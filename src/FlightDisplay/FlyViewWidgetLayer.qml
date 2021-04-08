@@ -22,7 +22,6 @@ import QGroundControl.Controls      1.0
 import QGroundControl.Airspace      1.0
 import QGroundControl.Airmap        1.0
 import QGroundControl.Controllers   1.0
-import QGroundControl.Controls      1.0
 import QGroundControl.FactSystem    1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
@@ -145,6 +144,25 @@ Item {
         ]
 
         property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
+    }
+
+    ExternalSensorControl{
+        id:                    externalSensorControl
+        anchors.margins:       _toolsMargin
+        anchors.right:         parent.right
+        anchors.bottom:        parent.bottom
+        width:                 _rightPanelWidth
+    }
+
+    ExternalSensorChart{
+        id:                 externalSensorChart
+        anchors.margins:    _toolsMargin
+        anchors.horizontalCenter:     parent.horizontalCenter
+        width:              parent.width/2
+        height:              parent.height/3
+        //anchors.top:        parent/2
+        anchors.bottom:     telemetryPanel.top
+        visible: externalSensorControl.isShowSensorChart
     }
 
     TelemetryValuesBar {

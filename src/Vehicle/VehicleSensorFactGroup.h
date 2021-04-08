@@ -53,13 +53,13 @@ public:
     static const char* _sensorStatusFactName;
 
 private:
-    void _handleData16     (mavlink_message_t& message);
-    void _handleScaledPressure     (mavlink_message_t& message);
+    void _handleData16     (mavlink_message_t &message);
+    void _handleScaledPressure     (mavlink_message_t &message);
 //    void _handleV2_extension (mavlink_message_t& message);
 //    void _initializeSensorData          ();
 //    void _writeSensorDataLine           ();
 #if !defined(NO_ARDUPILOT_DIALECT)
-    //void _handleWind        (mavlink_message_t& message);
+    void _handleWind        (mavlink_message_t &message);
 #endif
 
     Fact _sensorTempFact;
