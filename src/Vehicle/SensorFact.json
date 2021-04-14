@@ -66,6 +66,11 @@
     "enumStrings":      "Waiting,Logging,Logging",
     "enumValues":       "0,1,2",
     "decimalPlaces":    0
+},
+{
+    "name":             "sensorCount",
+    "shortDesc": "Sensor Cnt",
+    "type":             "double"
 }
 ]
 }

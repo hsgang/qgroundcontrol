@@ -21,10 +21,13 @@ const char* VehicleSensorFactGroup::_sensorPM1p0FactName =      "sensorPM1p0";
 const char* VehicleSensorFactGroup::_sensorPM2p5FactName =      "sensorPM2p5";
 const char* VehicleSensorFactGroup::_sensorPM10FactName =       "sensorPM10";
 const char* VehicleSensorFactGroup::_sensorStatusFactName =     "sensorStatus";
+const char* VehicleSensorFactGroup::_sensorCountFactName =      "sensorCount";
 
-struct sensor_data16_Payload {
+struct sensor_data32_Payload {
+    float sensorCountRaw;
     float sensorTempRaw;
     float sensorHumiRaw;
+    float sensorBaroRaw;
     uint16_t sensorPM1p0Raw;
     uint16_t sensorPM2p5Raw;
     uint16_t sensorPM10Raw;
@@ -41,6 +44,7 @@ VehicleSensorFactGroup::VehicleSensorFactGroup(QObject* parent)
     , _sensorPM2p5Fact   (0, _sensorPM2p5FactName,      FactMetaData::valueTypeUint16)
     , _sensorPM10Fact    (0, _sensorPM10FactName,       FactMetaData::valueTypeUint16)
     , _sensorStatusFact  (0, _sensorStatusFactName,     FactMetaData::valueTypeUint8)
+    , _sensorCountFact   (0, _sensorCountFactName,      FactMetaData::valueTypeDouble)
 {
     _addFact(&_sensorTempFact,          _sensorTempFactName);
     _addFact(&_sensorHumiFact,          _sensorHumiFactName);
@@ -51,6 +55,7 @@ VehicleSensorFactGroup::VehicleSensorFactGroup(QObject* parent)
     _addFact(&_sensorPM2p5Fact,         _sensorPM2p5FactName);
     _addFact(&_sensorPM10Fact,          _sensorPM10FactName);
     _addFact(&_sensorStatusFact,        _sensorStatusFactName);
+    _addFact(&_sensorCountFact,         _sensorCountFactName);
 
     // Start out as not available "--.--"
     _sensorTempFact.setRawValue      (qQNaN());
@@ -62,6 +67,7 @@ VehicleSensorFactGroup::VehicleSensorFactGroup(QObject* parent)
     _sensorPM2p5Fact.setRawValue     (qQNaN());
     _sensorPM10Fact.setRawValue      (qQNaN());
     _sensorStatusFact.setRawValue    (qQNaN());
+    _sensorCountFact.setRawValue     (qQNaN());
 }
 
 void VehicleSensorFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_message_t& message)
@@ -70,13 +76,13 @@ void VehicleSensorFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_messa
     case MAVLINK_MSG_ID_V2_EXTENSION:
 //        _handleV2_extension(message);
         break;
-    case MAVLINK_MSG_ID_DATA16:
+    case MAVLINK_MSG_ID_DATA32:
         if(message.compid == 158){
-         _handleData16(message);
+         _handleData32(message);
         }
         break;
     case MAVLINK_MSG_ID_SCALED_PRESSURE:
-        _handleScaledPressure(message);
+        //_handleScaledPressure(message);
         break;
 #if !defined(NO_ARDUPILOT_DIALECT)
     case MAVLINK_MSG_ID_WIND:
@@ -88,17 +94,19 @@ void VehicleSensorFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_messa
     }
 }
 
-void VehicleSensorFactGroup::_handleData16(mavlink_message_t &message)
+void VehicleSensorFactGroup::_handleData32(mavlink_message_t &message)
 {
-    mavlink_data16_t data16;
-    mavlink_msg_data16_decode(&message, &data16);
+    mavlink_data32_t data32;
+    mavlink_msg_data32_decode(&message, &data32);
 
-    struct sensor_data16_Payload sP;
+    struct sensor_data32_Payload sP;
 
-    memcpy(&sP, &data16.data, sizeof (struct sensor_data16_Payload));
+    memcpy(&sP, &data32.data, sizeof (struct sensor_data32_Payload));
 
+    float sensorCountRaw = sP.sensorCountRaw;
     float sensorTempRaw     = sP.sensorTempRaw;
     float sensorHumiRaw     = sP.sensorHumiRaw;
+    float sensorBaroRaw     = sP.sensorBaroRaw;
     uint16_t sensorPM1p0Raw = sP.sensorPM1p0Raw;
     uint16_t sensorPM2p5Raw = sP.sensorPM2p5Raw;
     uint16_t sensorPM10Raw  = sP.sensorPM10Raw;
@@ -110,13 +118,15 @@ void VehicleSensorFactGroup::_handleData16(mavlink_message_t &message)
     double sensorWindDirRaw = v2_extension.payload[6]+v2_extension.payload[7];
     double sensorWindSpdRaw = v2_extension.payload[8]+v2_extension.payload[9];
 */
+    sensorCount()->setRawValue(sensorCountRaw);
     sensorTemp()->setRawValue(sensorTempRaw);
     sensorHumi()->setRawValue(sensorHumiRaw);
+    sensorBaro()->setRawValue(sensorBaroRaw);
     sensorPM1p0()->setRawValue(sensorPM1p0Raw);
     sensorPM2p5()->setRawValue(sensorPM2p5Raw);
     sensorPM10()->setRawValue(sensorPM10Raw);
 
-    sensorStatus()->setRawValue(data16.type);
+    sensorStatus()->setRawValue(data32.type);
 }
 
 void VehicleSensorFactGroup::_handleScaledPressure(mavlink_message_t &message)

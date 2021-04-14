@@ -28,6 +28,7 @@ public:
     Q_PROPERTY(Fact* sensorPM2p5        READ sensorPM2p5        CONSTANT)
     Q_PROPERTY(Fact* sensorPM10         READ sensorPM10         CONSTANT)
     Q_PROPERTY(Fact* sensorStatus       READ sensorStatus       CONSTANT)
+    Q_PROPERTY(Fact* sensorCount        READ sensorCount        CONSTANT)
 
     Fact* sensorTemp                        () { return &_sensorTempFact; }
     Fact* sensorHumi                        () { return &_sensorHumiFact; }
@@ -38,6 +39,7 @@ public:
     Fact* sensorPM2p5                       () { return &_sensorPM2p5Fact; }
     Fact* sensorPM10                        () { return &_sensorPM10Fact; }
     Fact* sensorStatus                      () { return &_sensorStatusFact; }
+    Fact* sensorCount                       () { return &_sensorCountFact; }
 
     // Overrides from FactGroup
     void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
@@ -51,9 +53,10 @@ public:
     static const char* _sensorPM2p5FactName;
     static const char* _sensorPM10FactName;
     static const char* _sensorStatusFactName;
+    static const char* _sensorCountFactName;
 
 private:
-    void _handleData16     (mavlink_message_t &message);
+    void _handleData32     (mavlink_message_t &message);
     void _handleScaledPressure     (mavlink_message_t &message);
 //    void _handleV2_extension (mavlink_message_t& message);
 //    void _initializeSensorData          ();
@@ -71,6 +74,7 @@ private:
     Fact _sensorPM2p5Fact;
     Fact _sensorPM10Fact;
     Fact _sensorStatusFact;
+    Fact _sensorCountFact;
 
 //    QTimer              _sensorLogTimer;
 //    QFile               _sensorLogFile;

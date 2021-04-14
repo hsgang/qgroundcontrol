@@ -29,7 +29,7 @@ Rectangle {
     color:      "#80000000"
     radius:     _margins
 
-    property real _margins:                                   ScreenTools.defaultFontPixelHeight / 2
+    property real _margins: ScreenTools.defaultFontPixelHeight / 2
 
     property bool isShowSensorChart: false
     property bool isShowTemperature: false
@@ -46,6 +46,8 @@ Rectangle {
         GridLayout{
             id:     gridLayout
             columns: 2
+            columnSpacing: _margins*2
+            anchors.margins: _margins*2
 
             QGCSwitch{
                 id:showSensorChart
@@ -61,7 +63,7 @@ Rectangle {
             QGCLabel{
                 text: qsTr("SensorChart")
             }
-            QGCSwitch{
+            QGCCheckBox{
                 id:qgcSwitch_temp
                 visible: isShowSensorChart
                 onClicked: {
@@ -76,7 +78,7 @@ Rectangle {
                 visible: isShowSensorChart
                 text: qsTr("Temperature")
             }
-            QGCSwitch{
+            QGCCheckBox{
                 id:qgcSwitch_humi
                 visible: isShowSensorChart
                 onClicked: {
@@ -91,7 +93,7 @@ Rectangle {
                 visible: isShowSensorChart
                 text: qsTr("Humidity")
             }
-            QGCSwitch{
+            QGCCheckBox{
                 id:qgcSwitch_baro
                 visible: isShowSensorChart
                 onClicked: {
@@ -106,7 +108,7 @@ Rectangle {
                 visible: isShowSensorChart
                 text: qsTr("Pressure")
             }
-            QGCSwitch{
+            QGCCheckBox{
                 id:qgcSwitch_windDir
                 visible: isShowSensorChart
                 onClicked: {
@@ -121,7 +123,7 @@ Rectangle {
                 visible: isShowSensorChart
                 text: qsTr("WindDir")
             }
-            QGCSwitch{
+            QGCCheckBox{
                 id:qgcSwitch_windSpd
                 visible: isShowSensorChart
                 onClicked: {
