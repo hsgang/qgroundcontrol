@@ -65,7 +65,6 @@ public:
     DEFINE_SETTINGFACT(forwardMavlink)
     DEFINE_SETTINGFACT(forwardMavlinkHostName)
     DEFINE_SETTINGFACT(saveSensorLog)
-    DEFINE_SETTINGFACT(useComponentInformationQuery)
 
     // Although this is a global setting it only affects ArduPilot vehicle since PX4 automatically starts the stream from the vehicle side
     DEFINE_SETTINGFACT(apmStartMavlinkStreams)
