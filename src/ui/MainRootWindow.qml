@@ -416,7 +416,7 @@ ApplicationWindow {
                         }
 
                         QGCLabel {
-                            text:                   QGroundControl.qgcVersion
+                            text:                   qsTr("modified by AMP")//QGroundControl.qgcVersion
                             font.pointSize:         ScreenTools.smallFontPointSize
                             wrapMode:               QGCLabel.WrapAnywhere
                             Layout.maximumWidth:    parent.width

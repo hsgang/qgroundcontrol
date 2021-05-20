@@ -148,6 +148,10 @@ Item {
         id: videoControl
     }
 
+    FlyViewVideo {
+        id: videoControl2
+    }
+
     QGCPipOverlay {
         id:                     _pipOverlay
         anchors.left:           parent.left
@@ -161,4 +165,18 @@ Item {
         show:                   !QGroundControl.videoManager.fullScreen &&
                                     (videoControl.pipState.state === videoControl.pipState.pipState || mapControl.pipState.state === mapControl.pipState.pipState)
     }
+
+//    QGCPipOverlay {
+//        id:                     _pipOverlay2
+//        anchors.left:           parent.left
+//        anchors.bottom:         _pipOverlay.top
+//        anchors.margins:        _toolsMargin
+//        item1IsFullSettingsKey: "MainFlyWindowIsMap"
+//        item1:                  mapControl
+//        item2:                  QGroundControl.videoManager.hasVideo ? videoControl2 : null
+//        fullZOrder:             _fullItemZorder
+//        pipZOrder:              _pipItemZorder
+//        show:                   !QGroundControl.videoManager.fullScreen &&
+//                                    (videoControl2.pipState.state === videoControl2.pipState.pipState || mapControl.pipState.state === mapControl.pipState.pipState)
+//    }
 }

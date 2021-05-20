@@ -71,6 +71,31 @@
     "name":             "sensorCount",
     "shortDesc": "Sensor Cnt",
     "type":             "double"
+},
+{
+    "name":             "sensorSensor1",
+    "shortDesc": "SensorValue1",
+    "type":             "int16"
+},
+{
+    "name":             "sensorSensor2",
+    "shortDesc": "SensorValue2",
+    "type":             "int16"
+},
+{
+    "name":             "sensorSensor3",
+    "shortDesc": "SensorValue3",
+    "type":             "int16"
+},
+{
+    "name":             "sensorSensor4",
+    "shortDesc": "SensorValue4",
+    "type":             "int16"
+},
+{
+    "name":             "sensorSensor5",
+    "shortDesc": "SensorValue5",
+    "type":             "int16"
 }
 ]
 }

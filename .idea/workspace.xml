@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d5bc66e0-7eba-4066-ab12-4f6a34558e48" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FlightDisplay/FlyView.qml" beforeDir="false" afterPath="$PROJECT_DIR$/src/FlightDisplay/FlyView.qml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/FlightDisplay/FlyViewWidgetLayer.qml" beforeDir="false" afterPath="$PROJECT_DIR$/src/FlightDisplay/FlyViewWidgetLayer.qml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/QGCApplication.cc" beforeDir="false" afterPath="$PROJECT_DIR$/src/QGCApplication.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Vehicle/SensorFact.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle/SensorFact.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Vehicle/Vehicle.cc" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle/Vehicle.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Vehicle/VehicleSensorFactGroup.cc" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle/VehicleSensorFactGroup.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Vehicle/VehicleSensorFactGroup.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle/VehicleSensorFactGroup.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/MainRootWindow.qml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/MainRootWindow.qml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1rF7ONqEaRNLSmjAlzjG0cgvXL5" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d5bc66e0-7eba-4066-ab12-4f6a34558e48" name="Default Changelist" comment="" />
+      <created>1618559950100</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1618559950100</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1920" y="-171" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1621335181538">
+      <screen x="1920" y="-487" width="1080" height="1880" />
+    </state>
+    <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1621301204480" />
+    <state x="1920" y="-171" key="#com.intellij.execution.impl.EditConfigurationsDialog/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@1920.-487.1080.1880" timestamp="1621335181538" />
+    <state x="473" y="141" width="1200" height="800" key="AVDManager" timestamp="1621335780670">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="473" y="141" width="1200" height="800" key="AVDManager/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1621335780670" />
+    <state x="473" y="141" width="1200" height="800" key="AVDManager/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@1920.-487.1080.1880" timestamp="1621335444478" />
+    <state x="740" y="260" key="FileChooserDialogImpl" timestamp="1618573692226">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="740" y="260" key="FileChooserDialogImpl/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1618573692226" />
+    <state x="870" y="178" key="SettingsEditor" timestamp="1621335043854">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="870" y="178" key="SettingsEditor/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1621335043854" />
+  </component>
+</project>

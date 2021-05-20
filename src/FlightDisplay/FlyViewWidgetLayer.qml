@@ -155,14 +155,14 @@ Item {
     }
 
     ExternalSensorChart{
-        id:                 externalSensorChart
-        anchors.margins:    _toolsMargin
-        anchors.horizontalCenter:     parent.horizontalCenter
-        width:              parent.width/2
-        height:              parent.height/3
-        //anchors.top:        parent/2
-        anchors.bottom:     telemetryPanel.top
-        visible: externalSensorControl.isShowSensorChart
+        id:                         externalSensorChart
+        anchors.margins:            _toolsMargin
+        anchors.horizontalCenter:   parent.horizontalCenter
+        width:                      parent.width/2
+        height:                     parent.height/3
+        //anchors.top:              parent/2
+        anchors.top:                parent.top
+        visible:                    externalSensorControl.isShowSensorChart
     }
 
     TelemetryValuesBar {

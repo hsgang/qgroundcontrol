@@ -20,6 +20,11 @@ const char* VehicleSensorFactGroup::_sensorWindSpdFactName =    "sensorWindSpd";
 const char* VehicleSensorFactGroup::_sensorPM1p0FactName =      "sensorPM1p0";
 const char* VehicleSensorFactGroup::_sensorPM2p5FactName =      "sensorPM2p5";
 const char* VehicleSensorFactGroup::_sensorPM10FactName =       "sensorPM10";
+const char* VehicleSensorFactGroup::_sensorSensor1FactName =    "sensorSensor1";
+const char* VehicleSensorFactGroup::_sensorSensor2FactName =    "sensorSensor2";
+const char* VehicleSensorFactGroup::_sensorSensor3FactName =    "sensorSensor3";
+const char* VehicleSensorFactGroup::_sensorSensor4FactName =    "sensorSensor4";
+const char* VehicleSensorFactGroup::_sensorSensor5FactName =    "sensorSensor5";
 const char* VehicleSensorFactGroup::_sensorStatusFactName =     "sensorStatus";
 const char* VehicleSensorFactGroup::_sensorCountFactName =      "sensorCount";
 
@@ -31,6 +36,11 @@ struct sensor_data32_Payload {
     uint16_t sensorPM1p0Raw;
     uint16_t sensorPM2p5Raw;
     uint16_t sensorPM10Raw;
+    int16_t sensorSensor1Raw;
+    int16_t sensorSensor2Raw;
+    int16_t sensorSensor3Raw;
+    int16_t sensorSensor4Raw;
+    int16_t sensorSensor5Raw;
 };
 
 VehicleSensorFactGroup::VehicleSensorFactGroup(QObject* parent)
@@ -43,6 +53,11 @@ VehicleSensorFactGroup::VehicleSensorFactGroup(QObject* parent)
     , _sensorPM1p0Fact   (0, _sensorPM1p0FactName,      FactMetaData::valueTypeUint16)
     , _sensorPM2p5Fact   (0, _sensorPM2p5FactName,      FactMetaData::valueTypeUint16)
     , _sensorPM10Fact    (0, _sensorPM10FactName,       FactMetaData::valueTypeUint16)
+    , _sensorSensor1Fact (0, _sensorSensor1FactName,    FactMetaData::valueTypeInt16)
+    , _sensorSensor2Fact (0, _sensorSensor2FactName,    FactMetaData::valueTypeInt16)
+    , _sensorSensor3Fact (0, _sensorSensor3FactName,    FactMetaData::valueTypeInt16)
+    , _sensorSensor4Fact (0, _sensorSensor4FactName,    FactMetaData::valueTypeInt16)
+    , _sensorSensor5Fact (0, _sensorSensor5FactName,    FactMetaData::valueTypeInt16)
     , _sensorStatusFact  (0, _sensorStatusFactName,     FactMetaData::valueTypeUint8)
     , _sensorCountFact   (0, _sensorCountFactName,      FactMetaData::valueTypeDouble)
 {
@@ -54,6 +69,11 @@ VehicleSensorFactGroup::VehicleSensorFactGroup(QObject* parent)
     _addFact(&_sensorPM1p0Fact,         _sensorPM1p0FactName);
     _addFact(&_sensorPM2p5Fact,         _sensorPM2p5FactName);
     _addFact(&_sensorPM10Fact,          _sensorPM10FactName);
+    _addFact(&_sensorSensor1Fact,       _sensorSensor1FactName);
+    _addFact(&_sensorSensor2Fact,       _sensorSensor2FactName);
+    _addFact(&_sensorSensor3Fact,       _sensorSensor3FactName);
+    _addFact(&_sensorSensor4Fact,       _sensorSensor4FactName);
+    _addFact(&_sensorSensor5Fact,       _sensorSensor5FactName);
     _addFact(&_sensorStatusFact,        _sensorStatusFactName);
     _addFact(&_sensorCountFact,         _sensorCountFactName);
 
@@ -66,6 +86,11 @@ VehicleSensorFactGroup::VehicleSensorFactGroup(QObject* parent)
     _sensorPM1p0Fact.setRawValue     (qQNaN());
     _sensorPM2p5Fact.setRawValue     (qQNaN());
     _sensorPM10Fact.setRawValue      (qQNaN());
+    _sensorSensor1Fact.setRawValue   (qQNaN());
+    _sensorSensor2Fact.setRawValue   (qQNaN());
+    _sensorSensor3Fact.setRawValue   (qQNaN());
+    _sensorSensor4Fact.setRawValue   (qQNaN());
+    _sensorSensor5Fact.setRawValue   (qQNaN());
     _sensorStatusFact.setRawValue    (qQNaN());
     _sensorCountFact.setRawValue     (qQNaN());
 }
@@ -110,14 +135,12 @@ void VehicleSensorFactGroup::_handleData32(mavlink_message_t &message)
     uint16_t sensorPM1p0Raw = sP.sensorPM1p0Raw;
     uint16_t sensorPM2p5Raw = sP.sensorPM2p5Raw;
     uint16_t sensorPM10Raw  = sP.sensorPM10Raw;
+    int16_t sensorSensor1Raw  = sP.sensorSensor1Raw;
+    int16_t sensorSensor2Raw  = sP.sensorSensor2Raw;
+    int16_t sensorSensor3Raw  = sP.sensorSensor3Raw;
+    int16_t sensorSensor4Raw  = sP.sensorSensor4Raw;
+    int16_t sensorSensor5Raw  = sP.sensorSensor5Raw;
 
-    /*
-    double sensorTempRaw = v2_extension.payload[0]+v2_extension.payload[1];
-    double sensorHumiRaw = v2_extension.payload[2]+v2_extension.payload[3];
-    double sensorBaroRaw = v2_extension.payload[4]+v2_extension.payload[5];
-    double sensorWindDirRaw = v2_extension.payload[6]+v2_extension.payload[7];
-    double sensorWindSpdRaw = v2_extension.payload[8]+v2_extension.payload[9];
-*/
     sensorCount()->setRawValue(sensorCountRaw);
     sensorTemp()->setRawValue(sensorTempRaw);
     sensorHumi()->setRawValue(sensorHumiRaw);
@@ -125,6 +148,11 @@ void VehicleSensorFactGroup::_handleData32(mavlink_message_t &message)
     sensorPM1p0()->setRawValue(sensorPM1p0Raw);
     sensorPM2p5()->setRawValue(sensorPM2p5Raw);
     sensorPM10()->setRawValue(sensorPM10Raw);
+    sensorSensor1()->setRawValue(sensorSensor1Raw);
+    sensorSensor2()->setRawValue(sensorSensor2Raw);
+    sensorSensor3()->setRawValue(sensorSensor3Raw);
+    sensorSensor4()->setRawValue(sensorSensor4Raw);
+    sensorSensor5()->setRawValue(sensorSensor5Raw);
 
     sensorStatus()->setRawValue(data32.type);
 }

@@ -321,10 +321,10 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _windFactGroup                    (this)
     , _vibrationFactGroup               (this)
     , _clockFactGroup                   (this)
-    , _distanceSensorFactGroup          (this)
-    , _sensorFactGroup                  (this)
+    , _distanceSensorFactGroup          (this)    
     , _localPositionFactGroup           (this)
     , _localPositionSetpointFactGroup   (this)
+    , _sensorFactGroup                  (this)
 {
     _linkManager = _toolbox->linkManager();
 
@@ -3719,16 +3719,16 @@ void Vehicle::_writeCsvLine()
 void Vehicle::_initializeJson()
 {
     if(!_toolbox->settingsManager()->appSettings()->saveSensorLog()->rawValue().toBool()){
-        qInfo() << "diable save Sensor Log" ;
+        //qInfo() << "diable save Sensor Log" ;
         return;
     }
     //QString now = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss");
     QString now = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
     QString fileName = QString("%1 vehicle%2.json").arg(now).arg(_id);
     QDir saveDir(_toolbox->settingsManager()->appSettings()->sensorSavePath());
-    qInfo() << _toolbox->settingsManager()->appSettings()->sensorSavePath();
+    //qInfo() << _toolbox->settingsManager()->appSettings()->sensorSavePath();
     _jsonLogFile.setFileName(saveDir.absoluteFilePath(fileName));
-    qInfo() << "setFileName :" << saveDir.absoluteFilePath(fileName);
+    //qInfo() << "setFileName :" << saveDir.absoluteFilePath(fileName);
 
     if (!_jsonLogFile.open(QIODevice::Append)) {
         qCWarning(VehicleLog) << "unable to open file for csv logging, Stopping csv logging!";
