@@ -45,6 +45,7 @@
 #include "RallyPointManager.h"
 #include "FTPManager.h"
 #include "ImageProtocolManager.h"
+#include "VehicleSensorFactGroup.h"
 
 class EventHandler;
 class UAS;
