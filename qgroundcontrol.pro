@@ -1457,3 +1457,4 @@ contains (CONFIG, QGC_DISABLE_INSTALLER_SETUP) {
 
 DISTFILES += \
     src/QmlControls/QGroundControl/Specific/qmldir
+android: include(C:/Users/hyeonseung/AppData/Local/Android/Sdk/android_openssl/openssl.pri)

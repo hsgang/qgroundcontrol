@@ -322,6 +322,7 @@ ApplicationWindow {
     header: MainToolBar {
         id:         toolbar
         height:     ScreenTools.toolbarHeight
+        //visible:    false
         visible:    !QGroundControl.videoManager.fullScreen
     }
 
@@ -725,4 +726,14 @@ ApplicationWindow {
             indicatorPopup.currentIndicator = null
         }
     }
+
+//    LoginDialog{
+//        id:                     loginDialog
+//        width:                  mainWindow.width
+//        height:                 mainWindow.height
+//        //anchors.margins:            _toolsMargin
+//        anchors.horizontalCenter:   mainWindow.horizontalCenter
+//        anchors.verticalCenter:     mainWindow.verticalCenter
+//        //width:                 _rightPanelWidth
+//    }
 }

@@ -78,21 +78,21 @@ VehicleSensorFactGroup::VehicleSensorFactGroup(QObject* parent)
     _addFact(&_sensorCountFact,         _sensorCountFactName);
 
     // Start out as not available "--.--"
-    _sensorTempFact.setRawValue      (qQNaN());
-    _sensorHumiFact.setRawValue      (qQNaN());
-    _sensorBaroFact.setRawValue      (qQNaN());
-    _sensorWindDirFact.setRawValue   (qQNaN());
-    _sensorWindSpdFact.setRawValue   (qQNaN());
-    _sensorPM1p0Fact.setRawValue     (qQNaN());
-    _sensorPM2p5Fact.setRawValue     (qQNaN());
-    _sensorPM10Fact.setRawValue      (qQNaN());
-    _sensorSensor1Fact.setRawValue   (qQNaN());
-    _sensorSensor2Fact.setRawValue   (qQNaN());
-    _sensorSensor3Fact.setRawValue   (qQNaN());
-    _sensorSensor4Fact.setRawValue   (qQNaN());
-    _sensorSensor5Fact.setRawValue   (qQNaN());
-    _sensorStatusFact.setRawValue    (qQNaN());
-    _sensorCountFact.setRawValue     (qQNaN());
+//    _sensorTempFact.setRawValue      (qQNaN());
+//    _sensorHumiFact.setRawValue      (qQNaN());
+//    _sensorBaroFact.setRawValue      (qQNaN());
+//    _sensorWindDirFact.setRawValue   (qQNaN());
+//    _sensorWindSpdFact.setRawValue   (qQNaN());
+//    _sensorPM1p0Fact.setRawValue     (qQNaN());
+//    _sensorPM2p5Fact.setRawValue     (qQNaN());
+//    _sensorPM10Fact.setRawValue      (qQNaN());
+//    _sensorSensor1Fact.setRawValue   (qQNaN());
+//    _sensorSensor2Fact.setRawValue   (qQNaN());
+//    _sensorSensor3Fact.setRawValue   (qQNaN());
+//    _sensorSensor4Fact.setRawValue   (qQNaN());
+//    _sensorSensor5Fact.setRawValue   (qQNaN());
+//    _sensorStatusFact.setRawValue    (qQNaN());
+//    _sensorCountFact.setRawValue     (qQNaN());
 }
 
 void VehicleSensorFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_message_t& message)

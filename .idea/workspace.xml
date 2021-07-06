@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="d5bc66e0-7eba-4066-ab12-4f6a34558e48" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FlightDisplay/FlyView.qml" beforeDir="false" afterPath="$PROJECT_DIR$/src/FlightDisplay/FlyView.qml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/FlightDisplay/FlyViewWidgetLayer.qml" beforeDir="false" afterPath="$PROJECT_DIR$/src/FlightDisplay/FlyViewWidgetLayer.qml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/QGCApplication.cc" beforeDir="false" afterPath="$PROJECT_DIR$/src/QGCApplication.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Vehicle/SensorFact.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle/SensorFact.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Vehicle/Vehicle.cc" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle/Vehicle.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Vehicle/VehicleSensorFactGroup.cc" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle/VehicleSensorFactGroup.cc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Vehicle/VehicleSensorFactGroup.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Vehicle/VehicleSensorFactGroup.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/MainRootWindow.qml" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/MainRootWindow.qml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/android/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/res/values/libs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/res/values/libs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/qgroundcontrol.pro" beforeDir="false" afterPath="$PROJECT_DIR$/qgroundcontrol.pro" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +34,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -51,18 +54,18 @@
     </state>
     <state x="414" y="175" key="#com.intellij.execution.impl.EditConfigurationsDialog/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1621301204480" />
     <state x="1920" y="-171" key="#com.intellij.execution.impl.EditConfigurationsDialog/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@1920.-487.1080.1880" timestamp="1621335181538" />
-    <state x="473" y="141" width="1200" height="800" key="AVDManager" timestamp="1621335780670">
+    <state x="473" y="141" width="1200" height="800" key="AVDManager" timestamp="1621482560577">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="473" y="141" width="1200" height="800" key="AVDManager/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1621335780670" />
+    <state x="473" y="141" width="1200" height="800" key="AVDManager/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1621482560577" />
     <state x="473" y="141" width="1200" height="800" key="AVDManager/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@1920.-487.1080.1880" timestamp="1621335444478" />
     <state x="740" y="260" key="FileChooserDialogImpl" timestamp="1618573692226">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="260" key="FileChooserDialogImpl/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1618573692226" />
-    <state x="870" y="178" key="SettingsEditor" timestamp="1621335043854">
+    <state x="870" y="178" key="SettingsEditor" timestamp="1621482075356">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="870" y="178" key="SettingsEditor/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1621335043854" />
+    <state x="870" y="178" key="SettingsEditor/3000.-479.1080.1880/1920.-487.1080.1880/0.0.1920.1040@0.0.1920.1040" timestamp="1621482075356" />
   </component>
 </project>
