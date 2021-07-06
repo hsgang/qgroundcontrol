@@ -15,6 +15,7 @@
 #include <QGeoCoordinate>
 #include <QTime>
 #include <QQueue>
+#include <QSharedPointer>
 
 #include "FactGroup.h"
 #include "QGCMAVLink.h"
@@ -43,9 +44,9 @@
 #include "GeoFenceManager.h"
 #include "RallyPointManager.h"
 #include "FTPManager.h"
+#include "ImageProtocolManager.h"
 
-#include "VehicleSensorFactGroup.h"
-
+class EventHandler;
 class UAS;
 class UASInterface;
 class FirmwarePlugin;
@@ -72,6 +73,12 @@ class InitialConnectStateMachine;
 #if defined(QGC_AIRMAP_ENABLED)
 class AirspaceVehicleManager;
 #endif
+
+namespace events {
+namespace parser {
+class ParsedEvent;
+}
+}
 
 Q_DECLARE_LOGGING_CATEGORY(VehicleLog)
 
@@ -282,6 +289,7 @@ public:
     Q_PROPERTY(Fact* altitudeAMSL       READ altitudeAMSL       CONSTANT)
     Q_PROPERTY(Fact* altitudeTuning     READ altitudeTuning     CONSTANT)
     Q_PROPERTY(Fact* altitudeTuningSetpoint READ altitudeTuningSetpoint CONSTANT)
+    Q_PROPERTY(Fact* xTrackError        READ xTrackError        CONSTANT)
     Q_PROPERTY(Fact* flightDistance     READ flightDistance     CONSTANT)
     Q_PROPERTY(Fact* distanceToHome     READ distanceToHome     CONSTANT)
     Q_PROPERTY(Fact* missionItemIndex   READ missionItemIndex   CONSTANT)
@@ -305,7 +313,6 @@ public:
     Q_PROPERTY(FactGroup*           localPosition   READ localPositionFactGroup     CONSTANT)
     Q_PROPERTY(FactGroup*           localPositionSetpoint READ localPositionSetpointFactGroup CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
-    Q_PROPERTY(FactGroup*           sensor          READ sensorFactGroup            CONSTANT)
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -621,6 +628,7 @@ public:
     Fact* altitudeAMSL                      () { return &_altitudeAMSLFact; }
     Fact* altitudeTuning                    () { return &_altitudeTuningFact; }
     Fact* altitudeTuningSetpoint            () { return &_altitudeTuningSetpointFact; }
+    Fact* xTrackError                       () { return &_xTrackErrorFact; }
     Fact* flightDistance                    () { return &_flightDistanceFact; }
     Fact* distanceToHome                    () { return &_distanceToHomeFact; }
     Fact* missionItemIndex                  () { return &_missionItemIndexFact; }
@@ -644,7 +652,6 @@ public:
     FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
     FactGroup* terrainFactGroup             () { return &_terrainFactGroup; }
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
-    FactGroup* sensorFactGroup              () { return &_sensorFactGroup; }
 
     MissionManager*                 missionManager      () { return _missionManager; }
     GeoFenceManager*                geoFenceManager     () { return _geoFenceManager; }
@@ -792,6 +799,8 @@ public:
 
     double loadProgress                 () const { return _loadProgress; }
 
+    void setEventsMetadata(uint8_t compid, const QString& metadataJsonFileName, const QString& translationJsonFileName);
+
 public slots:
     void setVtolInFwdFlight                 (bool vtolInFwdFlight);
     void _offlineFirmwareTypeSettingChanged (QVariant varFirmwareType); // Should only be used by MissionControler to set firmware from Plan file
@@ -823,6 +832,7 @@ signals:
     void toolIndicatorsChanged          ();
     void modeIndicatorsChanged          ();
     void textMessageReceived            (int uasid, int componentid, int severity, QString text);
+    void calibrationEventReceived       (int uasid, int componentid, int severity, QSharedPointer<events::parser::ParsedEvent> event);
     void checkListStateChanged          ();
     void messagesReceivedChanged        ();
     void messagesSentChanged            ();
@@ -911,7 +921,7 @@ private slots:
     void _offlineHoverSpeedSettingChanged   (QVariant value);
     void _handleTextMessage                 (int newCount);
     void _handletextMessageReceived         (UASMessage* message);
-    void _imageReady                        (UASInterface* uas);    ///< A new camera image has arrived
+    void _imageProtocolImageReady           (void);
     void _prearmErrorTimeout                ();
     void _firstMissionLoadComplete          ();
     void _firstGeoFenceLoadComplete         ();
@@ -959,6 +969,7 @@ private:
     void _handleOrbitExecutionStatus    (const mavlink_message_t& message);
     void _handleGimbalOrientation       (const mavlink_message_t& message);
     void _handleObstacleDistance        (const mavlink_message_t& message);
+    void _handleEvent(uint8_t comp_id, std::unique_ptr<events::parser::ParsedEvent> event);
     // ArduPilot dialect messages
 #if !defined(NO_ARDUPILOT_DIALECT)
     void _handleCameraFeedback          (const mavlink_message_t& message);
@@ -980,14 +991,13 @@ private:
     bool _apmArmingNotRequired          ();
     void _initializeCsv                 ();
     void _writeCsvLine                  ();
-    void _initializeJson                ();
-    void _writeJsonLine                 ();
     void _flightTimerStart              ();
     void _flightTimerStop               ();
     void _chunkedStatusTextTimeout      (void);
     void _chunkedStatusTextCompleted    (uint8_t compId);
     void _setMessageInterval            (int messageId, int rate);
     bool _initialConnectComplete        () const;
+    EventHandler& _eventHandler         (uint8_t compid);
 
     static void _rebootCommandResultHandler(void* resultHandlerData, int compId, MAV_RESULT commandResult, MavCmdResultFailureCode_t failureCode);
 
@@ -1007,9 +1017,6 @@ private:
 
     QTimer              _csvLogTimer;
     QFile               _csvLogFile;
-
-    QTimer              _jsonLogTimer;
-    QFile               _jsonLogFile;
 
     bool            _joystickEnabled = false;
 
@@ -1152,6 +1159,8 @@ private:
     QTimer          _orbitTelemetryTimer;
     static const int _orbitTelemetryTimeoutMsecs = 3000; // No telemetry for this amount and orbit will go inactive
 
+    QMap<uint8_t, QSharedPointer<EventHandler>> _events; ///< One protocol handler for each component ID
+
     MAVLinkStreamConfig _mavlinkStreamConfig;
 
     // Chunked status text support
@@ -1244,6 +1253,7 @@ private:
     Fact _altitudeAMSLFact;
     Fact _altitudeTuningFact;
     Fact _altitudeTuningSetpointFact;
+    Fact _xTrackErrorFact;
     Fact _flightDistanceFact;
     Fact _flightTimeFact;
     Fact _distanceToHomeFact;
@@ -1268,7 +1278,6 @@ private:
     VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
-    VehicleSensorFactGroup          _sensorFactGroup;
 
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
 
@@ -1277,6 +1286,7 @@ private:
     RallyPointManager*              _rallyPointManager          = nullptr;
     VehicleLinkManager*             _vehicleLinkManager         = nullptr;
     FTPManager*                     _ftpManager                 = nullptr;
+    ImageProtocolManager*           _imageProtocolManager       = nullptr;
     InitialConnectStateMachine*     _initialConnectStateMachine = nullptr;
 
     static const char* _rollFactName;
@@ -1293,6 +1303,7 @@ private:
     static const char* _altitudeAMSLFactName;
     static const char* _altitudeTuningFactName;
     static const char* _altitudeTuningSetpointFactName;
+    static const char* _xTrackErrorFactName;
     static const char* _flightDistanceFactName;
     static const char* _flightTimeFactName;
     static const char* _distanceToHomeFactName;
@@ -1316,7 +1327,6 @@ private:
     static const char* _escStatusFactGroupName;
     static const char* _estimatorStatusFactGroupName;
     static const char* _terrainFactGroupName;
-    static const char* _sensorFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs      = 100;
 
