@@ -277,6 +277,15 @@
         <file alias="VibrationPage.qml">src/AnalyzeView/VibrationPage.qml</file>
         <file alias="VirtualJoystick.qml">src/FlightDisplay/VirtualJoystick.qml</file>
         <file alias="VTOLLandingPatternEditor.qml">src/PlanView/VTOLLandingPatternEditor.qml</file>
+        <file alias="QGroundControl/FlightDisplay/ExternalSensorChart.qml">src/FlightDisplay/ExternalSensorChart.qml</file>
+        <file alias="QGroundControl/FlightDisplay/ExternalSensorControl.qml">src/FlightMap/Widgets/ExternalSensorControl.qml</file>
+        <file alias="LoginDialog.qml">src/LoginDialog.qml</file>
+        <file alias="LoginDialogCButton.qml">src/LoginDialogCButton.qml</file>
+        <file alias="LoginDialogCIcon.qml">src/LoginDialogCIcon.qml</file>
+        <file alias="LoginDialogLoginPage.qml">src/LoginDialogLoginPage.qml</file>
+        <file alias="LoginDialogPasswordResetPage.qml">src/LoginDialogPasswordResetPage.qml</file>
+        <file alias="LoginDialogRegisterPage.qml">src/LoginDialogRegisterPage.qml</file>
+        <file alias="LoginDialogUserInfoPage.qml">src/LoginDialogUserInfoPage.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
@@ -335,6 +344,7 @@
         <file alias="Vehicle/WindFact.json">src/Vehicle/WindFact.json</file>
         <file alias="Video.SettingsGroup.json">src/Settings/Video.SettingsGroup.json</file>
         <file alias="VTOLLandingPattern.FactMetaData.json">src/MissionManager/VTOLLandingPattern.FactMetaData.json</file>
+        <file alias="Vehicle/SensorFact.json">src/Vehicle/SensorFact.json</file>
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/comm/APMArduSubMockLink.params</file>
