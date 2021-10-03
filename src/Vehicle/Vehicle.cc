@@ -107,6 +107,14 @@ const char* Vehicle::_localPositionSetpointFactGroupName ="localPositionSetpoint
 const char* Vehicle::_escStatusFactGroupName =          "escStatus";
 const char* Vehicle::_estimatorStatusFactGroupName =    "estimatorStatus";
 const char* Vehicle::_terrainFactGroupName =            "terrain";
+const char* Vehicle::_sensorFactGroupName =             "sensor";
+
+static int jsonLogSeq = 0;
+static QString StartTime;
+static QString StartLat;
+static QString StartLong;
+static QString StartAltAMSL;
+
 
 // Standard connected vehicle
 Vehicle::Vehicle(LinkInterface*             link,
@@ -166,6 +174,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _escStatusFactGroup           (this)
     , _estimatorStatusFactGroup     (this)
     , _terrainFactGroup             (this)
+    , _sensorFactGroup              (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
 {
     _linkManager = _toolbox->linkManager();
@@ -258,6 +267,10 @@ Vehicle::Vehicle(LinkInterface*             link,
     // Start csv logger
     connect(&_csvLogTimer, &QTimer::timeout, this, &Vehicle::_writeCsvLine);
     _csvLogTimer.start(1000);
+
+    // Start sensor logger
+    connect(&_jsonLogTimer, &QTimer::timeout, this, &Vehicle::_writeJsonLine);
+    _jsonLogTimer.start(1000);
 }
 
 // Disconnected Vehicle for offline editing
@@ -312,6 +325,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _vibrationFactGroup               (this)
     , _clockFactGroup                   (this)
     , _distanceSensorFactGroup          (this)
+    , _sensorFactGroup                  (this)
     , _localPositionFactGroup           (this)
     , _localPositionSetpointFactGroup   (this)
 {
@@ -442,6 +456,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_escStatusFactGroup,         _escStatusFactGroupName);
     _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
     _addFactGroup(&_terrainFactGroup,           _terrainFactGroupName);
+    _addFactGroup(&_sensorFactGroup,            _sensorFactGroupName);
 
     // Add firmware-specific fact groups, if provided
     QMap<QString, FactGroup*>* fwFactGroups = _firmwarePlugin->factGroups();
@@ -3788,6 +3803,149 @@ void Vehicle::_writeCsvLine()
 
     stream << allFactValues.join(",") << "\n";
 }
+
+void Vehicle::_initializeJson()
+{
+    if(!_toolbox->settingsManager()->appSettings()->saveSensorLog()->rawValue().toBool()){
+        qInfo() << "diable save Sensor Log" ;
+        return;
+    }
+    //QString now = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss");
+    QString now = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+    QString fileName = QString("%1 vehicle%2.json").arg(now).arg(_id);
+    QDir saveDir(_toolbox->settingsManager()->appSettings()->sensorSavePath());
+    qInfo() << _toolbox->settingsManager()->appSettings()->sensorSavePath();
+    _jsonLogFile.setFileName(saveDir.absoluteFilePath(fileName));
+    qInfo() << "setFileName :" << saveDir.absoluteFilePath(fileName);
+
+    if (!_jsonLogFile.open(QIODevice::Append)) {
+        qCWarning(VehicleLog) << "unable to open file for csv logging, Stopping csv logging!";
+        qInfo() << "unable to open file for csv logging" ;
+        return;
+    }
+    jsonLogSeq = 1;
+    QString Model = "Meteorology UAV";
+    QString Type = vehicleTypeName();
+    QString SN = "0000-0000-0000";
+    StartTime = now;
+    StartLat = getFactGroup("gps")->getFact("lat")->cookedValueString();
+    StartLong = getFactGroup("gps")->getFact("lon")->cookedValueString();
+    StartAltAMSL = getFact("altitudeAMSL")->cookedValueString();
+    QString Interval = "1Hz";
+
+    QTextStream jsonStream(&_jsonLogFile);
+    QString jsonFactValue;
+
+    jsonFactValue = "[\r\n";
+    jsonFactValue.append("]\r\n");
+
+    jsonStream << jsonFactValue;
+/*
+    QJsonObject initDataObject;
+    initDataObject.insert("Model",QJsonValue::fromVariant(Model));
+    initDataObject.insert("Type",QJsonValue::fromVariant(Type));
+    initDataObject.insert("SerialNumber",QJsonValue::fromVariant(SN));
+    initDataObject.insert("Start Time",QJsonValue::fromVariant(StartTime));
+    initDataObject.insert("Start Lat",QJsonValue::fromVariant(StartLat));
+    initDataObject.insert("Start Long",QJsonValue::fromVariant(StartLong));
+    initDataObject.insert("Start AMSL",QJsonValue::fromVariant(StartAltAMSL));
+    initDataObject.insert("Interval",QJsonValue::fromVariant(Interval));
+    //QJsonArray sensorDataArray;
+    //sensorDataArray.push_back(sensorDataObject);
+    QJsonDocument doc(initDataObject);
+    _jsonLogFile.write(doc.toJson());
+*/
+}
+
+void Vehicle::_writeJsonLine()
+{
+    // Only save the logs after the the vehicle gets armed, unless "Save logs even if vehicle was not armed" is checked
+    if(!_jsonLogFile.isOpen() && _armed) {
+            //  (_armed || _toolbox->settingsManager()->appSettings()->telemetrySaveNotArmed()->rawValue().toBool())){
+        if(_armed){
+        _initializeJson();
+        }
+    }
+
+    if(!_jsonLogFile.isOpen()){
+        return;
+    }
+
+    if(_armed==true){
+        QTextStream jsonStream(&_jsonLogFile);
+        //QTextStream stream(&_jsonLogFile);
+        int Seq = jsonLogSeq++;
+        //QString dataTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm:ss.zzz"));
+        QString dataTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMddhhmmss"));
+        QString Lat = getFactGroup("gps")->getFact("lat")->cookedValueString();
+        QString Long = getFactGroup("gps")->getFact("lon")->cookedValueString();
+        QString Temp = getFactGroup("sensor")->getFact("sensorTemp")->cookedValueString();
+        QString Humi = getFactGroup("sensor")->getFact("sensorHumi")->cookedValueString();
+        QString Baro = getFactGroup("sensor")->getFact("sensorBaro")->cookedValueString();
+        QString WindDir = getFactGroup("sensor")->getFact("sensorWindDir")->cookedValueString();
+        QString WindSpd = getFactGroup("sensor")->getFact("sensorWindSpd")->cookedValueString();
+        QString GroundSpeed = getFact("groundSpeed")->cookedValueString();
+        QString ClimbRate = getFact("climbRate")->cookedValueString();
+        QString Alt = getFact("altitudeRelative")->cookedValueString();
+        QString Roll = getFact("roll")->cookedValueString();
+        QString Pitch = getFact("pitch")->cookedValueString();
+        QString Yaw = getFact("heading")->cookedValueString();
+        QString Voltage = getFactGroup("battery0")->getFact("voltage")->cookedValueString();
+        QString BatteryPercent = getFactGroup("battery0")->getFact("percentRemaining")->cookedValueString();
+        QString Hovering = "-999";
+        QString Transtats = "-999";
+        QString Flystats = "-999";
+
+        QString Model = "Meteorology UAV";
+        QString Type = vehicleTypeName();
+        QString SN = "0000-0000-0000";
+        //QString StartTime = "-999";
+        //QString StartLat = "-999";
+        //QString StartLong = "-999";
+        //QString StartAltAMSL = "-999";
+        QString Interval = "1Hz";
+
+        QString jsonFactValue;
+
+        jsonFactValue = "{\r\n";
+        jsonFactValue.append("\t\"Model\": \"" + Model + "\",\r\n");
+        jsonFactValue.append("\t\"Type\": \"" + Type + "\",\r\n");
+        jsonFactValue.append("\t\"SerialNumber\": \"" + SN + "\",\r\n");
+        jsonFactValue.append("\t\"Start Time\": " + StartTime + ",\r\n");
+        jsonFactValue.append("\t\"Start Lat\": " + StartLat + ",\r\n");
+        jsonFactValue.append("\t\"Start Long\": " + StartLong + ",\r\n");
+        jsonFactValue.append("\t\"Start AMSL\": " + StartAltAMSL + ",\r\n");
+        jsonFactValue.append("\t\"Interval\": \"" + Interval + "\",\r\n");
+        jsonFactValue.append("\t\"Seq\": " + QString::number(Seq)+ ",\r\n");
+        jsonFactValue.append("\t\"DateTime\": \"" + dataTime + "\",\r\n");
+        jsonFactValue.append("\t\"Lat\": " + Lat + ",\r\n");
+        jsonFactValue.append("\t\"Long\": " + Long + ",\r\n");
+        jsonFactValue.append("\t\"Temp\": " + Temp + ",\r\n");
+        jsonFactValue.append("\t\"RH\": " + Humi + ",\r\n");
+        jsonFactValue.append("\t\"P\": " + Baro + ",\r\n");
+        jsonFactValue.append("\t\"WindDir\": " + WindDir + ",\r\n");
+        jsonFactValue.append("\t\"WindSpd\": " + WindSpd + ",\r\n");
+        jsonFactValue.append("\t\"Speed\": " + GroundSpeed + ",\r\n");
+        jsonFactValue.append("\t\"AscSpd\": " + ClimbRate + ",\r\n");
+        jsonFactValue.append("\t\"Alt\": " + Alt + ",\r\n");
+        jsonFactValue.append("\t\"Roll\": " + Roll + ",\r\n");
+        jsonFactValue.append("\t\"Pitch\": " + Pitch + ",\r\n");
+        jsonFactValue.append("\t\"Yaw\": " + Yaw + ",\r\n");
+        jsonFactValue.append("\t\"Voltage\": " + Voltage + ",\r\n");
+        jsonFactValue.append("\t\"BattPercent\": " + BatteryPercent + ",\r\n");
+        jsonFactValue.append("\t\"Hovering\": \"" + Hovering + "\",\r\n");
+        jsonFactValue.append("\t\"Transtats\": \"" + Transtats + "\",\r\n");
+        jsonFactValue.append("\t\"Flystats\": \"" + Flystats + "\"\r\n");
+        jsonFactValue.append("},\r\n");
+
+        jsonStream << jsonFactValue;
+    }
+
+    else if(!_armed){
+        _jsonLogFile.close();
+    }
+}
+
 
 #if !defined(NO_ARDUPILOT_DIALECT)
 void Vehicle::flashBootloader()

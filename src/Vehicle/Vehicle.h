@@ -45,6 +45,7 @@
 #include "RallyPointManager.h"
 #include "FTPManager.h"
 #include "ImageProtocolManager.h"
+#include "VehicleSensorFactGroup.h"
 
 class EventHandler;
 class UAS;
@@ -313,6 +314,7 @@ public:
     Q_PROPERTY(FactGroup*           localPosition   READ localPositionFactGroup     CONSTANT)
     Q_PROPERTY(FactGroup*           localPositionSetpoint READ localPositionSetpointFactGroup CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
+    Q_PROPERTY(FactGroup*           sensor          READ sensorFactGroup            CONSTANT)
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -653,6 +655,7 @@ public:
     FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
     FactGroup* terrainFactGroup             () { return &_terrainFactGroup; }
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
+    FactGroup* sensorFactGroup              () { return &_sensorFactGroup; }
 
     MissionManager*                 missionManager      () { return _missionManager; }
     GeoFenceManager*                geoFenceManager     () { return _geoFenceManager; }
@@ -992,6 +995,8 @@ private:
     bool _apmArmingNotRequired          ();
     void _initializeCsv                 ();
     void _writeCsvLine                  ();
+    void _initializeJson                ();
+    void _writeJsonLine                 ();
     void _flightTimerStart              ();
     void _flightTimerStop               ();
     void _chunkedStatusTextTimeout      (void);
@@ -1018,6 +1023,9 @@ private:
 
     QTimer              _csvLogTimer;
     QFile               _csvLogFile;
+
+    QTimer              _jsonLogTimer;
+    QFile               _jsonLogFile;
 
     bool            _joystickEnabled = false;
 
@@ -1279,6 +1287,7 @@ private:
     VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
+    VehicleSensorFactGroup          _sensorFactGroup;
 
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
 
@@ -1328,6 +1337,7 @@ private:
     static const char* _escStatusFactGroupName;
     static const char* _estimatorStatusFactGroupName;
     static const char* _terrainFactGroupName;
+    static const char* _sensorFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs      = 100;
 
