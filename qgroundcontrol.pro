@@ -500,6 +500,7 @@ DebugBuild { PX4FirmwarePlugin { PX4FirmwarePluginFactory { APMFirmwarePlugin { 
         src/qgcunittest/MultiSignalSpy.h \
         src/qgcunittest/MultiSignalSpyV2.h \
         src/qgcunittest/UnitTest.h \
+        src/Vehicle/Autotune.h \
         src/Vehicle/FTPManagerTest.h \
         src/Vehicle/InitialConnectTest.h \
         src/Vehicle/RequestMessageTest.h \
@@ -549,6 +550,7 @@ DebugBuild { PX4FirmwarePlugin { PX4FirmwarePluginFactory { APMFirmwarePlugin { 
         src/qgcunittest/MultiSignalSpyV2.cc \
         src/qgcunittest/UnitTest.cc \
         src/qgcunittest/UnitTestList.cc \
+        src/Vehicle/Autotune.cpp \
         src/Vehicle/FTPManagerTest.cc \
         src/Vehicle/InitialConnectTest.cc \
         src/Vehicle/RequestMessageTest.cc \
