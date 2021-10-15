@@ -1498,7 +1498,7 @@
     </parameter>
     <parameter name="COM_RC_OVERRIDE" default="1" type="INT32">
       <short_desc>Enable RC stick override of auto and/or offboard modes</short_desc>
-      <long_desc>When RC stick override is enabled, moving the RC sticks more than COM_RC_STICK_OV from their center position immediately gives control back to the pilot by switching to Position mode. Note: Only has an effect on multicopters, and VTOLs in multicopter mode.</long_desc>
+      <long_desc>When RC stick override is enabled, moving the RC sticks more than COM_RC_STICK_OV from their center position immediately gives control back to the pilot by switching to Position mode. Note: Only has an effect on multicopters, and VTOLs in multicopter mode. This parameter is not considered in case of a GPS failure (Descend flight mode), where stick override is always enabled.</long_desc>
       <min>0</min>
       <max>7</max>
       <bitmask>
@@ -1532,6 +1532,15 @@
       <short_desc>Horizontal velocity error threshold</short_desc>
       <long_desc>This is the horizontal velocity error (EVH) threshold that will trigger a failsafe. The default is appropriate for a multicopter. Can be increased for a fixed-wing.</long_desc>
       <unit>m/s</unit>
+    </parameter>
+    <parameter name="COM_WIND_WARN" default="-1." type="FLOAT">
+      <short_desc>Wind speed warning threshold</short_desc>
+      <long_desc>A warning is triggered if the currently estimated wind speed is above this value. Warning is sent periodically (every 1min). A negative value disables the feature.</long_desc>
+      <min>-1</min>
+      <max>30</max>
+      <unit>m/s</unit>
+      <decimal>1</decimal>
+      <increment>0.1</increment>
     </parameter>
     <parameter name="NAV_DLL_ACT" default="0" type="INT32">
       <short_desc>Set data link loss failsafe mode</short_desc>
@@ -10658,14 +10667,14 @@
         <value code="4096">4096</value>
       </values>
     </parameter>
-    <parameter name="IMU_GYRO_FFT_MAX" default="192." type="FLOAT">
+    <parameter name="IMU_GYRO_FFT_MAX" default="150." type="FLOAT">
       <short_desc>IMU gyro FFT maximum frequency</short_desc>
       <min>1</min>
       <max>1000</max>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter name="IMU_GYRO_FFT_MIN" default="32." type="FLOAT">
+    <parameter name="IMU_GYRO_FFT_MIN" default="30." type="FLOAT">
       <short_desc>IMU gyro FFT minimum frequency</short_desc>
       <min>1</min>
       <max>1000</max>
@@ -11006,6 +11015,9 @@
         <value code="3">SF10/b</value>
         <value code="4">SF10/c</value>
         <value code="5">SF11/c</value>
+        <value code="6">SF30/b</value>
+        <value code="7">SF30/c</value>
+        <value code="8">LW20/c</value>
       </values>
     </parameter>
     <parameter name="SENS_EN_SF1XX" default="0" type="INT32">
@@ -13214,7 +13226,7 @@
     <parameter name="UAVCAN_V1_ID" default="1" type="INT32">
       <short_desc>UAVCAN v1 Node ID</short_desc>
       <long_desc>Read the specs at http://uavcan.org to learn more about Node ID.</long_desc>
-      <min>1</min>
+      <min>-1</min>
       <max>125</max>
       <reboot_required>true</reboot_required>
     </parameter>
@@ -13310,13 +13322,13 @@
       <decimal>2</decimal>
       <increment>1</increment>
     </parameter>
-    <parameter name="VT_B_DEC_FF" default="0.12" type="FLOAT">
+    <parameter name="VT_B_DEC_FF" default="0." type="FLOAT">
       <short_desc>Backtransition deceleration setpoint to pitch feedforward gain</short_desc>
       <min>0</min>
       <max>0.2</max>
       <unit>rad s^2/m</unit>
       <decimal>1</decimal>
-      <increment>0.05</increment>
+      <increment>0.01</increment>
     </parameter>
     <parameter name="VT_B_DEC_I" default="0.1" type="FLOAT">
       <short_desc>Backtransition deceleration setpoint to pitch I gain</short_desc>
@@ -13375,19 +13387,13 @@
       <decimal>2</decimal>
       <increment>0.01</increment>
     </parameter>
-    <parameter name="VT_DWN_PITCH_MAX" default="5.0" type="FLOAT">
-      <short_desc>Maximum allowed angle the vehicle is allowed to pitch down to generate forward force</short_desc>
-      <long_desc>When fixed-wing forward actuation is active (see VT_FW_TRHUST_EN). If demanded down pitch exceeds this limmit, the fixed-wing forward actuators are used instead.</long_desc>
-      <min>0.0</min>
-      <max>45.0</max>
-    </parameter>
     <parameter name="VT_ELEV_MC_LOCK" default="1" type="INT32" boolean="true">
       <short_desc>Lock elevons in multicopter mode</short_desc>
       <long_desc>If set to 1 the elevons are locked in multicopter mode</long_desc>
     </parameter>
     <parameter name="VT_FWD_THRUST_EN" default="0" type="INT32">
       <short_desc>Enable/disable usage of fixed-wing actuators in hover to generate forward force (instead of pitching down)</short_desc>
-      <long_desc>This technique can be used to avoid the plane having to pitch down in order to move forward. This prevents large, negative lift values being created when facing strong winds. Fixed-wing forward actuators refers to puller/pusher (standard VTOL), or forward-tilt (tiltrotor VTOL). Only active if demaded down pitch is above VT_DWN_PITCH_MAX, and uses VT_FWD_THRUST_SC to get from demanded down pitch to fixed-wing actuation.</long_desc>
+      <long_desc>This technique can be used to avoid the plane having to pitch down in order to move forward. This prevents large, negative lift values being created when facing strong winds. Fixed-wing forward actuators refers to puller/pusher (standard VTOL), or forward-tilt (tiltrotor VTOL). Only active if demaded down pitch is below VT_PITCH_MIN, and uses VT_FWD_THRUST_SC to get from demanded down pitch to fixed-wing actuation.</long_desc>
       <values>
         <value code="0">Disable FW forward actuation in hover.</value>
         <value code="1">Enable FW forward actuation in hover in altitude, position and auto modes (except LANDING).</value>
@@ -13400,7 +13406,7 @@
     </parameter>
     <parameter name="VT_FWD_THRUST_SC" default="0.7" type="FLOAT">
       <short_desc>Fixed-wing actuator thrust scale for hover forward flight</short_desc>
-      <long_desc>Scale applied to the demanded down-pitch to get the fixed-wing forward actuation in hover mode. Only active if demaded down pitch is above VT_DWN_PITCH_MAX. Enabled via VT_FWD_THRUST_EN.</long_desc>
+      <long_desc>Scale applied to the demanded down-pitch to get the fixed-wing forward actuation in hover mode. Only active if demaded down pitch is below VT_PITCH_MIN. Enabled via VT_FWD_THRUST_EN.</long_desc>
       <min>0.0</min>
       <max>2.0</max>
     </parameter>
@@ -13486,6 +13492,12 @@
       <decimal>0</decimal>
       <increment>1</increment>
     </parameter>
+    <parameter name="VT_LND_PTCH_MIN" default="-5.0" type="FLOAT">
+      <short_desc>Minimum pitch angle during hover landing</short_desc>
+      <long_desc>Overrides  VT_PTCH_MIN when the vehicle is in LAND mode (hovering). During landing it can be beneficial to allow lower minimum pitch angles as it can avoid the wings generating too much lift and preventing the vehicle from sinking at the desired rate.</long_desc>
+      <min>-10.0</min>
+      <max>45.0</max>
+    </parameter>
     <parameter name="VT_MC_ON_FMU" default="0" type="INT32" boolean="true">
       <short_desc>Enable the usage of AUX outputs for hover motors</short_desc>
       <long_desc>Set this parameter to true if the vehicle's hover motors are connected to the FMU (AUX) port. Not required for boards that only have a FMU, and no IO. Only applies for standard VTOL and tiltrotor.</long_desc>
@@ -13503,6 +13515,12 @@
       <max>20</max>
       <decimal>2</decimal>
       <increment>0.01</increment>
+    </parameter>
+    <parameter name="VT_PTCH_MIN" default="-5.0" type="FLOAT">
+      <short_desc>Minimum pitch angle during hover</short_desc>
+      <long_desc>Minimum pitch angle during hover flight. If the desired pitch angle is is lower than this value then the fixed-wing forward actuation can be used to compensate for the missing thrust in forward direction (see VT_FW_TRHUST_EN)</long_desc>
+      <min>-10.0</min>
+      <max>45.0</max>
     </parameter>
     <parameter name="VT_TILT_FW" default="1.0" type="FLOAT">
       <short_desc>Position of tilt servo in fw mode</short_desc>
