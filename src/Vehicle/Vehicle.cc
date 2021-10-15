@@ -325,9 +325,9 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _vibrationFactGroup               (this)
     , _clockFactGroup                   (this)
     , _distanceSensorFactGroup          (this)
-    , _sensorFactGroup                  (this)
     , _localPositionFactGroup           (this)
     , _localPositionSetpointFactGroup   (this)
+    , _sensorFactGroup                  (this)
 {
     _linkManager = _toolbox->linkManager();
 
