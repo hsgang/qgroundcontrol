@@ -177,111 +177,77 @@ RowLayout {
         Layout.minimumWidth:    contentWidth
         Layout.maximumWidth:    contentWidth
         Layout.alignment:       Qt.AlignTop
-
         Column {
             spacing:            _margins
             Layout.alignment:   Qt.AlignTop
-
             width:          parent.width
             id:             rightColumn
 
-            Row {
-                spacing: _margins
-
-                Switch {
-                    id:        autotuningEnabled
-                    checked:   true
-                }
-
-                QGCLabel {
-                    color:   qgcPal.text
-                    text:    autotuningEnabled.checked ? qsTr("Autotune enabled") : qsTr("Autotune disabled")
-                }
-            }
-
             Column {
-                width:     parent.width
-                visible:   autotuningEnabled.checked
-
-                AutotuneUI {
-                    anchors {
-                        top:         parent.top
-                        topMargin:   _margins * 2
-                    }
-
-                    width:     parent.width
-                }
-            }
-
-            Column {
-                width:     parent.width
-                visible:   !autotuningEnabled.checked
-
-                Column {
-                    RowLayout {
-                        spacing: _margins
-                        visible: axis.length > 1
-
-                        QGCLabel { text: qsTr("Select Tuning:") }
-
-                        Repeater {
-                            model: axis
-                            QGCRadioButton {
-                                text:           modelData.name
-                                checked:        index == _currentAxis
-                                onClicked: _currentAxis = index
-                            }
-                        }
-                    }
-                }
-
-                // Instantiate all sliders (instead of switching the model), so that
-                // values are not changed unexpectedly if they do not match with a tick
-                // value
-                Repeater {
-                    model: axis
-                    FactSliderPanel {
-                        width:       parent.width
-                        visible:     _currentAxis === index
-                        sliderModel: axis[index].params
-                    }
-                }
-
-                Column {
-                    QGCLabel { text: qsTr("Clipboard Values:") }
-
-                    GridLayout {
-                        rows:           savedRepeater.model.length
-                        flow:           GridLayout.TopToBottom
-                        rowSpacing:     0
-                        columnSpacing:  _margins
-
-                        Repeater {
-                            model: axis[_currentAxis].params
-
-                            QGCLabel { text: param }
-                        }
-
-                        Repeater {
-                            id: savedRepeater
-
-                            QGCLabel { text: modelData }
-                        }
-                    }
-                }
 
                 RowLayout {
                     spacing: _margins
+                    visible: axis.length > 1
 
-                    QGCButton {
-                        text:       qsTr("Save To Clipboard")
-                        onClicked:  saveTuningParamValues()
+                    QGCLabel { text: qsTr("Select Tuning:") }
+
+                    Repeater {
+                        model: axis
+                        QGCRadioButton {
+                            text:           modelData.name
+                            checked:        index == _currentAxis
+                            onClicked: _currentAxis = index
+                        }
+                    }
+                }
+            }
+
+            // Instantiate all sliders (instead of switching the model), so that
+            // values are not changed unexpectedly if they do not match with a tick
+            // value
+            Repeater {
+                model: axis
+                FactSliderPanel {
+                    width:       parent.width
+                    visible:     _currentAxis === index
+                    sliderModel: axis[index].params
+                }
+            }
+
+            Column {
+                QGCLabel { text: qsTr("Clipboard Values:") }
+
+                GridLayout {
+                    rows:           savedRepeater.model.length
+                    flow:           GridLayout.TopToBottom
+                    rowSpacing:     0
+                    columnSpacing:  _margins
+
+                    Repeater {
+                        model: axis[_currentAxis].params
+
+                        QGCLabel { text: param }
                     }
 
-                    QGCButton {
-                        text:       qsTr("Restore From Clipboard")
-                        onClicked:  resetToSavedTuningParamValues()
+                    Repeater {
+                        id: savedRepeater
+
+                        QGCLabel { text: modelData }
                     }
+                }
+            }
+
+            RowLayout {
+                spacing: _margins
+
+                QGCButton {
+                    text:       qsTr("Save To Clipboard")
+                    onClicked:  saveTuningParamValues()
+                }
+
+                QGCButton {
+                    text:       qsTr("Restore From Clipboard")
+                    onClicked:  resetToSavedTuningParamValues()
                 }
             }
         }

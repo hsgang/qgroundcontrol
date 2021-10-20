@@ -50,7 +50,6 @@ add_custom_target(QmlControlsQml
 		EditPositionDialog.qml
 		ExclusiveGroupItem.qml
 		FactSliderPanel.qml
-        AutotuneUI.qml
 		FileButton.qml
 		FlightModeDropdown.qml
 		FlightModeMenu.qml
@@ -82,7 +81,6 @@ add_custom_target(QmlControlsQml
 		PreFlightCheckList.qml
 		PreFlightCheckModel.qml
 		QGCButton.qml
-		AutotuneUI.qml
 		QGCCheckBox.qml
 		QGCColoredImage.qml
 		QGCComboBox.qml
