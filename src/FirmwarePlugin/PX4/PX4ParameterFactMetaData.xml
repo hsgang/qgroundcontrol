@@ -940,9 +940,14 @@
       <max>180</max>
       <unit>deg</unit>
     </parameter>
-    <parameter name="COM_ARM_MAG_STR" default="1" type="INT32" boolean="true">
+    <parameter name="COM_ARM_MAG_STR" default="1" type="INT32">
       <short_desc>Enable mag strength preflight check</short_desc>
-      <long_desc>Deny arming if the estimator detects a strong magnetic disturbance (check enabled by EKF2_MAG_CHECK)</long_desc>
+      <long_desc>Check if the estimator detects a strong magnetic disturbance (check enabled by EKF2_MAG_CHECK)</long_desc>
+      <values>
+        <value code="0">Disabled</value>
+        <value code="1">Deny arming</value>
+        <value code="2">Warning only</value>
+      </values>
     </parameter>
     <parameter name="COM_ARM_MIS_REQ" default="0" type="INT32" boolean="true">
       <short_desc>Require valid mission to arm</short_desc>
@@ -11415,6 +11420,21 @@
       <short_desc>UAVCAN CAN bus bitrate</short_desc>
       <min>20000</min>
       <max>1000000</max>
+    </parameter>
+    <parameter name="CANNODE_FLOW_ROT" default="0" type="INT32">
+      <short_desc>Cannode flow board rotation</short_desc>
+      <long_desc>This parameter defines the yaw rotation of the Cannode flow board relative to the vehicle body frame. Zero rotation is defined as X on flow board pointing towards front of vehicle.</long_desc>
+      <reboot_required>true</reboot_required>
+      <values>
+        <value code="0">No rotation</value>
+        <value code="1">Yaw 45°</value>
+        <value code="2">Yaw 90°</value>
+        <value code="3">Yaw 135°</value>
+        <value code="4">Yaw 180°</value>
+        <value code="5">Yaw 225°</value>
+        <value code="6">Yaw 270°</value>
+        <value code="7">Yaw 315°</value>
+      </values>
     </parameter>
     <parameter name="CANNODE_NODE_ID" default="120" type="INT32">
       <short_desc>UAVCAN Node ID</short_desc>
