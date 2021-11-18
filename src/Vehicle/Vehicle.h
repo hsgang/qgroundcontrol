@@ -615,7 +615,7 @@ public:
     };
 
     void startCalibration   (CalibrationType calType);
-    void stopCalibration    (void);
+    void stopCalibration    (bool showError);
 
     void startUAVCANBusConfig(void);
     void stopUAVCANBusConfig(void);
