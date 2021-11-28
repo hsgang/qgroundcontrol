@@ -39,7 +39,7 @@ Button {
             id:     innerRect
             color:  showHighlight ? qgcPal.buttonHighlight : qgcPal.windowShade
 
-            implicitWidth: titleBar.x + titleBar.contentWidth + ScreenTools.defaultFontPixelWidth
+            implicitWidth: titleBar.x + titleBar.contentWidth * 1.5 + ScreenTools.defaultFontPixelWidth
 
             QGCColoredImage {
                 id:                     image

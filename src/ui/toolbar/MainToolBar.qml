@@ -67,9 +67,16 @@ Rectangle {
         QGCToolBarButton {
             id:                     currentButton
             Layout.preferredHeight: viewButtonRow.height
-            icon.source:            "/res/QGCLogoFull"
+            icon.source:            "/qmlimages/Hamburger.svg"
             logo:                   true
-            onClicked:              mainWindow.showToolSelectDialog()
+            //onClicked:              mainWindow.showToolSelectDialog()
+            onClicked:
+                if(viewSelectDrawer.visible === false){
+                    viewSelectDrawer.visible = true
+                }
+                else if(viewSelectDrawer.visible === true){
+                    viewSelectDrawer.visible = false
+                }
         }
 
         MainStatusIndicator {
@@ -109,57 +116,57 @@ Rectangle {
 
     //-------------------------------------------------------------------------
     //-- Branding Logo
-    Image {
-        anchors.right:          parent.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-        visible:                currentToolbar !== planViewToolbar && _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
-        fillMode:               Image.PreserveAspectFit
-        source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
-        mipmap:                 true
+//    Image {
+//        anchors.right:          parent.right
+//        anchors.top:            parent.top
+//        anchors.bottom:         parent.bottom
+//        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
+//        visible:                currentToolbar !== planViewToolbar && _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+//        fillMode:               Image.PreserveAspectFit
+//        source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
+//        mipmap:                 true
 
-        property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
-        property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
-        property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
-        property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
-        property bool   _userBrandingIndoor:    _userBrandImageIndoor.length != 0
-        property bool   _userBrandingOutdoor:   _userBrandImageOutdoor.length != 0
-        property string _brandImageIndoor:      brandImageIndoor()
-        property string _brandImageOutdoor:     brandImageOutdoor()
+//        property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
+//        property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
+//        property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
+//        property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
+//        property bool   _userBrandingIndoor:    _userBrandImageIndoor.length != 0
+//        property bool   _userBrandingOutdoor:   _userBrandImageOutdoor.length != 0
+//        property string _brandImageIndoor:      brandImageIndoor()
+//        property string _brandImageOutdoor:     brandImageOutdoor()
 
-        function brandImageIndoor() {
-            if (_userBrandingIndoor) {
-                return _userBrandImageIndoor
-            } else {
-                if (_userBrandingOutdoor) {
-                    return _userBrandingOutdoor
-                } else {
-                    if (_corePluginBranding) {
-                        return QGroundControl.corePlugin.brandImageIndoor
-                    } else {
-                        return _activeVehicle ? _activeVehicle.brandImageIndoor : ""
-                    }
-                }
-            }
-        }
+//        function brandImageIndoor() {
+//            if (_userBrandingIndoor) {
+//                return _userBrandImageIndoor
+//            } else {
+//                if (_userBrandingOutdoor) {
+//                    return _userBrandingOutdoor
+//                } else {
+//                    if (_corePluginBranding) {
+//                        return QGroundControl.corePlugin.brandImageIndoor
+//                    } else {
+//                        return _activeVehicle ? _activeVehicle.brandImageIndoor : ""
+//                    }
+//                }
+//            }
+//        }
 
-        function brandImageOutdoor() {
-            if (_userBrandingOutdoor) {
-                return _userBrandingOutdoor
-            } else {
-                if (_userBrandingIndoor) {
-                    return _userBrandingIndoor
-                } else {
-                    if (_corePluginBranding) {
-                        return QGroundControl.corePlugin.brandImageOutdoor
-                    } else {
-                        return _activeVehicle ? _activeVehicle.brandImageOutdoor : ""
-                    }
-                }
-            }
-        }
-    }
+//        function brandImageOutdoor() {
+//            if (_userBrandingOutdoor) {
+//                return _userBrandingOutdoor
+//            } else {
+//                if (_userBrandingIndoor) {
+//                    return _userBrandingIndoor
+//                } else {
+//                    if (_corePluginBranding) {
+//                        return QGroundControl.corePlugin.brandImageOutdoor
+//                    } else {
+//                        return _activeVehicle ? _activeVehicle.brandImageOutdoor : ""
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     // Small parameter download progress bar
     Rectangle {
