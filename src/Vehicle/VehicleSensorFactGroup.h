@@ -55,6 +55,7 @@ public:
 private:
     void _handleData16     (mavlink_message_t& message);
     void _handleScaledPressure     (mavlink_message_t& message);
+    void _handleAtmosphericSensor   (mavlink_message_t& message);
 //    void _handleV2_extension (mavlink_message_t& message);
 //    void _initializeSensorData          ();
 //    void _writeSensorDataLine           ();

@@ -76,6 +76,9 @@ void VehicleSensorFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_messa
     case MAVLINK_MSG_ID_SCALED_PRESSURE:
         _handleScaledPressure(message);
         break;
+    case MAVLINK_MSG_ID_ATMOSPHERIC_SENSOR:
+        _handleAtmosphericSensor(message);
+        break;
 #if !defined(NO_ARDUPILOT_DIALECT)
     case MAVLINK_MSG_ID_WIND:
 //        _handleWind(message);
@@ -120,9 +123,18 @@ void VehicleSensorFactGroup::_handleScaledPressure(mavlink_message_t& message)
     mavlink_scaled_pressure_t pressure;
     mavlink_msg_scaled_pressure_decode(&message, &pressure);
     sensorBaro()->setRawValue(pressure.press_abs);
-    _setTelemetryAvailable(true);
 }
 
+void VehicleSensorFactGroup::_handleAtmosphericSensor(mavlink_message_t& message)
+{
+    mavlink_atmospheric_sensor_t atmospheric;
+    mavlink_msg_atmospheric_sensor_decode(&message, &atmospheric);
+    sensorTemp()->setRawValue(atmospheric.temperature);
+    sensorHumi()->setRawValue(atmospheric.humidity);
+    sensorBaro()->setRawValue(atmospheric.press_abs);
+    sensorWindDir()->setRawValue(atmospheric.direction);
+    sensorWindSpd()->setRawValue(atmospheric.speed);
+}
 
 
 //void VehicleSensorFactGroup::_handleV2_extension(mavlink_message_t& message)
