@@ -585,6 +585,7 @@ HEADERS += \
     src/FollowMe/FollowMe.h \
     src/Joystick/Joystick.h \
     src/Joystick/JoystickManager.h \
+    src/Joystick/JoystickMavCommand.h \
     src/JsonHelper.h \
     src/KMLDomDocument.h \
     src/KMLHelper.h \
@@ -724,6 +725,7 @@ HEADERS += \
     src/Vehicle/VehicleTemperatureFactGroup.h \
     src/Vehicle/VehicleVibrationFactGroup.h \
     src/Vehicle/VehicleWindFactGroup.h \
+    src/Vehicle/VehicleHygrometerFactGroup.h \
     src/VehicleSetup/JoystickConfigController.h \
     src/comm/LinkConfiguration.h \
     src/comm/LinkInterface.h \
@@ -828,6 +830,7 @@ SOURCES += \
     src/FollowMe/FollowMe.cc \
     src/Joystick/Joystick.cc \
     src/Joystick/JoystickManager.cc \
+    src/Joystick/JoystickMavCommand.cc \
     src/JsonHelper.cc \
     src/KMLDomDocument.cc \
     src/KMLHelper.cc \
@@ -963,6 +966,7 @@ SOURCES += \
     src/Vehicle/VehicleSetpointFactGroup.cc \
     src/Vehicle/VehicleTemperatureFactGroup.cc \
     src/Vehicle/VehicleVibrationFactGroup.cc \
+    src/Vehicle/VehicleHygrometerFactGroup.cc \
     src/Vehicle/VehicleWindFactGroup.cc \
     src/VehicleSetup/JoystickConfigController.cc \
     src/comm/LinkConfiguration.cc \

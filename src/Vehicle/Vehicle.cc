@@ -109,13 +109,13 @@ const char* Vehicle::_escStatusFactGroupName =          "escStatus";
 const char* Vehicle::_estimatorStatusFactGroupName =    "estimatorStatus";
 const char* Vehicle::_terrainFactGroupName =            "terrain";
 const char* Vehicle::_sensorFactGroupName =             "sensor";
+const char* Vehicle::_hygrometerFactGroupName =         "hygrometer";
 
 static int jsonLogSeq = 0;
 static QString StartTime;
 static QString StartLat;
 static QString StartLong;
 static QString StartAltAMSL;
-
 
 // Standard connected vehicle
 Vehicle::Vehicle(LinkInterface*             link,
@@ -174,6 +174,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _localPositionSetpointFactGroup(this)
     , _escStatusFactGroup           (this)
     , _estimatorStatusFactGroup     (this)
+    , _hygrometerFactGroup          (this)
     , _terrainFactGroup             (this)
     , _sensorFactGroup              (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
@@ -458,6 +459,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_localPositionSetpointFactGroup,_localPositionSetpointFactGroupName);
     _addFactGroup(&_escStatusFactGroup,         _escStatusFactGroupName);
     _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
+    _addFactGroup(&_hygrometerFactGroup,        _hygrometerFactGroupName);
     _addFactGroup(&_terrainFactGroup,           _terrainFactGroupName);
     _addFactGroup(&_sensorFactGroup,            _sensorFactGroupName);
 
@@ -3436,8 +3438,12 @@ void Vehicle::_handleMavlinkLoggingData(mavlink_message_t& message)
 {
     mavlink_logging_data_t log;
     mavlink_msg_logging_data_decode(&message, &log);
-    emit mavlinkLogData(this, log.target_system, log.target_component, log.sequence,
-                        log.first_message_offset, QByteArray((const char*)log.data, log.length), false);
+    if (static_cast<size_t>(log.length) > sizeof(log.data)) {
+        qWarning() << "Invalid length for LOGGING_DATA, discarding." << log.length;
+    } else {
+        emit mavlinkLogData(this, log.target_system, log.target_component, log.sequence,
+                            log.first_message_offset, QByteArray((const char*)log.data, log.length), false);
+    }
 }
 
 void Vehicle::_handleMavlinkLoggingDataAcked(mavlink_message_t& message)
@@ -3445,8 +3451,12 @@ void Vehicle::_handleMavlinkLoggingDataAcked(mavlink_message_t& message)
     mavlink_logging_data_acked_t log;
     mavlink_msg_logging_data_acked_decode(&message, &log);
     _ackMavlinkLogData(log.sequence);
-    emit mavlinkLogData(this, log.target_system, log.target_component, log.sequence,
-                        log.first_message_offset, QByteArray((const char*)log.data, log.length), true);
+    if (static_cast<size_t>(log.length) > sizeof(log.data)) {
+        qWarning() << "Invalid length for LOGGING_DATA_ACKED, discarding." << log.length;
+    } else {
+        emit mavlinkLogData(this, log.target_system, log.target_component, log.sequence,
+                            log.first_message_offset, QByteArray((const char*)log.data, log.length), false);
+    }
 }
 
 void Vehicle::setFirmwarePluginInstanceData(QObject* firmwarePluginInstanceData)
