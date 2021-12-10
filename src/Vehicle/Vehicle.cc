@@ -3836,7 +3836,7 @@ void Vehicle::_writeCsvLine()
 void Vehicle::_initializeJson()
 {
     if(!_toolbox->settingsManager()->appSettings()->saveSensorLog()->rawValue().toBool()){
-        qInfo() << "diable save Sensor Log" ;
+        //qInfo() << "disable save Sensor Log" ;
         return;
     }
     //QString now = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss");
