@@ -2773,10 +2773,10 @@
     </parameter>
     <parameter name="FW_L1_PERIOD" default="20.0" type="FLOAT">
       <short_desc>L1 period</short_desc>
-      <long_desc>This is the L1 distance and defines the tracking point ahead of the aircraft its following. A value of 18-25 meters works for most aircraft. Shorten slowly during tuning until response is sharp without oscillation.</long_desc>
-      <min>12.0</min>
+      <long_desc>Used to determine the L1 gain and controller time constant. This parameter is proportional to the L1 distance (which points ahead of the aircraft on the path it is following). A value of 18-25 seconds works for most aircraft. Shorten slowly during tuning until response is sharp without oscillation.</long_desc>
+      <min>7.0</min>
       <max>50.0</max>
-      <unit>m</unit>
+      <unit>s</unit>
       <decimal>1</decimal>
       <increment>0.5</increment>
     </parameter>
@@ -3532,31 +3532,31 @@
   </group>
   <group name="Land Detector">
     <parameter name="LNDFW_AIRSPD_MAX" default="6.00" type="FLOAT">
-      <short_desc>Airspeed max</short_desc>
+      <short_desc>Fixed-wing land detector: Max airspeed</short_desc>
       <long_desc>Maximum airspeed allowed in the landed state</long_desc>
-      <min>4</min>
+      <min>2</min>
       <max>20</max>
       <unit>m/s</unit>
       <decimal>1</decimal>
     </parameter>
     <parameter name="LNDFW_VEL_XY_MAX" default="5.0" type="FLOAT">
-      <short_desc>Fixedwing max horizontal velocity</short_desc>
-      <long_desc>Maximum horizontal velocity allowed in the landed state</long_desc>
+      <short_desc>Fixed-wing land detector: Max horizontal velocity threshold</short_desc>
+      <long_desc>Maximum horizontal velocity allowed in the landed state. A factor of 0.7 is applied in case of airspeed-less flying (either because no sensor is present or sensor data got invalid in flight).</long_desc>
       <min>0.5</min>
       <max>10</max>
       <unit>m/s</unit>
       <decimal>1</decimal>
     </parameter>
-    <parameter name="LNDFW_VEL_Z_MAX" default="3.0" type="FLOAT">
-      <short_desc>Fixedwing max climb rate</short_desc>
-      <long_desc>Maximum vertical velocity allowed in the landed state</long_desc>
+    <parameter name="LNDFW_VEL_Z_MAX" default="2.0" type="FLOAT">
+      <short_desc>Fixed-wing land detector: Max vertiacal velocity threshold</short_desc>
+      <long_desc>Maximum vertical velocity allowed in the landed state. A factor of 0.7 is applied in case of airspeed-less flying (either because no sensor is present or sensor data got invalid in flight).</long_desc>
       <min>0.1</min>
       <max>20</max>
       <unit>m/s</unit>
       <decimal>1</decimal>
     </parameter>
     <parameter name="LNDFW_XYACC_MAX" default="8.0" type="FLOAT">
-      <short_desc>Fixedwing max horizontal acceleration</short_desc>
+      <short_desc>Fixed-wing land detector: Max horizontal acceleration</short_desc>
       <long_desc>Maximum horizontal (x,y body axes) acceleration allowed in the landed state</long_desc>
       <min>2</min>
       <max>15</max>
@@ -4375,13 +4375,13 @@
       <max>360.0</max>
       <decimal>1</decimal>
     </parameter>
-    <parameter name="MNT_RANGE_PITCH" default="360.0" type="FLOAT">
+    <parameter name="MNT_RANGE_PITCH" default="90.0" type="FLOAT">
       <short_desc>Range of pitch channel output in degrees (only in AUX output mode)</short_desc>
       <min>1.0</min>
       <max>720.0</max>
       <decimal>1</decimal>
     </parameter>
-    <parameter name="MNT_RANGE_ROLL" default="360.0" type="FLOAT">
+    <parameter name="MNT_RANGE_ROLL" default="90.0" type="FLOAT">
       <short_desc>Range of roll channel output in degrees (only in AUX output mode)</short_desc>
       <min>1.0</min>
       <max>720.0</max>
@@ -4404,6 +4404,15 @@
       <long_desc>Full stick input [-1..1] translats to [-yaw rate..yaw rate].</long_desc>
       <min>1.0</min>
       <max>90.0</max>
+    </parameter>
+    <parameter name="MNT_RC_IN_MODE" default="1" type="INT32">
+      <short_desc>Input mode for RC gimbal input</short_desc>
+      <min>0</min>
+      <max>1</max>
+      <values>
+        <value code="0">Angle</value>
+        <value code="1">Angular rate</value>
+      </values>
     </parameter>
   </group>
   <group name="Multicopter Attitude Control">
