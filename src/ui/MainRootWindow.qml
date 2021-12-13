@@ -444,7 +444,7 @@ ApplicationWindow {
                         id:                 settingsButton
                         height:             viewSelectDrawer._toolButtonHeight
                         Layout.fillWidth:   true
-                        text:               qsTr("Settings")
+                        text:               qsTr("App Settings")
                         imageResource:      "/qmlimages/Gears.svg"
                         imageColor:         "transparent"
                         visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
