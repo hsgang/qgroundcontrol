@@ -174,6 +174,14 @@ Rectangle {
                             }
 
                             FactCheckBox {
+                                text:       qsTr("Show Mission Max Altitude Indicator")
+                                visible:    _missionMaxAltitudeIndicator.visible
+                                fact:       _missionMaxAltitudeIndicator
+
+                                property Fact _missionMaxAltitudeIndicator: QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator
+                            }
+
+                            FactCheckBox {
                                 text:       qsTr("Show simple camera controls (DIGICAM_CONTROL)")
                                 visible:    _showDumbCameraControl.visible
                                 fact:       _showDumbCameraControl

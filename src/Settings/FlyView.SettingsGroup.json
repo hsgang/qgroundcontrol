@@ -42,6 +42,12 @@
     "default":     false
 },
 {
+    "name":             "missionMaxAltitudeIndicator",
+    "shortDesc": "Show Mission Max Altitude Indicator",
+    "type":             "bool",
+    "default":     false
+},
+{
     "name":             "keepMapCenteredOnVehicle",
     "shortDesc": "Keep map centered on vehicle",
     "type":             "bool",

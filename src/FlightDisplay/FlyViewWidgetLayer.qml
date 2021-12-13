@@ -22,7 +22,6 @@ import QGroundControl.Controls      1.0
 import QGroundControl.Airspace      1.0
 import QGroundControl.Airmap        1.0
 import QGroundControl.Controllers   1.0
-import QGroundControl.Controls      1.0
 import QGroundControl.FactSystem    1.0
 import QGroundControl.FlightDisplay 1.0
 import QGroundControl.FlightMap     1.0
@@ -178,8 +177,8 @@ Item {
 
                 AnchorChanges {
                     target: telemetryPanel
-                    anchors.top: photoVideoControl.bottom
-                    anchors.bottom: undefined
+                    anchors.top: undefined
+                    anchors.bottom: parent.bottom
                     anchors.right: parent.right
                     anchors.verticalCenter: undefined
                 }
@@ -277,5 +276,15 @@ Item {
         id: preFlightChecklistPopup
         FlyViewPreFlightChecklistPopup {
         }
+    }
+
+    FlyViewAltitudeIndicator{
+        id: altitudeIndicator
+
+        anchors.margins:            _toolsMargin
+        anchors.verticalCenter:     parent.verticalCenter
+        anchors.right:              photoVideoControl.left
+        anchors.rightMargin:        _rightPanelWidth * 0.15
+        visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
 }

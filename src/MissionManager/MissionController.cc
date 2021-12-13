@@ -88,6 +88,7 @@ void MissionController::_resetMissionFlightStatus(void)
 {
     _missionFlightStatus.totalDistance =        0.0;
     _missionFlightStatus.maxTelemetryDistance = 0.0;
+    _missionFlightStatus.maxAltitude =          0.0;
     _missionFlightStatus.totalTime =            0.0;
     _missionFlightStatus.hoverTime =            0.0;
     _missionFlightStatus.cruiseTime =           0.0;
@@ -122,6 +123,7 @@ void MissionController::_resetMissionFlightStatus(void)
     emit missionHoverTimeChanged();
     emit missionCruiseTimeChanged();
     emit missionMaxTelemetryChanged(_missionFlightStatus.maxTelemetryDistance);
+    emit missionMaxAltitudeChanged(_missionFlightStatus.maxAltitude);
     emit batteryChangePointChanged(_missionFlightStatus.batteryChangePoint);
     emit batteriesRequiredChanged(_missionFlightStatus.batteriesRequired);
 
@@ -1149,7 +1151,7 @@ void MissionController::_calcPrevWaypointValues(VisualMissionItem* currentItem, 
     // Convert to fixed altitudes
 
     *altDifference = currentItem->amslEntryAlt() - prevItem->amslExitAlt();
-    *distance = prevCoord.distanceTo(currentCoord);
+    *distance = sqrt(pow(prevCoord.distanceTo(currentCoord),2) + pow(*altDifference, 2));
     *azimuth = prevCoord.azimuthTo(currentCoord);
 }
 
@@ -1157,11 +1159,17 @@ double MissionController::_calcDistanceToHome(VisualMissionItem* currentItem, Vi
 {
     QGeoCoordinate  currentCoord =  currentItem->coordinate();
     QGeoCoordinate  homeCoord =     homeItem->exitCoordinate();
+    double altDiffToHome = currentItem->amslEntryAlt() - homeItem->amslExitAlt();
     bool            distanceOk =    false;
 
     distanceOk = true;
 
-    return distanceOk ? homeCoord.distanceTo(currentCoord) : 0.0;
+    return distanceOk ? sqrt(pow(homeCoord.distanceTo(currentCoord),2) + pow(altDiffToHome,2)) : 0.0;
+}
+
+double MissionController::_calcAltitudeToHome(VisualMissionItem* currentItem, VisualMissionItem* homeItem)
+{
+    return currentItem ? currentItem->amslEntryAlt() - homeItem->amslExitAlt() : 0.0;
 }
 
 FlightPathSegment* MissionController::_createFlightPathSegmentWorker(VisualItemPair& pair, bool mavlinkTerrainFrame)
@@ -1663,6 +1671,7 @@ void MissionController::_recalcMissionFlightStatus()
                         item->setDistanceFromStart(totalHorizontalDistance);
 
                         _missionFlightStatus.maxTelemetryDistance = qMax(_missionFlightStatus.maxTelemetryDistance, _calcDistanceToHome(item, _settingsItem));
+                        _missionFlightStatus.maxAltitude = qMax(_missionFlightStatus.maxAltitude, _calcAltitudeToHome(item, _settingsItem));
 
                         // Calculate time/distance
                         double hoverTime = distance / _missionFlightStatus.hoverSpeed;
@@ -1757,6 +1766,7 @@ void MissionController::_recalcMissionFlightStatus()
     }
 
     emit missionMaxTelemetryChanged     (_missionFlightStatus.maxTelemetryDistance);
+    emit missionMaxAltitudeChanged      (_missionFlightStatus.maxAltitude);
     emit missionDistanceChanged         (_missionFlightStatus.totalDistance);
     emit missionHoverDistanceChanged    (_missionFlightStatus.hoverDistance);
     emit missionCruiseDistanceChanged   (_missionFlightStatus.cruiseDistance);
