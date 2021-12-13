@@ -20,10 +20,12 @@ Rectangle {
     id:                 telemetryPanel
     height:             telemetryLayout.height + (_toolsMargin * 2)
     width:              telemetryLayout.width + (_toolsMargin * 2)
-    color:              qgcPal.window
+    //color:              qgcPal.window
+    color:              "#80000000"
     radius:             ScreenTools.defaultFontPixelWidth / 2
 
     property bool       bottomMode: true
+    property bool       editMode: false
 
     DeadMouseArea { anchors.fill: parent }
 
@@ -34,7 +36,7 @@ Rectangle {
         anchors.left:       parent.left
 
          RowLayout {
-            visible: mouseArea.containsMouse || valueArea.settingsUnlocked
+            visible: telemetryPanel.editMode || valueArea.settingsUnlocked
 
             QGCColoredImage {
                 source:             "/res/layout-bottom.svg"
@@ -88,12 +90,12 @@ Rectangle {
 
         QGCMouseArea {
             id:                         mouseArea
-            x:                          telemetryLayout.x
-            y:                          telemetryLayout.y
-            width:                      telemetryLayout.width
-            height:                     telemetryLayout.height
-            hoverEnabled:               true
-            propagateComposedEvents:    true
+            x:                          valueArea.x
+            y:                          valueArea.y
+            width:                      valueArea.width
+            height:                     valueArea.height
+            onClicked:                  telemetryPanel.editMode = !telemetryPanel.editMode
+            //propagateComposedEvents:    true
         }
 
         HorizontalFactValueGrid {
