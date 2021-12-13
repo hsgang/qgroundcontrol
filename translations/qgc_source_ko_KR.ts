@@ -8886,7 +8886,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/AnalyzeView/LogDownloadController.cc" line="366"/>
       <source>Downloaded</source>
-      <translation> 다운로드 완료</translation>
+      <translation> 다운로드 완료</translation>
     </message>
     <message>
       <location filename="../src/AnalyzeView/LogDownloadController.cc" line="436"/>
@@ -9489,6 +9489,21 @@ Click Ok to start the auto-tuning process.
       <location filename="../src/ui/MainRootWindow.qml" line="401"/>
       <source>Application Settings</source>
       <translation>응용프로그램 설정</translation>
+    </message>
+    <message>
+      <location filename="../src/ui/MainRootWindow.qml" line="447"/>
+      <source>App Settings</source>
+      <translation>응용프로그램 설정</translation>
+    </message>
+    <message>
+      <location filename="../src/ui/MainRootWindow.qml" line="384"/>
+      <source>Fly View</source>
+      <translation>비행 화면</translation>
+    </message>
+    <message>
+      <location filename="../src/ui/MainRootWindow.qml" line="399"/>
+      <source>Plan View</source>
+      <translation>계획 보기</translation>
     </message>
     <message>
       <location filename="../src/ui/MainRootWindow.qml" line="288"/>
@@ -10697,7 +10712,7 @@ Is this really what you want?</source>
     <message>
       <location filename="../src/QtLocationPlugin/QMLControl/OfflineMap.qml" line="560"/>
       <source>Downloaded:</source>
-      <translation> 다운로드 완료:</translation>
+      <translation> 다운로드 완료:</translation>
     </message>
     <message>
       <location filename="../src/QtLocationPlugin/QMLControl/OfflineMap.qml" line="567"/>
