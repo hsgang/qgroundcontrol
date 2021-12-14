@@ -108,7 +108,7 @@ const char* Vehicle::_localPositionSetpointFactGroupName ="localPositionSetpoint
 const char* Vehicle::_escStatusFactGroupName =          "escStatus";
 const char* Vehicle::_estimatorStatusFactGroupName =    "estimatorStatus";
 const char* Vehicle::_terrainFactGroupName =            "terrain";
-const char* Vehicle::_sensorFactGroupName =             "sensor";
+const char* Vehicle::_atmosphericSensorFactGroupName =  "atmosphericSensor";
 const char* Vehicle::_hygrometerFactGroupName =         "hygrometer";
 
 static int jsonLogSeq = 0;
@@ -176,7 +176,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _estimatorStatusFactGroup     (this)
     , _hygrometerFactGroup          (this)
     , _terrainFactGroup             (this)
-    , _sensorFactGroup              (this)
+    , _atmosphericSensorFactGroup   (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
 {
     _linkManager = _toolbox->linkManager();
@@ -329,7 +329,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _distanceSensorFactGroup          (this)
     , _localPositionFactGroup           (this)
     , _localPositionSetpointFactGroup   (this)
-    , _sensorFactGroup                  (this)
+    , _atmosphericSensorFactGroup       (this)
 {
     _linkManager = _toolbox->linkManager();
 
@@ -461,7 +461,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
     _addFactGroup(&_hygrometerFactGroup,        _hygrometerFactGroupName);
     _addFactGroup(&_terrainFactGroup,           _terrainFactGroupName);
-    _addFactGroup(&_sensorFactGroup,            _sensorFactGroupName);
+    _addFactGroup(&_atmosphericSensorFactGroup, _atmosphericSensorFactGroupName);
 
     // Add firmware-specific fact groups, if provided
     QMap<QString, FactGroup*>* fwFactGroups = _firmwarePlugin->factGroups();
@@ -3908,11 +3908,11 @@ void Vehicle::_writeJsonLine()
         QString dataTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMddhhmmss"));
         QString Lat = getFactGroup("gps")->getFact("lat")->cookedValueString();
         QString Long = getFactGroup("gps")->getFact("lon")->cookedValueString();
-        QString Temp = getFactGroup("sensor")->getFact("sensorTemp")->cookedValueString();
-        QString Humi = getFactGroup("sensor")->getFact("sensorHumi")->cookedValueString();
-        QString Baro = getFactGroup("sensor")->getFact("sensorBaro")->cookedValueString();
-        QString WindDir = getFactGroup("sensor")->getFact("sensorWindDir")->cookedValueString();
-        QString WindSpd = getFactGroup("sensor")->getFact("sensorWindSpd")->cookedValueString();
+        QString Temp = getFactGroup("atmosphericSensor")->getFact("Temperature")->cookedValueString();
+        QString Humi = getFactGroup("atmosphericSensor")->getFact("Humidity")->cookedValueString();
+        QString Baro = getFactGroup("atmosphericSensor")->getFact("Pressure")->cookedValueString();
+        QString WindDir = getFactGroup("atmosphericSensor")->getFact("WindDir")->cookedValueString();
+        QString WindSpd = getFactGroup("atmosphericSensor")->getFact("WindSpd")->cookedValueString();
         QString GroundSpeed = getFact("groundSpeed")->cookedValueString();
         QString ClimbRate = getFact("climbRate")->cookedValueString();
         QString Alt = getFact("altitudeRelative")->cookedValueString();

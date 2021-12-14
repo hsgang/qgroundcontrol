@@ -341,7 +341,7 @@
         <file alias="Vehicle/HygrometerFact.json">src/Vehicle/HygrometerFact.json</file>
         <file alias="Video.SettingsGroup.json">src/Settings/Video.SettingsGroup.json</file>
         <file alias="VTOLLandingPattern.FactMetaData.json">src/MissionManager/VTOLLandingPattern.FactMetaData.json</file>
-        <file alias="Vehicle/SensorFact.json">src/Vehicle/SensorFact.json</file>
+        <file alias="Vehicle/AtmosphericSensorFact.json">src/Vehicle/AtmosphericSensorFact.json</file>
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/comm/APMArduSubMockLink.params</file>

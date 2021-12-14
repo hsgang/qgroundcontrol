@@ -46,7 +46,7 @@
 #include "RallyPointManager.h"
 #include "FTPManager.h"
 #include "ImageProtocolManager.h"
-#include "VehicleSensorFactGroup.h"
+#include "AtmosphericSensorFactGroup.h"
 
 class EventHandler;
 class UAS;
@@ -318,7 +318,7 @@ public:
     Q_PROPERTY(FactGroup*           localPositionSetpoint READ localPositionSetpointFactGroup CONSTANT)
     Q_PROPERTY(FactGroup*           hygrometer      READ hygrometerFactGroup        CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
-    Q_PROPERTY(FactGroup*           sensor          READ sensorFactGroup            CONSTANT)
+    Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -661,7 +661,7 @@ public:
     FactGroup* terrainFactGroup             () { return &_terrainFactGroup; }
     FactGroup* hygrometerFactGroup          () { return &_hygrometerFactGroup; }
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
-    FactGroup* sensorFactGroup              () { return &_sensorFactGroup; }
+    FactGroup* atmosphericSensorFactGroup   () { return &_atmosphericSensorFactGroup; }
 
     MissionManager*                 missionManager      () { return _missionManager; }
     GeoFenceManager*                geoFenceManager     () { return _geoFenceManager; }
@@ -1322,7 +1322,7 @@ private:
     VehicleHygrometerFactGroup      _hygrometerFactGroup;
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
-    VehicleSensorFactGroup          _sensorFactGroup;
+    AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
 
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
 
@@ -1373,7 +1373,7 @@ private:
     static const char* _estimatorStatusFactGroupName;
     static const char* _hygrometerFactGroupName;
     static const char* _terrainFactGroupName;
-    static const char* _sensorFactGroupName;
+    static const char* _atmosphericSensorFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs      = 100;
 
