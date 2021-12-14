@@ -55,7 +55,7 @@ Rectangle {
         height   : 2
         width    : altitudeIndicator.width * 1.5
         anchors.horizontalCenter: altitudeIndicator.horizontalCenter
-        color    : white
+        color    : "white"
         y        : currentAltitudeRatio()
 
         QGCLabel {
