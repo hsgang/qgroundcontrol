@@ -62,6 +62,9 @@ public:
     /// Returns the string for speed units which has configued by user
     QString appSettingsSpeedUnitsString() { return FactMetaData::appSettingsSpeedUnitsString(); }
 
+    /// Converts from m/s to the user specified speed unit
+    Q_INVOKABLE QVariant meterPerSecToAppSettingsSpeedUnits(const QVariant& speed) const { return FactMetaData::meterPerSecToAppSettingsSpeedUnits(speed); }
+
     Q_INVOKABLE double degreesToRadians(double degrees) { return qDegreesToRadians(degrees); }
     Q_INVOKABLE double radiansToDegrees(double radians) { return qRadiansToDegrees(radians); }
 };

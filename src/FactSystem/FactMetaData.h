@@ -102,6 +102,9 @@ public:
     /// Returns the string for speed units which has configued by user
     static QString appSettingsSpeedUnitsString();
 
+    /// Converts from m/s to the user specified speed unit
+    static QVariant meterPerSecToAppSettingsSpeedUnits(const QVariant& speed);
+
     static const QString defaultCategory    ();
     static const QString defaultGroup       ();
 

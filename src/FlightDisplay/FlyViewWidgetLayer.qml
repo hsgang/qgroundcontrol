@@ -280,11 +280,18 @@ Item {
 
     FlyViewAltitudeIndicator{
         id: altitudeIndicator
-
         anchors.margins:            _toolsMargin
         anchors.verticalCenter:     parent.verticalCenter
         anchors.right:              photoVideoControl.left
         anchors.rightMargin:        _rightPanelWidth * 0.15
+        visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
+    }
+
+    FlyViewAtmosphericSensorView{
+        id: atmosphericSensorView
+        anchors.margins:            _toolsMargin
+        anchors.top:                parent.top
+        anchors.horizontalCenter:   parent.horizontalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
 }

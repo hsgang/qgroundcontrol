@@ -1210,6 +1210,15 @@ QString FactMetaData::appSettingsSpeedUnitsString()
     }
 }
 
+QVariant FactMetaData::meterPerSecToAppSettingsSpeedUnits(const QVariant& speed) {
+    const AppSettingsTranslation_s* pAppSettingsTraslation = _findAppSettingsUnitsTranslation("m/s", UnitSpeed);
+    if (pAppSettingsTraslation) {
+        return pAppSettingsTraslation->rawTranslator(speed);
+    } else {
+        return speed;
+    }
+}
+
 double FactMetaData::cookedIncrement(void) const
 {
     return _rawTranslator(this->rawIncrement()).toDouble();
