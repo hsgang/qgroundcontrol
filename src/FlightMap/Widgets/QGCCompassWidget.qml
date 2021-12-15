@@ -40,6 +40,7 @@ Item {
     property real _groundSpeed:         vehicle ? vehicle.groundSpeed.rawValue : 0
     property real _headingToNextWP:     vehicle ? vehicle.headingToNextWP.rawValue : 0
     property real _courseOverGround:    _activeVehicle ? _activeVehicle.gps.courseOverGround.rawValue : 0
+    property real _windDir:             _activeVehicle ? _activeVehicle.atmosphericSensor.windDir.rawValue : 0
 
     property bool usedByMultipleVehicleList:  false
 
@@ -58,6 +59,10 @@ Item {
 
     function isHeadingToNextWPOK(){
         return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_headingToNextWP)
+    }
+
+    function isWindVaneOK(){
+        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_windDir)
     }
 
     function isNoseUpLocked(){
@@ -129,6 +134,22 @@ Item {
                 property double _angle: isNoseUpLocked()?-_heading+_headingToHome:_headingToHome
                 x: size/2.3 * Math.sin((_angle)*(3.14/180))
                 y: - size/2.3 * Math.cos((_angle)*(3.14/180))
+            }
+        }
+
+        Image {
+            id:                 windVane
+            source:             isWindVaneOK() ? "/qmlimages/windVaneArrow.svg" : ""
+            mipmap:             true
+            fillMode:           Image.PreserveAspectFit
+            anchors.fill:       parent
+            sourceSize.height:  parent.height
+
+            transform: Rotation {
+                property var _angle:isNoseUpLocked()?_windDir-_heading:_windDir
+                origin.x:       cOGPointer.width  / 2
+                origin.y:       cOGPointer.height / 2
+                angle:         _angle
             }
         }
 
