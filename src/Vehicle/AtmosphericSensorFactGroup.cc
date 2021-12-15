@@ -1,12 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 #include "AtmosphericSensorFactGroup.h"
 #include "Vehicle.h"
 
@@ -27,6 +18,7 @@ const char* AtmosphericSensorFactGroup::_extValue4FactName =    "extValue4";
 const char* AtmosphericSensorFactGroup::_extValue5FactName =    "extValue5";
 const char* AtmosphericSensorFactGroup::_windDirFactName =      "windDir";
 const char* AtmosphericSensorFactGroup::_windSpdFactName =      "windSpd";
+const char* AtmosphericSensorFactGroup::_windSpdVerFactName =   "windSpdVer";
 
 struct sensor_data32_Payload {
     float logCountRaw;
@@ -60,6 +52,7 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     , _extValue5Fact  (0, _extValue5FactName,  FactMetaData::valueTypeInt16)
     , _windDirFact    (0, _windDirFactName,    FactMetaData::valueTypeDouble)
     , _windSpdFact    (0, _windSpdFactName,    FactMetaData::valueTypeDouble)
+    , _windSpdVerFact (0, _windSpdVerFactName, FactMetaData::valueTypeDouble)
 {
     _addFact(&_statusFact,        _statusFactName);
     _addFact(&_logCountFact,      _logCountFactName);
@@ -76,6 +69,7 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _addFact(&_extValue5Fact,     _extValue5FactName);
     _addFact(&_windDirFact,       _windDirFactName);
     _addFact(&_windSpdFact,       _windSpdFactName);
+    _addFact(&_windSpdVerFact,    _windSpdVerFactName);
 
     // Start out as not available "--.--"
     _temperatureFact.setRawValue (qQNaN());
@@ -91,6 +85,7 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _extValue5Fact.setRawValue (qQNaN());
     _windDirFact.setRawValue   (qQNaN());
     _windSpdFact.setRawValue   (qQNaN());
+    _windSpdVerFact.setRawValue(qQNaN());
 }
 
 void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message_t& message)
@@ -99,6 +94,11 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     case MAVLINK_MSG_ID_DATA32:
          _handleData32(message);
         break;
+#if !defined(NO_ARDUPILOT_DIALECT)
+    case MAVLINK_MSG_ID_WIND:
+        _handleWind(message);
+        break;
+#endif
     case MAVLINK_MSG_ID_ATMOSPHERIC_SENSOR:
         _handleAtmosphericSensor(message);
         break;
@@ -151,6 +151,24 @@ void AtmosphericSensorFactGroup::_handleScaledPressure(mavlink_message_t& messag
     mavlink_msg_scaled_pressure_decode(&message, &pressure);
     //sensorBaro()->setRawValue(pressure.press_abs);
 }
+
+#if !defined(NO_ARDUPILOT_DIALECT)
+void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
+{
+    mavlink_wind_t wind;
+    mavlink_msg_wind_decode(&message, &wind);
+
+    // We don't want negative wind angles
+    float direction = wind.direction;
+    if (direction < 0) {
+        direction += 360;
+    }
+    this->windDir()->setRawValue(direction);
+    windSpd()->setRawValue(wind.speed);
+    windSpdVer()->setRawValue(wind.speed_z);
+    _setTelemetryAvailable(true);
+}
+#endif
 
 void AtmosphericSensorFactGroup::_handleAtmosphericSensor(mavlink_message_t& message)
 {

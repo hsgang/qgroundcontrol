@@ -102,6 +102,13 @@
     "type":             "double",
     "decimalPlaces":    1,
     "units":            "m/s"
+},
+{
+    "name":             "windSpdVer",
+    "shortDesc": "Wind Vertical Speed",
+    "type":             "double",
+    "decimalPlaces":    1,
+    "units":            "m/s"
 }
 ]
 }

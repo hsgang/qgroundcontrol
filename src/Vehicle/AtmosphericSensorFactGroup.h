@@ -1,12 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 #pragma once
 
 #include "FactGroup.h"
@@ -34,6 +25,7 @@ public:
     Q_PROPERTY(Fact* extValue5    READ extValue5    CONSTANT)
     Q_PROPERTY(Fact* windDir      READ windDir      CONSTANT)
     Q_PROPERTY(Fact* windSpd      READ windSpd      CONSTANT)
+    Q_PROPERTY(Fact* windSpdVer   READ windSpdVer   CONSTANT)
 
     Fact* status                      () { return &_statusFact; }
     Fact* logCount                    () { return &_logCountFact; }
@@ -50,6 +42,7 @@ public:
     Fact* extValue5                   () { return &_extValue5Fact; }
     Fact* windDir                     () { return &_windDirFact; }
     Fact* windSpd                     () { return &_windSpdFact; }
+    Fact* windSpdVer                  () { return &_windSpdVerFact; }
 
     // Overrides from FactGroup
     void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
@@ -69,11 +62,13 @@ public:
     static const char* _extValue5FactName;
     static const char* _windDirFactName;
     static const char* _windSpdFactName;
+    static const char* _windSpdVerFactName;
 
 private:
     void _handleData32              (mavlink_message_t& message);
     void _handleScaledPressure      (mavlink_message_t& message);
     void _handleAtmosphericSensor   (mavlink_message_t& message);
+    void _handleWind                (mavlink_message_t& message);
 
     Fact _statusFact;
     Fact _logCountFact;
@@ -90,4 +85,5 @@ private:
     Fact _extValue5Fact;
     Fact _windDirFact;
     Fact _windSpdFact;
+    Fact _windSpdVerFact;
 };
