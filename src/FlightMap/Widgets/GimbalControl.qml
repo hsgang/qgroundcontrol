@@ -102,6 +102,7 @@ Rectangle {
         anchors.verticalCenter:     parent.verticalCenter
         anchors.horizontalCenter:   parent.horizontalCenter
         columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
+        rowSpacing:                 columnSpacing
         columns:                    3
 
         Rectangle {
@@ -112,6 +113,7 @@ Rectangle {
             color:      "#80000000"
             border.color:       qgcPal.text
             border.width:       1
+            scale:              zoomInPress.pressedButtons ? 0.95 : 1
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
@@ -125,11 +127,13 @@ Rectangle {
                 smooth:             true
                 color:              enabled ? qgcPal.text : qgcPalDisabled.text
                 enabled:            true
+            }
 
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked: {
-                    }
+            MouseArea {
+                id:             zoomInPress
+                anchors.fill:   parent
+                onClicked: {
+                    _mavlinkCamera.stepZoom(1)
                 }
             }
         }
@@ -143,6 +147,7 @@ Rectangle {
             color:      "#80000000"
             border.color:       qgcPal.text
             border.width:       1
+            scale:              gimbalUpPress.pressedButtons ? 0.95 : 1
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
@@ -156,11 +161,12 @@ Rectangle {
                 smooth:             true
                 color:              enabled ? qgcPal.text : qgcPalDisabled.text
                 enabled:            true
+            }
 
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked: {
-                    }
+            MouseArea {
+                id: gimbalUpPress
+                anchors.fill:   parent
+                onClicked: {
                 }
             }
         }
@@ -174,6 +180,7 @@ Rectangle {
             color:      "#80000000"
             border.color:       qgcPal.text
             border.width:       1
+            scale:              baseDownPress.pressedButtons ? 0.95 : 1
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
@@ -187,11 +194,12 @@ Rectangle {
                 smooth:             true
                 color:              enabled ? qgcPal.text : qgcPalDisabled.text
                 enabled:            true
+            }
 
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked: {
-                    }
+            MouseArea {
+                id:             baseDownPress
+                anchors.fill:   parent
+                onClicked: {
                 }
             }
         }
@@ -205,6 +213,7 @@ Rectangle {
             color:      "#80000000"
             border.color:       qgcPal.text
             border.width:       1
+            scale:              gimbalLeftPress.pressedButtons ? 0.95 : 1
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
@@ -218,11 +227,12 @@ Rectangle {
                 smooth:             true
                 color:              enabled ? qgcPal.text : qgcPalDisabled.text
                 enabled:            true
+            }
 
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked: {
-                    }
+            MouseArea {
+                id:             gimbalLeftPress
+                anchors.fill:   parent
+                onClicked: {
                 }
             }
         }
@@ -236,6 +246,7 @@ Rectangle {
             color:      "#80000000"
             border.color:       qgcPal.text
             border.width:       1
+            scale:              gimbalHomePress.pressedButtons ? 0.95 : 1
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
@@ -249,11 +260,12 @@ Rectangle {
                 smooth:             true
                 color:              enabled ? qgcPal.text : qgcPalDisabled.text
                 enabled:            true
+            }
 
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked: {
-                    }
+            MouseArea {
+                id:             gimbalHomePress
+                anchors.fill:   parent
+                onClicked: {
                 }
             }
         }
@@ -267,6 +279,7 @@ Rectangle {
             color:      "#80000000"
             border.color:       qgcPal.text
             border.width:       1
+            scale:              gimbalRightPress.pressedButtons ? 0.95 : 1
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
@@ -280,11 +293,12 @@ Rectangle {
                 smooth:             true
                 color:              enabled ? qgcPal.text : qgcPalDisabled.text
                 enabled:            true
+            }
 
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked: {
-                    }
+            MouseArea {
+                id:             gimbalRightPress
+                anchors.fill:   parent
+                onClicked: {
                 }
             }
         }
@@ -298,6 +312,7 @@ Rectangle {
             color:      "#80000000"
             border.color:       qgcPal.text
             border.width:       1
+            scale:              zoomOutPress.pressedButtons ? 0.95 : 1
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
@@ -311,11 +326,13 @@ Rectangle {
                 smooth:             true
                 color:              enabled ? qgcPal.text : qgcPalDisabled.text
                 enabled:            true
+            }
 
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked: {
-                    }
+            MouseArea {
+                id:             zoomOutPress
+                anchors.fill:   parent
+                onClicked: {
+                    _mavlinkCamera.stepZoom(-1)
                 }
             }
         }
@@ -329,6 +346,7 @@ Rectangle {
             color:      "#80000000"
             border.color:       qgcPal.text
             border.width:       1
+            scale:              gimbalDownPress.pressedButtons ? 0.95 : 1
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
@@ -342,11 +360,12 @@ Rectangle {
                 smooth:             true
                 color:              enabled ? qgcPal.text : qgcPalDisabled.text
                 enabled:            true
+            }
 
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked: {
-                    }
+            MouseArea {
+                id:             gimbalDownPress
+                anchors.fill:   parent
+                onClicked: {
                 }
             }
         }
@@ -360,6 +379,7 @@ Rectangle {
             color:      "#80000000"
             border.color:       qgcPal.text
             border.width:       1
+            scale:              gimbalModePress.pressedButtons ? 0.95 : 1
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
@@ -373,11 +393,12 @@ Rectangle {
                 smooth:             true
                 color:              enabled ? qgcPal.text : qgcPalDisabled.text
                 enabled:            true
+            }
 
-                MouseArea {
-                    anchors.fill:   parent
-                    onClicked: {
-                    }
+            MouseArea {
+                id:             gimbalModePress
+                anchors.fill:   parent
+                onClicked: {
                 }
             }
         }
