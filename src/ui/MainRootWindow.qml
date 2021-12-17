@@ -446,7 +446,7 @@ ApplicationWindow {
                         Layout.fillWidth:   true
                         text:               qsTr("App Settings")
                         imageResource:      "/qmlimages/Gears.svg"
-                        imageColor:         "transparent"
+                        imageColor:         qgcPal.text
                         visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
                         onClicked: {
                             // if (toolbar.viewButtonClicked(this)) {
