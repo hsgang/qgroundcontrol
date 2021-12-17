@@ -48,6 +48,7 @@
 #include "ImageProtocolManager.h"
 #include "AtmosphericSensorFactGroup.h"
 
+class Actuators;
 class EventHandler;
 class UAS;
 class UASInterface;
@@ -319,6 +320,7 @@ public:
     Q_PROPERTY(FactGroup*           hygrometer      READ hygrometerFactGroup        CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
+    Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -596,6 +598,7 @@ public:
     QObject*        sysStatusSensorInfo         () { return &_sysStatusSensorInfo; }
     bool            requiresGpsFix              () const { return static_cast<bool>(_onboardControlSensorsPresent & SysStatusSensorGPS); }
     bool            hilMode                     () const { return _base_mode & MAV_MODE_FLAG_HIL_ENABLED; }
+    Actuators*      actuators                   () const { return _actuators; }
 
     /// Get the maximum MAVLink protocol version supported
     /// @return the maximum version
@@ -829,6 +832,7 @@ public:
     double loadProgress                 () const { return _loadProgress; }
 
     void setEventsMetadata(uint8_t compid, const QString& metadataJsonFileName, const QString& translationJsonFileName);
+    void setActuatorsMetadata(uint8_t compid, const QString& metadataJsonFileName, const QString& translationJsonFileName);
 
 public slots:
     void setVtolInFwdFlight                 (bool vtolInFwdFlight);
@@ -1333,6 +1337,7 @@ private:
     FTPManager*                     _ftpManager                 = nullptr;
     ImageProtocolManager*           _imageProtocolManager       = nullptr;
     InitialConnectStateMachine*     _initialConnectStateMachine = nullptr;
+    Actuators*                      _actuators                  = nullptr;
 
     static const char* _rollFactName;
     static const char* _pitchFactName;
