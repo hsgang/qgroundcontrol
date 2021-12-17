@@ -11,7 +11,7 @@ import QGroundControl.Palette           1.0
 
 Rectangle {
     id:         altitudeIndicator
-    height:     mainLayout.height + (_margins * 2)
+    height:     parent.height * 0.32
     width:      _rightPanelWidth * 0.08
     color:      "#80000000"
     radius:     _margins
