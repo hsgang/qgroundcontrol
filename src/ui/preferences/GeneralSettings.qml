@@ -182,11 +182,27 @@ Rectangle {
                             }
 
                             FactCheckBox {
+                                text:       qsTr("Show AtmosphericSensor Value")
+                                visible:    _showAtmosphericValueBar.visible
+                                fact:       _showAtmosphericValueBar
+
+                                property Fact _showAtmosphericValueBar: QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar
+                            }
+
+                            FactCheckBox {
                                 text:       qsTr("Show simple camera controls (DIGICAM_CONTROL)")
                                 visible:    _showDumbCameraControl.visible
                                 fact:       _showDumbCameraControl
 
                                 property Fact _showDumbCameraControl: QGroundControl.settingsManager.flyViewSettings.showSimpleCameraControl
+                            }
+
+                            FactCheckBox {
+                                text:       qsTr("Show Gimbal Control Pannel")
+                                visible:    _showGimbalControlPannel.visible
+                                fact:       _showGimbalControlPannel
+
+                                property Fact _showGimbalControlPannel: QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel
                             }
 
                             GridLayout {

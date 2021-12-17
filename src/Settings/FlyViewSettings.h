@@ -30,4 +30,6 @@ public:
     DEFINE_SETTINGFACT(showSimpleCameraControl)
     DEFINE_SETTINGFACT(showObstacleDistanceOverlay)
     DEFINE_SETTINGFACT(missionMaxAltitudeIndicator)
+    DEFINE_SETTINGFACT(showAtmosphericValueBar)
+    DEFINE_SETTINGFACT(showGimbalControlPannel)
 };

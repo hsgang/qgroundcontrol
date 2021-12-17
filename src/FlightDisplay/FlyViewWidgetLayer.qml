@@ -279,7 +279,7 @@ Item {
     }
 
     FlyViewAltitudeIndicator{
-        id: altitudeIndicator
+        id:                         altitudeIndicator
         anchors.margins:            _toolsMargin
         anchors.verticalCenter:     parent.verticalCenter
         anchors.right:              photoVideoControl.left
@@ -288,11 +288,11 @@ Item {
     }
 
     FlyViewAtmosphericSensorView{
-        id: atmosphericSensorView
+        id:                         atmosphericSensorView
         anchors.margins:            _toolsMargin
         anchors.top:                parent.top
         anchors.horizontalCenter:   parent.horizontalCenter
-        visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
+        visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue
     }
 
     GimbalControl{

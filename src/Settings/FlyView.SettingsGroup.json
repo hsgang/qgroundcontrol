@@ -72,6 +72,18 @@
     "units":            "m",
     "default":     1000,
     "min":              1
+},
+{
+    "name":         "showAtmosphericValueBar",
+    "shortDesc": "show Atmospheric Value Bar",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":         "showGimbalControlPannel",
+    "shortDesc": "show Gimbal Control Pannel",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }
