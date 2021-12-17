@@ -307,6 +307,12 @@ Rectangle {
                 visible:            _mavlinkCameraBatteryReady
             }
         }
+        GimbalControl{
+            id:                     gimbalControl
+            anchors.margins:        _toolsMargin
+            width:                  _rightPanelWidth*0.9
+            height:                 width
+        }
     }
 
     Component {

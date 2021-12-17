@@ -25,7 +25,7 @@ import QGroundControl.FactControls      1.0
 
 Rectangle {
     id:         gimbalControlPannel
-    color:      "#80000000"
+    color:      "#00000000"
     radius:     _margins
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
