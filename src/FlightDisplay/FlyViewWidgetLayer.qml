@@ -294,4 +294,13 @@ Item {
         anchors.horizontalCenter:   parent.horizontalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
+
+    GimbalControl{
+        id:                     gimbalControl
+        anchors.margins:        _toolsMargin
+        anchors.top:            photoVideoControl.bottom
+        anchors.right:          parent.right
+        width:                  _rightPanelWidth
+        height:                 _rightPanelWidth
+    }
 }

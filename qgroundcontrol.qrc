@@ -283,6 +283,7 @@
         <file alias="VTOLLandingPatternEditor.qml">src/PlanView/VTOLLandingPatternEditor.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewAltitudeIndicator.qml">src/FlightDisplay/FlyViewAltitudeIndicator.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewAtmosphericSensorView.qml">src/FlightDisplay/FlyViewAtmosphericSensorView.qml</file>
+        <file alias="QGroundControl/FlightMap/GimbalControl.qml">src/FlightMap/Widgets/GimbalControl.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
