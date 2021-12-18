@@ -20,6 +20,7 @@
 #include "VTOLLandingComplexItem.h"
 #include "StructureScanComplexItem.h"
 #include "CorridorScanComplexItem.h"
+#include "VerticalFlightComplexItem.h"
 #include "JsonHelper.h"
 #include "ParameterManager.h"
 #include "QGroundControlQmlGlobal.h"
@@ -451,6 +452,8 @@ VisualMissionItem* MissionController::insertComplexMissionItem(QString itemName,
         newItem = new StructureScanComplexItem(_masterController, _flyView, QString() /* kmlFile */);
     } else if (itemName == CorridorScanComplexItem::name) {
         newItem = new CorridorScanComplexItem(_masterController, _flyView, QString() /* kmlFile */);
+    } else if (itemName == VerticalFlightComplexItem::name) {
+        newItem = new VerticalFlightComplexItem(_masterController, _flyView, QString());
     } else {
         qWarning() << "Internal error: Unknown complex item:" << itemName;
         return nullptr;
@@ -471,6 +474,8 @@ VisualMissionItem* MissionController::insertComplexMissionItemFromKMLOrSHP(QStri
         newItem = new StructureScanComplexItem(_masterController, _flyView, file);
     } else if (itemName == CorridorScanComplexItem::name) {
         newItem = new CorridorScanComplexItem(_masterController, _flyView, file);
+    } else if (itemName == VerticalFlightComplexItem::name) {
+        newItem = new VerticalFlightComplexItem(_masterController, _flyView, file);
     } else {
         qWarning() << "Internal error: Unknown complex item:" << itemName;
         return nullptr;
@@ -486,7 +491,8 @@ void MissionController::_insertComplexMissionItemWorker(const QGeoCoordinate& ma
     int sequenceNumber = _nextSequenceNumber();
     bool surveyStyleItem = qobject_cast<SurveyComplexItem*>(complexItem) ||
             qobject_cast<CorridorScanComplexItem*>(complexItem) ||
-            qobject_cast<StructureScanComplexItem*>(complexItem);
+            qobject_cast<StructureScanComplexItem*>(complexItem) ||
+            qobject_cast<VerticalFlightComplexItem*>(complexItem);
 
     if (surveyStyleItem) {
         bool rollSupported  = false;
@@ -2262,6 +2268,7 @@ QStringList MissionController::complexMissionItemNames(void) const
     if (_controllerVehicle->multiRotor() || _controllerVehicle->vtol()) {
         complexItems.append(StructureScanComplexItem::name);
     }
+    complexItems.append(VerticalFlightComplexItem::name);
 
     // Note: The landing pattern items are not added here since they have there own button which adds them
 
@@ -2649,6 +2656,11 @@ QString MissionController::corridorScanComplexItemName(void) const
 QString MissionController::structureScanComplexItemName(void) const
 {
     return StructureScanComplexItem::name;
+}
+
+QString MissionController::verticalFlightComplexItemName(void) const
+{
+    return VerticalFlightComplexItem::name;
 }
 
 void MissionController::_allItemsRemoved(void)

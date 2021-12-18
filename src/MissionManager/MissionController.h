@@ -100,6 +100,7 @@ public:
     Q_PROPERTY(QString              surveyComplexItemName           READ surveyComplexItemName          CONSTANT)
     Q_PROPERTY(QString              corridorScanComplexItemName     READ corridorScanComplexItemName    CONSTANT)
     Q_PROPERTY(QString              structureScanComplexItemName    READ structureScanComplexItemName   CONSTANT)
+    Q_PROPERTY(QString              verticalFlightComplexItemName   READ verticalFlightComplexItemName  CONSTANT)
     Q_PROPERTY(bool                 onlyInsertTakeoffValid          MEMBER _onlyInsertTakeoffValid      NOTIFY onlyInsertTakeoffValidChanged)
     Q_PROPERTY(bool                 isInsertTakeoffValid            MEMBER _isInsertTakeoffValid        NOTIFY isInsertTakeoffValidChanged)
     Q_PROPERTY(bool                 isInsertLandValid               MEMBER _isInsertLandValid           NOTIFY isInsertLandValidChanged)
@@ -231,6 +232,7 @@ public:
     QString             surveyComplexItemName       (void) const;
     QString             corridorScanComplexItemName (void) const;
     QString             structureScanComplexItemName(void) const;
+    QString             verticalFlightComplexItemName(void) const;
     bool                isInsertTakeoffValid        (void) const;
     double              minAMSLAltitude             (void) const { return _minAMSLAltitude; }
     double              maxAMSLAltitude             (void) const { return _maxAMSLAltitude; }

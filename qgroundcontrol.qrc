@@ -284,6 +284,14 @@
         <file alias="VibrationPage.qml">src/AnalyzeView/VibrationPage.qml</file>
         <file alias="VirtualJoystick.qml">src/FlightDisplay/VirtualJoystick.qml</file>
         <file alias="VTOLLandingPatternEditor.qml">src/PlanView/VTOLLandingPatternEditor.qml</file>
+<<<<<<< Updated upstream
+=======
+        <file alias="QGroundControl/FlightDisplay/FlyViewAltitudeIndicator.qml">src/FlightDisplay/FlyViewAltitudeIndicator.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewAtmosphericSensorView.qml">src/FlightDisplay/FlyViewAtmosphericSensorView.qml</file>
+        <file alias="QGroundControl/FlightMap/GimbalControl.qml">src/FlightMap/Widgets/GimbalControl.qml</file>
+        <file alias="VerticalFlightEditor.qml">src/PlanView/VerticalFlightEditor.qml</file>
+        <file alias="QGroundControl/Controls/VerticalFlightMapVisual.qml">src/PlanView/VerticalFlightMapVisual.qml</file>
+>>>>>>> Stashed changes
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
@@ -343,6 +351,11 @@
         <file alias="Vehicle/HygrometerFact.json">src/Vehicle/HygrometerFact.json</file>
         <file alias="Video.SettingsGroup.json">src/Settings/Video.SettingsGroup.json</file>
         <file alias="VTOLLandingPattern.FactMetaData.json">src/MissionManager/VTOLLandingPattern.FactMetaData.json</file>
+<<<<<<< Updated upstream
+=======
+        <file alias="Vehicle/AtmosphericSensorFact.json">src/Vehicle/AtmosphericSensorFact.json</file>
+        <file alias="VerticalFlight.SettingsGroup.json">src/MissionManager/VerticalFlight.SettingsGroup.json</file>
+>>>>>>> Stashed changes
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/comm/APMArduSubMockLink.params</file>

@@ -19,6 +19,7 @@
 #include "SurveyPlanCreator.h"
 #include "StructureScanPlanCreator.h"
 #include "CorridorScanPlanCreator.h"
+#include "VerticalFlightPlanCreator.h"
 #include "BlankPlanCreator.h"
 #if defined(QGC_AIRMAP_ENABLED)
 #include "AirspaceFlightPlanProvider.h"
@@ -641,6 +642,7 @@ void PlanMasterController::_updatePlanCreatorsList(void)
             _planCreators->append(new BlankPlanCreator(this, this));
             _planCreators->append(new SurveyPlanCreator(this, this));
             _planCreators->append(new CorridorScanPlanCreator(this, this));
+//            _planCreators->append(new VerticalFlightPlanCreator(this, this));
             emit planCreatorsChanged(_planCreators);
         }
 

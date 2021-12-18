@@ -1,0 +1,30 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "VerticalMaxAltitude",
+    "shortDesc": "Max Altitude for Vertical Flight Mission.",
+    "type":             "double",
+    "units":            "m",
+    "decimalPlaces":    1,
+    "default":     50
+},
+{
+    "name":             "VerticalInterval",
+    "shortDesc": "Total holding Index of Vertical Flight",
+    "type":             "int32",
+    "min":              0,
+    "default":     0
+},
+{
+    "name":             "VerticalHoldTime",
+    "shortDesc": "Each Keeping Time",
+    "type":             "int32",
+    "min":              0,
+    "units":            "s",
+    "default":     10
+}
+]
+}

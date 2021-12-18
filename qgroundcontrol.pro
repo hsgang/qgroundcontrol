@@ -428,6 +428,9 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 #
 
 HEADERS += \
+    src/MissionManager/VerticalFlightComplexItem.h \
+    src/MissionManager/VerticalFlightPlanCreator.cc \
+    src/MissionManager/VerticalFlightPlanCreator.h \
     src/QmlControls/QmlUnitsConversion.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
     src/api/QGCCorePlugin.h \
@@ -442,6 +445,11 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
+<<<<<<< Updated upstream
+=======
+    src/MissionManager/VerticalFlightComplexItem.cc \
+    src/Vehicle/AtmosphericSensorFactGroup.cc \
+>>>>>>> Stashed changes
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
