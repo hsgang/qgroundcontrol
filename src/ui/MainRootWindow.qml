@@ -48,8 +48,6 @@ ApplicationWindow {
         property var rgPromptIds:       QGroundControl.corePlugin.firstRunPromptsToShow()
         property int nextPromptIdIndex: 0
 
-        onRgPromptIdsChanged: console.log(QGroundControl.corePlugin, QGroundControl.corePlugin.firstRunPromptsToShow())
-
         function clearNextPromptSignal() {
             if (currentDialog) {
                 currentDialog.closed.disconnect(nextPrompt)
@@ -58,8 +56,10 @@ ApplicationWindow {
 
         function nextPrompt() {
             if (nextPromptIdIndex < rgPromptIds.length) {
-                currentDialog = showPopupDialogFromSource(QGroundControl.corePlugin.firstRunPromptResource(rgPromptIds[nextPromptIdIndex]))
+                var component = Qt.createComponent(QGroundControl.corePlugin.firstRunPromptResource(rgPromptIds[nextPromptIdIndex]));
+                currentDialog = component.createObject(mainWindow)
                 currentDialog.closed.connect(nextPrompt)
+                currentDialog.open()
                 nextPromptIdIndex++
             } else {
                 currentDialog = null
@@ -168,26 +168,14 @@ ApplicationWindow {
     //-- Global simple message dialog
 
     function showMessageDialog(dialogTitle, dialogText) {
-        showPopupDialogFromComponent(simpleMessageDialog, { title: dialogTitle, text: dialogText })
+        simpleMessageDialog.title = dialogTitle
+        simpleMessageDialog.text = dialogText
+        simpleMessageDialog.open()
     }
 
-    Component {
-        id: simpleMessageDialog
-
-        QGCPopupDialog {
-            title:      dialogProperties.title
-            buttons:    StandardButton.Ok
-
-            ColumnLayout {
-                QGCLabel {
-                    id:                     textLabel
-                    wrapMode:               Text.WordWrap
-                    text:                   dialogProperties.text
-                    Layout.fillWidth:       true
-                    Layout.maximumWidth:    mainWindow.width / 2
-                }
-            }
-        }
+    QGCSimpleMessageDialog {
+        id:         simpleMessageDialog
+        buttons:    StandardButton.Ok
     }
 
     /// Saves main window position and size
@@ -223,25 +211,6 @@ ApplicationWindow {
         }
     }
 
-    // Dialogs based on QGCPopupDialog
-
-    function showPopupDialogFromComponent(component, properties) {
-        var dialog = popupDialogContainerComponent.createObject(mainWindow, { dialogComponent: component, dialogProperties: properties })
-        dialog.open()
-        return dialog
-    }
-
-    function showPopupDialogFromSource(source, properties) {
-        var dialog = popupDialogContainerComponent.createObject(mainWindow, { dialogSource: source, dialogProperties: properties })
-        dialog.open()
-        return dialog
-    }
-
-    Component {
-        id: popupDialogContainerComponent
-        QGCPopupDialogContainer { }
-    }
-
     property bool _forceClose: false
 
     function finishCloseProcess() {
@@ -258,64 +227,64 @@ ApplicationWindow {
     //  Unsaved missions - then
     //  Pending parameter writes - then
     //  Active connections
+
+    property string closeDialogTitle: qsTr("Close %1").arg(QGroundControl.appName)
+
+    function checkForUnsavedMission() {
+        if (globals.planMasterControllerPlanView && globals.planMasterControllerPlanView.dirty) {
+            unsavedMissionCloseDialog.open()
+        } else {
+            checkForPendingParameterWrites()
+        }
+    }
+
+    function checkForPendingParameterWrites() {
+        for (var index=0; index<QGroundControl.multiVehicleManager.vehicles.count; index++) {
+            if (QGroundControl.multiVehicleManager.vehicles.get(index).parameterManager.pendingWrites) {
+                pendingParameterWritesCloseDialog.open()
+                return
+            }
+        }
+        checkForActiveConnections()
+    }
+
+    function checkForActiveConnections() {
+        if (QGroundControl.multiVehicleManager.activeVehicle) {
+            activeConnectionsCloseDialog.open()
+        } else {
+            finishCloseProcess()
+        }
+    }
+
     onClosing: {
         if (!_forceClose) {
-            unsavedMissionCloseDialog.check()
             close.accepted = false
+            checkForUnsavedMission()
         }
     }
 
-    MessageDialog {
-        id:                 unsavedMissionCloseDialog
-        title:              qsTr("%1 close").arg(QGroundControl.appName)
-        text:               qsTr("You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?")
-        standardButtons:    StandardButton.Yes | StandardButton.No
-        modality:           Qt.ApplicationModal
-        visible:            false
-        onYes:              pendingParameterWritesCloseDialog.check()
-        function check() {
-            if (globals.planMasterControllerPlanView && globals.planMasterControllerPlanView.dirty) {
-                unsavedMissionCloseDialog.open()
-            } else {
-                pendingParameterWritesCloseDialog.check()
-            }
-        }
+    QGCSimpleMessageDialog {
+        id:         unsavedMissionCloseDialog
+        title:      closeDialogTitle
+        text:       qsTr("You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?")
+        buttons:    StandardButton.Yes | StandardButton.No
+        onAccepted: checkForPendingParameterWrites()
     }
 
-    MessageDialog {
-        id:                 pendingParameterWritesCloseDialog
-        title:              qsTr("%1 close").arg(QGroundControl.appName)
-        text:               qsTr("You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?")
-        standardButtons:    StandardButton.Yes | StandardButton.No
-        modality:           Qt.ApplicationModal
-        visible:            false
-        onYes:              activeConnectionsCloseDialog.check()
-        function check() {
-            for (var index=0; index<QGroundControl.multiVehicleManager.vehicles.count; index++) {
-                if (QGroundControl.multiVehicleManager.vehicles.get(index).parameterManager.pendingWrites) {
-                    pendingParameterWritesCloseDialog.open()
-                    return
-                }
-            }
-            activeConnectionsCloseDialog.check()
-        }
+    QGCSimpleMessageDialog {
+        id:         pendingParameterWritesCloseDialog
+        title:      closeDialogTitle
+        text:       qsTr("You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?")
+        buttons:    StandardButton.Yes | StandardButton.No
+        onAccepted: checkForActiveConnections()
     }
 
-    MessageDialog {
-        id:                 activeConnectionsCloseDialog
-        title:              qsTr("%1 close").arg(QGroundControl.appName)
-        text:               qsTr("There are still active connections to vehicles. Are you sure you want to exit?")
-        standardButtons:    StandardButton.Yes | StandardButton.Cancel
-        modality:           Qt.ApplicationModal
-        visible:            false
-        onYes:              finishCloseProcess()
-        function check() {
-            if (QGroundControl.multiVehicleManager.activeVehicle) {
-                activeConnectionsCloseDialog.open()
-            } else {
-                finishCloseProcess()
-            }
-        }
+    QGCSimpleMessageDialog {
+        id:         activeConnectionsCloseDialog
+        title:      closeDialogTitle
+        text:       qsTr("There are still active connections to vehicles. Are you sure you want to exit?")
+        buttons:    StandardButton.Yes | StandardButton.No
+        onAccepted: finishCloseProcess()
     }
 
     //-------------------------------------------------------------------------
@@ -339,10 +308,9 @@ ApplicationWindow {
 
     function showToolSelectDialog() {
         if (!mainWindow.preventViewSwitch()) {
-            showPopupDialogFromComponent(toolSelectDialogComponent)
+            toolSelectDialog.open()
         }
     }
-
 
     Drawer {
         id:             viewSelectDrawer
@@ -406,6 +374,7 @@ ApplicationWindow {
                             }
                         }
                     }
+                }
 
                     SubMenuButton {
                         id:                 analyzeButton
@@ -423,6 +392,7 @@ ApplicationWindow {
                             }
                         }
                     }
+                }
 
                     SubMenuButton {
                         id:                 setupButton
