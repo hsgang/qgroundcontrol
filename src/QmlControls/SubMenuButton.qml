@@ -38,6 +38,7 @@ Button {
         background: Rectangle {
             id:     innerRect
             color:  showHighlight ? qgcPal.buttonHighlight : qgcPal.windowShade
+            radius: ScreenTools.defaultFontPointSize * 0.5
 
             implicitWidth: titleBar.x + titleBar.contentWidth * 1.5 + ScreenTools.defaultFontPixelWidth
 
@@ -50,7 +51,7 @@ Button {
                 height:                 ScreenTools.defaultFontPixelHeight * 2
                 fillMode:               Image.PreserveAspectFit
                 mipmap:                 true
-                color:                  imageColor ? imageColor : (control.setupComplete ? qgcPal.button : "red")
+                color:                  imageColor ? imageColor : (control.setupComplete ? qgcPal.text : "red")
                 source:                 control.imageResource
                 sourceSize:             _rootButton.sourceSize
             }
