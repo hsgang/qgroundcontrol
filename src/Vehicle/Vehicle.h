@@ -617,6 +617,7 @@ public:
         CalibrationAPMPreFlight,
         CalibrationPX4Airspeed,
         CalibrationPX4Pressure,
+        CalibrationAPMAccelSimple,
     };
 
     void startCalibration   (CalibrationType calType);
