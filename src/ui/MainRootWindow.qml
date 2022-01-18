@@ -124,10 +124,11 @@ ApplicationWindow {
     }
 
     function viewSwitch(currentToolbar) {
-        toolDrawer.visible      = false
-        toolDrawer.toolSource   = ""
         flightView.visible      = false
         planView.visible        = false
+        analyzeView.visible     = false
+        setupView.visible       = false
+        appSettings.visible     = false
         toolbar.currentToolbar  = currentToolbar
     }
 
@@ -144,33 +145,19 @@ ApplicationWindow {
         planView.visible = true
     }
 
-//    function showTool(toolTitle, toolSource, toolIcon) {
-//        toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
-//        toolDrawer.toolTitle    = toolTitle
-//        toolDrawer.toolSource   = toolSource
-//        toolDrawer.toolIcon     = toolIcon
-//        toolDrawer.visible      = true
-//    }
-
     function showAnalyzeTool() {
-        //showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
         viewSwitch(toolbar.flyViewToolbar)
-        toolDrawer.toolSource  = "AnalyzeView.qml"
-        toolDrawer.visible     = true
+        analyzeView.visible = true
     }
 
     function showSetupTool() {
-        //showTool(qsTr("Vehicle Setup"), "SetupView.qml", "/qmlimages/Gears.svg")
         viewSwitch(toolbar.flyViewToolbar)
-        toolDrawer.toolSource  = "SetupView.qml"
-        toolDrawer.visible     = true
+        setupView.visible = true
     }
 
     function showSettingsTool() {
-        //showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
         viewSwitch(toolbar.flyViewToolbar)
-        toolDrawer.toolSource  = "AppSettings.qml"
-        toolDrawer.visible     = true
+        appSettings.visible = true
     }
 
     function checkedMenu() {
@@ -510,97 +497,22 @@ ApplicationWindow {
         visible:        false
     }
 
-    Drawer {
-        id:             toolDrawer
-        width:          mainWindow.width
-        height:         mainWindow.height - toolbar.height
-        y:              toolbar.height
-        edge:           Qt.LeftEdge
-        dragMargin:     0
-        closePolicy:    Drawer.NoAutoClose
-        interactive:    false
+    AnalyzeView{
+        id:             analyzeView
+        anchors.fill:   parent
         visible:        false
+    }
 
-//        property alias backIcon:    backIcon.source
-//        property alias toolTitle:   toolbarDrawerText.text
-        property alias toolSource:  toolDrawerLoader.source
-//        property alias toolIcon:    toolIcon.source
+    SetupView{
+        id:             setupView
+        anchors.fill:   parent
+        visible:        false
+    }
 
-//        Rectangle {
-//            id:             toolDrawerToolbar
-//            anchors.left:   parent.left
-//            anchors.right:  parent.right
-//            anchors.top:    parent.top
-//            height:         ScreenTools.toolbarHeight
-//            color:          qgcPal.toolbarBackground
-
-//            RowLayout {
-//                anchors.leftMargin: ScreenTools.defaultFontPixelWidth
-//                anchors.left:       parent.left
-//                anchors.top:        parent.top
-//                anchors.bottom:     parent.bottom
-//                spacing:            ScreenTools.defaultFontPixelWidth
-
-//                QGCColoredImage {
-//                    id:                     backIcon
-//                    width:                  ScreenTools.defaultFontPixelHeight * 2
-//                    height:                 ScreenTools.defaultFontPixelHeight * 2
-//                    fillMode:               Image.PreserveAspectFit
-//                    mipmap:                 true
-//                    color:                  qgcPal.text
-//                }
-
-//                QGCLabel {
-//                    id:     backTextLabel
-//                    text:   qsTr("Back")
-//                }
-
-//                QGCLabel {
-//                    font.pointSize: ScreenTools.largeFontPointSize
-//                    text:           "<"
-//                }
-
-//                QGCColoredImage {
-//                    id:                     toolIcon
-//                    width:                  ScreenTools.defaultFontPixelHeight * 2
-//                    height:                 ScreenTools.defaultFontPixelHeight * 2
-//                    fillMode:               Image.PreserveAspectFit
-//                    mipmap:                 true
-//                    color:                  qgcPal.text
-//                }
-
-//                QGCLabel {
-//                    id:             toolbarDrawerText
-//                    font.pointSize: ScreenTools.largeFontPointSize
-//                }
-//            }
-
-//            QGCMouseArea {
-//                anchors.top:        parent.top
-//                anchors.bottom:     parent.bottom
-//                x:                  parent.mapFromItem(backIcon, backIcon.x, backIcon.y).x
-//                width:              (backTextLabel.x + backTextLabel.width) - backIcon.x
-//                onClicked: {
-//                    toolDrawer.visible      = false
-//                    toolDrawer.toolSource   = ""
-//                }
-//            }
-//        }
-
-        Loader {
-            id:             toolDrawerLoader
-            anchors.left:   parent.left
-            anchors.right:  parent.right
-            //anchors.top:    toolDrawerToolbar.bottom
-            anchors.top:    parent.top
-            anchors.bottom: parent.bottom
-
-            Connections {
-                target:                 toolDrawerLoader.item
-                ignoreUnknownSignals:   true
-                onPopout:               toolDrawer.visible = false
-            }
-        }
+    AppSettings{
+        id:             appSettings
+        anchors.fill:   parent
+        visible:        false
     }
 
     //-------------------------------------------------------------------------
