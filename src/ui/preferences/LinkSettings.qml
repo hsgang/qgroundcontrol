@@ -94,7 +94,7 @@ Rectangle {
         QGCButton {
             width:      ScreenTools.defaultFontPixelWidth * 10
             text:       qsTr("Delete")
-            enabled:    _currentSelection && !_currentSelection.dynamic
+            enabled:    _currentSelection && !_currentSelection.dynamic &&!_currentSelection.link
             onClicked:  deleteDialog.visible = true
 
             MessageDialog {
@@ -161,6 +161,7 @@ Rectangle {
             id:             settingsRect
             color:          qgcPal.window
             anchors.fill:   parent
+            anchors.horizontalCenter:   parent.horizontalCenter
             property real   _panelWidth:    width * 0.8
 
             QGCFlickable {
