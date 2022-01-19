@@ -34,7 +34,7 @@ Popup {
     property alias  acceptButtonEnabled:    acceptButton.enabled
     property alias  rejectButtonEnabled:    rejectButton.enabled
     property var    dialogProperties
-    property bool   destroyOnClose:         true
+    property bool   destroyOnClose:         false
     property bool   preventClose:           false
 
     signal accepted
