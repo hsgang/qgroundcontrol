@@ -171,48 +171,25 @@ ApplicationWindow {
     //-------------------------------------------------------------------------
     //-- Global simple message dialog
 
-    function showMessageDialog(dialogTitle, dialogText) {
-        simpleMessageDialog.title = dialogTitle
-        simpleMessageDialog.text = dialogText
-        simpleMessageDialog.open()
+    function showMessageDialog(dialogTitle, dialogText, buttons = StandardButton.Ok, acceptFunction = null) {
+        simpleMessageDialogComponent.createObject(mainWindow, { title: dialogTitle, text: dialogText, buttons: buttons, acceptFunction: acceptFunction }).open()
     }
 
-    QGCSimpleMessageDialog {
-        id:         simpleMessageDialog
-        buttons:    StandardButton.Ok
+    // This variant is only meant to be called by QGCApplication
+    function _showMessageDialog(dialogTitle, dialogText) {
+        showMessageDialog(dialogTitle, dialogText)
+    }
+
+    Component {
+        id: simpleMessageDialogComponent
+
+        QGCSimpleMessageDialog {
+        }
     }
 
     /// Saves main window position and size
     MainWindowSavedState {
         window: mainWindow
-    }
-
-    //-------------------------------------------------------------------------
-    //-- Global complex dialog
-
-    /// Shows a QGCViewDialogContainer based dialog
-    ///     @param component The dialog contents
-    ///     @param title Title for dialog
-    ///     @param charWidth Width of dialog in characters
-    ///     @param buttons Buttons to show in dialog using StandardButton enum
-
-    readonly property int showDialogFullWidth:      -1  ///< Use for full width dialog
-    readonly property int showDialogDefaultWidth:   40  ///< Use for default dialog width
-
-    function showComponentDialog(component, title, charWidth, buttons) {
-        var dialogWidth = charWidth === showDialogFullWidth ? mainWindow.width : ScreenTools.defaultFontPixelWidth * charWidth
-        var dialog = dialogDrawerComponent.createObject(mainWindow, { width: dialogWidth, dialogComponent: component, dialogTitle: title, dialogButtons: buttons })
-        mainWindow.pushPreventViewSwitch()
-        dialog.open()
-    }
-
-    Component {
-        id: dialogDrawerComponent
-        QGCViewDialogContainer {
-            y:          mainWindow.header.height
-            height:     mainWindow.height - mainWindow.header.height
-            onClosed:   mainWindow.popPreventViewSwitch()
-        }
     }
 
     property bool _forceClose: false
@@ -236,7 +213,10 @@ ApplicationWindow {
 
     function checkForUnsavedMission() {
         if (globals.planMasterControllerPlanView && globals.planMasterControllerPlanView.dirty) {
-            unsavedMissionCloseDialog.open()
+            showMessageDialog(closeDialogTitle,
+                              qsTr("You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?"),
+                              StandardButton.Yes | StandardButton.No,
+                              function() { checkForPendingParameterWrites() })
         } else {
             checkForPendingParameterWrites()
         }
@@ -245,7 +225,10 @@ ApplicationWindow {
     function checkForPendingParameterWrites() {
         for (var index=0; index<QGroundControl.multiVehicleManager.vehicles.count; index++) {
             if (QGroundControl.multiVehicleManager.vehicles.get(index).parameterManager.pendingWrites) {
-                pendingParameterWritesCloseDialog.open()
+                mainWindow.showMessageDialog(closeDialogTitle,
+                    qsTr("You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?"),
+                    StandardButton.Yes | StandardButton.No,
+                    function() { checkForActiveConnections() })
                 return
             }
         }
@@ -254,7 +237,10 @@ ApplicationWindow {
 
     function checkForActiveConnections() {
         if (QGroundControl.multiVehicleManager.activeVehicle) {
-            activeConnectionsCloseDialog.open()
+            mainWindow.showMessageDialog(closeDialogTitle,
+                qsTr("There are still active connections to vehicles. Are you sure you want to exit?"),
+                StandardButton.Yes | StandardButton.No,
+                function() { finishCloseProcess() })
         } else {
             finishCloseProcess()
         }
@@ -265,30 +251,6 @@ ApplicationWindow {
             close.accepted = false
             checkForUnsavedMission()
         }
-    }
-
-    QGCSimpleMessageDialog {
-        id:         unsavedMissionCloseDialog
-        title:      closeDialogTitle
-        text:       qsTr("You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?")
-        buttons:    StandardButton.Yes | StandardButton.No
-        onAccepted: checkForPendingParameterWrites()
-    }
-
-    QGCSimpleMessageDialog {
-        id:         pendingParameterWritesCloseDialog
-        title:      closeDialogTitle
-        text:       qsTr("You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?")
-        buttons:    StandardButton.Yes | StandardButton.No
-        onAccepted: checkForActiveConnections()
-    }
-
-    QGCSimpleMessageDialog {
-        id:         activeConnectionsCloseDialog
-        title:      closeDialogTitle
-        text:       qsTr("There are still active connections to vehicles. Are you sure you want to exit?")
-        buttons:    StandardButton.Yes | StandardButton.No
-        onAccepted: finishCloseProcess()
     }
 
     //-------------------------------------------------------------------------
@@ -312,7 +274,7 @@ ApplicationWindow {
 
     function showToolSelectDialog() {
         if (!mainWindow.preventViewSwitch()) {
-            toolSelectDialog.open()
+            toolSelectDialogComponent.createObject(mainWindow).open()
         }
     }
 
@@ -485,6 +447,7 @@ ApplicationWindow {
             }
         }
     }
+
 
     FlyView {
         id:             flightView

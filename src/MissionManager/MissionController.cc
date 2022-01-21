@@ -1277,7 +1277,6 @@ void MissionController::_recalcFlightPathSegments(void)
     bool                signalSplitSegmentChanged = false;
 
     qCDebug(MissionControllerLog) << "_recalcFlightPathSegments homePositionValid" << homePositionValid;
-    qDebug() << "_recalcFlightPathSegments homePositionValid" << homePositionValid;
 
     FlightPathSegmentHashTable oldSegmentTable = _flightPathSegmentHashTable;
 
