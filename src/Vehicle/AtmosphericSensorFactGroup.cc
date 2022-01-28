@@ -99,9 +99,9 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
         _handleWind(message);
         break;
 #endif
-    case MAVLINK_MSG_ID_ATMOSPHERIC_SENSOR:
-        _handleAtmosphericSensor(message);
-        break;
+//    case MAVLINK_MSG_ID_ATMOSPHERIC_SENSOR:
+//        _handleAtmosphericSensor(message);
+//        break;
     default:
         break;
     }
@@ -170,13 +170,13 @@ void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
 }
 #endif
 
-void AtmosphericSensorFactGroup::_handleAtmosphericSensor(mavlink_message_t& message)
-{
-    mavlink_atmospheric_sensor_t atmospheric;
-    mavlink_msg_atmospheric_sensor_decode(&message, &atmospheric);
-    temperature()->setRawValue(atmospheric.temperature);
-    humidity()->setRawValue(atmospheric.humidity);
-    pressure()->setRawValue(atmospheric.press_abs);
-    windDir()->setRawValue(atmospheric.direction);
-    windSpd()->setRawValue(atmospheric.speed);
-}
+//void AtmosphericSensorFactGroup::_handleAtmosphericSensor(mavlink_message_t& message)
+//{
+//    mavlink_atmospheric_sensor_t atmospheric;
+//    mavlink_msg_atmospheric_sensor_decode(&message, &atmospheric);
+//    temperature()->setRawValue(atmospheric.temperature);
+//    humidity()->setRawValue(atmospheric.humidity);
+//    pressure()->setRawValue(atmospheric.press_abs);
+//    windDir()->setRawValue(atmospheric.direction);
+//    windSpd()->setRawValue(atmospheric.speed);
+//}
