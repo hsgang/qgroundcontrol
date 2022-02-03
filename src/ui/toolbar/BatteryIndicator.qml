@@ -63,7 +63,7 @@ Item {
             function getBatteryColor() {
                 switch (battery.chargeState.rawValue) {
                 case MAVLink.MAV_BATTERY_CHARGE_STATE_OK:
-                    return qgcPal.text
+                    return qgcPal.colorGreen
                 case MAVLink.MAV_BATTERY_CHARGE_STATE_LOW:
                     return qgcPal.colorOrange
                 case MAVLink.MAV_BATTERY_CHARGE_STATE_CRITICAL:
@@ -112,14 +112,14 @@ Item {
                 QGCLabel {
                     text:                   getBatteryPercentageText()
                     //font.pointSize:         ScreenTools.mediumFontPointSize
-                    color:                  getBatteryColor()
+                    color:                  qgcPal.text
                     //anchors.verticalCenter: parent.verticalCenter
                 }
 
                 QGCLabel {
                     id:         batteryVoltageValue
                     //visible:    _activeVehicle && !isNaN(_activeVehicle.battery.voltage.rawValue)
-                    color:      getBatteryColor()
+                    color:      qgcPal.text
                     text:       _activeVehicle ? battery.voltage.valueString + battery.voltage.units : ""
                 }
             }

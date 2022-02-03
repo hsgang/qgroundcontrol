@@ -84,7 +84,7 @@ Item {
         fillMode:           Image.PreserveAspectFit
         sourceSize.height:  height
         opacity:            (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? 1 : 0.5
-        color:              qgcPal.buttonText
+        color:              (_activeVehicle && _activeVehicle.gps.lock.value >= 3) ? qgcPal.colorGreen : qgcPal.buttonText
     }
 
     Column {
