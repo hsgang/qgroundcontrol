@@ -82,7 +82,7 @@ Item {
             source:             "/qmlimages/RC.svg"
             fillMode:           Image.PreserveAspectFit
             opacity:            _rcRSSIAvailable ? 1 : 0.5
-            color:              qgcPal.buttonText
+            color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 70) ? qgcPal.colorGreen : qgcPal.buttonText
         }
 
         SignalStrength {
