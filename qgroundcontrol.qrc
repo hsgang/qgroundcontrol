@@ -285,6 +285,7 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewAtmosphericSensorView.qml">src/FlightDisplay/FlyViewAtmosphericSensorView.qml</file>
         <file alias="QGroundControl/FlightMap/GimbalControl.qml">src/FlightMap/Widgets/GimbalControl.qml</file>
         <file alias="QGroundControl/Controls/MockLinkOptionsDlg.qml">src/comm/MockLinkOptionsDlg.qml</file>
+        <file alias="QGroundControl/FlightDisplay/ModeChangedIndicator.qml">src/FlightDisplay/ModeChangedIndicator.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

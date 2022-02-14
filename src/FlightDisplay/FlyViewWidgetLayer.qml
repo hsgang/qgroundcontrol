@@ -260,6 +260,11 @@ Item {
         z:                  QGroundControl.zOrderTopMost
     }
 
+    ModeChangedIndicator {
+        anchors.centerIn:   parent
+        z:                  QGroundControl.zOrderTopMost
+    }
+
     MapScale {
         id:                 mapScale
         anchors.margins:    _toolsMargin
