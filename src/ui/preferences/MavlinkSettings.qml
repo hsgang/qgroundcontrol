@@ -34,6 +34,9 @@ Rectangle {
     property bool _uploadedSelected:    false
     property bool _showMavlinkLog:      QGroundControl.corePlugin.options.showMavlinkLogOptions
     property bool _showAPMStreamRates:  QGroundControl.apmFirmwareSupported && QGroundControl.settingsManager.apmMavlinkStreamRateSettings.visible
+    property var  _activeVehicle:       QGroundControl.multiVehicleManager.activeVehicle
+    property bool _isPX4:               _activeVehicle ? _activeVehicle.px4Firmware : false
+    property bool _isAPM:               _activeVehicle ? _activeVehicle.apmFirmware : false
     property Fact _disableDataPersistenceFact: QGroundControl.settingsManager.appSettings.disableAllPersistence
     property bool _disableDataPersistence:     _disableDataPersistenceFact ? _disableDataPersistenceFact.rawValue : false
 
@@ -193,7 +196,7 @@ Rectangle {
                 height:                     streamRatesLabel.height
                 anchors.margins:            ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter:   parent.horizontalCenter
-                visible:                    _showAPMStreamRates
+                visible:                    _showAPMStreamRates && _isAPM
                 QGCLabel {
                     id:             streamRatesLabel
                     text:           qsTr("Telemetry Stream Rates (ArduPilot Only)")
@@ -206,7 +209,7 @@ Rectangle {
                 color:                      qgcPal.windowShade
                 anchors.margins:            ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter:   parent.horizontalCenter
-                visible:                    _showAPMStreamRates
+                visible:                    _showAPMStreamRates && _isAPM
 
                 ColumnLayout {
                     id:                 streamRatesColumn
@@ -369,7 +372,7 @@ Rectangle {
                 height:             mavlogLabel.height
                 anchors.margins:    ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible:            _showMavlinkLog
+                visible:            _showMavlinkLog && _isPX4
                 QGCLabel {
                     id:             mavlogLabel
                     text:           qsTr("MAVLink 2.0 Logging (PX4 Pro Only)")
@@ -382,7 +385,7 @@ Rectangle {
                 color:          qgcPal.windowShade
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible:        _showMavlinkLog
+                visible:        _showMavlinkLog && _isPX4
                 Column {
                     id:         mavlogColumn
                     width:      gcsColumn.width
@@ -432,7 +435,7 @@ Rectangle {
                 height:             logLabel.height
                 anchors.margins:    ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible:            _showMavlinkLog
+                visible:            _showMavlinkLog && _isPX4
                 QGCLabel {
                     id:             logLabel
                     text:           qsTr("MAVLink 2.0 Log Uploads (PX4 Pro Only)")
@@ -445,7 +448,7 @@ Rectangle {
                 color:          qgcPal.windowShade
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible:        _showMavlinkLog
+                visible:        _showMavlinkLog && _isPX4
                 Column {
                     id:         logColumn
                     spacing:    _columnSpacing
