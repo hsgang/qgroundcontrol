@@ -20,10 +20,6 @@ import QGroundControl.Palette       1.0
 import QGroundControl.FlightMap     1.0
 import QGroundControl               1.0
 
-// Note: This control will spit out qWarnings like this: "QGridLayoutEngine::addItem: Cell (0, 1) already taken"
-// This is due to Qt bug https://bugreports.qt.io/browse/QTBUG-65121
-// If this becomes a problem I'll implement our own grid layout control
-
 T.HorizontalFactValueGrid {
     id:                     _root
     Layout.preferredWidth:  topLayout.width
@@ -32,7 +28,6 @@ T.HorizontalFactValueGrid {
     property bool   settingsUnlocked:       false
 
     property real   _margins:               ScreenTools.defaultFontPixelWidth / 2
-    property int    _rowMax:                2
     property real   _rowButtonWidth:        ScreenTools.minTouchPixels
     property real   _rowButtonHeight:       ScreenTools.minTouchPixels / 2
     property real   _editButtonSpacing:     2
@@ -126,7 +121,9 @@ T.HorizontalFactValueGrid {
                     Layout.preferredHeight: ScreenTools.minTouchPixels
                     Layout.preferredWidth:  parent.width
                     text:                   qsTr("+")
-                    onClicked:              appendColumn()
+                    onClicked:              if(_root.width + (2 * (_rowButtonWidth + _margins)) < screen.width) {
+                                                appendColumn()
+                                            }
                 }
 
                 QGCButton {
@@ -151,7 +148,9 @@ T.HorizontalFactValueGrid {
                 Layout.fillWidth:       true
                 Layout.preferredHeight: parent.height
                 text:                   qsTr("+")
-                onClicked:              appendRow()
+                onClicked:              if(_root.height + (2 * (_rowButtonHeight + _margins)) < (screen.height - ScreenTools.toolbarHeight)) {
+                                            appendRow()
+                                        }
             }
 
             QGCButton {
