@@ -376,6 +376,7 @@ void Vehicle::_commonInit()
     connect(this, &Vehicle::hobbsMeterChanged,      this, &Vehicle::_updateHobbsMeter);
 
     connect(_toolbox->qgcPositionManager(), &QGCPositionManager::gcsPositionChanged, this, &Vehicle::_updateDistanceToGCS);
+    connect(_toolbox->qgcPositionManager(), &QGCPositionManager::gcsPositionChanged, this, &Vehicle::_updateHomepoint);
 
     _missionManager = new MissionManager(this);
     connect(_missionManager, &MissionManager::error,                    this, &Vehicle::_missionManagerError);
@@ -2518,6 +2519,11 @@ bool Vehicle::takeoffVehicleSupported() const
     return _firmwarePlugin->isCapable(this, FirmwarePlugin::TakeoffVehicleCapability);
 }
 
+bool Vehicle::changeHeadingSupported() const
+{
+    return _firmwarePlugin->isCapable(this, FirmwarePlugin::ChangeHeadingCapability);
+}
+
 QString Vehicle::gotoFlightMode() const
 {
     return _firmwarePlugin->gotoFlightMode();
@@ -2584,6 +2590,50 @@ void Vehicle::guidedModeChangeAltitude(double altitudeChange, bool pauseVehicle)
         return;
     }
     _firmwarePlugin->guidedModeChangeAltitude(this, altitudeChange, pauseVehicle);
+}
+
+void Vehicle::guidedModeChangeHeading(const QGeoCoordinate& headingCoord)
+{
+    if (!changeHeadingSupported()) {
+        qgcApp()->showAppMessage(QStringLiteral("Changing heading not supported by Vehicle."));
+        return;
+    }
+    if (!guidedModeSupported()) {
+        qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
+        return;
+    }
+    if (!coordinate().isValid()) {
+        return;
+    }
+    if (qIsNaN(heading()->rawValue().toDouble())) {
+        qgcApp()->showAppMessage(QStringLiteral("Unable to yaw to location, vehicle heading not known."));
+        return;
+    }
+
+    bool ok;
+    double delta = (int)(coordinate().azimuthTo(headingCoord) - heading()->rawValue().toDouble(&ok) + 540.0) % 360 - 180.0;
+    if (!ok) {
+        qgcApp()->showAppMessage(QString("Current heading is invalid"));
+        return;
+    }
+    double direction = 1.0f ? delta > 0: -1.0f;
+
+    double maxYawRate = 0;
+    QString maxYawRateParam(QStringLiteral("ATC_RATE_Y_MAX"));
+    if (parameterManager()->parameterExists(defaultComponentId(), maxYawRateParam)) {
+        maxYawRate = parameterManager()->getParameter(defaultComponentId(), maxYawRateParam)->rawValue().toDouble();
+    }
+    if (maxYawRate == 0) {
+        maxYawRate = 60; // Value meaning "Slow" for APM
+    }
+
+    sendMavCommand(defaultComponentId(),
+                            MAV_CMD_CONDITION_YAW,
+                            true, // show error
+                            static_cast<float>(coordinate().azimuthTo(headingCoord)),
+                            maxYawRate,
+                            static_cast<float>(direction),
+                            0.0f);
 }
 
 void Vehicle::guidedModeOrbit(const QGeoCoordinate& centerCoord, double radius, double amslAltitude)
@@ -3674,6 +3724,24 @@ void Vehicle::_updateDistanceToGCS()
         _distanceToGCSFact.setRawValue(coordinate().distanceTo(gcsPosition));
     } else {
         _distanceToGCSFact.setRawValue(qQNaN());
+    }
+}
+
+void Vehicle::_updateHomepoint()
+{
+    const bool setHomeCmdSupported = firmwarePlugin()->supportedMissionCommands(vehicleClass()).contains(MAV_CMD_DO_SET_HOME);
+    const bool updateHomeActivated = _toolbox->settingsManager()->flyViewSettings()->updateHomePosition()->rawValue().toBool();
+    if(setHomeCmdSupported && updateHomeActivated){
+        QGeoCoordinate gcsPosition = _toolbox->qgcPositionManager()->gcsPosition();
+        if (coordinate().isValid() && gcsPosition.isValid()) {
+            sendMavCommand(defaultComponentId(),
+                           MAV_CMD_DO_SET_HOME, false,
+                           0,
+                           0, 0, 0,
+                           static_cast<float>(gcsPosition.latitude()) ,
+                           static_cast<float>(gcsPosition.longitude()),
+                           static_cast<float>(gcsPosition.altitude()));
+        }
     }
 }
 

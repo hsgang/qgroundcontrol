@@ -271,6 +271,7 @@ public:
     Q_PROPERTY(bool     orbitModeSupported      READ orbitModeSupported                             CONSTANT)                   ///< Orbit mode is supported by this vehicle
     Q_PROPERTY(bool     roiModeSupported        READ roiModeSupported                               CONSTANT)                   ///< Orbit mode is supported by this vehicle
     Q_PROPERTY(bool     takeoffVehicleSupported READ takeoffVehicleSupported                        CONSTANT)                   ///< Guided takeoff supported
+    Q_PROPERTY(bool     changeHeadingSupported  READ changeHeadingSupported                         CONSTANT)                   ///< Guided change yaw supported
     Q_PROPERTY(QString  gotoFlightMode          READ gotoFlightMode                                 CONSTANT)                   ///< Flight mode vehicle is in while performing goto
 
     Q_PROPERTY(ParameterManager*        parameterManager    READ parameterManager   CONSTANT)
@@ -362,6 +363,9 @@ public:
     ///     @param pauseVehicle true: pause vehicle prior to altitude change
     Q_INVOKABLE void guidedModeChangeAltitude(double altitudeChange, bool pauseVehicle);
 
+    /// Command vehicle to change heading
+    Q_INVOKABLE void guidedModeChangeHeading(const QGeoCoordinate& headingCoord);
+
     /// Command vehicle to orbit given center point
     ///     @param centerCoord Orit around this point
     ///     @param radius Distance from vehicle to centerCoord
@@ -445,6 +449,7 @@ public:
     bool    orbitModeSupported      () const;
     bool    roiModeSupported        () const;
     bool    takeoffVehicleSupported () const;
+    bool    changeHeadingSupported  () const;
     QString gotoFlightMode          () const;
 
     // Property accessors
@@ -968,6 +973,7 @@ private slots:
     void _updateMissionItemIndex            ();
     void _updateHeadingToNextWP             ();
     void _updateDistanceToGCS               ();
+    void _updateHomepoint                   ();
     void _updateHobbsMeter                  ();
     void _vehicleParamLoaded                (bool ready);
     void _sendQGCTimeToVehicle              ();
