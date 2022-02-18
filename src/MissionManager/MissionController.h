@@ -48,6 +48,7 @@ public:
         double                      maxTelemetryDistance;
         double                      maxAltitude;
         double                      totalDistance;
+        double                      totalPathDistance;
         double                      totalTime;
         double                      hoverDistance;
         double                      hoverTime;
@@ -89,6 +90,7 @@ public:
     Q_PROPERTY(VisualMissionItem*   currentPlanViewItem             READ currentPlanViewItem            NOTIFY currentPlanViewItemChanged)
     Q_PROPERTY(TakeoffMissionItem*  takeoffMissionItem              READ takeoffMissionItem             NOTIFY takeoffMissionItemChanged)
     Q_PROPERTY(double               missionDistance                 READ missionDistance                NOTIFY missionDistanceChanged)
+    Q_PROPERTY(double               missionPathDistance             READ missionPathDistance            NOTIFY missionPathDistanceChanged)
     Q_PROPERTY(double               missionTime                     READ missionTime                    NOTIFY missionTimeChanged)
     Q_PROPERTY(double               missionHoverDistance            READ missionHoverDistance           NOTIFY missionHoverDistanceChanged)
     Q_PROPERTY(double               missionCruiseDistance           READ missionCruiseDistance          NOTIFY missionCruiseDistanceChanged)
@@ -244,6 +246,7 @@ public:
     int currentPlanViewVIIndex      (void) const { return _currentPlanViewVIIndex; }
 
     double  missionDistance         (void) const { return _missionFlightStatus.totalDistance; }
+    double  missionPathDistance     (void) const { return _missionFlightStatus.totalPathDistance; }
     double  missionTime             (void) const { return _missionFlightStatus.totalTime; }
     double  missionHoverDistance    (void) const { return _missionFlightStatus.hoverDistance; }
     double  missionHoverTime        (void) const { return _missionFlightStatus.hoverTime; }
@@ -267,6 +270,7 @@ signals:
     void splitSegmentChanged                (void);
     void newItemsFromVehicle                (void);
     void missionDistanceChanged             (double missionDistance);
+    void missionPathDistanceChanged         (double missionPathDistance);
     void missionTimeChanged                 (void);
     void missionHoverDistanceChanged        (double missionHoverDistance);
     void missionHoverTimeChanged            (void);
@@ -332,7 +336,7 @@ private:
     void                    _initVisualItem                     (VisualMissionItem* item);
     void                    _deinitVisualItem                   (VisualMissionItem* item);
     void                    _setupActiveVehicle                 (Vehicle* activeVehicle, bool forceLoadFromVehicle);
-    void                    _calcPrevWaypointValues             (VisualMissionItem* currentItem, VisualMissionItem* prevItem, double* azimuth, double* distance, double* altDifference);
+    void                    _calcPrevWaypointValues             (VisualMissionItem* currentItem, VisualMissionItem* prevItem, double* azimuth, double* distance, double* pathDistance, double* altDifference);
     bool                    _findPreviousAltitude               (int newIndex, double* prevAltitude, QGroundControlQmlGlobal::AltMode* prevAltMode);
     MissionSettingsItem*    _addMissionSettings                 (QmlObjectListModel* visualItems);
     void                    _centerHomePositionOnMissionItems   (QmlObjectListModel* visualItems);
@@ -344,13 +348,13 @@ private:
     void                    _scanForAdditionalSettings          (QmlObjectListModel* visualItems, PlanMasterController* masterController);
     void                    _setPlannedHomePositionFromFirstCoordinate(const QGeoCoordinate& clickCoordinate);
     void                    _resetMissionFlightStatus           (void);
-    void                    _addHoverTime                       (double hoverTime, double hoverDistance, int waypointIndex);
-    void                    _addCruiseTime                      (double cruiseTime, double cruiseDistance, int wayPointIndex);
+    void                    _addHoverTime                       (double hoverTime, double hoverDistance, double pathDistance, int waypointIndex);
+    void                    _addCruiseTime                      (double cruiseTime, double cruiseDistance, double pathDistance, int wayPointIndex);
     void                    _updateBatteryInfo                  (int waypointIndex);
     bool                    _loadItemsFromJson                  (const QJsonObject& json, QmlObjectListModel* visualItems, QString& errorString);
     void                    _initLoadedVisualItems              (QmlObjectListModel* loadedVisualItems);
     FlightPathSegment*      _addFlightPathSegment               (FlightPathSegmentHashTable& prevItemPairHashTable, VisualItemPair& pair, bool mavlinkTerrainFrame);
-    void                    _addTimeDistance                    (bool vtolInHover, double hoverTime, double cruiseTime, double extraTime, double distance, int seqNum);
+    void                    _addTimeDistance                    (bool vtolInHover, double hoverTime, double cruiseTime, double extraTime, double distance, double pathDistnace, int seqNum);
     VisualMissionItem*      _insertSimpleMissionItemWorker      (QGeoCoordinate coordinate, MAV_CMD command, int visualItemIndex, bool makeCurrentItem);
     void                    _insertComplexMissionItemWorker     (const QGeoCoordinate& mapCenterCoordinate, ComplexMissionItem* complexItem, int visualItemIndex, bool makeCurrentItem);
     bool                    _isROIBeginItem                     (SimpleMissionItem* simpleItem);
@@ -360,6 +364,7 @@ private:
     void                    _firstItemAdded                     (void);
 
     static double           _calcDistanceToHome                 (VisualMissionItem* currentItem, VisualMissionItem* homeItem);
+    static double           _calcPathDistanceToHome             (VisualMissionItem* currentItem, VisualMissionItem* homeItem);
     static double           _calcAltitudeToHome                 (VisualMissionItem* currentItem, VisualMissionItem* homeItem);
     static double           _normalizeLat                       (double lat);
     static double           _normalizeLon                       (double lon);

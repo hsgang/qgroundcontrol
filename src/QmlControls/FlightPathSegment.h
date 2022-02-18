@@ -43,6 +43,7 @@ public:
     Q_PROPERTY(double           distanceBetween         MEMBER _distanceBetween                                 NOTIFY distanceBetweenChanged)
     Q_PROPERTY(double           finalDistanceBetween    MEMBER _finalDistanceBetween                            NOTIFY finalDistanceBetweenChanged)
     Q_PROPERTY(double           totalDistance           MEMBER _totalDistance                                   NOTIFY totalDistanceChanged)
+    Q_PROPERTY(double           totalPathDistance       MEMBER _totalPathDistance                               NOTIFY totalPathDistanceChanged)
     Q_PROPERTY(bool             terrainCollision        MEMBER _terrainCollision                                NOTIFY terrainCollisionChanged)
     Q_PROPERTY(SegmentType      segmentType             MEMBER _segmentType                                     CONSTANT)
 
@@ -76,6 +77,7 @@ signals:
     void distanceBetweenChanged     (double distanceBetween);
     void finalDistanceBetweenChanged(double finalDistanceBetween);
     void totalDistanceChanged       (double totalDistance);
+    void totalPathDistanceChanged   (double totalPathDistance);
     void terrainCollisionChanged    (bool terrainCollision);
 
 private slots:
@@ -98,6 +100,7 @@ private:
     double              _distanceBetween =              0;
     double              _finalDistanceBetween =         0;
     double              _totalDistance =                0;
+    double              _totalPathDistance =            0;
     SegmentType         _segmentType =                  SegmentTypeGeneric;
 
     static constexpr double _collisionIgnoreMeters =    10; // Distance to ignore for takeoff/land segments

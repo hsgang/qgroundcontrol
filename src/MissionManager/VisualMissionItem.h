@@ -98,7 +98,9 @@ public:
     Q_PROPERTY(bool   terrainCollision  READ terrainCollision       WRITE setTerrainCollision   NOTIFY terrainCollisionChanged)     ///< true: Item collides with terrain
     Q_PROPERTY(double azimuth           READ azimuth                WRITE setAzimuth            NOTIFY azimuthChanged)              ///< Azimuth to previous waypoint
     Q_PROPERTY(double distance          READ distance               WRITE setDistance           NOTIFY distanceChanged)             ///< Distance to previous waypoint
+    Q_PROPERTY(double pathDistance      READ pathDistance           WRITE setPathDistance       NOTIFY pathDistanceChanged)
     Q_PROPERTY(double distanceFromStart READ distanceFromStart      WRITE setDistanceFromStart  NOTIFY distanceFromStartChanged)    ///< Flight path cumalative horizontal distance from home point to this item
+    Q_PROPERTY(double totalPathDistance READ totalPathDistance      WRITE setTotalPathDistance  NOTIFY totalPathDistanceChanged)
 
     // Property accesors
     bool    homePosition        (void) const { return _homePositionSpecialCase; }
@@ -108,7 +110,9 @@ public:
     bool    terrainCollision    (void) const { return _terrainCollision; }
     double  azimuth             (void) const { return _azimuth; }
     double  distance            (void) const { return _distance; }
+    double  pathDistance        (void) const { return _pathDistance; }
     double  distanceFromStart   (void) const { return _distanceFromStart; }
+    double  totalPathDistance   (void) const { return _totalPathDistance; }
     bool    isCurrentItem       (void) const { return _isCurrentItem; }
     bool    hasCurrentChildItem (void) const { return _hasCurrentChildItem; }
     double  terrainAltitude     (void) const { return _terrainAltitude; }
@@ -126,7 +130,9 @@ public:
     void setTerrainCollision        (bool terrainCollision);
     void setAzimuth                 (double azimuth);
     void setDistance                (double distance);
+    void setPathDistance            (double pathDistance);
     void setDistanceFromStart       (double distanceFromStart);
+    void setTotalPathDistance       (double totalPathDistance);
     void setWizardMode              (bool wizardMode);
     void setParentItem              (VisualMissionItem* parentItem);
 
@@ -217,7 +223,9 @@ signals:
     void exitCoordinateChanged          (const QGeoCoordinate& exitCoordinate);
     void dirtyChanged                   (bool dirty);
     void distanceChanged                (double distance);
+    void pathDistanceChanged            (double pathDisntace);
     void distanceFromStartChanged       (double distanceFromStart);
+    void totalPathDistanceChanged       (double totalPathDistance);
     void isCurrentItemChanged           (bool isCurrentItem);
     void hasCurrentChildItemChanged     (bool hasCurrentChildItem);
     void sequenceNumberChanged          (int sequenceNumber);
@@ -265,7 +273,9 @@ protected:
     bool                        _terrainCollision           = false;                            ///< true: item collides with terrain
     double                      _azimuth                    = 0;                                ///< Azimuth to previous waypoint
     double                      _distance                   = 0;                                ///< Distance to previous waypoint
+    double                      _pathDistance               = 0;
     double                      _distanceFromStart          = 0;                                ///< Flight path cumalative horizontal distance from home point to this item
+    double                      _totalPathDistance          = 0;
     QString                     _editorQml;                                                     ///< Qml resource for editing item
     double                      _missionGimbalYaw           = qQNaN();
     double                      _missionVehicleYaw          = qQNaN();

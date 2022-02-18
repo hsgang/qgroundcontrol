@@ -106,11 +106,27 @@ void VisualMissionItem::setDistance(double distance)
     }
 }
 
+void VisualMissionItem::setPathDistance(double pathDistance)
+{
+    if (!QGC::fuzzyCompare(_pathDistance, pathDistance)) {
+        _pathDistance = pathDistance;
+        emit pathDistanceChanged(_pathDistance);
+    }
+}
+
 void VisualMissionItem::setDistanceFromStart(double distanceFromStart)
 {
     if (!QGC::fuzzyCompare(_distanceFromStart, distanceFromStart)) {
         _distanceFromStart = distanceFromStart;
         emit distanceFromStartChanged(_distanceFromStart);
+    }
+}
+
+void VisualMissionItem::setTotalPathDistance(double totalPathDistance)
+{
+    if (!QGC::fuzzyCompare(_totalPathDistance, totalPathDistance)) {
+        _totalPathDistance = totalPathDistance;
+        emit totalPathDistanceChanged(_totalPathDistance);
     }
 }
 

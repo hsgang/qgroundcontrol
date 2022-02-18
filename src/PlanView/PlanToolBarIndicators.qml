@@ -18,6 +18,7 @@ Item {
 
     property var    missionItems:               _controllerValid ? _planMasterController.missionController.visualItems : undefined
     property real   missionDistance:            _controllerValid ? _planMasterController.missionController.missionDistance : NaN
+    property real   missionPathDistance:        _controllerValid ? _planMasterController.missionController.missionPathDistance : NaN
     property real   missionTime:                _controllerValid ? _planMasterController.missionController.missionTime : 0
     property real   missionMaxTelemetry:        _controllerValid ? _planMasterController.missionController.missionMaxTelemetry : NaN
     property bool   missionDirty:               _controllerValid ? _planMasterController.missionController.dirty : false
@@ -43,6 +44,7 @@ Item {
     property real   _azimuth:                   _currentMissionItemValid ? _currentMissionItem.azimuth : NaN
     property real   _heading:                   _currentMissionItemValid ? _currentMissionItem.missionVehicleYaw : NaN
     property real   _missionDistance:           _missionValid ? missionDistance : NaN
+    property real   _missionPathDistance:       _missionValid ? missionPathDistance : NaN
     property real   _missionMaxTelemetry:       _missionValid ? missionMaxTelemetry : NaN
     property real   _missionTime:               _missionValid ? missionTime : 0
     property int    _batteryChangePoint:        _controllerValid ? _planMasterController.missionController.batteryChangePoint : -1
@@ -62,6 +64,7 @@ Item {
     property string _azimuthText:               isNaN(_azimuth) ?               "-.-" : Math.round(_azimuth) % 360
     property string _headingText:               isNaN(_azimuth) ?               "-.-" : Math.round(_heading) % 360
     property string _missionDistanceText:       isNaN(_missionDistance) ?       "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
+    property string _missionPathDistanceText:   isNaN(_missionPathDistance) ?   "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionPathDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
     property string _missionMaxTelemetryText:   isNaN(_missionMaxTelemetry) ?   "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionMaxTelemetry).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
     property string _batteryChangePointText:    _batteryChangePoint < 0 ?       qsTr("N/A") : _batteryChangePoint
     property string _batteriesRequiredText:     _batteriesRequired < 0 ?        qsTr("N/A") : _batteriesRequired
@@ -183,14 +186,14 @@ Item {
         }
 
         GridLayout {
-            columns:                5
+            columns:                4
             rowSpacing:             _rowSpacing
             columnSpacing:          _labelToValueSpacing
             Layout.alignment:       Qt.AlignVCenter | Qt.AlignHCenter
 
             QGCLabel {
                 text:               qsTr("Total Mission")
-                Layout.columnSpan:  5
+                Layout.columnSpan:  4
                 font.pointSize:     ScreenTools.smallFontPointSize
             }
 
@@ -201,7 +204,7 @@ Item {
                 Layout.minimumWidth:    _largeValueWidth
             }
 
-            Item { width: 1; height: 1 }
+            //Item { width: 1; height: 1 }
 
             QGCLabel { text: qsTr("Max telem dist:"); font.pointSize: _dataFontSize; }
             QGCLabel {
@@ -213,6 +216,13 @@ Item {
             QGCLabel { text: qsTr("Time:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   getMissionTime()
+                font.pointSize:         _dataFontSize
+                Layout.minimumWidth:    _largeValueWidth
+            }
+
+            QGCLabel { text: qsTr("Total Path Distance:"); font.pointSize: _dataFontSize; }
+            QGCLabel {
+                text:                   _missionPathDistanceText
                 font.pointSize:         _dataFontSize
                 Layout.minimumWidth:    _largeValueWidth
             }
