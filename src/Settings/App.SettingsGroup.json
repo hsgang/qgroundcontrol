@@ -235,6 +235,20 @@
     "default":     ""
 },
 {
+    "name":             "openWeatherApiKey",
+    "shortDesc": "openWeather Api Key",
+    "longDesc":  "Your personal api key for openWeather",
+    "type":             "string",
+    "default":     ""
+},
+{
+    "name":             "enableOpenWeatherAPI",
+    "shortDesc": "enable openWeather Api",
+    "longDesc":  "enable openWeather Api",
+    "type":             "bool",
+    "default":     false
+},
+{
     "name":             "defaultFirmwareType",
     "shortDesc": "Default firmware type for flashing",
     "type":             "uint32",

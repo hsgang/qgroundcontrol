@@ -136,6 +136,7 @@ DECLARE_SETTINGSFACT(AppSettings, mapboxStyle)
 DECLARE_SETTINGSFACT(AppSettings, esriToken)
 DECLARE_SETTINGSFACT(AppSettings, customURL)
 DECLARE_SETTINGSFACT(AppSettings, vworldToken)
+DECLARE_SETTINGSFACT(AppSettings, openWeatherApiKey)
 DECLARE_SETTINGSFACT(AppSettings, defaultFirmwareType)
 DECLARE_SETTINGSFACT(AppSettings, gstDebugLevel)
 DECLARE_SETTINGSFACT(AppSettings, followTarget)
@@ -151,6 +152,8 @@ DECLARE_SETTINGSFACT(AppSettings, forwardMavlink)
 DECLARE_SETTINGSFACT(AppSettings, forwardMavlinkHostName)
 DECLARE_SETTINGSFACT(AppSettings, saveSensorLog)
 DECLARE_SETTINGSFACT(AppSettings, useComponentInformationQuery)
+DECLARE_SETTINGSFACT(AppSettings, enableOpenWeatherAPI)
+
 
 DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, indoorPalette)
 {

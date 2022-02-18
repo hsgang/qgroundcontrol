@@ -52,6 +52,7 @@ public:
     DEFINE_SETTINGFACT(esriToken)
     DEFINE_SETTINGFACT(customURL)
     DEFINE_SETTINGFACT(vworldToken)
+    DEFINE_SETTINGFACT(openWeatherApiKey)
     DEFINE_SETTINGFACT(defaultFirmwareType)
     DEFINE_SETTINGFACT(gstDebugLevel)
     DEFINE_SETTINGFACT(followTarget)
@@ -67,6 +68,7 @@ public:
     DEFINE_SETTINGFACT(forwardMavlinkHostName)
     DEFINE_SETTINGFACT(saveSensorLog)
     DEFINE_SETTINGFACT(useComponentInformationQuery)
+    DEFINE_SETTINGFACT(enableOpenWeatherAPI)
 
     // Although this is a global setting it only affects ArduPilot vehicle since PX4 automatically starts the stream from the vehicle side
     DEFINE_SETTINGFACT(apmStartMavlinkStreams)
