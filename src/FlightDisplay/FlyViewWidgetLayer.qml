@@ -297,6 +297,19 @@ Item {
         anchors.margins:            _toolsMargin
         anchors.top:                parent.top
         anchors.horizontalCenter:   parent.horizontalCenter
-        visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue
+        visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     }
+
+    GuidedActionPressHoldConfirm{
+        Layout.fillWidth:   true
+        z:                  QGroundControl.zOrderTopMost
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        guidedController:   _guidedController
+        altitudeSlider:     _guidedAltSlider
+    }
+//    PowerEstimatedIndicator{
+//        id:                         powerEstimatedIndicator
+
+//    }
 }

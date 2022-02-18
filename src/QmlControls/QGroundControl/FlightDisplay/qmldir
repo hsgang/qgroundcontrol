@@ -16,6 +16,7 @@ FlyViewVideo                    1.0 FlyViewVideo.qml
 FlyViewWidgetLayer              1.0 FlyViewWidgetLayer.qml
 GuidedActionActionList          1.0 GuidedActionActionList.qml
 GuidedActionConfirm             1.0 GuidedActionConfirm.qml
+GuidedActionPressHoldConfirm    1.0 GuidedActionPressHoldConfirm.qml
 GuidedActionsController         1.0 GuidedActionsController.qml
 GuidedActionLand                1.0 GuidedActionLand.qml
 GuidedActionList                1.0 GuidedActionList.qml
@@ -33,6 +34,7 @@ PreFlightSensorsHealthCheck     1.0 PreFlightSensorsHealthCheck.qml
 PreFlightSoundCheck             1.0 PreFlightSoundCheck.qml
 ProximityRadarValues            1.0 ProximityRadarValues.qml
 ProximityRadarVideoView         1.0 ProximityRadarVideoView.qml
+PowerEstimatedIndicator         1.0 PowerEstimatedIndicator.qml
 TerrainProgress                 1.0 TerrainProgress.qml
 TelemetryValuesBar              1.0 TelemetryValuesBar.qml
 VehicleWarnings                 1.0 VehicleWarnings.qml

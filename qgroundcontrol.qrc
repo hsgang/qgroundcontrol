@@ -286,6 +286,9 @@
         <file alias="QGroundControl/FlightMap/GimbalControl.qml">src/FlightMap/Widgets/GimbalControl.qml</file>
         <file alias="QGroundControl/Controls/MockLinkOptionsDlg.qml">src/comm/MockLinkOptionsDlg.qml</file>
         <file alias="QGroundControl/FlightDisplay/ModeChangedIndicator.qml">src/FlightDisplay/ModeChangedIndicator.qml</file>
+        <file alias="QGroundControl/FlightDisplay/GuidedActionPressHoldConfirm.qml">src/FlightDisplay/GuidedActionPressHoldConfirm.qml</file>
+        <file alias="QGroundControl/FlightDisplay/PowerEstimatedIndicator.qml">src/FlightDisplay/PowerEstimatedIndicator.qml</file>
+        <file alias="QGroundControl/FlightMap/AtmosphericValueMapItem.qml">src/FlightMap/MapItems/AtmosphericValueMapItem.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
