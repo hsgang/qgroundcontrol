@@ -30,3 +30,5 @@ DECLARE_SETTINGSFACT(FlyViewSettings, showObstacleDistanceOverlay)
 DECLARE_SETTINGSFACT(FlyViewSettings, missionMaxAltitudeIndicator)
 DECLARE_SETTINGSFACT(FlyViewSettings, showAtmosphericValueBar)
 DECLARE_SETTINGSFACT(FlyViewSettings, showGimbalControlPannel)
+DECLARE_SETTINGSFACT(FlyViewSettings, updateHomePosition)
+

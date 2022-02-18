@@ -32,4 +32,5 @@ public:
     DEFINE_SETTINGFACT(missionMaxAltitudeIndicator)
     DEFINE_SETTINGFACT(showAtmosphericValueBar)
     DEFINE_SETTINGFACT(showGimbalControlPannel)
+    DEFINE_SETTINGFACT(updateHomePosition)
 };
