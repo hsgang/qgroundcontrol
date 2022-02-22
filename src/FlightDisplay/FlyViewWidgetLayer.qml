@@ -70,40 +70,40 @@ Item {
         rallyPointController:   _rallyPointController
     }
 
-    Row {
-        id:                 multiVehiclePanelSelector
-        anchors.margins:    _toolsMargin
-        anchors.top:        parent.top
-        anchors.right:      parent.right
-        width:              _rightPanelWidth
-        spacing:            ScreenTools.defaultFontPixelWidth
-        visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
+//    Row {
+//        id:                 multiVehiclePanelSelector
+//        anchors.margins:    _toolsMargin
+//        anchors.top:        parent.top
+//        anchors.right:      parent.right
+//        width:              _rightPanelWidth
+//        spacing:            ScreenTools.defaultFontPixelWidth
+//        visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
 
-        property bool showSingleVehiclePanel:  !visible || singleVehicleRadio.checked
+//        property bool showSingleVehiclePanel:  !visible || singleVehicleRadio.checked
 
-        QGCMapPalette { id: mapPal; lightColors: true }
+//        QGCMapPalette { id: mapPal; lightColors: true }
 
-        QGCRadioButton {
-            id:             singleVehicleRadio
-            text:           qsTr("Single")
-            checked:        true
-            textColor:      mapPal.text
-        }
+//        QGCRadioButton {
+//            id:             singleVehicleRadio
+//            text:           qsTr("Single")
+//            checked:        true
+//            textColor:      mapPal.text
+//        }
 
-        QGCRadioButton {
-            text:           qsTr("Multi-Vehicle")
-            textColor:      mapPal.text
-        }
-    }
+//        QGCRadioButton {
+//            text:           qsTr("Multi-Vehicle")
+//            textColor:      mapPal.text
+//        }
+//    }
 
-    MultiVehicleList {
-        anchors.margins:    _toolsMargin
-        anchors.top:        multiVehiclePanelSelector.bottom
-        anchors.right:      parent.right
-        width:              _rightPanelWidth
-        height:             parent.height - y - _toolsMargin
-        visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
-    }
+//    MultiVehicleList {
+//        anchors.margins:    _toolsMargin
+//        anchors.top:        multiVehiclePanelSelector.bottom
+//        anchors.right:      parent.right
+//        width:              _rightPanelWidth
+//        height:             parent.height - y - _toolsMargin
+//        visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
+//    }
 
 //    FlyViewInstrumentPanel {
 //        id:                         instrumentPanel
@@ -118,33 +118,33 @@ Item {
 //        property real rightInset: visible ? parent.width - x : 0
 //    }
 
-    PhotoVideoControl {
-        id:                     photoVideoControl
-        anchors.margins:        _toolsMargin
-        anchors.right:          parent.right
-        width:                  _rightPanelWidth
-        state:                  _verticalCenter ? "verticalCenter" : "topAnchor"
-        states: [
-            State {
-                name: "verticalCenter"
-                AnchorChanges {
-                    target:                 photoVideoControl
-                    anchors.top:            undefined
-                    anchors.verticalCenter: _root.verticalCenter
-                }
-            },
-            State {
-                name: "topAnchor"
-                AnchorChanges {
-                    target:                 photoVideoControl
-                    anchors.verticalCenter: undefined
-                    anchors.top:            instrumentPanel.bottom
-                }
-            }
-        ]
+//    PhotoVideoControl {
+//        id:                     photoVideoControl
+//        anchors.margins:        _toolsMargin
+//        anchors.right:          parent.right
+//        width:                  _rightPanelWidth
+//        state:                  _verticalCenter ? "verticalCenter" : "topAnchor"
+//        states: [
+//            State {
+//                name: "verticalCenter"
+//                AnchorChanges {
+//                    target:                 photoVideoControl
+//                    anchors.top:            undefined
+//                    anchors.verticalCenter: _root.verticalCenter
+//                }
+//            },
+//            State {
+//                name: "topAnchor"
+//                AnchorChanges {
+//                    target:                 photoVideoControl
+//                    anchors.verticalCenter: undefined
+//                    anchors.top:            instrumentPanel.bottom
+//                }
+//            }
+//        ]
 
-        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
-    }
+//        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
+//    }
 
 //    TelemetryValuesBar {
 //        id:                 telemetryPanel

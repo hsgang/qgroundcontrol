@@ -224,6 +224,44 @@ Item {
     }
 
     //-----------------------------------------------------------------------------------------------------
+    //--multiVehiclePanelSelector Widget-----------------------------------------------------------------------------------
+
+    Row {
+        id:                 multiVehiclePanelSelector
+        anchors.margins:    _toolsMargin
+        anchors.top:        parent.top
+        anchors.right:      parent.right
+        width:              _rightPanelWidth
+        spacing:            ScreenTools.defaultFontPixelWidth
+        visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
+
+        property bool showSingleVehiclePanel:  !visible || singleVehicleRadio.checked
+
+        QGCMapPalette { id: mapPal; lightColors: true }
+
+        QGCRadioButton {
+            id:             singleVehicleRadio
+            text:           qsTr("Single")
+            checked:        true
+            textColor:      mapPal.text
+        }
+
+        QGCRadioButton {
+            text:           qsTr("Multi-Vehicle")
+            textColor:      mapPal.text
+        }
+    }
+
+    MultiVehicleList {
+        anchors.margins:    _toolsMargin
+        anchors.top:        multiVehiclePanelSelector.bottom
+        anchors.right:      parent.right
+        width:              _rightPanelWidth
+        height:             parent.height - y - _toolsMargin
+        visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
+    }
+
+    //-----------------------------------------------------------------------------------------------------
     //--custom ModeChangedIndicator Widget-----------------------------------------------------------------------------------
 
     ModeChangedIndicator {
@@ -260,40 +298,61 @@ Item {
         anchors.leftMargin:    _toolsMargin * 1.5
         anchors.bottom:         parent.bottom
         //anchors.left:          telemetryPanel.right
-        height:                 ScreenTools.defaultFontPixelHeight * 9
+        height:                 ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6.5 : ScreenTools.defaultFontPixelHeight * 9
         width:                  height
         radius:                 height * 0.5
         color:                  "#80000000"
+        state:                  telemetryPanel.bottomMode ? "side" : "center"
 
         CustomAttitudeHUD {
             size:               parent.height
             vehicle:            _activeVehicle
         }
 
-        states:[
+        states: [
             State {
-                name: "telemetrybarSide"
-                when: telemetryPanel.bottomMode
+                name: "side"
                 AnchorChanges {
                     target: attitudeIndicator
-                    //anchors.top: undefined
-                    //anchors.bottom: parent.bottom
                     anchors.left: telemetryPanel.right
-                    //anchors.verticalCenter: undefined
                 }
             },
             State {
-                name: "parentCenter"
-                when: telemetryPanel.bottomMode
+                name: "center"
                 AnchorChanges {
                     target: attitudeIndicator
-                    //anchors.top: undefined
-                    anchors.bottom: parent.bottom
-                    //anchors.left: telemetryPanel.right
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
         ]
+    }
+
+    PhotoVideoControl {
+        id:                     photoVideoControl
+        anchors.margins:        _toolsMargin
+        anchors.right:          parent.right
+        width:                  ScreenTools.isMobile ? _rightPanelWidth * 0.66 : _rightPanelWidth
+        state:                  _verticalCenter ? "verticalCenter" : "topAnchor"
+        states: [
+            State {
+                name: "verticalCenter"
+                AnchorChanges {
+                    target:                 photoVideoControl
+                    anchors.top:            undefined
+                    anchors.verticalCenter: _root.verticalCenter
+                }
+            },
+            State {
+                name: "topAnchor"
+                AnchorChanges {
+                    target:                 photoVideoControl
+                    anchors.verticalCenter: undefined
+                    anchors.top:            instrumentPanel.bottom
+                }
+            }
+        ]
+
+        property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
     }
 
     //-----------------------------------------------------------------------------------------------------
