@@ -145,8 +145,156 @@ Item {
         getWeatherJSON()
     }
 
+    TelemetryValuesBar {
+        id:                 telemetryPanel
+        x:                  recalcXPosition()
+        anchors.margins:    _toolsMargin
 
+        // States for custom layout support
+        states: [
+            State {
+                name: "bottom"
+                when: telemetryPanel.bottomMode
 
+                AnchorChanges {
+                    target: telemetryPanel
+                    anchors.top: undefined
+                    anchors.bottom: parent.bottom
+                    anchors.right: undefined
+                    anchors.verticalCenter: undefined
+                }
+
+                PropertyChanges {
+                    target: telemetryPanel
+                    x: recalcXPosition()
+                }
+            },
+
+            State {
+                name: "right-video"
+                when: !telemetryPanel.bottomMode && attitudeIndicator.visible
+
+                AnchorChanges {
+                    target: telemetryPanel
+                    anchors.top: undefined
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    anchors.verticalCenter: undefined
+                }
+            },
+
+            State {
+                name: "right-novideo"
+                when: !telemetryPanel.bottomMode && !attitudeIndicator.visible
+
+                AnchorChanges {
+                    target: telemetryPanel
+                    anchors.top: undefined
+                    anchors.bottom: undefined
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+        ]
+
+        function recalcXPosition() {
+            // First try centered
+            var halfRootWidth   = _root.width / 2
+            var halfPanelWidth  = telemetryPanel.width / 2
+            var leftX           = (halfRootWidth - halfPanelWidth) - _toolsMargin
+            var rightX          = (halfRootWidth + halfPanelWidth) + _toolsMargin
+            if (leftX >= parentToolInsets.leftEdgeBottomInset || rightX <= parentToolInsets.rightEdgeBottomInset ) {
+                // It will fit in the horizontalCenter
+                return halfRootWidth - halfPanelWidth
+            } else {
+                // Anchor to left edge
+                return parentToolInsets.leftEdgeBottomInset + _toolsMargin
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    //--custom VehicleWarnings Widget-----------------------------------------------------------------------------------
+
+    VehicleWarnings {
+        anchors.top: parent.top
+        anchors.topMargin: atmosphericSensorView.visible ? atmosphericSensorView.height + (_toolsMargin * 2) : _toolsMargin
+        anchors.horizontalCenter: parent.horizontalCenter
+        z:                  QGroundControl.zOrderTopMost
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    //--custom ModeChangedIndicator Widget-----------------------------------------------------------------------------------
+
+    ModeChangedIndicator {
+        anchors.centerIn:   parent
+        z:                  QGroundControl.zOrderTopMost
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    //--custom indicator Widget-----------------------------------------------------------------------------------
+
+    FlyViewAltitudeIndicator{
+        id:                         altitudeIndicator
+        anchors.margins:            _toolsMargin
+        anchors.verticalCenter:     parent.verticalCenter
+        anchors.right:              parent.right
+        anchors.rightMargin:        _rightPanelWidth * 1.1
+        visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
+    }
+
+    FlyViewAtmosphericSensorView{
+        id:                         atmosphericSensorView
+        anchors.margins:            _toolsMargin
+        anchors.top:                parent.top
+        anchors.horizontalCenter:   parent.horizontalCenter
+        visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    //--Attitude Widget-----------------------------------------------------------------------------------
+
+    Rectangle {
+        id:                     attitudeIndicator
+        anchors.bottomMargin:   _toolsMargin
+        anchors.leftMargin:    _toolsMargin * 1.5
+        anchors.bottom:         parent.bottom
+        //anchors.left:          telemetryPanel.right
+        height:                 ScreenTools.defaultFontPixelHeight * 9
+        width:                  height
+        radius:                 height * 0.5
+        color:                  "#80000000"
+
+        CustomAttitudeHUD {
+            size:               parent.height
+            vehicle:            _activeVehicle
+        }
+
+        states:[
+            State {
+                name: "telemetrybarSide"
+                when: telemetryPanel.bottomMode
+                AnchorChanges {
+                    target: attitudeIndicator
+                    //anchors.top: undefined
+                    //anchors.bottom: parent.bottom
+                    anchors.left: telemetryPanel.right
+                    //anchors.verticalCenter: undefined
+                }
+            },
+            State {
+                name: "parentCenter"
+                when: telemetryPanel.bottomMode
+                AnchorChanges {
+                    target: attitudeIndicator
+                    //anchors.top: undefined
+                    anchors.bottom: parent.bottom
+                    //anchors.left: telemetryPanel.right
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+        ]
+    }
 
     //-----------------------------------------------------------------------------------------------------
     //--Vibration Widget-----------------------------------------------------------------------------------
@@ -288,7 +436,6 @@ Item {
         color:                  "#80000000" //qgcPal.window
         visible:                QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
 
-
         MouseArea {
             anchors.fill: parent
             onClicked: getWeatherJSON()
@@ -301,107 +448,38 @@ Item {
 
             // City
             Row {
-                QGCLabel {
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Location : ")
-                }
-
-                QGCLabel {
-                    id:                 cityText
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                QGCLabel { Layout.alignment:   Qt.AlignHCenter;     text: qsTr("Location : ");}
+                QGCLabel { id: cityText;                            Layout.alignment:   Qt.AlignHCenter;}
             }
-
             // Weather
             Row {
-                QGCLabel {
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Weather : ")
-                }
-
-                QGCLabel {
-                    id:                 weatherText
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                QGCLabel { Layout.alignment:   Qt.AlignHCenter;     text: qsTr("Weather : ")}
+                QGCLabel { id:                 weatherText;         Layout.alignment:   Qt.AlignHCenter}
             }
-
             // Temperature
             Row {
-                QGCLabel {
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Temperature : ")
-                }
-
-                QGCLabel {
-                    id:                 tempText
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                    text:               qsTr("Temperature : ")                }
+                QGCLabel { id:                 tempText;                     Layout.alignment:   Qt.AlignHCenter                }
             }
-
             // Humidity
             Row {
-                QGCLabel {
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Humidity : ")
-                }
-
-                QGCLabel {
-                    id:                 humiText
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                     text:               qsTr("Humidity : ")                }
+                QGCLabel { id:                 humiText;                    Layout.alignment:   Qt.AlignHCenter                }
             }
-
             // Wind Degree
             Row {
-                QGCLabel {
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Wind Direction : ")
-                }
-
-                QGCLabel {
-                    id:                 windDegreeText
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                     text:               qsTr("Wind Direction : ")                }
+                QGCLabel { id:                 windDegreeText; Layout.alignment:   Qt.AlignHCenter                }
             }
-
             // Wind Speed
             Row {
-                QGCLabel {
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Wind Speed : ")
-                }
-
-                QGCLabel {
-                    id:                 windSpeedText
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                     text:               qsTr("Wind Speed : ")                }
+                QGCLabel { id:                 windSpeedText;                     Layout.alignment:   Qt.AlignHCenter                }
             }
-
             // Visibility
             Row {
-                QGCLabel {
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Visibility : ")
-                }
-
-                QGCLabel {
-                    id:                 visibilityText
-                    //font.pointSize:     ScreenTools.smallFontPointSize
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                    text:               qsTr("Visibility : ")                }
+                QGCLabel { id:                 visibilityText;                     Layout.alignment:   Qt.AlignHCenter                }
             }
 
             // Widget Footer
@@ -419,3 +497,5 @@ Item {
         }//ColumnLayout
     }
 }
+
+

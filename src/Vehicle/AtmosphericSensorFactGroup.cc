@@ -94,6 +94,9 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     case MAVLINK_MSG_ID_DATA32:
          _handleData32(message);
         break;
+    case MAVLINK_MSG_ID_HYGROMETER_SENSOR:
+        _handleHygrometerSensor(message);
+        break;
 #if !defined(NO_ARDUPILOT_DIALECT)
     case MAVLINK_MSG_ID_WIND:
         _handleWind(message);
@@ -150,6 +153,15 @@ void AtmosphericSensorFactGroup::_handleScaledPressure(mavlink_message_t& messag
     mavlink_scaled_pressure_t pressure;
     mavlink_msg_scaled_pressure_decode(&message, &pressure);
     //sensorBaro()->setRawValue(pressure.press_abs);
+}
+
+void AtmosphericSensorFactGroup::_handleHygrometerSensor(mavlink_message_t& message)
+{
+    mavlink_hygrometer_sensor_t hygrometer;
+    mavlink_msg_hygrometer_sensor_decode(&message, &hygrometer);
+
+    temperature()->setRawValue(hygrometer.temperature/100);
+    humidity()->setRawValue(hygrometer.humidity);
 }
 
 #if !defined(NO_ARDUPILOT_DIALECT)

@@ -289,6 +289,7 @@
         <file alias="QGroundControl/FlightDisplay/GuidedActionPressHoldConfirm.qml">src/FlightDisplay/GuidedActionPressHoldConfirm.qml</file>
         <file alias="QGroundControl/FlightDisplay/PowerEstimatedIndicator.qml">src/FlightDisplay/PowerEstimatedIndicator.qml</file>
         <file alias="QGroundControl/FlightMap/AtmosphericValueMapItem.qml">src/FlightMap/MapItems/AtmosphericValueMapItem.qml</file>
+        <file alias="QGroundControl/FlightMap/CustomAttitudeHUD.qml">src/FlightMap/Widgets/CustomAttitudeHUD.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

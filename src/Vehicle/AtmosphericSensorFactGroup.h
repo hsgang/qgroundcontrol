@@ -69,6 +69,7 @@ private:
     void _handleScaledPressure      (mavlink_message_t& message);
     void _handleAtmosphericSensor   (mavlink_message_t& message);
     void _handleWind                (mavlink_message_t& message);
+    void _handleHygrometerSensor    (mavlink_message_t& message);
 
     Fact _statusFact;
     Fact _logCountFact;
