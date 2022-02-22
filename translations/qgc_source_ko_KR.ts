@@ -7053,6 +7053,44 @@ Click Ok to start the auto-tuning process.
     </message>
   </context>
   <context>
+    <name>FlyViewCustomLayer</name>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="307"/>
+      <source>Location : </source>
+      <translation>지역 : </translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="322"/>
+      <source>Weather : </source>
+      <translation>날씨 : </translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="337"/>
+      <source>Temperature : </source>
+      <translation>기온 : </translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="307"/>
+      <source>Humidity : </source>
+      <translation>습도 : </translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="307"/>
+      <source>Wind Direction : </source>
+      <translation>풍향 : </translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="307"/>
+      <source>Wind Speed : </source>
+      <translation>풍속 : </translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="307"/>
+      <source>Visibility : </source>
+      <translation>시정 : </translation>
+    </message>
+  </context>
+  <context>
     <name>GPSIndicator</name>
     <message>
       <location filename="../src/ui/toolbar/GPSIndicator.qml" line="50"/>
@@ -9551,7 +9589,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="38"/>
       <source>Disconnected</source>
-      <translation>연결 해제</translation>
+      <translation>연결 없음</translation>
     </message>
     <message>
       <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="39"/>
