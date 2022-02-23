@@ -227,7 +227,6 @@ SetupPage {
                     property bool battAmpsPerVoltAvailable:     batParams.battAmpsPerVoltAvailable
 
                     property Fact battSource:           batParams.battSource
-                    property Fact battCapacity:         batParams.battCapacity
                     property Fact battNumCells:         batParams.battNumCells
                     property Fact battHighVolt:         batParams.battHighVolt
                     property Fact battLowVolt:          batParams.battLowVolt
