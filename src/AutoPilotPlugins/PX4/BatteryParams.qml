@@ -29,6 +29,7 @@ QtObject {
 
     property Fact battSource:                   controller.getParameterFact(-1, "BAT#_SOURCE".replace       ("#", _indexedBatteryParamsAvailable ? batteryIndex : ""))
     property Fact battNumCells:                 controller.getParameterFact(-1, "BAT#_N_CELLS".replace      ("#", _indexedBatteryParamsAvailable ? batteryIndex : ""))
+    property Fact battCapacity:                 controller.getParameterFact(-1, "BAT#_CAPACITY".replace     ("#", _indexedBatteryParamsAvailable ? batteryIndex : ""))
     property Fact battHighVolt:                 controller.getParameterFact(-1, "BAT#_V_CHARGED".replace    ("#", _indexedBatteryParamsAvailable ? batteryIndex : ""))
     property Fact battLowVolt:                  controller.getParameterFact(-1, "BAT#_V_EMPTY".replace      ("#", _indexedBatteryParamsAvailable ? batteryIndex : ""))
     property Fact battVoltLoadDrop:             controller.getParameterFact(-1, "BAT#_V_LOAD_DROP".replace  ("#", _indexedBatteryParamsAvailable ? batteryIndex : ""))
