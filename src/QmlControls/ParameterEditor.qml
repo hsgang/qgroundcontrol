@@ -184,7 +184,7 @@ Item {
                         anchors.left:   parent.left
                         anchors.right:  parent.right
                         text:           object.name
-                        checked:        object == controller.currentCategory
+                        checked:        object === controller.currentCategory
                         exclusiveGroup: sectionGroup
 
                         onCheckedChanged: {
@@ -201,7 +201,7 @@ Item {
                             width:          ScreenTools.defaultFontPixelWidth * 25
                             text:           object.name
                             height:         _rowHeight
-                            checked:        object == controller.currentGroup
+                            checked:        object === controller.currentGroup
                             autoExclusive:  true
 
                             onClicked: {
@@ -257,7 +257,7 @@ Item {
                             return factRow.modelFact.valueString + " " + factRow.modelFact.units
                         }
 
-                        if(factRow.modelFact.bitmaskStrings.length != 0) {
+                        if(factRow.modelFact.bitmaskStrings.length !== 0) {
                             return factRow.modelFact.selectedBitmaskStrings.join(',')
                         }
 
