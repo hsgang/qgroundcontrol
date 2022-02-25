@@ -7057,7 +7057,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="307"/>
       <source>Location : </source>
-      <translation>지역 : </translation>
+      <translation>위치 : </translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="322"/>
@@ -10514,7 +10514,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="25"/>
       <source>Multirotor Initial Checks</source>
-      <translation type="unfinished">Multirotor Initial Checks</translation>
+      <translation type="unfinished">멀티로터 기본사항 확인</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="28"/>
@@ -10524,7 +10524,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="29"/>
       <source>Props mounted and secured?</source>
-      <translation type="unfinished">Props mounted and secured?</translation>
+      <translation type="unfinished">프로펠러 상태를 확인하였습니까?</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="50"/>
@@ -10539,7 +10539,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="54"/>
       <source>Propellers free? Then throttle up gently. Working properly?</source>
-      <translation>프로펠러가 모두 제거되었습니까? 그렇다면 스로틀을 부드럽게 올려주세요. 제대로 작동합니까?</translation>
+      <translation>스로틀 조작에 따라 작동합니까?</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="58"/>
@@ -10564,7 +10564,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="72"/>
       <source>Configured and started? Payload lid closed?</source>
-      <translation>설정 후 시작이 되었습니까? 페이로드 덮개가 닫혔습니까?</translation>
+      <translation>설정과 작동을 확인하였습니까?</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="76"/>
@@ -10574,7 +10574,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="77"/>
       <source>OK for your platform?</source>
-      <translation type="unfinished">OK for your platform?</translation>
+      <translation type="unfinished">기상조건을 확인하였습니까?</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="81"/>
@@ -18139,6 +18139,39 @@ Confirm change?</source>
       <location filename="../src/Settings/VideoSettings.cc" line="31"/>
       <source>Yuneec Mantis G</source>
       <translation>Yuneec Mantis G</translation>
+    </message>
+  </context>
+  <context>
+    <name>AtmosphericValueMapItem</name>
+    <message>
+      <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="60"/>
+      <source>Alt:</source>
+      <translation>고도:</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="63"/>
+      <source>Temp:</source>
+      <translation>기온:</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="66"/>
+      <source>Humi:</source>
+      <translation>습도:</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="69"/>
+      <source>Press:</source>
+      <translation>기압:</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="72"/>
+      <source>W/D:</source>
+      <translation>풍향:</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="75"/>
+      <source>W/S:</source>
+      <translation>풍속:</translation>
     </message>
   </context>
 </TS>
