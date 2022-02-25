@@ -487,8 +487,8 @@ Item {
         id:                     weatherBackground
         anchors.right:          parent.right
         anchors.rightMargin:     _toolsMargin
-        anchors.bottom:         parent.bottom
-        anchors.bottomMargin:   _toolsMargin
+        anchors.top:            parent.top
+        anchors.topMargin:      _toolsMargin
         width:                  _rightPanelWidth
         height:                 weatherValue.height + _toolsMargin
         radius:                 ScreenTools.defaultFontPixelWidth / 2
