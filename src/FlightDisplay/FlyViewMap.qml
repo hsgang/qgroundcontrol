@@ -289,10 +289,8 @@ FlightMap {
     MapItemView {
         model: QGroundControl.multiVehicleManager.vehicles
         delegate: AtmosphericValueMapItem {
-            vehicle:        object
             coordinate:     object.coordinate
             map:            _root
-            size:           ScreenTools.defaultFontPixelHeight * 2
             visible:        QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && !pipMode
             z:              QGroundControl.zOrderVehicles
         }
