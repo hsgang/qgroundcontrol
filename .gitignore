@@ -89,3 +89,4 @@ Qt*-linux*.tar.*
 .vs/
 
 libs/airmapd/include/boost
+log/latest_list
