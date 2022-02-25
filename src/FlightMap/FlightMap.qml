@@ -127,11 +127,11 @@ Map {
 
         sourceItem: Image {
             id:             mapItemImage
-            source:         isNaN(gcsHeading) ? "/qmlimages/homeMarker.png" : "/res/QGCLogoArrow"
+            source:         "/qmlimages/homeMarker.png"
             mipmap:         true
             antialiasing:   true
             fillMode:       Image.PreserveAspectFit
-            height:         ScreenTools.defaultFontPixelHeight * (isNaN(gcsHeading) ? 1.75 : 2.5 )
+            height:         ScreenTools.defaultFontPixelHeight * 3
             sourceSize.height: height
             transform: Rotation {
                 origin.x:       mapItemImage.width  / 2
