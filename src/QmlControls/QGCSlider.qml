@@ -53,7 +53,7 @@ Slider {
 
                 Rectangle {
                     anchors.fill:   parent
-                    color:          qgcPal.colorBlue
+                    color:          qgcPal.buttonHighlight
                     border.color:   Qt.darker(color, 1.2)
                     radius:         height/2
                 }
