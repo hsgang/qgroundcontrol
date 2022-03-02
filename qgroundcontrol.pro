@@ -27,7 +27,7 @@ message(Qt version $$[QT_VERSION])
 
 include(QGCCommon.pri)
 
-TARGET   = QGroundControl
+TARGET   = MissionControl
 TEMPLATE = app
 QGCROOT  = $$PWD
 
@@ -61,8 +61,8 @@ WindowsBuild {
 #
 
 QGC_APP_NAME        = "MissionControl"
-QGC_ORG_NAME        = "QGroundControl.org"
-QGC_ORG_DOMAIN      = "org.qgroundcontrol"
+QGC_ORG_NAME        = "MissionControl.org"
+QGC_ORG_DOMAIN      = "org.MissionControl"
 QGC_APP_DESCRIPTION = "Open source ground control app provided by QGroundControl dev team"
 QGC_APP_COPYRIGHT   = "Copyright (C) 2022 QGroundControl Development Team. All rights reserved."
 
@@ -1538,15 +1538,15 @@ DISTFILES += \
 LinuxBuild {
     target.path = $${PREFIX}/bin/
 
-    share_qgroundcontrol.path = $${PREFIX}/share/qgroundcontrol/
+    share_qgroundcontrol.path = $${PREFIX}/share/missioncontrol/
     share_qgroundcontrol.files = $${IN_PWD}/resources/
 
     share_icons.path = $${PREFIX}/share/icons/hicolor/128x128/apps/
-    share_icons.files = $${IN_PWD}/resources/icons/qgroundcontrol.png
+    share_icons.files = $${IN_PWD}/resources/icons/missioncontrol.png
     share_metainfo.path = $${PREFIX}/share/metainfo/
     share_metainfo.files = $${IN_PWD}/deploy/org.mavlink.qgroundcontrol.metainfo.xml
     share_applications.path = $${PREFIX}/share/applications/
-    share_applications.files = $${IN_PWD}/deploy/qgroundcontrol.desktop
+    share_applications.files = $${IN_PWD}/deploy/missioncontrol.desktop
 
     INSTALLS += target share_qgroundcontrol share_icons share_metainfo share_applications
 }
