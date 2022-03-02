@@ -397,19 +397,19 @@ ApplicationWindow {
             }
 
             ColumnLayout {
-                id:             qgcVersionLayout
-                anchors.left:   parent.left
-                anchors.right:  parent.right
-                anchors.bottom: parent.bottom
-                spacing:        0
+                width:                  innerLayout.width
+                spacing:                0
+                Layout.alignment:       Qt.AlignHCenter
 
                 QGCLabel {
+                    id:                     versionLabel
                     text:                   qsTr("%1 Version").arg(QGroundControl.appName)
                     font.pointSize:         ScreenTools.smallFontPointSize
                     wrapMode:               QGCLabel.WordWrap
                     Layout.maximumWidth:    parent.width
                     Layout.alignment:       Qt.AlignHCenter
                 }
+
                 QGCLabel {
                     text:                   QGroundControl.qgcVersion
                     font.pointSize:         ScreenTools.smallFontPointSize
