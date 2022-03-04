@@ -7,24 +7,65 @@
  *
  ****************************************************************************/
 
-import QtQuick                  2.3
-import QtQuick.Controls         1.2
+import QtQuick                  2.12 //2.3
+import QtQuick.Controls         2.12 //1.2
 import QtQuick.Controls.Styles  1.4
 
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 
 Switch {
-    id: _root
+    id: control
+    text: ""
+
     QGCPalette { id:qgcPal; colorGroupEnabled: true }
-    style: SwitchStyle {
-        groove:     Rectangle {
-            implicitWidth:  ScreenTools.defaultFontPixelWidth * 6
-            implicitHeight: ScreenTools.defaultFontPixelHeight
-            color:          (control.checked && control.enabled) ? qgcPal.colorGreen : qgcPal.colorGrey
-            radius:         3
+
+    indicator: Rectangle{
+        implicitWidth:  ScreenTools.defaultFontPixelWidth * 4
+        implicitHeight: ScreenTools.defaultFontPixelHeight
+        x:  control.leftPadding
+        y:  parent.height / 2 - height / 2
+        color:          (control.checked && control.enabled) ? qgcPal.buttonHighlight : qgcPal.colorGrey
+        radius:         implicitHeight * 0.5
+        border.color:   qgcPal.button
+        border.width:   1
+
+        Rectangle {
+            x: control.checked ? parent.width - width : 0
+            implicitWidth:  ScreenTools.defaultFontPixelHeight
+            implicitHeight: implicitWidth
+            color:          control.enabled ? qgcPal.text : qgcPal.colorGrey
+            radius:         implicitHeight * 0.5
             border.color:   qgcPal.button
             border.width:   1
         }
     }
+
+    contentItem: Text {
+            text: control.text
+            font: control.font
+            opacity: enabled ? 1.0 : 0.3
+            color: qgcPal.text
+            verticalAlignment: Text.AlignVCenter
+            leftPadding: control.indicator.width + control.spacing
+    }
+
+//    style: SwitchStyle {
+//        groove:     Rectangle {
+//            implicitWidth:  ScreenTools.defaultFontPixelWidth * 4
+//            implicitHeight: ScreenTools.defaultFontPixelHeight
+//            color:          (control.checked && control.enabled) ? qgcPal.buttonHighlight : qgcPal.colorGrey
+//            radius:         implicitHeight * 0.5
+//            border.color:   qgcPal.button
+//            border.width:   1
+//        }
+//        handle:     Rectangle {
+//            implicitWidth:  ScreenTools.defaultFontPixelHeight
+//            implicitHeight: implicitWidth
+//            color:          (control.checked && control.enabled) ? qgcPal.text : qgcPal.colorGrey
+//            radius:         implicitHeight * 0.5
+//            border.color:   qgcPal.button
+//            border.width:   1
+//        }
+//    }
 }
