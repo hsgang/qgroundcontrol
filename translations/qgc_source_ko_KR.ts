@@ -7055,6 +7055,11 @@ Click Ok to start the auto-tuning process.
   <context>
     <name>FlyViewCustomLayer</name>
     <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="505"/>
+      <source>Weather Status</source>
+      <translation>날씨 정보</translation>
+    </message>
+    <message>
       <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="307"/>
       <source>Location : </source>
       <translation>위치 : </translation>
