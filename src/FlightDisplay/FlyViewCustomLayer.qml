@@ -33,7 +33,7 @@ Item {
     id: _root
 
     property var parentToolInsets               // These insets tell you what screen real estate is available for positioning the controls in your overlay
-    property var totalToolInsets:   _toolInsets // These are the insets for your custom overlay additions
+    property var totalToolInsets:           _toolInsets // These are the insets for your custom overlay additions
     property var mapControl
     property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 30
 
@@ -57,7 +57,7 @@ Item {
     readonly property real _barBadValue:    60.0
 
     // Property of Vibration visible
-    property var _vibeStatusVisible:        false
+    property bool _vibeStatusVisible:        false
 
     // QGC Map Center Position
     property var _mapCoordinate:            QGroundControl.flightMapPosition
@@ -81,68 +81,6 @@ Item {
         bottomEdgeLeftInset:    0
         bottomEdgeCenterInset:  0
         bottomEdgeRightInset:   0
-    }
-
-    // Weather Function
-    function getWeatherJSON() {
-        if(!_openWeatherAPIkey) {
-            weatherBackground.visible = false
-            return
-        }
-
-        var requestUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + QGroundControl.flightMapPosition.latitude + "&lon="
-                         + QGroundControl.flightMapPosition.longitude + "&appid=" + _openWeatherAPIkey + "&lang=kr&units=metric"
-
-        var openWeatherRequest = new XMLHttpRequest()
-        openWeatherRequest.open('GET', requestUrl, true);
-        openWeatherRequest.onreadystatechange = function() {
-            if (openWeatherRequest.readyState === XMLHttpRequest.DONE) {
-                //console.log(openWeatherRequest.status)
-                if (openWeatherRequest.status && openWeatherRequest.status === 200) {
-                    var openWeatherText = JSON.parse(openWeatherRequest.responseText)
-
-                    // Debug
-                    //console.log(openWeatherRequest.responseText)
-
-                    // Weather Tab
-                    cityText.text       = openWeatherText.name
-                    weatherText.text    = openWeatherText.weather[0].main
-                    tempText.text       = openWeatherText.main.temp
-                    humiText.text       = openWeatherText.main.humidity
-                    windDegreeText.text = getDirection(openWeatherText.wind.deg)
-                    windSpeedText.text  = openWeatherText.wind.speed
-                    visibilityText.text = openWeatherText.visibility
-
-                } else {
-                    if(!openWeatherRequest.status) {
-                        // Not Internet
-                        mainWindow.showMessageDialog(qsTr("Internet Not Connect."), qsTr("Check Your Internet Connection."))
-                    }
-                    else if(openWeatherRequest.status === 401) {
-                        // Key error
-                        mainWindow.showMessageDialog(qsTr("OpenWeather Key Error"), qsTr("OpenWeather Key Error. Check Your API Key."))
-                        console.log(requestUrl)
-                    }
-                    else if(openWeatherRequest.status === 429) {
-                        // Key use excess
-                        mainWindow.showMessageDialog(qsTr("OpenWeather API Use Excess."), qsTr("OpenWeather API Use Excess. Make your request a little bit slower."))
-                    }
-                }
-            }
-        }
-        openWeatherRequest.send()
-    }
-
-    // Degree Convert
-    function getDirection(angle) {
-        var directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-        var index = Math.round(((angle %= 360) < 0 ? angle + 360 : angle) / 45) % 8;
-        return directions[index];
-    }
-
-    // Get Weather on Complete
-    Component.onCompleted: {
-        getWeatherJSON()
     }
 
     TelemetryValuesBar {
@@ -483,6 +421,68 @@ Item {
 
     //-----------------------------------------------------------------------------------------------------
     //--Weather Widget------------------------------------------------------==-----------------------------
+    // Weather Function
+    function getWeatherJSON() {
+        if(!_openWeatherAPIkey) {
+            weatherBackground.visible = false
+            return
+        }
+
+        var requestUrl = "http://api.openweathermap.org/data/2.5/weather?lat=" + QGroundControl.flightMapPosition.latitude + "&lon="
+                         + QGroundControl.flightMapPosition.longitude + "&appid=" + _openWeatherAPIkey + "&lang=kr&units=metric"
+
+        var openWeatherRequest = new XMLHttpRequest()
+        openWeatherRequest.open('GET', requestUrl, true);
+        openWeatherRequest.onreadystatechange = function() {
+            if (openWeatherRequest.readyState === XMLHttpRequest.DONE) {
+                //console.log(openWeatherRequest.status)
+                if (openWeatherRequest.status && openWeatherRequest.status === 200) {
+                    var openWeatherText = JSON.parse(openWeatherRequest.responseText)
+
+                    // Debug
+                    //console.log(openWeatherRequest.responseText)
+
+                    // Weather Tab
+                    cityText.text       = openWeatherText.name
+                    weatherText.text    = openWeatherText.weather[0].main
+                    tempText.text       = openWeatherText.main.temp
+                    humiText.text       = openWeatherText.main.humidity
+                    windDegreeText.text = getDirection(openWeatherText.wind.deg)
+                    windSpeedText.text  = openWeatherText.wind.speed
+                    visibilityText.text = openWeatherText.visibility
+
+                } else {
+                    if(!openWeatherRequest.status) {
+                        // Not Internet
+                        mainWindow.showMessageDialog(qsTr("Internet Not Connect."), qsTr("Check Your Internet Connection."))
+                    }
+                    else if(openWeatherRequest.status === 401) {
+                        // Key error
+                        mainWindow.showMessageDialog(qsTr("OpenWeather Key Error"), qsTr("OpenWeather Key Error. Check Your API Key."))
+                        console.log(requestUrl)
+                    }
+                    else if(openWeatherRequest.status === 429) {
+                        // Key use excess
+                        mainWindow.showMessageDialog(qsTr("OpenWeather API Use Excess."), qsTr("OpenWeather API Use Excess. Make your request a little bit slower."))
+                    }
+                }
+            }
+        }
+        openWeatherRequest.send()
+    }
+
+    // Degree Convert
+    function getDirection(angle) {
+        var directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+        var index = Math.round(((angle %= 360) < 0 ? angle + 360 : angle) / 45) % 8;
+        return directions[index];
+    }
+
+//    // Get Weather on Complete
+//    Component.onCompleted: {
+//        getWeatherJSON()
+//    }
+
     Rectangle {
         id:                     weatherBackground
         anchors.right:          parent.right
@@ -490,7 +490,7 @@ Item {
         anchors.top:            parent.top
         anchors.topMargin:      _toolsMargin
         width:                  _rightPanelWidth
-        height:                 weatherValue.height + _toolsMargin
+        height:                 weatherTitle.height + weatherValue.height + (_toolsMargin * 3)
         radius:                 ScreenTools.defaultFontPixelWidth / 2
         color:                  "#80000000" //qgcPal.window
         visible:                QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
@@ -500,10 +500,18 @@ Item {
             onClicked: getWeatherJSON()
         }
 
+        QGCLabel {
+            id:     weatherTitle
+            text:   qsTr("Weather Status")
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.margins: _toolsMargin
+        }
+
         ColumnLayout {
             id:         weatherValue
             spacing:    ScreenTools.defaultFontPixelWidth
-            anchors.centerIn: parent
+            anchors.top: weatherTitle.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
 
             // City
             Row {
