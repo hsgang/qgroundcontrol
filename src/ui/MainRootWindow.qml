@@ -397,7 +397,10 @@ ApplicationWindow {
             }
 
             ColumnLayout {
-                width:                  innerLayout.width
+                id:                     qgcVersionLayout
+                anchors.bottom:         parent.bottom
+                height:                 ScreenTools.defaultFontPixelHeight * 3
+                width:                  parent.width
                 spacing:                0
                 Layout.alignment:       Qt.AlignHCenter
 
