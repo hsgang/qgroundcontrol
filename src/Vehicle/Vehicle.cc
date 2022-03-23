@@ -2655,7 +2655,7 @@ void Vehicle::guidedModeChangeHeading(const QGeoCoordinate& headingCoord)
                             maxYawRate,
                             static_cast<float>(direction),
                             0.0f);
-
+}
 void Vehicle::guidedModeChangeGroundSpeed(double groundspeed)
 {
     if (!guidedModeSupported()) {

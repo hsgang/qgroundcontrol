@@ -285,7 +285,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         guidedController:   _guidedController
-        altitudeSlider:     _guidedAltSlider
+        guidedValueSlider:  _guidedValueSlider
     }
 //    PowerEstimatedIndicator{
 //        id:                         powerEstimatedIndicator

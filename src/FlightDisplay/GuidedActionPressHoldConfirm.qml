@@ -21,7 +21,7 @@ Item {
     id: root
 
     property var    guidedController
-    property var    altitudeSlider
+    property var    guidedValueSlider
     property string title                                       // Currently unused
     property alias  message:            messageText.text
     property int    action
@@ -49,14 +49,12 @@ Item {
         if (immediate) {
             visible = true
         } else {
-            // We delay showing the confirmation for a small amount in order for any other state
-            // changes to propogate through the system. This way only the final state shows up.
             visibleTimer.restart()
         }
     }
 
     function confirmCancelled() {
-        altitudeSlider.visible = false
+        guidedValueSlider.visible = false
         visible = false
         hideTrigger = false
         visibleTimer.stop()
@@ -73,16 +71,15 @@ Item {
         }
 
     onConfirmSignal: {
-        //console.log("onMyPressAndHold")
         root.visible = false
         feeder.value = 0
-        var altitudeChange = 0
-        if (altitudeSlider.visible) {
-            altitudeChange = altitudeSlider.getAltitudeChangeValue()
-            altitudeSlider.visible = false
+        var sliderOutputValue = 0
+        if (guidedValueSlider.visible) {
+            sliderOutputValue = guidedValueSlider.getOutputValue()
+            guidedValueSlider.visible = false
         }
         hideTrigger = false
-        guidedController.executeAction(root.action, root.actionData, altitudeChange, root.optionChecked)
+        guidedController.executeAction(root.action, root.actionData, sliderOutputValue, root.optionChecked)
         if (mapIndicator) {
             mapIndicator.actionConfirmed()
             mapIndicator = undefined
@@ -107,19 +104,10 @@ Item {
     property color progressColor: qgcPal.buttonHighlight // "#FFA51BAB"
 
     property int penStyle: Qt.RoundCap
-    //property int dialType: RadialBarShape.DialType.FullDial
 
     signal pressSignal
     signal releaseSignal
     signal confirmSignal
-
-//    onPressSignal: {
-//        console.log("Emit PressSignal")
-//    }
-
-//    onReleaseSignal: {
-//        console.log("Emit ReleaseSignal")
-//    }
 
     QtObject {
         id: internals
@@ -272,7 +260,6 @@ Item {
             id:                     messageText
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter:   parent.verticalCenter
-            //Layout.fillWidth:       true
             horizontalAlignment:    Text.AlignHCenter
             wrapMode:               Text.WordWrap
             color:                  qgcPal.text
@@ -283,7 +270,6 @@ Item {
         text: "Press to Confirm"
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter:   parent.verticalCenter
-        //Layout.fillWidth:       true
         horizontalAlignment:    Text.AlignHCenter
         wrapMode:               Text.WordWrap
     }

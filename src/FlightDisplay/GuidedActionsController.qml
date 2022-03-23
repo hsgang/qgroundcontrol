@@ -106,8 +106,8 @@ Item {
     readonly property int actionROI:                        22
     readonly property int actionActionList:                 23
     readonly property int actionForceArm:                   24
-    readonly property int actionChangeHeading:              25
     readonly property int actionChangeSpeed:                25
+    readonly property int actionChangeHeading:              26
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property bool   _useChecklist:              QGroundControl.settingsManager.appSettings.useChecklist.rawValue && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
