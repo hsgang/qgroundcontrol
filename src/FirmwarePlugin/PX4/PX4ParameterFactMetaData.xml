@@ -3544,6 +3544,10 @@
       <unit>m</unit>
       <increment>1</increment>
     </parameter>
+    <parameter name="GF_PREDICT" default="1" type="INT32" boolean="true">
+      <short_desc>Use Pre-emptive geofence triggering</short_desc>
+      <long_desc>Predict the motion of the vehicle and trigger the breach if it is determined that the current trajectory would result in a breach happening before the vehicle can make evasive maneuvers. The vehicle is then re-routed to a safe hold position (stop for multirotor, loiter for fixed wing).</long_desc>
+    </parameter>
     <parameter name="GF_SOURCE" default="0" type="INT32">
       <short_desc>Geofence source</short_desc>
       <long_desc>Select which position source should be used. Selecting GPS instead of global position makes sure that there is no dependence on the position estimator 0 = global position, 1 = GPS</long_desc>
@@ -4138,39 +4142,28 @@
       <max>250</max>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter name="MAV_TYPE" default="2" type="INT32">
+    <parameter name="MAV_TYPE" default="0" type="INT32">
       <short_desc>MAVLink airframe type</short_desc>
-      <min>1</min>
-      <max>27</max>
+      <min>0</min>
+      <max>22</max>
       <values>
         <value code="0">Generic micro air vehicle</value>
         <value code="1">Fixed wing aircraft</value>
         <value code="2">Quadrotor</value>
         <value code="3">Coaxial helicopter</value>
         <value code="4">Normal helicopter with tail rotor</value>
-        <value code="5">Ground installation</value>
-        <value code="6">Operator control unit / ground control station</value>
         <value code="7">Airship, controlled</value>
         <value code="8">Free balloon, uncontrolled</value>
-        <value code="9">Rocket</value>
         <value code="10">Ground rover</value>
         <value code="11">Surface vessel, boat, ship</value>
         <value code="12">Submarine</value>
         <value code="13">Hexarotor</value>
         <value code="14">Octorotor</value>
         <value code="15">Tricopter</value>
-        <value code="16">Flapping wing</value>
-        <value code="17">Kite</value>
-        <value code="18">Onboard companion controller</value>
-        <value code="19">Two-rotor VTOL using control surfaces in vertical operation in addition. Tailsitter.</value>
-        <value code="20">Quad-rotor VTOL using a V-shaped quad config in vertical operation. Tailsitter.</value>
-        <value code="21">Tiltrotor VTOL</value>
-        <value code="22">VTOL reserved 2</value>
-        <value code="23">VTOL reserved 3</value>
-        <value code="24">VTOL reserved 4</value>
-        <value code="25">VTOL reserved 5</value>
-        <value code="26">Onboard gimbal</value>
-        <value code="27">Onboard ADSB peripheral</value>
+        <value code="19">VTOL Tailsitter Duo</value>
+        <value code="20">VTOL Tailsitter Quad</value>
+        <value code="21">VTOL Tiltrotor</value>
+        <value code="22">VTOL Standard (quadplane)</value>
       </values>
     </parameter>
     <parameter name="MAV_USEHILGPS" default="0" type="INT32" boolean="true">
@@ -7675,17 +7668,33 @@
       <min>1</min>
       <max>30</max>
     </parameter>
-    <parameter name="IMU_GYRO_NF_BW" default="20.0" type="FLOAT">
+    <parameter name="IMU_GYRO_NF0_BW" default="20.0" type="FLOAT">
       <short_desc>Notch filter bandwidth for gyro</short_desc>
-      <long_desc>The frequency width of the stop band for the 2nd order notch filter on the primary gyro. See "IMU_GYRO_NF_FREQ" to activate the filter and to set the notch frequency. Applies to both angular velocity and angular acceleration sent to the controllers.</long_desc>
+      <long_desc>The frequency width of the stop band for the 2nd order notch filter on the primary gyro. See "IMU_GYRO_NF0_FRQ" to activate the filter and to set the notch frequency. Applies to both angular velocity and angular acceleration sent to the controllers.</long_desc>
       <min>0</min>
       <max>100</max>
       <unit>Hz</unit>
       <reboot_required>true</reboot_required>
     </parameter>
-    <parameter name="IMU_GYRO_NF_FREQ" default="0.0" type="FLOAT">
+    <parameter name="IMU_GYRO_NF0_FRQ" default="0.0" type="FLOAT">
       <short_desc>Notch filter frequency for gyro</short_desc>
-      <long_desc>The center frequency for the 2nd order notch filter on the primary gyro. This filter can be enabled to avoid feedback amplification of structural resonances at a specific frequency. This only affects the signal sent to the controllers, not the estimators. Applies to both angular velocity and angular acceleration sent to the controllers. See "IMU_GYRO_NF_BW" to set the bandwidth of the filter. A value of 0 disables the filter.</long_desc>
+      <long_desc>The center frequency for the 2nd order notch filter on the primary gyro. This filter can be enabled to avoid feedback amplification of structural resonances at a specific frequency. This only affects the signal sent to the controllers, not the estimators. Applies to both angular velocity and angular acceleration sent to the controllers. See "IMU_GYRO_NF0_BW" to set the bandwidth of the filter. A value of 0 disables the filter.</long_desc>
+      <min>0</min>
+      <max>1000</max>
+      <unit>Hz</unit>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="IMU_GYRO_NF1_BW" default="20.0" type="FLOAT">
+      <short_desc>Notch filter 1 bandwidth for gyro</short_desc>
+      <long_desc>The frequency width of the stop band for the 2nd order notch filter on the primary gyro. See "IMU_GYRO_NF1_FRQ" to activate the filter and to set the notch frequency. Applies to both angular velocity and angular acceleration sent to the controllers.</long_desc>
+      <min>0</min>
+      <max>100</max>
+      <unit>Hz</unit>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="IMU_GYRO_NF1_FRQ" default="0.0" type="FLOAT">
+      <short_desc>Notch filter 2 frequency for gyro</short_desc>
+      <long_desc>The center frequency for the 2nd order notch filter on the primary gyro. This filter can be enabled to avoid feedback amplification of structural resonances at a specific frequency. This only affects the signal sent to the controllers, not the estimators. Applies to both angular velocity and angular acceleration sent to the controllers. See "IMU_GYRO_NF1_BW" to set the bandwidth of the filter. A value of 0 disables the filter.</long_desc>
       <min>0</min>
       <max>1000</max>
       <unit>Hz</unit>
@@ -8006,6 +8015,10 @@
     </parameter>
     <parameter name="SENS_EN_SHT3X" default="0" type="INT32" boolean="true">
       <short_desc>SHT3x temperature and hygrometer</short_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="SENS_EN_SPL06" default="0" type="INT32" boolean="true">
+      <short_desc>Goertek SPL06 Barometer (external I2C)</short_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="SENS_EN_SR05" default="0" type="INT32" boolean="true">
@@ -8913,6 +8926,13 @@
     <parameter name="SYS_HAS_MAG" default="1" type="INT32" boolean="true">
       <short_desc>Control if the vehicle has a magnetometer</short_desc>
       <long_desc>Disable this if the board has no magnetometer, such as the Omnibus F4 SD. If disabled, the preflight checks will not check for the presence of a magnetometer.</long_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="SYS_HAS_NUM_DIST" default="0" type="INT32">
+      <short_desc>Control the number of distance sensors on the vehicle</short_desc>
+      <long_desc>If set to the number of distance sensors, the preflight check will check for their presence and valid data publication. Disable with 0 if no distance sensor present or to disbale the preflight check.</long_desc>
+      <min>0</min>
+      <max>4</max>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="SYS_HITL" default="0" type="INT32">
