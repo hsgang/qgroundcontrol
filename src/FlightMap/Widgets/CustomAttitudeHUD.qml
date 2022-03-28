@@ -26,27 +26,22 @@ import QGroundControl.Palette      1.0
 Item {
     id: root
 
-//    property bool active:       false  ///< true: actively connected to data provider, false: show inactive control
-//    property real rollAngle :   _defaultRollAngle
-//    property real pitchAngle:   _defaultPitchAngle
-
-//    readonly property real _defaultRollAngle:   0
-//    readonly property real _defaultPitchAngle:  0
-
-//    property real _rollAngle:   active ? rollAngle : _defaultRollAngle
-//    property real _pitchAngle:  active ? pitchAngle : _defaultPitchAngle
-
-    //
     property bool showPitch:    true
     property var  vehicle:      null
-    property real size
-    property bool showHeading:  false
+    property real size:         _defaultSize
+
+    //property bool showHeading:  false
 
     property real _rollAngle:   vehicle ? vehicle.roll.rawValue  : 0
     property real _pitchAngle:  vehicle ? vehicle.pitch.rawValue : 0
 
+    property real _heading:             vehicle ? vehicle.heading.rawValue : 0
+    property real _headingToHome:       vehicle ? vehicle.headingToHome.rawValue : 0
+
     width:  size
     height: size
+
+    property bool usedByMultipleVehicleList:  false
 
     anchors.centerIn: parent
 
@@ -54,6 +49,11 @@ Item {
         return _lockNoseUpCompass
     }
 
+    function isHeadingHomeOK(){
+        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_headingToHome)
+    }
+
+    readonly property bool _showAdditionalIndicatorsCompass:     QGroundControl.settingsManager.flyViewSettings.showAdditionalIndicatorsCompass.value && !usedByMultipleVehicleList
     readonly property bool _lockNoseUpCompass:        QGroundControl.settingsManager.flyViewSettings.lockNoseUpCompass.value
 
     Image {
@@ -73,6 +73,7 @@ Item {
 
     Image {
         id: pointer
+        visible: _lockNoseUpCompass
         anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
         source:             "/qmlimages/rollPointerWhite.svg"
         mipmap:             true
@@ -81,15 +82,32 @@ Item {
         fillMode:           Image.PreserveAspectFit
     }
 
+
     Image {
-        id:                 crossHair
-        anchors.centerIn:   parent
-        source:             "/qmlimages/crossHair.svg"
-        mipmap:             true
-        width:              parent.width
-        sourceSize.width:   width
-        //color:              qgcPal.text
-        fillMode:           Image.PreserveAspectFit
+            id:                 crossHair
+            anchors.centerIn:   parent
+            source:             "/qmlimages/crossHair.svg"
+            mipmap:             true
+            width:              parent.width
+            sourceSize.width:   width
+            //color:              qgcPal.text
+            fillMode:           Image.PreserveAspectFit
+    }
+
+    Image {
+        id:                     homePointer
+        width:                  size * 0.1
+        source:                 isHeadingHomeOK()  ? "/qmlimages/Home.svg" : ""
+        mipmap:                 true
+        fillMode:               Image.PreserveAspectFit
+        anchors.centerIn:   	parent
+        sourceSize.width:       width
+
+        transform: Translate {
+            property double _angle: isNoseUpLocked()?-_heading+_headingToHome:_headingToHome
+            x: size/2.3 * Math.sin((_angle)*(3.14/180))
+            y: - size/2.3 * Math.cos((_angle)*(3.14/180))
+        }
     }
 
     QGCPitchIndicator {

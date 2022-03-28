@@ -56,6 +56,16 @@ Item {
     readonly property real _barMaximum:     90.0
     readonly property real _barBadValue:    60.0
 
+    property real   _vehicleAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : 0
+    property real   _vehicleVerticalSpeed:      _activeVehicle ? _activeVehicle.climbRate.rawValue : 0
+    property real   _vehicleGroundSpeed:        _activeVehicle ? _activeVehicle.groundSpeed.rawValue : 0
+    property real   _distanceToHome:            _activeVehicle ? _activeVehicle.distanceToHome.rawValue : 0
+    property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_vehicleAltitude).toFixed(1)
+    property string _vehicleVerticalSpeedText:  isNaN(_vehicleVerticalSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleVerticalSpeed).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsSpeedUnitsString
+    property string _vehicleGroundSpeedText:    isNaN(_vehicleGroundSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleGroundSpeed).toFixed(1)
+    property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_distanceToHome).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+
+
     // Property of Vibration visible
     property bool _vibeStatusVisible:        false
 
@@ -236,10 +246,121 @@ Item {
         anchors.leftMargin:    _toolsMargin * 1.5
         anchors.bottom:         parent.bottom
         //anchors.left:          telemetryPanel.right
-        height:                 ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6.5 : ScreenTools.defaultFontPixelHeight * 9
+        height:                 ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 7 : ScreenTools.defaultFontPixelHeight * 9
         width:                  height
         radius:                 height * 0.5
         color:                  "#80000000"
+
+        Rectangle {
+            id:                         altitudeValue
+            anchors.margins:            _toolsMargin * 2
+            anchors.left:               parent.right
+            anchors.verticalCenter:     parent.verticalCenter
+            height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
+            width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
+            color:                      "#80000000"
+
+            GridLayout {
+                anchors.fill: parent
+
+                columns: 3
+                rows: 3
+
+                rowSpacing: 1
+
+                QGCLabel {
+                    text: "ALT"
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 1
+                    Layout.rowSpan : 1
+                    Layout.column : 2
+                    Layout.row : 0
+                }
+                QGCLabel {
+                    text:  QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 1
+                    Layout.rowSpan : 1
+                    Layout.column : 2
+                    Layout.row : 1
+                }
+                QGCLabel {
+                    id:     altutudeValueText
+                    text:   _vehicleAltitudeText
+                    font.bold : true
+                    font.pointSize : ScreenTools.defaultFontPointSize * 2.5
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 2
+                    Layout.rowSpan : 2
+                    Layout.column : 0
+                    Layout.row : 0
+                }
+                QGCLabel {
+                    text:   "VS " + _vehicleVerticalSpeedText
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 3
+                    Layout.rowSpan : 1
+                    Layout.column : 0
+                    Layout.row : 2
+                }
+            }
+        }
+
+        Rectangle {
+            id:                         groundSpeedValue
+            anchors.margins:            _toolsMargin * 2
+            anchors.right:              parent.left
+            anchors.verticalCenter:     parent.verticalCenter
+            height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
+            width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
+            color:                      "#80000000"
+
+            GridLayout {
+                id: leftIndicator
+                anchors.fill: parent
+
+                columns: 3
+                rows: 3
+
+                rowSpacing: 1
+
+                QGCLabel {
+                    text: "SPD"
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 1
+                    Layout.rowSpan : 1
+                    Layout.column : 0
+                    Layout.row : 0
+                }
+                QGCLabel {
+                    text:  QGroundControl.unitsConversion.appSettingsSpeedUnitsString
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 1
+                    Layout.rowSpan : 1
+                    Layout.column : 0
+                    Layout.row : 1
+                }
+                QGCLabel {
+                    text:   _vehicleGroundSpeedText
+                    font.bold : true
+                    font.pointSize : ScreenTools.defaultFontPointSize * 2.5
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 2
+                    Layout.rowSpan : 2
+                    Layout.column : 1
+                    Layout.row : 0
+                }
+                QGCLabel {
+                    text:   "DtoH " + _distanceToHomeText
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 3
+                    Layout.rowSpan : 1
+                    Layout.column : 0
+                    Layout.row : 2
+                }
+            }
+        }
+
         state:                  telemetryPanel.bottomMode ? "side" : "center"
 
         CustomAttitudeHUD {

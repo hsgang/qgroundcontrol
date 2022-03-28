@@ -24,7 +24,7 @@ Rectangle {
     color:              "#80000000"
     radius:             ScreenTools.defaultFontPixelWidth / 2
 
-    property bool       bottomMode: true
+    property bool       bottomMode: false
     property bool       editMode: false
 
     DeadMouseArea { anchors.fill: parent }
