@@ -199,5 +199,6 @@
         <file alias="windVaneArrow.svg">src/FlightMap/Images/windVaneArrow.svg</file>
         <file alias="alarm.svg">src/ui/toolbar/Images/alarm.svg</file>
         <file alias="homeMarker.png">src/FlightMap/Images/homemarker.png</file>
+        <file alias="cloudy_wind.svg">src/Airmap/images/weather-icons/cloudy_wind.svg</file>
     </qresource>
 </RCC>

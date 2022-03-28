@@ -11,6 +11,7 @@ import QtQuick                  2.12
 import QtQuick.Controls         2.4
 import QtQuick.Dialogs          1.3
 import QtQuick.Layouts          1.12
+import QtGraphicalEffects       1.12
 
 import QtLocation               5.3
 import QtPositioning            5.3
@@ -74,8 +75,8 @@ Item {
 
     // Property OpenWeather API Key
     property string   _openWeatherAPIkey:   QGroundControl.settingsManager ? QGroundControl.settingsManager.appSettings.openWeatherApiKey.value : null
-
-    property string timeString
+    property string timeString   
+    property bool _showWeatherStatus :       false
 
     QGCToolInsets {
         id:                     _toolInsets
@@ -603,18 +604,47 @@ Item {
 //    Component.onCompleted: {
 //        getWeatherJSON()
 //    }
+    Rectangle {
+        anchors.margins:    _toolsMargin
+        anchors.right:      parent.right
+        anchors.top:        parent.top
+        color:              "#80000000" //qgcPal.window
+        height:             ScreenTools.defaultFontPixelHeight * 2.5
+        width:              ScreenTools.defaultFontPixelHeight * 2.5
+        radius:             ScreenTools.defaultFontPixelHeight / 3
+        visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
+
+        Image {
+            id: showWeatherStatusIcon
+            source: "/qmlimages/cloudy_wind.svg"
+            mipmap: true
+            fillMode: Image.PreserveAspectFit
+            sourceSize: Qt.size(parent.width, parent.height)
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    getWeatherJSON()
+                    _showWeatherStatus = !_showWeatherStatus
+                }
+            }
+        }
+        ColorOverlay {
+               anchors.fill: showWeatherStatusIcon
+               source: showWeatherStatusIcon
+               color: "#ffffff"
+        }
+    }
 
     Rectangle {
         id:                     weatherBackground
-        anchors.right:          parent.right
-        anchors.rightMargin:     _toolsMargin
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.top:            parent.top
         anchors.topMargin:      _toolsMargin
         width:                  _rightPanelWidth
         height:                 weatherTitle.height + weatherValue.height + (_toolsMargin * 3)
         radius:                 ScreenTools.defaultFontPixelWidth / 2
         color:                  "#80000000" //qgcPal.window
-        visible:                QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
+        visible:                _showWeatherStatus
 
         MouseArea {
             anchors.fill: parent
@@ -624,14 +654,26 @@ Item {
         QGCLabel {
             id:     weatherTitle
             text:   qsTr("Weather Status")
+            font.pointSize: ScreenTools.defaultFontPixelWidth * 1.2
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.margins: _toolsMargin
+            anchors.margins: _toolsMargin * 2
+        }
+
+        Rectangle {
+            id:     weatherSpliter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: weatherTitle.bottom
+            anchors.topMargin: _toolsMargin
+            width: parent.width * 0.9
+            height: 1
+            color: "#ffffff"
         }
 
         ColumnLayout {
             id:         weatherValue
             spacing:    ScreenTools.defaultFontPixelWidth
-            anchors.top: weatherTitle.bottom
+            anchors.top: weatherSpliter.bottom
+            anchors.topMargin: _toolsMargin
             anchors.horizontalCenter: parent.horizontalCenter
 
             // City
