@@ -7099,18 +7099,18 @@ Click Ok to start the auto-tuning process.
     <name>GPSIndicator</name>
     <message>
       <location filename="../src/ui/toolbar/GPSIndicator.qml" line="50"/>
-      <source>GPS Status</source>
-      <translation>GPS 상태</translation>
+      <source>GNSS Status</source>
+      <translation>GNSS 상태</translation>
     </message>
     <message>
       <location filename="../src/ui/toolbar/GPSIndicator.qml" line="50"/>
-      <source>GPS Data Unavailable</source>
-      <translation>GPS 데이터 수집 불가</translation>
+      <source>GNSS Data Unavailable</source>
+      <translation>GNSS 데이터 수집 불가</translation>
     </message>
     <message>
       <location filename="../src/ui/toolbar/GPSIndicator.qml" line="63"/>
-      <source>GPS Count:</source>
-      <translation>GPS 카운트:</translation>
+      <source>GNSS Count:</source>
+      <translation>GNSS 카운트:</translation>
     </message>
     <message>
       <location filename="../src/ui/toolbar/GPSIndicator.qml" line="64"/>
@@ -7121,8 +7121,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
       <location filename="../src/ui/toolbar/GPSIndicator.qml" line="65"/>
-      <source>GPS Lock:</source>
-      <translation>GPS 고정:</translation>
+      <source>GNSS Lock:</source>
+      <translation>GNSS 고정:</translation>
     </message>
     <message>
       <location filename="../src/ui/toolbar/GPSIndicator.qml" line="67"/>
@@ -12552,7 +12552,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
       <location filename="../src/FlightMap/Widgets/PhotoVideoControl.qml" line="533"/>
       <source>Reset</source>
-      <translation>재시작</translation>
+      <translation>리셋</translation>
     </message>
     <message>
       <location filename="../src/FlightMap/Widgets/PhotoVideoControl.qml" line="538"/>
@@ -12567,7 +12567,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
       <location filename="../src/FlightMap/Widgets/PhotoVideoControl.qml" line="551"/>
       <source>Format</source>
-      <translation>형식</translation>
+      <translation>포맷</translation>
     </message>
     <message>
       <location filename="../src/FlightMap/Widgets/PhotoVideoControl.qml" line="556"/>
