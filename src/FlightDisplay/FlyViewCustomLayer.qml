@@ -259,50 +259,124 @@ Item {
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
-            color:                      "#80000000"
+            color:                      "transparent" //"#80000000"
+            border.color: "white"
+            border.width: 2
+            radius:                     _toolsMargin
 
             GridLayout {
                 anchors.fill: parent
 
-                columns: 3
+                columns: 4
                 rows: 3
 
                 rowSpacing: 1
 
-                QGCLabel {
-                    text: "ALT"
+                Rectangle{
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 1
                     Layout.rowSpan : 1
-                    Layout.column : 2
+                    Layout.preferredWidth: 1
+                    Layout.preferredHeight: 1
+                    Layout.column : 3
                     Layout.row : 0
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    color: "transparent"
+                    QGCLabel {
+                        id: altText
+                        text: "ALT"
+                        anchors.right: parent.right
+                        anchors.rightMargin: _toolsMargin
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Glow {
+                        anchors.fill: altText
+                        radius: 2
+                        samples: 3
+                        color: "black"
+                        source: altText
+                    }
                 }
-                QGCLabel {
-                    text:  QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+                Rectangle{
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 1
                     Layout.rowSpan : 1
-                    Layout.column : 2
+                    Layout.preferredWidth: 1
+                    Layout.preferredHeight: 1
+                    Layout.column : 3
                     Layout.row : 1
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    color: "transparent"
+                    QGCLabel {
+                        id: distunitText
+                        text:  QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+                        anchors.right: parent.right
+                        anchors.rightMargin: _toolsMargin
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Glow {
+                        anchors.fill: distunitText
+                        radius: 2
+                        samples: 3
+                        color: "black"
+                        source: distunitText
+                    }
                 }
-                QGCLabel {
-                    id:     altutudeValueText
-                    text:   _vehicleAltitudeText
-                    font.bold : true
-                    font.pointSize : ScreenTools.defaultFontPointSize * 2.5
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.columnSpan : 2
-                    Layout.rowSpan : 2
-                    Layout.column : 0
-                    Layout.row : 0
-                }
-                QGCLabel {
-                    text:   "VS " + _vehicleVerticalSpeedText
+
+                Rectangle{
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3
+                    Layout.rowSpan : 2
+                    Layout.preferredWidth: 3
+                    Layout.preferredHeight: 2
+                    Layout.column : 0
+                    Layout.row : 0
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    color: "transparent"
+                    QGCLabel {
+                        id:     altitudeValueText
+                        text:   _vehicleAltitudeText
+                        font.bold : true
+                        font.pointSize : ScreenTools.defaultFontPointSize * 2.5
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Glow {
+                        anchors.fill: altitudeValueText
+                        radius: 3
+                        samples: 5
+                        color: "black"
+                        source: altitudeValueText
+                    }
+                }
+
+                Rectangle{
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 4
                     Layout.rowSpan : 1
+                    Layout.preferredWidth: 4
+                    Layout.preferredHeight: 1
                     Layout.column : 0
                     Layout.row : 2
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    color: "transparent"
+                    QGCLabel {
+                        id: vsText
+                        text:   "VS " + _vehicleVerticalSpeedText
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Glow {
+                        anchors.fill: vsText
+                        radius: 2
+                        samples: 3
+                        color: "black"
+                        source: vsText
+                    }
                 }
             }
         }
@@ -314,50 +388,126 @@ Item {
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
-            color:                      "#80000000"
+            color:                      "transparent" //"#80000000"
+            border.color: "white"
+            border.width: 2
+            radius:                     _toolsMargin
 
             GridLayout {
                 id: leftIndicator
                 anchors.fill: parent
 
-                columns: 3
+                columns: 4
                 rows: 3
 
                 rowSpacing: 1
 
-                QGCLabel {
-                    text: "SPD"
+                Rectangle{
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 1
                     Layout.rowSpan : 1
+                    Layout.preferredWidth: 1
+                    Layout.preferredHeight: 1
                     Layout.column : 0
                     Layout.row : 0
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    color: "transparent"
+                    QGCLabel {
+                        id: spdText
+                        text: "SPD"
+                        anchors.left: parent.left
+                        anchors.leftMargin: _toolsMargin
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Glow {
+                        anchors.fill: spdText
+                        radius: 2
+                        samples: 3
+                        color: "black"
+                        source: spdText
+                    }
                 }
-                QGCLabel {
-                    text:  QGroundControl.unitsConversion.appSettingsSpeedUnitsString
+
+                Rectangle{
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 1
                     Layout.rowSpan : 1
+                    Layout.preferredWidth: 1
+                    Layout.preferredHeight: 1
                     Layout.column : 0
                     Layout.row : 1
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    color: "transparent"
+                    QGCLabel {
+                        id: spdunitText
+                        text:  QGroundControl.unitsConversion.appSettingsSpeedUnitsString
+                        anchors.left: parent.left
+                        anchors.leftMargin: _toolsMargin
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Glow {
+                        anchors.fill: spdunitText
+                        radius: 2
+                        samples: 3
+                        color: "black"
+                        source: spdunitText
+                    }
                 }
-                QGCLabel {
-                    text:   _vehicleGroundSpeedText
-                    font.bold : true
-                    font.pointSize : ScreenTools.defaultFontPointSize * 2.5
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.columnSpan : 2
-                    Layout.rowSpan : 2
-                    Layout.column : 1
-                    Layout.row : 0
-                }
-                QGCLabel {
-                    text:   "DtoH " + _distanceToHomeText
+
+                Rectangle{
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3
+                    Layout.rowSpan : 2
+                    Layout.preferredWidth: 3
+                    Layout.preferredHeight: 2
+                    Layout.column : 1
+                    Layout.row : 0
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    color: "transparent"
+                    QGCLabel {
+                        id: gndspdText
+                        text:   _vehicleGroundSpeedText
+                        font.bold : true
+                        font.pointSize : ScreenTools.defaultFontPointSize * 2.5
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Glow {
+                        anchors.fill: gndspdText
+                        radius: 3
+                        samples: 5
+                        color: "black"
+                        source: gndspdText
+                    }
+                }
+
+                Rectangle{
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.columnSpan : 4
                     Layout.rowSpan : 1
+                    Layout.preferredWidth: 4
+                    Layout.preferredHeight: 1
                     Layout.column : 0
                     Layout.row : 2
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    color: "transparent"
+                    QGCLabel {
+                        id: dtohText
+                        text:   "DtoH " + _distanceToHomeText
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                    Glow {
+                        anchors.fill: dtohText
+                        radius: 2
+                        samples: 3
+                        color: "black"
+                        source: dtohText
+                    }
                 }
             }
         }
