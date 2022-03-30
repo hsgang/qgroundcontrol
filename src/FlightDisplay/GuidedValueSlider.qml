@@ -54,7 +54,7 @@ Rectangle {
     }
 
     function configureAsLinearSlider() {
-        _altSlider = false
+        _altSlider = true
         valueField.updateFunction = valueField.updateLinear
 
     }
