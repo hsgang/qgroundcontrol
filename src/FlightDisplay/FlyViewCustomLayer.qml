@@ -260,8 +260,8 @@ Item {
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
             color:                      "transparent" //"#80000000"
-            border.color: "white"
-            border.width: 2
+            border.color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            border.width: 1
             radius:                     _toolsMargin
 
             GridLayout {
@@ -293,8 +293,8 @@ Item {
                     Glow {
                         anchors.fill: altText
                         radius: 2
-                        samples: 3
-                        color: "black"
+                        samples: 5
+                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
                         source: altText
                     }
                 }
@@ -319,8 +319,8 @@ Item {
                     Glow {
                         anchors.fill: distunitText
                         radius: 2
-                        samples: 3
-                        color: "black"
+                        samples: 5
+                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
                         source: distunitText
                     }
                 }
@@ -346,9 +346,9 @@ Item {
                     }
                     Glow {
                         anchors.fill: altitudeValueText
-                        radius: 3
+                        radius: 2
                         samples: 5
-                        color: "black"
+                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
                         source: altitudeValueText
                     }
                 }
@@ -373,8 +373,8 @@ Item {
                     Glow {
                         anchors.fill: vsText
                         radius: 2
-                        samples: 3
-                        color: "black"
+                        samples: 5
+                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
                         source: vsText
                     }
                 }
@@ -389,8 +389,8 @@ Item {
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
             color:                      "transparent" //"#80000000"
-            border.color: "white"
-            border.width: 2
+            border.color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            border.width: 1
             radius:                     _toolsMargin
 
             GridLayout {
@@ -423,8 +423,8 @@ Item {
                     Glow {
                         anchors.fill: spdText
                         radius: 2
-                        samples: 3
-                        color: "black"
+                        samples: 5
+                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
                         source: spdText
                     }
                 }
@@ -450,8 +450,8 @@ Item {
                     Glow {
                         anchors.fill: spdunitText
                         radius: 2
-                        samples: 3
-                        color: "black"
+                        samples: 5
+                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
                         source: spdunitText
                     }
                 }
@@ -477,9 +477,9 @@ Item {
                     }
                     Glow {
                         anchors.fill: gndspdText
-                        radius: 3
+                        radius: 2
                         samples: 5
-                        color: "black"
+                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
                         source: gndspdText
                     }
                 }
@@ -504,8 +504,8 @@ Item {
                     Glow {
                         anchors.fill: dtohText
                         radius: 2
-                        samples: 3
-                        color: "black"
+                        samples: 5
+                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
                         source: dtohText
                     }
                 }

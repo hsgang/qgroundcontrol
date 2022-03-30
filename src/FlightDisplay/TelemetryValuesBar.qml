@@ -20,8 +20,7 @@ Rectangle {
     id:                 telemetryPanel
     height:             telemetryLayout.height + (_toolsMargin * 2)
     width:              telemetryLayout.width + (_toolsMargin * 2)
-    //color:              qgcPal.window
-    color:              "#80000000"
+    color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:             ScreenTools.defaultFontPixelWidth / 2
 
     property bool       bottomMode: false
@@ -37,38 +36,6 @@ Rectangle {
 
          RowLayout {
             visible: telemetryPanel.editMode || valueArea.settingsUnlocked
-
-            QGCColoredImage {
-                source:             "/res/layout-bottom.svg"
-                mipmap:             true
-                width:              ScreenTools.minTouchPixels * 0.75
-                height:             width
-                sourceSize.width:   width
-                color:              qgcPal.text
-                fillMode:           Image.PreserveAspectFit
-                visible:            !bottomMode
-
-                QGCMouseArea {
-                    fillItem:   parent
-                    onClicked:  bottomMode = true
-                }
-            }
-
-            QGCColoredImage {
-                source:             "/res/layout-right.svg"
-                mipmap:             true
-                width:              ScreenTools.minTouchPixels * 0.75
-                height:             width
-                sourceSize.width:   width
-                color:              qgcPal.text
-                fillMode:           Image.PreserveAspectFit
-                visible:            bottomMode
-
-                QGCMouseArea {
-                    fillItem:   parent
-                    onClicked:  bottomMode = false
-                }
-            }
 
             QGCColoredImage {
                 source:             valueArea.settingsUnlocked ? "/res/LockOpen.svg" : "/res/pencil.svg"
