@@ -40,7 +40,7 @@ Button {
             color:  showHighlight ? qgcPal.buttonHighlight : qgcPal.windowShade
             radius: ScreenTools.defaultFontPointSize * 0.5
 
-            implicitWidth: titleBar.x + titleBar.contentWidth * 1.5 + ScreenTools.defaultFontPixelWidth
+            implicitWidth: titleBar.x + titleBar.contentWidth + ScreenTools.defaultFontPixelWidth
 
             QGCColoredImage {
                 id:                     image

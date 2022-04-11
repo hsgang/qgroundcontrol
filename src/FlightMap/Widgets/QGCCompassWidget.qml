@@ -88,7 +88,6 @@ Item {
         anchors.fill:   parent
         visible:        false
 
-
         Image {
             id:                 cOGPointer
             source:             isCOGAngleOK() ? "/qmlimages/cOGPointer.svg" : ""

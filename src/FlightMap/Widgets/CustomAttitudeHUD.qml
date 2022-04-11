@@ -1,19 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
-
-/**
- * @file
- *   @brief QGC Attitude Widget
- *   @author Gus Grubba <gus@auterion.com>
- */
-
 import QtQuick              2.3
 import QtGraphicalEffects   1.0
 
@@ -61,7 +45,7 @@ Item {
         anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
         source:             "/qmlimages/rollDialWhite.svg"
         mipmap:             true
-        width:              parent.width
+        width:              parent.width * 0.7
         sourceSize.width:   width
         fillMode:           Image.PreserveAspectFit
         transform: Rotation {
@@ -84,14 +68,14 @@ Item {
 
 
     Image {
-            id:                 crossHair
-            anchors.centerIn:   parent
-            source:             "/qmlimages/crossHair.svg"
-            mipmap:             true
-            width:              parent.width
-            sourceSize.width:   width
-            //color:              qgcPal.text
-            fillMode:           Image.PreserveAspectFit
+        id:                 crossHair
+        anchors.centerIn:   parent
+        source:             "/qmlimages/crossHair.svg"
+        mipmap:             true
+        width:              parent.width * 0.8
+        sourceSize.width:   width
+        //color:              qgcPal.text
+        fillMode:           Image.PreserveAspectFit
     }
 
     Image {

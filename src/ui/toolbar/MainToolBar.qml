@@ -33,6 +33,8 @@ Rectangle {
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
     property color  _mainStatusBGColor: qgcPal.brandingPurple
 
+    property var    _currentSelection:     null
+
     QGCPalette { id: qgcPal }
 
     /// Bottom single pixel divider
@@ -111,6 +113,84 @@ Rectangle {
             source:             currentToolbar === flyViewToolbar ?
                                     "qrc:/toolbar/MainToolBarIndicators.qml" :
                                     (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
+        }
+    }
+
+    QGCButton{
+        id:                     linkManagerButton
+        anchors.right:          parent.right
+        anchors.top:            parent.top
+        anchors.bottom:         parent.Bottom
+        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
+        text:                   qsTr("LinkManager")
+        onClicked:              linkManagerDialogComponent.createObject(mainWindow).open()
+    }
+
+    Component{
+        id: linkManagerDialogComponent
+
+        QGCPopupDialog {
+            title :     qsTr("LinkManager")
+            buttons:    StandardButton.Close
+
+            Rectangle {
+                id: _linkRoot
+                color: qgcPal.window
+                width: ScreenTools.defaultFontPixelWidth * 30
+                height: ScreenTools.defaultFontPixelHeight * 15
+                anchors.margins: ScreenTools.defaultFontPixelWidth
+
+                QGCFlickable {
+                    clip:               true
+                    anchors.top:        parent.top
+                    width:              parent.width
+                    height:             parent.height - buttonRow.height
+                    contentHeight:      settingsColumn.height
+                    contentWidth:       _linkRoot.width
+                    flickableDirection: Flickable.VerticalFlick
+
+                    Column {
+                        id:                 settingsColumn
+                        width:              _linkRoot.width
+                        anchors.margins:    ScreenTools.defaultFontPixelWidth
+                        spacing:            ScreenTools.defaultFontPixelHeight / 2
+                        Repeater {
+                            model: QGroundControl.linkManager.linkConfigurations
+                            delegate: QGCButton {
+                                anchors.horizontalCenter:   settingsColumn.horizontalCenter
+                                width:                      _linkRoot.width * 0.5
+                                text:                       object.name
+                                autoExclusive:              true
+                                visible:                    !object.dynamic
+                                onClicked: {
+                                    checked = true
+                                    _currentSelection = object
+                                    console.log("clicked", object, object.link)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Row {
+                    id:                 buttonRow
+                    spacing:            ScreenTools.defaultFontPixelWidth
+                    anchors.bottom:     parent.bottom
+                    anchors.margins:    ScreenTools.defaultFontPixelWidth
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    QGCButton {
+                        text:       qsTr("Connect")
+                        enabled:    _currentSelection && !_currentSelection.link
+                        onClicked:  QGroundControl.linkManager.createConnectedLink(_currentSelection)
+                    }
+                    QGCButton {
+                        text:       qsTr("Disconnect")
+                        enabled:    _currentSelection && _currentSelection.link
+                        onClicked:  _currentSelection.link.disconnect()
+                    }
+                }
+            }
         }
     }
 

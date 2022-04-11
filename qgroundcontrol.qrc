@@ -290,6 +290,8 @@
         <file alias="QGroundControl/FlightDisplay/PowerEstimatedIndicator.qml">src/FlightDisplay/PowerEstimatedIndicator.qml</file>
         <file alias="QGroundControl/FlightMap/AtmosphericValueMapItem.qml">src/FlightMap/MapItems/AtmosphericValueMapItem.qml</file>
         <file alias="QGroundControl/FlightMap/CustomAttitudeHUD.qml">src/FlightMap/Widgets/CustomAttitudeHUD.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewWeatherWidget.qml">src/FlightDisplay/FlyViewWeatherWidget.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewAttitudeIndicator.qml">src/FlightDisplay/FlyViewAttitudeIndicator.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
