@@ -606,6 +606,14 @@
     <parameter name="BAT_ADC_CHANNEL" default="-1" type="INT32">
       <short_desc>This parameter is deprecated. Please use BAT1_I_CHANNEL</short_desc>
     </parameter>
+    <parameter name="BAT_AVRG_CURRENT" default="15.0" type="FLOAT">
+      <short_desc>Expected battery current in flight</short_desc>
+      <long_desc>This value is used to initialize the in-flight average current estimation, which in turn is used for estimating remaining flight time and RTL triggering.</long_desc>
+      <min>0</min>
+      <max>500</max>
+      <unit>A</unit>
+      <increment>0.1</increment>
+    </parameter>
     <parameter name="BAT_CRIT_THR" default="0.07" type="FLOAT">
       <short_desc>Critical threshold</short_desc>
       <long_desc>Sets the threshold when the battery will be reported as critically low. This has to be lower than the low threshold. This threshold commonly will trigger RTL.</long_desc>
@@ -1175,6 +1183,10 @@
         <value code="200">Flight Tester</value>
         <value code="300">Developer</value>
       </values>
+    </parameter>
+    <parameter name="COM_FORCE_SAFETY" default="0" type="INT32" boolean="true">
+      <short_desc>Enable force safety</short_desc>
+      <long_desc>Force safety when the vehicle disarms. Not supported when safety button used over PX4IO board.</long_desc>
     </parameter>
     <parameter name="COM_HLDL_LOSS_T" default="120" type="INT32">
       <short_desc>High Latency Datalink loss time threshold</short_desc>
@@ -4163,10 +4175,11 @@
         <value code="13">Hexarotor</value>
         <value code="14">Octorotor</value>
         <value code="15">Tricopter</value>
-        <value code="19">VTOL Tailsitter Duo</value>
-        <value code="20">VTOL Tailsitter Quad</value>
+        <value code="19">VTOL Two-rotor Tailsitter</value>
+        <value code="20">VTOL Quad-rotor Tailsitter</value>
         <value code="21">VTOL Tiltrotor</value>
-        <value code="22">VTOL Standard (quadplane)</value>
+        <value code="22">VTOL Standard (separate fixed rotors for hover and cruise flight)</value>
+        <value code="23">VTOL Tailsitter</value>
       </values>
     </parameter>
     <parameter name="MAV_USEHILGPS" default="0" type="INT32" boolean="true">
@@ -4322,7 +4335,7 @@
       <decimal>1</decimal>
       <increment>0.5</increment>
     </parameter>
-    <parameter name="NAV_LOITER_RAD" default="50.0" type="FLOAT">
+    <parameter name="NAV_LOITER_RAD" default="80.0" type="FLOAT">
       <short_desc>Loiter radius (FW only)</short_desc>
       <long_desc>Default value of loiter radius for missions, Hold mode, Return mode, etc. (fixedwing only).</long_desc>
       <min>25</min>
@@ -7017,7 +7030,7 @@
       <decimal>1</decimal>
       <increment>0.5</increment>
     </parameter>
-    <parameter name="RTL_LOITER_RAD" default="50.0" type="FLOAT">
+    <parameter name="RTL_LOITER_RAD" default="80.0" type="FLOAT">
       <short_desc>Loiter radius for rtl descend</short_desc>
       <long_desc>Set the radius for loitering to a safe altitude for VTOL transition.</long_desc>
       <min>25</min>
@@ -9700,6 +9713,11 @@
       <long_desc>Enable UAVCAN battery subscription. uavcan::equipment::power::BatteryInfo ardupilot::equipment::power::BatteryInfoAux</long_desc>
       <reboot_required>true</reboot_required>
     </parameter>
+    <parameter name="UAVCAN_SUB_BTN" default="0" type="INT32" boolean="true">
+      <short_desc>subscription button</short_desc>
+      <long_desc>Enable UAVCAN button subscription. ardupilot::indication::Button</long_desc>
+      <reboot_required>true</reboot_required>
+    </parameter>
     <parameter name="UAVCAN_SUB_DPRES" default="0" type="INT32" boolean="true">
       <short_desc>subscription differential pressure</short_desc>
       <long_desc>Enable UAVCAN differential pressure subscription. uavcan::equipment::air_data::RawAirData</long_desc>
@@ -9732,12 +9750,12 @@
     </parameter>
     <parameter name="UAVCAN_SUB_MAG" default="1" type="INT32" boolean="true">
       <short_desc>subscription magnetometer</short_desc>
-      <long_desc>Enable UAVCAN GPS subscription. uavcan::equipment::ahrs::MagneticFieldStrength uavcan::equipment::ahrs::MagneticFieldStrength2</long_desc>
+      <long_desc>Enable UAVCAN mag subscription. uavcan::equipment::ahrs::MagneticFieldStrength uavcan::equipment::ahrs::MagneticFieldStrength2</long_desc>
       <reboot_required>true</reboot_required>
     </parameter>
     <parameter name="UAVCAN_SUB_RNG" default="0" type="INT32" boolean="true">
       <short_desc>subscription range finder</short_desc>
-      <long_desc>Enable UAVCAN GPS subscription. uavcan::equipment::range_sensor::Measurement</long_desc>
+      <long_desc>Enable UAVCAN range finder subscription. uavcan::equipment::range_sensor::Measurement</long_desc>
       <reboot_required>true</reboot_required>
     </parameter>
   </group>
