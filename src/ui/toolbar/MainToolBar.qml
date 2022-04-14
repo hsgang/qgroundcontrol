@@ -122,7 +122,7 @@ Rectangle {
         anchors.top:            parent.top
         anchors.bottom:         parent.Bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-        text:                   qsTr("LinkManager")
+        text:                   !_activeVehicle ? qsTr("Disconnected") : qsTr("Connected")
         onClicked:              linkManagerDialogComponent.createObject(mainWindow).open()
     }
 

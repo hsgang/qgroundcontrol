@@ -44,8 +44,8 @@ MapQuickItem {
             height:     atmosphericValueGrid.height + ScreenTools.defaultFontPixelHeight * 0.2
             width:      atmosphericValueGrid.width + ScreenTools.defaultFontPixelWidth * 2
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.bottom
-            anchors.topMargin: ScreenTools.defaultFontPixelHeight * 3
+            anchors.bottom: parent.top
+            anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 3
             color:      "#80000000"
             radius:     _margins
 
