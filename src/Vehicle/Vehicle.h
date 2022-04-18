@@ -47,6 +47,7 @@
 #include "FTPManager.h"
 #include "ImageProtocolManager.h"
 #include "AtmosphericSensorFactGroup.h"
+#include "VehicleLandingTargetFactGroup.h"
 
 class Actuators;
 class EventHandler;
@@ -324,6 +325,7 @@ public:
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
+    Q_PROPERTY(FactGroup*           landingTarget   READ landingTargetFactGroup     CONSTANT)
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -693,6 +695,7 @@ public:
     FactGroup* hygrometerFactGroup          () { return &_hygrometerFactGroup; }
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
     FactGroup* atmosphericSensorFactGroup   () { return &_atmosphericSensorFactGroup; }
+    FactGroup* landingTargetFactGroup       () { return &_landingTargetFactGroup; }
 
     MissionManager*                 missionManager      () { return _missionManager; }
     GeoFenceManager*                geoFenceManager     () { return _geoFenceManager; }
@@ -1362,6 +1365,7 @@ private:
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
     AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
+    VehicleLandingTargetFactGroup   _landingTargetFactGroup;
 
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
 
@@ -1414,6 +1418,7 @@ private:
     static const char* _hygrometerFactGroupName;
     static const char* _terrainFactGroupName;
     static const char* _atmosphericSensorFactGroupName;
+    static const char* _landingTargetFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs      = 100;
 

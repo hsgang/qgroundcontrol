@@ -1,0 +1,23 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "angleX",
+    "shortDesc":        "AngleX",
+    "type":             "double",
+    "default":          null,
+    "decimalPlaces":    3,
+    "units":            "rad"
+},
+{
+    "name":             "angleY",
+    "shortDesc":        "AngleY",
+    "type":             "double",
+    "default":          null,
+    "decimalPlaces":    3,
+    "units":            "rad"
+}
+]
+}
