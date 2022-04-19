@@ -309,7 +309,7 @@ Item {
                     color: "transparent"
                     QGCLabel {
                         id: dtohText
-                        text:   "DtoH " + _distanceToHomeText
+                        text:   "Home " + _distanceToHomeText
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                     }
