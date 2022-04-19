@@ -111,7 +111,7 @@ const char* Vehicle::_estimatorStatusFactGroupName =    "estimatorStatus";
 const char* Vehicle::_terrainFactGroupName =            "terrain";
 const char* Vehicle::_atmosphericSensorFactGroupName =  "atmosphericSensor";
 const char* Vehicle::_hygrometerFactGroupName =         "hygrometer";
-const char* Vehicle::_landingTargetFactGroupName =      "landingTaget";
+const char* Vehicle::_landingTargetFactGroupName =      "landingTarget";
 
 static int jsonLogSeq = 0;
 static QString StartTime;
