@@ -28,8 +28,12 @@ import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
 
-Item {
-    id: weatherWidget
+Rectangle {
+    id:                     weatherBackground
+    width:                  ScreenTools.defaultFontPixelWidth * 30
+    height:                 weatherTitle.height + weatherValue.height + (_toolsMargin * 3)
+    radius:                 ScreenTools.defaultFontPixelWidth / 2
+    color:                  "#80000000" //qgcPal.window
 
     // Property of Tools
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
@@ -99,127 +103,78 @@ Item {
         return directions[index];
     }
 
-    Rectangle {
-        anchors.margins:    _toolsMargin
-        anchors.right:      parent.right
-        anchors.top:        parent.top
-        color:              "#80000000" //qgcPal.window
-        height:             ScreenTools.defaultFontPixelHeight * 2.5
-        width:              ScreenTools.defaultFontPixelHeight * 2.5
-        radius:             ScreenTools.defaultFontPixelHeight / 3
-        visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
+    MouseArea {
+        anchors.fill: parent
+        onClicked: getWeatherJSON()
+    }
 
-        Image {
-            id: showWeatherStatusIcon
-            source: "/qmlimages/cloudy_wind.svg"
-            mipmap: true
-            fillMode: Image.PreserveAspectFit
-            sourceSize: Qt.size(parent.width, parent.height)
-            MouseArea {
-                anchors.fill: showWeatherStatusIcon
-                onClicked: {
-                    getWeatherJSON()
-                    _showWeatherStatus = !_showWeatherStatus
-                }
-            }
-        }
-        ColorOverlay {
-               anchors.fill: showWeatherStatusIcon
-               source: showWeatherStatusIcon
-               color: "#ffffff"
-        }
+    QGCLabel {
+        id:     weatherTitle
+        text:   qsTr("Weather Status")
+        font.pointSize: ScreenTools.defaultFontPixelWidth * 1.2
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.margins: _toolsMargin * 2
     }
 
     Rectangle {
-        id:                     weatherBackground
+        id:     weatherSpliter
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:            parent.top
-        anchors.topMargin:      _toolsMargin
-        width:                  _rightPanelWidth
-        height:                 weatherTitle.height + weatherValue.height + (_toolsMargin * 3)
-        radius:                 ScreenTools.defaultFontPixelWidth / 2
-        color:                  "#80000000" //qgcPal.window
-        visible:                _showWeatherStatus
+        anchors.top: weatherTitle.bottom
+        anchors.topMargin: _toolsMargin
+        width: parent.width * 0.9
+        height: 1
+        color: "#ffffff"
+    }
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: getWeatherJSON()
+    ColumnLayout {
+        id:         weatherValue
+        spacing:    ScreenTools.defaultFontPixelWidth
+        anchors.top: weatherSpliter.bottom
+        anchors.topMargin: _toolsMargin
+        anchors.horizontalCenter: parent.horizontalCenter
+
+        // City
+        Row {
+            QGCLabel { Layout.alignment:   Qt.AlignHCenter;     text: qsTr("Location : ");}
+            QGCLabel { id: cityText;                            Layout.alignment:   Qt.AlignHCenter;}
+        }
+        // Weather
+        Row {
+            QGCLabel { Layout.alignment:   Qt.AlignHCenter;     text: qsTr("Weather : ")}
+            QGCLabel { id:                 weatherText;         Layout.alignment:   Qt.AlignHCenter}
+        }
+        // Temperature
+        Row {
+            QGCLabel { Layout.alignment:   Qt.AlignHCenter;                    text:               qsTr("Temperature : ")                }
+            QGCLabel { id:                 tempText;                     Layout.alignment:   Qt.AlignHCenter                }
+        }
+        // Humidity
+        Row {
+            QGCLabel { Layout.alignment:   Qt.AlignHCenter;                     text:               qsTr("Humidity : ")                }
+            QGCLabel { id:                 humiText;                    Layout.alignment:   Qt.AlignHCenter                }
+        }
+        // Wind Degree
+        Row {
+            QGCLabel { Layout.alignment:   Qt.AlignHCenter;                     text:               qsTr("Wind Direction : ")                }
+            QGCLabel { id:                 windDegreeText; Layout.alignment:   Qt.AlignHCenter                }
+        }
+        // Wind Speed
+        Row {
+            QGCLabel { Layout.alignment:   Qt.AlignHCenter;                     text:               qsTr("Wind Speed : ")                }
+            QGCLabel { id:                 windSpeedText;                     Layout.alignment:   Qt.AlignHCenter                }
+        }
+        // Visibility
+        Row {
+            QGCLabel { Layout.alignment:   Qt.AlignHCenter;                    text:               qsTr("Visibility : ")                }
+            QGCLabel { id:                 visibilityText;                     Layout.alignment:   Qt.AlignHCenter                }
         }
 
-        QGCLabel {
-            id:     weatherTitle
-            text:   qsTr("Weather Status")
-            font.pointSize: ScreenTools.defaultFontPixelWidth * 1.2
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.margins: _toolsMargin * 2
-        }
-
-        Rectangle {
-            id:     weatherSpliter
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: weatherTitle.bottom
-            anchors.topMargin: _toolsMargin
-            width: parent.width * 0.9
-            height: 1
-            color: "#ffffff"
-        }
-
-        ColumnLayout {
-            id:         weatherValue
-            spacing:    ScreenTools.defaultFontPixelWidth
-            anchors.top: weatherSpliter.bottom
-            anchors.topMargin: _toolsMargin
-            anchors.horizontalCenter: parent.horizontalCenter
-
-            // City
-            Row {
-                QGCLabel { Layout.alignment:   Qt.AlignHCenter;     text: qsTr("Location : ");}
-                QGCLabel { id: cityText;                            Layout.alignment:   Qt.AlignHCenter;}
-            }
-            // Weather
-            Row {
-                QGCLabel { Layout.alignment:   Qt.AlignHCenter;     text: qsTr("Weather : ")}
-                QGCLabel { id:                 weatherText;         Layout.alignment:   Qt.AlignHCenter}
-            }
-            // Temperature
-            Row {
-                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                    text:               qsTr("Temperature : ")                }
-                QGCLabel { id:                 tempText;                     Layout.alignment:   Qt.AlignHCenter                }
-            }
-            // Humidity
-            Row {
-                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                     text:               qsTr("Humidity : ")                }
-                QGCLabel { id:                 humiText;                    Layout.alignment:   Qt.AlignHCenter                }
-            }
-            // Wind Degree
-            Row {
-                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                     text:               qsTr("Wind Direction : ")                }
-                QGCLabel { id:                 windDegreeText; Layout.alignment:   Qt.AlignHCenter                }
-            }
-            // Wind Speed
-            Row {
-                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                     text:               qsTr("Wind Speed : ")                }
-                QGCLabel { id:                 windSpeedText;                     Layout.alignment:   Qt.AlignHCenter                }
-            }
-            // Visibility
-            Row {
-                QGCLabel { Layout.alignment:   Qt.AlignHCenter;                    text:               qsTr("Visibility : ")                }
-                QGCLabel { id:                 visibilityText;                     Layout.alignment:   Qt.AlignHCenter                }
-            }
-
-            // Widget Footer
-            QGCLabel {
-                font.pointSize:     ScreenTools.smallFontPointSize
-                Layout.alignment:   Qt.AlignHCenter
-                text:               qsTr("[from OpenWeatherMap]")
-            }
-
-//            QGCLabel {
-//                font.pointSize:     ScreenTools.smallFontPointSize
-//                Layout.alignment:   Qt.AlignHCenter
-//                text:               qsTr("(Click to Refresh)")
-//            }
-        }//ColumnLayout
+//        // Widget Footer
+//        QGCLabel {
+//            font.pointSize:     ScreenTools.smallFontPointSize
+//            Layout.alignment:   Qt.AlignHCenter
+//            text:               qsTr("[from OpenWeatherMap]")
+//        }
     }
 }
 

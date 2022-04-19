@@ -76,7 +76,6 @@ Item {
     // Property OpenWeather API Key
     property string   _openWeatherAPIkey:   QGroundControl.settingsManager ? QGroundControl.settingsManager.appSettings.openWeatherApiKey.value : null
     property string timeString   
-    property bool _showWeatherStatus :       false
 
     QGCToolInsets {
         id:                     _toolInsets
@@ -250,29 +249,39 @@ Item {
     PhotoVideoControl {
         id:                     photoVideoControl
         anchors.margins:        _toolsMargin
+        anchors.top:            parent.top
         anchors.right:          parent.right
-        width:                  ScreenTools.isMobile ? _rightPanelWidth * 0.66 : _rightPanelWidth
-        state:                  _verticalCenter ? "verticalCenter" : "topAnchor"
-        states: [
-            State {
-                name: "verticalCenter"
-                AnchorChanges {
-                    target:                 photoVideoControl
-                    anchors.top:            undefined
-                    anchors.verticalCenter: _root.verticalCenter
-                }
-            },
-            State {
-                name: "topAnchor"
-                AnchorChanges {
-                    target:                 photoVideoControl
-                    anchors.verticalCenter: undefined
-                    anchors.top:            instrumentPanel.bottom
-                }
-            }
-        ]
+//        width:                  ScreenTools.isMobile ? _rightPanelWidth * 0.66 : _rightPanelWidth
+//        state:                  _verticalCenter ? "verticalCenter" : "topAnchor"
+//        states: [
+//            State {
+//                name: "verticalCenter"
+//                AnchorChanges {
+//                    target:                 photoVideoControl
+//                    anchors.top:            undefined
+//                    anchors.verticalCenter: _root.verticalCenter
+//                }
+//            },
+//            State {
+//                name: "topAnchor"
+//                AnchorChanges {
+//                    target:                 photoVideoControl
+//                    anchors.verticalCenter: undefined
+//                    anchors.top:            instrumentPanel.bottom
+//                }
+//            }
+//        ]
 
         property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
+    }
+
+    GimbalControl{
+        id:                     gimbalControl
+        anchors.margins:        _toolsMargin
+        anchors.right:          parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        width:                  _rightPanelWidth*0.9
+        height:                 width
     }
 
     //-----------------------------------------------------------------------------------------------------
@@ -402,11 +411,44 @@ Item {
     }
 
     FlyViewWeatherWidget{
+        id:                         weatherWidget
+        anchors.margins:            _toolsMargin
+        anchors.horizontalCenter:   parent.horizontalCenter
+        anchors.top:                parent.top
+        anchors.topMargin:          _toolsMargin
+        visible:                    false
+    }
+
+    Rectangle {
+        id:                 weatherPopupButton
         anchors.margins:    _toolsMargin
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
         anchors.right:      parent.right
-        anchors.left:       parent.left
+        anchors.bottom:     telemetryPanel.top
+        color:              "#80000000" //qgcPal.window
+        height:             ScreenTools.defaultFontPixelHeight * 2.5
+        width:              ScreenTools.defaultFontPixelHeight * 2.5
+        radius:             ScreenTools.defaultFontPixelHeight / 3
+        visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
+
+        Image {
+            id: showWeatherStatusIcon
+            source: "/qmlimages/cloudy_wind.svg"
+            mipmap: true
+            fillMode: Image.PreserveAspectFit
+            sourceSize: Qt.size(parent.width, parent.height)
+            MouseArea {
+                anchors.fill: showWeatherStatusIcon
+                onClicked: {
+                    weatherWidget.getWeatherJSON()
+                    weatherWidget.visible = !weatherWidget.visible
+                }
+            }
+        }
+        ColorOverlay {
+               anchors.fill: showWeatherStatusIcon
+               source: showWeatherStatusIcon
+               color: "#ffffff"
+        }
     }
 }
 
