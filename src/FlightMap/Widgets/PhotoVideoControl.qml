@@ -230,7 +230,7 @@ Rectangle {
             }
         }
 
-        RowLayout {
+        ColumnLayout {
             Layout.alignment:   Qt.AlignHCenter
             spacing:            0
             visible:            _showModeIndicator && !_mavlinkCamera && _simpleCameraAvailable && _videoStreamInPhotoMode
