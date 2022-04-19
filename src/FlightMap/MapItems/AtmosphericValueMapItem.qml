@@ -58,22 +58,34 @@ MapQuickItem {
                 columns: 3
 
                 QGCLabel { text: qsTr("Alt:") }
-                QGCLabel { text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) : qsTr("--.--", "No data to display") }
+                QGCLabel { text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) : qsTr("--.-", "No data to display")
+                           Layout.alignment: Qt.AlignRight
+                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
                 QGCLabel { text: QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString }
                 QGCLabel { text: qsTr("Temp:") }
-                QGCLabel { text: _temperatureValue ? _temperatureValue : qsTr("--.--", "No data to display") }
+                QGCLabel { text: _temperatureValue ? _temperatureValue : qsTr("--.-", "No data to display")
+                           Layout.alignment: Qt.AlignRight
+                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
                 QGCLabel { text: "℃" }
                 QGCLabel { text: qsTr("Humi:") }
-                QGCLabel { text: _humidityValue ? _humidityValue : qsTr("--.--", "No data to display") }
+                QGCLabel { text: _humidityValue ? _humidityValue : qsTr("--.-", "No data to display")
+                           Layout.alignment: Qt.AlignRight
+                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
                 QGCLabel { text: "Rh%" }
                 QGCLabel { text: qsTr("Press:") }
-                QGCLabel { text: _pressureValue ? _pressureValue : qsTr("--.--", "No data to display") }
+                QGCLabel { text: _pressureValue ? _pressureValue : qsTr("--.-", "No data to display")
+                           Layout.alignment: Qt.AlignRight
+                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
                 QGCLabel { text: "hPa" }
                 QGCLabel { text: qsTr("W/D:") }
-                QGCLabel { text: _windDirValue ? _windDirValue : qsTr("--.--", "No data to display") }
+                QGCLabel { text: _windDirValue ? _windDirValue : qsTr("--.-", "No data to display")
+                           Layout.alignment: Qt.AlignRight
+                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
                 QGCLabel { text: "deg" }
                 QGCLabel { text: qsTr("W/S:") }
-                QGCLabel { text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) : qsTr("--.--", "No data to display") }
+                QGCLabel { text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) : qsTr("--.-", "No data to display")
+                           Layout.alignment: Qt.AlignRight
+                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
                 QGCLabel { text: QGroundControl.unitsConversion.appSettingsSpeedUnitsString }
             }
         }
