@@ -98,6 +98,7 @@ Item {
                     QGCLabel {
                         id: altText
                         text: "ALT"
+                        font.bold : true
                         anchors.right: parent.right
                         anchors.rightMargin: _toolsMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -124,6 +125,7 @@ Item {
                     QGCLabel {
                         id: distunitText
                         text:  QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+                        font.bold : true
                         anchors.right: parent.right
                         anchors.rightMargin: _toolsMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -179,6 +181,7 @@ Item {
                     QGCLabel {
                         id: vsText
                         text:   "VS " + _vehicleVerticalSpeedText
+                        font.bold : true
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                     }
@@ -228,6 +231,7 @@ Item {
                     QGCLabel {
                         id: spdText
                         text: "SPD"
+                        font.bold : true
                         anchors.left: parent.left
                         anchors.leftMargin: _toolsMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -255,6 +259,7 @@ Item {
                     QGCLabel {
                         id: spdunitText
                         text:  QGroundControl.unitsConversion.appSettingsSpeedUnitsString
+                        font.bold : true
                         anchors.left: parent.left
                         anchors.leftMargin: _toolsMargin
                         anchors.verticalCenter: parent.verticalCenter
@@ -310,6 +315,7 @@ Item {
                     QGCLabel {
                         id: dtohText
                         text:   "Home " + _distanceToHomeText
+                        font.bold: true
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.verticalCenter: parent.verticalCenter
                     }

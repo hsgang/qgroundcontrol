@@ -251,26 +251,6 @@ Item {
         anchors.margins:        _toolsMargin
         anchors.top:            parent.top
         anchors.right:          parent.right
-//        width:                  ScreenTools.isMobile ? _rightPanelWidth * 0.66 : _rightPanelWidth
-//        state:                  _verticalCenter ? "verticalCenter" : "topAnchor"
-//        states: [
-//            State {
-//                name: "verticalCenter"
-//                AnchorChanges {
-//                    target:                 photoVideoControl
-//                    anchors.top:            undefined
-//                    anchors.verticalCenter: _root.verticalCenter
-//                }
-//            },
-//            State {
-//                name: "topAnchor"
-//                AnchorChanges {
-//                    target:                 photoVideoControl
-//                    anchors.verticalCenter: undefined
-//                    anchors.top:            instrumentPanel.bottom
-//                }
-//            }
-//        ]
 
         property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
     }
@@ -288,14 +268,14 @@ Item {
     //--Vibration Widget-----------------------------------------------------------------------------------
     Rectangle {
         id:                     vibrationBackground
-        anchors.bottom:         parent.bottom
-        anchors.bottomMargin:   ScreenTools.smallFontPointSize * 2
-        anchors.right:          parent.right
-        width:                  _rightPanelWidth
-        height:                 _rightPanelWidth * 0.1
-        radius:                 height / 2
-        color:                  Qt.rgba(0,0,0,1)
-        visible:  false
+        anchors.right:          weatherPopupButton.left
+        anchors.bottom:         telemetryPanel.top
+        anchors.margins:        _toolsMargin
+        color:                  "#80000000"
+        height:                 ScreenTools.defaultFontPixelHeight * 2.5
+        width:                  height
+        radius:                 ScreenTools.defaultFontPixelHeight / 3
+        visible:                true
 
         MouseArea {
             anchors.fill: parent
@@ -317,10 +297,9 @@ Item {
         id:                     vibrationStatus
         anchors.left:           parent.left
         anchors.leftMargin:     _toolsMargin
-        anchors.bottom:         parent.bottom
-        anchors.bottomMargin:   _toolsMargin
+        anchors.verticalCenter: parent.verticalCenter
         width:                  _rightPanelWidth
-        height:                 _rightPanelWidth
+        height:                 width
         radius:                 2
         color:                  qgcPal.window
         visible:                _vibeStatusVisible

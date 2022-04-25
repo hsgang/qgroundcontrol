@@ -8823,12 +8823,12 @@ Click Ok to start the auto-tuning process.
       <translation>추가</translation>
     </message>
     <message>
-      <location filename="../src/ui/preferences/LinkSettings.qml" line="125"/>
+      <location filename="../src/ui/preferences/LinkSettings.qml" line="126"/>
       <source>Connect</source>
       <translation>연결</translation>
     </message>
     <message>
-      <location filename="../src/ui/preferences/LinkSettings.qml" line="130"/>
+      <location filename="../src/ui/preferences/LinkSettings.qml" line="131"/>
       <source>Disconnect</source>
       <translation>연결 해제</translation>
     </message>
@@ -9668,6 +9668,21 @@ Click Ok to start the auto-tuning process.
       <location filename="../src/ui/toolbar/MainToolBar.qml" line="82"/>
       <source>Disconnect</source>
       <translation>연결 해제</translation>
+    </message>
+    <message>
+      <location filename="../src/ui/toolbar/MainToolBar.qml" line="184"/>
+      <source>Connected</source>
+      <translation>연결됨</translation>
+    </message>
+    <message>
+      <location filename="../src/ui/toolbar/MainToolBar.qml" line="190"/>
+      <source>Disconnected</source>
+      <translation>연결 없음</translation>
+    </message>
+    <message>
+      <location filename="../src/ui/toolbar/MainToolBar.qml" line="134"/>
+      <source>Link Management</source>
+      <translation>연결 관리</translation>
     </message>
   </context>
   <context>

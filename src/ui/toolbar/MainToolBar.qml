@@ -131,7 +131,7 @@ Rectangle {
         id: linkManagerDialogComponent
 
         QGCPopupDialog {
-            title :     qsTr("LinkManager")
+            title :     qsTr("Link Management")
             buttons:    StandardButton.Close
 
             Rectangle {
@@ -182,11 +182,13 @@ Rectangle {
 
                     QGCButton {
                         text:       qsTr("Connect")
+                        font.bold: true
                         enabled:    _currentSelection && !_currentSelection.link
                         onClicked:  QGroundControl.linkManager.createConnectedLink(_currentSelection)
                     }
                     QGCButton {
                         text:       qsTr("Disconnect")
+                        font.bold: true
                         enabled:    _currentSelection && _currentSelection.link
                         onClicked:  _currentSelection.link.disconnect()
                     }
