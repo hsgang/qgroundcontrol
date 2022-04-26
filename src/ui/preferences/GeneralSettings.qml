@@ -292,8 +292,6 @@ Rectangle {
                                     fact:                  _flyViewSettings.maxGoToLocationDistance
                                 }
                             }
-
-
                         }
                     }
                     Item { width: 1; height: _margins; visible: unitsSectionLabel.visible }
@@ -799,6 +797,7 @@ Rectangle {
                             id:                 autoConnectCol
                             anchors.margins:    _margins
                             anchors.left:       parent.left
+                            anchors.right:      parent.right
                             anchors.top:        parent.top
                             spacing:            _margins
 
@@ -810,13 +809,11 @@ Rectangle {
                                     model:  [ QGroundControl.settingsManager.autoConnectSettings.autoConnectPixhawk,
                                         QGroundControl.settingsManager.autoConnectSettings.autoConnectSiKRadio,
                                         QGroundControl.settingsManager.autoConnectSettings.autoConnectPX4Flow,
-                                        QGroundControl.settingsManager.autoConnectSettings.autoConnectLibrePilot,
                                         QGroundControl.settingsManager.autoConnectSettings.autoConnectUDP,
                                         QGroundControl.settingsManager.autoConnectSettings.autoConnectRTKGPS,
-                                        QGroundControl.settingsManager.autoConnectSettings.autoConnectZeroConf,
                                     ]
 
-                                    property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("PX4 Flow"), qsTr("LibrePilot"), qsTr("UDP"), qsTr("RTK GPS"), qsTr("Zero-Conf") ]
+                                    property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("PX4 Flow"), qsTr("UDP"), qsTr("RTK GPS") ]
 
                                     FactCheckBox {
                                         text:       autoConnectRepeater.names[index]
@@ -845,7 +842,7 @@ Rectangle {
                                     }
 
                                     onActivated: {
-                                        if (index != -1) {
+                                        if (index !== -1) {
                                             QGroundControl.settingsManager.autoConnectSettings.autoConnectNmeaPort.value = textAt(index);
                                         }
                                     }
@@ -920,16 +917,16 @@ Rectangle {
                             columns:                    3
 
                             property var  rtkSettings:      QGroundControl.settingsManager.rtkSettings
-                            property bool useFixedPosition: rtkSettings.useFixedBasePosition.rawValue
+                            property bool useFixedPosition: false //rtkSettings.useFixedBasePosition.rawValue
                             property real firstColWidth:    ScreenTools.defaultFontPixelWidth * 3
 
-                            QGCRadioButton {
-                                text:               qsTr("Perform Survey-In")
-                                visible:            rtkGrid.rtkSettings.useFixedBasePosition.visible
-                                checked:            rtkGrid.rtkSettings.useFixedBasePosition.value === false
-                                Layout.columnSpan:  3
-                                onClicked:          rtkGrid.rtkSettings.useFixedBasePosition.value = false
-                            }
+//                            QGCRadioButton {
+//                                text:               qsTr("Perform Survey-In")
+//                                visible:            rtkGrid.rtkSettings.useFixedBasePosition.visible
+//                                checked:            rtkGrid.rtkSettings.useFixedBasePosition.value === false
+//                                Layout.columnSpan:  3
+//                                onClicked:          rtkGrid.rtkSettings.useFixedBasePosition.value = false
+//                            }
 
                             Item { width: rtkGrid.firstColWidth; height: 1 }
                             QGCLabel {
@@ -957,78 +954,78 @@ Rectangle {
                                 Layout.preferredWidth:  _valueFieldWidth
                             }
 
-                            QGCRadioButton {
-                                text:               qsTr("Use Specified Base Position")
-                                visible:            rtkGrid.rtkSettings.useFixedBasePosition.visible
-                                checked:            rtkGrid.rtkSettings.useFixedBasePosition.value === true
-                                onClicked:          rtkGrid.rtkSettings.useFixedBasePosition.value = true
-                                Layout.columnSpan:  3
-                            }
+//                            QGCRadioButton {
+//                                text:               qsTr("Use Specified Base Position")
+//                                visible:            rtkGrid.rtkSettings.useFixedBasePosition.visible
+//                                checked:            rtkGrid.rtkSettings.useFixedBasePosition.value === true
+//                                onClicked:          rtkGrid.rtkSettings.useFixedBasePosition.value = true
+//                                Layout.columnSpan:  3
+//                            }
 
-                            Item { width: rtkGrid.firstColWidth; height: 1 }
-                            QGCLabel {
-                                text:               rtkGrid.rtkSettings.fixedBasePositionLatitude.shortDescription
-                                visible:            rtkGrid.rtkSettings.fixedBasePositionLatitude.visible
-                                enabled:            rtkGrid.useFixedPosition
-                            }
-                            FactTextField {
-                                fact:               rtkGrid.rtkSettings.fixedBasePositionLatitude
-                                visible:            rtkGrid.rtkSettings.fixedBasePositionLatitude.visible
-                                enabled:            rtkGrid.useFixedPosition
-                                Layout.fillWidth:   true
-                            }
+//                            Item { width: rtkGrid.firstColWidth; height: 1 }
+//                            QGCLabel {
+//                                text:               rtkGrid.rtkSettings.fixedBasePositionLatitude.shortDescription
+//                                visible:            rtkGrid.rtkSettings.fixedBasePositionLatitude.visible
+//                                enabled:            rtkGrid.useFixedPosition
+//                            }
+//                            FactTextField {
+//                                fact:               rtkGrid.rtkSettings.fixedBasePositionLatitude
+//                                visible:            rtkGrid.rtkSettings.fixedBasePositionLatitude.visible
+//                                enabled:            rtkGrid.useFixedPosition
+//                                Layout.fillWidth:   true
+//                            }
 
-                            Item { width: rtkGrid.firstColWidth; height: 1 }
-                            QGCLabel {
-                                text:               rtkGrid.rtkSettings.fixedBasePositionLongitude.shortDescription
-                                visible:            rtkGrid.rtkSettings.fixedBasePositionLongitude.visible
-                                enabled:            rtkGrid.useFixedPosition
-                            }
-                            FactTextField {
-                                fact:               rtkGrid.rtkSettings.fixedBasePositionLongitude
-                                visible:            rtkGrid.rtkSettings.fixedBasePositionLongitude.visible
-                                enabled:            rtkGrid.useFixedPosition
-                                Layout.fillWidth:   true
-                            }
+//                            Item { width: rtkGrid.firstColWidth; height: 1 }
+//                            QGCLabel {
+//                                text:               rtkGrid.rtkSettings.fixedBasePositionLongitude.shortDescription
+//                                visible:            rtkGrid.rtkSettings.fixedBasePositionLongitude.visible
+//                                enabled:            rtkGrid.useFixedPosition
+//                            }
+//                            FactTextField {
+//                                fact:               rtkGrid.rtkSettings.fixedBasePositionLongitude
+//                                visible:            rtkGrid.rtkSettings.fixedBasePositionLongitude.visible
+//                                enabled:            rtkGrid.useFixedPosition
+//                                Layout.fillWidth:   true
+//                            }
 
-                            Item { width: rtkGrid.firstColWidth; height: 1 }
-                            QGCLabel {
-                                text:           rtkGrid.rtkSettings.fixedBasePositionAltitude.shortDescription
-                                visible:        rtkGrid.rtkSettings.fixedBasePositionAltitude.visible
-                                enabled:        rtkGrid.useFixedPosition
-                            }
-                            FactTextField {
-                                fact:               rtkGrid.rtkSettings.fixedBasePositionAltitude
-                                visible:            rtkGrid.rtkSettings.fixedBasePositionAltitude.visible
-                                enabled:            rtkGrid.useFixedPosition
-                                Layout.fillWidth:   true
-                            }
+//                            Item { width: rtkGrid.firstColWidth; height: 1 }
+//                            QGCLabel {
+//                                text:           rtkGrid.rtkSettings.fixedBasePositionAltitude.shortDescription
+//                                visible:        rtkGrid.rtkSettings.fixedBasePositionAltitude.visible
+//                                enabled:        rtkGrid.useFixedPosition
+//                            }
+//                            FactTextField {
+//                                fact:               rtkGrid.rtkSettings.fixedBasePositionAltitude
+//                                visible:            rtkGrid.rtkSettings.fixedBasePositionAltitude.visible
+//                                enabled:            rtkGrid.useFixedPosition
+//                                Layout.fillWidth:   true
+//                            }
 
-                            Item { width: rtkGrid.firstColWidth; height: 1 }
-                            QGCLabel {
-                                text:           rtkGrid.rtkSettings.fixedBasePositionAccuracy.shortDescription
-                                visible:        rtkGrid.rtkSettings.fixedBasePositionAccuracy.visible
-                                enabled:        rtkGrid.useFixedPosition
-                            }
-                            FactTextField {
-                                fact:               rtkGrid.rtkSettings.fixedBasePositionAccuracy
-                                visible:            rtkGrid.rtkSettings.fixedBasePositionAccuracy.visible
-                                enabled:            rtkGrid.useFixedPosition
-                                Layout.fillWidth:   true
-                            }
+//                            Item { width: rtkGrid.firstColWidth; height: 1 }
+//                            QGCLabel {
+//                                text:           rtkGrid.rtkSettings.fixedBasePositionAccuracy.shortDescription
+//                                visible:        rtkGrid.rtkSettings.fixedBasePositionAccuracy.visible
+//                                enabled:        rtkGrid.useFixedPosition
+//                            }
+//                            FactTextField {
+//                                fact:               rtkGrid.rtkSettings.fixedBasePositionAccuracy
+//                                visible:            rtkGrid.rtkSettings.fixedBasePositionAccuracy.visible
+//                                enabled:            rtkGrid.useFixedPosition
+//                                Layout.fillWidth:   true
+//                            }
 
-                            Item { width: rtkGrid.firstColWidth; height: 1 }
-                            QGCButton {
-                                text:               qsTr("Save Current Base Position")
-                                enabled:            QGroundControl.gpsRtk && QGroundControl.gpsRtk.valid.value
-                                Layout.columnSpan:  2
-                                onClicked: {
-                                    rtkGrid.rtkSettings.fixedBasePositionLatitude.rawValue =    QGroundControl.gpsRtk.currentLatitude.rawValue
-                                    rtkGrid.rtkSettings.fixedBasePositionLongitude.rawValue =   QGroundControl.gpsRtk.currentLongitude.rawValue
-                                    rtkGrid.rtkSettings.fixedBasePositionAltitude.rawValue =    QGroundControl.gpsRtk.currentAltitude.rawValue
-                                    rtkGrid.rtkSettings.fixedBasePositionAccuracy.rawValue =    QGroundControl.gpsRtk.currentAccuracy.rawValue
-                                }
-                            }
+//                            Item { width: rtkGrid.firstColWidth; height: 1 }
+//                            QGCButton {
+//                                text:               qsTr("Save Current Base Position")
+//                                enabled:            QGroundControl.gpsRtk && QGroundControl.gpsRtk.valid.value
+//                                Layout.columnSpan:  2
+//                                onClicked: {
+//                                    rtkGrid.rtkSettings.fixedBasePositionLatitude.rawValue =    QGroundControl.gpsRtk.currentLatitude.rawValue
+//                                    rtkGrid.rtkSettings.fixedBasePositionLongitude.rawValue =   QGroundControl.gpsRtk.currentLongitude.rawValue
+//                                    rtkGrid.rtkSettings.fixedBasePositionAltitude.rawValue =    QGroundControl.gpsRtk.currentAltitude.rawValue
+//                                    rtkGrid.rtkSettings.fixedBasePositionAccuracy.rawValue =    QGroundControl.gpsRtk.currentAccuracy.rawValue
+//                                }
+//                            }
                         }
                     }
 
