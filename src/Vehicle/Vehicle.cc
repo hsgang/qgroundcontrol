@@ -4289,3 +4289,15 @@ void Vehicle::triggerSimpleCamera()
                    0.0, 0.0, 0.0, 0.0,          // param 1-4 unused
                    1.0);                        // trigger camera
 }
+
+void Vehicle::sendCustomMessage()
+{
+    SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
+    if (!sharedLink) {
+        qDebug()<< "sendCustomMessage: link gone!";
+        return;
+    }
+    const char message[] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x44,0x05,static_cast<char>(0xdc)};
+    sharedLink -> writeBytesThreadSafe(*message, 10);
+    qDebug()<< "sendCustomMessage: {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x44,0x05,0xdc}";
+}
