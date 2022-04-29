@@ -424,7 +424,6 @@ Rectangle {
                 id:             gimbalModePress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.sendCustomMessage()
                 }
             }
         }

@@ -372,9 +372,6 @@ void MAVLinkProtocol::receiveBytes(LinkInterface* link, QByteArray b)
             memset(&_status,  0, sizeof(_status));
             memset(&_message, 0, sizeof(_message));
         }
-        else{
-            qDebug()<< b;
-        }
     }
 }
 
