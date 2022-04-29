@@ -155,6 +155,10 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr& config, bool i
         connect(link.get(), &LinkInterface::bytesReceived,       _mavlinkProtocol,    &MAVLinkProtocol::receiveBytes);
         connect(link.get(), &LinkInterface::bytesSent,           _mavlinkProtocol,    &MAVLinkProtocol::logSentBytes);
         connect(link.get(), &LinkInterface::disconnected,        this,                &LinkManager::_linkDisconnected);
+        connect(link.get(), &LinkInterface::bytesReceived,       this,                &LinkManager::linkStatus);
+        connect(&_sendCustomMessageTimer, &QTimer::timeout, this, &LinkManager::sendCustomMessage);
+
+        _sendCustomMessageTimer.start(5000);
 
         _mavlinkProtocol->resetMetadataForLink(link.get());
         _mavlinkProtocol->setVersion(_mavlinkProtocol->getCurrentVersion());
@@ -203,6 +207,10 @@ void LinkManager::_linkDisconnected(void)
     disconnect(link, &LinkInterface::bytesReceived,       _mavlinkProtocol,    &MAVLinkProtocol::receiveBytes);
     disconnect(link, &LinkInterface::bytesSent,           _mavlinkProtocol,    &MAVLinkProtocol::logSentBytes);
     disconnect(link, &LinkInterface::disconnected,        this,                &LinkManager::_linkDisconnected);
+    disconnect(link, &LinkInterface::bytesReceived,       this,                &LinkManager::linkStatus);
+    disconnect(&_sendCustomMessageTimer, &QTimer::timeout, this, &LinkManager::sendCustomMessage);
+
+    _sendCustomMessageTimer.stop();
 
     link->_freeMavlinkChannel();
     for (int i=0; i<_rgLinks.count(); i++) {
@@ -903,4 +911,76 @@ bool LinkManager::_isSerialPortConnected(void)
     }
 #endif
     return false;
+}
+
+void LinkManager::linkStatus(LinkInterface* link, QByteArray b){
+
+    uint16_t stx = (static_cast<uint8_t>(b[1]) << 8) + static_cast<uint8_t>(b[0]);
+    uint16_t len = 0;
+
+    //if (static_cast<char>(b[0]) == 0x55 && static_cast<char>(b[1]) == 0x66 && static_cast<char>(b[2]) == 0x02){
+    if (stx == 26197 && static_cast<uint8_t>(b[2]) == 0x02){
+        len = (static_cast<uint8_t>(b[4]) << 8) + static_cast<uint8_t>(b[3]) + 10;
+        if (len == b.size()){
+            uint16_t recvCRC = (static_cast<uint8_t>(b[len-1]) << 8) + static_cast<uint8_t>(b[len-2]);
+            uint16_t calcCRC = crcSiyiSDK(b, b.size()-2);
+//            qDebug() << "recieved siyi SDK:" << b.toHex();
+//            qDebug() << "stx:" << stx;
+//            qDebug() << "lenth:" << len;
+//            qDebug() << "recv CRC:" << recvCRC;
+//            qDebug() << "calc CRC:" << calcCRC;
+
+            if(recvCRC == calcCRC){
+
+                b.insert(3, (uint8_t)0x00);
+                b.insert(9, 3, (uint8_t)0x00);
+                _linkStatus = {};
+
+                memcpy(&_linkStatus, b, b.size());
+
+                _signal = _linkStatus.signal;
+                _inactiveTime = _linkStatus.inactive_time;
+                _upstream = _linkStatus.upstream;
+                _downstream = _linkStatus.downstream;
+                _txbandwidth = _linkStatus.txbandwidth;
+                _rxbandwidth = _linkStatus.rxbandwidth;
+                _rssi = _linkStatus.rssi;
+                _freq = _linkStatus.freq;
+                _channel = _linkStatus.channel;
+
+                emit siyiStatusChanged();
+            }
+        }
+    }
+}
+
+uint16_t LinkManager::crcSiyiSDK(const char *buf, int len){
+    uint16_t crc = 0;
+    while(len--){
+        int i ;
+        crc = crc ^ (*(uint16_t*)buf++ << 8);
+        for( i = 0; i < 8; i++){
+            if(crc & 0x8000)
+                crc = (crc << 1) ^ 0x1021;
+            else
+                crc = crc << 1;
+        }
+    }
+    return crc;
+}
+
+void LinkManager::sendCustomMessage()
+{
+    QList<SharedLinkInterfacePtr> links = _rgLinks;
+    if (links.size() <= 0) {
+        qDebug()<< "sendCustomMessage: link gone!";
+        return;
+    }
+    uint8_t buffer[10] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x44,0x05,0xdc};
+    int len = sizeof(buffer);
+    for(int i = 0; i < links.size(); i++){
+        links[i] -> writeBytesThreadSafe((const char*)buffer, len);
+    }
+    _sendCustomMessageTimer.stop();
+    _sendCustomMessageTimer.start(200);
 }

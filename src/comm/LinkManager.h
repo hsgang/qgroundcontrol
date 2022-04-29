@@ -59,6 +59,26 @@ public:
     Q_PROPERTY(QStringList          serialPortStrings       READ serialPortStrings      NOTIFY commPortStringsChanged)
     Q_PROPERTY(QStringList          serialPorts             READ serialPorts            NOTIFY commPortsChanged)
 
+    Q_PROPERTY(int signal       READ signal         NOTIFY siyiStatusChanged)
+    Q_PROPERTY(int inactiveTime READ inactiveTime   NOTIFY siyiStatusChanged)
+    Q_PROPERTY(int upstream     READ upstream       NOTIFY siyiStatusChanged)
+    Q_PROPERTY(int downstream   READ downstream     NOTIFY siyiStatusChanged)
+    Q_PROPERTY(int txbandwidth  READ txbandwidth    NOTIFY siyiStatusChanged)
+    Q_PROPERTY(int rxbandwidth  READ rxbandwidth    NOTIFY siyiStatusChanged)
+    Q_PROPERTY(int rssi         READ rssi           NOTIFY siyiStatusChanged)
+    Q_PROPERTY(int freq         READ freq           NOTIFY siyiStatusChanged)
+    Q_PROPERTY(int channel      READ channel        NOTIFY siyiStatusChanged)
+
+    int signal () { return _signal; }
+    int inactiveTime () {return _inactiveTime; }
+    int upstream () { return _upstream; }
+    int downstream () { return _downstream; }
+    int txbandwidth () { return _txbandwidth; }
+    int rxbandwidth () { return _rxbandwidth; }
+    int rssi () { return _rssi; }
+    int freq () { return _freq; }
+    int channel () { return _channel; }
+
     /// Create/Edit Link Configuration
     Q_INVOKABLE LinkConfiguration*  createConfiguration         (int type, const QString& name);
     Q_INVOKABLE LinkConfiguration*  startConfigurationEditing   (LinkConfiguration* config);
@@ -71,6 +91,8 @@ public:
     Q_INVOKABLE void shutdown(void);
 
     Q_INVOKABLE LogReplayLink* startLogReplay(const QString& logFile);
+
+    Q_INVOKABLE void sendCustomMessage(void);
 
     // Property accessors
 
@@ -133,9 +155,14 @@ public:
 
     static const char*  settingsGroup;
 
+public slots:
+    void linkStatus(LinkInterface* link, QByteArray b);
+
 signals:
     void commPortStringsChanged();
     void commPortsChanged();
+
+    void siyiStatusChanged();
 
 private slots:
     void _linkDisconnected  (void);
@@ -188,10 +215,42 @@ private:
 #endif
 #endif
 
+    struct LinkStatus_t{
+        uint16_t stx;
+        uint8_t ctrl;
+        uint16_t len;
+        uint16_t seq;
+        uint8_t cmd_id;
+        int32_t signal;
+        int32_t inactive_time;
+        int32_t upstream;
+        int32_t downstream;
+        int32_t txbandwidth;
+        int32_t rxbandwidth;
+        int32_t rssi;
+        int32_t freq;
+        int32_t channel;
+        uint16_t crc;
+    };
+
+    LinkStatus_t _linkStatus;
+
+    int _signal = 0;
+    int _inactiveTime = 0;
+    int _upstream = 0;
+    int _downstream = 0;
+    int _txbandwidth = 0;
+    int _rxbandwidth = 0;
+    int _rssi = 0;
+    int _freq = 0;
+    int _channel = 0;
+
+    QTimer _sendCustomMessageTimer;
+    uint16_t crcSiyiSDK(const char *buf, int len);
+
     static const char*  _defaultUDPLinkName;
     static const char*  _mavlinkForwardingLinkName;
     static const int    _autoconnectUpdateTimerMSecs;
     static const int    _autoconnectConnectDelayMSecs;
-
 };
 
