@@ -26,7 +26,7 @@ Rectangle {
     property bool       bottomMode: false
     property bool       editMode: false
 
-    DeadMouseArea { anchors.fill: parent }
+    //DeadMouseArea { anchors.fill: parent }
 
     ColumnLayout {
         id:                 telemetryLayout
