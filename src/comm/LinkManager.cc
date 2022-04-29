@@ -932,7 +932,7 @@ void LinkManager::linkStatus(LinkInterface* link, QByteArray b){
 
             if(recvCRC == calcCRC){
 
-                b.insert(3, (uint8_t)0x00);
+                b.insert(3, 1, (uint8_t)0x00);
                 b.insert(9, 3, (uint8_t)0x00);
                 _linkStatus = {};
 
