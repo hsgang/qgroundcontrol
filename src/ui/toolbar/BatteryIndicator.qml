@@ -113,19 +113,18 @@ Item {
                 anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
                 //anchors.left:           batteryIcon.right
 
-
-                QGCLabel {
-                    text:                   getBatteryPercentageText()
-                    //font.pointSize:         ScreenTools.mediumFontPointSize
-                    color:                  qgcPal.text
-                    //anchors.verticalCenter: parent.verticalCenter
-                }
-
                 QGCLabel {
                     id:         batteryVoltageValue
                     //visible:    _activeVehicle && !isNaN(_activeVehicle.battery.voltage.rawValue)
                     color:      qgcPal.text
                     text:       _activeVehicle ? battery.voltage.valueString + battery.voltage.units : ""
+                }
+
+                QGCLabel {
+                    text:                   getBatteryPercentageText()
+                    //font.pointSize:         ScreenTools.mediumFontPointSize
+                    color:                  qgcPal.text
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
             }
 

@@ -84,11 +84,21 @@ Item {
             opacity:            _rcRSSIAvailable ? 1 : 0.5
             color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 70) ? qgcPal.colorGreen : qgcPal.buttonText
         }
-
-        SignalStrength {
+        Column {
+            id:                     rssiValuesColumn
             anchors.verticalCenter: parent.verticalCenter
-            size:                   parent.height * 0.5
-            percent:                _rcRSSIAvailable ? _activeVehicle.rcRSSI : 0
+            anchors.margins:        ScreenTools.defaultFontPixelWidth / 2
+
+            SignalStrength {
+                anchors.horizontalCenter: parent.horizontalCenter
+                size:                   parent.height * 0.5
+                percent:                _rcRSSIAvailable ? _activeVehicle.rcRSSI : 0
+            }
+            QGCLabel {
+                anchors.horizontalCenter:   parent.horizontalCenter
+                color:                      qgcPal.buttonText
+                text:                       _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
+            }
         }
     }
 
