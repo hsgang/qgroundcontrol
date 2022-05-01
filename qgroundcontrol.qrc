@@ -294,6 +294,8 @@
         <file alias="QGroundControl/FlightMap/CustomAttitudeHUD.qml">src/FlightMap/Widgets/CustomAttitudeHUD.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewWeatherWidget.qml">src/FlightDisplay/FlyViewWeatherWidget.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewAttitudeIndicator.qml">src/FlightDisplay/FlyViewAttitudeIndicator.qml</file>
+        <file alias="QGroundControl/FlightDisplay/MessageToast.qml">src/FlightDisplay/MessageToast.qml</file>
+        <file alias="QGroundControl/FlightDisplay/MessageToastManager.qml">src/FlightDisplay/MessageToastManager.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

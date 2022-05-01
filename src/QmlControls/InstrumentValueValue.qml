@@ -10,10 +10,10 @@
 import QtQuick          2.12
 import QtQuick.Layouts  1.2
 import QtQuick.Controls 2.5
+import QtGraphicalEffects 1.0
 
 import QGroundControl               1.0
 import QGroundControl.Controls      1.0
-import QGroundControl.Templates     1.0
 import QGroundControl.Templates     1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Palette       1.0
@@ -34,18 +34,28 @@ ColumnLayout {
     property real   _width:                         0
     property real   _height:                        0
 
-    QGCLabel {
-        id:                 label
-        Layout.alignment:   Qt.AlignVCenter
-        font.pointSize:     _fontSize
-        text:               valueText()
+    Rectangle{
+        height: label.height
+        QGCLabel {
+            id:                 label
+            Layout.alignment:   Qt.AlignVCenter
+            font.pointSize:     _fontSize
+            text:               valueText()
 
-        function valueText() {
-            if (instrumentValueData.fact) {
-                return instrumentValueData.fact.enumOrValueString + (instrumentValueData.showUnits ? " " + instrumentValueData.fact.units : "")
-            } else {
-                return qsTr("--.--")
+            function valueText() {
+                if (instrumentValueData.fact) {
+                    return instrumentValueData.fact.enumOrValueString + (instrumentValueData.showUnits ? " " + instrumentValueData.fact.units : "")
+                } else {
+                    return qsTr("--.--")
+                }
             }
+        }
+        Glow {
+            anchors.fill: label
+            radius: 2
+            samples: 5
+            color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            source: label
         }
     }
 }

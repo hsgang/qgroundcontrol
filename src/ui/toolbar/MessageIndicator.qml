@@ -34,9 +34,9 @@ Item {
     function getMessageColor() {
         if (_activeVehicle) {
             if (_activeVehicle.messageTypeNone)
-                return qgcPal.colorGrey
+                return qgcPal.text //qgcPal.colorGrey
             if (_activeVehicle.messageTypeNormal)
-                return qgcPal.colorBlue;
+                return qgcPal.alertBackground;
             if (_activeVehicle.messageTypeWarning)
                 return qgcPal.colorOrange;
             if (_activeVehicle.messageTypeError)
@@ -77,8 +77,8 @@ Item {
         id: vehicleMessagesPopup
 
         Rectangle {
-            width:          mainWindow.width  * 0.666
-            height:         mainWindow.height * 0.666
+            width:          mainWindow.width  * 0.5
+            height:         mainWindow.height * 0.4
             radius:         ScreenTools.defaultFontPixelHeight / 2
             color:          qgcPal.window
             border.color:   qgcPal.text

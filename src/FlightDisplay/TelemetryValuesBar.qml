@@ -20,13 +20,12 @@ Rectangle {
     id:                 telemetryPanel
     height:             telemetryLayout.height + (_toolsMargin * 2)
     width:              telemetryLayout.width + (_toolsMargin * 2)
-    color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+    color:              "transparent" //Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:             ScreenTools.defaultFontPixelWidth / 2
 
-    property bool       bottomMode: false
     property bool       editMode: false
 
-    //DeadMouseArea { anchors.fill: parent }
+    DeadMouseArea { anchors.fill: parent }
 
     ColumnLayout {
         id:                 telemetryLayout

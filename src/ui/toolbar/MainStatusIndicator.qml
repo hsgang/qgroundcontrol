@@ -48,7 +48,7 @@ RowLayout {
                     return mainStatusLabel._commLostText
                 }
                 if (_activeVehicle.armed) {
-                    _mainStatusBGColor = "green"
+                    _mainStatusBGColor = "#24CA95"
                     if (_activeVehicle.flying) {
                         return mainStatusLabel._flyingText
                     } else if (_activeVehicle.landing) {
@@ -59,7 +59,7 @@ RowLayout {
                 } else {
                     if (_activeVehicle.readyToFlyAvailable) {
                         if (_activeVehicle.readyToFly) {
-                            _mainStatusBGColor = "green"
+                            _mainStatusBGColor = "#24CA95"
                             return mainStatusLabel._readyToFlyText
                         } else {
                             _mainStatusBGColor = "yellow"
@@ -68,7 +68,7 @@ RowLayout {
                     } else {
                         // Best we can do is determine readiness based on AutoPilot component setup and health indicators from SYS_STATUS
                         if (_activeVehicle.allSensorsHealthy && _activeVehicle.autopilot.setupComplete) {
-                            _mainStatusBGColor = "green"
+                            _mainStatusBGColor = "#24CA95"
                             return mainStatusLabel._readyToFlyText
                         } else {
                             _mainStatusBGColor = "yellow"

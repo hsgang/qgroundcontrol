@@ -10,6 +10,7 @@
 import QtQuick          2.12
 import QtQuick.Layouts  1.2
 import QtQuick.Controls 2.5
+import QtGraphicalEffects 1.0
 
 import QGroundControl               1.0
 import QGroundControl.Controls      1.0
@@ -31,52 +32,67 @@ ColumnLayout {
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
-    QGCColoredImage {
-        id:                         valueIcon
-        Layout.alignment:           _verticalOrientation ? Qt.AlignHCenter : Qt.AlignVCenter
-        height:                     _tightHeight * 0.75
-        width:                      height
-        sourceSize.height:          height
-        fillMode:                   Image.PreserveAspectFit
-        mipmap:                     true
-        smooth:                     true
-        color:                      instrumentValueData.isValidColor(instrumentValueData.currentColor) ? instrumentValueData.currentColor : qgcPal.text
-        opacity:                    instrumentValueData.currentOpacity
-        visible:                    _iconVisible
+    Rectangle{
+        height:  valueIcon.height
+        width: _iconVisible ? valueIcon.width : valueLabel.width
+        color: "transparent"
+
+        QGCColoredImage {
+            id:                         valueIcon
+            Layout.alignment:           _verticalOrientation ? Qt.AlignHCenter : Qt.AlignVCenter
+            height:                     _tightHeight * 0.75
+            width:                      height
+            sourceSize.height:          height
+            fillMode:                   Image.PreserveAspectFit
+            mipmap:                     true
+            smooth:                     true
+            color:                      instrumentValueData.isValidColor(instrumentValueData.currentColor) ? instrumentValueData.currentColor : qgcPal.text
+            opacity:                    instrumentValueData.currentOpacity
+            visible:                    _iconVisible
 
 
-        readonly property string iconPrefix: "/InstrumentValueIcons/"
+            readonly property string iconPrefix: "/InstrumentValueIcons/"
 
-        function updateIcon() {
-            if (instrumentValueData.rangeType === InstrumentValueData.IconSelectRange) {
-                valueIcon.source = iconPrefix + instrumentValueData.currentIcon
-            } else if (instrumentValueData.icon) {
-                valueIcon.source = iconPrefix + instrumentValueData.icon
-            } else {
-                valueIcon.source = ""
+            function updateIcon() {
+                if (instrumentValueData.rangeType === InstrumentValueData.IconSelectRange) {
+                    valueIcon.source = iconPrefix + instrumentValueData.currentIcon
+                } else if (instrumentValueData.icon) {
+                    valueIcon.source = iconPrefix + instrumentValueData.icon
+                } else {
+                    valueIcon.source = ""
+                }
+            }
+
+            Connections {
+                target:                 instrumentValueData
+                function onRangeTypeChanged() { valueIcon.updateIcon() }
+                function onCurrentIconChanged() { valueIcon.updateIcon() }
+                function onIconChanged() { valueIcon.updateIcon() }
+            }
+            Component.onCompleted:      updateIcon();
+
+            Rectangle {
+                anchors.fill:   valueIcon
+                color:          qgcPal.text
+                visible:        valueIcon.status === Image.Error
             }
         }
 
-        Connections {
-            target:                 instrumentValueData
-            function onRangeTypeChanged() { valueIcon.updateIcon() }
-            function onCurrentIconChanged() { valueIcon.updateIcon() }
-            function onIconChanged() { valueIcon.updateIcon() }
+        QGCLabel {
+            id:                 valueLabel
+            Layout.alignment:   _verticalOrientation ? Qt.AlignHCenter : Qt.AlignVCenter
+            height:             _tightHeight
+            font.pointSize:     ScreenTools.smallFontPointSize
+            text:               instrumentValueData.text
+            visible:            !_iconVisible
         }
-        Component.onCompleted:      updateIcon();
 
-        Rectangle {
-            anchors.fill:   valueIcon
-            color:          qgcPal.text
-            visible:        valueIcon.status === Image.Error
+        Glow {
+            anchors.fill: _iconVisible ? valueIcon : valueLabel
+            radius: 2
+            samples: 5
+            color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            source: _iconVisible ? valueIcon : valueLabel
         }
-    }
-
-    QGCLabel {
-        Layout.alignment:   _verticalOrientation ? Qt.AlignHCenter : Qt.AlignVCenter
-        height:             _tightHeight
-        font.pointSize:     ScreenTools.smallFontPointSize
-        text:               instrumentValueData.text
-        visible:            !_iconVisible
     }
 }

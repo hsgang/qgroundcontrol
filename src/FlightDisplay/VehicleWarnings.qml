@@ -14,7 +14,7 @@ import QGroundControl.ScreenTools   1.0
 import QGroundControl.Controls      1.0
 
 Rectangle {
-    anchors.margins:    -ScreenTools.defaultFontPixelHeight
+    anchors.margins:    ScreenTools.defaultFontPixelHeight
     height:             warningsCol.height
     width:              warningsCol.width
     color:              Qt.rgba(1, 1, 1, 0.5)

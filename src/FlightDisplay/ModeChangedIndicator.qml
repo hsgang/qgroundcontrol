@@ -48,15 +48,17 @@ Rectangle {
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
             //visible:                    true
-            color:                      "#EECC44"
+            color:                      "#24CA95"
+            //"#EECC44"
             font.pointSize:             ScreenTools.mediumFontPointSize
-            text:                       qsTr("Mode Changed")
+            text:                       qsTr("Switched to")
         }
 
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
             //visible:                    true
-            color:                      "#EECC44"
+            color:                      "#24CA95"
+            //"#EECC44"
             font.pointSize:             ScreenTools.largeFontPointSize * 2
             font.weight:                Font.DemiBold
             text:                       flightMode

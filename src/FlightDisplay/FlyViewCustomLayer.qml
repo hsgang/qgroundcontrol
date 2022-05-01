@@ -97,53 +97,9 @@ Item {
         id:                 telemetryPanel
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
-
-        // States for custom layout support
-        states: [
-            State {
-                name: "bottom"
-                when: telemetryPanel.bottomMode
-
-                AnchorChanges {
-                    target: telemetryPanel
-                    anchors.top: undefined
-                    anchors.bottom: parent.bottom
-                    anchors.right: undefined
-                    anchors.verticalCenter: undefined
-                }
-
-                PropertyChanges {
-                    target: telemetryPanel
-                    x: recalcXPosition()
-                }
-            },
-
-            State {
-                name: "right-video"
-                when: !telemetryPanel.bottomMode && attitudeIndicator.visible
-
-                AnchorChanges {
-                    target: telemetryPanel
-                    anchors.top: undefined
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-                    anchors.verticalCenter: undefined
-                }
-            },
-
-            State {
-                name: "right-novideo"
-                when: !telemetryPanel.bottomMode && !attitudeIndicator.visible
-
-                AnchorChanges {
-                    target: telemetryPanel
-                    anchors.top: undefined
-                    anchors.bottom: undefined
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                }
-            }
-        ]
+        anchors.right:      parent.right
+        anchors.bottom:     parent.bottom
+        anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 3
 
         function recalcXPosition() {
             // First try centered
@@ -164,12 +120,12 @@ Item {
     //-----------------------------------------------------------------------------------------------------
     //--custom VehicleWarnings Widget-----------------------------------------------------------------------------------
 
-    VehicleWarnings {
-        anchors.top: parent.top
-        anchors.topMargin: atmosphericSensorView.visible ? atmosphericSensorView.height + (_toolsMargin * 2) : _toolsMargin
-        anchors.horizontalCenter: parent.horizontalCenter
-        z:                  QGroundControl.zOrderTopMost
-    }
+//    VehicleWarnings {
+//        anchors.top: parent.top
+//        anchors.topMargin: atmosphericSensorView.visible ? atmosphericSensorView.height + (_toolsMargin * 2) : _toolsMargin
+//        anchors.horizontalCenter: parent.horizontalCenter
+//        z:                  QGroundControl.zOrderTopMost
+//    }
 
     //-----------------------------------------------------------------------------------------------------
     //--multiVehiclePanelSelector Widget-----------------------------------------------------------------------------------
@@ -269,7 +225,7 @@ Item {
     Rectangle {
         id:                     vibrationBackground
         anchors.right:          weatherPopupButton.left
-        anchors.bottom:         telemetryPanel.top
+        anchors.bottom:         parent.bottom
         anchors.margins:        _toolsMargin
         color:                  "#80000000"
         height:                 ScreenTools.defaultFontPixelHeight * 2.5
@@ -402,7 +358,7 @@ Item {
         id:                 weatherPopupButton
         anchors.margins:    _toolsMargin
         anchors.right:      parent.right
-        anchors.bottom:     telemetryPanel.top
+        anchors.bottom:     parent.bottom
         color:              "#80000000" //qgcPal.window
         height:             ScreenTools.defaultFontPixelHeight * 2.5
         width:              ScreenTools.defaultFontPixelHeight * 2.5
@@ -427,6 +383,66 @@ Item {
                anchors.fill: showWeatherStatusIcon
                source: showWeatherStatusIcon
                color: "#ffffff"
+        }
+    }
+
+    Rectangle {
+        anchors.margins: _toolsMargin
+        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        implicitWidth:           mainWindow.width  * 0.5
+        implicitHeight:         mainWindow.height * 0.15
+        //radius:         ScreenTools.defaultFontPixelHeight / 2
+        color:          "transparent" //qgcPal.window
+        border.color:   qgcPal.text
+
+        QGCFlickable {
+            id:                 messageFlick
+            //anchors.margins:    ScreenTools.defaultFontPixelHeight
+            anchors.fill:       parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            contentHeight:      messageToastManager.height
+            contentWidth:       messageToastManager.width
+            pixelAligned:       true
+
+//        ScrollView{
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            anchors.fill: parent
+//            contentHeight: parent.height
+//            contentWidth: parent.height
+
+            MessageToastManager{
+                id: messageToastManager
+            }
+
+            Connections {
+                target: _activeVehicle
+                onNewFormattedMessage :{
+                    messageToastManager.show(formattedMessage)
+                }
+            }
+        }
+    }
+
+//    MessageToastManager{
+//        id: messageToastManager
+//    }
+
+//    Connections {
+//        target: _activeVehicle
+//        onNewFormattedMessage :{
+//            messageToastManager.show(formattedMessage)
+//        }
+//    }
+
+    property int counter : 0;
+    Timer{
+        interval: 500;
+        running: true;
+        repeat: true;
+        onTriggered: {
+            counter ++;
+            messageToastManager.show("Counter - " + counter);
         }
     }
 }
