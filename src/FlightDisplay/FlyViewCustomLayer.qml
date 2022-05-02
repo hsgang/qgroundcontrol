@@ -188,25 +188,26 @@ Item {
     FlyViewAtmosphericSensorView{
         id:                         atmosphericSensorView
         anchors.margins:            _toolsMargin
-        anchors.top:                parent.top
+        anchors.bottom:             parent.bottom
+        anchors.bottomMargin:       ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 9 : ScreenTools.defaultFontPixelHeight * 10
         anchors.horizontalCenter:   parent.horizontalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     }
 
     FlyViewAttitudeIndicator{
         id:                         attitudeIndicator
-        anchors.margins:    _toolsMargin
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
-        anchors.right:      parent.right
-        anchors.left:       parent.left
+        anchors.margins:            _toolsMargin
+        anchors.top:                parent.top
+        anchors.bottom:             parent.bottom
+        anchors.right:              parent.right
+        anchors.left:               parent.left
     }
 
     PhotoVideoControl {
-        id:                     photoVideoControl
-        anchors.margins:        _toolsMargin
-        anchors.top:            parent.top
-        anchors.right:          parent.right
+        id:                         photoVideoControl
+        anchors.margins:            _toolsMargin
+        anchors.top:                parent.top
+        anchors.right:              parent.right
 
         property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
     }
@@ -387,14 +388,15 @@ Item {
     }
 
     Rectangle {
+        id: messageToastManagerRect
         anchors.margins: _toolsMargin
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        implicitWidth:           mainWindow.width  * 0.5
-        implicitHeight:         mainWindow.height * 0.15
+        width:           mainWindow.width  * 0.5
+        height:         mainWindow.height * 0.25
         //radius:         ScreenTools.defaultFontPixelHeight / 2
         color:          "transparent" //qgcPal.window
-        border.color:   qgcPal.text
+        //border.color:   qgcPal.text
 
         QGCFlickable {
             id:                 messageFlick
@@ -405,11 +407,7 @@ Item {
             contentWidth:       messageToastManager.width
             pixelAligned:       true
 
-//        ScrollView{
-//            anchors.horizontalCenter: parent.horizontalCenter
-//            anchors.fill: parent
-//            contentHeight: parent.height
-//            contentWidth: parent.height
+            contentY : contentHeight > height ? contentHeight - height + _toolsMargin * 3 : 0
 
             MessageToastManager{
                 id: messageToastManager
@@ -435,16 +433,16 @@ Item {
 //        }
 //    }
 
-    property int counter : 0;
-    Timer{
-        interval: 500;
-        running: true;
-        repeat: true;
-        onTriggered: {
-            counter ++;
-            messageToastManager.show("Counter - " + counter);
-        }
-    }
+//    property int counter : 0;
+//    Timer{
+//        interval: 500;
+//        running: true;
+//        repeat: true;
+//        onTriggered: {
+//            counter ++;
+//            messageToastManager.show("Counter - " + counter);
+//        }
+//    }
 }
 
 

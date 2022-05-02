@@ -91,6 +91,7 @@ Item {
         sourceSize.height:  height
         source:             "/qmlimages/TelemRSSI.svg"
         fillMode:           Image.PreserveAspectFit
+        opacity:            QGroundControl.linkManager.signal !== 0 ? 1 : 0.5
         color:              QGroundControl.linkManager.signal > 30 ? qgcPal.colorGreen : qgcPal.buttonText
     }
     Column {

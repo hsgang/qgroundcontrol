@@ -14,12 +14,13 @@ Column{
     }
 
     z: Infinity
-    spacing:    ScreenTools.defaultFontPixelHeight * 0.5
+    spacing:    ScreenTools.defaultFontPixelHeight * 0.3
     //anchors.centerIn: parent
     anchors.horizontalCenter:   parent.horizontalCenter
     anchors.top:                parent.top
     anchors.margins:            ScreenTools.defaultFontPixelHeight
-
+    width:                      mainWindow.width * 0.5
+//
 //    height: parent.height * 0.2
 //    clip: true
 

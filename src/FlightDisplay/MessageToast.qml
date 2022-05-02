@@ -4,24 +4,14 @@ import QGroundControl               1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 
+import QtGraphicalEffects 1.0
 
-/**
-* @brief An Android-like timed message text in a box that selfdestroys when finished if desired
-*/
 Rectangle{
+
+    id: root
 
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
 
-    /**
-    * Public
-    */
-
-    /**
-    * @brief Shows this Toast
-    *
-    * @param {string} text Text to show
-    * @param {real} duration Duration to show in milliseconds, defaults to 3000
-    */
     function show(text, duration){
         theText.text = text;
         if(typeof duration !== "undefined"){
@@ -37,14 +27,8 @@ Rectangle{
 
     property bool selfDestroying: false ///< Whether this Toast will selfdestroy when it is finished
 
-    /**
-    * Private
-    */
-
-    id: root
-
     property real time: defaultTime
-    readonly property real defaultTime: 5000
+    readonly property real defaultTime: 10000
     readonly property real fadeTime: 300
 
     width: theText.width + _toolsMargin * 3
@@ -52,19 +36,33 @@ Rectangle{
     radius: _toolsMargin
 
     anchors.horizontalCenter: parent.horizontalCenter
-    //anchors.verticalCenter: parent.verticalCenter
 
-//    opacity: 0
-    color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+    //color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+    color: "transparent"
 
 //    Text{
 //        id: theText
+//        color: qgcPal.text
+//        font.pointSize: ScreenTools.defaultFontPointSize
+//        font.family:    ScreenTools.normalFontFamily
+//        antialiasing:   true
+
 //        text: ""
 
-//        horizontalAlignment: Text.AlignHCenter
-//        x: margin
-//        y: margin
+//        anchors.horizontalCenter: parent.horizontalCenter
+//        anchors.verticalCenter: parent.verticalCenter
+//        //x: _toolsMargin
+//        //y: _toolsMargin
+//        wrapMode: Text.WordWrap
 //    }
+
+    Glow {
+        anchors.fill: theText
+        radius: 2
+        samples: 5
+        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+        source: theText
+    }
 
     QGCLabel{
         id: theText
@@ -72,7 +70,7 @@ Rectangle{
 
         horizontalAlignment: Text.AlignHCenter
 
-        //anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenter: parent.verticalCenter
 
         x: _toolsMargin
         y: _toolsMargin
