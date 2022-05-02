@@ -160,8 +160,8 @@ void AtmosphericSensorFactGroup::_handleHygrometerSensor(mavlink_message_t& mess
     mavlink_hygrometer_sensor_t hygrometer;
     mavlink_msg_hygrometer_sensor_decode(&message, &hygrometer);
 
-    temperature()->setRawValue(hygrometer.temperature/100);
-    humidity()->setRawValue(hygrometer.humidity);
+    temperature()->setRawValue((hygrometer.temperature) * 0.01);
+    humidity()->setRawValue((hygrometer.humidity) * 0.01);
 }
 
 #if !defined(NO_ARDUPILOT_DIALECT)

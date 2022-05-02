@@ -32,16 +32,26 @@ Rectangle {
         anchors.verticalCenter:   atmosphericValueBar.verticalCenter
         rows: 1
 
-        QGCLabel { text: qsTr("T:") }
-        QGCLabel { text: _temperatureValue ? _temperatureValue + " C  " : qsTr("--.--", "No data to display") }
-        QGCLabel { text: qsTr("H:") }
-        QGCLabel { text: _humidityValue ? _humidityValue + " %  " : qsTr("--.--", "No data to display") }
-        QGCLabel { text: qsTr("P:") }
-        QGCLabel { text: _pressureValue ? _pressureValue + " hPa  " : qsTr("--.--", "No data to display") }
         QGCLabel { text: qsTr("W/D:") }
-        QGCLabel { text: _windDirValue ? _windDirValue + " deg  " : qsTr("--.--", "No data to display") }
+        QGCLabel { text: _windDirValue ? _windDirValue + " deg  " : qsTr("--")
+            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            }
         QGCLabel { text: qsTr("W/S:") }
-        QGCLabel { text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsSpeedUnitsString : qsTr("--.--", "No data to display") }
+        QGCLabel { text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsSpeedUnitsString : qsTr("--")
+            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            }
+        QGCLabel { text: qsTr("T:") }
+        QGCLabel { text: _temperatureValue ? _temperatureValue + " C  " : qsTr("--")
+            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            }
+        QGCLabel { text: qsTr("H:") }
+        QGCLabel { text: _humidityValue ? _humidityValue + " %  " : qsTr("--")
+            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            }
+        QGCLabel { text: qsTr("P:") }
+        QGCLabel { text: _pressureValue ? _pressureValue + " hPa  " : qsTr("--")
+            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            }
     }
 }
 

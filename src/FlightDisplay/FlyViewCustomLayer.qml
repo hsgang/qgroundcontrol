@@ -189,7 +189,7 @@ Item {
         id:                         atmosphericSensorView
         anchors.margins:            _toolsMargin
         anchors.bottom:             parent.bottom
-        anchors.bottomMargin:       ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 9 : ScreenTools.defaultFontPixelHeight * 10
+        anchors.bottomMargin:       ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 10 : ScreenTools.defaultFontPixelHeight * 11
         anchors.horizontalCenter:   parent.horizontalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     }
