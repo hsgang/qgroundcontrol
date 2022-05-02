@@ -397,6 +397,7 @@ Item {
         //radius:         ScreenTools.defaultFontPixelHeight / 2
         color:          "transparent" //qgcPal.window
         //border.color:   qgcPal.text
+        visible:        messageFlick.contentHeight
 
         QGCFlickable {
             id:                 messageFlick
