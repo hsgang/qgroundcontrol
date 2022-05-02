@@ -17203,7 +17203,7 @@ Confirm change?</source>
     <message>
       <location filename="../src/uas/UASMessageHandler.cc" line="162"/>
       <source> Critical:</source>
-      <translation> 임계:</translation>
+      <translation> 치명:</translation>
     </message>
     <message>
       <location filename="../src/uas/UASMessageHandler.cc" line="165"/>
