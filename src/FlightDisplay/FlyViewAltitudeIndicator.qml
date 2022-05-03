@@ -11,7 +11,7 @@ import QGroundControl.Palette           1.0
 
 Rectangle {
     id:         altitudeIndicator
-    height:     parent.height * 0.32
+    //height:     parent.height * 0.32
     width:      _rightPanelWidth * 0.08
     color:      "#80000000"
     radius:     _margins
@@ -27,7 +27,7 @@ Rectangle {
     property real   _missionMaxAltitude:        _missionValid ? missionMaxAltitude : NaN
     property real   _vehicleAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : 0
 
-    property string _missionMaxAltitudeText:    isNaN(_missionMaxAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_missionMaxAltitude).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+    property string _missionMaxAltitudeText:    isNaN(_missionMaxAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_missionMaxAltitude).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
     property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_vehicleAltitude).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
     property string _startAltitudeText:         isNaN(_vehicleAltitude) ? "-.-" : "0.0 " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
 
@@ -45,8 +45,9 @@ Rectangle {
     }
 
     QGCLabel {
-        text            : _missionMaxAltitudeText
-        anchors.bottom  : parent.top
+        text:                       _missionMaxAltitudeText
+        anchors.bottom:             parent.top
+        anchors.horizontalCenter:   parent.horizontalCenter
     }
 
     Rectangle{
@@ -59,14 +60,15 @@ Rectangle {
 
         QGCLabel {
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right       : parent.left
-            anchors.rightMargin : 2
-            text                : _vehicleAltitudeText
+            anchors.left:           parent.right
+            anchors.leftMargin:     2
+            text:                   _vehicleAltitudeText
         }
     }
 
     QGCLabel {
-        anchors.top     : parent.bottom
-        text            : _startAltitudeText
+        anchors.top:                parent.bottom
+        anchors.horizontalCenter:   parent.horizontalCenter
+        text:                       "GND" //_startAltitudeText
     }
 }

@@ -48,6 +48,13 @@ Item {
         width:              parent.width * 0.7
         sourceSize.width:   width
         fillMode:           Image.PreserveAspectFit
+
+        ColorOverlay {
+            anchors.fill:       rollDial
+            source:             rollDial
+            color:              qgcPal.colorGreen
+        }
+
         transform: Rotation {
             origin.x:       rollDial.width / 2
             origin.y:       rollDial.height
@@ -76,6 +83,12 @@ Item {
         sourceSize.width:   width
         //color:              qgcPal.text
         fillMode:           Image.PreserveAspectFit
+
+        ColorOverlay {
+            anchors.fill:       crossHair
+            source:             crossHair
+            color:              qgcPal.colorGreen
+        }
     }
 
     Image {
@@ -87,10 +100,16 @@ Item {
         anchors.centerIn:   	parent
         sourceSize.width:       width
 
+        ColorOverlay {
+            anchors.fill:       homePointer
+            source:             homePointer
+            color:              qgcPal.alertBackground
+        }
+
         transform: Translate {
             property double _angle: isNoseUpLocked()?-_heading+_headingToHome:_headingToHome
-            x: size/2.3 * Math.sin((_angle)*(3.14/180))
-            y: - size/2.3 * Math.cos((_angle)*(3.14/180))
+            x: size/1.9 * Math.sin((_angle)*(3.14/180))
+            y: - size/1.9 * Math.cos((_angle)*(3.14/180))
         }
     }
 

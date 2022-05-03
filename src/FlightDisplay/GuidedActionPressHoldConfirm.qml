@@ -135,8 +135,8 @@ Item {
     Shape {
         id: shape
         anchors.fill: parent
-        layer.enabled: true
-        layer.samples: 8
+//        layer.enabled: true
+//        layer.samples: 8
 
         property real value: feeder.value
 

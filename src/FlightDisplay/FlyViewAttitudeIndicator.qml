@@ -12,6 +12,7 @@ import QtQuick.Controls         2.4
 import QtQuick.Dialogs          1.3
 import QtQuick.Layouts          1.12
 import QtGraphicalEffects       1.12
+import QtQuick.Shapes           1.15
 
 import QtLocation               5.3
 import QtPositioning            5.3
@@ -30,8 +31,15 @@ import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
 
-Item {
+Rectangle {
     id: attitudeIndicatorRoot
+
+    width: attitudeIndicator.width + altitudeValue.width + groundSpeedValue.width + _toolsMargin * 6 + (speedShapeRoot.width * 0.5)
+    height: attitudeIndicator.height
+
+    color: "transparent"
+//    border.width: 1
+//    border.color: "white"
 
     // Property of Tools
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
@@ -56,7 +64,7 @@ Item {
 
     Rectangle {
         id:                     attitudeIndicator
-        anchors.bottomMargin:   _toolsMargin
+        //anchors.bottomMargin:   _toolsMargin
         anchors.bottom:         parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         height:                 ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 7 : ScreenTools.defaultFontPixelHeight * 9
@@ -72,8 +80,8 @@ Item {
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
             color:                      "transparent" //"#80000000"
-            border.color:               Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-            border.width:               1
+//            border.color:               Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//            border.width:               1
             radius:                     _toolsMargin
 
             GridLayout {
@@ -204,8 +212,8 @@ Item {
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
             color:                      "transparent" //"#80000000"
-            border.color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-            border.width: 1
+//            border.color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//            border.width: 1
             radius:                     _toolsMargin
 
             GridLayout {
@@ -334,6 +342,132 @@ Item {
             size:                       parent.height
             vehicle:                    _activeVehicle
             anchors.horizontalCenter:   parent.horizontalCenter
+        }
+
+        Rectangle{
+            id: speedShapeRoot
+            anchors.right: groundSpeedValue.left
+            anchors.rightMargin: -(width*0.65)
+            anchors.verticalCenter: parent.verticalCenter
+            width: attitudeIndicator.width
+            height: width
+            color: "transparent"
+
+            property int _startAngle : 100
+            property int _sweepAngle : 160
+
+            property real minValue: 0
+            property real maxValue: 20
+
+            property real value: _vehicleGroundSpeed
+
+            Shape {
+                id: shape
+                anchors.fill: parent
+
+                property int  dialWidth: ScreenTools.defaultFontPixelWidth * 2
+                property int  baseRadius: attitudeIndicator.height * 0.45
+                property real radiusOffset: dialWidth / 2
+                property int  penStyle: Qt.RoundCap
+
+                ShapePath {
+                    id: pathDial
+                    strokeColor: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5) //root.dialColor
+                    fillColor: "transparent"
+                    strokeWidth: shape.dialWidth
+                    capStyle: shape.penStyle
+
+                    PathAngleArc {
+                        radiusX: shape.baseRadius - shape.radiusOffset
+                        radiusY: shape.baseRadius - shape.radiusOffset
+                        centerX: speedShapeRoot.width / 2
+                        centerY: speedShapeRoot.height / 2
+                        startAngle: speedShapeRoot._startAngle
+                        sweepAngle: speedShapeRoot._sweepAngle
+                    }
+                }
+
+                ShapePath {
+                    id: pathProgress
+                    strokeColor: qgcPal.colorGreen
+                    fillColor:  "transparent"
+                    strokeWidth: shape.dialWidth - 5
+                    capStyle: shape.penStyle
+
+                    PathAngleArc {
+                        id:      pathProgressArc
+                        radiusX: shape.baseRadius - shape.radiusOffset
+                        radiusY: shape.baseRadius - shape.radiusOffset
+                        centerX: speedShapeRoot.width / 2
+                        centerY: speedShapeRoot.height / 2
+                        startAngle: speedShapeRoot._startAngle
+                        sweepAngle: (speedShapeRoot._sweepAngle / speedShapeRoot.maxValue * speedShapeRoot.value)
+                    }
+                }
+            }
+        }
+
+        Rectangle{
+            id: shapeRoot
+            anchors.left: altitudeValue.right
+            anchors.leftMargin: -(width*0.65)
+            anchors.verticalCenter: parent.verticalCenter
+            width: attitudeIndicator.width
+            height: width
+            color: "transparent"
+
+            property int _startAngle : 280
+            property int _sweepAngle : 160
+
+            property real minValue: 0
+            property real maxValue: 7
+
+            property real value: _vehicleVerticalSpeed
+
+            Shape {
+                id: shape1
+                anchors.fill: parent
+
+                property int  dialWidth: ScreenTools.defaultFontPixelWidth * 2
+                property int  baseRadius: attitudeIndicator.height * 0.5
+                property real radiusOffset: dialWidth / 2
+                property int  penStyle: Qt.RoundCap
+
+                ShapePath {
+                    id: pathDial1
+                    strokeColor: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5) //root.dialColor
+                    fillColor: "transparent" //internals.transparentColor
+                    strokeWidth: shape.dialWidth //root.dialWidth
+                    capStyle: shape.penStyle
+
+                    PathAngleArc {
+                        radiusX: shape.baseRadius - shape.radiusOffset
+                        radiusY: shape.baseRadius - shape.radiusOffset
+                        centerX: shapeRoot.width / 2
+                        centerY: shapeRoot.height / 2
+                        startAngle: shapeRoot._startAngle
+                        sweepAngle: shapeRoot._sweepAngle
+                    }
+                }
+
+                ShapePath {
+                    id: pathProgress1
+                    strokeColor: qgcPal.colorGreen //root.progressColor
+                    fillColor:  "transparent" //internals.transparentColor
+                    strokeWidth: shape.dialWidth - 5
+                    capStyle: shape.penStyle
+
+                    PathAngleArc {
+                        id:      pathProgressArc1
+                        radiusX: shape.baseRadius - shape.radiusOffset
+                        radiusY: shape.baseRadius - shape.radiusOffset
+                        centerX: shapeRoot.width / 2
+                        centerY: shapeRoot.height / 2
+                        startAngle: shapeRoot._startAngle + 80
+                        sweepAngle: -((shapeRoot._sweepAngle / 2) / shapeRoot.maxValue * shapeRoot.value)
+                    }
+                }
+            }
         }
     }
 }

@@ -24,6 +24,8 @@ Rectangle {
     property real _windDirValue:  _activeVehicle ? _activeVehicle.atmosphericSensor.windDir.rawValue.toFixed(1) : 0
     property real _windSpdValue:  _activeVehicle ? _activeVehicle.atmosphericSensor.windSpd.rawValue.toFixed(1) : 0
 
+    property real _preferredWidth : ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 6 : ScreenTools.defaultFontPixelWidth * 9
+
     GridLayout {
         id:                 atmosphericValueGrid
         anchors.margins:    ScreenTools.defaultFontPixelHeight
@@ -34,23 +36,23 @@ Rectangle {
 
         QGCLabel { text: qsTr("W/D:") }
         QGCLabel { text: _windDirValue ? _windDirValue + " deg  " : qsTr("--")
-            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            Layout.preferredWidth:    _preferredWidth
             }
         QGCLabel { text: qsTr("W/S:") }
         QGCLabel { text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsSpeedUnitsString : qsTr("--")
-            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            Layout.preferredWidth:    _preferredWidth
             }
         QGCLabel { text: qsTr("T:") }
         QGCLabel { text: _temperatureValue ? _temperatureValue + " C  " : qsTr("--")
-            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            Layout.preferredWidth:    _preferredWidth
             }
         QGCLabel { text: qsTr("H:") }
         QGCLabel { text: _humidityValue ? _humidityValue + " %  " : qsTr("--")
-            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            Layout.preferredWidth:    _preferredWidth
             }
         QGCLabel { text: qsTr("P:") }
         QGCLabel { text: _pressureValue ? _pressureValue + " hPa  " : qsTr("--")
-            Layout.preferredWidth:    ScreenTools.defaultFontPixelWidth * 8
+            Layout.preferredWidth:    _preferredWidth
             }
     }
 }

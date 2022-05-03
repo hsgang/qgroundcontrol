@@ -179,9 +179,11 @@ Item {
     FlyViewAltitudeIndicator{
         id:                         altitudeIndicator
         anchors.margins:            _toolsMargin
-        anchors.verticalCenter:     parent.verticalCenter
-        anchors.right:              parent.right
-        anchors.rightMargin:        _rightPanelWidth * 1.1
+        height:                     attitudeIndicator.height * 0.9
+        //anchors.verticalCenter:     parent.verticalCenter
+        anchors.left:               attitudeIndicator.right
+        anchors.leftMargin:         _toolsMargin
+        anchors.verticalCenter:     attitudeIndicator.verticalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
 
@@ -189,18 +191,19 @@ Item {
         id:                         atmosphericSensorView
         anchors.margins:            _toolsMargin
         anchors.bottom:             parent.bottom
-        anchors.bottomMargin:       ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 10 : ScreenTools.defaultFontPixelHeight * 11
+        anchors.bottomMargin:       ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 8 : ScreenTools.defaultFontPixelHeight * 11
         anchors.horizontalCenter:   parent.horizontalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     }
 
     FlyViewAttitudeIndicator{
         id:                         attitudeIndicator
-        anchors.margins:            _toolsMargin
-        anchors.top:                parent.top
+        anchors.margins:            _toolsMargin * 2
+        //anchors.top:                parent.top
         anchors.bottom:             parent.bottom
-        anchors.right:              parent.right
-        anchors.left:               parent.left
+        anchors.horizontalCenter:   parent.horizontalCenter
+        //anchors.right:              parent.right
+        //anchors.left:               parent.left
     }
 
     PhotoVideoControl {
