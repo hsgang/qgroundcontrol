@@ -182,7 +182,7 @@ Item {
         height:                     attitudeIndicator.height * 0.9
         //anchors.verticalCenter:     parent.verticalCenter
         anchors.left:               attitudeIndicator.right
-        anchors.leftMargin:         _toolsMargin
+        anchors.leftMargin:         _toolsMargin * 2
         anchors.verticalCenter:     attitudeIndicator.verticalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
