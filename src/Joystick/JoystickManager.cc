@@ -41,7 +41,7 @@ JoystickManager::~JoystickManager() {
         i.value()->stop();
         delete i.value();
     }
-    qDebug() << "Done";
+    qDebug() << "Release Joystick Done";
 }
 
 void JoystickManager::setToolbox(QGCToolbox *toolbox)
