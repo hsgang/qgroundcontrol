@@ -9579,7 +9579,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="35"/>
       <source>Communication Lost</source>
-      <translation>통신이 끊겼습니다</translation>
+      <translation>연결 끊김</translation>
     </message>
     <message>
       <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="36"/>
@@ -9589,7 +9589,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="37"/>
       <source>Not Ready</source>
-      <translation>준비되지 않음</translation>
+      <translation>점검 필요</translation>
     </message>
     <message>
       <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="38"/>
