@@ -33,6 +33,7 @@ Item {
         id:             batteryIndicatorRow
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
+        spacing:        ScreenTools.defaultFontPixelWidth
 
         Repeater {
             model: _activeVehicle ? _activeVehicle.batteries : 0
@@ -60,6 +61,8 @@ Item {
             anchors.top:    parent.top
             anchors.bottom: parent.bottom
 
+            spacing: ScreenTools.defaultFontPixelWidth
+
             function getBatteryColor() {
                 if (battery.voltage.rawValue) {
                     switch (battery.chargeState.rawValue) {
@@ -76,6 +79,21 @@ Item {
                         return qgcPal.text
                     }
                 }
+                else if(battery.percentRemaining.rawValue) {
+                    if(battery.percentRemaining.rawValue > 30){
+                        return qgcPal.colorGreen
+                    }
+                    else if(battery.percentRemaining.rawValue <= 30 && battery.percentRemaining.rawValue > 10 ){
+                        return qgcPal.colorOrange
+                    }
+                    else if(battery.percentRemaining.rawValue <= 10){
+                        return qgcPal.colorRed
+                    }
+                    else{
+                        return qgcPal.text
+                    }
+                }
+
                 else{
                     return qgcPal.text
                 }
@@ -96,15 +114,47 @@ Item {
                 return ""
             }
 
-            QGCColoredImage {
+//            QGCColoredImage {
+//                id:                 batteryIcon
+//                anchors.top:        parent.top
+//                anchors.bottom:     parent.bottom
+//                width:              height
+//                sourceSize.width:   width
+//                source:             "/qmlimages/Battery.svg"
+//                fillMode:           Image.PreserveAspectFit
+//                color:              getBatteryColor()
+//            }
+            Rectangle{
                 id:                 batteryIcon
-                anchors.top:        parent.top
-                anchors.bottom:     parent.bottom
-                width:              height
-                sourceSize.width:   width
-                source:             "/qmlimages/Battery.svg"
-                fillMode:           Image.PreserveAspectFit
-                color:              getBatteryColor()
+                anchors.verticalCenter: parent.verticalCenter
+//                anchors.top:        parent.top
+//                anchors.topMargin:  ScreenTools.defaultFontPixelHeight
+//                anchors.bottom:     parent.bottom
+//                anchors.bottomMargin: ScreenTools.defaultFontPixelHeight
+                color:              "transparent"
+                border.color:       getBatteryColor()
+                border.width:       ScreenTools.defaultFontPixelWidth * 0.2
+                height:             ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 1.2 : ScreenTools.defaultFontPixelHeight * 0.9
+                width:              ScreenTools.defaultFontPixelWidth * 4
+                radius:             ScreenTools.defaultFontPixelWidth * 0.4
+
+                Rectangle{
+                    anchors.left:           parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    color:                  getBatteryColor()
+                    height:                 parent.height / 2
+                    width:                  ScreenTools.defaultFontPixelWidth * 0.2
+                }
+
+                Rectangle{
+                    anchors.margins:        ScreenTools.defaultFontPixelWidth * 0.3
+                    anchors.top:            parent.top
+                    anchors.left:           parent.left
+                    height:                 parent.height - (anchors.margins * 2)
+                    width:                  (parent.width - (anchors.margins * 2)) * (battery.percentRemaining.rawValue / 100)
+                    color:                  getBatteryColor()
+                    radius:                 ScreenTools.defaultFontPixelWidth * 0.3
+                }
             }
 
             Column {

@@ -365,7 +365,8 @@ Rectangle {
                 id: shape
                 anchors.fill: parent
 
-                property int  dialWidth: ScreenTools.defaultFontPixelWidth * 2
+                property int  dialWidth: ScreenTools.defaultFontPixelWidth * 1.6
+                property int  strokeWidth: ScreenTools.defaultFontPixelWidth * 1.3
                 property int  baseRadius: attitudeIndicator.height * 0.45
                 property real radiusOffset: dialWidth / 2
                 property int  penStyle: Qt.RoundCap

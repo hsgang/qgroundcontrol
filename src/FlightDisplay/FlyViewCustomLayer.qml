@@ -411,6 +411,10 @@ Item {
             contentWidth:       messageToastManager.width
             pixelAligned:       true
 
+            ScrollBar.vertical : ScrollBar{
+                active: false
+            }
+
             contentY : contentHeight > height ? contentHeight - height + _toolsMargin * 3 : 0
 
             MessageToastManager{
@@ -423,6 +427,13 @@ Item {
                     messageToastManager.show(formattedMessage)
                 }
             }
+
+
+        }
+
+        MouseArea{
+            anchors.fill: parent
+            propagateComposedEvents: true
         }
     }
 
