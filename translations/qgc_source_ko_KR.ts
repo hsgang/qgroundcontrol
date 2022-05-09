@@ -7977,6 +7977,11 @@ Click Ok to start the auto-tuning process.
       <translation>착륙 중단</translation>
     </message>
     <message>
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="51"/>
+      <source>Change Max Ground Speed</source>
+      <translation>최고수평속도 변경</translation>
+    </message>
+    <message>
       <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="52"/>
       <source>Set Waypoint</source>
       <translation>경로지점 추가</translation>
@@ -8059,12 +8064,12 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="68"/>
       <source>Change the altitude of the vehicle up or down.</source>
-      <translation>기체의 고도를 높이거나 낮춥니다</translation>
+      <translation>기체의 고도를 변경합니다</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="69"/>
       <source>Move the vehicle to the specified location.</source>
-      <translation>기체를 지정된 위치로 이동합니다.</translation>
+      <translation>기체를 지정된 위치로 이동합니다</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="70"/>
@@ -8074,7 +8079,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="71"/>
       <source>Orbit the vehicle around the specified location.</source>
-      <translation>지정된 위치를 중심으로 기체를 원주비행합니다.</translation>
+      <translation>지정된 위치를 중심으로 기체를 원주비행합니다</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="72"/>
@@ -8083,8 +8088,13 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
       <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="73"/>
+      <source>Change the maximum horizontal cruise speed.</source>
+      <translation>최고수평속도를 변경합니다</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="73"/>
       <source>Pause the vehicle at it&apos;s current position, adjusting altitude up or down as needed.</source>
-      <translation>필요에 따라 고도를 위아래로 조정하여 기체를 현재 위치로 유지하십시오.</translation>
+      <translation>필요에 따라 고도를 위아래로 조정하여 기체를 현재 위치로 유지하십시오</translation>
     </message>
     <message>
       <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="74"/>
