@@ -2,6 +2,8 @@ import QtQuick          2.3
 import QtQuick.Controls 1.2
 import QtQuick.Layouts  1.2
 import QtQuick.Dialogs  1.2
+import QtGraphicalEffects       1.12
+
 
 import QGroundControl                   1.0
 import QGroundControl.ScreenTools       1.0
@@ -12,8 +14,8 @@ import QGroundControl.Palette           1.0
 Rectangle {
     id:         altitudeIndicator
     //height:     parent.height * 0.32
-    width:      _rightPanelWidth * 0.08
-    color:      "#80000000"
+    width:      ScreenTools.defaultFontPixelWidth * 1.6
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:     _margins
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
@@ -27,7 +29,7 @@ Rectangle {
     property real   _missionMaxAltitude:        _missionValid ? missionMaxAltitude : NaN
     property real   _vehicleAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : 0
 
-    property string _missionMaxAltitudeText:    isNaN(_missionMaxAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_missionMaxAltitude).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+    property string _missionMaxAltitudeText:    (isNaN(_missionMaxAltitude) || (_missionMaxAltitude <= 0)) ? "--" + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_missionMaxAltitude).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
     property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_vehicleAltitude).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
     property string _startAltitudeText:         isNaN(_vehicleAltitude) ? "-.-" : "0.0 " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
 
@@ -44,10 +46,29 @@ Rectangle {
         }
     }
 
+    Rectangle{
+        id: altLevelBar
+        width: parent.width * 0.7
+        radius: _margins
+        height: parent.height * (_vehicleAltitude / _missionMaxAltitude)
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        color:  qgcPal.colorGreen
+    }
+
     QGCLabel {
+        id:                         missionMaxAltitudeText
         text:                       _missionMaxAltitudeText
         anchors.bottom:             parent.top
         anchors.horizontalCenter:   parent.horizontalCenter
+    }
+
+    Glow {
+        anchors.fill: missionMaxAltitudeText
+        radius: 2
+        samples: 5
+        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+        source: missionMaxAltitudeText
     }
 
     Rectangle{
@@ -59,16 +80,32 @@ Rectangle {
         y        : currentAltitudeRatio()
 
         QGCLabel {
+            id:                     altLevelerText
             anchors.verticalCenter: parent.verticalCenter
             anchors.left:           parent.right
             anchors.leftMargin:     2
             text:                   _vehicleAltitudeText
         }
+        Glow {
+            anchors.fill: altLevelerText
+            radius: 2
+            samples: 5
+            color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            source: altLevelerText
+        }
     }
 
     QGCLabel {
+        id:                         gndText
         anchors.top:                parent.bottom
         anchors.horizontalCenter:   parent.horizontalCenter
         text:                       "GND" //_startAltitudeText
+    }
+    Glow {
+        anchors.fill: gndText
+        radius: 2
+        samples: 5
+        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+        source: gndText
     }
 }

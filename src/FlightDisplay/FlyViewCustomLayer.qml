@@ -182,7 +182,7 @@ Item {
         height:                     attitudeIndicator.height * 0.9
         //anchors.verticalCenter:     parent.verticalCenter
         anchors.left:               attitudeIndicator.right
-        anchors.leftMargin:         _toolsMargin * 2
+        anchors.leftMargin:         _toolsMargin * 4
         anchors.verticalCenter:     attitudeIndicator.verticalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
@@ -436,28 +436,6 @@ Item {
             propagateComposedEvents: true
         }
     }
-
-//    MessageToastManager{
-//        id: messageToastManager
-//    }
-
-//    Connections {
-//        target: _activeVehicle
-//        onNewFormattedMessage :{
-//            messageToastManager.show(formattedMessage)
-//        }
-//    }
-
-//    property int counter : 0;
-//    Timer{
-//        interval: 500;
-//        running: true;
-//        repeat: true;
-//        onTriggered: {
-//            counter ++;
-//            messageToastManager.show("Counter - " + counter);
-//        }
-//    }
 }
 
 

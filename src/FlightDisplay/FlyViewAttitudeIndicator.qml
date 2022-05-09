@@ -34,7 +34,7 @@ import QGroundControl.Vehicle       1.0
 Rectangle {
     id: attitudeIndicatorRoot
 
-    width: attitudeIndicator.width + altitudeValue.width + groundSpeedValue.width + _toolsMargin * 6 + (speedShapeRoot.width * 0.5)
+    width: attitudeIndicator.width + altitudeValue.width + groundSpeedValue.width + _toolsMargin * 6 + (gndSpdBarBase.width * 0.5)
     height: attitudeIndicator.height
 
     color: "transparent"
@@ -345,13 +345,14 @@ Rectangle {
         }
 
         Rectangle{
-            id: speedShapeRoot
+            id: gndSpdBarBase
             anchors.right: groundSpeedValue.left
             anchors.rightMargin: -(width*0.65)
             anchors.verticalCenter: parent.verticalCenter
             width: attitudeIndicator.width
             height: width
             color: "transparent"
+
 
             property int _startAngle : 100
             property int _sweepAngle : 160
@@ -371,6 +372,9 @@ Rectangle {
                 property real radiusOffset: dialWidth / 2
                 property int  penStyle: Qt.RoundCap
 
+                layer.enabled: true
+                layer.samples: 4
+
                 ShapePath {
                     id: pathDial
                     strokeColor: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5) //root.dialColor
@@ -381,10 +385,10 @@ Rectangle {
                     PathAngleArc {
                         radiusX: shape.baseRadius - shape.radiusOffset
                         radiusY: shape.baseRadius - shape.radiusOffset
-                        centerX: speedShapeRoot.width / 2
-                        centerY: speedShapeRoot.height / 2
-                        startAngle: speedShapeRoot._startAngle
-                        sweepAngle: speedShapeRoot._sweepAngle
+                        centerX: gndSpdBarBase.width / 2
+                        centerY: gndSpdBarBase.height / 2
+                        startAngle: gndSpdBarBase._startAngle
+                        sweepAngle: gndSpdBarBase._sweepAngle
                     }
                 }
 
@@ -399,17 +403,42 @@ Rectangle {
                         id:      pathProgressArc
                         radiusX: shape.baseRadius - shape.radiusOffset
                         radiusY: shape.baseRadius - shape.radiusOffset
-                        centerX: speedShapeRoot.width / 2
-                        centerY: speedShapeRoot.height / 2
-                        startAngle: speedShapeRoot._startAngle
-                        sweepAngle: (speedShapeRoot._sweepAngle / speedShapeRoot.maxValue * speedShapeRoot.value)
+                        centerX: gndSpdBarBase.width / 2
+                        centerY: gndSpdBarBase.height / 2
+                        startAngle: gndSpdBarBase._startAngle
+                        sweepAngle: (gndSpdBarBase._sweepAngle / gndSpdBarBase.maxValue * gndSpdBarBase.value)
                     }
+                }
+            }
+
+            Rectangle{
+                id: groundSpeedNeedleBase
+                width: parent.width * 0.75
+                height: parent.height * 0.75
+                color: "transparent"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+
+                Rectangle{
+                    width: ScreenTools.defaultFontPixelWidth * 2.5
+                    height: 2
+                    anchors.left: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: qgcPal.text
+                    antialiasing: true
+                    smooth: true
+                }
+
+                transform: Rotation{
+                    origin.x: groundSpeedNeedleBase.width / 2
+                    origin.y: groundSpeedNeedleBase.height / 2
+                    angle: gndSpdBarBase._startAngle + (gndSpdBarBase._sweepAngle / gndSpdBarBase.maxValue * gndSpdBarBase.value)
                 }
             }
         }
 
         Rectangle{
-            id: shapeRoot
+            id: altBarBase
             anchors.left: altitudeValue.right
             anchors.leftMargin: -(width*0.65)
             anchors.verticalCenter: parent.verticalCenter
@@ -434,6 +463,9 @@ Rectangle {
                 property real radiusOffset: dialWidth / 2
                 property int  penStyle: Qt.RoundCap
 
+                layer.enabled: true
+                layer.samples: 4
+
                 ShapePath {
                     id: pathDial1
                     strokeColor: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5) //root.dialColor
@@ -444,16 +476,16 @@ Rectangle {
                     PathAngleArc {
                         radiusX: shape.baseRadius - shape.radiusOffset
                         radiusY: shape.baseRadius - shape.radiusOffset
-                        centerX: shapeRoot.width / 2
-                        centerY: shapeRoot.height / 2
-                        startAngle: shapeRoot._startAngle
-                        sweepAngle: shapeRoot._sweepAngle
+                        centerX: altBarBase.width / 2
+                        centerY: altBarBase.height / 2
+                        startAngle: altBarBase._startAngle
+                        sweepAngle: altBarBase._sweepAngle
                     }
                 }
 
                 ShapePath {
                     id: pathProgress1
-                    strokeColor: qgcPal.colorGreen //root.progressColor
+                    strokeColor: (_vehicleVerticalSpeed >= 0) ? qgcPal.colorGreen : qgcPal.alertBackground //root.progressColor
                     fillColor:  "transparent" //internals.transparentColor
                     strokeWidth: shape.dialWidth - 5
                     capStyle: shape.penStyle
@@ -462,11 +494,37 @@ Rectangle {
                         id:      pathProgressArc1
                         radiusX: shape.baseRadius - shape.radiusOffset
                         radiusY: shape.baseRadius - shape.radiusOffset
-                        centerX: shapeRoot.width / 2
-                        centerY: shapeRoot.height / 2
-                        startAngle: shapeRoot._startAngle + 80
-                        sweepAngle: -((shapeRoot._sweepAngle / 2) / shapeRoot.maxValue * shapeRoot.value)
+                        centerX: altBarBase.width / 2
+                        centerY: altBarBase.height / 2
+                        startAngle: altBarBase._startAngle + 80
+                        sweepAngle: -((altBarBase._sweepAngle / 2) / altBarBase.maxValue * altBarBase.value)
                     }
+                }
+            }
+
+            Rectangle{
+                id: altNeedleBase
+                width: parent.width * 0.75
+                height: parent.height * 0.75
+                color: "transparent"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+
+                Rectangle{
+                    width: ScreenTools.defaultFontPixelWidth * 2.5
+                    height: 2
+                    anchors.left: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    color: qgcPal.text
+
+                    antialiasing: true
+                    smooth: true
+                }
+
+                transform: Rotation{
+                    origin.x: groundSpeedNeedleBase.width / 2
+                    origin.y: groundSpeedNeedleBase.height / 2
+                    angle: -((altBarBase._sweepAngle / 2) / altBarBase.maxValue * altBarBase.value)
                 }
             }
         }
