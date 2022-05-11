@@ -69,7 +69,7 @@ ArduCopterFirmwarePlugin::ArduCopterFirmwarePlugin(void)
         //APMCopterMode(APMCopterMode::FLIP,          true),
         APMCopterMode(APMCopterMode::AUTOTUNE,      true),
         APMCopterMode(APMCopterMode::POS_HOLD,      true),
-        //APMCopterMode(APMCopterMode::BRAKE,         true),
+        APMCopterMode(APMCopterMode::BRAKE,         true),
         //APMCopterMode(APMCopterMode::THROW,         true),
         //APMCopterMode(APMCopterMode::AVOID_ADSB,    true),
         //APMCopterMode(APMCopterMode::GUIDED_NOGPS,  true),
