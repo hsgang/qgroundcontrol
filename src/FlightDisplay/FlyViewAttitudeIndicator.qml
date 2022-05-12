@@ -74,7 +74,7 @@ Rectangle {
 
         Rectangle {
             id:                         altitudeValue
-            anchors.margins:            _toolsMargin * 2
+            anchors.margins:            _toolsMargin * 6
             anchors.left:               parent.right
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
@@ -206,7 +206,7 @@ Rectangle {
 
         Rectangle {
             id:                         groundSpeedValue
-            anchors.margins:            _toolsMargin * 2
+            anchors.margins:            _toolsMargin * 6
             anchors.right:              parent.left
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
@@ -345,6 +345,174 @@ Rectangle {
         }
 
         Rectangle{
+            id: gndSpdBarRect
+            width: ScreenTools.defaultFontPixelWidth * 0.2
+            height: parent.height * 0.8
+            color: qgcPal.text
+            anchors.right: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: _toolsMargin * 2
+
+            property real maxValue: 15
+            property real minValue: 0
+            property real value: (_vehicleGroundSpeed > maxValue) ? maxValue : _vehicleGroundSpeed
+            property string maxValueString: maxValue.toString()
+            property string minValueString: minValue.toString()
+
+            Rectangle{
+                height: 2
+                width: ScreenTools.defaultFontPixelWidth * 1.2
+                anchors.top: parent.top
+                anchors.right: parent.right
+
+                QGCLabel{
+                    text: gndSpdBarRect.maxValueString
+                    anchors.right: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: _toolsMargin
+                }
+            }
+
+            Rectangle{
+                height: 2
+                width: ScreenTools.defaultFontPixelWidth * 1.2
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+
+                QGCLabel{
+                    text: gndSpdBarRect.minValueString
+                    anchors.right: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: _toolsMargin
+                }
+            }
+
+            Rectangle{
+                id       : gndSpdLeveler
+                height   : 2
+                width    : ScreenTools.defaultFontPixelWidth
+                //anchors.horizontalCenter: parent.horizontalCenter
+                anchors.left: parent.right
+                color    : "transparent"
+                y        : (_vehicleGroundSpeed <= gndSpdBarRect.maxValue && _vehicleGroundSpeed > 0) ? gndSpdBarRect.height - (gndSpdBarRect.height * (_vehicleGroundSpeed / gndSpdBarRect.maxValue)) : gndSpdBarRect.height
+
+                Rectangle{
+                    id: gndSpdIndTAngle
+                    width: ScreenTools.defaultFontPixelWidth * 2
+                    height: width
+                    color: "transparent"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.left
+
+                    Canvas{
+                        anchors.fill: parent
+
+                        onPaint: {
+                            var context = getContext("2d");
+
+                            context.beginPath();
+                            context.moveTo(0,0);
+                            context.lineTo(gndSpdIndTAngle.height, gndSpdIndTAngle.height/2);
+                            context.lineTo(0, gndSpdIndTAngle.height);
+                            context.closePath();
+                            context.fillStyle = qgcPal.colorGreen;
+                            context.fill();
+                        }
+                    }
+                }
+
+//                Glow {
+//                    anchors.fill: altLevelerText
+//                    radius: 2
+//                    samples: 5
+//                    color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//                    source: altLevelerText
+//                }
+            }
+        }
+
+        Rectangle{
+            id: climbSpdBarRect
+            width: ScreenTools.defaultFontPixelWidth * 0.2
+            height: parent.height * 0.8
+            color: qgcPal.text
+            anchors.left: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: _toolsMargin * 2
+
+            property real maxValue: 10
+            property real minValue: -10
+            property real value: (Math.abs(_vehicleVerticalSpeed) > maxValue) ? maxValue : _vehicleVerticalSpeed
+            property string maxValueString: maxValue.toString()
+            property string minValueString: minValue.toString()
+
+            Rectangle{
+                height: 2
+                width: ScreenTools.defaultFontPixelWidth * 1.2
+                anchors.top: parent.top
+                anchors.left: parent.left
+
+                QGCLabel{
+                    text: climbSpdBarRect.maxValueString
+                    anchors.left: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: _toolsMargin
+                }
+            }
+
+            Rectangle{
+                height: 2
+                width: ScreenTools.defaultFontPixelWidth * 1.2
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+
+                QGCLabel{
+                    text: climbSpdBarRect.minValueString
+                    anchors.left: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.margins: _toolsMargin
+                }
+            }
+
+            Rectangle{
+                id       : climbSpdLeveler
+                height   : 2
+                width    : ScreenTools.defaultFontPixelWidth
+                //anchors.horizontalCenter: parent.horizontalCenter
+                anchors.right: parent.left
+                color    : "transparent"
+                y        : (Math.abs(_vehicleVerticalSpeed) <= climbSpdBarRect.maxValue) ? (climbSpdBarRect.height/2) - ((climbSpdBarRect.height/2) * (_vehicleVerticalSpeed / climbSpdBarRect.maxValue)) : (climbSpdBarRect.height/2)
+
+                Rectangle{
+                    id: climbSpdIndTAngle
+                    width: ScreenTools.defaultFontPixelWidth * 2
+                    height: width
+                    color: "transparent"
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.right
+
+                    Canvas{
+                        anchors.fill: parent
+
+                        onPaint: {
+                            var context = getContext("2d");
+
+                            context.beginPath();
+                            context.moveTo(climbSpdIndTAngle.height,0);
+                            context.lineTo(0, climbSpdIndTAngle.height/2);
+                            context.lineTo(climbSpdIndTAngle.height, climbSpdIndTAngle.height);
+                            context.closePath();
+                            context.fillStyle = qgcPal.colorGreen;
+                            context.fill();
+                        }
+                    }
+                }
+
+
+            }
+        }
+
+        Rectangle{
             id: gndSpdBarBase
             anchors.right: groundSpeedValue.left
             anchors.rightMargin: -(width*0.65)
@@ -352,6 +520,7 @@ Rectangle {
             width: attitudeIndicator.width
             height: width
             color: "transparent"
+            visible: false
 
 
             property int _startAngle : 100
@@ -445,6 +614,7 @@ Rectangle {
             width: attitudeIndicator.width
             height: width
             color: "transparent"
+            visible: false
 
             property int _startAngle : 280
             property int _sweepAngle : 160
