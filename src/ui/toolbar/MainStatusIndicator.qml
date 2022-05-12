@@ -30,7 +30,7 @@ RowLayout {
     QGCLabel {
         id:             mainStatusLabel
         text:           mainStatusText()
-        font.pointSize: _vehicleInAir ? ScreenTools.defaultFontPointSize : ScreenTools.largeFontPointSize
+        font.pointSize: ScreenTools.largeFontPointSize
 
         property string _commLostText:      qsTr("Communication Lost")
         property string _readyToFlyText:    qsTr("Ready To Fly")
@@ -118,7 +118,7 @@ RowLayout {
         id:                     flightModeMenu
         Layout.preferredHeight: _root.height
         verticalAlignment:      Text.AlignVCenter
-        font.pointSize:         _vehicleInAir ?  ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
+        font.pointSize:         ScreenTools.largeFontPointSize
         mouseAreaLeftMargin:    -(flightModeMenu.x - flightModeIcon.x)
         visible:                _activeVehicle
     }

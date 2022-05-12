@@ -7892,6 +7892,14 @@ Click Ok to start the auto-tuning process.
     </message>
   </context>
   <context>
+    <name>GuidedActionPressHoldConfirm</name>
+    <message>
+      <location filename="../src/FlightDisplay/GuidedActionPressHoldConfirm.qml" line="270"/>
+      <source>Press to Confirm</source>
+      <translation>눌러서 확인</translation>
+    </message>
+  </context>
+  <context>
     <name>GuidedActionList</name>
     <message>
       <location filename="../src/FlightDisplay/GuidedActionList.qml" line="81"/>
@@ -12869,13 +12877,18 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     </message>
     <message>
       <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="206"/>
-      <source>Max telem dist:</source>
-      <translation>최대 텔레메트리 거리:</translation>
+      <source>Max Telem Dist:</source>
+      <translation>최대 통신 거리:</translation>
     </message>
     <message>
       <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="213"/>
       <source>Time:</source>
       <translation>시간:</translation>
+    </message>
+    <message>
+      <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="213"/>
+      <source>Total Path Distance:</source>
+      <translation>전체 경로 거리:</translation>
     </message>
     <message>
       <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="229"/>

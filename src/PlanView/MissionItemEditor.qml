@@ -103,24 +103,14 @@ Rectangle {
                 font.pointSize:     ScreenTools.smallFontPointSize
             }
         }
-
-        QGCColoredImage {
-            id:                     deleteButton
+        QGCLabel {
+            id:                     sequenceNumber
             anchors.verticalCenter: parent.verticalCenter
-            height:                 _hamburgerSize
-            width:                  height
-            sourceSize.height:      height
-            fillMode:               Image.PreserveAspectFit
-            mipmap:                 true
-            smooth:                 true
-            color:                  qgcPal.text
-            visible:                _currentItem && missionItem.sequenceNumber !== 0
-            source:                 "/res/TrashDelete.svg"
-
-            QGCMouseArea {
-                fillItem:   parent
-                onClicked:  remove()
-            }
+            width:                  text.width
+            height:                 commandPicker.height
+            verticalAlignment:      Text.AlignVCenter
+            text:                   qsTr("#%1").arg(missionItem.sequenceNumber)
+            color:                  _outerTextColor
         }
 
         Item {
@@ -180,7 +170,29 @@ Rectangle {
         }
     }
 
-   QGCColoredImage {
+    QGCColoredImage {
+        id:                     deleteButton
+        anchors.verticalCenter: topRowLayout.verticalCenter
+        anchors.margins:        _margin
+        anchors.right:          hamburger.left
+        height:                 _hamburgerSize
+        width:                  height
+        sourceSize.height:      height
+        fillMode:               Image.PreserveAspectFit
+        mipmap:                 true
+        smooth:                 true
+        color:                  qgcPal.text
+        visible:                _currentItem && missionItem.sequenceNumber !== 0
+        source:                 "/res/TrashDelete.svg"
+
+        QGCMouseArea {
+            fillItem:   parent
+            onClicked:  remove()
+        }
+    }
+
+
+    QGCColoredImage {
         id:                     hamburger
         anchors.margins:        _margin
         anchors.right:          parent.right
@@ -204,7 +216,7 @@ Rectangle {
 
                 QGCMenuItem {
                     text:           qsTr("Move to vehicle position")
-                    visible:        missionItem.specifiesCoordinate
+                    visible:        missionItem.specifiesCoordinate || missionItem.isTakeoffItem
                     enabled:        _activeVehicle
                     onTriggered:    missionItem.coordinate = _activeVehicle.coordinate
 
@@ -213,7 +225,7 @@ Rectangle {
 
                 QGCMenuItem {
                     text:           qsTr("Move to previous item position")
-                    visible:        _missionController.previousCoordinate.isValid
+                    visible:        _missionController.previousCoordinate.isValid && missionItem.specifiesCoordinate
                     onTriggered:    missionItem.coordinate = _missionController.previousCoordinate
                 }
 

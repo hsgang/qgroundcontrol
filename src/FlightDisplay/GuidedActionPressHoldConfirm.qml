@@ -244,6 +244,9 @@ Item {
 
     QGCCheckBox {
         id:                 optionCheckBox
+        anchors.top:        parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.margins:    _toolsMargin
         Layout.alignment:   Qt.AlignHCenter
         text:               ""
         visible:            text !== ""
@@ -267,11 +270,11 @@ Item {
     }
 
     QGCLabel{
-        text: "Press to Confirm"
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.verticalCenter:   parent.verticalCenter
-        horizontalAlignment:    Text.AlignHCenter
-        wrapMode:               Text.WordWrap
+        text:                       qsTr("Press to Confirm")
+        anchors.horizontalCenter:   parent.horizontalCenter
+        anchors.verticalCenter:     parent.verticalCenter
+        horizontalAlignment:        Text.AlignHCenter
+        wrapMode:                   Text.WordWrap
     }
 }
 

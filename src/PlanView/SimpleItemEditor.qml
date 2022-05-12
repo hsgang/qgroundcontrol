@@ -238,14 +238,13 @@ Rectangle {
                     }
                 }
 
-                QGCCheckBox {
-                    id:         flightSpeedCheckbox
-                    text:       qsTr("Flight Speed")
-                    checked:    missionItem.speedSection.specifyFlightSpeed
-                    onClicked:  missionItem.speedSection.specifyFlightSpeed = checked
-                    visible:    missionItem.speedSection.available
-                }
-
+//                QGCCheckBox {
+//                    id:         flightSpeedCheckbox
+//                    text:       qsTr("Flight Speed")
+//                    checked:    missionItem.speedSection.specifyFlightSpeed
+//                    onClicked:  missionItem.speedSection.specifyFlightSpeed = checked
+//                    visible:    missionItem.speedSection.available
+//                }
 
                 Repeater {
                     model: missionItem.textFieldFacts
@@ -269,12 +268,12 @@ Rectangle {
                     }
                 }
 
-                FactTextField {
-                    fact:               missionItem.speedSection.flightSpeed
-                    Layout.fillWidth:   true
-                    enabled:            flightSpeedCheckbox.checked
-                    visible:            missionItem.speedSection.available
-                }
+//                FactTextField {
+//                    fact:               missionItem.speedSection.flightSpeed
+//                    Layout.fillWidth:   true
+//                    enabled:            flightSpeedCheckbox.checked
+//                    visible:            missionItem.speedSection.available
+//                }
             }
 
             CameraSection {

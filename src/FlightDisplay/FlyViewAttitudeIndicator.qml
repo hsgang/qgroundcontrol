@@ -70,7 +70,7 @@ Rectangle {
         height:                 ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 7 : ScreenTools.defaultFontPixelHeight * 9
         width:                  height
         radius:                 height * 0.5
-        color:                  "#80000000"
+        color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
 
         Rectangle {
             id:                         altitudeValue
@@ -360,7 +360,7 @@ Rectangle {
             property real minValue: 0
             property real maxValue: 20
 
-            property real value: _vehicleGroundSpeed
+            property real value: (_vehicleGroundSpeed > 20) ? maxValue : _vehicleGroundSpeed
 
             Shape {
                 id: shape
@@ -450,9 +450,9 @@ Rectangle {
             property int _sweepAngle : 160
 
             property real minValue: 0
-            property real maxValue: 7
+            property real maxValue: 10
 
-            property real value: _vehicleVerticalSpeed
+            property real value: (_vehicleVerticalSpeed > maxValue) ? maxValue : _vehicleVerticalSpeed
 
             Shape {
                 id: shape1
