@@ -61,23 +61,23 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     QGCLabel { text: qsTr("Signal:") }
-                    QGCLabel { text: QGroundControl.linkManager.signal + " %"}
+                    QGCLabel { text: QGroundControl.siyiSDKManager.signal + " %"}
                     QGCLabel { text: qsTr("RSSI:") }
-                    QGCLabel { text: QGroundControl.linkManager.rssi + " dBm"}
+                    QGCLabel { text: QGroundControl.siyiSDKManager.rssi + " dBm"}
                     QGCLabel { text: qsTr("Inactive Time:") }
-                    QGCLabel { text: QGroundControl.linkManager.inactiveTime + " ms"}
+                    QGCLabel { text: QGroundControl.siyiSDKManager.inactiveTime + " ms"}
                     QGCLabel { text: qsTr("Upstream:") }
-                    QGCLabel { text: (QGroundControl.linkManager.upstream / 1000).toFixed(1) + " kbps" }
+                    QGCLabel { text: (QGroundControl.siyiSDKManager.upstream / 1000).toFixed(1) + " kbps" }
                     QGCLabel { text: qsTr("Downstream:") }
-                    QGCLabel { text: (QGroundControl.linkManager.downstream / 1000).toFixed(1) + " kbps" }
+                    QGCLabel { text: (QGroundControl.siyiSDKManager.downstream / 1000).toFixed(1) + " kbps" }
                     QGCLabel { text: qsTr("TxBandwidth:") }
-                    QGCLabel { text: (QGroundControl.linkManager.txbandwidth / 1000).toFixed(1) + " Mbps" }
+                    QGCLabel { text: (QGroundControl.siyiSDKManager.txbandwidth / 1000).toFixed(1) + " Mbps" }
                     QGCLabel { text: qsTr("RxBandwidth:") }
-                    QGCLabel { text: (QGroundControl.linkManager.rxbandwidth / 1000).toFixed(1) + " Mbps" }
+                    QGCLabel { text: (QGroundControl.siyiSDKManager.rxbandwidth / 1000).toFixed(1) + " Mbps" }
                     QGCLabel { text: qsTr("Frequency:") }
-                    QGCLabel { text: QGroundControl.linkManager.freq + " Mhz"}
+                    QGCLabel { text: QGroundControl.siyiSDKManager.freq + " Mhz"}
                     QGCLabel { text: qsTr("Channel:") }
-                    QGCLabel { text: QGroundControl.linkManager.channel }
+                    QGCLabel { text: QGroundControl.siyiSDKManager.channel }
                 }
             }
         }
@@ -91,8 +91,8 @@ Item {
         sourceSize.height:  height
         source:             "/qmlimages/TelemRSSI.svg"
         fillMode:           Image.PreserveAspectFit
-        opacity:            QGroundControl.linkManager.signal !== 0 ? 1 : 0.5
-        color:              QGroundControl.linkManager.signal > 30 ? qgcPal.colorGreen : qgcPal.buttonText
+        opacity:            QGroundControl.siyiSDKManager.signal !== 0 ? 1 : 0.5
+        color:              QGroundControl.siyiSDKManager.signal > 30 ? qgcPal.colorGreen : qgcPal.buttonText
     }
     Column {
         id:                     siyiStatusValuesColumn
@@ -103,12 +103,12 @@ Item {
         SignalStrength {
             anchors.horizontalCenter:   parent.horizontalCenter
             size:                   parent.height * 0.5
-            percent:                QGroundControl.linkManager.signal
+            percent:                QGroundControl.siyiSDKManager.signal
         }
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
             color:                      qgcPal.buttonText
-            text:                       QGroundControl.linkManager.signal + " %"
+            text:                       QGroundControl.siyiSDKManager.signal + " %"
         }
 //        QGCLabel {
 //            anchors.horizontalCenter:   parent.horizontalCenter

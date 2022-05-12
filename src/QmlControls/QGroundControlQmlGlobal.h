@@ -32,6 +32,11 @@ class TaisyncManager;
 #else
 class MicrohardManager;
 #endif
+#if defined(QGC_SIYISDK_ENABLED)
+#include "Siyi/SiyiSDKManager.h"
+#else
+class SiyiSDKManager;
+#endif
 
 #ifdef QT_DEBUG
 #include "MockLink.h"
@@ -76,6 +81,8 @@ public:
     Q_PROPERTY(bool                 taisyncSupported        READ    taisyncSupported        CONSTANT)
     Q_PROPERTY(MicrohardManager*    microhardManager        READ    microhardManager        CONSTANT)
     Q_PROPERTY(bool                 microhardSupported      READ    microhardSupported      CONSTANT)
+    Q_PROPERTY(SiyiSDKManager*      siyiSDKManager          READ    siyiSDKManager          CONSTANT)
+    Q_PROPERTY(bool                 siyiSDKSupported        READ    siyiSDKSupported        CONSTANT)
     Q_PROPERTY(bool                 supportsPairing         READ    supportsPairing         CONSTANT)
     Q_PROPERTY(QGCPalette*          globalPalette           MEMBER  _globalPalette          CONSTANT)   ///< This palette will always return enabled colors
     Q_PROPERTY(QmlUnitsConversion*  unitsConversion         READ    unitsConversion         CONSTANT)
@@ -185,6 +192,13 @@ public:
     bool                    microhardSupported  () { return false; }
 #endif
 
+    SiyiSDKManager*         siyiSDKManager       () { return _siyiSDKManager; }
+#if defined(QGC_SIYISDK_ENABLED)
+    bool                    siyiSDKSupported    () { return true; }
+#else
+    bool                    siyiSDKSupported    () { return false; }
+#endif
+
     qreal zOrderTopMost             () { return 1000; }
     qreal zOrderWidgets             () { return 100; }
     qreal zOrderMapItems            () { return 50; }
@@ -258,6 +272,7 @@ private:
     AirspaceManager*        _airspaceManager        = nullptr;
     TaisyncManager*         _taisyncManager         = nullptr;
     MicrohardManager*       _microhardManager       = nullptr;
+    SiyiSDKManager*         _siyiSDKManager         = nullptr;
     ADSBVehicleManager*     _adsbVehicleManager     = nullptr;
     QGCPalette*             _globalPalette          = nullptr;
     QmlUnitsConversion      _unitsConversion;

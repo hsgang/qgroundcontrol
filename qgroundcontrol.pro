@@ -12,6 +12,7 @@ QMAKE_PROJECT_DEPTH = 0 # undocumented qmake flag to force absolute paths in mak
 # These are disabled until proven correct
 DEFINES += QGC_GST_TAISYNC_DISABLED
 DEFINES += QGC_GST_MICROHARD_DISABLED
+DEFINES += QGC_SIYISDK_ENABLED
 
 exists($${OUT_PWD}/qgroundcontrol.pro) {
     error("You must use shadow build (e.g. mkdir build; cd build; qmake ../qgroundcontrol.pro).")
@@ -1336,6 +1337,25 @@ contains (DEFINES, QGC_GST_MICROHARD_DISABLED) {
             src/Microhard/MicrohardSettings.cc \
     }
 }
+#-------------------------------------------------------------------------------------
+# SIYI SDK
+QGC_SIYISDK_ENABLED
+contains (DEFINES, QGC_SIYISDK_DISABLED) {
+    DEFINES -= QGC_SIYISDK_ENABLED
+    message("SiyiSDK disabled")
+} else {
+    contains (DEFINES, QGC_SIYISDK_ENABLED) {
+        INCLUDEPATH += \
+            src/Siyi
+
+        HEADERS += \
+            src/Siyi/SiyiSDKManager.h
+
+        SOURCES += \
+            src/Siyi/SiyiSDKManager.cc \
+    }
+}
+
 #-------------------------------------------------------------------------------------
 # AirMap
 
