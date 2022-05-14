@@ -50,10 +50,11 @@ Rectangle {
         id: altLevelBar
         width: parent.width * 0.7
         radius: _margins
-        height: parent.height * (_vehicleAltitude / _missionMaxAltitude)
+        height: ((_vehicleAltitude / _missionMaxAltitude) <= 1) ? parent.height * (_vehicleAltitude / _missionMaxAltitude) : parent.height
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         color:  qgcPal.colorGreen
+        visible: (_missionMaxAltitude > 0) ? true : false
     }
 
     QGCLabel {

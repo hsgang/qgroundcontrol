@@ -40,56 +40,56 @@ Item {
     readonly property bool _showAdditionalIndicatorsCompass:     QGroundControl.settingsManager.flyViewSettings.showAdditionalIndicatorsCompass.value && !usedByMultipleVehicleList
     readonly property bool _lockNoseUpCompass:        QGroundControl.settingsManager.flyViewSettings.lockNoseUpCompass.value
 
-    Image {
-        id: rollDial
-        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-        source:             "/qmlimages/rollDialWhite.svg"
-        mipmap:             true
-        width:              parent.width * 0.7
-        sourceSize.width:   width
-        fillMode:           Image.PreserveAspectFit
+//    Image {
+//        id: rollDial
+//        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
+//        source:             "/qmlimages/rollDialWhite.svg"
+//        mipmap:             true
+//        width:              parent.width * 0.7
+//        sourceSize.width:   width
+//        fillMode:           Image.PreserveAspectFit
 
-        ColorOverlay {
-            anchors.fill:       rollDial
-            source:             rollDial
-            color:              qgcPal.colorGreen
-        }
+//        ColorOverlay {
+//            anchors.fill:       rollDial
+//            source:             rollDial
+//            color:              qgcPal.colorGreen
+//        }
 
-        transform: Rotation {
-            origin.x:       rollDial.width / 2
-            origin.y:       rollDial.height
-            angle:          -_rollAngle
-        }
-    }
+//        transform: Rotation {
+//            origin.x:       rollDial.width / 2
+//            origin.y:       rollDial.height
+//            angle:          -_rollAngle
+//        }
+//    }
 
-    Image {
-        id: pointer
-        visible: _lockNoseUpCompass
-        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-        source:             "/qmlimages/rollPointerWhite.svg"
-        mipmap:             true
-        width:              rollDial.width
-        sourceSize.width:   width
-        fillMode:           Image.PreserveAspectFit
-    }
+//    Image {
+//        id: pointer
+//        visible: _lockNoseUpCompass
+//        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
+//        source:             "/qmlimages/rollPointerWhite.svg"
+//        mipmap:             true
+//        width:              rollDial.width
+//        sourceSize.width:   width
+//        fillMode:           Image.PreserveAspectFit
+//    }
 
 
-    Image {
-        id:                 crossHair
-        anchors.centerIn:   parent
-        source:             "/qmlimages/crossHair.svg"
-        mipmap:             true
-        width:              parent.width * 0.8
-        sourceSize.width:   width
-        //color:              qgcPal.text
-        fillMode:           Image.PreserveAspectFit
+//    Image {
+//        id:                 crossHair
+//        anchors.centerIn:   parent
+//        source:             "/qmlimages/crossHair.svg"
+//        mipmap:             true
+//        width:              parent.width * 0.8
+//        sourceSize.width:   width
+//        //color:              qgcPal.text
+//        fillMode:           Image.PreserveAspectFit
 
-        ColorOverlay {
-            anchors.fill:       crossHair
-            source:             crossHair
-            color:              qgcPal.colorGreen
-        }
-    }
+//        ColorOverlay {
+//            anchors.fill:       crossHair
+//            source:             crossHair
+//            color:              qgcPal.colorGreen
+//        }
+//    }
 
     Image {
         id:                     homePointer
@@ -113,15 +113,37 @@ Item {
         }
     }
 
-    QGCPitchIndicator {
-        id:                 pitchIndicator
-        anchors.verticalCenter: parent.verticalCenter
-        visible:            showPitch
-        pitchAngle:         _pitchAngle
-        rollAngle:          _rollAngle
-        color:              Qt.rgba(0,0,0,0)
-        size:               ScreenTools.defaultFontPixelHeight * (5)
+    Image {
+        id:                 vehicleHeadingDial
+        anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
+        source:             "/qmlimages/vehicleArrowOpaque.svg"
+        mipmap:             true
+        width:              parent.width * 0.2
+        sourceSize.width:   width
+        //fillMode:           Image.PreserveAspectFit
+
+        ColorOverlay {
+            anchors.fill:       vehicleHeadingDial
+            source:             vehicleHeadingDial
+            color:              qgcPal.text
+        }
+
+        transform: Rotation {
+            origin.x:       vehicleHeadingDial.width / 2
+            origin.y:       vehicleHeadingDial.height / 2
+            angle:          isNoseUpLocked() ? 0 : _heading
+        }
     }
+
+//    QGCPitchIndicator {
+//        id:                 pitchIndicator
+//        anchors.verticalCenter: parent.verticalCenter
+//        visible:            showPitch
+//        pitchAngle:         _pitchAngle
+//        rollAngle:          _rollAngle
+//        color:              Qt.rgba(0,0,0,0)
+//        size:               ScreenTools.defaultFontPixelHeight * (5)
+//    }
 
     QGCColoredImage {
         id:                 compassDial
@@ -137,5 +159,4 @@ Item {
             angle:          isNoseUpLocked()?-_heading:0
         }
     }
-
 }

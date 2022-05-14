@@ -67,7 +67,7 @@ Rectangle {
         //anchors.bottomMargin:   _toolsMargin
         anchors.bottom:         parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        height:                 ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 7 : ScreenTools.defaultFontPixelHeight * 9
+        height:                 ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
         width:                  height
         radius:                 height * 0.5
         color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
@@ -398,7 +398,7 @@ Rectangle {
 
                 Rectangle{
                     id: gndSpdIndTAngle
-                    width: ScreenTools.defaultFontPixelWidth * 2
+                    width: ScreenTools.defaultFontPixelWidth * 1.5
                     height: width
                     color: "transparent"
                     anchors.verticalCenter: parent.verticalCenter
@@ -485,7 +485,7 @@ Rectangle {
 
                 Rectangle{
                     id: climbSpdIndTAngle
-                    width: ScreenTools.defaultFontPixelWidth * 2
+                    width: ScreenTools.defaultFontPixelWidth * 1.5
                     height: width
                     color: "transparent"
                     anchors.verticalCenter: parent.verticalCenter
