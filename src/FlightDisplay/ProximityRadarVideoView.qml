@@ -24,7 +24,7 @@ Item {
     visible:        proximityValues.telemetryAvailable
 
     property var    vehicle     ///< Vehicle object, undefined for ADSB vehicle
-    property real   range:  6   ///< Default 6m view
+    property real   range:  10   ///< Default 6m view
 
     property var _minlength:    Math.min(_root.width,_root.height)
     property var _ratio:        (_minlength / 2) / _root.range
