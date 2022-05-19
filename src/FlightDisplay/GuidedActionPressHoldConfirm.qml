@@ -101,7 +101,7 @@ Item {
 
     property color backgroundColor: "transparent"
     property color dialColor: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)//"#FF505050"
-    property color progressColor: qgcPal.buttonHighlight // "#FFA51BAB"
+    property color progressColor: qgcPal.colorGreen //qgcPal.buttonHighlight // "#FFA51BAB"
 
     property int penStyle: Qt.RoundCap
 
@@ -131,10 +131,21 @@ Item {
             NumberAnimation { to: 100; duration: 500 }
         }
     }
+    Rectangle {
+        id: confirmBackground
+        width: (parent.width * 3 > messageTextBox.width) ? parent.width * 3 : messageTextBox.width
+        height: root.height + messageTextBox.height + cancelRectangle.height + _margins * 5
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        radius: _margins * 3
+        color: qgcPal.windowShadeDark
+    }
 
     Shape {
         id: shape
         anchors.fill: parent
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
 //        layer.enabled: true
 //        layer.samples: 8
 
@@ -195,7 +206,7 @@ Item {
     Rectangle {
         id: pressArea
         width: parent.width * 0.8
-        height: parent.height * 0.8
+        height: width
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         radius: width / 2
@@ -205,15 +216,15 @@ Item {
 
     MouseArea {
         id: mouseArea
-        anchors.fill: parent
+        anchors.fill: pressArea
         onPressed: {
             animator.restart();
-            parent.pressSignal();
+            root.pressSignal();
         }
         onReleased: {
             animator.stop()
             feeder.value = 0
-            parent.releaseSignal();
+            root.releaseSignal();
         }
     }
 
@@ -221,8 +232,9 @@ Item {
         id: cancelRectangle
         width: parent.width * 0.2
         height: width
-        anchors.left: parent.right
-        anchors.top: parent.bottom
+        anchors.right: confirmBackground.right
+        anchors.bottom: confirmBackground.bottom
+        anchors.margins: _margins * 2
         radius: width / 2
         color: qgcPal.windowShadeLight
 
@@ -252,6 +264,7 @@ Item {
         visible:            text !== ""
     }
     Rectangle {
+        id:    messageTextBox
         width: messageText.width * 1.2
         height: messageText.height * 1.5
         radius: height / 2
@@ -275,6 +288,7 @@ Item {
         anchors.verticalCenter:     parent.verticalCenter
         horizontalAlignment:        Text.AlignHCenter
         wrapMode:                   Text.WordWrap
+        font.bold:                  true
     }
 }
 
