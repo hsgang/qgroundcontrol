@@ -133,10 +133,13 @@ Item {
     }
     Rectangle {
         id: confirmBackground
-        width: (parent.width * 3 > messageTextBox.width) ? parent.width * 3 : messageTextBox.width
-        height: root.height + messageTextBox.height + cancelRectangle.height + _margins * 5
-        anchors.verticalCenter: parent.verticalCenter
+        width: (parent.width * 3 > messageTextBox.width) ? parent.width * 2 : messageTextBox.width
+        //height: root.height + messageTextBox.height + cancelRectangle.height + _margins * 5
+        //anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: messageTextBox.top
+        anchors.bottom: shape.bottom
+        anchors.bottomMargin: - _margins * 2
         radius: _margins * 3
         color: qgcPal.windowShadeDark
     }
