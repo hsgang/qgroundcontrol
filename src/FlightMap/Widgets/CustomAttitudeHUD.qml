@@ -21,6 +21,9 @@ Item {
 
     property real _heading:             vehicle ? vehicle.heading.rawValue : 0
     property real _headingToHome:       vehicle ? vehicle.headingToHome.rawValue : 0
+    property real _groundSpeed:         vehicle ? vehicle.groundSpeed.rawValue : 0
+    property real _headingToNextWP:     vehicle ? vehicle.headingToNextWP.rawValue : 0
+    property real _courseOverGround:    _activeVehicle ? _activeVehicle.gps.courseOverGround.rawValue : 0
 
     width:  size
     height: size
@@ -28,6 +31,19 @@ Item {
     property bool usedByMultipleVehicleList:  false
 
     anchors.centerIn: parent
+
+    function isCOGAngleOK(){
+        if(_groundSpeed < 0.3){
+            return false
+        }
+        else{
+            return vehicle && _showAdditionalIndicatorsCompass
+        }
+    }
+
+    function isHeadingToNextWPOK(){
+        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_headingToNextWP)
+    }
 
     function isNoseUpLocked(){
         return _lockNoseUpCompass
@@ -157,6 +173,38 @@ Item {
             origin.x:       compassDial.width  / 2
             origin.y:       compassDial.height / 2
             angle:          isNoseUpLocked()?-_heading:0
+        }
+    }
+
+    Image {
+        id:                 cOGPointer
+        source:             isCOGAngleOK() ? "/qmlimages/cOGPointer.svg" : ""
+        mipmap:             true
+        fillMode:           Image.PreserveAspectFit
+        anchors.fill:       parent
+        sourceSize.height:  parent.height
+
+        transform: Rotation {
+            property var _angle:isNoseUpLocked() ? _courseOverGround-_heading : _courseOverGround
+            origin.x:       cOGPointer.width  / 2
+            origin.y:       cOGPointer.height / 2
+            angle:         _angle
+        }
+    }
+
+    Image {
+        id:                 nextWPPointer
+        source:             isHeadingToNextWPOK() ? "/qmlimages/compassDottedLine.svg":""
+        mipmap:             true
+        fillMode:           Image.PreserveAspectFit
+        anchors.fill:       parent
+        sourceSize.height:  parent.height
+
+        transform: Rotation {
+            property var _angle: isNoseUpLocked()?_headingToNextWP-_heading:_headingToNextWP
+            origin.x:       cOGPointer.width  / 2
+            origin.y:       cOGPointer.height / 2
+            angle:         _angle
         }
     }
 }
