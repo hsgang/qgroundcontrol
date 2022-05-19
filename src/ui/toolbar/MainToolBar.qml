@@ -123,7 +123,6 @@ Rectangle {
         anchors.bottom:         parent.Bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
         text:                   !_activeVehicle ? qsTr("Disconnected") : qsTr("Connected")
-        font.weight:            Font.bold
         onClicked:              linkManagerDialogComponent.createObject(mainWindow).open()
     }
 
