@@ -130,8 +130,7 @@ void SiyiSDKManager::requestLinkStatus()
 {
     QList<SharedLinkInterfacePtr> links = _linkMgr->links();
     if (links.size() <= 0) {
-        qDebug()<< "sendCustomMessage: link gone!";
-        disconnectedLink();
+        //qDebug()<< "sendCustomMessage: link gone!";
         return;
     }
     uint8_t buffer[10] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x44,0x05,0xdc};
