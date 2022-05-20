@@ -538,7 +538,7 @@ void LinkManager::_updateAutoConnectLinks(void)
         portList = QGCSerialPortInfo::availablePorts();
     }
     else {
-        qDebug() << "Skipping serial port list";
+        //qDebug() << "Skipping serial port list";
     }
 #else
     portList = QGCSerialPortInfo::availablePorts();
