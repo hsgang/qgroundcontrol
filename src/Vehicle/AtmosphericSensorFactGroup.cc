@@ -97,11 +97,11 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     case MAVLINK_MSG_ID_HYGROMETER_SENSOR:
         _handleHygrometerSensor(message);
         break;
-#if !defined(NO_ARDUPILOT_DIALECT)
-    case MAVLINK_MSG_ID_WIND:
-        _handleWind(message);
-        break;
-#endif
+//#if !defined(NO_ARDUPILOT_DIALECT)
+//    case MAVLINK_MSG_ID_WIND:
+//        _handleWind(message);
+//        break;
+//#endif
 //    case MAVLINK_MSG_ID_ATMOSPHERIC_SENSOR:
 //        _handleAtmosphericSensor(message);
 //        break;
