@@ -484,122 +484,122 @@ ApplicationWindow {
     //-------------------------------------------------------------------------
     //-- Critical Vehicle Message Popup
 
-    property var    _vehicleMessageQueue:      []
-    property string _vehicleMessage:     ""
+//    property var    _vehicleMessageQueue:      []
+//    property string _vehicleMessage:     ""
 
-    function showCriticalVehicleMessage(message) {
-        indicatorPopup.close()
-        if (criticalVehicleMessagePopup.visible || QGroundControl.videoManager.fullScreen) {
-            _vehicleMessageQueue.push(message)
-        } else {
-            _vehicleMessage = message
-            criticalVehicleMessagePopup.open()
-        }
-    }
+//    function showCriticalVehicleMessage(message) {
+//        indicatorPopup.close()
+//        if (criticalVehicleMessagePopup.visible || QGroundControl.videoManager.fullScreen) {
+//            _vehicleMessageQueue.push(message)
+//        } else {
+//            _vehicleMessage = message
+//            criticalVehicleMessagePopup.open()
+//        }
+//    }
 
-    Popup {
-        id:                 criticalVehicleMessagePopup
-        y:                  ScreenTools.defaultFontPixelHeight
-        x:                  Math.round((mainWindow.width - width) * 0.5)
-        width:              mainWindow.width  * 0.55
-        height:             ScreenTools.defaultFontPixelHeight * 6
-        modal:              false
-        focus:              true
-        closePolicy:        Popup.CloseOnEscape
+//    Popup {
+//        id:                 criticalVehicleMessagePopup
+//        y:                  ScreenTools.defaultFontPixelHeight
+//        x:                  Math.round((mainWindow.width - width) * 0.5)
+//        width:              mainWindow.width  * 0.55
+//        height:             ScreenTools.defaultFontPixelHeight * 6
+//        modal:              false
+//        focus:              true
+//        closePolicy:        Popup.CloseOnEscape
 
-        background: Rectangle {
-            anchors.fill:   parent
-            color:          qgcPal.alertBackground
-            radius:         ScreenTools.defaultFontPixelHeight * 0.5
-            border.color:   qgcPal.alertBorder
-            border.width:   2
-        }
+//        background: Rectangle {
+//            anchors.fill:   parent
+//            color:          qgcPal.alertBackground
+//            radius:         ScreenTools.defaultFontPixelHeight * 0.5
+//            border.color:   qgcPal.alertBorder
+//            border.width:   2
+//        }
 
-        onOpened: {
-            criticalVehicleMessageText.text = mainWindow._vehicleMessage
-        }
+//        onOpened: {
+//            criticalVehicleMessageText.text = mainWindow._vehicleMessage
+//        }
 
-        onClosed: {
-            //-- Are there messages in the waiting queue?
-            if(mainWindow._vehicleMessageQueue.length) {
-                mainWindow._vehicleMessage = ""
-                //-- Show all messages in queue
-                for (var i = 0; i < mainWindow._vehicleMessageQueue.length; i++) {
-                    var text = mainWindow._vehicleMessageQueue[i]
-                    if(i) mainWindow._vehicleMessage += "<br>"
-                    mainWindow._vehicleMessage += text
-                }
-                //-- Clear it
-                mainWindow._vehicleMessageQueue = []
-                criticalVehicleMessagePopup.open()
-            } else {
-                mainWindow._vehicleMessage = ""
-            }
-        }
+//        onClosed: {
+//            //-- Are there messages in the waiting queue?
+//            if(mainWindow._vehicleMessageQueue.length) {
+//                mainWindow._vehicleMessage = ""
+//                //-- Show all messages in queue
+//                for (var i = 0; i < mainWindow._vehicleMessageQueue.length; i++) {
+//                    var text = mainWindow._vehicleMessageQueue[i]
+//                    if(i) mainWindow._vehicleMessage += "<br>"
+//                    mainWindow._vehicleMessage += text
+//                }
+//                //-- Clear it
+//                mainWindow._vehicleMessageQueue = []
+//                criticalVehicleMessagePopup.open()
+//            } else {
+//                mainWindow._vehicleMessage = ""
+//            }
+//        }
 
-        Flickable {
-            id:                 criticalVehicleMessageFlick
-            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.5
-            anchors.fill:       parent
-            contentHeight:      criticalVehicleMessageText.height
-            contentWidth:       criticalVehicleMessageText.width
-            boundsBehavior:     Flickable.StopAtBounds
-            pixelAligned:       true
-            clip:               true
-            TextEdit {
-                id:             criticalVehicleMessageText
-                width:          criticalVehicleMessagePopup.width - criticalVehicleMessageClose.width - (ScreenTools.defaultFontPixelHeight * 2)
-                anchors.centerIn: parent
-                readOnly:       true
-                textFormat:     TextEdit.RichText
-                font.pointSize: ScreenTools.defaultFontPointSize
-                font.family:    ScreenTools.demiboldFontFamily
-                wrapMode:       TextEdit.WordWrap
-                color:          qgcPal.alertText
-            }
-        }
+//        Flickable {
+//            id:                 criticalVehicleMessageFlick
+//            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.5
+//            anchors.fill:       parent
+//            contentHeight:      criticalVehicleMessageText.height
+//            contentWidth:       criticalVehicleMessageText.width
+//            boundsBehavior:     Flickable.StopAtBounds
+//            pixelAligned:       true
+//            clip:               true
+//            TextEdit {
+//                id:             criticalVehicleMessageText
+//                width:          criticalVehicleMessagePopup.width - criticalVehicleMessageClose.width - (ScreenTools.defaultFontPixelHeight * 2)
+//                anchors.centerIn: parent
+//                readOnly:       true
+//                textFormat:     TextEdit.RichText
+//                font.pointSize: ScreenTools.defaultFontPointSize
+//                font.family:    ScreenTools.demiboldFontFamily
+//                wrapMode:       TextEdit.WordWrap
+//                color:          qgcPal.alertText
+//            }
+//        }
 
-        //-- Dismiss Vehicle Message
-        QGCColoredImage {
-            id:                 criticalVehicleMessageClose
-            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.5
-            anchors.top:        parent.top
-            anchors.right:      parent.right
-            width:              ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 1.5 : ScreenTools.defaultFontPixelHeight
-            height:             width
-            sourceSize.height:  width
-            source:             "/res/XDelete.svg"
-            fillMode:           Image.PreserveAspectFit
-            color:              qgcPal.alertText
-            MouseArea {
-                anchors.fill:       parent
-                anchors.margins:    -ScreenTools.defaultFontPixelHeight
-                onClicked: {
-                    criticalVehicleMessagePopup.close()
-                }
-            }
-        }
+//        //-- Dismiss Vehicle Message
+//        QGCColoredImage {
+//            id:                 criticalVehicleMessageClose
+//            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.5
+//            anchors.top:        parent.top
+//            anchors.right:      parent.right
+//            width:              ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 1.5 : ScreenTools.defaultFontPixelHeight
+//            height:             width
+//            sourceSize.height:  width
+//            source:             "/res/XDelete.svg"
+//            fillMode:           Image.PreserveAspectFit
+//            color:              qgcPal.alertText
+//            MouseArea {
+//                anchors.fill:       parent
+//                anchors.margins:    -ScreenTools.defaultFontPixelHeight
+//                onClicked: {
+//                    criticalVehicleMessagePopup.close()
+//                }
+//            }
+//        }
 
-        //-- More text below indicator
-        QGCColoredImage {
-            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.5
-            anchors.bottom:     parent.bottom
-            anchors.right:      parent.right
-            width:              ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 1.5 : ScreenTools.defaultFontPixelHeight
-            height:             width
-            sourceSize.height:  width
-            source:             "/res/ArrowDown.svg"
-            fillMode:           Image.PreserveAspectFit
-            visible:            criticalVehicleMessageText.lineCount > 5
-            color:              qgcPal.alertText
-            MouseArea {
-                anchors.fill:   parent
-                onClicked: {
-                    criticalVehicleMessageFlick.flick(0,-500)
-                }
-            }
-        }
-    }
+//        //-- More text below indicator
+//        QGCColoredImage {
+//            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.5
+//            anchors.bottom:     parent.bottom
+//            anchors.right:      parent.right
+//            width:              ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 1.5 : ScreenTools.defaultFontPixelHeight
+//            height:             width
+//            sourceSize.height:  width
+//            source:             "/res/ArrowDown.svg"
+//            fillMode:           Image.PreserveAspectFit
+//            visible:            criticalVehicleMessageText.lineCount > 5
+//            color:              qgcPal.alertText
+//            MouseArea {
+//                anchors.fill:   parent
+//                onClicked: {
+//                    criticalVehicleMessageFlick.flick(0,-500)
+//                }
+//            }
+//        }
+//    }
 
     //-------------------------------------------------------------------------
     //-- Indicator Popups
