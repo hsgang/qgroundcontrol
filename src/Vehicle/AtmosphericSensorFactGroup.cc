@@ -25,14 +25,12 @@ struct sensor_data32_Payload {
     float temperatureRaw;
     float humidityRaw;
     float pressureRaw;
-    uint16_t opcPM1p0Raw;
-    uint16_t opcPM2p5Raw;
-    uint16_t opcPM10Raw;
+    float windDirRaw;
+    float windSpdRaw;
     int16_t extValue1Raw;
     int16_t extValue2Raw;
     int16_t extValue3Raw;
     int16_t extValue4Raw;
-    int16_t extValue5Raw;
 };
 
 AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
@@ -97,11 +95,11 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     case MAVLINK_MSG_ID_HYGROMETER_SENSOR:
         _handleHygrometerSensor(message);
         break;
-//#if !defined(NO_ARDUPILOT_DIALECT)
-//    case MAVLINK_MSG_ID_WIND:
-//        _handleWind(message);
-//        break;
-//#endif
+#if !defined(NO_ARDUPILOT_DIALECT)
+    case MAVLINK_MSG_ID_WIND:
+        _handleWind(message);
+        break;
+#endif
 //    case MAVLINK_MSG_ID_ATMOSPHERIC_SENSOR:
 //        _handleAtmosphericSensor(message);
 //        break;
@@ -123,27 +121,23 @@ void AtmosphericSensorFactGroup::_handleData32(mavlink_message_t &message)
     float temperatureRaw  = sP.temperatureRaw;
     float humidityRaw     = sP.humidityRaw;
     float pressureRaw     = sP.pressureRaw;
-    uint16_t opcPM1p0Raw  = sP.opcPM1p0Raw;
-    uint16_t opcPM2p5Raw  = sP.opcPM2p5Raw;
-    uint16_t opcPM10Raw   = sP.opcPM10Raw;
+    float windDirRaw      = sP.windDirRaw;
+    float windSpdRaw      = sP.windSpdRaw;
     int16_t extValue1Raw  = sP.extValue1Raw;
     int16_t extValue2Raw  = sP.extValue2Raw;
     int16_t extValue3Raw  = sP.extValue3Raw;
     int16_t extValue4Raw  = sP.extValue4Raw;
-    int16_t extValue5Raw  = sP.extValue5Raw;
 
     logCount()->setRawValue(logCountRaw);
     temperature()->setRawValue(temperatureRaw);
     humidity()->setRawValue(humidityRaw);
     pressure()->setRawValue(pressureRaw);
-    opcPM1p0()->setRawValue(opcPM1p0Raw);
-    opcPM2p5()->setRawValue(opcPM2p5Raw);
-    opcPM10()->setRawValue(opcPM10Raw);
+    windDir()->setRawValue(windDirRaw);
+    windSpd()->setRawValue(windSpdRaw);
     extValue1()->setRawValue(extValue1Raw);
     extValue2()->setRawValue(extValue2Raw);
     extValue3()->setRawValue(extValue3Raw);
     extValue4()->setRawValue(extValue4Raw);
-    extValue5()->setRawValue(extValue5Raw);
 
     status()->setRawValue(data32.type);
 }
@@ -175,20 +169,9 @@ void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
     if (direction < 0) {
         direction += 360;
     }
-    this->windDir()->setRawValue(direction);
-    windSpd()->setRawValue(wind.speed);
-    windSpdVer()->setRawValue(wind.speed_z);
-    _setTelemetryAvailable(true);
+//    this->windDir()->setRawValue(direction);
+//    windSpd()->setRawValue(wind.speed);
+//    windSpdVer()->setRawValue(wind.speed_z);
+    //_setTelemetryAvailable(true);
 }
 #endif
-
-//void AtmosphericSensorFactGroup::_handleAtmosphericSensor(mavlink_message_t& message)
-//{
-//    mavlink_atmospheric_sensor_t atmospheric;
-//    mavlink_msg_atmospheric_sensor_decode(&message, &atmospheric);
-//    temperature()->setRawValue(atmospheric.temperature);
-//    humidity()->setRawValue(atmospheric.humidity);
-//    pressure()->setRawValue(atmospheric.press_abs);
-//    windDir()->setRawValue(atmospheric.direction);
-//    windSpd()->setRawValue(atmospheric.speed);
-//}
