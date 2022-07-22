@@ -99,7 +99,7 @@ Item {
         anchors.margins:    _toolsMargin
         anchors.right:      parent.right
         anchors.bottom:     parent.bottom
-        anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 3
+        anchors.bottomMargin: _toolsMargin //ScreenTools.defaultFontPixelHeight * 3
 
         function recalcXPosition() {
             // First try centered
@@ -235,7 +235,7 @@ Item {
         height:                 ScreenTools.defaultFontPixelHeight * 2.5
         width:                  height
         radius:                 ScreenTools.defaultFontPixelHeight / 3
-        visible:                true
+        visible:                false
 
         MouseArea {
             anchors.fill: parent
@@ -362,7 +362,7 @@ Item {
         id:                 weatherPopupButton
         anchors.margins:    _toolsMargin
         anchors.right:      parent.right
-        anchors.bottom:     parent.bottom
+        anchors.bottom:     telemetryPanel.top
         color:              "#80000000" //qgcPal.window
         height:             ScreenTools.defaultFontPixelHeight * 2.5
         width:              ScreenTools.defaultFontPixelHeight * 2.5
