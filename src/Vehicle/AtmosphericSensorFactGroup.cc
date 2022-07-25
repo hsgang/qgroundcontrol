@@ -8,14 +8,10 @@ const char* AtmosphericSensorFactGroup::_logCountFactName =     "logCount";
 const char* AtmosphericSensorFactGroup::_temperatureFactName =  "temperature";
 const char* AtmosphericSensorFactGroup::_humidityFactName =     "humidity";
 const char* AtmosphericSensorFactGroup::_pressureFactName =     "pressure";
-const char* AtmosphericSensorFactGroup::_opcPM1p0FactName =     "opcPM1p0";
-const char* AtmosphericSensorFactGroup::_opcPM2p5FactName =     "opcPM2p5";
-const char* AtmosphericSensorFactGroup::_opcPM10FactName =      "opcPM10";
 const char* AtmosphericSensorFactGroup::_extValue1FactName =    "extValue1";
 const char* AtmosphericSensorFactGroup::_extValue2FactName =    "extValue2";
 const char* AtmosphericSensorFactGroup::_extValue3FactName =    "extValue3";
 const char* AtmosphericSensorFactGroup::_extValue4FactName =    "extValue4";
-const char* AtmosphericSensorFactGroup::_extValue5FactName =    "extValue5";
 const char* AtmosphericSensorFactGroup::_windDirFactName =      "windDir";
 const char* AtmosphericSensorFactGroup::_windSpdFactName =      "windSpd";
 const char* AtmosphericSensorFactGroup::_windSpdVerFactName =   "windSpdVer";
@@ -40,14 +36,10 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     , _temperatureFact(0, _temperatureFactName,FactMetaData::valueTypeDouble)
     , _humidityFact   (0, _humidityFactName,   FactMetaData::valueTypeDouble)
     , _pressureFact   (0, _pressureFactName,   FactMetaData::valueTypeDouble)
-    , _opcPM1p0Fact   (0, _opcPM1p0FactName,   FactMetaData::valueTypeUint16)
-    , _opcPM2p5Fact   (0, _opcPM2p5FactName,   FactMetaData::valueTypeUint16)
-    , _opcPM10Fact    (0, _opcPM10FactName,    FactMetaData::valueTypeUint16)
     , _extValue1Fact  (0, _extValue1FactName,  FactMetaData::valueTypeInt16)
     , _extValue2Fact  (0, _extValue2FactName,  FactMetaData::valueTypeInt16)
     , _extValue3Fact  (0, _extValue3FactName,  FactMetaData::valueTypeInt16)
     , _extValue4Fact  (0, _extValue4FactName,  FactMetaData::valueTypeInt16)
-    , _extValue5Fact  (0, _extValue5FactName,  FactMetaData::valueTypeInt16)
     , _windDirFact    (0, _windDirFactName,    FactMetaData::valueTypeDouble)
     , _windSpdFact    (0, _windSpdFactName,    FactMetaData::valueTypeDouble)
     , _windSpdVerFact (0, _windSpdVerFactName, FactMetaData::valueTypeDouble)
@@ -57,14 +49,10 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _addFact(&_temperatureFact,   _temperatureFactName);
     _addFact(&_humidityFact,      _humidityFactName);
     _addFact(&_pressureFact,      _pressureFactName);
-    _addFact(&_opcPM1p0Fact,      _opcPM1p0FactName);
-    _addFact(&_opcPM2p5Fact,      _opcPM2p5FactName);
-    _addFact(&_opcPM10Fact,       _opcPM10FactName);
     _addFact(&_extValue1Fact,     _extValue1FactName);
     _addFact(&_extValue2Fact,     _extValue2FactName);
     _addFact(&_extValue3Fact,     _extValue3FactName);
     _addFact(&_extValue4Fact,     _extValue4FactName);
-    _addFact(&_extValue5Fact,     _extValue5FactName);
     _addFact(&_windDirFact,       _windDirFactName);
     _addFact(&_windSpdFact,       _windSpdFactName);
     _addFact(&_windSpdVerFact,    _windSpdVerFactName);
@@ -73,14 +61,10 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _temperatureFact.setRawValue (qQNaN());
     _humidityFact.setRawValue  (qQNaN());
     _pressureFact.setRawValue  (qQNaN());
-    _opcPM1p0Fact.setRawValue  (qQNaN());
-    _opcPM2p5Fact.setRawValue  (qQNaN());
-    _opcPM10Fact.setRawValue   (qQNaN());
     _extValue1Fact.setRawValue (qQNaN());
     _extValue2Fact.setRawValue (qQNaN());
     _extValue3Fact.setRawValue (qQNaN());
     _extValue4Fact.setRawValue (qQNaN());
-    _extValue5Fact.setRawValue (qQNaN());
     _windDirFact.setRawValue   (qQNaN());
     _windSpdFact.setRawValue   (qQNaN());
     _windSpdVerFact.setRawValue(qQNaN());
@@ -95,14 +79,11 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     case MAVLINK_MSG_ID_HYGROMETER_SENSOR:
         _handleHygrometerSensor(message);
         break;
-#if !defined(NO_ARDUPILOT_DIALECT)
-    case MAVLINK_MSG_ID_WIND:
-        _handleWind(message);
-        break;
-#endif
-//    case MAVLINK_MSG_ID_ATMOSPHERIC_SENSOR:
-//        _handleAtmosphericSensor(message);
+//#if !defined(NO_ARDUPILOT_DIALECT)
+//    case MAVLINK_MSG_ID_WIND:
+//        _handleWind(message);
 //        break;
+//#endif
     default:
         break;
     }
@@ -158,20 +139,20 @@ void AtmosphericSensorFactGroup::_handleHygrometerSensor(mavlink_message_t& mess
     humidity()->setRawValue((hygrometer.humidity) * 0.01);
 }
 
-#if !defined(NO_ARDUPILOT_DIALECT)
-void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
-{
-    mavlink_wind_t wind;
-    mavlink_msg_wind_decode(&message, &wind);
+//#if !defined(NO_ARDUPILOT_DIALECT)
+//void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
+//{
+//    mavlink_wind_t wind;
+//    mavlink_msg_wind_decode(&message, &wind);
 
-    // We don't want negative wind angles
-    float direction = wind.direction;
-    if (direction < 0) {
-        direction += 360;
-    }
+//    // We don't want negative wind angles
+//    float direction = wind.direction;
+//    if (direction < 0) {
+//        direction += 360;
+//    }
 //    this->windDir()->setRawValue(direction);
 //    windSpd()->setRawValue(wind.speed);
 //    windSpdVer()->setRawValue(wind.speed_z);
-    //_setTelemetryAvailable(true);
-}
-#endif
+//    //_setTelemetryAvailable(true);
+//}
+//#endif
