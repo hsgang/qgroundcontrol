@@ -86,26 +86,26 @@ void SiyiSDKManager::receivedLinkStatus(LinkInterface* link, QByteArray ba){
 //            qDebug() << "calc CRC:" << calcCRC;
 
             if(recvCRC == calcCRC){
+                if(static_cast<uint8_t>(b[7]) == 0x44){ //cmd id 0x44 is acquire fpv link status
+                    b.insert(3, 1, (uint8_t)0x00);
+                    b.insert(9, 3, (uint8_t)0x00);
 
-                b.insert(3, 1, (uint8_t)0x00);
-                b.insert(9, 3, (uint8_t)0x00);
-//                _linkStatus = {};
+                    memcpy(&_linkStatus, b, b.size());
 
-                memcpy(&_linkStatus, b, b.size());
+                    _signal = _linkStatus.signal;
+                    _inactiveTime = _linkStatus.inactive_time;
+                    _upstream = _linkStatus.upstream;
+                    _downstream = _linkStatus.downstream;
+                    _txbandwidth = _linkStatus.txbandwidth;
+                    _rxbandwidth = _linkStatus.rxbandwidth;
+                    _rssi = _linkStatus.rssi;
+                    _freq = _linkStatus.freq;
+                    _channel = _linkStatus.channel;
 
-                _signal = _linkStatus.signal;
-                _inactiveTime = _linkStatus.inactive_time;
-                _upstream = _linkStatus.upstream;
-                _downstream = _linkStatus.downstream;
-                _txbandwidth = _linkStatus.txbandwidth;
-                _rxbandwidth = _linkStatus.rxbandwidth;
-                _rssi = _linkStatus.rssi;
-                _freq = _linkStatus.freq;
-                _channel = _linkStatus.channel;
+                    emit siyiStatusChanged();
 
-                emit siyiStatusChanged();
-
-                b.clear();
+                    b.clear();
+                }
             }
         }
     }

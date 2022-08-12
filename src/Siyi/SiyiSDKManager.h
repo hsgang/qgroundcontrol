@@ -33,6 +33,7 @@ public:
     SiyiSDKManager(QGCApplication* app, QGCToolbox* toolbox);
     ~SiyiSDKManager();
 
+    Q_PROPERTY(int isConnected  READ isConnected    NOTIFY siyiStatusChanged)
     Q_PROPERTY(int signal       READ signal         NOTIFY siyiStatusChanged)
     Q_PROPERTY(int inactiveTime READ inactiveTime   NOTIFY siyiStatusChanged)
     Q_PROPERTY(int upstream     READ upstream       NOTIFY siyiStatusChanged)
@@ -43,6 +44,7 @@ public:
     Q_PROPERTY(int freq         READ freq           NOTIFY siyiStatusChanged)
     Q_PROPERTY(int channel      READ channel        NOTIFY siyiStatusChanged)
 
+    bool isConnected () { return _isConnected; }
     int signal () { return _signal; }
     int inactiveTime () {return _inactiveTime; }
     int upstream () { return _upstream; }
@@ -91,6 +93,7 @@ private:
     };
     LinkStatus_t _linkStatus;
 
+    bool _isConnected = false;
     int _signal = 0;
     int _inactiveTime = 0;
     int _upstream = 0;
