@@ -33,7 +33,7 @@ Rectangle {
     property real _columnSpacing:       ScreenTools.defaultFontPixelHeight * 0.25
     property bool _uploadedSelected:    false
     property bool _showMavlinkLog:      QGroundControl.corePlugin.options.showMavlinkLogOptions
-    property bool _showAPMStreamRates:  QGroundControl.apmFirmwareSupported && QGroundControl.settingsManager.apmMavlinkStreamRateSettings.visible
+    property bool _showAPMStreamRates:  QGroundControl.apmFirmwareSupported && QGroundControl.settingsManager.apmMavlinkStreamRateSettings.visible && _isAPM
     property var  _activeVehicle:       QGroundControl.multiVehicleManager.activeVehicle
     property bool _isPX4:               _activeVehicle ? _activeVehicle.px4Firmware : false
     property bool _isAPM:               _activeVehicle ? _activeVehicle.apmFirmware : false

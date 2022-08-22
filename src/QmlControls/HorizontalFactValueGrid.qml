@@ -121,9 +121,8 @@ T.HorizontalFactValueGrid {
                     Layout.preferredHeight: ScreenTools.minTouchPixels
                     Layout.preferredWidth:  parent.width
                     text:                   qsTr("+")
-                    onClicked:              if(_root.width + (2 * (_rowButtonWidth + _margins)) < screen.width) {
-                                                appendColumn()
-                                            }
+                    enabled:                (_root.width + (2 * (_rowButtonWidth + _margins))) < screen.width
+                    onClicked:              appendColumn()
                 }
 
                 QGCButton {
@@ -148,9 +147,8 @@ T.HorizontalFactValueGrid {
                 Layout.fillWidth:       true
                 Layout.preferredHeight: parent.height
                 text:                   qsTr("+")
-                onClicked:              if(_root.height + (2 * (_rowButtonHeight + _margins)) < (screen.height - ScreenTools.toolbarHeight)) {
-                                            appendRow()
-                                        }
+                enabled:                (_root.height + (2 * (_rowButtonHeight + _margins))) < (screen.height - ScreenTools.toolbarHeight)
+                onClicked:              appendRow()
             }
 
             QGCButton {
