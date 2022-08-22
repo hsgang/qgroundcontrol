@@ -25,6 +25,10 @@ Item {
     property real _headingToNextWP:     vehicle ? vehicle.headingToNextWP.rawValue : 0
     property real _courseOverGround:    _activeVehicle ? _activeVehicle.gps.courseOverGround.rawValue : 0
 
+    property real _defaultSize: ScreenTools.defaultFontPixelHeight * (10)
+    property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
+    property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
+
     width:  size
     height: size
 
@@ -56,6 +60,89 @@ Item {
     readonly property bool _showAdditionalIndicatorsCompass:     QGroundControl.settingsManager.flyViewSettings.showAdditionalIndicatorsCompass.value && !usedByMultipleVehicleList
     readonly property bool _lockNoseUpCompass:        QGroundControl.settingsManager.flyViewSettings.lockNoseUpCompass.value
 
+    Image {
+        id:                     homePointer
+        width:                  size * 0.1
+        source:                 isHeadingHomeOK()  ? "/qmlimages/Home.svg" : ""
+        mipmap:                 true
+        fillMode:               Image.PreserveAspectFit
+        anchors.centerIn:   	parent
+        sourceSize.width:       width
+        layer {
+            enabled: true
+            effect: ColorOverlay {
+                color: qgcPal.alertBackground
+            }
+        }
+
+        transform: Translate {
+            property double _angle: isNoseUpLocked()?-_heading+_headingToHome:_headingToHome
+            x: size/2.2 * Math.sin((_angle)*(3.14/180))
+            y: - size/2.2 * Math.cos((_angle)*(3.14/180))
+        }
+    }
+
+    Image {
+            id:                 vehicleHeadingDial
+            anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
+            source:             "/qmlimages/vehicleArrowOpaque.svg"
+            mipmap:             true
+            width:              parent.width * 0.2
+            sourceSize.width:   width
+            antialiasing:       true
+            fillMode:           Image.PreserveAspectFit
+//            layer {
+//                enabled: true
+//                effect: ColorOverlay {
+//                    color: qgcPal.text
+//                }
+//            }
+
+            transform: Rotation {
+                origin.x:       vehicleHeadingDial.width / 2
+                origin.y:       vehicleHeadingDial.height / 2
+                angle:          isNoseUpLocked() ? 0 : _heading
+            }
+    }
+
+    QGCColoredImage {
+        id:                 compassDial
+        source:             "/qmlimages/compassInstrumentDial.svg"
+        mipmap:             true
+        fillMode:           Image.PreserveAspectFit
+        anchors.fill:       parent
+        sourceSize.height:  parent.height
+        color:              qgcPal.text
+        transform: Rotation {
+            origin.x:       compassDial.width  / 2
+            origin.y:       compassDial.height / 2
+            angle:          isNoseUpLocked()?-_heading:0
+        }
+    }
+
+    Rectangle {
+        anchors.horizontalCenter: vehicleHeadingDial.horizontalCenter
+        anchors.top:   vehicleHeadingDial.bottom
+        anchors.topMargin:  size * 0.05
+        width:              size * 0.30
+        height:             size * 0.12
+        border.color:       qgcPal.text
+        color:              "transparent"
+        opacity:            0.65
+        radius:             height * 0.1
+
+        QGCLabel {
+            text:               _headingString3
+            font.family:        vehicle ? ScreenTools.demiboldFontFamily : ScreenTools.normalFontFamily
+            font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
+            color:              qgcPal.text
+            anchors.centerIn:   parent
+
+            property string _headingString: vehicle ? _heading.toFixed(0) : "OFF"
+            property string _headingString2: _headingString.length === 1 ? "0" + _headingString : _headingString
+            property string _headingString3: _headingString2.length === 2 ? "0" + _headingString2 : _headingString2
+        }
+    }
 //    Image {
 //        id: rollDial
 //        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
@@ -107,50 +194,6 @@ Item {
 //        }
 //    }
 
-    Image {
-        id:                     homePointer
-        width:                  size * 0.1
-        source:                 isHeadingHomeOK()  ? "/qmlimages/Home.svg" : ""
-        mipmap:                 true
-        fillMode:               Image.PreserveAspectFit
-        anchors.centerIn:   	parent
-        sourceSize.width:       width
-
-        ColorOverlay {
-            anchors.fill:       homePointer
-            source:             homePointer
-            color:              qgcPal.alertBackground
-        }
-
-        transform: Translate {
-            property double _angle: isNoseUpLocked()?-_heading+_headingToHome:_headingToHome
-            x: size/1.9 * Math.sin((_angle)*(3.14/180))
-            y: - size/1.9 * Math.cos((_angle)*(3.14/180))
-        }
-    }
-
-    Image {
-        id:                 vehicleHeadingDial
-        anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-        source:             "/qmlimages/vehicleArrowOpaque.svg"
-        mipmap:             true
-        width:              parent.width * 0.2
-        sourceSize.width:   width
-        //fillMode:           Image.PreserveAspectFit
-
-        ColorOverlay {
-            anchors.fill:       vehicleHeadingDial
-            source:             vehicleHeadingDial
-            color:              qgcPal.text
-        }
-
-        transform: Rotation {
-            origin.x:       vehicleHeadingDial.width / 2
-            origin.y:       vehicleHeadingDial.height / 2
-            angle:          isNoseUpLocked() ? 0 : _heading
-        }
-    }
-
 //    QGCPitchIndicator {
 //        id:                 pitchIndicator
 //        anchors.verticalCenter: parent.verticalCenter
@@ -161,50 +204,36 @@ Item {
 //        size:               ScreenTools.defaultFontPixelHeight * (5)
 //    }
 
-    QGCColoredImage {
-        id:                 compassDial
-        source:             "/qmlimages/compassInstrumentDial.svg"
-        mipmap:             true
-        fillMode:           Image.PreserveAspectFit
-        anchors.fill:       parent
-        sourceSize.height:  parent.height
-        color:              qgcPal.text
-        transform: Rotation {
-            origin.x:       compassDial.width  / 2
-            origin.y:       compassDial.height / 2
-            angle:          isNoseUpLocked()?-_heading:0
-        }
-    }
+//    Image {
+//        id:                 cOGPointer
+//        source:             isCOGAngleOK() ? "/qmlimages/cOGPointer.svg" : ""
+//        mipmap:             true
+//        fillMode:           Image.PreserveAspectFit
+//        anchors.fill:       parent
+//        sourceSize.height:  parent.height
 
-    Image {
-        id:                 cOGPointer
-        source:             isCOGAngleOK() ? "/qmlimages/cOGPointer.svg" : ""
-        mipmap:             true
-        fillMode:           Image.PreserveAspectFit
-        anchors.fill:       parent
-        sourceSize.height:  parent.height
+//        transform: Rotation {
+//            property var _angle:isNoseUpLocked() ? _courseOverGround-_heading : _courseOverGround
+//            origin.x:       cOGPointer.width  / 2
+//            origin.y:       cOGPointer.height / 2
+//            angle:         _angle
+//        }
+//    }
 
-        transform: Rotation {
-            property var _angle:isNoseUpLocked() ? _courseOverGround-_heading : _courseOverGround
-            origin.x:       cOGPointer.width  / 2
-            origin.y:       cOGPointer.height / 2
-            angle:         _angle
-        }
-    }
+//    Image {
+//        id:                 nextWPPointer
+//        source:             isHeadingToNextWPOK() ? "/qmlimages/compassDottedLine.svg":""
+//        mipmap:             true
+//        fillMode:           Image.PreserveAspectFit
+//        anchors.fill:       parent
+//        sourceSize.height:  parent.height
 
-    Image {
-        id:                 nextWPPointer
-        source:             isHeadingToNextWPOK() ? "/qmlimages/compassDottedLine.svg":""
-        mipmap:             true
-        fillMode:           Image.PreserveAspectFit
-        anchors.fill:       parent
-        sourceSize.height:  parent.height
+//        transform: Rotation {
+//            property var _angle: isNoseUpLocked()?_headingToNextWP-_heading:_headingToNextWP
+//            origin.x:       cOGPointer.width  / 2
+//            origin.y:       cOGPointer.height / 2
+//            angle:         _angle
+//        }
+//    }
 
-        transform: Rotation {
-            property var _angle: isNoseUpLocked()?_headingToNextWP-_heading:_headingToNextWP
-            origin.x:       cOGPointer.width  / 2
-            origin.y:       cOGPointer.height / 2
-            angle:         _angle
-        }
-    }
 }

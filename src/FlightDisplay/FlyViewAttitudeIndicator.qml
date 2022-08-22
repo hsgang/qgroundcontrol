@@ -387,47 +387,23 @@ Rectangle {
                 }
             }
 
-            Rectangle{
-                id       : gndSpdLeveler
-                height   : 2
-                width    : ScreenTools.defaultFontPixelWidth
-                //anchors.horizontalCenter: parent.horizontalCenter
-                anchors.left: parent.right
-                color    : "transparent"
-                y        : (_vehicleGroundSpeed <= gndSpdBarRect.maxValue && _vehicleGroundSpeed > 0) ? gndSpdBarRect.height - (gndSpdBarRect.height * (_vehicleGroundSpeed / gndSpdBarRect.maxValue)) : gndSpdBarRect.height
+            Image {
+                id:                 gndSpdlevelerArrow
+                source:             "/qmlimages/LevelerArrow.svg"
+                mipmap:             true
+                fillMode:           Image.PreserveAspectFit
+                anchors.right:      parent.left
+                sourceSize.height:  ScreenTools.defaultFontPixelWidth * 2
+                y: {(_vehicleGroundSpeed <= gndSpdBarRect.maxValue && _vehicleGroundSpeed > 0) ?
+                                gndSpdBarRect.height - (gndSpdBarRect.height * (_vehicleGroundSpeed / gndSpdBarRect.maxValue)) - (height/2) :
+                                 gndSpdBarRect.height - (height/2)}
 
-                Rectangle{
-                    id: gndSpdIndTAngle
-                    width: ScreenTools.defaultFontPixelWidth * 1.5
-                    height: width
-                    color: "transparent"
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.left
-
-                    Canvas{
-                        anchors.fill: parent
-
-                        onPaint: {
-                            var context = getContext("2d");
-
-                            context.beginPath();
-                            context.moveTo(0,0);
-                            context.lineTo(gndSpdIndTAngle.height, gndSpdIndTAngle.height/2);
-                            context.lineTo(0, gndSpdIndTAngle.height);
-                            context.closePath();
-                            context.fillStyle = qgcPal.colorGreen;
-                            context.fill();
-                        }
-                    }
+                transform: Rotation {
+//                    property var _angle:isNoseUpLocked() ? _courseOverGround-_heading : _courseOverGround
+                    origin.x:       gndSpdlevelerArrow.width  / 2
+                    origin.y:       gndSpdlevelerArrow.height / 2
+                    angle:         180
                 }
-
-//                Glow {
-//                    anchors.fill: altLevelerText
-//                    radius: 2
-//                    samples: 5
-//                    color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-//                    source: altLevelerText
-//                }
             }
         }
 
@@ -474,39 +450,16 @@ Rectangle {
                 }
             }
 
-            Rectangle{
-                id       : climbSpdLeveler
-                height   : 2
-                width    : ScreenTools.defaultFontPixelWidth
-                //anchors.horizontalCenter: parent.horizontalCenter
-                anchors.right: parent.left
-                color    : "transparent"
-                y        : (Math.abs(_vehicleVerticalSpeed) <= climbSpdBarRect.maxValue) ? (climbSpdBarRect.height/2) - ((climbSpdBarRect.height/2) * (_vehicleVerticalSpeed / climbSpdBarRect.maxValue)) : (climbSpdBarRect.height/2)
-
-                Rectangle{
-                    id: climbSpdIndTAngle
-                    width: ScreenTools.defaultFontPixelWidth * 1.5
-                    height: width
-                    color: "transparent"
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.left: parent.right
-
-                    Canvas{
-                        anchors.fill: parent
-
-                        onPaint: {
-                            var context = getContext("2d");
-
-                            context.beginPath();
-                            context.moveTo(climbSpdIndTAngle.height,0);
-                            context.lineTo(0, climbSpdIndTAngle.height/2);
-                            context.lineTo(climbSpdIndTAngle.height, climbSpdIndTAngle.height);
-                            context.closePath();
-                            context.fillStyle = qgcPal.colorGreen;
-                            context.fill();
-                        }
-                    }
-                }
+            Image {
+                id:                 climbSpdlevelerArrow
+                source:             "/qmlimages/LevelerArrow.svg"
+                mipmap:             true
+                fillMode:           Image.PreserveAspectFit
+                anchors.left:       parent.right
+                sourceSize.height:  ScreenTools.defaultFontPixelWidth * 2
+                y: {(Math.abs(_vehicleVerticalSpeed) <= climbSpdBarRect.maxValue) ?
+                                (climbSpdBarRect.height/2) - ((climbSpdBarRect.height/2) * (_vehicleVerticalSpeed / climbSpdBarRect.maxValue)) - (height/2) :
+                                (climbSpdBarRect.height/2)}
             }
         }
     }
