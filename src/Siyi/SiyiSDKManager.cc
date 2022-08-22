@@ -69,7 +69,9 @@ void SiyiSDKManager::setToolbox(QGCToolbox *toolbox)
 
 void SiyiSDKManager::receivedLinkStatus(LinkInterface* link, QByteArray ba){
 
-    QByteArray b = ba;
+    QByteArray b;
+    b.resize(128);
+    b = ba;
 
     uint16_t stx = (static_cast<uint8_t>(b[1]) << 8) + static_cast<uint8_t>(b[0]);
     uint16_t len = 0;
@@ -92,6 +94,7 @@ void SiyiSDKManager::receivedLinkStatus(LinkInterface* link, QByteArray ba){
 
                     memcpy(&_linkStatus, b, b.size());
 
+                    _isConnected = true;
                     _signal = _linkStatus.signal;
                     _inactiveTime = _linkStatus.inactive_time;
                     _upstream = _linkStatus.upstream;
