@@ -18188,22 +18188,22 @@ Confirm change?</source>
     <name>AtmosphericValueMapItem</name>
     <message>
       <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="60"/>
-      <source>Alt:</source>
+      <source>ALT:</source>
       <translation>고도:</translation>
     </message>
     <message>
       <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="63"/>
-      <source>Temp:</source>
+      <source>TMP:</source>
       <translation>기온:</translation>
     </message>
     <message>
       <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="66"/>
-      <source>Humi:</source>
+      <source>HMD:</source>
       <translation>습도:</translation>
     </message>
     <message>
       <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="69"/>
-      <source>Press:</source>
+      <source>PRS:</source>
       <translation>기압:</translation>
     </message>
     <message>

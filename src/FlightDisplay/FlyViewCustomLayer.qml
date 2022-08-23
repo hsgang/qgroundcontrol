@@ -37,6 +37,7 @@ Item {
     property var    totalToolInsets:        _toolInsets // These are the insets for your custom overlay additions
     property var    mapControl
     property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 30
+    property real   _idealWidth:            (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin
 
     // Property of Tools
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
@@ -190,9 +191,11 @@ Item {
     FlyViewAtmosphericSensorView{
         id:                         atmosphericSensorView
         anchors.margins:            _toolsMargin
-        anchors.bottom:             parent.bottom
-        anchors.bottomMargin:       ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 8 : ScreenTools.defaultFontPixelHeight * 11
-        anchors.horizontalCenter:   parent.horizontalCenter
+        anchors.top:                parent.top
+        anchors.topMargin:          _toolsMargin//ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 8 : ScreenTools.defaultFontPixelHeight * 11
+        anchors.left:               parent.left
+        anchors.leftMargin:         _idealWidth * 1.4
+        //anchors.horizontalCenter:   parent.horizontalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     }
 

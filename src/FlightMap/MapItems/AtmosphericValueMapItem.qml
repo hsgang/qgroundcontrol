@@ -57,22 +57,22 @@ MapQuickItem {
                 anchors.verticalCenter:     atmosphericValueBar.verticalCenter
                 columns: 3
 
-                QGCLabel { text: qsTr("Alt:") }
+                QGCLabel { text: qsTr("ALT:") }
                 QGCLabel { text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) : qsTr("--.-", "No data to display")
                            Layout.alignment: Qt.AlignRight
                            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
                 QGCLabel { text: QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString }
-                QGCLabel { text: qsTr("Temp:") }
+                QGCLabel { text: qsTr("TMP:") }
                 QGCLabel { text: _temperatureValue ? _temperatureValue : qsTr("--.-", "No data to display")
                            Layout.alignment: Qt.AlignRight
                            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
                 QGCLabel { text: "℃" }
-                QGCLabel { text: qsTr("Humi:") }
+                QGCLabel { text: qsTr("HMD:") }
                 QGCLabel { text: _humidityValue ? _humidityValue : qsTr("--.-", "No data to display")
                            Layout.alignment: Qt.AlignRight
                            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
                 QGCLabel { text: "Rh%" }
-                QGCLabel { text: qsTr("Press:") }
+                QGCLabel { text: qsTr("PRS:") }
                 QGCLabel { text: _pressureValue ? _pressureValue : qsTr("--.-", "No data to display")
                            Layout.alignment: Qt.AlignRight
                            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
