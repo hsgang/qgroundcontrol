@@ -22,7 +22,6 @@
 
 #include "SiyiSDKManager.h"
 #include "UASInterface.h"
-#include "UASInterface.h"
 #include "UAS.h"
 #include "LinkManager.h"
 #include "QGC.h"
@@ -35,7 +34,6 @@ SiyiSDKManager::SiyiSDKManager(QGCApplication* app, QGCToolbox* toolbox)
 {
     connect(&_sendCustomMessageTimer, &QTimer::timeout, this, &SiyiSDKManager::requestLinkStatus);
     _sendCustomMessageTimer.start(5000);
-
     memset(&_linkStatus, 0, sizeof(_linkStatus));
 }
 
@@ -63,15 +61,10 @@ void SiyiSDKManager::disconnectedLink()
 void SiyiSDKManager::setToolbox(QGCToolbox *toolbox)
 {
    QGCTool::setToolbox(toolbox);
-
    _linkMgr = _toolbox->linkManager();
 }
 
-void SiyiSDKManager::receivedLinkStatus(LinkInterface* link, QByteArray ba){
-
-    QByteArray b;
-    b.resize(128);
-    b = ba;
+void SiyiSDKManager::receivedLinkStatus(LinkInterface* link, QByteArray b){
 
     uint16_t stx = (static_cast<uint8_t>(b[1]) << 8) + static_cast<uint8_t>(b[0]);
     uint16_t len = 0;
@@ -83,9 +76,6 @@ void SiyiSDKManager::receivedLinkStatus(LinkInterface* link, QByteArray ba){
             uint16_t recvCRC = (static_cast<uint8_t>(b[len-1]) << 8) + static_cast<uint8_t>(b[len-2]);
             uint16_t calcCRC = crcSiyiSDK(b, b.size()-2);
 //            qDebug() << "recieved siyi SDK:" << b.toHex();
-//            qDebug() << "stx:" << stx;
-//            qDebug() << "recv CRC:" << recvCRC;
-//            qDebug() << "calc CRC:" << calcCRC;
 
             if(recvCRC == calcCRC){
                 if(static_cast<uint8_t>(b[7]) == 0x44){ //cmd id 0x44 is acquire fpv link status
@@ -132,17 +122,15 @@ uint16_t SiyiSDKManager::crcSiyiSDK(const char *buf, int len){
 void SiyiSDKManager::requestLinkStatus()
 {
     QList<SharedLinkInterfacePtr> links = _linkMgr->links();
-    if (links.size() <= 0) {
-        //qDebug()<< "sendCustomMessage: link gone!";
-        return;
-    }
-    uint8_t buffer[10] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x44,0x05,0xdc};
-    int len = sizeof(buffer);
-    for(int i = 0; i < links.size(); i++){
-        links[i] -> writeBytesThreadSafe((const char*)buffer, len);
-    }
-    //qDebug()<< "requestLinkStatus to SiyiSDK";
+    if (links.size() > 0) {
+        uint8_t buffer[10] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x44,0x05,0xdc};
+        int len = sizeof(buffer);
+        for(int i = 0; i < links.size(); i++){
+            links[i] -> writeBytesThreadSafe((const char*)buffer, len);
+        }
+        //qDebug()<< "requestLinkStatus to SiyiSDK";
 
-    _sendCustomMessageTimer.stop();
-    _sendCustomMessageTimer.start(500);
+        _sendCustomMessageTimer.stop();
+        _sendCustomMessageTimer.start(500);
+    }
 }
