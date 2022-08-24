@@ -7378,7 +7378,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/ui/preferences/GeneralSettings.qml" line="169"/>
       <source>Lock Compass Nose-Up</source>
-      <translation type="unfinished">Lock Compass Nose-Up</translation>
+      <translation type="unfinished">나침반 방향 고정</translation>
     </message>
     <message>
       <location filename="../src/ui/preferences/GeneralSettings.qml" line="216"/>
@@ -7413,7 +7413,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/ui/preferences/GeneralSettings.qml" line="356"/>
       <source>Plan View</source>
-      <translation>계획 보기</translation>
+      <translation>자동 경로</translation>
     </message>
     <message>
       <location filename="../src/ui/preferences/GeneralSettings.qml" line="378"/>
@@ -9564,7 +9564,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/ui/MainRootWindow.qml" line="399"/>
       <source>Plan View</source>
-      <translation>계획 보기</translation>
+      <translation>자동 경로</translation>
     </message>
     <message>
       <location filename="../src/ui/MainRootWindow.qml" line="288"/>
