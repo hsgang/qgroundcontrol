@@ -18,6 +18,7 @@ import QGroundControl.ScreenTools   1.0
 import QGroundControl.Vehicle       1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.MultiVehicleManager 1.0
+import QGroundControl.Palette       1.0
 
 /// Marker for displaying a vehicle location on the map
 MapQuickItem {
@@ -41,52 +42,56 @@ MapQuickItem {
 
         Rectangle {
             id:         atmosphericValueBar
-            height:     atmosphericValueGrid.height + ScreenTools.defaultFontPixelHeight * 0.2
-            width:      atmosphericValueGrid.width + ScreenTools.defaultFontPixelWidth * 2
+            height:     atmosphericValueColumn.height + ScreenTools.defaultFontPixelHeight * 0.2
+            width:      atmosphericValueColumn.width + ScreenTools.defaultFontPixelWidth * 2
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.top
             anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 3
             color:      "#80000000"
             radius:     _margins
+            border.width: 1
+            border.color: qgcPal.text
 
-            GridLayout {
-                id:                         atmosphericValueGrid
-                anchors.margins:            ScreenTools.defaultFontPixelHeight
-                rowSpacing:                 ScreenTools.defaultFontPixelWidth
-                anchors.horizontalCenter:   atmosphericValueBar.horizontalCenter
-                anchors.verticalCenter:     atmosphericValueBar.verticalCenter
-                columns: 3
+            Column{
+                id:                 atmosphericValueColumn
+                spacing:            ScreenTools.defaultFontPixelWidth
+                width:              Math.max(atmosphericSensorViewLabel.width, atmosphericValueGrid.width)
+                anchors.margins:    ScreenTools.defaultFontPixelHeight
+                anchors.centerIn:   parent
 
-                QGCLabel { text: qsTr("ALT:") }
-                QGCLabel { text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) : qsTr("--.-", "No data to display")
-                           Layout.alignment: Qt.AlignRight
-                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
-                QGCLabel { text: QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString }
-                QGCLabel { text: qsTr("TMP:") }
-                QGCLabel { text: _temperatureValue ? _temperatureValue : qsTr("--.-", "No data to display")
-                           Layout.alignment: Qt.AlignRight
-                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
-                QGCLabel { text: "℃" }
-                QGCLabel { text: qsTr("HMD:") }
-                QGCLabel { text: _humidityValue ? _humidityValue : qsTr("--.-", "No data to display")
-                           Layout.alignment: Qt.AlignRight
-                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
-                QGCLabel { text: "Rh%" }
-                QGCLabel { text: qsTr("PRS:") }
-                QGCLabel { text: _pressureValue ? _pressureValue : qsTr("--.-", "No data to display")
-                           Layout.alignment: Qt.AlignRight
-                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
-                QGCLabel { text: "hPa" }
-                QGCLabel { text: qsTr("W/D:") }
-                QGCLabel { text: _windDirValue ? _windDirValue : qsTr("--.-", "No data to display")
-                           Layout.alignment: Qt.AlignRight
-                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
-                QGCLabel { text: "deg" }
-                QGCLabel { text: qsTr("W/S:") }
-                QGCLabel { text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) : qsTr("--.-", "No data to display")
-                           Layout.alignment: Qt.AlignRight
-                           Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6}
-                QGCLabel { text: QGroundControl.unitsConversion.appSettingsSpeedUnitsString }
+                QGCLabel {
+                    id:     atmosphericSensorViewLabel
+                    text:   qsTr("Ext. Sensors")
+                    font.family:    ScreenTools.demiboldFontFamily
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                GridLayout {
+                    id:                         atmosphericValueGrid
+                    anchors.margins:            ScreenTools.defaultFontPixelHeight
+                    columnSpacing:              ScreenTools.defaultFontPixelWidth
+                    anchors.horizontalCenter:   parent.horizontalCenter
+                    //anchors.verticalCenter:     atmosphericValueColumn.verticalCenter
+                    columns: 2
+
+                    QGCLabel { text: qsTr("ALT"); opacity: 0.7}
+                    QGCLabel { text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"}
+
+                    QGCLabel { text: qsTr("TMP"); opacity: 0.7}
+                    QGCLabel { text: _temperatureValue ? _temperatureValue +" ℃" : "No data"}
+
+                    QGCLabel { text: qsTr("HMD"); opacity: 0.7}
+                    QGCLabel { text: _humidityValue ? _humidityValue + " Rh%" : "No data"}
+
+                    QGCLabel { text: qsTr("PRS"); opacity: 0.7}
+                    QGCLabel { text: _pressureValue ? _pressureValue + " hPa" : "No data"}
+
+                    QGCLabel { text: qsTr("W/D"); opacity: 0.7}
+                    QGCLabel { text: _windDirValue ? _windDirValue + " deg" : "No data"}
+
+                    QGCLabel { text: qsTr("W/S"); opacity: 0.7}
+                    QGCLabel { text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " "+QGroundControl.unitsConversion.appSettingsSpeedUnitsString : "No data"}
+                }
             }
         }
     }
