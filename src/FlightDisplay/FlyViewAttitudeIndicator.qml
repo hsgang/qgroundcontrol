@@ -79,7 +79,7 @@ Rectangle {
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
-            color:                      "transparent" //"#80000000"
+            color:                      "#80000000"
 //            border.color:               Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
 //            border.width:               1
             radius:                     _toolsMargin
@@ -211,7 +211,7 @@ Rectangle {
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
-            color:                      "transparent" //"#80000000"
+            color:                      "#80000000"
 //            border.color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
 //            border.width: 1
             radius:                     _toolsMargin
