@@ -1320,13 +1320,13 @@
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="424"/>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="424"/>
       <source>Current pin:</source>
-      <translation>전류 핀:</translation>
+      <translation>전류 측정 포트:</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="439"/>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="439"/>
       <source>Voltage pin:</source>
-      <translation>전압 pin:</translation>
+      <translation>전압 측정 포트:</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="454"/>
@@ -1334,7 +1334,7 @@
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="454"/>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="579"/>
       <source>Voltage multiplier:</source>
-      <translation>전압 배율:</translation>
+      <translation>전압 계수:</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="465"/>
@@ -1348,7 +1348,7 @@
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="471"/>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="471"/>
       <source>Calculate Voltage Multiplier</source>
-      <translation>전압 배율 계산하기</translation>
+      <translation>전압 계수 계산하기</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="481"/>
@@ -1362,13 +1362,13 @@
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="486"/>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="641"/>
       <source>Amps per volt:</source>
-      <translation>볼트 당 암페어:</translation>
+      <translation>전류 계수:</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="503"/>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="503"/>
       <source>Calculate Amps per Volt</source>
-      <translation>볼트 당 암페어 계산</translation>
+      <translation>전류 계수 계산</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="512"/>
@@ -1380,7 +1380,7 @@
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="517"/>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="517"/>
       <source>Amps Offset:</source>
-      <translation type="unfinished">Amps Offset:</translation>
+      <translation type="unfinished">전류 옵셋:</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="532"/>
@@ -4393,7 +4393,7 @@ Click Ok to start the auto-tuning process.
       <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="170"/>
       <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="171"/>
       <source>Remaining</source>
-      <translation>잔여용량</translation>
+      <translation>잔여율</translation>
     </message>
     <message>
       <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="172"/>
@@ -4403,7 +4403,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="173"/>
       <source>Consumed</source>
-      <translation>소비</translation>
+      <translation>소비용량</translation>
     </message>
     <message>
       <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="174"/>
@@ -13341,7 +13341,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="255"/>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="270"/>
       <source>Source</source>
-      <translation>원본</translation>
+      <translation>전원 모듈</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="433"/>
@@ -13413,7 +13413,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="311"/>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="311"/>
       <source>Full Voltage (per cell)</source>
-      <translation>전체 전압 (셀 당)</translation>
+      <translation>최대 전압 (셀 당)</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="298"/>
@@ -13425,7 +13425,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="301"/>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="301"/>
       <source>Empty Voltage (per cell)</source>
-      <translation>방전 전압 (셀 당)</translation>
+      <translation>최소 전압 (셀 당)</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="307"/>
@@ -13434,16 +13434,22 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
       <translation>최소 배터리 용량:</translation>
     </message>
     <message>
-      <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="320"/>
-      <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="320"/>
+      <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="321"/>
+      <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="321"/>
+      <source>Capacity</source>
+      <translation>용량</translation>
+    </message>
+    <message>
+      <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="331"/>
+      <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="331"/>
       <source>Voltage divider</source>
-      <translation>전압 분배기</translation>
+      <translation>전압 계수</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="415"/>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="415"/>
       <source>Calculate Voltage Divider</source>
-      <translation>전압 분배기 계산</translation>
+      <translation>전압 계수 계산</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="339"/>
@@ -13463,13 +13469,13 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="344"/>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="344"/>
       <source>Amps per volt</source>
-      <translation>볼트 당 암페어</translation>
+      <translation>전류 계수</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="472"/>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="472"/>
       <source>Calculate Amps per Volt</source>
-      <translation>볼트 당 암페어 계산</translation>
+      <translation>전류 계수 계산</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="363"/>
@@ -13481,7 +13487,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="110"/>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="110"/>
       <source>ESC PWM Minimum and Maximum Calibration</source>
-      <translation>ESC PWM 최소, 최대값 캘리브레이션</translation>
+      <translation>ESC 캘리브레이션</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="120"/>
