@@ -124,7 +124,7 @@ Item {
         anchors.horizontalCenter: vehicleHeadingDial.horizontalCenter
         anchors.top:   vehicleHeadingDial.bottom
         anchors.topMargin:  size * 0.05
-        width:              size * 0.30
+        width:              size * 0.20
         height:             size * 0.12
         border.color:       qgcPal.text
         color:              "transparent"
