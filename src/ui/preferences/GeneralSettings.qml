@@ -170,22 +170,22 @@ Rectangle {
 //                                property Fact _showLogReplayStatusBar: QGroundControl.settingsManager.flyViewSettings.showLogReplayStatusBar
 //                            }
 
-//                            RowLayout {
-//                                spacing: ScreenTools.defaultFontPixelWidth
+                            RowLayout {
+                                spacing: ScreenTools.defaultFontPixelWidth
 
-//                                FactCheckBox {
-//                                    text:       qsTr("Virtual Joystick")
-//                                    visible:    _virtualJoystick.visible
-//                                    fact:       _virtualJoystick
-//                                }
+                                FactCheckBox {
+                                    text:       qsTr("Virtual Joystick")
+                                    visible:    _virtualJoystick.visible
+                                    fact:       _virtualJoystick
+                                }
 
-//                                FactCheckBox {
-//                                    text:       qsTr("Auto-Center Throttle")
-//                                    visible:    _virtualJoystickAutoCenterThrottle.visible
-//                                    enabled:    _virtualJoystick.rawValue
-//                                    fact:       _virtualJoystickAutoCenterThrottle
-//                                }
-//                            }
+                                FactCheckBox {
+                                    text:       qsTr("Auto-Center Throttle")
+                                    visible:    _virtualJoystickAutoCenterThrottle.visible
+                                    enabled:    _virtualJoystick.rawValue
+                                    fact:       _virtualJoystickAutoCenterThrottle
+                                }
+                            }
 
 //                            FactCheckBox {
 //                                text:       qsTr("Use Vertical Instrument Panel")
