@@ -48,6 +48,7 @@
 #include "ImageProtocolManager.h"
 #include "AtmosphericSensorFactGroup.h"
 #include "VehicleLandingTargetFactGroup.h"
+#include "HealthAndArmingCheckReport.h"
 
 class Actuators;
 class EventHandler;
@@ -326,6 +327,7 @@ public:
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
     Q_PROPERTY(FactGroup*           landingTarget   READ landingTargetFactGroup     CONSTANT)
+    Q_PROPERTY(HealthAndArmingCheckReport* healthAndArmingCheckReport READ healthAndArmingCheckReport CONSTANT)
 
     Q_PROPERTY(int      firmwareMajorVersion        READ firmwareMajorVersion       NOTIFY firmwareVersionChanged)
     Q_PROPERTY(int      firmwareMinorVersion        READ firmwareMinorVersion       NOTIFY firmwareVersionChanged)
@@ -865,6 +867,8 @@ public:
     void setEventsMetadata(uint8_t compid, const QString& metadataJsonFileName, const QString& translationJsonFileName);
     void setActuatorsMetadata(uint8_t compid, const QString& metadataJsonFileName, const QString& translationJsonFileName);
 
+    HealthAndArmingCheckReport* healthAndArmingCheckReport() { return &_healthAndArmingCheckReport; }
+
 public slots:
     void setVtolInFwdFlight                 (bool vtolInFwdFlight);
     void _offlineFirmwareTypeSettingChanged (QVariant varFirmwareType); // Should only be used by MissionControler to set firmware from Plan file
@@ -1241,6 +1245,7 @@ private:
     static const int _orbitTelemetryTimeoutMsecs = 3000; // No telemetry for this amount and orbit will go inactive
 
     QMap<uint8_t, QSharedPointer<EventHandler>> _events; ///< One protocol handler for each component ID
+    HealthAndArmingCheckReport _healthAndArmingCheckReport;
 
     MAVLinkStreamConfig _mavlinkStreamConfig;
 
