@@ -16,6 +16,7 @@ Rectangle {
     width:      atmosphericValueColumn.width + ScreenTools.defaultFontPixelWidth * 3
     color:      "#80000000"
     radius:     _margins
+    border.color: qgcPal.text
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property real _temperatureValue:    _activeVehicle ? _activeVehicle.atmosphericSensor.temperature.rawValue.toFixed(1) : NaN
@@ -46,7 +47,6 @@ Rectangle {
             anchors.margins:            ScreenTools.defaultFontPixelHeight
             columnSpacing:              ScreenTools.defaultFontPixelWidth
             anchors.horizontalCenter:   parent.horizontalCenter
-            //anchors.verticalCenter:     atmosphericValueColumn.verticalCenter
             columns: 2
 
             QGCLabel { text: qsTr("ALT"); opacity: 0.7}
