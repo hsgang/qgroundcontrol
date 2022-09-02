@@ -47,6 +47,7 @@
 #include "FTPManager.h"
 #include "ImageProtocolManager.h"
 #include "AtmosphericSensorFactGroup.h"
+#include "GeneratorStatusFactGroup.h"
 #include "VehicleLandingTargetFactGroup.h"
 #include "HealthAndArmingCheckReport.h"
 
@@ -325,6 +326,7 @@ public:
     Q_PROPERTY(FactGroup*           hygrometer      READ hygrometerFactGroup        CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
+    Q_PROPERTY(FactGroup*           generatorStatus READ generatorStatusFactGroup   CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
     Q_PROPERTY(FactGroup*           landingTarget   READ landingTargetFactGroup     CONSTANT)
     Q_PROPERTY(HealthAndArmingCheckReport* healthAndArmingCheckReport READ healthAndArmingCheckReport CONSTANT)
@@ -697,6 +699,7 @@ public:
     FactGroup* hygrometerFactGroup          () { return &_hygrometerFactGroup; }
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
     FactGroup* atmosphericSensorFactGroup   () { return &_atmosphericSensorFactGroup; }
+    FactGroup* generatorStatusFactGroup     () { return &_generatorStatusFactGroup; }
     FactGroup* landingTargetFactGroup       () { return &_landingTargetFactGroup; }
 
     MissionManager*                 missionManager      () { return _missionManager; }
@@ -1371,6 +1374,7 @@ private:
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
     AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
+    GeneratorStatusFactGroup        _generatorStatusFactGroup;
     VehicleLandingTargetFactGroup   _landingTargetFactGroup;
 
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
@@ -1424,6 +1428,7 @@ private:
     static const char* _hygrometerFactGroupName;
     static const char* _terrainFactGroupName;
     static const char* _atmosphericSensorFactGroupName;
+    static const char* _generatorStatusFactGroupName;
     static const char* _landingTargetFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs      = 100;

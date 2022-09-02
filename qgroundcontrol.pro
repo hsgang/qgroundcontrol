@@ -434,6 +434,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 HEADERS += \
     src/QmlControls/QmlUnitsConversion.h \
     src/Vehicle/AtmosphericSensorFactGroup.h \
+    src/Vehicle/GeneratorStatusFactGroup.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
     src/Vehicle/VehicleLandingTargetFactGroup.h \
     src/api/QGCCorePlugin.h \
@@ -449,6 +450,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 
 SOURCES += \
     src/Vehicle/AtmosphericSensorFactGroup.cc \
+    src/Vehicle/GeneratorStatusFactGroup.cc \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/Vehicle/VehicleLandingTargetFactGroup.cc \
     src/api/QGCCorePlugin.cc \

@@ -188,17 +188,6 @@ Item {
         visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
 
-    FlyViewAtmosphericSensorView{
-        id:                         atmosphericSensorView
-        anchors.margins:            _toolsMargin
-        anchors.top:                parent.top
-        anchors.topMargin:          _toolsMargin//ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 8 : ScreenTools.defaultFontPixelHeight * 11
-        anchors.left:               parent.left
-        anchors.leftMargin:         _idealWidth * 1.4
-        //anchors.horizontalCenter:   parent.horizontalCenter
-        visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
-    }
-
     FlyViewAttitudeIndicator{
         id:                         attitudeIndicator
         anchors.margins:            _toolsMargin * 2
@@ -207,6 +196,26 @@ Item {
         anchors.horizontalCenter:   parent.horizontalCenter
         //anchors.right:              parent.right
         //anchors.left:               parent.left
+    }
+
+    FlyViewAtmosphericSensorView{
+        id:                         atmosphericSensorView
+        anchors.margins:            _toolsMargin
+        anchors.top:                parent.top
+        anchors.topMargin:          _toolsMargin//ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 8 : ScreenTools.defaultFontPixelHeight * 11
+        anchors.left:               parent.left
+        anchors.leftMargin:         _idealWidth * 1.4
+        visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
+    }
+
+    FlyViewGeneratorStatusView{
+        id:                         generatorStatusView
+        anchors.margins:            _toolsMargin
+        anchors.top:                parent.top
+        anchors.topMargin:          mapControl.pipState.state !== mapControl.pipState.pipState ? (atmosphericSensorView.visible ? _toolsMargin : _idealWidth) : _toolsMargin
+        anchors.left:               atmosphericSensorView.visible ? atmosphericSensorView.right : parent.left
+        anchors.leftMargin:         atmosphericSensorView.visible ? _toolsMargin : _idealWidth * 1.4
+        visible:                    QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue
     }
 
     PhotoVideoControl {

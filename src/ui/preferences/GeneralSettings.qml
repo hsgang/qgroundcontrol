@@ -228,6 +228,14 @@ Rectangle {
                             }
 
                             FactCheckBox {
+                                text:       qsTr("Show Generator Status")
+                                visible:    _showGeneratorStatus.visible
+                                fact:       _showGeneratorStatus
+
+                                property Fact _showGeneratorStatus: QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus
+                            }
+
+                            FactCheckBox {
                                 text:       qsTr("Show simple camera controls (DIGICAM_CONTROL)")
                                 visible:    _showDumbCameraControl.visible
                                 fact:       _showDumbCameraControl

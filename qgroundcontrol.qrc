@@ -297,6 +297,7 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewAttitudeIndicator.qml">src/FlightDisplay/FlyViewAttitudeIndicator.qml</file>
         <file alias="QGroundControl/FlightDisplay/MessageToast.qml">src/FlightDisplay/MessageToast.qml</file>
         <file alias="QGroundControl/FlightDisplay/MessageToastManager.qml">src/FlightDisplay/MessageToastManager.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewGeneratorStatusView.qml">src/FlightDisplay/FlyViewGeneratorStatusView.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
@@ -358,6 +359,7 @@
         <file alias="VTOLLandingPattern.FactMetaData.json">src/MissionManager/VTOLLandingPattern.FactMetaData.json</file>
         <file alias="Vehicle/AtmosphericSensorFact.json">src/Vehicle/AtmosphericSensorFact.json</file>
         <file alias="Vehicle/LandingTargetFactGroup.json">src/Vehicle/LandingTargetFactGroup.json</file>
+        <file alias="Vehicle/GeneratorStatusFactGroup.json">src/Vehicle/GeneratorStatusFactGroup.json</file>
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/comm/APMArduSubMockLink.params</file>

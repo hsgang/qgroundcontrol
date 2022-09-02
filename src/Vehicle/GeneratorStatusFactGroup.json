@@ -1,0 +1,85 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "status",
+    "shortDesc": "Status",
+    "type":             "uint8",
+    "enumStrings":      "Unknown,Tethered,Battery",
+    "enumValues":       "0,1,2",
+    "decimalPlaces":    0
+},
+{
+    "name":             "batteryCurrent",
+    "shortDesc": "batteryCurrent",
+    "type":             "float",
+    "decimalPlaces":    2,
+    "units":            "A"
+},
+{
+    "name":             "loadCurrent",
+    "shortDesc": "loadCurrent",
+    "type":             "float",
+    "decimalPlaces":    2,
+    "units":            "A"
+},
+{
+    "name":             "powerGenerated",
+    "shortDesc": "powerGenerated",
+    "type":             "float",
+    "decimalPlaces":    2,
+    "units":            "W"
+},
+{
+    "name":             "busVoltage",
+    "shortDesc": "busVoltage",
+    "type":             "float",
+    "decimalPlaces":    2,
+    "units":            "V"
+},
+{
+    "name":             "batCurrentSetpoint",
+    "shortDesc": "batCurrentSetpoint",
+    "type":             "float",
+    "decimalPlaces":    2,
+    "units":            "V"
+},
+{
+    "name":             "runtime",
+    "shortDesc": "runtime",
+    "type":             "uint32",
+    "decimalPlaces":    0,
+    "units":            "sec"
+},
+{
+    "name":             "timeUntilMaintenance",
+    "shortDesc": "timeUntilMaintenance",
+    "type":             "int32",
+    "decimalPlaces":    0,
+    "units":            "sec"
+},
+{
+    "name":             "generatorSpeed",
+    "shortDesc": "generatorSpeed",
+    "type":             "uint16",
+    "decimalPlaces":    0,
+    "units":            "rpm"
+},
+{
+    "name":             "rectifierTemperature",
+    "shortDesc": "rectifierTemperature",
+    "type":             "int16",
+    "decimalPlaces":    0,
+    "units":            "C"
+},
+{
+    "name":             "generatorTemperature",
+    "shortDesc": "generatorTemperature",
+    "type":             "int16",
+    "decimalPlaces":    0,
+    "units":            "C"
+}
+]
+}

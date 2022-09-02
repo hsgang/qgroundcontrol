@@ -31,6 +31,7 @@ public:
     DEFINE_SETTINGFACT(showObstacleDistanceOverlay)
     DEFINE_SETTINGFACT(missionMaxAltitudeIndicator)
     DEFINE_SETTINGFACT(showAtmosphericValueBar)
+    DEFINE_SETTINGFACT(showGeneratorStatus)
     DEFINE_SETTINGFACT(showGimbalControlPannel)
     DEFINE_SETTINGFACT(updateHomePosition)
 };

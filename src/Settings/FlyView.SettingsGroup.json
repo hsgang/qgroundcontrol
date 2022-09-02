@@ -80,6 +80,12 @@
     "default":      false
 },
 {
+    "name":         "showGeneratorStatus",
+    "shortDesc": "show GeneratorStatus",
+    "type":         "bool",
+    "default":      false
+},
+{
     "name":         "showGimbalControlPannel",
     "shortDesc": "show Gimbal Control Pannel",
     "type":         "bool",
