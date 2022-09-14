@@ -114,28 +114,31 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr& config, bool i
     switch(config->type()) {
 #ifndef NO_SERIAL_LINK
     case LinkConfiguration::TypeSerial:
-        link = std::make_shared<SerialLink>(config, isPX4Flow);
+        link = QSharedPointer<SerialLink>::create(config, isPX4Flow);
         break;
 #else
     Q_UNUSED(isPX4Flow)
 #endif
     case LinkConfiguration::TypeUdp:
-        link = std::make_shared<UDPLink>(config);
+        link = QSharedPointer<UDPLink>::create(config);
+
         break;
     case LinkConfiguration::TypeTcp:
-        link = std::make_shared<TCPLink>(config);
+        link = QSharedPointer<TCPLink>::create(config);
+
         break;
 #ifdef QGC_ENABLE_BLUETOOTH
     case LinkConfiguration::TypeBluetooth:
-        link = std::make_shared<BluetoothLink>(config);
+        link = QSharedPointer<BluetoothLink>::create(config);
+
         break;
 #endif
     case LinkConfiguration::TypeLogReplay:
-        link = std::make_shared<LogReplayLink>(config);
+        link = QSharedPointer<LogReplayLink>::create(config);
         break;
 #ifdef QT_DEBUG
     case LinkConfiguration::TypeMock:
-        link = std::make_shared<MockLink>(config);
+        link = QSharedPointer<MockLink>::create(config);
         break;
 #endif
     case LinkConfiguration::TypeLast:
@@ -175,10 +178,9 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr& config, bool i
 
 SharedLinkInterfacePtr LinkManager::mavlinkForwardingLink()
 {
-    for (int i = 0; i < _rgLinks.count(); i++) {
-        SharedLinkConfigurationPtr linkConfig = _rgLinks[i]->linkConfiguration();
+    for (auto& link : _rgLinks) {
+        auto linkConfig = link->linkConfiguration();
         if (linkConfig->type() == LinkConfiguration::TypeUdp && linkConfig->name() == _mavlinkForwardingLinkName) {
-            SharedLinkInterfacePtr& link = _rgLinks[i];
             return link;
         }
     }
@@ -188,10 +190,8 @@ SharedLinkInterfacePtr LinkManager::mavlinkForwardingLink()
 
 void LinkManager::disconnectAll(void)
 {
-    QList<SharedLinkInterfacePtr> links = _rgLinks;
-
-    for (const SharedLinkInterfacePtr& sharedLink: links) {
-        sharedLink->disconnect();
+    for (auto& link : _rgLinks) {
+        link->disconnect();
     }
 }
 
@@ -211,7 +211,7 @@ void LinkManager::_linkDisconnected(void)
     link->_freeMavlinkChannel();
     for (int i=0; i<_rgLinks.count(); i++) {
         if (_rgLinks[i].get() == link) {
-            qCDebug(LinkManagerLog) << "LinkManager::_linkDisconnected" << _rgLinks[i]->linkConfiguration()->name() << _rgLinks[i].use_count();
+            qCDebug(LinkManagerLog) << "LinkManager::_linkDisconnected" << _rgLinks[i]->linkConfiguration()->name();
             _rgLinks.removeAt(i);
             return;
         }
@@ -359,9 +359,9 @@ bool LinkManager::_portAlreadyConnected(const QString& portName)
 {
     QString searchPort = portName.trimmed();
 
-    for (int i=0; i<_rgLinks.count(); i++) {
-        SharedLinkConfigurationPtr linkConfig = _rgLinks[i]->linkConfiguration();
-        SerialConfiguration* serialConfig = qobject_cast<SerialConfiguration*>(linkConfig.get());
+    for (auto& link : _rgLinks) {
+        auto linkConfig = link->linkConfiguration();
+        auto serialConfig = qobject_cast<SerialConfiguration*>(linkConfig.get());
         if (serialConfig) {
             if (serialConfig->portName() == searchPort) {
                 return true;
@@ -377,9 +377,9 @@ void LinkManager::_addUDPAutoConnectLink(void)
     if (_autoConnectSettings->autoConnectUDP()->rawValue().toBool()) {
         bool foundUDP = false;
 
-        for (int i = 0; i < _rgLinks.count(); i++) {
-            SharedLinkConfigurationPtr linkConfig = _rgLinks[i]->linkConfiguration();
-            if (linkConfig->type() == LinkConfiguration::TypeUdp && linkConfig->name() == _defaultUDPLinkName) {
+        for (auto& link : _rgLinks) {
+            auto config = link->linkConfiguration();
+            if (config->type() == LinkConfiguration::TypeUdp && config->name() == _defaultUDPLinkName) {
                 foundUDP = true;
                 break;
             }
@@ -401,9 +401,9 @@ void LinkManager::_addMAVLinkForwardingLink(void)
     if (_toolbox->settingsManager()->appSettings()->forwardMavlink()->rawValue().toBool()) {
         bool foundMAVLinkForwardingLink = false;
 
-        for (int i=0; i<_rgLinks.count(); i++) {
-            SharedLinkConfigurationPtr linkConfig = _rgLinks[i]->linkConfiguration();
-            if (linkConfig->type() == LinkConfiguration::TypeUdp && linkConfig->name() == _mavlinkForwardingLinkName) {
+        for (auto& link : _rgLinks) {
+            auto config = link->linkConfiguration();
+            if (config->type() == LinkConfiguration::TypeUdp && config->name() == _mavlinkForwardingLinkName) {
                 foundMAVLinkForwardingLink = true;
                 // TODO: should we check if the host/port matches the mavlinkForwardHostName setting and update if it does not match?
                 break;
@@ -830,8 +830,8 @@ bool LinkManager::isBluetoothAvailable(void)
 
 bool LinkManager::containsLink(LinkInterface* link)
 {
-    for (int i=0; i<_rgLinks.count(); i++) {
-        if (_rgLinks[i].get() == link) {
+    for (auto& link : _rgLinks) {
+        if (link.get() == link) {
             return true;
         }
     }

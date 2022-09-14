@@ -364,7 +364,7 @@ void MAVLinkProtocol::receiveBytes(LinkInterface* link, QByteArray b)
 
             // Anyone handling the message could close the connection, which deletes the link,
             // so we check if it's expired
-            if (1 == linkPtr.use_count()) {
+            if (!linkPtr.isNull()) {
                 break;
             }
 

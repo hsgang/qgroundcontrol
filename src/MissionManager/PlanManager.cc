@@ -103,7 +103,7 @@ void PlanManager::_writeMissionCount(void)
     qCDebug(PlanManagerLog) << QStringLiteral("_writeMissionCount %1 count:_retryCount").arg(_planTypeString()) << _writeMissionItems.count() << _retryCount;
 
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         mavlink_message_t       message;
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
@@ -149,7 +149,7 @@ void PlanManager::_requestList(void)
     _clearMissionItems();
 
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         mavlink_message_t       message;
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
@@ -292,7 +292,7 @@ void PlanManager::_readTransactionComplete(void)
     qCDebug(PlanManagerLog) << "_readTransactionComplete read sequence complete";
     
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
         mavlink_message_t       message;
 
@@ -354,7 +354,7 @@ void PlanManager::_requestNextMissionItem(void)
     qCDebug(PlanManagerLog) << QStringLiteral("_requestNextMissionItem %1 sequenceNumber:retry").arg(_planTypeString()) << _itemIndicesToRead[0] << _retryCount;
 
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
         mavlink_message_t       message;
 
@@ -515,7 +515,7 @@ void PlanManager::_handleMissionRequest(const mavlink_message_t& message)
     qCDebug(PlanManagerLog) << QStringLiteral("_handleMissionRequest %1 sequenceNumber:command").arg(_planTypeString()) << missionRequestSeq << item->command();
 
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         mavlink_message_t       messageOut;
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
@@ -866,7 +866,7 @@ void PlanManager::_removeAllWorker(void)
     _connectToMavlink();
 
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         mavlink_message_t       message;
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 

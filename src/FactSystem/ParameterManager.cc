@@ -81,7 +81,7 @@ ParameterManager::ParameterManager(Vehicle* vehicle)
     , _waitingForDefaultComponent       (false)
     , _saveRequired                     (false)
     , _metaDataAddedToFacts             (false)
-    , _logReplay                        (!vehicle->vehicleLinkManager()->primaryLink().expired() && vehicle->vehicleLinkManager()->primaryLink().lock()->isLogReplay())
+    , _logReplay                        (!vehicle->vehicleLinkManager()->primaryLink().isNull() && vehicle->vehicleLinkManager()->primaryLink().lock()->isLogReplay())
     , _prevWaitingReadParamIndexCount   (0)
     , _prevWaitingReadParamNameCount    (0)
     , _prevWaitingWriteParamNameCount   (0)
@@ -447,7 +447,7 @@ void ParameterManager::refreshAllParameters(uint8_t componentId)
 {
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
 
-    if (weakLink.expired()) {
+    if (weakLink.isNull()) {
         return;
     }
 
@@ -715,7 +715,7 @@ Out:
 void ParameterManager::_readParameterRaw(int componentId, const QString& paramName, int paramIndex)
 {
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         mavlink_message_t       msg;
         char                    fixedParamName[MAVLINK_MSG_PARAM_REQUEST_READ_FIELD_PARAM_ID_LEN];
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
@@ -738,7 +738,7 @@ void ParameterManager::_sendParamSetToVehicle(int componentId, const QString& pa
 {
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
 
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         mavlink_param_set_t     p;
         mavlink_param_union_t   union_value;
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
@@ -874,7 +874,7 @@ void ParameterManager::_tryCacheHashLoad(int vehicleId, int componentId, QVarian
 
         WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
 
-        if (!weakLink.expired()) {
+        if (!weakLink.isNull()) {
             mavlink_param_set_t     p;
             mavlink_param_union_t   union_value;
             SharedLinkInterfacePtr  sharedLink = weakLink.lock();
