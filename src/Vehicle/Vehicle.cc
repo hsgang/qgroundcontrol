@@ -1618,6 +1618,12 @@ void Vehicle::_handleEvent(uint8_t comp_id, std::unique_ptr<events::parser::Pars
                     messageChecks.append(check.message);
                 }
             }
+            if (messageChecks.empty()) {
+                // Add all
+                for (const auto& check : checks) {
+                    messageChecks.append(check.message);
+                }
+            }
             if (!message.empty() && !messageChecks.empty()) {
                 message += "<br/>";
             }
@@ -1677,8 +1683,10 @@ EventHandler& Vehicle::_eventHandler(uint8_t compid)
         });
         connect(this, &Vehicle::flightModeChanged, this, [compid, this]() {
             const QSharedPointer<EventHandler>& eventHandler = _events[compid];
-            _healthAndArmingCheckReport.update(compid, eventHandler->healthAndArmingCheckResults(),
-                    eventHandler->getModeGroup(_custom_mode));
+            if (eventHandler->healthAndArmingCheckResultsValid()) {
+                _healthAndArmingCheckReport.update(compid, eventHandler->healthAndArmingCheckResults(),
+                                                   eventHandler->getModeGroup(_custom_mode));
+            }
         });
     }
     return *eventData->data();
