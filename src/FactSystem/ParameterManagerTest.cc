@@ -138,3 +138,44 @@ void ParameterManagerTest::_requestListMissingParamFail(void)
     // User should have been notified
     checkExpectedMessageBox();
 }
+
+void ParameterManagerTest::_FTPnoFailure()
+{
+    Q_ASSERT(!_mockLink);
+    MultiVehicleManager* vehicleMgr = qgcApp()->toolbox()->multiVehicleManager();
+    QVERIFY(vehicleMgr);
+
+    // Wait for the Vehicle to get created
+    QSignalSpy spyVehicle(vehicleMgr, SIGNAL(activeVehicleAvailableChanged(bool)));
+    /* Mocklink later - otherwise the ftpdownload is finished before we
+     * can catch the signal changes */
+    _mockLink = MockLink::startAPMArduPlaneMockLink(false, MockConfiguration::FailParamNoReponseToRequestList);
+    _mockLink->mockLinkFTP()->enableBinParamFile(true);
+    QCOMPARE(spyVehicle.wait(5000), true);
+    qDebug() << Q_FUNC_INFO << QDateTime::currentDateTime().time();
+    QCOMPARE(spyVehicle.count(), 1);
+    QList<QVariant> arguments = spyVehicle.takeFirst();
+    QCOMPARE(arguments.count(), 1);
+    QCOMPARE(arguments.at(0).toBool(), true);
+    Vehicle* vehicle = vehicleMgr->activeVehicle();
+    QVERIFY(vehicle);
+
+    // We should get progress bar updates during load
+    QSignalSpy spyProgress(vehicle->parameterManager(), SIGNAL(loadProgressChanged(float)));
+    QCOMPARE(spyProgress.wait(6000), true);
+    arguments = spyProgress.takeFirst();
+    QCOMPARE(arguments.count(), 1);
+    QVERIFY(arguments.at(0).toFloat() > 0.0f);
+
+    // When param load is complete we get the param ready signal
+    QSignalSpy spyParamsReady(vehicleMgr, SIGNAL(parameterReadyVehicleAvailableChanged(bool)));
+    QCOMPARE(spyParamsReady.wait(60000), true);
+    arguments = spyParamsReady.takeFirst();
+    QCOMPARE(arguments.count(), 1);
+    QCOMPARE(arguments.at(0).toBool(), true);
+
+    // Progress should have been set back to 0
+    arguments = spyProgress.takeLast();
+    QCOMPARE(arguments.count(), 1);
+    QCOMPARE(arguments.at(0).toFloat(), 0.0f);
+}
