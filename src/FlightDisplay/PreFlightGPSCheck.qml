@@ -14,7 +14,7 @@ import QGroundControl.Controls  1.0
 import QGroundControl.Vehicle   1.0
 
 PreFlightCheckButton {
-    name:                           qsTr("GPS")
+    name:                           qsTr("GNSS")
     telemetryFailure:               _3dLockFailure || _satCountFailure
     telemetryTextFailure:           _3dLockFailure ?
                                         qsTr("Waiting for 3D lock.") :
