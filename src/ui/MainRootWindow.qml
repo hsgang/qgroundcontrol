@@ -345,23 +345,6 @@ ApplicationWindow {
                     }
 
                     SubMenuButton {
-                        id:                 analyzeButton
-                        height:             viewSelectDrawer._toolButtonHeight
-                        Layout.fillWidth:   true
-                        text:               qsTr("Analyze Tools")
-                        imageResource:      "/qmlimages/Analyze.svg"
-                        imageColor:         qgcPal.text
-                        visible:            QGroundControl.corePlugin.showAdvancedUI
-                        onClicked: {
-                            if (!mainWindow.preventViewSwitch()) {
-                                mainWindow.showAnalyzeTool()
-                                checkedMenu()
-                                analyzeButton.checked = true
-                            }
-                        }
-                    }
-
-                    SubMenuButton {
                         id:                 setupButton
                         height:             viewSelectDrawer._toolButtonHeight
                         Layout.fillWidth:   true
@@ -376,6 +359,23 @@ ApplicationWindow {
                             }
                         }
                     }
+
+                    SubMenuButton {
+                        id:                 analyzeButton
+                        height:             viewSelectDrawer._toolButtonHeight
+                        Layout.fillWidth:   true
+                        text:               qsTr("Analyze Tools")
+                        imageResource:      "/qmlimages/Analyze.svg"
+                        imageColor:         qgcPal.text
+                        visible:            QGroundControl.corePlugin.showAdvancedUI
+                        onClicked: {
+                            if (!mainWindow.preventViewSwitch()) {
+                                mainWindow.showAnalyzeTool()
+                                checkedMenu()
+                                analyzeButton.checked = true
+                            }
+                        }
+                    }                    
 
                     SubMenuButton {
                         id:                 settingsButton
