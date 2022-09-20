@@ -1177,7 +1177,7 @@ QGCCameraControl::_requestAllParameters()
         }
     }
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.isNull()) {
+    if (!weakLink.expired()) {
         SharedLinkInterfacePtr sharedLink = weakLink.lock();
 
         MAVLinkProtocol* mavlink = qgcApp()->toolbox()->mavlinkProtocol();

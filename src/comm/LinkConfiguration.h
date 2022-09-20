@@ -11,8 +11,7 @@
 
 #include <QSettings>
 
-#include <QSharedPointer>
-#include <QWeakPointer>
+#include <memory>
 
 class LinkInterface;
 
@@ -41,7 +40,7 @@ public:
     LinkInterface*  link(void)  { return _link.lock().get(); }
 
     void            setName(const QString name);
-    void            setLink(QSharedPointer<LinkInterface> link);
+    void            setLink(std::shared_ptr<LinkInterface> link);
 
     ///  The link types supported by QGC
     ///  Any changes here MUST be reflected in LinkManager::linkTypeStrings()
@@ -171,7 +170,7 @@ signals:
     void linkChanged        ();
 
 protected:
-    QWeakPointer<LinkInterface> _link; ///< Link currently using this configuration (if any)
+    std::weak_ptr<LinkInterface> _link; ///< Link currently using this configuration (if any)
 
 private:
     QString _name;
@@ -180,5 +179,6 @@ private:
     bool    _highLatency;
 };
 
-typedef QSharedPointer<LinkConfiguration>  SharedLinkConfigurationPtr;
-typedef QWeakPointer<LinkConfiguration>    WeakLinkConfigurationPtr;
+typedef std::shared_ptr<LinkConfiguration>  SharedLinkConfigurationPtr;
+typedef std::weak_ptr<LinkConfiguration>    WeakLinkConfigurationPtr;
+

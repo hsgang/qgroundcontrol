@@ -206,7 +206,7 @@ void VehicleLinkManager::_removeLink(LinkInterface* link)
         qCDebug(VehicleLinkManagerLog) << "_removeLink:" << QString("%1").arg((qulonglong)link, 0, 16);
 
         if (link == _primaryLink.lock().get()) {
-            _primaryLink.clear();
+            _primaryLink.reset();
             emit primaryLinkChanged();
         }
 
@@ -357,7 +357,7 @@ bool VehicleLinkManager::containsLink(LinkInterface* link)
 
 QString VehicleLinkManager::primaryLinkName() const
 {
-    if (!_primaryLink.isNull()) {
+    if (!_primaryLink.expired()) {
         return _primaryLink.lock()->linkConfiguration()->name();
     }
 

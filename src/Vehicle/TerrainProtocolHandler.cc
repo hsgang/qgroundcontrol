@@ -136,7 +136,7 @@ void TerrainProtocolHandler::_sendTerrainData(const QGeoCoordinate& swCorner, ui
             }
 
             WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-            if (!weakLink.isNull()) {
+            if (!weakLink.expired()) {
                 mavlink_message_t       msg;
                 SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 

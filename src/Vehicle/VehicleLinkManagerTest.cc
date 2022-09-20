@@ -75,6 +75,9 @@ void VehicleLinkManagerTest::_simpleLinkTest(void)
     QSignalSpy spyVehicleDelete(vehicle, &QObject::destroyed);
     QSignalSpy spyVehicleInitialConnectComplete(vehicle, &Vehicle::initialConnectComplete);
 
+    QCOMPARE(mockConfig.use_count(),    2); // Refs: This method, MockLink
+    QCOMPARE(mockLink.use_count(),      3); // Refs: This method, LinkManager, Vehicle
+
     // We wait for the full initial connect sequence to complete to catch anby ComponentInformationManager bugs
     QCOMPARE(spyVehicleInitialConnectComplete.wait(3000), true);
 
@@ -86,10 +89,14 @@ void VehicleLinkManagerTest::_simpleLinkTest(void)
     // Config/Link should still be alive due to the last refs being held by this method
     QCOMPARE(spyConfigDelete.count(),   0);
     QCOMPARE(spyLinkDelete.count(),     0);
+    QCOMPARE(mockConfig.use_count(),    2); // Refs: This method, MockLink
+    QCOMPARE(mockLink.use_count(),      1); // Refs: This method
 
     // Let go of our refs from this method and config and link should go away
-    mockConfig.clear();
-    mockLink.clear();
+    mockConfig.reset();
+    mockLink.reset();
+    QCOMPARE(mockConfig.use_count(),    0);
+    QCOMPARE(mockLink.use_count(),      0);
     QCOMPARE(spyLinkDelete.count(),     1);
     QCOMPARE(spyConfigDelete.count(),   1);
 }

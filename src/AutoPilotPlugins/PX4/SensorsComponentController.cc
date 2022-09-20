@@ -68,7 +68,7 @@ SensorsComponentController::SensorsComponentController(void)
 bool SensorsComponentController::usingUDPLink(void)
 {
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (weakLink.isNull()) {
+    if (weakLink.expired()) {
         return false;
     } else {
         SharedLinkInterfacePtr sharedLink = weakLink.lock();

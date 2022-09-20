@@ -468,7 +468,7 @@ LogDownloadController::_requestLogData(uint16_t id, uint32_t offset, uint32_t co
 {
     if (_vehicle) {
         WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-        if (!weakLink.isNull()) {
+        if (!weakLink.expired()) {
             SharedLinkInterfacePtr sharedLink = weakLink.lock();
 
             //-- APM "Fix"
@@ -504,7 +504,7 @@ LogDownloadController::_requestLogList(uint32_t start, uint32_t end)
         qCDebug(LogDownloadLog) << "Request log entry list (" << start << "through" << end << ")";
         _setListing(true);
         WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-        if (!weakLink.isNull()) {
+        if (!weakLink.expired()) {
             SharedLinkInterfacePtr sharedLink = weakLink.lock();
 
             mavlink_message_t msg;
@@ -678,7 +678,7 @@ LogDownloadController::eraseAll(void)
 {
     if(_vehicle && _uas) {
         WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-        if (!weakLink.isNull()) {
+        if (!weakLink.expired()) {
             SharedLinkInterfacePtr sharedLink = weakLink.lock();
 
             mavlink_message_t msg;

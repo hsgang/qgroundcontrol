@@ -599,7 +599,7 @@ void FTPManager::_sendRequestExpectAck(MavlinkFTP::Request* request)
     
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
 
-    if (weakLink.isNull()) {
+    if (weakLink.expired()) {
         qCDebug(FTPManagerLog) << "_sendRequestExpectAck No primary link. Allowing timeout to fail sequence.";
     } else {
         SharedLinkInterfacePtr sharedLink = weakLink.lock();

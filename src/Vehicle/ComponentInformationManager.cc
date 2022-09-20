@@ -280,7 +280,7 @@ void RequestMetaDataTypeStateMachine::_stateRequestCompInfo(StateMachine* stateM
         return;
     }
 
-    if (weakLink.isNull()) {
+    if (weakLink.expired()) {
         qCDebug(ComponentInformationManagerLog) << QStringLiteral("_stateRequestCompInfo Skipping component information %1 request due to no primary link").arg(requestMachine->typeToString());
         stateMachine->advance();
     } else {
@@ -315,7 +315,7 @@ void RequestMetaDataTypeStateMachine::_stateRequestCompInfoDeprecated(StateMachi
         return;
     }
 
-    if (weakLink.isNull()) {
+    if (weakLink.expired()) {
         qCDebug(ComponentInformationManagerLog) << QStringLiteral("_stateRequestCompInfo Skipping component information %1 request due to no primary link").arg(requestMachine->typeToString());
         stateMachine->advance();
     } else {

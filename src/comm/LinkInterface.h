@@ -19,8 +19,7 @@
 #include <QDebug>
 #include <QTimer>
 
-#include <QSharedPointer>
-#include <QWeakPointer>
+#include <memory>
 
 #include "QGCMAVLink.h"
 #include "LinkConfiguration.h"
@@ -113,5 +112,6 @@ private:
     QMap<int /* vehicle id */, MavlinkMessagesTimer*> _mavlinkMessagesTimers;
 };
 
-typedef QSharedPointer<LinkInterface> SharedLinkInterfacePtr;
-typedef QWeakPointer<LinkInterface> WeakLinkInterfacePtr;
+typedef std::shared_ptr<LinkInterface>  SharedLinkInterfacePtr;
+typedef std::weak_ptr<LinkInterface>    WeakLinkInterfacePtr;
+

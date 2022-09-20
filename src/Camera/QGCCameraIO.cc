@@ -131,7 +131,7 @@ void
 QGCCameraParamIO::_sendParameter()
 {
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.isNull()) {
+    if (!weakLink.expired()) {
         SharedLinkInterfacePtr sharedLink = weakLink.lock();
 
         mavlink_param_ext_set_t p;
@@ -355,7 +355,7 @@ QGCCameraParamIO::paramRequest(bool reset)
     }
     qCDebug(CameraIOLog) << "Request parameter:" << _fact->name();
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.isNull()) {
+    if (!weakLink.expired()) {
         SharedLinkInterfacePtr sharedLink = weakLink.lock();
 
         char param_id[MAVLINK_MSG_PARAM_EXT_REQUEST_READ_FIELD_PARAM_ID_LEN + 1];
