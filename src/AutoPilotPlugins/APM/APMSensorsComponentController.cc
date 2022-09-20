@@ -472,7 +472,7 @@ void APMSensorsComponentController::cancelCalibration(void)
 void APMSensorsComponentController::nextClicked(void)
 {
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         mavlink_message_t       msg;
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
@@ -508,7 +508,7 @@ bool APMSensorsComponentController::accelSetupNeeded(void) const
 bool APMSensorsComponentController::usingUDPLink(void)
 {
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (weakLink.expired()) {
+    if (weakLink.isNull()) {
         return false;
     } else {
         SharedLinkInterfacePtr sharedLink = weakLink.lock();

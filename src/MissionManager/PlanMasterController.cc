@@ -214,7 +214,7 @@ void PlanMasterController::_activeVehicleChanged(Vehicle* activeVehicle)
 void PlanMasterController::loadFromVehicle(void)
 {
     WeakLinkInterfacePtr weakLink = _managerVehicle->vehicleLinkManager()->primaryLink();
-    if (weakLink.expired()) {
+    if (weakLink.isNull()) {
         // Vehicle is shutting down
         return;
     } else {
@@ -328,7 +328,7 @@ void PlanMasterController::_startFlightPlanning(void) {
 void PlanMasterController::sendToVehicle(void)
 {
     WeakLinkInterfacePtr weakLink = _managerVehicle->vehicleLinkManager()->primaryLink();
-    if (weakLink.expired()) {
+    if (weakLink.isNull()) {
         // Vehicle is shutting down
         return;
     } else {

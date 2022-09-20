@@ -40,7 +40,7 @@ void MissionManager::writeArduPilotGuidedMissionItem(const QGeoCoordinate& gotoC
     _connectToMavlink();
 
     WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
+    if (!weakLink.isNull()) {
         SharedLinkInterfacePtr sharedLink = weakLink.lock();
 
 
