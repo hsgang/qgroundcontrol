@@ -127,31 +127,27 @@ Item {
             Rectangle{
                 id:                 batteryIcon
                 anchors.verticalCenter: parent.verticalCenter
-//                anchors.top:        parent.top
-//                anchors.topMargin:  ScreenTools.defaultFontPixelHeight
-//                anchors.bottom:     parent.bottom
-//                anchors.bottomMargin: ScreenTools.defaultFontPixelHeight
                 color:              "transparent"
                 border.color:       getBatteryColor()
                 border.width:       ScreenTools.defaultFontPixelWidth * 0.2
-                height:             ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 1.2 : ScreenTools.defaultFontPixelHeight * 0.9
-                width:              ScreenTools.defaultFontPixelWidth * 4
+                height:             ScreenTools.defaultFontPixelHeight * 1.6
+                width:              ScreenTools.defaultFontPixelWidth * 2
                 radius:             ScreenTools.defaultFontPixelWidth * 0.4
 
                 Rectangle{
-                    anchors.left:           parent.right
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.bottom:           parent.top
+                    anchors.horizontalCenter: parent.horizontalCenter
                     color:                  getBatteryColor()
-                    height:                 parent.height / 2
-                    width:                  ScreenTools.defaultFontPixelWidth * 0.2
+                    height:                 ScreenTools.defaultFontPixelHeight * 0.1
+                    width:                  parent.width / 2
                 }
 
                 Rectangle{
                     anchors.margins:        ScreenTools.defaultFontPixelWidth * 0.3
-                    anchors.top:            parent.top
-                    anchors.left:           parent.left
-                    height:                 parent.height - (anchors.margins * 2)
-                    width:                  (parent.width - (anchors.margins * 2)) * (battery.percentRemaining.rawValue / 100)
+                    anchors.bottom:         parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    height:                 (parent.height - (anchors.margins * 2)) * (battery.percentRemaining.rawValue / 100)
+                    width:                  parent.width - (anchors.margins * 2)
                     color:                  getBatteryColor()
                     radius:                 ScreenTools.defaultFontPixelWidth * 0.3
                 }
