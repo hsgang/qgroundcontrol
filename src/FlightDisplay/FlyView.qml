@@ -115,7 +115,7 @@ Item {
     GuidedActionList {
         id:                         guidedActionList
         anchors.margins:            _margins
-        anchors.bottom:             parent.bottom
+        anchors.verticalCenter:     parent.verticalCenter
         anchors.horizontalCenter:   parent.horizontalCenter
         z:                          QGroundControl.zOrderTopMost
         guidedController:           _guidedController
