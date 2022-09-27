@@ -639,6 +639,18 @@ FlightMap {
                         globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionROI, clickMenu.coord, roiLocationItem)
                     }
                 }
+                QGCButton {
+                    Layout.fillWidth: true
+                    text:           qsTr("Yaw towards location")
+                    visible:        globals.guidedControllerFlyView.showChangeHeading
+                    onClicked: {
+                        if (clickMenu.opened) {
+                            clickMenu.close()
+                        }
+                        changeHeadingItem.show(clickMenu.coord)
+                        globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionChangeHeading, clickMenu.coord, changeHeadingItem)
+                    }
+                }
             }
             QGCMenuItem {
                  text:           qsTr("Yaw towards location")
