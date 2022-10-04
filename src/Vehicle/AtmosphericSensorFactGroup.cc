@@ -79,6 +79,9 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     case MAVLINK_MSG_ID_HYGROMETER_SENSOR:
         _handleHygrometerSensor(message);
         break;
+    case MAVLINK_MSG_ID_TUNNEL:
+        _handleTunnel(message);
+        break;
 //#if !defined(NO_ARDUPILOT_DIALECT)
 //    case MAVLINK_MSG_ID_WIND:
 //        _handleWind(message);
@@ -139,20 +142,39 @@ void AtmosphericSensorFactGroup::_handleHygrometerSensor(mavlink_message_t& mess
     humidity()->setRawValue((hygrometer.humidity) * 0.01);
 }
 
-//#if !defined(NO_ARDUPILOT_DIALECT)
-//void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
-//{
-//    mavlink_wind_t wind;
-//    mavlink_msg_wind_decode(&message, &wind);
+void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
+{
+    mavlink_tunnel_t tunnel;
+    mavlink_msg_tunnel_decode(&message, &tunnel);
 
-//    // We don't want negative wind angles
-//    float direction = wind.direction;
-//    if (direction < 0) {
-//        direction += 360;
-//    }
-//    this->windDir()->setRawValue(direction);
-//    windSpd()->setRawValue(wind.speed);
-//    windSpdVer()->setRawValue(wind.speed_z);
-//    //_setTelemetryAvailable(true);
-//}
-//#endif
+    if(tunnel.payload_type == 300){
+        struct sensor_data32_Payload tP;
+
+        memcpy(&tP, &tunnel.payload, sizeof(tP));
+
+        float logCountRaw     = tP.logCountRaw;
+        float temperatureRaw  = tP.temperatureRaw;
+        float humidityRaw     = tP.humidityRaw;
+        float pressureRaw     = tP.pressureRaw;
+        float windDirRaw      = tP.windDirRaw;
+        float windSpdRaw      = tP.windSpdRaw;
+        int16_t extValue1Raw  = tP.extValue1Raw;
+        int16_t extValue2Raw  = tP.extValue2Raw;
+        int16_t extValue3Raw  = tP.extValue3Raw;
+        int16_t extValue4Raw  = tP.extValue4Raw;
+
+        logCount()->setRawValue(logCountRaw);
+        temperature()->setRawValue(temperatureRaw);
+        humidity()->setRawValue(humidityRaw);
+        pressure()->setRawValue(pressureRaw);
+        windDir()->setRawValue(windDirRaw);
+        windSpd()->setRawValue(windSpdRaw);
+        extValue1()->setRawValue(extValue1Raw);
+        extValue2()->setRawValue(extValue2Raw);
+        extValue3()->setRawValue(extValue3Raw);
+        extValue4()->setRawValue(extValue4Raw);
+
+        status()->setRawValue(tunnel.payload_type);
+    }
+}
+
