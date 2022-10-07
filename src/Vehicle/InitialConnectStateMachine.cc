@@ -216,6 +216,9 @@ void InitialConnectStateMachine::_stateRequestProtocolVersion(StateMachine* stat
         if (sharedLink->linkConfiguration()->isHighLatency() || sharedLink->isPX4Flow() || sharedLink->isLogReplay()) {
             qCDebug(InitialConnectStateMachineLog) << "Skipping REQUEST_MESSAGE:PROTOCOL_VERSION request due to link type";
             connectMachine->advance();
+        } else if (vehicle->apmFirmware()) {
+            qCDebug(InitialConnectStateMachineLog) << "Skipping REQUEST_MESSAGE:PROTOCOL_VERSION request due to Ardupilot firmware";
+            connectMachine->advance();
         } else {
             qCDebug(InitialConnectStateMachineLog) << "Sending REQUEST_MESSAGE:PROTOCOL_VERSION";
             vehicle->requestMessage(_protocolVersionRequestMessageHandler,
@@ -360,9 +363,8 @@ void InitialConnectStateMachine::_stateRequestRallyPoints(StateMachine* stateMac
     Vehicle*                    vehicle         = connectMachine->_vehicle;
     SharedLinkInterfacePtr      sharedLink      = vehicle->vehicleLinkManager()->primaryLink().lock();
 
-    if (vehicle->_geoFenceManager->supported() && vehicle->_geoFenceManager != nullptr)
-        disconnect(vehicle->_geoFenceManager, &GeoFenceManager::progressPct, connectMachine,
-                   &InitialConnectStateMachine::gotProgressUpdate);
+    disconnect(vehicle->_geoFenceManager, &GeoFenceManager::progressPct, connectMachine,
+               &InitialConnectStateMachine::gotProgressUpdate);
 
     if (!sharedLink) {
         qCDebug(InitialConnectStateMachineLog) << "_stateRequestRallyPoints: Skipping first rally point load request due to no primary link";
@@ -389,9 +391,8 @@ void InitialConnectStateMachine::_stateSignalInitialConnectComplete(StateMachine
     InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(stateMachine);
     Vehicle*                    vehicle         = connectMachine->_vehicle;
 
-    if (vehicle->_rallyPointManager->supported() && vehicle->_rallyPointManager != nullptr)
-        disconnect(vehicle->_rallyPointManager, &RallyPointManager::progressPct, connectMachine,
-                   &InitialConnectStateMachine::gotProgressUpdate);
+    disconnect(vehicle->_rallyPointManager, &RallyPointManager::progressPct, connectMachine,
+               &InitialConnectStateMachine::gotProgressUpdate);
 
     connectMachine->advance();
     qCDebug(InitialConnectStateMachineLog) << "Signalling initialConnectComplete";
