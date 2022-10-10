@@ -72,9 +72,10 @@ Item {
         id:             rssiRow
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
-        spacing:        ScreenTools.defaultFontPixelWidth
+        spacing:        ScreenTools.defaultFontPixelWidth/4
 
         QGCColoredImage {
+            id:                 rssiValuesIcon
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
@@ -82,8 +83,9 @@ Item {
             source:             "/qmlimages/RC.svg"
             fillMode:           Image.PreserveAspectFit
             opacity:            _rcRSSIAvailable ? 1 : 0.5
-            color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 70) ? qgcPal.colorGreen : qgcPal.buttonText
+            color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 70) ? qgcPal.buttonText : qgcPal.colorOrange
         }
+
         Column {
             id:                     rssiValuesColumn
             anchors.verticalCenter: parent.verticalCenter

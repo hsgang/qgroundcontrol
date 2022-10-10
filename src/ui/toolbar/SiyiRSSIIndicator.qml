@@ -82,40 +82,47 @@ Item {
             }
         }
     }
+    Row{
+        id:         siyirssiRow
+        anchors.top:    parent.top
+        anchors.bottom: parent.bottom
+        spacing:        ScreenTools.defaultFontPixelWidth/4
 
-    QGCColoredImage {
-        id:                 siyiStatusIcon
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
-        width:              height
-        sourceSize.height:  height
-        source:             "/qmlimages/TelemRSSI.svg"
-        fillMode:           Image.PreserveAspectFit
-        opacity:            QGroundControl.siyiSDKManager.signal !== 0 ? 1 : 0.5
-        color:              QGroundControl.siyiSDKManager.signal > 30 ? qgcPal.colorGreen : qgcPal.buttonText
-    }
-    Column {
-        id:                     siyiStatusValuesColumn
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
-        anchors.left:           siyiStatusIcon.right
+        QGCColoredImage {
+            id:                 siyiStatusIcon
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            width:              height
+            sourceSize.height:  height
+            source:             "/qmlimages/TelemRSSI.svg"
+            fillMode:           Image.PreserveAspectFit
+            opacity:            QGroundControl.siyiSDKManager.signal !== 0 ? 1 : 0.5
+            color:              QGroundControl.siyiSDKManager.signal > 30 ? qgcPal.buttonText : qgcPal.colorOrange
+        }
+        Column {
+            id:                     siyiStatusValuesColumn
+            anchors.verticalCenter: parent.verticalCenter
+//            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
+//            anchors.left:           siyiStatusIcon.right
 
-        SignalStrength {
-            anchors.horizontalCenter:   parent.horizontalCenter
-            size:                   parent.height * 0.5
-            percent:                QGroundControl.siyiSDKManager.signal
+            SignalStrength {
+                anchors.horizontalCenter:   parent.horizontalCenter
+                size:                   parent.height * 0.5
+                percent:                QGroundControl.siyiSDKManager.signal
+            }
+            QGCLabel {
+                anchors.horizontalCenter:   parent.horizontalCenter
+                color:                      qgcPal.buttonText
+                text:                       QGroundControl.siyiSDKManager.signal + " %"
+            }
+    //        QGCLabel {
+    //            anchors.horizontalCenter:   parent.horizontalCenter
+    //            color:                      qgcPal.buttonText
+    //            text:                       QGroundControl.linkManager.rssi + " dBm"
+    //        }
         }
-        QGCLabel {
-            anchors.horizontalCenter:   parent.horizontalCenter
-            color:                      qgcPal.buttonText
-            text:                       QGroundControl.siyiSDKManager.signal + " %"
-        }
-//        QGCLabel {
-//            anchors.horizontalCenter:   parent.horizontalCenter
-//            color:                      qgcPal.buttonText
-//            text:                       QGroundControl.linkManager.rssi + " dBm"
-//        }
     }
+
     MouseArea {
         anchors.fill: parent
         onClicked: {

@@ -61,13 +61,13 @@ Item {
             anchors.top:    parent.top
             anchors.bottom: parent.bottom
 
-            spacing: ScreenTools.defaultFontPixelWidth
+            spacing: ScreenTools.defaultFontPixelWidth/4
 
             function getBatteryColor() {
-                if (battery.voltage.rawValue) {
+                if (battery.chargeState.rawValue) {
                     switch (battery.chargeState.rawValue) {
                     case MAVLink.MAV_BATTERY_CHARGE_STATE_OK:
-                        return qgcPal.colorGreen
+                        return qgcPal.text
                     case MAVLink.MAV_BATTERY_CHARGE_STATE_LOW:
                         return qgcPal.colorOrange
                     case MAVLink.MAV_BATTERY_CHARGE_STATE_CRITICAL:
@@ -81,7 +81,7 @@ Item {
                 }
                 else if(battery.percentRemaining.rawValue) {
                     if(battery.percentRemaining.rawValue > 30){
-                        return qgcPal.colorGreen
+                        return qgcPal.text
                     }
                     else if(battery.percentRemaining.rawValue <= 30 && battery.percentRemaining.rawValue > 10 ){
                         return qgcPal.colorOrange
@@ -125,31 +125,40 @@ Item {
 //                color:              getBatteryColor()
 //            }
             Rectangle{
-                id:                 batteryIcon
-                anchors.verticalCenter: parent.verticalCenter
+                id:                 batteryIconBase
+                anchors.top:        parent.top
+                anchors.bottom:     parent.bottom
+                width:              height
                 color:              "transparent"
-                border.color:       getBatteryColor()
-                border.width:       ScreenTools.defaultFontPixelWidth * 0.2
-                height:             ScreenTools.defaultFontPixelHeight * 1.6
-                width:              ScreenTools.defaultFontPixelWidth * 2
-                radius:             ScreenTools.defaultFontPixelWidth * 0.4
 
                 Rectangle{
-                    anchors.bottom:           parent.top
+                    id:                 batteryIcon
+                    anchors.verticalCenter: parent.verticalCenter
                     anchors.horizontalCenter: parent.horizontalCenter
-                    color:                  getBatteryColor()
-                    height:                 ScreenTools.defaultFontPixelHeight * 0.1
-                    width:                  parent.width / 2
-                }
+                    color:              "transparent"
+                    border.color:       getBatteryColor()
+                    border.width:       ScreenTools.defaultFontPixelWidth * 0.2
+                    height:             ScreenTools.defaultFontPixelHeight * 1.6
+                    width:              ScreenTools.defaultFontPixelWidth * 2
+                    radius:             ScreenTools.defaultFontPixelWidth * 0.4
 
-                Rectangle{
-                    anchors.margins:        ScreenTools.defaultFontPixelWidth * 0.3
-                    anchors.bottom:         parent.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    height:                 (parent.height - (anchors.margins * 2)) * (battery.percentRemaining.rawValue / 100)
-                    width:                  parent.width - (anchors.margins * 2)
-                    color:                  getBatteryColor()
-                    radius:                 ScreenTools.defaultFontPixelWidth * 0.3
+                    Rectangle{
+                        anchors.bottom:           parent.top
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        color:                  getBatteryColor()
+                        height:                 ScreenTools.defaultFontPixelHeight * 0.1
+                        width:                  parent.width / 2
+                    }
+
+                    Rectangle{
+                        anchors.margins:        ScreenTools.defaultFontPixelWidth * 0.3
+                        anchors.bottom:         parent.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        height:                 (parent.height - (anchors.margins * 2)) * (battery.percentRemaining.rawValue / 100)
+                        width:                  parent.width - (anchors.margins * 2)
+                        color:                  getBatteryColor()
+                        radius:                 ScreenTools.defaultFontPixelWidth * 0.3
+                    }
                 }
             }
 

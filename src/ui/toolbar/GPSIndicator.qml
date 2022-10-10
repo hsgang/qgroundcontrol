@@ -75,36 +75,43 @@ Item {
         }
     }
 
-    QGCColoredImage {
-        id:                 gpsIcon
-        width:              height
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
-        source:             "/qmlimages/Gps.svg"
-        fillMode:           Image.PreserveAspectFit
-        sourceSize.height:  height
-        opacity:            (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? 1 : 0.5
-        color:              (_activeVehicle && _activeVehicle.gps.lock.value >= 3) ? qgcPal.colorGreen : qgcPal.buttonText
-    }
+    Row {
+        anchors.top:    parent.top
+        anchors.bottom: parent.bottom
 
-    Column {
-        id:                     gpsValuesColumn
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
-        anchors.left:           gpsIcon.right
+        spacing: ScreenTools.defaultFontPixelWidth/4
 
-        QGCLabel {
-            anchors.horizontalCenter:   hdopValue.horizontalCenter
-            visible:                    _activeVehicle && !isNaN(_activeVehicle.gps.hdop.value)
-            color:                      qgcPal.buttonText
-            text:                       _activeVehicle ? _activeVehicle.gps.count.valueString : ""
+        QGCColoredImage {
+            id:                 gpsIcon
+            width:              height
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            source:             "/qmlimages/Gps.svg"
+            fillMode:           Image.PreserveAspectFit
+            sourceSize.height:  height
+            opacity:            (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? 1 : 0.5
+            color:              (_activeVehicle && _activeVehicle.gps.lock.value >= 3) ? qgcPal.colorGreen : qgcPal.buttonText
         }
 
-        QGCLabel {
-            id:         hdopValue
-            visible:    _activeVehicle && !isNaN(_activeVehicle.gps.hdop.value)
-            color:      qgcPal.buttonText
-            text:       _activeVehicle ? _activeVehicle.gps.hdop.value.toFixed(1) : ""
+        Column {
+            id:                     gpsValuesColumn
+            anchors.verticalCenter: parent.verticalCenter
+            //anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
+            //anchors.left:           gpsIcon.right
+
+            QGCLabel {
+                anchors.horizontalCenter:   hdopValue.horizontalCenter
+                //visible:                    _activeVehicle && !isNaN(_activeVehicle.gps.hdop.value)
+                color:                      qgcPal.buttonText
+                text:                       _activeVehicle ? _activeVehicle.gps.count.valueString : ""
+            }
+
+            QGCLabel {
+                id:         hdopValue
+                //visible:    _activeVehicle && !isNaN(_activeVehicle.gps.hdop.value)
+                color:      qgcPal.buttonText
+                text:       _activeVehicle ? _activeVehicle.gps.hdop.value.toFixed(1) : ""
+            }
         }
     }
 
