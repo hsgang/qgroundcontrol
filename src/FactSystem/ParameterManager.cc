@@ -90,7 +90,7 @@ ParameterManager::ParameterManager(Vehicle* vehicle)
     , _disableAllRetries                (false)
     , _indexBatchQueueActive            (false)
     , _totalParamCount                  (0)
-    , _tryftp                           (true)
+    , _tryftp                           (vehicle->apmFirmware())
 {
     if (_vehicle->isOfflineEditingVehicle()) {
         _loadOfflineEditingParams();
@@ -171,7 +171,7 @@ void ParameterManager::_updateProgressBar(void)
 
 void ParameterManager::mavlinkMessageReceived(mavlink_message_t message)
 {
-    if (_tryftp)
+    if (_tryftp && message.compid == MAV_COMP_ID_AUTOPILOT1 && !_initialLoadComplete)
         return;
 
     if (message.msgid == MAVLINK_MSG_ID_PARAM_VALUE) {
@@ -450,8 +450,8 @@ void ParameterManager::_factRawValueUpdated(const QVariant& rawValue)
 
 void ParameterManager::_ftpDownloadComplete(const QString& fileName, const QString& errorMsg)
 {
-    bool continuewithdefaultparameterdownload = true;
-    bool immediateretry = false;
+    bool continueWithDefaultParameterdownload = true;
+    bool immediateRetry = false;
 
     disconnect(_vehicle->ftpManager(), &FTPManager::downloadComplete, this, &ParameterManager::_ftpDownloadComplete);
     disconnect(_vehicle->ftpManager(), &FTPManager::commandProgress, this, &ParameterManager::_ftpDownloadProgress);
@@ -469,25 +469,25 @@ void ParameterManager::_ftpDownloadComplete(const QString& fileName, const QStri
         if (errorMsg.contains("File Not Found")) {
             qCDebug(ParameterManagerLog) << "ParameterManager-ftp: No Parameterfile on vehicle - Start Conventional Parameter Download";
             if (_initialRequestRetryCount == 0)
-                immediateretry = true;
-        } else if (_loadProgress < 0.01) {
+                immediateRetry = true;
+        } else if (_loadProgress > 0.0001 && _loadProgress < 0.01) { /* FTP supported but too slow */
             qCDebug(ParameterManagerLog) << "ParameterManager-ftp progress too slow - Start Conventional Parameter Download";
         } else if (_initialRequestRetryCount == 1) {
             qCDebug(ParameterManagerLog) << "ParameterManager-ftp: Too many retries - Start Conventional Parameter Download";
         } else {
             qCDebug(ParameterManagerLog) << "ParameterManager-ftp Retry: " << _initialRequestRetryCount;
-            continuewithdefaultparameterdownload = false;
+            continueWithDefaultParameterdownload = false;
         }
     }
 
-    if (continuewithdefaultparameterdownload) {
+    if (continueWithDefaultParameterdownload) {
         _tryftp = false;
         _initialRequestRetryCount = 0;
         /* If we receive "File not Found" this indicates that the vehicle does not support
          * the parameter download via ftp. If we received this without retry, then we
          * can immediately response with the conventional parameter download request, because
          * we have no indication of communication link congestion.*/
-        if (immediateretry)
+        if (immediateRetry)
             _initialRequestTimeout();
         else
             _initialRequestTimeoutTimer.start();
@@ -527,7 +527,7 @@ void ParameterManager::refreshAllParameters(uint8_t componentId)
         _initialRequestTimeoutTimer.start();
     }
 
-    if (_tryftp) {
+    if (_tryftp && (componentId == MAV_COMP_ID_ALL || componentId == MAV_COMP_ID_AUTOPILOT1)) {
         FTPManager* ftpManager = _vehicle->ftpManager();
         connect(ftpManager, &FTPManager::downloadComplete, this, &ParameterManager::_ftpDownloadComplete);
         _waitingParamTimeoutTimer.stop();
@@ -1516,20 +1516,20 @@ bool ParameterManager::_parseParamFile(const QString& filename)
         withdefault = (flags & 0x01) == 0x01;
         in >> byte;
         if (in.status() != QDataStream::Ok) {
-            qCDebug(ParameterManagerLog) << "_parseParamFile: Error: Unexpected EOF while reading flags";
+            qCritical(ParameterManagerLog) << "_parseParamFile: Error: Unexpected EOF while reading flags";
             goto Error;
         }
         name_len = ((byte >> 4) & 0x0F) + 1;
         common_len = byte & 0x0F;
         if ((name_len + common_len) > 16) {
-            qCDebug(ParameterManagerLog) << "_parseParamFile: Error: common_len + name_len > 16 "
+            qCritical(ParameterManagerLog) << "_parseParamFile: Error: common_len + name_len > 16 "
                                          << "name_len" << name_len
                                          << "common_len" << common_len;
             goto Error;
         }
         no_read = in.readRawData(&name_buffer[common_len], (int) name_len);
         if (no_read != name_len) {
-            qCDebug(ParameterManagerLog) << "_parseParamFile: Error: Unexpected EOF while reading parameterName"
+            qCritical(ParameterManagerLog) << "_parseParamFile: Error: Unexpected EOF while reading parameterName"
                                          << "Expected:" << name_len
                                          << "Actual:" << no_read;
             goto Error;
