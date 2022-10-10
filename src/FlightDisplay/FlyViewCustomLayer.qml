@@ -408,15 +408,13 @@ Item {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         width:           mainWindow.width  * 0.5
-        height:         mainWindow.height * 0.25
-        //radius:         ScreenTools.defaultFontPixelHeight / 2
+        //height:         mainWindow.height * 0.15
+        height:             messageToastManager.height
         color:          "transparent" //qgcPal.window
-        //border.color:   qgcPal.text
         visible:        messageFlick.contentHeight
 
         QGCFlickable {
             id:                 messageFlick
-            //anchors.margins:    ScreenTools.defaultFontPixelHeight
             anchors.fill:       parent
             anchors.horizontalCenter: parent.horizontalCenter
             contentHeight:      messageToastManager.height
