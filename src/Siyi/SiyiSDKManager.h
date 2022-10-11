@@ -20,6 +20,14 @@
 #include "QGC.h"
 #include "QGCToolbox.h"
 
+#define MK15_SIYI_HEADER1       0x55
+#define MK15_SIYI_HEADER2       0x66
+#define MK15_SIYI_PACKETLEN_MIN 10
+#define MK15_SIYI_PACKETLEN_MAX 46
+#define MK15_SIYI_DATALEN_MAX   (MK15_SIYI_PACKETLEN_MAX-MK15_SIYI_PACKETLEN_MIN)
+#define MK15_SIYI_SERIAL_RESEND_MS 1000
+#define MK15_SIYI_MSG_BUF_DATA_START 8
+
 class LinkManager;
 class QGCApplication;
 
@@ -60,7 +68,7 @@ public:
     bool isConnectedLink();
 
 public slots:
-    void receivedLinkStatus(LinkInterface* link, QByteArray b);
+    void read_incoming_packets(LinkInterface* link, QByteArray b);
     void requestLinkStatus();
 
 protected:
@@ -73,6 +81,29 @@ private slots:
 
 private:
     LinkManager*            _linkMgr;
+
+    enum class SiyiCommandId {
+        HARDWARE_ID = 0x40,
+        ACQUIRE_SYSTEM_SETTINGS = 0x16,
+        SYSTEM_SETTINGS = 0x17,
+        REMOTE_CONTROL_CHANNELS = 0x42,
+        ACQUIRE_RC_LINK_STATUS = 0x43,
+        ACQUIRE_FPV_LINK_STATUS = 0x44
+    };
+
+    enum class ParseState : uint8_t {
+        WAITING_FOR_STX_LOW,
+        WAITING_FOR_STX_HIGH,
+        WAITING_FOR_CTRL,
+        WAITING_FOR_DATALEN_LOW,
+        WAITING_FOR_DATALEN_HIGH,
+        WAITING_FOR_SEQ_LOW,
+        WAITING_FOR_SEQ_HIGH,
+        WAITING_FOR_CMDID,
+        WAITING_FOR_DATA,
+        WAITING_FOR_CRC_LOW,
+        WAITING_FOR_CRC_HIGH
+    };
 
     struct LinkStatus_t{
         uint16_t stx;
@@ -107,5 +138,27 @@ private:
     QTimer _sendCustomMessageTimer;
     uint16_t crcSiyiSDK(const char *buf, int len);
     void disconnectedLink();
+    void process_packet();
+
+    bool send_packet(SiyiCommandId, const uint8_t* databuff, uint8_t databuff_len);
+
+    void request_hardware_id() {send_packet(SiyiCommandId::HARDWARE_ID, nullptr, 0);}
+    void request_rc_link_status() {send_packet(SiyiCommandId::ACQUIRE_RC_LINK_STATUS, nullptr, 0);}
+    void request_fpv_link_status() {send_packet(SiyiCommandId::ACQUIRE_FPV_LINK_STATUS, nullptr, 0);}
+
+    uint8_t _msg_buff[MK15_SIYI_PACKETLEN_MAX];
+    uint8_t _msg_buff_len;
+
+    struct PACKED {
+        uint16_t data_len;
+        uint8_t command_id;
+        uint16_t data_bytes_received;
+        uint16_t crc16;
+        ParseState state;
+    } _parsed_msg;
+
+    uint32_t _last_send_ms;
+    uint16_t _last_seq;
+
 };
 
