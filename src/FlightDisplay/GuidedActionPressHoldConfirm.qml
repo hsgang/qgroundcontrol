@@ -134,8 +134,6 @@ Item {
     Rectangle {
         id: confirmBackground
         width: (parent.width * 3 > messageTextBox.width) ? parent.width * 2 : messageTextBox.width
-        //height: root.height + messageTextBox.height + cancelRectangle.height + _margins * 5
-        //anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: messageTextBox.top
         anchors.bottom: shape.bottom
@@ -149,8 +147,6 @@ Item {
         anchors.fill: parent
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-//        layer.enabled: true
-//        layer.samples: 8
 
         property real value: feeder.value
 
@@ -201,7 +197,7 @@ Item {
                 centerX: root.width / 2
                 centerY: root.height / 2
                 startAngle: root.startAngle - 90
-                sweepAngle: (internals.actualSpanAngle / root.maxValue * shape.value)
+                sweepAngle: (internals.actualSpanAngle / root.maxValue * (shape.value * 1.05))
             }
         }
     }
