@@ -133,9 +133,9 @@ Item {
     }
     Rectangle {
         id: confirmBackground
-        width: (parent.width * 3 > messageTextBox.width) ? parent.width * 2 : messageTextBox.width
+        width: parent.width * 1.4 //(parent.width * 3 > messageTextBox.width) ? parent.width * 2 : messageTextBox.width
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: messageTextBox.top
+        anchors.top: shape.top
         anchors.bottom: shape.bottom
         anchors.bottomMargin: - _margins * 2
         radius: _margins * 3
@@ -262,13 +262,14 @@ Item {
         text:               ""
         visible:            text !== ""
     }
+
     Rectangle {
         id:    messageTextBox
         width: messageText.width * 1.2
         height: messageText.height * 1.5
         radius: height / 2
         anchors.margins: _toolsMargin
-        anchors.bottom: parent.top
+        anchors.bottom: confirmBackground.top
         anchors.horizontalCenter: parent.horizontalCenter
         color: qgcPal.windowShadeDark
         QGCLabel {
