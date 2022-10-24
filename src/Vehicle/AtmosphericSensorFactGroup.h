@@ -12,15 +12,15 @@ public:
 
     Q_PROPERTY(Fact* status       READ status       CONSTANT)
     Q_PROPERTY(Fact* logCount     READ logCount     CONSTANT)
-    Q_PROPERTY(Fact* temperature  READ temperature  CONSTANT)
-    Q_PROPERTY(Fact* humidity     READ humidity     CONSTANT)
-    Q_PROPERTY(Fact* pressure     READ pressure     CONSTANT)
+    Q_PROPERTY(Fact* temperature  READ temperature  NOTIFY atmosphericValueChanged)
+    Q_PROPERTY(Fact* humidity     READ humidity     NOTIFY atmosphericValueChanged)
+    Q_PROPERTY(Fact* pressure     READ pressure     NOTIFY atmosphericValueChanged)
     Q_PROPERTY(Fact* extValue1    READ extValue1    CONSTANT)
     Q_PROPERTY(Fact* extValue2    READ extValue2    CONSTANT)
     Q_PROPERTY(Fact* extValue3    READ extValue3    CONSTANT)
     Q_PROPERTY(Fact* extValue4    READ extValue4    CONSTANT)
-    Q_PROPERTY(Fact* windDir      READ windDir      CONSTANT)
-    Q_PROPERTY(Fact* windSpd      READ windSpd      CONSTANT)
+    Q_PROPERTY(Fact* windDir      READ windDir      NOTIFY atmosphericValueChanged)
+    Q_PROPERTY(Fact* windSpd      READ windSpd      NOTIFY atmosphericValueChanged)
     Q_PROPERTY(Fact* windSpdVer   READ windSpdVer   CONSTANT)
 
     Fact* status                      () { return &_statusFact; }
@@ -51,6 +51,9 @@ public:
     static const char* _windDirFactName;
     static const char* _windSpdFactName;
     static const char* _windSpdVerFactName;
+
+signals:
+    void atmosphericValueChanged();
 
 private:
     void _handleData32              (mavlink_message_t& message);

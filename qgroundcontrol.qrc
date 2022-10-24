@@ -298,6 +298,7 @@
         <file alias="QGroundControl/FlightDisplay/MessageToast.qml">src/FlightDisplay/MessageToast.qml</file>
         <file alias="QGroundControl/FlightDisplay/MessageToastManager.qml">src/FlightDisplay/MessageToastManager.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewGeneratorStatusView.qml">src/FlightDisplay/FlyViewGeneratorStatusView.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewAtmosphericChart.qml">src/FlightDisplay/FlyViewAtmosphericChart.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

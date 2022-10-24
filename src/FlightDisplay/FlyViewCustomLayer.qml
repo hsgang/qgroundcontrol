@@ -409,7 +409,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         width:           mainWindow.width  * 0.5
         //height:         mainWindow.height * 0.15
-        height:             messageToastManager.height
+        height:         messageToastManager.height < mainWindow.height * 0.15 ? messageToastManager.height : mainWindow.height * 0.15
         color:          "transparent" //qgcPal.window
         visible:        messageFlick.contentHeight
 
@@ -446,6 +446,51 @@ Item {
             propagateComposedEvents: true
         }
     }
+
+    Rectangle {
+        id:                 chartPopupButton
+        anchors.margins:    _toolsMargin
+        anchors.right:      parent.right
+        anchors.bottom:     weatherPopupButton.visible ? weatherPopupButton.top : telemetryPanel.top
+        color:              "#80000000" //qgcPal.window
+        height:             ScreenTools.defaultFontPixelHeight * 2.5
+        width:              ScreenTools.defaultFontPixelHeight * 2.5
+        radius:             ScreenTools.defaultFontPixelHeight / 3
+        visible:            true
+        //visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
+
+        Image {
+            id: showChartIcon
+            anchors.centerIn: parent
+            source: "/qmlimages/MAVLinkInspector"
+            mipmap: true
+            fillMode: Image.PreserveAspectFit
+            sourceSize: Qt.size(parent.width * 0.8, parent.height * 0.8)
+            MouseArea {
+                anchors.fill: showChartIcon
+                onClicked: {
+                    flyViewChartWidget.visible = !flyViewChartWidget.visible
+                }
+            }
+        }
+        ColorOverlay {
+               anchors.fill: showChartIcon
+               source: showChartIcon
+               color: "#ffffff"
+        }
+    }
+
+    FlyViewAtmosphericChart{
+        id: flyViewChartWidget
+        anchors.margins:        _toolsMargin
+        anchors.top:            photoVideoControl.bottom
+        anchors.bottom:         attitudeIndicator.top
+        anchors.right:          chartPopupButton.left
+        //anchors.verticalCenter: parent.verticalCenter
+        width: mainWindow.width * 0.4
+        //height: mainWindow.height * 0.5
+    }
+
 }
 
 

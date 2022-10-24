@@ -175,6 +175,8 @@ void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
         extValue4()->setRawValue(extValue4Raw);
 
         status()->setRawValue(tunnel.payload_type);
+
+        emit atmosphericValueChanged();
     }
 }
 
