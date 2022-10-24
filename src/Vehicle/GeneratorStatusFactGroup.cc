@@ -15,19 +15,6 @@ const char* GeneratorStatusFactGroup::_generatorSpeedFactName =         "generat
 const char* GeneratorStatusFactGroup::_rectifierTemperatureFactName =   "rectifierTemperature";
 const char* GeneratorStatusFactGroup::_generatorTemperatureFactName =   "generatorTemperature";
 
-struct sensor_data32_Payload {
-    float logCountRaw;
-    float temperatureRaw;
-    float humidityRaw;
-    float pressureRaw;
-    float windDirRaw;
-    float windSpdRaw;
-    int16_t extValue1Raw;
-    int16_t extValue2Raw;
-    int16_t extValue3Raw;
-    int16_t extValue4Raw;
-};
-
 GeneratorStatusFactGroup::GeneratorStatusFactGroup(QObject* parent)
     : FactGroup(1000, ":/json/Vehicle/GeneratorStatusFactGroup.json", parent)
     , _statusFact               (0, _statusFactName,                FactMetaData::valueTypeUint64)
@@ -83,7 +70,10 @@ void GeneratorStatusFactGroup::_handleGeneratorStatus(mavlink_message_t &message
     mavlink_generator_status_t generator;
     mavlink_msg_generator_status_decode(&message, &generator);
 
-    status()->setRawValue(generator.status);
+    QVariant generatorStatus = QVariant::fromValue(generator.status);
+
+    //status()->setRawValue(generator.status);
+    status()->setRawValue(generatorStatus);
     batteryCurrent()->setRawValue(generator.battery_current);
     loadCurrent()->setRawValue(generator.load_current);
     powerGenerated()->setRawValue(generator.power_generated);
