@@ -27,33 +27,93 @@ Item{
     property real   _pressureValue:       _activeVehicle ? _activeVehicle.atmosphericSensor.pressure.rawValue.toFixed(1) : 0
     property real   _windDirValue:        _activeVehicle ? _activeVehicle.atmosphericSensor.windDir.rawValue.toFixed(1) : 0
     property real   _windSpdValue:        _activeVehicle ? _activeVehicle.atmosphericSensor.windSpd.rawValue.toFixed(1) : 0
-    property real   _altitudeValue:       _activeVehicle ? _activeVehicle.altitudeRelative.rawValue.toFixed(1) : 0
 
     property real   preAltitudeValue: 0
     property real   preValue: 0
     property real   maxAltitude: 0
-    property real   diffGapValue: 0.1
+    property real   minAltitude: 0
+    property real   diffGapValue: 1
+    property real   count: 0
 
-    function getMaxAltitude(){
-        if(_vehicleAltitude > preAltitudeValue){
-            preAltitudeValue = _vehicleAltitude
-            maxAltitude = _vehicleAltitude
+    property int   tempMin: _temperatureValue - 2
+    property int   tempMax: _temperatureValue + 2
+    property int   humiMin: _humidityValue - 5
+    property int   humiMax: _humidityValue + 5
+    property int   presMin: _pressureValue - 5
+    property int   presMax: _pressureValue + 5
+    property int   wnDrMin: 0
+    property int   wnDrMax: 360
+    property int   wnSpMin: _windSpdValue - 5
+    property int   wnSpMax: _windSpdValue + 5
+
+    function getAltRange(){
+        var value = _vehicleAltitude
+        if(value > maxAltitude - 5){
+            maxAltitude = value + 5
+        }
+        else if(value < minAltitude + 5){
+            minAltitude = value - 5
+        }
+    }
+
+    function getTempRange(){
+        var Value = _temperatureValue
+        if(Value > tempMax - 2){
+            tempMax = Value + 2
+        }
+        else if(Value < tempMin + 2){
+            tempMin = Value - 2
+        }
+    }
+
+    function getHumiRange(){
+        var Value = _humidityValue
+        if(Value > humiMax - 5){
+            humiMax = Value + 5
+        }
+        else if(Value < humiMin + 5){
+            humiMin = Value - 5
+        }
+    }
+
+    function getPressRange(){
+        var Value = _pressureValue
+        if(Value > presMax - 5){
+            presMax = Value + 5
+        }
+        else if(Value < presMin + 5){
+            presMin = Value - 5
+        }
+    }
+
+    function getWindSpdRange(){
+        var Value = _windSpdValue
+        if(Value > wnSpMax - 5){
+            wnSpMax = Value + 5
+        }
+        else if(Value < wnSpMin + 5){
+            wnSpMin = Value - 5
         }
     }
 
     function atmosphericDataGet(){
 
-        console.log(" ttttt")
-
         var diffValue = Math.abs(_vehicleAltitude - preValue)
 
         if(diffValue >= diffGapValue) {
+            getAltRange()
+            getTempRange()
+            getHumiRange()
+            getPressRange()
+            getWindSpdRange()
             seriesTemp.append(_temperatureValue, _vehicleAltitude)
             seriesHumi.append(_humidityValue, _vehicleAltitude)
             seriesPress.append(_pressureValue, _vehicleAltitude)
             seriesWindDir.append(_windDirValue, _vehicleAltitude)
             seriesWindSpd.append(_windSpdValue, _vehicleAltitude)
             preValue = _vehicleAltitude
+            count++
+            console.log("count :", count)
         }
     }
 
@@ -65,14 +125,13 @@ Item{
         seriesWindSpd.removePoints(0,seriesWindSpd.count)
         maxAltitude = 0
         preValue = 0
+        count = 0
         }
 
     Connections{
         target: _activeVehicle
         onAtmosphericValueChanged: {
-        //onCoordinateChanged:{
-            atmosphericDataGet()
-            getMaxAltitude()
+            atmosphericDataGet()            
         }
     }
 
@@ -87,12 +146,14 @@ Item{
         border.width: 1
         radius : _toolsMargin
 
-        RowLayout{
+        ColumnLayout{
             id: checkBoxRow
-            anchors.horizontalCenter: parent.horizontalCenter
-            anchors.topMargin: _toolsMargin
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.rightMargin: _toolsMargin
+            spacing: 2
 
-            CheckBox {
+            QGCCheckBox {
                 id: tempCheck
                 style: CheckBoxStyle {
                     label: Text {
@@ -101,7 +162,7 @@ Item{
                     }
                 }
             }
-            CheckBox {
+            QGCCheckBox {
                 id: humiCheck
                 style: CheckBoxStyle {
                     label: Text {
@@ -110,7 +171,7 @@ Item{
                     }
                 }
             }
-            CheckBox {
+            QGCCheckBox {
                 id: presCheck
                 style: CheckBoxStyle {
                     label: Text {
@@ -119,7 +180,7 @@ Item{
                     }
                 }
             }
-            CheckBox {
+            QGCCheckBox {
                 id: windDirCheck
                 style: CheckBoxStyle {
                     label: Text {
@@ -128,7 +189,7 @@ Item{
                     }
                 }
             }
-            CheckBox {
+            QGCCheckBox {
                 id: windSpdCheck
                 style: CheckBoxStyle {
                     label: Text {
@@ -144,12 +205,37 @@ Item{
                     clearChart()
                 }
             }
+
+            QGCLabel{
+                text: "Interval(m)"
+            }
+
+            QGCTextField{
+                id: intervalTextField
+                placeholderText: qsTr("input Interval")
+                width: ScreenTools.defaultFontPixelWidth * 5
+            }
+
+            QGCButton{
+                text:"Set Interval"
+                onClicked: {
+                    diffGapValue = intervalTextField.text
+                }
+            }
+
+            QGCLabel{
+                text: "Count : " + count
+            }
+
+            QGCLabel{
+                text: "Interval : " + diffGapValue
+            }
         }
 
         Rectangle{
-            anchors.top: checkBoxRow.bottom
+            anchors.top: parent.top
             anchors.left: parent.left
-            anchors.right: parent.right
+            anchors.right: checkBoxRow.left
             anchors.bottom: parent.bottom
             color: "transparent"
 
@@ -171,13 +257,13 @@ Item{
                     axisX: ValueAxis {
                         visible: tempCheck.checked
                         labelsColor: qgcPal.text
-                        min: -20
-                        max: 40
+                        min: tempMin
+                        max: tempMax
                     }
                     axisY: ValueAxis {
                         labelsColor: qgcPal.text
-                        min: 0
-                        max: maxAltitude + 10
+                        min: minAltitude
+                        max: maxAltitude
                     }
                 }
                 ScatterSeries{
@@ -188,8 +274,8 @@ Item{
                     axisX: ValueAxis {
                         visible: humiCheck.checked
                         labelsColor: qgcPal.text
-                        min: 0
-                        max: 100
+                        min: humiMin
+                        max: humiMax
                     }
                 }
                 ScatterSeries{
@@ -200,8 +286,8 @@ Item{
                     axisX: ValueAxis {
                         visible: presCheck.checked
                         labelsColor: qgcPal.text
-                        min: 500
-                        max: 1050
+                        min: presMin
+                        max: presMax
                     }
                 }
                 ScatterSeries{
@@ -224,14 +310,13 @@ Item{
                     axisX: ValueAxis {
                         visible: windSpdCheck.checked
                         labelsColor: qgcPal.text
-                        min: 0
-                        max: 20
+                        min: wnSpMin
+                        max: wnSpMax
                     }
                 }
             }
         }
     }
-
 }
 
 

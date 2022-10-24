@@ -489,6 +489,7 @@ Item {
         //anchors.verticalCenter: parent.verticalCenter
         width: mainWindow.width * 0.4
         //height: mainWindow.height * 0.5
+        visible: false
     }
 
 }

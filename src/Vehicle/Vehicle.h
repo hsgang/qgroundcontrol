@@ -945,6 +945,8 @@ signals:
     void vehicleUIDChanged              ();
     void loadProgressChanged            (float value);
 
+    void atmosphericValueChanged        ();
+
     /// New RC channel values coming from RC_CHANNELS message
     ///     @param channelCount Number of available channels, cMaxRcChannels max
     ///     @param pwmValues -1 signals channel not available
