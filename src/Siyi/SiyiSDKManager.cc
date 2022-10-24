@@ -71,7 +71,7 @@ void SiyiSDKManager::read_incoming_packets(LinkInterface* link, QByteArray b){
 //        return;
 //    }
 
-//    bool reset_parser = false;
+//    reset_parser = false;
 
 //    for(int16_t i = 0; i < nbytes; i ++){
 //        const int16_t p = b[i];
@@ -237,5 +237,36 @@ void SiyiSDKManager::requestLinkStatus()
 
         _sendCustomMessageTimer.stop();
         _sendCustomMessageTimer.start(500);
+    }
+}
+
+
+void SiyiSDKManager::process_packet()
+{
+
+    switch ((SiyiCommandId)_parsed_msg.command_id) {
+
+    case SiyiCommandId::HARDWARE_ID:
+        break;
+
+    case SiyiCommandId::ACQUIRE_SYSTEM_SETTINGS :
+        break;
+
+    case SiyiCommandId::SYSTEM_SETTINGS :
+        break;
+
+    case SiyiCommandId::REMOTE_CONTROL_CHANNELS :
+        break;
+
+    case SiyiCommandId::ACQUIRE_RC_LINK_STATUS :
+        break;
+
+    case SiyiCommandId::ACQUIRE_FPV_LINK_STATUS:{
+        if(_parsed_msg.data_bytes_received != 36) {
+            unexpected_len = true;
+            break;
+        }
+        break;
+    }
     }
 }

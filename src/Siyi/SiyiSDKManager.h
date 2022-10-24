@@ -160,5 +160,8 @@ private:
     uint32_t _last_send_ms;
     uint16_t _last_seq;
 
+    bool reset_parser;
+    bool unexpected_len;
+
 };
 
