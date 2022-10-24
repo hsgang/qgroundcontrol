@@ -101,19 +101,34 @@ Item{
         var diffValue = Math.abs(_vehicleAltitude - preValue)
 
         if(diffValue >= diffGapValue) {
+            preValue = _vehicleAltitude
+
             getAltRange()
             getTempRange()
             getHumiRange()
             getPressRange()
             getWindSpdRange()
-            seriesTemp.append(_temperatureValue, _vehicleAltitude)
-            seriesHumi.append(_humidityValue, _vehicleAltitude)
-            seriesPress.append(_pressureValue, _vehicleAltitude)
-            seriesWindDir.append(_windDirValue, _vehicleAltitude)
-            seriesWindSpd.append(_windSpdValue, _vehicleAltitude)
-            preValue = _vehicleAltitude
-            count++
-            console.log("count :", count)
+
+            if(tempCheck.checked){
+                seriesTemp.append(_temperatureValue, _vehicleAltitude)
+            }
+            if(humiCheck.checked){
+                seriesHumi.append(_humidityValue, _vehicleAltitude)
+            }
+            if(presCheck.checked){
+                seriesPress.append(_pressureValue, _vehicleAltitude)
+            }
+            if(windDirCheck.checked){
+                seriesWindDir.append(_windDirValue, _vehicleAltitude)
+            }
+            if(windSpdCheck.checked){
+                seriesWindSpd.append(_windSpdValue, _vehicleAltitude)
+            }
+            if(tempCheck.checked || humiCheck.checked || presCheck.checked || windDirCheck.checked || windSpdCheck.checked){
+                count++
+            }
+
+            //console.log("count :", count)
         }
     }
 
