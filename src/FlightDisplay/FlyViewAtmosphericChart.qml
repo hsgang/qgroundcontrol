@@ -170,48 +170,23 @@ Item{
 
             QGCCheckBox {
                 id: tempCheck
-                style: CheckBoxStyle {
-                    label: Text {
-                        color: qgcPal.text
-                        text: "Temperature"
-                    }
-                }
+                text: "Temperature"
             }
             QGCCheckBox {
                 id: humiCheck
-                style: CheckBoxStyle {
-                    label: Text {
-                        color: qgcPal.text
-                        text: "Humidity"
-                    }
-                }
+                text: "Humidity"
             }
             QGCCheckBox {
                 id: presCheck
-                style: CheckBoxStyle {
-                    label: Text {
-                        color: qgcPal.text
-                        text: "Pressure"
-                    }
-                }
+                text: "Pressure"
             }
             QGCCheckBox {
                 id: windDirCheck
-                style: CheckBoxStyle {
-                    label: Text {
-                        color: qgcPal.text
-                        text: "WindDir"
-                    }
-                }
+                text: "WindDir"
             }
             QGCCheckBox {
                 id: windSpdCheck
-                style: CheckBoxStyle {
-                    label: Text {
-                        color: qgcPal.text
-                        text: "WindSpd"
-                    }
-                }
+                text: "WindSpd"
             }
 
             QGCButton{
@@ -274,11 +249,13 @@ Item{
                         labelsColor: qgcPal.text
                         min: tempMin
                         max: tempMax
+                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
                     }
                     axisY: ValueAxis {
                         labelsColor: qgcPal.text
                         min: minAltitude
                         max: maxAltitude
+                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
                     }
                 }
                 ScatterSeries{
@@ -291,6 +268,7 @@ Item{
                         labelsColor: qgcPal.text
                         min: humiMin
                         max: humiMax
+                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
                     }
                 }
                 ScatterSeries{
@@ -303,6 +281,7 @@ Item{
                         labelsColor: qgcPal.text
                         min: presMin
                         max: presMax
+                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
                     }
                 }
                 ScatterSeries{
@@ -315,6 +294,7 @@ Item{
                         labelsColor: qgcPal.text
                         min: 0
                         max: 360
+                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
                     }
                 }
                 ScatterSeries{
@@ -327,6 +307,7 @@ Item{
                         labelsColor: qgcPal.text
                         min: wnSpMin
                         max: wnSpMax
+                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
                     }
                 }
             }
