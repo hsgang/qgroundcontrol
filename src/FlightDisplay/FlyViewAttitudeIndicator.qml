@@ -78,7 +78,7 @@ Rectangle {
             anchors.left:               parent.right
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
-            width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
+            width:                      ScreenTools.isMobile ? parent.width * 1.2 : parent.width * 1
             color:                      "#80000000"
 //            border.color:               Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
 //            border.width:               1
@@ -210,7 +210,7 @@ Rectangle {
             anchors.right:              parent.left
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
-            width:                      ScreenTools.isMobile ? parent.width : parent.width * 0.8
+            width:                      ScreenTools.isMobile ? parent.width * 1.2 : parent.width * 1
             color:                      "#80000000"
 //            border.color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
 //            border.width: 1
