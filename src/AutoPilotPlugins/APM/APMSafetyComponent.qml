@@ -542,7 +542,7 @@ SetupPage {
                     property Fact _landSpeedFact:   controller.getParameterFact(-1, "LAND_SPEED")
                     property Fact _rtlAltFact:      controller.getParameterFact(-1, "RTL_ALT")
                     property Fact _rtlLoitTimeFact: controller.getParameterFact(-1, "RTL_LOIT_TIME")
-                    property Fact _rtlAltFinalFact: controller.getParameterFact(-1, "RTL_ALT_FINAL")
+                    property Fact _landAltLow:      controller.getParameterFact(-1, "LAND_ALT_LOW")
 
                     QGCLabel {
                         id:             rtlLabel
@@ -632,7 +632,7 @@ SetupPage {
                         QGCLabel {
                             anchors.left:       returnAtCurrentRadio.left
                             anchors.baseline:   rltAltFinalField.baseline
-                            text:               qsTr("Final land stage altitude:")
+                            text:               qsTr("Land stage altitude:")
                         }
 
                         FactTextField {
@@ -640,14 +640,14 @@ SetupPage {
                             anchors.topMargin:  _innerMargin
                             anchors.left:       rltAltField.left
                             anchors.top:        landDelayField.bottom
-                            fact:               _rtlAltFinalFact
+                            fact:               _landAltLow
                             showUnits:          true
                         }
 
                         QGCLabel {
                             anchors.left:       returnAtCurrentRadio.left
                             anchors.baseline:   landSpeedField.baseline
-                            text:               qsTr("Final land stage descent speed:")
+                            text:               qsTr("Land stage descent speed:")
                         }
 
                         FactTextField {
