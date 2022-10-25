@@ -236,131 +236,6 @@ Item {
         height:                 width
     }
 
-    //-----------------------------------------------------------------------------------------------------
-    //--Vibration Widget-----------------------------------------------------------------------------------
-    Rectangle {
-        id:                     vibrationBackground
-        anchors.right:          weatherPopupButton.left
-        anchors.bottom:         parent.bottom
-        anchors.margins:        _toolsMargin
-        color:                  "#80000000"
-        height:                 ScreenTools.defaultFontPixelHeight * 2.5
-        width:                  height
-        radius:                 ScreenTools.defaultFontPixelHeight / 3
-        visible:                false
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked:    _vibeStatusVisible = !_vibeStatusVisible
-        }
-
-        QGCLabel {
-            anchors.centerIn:   parent
-            font.pointSize:     ScreenTools.largeFontPointSize
-            Layout.alignment:   Qt.AlignHCenter
-            color:              "white"
-            text:               qsTr("Vibe")
-        }
-    }
-
-    //-----------------------------------------------------------------------------------------------------
-    //--Vibration Status-----------------------------------------------------------------------------------
-    Rectangle {
-        id:                     vibrationStatus
-        anchors.left:           parent.left
-        anchors.leftMargin:     _toolsMargin
-        anchors.verticalCenter: parent.verticalCenter
-        width:                  _rightPanelWidth
-        height:                 width
-        radius:                 2
-        color:                  qgcPal.window
-        visible:                _vibeStatusVisible
-
-        RowLayout {
-            id:               barRow
-            spacing:          ScreenTools.defaultFontPixelWidth * 2
-            anchors.centerIn: parent
-
-            ColumnLayout {
-                Rectangle {
-                    id:                 xBar
-                    height:             _barHeight
-                    width:              _barWidth
-                    Layout.alignment:   Qt.AlignHCenter
-                    border.width:       1
-                    border.color:       qgcPal.text
-
-                    Rectangle {
-                        anchors.bottom: parent.bottom
-                        width:          parent.width
-                        height:         parent.height * (Math.min(_barMaximum, _xValue) / (_barMaximum - _barMinimum))
-                        color:          qgcPal.text
-                    }
-                }
-
-                QGCLabel {
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("X")
-                }
-            }
-
-            ColumnLayout {
-                Rectangle {
-                    height:             _barHeight
-                    width:              _barWidth
-                    Layout.alignment:   Qt.AlignHCenter
-                    border.width:       1
-                    border.color:       qgcPal.text
-
-                    Rectangle {
-                        anchors.bottom: parent.bottom
-                        width:          parent.width
-                        height:         parent.height * (Math.min(_barMaximum, _yValue) / (_barMaximum - _barMinimum))
-                        color:          qgcPal.text
-                    }
-                }
-
-                QGCLabel {
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Y")
-                }
-            }
-
-            ColumnLayout {
-                Rectangle {
-                    height:             _barHeight
-                    width:              _barWidth
-                    Layout.alignment:   Qt.AlignHCenter
-                    border.width:       1
-                    border.color:       qgcPal.text
-
-                    Rectangle {
-                        anchors.bottom: parent.bottom
-                        width:          parent.width
-                        height:         parent.height * (Math.min(_barMaximum, _zValue) / (_barMaximum - _barMinimum))
-                        color:          qgcPal.text
-                    }
-                }
-
-                QGCLabel {
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               qsTr("Z")
-                }
-            }
-        }
-
-        // Max vibe indication line at 60
-        Rectangle {
-            anchors.topMargin:      xBar.height * (1.0 - ((_barBadValue - _barMinimum) / (_barMaximum - _barMinimum)))
-            anchors.top:            barRow.top
-            anchors.left:           barRow.left
-            anchors.right:          barRow.right
-            width:                  barRow.width
-            height:                 1
-            color:                  "red"
-        }
-    }
-
     FlyViewWeatherWidget{
         id:                         weatherWidget
         anchors.margins:            _toolsMargin
@@ -408,7 +283,6 @@ Item {
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
         width:           mainWindow.width  * 0.5
-        //height:         mainWindow.height * 0.15
         height:         messageToastManager.height < mainWindow.height * 0.15 ? messageToastManager.height : mainWindow.height * 0.15
         color:          "transparent" //qgcPal.window
         visible:        messageFlick.contentHeight
@@ -437,8 +311,6 @@ Item {
                     messageToastManager.show(formattedMessage)
                 }
             }
-
-
         }
 
         MouseArea{
@@ -486,12 +358,10 @@ Item {
         anchors.top:            photoVideoControl.bottom
         anchors.bottom:         attitudeIndicator.top
         anchors.right:          chartPopupButton.left
-        //anchors.verticalCenter: parent.verticalCenter
         width: mainWindow.width * 0.4
         //height: mainWindow.height * 0.5
         visible: false
     }
-
 }
 
 
