@@ -18,6 +18,7 @@ FlyViewWeatherWidget            1.0 FlyViewWeatherWidget.qml
 FlyViewAttitudeIndicator        1.0 FlyViewAttitudeIndicator.qml
 FlyViewGeneratorStatusView      1.0 FlyViewGeneratorStatusView.qml
 FlyViewAtmosphericChart         1.0 FlyViewAtmosphericChart.qml
+FlyViewMissionProgress          1.0 FlyViewMissionProgress.qml
 GuidedActionActionList          1.0 GuidedActionActionList.qml
 GuidedActionConfirm             1.0 GuidedActionConfirm.qml
 GuidedActionPressHoldConfirm    1.0 GuidedActionPressHoldConfirm.qml

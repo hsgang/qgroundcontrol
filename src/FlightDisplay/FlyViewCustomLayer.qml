@@ -297,6 +297,14 @@ Item {
         visible: false
     }
 
+    FlyViewMissionProgress{
+        id: flyviewMissionProgress
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom:           attitudeIndicator.top
+        anchors.bottomMargin:     _toolsMargin
+        visible: false
+    }
+
     Rectangle{
         id:                     popupIcons
         color:                  qgcPal.toolbarBackground
@@ -457,6 +465,48 @@ Item {
                         anchors.fill: telemetryPanelPopupButton
                         onClicked: {
                             telemetryPanel.visible = !telemetryPanel.visible
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id:                 missionProgressPopupButton
+                    anchors.top:        parent.top
+                    anchors.bottom:     parent.bottom
+                    border.color:       telemetryPanel.visible ? qgcPal.text : qgcPal.colorGrey
+                    border.width:       3
+                    color:              "#80000000" //qgcPal.window
+                    height:             ScreenTools.defaultFontPixelHeight * 2.5
+                    width:              ScreenTools.defaultFontPixelHeight * 2.5
+                    radius:             ScreenTools.defaultFontPixelHeight / 3
+
+                    Connections{
+                        target: _activeVehicle
+                        onFlightModeChanged: {
+                            if (flightMode === "Auto"){
+                                flyviewMissionProgress.visible = true
+                            }
+                        }
+                    }
+
+                    Image {
+                        id: missionProgressPopupIcon
+                        source: "/qmlimages/Plan.svg"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        mipmap: true
+                        fillMode: Image.PreserveAspectFit
+                        sourceSize: Qt.size(parent.width * 0.7, parent.height * 0.7)
+                    }
+                    ColorOverlay {
+                           anchors.fill: missionProgressPopupIcon
+                           source: missionProgressPopupIcon
+                           color: "#ffffff"
+                    }
+                    MouseArea {
+                        anchors.fill: missionProgressPopupButton
+                        onClicked: {
+                            flyviewMissionProgress.visible = !flyviewMissionProgress.visible
                         }
                     }
                 }
