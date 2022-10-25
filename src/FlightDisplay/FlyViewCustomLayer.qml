@@ -99,8 +99,8 @@ Item {
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
         anchors.right:      parent.right
-        anchors.bottom:     parent.bottom
-        anchors.bottomMargin: _toolsMargin //ScreenTools.defaultFontPixelHeight * 3
+        anchors.bottom:     popupIcons.top
+        anchors.bottomMargin: _toolsMargin
 
         function recalcXPosition() {
             // First try centered
@@ -239,42 +239,10 @@ Item {
     FlyViewWeatherWidget{
         id:                         weatherWidget
         anchors.margins:            _toolsMargin
-        anchors.horizontalCenter:   parent.horizontalCenter
-        anchors.top:                parent.top
+        anchors.verticalCenter:     parent.verticalCenter
+        anchors.right:              parent.right
         anchors.topMargin:          _toolsMargin
         visible:                    false
-    }
-
-    Rectangle {
-        id:                 weatherPopupButton
-        anchors.margins:    _toolsMargin
-        anchors.right:      parent.right
-        anchors.bottom:     telemetryPanel.top
-        color:              "#80000000" //qgcPal.window
-        height:             ScreenTools.defaultFontPixelHeight * 2.5
-        width:              ScreenTools.defaultFontPixelHeight * 2.5
-        radius:             ScreenTools.defaultFontPixelHeight / 3
-        visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
-
-        Image {
-            id: showWeatherStatusIcon
-            source: "/qmlimages/cloudy_wind.svg"
-            mipmap: true
-            fillMode: Image.PreserveAspectFit
-            sourceSize: Qt.size(parent.width, parent.height)
-            MouseArea {
-                anchors.fill: showWeatherStatusIcon
-                onClicked: {
-                    weatherWidget.getWeatherJSON()
-                    weatherWidget.visible = !weatherWidget.visible
-                }
-            }
-        }
-        ColorOverlay {
-               anchors.fill: showWeatherStatusIcon
-               source: showWeatherStatusIcon
-               color: "#ffffff"
-        }
     }
 
     Rectangle {
@@ -319,48 +287,181 @@ Item {
         }
     }
 
-    Rectangle {
-        id:                 chartPopupButton
-        anchors.margins:    _toolsMargin
-        anchors.right:      parent.right
-        anchors.bottom:     weatherPopupButton.visible ? weatherPopupButton.top : telemetryPanel.top
-        color:              "#80000000" //qgcPal.window
-        height:             ScreenTools.defaultFontPixelHeight * 2.5
-        width:              ScreenTools.defaultFontPixelHeight * 2.5
-        radius:             ScreenTools.defaultFontPixelHeight / 3
-        visible:            true
-        //visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
-
-        Image {
-            id: showChartIcon
-            anchors.centerIn: parent
-            source: "/qmlimages/MAVLinkInspector"
-            mipmap: true
-            fillMode: Image.PreserveAspectFit
-            sourceSize: Qt.size(parent.width * 0.8, parent.height * 0.8)
-            MouseArea {
-                anchors.fill: showChartIcon
-                onClicked: {
-                    flyViewChartWidget.visible = !flyViewChartWidget.visible
-                }
-            }
-        }
-        ColorOverlay {
-               anchors.fill: showChartIcon
-               source: showChartIcon
-               color: "#ffffff"
-        }
-    }
-
     FlyViewAtmosphericChart{
         id: flyViewChartWidget
         anchors.margins:        _toolsMargin
-        anchors.top:            photoVideoControl.bottom
+        anchors.top:            photoVideoControl.visible ? photoVideoControl.bottom : parent.top
         anchors.bottom:         attitudeIndicator.top
-        anchors.right:          chartPopupButton.left
+        anchors.right:          parent.right
         width: mainWindow.width * 0.4
-        //height: mainWindow.height * 0.5
         visible: false
+    }
+
+    Rectangle{
+        id:                     popupIcons
+        color:                  qgcPal.toolbarBackground
+        anchors.margins:        _toolsMargin
+        anchors.right:          parent.right
+        anchors.bottom:         parent.bottom
+        width:                  toolStripRow.width + (flickable.anchors.margins * 2)
+        height:                 ScreenTools.defaultFontPixelHeight * 3
+        radius:                 _toolsMargin
+
+        DeadMouseArea {
+            anchors.fill: parent
+        }
+
+        QGCFlickable {
+            id:                 flickable
+            anchors.margins:    ScreenTools.defaultFontPixelWidth * 0.4
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            anchors.left:       parent.left
+            width:              parent.width
+            contentWidth:       toolStripRow.width
+            flickableDirection: Flickable.HorizontalFlick
+            clip:               true
+
+            Row {
+                id:             toolStripRow
+                anchors.top:    parent.top
+                anchors.bottom:  parent.bottom
+                spacing:        ScreenTools.defaultFontPixelWidth * 0.5
+
+                Rectangle {
+                    id:                 chartPopupButton
+                    anchors.top:        parent.top
+                    anchors.bottom:     parent.bottom
+                    border.color:       flyViewChartWidget.visible ? qgcPal.text : qgcPal.colorGrey
+                    border.width:       3
+                    color:              "#80000000" //qgcPal.window
+                    height:             ScreenTools.defaultFontPixelHeight * 2.5
+                    width:              ScreenTools.defaultFontPixelHeight * 2.5
+                    radius:             ScreenTools.defaultFontPixelHeight / 3
+                    visible:            true
+                    Image {
+                        id: showChartIcon
+                        anchors.centerIn: parent
+                        source: "/qmlimages/MAVLinkInspector"
+                        mipmap: true
+                        fillMode: Image.PreserveAspectFit
+                        sourceSize: Qt.size(parent.width * 0.8, parent.height * 0.8)
+                    }
+                    ColorOverlay {
+                           anchors.fill: showChartIcon
+                           source: showChartIcon
+                           color: "#ffffff"
+                    }
+                    MouseArea {
+                        anchors.fill: chartPopupButton
+                        onClicked: {
+                            flyViewChartWidget.visible = !flyViewChartWidget.visible
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id:                 weatherPopupButton
+                    anchors.top:        parent.top
+                    anchors.bottom:     parent.bottom
+                    border.color:       weatherWidget.visible ? qgcPal.text : qgcPal.colorGrey
+                    border.width:       3
+                    color:              "#80000000" //qgcPal.window
+                    height:             ScreenTools.defaultFontPixelHeight * 2.5
+                    width:              ScreenTools.defaultFontPixelHeight * 2.5
+                    radius:             ScreenTools.defaultFontPixelHeight / 3
+                    visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
+
+                    Image {
+                        id: showWeatherStatusIcon
+                        source: "/qmlimages/cloudy_wind.svg"
+                        mipmap: true
+                        fillMode: Image.PreserveAspectFit
+                        sourceSize: Qt.size(parent.width, parent.height)
+                    }
+                    ColorOverlay {
+                           anchors.fill: showWeatherStatusIcon
+                           source: showWeatherStatusIcon
+                           color: "#ffffff"
+                    }
+                    MouseArea {
+                        anchors.fill: weatherPopupButton
+                        onClicked: {
+                            weatherWidget.getWeatherJSON()
+                            weatherWidget.visible = !weatherWidget.visible
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id:                 photovideoPopupButton
+                    anchors.top:        parent.top
+                    anchors.bottom:     parent.bottom
+                    border.color:       photoVideoControl.visible ? qgcPal.text : qgcPal.colorGrey
+                    border.width:       3
+                    color:              "#80000000" //qgcPal.window
+                    height:             ScreenTools.defaultFontPixelHeight * 2.5
+                    width:              ScreenTools.defaultFontPixelHeight * 2.5
+                    radius:             ScreenTools.defaultFontPixelHeight / 3
+                    visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
+
+                    Image {
+                        id: photoStatusIcon
+                        source: "/qmlimages/camera.svg"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        mipmap: true
+                        fillMode: Image.PreserveAspectFit
+                        sourceSize: Qt.size(parent.width * 0.7, parent.height * 0.7)
+                    }
+                    ColorOverlay {
+                           anchors.fill: photoStatusIcon
+                           source: photoStatusIcon
+                           color: "#ffffff"
+                    }
+                    MouseArea {
+                        anchors.fill: photovideoPopupButton
+                        onClicked: {
+                            photoVideoControl.visible = !photoVideoControl.visible
+                        }
+                    }
+                }
+
+                Rectangle {
+                    id:                 telemetryPanelPopupButton
+                    anchors.top:        parent.top
+                    anchors.bottom:     parent.bottom
+                    border.color:       telemetryPanel.visible ? qgcPal.text : qgcPal.colorGrey
+                    border.width:       3
+                    color:              "#80000000" //qgcPal.window
+                    height:             ScreenTools.defaultFontPixelHeight * 2.5
+                    width:              ScreenTools.defaultFontPixelHeight * 2.5
+                    radius:             ScreenTools.defaultFontPixelHeight / 3
+                    visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
+
+                    Image {
+                        id: telemetryPanelPopupIcon
+                        source: "/qmlimages/LogDownloadIcon"
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        mipmap: true
+                        fillMode: Image.PreserveAspectFit
+                        sourceSize: Qt.size(parent.width * 0.7, parent.height * 0.7)
+                    }
+                    ColorOverlay {
+                           anchors.fill: telemetryPanelPopupIcon
+                           source: telemetryPanelPopupIcon
+                           color: "#ffffff"
+                    }
+                    MouseArea {
+                        anchors.fill: telemetryPanelPopupButton
+                        onClicked: {
+                            telemetryPanel.visible = !telemetryPanel.visible
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
