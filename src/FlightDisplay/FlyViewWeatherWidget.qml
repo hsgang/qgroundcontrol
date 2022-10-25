@@ -9,7 +9,6 @@
 
 import QtQuick                  2.12
 import QtQuick.Controls         2.4
-import QtQuick.Dialogs          1.3
 import QtQuick.Layouts          1.12
 import QtGraphicalEffects       1.12
 
@@ -17,16 +16,10 @@ import QtQuick.Window           2.2
 import QtQml.Models             2.1
 
 import QGroundControl               1.0
-import QGroundControl.Airspace      1.0
-import QGroundControl.Airmap        1.0
-import QGroundControl.Controllers   1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.FactSystem    1.0
-import QGroundControl.FlightDisplay 1.0
-import QGroundControl.FlightMap     1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
-import QGroundControl.Vehicle       1.0
 
 Rectangle {
     id:                     weatherBackground
@@ -34,6 +27,8 @@ Rectangle {
     height:                 weatherTitle.height + weatherValue.height + (_toolsMargin * 3)
     radius:                 ScreenTools.defaultFontPixelWidth / 2
     color:                  "#80000000" //qgcPal.window
+    border.color:           qgcPal.text
+    border.width:           1
 
     // Property of Tools
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
