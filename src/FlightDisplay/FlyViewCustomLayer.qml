@@ -473,7 +473,7 @@ Item {
                     id:                 missionProgressPopupButton
                     anchors.top:        parent.top
                     anchors.bottom:     parent.bottom
-                    border.color:       telemetryPanel.visible ? qgcPal.text : qgcPal.colorGrey
+                    border.color:       flyviewMissionProgress.visible ? qgcPal.text : qgcPal.colorGrey
                     border.width:       3
                     color:              "#80000000" //qgcPal.window
                     height:             ScreenTools.defaultFontPixelHeight * 2.5
@@ -483,7 +483,8 @@ Item {
                     Connections{
                         target: _activeVehicle
                         onFlightModeChanged: {
-                            if (flightMode === "Auto"){
+                            //console.log(flightMode)
+                            if (flightMode === "Auto" || flightMode === "Mission" || flightMode ==="미션"){
                                 flyviewMissionProgress.visible = true
                             }
                         }
