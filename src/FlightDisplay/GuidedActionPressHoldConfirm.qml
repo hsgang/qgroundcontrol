@@ -134,11 +134,10 @@ Item {
     Rectangle {
         id: confirmBackground
         width: parent.width * 1.4 //(parent.width * 3 > messageTextBox.width) ? parent.width * 2 : messageTextBox.width
+        height : parent.height * 1.1
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: shape.top
-        anchors.bottom: shape.bottom
-        anchors.bottomMargin: - _margins * 2
-        radius: _margins * 3
+        anchors.verticalCenter: parent.verticalCenter
+        radius: parent.width * 0.15 //_margins * 3
         color: qgcPal.windowShadeDark
     }
 
