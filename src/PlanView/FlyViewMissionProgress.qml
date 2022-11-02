@@ -15,6 +15,13 @@ Rectangle {
     width: missionStats.width + _margins * 2
     color: "#80000000"
     radius: _margins
+// form
+    property real   _dataFontSize:              ScreenTools.defaultFontPointSize
+    property real   _largeValueWidth:           ScreenTools.defaultFontPixelWidth * 8
+    property real   _mediumValueWidth:          ScreenTools.defaultFontPixelWidth * 4
+    property real   _smallValueWidth:           ScreenTools.defaultFontPixelWidth * 3
+    property real   _labelToValueSpacing:       ScreenTools.defaultFontPixelWidth
+    property real   _rowSpacing:                ScreenTools.isMobile ? 1 : 0
 
 // Vehicle
     property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
@@ -33,16 +40,17 @@ Rectangle {
     property string _latitudeText:              isNaN(_latitude) ? "-.-" : _latitude.toFixed(7)
     property string _longitudeText:             isNaN(_longitude) ? "-.-" : _longitude.toFixed(7)
     property string _flightDistanceText:        isNaN(_flightDistance) ? "-.-" : _flightDistance.toFixed(1)
+    property real   _missionItemIndex:          _activeVehicle ? _activeVehicle.missionItemIndex.rawValue : 0
 
 // Mission
     property var    _planMasterController:      globals.planMasterControllerPlanView
     property var    _currentMissionItem:        globals.currentPlanMissionItem          ///< Mission item to display status for
 
     property var    missionItems:               _controllerValid ? _planMasterController.missionController.visualItems : undefined
-//    property real   missionItemCount:           _controllerValid ? _planMasterController.missionController.visualItems.lastItem : NaN
     property real   missionDistance:            _controllerValid ? _planMasterController.missionController.missionDistance : NaN
     property real   missionPathDistance:        _controllerValid ? _planMasterController.missionController.missionPathDistance : NaN
     property real   missionTime:                _controllerValid ? _planMasterController.missionController.missionTime : 0
+    property real   missionItemCount:           _controllerValid ? _planMasterController.missionController.missionItemCount : NaN
 
     property bool   _controllerValid:           _planMasterController !== undefined && _planMasterController !== null
     property bool   _controllerOffline:         _controllerValid ? _planMasterController.offline : true
@@ -50,22 +58,18 @@ Rectangle {
 
     property bool   _missionValid:              missionItems !== undefined
 
-    property real   _dataFontSize:              ScreenTools.defaultFontPointSize
-    property real   _largeValueWidth:           ScreenTools.defaultFontPixelWidth * 8
-    property real   _mediumValueWidth:          ScreenTools.defaultFontPixelWidth * 4
-    property real   _smallValueWidth:           ScreenTools.defaultFontPixelWidth * 3
-    property real   _labelToValueSpacing:       ScreenTools.defaultFontPixelWidth
-    property real   _rowSpacing:                ScreenTools.isMobile ? 1 : 0
-
     property real   _missionDistance:           _missionValid ? missionDistance : NaN
     property real   _missionPathDistance:       _missionValid ? missionPathDistance : NaN
     property real   _missionTime:               _missionValid ? missionTime : 0
+    property real   _missionItemCount:          _missionValid ? missionItemCount : NaN
 
     property string _missionDistanceText:       isNaN(_missionDistance) ?       "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
     property string _missionPathDistanceText:   isNaN(_missionPathDistance) ?   "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionPathDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
 
     property real   _missionProgress:           0
-    property string _missionProgressText:       isNaN(_missionProgress) ? "-.- %" : _missionProgress.toFixed(1) + " %"
+    property string _missionProgressText:       isNaN(_missionProgress) ? "--.- %" : _missionProgress.toFixed(1) + " %"
+
+    property bool   isVerticalMission:          (_missionDistance < (_missionPathDistance - _missionDistance)) ? true : false
 
     readonly property real _margins: ScreenTools.defaultFontPixelWidth
 
@@ -95,7 +99,6 @@ Rectangle {
         return pct
     }
 
-
     GridLayout {
         id: missionStats
         anchors.top:            parent.top
@@ -117,6 +120,7 @@ Rectangle {
             border.color:   qgcPal.text
             border.width:   1
             radius:         _margins * 0.5
+            visible:        !isVerticalMission
 
             Rectangle {
                 anchors.top:    parent.top
@@ -156,7 +160,7 @@ Rectangle {
             Layout.minimumWidth:    _largeValueWidth
         }
 
-        QGCLabel { text: qsTr("Distance:"); font.pointSize: _dataFontSize; }
+        QGCLabel { text: qsTr("H.Distance:"); font.pointSize: _dataFontSize; }
         QGCLabel {
             text:                   _missionDistanceText
             font.pointSize:         _dataFontSize
@@ -178,9 +182,9 @@ Rectangle {
             Layout.minimumWidth:    _largeValueWidth
         }
 
-//        QGCLabel { text: qsTr("Flt.Distance:"); font.pointSize: _dataFontSize; }
+//        QGCLabel { text: qsTr("Mission Seq:"); font.pointSize: _dataFontSize; }
 //        QGCLabel {
-//            text:                   missionItemCount
+//            text:                   _missionItemIndex + " / " + _missionItemCount
 //            font.pointSize:         _dataFontSize
 //            Layout.minimumWidth:    _largeValueWidth
 //        }
