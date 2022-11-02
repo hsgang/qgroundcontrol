@@ -12840,6 +12840,11 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
   <context>
     <name>PlanToolBarIndicators</name>
     <message>
+      <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="121"/>
+      <source>Done</source>
+      <translation>완료</translation>
+    </message>
+    <message>
       <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="138"/>
       <source>Selected Waypoint</source>
       <translation>선택된 경로지점</translation>
