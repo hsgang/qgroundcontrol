@@ -44,6 +44,9 @@ Rectangle {
     // Property of Tools
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
     property color  _baseBGColor:           qgcPal.window
+    property real   _largeValueWidth:           ScreenTools.defaultFontPixelWidth * 8
+    property real   _mediumValueWidth:          ScreenTools.defaultFontPixelWidth * 6
+    property real   _smallValueWidth:           ScreenTools.defaultFontPixelWidth * 4
 
     // Property of Active Vehicle
     property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
@@ -64,7 +67,6 @@ Rectangle {
 
     Rectangle {
         id:                     attitudeIndicator
-        //anchors.bottomMargin:   _toolsMargin
         anchors.bottom:         parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         height:                 ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
@@ -78,21 +80,30 @@ Rectangle {
             anchors.left:               parent.right
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
-            width:                      ScreenTools.isMobile ? parent.width * 1.2 : parent.width * 1
+            width:                      altitudeGrid.width
             color:                      "#80000000"
-//            border.color:               Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-//            border.width:               1
             radius:                     _toolsMargin
 
             GridLayout {
-                anchors.fill: parent
+                id: altitudeGrid
+                anchors.top:            parent.top
+                anchors.bottom:         parent.bottom
+                anchors.left:           parent.left
+                anchors.leftMargin:     _margins
+                Layout.alignment:       Qt.AlignVCenter | Qt.AlignHCenter
 
                 columns: 4
                 rows: 3
 
                 rowSpacing: 1
 
-                Rectangle{
+                QGCLabel {
+                    id: altText
+                    text: "ALT"
+                    font.bold : true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 1
                     Layout.rowSpan : 1
@@ -102,24 +113,23 @@ Rectangle {
                     Layout.row : 0
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: "transparent"
-                    QGCLabel {
-                        id: altText
-                        text: "ALT"
-                        font.bold : true
-                        anchors.right: parent.right
-                        anchors.rightMargin: _toolsMargin
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Glow {
-                        anchors.fill: altText
-                        radius: 2
+                    Layout.minimumWidth:    _mediumValueWidth
+
+                    layer.enabled: true
+                    layer.effect: Glow {
                         samples: 5
                         color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        source: altText
+                        transparentBorder: true
                     }
                 }
-                Rectangle{
+
+                QGCLabel {
+                    id: distunitText
+                    text:  QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+                    font.bold : true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 1
                     Layout.rowSpan : 1
@@ -129,25 +139,25 @@ Rectangle {
                     Layout.row : 1
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: "transparent"
-                    QGCLabel {
-                        id: distunitText
-                        text:  QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
-                        font.bold : true
-                        anchors.right: parent.right
-                        anchors.rightMargin: _toolsMargin
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Glow {
-                        anchors.fill: distunitText
-                        radius: 2
+                    Layout.minimumWidth:    _mediumValueWidth
+
+                    layer.enabled: true
+                    layer.effect: Glow {
                         samples: 5
                         color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        source: distunitText
+                        transparentBorder: true
                     }
                 }
 
-                Rectangle{
+
+                QGCLabel {
+                    id:     altitudeValueText
+                    text:   _vehicleAltitudeText
+                    font.bold : true
+                    font.pointSize : ScreenTools.defaultFontPointSize * 2.5
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3
                     Layout.rowSpan : 2
@@ -157,25 +167,23 @@ Rectangle {
                     Layout.row : 0
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: "transparent"
-                    QGCLabel {
-                        id:     altitudeValueText
-                        text:   _vehicleAltitudeText
-                        font.bold : true
-                        font.pointSize : ScreenTools.defaultFontPointSize * 2.5
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Glow {
-                        anchors.fill: altitudeValueText
-                        radius: 2
+                    Layout.minimumWidth:    _largeValueWidth * 1.5
+
+                    layer.enabled: true
+                    layer.effect: Glow {
                         samples: 5
                         color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        source: altitudeValueText
+                        transparentBorder: true
                     }
                 }
 
-                Rectangle{
+                QGCLabel {
+                    id: vsText
+                    text:   "VS " + _vehicleVerticalSpeedText
+                    font.bold : true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 4
                     Layout.rowSpan : 1
@@ -185,22 +193,18 @@ Rectangle {
                     Layout.row : 2
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: "transparent"
-                    QGCLabel {
-                        id: vsText
-                        text:   "VS " + _vehicleVerticalSpeedText
-                        font.bold : true
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Glow {
-                        anchors.fill: vsText
-                        radius: 2
+                    Layout.minimumWidth:    _largeValueWidth + _mediumValueWidth
+
+                    layer.enabled: true
+                    layer.effect: Glow {
                         samples: 5
                         color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        source: vsText
+                        transparentBorder: true
                     }
                 }
+
+
+
             }
         }
 
@@ -210,22 +214,31 @@ Rectangle {
             anchors.right:              parent.left
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
-            width:                      ScreenTools.isMobile ? parent.width * 1.2 : parent.width * 1
+            width:                      spdGrid.width
             color:                      "#80000000"
-//            border.color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-//            border.width: 1
             radius:                     _toolsMargin
 
             GridLayout {
-                id: leftIndicator
-                anchors.fill: parent
+                id: spdGrid
+
+                anchors.top:            parent.top
+                anchors.bottom:         parent.bottom
+                anchors.right:          parent.right
+                anchors.rightMargin:    _margins
+                Layout.alignment:       Qt.AlignVCenter | Qt.AlignHCenter
 
                 columns: 4
                 rows: 3
 
                 rowSpacing: 1
 
-                Rectangle{
+                QGCLabel {
+                    id: spdText
+                    text: "SPD"
+                    font.bold : true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 1
                     Layout.rowSpan : 1
@@ -235,25 +248,23 @@ Rectangle {
                     Layout.row : 0
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: "transparent"
-                    QGCLabel {
-                        id: spdText
-                        text: "SPD"
-                        font.bold : true
-                        anchors.left: parent.left
-                        anchors.leftMargin: _toolsMargin
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Glow {
-                        anchors.fill: spdText
-                        radius: 2
+                    Layout.minimumWidth:    _mediumValueWidth
+
+                    layer.enabled: true
+                    layer.effect: Glow {
                         samples: 5
                         color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        source: spdText
+                        transparentBorder: true
                     }
                 }
 
-                Rectangle{
+                QGCLabel {
+                    id: spdunitText
+                    text: QGroundControl.unitsConversion.appSettingsSpeedUnitsString
+                    font.bold : true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 1
                     Layout.rowSpan : 1
@@ -263,25 +274,24 @@ Rectangle {
                     Layout.row : 1
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: "transparent"
-                    QGCLabel {
-                        id: spdunitText
-                        text:  QGroundControl.unitsConversion.appSettingsSpeedUnitsString
-                        font.bold : true
-                        anchors.left: parent.left
-                        anchors.leftMargin: _toolsMargin
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Glow {
-                        anchors.fill: spdunitText
-                        radius: 2
+                    Layout.minimumWidth:    _mediumValueWidth
+
+                    layer.enabled: true
+                    layer.effect: Glow {
                         samples: 5
                         color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        source: spdunitText
+                        transparentBorder: true
                     }
                 }
 
-                Rectangle{
+                QGCLabel {
+                    id: gndspdText
+                    text: _vehicleGroundSpeedText
+                    font.bold : true
+                    font.pointSize : ScreenTools.defaultFontPointSize * 2.5
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3
                     Layout.rowSpan : 2
@@ -291,25 +301,23 @@ Rectangle {
                     Layout.row : 0
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: "transparent"
-                    QGCLabel {
-                        id: gndspdText
-                        text:   _vehicleGroundSpeedText
-                        font.bold : true
-                        font.pointSize : ScreenTools.defaultFontPointSize * 2.5
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Glow {
-                        anchors.fill: gndspdText
-                        radius: 2
+                    Layout.minimumWidth:    _largeValueWidth * 1.5
+
+                    layer.enabled: true
+                    layer.effect: Glow {
                         samples: 5
                         color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        source: gndspdText
+                        transparentBorder: true
                     }
                 }
 
-                Rectangle{
+                QGCLabel {
+                    id: dtohText
+                    text: "Home " + _distanceToHomeText
+                    font.bold : true
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 4
                     Layout.rowSpan : 1
@@ -319,22 +327,16 @@ Rectangle {
                     Layout.row : 2
                     Layout.fillHeight: true
                     Layout.fillWidth: true
-                    color: "transparent"
-                    QGCLabel {
-                        id: dtohText
-                        text:   "Home " + _distanceToHomeText
-                        font.bold: true
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-                    Glow {
-                        anchors.fill: dtohText
-                        radius: 2
+                    Layout.minimumWidth:    _largeValueWidth + _mediumValueWidth
+
+                    layer.enabled: true
+                    layer.effect: Glow {
                         samples: 5
                         color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        source: dtohText
+                        transparentBorder: true
                     }
                 }
+
             }
         }
 
