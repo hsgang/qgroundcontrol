@@ -44,7 +44,7 @@ Rectangle {
     // Weather Function
     function getWeatherJSON() {
         if(!_openWeatherAPIkey) {
-            weatherBackground.visible = false
+            //weatherBackground.visible = false
             return
         }
 
