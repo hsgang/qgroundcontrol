@@ -81,7 +81,7 @@ Rectangle {
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      altitudeGrid.width
-            color:                      "#80000000"
+            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
             radius:                     _toolsMargin
 
             GridLayout {
@@ -215,7 +215,7 @@ Rectangle {
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      spdGrid.width
-            color:                      "#80000000"
+            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
             radius:                     _toolsMargin
 
             GridLayout {
@@ -363,6 +363,7 @@ Rectangle {
 
             Rectangle{
                 height: 2
+                color: qgcPal.text
                 width: ScreenTools.defaultFontPixelWidth * 1.2
                 anchors.top: parent.top
                 anchors.right: parent.right
@@ -377,6 +378,7 @@ Rectangle {
 
             Rectangle{
                 height: 2
+                color: qgcPal.text
                 width: ScreenTools.defaultFontPixelWidth * 1.2
                 anchors.bottom: parent.bottom
                 anchors.right: parent.right
@@ -426,6 +428,7 @@ Rectangle {
 
             Rectangle{
                 height: 2
+                color: qgcPal.text
                 width: ScreenTools.defaultFontPixelWidth * 1.2
                 anchors.top: parent.top
                 anchors.left: parent.left
@@ -440,6 +443,7 @@ Rectangle {
 
             Rectangle{
                 height: 2
+                color: qgcPal.text
                 width: ScreenTools.defaultFontPixelWidth * 1.2
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
