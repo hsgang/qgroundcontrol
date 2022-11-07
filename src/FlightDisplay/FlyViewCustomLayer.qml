@@ -315,56 +315,45 @@ Item {
         }
     }
 
-    Rectangle{
-        id:                     quickViewControl
-        color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-        anchors.margins:        _toolsMargin
-        anchors.right:          parent.right
-        anchors.verticalCenter: parent.verticalCenter
-        width:                  quickViewControlStripGrid.width
-        height:                 parent.height * 0.3
-        radius:                 _toolsMargin
-        visible:                false
+//    Rectangle{
+//        id:                     quickViewControl
+//        color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+//        anchors.margins:        _toolsMargin
+//        anchors.right:          parent.right
+//        anchors.verticalCenter: parent.verticalCenter
+//        width:                  quickViewControlStripGrid.width + (_toolsMargin * 2)
+//        height:                 parent.height * 0.3
+//        radius:                 _toolsMargin
+//        visible:                false
 
-        DeadMouseArea{
-            anchors.fill: parent
-        }
+//        DeadMouseArea{
+//            anchors.fill: parent
+//        }
 
-        QGCFlickable {
-            id:                 quickViewControlflickable
-            anchors.margins:    ScreenTools.defaultFontPixelWidth * 0.4
-            anchors.top:        parent.top
-            anchors.left:       parent.left
-            anchors.right:      parent.right
-            anchors.bottom:     parent.bottom
-            height:             parent.height
-            contentHeight:      quickViewControlStripGrid.height
-            flickableDirection: Flickable.VerticalFlick
-            clip:               true
+//        QGCFlickable {
+//            id:                 quickViewControlflickable
+//            anchors.margins:    ScreenTools.defaultFontPixelWidth * 0.4
+//            anchors.top:        parent.top
+//            anchors.left:       parent.left
+//            anchors.right:      parent.right
+//            anchors.bottom:     parent.bottom
+//            height:             parent.height
+//            contentHeight:      quickViewControlStripGrid.height
+//            flickableDirection: Flickable.VerticalFlick
+//            clip:               true
+
+    Component {
+        id: quickViewControlDialogComponent
+
+        QGCPopupDialog {
+            title:      qsTr("QuickView Settings")
+            buttons:    StandardButton.Close
 
             GridLayout{
                 id:     quickViewControlStripGrid
                 flow:   GridLayout.TopToBottom
                 rows:   6
 
-                QGCLabel{
-                    text:               qsTr("PhotoVideo Control")
-                }
-                QGCLabel{
-                    text:               qsTr("Telemetry Panel")
-                }
-                QGCLabel{
-                    text:               qsTr("Chart Widget")
-                }
-                QGCLabel{
-                    text:               qsTr("Atmospheric Data")
-                }
-                QGCLabel{
-                    text:               qsTr("Weather Widget")
-                }
-                QGCLabel{
-                    text:               qsTr("Mission Progress Bar")
-                }
                 QGCSwitch {
                     checked:            photoVideoControl.visible
                     onClicked:          photoVideoControl.visible = !photoVideoControl.visible
@@ -385,13 +374,33 @@ Item {
                     checked:            weatherWidget.visible
                     onClicked:          {
                         weatherWidget.visible = !weatherWidget.visible
-                        weatherWidget.getWeatherJSON()
+                        //weatherWidget.getWeatherJSON()
                     }
                 }
                 QGCSwitch {
                     checked:            flyviewMissionProgress.visible
                     onClicked:          flyviewMissionProgress.visible = !flyviewMissionProgress.visible
                 }
+
+                QGCLabel{
+                    text:               qsTr("PhotoVideo Control")
+                }
+                QGCLabel{
+                    text:               qsTr("Telemetry Panel")
+                }
+                QGCLabel{
+                    text:               qsTr("Chart Widget")
+                }
+                QGCLabel{
+                    text:               qsTr("Atmospheric Data")
+                }
+                QGCLabel{
+                    text:               qsTr("Weather Widget")
+                }
+                QGCLabel{
+                    text:               qsTr("Mission Progress Bar")
+                }
+
             }
         }
     }
@@ -427,7 +436,8 @@ Item {
         MouseArea {
             anchors.fill: quickViewPopupButton
             onClicked: {
-                quickViewControl.visible = !quickViewControl.visible
+                //quickViewControl.visible = !quickViewControl.visible
+                quickViewControlDialogComponent.createObject(mainWindow).open()
             }
         }
     }
