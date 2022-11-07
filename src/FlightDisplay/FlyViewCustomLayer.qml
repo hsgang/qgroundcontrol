@@ -99,7 +99,7 @@ Item {
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
         anchors.right:      parent.right
-        anchors.bottom:     popupIcons.top
+        anchors.bottom:     quickViewPopupButton.top
         anchors.bottomMargin: _toolsMargin
 
         function recalcXPosition() {
@@ -303,214 +303,131 @@ Item {
         anchors.bottom:           attitudeIndicator.top
         anchors.bottomMargin:     _toolsMargin
         visible: false
+
+        Connections{
+            target: _activeVehicle
+            onFlightModeChanged: {
+                //console.log(flightMode)
+                if (flightMode === "Auto" || flightMode === "Mission" || flightMode ==="미션"){
+                    flyviewMissionProgress.visible = true
+                }
+            }
+        }
     }
 
     Rectangle{
-        id:                     popupIcons
-        color:                  qgcPal.toolbarBackground
+        id:                     quickViewControl
+        color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
         anchors.margins:        _toolsMargin
         anchors.right:          parent.right
-        anchors.bottom:         parent.bottom
-        width:                  toolStripRow.width + (flickable.anchors.margins * 2)
-        height:                 ScreenTools.defaultFontPixelHeight * 3
+        anchors.verticalCenter: parent.verticalCenter
+        width:                  quickViewControlStripGrid.width
+        height:                 parent.height * 0.3
         radius:                 _toolsMargin
+        visible:                false
+
+        DeadMouseArea{
+            anchors.fill: parent
+        }
+
+        QGCFlickable {
+            id:                 quickViewControlflickable
+            anchors.margins:    ScreenTools.defaultFontPixelWidth * 0.4
+            anchors.top:        parent.top
+            anchors.left:       parent.left
+            anchors.right:      parent.right
+            anchors.bottom:     parent.bottom
+            height:             parent.height
+            contentHeight:      quickViewControlStripGrid.height
+            flickableDirection: Flickable.VerticalFlick
+            clip:               true
+
+            GridLayout{
+                id:     quickViewControlStripGrid
+                flow:   GridLayout.TopToBottom
+                rows:   6
+
+                QGCLabel{
+                    text:               qsTr("PhotoVideo Control")
+                }
+                QGCLabel{
+                    text:               qsTr("Telemetry Panel")
+                }
+                QGCLabel{
+                    text:               qsTr("Chart Widget")
+                }
+                QGCLabel{
+                    text:               qsTr("Atmospheric Data")
+                }
+                QGCLabel{
+                    text:               qsTr("Weather Widget")
+                }
+                QGCLabel{
+                    text:               qsTr("Mission Progress Bar")
+                }
+                QGCSwitch {
+                    checked:            photoVideoControl.visible
+                    onClicked:          photoVideoControl.visible = !photoVideoControl.visible
+                }
+                QGCSwitch {
+                    checked:            telemetryPanel.visible
+                    onClicked:          telemetryPanel.visible = !telemetryPanel.visible
+                }
+                QGCSwitch {
+                    checked:            flyViewChartWidget.visible
+                    onClicked:          flyViewChartWidget.visible = !flyViewChartWidget.visible
+                }
+                QGCSwitch {
+                    checked:            QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue === true ? 1 : 0
+                    onClicked:          QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue = checked ? 1 : 0
+                }
+                QGCSwitch {
+                    checked:            weatherWidget.visible
+                    onClicked:          {
+                        weatherWidget.visible = !weatherWidget.visible
+                        weatherWidget.getWeatherJSON()
+                    }
+                }
+                QGCSwitch {
+                    checked:            flyviewMissionProgress.visible
+                    onClicked:          flyviewMissionProgress.visible = !flyviewMissionProgress.visible
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id:                 quickViewPopupButton
+        anchors.margins:    _toolsMargin
+        anchors.right:      parent.right
+        anchors.bottom:     parent.bottom
+        color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        height:             ScreenTools.defaultFontPixelHeight * 2.5
+        width:              ScreenTools.defaultFontPixelHeight * 2.5
+        radius:             ScreenTools.defaultFontPixelHeight / 3
+        visible:            true
 
         DeadMouseArea {
             anchors.fill: parent
         }
 
-        QGCFlickable {
-            id:                 flickable
-            anchors.margins:    ScreenTools.defaultFontPixelWidth * 0.4
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            anchors.left:       parent.left
-            width:              parent.width
-            contentWidth:       toolStripRow.width
-            flickableDirection: Flickable.HorizontalFlick
-            clip:               true
-
-            Row {
-                id:             toolStripRow
-                anchors.top:    parent.top
-                anchors.bottom:  parent.bottom
-                spacing:        ScreenTools.defaultFontPixelWidth * 0.5
-
-                Rectangle {
-                    id:                 chartPopupButton
-                    anchors.top:        parent.top
-                    anchors.bottom:     parent.bottom
-                    border.color:       flyViewChartWidget.visible ? qgcPal.text : qgcPal.colorGrey
-                    border.width:       3
-                    color:              "#80000000" //qgcPal.window
-                    height:             ScreenTools.defaultFontPixelHeight * 2.5
-                    width:              ScreenTools.defaultFontPixelHeight * 2.5
-                    radius:             ScreenTools.defaultFontPixelHeight / 3
-                    visible:            true
-                    Image {
-                        id: showChartIcon
-                        anchors.centerIn: parent
-                        source: "/qmlimages/MAVLinkInspector"
-                        mipmap: true
-                        fillMode: Image.PreserveAspectFit
-                        sourceSize: Qt.size(parent.width * 0.8, parent.height * 0.8)
-                    }
-                    ColorOverlay {
-                           anchors.fill: showChartIcon
-                           source: showChartIcon
-                           color: "#ffffff"
-                    }
-                    MouseArea {
-                        anchors.fill: chartPopupButton
-                        onClicked: {
-                            flyViewChartWidget.visible = !flyViewChartWidget.visible
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id:                 weatherPopupButton
-                    anchors.top:        parent.top
-                    anchors.bottom:     parent.bottom
-                    border.color:       weatherWidget.visible ? qgcPal.text : qgcPal.colorGrey
-                    border.width:       3
-                    color:              "#80000000" //qgcPal.window
-                    height:             ScreenTools.defaultFontPixelHeight * 2.5
-                    width:              ScreenTools.defaultFontPixelHeight * 2.5
-                    radius:             ScreenTools.defaultFontPixelHeight / 3
-                    visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
-
-                    Image {
-                        id: showWeatherStatusIcon
-                        source: "/qmlimages/cloudy_wind.svg"
-                        mipmap: true
-                        fillMode: Image.PreserveAspectFit
-                        sourceSize: Qt.size(parent.width, parent.height)
-                    }
-                    ColorOverlay {
-                           anchors.fill: showWeatherStatusIcon
-                           source: showWeatherStatusIcon
-                           color: "#ffffff"
-                    }
-                    MouseArea {
-                        anchors.fill: weatherPopupButton
-                        onClicked: {
-                            weatherWidget.getWeatherJSON()
-                            weatherWidget.visible = !weatherWidget.visible
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id:                 photovideoPopupButton
-                    anchors.top:        parent.top
-                    anchors.bottom:     parent.bottom
-                    border.color:       photoVideoControl.visible ? qgcPal.text : qgcPal.colorGrey
-                    border.width:       3
-                    color:              "#80000000" //qgcPal.window
-                    height:             ScreenTools.defaultFontPixelHeight * 2.5
-                    width:              ScreenTools.defaultFontPixelHeight * 2.5
-                    radius:             ScreenTools.defaultFontPixelHeight / 3
-                    visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
-
-                    Image {
-                        id: photoStatusIcon
-                        source: "/qmlimages/camera.svg"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        mipmap: true
-                        fillMode: Image.PreserveAspectFit
-                        sourceSize: Qt.size(parent.width * 0.7, parent.height * 0.7)
-                    }
-                    ColorOverlay {
-                           anchors.fill: photoStatusIcon
-                           source: photoStatusIcon
-                           color: "#ffffff"
-                    }
-                    MouseArea {
-                        anchors.fill: photovideoPopupButton
-                        onClicked: {
-                            photoVideoControl.visible = !photoVideoControl.visible
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id:                 telemetryPanelPopupButton
-                    anchors.top:        parent.top
-                    anchors.bottom:     parent.bottom
-                    border.color:       telemetryPanel.visible ? qgcPal.text : qgcPal.colorGrey
-                    border.width:       3
-                    color:              "#80000000" //qgcPal.window
-                    height:             ScreenTools.defaultFontPixelHeight * 2.5
-                    width:              ScreenTools.defaultFontPixelHeight * 2.5
-                    radius:             ScreenTools.defaultFontPixelHeight / 3
-                    visible: QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI.rawValue
-
-                    Image {
-                        id: telemetryPanelPopupIcon
-                        source: "/qmlimages/LogDownloadIcon"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        mipmap: true
-                        fillMode: Image.PreserveAspectFit
-                        sourceSize: Qt.size(parent.width * 0.7, parent.height * 0.7)
-                    }
-                    ColorOverlay {
-                           anchors.fill: telemetryPanelPopupIcon
-                           source: telemetryPanelPopupIcon
-                           color: "#ffffff"
-                    }
-                    MouseArea {
-                        anchors.fill: telemetryPanelPopupButton
-                        onClicked: {
-                            telemetryPanel.visible = !telemetryPanel.visible
-                        }
-                    }
-                }
-
-                Rectangle {
-                    id:                 missionProgressPopupButton
-                    anchors.top:        parent.top
-                    anchors.bottom:     parent.bottom
-                    border.color:       flyviewMissionProgress.visible ? qgcPal.text : qgcPal.colorGrey
-                    border.width:       3
-                    color:              "#80000000" //qgcPal.window
-                    height:             ScreenTools.defaultFontPixelHeight * 2.5
-                    width:              ScreenTools.defaultFontPixelHeight * 2.5
-                    radius:             ScreenTools.defaultFontPixelHeight / 3
-
-                    Connections{
-                        target: _activeVehicle
-                        onFlightModeChanged: {
-                            //console.log(flightMode)
-                            if (flightMode === "Auto" || flightMode === "Mission" || flightMode ==="미션"){
-                                flyviewMissionProgress.visible = true
-                            }
-                        }
-                    }
-
-                    Image {
-                        id: missionProgressPopupIcon
-                        source: "/qmlimages/Plan.svg"
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        mipmap: true
-                        fillMode: Image.PreserveAspectFit
-                        sourceSize: Qt.size(parent.width * 0.7, parent.height * 0.7)
-                    }
-                    ColorOverlay {
-                           anchors.fill: missionProgressPopupIcon
-                           source: missionProgressPopupIcon
-                           color: "#ffffff"
-                    }
-                    MouseArea {
-                        anchors.fill: missionProgressPopupButton
-                        onClicked: {
-                            flyviewMissionProgress.visible = !flyviewMissionProgress.visible
-                        }
-                    }
-                }
+        Image {
+            id: quickViewPopupIcon
+            anchors.centerIn: parent
+            source: "/qmlimages/LogDownloadIcon"
+            mipmap: true
+            fillMode: Image.PreserveAspectFit
+            sourceSize: Qt.size(parent.width * 0.8, parent.height * 0.8)
+        }
+        ColorOverlay {
+               anchors.fill: quickViewPopupIcon
+               source: quickViewPopupIcon
+               color: qgcPal.text
+        }
+        MouseArea {
+            anchors.fill: quickViewPopupButton
+            onClicked: {
+                quickViewControl.visible = !quickViewControl.visible
             }
         }
     }
