@@ -202,8 +202,8 @@ Item{
 
             QGCTextField{
                 id: intervalTextField
-                placeholderText: qsTr("input Interval")
-                width: ScreenTools.defaultFontPixelWidth * 4
+                placeholderText: qsTr("Interval")
+                implicitWidth: ScreenTools.defaultFontPixelWidth * 8
             }
 
             QGCButton{
