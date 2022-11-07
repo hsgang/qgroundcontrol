@@ -156,8 +156,8 @@ Item{
         anchors.fill: parent
         width: parent.width
         height: parent.height
-        color : "#80000000"
-        border.color: "white"
+        color : Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        border.color: qgcPal.text
         border.width: 1
         radius : _toolsMargin
 
@@ -203,7 +203,7 @@ Item{
             QGCTextField{
                 id: intervalTextField
                 placeholderText: qsTr("input Interval")
-                width: ScreenTools.defaultFontPixelWidth * 5
+                width: ScreenTools.defaultFontPixelWidth * 4
             }
 
             QGCButton{
@@ -231,8 +231,8 @@ Item{
 
             ChartView{
                 id: customChartView
-                title : "Atmospheric Profile Data"
-                titleColor: qgcPal.text
+                //title : "Atmospheric Profile Data"
+                //titleColor: qgcPal.text
                 anchors.fill: parent
                 antialiasing: true
                 backgroundColor: "transparent"
