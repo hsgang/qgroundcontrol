@@ -22,7 +22,7 @@ Switch {
 
     indicator: Rectangle{
         implicitWidth:  ScreenTools.defaultFontPixelWidth * 4
-        implicitHeight: ScreenTools.defaultFontPixelHeight
+        implicitHeight: ScreenTools.defaultFontPixelHeight * 0.8
         x:  control.leftPadding
         y:  parent.height / 2 - height / 2
         color:          (control.checked && control.enabled) ? qgcPal.buttonHighlight : qgcPal.colorGrey
@@ -34,6 +34,7 @@ Switch {
             x: control.checked ? parent.width - width : 0
             implicitWidth:  ScreenTools.defaultFontPixelHeight
             implicitHeight: implicitWidth
+            anchors.verticalCenter: parent.verticalCenter
             color:          control.enabled ? qgcPal.text : qgcPal.colorGrey
             radius:         implicitHeight * 0.5
             border.color:   qgcPal.button
