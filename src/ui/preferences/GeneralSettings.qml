@@ -385,7 +385,7 @@ Rectangle {
 
                             QGCLabel {
                                 id:         videoFileFormatLabel
-                                text:       qsTr("File Format")
+                                text:       qsTr("Record File Format")
                                 visible:    _showSaveVideoSettings && _videoSettings.recordingFormat.visible
                             }
                             FactComboBox {
