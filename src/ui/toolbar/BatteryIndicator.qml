@@ -137,10 +137,10 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     color:              "transparent"
                     border.color:       getBatteryColor()
-                    border.width:       ScreenTools.defaultFontPixelWidth * 0.2
-                    height:             ScreenTools.defaultFontPixelHeight * 1.6
-                    width:              ScreenTools.defaultFontPixelWidth * 2
-                    radius:             ScreenTools.defaultFontPixelWidth * 0.4
+                    border.width:       ScreenTools.defaultFontPixelHeight * 0.08
+                    height:             ScreenTools.defaultFontPixelHeight * 1.4
+                    width:              ScreenTools.defaultFontPixelHeight * 1.0
+                    radius:             ScreenTools.defaultFontPixelHeight * 0.15
 
                     Rectangle{
                         anchors.bottom:           parent.top
@@ -151,13 +151,13 @@ Item {
                     }
 
                     Rectangle{
-                        anchors.margins:        ScreenTools.defaultFontPixelWidth * 0.3
+                        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.13
                         anchors.bottom:         parent.bottom
                         anchors.horizontalCenter: parent.horizontalCenter
                         height:                 (parent.height - (anchors.margins * 2)) * (battery.percentRemaining.rawValue / 100)
                         width:                  parent.width - (anchors.margins * 2)
                         color:                  getBatteryColor()
-                        radius:                 ScreenTools.defaultFontPixelWidth * 0.3
+                        radius:                 ScreenTools.defaultFontPixelHeight * 0.15
                     }
                 }
             }
