@@ -202,5 +202,12 @@
         <file alias="cloudy_wind.svg">src/Airmap/images/weather-icons/cloudy_wind.svg</file>
         <file alias="PrecisionLanding.svg">resources/PrecisionLanding.svg</file>
         <file alias="LevelerArrow.svg">src/FlightMap/Images/LevelerArrow.svg</file>
+        <file alias="GPS_2DFix.svg">src/ui/toolbar/Images/GPS_2DFix.svg</file>
+        <file alias="GPS_3DFix.svg">src/ui/toolbar/Images/GPS_3DFix.svg</file>
+        <file alias="GPS_DGPS.svg">src/ui/toolbar/Images/GPS_DGPS.svg</file>
+        <file alias="GPS_Float.svg">src/ui/toolbar/Images/GPS_Float.svg</file>
+        <file alias="GPS_NoFix.svg">src/ui/toolbar/Images/GPS_NoFix.svg</file>
+        <file alias="GPS_RTK.svg">src/ui/toolbar/Images/GPS_RTK.svg</file>
+        <file alias="GSP_None.svg">src/ui/toolbar/Images/GPS_None.svg</file>
     </qresource>
 </RCC>
