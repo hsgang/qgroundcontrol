@@ -89,13 +89,42 @@ Rectangle {
     property bool   _canShootInCurrentMode:                     _mavlinkCamera ? _mavlinkCameraCanShoot : _videoStreamCanShoot || _simpleCameraAvailable
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
-    property int _localPitch: 0.0
-    property int _localYaw: 0.0
+    property real _gimbalRollAngle:                   _activeVehicle ? _activeVehicle.gimbalRoll.toFixed(2) : 0
+    property real _gimbalPitchAngle:                  _activeVehicle ? _activeVehicle.gimbalPitch.toFixed(2) : 0
+    property real _gimbalYawAngle:                    _activeVehicle ? _activeVehicle.gimbalYaw.toFixed(2) : 0
+
+    property string _gimbalRollString:                 _gimbalRollAngle ? _gimbalRollAngle.toString() : "--"
+    property string _gimbalPitchString:                _gimbalPitchAngle ? _gimbalPitchAngle.toString() : "--"
+    property string _gimbalYawString:                  _gimbalYawAngle ? _gimbalYawAngle.toString() : "--"
+
+    property double _localPitch: 0.0
+    property double _localYaw: 0.0
+    property int    _gimbalModeStatus: 0
 
     Timer {
         id:             simplePhotoCaptureTimer
         interval:       500
         onTriggered:    _simplePhotoCaptureIsIdle = true
+    }
+
+    Rectangle{
+        anchors.bottom: parent.bottom
+        //anchors.horizontalCenter: parent.horizontalCenter
+        width:          parent.width
+        height:         gimbalAngleValueRow.height
+        color:          "transparent"
+        Row{
+            id: gimbalAngleValueRow
+            QGCLabel{
+                text: " R: " +_gimbalRollString
+            }
+            QGCLabel{
+                text: " P: " +_gimbalPitchString
+            }
+            QGCLabel{
+                text: " Y: " +_gimbalYawString
+            }
+        }
     }
 
     GridLayout {
@@ -170,7 +199,7 @@ Rectangle {
                 id: gimbalUpPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localPitch += 1
+                    _localPitch += 0.03
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
@@ -208,7 +237,7 @@ Rectangle {
                 id:             baseDownPress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalControlValue(-90.0, 0.0)
+                    _activeVehicle.gimbalControlValue(-0.9, 0.0)
                 }
             }
         }
@@ -242,7 +271,7 @@ Rectangle {
                 id:             gimbalLeftPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localYaw += -1
+                    _localYaw += -0.03
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
@@ -281,6 +310,8 @@ Rectangle {
                 anchors.fill:   parent
                 onClicked: {
                     _activeVehicle.gimbalControlValue(0.0, 0.0)
+                    _localPitch = 0
+                    _localYaw = 0
                 }
             }
         }
@@ -314,7 +345,7 @@ Rectangle {
                 id:             gimbalRightPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localYaw += 1
+                    _localYaw += 0.03
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
@@ -386,7 +417,7 @@ Rectangle {
                 id:             gimbalDownPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localPitch += -1
+                    _localPitch += -0.03
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
@@ -406,6 +437,16 @@ Rectangle {
             border.width:       1
             scale:              gimbalModePress.pressedButtons ? 0.95 : 1
 
+//            function gimbalMode(){
+//                if(_gimbalModeStatus < 7){
+//                    _gimbalModeStatus += 1
+//                    return _gimbalModeStatus-1
+//                }
+//                else{
+//                    _gimbalModeStatus = 0
+//                }
+//            }
+
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -424,6 +465,7 @@ Rectangle {
                 id:             gimbalModePress
                 anchors.fill:   parent
                 onClicked: {
+                    _activeVehicle.gimbalMode(3)
                 }
             }
         }

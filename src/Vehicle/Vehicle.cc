@@ -774,6 +774,9 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_MOUNT_ORIENTATION:
         _handleGimbalOrientation(message);
         break;
+    case 285: //MAVLINK_MSG_GIMBAL_DEVICE_ATTITUDE_STATUS:
+        _handleGimbalDeviceAttitudeStatus(message);
+        break;
     case MAVLINK_MSG_ID_OBSTACLE_DISTANCE:
         _handleObstacleDistance(message);
         break;
@@ -4204,6 +4207,24 @@ void Vehicle::flashBootloader()
 }
 #endif
 
+void Vehicle::gimbalMode(float mode)
+{
+    double p = static_cast<double>(_curGimbalPitch);
+    double y = static_cast<double>(_curGimbalYaw);
+
+    sendMavCommand(
+                _defaultComponentId,
+                MAV_CMD_DO_MOUNT_CONTROL,
+                false,                               // show errors
+                p,
+                0,
+                y,
+                0,                                   // Altitude (not used)
+                0,                                   // Latitude (not used)
+                0,                                   // Longitude (not used)
+                mode);   // MAVLink Roll,Pitch,Yaw
+}
+
 void Vehicle::gimbalControlValue(double pitch, double yaw)
 {
     if (apmFirmware()) {
@@ -4267,6 +4288,41 @@ void Vehicle::_handleGimbalOrientation(const mavlink_message_t& message)
         _curGimbalYaw = o.yaw;
         emit gimbalYawChanged();
     }
+    if(!_haveGimbalData) {
+        _haveGimbalData = true;
+        emit gimbalDataChanged();
+    }
+}
+
+void Vehicle::_handleGimbalDeviceAttitudeStatus(const mavlink_message_t& message)
+{
+    mavlink_gimbal_device_attitude_status_t o;
+    mavlink_msg_gimbal_device_attitude_status_decode(&message, &o);
+    double w = o.q[0];
+    double x = o.q[1];
+    double y = o.q[2];
+    double z = o.q[3];
+
+    //roll(x-axis rotation)
+    double sinr_cosp = 2 * (w * x + y * z);
+    double cosr_cosp = 1 - 2 * (x * x + y * y);
+    _curGimbalRoll = std::atan2(sinr_cosp, cosr_cosp) * 180/M_PI;
+    emit gimbalRollChanged();
+
+    //pitch
+    double sinp = 2 * (w * y - z * x);
+    if(std::abs(sinp) >= 1)
+        _curGimbalPitch = std::copysign(M_PI / 2, sinp) * 180/M_PI;
+    else
+        _curGimbalPitch = std::asin(sinp) * 180/M_PI;
+    emit gimbalPitchChanged();
+
+    //yaw
+    double siny_cosp = 2* (w * z + x * y);
+    double cosy_cosp = 1 - 2 * (y * y + z * z);
+    _curGimbalYaw = std::atan2(siny_cosp,cosy_cosp) * 180/M_PI;
+    emit gimbalYawChanged();
+
     if(!_haveGimbalData) {
         _haveGimbalData = true;
         emit gimbalDataChanged();

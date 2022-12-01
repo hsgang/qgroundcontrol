@@ -29,6 +29,10 @@ Item {
     property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
+    property bool _haveGimbal:  vehicle.gimbalData
+    property real _gimbalYaw:   vehicle ? vehicle.gimbalYaw.toFixed(1) : 0
+    property real _gimbalPitch: vehicle ? vehicle.gimbalPitch.toFixed(1) : 0
+
     width:  size
     height: size
 
@@ -80,6 +84,24 @@ Item {
             x: size/2.2 * Math.sin((_angle)*(3.14/180))
             y: - size/2.2 * Math.cos((_angle)*(3.14/180))
         }
+    }
+
+    Image {
+            id:                 gimbalSight
+            visible:            _haveGimbal & _gimbalPitch >= -85
+            anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
+            source:             "/qmlimages/gimbalSight.svg"
+            mipmap:             true
+            width:              parent.width * 0.6
+            sourceSize.width:   width
+            antialiasing:       true
+            fillMode:           Image.PreserveAspectFit
+
+            transform: Rotation {
+                origin.x:       gimbalSight.width / 2
+                origin.y:       gimbalSight.height / 2
+                angle:          isNoseUpLocked() ? _gimbalYaw : _heading + _gimbalYaw
+            }
     }
 
     Image {
@@ -143,6 +165,9 @@ Item {
             property string _headingString3: _headingString2.length === 2 ? "0" + _headingString2 : _headingString2
         }
     }
+
+
+
 //    Image {
 //        id: rollDial
 //        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }

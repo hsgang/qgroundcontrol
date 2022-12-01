@@ -352,7 +352,7 @@ Item {
             GridLayout{
                 id:     quickViewControlStripGrid
                 flow:   GridLayout.TopToBottom
-                rows:   6
+                rows:   7
 
                 QGCSwitch {
                     checked:            photoVideoControl.visible
@@ -381,6 +381,10 @@ Item {
                     checked:            flyviewMissionProgress.visible
                     onClicked:          flyviewMissionProgress.visible = !flyviewMissionProgress.visible
                 }
+                QGCSwitch {
+                    checked:            QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue === true ? 1 : 0
+                    onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
+                }
 
                 QGCLabel{
                     text:               qsTr("PhotoVideo Control")
@@ -399,6 +403,9 @@ Item {
                 }
                 QGCLabel{
                     text:               qsTr("Mission Progress Bar")
+                }
+                QGCLabel{
+                    text:               qsTr("Mount Control")
                 }
 
             }
