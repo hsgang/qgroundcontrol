@@ -1100,7 +1100,7 @@ Rectangle {
 //                        }
 //                    }
 
-                    Item { width: 1; height: _margins; visible: adsbSectionLabel.visible }
+//                    Item { width: 1; height: _margins; visible: adsbSectionLabel.visible }
 
                     Item { width: 1; height: _margins; visible: ntripSectionLabel.visible }
                     QGCLabel {
