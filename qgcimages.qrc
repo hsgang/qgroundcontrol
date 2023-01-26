@@ -208,7 +208,7 @@
         <file alias="GPS_Float.svg">src/ui/toolbar/Images/GPS_Float.svg</file>
         <file alias="GPS_NoFix.svg">src/ui/toolbar/Images/GPS_NoFix.svg</file>
         <file alias="GPS_RTK.svg">src/ui/toolbar/Images/GPS_RTK.svg</file>
-        <file alias="GSP_None.svg">src/ui/toolbar/Images/GPS_None.svg</file>
+        <file alias="GPS_None.svg">src/ui/toolbar/Images/GPS_None.svg</file>
         <file alias="gimbalSight.svg">src/FlightMap/Images/gimbalSight.svg</file>
     </qresource>
 </RCC>

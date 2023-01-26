@@ -49,6 +49,9 @@ Item {
                 return "/qmlimages/Gps.svg"
             }
         }
+        else{
+            return "/qmlimages/GPS_None.svg"
+        }
     }
 
     Component {
