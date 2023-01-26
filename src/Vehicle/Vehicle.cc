@@ -781,7 +781,7 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         _handleObstacleDistance(message);
         break;
     case MAVLINK_MSG_ID_TUNNEL:
-        emit atmosphericValueChanged();
+        //emit atmosphericValueChanged();
         break;
 
     case MAVLINK_MSG_ID_EVENT:
@@ -2537,7 +2537,7 @@ QString Vehicle::vehicleTypeName() const {
         { MAV_TYPE_VTOL_TILTROTOR,  tr("Tiltrotor VTOL")},
         { MAV_TYPE_VTOL_FIXEDROTOR,  tr("VTOL Fixedrotor")},
         { MAV_TYPE_VTOL_TAILSITTER,  tr("VTOL Tailsitter")},
-        { MAV_TYPE_VTOL_RESERVED4,  tr("VTOL reserved 4")},
+        { MAV_TYPE_VTOL_TILTWING,  tr("VTOL Tiltwing")},
         { MAV_TYPE_VTOL_RESERVED5,  tr("VTOL reserved 5")},
         { MAV_TYPE_GIMBAL,          tr("Onboard gimbal")},
         { MAV_TYPE_ADSB,            tr("Onboard ADSB peripheral")},
