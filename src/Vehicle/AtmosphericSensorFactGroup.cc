@@ -146,6 +146,19 @@ void AtmosphericSensorFactGroup::_handleHygrometerSensor(mavlink_message_t& mess
     humidity()->setRawValue((hygrometer.humidity) * 0.01);
 }
 
+void AtmosphericSensorFactGroup::_handleAtmosphericValue(mavlink_message_t& message)
+{
+    mavlink_atmospheric_value_t atmospheric;
+    mavlink_msg_atmospheric_value_decode(&message, &atmospheric);
+
+    logCount()->setRawValue(atmospheric.count);
+    temperature()->setRawValue(atmospheric.temperature);
+    humidity()->setRawValue(atmospheric.humidity);
+    pressure()->setRawValue(atmospheric.pressure);
+    windDir()->setRawValue(atmospheric.wind_direction);
+    windSpd()->setRawValue(atmospheric.wind_speed);
+}
+
 void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
 {
     mavlink_tunnel_t tunnel;
