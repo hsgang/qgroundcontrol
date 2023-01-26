@@ -82,6 +82,10 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     case MAVLINK_MSG_ID_TUNNEL:
         _handleTunnel(message);
         break;
+    case MAVLINK_MSG_ID_ATMOSPHERIC_VALUE:
+        _handleAtmosphericValue(message);
+        break;
+
 //#if !defined(NO_ARDUPILOT_DIALECT)
 //    case MAVLINK_MSG_ID_WIND:
 //        _handleWind(message);

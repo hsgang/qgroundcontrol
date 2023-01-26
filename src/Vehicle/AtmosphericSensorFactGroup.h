@@ -56,7 +56,7 @@ private:
     void _handleData32              (mavlink_message_t& message);
     void _handleTunnel              (mavlink_message_t& message);
     void _handleScaledPressure      (mavlink_message_t& message);
-    void _handleAtmosphericSensor   (mavlink_message_t& message);
+    void _handleAtmosphericValue    (mavlink_message_t& message);
     void _handleWind                (mavlink_message_t& message);
     void _handleHygrometerSensor    (mavlink_message_t& message);
 
