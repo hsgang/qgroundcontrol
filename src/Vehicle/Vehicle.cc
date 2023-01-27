@@ -113,6 +113,7 @@ const char* Vehicle::_atmosphericSensorFactGroupName =  "atmosphericSensor";
 const char* Vehicle::_generatorStatusFactGroupName =    "generatorStatus";
 const char* Vehicle::_hygrometerFactGroupName =         "hygrometer";
 const char* Vehicle::_landingTargetFactGroupName =      "landingTarget";
+const char* Vehicle::_externalPowerStatusFactGroupName = "externalPower";
 
 static int jsonLogSeq = 0;
 static QString StartTime;
@@ -181,6 +182,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _terrainFactGroup             (this)
     , _atmosphericSensorFactGroup   (this)
     , _generatorStatusFactGroup     (this)
+    , _externalPowerStatusFactGroup (this)
     , _landingTargetFactGroup       (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
 {
@@ -336,6 +338,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _localPositionSetpointFactGroup   (this)
     , _atmosphericSensorFactGroup       (this)
     , _generatorStatusFactGroup         (this)
+    , _externalPowerStatusFactGroup     (this)
     , _landingTargetFactGroup           (this)
 {
     _linkManager = _toolbox->linkManager();
@@ -471,6 +474,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_terrainFactGroup,           _terrainFactGroupName);
     _addFactGroup(&_atmosphericSensorFactGroup, _atmosphericSensorFactGroupName);
     _addFactGroup(&_generatorStatusFactGroup,   _generatorStatusFactGroupName);
+    _addFactGroup(&_externalPowerStatusFactGroup,_externalPowerStatusFactGroupName);
     _addFactGroup(&_landingTargetFactGroup,     _landingTargetFactGroupName);
 
     // Add firmware-specific fact groups, if provided

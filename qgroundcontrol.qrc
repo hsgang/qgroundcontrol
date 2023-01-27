@@ -364,6 +364,7 @@
         <file alias="Vehicle/AtmosphericSensorFact.json">src/Vehicle/AtmosphericSensorFact.json</file>
         <file alias="Vehicle/LandingTargetFactGroup.json">src/Vehicle/LandingTargetFactGroup.json</file>
         <file alias="Vehicle/GeneratorStatusFactGroup.json">src/Vehicle/GeneratorStatusFactGroup.json</file>
+        <file>src/Vehicle/ExternalPowerStatusFactGroup.json</file>
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/comm/APMArduSubMockLink.params</file>
