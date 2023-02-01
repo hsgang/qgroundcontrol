@@ -7094,6 +7094,53 @@ Click Ok to start the auto-tuning process.
       <source>Visibility : </source>
       <translation>시정 : </translation>
     </message>
+
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="349"/>
+      <source>FlyView Widget Settings</source>
+      <translation>위젯 설정</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="395"/>
+      <source>PhotoVideo Control</source>
+      <translation>영상캡처 제어</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="398"/>
+      <source>Telemetry Panel</source>
+      <translation>텔레메트리 패널</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="401"/>
+      <source>Chart Widget</source>
+      <translation>대기 상태 차트</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="404"/>
+      <source>Atmospheric Data</source>
+      <translation>대기 상태 정보</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="407"/>
+      <source>Weather Widget</source>
+      <translation>날씨 정보</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="410"/>
+      <source>Mission Progress Bar</source>
+      <translation>미션 진행 정보</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
+      <source>Mount Control</source>
+      <translation>마운트 제어</translation>
+    </message>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="416"/>
+      <source>External Power Status</source>
+      <translation>외부 전원 상태</translation>
+    </message>
+
   </context>
   <context>
     <name>GPSIndicator</name>
