@@ -214,7 +214,7 @@ Item {
         anchors.top:                parent.top
         anchors.topMargin:          mapControl.pipState.state !== mapControl.pipState.pipState ? (atmosphericSensorView.visible ? _toolsMargin : _idealWidth) : _toolsMargin
         anchors.left:               atmosphericSensorView.visible ? atmosphericSensorView.right : parent.left
-        anchors.leftMargin:         atmosphericSensorView.visible ? _toolsMargin : _idealWidth * 1.4
+        anchors.leftMargin:         atmosphericSensorView.visible ? _toolsMargin : _idealWidth * 3
         visible:                    QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue
     }
 
@@ -346,13 +346,13 @@ Item {
         id: quickViewControlDialogComponent
 
         QGCPopupDialog {
-            title:      qsTr("QuickView Settings")
+            title:      qsTr("FlyView Widget Settings")
             buttons:    StandardButton.Close
 
             GridLayout{
                 id:     quickViewControlStripGrid
                 flow:   GridLayout.TopToBottom
-                rows:   7
+                rows:   8
 
                 QGCSwitch {
                     checked:            photoVideoControl.visible
@@ -386,6 +386,11 @@ Item {
                     onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
                 }
 
+                QGCSwitch {
+                    checked:            QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
+                    onClicked:          QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
+                }
+
                 QGCLabel{
                     text:               qsTr("PhotoVideo Control")
                 }
@@ -407,7 +412,9 @@ Item {
                 QGCLabel{
                     text:               qsTr("Mount Control")
                 }
-
+                QGCLabel{
+                    text:               qsTr("External Power Status")
+                }
             }
         }
     }
