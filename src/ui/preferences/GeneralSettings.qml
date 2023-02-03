@@ -188,6 +188,14 @@ Rectangle {
                                 property Fact _updateHomePosition: QGroundControl.settingsManager.flyViewSettings.updateHomePosition
                             }
 
+                            FactCheckBox {
+                                text:       qsTr("Enable Custom Actions")
+                                visible:    _enableCustomActions.visible
+                                fact:       _enableCustomActions
+
+                                property Fact _enableCustomActions: QGroundControl.settingsManager.flyViewSettings.enableCustomActions
+                            }
+
                             GridLayout {
                                 columns: 2
 

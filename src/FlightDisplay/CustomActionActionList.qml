@@ -16,10 +16,11 @@ import QGroundControl.FlightDisplay     1.0
 ToolStripAction {
     text:           qsTr("Custom")
     iconSource:     "/InstrumentValueIcons/navigation-more.svg"
-    visible:        true
-    enabled:        _activeVehicle
+    visible:        isEnabled
+    enabled:        isEnabled && _activeVehicle
 
     dropPanelComponent: CustomActionList {}
 
     property var _activeVehicle:  QGroundControl.multiVehicleManager.activeVehicle
+    property bool isEnabled: QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
 }
