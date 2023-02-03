@@ -196,6 +196,43 @@ Rectangle {
                                 property Fact _enableCustomActions: QGroundControl.settingsManager.flyViewSettings.enableCustomActions
                             }
 
+                            //-----------------------------------------------------------------
+                            //-- CustomAction definition path
+                            GridLayout {
+                                id: customActions
+
+                                columns:  2
+                                visible:  _enabled && fact.visible
+
+                                property bool _enabled:  QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
+                                property Fact fact:      QGroundControl.settingsManager.flyViewSettings.customActionDefinitions
+
+                                QGCLabel {
+                                    text: qsTr("Custom Action Definitions")
+
+                                    Layout.columnSpan:  2
+                                    Layout.alignment:   Qt.AlignHCenter
+                                }
+
+                                QGCTextField {
+                                    Layout.fillWidth:   true
+                                    readOnly:           true
+                                    text:               customActions.fact.rawValue === "" ? qsTr("<not set>") : customActions.fact.value
+                                }
+                                QGCButton {
+                                    text:       qsTr("Browse")
+                                    onClicked:  customActionPathBrowseDialog.openForLoad()
+                                    QGCFileDialog {
+                                        id:             customActionPathBrowseDialog
+                                        title:          qsTr("Choose the Custom Action Definitions file")
+                                        folder:         customActions.fact.rawValue
+                                        selectExisting: true
+                                        selectFolder:   false
+                                        onAcceptedForLoad: customActions.fact.rawValue = file
+                                    }
+                                }
+                            }
+
                             GridLayout {
                                 columns: 2
 
