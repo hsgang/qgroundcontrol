@@ -19,32 +19,7 @@ ToolStripAction {
     visible:        true
     enabled:        _activeVehicle
 
-    property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
+    dropPanelComponent: CustomActionList {}
 
-    onTriggered: { console.log("CUSTOM ACTION PARENT!") }
-
-//    ToolStrip {
-//        id:     _toolStrip
-//        title:  qsTr("Custom S")
-
-//        model: _toolStripActionList.model
-
-//    }
-
-//    ToolStripActionList {
-//        id: _toolStripActionList
-
-//        model: [
-//            ToolStripAction {
-//                text:           qsTr("Custom 1")
-//                iconSource:     "/res/gear-white.svg"
-//                onTriggered: { console.log("CUSTOM ACTION 1!") }
-//            },
-//            ToolStripAction {
-//                text:           qsTr("Custom 2")
-//                iconSource:     "/res/gear-white.svg"
-//                onTriggered: { console.log("CUSTOM ACTION 2!") }
-//            }
-//        ]
-//    }
+    property var _activeVehicle:  QGroundControl.multiVehicleManager.activeVehicle
 }
