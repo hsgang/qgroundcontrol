@@ -15,25 +15,71 @@ import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 
 Component {
+
     ColumnLayout {
+        id: _root
         spacing:    ScreenTools.defaultFontPixelWidth * 0.5
+
+        property var activeVehicle:  QGroundControl.multiVehicleManager.activeVehicle
+
+        property var json_string: '
+        {
+            "version":  1,
+            "fileType": "CustomActions",
+            "CustomActions": [
+                {
+                    "label":  "Image Start Capture",
+                    "mavCmd": 2000,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0,
+                    "param6": 0,
+                    "param7": 0
+                },
+                {
+                    "label":  "Image Stop Capture",
+                    "mavCmd": 2001,
+                    "param1": 0,
+                    "param2": 0,
+                    "param3": 0,
+                    "param4": 0,
+                    "param5": 0,
+                    "param6": 0,
+                    "param7": 0
+                }
+            ]
+        }'
+        property var json: JSON.parse(json_string)
 
         QGCLabel { text: qsTr("Custom Action:") }
 
         Repeater {
-            model: [
-                "Test 1",
-                "Test 2",
-                "Test 3",
-                "Test 4",
-            ]
+            model: _root.json.CustomActions
 
             QGCButton {
-                text:               modelData
+                text:               modelData.label
                 Layout.fillWidth:   true
 
                 onClicked: {
-                    console.log(modelData)
+                    var vehicle = _root.activeVehicle
+                    if (vehicle) {
+                        const show_error = true
+                        var comp_id = vehicle.defaultComponentId
+                        vehicle.sendCommand(
+                                    comp_id,
+                                    modelData.mavCmd,
+                                    show_error,
+                                    modelData.param1,
+                                    modelData.param2,
+                                    modelData.param3,
+                                    modelData.param4,
+                                    modelData.param5,
+                                    modelData.param6,
+                                    modelData.param7
+                        )
+                    }
                 }
             }
         } // Repeater
