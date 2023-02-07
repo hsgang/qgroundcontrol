@@ -15,18 +15,22 @@ class CustomActionManager : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QmlObjectListModel*  actions     READ  actions     CONSTANT)
-    Q_PROPERTY(bool                 hasActions  READ  hasActions  CONSTANT)
+    Q_PROPERTY(QmlObjectListModel*  actions     READ  actions     NOTIFY  actionsChanged)
+    Q_PROPERTY(bool                 hasActions  READ  hasActions  NOTIFY  actionsChanged)
 
 public:
     CustomActionManager(void);
 
     QmlObjectListModel* actions(void) { return &_actions; }
-    bool hasActions(void) { return _hasActions; }
+    bool hasActions(void) { return  _actions.count() > 0; }
+
+signals:
+    void actionsChanged();
+
+private slots:
+    void _loadFromJson(QVariant path);
 
 private:
-    bool _loadFromJson(const QString& path);
-
     QmlObjectListModel  _actions;
     bool _hasActions;
 

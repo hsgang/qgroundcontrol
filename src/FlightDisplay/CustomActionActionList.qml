@@ -8,19 +8,49 @@
  ****************************************************************************/
 
 import QtQml.Models 2.12
+import QtQuick                  2.12
+import QtQuick.Layouts          1.12
 
 import QGroundControl                   1.0
 import QGroundControl.Controls          1.0
+import QGroundControl.Controllers       1.0
 import QGroundControl.FlightDisplay     1.0
+import QGroundControl.ScreenTools       1.0
 
 ToolStripAction {
     text:           qsTr("Custom")
     iconSource:     "/InstrumentValueIcons/navigation-more.svg"
     visible:        isEnabled
-    enabled:        isEnabled && _activeVehicle
-
-    dropPanelComponent: CustomActionList {}
+    enabled:        manager.hasActions && _activeVehicle
 
     property var _activeVehicle:  QGroundControl.multiVehicleManager.activeVehicle
-    property bool isEnabled: QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
+    property bool isEnabled:      QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
+
+    property var _manager: CustomActionManager {
+        id: manager
+    }
+
+    dropPanelComponent: Component {
+        ColumnLayout {
+            id: _root
+            spacing:    ScreenTools.defaultFontPixelWidth * 0.5
+
+            QGCLabel { text: qsTr("Custom Action:") }
+
+            Repeater {
+                model: manager.actions
+
+                QGCButton {
+                    text:              object.label
+                    Layout.fillWidth:  true
+
+                    onClicked: {
+                        var vehicle = QGroundControl.multiVehicleManager.activeVehicle
+                        object.sendTo(vehicle)
+                    }
+                }
+            } // Repeater
+        } // ColumnLayout
+    }
+
 }

@@ -16,20 +16,28 @@
 #include "SettingsManager.h"
 
 CustomActionManager::CustomActionManager(void) {
-    QString customActionsPath = qgcApp()->toolbox()->settingsManager()->flyViewSettings()->customActionDefinitions()->rawValue().toString();
-    _hasActions = _loadFromJson(customActionsPath);
+    auto flyViewSettings = qgcApp()->toolbox()->settingsManager()->flyViewSettings();
+    Fact* customActionsFact = flyViewSettings->customActionDefinitions();
+
+    connect(customActionsFact, &Fact::valueChanged, this, &CustomActionManager::_loadFromJson);
+    _loadFromJson(customActionsFact->rawValue());
 }
 
-bool CustomActionManager::_loadFromJson(const QString& path) {
+void CustomActionManager::_loadFromJson(QVariant fact) {
+    QString path = fact.toString();
+
     const char* kQgcFileType = "CustomActions";
     const char* kActionListKey = "actions";
+
+    _actions.clearAndDeleteContents();
 
     QString errorString;
     int version;
     QJsonObject jsonObject = JsonHelper::openInternalQGCJsonFile(path, kQgcFileType, 1, 1, version, errorString);
     if (!errorString.isEmpty()) {
         qWarning() << "Custom Actions Internal Error: " << errorString;
-        return false;
+        emit actionsChanged();
+        return;
     }
 
     QList<JsonHelper::KeyValidateInfo> keyInfoList = {
@@ -37,11 +45,9 @@ bool CustomActionManager::_loadFromJson(const QString& path) {
     };
     if (!JsonHelper::validateKeys(jsonObject, keyInfoList, errorString)) {
         qWarning() << "Custom Actions JSON document incorrect format:" << errorString;
-        return false;
+        emit actionsChanged();
+        return;
     }
-
-    // at this point we have a valid JSON document, so clear out previously defined actions
-    _actions.clearAndDeleteContents();
 
     QJsonArray actionList = jsonObject[kActionListKey].toArray();
     for (auto actionJson: actionList) {
@@ -86,5 +92,5 @@ bool CustomActionManager::_loadFromJson(const QString& path) {
         _actions.append(action);
     }
 
-    return _actions.count() > 0;
+    emit actionsChanged();
 }
