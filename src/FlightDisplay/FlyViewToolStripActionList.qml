@@ -29,6 +29,6 @@ ToolStripActionList {
         GuidedActionRTL { },
         GuidedActionPause { },
         GuidedActionActionList { },
-        CustomActionActionList { }
+        CustomActionToolStrip { }
     ]
 }
