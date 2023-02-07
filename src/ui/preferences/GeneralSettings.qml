@@ -229,6 +229,7 @@ Rectangle {
                                         selectExisting: true
                                         selectFolder:   false
                                         onAcceptedForLoad: customActions.fact.rawValue = file
+                                        nameFilters: ["JSON files (*.json)"]
                                     }
                                 }
                             }
