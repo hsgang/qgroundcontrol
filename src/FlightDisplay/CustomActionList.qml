@@ -12,6 +12,7 @@ import QtQuick.Layouts          1.12
 
 import QGroundControl               1.0
 import QGroundControl.Controls      1.0
+import QGroundControl.Controllers   1.0
 import QGroundControl.ScreenTools   1.0
 
 Component {
@@ -20,66 +21,22 @@ Component {
         id: _root
         spacing:    ScreenTools.defaultFontPixelWidth * 0.5
 
-        property var activeVehicle:  QGroundControl.multiVehicleManager.activeVehicle
-
-        property var json_string: '
-        {
-            "version":  1,
-            "fileType": "CustomActions",
-            "CustomActions": [
-                {
-                    "label":  "Image Start Capture",
-                    "mavCmd": 2000,
-                    "param1": 0,
-                    "param2": 0,
-                    "param3": 0,
-                    "param4": 0,
-                    "param5": 0,
-                    "param6": 0,
-                    "param7": 0
-                },
-                {
-                    "label":  "Image Stop Capture",
-                    "mavCmd": 2001,
-                    "param1": 0,
-                    "param2": 0,
-                    "param3": 0,
-                    "param4": 0,
-                    "param5": 0,
-                    "param6": 0,
-                    "param7": 0
-                }
-            ]
-        }'
-        property var json: JSON.parse(json_string)
+        CustomActionManager {
+            id: manager
+        }
 
         QGCLabel { text: qsTr("Custom Action:") }
 
         Repeater {
-            model: _root.json.CustomActions
+            model: manager.actions
 
             QGCButton {
-                text:               modelData.label
-                Layout.fillWidth:   true
+                text:              object.label
+                Layout.fillWidth:  true
 
                 onClicked: {
-                    var vehicle = _root.activeVehicle
-                    if (vehicle) {
-                        const show_error = true
-                        var comp_id = vehicle.defaultComponentId
-                        vehicle.sendCommand(
-                                    comp_id,
-                                    modelData.mavCmd,
-                                    show_error,
-                                    modelData.param1,
-                                    modelData.param2,
-                                    modelData.param3,
-                                    modelData.param4,
-                                    modelData.param5,
-                                    modelData.param6,
-                                    modelData.param7
-                        )
-                    }
+                    var vehicle = QGroundControl.multiVehicleManager.activeVehicle
+                    object.sendTo(vehicle)
                 }
             }
         } // Repeater
