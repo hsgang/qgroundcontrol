@@ -202,10 +202,17 @@ Rectangle {
                                 id: customActions
 
                                 columns:  2
-                                visible:  _enabled && fact.visible
+                                visible:  QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
 
-                                property bool _enabled:  QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
-                                property Fact fact:      QGroundControl.settingsManager.flyViewSettings.customActionDefinitions
+                                onVisibleChanged: {
+                                    if (jsonFile.rawValue === "" && ScreenTools.isMobile) {
+                                        jsonFile.rawValue = _defaultFile
+                                    }
+                                }
+
+                                property Fact   jsonFile:     QGroundControl.settingsManager.flyViewSettings.customActionDefinitions
+                                property string _defaultDir:  QGroundControl.settingsManager.appSettings.customActionsSavePath
+                                property string _defaultFile: _defaultDir + "/CustomActions.json"
 
                                 QGCLabel {
                                     text: qsTr("Custom Action Definitions")
@@ -217,19 +224,30 @@ Rectangle {
                                 QGCTextField {
                                     Layout.fillWidth:   true
                                     readOnly:           true
-                                    text:               customActions.fact.rawValue === "" ? qsTr("<not set>") : customActions.fact.value
+                                    text:               customActions.jsonFile.rawValue === "" ? qsTr("<not set>") : customActions.jsonFile.rawValue
                                 }
                                 QGCButton {
+                                    visible:    !ScreenTools.isMobile
                                     text:       qsTr("Browse")
                                     onClicked:  customActionPathBrowseDialog.openForLoad()
                                     QGCFileDialog {
                                         id:             customActionPathBrowseDialog
                                         title:          qsTr("Choose the Custom Action Definitions file")
-                                        folder:         customActions.fact.rawValue
+                                        folder:         customActions.jsonFile.rawValue
                                         selectExisting: true
                                         selectFolder:   false
-                                        onAcceptedForLoad: customActions.fact.rawValue = file
+                                        onAcceptedForLoad: customActions.jsonFile.rawValue = file
                                         nameFilters: ["JSON files (*.json)"]
+                                    }
+                                }
+                                // The file loader on Android doesn't work, so we hard code the path to the
+                                // JSON file. However, we need a button to force a refresh if the JSON file
+                                // is changed.
+                                QGCButton {
+                                    visible:    ScreenTools.isMobile
+                                    text:       qsTr("Reload")
+                                    onClicked:  {
+                                        customActions.jsonFile.valueChanged(customActions.jsonFile.rawValue)
                                     }
                                 }
                             }
