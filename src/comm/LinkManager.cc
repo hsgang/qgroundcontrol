@@ -156,7 +156,7 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr& config, bool i
         connect(link.get(), &LinkInterface::bytesReceived,       _mavlinkProtocol,    &MAVLinkProtocol::receiveBytes);
         connect(link.get(), &LinkInterface::bytesSent,           _mavlinkProtocol,    &MAVLinkProtocol::logSentBytes);
         connect(link.get(), &LinkInterface::disconnected,        this,                &LinkManager::_linkDisconnected);
-        connect(link.get(), &LinkInterface::bytesReceived,       _siyiSDKManager,     &SiyiSDKManager::read_incoming_packets);
+        //connect(link.get(), &LinkInterface::bytesReceived,       _siyiSDKManager,     &SiyiSDKManager::read_incoming_packets);
         _mavlinkProtocol->resetMetadataForLink(link.get());
         _mavlinkProtocol->setVersion(_mavlinkProtocol->getCurrentVersion());
 
@@ -207,7 +207,7 @@ void LinkManager::_linkDisconnected(void)
     disconnect(link, &LinkInterface::bytesReceived,       _mavlinkProtocol,    &MAVLinkProtocol::receiveBytes);
     disconnect(link, &LinkInterface::bytesSent,           _mavlinkProtocol,    &MAVLinkProtocol::logSentBytes);
     disconnect(link, &LinkInterface::disconnected,        this,                &LinkManager::_linkDisconnected);
-    disconnect(link, &LinkInterface::bytesReceived,       _siyiSDKManager,     &SiyiSDKManager::read_incoming_packets);
+    //disconnect(link, &LinkInterface::bytesReceived,       _siyiSDKManager,     &SiyiSDKManager::read_incoming_packets);
 
     link->_freeMavlinkChannel();
     for (int i=0; i<_rgLinks.count(); i++) {
