@@ -62,6 +62,22 @@ Rectangle {
     property string _vehicleGroundSpeedText:    isNaN(_vehicleGroundSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleGroundSpeed).toFixed(1)
     property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_distanceToHome).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
 
+    property real _acInputVolatage1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage1.rawValue.toFixed(1) : NaN
+    property real _acInputVolatage2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage2.rawValue.toFixed(1) : NaN
+    property real _acInputVolatage3Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage3.rawValue.toFixed(1) : NaN
+    property real _dcOutputVolatage1Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage1.rawValue.toFixed(1) : NaN
+    property real _dcOutputVolatage2Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage2.rawValue.toFixed(1) : NaN
+    property real _dcOutputVolatage3Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage3.rawValue.toFixed(1) : NaN
+    property real _dcOutputCurrent1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent1.rawValue.toFixed(1) : NaN
+    property real _dcOutputCurrent2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent2.rawValue.toFixed(1) : NaN
+    property real _dcOutputCurrent3Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent3.rawValue.toFixed(1) : NaN
+    property real _temperatureValue:        _activeVehicle ? _activeVehicle.externalPowerStatus.temperature.rawValue.toFixed(1) : NaN
+    property real _batteryVoltageValue:     _activeVehicle ? _activeVehicle.externalPowerStatus.batteryVoltage.rawValue.toFixed(1) : NaN
+    property real _batteryChangeValue:      _activeVehicle ? _activeVehicle.externalPowerStatus.batteryChange.rawValue.toFixed(0) : NaN
+
+    property real _meanACInput : ((_acInputVolatage1Value + _acInputVolatage2Value + _acInputVolatage3Value) / 3).toFixed(1)
+    property real _meanDCOutput: (((_dcOutputVolatage1Value + _dcOutputVolatage2Value + _dcOutputVolatage3Value) / 3) * ((_dcOutputCurrent1Value + _dcOutputCurrent2Value + _dcOutputCurrent3Value) / 3)).toFixed(1)
+
     //-----------------------------------------------------------------------------------------------------
     //--Attitude Widget-----------------------------------------------------------------------------------
 
@@ -234,7 +250,7 @@ Rectangle {
 
                 QGCLabel {
                     id: spdText
-                    text: "SPD"
+                    text: "PWR" //externalpower
                     font.bold : true
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -260,7 +276,7 @@ Rectangle {
 
                 QGCLabel {
                     id: spdunitText
-                    text: QGroundControl.unitsConversion.appSettingsSpeedUnitsString
+                    text: "W"//QGroundControl.unitsConversion.appSettingsSpeedUnitsString
                     font.bold : true
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -286,7 +302,7 @@ Rectangle {
 
                 QGCLabel {
                     id: gndspdText
-                    text: _vehicleGroundSpeedText
+                    text: _meanDCOutput//_vehicleGroundSpeedText
                     font.bold : true
                     font.pointSize : ScreenTools.defaultFontPointSize * 2.5
                     horizontalAlignment: Text.AlignHCenter
@@ -313,7 +329,7 @@ Rectangle {
 
                 QGCLabel {
                     id: dtohText
-                    text: "Home " + _distanceToHomeText
+                    text: "AC " + _meanACInput + "V"//_distanceToHomeText
                     font.bold : true
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -346,128 +362,128 @@ Rectangle {
             anchors.horizontalCenter:   parent.horizontalCenter
         }
 
-        Rectangle{
-            id: gndSpdBarRect
-            width: ScreenTools.defaultFontPixelWidth * 0.2
-            height: parent.height * 0.8
-            color: qgcPal.text
-            anchors.right: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: _toolsMargin * 2
+//        Rectangle{
+//            id: gndSpdBarRect
+//            width: ScreenTools.defaultFontPixelWidth * 0.2
+//            height: parent.height * 0.8
+//            color: qgcPal.text
+//            anchors.right: parent.left
+//            anchors.verticalCenter: parent.verticalCenter
+//            anchors.margins: _toolsMargin * 2
 
-            property real maxValue: 15
-            property real minValue: 0
-            property real value: (_vehicleGroundSpeed > maxValue) ? maxValue : _vehicleGroundSpeed
-            property string maxValueString: maxValue.toString()
-            property string minValueString: minValue.toString()
+//            property real maxValue: 15
+//            property real minValue: 0
+//            property real value: (_vehicleGroundSpeed > maxValue) ? maxValue : _vehicleGroundSpeed
+//            property string maxValueString: maxValue.toString()
+//            property string minValueString: minValue.toString()
 
-            Rectangle{
-                height: 2
-                color: qgcPal.text
-                width: ScreenTools.defaultFontPixelWidth * 1.2
-                anchors.top: parent.top
-                anchors.right: parent.right
+//            Rectangle{
+//                height: 2
+//                color: qgcPal.text
+//                width: ScreenTools.defaultFontPixelWidth * 1.2
+//                anchors.top: parent.top
+//                anchors.right: parent.right
 
-                QGCLabel{
-                    text: gndSpdBarRect.maxValueString
-                    anchors.right: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: _toolsMargin
-                }
-            }
+//                QGCLabel{
+//                    text: gndSpdBarRect.maxValueString
+//                    anchors.right: parent.left
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    anchors.margins: _toolsMargin
+//                }
+//            }
 
-            Rectangle{
-                height: 2
-                color: qgcPal.text
-                width: ScreenTools.defaultFontPixelWidth * 1.2
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
+//            Rectangle{
+//                height: 2
+//                color: qgcPal.text
+//                width: ScreenTools.defaultFontPixelWidth * 1.2
+//                anchors.bottom: parent.bottom
+//                anchors.right: parent.right
 
-                QGCLabel{
-                    text: gndSpdBarRect.minValueString
-                    anchors.right: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: _toolsMargin
-                }
-            }
+//                QGCLabel{
+//                    text: gndSpdBarRect.minValueString
+//                    anchors.right: parent.left
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    anchors.margins: _toolsMargin
+//                }
+//            }
 
-            Image {
-                id:                 gndSpdlevelerArrow
-                source:             "/qmlimages/LevelerArrow.svg"
-                mipmap:             true
-                fillMode:           Image.PreserveAspectFit
-                anchors.right:      parent.left
-                sourceSize.height:  ScreenTools.defaultFontPixelWidth * 2
-                y: {(_vehicleGroundSpeed <= gndSpdBarRect.maxValue && _vehicleGroundSpeed > 0) ?
-                                gndSpdBarRect.height - (gndSpdBarRect.height * (_vehicleGroundSpeed / gndSpdBarRect.maxValue)) - (height/2) :
-                                 gndSpdBarRect.height - (height/2)}
+//            Image {
+//                id:                 gndSpdlevelerArrow
+//                source:             "/qmlimages/LevelerArrow.svg"
+//                mipmap:             true
+//                fillMode:           Image.PreserveAspectFit
+//                anchors.right:      parent.left
+//                sourceSize.height:  ScreenTools.defaultFontPixelWidth * 2
+//                y: {(_vehicleGroundSpeed <= gndSpdBarRect.maxValue && _vehicleGroundSpeed > 0) ?
+//                                gndSpdBarRect.height - (gndSpdBarRect.height * (_vehicleGroundSpeed / gndSpdBarRect.maxValue)) - (height/2) :
+//                                 gndSpdBarRect.height - (height/2)}
 
-                transform: Rotation {
-//                    property var _angle:isNoseUpLocked() ? _courseOverGround-_heading : _courseOverGround
-                    origin.x:       gndSpdlevelerArrow.width  / 2
-                    origin.y:       gndSpdlevelerArrow.height / 2
-                    angle:         180
-                }
-            }
-        }
+//                transform: Rotation {
+////                    property var _angle:isNoseUpLocked() ? _courseOverGround-_heading : _courseOverGround
+//                    origin.x:       gndSpdlevelerArrow.width  / 2
+//                    origin.y:       gndSpdlevelerArrow.height / 2
+//                    angle:         180
+//                }
+//            }
+//        }
 
-        Rectangle{
-            id: climbSpdBarRect
-            width: ScreenTools.defaultFontPixelWidth * 0.2
-            height: parent.height * 0.8
-            color: qgcPal.text
-            anchors.left: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: _toolsMargin * 2
+//        Rectangle{
+//            id: climbSpdBarRect
+//            width: ScreenTools.defaultFontPixelWidth * 0.2
+//            height: parent.height * 0.8
+//            color: qgcPal.text
+//            anchors.left: parent.right
+//            anchors.verticalCenter: parent.verticalCenter
+//            anchors.margins: _toolsMargin * 2
 
-            property real maxValue: 10
-            property real minValue: -10
-            property real value: (Math.abs(_vehicleVerticalSpeed) > maxValue) ? maxValue : _vehicleVerticalSpeed
-            property string maxValueString: maxValue.toString()
-            property string minValueString: minValue.toString()
+//            property real maxValue: 10
+//            property real minValue: -10
+//            property real value: (Math.abs(_vehicleVerticalSpeed) > maxValue) ? maxValue : _vehicleVerticalSpeed
+//            property string maxValueString: maxValue.toString()
+//            property string minValueString: minValue.toString()
 
-            Rectangle{
-                height: 2
-                color: qgcPal.text
-                width: ScreenTools.defaultFontPixelWidth * 1.2
-                anchors.top: parent.top
-                anchors.left: parent.left
+//            Rectangle{
+//                height: 2
+//                color: qgcPal.text
+//                width: ScreenTools.defaultFontPixelWidth * 1.2
+//                anchors.top: parent.top
+//                anchors.left: parent.left
 
-                QGCLabel{
-                    text: climbSpdBarRect.maxValueString
-                    anchors.left: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: _toolsMargin
-                }
-            }
+//                QGCLabel{
+//                    text: climbSpdBarRect.maxValueString
+//                    anchors.left: parent.right
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    anchors.margins: _toolsMargin
+//                }
+//            }
 
-            Rectangle{
-                height: 2
-                color: qgcPal.text
-                width: ScreenTools.defaultFontPixelWidth * 1.2
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
+//            Rectangle{
+//                height: 2
+//                color: qgcPal.text
+//                width: ScreenTools.defaultFontPixelWidth * 1.2
+//                anchors.bottom: parent.bottom
+//                anchors.left: parent.left
 
-                QGCLabel{
-                    text: climbSpdBarRect.minValueString
-                    anchors.left: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: _toolsMargin
-                }
-            }
+//                QGCLabel{
+//                    text: climbSpdBarRect.minValueString
+//                    anchors.left: parent.right
+//                    anchors.verticalCenter: parent.verticalCenter
+//                    anchors.margins: _toolsMargin
+//                }
+//            }
 
-            Image {
-                id:                 climbSpdlevelerArrow
-                source:             "/qmlimages/LevelerArrow.svg"
-                mipmap:             true
-                fillMode:           Image.PreserveAspectFit
-                anchors.left:       parent.right
-                sourceSize.height:  ScreenTools.defaultFontPixelWidth * 2
-                y: {(Math.abs(_vehicleVerticalSpeed) <= climbSpdBarRect.maxValue) ?
-                                (climbSpdBarRect.height/2) - ((climbSpdBarRect.height/2) * (_vehicleVerticalSpeed / climbSpdBarRect.maxValue)) - (height/2) :
-                                (climbSpdBarRect.height/2)}
-            }
-        }
+//            Image {
+//                id:                 climbSpdlevelerArrow
+//                source:             "/qmlimages/LevelerArrow.svg"
+//                mipmap:             true
+//                fillMode:           Image.PreserveAspectFit
+//                anchors.left:       parent.right
+//                sourceSize.height:  ScreenTools.defaultFontPixelWidth * 2
+//                y: {(Math.abs(_vehicleVerticalSpeed) <= climbSpdBarRect.maxValue) ?
+//                                (climbSpdBarRect.height/2) - ((climbSpdBarRect.height/2) * (_vehicleVerticalSpeed / climbSpdBarRect.maxValue)) - (height/2) :
+//                                (climbSpdBarRect.height/2)}
+//            }
+//        }
     }
 }
 

@@ -208,14 +208,12 @@ Item {
         visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     }
 
-    FlyViewGeneratorStatusView{
-        id:                         generatorStatusView
+    FlyViewExternalPowerStatusView{
+        id:                         externalPowerStatusView
         anchors.margins:            _toolsMargin
         anchors.top:                parent.top
-        anchors.topMargin:          mapControl.pipState.state !== mapControl.pipState.pipState ? (atmosphericSensorView.visible ? _toolsMargin : _idealWidth) : _toolsMargin
-        anchors.left:               atmosphericSensorView.visible ? atmosphericSensorView.right : parent.left
-        anchors.leftMargin:         atmosphericSensorView.visible ? _toolsMargin : _idealWidth * 3
-        visible:                    QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue
+        anchors.right:              parent.right
+        visible:                    QGroundControl.settingsManager.flyViewSettings.showExternalPowerStatus.rawValue
     }
 
     PhotoVideoControl {
@@ -223,6 +221,7 @@ Item {
         anchors.margins:            _toolsMargin
         anchors.top:                parent.top
         anchors.right:              parent.right
+        visible:                    false
 
         property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
     }
@@ -352,7 +351,7 @@ Item {
             GridLayout{
                 id:     quickViewControlStripGrid
                 flow:   GridLayout.TopToBottom
-                rows:   8
+                rows:   9
 
                 QGCSwitch {
                     checked:            photoVideoControl.visible
@@ -387,8 +386,13 @@ Item {
                 }
 
                 QGCSwitch {
-                    checked:            QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
-                    onClicked:          QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
+                    checked:            QGroundControl.settingsManager.flyViewSettings.showExternalPowerStatus.rawValue === true ? 1 : 0
+                    onClicked:          QGroundControl.settingsManager.flyViewSettings.showExternalPowerStatus.rawValue = checked ? 1 : 0
+                }
+
+                QGCSwitch {
+                    checked:            QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue === true ? 1 : 0
+                    onClicked:          QGroundControl.settingsManager.appSettings.virtualJoystick.rawValue = checked ? 1 : 0
                 }
 
                 QGCLabel{
@@ -414,6 +418,9 @@ Item {
                 }
                 QGCLabel{
                     text:               qsTr("External Power Status")
+                }                
+                QGCLabel{
+                    text:               qsTr("Virtual Joystick")
                 }
             }
         }
@@ -428,7 +435,7 @@ Item {
         height:             ScreenTools.defaultFontPixelHeight * 2.5
         width:              ScreenTools.defaultFontPixelHeight * 2.5
         radius:             ScreenTools.defaultFontPixelHeight / 3
-        visible:            true
+        visible:            QGroundControl.corePlugin.showAdvancedUI
 
         DeadMouseArea {
             anchors.fill: parent

@@ -4,88 +4,89 @@
     "QGC.MetaData.Facts":
 [
 {
-    "name":             "ACInputVolatage1",
+    "name":             "acInputVolatage1",
     "shortDesc": "ACInputVolatage1",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "V"
 },
 {
-    "name":             "ACInputVolatage2",
+    "name":             "acInputVolatage2",
     "shortDesc": "ACInputVolatage2",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "V"
 },
 {
-    "name":             "ACInputVolatage3",
+    "name":             "acInputVolatage3",
     "shortDesc": "ACInputVolatage3",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "V"
 },
 {
-    "name":             "DCOutputVolatage1",
+    "name":             "dcOutputVolatage1",
     "shortDesc": "DCOutputVolatage1",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "V"
 },
 {
-    "name":             "DCOutputVolatage2",
+    "name":             "dcOutputVolatage2",
     "shortDesc": "DCOutputVolatage2",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "V"
 },
 {
-    "name":             "DCOutputVolatage3",
+    "name":             "dcOutputVolatage3",
     "shortDesc": "DCOutputVolatage3",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "V"
 },
 {
-    "name":             "DCOutputCurrent1",
+    "name":             "dcOutputCurrent1",
     "shortDesc": "DCOutputCurrent1",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "A"
 },
 {
-    "name":             "DCOutputCurrent2",
+    "name":             "dcOutputCurrent2",
     "shortDesc": "DCOutputCurrent2",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "A"
 },
 {
-    "name":             "DCOutputCurrent3",
+    "name":             "dcOutputCurrent3",
     "shortDesc": "DCOutputCurrent3",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "A"
 },
 {
-    "name":             "Temperature",
+    "name":             "temperature",
     "shortDesc": "Temperature",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "C"
 },
 {
-    "name":             "BatteryVoltage",
+    "name":             "batteryVoltage",
     "shortDesc": "BatteryVoltage",
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "V"
 },
 {
-    "name":             "BatteryChange",
+    "name":             "batteryChange",
     "shortDesc": "BatteryChange",
-    "type":             "float",
-    "decimalPlaces":    0,
-    "units":            " "
+    "type":             "uint8",
+    "enumStrings":      "Normal,Using Battery,Using AC&Battery,Using AC&Battery",
+    "enumValues":       "0,1,2,3",
+    "decimalPlaces":    0
 }
 ]
 }

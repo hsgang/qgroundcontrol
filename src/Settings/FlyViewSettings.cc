@@ -28,8 +28,9 @@ DECLARE_SETTINGSFACT(FlyViewSettings, keepMapCenteredOnVehicle)
 DECLARE_SETTINGSFACT(FlyViewSettings, showSimpleCameraControl)
 DECLARE_SETTINGSFACT(FlyViewSettings, showObstacleDistanceOverlay)
 DECLARE_SETTINGSFACT(FlyViewSettings, missionMaxAltitudeIndicator)
+
 DECLARE_SETTINGSFACT(FlyViewSettings, showAtmosphericValueBar)
-DECLARE_SETTINGSFACT(FlyViewSettings, showGeneratorStatus)
+DECLARE_SETTINGSFACT(FlyViewSettings, showExternalPowerStatus)
 DECLARE_SETTINGSFACT(FlyViewSettings, showGimbalControlPannel)
 DECLARE_SETTINGSFACT(FlyViewSettings, updateHomePosition)
 

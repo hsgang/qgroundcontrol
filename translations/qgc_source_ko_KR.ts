@@ -7140,8 +7140,22 @@ Click Ok to start the auto-tuning process.
       <source>External Power Status</source>
       <translation>외부 전원 상태</translation>
     </message>
-
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="423"/>
+      <source>Virtual Joystick</source>
+      <translation>가상 조이스틱</translation>
+    </message>
   </context>
+
+  <context>
+    <name>FlyViewExternalPowerStatusView</name>
+    <message>
+      <location filename="../src/FlightDisplay/FlyViewExternalPowerStatusView.qml" line="49"/>
+      <source>External Power Status</source>
+      <translation>전원 공급 상태</translation>
+    </message>
+  </context>
+
   <context>
     <name>GPSIndicator</name>
     <message>

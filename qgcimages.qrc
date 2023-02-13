@@ -210,5 +210,6 @@
         <file alias="GPS_RTK.svg">src/ui/toolbar/Images/GPS_RTK.svg</file>
         <file alias="GPS_None.svg">src/ui/toolbar/Images/GPS_None.svg</file>
         <file alias="gimbalSight.svg">src/FlightMap/Images/gimbalSight.svg</file>
+        <file alias="ExternalPower.svg">src/ui/toolbar/Images/ExternalPower.svg</file>
     </qresource>
 </RCC>

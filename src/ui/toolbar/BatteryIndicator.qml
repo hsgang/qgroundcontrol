@@ -141,6 +141,7 @@ Item {
                     height:             ScreenTools.defaultFontPixelHeight * 1.4
                     width:              ScreenTools.defaultFontPixelHeight * 1.0
                     radius:             ScreenTools.defaultFontPixelHeight * 0.15
+                    //antialiasing:       false
 
                     Rectangle{
                         anchors.bottom:           parent.top
@@ -151,7 +152,7 @@ Item {
                     }
 
                     Rectangle{
-                        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.13
+                        anchors.margins:        1//ScreenTools.defaultFontPixelHeight * 0.15
                         anchors.bottom:         parent.bottom
                         anchors.horizontalCenter: parent.horizontalCenter
                         height:                 (parent.height - (anchors.margins * 2)) * (battery.percentRemaining.rawValue / 100)
@@ -175,12 +176,12 @@ Item {
                     text:       _activeVehicle ? battery.voltage.valueString + battery.voltage.units : ""
                 }
 
-                QGCLabel {
-                    text:                   getBatteryPercentageText()
-                    //font.pointSize:         ScreenTools.mediumFontPointSize
-                    color:                  qgcPal.text
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+//                QGCLabel {
+//                    text:                   getBatteryPercentageText()
+//                    //font.pointSize:         ScreenTools.mediumFontPointSize
+//                    color:                  qgcPal.text
+//                    anchors.horizontalCenter: parent.horizontalCenter
+//                }
             }
 
         }

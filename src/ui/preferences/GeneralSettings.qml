@@ -228,11 +228,11 @@ Rectangle {
                             }
 
                             FactCheckBox {
-                                text:       qsTr("Show Generator Status")
-                                visible:    _showGeneratorStatus.visible
-                                fact:       _showGeneratorStatus
+                                text:       qsTr("Show ExternalPower Status")
+                                visible:    _showExternalPowerStatus.visible
+                                fact:       _showExternalPowerStatus
 
-                                property Fact _showGeneratorStatus: QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus
+                                property Fact _showExternalPowerStatus: QGroundControl.settingsManager.flyViewSettings.showExternalPowerStatus
                             }
 
                             FactCheckBox {

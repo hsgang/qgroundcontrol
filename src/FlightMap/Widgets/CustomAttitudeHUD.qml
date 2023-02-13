@@ -168,27 +168,27 @@ Item {
 
 
 
-//    Image {
-//        id: rollDial
-//        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-//        source:             "/qmlimages/rollDialWhite.svg"
-//        mipmap:             true
-//        width:              parent.width * 0.7
-//        sourceSize.width:   width
-//        fillMode:           Image.PreserveAspectFit
+    Image {
+        id: rollDial
+        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
+        source:             "/qmlimages/rollDialWhite.svg"
+        mipmap:             true
+        width:              parent.width * 0.7
+        sourceSize.width:   width
+        fillMode:           Image.PreserveAspectFit
 
-//        ColorOverlay {
-//            anchors.fill:       rollDial
-//            source:             rollDial
-//            color:              qgcPal.colorGreen
-//        }
+        ColorOverlay {
+            anchors.fill:       rollDial
+            source:             rollDial
+            color:              qgcPal.colorGreen
+        }
 
-//        transform: Rotation {
-//            origin.x:       rollDial.width / 2
-//            origin.y:       rollDial.height
-//            angle:          -_rollAngle
-//        }
-//    }
+        transform: Rotation {
+            origin.x:       rollDial.width / 2
+            origin.y:       rollDial.height
+            angle:          -_rollAngle
+        }
+    }
 
 //    Image {
 //        id: pointer
@@ -219,15 +219,15 @@ Item {
 //        }
 //    }
 
-//    QGCPitchIndicator {
-//        id:                 pitchIndicator
-//        anchors.verticalCenter: parent.verticalCenter
-//        visible:            showPitch
-//        pitchAngle:         _pitchAngle
-//        rollAngle:          _rollAngle
-//        color:              Qt.rgba(0,0,0,0)
-//        size:               ScreenTools.defaultFontPixelHeight * (5)
-//    }
+    QGCPitchIndicator {
+        id:                 pitchIndicator
+        anchors.verticalCenter: parent.verticalCenter
+        visible:            showPitch
+        pitchAngle:         _pitchAngle
+        rollAngle:          _rollAngle
+        color:              Qt.rgba(0,0,0,0)
+        size:               ScreenTools.defaultFontPixelHeight * (5)
+    }
 
 //    Image {
 //        id:                 cOGPointer

@@ -32,7 +32,7 @@ struct externalPower_Payload {
 };
 
 ExternalPowerStatusFactGroup::ExternalPowerStatusFactGroup(QObject* parent)
-    : FactGroup(1000, ":/json/Vehicle/GeneratorStatusFactGroup.json", parent)
+    : FactGroup(250, ":/json/Vehicle/ExternalPowerStatusFactGroup.json", parent)
     , _acInputVolatage1Fact     (0, _acInputVolatage1FactName,      FactMetaData::valueTypeFloat)
     , _acInputVolatage2Fact     (0, _acInputVolatage2FactName,      FactMetaData::valueTypeFloat)
     , _acInputVolatage3Fact     (0, _acInputVolatage3FactName,      FactMetaData::valueTypeFloat)
@@ -44,7 +44,7 @@ ExternalPowerStatusFactGroup::ExternalPowerStatusFactGroup(QObject* parent)
     , _dcOutputCurrent3Fact     (0, _dcOutputCurrent3FactName,      FactMetaData::valueTypeFloat)
     , _temperatureFact          (0, _temperatureFactName,           FactMetaData::valueTypeFloat)
     , _batteryVoltageFact       (0, _temperatureFactName,           FactMetaData::valueTypeFloat)
-    , _batteryChangeFact        (0, _batteryChangeFactName,         FactMetaData::valueTypeInt8)
+    , _batteryChangeFact        (0, _batteryChangeFactName,         FactMetaData::valueTypeUint8)
 {
     _addFact(&_acInputVolatage1Fact,      _acInputVolatage1FactName);
     _addFact(&_acInputVolatage2Fact,      _acInputVolatage2FactName);
@@ -60,18 +60,18 @@ ExternalPowerStatusFactGroup::ExternalPowerStatusFactGroup(QObject* parent)
     _addFact(&_batteryChangeFact,         _batteryChangeFactName);
 
     // Start out as not available "--.--"
-    _acInputVolatage1Fact.setRawValue       (qQNaN());
-    _acInputVolatage2Fact.setRawValue       (qQNaN());
-    _acInputVolatage3Fact.setRawValue       (qQNaN());
-    _dcOutputVolatage1Fact.setRawValue      (qQNaN());
-    _dcOutputVolatage2Fact.setRawValue      (qQNaN());
-    _dcOutputVolatage3Fact.setRawValue      (qQNaN());
-    _dcOutputCurrent1Fact.setRawValue       (qQNaN());
-    _dcOutputCurrent2Fact.setRawValue       (qQNaN());
-    _dcOutputCurrent3Fact.setRawValue       (qQNaN());
-    _temperatureFact.setRawValue            (qQNaN());
-    _batteryVoltageFact.setRawValue         (qQNaN());
-    _batteryChangeFact.setRawValue          (qQNaN());
+    _acInputVolatage1Fact.setRawValue       (std::numeric_limits<float>::quiet_NaN());
+    _acInputVolatage2Fact.setRawValue       (std::numeric_limits<float>::quiet_NaN());
+    _acInputVolatage3Fact.setRawValue       (std::numeric_limits<float>::quiet_NaN());
+    _dcOutputVolatage1Fact.setRawValue      (std::numeric_limits<float>::quiet_NaN());
+    _dcOutputVolatage2Fact.setRawValue      (std::numeric_limits<float>::quiet_NaN());
+    _dcOutputVolatage3Fact.setRawValue      (std::numeric_limits<float>::quiet_NaN());
+    _dcOutputCurrent1Fact.setRawValue       (std::numeric_limits<float>::quiet_NaN());
+    _dcOutputCurrent2Fact.setRawValue       (std::numeric_limits<float>::quiet_NaN());
+    _dcOutputCurrent3Fact.setRawValue       (std::numeric_limits<float>::quiet_NaN());
+    _temperatureFact.setRawValue            (std::numeric_limits<float>::quiet_NaN());
+    _batteryVoltageFact.setRawValue         (std::numeric_limits<float>::quiet_NaN());
+//    _batteryChangeFact.setRawValue          (qQNaN());
 }
 
 void ExternalPowerStatusFactGroup::handleMessage(Vehicle* vehicle, mavlink_message_t& message)
@@ -95,31 +95,18 @@ void ExternalPowerStatusFactGroup::_handleExternalPowerStatus(mavlink_message_t 
 
         memcpy(&eP, &extPower.payload, sizeof(eP));
 
-        float acInputVolt1Raw   = eP.acInputVolt1 * 0.1;
-        float acInputVolt2Raw   = eP.acInputVolt2 * 0.1;
-        float acInputVolt3Raw   = eP.acInputVolt3 * 0.1;
-        float dcOutVolt1Raw     = eP.dcOutVolt1 * 0.1;
-        float dcOutVolt2Raw     = eP.dcOutVolt2 * 0.1;
-        float dcOutVolt3Raw     = eP.dcOutVolt3 * 0.1;
-        float dcOutCurr1Raw     = eP.dcOutCurr1 * 0.1;
-        float dcOutCurr2Raw     = eP.dcOutCurr2 * 0.1;
-        float dcOutCurr3Raw     = eP.dcOutCurr3 * 0.1;
-        float temperatureRaw    = eP.temperature * 0.1;
-        float battVoltRaw       = eP.battVolt * 0.1;
-        float battChangeRaw     = eP.battChange * 0.1;
-
-        acInputVolatage1()->setRawValue(acInputVolt1Raw);
-        acInputVolatage2()->setRawValue(acInputVolt2Raw);
-        acInputVolatage3()->setRawValue(acInputVolt3Raw);
-        dcOutputVolatage1()->setRawValue(dcOutVolt1Raw);
-        dcOutputVolatage2()->setRawValue(dcOutVolt2Raw);
-        dcOutputVolatage3()->setRawValue(dcOutVolt3Raw);
-        dcOutputCurrent1()->setRawValue(dcOutCurr1Raw);
-        dcOutputCurrent2()->setRawValue(dcOutCurr2Raw);
-        dcOutputCurrent3()->setRawValue(dcOutCurr3Raw);
-        temperature()->setRawValue(temperatureRaw);
-        batteryVoltage()->setRawValue(battVoltRaw);
-        batteryChange()->setRawValue(battChangeRaw);
+        acInputVolatage1()->setRawValue(float(eP.acInputVolt1 * 0.1));
+        acInputVolatage2()->setRawValue(float(eP.acInputVolt2 * 0.1));
+        acInputVolatage3()->setRawValue(float(eP.acInputVolt3 * 0.1));
+        dcOutputVolatage1()->setRawValue(float(eP.dcOutVolt1 * 0.1));
+        dcOutputVolatage2()->setRawValue(float(eP.dcOutVolt2 * 0.1));
+        dcOutputVolatage3()->setRawValue(float(eP.dcOutVolt3 * 0.1));
+        dcOutputCurrent1()->setRawValue(float(eP.dcOutCurr1 * 0.1));
+        dcOutputCurrent2()->setRawValue(float(eP.dcOutCurr2 * 0.1));
+        dcOutputCurrent3()->setRawValue(float(eP.dcOutCurr3 * 0.1));
+        temperature()->setRawValue(float(eP.temperature * 0.1));
+        batteryVoltage()->setRawValue(float(eP.battVolt * 0.1));
+        batteryChange()->setRawValue(uint8_t(eP.battChange * 0.1));
     }
 }
 

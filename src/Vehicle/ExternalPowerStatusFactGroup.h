@@ -10,18 +10,18 @@ class ExternalPowerStatusFactGroup : public FactGroup
 public:
     ExternalPowerStatusFactGroup(QObject* parent = nullptr);
 
-    Q_PROPERTY(Fact* ACInputVolatage1        READ acInputVolatage1        CONSTANT)
-    Q_PROPERTY(Fact* ACInputVolatage2        READ acInputVolatage2        CONSTANT)
-    Q_PROPERTY(Fact* ACInputVolatage3        READ acInputVolatage3        CONSTANT)
-    Q_PROPERTY(Fact* DCOutputVolatage1       READ dcOutputVolatage1       CONSTANT)
-    Q_PROPERTY(Fact* DCOutputVolatage2       READ dcOutputVolatage2       CONSTANT)
-    Q_PROPERTY(Fact* DCOutputVolatage3       READ dcOutputVolatage3       CONSTANT)
-    Q_PROPERTY(Fact* DCOutputCurrent1        READ dcOutputCurrent1        CONSTANT)
-    Q_PROPERTY(Fact* DCOutputCurrent2        READ dcOutputCurrent2        CONSTANT)
-    Q_PROPERTY(Fact* DCOutputCurrent3        READ dcOutputCurrent3        CONSTANT)
-    Q_PROPERTY(Fact* Temperature             READ temperature             CONSTANT)
-    Q_PROPERTY(Fact* BatteryVoltage          READ batteryVoltage          CONSTANT)
-    Q_PROPERTY(Fact* BatteryChange           READ batteryChange           CONSTANT)
+    Q_PROPERTY(Fact* acInputVolatage1        READ acInputVolatage1        CONSTANT)
+    Q_PROPERTY(Fact* acInputVolatage2        READ acInputVolatage2        CONSTANT)
+    Q_PROPERTY(Fact* acInputVolatage3        READ acInputVolatage3        CONSTANT)
+    Q_PROPERTY(Fact* dcOutputVolatage1       READ dcOutputVolatage1       CONSTANT)
+    Q_PROPERTY(Fact* dcOutputVolatage2       READ dcOutputVolatage2       CONSTANT)
+    Q_PROPERTY(Fact* dcOutputVolatage3       READ dcOutputVolatage3       CONSTANT)
+    Q_PROPERTY(Fact* dcOutputCurrent1        READ dcOutputCurrent1        CONSTANT)
+    Q_PROPERTY(Fact* dcOutputCurrent2        READ dcOutputCurrent2        CONSTANT)
+    Q_PROPERTY(Fact* dcOutputCurrent3        READ dcOutputCurrent3        CONSTANT)
+    Q_PROPERTY(Fact* temperature             READ temperature             CONSTANT)
+    Q_PROPERTY(Fact* batteryVoltage          READ batteryVoltage          CONSTANT)
+    Q_PROPERTY(Fact* batteryChange           READ batteryChange           CONSTANT)
 
     Fact* acInputVolatage1                    () { return &_acInputVolatage1Fact; }
     Fact* acInputVolatage2                    () { return &_acInputVolatage2Fact; }

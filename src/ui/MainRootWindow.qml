@@ -335,6 +335,7 @@ ApplicationWindow {
                         text:               qsTr("Plan View")
                         imageResource:      "/qmlimages/Plan.svg"
                         imageColor:         qgcPal.text
+                        visible:            QGroundControl.corePlugin.showAdvancedUI
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
                                 mainWindow.showPlanView()
