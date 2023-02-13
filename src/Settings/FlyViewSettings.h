@@ -34,4 +34,6 @@ public:
     DEFINE_SETTINGFACT(showGeneratorStatus)
     DEFINE_SETTINGFACT(showGimbalControlPannel)
     DEFINE_SETTINGFACT(updateHomePosition)
+    DEFINE_SETTINGFACT(enableCustomActions)
+    DEFINE_SETTINGFACT(customActionDefinitions)
 };

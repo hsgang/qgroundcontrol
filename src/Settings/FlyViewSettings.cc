@@ -32,4 +32,6 @@ DECLARE_SETTINGSFACT(FlyViewSettings, showAtmosphericValueBar)
 DECLARE_SETTINGSFACT(FlyViewSettings, showGeneratorStatus)
 DECLARE_SETTINGSFACT(FlyViewSettings, showGimbalControlPannel)
 DECLARE_SETTINGSFACT(FlyViewSettings, updateHomePosition)
+DECLARE_SETTINGSFACT(FlyViewSettings, enableCustomActions)
+DECLARE_SETTINGSFACT(FlyViewSettings, customActionDefinitions)
 

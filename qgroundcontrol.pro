@@ -433,6 +433,8 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 #
 
 HEADERS += \
+    src/QmlControls/CustomAction.h \
+    src/QmlControls/CustomActionManager.h \
     src/QmlControls/QmlUnitsConversion.h \
     src/Vehicle/AtmosphericSensorFactGroup.h \
     src/Vehicle/ExternalPowerStatusFactGroup.h \
@@ -454,6 +456,7 @@ SOURCES += \
     src/Vehicle/AtmosphericSensorFactGroup.cc \
     src/Vehicle/ExternalPowerStatusFactGroup.cc \
     src/Vehicle/GeneratorStatusFactGroup.cc \
+    src/QmlControls/CustomActionManager.cc \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/Vehicle/VehicleLandingTargetFactGroup.cc \
     src/api/QGCCorePlugin.cc \
