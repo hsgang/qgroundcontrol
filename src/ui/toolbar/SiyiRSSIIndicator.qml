@@ -86,7 +86,15 @@ Item {
         id:         siyirssiRow
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
-        spacing:        ScreenTools.defaultFontPixelWidth/4
+        spacing:        ScreenTools.defaultFontPixelWidth/2
+
+        Rectangle{
+            width:              1
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            color:              qgcPal.text
+            opacity:            0.5
+        }
 
         QGCColoredImage {
             id:                 siyiStatusIcon

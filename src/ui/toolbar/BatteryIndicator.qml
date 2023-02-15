@@ -61,7 +61,7 @@ Item {
             anchors.top:    parent.top
             anchors.bottom: parent.bottom
 
-            spacing: ScreenTools.defaultFontPixelWidth/4
+            spacing: ScreenTools.defaultFontPixelWidth/2
 
             function getBatteryColor() {
                 if (battery.chargeState.rawValue) {
@@ -114,16 +114,14 @@ Item {
                 return ""
             }
 
-//            QGCColoredImage {
-//                id:                 batteryIcon
-//                anchors.top:        parent.top
-//                anchors.bottom:     parent.bottom
-//                width:              height
-//                sourceSize.width:   width
-//                source:             "/qmlimages/Battery.svg"
-//                fillMode:           Image.PreserveAspectFit
-//                color:              getBatteryColor()
-//            }
+            Rectangle{
+                width:              1
+                anchors.top:        parent.top
+                anchors.bottom:     parent.bottom
+                color:              qgcPal.text
+                opacity:            0.5
+            }
+
             Rectangle{
                 id:                 batteryIconBase
                 anchors.top:        parent.top
