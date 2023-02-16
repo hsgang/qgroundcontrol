@@ -566,7 +566,7 @@ SetupPage {
                             checked:            _rtlLoitTimeFact.value > 0
                             text:               qsTr("Loiter above Home for:")
 
-                            onClicked: _rtlLoitTimeFact.value = (checked ? 60 : 0)
+                            onClicked: _rtlLoitTimeFact.value = (checked ? 5000 : 0)
                         }
 
                         FactTextField {
