@@ -101,7 +101,7 @@ Rectangle {
                     // Outer summary item rectangle
                     Rectangle {
                         width:      _summaryBoxWidth
-                        height:     ScreenTools.defaultFontPixelHeight * 13
+                        height:     ScreenTools.defaultFontPixelHeight * 14
                         color:      qgcPal.windowShade
                         visible:    modelData.summaryQmlSource.toString() !== ""
                         border.width: 1
