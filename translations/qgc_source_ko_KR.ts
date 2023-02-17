@@ -1488,11 +1488,6 @@
       <translation>최대 반지름:</translation>
     </message>
     <message>
-      <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="452"/>
-      <source>Max altitude:</source>
-      <translation>최대 고도:</translation>
-    </message>
-    <message>
       <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="461"/>
       <source>Max altitude:</source>
       <translation>최대 고도:</translation>
@@ -5072,8 +5067,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/QmlControls/EditPositionDialog.qml" line="104"/>
       <source>Northing</source>
-      <translation>북향
-</translation>
+      <translation>북향</translation>
     </message>
     <message>
       <location filename="../src/QmlControls/EditPositionDialog.qml" line="112"/>
@@ -5366,8 +5360,7 @@ Click Ok to start the auto-tuning process.
     <message>
       <location filename="../src/QmlControls/FactValueGrid.cc" line="318"/>
       <source>Settings version %1 for %2 is not supported. Setup will be reset to defaults.</source>
-      <translation>%2에 대한 설정 버전 %1은(는) 지원되지 않습니다. 설정이 기본 값으로 재 설정됩니다.
-</translation>
+      <translation>%2에 대한 설정 버전 %1은(는) 지원되지 않습니다. 설정이 기본 값으로 재 설정됩니다.</translation>
     </message>
     <message>
       <location filename="../src/QmlControls/FactValueGrid.cc" line="318"/>
@@ -5381,6 +5374,19 @@ Click Ok to start the auto-tuning process.
       <location filename="../src/FactSystem/FactControls/FactValueSlider.qml" line="100"/>
       <source>Value Details</source>
       <translation>값 세부 정보</translation>
+    </message>
+  </context>
+  <context>
+    <name>RCChannelMonitor</name>
+    <message>
+      <location filename="../src/QmlControls/RCChannelMonitor.cc" line="90"/>
+      <source>Not Mapped</source>
+      <translation>채널 매핑 없음</translation>
+    </message>
+    <message>
+      <location filename="../src/QmlControls/RCChannelMonitor.cc" line="112"/>
+      <source>Channel Monitor</source>
+      <translation>채널 모니터</translation>
     </message>
   </context>
   <context>
@@ -10942,24 +10948,18 @@ Is this really what you want?</source>
     <name>PX4AdvancedFlightModesController</name>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PX4AdvancedFlightModesController.cc" line="151"/>
-      <source>%1 is set to %2. Mapping must between 0 and %3 (inclusive).
-</source>
-      <translation>%1은(는) %2(으)로 설정되어있습니다. 매핑은 0 과 %3(포함) 사이여야합니다
-</translation>
+      <source>%1 is set to %2. Mapping must between 0 and %3 (inclusive).</source>
+      <translation>%1은(는) %2(으)로 설정되어있습니다. 매핑은 0 과 %3(포함) 사이여야합니다.</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PX4AdvancedFlightModesController.cc" line="167"/>
-      <source>%1 is set to same channel as %2.
-</source>
-      <translation>%1이(가) %2와(과) 같은 채널로 설정되어 있습니다.
-</translation>
+      <source>%1 is set to same channel as %2.</source>
+      <translation>%1이(가) %2와(과) 같은 채널로 설정되어 있습니다.</translation>
     </message>
     <message>
       <location filename="../src/AutoPilotPlugins/PX4/PX4AdvancedFlightModesController.cc" line="177"/>
-      <source>%1 is set to %2. Threshold must between 0.0 and 1.0 (inclusive).
-</source>
-      <translation>%1이(가) %2(으)로 설정되어있습니다. 임계값은 0.0에서 1.0(이하) 의 값이어야합니다
-</translation>
+      <source>%1 is set to %2. Threshold must between 0.0 and 1.0 (inclusive).</source>
+      <translation>%1이(가) %2(으)로 설정되어있습니다. 임계값은 0.0에서 1.0(이하) 의 값이어야합니다.</translation>
     </message>
   </context>
   <context>
