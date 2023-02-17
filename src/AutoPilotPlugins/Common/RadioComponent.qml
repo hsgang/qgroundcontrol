@@ -111,8 +111,8 @@ SetupPage {
                     readonly property int   __rcValueMaxJitter: 2
                     property color          __barColor:         qgcPal.windowShade
 
-                    readonly property int _pwmMin:      800
-                    readonly property int _pwmMax:      2200
+                    readonly property int _pwmMin:      900
+                    readonly property int _pwmMax:      2100
                     readonly property int _pwmRange:    _pwmMax - _pwmMin
 
                     // Bar

@@ -26,8 +26,8 @@ Item {
 
     property bool twoColumn: false
 
-    readonly property int _pwmMin:      800
-    readonly property int _pwmMax:      2200
+    readonly property int _pwmMin:      900
+    readonly property int _pwmMax:      2100
     readonly property int _pwmRange:    _pwmMax - _pwmMin
 
     RCChannelMonitorController {
@@ -72,6 +72,14 @@ Item {
                 x:                      (((reversed ? _pwmMax - rcValue : rcValue - _pwmMin) / _pwmRange) * parent.width) - (width / 2)
                 radius:                 width / 2
                 color:                  qgcPal.text
+                visible:                mapped && (rcValue !== 0)
+            }
+
+            QGCLabel {
+                anchors.fill:           parent
+                horizontalAlignment:    Text.AlignHCenter
+                verticalAlignment:      Text.AlignVCenter
+                text:                   rcValue
                 visible:                mapped
             }
 
