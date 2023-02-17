@@ -22,7 +22,7 @@ import QGroundControl.Palette               1.0
 //-- Message Indicator
 Item {
     id:             _root
-    width:          height
+    width:          height * 1.4
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
@@ -49,11 +49,20 @@ Item {
         return qgcPal.colorGrey
     }
 
+    Rectangle{
+        width:              1
+        anchors.top:        parent.top
+        anchors.bottom:     parent.bottom
+        anchors.left:       parent.left
+        color:              qgcPal.text
+        opacity:            0.5
+    }
+
     Image {
         id:                 criticalMessageIcon
         anchors.fill:       parent
         source:             "/qmlimages/Yield.svg"
-        sourceSize.height:  height
+        sourceSize.height:  height * 0.9
         fillMode:           Image.PreserveAspectFit
         cache:              false
         visible:            _activeVehicle && _activeVehicle.messageCount > 0 && _isMessageImportant
@@ -62,7 +71,7 @@ Item {
     QGCColoredImage {
         anchors.fill:       parent
         source:             "/qmlimages/alarm.svg"
-        sourceSize.height:  height
+        sourceSize.height:  height * 0.9
         fillMode:           Image.PreserveAspectFit
         color:              getMessageColor()
         visible:            !criticalMessageIcon.visible

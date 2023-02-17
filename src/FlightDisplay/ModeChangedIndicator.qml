@@ -12,6 +12,7 @@ import QtQuick 2.3
 import QGroundControl               1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Controls      1.0
+import QGroundControl.Palette       1.0
 
 Rectangle {
     id:                 modeChangedIndicator
@@ -48,7 +49,7 @@ Rectangle {
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
             //visible:                    true
-            color:                      "#24CA95"
+            color:                      qgcPal.colorGreen
             //"#EECC44"
             font.pointSize:             ScreenTools.mediumFontPointSize
             text:                       qsTr("Switched to")
@@ -57,7 +58,7 @@ Rectangle {
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
             //visible:                    true
-            color:                      "#24CA95"
+            color:                      qgcPal.colorGreen
             //"#EECC44"
             font.pointSize:             ScreenTools.largeFontPointSize * 2
             font.weight:                Font.DemiBold

@@ -50,7 +50,7 @@ RowLayout {
                     return mainStatusLabel._commLostText
                 }
                 if (_activeVehicle.armed) {
-                    _mainStatusBGColor = "#24CA95"
+                    _mainStatusBGColor = qgcPal.colorGreen
 
                     if (_healthAndArmingChecksSupported) {
                         if (_activeVehicle.healthAndArmingCheckReport.canArm) {
@@ -84,7 +84,7 @@ RowLayout {
                         }
                     } else if (_activeVehicle.readyToFlyAvailable) {
                         if (_activeVehicle.readyToFly) {
-                            _mainStatusBGColor = "#24CA95"
+                            _mainStatusBGColor = qgcPal.colorGreen
                             return mainStatusLabel._readyToFlyText
                         } else {
                             _mainStatusBGColor = "yellow"
@@ -93,7 +93,7 @@ RowLayout {
                     } else {
                         // Best we can do is determine readiness based on AutoPilot component setup and health indicators from SYS_STATUS
                         if (_activeVehicle.allSensorsHealthy && _activeVehicle.autopilot.setupComplete) {
-                            _mainStatusBGColor = "#24CA95"
+                            _mainStatusBGColor = qgcPal.colorGreen
                             return mainStatusLabel._readyToFlyText
                         } else {
                             _mainStatusBGColor = "yellow"
@@ -129,7 +129,7 @@ RowLayout {
         fillMode:   Image.PreserveAspectFit
         mipmap:     true
         color:      qgcPal.text
-        source:     "/qmlimages/FlightModesComponentIcon.png"
+        source:     "/InstrumentValueIcons/view-tile.svg"  //"/qmlimages/FlightModesComponentIcon.png"
         visible:    flightModeMenu.visible
     }
 

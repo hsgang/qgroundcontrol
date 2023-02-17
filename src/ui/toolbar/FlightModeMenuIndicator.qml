@@ -72,8 +72,18 @@ RowLayout {
 
         QGCLabel {
             text: activeVehicle ? activeVehicle.flightMode : qsTr("N/A", "No data to display")
-            font.pointSize: fontPointSize
+            font.pointSize: ScreenTools.largeFontPointSize * 0.9
             Layout.alignment: Qt.AlignCenter
+
+            Rectangle{
+                width: parent.width + _margins
+                height: parent.height * 1.1
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                color: "transparent"
+                border.color: qgcPal.text
+                radius: _margins / 2
+            }
 
             MouseArea {
                 anchors.fill: parent

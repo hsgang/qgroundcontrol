@@ -157,6 +157,7 @@ Rectangle {
                     font.pointSize : ScreenTools.defaultFontPointSize * 2.5
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                    color: qgcPal.colorGreen
 
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3
@@ -291,6 +292,7 @@ Rectangle {
                     font.pointSize : ScreenTools.defaultFontPointSize * 2.5
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                    color: qgcPal.colorGreen
 
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3
