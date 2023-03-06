@@ -80,18 +80,11 @@ Item {
                     }
                 }
                 else if(battery.percentRemaining.rawValue) {
-                    if(battery.percentRemaining.rawValue > 30){
-                        return qgcPal.text
-                    }
-                    else if(battery.percentRemaining.rawValue <= 30 && battery.percentRemaining.rawValue > 10 ){
-                        return qgcPal.colorOrange
-                    }
-                    else if(battery.percentRemaining.rawValue <= 10){
+                    if (battery.percentRemaining.rawValue < 10)
                         return qgcPal.colorRed
-                    }
-                    else{
-                        return qgcPal.text
-                    }
+                    if (battery.percentRemaining.rawValue < 30)
+                        return qgcPal.colorOrange
+                    return qgcPal.text
                 }
 
                 else{
@@ -114,6 +107,20 @@ Item {
                 return ""
             }
 
+            function getBatteryIcon(){
+                if (battery.percentRemaining.rawValue < 10)
+                    return "/qmlimages/battery_0.svg"
+                if (battery.percentRemaining.rawValue < 30)
+                    return "/qmlimages/battery_20.svg"
+                if (battery.percentRemaining.rawValue < 50)
+                    return "/qmlimages/battery_40.svg"
+                if (battery.percentRemaining.rawValue < 70)
+                    return "/qmlimages/battery_60.svg"
+                if (battery.percentRemaining.rawValue < 90)
+                    return "/qmlimages/battery_80.svg"
+                return "/qmlimages/battery_100.svg"
+            }
+
             Rectangle{
                 width:              1
                 anchors.top:        parent.top
@@ -122,42 +129,15 @@ Item {
                 opacity:            0.5
             }
 
-            Rectangle{
-                id:                 batteryIconBase
+            QGCColoredImage {
+                id:                 batteryIcon
+                width:              height
                 anchors.top:        parent.top
                 anchors.bottom:     parent.bottom
-                width:              height
-                color:              "transparent"
-
-                Rectangle{
-                    id:                 batteryIcon
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    color:              "transparent"
-                    border.color:       getBatteryColor()
-                    border.width:       ScreenTools.defaultFontPixelHeight * 0.08
-                    height:             ScreenTools.defaultFontPixelHeight * 1.4
-                    width:              ScreenTools.defaultFontPixelHeight * 1.0
-                    radius:             ScreenTools.defaultFontPixelHeight * 0.15
-
-                    Rectangle{
-                        anchors.bottom:           parent.top
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        color:                  getBatteryColor()
-                        height:                 ScreenTools.defaultFontPixelHeight * 0.1
-                        width:                  parent.width / 2
-                    }
-
-                    Rectangle{
-                        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.13
-                        anchors.bottom:         parent.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        height:                 (parent.height - (anchors.margins * 2)) * (battery.percentRemaining.rawValue / 100)
-                        width:                  parent.width - (anchors.margins * 2)
-                        color:                  getBatteryColor()
-                        radius:                 ScreenTools.defaultFontPixelHeight * 0.15
-                    }
-                }
+                source:             getBatteryIcon()
+                sourceSize.height:  height
+                fillMode:           Image.PreserveAspectFit
+                color:              getBatteryColor()
             }
 
             Column {

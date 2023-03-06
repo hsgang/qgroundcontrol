@@ -210,5 +210,11 @@
         <file alias="GPS_RTK.svg">src/ui/toolbar/Images/GPS_RTK.svg</file>
         <file alias="GPS_None.svg">src/ui/toolbar/Images/GPS_None.svg</file>
         <file alias="gimbalSight.svg">src/FlightMap/Images/gimbalSight.svg</file>
+        <file alias="battery_100.svg">src/ui/toolbar/Images/battery_100.svg</file>
+        <file alias="battery_0.svg">src/ui/toolbar/Images/battery_0.svg</file>
+        <file alias="battery_20.svg">src/ui/toolbar/Images/battery_20.svg</file>
+        <file alias="battery_40.svg">src/ui/toolbar/Images/battery_40.svg</file>
+        <file alias="battery_60.svg">src/ui/toolbar/Images/battery_60.svg</file>
+        <file alias="battery_80.svg">src/ui/toolbar/Images/battery_80.svg</file>
     </qresource>
 </RCC>
