@@ -54,6 +54,7 @@ Item {
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
         anchors.left:       parent.left
+        anchors.leftMargin: 1
         color:              qgcPal.text
         opacity:            0.5
     }
