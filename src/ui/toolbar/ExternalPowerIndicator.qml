@@ -24,7 +24,7 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property bool showIndicator:    true//QGroundControl.siyiSDKManager.isConnected
+    property bool showIndicator:    true
 
     property var  _activeVehicle:   QGroundControl.multiVehicleManager.activeVehicle
     property real _acInputVolatage1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage1.rawValue.toFixed(1) : NaN
@@ -123,8 +123,6 @@ Item {
         Column {
             id:                     extPowerValuesColumn
             anchors.verticalCenter: parent.verticalCenter
-//            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
-//            anchors.left:           siyiStatusIcon.right
 
             QGCLabel {
                 anchors.horizontalCenter:   parent.horizontalCenter
