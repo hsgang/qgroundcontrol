@@ -101,7 +101,7 @@ Rectangle {
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
-        anchors.right:          parent.right
+        anchors.right:          linkManagerButton.left
         contentWidth:           indicatorLoader.x + indicatorLoader.width
         flickableDirection:     Flickable.HorizontalFlick
 
@@ -116,14 +116,34 @@ Rectangle {
         }
     }
 
-    QGCButton{
+    Rectangle{
         id:                     linkManagerButton
         anchors.right:          parent.right
         anchors.top:            parent.top
-        anchors.bottom:         parent.Bottom
+        anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
-        text:                   !_activeVehicle ? qsTr("Disconnected") : qsTr("Connected")
-        onClicked:              linkManagerDialogComponent.createObject(mainWindow).open()
+        height:                 parent.height - ScreenTools.defaultFontPixelHeight
+        width:                  height
+        color:                  "transparent"
+        radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+        border.color:           qgcPal.text
+        border.width:           1
+
+        QGCColoredImage{
+            height:             parent.height * 0.7
+            width:              height
+            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
+            anchors.fill:       parent
+            source:             "/InstrumentValueIcons/link.svg"
+            sourceSize.height:  height
+            fillMode:           Image.PreserveAspectFit
+            color:              !_activeVehicle ? qgcPal.colorRed : qgcPal.colorGreen
+        }
+
+        MouseArea{
+            anchors.fill:       parent
+            onClicked:          linkManagerDialogComponent.createObject(mainWindow).open()
+        }
     }
 
     Component{
