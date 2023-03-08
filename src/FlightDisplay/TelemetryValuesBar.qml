@@ -27,7 +27,7 @@ Rectangle {
 
     DeadMouseArea { anchors.fill: parent }
 
-    ColumnLayout {
+    RowLayout {
         id:                 telemetryLayout
         anchors.margins:    _toolsMargin
         anchors.bottom:     parent.bottom

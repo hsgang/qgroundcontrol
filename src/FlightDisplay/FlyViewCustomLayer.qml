@@ -99,8 +99,7 @@ Item {
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
         anchors.right:      parent.right
-        anchors.bottom:     quickViewPopupButton.top
-        anchors.bottomMargin: _toolsMargin
+        anchors.top:        parent.top
 
         function recalcXPosition() {
             // First try centered
@@ -221,8 +220,8 @@ Item {
     PhotoVideoControl {
         id:                         photoVideoControl
         anchors.margins:            _toolsMargin
-        anchors.top:                parent.top
         anchors.right:              parent.right
+        anchors.verticalCenter:     parent.verticalCenter
 
         property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
     }
@@ -230,7 +229,7 @@ Item {
     GimbalControl{
         id:                     gimbalControl
         anchors.margins:        _toolsMargin
-        anchors.right:          parent.right
+        anchors.right:          photoVideoControl.visible ? photoVideoControl.left : parent.right
         anchors.verticalCenter: parent.verticalCenter
         width:                  _rightPanelWidth*0.9
         height:                 width
@@ -290,11 +289,11 @@ Item {
     FlyViewAtmosphericChart{
         id: flyViewChartWidget
         anchors.margins:        _toolsMargin
-        anchors.top:            photoVideoControl.visible ? photoVideoControl.bottom : parent.top
+        anchors.top:            parent.top
         anchors.bottom:         attitudeIndicator.top
-        anchors.right:          parent.right
-        width: mainWindow.width * 0.4
-        visible: false
+        anchors.right:          photoVideoControl.visible ? photoVideoControl.left : parent.right
+        width:                  mainWindow.width * 0.4
+        visible:                false
     }
 
     FlyViewMissionProgress{
@@ -314,33 +313,6 @@ Item {
             }
         }
     }
-
-//    Rectangle{
-//        id:                     quickViewControl
-//        color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-//        anchors.margins:        _toolsMargin
-//        anchors.right:          parent.right
-//        anchors.verticalCenter: parent.verticalCenter
-//        width:                  quickViewControlStripGrid.width + (_toolsMargin * 2)
-//        height:                 parent.height * 0.3
-//        radius:                 _toolsMargin
-//        visible:                false
-
-//        DeadMouseArea{
-//            anchors.fill: parent
-//        }
-
-//        QGCFlickable {
-//            id:                 quickViewControlflickable
-//            anchors.margins:    ScreenTools.defaultFontPixelWidth * 0.4
-//            anchors.top:        parent.top
-//            anchors.left:       parent.left
-//            anchors.right:      parent.right
-//            anchors.bottom:     parent.bottom
-//            height:             parent.height
-//            contentHeight:      quickViewControlStripGrid.height
-//            flickableDirection: Flickable.VerticalFlick
-//            clip:               true
 
     Component {
         id: quickViewControlDialogComponent
