@@ -240,33 +240,32 @@ void SiyiSDKManager::requestLinkStatus()
     }
 }
 
-
 void SiyiSDKManager::process_packet()
 {
 
     switch ((SiyiCommandId)_parsed_msg.command_id) {
 
-    case SiyiCommandId::HARDWARE_ID:
-        break;
+        case SiyiCommandId::HARDWARE_ID:
+            break;
 
-    case SiyiCommandId::ACQUIRE_SYSTEM_SETTINGS :
-        break;
+        case SiyiCommandId::ACQUIRE_SYSTEM_SETTINGS :
+            break;
 
-    case SiyiCommandId::SYSTEM_SETTINGS :
-        break;
+        case SiyiCommandId::SYSTEM_SETTINGS :
+            break;
 
-    case SiyiCommandId::REMOTE_CONTROL_CHANNELS :
-        break;
+        case SiyiCommandId::REMOTE_CONTROL_CHANNELS :
+            break;
 
-    case SiyiCommandId::ACQUIRE_RC_LINK_STATUS :
-        break;
+        case SiyiCommandId::ACQUIRE_RC_LINK_STATUS :
+            break;
 
-    case SiyiCommandId::ACQUIRE_FPV_LINK_STATUS:{
-        if(_parsed_msg.data_bytes_received != 36) {
-            unexpected_len = true;
+        case SiyiCommandId::ACQUIRE_FPV_LINK_STATUS:{
+            if(_parsed_msg.data_bytes_received != 36) {
+                unexpected_len = true;
+                break;
+            }
             break;
         }
-        break;
-    }
     }
 }
