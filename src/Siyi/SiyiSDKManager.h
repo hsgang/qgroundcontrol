@@ -19,6 +19,7 @@
 #include "LinkInterface.h"
 #include "QGC.h"
 #include "QGCToolbox.h"
+#include "AppSettings.h"
 
 #define MK15_SIYI_HEADER1       0x55
 #define MK15_SIYI_HEADER2       0x66
@@ -81,6 +82,7 @@ private slots:
 
 private:
     LinkManager*            _linkMgr;
+    AppSettings*            _appSettings;
 
     enum class SiyiCommandId {
         HARDWARE_ID = 0x40,

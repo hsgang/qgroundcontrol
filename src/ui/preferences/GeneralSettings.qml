@@ -1308,6 +1308,42 @@ Rectangle {
                         }
                     }
 
+                    Item { width: 1; height: _margins; visible: _openWeatherFact ? _openWeatherFact.visible : false }
+
+                    QGCLabel {
+                        id:         siyiSDKLabel
+                        text:       qsTr("Siyi SDK")
+                        visible:    _openWeatherFact.visible
+                    }
+                    Rectangle {
+                        Layout.preferredHeight: siyiSDKCol.height + (_margins * 2)
+                        Layout.preferredWidth:  siyiSDKCol.width + (_margins * 2)
+                        color:                  qgcPal.windowShade
+                        visible:                true
+                        Layout.fillWidth:       true
+
+                        ColumnLayout {
+                            id:                         siyiSDKCol
+                            anchors.margins:            _margins
+                            anchors.top:                parent.top
+                            anchors.horizontalCenter:   parent.horizontalCenter
+                            spacing:                    _margins
+
+                            GridLayout {
+                                columns:            2
+                                columnSpacing:      ScreenTools.defaultFontPixelWidth
+
+                                FactCheckBox {
+                                    text:       qsTr("Enable SiyiSDK Support")
+                                    fact:       _enableSiyiSDK
+                                    Layout.columnSpan:      2
+
+                                    property Fact _enableSiyiSDK: QGroundControl.settingsManager.appSettings.enableSiyiSDK
+                                }
+                            }
+                        }
+                    }
+
 //                    Item { width: 1; height: _margins; visible: brandImageSectionLabel.visible }
 //                    QGCLabel {
 //                        id:         brandImageSectionLabel

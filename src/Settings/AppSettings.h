@@ -69,6 +69,7 @@ public:
     DEFINE_SETTINGFACT(saveSensorLog)
     DEFINE_SETTINGFACT(useComponentInformationQuery)
     DEFINE_SETTINGFACT(enableOpenWeatherAPI)
+    DEFINE_SETTINGFACT(enableSiyiSDK)
 
     // Although this is a global setting it only affects ArduPilot vehicle since PX4 automatically starts the stream from the vehicle side
     DEFINE_SETTINGFACT(apmStartMavlinkStreams)

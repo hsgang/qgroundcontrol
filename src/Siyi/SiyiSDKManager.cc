@@ -27,6 +27,7 @@
 #include "QGC.h"
 #include "QGCApplication.h"
 #include "SettingsManager.h"
+#include "AppSettings.h"
 
 SiyiSDKManager::SiyiSDKManager(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
@@ -62,6 +63,7 @@ void SiyiSDKManager::setToolbox(QGCToolbox *toolbox)
 {
    QGCTool::setToolbox(toolbox);
    _linkMgr = _toolbox->linkManager();
+   _appSettings = _toolbox->settingsManager()->appSettings();
 }
 
 void SiyiSDKManager::read_incoming_packets(LinkInterface* link, QByteArray b){
@@ -227,7 +229,8 @@ uint16_t SiyiSDKManager::crcSiyiSDK(const char *buf, int len){
 void SiyiSDKManager::requestLinkStatus()
 {
     QList<SharedLinkInterfacePtr> links = _linkMgr->links();
-    if (links.size() > 0) {
+    bool enable = _appSettings->enableSiyiSDK()->rawValue().toBool();
+    if (links.size() > 0 && enable) {
         uint8_t buffer[10] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x44,0x05,0xdc};
         int len = sizeof(buffer);
         for(int i = 0; i < links.size(); i++){

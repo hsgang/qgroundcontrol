@@ -291,6 +291,13 @@
     "default":     false
 },
 {
+    "name":             "enableSiyiSDK",
+    "shortDesc": "Enable SiyiSDK Support",
+    "longDesc":  "Enable SiyiSDK Support",
+    "type":             "bool",
+    "default":     false
+},
+{
     "name":         "qLocaleLanguage",
     "shortDesc":    "Language",
     "type":         "uint32",
