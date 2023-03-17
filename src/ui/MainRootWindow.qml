@@ -150,15 +150,15 @@ ApplicationWindow {
         analyzeView.visible = true
     }
 
-    //function showSetupTool() {
-    //    viewSwitch(toolbar.flyViewToolbar)
-    //    setupView.visible = true
-    function showVehicleSetupTool(setupPage = "") {
+    function showSetupTool() {
         viewSwitch(toolbar.flyViewToolbar)
-        setuoView.visible = true
-        //showTool(qsTr("Vehicle Setup"), "SetupView.qml", "/qmlimages/Gears.svg")
+        setupView.visible = true
+    }
+
+    function showVehicleSetupTool(setupPage = "") {
+        setupView.visible = true
         if (setupPage !== "") {
-            toolDrawerLoader.item.showNamedComponentPanel(setupPage)
+            setupView.showNamedComponentPanel(setupPage)
         }
     }
 
@@ -360,12 +360,9 @@ ApplicationWindow {
                         imageResource:      "/qmlimages/Quad.svg"
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
-                                //mainWindow.showSetupTool()
-                                mainWindow.showVehicleSetupTool()
+                                mainWindow.showSetupTool()
                                 checkedMenu()
                                 setupButton.checked = true
-                                //toolSelectDialog.close()
-                                //mainWindow.showVehicleSetupTool()
                             }
                         }
                     }
@@ -700,14 +697,17 @@ ApplicationWindow {
             Rectangle {
                 id:             backgroundRect
                 anchors.fill:   parent
+                height:         indicatorDrawerLoader.height
                 color:          QGroundControl.globalPalette.window
                 radius:         indicatorDrawer._margins
                 opacity:        0.85
             }
 
             Rectangle {
-                anchors.horizontalCenter:   backgroundRect.right
-                anchors.verticalCenter:     backgroundRect.top
+                anchors.top:                backgroundRect.top
+                anchors.topMargin:          ScreenTools.defaultFontPixelHeight / 4
+                anchors.left:               backgroundRect.right
+                anchors.leftMargin:         ScreenTools.defaultFontPixelHeight / 4
                 width:                      ScreenTools.defaultFontPixelHeight
                 height:                     width
                 radius:                     width / 2
@@ -741,6 +741,11 @@ ApplicationWindow {
                 property var  drawer:           indicatorDrawer
                 property bool expanded:         indicatorDrawer._expanded
                 property var  editFieldWidth:   ScreenTools.defaultFontPixelWidth * 13
+
+                onHeightChanged: {
+                    indicatorDrawer.contentHeight = Math.min(mainWindow.contentItem.height - (2 * indicatorDrawer._margins) - (indicatorDrawer.padding * 2), indicatorDrawerLoader.height)
+                }
+
             }
         }
     }

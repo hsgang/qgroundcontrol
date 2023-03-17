@@ -20,7 +20,7 @@ import QGroundControl.Palette               1.0
 //-- RC RSSI Indicator
 Item {
     id:             _root
-    width:          rssiRow.width * 1.1
+    width:          rssiRow.width
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
@@ -72,7 +72,7 @@ Item {
         id:             rssiRow
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
-        spacing:        ScreenTools.defaultFontPixelWidth/2
+        spacing:        ScreenTools.defaultFontPixelWidth / 2
 
         Rectangle{
             width:              1

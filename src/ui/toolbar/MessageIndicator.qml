@@ -50,38 +50,35 @@ Item {
         return qgcPal.colorGrey
     }
 
-    Rectangle{
-        width:              1
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
-        anchors.left:       parent.left
-        anchors.leftMargin: 1
-        color:              qgcPal.text
-        opacity:            0.5
-    }
+    Row {
+        id:             messageIconRow
+        anchors.top:    parent.top
+        anchors.bottom: parent.bottom
+        spacing:        ScreenTools.defaultFontPixelWidth/2
 
-    Image {
-        id:                 criticalMessageIcon
-        anchors.fill:       parent
-        source:             "/qmlimages/Yield.svg"
-        sourceSize.height:  height * 0.9
-        fillMode:           Image.PreserveAspectFit
-        cache:              false
-        visible:            _activeVehicle && _activeVehicle.messageCount > 0 && _isMessageImportant
-    }
+        Rectangle{
+            width:              1
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            color:              qgcPal.text
+            opacity:            0.5
+        }
 
-    QGCColoredImage {
-        anchors.fill:       parent
-        source:             "/qmlimages/alarm.svg"
-        sourceSize.height:  height * 0.9
-        fillMode:           Image.PreserveAspectFit
-        color:              getMessageColor()
-        visible:            !criticalMessageIcon.visible
-    }
+        QGCColoredImage {
+            width:              height
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            source:             "/qmlimages/alarm.svg"
+            sourceSize.height:  height * 0.8
+            fillMode:           Image.PreserveAspectFit
+            color:              getMessageColor()
+            visible:            _activeVehicle //!criticalMessageIcon.visible
 
-    MouseArea {
-        anchors.fill:   parent
-        onClicked:      mainWindow.showIndicatorDrawer(vehicleMessagesPopup)
+            MouseArea {
+                anchors.fill:   parent
+                onClicked:      mainWindow.showIndicatorDrawer(vehicleMessagesPopup)
+            }
+        }
     }
 
     Component {
@@ -105,7 +102,6 @@ Item {
                 messageText.text = formatMessage(_activeVehicle.formattedMessages)
                 //-- Hack to scroll to last message
                 for (var i = 0; i < _activeVehicle.messageCount; i++)
-                    messageFlick.flick(0,-5000)
                 _activeVehicle.resetMessages()
             }
 
@@ -114,7 +110,6 @@ Item {
                 onNewFormattedMessage :{
                     messageText.append(formatMessage(formattedMessage))
                     //-- Hack to scroll down
-                    messageFlick.flick(0,-500)
                 }
             }
 

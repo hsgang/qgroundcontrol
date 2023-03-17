@@ -3859,7 +3859,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/AutoPilotPlugins/AutoPilotPlugin.cc" line="74"/>
         <source>One or more vehicle components require setup prior to flight.</source>
-        <translation>하나이상의 기체 구성요소가 비행전 설정이 필요합니다</translation>
+        <translation>하나 이상의 기체 구성요소가 비행전 설정이 필요합니다.</translation>
     </message>
 </context>
 <context>
@@ -6444,6 +6444,32 @@ Click Ok to start the auto-tuning process.
         <source>N/A</source>
         <comment>No data to display</comment>
         <translation>N/A</translation>
+    </message>
+</context>
+<context>
+    <name>FlightModeMenuIndicator</name>
+    <message>
+        <location filename="../src/ui/toolbar/FlightModeMenuIndicator.qml" line="358"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/FlightModeMenuIndicator.qml" line="360"/>
+        <source>Radio</source>
+        <translation>라디오</translation>
+    </message>
+</context>
+<context>
+    <name>BatteryIndicator</name>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="198"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="200"/>
+        <source>Power</source>
+        <translation>전원</translation>
     </message>
 </context>
 <context>

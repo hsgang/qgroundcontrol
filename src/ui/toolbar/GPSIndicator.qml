@@ -21,13 +21,15 @@ import QGroundControl.FactControls          1.0
 //-- GPS Indicator
 Item {
     id:             _root
-    width:          (gpsValuesColumn.x + gpsValuesColumn.width) * 1.1
+    width:          gnssValuesRow.width//(gnssValuesRow.x + gnssValuesRow.width)// * 1.1
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
     property bool showIndicator: true
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+
+    property bool isGNSS2: _activeVehicle.gps2.lock.value
 
     function getGpsImage() {
         if (_activeVehicle.gps.lock.value) {
@@ -95,6 +97,34 @@ Item {
                     QGCLabel { text: _activeVehicle ? _activeVehicle.gps.vdop.valueString : qsTr("--.--", "No data to display") }
                     QGCLabel { text: qsTr("Course Over Ground:") }
                     QGCLabel { text: _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : qsTr("--.--", "No data to display") }
+                }
+
+                QGCLabel {
+                    id:             gps2Label
+                    visible:        isGNSS2
+                    text:           (_activeVehicle && _activeVehicle.gps2.count.value >= 0) ? qsTr("GNSS2 Status") : qsTr("GNSS2 Data Unavailable")
+                    font.family:    ScreenTools.demiboldFontFamily
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                GridLayout {
+                    id:                 gps2Grid
+                    visible:            isGNSS2
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight
+                    columnSpacing:      ScreenTools.defaultFontPixelWidth
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    columns: 2
+
+                    QGCLabel { text: qsTr("GNSS Count:") }
+                    QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.count.valueString : qsTr("N/A", "No data to display") }
+                    QGCLabel { text: qsTr("GNSS Lock:") }
+                    QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.lock.enumStringValue : qsTr("N/A", "No data to display") }
+                    QGCLabel { text: qsTr("HDOP:") }
+                    QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.hdop.valueString : qsTr("--.--", "No data to display") }
+                    QGCLabel { text: qsTr("VDOP:") }
+                    QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.vdop.valueString : qsTr("--.--", "No data to display") }
+                    QGCLabel { text: qsTr("Course Over Ground:") }
+                    QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.courseOverGround.valueString : qsTr("--.--", "No data to display") }
                 }
             }
 
@@ -232,10 +262,11 @@ Item {
     }
 
     Row {
+        id:             gnssValuesRow
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
 
-        spacing: ScreenTools.defaultFontPixelWidth/2
+        spacing: ScreenTools.defaultFontPixelWidth / 2
 
         Rectangle{
             width:              1
@@ -273,7 +304,57 @@ Item {
                 text:       _activeVehicle ? _activeVehicle.gps.hdop.value.toFixed(1) : ""
             }
         }
+
+        Rectangle{
+            visible:            isGNSS2
+            width:              1
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            color:              qgcPal.text
+            opacity:            0.5
+        }
+
+        QGCColoredImage {
+            visible:            isGNSS2
+            id:                 gps2Icon
+            width:              height
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            source:             getGpsImage()
+            fillMode:           Image.PreserveAspectFit
+            sourceSize.height:  height
+            opacity:            (_activeVehicle && _activeVehicle.gps2.count.value >= 0) ? 1 : 0.5
+            color:              (_activeVehicle && _activeVehicle.gps2.lock.value >= 3) ? qgcPal.buttonText : qgcPal.colorOrange
+        }
+
+        Column {
+            id:                     gps2ValuesColumn
+            visible:                isGNSS2
+            anchors.verticalCenter: parent.verticalCenter
+
+            QGCLabel {
+                anchors.horizontalCenter:   gps2hdopValue.horizontalCenter
+                color:                      qgcPal.buttonText
+                text:                       _activeVehicle ? _activeVehicle.gps2.count.valueString : ""
+            }
+
+            QGCLabel {
+                id:         gps2hdopValue
+                color:      qgcPal.buttonText
+                text:       _activeVehicle ? _activeVehicle.gps2.hdop.value.toFixed(1) : "100.0"
+            }
+        }
     }
+
+//    Row {
+//        visible:        true//isGNSS2
+//        anchors.top:    parent.top
+//        anchors.bottom: parent.bottom
+
+//        spacing: ScreenTools.defaultFontPixelWidth/2
+
+
+//    }
 
     MouseArea {
         anchors.fill:   parent
