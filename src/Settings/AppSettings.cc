@@ -305,7 +305,8 @@ QString AppSettings::crashSavePath(void)
     return QString();
 }
 
-QString AppSettings::sensorSavePath(void){
+QString AppSettings::sensorSavePath(void)
+{
     QString path = savePath()->rawValue().toString();
     if (!path.isEmpty() && QDir(path).exists()) {
         QDir dir(path);

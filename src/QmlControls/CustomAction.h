@@ -16,7 +16,7 @@ class CustomAction: public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString  label   READ label   CONSTANT)
+    Q_PROPERTY(QString label   READ label   CONSTANT)
 
 
 public:
@@ -48,7 +48,7 @@ public:
 
 
 private:
-    QString  label() const  { return _label;     }
+    QString  label() const  { return _label; }
 
     QString _label;
     MAV_CMD _mavCmd;

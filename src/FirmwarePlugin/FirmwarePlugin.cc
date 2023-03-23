@@ -335,6 +335,7 @@ const QVariantList& FirmwarePlugin::toolIndicators(const Vehicle*)
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/SiyiRSSIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/BatteryIndicator.qml")),
             //QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/PrecisionLandingIndicator.qml")),
+            QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/RemoteIDIndicator.qml")),
         });
     }
     return _toolIndicatorList;
