@@ -15,6 +15,7 @@ import QGroundControl.Controls              1.0
 import QGroundControl.MultiVehicleManager   1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.Palette               1.0
+import QGroundControl.FactSystem            1.0
 import QGroundControl.FactControls          1.0
 
 //-------------------------------------------------------------------------
@@ -358,8 +359,14 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked: {
-            mainWindow.showIndicatorDrawer(gpsInfo)
+        onClicked:      mainWindow.showIndicatorDrawer(gpsIndicatorPage)
+    }
+
+    Component {
+        id: gpsIndicatorPage
+
+        GPSIndicatorPage {
+
         }
     }
 }

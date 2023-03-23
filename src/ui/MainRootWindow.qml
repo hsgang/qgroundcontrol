@@ -170,13 +170,19 @@ ApplicationWindow {
         appSettings.visible = true
     }
 
+//    function showSettingsTool(settingsPage = "") {
+//        showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
+//        if (settingsPage !== "") {
+//            toolDrawerLoader.item.showSettingsPage(settingsPage)
+//        }
+//    }
+
     function checkedMenu() {
         flyButton.checked = false
         planButton.checked = false
         analyzeButton.checked = false
         setupButton.checked = false
         settingsButton.checked = false
-    }
 
     //-------------------------------------------------------------------------
     //-- Global simple message dialog
@@ -284,7 +290,7 @@ ApplicationWindow {
 
     function showToolSelectDialog() {
         if (!mainWindow.preventViewSwitch()) {
-            toolSelectDialogComponent.createObject(mainWindow).open()
+            mainWindow.showIndicatorDrawer(toolSelectComponent)
         }
     }
 
@@ -675,8 +681,6 @@ ApplicationWindow {
         topInset:       0
         bottomInset:    0
         padding:        _margins * 2
-        contentWidth:   indicatorDrawerLoader.width
-        contentHeight:  indicatorDrawerLoader.height
         visible:        false
         modal:          true
         focus:          true
@@ -692,8 +696,8 @@ ApplicationWindow {
             indicatorDrawerLoader.sourceComponent   = indicatorDrawer.sourceComponent
         }
         onClosed: {
-            indicatorDrawerLoader.sourceComponent   = null
             _expanded                               = false
+            indicatorDrawerLoader.sourceComponent   = undefined
         }
 
         background: Item {
@@ -733,8 +737,8 @@ ApplicationWindow {
 
         contentItem: QGCFlickable {
             id:             indicatorDrawerLoaderFlickable
-            width:          Math.min(mainWindow.contentItem.width - (2 * indicatorDrawer._margins) - (indicatorDrawer.padding * 2), indicatorDrawerLoader.width)
-            height:         Math.min(mainWindow.contentItem.height - (2 * indicatorDrawer._margins) - (indicatorDrawer.padding * 2), indicatorDrawerLoader.height)
+            implicitWidth:  Math.min(mainWindow.contentItem.width - (2 * indicatorDrawer._margins) - (indicatorDrawer.padding * 2), indicatorDrawerLoader.width)
+            implicitHeight: Math.min(mainWindow.contentItem.height - (2 * indicatorDrawer._margins) - (indicatorDrawer.padding * 2), indicatorDrawerLoader.height)
             contentWidth:   indicatorDrawerLoader.width
             contentHeight:  indicatorDrawerLoader.height
 

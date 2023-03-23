@@ -116,8 +116,14 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked: {
-            mainWindow.showIndicatorPopup(_root, gpsInfo)
+        onClicked:      mainWindow.showIndicatorDrawer(gpsIndicatorPage)
+    }
+
+    Component {
+        id: gpsIndicatorPage
+
+        GPSIndicatorPage {
+
         }
     }
 }
