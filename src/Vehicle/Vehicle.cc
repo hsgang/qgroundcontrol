@@ -1722,7 +1722,7 @@ EventHandler& Vehicle::_eventHandler(uint8_t compid)
     return *eventData->data();
 }
 
-void Vehicle::setEventsMetadata(uint8_t compid, const QString& metadataJsonFileName, const QString& translationJsonFileName)
+void Vehicle::setEventsMetadata(uint8_t compid, const QString& metadataJsonFileName)
 {
     _eventHandler(compid).setMetadata(metadataJsonFileName);
 
@@ -1747,7 +1747,7 @@ void Vehicle::setEventsMetadata(uint8_t compid, const QString& metadataJsonFileN
                    false);
 }
 
-void Vehicle::setActuatorsMetadata(uint8_t compid, const QString& metadataJsonFileName, const QString& translationJsonFileName)
+void Vehicle::setActuatorsMetadata(uint8_t compid, const QString& metadataJsonFileName)
 {
     if (!_actuators) {
         _actuators = new Actuators(this, this);
