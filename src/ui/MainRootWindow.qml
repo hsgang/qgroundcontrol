@@ -183,6 +183,7 @@ ApplicationWindow {
         analyzeButton.checked = false
         setupButton.checked = false
         settingsButton.checked = false
+    }
 
     //-------------------------------------------------------------------------
     //-- Global simple message dialog
@@ -745,12 +746,16 @@ ApplicationWindow {
             Loader {
                 id: indicatorDrawerLoader
 
-                property var  drawer:           indicatorDrawer
-                property bool expanded:         indicatorDrawer._expanded
-                property var  editFieldWidth:   ScreenTools.defaultFontPixelWidth * 13
+                Binding {
+                    target:     indicatorDrawerLoader.item
+                    property:   "expanded"
+                    value:      indicatorDrawer._expanded
+                }
 
-                onHeightChanged: {
-                    indicatorDrawer.contentHeight = Math.min(mainWindow.contentItem.height - (2 * indicatorDrawer._margins) - (indicatorDrawer.padding * 2), indicatorDrawerLoader.height)
+                Binding {
+                    target:     indicatorDrawerLoader.item
+                    property:   "drawer"
+                    value:      indicatorDrawer
                 }
 
             }

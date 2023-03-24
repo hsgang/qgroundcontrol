@@ -55,7 +55,7 @@ ColumnLayout {
                 model: _activeVehicle ? _activeVehicle.batteries : 0
 
                 ColumnLayout {
-                    spacing: 0
+                    spacing: ScreenTools.defaultFontPixelHeight / 3
 
                     property var batteryValuesAvailable: nameAvailableLoader.item
 
@@ -83,7 +83,7 @@ ColumnLayout {
                 model: _activeVehicle ? _activeVehicle.batteries : 0
 
                 ColumnLayout {
-                    spacing: 0
+                    spacing: ScreenTools.defaultFontPixelHeight / 3
 
                     property var batteryValuesAvailable: valueAvailableLoader.item
 

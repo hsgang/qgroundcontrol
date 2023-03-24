@@ -136,30 +136,27 @@ Rectangle {
                             anchors.horizontalCenter:   parent.horizontalCenter
                             spacing:                    _margins
 
-                            FactCheckBox {
-                                id:             useCheckList
-                                text:           qsTr("Use Preflight Checklist")
-                                fact:           _useChecklist
-                                visible:        _useChecklist.visible && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
-
-                                property Fact _useChecklist: QGroundControl.settingsManager.appSettings.useChecklist
+                            FactCheckBoxSlider {
+                                id:                 useCheckList
+                                Layout.fillWidth:   true
+                                text:               qsTr("Use Preflight Checklist")
+                                fact:               QGroundControl.settingsManager.appSettings.useChecklist
+                                visible:            fact.visible && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
                             }
 
-                            FactCheckBox {
-                                text:           qsTr("Enforce Preflight Checklist")
-                                fact:           _enforceChecklist
-                                enabled:        QGroundControl.settingsManager.appSettings.useChecklist.value
-                                visible:        useCheckList.visible && _enforceChecklist.visible && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
-
-                                property Fact _enforceChecklist: QGroundControl.settingsManager.appSettings.enforceChecklist
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Enforce Preflight Checklist")
+                                fact:               QGroundControl.settingsManager.appSettings.enforceChecklist
+                                enabled:            QGroundControl.settingsManager.appSettings.useChecklist.value
+                                visible:            useCheckList.fact.value && fact.visible && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
                             }
 
-                            FactCheckBox {
-                                text:       qsTr("Keep Map Centered On Vehicle")
-                                fact:       _keepMapCenteredOnVehicle
-                                visible:    _keepMapCenteredOnVehicle.visible
-
-                                property Fact _keepMapCenteredOnVehicle: QGroundControl.settingsManager.flyViewSettings.keepMapCenteredOnVehicle
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Keep Map Centered On Vehicle")
+                                fact:               QGroundControl.settingsManager.flyViewSettings.keepMapCenteredOnVehicle
+                                visible:            fact.visible
                             }
 
 //                            FactCheckBox {
@@ -170,22 +167,22 @@ Rectangle {
 //                                property Fact _showLogReplayStatusBar: QGroundControl.settingsManager.flyViewSettings.showLogReplayStatusBar
 //                            }
 
-                            RowLayout {
-                                spacing: ScreenTools.defaultFontPixelWidth
-
-                                FactCheckBox {
-                                    text:       qsTr("Virtual Joystick")
-                                    visible:    _virtualJoystick.visible
-                                    fact:       _virtualJoystick
-                                }
-
-                                FactCheckBox {
-                                    text:       qsTr("Auto-Center Throttle")
-                                    visible:    _virtualJoystickAutoCenterThrottle.visible
-                                    enabled:    _virtualJoystick.rawValue
-                                    fact:       _virtualJoystickAutoCenterThrottle
-                                }
+                            FactCheckBoxSlider {
+                                id:                 enableVirtualJoystick
+                                Layout.fillWidth:   true
+                                text:               qsTr("Virtual Joystick")
+                                fact:               _virtualJoystick
+                                visible:            fact.visible
                             }
+
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Auto-Center Throttle")
+                                fact:               _virtualJoystickAutoCenterThrottle
+                                enabled:            _virtualJoystick.rawValue
+                                visible:            fact.visible && enableVirtualJoystick.fact.value
+                            }
+
 
 //                            FactCheckBox {
 //                                text:       qsTr("Use Vertical Instrument Panel")
@@ -195,139 +192,70 @@ Rectangle {
 //                                property Fact _alternateInstrumentPanel: QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel
 //                            }
 
-                            FactCheckBox {
-                                text:       qsTr("Show additional heading indicators on Compass")
-                                visible:    _showAdditionalIndicatorsCompass.visible
-                                fact:       _showAdditionalIndicatorsCompass
+//                            FactCheckBox {
+//                                text:       qsTr("Show additional heading indicators on Compass")
+//                                visible:    _showAdditionalIndicatorsCompass.visible
+//                                fact:       _showAdditionalIndicatorsCompass
 
-                                property Fact _showAdditionalIndicatorsCompass: QGroundControl.settingsManager.flyViewSettings.showAdditionalIndicatorsCompass
+//                                property Fact _showAdditionalIndicatorsCompass: QGroundControl.settingsManager.flyViewSettings.showAdditionalIndicatorsCompass
+//                            }
+
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Show additional heading indicators on Compass")
+                                fact:               QGroundControl.settingsManager.flyViewSettings.showAdditionalIndicatorsCompass
+                                visible:            fact.visible
                             }
 
-                            FactCheckBox {
-                                text:       qsTr("Lock Compass Nose-Up")
-                                visible:    _lockNoseUpCompass.visible
-                                fact:       _lockNoseUpCompass
-
-                                property Fact _lockNoseUpCompass: QGroundControl.settingsManager.flyViewSettings.lockNoseUpCompass
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Lock Compass Nose-Up")
+                                fact:               QGroundControl.settingsManager.flyViewSettings.lockNoseUpCompass
+                                visible:            fact.visible
                             }
 
-                            FactCheckBox {
-                                text:       qsTr("Show Mission Max Altitude Indicator")
-                                visible:    _missionMaxAltitudeIndicator.visible
-                                fact:       _missionMaxAltitudeIndicator
+//                            FactCheckBox {
+//                                text:       qsTr("Lock Compass Nose-Up")
+//                                visible:    _lockNoseUpCompass.visible
+//                                fact:       _lockNoseUpCompass
 
-                                property Fact _missionMaxAltitudeIndicator: QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator
+//                                property Fact _lockNoseUpCompass: QGroundControl.settingsManager.flyViewSettings.lockNoseUpCompass
+//                            }
+
+//                            FactCheckBox {
+//                                text:       qsTr("Show Mission Max Altitude Indicator")
+//                                visible:    _missionMaxAltitudeIndicator.visible
+//                                fact:       _missionMaxAltitudeIndicator
+
+//                                property Fact _missionMaxAltitudeIndicator: QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator
+//                            }
+
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Show Mission Max Altitude Indicator")
+                                fact:               QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator
+                                visible:            fact.visible
                             }
 
-                            FactCheckBox {
-                                text:       qsTr("Show AtmosphericSensor Value")
-                                visible:    _showAtmosphericValueBar.visible
-                                fact:       _showAtmosphericValueBar
-
-                                property Fact _showAtmosphericValueBar: QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Show simple camera controls (DIGICAM_CONTROL)")
+                                fact:               QGroundControl.settingsManager.flyViewSettings.showSimpleCameraControl
+                                visible:            fact.visible
                             }
 
-                            FactCheckBox {
-                                text:       qsTr("Show Generator Status")
-                                visible:    _showGeneratorStatus.visible
-                                fact:       _showGeneratorStatus
-
-                                property Fact _showGeneratorStatus: QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Update Home Position")
+                                fact:               QGroundControl.settingsManager.flyViewSettings.updateHomePosition
+                                visible:            fact.visible
                             }
 
-                            FactCheckBox {
-                                text:       qsTr("Show simple camera controls (DIGICAM_CONTROL)")
-                                visible:    _showDumbCameraControl.visible
-                                fact:       _showDumbCameraControl
-
-                                property Fact _showDumbCameraControl: QGroundControl.settingsManager.flyViewSettings.showSimpleCameraControl
-                            }
-
-                            FactCheckBox {
-                                 text:       qsTr("Update Home Position")
-                                 fact:       _updateHomePosition
-                                 visible:    _updateHomePosition.visible
-                                 property Fact _updateHomePosition: QGroundControl.settingsManager.flyViewSettings.updateHomePosition
-                             }
-
-                            FactCheckBox {
-                                text:       qsTr("Show Gimbal Control Pannel")
-                                visible:    _showGimbalControlPannel.visible
-                                fact:       _showGimbalControlPannel
-
-                                property Fact _showGimbalControlPannel: QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel
-                            }
-
-                            FactCheckBox {
-                                text:       qsTr("Enable Custom Actions")
-                                visible:    _enableCustomActions.visible
-                                fact:       _enableCustomActions
-
-                                property Fact _enableCustomActions: QGroundControl.settingsManager.flyViewSettings.enableCustomActions
-                            }
-
-                            //-----------------------------------------------------------------
-                            //-- CustomAction definition path
-                            GridLayout {
-                                id: customActions
-
-                                columns:  2
-                                visible:  QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
-
-                                onVisibleChanged: {
-                                    if (jsonFile.rawValue === "" && ScreenTools.isMobile) {
-                                        jsonFile.rawValue = _defaultFile
-                                    }
-                                }
-
-                                property Fact   jsonFile:     QGroundControl.settingsManager.flyViewSettings.customActionDefinitions
-                                property string _defaultDir:  QGroundControl.settingsManager.appSettings.customActionsSavePath
-                                property string _defaultFile: _defaultDir + "/CustomActions.json"
-
-                                QGCLabel {
-                                    text: qsTr("Custom Action Definitions")
-
-                                    Layout.columnSpan:  2
-                                    Layout.alignment:   Qt.AlignHCenter
-                                }
-
-                                QGCTextField {
-                                    Layout.fillWidth:   true
-                                    readOnly:           true
-                                    text:               customActions.jsonFile.rawValue === "" ? qsTr("<not set>") : customActions.jsonFile.rawValue
-                                }
-                                QGCButton {
-                                    visible:    !ScreenTools.isMobile
-                                    text:       qsTr("Browse")
-                                    onClicked:  customActionPathBrowseDialog.openForLoad()
-                                    QGCFileDialog {
-                                        id:             customActionPathBrowseDialog
-                                        title:          qsTr("Choose the Custom Action Definitions file")
-                                        folder:         customActions.jsonFile.rawValue
-                                        selectExisting: true
-                                        selectFolder:   false
-                                        onAcceptedForLoad: customActions.jsonFile.rawValue = file
-                                        nameFilters: ["JSON files (*.json)"]
-                                    }
-                                }
-                                // The file loader on Android doesn't work, so we hard code the path to the
-                                // JSON file. However, we need a button to force a refresh if the JSON file
-                                // is changed.
-                                QGCButton {
-                                    visible:    ScreenTools.isMobile
-                                    text:       qsTr("Reload")
-                                    onClicked:  {
-                                        customActions.jsonFile.valueChanged(customActions.jsonFile.rawValue)
-                                    }
-                                }
-                            }
-
-                            FactCheckBox {
-                                text:       qsTr("Enable Custom Actions")
-                                visible:    _enableCustomActions.visible
-                                fact:       _enableCustomActions
-
-                                property Fact _enableCustomActions: QGroundControl.settingsManager.flyViewSettings.enableCustomActions
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Enable Custom Actions")
+                                fact:               QGroundControl.settingsManager.flyViewSettings.enableCustomActions
+                                visible:            fact.visible
                             }
 
                             //-----------------------------------------------------------------
@@ -547,24 +475,43 @@ Rectangle {
                             }
 
                             Item { width: 1; height: 1}
-                            FactCheckBox {
-                                text:       qsTr("Disable When Disarmed")
-                                fact:       _videoSettings.disableWhenDisarmed
-                                visible:    !_videoAutoStreamConfig && _isGst && fact.visible
+//                            FactCheckBox {
+//                                text:       qsTr("Disable When Disarmed")
+//                                fact:       _videoSettings.disableWhenDisarmed
+//                                visible:    !_videoAutoStreamConfig && _isGst && fact.visible
+//                            }
+
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Disable When Disarmed")
+                                fact:               _videoSettings.disableWhenDisarmed
+                                visible:            !_videoAutoStreamConfig && _isGst && fact.visible
                             }
 
                             Item { width: 1; height: 1}
-                            FactCheckBox {
-                                text:       qsTr("Low Latency Mode")
-                                fact:       _videoSettings.lowLatencyMode
-                                visible:    !_videoAutoStreamConfig && _isGst && fact.visible
+//                            FactCheckBox {
+//                                text:       qsTr("Low Latency Mode")
+//                                fact:       _videoSettings.lowLatencyMode
+//                                visible:    !_videoAutoStreamConfig && _isGst && fact.visible
+//                            }
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Low Latency Mode")
+                                fact:               _videoSettings.lowLatencyMode
+                                visible:            !_videoAutoStreamConfig && _isGst && fact.visible
                             }
 
                             Item { width: 1; height: 1}
-                            FactCheckBox {
-                                text:       qsTr("Auto-Delete Saved Recordings")
-                                fact:       _videoSettings.enableStorageLimit
-                                visible:    _showSaveVideoSettings && fact.visible
+//                            FactCheckBox {
+//                                text:       qsTr("Auto-Delete Saved Recordings")
+//                                fact:       _videoSettings.enableStorageLimit
+//                                visible:    _showSaveVideoSettings && fact.visible
+//                            }
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Auto-Delete Saved Recordings")
+                                fact:               _videoSettings.enableStorageLimit
+                                visible:            _showSaveVideoSettings && fact.visible
                             }
                         }
                     }
@@ -607,14 +554,25 @@ Rectangle {
                                 }
                             }
 
-                            FactCheckBox {
-                                text:   qsTr("Use MAV_CMD_CONDITION_GATE for pattern generation")
-                                fact:   QGroundControl.settingsManager.planViewSettings.useConditionGate
+//                            FactCheckBox {
+//                                text:   qsTr("Use MAV_CMD_CONDITION_GATE for pattern generation")
+//                                fact:   QGroundControl.settingsManager.planViewSettings.useConditionGate
+//                            }
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Use MAV_CMD_CONDITION_GATE for pattern generation")
+                                fact:               QGroundControl.settingsManager.planViewSettings.useConditionGate
                             }
 
-                            FactCheckBox {
-                                text:       qsTr("Missions Do Not Require Takeoff Item")
-                                fact:       _planViewSettings.takeoffItemNotRequired
+//                            FactCheckBox {
+//                                text:       qsTr("Missions Do Not Require Takeoff Item")
+//                                fact:       _planViewSettings.takeoffItemNotRequired
+//                                visible:    _planViewSettings.takeoffItemNotRequired.visible
+//                            }
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Missions Do Not Require Takeoff Item")
+                                fact:               _planViewSettings.takeoffItemNotRequired
                                 visible:    _planViewSettings.takeoffItemNotRequired.visible
                             }
                         }
@@ -783,34 +741,36 @@ Rectangle {
                                 anchors.horizontalCenter:   parent.horizontalCenter
                                 spacing:                    _margins
 
-                                FactCheckBox {
-                                    text:       qsTr("Use Vehicle Pairing")
-                                    fact:       _usePairing
-                                    visible:    _usePairing.visible && QGroundControl.supportsPairing
-                                    property Fact _usePairing: QGroundControl.settingsManager.appSettings.usePairing
+                                FactCheckBoxSlider {
+                                    Layout.fillWidth:   true
+                                    text:               qsTr("Use Vehicle Pairing")
+                                    fact:               QGroundControl.settingsManager.appSettings.usePairing
+                                    visible:            fact.visible && QGroundControl.supportsPairing
                                 }
 
-                                FactCheckBox {
-                                    text:       qsTr("Mute all audio output")
-                                    fact:       _audioMuted
-                                    visible:    _audioMuted.visible
-                                    property Fact _audioMuted: QGroundControl.settingsManager.appSettings.audioMuted
+                                FactCheckBoxSlider {
+                                    Layout.fillWidth:   true
+                                    text:               qsTr("Mute all audio output")
+                                    fact:               QGroundControl.settingsManager.appSettings.audioMuted
+                                    visible:            fact.visible
                                 }
 
-                                FactCheckBox {
-                                    text:       qsTr("Check for Internet connection")
-                                    fact:       _checkInternet
-                                    visible:    _checkInternet && _checkInternet.visible
-                                    property Fact _checkInternet: QGroundControl.settingsManager.appSettings.checkInternet
+                                FactCheckBoxSlider {
+                                    Layout.fillWidth:   true
+                                    text:               qsTr("Check for Internet connection")
+                                    fact:               QGroundControl.settingsManager.appSettings.checkInternet
+                                    visible:            fact.visible
                                 }
 
-                                QGCCheckBox {
-                                    id:         clearCheck
-                                    text:       qsTr("Clear all settings on next start")
-                                    checked:    false
+                                FactCheckBoxSlider {
+                                    id:                 clearCheck
+                                    Layout.fillWidth:   true
+                                    text:               qsTr("Clear all settings on next start")
+                                    checked:            false
                                     onClicked: {
                                         checked ? clearDialog.visible = true : QGroundControl.clearDeleteAllSettingsNextBoot()
                                     }
+
                                     MessageDialog {
                                         id:                 clearDialog
                                         visible:            false
@@ -830,11 +790,12 @@ Rectangle {
                                 }
 
                                 // Check box to show/hide Remote ID submenu in App settings
-                                FactCheckBox {
-                                    text:       qsTr("Enable Remote ID")
-                                    fact:       _remoteIDEnable
-                                    visible:    _remoteIDEnable.visible
-                                    property Fact _remoteIDEnable: QGroundControl.settingsManager.remoteIDSettings.enable
+
+                                FactCheckBoxSlider {
+                                    Layout.fillWidth:   true
+                                    text:               qsTr("Enable Remote ID")
+                                    fact:               QGroundControl.settingsManager.remoteIDSettings.enable
+                                    visible:            fact.visible
                                 }
                             }
                         }
@@ -882,44 +843,47 @@ Rectangle {
                         Layout.preferredWidth:  loggingCol.width + (_margins * 2)
                         color:                  qgcPal.windowShade
                         Layout.fillWidth:       true
-                        visible:                promptSaveLog._telemetrySave.visible || logIfNotArmed._telemetrySaveNotArmed.visible || promptSaveCsv._saveCsvTelemetry.visible
+                        visible:                promptSaveLog.fact.visible || logIfNotArmed.fact.visible || promptSaveCsv.fact.visible
                         ColumnLayout {
                             id:                         loggingCol
                             anchors.margins:            _margins
                             anchors.top:                parent.top
                             anchors.horizontalCenter:   parent.horizontalCenter
                             spacing:                    _margins
-                            FactCheckBox {
-                                id:         promptSaveLog
-                                text:       qsTr("Save log after each flight")
-                                fact:       _telemetrySave
-                                visible:    _telemetrySave.visible
-                                enabled:    !_disableAllDataPersistence
-                                property Fact _telemetrySave: QGroundControl.settingsManager.appSettings.telemetrySave
+
+                            FactCheckBoxSlider {
+                                id:                 promptSaveLog
+                                Layout.fillWidth:   true
+                                text:               qsTr("Save log after each flight")
+                                fact:               QGroundControl.settingsManager.appSettings.telemetrySave
+                                visible:            fact.visible
+                                enabled:            !_disableAllDataPersistence
                             }
-                            FactCheckBox {
-                                id:         logIfNotArmed
-                                text:       qsTr("Save logs even if vehicle was not armed")
-                                fact:       _telemetrySaveNotArmed
-                                visible:    _telemetrySaveNotArmed.visible
-                                enabled:    promptSaveLog.checked && !_disableAllDataPersistence
-                                property Fact _telemetrySaveNotArmed: QGroundControl.settingsManager.appSettings.telemetrySaveNotArmed
+
+                            FactCheckBoxSlider {
+                                id:                 logIfNotArmed
+                                Layout.fillWidth:   true
+                                text:               qsTr("Save logs even if vehicle was not armed")
+                                fact:               QGroundControl.settingsManager.appSettings.telemetrySaveNotArmed
+                                visible:            fact.visible
+                                enabled:            promptSaveLog.checked && !_disableAllDataPersistence
                             }
-                            FactCheckBox {
-                                id:         promptSaveCsv
-                                text:       qsTr("Save CSV log of telemetry data")
-                                fact:       _saveCsvTelemetry
-                                visible:    _saveCsvTelemetry.visible
-                                enabled:    !_disableAllDataPersistence
-                                property Fact _saveCsvTelemetry: QGroundControl.settingsManager.appSettings.saveCsvTelemetry
+
+                            FactCheckBoxSlider {
+                                id:                 promptSaveCsv
+                                Layout.fillWidth:   true
+                                text:               qsTr("Save CSV log of telemetry data")
+                                fact:               QGroundControl.settingsManager.appSettings.saveCsvTelemetry
+                                visible:            fact.visible
+                                enabled:            !_disableAllDataPersistence
                             }
-                            FactCheckBox {
-                                id:         sensorSaveLog
-                                text:       qsTr("Save SensorData JSON log")
-                                fact:       _saveSensorLog
-                                //visible:    _saveSensorLog.visible
-                                enabled:    !_disableAllDataPersistence
-                                property Fact _saveSensorLog: QGroundControl.settingsManager.appSettings.saveSensorLog
+
+                            FactCheckBoxSlider {
+                                id:                 sensorSaveLog
+                                Layout.fillWidth:   true
+                                text:               qsTr("Save SensorData JSON log")
+                                fact:               QGroundControl.settingsManager.appSettings.saveSensorLog
+                                enabled:            !_disableAllDataPersistence
                             }
                         }
                     }
@@ -940,12 +904,13 @@ Rectangle {
                         ColumnLayout {
                             id:                 autoConnectCol
                             anchors.margins:    _margins
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
+                            //anchors.left:       parent.left
+                            //anchors.right:      parent.right
                             anchors.top:        parent.top
+                            anchors.horizontalCenter:   parent.horizontalCenter
                             spacing:            _margins
 
-                            RowLayout {
+                            ColumnLayout {
                                 spacing: _margins
 
                                 Repeater {
@@ -959,10 +924,16 @@ Rectangle {
 
                                     property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("PX4 Flow"), qsTr("UDP"), qsTr("RTK GPS") ]
 
-                                    FactCheckBox {
-                                        text:       autoConnectRepeater.names[index]
-                                        fact:       modelData
-                                        visible:    modelData.visible
+//                                    FactCheckBox {
+//                                        text:       autoConnectRepeater.names[index]
+//                                        fact:       modelData
+//                                        visible:    modelData.visible
+//                                    }
+                                    FactCheckBoxSlider {
+                                        Layout.fillWidth:   true
+                                        text:               autoConnectRepeater.names[index]
+                                        fact:               modelData
+                                        visible:            fact.visible
                                     }
                                 }
                             }
@@ -1261,18 +1232,32 @@ Rectangle {
 
                             property var  ntripSettings:    QGroundControl.settingsManager.ntripSettings
 
-                            FactCheckBox {
-                                text:                   ntripGrid.ntripSettings.ntripServerConnectEnabled.shortDescription
-                                fact:                   ntripGrid.ntripSettings.ntripServerConnectEnabled
-                                visible:                ntripGrid.ntripSettings.ntripServerConnectEnabled.visible
-                                Layout.columnSpan:      2
+//                            FactCheckBox {
+//                                text:                   ntripGrid.ntripSettings.ntripServerConnectEnabled.shortDescription
+//                                fact:                   ntripGrid.ntripSettings.ntripServerConnectEnabled
+//                                visible:                ntripGrid.ntripSettings.ntripServerConnectEnabled.visible
+//                                Layout.columnSpan:      2
+//                            }
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               ntripGrid.ntripSettings.ntripServerConnectEnabled.shortDescription
+                                fact:               ntripGrid.ntripSettings.ntripServerConnectEnabled
+                                visible:            fact.visible
+                                Layout.columnSpan:  2
                             }
 
-                            FactCheckBox {
-                                text:                   ntripGrid.ntripSettings.ntripEnableVRS.shortDescription
-                                fact:                   ntripGrid.ntripSettings.ntripEnableVRS
-                                visible:                ntripGrid.ntripSettings.ntripEnableVRS.visible
-                                Layout.columnSpan:      2
+//                            FactCheckBox {
+//                                text:                   ntripGrid.ntripSettings.ntripEnableVRS.shortDescription
+//                                fact:                   ntripGrid.ntripSettings.ntripEnableVRS
+//                                visible:                ntripGrid.ntripSettings.ntripEnableVRS.visible
+//                                Layout.columnSpan:      2
+//                            }
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               ntripGrid.ntripSettings.ntripEnableVRS.shortDescription
+                                fact:               ntripGrid.ntripSettings.ntripEnableVRS
+                                visible:            fact.visible
+                                Layout.columnSpan:  2
                             }
 
                             QGCLabel {
@@ -1282,7 +1267,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripServerHostAddress
                                 visible:                ntripGrid.ntripSettings.ntripServerHostAddress.visible
-                                Layout.preferredWidth:  _valueFieldWidth
+                                Layout.preferredWidth:  _valueFieldWidth * 3
                             }
 
                             QGCLabel {
@@ -1292,7 +1277,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripServerPort
                                 visible:                ntripGrid.ntripSettings.ntripServerPort.visible
-                                Layout.preferredWidth:  _valueFieldWidth
+                                Layout.preferredWidth:  _valueFieldWidth * 3
                             }
 
                             QGCLabel {
@@ -1302,7 +1287,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripUsername
                                 visible:                ntripGrid.ntripSettings.ntripUsername.visible
-                                Layout.preferredWidth:  _valueFieldWidth
+                                Layout.preferredWidth:  _valueFieldWidth * 3
                             }
 
                             QGCLabel {
@@ -1312,7 +1297,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripPassword
                                 visible:                ntripGrid.ntripSettings.ntripPassword.visible
-                                Layout.preferredWidth:  _valueFieldWidth
+                                Layout.preferredWidth:  _valueFieldWidth * 3
                             }
 
                             QGCLabel {
@@ -1322,7 +1307,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripMountpoint
                                 visible:                ntripGrid.ntripSettings.ntripMountpoint.visible
-                                Layout.preferredWidth:  _valueFieldWidth
+                                Layout.preferredWidth:  _valueFieldWidth * 3
                             }
 
                             QGCLabel {
@@ -1332,7 +1317,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripWhitelist
                                 visible:                ntripGrid.ntripSettings.ntripWhitelist.visible
-                                Layout.preferredWidth:  _valueFieldWidth
+                                Layout.preferredWidth:  _valueFieldWidth * 3
                             }
                         }
                     }
@@ -1363,17 +1348,24 @@ Rectangle {
                                 columnSpacing:      ScreenTools.defaultFontPixelWidth
                                 visible:           _openWeatherFact ? _openWeatherFact.visible : false
 
-                                FactCheckBox {
-                                    text:       qsTr("Enable OpenWeatherMap API")
-                                    fact:       _enableOpenWeatherAPI
-                                    Layout.columnSpan:      2
+//                                FactCheckBox {
+//                                    text:       qsTr("Enable OpenWeatherMap API")
+//                                    fact:       _enableOpenWeatherAPI
+//                                    Layout.columnSpan:      2
 
-                                    property Fact _enableOpenWeatherAPI : QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
+//                                    property Fact _enableOpenWeatherAPI : QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
+//                                }
+                                FactCheckBoxSlider {
+                                    Layout.fillWidth:   true
+                                    Layout.columnSpan:      2
+                                    text:               qsTr("Enable OpenWeatherMap API")
+                                    fact:               QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
+                                    visible:            fact.visible
                                 }
 
                                 QGCLabel { text: qsTr("Enter OpenWeather API Key") }
                                 FactTextField {
-                                    Layout.preferredWidth:  _valueFieldWidth * 4
+                                    Layout.preferredWidth:  _valueFieldWidth * 3
                                     fact:                   _openWeatherFact
                                 }
                             }
@@ -1405,12 +1397,18 @@ Rectangle {
                                 columns:            2
                                 columnSpacing:      ScreenTools.defaultFontPixelWidth
 
-                                FactCheckBox {
-                                    text:       qsTr("Enable SiyiSDK Support")
-                                    fact:       _enableSiyiSDK
-                                    Layout.columnSpan:      2
+//                                FactCheckBox {
+//                                    text:       qsTr("Enable SiyiSDK Support")
+//                                    fact:       _enableSiyiSDK
+//                                    Layout.columnSpan:      2
 
-                                    property Fact _enableSiyiSDK: QGroundControl.settingsManager.appSettings.enableSiyiSDK
+//                                    property Fact _enableSiyiSDK: QGroundControl.settingsManager.appSettings.enableSiyiSDK
+//                                }
+                                FactCheckBoxSlider {
+                                    Layout.fillWidth:   true
+                                    text:               qsTr("Enable SiyiSDK Support")
+                                    fact:               QGroundControl.settingsManager.appSettings.enableSiyiSDK
+                                    visible:            fact.visible
                                 }
                             }
                         }

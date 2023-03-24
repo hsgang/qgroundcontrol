@@ -296,10 +296,10 @@ RowLayout {
                 }
             }
 
-            expandedItem: Loader {
-                id:     expandedItemLoader
-                source: _activeVehicle.mainStatusIndicatorExpandedItem
-            }
+//            expandedItem: Loader {
+//                id:     expandedItemLoader
+//                source: _activeVehicle.mainStatusIndicatorExpandedItem
+//            }
         }
     }
 

@@ -100,23 +100,17 @@ Item {
             Component.onCompleted: {
                 messageText.text = formatMessage(_activeVehicle.formattedMessages)
                 //-- Hack to scroll to last message
-//                for (var i = 0; i < _activeVehicle.messageCount; i++)
                 _activeVehicle.resetMessages()
             }
 
             Connections {
-//                target: _activeVehicle
-//                onNewFormattedMessage :{
-//                    messageText.append(formatMessage(formattedMessage))
-//                    //-- Hack to scroll down
-                }
                 target:                 _activeVehicle
                 onNewFormattedMessage:  messageText.insert(0, formatMessage(formattedMessage))
             }
 
             contentItem: TextArea {
                 id:                     messageText
-                width:                  Math.max(ScreenTools.defaultFontPixelHeight * 20, contentWidth + ScreenTools.defaultFontPixelWidth)
+                width:                  Math.max(ScreenTools.defaultFontPixelWidth * 30, contentWidth + ScreenTools.defaultFontPixelWidth)
                 height:                 Math.max(ScreenTools.defaultFontPixelHeight * 20, contentHeight)
                 readOnly:               true
                 textFormat:             TextEdit.RichText
@@ -151,6 +145,7 @@ Item {
                         fillItem: parent
                         onClicked: {
                             _activeVehicle.clearMessages()
+                            //indicatorDrawer.close()
                             drawer.close()
                         }
                     }

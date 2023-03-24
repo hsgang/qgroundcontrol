@@ -26,73 +26,109 @@ ToolIndicatorPage {
     property string _NA:            qsTr("N/A", "No data to display")
     property string _valueNA:       qsTr("--.--", "No data to display")
 
+    property bool   isGNSS2:        _activeVehicle.gps2.lock.value
+
     contentItem: ColumnLayout {
         spacing: _margins
 
-        QGCLabel {
-            Layout.alignment:   Qt.AlignHCenter
-            text:               qsTr("Vehicle GPS Status")
-            font.family:        ScreenTools.demiboldFontFamily
-        }
-
-        GridLayout {
-            Layout.fillWidth:   true
-            columnSpacing:      _margins
-            columns:            2
-
-            QGCLabel { Layout.fillWidth: true; text: qsTr("Satellites") }
-            QGCLabel { text: _activeVehicle ? _activeVehicle.gps.count.valueString : _NA }
-
-            QGCLabel { Layout.fillWidth: true; text: qsTr("GPS Lock") }
-            QGCLabel { text: _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : _NA }
-
-            QGCLabel { Layout.fillWidth: true; text: qsTr("HDOP") }
-            QGCLabel { text: _activeVehicle ? _activeVehicle.gps.hdop.valueString : _valueNA }
-
-            QGCLabel { Layout.fillWidth: true; text: qsTr("VDOP") }
-            QGCLabel { text: _activeVehicle ? _activeVehicle.gps.vdop.valueString : _valueNA }
-
-            QGCLabel { Layout.fillWidth: true; text: qsTr("Course Over Ground") }
-            QGCLabel { text: _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : _valueNA }
-        }
-
-        QGCLabel {
-            Layout.alignment:   Qt.AlignHCenter
-            text:               qsTr("RTK GPS Status")
-            font.family:        ScreenTools.demiboldFontFamily
-            visible:            QGroundControl.gpsRtk.connected.value
-        }
-
-        GridLayout {
-            Layout.fillWidth:   true
-            columnSpacing:      _margins
-            columns:            2
-            visible:            QGroundControl.gpsRtk.connected.value
+//        ColumnLayout {
+            //Layout.alignment:   Qt.AlignTop
+            //spacing:            ScreenTools.defaultFontPixelHeight * 0.5
 
             QGCLabel {
-                Layout.alignment:   Qt.AlignLeft
-                Layout.columnSpan:  2
-                text:               (QGroundControl.gpsRtk.active.value) ? qsTr("Survey-in Active") : qsTr("RTK Streaming")
+                Layout.alignment:   Qt.AlignHCenter
+                text:               qsTr("Vehicle GNSS Status")
+                font.family:        ScreenTools.demiboldFontFamily
             }
 
-            QGCLabel { Layout.fillWidth: true; text: qsTr("Satellites") }
-            QGCLabel { text: QGroundControl.gpsRtk.numSatellites.value }
-
-            QGCLabel { Layout.fillWidth: true; text: qsTr("Duration") }
-            QGCLabel { text: QGroundControl.gpsRtk.currentDuration.value + ' s' }
-
-            QGCLabel {
-                // during survey-in show the current accuracy, after that show the final accuracy
-                id:                 accuracyLabel  
+            GridLayout {
                 Layout.fillWidth:   true
-                text:               QGroundControl.gpsRtk.valid.value ? qsTr("Accuracy") : qsTr("Current Accuracy")
-                visible:            QGroundControl.gpsRtk.currentAccuracy.value > 0
+                columnSpacing:      _margins
+                columns:            2
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("Satellites") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.count.valueString : _NA }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("GPS Lock") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : _NA }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("HDOP") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.hdop.valueString : _valueNA }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("VDOP") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.vdop.valueString : _valueNA }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("Course Over Ground") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : _valueNA }
             }
+
             QGCLabel {
-                text:       QGroundControl.gpsRtk.currentAccuracy.valueString + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
-                visible:    accuracyLabel.visible
+                Layout.alignment:   Qt.AlignHCenter
+                text:               qsTr("Vehicle GNSS2 Status")
+                font.family:        ScreenTools.demiboldFontFamily
+                visible:            isGNSS2
             }
-        }
+
+            GridLayout {
+                Layout.fillWidth:   true
+                columnSpacing:      _margins
+                columns:            2
+                visible:            isGNSS2
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("Satellites") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.count.valueString : _NA }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("GPS Lock") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.lock.enumStringValue : _NA }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("HDOP") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.hdop.valueString : _valueNA }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("VDOP") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.vdop.valueString : _valueNA }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("Course Over Ground") }
+                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.courseOverGround.valueString : _valueNA }
+            }
+
+            QGCLabel {
+                Layout.alignment:   Qt.AlignHCenter
+                text:               qsTr("RTK GPS Status")
+                font.family:        ScreenTools.demiboldFontFamily
+                visible:            QGroundControl.gpsRtk.connected.value
+            }
+
+            GridLayout {
+                Layout.fillWidth:   true
+                columnSpacing:      _margins
+                columns:            2
+                visible:            QGroundControl.gpsRtk.connected.value
+
+                QGCLabel {
+                    Layout.alignment:   Qt.AlignLeft
+                    Layout.columnSpan:  2
+                    text:               (QGroundControl.gpsRtk.active.value) ? qsTr("Survey-in Active") : qsTr("RTK Streaming")
+                }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("Satellites") }
+                QGCLabel { text: QGroundControl.gpsRtk.numSatellites.value }
+
+                QGCLabel { Layout.fillWidth: true; text: qsTr("Duration") }
+                QGCLabel { text: QGroundControl.gpsRtk.currentDuration.value + ' s' }
+
+                QGCLabel {
+                    // during survey-in show the current accuracy, after that show the final accuracy
+                    id:                 accuracyLabel
+                    Layout.fillWidth:   true
+                    text:               QGroundControl.gpsRtk.valid.value ? qsTr("Accuracy") : qsTr("Current Accuracy")
+                    visible:            QGroundControl.gpsRtk.currentAccuracy.value > 0
+                }
+                QGCLabel {
+                    text:       QGroundControl.gpsRtk.currentAccuracy.valueString + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
+                    visible:    accuracyLabel.visible
+                }
+            }
+//        }
     }
 
     expandedItem: IndicatorPageGroupLayout {
