@@ -64,8 +64,8 @@ WindowsBuild {
 QGC_APP_NAME        = "MissionControl"
 QGC_ORG_NAME        = "MissionControl.org"
 QGC_ORG_DOMAIN      = "org.MissionControl"
-QGC_APP_DESCRIPTION = "Open source ground control app provided by QGroundControl dev team"
-QGC_APP_COPYRIGHT   = "Copyright (C) 2022 QGroundControl Development Team. All rights reserved."
+QGC_APP_DESCRIPTION = "MissionControl"
+QGC_APP_COPYRIGHT   = "Copyright (C) 2023 QGroundControl Development Team. All rights reserved."
 
 WindowsBuild {
     QGC_INSTALLER_SCRIPT        = "$$SOURCE_DIR\\deploy\\windows\\nullsoft_installer.nsi"
