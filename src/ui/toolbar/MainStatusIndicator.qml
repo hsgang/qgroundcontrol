@@ -181,7 +181,7 @@ RowLayout {
                             }
                         }
                         forceArm = false
-                        drawer.close()()
+                        drawer.close()
                     }
                 }
 

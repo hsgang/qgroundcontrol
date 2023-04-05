@@ -165,9 +165,17 @@ ApplicationWindow {
         }
     }
 
-    function showSettingsTool() {
+    function showAppSettings() {
         viewSwitch(toolbar.flyViewToolbar)
         appSettings.visible = true
+    }
+
+    function showSettingsTool(settingsPage = "") {
+        viewSwitch(toolbar.flyViewToolbar)
+        appSettings.visible = true
+        if (settingsPage !== "") {
+            appSettings.showSettingsPage(settingsPage)
+        }
     }
 
 //    function showSettingsTool(settingsPage = "") {
@@ -404,7 +412,7 @@ ApplicationWindow {
                         visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
-                                mainWindow.showSettingsTool()
+                                mainWindow.showAppSettings()
                                 checkedMenu()
                                 settingsButton.checked = true
                             }

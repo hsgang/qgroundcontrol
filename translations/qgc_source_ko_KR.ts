@@ -6447,6 +6447,19 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>MainStatusIndicatorOfflinePage</name>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="75"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="77"/>
+        <source>Comm Links</source>
+        <translation>통신 링크</translation>
+    </message>
+</context>
+<context>
     <name>FlightModeMenuIndicator</name>
     <message>
         <location filename="../src/ui/toolbar/FlightModeMenuIndicator.qml" line="358"/>
