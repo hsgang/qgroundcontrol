@@ -8,7 +8,7 @@
  ****************************************************************************/
 
 import QtQuick          2.15 //2.12
-import QtQuick.Controls 2.4
+import QtQuick.Controls 2.15
 import QtQuick.Layouts  1.12 //1.12
 import QtQuick.Shapes   1.15
 
@@ -83,6 +83,27 @@ Item {
         if (mapIndicator) {
             mapIndicator.actionConfirmed()
             mapIndicator = undefined
+        }
+    }
+
+    onVisibleChanged: {
+        if (visible) {
+            root.focus = true
+        }
+    }
+
+    Keys.onPressed:{
+        if(event.key === Qt.Key_Space){
+            animator.restart()
+            root.pressSignal()
+        }
+    }
+
+    Keys.onReleased:{
+        if(event.key === Qt.Key_Space){
+            animator.stop()
+            feeder.value = 0
+            root.releaseSignal()
         }
     }
 
