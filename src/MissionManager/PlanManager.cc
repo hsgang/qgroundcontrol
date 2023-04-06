@@ -632,7 +632,7 @@ void PlanManager::_handleMissionAck(const mavlink_message_t& message)
             _finishTransaction(true, true /* apmGuidedItemWrite */);
         } else {
             // FIXME: Protocol error
-            _sendError(VehicleAckError, tr("Vehicle returned error: %1. %2Vehicle did not accept guided item.").arg(_missionResultToString((MAV_MISSION_RESULT)missionAck.type)));
+            _sendError(VehicleAckError, tr("Vehicle returned error: %1. %2Vehicle did not accept guided item.").arg(_missionResultToString((MAV_MISSION_RESULT)missionAck.type)).arg(_vehicle->id()));
             _finishTransaction(false, true /* apmGuidedItemWrite */);
         }
         break;
