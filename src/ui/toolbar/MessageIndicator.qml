@@ -151,6 +151,24 @@ Item {
                     }
                 }
             }
+            QGCFlickable {
+                id:                 messageFlick
+                anchors.margins:    ScreenTools.defaultFontPixelHeight
+                anchors.fill:       parent
+                contentHeight:      messageText.height
+                contentWidth:       messageText.width
+                pixelAligned:       true
+
+                TextEdit {
+                    id:                 messageText
+                    readOnly:           true
+                    textFormat:         TextEdit.RichText
+                    selectByMouse:      true
+                    color:              qgcPal.text
+                    selectionColor:     qgcPal.text
+                    selectedTextColor:  qgcPal.window
+                }
+            }
         }
     }
 }
