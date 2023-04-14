@@ -85,7 +85,8 @@ ParameterManager::ParameterManager(Vehicle* vehicle)
     , _disableAllRetries                (false)
     , _indexBatchQueueActive            (false)
     , _totalParamCount                  (0)
-    , _tryftp                           (vehicle->apmFirmware())
+    //, _tryftp                           (vehicle->apmFirmware())
+    , _tryftp                           (false)
 {
     if (_vehicle->isOfflineEditingVehicle()) {
         _loadOfflineEditingParams();
