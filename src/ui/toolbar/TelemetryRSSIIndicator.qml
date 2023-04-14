@@ -22,7 +22,7 @@ Item {
     id:             _root
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
-    width:          telemIcon.width * 1.1
+    width:          telemRow.width
 
     property bool showIndicator: _hasTelemetry
 
@@ -73,16 +73,50 @@ Item {
             }
         }
     }
-    QGCColoredImage {
-        id:                 telemIcon
+
+    Row{
+        id:                 telemRow
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
-        width:              height
-        sourceSize.height:  height
-        source:             "/qmlimages/TelemRSSI.svg"
-        fillMode:           Image.PreserveAspectFit
-        color:              qgcPal.buttonText
+        spacing:            ScreenTools.defaultFontPixelWidth / 2
+
+        Rectangle{
+            width:              1
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            color:              qgcPal.text
+            opacity:            0.5
+        }
+
+        QGCColoredImage {
+            id:                 telemIcon
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            width:              height
+            sourceSize.height:  height
+            source:             "/qmlimages/TelemRSSI.svg"
+            fillMode:           Image.PreserveAspectFit
+            color:              qgcPal.buttonText
+        }
+
+        Column {
+            id:                     telemValuesColumn
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins:        ScreenTools.defaultFontPixelWidth / 2
+
+            QGCLabel {
+                anchors.horizontalCenter:   parent.horizontalCenter
+                color:                      qgcPal.buttonText
+                text:                       _activeVehicle ? _activeVehicle.telemetryLRSSI : 0
+            }
+            QGCLabel {
+                anchors.horizontalCenter:   parent.horizontalCenter
+                color:                      qgcPal.buttonText
+                text:                       _activeVehicle ? _activeVehicle.telemetryRRSSI : 0
+            }
+        }
     }
+
     MouseArea {
         anchors.fill: parent
         onClicked: {

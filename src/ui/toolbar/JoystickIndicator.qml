@@ -19,7 +19,7 @@ import QGroundControl.Palette               1.0
 // Joystick Indicator
 Item {
     id:             _root
-    width:          joystickRow.width * 1.1
+    width:          joystickRow.width
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
     visible:        globals.activeVehicle ? globals.activeVehicle.sub : false
@@ -76,6 +76,14 @@ Item {
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
         spacing:        ScreenTools.defaultFontPixelWidth
+
+        Rectangle{
+            width:              1
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            color:              qgcPal.text
+            opacity:            0.5
+        }
 
         QGCColoredImage {
             width:              height

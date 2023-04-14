@@ -23,7 +23,7 @@ import QGroundControl.Palette               1.0
 //-- ROI Indicator
 Item {
     id:                     _root
-    width:                  showIndicator ? roiIcon.width : 0
+    width:                  roiRow.width
     visible:                showIndicator
     anchors.top:            parent.top
     anchors.bottom:         parent.bottom
@@ -70,16 +70,31 @@ Item {
         }
     }
 
-    QGCColoredImage {
-        id:                 roiIcon
-        width:              height
+    Row{
+        id:                 roiRow
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
-        sourceSize.height:  height
-        source:             "/qmlimages/roi.svg"
-        color:              _activeVehicle && _activeVehicle.isROIEnabled ? qgcPal.colorGreen : qgcPal.text
-        fillMode:           Image.PreserveAspectFit
-        opacity:            _activeVehicle && _activeVehicle.isROIEnabled ? 1 : 0.5
+        spacing:            ScreenTools.defaultFontPixelWidth / 2
+
+        Rectangle{
+            width:              1
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            color:              qgcPal.text
+            opacity:            0.5
+        }
+
+        QGCColoredImage {
+            id:                 roiIcon
+            width:              height
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            sourceSize.height:  height
+            source:             "/qmlimages/roi.svg"
+            color:              _activeVehicle && _activeVehicle.isROIEnabled ? qgcPal.colorGreen : qgcPal.text
+            fillMode:           Image.PreserveAspectFit
+            opacity:            _activeVehicle && _activeVehicle.isROIEnabled ? 1 : 0.5
+        }
     }
 
     MouseArea {

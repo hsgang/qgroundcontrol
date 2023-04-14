@@ -22,7 +22,7 @@ import QGroundControl.Palette               1.0
 //-- Message Indicator
 Item {
     id:             _root
-    width:          height * 1.4
+    width:          messageIconRow.width //height * 1.4
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
