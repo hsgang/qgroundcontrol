@@ -84,9 +84,10 @@ Item {
                 onClicked:      mainWindow.showIndicatorDrawer(vehicleMessagesPopup)
             }
         }
-    MouseArea {
-        anchors.fill:   parent
-        onClicked:      dropMessageIndicator()
+//        MouseArea {
+//            anchors.fill:   parent
+//            onClicked:      dropMessageIndicator()
+//        }
     }
 
     Component {
@@ -101,13 +102,13 @@ Item {
                 message = message.replace(new RegExp("<#E>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0) - 1) + "pt monospace;");
                 message = message.replace(new RegExp("<#I>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0) - 1) + "pt monospace;");
                 message = message.replace(new RegExp("<#N>", "g"), "color: " + qgcPal.text + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0) - 1) + "pt monospace;");
-                return message;
+                return message + "\n";
             }
 
             Component.onCompleted: {
                 messageText.text = formatMessage(_activeVehicle.formattedMessages)
                 //-- Hack to scroll to last message
-                _activeVehicle.resetMessages()
+                _activeVehicle.resetAllMessages()
                 //for (var i = 0; i < _activeVehicle.messageCount; i++)
                 //    messageFlick.flick(0,-5000)
                 //_activeVehicle.resetAllMessages()
