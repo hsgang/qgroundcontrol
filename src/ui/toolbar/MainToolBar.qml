@@ -35,6 +35,12 @@ Rectangle {
 
     property var    _currentSelection:     null
 
+//    function dropMessageIndicatorTool() {
+//        if (currentToolbar === flyViewToolbar) {
+//            indicatorLoader.item.dropMessageIndicatorTool();
+//        }
+//    }
+
     QGCPalette { id: qgcPal }
 
     /// Bottom single pixel divider
