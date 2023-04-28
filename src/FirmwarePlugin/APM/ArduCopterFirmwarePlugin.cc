@@ -57,7 +57,7 @@ ArduCopterFirmwarePlugin::ArduCopterFirmwarePlugin(void)
     setSupportedModes({
         //APMCopterMode(APMCopterMode::STABILIZE,     true),
         //APMCopterMode(APMCopterMode::ACRO,          true),
-        //APMCopterMode(APMCopterMode::ALT_HOLD,      true),
+        APMCopterMode(APMCopterMode::ALT_HOLD,      true),
         //APMCopterMode(APMCopterMode::AUTO,          true),
         APMCopterMode(APMCopterMode::GUIDED,        true),
         APMCopterMode(APMCopterMode::LOITER,        true),

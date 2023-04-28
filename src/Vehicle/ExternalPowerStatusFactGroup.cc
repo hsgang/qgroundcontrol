@@ -101,9 +101,9 @@ void ExternalPowerStatusFactGroup::_handleExternalPowerStatus(mavlink_message_t 
         dcOutputVolatage1()->setRawValue(float(eP.dcOutVolt1 * 0.1));
         dcOutputVolatage2()->setRawValue(float(eP.dcOutVolt2 * 0.1));
         dcOutputVolatage3()->setRawValue(float(eP.dcOutVolt3 * 0.1));
-        dcOutputCurrent1()->setRawValue(float(eP.dcOutCurr1 * 0.1));
-        dcOutputCurrent2()->setRawValue(float(eP.dcOutCurr2 * 0.1));
-        dcOutputCurrent3()->setRawValue(float(eP.dcOutCurr3 * 0.1));
+        dcOutputCurrent1()->setRawValue(float(eP.dcOutCurr1 * 0.1) * 2);
+        dcOutputCurrent2()->setRawValue(float(eP.dcOutCurr2 * 0.1) * 2);
+        dcOutputCurrent3()->setRawValue(float(eP.dcOutCurr3 * 0.1) * 2);
         temperature()->setRawValue(float(eP.temperature * 0.1));
         batteryVoltage()->setRawValue(float(eP.battVolt * 0.1));
         batteryChange()->setRawValue(uint8_t(eP.battChange * 0.1));
