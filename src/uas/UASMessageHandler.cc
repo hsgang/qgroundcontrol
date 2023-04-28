@@ -181,7 +181,7 @@ void UASMessageHandler::handleTextMessage(int, int compId, int severity, QString
     }
 
     // Finally preppend the properly-styled text with a timestamp.
-    QString dateString = QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+    QString dateString = QDateTime::currentDateTime().toString("hh:mm:ss");
     UASMessage* message = new UASMessage(compId, severity, text);
     QString compString;
     if (_multiComp) {
