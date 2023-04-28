@@ -102,7 +102,7 @@ Item {
                 message = message.replace(new RegExp("<#E>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0) - 1) + "pt monospace;");
                 message = message.replace(new RegExp("<#I>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0) - 1) + "pt monospace;");
                 message = message.replace(new RegExp("<#N>", "g"), "color: " + qgcPal.text + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0) - 1) + "pt monospace;");
-                return message + "\n";
+                return message;
             }
 
             Component.onCompleted: {
@@ -116,7 +116,9 @@ Item {
 
             Connections {
                 target:                 _activeVehicle
-                onNewFormattedMessage:  messageText.insert(0, formatMessage(formattedMessage))
+                onNewFormattedMessage:  {
+                    messageText.append(formatMessage(formattedMessage));
+                }
             }
 
             contentItem: TextArea {
