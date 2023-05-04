@@ -106,6 +106,36 @@ private:
         WAITING_FOR_CRC_HIGH
     };
 
+    // 0x40
+    struct HardwareID_t{
+        uint64_t padding;
+        uint8_t hardware_id[12];
+        uint16_t crc;
+    };
+
+    // 0x16
+    struct SystemSettings_t{
+        uint64_t padding;
+        uint8_t match;
+        uint8_t baud_type;
+        uint8_t joy_type;
+        uint8_t rc_bat;
+        uint16_t crc;
+    };
+
+    // 0x43
+    struct RCLinkStatus_t{
+        uint64_t padding;
+        uint16_t freq;
+        uint8_t pack_loss_rate;
+        uint16_t real_pack;
+        uint16_t real_pack_rate;
+        uint32_t data_up;
+        uint32_t data_down;
+        uint16_t crc;
+    };
+
+    // 0x44
     struct LinkStatus_t{
 //        uint16_t stx;
 //        uint8_t ctrl;
@@ -124,6 +154,10 @@ private:
         int32_t channel;
         uint16_t crc;
     };
+
+    HardwareID_t _hardwareId;
+    SystemSettings_t _systemSettings;
+    RCLinkStatus_t _rcLinkStatus;
     LinkStatus_t _linkStatus;
 
     bool _isConnected = false;
