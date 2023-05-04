@@ -185,13 +185,13 @@ Rectangle {
                             delegate: QGCButton {
                                 anchors.horizontalCenter:   settingsColumn.horizontalCenter
                                 width:                      _linkRoot.width * 0.5
-                                text:                       object.name
+                                text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
                                 autoExclusive:              true
                                 visible:                    !object.dynamic
                                 onClicked: {
                                     checked = true
                                     _currentSelection = object
-                                    console.log("clicked", object, object.link)
+                                    //console.log("clicked", object, object.link)
                                 }
                             }
                         }
