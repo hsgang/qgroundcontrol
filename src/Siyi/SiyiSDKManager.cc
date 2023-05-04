@@ -21,10 +21,7 @@
 #include <QFileInfo>
 
 #include "SiyiSDKManager.h"
-#include "UASInterface.h"
-#include "UAS.h"
 #include "LinkManager.h"
-#include "QGC.h"
 #include "QGCApplication.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
@@ -68,162 +65,136 @@ void SiyiSDKManager::setToolbox(QGCToolbox *toolbox)
 
 void SiyiSDKManager::read_incoming_packets(LinkInterface* link, QByteArray b){
 
-//    int16_t nbytes = std::min(b.size(), 1024);
-//    if(nbytes <= 0) {
-//        return;
+    uint16_t nbytes = std::min(b.size(), 1024);
+    if(nbytes <= 0 || nbytes > 50) {
+        return;
+    }
+
+//    if (static_cast<char>(b[0]) == 0x55 && static_cast<char>(b[1]) == 0x66 && static_cast<char>(b[2]) == 0x02){
+//        qDebug() << "recieved :" << b.toHex();
 //    }
 
-//    reset_parser = false;
+    reset_parser = false;
 
-//    for(int16_t i = 0; i < nbytes; i ++){
-//        const int16_t p = b[i];
+    for(uint16_t i = 0; i < nbytes; i ++){
+        uint8_t p = static_cast<uint8_t>(b[i]);
 
-//        if ((p < 0) || (p > 0xff)) {
-//            continue;
-//        }
+        if ((p < 0) || (p > 0xff)) {
+            continue;
+        }
 
-//        _msg_buff[_msg_buff_len++] = p;
+        _msg_buff[_msg_buff_len++] = p;
 
-//        if (_msg_buff_len >= MK15_SIYI_PACKETLEN_MAX) {
-//            reset_parser = true;
-//        }
+        if (_msg_buff_len >= MK15_SIYI_PACKETLEN_MAX) {
+            reset_parser = true;
+        }
 
-//        switch (_parsed_msg.state) {
+        switch (_parsed_msg.state) {
 
-//        case ParseState::WAITING_FOR_STX_LOW:
-//            if (p == MK15_SIYI_HEADER1) {
-//                _parsed_msg.state = ParseState::WAITING_FOR_STX_HIGH;
-//            } else {
-//                reset_parser = true;
-//            }
-//            break;
-
-//        case ParseState::WAITING_FOR_STX_HIGH:
-//            if (p == MK15_SIYI_HEADER2) {
-//                _parsed_msg.state = ParseState::WAITING_FOR_CTRL;
-//            } else {
-//                reset_parser = true;
-//            }
-//            break;
-
-//        case ParseState::WAITING_FOR_CTRL:
-//            _parsed_msg.state = ParseState::WAITING_FOR_DATALEN_LOW;
-//            break;
-
-//        case ParseState::WAITING_FOR_DATALEN_LOW:
-//            _parsed_msg.data_len = p;
-//            _parsed_msg.state = ParseState::WAITING_FOR_DATALEN_HIGH;
-//            break;
-
-//        case ParseState::WAITING_FOR_DATALEN_HIGH:
-//            _parsed_msg.data_len |= ((uint16_t)p << 8);
-//            // sanity check data length
-//            if (_parsed_msg.data_len <= MK15_SIYI_PACKETLEN_MAX) {
-//                _parsed_msg.state = ParseState::WAITING_FOR_SEQ_LOW;
-//            } else {
-//                reset_parser = true;
-//                //debug("data len too large:%u (>%u)", (unsigned)_parsed_msg.data_len, (unsigned)AP_MOUNT_SIYI_DATALEN_MAX);
-//            }
-//            break;
-
-//        case ParseState::WAITING_FOR_SEQ_LOW:
-//            _parsed_msg.state = ParseState::WAITING_FOR_SEQ_HIGH;
-//            break;
-
-//        case ParseState::WAITING_FOR_SEQ_HIGH:
-//            _parsed_msg.state = ParseState::WAITING_FOR_CMDID;
-//            break;
-
-//        case ParseState::WAITING_FOR_CMDID:
-//            _parsed_msg.command_id = p;
-//            _parsed_msg.data_bytes_received = 0;
-//            if (_parsed_msg.data_len > 0) {
-//                _parsed_msg.state = ParseState::WAITING_FOR_DATA;
-//            } else {
-//                _parsed_msg.state = ParseState::WAITING_FOR_CRC_LOW;
-//            }
-//            break;
-
-//        case ParseState::WAITING_FOR_DATA:
-//            _parsed_msg.data_bytes_received++;
-//            if (_parsed_msg.data_bytes_received >= _parsed_msg.data_len) {
-//                _parsed_msg.state = ParseState::WAITING_FOR_CRC_LOW;
-//            }
-//            break;
-
-//        case ParseState::WAITING_FOR_CRC_LOW:
-//            _parsed_msg.crc16 = p;
-//            _parsed_msg.state = ParseState::WAITING_FOR_CRC_HIGH;
-//            break;
-
-//        case ParseState::WAITING_FOR_CRC_HIGH:
-//            _parsed_msg.crc16 |= ((uint16_t)p << 8);
-
-//            // check crc
-//            const uint16_t expected_crc = crcSiyiSDK(_msg_buff, _msg_buff_len-2);
-//            if (expected_crc == _parsed_msg.crc16) {
-//                // successfully received a message, do something with it
-//                process_packet();
-//            } else {
-//                qDebug() << "crc expected:%x got:%x", (unsigned)expected_crc, (unsigned)_parsed_msg.crc16;
-//            }
-//            reset_parser = true;
-//            break;
-//        }
-//        }
-//    }
-
-    uint16_t stx = (static_cast<uint8_t>(b[1]) << 8) + static_cast<uint8_t>(b[0]);
-    uint16_t len = 0;
-
-    //if (static_cast<char>(b[0]) == 0x55 && static_cast<char>(b[1]) == 0x66 && static_cast<char>(b[2]) == 0x02){
-    if (stx == 26197 && static_cast<uint8_t>(b[2]) == 0x02){
-        len = (static_cast<uint8_t>(b[4]) << 8) + static_cast<uint8_t>(b[3]) + 10;
-        if (len == b.size()){
-            uint16_t recvCRC = (static_cast<uint8_t>(b[len-1]) << 8) + static_cast<uint8_t>(b[len-2]);
-            uint16_t calcCRC = crcSiyiSDK(b, b.size()-2);
-//            qDebug() << "recieved siyi SDK:" << b.toHex();
-
-            if(recvCRC == calcCRC){
-                if(static_cast<uint8_t>(b[7]) == (uint8_t)SiyiCommandId::ACQUIRE_FPV_LINK_STATUS){// 0x44){ //cmd id 0x44 is acquire fpv link status
-                    b.insert(3, 1, (uint8_t)0x00);
-                    b.insert(9, 3, (uint8_t)0x00);
-
-                    memcpy(&_linkStatus, b, b.size());
-
-                    _isConnected = true;
-                    _signal = _linkStatus.signal;
-                    _inactiveTime = _linkStatus.inactive_time;
-                    _upstream = _linkStatus.upstream;
-                    _downstream = _linkStatus.downstream;
-                    _txbandwidth = _linkStatus.txbandwidth;
-                    _rxbandwidth = _linkStatus.rxbandwidth;
-                    _rssi = _linkStatus.rssi;
-                    _freq = _linkStatus.freq;
-                    _channel = _linkStatus.channel;
-
-                    emit siyiStatusChanged();
-
-                    b.clear();
-                }
+        case ParseState::WAITING_FOR_STX_LOW:
+            if (p == MK15_SIYI_HEADER1) {
+                _parsed_msg.state = ParseState::WAITING_FOR_STX_HIGH;
+            } else {
+                reset_parser = true;
             }
+            break;
+
+        case ParseState::WAITING_FOR_STX_HIGH:
+            if (p == MK15_SIYI_HEADER2) {
+                _parsed_msg.state = ParseState::WAITING_FOR_CTRL;
+            } else {
+                reset_parser = true;
+            }
+            break;
+
+        case ParseState::WAITING_FOR_CTRL:
+            _parsed_msg.state = ParseState::WAITING_FOR_DATALEN_LOW;
+            break;
+
+        case ParseState::WAITING_FOR_DATALEN_LOW:
+            _parsed_msg.data_len = p;
+            _parsed_msg.state = ParseState::WAITING_FOR_DATALEN_HIGH;
+            break;
+
+        case ParseState::WAITING_FOR_DATALEN_HIGH:
+            _parsed_msg.data_len |= ((uint16_t)p << 8);
+            // sanity check data length
+            if (_parsed_msg.data_len == nbytes-MK15_SIYI_PACKETLEN_MIN) {
+                _parsed_msg.state = ParseState::WAITING_FOR_SEQ_LOW;
+                //qDebug() << "dataLen:" << _parsed_msg.data_len;
+            } else {
+                reset_parser = true;
+                //debug("data len too large:%u (>%u)", (unsigned)_parsed_msg.data_len, (unsigned)AP_MOUNT_SIYI_DATALEN_MAX);
+            }
+            break;
+
+        case ParseState::WAITING_FOR_SEQ_LOW:
+            _parsed_msg.seq = p;
+            _parsed_msg.state = ParseState::WAITING_FOR_SEQ_HIGH;
+            break;
+
+        case ParseState::WAITING_FOR_SEQ_HIGH:
+            _parsed_msg.seq |= ((uint16_t)p << 8);
+            _parsed_msg.state = ParseState::WAITING_FOR_CMDID;
+            break;
+
+        case ParseState::WAITING_FOR_CMDID:
+            _parsed_msg.command_id = p;
+            _parsed_msg.data_bytes_received = 0;
+            if (_parsed_msg.data_len > 0) {
+                _parsed_msg.state = ParseState::WAITING_FOR_DATA;
+            } else {
+                _parsed_msg.state = ParseState::WAITING_FOR_CRC_LOW;
+            }
+            break;
+
+        case ParseState::WAITING_FOR_DATA:
+            _parsed_msg.data_bytes_received++;
+            if (_parsed_msg.data_bytes_received == _parsed_msg.data_len) {
+                _parsed_msg.state = ParseState::WAITING_FOR_CRC_LOW;
+            }
+            break;
+
+        case ParseState::WAITING_FOR_CRC_LOW:
+            _parsed_msg.crc16 = p;
+            _parsed_msg.state = ParseState::WAITING_FOR_CRC_HIGH;
+            break;
+
+        case ParseState::WAITING_FOR_CRC_HIGH:
+            _parsed_msg.crc16 |= ((uint16_t)p << 8);
+            const uint16_t expected_crc = crcSiyiSDK(_msg_buff, _msg_buff_len-2, 0);
+            if (expected_crc == _parsed_msg.crc16) {
+                process_packet();
+            } else {
+                qDebug() << "crc expected:" << QString::number((unsigned)expected_crc, 16) << "got:" << QString::number((unsigned)_parsed_msg.crc16, 16);
+                qDebug() << "received:" << b.toHex();
+            }
+            reset_parser = true;
+            break;
+        }
+
+        if (reset_parser == true) {
+            _parsed_msg.state = ParseState::WAITING_FOR_STX_LOW;
+            _msg_buff_len = 0;
         }
     }
 }
 
-uint16_t SiyiSDKManager::crcSiyiSDK(const char *buf, int len){
-    uint16_t crc = 0;
-    while(len--){
-        int i ;
-        crc = crc ^ (*(uint16_t*)buf++ << 8);
-        for( i = 0; i < 8; i++){
-            if(crc & 0x8000)
-                crc = (crc << 1) ^ 0x1021;
-            else
-                crc = crc << 1;
+uint16_t SiyiSDKManager::crcSiyiSDK(uint8_t *ptr, uint16_t len, uint16_t crc_init){
+    {
+        uint16_t crc, oldcrc16;
+        uint8_t temp;
+        crc = crc_init;
+        while (len-- != 0)
+        {
+            temp = (crc >> 8) & 0xff;
+            oldcrc16 = crc16_tab[*ptr ^ temp];
+            crc = (crc << 8) ^ oldcrc16;
+            ptr++;
         }
+        // crc = ~crc; // ??
+        return crc;
     }
-    return crc;
 }
 
 void SiyiSDKManager::requestLinkStatus()
@@ -232,6 +203,7 @@ void SiyiSDKManager::requestLinkStatus()
     bool enable = _appSettings->enableSiyiSDK()->rawValue().toBool();
     if (links.size() > 0 && enable) {
         uint8_t buffer[10] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x44,0x05,0xdc};
+        //uint8_t buffer[10] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x40,0x81,0x9c};
         int len = sizeof(buffer);
         for(int i = 0; i < links.size(); i++){
             links[i] -> writeBytesThreadSafe((const char*)buffer, len);
@@ -239,7 +211,7 @@ void SiyiSDKManager::requestLinkStatus()
         //qDebug()<< "requestLinkStatus to SiyiSDK";
 
         _sendCustomMessageTimer.stop();
-        _sendCustomMessageTimer.start(500);
+        _sendCustomMessageTimer.start(250);
     }
 }
 
@@ -249,6 +221,7 @@ void SiyiSDKManager::process_packet()
     switch ((SiyiCommandId)_parsed_msg.command_id) {
 
         case SiyiCommandId::HARDWARE_ID:
+            qDebug() << "CommandID received";
             break;
 
         case SiyiCommandId::ACQUIRE_SYSTEM_SETTINGS :
@@ -264,11 +237,35 @@ void SiyiSDKManager::process_packet()
             break;
 
         case SiyiCommandId::ACQUIRE_FPV_LINK_STATUS:{
-            if(_parsed_msg.data_bytes_received != 36) {
-                unexpected_len = true;
-                break;
+
+            memcpy(&_linkStatus, _msg_buff, _msg_buff_len);
+
+            _isConnected = true;
+            _signal = _linkStatus.signal;
+            _inactiveTime = _linkStatus.inactive_time;
+            _upstream = _linkStatus.upstream;
+            _downstream = _linkStatus.downstream;
+            _txbandwidth = _linkStatus.txbandwidth;
+            _rxbandwidth = _linkStatus.rxbandwidth;
+            _rssi = _linkStatus.rssi;
+            _freq = _linkStatus.freq;
+            _channel = _linkStatus.channel;
+
+            emit siyiStatusChanged();
+
+//            qDebug() << "ACQUIRE_FPV_LINK_STATUS received";
+
+//            qDebug() << "signal:" << _linkStatus.signal;
+//            qDebug() << "inactive:" << _linkStatus.inactive_time;
+//            qDebug() << "upstream:" << _linkStatus.upstream;
+//            qDebug() << "dnstream:" << _linkStatus.downstream;
+//            qDebug() << "txband:" << _linkStatus.txbandwidth;
+//            qDebug() << "rxband:" << _linkStatus.rxbandwidth;
+//            qDebug() << "rssi:" << _linkStatus.rssi;
+//            qDebug() << "freq:" << _linkStatus.freq;
+//            qDebug() << "ch:" << _linkStatus.channel;
+//            qDebug() << "crc:" << _linkStatus.crc;
             }
             break;
-        }
     }
 }
