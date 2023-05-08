@@ -3373,7 +3373,7 @@ void Vehicle::_waitForMavlinkMessage(WaitForMavlinkMessageResultHandler resultHa
 {
     qCDebug(VehicleLog) << "_waitForMavlinkMessage msg:timeout" << messageId << timeoutMsecs;
     if (_waitForMavlinkMessageResultHandler) {
-        qCCritical(VehicleLog) << "_waitForMavlinkMessage: collision";
+        qCCritical(VehicleLog) << "_waitForMavlinkMessage: collision / messageID: " << messageId;
     }
     _waitForMavlinkMessageResultHandler     = resultHandler;
     _waitForMavlinkMessageResultHandlerData = resultHandlerData;
