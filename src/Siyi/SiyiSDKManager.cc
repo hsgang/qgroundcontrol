@@ -26,6 +26,8 @@
 #include "SettingsManager.h"
 #include "AppSettings.h"
 
+QGC_LOGGING_CATEGORY(SiyiSDKLog, "SiyiSDKLog")
+
 SiyiSDKManager::SiyiSDKManager(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
     , _linkMgr(nullptr)
@@ -165,9 +167,9 @@ void SiyiSDKManager::read_incoming_packets(LinkInterface* link, QByteArray b){
             const uint16_t expected_crc = crcSiyiSDK(_msg_buff, _msg_buff_len-2, 0);
             if (expected_crc == _parsed_msg.crc16) {
                 process_packet();
-            } else {
-                qDebug() << "crc expected:" << QString::number((unsigned)expected_crc, 16) << "got:" << QString::number((unsigned)_parsed_msg.crc16, 16);
-                qDebug() << "received:" << b.toHex();
+//            } else {
+//                qDebug() << "crc expected:" << QString::number((unsigned)expected_crc, 16) << "got:" << QString::number((unsigned)_parsed_msg.crc16, 16);
+//                qDebug() << "received:" << b.toHex();
             }
             reset_parser = true;
             break;
