@@ -82,9 +82,11 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     case MAVLINK_MSG_ID_TUNNEL:
         _handleTunnel(message);
         break;
+#if defined(MAVLINK_MSG_ID_ATMOSPHERIC_VALUE)
     case MAVLINK_MSG_ID_ATMOSPHERIC_VALUE:
         _handleAtmosphericValue(message);
         break;
+#endif
 
 //#if !defined(NO_ARDUPILOT_DIALECT)
 //    case MAVLINK_MSG_ID_WIND:
@@ -146,6 +148,7 @@ void AtmosphericSensorFactGroup::_handleHygrometerSensor(mavlink_message_t& mess
     humidity()->setRawValue((hygrometer.humidity) * 0.01);
 }
 
+#if defined(MAVLINK_MSG_ID_ATMOSPHERIC_VALUE)
 void AtmosphericSensorFactGroup::_handleAtmosphericValue(mavlink_message_t& message)
 {
     mavlink_atmospheric_value_t atmospheric;
@@ -158,6 +161,7 @@ void AtmosphericSensorFactGroup::_handleAtmosphericValue(mavlink_message_t& mess
     windDir()->setRawValue(atmospheric.wind_direction);
     windSpd()->setRawValue(atmospheric.wind_speed);
 }
+#endif
 
 void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
 {

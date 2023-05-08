@@ -1,7 +1,8 @@
 #pragma once
 
+#define MAVLINK_MSG_ID_ATMOSPHERIC_VALUE
+
 #include "FactGroup.h"
-#include "QGCMAVLink.h"
 
 class AtmosphericSensorFactGroup : public FactGroup
 {
