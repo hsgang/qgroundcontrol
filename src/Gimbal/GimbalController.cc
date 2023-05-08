@@ -43,7 +43,7 @@ GimbalController::_handleHeartbeat(const mavlink_message_t& message)
     auto& gimbal = _potentialGimbals[message.compid];
 
     if (!gimbal.receivedInformation && gimbal.requestInformationRetries > 0) {
-        _requestGimbalInformation(message.compid);
+        //_requestGimbalInformation(message.compid);
         --gimbal.requestInformationRetries;
     }
 
