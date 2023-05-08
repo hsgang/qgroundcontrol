@@ -76,7 +76,7 @@ SetupPage {
             property bool _servoReverseIsBool:  controller.parameterExists(-1, "RC5_REVERSED")
 
             // Gimbal Settings not available on older firmware
-            property bool _showGimbaLSettings:  controller.parameterExists(-1, "MNT_DEFLT_MODE")
+            property bool _showGimbaLSettings:  controller.parameterExists(-1, "MNT1_DEFLT_MODE")
 
             readonly property real  _margins:                       ScreenTools.defaultFontPixelHeight
             readonly property int   _rcFunctionDisabled:            0
@@ -401,8 +401,8 @@ SetupPage {
                     width:  rectangle.x + rectangle.width
                     height: rectangle.y + rectangle.height
 
-                    property Fact _mountDefaultMode:    controller.getParameterFact(-1, "MNT_DEFLT_MODE")
-                    property Fact _mountType:           controller.getParameterFact(-1, "MNT_TYPE")
+                    property Fact _mountDefaultMode:    controller.getParameterFact(-1, "MNT1_DEFLT_MODE")
+                    property Fact _mountType:           controller.getParameterFact(-1, "MNT1_TYPE")
 
                     QGCLabel {
                         id:             settingsLabel
