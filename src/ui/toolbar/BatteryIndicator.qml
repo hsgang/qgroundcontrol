@@ -292,8 +292,16 @@ Item {
             function getBatteryColor() {
                 if (battery.chargeState.rawValue) {
                     switch (battery.chargeState.rawValue) {
-                    case MAVLink.MAV_BATTERY_CHARGE_STATE_OK:
-                        return qgcPal.colorGreen //qgcPal.text
+                    case MAVLink.MAV_BATTERY_CHARGE_STATE_OK: {
+                        if(battery.percentRemaining.rawValue) {
+                            if (battery.percentRemaining.rawValue < 15)
+                                return qgcPal.colorRed
+                            if (battery.percentRemaining.rawValue < 30)
+                                return qgcPal.colorOrange
+                            return qgcPal.colorGreen //qgcPal.text
+                            }
+                        }
+                        //return qgcPal.colorGreen //qgcPal.text
                     case MAVLink.MAV_BATTERY_CHARGE_STATE_LOW:
                         return qgcPal.colorOrange
                     case MAVLink.MAV_BATTERY_CHARGE_STATE_CRITICAL:
@@ -306,7 +314,7 @@ Item {
                     }
                 }
                 else if(battery.percentRemaining.rawValue) {
-                    if (battery.percentRemaining.rawValue < 10)
+                    if (battery.percentRemaining.rawValue < 15)
                         return qgcPal.colorRed
                     if (battery.percentRemaining.rawValue < 30)
                         return qgcPal.colorOrange
