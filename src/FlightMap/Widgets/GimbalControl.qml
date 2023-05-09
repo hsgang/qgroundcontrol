@@ -465,7 +465,7 @@ Rectangle {
                 id:             gimbalModePress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalMode(3)
+                    _activeVehicle.setGimbalRcTargeting()
                 }
             }
         }
