@@ -16017,7 +16017,7 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     <message>
         <location filename="../src/Vehicle/SysStatusSensorInfo.cc" line="111"/>
         <source>Normal</source>
-        <translation>보통</translation>
+        <translation>정상</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/SysStatusSensorInfo.cc" line="119"/>
