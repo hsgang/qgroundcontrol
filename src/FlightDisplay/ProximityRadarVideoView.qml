@@ -71,7 +71,7 @@ Item {
                 y:                      (_sectorViewEllipsoid.height / 2) - (height / 2)
                 text:                   proximityValues.rgRotationValueStrings[index]
                 font.family:            ScreenTools.demiboldFontFamily
-                visible:                !isNaN(proximityValues.rgRotationValues[index])
+                visible:                !isNaN(proximityValues.rgRotationValues[index]) && (proximityValues.rgRotationValues[index] < _root.range)
 
                 transform: Translate {
                     x: Math.cos(-Math.PI/2 + Math.PI/4 * index) * (proximityValues.rgRotationValues[index] * _ratio)
