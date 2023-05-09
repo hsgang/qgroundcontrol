@@ -145,6 +145,7 @@ GimbalController::_handleGimbalDeviceAttitudeStatus(const mavlink_message_t& mes
 
     if (gimbal_it == _potentialGimbals.end()) {
         qCDebug(GimbalLog) << "_handleGimbalDeviceAttitudeStatus for unknown device with component " << message.compid;
+        return;
     }
 
     mavlink_gimbal_device_attitude_status_t attitude_status;
@@ -162,6 +163,8 @@ GimbalController::_handleGimbalDeviceAttitudeStatus(const mavlink_message_t& mes
     gimbal_it->curRoll  = roll * (180.0f / M_PI);
     gimbal_it->curYaw   = yaw * (180.0f / M_PI);
 
+    gimbal_it->receivedAttitude = true;
+
     _checkComplete(*gimbal_it);
 }
 
@@ -171,22 +174,11 @@ GimbalController::_requestGimbalInformation(uint8_t compid)
     qCDebug(GimbalLog) << "_requestGimbalInformation(" << compid << ")";
 
     if(_vehicle) {
-        _vehicle->requestMessage(_requestMessageHandler, this,
-                                 compid, MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION);
+        _vehicle->sendMavCommand(compid,
+                                 MAV_CMD_REQUEST_MESSAGE,
+                                 false /* no error */,
+                                 MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION);
     }
-}
-
-void GimbalController::_requestMessageHandler(void* resultHandlerData,
-                                              MAV_RESULT commandResult,
-                                              Vehicle::RequestMessageResultHandlerFailureCode_t failureCode,
-                                              const mavlink_message_t& message)
-{
-    // GimbalController* self = (GimbalController*)resultHandlerData;
-
-    qCDebug(GimbalLog) << "_requestMessageHandler, commandResult: " << commandResult << ", failureCode: " << failureCode << "message id: " << message.msgid;
-
-    // Not sure what to do here, we already subscribed to GimbalInformation in general in case it
-    // arrives without us asking for it.
 }
 
 void GimbalController::_checkComplete(Gimbal& gimbal)
@@ -204,4 +196,5 @@ void GimbalController::_checkComplete(Gimbal& gimbal)
     gimbal.isComplete = true;
 
     _gimbals.push_back(&gimbal);
+    _vehicle->gimbalDataChanged();
 }
