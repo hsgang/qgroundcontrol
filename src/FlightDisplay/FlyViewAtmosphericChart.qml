@@ -1,4 +1,4 @@
-import QtQuick                  2.12
+import QtQuick                  2.15
 import QtQuick.Controls         1.2
 import QtQuick.Controls.Styles  1.4
 import QtQuick.Layouts          1.12
@@ -46,68 +46,58 @@ Item{
     property int   wnSpMin: _windSpdValue - 5
     property int   wnSpMax: _windSpdValue + 5
 
-    function getAltRange(){
-        var value = _vehicleAltitude
-        if(value > maxAltitude - 5){
-            maxAltitude = value + 5
-        }
-        else if(value < minAltitude + 5){
-            minAltitude = value - 5
+    function setAltRange(){
+        if(_vehicleAltitude > maxAltitude - 5){
+            maxAltitude = _vehicleAltitude + 5
+        } else if(_vehicleAltitude < minAltitude + 5){
+            minAltitude = _vehicleAltitude - 5
         }
     }
 
-    function getTempRange(){
-        var Value = _temperatureValue
-        if(Value > tempMax - 2){
-            tempMax = Value + 2
-        }
-        else if(Value < tempMin + 2){
-            tempMin = Value - 2
+    function setTempRange(){
+        if(_temperatureValue > tempMax - 2){
+            tempMax = _temperatureValue + 2
+        } else if(_temperatureValue < tempMin + 2){
+            tempMin = _temperatureValue - 2
         }
     }
 
-    function getHumiRange(){
-        var Value = _humidityValue
-        if(Value > humiMax - 5){
-            humiMax = Value + 5
-        }
-        else if(Value < humiMin + 5){
-            humiMin = Value - 5
+    function setHumiRange(){
+        if(_humidityValue > humiMax - 5){
+            humiMax = _humidityValue + 5
+        } else if(_humidityValue < humiMin + 5){
+            humiMin = _humidityValue - 5
         }
     }
 
-    function getPressRange(){
-        var Value = _pressureValue
-        if(Value > presMax - 5){
-            presMax = Value + 5
-        }
-        else if(Value < presMin + 5){
-            presMin = Value - 5
+    function setPressRange(){
+        if(_pressureValue > presMax - 5){
+            presMax = _pressureValue + 5
+        } else if(_pressureValue < presMin + 5){
+            presMin = _pressureValue - 5
         }
     }
 
-    function getWindSpdRange(){
-        var Value = _windSpdValue
-        if(Value > wnSpMax - 5){
-            wnSpMax = Value + 5
-        }
-        else if(Value < wnSpMin + 5){
-            wnSpMin = Value - 5
+    function setWindSpdRange(){
+        if(_windSpdValue > wnSpMax - 5){
+            wnSpMax = _windSpdValue + 5
+        } else if(_windSpdValue < wnSpMin + 5){
+            wnSpMin = _windSpdValue - 5
         }
     }
 
-    function atmosphericDataGet(){
+    function updateAtmosphericData(){
 
         var diffValue = Math.abs(_vehicleAltitude - preValue)
 
         if(diffValue >= diffGapValue) {
             preValue = _vehicleAltitude
 
-            getAltRange()
-            getTempRange()
-            getHumiRange()
-            getPressRange()
-            getWindSpdRange()
+            setAltRange()
+            setTempRange()
+            setHumiRange()
+            setPressRange()
+            setWindSpdRange()
 
             if(tempCheck.checked){
                 seriesTemp.append(_temperatureValue, _vehicleAltitude)
@@ -127,8 +117,6 @@ Item{
             if(tempCheck.checked || humiCheck.checked || presCheck.checked || windDirCheck.checked || windSpdCheck.checked){
                 count++
             }
-
-            //console.log("count :", count)
         }
     }
 
@@ -141,12 +129,22 @@ Item{
         maxAltitude = 0
         preValue = 0
         count = 0
+        tempMin = 0
+        tempMax = 0
+        humiMin = 0
+        humiMax = 0
+        presMin = 0
+        presMax = 0
+        wnDrMin = 0
+        wnDrMax = 360
+        wnSpMin = 0
+        wnSpMax = 0
         }
 
     Connections{
         target: _activeVehicle
         onAtmosphericValueChanged: {
-            atmosphericDataGet()            
+            updateAtmosphericData()
         }
     }
 
@@ -166,7 +164,7 @@ Item{
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             anchors.rightMargin: _toolsMargin
-            spacing: 2
+            spacing: ScreenTools.defaultFontPixelHeight / 4
 
             QGCCheckBox {
                 id: tempCheck
@@ -189,11 +187,8 @@ Item{
                 text: "WindSpd"
             }
 
-            QGCButton{
-                text: "Clear"
-                onClicked:  {
-                    clearChart()
-                }
+            Item{
+                height: ScreenTools.defaultFontPixelHeight
             }
 
             QGCLabel{
@@ -202,8 +197,8 @@ Item{
 
             QGCTextField{
                 id: intervalTextField
-                placeholderText: qsTr("Interval")
-                implicitWidth: ScreenTools.defaultFontPixelWidth * 8
+                placeholderText: qsTr("Alt Interval")
+                implicitWidth: parent.width//ScreenTools.defaultFontPixelWidth * 8
             }
 
             QGCButton{
@@ -220,6 +215,14 @@ Item{
             QGCLabel{
                 text: "Interval : " + diffGapValue
             }
+
+            QGCButton{
+                text: "Clear"
+                implicitWidth: parent.width
+                onClicked:  {
+                    clearChart()
+                }
+            }
         }
 
         Rectangle{
@@ -231,8 +234,6 @@ Item{
 
             ChartView{
                 id: customChartView
-                //title : "Atmospheric Profile Data"
-                //titleColor: qgcPal.text
                 anchors.fill: parent
                 antialiasing: true
                 backgroundColor: "transparent"
@@ -243,7 +244,6 @@ Item{
                     name: "Temperature"
                     visible: tempCheck.checked
                     markerSize: _toolsMargin
-
                     axisX: ValueAxis {
                         visible: tempCheck.checked
                         labelsColor: qgcPal.text

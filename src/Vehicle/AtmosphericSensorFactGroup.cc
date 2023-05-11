@@ -87,12 +87,11 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
         _handleAtmosphericValue(message);
         break;
 #endif
-
-//#if !defined(NO_ARDUPILOT_DIALECT)
-//    case MAVLINK_MSG_ID_WIND:
-//        _handleWind(message);
-//        break;
-//#endif
+#if !defined(NO_ARDUPILOT_DIALECT)
+    case MAVLINK_MSG_ID_WIND:
+        _handleWind(message);
+        break;
+#endif
     default:
         break;
     }
@@ -118,16 +117,16 @@ void AtmosphericSensorFactGroup::_handleData32(mavlink_message_t &message)
     int16_t extValue3Raw  = sP.extValue3Raw;
     int16_t extValue4Raw  = sP.extValue4Raw;
 
-    logCount()->setRawValue(logCountRaw);
-    temperature()->setRawValue(temperatureRaw);
-    humidity()->setRawValue(humidityRaw);
-    pressure()->setRawValue(pressureRaw);
-    windDir()->setRawValue(windDirRaw);
-    windSpd()->setRawValue(windSpdRaw);
-    extValue1()->setRawValue(extValue1Raw);
-    extValue2()->setRawValue(extValue2Raw);
-    extValue3()->setRawValue(extValue3Raw);
-    extValue4()->setRawValue(extValue4Raw);
+    if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
+    if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
+    if(humidityRaw)     {humidity()->setRawValue(humidityRaw);}
+    if(pressureRaw)     {pressure()->setRawValue(pressureRaw);}
+    if(windDirRaw)      {windDir()->setRawValue(windDirRaw);}
+    if(windSpdRaw)      {windSpd()->setRawValue(windSpdRaw);}
+    if(extValue1Raw)    {extValue1()->setRawValue(extValue1Raw);}
+    if(extValue2Raw)    {extValue2()->setRawValue(extValue2Raw);}
+    if(extValue3Raw)    {extValue3()->setRawValue(extValue3Raw);}
+    if(extValue4Raw)    {extValue4()->setRawValue(extValue4Raw);}
 
     status()->setRawValue(data32.type);
 }
@@ -184,18 +183,35 @@ void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
         int16_t extValue3Raw  = tP.extValue3Raw;
         int16_t extValue4Raw  = tP.extValue4Raw;
 
-        logCount()->setRawValue(logCountRaw);
-        temperature()->setRawValue(temperatureRaw);
-        humidity()->setRawValue(humidityRaw);
-        pressure()->setRawValue(pressureRaw);
-        windDir()->setRawValue(windDirRaw);
-        windSpd()->setRawValue(windSpdRaw);
-        extValue1()->setRawValue(extValue1Raw);
-        extValue2()->setRawValue(extValue2Raw);
-        extValue3()->setRawValue(extValue3Raw);
-        extValue4()->setRawValue(extValue4Raw);
+        if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
+        if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
+        if(humidityRaw)     {humidity()->setRawValue(humidityRaw);}
+        if(pressureRaw)     {pressure()->setRawValue(pressureRaw);}
+        if(windDirRaw)      {windDir()->setRawValue(windDirRaw);}
+        if(windSpdRaw)      {windSpd()->setRawValue(windSpdRaw);}
+        if(extValue1Raw)    {extValue1()->setRawValue(extValue1Raw);}
+        if(extValue2Raw)    {extValue2()->setRawValue(extValue2Raw);}
+        if(extValue3Raw)    {extValue3()->setRawValue(extValue3Raw);}
+        if(extValue4Raw)    {extValue4()->setRawValue(extValue4Raw);}
 
         status()->setRawValue(tunnel.payload_type);
     }
 }
+
+#if !defined(NO_ARDUPILOT_DIALECT)
+void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
+{
+    mavlink_wind_t wind;
+    mavlink_msg_wind_decode(&message, &wind);
+
+    // We don't want negative wind angles
+    float direction = wind.direction;
+    if (direction < 0) {
+        direction += 360;
+    }
+
+    if(wind.direction)  {windDir()->setRawValue(direction);}
+    if(wind.speed)      {windSpd()->setRawValue(wind.speed);}
+}
+#endif
 

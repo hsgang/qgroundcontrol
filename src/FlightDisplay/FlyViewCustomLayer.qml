@@ -200,8 +200,9 @@ Item {
     FlyViewAtmosphericSensorView{
         id:                         atmosphericSensorView
         anchors.margins:            _toolsMargin
-        anchors.top:                parent.top
-        anchors.topMargin:          _toolsMargin//ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 8 : ScreenTools.defaultFontPixelHeight * 11
+        //anchors.top:                parent.top
+        //anchors.topMargin:          _toolsMargin//ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 8 : ScreenTools.defaultFontPixelHeight * 11
+        anchors.verticalCenter:     parent.verticalCenter
         anchors.left:               parent.left
         anchors.leftMargin:         _idealWidth * 1.4
         visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
@@ -289,7 +290,7 @@ Item {
     FlyViewAtmosphericChart{
         id: flyViewChartWidget
         anchors.margins:        _toolsMargin
-        anchors.top:            parent.top
+        anchors.top:            telemetryPanel.bottom
         anchors.bottom:         attitudeIndicator.top
         anchors.right:          photoVideoControl.visible ? photoVideoControl.left : parent.right
         width:                  mainWindow.width * 0.4
