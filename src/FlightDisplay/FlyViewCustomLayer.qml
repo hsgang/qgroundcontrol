@@ -208,15 +208,15 @@ Item {
         visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     }
 
-    FlyViewGeneratorStatusView{
-        id:                         generatorStatusView
-        anchors.margins:            _toolsMargin
-        anchors.top:                parent.top
-        anchors.topMargin:          mapControl.pipState.state !== mapControl.pipState.pipState ? (atmosphericSensorView.visible ? _toolsMargin : _idealWidth) : _toolsMargin
-        anchors.left:               atmosphericSensorView.visible ? atmosphericSensorView.right : parent.left
-        anchors.leftMargin:         atmosphericSensorView.visible ? _toolsMargin : _idealWidth * 3
-        visible:                    QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue
-    }
+//    FlyViewGeneratorStatusView{
+//        id:                         generatorStatusView
+//        anchors.margins:            _toolsMargin
+//        anchors.top:                parent.top
+//        anchors.topMargin:          mapControl.pipState.state !== mapControl.pipState.pipState ? (atmosphericSensorView.visible ? _toolsMargin : _idealWidth) : _toolsMargin
+//        anchors.left:               atmosphericSensorView.visible ? atmosphericSensorView.right : parent.left
+//        anchors.leftMargin:         atmosphericSensorView.visible ? _toolsMargin : _idealWidth * 3
+//        visible:                    QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue
+//    }
 
     PhotoVideoControl {
         id:                         photoVideoControl
@@ -315,6 +315,23 @@ Item {
         }
     }
 
+    FlyViewVibrationStatus{
+        id:                         flyviewVibrationStatus
+        anchors.horizontalCenter:   parent.horizontalCenter
+        anchors.bottom:             attitudeIndicator.top
+        anchors.bottomMargin:       _toolsMargin
+        visible:                    false
+    }
+
+    FlyViewEKFStatus{
+        id:                         flyviewEKFStatus
+        anchors.left:               flyviewVibrationStatus.visible ? flyviewVibrationStatus.right : parent.horizontalCenter
+        anchors.leftMargin:         _toolsMargin
+        anchors.bottom:             attitudeIndicator.top
+        anchors.bottomMargin:       _toolsMargin
+        visible:                    false
+    }
+
     Component {
         id: quickViewControlDialogComponent
 
@@ -325,7 +342,7 @@ Item {
             GridLayout{
                 id:     quickViewControlStripGrid
                 flow:   GridLayout.TopToBottom
-                rows:   8
+                rows:   9
 
                 QGCSwitch {
                     checked:            photoVideoControl.visible
@@ -360,8 +377,13 @@ Item {
                 }
 
                 QGCSwitch {
-                    checked:            QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
-                    onClicked:          QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
+                    checked:            flyviewVibrationStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
+                    onClicked:          flyviewVibrationStatus.visible = !flyviewVibrationStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
+                }
+
+                QGCSwitch {
+                    checked:            flyviewEKFStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
+                    onClicked:          flyviewEKFStatus.visible = !flyviewEKFStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
                 }
 
                 QGCLabel{
@@ -386,7 +408,10 @@ Item {
                     text:               qsTr("Mount Control")
                 }
                 QGCLabel{
-                    text:               qsTr("External Power Status")
+                    text:               qsTr("Vibration Status")
+                }
+                QGCLabel{
+                    text:               qsTr("EKF Status")
                 }
             }
         }

@@ -196,7 +196,7 @@
         <file alias="QGroundControl/Controls/ToolIndicatorPage.qml">src/QmlControls/ToolIndicatorPage.qml</file>
         <file alias="QGroundControl/Controls/ToolStrip.qml">src/QmlControls/ToolStrip.qml</file>
         <file alias="QGroundControl/Controls/ToolStripHorizontal.qml">src/QmlControls/ToolStripHorizontal.qml</file>
-       	<file alias="QGroundControl/Controls/ToolStripHoverButton.qml">src/QmlControls/ToolStripHoverButton.qml</file>
+        <file alias="QGroundControl/Controls/ToolStripHoverButton.qml">src/QmlControls/ToolStripHoverButton.qml</file>
         <file alias="QGroundControl/Controls/TransectStyleComplexItemEditor.qml">src/PlanView/TransectStyleComplexItemEditor.qml</file>
         <file alias="QGroundControl/Controls/TransectStyleComplexItemStats.qml">src/PlanView/TransectStyleComplexItemStats.qml</file>
         <file alias="QGroundControl/Controls/TransectStyleComplexItemTabBar.qml">src/PlanView/TransectStyleComplexItemTabBar.qml</file>
@@ -318,6 +318,8 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewGeneratorStatusView.qml">src/FlightDisplay/FlyViewGeneratorStatusView.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewAtmosphericChart.qml">src/FlightDisplay/FlyViewAtmosphericChart.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewMissionProgress.qml">src/PlanView/FlyViewMissionProgress.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewVibrationStatus.qml">src/FlightDisplay/FlyViewVibrationStatus.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewEKFStatus.qml">src/FlightDisplay/FlyViewEKFStatus.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
@@ -385,6 +387,7 @@
         <file alias="Vehicle/GeneratorStatusFactGroup.json">src/Vehicle/GeneratorStatusFactGroup.json</file>
         <file>src/Vehicle/ExternalPowerStatusFactGroup.json</file>
         <file alias="GimbalController.SettingsGroup.json">src/Settings/GimbalController.SettingsGroup.json</file>
+        <file alias="Vehicle/EKFStatusFact.json">src/Vehicle/EKFStatusFact.json</file>
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/comm/APMArduSubMockLink.params</file>

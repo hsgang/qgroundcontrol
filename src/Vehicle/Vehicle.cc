@@ -106,6 +106,7 @@ const char* Vehicle::_gpsFactGroupName =                "gps";
 const char* Vehicle::_gps2FactGroupName =               "gps2";
 const char* Vehicle::_windFactGroupName =               "wind";
 const char* Vehicle::_vibrationFactGroupName =          "vibration";
+const char* Vehicle::_ekfStatusFactGroupName =          "ekfStatus";
 const char* Vehicle::_temperatureFactGroupName =        "temperature";
 const char* Vehicle::_clockFactGroupName =              "clock";
 const char* Vehicle::_setpointFactGroupName =           "setpoint";
@@ -180,6 +181,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _gps2FactGroup                (this)
     , _windFactGroup                (this)
     , _vibrationFactGroup           (this)
+    , _ekfStatusFactGroup           (this)
     , _temperatureFactGroup         (this)
     , _clockFactGroup               (this)
     , _setpointFactGroup            (this)
@@ -347,6 +349,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _gps2FactGroup                    (this)
     , _windFactGroup                    (this)
     , _vibrationFactGroup               (this)
+    , _ekfStatusFactGroup               (this)
     , _clockFactGroup                   (this)
     , _distanceSensorFactGroup          (this)
     , _localPositionFactGroup           (this)
@@ -484,6 +487,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_gps2FactGroup,              _gps2FactGroupName);
     _addFactGroup(&_windFactGroup,              _windFactGroupName);
     _addFactGroup(&_vibrationFactGroup,         _vibrationFactGroupName);
+    _addFactGroup(&_ekfStatusFactGroup,         _ekfStatusFactGroupName);
     _addFactGroup(&_temperatureFactGroup,       _temperatureFactGroupName);
     _addFactGroup(&_clockFactGroup,             _clockFactGroupName);
     _addFactGroup(&_setpointFactGroup,          _setpointFactGroupName);

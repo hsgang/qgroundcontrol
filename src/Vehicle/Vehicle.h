@@ -37,6 +37,7 @@
 #include "VehicleSetpointFactGroup.h"
 #include "VehicleTemperatureFactGroup.h"
 #include "VehicleVibrationFactGroup.h"
+#include "VehicleEKFStatusFactGroup.h"
 #include "VehicleEscStatusFactGroup.h"
 #include "VehicleEstimatorStatusFactGroup.h"
 #include "VehicleHygrometerFactGroup.h"
@@ -330,6 +331,7 @@ public:
     Q_PROPERTY(FactGroup*           gps2            READ gps2FactGroup              CONSTANT)
     Q_PROPERTY(FactGroup*           wind            READ windFactGroup              CONSTANT)
     Q_PROPERTY(FactGroup*           vibration       READ vibrationFactGroup         CONSTANT)
+    Q_PROPERTY(FactGroup*           ekfStatus       READ ekfStatusFactGroup         CONSTANT)
     Q_PROPERTY(FactGroup*           temperature     READ temperatureFactGroup       CONSTANT)
     Q_PROPERTY(FactGroup*           clock           READ clockFactGroup             CONSTANT)
     Q_PROPERTY(FactGroup*           setpoint        READ setpointFactGroup          CONSTANT)
@@ -729,6 +731,7 @@ public:
     FactGroup* gps2FactGroup                () { return &_gps2FactGroup; }
     FactGroup* windFactGroup                () { return &_windFactGroup; }
     FactGroup* vibrationFactGroup           () { return &_vibrationFactGroup; }
+    FactGroup* ekfStatusFactGroup           () { return &_ekfStatusFactGroup; }
     FactGroup* temperatureFactGroup         () { return &_temperatureFactGroup; }
     FactGroup* clockFactGroup               () { return &_clockFactGroup; }
     FactGroup* setpointFactGroup            () { return &_setpointFactGroup; }
@@ -1445,6 +1448,7 @@ private:
     VehicleGPS2FactGroup            _gps2FactGroup;
     VehicleWindFactGroup            _windFactGroup;
     VehicleVibrationFactGroup       _vibrationFactGroup;
+    VehicleEKFStatusFactGroup       _ekfStatusFactGroup;
     VehicleTemperatureFactGroup     _temperatureFactGroup;
     VehicleClockFactGroup           _clockFactGroup;
     VehicleSetpointFactGroup        _setpointFactGroup;
@@ -1506,6 +1510,7 @@ private:
     static const char* _gps2FactGroupName;
     static const char* _windFactGroupName;
     static const char* _vibrationFactGroupName;
+    static const char* _ekfStatusFactGroupName;
     static const char* _temperatureFactGroupName;
     static const char* _clockFactGroupName;
     static const char* _setpointFactGroupName;
