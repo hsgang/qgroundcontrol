@@ -381,21 +381,21 @@ SetupPage {
                     }
                 }
 
-                RowLayout {
-                    QGCButton {
-                        id:         bindButton
-                        text:       qsTr("Spektrum Bind")
-                        onClicked:  spektrumBindDialogComponent.createObject(mainWindow).open()
-                    }
+//                RowLayout {
+//                    QGCButton {
+//                        id:         bindButton
+//                        text:       qsTr("Spektrum Bind")
+//                        onClicked:  spektrumBindDialogComponent.createObject(mainWindow).open()
+//                    }
 
-                    QGCButton {
-                        text:       qsTr("Copy Trims")
-                        onClicked:  mainWindow.showMessageDialog(qsTr("Copy Trims"),
-                                                                 qsTr("Center your sticks and move throttle all the way down, then press Ok to copy trims. After pressing Ok, reset the trims on your radio back to zero."),
-                                                                 StandardButton.Ok | StandardButton.Cancel,
-                                                                 function() { controller.copyTrims() })
-                    }
-                }
+//                    QGCButton {
+//                        text:       qsTr("Copy Trims")
+//                        onClicked:  mainWindow.showMessageDialog(qsTr("Copy Trims"),
+//                                                                 qsTr("Center your sticks and move throttle all the way down, then press Ok to copy trims. After pressing Ok, reset the trims on your radio back to zero."),
+//                                                                 StandardButton.Ok | StandardButton.Cancel,
+//                                                                 function() { controller.copyTrims() })
+//                    }
+//                }
             } // Column - Left Column
 
             Item {
