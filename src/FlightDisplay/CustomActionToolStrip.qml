@@ -35,7 +35,10 @@ ToolStripAction {
             id: _root
             spacing:    ScreenTools.defaultFontPixelWidth * 0.5
 
-            QGCLabel { text: qsTr("Custom Action:") }
+            QGCLabel {
+                text: qsTr("Custom Action")
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
 
             Repeater {
                 model: manager.actions
