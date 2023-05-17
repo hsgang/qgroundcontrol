@@ -73,8 +73,8 @@ Item {
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            source:             "/qmlimages/alarm.svg"
-            sourceSize.height:  height * 0.8
+            source:             "/InstrumentValueIcons/notification.svg"
+            sourceSize.height:  height * 0.7
             fillMode:           Image.PreserveAspectFit
             color:              getMessageColor()
             visible:            _activeVehicle //!criticalMessageIcon.visible
