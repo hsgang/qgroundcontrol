@@ -2607,12 +2607,12 @@ Click Ok to start calibration.</source>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="684"/>
         <source>CompassMot</source>
-        <translation>지자기센서</translation>
+        <translation>모터 간섭보정</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="687"/>
         <source>CompassMot - Compass Motor Interference Calibration</source>
-        <translation>지자기 센서 - 지자기 모터 간섭 캘리브레이션</translation>
+        <translation>모터 지자기 간섭보정 - 지자기 모터 간섭 캘리브레이션</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="707"/>
