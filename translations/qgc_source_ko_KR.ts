@@ -7705,7 +7705,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="56"/>
         <source>Action</source>
-        <translation>행동</translation>
+        <translation>명령</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="58"/>
@@ -7821,6 +7821,19 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="536"/>
         <source>Internal error: unknown actionCode</source>
         <translation>내부오류: 알 수 없는 액션코드입니다</translation>
+    </message>
+</context>
+<context>
+    <name>CustomActionToolStrip</name>
+    <message>
+        <location filename="../src/FlightDisplay/CustomActionToolStrip.qml" line="21"/>
+        <source>Custom</source>
+        <translation>커스텀</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/CustomActionToolStrip.qml" line="38"/>
+        <source>Custom Action</source>
+        <translation>사용자 지정 명령</translation>
     </message>
 </context>
 <context>
@@ -10049,7 +10062,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/MissionManager/MissionSettingsItem.cc" line="292"/>
         <source>L</source>
-        <translation>출발</translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/MissionSettingsItem.cc" line="292"/>
