@@ -320,6 +320,7 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewMissionProgress.qml">src/PlanView/FlyViewMissionProgress.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewVibrationStatus.qml">src/FlightDisplay/FlyViewVibrationStatus.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewEKFStatus.qml">src/FlightDisplay/FlyViewEKFStatus.qml</file>
+        <file alias="QGroundControl/FactControls/FactSpinBox.qml">src/QmlControls/FactSpinBox.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
