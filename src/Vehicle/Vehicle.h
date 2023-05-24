@@ -323,6 +323,7 @@ public:
     Q_PROPERTY(Fact* distanceToGCS      READ distanceToGCS      CONSTANT)
     Q_PROPERTY(Fact* hobbs              READ hobbs              CONSTANT)
     Q_PROPERTY(Fact* throttlePct        READ throttlePct        CONSTANT)
+    Q_PROPERTY(Fact* imuTemp            READ imuTemp            CONSTANT)
     Q_PROPERTY(Fact* gimbalTargetSetLatitude   READ gimbalTargetSetLatitude   CONSTANT)
     Q_PROPERTY(Fact* gimbalTargetSetLongitude  READ gimbalTargetSetLongitude  CONSTANT)
     Q_PROPERTY(Fact* gimbalTargetSetAltitude   READ gimbalTargetSetAltitude   CONSTANT)
@@ -723,6 +724,7 @@ public:
     Fact* distanceToGCS                     () { return &_distanceToGCSFact; }
     Fact* hobbs                             () { return &_hobbsFact; }
     Fact* throttlePct                       () { return &_throttlePctFact; }
+    Fact* imuTemp                           () { return &_imuTempFact; }
     Fact* gimbalTargetSetLatitude           () { return &_gimbalTargetSetLatitudeFact; }
     Fact* gimbalTargetSetLongitude          () { return &_gimbalTargetSetLongitudeFact; }
     Fact* gimbalTargetSetAltitude           () { return &_gimbalTargetSetAltitudeFact; }
@@ -1122,6 +1124,7 @@ private:
 #endif
     void _handleCameraImageCaptured     (const mavlink_message_t& message);
     void _handleADSBVehicle             (const mavlink_message_t& message);
+    void _handleRawImuTemp              (mavlink_message_t& message);
     void _missionManagerError           (int errorCode, const QString& errorMsg);
     void _geoFenceManagerError          (int errorCode, const QString& errorMsg);
     void _rallyPointManagerError        (int errorCode, const QString& errorMsg);
@@ -1440,6 +1443,7 @@ private:
     Fact _distanceToGCSFact;
     Fact _hobbsFact;
     Fact _throttlePctFact;
+    Fact _imuTempFact;
     Fact _gimbalTargetSetLatitudeFact;
     Fact _gimbalTargetSetLongitudeFact;
     Fact _gimbalTargetSetAltitudeFact;
@@ -1502,6 +1506,7 @@ private:
     static const char* _distanceToGCSFactName;
     static const char* _hobbsFactName;
     static const char* _throttlePctFactName;
+    static const char* _imuTempFactName;
     static const char* _gimbalTargetSetLatitudeFactName;
     static const char* _gimbalTargetSetLongitudeFactName;
     static const char* _gimbalTargetSetAltitudeFactName;

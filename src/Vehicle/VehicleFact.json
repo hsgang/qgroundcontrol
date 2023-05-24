@@ -138,6 +138,12 @@
     "units":            "%"
 },
 {
+    "name":             "imuTemp",
+    "shortDesc": "IMU Temperature",
+    "type":             "int16",
+    "units":            "°C"
+},
+{
     "name":             "gimbalTargetSetLatitude",
     "shortDesc":        "Latitude saved to point gimbal to",
     "type":             "double",
