@@ -1,6 +1,6 @@
 #pragma once
 
-#define MAVLINK_MSG_ID_ATMOSPHERIC_VALUE
+#define USE_ATMOSPHERIC_VALUE
 
 #include "FactGroup.h"
 
@@ -57,7 +57,7 @@ private:
     void _handleData32              (mavlink_message_t& message);
     void _handleTunnel              (mavlink_message_t& message);
     void _handleScaledPressure      (mavlink_message_t& message);
-#if defined(MAVLINK_MSG_ID_ATMOSPHERIC_VALUE)
+#if defined(USE_ATMOSPHERIC_VALUE)
     void _handleAtmosphericValue    (mavlink_message_t& message);
 #endif
 #if !defined(NO_ARDUPILOT_DIALECT)
