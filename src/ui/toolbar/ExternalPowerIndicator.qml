@@ -27,21 +27,18 @@ Item {
     property bool showIndicator:    true
 
     property var  _activeVehicle:   QGroundControl.multiVehicleManager.activeVehicle
-    property real _acInputVolatage1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage1.rawValue.toFixed(1) : NaN
-    property real _acInputVolatage2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage2.rawValue.toFixed(1) : NaN
-    property real _acInputVolatage3Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage3.rawValue.toFixed(1) : NaN
-    property real _dcOutputVolatage1Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage1.rawValue.toFixed(1) : NaN
-    property real _dcOutputVolatage2Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage2.rawValue.toFixed(1) : NaN
-    property real _dcOutputVolatage3Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage3.rawValue.toFixed(1) : NaN
-    property real _dcOutputCurrent1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent1.rawValue.toFixed(1) : NaN
-    property real _dcOutputCurrent2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent2.rawValue.toFixed(1) : NaN
-    property real _dcOutputCurrent3Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent3.rawValue.toFixed(1) : NaN
-    property real _temperatureValue:        _activeVehicle ? _activeVehicle.externalPowerStatus.temperature.rawValue.toFixed(1) : NaN
-    property real _batteryVoltageValue:     _activeVehicle ? _activeVehicle.externalPowerStatus.batteryVoltage.rawValue.toFixed(1) : NaN
-    property real _batteryChangeValue:      _activeVehicle ? _activeVehicle.externalPowerStatus.batteryChange.rawValue.toFixed(0) : NaN
+    property string _acInputVolatage1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage1.rawValue.toFixed(1) : "--.-"
+    property string _acInputVolatage2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage2.rawValue.toFixed(1) : "--.-"
+    property string _dcOutputVolatage1Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage1.rawValue.toFixed(1) : "--.-"
+    property string _dcOutputVolatage2Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage2.rawValue.toFixed(1) : "--.-"
+    property string _dcOutputCurrent1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent1.rawValue.toFixed(1) : "--.-"
+    property string _dcOutputCurrent2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent2.rawValue.toFixed(1) : "--.-"
+    property string _temperatureValue:        _activeVehicle ? _activeVehicle.externalPowerStatus.temperature.rawValue.toFixed(1) : "--.-"
+    property string _batteryVoltageValue:     _activeVehicle ? _activeVehicle.externalPowerStatus.batteryVoltage.rawValue.toFixed(1) : "--.-"
+    property string _batteryChangeValue:      _activeVehicle ? _activeVehicle.externalPowerStatus.batteryChange.rawValue.toFixed(0) : "--.-"
 
-    property real _meanACInput : ((_acInputVolatage1Value + _acInputVolatage2Value + _acInputVolatage3Value) / 3).toFixed(1)
-    property real _meanDCOutput: (((_dcOutputVolatage1Value + _dcOutputVolatage2Value + _dcOutputVolatage3Value) / 3) * ((_dcOutputCurrent1Value + _dcOutputCurrent2Value + _dcOutputCurrent3Value) / 3)).toFixed(1)
+    property real _meanACInput : ((_acInputVolatage1Value + _acInputVolatage2Value) / 2).toFixed(1)
+    property real _meanDCOutput: ((_dcOutputVolatage1Value + _dcOutputVolatage2Value / 2) * (_dcOutputCurrent1Value + _dcOutputCurrent2Value / 2)).toFixed(1)
 
     Component {
         id: extPowerStatusInfo
@@ -78,20 +75,14 @@ Item {
                     QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage1.rawValue.toFixed(1) + " V": "No data"}
                     QGCLabel { text: qsTr("AC2_V"); opacity: 0.7}
                     QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage2.rawValue.toFixed(1) + " V": "No data"}
-                    QGCLabel { text: qsTr("AC3_V"); opacity: 0.7}
-                    QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage3.rawValue.toFixed(1) + " V": "No data"}
                     QGCLabel { text: qsTr("DC1_V"); opacity: 0.7}
                     QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage1.rawValue.toFixed(1) + " V" : "No data"}
                     QGCLabel { text: qsTr("DC2_V"); opacity: 0.7}
                     QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage2.rawValue.toFixed(1) + " V" : "No data"}
-                    QGCLabel { text: qsTr("DC3_V"); opacity: 0.7}
-                    QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage3.rawValue.toFixed(1) + " V" : "No data"}
                     QGCLabel { text: qsTr("DC1_C"); opacity: 0.7}
                     QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent1.rawValue.toFixed(1) + " A" : "No data"}
                     QGCLabel { text: qsTr("DC2_C"); opacity: 0.7}
                     QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent2.rawValue.toFixed(1) + " A" : "No data"}
-                    QGCLabel { text: qsTr("DC3_C"); opacity: 0.7}
-                    QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent3.rawValue.toFixed(1) + " A" : "No data"}
                     QGCLabel { text: qsTr("TEMP"); opacity: 0.7}
                     QGCLabel { text: _activeVehicle ? _activeVehicle.externalPowerStatus.temperature.rawValue.toFixed(1) + " ℃" : "No data"}
                     QGCLabel { text: qsTr("BATT"); opacity: 0.7}
