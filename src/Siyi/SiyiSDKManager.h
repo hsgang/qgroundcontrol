@@ -83,6 +83,8 @@ private:
     LinkManager*            _linkMgr;
     AppSettings*            _appSettings;
 
+    bool portAvailable = false;
+
     enum class SiyiCommandId {
         HARDWARE_ID = 0x40,
         ACQUIRE_SYSTEM_SETTINGS = 0x16,
