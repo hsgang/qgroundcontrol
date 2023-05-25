@@ -4,10 +4,14 @@
     "QGC.MetaData.Facts":
 [
 {
+    "name":             "targetNum",
+    "shortDesc":        "targetNum",
+    "type":             "Uint8"
+},
+{
     "name":             "angleX",
     "shortDesc":        "AngleX",
     "type":             "double",
-    "default":          null,
     "decimalPlaces":    3,
     "units":            "rad"
 },
@@ -15,9 +19,60 @@
     "name":             "angleY",
     "shortDesc":        "AngleY",
     "type":             "double",
-    "default":          null,
     "decimalPlaces":    3,
     "units":            "rad"
+},
+{
+    "name":             "distance",
+    "shortDesc":        "Distance",
+    "type":             "double",
+    "decimalPlaces":    1,
+    "units":            "m"
+},
+{
+    "name":             "sizeX",
+    "shortDesc":        "SizeX",
+    "type":             "double",
+    "decimalPlaces":    3,
+    "units":            "rad"
+},
+{
+    "name":             "sizeY",
+    "shortDesc":        "SizeX",
+    "type":             "double",
+    "decimalPlaces":    3,
+    "units":            "rad"
+},
+{
+    "name":             "x",
+    "shortDesc":        "X",
+    "type":             "double",
+    "decimalPlaces":    2,
+    "units":            "m"
+},
+{
+    "name":             "y",
+    "shortDesc":        "Y",
+    "type":             "double",
+    "decimalPlaces":    2,
+    "units":            "m"
+},
+{
+    "name":             "z",
+    "shortDesc":        "Z",
+    "type":             "double",
+    "decimalPlaces":    2,
+    "units":            "m"
+},
+{
+    "name":             "type",
+    "shortDesc":        "Type",
+    "type":             "uint8"
+},
+{
+    "name":             "postionValid",
+    "shortDesc":        "PostionValid",
+    "type":             "uint8"
 }
 ]
 }
