@@ -310,7 +310,7 @@ ApplicationWindow {
         edge:           Qt.LeftEdge
         interactive:    true
         dragMargin:     0
-        visible:        false        
+        visible:        false
 
         property var    _mainWindow:       mainWindow
         property real   _toolButtonHeight: ScreenTools.defaultFontPixelHeight * 3
