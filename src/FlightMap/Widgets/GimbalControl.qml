@@ -89,40 +89,33 @@ Rectangle {
     property bool   _canShootInCurrentMode:                     _mavlinkCamera ? _mavlinkCameraCanShoot : _videoStreamCanShoot || _simpleCameraAvailable
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
-    property real _gimbalRollAngle:                   _activeVehicle ? _activeVehicle.gimbalRoll.toFixed(2) : 0
-    property real _gimbalPitchAngle:                  _activeVehicle ? _activeVehicle.gimbalPitch.toFixed(2) : 0
-    property real _gimbalYawAngle:                    _activeVehicle ? _activeVehicle.gimbalYaw.toFixed(2) : 0
-
-    property string _gimbalRollString:                 _gimbalRollAngle ? _gimbalRollAngle.toString() : "--"
-    property string _gimbalPitchString:                _gimbalPitchAngle ? _gimbalPitchAngle.toString() : "--"
-    property string _gimbalYawString:                  _gimbalYawAngle ? _gimbalYawAngle.toString() : "--"
+    property string   _gimbalRollString:        _activeVehicle ? _activeVehicle.gimbalRoll.toFixed(2) : "--"
+    property string   _gimbalPitchString:       _activeVehicle ? _activeVehicle.gimbalPitch.toFixed(2) : "--"
+    property string   _gimbalYawString:         _activeVehicle ? _activeVehicle.gimbalYaw.toFixed(2) : "--"
 
     property double _localPitch: 0.0
     property double _localYaw: 0.0
     property int    _gimbalModeStatus: 0
 
-    Timer {
-        id:             simplePhotoCaptureTimer
-        interval:       500
-        onTriggered:    _simplePhotoCaptureIsIdle = true
-    }
-
     Rectangle{
         anchors.bottom: parent.bottom
-        //anchors.horizontalCenter: parent.horizontalCenter
-        width:          parent.width
+        anchors.horizontalCenter: parent.horizontalCenter
+        width:          gimbalAngleValueRow.width
         height:         gimbalAngleValueRow.height
         color:          "transparent"
-        Row{
+        RowLayout{
             id: gimbalAngleValueRow
             QGCLabel{
                 text: " R: " +_gimbalRollString
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
             }
             QGCLabel{
                 text: " P: " +_gimbalPitchString
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
             }
             QGCLabel{
                 text: " Y: " +_gimbalYawString
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
             }
         }
     }

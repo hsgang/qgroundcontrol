@@ -43,16 +43,22 @@ GimbalController::_handleHeartbeat(const mavlink_message_t& message)
     auto& gimbal = _potentialGimbals[message.compid];
 
     if (!gimbal.receivedInformation && gimbal.requestInformationRetries > 0) {
-        //_requestGimbalInformation(message.compid);
+        _requestGimbalInformation(message.compid);
         --gimbal.requestInformationRetries;
     }
 
     if (!gimbal.receivedStatus && gimbal.requestStatusRetries > 0) {
+        qCDebug(GimbalLog) << "_requestGimbalStatus(" << message.compid << ")";
         _vehicle->sendMavCommand(message.compid,
                                  MAV_CMD_SET_MESSAGE_INTERVAL,
                                  false /* no error */,
                                  MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS,
-                                 0 /* request default rate */);
+                                 200000, /* 200ms / 5Hz */
+                                 0,
+                                 0,
+                                 0,
+                                 0,
+                                 1 );
         --gimbal.requestStatusRetries;
     }
 
@@ -165,6 +171,10 @@ GimbalController::_handleGimbalDeviceAttitudeStatus(const mavlink_message_t& mes
 
     gimbal_it->receivedAttitude = true;
 
+    emit _vehicle->gimbalPitchChanged();
+    emit _vehicle->gimbalRollChanged();
+    emit _vehicle->gimbalYawChanged();
+
     _checkComplete(*gimbal_it);
 }
 
@@ -190,6 +200,9 @@ void GimbalController::_checkComplete(Gimbal& gimbal)
 
     if (!gimbal.receivedInformation || !gimbal.receivedStatus || !gimbal.receivedAttitude) {
         // Not complete yet.
+        qCDebug(GimbalLog) << "Information : " << gimbal.receivedInformation
+                           << " / Status : " << gimbal.receivedStatus
+                           << " / Attitude : " << gimbal.receivedAttitude ;
         return;
     }
 
