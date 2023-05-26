@@ -1,0 +1,56 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "temperature",
+    "shortDesc": "Temperature",
+    "type":             "double",
+    "decimalPlaces":    2,
+    "units":            "°C"
+},
+{
+    "name":             "humidity",
+    "shortDesc": "Humidity",
+    "type":             "double",
+    "decimalPlaces":    2,
+    "units":            "%"
+},
+{
+    "name":             "windSpeed",
+    "shortDesc": "WindSpeed",
+    "type":             "double",
+    "decimalPlaces":    1,
+    "units":            "m/s"
+},
+{
+    "name":             "windDirection",
+    "shortDesc": "WindDirection",
+    "type":             "double",
+    "decimalPlaces":    1,
+    "units":            "°"
+},
+{
+    "name":             "pm2_5",
+    "shortDesc": "PM2.5",
+    "type":             "uint16",
+    "decimalPlaces":    0,
+    "units":            "ug/㎥"
+},
+{
+    "name":             "pm10",
+    "shortDesc": "PM10",
+    "type":             "uint16",
+    "decimalPlaces":    0,
+    "units":            "ug/㎥"
+},
+{
+    "name":             "radiation",
+    "shortDesc": "Radiation",
+    "type":             "double",
+    "decimalPlaces":    0,
+    "units":            "uSv/h"
+}
+]
+}

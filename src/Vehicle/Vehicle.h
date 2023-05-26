@@ -52,6 +52,7 @@
 #include "VehicleLandingTargetFactGroup.h"
 #include "HealthAndArmingCheckReport.h"
 #include "ExternalPowerStatusFactGroup.h"
+#include "TunnelingDataFactGroup.h"
 
 class Actuators;
 class EventHandler;
@@ -346,6 +347,7 @@ public:
     Q_PROPERTY(FactGroup*           hygrometer      READ hygrometerFactGroup        CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
+    Q_PROPERTY(FactGroup*           tunnelingData   READ tunnelingDataFactGroup     CONSTANT)
     Q_PROPERTY(FactGroup*           generatorStatus READ generatorStatusFactGroup   CONSTANT)
     Q_PROPERTY(FactGroup*           externalPowerStatus READ externalPowerStatusFactGroup CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
@@ -748,6 +750,7 @@ public:
     FactGroup* hygrometerFactGroup          () { return &_hygrometerFactGroup; }
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
     FactGroup* atmosphericSensorFactGroup   () { return &_atmosphericSensorFactGroup; }
+    FactGroup* tunnelingDataFactGroup       () { return &_tunnelingDataFactGroup; }
     FactGroup* generatorStatusFactGroup     () { return &_generatorStatusFactGroup; }
     FactGroup* externalPowerStatusFactGroup () { return &_externalPowerStatusFactGroup; }
     FactGroup* landingTargetFactGroup       () { return &_landingTargetFactGroup; }
@@ -1008,6 +1011,7 @@ signals:
     void loadProgressChanged            (float value);
 
     void atmosphericValueChanged        ();
+    void tunnelingDataValueChanged      ();
 
     /// New RC channel values coming from RC_CHANNELS message
     ///     @param channelCount Number of available channels, cMaxRcChannels max
@@ -1468,6 +1472,7 @@ private:
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
     AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
+    TunnelingDataFactGroup          _tunnelingDataFactGroup;
     GeneratorStatusFactGroup        _generatorStatusFactGroup;
     ExternalPowerStatusFactGroup    _externalPowerStatusFactGroup;
     VehicleLandingTargetFactGroup   _landingTargetFactGroup;
@@ -1531,6 +1536,7 @@ private:
     static const char* _hygrometerFactGroupName;
     static const char* _terrainFactGroupName;
     static const char* _atmosphericSensorFactGroupName;
+    static const char* _tunnelingDataFactGroupName;
     static const char* _generatorStatusFactGroupName;
     static const char* _externalPowerStatusFactGroupName;
     static const char* _landingTargetFactGroupName;

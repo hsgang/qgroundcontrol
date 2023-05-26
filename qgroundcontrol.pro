@@ -440,6 +440,7 @@ HEADERS += \
     src/Vehicle/AtmosphericSensorFactGroup.h \
     src/Vehicle/ExternalPowerStatusFactGroup.h \
     src/Vehicle/GeneratorStatusFactGroup.h \
+    src/Vehicle/TunnelingDataFactGroup.h \
     src/Vehicle/VehicleEKFStatusFactGroup.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
     src/Vehicle/VehicleLandingTargetFactGroup.h \
@@ -459,6 +460,7 @@ SOURCES += \
     src/Vehicle/ExternalPowerStatusFactGroup.cc \
     src/Vehicle/GeneratorStatusFactGroup.cc \
     src/QmlControls/CustomActionManager.cc \
+    src/Vehicle/TunnelingDataFactGroup.cc \
     src/Vehicle/VehicleEKFStatusFactGroup.cc \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/Vehicle/VehicleLandingTargetFactGroup.cc \
