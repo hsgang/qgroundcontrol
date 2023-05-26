@@ -28,7 +28,7 @@ void NTRIP::setToolbox(QGCToolbox* toolbox)
 
     NTRIPSettings* settings = qgcApp()->toolbox()->settingsManager()->ntripSettings();
     if (settings->ntripServerConnectEnabled()->rawValue().toBool()) {
-        qCDebug(NTRIPLog) << settings->ntripEnableVRS()->rawValue().toBool();
+        qCDebug(NTRIPLog) << "NTRIP enableVRS : " << settings->ntripEnableVRS()->rawValue().toBool();
         _rtcmMavlink = new RTCMMavlink(*toolbox);
 
         _tcpLink = new NTRIPTCPLink(settings->ntripServerHostAddress()->rawValue().toString(),
