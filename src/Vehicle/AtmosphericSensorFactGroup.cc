@@ -82,7 +82,7 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     case MAVLINK_MSG_ID_TUNNEL:
         _handleTunnel(message);
         break;
-#if defined(MAVLINK_MSG_ID_ATMOSPHERIC_VALUE)
+#if defined(USE_ATMOSPHERIC_VALUE)
     case MAVLINK_MSG_ID_ATMOSPHERIC_VALUE:
         _handleAtmosphericValue(message);
         break;
@@ -147,7 +147,7 @@ void AtmosphericSensorFactGroup::_handleHygrometerSensor(mavlink_message_t& mess
     humidity()->setRawValue((hygrometer.humidity) * 0.01);
 }
 
-#if defined(MAVLINK_MSG_ID_ATMOSPHERIC_VALUE)
+#if defined(USE_ATMOSPHERIC_VALUE)
 void AtmosphericSensorFactGroup::_handleAtmosphericValue(mavlink_message_t& message)
 {
     mavlink_atmospheric_value_t atmospheric;
@@ -167,34 +167,36 @@ void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
     mavlink_tunnel_t tunnel;
     mavlink_msg_tunnel_decode(&message, &tunnel);
 
-    if(tunnel.payload_type == 300){
-        struct sensor_data32_Payload tP;
+    switch(tunnel.payload_type){
+        case 300:
+            struct sensor_data32_Payload tP;
 
-        memcpy(&tP, &tunnel.payload, sizeof(tP));
+            memcpy(&tP, &tunnel.payload, sizeof(tP));
 
-        float logCountRaw     = tP.logCountRaw;
-        float temperatureRaw  = tP.temperatureRaw;
-        float humidityRaw     = tP.humidityRaw;
-        float pressureRaw     = tP.pressureRaw;
-        float windDirRaw      = tP.windDirRaw;
-        float windSpdRaw      = tP.windSpdRaw;
-        int16_t extValue1Raw  = tP.extValue1Raw;
-        int16_t extValue2Raw  = tP.extValue2Raw;
-        int16_t extValue3Raw  = tP.extValue3Raw;
-        int16_t extValue4Raw  = tP.extValue4Raw;
+            float logCountRaw     = tP.logCountRaw;
+            float temperatureRaw  = tP.temperatureRaw;
+            float humidityRaw     = tP.humidityRaw;
+            float pressureRaw     = tP.pressureRaw;
+            float windDirRaw      = tP.windDirRaw;
+            float windSpdRaw      = tP.windSpdRaw;
+            int16_t extValue1Raw  = tP.extValue1Raw;
+            int16_t extValue2Raw  = tP.extValue2Raw;
+            int16_t extValue3Raw  = tP.extValue3Raw;
+            int16_t extValue4Raw  = tP.extValue4Raw;
 
-        if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
-        if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
-        if(humidityRaw)     {humidity()->setRawValue(humidityRaw);}
-        if(pressureRaw)     {pressure()->setRawValue(pressureRaw);}
-        if(windDirRaw)      {windDir()->setRawValue(windDirRaw);}
-        if(windSpdRaw)      {windSpd()->setRawValue(windSpdRaw);}
-        if(extValue1Raw)    {extValue1()->setRawValue(extValue1Raw);}
-        if(extValue2Raw)    {extValue2()->setRawValue(extValue2Raw);}
-        if(extValue3Raw)    {extValue3()->setRawValue(extValue3Raw);}
-        if(extValue4Raw)    {extValue4()->setRawValue(extValue4Raw);}
+            if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
+            if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
+            if(humidityRaw)     {humidity()->setRawValue(humidityRaw);}
+            if(pressureRaw)     {pressure()->setRawValue(pressureRaw);}
+            if(windDirRaw)      {windDir()->setRawValue(windDirRaw);}
+            if(windSpdRaw)      {windSpd()->setRawValue(windSpdRaw);}
+            if(extValue1Raw)    {extValue1()->setRawValue(extValue1Raw);}
+            if(extValue2Raw)    {extValue2()->setRawValue(extValue2Raw);}
+            if(extValue3Raw)    {extValue3()->setRawValue(extValue3Raw);}
+            if(extValue4Raw)    {extValue4()->setRawValue(extValue4Raw);}
 
-        status()->setRawValue(tunnel.payload_type);
+            status()->setRawValue(tunnel.payload_type);
+            break;
     }
 }
 
@@ -204,7 +206,6 @@ void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
     mavlink_wind_t wind;
     mavlink_msg_wind_decode(&message, &wind);
 
-    // We don't want negative wind angles
     float direction = wind.direction;
     if (direction < 0) {
         direction += 360;

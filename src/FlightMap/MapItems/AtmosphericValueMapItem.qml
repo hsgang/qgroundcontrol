@@ -71,26 +71,43 @@ MapQuickItem {
                     anchors.margins:            ScreenTools.defaultFontPixelHeight
                     columnSpacing:              ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter:   parent.horizontalCenter
-                    //anchors.verticalCenter:     atmosphericValueColumn.verticalCenter
                     columns: 2
 
                     QGCLabel { text: qsTr("ALT"); opacity: 0.7}
-                    QGCLabel { text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"}
+                    QGCLabel {
+                        text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"
+                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 11
+                    }
 
                     QGCLabel { text: qsTr("TMP"); opacity: 0.7}
-                    QGCLabel { text: _temperatureValue ? _temperatureValue +" ℃" : "No data"}
+                    QGCLabel {
+                        text: _temperatureValue ? _temperatureValue +" ℃" : "No data"
+                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 11
+                    }
 
                     QGCLabel { text: qsTr("HMD"); opacity: 0.7}
-                    QGCLabel { text: _humidityValue ? _humidityValue + " Rh%" : "No data"}
+                    QGCLabel {
+                        text: _humidityValue ? _humidityValue + " Rh%" : "No data"
+                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 11
+                    }
 
                     QGCLabel { text: qsTr("PRS"); opacity: 0.7}
-                    QGCLabel { text: _pressureValue ? _pressureValue + " hPa" : "No data"}
+                    QGCLabel {
+                        text: _pressureValue ? _pressureValue + " hPa" : "No data"
+                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 11
+                    }
 
                     QGCLabel { text: qsTr("W/D"); opacity: 0.7}
-                    QGCLabel { text: _windDirValue ? _windDirValue + " deg" : "No data"}
+                    QGCLabel {
+                        text: _windDirValue ? _windDirValue + " deg" : "No data"
+                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 11
+                    }
 
                     QGCLabel { text: qsTr("W/S"); opacity: 0.7}
-                    QGCLabel { text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " "+QGroundControl.unitsConversion.appSettingsSpeedUnitsString : "No data"}
+                    QGCLabel {
+                        text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " "+QGroundControl.unitsConversion.appSettingsSpeedUnitsString : "No data"
+                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 11
+                    }
                 }
             }
         }
