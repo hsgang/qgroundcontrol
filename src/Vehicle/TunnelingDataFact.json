@@ -18,6 +18,13 @@
     "units":            "%"
 },
 {
+    "name":             "pressure",
+    "shortDesc": "Pressure",
+    "type":             "double",
+    "decimalPlaces":    2,
+    "units":            "hPa"
+},
+{
     "name":             "windSpeed",
     "shortDesc": "WindSpeed",
     "type":             "double",
@@ -32,7 +39,14 @@
     "units":            "°"
 },
 {
-    "name":             "pm2_5",
+    "name":             "pm1p0",
+    "shortDesc": "PM1.0",
+    "type":             "uint16",
+    "decimalPlaces":    0,
+    "units":            "ug/㎥"
+},
+{
+    "name":             "pm2p5",
     "shortDesc": "PM2.5",
     "type":             "uint16",
     "decimalPlaces":    0,
@@ -44,13 +58,6 @@
     "type":             "uint16",
     "decimalPlaces":    0,
     "units":            "ug/㎥"
-},
-{
-    "name":             "radiation",
-    "shortDesc": "Radiation",
-    "type":             "double",
-    "decimalPlaces":    0,
-    "units":            "uSv/h"
 }
 ]
 }
