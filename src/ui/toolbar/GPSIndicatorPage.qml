@@ -135,6 +135,38 @@ ToolIndicatorPage {
         heading:        qsTr("RTK GPS Settings")
         showDivider:    false
 
+        RowLayout {
+            Layout.columnSpan:  3
+
+            QGCLabel {
+                Layout.fillWidth:   true;
+                text:               qsTr("NTRIP Connect")
+                enabled:            true
+            }
+
+            QGCButton {
+                id:         ntripConnectButton
+                text:       qsTr("Connect") //enabled ? qsTr("Save") : qsTr("Not Yet Valid")
+                //enabled:    QGroundControl.ntrip.connectNTRIP()
+
+                onClicked: {
+                    QGroundControl.ntrip.connectNTRIP()
+                    console.log("clicked connectNTRIP")
+                }
+            }
+
+            QGCButton {
+                id:         ntripDisconnectButton
+                text:       qsTr("Disconnect") //enabled ? qsTr("Save") : qsTr("Not Yet Valid")
+                //enabled:    QGroundControl.ntrip.connectNTRIP()
+
+                onClicked: {
+                    QGroundControl.ntrip.disconnectNTRIP()
+                    console.log("clicked disconnectNTRIP")
+                }
+            }
+        }
+
         FactCheckBoxSlider {
             Layout.fillWidth:   true
             text:               qsTr("AutoConnect")

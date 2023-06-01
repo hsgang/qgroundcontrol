@@ -92,6 +92,8 @@ public:
 
 public slots:
     void _tcpError          (const QString errorMsg);
+    Q_INVOKABLE void connectNTRIP();
+    Q_INVOKABLE void disconnectNTRIP();
 
 private slots:
 

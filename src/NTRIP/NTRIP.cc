@@ -43,12 +43,36 @@ void NTRIP::setToolbox(QGCToolbox* toolbox)
     }
 }
 
+void NTRIP::connectNTRIP()
+{
+    QGCTool::setToolbox(_toolbox);
+
+    _rtcmMavlink = new RTCMMavlink(*_toolbox);
+
+    NTRIPSettings* settings = qgcApp()->toolbox()->settingsManager()->ntripSettings();
+
+    _tcpLink = new NTRIPTCPLink(settings->ntripServerHostAddress()->rawValue().toString(),
+                                settings->ntripServerPort()->rawValue().toInt(),
+                                settings->ntripUsername()->rawValue().toString(),
+                                settings->ntripPassword()->rawValue().toString(),
+                                settings->ntripMountpoint()->rawValue().toString(),
+                                settings->ntripWhitelist()->rawValue().toString(),
+                                settings->ntripEnableVRS()->rawValue().toBool());
+    connect(_tcpLink, &NTRIPTCPLink::error,              this, &NTRIP::_tcpError,           Qt::QueuedConnection);
+    connect(_tcpLink, &NTRIPTCPLink::RTCMDataUpdate,   _rtcmMavlink, &RTCMMavlink::RTCMDataUpdate);
+}
+
+void NTRIP::disconnectNTRIP()
+{
+    _tcpLink->quit();
+    disconnect(_tcpLink, &NTRIPTCPLink::error,            this, &NTRIP::_tcpError);
+    disconnect(_tcpLink, &NTRIPTCPLink::RTCMDataUpdate,   _rtcmMavlink, &RTCMMavlink::RTCMDataUpdate);
+}
 
 void NTRIP::_tcpError(const QString errorMsg)
 {
     qgcApp()->showAppMessage(tr("NTRIP Server Error: %1").arg(errorMsg));
 }
-
 
 NTRIPTCPLink::NTRIPTCPLink(const QString& hostAddress,
                            int port,
