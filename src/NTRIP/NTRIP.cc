@@ -153,7 +153,7 @@ void NTRIPTCPLink::_hardwareConnect()
     _socket->connectToHost(_hostAddress, static_cast<quint16>(_port));
 
     // Give the socket a second to connect to the other side otherwise error out
-    if (!_socket->waitForConnected(1000)) {
+    if (!_socket->waitForConnected(3000)) {
         qCDebug(NTRIPLog) << "NTRIP Socket failed to connect";
         emit error(_socket->errorString());
         delete _socket;
