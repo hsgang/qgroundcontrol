@@ -140,7 +140,7 @@ ToolIndicatorPage {
 
             QGCLabel {
                 Layout.fillWidth:   true;
-                text:               qsTr("NTRIP Connect")
+                text:               qsTr("NTRIP")
                 enabled:            true
             }
 
