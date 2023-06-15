@@ -236,6 +236,19 @@ Item {
         height:                 width
     }
 
+    // need to manage full screen here
+    FlyViewVideoToolStrip {
+        id:                         videoToolStrip
+        anchors.topMargin:          _toolsMargin
+        anchors.horizontalCenter:   photoVideoControl.horizontalCenter
+        anchors.top:                photoVideoControl.bottom
+        anchors.bottomMargin:       _toolsMargin
+        z:                          QGroundControl.zOrderWidgets
+        maxWidth:                   parent.width * 0.5 - photoVideoControl.width + _toolsMargin
+        maxHeight:                  parent.height * 0.5
+        visible:                    !QGroundControl.videoManager.fullScreen
+    }
+
     FlyViewWeatherWidget{
         id:                         weatherWidget
         anchors.margins:            _toolsMargin

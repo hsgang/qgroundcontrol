@@ -257,18 +257,6 @@ Item {
         property real leftInset: x + width
     }
 
-    // need to manage full screen here
-    FlyViewVideoToolStrip {
-        id:                     videoToolStrip
-        anchors.leftMargin:     _toolsMargin
-        anchors.topMargin:      _toolsMargin
-        anchors.left:           toolStrip.right
-        anchors.top:            parent.top
-        z:                      QGroundControl.zOrderWidgets
-        maxWidth:               parent.width * 0.5 - toolStrip.width + _toolsMargin
-        visible:                !QGroundControl.videoManager.fullScreen
-    }
-
     FlyViewAirspaceIndicator {
         anchors.top:                parent.top
         anchors.topMargin:          ScreenTools.defaultFontPixelHeight * 0.25
@@ -282,11 +270,10 @@ Item {
 //        z:                  QGroundControl.zOrderTopMost
 //    }
 
-
     MapScale {
         id:                 mapScale
         anchors.margins:    _toolsMargin
-        anchors.left:       videoToolStrip.right
+        anchors.left:       toolStrip.right
         anchors.top:        parent.top
         mapControl:         _mapControl
         buttonsOnLeft:      true

@@ -15,7 +15,8 @@ Item {
     width:  toolStripPanelVideo.width
     height: toolStripPanelVideo.height
 
-    property alias maxWidth:                toolStripPanelVideo.maxWidth
+    property alias maxWidth:                modesToolStrip.maxWidth
+    property alias maxHeight:               toolStripPanelVideo.maxHeight
     property real  _margins:                ScreenTools.defaultFontPixelWidth * 0.75
     property bool  _modesPanelVisible:      modesToolStripAction.checked
     property bool  _actionsPanelVisible:    actionsToolStripAction.checked
@@ -24,12 +25,12 @@ Item {
     property bool  _haveGimbalControl:      _activeVehicle ? _activeVehicle.gimbalHaveControl : false
     property bool  _othersHaveGimbalControl: _activeVehicle ? _activeVehicle.gimbalOthersHaveControl : false
 
-    ToolStripHorizontal {
-        id:                toolStripPanelVideo
-        model:             toolStripActionList.model
-        forceImageScale11: true
+    ToolStrip{
+        id:                 toolStripPanelVideo
+        model:              toolStripActionList.model
+        maxHeight:          width * 5
         
-        property bool panelHidden: false
+        property bool panelHidden: true
 
         function togglePanelVisibility() {
             if (panelHidden) {
@@ -43,7 +44,7 @@ Item {
             id: toolStripActionList
             model: [
                 ToolStripAction {
-                    text:               toolStripPanelVideo.panelHidden ? qsTr("Show") : qsTr("Hide")
+                    text:               toolStripPanelVideo.panelHidden ? qsTr("SHOW ▼") : qsTr("HIDE ▲")
                     iconSource:         "/HA_Icons/PAYLOAD.png"
                     onTriggered:        toolStripPanelVideo.togglePanelVisibility()
                 },
@@ -56,7 +57,7 @@ Item {
                     
                     onVisibleChanged: {
                         checked = false
-                    }   
+                    }
                 },
                 ToolStripAction {
                     id:                actionsToolStripAction
@@ -68,23 +69,23 @@ Item {
 
                     onVisibleChanged: {
                         checked = false
-                    } 
+                    }
                 }
             ]
         }
     }
 
-    ToolStrip {
+    ToolStripHorizontal {
         id:        modesToolStrip
-        width:     toolStripPanelVideo.height
-        maxHeight: width * 5
-        visible:   rootItem._modesPanelVisible
         model:     modesToolStripActionList.model
+        forceImageScale11: true
+        visible:   rootItem._modesPanelVisible
         fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
 
-        anchors.top:                toolStripPanelVideo.bottom
-        anchors.horizontalCenter:   toolStripPanelVideo.horizontalCenter
+        anchors.verticalCenter:     toolStripPanelVideo.verticalCenter
+        anchors.right:              toolStripPanelVideo.left
         anchors.topMargin:          _margins
+        anchors.rightMargin:        _margins
 
         ToolStripActionList {
             id: modesToolStripActionList
@@ -118,230 +119,206 @@ Item {
         }
     }
 
-    Rectangle {
-        id:        actionsPanel
-        height:    toolStripPanelVideo.height * 3
-        width:     _actionsMapPanelVisible ? height * 2 : toolStripPanelVideo.height
-        color:     qgcPal.toolbarBackground
-        radius:    ScreenTools.defaultFontPixelWidth / 2
+    ToolStripHorizontal{
+        id:        actionsToolStrip
+        model:     actionsToolStripActionList.model
+        forceImageScale11: true
+        maxWidth:  height * 3
         visible:   rootItem._actionsPanelVisible
+        fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
 
-        anchors.top:                toolStripPanelVideo.bottom
-        anchors.left:               modesToolStrip.right
+        anchors.bottom:             toolStripPanelVideo.bottom
+        anchors.right:              toolStripPanelVideo.left
         anchors.topMargin:          _margins
+        anchors.rightMargin:        _margins
 
-
-        // Buttons for tilt 90 and point to home
-        ToolStrip {
-            id:        actionsToolStrip
-            width:     toolStripPanelVideo.height
-            maxHeight: parent.height
-            model:     actionsToolStripActionList.model
-            fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
-
-            anchors.top:                parent.top
-            anchors.left:               parent.left
-
-            ToolStripActionList {
-                id: actionsToolStripActionList
-                model: [
-                    ToolStripAction {
-                        text:               qsTr("Tilt 90")
-                        iconSource:         "/HA_Icons/CAMERA_90.png"
-                        onTriggered: { 
-                            if (_activeVehicle) {
-                                if (_activeVehicle.gimbalOthersHaveControl) {
-                                     // TODO: we should mention who is currently in control
-                                     mainWindow.showMessageDialog(title,
-                                         qsTr("Do you want to take over gimbal control?"),
-                                         StandardButton.Yes | StandardButton.Cancel,
-                                         function() {
-                                            _activeVehicle.acquireGimbalControl()
-                                            _activeVehicle.toggleGimbalYawLock(true, false) // we need yaw lock for this
-                                            _activeVehicle.sendGimbalManagerPitchYaw(0, -90) // point gimbal down
-                                         })
-                                } else if (!_activeVehicle.othersHaveControl) {
-                                    _activeVehicle.acquireGimbalControl()
-                                    _activeVehicle.toggleGimbalYawLock(true, false) // we need yaw lock for this
-                                    _activeVehicle.sendGimbalManagerPitchYaw(0, -90) // point gimbal down
-                                } else {
-                                    _activeVehicle.toggleGimbalYawLock(true, false) // we need yaw lock for this
-                                    _activeVehicle.sendGimbalManagerPitchYaw(0, -90) // point gimbal down
-                                }
+        ToolStripActionList {
+            id: actionsToolStripActionList
+            model: [
+                ToolStripAction {
+                    text:               qsTr("Tilt 90")
+                    iconSource:         "/HA_Icons/CAMERA_90.png"
+                    onTriggered: {
+                        if (_activeVehicle) {
+                            if (_activeVehicle.gimbalOthersHaveControl) {
+                                 // TODO: we should mention who is currently in control
+                                 mainWindow.showMessageDialog(title,
+                                     qsTr("Do you want to take over gimbal control?"),
+                                     StandardButton.Yes | StandardButton.Cancel,
+                                     function() {
+                                        _activeVehicle.acquireGimbalControl()
+                                        _activeVehicle.toggleGimbalYawLock(true, false) // we need yaw lock for this
+                                        _activeVehicle.sendGimbalManagerPitchYaw(0, -90) // point gimbal down
+                                     })
+                            } else if (!_activeVehicle.othersHaveControl) {
+                                _activeVehicle.acquireGimbalControl()
+                                _activeVehicle.toggleGimbalYawLock(true, false) // we need yaw lock for this
+                                _activeVehicle.sendGimbalManagerPitchYaw(0, -90) // point gimbal down
+                            } else {
+                                _activeVehicle.toggleGimbalYawLock(true, false) // we need yaw lock for this
+                                _activeVehicle.sendGimbalManagerPitchYaw(0, -90) // point gimbal down
                             }
                         }
-                    },
-                    ToolStripAction {
-                        text:               qsTr("Point Home")
-                        iconSource:         "/HA_Icons/HOME.png"
-                        onTriggered:        _activeVehicle ? _activeVehicle.setGimbalHomeTargeting() : undefined
-                    },
-                    ToolStripAction {
-                        id:                 mapToolsToolStripAction
-                        text:               qsTr("Map tools")
-                        iconSource:         "/HA_Icons/MAP_CLICK.png"
-                        checkable:          true
-                        visible:            !toolStripPanelVideo.panelHidden
-
-                        onVisibleChanged: {
-                            if (!visible)
-                                checked = false
-                        } 
                     }
-                ]
-            }
+                },
+                ToolStripAction {
+                    text:               qsTr("Point Home")
+                    iconSource:         "/HA_Icons/HOME.png"
+                    onTriggered:        _activeVehicle ? _activeVehicle.setGimbalHomeTargeting() : undefined
+                },
+                ToolStripAction {
+                    id:                 mapToolsToolStripAction
+                    text:               qsTr("Map tools")
+                    iconSource:         "/HA_Icons/MAP_CLICK.png"
+                    checkable:          true
+                    visible:            !toolStripPanelVideo.panelHidden
+
+                    onVisibleChanged: {
+                        if (!visible)
+                            checked = false
+                    }
+                }
+            ]
+        }
+    }
+
+    Rectangle {
+        id:      gimbalMapActions
+        width:   ScreenTools.defaultFontPixelWidth * 20
+        height:   ScreenTools.defaultFontPixelHeight * 10
+        color:   Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        radius:  ScreenTools.defaultFontPixelWidth / 2
+        visible: rootItem._actionsMapPanelVisible && rootItem._actionsPanelVisible
+
+        anchors.right:          actionsToolStrip.right
+        anchors.rightMargin:    _toolsMargin * 3
+        anchors.bottom:         actionsToolStrip.top
+        anchors.bottomMargin:   _toolsMargin
+
+        property var roiActive: _activeVehicle && _activeVehicle.isROIEnabled ? true : false
+
+        DeadMouseArea {
+            anchors.fill: parent
         }
 
-        Rectangle {
-            id:      gimbalMapActions
-            color:   qgcPal.window
-            radius:  ScreenTools.defaultFontPixelWidth / 2
-            visible: rootItem._actionsMapPanelVisible && rootItem._actionsPanelVisible
-            
-            anchors.left:   actionsToolStrip.right
+        QGCLabel {
+            id: gimbalMapActionsLabel
+            text: qsTr("ROI Tools")
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top:              parent.top
+            anchors.margins:          _margins
+            font.pointSize:           ScreenTools.smallFontPointSize
+        }
+
+        // Left grid, coordinates
+        GridLayout {
+            id:             gimbalMapActionsGridLeft
+            anchors.top:    gimbalMapActionsLabel.bottom
+            anchors.left:   parent.left
             anchors.right:  parent.right
-            anchors.top:    parent.top
             anchors.bottom: parent.bottom
+            anchors.margins:_margins
 
-            DeadMouseArea {
-                anchors.fill: parent
-            }
-        
+            columnSpacing:  _margins
+            rowSpacing:     _margins
+            columns:        2
+
             QGCLabel {
-                id: gimbalMapActionsLabel
-                text: qsTr("Map ROI targetting tools")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top:              parent.top
-                anchors.margins:          _margins
-                font.pointSize:           ScreenTools.smallFontPointSize
+                text: qsTr("Lat")
+                font.pointSize: ScreenTools.smallFontPointSize
+                Layout.preferredWidth: ScreenTools.smallFontPointSize * 3
+                Layout.alignment:   Qt.AlignHCenter
+            }
+            FactTextField {
+                fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetLatitude : null
+                font.pointSize:     ScreenTools.smallFontPointSize
+                implicitHeight:     ScreenTools.defaultFontPixelHeight
+                Layout.fillWidth:   true
             }
 
-            // Left grid, coordinates
-            GridLayout {
-                id:             gimbalMapActionsGridLeft
-                anchors.top:    gimbalMapActionsLabel.bottom
-                anchors.left:   parent.left
-                anchors.right:  parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                anchors.margins:_margins
+            QGCLabel {
+                text: qsTr("Long")
+                font.pointSize: ScreenTools.smallFontPointSize
+                Layout.alignment:   Qt.AlignHCenter
+            }
+            FactTextField {
+                fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetLongitude : null
+                font.pointSize:     ScreenTools.smallFontPointSize
+                implicitHeight:     ScreenTools.defaultFontPixelHeight
+                Layout.fillWidth:   true
+            }
 
-                columnSpacing:  _margins
-                rowSpacing:     _margins
-                columns:        2
+            QGCLabel {
+                text: qsTr("Alt")
+                font.pointSize: ScreenTools.smallFontPointSize
+                Layout.alignment:   Qt.AlignHCenter
+            }
+            FactTextField {
+                fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetAltitude : null
+                font.pointSize:     ScreenTools.smallFontPointSize
+                implicitHeight:     ScreenTools.defaultFontPixelHeight
+                Layout.fillWidth:   true
+            }
+            QGCButton {
+                text:              qsTr("Get from map")
+                checkable:         true
+                Layout.columnSpan: 2
+                Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
+                //Layout.fillWidth:  true
+                pointSize:         ScreenTools.smallFontPointSize
+                implicitHeight:    ScreenTools.implicitButtonHeight * 0.6
+                implicitWidth:     ScreenTools.implicitButtonWidth * 2
+                backRadius:        ScreenTools.defaultFontPixelWidth / 2
 
-                QGCLabel {
-                    text: qsTr("Lat")
-                    font.pointSize: ScreenTools.smallFontPointSize
-                }
-                FactTextField {
-                    fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetLatitude : null
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    implicitHeight:     ScreenTools.defaultFontPixelHeight
-                    Layout.fillWidth:   true
-                }
-
-                QGCLabel {
-                    text: qsTr("Long")
-                    font.pointSize: ScreenTools.smallFontPointSize
-
-                }
-                FactTextField {
-                    fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetLongitude : null
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    implicitHeight:     ScreenTools.defaultFontPixelHeight
-                    Layout.fillWidth:   true
-                }
-                QGCLabel {
-                    text:                   qsTr("Altitude above home(m)")
-                    wrapMode:               Text.Wrap
-                    maximumLineCount:       2
-                    elide:                  Text.ElideRight
-                    font.pointSize:         ScreenTools.smallFontPointSize
-                    Layout.columnSpan:      2
-                }
-                QGCLabel {
-                    text: qsTr("Alt")
-                    font.pointSize: ScreenTools.smallFontPointSize
-                }
-                FactTextField {
-                    fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetAltitude : null
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    implicitHeight:     ScreenTools.defaultFontPixelHeight
-                    Layout.fillWidth:   true
-                }
-                QGCButton {
-                    text:              qsTr("Get from map")
-                    checkable:         true
-                    Layout.columnSpan: 2
-                    Layout.fillWidth:  true
-                    pointSize:         ScreenTools.smallFontPointSize
-                    implicitHeight:    ScreenTools.implicitButtonHeight * 0.6
-                    backRadius:        ScreenTools.defaultFontPixelWidth / 2
-                    
-                    onCheckedChanged: {
-                        if (_activeVehicle) {
-                            _activeVehicle.GimbalClickOnMapActive = checked
-                        }
+                onCheckedChanged: {
+                    if (_activeVehicle) {
+                        _activeVehicle.GimbalClickOnMapActive = checked
                     }
                 }
             }
+            QGCLabel {
+                text:                   qsTr("ROI")
+                Layout.rowSpan:     2
+                font.pointSize:         ScreenTools.smallFontPointSize
+                //visible:                gimbalMapActions.roiActive
+                Layout.fillWidth:       true
+                Layout.alignment:       Qt.AlignHCenter | Qt.AlignVCenter
+            }
 
-            // Right grid, options
-            GridLayout {
-                id:             gimbalMapActionsGridRight
-                anchors.top:    gimbalMapActionsLabel.bottom
-                anchors.left:   gimbalMapActionsGridLeft.right
-                anchors.right:  parent.right
-                anchors.bottom: parent.bottom
-                anchors.margins:_margins
+            QGCButton {
+                text:               qsTr("ROI Activation")
+                Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
+                checkable:          false
+                backRadius:         ScreenTools.defaultFontPixelWidth / 2
+                pointSize:          ScreenTools.smallFontPointSize
+                implicitHeight:     ScreenTools.implicitButtonHeight * 0.6
+                implicitWidth:     ScreenTools.implicitButtonWidth * 2
 
-                columnSpacing:  _margins
-                rowSpacing:     _margins
-                columns:        2
-
-                property var roiActive: _activeVehicle && _activeVehicle.isROIEnabled ? true : false
-
-                QGCButton {
-                    text:               qsTr("Send")
-                    Layout.columnSpan:  2
-                    Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
-                    checkable:          false
-                    backRadius:         ScreenTools.defaultFontPixelWidth / 2
-                    pointSize:          ScreenTools.smallFontPointSize
-                    implicitHeight:     ScreenTools.implicitButtonHeight * 0.6
-                    
-
-                    onClicked: {
-                        var coordinate = QtPositioning.coordinate(_activeVehicle.gimbalTargetSetLatitude.rawValue, _activeVehicle.gimbalTargetSetLongitude.rawValue, _activeVehicle.gimbalTargetSetAltitude.rawValue)
-                        _activeVehicle.guidedModeROI(coordinate)
-                    }
+                onClicked: {
+                    var coordinate = QtPositioning.coordinate(_activeVehicle.gimbalTargetSetLatitude.rawValue, _activeVehicle.gimbalTargetSetLongitude.rawValue, _activeVehicle.gimbalTargetSetAltitude.rawValue)
+                    _activeVehicle.guidedModeROI(coordinate)
                 }
+            }
 
-                QGCLabel {
-                    text:                   qsTr("Roi Active:")
-                    wrapMode:               Text.Wrap
-                    maximumLineCount:       2
-                    elide:                  Text.ElideRight
-                    font.pointSize:         ScreenTools.smallFontPointSize
-                    visible:                gimbalMapActionsGridRight.roiActive
-                    Layout.fillWidth:       true
-                }
+            QGCButton {
+                text:             qsTr("Cancel")
+                //visible:          gimbalMapActions.roiActive
+                Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
+                pointSize:        ScreenTools.smallFontPointSize
+                implicitHeight:   ScreenTools.implicitButtonHeight * 0.6
+                implicitWidth:     ScreenTools.implicitButtonWidth * 2
+                backRadius:       ScreenTools.defaultFontPixelWidth / 2
+                enabled:           gimbalMapActions.roiActive
 
-                QGCButton {
-                    text:             qsTr("Cancel")
-                    visible:          gimbalMapActionsGridRight.roiActive
-                    pointSize:        ScreenTools.smallFontPointSize
-                    implicitHeight:   ScreenTools.implicitButtonHeight * 0.6
-                    backRadius:       ScreenTools.defaultFontPixelWidth / 2
-                    Layout.fillWidth: true
-                    
-                    onPressed: {
-                        if (_activeVehicle) {
-                            _activeVehicle.stopGuidedModeROI()
-                        }
+                onPressed: {
+                    if (_activeVehicle) {
+                        _activeVehicle.stopGuidedModeROI()
                     }
                 }
             }
         }
     }
 }
+
+
+
