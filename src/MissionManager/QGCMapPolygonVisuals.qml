@@ -62,7 +62,7 @@ Item {
 
     function addEditingVisuals() {
         if (_objMgrEditingVisuals.empty) {
-            _objMgrEditingVisuals.createObjects([ dragHandlesComponent, splitHandlesComponent, centerDragHandleComponent ], mapControl, false /* addToMap */)
+            _objMgrEditingVisuals.createObjects([ dragHandlesComponent, splitHandlesComponent, centerDragHandleComponent, edgeLengthHandlesComponent ], mapControl, false /* addToMap */)
         }
     }
 
@@ -307,6 +307,31 @@ Item {
     }
 
     Component {
+        id: edgeLengthHandleComponent
+
+        MapQuickItem {
+            id:             mapQuickItem
+            anchorPoint.x:  sourceItem.width / 2
+            anchorPoint.y:  sourceItem.height / 2
+            visible:        !_circleMode
+
+            property int vertexIndex
+            property real distance
+
+            sourceItem: Rectangle{
+                width:  edgeLengthText.width
+                height: edgeLengthText.height
+                color: "black"
+                Text {
+                    id: edgeLengthText
+                    text: distance.toFixed(1) + " m"
+                    color: "white"
+                }
+            }
+        }
+    }
+
+    Component {
         id: splitHandlesComponent
 
         Repeater {
@@ -341,6 +366,44 @@ Item {
             }
         }
     }
+
+    Component {
+        id: edgeLengthHandlesComponent
+
+        Repeater {
+            model: mapPolygon.path
+
+            delegate: Item {
+                property var _edgeLengthHandle
+                property var _vertices:     mapPolygon.path
+
+                function _setHandlePosition() {
+                    var nextIndex = index + 1
+                    if (nextIndex > _vertices.length - 1) {
+                        nextIndex = 0
+                    }
+                    var distance = _vertices[index].distanceTo(_vertices[nextIndex])
+                    var azimuth = _vertices[index].azimuthTo(_vertices[nextIndex])
+                    _edgeLengthHandle.coordinate =_vertices[index].atDistanceAndAzimuth(distance / 3, azimuth)
+                    _edgeLengthHandle.distance = distance
+                }
+
+                Component.onCompleted: {
+                    _edgeLengthHandle = edgeLengthHandleComponent.createObject(mapControl)
+                    _edgeLengthHandle.vertexIndex = index
+                    _setHandlePosition()
+                    mapControl.addMapItem(_edgeLengthHandle)
+                }
+
+                Component.onDestruction: {
+                    if (_edgeLengthHandle) {
+                        _edgeLengthHandle.destroy()
+                    }
+                }
+            }
+        }
+    }
+
 
     // Control which is used to drag polygon vertices
     Component {
