@@ -318,14 +318,15 @@ Item {
             property int vertexIndex
             property real distance
 
-            sourceItem: Rectangle{
-                width:  edgeLengthText.width
-                height: edgeLengthText.height
-                color: "black"
-                Text {
+            sourceItem: Rectangle {
+                width: edgeLengthText.width + ScreenTools.defaultFontPixelWidth
+                height: edgeLengthText.height + (ScreenTools.defaultFontPixelHeight * 0.2)
+                radius: height * 0.2
+                color: qgcPal.window
+                QGCLabel{
                     id: edgeLengthText
-                    text: distance.toFixed(1) + " m"
-                    color: "white"
+                    anchors.centerIn: parent
+                    text: distance.toFixed(1) + "m"
                 }
             }
         }

@@ -48,7 +48,7 @@ Item {
 
     function _addInteractiveVisuals() {
         if (_objMgrInteractiveVisuals.empty) {
-            _objMgrInteractiveVisuals.createObjects([ dragHandlesComponent, splitHandlesComponent, toolbarComponent ], mapControl)
+            _objMgrInteractiveVisuals.createObjects([ dragHandlesComponent, splitHandlesComponent, toolbarComponent, pathLengthHandlesComponent ], mapControl)
         }
     }
 
@@ -358,6 +358,70 @@ Item {
                 text:               qsTr("Load KML...")
                 onClicked:          kmlLoadDialog.openForLoad()
                 visible:            !mapPolyline.traceMode
+            }
+        }
+    }
+
+    Component {
+        id: pathLengthHandleComponent
+
+        MapQuickItem {
+            id:             mapQuickItem
+            anchorPoint.x:  sourceItem.width / 2
+            anchorPoint.y:  sourceItem.height / 2
+
+            property int vertexIndex
+            property real distance
+
+            sourceItem: Rectangle {
+                width: pathLengthText.width + ScreenTools.defaultFontPixelWidth
+                height: pathLengthText.height + (ScreenTools.defaultFontPixelHeight * 0.2)
+                radius: height * 0.2
+                color: qgcPal.window
+                QGCLabel{
+                    id: pathLengthText
+                    anchors.centerIn: parent
+                    text: distance.toFixed(1) + "m"
+                }
+            }
+        }
+    }
+
+    Component {
+        id: pathLengthHandlesComponent
+
+        Repeater {
+            model: mapPolyline.path
+
+            delegate: Item {
+                property var _pathLengthHandle
+                property var _vertices:     mapPolyline.path
+
+                function _setHandlePosition() {
+                    var nextIndex = index + 1
+                    if (nextIndex > _vertices.length - 1) {
+                        nextIndex = 0
+                    }
+                    var distance = _vertices[index].distanceTo(_vertices[nextIndex])
+                    var azimuth = _vertices[index].azimuthTo(_vertices[nextIndex])
+                    _pathLengthHandle.coordinate =_vertices[index].atDistanceAndAzimuth(distance / 3, azimuth)
+                    _pathLengthHandle.distance = distance
+                }
+
+                Component.onCompleted: {
+                    _pathLengthHandle = pathLengthHandleComponent.createObject(mapControl)
+                    _pathLengthHandle.vertexIndex = index
+                    if(index !== (_vertices.length - 1)){
+                        _setHandlePosition()
+                    }
+                    mapControl.addMapItem(_pathLengthHandle)
+                }
+
+                Component.onDestruction: {
+                    if (_pathLengthHandle) {
+                        _pathLengthHandle.destroy()
+                    }
+                }
             }
         }
     }
