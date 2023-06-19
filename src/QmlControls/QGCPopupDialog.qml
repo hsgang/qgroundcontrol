@@ -71,45 +71,9 @@ Popup {
 
     background: Item {
         Rectangle {
-            anchors.left:   parent.left
-            anchors.top:    parent.top
-            width:          _frameSize
-            height:         _frameSize
-            color:          _pal.text
-            visible:        enabled
-        }
-
-        Rectangle {
-            anchors.right:  parent.right
-            anchors.top:    parent.top
-            width:          _frameSize
-            height:         _frameSize
-            color:          _pal.text
-            visible:        enabled
-        }
-
-        Rectangle {
-            anchors.left:   parent.left
-            anchors.bottom: parent.bottom
-            width:          _frameSize
-            height:         _frameSize
-            color:          _pal.text
-            visible:        enabled
-        }
-
-        Rectangle {
-            anchors.right:  parent.right
-            anchors.bottom: parent.bottom
-            width:          _frameSize
-            height:         _frameSize
-            color:          _pal.text
-            visible:        enabled
-        }
-
-        Rectangle {
-            anchors.margins:    _root.padding
             anchors.fill:       parent
             color:              _pal.window
+            radius:             ScreenTools.defaultFontPixelWidth / 2
         }
     }
 
@@ -222,11 +186,12 @@ Popup {
         acceptButton.enabled = false
     }
 
-    Rectangle {
-        width:  titleRowLayout.width
-        height: titleRowLayout.height
-        color:  qgcPal.windowShade
-    }
+//    Rectangle {
+//        width:  titleRowLayout.width
+//        height: titleRowLayout.height
+//        color:  qgcPal.windowShade
+//        radius: ScreenTools.defaultFontPixelWidth / 2
+//    }
 
     ColumnLayout {
         id:         mainColumnLayout
@@ -255,6 +220,12 @@ Popup {
                 onClicked:  _accept()
             }
         }
+
+//        Rectangle {
+//            width:  titleRowLayout.width
+//            height: 1
+//            color:  qgcPal.windowShade
+//        }
 
         QGCFlickable {
             id:                     mainFlickable

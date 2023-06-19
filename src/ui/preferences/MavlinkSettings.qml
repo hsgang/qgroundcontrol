@@ -115,7 +115,7 @@ Rectangle {
             Rectangle {
                 height:         gcsColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShade
+                color:          qgcPal.windowShadeLight
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
                 Column {
@@ -206,7 +206,7 @@ Rectangle {
             Rectangle {
                 height:                     streamRatesColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:                      __mavlinkRoot.width * 0.8
-                color:                      qgcPal.windowShade
+                color:                      qgcPal.windowShadeLight
                 anchors.margins:            ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter:   parent.horizontalCenter
                 visible:                    _showAPMStreamRates && _isAPM
@@ -295,7 +295,7 @@ Rectangle {
             Rectangle {
                 height:         mavStatusColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShade
+                color:          qgcPal.windowShadeLight
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
                 Column {
@@ -382,7 +382,7 @@ Rectangle {
             Rectangle {
                 height:         mavlogColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShade
+                color:          qgcPal.windowShadeLight
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible:        _showMavlinkLog && _isPX4
@@ -445,7 +445,7 @@ Rectangle {
             Rectangle {
                 height:         logColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShade
+                color:          qgcPal.windowShadeLight
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible:        _showMavlinkLog && _isPX4
@@ -684,7 +684,7 @@ Rectangle {
             Rectangle {
                 height:         logFilesColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShade
+                color:          qgcPal.windowShadeLight
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible:        _showMavlinkLog

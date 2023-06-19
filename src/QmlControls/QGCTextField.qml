@@ -8,7 +8,7 @@ import QGroundControl.ScreenTools   1.0
 
 TextField {
     id:                 root
-    textColor:          qgcPal.textFieldText
+    textColor:          qgcPal.text
     implicitHeight:     ScreenTools.implicitTextFieldHeight
     activeFocusOnPress: true
     antialiasing:       true
@@ -62,14 +62,15 @@ TextField {
             Rectangle {
                 anchors.fill:           parent
                 anchors.bottomMargin:   -1
-                color:                  "#44ffffff"
+                color:                  qgcPal.window //"#ffffff"
             }
 
             Rectangle {
                 anchors.fill:           parent
                 border.width:           enabled ? 1 : 0
-                border.color:           root.activeFocus ? "#47b" : "#999"
-                color:                  qgcPal.textField
+                border.color:           root.activeFocus ? qgcPal.buttonHighlight : qgcPal.windowShade
+                color:                  qgcPal.window //textField
+                radius:                 ScreenTools.defaultFontPixelWidth / 2
             }
 
             RowLayout {

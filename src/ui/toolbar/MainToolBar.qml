@@ -77,7 +77,6 @@ Rectangle {
             Layout.preferredHeight: viewButtonRow.height
             icon.source:            "/qmlimages/Hamburger.svg"
             logo:                   true
-            //onClicked:              mainWindow.showToolSelectDialog()
             onClicked:
                 if(viewSelectDrawer.visible === false){
                     viewSelectDrawer.visible = true

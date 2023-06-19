@@ -14,7 +14,7 @@ Rectangle {
     id:         atmosphericValueBar
     height:     atmosphericValueColumn.height + ScreenTools.defaultFontPixelHeight * 0.5
     width:      atmosphericValueColumn.width + ScreenTools.defaultFontPixelWidth * 3
-    color:      "#80000000"
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
     radius:     _margins
     border.color: qgcPal.text
 

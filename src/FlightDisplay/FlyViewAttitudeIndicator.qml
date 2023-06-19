@@ -72,7 +72,7 @@ Rectangle {
         height:                 ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
         width:                  height
         radius:                 height * 0.5
-        color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
 
         Rectangle {
             id:                         altitudeValue
@@ -81,7 +81,7 @@ Rectangle {
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      altitudeGrid.width
-            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             radius:                     _toolsMargin
 
             GridLayout {
@@ -157,7 +157,7 @@ Rectangle {
                     font.pointSize : ScreenTools.defaultFontPointSize * 2.5
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    color: qgcPal.colorGreen
+                    color: qgcPal.brandingBlue
 
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3
@@ -216,7 +216,7 @@ Rectangle {
             anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
             width:                      spdGrid.width
-            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             radius:                     _toolsMargin
 
             GridLayout {
@@ -292,7 +292,7 @@ Rectangle {
                     font.pointSize : ScreenTools.defaultFontPointSize * 2.5
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    color: qgcPal.colorGreen
+                    color: qgcPal.brandingBlue
 
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3

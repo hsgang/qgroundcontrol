@@ -318,8 +318,7 @@ ApplicationWindow {
         Rectangle {
             width:  mainLayout.width + (mainLayout.anchors.margins * 2)
             height: parent.height
-            //color:  qgcPal.window
-            color:  "#80000000"
+            color:  qgcPal.window //Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
 
             QGCFlickable {
                 anchors.top:        parent.top

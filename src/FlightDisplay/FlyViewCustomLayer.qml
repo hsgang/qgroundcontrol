@@ -98,7 +98,7 @@ Item {
         id:                 telemetryPanel
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
-        anchors.right:      parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.top:        parent.top
 
         function recalcXPosition() {
@@ -239,14 +239,14 @@ Item {
     // need to manage full screen here
     FlyViewVideoToolStrip {
         id:                         videoToolStrip
+        anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
         anchors.topMargin:          _toolsMargin
-        anchors.horizontalCenter:   photoVideoControl.horizontalCenter
-        anchors.top:                photoVideoControl.bottom
-        anchors.bottomMargin:       _toolsMargin
+        anchors.right:              multiVehiclePanelSelector.showSingleVehiclePanel ? parent.right : multiVehiclePanelSelector.left
+        anchors.rightMargin:        _toolsMargin
         z:                          QGroundControl.zOrderWidgets
         maxWidth:                   parent.width * 0.5 - photoVideoControl.width + _toolsMargin
         maxHeight:                  parent.height * 0.5
-        visible:                    !QGroundControl.videoManager.fullScreen
+        visible:                    multiVehiclePanelSelector.showSingleVehiclePanel
     }
 
     FlyViewWeatherWidget{
@@ -259,14 +259,14 @@ Item {
     }
 
     Rectangle {
-        id: messageToastManagerRect
-        anchors.margins: _toolsMargin
-        anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        width:           mainWindow.width  * 0.5
-        height:         messageToastManager.height < mainWindow.height * 0.15 ? messageToastManager.height : mainWindow.height * 0.15
-        color:          "transparent" //qgcPal.window
-        visible:        messageFlick.contentHeight
+        id:                         messageToastManagerRect
+        anchors.margins:            _toolsMargin
+        anchors.bottom:             attitudeIndicator.top
+        anchors.horizontalCenter:   parent.horizontalCenter
+        width:                      mainWindow.width  * 0.5
+        height:                     messageToastManager.height < mainWindow.height * 0.15 ? messageToastManager.height : mainWindow.height * 0.15
+        color:                      "transparent" //qgcPal.window
+        visible:                    messageFlick.contentHeight
 
         QGCFlickable {
             id:                 messageFlick
@@ -433,11 +433,13 @@ Item {
     Rectangle {
         id:                 quickViewPopupButton
         anchors.margins:    _toolsMargin
-        anchors.right:      parent.right
-        anchors.bottom:     parent.bottom
-        color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-        height:             ScreenTools.defaultFontPixelHeight * 2.5
-        width:              ScreenTools.defaultFontPixelHeight * 2.5
+        anchors.top:        multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+        anchors.right:      videoToolStrip.left
+        color:              qgcPal.window
+        width:              (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8)
+        height:             width
+        //height:             ScreenTools.defaultFontPixelHeight * 2.5
+        //width:              ScreenTools.defaultFontPixelHeight * 2.5
         radius:             ScreenTools.defaultFontPixelHeight / 3
         visible:            true
 
@@ -445,19 +447,53 @@ Item {
             anchors.fill: parent
         }
 
-        Image {
-            id: quickViewPopupIcon
-            anchors.centerIn: parent
-            source: "/qmlimages/LogDownloadIcon"
-            mipmap: true
-            fillMode: Image.PreserveAspectFit
-            sourceSize: Qt.size(parent.width * 0.8, parent.height * 0.8)
-        }
-        ColorOverlay {
-               anchors.fill: quickViewPopupIcon
-               source: quickViewPopupIcon
-               color: qgcPal.text
-        }
+        Item {
+                id:                 contentLayoutItem
+                anchors.fill:       parent
+                anchors.margins:    innerText.height * 0.2
+
+                Column {
+                    anchors.centerIn:   parent
+                    spacing:        innerText.height * 0.2
+
+                    QGCColoredImage {
+                        id:                         innerImage
+                        height:                     contentLayoutItem.height * 0.6
+                        width:                      contentLayoutItem.width  * 0.6
+                        smooth:                     true
+                        mipmap:                     true
+                        color:                      qgcPal.text
+                        fillMode:                   Image.PreserveAspectFit
+                        antialiasing:               true
+                        sourceSize.height:          height
+                        sourceSize.width:           width
+                        anchors.horizontalCenter:   parent.horizontalCenter
+                        source: "/qmlimages/LogDownloadIcon"
+                    }
+
+                    QGCLabel {
+                        id:                         innerText
+                        text:                       "WIDGET"
+                        color:                      qgcPal.text
+                        anchors.horizontalCenter:   parent.horizontalCenter
+                        font.pointSize:             ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
+                    }
+                }
+            }
+
+//        Image {
+//            id: quickViewPopupIcon
+//            anchors.centerIn: parent
+//            source: "/qmlimages/LogDownloadIcon"
+//            mipmap: true
+//            fillMode: Image.PreserveAspectFit
+//            sourceSize: Qt.size(parent.width * 0.8, parent.height * 0.8)
+//        }
+//        ColorOverlay {
+//               anchors.fill: quickViewPopupIcon
+//               source: quickViewPopupIcon
+//               color: qgcPal.text
+//        }
         MouseArea {
             anchors.fill: quickViewPopupButton
             onClicked: {

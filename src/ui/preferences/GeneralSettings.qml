@@ -88,7 +88,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredHeight: unitsGrid.height + (_margins * 2)
                         Layout.preferredWidth:  unitsGrid.width + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                miscSectionLabel.visible
                         Layout.fillWidth:       true
 
@@ -125,7 +127,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredHeight: flyViewCol.height + (_margins * 2)
                         Layout.preferredWidth:  flyViewCol.width + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                flyViewSectionLabel.visible
                         Layout.fillWidth:       true
 
@@ -367,7 +371,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredHeight: videoGrid.height + (_margins * 2)
                         Layout.preferredWidth:  videoGrid.width + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                videoSettingsLabel.visible
                         Layout.fillWidth:       true
 
@@ -525,7 +531,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredHeight: planViewCol.height + (_margins * 2)
                         Layout.preferredWidth:  planViewCol.width + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                planViewSectionLabel.visible
                         Layout.fillWidth:       true
 
@@ -589,7 +597,9 @@ Rectangle {
                         Layout.preferredWidth:  Math.max(comboGrid.width, miscCol.width) + (_margins * 2)
                         Layout.preferredHeight: (pathRow.visible ? pathRow.y + pathRow.height : miscColItem.y + miscColItem.height)  + (_margins * 2)
                         Layout.fillWidth:       true
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                miscSectionLabel.visible
 
                         Item {
@@ -841,7 +851,9 @@ Rectangle {
                         id:                     telemetryRect
                         Layout.preferredHeight: loggingCol.height + (_margins * 2)
                         Layout.preferredWidth:  loggingCol.width + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         Layout.fillWidth:       true
                         visible:                promptSaveLog.fact.visible || logIfNotArmed.fact.visible || promptSaveCsv.fact.visible
                         ColumnLayout {
@@ -897,7 +909,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredWidth:  autoConnectCol.width + (_margins * 2)
                         Layout.preferredHeight: autoConnectCol.height + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                autoConnectSectionLabel.visible
                         Layout.fillWidth:       true
 
@@ -1019,7 +1033,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredHeight: rtkGrid.height + (_margins * 2)
                         Layout.preferredWidth:  rtkGrid.width + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                rtkSectionLabel.visible
                         Layout.fillWidth:       true
 
@@ -1153,7 +1169,9 @@ Rectangle {
 //                    Rectangle {
 //                        Layout.preferredHeight: adsbGrid.y + adsbGrid.height + _margins
 //                        Layout.preferredWidth:  adsbGrid.width + (_margins * 2)
-//                        color:                  qgcPal.windowShade
+//                        color:                  qgcPal.window
+//                        border.color:           qgcPal.windowShade
+//                        radius:                 _margins
 //                        visible:                adsbSectionLabel.visible
 //                        Layout.fillWidth:       true
 
@@ -1218,7 +1236,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredHeight: ntripGrid.y + ntripGrid.height + _margins
                         Layout.preferredWidth:  ntripGrid.width + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                ntripSectionLabel.visible
                         Layout.fillWidth:       true
 
@@ -1332,7 +1352,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredHeight: openWeatherViewCol.height + (_margins * 2)
                         Layout.preferredWidth:  openWeatherViewCol.width + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                openWeatherLabel.visible
                         Layout.fillWidth:       true
 
@@ -1382,7 +1404,9 @@ Rectangle {
                     Rectangle {
                         Layout.preferredHeight: siyiSDKCol.height + (_margins * 2)
                         Layout.preferredWidth:  siyiSDKCol.width + (_margins * 2)
-                        color:                  qgcPal.windowShade
+                        color:                  qgcPal.window
+                        border.color:           qgcPal.windowShade
+                        radius:                 _margins
                         visible:                true
                         Layout.fillWidth:       true
 
@@ -1424,7 +1448,9 @@ Rectangle {
 //                        Layout.preferredWidth:  brandImageGrid.width + (_margins * 2)
 //                        Layout.preferredHeight: brandImageGrid.height + (_margins * 2)
 //                        Layout.fillWidth:       true
-//                        color:                  qgcPal.windowShade
+//                        color:                  qgcPal.window
+//                        border.color:           qgcPal.windowShade
+//                        radius:                 _margins
 //                        visible:                brandImageSectionLabel.visible
 
 //                        GridLayout {

@@ -186,14 +186,14 @@ Item {
         id:      gimbalMapActions
         width:   ScreenTools.defaultFontPixelWidth * 20
         height:   ScreenTools.defaultFontPixelHeight * 10
-        color:   Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        color:   Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
         radius:  ScreenTools.defaultFontPixelWidth / 2
         visible: rootItem._actionsMapPanelVisible && rootItem._actionsPanelVisible
 
         anchors.right:          actionsToolStrip.right
         anchors.rightMargin:    _toolsMargin * 3
-        anchors.bottom:         actionsToolStrip.top
-        anchors.bottomMargin:   _toolsMargin
+        anchors.top:         actionsToolStrip.bottom
+        anchors.topMargin:   _toolsMargin
 
         property var roiActive: _activeVehicle && _activeVehicle.isROIEnabled ? true : false
 

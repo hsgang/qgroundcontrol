@@ -32,7 +32,7 @@ Item {
         anchors.left:   parent.left
         anchors.right:  parent.right
         height:         mvCommandsColumn.height + (_margin *2)
-        color:          qgcPal.missionItemEditor
+        color:          qgcPal.window
         opacity:        _rectOpacity
         radius:         _margin
 

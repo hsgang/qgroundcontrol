@@ -25,7 +25,9 @@ import QGroundControl.FactControls      1.0
 
 Rectangle {
     id:         gimbalControlPannel
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+    width:      mainGridLayout.width
+    height:     mainGridLayout.height + _margins
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
     radius:     _margins
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
@@ -135,7 +137,7 @@ Rectangle {
             width:              gimbalControlPannel.width/4
             height:             gimbalControlPannel.height/4
             radius:             _margins
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
             border.width:       1
             scale:              zoomInPress.pressedButtons ? 0.95 : 1
@@ -169,7 +171,7 @@ Rectangle {
             width:              gimbalControlPannel.width/4
             height:             gimbalControlPannel.height/4
             radius:             _margins
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalUpPress.pressedButtons ? 0.95 : 1
@@ -207,7 +209,7 @@ Rectangle {
             width:              gimbalControlPannel.width/4
             height:             gimbalControlPannel.height/4
             radius:             _margins
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
             border.width:       1
             scale:              baseDownPress.pressedButtons ? 0.95 : 1
@@ -241,7 +243,7 @@ Rectangle {
             width:              gimbalControlPannel.width/4
             height:             gimbalControlPannel.height/4
             radius:             _margins
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalLeftPress.pressedButtons ? 0.95 : 1
@@ -279,7 +281,7 @@ Rectangle {
             width:              gimbalControlPannel.width/4
             height:             gimbalControlPannel.height/4
             radius:             _margins
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalHomePress.pressedButtons ? 0.95 : 1
@@ -315,7 +317,7 @@ Rectangle {
             width:              gimbalControlPannel.width/4
             height:             gimbalControlPannel.height/4
             radius:             _margins
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalRightPress.pressedButtons ? 0.95 : 1
@@ -353,7 +355,7 @@ Rectangle {
             width:              gimbalControlPannel.width/4
             height:             gimbalControlPannel.height/4
             radius:             _margins
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
             border.width:       1
             scale:              zoomOutPress.pressedButtons ? 0.95 : 1
@@ -387,7 +389,7 @@ Rectangle {
             width:              gimbalControlPannel.width/4
             height:             gimbalControlPannel.height/4
             radius:             _margins
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalDownPress.pressedButtons ? 0.95 : 1
@@ -425,7 +427,7 @@ Rectangle {
             width:              gimbalControlPannel.width/4
             height:             gimbalControlPannel.height/4
             radius:             _margins
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalModePress.pressedButtons ? 0.95 : 1

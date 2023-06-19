@@ -126,7 +126,9 @@ T.ComboBox {
         implicitWidth:  ScreenTools.implicitComboBoxWidth
         implicitHeight: ScreenTools.implicitComboBoxHeight
         color:          _qgcPal.window
-        border.color:   _qgcPal.text
+        border.color:   _qgcPal.windowShadeDark
+        border.width:   1
+        radius:         ScreenTools.defaultFontPixelWidth / 2
     }
 
     popup: T.Popup {
@@ -148,7 +150,7 @@ T.ComboBox {
                 width:          parent.width
                 height:         parent.height
                 color:          "transparent"
-                border.color:   _qgcPal.text
+                border.color:   _qgcPal.windowShade
             }
 
             T.ScrollIndicator.vertical: ScrollIndicator { }

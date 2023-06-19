@@ -37,7 +37,9 @@ Button {
 
         background: Rectangle {
             id:     innerRect
-            color:  showHighlight ? qgcPal.buttonHighlight : qgcPal.windowShade
+            color:  showHighlight ? qgcPal.buttonHighlight : qgcPal.window
+            border.width:   1
+            border.color:   qgcPal.windowShadeLight
             radius: ScreenTools.defaultFontPointSize * 0.5
 
             implicitWidth: titleBar.x + titleBar.contentWidth + ScreenTools.defaultFontPixelWidth
