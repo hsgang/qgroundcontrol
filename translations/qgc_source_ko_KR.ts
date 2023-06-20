@@ -6682,12 +6682,20 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/FlyViewWidgetLayer.qml" line="89"/>
         <source>Single</source>
-        <translation>개별</translation>
+        <translation>단일 기체</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewWidgetLayer.qml" line="95"/>
         <source>Multi-Vehicle</source>
         <translation>다중 기체</translation>
+    </message>
+</context>
+<context>
+    <name>ModeChangedIndicator</name>
+    <message>
+        <location filename="../src/FlightDisplay/ModeChangedIndicator.qml" line="53"/>
+        <source>Switched to</source>
+        <translation>모드 변경</translation>
     </message>
 </context>
 <context>
@@ -9304,6 +9312,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="37"/>
         <source>Not Ready</source>
         <translation>점검 필요</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="42"/>
+        <source>Disconnected - Click to manually connect</source>
+        <translation>연결 없음 - 수동으로 연결</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="38"/>

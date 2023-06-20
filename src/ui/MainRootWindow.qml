@@ -307,6 +307,7 @@ ApplicationWindow {
         id:             viewSelectDrawer
         y:              header.height
         height:         mainWindow.height - header.height
+        width:          mainLayoutRect.width
         edge:           Qt.LeftEdge
         interactive:    true
         dragMargin:     0
@@ -316,6 +317,7 @@ ApplicationWindow {
         property real   _toolButtonHeight: ScreenTools.defaultFontPixelHeight * 3
 
         Rectangle {
+            id:     mainLayoutRect
             width:  mainLayout.width + (mainLayout.anchors.margins * 2)
             height: parent.height
             color:  qgcPal.window //Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
@@ -348,6 +350,7 @@ ApplicationWindow {
                                 mainWindow.showFlyView()
                                 checkedMenu()
                                 flyButton.checked = true
+                                viewSelectDrawer.visible = false
                             }
                         }
                     }
@@ -364,6 +367,7 @@ ApplicationWindow {
                                 mainWindow.showPlanView()
                                 checkedMenu()
                                 planButton.checked = true
+                                viewSelectDrawer.visible = false
                             }
                         }
                     }
@@ -380,6 +384,7 @@ ApplicationWindow {
                                 mainWindow.showSetupTool()
                                 checkedMenu()
                                 setupButton.checked = true
+                                viewSelectDrawer.visible = false
                             }
                         }
                     }
@@ -397,6 +402,7 @@ ApplicationWindow {
                                 mainWindow.showAnalyzeTool()
                                 checkedMenu()
                                 analyzeButton.checked = true
+                                viewSelectDrawer.visible = false
                             }
                         }
                     }                    
@@ -414,6 +420,7 @@ ApplicationWindow {
                                 mainWindow.showAppSettings()
                                 checkedMenu()
                                 settingsButton.checked = true
+                                viewSelectDrawer.visible = false
                             }
                         }
                     }

@@ -44,7 +44,7 @@ Item {
             id: toolStripActionList
             model: [
                 ToolStripAction {
-                    text:               toolStripPanelVideo.panelHidden ? qsTr("SHOW ▼") : qsTr("HIDE ▲")
+                    text:               toolStripPanelVideo.panelHidden ? qsTr("MOUNT ▼") : qsTr("HIDE ▲")
                     iconSource:         "/HA_Icons/PAYLOAD.png"
                     onTriggered:        toolStripPanelVideo.togglePanelVisibility()
                 },

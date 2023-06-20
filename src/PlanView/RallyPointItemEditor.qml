@@ -86,7 +86,7 @@ Rectangle {
         anchors.right:      parent.right
         anchors.top:        titleBar.bottom
         height:             valuesGrid.height + (_margin * 2)
-        color:              qgcPal.windowShadeDark
+        color:              qgcPal.window
         visible:            _currentItem
         radius:             _radius
 

@@ -21,24 +21,24 @@ Switch {
     QGCPalette { id:qgcPal; colorGroupEnabled: true }
 
     indicator: Rectangle{
-        implicitWidth:  ScreenTools.defaultFontPixelWidth * 4
-        implicitHeight: ScreenTools.defaultFontPixelHeight * 0.8
+        height: ScreenTools.defaultFontPixelHeight
+        width:  height * 2
         x:  control.leftPadding
         y:  parent.height / 2 - height / 2
-        color:          (control.checked && control.enabled) ? qgcPal.buttonHighlight : qgcPal.colorGrey
-        radius:         implicitHeight * 0.5
-        border.color:   qgcPal.button
-        border.width:   1
+        color:          (control.checked && control.enabled) ? qgcPal.buttonHighlight : qgcPal.windowShade
+        radius:         height / 2
+//        border.color:   qgcPal.button
+//        border.width:   1
 
         Rectangle {
-            x: control.checked ? parent.width - width : 0
-            implicitWidth:  ScreenTools.defaultFontPixelHeight
-            implicitHeight: implicitWidth
+            x: control.checked ? parent.width - width - 2 : 2
+            height:  parent.height - 4
+            width: height
             anchors.verticalCenter: parent.verticalCenter
-            color:          control.enabled ? qgcPal.text : qgcPal.colorGrey
-            radius:         implicitHeight * 0.5
-            border.color:   qgcPal.button
-            border.width:   1
+            color:          control.enabled ? qgcPal.colorWhite : qgcPal.colorGrey
+            radius:         height / 2
+//            border.color:   qgcPal.button
+//            border.width:   1
         }
     }
 

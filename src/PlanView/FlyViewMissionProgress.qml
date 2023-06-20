@@ -13,7 +13,7 @@ Rectangle {
     id:     missionProgressRect
     height: ScreenTools.defaultFontPixelHeight * 4 // missionStats.height + _margins
     width: missionStats.width + _margins * 2
-    color: "#80000000"
+    color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
     radius: _margins
 // form
     property real   _dataFontSize:              ScreenTools.defaultFontPointSize
@@ -126,7 +126,7 @@ Rectangle {
                 anchors.top:    parent.top
                 anchors.bottom: parent.bottom
                 width:          getMissionProgress() * parent.width
-                color:          qgcPal.colorGreen
+                color:          qgcPal.textHighlight
                 radius:         _margins * 0.5
             }
 

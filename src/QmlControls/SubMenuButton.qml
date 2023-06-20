@@ -15,7 +15,7 @@ Button {
     property bool   setupIndicator: true                                    ///< true: show setup complete indicator
     property var    imageColor:     undefined
     property string imageResource:  "/qmlimages/subMenuButtonImage.png"     ///< Button image
-    property size   sourceSize:     Qt.size(ScreenTools.defaultFontPixelHeight * 2, ScreenTools.defaultFontPixelHeight * 2)
+    property size   sourceSize:     Qt.size(ScreenTools.defaultFontPixelHeight * 1.5, ScreenTools.defaultFontPixelHeight * 1.5)
 
     text:               "Button"  ///< Pass in your own button text
     activeFocusOnPress: true
@@ -38,7 +38,7 @@ Button {
         background: Rectangle {
             id:     innerRect
             color:  showHighlight ? qgcPal.buttonHighlight : qgcPal.window
-            border.width:   1
+            border.width:   ScreenTools.defaultFontPointSize * 0.2
             border.color:   qgcPal.windowShadeLight
             radius: ScreenTools.defaultFontPointSize * 0.5
 

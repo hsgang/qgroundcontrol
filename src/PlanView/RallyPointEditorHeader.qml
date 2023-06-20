@@ -37,7 +37,7 @@ QGCFlickable {
             anchors.right:      parent.right
             anchors.top:        editorLabel.bottom
             height:             infoLabel.height + (_margin * 2)
-            color:              qgcPal.windowShadeDark
+            color:              qgcPal.window
             radius:             _radius
 
             QGCLabel {

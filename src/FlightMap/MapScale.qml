@@ -202,7 +202,7 @@ Item {
         anchors.top:        scaleText.top
         anchors.bottom:     rightEnd.bottom
         anchors.leftMargin: terrainButton.visible ? ScreenTools.defaultFontPixelWidth / 2 : 0
-        anchors.left:       terrainButton.visible ? terrainButton.right : terrainButton.left
+        anchors.left:       terrainButton.visible ? terrainButton.right : parent.left
         text:               qsTr("+")
         width:              height
         opacity:            0.75

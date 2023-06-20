@@ -558,7 +558,7 @@ Item {
             anchors.top:        parent.top
             z:                  QGroundControl.zOrderWidgets
             maxHeight:          parent.height - toolStrip.y
-            title:              qsTr("Plan")
+            //title:              qsTr("Plan")
 
             readonly property int flyButtonIndex:       0
             readonly property int fileButtonIndex:      1
@@ -575,11 +575,6 @@ Item {
             ToolStripActionList {
                 id: toolStripActionList
                 model: [
-//                    ToolStripAction {
-//                        text:           qsTr("Fly")
-//                        iconSource:     "/qmlimages/PaperPlane.svg"
-//                        onTriggered:    mainWindow.showFlyView()
-//                    },
                     ToolStripAction {
                         text:                   qsTr("File")
                         enabled:                !_planMasterController.syncInProgress

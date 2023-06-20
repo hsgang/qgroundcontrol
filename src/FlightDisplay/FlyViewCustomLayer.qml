@@ -42,6 +42,7 @@ Item {
     // Property of Tools
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
     property color  _baseBGColor:           qgcPal.window
+    property color  _transparentColor:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
 
     // Property of Active Vehicle
     property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
@@ -99,7 +100,7 @@ Item {
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:        parent.top
+        anchors.top:        flyviewMissionProgress.visible ? flyviewMissionProgress.bottom : parent.top
 
         function recalcXPosition() {
             // First try centered
@@ -313,8 +314,8 @@ Item {
     FlyViewMissionProgress{
         id: flyviewMissionProgress
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom:           attitudeIndicator.top
-        anchors.bottomMargin:     _toolsMargin
+        anchors.top:                parent.top
+        anchors.topMargin:     _toolsMargin
         visible: false
 
         Connections{
@@ -432,16 +433,18 @@ Item {
 
     Rectangle {
         id:                 quickViewPopupButton
-        anchors.margins:    _toolsMargin
+        anchors.margins:    _toolsMargin + ScreenTools.defaultFontPixelWidth * 0.25
         anchors.top:        multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
         anchors.right:      videoToolStrip.left
         color:              qgcPal.window
-        width:              (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8)
+        width:              (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8 - anchorsMargins)
         height:             width
         //height:             ScreenTools.defaultFontPixelHeight * 2.5
         //width:              ScreenTools.defaultFontPixelHeight * 2.5
         radius:             ScreenTools.defaultFontPixelHeight / 3
         visible:            true
+
+        property real anchorsMargins:    ScreenTools.defaultFontPixelWidth * 0.6
 
         DeadMouseArea {
             anchors.fill: parent
@@ -468,7 +471,7 @@ Item {
                         sourceSize.height:          height
                         sourceSize.width:           width
                         anchors.horizontalCenter:   parent.horizontalCenter
-                        source: "/qmlimages/LogDownloadIcon"
+                        source:                     "/qmlimages/LogDownloadIcon"
                     }
 
                     QGCLabel {

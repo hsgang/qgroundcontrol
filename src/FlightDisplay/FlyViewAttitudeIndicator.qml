@@ -115,12 +115,12 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.minimumWidth:    _mediumValueWidth
 
-                    layer.enabled: true
-                    layer.effect: Glow {
-                        samples: 5
-                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        transparentBorder: true
-                    }
+//                    layer.enabled: true
+//                    layer.effect: Glow {
+//                        samples: 5
+//                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//                        transparentBorder: true
+//                    }
                 }
 
                 QGCLabel {
@@ -141,12 +141,12 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.minimumWidth:    _mediumValueWidth
 
-                    layer.enabled: true
-                    layer.effect: Glow {
-                        samples: 5
-                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        transparentBorder: true
-                    }
+//                    layer.enabled: true
+//                    layer.effect: Glow {
+//                        samples: 5
+//                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//                        transparentBorder: true
+//                    }
                 }
 
 
@@ -157,7 +157,7 @@ Rectangle {
                     font.pointSize : ScreenTools.defaultFontPointSize * 2.5
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    color: qgcPal.brandingBlue
+                    color: qgcPal.textHighlight
 
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3
@@ -170,12 +170,12 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.minimumWidth:    _largeValueWidth * 1.5
 
-                    layer.enabled: true
-                    layer.effect: Glow {
-                        samples: 5
-                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        transparentBorder: true
-                    }
+//                    layer.enabled: true
+//                    layer.effect: Glow {
+//                        samples: 5
+//                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//                        transparentBorder: true
+//                    }
                 }
 
                 QGCLabel {
@@ -196,12 +196,12 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.minimumWidth:    _largeValueWidth + _mediumValueWidth
 
-                    layer.enabled: true
-                    layer.effect: Glow {
-                        samples: 5
-                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        transparentBorder: true
-                    }
+//                    layer.enabled: true
+//                    layer.effect: Glow {
+//                        samples: 5
+//                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//                        transparentBorder: true
+//                    }
                 }
 
 
@@ -251,12 +251,12 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.minimumWidth:    _mediumValueWidth
 
-                    layer.enabled: true
-                    layer.effect: Glow {
-                        samples: 5
-                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        transparentBorder: true
-                    }
+//                    layer.enabled: true
+//                    layer.effect: Glow {
+//                        samples: 5
+//                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//                        transparentBorder: true
+//                    }
                 }
 
                 QGCLabel {
@@ -277,12 +277,12 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.minimumWidth:    _mediumValueWidth
 
-                    layer.enabled: true
-                    layer.effect: Glow {
-                        samples: 5
-                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        transparentBorder: true
-                    }
+//                    layer.enabled: true
+//                    layer.effect: Glow {
+//                        samples: 5
+//                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//                        transparentBorder: true
+//                    }
                 }
 
                 QGCLabel {
@@ -292,7 +292,7 @@ Rectangle {
                     font.pointSize : ScreenTools.defaultFontPointSize * 2.5
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    color: qgcPal.brandingBlue
+                    color: qgcPal.textHighlight
 
                     Layout.alignment: Qt.AlignHCenter
                     Layout.columnSpan : 3
@@ -305,12 +305,12 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.minimumWidth:    _largeValueWidth * 1.5
 
-                    layer.enabled: true
-                    layer.effect: Glow {
-                        samples: 5
-                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        transparentBorder: true
-                    }
+//                    layer.enabled: true
+//                    layer.effect: Glow {
+//                        samples: 5
+//                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//                        transparentBorder: true
+//                    }
                 }
 
                 QGCLabel {
@@ -331,12 +331,12 @@ Rectangle {
                     Layout.fillWidth: true
                     Layout.minimumWidth:    _largeValueWidth + _mediumValueWidth
 
-                    layer.enabled: true
-                    layer.effect: Glow {
-                        samples: 5
-                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                        transparentBorder: true
-                    }
+//                    layer.enabled: true
+//                    layer.effect: Glow {
+//                        samples: 5
+//                        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//                        transparentBorder: true
+//                    }
                 }
 
             }

@@ -48,17 +48,14 @@ Rectangle {
 
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
-            //visible:                    true
-            color:                      qgcPal.colorGreen
-            //"#EECC44"
+            color:                      qgcPal.textHighlight
             font.pointSize:             ScreenTools.mediumFontPointSize
             text:                       qsTr("Switched to")
         }
 
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
-            //visible:                    true
-            color:                      qgcPal.colorGreen
+            color:                      qgcPal.textHighlight
             //"#EECC44"
             font.pointSize:             ScreenTools.largeFontPointSize * 2
             font.weight:                Font.DemiBold
