@@ -53,13 +53,14 @@ GimbalController::_handleHeartbeat(const mavlink_message_t& message)
                                  MAV_CMD_SET_MESSAGE_INTERVAL,
                                  false /* no error */,
                                  MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS,
-                                 200000, /* 200ms / 5Hz */
+                                 (gimbal.requestStatusRetries > 1) ? 0 : 200000, /* 200ms / 5Hz */
                                  0,
                                  0,
                                  0,
                                  0,
                                  1 );
         --gimbal.requestStatusRetries;
+        qCDebug(GimbalLog) << "attempt to set GIMBAL_MANAGER_STATUS message interval for compID " << message.compid << ", retries remaining: " << gimbal.requestStatusRetries;
     }
 
     if (!gimbal.receivedAttitude && gimbal.requestAttitudeRetries > 0 &&
@@ -90,7 +91,7 @@ GimbalController::_handleGimbalManagerInformation(const mavlink_message_t& messa
     gimbal.receivedInformation = true;
     if (information.gimbal_device_id != 0) {
         gimbal.responsibleCompid = information.gimbal_device_id;
-        qCDebug(GimbalLog) << "gimbal manager " << message.compid
+        qCDebug(GimbalLog) << "gimbal manager with compId" << message.compid
             << " is responsible for gimbal device " << information.gimbal_device_id;
     }
 
@@ -111,7 +112,7 @@ GimbalController::_handleGimbalManagerStatus(const mavlink_message_t& message)
 
     if (status.gimbal_device_id != 0) {
         gimbal.responsibleCompid = status.gimbal_device_id;
-        qCDebug(GimbalLog) << "gimbal manager " << message.compid
+        qCDebug(GimbalLog) << "gimbal manager with compId" << message.compid
             << " is responsible for gimbal device " << status.gimbal_device_id;
     }
 
