@@ -39,7 +39,7 @@ Rectangle {
 
     property real   _labelWidth:                ScreenTools.defaultFontPixelWidth * 20
     property real   _comboFieldWidth:           ScreenTools.defaultFontPixelWidth * 30
-    property real   _valueFieldWidth:           ScreenTools.defaultFontPixelWidth * 10
+    property real   _valueFieldWidth:           ScreenTools.defaultFontPixelWidth * 15
     property string _mapProvider:               QGroundControl.settingsManager.flightMapSettings.mapProvider.value
     property string _mapType:                   QGroundControl.settingsManager.flightMapSettings.mapType.value
     property Fact   _followTarget:              QGroundControl.settingsManager.appSettings.followTarget

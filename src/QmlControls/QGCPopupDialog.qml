@@ -73,7 +73,7 @@ Popup {
         Rectangle {
             anchors.fill:       parent
             color:              _pal.window
-            radius:             ScreenTools.defaultFontPixelWidth / 2
+            radius:             ScreenTools.defaultFontPixelHeight / 2
         }
     }
 
@@ -200,6 +200,7 @@ Popup {
         RowLayout {
             id:                 titleRowLayout
             Layout.fillWidth:   true
+            Layout.margins:     ScreenTools.defaultFontPixelHeight / 5
 
             QGCLabel {
                 Layout.leftMargin:  ScreenTools.defaultFontPixelWidth
@@ -212,20 +213,16 @@ Popup {
             QGCButton {
                 id:         rejectButton
                 onClicked:  _reject()
+                backRadius: ScreenTools.defaultFontPixelHeight / 2
             }
 
             QGCButton {
                 id:         acceptButton
                 primary:    true
                 onClicked:  _accept()
+                backRadius: ScreenTools.defaultFontPixelHeight / 2
             }
         }
-
-//        Rectangle {
-//            width:  titleRowLayout.width
-//            height: 1
-//            color:  qgcPal.windowShade
-//        }
 
         QGCFlickable {
             id:                     mainFlickable

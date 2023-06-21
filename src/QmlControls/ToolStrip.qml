@@ -62,7 +62,7 @@ Rectangle {
             id:             toolStripColumn
             anchors.left:   parent.left
             anchors.right:  parent.right
-            spacing:        ScreenTools.defaultFontPixelWidth * 0.25
+            spacing:        ScreenTools.defaultFontPixelWidth //* 0.5
 
             QGCLabel {
                 id:                     titleLabel
@@ -81,7 +81,7 @@ Rectangle {
                     anchors.left:       toolStripColumn.left
                     anchors.right:      toolStripColumn.right
                     height:             width
-                    radius:             ScreenTools.defaultFontPixelWidth / 2
+                    radius:             ScreenTools.defaultFontPixelHeight / 2
                     fontPointSize:      _root.fontSize
                     toolStripAction:    modelData
                     dropPanel:          _dropPanel

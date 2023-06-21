@@ -6785,6 +6785,57 @@ Click Ok to start the auto-tuning process.
         <source>External Power Status</source>
         <translation>외부 전원 상태</translation>
     </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="479"/>
+        <source>Widget</source>
+        <translation>위젯</translation>
+    </message>
+</context>
+<context>
+    <name>FlyViewVideoToolStrip</name>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewVideoToolStrip.qml" line="47"/>
+        <source>MOUNT ▼</source>
+        <translation>마운트 ▼</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewVideoToolStrip.qml" line="47"/>
+        <source>MOUNT ▲</source>
+        <translation>마운트 ▲</translation>
+    </message>
+</context>
+<context>
+    <name>FlyViewMissionProgress</name>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="140"/>
+        <source>Altitude:</source>
+        <translation>고도:</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="148"/>
+        <source>Latitude:</source>
+        <translation>위도:</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="155"/>
+        <source>Longitude:</source>
+        <translation>경도:</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="162"/>
+        <source>H.Distance:</source>
+        <translation>수평 경로:</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="169"/>
+        <source>Path Distance:</source>
+        <translation>전체 경로:</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="176"/>
+        <source>Total Time:</source>
+        <translation>비행 시간:</translation>
+    </message>
 </context>
 <context>
     <name>GPSIndicator</name>
@@ -6935,6 +6986,11 @@ Click Ok to start the auto-tuning process.
         <translation>다음 시작 시에 모든 설정 지우기</translation>
     </message>
     <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="806"/>
+        <source>Enable Remote ID</source>
+        <translation>Remote ID 활성화</translation>
+    </message>
+    <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="636"/>
         <source>Clear Settings</source>
         <translation>설정 취소</translation>
@@ -6992,9 +7048,29 @@ Click Ok to start the auto-tuning process.
         <translation>자동으로 중심으로 잡히는  스로틀</translation>
     </message>
     <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="239"/>
+        <source>Show Mission Max Altitude Indicator</source>
+        <translation>임무 최대 고도 지시기 표시</translation>
+    </message>
+    <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="177"/>
         <source>Show simple camera controls (DIGICAM_CONTROL)</source>
         <translation>간단한 카메라 컨트롤 표시 (DIGICAM_CONTROL)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="253"/>
+        <source>Update Home Position</source>
+        <translation>홈 위치 업데이트</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="260"/>
+        <source>Enable Custom Actions</source>
+        <translation>커스텀 명령 사용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="284"/>
+        <source>Custom Action Definitions</source>
+        <translation>커스텀 명령 정의 파일</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="188"/>
@@ -7087,9 +7163,9 @@ Click Ok to start the auto-tuning process.
         <translation>소스</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="296"/>
-        <source>File Format</source>
-        <translation>파일 포맷</translation>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="450"/>
+        <source>Record File Format</source>
+        <translation>녹화 파일 형식</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="318"/>
@@ -9387,12 +9463,17 @@ Click Ok to start the auto-tuning process.
         <translation>다운로드 중</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="209"/>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="327"/>
         <source>Click anywhere to hide</source>
         <translation>숨기려면 아무 곳이나 클릭하십시오</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="82"/>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="209"/>
+        <source>Connect</source>
+        <translation>연결</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="215"/>
         <source>Disconnect</source>
         <translation>연결 해제</translation>
     </message>

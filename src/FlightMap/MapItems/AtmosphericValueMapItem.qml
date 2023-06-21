@@ -47,7 +47,7 @@ MapQuickItem {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.top
             anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 3
-            color:      "#80000000"
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             radius:     _margins
             border.width: 1
             border.color: qgcPal.text

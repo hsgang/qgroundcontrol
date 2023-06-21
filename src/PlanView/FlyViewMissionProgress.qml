@@ -152,7 +152,6 @@ Rectangle {
             Layout.minimumWidth:    _largeValueWidth
         }
 
-
         QGCLabel { text: qsTr("Longitude:"); font.pointSize: _dataFontSize; }
         QGCLabel {
             text:                   _longitudeText
@@ -166,7 +165,6 @@ Rectangle {
             font.pointSize:         _dataFontSize
             Layout.minimumWidth:    _largeValueWidth
         }
-
 
         QGCLabel { text: qsTr("Path Distance:"); font.pointSize: _dataFontSize; }
         QGCLabel {

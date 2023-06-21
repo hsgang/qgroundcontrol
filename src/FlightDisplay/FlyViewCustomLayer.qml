@@ -242,7 +242,7 @@ Item {
         id:                         videoToolStrip
         anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
         anchors.topMargin:          _toolsMargin
-        anchors.right:              multiVehiclePanelSelector.showSingleVehiclePanel ? parent.right : multiVehiclePanelSelector.left
+        anchors.right:              multiVehiclePanelSelector.showSingleVehiclePanel ? quickViewPopupButton.left : multiVehiclePanelSelector.left
         anchors.rightMargin:        _toolsMargin
         z:                          QGroundControl.zOrderWidgets
         maxWidth:                   parent.width * 0.5 - photoVideoControl.width + _toolsMargin
@@ -435,13 +435,13 @@ Item {
         id:                 quickViewPopupButton
         anchors.margins:    _toolsMargin + ScreenTools.defaultFontPixelWidth * 0.25
         anchors.top:        multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-        anchors.right:      videoToolStrip.left
+        anchors.right:      multiVehiclePanelSelector.showSingleVehiclePanel ? parent.right : multiVehiclePanelSelector.left
         color:              qgcPal.window
         width:              (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8 - anchorsMargins)
         height:             width
         //height:             ScreenTools.defaultFontPixelHeight * 2.5
         //width:              ScreenTools.defaultFontPixelHeight * 2.5
-        radius:             ScreenTools.defaultFontPixelHeight / 3
+        radius:             ScreenTools.defaultFontPixelHeight / 2
         visible:            true
 
         property real anchorsMargins:    ScreenTools.defaultFontPixelWidth * 0.6
@@ -476,7 +476,7 @@ Item {
 
                     QGCLabel {
                         id:                         innerText
-                        text:                       "WIDGET"
+                        text:                       qsTr("Widget")
                         color:                      qgcPal.text
                         anchors.horizontalCenter:   parent.horizontalCenter
                         font.pointSize:             ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize

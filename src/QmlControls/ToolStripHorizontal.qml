@@ -8,7 +8,7 @@ import QGroundControl.Controls      1.0
 
 Rectangle {
     id:         _root
-    color:      qgcPal.toolbarBackground
+    color:      "transparent" //qgcPal.toolbarBackground
     width:      Math.min(maxWidth, toolStripRow.width + (flickable.anchors.margins * 2))
     height:      _idealHeight < repeater.contentHeight ? repeater.contentHeight : _idealHeight
     radius:     ScreenTools.defaultFontPixelWidth / 2
@@ -54,7 +54,7 @@ Rectangle {
             id:             toolStripRow
             anchors.top:    parent.top
             anchors.bottom: parent.bottom
-            spacing:        ScreenTools.defaultFontPixelWidth * 0.25
+            spacing:        ScreenTools.defaultFontPixelWidth / 2
 
             QGCLabel {
                 id:                     titleLabel
