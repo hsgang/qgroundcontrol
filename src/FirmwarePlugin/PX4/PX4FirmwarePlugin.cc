@@ -749,3 +749,11 @@ const QVariantList& PX4FirmwarePlugin::toolIndicators(const Vehicle*)
     }
     return _toolIndicatorList;
 }
+bool PX4FirmwarePlugin::hasGripper(const Vehicle* vehicle) const
+{
+    if(vehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, QStringLiteral("PD_GRIPPER_EN"))) {
+        bool _hasGripper = (vehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, QStringLiteral("PD_GRIPPER_EN"))->rawValue().toInt()) != 0 ? true : false;
+        return _hasGripper;
+    }
+    return false;
+}

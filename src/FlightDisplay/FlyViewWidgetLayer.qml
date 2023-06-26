@@ -47,6 +47,7 @@ Item {
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
     property rect   _centerViewport:        Qt.rect(0, 0, width, height)
     property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 30
+    property alias  _gripperMenu:           gripperOptions
 
     QGCToolInsets {
         id:                     _totalToolInsets
@@ -255,6 +256,10 @@ Item {
         onDisplayPreFlightChecklist: preFlightChecklistPopup.createObject(mainWindow).open()
 
         property real leftInset: x + width
+    }
+
+    GripperMenu {
+        id: gripperOptions
     }
 
     FlyViewAirspaceIndicator {

@@ -262,6 +262,7 @@ public:
     Q_PROPERTY(bool                 gimbalNeutral               READ gimbalNeutral                                                  NOTIFY gimbalNeutralChanged)
     Q_PROPERTY(bool                 gimbalYawLock               READ gimbalYawLock                                                  NOTIFY gimbalYawLockChanged)
     Q_PROPERTY(bool                 gimbalClickOnMapActive      READ gimbalClickOnMapActive     WRITE setGimbalClickOnMapActive     NOTIFY gimbalClickOnMapActiveChanged)
+    Q_PROPERTY(bool                 hasGripper                  READ hasGripper                                                     CONSTANT)
     Q_PROPERTY(bool                 isROIEnabled                READ isROIEnabled                                                   NOTIFY isROIEnabledChanged)
     Q_PROPERTY(bool                 gimbalHaveControl           READ gimbalHaveControl                                              NOTIFY gimbalHaveControlChanged)
     Q_PROPERTY(bool                 gimbalOthersHaveControl     READ gimbalOthersHaveControl                                        NOTIFY gimbalOthersHaveControlChanged)
@@ -511,7 +512,7 @@ public:
     bool    takeoffVehicleSupported () const;
     bool    changeHeadingSupported  () const;
     QString gotoFlightMode          () const;
-
+    bool    hasGripper              () const;
     bool haveMRSpeedLimits() const { return _multirotor_speed_limits_available; }
     bool haveFWSpeedLimits() const { return _fixed_wing_airspeed_limits_available; }
 
@@ -570,8 +571,18 @@ public:
      * @brief Send MAV_CMD_DO_GRIPPER command to trigger specified action in the vehicle
      * 
      * @param gripperAction Gripper action to trigger
-     */
+    */
+
+    enum    GRIPPER_OPTIONS
+    {
+    Gripper_release = GRIPPER_ACTION_RELEASE, 
+    Gripper_grab    = GRIPPER_ACTION_GRAB,
+    Invalid_option  = GRIPPER_ACTIONS_ENUM_END,
+    }; 
+    Q_ENUM(GRIPPER_OPTIONS)
+
     void setGripperAction(GRIPPER_ACTIONS gripperAction);
+    Q_INVOKABLE void sendGripperAction(GRIPPER_OPTIONS gripperOption); 
 
     bool fixedWing() const;
     bool multiRotor() const;
