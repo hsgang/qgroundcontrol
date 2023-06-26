@@ -159,68 +159,84 @@ Item{
         border.width: 1
         radius : _toolsMargin
 
-        ColumnLayout{
-            id: checkBoxRow
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.rightMargin: _toolsMargin
-            spacing: ScreenTools.defaultFontPixelHeight / 4
+        DeadMouseArea {
+            anchors.fill: parent
+        }
 
-            QGCCheckBox {
-                id: tempCheck
-                text: "Temperature"
-            }
-            QGCCheckBox {
-                id: humiCheck
-                text: "Humidity"
-            }
-            QGCCheckBox {
-                id: presCheck
-                text: "Pressure"
-            }
-            QGCCheckBox {
-                id: windDirCheck
-                text: "WindDir"
-            }
-            QGCCheckBox {
-                id: windSpdCheck
-                text: "WindSpd"
-            }
+        QGCFlickable {
+            id:                 flickable
+            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
+            anchors.top:        parent.top
+            anchors.right:      parent.right
+            width:              checkBoxRow.width + _toolsMargin * 2
+            height:             parent.height - ScreenTools.defaultFontPixelHeight * 0.4
+            contentHeight:      checkBoxRow.height
+            flickableDirection: Flickable.VerticalFlick
+            clip:               true
 
-            Item{
-                height: ScreenTools.defaultFontPixelHeight
-            }
+            ColumnLayout{
+                id: checkBoxRow
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.rightMargin: _toolsMargin
+                spacing: ScreenTools.defaultFontPixelHeight / 4
 
-            QGCLabel{
-                text: "Interval(m)"
-            }
-
-            QGCTextField{
-                id: intervalTextField
-                placeholderText: qsTr("Alt Interval")
-                implicitWidth: parent.width//ScreenTools.defaultFontPixelWidth * 8
-            }
-
-            QGCButton{
-                text:"Set Interval"
-                onClicked: {
-                    diffGapValue = intervalTextField.text
+                QGCCheckBox {
+                    id: tempCheck
+                    text: "Temperature"
                 }
-            }
+                QGCCheckBox {
+                    id: humiCheck
+                    text: "Humidity"
+                }
+                QGCCheckBox {
+                    id: presCheck
+                    text: "Pressure"
+                }
+                QGCCheckBox {
+                    id: windDirCheck
+                    text: "WindDir"
+                }
+                QGCCheckBox {
+                    id: windSpdCheck
+                    text: "WindSpd"
+                }
 
-            QGCLabel{
-                text: "Count : " + count
-            }
+                Item{
+                    height: ScreenTools.defaultFontPixelHeight
+                }
 
-            QGCLabel{
-                text: "Interval : " + diffGapValue
-            }
+                QGCLabel{
+                    text: "Interval(m)"
+                }
 
-            QGCButton{
-                text: "Clear"
-                implicitWidth: parent.width
-                onClicked:  {
-                    clearChart()
+                QGCTextField{
+                    id: intervalTextField
+                    placeholderText: qsTr("Alt Interval")
+                    implicitWidth: parent.width//ScreenTools.defaultFontPixelWidth * 8
+                }
+
+                QGCButton{
+                    text:"Set Interval"
+                    onClicked: {
+                        diffGapValue = intervalTextField.text
+                    }
+                }
+
+                QGCLabel{
+                    text: "Count : " + count
+                }
+
+                QGCLabel{
+                    text: "Interval : " + diffGapValue
+                }
+
+                QGCButton{
+                    text: "Clear"
+                    implicitWidth: parent.width
+                    onClicked:  {
+                        clearChart()
+                    }
                 }
             }
         }
@@ -228,7 +244,7 @@ Item{
         Rectangle{
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.right: checkBoxRow.left
+            anchors.right: flickable.left
             anchors.bottom: parent.bottom
             color: "transparent"
 
