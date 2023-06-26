@@ -159,8 +159,8 @@ Rectangle {
             //-- Video Mode
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                width:                  parent.height
                 height:                 parent.height
+                width:                  height
                 color:                  qgcPal.window
                 radius:                 height * 0.5
                 anchors.left:           parent.left
@@ -185,8 +185,8 @@ Rectangle {
             //-- Photo Mode
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                width:                  parent.height
                 height:                 parent.height
+                width:                  height
                 color:                  qgcPal.window
                 radius:                 height * 0.5
                 anchors.right:          parent.right
