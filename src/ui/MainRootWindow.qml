@@ -261,7 +261,7 @@ ApplicationWindow {
     }
 
     function checkForActiveConnections() {
-        if (QGroundControl.multiVehicleManager.activeVehicle) {
+        if (globals.activeVehicle) {
             mainWindow.showMessageDialog(closeDialogTitle,
                 qsTr("There are still active connections to vehicles. Are you sure you want to exit?"),
                 StandardButton.Yes | StandardButton.No,

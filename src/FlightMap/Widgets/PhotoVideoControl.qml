@@ -156,6 +156,8 @@ Rectangle {
             color:              qgcPal.window
             radius:             height * 0.5
 
+            DeadMouseArea { anchors.fill: parent }
+
             //-- Video Mode
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter

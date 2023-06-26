@@ -436,75 +436,63 @@ Item {
         anchors.margins:    _toolsMargin + ScreenTools.defaultFontPixelWidth * 0.25
         anchors.top:        multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
         anchors.right:      multiVehiclePanelSelector.showSingleVehiclePanel ? parent.right : multiVehiclePanelSelector.left
+        anchors.rightMargin: ScreenTools.isMobile ? _rightPanelWidth : _toolsMargin
         color:              qgcPal.window
-        width:              (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8 - anchorsMargins)
+        width:              _idealWidth - anchorsMargins
         height:             width
-        //height:             ScreenTools.defaultFontPixelHeight * 2.5
-        //width:              ScreenTools.defaultFontPixelHeight * 2.5
         radius:             ScreenTools.defaultFontPixelHeight / 2
         visible:            true
 
-        property real anchorsMargins:    ScreenTools.defaultFontPixelWidth * 0.6
+        property real _idealWidth:      (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8)
+        property real anchorsMargins:   ScreenTools.defaultFontPixelWidth * 0.8
+        property real contentMargins:   innerText.height * 0.1
 
         DeadMouseArea {
             anchors.fill: parent
         }
 
-        Item {
-                id:                 contentLayoutItem
-                anchors.fill:       parent
-                anchors.margins:    innerText.height * 0.2
+        Item{
+            id:                 contentLayoutItem
+            anchors.fill:       parent
+            anchors.margins:    quickViewPopupButton.contentMargins
 
-                Column {
-                    anchors.centerIn:   parent
-                    spacing:        innerText.height * 0.2
+            Column {
+                anchors.centerIn:   parent
+                spacing:            quickViewPopupButton.contentMargins * 2
 
-                    QGCColoredImage {
-                        id:                         innerImage
-                        height:                     contentLayoutItem.height * 0.6
-                        width:                      contentLayoutItem.width  * 0.6
-                        smooth:                     true
-                        mipmap:                     true
-                        color:                      qgcPal.text
-                        fillMode:                   Image.PreserveAspectFit
-                        antialiasing:               true
-                        sourceSize.height:          height
-                        sourceSize.width:           width
-                        anchors.horizontalCenter:   parent.horizontalCenter
-                        source:                     "/qmlimages/LogDownloadIcon"
-                    }
+                QGCColoredImage {
+                    id:                         innerImage
+                    height:                     contentLayoutItem.height * 0.6
+                    width:                      contentLayoutItem.width  * 0.6
+                    smooth:                     true
+                    mipmap:                     true
+                    color:                      qgcPal.text
+                    fillMode:                   Image.PreserveAspectFit
+                    antialiasing:               true
+                    sourceSize.height:          height
+                    sourceSize.width:           width
+                    anchors.horizontalCenter:   parent.horizontalCenter
+                    source:                     "/qmlimages/LogDownloadIcon"
+                }
 
-                    QGCLabel {
-                        id:                         innerText
-                        text:                       qsTr("Widget")
-                        color:                      qgcPal.text
-                        anchors.horizontalCenter:   parent.horizontalCenter
-                        font.pointSize:             ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
-                    }
+                QGCLabel {
+                    id:                         innerText
+                    text:                       qsTr("Widget")
+                    color:                      qgcPal.text
+                    anchors.horizontalCenter:   parent.horizontalCenter
+                    font.pointSize:             ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
                 }
             }
+        }
 
-//        Image {
-//            id: quickViewPopupIcon
-//            anchors.centerIn: parent
-//            source: "/qmlimages/LogDownloadIcon"
-//            mipmap: true
-//            fillMode: Image.PreserveAspectFit
-//            sourceSize: Qt.size(parent.width * 0.8, parent.height * 0.8)
-//        }
-//        ColorOverlay {
-//               anchors.fill: quickViewPopupIcon
-//               source: quickViewPopupIcon
-//               color: qgcPal.text
-//        }
         MouseArea {
             anchors.fill: quickViewPopupButton
             onClicked: {
-                //quickViewControl.visible = !quickViewControl.visible
                 quickViewControlDialogComponent.createObject(mainWindow).open()
             }
         }
     }
 }
+
 
 
