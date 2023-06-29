@@ -480,7 +480,8 @@ Item {
                     text:                       qsTr("Widget")
                     color:                      qgcPal.text
                     anchors.horizontalCenter:   parent.horizontalCenter
-                    font.pointSize:             ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
+                    font.family:                ScreenTools.normalFontFamily
+                    font.pointSize:             ScreenTools.smallFontPointSize
                 }
             }
         }

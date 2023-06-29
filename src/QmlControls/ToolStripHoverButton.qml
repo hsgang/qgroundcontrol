@@ -85,7 +85,7 @@ Button {
                 text:                       control.text
                 color:                      _currentContentColor
                 anchors.horizontalCenter:   parent.horizontalCenter
-                font.family: ScreenTools.normalFontFamily
+                font.family:                ScreenTools.normalFontFamily
             }
         }
     }
