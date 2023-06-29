@@ -436,7 +436,7 @@ Item {
         anchors.margins:    _toolsMargin + ScreenTools.defaultFontPixelWidth * 0.25
         anchors.top:        multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
         anchors.right:      multiVehiclePanelSelector.showSingleVehiclePanel ? parent.right : multiVehiclePanelSelector.left
-        anchors.rightMargin: ScreenTools.isMobile ? _rightPanelWidth : _toolsMargin
+        anchors.rightMargin: _toolsMargin
         color:              qgcPal.window
         width:              _idealWidth - anchorsMargins
         height:             width
