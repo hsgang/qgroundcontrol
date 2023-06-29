@@ -122,7 +122,7 @@ Item {
 
     property color backgroundColor: "transparent"
     property color dialColor: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)//"#FF505050"
-    property color progressColor: qgcPal.colorGreen //qgcPal.buttonHighlight // "#FFA51BAB"
+    property color progressColor: qgcPal.textHighlight //qgcPal.buttonHighlight // "#FFA51BAB"
 
     property int penStyle: Qt.RoundCap
 
@@ -159,7 +159,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         radius: parent.width * 0.15 //_margins * 3
-        color: qgcPal.windowShadeDark
+        color: qgcPal.window
     }
 
     Shape {
@@ -291,7 +291,7 @@ Item {
         anchors.margins: _toolsMargin
         anchors.bottom: confirmBackground.top
         anchors.horizontalCenter: parent.horizontalCenter
-        color: qgcPal.windowShadeDark
+        color: qgcPal.window
         QGCLabel {
             id:                     messageText
             anchors.horizontalCenter: parent.horizontalCenter
