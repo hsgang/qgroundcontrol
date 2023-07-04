@@ -1,12 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 import QtQuick          2.11
 import QtQuick.Layouts  1.11
 
@@ -16,16 +7,13 @@ import QGroundControl.MultiVehicleManager   1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.Palette               1.0
 
-//-------------------------------------------------------------------------
-//-- Telemetry RSSI
 Item {
     id:             _root
-    width:          (siyiStatusIcon.width + siyiStatusValuesColumn.width) * 1.1
+    width:          siyirssiRow.width //(siyiStatusIcon.width + siyiStatusValuesColumn.width) * 1.1
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property bool showIndicator:    QGroundControl.siyiSDKManager.isConnected
-
+    property bool showIndicator:    QGroundControl.settingsManager.appSettings.enableSiyiSDK.rawValue//QGroundControl.siyiSDKManager.isConnected
     property var  _activeVehicle:   QGroundControl.multiVehicleManager.activeVehicle
     property bool _hasTelemetry:    _activeVehicle ? _activeVehicle.telemetryLRSSI !== 0 : false
 
@@ -82,52 +70,39 @@ Item {
             }
         }
     }
+
     Row{
-        id:         siyirssiRow
+        id:             siyirssiRow
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
         spacing:        ScreenTools.defaultFontPixelWidth/2
 
         Rectangle{
-            width:              1
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            color:              qgcPal.text
-            opacity:            0.5
-        }
-
-        QGCColoredImage {
-            id:                 siyiStatusIcon
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            width:              height
-            sourceSize.height:  height
-            source:             "/qmlimages/TelemRSSI.svg"
-            fillMode:           Image.PreserveAspectFit
-            opacity:            QGroundControl.siyiSDKManager.signal !== 0 ? 1 : 0.5
-            color:              QGroundControl.siyiSDKManager.signal > 30 ? qgcPal.buttonText : qgcPal.colorOrange
-        }
-        Column {
-            id:                     siyiStatusValuesColumn
-            anchors.verticalCenter: parent.verticalCenter
-//            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
-//            anchors.left:           siyiStatusIcon.right
+            anchors.top:    parent.top
+            anchors.bottom: parent.bottom
+            height:         parent.height
+            width:          height
+            color:          "transparent"
 
             SignalStrength {
                 anchors.horizontalCenter:   parent.horizontalCenter
-                size:                   parent.height * 0.5
-                percent:                QGroundControl.siyiSDKManager.signal
+                anchors.verticalCenter:     parent.verticalCenter
+                size:                       parent.height * 0.9
+                percent:                    QGroundControl.siyiSDKManager.signal
             }
-            QGCLabel {
-                anchors.horizontalCenter:   parent.horizontalCenter
-                color:                      qgcPal.buttonText
-                text:                       QGroundControl.siyiSDKManager.signal + " %"
+
+            QGCColoredImage {
+                id:                 siyiStatusIcon
+                anchors.top:        parent.top
+                anchors.left:       parent.left
+                width:              parent.width / 2
+                height:             width
+                sourceSize.height:  height
+                source:             "/qmlimages/TelemRSSI.svg"
+                fillMode:           Image.PreserveAspectFit
+                //opacity:            QGroundControl.siyiSDKManager.signal !== 0 ? 1 : 0.5
+                color:              QGroundControl.siyiSDKManager.signal > 30 ? qgcPal.buttonText : qgcPal.colorOrange
             }
-    //        QGCLabel {
-    //            anchors.horizontalCenter:   parent.horizontalCenter
-    //            color:                      qgcPal.buttonText
-    //            text:                       QGroundControl.linkManager.rssi + " dBm"
-    //        }
         }
     }
 

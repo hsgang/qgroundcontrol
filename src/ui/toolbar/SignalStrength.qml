@@ -38,7 +38,7 @@ Item {
             return "/qmlimages/Signal40.svg"
         if (percent < 80)
             return "/qmlimages/Signal60.svg"
-        if (percent < 95)
+        if (percent < 90)
             return "/qmlimages/Signal80.svg"
         return "/qmlimages/Signal100.svg"
     }

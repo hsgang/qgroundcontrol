@@ -61,19 +61,11 @@ Item {
         anchors.bottom: parent.bottom
         spacing:        ScreenTools.defaultFontPixelWidth/2
 
-        Rectangle{
-            width:              1
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            color:              qgcPal.text
-            opacity:            0.5
-        }
-
         QGCColoredImage {
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            source:             "/InstrumentValueIcons/notification.svg"
+            source:             "/InstrumentValueIcons/notifications-outline.svg"
             sourceSize.height:  height * 0.7
             fillMode:           Image.PreserveAspectFit
             color:              getMessageColor()

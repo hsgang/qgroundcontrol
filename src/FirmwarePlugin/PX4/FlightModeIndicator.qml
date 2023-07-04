@@ -38,7 +38,7 @@ RowLayout {
             fillMode:   Image.PreserveAspectFit
             mipmap:     true
             color:      qgcPal.text
-            source:     "/qmlimages/FlightModesComponentIcon.png"
+            source:     "/InstrumentValueIcons/view-carousel.svg"
         }
 
         QGCLabel {

@@ -58,6 +58,58 @@ Item {
         }
     }
 
+    function getGpsLock() {
+        if (_activeVehicle.gps.lock.value) {
+            switch (_activeVehicle.gps.lock.value) {
+            case 0:
+                return "None"
+            case 1:
+                return "NoFix"
+            case 2:
+                return "2D"
+            case 3:
+                return "3D"
+            case 4:
+                return "DGPS"
+            case 5:
+                return "Float"
+            case 6:
+                return "RTK"
+            default:
+                return "GPS"
+            }
+        }
+        else{
+            return "None"
+        }
+    }
+
+    function getGps2Lock() {
+        if (_activeVehicle.gps2.lock.value) {
+            switch (_activeVehicle.gps2.lock.value) {
+            case 0:
+                return "None"
+            case 1:
+                return "NoFix"
+            case 2:
+                return "2D"
+            case 3:
+                return "3D"
+            case 4:
+                return "DGPS"
+            case 5:
+                return "Float"
+            case 6:
+                return "RTK"
+            default:
+                return "GPS"
+            }
+        }
+        else{
+            return "None"
+        }
+    }
+
     Component {
         id: gpsInfo
 
@@ -267,24 +319,16 @@ Item {
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
 
-        spacing: ScreenTools.defaultFontPixelWidth / 2
-
-        Rectangle{
-            width:              1
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            color:              qgcPal.text
-            opacity:            0.5
-        }
+        spacing: ScreenTools.defaultFontPixelHeight / 5
 
         QGCColoredImage {
             id:                 gpsIcon
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            source:             getGpsImage()
+            source:             "/qmlimages/Gps.svg" //getGpsImage()
             fillMode:           Image.PreserveAspectFit
-            sourceSize.height:  height
+            sourceSize.height:  height * 0.9
             opacity:            (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? 1 : 0.5
             color:              (_activeVehicle && _activeVehicle.gps.lock.value >= 3) ? qgcPal.buttonText : qgcPal.colorOrange
         }
@@ -294,15 +338,18 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             QGCLabel {
-                anchors.horizontalCenter:   hdopValue.horizontalCenter
-                color:                      qgcPal.buttonText
-                text:                       _activeVehicle ? _activeVehicle.gps.count.valueString : ""
+                anchors.left:   parent.left
+                color:          qgcPal.buttonText
+                font.pointSize: ScreenTools.smallFontPointSize
+                //text:           _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : "" //_activeVehicle ? _activeVehicle.gps.count.valueString : ""
+                text:           _activeVehicle ? getGpsLock() : ""
             }
 
             QGCLabel {
-                id:         hdopValue
-                color:      qgcPal.buttonText
-                text:       _activeVehicle ? _activeVehicle.gps.hdop.value.toFixed(1) : ""
+                id:             hdopValue
+                anchors.left:   parent.left
+                color:          qgcPal.buttonText
+                text:           _activeVehicle ? _activeVehicle.gps.count.valueString : "" //_activeVehicle ? _activeVehicle.gps.hdop.value.toFixed(1) : ""
             }
         }
 
@@ -321,9 +368,9 @@ Item {
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            source:             getGpsImage()
+            source:             "/qmlimages/Gps.svg" //getGpsImage()
             fillMode:           Image.PreserveAspectFit
-            sourceSize.height:  height
+            sourceSize.height:  height * 0.9
             opacity:            (_activeVehicle && _activeVehicle.gps2.count.value >= 0) ? 1 : 0.5
             color:              (_activeVehicle && _activeVehicle.gps2.lock.value >= 3) ? qgcPal.buttonText : qgcPal.colorOrange
         }
@@ -334,15 +381,17 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
 
             QGCLabel {
-                anchors.horizontalCenter:   gps2hdopValue.horizontalCenter
-                color:                      qgcPal.buttonText
-                text:                       _activeVehicle ? _activeVehicle.gps2.count.valueString : ""
+                anchors.left:   parent.left
+                color:          qgcPal.buttonText
+                font.pointSize: ScreenTools.smallFontPointSize
+                text:           _activeVehicle ? getGps2Lock() : "" //_activeVehicle ? _activeVehicle.gps2.count.valueString : ""
             }
 
             QGCLabel {
-                id:         gps2hdopValue
-                color:      qgcPal.buttonText
-                text:       _activeVehicle ? _activeVehicle.gps2.hdop.value.toFixed(1) : "100.0"
+                id:             gps2hdopValue
+                anchors.left:   parent.left
+                color:          qgcPal.buttonText
+                text:           _activeVehicle ? _activeVehicle.gps2.count.valueString : "" //_activeVehicle ? _activeVehicle.gps2.hdop.value.toFixed(1) : "100.0"
             }
         }
     }

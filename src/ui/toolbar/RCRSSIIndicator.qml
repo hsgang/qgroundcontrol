@@ -75,39 +75,30 @@ Item {
         spacing:        ScreenTools.defaultFontPixelWidth / 2
 
         Rectangle{
-            width:              1
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            color:              qgcPal.text
-            opacity:            0.5
-        }
-
-        QGCColoredImage {
-            id:                 rssiValuesIcon
-            width:              height
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            sourceSize.height:  height
-            source:             "/qmlimages/RC.svg"
-            fillMode:           Image.PreserveAspectFit
-            //opacity:            _rcRSSIAvailable ? 1 : 0.5
-            color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 70) ? qgcPal.buttonText : qgcPal.colorOrange
-        }
-
-        Column {
-            id:                     rssiValuesColumn
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins:        ScreenTools.defaultFontPixelWidth / 2
+            anchors.top:    parent.top
+            anchors.bottom: parent.bottom
+            height:         parent.height
+            width:          height
+            color:          "transparent"
 
             SignalStrength {
-                anchors.horizontalCenter: parent.horizontalCenter
-                size:                   parent.height * 0.5
-                percent:                _rcRSSIAvailable ? _activeVehicle.rcRSSI : 0
-            }
-            QGCLabel {
                 anchors.horizontalCenter:   parent.horizontalCenter
-                color:                      qgcPal.buttonText
-                text:                       _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
+                anchors.verticalCenter:     parent.verticalCenter
+                size:                       parent.height * 0.9// * 0.5
+                percent:                    _rcRSSIAvailable ? _activeVehicle.rcRSSI : 0
+            }
+
+            QGCColoredImage {
+                id:                 rssiValuesIcon
+                width:              parent.width / 2
+                height:             width
+                anchors.top:        parent.top
+                anchors.left:       parent.left
+                sourceSize.height:  height
+                source:             "/qmlimages/RC.svg"
+                fillMode:           Image.PreserveAspectFit
+                //opacity:            _rcRSSIAvailable ? 1 : 0.5
+                color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 70) ? qgcPal.buttonText : qgcPal.colorOrange
             }
         }
     }

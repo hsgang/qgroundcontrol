@@ -99,6 +99,98 @@ Rectangle {
         }
     }
 
+    Rectangle {
+        id:                     vehicleModeIndicatorRect
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        anchors.left:           viewButtonRow.right
+        anchors.right:          messageIndicatorRect.left
+        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
+        color:                  "transparent"
+        visible:                currentToolbar == flyViewToolbar
+
+        Row {
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            anchors.margins:    _toolIndicatorMargins
+            spacing:            ScreenTools.defaultFontPixelWidth * 0.5
+
+            property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
+
+            Repeater {
+                model: _activeVehicle ? _activeVehicle.modeIndicators : []
+                Loader {
+                    anchors.top:        parent.top
+                    anchors.bottom:     parent.bottom
+                    source:             modelData
+                    visible:            item.showIndicator
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id:                     messageIndicatorRect
+        width:                  height
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.8
+        anchors.right:          flightModeIndicatorRect.left
+        color:                  "transparent"
+        visible:                currentToolbar == flyViewToolbar
+
+        Loader{
+            id:             messageIndicatorLoader
+            anchors.top:    parent.top
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            source:        "qrc:/toolbar/MessageIndicator.qml"
+        }
+    }
+
+    Rectangle {
+        id:                     flightModeIndicatorRect
+        width:                  ScreenTools.defaultFontPixelHeight * 8
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.33
+        anchors.horizontalCenter: parent.horizontalCenter
+        color:                  "transparent"
+        border.color:           qgcPal.text
+        radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+        visible:                currentToolbar == flyViewToolbar
+
+        Loader{
+            id:             flightModeIndicatorLoader
+            anchors.top:    parent.top
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            source:        "qrc:/qml/QGroundControl/Controls/FlightModeMenuIndicator.qml"
+        }
+    }
+
+    QGCFlickable {
+        id:                     vehicleStatusFlickable
+        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+        anchors.left:           flightModeIndicatorRect.right
+        anchors.bottomMargin:   1
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        anchors.right:          parent.right
+        contentWidth:           statusIndicatorLoader.x + statusIndicatorLoader.width
+        flickableDirection:     Flickable.HorizontalFlick
+        visible:                currentToolbar == flyViewToolbar
+
+        Loader {
+            id:                 statusIndicatorLoader
+            anchors.left:       parent.left
+            anchors.right:      parent.right
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            source:             currentToolbar == flyViewToolbar ? "qrc:/toolbar/MainToolBarIndicators.qml" : ""
+        }
+    }
+
     QGCFlickable {
         id:                     toolsFlickable
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
@@ -109,6 +201,7 @@ Rectangle {
         anchors.right:          linkManagerButton.left
         contentWidth:           indicatorLoader.x + indicatorLoader.width
         flickableDirection:     Flickable.HorizontalFlick
+        visible:                currentToolbar == planViewToolbar
 
         Loader {
             id:                 indicatorLoader
@@ -116,9 +209,7 @@ Rectangle {
             anchors.right:      parent.right
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            source:             currentToolbar === flyViewToolbar ?
-                                    "qrc:/toolbar/MainToolBarIndicators.qml" :
-                                    (currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : "")
+            source:             currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : ""
         }
     }
 
@@ -134,6 +225,7 @@ Rectangle {
         radius:                 ScreenTools.defaultFontPixelHeight * 0.2
         border.color:           qgcPal.text
         border.width:           1
+        visible:                currentToolbar === flyViewToolbar
 
         QGCColoredImage{
             height:             parent.height * 0.7

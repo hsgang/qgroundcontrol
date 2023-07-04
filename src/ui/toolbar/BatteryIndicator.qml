@@ -287,7 +287,7 @@ Item {
             anchors.top:    parent.top
             anchors.bottom: parent.bottom
 
-            spacing: ScreenTools.defaultFontPixelWidth/2
+            spacing: ScreenTools.defaultFontPixelHeight / 5
 
             function getBatteryColor() {
                 if (battery.chargeState.rawValue) {
@@ -355,25 +355,6 @@ Item {
                 return "/qmlimages/battery_100.svg"
             }
 
-            Rectangle{
-                width:              1
-                anchors.top:        parent.top
-                anchors.bottom:     parent.bottom
-                color:              qgcPal.text
-                opacity:            0.5
-            }
-
-            QGCColoredImage {
-                id:                 batteryIcon
-                width:              height
-                anchors.top:        parent.top
-                anchors.bottom:     parent.bottom
-                source:             getBatteryIcon()
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                color:              getBatteryColor()
-            }
-
             Column {
                 id:                     batteryValuesColumn
                 anchors.verticalCenter: parent.verticalCenter
@@ -382,17 +363,30 @@ Item {
 
                 QGCLabel {
                     id:         batteryVoltageValue
-                    //visible:    _activeVehicle && !isNaN(_activeVehicle.battery.voltage.rawValue)
+                    anchors.right: parent.right
+                    font.pointSize:         ScreenTools.smallFontPointSize
                     color:      qgcPal.text
                     text:       _activeVehicle ? battery.voltage.valueString + battery.voltage.units : ""
                 }
 
                 QGCLabel {
-                    text:                   getBatteryPercentageText()
-                    //font.pointSize:         ScreenTools.mediumFontPointSize
+                    anchors.right: parent.right
                     color:                  qgcPal.text
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    text:                   getBatteryPercentageText()
+                    //anchors.horizontalCenter: parent.horizontalCenter
                 }
+            }
+
+            QGCColoredImage {
+                id:                 batteryIcon
+                height:             parent.height
+                width:              height * 0.7
+                anchors.top:        parent.top
+                anchors.bottom:     parent.bottom
+                source:             getBatteryIcon()
+                sourceSize.height:  height
+                fillMode:           Image.PreserveAspectCrop //Image.PreserveAspectFit
+                color:              getBatteryColor()
             }
         }
     }
