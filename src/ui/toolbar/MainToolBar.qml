@@ -225,7 +225,7 @@ Rectangle {
         radius:                 ScreenTools.defaultFontPixelHeight * 0.2
         border.color:           qgcPal.text
         border.width:           1
-        visible:                currentToolbar === flyViewToolbar
+        visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
 
         QGCColoredImage{
             height:             parent.height * 0.7

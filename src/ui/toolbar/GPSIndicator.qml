@@ -64,7 +64,7 @@ Item {
             case 0:
                 return "None"
             case 1:
-                return "NoFix"
+                return "NoFx"
             case 2:
                 return "2D"
             case 3:
@@ -72,7 +72,7 @@ Item {
             case 4:
                 return "DGPS"
             case 5:
-                return "Float"
+                return "Flt"
             case 6:
                 return "RTK"
             default:
@@ -341,7 +341,6 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
-                //text:           _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : "" //_activeVehicle ? _activeVehicle.gps.count.valueString : ""
                 text:           _activeVehicle ? getGpsLock() : ""
             }
 
@@ -349,30 +348,8 @@ Item {
                 id:             hdopValue
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
-                text:           _activeVehicle ? _activeVehicle.gps.count.valueString : "" //_activeVehicle ? _activeVehicle.gps.hdop.value.toFixed(1) : ""
+                text:           _activeVehicle ? _activeVehicle.gps.count.valueString : ""
             }
-        }
-
-        Rectangle{
-            visible:            isGNSS2
-            width:              1
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            color:              qgcPal.text
-            opacity:            0.5
-        }
-
-        QGCColoredImage {
-            visible:            isGNSS2
-            id:                 gps2Icon
-            width:              height
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            source:             "/qmlimages/Gps.svg" //getGpsImage()
-            fillMode:           Image.PreserveAspectFit
-            sourceSize.height:  height * 0.9
-            opacity:            (_activeVehicle && _activeVehicle.gps2.count.value >= 0) ? 1 : 0.5
-            color:              (_activeVehicle && _activeVehicle.gps2.lock.value >= 3) ? qgcPal.buttonText : qgcPal.colorOrange
         }
 
         Column {
@@ -384,14 +361,14 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
-                text:           _activeVehicle ? getGps2Lock() : "" //_activeVehicle ? _activeVehicle.gps2.count.valueString : ""
+                text:           _activeVehicle ? getGps2Lock() : ""
             }
 
             QGCLabel {
                 id:             gps2hdopValue
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
-                text:           _activeVehicle ? _activeVehicle.gps2.count.valueString : "" //_activeVehicle ? _activeVehicle.gps2.hdop.value.toFixed(1) : "100.0"
+                text:           _activeVehicle ? _activeVehicle.gps2.count.valueString : ""
             }
         }
     }
