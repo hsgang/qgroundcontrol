@@ -112,7 +112,7 @@ Rectangle {
         Row {
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            anchors.margins:    _toolIndicatorMargins
+            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.66
             spacing:            ScreenTools.defaultFontPixelWidth * 0.5
 
             property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
@@ -169,21 +169,32 @@ Rectangle {
         }
     }
 
-    QGCFlickable {
-        id:                     vehicleStatusFlickable
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-        anchors.left:           flightModeIndicatorRect.right
-        anchors.bottomMargin:   1
+//    QGCFlickable {
+//        id:                     vehicleStatusFlickable
+//        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+//        anchors.left:           flightModeIndicatorRect.right
+//        anchors.bottomMargin:   1
+//        anchors.top:            parent.top
+//        anchors.bottom:         parent.bottom
+//        anchors.right:          parent.right
+//        contentWidth:           statusIndicatorLoader.x + statusIndicatorLoader.width
+//        flickableDirection:     Flickable.HorizontalFlick
+//        visible:                currentToolbar == flyViewToolbar
+    Rectangle {
+        id:                     vehicleStatusRect
+        visible:                currentToolbar == flyViewToolbar
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
-        anchors.right:          parent.right
-        contentWidth:           statusIndicatorLoader.x + statusIndicatorLoader.width
-        flickableDirection:     Flickable.HorizontalFlick
-        visible:                currentToolbar == flyViewToolbar
+        anchors.bottomMargin:   1
+        anchors.left:           flightModeIndicatorRect.right
+        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
+        anchors.right:          linkManagerButton.visible ? linkManagerButton.left : parent.right
+        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
+        color:                  "transparent"
 
         Loader {
             id:                 statusIndicatorLoader
-            anchors.left:       parent.left
+            //anchors.left:       parent.left
             anchors.right:      parent.right
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
