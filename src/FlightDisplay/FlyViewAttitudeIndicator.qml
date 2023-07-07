@@ -64,19 +64,16 @@ Rectangle {
 
     property real _acInputVolatage1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage1.rawValue.toFixed(1) : NaN
     property real _acInputVolatage2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage2.rawValue.toFixed(1) : NaN
-    property real _acInputVolatage3Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage3.rawValue.toFixed(1) : NaN
     property real _dcOutputVolatage1Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage1.rawValue.toFixed(1) : NaN
     property real _dcOutputVolatage2Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage2.rawValue.toFixed(1) : NaN
-    property real _dcOutputVolatage3Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage3.rawValue.toFixed(1) : NaN
     property real _dcOutputCurrent1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent1.rawValue.toFixed(1) : NaN
     property real _dcOutputCurrent2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent2.rawValue.toFixed(1) : NaN
-    property real _dcOutputCurrent3Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent3.rawValue.toFixed(1) : NaN
     property real _temperatureValue:        _activeVehicle ? _activeVehicle.externalPowerStatus.temperature.rawValue.toFixed(1) : NaN
     property real _batteryVoltageValue:     _activeVehicle ? _activeVehicle.externalPowerStatus.batteryVoltage.rawValue.toFixed(1) : NaN
     property real _batteryChangeValue:      _activeVehicle ? _activeVehicle.externalPowerStatus.batteryChange.rawValue.toFixed(0) : NaN
 
-    property real _meanACInput : ((_acInputVolatage1Value + _acInputVolatage2Value + _acInputVolatage3Value) / 3).toFixed(1)
-    property real _meanDCOutput: (((_dcOutputVolatage1Value + _dcOutputVolatage2Value + _dcOutputVolatage3Value) / 3) * ((_dcOutputCurrent1Value + _dcOutputCurrent2Value + _dcOutputCurrent3Value) / 3)).toFixed(1)
+    property real _meanACInput : ((_acInputVolatage1Value + _acInputVolatage2Value) / 2).toFixed(1)
+    property real _meanDCOutput: (((_dcOutputVolatage1Value + _dcOutputVolatage2Value) / 2) * ((_dcOutputCurrent1Value + _dcOutputCurrent2Value) / 2)).toFixed(1)
 
     //-----------------------------------------------------------------------------------------------------
     //--Attitude Widget-----------------------------------------------------------------------------------
