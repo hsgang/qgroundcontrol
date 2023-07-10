@@ -26,7 +26,7 @@ Rectangle {
     width:                  ScreenTools.defaultFontPixelWidth * 30
     height:                 weatherTitle.height + weatherValue.height + (_toolsMargin * 3)
     radius:                 ScreenTools.defaultFontPixelWidth / 2
-    color:                  "#80000000" //qgcPal.window
+    color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
     border.color:           qgcPal.text
     border.width:           1
 
@@ -106,7 +106,6 @@ Rectangle {
     QGCLabel {
         id:     weatherTitle
         text:   qsTr("Weather Status")
-        font.pointSize: ScreenTools.defaultFontPixelWidth * 1.2
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.margins: _toolsMargin * 2
     }
