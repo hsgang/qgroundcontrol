@@ -12,8 +12,8 @@ import QGroundControl.Palette           1.0
 
 Rectangle {
     id:         ekfStatus
-    height:     ekfStatusItem.height// + ScreenTools.defaultFontPixelHeight * 0.5
-    width:      ekfStatusItem.width// + ScreenTools.defaultFontPixelWidth * 3
+    height:     ekfStatusItem.height + ScreenTools.defaultFontPixelHeight / 2
+    width:      ekfStatusItem.width + ScreenTools.defaultFontPixelHeight / 2
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:     _margins
     border.color: qgcPal.text
@@ -38,6 +38,8 @@ Rectangle {
         id:     ekfStatusItem
         width:  childrenRect.width
         height: childrenRect.height
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
         anchors.margins: ScreenTools.defaultFontPixelWidth / 2
 
         RowLayout {

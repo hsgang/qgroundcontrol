@@ -49,8 +49,8 @@ MapQuickItem {
             anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 3
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             radius:     _margins
-            border.width: 1
-            border.color: qgcPal.text
+//            border.width: 1
+//            border.color: qgcPal.text
 
             Column{
                 id:                 atmosphericValueColumn
@@ -109,6 +109,32 @@ MapQuickItem {
                         Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 11
                     }
                 }
+            }
+        }
+
+        Item {
+            id : triangleComponent
+            anchors.top:    atmosphericValueBar.bottom
+            anchors.left:   atmosphericValueBar.horizontalCenter
+            width: ScreenTools.defaultFontPixelHeight
+            height: ScreenTools.defaultFontPixelHeight
+            clip : true
+
+            // The index of corner for the triangle to be attached
+            property int corner : 0;
+            property alias color : rect.color
+
+            Rectangle {
+                x : triangleComponent.width * ((triangleComponent.corner + 1) % 4 < 2 ? 0 : 1) - width / 2
+                y : triangleComponent.height * (triangleComponent.corner    % 4 < 2 ? 0 : 1) - height / 2
+                id : rect
+                color : Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+                antialiasing: true
+                width : Math.min(triangleComponent.width,triangleComponent.height)
+                height : width
+                transformOrigin: Item.Center
+                rotation : 45
+                scale : 1.414
             }
         }
     }

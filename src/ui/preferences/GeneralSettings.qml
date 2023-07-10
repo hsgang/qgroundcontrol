@@ -213,6 +213,13 @@ Rectangle {
 
                             FactCheckBoxSlider {
                                 Layout.fillWidth:   true
+                                text:               qsTr("Show attitude HUD indicators on Compass")
+                                fact:               QGroundControl.settingsManager.flyViewSettings.showAttitudeHUD
+                                visible:            fact.visible
+                            }
+
+                            FactCheckBoxSlider {
+                                Layout.fillWidth:   true
                                 text:               qsTr("Lock Compass Nose-Up")
                                 fact:               QGroundControl.settingsManager.flyViewSettings.lockNoseUpCompass
                                 visible:            fact.visible

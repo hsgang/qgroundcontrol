@@ -36,7 +36,7 @@ Item {
 
                 QGCLabel {
                     id:             telemLabel
-                    text:           qsTr("Link Status")
+                    text:           qsTr("Network Status")
                     font.family:    ScreenTools.demiboldFontFamily
                     anchors.horizontalCenter: parent.horizontalCenter
                 }

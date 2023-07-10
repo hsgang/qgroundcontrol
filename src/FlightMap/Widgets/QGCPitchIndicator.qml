@@ -48,7 +48,7 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: (_pitch % 10) === 0 ? _longDash : _shortDash
                     height: _reticleHeight
-                    color: qgcPal.colorGreen
+                    color: qgcPal.textHighlight
                     antialiasing: true
                     smooth: true
                     QGCLabel {
@@ -59,7 +59,7 @@ Rectangle {
                         font.family: ScreenTools.demiboldFontFamily
                         font.pointSize: _fontSize
                         text: _pitch
-                        color: qgcPal.colorGreen
+                        color: qgcPal.textHighlight
                         visible: (_pitch != 0) && ((_pitch % 10) === 0)
                     }
                     QGCLabel {
@@ -70,7 +70,7 @@ Rectangle {
                         font.family: ScreenTools.demiboldFontFamily
                         font.pointSize: _fontSize
                         text: _pitch
-                        color: qgcPal.colorGreen
+                        color: qgcPal.textHighlight
                         visible: (_pitch != 0) && ((_pitch % 10) === 0)
                     }
                 }

@@ -62,6 +62,7 @@ Item {
     }
 
     readonly property bool _showAdditionalIndicatorsCompass:     QGroundControl.settingsManager.flyViewSettings.showAdditionalIndicatorsCompass.value && !usedByMultipleVehicleList
+    readonly property bool _showAttitudeHUD:            QGroundControl.settingsManager.flyViewSettings.showAttitudeHUD.value && !usedByMultipleVehicleList
     readonly property bool _lockNoseUpCompass:        QGroundControl.settingsManager.flyViewSettings.lockNoseUpCompass.value
 
     Image {
@@ -168,31 +169,32 @@ Item {
 
 
 
+    Image {
+        id: rollDial
+        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
+        visible:            _showAttitudeHUD
+        source:             "/qmlimages/rollDialWhite.svg"
+        mipmap:             true
+        width:              parent.width * 0.7
+        sourceSize.width:   width
+        fillMode:           Image.PreserveAspectFit
+
+        ColorOverlay {
+            anchors.fill:       rollDial
+            source:             rollDial
+            color:              qgcPal.textHighlight
+        }
+
+        transform: Rotation {
+            origin.x:       rollDial.width / 2
+            origin.y:       rollDial.height
+            angle:          -_rollAngle
+        }
+    }
+
 //    Image {
-//        id: rollDial
-//        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-//        source:             "/qmlimages/rollDialWhite.svg"
-//        mipmap:             true
-//        width:              parent.width * 0.7
-//        sourceSize.width:   width
-//        fillMode:           Image.PreserveAspectFit
-
-//        ColorOverlay {
-//            anchors.fill:       rollDial
-//            source:             rollDial
-//            color:              qgcPal.colorGreen
-//        }
-
-//        transform: Rotation {
-//            origin.x:       rollDial.width / 2
-//            origin.y:       rollDial.height
-//            angle:          -_rollAngle
-//        }
-//    }
-
-//    Image {
-//        id: pointer
-//        visible: _lockNoseUpCompass
+//        id:                 pointer
+//        visible:            _lockNoseUpCompass
 //        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
 //        source:             "/qmlimages/rollPointerWhite.svg"
 //        mipmap:             true
@@ -202,63 +204,64 @@ Item {
 //    }
 
 
-//    Image {
-//        id:                 crossHair
-//        anchors.centerIn:   parent
-//        source:             "/qmlimages/crossHair.svg"
-//        mipmap:             true
-//        width:              parent.width * 0.8
-//        sourceSize.width:   width
-//        //color:              qgcPal.text
-//        fillMode:           Image.PreserveAspectFit
+    Image {
+        id:                 crossHair
+        visible:            _showAttitudeHUD
+        anchors.centerIn:   parent
+        source:             "/qmlimages/crossHair.svg"
+        mipmap:             true
+        width:              parent.width * 0.8
+        sourceSize.width:   width
+        //color:              qgcPal.text
+        fillMode:           Image.PreserveAspectFit
 
-//        ColorOverlay {
-//            anchors.fill:       crossHair
-//            source:             crossHair
-//            color:              qgcPal.colorGreen
-//        }
-//    }
+        ColorOverlay {
+            anchors.fill:       crossHair
+            source:             crossHair
+            color:              qgcPal.textHighlight
+        }
+    }
 
-//    QGCPitchIndicator {
-//        id:                 pitchIndicator
-//        anchors.verticalCenter: parent.verticalCenter
-//        visible:            showPitch
-//        pitchAngle:         _pitchAngle
-//        rollAngle:          _rollAngle
-//        color:              Qt.rgba(0,0,0,0)
-//        size:               ScreenTools.defaultFontPixelHeight * (5)
-//    }
+    QGCPitchIndicator {
+        id:                 pitchIndicator
+        anchors.verticalCenter: parent.verticalCenter
+        visible:            _showAttitudeHUD //showPitch
+        pitchAngle:         _pitchAngle
+        rollAngle:          _rollAngle
+        color:              Qt.rgba(0,0,0,0)
+        size:               ScreenTools.defaultFontPixelHeight * (5)
+    }
 
-//    Image {
-//        id:                 cOGPointer
-//        source:             isCOGAngleOK() ? "/qmlimages/cOGPointer.svg" : ""
-//        mipmap:             true
-//        fillMode:           Image.PreserveAspectFit
-//        anchors.fill:       parent
-//        sourceSize.height:  parent.height
+    Image {
+        id:                 cOGPointer
+        source:             isCOGAngleOK() ? "/qmlimages/cOGPointer.svg" : ""
+        mipmap:             true
+        fillMode:           Image.PreserveAspectFit
+        anchors.fill:       parent
+        sourceSize.height:  parent.height
 
-//        transform: Rotation {
-//            property var _angle:isNoseUpLocked() ? _courseOverGround-_heading : _courseOverGround
-//            origin.x:       cOGPointer.width  / 2
-//            origin.y:       cOGPointer.height / 2
-//            angle:         _angle
-//        }
-//    }
+        transform: Rotation {
+            property var _angle:isNoseUpLocked() ? _courseOverGround-_heading : _courseOverGround
+            origin.x:       cOGPointer.width  / 2
+            origin.y:       cOGPointer.height / 2
+            angle:         _angle
+        }
+    }
 
-//    Image {
-//        id:                 nextWPPointer
-//        source:             isHeadingToNextWPOK() ? "/qmlimages/compassDottedLine.svg":""
-//        mipmap:             true
-//        fillMode:           Image.PreserveAspectFit
-//        anchors.fill:       parent
-//        sourceSize.height:  parent.height
+    Image {
+        id:                 nextWPPointer
+        source:             isHeadingToNextWPOK() ? "/qmlimages/compassDottedLine.svg":""
+        mipmap:             true
+        fillMode:           Image.PreserveAspectFit
+        anchors.fill:       parent
+        sourceSize.height:  parent.height
 
-//        transform: Rotation {
-//            property var _angle: isNoseUpLocked()?_headingToNextWP-_heading:_headingToNextWP
-//            origin.x:       cOGPointer.width  / 2
-//            origin.y:       cOGPointer.height / 2
-//            angle:         _angle
-//        }
-//    }
+        transform: Rotation {
+            property var _angle: isNoseUpLocked()?_headingToNextWP-_heading:_headingToNextWP
+            origin.x:       cOGPointer.width  / 2
+            origin.y:       cOGPointer.height / 2
+            angle:         _angle
+        }
+    }
 
 }

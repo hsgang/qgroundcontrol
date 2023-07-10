@@ -114,19 +114,19 @@ Item {
             }
 
             contentItem: TextArea {
-                id:                     messageText
-                width:                  Math.max(ScreenTools.defaultFontPixelWidth * 30, contentWidth + ScreenTools.defaultFontPixelWidth)
-                height:                 Math.max(ScreenTools.defaultFontPixelHeight * 20, contentHeight)
-                readOnly:               true
-                textFormat:             TextEdit.RichText
-                color:                  qgcPal.text
-                placeholderText:        qsTr("No Messages")
-                placeholderTextColor:   qgcPal.text
-                padding:                0
+                    id:                     messageText
+                    width:                  Math.max(ScreenTools.defaultFontPixelWidth * 30, contentWidth + ScreenTools.defaultFontPixelWidth)
+                    height:                 Math.max(ScreenTools.defaultFontPixelHeight * 20, contentHeight)
+                    readOnly:               true
+                    textFormat:             TextEdit.RichText
+                    color:                  qgcPal.text
+                    placeholderText:        qsTr("No Messages")
+                    placeholderTextColor:   qgcPal.text
+                    padding:                0
 
                 Rectangle {
-                    anchors.right:   parent.right
-                    anchors.top:     parent.top
+                    anchors.right:              parent.right
+                    anchors.bottom:             parent.bottom
                     width:                      ScreenTools.defaultFontPixelHeight * 1.25
                     height:                     width
                     radius:                     width / 2
@@ -156,24 +156,6 @@ Item {
                     }
                 }
             }
-//            QGCFlickable {
-//                id:                 messageFlick
-//                anchors.margins:    ScreenTools.defaultFontPixelHeight
-//                anchors.fill:       parent
-//                contentHeight:      messageText.height
-//                contentWidth:       messageText.width
-//                pixelAligned:       true
-
-//                TextEdit {
-//                    id:                 messageText
-//                    readOnly:           true
-//                    textFormat:         TextEdit.RichText
-//                    selectByMouse:      true
-//                    color:              qgcPal.text
-//                    selectionColor:     qgcPal.text
-//                    selectedTextColor:  qgcPal.window
-//                }
-//            }
         }
     }
 }

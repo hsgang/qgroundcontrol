@@ -326,22 +326,31 @@ Item {
         }
     }
 
-    FlyViewVibrationStatus{
-        id:                         flyviewVibrationStatus
+    Rectangle {
+        id:                         flyviewStatusRect
         anchors.horizontalCenter:   parent.horizontalCenter
         anchors.bottom:             attitudeIndicator.top
         anchors.bottomMargin:       _toolsMargin
-        visible:                    false
+        color:                      "transparent"
+        width:                      flyviewStatusRow.width
+        height:                     flyviewStatusRow.height
+
+        RowLayout{
+            id: flyviewStatusRow
+
+            FlyViewVibrationStatus{
+                id:                         flyviewVibrationStatus
+                visible:                    false
+            }
+
+            FlyViewEKFStatus{
+                id:                         flyviewEKFStatus
+                visible:                    false
+            }
+        }
     }
 
-    FlyViewEKFStatus{
-        id:                         flyviewEKFStatus
-        anchors.left:               flyviewVibrationStatus.visible ? flyviewVibrationStatus.right : parent.horizontalCenter
-        anchors.leftMargin:         _toolsMargin
-        anchors.bottom:             attitudeIndicator.top
-        anchors.bottomMargin:       _toolsMargin
-        visible:                    false
-    }
+
 
     Component {
         id: quickViewControlDialogComponent

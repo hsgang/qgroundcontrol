@@ -211,8 +211,12 @@ void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
         direction += 360;
     }
 
-    if(wind.direction)  {windDir()->setRawValue(direction);}
-    if(wind.speed)      {windSpd()->setRawValue(wind.speed);}
+    uint8_t compId = message.compid;
+
+    if (compId == 158) {
+        if(wind.direction)  {windDir()->setRawValue(direction);}
+        if(wind.speed)      {windSpd()->setRawValue(wind.speed);}
+    }
 }
 #endif
 

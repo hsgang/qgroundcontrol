@@ -24,6 +24,7 @@ public:
     DEFINE_SETTINGFACT(showLogReplayStatusBar)
     DEFINE_SETTINGFACT(alternateInstrumentPanel)
     DEFINE_SETTINGFACT(showAdditionalIndicatorsCompass)
+    DEFINE_SETTINGFACT(showAttitudeHUD)
     DEFINE_SETTINGFACT(lockNoseUpCompass)
     DEFINE_SETTINGFACT(maxGoToLocationDistance)
     DEFINE_SETTINGFACT(keepMapCenteredOnVehicle)

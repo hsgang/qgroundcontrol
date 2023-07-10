@@ -12,8 +12,8 @@ import QGroundControl.Palette           1.0
 
 Rectangle {
     id:         vibrationStatus
-    height:     vibrationItem.height// + ScreenTools.defaultFontPixelHeight * 0.5
-    width:      vibrationItem.width// + ScreenTools.defaultFontPixelWidth * 3
+    height:     vibrationItem.height + ScreenTools.defaultFontPixelHeight / 2
+    width:      vibrationItem.width + ScreenTools.defaultFontPixelHeight / 2
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:     _margins
     border.color: qgcPal.text
@@ -36,6 +36,8 @@ Rectangle {
         id:     vibrationItem
         width:  childrenRect.width
         height: childrenRect.height
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
         anchors.margins: ScreenTools.defaultFontPixelWidth / 2
 
         RowLayout {

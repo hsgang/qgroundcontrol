@@ -21,7 +21,7 @@ import QGroundControl.FlightMap     1.0
 Item {
     property real   _margin:            ScreenTools.defaultFontPixelWidth / 2
     property real   _widgetHeight:      ScreenTools.defaultFontPixelHeight * 3
-    property color  _textColor:         "black"
+    property color  _textColor:         qgcPal.text
     property real   _rectOpacity:       0.8
     property var    _guidedController:  globals.guidedControllerFlyView
 

@@ -99,7 +99,8 @@ Item {
     function goToSettings() {
         if (!mainWindow.preventViewSwitch()) {
             globals.commingFromRIDIndicator = true
-            mainWindow.showSettingsTool()
+            mainWindow.showSettingsTool("Remote ID")
+            mainWindow.hideIndicatorPopup()
         }
     }
 

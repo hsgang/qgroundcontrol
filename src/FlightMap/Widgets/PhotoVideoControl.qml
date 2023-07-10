@@ -88,6 +88,10 @@ Rectangle {
     property bool   _videoIsRecording:                          _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamRecording
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
+//    Component.onCompleted :{
+//        console.log("_mavlinkCameraManagerCurCameraIndex :"+ _mavlinkCameraManagerCurCameraIndex)
+//    }
+
     function setCameraMode(photoMode) {
         _videoStreamInPhotoMode = photoMode
         if (_mavlinkCamera) {
@@ -101,30 +105,37 @@ Rectangle {
 
     function toggleShooting() {
         console.log("toggleShooting", _anyVideoStreamAvailable)
-        if (_mavlinkCamera && _mavlinkCamera.capturesVideo || _mavlinkCamera.capturesPhotos ) {
+        console.log("_mavlinkCameraManagerCurCameraIndex :"+ _mavlinkCameraManagerCurCameraIndex)
+        if (_mavlinkCamera) { // && _mavlinkCamera.capturesVideo || _mavlinkCamera.capturesPhotos ) {
             if(_mavlinkCameraInVideoMode) {
                 _mavlinkCamera.toggleVideo()
             } else {
                 if(_mavlinkCameraInPhotoMode && !_mavlinkCameraPhotoCaptureIsIdle && _mavlinkCameraElapsedMode) {
                     _mavlinkCamera.stopTakePhoto()
+                    console.log("_mavlinkCamera.stopTakePhoto()")
                 } else {
                     _mavlinkCamera.takePhoto()
+                    console.log("_mavlinkCamera.takePhoto()")
                 }
             }
         } else if (_onlySimpleCameraAvailable || (_simpleCameraAvailable && _anyVideoStreamAvailable && _videoStreamInPhotoMode && !videoGrabRadio.checked)) {
             _simplePhotoCaptureIsIdle = false
             _activeVehicle.triggerSimpleCamera()
+            console.log("_activeVehicle.triggerSimpleCamera()")
             simplePhotoCaptureTimer.start()
         } else if (_anyVideoStreamAvailable) {
             if (_videoStreamInPhotoMode) {
                 _simplePhotoCaptureIsIdle = false
                 _videoStreamManager.grabImage()
+                console.log("_videoStreamManager.grabImage()")
                 simplePhotoCaptureTimer.start()
             } else {
                 if (_videoStreamManager.recording) {
                     _videoStreamManager.stopRecording()
+                    console.log("_videoStreamManager.stopRecording()")
                 } else {
                     _videoStreamManager.startRecording()
+                    console.log("_videoStreamManager.startRecording()")
                 }
             }
         }

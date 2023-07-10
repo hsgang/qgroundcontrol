@@ -680,7 +680,8 @@ ApplicationWindow {
 
     Popup {
         id:             indicatorDrawer
-        x:              _margins
+        //x:              _margins
+        x:              parent.width / 2 - backgroundRect.width / 2
         y:              _margins
         leftInset:      0
         rightInset:     0

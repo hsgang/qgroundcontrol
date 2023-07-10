@@ -120,8 +120,7 @@ Rectangle {
             Repeater {
                 model: _activeVehicle ? _activeVehicle.modeIndicators : []
                 Loader {
-                    anchors.top:        parent.top
-                    anchors.bottom:     parent.bottom
+                    anchors.verticalCenter: parent.verticalCenter
                     source:             modelData
                     visible:            item.showIndicator
                 }
@@ -158,7 +157,7 @@ Rectangle {
         color:                  "transparent"
         border.color:           qgcPal.text
         radius:                 ScreenTools.defaultFontPixelHeight * 0.2
-        visible:                currentToolbar == flyViewToolbar
+        visible:                currentToolbar == flyViewToolbar && _activeVehicle
 
         Loader{
             id:             flightModeIndicatorLoader
