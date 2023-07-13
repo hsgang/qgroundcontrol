@@ -73,7 +73,7 @@ Rectangle {
     property real _batteryChangeValue:      _activeVehicle ? _activeVehicle.externalPowerStatus.batteryChange.rawValue.toFixed(0) : NaN
 
     property real _meanACInput : ((_acInputVolatage1Value + _acInputVolatage2Value) / 2).toFixed(1)
-    property real _meanDCOutput: (((_dcOutputVolatage1Value + _dcOutputVolatage2Value) / 2) * ((_dcOutputCurrent1Value + _dcOutputCurrent2Value) / 2)).toFixed(1)
+    property real _meanDCOutput: ((_dcOutputVolatage1Value + _dcOutputVolatage2Value) * (_dcOutputCurrent1Value + _dcOutputCurrent2Value) / 2).toFixed(1)
 
     //-----------------------------------------------------------------------------------------------------
     //--Attitude Widget-----------------------------------------------------------------------------------

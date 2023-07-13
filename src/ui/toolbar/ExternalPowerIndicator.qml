@@ -27,18 +27,26 @@ Item {
     property bool showIndicator:    true
 
     property var  _activeVehicle:   QGroundControl.multiVehicleManager.activeVehicle
-    property string _acInputVolatage1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage1.rawValue.toFixed(1) : "--.-"
-    property string _acInputVolatage2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage2.rawValue.toFixed(1) : "--.-"
-    property string _dcOutputVolatage1Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage1.rawValue.toFixed(1) : "--.-"
-    property string _dcOutputVolatage2Value:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage2.rawValue.toFixed(1) : "--.-"
-    property string _dcOutputCurrent1Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent1.rawValue.toFixed(1) : "--.-"
-    property string _dcOutputCurrent2Value:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent2.rawValue.toFixed(1) : "--.-"
+
+    property real _acInputVolatage1raw:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage1.rawValue : 0
+    property real _acInputVolatage2raw:   _activeVehicle ? _activeVehicle.externalPowerStatus.acInputVolatage2.rawValue : 0
+    property real _dcOutputVolatage1raw:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage1.rawValue : 0
+    property real _dcOutputVolatage2raw:  _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputVolatage2.rawValue : 0
+    property real _dcOutputCurrent1raw:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent1.rawValue : 0
+    property real _dcOutputCurrent2raw:   _activeVehicle ? _activeVehicle.externalPowerStatus.dcOutputCurrent2.rawValue : 0
+
+    property string _acInputVolatage1Value:   _activeVehicle ? _acInputVolatage1raw.toFixed(1) : "--.-"
+    property string _acInputVolatage2Value:   _activeVehicle ? _acInputVolatage2raw.toFixed(1) : "--.-"
+    property string _dcOutputVolatage1Value:  _activeVehicle ? _dcOutputVolatage1raw.toFixed(1) : "--.-"
+    property string _dcOutputVolatage2Value:  _activeVehicle ? _dcOutputVolatage2raw.toFixed(1) : "--.-"
+    property string _dcOutputCurrent1Value:   _activeVehicle ? _dcOutputCurrent1raw.toFixed(1) : "--.-"
+    property string _dcOutputCurrent2Value:   _activeVehicle ? _dcOutputCurrent2raw.toFixed(1) : "--.-"
     property string _temperatureValue:        _activeVehicle ? _activeVehicle.externalPowerStatus.temperature.rawValue.toFixed(1) : "--.-"
     property string _batteryVoltageValue:     _activeVehicle ? _activeVehicle.externalPowerStatus.batteryVoltage.rawValue.toFixed(1) : "--.-"
     property string _batteryChangeValue:      _activeVehicle ? _activeVehicle.externalPowerStatus.batteryChange.rawValue.toFixed(0) : "--.-"
 
-    property real _meanACInput : ((_acInputVolatage1Value + _acInputVolatage2Value) / 2).toFixed(1)
-    property real _meanDCOutput: ((_dcOutputVolatage1Value + _dcOutputVolatage2Value / 2) * (_dcOutputCurrent1Value + _dcOutputCurrent2Value / 2)).toFixed(1)
+    property string _meanACInput : ((_acInputVolatage1raw + _acInputVolatage2raw) / 2).toFixed(1)
+    property string _meanDCOutput: ((_dcOutputVolatage1raw + _dcOutputVolatage2raw) * (_dcOutputCurrent1raw + _dcOutputCurrent2raw) / 2).toFixed(1)
 
     Component {
         id: extPowerStatusInfo
@@ -118,13 +126,13 @@ Item {
             QGCLabel {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 color:                      qgcPal.buttonText
-                text:                       _acInputVolatage1Value ? _meanACInput + "V" : "No data"
+                text:                       _meanACInput + " V"
             }
 
             QGCLabel {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 color:                      qgcPal.buttonText
-                text:                       _dcOutputVolatage1Value ? _meanDCOutput + "W" : "No data"
+                text:                       _meanDCOutput + " W"
             }
         }
     }
