@@ -275,7 +275,7 @@ FlightMap {
             coordinate:     object.coordinate
             map:            _root
             visible:        QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && !pipMode
-            z:              QGroundControl.zOrderVehicles
+            z:              QGroundControl.zOrderTopMost
         }
     }
 
