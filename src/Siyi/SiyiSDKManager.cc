@@ -163,6 +163,7 @@ void SiyiSDKManager::read_incoming_packets(LinkInterface* link, QByteArray b){
             const uint16_t expected_crc = crcSiyiSDK(_msg_buff, _msg_buff_len-2, 0);
             if (expected_crc == _parsed_msg.crc16) {
                 process_packet();
+                qCDebug(SiyiSDKLog)<<_msg_buff;
             }
             reset_parser = true;
             break;
@@ -198,20 +199,22 @@ void SiyiSDKManager::requestLinkStatus()
     bool enable = _appSettings->enableSiyiSDK()->rawValue().toBool();
     if (links.size() > 0 && enable && portAvailable) {
         uint8_t buffer[10] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x44,0x05,0xdc};
+        qCDebug(SiyiSDKLog)<<"Request Link Status";
+
         //uint8_t buffer[10] = {0x55,0x66,0x01,0x00,0x00,0x00,0x00,0x40,0x81,0x9c};
         int len = sizeof(buffer);
         for(int i = 0; i < links.size(); i++){
             links[i] -> writeBytesThreadSafe((const char*)buffer, len);
         }
         _sendCustomMessageTimer.stop();
-        _sendCustomMessageTimer.start(200);
+        _sendCustomMessageTimer.start(250);
         portAvailable = false;
     }
 }
 
 void SiyiSDKManager::process_packet()
 {
-
+    qCDebug(SiyiSDKLog)<<QString::number(_parsed_msg.command_id, 16).toUpper();
     switch ((SiyiCommandId)_parsed_msg.command_id) {
 
         case SiyiCommandId::HARDWARE_ID:
