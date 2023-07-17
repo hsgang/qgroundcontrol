@@ -207,7 +207,7 @@ void SiyiSDKManager::requestLinkStatus()
             links[i] -> writeBytesThreadSafe((const char*)buffer, len);
         }
         _sendCustomMessageTimer.stop();
-        _sendCustomMessageTimer.start(250);
+        _sendCustomMessageTimer.start(1000);
         portAvailable = false;
     }
 }
