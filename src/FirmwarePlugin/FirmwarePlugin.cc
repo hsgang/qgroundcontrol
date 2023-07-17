@@ -484,16 +484,32 @@ const QVariantList& FirmwarePlugin::cameraList(const Vehicle*)
         metaData = new CameraMetaData(
                     "RedEdge",
                     tr("RedEdge"),
+                    tr("RedEdge-M"),
+                    4.8,                // sensorWidth
+                    3.6,                // sendsorHeight
+                    1280,               // imageWidth
+                    960,                // imageHeight
+                    5.4,                // focalLength
+                    true,               // landscape
+                    false,              // fixedOrientation
+                    0,                  // minTriggerInterval
+                    tr("RedEdge-M"),    // SHOULD BE BLANK FOR NEWLY ADDED CAMERAS. Deprecated translation from older builds.
+                    this);
+        _cameraList.append(QVariant::fromValue(metaData));
+
+        metaData = new CameraMetaData(
+                    "RedEdge",
                     tr("RedEdge"),
-                    4.8,            // sensorWidth
-                    3.6,            // sendsorHeight
-                    1280,           // imageWidth
-                    960,            // imageHeight
-                    5.5,            // focalLength
-                    true,           // landscape
-                    false,          // fixedOrientation
-                    0,              // minTriggerInterval
-                    tr("RedEdge"),  // SHOULD BE BLANK FOR NEWLY ADDED CAMERAS. Deprecated translation from older builds.
+                    tr("RedEdge-p"),
+                    4.8,                // sensorWidth
+                    3.6,                // sendsorHeight
+                    1456,               // imageWidth
+                    1088,               // imageHeight
+                    5.5,                // focalLength
+                    true,               // landscape
+                    false,              // fixedOrientation
+                    0,                  // minTriggerInterval
+                    tr("RedEdge-P"),    // SHOULD BE BLANK FOR NEWLY ADDED CAMERAS. Deprecated translation from older builds.
                     this);
         _cameraList.append(QVariant::fromValue(metaData));
 
