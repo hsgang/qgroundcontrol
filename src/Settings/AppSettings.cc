@@ -155,7 +155,7 @@ DECLARE_SETTINGSFACT(AppSettings, saveSensorLog)
 DECLARE_SETTINGSFACT(AppSettings, useComponentInformationQuery)
 DECLARE_SETTINGSFACT(AppSettings, enableOpenWeatherAPI)
 DECLARE_SETTINGSFACT(AppSettings, enableSiyiSDK)
-
+DECLARE_SETTINGSFACT(AppSettings, forwardMavlinkAPMSupportHostName)
 
 DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, indoorPalette)
 {

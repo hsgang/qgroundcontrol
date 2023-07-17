@@ -1182,6 +1182,7 @@ APMFirmwarePlugin {
         src/AutoPilotPlugins/APM/APMSensorsComponentController.h \
         src/AutoPilotPlugins/APM/APMSubMotorComponentController.h \
         src/AutoPilotPlugins/APM/APMTuningComponent.h \
+        src/AutoPilotPlugins/APM/APMRemoteSupportComponent.h \
         src/FirmwarePlugin/APM/APMFirmwarePlugin.h \
         src/FirmwarePlugin/APM/APMParameterMetaData.h \
         src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h \
@@ -1210,6 +1211,7 @@ APMFirmwarePlugin {
         src/AutoPilotPlugins/APM/APMSensorsComponentController.cc \
         src/AutoPilotPlugins/APM/APMSubMotorComponentController.cc \
         src/AutoPilotPlugins/APM/APMTuningComponent.cc \
+        src/AutoPilotPlugins/APM/APMRemoteSupportComponent.cc \
         src/FirmwarePlugin/APM/APMFirmwarePlugin.cc \
         src/FirmwarePlugin/APM/APMParameterMetaData.cc \
         src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc \

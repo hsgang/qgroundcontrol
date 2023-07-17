@@ -257,7 +257,7 @@ Rectangle {
 
                             FactCheckBoxSlider {
                                 Layout.fillWidth:   true
-                                text:               qsTr("Update Home Position")
+                                text:               qsTr("Update home position based on device location. This will affect return to home")
                                 fact:               QGroundControl.settingsManager.flyViewSettings.updateHomePosition
                                 visible:            fact.visible
                             }
