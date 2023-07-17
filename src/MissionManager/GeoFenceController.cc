@@ -38,9 +38,9 @@ const char* GeoFenceController::_jsonCirclesKey =           "circles";
 
 const char* GeoFenceController::_breachReturnAltitudeFactName = "Altitude";
 
-const char* GeoFenceController::_px4ParamCircularFence =    "GF_MAX_HOR_DIST";
-const char* GeoFenceController::_apmParamCircularFenceRadius =    "FENCE_RADIUS";
-const char* GeoFenceController::_apmParamCircularFenceEnabled =    "FENCE_ENABLE";
+const char* GeoFenceController::_px4ParamCircularFence =        "GF_MAX_HOR_DIST";
+const char* GeoFenceController::_apmParamCircularFenceRadius =  "FENCE_RADIUS";
+const char* GeoFenceController::_apmParamCircularFenceEnabled = "FENCE_ENABLE";
 const char* GeoFenceController::_apmParamCircularFenceType =    "FENCE_TYPE";
 
 GeoFenceController::GeoFenceController(PlanMasterController* masterController, QObject* parent)
@@ -498,20 +498,23 @@ bool GeoFenceController::supported(void) const
     return (_managerVehicle->capabilityBits() & MAV_PROTOCOL_CAPABILITY_MISSION_FENCE) && (_managerVehicle->maxProtoVersion() >= 200);
 }
 
-// Hack for PX4 & APM
+/* Returns the radius of the "paramCircularFence"
+ * which is called the "Geofence Failsafe" in PX4 and the "Circular Geofence" on Ardupilot
+ * this code should ideally live in the firmware plugin since it is specific to apm and px4 firmwares */
 double GeoFenceController::paramCircularFence(void)
 {
     if (_managerVehicle->isOfflineEditingVehicle()) {
         return 0;
     }
-    else if(_managerVehicle->px4Firmware()){
+    if(_managerVehicle->px4Firmware()){
         if(!_managerVehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, _px4ParamCircularFence)){
             return 0;
         }
 
         return _managerVehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, _px4ParamCircularFence)->rawValue().toDouble();
     }
-    else if(_managerVehicle->apmFirmware())
+
+    if(_managerVehicle->apmFirmware())
     {
         if (!_managerVehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, _apmParamCircularFenceRadius) ||
             !_managerVehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, _apmParamCircularFenceEnabled) ||
@@ -527,10 +530,8 @@ double GeoFenceController::paramCircularFence(void)
 
         return _managerVehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, _apmParamCircularFenceRadius)->rawValue().toDouble();
     }
-    else
-    {
-        return 0;
-    }
+
+    return 0;
 }
 
 void GeoFenceController::_parametersReady(void)
@@ -559,31 +560,33 @@ void GeoFenceController::_parametersReady(void)
 
     // then connect to needed paremters
     // While checking they exist to avoid errors
+    ParameterManager* _paramManager = _managerVehicle->parameterManager();
+
     if(_managerVehicle->isOfflineEditingVehicle()){
         emit paramCircularFenceChanged();
         return;
     }
-    else if(_managerVehicle->px4Firmware()){
-        if(!_managerVehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, _px4ParamCircularFence)){
+    if(_managerVehicle->px4Firmware()){
+        if(!_paramManager->parameterExists(FactSystem::defaultComponentId, _px4ParamCircularFence)){
             emit paramCircularFenceChanged();
             return;
         }
 
-        _px4ParamCircularFenceFact = _managerVehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, _px4ParamCircularFence);
+        _px4ParamCircularFenceFact = _paramManager->getParameter(FactSystem::defaultComponentId, _px4ParamCircularFence);
         connect(_px4ParamCircularFenceFact, &Fact::rawValueChanged, this, &GeoFenceController::paramCircularFenceChanged);
     }
     else if(_managerVehicle->apmFirmware())
     {
-        if (!_managerVehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, _apmParamCircularFenceRadius) ||
-            !_managerVehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, _apmParamCircularFenceEnabled) ||
-            !_managerVehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, _apmParamCircularFenceType)){
+        if (!_paramManager->parameterExists(FactSystem::defaultComponentId, _apmParamCircularFenceRadius) ||
+            !_paramManager->parameterExists(FactSystem::defaultComponentId, _apmParamCircularFenceEnabled) ||
+            !_paramManager->parameterExists(FactSystem::defaultComponentId, _apmParamCircularFenceType)){
             emit paramCircularFenceChanged();
             return;
         }
 
-        _apmParamCircularFenceRadiusFact = _managerVehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, _apmParamCircularFenceRadius);
-        _apmParamCircularFenceEnabledFact = _managerVehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, _apmParamCircularFenceEnabled);
-        _apmParamCircularFenceTypeFact = _managerVehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, _apmParamCircularFenceType);
+        _apmParamCircularFenceRadiusFact = _paramManager->getParameter(FactSystem::defaultComponentId, _apmParamCircularFenceRadius);
+        _apmParamCircularFenceEnabledFact = _paramManager->getParameter(FactSystem::defaultComponentId, _apmParamCircularFenceEnabled);
+        _apmParamCircularFenceTypeFact = _paramManager->getParameter(FactSystem::defaultComponentId, _apmParamCircularFenceType);
         connect(_apmParamCircularFenceRadiusFact, &Fact::rawValueChanged, this, &GeoFenceController::paramCircularFenceChanged);
         connect(_apmParamCircularFenceEnabledFact, &Fact::rawValueChanged, this, &GeoFenceController::paramCircularFenceChanged);
         connect(_apmParamCircularFenceTypeFact, &Fact::rawValueChanged, this, &GeoFenceController::paramCircularFenceChanged);
