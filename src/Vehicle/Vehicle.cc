@@ -4358,7 +4358,6 @@ bool
 Vehicle::gimbalOthersHaveControl() const
 {
     return gimbalData() ? _gimbalController->gimbals()[0]->othersHaveControl : false;
-void Vehicle::doSetHome(const QGeoCoordinate& coord)
 }
 
 void Vehicle::doSetHome(const QGeoCoordinate& coord)
