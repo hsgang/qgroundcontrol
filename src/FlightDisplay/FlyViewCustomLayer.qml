@@ -240,7 +240,7 @@ Item {
         anchors.right:              multiVehiclePanelSelector.showSingleVehiclePanel ? quickViewPopupButton.left : multiVehiclePanelSelector.left
         anchors.rightMargin:        _toolsMargin
         z:                          QGroundControl.zOrderWidgets
-        maxWidth:                   parent.width * 0.5 - photoVideoControl.width + _toolsMargin
+        maxWidth:                   parent.width * 0.5
         maxHeight:                  parent.height * 0.5
         visible:                    multiVehiclePanelSelector.showSingleVehiclePanel
     }

@@ -62,7 +62,7 @@ Rectangle {
             id:             toolStripColumn
             anchors.left:   parent.left
             anchors.right:  parent.right
-            spacing:        ScreenTools.defaultFontPixelWidth //* 0.5
+            spacing:        ScreenTools.defaultFontPixelHeight * 0.5
 
             QGCLabel {
                 id:                     titleLabel

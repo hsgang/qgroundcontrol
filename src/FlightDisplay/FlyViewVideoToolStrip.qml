@@ -17,7 +17,7 @@ Item {
     height: toolStripPanelVideo.height
 
     property alias maxHeight:               toolStripPanelVideo.maxHeight
-    property alias maxWidth:                toolStripPanelVideo.maxWidth
+    property alias maxWidth:                modesToolStrip.maxWidth
     property real  _margins:                ScreenTools.defaultFontPixelWidth * 0.75
     property bool  _modesPanelVisible:      modesToolStripAction.checked
     property bool  _actionsPanelVisible:    actionsToolStripAction.checked
@@ -95,9 +95,9 @@ Item {
         visible:   rootItem._modesPanelVisible
         fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
 
-        anchors.verticalCenter:     toolStripPanelVideo.verticalCenter
+        anchors.bottom:             toolStripPanelVideo.bottom
         anchors.right:              toolStripPanelVideo.left
-        anchors.topMargin:          _margins
+        anchors.bottomMargin:       (height * 2) + (ScreenTools.defaultFontPixelHeight / 3)
         anchors.rightMargin:        _margins
 
         ToolStripActionList {
@@ -142,7 +142,7 @@ Item {
 
         anchors.bottom:             toolStripPanelVideo.bottom
         anchors.right:              toolStripPanelVideo.left
-        anchors.topMargin:          _margins
+        anchors.bottomMargin:       height + (ScreenTools.defaultFontPixelHeight / 4)
         anchors.rightMargin:        _margins
 
         ToolStripActionList {
@@ -190,188 +190,163 @@ Item {
                         if (!visible)
                             checked = false
                     }
-    
-
-        Rectangle {
-            id:      gimbalMapActions
-            color:   qgcPal.window
-            radius:  ScreenTools.defaultFontPixelWidth / 2
-            visible: rootItem._actionsMapPanelVisible && rootItem._actionsPanelVisible
-            
-            anchors.left:   actionsToolStrip.right
-            anchors.right:  parent.right
-            anchors.top:    parent.top
-            anchors.bottom: parent.bottom
-
-            DeadMouseArea {
-                anchors.fill: parent
-            }
-        
-            QGCLabel {
-                id: gimbalMapActionsLabel
-                text: qsTr("Map ROI targetting tools")
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.top:              parent.top
-                anchors.margins:          _margins
-                font.pointSize:           ScreenTools.smallFontPointSize
-            }
-
-            // Left grid, coordinates
-            GridLayout {
-                id:             gimbalMapActionsGridLeft
-                anchors.top:    gimbalMapActionsLabel.bottom
-                anchors.left:   parent.left
-                anchors.right:  parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                anchors.margins:_margins
-
-                columnSpacing:  _margins
-                rowSpacing:     _margins
-                columns:        2
-
-                QGCLabel {
-                    text: qsTr("Lat")
-                    font.pointSize: ScreenTools.smallFontPointSize
-                }
-                FactTextField {
-                    fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetLatitude : null
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    implicitHeight:     ScreenTools.defaultFontPixelHeight
-                    Layout.fillWidth:   true
-                }
-
-                QGCLabel {
-                    text: qsTr("Long")
-                    font.pointSize: ScreenTools.smallFontPointSize
-
-                }
-                FactTextField {
-                    fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetLongitude : null
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    implicitHeight:     ScreenTools.defaultFontPixelHeight
-                    Layout.fillWidth:   true
-                }
-                QGCLabel {
-                    text:                   qsTr("Altitude above home(m)")
-                    wrapMode:               Text.Wrap
-                    maximumLineCount:       2
-                    elide:                  Text.ElideRight
-                    font.pointSize:         ScreenTools.smallFontPointSize
-                    Layout.columnSpan:      2
-                }
-                QGCLabel {
-                    text: qsTr("Alt")
-                    font.pointSize: ScreenTools.smallFontPointSize
-                }
-                FactTextField {
-                    fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetAltitude : null
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    implicitHeight:     ScreenTools.defaultFontPixelHeight
-                    Layout.fillWidth:   true
-                }
-                QGCButton {
-                    text:              qsTr("Get from map")
-                    checkable:         true
-                    Layout.columnSpan: 2
-                    Layout.fillWidth:  true
-                    pointSize:         ScreenTools.smallFontPointSize
-                    implicitHeight:    ScreenTools.implicitButtonHeight * 0.6
-                    backRadius:        ScreenTools.defaultFontPixelWidth / 2
-                    
-                    onCheckedChanged: {
-                        if (_activeVehicle) {
-                            _activeVehicle.GimbalClickOnMapActive = checked
-                        }
-                    }
-                }
-            }
-
-            // Right grid, options
-            GridLayout {
-                id:             gimbalMapActionsGridRight
-                anchors.top:    gimbalMapActionsLabel.bottom
-                anchors.left:   gimbalMapActionsGridLeft.right
-                anchors.right:  parent.right
-                anchors.bottom: parent.bottom
-                anchors.margins:_margins
-
-                columnSpacing:  _margins
-                rowSpacing:     _margins
-                columns:        2
-
-                property var roiActive: _activeVehicle && _activeVehicle.isROIEnabled ? true : false
-
-                QGCButton {
-                    text:               qsTr("Send")
-                    Layout.columnSpan:  2
-                    Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
-                    checkable:          false
-                    backRadius:         ScreenTools.defaultFontPixelWidth / 2
-                    pointSize:          ScreenTools.smallFontPointSize
-                    implicitHeight:     ScreenTools.implicitButtonHeight * 0.6
-                    
-
-                    onClicked: {
-                        var coordinate = QtPositioning.coordinate(_activeVehicle.gimbalTargetSetLatitude.rawValue, _activeVehicle.gimbalTargetSetLongitude.rawValue, _activeVehicle.gimbalTargetSetAltitude.rawValue)
-                        _activeVehicle.guidedModeROI(coordinate)
-                    }
-                }
-
-                QGCLabel {
-                    text:                   qsTr("Roi Active:")
-                    wrapMode:               Text.Wrap
-                    maximumLineCount:       2
-                    elide:                  Text.ElideRight
-                    font.pointSize:         ScreenTools.smallFontPointSize
-                    visible:                gimbalMapActionsGridRight.roiActive
-                    Layout.fillWidth:       true
-                }
-
-                QGCButton {
-                    text:             qsTr("Cancel")
-                    visible:          gimbalMapActionsGridRight.roiActive
-                    pointSize:        ScreenTools.smallFontPointSize
-                    implicitHeight:   ScreenTools.implicitButtonHeight * 0.6
-                    backRadius:       ScreenTools.defaultFontPixelWidth / 2
-                    Layout.fillWidth: true
-                    
-                    onPressed: {
-                        if (_activeVehicle) {
-                            _activeVehicle.stopGuidedModeROI()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    ToolStrip {
-        id:        selectToolStrip
-        width:     toolStripPanelVideo.height
-        maxHeight: width * 2
-        visible:   rootItem._selectPanelVisible
-        model:     selectToolStripActionList.model
-        fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
-
-        anchors.top:                toolStripPanelVideo.bottom
-        anchors.right:              toolStripPanelVideo.right
-        anchors.topMargin:          _margins
-
-        ToolStripActionList {
-            id: selectToolStripActionList
-            model: [
-                ToolStripAction {
-                    text:               qsTr("Gimbal 1")
-                    iconSource:         "/HA_Icons/PAYLOAD.png"
-                    onTriggered:        undefined
-                },
-                ToolStripAction {
-                    text:               qsTr("Gimbal 2")
-                    iconSource:         "/HA_Icons/PAYLOAD.png"
-                    onTriggered:        undefined
                 }
             ]
-        }
+    
+
+//        Rectangle {
+//            id:      gimbalMapActions
+//            color:   qgcPal.window
+//            radius:  ScreenTools.defaultFontPixelWidth / 2
+//            visible: rootItem._actionsMapPanelVisible && rootItem._actionsPanelVisible
+            
+//            anchors.left:   actionsToolStrip.right
+//            anchors.right:  parent.right
+//            anchors.top:    parent.top
+//            anchors.bottom: parent.bottom
+
+//            DeadMouseArea {
+//                anchors.fill: parent
+//            }
+        
+//            QGCLabel {
+//                id: gimbalMapActionsLabel
+//                text: qsTr("Map ROI targetting tools")
+//                anchors.horizontalCenter: parent.horizontalCenter
+//                anchors.top:              parent.top
+//                anchors.margins:          _margins
+//                font.pointSize:           ScreenTools.smallFontPointSize
+//            }
+
+//            // Left grid, coordinates
+//            GridLayout {
+//                id:             gimbalMapActionsGridLeft
+//                anchors.top:    gimbalMapActionsLabel.bottom
+//                anchors.left:   parent.left
+//                anchors.right:  parent.horizontalCenter
+//                anchors.bottom: parent.bottom
+//                anchors.margins:_margins
+
+//                columnSpacing:  _margins
+//                rowSpacing:     _margins
+//                columns:        2
+
+//                QGCLabel {
+//                    text: qsTr("Lat")
+//                    font.pointSize: ScreenTools.smallFontPointSize
+//                }
+//                FactTextField {
+//                    fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetLatitude : null
+//                    font.pointSize:     ScreenTools.smallFontPointSize
+//                    implicitHeight:     ScreenTools.defaultFontPixelHeight
+//                    Layout.fillWidth:   true
+//                }
+
+//                QGCLabel {
+//                    text: qsTr("Long")
+//                    font.pointSize: ScreenTools.smallFontPointSize
+
+//                }
+//                FactTextField {
+//                    fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetLongitude : null
+//                    font.pointSize:     ScreenTools.smallFontPointSize
+//                    implicitHeight:     ScreenTools.defaultFontPixelHeight
+//                    Layout.fillWidth:   true
+//                }
+//                QGCLabel {
+//                    text:                   qsTr("Altitude above home(m)")
+//                    wrapMode:               Text.Wrap
+//                    maximumLineCount:       2
+//                    elide:                  Text.ElideRight
+//                    font.pointSize:         ScreenTools.smallFontPointSize
+//                    Layout.columnSpan:      2
+//                }
+//                QGCLabel {
+//                    text: qsTr("Alt")
+//                    font.pointSize: ScreenTools.smallFontPointSize
+//                }
+//                FactTextField {
+//                    fact:               _activeVehicle ? _activeVehicle.gimbalTargetSetAltitude : null
+//                    font.pointSize:     ScreenTools.smallFontPointSize
+//                    implicitHeight:     ScreenTools.defaultFontPixelHeight
+//                    Layout.fillWidth:   true
+//                }
+//                QGCButton {
+//                    text:              qsTr("Get from map")
+//                    checkable:         true
+//                    Layout.columnSpan: 2
+//                    Layout.fillWidth:  true
+//                    pointSize:         ScreenTools.smallFontPointSize
+//                    implicitHeight:    ScreenTools.implicitButtonHeight * 0.6
+//                    backRadius:        ScreenTools.defaultFontPixelWidth / 2
+                    
+//                    onCheckedChanged: {
+//                        if (_activeVehicle) {
+//                            _activeVehicle.GimbalClickOnMapActive = checked
+//                        }
+//                    }
+//                }
+//            }
+
+//            // Right grid, options
+//            GridLayout {
+//                id:             gimbalMapActionsGridRight
+//                anchors.top:    gimbalMapActionsLabel.bottom
+//                anchors.left:   gimbalMapActionsGridLeft.right
+//                anchors.right:  parent.right
+//                anchors.bottom: parent.bottom
+//                anchors.margins:_margins
+
+//                columnSpacing:  _margins
+//                rowSpacing:     _margins
+//                columns:        2
+
+//                property var roiActive: _activeVehicle && _activeVehicle.isROIEnabled ? true : false
+
+//                QGCButton {
+//                    text:               qsTr("Send")
+//                    Layout.columnSpan:  2
+//                    Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
+//                    checkable:          false
+//                    backRadius:         ScreenTools.defaultFontPixelWidth / 2
+//                    pointSize:          ScreenTools.smallFontPointSize
+//                    implicitHeight:     ScreenTools.implicitButtonHeight * 0.6
+                    
+
+//                    onClicked: {
+//                        var coordinate = QtPositioning.coordinate(_activeVehicle.gimbalTargetSetLatitude.rawValue, _activeVehicle.gimbalTargetSetLongitude.rawValue, _activeVehicle.gimbalTargetSetAltitude.rawValue)
+//                        _activeVehicle.guidedModeROI(coordinate)
+//                    }
+//                }
+
+//                QGCLabel {
+//                    text:                   qsTr("Roi Active:")
+//                    wrapMode:               Text.Wrap
+//                    maximumLineCount:       2
+//                    elide:                  Text.ElideRight
+//                    font.pointSize:         ScreenTools.smallFontPointSize
+//                    visible:                gimbalMapActionsGridRight.roiActive
+//                    Layout.fillWidth:       true
+//                }
+
+//                QGCButton {
+//                    text:             qsTr("Cancel")
+//                    visible:          gimbalMapActionsGridRight.roiActive
+//                    pointSize:        ScreenTools.smallFontPointSize
+//                    implicitHeight:   ScreenTools.implicitButtonHeight * 0.6
+//                    backRadius:       ScreenTools.defaultFontPixelWidth / 2
+//                    Layout.fillWidth: true
+                    
+//                    onPressed: {
+//                        if (_activeVehicle) {
+//                            _activeVehicle.stopGuidedModeROI()
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        }
+    }
     }
 
     Rectangle {
@@ -510,4 +485,33 @@ Item {
             }
         }
     }
+
+    ToolStripHorizontal {
+        id:        selectToolStrip
+        //width:     toolStripPanelVideo.height
+        maxWidth:  height * 2
+        visible:   rootItem._selectPanelVisible
+        model:     selectToolStripActionList.model
+        fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
+
+        anchors.bottom:             toolStripPanelVideo.bottom
+        anchors.right:              toolStripPanelVideo.left
+        anchors.rightMargin:        _margins
+
+        ToolStripActionList {
+            id: selectToolStripActionList
+            model: [
+                ToolStripAction {
+                    text:               qsTr("Gimbal 1")
+                    iconSource:         "/HA_Icons/PAYLOAD.png"
+                    onTriggered:        undefined
+                },
+                ToolStripAction {
+                    text:               qsTr("Gimbal 2")
+                    iconSource:         "/HA_Icons/PAYLOAD.png"
+                    onTriggered:        undefined
+                }
+            ]
+        }
+    }   
 }
