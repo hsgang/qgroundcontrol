@@ -27,4 +27,4 @@
 	url = https://github.com/ArduPilot/ArduPilot-Parameter-Repository
 [submodule "libs/mavlink/include/mavlink/v2.0"]
 	path = libs/mavlink/include/mavlink/v2.0
-	url = https://github.com/hsgang/c_library_v2.git
+	url = https://github.com/mavlink/c_library_v2.git
