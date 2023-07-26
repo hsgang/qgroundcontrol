@@ -104,6 +104,8 @@ void SiyiSDKManager::read_incoming_packets(LinkInterface* link, QByteArray b){
                 _parsed_msg.state = ParseState::WAITING_FOR_CTRL;
             } else {
                 reset_parser = true;
+                requestLinkStatus();
+                qCDebug(SiyiSDKLog)<<"Fail Siyi header second stx";
             }
             break;
 
@@ -163,7 +165,7 @@ void SiyiSDKManager::read_incoming_packets(LinkInterface* link, QByteArray b){
             const uint16_t expected_crc = crcSiyiSDK(_msg_buff, _msg_buff_len-2, 0);
             if (expected_crc == _parsed_msg.crc16) {
                 process_packet();
-                qCDebug(SiyiSDKLog)<<_msg_buff;
+//                qCDebug(SiyiSDKLog)<<_msg_buff;
             }
             reset_parser = true;
             break;
@@ -214,7 +216,7 @@ void SiyiSDKManager::requestLinkStatus()
 
 void SiyiSDKManager::process_packet()
 {
-    qCDebug(SiyiSDKLog)<<QString::number(_parsed_msg.command_id, 16).toUpper();
+//    qCDebug(SiyiSDKLog)<<QString::number(_parsed_msg.command_id, 16).toUpper();
     switch ((SiyiCommandId)_parsed_msg.command_id) {
 
         case SiyiCommandId::HARDWARE_ID:
@@ -233,6 +235,7 @@ void SiyiSDKManager::process_packet()
             break;
 
         case SiyiCommandId::ACQUIRE_FPV_LINK_STATUS:{
+            qCDebug(SiyiSDKLog)<<"Receive FPV_LINK_STATUS";
 
             memcpy(&_linkStatus, _msg_buff, _msg_buff_len);
 
