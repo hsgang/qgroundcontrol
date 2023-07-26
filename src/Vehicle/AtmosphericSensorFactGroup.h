@@ -1,6 +1,6 @@
 #pragma once
 
-#define USE_ATMOSPHERIC_VALUE
+//#define USE_ATMOSPHERIC_VALUE
 
 #include "FactGroup.h"
 
