@@ -4413,6 +4413,42 @@ void Vehicle::_doSetHomeTerrainReceived(bool success, QList<double> heights)
     _currentDoSetHomeTerrainAtCoordinateQuery = nullptr;
     _doSetHomeCoordinate = QGeoCoordinate(); // So isValid() will no longer return true, for extra safety
 }
+    
+qreal
+Vehicle::gimbalRoll() const
+{
+    return static_cast<qreal>(gimbalData() ? _gimbalController->gimbals()[0]->curRoll : NAN);
+}
+
+qreal
+Vehicle::gimbalPitch() const
+{
+    return static_cast<qreal>(gimbalData() ? _gimbalController->gimbals()[0]->curPitch : NAN);
+}
+
+qreal
+Vehicle::gimbalYaw() const
+{
+    return static_cast<qreal>(gimbalData() ? _gimbalController->gimbals()[0]->curYaw : NAN);
+}
+
+bool
+Vehicle::gimbalData() const
+{
+    return _gimbalController->gimbals().size() > 0;
+}
+
+bool
+Vehicle::gimbalHaveControl() const
+{
+    return gimbalData() ? _gimbalController->gimbals()[0]->haveControl : false;
+}
+
+bool
+Vehicle::gimbalOthersHaveControl() const
+{
+    return gimbalData() ? _gimbalController->gimbals()[0]->othersHaveControl : false;
+}
 
 void Vehicle::gimbalControlValue(double pitch, double yaw)
 {
