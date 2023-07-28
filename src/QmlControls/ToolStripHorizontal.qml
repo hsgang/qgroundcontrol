@@ -41,7 +41,7 @@ Rectangle {
 
     QGCFlickable {
         id:                 flickable
-        anchors.margins:    ScreenTools.defaultFontPixelWidth * 0.4
+        anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
         anchors.top:        parent.top
         anchors.left:       parent.left
         anchors.bottom:     parent.bottom
