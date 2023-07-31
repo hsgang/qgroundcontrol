@@ -780,6 +780,14 @@ Rectangle {
                                 }
 
                                 FactCheckBoxSlider {
+                                    Layout.fillWidth:   true
+                                    text:               qsTr("Save application data to SD Card")
+                                    fact:               _androidSaveToSDCard
+                                    visible:            _androidSaveToSDCard.visible
+                                    property Fact _androidSaveToSDCard: QGroundControl.settingsManager.appSettings.androidSaveToSDCard
+                                }
+
+                                FactCheckBoxSlider {
                                     id:                 clearCheck
                                     Layout.fillWidth:   true
                                     text:               qsTr("Clear all settings on next start")
@@ -817,8 +825,6 @@ Rectangle {
                             }
                         }
 
-                        //-----------------------------------------------------------------
-                        //-- Save path
                         RowLayout {
                             id:                 pathRow
                             anchors.margins:    _margins
