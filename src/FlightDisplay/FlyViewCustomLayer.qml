@@ -223,6 +223,14 @@ Item {
         property bool _verticalCenter: !QGroundControl.settingsManager.flyViewSettings.alternateInstrumentPanel.rawValue
     }
 
+    SIYICameraControl {
+        id:                         siyiCameraControl
+        anchors.margins:            _toolsMargin
+        anchors.right:              parent.right
+        anchors.verticalCenter:     parent.verticalCenter
+
+    }
+
     GimbalControl{
         id:                     gimbalControl
         anchors.margins:        _toolsMargin
