@@ -226,7 +226,7 @@ Item {
     SIYICameraControl {
         id:                         siyiCameraControl
         anchors.margins:            _toolsMargin
-        anchors.right:              parent.right
+        anchors.right:              photoVideoControl.visible ? photoVideoControl.left : parent.right
         anchors.verticalCenter:     parent.verticalCenter
 
     }

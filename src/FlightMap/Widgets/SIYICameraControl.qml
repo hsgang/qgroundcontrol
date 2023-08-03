@@ -30,13 +30,14 @@ Rectangle {
     height: controlColumn.height
     anchors.top: parent.top
     //visible: camera.isConnected
-    color: "transparent"
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+    radius:     _margins
 
     property var siyi: SiYi
     property SiYiCamera camera: siyi.camera
     property bool isRecording: camera.isRecording
     property int minDelta: 5
-    property int buttonSize:    ScreenTools.defaultFontPixelHeight * 3
+    property int buttonSize:    ScreenTools.defaultFontPixelHeight * 2
 
     Text {
         id: btText
