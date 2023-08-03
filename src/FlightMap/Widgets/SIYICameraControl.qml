@@ -173,8 +173,8 @@ Rectangle {
 
         Image { // 录像
             id: video
-            //sourceSize.width: btText.width
-            //sourceSize.height: btText.width
+            sourceSize.width: buttonSize
+            sourceSize.height: buttonSize
             width: buttonSize
             height: buttonSize
             cache: false
