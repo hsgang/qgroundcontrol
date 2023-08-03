@@ -41,9 +41,6 @@
 #if defined(QGC_GST_MICROHARD_ENABLED)
 #include "MicrohardManager.h"
 #endif
-#if defined(QGC_SIYISDK_ENABLED)
-#include "SiyiSDKManager.h"
-#endif
 
 #if defined(QGC_CUSTOM_BUILD)
 #include CUSTOMHEADER
@@ -84,9 +81,6 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
 #if defined(QGC_GST_MICROHARD_ENABLED)
     _microhardManager       = new MicrohardManager          (app, this);
 #endif
-#if defined(QGC_SIYISDK_ENABLED)
-    _siyiSDKManager         = new SiyiSDKManager            (app, this);
-#endif
 }
 
 void QGCToolbox::setChildToolboxes(void)
@@ -123,9 +117,6 @@ void QGCToolbox::setChildToolboxes(void)
 #endif
 #if defined(QGC_ENABLE_PAIRING)
     _pairingManager->setToolbox(this);
-#endif
-#if defined(QGC_SIYISDK_ENABLED)
-    _siyiSDKManager->setToolbox(this);
 #endif
 }
 

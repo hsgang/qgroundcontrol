@@ -66,7 +66,6 @@ LinkManager::LinkManager(QGCApplication* app, QGCToolbox* toolbox)
     , _mavlinkChannelsUsedBitMask(1)    // We never use channel 0 to avoid sequence numbering problems
     , _autoConnectSettings(nullptr)
     , _mavlinkProtocol(nullptr)
-    , _siyiSDKManager(nullptr)
     #ifndef __mobile__
     #ifndef NO_SERIAL_LINK
     , _nmeaPort(nullptr)
@@ -93,7 +92,6 @@ void LinkManager::setToolbox(QGCToolbox *toolbox)
 
     _autoConnectSettings = toolbox->settingsManager()->autoConnectSettings();
     _mavlinkProtocol = _toolbox->mavlinkProtocol();
-    _siyiSDKManager = _toolbox->siyiSDKManager();
 
     connect(&_portListTimer, &QTimer::timeout, this, &LinkManager::_updateAutoConnectLinks);
     _portListTimer.start(_autoconnectUpdateTimerMSecs); // timeout must be long enough to get past bootloader on second pass
@@ -157,7 +155,6 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr& config, bool i
         connect(link.get(), &LinkInterface::bytesReceived,       _mavlinkProtocol,    &MAVLinkProtocol::receiveBytes);
         connect(link.get(), &LinkInterface::bytesSent,           _mavlinkProtocol,    &MAVLinkProtocol::logSentBytes);
         connect(link.get(), &LinkInterface::disconnected,        this,                &LinkManager::_linkDisconnected);
-        connect(link.get(), &LinkInterface::bytesReceived,       _siyiSDKManager,     &SiyiSDKManager::read_incoming_packets);
         _mavlinkProtocol->resetMetadataForLink(link.get());
         _mavlinkProtocol->setVersion(_mavlinkProtocol->getCurrentVersion());
 
@@ -219,7 +216,6 @@ void LinkManager::_linkDisconnected(void)
     disconnect(link, &LinkInterface::bytesReceived,       _mavlinkProtocol,    &MAVLinkProtocol::receiveBytes);
     disconnect(link, &LinkInterface::bytesSent,           _mavlinkProtocol,    &MAVLinkProtocol::logSentBytes);
     disconnect(link, &LinkInterface::disconnected,        this,                &LinkManager::_linkDisconnected);
-    disconnect(link, &LinkInterface::bytesReceived,       _siyiSDKManager,     &SiyiSDKManager::read_incoming_packets);
 
     link->_freeMavlinkChannel();
     for (int i=0; i<_rgLinks.count(); i++) {

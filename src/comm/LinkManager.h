@@ -20,7 +20,6 @@
 #include "QGCLoggingCategory.h"
 #include "QGCToolbox.h"
 #include "MAVLinkProtocol.h"
-#include "SiyiSDKManager.h"
 #if !defined(__mobile__)
 #include "LogReplayLink.h"
 #include "UdpIODevice.h"
@@ -177,8 +176,6 @@ private:
 
     AutoConnectSettings*                _autoConnectSettings;
     MAVLinkProtocol*                    _mavlinkProtocol;
-
-    SiyiSDKManager*                     _siyiSDKManager;
 
     QList<SharedLinkInterfacePtr>       _rgLinks;
     QList<SharedLinkConfigurationPtr>   _rgLinkConfigs;

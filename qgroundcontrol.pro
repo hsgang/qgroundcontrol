@@ -12,7 +12,6 @@ QMAKE_PROJECT_DEPTH = 0 # undocumented qmake flag to force absolute paths in mak
 # These are disabled until proven correct
 DEFINES += QGC_GST_TAISYNC_DISABLED
 DEFINES += QGC_GST_MICROHARD_DISABLED
-DEFINES += QGC_SIYISDK_ENABLED
 
 exists($${OUT_PWD}/qgroundcontrol.pro) {
     error("You must use shadow build (e.g. mkdir build; cd build; qmake ../qgroundcontrol.pro).")
@@ -437,6 +436,11 @@ HEADERS += \
     src/QmlControls/CustomAction.h \
     src/QmlControls/CustomActionManager.h \
     src/QmlControls/QmlUnitsConversion.h \
+    src/SiYi/SiYi.h \
+    src/SiYi/SiYiCamera.h \
+    src/SiYi/SiYiCrcApi.h \
+    src/SiYi/SiYiTcpClient.h \
+    src/SiYi/SiYiTransmitter.h \
     src/Vehicle/AtmosphericSensorFactGroup.h \
     src/Vehicle/ExternalPowerStatusFactGroup.h \
     src/Vehicle/GeneratorStatusFactGroup.h \
@@ -456,6 +460,11 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
+    src/SiYi/SiYi.cc \
+    src/SiYi/SiYiCamera.cc \
+    src/SiYi/SiYiCrcApi.cc \
+    src/SiYi/SiYiTcpClient.cc \
+    src/SiYi/SiYiTransmitter.cc \
     src/Vehicle/AtmosphericSensorFactGroup.cc \
     src/Vehicle/ExternalPowerStatusFactGroup.cc \
     src/Vehicle/GeneratorStatusFactGroup.cc \
@@ -1376,24 +1385,7 @@ contains (DEFINES, QGC_GST_MICROHARD_DISABLED) {
             src/Microhard/MicrohardSettings.cc \
     }
 }
-#-------------------------------------------------------------------------------------
-# SIYI SDK
-QGC_SIYISDK_ENABLED
-contains (DEFINES, QGC_SIYISDK_DISABLED) {
-    DEFINES -= QGC_SIYISDK_ENABLED
-    message("SiyiSDK disabled")
-} else {
-    contains (DEFINES, QGC_SIYISDK_ENABLED) {
-        INCLUDEPATH += \
-            src/Siyi
 
-        HEADERS += \
-            src/Siyi/SiyiSDKManager.h
-
-        SOURCES += \
-            src/Siyi/SiyiSDKManager.cc \
-    }
-}
 #-------------------------------------------------------------------------------------
 # Video Streaming
 

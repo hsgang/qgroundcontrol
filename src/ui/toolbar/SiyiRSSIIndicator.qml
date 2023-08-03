@@ -7,15 +7,18 @@ import QGroundControl.MultiVehicleManager   1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.Palette               1.0
 
+import SiYi.Object 1.0
+
 Item {
     id:             _root
     width:          siyirssiRow.width //(siyiStatusIcon.width + siyiStatusValuesColumn.width) * 1.1
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property bool showIndicator:    QGroundControl.settingsManager.appSettings.enableSiyiSDK.rawValue//QGroundControl.siyiSDKManager.isConnected
+    property SiYiTransmitter transmitter: SiYi.transmitter
+
+    property bool showIndicator:    transmitter.isConnected //QGroundControl.settingsManager.appSettings.enableSiyiSDK.rawValue//QGroundControl.siyiSDKManager.isConnected
     property var  _activeVehicle:   QGroundControl.multiVehicleManager.activeVehicle
-    property bool _hasTelemetry:    _activeVehicle ? _activeVehicle.telemetryLRSSI !== 0 : false
 
     Component {
         id: siyiStatusInfo
@@ -49,23 +52,23 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
 
                     QGCLabel { text: qsTr("Signal:") }
-                    QGCLabel { text: QGroundControl.siyiSDKManager.signal + " %"}
+                    QGCLabel { text: transmitter.signalQuality + " %"}
                     QGCLabel { text: qsTr("RSSI:") }
-                    QGCLabel { text: QGroundControl.siyiSDKManager.rssi + " dBm"}
+                    QGCLabel { text: transmitter.rssi + " dBm"}
                     QGCLabel { text: qsTr("Inactive Time:") }
-                    QGCLabel { text: QGroundControl.siyiSDKManager.inactiveTime + " ms"}
+                    QGCLabel { text: transmitter.inactiveTime + " ms"}
                     QGCLabel { text: qsTr("Upstream:") }
-                    QGCLabel { text: (QGroundControl.siyiSDKManager.upstream / 1000).toFixed(1) + " kbps" }
+                    QGCLabel { text: (transmitter.upStream / 1024).toFixed(1) + " kbps" }
                     QGCLabel { text: qsTr("Downstream:") }
-                    QGCLabel { text: (QGroundControl.siyiSDKManager.downstream / 1000).toFixed(1) + " kbps" }
+                    QGCLabel { text: (transmitter.downStream / 1024).toFixed(1) + " kbps" }
                     QGCLabel { text: qsTr("TxBandwidth:") }
-                    QGCLabel { text: (QGroundControl.siyiSDKManager.txbandwidth / 1000).toFixed(1) + " Mbps" }
+                    QGCLabel { text: (transmitter.txBandWidth / 1024).toFixed(1) + " Mbps" }
                     QGCLabel { text: qsTr("RxBandwidth:") }
-                    QGCLabel { text: (QGroundControl.siyiSDKManager.rxbandwidth / 1000).toFixed(1) + " Mbps" }
+                    QGCLabel { text: (transmitter.rxBandWidth / 1024).toFixed(1) + " Mbps" }
                     QGCLabel { text: qsTr("Frequency:") }
-                    QGCLabel { text: QGroundControl.siyiSDKManager.freq + " Mhz"}
+                    QGCLabel { text: transmitter.freq + " Mhz"}
                     QGCLabel { text: qsTr("Channel:") }
-                    QGCLabel { text: QGroundControl.siyiSDKManager.channel }
+                    QGCLabel { text: transmitter.channel }
                 }
             }
         }
@@ -88,7 +91,7 @@ Item {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
                 size:                       parent.height * 0.9
-                percent:                    QGroundControl.siyiSDKManager.signal
+                percent:                    transmitter.signalQuality
             }
 
             QGCColoredImage {
@@ -101,7 +104,7 @@ Item {
                 source:             "/qmlimages/TelemRSSI.svg"
                 fillMode:           Image.PreserveAspectFit
                 //opacity:            QGroundControl.siyiSDKManager.signal !== 0 ? 1 : 0.5
-                color:              QGroundControl.siyiSDKManager.signal > 30 ? qgcPal.buttonText : qgcPal.colorOrange
+                color:              transmitter.signalQuality > 30 ? qgcPal.buttonText : qgcPal.colorOrange
             }
         }
     }
