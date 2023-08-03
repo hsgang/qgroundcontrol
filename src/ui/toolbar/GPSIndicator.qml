@@ -72,7 +72,7 @@ Item {
             case 4:
                 return "DGPS"
             case 5:
-                return "Flt"
+                return "Float"
             case 6:
                 return "RTK"
             default:
