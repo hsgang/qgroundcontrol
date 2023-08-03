@@ -228,7 +228,6 @@ Item {
         anchors.margins:            _toolsMargin
         anchors.right:              photoVideoControl.visible ? photoVideoControl.left : parent.right
         anchors.verticalCenter:     parent.verticalCenter
-
     }
 
     GimbalControl{
@@ -309,7 +308,8 @@ Item {
         anchors.margins:        _toolsMargin
         anchors.top:            telemetryPanel.bottom
         anchors.bottom:         attitudeIndicator.top
-        anchors.right:          photoVideoControl.visible ? photoVideoControl.left : parent.right
+        anchors.right:          siyiCameraControl.visible ? siyiCameraControl.left : (photoVideoControl.visible ? photoVideoControl.left : parent.right)
+            //photoVideoControl.visible ? photoVideoControl.left : (siyiCameraControl.visible ? siyiCameraControl.left : parent.right)
         width:                  mainWindow.width * 0.4
         visible:                false
     }

@@ -1,15 +1,6 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
-
 import QtQuick                          2.11
 import QtQuick.Controls                 2.4
+import QtQuick.Layouts                  1.2
 
 import QGroundControl                   1.0
 import QGroundControl.FlightDisplay     1.0
@@ -22,16 +13,18 @@ import QGroundControl.Controllers       1.0
 
 import SiYi.Object 1.0
 import QtGraphicalEffects 1.12
-import "qrc:/qml/QGroundControl/Controls"
+//import "qrc:/qml/QGroundControl/Controls"
 
 Rectangle {
     id: controlRectangle
-    width: controlColumn.width
-    height: controlColumn.height
-    anchors.top: parent.top
+    width: controlColumn.width + (_margins * 2)
+    height: controlColumn.height + (_margins * 2)
     //visible: camera.isConnected
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
     radius:     _margins
+    visible:    camera.enablePhoto
+
+    property real   _margins:                                   ScreenTools.defaultFontPixelHeight / 2
 
     property var siyi: SiYi
     property SiYiCamera camera: siyi.camera
@@ -39,25 +32,24 @@ Rectangle {
     property int minDelta: 5
     property int buttonSize:    ScreenTools.defaultFontPixelHeight * 2
 
-    Text {
-        id: btText
-        text: "1234"
-        anchors.verticalCenter: parent.verticalCenter
-        visible: false
-    }
-
-    Column {
+    ColumnLayout {
         id: controlColumn
         spacing: ScreenTools.defaultFontPixelHeight
+
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
 
         Image { // 放大
             id: zoomInImage
             sourceSize.width: buttonSize // btText.width
             sourceSize.height: buttonSize
-            source: camera.enableZoom
-                    ? zoomInMA.pressed ? "/SiYi/ZoomInGreen.svg" : "/SiYi/ZoomIn.svg"
-                    : "/SiYi/empty.png"
-            anchors.horizontalCenter: parent.horizontalCenter
+            visible: camera.enableZoom
+            source: zoomInMA.pressed ? "/SiYi/ZoomInGreen.svg" : "/SiYi/ZoomIn.svg"
+//            source: camera.enableZoom
+//                    ? zoomInMA.pressed ? "/SiYi/ZoomInGreen.svg" : "/SiYi/ZoomIn.svg"
+//                    : "/SiYi/empty.png"
+//            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.alignment: Qt.AlignHCenter
             fillMode: Image.PreserveAspectFit
             cache: false
             MouseArea {
@@ -78,11 +70,6 @@ Rectangle {
                     console.info("zoomIn stop--------------------------------")
                 }
             }
-//                ColorOverlay {
-//                    anchors.fill: zoomInImage
-//                    source: zoomInImage
-//                    color: zoomInMA.pressed ? "green" : "white"
-//                }
             Timer {
                 id: zoomInTimer
                 interval: 100
@@ -99,10 +86,13 @@ Rectangle {
             id: zoomOut
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
-            source: camera.enableZoom
-                    ? zoomOutMA.pressed ? "/SiYi/ZoomOutGreen.svg" : "/SiYi/ZoomOut.svg"
-                    : "/SiYi/empty.png"
-            anchors.horizontalCenter: parent.horizontalCenter
+            visible: camera.enableZoom
+            source: zoomOutMA.pressed ? "/SiYi/ZoomOutGreen.svg" : "/SiYi/ZoomOut.svg"
+            Layout.alignment: Qt.AlignHCenter
+//            source: camera.enableZoom
+//                    ? zoomOutMA.pressed ? "/SiYi/ZoomOutGreen.svg" : "/SiYi/ZoomOut.svg"
+//                    : "/SiYi/empty.png"
+//            anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
             MouseArea {
@@ -142,10 +132,13 @@ Rectangle {
             id: reset
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
-            source: camera.enableControl
-                    ? resetMA.pressed ? "/SiYi/ResetGreen.svg" : "/SiYi/Reset.svg"
-                    : "/SiYi/empty.png"
-            anchors.horizontalCenter: parent.horizontalCenter
+            visible: camera.enableControl
+            source: resetMA.pressed ? "/SiYi/ResetGreen.svg" : "/SiYi/Reset.svg"
+            Layout.alignment: Qt.AlignHCenter
+//            source: camera.enableControl
+//                    ? resetMA.pressed ? "/SiYi/ResetGreen.svg" : "/SiYi/Reset.svg"
+//                    : "/SiYi/empty.png"
+//            anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
             MouseArea {
@@ -153,21 +146,19 @@ Rectangle {
                 anchors.fill: parent
                 onPressed: camera.resetPostion()
             }
-//                ColorOverlay {
-//                    anchors.fill: reset
-//                    source: reset
-//                    color: resetMA.pressed ? "green" : "white"
-//                }
         }
 
         Image { // 拍照
             id: photo
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
-            source: camera.enablePhoto
-                    ? photoMA.pressed ? "/SiYi/PhotoGreen.svg" : "/SiYi/Photo.svg"
-                    : "/SiYi/empty.png"
-            anchors.horizontalCenter: parent.horizontalCenter
+            visible: camera.enablePhoto
+            source: photoMA.pressed ? "/SiYi/PhotoGreen.svg" : "/SiYi/Photo.svg"
+            Layout.alignment: Qt.AlignHCenter
+//            source: camera.enablePhoto
+//                    ? photoMA.pressed ? "/SiYi/PhotoGreen.svg" : "/SiYi/Photo.svg"
+//                    : "/SiYi/empty.png"
+//            anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
             MouseArea {
@@ -178,11 +169,6 @@ Rectangle {
                     camera.sendCommand(SiYiCamera.CameraCommandTakePhoto)
                 }
             }
-//                ColorOverlay {
-//                    anchors.fill: photo
-//                    source: photo
-//                    color: photoMA.pressed ? "green" : "white"
-//                }
         }
 
         Image { // 录像
@@ -192,18 +178,8 @@ Rectangle {
             width: buttonSize
             height: buttonSize
             cache: false
-//                source: {
-//                    if (camera.enableVideo) {
-//                        if (camera.isRecording) {
-//                            return "qrc:/resources/SiYi/Stop.svg"
-//                        } else {
-//                            return "qrc:/resources/SiYi/Video.png"
-//                        }
-//                    } else {
-//                        return "qrc:/resources/SiYi/empty.png"
-//                    }
-//                }
-            anchors.horizontalCenter: parent.horizontalCenter
+
+            Layout.alignment: Qt.AlignHCenter // nchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             visible: camera.enableVideo
             MouseArea {
@@ -217,21 +193,11 @@ Rectangle {
                     }
                 }
             }
-//                ColorOverlay {
-//                    anchors.fill: video
-//                    source: video
-//                    color: {
-//                        if (camera.isRecording) {
-//                            return "red"
-//                        } else {
-//                            return videoMA.pressed ? "green" : "white"
-//                        }
-//                    }
-//                }
+
             Connections {
                 target: camera
                 function onEnableVideoChanged() {
-                    video.source = "qrc:/resources/SiYi/empty.png"
+                    video.source = "/SiYi/empty.png"
                     if (camera.enableVideo) {
                         if (camera.isRecording) {
                             video.source = "/SiYi/Stop.svg"
@@ -256,10 +222,13 @@ Rectangle {
             id: far
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
-            source: camera.enableFocus
-                    ? farMA.pressed ? "/SiYi/farGreen.svg" : "/SiYi/far.svg"
-                    : "/SiYi/empty.png"
-            anchors.horizontalCenter: parent.horizontalCenter
+            visible: camera.enableFocus
+            source: farMA.pressed ? "/SiYi/farGreen.svg" : "/SiYi/far.svg"
+            Layout.alignment: Qt.AlignHCenter
+//            source: camera.enableFocus
+//                    ? farMA.pressed ? "/SiYi/farGreen.svg" : "/SiYi/far.svg"
+//                    : "/SiYi/empty.png"
+//            anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
             MouseArea {
@@ -274,11 +243,6 @@ Rectangle {
                     camera.focus(0)
                 }
             }
-//                ColorOverlay {
-//                    anchors.fill: far
-//                    source: far
-//                    color: farMA.pressed ? "green" : "white"
-//                }
             Timer {
                 id: farTimer
                 interval: 100
@@ -295,10 +259,13 @@ Rectangle {
             id: neer
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
-            source: camera.enableFocus
-                    ? neerMA.pressed ? "/SiYi/neerGreen.svg" : "/SiYi/neer.svg"
-                    : "/SiYi/empty.png"
-            anchors.horizontalCenter: parent.horizontalCenter
+            visible: camera.enableFocus
+            source: neerMA.pressed ? "/SiYi/neerGreen.svg" : "/SiYi/neer.svg"
+            Layout.alignment: Qt.AlignHCenter
+//            source: camera.enableFocus
+//                    ? neerMA.pressed ? "/SiYi/neerGreen.svg" : "/SiYi/neer.svg"
+//                    : "/SiYi/empty.png"
+//            anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
             MouseArea {
@@ -313,11 +280,6 @@ Rectangle {
                     camera.focus(0)
                 }
             }
-//                ColorOverlay {
-//                    anchors.fill: neer
-//                    source: neer
-//                    color: neerMA.pressed ? "green" : "white"
-//                }
             Timer {
                 id: neerTimer
                 interval: 100
