@@ -64,7 +64,7 @@ Item {
             case 0:
                 return "None"
             case 1:
-                return "NoFx"
+                return "NoFix"
             case 2:
                 return "2D"
             case 3:
