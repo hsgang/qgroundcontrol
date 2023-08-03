@@ -24,15 +24,13 @@ import SiYi.Object 1.0
 import QtGraphicalEffects 1.12
 import "qrc:/qml/QGroundControl/Controls"
 
-Item {
+Rectangle {
     id: controlRectangle
-    anchors.left: parent.left
-    anchors.leftMargin: 150
-    anchors.topMargin: 10
     width: controlColumn.width
     height: controlColumn.height
     anchors.top: parent.top
     //visible: camera.isConnected
+    color: "transparent"
 
     property var siyi: SiYi
     property SiYiCamera camera: siyi.camera
@@ -56,8 +54,8 @@ Item {
             sourceSize.width: buttonSize // btText.width
             sourceSize.height: buttonSize
             source: camera.enableZoom
-                    ? zoomInMA.pressed ? "qrc:/resources/SiYi/ZoomInGreen.svg" : "qrc:/resources/SiYi/ZoomIn.svg"
-                    : "qrc:/resources/SiYi/empty.png"
+                    ? zoomInMA.pressed ? "/SiYi/ZoomInGreen.svg" : "/SiYi/ZoomIn.svg"
+                    : "/SiYi/empty.png"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
@@ -101,8 +99,8 @@ Item {
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
             source: camera.enableZoom
-                    ? zoomOutMA.pressed ? "qrc:/resources/SiYi/ZoomOutGreen.svg" : "qrc:/resources/SiYi/ZoomOut.svg"
-                    : "qrc:/resources/SiYi/empty.png"
+                    ? zoomOutMA.pressed ? "/SiYi/ZoomOutGreen.svg" : "/SiYi/ZoomOut.svg"
+                    : "/SiYi/empty.png"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
@@ -144,8 +142,8 @@ Item {
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
             source: camera.enableControl
-                    ? resetMA.pressed ? "qrc:/resources/SiYi/ResetGreen.svg" : "qrc:/resources/SiYi/Reset.svg"
-                    : "qrc:/resources/SiYi/empty.png"
+                    ? resetMA.pressed ? "/SiYi/ResetGreen.svg" : "/SiYi/Reset.svg"
+                    : "/SiYi/empty.png"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
@@ -166,8 +164,8 @@ Item {
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
             source: camera.enablePhoto
-                    ? photoMA.pressed ? "qrc:/resources/SiYi/PhotoGreen.svg" : "qrc:/resources/SiYi/Photo.svg"
-                    : "qrc:/resources/SiYi/empty.png"
+                    ? photoMA.pressed ? "/SiYi/PhotoGreen.svg" : "/SiYi/Photo.svg"
+                    : "/SiYi/empty.png"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
@@ -235,19 +233,19 @@ Item {
                     video.source = "qrc:/resources/SiYi/empty.png"
                     if (camera.enableVideo) {
                         if (camera.isRecording) {
-                            video.source = "qrc:/resources/SiYi/Stop.svg"
+                            video.source = "/SiYi/Stop.svg"
                         } else {
-                            video.source = "qrc:/resources/SiYi/Video.png"
+                            video.source = "/SiYi/Video.png"
                         }
                     }
                 }
 
                 function onIsRecordingChanged() {
-                    video.source = "qrc:/resources/SiYi/empty.png"
+                    video.source = "/SiYi/empty.png"
                     if (camera.isRecording) {
-                        video.source = "qrc:/resources/SiYi/Stop.svg"
+                        video.source = "/SiYi/Stop.svg"
                     } else {
-                        video.source = "qrc:/resources/SiYi/Video.png"
+                        video.source = "/SiYi/Video.png"
                     }
                 }
             }
@@ -258,8 +256,8 @@ Item {
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
             source: camera.enableFocus
-                    ? farMA.pressed ? "qrc:/resources/SiYi/farGreen.svg" : "qrc:/resources/SiYi/far.svg"
-                    : "qrc:/resources/SiYi/empty.png"
+                    ? farMA.pressed ? "/SiYi/farGreen.svg" : "/SiYi/far.svg"
+                    : "/SiYi/empty.png"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false
@@ -297,8 +295,8 @@ Item {
             sourceSize.width: buttonSize
             sourceSize.height: buttonSize
             source: camera.enableFocus
-                    ? neerMA.pressed ? "qrc:/resources/SiYi/neerGreen.svg" : "qrc:/resources/SiYi/neer.svg"
-                    : "qrc:/resources/SiYi/empty.png"
+                    ? neerMA.pressed ? "/SiYi/neerGreen.svg" : "/SiYi/neer.svg"
+                    : "/SiYi/empty.png"
             anchors.horizontalCenter: parent.horizontalCenter
             fillMode: Image.PreserveAspectFit
             cache: false

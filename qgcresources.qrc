@@ -123,4 +123,35 @@
         <file alias="MODES.png">resources/HA_Icons/payload/MODES.png</file>
         <file alias="SELECT.png">resources/HA_Icons/payload/SELECT.png</file>
     </qresource>
+    <qresource prefix="/SiYi">
+        <file alias="BeadSight.svg">resources/SiYi/BeadSight.svg</file>
+        <file alias="data.svg">resources/SiYi/data.svg</file>
+        <file alias="Down.svg">resources/SiYi/Down.svg</file>
+        <file alias="Emiter.svg">resources/SiYi/Emiter.svg</file>
+        <file alias="empty.png">resources/SiYi/empty.png</file>
+        <file alias="far.png">resources/SiYi/far.png</file>
+        <file alias="far.svg">resources/SiYi/far.svg</file>
+        <file alias="farGreen.svg">resources/SiYi/farGreen.svg</file>
+        <file alias="Left.svg">resources/SiYi/Left.svg</file>
+        <file alias="neer.png">resources/SiYi/neer.png</file>
+        <file alias="neer.svg">resources/SiYi/neer.svg</file>
+        <file alias="neerGreen.svg">resources/SiYi/neerGreen.svg</file>
+        <file alias="Photo.png">resources/SiYi/Photo.png</file>
+        <file alias="Photo.svg">resources/SiYi/Photo.svg</file>
+        <file alias="PhotoGreen.svg">resources/SiYi/PhotoGreen.svg</file>
+        <file alias="Reset.png">resources/SiYi/Reset.png</file>
+        <file alias="Reset.svg">resources/SiYi/Reset.svg</file>
+        <file alias="ResetGreen.svg">resources/SiYi/ResetGreen.svg</file>
+        <file alias="Right.svg">resources/SiYi/Right.svg</file>
+        <file alias="Stop.svg">resources/SiYi/Stop.svg</file>
+        <file alias="Video.png">resources/SiYi/Video.png</file>
+        <file alias="Video.svg">resources/SiYi/Video.svg</file>
+        <file alias="VideoGreen.svg">resources/SiYi/VideoGreen.svg</file>
+        <file alias="ZoomIn.png">resources/SiYi/ZoomIn.png</file>
+        <file alias="ZoomIn.svg">resources/SiYi/ZoomIn.svg</file>
+        <file alias="ZoomInGreen.svg">resources/SiYi/ZoomInGreen.svg</file>
+        <file alias="ZoomOut.png">resources/SiYi/ZoomOut.png</file>
+        <file alias="ZoomOut.svg">resources/SiYi/ZoomOut.svg</file>
+        <file alias="ZoomOutGreen.svg">resources/SiYi/ZoomOutGreen.svg</file>
+    </qresource>
 </RCC>
