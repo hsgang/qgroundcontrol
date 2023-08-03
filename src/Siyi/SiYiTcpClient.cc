@@ -7,15 +7,13 @@
 #include "SiYiCrcApi.h"
 #include "SiYiTcpClient.h"
 
-
-
 SiYiTcpClient::SiYiTcpClient(const QString ip, quint16 port, QObject *parent)
     : QThread(parent)
     , ip_(ip)
     , port_(port)
 {
     sequence_ = quint16(QDateTime::currentMSecsSinceEpoch());
-    // 自动重连
+    // 自动重连 자동재연결
     connect(this, &SiYiTcpClient::finished, this, [=](){start();});
 }
 
@@ -81,7 +79,7 @@ void SiYiTcpClient::run()
         qInfo() << info << tcpClient->errorString();
     });
 
-    // 定时发送
+    // 定时发送 예약발송
     txTimer->setInterval(10);
     txTimer->setSingleShot(true);
     connect(txTimer, &QTimer::timeout, txTimer, [=](){
@@ -108,7 +106,7 @@ void SiYiTcpClient::run()
         txTimer->start();
     });
 
-    // 定时处理接收数据
+    // 定时处理接收数据 수신데이터의 타이밍처리
     rxTimer->setInterval(1);
     rxTimer->setSingleShot(true);
     connect(rxTimer, &QTimer::timeout, rxTimer, [=](){
@@ -124,11 +122,11 @@ void SiYiTcpClient::run()
         rxTimer->start();
     });
 
-    // 心跳
+    // 心跳 하트비트
     heartbeatTimer->setInterval(1500);
     heartbeatTimer->setSingleShot(true);
     connect(heartbeatTimer, &QTimer::timeout, heartbeatTimer, [=](){
-        // 心跳超时后退出线程
+        // 心跳超时后退出线程 하트비트 시간 초과 후 스레드 종료
         this->timeoutCountMutex.lock();
         int count = this->timeoutCount;
         this->timeoutCountMutex.unlock();

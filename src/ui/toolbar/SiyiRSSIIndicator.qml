@@ -58,13 +58,13 @@ Item {
                     QGCLabel { text: qsTr("Inactive Time:") }
                     QGCLabel { text: transmitter.inactiveTime + " ms"}
                     QGCLabel { text: qsTr("Upstream:") }
-                    QGCLabel { text: (transmitter.upStream / 1024).toFixed(1) + " kbps" }
+                    QGCLabel { text: (transmitter.upStream / 1024).toFixed(1) + " Kb/s" }
                     QGCLabel { text: qsTr("Downstream:") }
-                    QGCLabel { text: (transmitter.downStream / 1024).toFixed(1) + " kbps" }
+                    QGCLabel { text: (transmitter.downStream / 1024).toFixed(1) + " Kb/s" }
                     QGCLabel { text: qsTr("TxBandwidth:") }
-                    QGCLabel { text: (transmitter.txBandWidth / 1024).toFixed(1) + " Mbps" }
+                    QGCLabel { text: (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s" }
                     QGCLabel { text: qsTr("RxBandwidth:") }
-                    QGCLabel { text: (transmitter.rxBandWidth / 1024).toFixed(1) + " Mbps" }
+                    QGCLabel { text: (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s" }
                     QGCLabel { text: qsTr("Frequency:") }
                     QGCLabel { text: transmitter.freq + " Mhz"}
                     QGCLabel { text: qsTr("Channel:") }
@@ -79,6 +79,27 @@ Item {
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
         spacing:        ScreenTools.defaultFontPixelWidth/2
+
+        Column {
+            id:                     batteryValuesColumn
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
+            //anchors.left:           batteryIcon.right
+
+            QGCLabel {
+                id:                 batteryVoltageValue
+                anchors.right:      parent.right
+                font.pointSize:     ScreenTools.smallFontPointSize
+                color:              qgcPal.text
+                text:               (transmitter.downStream / 1024).toFixed(0) + " Kb/s"
+            }
+
+            QGCLabel {
+                anchors.right:      parent.right
+                color:              qgcPal.text
+                text:               transmitter.rssi +" dBm"
+            }
+        }
 
         Rectangle{
             anchors.top:    parent.top
