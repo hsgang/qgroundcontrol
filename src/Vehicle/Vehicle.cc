@@ -791,8 +791,13 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_TUNNEL:
         emit atmosphericValueChanged();
         emit tunnelingDataValueChanged();
+        break;
     case MAVLINK_MSG_ID_DATA32:
         emit atmosphericValueChanged();
+        break;
+    case MAVLINK_MSG_ID_FENCE_STATUS:
+        _handleFenceStatus(message);
+        break;
 
     case MAVLINK_MSG_ID_EVENT:
     case MAVLINK_MSG_ID_CURRENT_EVENT_SEQUENCE:
@@ -4589,7 +4594,6 @@ void Vehicle::toggleGimbalRetracted(bool force, bool set)
         setDesired = !_gimbalRetracted;
     }
 
-
     uint32_t flags = 0;
     qDebug() << "flags before: " << flags;
     if (setDesired) {
@@ -4709,6 +4713,41 @@ void Vehicle::releaseGimbalControl()
         0); // All gimbal IDs, TODO: make gimbal specific
 }
 
+void Vehicle::_handleFenceStatus(const mavlink_message_t& message)
+{
+    mavlink_fence_status_t fenceStatus;
+
+    mavlink_msg_fence_status_decode(&message, &fenceStatus);
+
+    qCDebug(VehicleLog) << "_handleFenceStatus breach_status" << fenceStatus.breach_status;
+
+    static qint64 lastUpdate = 0;
+    qint64 now = QDateTime::currentMSecsSinceEpoch();
+    if (fenceStatus.breach_status == 1) {
+        if (now - lastUpdate > 3000) {
+            lastUpdate = now;
+            QString breachTypeStr;
+            switch (fenceStatus.breach_type) {
+                case FENCE_BREACH_NONE:
+                    return;
+                case FENCE_BREACH_MINALT:
+                    breachTypeStr = tr("minimum altitude");
+                    break;
+                case FENCE_BREACH_MAXALT:
+                    breachTypeStr = tr("maximum altitude");
+                    break;
+                case FENCE_BREACH_BOUNDARY:
+                    breachTypeStr = tr("boundary");
+                    break;
+                default:
+                    break;
+            }
+            qgcApp()->toolbox()->audioOutput()->say(breachTypeStr + " " + tr("fence breached"));
+        }
+    } else {
+        lastUpdate = now;
+    }
+}
 void Vehicle::updateFlightDistance(double distance)
 {
     _flightDistanceFact.setRawValue(_flightDistanceFact.rawValue().toDouble() + distance);

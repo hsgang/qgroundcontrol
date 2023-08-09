@@ -56,12 +56,21 @@ Rectangle {
 
         QGCMouseArea {
             id:                         mouseArea
-            x:                          valueArea.x
-            y:                          valueArea.y
-            width:                      valueArea.width
-            height:                     valueArea.height
-            onClicked:                  telemetryPanel.editMode = !telemetryPanel.editMode
-            //propagateComposedEvents:    true
+            x:                          telemetryLayout.x
+            y:                          telemetryLayout.y
+            width:                      telemetryLayout.width
+            height:                     telemetryLayout.height
+            hoverEnabled:               !ScreenTools.isMobile
+            propagateComposedEvents:    true
+
+            onClicked: {
+                if (ScreenTools.isMobile && !valueArea.settingsUnlocked) {
+                    valueArea.settingsUnlocked = true
+                    mouse.accepted = true
+                } else {
+                    mouse.accepted = false
+                }
+            }
         }
 
         HorizontalFactValueGrid {

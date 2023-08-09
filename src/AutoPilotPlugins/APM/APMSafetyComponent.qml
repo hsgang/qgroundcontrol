@@ -410,71 +410,117 @@ SetupPage {
                     property Fact _fenceRadius: controller.getParameterFact(-1, "FENCE_RADIUS")
                     property Fact _fenceType:   controller.getParameterFact(-1, "FENCE_TYPE")
 
+                    readonly property int _maxAltitudeFenceBitMask: 1
+                    readonly property int _circleFenceBitMask:      2
+                    readonly property int _polygonFenceBitMask:     4
+
                     QGCLabel {
-                        id:             geoFenceLabel
                         text:           qsTr("GeoFence")
                         font.family:    ScreenTools.demiboldFontFamily
                     }
 
                     Rectangle {
-                        id:     geoFenceSettings
-                        width:  gfGrid.x + gfGrid.width + _margins
-                        height: gfGrid.y + gfGrid.height + _margins
+                        width:  mainLayout.width + (_margins * 2)
+                        height: mainLayout.height + (_margins * 2)
                         color:  ggcPal.windowShade
 
-                        GridLayout {
-                            id: gfGrid
-                            anchors.margins:    _margins
-                            anchors.left:       parent.left
-                            anchors.top:        parent.top
-                            columns:            2
-                            rowSpacing:         _margins
+                        ColumnLayout {
+                            id:         mainLayout
+                            x:          _margins
+                            y:          _margins
+                            spacing:    ScreenTools.defaultFontPixellHeight / 2
 
-                            QGCLabel {
-                                text: qsTr("GeoFence Type Options:")
-                                Layout.columnSpan: 2
-                            }
-                            FactBitmask {
-                                fact: _fenceType
-                                Layout.columnSpan: 2
+                            FactCheckBox {
+                                id:     enabledCheckBox
+                                text:   qsTr("Enabled")
+                                fact:   _fenceEnable
                             }
 
-                            QGCLabel { text: qsTr("GeoFence Actions:") }
-                            QGCComboBox {
-                                model:              [qsTr("Report Only"), qsTr("RTL and Land"), qsTr("Always Land"), qsTr("SmartRTL or RTL or Land"), qsTr("Brake or Land"), qsTr("SmartRTL or Land")]
-                                currentIndex:       _fenceAction.value
-                                Layout.fillWidth:   true
+                            GridLayout {
+                                columns:    2
+                                enabled:    enabledCheckBox.checked
 
-                                onActivated: _fenceAction.value = index
+                                QGCCheckBox {
+                                    text:       qsTr("Maximum Altitude")
+                                    checked:    _fenceType.rawValue & _maxAltitudeFenceBitMask
+
+                                    onClicked: {
+                                        if (checked) {
+                                            _fenceType.rawValue |= _maxAltitudeFenceBitMask
+                                        } else {
+                                            _fenceType.value &= ~_maxAltitudeFenceBitMask
+                                        }
+                                    }
+                                }
+
+                                FactTextField {
+                                    fact: _fenceAltMax
+                                }
+
+                                QGCCheckBox {
+                                    text:       qsTr("Circle centered on Home")
+                                    checked:    _fenceType.rawValue & _circleFenceBitMask
+
+                                    onClicked: {
+                                        if (checked) {
+                                            _fenceType.rawValue |= _circleFenceBitMask
+                                        } else {
+                                            _fenceType.value &= ~_circleFenceBitMask
+                                        }
+                                    }
+                                }
+
+                                FactTextField {
+                                    fact:       _fenceRadius
+                                    showUnits:  true
+                                }
+
+                                QGCCheckBox {
+                                    text:       qsTr("Inclusion/Exclusion Circles+Polygons")
+                                    checked:    _fenceType.rawValue & _polygonFenceBitMask
+
+                                    onClicked: {
+                                        if (checked) {
+                                            _fenceType.rawValue |= _polygonFenceBitMask
+                                        } else {
+                                            _fenceType.value &= ~_polygonFenceBitMask
+                                        }
+                                    }
+                                }
+
+                                Item {
+                                    height: 1
+                                    width:  1
+                                }
+                            } // GridLayout
+
+                            Item {
+                                height: 1
+                                width:  1
                             }
 
-                            QGCLabel {
-                                text:               qsTr("Max radius:")
-                            }
+                            GridLayout {
+                                columns: 2
+                                enabled: enabledCheckBox.checked
 
-                            FactTextField {
-                                fact:               _fenceRadius
-                                showUnits:          true
-                            }
+                                QGCLabel {
+                                    text: qsTr("Breach action")
+                                }
 
-                            QGCLabel {
-                                text:               qsTr("Max altitude:")
-                            }
+                                FactComboBox {
+                                    sizeToContents: true
+                                    fact:           _fenceAction
+                                }
 
-                            FactTextField {
-                                fact:               _fenceAltMax
-                                showUnits:          true
-                            }
+                                QGCLabel {
+                                    text: qsTr("Fence margin")
+                                }
 
-                            QGCLabel {
-                                text:               qsTr("Min altitude:")
+                                FactTextField {
+                                    fact: _fenceMargin
+                                }
                             }
-
-                            FactTextField {
-                                fact:               _fenceAltMin
-                                showUnits:          true
-                            }
-                        } // GridLayout
+                        }
                     } // Rectangle - GeoFence Settings
                 } // Column - GeoFence Settings
             }
