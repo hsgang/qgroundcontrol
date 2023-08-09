@@ -444,30 +444,13 @@ ApplicationWindow {
                     Layout.alignment:       Qt.AlignHCenter
                 }
 
-                QGCLabel {
-                    text:                   qsTr("Version: %1").arg(QGroundControl.qgcVersion)
-                    font.pointSize:         ScreenTools.smallFontPointSize
-                    wrapMode:               QGCLabel.WrapAnywhere
-                    Layout.maximumWidth:    parent.width
-                    Layout.alignment:       Qt.AlignHCenter
-                }
-            }
-
-            QGCMouseArea {
-                anchors.fill: qgcVersionLayout
-
-                onClicked: {
-                    if (mouse.modifiers & Qt.ShiftModifier) {
-                        QGroundControl.corePlugin.showTouchAreas = !QGroundControl.corePlugin.showTouchAreas
-                    } else {
-                        if(!QGroundControl.corePlugin.showAdvancedUI) {
-                            advancedModeConfirmation.open()
-                        } else {
-                            QGroundControl.corePlugin.showAdvancedUI = false
-                        }
-                    }
-                }
-
+//                QGCLabel {
+//                    text:                   qsTr("Version: %1").arg(QGroundControl.qgcVersion)
+//                    font.pointSize:         ScreenTools.smallFontPointSize
+//                    wrapMode:               QGCLabel.WrapAnywhere
+//                    Layout.maximumWidth:    parent.width
+//                    Layout.alignment:       Qt.AlignHCenter
+//                }
                 QGCLabel {
                     text:                   QGroundControl.qgcVersion
                     font.pointSize:         ScreenTools.smallFontPointSize
@@ -526,6 +509,23 @@ ApplicationWindow {
                                 QGroundControl.corePlugin.showAdvancedUI = false
                                 advancedModeOffConfirmation.close()
                             }
+                        }
+                    }
+                }
+            }
+
+            QGCMouseArea {
+                anchors.fill: qgcVersionLayout
+
+                onClicked: {
+                    if (mouse.modifiers & Qt.ShiftModifier) {
+                        QGroundControl.corePlugin.showTouchAreas = !QGroundControl.corePlugin.showTouchAreas
+                    } else {
+                        if(!QGroundControl.corePlugin.showAdvancedUI) {
+                            advancedModeOnConfirmation.open()
+                        } else {
+                            //QGroundControl.corePlugin.showAdvancedUI = false
+                            advancedModeOffConfirmation.open()
                         }
                     }
                 }

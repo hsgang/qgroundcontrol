@@ -20,7 +20,7 @@ Rectangle {
     id:                 telemetryPanel
     height:             telemetryLayout.height + (_toolsMargin * 2)
     width:              telemetryLayout.width + (_toolsMargin * 2)
-    color:              "transparent" //Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+    color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5) //"transparent"
     radius:             ScreenTools.defaultFontPixelWidth / 2
 
     property bool       editMode: false
@@ -56,21 +56,12 @@ Rectangle {
 
         QGCMouseArea {
             id:                         mouseArea
-            x:                          telemetryLayout.x
-            y:                          telemetryLayout.y
-            width:                      telemetryLayout.width
-            height:                     telemetryLayout.height
-            hoverEnabled:               !ScreenTools.isMobile
-            propagateComposedEvents:    true
-
-            onClicked: {
-                if (ScreenTools.isMobile && !valueArea.settingsUnlocked) {
-                    valueArea.settingsUnlocked = true
-                    mouse.accepted = true
-                } else {
-                    mouse.accepted = false
-                }
-            }
+            x:                          valueArea.x
+            y:                          valueArea.y
+            width:                      valueArea.width
+            height:                     valueArea.height
+            onClicked:                  telemetryPanel.editMode = !telemetryPanel.editMode
+            //propagateComposedEvents:    true
         }
 
         HorizontalFactValueGrid {

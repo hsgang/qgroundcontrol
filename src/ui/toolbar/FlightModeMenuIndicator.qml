@@ -19,9 +19,9 @@ import QGroundControl.Palette               1.0
 import QGroundControl.FactSystem            1.0
 import QGroundControl.FactControls          1.0
 
-Item {
-    id:                     _root
-    Layout.preferredWidth:  rowLayout.width
+RowLayout {
+    id: _root
+    spacing: 0
 
     property bool showIndicator: true
 
@@ -31,25 +31,7 @@ Item {
     property real editFieldWidth:        ScreenTools.defaultFontPixelWidth * 13
 
     RowLayout {
-        id:         rowLayout
-        spacing:    0
-        height:     parent.height
-
-        QGCColoredImage {
-            id:         flightModeIcon
-            width:      ScreenTools.defaultFontPixelWidth * 2
-            height:     ScreenTools.defaultFontPixelHeight * 0.75
-            fillMode:   Image.PreserveAspectFit
-            mipmap:     true
-            color:      qgcPal.text
-            source:     "/qmlimages/FlightModesComponentIcon.png"
-            Layout.alignment:   Qt.AlignVCenter
-        }
-
-        Item {
-            Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth / 2
-            height:                 1
-        }
+        Layout.fillWidth: true
 
 //        QGCColoredImage {
 //            id:         flightModeIcon
@@ -282,10 +264,5 @@ Item {
 
             }
         }
-    }
-
-    QGCMouseArea {
-        anchors.fill:   parent
-        onClicked:      mainWindow.showIndicatorPopup(_root, flightModeMenu)
     }
 }
