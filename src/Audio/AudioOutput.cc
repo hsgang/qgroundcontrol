@@ -109,9 +109,6 @@ QString AudioOutput::fixTextMessageForAudio(const QString& string) {
     } else if(result.contains("RTL", Qt::CaseInsensitive)) {
         result.replace("RTL", "Return To Launch", Qt::CaseInsensitive);
     }
-    if(result.contains("ACCEL ", Qt::CaseInsensitive)) {
-        result.replace("ACCEL ", "accelerometer ", Qt::CaseInsensitive);
-    }
     if(result.contains("RC_MAP_MODE_SW", Qt::CaseInsensitive)) {
         result.replace("RC_MAP_MODE_SW", "RC mode switch", Qt::CaseInsensitive);
     }
@@ -140,10 +137,25 @@ QString AudioOutput::fixTextMessageForAudio(const QString& string) {
         result.replace(" EKF ", " Eee Kay Eff ", Qt::CaseInsensitive);
     }
     if(result.contains("PREARM", Qt::CaseInsensitive)) {
-        result.replace("PREARM", "pre arm", Qt::CaseInsensitive);
+        result.replace("PREARM", tr("pre arm"), Qt::CaseInsensitive);
     }
     if(result.contains("PITOT", Qt::CaseInsensitive)) {
         result.replace("PITOT", "pee toe", Qt::CaseInsensitive);
+    }
+    if(result.contains("RC not found", Qt::CaseInsensitive)) {
+        result.replace("RC not found", tr("RC not found"), Qt::CaseInsensitive);
+    }
+    if(result.contains("3D Accel calibration needed", Qt::CaseInsensitive)) {
+        result.replace("3D Accel calibration needed", tr("3D Accel calibration needed"), Qt::CaseInsensitive);
+    }
+    if(result.contains("ACCEL ", Qt::CaseInsensitive)) {
+        result.replace("ACCEL ", "accelerometer ", Qt::CaseInsensitive);
+    }
+    if(result.contains("low voltage failsafe", Qt::CaseInsensitive)) {
+        result.replace("low voltage failsafe", tr("low voltage failsafe"), Qt::CaseInsensitive);
+    }
+    if(result.contains("AHRS: waiting for home", Qt::CaseInsensitive)) {
+        result.replace("AHRS: waiting for home", tr("AHRS: waiting for home"), Qt::CaseInsensitive);
     }
 
     // Convert negative numbers

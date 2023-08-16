@@ -3853,6 +3853,31 @@ Please place your vehicle in water, click the button, and wait. Note that the th
         <source> meters</source>
         <translation> 미터</translation>
     </message>
+    <message>
+        <location filename="../src/Audio/AudioOutput.cc" line="143"/>
+        <source>pre arm</source>
+        <translation>비행전 점검사항</translation>
+    </message>
+    <message>
+        <location filename="../src/Audio/AudioOutput.cc" line="149"/>
+        <source>RC not found</source>
+        <translation>라디오 신호 없음</translation>
+    </message>
+    <message>
+        <location filename="../src/Audio/AudioOutput.cc" line="152"/>
+        <source>3D Accel calibration needed</source>
+        <translation>가속도계 보정 필요</translation>
+    </message>
+    <message>
+        <location filename="../src/Audio/AudioOutput.cc" line="155"/>
+        <source>low voltage failsafe</source>
+        <translation>저전압 페일세이프</translation>
+    </message>
+    <message>
+        <location filename="../src/Audio/AudioOutput.cc" line="158"/>
+        <source>waiting for home</source>
+        <translation>홈위치 수신 대기중</translation>
+    </message>
 </context>
 <context>
     <name>AutoPilotPlugin</name>
@@ -17408,7 +17433,7 @@ Confirm change?</source>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="2435"/>
         <source>%1 %2 flight mode</source>
-        <translation>%1 %2 비행모드</translation>
+        <translation>%1 %2 비행 모드</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="2441"/>
