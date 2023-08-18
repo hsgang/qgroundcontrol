@@ -8034,7 +8034,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="25"/>
         <source>Value Display</source>
-        <translation>값 표시 HTML</translation>
+        <translation>값 표시</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="41"/>
