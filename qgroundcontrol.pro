@@ -827,7 +827,11 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
     }
 }
 
-!contains(DEFINES, NO_SERIAL_LINK) {
+contains(DEFINES, NO_SERIAL_LINK) {
+    CONFIG += NoSerialBuild
+}
+
+!NoSerialBuild {
 HEADERS += \
     src/comm/QGCSerialPortInfo.h \
     src/comm/SerialLink.h \
@@ -1063,7 +1067,7 @@ SOURCES += \
     src/comm/MockLinkMissionItemHandler.cc \
 }
 
-!contains(DEFINES, NO_SERIAL_LINK) {
+!NoSerialBuild {
 SOURCES += \
     src/comm/QGCSerialPortInfo.cc \
     src/comm/SerialLink.cc \
@@ -1116,7 +1120,7 @@ HEADERS+= \
     src/FirmwarePlugin/FirmwarePluginManager.h \
     src/VehicleSetup/VehicleComponent.h \
 
-!MobileBuild { !contains(DEFINES, NO_SERIAL_LINK) {
+!MobileBuild { !NoSerialBuild {
     HEADERS += \
         src/VehicleSetup/Bootloader.h \
         src/VehicleSetup/FirmwareImage.h \
@@ -1138,7 +1142,7 @@ SOURCES += \
     src/FirmwarePlugin/FirmwarePluginManager.cc \
     src/VehicleSetup/VehicleComponent.cc \
 
-!MobileBuild { !contains(DEFINES, NO_SERIAL_LINK) {
+!MobileBuild { !NoSerialBuild {
     SOURCES += \
         src/VehicleSetup/Bootloader.cc \
         src/VehicleSetup/FirmwareImage.cc \
