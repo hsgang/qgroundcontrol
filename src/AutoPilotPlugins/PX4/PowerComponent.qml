@@ -450,7 +450,7 @@ SetupPage {
                             columns:    2
 
                             QGCLabel { text: qsTr("Measured voltage:") }
-                            QGCTextField { id: measuredVoltage }
+                            QGCTextField { id: measuredVoltage; numericValuesOnly: true }
 
                             QGCLabel { text: qsTr("Vehicle voltage:") }
                             QGCLabel { text: _batteryFactGroup.voltage.valueString }
@@ -508,7 +508,7 @@ SetupPage {
                             columns:    2
 
                             QGCLabel { text: qsTr("Measured current:") }
-                            QGCTextField { id: measuredCurrent }
+                            QGCTextField { id: measuredCurrent; numericValuesOnly: true }
 
                             QGCLabel { text: qsTr("Vehicle current:") }
                             QGCLabel { text: _batteryFactGroup.current.valueString }
