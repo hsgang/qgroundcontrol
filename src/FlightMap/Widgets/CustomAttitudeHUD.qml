@@ -179,17 +179,17 @@ Item {
         sourceSize.width:   width
         fillMode:           Image.PreserveAspectFit
 
-        ColorOverlay {
-            anchors.fill:       rollDial
-            source:             rollDial
-            color:              qgcPal.textHighlight
-        }
-
         transform: Rotation {
             origin.x:       rollDial.width / 2
             origin.y:       rollDial.height
             angle:          -_rollAngle
         }
+    }
+
+    ColorOverlay {
+        anchors.fill:       rollDial
+        source:             rollDial
+        color:              qgcPal.textHighlight
     }
 
 //    Image {
@@ -214,12 +214,12 @@ Item {
         sourceSize.width:   width
         //color:              qgcPal.text
         fillMode:           Image.PreserveAspectFit
+    }
 
-        ColorOverlay {
-            anchors.fill:       crossHair
-            source:             crossHair
-            color:              qgcPal.textHighlight
-        }
+    ColorOverlay {
+        anchors.fill:       crossHair
+        source:             crossHair
+        color:              qgcPal.textHighlight
     }
 
     QGCPitchIndicator {
