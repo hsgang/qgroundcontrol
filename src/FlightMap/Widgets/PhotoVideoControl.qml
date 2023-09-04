@@ -162,7 +162,7 @@ Rectangle {
             id:                 modeSelector
             Layout.alignment:   Qt.AlignHCenter
             Layout.margins:     _margins
-            width:              ScreenTools.defaultFontPixelWidth * 8
+            width:              ScreenTools.defaultFontPixelWidth * 10
             height:             width / 2
             color:              qgcPal.window
             radius:             height * 0.5
