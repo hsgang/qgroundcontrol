@@ -29,6 +29,7 @@ const char* VideoSettings::videoSourceMPEGTS            = QT_TRANSLATE_NOOP("Vid
 const char* VideoSettings::videoSource3DRSolo           = QT_TRANSLATE_NOOP("VideoSettings", "3DR Solo (requires restart)");
 const char* VideoSettings::videoSourceParrotDiscovery   = QT_TRANSLATE_NOOP("VideoSettings", "Parrot Discovery");
 const char* VideoSettings::videoSourceYuneecMantisG     = QT_TRANSLATE_NOOP("VideoSettings", "Yuneec Mantis G");
+const char* VideoSettings::videoSourceSiyiA8            = QT_TRANSLATE_NOOP("VideoSettings", "SIYI A8");
 
 DECLARE_SETTINGGROUP(Video, "Video")
 {
@@ -43,10 +44,11 @@ DECLARE_SETTINGGROUP(Video, "Video")
     videoSourceList.append(videoSourceUDPH265);
 #endif
     videoSourceList.append(videoSourceTCP);
-    videoSourceList.append(videoSourceMPEGTS);
-    videoSourceList.append(videoSource3DRSolo);
-    videoSourceList.append(videoSourceParrotDiscovery);
-    videoSourceList.append(videoSourceYuneecMantisG);
+    //videoSourceList.append(videoSourceMPEGTS);
+    //videoSourceList.append(videoSource3DRSolo);
+    //videoSourceList.append(videoSourceParrotDiscovery);
+    //videoSourceList.append(videoSourceYuneecMantisG);
+    videoSourceList.append(videoSourceSiyiA8);
 #endif
 #ifndef QGC_DISABLE_UVC
     QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
