@@ -243,7 +243,7 @@ void SiYiCamera::analyzeMessage()
                 }
 
                 if (!(msg.header.cmdId == 0x90)) {
-                    qInfo() << info << "Rx:" << packet.toHex(' ');
+                    //qInfo() << info << "Rx:" << packet.toHex(' ');
                 }
 
                 rxBytes_.remove(0, msgLen);

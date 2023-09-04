@@ -77,7 +77,7 @@ void SiYiTransmitter::analyzeMessage()
                 if ((msg.header.cmdId == 0x83) || (msg.header.cmdId == 0x2f)) {
                     const QString info = QString("[%1:%2]:").arg(ip_, QString::number(port_));
                     QByteArray packet = QByteArray(rxBytes_.data(), msgLen);
-                    qInfo() << info << "Rx:" << packet.toHex(' ');
+                    //qInfo() << info << "Rx:" << packet.toHex(' ');
                     onHeartbeatMessageReceived(packet);
                 } else if (msg.header.cmdId == 0x8a) {
                     // Nothing to do yet
@@ -192,15 +192,15 @@ void SiYiTransmitter::onHeartbeatMessageReceived(const QByteArray &msg)
         emit freqChanged();
         emit channelChanged();
 
-        qInfo() << "signalQuality_:" << signalQuality_
-                << "inactiveTime_:" << inactiveTime_
-                << "upStream_:" << upStream_
-                << "downStream_:" << downStream_
-                << "txBanWidth_:" << txBanWidth_
-                << "rxBanWidth_:" << rxBanWidth_
-                << "rssi_:" << rssi_
-                << "freq_:" << freq_
-                << "channel_:" << channel_;
+//        qInfo() << "signalQuality_:" << signalQuality_
+//                << "inactiveTime_:" << inactiveTime_
+//                << "upStream_:" << upStream_
+//                << "downStream_:" << downStream_
+//                << "txBanWidth_:" << txBanWidth_
+//                << "rxBanWidth_:" << rxBanWidth_
+//                << "rssi_:" << rssi_
+//                << "freq_:" << freq_
+//                << "channel_:" << channel_;
 
     } else {
         qWarning() << "bad heartbeat message:" << msg.toHex(' ') ;
