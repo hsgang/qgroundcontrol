@@ -92,7 +92,7 @@ void SiYiTcpClient::run()
         if ((!msg.isEmpty())) {
             if ((tcpClient->state() == QTcpSocket::ConnectedState)) {
                 if (tcpClient->write(msg) != -1) {
-                    qInfo() << info << "Tx:" << msg.toHex(' ');
+                    //qInfo() << info << "Tx:" << msg.toHex(' ');
                 } else {
                     qInfo() << info << tcpClient->errorString();
                 }
