@@ -13,8 +13,8 @@ TextField {
     activeFocusOnPress: true
     antialiasing:       true
     inputMethodHints:   numericValuesOnly && !ScreenTools.isiOS ?
-                          Qt.ImhNone :                // iOS numeric keyboard has no done button, we can't use it.
-                          Qt.ImhFormattedNumbersOnly  // Forces use of virtual numeric keyboard instead of full keyboard
+                            Qt.ImhFormattedNumbersOnly : // Forces use of virtual numeric keyboard instead of full keyboard
+                            Qt.ImhNone                // iOS numeric keyboard has no done button, we can't use it.
 
     property bool   showUnits:          false
     property bool   showHelp:           false
@@ -114,7 +114,7 @@ TextField {
                     Layout.rightMargin: 1
                     Layout.fillHeight:  true
                     width:              helpLabel.contentWidth * 3
-                    color:              control.textColor
+                    color:              qgcPal.buttonHighlight
                     visible:            backgroundItem.showHelp
 
                     QGCLabel {
