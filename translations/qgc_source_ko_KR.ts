@@ -6859,7 +6859,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="176"/>
         <source>Total Time:</source>
-        <translation>비행 시간:</translation>
+        <translation>임무 시간:</translation>
     </message>
 </context>
 <context>
@@ -7390,17 +7390,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/MissionManager/GeoFenceController.cc" line="151"/>
         <source>GeoFence supports version %1</source>
-        <translation>GeoFence는 버젼 %1을 지원합니다</translation>
+        <translation>지오펜스는 버젼 %1을 지원합니다</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/GeoFenceController.cc" line="158"/>
         <source>GeoFence polygon not stored as object</source>
-        <translation>GeoFence 다각형이 오브젝트로 저장되지 않았습니다</translation>
+        <translation>지오펜스 폴리곤이 오브젝트로 저장되어 있지 않았습니다</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/GeoFenceController.cc" line="172"/>
         <source>GeoFence circle not stored as object</source>
-        <translation>GeoFence circle이 오브젝트로 저장되어있지 않습니다</translation>
+        <translation>지오펜스 써클이 오브젝트로 저장되어 있지 않습니다</translation>
     </message>
 </context>
 <context>
@@ -7408,37 +7408,37 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="37"/>
         <source>GeoFence</source>
-        <translation>비행제한구역(GeoFence)</translation>
+        <translation>지오펜스(GeoFence)</translation>
     </message>
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="65"/>
         <source>GeoFencing allows you to set a virtual fence around the area you want to fly in.</source>
-        <translation>GeoFencing은 비행을 제한하고 싶은 가상의 경계를 지정할 수 있도록 합니다.</translation>
+        <translation>지오펜스는 비행을 제한하고 싶은 가상의 경계를 지정할 수 있도록 합니다.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="66"/>
         <source>This vehicle does not support GeoFence.</source>
-        <translation>기체가 GeoFence를 지원하지 않습니다.</translation>
+        <translation>기체가 지오펜스를 지원하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="116"/>
         <source>Insert GeoFence</source>
-        <translation>GeoFence 삽입</translation>
+        <translation>지오펜스 추가</translation>
     </message>
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="121"/>
         <source>Polygon Fence</source>
-        <translation>다각형 Fence</translation>
+        <translation>다각형 펜스</translation>
     </message>
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="133"/>
         <source>Circular Fence</source>
-        <translation>원형 Fence</translation>
+        <translation>원형 펜스</translation>
     </message>
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="147"/>
         <source>Polygon Fences</source>
-        <translation>다각형 Fence</translation>
+        <translation>다각형 펜스</translation>
     </message>
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="151"/>
@@ -7473,7 +7473,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="222"/>
         <source>Circular Fences</source>
-        <translation>원형 Fence</translation>
+        <translation>원형 펜스</translation>
     </message>
     <message>
         <location filename="../src/PlanView/GeoFenceEditor.qml" line="278"/>
@@ -12807,7 +12807,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="820"/>
         <source>Fence</source>
-        <translation>울타리</translation>
+        <translation>지오펜스</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="824"/>
@@ -13648,7 +13648,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/QGCFileDialog.qml" line="123"/>
         <source>Path: %1</source>
-        <translation>경로: %@</translation>
+        <translation>경로: %1</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/QGCFileDialog.qml" line="154"/>
@@ -15786,7 +15786,7 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="105"/>
         <source>Click in map to set planned Takeoff location.</source>
-        <translation type="unfinished">Click in map to set planned Takeoff location.</translation>
+        <translation>지도에서 이륙위치를 클릭하세요.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="106"/>
