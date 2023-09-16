@@ -13,10 +13,10 @@ import QGroundControl.Palette           1.0
 Rectangle {
     id:         atmosphericValueBar
     height:     atmosphericValueColumn.height + ScreenTools.defaultFontPixelHeight * 0.5
-    width:      atmosphericValueColumn.width + ScreenTools.defaultFontPixelWidth * 3
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+    width:      atmosphericValueColumn.width + ScreenTools.defaultFontPixelWidth * 2
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:     _margins
-    border.color: qgcPal.text
+    //border.color: qgcPal.text
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property real _temperatureValue:    _activeVehicle ? _activeVehicle.atmosphericSensor.temperature.rawValue.toFixed(1) : NaN
@@ -39,33 +39,64 @@ Rectangle {
             id:     atmosphericSensorViewLabel
             text:   qsTr("Ext. Sensors")
             font.family:    ScreenTools.demiboldFontFamily
+            font.pointSize: ScreenTools.defaultFontPointSize * 0.8
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
         GridLayout {
             id:                         atmosphericValueGrid
             anchors.margins:            ScreenTools.defaultFontPixelHeight
-            columnSpacing:              ScreenTools.defaultFontPixelWidth
+            columnSpacing:              ScreenTools.defaultFontPixelWidth / 2
             anchors.horizontalCenter:   parent.horizontalCenter
             columns: 2
 
-            QGCLabel { text: qsTr("ALT"); opacity: 0.7}
-            QGCLabel { text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"}
+            QGCLabel { text: qsTr("ALT"); opacity: 0.7; font.pointSize:ScreenTools.defaultFontPointSize * 0.8; }
+            QGCLabel {
+                text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"
+                font.pointSize:ScreenTools.defaultFontPointSize * 0.8
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 8
+                horizontalAlignment:    Text.AlignRight
+            }
 
-            QGCLabel { text: qsTr("TMP"); opacity: 0.7}
-            QGCLabel { text: _temperatureValue ? _temperatureValue +" ℃" : "No data"}
+            QGCLabel { text: qsTr("TMP"); opacity: 0.7; font.pointSize:ScreenTools.defaultFontPointSize * 0.8; }
+            QGCLabel {
+                text: _temperatureValue ? _temperatureValue +" ℃" : "No data"
+                font.pointSize:ScreenTools.defaultFontPointSize * 0.8
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 8
+                horizontalAlignment:    Text.AlignRight
+            }
 
-            QGCLabel { text: qsTr("HMD"); opacity: 0.7}
-            QGCLabel { text: _humidityValue ? _humidityValue + " Rh%" : "No data"}
+            QGCLabel { text: qsTr("HMD"); opacity: 0.7; font.pointSize:ScreenTools.defaultFontPointSize * 0.8; }
+            QGCLabel {
+                text: _humidityValue ? _humidityValue + " Rh%" : "No data"
+                font.pointSize:ScreenTools.defaultFontPointSize * 0.8
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 8
+                horizontalAlignment:    Text.AlignRight
+            }
 
-            QGCLabel { text: qsTr("PRS"); opacity: 0.7}
-            QGCLabel { text: _pressureValue ? _pressureValue + " hPa" : "No data"}
+            QGCLabel { text: qsTr("PRS"); opacity: 0.7; font.pointSize:ScreenTools.defaultFontPointSize * 0.8; }
+            QGCLabel {
+                text: _pressureValue ? _pressureValue + " hPa" : "No data"
+                font.pointSize:ScreenTools.defaultFontPointSize * 0.8
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 8
+                horizontalAlignment:    Text.AlignRight
+            }
 
-            QGCLabel { text: qsTr("W/D"); opacity: 0.7}
-            QGCLabel { text: _windDirValue ? _windDirValue + " deg" : "No data"}
+            QGCLabel { text: qsTr("W/D"); opacity: 0.7; font.pointSize:ScreenTools.defaultFontPointSize * 0.8; }
+            QGCLabel {
+                text: _windDirValue ? _windDirValue + " deg" : "No data"
+                font.pointSize:ScreenTools.defaultFontPointSize * 0.8
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 8
+                horizontalAlignment:    Text.AlignRight
+            }
 
-            QGCLabel { text: qsTr("W/S"); opacity: 0.7}
-            QGCLabel { text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " "+QGroundControl.unitsConversion.appSettingsSpeedUnitsString : "No data"}
+            QGCLabel { text: qsTr("W/S"); opacity: 0.7; font.pointSize:ScreenTools.defaultFontPointSize * 0.8; }
+            QGCLabel {
+                text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " "+QGroundControl.unitsConversion.appSettingsSpeedUnitsString : "No data"
+                font.pointSize:ScreenTools.defaultFontPointSize * 0.8
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 8
+                horizontalAlignment:    Text.AlignRight
+            }
         }
     }
 }
