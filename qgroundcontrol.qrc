@@ -325,6 +325,7 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewEKFStatus.qml">src/FlightDisplay/FlyViewEKFStatus.qml</file>
         <file alias="QGroundControl/FactControls/FactSpinBox.qml">src/QmlControls/FactSpinBox.qml</file>
         <file alias="QGroundControl/FlightDisplay/SIYICameraControl.qml">src/FlightMap/Widgets/SIYICameraControl.qml</file>
+        <file alias="QGroundControl/FlightDisplay/GuidedActionArm.qml">src/FlightDisplay/GuidedActionArm.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
