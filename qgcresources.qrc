@@ -104,6 +104,7 @@
     </qresource>
     <qresource prefix="/res/audio">
         <file alias="Alert">resources/audio/alert.wav</file>
+        <file alias="shutter">resources/audio/shutter.wav</file>
     </qresource>
     <qresource prefix="/opengl">
         <file>resources/opengl/buglist.json</file>

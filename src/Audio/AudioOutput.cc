@@ -28,6 +28,8 @@ AudioOutput::AudioOutput(QGCApplication* app, QGCToolbox* toolbox)
 
     _tts = new QTextToSpeech(this);
 
+    _soundEffect = new QSoundEffect(this);
+
     //-- Force TTS engine to English as all incoming messages from the autopilot
     //   are in English and not localized.
 #ifdef Q_OS_LINUX
@@ -59,6 +61,12 @@ void AudioOutput::say(const QString& inText)
             _tts->say(text);
         }
     }
+}
+
+void AudioOutput::play(const QString& file)
+{
+    _soundEffect->setSource(QUrl::fromUserInput(file));
+    _soundEffect->play();
 }
 
 void AudioOutput::_stateChanged(QTextToSpeech::State state)

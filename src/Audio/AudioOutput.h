@@ -14,6 +14,7 @@
 #include <QThread>
 #include <QStringList>
 #include <QTextToSpeech>
+#include <QSoundEffect>
 
 #include "QGCToolbox.h"
 
@@ -32,6 +33,7 @@ public:
 public slots:
     /// Convert string to speech output and say it
     void            say                     (const QString& text);
+    void            play                    (const QString& file);
 
 private slots:
     void            _stateChanged           (QTextToSpeech::State state);
@@ -39,5 +41,6 @@ private slots:
 protected:
     QTextToSpeech*  _tts;
     QStringList     _texts;
+    QSoundEffect*   _soundEffect;
 };
 
