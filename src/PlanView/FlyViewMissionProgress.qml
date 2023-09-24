@@ -2,6 +2,7 @@ import QtQuick          2.3
 import QtQuick.Controls 1.2
 import QtQuick.Layouts  1.2
 import QtQuick.Dialogs  1.2
+import QtGraphicalEffects 1.0
 
 import QGroundControl                   1.0
 import QGroundControl.ScreenTools       1.0
@@ -11,16 +12,16 @@ import QGroundControl.Palette           1.0
 
 Rectangle {
     id:     missionProgressRect
-    height: ScreenTools.defaultFontPixelHeight * 4 // missionStats.height + _margins
-    width: missionStats.width + _margins * 2
+    height: ScreenTools.defaultFontPixelHeight * 3.2 // missionStats.height + _margins
+    width:  missionStatsGrid.width + _margins * 2
     color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
     radius: _margins
 // form
-    property real   _dataFontSize:              ScreenTools.defaultFontPointSize
+    property real   _dataFontSize:              ScreenTools.defaultFontPointSize * 0.8
     property real   _largeValueWidth:           ScreenTools.defaultFontPixelWidth * 8
     property real   _mediumValueWidth:          ScreenTools.defaultFontPixelWidth * 4
     property real   _smallValueWidth:           ScreenTools.defaultFontPixelWidth * 3
-    property real   _labelToValueSpacing:       ScreenTools.defaultFontPixelWidth
+    property real   _labelToValueSpacing:       0 //ScreenTools.defaultFontPixelWidth * 0.5
     property real   _rowSpacing:                ScreenTools.isMobile ? 1 : 0
 
 // Vehicle
@@ -97,10 +98,10 @@ Rectangle {
         }
         _missionProgress = pct * 100
         return pct
-    }
+    }      
 
     GridLayout {
-        id: missionStats
+        id: missionStatsGrid
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.left:           parent.left
@@ -112,10 +113,12 @@ Rectangle {
 
         Rectangle {
             id:             largeProgressBar
+            height:         ScreenTools.defaultFontPixelHeight * 0.7
+            width:          parent.width
+            Layout.alignment: Qt.AlignHCenter
             Layout.fillWidth: true
             Layout.columnSpan:  6
             Layout.rowSpan: 1
-            Layout.minimumHeight: ScreenTools.defaultFontPixelHeight
             color:          qgcPal.window
             border.color:   qgcPal.text
             border.width:   1
@@ -131,9 +134,18 @@ Rectangle {
             }
 
             QGCLabel {
+                id:                 missionProgressText
                 anchors.centerIn:   parent
                 text:               _missionProgressText
                 font.pointSize:     ScreenTools.smallFontPointSize
+            }
+
+            Glow {
+                anchors.fill: missionProgressText
+                radius: 2
+                samples: 5
+                color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+                source: missionProgressText
             }
         }
 
@@ -187,6 +199,5 @@ Rectangle {
 //            Layout.minimumWidth:    _largeValueWidth
 //        }
     }
-
 }
 

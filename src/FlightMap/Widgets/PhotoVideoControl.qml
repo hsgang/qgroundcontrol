@@ -14,6 +14,8 @@ import QtQuick.Controls         1.4
 import QtQuick.Dialogs          1.2
 import QtGraphicalEffects       1.0
 
+import QtMultimedia             5.15
+
 import QGroundControl                   1.0
 import QGroundControl.ScreenTools       1.0
 import QGroundControl.Controls          1.0
@@ -25,7 +27,7 @@ import QGroundControl.FactControls      1.0
 
 Rectangle {
     height:     mainLayout.height + (_margins * 2)
-    width:      mainLayout.width + (_margins * 2)
+    width:      mainLayout.width //+ (_margins * 2)
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
     radius:     _margins
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && multiVehiclePanelSelector.showSingleVehiclePanel
@@ -151,7 +153,7 @@ Rectangle {
 
     ColumnLayout {
         id:                         mainLayout
-        anchors.margins:            _margins
+        //anchors.margins:            _margins
         anchors.right:              parent.right
         spacing:                    ScreenTools.defaultFontPixelHeight * 0.7
 
@@ -166,19 +168,21 @@ Rectangle {
             height:             width / 2
             color:              qgcPal.window
             radius:             height * 0.5
+            border.color:       qgcPal.colorGrey
 
             DeadMouseArea { anchors.fill: parent }
 
             //-- Video Mode
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                height:                 parent.height
+                height:                 parent.height * 0.9
                 width:                  height
                 color:                  qgcPal.window
                 radius:                 height * 0.5
                 anchors.left:           parent.left
+                anchors.leftMargin:     parent.height * 0.05
                 border.color:           qgcPal.text
-                border.width:           _videoStreamInPhotoMode ? 0 : 1
+                border.width:           _videoStreamInPhotoMode ? 0 : 2
 
                 QGCColoredImage {
                     height:             parent.height * 0.5
@@ -198,13 +202,14 @@ Rectangle {
             //-- Photo Mode
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                height:                 parent.height
+                height:                 parent.height * 0.9
                 width:                  height
                 color:                  qgcPal.window
                 radius:                 height * 0.5
                 anchors.right:          parent.right
+                anchors.rightMargin:    parent.height * 0.05
                 border.color:           qgcPal.text
-                border.width:           _videoStreamInPhotoMode ? 1 : 0
+                border.width:           _videoStreamInPhotoMode ? 2 : 0
                 QGCColoredImage {
                     height:             parent.height * 0.5
                     width:              height
@@ -250,7 +255,7 @@ Rectangle {
             height:             width
             radius:             width * 0.5
             border.color:       qgcPal.buttonText
-            border.width:       2
+            border.width:       3
             visible:            !_videoStreamInPhotoMode
 
             Rectangle {
@@ -285,7 +290,7 @@ Rectangle {
            height:             width
            radius:             width * 0.5
            border.color:       qgcPal.buttonText
-           border.width:       2
+           border.width:       3
            visible:            _videoStreamInPhotoMode
 
            Rectangle {
@@ -313,7 +318,13 @@ Rectangle {
                onClicked: {
                    parent.shoot()
                    toggleShooting()
+                   playSound.play()
                }
+           }
+
+           SoundEffect {
+               id: playSound
+               source: "/res/audio/shutter" //"soundeffect.wav"
            }
         }
 
@@ -330,13 +341,13 @@ Rectangle {
             QGCLabel {
                 Layout.alignment:   Qt.AlignHCenter
                 text:               (_mavlinkCameraInVideoMode && _mavlinkCamera.videoStatus === QGCCameraControl.VIDEO_CAPTURE_STATUS_RUNNING) ? _mavlinkCamera.recordTimeStr : "00:00:00"
-                font.pointSize:     ScreenTools.largeFontPointSize
+                font.pointSize:     ScreenTools.defaultFontPointSize
                 visible:            _mavlinkCameraInVideoMode && _mavlinkCamera.capturesVideo
             }
             QGCLabel {
                 Layout.alignment:   Qt.AlignHCenter
-                text:               _activeVehicle ? ('00000' + _activeVehicle.cameraTriggerPoints.count).slice(-5) : "00000"
-                font.pointSize:     ScreenTools.largeFontPointSize
+                text:               _activeVehicle ? ('0000' + _activeVehicle.cameraTriggerPoints.count).slice(-4) : "0000"
+                font.pointSize:     ScreenTools.defaultFontPointSize
                 visible:            _modeIndicatorPhotoMode
             }
             QGCLabel {
@@ -352,8 +363,6 @@ Rectangle {
                 visible:            _mavlinkCameraBatteryReady
             }
         }
-
-
 
         QGCColoredImage {
            Layout.alignment:   Qt.AlignHCenter

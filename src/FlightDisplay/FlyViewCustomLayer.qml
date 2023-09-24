@@ -179,9 +179,8 @@ Item {
         id:                         altitudeIndicator
         anchors.margins:            _toolsMargin
         height:                     attitudeIndicator.height * 0.9
-        //anchors.verticalCenter:     parent.verticalCenter
         anchors.left:               attitudeIndicator.right
-        anchors.leftMargin:         _toolsMargin * 4
+        anchors.leftMargin:         ScreenTools.defaultFontPixelWidth * 19 + _toolsMargin * 6
         anchors.verticalCenter:     attitudeIndicator.verticalCenter
         visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
@@ -189,18 +188,16 @@ Item {
     FlyViewAttitudeIndicator{
         id:                         attitudeIndicator
         anchors.margins:            _toolsMargin * 2
-        //anchors.top:                parent.top
         anchors.bottom:             parent.bottom
         anchors.horizontalCenter:   parent.horizontalCenter
-        //anchors.right:              parent.right
-        //anchors.left:               parent.left
     }
 
     FlyViewAtmosphericSensorView{
         id:                         atmosphericSensorView
-        anchors.margins:            _toolsMargin
-        anchors.right:              parent.right
-        anchors.bottom:             parent.bottom
+        anchors.top:                parent.top
+        anchors.topMargin:          _toolsMargin
+        anchors.left:               parent.left
+        anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
         visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     }
 
@@ -310,15 +307,15 @@ Item {
         anchors.bottom:         attitudeIndicator.top
         anchors.right:          siyiCameraControl.visible ? siyiCameraControl.left : (photoVideoControl.visible ? photoVideoControl.left : parent.right)
             //photoVideoControl.visible ? photoVideoControl.left : (siyiCameraControl.visible ? siyiCameraControl.left : parent.right)
-        width:                  mainWindow.width * 0.4
+        width:                  ScreenTools.isMobile ? mainWindow.width * 0.7 : mainWindow.width * 0.4
         visible:                false
     }
 
     FlyViewMissionProgress{
         id: flyviewMissionProgress
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.horizontalCenter:   parent.horizontalCenter
         anchors.top:                parent.top
-        anchors.topMargin:     _toolsMargin
+        anchors.topMargin:          _toolsMargin
         visible: false
 
         Connections{

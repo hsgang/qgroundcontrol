@@ -18,7 +18,7 @@ import QGroundControl.Palette       1.0
 
 Rectangle {
     id:                 telemetryPanel
-    height:             telemetryLayout.height + (_toolsMargin * 2)
+    height:             telemetryLayout.height + _toolsMargin
     width:              telemetryLayout.width + (_toolsMargin * 2)
     color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5) //"transparent"
     radius:             ScreenTools.defaultFontPixelWidth / 2
@@ -29,11 +29,11 @@ Rectangle {
 
     RowLayout {
         id:                 telemetryLayout
-        anchors.margins:    _toolsMargin
+        anchors.margins:    _toolsMargin * 0.5
         anchors.bottom:     parent.bottom
         anchors.left:       parent.left
 
-         RowLayout {
+        RowLayout {
             visible: telemetryPanel.editMode || valueArea.settingsUnlocked
 
             QGCColoredImage {
