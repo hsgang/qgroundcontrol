@@ -23,8 +23,18 @@ FirstRunPrompt {
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
     property var    _unitsSettings:     QGroundControl.settingsManager.unitsSettings
-    property var    _rgFacts:           [ _unitsSettings.horizontalDistanceUnits, _unitsSettings.verticalDistanceUnits, _unitsSettings.areaUnits, _unitsSettings.speedUnits, _unitsSettings.temperatureUnits ]
-    property var    _rgLabels:          [ qsTr("Horizontal Distance"), qsTr("Vertical Distance"), qsTr("Area"), qsTr("Speed"), qsTr("Temperature") ]
+    property var    _rgFacts:           [   _unitsSettings.distanceUnits,
+                                            //_unitsSettings.horizontalDistanceUnits,
+                                            //_unitsSettings.verticalDistanceUnits,
+                                            _unitsSettings.areaUnits,
+                                            _unitsSettings.speedUnits,
+                                            _unitsSettings.temperatureUnits ]
+    property var    _rgLabels:          [   qsTr("Distance"),
+                                            //qsTr("Horizontal Distance"),
+                                            //qsTr("Vertical Distance"),
+                                            qsTr("Area"),
+                                            qsTr("Speed"),
+                                            qsTr("Temperature") ]
     property int    _cVisibleFacts:     0
 
     Component.onCompleted: {

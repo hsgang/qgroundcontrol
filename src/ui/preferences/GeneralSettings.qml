@@ -7,7 +7,6 @@
  *
  ****************************************************************************/
 
-
 import QtQuick                  2.3
 import QtQuick.Controls         1.2
 import QtQuick.Controls.Styles  1.4
@@ -23,6 +22,8 @@ import QGroundControl.MultiVehicleManager   1.0
 import QGroundControl.Palette               1.0
 import QGroundControl.Controllers           1.0
 import QGroundControl.SettingsManager       1.0
+
+import SiYi.Object 1.0
 
 Rectangle {
     id:                 _root
@@ -40,6 +41,7 @@ Rectangle {
     property real   _labelWidth:                ScreenTools.defaultFontPixelWidth * 20
     property real   _comboFieldWidth:           ScreenTools.defaultFontPixelWidth * 30
     property real   _valueFieldWidth:           ScreenTools.defaultFontPixelWidth * 15
+    property real   _borderWidth:               ScreenTools.defaultFontPixelWidth * 0.2
     property string _mapProvider:               QGroundControl.settingsManager.flightMapSettings.mapProvider.value
     property string _mapType:                   QGroundControl.settingsManager.flightMapSettings.mapType.value
     property Fact   _followTarget:              QGroundControl.settingsManager.appSettings.followTarget
@@ -90,6 +92,7 @@ Rectangle {
                         Layout.preferredWidth:  unitsGrid.width + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                miscSectionLabel.visible
                         Layout.fillWidth:       true
@@ -101,14 +104,24 @@ Rectangle {
                             Layout.fillWidth:           false
                             anchors.horizontalCenter:   parent.horizontalCenter
                             flow:                       GridLayout.TopToBottom
-                            rows:                       5
+                            rows:                       4
 
                             Repeater {
-                                model: [ qsTr("Horizontal Distance"), qsTr("Vertical Distance"), qsTr("Area"), qsTr("Speed"), qsTr("Temperature") ]
+                                model: [ qsTr("Distance"),
+                                        //qsTr("Horizontal Distance"),
+                                        //qsTr("Vertical Distance"),
+                                        qsTr("Area"),
+                                        qsTr("Speed"),
+                                        qsTr("Temperature") ]
                                 QGCLabel { text: modelData }
                             }
                             Repeater {
-                                model:  [ QGroundControl.settingsManager.unitsSettings.horizontalDistanceUnits, QGroundControl.settingsManager.unitsSettings.verticalDistanceUnits, QGroundControl.settingsManager.unitsSettings.areaUnits, QGroundControl.settingsManager.unitsSettings.speedUnits, QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
+                                model:  [ QGroundControl.settingsManager.unitsSettings.distanceUnits,
+                                        //QGroundControl.settingsManager.unitsSettings.horizontalDistanceUnits,
+                                        //QGroundControl.settingsManager.unitsSettings.verticalDistanceUnits,
+                                        QGroundControl.settingsManager.unitsSettings.areaUnits,
+                                        QGroundControl.settingsManager.unitsSettings.speedUnits,
+                                        QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
                                 FactComboBox {
                                     Layout.preferredWidth:  _comboFieldWidth
                                     fact:                   modelData
@@ -129,6 +142,7 @@ Rectangle {
                         Layout.preferredWidth:  flyViewCol.width + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                flyViewSectionLabel.visible
                         Layout.fillWidth:       true
@@ -138,7 +152,7 @@ Rectangle {
                             anchors.margins:            _margins
                             anchors.top:                parent.top
                             anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:                    _margins
+                            spacing:                    _margins * 2
 
                             FactCheckBoxSlider {
                                 id:                 useCheckList
@@ -327,6 +341,7 @@ Rectangle {
 
                             GridLayout {
                                 columns: 2
+                                Layout.alignment: Qt.AlignHCenter
 
                                 QGCLabel {
                                     text:               qsTr("Guided Command Settings")
@@ -380,6 +395,7 @@ Rectangle {
                         Layout.preferredWidth:  videoGrid.width + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                videoSettingsLabel.visible
                         Layout.fillWidth:       true
@@ -387,14 +403,9 @@ Rectangle {
                         GridLayout {
                             id:         videoGrid
                             anchors.horizontalCenter:   parent.horizontalCenter
-                            columns:    2
-                            visible:    _videoSettings.visible
-
-                            QGCLabel {
-                                text:               qsTr("Video Settings")
-                                Layout.columnSpan:  2
-                                Layout.alignment:   Qt.AlignHCenter
-                            }
+                            anchors.verticalCenter:     parent.verticalCenter
+                            columns:                    2
+                            visible:                    _videoSettings.visible
 
                             QGCLabel {
                                 id:         videoSourceLabel
@@ -429,6 +440,7 @@ Rectangle {
                                 Layout.preferredWidth:  _comboFieldWidth
                                 fact:                   _videoSettings.rtspUrl
                                 visible:                rtspUrlLabel.visible
+                                onTextChanged:      SiYi.camera.analyzeIp(text)
                             }
 
                             QGCLabel {
@@ -443,8 +455,8 @@ Rectangle {
                             }
 
                             QGCLabel {
-                                text:                   qsTr("Aspect Ratio")
-                                visible:                !_videoAutoStreamConfig && _isGst && _videoSettings.aspectRatio.visible
+                                text:       qsTr("Aspect Ratio")
+                                visible:    !_videoAutoStreamConfig && _isGst && _videoSettings.aspectRatio.visible
                             }
                             FactTextField {
                                 Layout.preferredWidth:  _comboFieldWidth
@@ -540,6 +552,7 @@ Rectangle {
                         Layout.preferredWidth:  planViewCol.width + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                planViewSectionLabel.visible
                         Layout.fillWidth:       true
@@ -606,6 +619,7 @@ Rectangle {
                         Layout.fillWidth:       true
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                miscSectionLabel.visible
 
@@ -866,6 +880,7 @@ Rectangle {
                         Layout.preferredWidth:  loggingCol.width + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         Layout.fillWidth:       true
                         visible:                promptSaveLog.fact.visible || logIfNotArmed.fact.visible || promptSaveCsv.fact.visible
@@ -924,6 +939,7 @@ Rectangle {
                         Layout.preferredHeight: autoConnectCol.height + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                autoConnectSectionLabel.visible
                         Layout.fillWidth:       true
@@ -944,12 +960,11 @@ Rectangle {
                                     id:     autoConnectRepeater
                                     model:  [ QGroundControl.settingsManager.autoConnectSettings.autoConnectPixhawk,
                                         QGroundControl.settingsManager.autoConnectSettings.autoConnectSiKRadio,
-                                        QGroundControl.settingsManager.autoConnectSettings.autoConnectPX4Flow,
                                         QGroundControl.settingsManager.autoConnectSettings.autoConnectUDP,
                                         QGroundControl.settingsManager.autoConnectSettings.autoConnectRTKGPS,
                                     ]
 
-                                    property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("PX4 Flow"), qsTr("UDP"), qsTr("RTK GPS") ]
+                                    property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("UDP"), qsTr("RTK GPS") ]
 
 //                                    FactCheckBox {
 //                                        text:       autoConnectRepeater.names[index]
@@ -1048,6 +1063,7 @@ Rectangle {
                         Layout.preferredWidth:  rtkGrid.width + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                rtkSectionLabel.visible
                         Layout.fillWidth:       true
@@ -1184,6 +1200,7 @@ Rectangle {
 //                        Layout.preferredWidth:  adsbGrid.width + (_margins * 2)
 //                        color:                  qgcPal.window
 //                        border.color:           qgcPal.windowShade
+//                        border.width:           _borderWidth
 //                        radius:                 _margins
 //                        visible:                adsbSectionLabel.visible
 //                        Layout.fillWidth:       true
@@ -1251,6 +1268,7 @@ Rectangle {
                         Layout.preferredWidth:  ntripGrid.width + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                ntripSectionLabel.visible
                         Layout.fillWidth:       true
@@ -1262,6 +1280,7 @@ Rectangle {
                             Layout.fillWidth:           true
                             anchors.horizontalCenter:   parent.horizontalCenter
                             columns:                    2
+                            columnSpacing:              _margins * 2
 
                             property var  ntripSettings:    QGroundControl.settingsManager.ntripSettings
 
@@ -1367,6 +1386,7 @@ Rectangle {
                         Layout.preferredWidth:  openWeatherViewCol.width + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                openWeatherLabel.visible
                         Layout.fillWidth:       true
@@ -1419,6 +1439,7 @@ Rectangle {
                         Layout.preferredWidth:  siyiSDKCol.width + (_margins * 2)
                         color:                  qgcPal.window
                         border.color:           qgcPal.windowShade
+                        border.width:           _borderWidth
                         radius:                 _margins
                         visible:                true
                         Layout.fillWidth:       true

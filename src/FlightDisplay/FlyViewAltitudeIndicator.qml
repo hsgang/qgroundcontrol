@@ -29,9 +29,9 @@ Rectangle {
     property real   _missionMaxAltitude:        _missionValid ? missionMaxAltitude : NaN
     property real   _vehicleAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : 0
 
-    property string _missionMaxAltitudeText:    (isNaN(_missionMaxAltitude) || (_missionMaxAltitude <= 0)) ? "--" + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_missionMaxAltitude).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
-    property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_vehicleAltitude).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
-    property string _startAltitudeText:         isNaN(_vehicleAltitude) ? "-.-" : "0.0 " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+    property string _missionMaxAltitudeText:    (isNaN(_missionMaxAltitude) || (_missionMaxAltitude <= 0)) ? "--" + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_missionMaxAltitude).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitude).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _startAltitudeText:         isNaN(_vehicleAltitude) ? "-.-" : "0.0 " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
 
     function currentAltitudeRatio(){
         currentAltitudeRatio = height - (height * (_vehicleAltitude / _missionMaxAltitude))
@@ -100,6 +100,7 @@ Rectangle {
         id:                         gndText
         anchors.top:                parent.bottom
         anchors.horizontalCenter:   parent.horizontalCenter
+        font.pointSize:             ScreenTools.defaultFontPointSize * 0.8
         text:                       "GND" //_startAltitudeText
     }
     Glow {

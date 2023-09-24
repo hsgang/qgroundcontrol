@@ -31,45 +31,45 @@ import QGroundControl.Vehicle       1.0
 
 Rectangle {
     id: attitudeIndicatorRoot
-
-    width: ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
+    width: ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 5 : ScreenTools.defaultFontPixelHeight * 8
     height: width
-
     color: "transparent"
-//    border.width: 1
-//    border.color: "white"
 
     // Property of Tools
-    property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
-    property color  _baseBGColor:           qgcPal.window
+    property real   _toolsMargin:               ScreenTools.defaultFontPixelWidth * 0.75
+    property color  _baseBGColor:               qgcPal.window
     property real   _largeValueWidth:           ScreenTools.defaultFontPixelWidth * 8
     property real   _mediumValueWidth:          ScreenTools.defaultFontPixelWidth * 6
     property real   _smallValueWidth:           ScreenTools.defaultFontPixelWidth * 4
 
     // Property of Active Vehicle
-    property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
-    property real   _heading:               _activeVehicle   ? _activeVehicle.heading.rawValue : 0
-    property bool   _available:             !isNaN(_activeVehicle.vibration.xAxis.rawValue)
+    property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
+    property real   _heading:                   _activeVehicle   ? _activeVehicle.heading.rawValue : 0
+    property bool   _available:                 !isNaN(_activeVehicle.vibration.xAxis.rawValue)
 
     property real   _vehicleAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : 0
+    property real   _vehicleAltitudeASML:       _activeVehicle ? _activeVehicle.altitudeAMSL.rawValue : 0
     property real   _vehicleVerticalSpeed:      _activeVehicle ? _activeVehicle.climbRate.rawValue : 0
     property real   _vehicleGroundSpeed:        _activeVehicle ? _activeVehicle.groundSpeed.rawValue : 0
     property real   _distanceToHome:            _activeVehicle ? _activeVehicle.distanceToHome.rawValue : 0
-    property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_vehicleAltitude).toFixed(1)
+    property real   _distanceDown:              _activeVehicle ? _activeVehicle.distanceSensors.rotationPitch270.rawValue : 0
+    property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitude).toFixed(1)
+    property string _vehicleAltitudeASMLText:   isNaN(_vehicleAltitudeASML) ? "-.-" : "ASML " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitudeASML).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _vehicleVerticalSpeedText:  isNaN(_vehicleVerticalSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleVerticalSpeed).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsSpeedUnitsString
     property string _vehicleGroundSpeedText:    isNaN(_vehicleGroundSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleGroundSpeed).toFixed(1)
-    property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_distanceToHome).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+    property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceToHome).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _distanceDownText:          isNaN(_distanceDown) ? "   " : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceDown).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
 
     //--Attitude Widget-----------------------------------------------------------------------------------
 
     Rectangle {
-        id:                     attitudeIndicator
-        anchors.bottom:         parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        height:                 parent.height
-        width:                  height
-        radius:                 height * 0.5
-        color:                  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+        id:                         attitudeIndicator
+        anchors.bottom:             parent.bottom
+        anchors.horizontalCenter:   parent.horizontalCenter
+        height:                     parent.height
+        width:                      height
+        radius:                     height * 0.5
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
 
         CustomAttitudeHUD {
             size:                       parent.height
@@ -85,61 +85,109 @@ Rectangle {
         anchors.margins:            _toolsMargin * 6
         anchors.left:               parent.right
         anchors.verticalCenter:     parent.verticalCenter
-        height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
-        width:                      ScreenTools.defaultFontPixelWidth * 20 //altitudeGrid.width
-        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+        height:                     ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
+        width:                      ScreenTools.defaultFontPixelWidth * 18
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
         radius:                     _toolsMargin
 
         ColumnLayout {
-            id: altitudeGrid
-            anchors.fill: parent
-            spacing: ScreenTools.defaultFontPixelHeight * 0.5
+            id:             altitudeGrid
+            anchors.fill:   parent
+            spacing:        0
 
             RowLayout{
-                spacing : ScreenTools.defaultFontPixelWidth
-                Layout.preferredHeight: 0.6 * parent.height
-                Layout.fillHeight: false
+                spacing :               0
+                Layout.preferredHeight: parent.height * 0.6
+                Layout.fillHeight:      false
 
                 QGCLabel {
-                    text:   _vehicleAltitudeText
-                    font.bold : true
-                    color: qgcPal.textHighlight
-                    font.pointSize : ScreenTools.defaultFontPointSize * 2.5
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: _largeValueWidth * 1.5
-                    Layout.preferredWidth: _largeValueWidth * 1.7
-                    horizontalAlignment : Text.AlignHCenter
+                    text:                   _vehicleAltitudeText
+                    font.bold:              true
+                    color:                  qgcPal.textHighlight
+                    font.pointSize:         ScreenTools.defaultFontPointSize * 2
+                    Layout.fillWidth:       true
+                    Layout.minimumWidth:    _largeValueWidth * 1.5
+                    Layout.preferredWidth:  _largeValueWidth * 1.7
+                    horizontalAlignment:    Text.AlignHCenter
                 }
 
                 ColumnLayout {
-                    spacing: ScreenTools.defaultFontPixelHeight * 0.5
-                    Layout.preferredWidth: 0.25 * parent.width
+                    spacing: 0
+                    Layout.preferredWidth:  0.25 * parent.width
 
                     QGCLabel {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        text: "ALT"
-                        font.bold : true
-                        horizontalAlignment : Text.AlignHCenter
+                        Layout.alignment:       Qt.AlignBottom
+                        Layout.fillWidth:       true
+                        text:                   "ALT"
+                        font.bold :             true
+                        font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
+                        horizontalAlignment :   Text.AlignHCenter
                     }
 
                     QGCLabel {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        text: QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
-                        font.bold : true
-                        horizontalAlignment : Text.AlignHCenter
+                        Layout.alignment:       Qt.AlignTop
+                        Layout.fillWidth:       true
+                        text:                   QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+                        font.bold :             true
+                        font.pointSize:         ScreenTools.defaultFontPointSize
+                        horizontalAlignment :   Text.AlignHCenter
                     }
                 }
             }
 
             QGCLabel {
-                text:   "VS " + _vehicleVerticalSpeedText
-                font.bold : true
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
+                text:                   "VS " + _vehicleVerticalSpeedText
+                font.bold :             true
+                Layout.fillWidth:       true
+                horizontalAlignment:    Text.AlignHCenter
+                verticalAlignment:      Text.AlignVCenter
             }
+        }
+
+        RowLayout {
+            id:                 distanceDownRowLayout
+            anchors.bottom:     parent.top
+            anchors.left:       parent.left
+            anchors.bottomMargin:    _toolsMargin * 0.5
+
+            Rectangle{
+                height:     valueIcon.height
+                width:      valueIcon.width
+                color:      "transparent"
+
+                QGCColoredImage {
+                    id:                         valueIcon
+                    Layout.alignment:           Qt.AlignHCenter || Qt.AlignVCenter
+                    height:                     distanceDownLabel.height * 0.6
+                    width:                      height
+                    sourceSize.height:          height
+                    fillMode:                   Image.PreserveAspectFit
+                    mipmap:                     true
+                    smooth:                     true
+                    color:                      qgcPal.text
+                    visible:                    true //_iconVisible
+                    source:                     "/InstrumentValueIcons/arrow-base-down.svg"
+                }
+            }
+
+            QGCLabel {
+                id:                     distanceDownLabel
+                text:                   _distanceDownText
+                font.bold :             true
+                font.pointSize :        ScreenTools.defaultFontPointSize * 1.2
+                Layout.fillWidth:       true
+                horizontalAlignment:    Text.AlignHCenter
+                verticalAlignment:      Text.AlignVCenter
+            }
+        }
+
+        QGCLabel {
+            text:               _vehicleAltitudeASMLText
+            font.bold:          true
+            font.pointSize:     ScreenTools.defaultFontPointSize * 0.8
+            anchors.top:        parent.bottom
+            anchors.topMargin:  _toolsMargin * 0.5
+            anchors.left:       parent.left
         }
     }
 
@@ -150,96 +198,101 @@ Rectangle {
         anchors.margins:            _toolsMargin * 6
         anchors.right:              parent.left
         anchors.verticalCenter:     parent.verticalCenter
-        height:                     ScreenTools.isMobile ? parent.height * 0.55 : parent.height * 0.45
-        width:                      ScreenTools.defaultFontPixelWidth * 20
-        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+        height:                     ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
+        width:                      ScreenTools.defaultFontPixelWidth * 18
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
         radius:                     _toolsMargin
 
         ColumnLayout {
-            id : spdGrid
-            anchors.fill: parent
-            spacing : ScreenTools.defaultFontPixelHeight * 0.5
+            id :            spdGrid
+            anchors.fill:   parent
+            spacing :       0
 
             RowLayout{
-                spacing: ScreenTools.defaultFontPixelWidth
-                Layout.preferredHeight: 0.6 * parent.height
-                Layout.fillHeight: false
+                spacing:                0
+                Layout.preferredHeight: parent.height * 0.6
+                Layout.fillHeight:      false
 
                 ColumnLayout {
-                    spacing: ScreenTools.defaultFontPixelHeight * 0.5
-                    Layout.preferredWidth: 0.25 * parent.width
+                    spacing:                0
+                    Layout.preferredWidth:  0.25 * parent.width
 
                     QGCLabel {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        text: "SPD"
-                        font.bold : true
-                        horizontalAlignment : Text.AlignHCenter
+                        Layout.alignment:       Qt.AlignBottom
+                        Layout.fillWidth:       true
+                        text:                   "SPD"
+                        font.bold :             true
+                        font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
+                        horizontalAlignment :   Text.AlignHCenter
                     }
 
                     QGCLabel {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        text: QGroundControl.unitsConversion.appSettingsSpeedUnitsString
-                        font.bold : true
-                        horizontalAlignment : Text.AlignHCenter
+                        Layout.alignment:       Qt.AlignTop
+                        Layout.fillWidth:       true
+                        text:                   QGroundControl.unitsConversion.appSettingsSpeedUnitsString
+                        font.bold :             true
+                        horizontalAlignment :   Text.AlignHCenter
                     }
                 }
 
                 QGCLabel {
-                    text:   _vehicleGroundSpeedText
-                    font.bold : true
-                    color: qgcPal.textHighlight
-                    font.pointSize : ScreenTools.defaultFontPointSize * 2.5
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: _largeValueWidth * 1.5
-                    Layout.preferredWidth: _largeValueWidth * 1.7
-                    horizontalAlignment : Text.AlignHCenter
+                    text:                   _vehicleGroundSpeedText
+                    font.bold :             true
+                    color:                  qgcPal.textHighlight
+                    font.pointSize :        ScreenTools.defaultFontPointSize * 2
+                    Layout.fillWidth:       true
+                    Layout.minimumWidth:    _largeValueWidth * 1.5
+                    Layout.preferredWidth:  _largeValueWidth * 1.7
+                    horizontalAlignment:    Text.AlignHCenter
                 }
             }
 
             QGCLabel {
-                text:   "Home " + _distanceToHomeText
-                font.bold : true
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
+                text:                   "Home " + _distanceToHomeText
+                font.bold :             true
+                Layout.fillWidth:       true
+                horizontalAlignment:    Text.AlignHCenter
             }
         }
     }
 
     Rectangle {
-        id : gndSpdBarRect
-        width: ScreenTools.defaultFontPixelWidth * 3
-        height: parent.height * 0.9
-        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-        radius: _toolsMargin
+        id :        gndSpdBarRect
+        width:      ScreenTools.defaultFontPixelWidth * 3
+        height:     parent.height * 0.9
+        color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
+        radius:     _toolsMargin
 
-        anchors.right: parent.left
+        anchors.right:          parent.left
         anchors.verticalCenter: parent.verticalCenter
-        anchors.margins: _toolsMargin
+        anchors.margins:        _toolsMargin
 
         ColumnLayout {
-            anchors.fill: parent
-            spacing: 0
+            anchors.fill:       parent
+            spacing:            0
 
             QGCLabel{
-                text: gndSpdBar.maxValueString
-                Layout.fillWidth: true
-                Layout.preferredHeight: parent.height * 0.15
-                horizontalAlignment : Text.AlignHCenter
+                text:                   gndSpdBar.maxValueString
+                font.pointSize:         ScreenTools.defaultFontPointSize * 0.7
+                Layout.fillWidth:       true
+                Layout.preferredHeight: parent.height * 0.12
+                horizontalAlignment:    Text.AlignHCenter
+                verticalAlignment:      Text.AlignVCenter
             }
             Rectangle {
-                id: gndSpdBar
-                width: ScreenTools.defaultFontPixelWidth * 0.2
-                height: parent.height * 0.7
-                color: qgcPal.text
-                Layout.fillWidth: false
-                Layout.alignment: Qt.AlignRight
-                Layout.rightMargin: _toolsMargin
+                id:                     gndSpdBar
+                width:                  ScreenTools.defaultFontPixelWidth * 0.2
+                height:                 parent.height * 0.7
+                color:                  qgcPal.text
+                Layout.fillWidth:       false
+                Layout.fillHeight:      true
+                Layout.preferredHeight: parent.height * 0.76
+                Layout.alignment:       Qt.AlignRight
+                Layout.rightMargin:     _toolsMargin
 
-                property real maxValue: 15
-                property real minValue: 0
-                property real value: (_vehicleGroundSpeed > maxValue) ? maxValue : _vehicleGroundSpeed
+                property real maxValue:         15
+                property real minValue:         0
+                property real value:            (_vehicleGroundSpeed > maxValue) ? maxValue : _vehicleGroundSpeed
                 property string maxValueString: maxValue.toString()
                 property string minValueString: minValue.toString()
 
@@ -257,48 +310,54 @@ Rectangle {
                     transform: Rotation {
                         origin.x:       gndSpdlevelerArrow.width  / 2
                         origin.y:       gndSpdlevelerArrow.height / 2
-                        angle:         180
+                        angle:          180
                     }
                 }
             }
             QGCLabel{
-                text: gndSpdBar.minValueString
-                Layout.fillWidth: true
-                Layout.preferredHeight: parent.height * 0.15
-                horizontalAlignment : Text.AlignHCenter
+                text:                   gndSpdBar.minValueString
+                font.pointSize:         ScreenTools.defaultFontPointSize * 0.7
+                Layout.fillWidth:       true
+                Layout.preferredHeight: parent.height * 0.12
+                horizontalAlignment:    Text.AlignHCenter
+                verticalAlignment:      Text.AlignVCenter
             }
         }
     }
 
     Rectangle {
-        id : climbSpdBarRect
-        width: ScreenTools.defaultFontPixelWidth * 3
-        height: parent.height * 0.9
-        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-        radius: _toolsMargin
+        id :        climbSpdBarRect
+        width:      ScreenTools.defaultFontPixelWidth * 3
+        height:     parent.height * 0.9
+        color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
+        radius:     _toolsMargin
 
-        anchors.left: parent.right
+        anchors.left:           parent.right
         anchors.verticalCenter: parent.verticalCenter
-        anchors.margins: _toolsMargin
+        anchors.margins:        _toolsMargin
 
         ColumnLayout {
-            anchors.fill: parent
-            spacing: 0
+            anchors.fill:   parent
+            spacing:        0
 
             QGCLabel{
-                text: climbSpdBar.maxValueString
-                Layout.fillWidth: true
-                Layout.preferredHeight: parent.height * 0.15
-                horizontalAlignment : Text.AlignHCenter
+                text:                   climbSpdBar.maxValueString
+                font.pointSize:         ScreenTools.defaultFontPointSize * 0.7
+                Layout.fillWidth:       true
+                Layout.preferredHeight: parent.height * 0.12
+                horizontalAlignment:    Text.AlignHCenter
+                verticalAlignment:      Text.AlignVCenter
             }
             Rectangle {
-                id: climbSpdBar
-                width: ScreenTools.defaultFontPixelWidth * 0.2
-                height: parent.height * 0.7
-                color: qgcPal.text
-                Layout.fillWidth: false
-                Layout.alignment: Qt.AlignLeft
-                Layout.leftMargin: _toolsMargin
+                id:                     climbSpdBar
+                width:                  ScreenTools.defaultFontPixelWidth * 0.2
+                height:                 parent.height * 0.7
+                color:                  qgcPal.text
+                Layout.fillWidth:       false
+                Layout.fillHeight:      true
+                Layout.preferredHeight: parent.height * 0.76
+                Layout.alignment:       Qt.AlignLeft
+                Layout.leftMargin:      _toolsMargin
 
                 property real maxValue: 10
                 property real minValue: -10
@@ -319,14 +378,15 @@ Rectangle {
                 }
             }
             QGCLabel{
-                text: climbSpdBar.minValueString
-                Layout.fillWidth: true
-                Layout.preferredHeight: parent.height * 0.15
-                horizontalAlignment : Text.AlignHCenter
+                text:                   climbSpdBar.minValueString
+                font.pointSize:         ScreenTools.defaultFontPointSize * 0.7
+                Layout.fillWidth:       true
+                Layout.preferredHeight: parent.height * 0.12
+                horizontalAlignment:    Text.AlignHCenter
+                verticalAlignment:      Text.AlignVCenter
             }
         }
     }
-
 }
 
 
