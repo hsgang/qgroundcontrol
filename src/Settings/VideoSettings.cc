@@ -30,6 +30,8 @@ const char* VideoSettings::videoSource3DRSolo           = QT_TRANSLATE_NOOP("Vid
 const char* VideoSettings::videoSourceParrotDiscovery   = QT_TRANSLATE_NOOP("VideoSettings", "Parrot Discovery");
 const char* VideoSettings::videoSourceYuneecMantisG     = QT_TRANSLATE_NOOP("VideoSettings", "Yuneec Mantis G");
 const char* VideoSettings::videoSourceSiyiA8            = QT_TRANSLATE_NOOP("VideoSettings", "SIYI A8");
+const char* VideoSettings::videoSourceHerelinkAirUnit   = QT_TRANSLATE_NOOP("VideoSettings", "Herelink AirUnit");
+const char* VideoSettings::videoSourceHerelinkHotspot   = QT_TRANSLATE_NOOP("VideoSettings", "Herelink Hotspot");
 
 DECLARE_SETTINGGROUP(Video, "Video")
 {
@@ -50,6 +52,13 @@ DECLARE_SETTINGGROUP(Video, "Video")
     //videoSourceList.append(videoSourceYuneecMantisG);
     videoSourceList.append(videoSourceSiyiA8);
 #endif
+
+#ifdef QGC_HERELINK_AIRUNIT_VIDEO
+    videoSourceList.append(videoSourceHerelinkAirUnit);
+#else
+    videoSourceList.append(videoSourceHerelinkHotspot);
+#endif
+
 #ifndef QGC_DISABLE_UVC
     QList<QCameraInfo> cameras = QCameraInfo::availableCameras();
     for (const QCameraInfo &cameraInfo: cameras) {

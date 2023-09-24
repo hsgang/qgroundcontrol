@@ -36,7 +36,7 @@ public:
     Q_PROPERTY(Fact*                breachReturnAltitude    READ breachReturnAltitude                               CONSTANT)
 
     // Radius of the "paramCircularFence" which is called the "Geofence Failsafe" in PX4 and the "Circular Geofence" on ArduPilot
-    Q_PROPERTY(double               paramCircularFence      READ paramCircularFence     NOTIFY paramCircularFenceChanged)
+    Q_PROPERTY(double               paramCircularFence      READ paramCircularFence                                 NOTIFY paramCircularFenceChanged)
 
     /// Add a new inclusion polygon to the fence
     ///     @param topLeft: Top left coordinate or map viewport

@@ -503,7 +503,7 @@ bool GeoFenceController::supported(void) const
  * this code should ideally live in the firmware plugin since it is specific to apm and px4 firmwares */
 double GeoFenceController::paramCircularFence(void)
 {
-    if (_managerVehicle->isOfflineEditingVehicle()) {
+    if(_managerVehicle->isOfflineEditingVehicle()){
         return 0;
     }
     if(_managerVehicle->px4Firmware()){
@@ -536,7 +536,7 @@ double GeoFenceController::paramCircularFence(void)
 
 void GeoFenceController::_parametersReady(void)
 {
-    /* When parameters area ready we setup notifications of param changes
+    /* When parameters are ready we setup notifications of param changes
      * so that if a param changes we can emit paramCircularFenceChanged
      * and trigger an update to the UI */
 

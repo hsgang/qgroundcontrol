@@ -74,6 +74,8 @@ public:
     static const char* videoSourceParrotDiscovery;
     static const char* videoSourceYuneecMantisG;
     static const char* videoSourceSiyiA8;
+    static const char* videoSourceHerelinkAirUnit;
+    static const char* videoSourceHerelinkHotspot;
 
 signals:
     void streamConfiguredChanged    (bool configured);
