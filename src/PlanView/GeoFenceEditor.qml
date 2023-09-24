@@ -118,7 +118,9 @@ QGCFlickable {
 
                     QGCButton {
                         Layout.fillWidth:   true
+                        anchors.horizontalCenter: parent.horizontalCenter
                         text:               qsTr("Polygon Fence")
+                        width:              _editFieldWidth
 
                         onClicked: {
                             var rect = Qt.rect(flightMap.centerViewport.x, flightMap.centerViewport.y, flightMap.centerViewport.width, flightMap.centerViewport.height)
@@ -130,7 +132,9 @@ QGCFlickable {
 
                     QGCButton {
                         Layout.fillWidth:   true
+                        anchors.horizontalCenter: parent.horizontalCenter
                         text:               qsTr("Circular Fence")
+                        width:              _editFieldWidth
 
                         onClicked: {
                             var rect = Qt.rect(flightMap.centerViewport.x, flightMap.centerViewport.y, flightMap.centerViewport.width, flightMap.centerViewport.height)

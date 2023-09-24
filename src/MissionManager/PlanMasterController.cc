@@ -620,7 +620,7 @@ void PlanMasterController::_updatePlanCreatorsList(void)
             _planCreators = new QmlObjectListModel(this);
             _planCreators->append(new BlankPlanCreator(this, this));
             _planCreators->append(new SurveyPlanCreator(this, this));
-            _planCreators->append(new CorridorScanPlanCreator(this, this));
+            //_planCreators->append(new CorridorScanPlanCreator(this, this));
             emit planCreatorsChanged(_planCreators);
         }
 
@@ -630,7 +630,7 @@ void PlanMasterController::_updatePlanCreatorsList(void)
             }
         } else {
             if (_planCreators->count() != 4) {
-                _planCreators->append(new StructureScanPlanCreator(this, this));
+                //_planCreators->append(new StructureScanPlanCreator(this, this));
             }
         }
     }

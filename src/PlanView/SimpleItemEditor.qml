@@ -130,52 +130,56 @@ Rectangle {
                     visible:            missionItem.isLandCommand
                 }
 
-                MouseArea {
-                    Layout.preferredWidth:  childrenRect.width
-                    Layout.preferredHeight: childrenRect.height
-
-                    onClicked: {
-                        if (_globalAltModeIsMixed) {
-                            var removeModes = []
-                            var updateFunction = function(altMode){ missionItem.altitudeMode = altMode }
-                            if (!_controllerVehicle.supportsTerrainFrame) {
-                                removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
-                            }
-                            if (!QGroundControl.corePlugin.options.showMissionAbsoluteAltitude && missionItem.altitudeMode !== QGroundControl.AltitudeModeAbsolute) {
-                                removeModes.push(QGroundControl.AltitudeModeAbsolute)
-                            }
-                            removeModes.push(QGroundControl.AltitudeModeMixed)
-                            altModeDialogComponent.createObject(mainWindow, { rgRemoveModes: removeModes, updateAltModeFn: updateFunction }).open()
-                        }
-                    }
-
-                    RowLayout {
-                        spacing: _altRectMargin
-
-                        QGCLabel {
-                            Layout.alignment:   Qt.AlignBaseline
-                            text:               qsTr("Altitude")
-                            font.pointSize:     ScreenTools.smallFontPointSize
-                        }
-                        QGCLabel {
-                            id:                 altModeLabel
-                            Layout.alignment:   Qt.AlignBaseline
-                            visible:            _globalAltMode !== QGroundControl.AltitudeModeRelative
-                        }
-                        QGCColoredImage {
-                            height:     ScreenTools.defaultFontPixelHeight / 2
-                            width:      height
-                            source:     "/res/DropArrow.svg"
-                            color:      qgcPal.text
-                            visible:    _globalAltModeIsMixed
-                        }
-                    }
-                }
-
-                FactTextField {
-                    id:                 altField
+                RowLayout{
                     Layout.fillWidth:   true
-                    fact:               missionItem.altitude
+
+                    MouseArea {
+                        Layout.preferredWidth:  childrenRect.width
+                        Layout.preferredHeight: childrenRect.height
+
+                        onClicked: {
+                            if (_globalAltModeIsMixed) {
+                                var removeModes = []
+                                var updateFunction = function(altMode){ missionItem.altitudeMode = altMode }
+                                if (!_controllerVehicle.supportsTerrainFrame) {
+                                    removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
+                                }
+                                if (!QGroundControl.corePlugin.options.showMissionAbsoluteAltitude && missionItem.altitudeMode !== QGroundControl.AltitudeModeAbsolute) {
+                                    removeModes.push(QGroundControl.AltitudeModeAbsolute)
+                                }
+                                removeModes.push(QGroundControl.AltitudeModeMixed)
+                                altModeDialogComponent.createObject(mainWindow, { rgRemoveModes: removeModes, updateAltModeFn: updateFunction }).open()
+                            }
+                        }
+
+                        RowLayout {
+                            spacing: _altRectMargin
+
+                            QGCLabel {
+                                Layout.alignment:   Qt.AlignBaseline
+                                text:               qsTr("Altitude")
+                                //font.pointSize:     ScreenTools.smallFontPointSize
+                            }
+                            QGCLabel {
+                                id:                 altModeLabel
+                                Layout.alignment:   Qt.AlignBaseline
+                                visible:            _globalAltMode !== QGroundControl.AltitudeModeRelative
+                            }
+                            QGCColoredImage {
+                                height:     ScreenTools.defaultFontPixelHeight / 2
+                                width:      height
+                                source:     "/res/DropArrow.svg"
+                                color:      qgcPal.text
+                                visible:    _globalAltModeIsMixed
+                            }
+                        }
+                    }
+
+                    FactTextField {
+                        id:                 altField
+                        Layout.fillWidth:   true
+                        fact:               missionItem.altitude
+                    }
                 }
 
                 QGCLabel {

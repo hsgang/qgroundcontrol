@@ -317,6 +317,7 @@ Item {
 
             property int vertexIndex
             property real distance
+            property string distanceText : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(distance).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
 
             sourceItem: Rectangle {
                 width: edgeLengthText.width + ScreenTools.defaultFontPixelWidth
@@ -326,7 +327,7 @@ Item {
                 QGCLabel{
                     id: edgeLengthText
                     anchors.centerIn: parent
-                    text: distance.toFixed(1) + "m"
+                    text: distanceText //distance.toFixed(1) + "m"
                 }
             }
         }

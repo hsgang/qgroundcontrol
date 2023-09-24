@@ -58,14 +58,14 @@ Item {
                                                          (Math.atan(_currentMissionItem.altDifference / _currentMissionItem.distance) * (180.0/Math.PI)))
                                                   : NaN
 
-    property string _distanceText:              isNaN(_distance) ?              "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_distance).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
-    property string _altDifferenceText:         isNaN(_altDifference) ?         "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altDifference).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
+    property string _distanceText:              isNaN(_distance) ?              "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distance).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _altDifferenceText:         isNaN(_altDifference) ?         "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_altDifference).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _gradientText:              isNaN(_gradient) ?              "-.-" : _gradient.toFixed(0) + qsTr(" deg")
     property string _azimuthText:               isNaN(_azimuth) ?               "-.-" : Math.round(_azimuth) % 360
     property string _headingText:               isNaN(_azimuth) ?               "-.-" : Math.round(_heading) % 360
-    property string _missionDistanceText:       isNaN(_missionDistance) ?       "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
-    property string _missionPathDistanceText:   isNaN(_missionPathDistance) ?   "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionPathDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
-    property string _missionMaxTelemetryText:   isNaN(_missionMaxTelemetry) ?   "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionMaxTelemetry).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
+    property string _missionDistanceText:       isNaN(_missionDistance) ?       "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_missionDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _missionPathDistanceText:   isNaN(_missionPathDistance) ?   "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_missionPathDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _missionMaxTelemetryText:   isNaN(_missionMaxTelemetry) ?   "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_missionMaxTelemetry).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _batteryChangePointText:    _batteryChangePoint < 0 ?       qsTr("N/A") : _batteryChangePoint
     property string _batteriesRequiredText:     _batteriesRequired < 0 ?        qsTr("N/A") : _batteriesRequired
 
