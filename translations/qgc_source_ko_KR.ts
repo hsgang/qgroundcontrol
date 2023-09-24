@@ -7095,7 +7095,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="284"/>
         <source>Custom Action Definitions</source>
-        <translation>커스텀 명령 정의 파일</translation>
+        <translation>커스텀 명령 설정 파일</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="188"/>
@@ -7165,7 +7165,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="161"/>
         <source>Show additional heading indicators on Compass</source>
-        <translation>나침반에 추가 방향 지시기 표시</translation>
+        <translation>나침반에 추가 방향 정보 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="230"/>
+        <source>Show attitude HUD indicators on Compass</source>
+        <translation>나침반에 HUD 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="230"/>
+        <source>Update home position based on device location. This will affect return to home</source>
+        <translation>조종기 기반 홈 위치 업데이트</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="169"/>
@@ -7226,6 +7236,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="397"/>
         <source>Missions Do Not Require Takeoff Item</source>
         <translation type="unfinished">Missions Do Not Require Takeoff Item</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="427"/>
+        <source>Distance</source>
+        <translation>거리</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="427"/>
@@ -9543,7 +9558,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightMap/MapScale.qml" line="64"/>
         <source> ft</source>
-        <translation> 피트(ft)</translation>
+        <translation> ft</translation>
     </message>
     <message>
         <location filename="../src/FlightMap/MapScale.qml" line="193"/>
@@ -16904,6 +16919,11 @@ Confirm change?</source>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="21"/>
         <source>Measurement Units</source>
         <translation>측정 단위</translation>
+    </message>
+    <message>
+        <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="32"/>
+        <source>Distance</source>
+        <translation>거리</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml" line="27"/>
