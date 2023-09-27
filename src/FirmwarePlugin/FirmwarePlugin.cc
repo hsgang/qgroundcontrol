@@ -334,6 +334,7 @@ const QVariantList& FirmwarePlugin::toolIndicators(const Vehicle*)
         _toolIndicatorList = QVariantList({
             //QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/FlightModeMenuIndicator.qml")),
             //QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/MessageIndicator.qml")),
+            QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ROIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/GPSRTKIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/GPSIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/TelemetryRSSIIndicator.qml")),
@@ -352,7 +353,7 @@ const QVariantList& FirmwarePlugin::modeIndicators(const Vehicle*)
     //-- Default list of indicators for all vehicles.
     if(_modeIndicatorList.size() == 0) {
         _modeIndicatorList = QVariantList({
-            // QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ROIIndicator.qml")),
+            //QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ROIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/MultiVehicleSelector.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/LinkIndicator.qml")),
         });
