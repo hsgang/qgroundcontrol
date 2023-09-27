@@ -276,7 +276,7 @@ FlightMap {
             coordinate:     object.coordinate
             map:            _root
             visible:        QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && !pipMode
-            z:              QGroundControl.zOrderTopMost
+            z:              QGroundControl.zOrderWidgets
         }
     }
 
@@ -570,14 +570,14 @@ FlightMap {
                 }
 
                 // Set coordiantes
-                x = newX
-                y = newY
+                x = newX + (_toolsMargin * 2)
+                y = newY + (_toolsMargin * 2)
             }
 
             background: Rectangle {
                 radius: ScreenTools.defaultFontPixelHeight * 0.5
-                color: qgcPal.window
-                border.color: qgcPal.text
+                color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+                //border.color: qgcPal.text
             }
 
             ColumnLayout {
@@ -586,7 +586,7 @@ FlightMap {
 
                 QGCButton {
                     Layout.fillWidth: true
-                    text: "Go to location"
+                    text: qsTr("Go to location")
                     visible: globals.guidedControllerFlyView.showGotoLocation
                     onClicked: {
                         if (clickMenu.opened) {
@@ -599,7 +599,7 @@ FlightMap {
 
                 QGCButton {
                     Layout.fillWidth: true
-                    text: "Orbit at location"
+                    text: qsTr("Orbit at location")
                     visible: globals.guidedControllerFlyView.showOrbit
                     onClicked: {
                         if (clickMenu.opened) {
@@ -612,7 +612,7 @@ FlightMap {
 
                 QGCButton {
                     Layout.fillWidth: true
-                    text: "ROI at location"
+                    text: qsTr("ROI at location")
                     visible: globals.guidedControllerFlyView.showROI
                     onClicked: {
                         if (clickMenu.opened) {
@@ -638,8 +638,8 @@ FlightMap {
 
                 QGCButton {
                     Layout.fillWidth: true
-                    text: "Set home here"
-                    visible: globals.guidedControllerFlyView.showSetHome
+                    text:           qsTr("Set home here")
+                    visible:        globals.guidedControllerFlyView.showSetHome
                     onClicked: {
                         if (clickMenu.opened) {
                             clickMenu.close()
@@ -678,6 +678,33 @@ FlightMap {
                 clickMenu.setCoordinates(mouse.x, mouse.y)
                 clickMenu.open()
             }
+        }
+    }
+
+    Rectangle {
+        id: clickIndicator
+        visible:    clickMenu.visible
+        x: clickMenu.x - (height / 2) - (_toolsMargin * 2)
+        y: clickMenu.y - (height / 2) - (_toolsMargin * 2)
+        height: _toolsMargin * 5
+        width:  height
+        radius: height / 2
+        color: "transparent"
+        border.color: qgcPal.text
+        border.width: 3
+
+        Rectangle {
+            height: 1
+            width:  _toolsMargin * 7
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+
+        Rectangle {
+            height: _toolsMargin * 7
+            width:  1
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
         }
     }
 

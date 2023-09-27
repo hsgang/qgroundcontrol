@@ -126,7 +126,7 @@ T.ComboBox {
         implicitWidth:  ScreenTools.implicitComboBoxWidth
         implicitHeight: ScreenTools.implicitComboBoxHeight
         color:          _qgcPal.window
-        border.color:   _qgcPal.windowShade
+        border.color:   _qgcPal.windowShadeLight
         border.width:   1
         radius:         ScreenTools.defaultFontPixelWidth / 2
     }

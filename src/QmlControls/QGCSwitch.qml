@@ -21,24 +21,20 @@ Switch {
     QGCPalette { id:qgcPal; colorGroupEnabled: true }
 
     indicator: Rectangle{
-        height: ScreenTools.defaultFontPixelHeight
+        height: ScreenTools.defaultFontPixelHeight * 0.9
         width:  height * 2
         x:  control.leftPadding
         y:  parent.height / 2 - height / 2
         color:          (control.checked && control.enabled) ? qgcPal.buttonHighlight : qgcPal.windowShade
         radius:         height / 2
-//        border.color:   qgcPal.button
-//        border.width:   1
 
         Rectangle {
-            x: control.checked ? parent.width - width - 2 : 2
-            height:  parent.height - 4
+            x: control.checked ? parent.width - width - 4 : 4
+            height:  parent.height - 8
             width: height
             anchors.verticalCenter: parent.verticalCenter
             color:          control.enabled ? qgcPal.colorWhite : qgcPal.colorGrey
             radius:         height / 2
-//            border.color:   qgcPal.button
-//            border.width:   1
         }
     }
 
@@ -50,23 +46,4 @@ Switch {
             verticalAlignment: Text.AlignVCenter
             leftPadding: control.indicator.width + control.spacing
     }
-
-//    style: SwitchStyle {
-//        groove:     Rectangle {
-//            implicitWidth:  ScreenTools.defaultFontPixelWidth * 4
-//            implicitHeight: ScreenTools.defaultFontPixelHeight
-//            color:          (control.checked && control.enabled) ? qgcPal.buttonHighlight : qgcPal.colorGrey
-//            radius:         implicitHeight * 0.5
-//            border.color:   qgcPal.button
-//            border.width:   1
-//        }
-//        handle:     Rectangle {
-//            implicitWidth:  ScreenTools.defaultFontPixelHeight
-//            implicitHeight: implicitWidth
-//            color:          (control.checked && control.enabled) ? qgcPal.text : qgcPal.colorGrey
-//            radius:         implicitHeight * 0.5
-//            border.color:   qgcPal.button
-//            border.width:   1
-//        }
-//    }
 }

@@ -36,15 +36,15 @@ AbstractButton   {
             id:                     indicator
             anchors.right:          parent.right
             anchors.verticalCenter: parent.verticalCenter
-            height:                 ScreenTools.defaultFontPixelHeight
+            height:                 ScreenTools.defaultFontPixelHeight * 0.9
             width:                  height * 2
             radius:                 height / 2
             color:                  control.checked ? qgcPal.buttonHighlight : qgcPal.windowShade
 
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                x:                      checked ? indicator.width - width - 2 : 2
-                height:                 parent.height - 4
+                x:                      checked ? indicator.width - width - 4 : 4
+                height:                 parent.height - 8
                 width:                  height
                 radius:                 height / 2
                 color:                  qgcPal.colorWhite

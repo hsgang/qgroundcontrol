@@ -18,7 +18,7 @@ Button {
     property real   pointSize:      ScreenTools.defaultFontPointSize    ///< Point size for button text
     property bool   showBorder:     qgcPal.globalTheme === QGCPalette.Light
     property bool   iconLeft:       false
-    property real   backRadius:     ScreenTools.defaultFontPointSize * 0.5
+    property real   backRadius:     ScreenTools.defaultFontPointSize
     property real   heightFactor:   0.5
     property string iconSource
 

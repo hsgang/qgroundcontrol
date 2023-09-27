@@ -72,7 +72,7 @@ TextField {
             Rectangle {
                 anchors.fill:           parent
                 border.width:           enabled ? 1 : 0
-                border.color:           root.activeFocus ? qgcPal.buttonHighlight : qgcPal.windowShade
+                border.color:           root.activeFocus ? qgcPal.buttonHighlight : qgcPal.windowShadeLight
                 color:                  qgcPal.window //textField
                 radius:                 ScreenTools.defaultFontPixelWidth / 2
             }

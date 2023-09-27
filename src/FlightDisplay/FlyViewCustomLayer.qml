@@ -78,17 +78,17 @@ Item {
     property string timeString   
 
     QGCToolInsets {
-        id:                     _toolInsets
+        id:                     _totalToolInsets
         leftEdgeTopInset:       0
         leftEdgeCenterInset:    0
-        leftEdgeBottomInset:    0
-        rightEdgeTopInset:      0
-        rightEdgeCenterInset:   0
-        rightEdgeBottomInset:   0
-        topEdgeLeftInset:       0
-        topEdgeCenterInset:     0
-        topEdgeRightInset:      0
-        bottomEdgeLeftInset:    0
+        leftEdgeBottomInset:    parentToolInsets.leftEdgeBottomInset
+        rightEdgeTopInset:      parentToolInsets.rightEdgeTopInset
+        rightEdgeCenterInset:   parentToolInsets.rightEdgeCenterInset
+        rightEdgeBottomInset:   parentToolInsets.rightEdgeBottomInset
+        topEdgeLeftInset:       parentToolInsets.topEdgeLeftInset
+        topEdgeCenterInset:     parentToolInsets.topEdgeCenterInset
+        topEdgeRightInset:      parentToolInsets.topEdgeRightInset
+        bottomEdgeLeftInset:    parentToolInsets.bottomEdgeLeftInset
         bottomEdgeCenterInset:  0
         bottomEdgeRightInset:   0
     }
@@ -98,7 +98,7 @@ Item {
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:        flyviewMissionProgress.visible ? flyviewMissionProgress.bottom : parent.top
+        anchors.top:        parent.top
 
         function recalcXPosition() {
             // First try centered
@@ -313,9 +313,9 @@ Item {
 
     FlyViewMissionProgress{
         id: flyviewMissionProgress
-        anchors.horizontalCenter:   parent.horizontalCenter
-        anchors.top:                parent.top
-        anchors.topMargin:          _toolsMargin
+        y:                      (parent.height - parentToolInsets.bottomEdgeLeftInset - height) * 0.7
+        anchors.left:           parent.left
+        anchors.leftMargin:     (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _margins * 2
         visible: false
 
         Connections{
@@ -366,6 +366,7 @@ Item {
                 id:     quickViewControlStripGrid
                 flow:   GridLayout.TopToBottom
                 rows:   9
+                rowSpacing: _margins * 2
 
                 QGCSwitch {
                     checked:            photoVideoControl.visible

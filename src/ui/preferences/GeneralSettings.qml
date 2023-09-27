@@ -406,6 +406,7 @@ Rectangle {
                             anchors.verticalCenter:     parent.verticalCenter
                             columns:                    2
                             visible:                    _videoSettings.visible
+                            rowSpacing:                 _margins * 2
 
                             QGCLabel {
                                 id:         videoSourceLabel
@@ -415,6 +416,7 @@ Rectangle {
                             FactComboBox {
                                 id:                     videoSource
                                 Layout.preferredWidth:  _comboFieldWidth
+                                Layout.alignment:       Qt.AlignRight
                                 indexModel:             false
                                 fact:                   _videoSettings.videoSource
                                 visible:                videoSourceLabel.visible
@@ -426,7 +428,8 @@ Rectangle {
                                 visible:    !_videoAutoStreamConfig && (_isUDP264 || _isUDP265 || _isMPEGTS) && _videoSettings.udpPort.visible
                             }
                             FactTextField {
-                                Layout.preferredWidth:  _comboFieldWidth
+                                Layout.preferredWidth:  _comboFieldWidth * 0.5
+                                Layout.alignment:       Qt.AlignRight
                                 fact:                   _videoSettings.udpPort
                                 visible:                udpPortLabel.visible
                             }
@@ -437,7 +440,7 @@ Rectangle {
                                 visible:    !_videoAutoStreamConfig && _isRTSP && _videoSettings.rtspUrl.visible
                             }
                             FactTextField {
-                                Layout.preferredWidth:  _comboFieldWidth
+                                Layout.preferredWidth:  _comboFieldWidth * 1.2
                                 fact:                   _videoSettings.rtspUrl
                                 visible:                rtspUrlLabel.visible
                                 onTextChanged:      SiYi.camera.analyzeIp(text)
@@ -449,7 +452,7 @@ Rectangle {
                                 visible:    !_videoAutoStreamConfig && _isTCP && _videoSettings.tcpUrl.visible
                             }
                             FactTextField {
-                                Layout.preferredWidth:  _comboFieldWidth
+                                Layout.preferredWidth:  _comboFieldWidth * 1.2
                                 fact:                   _videoSettings.tcpUrl
                                 visible:                tcpUrlLabel.visible
                             }
@@ -459,7 +462,8 @@ Rectangle {
                                 visible:    !_videoAutoStreamConfig && _isGst && _videoSettings.aspectRatio.visible
                             }
                             FactTextField {
-                                Layout.preferredWidth:  _comboFieldWidth
+                                Layout.preferredWidth:  _comboFieldWidth * 0.5
+                                Layout.alignment:       Qt.AlignRight
                                 fact:                   _videoSettings.aspectRatio
                                 visible:                !_videoAutoStreamConfig && _isGst && _videoSettings.aspectRatio.visible
                             }
@@ -470,7 +474,8 @@ Rectangle {
                                 visible:    _showSaveVideoSettings && _videoSettings.recordingFormat.visible
                             }
                             FactComboBox {
-                                Layout.preferredWidth:  _comboFieldWidth
+                                Layout.preferredWidth:  _comboFieldWidth * 0.5
+                                Layout.alignment:       Qt.AlignRight
                                 fact:                   _videoSettings.recordingFormat
                                 visible:                videoFileFormatLabel.visible
                             }
@@ -481,7 +486,8 @@ Rectangle {
                                 visible:    _showSaveVideoSettings && _videoSettings.maxVideoSize.visible && _videoSettings.enableStorageLimit.value
                             }
                             FactTextField {
-                                Layout.preferredWidth:  _comboFieldWidth
+                                Layout.preferredWidth:  _comboFieldWidth * 0.5
+                                Layout.alignment:       Qt.AlignRight
                                 fact:                   _videoSettings.maxVideoSize
                                 visible:                _showSaveVideoSettings && _videoSettings.enableStorageLimit.value && maxSavedVideoStorageLabel.visible
                             }
@@ -493,13 +499,14 @@ Rectangle {
                             }
                             FactComboBox {
                                 id:                     forceVideoDecoderComboBox
-                                Layout.preferredWidth:  _comboFieldWidth
+                                Layout.preferredWidth:  _comboFieldWidth * 0.5
+                                Layout.alignment:       Qt.AlignRight
                                 fact:                   _videoSettings.forceVideoDecoder
                                 visible:                fact.visible
                                 indexModel:             false
                             }
 
-                            Item { width: 1; height: 1}
+//                            Item { width: 1; height: 1}
 //                            FactCheckBox {
 //                                text:       qsTr("Disable When Disarmed")
 //                                fact:       _videoSettings.disableWhenDisarmed
@@ -507,32 +514,35 @@ Rectangle {
 //                            }
 
                             FactCheckBoxSlider {
+                                Layout.columnSpan:  2
                                 Layout.fillWidth:   true
                                 text:               qsTr("Disable When Disarmed")
                                 fact:               _videoSettings.disableWhenDisarmed
                                 visible:            !_videoAutoStreamConfig && _isGst && fact.visible
                             }
 
-                            Item { width: 1; height: 1}
+//                            Item { width: 1; height: 1}
 //                            FactCheckBox {
 //                                text:       qsTr("Low Latency Mode")
 //                                fact:       _videoSettings.lowLatencyMode
 //                                visible:    !_videoAutoStreamConfig && _isGst && fact.visible
 //                            }
                             FactCheckBoxSlider {
+                                Layout.columnSpan:  2
                                 Layout.fillWidth:   true
                                 text:               qsTr("Low Latency Mode")
                                 fact:               _videoSettings.lowLatencyMode
                                 visible:            !_videoAutoStreamConfig && _isGst && fact.visible
                             }
 
-                            Item { width: 1; height: 1}
+//                            Item { width: 1; height: 1}
 //                            FactCheckBox {
 //                                text:       qsTr("Auto-Delete Saved Recordings")
 //                                fact:       _videoSettings.enableStorageLimit
 //                                visible:    _showSaveVideoSettings && fact.visible
 //                            }
                             FactCheckBoxSlider {
+                                Layout.columnSpan:  2
                                 Layout.fillWidth:   true
                                 text:               qsTr("Auto-Delete Saved Recordings")
                                 fact:               _videoSettings.enableStorageLimit
@@ -562,11 +572,11 @@ Rectangle {
                             anchors.margins:            _margins
                             anchors.top:                parent.top
                             anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:                    _margins
+                            spacing:                    _margins * 2
 
                             GridLayout {
                                 columns:            2
-                                columnSpacing:      ScreenTools.defaultFontPixelWidth
+                                columnSpacing:      _margins * 2
                                 visible:            QGroundControl.settingsManager.appSettings.defaultMissionItemAltitude.visible
 
                                 QGCLabel { text: qsTr("Default Mission Altitude") }
@@ -582,30 +592,20 @@ Rectangle {
                                 }
                             }
 
-//                            FactCheckBox {
-//                                text:   qsTr("Use MAV_CMD_CONDITION_GATE for pattern generation")
-//                                fact:   QGroundControl.settingsManager.planViewSettings.useConditionGate
-//                            }
                             FactCheckBoxSlider {
                                 Layout.fillWidth:   true
                                 text:               qsTr("Use MAV_CMD_CONDITION_GATE for pattern generation")
                                 fact:               QGroundControl.settingsManager.planViewSettings.useConditionGate
                             }
 
-//                            FactCheckBox {
-//                                text:       qsTr("Missions Do Not Require Takeoff Item")
-//                                fact:       _planViewSettings.takeoffItemNotRequired
-//                                visible:    _planViewSettings.takeoffItemNotRequired.visible
-//                            }
                             FactCheckBoxSlider {
                                 Layout.fillWidth:   true
                                 text:               qsTr("Missions Do Not Require Takeoff Item")
                                 fact:               _planViewSettings.takeoffItemNotRequired
-                                visible:    _planViewSettings.takeoffItemNotRequired.visible
+                                visible:            _planViewSettings.takeoffItemNotRequired.visible
                             }
                         }
                     }
-
 
                     Item { width: 1; height: _margins; visible: miscSectionLabel.visible }
                     QGCLabel {
@@ -635,6 +635,7 @@ Rectangle {
                                 id:                         comboGrid
                                 anchors.horizontalCenter:   parent.horizontalCenter
                                 columns:                    2
+                                rowSpacing:                 _margins * 2
 
                                 QGCLabel {
                                     text:           qsTr("Language")
@@ -770,7 +771,7 @@ Rectangle {
                             ColumnLayout {
                                 id:                         miscCol
                                 anchors.horizontalCenter:   parent.horizontalCenter
-                                spacing:                    _margins
+                                spacing:                    _margins * 2
 
                                 FactCheckBoxSlider {
                                     Layout.fillWidth:   true
@@ -801,32 +802,32 @@ Rectangle {
                                     property Fact _androidSaveToSDCard: QGroundControl.settingsManager.appSettings.androidSaveToSDCard
                                 }
 
-                                FactCheckBoxSlider {
-                                    id:                 clearCheck
-                                    Layout.fillWidth:   true
-                                    text:               qsTr("Clear all settings on next start")
-                                    checked:            false
-                                    onClicked: {
-                                        checked ? clearDialog.visible = true : QGroundControl.clearDeleteAllSettingsNextBoot()
-                                    }
+//                                FactCheckBoxSlider {
+//                                    id:                 clearCheck
+//                                    Layout.fillWidth:   true
+//                                    text:               qsTr("Clear all settings on next start")
+//                                    checked:            false
+//                                    onClicked: {
+//                                        checked ? clearDialog.visible = true : QGroundControl.clearDeleteAllSettingsNextBoot()
+//                                    }
 
-                                    MessageDialog {
-                                        id:                 clearDialog
-                                        visible:            false
-                                        icon:               StandardIcon.Warning
-                                        standardButtons:    StandardButton.Yes | StandardButton.No
-                                        title:              qsTr("Clear Settings")
-                                        text:               qsTr("All saved settings will be reset the next time you start %1. Is this really what you want?").arg(QGroundControl.appName)
-                                        onYes: {
-                                            QGroundControl.deleteAllSettingsNextBoot()
-                                            clearDialog.visible = false
-                                        }
-                                        onNo: {
-                                            clearCheck.checked  = false
-                                            clearDialog.visible = false
-                                        }
-                                    }
-                                }
+//                                    MessageDialog {
+//                                        id:                 clearDialog
+//                                        visible:            false
+//                                        icon:               StandardIcon.Warning
+//                                        standardButtons:    StandardButton.Yes | StandardButton.No
+//                                        title:              qsTr("Clear Settings")
+//                                        text:               qsTr("All saved settings will be reset the next time you start %1. Is this really what you want?").arg(QGroundControl.appName)
+//                                        onYes: {
+//                                            QGroundControl.deleteAllSettingsNextBoot()
+//                                            clearDialog.visible = false
+//                                        }
+//                                        onNo: {
+//                                            clearCheck.checked  = false
+//                                            clearDialog.visible = false
+//                                        }
+//                                    }
+//                                }
 
                                 // Check box to show/hide Remote ID submenu in App settings
 
@@ -889,7 +890,7 @@ Rectangle {
                             anchors.margins:            _margins
                             anchors.top:                parent.top
                             anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:                    _margins
+                            spacing:                    _margins * 2
 
                             FactCheckBoxSlider {
                                 id:                 promptSaveLog
@@ -951,10 +952,10 @@ Rectangle {
                             //anchors.right:      parent.right
                             anchors.top:        parent.top
                             anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:            _margins
+                            spacing:            _margins * 2
 
                             ColumnLayout {
-                                spacing: _margins
+                                spacing: _margins * 2
 
                                 Repeater {
                                     id:     autoConnectRepeater
@@ -1075,6 +1076,7 @@ Rectangle {
                             Layout.fillWidth:           true
                             anchors.horizontalCenter:   parent.horizontalCenter
                             columns:                    3
+                            rowSpacing:                 _margins * 2
 
                             property var  rtkSettings:      QGroundControl.settingsManager.rtkSettings
                             property bool useFixedPosition: false //rtkSettings.useFixedBasePosition.rawValue
@@ -1280,7 +1282,7 @@ Rectangle {
                             Layout.fillWidth:           true
                             anchors.horizontalCenter:   parent.horizontalCenter
                             columns:                    2
-                            columnSpacing:              _margins * 2
+                            rowSpacing:                 _margins * 2
 
                             property var  ntripSettings:    QGroundControl.settingsManager.ntripSettings
 
@@ -1319,7 +1321,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripServerHostAddress
                                 visible:                ntripGrid.ntripSettings.ntripServerHostAddress.visible
-                                Layout.preferredWidth:  _valueFieldWidth * 3
+                                Layout.preferredWidth:  _valueFieldWidth * 2
                             }
 
                             QGCLabel {
@@ -1329,7 +1331,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripServerPort
                                 visible:                ntripGrid.ntripSettings.ntripServerPort.visible
-                                Layout.preferredWidth:  _valueFieldWidth * 3
+                                Layout.preferredWidth:  _valueFieldWidth * 2
                             }
 
                             QGCLabel {
@@ -1339,7 +1341,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripUsername
                                 visible:                ntripGrid.ntripSettings.ntripUsername.visible
-                                Layout.preferredWidth:  _valueFieldWidth * 3
+                                Layout.preferredWidth:  _valueFieldWidth * 2
                             }
 
                             QGCLabel {
@@ -1349,7 +1351,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripPassword
                                 visible:                ntripGrid.ntripSettings.ntripPassword.visible
-                                Layout.preferredWidth:  _valueFieldWidth * 3
+                                Layout.preferredWidth:  _valueFieldWidth * 2
                             }
 
                             QGCLabel {
@@ -1359,7 +1361,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripMountpoint
                                 visible:                ntripGrid.ntripSettings.ntripMountpoint.visible
-                                Layout.preferredWidth:  _valueFieldWidth * 3
+                                Layout.preferredWidth:  _valueFieldWidth * 2
                             }
 
                             QGCLabel {
@@ -1369,7 +1371,7 @@ Rectangle {
                             FactTextField {
                                 fact:                   ntripGrid.ntripSettings.ntripWhitelist
                                 visible:                ntripGrid.ntripSettings.ntripWhitelist.visible
-                                Layout.preferredWidth:  _valueFieldWidth * 3
+                                Layout.preferredWidth:  _valueFieldWidth * 2
                             }
                         }
                     }
@@ -1396,7 +1398,7 @@ Rectangle {
                             anchors.margins:            _margins
                             anchors.top:                parent.top
                             anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:                    _margins
+                            spacing:                    _margins * 2
 
                             GridLayout {
                                 columns:            2

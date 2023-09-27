@@ -6619,17 +6619,27 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/FlyViewMap.qml" line="522"/>
         <source>Go to location</source>
-        <translation>이 장소로 이동</translation>
+        <translation>여기로 이동</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewMap.qml" line="531"/>
         <source>Orbit at location</source>
-        <translation>이 장소에서 회전</translation>
+        <translation>오빗 설정</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewMap.qml" line="540"/>
         <source>ROI at location</source>
-        <translation>이 위치에 관심지역</translation>
+        <translation>ROI 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewMap.qml" line="540"/>
+        <source>Yaw towards location</source>
+        <translation>헤딩 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewMap.qml" line="540"/>
+        <source>Set home here</source>
+        <translation>홈위치 설정</translation>
     </message>
 </context>
 <context>
@@ -6833,33 +6843,38 @@ Click Ok to start the auto-tuning process.
     <name>FlyViewMissionProgress</name>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="140"/>
-        <source>Altitude:</source>
-        <translation>고도:</translation>
+        <source>Altitude: </source>
+        <translation>고도: </translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="148"/>
-        <source>Latitude:</source>
-        <translation>위도:</translation>
+        <source>Latitude: </source>
+        <translation>위도: </translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="155"/>
-        <source>Longitude:</source>
-        <translation>경도:</translation>
+        <source>Longitude: </source>
+        <translation>경도: </translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="162"/>
-        <source>H.Distance:</source>
-        <translation>수평 경로:</translation>
+        <source>H.Distance: </source>
+        <translation>수평 경로: </translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="169"/>
-        <source>Path Distance:</source>
-        <translation>전체 경로:</translation>
+        <source>Path Distance: </source>
+        <translation>전체 경로: </translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="176"/>
-        <source>Total Time:</source>
-        <translation>임무 시간:</translation>
+        <source>Total Time: </source>
+        <translation>임무 시간: </translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="176"/>
+        <source>Mission Seq: </source>
+        <translation>경로 항목: </translation>
     </message>
 </context>
 <context>
@@ -6983,12 +6998,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="479"/>
         <source>Color Scheme</source>
-        <translation>색 구성</translation>
+        <translation>테마 구성</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="490"/>
         <source>Map Provider</source>
-        <translation>지도 출처</translation>
+        <translation>지도 제공</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="510"/>
@@ -6998,12 +7013,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="529"/>
         <source>Stream GCS Position</source>
-        <translation>지상국 위치 스트림</translation>
+        <translation>GCS 위치 전송</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="611"/>
         <source>Mute all audio output</source>
-        <translation>모든 오디오 출력 음소거</translation>
+        <translation>오디오 출력 음소거</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="626"/>
@@ -7028,7 +7043,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="661"/>
         <source>Application Load/Save Path</source>
-        <translation>응용프로그램 불러오기/저장 경로</translation>
+        <translation>저장 경로</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="665"/>
@@ -7125,7 +7140,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="618"/>
         <source>Check for Internet connection</source>
-        <translation>인터넷 연결을 확인하십시오.</translation>
+        <translation>인터넷 연결 확인</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="719"/>
@@ -7230,12 +7245,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="392"/>
         <source>Use MAV_CMD_CONDITION_GATE for pattern generation</source>
-        <translation type="unfinished">Use MAV_CMD_CONDITION_GATE for pattern generation</translation>
+        <translation>자동 경로 생성시 MAV_CMD_CONDITION_GATE 적용</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="397"/>
         <source>Missions Do Not Require Takeoff Item</source>
-        <translation type="unfinished">Missions Do Not Require Takeoff Item</translation>
+        <translation>자동 경로에서 이륙 항목(Takeoff) 제외</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="427"/>
@@ -7255,7 +7270,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="731"/>
         <source>AutoConnect to the following devices</source>
-        <translation>다음 장치에 자동으로 연결</translation>
+        <translation>자동 연결 장치</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="762"/>
@@ -7829,7 +7844,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="56"/>
         <source>Action</source>
-        <translation>명령</translation>
+        <translation>실행</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="58"/>
@@ -7874,17 +7889,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="66"/>
         <source>Land the vehicle at the current position.</source>
-        <translation>기체를 현재 위치에 착륙 시킵니다.</translation>
+        <translation>현재 위치에 착륙</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="68"/>
         <source>Change the altitude of the vehicle up or down.</source>
-        <translation>기체의 고도를 변경합니다</translation>
+        <translation>고도를 변경</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="69"/>
         <source>Move the vehicle to the specified location.</source>
-        <translation>기체를 지정된 위치로 이동합니다</translation>
+        <translation>지정된 위치로 이동</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="70"/>
@@ -7894,7 +7909,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="71"/>
         <source>Orbit the vehicle around the specified location.</source>
-        <translation>지정된 위치를 중심으로 기체를 원주비행합니다</translation>
+        <translation>지정된 위치를 중심으로 기체를 원주비행</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="72"/>
@@ -7904,12 +7919,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="73"/>
         <source>Change the maximum horizontal cruise speed.</source>
-        <translation>최고수평속도를 변경합니다</translation>
+        <translation>최고수평속도를 변경</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="73"/>
         <source>Pause the vehicle at it&apos;s current position, adjusting altitude up or down as needed.</source>
-        <translation>필요에 따라 고도를 위아래로 조정하여 기체를 현재 위치로 유지하십시오</translation>
+        <translation>필요에 따라 고도를 위아래로 조정하여 기체를 현재 위치로 유지</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="74"/>
@@ -7919,17 +7934,27 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="75"/>
         <source>Transition VTOL to fixed wing flight.</source>
-        <translation>VTOL를 고정익 비행으로 전환하기.</translation>
+        <translation>VTOL을 고정익 모드로 전환</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="76"/>
         <source>Transition VTOL to multi-rotor flight.</source>
-        <translation>VTOL를 고정익 비행으로 전환하기.</translation>
+        <translation>VTOL을 회전익 모드로 전환</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="77"/>
         <source>Make the specified location a Region Of Interest.</source>
-        <translation type="unfinished">Make the specified location a Region Of Interest.</translation>
+        <translation>지정 위치에 ROI 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="75"/>
+        <source>Change the heading of the vehicle toward the specified location.</source>
+        <translation>지정 위치를 향하도록 헤딩 변경</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="87"/>
+        <source>Set vehicle home as the specified location. This will affect Return to Home position</source>
+        <translation>지정 위치를 홈포인트로 설정</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="163"/>
@@ -7944,7 +7969,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="536"/>
         <source>Internal error: unknown actionCode</source>
-        <translation>내부오류: 알 수 없는 액션코드입니다</translation>
+        <translation>내부오류: 알 수 없는 액션코드</translation>
     </message>
 </context>
 <context>
@@ -12012,7 +12037,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="119"/>
         <source>Load from file...</source>
-        <translation>파일로부터 불러오기...</translation>
+        <translation>파일로부터 불러오기</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="121"/>
@@ -12022,7 +12047,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="127"/>
         <source>Save to file...</source>
-        <translation>다른이름으로 저장...</translation>
+        <translation>다른이름으로 저장</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="129"/>
@@ -12872,12 +12897,12 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1037"/>
         <source>You have unsaved changes.</source>
-        <translation>변경내용이 저장되지 않았습니다.</translation>
+        <translation>변경내용이 저장되지 않았습니다</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1136"/>
         <source>Open...</source>
-        <translation>열기...</translation>
+        <translation>열기</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="231"/>
@@ -12905,7 +12930,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1036"/>
         <source>You have unsaved changes. You should upload to your vehicle, or save to a file.</source>
-        <translation>변경내용이 저장되지 않았습니다. 변경사항을 기체에 업로드하거나 파일에 저장하십시오:</translation>
+        <translation>변경내용이 저장되지 않았습니다. 변경사항을 기체에 업로드하거나 파일에 저장하십시오</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1044"/>
@@ -12921,12 +12946,12 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1164"/>
         <source>Save As...</source>
-        <translation>다른이름으로 저장...</translation>
+        <translation>다른이름으로 저장</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1176"/>
         <source>Save Mission Waypoints As KML...</source>
-        <translation>미션 경로지점을 KML로 저장하기...</translation>
+        <translation>경로지점을 KML로 저장</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1181"/>

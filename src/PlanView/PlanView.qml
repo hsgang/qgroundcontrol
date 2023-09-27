@@ -874,7 +874,7 @@ Item {
             }
 
             GridLayout {
-                columns:            2
+                columns:            3
                 columnSpacing:      _margin
                 rowSpacing:         _margin
                 Layout.fillWidth:   true
@@ -885,7 +885,7 @@ Item {
 
                     Rectangle {
                         id:     button
-                        width:  ScreenTools.defaultFontPixelHeight * 7
+                        width:  ScreenTools.defaultFontPixelHeight * 5
                         height: planCreatorNameLabel.y + planCreatorNameLabel.height
                         color:  button.pressed || button.highlighted ? qgcPal.buttonHighlight : qgcPal.button
 

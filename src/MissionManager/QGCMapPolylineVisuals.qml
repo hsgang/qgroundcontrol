@@ -28,7 +28,7 @@ Item {
     property var    mapPolyline                 ///< QGCMapPolyline object
     property bool   interactive:    mapPolyline.interactive
     property int    lineWidth:      3
-    property color  lineColor:      "#be781c"
+    property color  lineColor:      "#36bc9b" //"#be781c"
 
     property var    _dragHandlesComponent
     property var    _splitHandlesComponent

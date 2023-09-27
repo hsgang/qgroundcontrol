@@ -154,11 +154,11 @@ Item {
     }
     Rectangle {
         id: confirmBackground
-        width: parent.width * 1.4 //(parent.width * 3 > messageTextBox.width) ? parent.width * 2 : messageTextBox.width
+        width: parent.width * 1.1 //(parent.width * 3 > messageTextBox.width) ? parent.width * 2 : messageTextBox.width
         height : parent.height * 1.1
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        radius: parent.width * 0.15 //_margins * 3
+        radius: width * 0.5 //_margins * 3
         color: qgcPal.window
     }
 
@@ -251,8 +251,8 @@ Item {
         id: cancelRectangle
         width: parent.width * 0.2
         height: width
-        anchors.right: confirmBackground.right
-        anchors.bottom: confirmBackground.bottom
+        anchors.horizontalCenter: confirmBackground.horizontalCenter
+        anchors.top: confirmBackground.bottom
         anchors.margins: _margins * 2
         radius: width / 2
         color: qgcPal.windowShadeLight
