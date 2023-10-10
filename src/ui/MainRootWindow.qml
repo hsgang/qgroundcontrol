@@ -659,6 +659,7 @@ ApplicationWindow {
             anchors.centerIn:   parent
             wrapMode:           Text.WordWrap
             color:              qgcPal.alertText
+            textFormat:         TextEdit.RichText
         }
 
         MouseArea {
