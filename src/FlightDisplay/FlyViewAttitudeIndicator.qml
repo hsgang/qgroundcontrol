@@ -149,6 +149,7 @@ Rectangle {
             anchors.bottom:     parent.top
             anchors.left:       parent.left
             anchors.bottomMargin:    _toolsMargin * 0.5
+            visible:            _distanceDown
 
             Rectangle{
                 height:     valueIcon.height
