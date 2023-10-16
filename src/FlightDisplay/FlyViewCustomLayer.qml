@@ -445,7 +445,7 @@ Item {
         id:                 quickViewPopupButton
         anchors.margins:    _toolsMargin + ScreenTools.defaultFontPixelWidth * 0.25
         anchors.top:        multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-        anchors.right:      multiVehiclePanelSelector.showSingleVehiclePanel ? parent.right : multiVehiclePanelSelector.left
+        anchors.right:      multiVehiclePanelSelector.showSingleVehiclePanel ?  (photoVideoControl.visible ? photoVideoControl.left : parent.right) : multiVehiclePanelSelector.left
         anchors.rightMargin: _toolsMargin
         color:              qgcPal.window
         width:              _idealWidth - anchorsMargins
