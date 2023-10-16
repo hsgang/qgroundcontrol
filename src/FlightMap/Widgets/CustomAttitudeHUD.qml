@@ -214,7 +214,7 @@ Item {
     }
 
     Image {
-        id: rollDial
+        id:                 rollDial
         anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
         visible:            _showAttitudeHUD
         source:             "/qmlimages/rollDialWhite.svg"
@@ -223,6 +223,13 @@ Item {
         sourceSize.width:   width
         fillMode:           Image.PreserveAspectFit
 
+        layer {
+            enabled: true
+            effect: ColorOverlay {
+                color: qgcPal.textHighlight
+            }
+        }
+
         transform: Rotation {
             origin.x:       rollDial.width / 2
             origin.y:       rollDial.height
@@ -230,12 +237,12 @@ Item {
         }
     }
 
-    ColorOverlay {
-        anchors.fill:       rollDial
-        source:             rollDial
-        color:              qgcPal.textHighlight
-        visible:            rollDial.visible
-    }
+//    ColorOverlay {
+//        anchors.fill:       rollDial
+//        source:             rollDial
+//        color:              qgcPal.textHighlight
+//        visible:            rollDial.visible
+//    }
 
 //    Image {
 //        id:                 pointer
