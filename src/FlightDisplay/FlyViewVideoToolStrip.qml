@@ -92,7 +92,7 @@ Item {
         id:        modesToolStrip
         model:     modesToolStripActionList.model
         forceImageScale11: true
-        maxWidth:  height * 5
+        maxWidth:  height * 3
         visible:   rootItem._modesPanelVisible
         fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
 
@@ -118,16 +118,6 @@ Item {
                     text:               qsTr("Yaw Follow")
                     iconSource:         "/HA_Icons/YAW_UNLOCK.png"
                     onTriggered:        _activeVehicle ? _activeVehicle.toggleGimbalYawLock(true, false) : undefined
-                },
-                ToolStripAction {
-                    text:               qsTr("Retract")
-                    iconSource:         "/HA_Icons/RETRACT_ON.png"
-                    onTriggered:        _activeVehicle ? _activeVehicle.toggleGimbalRetracted(true, true) : undefined
-                },
-                ToolStripAction {
-                    text:               qsTr("Neutral")
-                    iconSource:         "/HA_Icons/NEUTRAL.png"
-                    onTriggered:        _activeVehicle ? _activeVehicle.toggleGimbalNeutral(true, true) : undefined
                 }
             ]
         }
@@ -137,7 +127,7 @@ Item {
         id:        actionsToolStrip
         model:     actionsToolStripActionList.model
         forceImageScale11: true
-        maxWidth:  height * 3
+        maxWidth:  height * 5
         visible:   rootItem._actionsPanelVisible
         fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
 
@@ -149,6 +139,16 @@ Item {
         ToolStripActionList {
             id: actionsToolStripActionList
             model: [
+                ToolStripAction {
+                    text:               qsTr("Retract")
+                    iconSource:         "/HA_Icons/RETRACT_ON.png"
+                    onTriggered:        _activeVehicle ? _activeVehicle.toggleGimbalRetracted(true, true) : undefined
+                },
+                ToolStripAction {
+                    text:               qsTr("Neutral")
+                    iconSource:         "/HA_Icons/NEUTRAL.png"
+                    onTriggered:        _activeVehicle ? _activeVehicle.toggleGimbalNeutral(true, true) : undefined
+                },
                 ToolStripAction {
                     text:               qsTr("Tilt 90")
                     iconSource:         "/HA_Icons/CAMERA_90.png"
