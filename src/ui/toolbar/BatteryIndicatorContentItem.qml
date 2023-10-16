@@ -68,7 +68,7 @@ ColumnLayout {
 
                     QGCLabel { text: qsTr("Battery %1").arg(object.id.rawValue) }
                     QGCLabel { text: qsTr("Charge State");                          visible: batteryValuesAvailable.chargeStateAvailable }
-                    QGCLabel { text: qsTr("Remaining");                             visible: batteryValuesAvailable.timeRemainingAvailable }
+                    QGCLabel { text: qsTr("Remaining Time");                         visible: batteryValuesAvailable.timeRemainingAvailable }
                     QGCLabel { text: qsTr("Remaining") }
                     QGCLabel { text: qsTr("Voltage") }
                     QGCLabel { text: qsTr("Current");                               visible: batteryValuesAvailable.currentAvailable }

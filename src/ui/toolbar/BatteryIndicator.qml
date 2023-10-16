@@ -167,12 +167,14 @@ Item {
                     }
                 }
                 else if(battery.percentRemaining.rawValue) {
-                    if (battery.percentRemaining.rawValue < 15)
+                    if (battery.percentRemaining.rawValue < 15 ) {
                         isBlink = true
                         return qgcPal.colorRed
-                    if (battery.percentRemaining.rawValue < 30)
+                    } else if (battery.percentRemaining.rawValue < 30 ) {
                         return qgcPal.colorOrange
-                    return qgcPal.colorGreen //qgcPal.text
+                    } else if (battery.percentRemaining.rawValue >=30 ) {
+                        return qgcPal.colorGreen //qgcPal.text
+                    }
                 }
 
                 else{

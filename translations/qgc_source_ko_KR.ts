@@ -4051,6 +4051,59 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>BatteryIndicatorContentItem</name>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="46"/>
+        <source>Battery Status</source>
+        <translation>배터리 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="69"/>
+        <source>Battery %1</source>
+        <translation>배터리 %1</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="70"/>
+        <source>Charge State</source>
+        <translation>충전 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="71"/>
+        <source>Remaining Time</source>
+        <translation>남은시간</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="72"/>
+        <source>Remaining</source>
+        <translation>잔량</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="73"/>
+        <source>Voltage</source>
+        <translation>전압</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="74"/>
+        <source>Current</source>
+        <translation>전류</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="75"/>
+        <source>Consumed</source>
+        <translation>소모량</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="75"/>
+        <source>Temperature</source>
+        <translation>온도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="75"/>
+        <source>Function</source>
+        <translation>기능</translation>
+    </message>
+</context>
+<context>
     <name>BlankPlanCreator</name>
     <message>
         <location filename="../src/MissionManager/BlankPlanCreator.cc" line="16"/>
