@@ -29,7 +29,7 @@ Rectangle {
     height:     mainLayout.height + (_margins * 2)
     width:      mainLayout.width //+ (_margins * 2)
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-    radius:     _margins
+    radius:     _margins + (ScreenTools.defaultFontPixelWidth * 2.5)
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:                                   ScreenTools.defaultFontPixelHeight / 2
@@ -165,7 +165,7 @@ Rectangle {
             Layout.alignment:   Qt.AlignHCenter
             Layout.margins:     _margins
             width:              ScreenTools.defaultFontPixelWidth * 10
-            height:             width / 2
+            height:             width * 0.5
             color:              qgcPal.window
             radius:             height * 0.5
             border.color:       qgcPal.colorGrey
