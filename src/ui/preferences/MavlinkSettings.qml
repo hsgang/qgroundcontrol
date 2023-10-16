@@ -29,6 +29,8 @@ Rectangle {
 
     property real _labelWidth:          ScreenTools.defaultFontPixelWidth * 28
     property real _valueWidth:          ScreenTools.defaultFontPixelWidth * 24
+    property real _borderWidth:         ScreenTools.defaultFontPixelWidth * 0.2
+    property real _margins:             ScreenTools.defaultFontPixelWidth
     property int  _selectedCount:       0
     property real _columnSpacing:       ScreenTools.defaultFontPixelHeight * 0.25
     property bool _uploadedSelected:    false
@@ -115,9 +117,13 @@ Rectangle {
             Rectangle {
                 height:         gcsColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShadeLight
+                color:          qgcPal.window
+                border.color:   qgcPal.windowShade
+                border.width:   _borderWidth
+                radius:         _margins
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
+
                 Column {
                     id:         gcsColumn
                     spacing:    _columnSpacing
@@ -206,7 +212,10 @@ Rectangle {
             Rectangle {
                 height:                     streamRatesColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:                      __mavlinkRoot.width * 0.8
-                color:                      qgcPal.windowShadeLight
+                color:                      qgcPal.window
+                border.color:               qgcPal.windowShade
+                border.width:               _borderWidth
+                radius:                     _margins
                 anchors.margins:            ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter:   parent.horizontalCenter
                 visible:                    _showAPMStreamRates && _isAPM
@@ -295,7 +304,10 @@ Rectangle {
             Rectangle {
                 height:         mavStatusColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShadeLight
+                color:          qgcPal.window
+                border.color:   qgcPal.windowShade
+                border.width:   _borderWidth
+                radius:         _margins
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
                 Column {
@@ -382,7 +394,10 @@ Rectangle {
             Rectangle {
                 height:         mavlogColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShadeLight
+                color:          qgcPal.window
+                border.color:   qgcPal.windowShade
+                border.width:   _borderWidth
+                radius:         _margins
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible:        _showMavlinkLog && _isPX4
@@ -445,7 +460,10 @@ Rectangle {
             Rectangle {
                 height:         logColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShadeLight
+                color:          qgcPal.window
+                border.color:   qgcPal.windowShade
+                border.width:   _borderWidth
+                radius:         _margins
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible:        _showMavlinkLog && _isPX4
@@ -684,7 +702,10 @@ Rectangle {
             Rectangle {
                 height:         logFilesColumn.height + (ScreenTools.defaultFontPixelHeight * 2)
                 width:          __mavlinkRoot.width * 0.8
-                color:          qgcPal.windowShadeLight
+                color:          qgcPal.window
+                border.color:   qgcPal.windowShade
+                border.width:   _borderWidth
+                radius:         _margins
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible:        _showMavlinkLog
