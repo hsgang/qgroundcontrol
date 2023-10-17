@@ -16,51 +16,14 @@ Rectangle {
     id:     missionProgressRect
     height: childrenRect.height//ScreenTools.defaultFontPixelHeight * 3.2 // missionStats.height + _margins
     width:  childrenRect.width//missionStatsGrid.width + _margins * 2
-    //color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-    //border.color: "white"
     color: "transparent"
     radius: _margins
 
-//    FactPanelController {
-//        id: controller
-//        // You can initialize the FactPanelController here, if needed
-//    }
-
-//    property bool parameterAvailable:   QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable
+//    property bool parameterAvailable:   _activeVehicle && QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable
 //    property Fact wpnavSpeed:           parameterAvailable ? controller.getParameterFact(-1, "WPNAV_SPEED") : null
 //    property string wpnavSpeedString:   parameterAvailable ? wpnavSpeed.valueString + " " + wpnavSpeed.units : "unknown"
 
-//    Component {
-//        id: factComponent
-
-//        QGCLabel {
-//            id: label
-//            text: wpnavSpeedString
-//            anchors.bottom: parent.bottom
-//            anchors.left: parent.left
-//        }
-//    }
-
-//     Loader {
-//        id: componentLoader
-//        sourceComponent: null // Initially, set it to null
-//        onLoaded: {
-//            // When the component is loaded, check if all parameters are available
-//            if (parameterAvailable) {
-//                componentLoader.sourceComponent = factComponent;
-//            }
-//        }
-//    }
-
-//    Connections {
-//        target: QGroundControl.multiVehicleManager
-//        onParameterReadyVehicleAvailableChanged: {
-//            if (parameterAvailable && !componentLoader.sourceComponent) {
-//                // If all parameters are available and the component is not loaded, load it
-//                componentLoader.sourceComponent = factComponent;
-//            }
-//        }
-//    }
+//    FactPanelController { id: controller; }
 
 // form
     property real   _dataFontSize:              ScreenTools.defaultFontPointSize * 0.8
@@ -71,9 +34,8 @@ Rectangle {
     property real   _rowSpacing:                ScreenTools.isMobile ? 1 : 0
 
 // Vehicle
-    property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
+    property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle
     property real   _heading:               _activeVehicle   ? _activeVehicle.heading.rawValue : 0
-    property bool   _available:             !isNaN(_activeVehicle.vibration.xAxis.rawValue)
 
     property real   _vehicleAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : 0
     property real   _vehicleVerticalSpeed:      _activeVehicle ? _activeVehicle.climbRate.rawValue : 0
