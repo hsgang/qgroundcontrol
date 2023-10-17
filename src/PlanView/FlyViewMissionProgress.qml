@@ -43,6 +43,7 @@ Rectangle {
     property real   _latitude:                  _activeVehicle ? _activeVehicle.gps.lat.rawValue : NaN
     property real   _longitude:                 _activeVehicle ? _activeVehicle.gps.lon.rawValue : NaN
     property real   _flightDistance:            _activeVehicle ? _activeVehicle.flightDistance.rawValue : 20
+    property real   _cameraTriggerCount:        _activeVehicle ? _activeVehicle.cameraTriggerPoints.count : 0
     property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_vehicleAltitude).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
     property string _vehicleVerticalSpeedText:  isNaN(_vehicleVerticalSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleVerticalSpeed).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsSpeedUnitsString
     property string _vehicleGroundSpeedText:    isNaN(_vehicleGroundSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleGroundSpeed).toFixed(1)
@@ -313,6 +314,14 @@ Rectangle {
                     QGCLabel { text: qsTr("Mission Seq: "); font.pointSize: _dataFontSize; opacity: 0.7; }
                     QGCLabel {
                         text:                   _missionItemIndex + " / " + (_missionItemCount -1)
+                        font.pointSize:         _dataFontSize
+                        Layout.minimumWidth:    _largeValueWidth
+                        horizontalAlignment:    Text.AlignRight
+                    }
+
+                    QGCLabel { text: qsTr("Captures: "); font.pointSize: _dataFontSize; opacity: 0.7; }
+                    QGCLabel {
+                        text:                   _cameraTriggerCount
                         font.pointSize:         _dataFontSize
                         Layout.minimumWidth:    _largeValueWidth
                         horizontalAlignment:    Text.AlignRight
