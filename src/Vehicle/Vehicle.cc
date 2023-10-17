@@ -3874,8 +3874,9 @@ QString Vehicle::followFlightMode() const
 
 QString Vehicle::vehicleImageOpaque() const
 {
-    if(_firmwarePlugin)
-        return _firmwarePlugin->vehicleImageOpaque(this);
+    QString vehicleType = vehicleTypeString();
+    if(_firmwarePlugin)        
+        return _firmwarePlugin->vehicleImageOpaque(this, vehicleType);
     else
         return QString();
 }

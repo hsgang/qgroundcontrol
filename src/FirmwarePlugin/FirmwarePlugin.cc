@@ -307,9 +307,24 @@ int FirmwarePlugin::remapParamNameHigestMinorVersionNumber(int) const
     return 0;
 }
 
-QString FirmwarePlugin::vehicleImageOpaque(const Vehicle*) const
+QString FirmwarePlugin::vehicleImageOpaque(const Vehicle*, QString vehicleType) const
 {
-    return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
+    if (vehicleType == tr("Airship")) {
+        return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
+    } else if (vehicleType == tr("Fixed Wing")) {
+        return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
+    } else if (vehicleType == tr("Multi-Rotor")) {
+        return QStringLiteral("/qmlimages/vehicleQuadRotor.svg");
+    } else if (vehicleType == tr("VTOL")) {
+        return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
+    } else if (vehicleType == tr("Rover")) {
+        return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
+    } else if (vehicleType == tr("Sub")) {
+        return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
+    } else {
+        return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
+    }
+    //return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
 }
 
 QString FirmwarePlugin::vehicleImageOutline(const Vehicle*) const
