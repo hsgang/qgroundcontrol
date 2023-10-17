@@ -145,7 +145,7 @@ Item {
                 if (battery.chargeState.rawValue) {
                     switch (battery.chargeState.rawValue) {
                     case MAVLink.MAV_BATTERY_CHARGE_STATE_OK:
-                        if(battery.percentRemaining.rawValue) {
+                        if(battery.percentRemaining.rawValue >= 0) {
                             if (battery.percentRemaining.rawValue < 15) {
                                 isBlink = true
                                 return qgcPal.colorRed
@@ -153,7 +153,9 @@ Item {
                                 return qgcPal.colorOrange
                             }else if (battery.percentRemaining.rawValue >=30 ) {
                                 return qgcPal.colorGreen //qgcPal.text
-                            }
+                            }                            
+                        } else {
+                            return qgcPal.text
                         }
                         break;
                         //return qgcPal.colorGreen //qgcPal.text
@@ -168,8 +170,7 @@ Item {
                     default:
                         return qgcPal.text
                     }
-                }
-                else if(battery.percentRemaining.rawValue) {
+                } else if(battery.percentRemaining.rawValue) {
                     if (battery.percentRemaining.rawValue < 15 ) {
                         isBlink = true
                         return qgcPal.colorRed
@@ -178,9 +179,7 @@ Item {
                     } else if (battery.percentRemaining.rawValue >=30 ) {
                         return qgcPal.colorGreen //qgcPal.text
                     }
-                }
-
-                else{
+                } else{
                     return qgcPal.text
                 }
             }
