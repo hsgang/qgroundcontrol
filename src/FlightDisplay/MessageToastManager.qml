@@ -20,7 +20,6 @@ Column{
     spacing:    0//ScreenTools.defaultFontPixelHeight * 0.2
     anchors.horizontalCenter:   parent.horizontalCenter
     anchors.bottom:             parent.bottom
-    anchors.margins:            _toolsMargin //ScreenTools.defaultFontPixelHeight
     width:                      Math.max(toastComponent.width, mainWindow.width * 0.2)
 
     property var toastComponent
