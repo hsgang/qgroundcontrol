@@ -333,6 +333,14 @@ Rectangle {
 //                        font.pointSize:         _dataFontSize
 //                        Layout.minimumWidth:    _largeValueWidth
 //                    }
+                    QGCButton {
+                        visible:            !(ScreenTools.isMobile)
+                        Layout.columnSpan:  2
+                        text:               "Reload Mission"
+                        onClicked: {
+                            _planMasterController.loadFromVehicle()
+                        }
+                    }
                 }
             }
         }
