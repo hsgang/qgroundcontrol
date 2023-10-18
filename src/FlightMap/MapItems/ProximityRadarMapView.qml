@@ -93,7 +93,7 @@ MapQuickItem {
                 ctx.strokeStyle = Qt.rgba(1, 0, 0, 1);
                 for(var i=0; i<proximityValues.rgRotationValues.length; i++){
                     var rotationValue = proximityValues.rgRotationValues[i]
-                    if (!isNaN(rotationValue)) {
+                    if (!isNaN(rotationValue) && (rotationValue < proximityValues.maxDistance)) {
                         var a=deg2rad(360-22.5)+Math.PI/4*i;
                         ctx.beginPath();
                         ctx.arc(0, 0, rotationValue * _ratio, a, a + Math.PI/4,false);
