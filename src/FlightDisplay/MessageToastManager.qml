@@ -17,11 +17,11 @@ Column{
     }
 
     z: Infinity
-    spacing:    ScreenTools.defaultFontPixelHeight * 0.5
+    spacing:    0//ScreenTools.defaultFontPixelHeight * 0.2
     anchors.horizontalCenter:   parent.horizontalCenter
-    anchors.top:                parent.top
-    anchors.margins:            ScreenTools.defaultFontPixelHeight
-    width:                      mainWindow.width * 0.5
+    anchors.bottom:             parent.bottom
+    anchors.margins:            _toolsMargin //ScreenTools.defaultFontPixelHeight
+    width:                      Math.max(toastComponent.width, mainWindow.width * 0.2)
 
     property var toastComponent
 

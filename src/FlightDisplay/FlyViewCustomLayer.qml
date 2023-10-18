@@ -263,9 +263,10 @@ Item {
         anchors.margins:            _toolsMargin
         anchors.bottom:             attitudeIndicator.top
         anchors.horizontalCenter:   parent.horizontalCenter
-        width:                      mainWindow.width  * 0.5
-        height:                     messageToastManager.height < mainWindow.height * 0.15 ? messageToastManager.height : mainWindow.height * 0.15
-        color:                      "transparent" //qgcPal.window
+        width:                      messageToastManager.width //mainWindow.width  * 0.4
+        height:                     messageToastManager.height < mainWindow.height * 0.14 ? messageToastManager.height : mainWindow.height * 0.14
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.4) //"transparent" //qgcPal.window
+        radius:                     _toolsMargin
         visible:                    messageFlick.contentHeight
 
         QGCFlickable {

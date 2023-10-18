@@ -10,7 +10,7 @@ Rectangle{
 
     id: root
 
-    property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
+    property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.5
 
     function show(text, duration){
         theText.text = text;
@@ -32,7 +32,7 @@ Rectangle{
     readonly property real fadeTime: 300
 
     width: theText.width + _toolsMargin * 3
-    height: theText.height // _toolsMargin
+    height: theText.height + _toolsMargin * 0.5 // _toolsMargin
     radius: _toolsMargin
 
     anchors.horizontalCenter: parent.horizontalCenter
@@ -56,13 +56,13 @@ Rectangle{
 //        wrapMode: Text.WordWrap
 //    }
 
-    Glow {
-        anchors.fill: theText
-        radius: 2
-        samples: 5
-        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-        source: theText
-    }
+//    Glow {
+//        anchors.fill: theText
+//        radius: 2
+//        samples: 5
+//        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+//        source: theText
+//    }
 
     QGCLabel{
         id: theText
