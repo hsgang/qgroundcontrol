@@ -5595,6 +5595,41 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>FirmwarePlugin</name>
     <message>
+        <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="558"/>
+        <source>MAVLink Generic</source>
+        <translation>일반 MAVLink</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="312"/>
+        <source>Airship</source>
+        <translation>비행선</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="314"/>
+        <source>Fixed Wing</source>
+        <translation>고정익</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="316"/>
+        <source>Multi-Rotor</source>
+        <translation>멀티로터</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="318"/>
+        <source>VTOL</source>
+        <translation>수직이착륙기(VTOL)</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="320"/>
+        <source>Rover</source>
+        <translation>로버</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="322"/>
+        <source>Sub</source>
+        <translation>잠수정</translation>
+    </message>
+    <message>
         <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="347"/>
         <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="364"/>
         <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="381"/>
@@ -6925,9 +6960,14 @@ Click Ok to start the auto-tuning process.
         <translation>임무 시간: </translation>
     </message>
     <message>
-        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="176"/>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="314"/>
         <source>Mission Seq: </source>
         <translation>경로 항목: </translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="322"/>
+        <source>Captures: </source>
+        <translation>촬영: </translation>
     </message>
 </context>
 <context>
@@ -12821,12 +12861,12 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="156"/>
         <source>Discard Unsaved Changes</source>
-        <translation>저장되지 않은 변경 사항 삭제.</translation>
+        <translation>저장되지 않은 변경 사항 삭제</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="157"/>
         <source>Discard Unsaved Changes, Load New Plan From Vehicle</source>
-        <translation>저장하지 않은 변경 사항 삭제, 연결 된 기체에서 플랜 가져오기.</translation>
+        <translation>연결된 기체에서 플랜 가져오기</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="158"/>
@@ -12841,7 +12881,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="170"/>
         <source>Keep Current Plan, Don&apos;t Update From Vehicle</source>
-        <translation>현재 플랜 유지, 기체에 업로드 하지 않음</translation>
+        <translation>작성 중인 플랜 유지</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="187"/>
