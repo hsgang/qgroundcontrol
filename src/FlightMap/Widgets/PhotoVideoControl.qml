@@ -107,8 +107,7 @@ Rectangle {
 
     function toggleShooting() {
         console.log("toggleShooting", _anyVideoStreamAvailable)
-        console.log("_mavlinkCameraManagerCurCameraIndex :"+ _mavlinkCameraManagerCurCameraIndex)
-        if (_mavlinkCamera) { // && _mavlinkCamera.capturesVideo || _mavlinkCamera.capturesPhotos ) {
+        if (_mavlinkCamera && (_mavlinkCamera.capturesVideo || _mavlinkCamera.capturesPhotos) ) {
             if(_mavlinkCameraInVideoMode) {
                 _mavlinkCamera.toggleVideo()
             } else {
