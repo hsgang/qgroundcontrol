@@ -40,6 +40,51 @@ MapQuickItem {
     property real   _windSpdValue:          object ? object.atmosphericSensor.windSpd.rawValue.toFixed(1) : 0
     property real   _altitudeValue:         object ? object.altitudeRelative.rawValue.toFixed(1) : 0
 
+    property bool   _healthAndArmingChecksSupported: object ? object.healthAndArmingCheckReport.supported : false
+
+    property string _readyToFlyText:    qsTr("Ready To Fly")
+    property string _notReadyToFlyText: qsTr("Not Ready")
+    property string _armedText:         qsTr("Armed")
+    property string _flyingText:        qsTr("Flying")
+    property string _landingText:       qsTr("Landing")
+
+    function mainStatusText() {
+        if (object) {
+            if (object.armed) {
+                if (object.flying) {
+                    return _flyingText
+                } else if (object.landing) {
+                    return _landingText
+                } else {
+                    return _armedText
+                }
+            } else {
+                if (_healthAndArmingChecksSupported) {
+                    if (object.healthAndArmingCheckReport.canArm) {
+                        return _readyToFlyText
+                    } else {
+                        return _notReadyToFlyText
+                    }
+                } else if (object.readyToFlyAvailable) {
+                    if (object.readyToFly) {
+                        return _readyToFlyText
+                    } else {
+                        return _notReadyToFlyText
+                    }
+                } else {
+                    // Best we can do is determine readiness based on AutoPilot component setup and health indicators from SYS_STATUS
+                    if (object.allSensorsHealthy && object.autopilot.setupComplete) {
+                        return _readyToFlyText
+                    } else {
+                        return _notReadyToFlyText
+                    }
+                }
+            }
+        } else {
+            return "Unknown"
+        }
+    }
+
     sourceItem: Item {
         id:         vehicleItem
 
@@ -154,7 +199,7 @@ MapQuickItem {
 
                     QGCLabel { text: qsTr("STS"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
                     QGCLabel {
-                        text: object && object.armed ? qsTr("Armed") : qsTr("Disarmed")
+                        text: mainStatusText()
                         width: ScreenTools.defaultFontPixelHeight * 11
                         Layout.alignment: Qt.AlignCenter
                     }
