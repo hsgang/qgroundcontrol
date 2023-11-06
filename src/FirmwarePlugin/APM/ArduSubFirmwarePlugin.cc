@@ -306,7 +306,7 @@ APMSubmarineFactGroup::APMSubmarineFactGroup(QObject* parent)
 
 }
 
-QString ArduSubFirmwarePlugin::vehicleImageOpaque(const Vehicle* vehicle) const
+QString ArduSubFirmwarePlugin::vehicleImageOpaque(const Vehicle* vehicle, QString vehicleType) const
 {
     Q_UNUSED(vehicle);
     return QStringLiteral("/qmlimages/subVehicleArrowOpaque.png");
@@ -314,7 +314,7 @@ QString ArduSubFirmwarePlugin::vehicleImageOpaque(const Vehicle* vehicle) const
 
 QString ArduSubFirmwarePlugin::vehicleImageOutline(const Vehicle* vehicle) const
 {
-    return vehicleImageOpaque(vehicle);
+    return vehicleImageOpaque(vehicle, "sub");
 }
 
 void ArduSubFirmwarePlugin::adjustMetaData(MAV_TYPE vehicleType, FactMetaData* metaData)

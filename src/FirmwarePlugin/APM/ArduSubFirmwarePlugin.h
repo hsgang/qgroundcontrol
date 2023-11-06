@@ -125,7 +125,7 @@ public:
     bool supportsMotorInterference(void) final;
 
     /// Return the resource file which contains the vehicle icon used in the flight view when the view is dark (Satellite for instance)
-    virtual QString vehicleImageOpaque(const Vehicle* vehicle) const final;
+    virtual QString vehicleImageOpaque(const Vehicle* vehicle, QString vehicleType) const final;
 
     /// Return the resource file which contains the vehicle icon used in the flight view when the view is light (Map for instance)
     virtual QString vehicleImageOutline(const Vehicle* vehicle) const final;
