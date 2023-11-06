@@ -235,9 +235,9 @@ Rectangle {
                     anchors.horizontalCenter:   background.horizontalCenter
                     anchors.verticalCenter:     background.verticalCenter
                     horizontalAlignment:        Text.AlignVCenter
-                    wrapMode:                   Text.WordWrap
+                    //wrapMode:                   Text.WordWrap
                     font.bold:                  true
-                    font.pointSize:             ScreenTools.defaultFontPointSize * 1.2
+                    font.pointSize:             ScreenTools.defaultFontPointSize
                 }
             }
 

@@ -28,6 +28,7 @@ ToolStripActionList {
         GuidedActionDisarm { },
         GuidedActionTakeoff { },
         GuidedActionLand { },
+        GuidedActionMission { },
         GuidedActionRTL { },
         GuidedActionPause { },
         GuidedActionActionList { },
