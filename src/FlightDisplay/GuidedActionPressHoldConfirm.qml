@@ -37,7 +37,7 @@ Item {
     Component.onCompleted: guidedController.confirmDialog = this
 
     property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 30
-    property int    size: _rightPanelWidth * 0.65
+    property int    size: _rightPanelWidth * 0.6
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
