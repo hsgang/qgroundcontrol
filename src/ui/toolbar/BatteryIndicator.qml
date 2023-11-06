@@ -152,6 +152,7 @@ Item {
                             }else if (battery.percentRemaining.rawValue < 30) {
                                 return qgcPal.colorOrange
                             }else if (battery.percentRemaining.rawValue >=30 ) {
+                                isBlink = false
                                 return qgcPal.colorGreen //qgcPal.text
                             }                            
                         } else {
@@ -168,6 +169,7 @@ Item {
                         isBlink = true
                         return qgcPal.colorRed
                     default:
+                        isBlink = false
                         return qgcPal.text
                     }
                 } else if(battery.percentRemaining.rawValue) {
@@ -177,6 +179,7 @@ Item {
                     } else if (battery.percentRemaining.rawValue < 30 ) {
                         return qgcPal.colorOrange
                     } else if (battery.percentRemaining.rawValue >=30 ) {
+                        isBlink = false
                         return qgcPal.colorGreen //qgcPal.text
                     }
                 } else{
