@@ -236,6 +236,16 @@ Item {
         height:                 width
     }
 
+    WinchControlPanel {
+        id:                     winchControlPanel
+        anchors.margins:        _toolsMargin
+        anchors.right:          photoVideoControl.visible ? photoVideoControl.left : parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        width:                  ScreenTools.defaultFontPixelWidth * 10
+        height:                 ScreenTools.defaultFontPixelWidth * 40
+        visible:                false
+    }
+
     // need to manage full screen here
     FlyViewVideoToolStrip {
         id:                         videoToolStrip
@@ -363,80 +373,88 @@ Item {
             title:      qsTr("FlyView Widget Settings")
             buttons:    StandardButton.Close
 
-            GridLayout{
-                id:     quickViewControlStripGrid
-                flow:   GridLayout.TopToBottom
-                rows:   9
-                rowSpacing: _margins * 2
+            RowLayout{
+                spacing: _margins * 5
 
-                QGCSwitch {
-                    checked:            photoVideoControl.visible
-                    onClicked:          photoVideoControl.visible = !photoVideoControl.visible
-                }
-                QGCSwitch {
-                    checked:            telemetryPanel.visible
-                    onClicked:          telemetryPanel.visible = !telemetryPanel.visible
-                }
-                QGCSwitch {
-                    checked:            flyViewChartWidget.visible
-                    onClicked:          flyViewChartWidget.visible = !flyViewChartWidget.visible
-                }
-                QGCSwitch {
-                    checked:            QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue === true ? 1 : 0
-                    onClicked:          QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue = checked ? 1 : 0
-                }
-                QGCSwitch {
-                    checked:            weatherWidget.visible
-                    onClicked:          {
-                        weatherWidget.visible = !weatherWidget.visible
-                        //weatherWidget.getWeatherJSON()
+                GridLayout{
+                    id:     quickViewControlStripGrid
+                    flow:   GridLayout.LeftToRight //TopToBottom
+                    columns: 2
+                    rowSpacing: _margins * 2
+
+                    QGCLabel{ text: qsTr("Payload Widget"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
+
+                    QGCLabel{ text: qsTr("PhotoVideo Control") }
+                    QGCSwitch {
+                        checked:            photoVideoControl.visible
+                        onClicked:          photoVideoControl.visible = !photoVideoControl.visible
+                    }
+
+                    QGCLabel{ text: qsTr("Mount Control") }
+                    QGCSwitch {
+                        checked:            QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue === true ? 1 : 0
+                        onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
+                    }
+
+                    QGCLabel{ text: qsTr("Winch Control") }
+                    QGCSwitch {
+                        checked:            winchControlPanel.visible
+                        onClicked:          winchControlPanel.visible = !winchControlPanel.visible
+                    }
+
+                    QGCLabel{ text: qsTr("Chart Widget") }
+                    QGCSwitch {
+                        checked:            flyViewChartWidget.visible
+                        onClicked:          flyViewChartWidget.visible = !flyViewChartWidget.visible
+                    }
+
+                    QGCLabel{ text: qsTr("Atmospheric Data") }
+                    QGCSwitch {
+                        checked:            QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue === true ? 1 : 0
+                        onClicked:          QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue = checked ? 1 : 0
                     }
                 }
-                QGCSwitch {
-                    checked:            flyviewMissionProgress.visible
-                    onClicked:          flyviewMissionProgress.visible = !flyviewMissionProgress.visible
-                }
-                QGCSwitch {
-                    checked:            QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue === true ? 1 : 0
-                    onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
-                }
 
-                QGCSwitch {
-                    checked:            flyviewVibrationStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
-                    onClicked:          flyviewVibrationStatus.visible = !flyviewVibrationStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
-                }
+                GridLayout{
+                    id:     quickViewControlStripGrid2
+                    flow:   GridLayout.LeftToRight //TopToBottom
+                    columns: 2
+                    rowSpacing: _margins * 2
 
-                QGCSwitch {
-                    checked:            flyviewEKFStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
-                    onClicked:          flyviewEKFStatus.visible = !flyviewEKFStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
-                }
+                    QGCLabel{ text: qsTr("Status Widget"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
 
-                QGCLabel{
-                    text:               qsTr("PhotoVideo Control")
-                }
-                QGCLabel{
-                    text:               qsTr("Telemetry Panel")
-                }
-                QGCLabel{
-                    text:               qsTr("Chart Widget")
-                }
-                QGCLabel{
-                    text:               qsTr("Atmospheric Data")
-                }
-                QGCLabel{
-                    text:               qsTr("Weather Widget")
-                }
-                QGCLabel{
-                    text:               qsTr("Mission Progress Bar")
-                }
-                QGCLabel{
-                    text:               qsTr("Mount Control")
-                }
-                QGCLabel{
-                    text:               qsTr("Vibration Status")
-                }
-                QGCLabel{
-                    text:               qsTr("EKF Status")
+                    QGCLabel{ text: qsTr("Mission Progress Bar") }
+                    QGCSwitch {
+                        checked:            flyviewMissionProgress.visible
+                        onClicked:          flyviewMissionProgress.visible = !flyviewMissionProgress.visible
+                    }
+
+                    QGCLabel{ text: qsTr("Telemetry Panel") }
+                    QGCSwitch {
+                        checked:            telemetryPanel.visible
+                        onClicked:          telemetryPanel.visible = !telemetryPanel.visible
+                    }
+
+                    QGCLabel{ text: qsTr("Weather Widget") }
+                    QGCSwitch {
+                        checked:            weatherWidget.visible
+                        onClicked:          {
+                            weatherWidget.visible = !weatherWidget.visible
+                            //weatherWidget.getWeatherJSON()
+                        }
+                    }
+
+                    QGCLabel{ text: qsTr("Vibration Status") }
+                    QGCSwitch {
+                        checked:            flyviewVibrationStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
+                        onClicked:          flyviewVibrationStatus.visible = !flyviewVibrationStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
+                    }
+
+                    QGCLabel{ text: qsTr("EKF Status") }
+                    QGCSwitch {
+                        checked:            flyviewEKFStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
+                        onClicked:          flyviewEKFStatus.visible = !flyviewEKFStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
+                    }
                 }
             }
         }

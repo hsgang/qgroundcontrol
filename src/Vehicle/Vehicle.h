@@ -52,6 +52,7 @@
 #include "VehicleLandingTargetFactGroup.h"
 #include "HealthAndArmingCheckReport.h"
 #include "ExternalPowerStatusFactGroup.h"
+#include "WinchStatusFactGroup.h"
 #include "TunnelingDataFactGroup.h"
 #include "TerrainQuery.h"
 #include "StandardModes.h"
@@ -347,6 +348,7 @@ public:
     Q_PROPERTY(FactGroup*           tunnelingData   READ tunnelingDataFactGroup     CONSTANT)
     Q_PROPERTY(FactGroup*           generatorStatus READ generatorStatusFactGroup   CONSTANT)
     Q_PROPERTY(FactGroup*           externalPowerStatus READ externalPowerStatusFactGroup CONSTANT)
+    Q_PROPERTY(FactGroup*           winchStatus     READ winchStatusFactGroup       CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
     Q_PROPERTY(FactGroup*           landingTarget   READ landingTargetFactGroup     CONSTANT)
     Q_PROPERTY(HealthAndArmingCheckReport* healthAndArmingCheckReport READ healthAndArmingCheckReport CONSTANT)
@@ -481,6 +483,7 @@ public:
     Q_INVOKABLE void releaseGimbalControl();
     Q_INVOKABLE void setGimbalRcTargeting();
     Q_INVOKABLE void setGimbalHomeTargeting();
+    Q_INVOKABLE void winchControlValue (float value);
     
     Q_INVOKABLE void forceArm           ();
 
@@ -763,6 +766,7 @@ public:
     FactGroup* tunnelingDataFactGroup       () { return &_tunnelingDataFactGroup; }
     FactGroup* generatorStatusFactGroup     () { return &_generatorStatusFactGroup; }
     FactGroup* externalPowerStatusFactGroup () { return &_externalPowerStatusFactGroup; }
+    FactGroup* winchStatusFactGroup         () { return &_winchStatusFactGroup; }
     FactGroup* landingTargetFactGroup       () { return &_landingTargetFactGroup; }
 
     MissionManager*                 missionManager      () { return _missionManager; }
@@ -1415,7 +1419,7 @@ private:
     QTimer                          _mavCommandResponseCheckTimer;
     static const int                _mavCommandMaxRetryCount                = 3;
     static const int                _mavCommandResponseCheckTimeoutMSecs    = 500;
-    static const int                _mavCommandAckTimeoutMSecs              = 3000;
+    static const int                _mavCommandAckTimeoutMSecs              = 1000;
     static const int                _mavCommandAckTimeoutMSecsHighLatency   = 120000;
 
     void _sendMavCommandWorker  (bool commandInt, bool showError, MavCmdResultHandler resultHandler, void* resultHandlerData, int compId, MAV_CMD command, MAV_FRAME frame, float param1, float param2, float param3, float param4, double param5, double param6, float param7);
@@ -1485,6 +1489,7 @@ private:
     TunnelingDataFactGroup          _tunnelingDataFactGroup;
     GeneratorStatusFactGroup        _generatorStatusFactGroup;
     ExternalPowerStatusFactGroup    _externalPowerStatusFactGroup;
+    WinchStatusFactGroup            _winchStatusFactGroup;
     VehicleLandingTargetFactGroup   _landingTargetFactGroup;
 
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
@@ -1550,6 +1555,7 @@ private:
     static const char* _tunnelingDataFactGroupName;
     static const char* _generatorStatusFactGroupName;
     static const char* _externalPowerStatusFactGroupName;
+    static const char* _winchStatusFactGroupName;
     static const char* _landingTargetFactGroupName;
 
     static const int _vehicleUIUpdateRateMSecs      = 100;

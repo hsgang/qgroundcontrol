@@ -1,0 +1,63 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "timeUsec",
+    "shortDesc": "TimeUsec",
+    "type":             "uint64",
+    "decimalPlaces":    0,
+    "units":            "us"
+},
+{
+    "name":             "lineLength",
+    "shortDesc": "LineLength",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "units":            "m"
+},
+{
+    "name":             "speed",
+    "shortDesc": "Speed",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "units":            "m/s"
+},
+{
+    "name":             "tension",
+    "shortDesc": "Tension",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "units":            "kg"
+},
+{
+    "name":             "voltage",
+    "shortDesc": "Voltage",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "units":            "V"
+},
+{
+    "name":             "current",
+    "shortDesc": "Current",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "units":            "A"
+},
+{
+    "name":             "temperature",
+    "shortDesc": "Temperature",
+    "type":             "int16",
+    "decimalPlaces":    0,
+    "units":            "degC"
+},
+{
+    "name":             "status",
+    "shortDesc": "Status",
+    "type":             "uint32",
+    "enumStrings":      "Healthy, Fully_Retracted, Moving, Clutch_Engaged, Locked, Dropping, Arresting, Ground_Sense, Retracting, Redeliver, Abandon_Line, Locking, Load_Line, Load_Payload",
+    "enumValues":       "1,2,4,8,16,32,64,128,256,512,1024,2048,4096,8192"
+}
+]
+}

@@ -122,6 +122,7 @@ const char* Vehicle::_generatorStatusFactGroupName =    "generatorStatus";
 const char* Vehicle::_hygrometerFactGroupName =         "hygrometer";
 const char* Vehicle::_landingTargetFactGroupName =      "landingTarget";
 const char* Vehicle::_externalPowerStatusFactGroupName = "externalPower";
+const char* Vehicle::_winchStatusFactGroupName =        "winch";
 
 static int jsonLogSeq = 0;
 static QString StartTime;
@@ -199,6 +200,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _tunnelingDataFactGroup       (this)
     , _generatorStatusFactGroup     (this)
     , _externalPowerStatusFactGroup (this)
+    , _winchStatusFactGroup         (this)
     , _landingTargetFactGroup       (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
 {
@@ -351,6 +353,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _tunnelingDataFactGroup           (this)
     , _generatorStatusFactGroup         (this)
     , _externalPowerStatusFactGroup     (this)
+    , _winchStatusFactGroup             (this)
     , _landingTargetFactGroup           (this)
 {
     _linkManager = _toolbox->linkManager();
@@ -501,6 +504,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_tunnelingDataFactGroup,     _tunnelingDataFactGroupName);
     _addFactGroup(&_generatorStatusFactGroup,   _generatorStatusFactGroupName);
     _addFactGroup(&_externalPowerStatusFactGroup,_externalPowerStatusFactGroupName);
+    _addFactGroup(&_winchStatusFactGroup,       _winchStatusFactGroupName);
     _addFactGroup(&_landingTargetFactGroup,     _landingTargetFactGroupName);
 
     // Add firmware-specific fact groups, if provided
@@ -4933,4 +4937,18 @@ void Vehicle::sendGripperAction(GRIPPER_OPTIONS gripperOption)
         default: 
         break;
     }
+}
+
+void Vehicle::winchControlValue(float value)
+{
+    sendMavCommand(
+            MAV_COMP_ID_WINCH, //169, //_defaultComponentId,
+            MAV_CMD_DO_WINCH,
+            false,
+            1, // winch instance number, 1 is default
+            2, // action to perform, 2 is WINCH_RATE_CONTROL
+            0, // length - length of line to release (m)
+            value, // rate - release rate(m/s)
+            0,0,0);
+    qCDebug(VehicleLog)<< "send command to winch value : " << value;
 }

@@ -448,6 +448,7 @@ HEADERS += \
     src/Vehicle/VehicleEKFStatusFactGroup.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
     src/Vehicle/VehicleLandingTargetFactGroup.h \
+    src/Vehicle/WinchStatusFactGroup.h \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
     src/api/QGCSettings.h \
@@ -473,6 +474,7 @@ SOURCES += \
     src/Vehicle/VehicleEKFStatusFactGroup.cc \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/Vehicle/VehicleLandingTargetFactGroup.cc \
+    src/Vehicle/WinchStatusFactGroup.cc \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \

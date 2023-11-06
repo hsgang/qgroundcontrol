@@ -327,6 +327,8 @@
         <file alias="QGroundControl/FlightDisplay/SIYICameraControl.qml">src/FlightMap/Widgets/SIYICameraControl.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionArm.qml">src/FlightDisplay/GuidedActionArm.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionDisarm.qml">src/FlightDisplay/GuidedActionDisarm.qml</file>
+        <file alias="QGroundControl/FlightDisplay/GuidedActionMission.qml">src/FlightDisplay/GuidedActionMission.qml</file>
+        <file alias="QGroundControl/FlightMap/WinchControlPanel.qml">src/FlightMap/Widgets/WinchControlPanel.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
@@ -396,6 +398,7 @@
         <file alias="GimbalController.SettingsGroup.json">src/Settings/GimbalController.SettingsGroup.json</file>
         <file alias="Vehicle/EKFStatusFact.json">src/Vehicle/EKFStatusFact.json</file>
         <file alias="Vehicle/TunnelingDataFact.json">src/Vehicle/TunnelingDataFact.json</file>
+        <file alias="Vehicle/WinchStatusFactGroup.json">src/Vehicle/WinchStatusFactGroup.json</file>
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/comm/APMArduSubMockLink.params</file>
