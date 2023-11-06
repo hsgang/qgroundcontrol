@@ -61,7 +61,7 @@ FlightMap {
         _saveZoomLevelSetting = false
         if (pipMode) {
             if (QGroundControl.flightMapZoom > 3) {
-                zoomLevel = QGroundControl.flightMapZoom - 3
+                zoomLevel = QGroundControl.flightMapZoom - 1
             }
         } else {
             zoomLevel = QGroundControl.flightMapZoom
@@ -215,7 +215,7 @@ FlightMap {
     MapPolyline {
         id:         trajectoryPolyline
         line.width: 3
-        line.color: "red"
+        line.color: "#9c1bff"
         z:          QGroundControl.zOrderTrajectoryLines
         visible:    !pipMode
 
