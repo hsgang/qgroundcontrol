@@ -16781,17 +16781,17 @@ Confirm change?</source>
     <message>
         <location filename="../src/PlanView/TransectStyleComplexItemStats.qml" line="16"/>
         <source>Survey Area</source>
-        <translation>측량 구역</translation>
+        <translation>측량 면적</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransectStyleComplexItemStats.qml" line="19"/>
         <source>Photo Count</source>
-        <translation>사진 카운트</translation>
+        <translation>사진 촬영</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransectStyleComplexItemStats.qml" line="22"/>
         <source>Photo Interval</source>
-        <translation>사진 주기</translation>
+        <translation>촬영 간격</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransectStyleComplexItemStats.qml" line="23"/>
@@ -16802,6 +16802,11 @@ Confirm change?</source>
         <location filename="../src/PlanView/TransectStyleComplexItemStats.qml" line="25"/>
         <source>Trigger Distance</source>
         <translation>트리거 거리</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/TransectStyleComplexItemStats.qml" line="28"/>
+        <source>Side Distance</source>
+        <translation>경로 간격</translation>
     </message>
 </context>
 <context>

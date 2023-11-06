@@ -24,4 +24,8 @@ Grid {
 
     QGCLabel { text: qsTr("Trigger Distance") }
     QGCLabel { text: missionItem.cameraCalc.adjustedFootprintFrontal.valueString + " " + missionItem.cameraCalc.adjustedFootprintFrontal.units }
+
+    QGCLabel { text: qsTr("Side Distance") }
+    QGCLabel { text: missionItem.cameraCalc.adjustedFootprintSide.valueString + " " + missionItem.cameraCalc.adjustedFootprintSide.units }
+
 }

@@ -302,7 +302,7 @@ QString CameraCalc::canonicalCustomCameraName(void)
 QString CameraCalc::canonicalManualCameraName(void)
 {
     // This string should NOT be translated
-    return "Manual (no camera specs)";
+    return tr("Manual (no camera specs)");
 }
 
 QString CameraCalc::xlatCustomCameraName(void)
