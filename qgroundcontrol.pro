@@ -1179,7 +1179,6 @@ APMFirmwarePlugin {
         src/AutoPilotPlugins/APM/APMAirframeComponentController.h \
         src/AutoPilotPlugins/APM/APMAutoPilotPlugin.h \
         src/AutoPilotPlugins/APM/APMCameraComponent.h \
-        src/AutoPilotPlugins/APM/APMCompassCal.h \
         src/AutoPilotPlugins/APM/APMFlightModesComponent.h \
         src/AutoPilotPlugins/APM/APMFlightModesComponentController.h \
         src/AutoPilotPlugins/APM/APMFollowComponent.h \
@@ -1208,7 +1207,6 @@ APMFirmwarePlugin {
         src/AutoPilotPlugins/APM/APMAirframeComponentController.cc \
         src/AutoPilotPlugins/APM/APMAutoPilotPlugin.cc \
         src/AutoPilotPlugins/APM/APMCameraComponent.cc \
-        src/AutoPilotPlugins/APM/APMCompassCal.cc \
         src/AutoPilotPlugins/APM/APMFlightModesComponent.cc \
         src/AutoPilotPlugins/APM/APMFlightModesComponentController.cc \
         src/AutoPilotPlugins/APM/APMFollowComponent.cc \

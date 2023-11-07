@@ -421,6 +421,7 @@ void Vehicle::_commonInit()
     _vehicleLinkManager             = new VehicleLinkManager            (this);
 
     connect(_standardModes, &StandardModes::modesUpdated, this, &Vehicle::flightModesChanged);
+    connect(_standardModes, &StandardModes::modesUpdated, this, [this](){ Vehicle::flightModeChanged(flightMode()); });
 
     _parameterManager = new ParameterManager(this);
     connect(_parameterManager, &ParameterManager::parametersReadyChanged, this, &Vehicle::_parametersReady);
@@ -3133,6 +3134,18 @@ void Vehicle::sendMavCommandInt(int compId, MAV_CMD command, MAV_FRAME frame, bo
                           showError,
                           nullptr,      // resultHandler
                           nullptr,      // resultHandlerData
+                          compId,
+                          command,
+                          frame,
+                          param1, param2, param3, param4, param5, param6, param7);
+}
+
+void Vehicle::sendMavCommandIntWithHandler(MavCmdResultHandler resultHandler, void *resultHandlerData, int compId, MAV_CMD command, MAV_FRAME frame, float param1, float param2, float param3, float param4, double param5, double param6, float param7)
+{
+    _sendMavCommandWorker(true,                   // commandInt
+                          false,                  // showError
+                          resultHandler,
+                          resultHandlerData,
                           compId,
                           command,
                           frame,

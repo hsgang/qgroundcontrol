@@ -77,10 +77,14 @@ Item {
     property string   _openWeatherAPIkey:   QGroundControl.settingsManager ? QGroundControl.settingsManager.appSettings.openWeatherApiKey.value : null
     property string timeString   
 
+    // since this file is a placeholder for the custom layer in a standard build, we will just pass through the parent insets
     QGCToolInsets {
         id:                     _totalToolInsets
         leftEdgeTopInset:       0
         leftEdgeCenterInset:    0
+        id:                     _toolInsets
+        leftEdgeTopInset:       parentToolInsets.leftEdgeTopInset
+        leftEdgeCenterInset:    parentToolInsets.leftEdgeCenterInset
         leftEdgeBottomInset:    parentToolInsets.leftEdgeBottomInset
         rightEdgeTopInset:      parentToolInsets.rightEdgeTopInset
         rightEdgeCenterInset:   parentToolInsets.rightEdgeCenterInset
@@ -89,8 +93,8 @@ Item {
         topEdgeCenterInset:     parentToolInsets.topEdgeCenterInset
         topEdgeRightInset:      parentToolInsets.topEdgeRightInset
         bottomEdgeLeftInset:    parentToolInsets.bottomEdgeLeftInset
-        bottomEdgeCenterInset:  0
-        bottomEdgeRightInset:   0
+        bottomEdgeCenterInset:  parentToolInsets.bottomEdgeCenterInset
+        bottomEdgeRightInset:   parentToolInsets.bottomEdgeRightInset
     }
 
     TelemetryValuesBar {
