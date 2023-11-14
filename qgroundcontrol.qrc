@@ -329,7 +329,6 @@
         <file alias="QGroundControl/FlightDisplay/GuidedActionDisarm.qml">src/FlightDisplay/GuidedActionDisarm.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionMission.qml">src/FlightDisplay/GuidedActionMission.qml</file>
         <file alias="QGroundControl/FlightMap/WinchControlPanel.qml">src/FlightMap/Widgets/WinchControlPanel.qml</file>
-        <file alias="QGroundControl/Controls/MockLinkOptionsDlg.qml">src/comm/MockLinkOptionsDlg.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewInsetViewer.qml">src/FlightDisplay/FlyViewInsetViewer.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
