@@ -4,23 +4,23 @@ QT += androidextras
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-ANDROID_PACKAGE_SOURCE_DIR          = $$OUT_PWD/ANDROID_PACKAGE_SOURCE_DIR  # Tells Qt location of package files for build
-ANDROID_PACKAGE_QGC_SOURCE_DIR      = $$PWD/android                         # Original location of QGC package files
-ANDROID_PACKAGE_CUSTOM_SOURCE_DIR   = $$PWD/custom/android                  # Original location for custom build override package files
+#ANDROID_PACKAGE_SOURCE_DIR          = $$OUT_PWD/ANDROID_PACKAGE_SOURCE_DIR  # Tells Qt location of package files for build
+#ANDROID_PACKAGE_QGC_SOURCE_DIR      = $$PWD/android                         # Original location of QGC package files
+#ANDROID_PACKAGE_CUSTOM_SOURCE_DIR   = $$PWD/custom/android                  # Original location for custom build override package files
 
-# We always move the package files to the ANDROID_PACKAGE_SOURCE_DIR build dir so we can modify the manifest as needed
+## We always move the package files to the ANDROID_PACKAGE_SOURCE_DIR build dir so we can modify the manifest as needed
 
-android_source_dir_target.target = $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml
-android_source_dir_target.commands = \
-    $$QMAKE_MKDIR $$ANDROID_PACKAGE_SOURCE_DIR && \
-    $$QMAKE_COPY_DIR $$ANDROID_PACKAGE_QGC_SOURCE_DIR/* $$ANDROID_PACKAGE_SOURCE_DIR
-PRE_TARGETDEPS += $$android_source_dir_target.target
-QMAKE_EXTRA_TARGETS += android_source_dir_target
-exists($$ANDROID_PACKAGE_CUSTOM_SOURCE_DIR/AndroidManifest.xml) {
-    android_source_dir_target.depends = $$ANDROID_PACKAGE_CUSTOM_SOURCE_DIR/AndroidManifest.xml
-} else {
-    android_source_dir_target.depends = $$ANDROID_PACKAGE_QGC_SOURCE_DIR/AndroidManifest.xml
-}
+#android_source_dir_target.target = $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml
+#android_source_dir_target.commands = \
+#    $$QMAKE_MKDIR $$ANDROID_PACKAGE_SOURCE_DIR && \
+#    $$QMAKE_COPY_DIR $$ANDROID_PACKAGE_QGC_SOURCE_DIR/* $$ANDROID_PACKAGE_SOURCE_DIR
+#PRE_TARGETDEPS += $$android_source_dir_target.target
+#QMAKE_EXTRA_TARGETS += android_source_dir_target
+#exists($$ANDROID_PACKAGE_CUSTOM_SOURCE_DIR/AndroidManifest.xml) {
+#    android_source_dir_target.depends = $$ANDROID_PACKAGE_CUSTOM_SOURCE_DIR/AndroidManifest.xml
+#} else {
+#    android_source_dir_target.depends = $$ANDROID_PACKAGE_QGC_SOURCE_DIR/AndroidManifest.xml
+#}
 
 exists($$PWD/custom/android) {
     message("Merging $$PWD/custom/android/ -> $$PWD/android/")
