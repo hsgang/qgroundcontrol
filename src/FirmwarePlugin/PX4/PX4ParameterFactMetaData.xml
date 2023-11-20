@@ -1033,6 +1033,10 @@
       <decimal>1</decimal>
       <increment>0.1</increment>
     </parameter>
+    <parameter name="COM_DISARM_MAN" default="1" type="INT32" boolean="true">
+      <short_desc>Allow disarming via switch/stick/button on multicopters in manual thrust modes</short_desc>
+      <long_desc>0: Disallow disarming when not landed 1: Allow disarming in multicopter flight in modes where the thrust is directly controlled by thr throttle stick e.g. Stabilized, Acro</long_desc>
+    </parameter>
     <parameter name="COM_DISARM_PRFLT" default="10.0" type="FLOAT">
       <short_desc>Time-out for auto disarm if not taking off</short_desc>
       <long_desc>A non-zero, positive value specifies the time in seconds, within which the vehicle is expected to take off after arming. In case the vehicle didn't takeoff within the timeout it disarms again. A negative value disables autmoatic disarming triggered by a pre-takeoff timeout.</long_desc>
@@ -1061,126 +1065,6 @@
       <short_desc>Next flight UUID</short_desc>
       <long_desc>This number is incremented automatically after every flight on disarming in order to remember the next flight UUID. The first flight is 0.</long_desc>
       <min>0</min>
-    </parameter>
-    <parameter name="COM_FLTMODE1" default="-1" type="INT32">
-      <short_desc>First flightmode slot (1000-1160)</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE2" default="-1" type="INT32">
-      <short_desc>Second flightmode slot (1160-1320)</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE3" default="-1" type="INT32">
-      <short_desc>Third flightmode slot (1320-1480)</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE4" default="-1" type="INT32">
-      <short_desc>Fourth flightmode slot (1480-1640)</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE5" default="-1" type="INT32">
-      <short_desc>Fifth flightmode slot (1640-1800)</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-      </values>
-    </parameter>
-    <parameter name="COM_FLTMODE6" default="-1" type="INT32">
-      <short_desc>Sixth flightmode slot (1800-2000)</short_desc>
-      <long_desc>If the main switch channel is in this range the selected flight mode will be applied.</long_desc>
-      <values>
-        <value code="-1">Unassigned</value>
-        <value code="0">Manual</value>
-        <value code="1">Altitude</value>
-        <value code="2">Position</value>
-        <value code="3">Mission</value>
-        <value code="4">Hold</value>
-        <value code="5">Return</value>
-        <value code="6">Acro</value>
-        <value code="7">Offboard</value>
-        <value code="8">Stabilized</value>
-        <value code="10">Takeoff</value>
-        <value code="11">Land</value>
-        <value code="12">Follow Me</value>
-        <value code="13">Precision Land</value>
-      </values>
     </parameter>
     <parameter name="COM_FLT_PROFILE" default="0" type="INT32">
       <short_desc>User Flight Profile</short_desc>
@@ -1429,6 +1313,18 @@
         <value code="1">Mission (if valid)</value>
       </values>
     </parameter>
+    <parameter name="COM_THROW_EN" default="0" type="INT32" boolean="true">
+      <short_desc>Enable throw-start</short_desc>
+      <long_desc>Allows to start the vehicle by throwing it into the air.</long_desc>
+    </parameter>
+    <parameter name="COM_THROW_SPEED" default="5" type="FLOAT">
+      <short_desc>Minimum speed for the throw start</short_desc>
+      <long_desc>When the throw launch is enabled, the drone will only arm after this speed is exceeded before detecting the freefall. This is a safety feature to ensure the drone does not turn on after accidental drop or a rapid movement before the throw. Set to 0 to disable.</long_desc>
+      <min>0</min>
+      <unit>m/s</unit>
+      <decimal>1</decimal>
+      <increment>0.1</increment>
+    </parameter>
     <parameter name="COM_VEL_FS_EVH" default="1." type="FLOAT">
       <short_desc>Horizontal velocity error threshold</short_desc>
       <long_desc>This is the horizontal velocity error (EVH) threshold that will trigger a failsafe. The default is appropriate for a multicopter. Can be increased for a fixed-wing. If the previous velocity error was below this threshold, there is an additional factor of 2.5 applied (threshold for invalidation 2.5 times the one for validation).</long_desc>
@@ -1633,24 +1529,6 @@
       <max>1.0</max>
       <unit>m/s^2</unit>
       <decimal>2</decimal>
-    </parameter>
-    <parameter name="EKF2_AID_MASK" default="0" type="INT32">
-      <short_desc>Will be removed after v1.14 release</short_desc>
-      <long_desc>Set bits in the following positions to enable: 0 : Deprecated, use EKF2_GPS_CTRL instead 1 : Deprecated. use EKF2_OF_CTRL instead 2 : Deprecated, use EKF2_IMU_CTRL instead 3 : Deprecated, use EKF2_EV_CTRL instead 4 : Deprecated, use EKF2_EV_CTRL instead 5 : Deprecated. use EKF2_DRAG_CTRL instead 6 : Deprecated, use EKF2_EV_CTRL instead 7 : Deprecated, use EKF2_GPS_CTRL instead 8 : Deprecated, use EKF2_EV_CTRL instead</long_desc>
-      <min>0</min>
-      <max>511</max>
-      <reboot_required>true</reboot_required>
-      <bitmask>
-        <bit index="0">unused</bit>
-        <bit index="1">unused</bit>
-        <bit index="2">unused</bit>
-        <bit index="3">unused</bit>
-        <bit index="4">unused</bit>
-        <bit index="5">unused</bit>
-        <bit index="6">unused</bit>
-        <bit index="7">unused</bit>
-        <bit index="8">unused</bit>
-      </bitmask>
     </parameter>
     <parameter name="EKF2_ANGERR_INIT" default="0.1" type="FLOAT">
       <short_desc>1-sigma tilt angle uncertainty after gravity vector alignment</short_desc>
@@ -4644,6 +4522,14 @@
     <parameter name="MAN_ARM_GESTURE" default="1" type="INT32" boolean="true">
       <short_desc>Enable arm/disarm stick gesture</short_desc>
       <long_desc>This determines if moving the left stick to the lower right arms and to the lower left disarms the vehicle.</long_desc>
+    </parameter>
+    <parameter name="MAN_KILL_GEST_T" default="-1." type="FLOAT">
+      <short_desc>Trigger time for kill stick gesture</short_desc>
+      <long_desc>The timeout for holding the left stick to the lower left and the right stick to the lower right at the same time until the gesture kills the actuators one-way. A negative value disables the feature.</long_desc>
+      <min>-1</min>
+      <max>15</max>
+      <unit>s</unit>
+      <decimal>2</decimal>
     </parameter>
   </group>
   <group name="Mission">
