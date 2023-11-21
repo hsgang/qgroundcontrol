@@ -163,9 +163,7 @@ FactMetaData::FactMetaData(QObject* parent)
     , _rawDefaultValue      (0)
     , _defaultValueAvailable(false)
     , _rawMax               (_maxForType())
-    , _maxIsDefaultForType  (true)
     , _rawMin               (_minForType())
-    , _minIsDefaultForType  (true)
     , _rawTranslator        (_defaultTranslator)
     , _cookedTranslator     (_defaultTranslator)
     , _vehicleRebootRequired(false)
@@ -187,9 +185,7 @@ FactMetaData::FactMetaData(ValueType_t type, QObject* parent)
     , _rawDefaultValue      (0)
     , _defaultValueAvailable(false)
     , _rawMax               (_maxForType())
-    , _maxIsDefaultForType  (true)
     , _rawMin               (_minForType())
-    , _minIsDefaultForType  (true)
     , _rawTranslator        (_defaultTranslator)
     , _cookedTranslator     (_defaultTranslator)
     , _vehicleRebootRequired(false)
@@ -217,9 +213,7 @@ FactMetaData::FactMetaData(ValueType_t type, const QString name, QObject* parent
     , _rawDefaultValue      (0)
     , _defaultValueAvailable(false)
     , _rawMax               (_maxForType())
-    , _maxIsDefaultForType  (true)
     , _rawMin               (_minForType())
-    , _minIsDefaultForType  (true)
     , _name                 (name)
     , _rawTranslator        (_defaultTranslator)
     , _cookedTranslator     (_defaultTranslator)
@@ -248,9 +242,7 @@ const FactMetaData& FactMetaData::operator=(const FactMetaData& other)
     _group                  = other._group;
     _longDescription        = other._longDescription;
     _rawMax                 = other._rawMax;
-    _maxIsDefaultForType    = other._maxIsDefaultForType;
     _rawMin                 = other._rawMin;
-    _minIsDefaultForType    = other._minIsDefaultForType;
     _name                   = other._name;
     _shortDescription       = other._shortDescription;
     _type                   = other._type;
@@ -302,7 +294,6 @@ void FactMetaData::setRawMin(const QVariant& rawMin)
 {
     if (isInRawMinLimit(rawMin)) {
         _rawMin = rawMin;
-        _minIsDefaultForType = false;
     } else {
         qWarning() << "Attempt to set min below allowable value for fact: " << name()
                    << ", value attempted: " << rawMin
@@ -315,9 +306,10 @@ void FactMetaData::setRawMax(const QVariant& rawMax)
 {
     if (isInRawMaxLimit(rawMax)) {
         _rawMax = rawMax;
-        _maxIsDefaultForType = false;
     } else {
-        qWarning() << "Attempt to set max above allowable value";
+        qWarning() << "Attempt to set max above allowable value for fact: " << name()
+                   << ", value attempted: " << rawMax
+                   << ", type: " << type() << ", max for type: " << _maxForType();
         _rawMax = _maxForType();
     }
 }
@@ -382,9 +374,9 @@ bool FactMetaData::isInRawMaxLimit(const QVariant& variantValue) const
     return true;
 }
 
-QVariant FactMetaData::_minForType(void) const
+QVariant FactMetaData::minForType(ValueType_t type)
 {
-    switch (_type) {
+    switch (type) {
     case valueTypeUint8:
         return QVariant(std::numeric_limits<unsigned char>::min());
     case valueTypeInt8:
@@ -419,9 +411,9 @@ QVariant FactMetaData::_minForType(void) const
     return QVariant();
 }
 
-QVariant FactMetaData::_maxForType(void) const
+QVariant FactMetaData::maxForType(ValueType_t type)
 {
-    switch (_type) {
+    switch (type) {
     case valueTypeUint8:
         return QVariant(std::numeric_limits<unsigned char>::max());
     case valueTypeInt8:

@@ -56,6 +56,8 @@
 #include "TunnelingDataFactGroup.h"
 #include "TerrainQuery.h"
 #include "StandardModes.h"
+#include "VehicleGeneratorFactGroup.h"
+#include "VehicleEFIFactGroup.h"
 
 class Actuators;
 class EventHandler;
@@ -310,6 +312,7 @@ public:
     Q_PROPERTY(Fact* climbRate          READ climbRate          CONSTANT)
     Q_PROPERTY(Fact* altitudeRelative   READ altitudeRelative   CONSTANT)
     Q_PROPERTY(Fact* altitudeAMSL       READ altitudeAMSL       CONSTANT)
+    Q_PROPERTY(Fact* altitudeAboveTerr  READ altitudeAboveTerr  CONSTANT)
     Q_PROPERTY(Fact* altitudeTuning     READ altitudeTuning     CONSTANT)
     Q_PROPERTY(Fact* altitudeTuningSetpoint READ altitudeTuningSetpoint CONSTANT)
     Q_PROPERTY(Fact* xTrackError        READ xTrackError        CONSTANT)
@@ -343,6 +346,8 @@ public:
     Q_PROPERTY(FactGroup*           localPosition   READ localPositionFactGroup     CONSTANT)
     Q_PROPERTY(FactGroup*           localPositionSetpoint READ localPositionSetpointFactGroup CONSTANT)
     Q_PROPERTY(FactGroup*           hygrometer      READ hygrometerFactGroup        CONSTANT)
+    Q_PROPERTY(FactGroup*           generator       READ generatorFactGroup         CONSTANT)
+    Q_PROPERTY(FactGroup*           efi             READ efiFactGroup               CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
     Q_PROPERTY(FactGroup*           tunnelingData   READ tunnelingDataFactGroup     CONSTANT)
@@ -728,6 +733,7 @@ public:
     Fact* climbRate                         () { return &_climbRateFact; }
     Fact* altitudeRelative                  () { return &_altitudeRelativeFact; }
     Fact* altitudeAMSL                      () { return &_altitudeAMSLFact; }
+    Fact* altitudeAboveTerr                 () { return &_altitudeAboveTerrFact; }
     Fact* altitudeTuning                    () { return &_altitudeTuningFact; }
     Fact* altitudeTuningSetpoint            () { return &_altitudeTuningSetpointFact; }
     Fact* xTrackError                       () { return &_xTrackErrorFact; }
@@ -762,6 +768,8 @@ public:
     FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
     FactGroup* terrainFactGroup             () { return &_terrainFactGroup; }
     FactGroup* hygrometerFactGroup          () { return &_hygrometerFactGroup; }
+    FactGroup* generatorFactGroup           () { return &_generatorFactGroup; }
+    FactGroup* efiFactGroup                 () { return &_efiFactGroup; }
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
     FactGroup* atmosphericSensorFactGroup   () { return &_atmosphericSensorFactGroup; }
     FactGroup* tunnelingDataFactGroup       () { return &_tunnelingDataFactGroup; }
@@ -1127,6 +1135,9 @@ private slots:
     void _orbitTelemetryTimeout             ();
     void _updateFlightTime                  ();
     void _gotProgressUpdate                 (float progressValue);
+    void _doSetHomeTerrainReceived          (bool success, QList<double> heights);
+    void _updateAltAboveTerrain             ();
+    void _altitudeAboveTerrainReceived      (bool sucess, QList<double> heights);
 
 private:
     void _loadJoystickSettings          ();
@@ -1193,9 +1204,6 @@ private:
     bool setFlightModeCustom            (const QString& flightMode, uint8_t* base_mode, uint32_t* custom_mode);
 
     static void _rebootCommandResultHandler(void* resultHandlerData, int compId, const mavlink_command_ack_t& ack, MavCmdResultFailureCode_t failureCode);
-
-    // This is called after we get terrain data triggered from a doSetHome()
-    void _doSetHomeTerrainReceived      (bool success, QList<double> heights);
 
     int     _id;                    ///< Mavlink system id
     int     _defaultComponentId;
@@ -1477,6 +1485,7 @@ private:
     Fact _climbRateFact;
     Fact _altitudeRelativeFact;
     Fact _altitudeAMSLFact;
+    Fact _altitudeAboveTerrFact;
     Fact _altitudeTuningFact;
     Fact _altitudeTuningSetpointFact;
     Fact _xTrackErrorFact;
@@ -1511,6 +1520,8 @@ private:
     VehicleEscStatusFactGroup       _escStatusFactGroup;
     VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
     VehicleHygrometerFactGroup      _hygrometerFactGroup;
+    VehicleGeneratorFactGroup       _generatorFactGroup;
+    VehicleEFIFactGroup             _efiFactGroup;
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
     AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
@@ -1545,6 +1556,7 @@ private:
     static const char* _climbRateFactName;
     static const char* _altitudeRelativeFactName;
     static const char* _altitudeAMSLFactName;
+    static const char* _altitudeAboveTerrFactName;
     static const char* _altitudeTuningFactName;
     static const char* _altitudeTuningSetpointFactName;
     static const char* _xTrackErrorFactName;
@@ -1579,6 +1591,8 @@ private:
     static const char* _escStatusFactGroupName;
     static const char* _estimatorStatusFactGroupName;
     static const char* _hygrometerFactGroupName;
+    static const char* _generatorFactGroupName;
+    static const char* _efiFactGroupName;
     static const char* _terrainFactGroupName;
     static const char* _atmosphericSensorFactGroupName;
     static const char* _tunnelingDataFactGroupName;
@@ -1594,9 +1608,15 @@ private:
     static const char* _joystickEnabledSettingsKey;
 
     // Terrain query members, used to get terrain altitude for doSetHome()
-    QTimer                      _updateDoSetHomeTerrainTimer;
     TerrainAtCoordinateQuery*   _currentDoSetHomeTerrainAtCoordinateQuery = nullptr;
     QGeoCoordinate              _doSetHomeCoordinate;
+
+    // Terrain query members, used to get altitude above terrain Fact
+    QElapsedTimer               _altitudeAboveTerrQueryTimer;
+    TerrainAtCoordinateQuery*   _altitudeAboveTerrTerrainAtCoordinateQuery = nullptr;
+    // We use this to limit above terrain altitude queries based on distance and altitude change
+    QGeoCoordinate              _altitudeAboveTerrLastCoord;
+    float                       _altitudeAboveTerrLastRelAlt = qQNaN();
 };
 
 Q_DECLARE_METATYPE(Vehicle::MavCmdResultFailureCode_t)

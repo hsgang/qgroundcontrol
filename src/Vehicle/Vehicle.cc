@@ -85,6 +85,7 @@ const char* Vehicle::_groundSpeedFactName =         "groundSpeed";
 const char* Vehicle::_climbRateFactName =           "climbRate";
 const char* Vehicle::_altitudeRelativeFactName =    "altitudeRelative";
 const char* Vehicle::_altitudeAMSLFactName =        "altitudeAMSL";
+const char* Vehicle::_altitudeAboveTerrFactName =   "altitudeAboveTerr";
 const char* Vehicle::_altitudeTuningFactName =      "altitudeTuning";
 const char* Vehicle::_altitudeTuningSetpointFactName = "altitudeTuningSetpoint";
 const char* Vehicle::_flightDistanceFactName =      "flightDistance";
@@ -124,6 +125,8 @@ const char* Vehicle::_hygrometerFactGroupName =         "hygrometer";
 const char* Vehicle::_landingTargetFactGroupName =      "landingTarget";
 const char* Vehicle::_externalPowerStatusFactGroupName = "externalPower";
 const char* Vehicle::_winchStatusFactGroupName =        "winch";
+const char* Vehicle::_generatorFactGroupName =          "generator";
+const char* Vehicle::_efiFactGroupName =                "efi";
 
 static int jsonLogSeq = 0;
 static QString StartTime;
@@ -164,6 +167,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _climbRateFact                (0, _climbRateFactName,         FactMetaData::valueTypeDouble)
     , _altitudeRelativeFact         (0, _altitudeRelativeFactName,  FactMetaData::valueTypeDouble)
     , _altitudeAMSLFact             (0, _altitudeAMSLFactName,      FactMetaData::valueTypeDouble)
+    , _altitudeAboveTerrFact        (0, _altitudeAboveTerrFactName, FactMetaData::valueTypeDouble)
     , _altitudeTuningFact           (0, _altitudeTuningFactName,    FactMetaData::valueTypeDouble)
     , _altitudeTuningSetpointFact   (0, _altitudeTuningSetpointFactName, FactMetaData::valueTypeDouble)
     , _xTrackErrorFact              (0, _xTrackErrorFactName,       FactMetaData::valueTypeDouble)
@@ -197,6 +201,8 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _escStatusFactGroup           (this)
     , _estimatorStatusFactGroup     (this)
     , _hygrometerFactGroup          (this)
+    , _generatorFactGroup           (this)
+    , _efiFactGroup                 (this)
     , _terrainFactGroup             (this)
     , _atmosphericSensorFactGroup   (this)
     , _tunnelingDataFactGroup       (this)
@@ -289,6 +295,9 @@ Vehicle::Vehicle(LinkInterface*             link,
     // Start sensor logger
     connect(&_jsonLogTimer, &QTimer::timeout, this, &Vehicle::_writeJsonLine);
     _jsonLogTimer.start(1000);
+    
+    // Start timer to limit altitude above terrain queries
+    _altitudeAboveTerrQueryTimer.restart();
 }
 
 // Disconnected Vehicle for offline editing
@@ -325,6 +334,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _climbRateFact                    (0, _climbRateFactName,         FactMetaData::valueTypeDouble)
     , _altitudeRelativeFact             (0, _altitudeRelativeFactName,  FactMetaData::valueTypeDouble)
     , _altitudeAMSLFact                 (0, _altitudeAMSLFactName,      FactMetaData::valueTypeDouble)
+    , _altitudeAboveTerrFact            (0, _altitudeAboveTerrFactName, FactMetaData::valueTypeDouble)
     , _altitudeTuningFact               (0, _altitudeTuningFactName,    FactMetaData::valueTypeDouble)
     , _altitudeTuningSetpointFact       (0, _altitudeTuningSetpointFactName, FactMetaData::valueTypeDouble)
     , _xTrackErrorFact                  (0, _xTrackErrorFactName,       FactMetaData::valueTypeDouble)
@@ -402,6 +412,9 @@ void Vehicle::_commonInit()
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceToNextWP);
     connect(this, &Vehicle::homePositionChanged,    this, &Vehicle::_updateDistanceHeadingToHome);
     connect(this, &Vehicle::hobbsMeterChanged,      this, &Vehicle::_updateHobbsMeter);
+    connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateAltAboveTerrain);
+    // Initialize alt above terrain to Nan so frontend can display it correctly in case the terrain query had no response
+    _altitudeAboveTerrFact.setRawValue(qQNaN());
 
     connect(_toolbox->qgcPositionManager(), &QGCPositionManager::gcsPositionChanged, this, &Vehicle::_updateDistanceToGCS);
     connect(_toolbox->qgcPositionManager(), &QGCPositionManager::gcsPositionChanged, this, &Vehicle::_updateHomepoint);
@@ -470,6 +483,7 @@ void Vehicle::_commonInit()
     _addFact(&_climbRateFact,           _climbRateFactName);
     _addFact(&_altitudeRelativeFact,    _altitudeRelativeFactName);
     _addFact(&_altitudeAMSLFact,        _altitudeAMSLFactName);
+    _addFact(&_altitudeAboveTerrFact,   _altitudeAboveTerrFactName);
     _addFact(&_altitudeTuningFact,       _altitudeTuningFactName);
     _addFact(&_altitudeTuningSetpointFact, _altitudeTuningSetpointFactName);
     _addFact(&_xTrackErrorFact,         _xTrackErrorFactName);
@@ -506,6 +520,8 @@ void Vehicle::_commonInit()
     _addFactGroup(&_escStatusFactGroup,         _escStatusFactGroupName);
     _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
     _addFactGroup(&_hygrometerFactGroup,        _hygrometerFactGroupName);
+    _addFactGroup(&_generatorFactGroup,         _generatorFactGroupName);
+    _addFactGroup(&_efiFactGroup,               _efiFactGroupName);
     _addFactGroup(&_terrainFactGroup,           _terrainFactGroupName);
     _addFactGroup(&_atmosphericSensorFactGroup, _atmosphericSensorFactGroupName);
     _addFactGroup(&_tunnelingDataFactGroup,     _tunnelingDataFactGroupName);
@@ -4534,6 +4550,63 @@ bool
 Vehicle::gimbalOthersHaveControl() const
 {
     return gimbalData() ? _gimbalController->gimbals()[0]->othersHaveControl : false;
+}
+
+void Vehicle::_updateAltAboveTerrain()
+{
+    // We won't do another query if the previous query was done closer than 2 meters from current position
+    // or if altitude change has been less than 0.5 meters since then.
+    const qreal minimumDistanceTraveled = 2;
+    const float minimumAltitudeChanged  = 0.5f;
+
+    // This is not super elegant but it works to limit the amount of queries we do. It seems more than 500ms is not possible to get
+    // serviced on time. It is not a big deal if it is not serviced on time as terrain queries can manage that just fine, but QGC would
+    // use resources to service those queries, and it is pointless, so this is a quick workaround to not waste that little computing time
+    int altitudeAboveTerrQueryMinInterval = 500;
+    if (_altitudeAboveTerrQueryTimer.elapsed() < altitudeAboveTerrQueryMinInterval) {
+        // qCDebug(VehicleLog) << "_updateAltAboveTerrain: minimum 500ms interval between queries not reached, returning";
+        return;
+    }
+    // Sanity check, although it is very unlikely that vehicle coordinate is not valid
+    if (_coordinate.isValid()) {
+        // Check for minimum distance and altitude traveled before doing query, to not do a lot of queries of the same data
+        if (_altitudeAboveTerrLastCoord.isValid() && !qIsNaN(_altitudeAboveTerrLastRelAlt)) {
+            if (_altitudeAboveTerrLastCoord.distanceTo(_coordinate) < minimumDistanceTraveled && fabs(_altitudeRelativeFact.rawValue().toFloat() - _altitudeAboveTerrLastRelAlt) < minimumAltitudeChanged ) {
+                return;
+            }
+        }
+        _altitudeAboveTerrLastCoord = _coordinate;
+        _altitudeAboveTerrLastRelAlt = _altitudeRelativeFact.rawValue().toFloat();
+
+        // If for some reason we already did a query and it hasn't arrived yet, disconnect signals and unset current query. TerrainQuery system will
+        // automatically delete that forgotten query.
+        if (_altitudeAboveTerrTerrainAtCoordinateQuery) {
+            // qCDebug(VehicleLog) << "_updateAltAboveTerrain: cleaning previous query, no longer needed";
+            disconnect(_altitudeAboveTerrTerrainAtCoordinateQuery, &TerrainAtCoordinateQuery::terrainDataReceived, this, &Vehicle::_altitudeAboveTerrainReceived);
+            _altitudeAboveTerrTerrainAtCoordinateQuery = nullptr;
+        }
+        // Now setup and trigger the new terrain query
+        _altitudeAboveTerrTerrainAtCoordinateQuery = new TerrainAtCoordinateQuery(true /* autoDelet */);
+        connect(_altitudeAboveTerrTerrainAtCoordinateQuery, &TerrainAtCoordinateQuery::terrainDataReceived, this, &Vehicle::_altitudeAboveTerrainReceived);
+        QList<QGeoCoordinate> rgCoord;
+        rgCoord.append(_coordinate);
+        _altitudeAboveTerrTerrainAtCoordinateQuery->requestData(rgCoord);
+        _altitudeAboveTerrQueryTimer.restart();
+    }
+}
+
+void Vehicle::_altitudeAboveTerrainReceived(bool success, QList<double> heights)
+{
+    if (!success) {
+        qCDebug(VehicleLog) << "_altitudeAboveTerrainReceived: terrain data not available for vehicle coordinate";
+    } else {
+        // Query was succesful, save the data.
+        double terrainAltitude = heights[0];
+        double altitudeAboveTerrain = altitudeAMSL()->rawValue().toDouble() - terrainAltitude;
+        _altitudeAboveTerrFact.setRawValue(altitudeAboveTerrain);
+    }
+    // Clean up
+    _altitudeAboveTerrTerrainAtCoordinateQuery = nullptr;
 }
 
 void Vehicle::gimbalControlValue(double pitch, double yaw)
