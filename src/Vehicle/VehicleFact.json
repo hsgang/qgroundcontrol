@@ -128,6 +128,13 @@
     "units":            "deg"
 },
 {
+    "name":             "distanceToNextWP",
+    "shortDesc": "Distance to Next WP",
+    "type":             "double",
+    "decimalPlaces":    1,
+    "units":            "m"
+},
+{
     "name":             "flightTime",
     "shortDesc": "Flight Time",
     "type":             "elapsedSeconds",

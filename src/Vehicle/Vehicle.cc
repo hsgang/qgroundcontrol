@@ -93,6 +93,7 @@ const char* Vehicle::_distanceToHomeFactName =      "distanceToHome";
 const char* Vehicle::_timeToHomeFactName =          "timeToHome";
 const char* Vehicle::_missionItemIndexFactName =    "missionItemIndex";
 const char* Vehicle::_headingToNextWPFactName =     "headingToNextWP";
+const char* Vehicle::_distanceToNextWPFactName =    "distanceToNextWP";
 const char* Vehicle::_headingToHomeFactName =       "headingToHome";
 const char* Vehicle::_distanceToGCSFactName =       "distanceToGCS";
 const char* Vehicle::_hobbsFactName =               "hobbs";
@@ -173,6 +174,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _timeToHomeFact               (0, _timeToHomeFactName,        FactMetaData::valueTypeDouble)
     , _missionItemIndexFact         (0, _missionItemIndexFactName,  FactMetaData::valueTypeUint16)
     , _headingToNextWPFact          (0, _headingToNextWPFactName,   FactMetaData::valueTypeDouble)
+    , _distanceToNextWPFact         (0, _distanceToNextWPFactName,  FactMetaData::valueTypeDouble)
     , _headingToHomeFact            (0, _headingToHomeFactName,     FactMetaData::valueTypeDouble)
     , _distanceToGCSFact            (0, _distanceToGCSFactName,     FactMetaData::valueTypeDouble)
     , _hobbsFact                    (0, _hobbsFactName,             FactMetaData::valueTypeString)
@@ -332,6 +334,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _distanceToHomeFact               (0, _distanceToHomeFactName,    FactMetaData::valueTypeDouble)
     , _missionItemIndexFact             (0, _missionItemIndexFactName,  FactMetaData::valueTypeUint16)
     , _headingToNextWPFact              (0, _headingToNextWPFactName,   FactMetaData::valueTypeDouble)
+    , _distanceToNextWPFact             (0, _distanceToNextWPFactName,  FactMetaData::valueTypeDouble)
     , _headingToHomeFact                (0, _headingToHomeFactName,     FactMetaData::valueTypeDouble)
     , _distanceToGCSFact                (0, _distanceToGCSFactName,     FactMetaData::valueTypeDouble)
     , _hobbsFact                        (0, _hobbsFactName,             FactMetaData::valueTypeString)
@@ -396,6 +399,7 @@ void Vehicle::_commonInit()
 
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceHeadingToHome);
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceToGCS);
+    connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceToNextWP);
     connect(this, &Vehicle::homePositionChanged,    this, &Vehicle::_updateDistanceHeadingToHome);
     connect(this, &Vehicle::hobbsMeterChanged,      this, &Vehicle::_updateHobbsMeter);
 
@@ -409,6 +413,7 @@ void Vehicle::_commonInit()
     connect(_missionManager, &MissionManager::sendComplete,             this, &Vehicle::_clearCameraTriggerPoints);
     connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateHeadingToNextWP);
     connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateMissionItemIndex);
+    connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateDistanceToNextWP);
 
     connect(_missionManager, &MissionManager::sendComplete,             _trajectoryPoints, &TrajectoryPoints::clear);
     connect(_missionManager, &MissionManager::newMissionItemsAvailable, _trajectoryPoints, &TrajectoryPoints::clear);
@@ -475,6 +480,7 @@ void Vehicle::_commonInit()
     _addFact(&_timeToHomeFact,          _timeToHomeFactName);
     _addFact(&_missionItemIndexFact,    _missionItemIndexFactName);
     _addFact(&_headingToNextWPFact,     _headingToNextWPFactName);
+    _addFact(&_distanceToNextWPFact,    _distanceToNextWPFactName);
     _addFact(&_headingToHomeFact,       _headingToHomeFactName);
     _addFact(&_distanceToGCSFact,       _distanceToGCSFactName);
     _addFact(&_throttlePctFact,         _throttlePctFactName);
@@ -4073,6 +4079,22 @@ void Vehicle::_updateHeadingToNextWP()
     }
     else{
         _headingToNextWPFact.setRawValue(qQNaN());
+    }
+}
+
+void Vehicle::_updateDistanceToNextWP()
+{
+    const int currentIndex = _missionManager->currentIndex();
+    QList<MissionItem*> llist = _missionManager->missionItems();
+
+    if(llist.size()>currentIndex && currentIndex!=-1
+        && llist[currentIndex]->coordinate().longitude()!=0.0
+        && coordinate().distanceTo(llist[currentIndex]->coordinate())>1.0) {
+
+        _distanceToNextWPFact.setRawValue(coordinate().distanceTo(llist[currentIndex]->coordinate()));
+    }
+    else{
+        _distanceToNextWPFact.setRawValue(qQNaN());
     }
 }
 

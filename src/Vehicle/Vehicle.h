@@ -737,6 +737,7 @@ public:
     Fact* timeToHome                        () { return &_timeToHomeFact; }
     Fact* missionItemIndex                  () { return &_missionItemIndexFact; }
     Fact* headingToNextWP                   () { return &_headingToNextWPFact; }
+    Fact* distanceToNextWP                  () { return &_distanceToNextWPFact; }
     Fact* headingToHome                     () { return &_headingToHomeFact; }
     Fact* distanceToGCS                     () { return &_distanceToGCSFact; }
     Fact* hobbs                             () { return &_hobbsFact; }
@@ -1116,6 +1117,7 @@ private slots:
     void _updateDistanceHeadingToHome       ();
     void _updateMissionItemIndex            ();
     void _updateHeadingToNextWP             ();
+    void _updateDistanceToNextWP            ();
     void _updateDistanceToGCS               ();
     void _updateHomepoint                   ();
     void _updateHobbsMeter                  ();
@@ -1485,6 +1487,7 @@ private:
     Fact _timeToHomeFact;
     Fact _missionItemIndexFact;
     Fact _headingToNextWPFact;
+    Fact _distanceToNextWPFact;
     Fact _headingToHomeFact;
     Fact _distanceToGCSFact;
     Fact _hobbsFact;
@@ -1552,6 +1555,7 @@ private:
     static const char* _timeToHomeFactName;
     static const char* _missionItemIndexFactName;
     static const char* _headingToNextWPFactName;
+    static const char* _distanceToNextWPFactName;
     static const char* _headingToHomeFactName;
     static const char* _distanceToGCSFactName;
     static const char* _hobbsFactName;
