@@ -125,7 +125,7 @@ Item {
                 source:             "/qmlimages/TelemRSSI.svg"
                 fillMode:           Image.PreserveAspectFit
                 //opacity:            QGroundControl.siyiSDKManager.signal !== 0 ? 1 : 0.5
-                color:              transmitter.signalQuality > 30 ? qgcPal.buttonText : qgcPal.colorOrange
+                color:              transmitter.signalQuality > 15 ? qgcPal.buttonText : qgcPal.colorOrange
             }
         }
     }

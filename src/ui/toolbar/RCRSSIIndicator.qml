@@ -98,7 +98,7 @@ Item {
                 source:             "/qmlimages/RC.svg"
                 fillMode:           Image.PreserveAspectFit
                 //opacity:            _rcRSSIAvailable ? 1 : 0.5
-                color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 70) ? qgcPal.buttonText : qgcPal.colorOrange
+                color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 30) ? qgcPal.buttonText : qgcPal.colorOrange
             }
         }
     }
