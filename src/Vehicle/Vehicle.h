@@ -318,10 +318,12 @@ public:
     Q_PROPERTY(Fact* xTrackError        READ xTrackError        CONSTANT)
     Q_PROPERTY(Fact* rangeFinderDist    READ rangeFinderDist    CONSTANT)
     Q_PROPERTY(Fact* flightDistance     READ flightDistance     CONSTANT)
+    Q_PROPERTY(Fact* flightTime         READ flightTime         CONSTANT)
     Q_PROPERTY(Fact* distanceToHome     READ distanceToHome     CONSTANT)
     Q_PROPERTY(Fact* timeToHome         READ timeToHome         CONSTANT)
     Q_PROPERTY(Fact* missionItemIndex   READ missionItemIndex   CONSTANT)
     Q_PROPERTY(Fact* headingToNextWP    READ headingToNextWP    CONSTANT)
+    Q_PROPERTY(Fact* distanceToNextWP   READ distanceToNextWP   CONSTANT)
     Q_PROPERTY(Fact* headingToHome      READ headingToHome      CONSTANT)
     Q_PROPERTY(Fact* distanceToGCS      READ distanceToGCS      CONSTANT)
     Q_PROPERTY(Fact* hobbs              READ hobbs              CONSTANT)
@@ -739,6 +741,7 @@ public:
     Fact* xTrackError                       () { return &_xTrackErrorFact; }
     Fact* rangeFinderDist                   () { return &_rangeFinderDistFact; }
     Fact* flightDistance                    () { return &_flightDistanceFact; }
+    Fact* flightTime                        () { return &_flightTimeFact;}
     Fact* distanceToHome                    () { return &_distanceToHomeFact; }
     Fact* timeToHome                        () { return &_timeToHomeFact; }
     Fact* missionItemIndex                  () { return &_missionItemIndexFact; }
@@ -1450,7 +1453,7 @@ private:
     QTimer                          _mavCommandResponseCheckTimer;
     static const int                _mavCommandMaxRetryCount                = 3;
     static const int                _mavCommandResponseCheckTimeoutMSecs    = 500;
-    static const int                _mavCommandAckTimeoutMSecs              = 1000;
+    static const int                _mavCommandAckTimeoutMSecs              = 3000;
     static const int                _mavCommandAckTimeoutMSecsHighLatency   = 120000;
 
     void _sendMavCommandWorker  (
