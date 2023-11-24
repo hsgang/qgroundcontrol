@@ -179,11 +179,11 @@ Item {
     FlyViewAltitudeIndicator{
         id:                         altitudeIndicator
         anchors.margins:            _toolsMargin
-        height:                     attitudeIndicator.height * 0.9
-        anchors.left:               attitudeIndicator.right
-        anchors.leftMargin:         ScreenTools.defaultFontPixelWidth * 19 + _toolsMargin * 6
-        anchors.verticalCenter:     attitudeIndicator.verticalCenter
-        visible:                    QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
+        height:                     flyviewMissionProgress.height * 0.9
+        anchors.left:               flyviewMissionProgress.right
+        anchors.leftMargin:         _toolsMargin
+        anchors.verticalCenter:     flyviewMissionProgress.verticalCenter
+        visible:                    flyviewMissionProgress.visible && QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
 
     FlyViewAttitudeIndicator{
@@ -191,6 +191,19 @@ Item {
         anchors.margins:            _toolsMargin * 2
         anchors.bottom:             parent.bottom
         anchors.horizontalCenter:   parent.horizontalCenter
+        visible:                    !flyviewMissionProgress.visible
+
+//        Connections{
+//            target: _activeVehicle
+//            onFlightModeChanged: {
+//                //console.log(flightMode)
+//                if (flightMode === "Auto" || flightMode === "Mission" || flightMode ==="미션"){
+//                    attitudeIndicator.visible = false
+//                } else {
+//                    attitudeIndicator.visible = true
+//                }
+//            }
+//        }
     }
 
     FlyViewAtmosphericSensorView{
@@ -325,9 +338,9 @@ Item {
 
     FlyViewMissionProgress{
         id: flyviewMissionProgress
-        y:                      (parent.height - parentToolInsets.bottomEdgeLeftInset - height) * 0.7
-        anchors.left:           parent.left
-        anchors.leftMargin:     (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _margins * 2
+        anchors.margins:            _toolsMargin * 2
+        anchors.bottom:             parent.bottom
+        anchors.horizontalCenter:   parent.horizontalCenter
         visible: false
 
         Connections{
@@ -336,6 +349,8 @@ Item {
                 //console.log(flightMode)
                 if (flightMode === "Auto" || flightMode === "Mission" || flightMode ==="미션"){
                     flyviewMissionProgress.visible = true
+                } else {
+                    flyviewMissionProgress.visible = false
                 }
             }
         }

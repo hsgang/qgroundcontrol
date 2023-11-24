@@ -22,19 +22,24 @@ Item {
     property real _heading:             vehicle ? vehicle.heading.rawValue : 0
     property real _headingToHome:       vehicle ? vehicle.headingToHome.rawValue : 0
     property real _distanceToHome:      vehicle ? vehicle.distanceToHome.rawValue : 0
+    property real _distanceToNextWP:    vehicle ? vehicle.distanceToNextWP.rawValue : 0
     property real _groundSpeed:         vehicle ? vehicle.groundSpeed.rawValue : 0
     property real _headingToNextWP:     vehicle ? vehicle.headingToNextWP.rawValue : 0
-    property real _courseOverGround:    _activeVehicle ? _activeVehicle.gps.courseOverGround.rawValue : 0
+    property real _courseOverGround:    vehicle ? vehicle.gps.courseOverGround.rawValue : 0
+    property real _windDir:             vehicle ? vehicle.wind.direction.rawValue : 0
+    property real _windSpd:             vehicle ? vehicle.wind.speed.rawValue : 0
 
     property real _defaultSize: ScreenTools.defaultFontPixelHeight * (10)
     property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
-    property bool _haveGimbal:  vehicle.gimbalData
+    property bool _haveGimbal:  vehicle ? vehicle.gimbalData : false
     property real _gimbalYaw:   vehicle ? vehicle.gimbalYaw.toFixed(1) : 0
     property real _gimbalPitch: vehicle ? vehicle.gimbalPitch.toFixed(1) : 0
 
     property string _distanceToHomeText:    vehicle ? _distanceToHome.toFixed(0) : "--"
+    property string _distanceToNextWPText:  vehicle ? _distanceToNextWP.toFixed(0) : "--"
+    property string _windSpdText:           vehicle ? _windSpd.toFixed(1) : "0.0"
 
     width:  size
     height: size
@@ -54,6 +59,14 @@ Item {
 
     function isHeadingToNextWPOK(){
         return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_headingToNextWP)
+    }
+
+    function isDistanceToNextWPOK(){
+        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_distanceToNextWP)
+    }
+
+    function isWindVaneOK(){
+        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_windDir)
     }
 
     function isNoseUpLocked(){
@@ -124,7 +137,8 @@ Item {
 
     Rectangle {
         id:                 homePointer
-        width:              size * 0.1
+        visible:            isHeadingHomeOK()
+        width:              size * 0.11
         height:             width
         radius:             width * 0.5
         anchors.centerIn:   parent
@@ -166,7 +180,7 @@ Item {
         }
 
         transform: Translate {
-            property double _angle: isNoseUpLocked()?-_heading+_headingToHome:_headingToHome
+            property double _angle: isNoseUpLocked() ? -_heading + _headingToHome : _headingToHome
             x: size/3.1 * Math.sin((_angle)*(3.14/180))
             y: - size/3.1 * Math.cos((_angle)*(3.14/180))
         }
@@ -199,12 +213,13 @@ Item {
             sourceSize.width:   width
             antialiasing:       true
             fillMode:           Image.PreserveAspectFit
-//            layer {
-//                enabled: true
-//                effect: ColorOverlay {
-//                    color: qgcPal.text
-//                }
-//            }
+
+            layer {
+                enabled: true
+                effect: ColorOverlay {
+                    color: qgcPal.text
+                }
+            }
 
             transform: Rotation {
                 origin.x:       vehicleHeadingDial.width / 2
@@ -301,26 +316,11 @@ Item {
         }
     }
 
-//    Image {
-//        id:                 nextWPPointer
-//        source:             isHeadingToNextWPOK() ? "/qmlimages/compassDottedLine.svg":""
-//        mipmap:             true
-//        fillMode:           Image.PreserveAspectFit
-//        anchors.fill:       parent
-//        sourceSize.height:  parent.height
-
-//        transform: Rotation {
-//            property var _angle: isNoseUpLocked()?_headingToNextWP-_heading:_headingToNextWP
-//            origin.x:       cOGPointer.width  / 2
-//            origin.y:       cOGPointer.height / 2
-//            angle:         _angle
-//        }
-//    }
-
     Rectangle {
         id:                 nextWPPointer
+        visible:            isHeadingToNextWPOK()
         width:              wpText.width + (size * 0.02)
-        height:             size * 0.1
+        height:             size * 0.11
         radius:             height * 0.1
         anchors.centerIn:   parent
         color:              qgcPal.text //"transparent"
@@ -337,9 +337,75 @@ Item {
         }
 
         transform: Translate {
-            property double _angle: isNoseUpLocked()?_headingToNextWP-_heading:_headingToNextWP
+            property double _angle: isNoseUpLocked() ? _headingToNextWP-_heading : _headingToNextWP
             x: size/2.1 * Math.sin((_angle)*(3.14/180))
             y: - size/2.1 * Math.cos((_angle)*(3.14/180))
+        }
+    }
+
+    Rectangle {
+        width:                      distanceToNextWPText.width + (size * 0.05)
+        height:                     size * 0.12
+        border.color:               qgcPal.buttonHighlight
+        color:                      "transparent"
+        radius:                     height * 0.1
+        visible:                    isDistanceToNextWPOK()
+        anchors.centerIn:           parent
+
+        QGCLabel {
+            id:                 distanceToNextWPText
+            text:               _distanceToNextWPText
+            font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
+            font.family:        ScreenTools.demiboldFontFamily
+            color:              qgcPal.text
+            anchors.centerIn:   parent
+        }
+
+        transform: Translate {
+            property double _angle: isNoseUpLocked() ? _headingToNextWP-_heading : _headingToNextWP
+            x: size/3.1 * Math.sin((_angle)*(3.14/180))
+            y: - size/3.1 * Math.cos((_angle)*(3.14/180))
+        }
+    }
+
+    Image {
+        id:                 windVane
+        source:             isWindVaneOK() ? "/qmlimages/windVaneArrow.svg" : ""
+        mipmap:             true
+        fillMode:           Image.PreserveAspectFit
+        anchors.fill:       parent
+        sourceSize.height:  parent.height
+
+        transform: Rotation {
+            property var _angle: isNoseUpLocked() ? _windDir - _heading : _windDir
+            origin.x:       cOGPointer.width  / 2
+            origin.y:       cOGPointer.height / 2
+            angle:         _angle
+        }
+    }
+
+    Rectangle {
+        width:                      windVaneText.width + (size * 0.05)
+        height:                     size * 0.12
+        border.color:               qgcPal.buttonHighlight
+        color:                      "transparent"
+        radius:                     height * 0.1
+        visible:                    isWindVaneOK()
+        anchors.centerIn:           parent
+
+        QGCLabel {
+            id:                 windVaneText
+            text:               _windSpdText
+            font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
+            font.family:        ScreenTools.demiboldFontFamily
+            color:              qgcPal.text
+            anchors.centerIn:   parent
+        }
+
+        transform: Translate {
+            property double _angle: isNoseUpLocked() ? _windDir - _heading : _windDir
+            x: size/1.85 * Math.sin((_angle)*(3.14/180))
+            y: - size/1.85 * Math.cos((_angle)*(3.14/180))
         }
     }
 
