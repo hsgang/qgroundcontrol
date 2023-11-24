@@ -314,7 +314,7 @@ QString FirmwarePlugin::vehicleImageOpaque(const Vehicle*, QString vehicleType) 
     } else if (vehicleType == tr("Fixed Wing")) {
         return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
     } else if (vehicleType == tr("Multi-Rotor")) {
-        return QStringLiteral("/qmlimages/vehicleQuadRotor.svg");
+        return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
     } else if (vehicleType == tr("VTOL")) {
         return QStringLiteral("/qmlimages/vehicleArrowOpaque.svg");
     } else if (vehicleType == tr("Rover")) {
