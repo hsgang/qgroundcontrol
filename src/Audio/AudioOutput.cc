@@ -156,6 +156,9 @@ QString AudioOutput::fixTextMessageForAudio(const QString& string) {
     if(result.contains("3D Accel calibration needed", Qt::CaseInsensitive)) {
         result.replace("3D Accel calibration needed", tr("3D Accel calibration needed"), Qt::CaseInsensitive);
     }
+    if(result.contains("Throttle below failsafe", Qt::CaseInsensitive)) {
+        result.replace("Throttle below failsafe", tr("Throttle below failsafe"), Qt::CaseInsensitive);
+    }
     if(result.contains("ACCEL ", Qt::CaseInsensitive)) {
         result.replace("ACCEL ", "accelerometer ", Qt::CaseInsensitive);
     }
