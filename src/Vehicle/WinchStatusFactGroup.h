@@ -10,13 +10,13 @@ class WinchStatusFactGroup : public FactGroup
 public:
     WinchStatusFactGroup(QObject* parent = nullptr);
 
-    Q_PROPERTY(Fact* TimeUsec       READ timeUsec           CONSTANT)
-    Q_PROPERTY(Fact* LineLength     READ lineLength         CONSTANT)
-    Q_PROPERTY(Fact* Speed          READ speed              CONSTANT)
-    Q_PROPERTY(Fact* Tension        READ tension            CONSTANT)
-    Q_PROPERTY(Fact* Voltage        READ voltage            CONSTANT)
-    Q_PROPERTY(Fact* Current        READ current            CONSTANT)
-    Q_PROPERTY(Fact* Temperature    READ temperature        CONSTANT)
+    Q_PROPERTY(Fact* timeUsec       READ timeUsec           CONSTANT)
+    Q_PROPERTY(Fact* lineLength     READ lineLength         CONSTANT)
+    Q_PROPERTY(Fact* speed          READ speed              CONSTANT)
+    Q_PROPERTY(Fact* tension        READ tension            CONSTANT)
+    Q_PROPERTY(Fact* voltage        READ voltage            CONSTANT)
+    Q_PROPERTY(Fact* current        READ current            CONSTANT)
+    Q_PROPERTY(Fact* temperature    READ temperature        CONSTANT)
     Q_PROPERTY(Fact* status         READ status             CONSTANT)
 
     Fact* timeUsec                      () { return &_timeUsecFact; }
