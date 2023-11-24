@@ -285,7 +285,7 @@ Item {
 
     Rectangle {
         id:    messageTextBox
-        width: messageText.width * 1.2
+        width: messageText.width + (_toolsMargin * 4)
         height: messageText.height * 1.5
         radius: height / 2
         anchors.margins: _toolsMargin
