@@ -29,6 +29,17 @@ struct sensor_data32_Payload {
     int16_t extValue4Raw;
 };
 
+struct sensor_tunnel_forSmartCity {
+    int16_t temperatureRaw;
+    uint16_t humidityRaw;
+    float pressureRaw;
+    uint16_t windSpeedRaw;
+    uint16_t windHeadingRaw;
+    uint16_t pm1p0Raw;
+    uint16_t pm2p5Raw;
+    uint16_t pm10Raw;
+};
+
 AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     : FactGroup(500, ":/json/Vehicle/AtmosphericSensorFact.json", parent)
     , _statusFact     (0, _statusFactName,     FactMetaData::valueTypeUint8)
@@ -168,7 +179,33 @@ void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
     mavlink_msg_tunnel_decode(&message, &tunnel);
 
     switch(tunnel.payload_type){
-        case 300:
+        case 0: {
+            struct sensor_tunnel_forSmartCity sC;
+            memcpy(&sC, &tunnel.payload, sizeof(sC));
+
+            float tempRaw = sC.temperatureRaw * 0.01;
+            float humiRaw = sC.humidityRaw * 0.01;
+            float pressRaw = sC.pressureRaw;
+            float windDRaw = sC.windHeadingRaw;
+            float windSRaw = sC.windSpeedRaw * 0.1;
+            int16_t ext1Raw = sC.pm1p0Raw * 0.1;
+            int16_t ext2Raw = sC.pm2p5Raw * 0.1;
+            int16_t ext3Raw = sC.pm10Raw * 0.1;
+
+            if(tempRaw)  {temperature()->setRawValue(tempRaw);}
+            if(humiRaw)     {humidity()->setRawValue(humiRaw);}
+            if(pressRaw)     {pressure()->setRawValue(pressRaw);}
+            if(windDRaw)      {windDir()->setRawValue(windDRaw);}
+            if(windSRaw)      {windSpd()->setRawValue(windSRaw);}
+            if(ext1Raw)    {extValue1()->setRawValue(ext1Raw);}
+            if(ext2Raw)    {extValue2()->setRawValue(ext2Raw);}
+            if(ext3Raw)    {extValue3()->setRawValue(ext3Raw);}
+
+            status()->setRawValue(tunnel.payload_type);
+
+            break;
+        }
+        case 300: {
             struct sensor_data32_Payload tP;
 
             memcpy(&tP, &tunnel.payload, sizeof(tP));
@@ -197,6 +234,7 @@ void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
 
             status()->setRawValue(tunnel.payload_type);
             break;
+        }
     }
 }
 
