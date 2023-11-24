@@ -3869,6 +3869,11 @@ Please place your vehicle in water, click the button, and wait. Note that the th
         <translation>가속도계 보정 필요</translation>
     </message>
     <message>
+        <location filename="../src/Audio/AudioOutput.cc" line="159"/>
+        <source>Throttle below failsafe</source>
+        <translation>조종기 신호 없음</translation>
+    </message>
+    <message>
         <location filename="../src/Audio/AudioOutput.cc" line="155"/>
         <source>low voltage failsafe</source>
         <translation>저전압 페일세이프</translation>
@@ -6904,6 +6909,11 @@ Click Ok to start the auto-tuning process.
         <translation>마운트 제어</translation>
     </message>
     <message>
+        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
+        <source>Winch Control</source>
+        <translation>윈치 제어</translation>
+    </message>
+    <message>
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="416"/>
         <source>External Power Status</source>
         <translation>외부 전원 상태</translation>
@@ -6912,6 +6922,14 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="479"/>
         <source>Widget</source>
         <translation>위젯</translation>
+    </message>
+</context>
+<context>
+    <name>FlyViewAtmosphericSensorView</name>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericSensorView.qml" line="41"/>
+        <source>Ext. Sensors</source>
+        <translation>외부 센서 정보</translation>
     </message>
 </context>
 <context>
@@ -6930,44 +6948,69 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>FlyViewMissionProgress</name>
     <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="138"/>
+        <source>H.Speed</source>
+        <translation>수평 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="139"/>
+        <source>V.Speed</source>
+        <translation>수직 속도</translation>
+    </message>
+    <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="140"/>
-        <source>Altitude: </source>
-        <translation>고도: </translation>
+        <source>Altitude</source>
+        <translation>상대 고도</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="148"/>
-        <source>Latitude: </source>
-        <translation>위도: </translation>
+        <source>Latitude</source>
+        <translation>위도</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="155"/>
-        <source>Longitude: </source>
-        <translation>경도: </translation>
+        <source>Longitude</source>
+        <translation>경도</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="162"/>
-        <source>H.Distance: </source>
-        <translation>수평 경로: </translation>
+        <source>H.Distance</source>
+        <translation>수평 경로</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="169"/>
-        <source>Path Distance: </source>
-        <translation>전체 경로: </translation>
+        <source>Path Distance</source>
+        <translation>전체 경로</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="201"/>
+        <source>Flight Distance</source>
+        <translation>비행 거리</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="242"/>
+        <source>Flight Time</source>
+        <translation>비행 시간</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="176"/>
-        <source>Total Time: </source>
-        <translation>임무 시간: </translation>
+        <source>Total Time</source>
+        <translation>계획 시간</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="314"/>
-        <source>Mission Seq: </source>
-        <translation>경로 항목: </translation>
+        <source>Mission Seq</source>
+        <translation>경로 항목</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="322"/>
-        <source>Captures: </source>
-        <translation>촬영: </translation>
+        <source>Captures</source>
+        <translation>촬영 매수</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="134"/>
+        <source>Reload Mission</source>
+        <translation>미션 다운로드</translation>
     </message>
 </context>
 <context>
