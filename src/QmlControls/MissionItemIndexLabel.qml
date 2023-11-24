@@ -18,7 +18,7 @@ Canvas {
     property bool   small:                  !checked
     property bool   child:                  false
     property bool   highlightSelected:      false
-    property var    color:                  checked ? "green" : (child ? qgcPal.mapIndicatorChild : qgcPal.mapIndicator)
+    property var    color:                  checked ? qgcPal.colorGreen : (child ? qgcPal.mapIndicatorChild : qgcPal.mapIndicator)
     property real   anchorPointX:           _height / 2
     property real   anchorPointY:           _height / 2
     property bool   specifiesCoordinate:    true
@@ -115,7 +115,7 @@ Canvas {
             anchors.fill:           parent
             horizontalAlignment:    Text.AlignHCenter
             verticalAlignment:      Text.AlignVCenter
-            color:                  "white"
+            color:                  checked ? "black" : "white"
             font.pointSize:         ScreenTools.defaultFontPointSize
             fontSizeMode:           Text.Fit
             text:                   _index
