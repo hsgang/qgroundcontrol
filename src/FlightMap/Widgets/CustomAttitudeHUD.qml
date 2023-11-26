@@ -186,46 +186,81 @@ Item {
         }
     }
 
-    Image {
-            id:                 gimbalSight
-            visible:            _haveGimbal & _gimbalPitch >= -85
-            anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-            source:             "/qmlimages/gimbalSight.svg"
-            mipmap:             true
-            width:              parent.width * 0.6
-            sourceSize.width:   width
-            antialiasing:       true
-            fillMode:           Image.PreserveAspectFit
 
-            transform: Rotation {
-                origin.x:       gimbalSight.width / 2
-                origin.y:       gimbalSight.height / 2
-                angle:          isNoseUpLocked() ? _gimbalYaw : _heading + _gimbalYaw
+//    Image {
+//            id:                 gimbalSight
+//            visible:            true //_haveGimbal & _gimbalPitch >= -85
+//            anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
+//            source:             "/qmlimages/gimbalSight.svg"
+//            mipmap:             true
+//            width:              parent.width * 0.6
+//            sourceSize.width:   width
+//            antialiasing:       true
+//            fillMode:           Image.PreserveAspectFit
+
+    Rectangle {
+        id:             gimbalSight
+        visible:        _haveGimbal & _gimbalPitch >= -85
+        anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter }
+        width:          parent.width * 0.6
+        height:         width
+        color:          "transparent"
+        //border.color:   qgcPal.text
+
+        Canvas {
+            id: triangleCanvas
+            anchors.fill: parent
+
+            onPaint: {
+                var ctx = getContext("2d");
+
+                // 그라데이션 생성
+                var gradient = ctx.createLinearGradient(triangleCanvas.width / 2, 0, triangleCanvas.width / 2, triangleCanvas.height);
+                gradient.addColorStop(0, "transparent");
+                gradient.addColorStop(0.5, qgcPal.colorGreen);
+
+                // 삼각형 그리기
+                ctx.beginPath();
+                ctx.moveTo(triangleCanvas.width / 4, 0);
+                ctx.lineTo((triangleCanvas.width / 4) * 3, 0);
+                ctx.lineTo(triangleCanvas.width / 2, triangleCanvas.height / 2);
+                ctx.closePath();
+
+                // 그라데이션 적용
+                ctx.fillStyle = gradient;
+                ctx.fill();
             }
+        }
+
+        transform: Rotation {
+            origin.x:       gimbalSight.width / 2
+            origin.y:       gimbalSight.height / 2
+            angle:          isNoseUpLocked() ? _gimbalYaw : _heading + _gimbalYaw
+        }
     }
 
     Image {
-            id:                 vehicleHeadingDial
-            anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-            source:             "/qmlimages/vehicleArrowOpaque.svg"
-            mipmap:             true
-            width:              parent.width * 0.2
-            sourceSize.width:   width
-            antialiasing:       true
-            fillMode:           Image.PreserveAspectFit
+        id:                 vehicleHeadingDial
+        anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
+        source:             "/qmlimages/vehicleArrowOpaque.svg"
+        mipmap:             true
+        width:              parent.width * 0.2
+        sourceSize.width:   width
+        antialiasing:       true
+        fillMode:           Image.PreserveAspectFit
 
-            layer {
-                enabled: true
-                effect: ColorOverlay {
-                    color: qgcPal.text
-                }
+        layer {
+            enabled: true
+            effect: ColorOverlay {
+                color: qgcPal.text
             }
+        }
 
-            transform: Rotation {
-                origin.x:       vehicleHeadingDial.width / 2
-                origin.y:       vehicleHeadingDial.height / 2
-                angle:          isNoseUpLocked() ? 0 : _heading
-            }
+        transform: Rotation {
+            origin.x:       vehicleHeadingDial.width / 2
+            origin.y:       vehicleHeadingDial.height / 2
+            angle:          isNoseUpLocked() ? 0 : _heading
+        }
     }
 
     Image {
