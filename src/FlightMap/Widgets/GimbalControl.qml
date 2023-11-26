@@ -26,12 +26,15 @@ import QGroundControl.FactControls      1.0
 Rectangle {
     id:         gimbalControlPannel
     width:      mainGridLayout.width
-    height:     mainGridLayout.height + _margins
+    height:     mainGridLayout.height //+ _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
     radius:     _margins
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
-    property real   _margins:                                   ScreenTools.defaultFontPixelHeight / 2
+    property real   _margins:         ScreenTools.defaultFontPixelHeight / 2
+    property real   _idealWidth:      (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8)
+    property real   anchorsMargins:   _margins //ScreenTools.defaultFontPixelWidth * 0.8
+
     property var    _activeVehicle:                             QGroundControl.multiVehicleManager.activeVehicle
 
     // The following properties relate to a simple camera
@@ -91,9 +94,10 @@ Rectangle {
     property bool   _canShootInCurrentMode:                     _mavlinkCamera ? _mavlinkCameraCanShoot : _videoStreamCanShoot || _simpleCameraAvailable
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
-    property string   _gimbalRollString:        _activeVehicle ? _activeVehicle.gimbalRoll.toFixed(2) : "--"
-    property string   _gimbalPitchString:       _activeVehicle ? _activeVehicle.gimbalPitch.toFixed(2) : "--"
-    property string   _gimbalYawString:         _activeVehicle ? _activeVehicle.gimbalYaw.toFixed(2) : "--"
+    property bool     _gimbalData:              _activeVehicle ? _activeVehicle.gimbalData : false
+    property string   _gimbalRollString:        _gimbalData ? _activeVehicle.gimbalRoll.toFixed(2) : "--"
+    property string   _gimbalPitchString:       _gimbalData ? _activeVehicle.gimbalPitch.toFixed(2) : "--"
+    property string   _gimbalYawString:         _gimbalData ? _activeVehicle.gimbalYaw.toFixed(2) : "--"
 
     property double _localPitch: 0.0
     property double _localYaw: 0.0
@@ -119,13 +123,16 @@ Rectangle {
                 text: " Y: " +_gimbalYawString
                 Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
             }
+            QGCLabel{
+                text: "data:" + _gimbalData
+            }
         }
     }
 
     GridLayout {
         id:                         mainGridLayout
-        Layout.alignment:           Qt.AlignHCenter
-        anchors.margins:            _margins
+        //Layout.alignment:           Qt.AlignHCenter
+        //anchors.margins:            _margins
         anchors.verticalCenter:     parent.verticalCenter
         anchors.horizontalCenter:   parent.horizontalCenter
         columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
@@ -134,8 +141,8 @@ Rectangle {
 
         Rectangle {
             id:                 zoomIn
-            width:              gimbalControlPannel.width/4
-            height:             gimbalControlPannel.height/4
+            width:              _idealWidth - anchorsMargins
+            height:             width
             radius:             _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
@@ -168,8 +175,8 @@ Rectangle {
         Rectangle {
             id:                 gimbalUp
             Layout.alignment:   Qt.AlignHCenter
-            width:              gimbalControlPannel.width/4
-            height:             gimbalControlPannel.height/4
+            width:              _idealWidth - anchorsMargins
+            height:             width
             radius:             _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
@@ -206,8 +213,8 @@ Rectangle {
         Rectangle {
             id:                 baseDown
             Layout.alignment:   Qt.AlignHCenter
-            width:              gimbalControlPannel.width/4
-            height:             gimbalControlPannel.height/4
+            width:              _idealWidth - anchorsMargins
+            height:             width
             radius:             _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
@@ -240,8 +247,8 @@ Rectangle {
         Rectangle {
             id:                 gimbalLeft
             Layout.alignment:   Qt.AlignHCenter
-            width:              gimbalControlPannel.width/4
-            height:             gimbalControlPannel.height/4
+            width:              _idealWidth - anchorsMargins
+            height:             width
             radius:             _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
@@ -278,8 +285,8 @@ Rectangle {
         Rectangle {
             id:                 gimbalHome
             Layout.alignment:   Qt.AlignHCenter
-            width:              gimbalControlPannel.width/4
-            height:             gimbalControlPannel.height/4
+            width:              _idealWidth - anchorsMargins
+            height:             width
             radius:             _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
@@ -314,8 +321,8 @@ Rectangle {
         Rectangle {
             id:                 gimbalRight
             Layout.alignment:   Qt.AlignHCenter
-            width:              gimbalControlPannel.width/4
-            height:             gimbalControlPannel.height/4
+            width:              _idealWidth - anchorsMargins
+            height:             width
             radius:             _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
@@ -352,8 +359,8 @@ Rectangle {
         Rectangle {
             id:                 zoomOut
             Layout.alignment:   Qt.AlignHCenter
-            width:              gimbalControlPannel.width/4
-            height:             gimbalControlPannel.height/4
+            width:              _idealWidth - anchorsMargins
+            height:             width
             radius:             _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
@@ -386,8 +393,8 @@ Rectangle {
         Rectangle {
             id:                 gimbalDown
             Layout.alignment:   Qt.AlignHCenter
-            width:              gimbalControlPannel.width/4
-            height:             gimbalControlPannel.height/4
+            width:              _idealWidth - anchorsMargins
+            height:             width
             radius:             _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text
@@ -424,8 +431,8 @@ Rectangle {
         Rectangle {
             id:                 gimbalMode
             Layout.alignment:   Qt.AlignHCenter
-            width:              gimbalControlPannel.width/4
-            height:             gimbalControlPannel.height/4
+            width:              _idealWidth - anchorsMargins
+            height:             width
             radius:             _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
             border.color:       qgcPal.text

@@ -165,6 +165,10 @@ GimbalController::_handleGimbalDeviceAttitudeStatus(const mavlink_message_t& mes
 
     gimbal_it->receivedAttitude = true;
 
+    emit _vehicle->gimbalRollChanged();
+    emit _vehicle->gimbalPitchChanged();
+    emit _vehicle->gimbalYawChanged();
+
     _checkComplete(*gimbal_it, message.compid);
 }
 
@@ -227,5 +231,5 @@ GimbalController::_checkComplete(Gimbal& gimbal, uint8_t compid)
     gimbal.isComplete = true;
 
     _gimbals.push_back(&gimbal);
-    _vehicle->gimbalDataChanged();
+    emit _vehicle->gimbalDataChanged();
 }
