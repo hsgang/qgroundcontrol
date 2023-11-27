@@ -4515,7 +4515,7 @@ void Vehicle::_doSetHomeTerrainReceived(bool success, QList<double> heights)
     _currentDoSetHomeTerrainAtCoordinateQuery = nullptr;
     _doSetHomeCoordinate = QGeoCoordinate(); // So isValid() will no longer return true, for extra safety
 }
-    
+
 qreal
 Vehicle::gimbalRoll() const
 {
