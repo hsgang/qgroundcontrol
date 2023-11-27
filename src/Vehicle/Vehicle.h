@@ -1620,6 +1620,10 @@ private:
     // We use this to limit above terrain altitude queries based on distance and altitude change
     QGeoCoordinate              _altitudeAboveTerrLastCoord;
     float                       _altitudeAboveTerrLastRelAlt = qQNaN();
+
+    float mountRoll = qQNaN();
+    float mountPitch = qQNaN();
+    float mountYaw = qQNaN();
 };
 
 Q_DECLARE_METATYPE(Vehicle::MavCmdResultFailureCode_t)

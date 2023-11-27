@@ -217,7 +217,7 @@ Item {
                 // 그라데이션 생성
                 var gradient = ctx.createLinearGradient(triangleCanvas.width / 2, 0, triangleCanvas.width / 2, triangleCanvas.height);
                 gradient.addColorStop(0, "transparent");
-                gradient.addColorStop(0.5, qgcPal.colorGreen);
+                gradient.addColorStop(0.5, qgcPal.brandingBlue);
 
                 // 삼각형 그리기
                 ctx.beginPath();

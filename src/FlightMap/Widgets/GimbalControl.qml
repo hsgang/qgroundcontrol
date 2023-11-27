@@ -95,9 +95,9 @@ Rectangle {
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
     property bool     _gimbalData:              _activeVehicle ? _activeVehicle.gimbalData : false
-    property string   _gimbalRollString:        _gimbalData ? _activeVehicle.gimbalRoll.toFixed(2) : "--"
-    property string   _gimbalPitchString:       _gimbalData ? _activeVehicle.gimbalPitch.toFixed(2) : "--"
-    property string   _gimbalYawString:         _gimbalData ? _activeVehicle.gimbalYaw.toFixed(2) : "--"
+    property string   _gimbalRollString:        _activeVehicle ? _activeVehicle.gimbalRoll.toFixed(2) : "--"
+    property string   _gimbalPitchString:       _activeVehicle ? _activeVehicle.gimbalPitch.toFixed(2) : "--"
+    property string   _gimbalYawString:         _activeVehicle ? _activeVehicle.gimbalYaw.toFixed(2) : "--"
 
     property double _localPitch: 0.0
     property double _localYaw: 0.0
