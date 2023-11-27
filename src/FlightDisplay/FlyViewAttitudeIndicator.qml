@@ -71,6 +71,15 @@ Row{
         }
     }
 
+    function zeroPad(input, length) {
+        var sign = (input[0] === '-') ? '-' : "";
+        input = input.replace(/^-/, "");
+        while (input.length < length) {
+            input = "0" + input;
+        }
+        return sign + input;
+    }
+
     //--Ground Speed Value Widget-----------------------------------------------------------------------------------
 
     Rectangle {
@@ -116,13 +125,13 @@ Row{
                 }
 
                 QGCLabel {
-                    text:                   _vehicleGroundSpeedText
+                    //text:                   _vehicleGroundSpeedText
+                    text:                   zeroPad(_vehicleGroundSpeedText, 4)
                     font.bold :             true
                     color:                  qgcPal.textHighlight
                     font.pointSize :        ScreenTools.defaultFontPointSize * 2
                     Layout.fillWidth:       true
-                    Layout.minimumWidth:    _largeValueWidth * 1.5
-                    Layout.preferredWidth:  _largeValueWidth * 1.7
+                    Layout.preferredWidth:  _largeValueWidth
                     horizontalAlignment:    Text.AlignHCenter
                 }
             }
@@ -303,13 +312,13 @@ Row{
                 Layout.fillHeight:      false
 
                 QGCLabel {
-                    text:                   _vehicleAltitudeText
+                    //text:                   _vehicleAltitudeText
+                    text:                   zeroPad(_vehicleAltitudeText, 5)
                     font.bold:              true
                     color:                  qgcPal.textHighlight
                     font.pointSize:         ScreenTools.defaultFontPointSize * 2
                     Layout.fillWidth:       true
-                    Layout.minimumWidth:    _largeValueWidth * 1.5
-                    Layout.preferredWidth:  _largeValueWidth * 1.7
+                    Layout.preferredWidth:  _largeValueWidth
                     horizontalAlignment:    Text.AlignHCenter
                 }
 
