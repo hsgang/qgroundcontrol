@@ -25,8 +25,8 @@ import QGroundControl.FactControls      1.0
 
 Rectangle {
     id:         gimbalControlPannel
-    width:      mainGridLayout.width
-    height:     mainGridLayout.height //+ _margins
+    width:      mainGridLayout.width + _margins
+    height:     mainGridLayout.height + _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
     radius:     _margins
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
@@ -104,7 +104,8 @@ Rectangle {
     property int    _gimbalModeStatus: 0
 
     Rectangle{
-        anchors.bottom: parent.bottom
+        anchors.top: parent.bottom
+        anchors.margins: _margins / 2
         anchors.horizontalCenter: parent.horizontalCenter
         width:          gimbalAngleValueRow.width
         height:         gimbalAngleValueRow.height
