@@ -93,9 +93,11 @@ Item {
     }
 
     Keys.onPressed:{
-        if(event.key === Qt.Key_Space){
-            animator.restart()
-            root.pressSignal()
+        if (visible) {
+            if(event.key === Qt.Key_Space){
+                animator.restart()
+                root.pressSignal()
+            }
         }
     }
 
