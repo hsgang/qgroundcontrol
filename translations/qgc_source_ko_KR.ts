@@ -4088,6 +4088,11 @@ Click Ok to start the auto-tuning process.
         <translation>전압</translation>
     </message>
     <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="79"/>
+        <source>Cell Voltage</source>
+        <translation>셀전압</translation>
+    </message>
+    <message>
         <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="74"/>
         <source>Current</source>
         <translation>전류</translation>
@@ -6568,13 +6573,33 @@ Click Ok to start the auto-tuning process.
     <name>MainStatusIndicatorOfflinePage</name>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="75"/>
+        <source>Communication Links</source>
+        <translation>연결 관리</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="75"/>
         <source>Configure</source>
         <translation>설정</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="77"/>
         <source>Comm Links</source>
-        <translation>통신 링크</translation>
+        <translation>연결 관리</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="45"/>
+        <source>Connect To Link</source>
+        <translation>연결 목록</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="45"/>
+        <source>No Links Configured</source>
+        <translation>연결 목록 없음</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="45"/>
+        <source>Auto Connect</source>
+        <translation>자동 연결</translation>
     </message>
 </context>
 <context>
@@ -6829,6 +6854,16 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>FlyViewCustomLayer</name>
     <message>
+        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="395"/>
+        <source>Payload Widget</source>
+        <translation>임무장치</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="395"/>
+        <source>Status Widget</source>
+        <translation>상태</translation>
+    </message>
+    <message>
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="505"/>
         <source>Weather Status</source>
         <translation>날씨 정보</translation>
@@ -6891,7 +6926,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="404"/>
         <source>Atmospheric Data</source>
-        <translation>대기 상태 정보</translation>
+        <translation>대기 측정 정보</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="407"/>
@@ -6905,8 +6940,13 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
-        <source>Mount Control</source>
-        <translation>마운트 제어</translation>
+        <source>Mount Control Pad</source>
+        <translation>마운트 제어 패드</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
+        <source>Mount Widget</source>
+        <translation>마운트 위젯</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
@@ -7064,6 +7104,44 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/GPSIndicator.qml" line="71"/>
         <source>Course Over Ground:</source>
         <translation>지상 궤적:</translation>
+    </message>
+</context>
+<context>
+    <name>GPSIndicatorPage</name>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Vehicle GNSS Status</source>
+        <translation>GNSS 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="49"/>
+        <source>Satellites</source>
+        <translation>위성</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="52"/>
+        <source>GPS Lock</source>
+        <translation>GNSS 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="55"/>
+        <source>HDOP</source>
+        <translation>수평 위치 오차</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="58"/>
+        <source>VDOP</source>
+        <translation>수직 위치 오차</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="61"/>
+        <source>Course Over Ground</source>
+        <translation>경로 방위</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Vehicle GNSS2 Status</source>
+        <translation>GNSS2 상태</translation>
     </message>
 </context>
 <context>
@@ -9142,7 +9220,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/QmlControls/LogReplayStatusBar.qml" line="56"/>
         <source>Pause</source>
-        <translation>일시 중지</translation>
+        <translation>정지</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/LogReplayStatusBar.qml" line="56"/>
@@ -9571,6 +9649,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/MainRootWindow.qml" line="520"/>
         <source>Back</source>
         <translation>뒤로 가기</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/MainRootWindow.qml" line="627"/>
+        <source>Detail</source>
+        <translation>상세 설정</translation>
     </message>
 </context>
 <context>
@@ -12714,7 +12797,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="121"/>
         <source>Done</source>
-        <translation>완료</translation>
+        <translation>업로드 완료</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="138"/>
@@ -12884,12 +12967,12 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="140"/>
         <source>Plan View - Vehicle Disconnected</source>
-        <translation>플랜 뷰 - 기체 연결 해제 됨</translation>
+        <translation>플랜 뷰 - 연결 끊김</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="140"/>
         <source>Plan View - Vehicle Changed</source>
-        <translation>플랜 뷰 - 활성 기체 바뀜</translation>
+        <translation>플랜 뷰 - 기체 변경</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="148"/>
@@ -12919,12 +13002,12 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="169"/>
         <source>Keep Current Plan</source>
-        <translation>현재 플랜 유지</translation>
+        <translation>현재 플랜 유지하기</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="170"/>
         <source>Keep Current Plan, Don&apos;t Update From Vehicle</source>
-        <translation>작성 중인 플랜 유지</translation>
+        <translation>작성 중인 플랜 유지하기</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="187"/>
@@ -13715,12 +13798,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/api/QGCCorePlugin.cc" line="134"/>
         <source>General</source>
-        <translation>일반</translation>
+        <translation>일반 설정</translation>
     </message>
     <message>
         <location filename="../src/api/QGCCorePlugin.cc" line="138"/>
         <source>Comm Links</source>
-        <translation>통신 링크</translation>
+        <translation>연결 관리</translation>
     </message>
     <message>
         <location filename="../src/api/QGCCorePlugin.cc" line="142"/>
