@@ -102,9 +102,11 @@ Item {
                     Layout.fillWidth:   true
                     color:              qgcPal.text
                     height:             1
+                    visible:            resumeMissionColumn.visible
                 }
 
                 ColumnLayout {
+                    id:                 resumeMissionColumn
                     Layout.fillWidth:   true
                     spacing:            ScreenTools.defaultFontPixelHeight
                     visible:            !_activeVehicle.communicationLost && globals.guidedControllerFlyView.showResumeMission
