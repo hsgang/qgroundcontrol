@@ -440,7 +440,7 @@ Rectangle{
 
                     ShapePath {
                         id: battPathProgress
-                        strokeColor: qgcPal.colorOrange // root.progressColor
+                        strokeColor: qgcPal.brandingBlue // root.progressColor
                         fillColor: internals.transparentColor
                         strokeWidth: root.dialWidth
                         capStyle: root.penStyle
