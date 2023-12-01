@@ -22,6 +22,8 @@ Rectangle {
     color:  qgcPal.window
     z:      QGroundControl.zOrderTopMost
 
+    ExclusiveGroup { id: setupButtonGroup }
+
     readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
     readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
     readonly property real _horizontalMargin:   _defaultTextWidth / 2
@@ -66,50 +68,86 @@ Rectangle {
         flickableDirection: Flickable.VerticalFlick
         clip:               true
 
-        ColumnLayout {
+        Column {
             id:         buttonColumn
+            width:      _maxButtonWidth
             spacing:    _verticalMargin
 
             property real _maxButtonWidth: 0
+
+            Component.onCompleted: reflowWidths()
+
+            // I don't know why this does not work
+            Connections {
+                target:         QGroundControl.settingsManager.appSettings.appFontPointSize
+                onValueChanged: buttonColumn.reflowWidths()
+            }
+
+            function reflowWidths() {
+                buttonColumn._maxButtonWidth = 0
+                for (var i = 0; i < children.length; i++) {
+                    buttonColumn._maxButtonWidth = Math.max(buttonColumn._maxButtonWidth, children[i].width)
+                }
+                for (var j = 0; j < children.length; j++) {
+                    children[j].width = buttonColumn._maxButtonWidth
+                }
+            }
 
             Repeater {
                 id:     buttonRepeater
                 model:  QGroundControl.corePlugin.settingsPages
 
-                QGCButton {
-                    height:             _buttonHeight
+                Component.onCompleted:  itemAt(0).checked = true
+
+                SubMenuButton {
+                    id:                 subMenu
+                    imageResource:      modelData.icon
+                    setupIndicator:     false
+                    exclusiveGroup:     setupButtonGroup
                     text:               modelData.title
-                    autoExclusive:      true
-                    Layout.fillWidth:   true
                     visible:            modelData.url != "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
 
                     onClicked: {
-                        if (mainWindow.preventViewSwitch()) {
-                            return
-                        }
-                        if (__rightPanel.source !== modelData.url) {
-                            __rightPanel.source = modelData.url
-                        }
-                        checked = true
-                    }
-
-                    Component.onCompleted: {
-                        if (globals.commingFromRIDIndicator) {
-                            _commingFromRIDSettings = true
-                        }
-                        if(_first) {
-                            _first = false
-                            checked = true
-                        }
-                        if (_commingFromRIDSettings) {
-                            checked = false
-                            _commingFromRIDSettings = false
-                            if (modelData.url == "qrc:/qml/RemoteIDSettings.qml") {
-                                checked = true
-                            }
-                        }
+                        __rightPanel.source = modelData.url
+                        //__rightPanel.title  = modelData.title
+                        checked             = true
                     }
                 }
+
+//                QGCButton {
+//                    height:             _buttonHeight
+//                    text:               modelData.title
+//                    autoExclusive:      true
+//                    Layout.fillWidth:   true
+//                    visible:            modelData.url != "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
+
+//                    onClicked: {
+//                        if (mainWindow.preventViewSwitch()) {
+//                            return
+//                        }
+//                        if (__rightPanel.source !== modelData.url) {
+//                            __rightPanel.source = modelData.url
+//                        }
+//                        checked = true
+//                    }
+
+//                    Component.onCompleted: {
+//                        if (globals.commingFromRIDIndicator) {
+//                            _commingFromRIDSettings = true
+//                        }
+//                        if(_first) {
+//                            _first = false
+//                            checked = true
+//                        }
+//                        if (_commingFromRIDSettings) {
+//                            checked = false
+//                            _commingFromRIDSettings = false
+//                            if (modelData.url == "qrc:/qml/RemoteIDSettings.qml") {
+//                                checked = true
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
     }

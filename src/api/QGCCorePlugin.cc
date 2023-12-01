@@ -133,11 +133,11 @@ QVariantList &QGCCorePlugin::settingsPages()
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pGeneral)));
         _p->pCommLinks = new QmlComponentInfo(tr("Comm Links"),
                                               QUrl::fromUserInput("qrc:/qml/LinkSettings.qml"),
-                                              QUrl::fromUserInput("qrc:/res/waves.svg"));
+                                              QUrl::fromUserInput("qrc:/InstrumentValueIcons/link.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pCommLinks)));
         _p->pOfflineMaps = new QmlComponentInfo(tr("Offline Maps"),
                                                 QUrl::fromUserInput("qrc:/qml/OfflineMap.qml"),
-                                                QUrl::fromUserInput("qrc:/res/waves.svg"));
+                                                QUrl::fromUserInput("qrc:/InstrumentValueIcons/globe.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pOfflineMaps)));
 #if defined(QGC_GST_TAISYNC_ENABLED)
         _p->pTaisync = new QmlComponentInfo(tr("Taisync"),
@@ -156,13 +156,16 @@ QVariantList &QGCCorePlugin::settingsPages()
                                             QUrl::fromUserInput("qrc:/res/waves.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pMAVLink)));
         _p->pRemoteID = new QmlComponentInfo(tr("Remote ID"),
-                                            QUrl::fromUserInput("qrc:/qml/RemoteIDSettings.qml"));
+                                            QUrl::fromUserInput("qrc:/qml/RemoteIDSettings.qml"),
+                                            QUrl::fromUserInput("qrc:/qmlimages/RidIconGreen.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pRemoteID)));
         _p->pConsole = new QmlComponentInfo(tr("Console"),
-                                            QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/AppMessages.qml"));
+                                            QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/AppMessages.qml"),
+                                            QUrl::fromUserInput("qrc:/InstrumentValueIcons/chat-bubble-dots.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pConsole)));
         _p->pHelp = new QmlComponentInfo(tr("Help"),
-                                         QUrl::fromUserInput("qrc:/qml/HelpSettings.qml"));
+                                         QUrl::fromUserInput("qrc:/qml/HelpSettings.qml"),
+                                         QUrl::fromUserInput("qrc:/InstrumentValueIcons/question.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pHelp)));
 #if defined(QT_DEBUG)
         //-- These are always present on Debug builds
