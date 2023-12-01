@@ -397,6 +397,7 @@ Item {
                     flow:   GridLayout.LeftToRight //TopToBottom
                     columns: 2
                     rowSpacing: _margins * 2
+                    Layout.alignment: Qt.AlignTop
 
                     QGCLabel{ text: qsTr("Payload Widget"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
 
@@ -406,10 +407,16 @@ Item {
                         onClicked:          photoVideoControl.visible = !photoVideoControl.visible
                     }
 
-                    QGCLabel{ text: qsTr("Mount Control") }
+                    QGCLabel{ text: qsTr("Mount Control Pad") }
                     QGCSwitch {
                         checked:            QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue === true ? 1 : 0
                         onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
+                    }
+
+                    QGCLabel{ text: qsTr("Mount Widget") }
+                    QGCSwitch {
+                        checked:            videoToolStrip.visible
+                        onClicked:          videoToolStrip.visible = !videoToolStrip.visible
                     }
 
                     QGCLabel{ text: qsTr("Winch Control") }
@@ -436,6 +443,7 @@ Item {
                     flow:   GridLayout.LeftToRight //TopToBottom
                     columns: 2
                     rowSpacing: _margins * 2
+                    Layout.alignment: Qt.AlignTop
 
                     QGCLabel{ text: qsTr("Status Widget"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
 
