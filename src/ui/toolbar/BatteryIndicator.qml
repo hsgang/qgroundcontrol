@@ -31,6 +31,10 @@ Item {
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 
+    property var _batterySettings:  QGroundControl.settingsManager.batterySettings
+    property real _batteryCellCount: _batterySettings.batteryCellCount.value
+    property bool _showCellVoltage: QGroundControl.settingsManager.batterySettings.showCellVoltage.value
+
     Row {
         id:             batteryIndicatorRow
         anchors.top:    parent.top
@@ -66,10 +70,39 @@ Item {
 
             FactPanelController { id: controller }
 
-            contentItem: BatteryIndicatorContentItem { }
+            contentItem: BatteryIndicatorContentItem {
+                Layout.preferredWidth: parent.width
+            }
 
             expandedItem: ColumnLayout {
-                spacing: ScreenTools.defaultFontPixelHeight / 2
+                Layout.fillWidth:   true
+                spacing:            ScreenTools.defaultFontPixelHeight / 2
+
+                IndicatorPageGroupLayout {
+                    Layout.fillWidth:       true
+                    heading:                qsTr("Battery Settings")
+
+                    GridLayout {
+                        Layout.fillWidth:   true
+                        columns:            2
+                        columnSpacing:      ScreenTools.defaultFontPixelHeight
+
+                        QGCLabel { text: qsTr("Battery Cells") }
+                        FactTextField {
+                            Layout.fillWidth:       true
+                            Layout.preferredWidth:  editFieldWidth
+                            fact:                   _batterySettings.batteryCellCount
+                        }
+
+                        //QGCLabel { text: qsTr("Show Cell Voltage") }
+                        FactCheckBoxSlider {
+                            text:                   qsTr("Show Cell Voltage")
+                            Layout.columnSpan:      2
+                            Layout.fillWidth:       true
+                            fact:                   _batterySettings.showCellVoltage
+                        }
+                    }
+                }
 
                 IndicatorPageGroupLayout {
                     Layout.fillWidth:   true
@@ -121,7 +154,8 @@ Item {
                             text: qsTr("Configure")
                             onClicked: {
                                 mainWindow.showVehicleSetupTool(qsTr("Power"))
-                                indicatorDrawer.close()
+                                //indicatorDrawer.close()
+                                componentDrawer.visible = false
                             }
                         }
                     }
@@ -260,7 +294,9 @@ Item {
                     anchors.right:          parent.right
                     font.pointSize:         ScreenTools.smallFontPointSize
                     color:                  qgcPal.text
-                    text:                   _activeVehicle ? battery.voltage.valueString + battery.voltage.units : ""
+                    text:                   _activeVehicle ? (_showCellVoltage ? _cellVoltage : battery.voltage.valueString + battery.voltage.units) : ""
+
+                    property string _cellVoltage: (battery.voltage.value / _batteryCellCount).toFixed(2) + battery.voltage.units
                 }
 
                 QGCLabel {

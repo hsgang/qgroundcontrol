@@ -436,6 +436,7 @@ HEADERS += \
     src/QmlControls/CustomAction.h \
     src/QmlControls/CustomActionManager.h \
     src/QmlControls/QmlUnitsConversion.h \
+    src/Settings/BatterySettings.h \
     src/SiYi/SiYi.h \
     src/SiYi/SiYiCamera.h \
     src/SiYi/SiYiCrcApi.h \
@@ -461,6 +462,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
+    src/Settings/BatterySettings.cc \
     src/SiYi/SiYi.cc \
     src/SiYi/SiYiCamera.cc \
     src/SiYi/SiYiCrcApi.cc \

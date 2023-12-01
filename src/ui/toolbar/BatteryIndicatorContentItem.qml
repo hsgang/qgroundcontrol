@@ -25,8 +25,12 @@ import MAVLink                              1.0
 ColumnLayout {
     id:         mainLayout
     spacing:    ScreenTools.defaultFontPixelHeight
+    Layout.fillWidth: true
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+
+    property var _batterySettings: QGroundControl.settingsManager.batterySettings
+    property real _batteryCellCount: _batterySettings.batteryCellCount.value
 
     Component {
         id: batteryValuesAvailableComponent
@@ -48,6 +52,7 @@ ColumnLayout {
     }
 
     RowLayout {
+        Layout.preferredWidth: parent.width
         spacing: ScreenTools.defaultFontPixelWidth
 
         ColumnLayout {
@@ -68,9 +73,10 @@ ColumnLayout {
 
                     QGCLabel { text: qsTr("Battery %1").arg(object.id.rawValue) }
                     QGCLabel { text: qsTr("Charge State");                          visible: batteryValuesAvailable.chargeStateAvailable }
-                    QGCLabel { text: qsTr("Remaining Time");                         visible: batteryValuesAvailable.timeRemainingAvailable }
+                    QGCLabel { text: qsTr("Remaining Time");                        visible: batteryValuesAvailable.timeRemainingAvailable }
                     QGCLabel { text: qsTr("Remaining") }
                     QGCLabel { text: qsTr("Voltage") }
+                    QGCLabel { text: qsTr("Cell Voltage") }
                     QGCLabel { text: qsTr("Current");                               visible: batteryValuesAvailable.currentAvailable }
                     QGCLabel { text: qsTr("Consumed");                              visible: batteryValuesAvailable.mahConsumedAvailable }
                     QGCLabel { text: qsTr("Temperature");                           visible: batteryValuesAvailable.temperatureAvailable }
@@ -100,6 +106,7 @@ ColumnLayout {
                     QGCLabel { text: object.timeRemainingStr.value;                                             visible: batteryValuesAvailable.timeRemainingAvailable }
                     QGCLabel { text: object.percentRemaining.valueString + " " + object.percentRemaining.units }
                     QGCLabel { text: object.voltage.valueString + " " + object.voltage.units }
+                    QGCLabel { text: (object.voltage.value / _batteryCellCount).toFixed(2) + " " + object.voltage.units }
                     QGCLabel { text: object.current.valueString + " " + object.current.units;                   visible: batteryValuesAvailable.currentAvailable }
                     QGCLabel { text: object.mahConsumed.valueString + " " + object.mahConsumed.units;           visible: batteryValuesAvailable.mahConsumedAvailable }
                     QGCLabel { text: object.temperature.valueString + " " + object.temperature.units;           visible: batteryValuesAvailable.temperatureAvailable }
