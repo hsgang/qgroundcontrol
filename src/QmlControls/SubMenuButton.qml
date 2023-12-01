@@ -15,7 +15,7 @@ Button {
     property bool   setupIndicator: true                                    ///< true: show setup complete indicator
     property var    imageColor:     undefined
     property string imageResource:  "/qmlimages/subMenuButtonImage.png"     ///< Button image
-    property size   sourceSize:     Qt.size(ScreenTools.defaultFontPixelHeight * 1.5, ScreenTools.defaultFontPixelHeight * 1.5)
+    property size   sourceSize:     Qt.size(ScreenTools.defaultFontPixelHeight * 1.2, ScreenTools.defaultFontPixelHeight * 1.2)
 
     text:               "Button"  ///< Pass in your own button text
     activeFocusOnPress: true

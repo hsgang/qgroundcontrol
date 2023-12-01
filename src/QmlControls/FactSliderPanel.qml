@@ -8,8 +8,8 @@
  ****************************************************************************/
 
 
-import QtQuick              2.3
-import QtQuick.Controls     1.2
+import QtQuick              2.3 //2.3
+import QtQuick.Controls     1.2 //1.2
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts  1.2
 
@@ -31,7 +31,7 @@ Column {
     ///     }
     property ListModel sliderModel
 
-    property real _margins:         ScreenTools.defaultFontPixelHeight
+    property real _margins:         ScreenTools.defaultFontPixelHeight / 2
     property bool _loadComplete:    false
 
     Component.onCompleted: _loadComplete = true
@@ -56,7 +56,7 @@ Column {
                 id:                 sliderRect
                 anchors.left:       parent.left
                 anchors.right:      parent.right
-                height:             sliderColumn.y + sliderColumn.height + _margins
+                height:             sliderColumn.y +  sliderColumn.height + _margins
                 color:              palette.windowShade
 
                 Column {
@@ -157,6 +157,7 @@ Column {
                         anchors.left:   parent.left
                         anchors.right:  parent.right
                         wrapMode:       Text.WordWrap
+                        visible:        description === "" ? false : true
                     }
                 }
             }

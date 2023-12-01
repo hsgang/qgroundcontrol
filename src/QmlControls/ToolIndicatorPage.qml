@@ -26,6 +26,8 @@ RowLayout {
     property bool expanded: false            
     property var  drawer
 
+    property real dividerHeight
+
     id:         _root
     spacing:    _margins
 
@@ -44,15 +46,18 @@ RowLayout {
     }
 
     ColumnLayout {
-        id:                 _contentItemHolder
-        Layout.alignment:   Qt.AlignTop
+        id:                     _contentItemHolder
+        Layout.alignment:       Qt.AlignTop
+        Layout.minimumWidth:    ScreenTools.defaultFontPixelWidth * 22
     }
 
     Rectangle {
         id:                     divider
         Layout.preferredWidth:  visible ? 1 : -1
         Layout.fillHeight:      true
+        Layout.minimumHeight:   dividerHeight - _margins
         color:                  QGroundControl.globalPalette.text
+        opacity:                0.5
         visible:                expanded
     }
 
