@@ -88,7 +88,7 @@ Row{
         //anchors.right:              parent.left
         anchors.verticalCenter:     parent.verticalCenter
         height:                     ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
-        width:                      ScreenTools.defaultFontPixelWidth * 18
+        width:                      ScreenTools.defaultFontPixelWidth * 16
         color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
         radius:                     _toolsMargin
 
@@ -104,7 +104,7 @@ Row{
 
                 ColumnLayout {
                     spacing:                0
-                    Layout.preferredWidth:  0.25 * parent.width
+                    //Layout.preferredWidth:  0.25 * parent.width
 
                     QGCLabel {
                         Layout.alignment:       Qt.AlignBottom
@@ -297,7 +297,7 @@ Row{
         //anchors.left:               parent.right
         anchors.verticalCenter:     parent.verticalCenter
         height:                     ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
-        width:                      ScreenTools.defaultFontPixelWidth * 18
+        width:                      ScreenTools.defaultFontPixelWidth * 16
         color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
         radius:                     _toolsMargin
 
@@ -324,7 +324,7 @@ Row{
 
                 ColumnLayout {
                     spacing: 0
-                    Layout.preferredWidth:  0.25 * parent.width
+                    //Layout.preferredWidth:  0.25 * parent.width
 
                     QGCLabel {
                         Layout.alignment:       Qt.AlignBottom
