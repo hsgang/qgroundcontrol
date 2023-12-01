@@ -109,6 +109,7 @@ Item {
 
             ColumnLayout {
                 QGCLabel {
+                    Layout.preferredWidth:  parent.width
                     Layout.maximumWidth:    parent.width
                     wrapMode:               QGCLabel.WordWrap
                     text:                   _planMasterController.managerVehicle.isOfflineEditingVehicle ?
