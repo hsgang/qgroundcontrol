@@ -113,7 +113,8 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            mainWindow.showIndicatorPopup(_root, telemRSSIInfo)
+            //mainWindow.showIndicatorPopup(_root, telemRSSIInfo)
+            mainWindow.showIndicatorDrawer(telemRSSIInfo)
         }
     }
 }

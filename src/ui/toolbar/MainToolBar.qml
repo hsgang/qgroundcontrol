@@ -21,7 +21,7 @@ import QGroundControl.Controllers           1.0
 
 Rectangle {
     id:     _root
-    color:  qgcPal.toolbarBackground
+    color:  qgcPal.window //toolbarBackground
 
     property int currentToolbar: flyViewToolbar
 
@@ -72,18 +72,28 @@ Rectangle {
         anchors.bottom:         parent.bottom
         spacing:                ScreenTools.defaultFontPixelWidth / 2
 
-        QGCToolBarButton {
+        Rectangle {
             id:                     currentButton
-            Layout.preferredHeight: viewButtonRow.height
-            icon.source:            "/qmlimages/Hamburger.svg"
-            logo:                   true
-            onClicked:
-                if(viewSelectDrawer.visible === false){
-                    viewSelectDrawer.visible = true
-                }
-                else if(viewSelectDrawer.visible === true){
-                    viewSelectDrawer.visible = false
-                }
+            Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
+            height:                 viewButtonRow.height * 0.8
+            width:                  height
+            color:                  "transparent"
+            border.color:           qgcPal.text
+            radius:                 ScreenTools.defaultFontPixelHeight / 4
+
+            QGCToolBarButton {
+                anchors.centerIn:       parent
+                //Layout.preferredHeight: currentButton.height
+                icon.source:            "/qmlimages/Hamburger.svg"
+                logo:                   true
+                onClicked:
+                    if(viewSelectDrawer.visible === false){
+                        viewSelectDrawer.visible = true
+                    }
+                    else if(viewSelectDrawer.visible === true){
+                        viewSelectDrawer.visible = false
+                    }
+            }
         }
 
         MainStatusIndicator {
@@ -104,7 +114,7 @@ Rectangle {
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.left:           viewButtonRow.right
-        anchors.right:          messageIndicatorRect.left
+        anchors.right:          flightModeIndicatorRect.left
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
         color:                  "transparent"
         visible:                currentToolbar == flyViewToolbar
@@ -128,24 +138,24 @@ Rectangle {
         }
     }
 
-    Rectangle {
-        id:                     messageIndicatorRect
-        width:                  height
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.8
-        anchors.right:          flightModeIndicatorRect.left
-        color:                  "transparent"
-        visible:                currentToolbar == flyViewToolbar
+//    Rectangle {
+//        id:                     messageIndicatorRect
+//        width:                  height
+//        anchors.top:            parent.top
+//        anchors.bottom:         parent.bottom
+//        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.8
+//        anchors.right:          flightModeIndicatorRect.left
+//        color:                  "transparent"
+//        visible:                currentToolbar == flyViewToolbar
 
-        Loader{
-            id:             messageIndicatorLoader
-            anchors.top:    parent.top
-            anchors.bottom: parent.bottom
-            anchors.horizontalCenter: parent.horizontalCenter
-            source:        "qrc:/toolbar/MessageIndicator.qml"
-        }
-    }
+//        Loader{
+//            id:             messageIndicatorLoader
+//            anchors.top:    parent.top
+//            anchors.bottom: parent.bottom
+//            anchors.horizontalCenter: parent.horizontalCenter
+//            source:        "qrc:/toolbar/MessageIndicator.qml"
+//        }
+//    }
 
     Rectangle {
         id:                     flightModeIndicatorRect
@@ -154,9 +164,9 @@ Rectangle {
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.33
         anchors.horizontalCenter: parent.horizontalCenter
-        color:                  "transparent"
+        color:                  qgcPal.windowShadeDark //"transparent"
         border.color:           qgcPal.text
-        radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+        radius:                 ScreenTools.defaultFontPixelHeight / 4
         visible:                currentToolbar == flyViewToolbar && _activeVehicle
 
         Loader{
@@ -203,12 +213,13 @@ Rectangle {
 
     QGCFlickable {
         id:                     toolsFlickable
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
         anchors.left:           viewButtonRow.right
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
-        anchors.right:          linkManagerButton.left
+        anchors.right:          parent.right
+        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
         contentWidth:           indicatorLoader.x + indicatorLoader.width
         flickableDirection:     Flickable.HorizontalFlick
         visible:                currentToolbar == planViewToolbar

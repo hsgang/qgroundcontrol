@@ -25,7 +25,7 @@ import QGroundControl.FactControls          1.0
 
 ColumnLayout {
     id:         modeColumn
-    spacing:    ScreenTools.defaultFontPixelWidth / 2
+    spacing:    modeEditCheckBox.checked ? ScreenTools.defaultFontPixelHeight / 4 : ScreenTools.defaultFontPixelHeight / 2
 
     property var  activeVehicle:            QGroundControl.multiVehicleManager.activeVehicle
     property var  flightModeSettings:       QGroundControl.settingsManager.flightModeSettings
@@ -69,13 +69,14 @@ ColumnLayout {
         model:  activeVehicle ? activeVehicle.flightModes : []
 
         RowLayout {
-            spacing: ScreenTools.defaultFontPixelWidth
+            spacing: ScreenTools.defaultFontPixelHeight
             visible: modeEditCheckBox.checked || !hiddenFlightModesList.find(item => { return item === modelData } )
 
             QGCButton {
                 id:                 modeButton
                 text:               modelData
                 Layout.fillWidth:   true
+                checked:            modeEditCheckBox.checked || (modelData !== activeVehicle.flightMode) ? false : true
 
                 onClicked: {
                     if (modeEditCheckBox.checked) {
@@ -83,7 +84,7 @@ ColumnLayout {
                         parent.children[1].clicked()
                     } else {
                         activeVehicle.flightMode = modelData
-                        drawer.close()
+                        //drawer.close()
                     }
                 }
             }

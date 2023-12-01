@@ -15,41 +15,35 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property SiYiTransmitter transmitter: SiYi.transmitter
+    property SiYiTransmitter transmitter:   SiYi.transmitter
 
-    property bool showIndicator:    transmitter.isConnected //QGroundControl.settingsManager.appSettings.enableSiyiSDK.rawValue//QGroundControl.siyiSDKManager.isConnected
-    property var  _activeVehicle:   QGroundControl.multiVehicleManager.activeVehicle
+    property bool showIndicator:            transmitter.isConnected //QGroundControl.settingsManager.appSettings.enableSiyiSDK.rawValue//QGroundControl.siyiSDKManager.isConnected
+    property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
 
     Component {
         id: siyiStatusInfo
 
-        Rectangle {
-            width:  telemCol.width   + ScreenTools.defaultFontPixelWidth  * 3
-            height: telemCol.height  + ScreenTools.defaultFontPixelHeight * 2
-            radius: ScreenTools.defaultFontPixelHeight * 0.5
-            color:  qgcPal.window
-            border.color:   qgcPal.text
+        ToolIndicatorPage{
+            showExpand: false
 
-            Column {
-                id:                 telemCol
-                spacing:            ScreenTools.defaultFontPixelHeight * 0.5
-                width:              Math.max(telemGrid.width, telemLabel.width)
-                anchors.margins:    ScreenTools.defaultFontPixelHeight
-                anchors.centerIn:   parent
+            property real _margins: ScreenTools.defaultFontPixelHeight
+
+            contentItem: ColumnLayout {
+                Layout.preferredWidth:  parent.width
+                spacing:                ScreenTools.defaultFontPixelHeight * 0.5
 
                 QGCLabel {
-                    id:             telemLabel
-                    text:           qsTr("Network Status")
-                    font.family:    ScreenTools.demiboldFontFamily
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    id:                 telemLabel
+                    text:               qsTr("Network Status")
+                    font.family:        ScreenTools.demiboldFontFamily
+                    Layout.alignment:   Qt.AlignHCenter
                 }
 
                 GridLayout {
                     id:                 telemGrid
-                    anchors.margins:    ScreenTools.defaultFontPixelHeight
                     columnSpacing:      ScreenTools.defaultFontPixelWidth
                     columns:            2
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.fillWidth:   true
 
                     QGCLabel { text: qsTr("Signal:") }
                     QGCLabel { text: transmitter.signalQuality + " %"}
@@ -71,7 +65,8 @@ Item {
                     QGCLabel { text: transmitter.channel }
                 }
             }
-        }
+//        }
+        } //ToolIndicatorPage
     }
 
     Row{
@@ -102,11 +97,11 @@ Item {
         }
 
         Rectangle{
-            anchors.top:    parent.top
-            anchors.bottom: parent.bottom
-            height:         parent.height
-            width:          height
-            color:          "transparent"
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            height:             parent.height
+            width:              height
+            color:              "transparent"
 
             SignalStrength {
                 anchors.horizontalCenter:   parent.horizontalCenter
@@ -124,8 +119,7 @@ Item {
                 sourceSize.height:  height
                 source:             "/qmlimages/TelemRSSI.svg"
                 fillMode:           Image.PreserveAspectFit
-                //opacity:            QGroundControl.siyiSDKManager.signal !== 0 ? 1 : 0.5
-                color:              transmitter.signalQuality > 15 ? qgcPal.buttonText : qgcPal.colorOrange
+                color:              transmitter.signalQuality > 10 ? qgcPal.buttonText : qgcPal.colorOrange
             }
         }
     }
@@ -133,7 +127,8 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            mainWindow.showIndicatorPopup(_root, siyiStatusInfo)
+            //mainWindow.showIndicatorPopup(_root, siyiStatusInfo)
+            mainWindow.showIndicatorDrawer(siyiStatusInfo)
         }
     }
 }

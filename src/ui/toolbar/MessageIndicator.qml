@@ -43,11 +43,11 @@ Item {
             if (_activeVehicle.messageTypeNone)
                 return qgcPal.text //qgcPal.colorGrey
             if (_activeVehicle.messageTypeNormal)
-                return qgcPal.alertBackground;
+                return qgcPal.text //alertBackground;
             if (_activeVehicle.messageTypeWarning)
-                return qgcPal.colorOrange;
+                return qgcPal.alertBackground //colorOrange;
             if (_activeVehicle.messageTypeError)
-                return qgcPal.colorRed;
+                return qgcPal.colorRed
             // Cannot be so make make it obnoxious to show error
             console.warn("MessageIndicator.qml:getMessageColor Invalid vehicle message type", _activeVehicle.messageTypeNone)
             return "purple";
@@ -63,6 +63,7 @@ Item {
         spacing:        ScreenTools.defaultFontPixelWidth/2
 
         QGCColoredImage {
+            height:             parent.height * 0.8
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
@@ -71,16 +72,13 @@ Item {
             fillMode:           Image.PreserveAspectFit
             color:              getMessageColor()
             visible:            _activeVehicle //!criticalMessageIcon.visible
+//            opacity:            _noMessages ? 0.5 : 1
 
             MouseArea {
                 anchors.fill:   parent
                 onClicked:      mainWindow.showIndicatorDrawer(vehicleMessagesPopup)
             }
         }
-//        MouseArea {
-//            anchors.fill:   parent
-//            onClicked:      dropMessageIndicator()
-//        }
     }
 
     Component {
@@ -128,11 +126,11 @@ Item {
                 Rectangle {
                     anchors.right:              parent.right
                     anchors.bottom:             parent.bottom
-                    width:                      ScreenTools.defaultFontPixelHeight * 1.25
+                    width:                      ScreenTools.defaultFontPixelHeight * 2
                     height:                     width
-                    radius:                     width / 2
-                    color:                      QGroundControl.globalPalette.button
-                    border.color:               QGroundControl.globalPalette.buttonText
+                    radius:                     width / 4
+                    color:                      QGroundControl.globalPalette.windowShadeDark
+                    border.color:               QGroundControl.globalPalette.text
                     visible:                    !_noMessages
 
                     QGCColoredImage {
@@ -152,7 +150,8 @@ Item {
                         onClicked: {
                             _activeVehicle.clearMessages()
                             //indicatorDrawer.close()
-                            drawer.close()
+                            //drawer.close()
+                            componentDrawer.visible = false
                         }
                     }
                 }

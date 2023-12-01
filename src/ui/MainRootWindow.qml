@@ -533,6 +533,108 @@ ApplicationWindow {
         }
     }
 
+    Drawer {
+        id:             componentDrawer
+        y:              header.height
+        height:         mainWindow.height - header.height
+        width:          componentDrawerLayoutRect.width
+        edge:           Qt.RightEdge
+        interactive:    true
+        dragMargin:     0
+        visible:        false
+        modal:          true
+        padding:        _margins
+
+        property var sourceComponent
+        property bool _expanded: false
+
+        property real _margins: ScreenTools.defaultFontPixelHeight / 4
+
+        onVisibleChanged: {
+            if(visible == true) {
+                componentDrawerLoader.sourceComponent   = componentDrawer.sourceComponent
+                _expanded                               = false
+            } else if(visible == false) {
+                componentDrawerLoader.sourceComponent   = undefined
+                _expanded                               = false
+            }
+        }
+
+        Rectangle {
+            id:     componentDrawerLayoutRect
+            width:  componentContents.width + (componentDrawer._margins * 2)
+            height: parent.height
+            color:  qgcPal.windowShadeDark
+
+            QGCFlickable {
+                anchors.margins:    componentDrawer._margins
+                anchors.top:        parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
+                flickableDirection: QGCFlickable.VerticalFlick
+                width:  Math.min(mainWindow.contentItem.width - (2 * componentDrawer._margins) - (componentDrawer.padding * 2), componentDrawerLoader.width)
+                height: { componentExpandButton.visible ?
+                    parent.height - componentExpandButton.height - ScreenTools.defaultFontPixelHeight :
+                    parent.height - ScreenTools.defaultFontPixelHeight }
+                contentWidth:   componentContents.width
+                contentHeight:  componentContents.height
+
+                Rectangle {
+                    id:         componentContents
+                    anchors.margins: componentDrawer._margins
+                    width:      300 //componentDrawerLoader.width
+                    height:     20
+                    color:      "transparent"
+
+                    Loader {
+                        id: componentDrawerLoader
+                        //anchors.fill: parent
+
+                        onHeightChanged: componentContents.height = height
+                        onWidthChanged: componentContents.width = width + (componentDrawer._margins * 2)
+
+                        Binding {
+                            target:     componentDrawerLoader.item
+                            property:   "expanded"
+                            value:      componentDrawer._expanded
+                        }
+
+                        Binding {
+                            target:     componentDrawerLoader.item
+                            property:   "dividerHeight"
+                            value:      componentDrawer.height
+                        }
+                    }
+                } //componentContents
+            }
+
+            Rectangle {
+                id:                         componentExpandButton
+                anchors.bottom:             componentDrawerLayoutRect.bottom
+                anchors.bottomMargin:       ScreenTools.defaultFontPixelHeight / 4
+                anchors.horizontalCenter:   parent.horizontalCenter
+                width:                      componentExpandButtonLabel.width + (componentDrawer._margins * 2) * 3
+                height:                     componentExpandButtonLabel.height * 2
+                radius:                     componentDrawer._margins
+                color:                      QGroundControl.globalPalette.windowShadeDark
+                border.color:               QGroundControl.globalPalette.text
+                visible:                    componentDrawerLoader.item && componentDrawerLoader.item.showExpand && !componentDrawer._expanded
+
+                QGCLabel {
+                    id:                 componentExpandButtonLabel
+                    anchors.centerIn:   parent
+                    text:               qsTr("Detail")
+                    color:              QGroundControl.globalPalette.text
+                }
+
+                QGCMouseArea {
+                    fillItem: parent
+                    onClicked: {
+                        componentDrawer._expanded = true
+                    }
+                }
+            }
+        }
+    }
 
     FlyView {
         id:             flightView
@@ -726,8 +828,10 @@ ApplicationWindow {
     //-- Indicator Drawer
 
     function showIndicatorDrawer(drawerComponent) {
-        indicatorDrawer.sourceComponent = drawerComponent
-        indicatorDrawer.open()
+        //indicatorDrawer.sourceComponent = drawerComponent
+        //indicatorDrawer.open()
+        componentDrawer.sourceComponent = drawerComponent
+        componentDrawer.visible = true
     }
 
     Popup {
@@ -774,7 +878,7 @@ ApplicationWindow {
                 anchors.topMargin:          ScreenTools.defaultFontPixelHeight / 4
                 anchors.left:               backgroundRect.right
                 anchors.leftMargin:         ScreenTools.defaultFontPixelHeight / 4
-                width:                      ScreenTools.defaultFontPixelHeight
+                width:                      ScreenTools.defaultFontPixelHeight * 2
                 height:                     width
                 radius:                     width / 2
                 color:                      QGroundControl.globalPalette.button
@@ -789,7 +893,9 @@ ApplicationWindow {
 
                 QGCMouseArea {
                     fillItem: parent
-                    onClicked: indicatorDrawer._expanded = true
+                    onClicked: {
+                        indicatorDrawer._expanded = true
+                    }
                 }
             }
         }
@@ -815,8 +921,7 @@ ApplicationWindow {
                     property:   "drawer"
                     value:      indicatorDrawer
                 }
-
-            }
+            } // loader
         }
     }
 

@@ -28,20 +28,20 @@ RowLayout {
     property real fontPointSize: ScreenTools.largeFontPointSize
     property var  activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 
-    property real editFieldWidth:        ScreenTools.defaultFontPixelWidth * 13
+    property real editFieldWidth: ScreenTools.defaultFontPixelWidth * 13
 
     RowLayout {
         Layout.fillWidth: true
 
-//        QGCColoredImage {
-//            id:         flightModeIcon
-//            width:      ScreenTools.defaultFontPixelWidth * 3
-//            height:     ScreenTools.defaultFontPixelHeight
-//            fillMode:   Image.PreserveAspectFit
-//            mipmap:     true
-//            color:      qgcPal.text
-//            source:     "/qmlimages/FlightModesComponentIcon.png"
-//        }
+        QGCColoredImage {
+            id:         flightModeIcon
+            width:      ScreenTools.defaultFontPixelWidth * 3
+            height:     ScreenTools.defaultFontPixelHeight
+            fillMode:   Image.PreserveAspectFit
+            mipmap:     true
+            color:      qgcPal.text
+            source:     "/qmlimages/vehicleQuadRotor.svg"
+        }
 
         QGCLabel {
             id:                 modeLabel
@@ -63,26 +63,80 @@ RowLayout {
             id:         mainLayout
             showExpand: true
 
+            FactPanelController { id: controller }
+
             property var  activeVehicle:            QGroundControl.multiVehicleManager.activeVehicle
 
             property Fact landSpeedFact:            controller.getParameterFact(-1, "LAND_SPEED", false)
             property Fact precisionLandingFact:     controller.getParameterFact(-1, "PLND_ENABLED", false)
             property Fact atcInputTCFact:           controller.getParameterFact(-1, "ATC_INPUT_TC", false)
             property Fact loitSpeedFact:            controller.getParameterFact(-1, "LOIT_SPEED", false)
+            property Fact wpnavSpeedFact:           controller.getParameterFact(-1, "WPNAV_SPEED", false)
+            property Fact wpnavSpeedUpFact:         controller.getParameterFact(-1, "WPNAV_SPEED_UP", false)
+            property Fact wpnavSpeedDnFact:         controller.getParameterFact(-1, "WPNAV_SPEED_DN", false)
             property Fact wpnavRadiusFact:          controller.getParameterFact(-1, "WPNAV_RADIUS", false)
 
             property var  qgcPal:                   QGroundControl.globalPalette
             property real margins:                  ScreenTools.defaultFontPixelHeight
-            property real valueColumnWidth:         Math.max(editFieldWidth, precisionLandingCombo.implicitWidth)
+            property real valueColumnWidth:         editFieldWidth
 
-            FactPanelController { id: controller }
+            property var params : ListModel{
+//                ListElement {
+//                    title:          qsTr("Responsiveness")
+//                    param:          "ATC_INPUT_TC"
+//                    description:    ""
+//                    min:            0.01
+//                    max:            1
+//                    step:           0.01
+//                }
+                ListElement {
+                    title:          qsTr("Loiter Horizontal Speed(cm/s)")
+                    param:          "LOIT_SPEED"
+                    description:    ""
+                    min:            100
+                    max:            1500
+                    step:           100
+                }
+                ListElement {
+                    title:          qsTr("WP Horizontal Speed(cm/s)")
+                    param:          "WPNAV_SPEED"
+                    description:    ""
+                    min:            100
+                    max:            1500
+                    step:           100
+                }
+                ListElement {
+                    title:          qsTr("WP Climb Speed(cm/s)")
+                    param:          "WPNAV_SPEED_UP"
+                    description:    ""
+                    min:            100
+                    max:            500
+                    step:           50
+                }
+                ListElement {
+                    title:          qsTr("WP Descent Speed(cm/s)")
+                    param:          "WPNAV_SPEED_DN"
+                    description:    ""
+                    min:            100
+                    max:            500
+                    step:           50
+                }
+                ListElement {
+                    title:          qsTr("Mission Turning Radius(cm)")
+                    param:          "WPNAV_RADIUS"
+                    description:    ""
+                    min:            100
+                    max:            1000
+                    step:           100
+                }
+            }
 
             // Mode list
             contentItem: FlightModeToolIndicatorContentItem { }
 
             // Settings
             expandedItem: ColumnLayout{
-                Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 60
+                Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 50
                 spacing:                margins / 2
 
                 IndicatorPageGroupLayout {
@@ -117,20 +171,20 @@ RowLayout {
                             visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
                         }
 
-                        QGCLabel {
-                            Layout.fillWidth:       true
-                            text:                   qsTr("Precision Landing")
-                            visible:                precisionLandingCombo.visible
-                        }
+//                        QGCLabel {
+//                            Layout.fillWidth:       true
+//                            text:                   qsTr("Precision Landing")
+//                            visible:                precisionLandingCombo.visible
+//                        }
 
-                        FactComboBox {
-                            id:                     precisionLandingCombo
-                            Layout.minimumWidth:    editFieldWidth
-                            fact:                   precisionLandingFact
-                            indexModel:             false
-                            sizeToContents:         true
-                            visible:                precisionLandingFact
-                        }
+//                        FactComboBox {
+//                            id:                     precisionLandingCombo
+//                            Layout.minimumWidth:    editFieldWidth
+//                            fact:                   precisionLandingFact
+//                            indexModel:             false
+//                            sizeToContents:         true
+//                            visible:                precisionLandingFact
+//                        }
                     }
                 }
 
@@ -141,106 +195,15 @@ RowLayout {
                     ColumnLayout {
                         Layout.fillWidth:   true
 
-//                        QGCCheckBoxSlider {
-//                            id:                 responsivenessCheckBox
-//                            Layout.fillWidth:   true
-//                            text:               qsTr("Overall Responsiveness")
-//                            checked:            atcInputTCFact && atcInputTCFact.value >= 0
-
-//                            onClicked: {
-//                                if (checked) {
-//                                    atcInputTCFact.value = Math.abs(atcInputTCFact.value)
-//                                } else {
-//                                    atcInputTCFact.value = -Math.abs(atcInputTCFact.value)
-//                                }
-//                            }
-//                        }
-
-                        QGCLabel { text: qsTr("Responsiveness") }
-
-                        FactSlider {
-                            width:              parent.width
-                            //enabled:            responsivenessCheckBox.checked
-                            fact:               atcInputTCFact
-                            from:               0.01
-                            to:                 1
-                            stepSize:           0.01
+                        FactSliderPanel {
+                            width:       parent.width
+                            sliderModel: params
                         }
-
-//                        QGCLabel {
-//                            Layout.fillWidth:   true
-//                            enabled:            responsivenessCheckBox.checked
-//                            text:               qsTr("A higher value makes the vehicle react faster. Be aware that this affects braking as well, and a combination of slow responsiveness with high maximum velocity will lead to long braking distances.")
-//                            wrapMode:           QGCLabel.WordWrap
-//                        }
-//                        QGCLabel {
-//                            Layout.fillWidth:   true
-//                            visible:            atcInputTCFact && atcInputTCFact.value > 0.8
-//                            color:              qgcPal.warningText
-//                            text:               qsTr("Warning: a high responsiveness requires a vehicle with large thrust-to-weight ratio. The vehicle might lose altitude otherwise.")
-//                            wrapMode:           QGCLabel.WordWrap
-//                        }
                     }
 
                     Item {
                         height:             1
                         Layout.fillWidth:   true
-                    }
-
-                    ColumnLayout {
-                        Layout.fillWidth:   true
-                        visible:            loitSpeedFact
-
-//                        QGCCheckBoxSlider {
-//                            id:                 xyVelCheckBox
-//                            Layout.fillWidth:   true
-//                            text:               qsTr("Overall Horizontal Velocity (cm/s)")
-//                            checked:            loitSpeedFact && loitSpeedFact.value >= 0
-
-//                            onClicked: {
-//                                if (checked) {
-//                                    loitSpeedFact.value = Math.abs(loitSpeedFact.value)
-//                                } else {
-//                                    loitSpeedFact.value = -Math.abs(loitSpeedFact.value)
-//                                }
-//                            }
-//                        }
-
-                        QGCLabel { text: qsTr("Horizontal Velocity (cm/s)") }
-
-                        FactSlider {
-                            width:      parent.width
-                            //enabled:    xyVelCheckBox.checked
-                            fact:       loitSpeedFact
-                            from:       50
-                            to:         2000
-                            stepSize:   50
-                        }
-                    }
-                }
-
-                IndicatorPageGroupLayout {
-                    Layout.fillWidth:   true
-
-                    ColumnLayout {
-                        Layout.fillWidth:   true
-                        visible:            wpnavRadiusFact
-
-                        QGCLabel { text: qsTr("Mission Turning Radius(cm)") }
-
-                        FactSlider {
-                            width:      parent.width
-                            fact:       wpnavRadiusFact
-                            from:       100
-                            to:         1000
-                            stepSize:   100
-                        }
-
-//                        QGCLabel {
-//                            width:      parent.width
-//                            text:       qsTr("Increasing this leads to rounder turns in missions (corner cutting). Use the minimum value for accurate corner tracking.")
-//                            wrapMode:   QGCLabel.WordWrap
-//                        }
                     }
                 }
 
@@ -257,6 +220,7 @@ RowLayout {
                             onClicked: {
                                 mainWindow.showVehicleSetupTool(qsTr("Radio"))
                                 indicatorDrawer.close()
+                                componentDrawer.visible = false
                             }
                         }
                     }

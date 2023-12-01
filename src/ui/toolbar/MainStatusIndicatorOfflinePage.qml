@@ -41,7 +41,7 @@ ToolIndicatorPage {
         spacing: ScreenTools.defaultFontPixelHeight / 2
 
         QGCLabel {
-            Layout.alignment:   Qt.AlignTop
+            Layout.alignment:   {Qt.AlignTop; Qt.AlignHCenter;}
             text:               noLinks ? qsTr("No Links Configured") : qsTr("Connect To Link")
             font.pointSize:     noLinks ? ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
         }
@@ -58,7 +58,8 @@ ToolIndicatorPage {
 
                 onClicked: {
                     QGroundControl.linkManager.createConnectedLink(object)
-                    drawer.close()
+                    //drawer.close()
+                    componentDrawer.visible = false
                 }
             }
         }
@@ -75,14 +76,15 @@ ToolIndicatorPage {
                     text:       qsTr("Configure")
                     onClicked: {
                         mainWindow.showSettingsTool(qsTr("Comm Links"))
-                        drawer.close()
+                        //drawer.close()
+                        componentDrawer.visible = false
                     }
                 }
             }
         }
 
         IndicatorPageGroupLayout {
-            heading:        qsTr("AutoConnect")
+            heading:        qsTr("Auto Connect")
             visible:        autoConnectSettings.visible
             showDivider:    false
 

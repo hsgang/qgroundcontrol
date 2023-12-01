@@ -32,41 +32,47 @@ Item {
     Component {
         id: rcRSSIInfo
 
-        Rectangle {
-            width:  rcrssiCol.width   + ScreenTools.defaultFontPixelWidth  * 3
-            height: rcrssiCol.height  + ScreenTools.defaultFontPixelHeight * 2
-            radius: ScreenTools.defaultFontPixelHeight * 0.5
-            color:  qgcPal.window
-            border.color:   qgcPal.text
+//        Rectangle {
+//            width:  rcrssiCol.width   + ScreenTools.defaultFontPixelWidth  * 3
+//            height: rcrssiCol.height  + ScreenTools.defaultFontPixelHeight * 2
+//            radius: ScreenTools.defaultFontPixelHeight * 0.5
+//            color:  qgcPal.window
+//            border.color:   qgcPal.text
+        ToolIndicatorPage{
+            showExpand: false
 
-            Column {
-                id:                 rcrssiCol
-                spacing:            ScreenTools.defaultFontPixelHeight * 0.5
-                width:              Math.max(rcrssiGrid.width, rssiLabel.width)
-                anchors.margins:    ScreenTools.defaultFontPixelHeight
-                anchors.centerIn:   parent
+            property real _margins: ScreenTools.defaultFontPixelHeight
+
+            contentItem: ColumnLayout {
+                Layout.preferredWidth:  parent.width
+                spacing:                ScreenTools.defaultFontPixelHeight * 0.5
 
                 QGCLabel {
-                    id:             rssiLabel
-                    text:           _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
-                    font.family:    ScreenTools.demiboldFontFamily
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    id:                 rssiLabel
+                    text:               _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
+                    font.family:        ScreenTools.demiboldFontFamily
+                    Layout.alignment:   Qt.AlignHCenter
                 }
 
                 GridLayout {
                     id:                 rcrssiGrid
-                    visible:            _rcRSSIAvailable
-                    anchors.margins:    ScreenTools.defaultFontPixelHeight
                     columnSpacing:      ScreenTools.defaultFontPixelWidth
                     columns:            2
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.alignment: Qt.AlignHCenter
 
-                    QGCLabel { text: qsTr("RSSI:") }
-                    QGCLabel { text: _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0 }
+                    QGCLabel {
+                        text: qsTr("RSSI:")
+                        visible: _rcRSSIAvailable
+                    }
+                    QGCLabel {
+                        text: _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
+                        visible: _rcRSSIAvailable
+                    }
                 }
             }
+//        }
         }
-    }
+    } //Component
 
     Row {
         id:             rssiRow
@@ -106,7 +112,8 @@ Item {
     MouseArea {
         anchors.fill:   parent
         onClicked: {
-            mainWindow.showIndicatorPopup(_root, rcRSSIInfo)
+            //mainWindow.showIndicatorPopup(_root, rcRSSIInfo)
+            mainWindow.showIndicatorDrawer(rcRSSIInfo)
         }
     }
 }
