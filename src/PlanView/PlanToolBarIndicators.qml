@@ -11,7 +11,7 @@ import QGroundControl.Palette           1.0
 
 // Toolbar for Plan View
 Item {
-    width: missionStats.width + _margins
+    //width: missionStats.width + _margins
 
     property var    _planMasterController:      globals.planMasterControllerPlanView
     property var    _currentMissionItem:        globals.currentPlanMissionItem          ///< Mission item to display status for
@@ -114,7 +114,9 @@ Item {
 
     QGCLabel {
         id:                     uploadCompleteText
-        anchors.fill:           parent
+        anchors.left:           parent.left
+        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
+        anchors.verticalCenter: parent.verticalCenter
         font.pointSize:         ScreenTools.largeFontPointSize
         horizontalAlignment:    Text.AlignHCenter
         verticalAlignment:      Text.AlignVCenter
