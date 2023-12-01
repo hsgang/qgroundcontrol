@@ -14,9 +14,9 @@ import QGroundControl.Palette           1.0
 Rectangle {
     id:         altitudeIndicator
     //height:     parent.height * 0.32
-    width:      ScreenTools.defaultFontPixelWidth * 1.6
+    width:      ScreenTools.defaultFontPixelWidth * 1.4
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-    radius:     _margins
+    radius:     ScreenTools.defaultFontPixelWidth * 0.7
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property var    _planMasterController:      globals.planMasterControllerPlanView
@@ -48,10 +48,13 @@ Rectangle {
 
     Rectangle{
         id: altLevelBar
-        width: parent.width * 0.7
-        radius: _margins
-        height: ((_vehicleAltitude / _missionMaxAltitude) <= 1) ? parent.height * (_vehicleAltitude / _missionMaxAltitude) : parent.height
+        width: ScreenTools.defaultFontPixelWidth
+        radius: ScreenTools.defaultFontPixelWidth * 0.5
+        height: ((_vehicleAltitude / _missionMaxAltitude) <= 1)
+                    ? (parent.height - ScreenTools.defaultFontPixelWidth * 0.4) * (_vehicleAltitude / _missionMaxAltitude)
+                    : (parent.height - ScreenTools.defaultFontPixelWidth * 0.4)
         anchors.bottom: parent.bottom
+        anchors.bottomMargin: ScreenTools.defaultFontPixelWidth * 0.2
         anchors.horizontalCenter: parent.horizontalCenter
         color:  qgcPal.colorGreen
         visible: (_missionMaxAltitude > 0) ? true : false
