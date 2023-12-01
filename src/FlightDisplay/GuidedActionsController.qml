@@ -254,9 +254,9 @@ Item {
             console.log("showStartMission", showStartMission)
         }
         _outputState()
-        if (showStartMission) {
-            confirmAction(actionStartMission)
-        }
+//        if (showStartMission) {
+//            confirmAction(actionStartMission)
+//        }
     }
     onShowContinueMissionChanged: {
         if (_corePlugin.guidedActionsControllerLogging()) {
