@@ -231,7 +231,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
         radius: width / 2
-        color: qgcPal.windowShadeLight
+        color: qgcPal.brandingBlue
         opacity: onPressSignal ? 1 : 0.5
     }
 
@@ -253,8 +253,9 @@ Item {
         id: cancelRectangle
         width: parent.width * 0.2
         height: width
-        anchors.horizontalCenter: confirmBackground.horizontalCenter
-        anchors.top: confirmBackground.bottom
+        //anchors.horizontalCenter: confirmBackground.horizontalCenter
+        anchors.bottom: confirmBackground.bottom
+        anchors.left: confirmBackground.right
         anchors.margins: _margins * 2
         radius: width / 2
         color: qgcPal.windowShadeLight
