@@ -173,7 +173,7 @@
 		<file alias="QGroundControl/Controls/RallyPointMapVisuals.qml">../src/PlanView/RallyPointMapVisuals.qml</file>
 		<file alias="QGroundControl/Controls/RCChannelMonitor.qml">../src/QmlControls/RCChannelMonitor.qml</file>
 		<file alias="QGroundControl/Controls/RCToParamDialog.qml">../src/QmlControls/RCToParamDialog.qml</file>
-		<file alias="QGroundControl/Controls/RoundButton.qml">../src/QmlControls/RoundButton.qml</file>
+		<file alias="QGroundControl/Controls/QGCRoundButton.qml">../src/QmlControls/QGCRoundButton.qml</file>
 		<file alias="QGroundControl/Controls/SectionHeader.qml">../src/QmlControls/SectionHeader.qml</file>
 		<file alias="QGroundControl/Controls/SetupPage.qml">../src/AutoPilotPlugins/Common/SetupPage.qml</file>
 		<file alias="QGroundControl/Controls/SignalStrength.qml">../src/ui/toolbar/SignalStrength.qml</file>
@@ -347,6 +347,8 @@
 		<file alias="Vehicle/VibrationFact.json">../src/Vehicle/VibrationFact.json</file>
 		<file alias="Vehicle/WindFact.json">../src/Vehicle/WindFact.json</file>
 		<file alias="Vehicle/HygrometerFact.json">../src/Vehicle/HygrometerFact.json</file>
+		<file alias="Vehicle/GeneratorFact.json">../src/Vehicle/GeneratorFact.json</file>
+		<file alias="Vehicle/EFIFact.json">../src/Vehicle/EFIFact.json</file>
 		<file alias="Video.SettingsGroup.json">../src/Settings/Video.SettingsGroup.json</file>
 		<file alias="VTOLLandingPattern.FactMetaData.json">../src/MissionManager/VTOLLandingPattern.FactMetaData.json</file>
 	</qresource>

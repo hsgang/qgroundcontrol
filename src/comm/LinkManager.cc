@@ -37,11 +37,13 @@
 #include "MockLink.h"
 #endif
 
+#ifndef QT6_DISABLE_DNSENGINE
 #include <qmdnsengine/browser.h>
 #include <qmdnsengine/cache.h>
 #include <qmdnsengine/mdns.h>
 #include <qmdnsengine/server.h>
 #include <qmdnsengine/service.h>
+#endif
 
 QGC_LOGGING_CATEGORY(LinkManagerLog, "LinkManagerLog")
 QGC_LOGGING_CATEGORY(LinkManagerVerboseLog, "LinkManagerVerboseLog")
@@ -428,6 +430,7 @@ void LinkManager::_addMAVLinkForwardingLink(void)
 
 void LinkManager::_addZeroConfAutoConnectLink(void)
 {
+#ifndef QT6_DISABLE_DNSENGINE
     if (!_autoConnectSettings->autoConnectZeroConf()->rawValue().toBool()) {
         return;
     }
@@ -438,7 +441,7 @@ void LinkManager::_addZeroConfAutoConnectLink(void)
     browser.reset(new QMdnsEngine::Browser(server.get(), QMdnsEngine::MdnsBrowseType));
 
     auto checkIfConnectionLinkExist = [this](LinkConfiguration::LinkType linkType, const QString& linkName){
-        for (const auto& link : qAsConst(_rgLinks)) {
+        for (const auto& link : std::as_const(_rgLinks)) {
             SharedLinkConfigurationPtr linkConfig = link->linkConfiguration();
             if (linkConfig->type() == linkType && linkConfig->name() == linkName) {
                 return true;
@@ -495,6 +498,7 @@ void LinkManager::_addZeroConfAutoConnectLink(void)
             return;
         }
     });
+#endif
 }
 
 void LinkManager::_updateAutoConnectLinks(void)

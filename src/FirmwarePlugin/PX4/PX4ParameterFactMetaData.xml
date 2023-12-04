@@ -1530,6 +1530,37 @@
       <unit>m/s^2</unit>
       <decimal>2</decimal>
     </parameter>
+    <parameter name="EKF2_AGP_CTRL" default="1" type="INT32">
+      <short_desc>Aux global position (AGP) sensor aiding</short_desc>
+      <long_desc>Set bits in the following positions to enable: 0 : Horizontal position fusion 1 : Vertical position fusion</long_desc>
+      <min>0</min>
+      <max>3</max>
+      <bitmask>
+        <bit index="0">Horizontal position</bit>
+        <bit index="1">Vertical position</bit>
+      </bitmask>
+    </parameter>
+    <parameter name="EKF2_AGP_DELAY" default="0" type="FLOAT">
+      <short_desc>Aux global position estimator delay relative to IMU measurements</short_desc>
+      <min>0</min>
+      <max>300</max>
+      <unit>ms</unit>
+      <decimal>1</decimal>
+      <reboot_required>true</reboot_required>
+    </parameter>
+    <parameter name="EKF2_AGP_GATE" default="3.0" type="FLOAT">
+      <short_desc>Gate size for aux global position fusion</short_desc>
+      <long_desc>Sets the number of standard deviations used by the innovation consistency test.</long_desc>
+      <min>1.0</min>
+      <unit>SD</unit>
+      <decimal>1</decimal>
+    </parameter>
+    <parameter name="EKF2_AGP_NOISE" default="0.9" type="FLOAT">
+      <short_desc>Measurement noise for aux global position observations used to lower bound or replace the uncertainty included in the message</short_desc>
+      <min>0.01</min>
+      <unit>m</unit>
+      <decimal>2</decimal>
+    </parameter>
     <parameter name="EKF2_ANGERR_INIT" default="0.1" type="FLOAT">
       <short_desc>1-sigma tilt angle uncertainty after gravity vector alignment</short_desc>
       <min>0.0</min>
@@ -3750,34 +3781,17 @@
         <value code="5">Land mode</value>
       </values>
     </parameter>
-    <parameter name="GF_ALTMODE" default="0" type="INT32">
-      <short_desc>Geofence altitude mode</short_desc>
-      <long_desc>Select which altitude (AMSL) source should be used for geofence calculations.</long_desc>
-      <min>0</min>
-      <max>1</max>
-      <values>
-        <value code="0">Autopilot estimator global position altitude (GPS)</value>
-        <value code="1">Raw barometer altitude (assuming standard atmospheric pressure)</value>
-      </values>
-    </parameter>
-    <parameter name="GF_COUNT" default="-1" type="INT32">
-      <short_desc>Geofence counter limit</short_desc>
-      <long_desc>Set how many subsequent position measurements outside of the fence are needed before geofence violation is triggered</long_desc>
-      <min>-1</min>
-      <max>10</max>
-      <increment>1</increment>
-    </parameter>
-    <parameter name="GF_MAX_HOR_DIST" default="0" type="FLOAT">
-      <short_desc>Max horizontal distance in meters</short_desc>
-      <long_desc>Maximum horizontal distance in meters the vehicle can be from home before triggering a geofence action. Disabled if 0.</long_desc>
+    <parameter name="GF_MAX_HOR_DIST" default="0.0" type="FLOAT">
+      <short_desc>Max horizontal distance from Home</short_desc>
+      <long_desc>Maximum horizontal distance in meters the vehicle can be from Home before triggering a geofence action. Disabled if 0.</long_desc>
       <min>0</min>
       <max>10000</max>
       <unit>m</unit>
       <increment>1</increment>
     </parameter>
-    <parameter name="GF_MAX_VER_DIST" default="0" type="FLOAT">
-      <short_desc>Max vertical distance in meters</short_desc>
-      <long_desc>Maximum vertical distance in meters the vehicle can be from home before triggering a geofence action. Disabled if 0.</long_desc>
+    <parameter name="GF_MAX_VER_DIST" default="0.0" type="FLOAT">
+      <short_desc>Max vertical distance from Home</short_desc>
+      <long_desc>Maximum vertical distance in meters the vehicle can be from Home before triggering a geofence action. Disabled if 0.</long_desc>
       <min>0</min>
       <max>10000</max>
       <unit>m</unit>
@@ -5027,10 +5041,19 @@
       <decimal>2</decimal>
       <increment>0.1</increment>
     </parameter>
+    <parameter name="MPC_YAWRAUTO_ACC" default="60." type="FLOAT">
+      <short_desc>Maximum yaw acceleration in autonomous modes</short_desc>
+      <long_desc>Limits the acceleration of the yaw setpoint to avoid large control output and mixer saturation.</long_desc>
+      <min>5</min>
+      <max>360</max>
+      <unit>deg/s^2</unit>
+      <decimal>0</decimal>
+      <increment>5</increment>
+    </parameter>
     <parameter name="MPC_YAWRAUTO_MAX" default="45." type="FLOAT">
-      <short_desc>Max yaw rate in autonomous modes</short_desc>
+      <short_desc>Maximum yaw rate in autonomous modes</short_desc>
       <long_desc>Limits the rate of change of the yaw setpoint to avoid large control output and mixer saturation.</long_desc>
-      <min>0</min>
+      <min>5</min>
       <max>360</max>
       <unit>deg/s</unit>
       <decimal>0</decimal>
@@ -8616,6 +8639,10 @@
     <parameter name="SENS_IMU_AUTOCAL" default="1" type="INT32" boolean="true" category="System">
       <short_desc>IMU auto calibration</short_desc>
       <long_desc>Automatically initialize IMU (accel/gyro) calibration from bias estimates if available.</long_desc>
+    </parameter>
+    <parameter name="SENS_IMU_CLPNOTI" default="1" type="INT32" boolean="true" category="System">
+      <short_desc>IMU notify clipping</short_desc>
+      <long_desc>Notify the user if the IMU is clipping</long_desc>
     </parameter>
     <parameter name="SENS_IMU_MODE" default="1" type="INT32" category="System">
       <short_desc>Sensors hub IMU mode</short_desc>

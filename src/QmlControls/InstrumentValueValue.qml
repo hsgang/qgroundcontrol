@@ -7,16 +7,16 @@
  *
  ****************************************************************************/
 
-import QtQuick          2.12
-import QtQuick.Layouts  1.2
-import QtQuick.Controls 2.5
-import QtGraphicalEffects 1.0
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
+import QtGraphicalEffects
 
-import QGroundControl               1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.Templates     1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Palette       1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.Templates
+import QGroundControl.ScreenTools
+import QGroundControl.Palette
 
 ColumnLayout {
     property var    instrumentValueData:            null
