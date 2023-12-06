@@ -52,13 +52,13 @@ Item {
                     QGCLabel { text: qsTr("Inactive Time:") }
                     QGCLabel { text: transmitter.inactiveTime + " ms"}
                     QGCLabel { text: qsTr("Upstream:") }
-                    QGCLabel { text: (transmitter.upStream / 1024).toFixed(1) + " Kb/s" }
+                    QGCLabel { text: (transmitter.upStream / 1024).toFixed(1) + " KB/s" }
                     QGCLabel { text: qsTr("Downstream:") }
-                    QGCLabel { text: (transmitter.downStream / 1024).toFixed(1) + " Kb/s" }
+                    QGCLabel { text: (transmitter.downStream / 1024).toFixed(1) + " KB/s" }
                     QGCLabel { text: qsTr("TxBandwidth:") }
-                    QGCLabel { text: (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s" }
+                    QGCLabel { text: (transmitter.txBanWidth / 1024).toFixed(1) + " MB/s" }
                     QGCLabel { text: qsTr("RxBandwidth:") }
-                    QGCLabel { text: (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s" }
+                    QGCLabel { text: (transmitter.rxBanWidth / 1024).toFixed(1) + " MB/s" }
                     QGCLabel { text: qsTr("Frequency:") }
                     QGCLabel { text: transmitter.freq + " Mhz"}
                     QGCLabel { text: qsTr("Channel:") }
@@ -86,7 +86,7 @@ Item {
                 anchors.right:      parent.right
                 font.pointSize:     ScreenTools.smallFontPointSize
                 color:              qgcPal.text
-                text:               (transmitter.downStream / 1024).toFixed(0) + " Kb/s"
+                text:               (transmitter.downStream / 1024).toFixed(0) + " KB/s"
             }
 
             QGCLabel {
