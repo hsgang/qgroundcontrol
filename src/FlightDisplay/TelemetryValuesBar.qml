@@ -18,50 +18,35 @@ import QGroundControl.Palette
 
 Rectangle {
     id:                 telemetryPanel
-    height:             telemetryLayout.height + _toolsMargin
+    height:             telemetryLayout.height + (_toolsMargin * 2)
     width:              telemetryLayout.width + (_toolsMargin * 2)
     color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5) //"transparent"
     radius:             ScreenTools.defaultFontPixelWidth / 2
-
-    property bool       editMode: false
 
     DeadMouseArea { anchors.fill: parent }
 
     RowLayout {
         id:                 telemetryLayout
-        anchors.margins:    _toolsMargin * 0.5
+        anchors.margins:    _toolsMargin
         anchors.bottom:     parent.bottom
         anchors.left:       parent.left
 
-        RowLayout {
-            visible: telemetryPanel.editMode || valueArea.settingsUnlocked
+        QGCColoredImage {
+            visible:            mouseArea.containsMouse || valueArea.settingsUnlocked
+            source:             valueArea.settingsUnlocked ? "/res/LockOpen.svg" : "/res/pencil.svg"
+            mipmap:             true
+            width:              ScreenTools.minTouchPixels * 0.75
+            height:             width
+            sourceSize.width:   width
+            color:              qgcPal.text
+            fillMode:           Image.PreserveAspectFit
 
-            QGCColoredImage {
-                source:             valueArea.settingsUnlocked ? "/res/LockOpen.svg" : "/res/pencil.svg"
-                mipmap:             true
-                width:              ScreenTools.minTouchPixels * 0.75
-                height:             width
-                sourceSize.width:   width
-                color:              qgcPal.text
-                fillMode:           Image.PreserveAspectFit
-
-                QGCMouseArea {
-                    anchors.fill: parent
-                    hoverEnabled: true
-                    cursorShape:  Qt.PointingHandCursor
-                    onClicked:    valueArea.settingsUnlocked = !valueArea.settingsUnlocked
-                }
+            QGCMouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape:  Qt.PointingHandCursor
+                onClicked:    valueArea.settingsUnlocked = !valueArea.settingsUnlocked
             }
-        }
-
-        QGCMouseArea {
-            id:                         mouseArea
-            x:                          valueArea.x
-            y:                          valueArea.y
-            width:                      valueArea.width
-            height:                     valueArea.height
-            onClicked:                  telemetryPanel.editMode = !telemetryPanel.editMode
-            //propagateComposedEvents:    true
         }
 
         HorizontalFactValueGrid {
@@ -75,8 +60,8 @@ Rectangle {
         id:                         mouseArea
         x:                          telemetryLayout.x
         y:                          telemetryLayout.y
-        width:                      telemetryLayout.width
-        height:                     telemetryLayout.height
+        width:                      valueArea.settingsUnlocked ? (telemetryLayout.width - ScreenTools.minTouchPixels / 2) : telemetryLayout.width
+        height:                     valueArea.settingsUnlocked ? (telemetryLayout.height - ScreenTools.minTouchPixels / 2) : telemetryLayout.height
         hoverEnabled:               !ScreenTools.isMobile
         propagateComposedEvents:    true
 

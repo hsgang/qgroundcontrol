@@ -7,17 +7,17 @@
  *
  ****************************************************************************/
 
-import QtQuick          2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts  1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import QGroundControl                       1.0
-import QGroundControl.Controls              1.0
-import QGroundControl.MultiVehicleManager   1.0
-import QGroundControl.ScreenTools           1.0
-import QGroundControl.Palette               1.0
-import QGroundControl.FactSystem            1.0
-import QGroundControl.FactControls          1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.MultiVehicleManager
+import QGroundControl.ScreenTools
+import QGroundControl.Palette
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
 
 // This is the contentItem portion of the ToolIndicatorPage for the Flight Mode toolbar item.
 // It supports changing the flight mode and editing the flight mode list.

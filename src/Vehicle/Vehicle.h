@@ -97,6 +97,7 @@ class GimbalController;
     Q_DECLARE_OPAQUE_POINTER(RemoteIDManager*)
     Q_DECLARE_OPAQUE_POINTER(Actuators*)
     Q_DECLARE_OPAQUE_POINTER(QGCCameraManager*)
+    Q_DECLARE_OPAQUE_POINTER(GimbalController*)
 #endif
 
 namespace events {

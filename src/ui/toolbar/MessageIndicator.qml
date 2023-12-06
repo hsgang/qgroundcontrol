@@ -107,7 +107,7 @@ Item {
 
             Connections {
                 target:                 _activeVehicle
-                onNewFormattedMessage:  {
+                onNewFormattedMessage: function(formattedMessage) {
                     messageText.append(formatMessage(formattedMessage));
                 }
             }

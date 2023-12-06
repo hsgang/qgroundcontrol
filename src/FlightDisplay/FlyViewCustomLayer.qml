@@ -11,7 +11,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts
-import QtGraphicalEffects
 
 import QtLocation
 import QtPositioning
@@ -313,7 +312,7 @@ Item {
 
             Connections {
                 target: _activeVehicle
-                onNewFormattedMessage :{
+                onNewFormattedMessage : function(formattedMessage) {
                     messageToastManager.show(formattedMessage)
                 }
             }
@@ -387,7 +386,7 @@ Item {
 
         QGCPopupDialog {
             title:      qsTr("FlyView Widget Settings")
-            buttons:    StandardButton.Close
+            buttons:    Dialog.Close //StandardButton.Close
 
             RowLayout{
                 spacing: _margins * 5

@@ -22,8 +22,6 @@ Rectangle {
     color:  qgcPal.window
     z:      QGroundControl.zOrderTopMost
 
-    ExclusiveGroup { id: setupButtonGroup }
-
     readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
     readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
     readonly property real _horizontalMargin:   _defaultTextWidth / 2
@@ -103,7 +101,7 @@ Rectangle {
                     id:                 subMenu
                     imageResource:      modelData.icon
                     setupIndicator:     false
-                    exclusiveGroup:     setupButtonGroup
+                    autoExclusive:      true
                     text:               modelData.title
                     visible:            modelData.url != "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
 
@@ -113,41 +111,6 @@ Rectangle {
                         checked             = true
                     }
                 }
-
-//                QGCButton {
-//                    height:             _buttonHeight
-//                    text:               modelData.title
-//                    autoExclusive:      true
-//                    Layout.fillWidth:   true
-//                    visible:            modelData.url != "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
-
-//                    onClicked: {
-//                        if (mainWindow.preventViewSwitch()) {
-//                            return
-//                        }
-//                        if (__rightPanel.source !== modelData.url) {
-//                            __rightPanel.source = modelData.url
-//                        }
-//                        checked = true
-//                    }
-
-//                    Component.onCompleted: {
-//                        if (globals.commingFromRIDIndicator) {
-//                            _commingFromRIDSettings = true
-//                        }
-//                        if(_first) {
-//                            _first = false
-//                            checked = true
-//                        }
-//                        if (_commingFromRIDSettings) {
-//                            checked = false
-//                            _commingFromRIDSettings = false
-//                            if (modelData.url == "qrc:/qml/RemoteIDSettings.qml") {
-//                                checked = true
-//                            }
-//                        }
-//                    }
-//                }
             }
         }
     }

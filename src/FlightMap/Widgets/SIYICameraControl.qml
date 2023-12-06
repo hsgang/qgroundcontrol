@@ -1,18 +1,17 @@
-import QtQuick                          2.11
-import QtQuick.Controls                 2.4
-import QtQuick.Layouts                  1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import QGroundControl                   1.0
-import QGroundControl.FlightDisplay     1.0
-import QGroundControl.FlightMap         1.0
-import QGroundControl.ScreenTools       1.0
-import QGroundControl.Controls          1.0
-import QGroundControl.Palette           1.0
-import QGroundControl.Vehicle           1.0
-import QGroundControl.Controllers       1.0
+import QGroundControl
+import QGroundControl.FlightDisplay
+import QGroundControl.FlightMap
+import QGroundControl.ScreenTools
+import QGroundControl.Controls
+import QGroundControl.Palette
+import QGroundControl.Vehicle
+import QGroundControl.Controllers
 
 import SiYi.Object 1.0
-import QtGraphicalEffects 1.12
 //import "qrc:/qml/QGroundControl/Controls"
 
 Rectangle {

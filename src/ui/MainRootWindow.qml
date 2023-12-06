@@ -470,7 +470,8 @@ ApplicationWindow {
                         anchors.topMargin:  -versionLabel.height
                         anchors.fill:       parent
 
-                        onClicked: {
+                        onClicked: (mouse) => {
+                            console.log("clicked")
                             if (mouse.modifiers & Qt.ControlModifier) {
                                 QGroundControl.corePlugin.showTouchAreas = !QGroundControl.corePlugin.showTouchAreas
                                 showTouchAreasNotification.open()
@@ -493,17 +494,21 @@ ApplicationWindow {
                             id:                 showTouchAreasNotification
                             title:              qsTr("Debug Touch Areas")
                             text:               qsTr("Touch Area display toggled")
-                            standardButtons:    StandardButton.Ok
+                            buttons:    MessageDialog.Ok
                         }
 
                         MessageDialog {
                             id:                 advancedModeOnConfirmation
                             title:              qsTr("Advanced Mode")
                             text:               QGroundControl.corePlugin.showAdvancedUIMessage
-                            standardButtons:    StandardButton.Yes | StandardButton.No
-                            onYes: {
-                                QGroundControl.corePlugin.showAdvancedUI = true
-                                advancedModeOnConfirmation.close()
+                            buttons:    MessageDialog.Yes | MessageDialog.No
+                            onButtonClicked: function (button, role) {
+                                switch (button) {
+                                case MessageDialog.Yes:
+                                    QGroundControl.corePlugin.showAdvancedUI = true
+                                    advancedModeOnConfirmation.close()
+                                    break;
+                                }
                             }
                         }
 
@@ -511,32 +516,39 @@ ApplicationWindow {
                             id:                 advancedModeOffConfirmation
                             title:              qsTr("Advanced Mode")
                             text:               qsTr("Turn off Advanced Mode?")
-                            standardButtons:    StandardButton.Yes | StandardButton.No
-                            onYes: {
-                                QGroundControl.corePlugin.showAdvancedUI = false
-                                advancedModeOffConfirmation.close()
+                            buttons:    MessageDialog.Yes | MessageDialog.No
+                            onButtonClicked: function (button, role) {
+                                switch (button) {
+                                case MessageDialog.Yes:
+                                    QGroundControl.corePlugin.showAdvancedUI = false
+                                    advancedModeOffConfirmation.close()
+                                    break;
+                                case MessageDialog.No:
+                                    resetPrompt.close()
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
 
-            QGCMouseArea {
-                anchors.fill: qgcVersionLayout
+//            QGCMouseArea {
+//                anchors.fill: qgcVersionLayout
 
-                onClicked: {
-                    if (mouse.modifiers & Qt.ShiftModifier) {
-                        QGroundControl.corePlugin.showTouchAreas = !QGroundControl.corePlugin.showTouchAreas
-                    } else {
-                        if(!QGroundControl.corePlugin.showAdvancedUI) {
-                            advancedModeOnConfirmation.open()
-                        } else {
-                            //QGroundControl.corePlugin.showAdvancedUI = false
-                            advancedModeOffConfirmation.open()
-                        }
-                    }
-                }
-            }
+//                onClicked: {
+//                    if (mouse.modifiers & Qt.ShiftModifier) {
+//                        QGroundControl.corePlugin.showTouchAreas = !QGroundControl.corePlugin.showTouchAreas
+//                    } else {
+//                        if(!QGroundControl.corePlugin.showAdvancedUI) {
+//                            advancedModeOnConfirmation.open()
+//                        } else {
+//                            //QGroundControl.corePlugin.showAdvancedUI = false
+//                            advancedModeOffConfirmation.open()
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 

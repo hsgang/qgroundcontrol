@@ -1,19 +1,18 @@
-import QtQuick                  2.15
-import QtQuick.Controls         1.2
-import QtQuick.Controls.Styles  1.4
-import QtQuick.Layouts          1.12
-import QtCharts                 2.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtCharts
 
-import QtQuick.Window           2.2
-import QtQml.Models             2.1
+import QtQuick.Window
+import QtQml.Models
 
-import QGroundControl               1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.FactSystem    1.0
-import QGroundControl.FlightDisplay 1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Vehicle       1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.FactSystem
+import QGroundControl.FlightDisplay
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
 
 Item{
     id: chartWidgetRoot

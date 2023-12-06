@@ -10,7 +10,6 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtGraphicalEffects
 
 import QGroundControl
 import QGroundControl.Controls
@@ -38,7 +37,7 @@ ColumnLayout {
 
         QGCColoredImage {
             id:                         valueIcon
-            Layout.alignment:           _verticalOrientation ? Qt.AlignHCenter : Qt.AlignVCenter
+            Layout.alignment:           Qt.AlignHCenter || Qt.AlignVCenter
             height:                     _tightHeight * 0.75
             width:                      _tightHeight * 0.85
             sourceSize.height:          height
@@ -79,21 +78,13 @@ ColumnLayout {
 
         QGCLabel {
             id:                 valueLabel
-            Layout.alignment:   _verticalOrientation ? Qt.AlignHCenter : Qt.AlignVCenter
+            Layout.alignment:   Qt.AlignVCenter
             height:             _tightHeight
             font.pointSize:     ScreenTools.smallFontPointSize
             text:               instrumentValueData.text
             color:              _color
             opacity:            instrumentValueData.currentOpacity
             visible:            !_iconVisible
-        }
-
-        Glow {
-            anchors.fill: _iconVisible ? valueIcon : valueLabel
-            radius: 2
-            samples: 5
-            color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-            source: _iconVisible ? valueIcon : valueLabel
         }
     }
 }

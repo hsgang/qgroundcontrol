@@ -14,9 +14,9 @@
 #include <QtQml>
 #include <QVariantList>
 
-#ifndef QGC_DISABLE_UVC
-#include <QCameraInfo>
-#endif
+//#ifndef QGC_DISABLE_UVC
+//#include <QCameraInfo>
+//#endif
 
 DECLARE_SETTINGGROUP(GimbalController, "GimbalController")
 {

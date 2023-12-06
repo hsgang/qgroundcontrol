@@ -1,8 +1,8 @@
-import QtQuick 2.0
+import QtQuick
 
-import QGroundControl.FlightDisplay 1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Controls      1.0
+import QGroundControl.FlightDisplay
+import QGroundControl.ScreenTools
+import QGroundControl.Controls
 
 Column{
     id: root
@@ -17,15 +17,15 @@ Column{
     }
 
     z: Infinity
-    spacing:    0//ScreenTools.defaultFontPixelHeight * 0.2
+    spacing:    0
     anchors.horizontalCenter:   parent.horizontalCenter
     anchors.bottom:             parent.bottom
-    width:                      Math.max(toastComponent.width, mainWindow.width * 0.2)
+    width:                      toastComponent ? toastComponent.width : 0//Math.max(toastComponent.width, mainWindow.width * 0.2)
 
     property var toastComponent
 
     Component.onCompleted:
     {
-     toastComponent = Qt.createComponent("MessageToast.qml")
+        toastComponent = Qt.createComponent("MessageToast.qml")
     }
 }

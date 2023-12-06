@@ -10,11 +10,9 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtGraphicalEffects
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.Templates
 import QGroundControl.ScreenTools
 import QGroundControl.Palette
 
@@ -50,13 +48,6 @@ ColumnLayout {
                     return qsTr("--.--")
                 }
             }
-        }
-        Glow {
-            anchors.fill: label
-            radius: 2
-            samples: 5
-            color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-            source: label
         }
     }
 }

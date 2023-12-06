@@ -1,15 +1,13 @@
-import QtQuick          2.3
-import QtQuick.Controls 1.2
-import QtQuick.Layouts  1.2
-import QtQuick.Dialogs  1.2
-import QtGraphicalEffects       1.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
 
-
-import QGroundControl                   1.0
-import QGroundControl.ScreenTools       1.0
-import QGroundControl.Controls          1.0
-import QGroundControl.FactControls      1.0
-import QGroundControl.Palette           1.0
+import QGroundControl
+import QGroundControl.ScreenTools
+import QGroundControl.Controls
+import QGroundControl.FactControls
+import QGroundControl.Palette
 
 Rectangle {
     id:         altitudeIndicator
@@ -34,15 +32,15 @@ Rectangle {
     property string _startAltitudeText:         isNaN(_vehicleAltitude) ? "-.-" : "0.0 " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
 
     function currentAltitudeRatio(){
-        currentAltitudeRatio = height - (height * (_vehicleAltitude / _missionMaxAltitude))
-        if (currentAltitudeRatio > height){
+        var ratio = height - (height * (_vehicleAltitude / _missionMaxAltitude))
+        if (ratio > height){
             return height
         }
-        else if (currentAltitudeRatio < 0){
+        else if (ratio < 0){
             return 0
         }
         else {
-            return currentAltitudeRatio
+            return ratio
         }
     }
 
@@ -67,14 +65,6 @@ Rectangle {
         anchors.horizontalCenter:   parent.horizontalCenter
     }
 
-    Glow {
-        anchors.fill: missionMaxAltitudeText
-        radius: 2
-        samples: 5
-        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-        source: missionMaxAltitudeText
-    }
-
     Rectangle{
         id       : altLeveler
         height   : 2
@@ -90,13 +80,6 @@ Rectangle {
             anchors.leftMargin:     2
             text:                   _vehicleAltitudeText
         }
-        Glow {
-            anchors.fill: altLevelerText
-            radius: 2
-            samples: 5
-            color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-            source: altLevelerText
-        }
     }
 
     QGCLabel {
@@ -105,12 +88,5 @@ Rectangle {
         anchors.horizontalCenter:   parent.horizontalCenter
         font.pointSize:             ScreenTools.defaultFontPointSize * 0.8
         text:                       "GND" //_startAltitudeText
-    }
-    Glow {
-        anchors.fill: gndText
-        radius: 2
-        samples: 5
-        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-        source: gndText
     }
 }

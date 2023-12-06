@@ -9,7 +9,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls.Styles
 import QtQuick.Layouts
 
 import QGroundControl.FactSystem

@@ -51,6 +51,7 @@ class LinkManager;
     Q_DECLARE_OPAQUE_POINTER(MissionCommandTree*)
     Q_DECLARE_OPAQUE_POINTER(TaisyncManager*)
     Q_DECLARE_OPAQUE_POINTER(MicrohardManager*)
+    Q_DECLARE_OPAQUE_POINTER(NTRIP*)
 #endif
 
 class QGroundControlQmlGlobal : public QGCTool

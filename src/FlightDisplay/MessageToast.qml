@@ -1,10 +1,8 @@
-import QtQuick 2.0
+import QtQuick
 
-import QGroundControl               1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.ScreenTools   1.0
-
-import QtGraphicalEffects 1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.ScreenTools
 
 Rectangle{
 
@@ -37,32 +35,7 @@ Rectangle{
 
     anchors.horizontalCenter: parent.horizontalCenter
 
-    //color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     color: "transparent"
-
-//    Text{
-//        id: theText
-//        color: qgcPal.text
-//        font.pointSize: ScreenTools.defaultFontPointSize
-//        font.family:    ScreenTools.normalFontFamily
-//        antialiasing:   true
-
-//        text: ""
-
-//        anchors.horizontalCenter: parent.horizontalCenter
-//        anchors.verticalCenter: parent.verticalCenter
-//        //x: _toolsMargin
-//        //y: _toolsMargin
-//        wrapMode: Text.WordWrap
-//    }
-
-//    Glow {
-//        anchors.fill: theText
-//        radius: 2
-//        samples: 5
-//        color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-//        source: theText
-//    }
 
     QGCLabel{
         id: theText
