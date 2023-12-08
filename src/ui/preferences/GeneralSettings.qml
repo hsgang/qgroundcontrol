@@ -1286,12 +1286,6 @@ Rectangle {
 
                             property var  ntripSettings:    QGroundControl.settingsManager.ntripSettings
 
-//                            FactCheckBox {
-//                                text:                   ntripGrid.ntripSettings.ntripServerConnectEnabled.shortDescription
-//                                fact:                   ntripGrid.ntripSettings.ntripServerConnectEnabled
-//                                visible:                ntripGrid.ntripSettings.ntripServerConnectEnabled.visible
-//                                Layout.columnSpan:      2
-//                            }
                             FactCheckBoxSlider {
                                 Layout.fillWidth:   true
                                 text:               ntripGrid.ntripSettings.ntripServerConnectEnabled.shortDescription
@@ -1300,19 +1294,13 @@ Rectangle {
                                 Layout.columnSpan:  2
                             }
 
-//                            FactCheckBox {
-//                                text:                   ntripGrid.ntripSettings.ntripEnableVRS.shortDescription
-//                                fact:                   ntripGrid.ntripSettings.ntripEnableVRS
-//                                visible:                ntripGrid.ntripSettings.ntripEnableVRS.visible
-//                                Layout.columnSpan:      2
-//                            }
-                            FactCheckBoxSlider {
-                                Layout.fillWidth:   true
-                                text:               ntripGrid.ntripSettings.ntripEnableVRS.shortDescription
-                                fact:               ntripGrid.ntripSettings.ntripEnableVRS
-                                visible:            fact.visible
-                                Layout.columnSpan:  2
-                            }
+                            // FactCheckBoxSlider {
+                            //     Layout.fillWidth:   true
+                            //     text:               ntripGrid.ntripSettings.ntripEnableVRS.shortDescription
+                            //     fact:               ntripGrid.ntripSettings.ntripEnableVRS
+                            //     visible:            fact.visible
+                            //     Layout.columnSpan:  2
+                            // }
 
                             QGCLabel {
                                 text:               ntripGrid.ntripSettings.ntripServerHostAddress.shortDescription
@@ -1372,6 +1360,27 @@ Rectangle {
                                 fact:                   ntripGrid.ntripSettings.ntripWhitelist
                                 visible:                ntripGrid.ntripSettings.ntripWhitelist.visible
                                 Layout.preferredWidth:  _valueFieldWidth * 2
+                            }
+
+                            QGCButton {
+                                text: qsTr("Reconnect")
+                                Layout.fillWidth: true
+                                onClicked: {
+                                    QGroundControl.ntrip.reconnectNTRIP()
+                                }
+                            }
+                            QGCButton {
+                                text: qsTr("Stop")
+                                Layout.fillWidth: true
+                                onClicked: {
+                                    QGroundControl.ntrip.stopNTRIP()
+                                }
+                            }
+                            QGCLabel {
+                                text: QGroundControl.ntrip.connected
+                            }
+                            QGCLabel {
+                                text: QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s"
                             }
                         }
                     }

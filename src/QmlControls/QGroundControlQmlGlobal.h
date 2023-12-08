@@ -16,6 +16,7 @@
 #include "QGCLoggingCategory.h"
 #include "AppSettings.h"
 #include "ADSBVehicleManager.h"
+#include "NTRIP.h"
 #include "QGCPalette.h"
 #include "QmlUnitsConversion.h"
 #if defined(QGC_ENABLE_PAIRING)
