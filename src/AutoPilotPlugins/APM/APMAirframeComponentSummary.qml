@@ -25,7 +25,6 @@ Item {
         VehicleSummaryRow {
             labelText:  qsTr("Frame Class")
             valueText:  _frameClass.enumStringValue
-
         }
 
         VehicleSummaryRow {
@@ -54,7 +53,7 @@ Item {
 
         VehicleSummaryRow {
             labelText: qsTr("Firmware Version")
-            valueText: globals.activeVehicle.firmwareMajorVersion == -1 ? qsTr("Unknown") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + globals.activeVehicle.firmwareVersionTypeString
+            valueText: globals.activeVehicle.firmwareMajorVersion === -1 ? qsTr("Unknown") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + globals.activeVehicle.firmwareVersionTypeString
         }
     }
 }
