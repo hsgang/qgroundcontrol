@@ -21,6 +21,7 @@
         <file alias="SiyiRSSIIndicator.qml">src/ui/toolbar/SiyiRSSIIndicator.qml</file>
         <file alias="GPS2Indicator.qml">src/ui/toolbar/GPS2Indicator.qml</file>
         <file alias="APMSupportForwardingIndicator.qml">src/ui/toolbar/APMSupportForwardingIndicator.qml</file>
+        <file alias="VehicleIndicator.qml">src/ui/toolbar/VehicleIndicator.qml</file>
     </qresource>
     <qresource prefix="/checklists">
         <file alias="DefaultChecklist.qml">src/FlightDisplay/DefaultChecklist.qml</file>
@@ -330,6 +331,7 @@
         <file alias="QGroundControl/FlightDisplay/GuidedActionMission.qml">src/FlightDisplay/GuidedActionMission.qml</file>
         <file alias="QGroundControl/FlightMap/WinchControlPanel.qml">src/FlightMap/Widgets/WinchControlPanel.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewInsetViewer.qml">src/FlightDisplay/FlyViewInsetViewer.qml</file>
+        <file alias="QGroundControl/Controls/ComponentLabelValueRow.qml">src/QmlControls/ComponentLabelValueRow.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
