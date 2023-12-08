@@ -134,6 +134,6 @@ TextField {
             }
         }
 
-        padding.right: control._helpLayoutWidth //control.showUnits ? unitsLabelWidthGenerator.width : control.__contentHeight * 0.333
+        padding.right: control._helpLayoutWidth + (ScreenTools.defaultFontPixelWidth * 2) //control.showUnits ? unitsLabelWidthGenerator.width : control.__contentHeight * 0.333
     }
 }
