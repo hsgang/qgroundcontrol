@@ -19,9 +19,6 @@ import QGroundControl.FactSystem            1.0
 import QGroundControl.FactControls          1.0
 import MAVLink                              1.0
 
-// This is the contentItem portion of the ToolIndicatorPage for the Battery toolbar item.
-// It works for both PX4 and APM firmware.
-
 ColumnLayout {
     id:         mainLayout
     spacing:    ScreenTools.defaultFontPixelHeight
@@ -51,66 +48,70 @@ ColumnLayout {
         font.family:        ScreenTools.demiboldFontFamily
     }
 
-    RowLayout {
-        Layout.preferredWidth: parent.width
-        spacing: ScreenTools.defaultFontPixelWidth
+    ColumnLayout {
+        spacing: ScreenTools.defaultFontPixelHeight
 
-        ColumnLayout {
-            Repeater {
-                model: _activeVehicle ? _activeVehicle.batteries : 0
+        Repeater {
+            model: _activeVehicle ? _activeVehicle.batteries : 0
 
-                ColumnLayout {
-                    spacing: ScreenTools.defaultFontPixelHeight / 3
+            ColumnLayout {
+                spacing: ScreenTools.defaultFontPixelHeight / 2
+                Layout.fillWidth: true
 
-                    property var batteryValuesAvailable: nameAvailableLoader.item
+                property var batteryValuesAvailable: nameAvailableLoader.item
 
-                    Loader {
-                        id:                 nameAvailableLoader
-                        sourceComponent:    batteryValuesAvailableComponent
+                Loader {
+                    id:                 nameAvailableLoader
+                    sourceComponent:    batteryValuesAvailableComponent
 
-                        property var battery: object
-                    }
-
-                    QGCLabel { text: qsTr("Battery %1").arg(object.id.rawValue) }
-                    QGCLabel { text: qsTr("Charge State");                          visible: batteryValuesAvailable.chargeStateAvailable }
-                    QGCLabel { text: qsTr("Remaining Time");                        visible: batteryValuesAvailable.timeRemainingAvailable }
-                    QGCLabel { text: qsTr("Remaining") }
-                    QGCLabel { text: qsTr("Voltage") }
-                    QGCLabel { text: qsTr("Cell Voltage") }
-                    QGCLabel { text: qsTr("Current");                               visible: batteryValuesAvailable.currentAvailable }
-                    QGCLabel { text: qsTr("Consumed");                              visible: batteryValuesAvailable.mahConsumedAvailable }
-                    QGCLabel { text: qsTr("Temperature");                           visible: batteryValuesAvailable.temperatureAvailable }
-                    QGCLabel { text: qsTr("Function");                              visible: batteryValuesAvailable.functionAvailable }
+                    property var battery: object
                 }
-            }
-        }
 
-        ColumnLayout {
-            Repeater {
-                model: _activeVehicle ? _activeVehicle.batteries : 0
-
-                ColumnLayout {
-                    spacing: ScreenTools.defaultFontPixelHeight / 3
-
-                    property var batteryValuesAvailable: valueAvailableLoader.item
-
-                    Loader {
-                        id:                 valueAvailableLoader
-                        sourceComponent:    batteryValuesAvailableComponent
-
-                        property var battery: object
-                    }
-
-                    QGCLabel { text: "" }
-                    QGCLabel { text: object.chargeState.enumStringValue;                                        visible: batteryValuesAvailable.chargeStateAvailable }
-                    QGCLabel { text: object.timeRemainingStr.value;                                             visible: batteryValuesAvailable.timeRemainingAvailable }
-                    QGCLabel { text: object.percentRemaining.valueString + " " + object.percentRemaining.units }
-                    QGCLabel { text: object.voltage.valueString + " " + object.voltage.units }
-                    QGCLabel { text: (object.voltage.value / _batteryCellCount).toFixed(2) + " " + object.voltage.units }
-                    QGCLabel { text: object.current.valueString + " " + object.current.units;                   visible: batteryValuesAvailable.currentAvailable }
-                    QGCLabel { text: object.mahConsumed.valueString + " " + object.mahConsumed.units;           visible: batteryValuesAvailable.mahConsumedAvailable }
-                    QGCLabel { text: object.temperature.valueString + " " + object.temperature.units;           visible: batteryValuesAvailable.temperatureAvailable }
-                    QGCLabel { text: object.function.enumStringValue;                                           visible: batteryValuesAvailable.functionAvailable }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Battery %1").arg(object.id.rawValue)
+                    valueText:  ""
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Charge State")
+                    valueText:  object.chargeState.enumStringValue
+                    visible:    batteryValuesAvailable.chargeStateAvailable
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Remaining Time")
+                    valueText:  object.timeRemainingStr.value
+                    visible:    batteryValuesAvailable.timeRemainingAvailable
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Remaining")
+                    valueText:  object.percentRemaining.valueString + " " + object.percentRemaining.units
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Voltage")
+                    valueText:  object.voltage.valueString + " " + object.voltage.units
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Cell Voltage")
+                    valueText:  (object.voltage.value / _batteryCellCount).toFixed(2) + " " + object.voltage.units
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Current")
+                    valueText:  object.current.valueString + " " + object.current.units
+                    visible:    batteryValuesAvailable.currentAvailable
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Consumed")
+                    valueText:  object.mahConsumed.valueString + " " + object.mahConsumed.units
+                    visible:    batteryValuesAvailable.mahConsumedAvailable
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Temperature")
+                    valueText:  object.temperature.valueString + " " + object.temperature.units
+                    visible:    batteryValuesAvailable.temperatureAvailable
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Function")
+                    valueText:  object.function.enumStringValue
+                    visible:    batteryValuesAvailable.functionAvailable
                 }
             }
         }

@@ -87,19 +87,20 @@ Item {
                         columns:            2
                         columnSpacing:      ScreenTools.defaultFontPixelHeight
 
-                        QGCLabel { text: qsTr("Battery Cells") }
-                        FactTextField {
-                            Layout.fillWidth:       true
-                            Layout.preferredWidth:  editFieldWidth
-                            fact:                   _batterySettings.batteryCellCount
-                        }
-
                         //QGCLabel { text: qsTr("Show Cell Voltage") }
                         FactCheckBoxSlider {
                             text:                   qsTr("Show Cell Voltage")
                             Layout.columnSpan:      2
                             Layout.fillWidth:       true
                             fact:                   _batterySettings.showCellVoltage
+                        }
+
+                        QGCLabel { text: qsTr("Battery Cells"); Layout.fillWidth: true}
+                        FactTextField {
+                            Layout.alignment:       Qt.AlignRight
+                            Layout.preferredWidth:  editFieldWidth
+                            fact:                   _batterySettings.batteryCellCount
+                            horizontalAlignment:    Text.AlignRight;
                         }
                     }
                 }
@@ -117,6 +118,7 @@ Item {
                             Layout.fillWidth:       true
                             Layout.preferredWidth:  editFieldWidth
                             fact:                   controller.getParameterFact(-1, "BATT_LOW_VOLT")
+                            horizontalAlignment:    Text.AlignRight;
                         }
 
                         QGCLabel { text: qsTr("Battery Low Action") }
@@ -131,6 +133,7 @@ Item {
                             Layout.fillWidth:       true
                             Layout.preferredWidth:  editFieldWidth
                             fact:                   controller.getParameterFact(-1, "BATT_CRT_VOLT")
+                            horizontalAlignment:    Text.AlignRight;
                         }
 
                         QGCLabel { text: qsTr("Battery Critical Action") }

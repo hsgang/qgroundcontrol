@@ -30,7 +30,7 @@ Item {
 
             contentItem: ColumnLayout {
                 Layout.preferredWidth:  parent.width
-                spacing:                ScreenTools.defaultFontPixelHeight * 0.5
+                spacing:                ScreenTools.defaultFontPixelHeight
 
                 QGCLabel {
                     id:                 telemLabel
@@ -39,30 +39,66 @@ Item {
                     Layout.alignment:   Qt.AlignHCenter
                 }
 
-                GridLayout {
+                ColumnLayout {
                     id:                 telemGrid
-                    columnSpacing:      ScreenTools.defaultFontPixelWidth
-                    columns:            2
+                    spacing:            ScreenTools.defaultFontPixelHeight * 0.5
                     Layout.fillWidth:   true
 
-                    QGCLabel { text: qsTr("Signal:") }
-                    QGCLabel { text: transmitter.signalQuality + " %"}
-                    QGCLabel { text: qsTr("RSSI:") }
-                    QGCLabel { text: transmitter.rssi + " dBm"}
-                    QGCLabel { text: qsTr("Inactive Time:") }
-                    QGCLabel { text: transmitter.inactiveTime + " ms"}
-                    QGCLabel { text: qsTr("Upstream:") }
-                    QGCLabel { text: (transmitter.upStream / 1024).toFixed(1) + " KB/s" }
-                    QGCLabel { text: qsTr("Downstream:") }
-                    QGCLabel { text: (transmitter.downStream / 1024).toFixed(1) + " KB/s" }
-                    QGCLabel { text: qsTr("TxBandwidth:") }
-                    QGCLabel { text: (transmitter.txBanWidth / 1024).toFixed(1) + " MB/s" }
-                    QGCLabel { text: qsTr("RxBandwidth:") }
-                    QGCLabel { text: (transmitter.rxBanWidth / 1024).toFixed(1) + " MB/s" }
-                    QGCLabel { text: qsTr("Frequency:") }
-                    QGCLabel { text: transmitter.freq + " Mhz"}
-                    QGCLabel { text: qsTr("Channel:") }
-                    QGCLabel { text: transmitter.channel }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Signal")
+                        valueText:  transmitter.signalQuality + " %"
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("RSSI")
+                        valueText:  transmitter.rssi + " dBm"
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Inactive Time")
+                        valueText:  transmitter.inactiveTime + " ms"
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Upstream")
+                        valueText:  (transmitter.upStream / 1024).toFixed(1) + " KB/s"
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Downstream")
+                        valueText:  (transmitter.downStream / 1024).toFixed(1) + " KB/s"
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("TxBandwidth")
+                        valueText:  (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s"
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("RxBandwidth")
+                        valueText:  (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s"
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Frequency")
+                        valueText:  transmitter.freq + " Mhz"
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Channel")
+                        valueText:  transmitter.channel
+                    }
+
+                    // QGCLabel { text: qsTr("Signal:") }
+                    // QGCLabel { text: transmitter.signalQuality + " %";                      horizontalAlignment: Text.AlignRight;}
+                    // QGCLabel { text: qsTr("RSSI:") }
+                    // QGCLabel { text: transmitter.rssi + " dBm";                             horizontalAlignment: Text.AlignRight;}
+                    // QGCLabel { text: qsTr("Inactive Time:") }
+                    // QGCLabel { text: transmitter.inactiveTime + " ms";                      horizontalAlignment: Text.AlignRight;}
+                    // QGCLabel { text: qsTr("Upstream:") }
+                    // QGCLabel { text: (transmitter.upStream / 1024).toFixed(1) + " KB/s";    horizontalAlignment: Text.AlignRight;}
+                    // QGCLabel { text: qsTr("Downstream:") }
+                    // QGCLabel { text: (transmitter.downStream / 1024).toFixed(1) + " KB/s";  horizontalAlignment: Text.AlignRight;}
+                    // QGCLabel { text: qsTr("TxBandwidth:") }
+                    // QGCLabel { text: (transmitter.txBanWidth / 1024).toFixed(1) + " MB/s";  horizontalAlignment: Text.AlignRight;}
+                    // QGCLabel { text: qsTr("RxBandwidth:") }
+                    // QGCLabel { text: (transmitter.rxBanWidth / 1024).toFixed(1) + " MB/s";  horizontalAlignment: Text.AlignRight;}
+                    // QGCLabel { text: qsTr("Frequency:") }
+                    // QGCLabel { text: transmitter.freq + " Mhz";                             horizontalAlignment: Text.AlignRight;}
+                    // QGCLabel { text: qsTr("Channel:") }
+                    // QGCLabel { text: transmitter.channel;                                   horizontalAlignment: Text.AlignRight;}
                 }
             }
 //        }

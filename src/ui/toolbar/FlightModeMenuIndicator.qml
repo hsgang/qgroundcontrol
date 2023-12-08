@@ -81,14 +81,6 @@ RowLayout {
             property real valueColumnWidth:         editFieldWidth
 
             property var params : ListModel{
-//                ListElement {
-//                    title:          qsTr("Responsiveness")
-//                    param:          "ATC_INPUT_TC"
-//                    description:    ""
-//                    min:            0.01
-//                    max:            1
-//                    step:           0.01
-//                }
                 ListElement {
                     title:          qsTr("Loiter Horizontal Speed(cm/s)")
                     param:          "LOIT_SPEED"
@@ -134,99 +126,84 @@ RowLayout {
             // Mode list
             contentItem: FlightModeToolIndicatorContentItem { }
 
-            // Settings
-            expandedItem: ColumnLayout{
-                Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 50
-                spacing:                margins / 2
 
-                IndicatorPageGroupLayout {
-                    Layout.fillWidth: true
+            // expandedItem: ColumnLayout{
+            //     Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 50
+            //     spacing:                margins / 2
 
-                    GridLayout {
-                        Layout.fillWidth:   true
-                        columns:            2
+            //     IndicatorPageGroupLayout {
+            //         Layout.fillWidth: true
 
-                        QGCLabel {
-                            Layout.fillWidth: true
-                            text: qsTr("RTL Altitude")
-                            visible:                landSpeedFact
-                        }
+            //         GridLayout {
+            //             Layout.fillWidth:   true
+            //             columns:            2
 
-                        FactTextField {
-                            fact:                   controller.getParameterFact(-1, "RTL_ALT")
-                            Layout.preferredWidth:  valueColumnWidth
-                            visible:                landSpeedFact
-                        }
+            //             QGCLabel {
+            //                 Layout.fillWidth: true
+            //                 text: qsTr("RTL Altitude")
+            //                 visible:                landSpeedFact
+            //             }
 
-                        QGCLabel {
-                            id:                     landDescentLabel
-                            Layout.fillWidth:       true
-                            text:                   qsTr("Land Descent Rate")
-                            visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
-                        }
+            //             FactTextField {
+            //                 fact:                   controller.getParameterFact(-1, "RTL_ALT")
+            //                 Layout.preferredWidth:  valueColumnWidth
+            //                 visible:                landSpeedFact
+            //             }
 
-                        FactTextField {
-                            fact:                   landSpeedFact
-                            Layout.preferredWidth:  valueColumnWidth
-                            visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
-                        }
+            //             QGCLabel {
+            //                 id:                     landDescentLabel
+            //                 Layout.fillWidth:       true
+            //                 text:                   qsTr("Land Descent Rate")
+            //                 visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
+            //             }
 
-//                        QGCLabel {
-//                            Layout.fillWidth:       true
-//                            text:                   qsTr("Precision Landing")
-//                            visible:                precisionLandingCombo.visible
-//                        }
+            //             FactTextField {
+            //                 fact:                   landSpeedFact
+            //                 Layout.preferredWidth:  valueColumnWidth
+            //                 visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
+            //             }
+            //         }
+            //     }
 
-//                        FactComboBox {
-//                            id:                     precisionLandingCombo
-//                            Layout.minimumWidth:    editFieldWidth
-//                            fact:                   precisionLandingFact
-//                            indexModel:             false
-//                            sizeToContents:         true
-//                            visible:                precisionLandingFact
-//                        }
-                    }
-                }
+            //     IndicatorPageGroupLayout {
+            //         Layout.fillWidth:   true
+            //         visible:            atcInputTCFact
 
-                IndicatorPageGroupLayout {
-                    Layout.fillWidth:   true
-                    visible:            atcInputTCFact
+            //         ColumnLayout {
+            //             Layout.fillWidth:   true
 
-                    ColumnLayout {
-                        Layout.fillWidth:   true
+            //             FactSliderPanel {
+            //                 width:       parent.width
+            //                 sliderModel: params
+            //             }
+            //         }
 
-                        FactSliderPanel {
-                            width:       parent.width
-                            sliderModel: params
-                        }
-                    }
+            //         Item {
+            //             height:             1
+            //             Layout.fillWidth:   true
+            //         }
+            //     }
 
-                    Item {
-                        height:             1
-                        Layout.fillWidth:   true
-                    }
-                }
+            //     IndicatorPageGroupLayout {
+            //         Layout.fillWidth:   true
+            //         showDivider:        false
 
-                IndicatorPageGroupLayout {
-                    Layout.fillWidth:   true
-                    showDivider:        false
+            //         RowLayout {
+            //             Layout.fillWidth: true
 
-                    RowLayout {
-                        Layout.fillWidth: true
+            //             QGCLabel { Layout.fillWidth: true; text: qsTr("Flight Modes Settings") }
+            //             QGCButton {
+            //                 text: qsTr("Configure")
+            //                 onClicked: {
+            //                     mainWindow.showVehicleSetupTool(qsTr("Flight Modes"))
+            //                     indicatorDrawer.close()
+            //                     componentDrawer.visible = false
+            //                 }
+            //             }
+            //         }
+            //     }
 
-                        QGCLabel { Layout.fillWidth: true; text: qsTr("RC Transmitter Flight Modes") }
-                        QGCButton {
-                            text: qsTr("Configure")
-                            onClicked: {
-                                mainWindow.showVehicleSetupTool(qsTr("Radio"))
-                                indicatorDrawer.close()
-                                componentDrawer.visible = false
-                            }
-                        }
-                    }
-                }
-
-            }
+            // }
         }
     }
 }

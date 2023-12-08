@@ -161,29 +161,29 @@ RowLayout {
                 id:         mainLayout
                 spacing:    _spacing
 
-                QGCButton {
-                    // FIXME: forceArm is not possible anymore if _healthAndArmingChecksSupported == true
-                    enabled:    _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
-                    text:       _armed ?  qsTr("Disarm") : (forceArm ? qsTr("Force Arm") : qsTr("Arm"))
+                // QGCButton {
+                //     // FIXME: forceArm is not possible anymore if _healthAndArmingChecksSupported == true
+                //     enabled:    _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
+                //     text:       _armed ?  qsTr("Disarm") : (forceArm ? qsTr("Force Arm") : qsTr("Arm"))
 
-                    property bool forceArm: false
+                //     property bool forceArm: false
 
-                    onPressAndHold: forceArm = true
+                //     onPressAndHold: forceArm = true
 
-                    onClicked: {
-                        if (_armed) {
-                            mainWindow.disarmVehicleRequest()
-                        } else {
-                            if (forceArm) {
-                                mainWindow.forceArmVehicleRequest()
-                            } else {
-                                mainWindow.armVehicleRequest()
-                            }
-                        }
-                        forceArm = false
-                        drawer.close()
-                    }
-                }
+                //     onClicked: {
+                //         if (_armed) {
+                //             mainWindow.disarmVehicleRequest()
+                //         } else {
+                //             if (forceArm) {
+                //                 mainWindow.forceArmVehicleRequest()
+                //             } else {
+                //                 mainWindow.armVehicleRequest()
+                //             }
+                //         }
+                //         forceArm = false
+                //         drawer.close()
+                //     }
+                // }
 
                 QGCLabel {
                     anchors.horizontalCenter:   parent.horizontalCenter
