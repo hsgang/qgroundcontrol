@@ -127,17 +127,26 @@ Map {
         visible:        gcsPosition.isValid
         coordinate:     gcsPosition
 
-        sourceItem: Image {
-            id:             mapItemImage
-            source:         "/qmlimages/homeMarker.png"
-            mipmap:         true
-            antialiasing:   true
-            fillMode:       Image.PreserveAspectFit
-            height:         ScreenTools.defaultFontPixelHeight * 3
-            sourceSize.height: height
+        sourceItem: Rectangle {
+            id:         homeMarker
+            height:     ScreenTools.defaultFontPixelHeight * 2
+            width:      height
+            radius:     width * 0.5
+            color:      "transparent"
+            border.color: qgcPal.alertBackground
+
+            QGCLabel {
+                text:               "H"
+                font.pointSize:     parent.height * 0.6
+                font.family:        ScreenTools.demiboldFontFamily
+                font.bold:          true
+                color:              qgcPal.alertBackground
+                anchors.centerIn:   parent
+            }
+
             transform: Rotation {
-                origin.x:       mapItemImage.width  / 2
-                origin.y:       mapItemImage.height / 2
+                origin.x:       homeMarker.width  / 2
+                origin.y:       homeMarker.height / 2
                 angle:          isNaN(gcsHeading) ? 0 : gcsHeading
             }
         }
