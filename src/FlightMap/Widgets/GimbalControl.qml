@@ -202,11 +202,11 @@ Rectangle {
                 id: gimbalUpPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localPitch += 0.03
+                    _localPitch += 2
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
-                    _activeVehicle.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
                 }
             }
         }
@@ -240,7 +240,7 @@ Rectangle {
                 id:             baseDownPress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalControlValue(-0.9, 0.0)
+                    _activeVehicle.gimbalController.gimbalControlValue(-90.0, 0.0)
                 }
             }
         }
@@ -274,11 +274,11 @@ Rectangle {
                 id:             gimbalLeftPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localYaw += -0.03
+                    _localYaw += -2
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
-                    _activeVehicle.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
                 }
             }
         }
@@ -312,7 +312,7 @@ Rectangle {
                 id:             gimbalHomePress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalControlValue(0.0, 0.0)
+                    _activeVehicle.gimbalController.gimbalControlValue(0.0, 0.0)
                     _localPitch = 0
                     _localYaw = 0
                 }
@@ -348,11 +348,11 @@ Rectangle {
                 id:             gimbalRightPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localYaw += 0.03
+                    _localYaw += 2
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
-                    _activeVehicle.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
                 }
             }
         }
@@ -420,11 +420,11 @@ Rectangle {
                 id:             gimbalDownPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localPitch += -0.03
+                    _localPitch += -2
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
-                    _activeVehicle.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
                 }
             }
         }
@@ -468,10 +468,9 @@ Rectangle {
                 id:             gimbalModePress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.setGimbalRcTargeting()
+                    _activeVehicle.gimbalController.setGimbalRcTargeting()
                 }
             }
         }
-
     }
 }
