@@ -129,7 +129,7 @@ Map {
 
         sourceItem: Rectangle {
             id:         homeMarker
-            height:     ScreenTools.defaultFontPixelHeight * 2
+            height:     ScreenTools.defaultFontPixelHeight
             width:      height
             radius:     width * 0.5
             color:      "transparent"
@@ -137,7 +137,7 @@ Map {
 
             QGCLabel {
                 text:               "H"
-                font.pointSize:     parent.height * 0.6
+                font.pointSize:     parent.height * 0.25
                 font.family:        ScreenTools.demiboldFontFamily
                 font.bold:          true
                 color:              qgcPal.alertBackground

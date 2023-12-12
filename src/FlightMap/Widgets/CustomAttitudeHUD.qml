@@ -120,21 +120,6 @@ Item {
         }
     }
 
-//    Image {
-//        id:                     homePointer
-//        width:                  size * 0.1
-//        source:                 isHeadingHomeOK() ? "/qmlimages/Home.svg" : ""
-//        mipmap:                 true
-//        fillMode:               Image.PreserveAspectFit
-//        anchors.centerIn:   	parent
-//        sourceSize.width:       width
-//        layer {
-//            enabled: true
-//            effect: ColorOverlay {
-//                color: qgcPal.alertBackground
-//            }
-//        }
-
     Rectangle {
         id:                 homePointer
         visible:            isHeadingHomeOK()
@@ -165,8 +150,8 @@ Item {
         width:                      distanceToHomeText.width + (size * 0.05)
         height:                     size * 0.12
         border.color:               qgcPal.alertBackground
-        color:                      "transparent"
-        radius:                     height * 0.1
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        radius:                     height * 0.2
         visible:                    isHeadingHomeOK()
         anchors.centerIn:           parent
 
@@ -382,8 +367,8 @@ Item {
         width:                      distanceToNextWPText.width + (size * 0.05)
         height:                     size * 0.12
         border.color:               qgcPal.buttonHighlight
-        color:                      "transparent"
-        radius:                     height * 0.1
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        radius:                     height * 0.2
         visible:                    isDistanceToNextWPOK()
         anchors.centerIn:           parent
 
@@ -422,9 +407,9 @@ Item {
     Rectangle {
         width:                      windVaneText.width + (size * 0.05)
         height:                     size * 0.12
-        border.color:               qgcPal.buttonHighlight
-        color:                      "transparent"
-        radius:                     height * 0.1
+        border.color:               qgcPal.colorGreen
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        radius:                     height * 0.2
         visible:                    isWindVaneOK()
         anchors.centerIn:           parent
 
@@ -439,8 +424,8 @@ Item {
 
         transform: Translate {
             property double _angle: isNoseUpLocked() ? _windDir - _heading : _windDir
-            x: size/1.85 * Math.sin((_angle)*(3.14/180))
-            y: - size/1.85 * Math.cos((_angle)*(3.14/180))
+            x: size/1.82 * Math.sin((_angle)*(3.14/180))
+            y: - size/1.82 * Math.cos((_angle)*(3.14/180))
         }
     }
 
