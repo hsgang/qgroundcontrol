@@ -1,0 +1,23 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":                 "siyiTransmitterEnabled",
+    "shortDesc":     "siyiTransmitterEnabled",
+    "longDesc":      "siyiTransmitterEnabled",
+    "type":                 "bool",
+    "default":         false,
+    "qgcRebootRequired":    true
+},
+{
+    "name":                 "siyiCameraEnabled",
+    "shortDesc":     "siyiCameraEnabled",
+    "longDesc":      "siyiCameraEnabled",
+    "type":                 "bool",
+    "default":         false,
+    "qgcRebootRequired":    true
+}
+]
+}

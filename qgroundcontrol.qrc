@@ -405,6 +405,7 @@
         <file alias="Vehicle/TunnelingDataFact.json">src/Vehicle/TunnelingDataFact.json</file>
         <file alias="Vehicle/WinchStatusFactGroup.json">src/Vehicle/WinchStatusFactGroup.json</file>
         <file alias="Battery.SettingsGroup.json">src/Settings/Battery.SettingsGroup.json</file>
+        <file alias="SIYI.SettingsGroup.json">src/Settings/SIYI.SettingsGroup.json</file>
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/comm/APMArduSubMockLink.params</file>

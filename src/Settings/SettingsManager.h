@@ -33,6 +33,7 @@
 #include "BatterySettings.h"
 #include <QVariantList>
 #include "RemoteIDSettings.h"
+#include "SIYISettings.h"
 
 /// Provides access to all app settings
 class SettingsManager : public QGCTool
@@ -62,6 +63,7 @@ public:
     Q_PROPERTY(QObject* apmMavlinkStreamRateSettings    READ apmMavlinkStreamRateSettings   CONSTANT)
 #endif
     Q_PROPERTY(QObject* remoteIDSettings                READ remoteIDSettings               CONSTANT)
+    Q_PROPERTY(QObject* siyiSettings                    READ siyiSettings                   CONSTANT)
     // Override from QGCTool
     virtual void setToolbox(QGCToolbox *toolbox);
 
@@ -85,6 +87,7 @@ public:
     APMMavlinkStreamRateSettings*   apmMavlinkStreamRateSettings(void) { return _apmMavlinkStreamRateSettings; }
 #endif
     RemoteIDSettings*               remoteIDSettings            (void) { return _remoteIDSettings; }
+    SIYISettings*                   siyiSettings                (void) { return _siyiSettings; }
 private:
     AppSettings*                    _appSettings;
     UnitsSettings*                  _unitsSettings;
@@ -106,6 +109,7 @@ private:
     APMMavlinkStreamRateSettings*   _apmMavlinkStreamRateSettings;
 #endif
     RemoteIDSettings*               _remoteIDSettings;
+    SIYISettings*                   _siyiSettings;
 };
 
 #endif
