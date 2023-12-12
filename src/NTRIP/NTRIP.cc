@@ -56,6 +56,9 @@ void NTRIP::stopNTRIP(){
         //_tcpLink->stopConnection();
         QMetaObject::invokeMethod(_tcpLink, "stopConnection", Qt::QueuedConnection);
     }
+    _bandwidthTimer.restart();
+    _bandWidth = 0;
+    emit ntripReceivedCountChanged();
     qCDebug(NTRIPLog) << "clicked NTRIP stop";
 }
 
@@ -64,6 +67,9 @@ void NTRIP::reconnectNTRIP(){
         //_tcpLink->reconnect();
         QMetaObject::invokeMethod(_tcpLink, "reconnect", Qt::QueuedConnection);
     }
+    _bandwidthTimer.restart();
+    _bandWidth = 0;
+    emit ntripReceivedCountChanged();
     qCDebug(NTRIPLog) << "clicked NTRIP reconnect";
 }
 

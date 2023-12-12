@@ -7161,17 +7161,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
         <source>NTRIP Status</source>
-        <translation>NTRIP 상태</translation>
+        <translation>네트워크 RTK</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
         <source>Status</source>
-        <translation>연결 상태</translation>
+        <translation>서버 연결</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
         <source>BandWidth</source>
-        <translation>대역폭</translation>
+        <translation>전송 속도</translation>
     </message>
 </context>
 <context>
@@ -7273,17 +7273,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
         <source>Loiter Speed</source>
-        <translation>로이터 속도</translation>
+        <translation>사용자 수평 속도</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
         <source>Pilot Climb Speed</source>
-        <translation>상승 속도</translation>
+        <translation>사용자 상승 속도</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
         <source>Pilot Descent Speed</source>
-        <translation>하강 속도</translation>
+        <translation>사용자 하강 속도</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="185"/>

@@ -1378,7 +1378,7 @@ Rectangle {
                                 }
                             }
                             QGCLabel {
-                                text: QGroundControl.ntrip.connected
+                                text: QGroundControl.ntrip.connected === true ? "Connected" : "Disconnected"
                             }
                             QGCLabel {
                                 text: QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s"

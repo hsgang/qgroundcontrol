@@ -5,7 +5,7 @@
 [
 {
     "name":                 "ntripServerConnectEnabled",
-    "shortDesc":     "Connect to NTRIP server",
+    "shortDesc":     "Connect to NTRIP server (Required Reboot)",
     "longDesc":      "Connect to NTRIP server using specified address/port",
     "type":                 "bool",
     "default":         false,
