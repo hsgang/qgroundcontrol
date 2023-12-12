@@ -4063,6 +4063,11 @@ Click Ok to start the auto-tuning process.
         <translation>배터리 상태</translation>
     </message>
     <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="68"/>
+        <source>Battery ID</source>
+        <translation>배터리 ID</translation>
+    </message>
+    <message>
         <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="69"/>
         <source>Battery %1</source>
         <translation>배터리 %1</translation>
@@ -7156,7 +7161,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
         <source>NTRIP Status</source>
-        <translation>GNSS2 상태</translation>
+        <translation>NTRIP 상태</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
@@ -7236,6 +7241,16 @@ Click Ok to start the auto-tuning process.
         <translation>임무 선회 반경(cm)</translation>
     </message>
     <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="133"/>
+        <source>Vehicle Summary</source>
+        <translation>기체 정보 페이지</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="133"/>
+        <source>Summary</source>
+        <translation>설정</translation>
+    </message>
+    <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="148"/>
         <source>Vehicle Information</source>
         <translation>기체 정보</translation>
@@ -7249,6 +7264,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="163"/>
         <source>Firmware Version</source>
         <translation>펌웨어 버전</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="163"/>
+        <source>Parameter Summary</source>
+        <translation>파라미터 요약</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
@@ -7294,6 +7314,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="222"/>
         <source>Frame Class</source>
         <translation>프레임 형태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="271"/>
+        <source>Operating Summary</source>
+        <translation>운영 정보</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="227"/>
