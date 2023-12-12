@@ -9,6 +9,7 @@ import QGroundControl.ScreenTools   1.0
 TextField {
     id:                 root
     textColor:          qgcPal.text
+    implicitWidth:      ScreenTools.implicitTextFieldWidth
     implicitHeight:     ScreenTools.implicitTextFieldHeight
     activeFocusOnPress: true
     antialiasing:       true
