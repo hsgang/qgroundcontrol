@@ -20,7 +20,6 @@
 NTRIP::NTRIP(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
 {
-    _bandwidthTimer.start();
 }
 
 void NTRIP::setToolbox(QGCToolbox* toolbox)
@@ -42,6 +41,8 @@ void NTRIP::setToolbox(QGCToolbox* toolbox)
         connect(_tcpLink, &NTRIPTCPLink::RTCMDataUpdate,   _rtcmMavlink, &RTCMMavlink::RTCMDataUpdate);
         connect(_tcpLink, &NTRIPTCPLink::connectStatus,      this, &NTRIP::connectStatus);
         connect(_tcpLink, &NTRIPTCPLink::receivedCount,      this, &NTRIP::ntripReceivedUpdate);
+
+        _bandwidthTimer.start();
     }
 }
 
