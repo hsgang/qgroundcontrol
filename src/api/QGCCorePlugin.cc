@@ -163,10 +163,10 @@ QVariantList &QGCCorePlugin::settingsPages()
                                             QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/AppMessages.qml"),
                                             QUrl::fromUserInput("qrc:/InstrumentValueIcons/chat-bubble-dots.svg"));
         _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pConsole)));
-        _p->pHelp = new QmlComponentInfo(tr("Help"),
-                                         QUrl::fromUserInput("qrc:/qml/HelpSettings.qml"),
-                                         QUrl::fromUserInput("qrc:/InstrumentValueIcons/question.svg"));
-        _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pHelp)));
+        // _p->pHelp = new QmlComponentInfo(tr("Help"),
+        //                                  QUrl::fromUserInput("qrc:/qml/HelpSettings.qml"),
+        //                                  QUrl::fromUserInput("qrc:/InstrumentValueIcons/question.svg"));
+        // _p->settingsList.append(QVariant::fromValue(reinterpret_cast<QmlComponentInfo*>(_p->pHelp)));
 #if defined(QT_DEBUG)
         //-- These are always present on Debug builds
         _p->pMockLink = new QmlComponentInfo(tr("Mock Link"),
