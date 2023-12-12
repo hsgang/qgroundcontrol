@@ -58,6 +58,7 @@ Column {
                 anchors.right:      parent.right
                 height:             sliderColumn.y +  sliderColumn.height + _margins
                 color:              palette.windowShade
+                radius:             ScreenTools.defaultFontPixelHeight / 4
 
                 Column {
                     id:                 sliderColumn

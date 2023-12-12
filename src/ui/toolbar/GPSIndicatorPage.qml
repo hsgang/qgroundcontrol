@@ -21,7 +21,7 @@ import QGroundControl.FactControls          1.0
 ToolIndicatorPage {
     showExpand: true
 
-    property real   _margins:       ScreenTools.defaultFontPixelHeight
+    property real   _margins:       ScreenTools.defaultFontPixelHeight / 2
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property string _NA:            qsTr("N/A", "No data to display")
     property string _valueNA:       qsTr("--.--", "No data to display")
@@ -29,7 +29,7 @@ ToolIndicatorPage {
     property bool   isGNSS2:        _activeVehicle.gps2.lock.value
 
     contentItem: ColumnLayout {
-        spacing: ScreenTools.defaultFontPixelHeight
+        spacing: _margins
 
         QGCLabel {
             Layout.alignment:   Qt.AlignHCenter
@@ -37,29 +37,42 @@ ToolIndicatorPage {
             font.family:        ScreenTools.demiboldFontFamily
         }
 
-        ColumnLayout {
-            Layout.fillWidth:   true
-            spacing: ScreenTools.defaultFontPixelHeight / 2
+        Rectangle {
+            Layout.preferredHeight: gnssColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
+            Layout.preferredWidth:  gnssColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+            color:                  qgcPal.windowShade
+            radius:                 _margins / 2
+            Layout.fillWidth:       true
 
-            ComponentLabelValueRow {
-                labelText:  qsTr("Satellites")
-                valueText:  _activeVehicle ? _activeVehicle.gps.count.valueString : _NA
-            }
-            ComponentLabelValueRow {
-                labelText:  qsTr("GPS Lock")
-                valueText:  _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : _NA
-            }
-            ComponentLabelValueRow {
-                labelText:  qsTr("HDOP")
-                valueText:  _activeVehicle ? _activeVehicle.gps.hdop.valueString : _valueNA
-            }
-            ComponentLabelValueRow {
-                labelText:  qsTr("VDOP")
-                valueText:  _activeVehicle ? _activeVehicle.gps.vdop.valueString : _valueNA
-            }
-            ComponentLabelValueRow {
-                labelText:  qsTr("Course Over Ground")
-                valueText:  _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : _valueNA
+            ColumnLayout {
+                id:      gnssColumnLayout
+                //Layout.fillWidth:   true
+                anchors.margins:    _margins / 2
+                anchors.top:        parent.top
+                anchors.left:       parent.left
+                anchors.right:      parent.right
+                spacing:            _margins
+
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Satellites")
+                    valueText:  _activeVehicle ? _activeVehicle.gps.count.valueString : _NA
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("GPS Lock")
+                    valueText:  _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : _NA
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("HDOP")
+                    valueText:  _activeVehicle ? _activeVehicle.gps.hdop.valueString : _valueNA
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("VDOP")
+                    valueText:  _activeVehicle ? _activeVehicle.gps.vdop.valueString : _valueNA
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Course Over Ground")
+                    valueText:  _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : _valueNA
+                }
             }
         }
 
@@ -70,30 +83,47 @@ ToolIndicatorPage {
             visible:            isGNSS2
         }
 
-        ColumnLayout {
-            Layout.fillWidth:   true
-            spacing: ScreenTools.defaultFontPixelHeight / 2
-            visible:            isGNSS2
+        Rectangle {
+            Layout.preferredHeight: gnss2ColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
+            Layout.preferredWidth:  gnss2ColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+            color:                  qgcPal.windowShade
+            radius:                 _margins / 2
+            Layout.fillWidth:       true
+            visible:                isGNSS2
 
-            ComponentLabelValueRow {
-                labelText:  qsTr("Satellites")
-                valueText:  _activeVehicle ? _activeVehicle.gps2.count.valueString : _NA
-            }
-            ComponentLabelValueRow {
-                labelText:  qsTr("GPS Lock")
-                valueText:  _activeVehicle ? _activeVehicle.gps2.lock.enumStringValue : _NA
-            }
-            ComponentLabelValueRow {
-                labelText:  qsTr("HDOP")
-                valueText:  _activeVehicle ? _activeVehicle.gps2.hdop.valueString : _valueNA
-            }
-            ComponentLabelValueRow {
-                labelText:  qsTr("VDOP")
-                valueText:  _activeVehicle ? _activeVehicle.gps2.vdop.valueString : _valueNA
-            }
-            ComponentLabelValueRow {
-                labelText:  qsTr("Course Over Ground")
-                valueText:  _activeVehicle ? _activeVehicle.gps2.courseOverGround.valueString : _valueNA
+            ColumnLayout {
+                id:      gnss2ColumnLayout
+                anchors.margins:    _margins / 2
+                anchors.top:        parent.top
+                anchors.left:       parent.left
+                anchors.right:      parent.right
+                visible:            isGNSS2
+
+            // ColumnLayout {
+            //     Layout.fillWidth:   true
+            //     spacing: ScreenTools.defaultFontPixelHeight / 2
+            //     visible:            isGNSS2
+
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Satellites")
+                    valueText:  _activeVehicle ? _activeVehicle.gps2.count.valueString : _NA
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("GPS Lock")
+                    valueText:  _activeVehicle ? _activeVehicle.gps2.lock.enumStringValue : _NA
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("HDOP")
+                    valueText:  _activeVehicle ? _activeVehicle.gps2.hdop.valueString : _valueNA
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("VDOP")
+                    valueText:  _activeVehicle ? _activeVehicle.gps2.vdop.valueString : _valueNA
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Course Over Ground")
+                    valueText:  _activeVehicle ? _activeVehicle.gps2.courseOverGround.valueString : _valueNA
+                }
             }
         }
 
@@ -104,18 +134,35 @@ ToolIndicatorPage {
             visible:            QGroundControl.ntrip.connected
         }
 
-        ColumnLayout {
-            Layout.fillWidth:   true
-            spacing: ScreenTools.defaultFontPixelHeight / 2
+        Rectangle {
+            Layout.preferredHeight: ntripColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
+            Layout.preferredWidth:  ntripColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+            color:                  qgcPal.windowShade
+            radius:                 _margins / 2
+            Layout.fillWidth:       true
             visible:            QGroundControl.ntrip.connected
 
-            ComponentLabelValueRow {
-                labelText:  qsTr("Status")
-                valueText:  QGroundControl.ntrip.connected ? "Connected" : "Disconnected"
-            }
-            ComponentLabelValueRow {
-                labelText:  qsTr("BandWidth")
-                valueText:  QGroundControl.ntrip.connected ? QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s" : "0.00 kB/s"
+            ColumnLayout {
+                id:      ntripColumnLayout
+                anchors.margins:    _margins / 2
+                anchors.top:        parent.top
+                anchors.left:       parent.left
+                anchors.right:      parent.right
+                visible:            QGroundControl.ntrip.connected
+
+            // ColumnLayout {
+            //     Layout.fillWidth:   true
+            //     spacing: ScreenTools.defaultFontPixelHeight / 2
+            //     visible:            QGroundControl.ntrip.connected
+
+                ComponentLabelValueRow {
+                    labelText:  qsTr("Status")
+                    valueText:  QGroundControl.ntrip.connected ? "Connected" : "Disconnected"
+                }
+                ComponentLabelValueRow {
+                    labelText:  qsTr("BandWidth")
+                    valueText:  QGroundControl.ntrip.connected ? QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s" : "0.00 kB/s"
+                }
             }
         }
 

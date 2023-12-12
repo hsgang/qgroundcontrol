@@ -39,47 +39,62 @@ Item {
                     Layout.alignment:   Qt.AlignHCenter
                 }
 
-                ColumnLayout {
-                    id:                 telemGrid
-                    spacing:            ScreenTools.defaultFontPixelHeight * 0.5
-                    Layout.fillWidth:   true
+                Rectangle {
+                    Layout.preferredHeight: siyiColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
+                    Layout.preferredWidth:  siyiColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                    color:                  qgcPal.windowShade
+                    radius:                 _margins / 2
+                    Layout.fillWidth:       true
 
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("Signal")
-                        valueText:  transmitter.signalQuality + " %"
-                    }
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("RSSI")
-                        valueText:  transmitter.rssi + " dBm"
-                    }
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("Inactive Time")
-                        valueText:  transmitter.inactiveTime + " ms"
-                    }
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("Upstream")
-                        valueText:  (transmitter.upStream / 1024).toFixed(1) + " KB/s"
-                    }
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("Downstream")
-                        valueText:  (transmitter.downStream / 1024).toFixed(1) + " KB/s"
-                    }
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("TxBandwidth")
-                        valueText:  (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s"
-                    }
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("RxBandwidth")
-                        valueText:  (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s"
-                    }
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("Frequency")
-                        valueText:  transmitter.freq + " Mhz"
-                    }
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("Channel")
-                        valueText:  transmitter.channel
-                    }
+                    ColumnLayout {
+                        id:                 siyiColumnLayout
+                        anchors.margins:    _margins / 2
+                        anchors.top:        parent.top
+                        anchors.left:       parent.left
+                        anchors.right:      parent.right
+                        spacing:            _margins / 2
+
+                    // ColumnLayout {
+                    //     id:                 telemGrid
+                    //     spacing:            ScreenTools.defaultFontPixelHeight * 0.5
+                    //     Layout.fillWidth:   true
+
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("Signal")
+                            valueText:  transmitter.signalQuality + " %"
+                        }
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("RSSI")
+                            valueText:  transmitter.rssi + " dBm"
+                        }
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("Inactive Time")
+                            valueText:  transmitter.inactiveTime + " ms"
+                        }
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("Upstream")
+                            valueText:  (transmitter.upStream / 1024).toFixed(1) + " KB/s"
+                        }
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("Downstream")
+                            valueText:  (transmitter.downStream / 1024).toFixed(1) + " KB/s"
+                        }
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("TxBandwidth")
+                            valueText:  (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s"
+                        }
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("RxBandwidth")
+                            valueText:  (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s"
+                        }
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("Frequency")
+                            valueText:  transmitter.freq + " Mhz"
+                        }
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("Channel")
+                            valueText:  transmitter.channel
+                        }
 
                     // QGCLabel { text: qsTr("Signal:") }
                     // QGCLabel { text: transmitter.signalQuality + " %";                      horizontalAlignment: Text.AlignRight;}
@@ -99,6 +114,7 @@ Item {
                     // QGCLabel { text: transmitter.freq + " Mhz";                             horizontalAlignment: Text.AlignRight;}
                     // QGCLabel { text: qsTr("Channel:") }
                     // QGCLabel { text: transmitter.channel;                                   horizontalAlignment: Text.AlignRight;}
+                    }
                 }
             }
 //        }

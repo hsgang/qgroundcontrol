@@ -29,7 +29,7 @@ RowLayout {
     property real dividerHeight
 
     id:         _root
-    spacing:    _margins
+    spacing:    _margins / 2
 
     property real _margins: ScreenTools.defaultFontPixelHeight
 

@@ -101,7 +101,8 @@ Rectangle {
                             id:                         unitsGrid
                             anchors.topMargin:          _margins
                             anchors.top:                parent.top
-                            Layout.fillWidth:           false
+                            //Layout.fillWidth:           true
+                            //anchors.fill:               parent
                             anchors.horizontalCenter:   parent.horizontalCenter
                             flow:                       GridLayout.TopToBottom
                             rows:                       4
@@ -1475,8 +1476,8 @@ Rectangle {
 //                                }
                                 FactCheckBoxSlider {
                                     Layout.fillWidth:   true
-                                    text:               qsTr("Enable SiyiSDK Support")
-                                    fact:               QGroundControl.settingsManager.appSettings.enableSiyiSDK
+                                    text:               qsTr("Enable SIYI Transmitter")
+                                    fact:               QGroundControl.settingsManager.siyiSettings.siyiTransmitterEnabled
                                     visible:            fact.visible
                                 }
                             }

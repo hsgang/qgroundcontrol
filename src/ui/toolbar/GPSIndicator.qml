@@ -133,7 +133,7 @@ Item {
                 width:          ScreenTools.defaultFontPixelHeight * 0.9
                 height:         width
                 color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-                border.color:   qgcPal.colorGreen
+                border.color:   (QGroundControl.ntrip.bandWidth > 0) ? qgcPal.colorGreen : qgcPal.text
                 border.width:   2
                 radius:         ScreenTools.defaultFontPixelHeight / 5
                 anchors.left:   parent.left
@@ -142,7 +142,7 @@ Item {
                 QGCLabel {
                     text:                       "N"
                     font.bold:                  true
-                    color:                      qgcPal.colorGreen
+                    color:                      (QGroundControl.ntrip.bandWidth > 0) ? qgcPal.colorGreen : qgcPal.text
                     anchors.horizontalCenter:   parent.horizontalCenter
                     anchors.verticalCenter:     parent.verticalCenter
                 }
