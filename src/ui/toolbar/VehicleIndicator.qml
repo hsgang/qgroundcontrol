@@ -88,7 +88,7 @@ Item {
             property Fact rtlAltitudeFact:          controller.getParameterFact(-1, "RTL_ALT", false)
 
             property var  qgcPal:                   QGroundControl.globalPalette
-            property real margins:                  ScreenTools.defaultFontPixelHeight
+            property real _margins:                 ScreenTools.defaultFontPixelHeight / 2
             property real valueColumnWidth:         editFieldWidth
 
             property var params : ListModel{
@@ -146,7 +146,7 @@ Item {
             contentItem: ColumnLayout {
                 Layout.preferredWidth:  parent.width
                 Layout.alignment:       Qt.AlignTop
-                spacing:                ScreenTools.defaultFontPixelHeight / 2
+                spacing:                _margins
 
                 QGCLabel {
                     text:                   qsTr("Vehicle Information")
@@ -156,8 +156,8 @@ Item {
                 }
 
                 Rectangle {
-                    Layout.preferredHeight: infoColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
-                    Layout.preferredWidth:  infoColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                    Layout.preferredHeight: infoColumnLayout.height + _margins
+                    Layout.preferredWidth:  infoColumnLayout.width + _margins
                     color:                  qgcPal.windowShade
                     radius:                 _margins / 4
                     Layout.fillWidth:       true
@@ -169,7 +169,7 @@ Item {
                         anchors.top:        parent.top
                         anchors.left:       parent.left
                         anchors.right:      parent.right
-                        spacing:            _margins / 2
+                        spacing:            _margins
 
                         VehicleSummaryRow {
                             labelText: qsTr("Firmware Type")
@@ -196,8 +196,8 @@ Item {
                 }
 
                 Rectangle {
-                    Layout.preferredHeight: parameterColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
-                    Layout.preferredWidth:  parameterColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                    Layout.preferredHeight: parameterColumnLayout.height + _margins
+                    Layout.preferredWidth:  parameterColumnLayout.width + _margins
                     color:                  qgcPal.windowShade
                     radius:                 _margins / 4
                     Layout.fillWidth:       true
@@ -208,7 +208,7 @@ Item {
                         anchors.top:        parent.top
                         anchors.left:       parent.left
                         anchors.right:      parent.right
-                        spacing:            _margins / 2
+                        spacing:            _margins
 
                         VehicleSummaryRow {
                             labelText: qsTr("Loiter Speed")
@@ -277,8 +277,8 @@ Item {
                 }
 
                 Rectangle {
-                    Layout.preferredHeight: operatingColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
-                    Layout.preferredWidth:  operatingColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                    Layout.preferredHeight: operatingColumnLayout.height + _margins
+                    Layout.preferredWidth:  operatingColumnLayout.width + _margins
                     color:                  qgcPal.windowShade
                     radius:                 _margins / 4
                     Layout.fillWidth:       true
@@ -289,7 +289,7 @@ Item {
                         anchors.top:        parent.top
                         anchors.left:       parent.left
                         anchors.right:      parent.right
-                        spacing:            _margins / 2
+                        spacing:            _margins
 
                         VehicleSummaryRow {
                             labelText:  qsTr("Boot Count")
@@ -315,7 +315,7 @@ Item {
             // Settings
             expandedItem: ColumnLayout{
                 Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 50
-                spacing:                margins / 2
+                spacing:                _margins / 2
 
                 IndicatorPageGroupLayout {
                     Layout.fillWidth: true

@@ -7318,7 +7318,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="271"/>
         <source>Operating Summary</source>
-        <translation>운영 정보</translation>
+        <translation>사용 정보</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="227"/>
@@ -7366,12 +7366,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="60"/>
         <source>Upstream</source>
-        <translation>업스트림속도</translation>
+        <translation>업스트림</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="64"/>
         <source>Downstream</source>
-        <translation>다운스트림속도</translation>
+        <translation>다운스트림</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="68"/>

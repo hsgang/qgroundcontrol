@@ -41,7 +41,7 @@ ToolIndicatorPage {
             Layout.preferredHeight: gnssColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
             Layout.preferredWidth:  gnssColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
             color:                  qgcPal.windowShade
-            radius:                 _margins / 2
+            radius:                 _margins / 4
             Layout.fillWidth:       true
 
             ColumnLayout {
@@ -99,11 +99,6 @@ ToolIndicatorPage {
                 anchors.right:      parent.right
                 visible:            isGNSS2
 
-            // ColumnLayout {
-            //     Layout.fillWidth:   true
-            //     spacing: ScreenTools.defaultFontPixelHeight / 2
-            //     visible:            isGNSS2
-
                 ComponentLabelValueRow {
                     labelText:  qsTr("Satellites")
                     valueText:  _activeVehicle ? _activeVehicle.gps2.count.valueString : _NA
@@ -149,11 +144,6 @@ ToolIndicatorPage {
                 anchors.left:       parent.left
                 anchors.right:      parent.right
                 visible:            QGroundControl.ntrip.connected
-
-            // ColumnLayout {
-            //     Layout.fillWidth:   true
-            //     spacing: ScreenTools.defaultFontPixelHeight / 2
-            //     visible:            QGroundControl.ntrip.connected
 
                 ComponentLabelValueRow {
                     labelText:  qsTr("Status")

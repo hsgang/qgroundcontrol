@@ -11,13 +11,13 @@ import SiYi.Object 1.0
 
 Item {
     id:             _root
-    width:          siyirssiRow.width //(siyiStatusIcon.width + siyiStatusValuesColumn.width) * 1.1
+    width:          siyirssiRow.width
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
     property SiYiTransmitter transmitter:   SiYi.transmitter
 
-    property bool showIndicator:            transmitter.isConnected //QGroundControl.settingsManager.appSettings.enableSiyiSDK.rawValue//QGroundControl.siyiSDKManager.isConnected
+    property bool showIndicator:            transmitter.isConnected
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
 
     Component {
@@ -26,11 +26,11 @@ Item {
         ToolIndicatorPage{
             showExpand: false
 
-            property real _margins: ScreenTools.defaultFontPixelHeight
+            property real _margins: ScreenTools.defaultFontPixelHeight / 2
 
             contentItem: ColumnLayout {
                 Layout.preferredWidth:  parent.width
-                spacing:                ScreenTools.defaultFontPixelHeight
+                spacing:                _margins
 
                 QGCLabel {
                     id:                 telemLabel
@@ -40,10 +40,10 @@ Item {
                 }
 
                 Rectangle {
-                    Layout.preferredHeight: siyiColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
-                    Layout.preferredWidth:  siyiColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                    Layout.preferredHeight: siyiColumnLayout.height + _margins
+                    Layout.preferredWidth:  siyiColumnLayout.width + _margins
                     color:                  qgcPal.windowShade
-                    radius:                 _margins / 2
+                    radius:                 _margins / 4
                     Layout.fillWidth:       true
 
                     ColumnLayout {
@@ -52,12 +52,7 @@ Item {
                         anchors.top:        parent.top
                         anchors.left:       parent.left
                         anchors.right:      parent.right
-                        spacing:            _margins / 2
-
-                    // ColumnLayout {
-                    //     id:                 telemGrid
-                    //     spacing:            ScreenTools.defaultFontPixelHeight * 0.5
-                    //     Layout.fillWidth:   true
+                        spacing:            _margins
 
                         ComponentLabelValueRow {
                             labelText:  qsTr("Signal")
@@ -95,29 +90,9 @@ Item {
                             labelText:  qsTr("Channel")
                             valueText:  transmitter.channel
                         }
-
-                    // QGCLabel { text: qsTr("Signal:") }
-                    // QGCLabel { text: transmitter.signalQuality + " %";                      horizontalAlignment: Text.AlignRight;}
-                    // QGCLabel { text: qsTr("RSSI:") }
-                    // QGCLabel { text: transmitter.rssi + " dBm";                             horizontalAlignment: Text.AlignRight;}
-                    // QGCLabel { text: qsTr("Inactive Time:") }
-                    // QGCLabel { text: transmitter.inactiveTime + " ms";                      horizontalAlignment: Text.AlignRight;}
-                    // QGCLabel { text: qsTr("Upstream:") }
-                    // QGCLabel { text: (transmitter.upStream / 1024).toFixed(1) + " KB/s";    horizontalAlignment: Text.AlignRight;}
-                    // QGCLabel { text: qsTr("Downstream:") }
-                    // QGCLabel { text: (transmitter.downStream / 1024).toFixed(1) + " KB/s";  horizontalAlignment: Text.AlignRight;}
-                    // QGCLabel { text: qsTr("TxBandwidth:") }
-                    // QGCLabel { text: (transmitter.txBanWidth / 1024).toFixed(1) + " MB/s";  horizontalAlignment: Text.AlignRight;}
-                    // QGCLabel { text: qsTr("RxBandwidth:") }
-                    // QGCLabel { text: (transmitter.rxBanWidth / 1024).toFixed(1) + " MB/s";  horizontalAlignment: Text.AlignRight;}
-                    // QGCLabel { text: qsTr("Frequency:") }
-                    // QGCLabel { text: transmitter.freq + " Mhz";                             horizontalAlignment: Text.AlignRight;}
-                    // QGCLabel { text: qsTr("Channel:") }
-                    // QGCLabel { text: transmitter.channel;                                   horizontalAlignment: Text.AlignRight;}
                     }
-                }
+                }               
             }
-//        }
         } //ToolIndicatorPage
     }
 
@@ -125,7 +100,7 @@ Item {
         id:             siyirssiRow
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
-        spacing:        ScreenTools.defaultFontPixelWidth/2
+        spacing:        ScreenTools.defaultFontPixelWidth / 2
 
         Column {
             id:                     batteryValuesColumn
