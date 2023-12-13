@@ -245,14 +245,12 @@ Item {
         anchors.margins:        _toolsMargin
         anchors.right:          photoVideoControl.visible ? photoVideoControl.left : parent.right
         anchors.verticalCenter: parent.verticalCenter
-        //width:                  _rightPanelWidth*0.9
-        //height:                 width
     }
 
     WinchControlPanel {
         id:                     winchControlPanel
         anchors.margins:        _toolsMargin
-        anchors.right:          photoVideoControl.visible ? photoVideoControl.left : parent.right
+        anchors.right:          photoVideoControl.visible ? (siyiCameraControl.visible ? siyiCameraControl.left : photoVideoControl.left) : parent.right
         anchors.verticalCenter: parent.verticalCenter
         width:                  ScreenTools.defaultFontPixelWidth * 10
         height:                 ScreenTools.defaultFontPixelWidth * 40
