@@ -134,6 +134,7 @@ Map {
             radius:     width * 0.5
             color:      "transparent"
             border.color: qgcPal.alertBackground
+            border.width: 2
 
             QGCLabel {
                 text:               "H"
