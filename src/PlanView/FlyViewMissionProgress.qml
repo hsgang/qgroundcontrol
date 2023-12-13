@@ -176,8 +176,6 @@ Rectangle{
         Column {
             anchors.verticalCenter: parent.verticalCenter
             spacing: ScreenTools.defaultFontPixelHeight * 0.25
-            // anchors.top:    parent.top
-            // anchors.bottom: parent.bottom
 
             Row {
                 spacing: ScreenTools.defaultFontPixelHeight
@@ -197,7 +195,6 @@ Rectangle{
             Rectangle{
                 id: missionStatusRect
 
-                //anchors.verticalCenter: parent.verticalCenter
                 width:  backgroundGrid.width + _toolsMargin * 2
                 height: backgroundGrid.height + _toolsMargin * 2
                 color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
