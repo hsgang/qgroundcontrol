@@ -66,7 +66,6 @@ Item {
     property string _vehicleGroundSpeedText:    isNaN(_vehicleGroundSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleGroundSpeed).toFixed(1)
     property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_distanceToHome).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
 
-
     // Property of Vibration visible
     property bool _vibeStatusVisible:        false
 
@@ -347,7 +346,7 @@ Item {
             target: _activeVehicle
             onFlightModeChanged: {
                 //console.log(flightMode)
-                if (flightMode === "Auto" || flightMode === "Mission" || flightMode ==="미션"){
+                if(flightMode === _activeVehicle.missionFlightMode){
                     flyviewMissionProgress.visible = true
                 } else {
                     flyviewMissionProgress.visible = false
