@@ -7035,7 +7035,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="169"/>
         <source>Path Distance</source>
-        <translation>전체 경로</translation>
+        <translation>계획 경로</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="201"/>

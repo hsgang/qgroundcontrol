@@ -193,6 +193,20 @@ Rectangle{
                     columnSpacing:          _labelToValueSpacing
                     Layout.alignment:       Qt.AlignVCenter | Qt.AlignHCenter
 
+                    QGCLabel { text: qsTr("Altitude"); font.pointSize: _dataFontSize; opacity: 0.7;}
+                    QGCLabel {
+                        text:                   _vehicleAltitudeText
+                        font.pointSize:         _dataFontSize * 1.2
+                        Layout.minimumWidth:    _largeValueWidth
+                        horizontalAlignment:    Text.AlignRight
+                    }
+                    QGCLabel { text: qsTr("Flight Distance"); font.pointSize: _dataFontSize; opacity: 0.7; }
+                    QGCLabel {
+                        text:                   _flightDistanceText
+                        font.pointSize:         _dataFontSize * 1.2
+                        Layout.minimumWidth:    _largeValueWidth
+                        horizontalAlignment:    Text.AlignRight
+                    }
                     QGCLabel { text: qsTr("H.Speed"); font.pointSize: _dataFontSize; opacity: 0.7;}
                     QGCLabel {
                         text:                   _vehicleGroundSpeedText
@@ -206,23 +220,7 @@ Rectangle{
                         font.pointSize:         _dataFontSize * 1.2
                         Layout.minimumWidth:    _largeValueWidth
                         horizontalAlignment:    Text.AlignRight
-                    }
-
-                    QGCLabel { text: qsTr("Altitude"); font.pointSize: _dataFontSize; opacity: 0.7;}
-                    QGCLabel {
-                        text:                   _vehicleAltitudeText
-                        font.pointSize:         _dataFontSize * 1.2
-                        Layout.minimumWidth:    _largeValueWidth
-                        horizontalAlignment:    Text.AlignRight
-                    }
-
-                    QGCLabel { text: qsTr("Flight Distance"); font.pointSize: _dataFontSize; opacity: 0.7; }
-                    QGCLabel {
-                        text:                   _flightDistanceText
-                        font.pointSize:         _dataFontSize * 1.2
-                        Layout.minimumWidth:    _largeValueWidth
-                        horizontalAlignment:    Text.AlignRight
-                    }
+                    }                    
                 }
 
                 GridLayout {
@@ -262,76 +260,37 @@ Rectangle{
                         Layout.minimumWidth:    _largeValueWidth
                         horizontalAlignment:    Text.AlignRight
                     }
-
-//                    QGCLabel { text: qsTr("Latitude"); font.pointSize: _dataFontSize; opacity: 0.7; }
-//                    QGCLabel {
-//                        text:                   _latitudeText
-//                        font.pointSize:         _dataFontSize * 1.2
-//                        Layout.minimumWidth:    _largeValueWidth
-//                        horizontalAlignment:    Text.AlignRight
-//                    }
-
-//                    QGCLabel { text: qsTr("Longitude"); font.pointSize: _dataFontSize; opacity: 0.7; }
-//                    QGCLabel {
-//                        text:                   _longitudeText
-//                        font.pointSize:         _dataFontSize * 1.2
-//                        Layout.minimumWidth:    _largeValueWidth
-//                        horizontalAlignment:    Text.AlignRight
-//                    }
-
-//                    QGCLabel { text: qsTr("H.Distance: "); font.pointSize: _dataFontSize; opacity: 0.7; }
-//                    QGCLabel {
-//                        text:                   _missionDistanceText
-//                        font.pointSize:         _dataFontSize
-//                        Layout.minimumWidth:    _largeValueWidth
-//                        horizontalAlignment:    Text.AlignRight
-//                    }
-
-//                    QGCLabel { text: qsTr("Mission Seq"); font.pointSize: _dataFontSize; opacity: 0.7; }
-//                    QGCLabel {
-//                        text:                   _missionItemIndex + " / " + (_missionItemCount -1)
-//                        font.pointSize:         _dataFontSize * 1.2
-//                        Layout.minimumWidth:    _largeValueWidth
-//                        horizontalAlignment:    Text.AlignRight
-//                    }
-
-//                    QGCLabel { text: qsTr("text:"); font.pointSize: _dataFontSize; }
-//                    QGCLabel {
-//                        text:                   wpnavSpeedString
-//                        font.pointSize:         _dataFontSize
-//                        Layout.minimumWidth:    _largeValueWidth
-//                    }
                 }
             }
         }
 
         Rectangle{
             id: root
-            width:          ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8 //ScreenTools.defaultFontPixelWidth * 12
-            height: width
-            Layout.alignment: Qt.AlignHCenter
-            color: "transparent"
+            width:              ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
+            height:             width
+            Layout.alignment:   Qt.AlignHCenter
+            color:              "transparent"
 
-            property real startAngle: 0
-            property real spanAngle: 360
-            property real minValue: 0
-            property real maxValue: 100
-            property int  dialWidth: 15
+            property real   startAngle:         0
+            property real   spanAngle:          360
+            property real   minValue:           0
+            property real   maxValue:           100
+            property int    dialWidth:          ScreenTools.defaultFontPixelWidth * 0.8
 
-            property color backgroundColor: "transparent"
-            property color dialColor: Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.3)//"#FF505050"
-            property color progressColor: qgcPal.textHighlight //qgcPal.buttonHighlight // "#FFA51BAB"
+            property color  backgroundColor:    "transparent"
+            property color  dialColor:          Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.3)//"#FF505050"
+            property color  progressColor:      qgcPal.textHighlight //qgcPal.buttonHighlight // "#FFA51BAB"
 
-            property int penStyle: Qt.RoundCap
+            property int    penStyle:           Qt.RoundCap
 
             Rectangle{
                 id: background
-                width: ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8 //ScreenTools.defaultFontPixelWidth * 8
-                height : width
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
-                radius: width * 0.5
-                color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+                width:                      ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
+                height:                     width
+                anchors.horizontalCenter:   parent.horizontalCenter
+                anchors.verticalCenter:     parent.verticalCenter
+                radius:                     width * 0.5
+                color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
 
                 QtObject {
                     id: internals

@@ -120,7 +120,7 @@ Item {
     property real spanAngle: 360
     property real minValue: 0
     property real maxValue: 100
-    property int  dialWidth: 15
+    property int  dialWidth: ScreenTools.defaultFontPixelWidth
 
     property color backgroundColor: "transparent"
     property color dialColor: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)//"#FF505050"
