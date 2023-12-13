@@ -186,13 +186,11 @@ Rectangle{
 
                 QGCLabel {
                     text:               _vehicleAltitudeASMLText
-                    font.bold:          true
-                    font.pointSize:     ScreenTools.defaultFontPointSize * 0.9
+                    font.pointSize:     _dataFontSize * 0.9
                 }
                 QGCLabel {
                     text:               _vehicleAltitudeTerrainText
-                    font.bold:          true
-                    font.pointSize:     ScreenTools.defaultFontPointSize * 0.9
+                    font.pointSize:     _dataFontSize * 0.9
                 }
             }
 
