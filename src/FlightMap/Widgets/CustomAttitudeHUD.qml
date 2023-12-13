@@ -58,11 +58,11 @@ Item {
     }
 
     function isHeadingToNextWPOK(){
-        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_headingToNextWP)
+        return vehicle && _vehicleInMissionMode && _showAdditionalIndicatorsCompass && !isNaN(_headingToNextWP)
     }
 
     function isDistanceToNextWPOK(){
-        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_distanceToNextWP)
+        return vehicle && _vehicleInMissionMode && _showAdditionalIndicatorsCompass && !isNaN(_distanceToNextWP)
     }
 
     function isWindVaneOK(){
