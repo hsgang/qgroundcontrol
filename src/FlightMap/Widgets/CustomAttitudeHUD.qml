@@ -41,6 +41,9 @@ Item {
     property string _distanceToNextWPText:  vehicle ? _distanceToNextWP.toFixed(0) : "--"
     property string _windSpdText:           vehicle ? _windSpd.toFixed(1) : "0.0"
 
+    property string _flightMode:            vehicle ? vehicle.flightMode : ""
+    property bool   _vehicleInMissionMode:  vehicle ? _flightMode === vehicle.missionFlightMode : false
+
     width:  size
     height: size
 
@@ -127,15 +130,15 @@ Item {
         height:             width
         radius:             width * 0.5
         anchors.centerIn:   parent
-        color:              qgcPal.text //"transparent"
-        border.color:       qgcPal.alertBackground
+        color:              qgcPal.alertBackground //qgcPal.text
+        border.color:       "black" //qgcPal.alertBackground
 
         QGCLabel {
             text:               "H"
             font.pointSize:     _fontSize < 10 ? 10 : _fontSize;
             font.family:        ScreenTools.demiboldFontFamily
             font.bold:          true
-            color:              qgcPal.alertBackground
+            color:              "black" //qgcPal.alertBackground
             anchors.centerIn:   parent
         }
 
