@@ -27,13 +27,13 @@ Rectangle {
     id:         gimbalControlPannel
     width:      mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
     radius:     _margins
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:         ScreenTools.defaultFontPixelHeight / 2
-    property real   _idealWidth:      (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8)
-    property real   anchorsMargins:   _margins //ScreenTools.defaultFontPixelWidth * 0.8
+    property real   _idealWidth:      ScreenTools.isMobile ? ScreenTools.minTouchPixels * 0.8 : (ScreenTools.defaultFontPixelWidth * 8)
+    property real   anchorsMargins:   _margins
 
     property var    _activeVehicle:                             QGroundControl.multiVehicleManager.activeVehicle
 
@@ -110,8 +110,11 @@ Rectangle {
         width:          gimbalAngleValueRow.width
         height:         gimbalAngleValueRow.height
         color:          "transparent"
-        RowLayout{
+        GridLayout{
             id: gimbalAngleValueRow
+            rowSpacing: ScreenTools.defaultFontPixelHeight / 5
+            columns: 3
+
             QGCLabel{
                 text: " R: " +_gimbalRollString
                 Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
@@ -126,14 +129,13 @@ Rectangle {
             }
             QGCLabel{
                 text: "data:" + _gimbalData
+                Layout.columnSpan: 3
             }
         }
     }
 
     GridLayout {
         id:                         mainGridLayout
-        //Layout.alignment:           Qt.AlignHCenter
-        //anchors.margins:            _margins
         anchors.verticalCenter:     parent.verticalCenter
         anchors.horizontalCenter:   parent.horizontalCenter
         columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
@@ -439,16 +441,6 @@ Rectangle {
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalModePress.pressedButtons ? 0.95 : 1
-
-//            function gimbalMode(){
-//                if(_gimbalModeStatus < 7){
-//                    _gimbalModeStatus += 1
-//                    return _gimbalModeStatus-1
-//                }
-//                else{
-//                    _gimbalModeStatus = 0
-//                }
-//            }
 
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
