@@ -155,7 +155,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.7
                 width:              height
                 source:             "/InstrumentValueIcons/zoom-in.svg"
                 sourceSize.height:  height
@@ -189,7 +189,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.7
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-up.svg"
                 sourceSize.height:  height
@@ -227,7 +227,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.7
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-base-down.svg"
                 sourceSize.height:  height
@@ -261,7 +261,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.7
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-left.svg"
                 sourceSize.height:  height
@@ -299,7 +299,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.7
                 width:              height
                 source:             "/InstrumentValueIcons/target.svg"
                 sourceSize.height:  height
@@ -335,7 +335,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.7
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-right.svg"
                 sourceSize.height:  height
@@ -373,7 +373,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.7
                 width:              height
                 source:             "/InstrumentValueIcons/zoom-out.svg"
                 sourceSize.height:  height
@@ -407,7 +407,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.7
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-down.svg"
                 sourceSize.height:  height
@@ -445,7 +445,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.7
                 width:              height
                 source:             "/InstrumentValueIcons/navigation-more.svg"
                 sourceSize.height:  height
