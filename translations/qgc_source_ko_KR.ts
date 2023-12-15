@@ -3661,7 +3661,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/QmlControls/AltModeDialog.qml" line="52"/>
         <source>AMSL</source>
-        <translation>ASML</translation>
+        <translation>AMSL</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AltModeDialog.qml" line="53"/>
@@ -14556,7 +14556,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/QGroundControlQmlGlobal.cc" line="292"/>
         <source>AMSL</source>
-        <translation>ASML</translation>
+        <translation>AMSL</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/QGroundControlQmlGlobal.cc" line="294"/>
