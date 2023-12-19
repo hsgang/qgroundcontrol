@@ -306,9 +306,9 @@ QList<QGCSerialPortInfo> QGCSerialPortInfo::availablePorts(void)
                 if (seenSerialNumbers.contains(vidPid) && seenSerialNumbers[vidPid].contains(portInfo.serialNumber())) {
                     // Some boards are a composite USB device, with the first port being mavlink and the second something else. We only expose to first mavlink port.
                     // However internal NMEA devices can present like this, so dont skip anything with NMEA in description
-                    if(!portInfo.description().contains("NMEA"))
+                    if(!portInfo.description().contains("NMEA") && !portInfo.description().contains("Mavlink"))
                     {
-                        qCDebug(QGCSerialPortInfoLog) << "Skipping secondary port on same device" << portInfo.portName() << portInfo.vendorIdentifier() << portInfo.productIdentifier() << portInfo.serialNumber();
+                        qCDebug(QGCSerialPortInfoLog) << "Skipping secondary port on same device" << portInfo.portName() << portInfo.vendorIdentifier() << portInfo.productIdentifier() << portInfo.serialNumber() << portInfo.description();
                         continue;
                     }
                 }
