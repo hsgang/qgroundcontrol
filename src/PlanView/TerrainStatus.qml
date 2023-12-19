@@ -42,7 +42,7 @@ Rectangle {
         anchors.top:            parent.bottom
         width:                  parent.height
         font.pointSize:         ScreenTools.smallFontPointSize
-        text:                   qsTr("Height AMSL (%1)").arg(_unitsConversion.appSettingsHorizontalDistanceUnitsString)
+        text:                   qsTr("Height AMSL (%1)").arg(_unitsConversion.appSettingsDistanceUnitsString)
         horizontalAlignment:    Text.AlignHCenter
         rotation:               -90
         transformOrigin:        Item.TopLeft
@@ -75,23 +75,25 @@ Rectangle {
                 ValueAxis {
                     id:                         axisX
                     min:                        0
-                    max:                        _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(missionController.missionDistance)
+                    max:                        _unitsConversion.metersToAppSettingsDistanceUnits(missionController.missionDistance)
                     lineVisible:                true
                     labelsFont.family:          "Fixed"
                     labelsFont.pointSize:       ScreenTools.smallFontPointSize
                     labelsColor:                "white"
+                    labelFormat:                "%d %1".arg(_unitsConversion.appSettingsDistanceUnitsString)
                     tickCount:                  5
                     gridLineColor:              "#44FFFFFF"
                 }
 
                 ValueAxis {
                     id:                         axisY
-                    min:                        _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_minAMSLAltitude)
-                    max:                        _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_maxAMSLAltitude)
+                    min:                        _unitsConversion.metersToAppSettingsDistanceUnits(_minAMSLAltitude)
+                    max:                        _unitsConversion.metersToAppSettingsDistanceUnits(_maxAMSLAltitude)
                     lineVisible:                true
                     labelsFont.family:          "Fixed"
                     labelsFont.pointSize:       ScreenTools.smallFontPointSize
                     labelsColor:                "white"
+                    labelFormat:                "%d %1".arg(_unitsConversion.appSettingsDistanceUnitsString)
                     tickCount:                  4
                     gridLineColor:              "#44FFFFFF"
                 }
@@ -102,8 +104,8 @@ Rectangle {
                     axisY:      axisY
                     visible:    true
 
-                    XYPoint { x: 0; y: _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_minAMSLAltitude) }
-                    XYPoint { x: _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionDistance); y: _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_maxAMSLAltitude) }
+                    XYPoint { x: 0; y: _unitsConversion.metersToAppSettingsDistanceUnits(_minAMSLAltitude) }
+                    XYPoint { x: _unitsConversion.metersToAppSettingsDistanceUnits(_missionDistance); y: _unitsConversion.metersToAppSettingsDistanceUnits(_maxAMSLAltitude) }
                 }
             }
 
