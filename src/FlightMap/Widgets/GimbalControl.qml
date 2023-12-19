@@ -27,12 +27,12 @@ Rectangle {
     id:         gimbalControlPannel
     width:      mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:     _margins
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:         ScreenTools.defaultFontPixelHeight / 2
-    property real   _idealWidth:      ScreenTools.isMobile ? ScreenTools.minTouchPixels * 0.8 : (ScreenTools.defaultFontPixelWidth * 8)
+    property real   _idealWidth:      ScreenTools.isMobile ? ScreenTools.minTouchPixels * 0.8 : (ScreenTools.defaultFontPixelWidth * 7)
     property real   anchorsMargins:   _margins
 
     property var    _activeVehicle:                             QGroundControl.multiVehicleManager.activeVehicle
@@ -147,7 +147,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              zoomInPress.pressedButtons ? 0.95 : 1
@@ -155,7 +155,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.7
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/zoom-in.svg"
                 sourceSize.height:  height
@@ -181,7 +181,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalUpPress.pressedButtons ? 0.95 : 1
@@ -189,7 +189,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.7
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-up.svg"
                 sourceSize.height:  height
@@ -219,7 +219,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              baseDownPress.pressedButtons ? 0.95 : 1
@@ -227,7 +227,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.7
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-base-down.svg"
                 sourceSize.height:  height
@@ -253,7 +253,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalLeftPress.pressedButtons ? 0.95 : 1
@@ -261,7 +261,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.7
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-left.svg"
                 sourceSize.height:  height
@@ -291,7 +291,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalHomePress.pressedButtons ? 0.95 : 1
@@ -299,7 +299,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.7
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/target.svg"
                 sourceSize.height:  height
@@ -327,7 +327,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalRightPress.pressedButtons ? 0.95 : 1
@@ -335,7 +335,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.7
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-right.svg"
                 sourceSize.height:  height
@@ -365,7 +365,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              zoomOutPress.pressedButtons ? 0.95 : 1
@@ -373,7 +373,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.7
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/zoom-out.svg"
                 sourceSize.height:  height
@@ -399,7 +399,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalDownPress.pressedButtons ? 0.95 : 1
@@ -407,7 +407,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.7
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-down.svg"
                 sourceSize.height:  height
@@ -437,7 +437,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalModePress.pressedButtons ? 0.95 : 1
@@ -445,7 +445,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.7
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/navigation-more.svg"
                 sourceSize.height:  height
