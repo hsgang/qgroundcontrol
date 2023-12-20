@@ -7,12 +7,12 @@
  *
  ****************************************************************************/
 
-import QtQuick          2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts  1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
 
 AbstractButton   {
     id:             control
@@ -36,18 +36,18 @@ AbstractButton   {
             id:                     indicator
             anchors.right:          parent.right
             anchors.verticalCenter: parent.verticalCenter
-            height:                 ScreenTools.defaultFontPixelHeight * 0.9
+            height:                 ScreenTools.defaultFontPixelHeight
             width:                  height * 2
             radius:                 height / 2
-            color:                  control.checked ? qgcPal.buttonHighlight : qgcPal.windowShade
+            color:                  control.checked ? qgcPal.primaryButton : qgcPal.button
 
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                x:                      checked ? indicator.width - width - 4 : 4
-                height:                 parent.height - 8
+                x:                      checked ? indicator.width - width - 1: 1
+                height:                 parent.height - 2
                 width:                  height
                 radius:                 height / 2
-                color:                  qgcPal.colorWhite
+                color:                  qgcPal.buttonText
             }
         }
     }

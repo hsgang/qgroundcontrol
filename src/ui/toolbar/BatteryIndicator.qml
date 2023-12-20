@@ -22,14 +22,20 @@ import MAVLink
 //-------------------------------------------------------------------------
 //-- Battery Indicator
 Item {
-    id:             _root
+    id:             control
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
     width:          batteryIndicatorRow.width
 
-    property bool showIndicator: true
+    property bool       showIndicator:      true
+    property bool       waitForParameters:  false   // UI won't show until parameters are ready
+    property Component  expandedPageComponent
 
-    property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+    property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
+    property Fact   _indicatorDisplay:  QGroundControl.settingsManager.batteryIndicatorSettings.display
+    property bool   _showPercentage:    _indicatorDisplay.rawValue === 0
+    property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
+    property bool   _showBoth:          _indicatorDisplay.rawValue === 2
 
     property var _batterySettings:  QGroundControl.settingsManager.batterySettings
     property real _batteryCellCount: _batterySettings.batteryCellCount.value
@@ -233,7 +239,16 @@ Item {
                 } else if (battery.chargeState.rawValue !== MAVLink.MAV_BATTERY_CHARGE_STATE_UNDEFINED) {
                     return battery.chargeState.enumStringValue
                 }
-                return ""
+                return qsTr("n/a")
+            }
+
+           function getBatteryVoltageText() {
+                if (!isNaN(battery.voltage.rawValue)) {
+                    return battery.voltage.valueString + battery.voltage.units
+                } else if (battery.chargeState.rawValue !== MAVLink.MAV_BATTERY_CHARGE_STATE_UNDEFINED) {
+                    return battery.chargeState.enumStringValue
+                }
+                return qsTr("n/a")
             }
 
             function getBatteryIcon(){
@@ -298,6 +313,7 @@ Item {
 
                     property string _cellVoltage: (battery.voltage.value / _batteryCellCount).toFixed(2) + battery.voltage.units
                 }
+            }
 
                 QGCLabel {
                     anchors.right:          parent.right

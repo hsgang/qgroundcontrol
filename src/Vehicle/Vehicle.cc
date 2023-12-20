@@ -2067,7 +2067,7 @@ QString Vehicle::formattedMessages()
 {
     QString messages;
     for(UASMessage* message: _toolbox->uasMessageHandler()->messages()) {
-        messages += message->getFormatedText();
+        messages.prepend(message->getFormatedText());
     }
     return messages;
 }

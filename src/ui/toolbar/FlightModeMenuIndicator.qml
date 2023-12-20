@@ -20,7 +20,7 @@ import QGroundControl.FactSystem
 import QGroundControl.FactControls
 
 RowLayout {
-    id: _root
+    id:      _root
     spacing: 0
 
     property bool showIndicator: true

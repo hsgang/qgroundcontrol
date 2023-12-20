@@ -37,6 +37,7 @@ ColumnLayout {
 
         QtObject {
             property bool functionAvailable:        battery.function.rawValue !== MAVLink.MAV_BATTERY_FUNCTION_UNKNOWN
+            property bool showFunction:             functionAvailable && battery.function.rawValue != MAVLink.MAV_BATTERY_FUNCTION_ALL
             property bool temperatureAvailable:     !isNaN(battery.temperature.rawValue)
             property bool currentAvailable:         !isNaN(battery.current.rawValue)
             property bool mahConsumedAvailable:     !isNaN(battery.mahConsumed.rawValue)
@@ -60,6 +61,7 @@ ColumnLayout {
                 model: _activeVehicle ? _activeVehicle.batteries : 0
 
                 ColumnLayout {
+                    id:      col1Repeater
                     spacing: ScreenTools.defaultFontPixelHeight / 3
 
                     property var batteryValuesAvailable: nameAvailableLoader.item
@@ -90,6 +92,7 @@ ColumnLayout {
                 model: _activeVehicle ? _activeVehicle.batteries : 0
 
                 ColumnLayout {
+                    id:      col2Repeater
                     spacing: ScreenTools.defaultFontPixelHeight / 3
 
                     property var batteryValuesAvailable: valueAvailableLoader.item
@@ -101,7 +104,7 @@ ColumnLayout {
                         property var battery: object
                     }
 
-                    QGCLabel { text: "" }
+                    QGCLabel { text: "";                                                                        visible: col2Repeater.count !== 1 }
                     QGCLabel { text: object.chargeState.enumStringValue;                                        visible: batteryValuesAvailable.chargeStateAvailable }
                     QGCLabel { text: object.timeRemainingStr.value;                                             visible: batteryValuesAvailable.timeRemainingAvailable }
                     QGCLabel { text: object.percentRemaining.valueString + " " + object.percentRemaining.units }

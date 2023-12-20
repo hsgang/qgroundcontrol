@@ -33,9 +33,9 @@
         <file alias="QGroundControl/PX4/BatteryParams.qml">../../AutoPilotPlugins/PX4/BatteryParams.qml</file>
     </qresource>
     <qresource prefix="/PX4/Indicators">
-        <file alias="FlightModeIndicator.qml">FlightModeIndicator.qml</file>
-        <file alias="BatteryIndicator.qml">BatteryIndicator.qml</file>
-        <file alias="MainStatusIndicatorExpandedItem.qml">MainStatusIndicatorExpandedItem.qml</file>
+        <file alias="PX4FlightModeIndicator.qml">PX4FlightModeIndicator.qml</file>
+        <file alias="PX4BatteryIndicator.qml">PX4BatteryIndicator.qml</file>
+        <file alias="PX4MainStatusIndicatorExpandedItem.qml">PX4MainStatusIndicatorExpandedItem.qml</file>
     </qresource>
 
     <qresource prefix="/json">

@@ -4,7 +4,6 @@
     </qresource>
     <qresource prefix="/toolbar">
         <file alias="ArmedIndicator.qml">src/ui/toolbar/ArmedIndicator.qml</file>
-        <file alias="BatteryIndicator.qml">src/ui/toolbar/BatteryIndicator.qml</file>
         <file alias="GPSIndicator.qml">src/ui/toolbar/GPSIndicator.qml</file>
         <file alias="GPSRTKIndicator.qml">src/ui/toolbar/GPSRTKIndicator.qml</file>
         <file alias="JoystickIndicator.qml">src/ui/toolbar/JoystickIndicator.qml</file>
@@ -86,6 +85,7 @@
         <file alias="QGroundControl/Controls/AppMessages.qml">src/QmlControls/AppMessages.qml</file>
         <file alias="QGroundControl/Controls/AltModeDialog.qml">src/QmlControls/AltModeDialog.qml</file>
         <file alias="QGroundControl/Controls/AxisMonitor.qml">src/QmlControls/AxisMonitor.qml</file>
+        <file alias="QGroundControl/Controls/BatteryIndicator.qml">src/ui/toolbar/BatteryIndicator.qml</file>
         <file alias="QGroundControl/Controls/BatteryIndicatorContentItem.qml">src/ui/toolbar/BatteryIndicatorContentItem.qml</file>
         <file alias="QGroundControl/Controls/CameraCalcCamera.qml">src/PlanView/CameraCalcCamera.qml</file>
         <file alias="QGroundControl/Controls/CameraCalcGrid.qml">src/PlanView/CameraCalcGrid.qml</file>
@@ -102,6 +102,7 @@
         <file alias="QGroundControl/Controls/FirstRunPrompt.qml">src/FirstRunPromptDialogs/FirstRunPrompt.qml</file>
         <file alias="QGroundControl/Controls/FileButton.qml">src/QmlControls/FileButton.qml</file>
         <file alias="QGroundControl/Controls/FlightModeToolIndicatorContentItem.qml">src/ui/toolbar/FlightModeToolIndicatorContentItem.qml</file>
+        <file alias="QGroundControl/Controls/FlightModeIndicator.qml">src/ui/toolbar/FlightModeIndicator.qml</file>
         <file alias="QGroundControl/Controls/FlightModeDropdown.qml">src/QmlControls/FlightModeDropdown.qml</file>
         <file alias="QGroundControl/Controls/FlightModeMenu.qml">src/QmlControls/FlightModeMenu.qml</file>
         <file alias="QGroundControl/Controls/FWLandingPatternMapVisual.qml">src/PlanView/FWLandingPatternMapVisual.qml</file>
@@ -340,6 +341,7 @@
         <file alias="APMMavlinkStreamRate.SettingsGroup.json">src/Settings/APMMavlinkStreamRate.SettingsGroup.json</file>
         <file alias="App.SettingsGroup.json">src/Settings/App.SettingsGroup.json</file>
         <file alias="AutoConnect.SettingsGroup.json">src/Settings/AutoConnect.SettingsGroup.json</file>
+        <file alias="BatteryIndicator.SettingsGroup.json">src/Settings/BatteryIndicator.SettingsGroup.json</file>
         <file alias="BrandImage.SettingsGroup.json">src/Settings/BrandImage.SettingsGroup.json</file>
         <file alias="BreachReturn.FactMetaData.json">src/MissionManager/BreachReturn.FactMetaData.json</file>
         <file alias="CameraCalc.FactMetaData.json">src/MissionManager/CameraCalc.FactMetaData.json</file>

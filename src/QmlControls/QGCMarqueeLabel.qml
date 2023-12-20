@@ -117,7 +117,7 @@ Item {
         id:             _measureBlanks
         font:           _root.font
         antialiasing:   true
-        text:           "    "
+        text:           "  "
         visible:        false
     }
 }

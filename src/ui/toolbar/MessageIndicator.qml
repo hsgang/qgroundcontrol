@@ -35,7 +35,7 @@ Item {
     property bool   _isMessageImportant:    _activeVehicle ? !_activeVehicle.messageTypeNormal && !_activeVehicle.messageTypeNone : false
 
     function dropMessageIndicator() {
-        mainWindow.showIndicatorPopup(_root, vehicleMessagesPopup);
+        mainWindow.showIndicatorDrawer(drawerComponent)
     }
 
     function getMessageColor() {
@@ -82,12 +82,30 @@ Item {
     }
 
     Component {
-        id: vehicleMessagesPopup
+        id: drawerComponent
 
         ToolIndicatorPage {
-            showExpand: false
+            showExpand:         false
+            contentComponent:   messageContentComponent
+        }
+    }
 
-            property bool _noMessages: messageText.length === 0
+    Component {
+        id: messageContentComponent
+
+        TextArea {
+            id:                     messageText
+            width:                  Math.max(ScreenTools.defaultFontPixelHeight * 20, contentWidth + ScreenTools.defaultFontPixelWidth)
+            height:                 Math.max(ScreenTools.defaultFontPixelHeight * 20, contentHeight)
+            readOnly:               true
+            textFormat:             TextEdit.RichText
+            color:                  qgcPal.text
+            placeholderText:        qsTr("No Messages")
+            placeholderTextColor:   qgcPal.text
+            padding:                0
+
+            property bool   _noMessages:    messageText.length === 0
+            property var    _fact:          null
 
             function formatMessage(message) {
                 message = message.replace(new RegExp("<#E>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0)) + "pt monospace;");
@@ -98,7 +116,6 @@ Item {
 
             Component.onCompleted: {
                 messageText.text = formatMessage(_activeVehicle.formattedMessages)
-                //-- Hack to scroll to last message
                 _activeVehicle.resetAllMessages()
                 //for (var i = 0; i < _activeVehicle.messageCount; i++)
                 //    messageFlick.flick(0,-5000)
@@ -107,55 +124,111 @@ Item {
 
             Connections {
                 target:                 _activeVehicle
-                onNewFormattedMessage: function(formattedMessage) {
-                    messageText.append(formatMessage(formattedMessage));
+                onNewFormattedMessage:  messageText.insert(0, formatMessage(formattedMessage))
+            }
+
+            FactPanelController {
+                id: controller
+            }
+
+            onLinkActivated: (link) => {
+                if (link.startsWith('param://')) {
+                    var paramName = link.substr(8);
+                    _fact = controller.getParameterFact(-1, paramName, true)
+                    if (_fact != null) {
+                        paramEditorDialogComponent.createObject(mainWindow).open()
+                    }
+                } else {
+                    Qt.openUrlExternally(link);
                 }
             }
 
-            contentItem: TextArea {
-                    id:                     messageText
-                    width:                  Math.max(ScreenTools.defaultFontPixelWidth * 30, contentWidth + ScreenTools.defaultFontPixelWidth)
-                    height:                 Math.max(ScreenTools.defaultFontPixelHeight * 20, contentHeight)
-                    readOnly:               true
-                    textFormat:             TextEdit.RichText
-                    color:                  qgcPal.text
-                    placeholderText:        qsTr("No Messages")
-                    placeholderTextColor:   qgcPal.text
-                    padding:                0
+            Component {
+                id: paramEditorDialogComponent
 
-                Rectangle {
-                    anchors.right:              parent.right
-                    anchors.bottom:             parent.bottom
-                    width:                      ScreenTools.defaultFontPixelHeight * 2
-                    height:                     width
-                    radius:                     width / 4
-                    color:                      QGroundControl.globalPalette.windowShadeDark
-                    border.color:               QGroundControl.globalPalette.text
-                    visible:                    !_noMessages
+                ParameterEditorDialog {
+                    title:          qsTr("Edit Parameter")
+                    fact:           messageText._fact
+                    destroyOnClose: true
+                }
+            }
 
-                    QGCColoredImage {
-                        anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.25
-                        anchors.centerIn:   parent
-                        anchors.fill:       parent
-                        sourceSize.height:  height
-                        source:             "/res/TrashDelete.svg"
-                        fillMode:           Image.PreserveAspectFit
-                        mipmap:             true
-                        smooth:             true
-                        color:              qgcPal.text
-                    }
+            Rectangle {
+                anchors.right:   parent.right
+                anchors.top:     parent.top
+                width:                      ScreenTools.defaultFontPixelHeight * 1.25
+                height:                     width
+                radius:                     width / 2
+                color:                      QGroundControl.globalPalette.button
+                border.color:               QGroundControl.globalPalette.buttonText
+                visible:                    !_noMessages
 
-                    QGCMouseArea {
-                        fillItem: parent
-                        onClicked: {
-                            _activeVehicle.clearMessages()
-                            //indicatorDrawer.close()
-                            //drawer.close()
-                            componentDrawer.visible = false
-                        }
+                QGCColoredImage {
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.25
+                    anchors.centerIn:   parent
+                    anchors.fill:       parent
+                    sourceSize.height:  height
+                    source:             "/res/TrashDelete.svg"
+                    fillMode:           Image.PreserveAspectFit
+                    mipmap:             true
+                    smooth:             true
+                    color:              qgcPal.text
+                }
+
+                QGCMouseArea {
+                    fillItem: parent
+                    onClicked: {
+                        _activeVehicle.clearMessages()
+                        drawer.close()
                     }
                 }
             }
         }
     }
+
+    /*
+    FIXME-NEXTGEN: Reimplement this
+    FactPanelController {
+        id: controller
+    }
+
+    QGCFlickable {
+        id:                 messageFlick
+        anchors.margins:    ScreenTools.defaultFontPixelHeight
+        anchors.fill:       parent
+        contentHeight:      messageText.height
+        contentWidth:       messageText.width
+        pixelAligned:       true
+
+        TextEdit {
+            id:                 messageText
+            readOnly:           true
+            textFormat:         TextEdit.RichText
+            selectByMouse:      true
+            color:              qgcPal.text
+            selectionColor:     qgcPal.text
+            selectedTextColor:  qgcPal.window
+            onLinkActivated: {
+                if (link.startsWith('param://')) {
+                    var paramName = link.substr(8);
+                    fact = controller.getParameterFact(-1, paramName, true)
+                    if (fact != null) {
+                        paramEditorDialogComponent.createObject(mainWindow).open()
+                    }
+                } else {
+                    Qt.openUrlExternally(link);
+                }
+            }
+        }
+        Component {
+            id: paramEditorDialogComponent
+
+            ParameterEditorDialog {
+                title:          qsTr("Edit Parameter")
+                fact:           messageText.fact
+                destroyOnClose: true
+            }
+        }
+    }
+    */
 }

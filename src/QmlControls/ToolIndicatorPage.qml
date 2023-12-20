@@ -7,64 +7,64 @@
  *
  ****************************************************************************/
 
-import QtQuick          2.11
-import QtQuick.Layouts  1.11
+import QtQuick
+import QtQuick.Layouts
 
-import QGroundControl               1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl
+import QGroundControl.ScreenTools
 
-// ToolIndicatorPage 
+// ToolIndicatorPage
 //      The base control for all Toolbar Indicator drop down pages. It supports a normal and expanded view.
 
 RowLayout {
-    property bool showExpand:       false   // Controls whether the expand widget is shown or not
-    property Item contentItem               // Item for the normal view portion of the page
-    property Item expandedItem              // Item for the expanded portion of the page
-    property var  editFieldWidth:   ScreenTools.defaultFontPixelWidth * 13
- 
-    // These properties are bound by the MainRoowWindow loader
-    property bool expanded: false            
-    property var  drawer
-
-    property real dividerHeight
-
-    id:         _root
+    id:         control
     spacing:    _margins
 
-    property real _margins: ScreenTools.defaultFontPixelHeight
+    property bool       showExpand:         false   // Controls whether the expand widget is shown or not
+    property bool       waitForParameters:  false   // UI won't show until parameters are ready
+    property Component  contentComponent            // Item for the normal view portion of the page
+    property Component  expandedComponent           // Item for the expanded portion of the page
+    property var        pageProperties              // Allows you to share a QtObject full of properties between pages
 
-    onContentItemChanged: {
-        if (_root.contentItem) {
-            _root.contentItem.parent = _contentItemHolder
-        }
+    // These properties are bound by the MainRoowWindow loader
+    property bool expanded: false
+    property var  drawer
+
+
+    property var    activeVehicle:      QGroundControl.multiVehicleManager.vehicle
+    property bool   parametersReady:    QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable
+
+    property real _margins:     ScreenTools.defaultFontPixelHeight
+    property bool _loadPages:   !waitForParameters || parametersReady
+
+    QGCLabel {
+        text:       qsTr("Waiting for parameters...")
+        visible:    waitForParameters && !parametersReady
     }
 
-    onExpandedItemChanged: {
-        if (_root.expandedItem) {
-            _root.expandedItem.parent = _expandedItemHolder
-        }
-    }
+    Loader {
+        id:                 contentItemLoader
+        Layout.alignment:   Qt.AlignTop
+        sourceComponent:    _loadPages ? contentComponent : undefined
 
-    ColumnLayout {
-        id:                     _contentItemHolder
-        Layout.alignment:       Qt.AlignTop
-        Layout.minimumWidth:    ScreenTools.defaultFontPixelWidth * 22
+        property var pageProperties: control.pageProperties
     }
 
     Rectangle {
         id:                     divider
         Layout.preferredWidth:  visible ? 1 : -1
         Layout.fillHeight:      true
-        Layout.minimumHeight:   dividerHeight - _margins
         color:                  QGroundControl.globalPalette.text
-        opacity:                0.5
         visible:                expanded
     }
 
-    ColumnLayout {
-        id:                     _expandedItemHolder
+    Loader {
+        id:                     expandedItemLoader
         Layout.alignment:       Qt.AlignTop
         Layout.preferredWidth:  visible ? -1 : 0
         visible:                expanded
+        sourceComponent:        expanded ? expandedComponent : undefined
+
+        property var pageProperties: control.pageProperties
     }
 }
