@@ -4680,7 +4680,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/MissionManager/CorridorScanComplexItem.h" line="52"/>
         <location filename="../src/MissionManager/CorridorScanComplexItem.h" line="53"/>
         <source>Corridor Scan</source>
-        <translation>복도 스캔</translation>
+        <translation>회랑 스캔</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/CorridorScanComplexItem.h" line="54"/>
@@ -4693,7 +4693,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/CorridorScanEditor.qml" line="19"/>
         <source>Corridor</source>
-        <translation>복도</translation>
+        <translation>회랑</translation>
     </message>
     <message>
         <location filename="../src/PlanView/CorridorScanEditor.qml" line="38"/>
@@ -7246,9 +7246,14 @@ Click Ok to start the auto-tuning process.
         <translation>기체 정보 페이지</translation>
     </message>
     <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="402"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+    <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="133"/>
         <source>Summary</source>
-        <translation>설정</translation>
+        <translation>기체 정보</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="148"/>
@@ -10639,7 +10644,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="224"/>
         <source>Hover speed</source>
-        <translation>정지비행 속도</translation>
+        <translation>비행 속도</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="258"/>
@@ -10663,6 +10668,12 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/MissionManager/MissionSettingsItem.cc" line="292"/>
         <source>Launch</source>
         <translation>시작</translation>
+    </message>
+    <message>
+        <location filename="../src/MissionManager/MissionSettingsItem.h" line="74"/>
+        <location filename="../src/MissionManager/MissionSettingsItem.h" line="75"/>
+        <source>Mission Start</source>
+        <translation>자동 경로 개요</translation>
     </message>
 </context>
 <context>
@@ -13313,7 +13324,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1004"/>
         <source>Create complex pattern:</source>
-        <translation>복잡한 패턴 생성:</translation>
+        <translation>패턴 생성</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1029"/>

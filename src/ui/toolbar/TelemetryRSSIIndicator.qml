@@ -37,59 +37,61 @@ Item {
 
             property real _margins: ScreenTools.defaultFontPixelHeight / 2
 
-            contentItem: ColumnLayout {
-                Layout.preferredWidth: parent.width
-                spacing:                _margins
+            contentComponent: Component {
+                ColumnLayout {
+                    Layout.preferredWidth: parent.width
+                    spacing:                _margins
 
-                QGCLabel {
-                    id:                 telemLabel
-                    text:               qsTr("Telemetry RSSI Status")
-                    font.family:        ScreenTools.demiboldFontFamily
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                    QGCLabel {
+                        id:                 telemLabel
+                        text:               qsTr("Telemetry RSSI Status")
+                        font.family:        ScreenTools.demiboldFontFamily
+                        Layout.alignment:   Qt.AlignHCenter
+                    }
 
-                Rectangle {
-                    Layout.preferredHeight: telemColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
-                    Layout.preferredWidth:  telemColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
-                    color:                  qgcPal.windowShade
-                    radius:                 _margins / 2
-                    Layout.fillWidth:       true
+                    Rectangle {
+                        Layout.preferredHeight: telemColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
+                        Layout.preferredWidth:  telemColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                        color:                  qgcPal.windowShade
+                        radius:                 _margins / 2
+                        Layout.fillWidth:       true
 
-                    ColumnLayout {
-                        id:                 telemColumnLayout
-                        anchors.margins:    _margins / 2
-                        anchors.top:        parent.top
-                        anchors.left:       parent.left
-                        anchors.right:      parent.right
-                        spacing:            _margins
+                        ColumnLayout {
+                            id:                 telemColumnLayout
+                            anchors.margins:    _margins / 2
+                            anchors.top:        parent.top
+                            anchors.left:       parent.left
+                            anchors.right:      parent.right
+                            spacing:            _margins
 
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Local RSSI")
-                            valueText:  _activeVehicle.telemetryLRSSI + " dBm"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Remote RSSI")
-                            valueText:  _activeVehicle.telemetryRRSSI + " dBm"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("RX Errors")
-                            valueText:  _activeVehicle.telemetryRXErrors
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Errors Fixed")
-                            valueText:  _activeVehicle.telemetryFixed
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("TX Buffer")
-                            valueText:  _activeVehicle.telemetryTXBuffer
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Local Noise")
-                            valueText:  _activeVehicle.telemetryLNoise
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Remote Noise")
-                            valueText:  _activeVehicle.telemetryRNoise
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Local RSSI")
+                                valueText:  _activeVehicle.telemetryLRSSI + " dBm"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Remote RSSI")
+                                valueText:  _activeVehicle.telemetryRRSSI + " dBm"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("RX Errors")
+                                valueText:  _activeVehicle.telemetryRXErrors
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Errors Fixed")
+                                valueText:  _activeVehicle.telemetryFixed
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("TX Buffer")
+                                valueText:  _activeVehicle.telemetryTXBuffer
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Local Noise")
+                                valueText:  _activeVehicle.telemetryLNoise
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Remote Noise")
+                                valueText:  _activeVehicle.telemetryRNoise
+                            }
                         }
                     }
                 }

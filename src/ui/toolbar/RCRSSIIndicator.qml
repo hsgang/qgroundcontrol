@@ -37,26 +37,28 @@ Item {
 
             property real _margins: ScreenTools.defaultFontPixelHeight
 
-            contentItem: ColumnLayout {
-                Layout.preferredWidth:  parent.width
-                spacing:                ScreenTools.defaultFontPixelHeight
-
-                QGCLabel {
-                    id:                 rssiLabel
-                    text:               _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
-                    font.family:        ScreenTools.demiboldFontFamily
-                    Layout.alignment:   Qt.AlignHCenter
-                }
-
+            contentComponent: Component {
                 ColumnLayout {
-                    id:                 rcrssiGrid
-                    spacing:            ScreenTools.defaultFontPixelHeight / 2
-                    Layout.fillWidth:   true
+                    Layout.preferredWidth:  parent.width
+                    spacing:                ScreenTools.defaultFontPixelHeight
 
-                    ComponentLabelValueRow {
-                        labelText:  qsTr("RC RSSI")
-                        valueText:  _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
-                        visible:    _rcRSSIAvailable
+                    QGCLabel {
+                        id:                 rssiLabel
+                        text:               _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
+                        font.family:        ScreenTools.demiboldFontFamily
+                        Layout.alignment:   Qt.AlignHCenter
+                    }
+
+                    ColumnLayout {
+                        id:                 rcrssiGrid
+                        spacing:            ScreenTools.defaultFontPixelHeight / 2
+                        Layout.fillWidth:   true
+
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("RC RSSI")
+                            valueText:  _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
+                            visible:    _rcRSSIAvailable
+                        }
                     }
                 }
             }

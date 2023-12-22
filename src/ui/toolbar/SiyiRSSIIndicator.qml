@@ -28,70 +28,72 @@ Item {
 
             property real _margins: ScreenTools.defaultFontPixelHeight / 2
 
-            contentItem: ColumnLayout {
-                Layout.preferredWidth:  parent.width
-                spacing:                _margins
+            contentComponent: Component {
+                ColumnLayout {
+                    Layout.preferredWidth:  parent.width
+                    spacing:                _margins
 
-                QGCLabel {
-                    id:                 telemLabel
-                    text:               qsTr("Network Status")
-                    font.family:        ScreenTools.demiboldFontFamily
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                    QGCLabel {
+                        id:                 telemLabel
+                        text:               qsTr("Network Status")
+                        font.family:        ScreenTools.demiboldFontFamily
+                        Layout.alignment:   Qt.AlignHCenter
+                    }
 
-                Rectangle {
-                    Layout.preferredHeight: siyiColumnLayout.height + _margins
-                    Layout.preferredWidth:  siyiColumnLayout.width + _margins
-                    color:                  qgcPal.windowShade
-                    radius:                 _margins / 4
-                    Layout.fillWidth:       true
+                    Rectangle {
+                        Layout.preferredHeight: siyiColumnLayout.height + _margins
+                        Layout.preferredWidth:  siyiColumnLayout.width + _margins
+                        color:                  qgcPal.windowShade
+                        radius:                 _margins / 4
+                        Layout.fillWidth:       true
 
-                    ColumnLayout {
-                        id:                 siyiColumnLayout
-                        anchors.margins:    _margins / 2
-                        anchors.top:        parent.top
-                        anchors.left:       parent.left
-                        anchors.right:      parent.right
-                        spacing:            _margins
+                        ColumnLayout {
+                            id:                 siyiColumnLayout
+                            anchors.margins:    _margins / 2
+                            anchors.top:        parent.top
+                            anchors.left:       parent.left
+                            anchors.right:      parent.right
+                            spacing:            _margins
 
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Signal")
-                            valueText:  transmitter.signalQuality + " %"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("RSSI")
-                            valueText:  transmitter.rssi + " dBm"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Inactive Time")
-                            valueText:  transmitter.inactiveTime + " ms"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Upstream")
-                            valueText:  (transmitter.upStream / 1024).toFixed(1) + " KB/s"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Downstream")
-                            valueText:  (transmitter.downStream / 1024).toFixed(1) + " KB/s"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("TxBandwidth")
-                            valueText:  (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("RxBandwidth")
-                            valueText:  (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Frequency")
-                            valueText:  transmitter.freq + " Mhz"
-                        }
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("Channel")
-                            valueText:  transmitter.channel
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Signal")
+                                valueText:  transmitter.signalQuality + " %"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("RSSI")
+                                valueText:  transmitter.rssi + " dBm"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Inactive Time")
+                                valueText:  transmitter.inactiveTime + " ms"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Upstream")
+                                valueText:  (transmitter.upStream / 1024).toFixed(1) + " KB/s"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Downstream")
+                                valueText:  (transmitter.downStream / 1024).toFixed(1) + " KB/s"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("TxBandwidth")
+                                valueText:  (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("RxBandwidth")
+                                valueText:  (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Frequency")
+                                valueText:  transmitter.freq + " Mhz"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Channel")
+                                valueText:  transmitter.channel
+                            }
                         }
                     }
-                }               
+                }
             }
         } //ToolIndicatorPage
     }

@@ -37,83 +37,87 @@ ToolIndicatorPage {
         }
     }
 
-    contentItem: ColumnLayout {
-        spacing: ScreenTools.defaultFontPixelHeight / 2
+    contentComponent: Component {
+        ColumnLayout {
+            spacing: ScreenTools.defaultFontPixelHeight / 2
 
-        QGCLabel {
-            Layout.alignment:   {Qt.AlignTop; Qt.AlignHCenter;}
-            text:               noLinks ? qsTr("No Links Configured") : qsTr("Connect To Link")
-            font.pointSize:     noLinks ? ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
-        }
-        
-        Repeater {
-            model: linkConfigs
-
-            delegate: QGCButton {
-                Layout.fillWidth:   true
-                text:               object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
-                visible:            !object.dynamic
-                enabled:            !object.link
-                autoExclusive:      true
-
-                onClicked: {
-                    QGroundControl.linkManager.createConnectedLink(object)
-                    //drawer.close()
-                    componentDrawer.visible = false
-                }
+            QGCLabel {
+                Layout.alignment:   {Qt.AlignTop; Qt.AlignHCenter;}
+                text:               noLinks ? qsTr("No Links Configured") : qsTr("Connect To Link")
+                font.pointSize:     noLinks ? ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
             }
-        }
-    }
 
-    expandedItem: ColumnLayout {
-        spacing: ScreenTools.defaultFontPixelHeight / 2
+            Repeater {
+                model: linkConfigs
 
-        IndicatorPageGroupLayout {
-            RowLayout {
-                QGCLabel { Layout.fillWidth: true; text: qsTr("Communication Links") }
-                
-                QGCButton {
-                    text:       qsTr("Configure")
+                delegate: QGCButton {
+                    Layout.fillWidth:   true
+                    text:               object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
+                    visible:            !object.dynamic
+                    enabled:            !object.link
+                    autoExclusive:      true
+
                     onClicked: {
-                        mainWindow.showSettingsTool(qsTr("Comm Links"))
+                        QGroundControl.linkManager.createConnectedLink(object)
                         //drawer.close()
                         componentDrawer.visible = false
                     }
                 }
             }
         }
+    }
 
-        IndicatorPageGroupLayout {
-            heading:        qsTr("Auto Connect")
-            visible:        autoConnectSettings.visible
-            showDivider:    false
+    expandedComponent: Component {
+        ColumnLayout {
+            spacing: ScreenTools.defaultFontPixelHeight / 2
 
-            Repeater {
-                id: autoConnectRepeater
+            IndicatorPageGroupLayout {
+                RowLayout {
+                    QGCLabel { Layout.fillWidth: true; text: qsTr("Communication Links") }
 
-                model: [ 
-                    autoConnectSettings.autoConnectPixhawk,
-                    autoConnectSettings.autoConnectSiKRadio,
-                    //autoConnectSettings.autoConnectPX4Flow,
-                    //autoConnectSettings.autoConnectLibrePilot,
-                    autoConnectSettings.autoConnectUDP,
-                    //autoConnectSettings.autoConnectZeroConf,
-                ]
+                    QGCButton {
+                        text:       qsTr("Configure")
+                        onClicked: {
+                            mainWindow.showSettingsTool(qsTr("Comm Links"))
+                            //drawer.close()
+                            componentDrawer.visible = false
+                        }
+                    }
+                }
+            }
 
-                property var names: [
-                    qsTr("Pixhawk"),
-                    qsTr("SiK Radio"),
-                    //qsTr("PX4 Flow"),
-                    //qsTr("LibrePilot"),
-                    qsTr("UDP")
-                    //,qsTr("Zero-Conf")
-                ]
+            IndicatorPageGroupLayout {
+                heading:        qsTr("Auto Connect")
+                visible:        autoConnectSettings.visible
+                showDivider:    false
 
-                FactCheckBoxSlider {
-                    Layout.fillWidth:   true
-                    text:               autoConnectRepeater.names[index]
-                    fact:               modelData
-                    visible:            modelData.visible
+                Repeater {
+                    id: autoConnectRepeater
+
+                    model: [
+                        autoConnectSettings.autoConnectPixhawk,
+                        autoConnectSettings.autoConnectSiKRadio,
+                        //autoConnectSettings.autoConnectPX4Flow,
+                        //autoConnectSettings.autoConnectLibrePilot,
+                        autoConnectSettings.autoConnectUDP,
+                        //autoConnectSettings.autoConnectZeroConf,
+                    ]
+
+                    property var names: [
+                        qsTr("Pixhawk"),
+                        qsTr("SiK Radio"),
+                        //qsTr("PX4 Flow"),
+                        //qsTr("LibrePilot"),
+                        qsTr("UDP")
+                        //,qsTr("Zero-Conf")
+                    ]
+
+                    FactCheckBoxSlider {
+                        Layout.fillWidth:   true
+                        text:               autoConnectRepeater.names[index]
+                        fact:               modelData
+                        visible:            modelData.visible
+                    }
                 }
             }
         }

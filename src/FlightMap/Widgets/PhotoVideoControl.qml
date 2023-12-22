@@ -90,6 +90,7 @@ Rectangle {
     property bool   _videoIsRecording:                          _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamRecording
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
+    property real   _cameraTriggerCount:                        _activeVehicle ? _activeVehicle.cameraTriggerPoints.count : 0
 //    Component.onCompleted :{
 //        console.log("_mavlinkCameraManagerCurCameraIndex :"+ _mavlinkCameraManagerCurCameraIndex)
 //    }
@@ -152,6 +153,10 @@ Rectangle {
                 }
             }
         }
+    }
+
+    on_CameraTriggerCountChanged: {
+        onCountChanged: photoCaptureButton.shootEffect()
     }
 
     Timer {
@@ -319,15 +324,16 @@ Rectangle {
                onTriggered: trigger.color = qgcPal.colorRed
            }
 
-           function shoot() {
+           function shootEffect() {
                trigger.color = qgcPal.text
                colorTimer.start()
+               //playSound.play()
            }
 
            MouseArea {
                anchors.fill:   parent
                onClicked: {
-                   parent.shoot()
+                   parent.shootEffect()
                    toggleShooting()
                    playSound.play()
                }
@@ -357,7 +363,7 @@ Rectangle {
             }
             QGCLabel {
                 Layout.alignment:   Qt.AlignHCenter
-                text:               _activeVehicle ? ('0000' + _activeVehicle.cameraTriggerPoints.count).slice(-4) : "0000"
+                text:               _activeVehicle ? ('0000' + _cameraTriggerCount).slice(-4) : "0000"
                 font.pointSize:     ScreenTools.defaultFontPointSize
                 visible:            _modeIndicatorPhotoMode
             }

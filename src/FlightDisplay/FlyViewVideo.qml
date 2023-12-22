@@ -108,6 +108,7 @@ Item {
     ProximityRadarVideoView{
         anchors.fill:   parent
         vehicle:        QGroundControl.multiVehicleManager.activeVehicle
+        visible:        pipState.state === pipState.fullState
     }
 
     ObstacleDistanceOverlayVideo {

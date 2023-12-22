@@ -124,86 +124,8 @@ RowLayout {
             }
 
             // Mode list
-            contentItem: FlightModeToolIndicatorContentItem { }
+            contentComponent: FlightModeToolIndicatorContentItem { }
 
-
-            // expandedItem: ColumnLayout{
-            //     Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 50
-            //     spacing:                margins / 2
-
-            //     IndicatorPageGroupLayout {
-            //         Layout.fillWidth: true
-
-            //         GridLayout {
-            //             Layout.fillWidth:   true
-            //             columns:            2
-
-            //             QGCLabel {
-            //                 Layout.fillWidth: true
-            //                 text: qsTr("RTL Altitude")
-            //                 visible:                landSpeedFact
-            //             }
-
-            //             FactTextField {
-            //                 fact:                   controller.getParameterFact(-1, "RTL_ALT")
-            //                 Layout.preferredWidth:  valueColumnWidth
-            //                 visible:                landSpeedFact
-            //             }
-
-            //             QGCLabel {
-            //                 id:                     landDescentLabel
-            //                 Layout.fillWidth:       true
-            //                 text:                   qsTr("Land Descent Rate")
-            //                 visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
-            //             }
-
-            //             FactTextField {
-            //                 fact:                   landSpeedFact
-            //                 Layout.preferredWidth:  valueColumnWidth
-            //                 visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
-            //             }
-            //         }
-            //     }
-
-            //     IndicatorPageGroupLayout {
-            //         Layout.fillWidth:   true
-            //         visible:            atcInputTCFact
-
-            //         ColumnLayout {
-            //             Layout.fillWidth:   true
-
-            //             FactSliderPanel {
-            //                 width:       parent.width
-            //                 sliderModel: params
-            //             }
-            //         }
-
-            //         Item {
-            //             height:             1
-            //             Layout.fillWidth:   true
-            //         }
-            //     }
-
-            //     IndicatorPageGroupLayout {
-            //         Layout.fillWidth:   true
-            //         showDivider:        false
-
-            //         RowLayout {
-            //             Layout.fillWidth: true
-
-            //             QGCLabel { Layout.fillWidth: true; text: qsTr("Flight Modes Settings") }
-            //             QGCButton {
-            //                 text: qsTr("Configure")
-            //                 onClicked: {
-            //                     mainWindow.showVehicleSetupTool(qsTr("Flight Modes"))
-            //                     indicatorDrawer.close()
-            //                     componentDrawer.visible = false
-            //                 }
-            //             }
-            //         }
-            //     }
-
-            // }
         }
     }
 }
