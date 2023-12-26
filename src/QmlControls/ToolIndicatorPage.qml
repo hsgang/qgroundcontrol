@@ -30,7 +30,6 @@ RowLayout {
     property bool expanded: false
     property var  drawer
 
-
     property var    activeVehicle:      QGroundControl.multiVehicleManager.vehicle
     property bool   parametersReady:    QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable
 

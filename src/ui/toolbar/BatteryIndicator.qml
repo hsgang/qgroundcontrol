@@ -242,7 +242,7 @@ Item {
                 return qsTr("n/a")
             }
 
-           function getBatteryVoltageText() {
+            function getBatteryVoltageText() {
                 if (!isNaN(battery.voltage.rawValue)) {
                     return battery.voltage.valueString + battery.voltage.units
                 } else if (battery.chargeState.rawValue !== MAVLink.MAV_BATTERY_CHARGE_STATE_UNDEFINED) {
@@ -313,7 +313,6 @@ Item {
 
                     property string _cellVoltage: (battery.voltage.value / _batteryCellCount).toFixed(2) + battery.voltage.units
                 }
-            }
 
                 QGCLabel {
                     anchors.right:          parent.right
@@ -335,5 +334,4 @@ Item {
             }
         }
     }
-
 }

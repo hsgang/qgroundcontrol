@@ -42,16 +42,6 @@ Rectangle {
         }
     }
 
-    function showSettingsPage(settingsPage) {
-        for (var i=0; i<buttonRepeater.count; i++) {
-            var button = buttonRepeater.itemAt(i)
-            if (button.text === settingsPage) {
-                button.clicked()
-                break
-            }
-        }
-    }
-
     QGCPalette { id: qgcPal }
 
     Component.onCompleted: {
