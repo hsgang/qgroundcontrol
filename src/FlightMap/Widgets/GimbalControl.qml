@@ -27,13 +27,16 @@ Rectangle {
     id:         gimbalControlPannel
     width:      mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-    radius:     _margins
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+    border.color:   qgcPal.text
+    border.width:   1
+    radius:     _margins * 1.5
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:         ScreenTools.defaultFontPixelHeight / 2
     property real   _idealWidth:      ScreenTools.isMobile ? ScreenTools.minTouchPixels * 0.8 : (ScreenTools.defaultFontPixelWidth * 7)
     property real   anchorsMargins:   _margins
+    property real   backgroundOpacity:                          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
     property var    _activeVehicle:                             QGroundControl.multiVehicleManager.activeVehicle
 

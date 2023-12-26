@@ -27,6 +27,7 @@ Rectangle{
     property real   _largeValueWidth:           ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 7 : ScreenTools.defaultFontPixelWidth * 10
     property real   _mediumValueWidth:          ScreenTools.defaultFontPixelWidth * 6
     property real   _smallValueWidth:           ScreenTools.defaultFontPixelWidth * 4
+    property real   backgroundOpacity:          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
     // form
     property real   _dataFontSize:              ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
     property real   _labelToValueSpacing:       0 //ScreenTools.defaultFontPixelWidth * 0.5
@@ -157,14 +158,14 @@ Rectangle{
 
     Row{
         id: missionIndicatorRow
-        spacing: _toolsMargin * 2
+        spacing: _toolsMargin * 2.5
 
         Rectangle {
             id: attitudeIndicatorBase
             width:  ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
             height: width
             radius: height * 0.5
-            color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
+            color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
 
             CustomAttitudeHUD {
                 size:                       parent.height
@@ -197,7 +198,7 @@ Rectangle{
 
                 width:  backgroundGrid.width + _toolsMargin * 2
                 height: backgroundGrid.height + _toolsMargin * 2
-                color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+                color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
                 radius: _margins
 
                 Row {
@@ -295,8 +296,8 @@ Rectangle{
             property int    dialWidth:          ScreenTools.defaultFontPixelWidth * 0.8
 
             property color  backgroundColor:    "transparent"
-            property color  dialColor:          Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.3)//"#FF505050"
-            property color  progressColor:      qgcPal.textHighlight //qgcPal.buttonHighlight // "#FFA51BAB"
+            property color  dialColor:          Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.3)
+            property color  progressColor:      qgcPal.textHighlight
 
             property int    penStyle:           Qt.RoundCap
 
@@ -307,7 +308,7 @@ Rectangle{
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
                 radius:                     width * 0.5
-                color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+                color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
 
                 QtObject {
                     id: internals

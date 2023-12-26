@@ -157,34 +157,15 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
-                text:           _activeVehicle ? getGpsLock() : ""
+                text:           _activeVehicle ? (isGNSS2 ? getGpsLock() + "("+ _activeVehicle.gps.count.valueString +")" : getGpsLock()) : ""
             }
 
             QGCLabel {
                 id:             hdopValue
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
-                text:           _activeVehicle ? _activeVehicle.gps.count.valueString : ""
-            }
-        }
-
-        Column {
-            id:                     gps2ValuesColumn
-            visible:                isGNSS2
-            anchors.verticalCenter: parent.verticalCenter
-
-            QGCLabel {
-                anchors.left:   parent.left
-                color:          qgcPal.buttonText
-                font.pointSize: ScreenTools.smallFontPointSize
-                text:           _activeVehicle ? getGps2Lock() : ""
-            }
-
-            QGCLabel {
-                id:             gps2hdopValue
-                anchors.left:   parent.left
-                color:          qgcPal.buttonText
-                text:           _activeVehicle ? _activeVehicle.gps2.count.valueString : ""
+                font.pointSize: isGNSS2 ? ScreenTools.smallFontPointSize : ScreenTools.defaultFontPointSize
+                text:           _activeVehicle ? (isGNSS2 ? getGps2Lock() + "("+ _activeVehicle.gps2.count.valueString +")" : _activeVehicle.gps.count.valueString) : ""
             }
         }
     }

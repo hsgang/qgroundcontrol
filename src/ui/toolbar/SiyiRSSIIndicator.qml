@@ -105,23 +105,20 @@ Item {
         spacing:        ScreenTools.defaultFontPixelWidth / 2
 
         Column {
-            id:                     batteryValuesColumn
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
-            //anchors.left:           batteryIcon.right
 
             QGCLabel {
-                id:                 batteryVoltageValue
                 anchors.right:      parent.right
                 font.pointSize:     ScreenTools.smallFontPointSize
                 color:              qgcPal.text
-                text:               (transmitter.downStream / 1024).toFixed(0) + " KB/s"
+                text:               (transmitter.downStream / 1024).toFixed(0) + "KB"
             }
 
             QGCLabel {
                 anchors.right:      parent.right
                 color:              qgcPal.text
-                text:               transmitter.rssi +" dBm"
+                text:               transmitter.rssi
             }
         }
 

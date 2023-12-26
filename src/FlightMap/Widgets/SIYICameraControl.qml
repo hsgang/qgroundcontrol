@@ -20,7 +20,7 @@ Rectangle {
     width: controlColumn.width + (_margins * 2)
     height: controlColumn.height + (_margins * 2)
     //visible: camera.isConnected
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
     radius:     _margins
     visible:    camera.enablePhoto
 
@@ -32,12 +32,84 @@ Rectangle {
     property int minDelta: 5
     property int buttonSize:    ScreenTools.defaultFontPixelHeight * 2
 
-    ColumnLayout {
+    GridLayout {
         id: controlColumn
-        spacing: ScreenTools.defaultFontPixelHeight
+        //spacing: ScreenTools.defaultFontPixelHeight
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
+
+        columns: 2
+
+        Image { // 拍照
+            id: photo
+            sourceSize.width: buttonSize
+            sourceSize.height: buttonSize
+            visible: camera.enablePhoto
+            source: photoMA.pressed ? "/SiYi/PhotoGreen.svg" : "/SiYi/Photo.svg"
+            Layout.alignment: Qt.AlignHCenter
+//            source: camera.enablePhoto
+//                    ? photoMA.pressed ? "/SiYi/PhotoGreen.svg" : "/SiYi/Photo.svg"
+//                    : "/SiYi/empty.png"
+//            anchors.horizontalCenter: parent.horizontalCenter
+            fillMode: Image.PreserveAspectFit
+            cache: false
+            MouseArea {
+                id: photoMA
+                anchors.fill: parent
+                onPressed: {
+                    console.info("camera.sendCommand(SiYiCamera.CameraCommandTakePhoto)")
+                    camera.sendCommand(SiYiCamera.CameraCommandTakePhoto)
+                }
+            }
+        }
+
+        Image { // 录像
+            id: video
+            sourceSize.width: buttonSize
+            sourceSize.height: buttonSize
+            width: buttonSize
+            height: buttonSize
+            cache: false
+
+            Layout.alignment: Qt.AlignHCenter // nchors.horizontalCenter: parent.horizontalCenter
+            fillMode: Image.PreserveAspectFit
+            visible: camera.enableVideo
+            MouseArea {
+                id: videoMA
+                anchors.fill: parent
+                onPressed: {
+                    if (camera.isRecording) {
+                        camera.sendRecodingCommand(SiYiCamera.CloseRecording)
+                    } else {
+                        camera.sendRecodingCommand(SiYiCamera.OpenRecording)
+                    }
+                }
+            }
+
+            Connections {
+                target: camera
+                function onEnableVideoChanged() {
+                    video.source = "/SiYi/empty.png"
+                    if (camera.enableVideo) {
+                        if (camera.isRecording) {
+                            video.source = "/SiYi/Stop.svg"
+                        } else {
+                            video.source = "/SiYi/Video.png"
+                        }
+                    }
+                }
+
+                function onIsRecordingChanged() {
+                    video.source = "/SiYi/empty.png"
+                    if (camera.isRecording) {
+                        video.source = "/SiYi/Stop.svg"
+                    } else {
+                        video.source = "/SiYi/Video.png"
+                    }
+                }
+            }
+        }
 
         Image { // 放大
             id: zoomInImage
@@ -126,97 +198,7 @@ Rectangle {
                     zoomOutTimer.start()
                 }
             }
-        }
-
-        Image { // 回中
-            id: reset
-            sourceSize.width: buttonSize
-            sourceSize.height: buttonSize
-            visible: camera.enableControl
-            source: resetMA.pressed ? "/SiYi/ResetGreen.svg" : "/SiYi/Reset.svg"
-            Layout.alignment: Qt.AlignHCenter
-//            source: camera.enableControl
-//                    ? resetMA.pressed ? "/SiYi/ResetGreen.svg" : "/SiYi/Reset.svg"
-//                    : "/SiYi/empty.png"
-//            anchors.horizontalCenter: parent.horizontalCenter
-            fillMode: Image.PreserveAspectFit
-            cache: false
-            MouseArea {
-                id: resetMA
-                anchors.fill: parent
-                onPressed: camera.resetPostion()
-            }
-        }
-
-        Image { // 拍照
-            id: photo
-            sourceSize.width: buttonSize
-            sourceSize.height: buttonSize
-            visible: camera.enablePhoto
-            source: photoMA.pressed ? "/SiYi/PhotoGreen.svg" : "/SiYi/Photo.svg"
-            Layout.alignment: Qt.AlignHCenter
-//            source: camera.enablePhoto
-//                    ? photoMA.pressed ? "/SiYi/PhotoGreen.svg" : "/SiYi/Photo.svg"
-//                    : "/SiYi/empty.png"
-//            anchors.horizontalCenter: parent.horizontalCenter
-            fillMode: Image.PreserveAspectFit
-            cache: false
-            MouseArea {
-                id: photoMA
-                anchors.fill: parent
-                onPressed: {
-                    console.info("camera.sendCommand(SiYiCamera.CameraCommandTakePhoto)")
-                    camera.sendCommand(SiYiCamera.CameraCommandTakePhoto)
-                }
-            }
-        }
-
-        Image { // 录像
-            id: video
-            sourceSize.width: buttonSize
-            sourceSize.height: buttonSize
-            width: buttonSize
-            height: buttonSize
-            cache: false
-
-            Layout.alignment: Qt.AlignHCenter // nchors.horizontalCenter: parent.horizontalCenter
-            fillMode: Image.PreserveAspectFit
-            visible: camera.enableVideo
-            MouseArea {
-                id: videoMA
-                anchors.fill: parent
-                onPressed: {
-                    if (camera.isRecording) {
-                        camera.sendRecodingCommand(SiYiCamera.CloseRecording)
-                    } else {
-                        camera.sendRecodingCommand(SiYiCamera.OpenRecording)
-                    }
-                }
-            }
-
-            Connections {
-                target: camera
-                function onEnableVideoChanged() {
-                    video.source = "/SiYi/empty.png"
-                    if (camera.enableVideo) {
-                        if (camera.isRecording) {
-                            video.source = "/SiYi/Stop.svg"
-                        } else {
-                            video.source = "/SiYi/Video.png"
-                        }
-                    }
-                }
-
-                function onIsRecordingChanged() {
-                    video.source = "/SiYi/empty.png"
-                    if (camera.isRecording) {
-                        video.source = "/SiYi/Stop.svg"
-                    } else {
-                        video.source = "/SiYi/Video.png"
-                    }
-                }
-            }
-        }
+        }   
 
         Image { // 远景
             id: far
@@ -289,6 +271,26 @@ Rectangle {
                     camera.focus(-1)
                     neerTimer.start()
                 }
+            }
+        }
+
+        Image { // 回中
+            id: reset
+            sourceSize.width: buttonSize
+            sourceSize.height: buttonSize
+            visible: camera.enableControl
+            source: resetMA.pressed ? "/SiYi/ResetGreen.svg" : "/SiYi/Reset.svg"
+            Layout.alignment: Qt.AlignHCenter
+//            source: camera.enableControl
+//                    ? resetMA.pressed ? "/SiYi/ResetGreen.svg" : "/SiYi/Reset.svg"
+//                    : "/SiYi/empty.png"
+//            anchors.horizontalCenter: parent.horizontalCenter
+            fillMode: Image.PreserveAspectFit
+            cache: false
+            MouseArea {
+                id: resetMA
+                anchors.fill: parent
+                onPressed: camera.resetPostion()
             }
         }
     }

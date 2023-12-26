@@ -163,167 +163,186 @@ Item{
             anchors.fill: parent
         }
 
-        QGCFlickable {
-            id:                 flickable
-            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
-            anchors.top:        parent.top
-            anchors.right:      parent.right
-            width:              checkBoxRow.width + _toolsMargin * 2
-            height:             parent.height - ScreenTools.defaultFontPixelHeight * 0.4
-            contentHeight:      checkBoxRow.height
-            flickableDirection: Flickable.VerticalFlick
-            clip:               true
+        Row {
+            anchors.fill: parent
+            spacing: 0
 
-            ColumnLayout{
-                id: checkBoxRow
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.rightMargin: _toolsMargin
-                spacing: ScreenTools.defaultFontPixelHeight / 4
+            Rectangle{
+                anchors.top: parent.top
+                //anchors.left: parent.left
+                //anchors.right: flickable.left
+                anchors.bottom: parent.bottom
+                width: parent.width - flickable.width - divider.width
+                color: "transparent"
 
-                QGCCheckBox {
-                    id: tempCheck
-                    text: "Temperature"
-                }
-                QGCCheckBox {
-                    id: humiCheck
-                    text: "Humidity"
-                }
-                QGCCheckBox {
-                    id: presCheck
-                    text: "Pressure"
-                }
-                QGCCheckBox {
-                    id: windDirCheck
-                    text: "WindDir"
-                }
-                QGCCheckBox {
-                    id: windSpdCheck
-                    text: "WindSpd"
-                }
+                ChartView{
+                    id: customChartView
+                    anchors.fill: parent
+                    antialiasing: true
+                    backgroundColor: "transparent"
+                    legend.labelColor: qgcPal.text
 
-                Item{
-                    height: ScreenTools.defaultFontPixelHeight
-                }
-
-                QGCLabel{
-                    text: "Interval(m)"
-                }
-
-                QGCTextField{
-                    id: intervalTextField
-                    placeholderText: qsTr("Alt Interval")
-                    implicitWidth: parent.width//ScreenTools.defaultFontPixelWidth * 8
-                }
-
-                QGCButton{
-                    text:"Set Interval"
-                    onClicked: {
-                        diffGapValue = intervalTextField.text
+                    ScatterSeries{
+                        id: seriesTemp
+                        name: "Temperature"
+                        visible: tempCheck.checked
+                        markerSize: _toolsMargin
+                        axisX: ValueAxis {
+                            visible: tempCheck.checked
+                            labelsColor: qgcPal.text
+                            min: tempMin
+                            max: tempMax
+                            labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                        }
+                        axisY: ValueAxis {
+                            labelsColor: qgcPal.text
+                            min: minAltitude
+                            max: maxAltitude
+                            labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                        }
                     }
-                }
-
-                QGCLabel{
-                    text: "Count : " + count
-                }
-
-                QGCLabel{
-                    text: "Interval : " + diffGapValue
-                }
-
-                QGCButton{
-                    text: "Clear"
-                    implicitWidth: parent.width
-                    onClicked:  {
-                        clearChart()
+                    ScatterSeries{
+                        id: seriesHumi
+                        name: "Humidity"
+                        visible: humiCheck.checked
+                        markerSize: _toolsMargin
+                        axisX: ValueAxis {
+                            visible: humiCheck.checked
+                            labelsColor: qgcPal.text
+                            min: humiMin
+                            max: humiMax
+                            labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                        }
+                    }
+                    ScatterSeries{
+                        id: seriesPress
+                        name: "Pressure"
+                        visible: presCheck.checked
+                        markerSize: _toolsMargin
+                        axisX: ValueAxis {
+                            visible: presCheck.checked
+                            labelsColor: qgcPal.text
+                            min: presMin
+                            max: presMax
+                            labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                        }
+                    }
+                    ScatterSeries{
+                        id: seriesWindDir
+                        name: "WindDir"
+                        visible: windDirCheck.checked
+                        markerSize: _toolsMargin
+                        axisX: ValueAxis {
+                            visible: windDirCheck.checked
+                            labelsColor: qgcPal.text
+                            min: 0
+                            max: 360
+                            labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                        }
+                    }
+                    ScatterSeries{
+                        id: seriesWindSpd
+                        name: "WindSpd"
+                        visible: windSpdCheck.checked
+                        markerSize: _toolsMargin
+                        axisX: ValueAxis {
+                            visible: windSpdCheck.checked
+                            labelsColor: qgcPal.text
+                            min: wnSpMin
+                            max: wnSpMax
+                            labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                        }
                     }
                 }
             }
-        }
 
-        Rectangle{
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: flickable.left
-            anchors.bottom: parent.bottom
-            color: "transparent"
+            Rectangle {
+                id : divider
+                height:             parent.height - (_toolsMargin * 2)
+                anchors.top:        parent.top
+                anchors.topMargin:  _toolsMargin
+                width:              1
+                color:              qgcPal.text
+            }
 
-            ChartView{
-                id: customChartView
-                anchors.fill: parent
-                antialiasing: true
-                backgroundColor: "transparent"
-                legend.labelColor: qgcPal.text
+            QGCFlickable {
+                id:                 flickable
+                anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
+                anchors.top:        parent.top
+                //anchors.right:      parent.right
+                width:              checkBoxRow.width + _toolsMargin * 2
+                height:             parent.height - ScreenTools.defaultFontPixelHeight * 0.4
+                contentHeight:      checkBoxRow.height
+                flickableDirection: Flickable.VerticalFlick
+                clip:               true
 
-                ScatterSeries{
-                    id: seriesTemp
-                    name: "Temperature"
-                    visible: tempCheck.checked
-                    markerSize: _toolsMargin
-                    axisX: ValueAxis {
-                        visible: tempCheck.checked
-                        labelsColor: qgcPal.text
-                        min: tempMin
-                        max: tempMax
-                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                ColumnLayout{
+                    id: checkBoxRow
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.rightMargin: _toolsMargin
+                    spacing: ScreenTools.defaultFontPixelHeight / 4
+
+                    QGCCheckBox {
+                        id: tempCheck
+                        text: "Temperature"
                     }
-                    axisY: ValueAxis {
-                        labelsColor: qgcPal.text
-                        min: minAltitude
-                        max: maxAltitude
-                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                    QGCCheckBox {
+                        id: humiCheck
+                        text: "Humidity"
                     }
-                }
-                ScatterSeries{
-                    id: seriesHumi
-                    name: "Humidity"
-                    visible: humiCheck.checked
-                    markerSize: _toolsMargin
-                    axisX: ValueAxis {
-                        visible: humiCheck.checked
-                        labelsColor: qgcPal.text
-                        min: humiMin
-                        max: humiMax
-                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                    QGCCheckBox {
+                        id: presCheck
+                        text: "Pressure"
                     }
-                }
-                ScatterSeries{
-                    id: seriesPress
-                    name: "Pressure"
-                    visible: presCheck.checked
-                    markerSize: _toolsMargin
-                    axisX: ValueAxis {
-                        visible: presCheck.checked
-                        labelsColor: qgcPal.text
-                        min: presMin
-                        max: presMax
-                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                    QGCCheckBox {
+                        id: windDirCheck
+                        text: "WindDir"
                     }
-                }
-                ScatterSeries{
-                    id: seriesWindDir
-                    name: "WindDir"
-                    visible: windDirCheck.checked
-                    markerSize: _toolsMargin
-                    axisX: ValueAxis {
-                        visible: windDirCheck.checked
-                        labelsColor: qgcPal.text
-                        min: 0
-                        max: 360
-                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+                    QGCCheckBox {
+                        id: windSpdCheck
+                        text: "WindSpd"
                     }
-                }
-                ScatterSeries{
-                    id: seriesWindSpd
-                    name: "WindSpd"
-                    visible: windSpdCheck.checked
-                    markerSize: _toolsMargin
-                    axisX: ValueAxis {
-                        visible: windSpdCheck.checked
-                        labelsColor: qgcPal.text
-                        min: wnSpMin
-                        max: wnSpMax
-                        labelsFont: Qt.font({pointSize: ScreenTools.defaultFontPointSize})
+
+                    Item{
+                        height: ScreenTools.defaultFontPixelHeight / 2
+                    }
+
+                    QGCLabel{
+                        text: "Interval(m)"
+                    }
+
+                    QGCTextField{
+                        id: intervalTextField
+                        placeholderText: qsTr("Alt Interval")
+                        implicitWidth: parent.width//ScreenTools.defaultFontPixelWidth * 8
+                    }
+
+                    QGCButton{
+                        text:"Set Interval"
+                        onClicked: {
+                            diffGapValue = intervalTextField.text
+                        }
+                    }
+
+                    QGCLabel{
+                        text: "Count : " + count
+                    }
+
+                    QGCLabel{
+                        text: "Interval : " + diffGapValue
+                    }
+
+                    Item{
+                        height: ScreenTools.defaultFontPixelHeight / 2
+                    }
+
+                    QGCButton{
+                        text: "Clear"
+                        implicitWidth: parent.width
+                        onClicked:  {
+                            clearChart()
+                        }
                     }
                 }
             }

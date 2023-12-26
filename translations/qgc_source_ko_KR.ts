@@ -6917,62 +6917,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="307"/>
         <source>Visibility : </source>
         <translation>시정 : </translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="349"/>
-        <source>FlyView Widget Settings</source>
-        <translation>위젯 설정</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="395"/>
-        <source>PhotoVideo Control</source>
-        <translation>영상캡처 제어</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="398"/>
-        <source>Telemetry Panel</source>
-        <translation>텔레메트리 패널</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="401"/>
-        <source>Chart Widget</source>
-        <translation>대기 상태 차트</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="404"/>
-        <source>Atmospheric Data</source>
-        <translation>대기 측정 정보</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="407"/>
-        <source>Weather Widget</source>
-        <translation>날씨 정보</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="410"/>
-        <source>Mission Progress Bar</source>
-        <translation>미션 진행 정보</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
-        <source>Mount Control Pad</source>
-        <translation>마운트 제어 패드</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
-        <source>Mount Widget</source>
-        <translation>마운트 위젯</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
-        <source>Winch Control</source>
-        <translation>윈치 제어</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="416"/>
-        <source>External Power Status</source>
-        <translation>외부 전원 상태</translation>
-    </message>
+    </message>    
     <message>
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="479"/>
         <source>Widget</source>
@@ -9997,6 +9942,76 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/MainToolBar.qml" line="134"/>
         <source>Link Management</source>
         <translation>연결 관리</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="391"/>
+        <source>FlyView Widget</source>
+        <translation>비행 화면 위젯</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="414"/>
+        <source>Payload</source>
+        <translation>페이로드 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="416"/>
+        <source>PhotoVideo Control</source>
+        <translation>영상캡처 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="422"/>
+        <source>Mount Control</source>
+        <translation>짐벌 마운트 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="428"/>
+        <source>Winch Control</source>
+        <translation>윈치 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="434"/>
+        <source>Chart Widget</source>
+        <translation>차트 위젯</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="440"/>
+        <source>Atmospheric Data</source>
+        <translation>대기 측정 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="450"/>
+        <source>Status</source>
+        <translation>상태 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="452"/>
+        <source>Mission Progress</source>
+        <translation>미션 진행 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="458"/>
+        <source>Telemetry Panel</source>
+        <translation>텔레메트리 패널</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="464"/>
+        <source>Vibration Status</source>
+        <translation>진동 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="470"/>
+        <source>EKF Status</source>
+        <translation>EKF 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="479"/>
+        <source>FlyView Settings</source>
+        <translation>비행화면 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="502"/>
+        <source>Background Opacity</source>
+        <translation>배경 투명도</translation>
     </message>
 </context>
 <context>

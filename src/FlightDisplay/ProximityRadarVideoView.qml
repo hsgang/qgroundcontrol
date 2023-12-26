@@ -30,6 +30,7 @@ Item {
     property real   _minRadius:    Math.min(_root.width,_root.height) / 4
     property real   _ratio:        (_minRadius / 2) / _root.range
     property real   _warningDistance: 10
+    property real   _maxRange:        50
 
     ProximityRadarValues {
         id:                     proximityValues
@@ -52,14 +53,16 @@ Item {
             ctx.rotate(-Math.PI/2 - Math.PI/8);
             for (var i=0; i<proximityValues.rgRotationValues.length; i++) {
                 var rotationValue = proximityValues.rgRotationValues[i]
-                if (rotationValue < _warningDistance) { ctx.strokeStyle = Qt.rgba(1, 0, 0, 1) }
-                else if (rotationValue >= _warningDistance) {ctx.strokeStyle = Qt.rgba(1, 1, 0, 1) }
-                if (rotationValue > range) { rotationValue = range; }
-                if (!isNaN(rotationValue)) {
-                    var a=Math.PI/4 * i;
-                    ctx.beginPath();
-                    ctx.arc(0, 0, _minRadius + (rotationValue * _ratio), 0 + a + Math.PI/50, Math.PI/4 + a - Math.PI/50, false);
-                    ctx.stroke();
+                if (rotationValue < _maxRange) {
+                    if (rotationValue < _warningDistance) { ctx.strokeStyle = Qt.rgba(1, 0, 0, 1) }
+                    else if (rotationValue >= _warningDistance) {ctx.strokeStyle = Qt.rgba(1, 1, 0, 1) }
+                    if (rotationValue > range) { rotationValue = range; }
+                    if (!isNaN(rotationValue)) {
+                        var a=Math.PI/4 * i;
+                        ctx.beginPath();
+                        ctx.arc(0, 0, _minRadius + (rotationValue * _ratio), 0 + a + Math.PI/50, Math.PI/4 + a - Math.PI/50, false);
+                        ctx.stroke();
+                    }
                 }
             }
         }

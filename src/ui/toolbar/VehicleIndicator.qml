@@ -165,7 +165,6 @@ Item {
 
                         ColumnLayout {
                             id:                 infoColumnLayout
-                            //Layout.fillWidth:   true
                             anchors.margins:    _margins / 2
                             anchors.top:        parent.top
                             anchors.left:       parent.left
@@ -353,21 +352,6 @@ Item {
                                 visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
                                 horizontalAlignment:    Text.AlignRight;
                             }
-
-                            // QGCLabel {
-                            //    Layout.fillWidth:       true
-                            //    text:                   qsTr("Precision Landing")
-                            //    visible:                precisionLandingCombo.visible
-                            // }
-
-                            // FactComboBox {
-                            //    id:                     precisionLandingCombo
-                            //    Layout.minimumWidth:    editFieldWidth
-                            //    fact:                   precisionLandingFact
-                            //    indexModel:             false
-                            //    sizeToContents:         true
-                            //    visible:                precisionLandingFact
-                            // }
 
                             FactCheckBoxSlider {
                                 Layout.fillWidth:   true

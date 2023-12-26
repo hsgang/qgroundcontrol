@@ -301,7 +301,7 @@ Item {
                     anchors.right:          parent.right
                     font.pointSize:         ScreenTools.smallFontPointSize
                     color:                  qgcPal.text
-                    text:                   _activeVehicle ? (_showCellVoltage ? _cellVoltage : battery.voltage.valueString + battery.voltage.units) : ""
+                    text:                   _activeVehicle ? (_showCellVoltage ? _cellVoltage : battery.voltage.value.toFixed(1) + battery.voltage.units) : ""
 
                     property string _cellVoltage: (battery.voltage.value / _batteryCellCount).toFixed(2) + battery.voltage.units
                 }

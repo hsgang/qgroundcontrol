@@ -18,6 +18,8 @@ import QGroundControl.Palette               1.0
 import QGroundControl.MultiVehicleManager   1.0
 import QGroundControl.ScreenTools           1.0
 import QGroundControl.Controllers           1.0
+import QGroundControl.FactSystem            1.0
+import QGroundControl.FactControls          1.0
 
 Rectangle {
     id:     _root
@@ -164,7 +166,7 @@ Rectangle {
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.33
         anchors.horizontalCenter: parent.horizontalCenter
-        color:                  qgcPal.windowShadeDark //"transparent"
+        color:                  qgcPal.windowShade //"transparent"
         border.color:           qgcPal.text
         radius:                 ScreenTools.defaultFontPixelHeight / 4
         visible:                currentToolbar == flyViewToolbar && _activeVehicle
@@ -175,6 +177,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             source:        "qrc:/qml/QGroundControl/Controls/FlightModeMenuIndicator.qml"
+            width:              parent.width
         }
     }
 
@@ -197,7 +200,7 @@ Rectangle {
         anchors.bottomMargin:   1
         anchors.left:           flightModeIndicatorRect.right
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
-        anchors.right:          linkManagerButton.visible ? linkManagerButton.left : parent.right
+        anchors.right:          linkManagerButton.visible ? linkManagerButton.left : widgetControlButton.left
         anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
         color:                  "transparent"
 
@@ -236,7 +239,7 @@ Rectangle {
 
     Rectangle{
         id:                     linkManagerButton
-        anchors.right:          parent.right
+        anchors.right:          widgetControlButton.left //parent.right
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
@@ -262,6 +265,37 @@ Rectangle {
         MouseArea{
             anchors.fill:       parent
             onClicked:          linkManagerDialogComponent.createObject(mainWindow).open()
+        }
+    }
+
+    Rectangle {
+        id:                     widgetControlButton
+        anchors.right:          parent.right
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
+        height:                 parent.height - ScreenTools.defaultFontPixelHeight
+        width:                  height
+        color:                  "transparent"
+        radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+        border.color:           qgcPal.text
+        border.width:           1
+        visible:                currentToolbar === flyViewToolbar
+
+        QGCColoredImage{
+            height:             parent.height * 0.7
+            width:              height
+            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
+            anchors.fill:       parent
+            source:             "/InstrumentValueIcons/navigation-more.svg"
+            sourceSize.height:  height
+            fillMode:           Image.PreserveAspectFit
+            color:              qgcPal.text
+        }
+
+        MouseArea{
+            anchors.fill:       parent
+            onClicked:          mainWindow.showIndicatorDrawer(widgetControlComponent)
         }
     }
 
@@ -334,6 +368,147 @@ Rectangle {
                             _currentSelection.linkChanged()
                         }
                     }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: widgetControlComponent
+
+        ToolIndicatorPage{
+            showExpand: false
+
+            property real _margins: ScreenTools.defaultFontPixelHeight / 2
+
+            contentComponent: Component {
+                ColumnLayout {
+                    Layout.preferredWidth:  parent.width
+                    Layout.alignment:       Qt.AlignTop
+                    spacing:                _margins
+
+                    QGCLabel {
+                        text:                   qsTr("FlyView Widget")
+                        font.family:            ScreenTools.demiboldFontFamily
+                        Layout.fillWidth:       true
+                        horizontalAlignment:    Text.AlignHCenter
+                    }
+
+                    Rectangle {
+                        Layout.preferredHeight: widgetGridLayout.height + _margins
+                        Layout.preferredWidth:  widgetGridLayout.width + _margins
+                        color:                  qgcPal.windowShade
+                        radius:                 _margins / 4
+                        Layout.fillWidth:       true
+
+                        GridLayout {
+                            id:                 widgetGridLayout
+                            flow:               GridLayout.LeftToRight
+                            columns:            2
+                            rowSpacing:         _margins
+                            anchors.margins:    _margins / 2
+                            anchors.top:        parent.top
+                            anchors.left:       parent.left
+                            anchors.right:      parent.right
+
+                            QGCLabel{ text: qsTr("Payload"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
+
+                            QGCLabel{ text: qsTr("PhotoVideo Control") }
+                            QGCSwitch {
+                                checked:            QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue === true ? 1 : 0
+                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue = checked ? 1 : 0
+                            }
+
+                            QGCLabel{ text: qsTr("Mount Control") }
+                            QGCSwitch {
+                                checked:            QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue === true ? 1 : 0
+                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
+                            }
+
+                            QGCLabel{ text: qsTr("Winch Control") }
+                            QGCSwitch {
+                                checked:            QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue === true ? 1 : 0
+                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue = checked ? 1 : 0
+                            }
+
+                            QGCLabel{ text: qsTr("Chart Widget") }
+                            QGCSwitch {
+                                checked:            QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue === true ? 1 : 0
+                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue = checked ? 1 : 0
+                            }
+
+                            QGCLabel{ text: qsTr("Atmospheric Data") }
+                            QGCSwitch {
+                                checked:            QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue === true ? 1 : 0
+                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue = checked ? 1 : 0
+                            }
+
+                            Item{
+                                height: _margins / 2
+                            }
+
+                            QGCLabel{ text: qsTr("Status"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
+
+                            QGCLabel{ text: qsTr("Mission Progress") }
+                            QGCSwitch {
+                                checked:            QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue === true ? 1 : 0
+                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue = checked ? 1 : 0
+                            }
+
+                            QGCLabel{ text: qsTr("Telemetry Panel") }
+                            QGCSwitch {
+                                checked:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue === true ? 1 : 0
+                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue = checked ? 1 : 0
+                            }
+
+                            QGCLabel{ text: qsTr("Vibration Status") }
+                            QGCSwitch {
+                                checked:            QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue === true ? 1 : 0
+                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue = checked ? 1 : 0
+                            }
+
+                            QGCLabel{ text: qsTr("EKF Status") }
+                            QGCSwitch {
+                                checked:            QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue === true ? 1 : 0
+                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue = checked ? 1 : 0
+                            }
+                        }
+                    }
+
+                    QGCLabel {
+                        text:                   qsTr("FlyView Settings")
+                        font.family:            ScreenTools.demiboldFontFamily
+                        Layout.fillWidth:       true
+                        horizontalAlignment:    Text.AlignHCenter
+                    }
+
+                    Rectangle {
+                        Layout.preferredHeight: settingsLayout.height + _margins
+                        Layout.preferredWidth:  settingsLayout.width + _margins
+                        color:                  qgcPal.windowShade
+                        radius:                 _margins / 4
+                        Layout.fillWidth:       true
+
+                        GridLayout {
+                            id:                 settingsLayout
+                            flow:               GridLayout.LeftToRight
+                            columns:            2
+                            rowSpacing:         _margins
+                            anchors.margins:    _margins / 2
+                            anchors.top:        parent.top
+                            anchors.left:       parent.left
+                            anchors.right:      parent.right
+
+                            QGCLabel{ text: qsTr("Background Opacity"); Layout.columnSpan: 2; Layout.alignment: Qt.AlignHCenter }
+                            FactComboBox {
+                                Layout.columnSpan:  2
+                                Layout.fillWidth:   true
+                                fact:               QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
+                                indexModel:         false
+                            }
+                        }
+                    }
+
                 }
             }
         }

@@ -1386,58 +1386,58 @@ Rectangle {
                         }
                     }
 
-                    Item { width: 1; height: _margins; visible: _openWeatherFact ? _openWeatherFact.visible : false }
+//                     Item { width: 1; height: _margins; visible: _openWeatherFact ? _openWeatherFact.visible : false }
                     
-                    QGCLabel {
-                        id:         openWeatherLabel
-                        text:       qsTr("OpenWeather API Key")
-                        visible:    _openWeatherFact.visible
-                    }
-                    Rectangle {
-                        Layout.preferredHeight: openWeatherViewCol.height + (_margins * 2)
-                        Layout.preferredWidth:  openWeatherViewCol.width + (_margins * 2)
-                        color:                  qgcPal.window
-                        border.color:           qgcPal.windowShade
-                        border.width:           _borderWidth
-                        radius:                 _margins
-                        visible:                openWeatherLabel.visible
-                        Layout.fillWidth:       true
+//                     QGCLabel {
+//                         id:         openWeatherLabel
+//                         text:       qsTr("OpenWeather API Key")
+//                         visible:    _openWeatherFact.visible
+//                     }
+//                     Rectangle {
+//                         Layout.preferredHeight: openWeatherViewCol.height + (_margins * 2)
+//                         Layout.preferredWidth:  openWeatherViewCol.width + (_margins * 2)
+//                         color:                  qgcPal.window
+//                         border.color:           qgcPal.windowShade
+//                         border.width:           _borderWidth
+//                         radius:                 _margins
+//                         visible:                openWeatherLabel.visible
+//                         Layout.fillWidth:       true
 
-                        ColumnLayout {
-                            id:                         openWeatherViewCol
-                            anchors.margins:            _margins
-                            anchors.top:                parent.top
-                            anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:                    _margins * 2
+//                         ColumnLayout {
+//                             id:                         openWeatherViewCol
+//                             anchors.margins:            _margins
+//                             anchors.top:                parent.top
+//                             anchors.horizontalCenter:   parent.horizontalCenter
+//                             spacing:                    _margins * 2
 
-                            GridLayout {
-                                columns:            2
-                                columnSpacing:      ScreenTools.defaultFontPixelWidth
-                                visible:           _openWeatherFact ? _openWeatherFact.visible : false
+//                             GridLayout {
+//                                 columns:            2
+//                                 columnSpacing:      ScreenTools.defaultFontPixelWidth
+//                                 visible:           _openWeatherFact ? _openWeatherFact.visible : false
 
-//                                FactCheckBox {
-//                                    text:       qsTr("Enable OpenWeatherMap API")
-//                                    fact:       _enableOpenWeatherAPI
-//                                    Layout.columnSpan:      2
+// //                                FactCheckBox {
+// //                                    text:       qsTr("Enable OpenWeatherMap API")
+// //                                    fact:       _enableOpenWeatherAPI
+// //                                    Layout.columnSpan:      2
 
-//                                    property Fact _enableOpenWeatherAPI : QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
-//                                }
-                                FactCheckBoxSlider {
-                                    Layout.fillWidth:   true
-                                    Layout.columnSpan:      2
-                                    text:               qsTr("Enable OpenWeatherMap API")
-                                    fact:               QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
-                                    visible:            fact.visible
-                                }
+// //                                    property Fact _enableOpenWeatherAPI : QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
+// //                                }
+//                                 FactCheckBoxSlider {
+//                                     Layout.fillWidth:   true
+//                                     Layout.columnSpan:      2
+//                                     text:               qsTr("Enable OpenWeatherMap API")
+//                                     fact:               QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
+//                                     visible:            fact.visible
+//                                 }
 
-                                QGCLabel { text: qsTr("Enter OpenWeather API Key") }
-                                FactTextField {
-                                    Layout.preferredWidth:  _valueFieldWidth * 3
-                                    fact:                   _openWeatherFact
-                                }
-                            }
-                        }
-                    }
+//                                 QGCLabel { text: qsTr("Enter OpenWeather API Key") }
+//                                 FactTextField {
+//                                     Layout.preferredWidth:  _valueFieldWidth * 3
+//                                     fact:                   _openWeatherFact
+//                                 }
+//                             }
+//                         }
+//                     }
 
                     Item { width: 1; height: _margins; visible: _openWeatherFact ? _openWeatherFact.visible : false }
 

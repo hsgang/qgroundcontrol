@@ -115,6 +115,62 @@
     "longDesc":  "File that defines custom actions to send connected vehicle",
     "type":         "string",
     "default":      ""
+},
+{
+    "name":         "showPhotoVideoControl",
+    "shortDesc": "showPhotoVideoControl",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":         "showMountControl",
+    "shortDesc": "showMountControl",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":         "showWinchControl",
+    "shortDesc": "showWinchControl",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":         "showChartWidget",
+    "shortDesc": "showChartWidget",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":         "showMissionProgress",
+    "shortDesc": "showMissionProgress",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":         "showTelemetryPanel",
+    "shortDesc": "showTelemetryPanel",
+    "type":         "bool",
+    "default":      true
+},
+{
+    "name":         "showVibrationStatus",
+    "shortDesc": "showVibrationStatus",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":         "showEKFStatus",
+    "shortDesc": "showEKFStatus",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":             "flyviewWidgetOpacity",
+    "shortDesc": "flyviewWidgetOpacity",
+    "type":             "double",
+    "enumStrings":      "Transparent,Lighten,Normal,Darken,Opaque",
+    "enumValues":       "0,0.3,0.5,0.7,1",
+    "default":          0.7
 }
 ]
 }
