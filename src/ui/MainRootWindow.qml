@@ -144,7 +144,7 @@ ApplicationWindow {
     }
 
     function showPlanView() {
-        stackView.push(planViewComponenent)
+        stackView.push(planViewComponent)
     }
 
     function popView() {
@@ -297,16 +297,16 @@ ApplicationWindow {
         visible: QGroundControl.settingsManager.flyViewSettings.showLogReplayStatusBar.rawValue
     }
 
-    function showToolSelectDialog() {
-        if (!mainWindow.preventViewSwitch()) {
-            mainWindow.showIndicatorDrawer(toolSelectComponent, null)
-        }
-    }
+//    function showToolSelectDialog() {
+//        if (!mainWindow.preventViewSwitch()) {
+//            mainWindow.showIndicatorDrawer(toolSelectComponent, null)
+//        }
+//    }
 
     Drawer {
         id:             viewSelectDrawer
-        y:              header.height
-        height:         mainWindow.height - header.height
+        y:              stackView.height
+        height:         mainWindow.height - stackView.height
         width:          mainLayoutRect.width
         edge:           Qt.LeftEdge
         interactive:    true
@@ -547,8 +547,8 @@ ApplicationWindow {
 
     Drawer {
         id:             componentDrawer
-        y:              header.height
-        height:         mainWindow.height - header.height
+        y:              stackView.height
+        height:         mainWindow.height - stackView.height
         width:          componentDrawerLayoutRect.width
         edge:           Qt.RightEdge
         interactive:    true
@@ -648,8 +648,12 @@ ApplicationWindow {
         }
     }
 
-    PlanView {
-        id: planView
+    Component {
+        id: planViewComponent
+
+        PlanView {
+            id: planView
+        }
     }
 
     AnalyzeView{

@@ -46,12 +46,28 @@ Rectangle {
         anchors.bottom:         parent.bottom
         spacing:                ScreenTools.defaultFontPixelWidth / 2
 
-        QGCToolBarButton {
+        Rectangle {
             id:                     currentButton
-            Layout.preferredHeight: viewButtonRow.height
-            icon.source:            "/res/QGCLogoFull"
-            logo:                   true
-            onClicked:              mainWindow.showToolSelectDialog()
+            Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
+            height:                 viewButtonRow.height * 0.8
+            width:                  height
+            color:                  "transparent"
+            border.color:           qgcPal.text
+            radius:                 ScreenTools.defaultFontPixelHeight / 4
+
+            QGCToolBarButton {
+                anchors.centerIn:       parent
+                //Layout.preferredHeight: currentButton.height
+                icon.source:            "/qmlimages/Hamburger.svg"
+                logo:                   true
+                onClicked:
+                    if(viewSelectDrawer.visible === false){
+                        viewSelectDrawer.visible = true
+                    }
+                    else if(viewSelectDrawer.visible === true){
+                        viewSelectDrawer.visible = false
+                    }
+            }
         }
     }
 

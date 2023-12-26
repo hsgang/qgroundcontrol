@@ -78,15 +78,14 @@ Item {
         visible:    !QGroundControl.videoManager.fullScreen
     }
 
-
-    FlyViewCustomLayer {
-        id:                 customOverlay
-        anchors.fill:       widgetLayer
-        z:                  _fullItemZorder + 2
-        parentToolInsets:   widgetLayer.totalToolInsets
-        mapControl:         _mapControl
-        visible:            !QGroundControl.videoManager.fullScreen
-    }
+//    FlyViewCustomLayer {
+//        id:                 customOverlay
+//        anchors.fill:       widgetLayer
+//        z:                  _fullItemZorder + 2
+//        parentToolInsets:   widgetLayer.totalToolInsets
+//        mapControl:         _mapControl
+//        visible:            !QGroundControl.videoManager.fullScreen
+//    }
 
     // Development tool for visualizing the insets for a paticular layer, enable if needed
     /*
@@ -102,12 +101,12 @@ Item {
         insetsToView:           customOverlay.totalToolInsets
     }*/
 
-    GuidedActionsController {
-        id:                 guidedActionsController
-        missionController:  _missionController
-        actionList:         _guidedActionList
-        guidedValueSlider:     _guidedValueSlider
-    }
+//    GuidedActionsController {
+//        id:                 guidedActionsController
+//        missionController:  _missionController
+//        actionList:         _guidedActionList
+//        guidedValueSlider:     _guidedValueSlider
+//    }
 
     /*GuidedActionConfirm {
         id:                         guidedActionConfirm
@@ -119,21 +118,23 @@ Item {
         guidedValueSlider:             _guidedValueSlider
     }*/
 
-    GuidedActionList {
-        id:                         guidedActionList
-        anchors.margins:            _margins
-        anchors.verticalCenter:     parent.verticalCenter
-        anchors.horizontalCenter:   parent.horizontalCenter
-        z:                          QGroundControl.zOrderTopMost
-        guidedController:           _guidedController
-    }
+//    GuidedActionList {
+//        id:                         guidedActionList
+//        anchors.margins:            _margins
+//        anchors.verticalCenter:     parent.verticalCenter
+//        anchors.horizontalCenter:   parent.horizontalCenter
+//        z:                          QGroundControl.zOrderTopMost
+//        guidedController:           _guidedController
+//    }
 
-    //-- Guided value slider (e.g. altitude)
-    GuidedValueSlider {
-        id:                 guidedValueSlider
-        anchors.margins:    _toolsMargin
-        anchors.right:      parent.right
-        anchors.top:        parent.top
+//    //-- Guided value slider (e.g. altitude)
+//    GuidedValueSlider {
+//        id:                 guidedValueSlider
+//        anchors.margins:    _toolsMargin
+//        anchors.right:      parent.right
+//        anchors.top:        parent.top
+//    }
+
     Item {
         id:                 mapHolder
         anchors.top:        toolbar.bottom
