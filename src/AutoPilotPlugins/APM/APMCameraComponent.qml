@@ -539,7 +539,7 @@ SetupPage {
                 anchors.top:        gimbalOutModel.bottom
                 width:              gimbalControlSettingsColumn.width + _margins * 3
                 height:             ScreenTools.defaultFontPixelHeight * 40
-                color:              palette.windowShade
+                color:              qgcPal.windowShade
 
                 property var _margins: ScreenTools.defaultFontPixelWidth * 2
 

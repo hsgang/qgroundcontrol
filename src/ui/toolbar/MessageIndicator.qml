@@ -82,13 +82,10 @@ Item {
     }
 
     Component {
-        id: drawerComponent
+        id: vehicleMessagesPopup
 
         ToolIndicatorPage {
             showExpand:         false
-            contentComponent:   messageContentComponent
-        }
-    }
 
             function formatMessage(message) {
                 message = message.replace(new RegExp("<#E>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0)) + "pt monospace;");
@@ -157,50 +154,4 @@ Item {
             }
         }
     }
-
-    /*
-    FIXME-NEXTGEN: Reimplement this
-    FactPanelController {
-        id: controller
-    }
-
-    QGCFlickable {
-        id:                 messageFlick
-        anchors.margins:    ScreenTools.defaultFontPixelHeight
-        anchors.fill:       parent
-        contentHeight:      messageText.height
-        contentWidth:       messageText.width
-        pixelAligned:       true
-
-        TextEdit {
-            id:                 messageText
-            readOnly:           true
-            textFormat:         TextEdit.RichText
-            selectByMouse:      true
-            color:              qgcPal.text
-            selectionColor:     qgcPal.text
-            selectedTextColor:  qgcPal.window
-            onLinkActivated: {
-                if (link.startsWith('param://')) {
-                    var paramName = link.substr(8);
-                    fact = controller.getParameterFact(-1, paramName, true)
-                    if (fact != null) {
-                        paramEditorDialogComponent.createObject(mainWindow).open()
-                    }
-                } else {
-                    Qt.openUrlExternally(link);
-                }
-            }
-        }
-        Component {
-            id: paramEditorDialogComponent
-
-            ParameterEditorDialog {
-                title:          qsTr("Edit Parameter")
-                fact:           messageText.fact
-                destroyOnClose: true
-            }
-        }
-    }
-    */
 }

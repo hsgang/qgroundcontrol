@@ -202,7 +202,7 @@ Item {
 
         Connections{
             target: _activeVehicle
-            onFlightModeChanged: {
+            onFlightModeChanged: (flightMode)=> {
                 //console.log(flightMode)
                 if(flightMode === _activeVehicle.missionFlightMode){
                     flyviewMissionProgress.visible = true

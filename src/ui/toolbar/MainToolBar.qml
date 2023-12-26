@@ -304,7 +304,7 @@ Rectangle {
 
         QGCPopupDialog {
             title :     qsTr("Link Management")
-            buttons:    StandardButton.Close
+            buttons:    Dialog.Close
 
             Rectangle {
                 id: _linkRoot

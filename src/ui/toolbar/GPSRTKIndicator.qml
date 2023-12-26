@@ -116,7 +116,7 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked:      mainWindow.showIndicatorDrawer(gpsIndicatorPage, control)
+        onClicked:      mainWindow.showIndicatorDrawer(gpsIndicatorPage)
     }
 
     Component {

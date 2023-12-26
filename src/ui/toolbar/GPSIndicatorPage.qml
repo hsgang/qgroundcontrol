@@ -168,7 +168,7 @@ ToolIndicatorPage {
 
             GridLayout {
                 Layout.fillWidth:   true
-                columnSpacing:      margins
+                columnSpacing:      _margins
                 columns:            2
                 visible:            QGroundControl.gpsRtk.connected.value
 
@@ -286,26 +286,19 @@ ToolIndicatorPage {
                     Layout.fillWidth:   true;
                     text:               qsTr("Current Base Position")
                     enabled:            saveBasePositionButton.enabled
-                }
+                }              
 
-                Item { width: rtkGrid.firstColWidth; height: 1 }
-                QGCLabel {
-                    text:       rtkGrid.rtkSettings.surveyInAccuracyLimit.shortDescription
-                    visible:    rtkGrid.rtkSettings.surveyInAccuracyLimit.visible
-                    enabled:    !rtkGrid.useFixedPosition
-                }
-                FactTextField {
-                    Layout.preferredWidth:  editFieldWidth
-                    fact:                   rtkGrid.rtkSettings.surveyInAccuracyLimit
-                    visible:                rtkGrid.rtkSettings.surveyInAccuracyLimit.visible
-                    enabled:                !rtkGrid.useFixedPosition
-                }
+                QGCButton {
+                    id:                 saveBasePositionButton
+                    text:               enabled ? qsTr("Save") : qsTr("Not Yet Valid")
+                    enabled:            QGroundControl.gpsRtk.valid.value
 
-                onClicked: {
-                    rtkSettings.fixedBasePositionLatitude.rawValue  = QGroundControl.gpsRtk.currentLatitude.rawValue
-                    rtkSettings.fixedBasePositionLongitude.rawValue = QGroundControl.gpsRtk.currentLongitude.rawValue
-                    rtkSettings.fixedBasePositionAltitude.rawValue  = QGroundControl.gpsRtk.currentAltitude.rawValue
-                    rtkSettings.fixedBasePositionAccuracy.rawValue  = QGroundControl.gpsRtk.currentAccuracy.rawValue
+                    onClicked: {
+                        rtkSettings.fixedBasePositionLatitude.rawValue  = QGroundControl.gpsRtk.currentLatitude.rawValue
+                        rtkSettings.fixedBasePositionLongitude.rawValue = QGroundControl.gpsRtk.currentLongitude.rawValue
+                        rtkSettings.fixedBasePositionAltitude.rawValue  = QGroundControl.gpsRtk.currentAltitude.rawValue
+                        rtkSettings.fixedBasePositionAccuracy.rawValue  = QGroundControl.gpsRtk.currentAccuracy.rawValue
+                    }
                 }
             }
         }

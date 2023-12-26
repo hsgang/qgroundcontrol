@@ -58,8 +58,8 @@ ColumnLayout {
             model: _activeVehicle ? _activeVehicle.batteries : 0
 
             Rectangle {
-                Layout.preferredHeight: batteryColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
-                Layout.preferredWidth:  batteryColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                Layout.preferredHeight: batteryColumnLayout.height + _margins
+                Layout.preferredWidth:  batteryColumnLayout.width + _margins
                 color:                  qgcPal.windowShade
                 radius:                 _margins / 2
                 Layout.fillWidth:       true
@@ -80,19 +80,6 @@ ColumnLayout {
                     anchors.left:       parent.left
                     anchors.right:      parent.right
                     spacing:            _margins
-
-                // ColumnLayout {
-                //     spacing: ScreenTools.defaultFontPixelHeight / 2
-                //     Layout.fillWidth: true
-
-                    // property var batteryValuesAvailable: nameAvailableLoader.item
-
-                    // Loader {
-                    //     id:                 nameAvailableLoader
-                    //     sourceComponent:    batteryValuesAvailableComponent
-
-                    //     property var battery: object
-                    // }
 
                     ComponentLabelValueRow {
                         labelText:  qsTr("Battery ID")
@@ -140,8 +127,8 @@ ColumnLayout {
                         valueText:  object.function.enumStringValue
                         visible:    batteryValuesAvailable.functionAvailable
                     }
-                }
-            }
-        } // columnlayout
+                } //columnlayout
+            } // rectangle
+        } // repeater
     }
 }
