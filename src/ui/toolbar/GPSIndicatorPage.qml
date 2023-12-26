@@ -127,10 +127,10 @@ ToolIndicatorPage {
                     visible:    accuracyLabel.visible
                 }
             }
-//        }
+        }
     }
 
-    expandedItem: IndicatorPageGroupLayout {
+    expandedComponent: IndicatorPageGroupLayout {
         heading:        qsTr("RTK GPS Settings")
         showDivider:    false
 

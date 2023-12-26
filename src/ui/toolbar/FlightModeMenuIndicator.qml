@@ -132,10 +132,10 @@ RowLayout {
             }
 
             // Mode list
-            contentItem: FlightModeToolIndicatorContentItem { }
+            contentComponent: FlightModeToolIndicatorContentItem { }
 
             // Settings
-            expandedItem: ColumnLayout{
+            expandedComponent: ColumnLayout{
                 Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 50
                 spacing:                margins / 2
 

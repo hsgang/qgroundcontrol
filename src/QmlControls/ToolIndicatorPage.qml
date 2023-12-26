@@ -35,6 +35,7 @@ RowLayout {
 
     property real _margins:     ScreenTools.defaultFontPixelHeight
     property bool _loadPages:   !waitForParameters || parametersReady
+    property real dividerHeight
 
     QGCLabel {
         text:       qsTr("Waiting for parameters...")
@@ -52,7 +53,7 @@ RowLayout {
     Rectangle {
         id:                     divider
         Layout.preferredWidth:  visible ? 1 : -1
-        Layout.fillHeight:      true
+        height:                 dividerHeight
         color:                  QGroundControl.globalPalette.text
         visible:                expanded
     }

@@ -43,7 +43,7 @@ Item {
 
             property real _margins: ScreenTools.defaultFontPixelHeight
 
-            contentItem: ColumnLayout {
+            contentComponent: ColumnLayout {
                 Layout.preferredWidth:  parent.width
                 spacing:                ScreenTools.defaultFontPixelHeight * 0.5
 
