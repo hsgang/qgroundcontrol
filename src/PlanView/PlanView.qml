@@ -34,7 +34,7 @@ Item {
     readonly property real  _margin:                    ScreenTools.defaultFontPixelHeight * 0.5
     readonly property real  _toolsMargin:               ScreenTools.defaultFontPixelWidth * 0.75
     readonly property real  _radius:                    ScreenTools.defaultFontPixelWidth  * 0.5
-    readonly property real  _rightPanelWidth:           Math.min(parent.width / 3, ScreenTools.defaultFontPixelWidth * 30)
+    readonly property real  _rightPanelWidth:           Math.min(width / 3, ScreenTools.defaultFontPixelWidth * 30)
     readonly property var   _defaultVehicleCoordinate:  QtPositioning.coordinate(37.803784, -122.462276)
     readonly property bool  _waypointsOnlyMode:         QGroundControl.corePlugin.options.missionWaypointsOnly
 
@@ -317,9 +317,16 @@ Item {
         }
     }
 
+    PlanViewToolBar {
+        id: planToolBar
+    }
+
     Item {
         id:             panel
-        anchors.fill:   parent
+        anchors.left:   parent.left
+        anchors.right:  parent.right
+        anchors.top:    planToolBar.bottom
+        anchors.bottom: parent.bottom
 
         FlightMap {
             id:                         editorMap
@@ -351,32 +358,29 @@ Item {
                 QGroundControl.flightMapPosition = editorMap.center
             }
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: (mouse) => {
-                    // Take focus to close any previous editing
-                    editorMap.focus = true
-                    var coordinate = editorMap.toCoordinate(Qt.point(mouse.x, mouse.y), false /* clipToViewPort */)
-                    coordinate.latitude = coordinate.latitude.toFixed(_decimalPlaces)
-                    coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
-                    coordinate.altitude = coordinate.altitude.toFixed(_decimalPlaces)
+            onMapClicked: (mouse) => {
+                // Take focus to close any previous editing
+                editorMap.focus = true
+                var coordinate = editorMap.toCoordinate(Qt.point(mouse.x, mouse.y), false /* clipToViewPort */)
+                coordinate.latitude = coordinate.latitude.toFixed(_decimalPlaces)
+                coordinate.longitude = coordinate.longitude.toFixed(_decimalPlaces)
+                coordinate.altitude = coordinate.altitude.toFixed(_decimalPlaces)
 
-                    switch (_editingLayer) {
-                    case _layerMission:
-                        if (addWaypointRallyPointAction.checked) {
-                            insertSimpleItemAfterCurrent(coordinate)
-                        } else if (_addROIOnClick) {
-                            insertROIAfterCurrent(coordinate)
-                            _addROIOnClick = false
-                        }
-
-                        break
-                    case _layerRallyPoints:
-                        if (_rallyPointController.supported && addWaypointRallyPointAction.checked) {
-                            _rallyPointController.addPoint(coordinate)
-                        }
-                        break
+                switch (_editingLayer) {
+                case _layerMission:
+                    if (addWaypointRallyPointAction.checked) {
+                        insertSimpleItemAfterCurrent(coordinate)
+                    } else if (_addROIOnClick) {
+                        insertROIAfterCurrent(coordinate)
+                        _addROIOnClick = false
                     }
+
+                    break
+                case _layerRallyPoints:
+                    if (_rallyPointController.supported && addWaypointRallyPointAction.checked) {
+                        _rallyPointController.addPoint(coordinate)
+                    }
+                    break
                 }
             }
 
@@ -385,10 +389,11 @@ Item {
                 model: _missionController.visualItems
                 delegate: MissionItemMapVisual {
                     map:         editorMap
-                    onClicked:   function(sequenceNumber) { _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) }
                     opacity:     _editingLayer == _layerMission ? 1 : editorMap._nonInteractiveOpacity
                     interactive: _editingLayer == _layerMission
                     vehicle:     _planMasterController.controllerVehicle
+
+                    onClicked:(sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(sequenceNumber, false) }
                 }
             }
 
@@ -677,7 +682,7 @@ Item {
                         missionItem:    object
                         width:          missionItemEditorListView.width
                         readOnly:       false
-                        onClicked:      _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false)
+                        onClicked: (sequenceNumber) => { _missionController.setCurrentPlanViewSeqNum(object.sequenceNumber, false) }
                         onRemove: {
                             var removeVIIndex = index
                             _missionController.removeVisualItem(removeVIIndex)

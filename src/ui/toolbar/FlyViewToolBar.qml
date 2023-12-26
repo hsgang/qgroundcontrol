@@ -23,13 +23,9 @@ import QGroundControl.FactControls
 
 Rectangle {
     id:     _root
-    color:  qgcPal.window //toolbarBackground
-
-    property int currentToolbar: flyViewToolbar
-
-    readonly property int flyViewToolbar:   0
-    readonly property int planViewToolbar:  1
-    readonly property int simpleToolbar:    2
+    width:  parent.width
+    height: ScreenTools.toolbarHeight
+    color:  qgcPal.toolbarBackground
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
@@ -56,9 +52,8 @@ Rectangle {
     }
 
     Rectangle {
-        anchors.fill:   viewButtonRow
-        visible:        currentToolbar === flyViewToolbar
-
+        anchors.fill: viewButtonRow
+        
         gradient: Gradient {
             orientation: Gradient.Horizontal
             GradientStop { position: 0;                                     color: _mainStatusBGColor }
@@ -100,14 +95,13 @@ Rectangle {
 
         MainStatusIndicator {
             Layout.preferredHeight: viewButtonRow.height
-            visible:                currentToolbar === flyViewToolbar
         }
 
         QGCButton {
             id:                 disconnectButton
             text:               qsTr("Disconnect")
             onClicked:          _activeVehicle.closeVehicle()
-            visible:            _activeVehicle && _communicationLost && currentToolbar === flyViewToolbar
+            visible:            _activeVehicle && _communicationLost
         }
     }
 

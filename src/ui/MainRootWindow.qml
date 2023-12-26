@@ -41,13 +41,6 @@ ApplicationWindow {
         firstRunPromptManager.nextPrompt()
     }
 
-    Rectangle {
-        width: 500
-        height: 500
-        anchors.left: parent.left
-        color: "red"
-    }
-
     QtObject {
         id: firstRunPromptManager
 
@@ -151,8 +144,11 @@ ApplicationWindow {
     }
 
     function showPlanView() {
-        viewSwitch(toolbar.planViewToolbar)
-        planView.visible = true
+        stackView.push(planViewComponenent)
+    }
+
+    function popView() {
+        stackView.pop()
     }
 
     function showAnalyzeTool() {
@@ -285,19 +281,16 @@ ApplicationWindow {
         }
     }
 
-    //-------------------------------------------------------------------------
-    /// Main, full window background (Fly View)
-    background: Item {
-        id:             rootBackground
+    background: Rectangle {
         anchors.fill:   parent
+        color:          QGroundControl.globalPalette.window
     }
 
-    //-------------------------------------------------------------------------
-    /// Toolbar
-    header: MainToolBar {
-        id:         toolbar
-        height:     ScreenTools.toolbarHeight
-        visible:    !(QGroundControl.videoManager.fullScreen && flightView.visible)
+    StackView {
+        id:             stackView
+        anchors.fill:   parent
+
+        initialItem: FlyView { id: flightView }
     }
 
     footer: LogReplayStatusBar {
@@ -655,15 +648,8 @@ ApplicationWindow {
         }
     }
 
-    FlyView {
-        id:             flightView
-        anchors.fill:   parent
-    }
-
     PlanView {
-        id:             planView
-        anchors.fill:   parent
-        visible:        false
+        id: planView
     }
 
     AnalyzeView{
@@ -790,7 +776,7 @@ ApplicationWindow {
                 if (criticalVehicleMessagePopup.dropMessageIndicatorOnClose) {
                     criticalVehicleMessagePopup.dropMessageIndicatorOnClose = false;
                     QGroundControl.multiVehicleManager.activeVehicle.resetErrorLevelMessages();
-                    toolbar.dropMessageIndicatorTool();
+                    flyView.toolbar.dropMessageIndicatorTool();
                 }
             }
         }
@@ -856,7 +842,7 @@ ApplicationWindow {
     Popup {
         id:             indicatorDrawer
         x:              calcXPosition()
-        y:              _margins
+        y:              ScreenTools.toolbarHeight + _margins
         leftInset:      0
         rightInset:     0
         topInset:       0
