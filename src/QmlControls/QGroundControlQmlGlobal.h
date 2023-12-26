@@ -21,16 +21,6 @@
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
 #endif
-#if defined(QGC_GST_TAISYNC_ENABLED)
-#include "TaisyncManager.h"
-#else
-class TaisyncManager;
-#endif
-#if defined(QGC_GST_MICROHARD_ENABLED)
-#include "MicrohardManager.h"
-#else
-class MicrohardManager;
-#endif
 
 #ifdef QT_DEBUG
 #include "MockLink.h"
@@ -39,20 +29,15 @@ class MicrohardManager;
 class QGCToolbox;
 class LinkManager;
 
-#ifndef OPAQUE_PTR_QGFroundControlQmlGlobal
-    #define OPAQUE_PTR_QGFroundControlQmlGlobal
-    Q_DECLARE_OPAQUE_POINTER(LinkManager*)
-    Q_DECLARE_OPAQUE_POINTER(QGCMapEngineManager*)
-    Q_DECLARE_OPAQUE_POINTER(QGCPositionManager*)
-    Q_DECLARE_OPAQUE_POINTER(VideoManager*)
-    Q_DECLARE_OPAQUE_POINTER(MAVLinkLogManager*)
-    Q_DECLARE_OPAQUE_POINTER(SettingsManager*)
-    Q_DECLARE_OPAQUE_POINTER(QGCCorePlugin*)
-    Q_DECLARE_OPAQUE_POINTER(MissionCommandTree*)
-    Q_DECLARE_OPAQUE_POINTER(TaisyncManager*)
-    Q_DECLARE_OPAQUE_POINTER(MicrohardManager*)
-    Q_DECLARE_OPAQUE_POINTER(NTRIP*)
-#endif
+Q_MOC_INCLUDE("LinkManager.h")
+Q_MOC_INCLUDE("QGCMapEngineManager.h")
+Q_MOC_INCLUDE("PositionManager.h")
+Q_MOC_INCLUDE("VideoManager.h")
+Q_MOC_INCLUDE("MAVLinkLogManager.h")
+Q_MOC_INCLUDE("SettingsManager.h")
+Q_MOC_INCLUDE("QGCCorePlugin.h")
+Q_MOC_INCLUDE("MissionCommandTree.h")
+Q_MOC_INCLUDE("NTRIP.h")
 
 class QGroundControlQmlGlobal : public QGCTool
 {
@@ -85,10 +70,6 @@ public:
     Q_PROPERTY(QGCCorePlugin*       corePlugin              READ    corePlugin              CONSTANT)
     Q_PROPERTY(MissionCommandTree*  missionCommandTree      READ    missionCommandTree      CONSTANT)
     Q_PROPERTY(FactGroup*           gpsRtk                  READ    gpsRtkFactGroup         CONSTANT)
-    Q_PROPERTY(TaisyncManager*      taisyncManager          READ    taisyncManager          CONSTANT)
-    Q_PROPERTY(bool                 taisyncSupported        READ    taisyncSupported        CONSTANT)
-    Q_PROPERTY(MicrohardManager*    microhardManager        READ    microhardManager        CONSTANT)
-    Q_PROPERTY(bool                 microhardSupported      READ    microhardSupported      CONSTANT)
     Q_PROPERTY(bool                 supportsPairing         READ    supportsPairing         CONSTANT)
     Q_PROPERTY(QGCPalette*          globalPalette           MEMBER  _globalPalette          CONSTANT)   ///< This palette will always return enabled colors
     Q_PROPERTY(QmlUnitsConversion*  unitsConversion         READ    unitsConversion         CONSTANT)
@@ -190,20 +171,6 @@ public:
     static QGeoCoordinate   flightMapPosition   ()  { return _coord; }
     static double           flightMapZoom       ()  { return _zoom; }
 
-    TaisyncManager*         taisyncManager      ()  { return _taisyncManager; }
-#if defined(QGC_GST_TAISYNC_ENABLED)
-    bool                    taisyncSupported    ()  { return true; }
-#else
-    bool                    taisyncSupported    () { return false; }
-#endif
-
-    MicrohardManager*       microhardManager    () { return _microhardManager; }
-#if defined(QGC_GST_TAISYNC_ENABLED)
-    bool                    microhardSupported  () { return true; }
-#else
-    bool                    microhardSupported  () { return false; }
-#endif
-
     qreal zOrderTopMost             () { return 1000; }
     qreal zOrderWidgets             () { return 100; }
     qreal zOrderMapItems            () { return 50; }
@@ -271,8 +238,6 @@ private:
     FirmwarePluginManager*  _firmwarePluginManager  = nullptr;
     SettingsManager*        _settingsManager        = nullptr;
     FactGroup*              _gpsRtkFactGroup        = nullptr;
-    TaisyncManager*         _taisyncManager         = nullptr;
-    MicrohardManager*       _microhardManager       = nullptr;
     ADSBVehicleManager*     _adsbVehicleManager     = nullptr;
     NTRIP*                  _ntrip                  = nullptr;
     QGCPalette*             _globalPalette          = nullptr;

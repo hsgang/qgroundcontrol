@@ -1,8 +1,8 @@
-import QtQuick          2.15
-import QtQuick.Layouts  1.15
+import QtQuick
+import QtQuick.Layouts
 
-import QGroundControl               1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl
+import QGroundControl.ScreenTools
 
 ColumnLayout {
     id:         _root
@@ -21,7 +21,7 @@ ColumnLayout {
     ColumnLayout {
         id:                 _contentItem
         Layout.fillWidth:   children[0].Layout.fillWidth
-        Layout.leftMargin:  heading === "" ? 0 : ScreenTools.defaultFontPixelWidth * 2
+        Layout.leftMargin:  heading === "" ? 0 : ScreenTools.defaultFontPixelWidth * 1.5
     }
 
     Rectangle {

@@ -7,33 +7,32 @@
  *
  ****************************************************************************/
 
-import QtQuick          2.11
-import QtQuick.Layouts  1.11
+import QtQuick
+import QtQuick.Layouts
 
-import QGroundControl                       1.0
-import QGroundControl.Controls              1.0
-import QGroundControl.MultiVehicleManager   1.0
-import QGroundControl.ScreenTools           1.0
-import QGroundControl.Palette               1.0
-import QGroundControl.FactSystem            1.0
-import QGroundControl.FactControls          1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.MultiVehicleManager
+import QGroundControl.ScreenTools
+import QGroundControl.Palette
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
 
 ToolIndicatorPage {
     showExpand: true
 
-    property real   _margins:       ScreenTools.defaultFontPixelHeight
-    property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
-    property string _NA:            qsTr("N/A", "No data to display")
-    property string _valueNA:       qsTr("--.--", "No data to display")
+    property real   margins:            ScreenTools.defaultFontPixelHeight
+    property var    activeVehicle:      QGroundControl.multiVehicleManager.activeVehicle
+    property string na:                 qsTr("N/A", "No data to display")
+    property string valueNA:            qsTr("--.--", "No data to display")
+    property var    rtkSettings:        QGroundControl.settingsManager.rtkSettings
+    property bool   useFixedPosition:   rtkSettings.useFixedBasePosition.rawValue
 
     property bool   isGNSS2:        _activeVehicle.gps2.lock.value
 
-    contentItem: ColumnLayout {
-        spacing: _margins
-
-//        ColumnLayout {
-            //Layout.alignment:   Qt.AlignTop
-            //spacing:            ScreenTools.defaultFontPixelHeight * 0.5
+    contentComponent: Component {
+        ColumnLayout {
+            spacing: margins
 
             QGCLabel {
                 Layout.alignment:   Qt.AlignHCenter
@@ -43,23 +42,23 @@ ToolIndicatorPage {
 
             GridLayout {
                 Layout.fillWidth:   true
-                columnSpacing:      _margins
+                columnSpacing:      margins
                 columns:            2
 
                 QGCLabel { Layout.fillWidth: true; text: qsTr("Satellites") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.count.valueString : _NA }
+                QGCLabel { text: activeVehicle ? activeVehicle.gps.count.valueString : na }
 
                 QGCLabel { Layout.fillWidth: true; text: qsTr("GPS Lock") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : _NA }
+                QGCLabel { text: activeVehicle ? activeVehicle.gps.lock.enumStringValue : na }
 
                 QGCLabel { Layout.fillWidth: true; text: qsTr("HDOP") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.hdop.valueString : _valueNA }
+                QGCLabel { text: activeVehicle ? activeVehicle.gps.hdop.valueString : valueNA }
 
                 QGCLabel { Layout.fillWidth: true; text: qsTr("VDOP") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.vdop.valueString : _valueNA }
+                QGCLabel { text: activeVehicle ? activeVehicle.gps.vdop.valueString : valueNA }
 
                 QGCLabel { Layout.fillWidth: true; text: qsTr("Course Over Ground") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : _valueNA }
+                QGCLabel { text: activeVehicle ? activeVehicle.gps.courseOverGround.valueString : valueNA }
             }
 
             QGCLabel {
@@ -100,7 +99,7 @@ ToolIndicatorPage {
 
             GridLayout {
                 Layout.fillWidth:   true
-                columnSpacing:      _margins
+                columnSpacing:      margins
                 columns:            2
                 visible:            QGroundControl.gpsRtk.connected.value
 
@@ -117,7 +116,7 @@ ToolIndicatorPage {
                 QGCLabel { text: QGroundControl.gpsRtk.currentDuration.value + ' s' }
 
                 QGCLabel {
-                    // during survey-in show the current accuracy, after that show the final accuracy
+                    // during survey-in show the current Accuracy, after that show the final Accuracy
                     id:                 accuracyLabel
                     Layout.fillWidth:   true
                     text:               QGroundControl.gpsRtk.valid.value ? qsTr("Accuracy") : qsTr("Current Accuracy")
@@ -142,117 +141,80 @@ ToolIndicatorPage {
             visible:            fact.visible
         }
 
-        GridLayout {
+        ColumnLayout {
             id:         rtkGrid
-            columns:    3
 
             property var  rtkSettings:      QGroundControl.settingsManager.rtkSettings
             property bool useFixedPosition: rtkSettings.useFixedBasePosition.rawValue
             property real firstColWidth:    ScreenTools.defaultFontPixelWidth * 5
 
             FactCheckBoxSlider {
-                Layout.columnSpan:  3
                 Layout.fillWidth:   true
                 text:               qsTr("Perform Survey-In")
-                fact:               rtkGrid.rtkSettings.useFixedBasePosition
+                fact:               rtkSettings.useFixedBasePosition
                 checkedValue:       false
                 uncheckedValue:     true
-                visible:            rtkGrid.rtkSettings.useFixedBasePosition.visible
+                visible:            rtkSettings.useFixedBasePosition.visible
             }
 
-            Item { width: rtkGrid.firstColWidth; height: 1 }
-            QGCLabel {
-                text:       rtkGrid.rtkSettings.surveyInAccuracyLimit.shortDescription
-                visible:    rtkGrid.rtkSettings.surveyInAccuracyLimit.visible
-                enabled:    !rtkGrid.useFixedPosition
-            }
-            FactTextField {
-                Layout.preferredWidth:  editFieldWidth
-                fact:                   rtkGrid.rtkSettings.surveyInAccuracyLimit
-                visible:                rtkGrid.rtkSettings.surveyInAccuracyLimit.visible
-                enabled:                !rtkGrid.useFixedPosition
+            LabelledFactSlider {
+                label:                  rtkSettings.surveyInAccuracyLimit.shortDescription
+                fact:                   QGroundControl.settingsManager.rtkSettings.surveyInAccuracyLimit
+                visible:                rtkSettings.surveyInAccuracyLimit.visible
+                enabled:                !useFixedPosition
+
+                Component.onCompleted: console.log("increment", fact.increment)
             }
 
-            Item { width: rtkGrid.firstColWidth; height: 1 }
-            QGCLabel {
-                text:       rtkGrid.rtkSettings.surveyInMinObservationDuration.shortDescription
-                visible:    rtkGrid.rtkSettings.surveyInMinObservationDuration.visible
-                enabled:    !rtkGrid.useFixedPosition
-            }
-            FactTextField {
-                Layout.preferredWidth:  editFieldWidth
-                fact:                   rtkGrid.rtkSettings.surveyInMinObservationDuration
-                visible:                rtkGrid.rtkSettings.surveyInMinObservationDuration.visible
-                enabled:                !rtkGrid.useFixedPosition
+            LabelledFactSlider {
+                label:                  rtkSettings.surveyInMinObservationDuration.shortDescription
+                fact:                   rtkSettings.surveyInMinObservationDuration
+                visible:                rtkSettings.surveyInMinObservationDuration.visible
+                enabled:                !useFixedPosition
             }
 
             FactCheckBoxSlider {
                 Layout.columnSpan:  3
                 Layout.fillWidth:   true
                 text:               qsTr("Use Specified Base Position")
-                fact:               rtkGrid.rtkSettings.useFixedBasePosition
-                visible:            rtkGrid.rtkSettings.useFixedBasePosition.visible
+                fact:               rtkSettings.useFixedBasePosition
+                visible:            rtkSettings.useFixedBasePosition.visible
             }
 
-            Item { width: rtkGrid.firstColWidth; height: 1 }
-            QGCLabel {
-                text:       rtkGrid.rtkSettings.fixedBasePositionLatitude.shortDescription
-                visible:    rtkGrid.rtkSettings.fixedBasePositionLatitude.visible
-                enabled:    rtkGrid.useFixedPosition
-            }
-            FactTextField {
-                Layout.preferredWidth:  editFieldWidth
-                fact:                   rtkGrid.rtkSettings.fixedBasePositionLatitude
-                visible:                rtkGrid.rtkSettings.fixedBasePositionLatitude.visible
-                enabled:                rtkGrid.useFixedPosition
+            LabelledFactTextField {
+                label:                  rtkSettings.fixedBasePositionLatitude.shortDescription
+                fact:                   rtkSettings.fixedBasePositionLatitude
+                visible:                rtkSettings.fixedBasePositionLatitude.visible
+                enabled:                useFixedPosition
             }
 
-            Item { width: rtkGrid.firstColWidth; height: 1 }
-            QGCLabel {
-                text:       rtkGrid.rtkSettings.fixedBasePositionLongitude.shortDescription
-                visible:    rtkGrid.rtkSettings.fixedBasePositionLongitude.visible
-                enabled:    rtkGrid.useFixedPosition
-            }
-            FactTextField {
-                Layout.preferredWidth:  editFieldWidth
-                fact:               rtkGrid.rtkSettings.fixedBasePositionLongitude
-                visible:            rtkGrid.rtkSettings.fixedBasePositionLongitude.visible
-                enabled:            rtkGrid.useFixedPosition
+            LabelledFactTextField {
+                label:              rtkSettings.fixedBasePositionLongitude.shortDescription
+                fact:               rtkSettings.fixedBasePositionLongitude
+                visible:            rtkSettings.fixedBasePositionLongitude.visible
+                enabled:            useFixedPosition
             }
 
-            Item { width: rtkGrid.firstColWidth; height: 1 }
-            QGCLabel {
-                text:       rtkGrid.rtkSettings.fixedBasePositionAltitude.shortDescription
-                visible:    rtkGrid.rtkSettings.fixedBasePositionAltitude.visible
-                enabled:    rtkGrid.useFixedPosition
-            }
-            FactTextField {
-                Layout.preferredWidth:  editFieldWidth
-                fact:               rtkGrid.rtkSettings.fixedBasePositionAltitude
-                visible:            rtkGrid.rtkSettings.fixedBasePositionAltitude.visible
-                enabled:            rtkGrid.useFixedPosition
+            LabelledFactTextField {
+                label:              rtkSettings.fixedBasePositionAltitude.shortDescription
+                fact:               rtkSettings.fixedBasePositionAltitude
+                visible:            rtkSettings.fixedBasePositionAltitude.visible
+                enabled:            useFixedPosition
             }
 
-            Item { width: rtkGrid.firstColWidth; height: 1 }
-            QGCLabel {
-                text:       rtkGrid.rtkSettings.fixedBasePositionAccuracy.shortDescription
-                visible:    rtkGrid.rtkSettings.fixedBasePositionAccuracy.visible
-                enabled:    rtkGrid.useFixedPosition
-            }
-            FactTextField {
-                Layout.preferredWidth:  editFieldWidth
-                fact:               rtkGrid.rtkSettings.fixedBasePositionAccuracy
-                visible:            rtkGrid.rtkSettings.fixedBasePositionAccuracy.visible
-                enabled:            rtkGrid.useFixedPosition
+            LabelledFactTextField {
+                label:              rtkSettings.fixedBasePositionAccuracy.shortDescription
+                fact:               rtkSettings.fixedBasePositionAccuracy
+                visible:            rtkSettings.fixedBasePositionAccuracy.visible
+                enabled:            useFixedPosition
             }
 
-            Item { width: rtkGrid.firstColWidth; height: 1 }
             RowLayout {
-                Layout.columnSpan:  2
+                spacing: ScreenTools.defaultFontPixelWidth
 
-                QGCLabel { 
-                    Layout.fillWidth:   true; 
-                    text:               qsTr("Current Base Position") 
+                QGCLabel {
+                    Layout.fillWidth:   true;
+                    text:               qsTr("Current Base Position")
                     enabled:            saveBasePositionButton.enabled
                 }
 
@@ -262,10 +224,10 @@ ToolIndicatorPage {
                     enabled:    QGroundControl.gpsRtk.valid.value
 
                     onClicked: {
-                        rtkGrid.rtkSettings.fixedBasePositionLatitude.rawValue  = QGroundControl.gpsRtk.currentLatitude.rawValue
-                        rtkGrid.rtkSettings.fixedBasePositionLongitude.rawValue = QGroundControl.gpsRtk.currentLongitude.rawValue
-                        rtkGrid.rtkSettings.fixedBasePositionAltitude.rawValue  = QGroundControl.gpsRtk.currentAltitude.rawValue
-                        rtkGrid.rtkSettings.fixedBasePositionAccuracy.rawValue  = QGroundControl.gpsRtk.currentAccuracy.rawValue
+                        rtkSettings.fixedBasePositionLatitude.rawValue  = QGroundControl.gpsRtk.currentLatitude.rawValue
+                        rtkSettings.fixedBasePositionLongitude.rawValue = QGroundControl.gpsRtk.currentLongitude.rawValue
+                        rtkSettings.fixedBasePositionAltitude.rawValue  = QGroundControl.gpsRtk.currentAltitude.rawValue
+                        rtkSettings.fixedBasePositionAccuracy.rawValue  = QGroundControl.gpsRtk.currentAccuracy.rawValue
                     }
                 }
             }

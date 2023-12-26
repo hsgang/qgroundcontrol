@@ -7,35 +7,54 @@
  *
  ****************************************************************************/
 
-import QtQuick                  2.15
-import QtQuick.Controls         2.15
-import QtQuick.Layouts          1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import QGroundControl.FactSystem    1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl.FactSystem
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
 
 Slider {
     id:             control
-    value:          fact.value
+    value:          _fact.value
+    from:           _fact.min
+    to:             _fact.max
+    stepSize:       isNaN(_fact.increment) ? 0 : _fact.increment
     snapMode:       stepSize ? Slider.SnapAlways : Slider.NoSnap
     live:           true
-    bottomPadding:  sliderLabel.contentHeight
+    bottomPadding:  sliderValueLabel.contentHeight
     leftPadding:    0
     rightPadding:   0
 
     property Fact fact
+    property bool showUnits: true
 
-    property bool _loadComplete: false
+    property bool _loadComplete:            false
+    property real _minMaxVisibilityPadding: ScreenTools.defaultFontPixelWidth
+    property Fact _nullFact:                Fact { }
+    property Fact _fact:                    fact ? fact : _nullFact
+    
+    Component.onCompleted: {
+        _loadComplete = true
+        if (fact && fact.minIsDefaultForType && fact.min == from) {
+            console.error("FactSlider: Fact is minIsDefaultForType", _fact.name)
+        }
+        if (fact && fact.maxIsDefaultForType && fact.max == to) {
+            console.error("FactSlider: Fact is maxIsDefaultForType", _fact.name)
+        }
+    }
 
-    Component.onCompleted: _loadComplete = true
+    function valuePlusUnits(valueString) {
+        return valueString + (showUnits ? " " + _fact.units : "")
+    }
 
     Timer {
         id:             updateTimer
         interval:       1000
         repeat:         false
         running:        false
-        onTriggered:    fact.value = control.value
+        onTriggered:    _fact.value = control.value
     }
 
     onValueChanged: {
@@ -52,7 +71,7 @@ Slider {
 
     background: Item {
         implicitWidth:  ScreenTools.defaultFontPixelWidth * 40
-        implicitHeight: ScreenTools.defaultFontPixelHeight + sliderLabel.contentHeight
+        implicitHeight: ScreenTools.defaultFontPixelHeight + sliderValueLabel.contentHeight
 
         Rectangle {
             id:     sliderBar
@@ -65,9 +84,8 @@ Slider {
         }
 
         QGCLabel {
-            id:         sliderLabel
-            text:       control.from.toFixed(fact.decimalPlaces)
-            visible:    control.value !== control.from
+            text:       control.from.toFixed(_fact.decimalPlaces)
+            visible:    sliderValueLabel.x > x + contentWidth + _minMaxVisibilityPadding
             anchors {
                 left:   parent.left
                 bottom: parent.bottom
@@ -75,8 +93,8 @@ Slider {
         }
 
         QGCLabel {
-            text:       control.to.toFixed(fact.decimalPlaces)
-            visible:    control.value !== control.to
+            text:       control.to.toFixed(_fact.decimalPlaces)
+            visible:    sliderValueLabel.x + sliderValueLabel.contentWidth < x - _minMaxVisibilityPadding
             anchors {
                 right:  parent.right
                 bottom: parent.bottom
@@ -84,9 +102,10 @@ Slider {
         }
 
         QGCLabel {
+            id:                     sliderValueLabel
             anchors.bottom:         parent.bottom
             x:                      control.leftPadding + (control.visualPosition * (control.availableWidth - width))
-            text:                   control.value.toFixed(control.fact.decimalPlaces)
+            text:                   valuePlusUnits(control.value.toFixed(control._fact.decimalPlaces))
             horizontalAlignment:    Text.AlignHCenter
         }
     }

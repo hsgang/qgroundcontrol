@@ -62,7 +62,7 @@ Item {
     MouseArea {
         anchors.fill:   parent
         onClicked: {
-            mainWindow.showIndicatorDrawer(batteryPopup)
+            mainWindow.showIndicatorDrawer(batteryPopup, control)
         }
     }
 

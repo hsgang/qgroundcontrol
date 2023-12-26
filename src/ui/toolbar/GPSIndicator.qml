@@ -21,7 +21,7 @@ import QGroundControl.FactControls
 //-------------------------------------------------------------------------
 //-- GPS Indicator
 Item {
-    id:             _root
+    id:             control
     width:          gnssValuesRow.width//(gnssValuesRow.x + gnssValuesRow.width)// * 1.1
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
@@ -385,7 +385,7 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked:      mainWindow.showIndicatorDrawer(gpsIndicatorPage)
+        onClicked:      mainWindow.showIndicatorDrawer(gpsIndicatorPage, control)
     }
 
     Component {

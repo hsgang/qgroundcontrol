@@ -22,7 +22,7 @@ import QGroundControl.Palette
 //-------------------------------------------------------------------------
 //-- Message Indicator
 Item {
-    id:             _root
+    id:             control
     width:          messageIconRow.width //height * 1.4
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
@@ -35,7 +35,7 @@ Item {
     property bool   _isMessageImportant:    _activeVehicle ? !_activeVehicle.messageTypeNormal && !_activeVehicle.messageTypeNone : false
 
     function dropMessageIndicator() {
-        mainWindow.showIndicatorDrawer(drawerComponent)
+        mainWindow.showIndicatorDrawer(drawerComponent, control)
     }
 
     function getMessageColor() {

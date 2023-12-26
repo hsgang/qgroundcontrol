@@ -45,7 +45,7 @@ Popup {
     anchors.centerIn:   parent
     width:              mainColumnLayout.width + (padding * 2)
     height:             mainColumnLayout.y + mainColumnLayout.height + padding
-    padding:            2
+    padding:            ScreenTools.defaultFontPixelHeight / 2
     modal:              true
     focus:              true
 
@@ -69,8 +69,14 @@ Popup {
     property real   _maxContentWidth:   parent.width - _popupDoubleInset
     property real   _maxContentHeight:  parent.height - titleRowLayout.height - _popupDoubleInset
 
-    background: Item {
+    background: Rectangle {
+        color:          _pal.windowShade
+        radius:         _root.padding / 2
+        border.width:   1
+        border.color:   _pal.windowShadeLight
+
         Rectangle {
+            anchors.margins:    _root.padding
             anchors.fill:       parent
             color:              _pal.window
             radius:             ScreenTools.defaultFontPixelHeight / 2
@@ -175,10 +181,14 @@ Popup {
             rejectButton.visible = true
         }
 
+        closePolicy = Popup.NoAutoClose
+        if (buttons === Dialog.Close || buttons === Dialog.Ok) {
+            acceptButton.visible = false
+            rejectButton.visible = false
+            closePolicy = Popup.CloseOnPressOutside
+        }
         if (rejectButton.visible) {
-            closePolicy = Popup.NoAutoClose | Popup.CloseOnEscape
-        } else {
-            closePolicy = Popup.NoAutoClose
+            closePolicy |= Popup.CloseOnEscape
         }
     }
 
@@ -234,7 +244,7 @@ Popup {
             Item {
                 id:     marginItem
                 width:  dialogContentParent.width + (_contentMargin * 2)
-                height: dialogContentParent.height + _contentMargin
+                height: dialogContentParent.height + (_contentMargin * 2)
 
                 Item {
                     id:     dialogContentParent

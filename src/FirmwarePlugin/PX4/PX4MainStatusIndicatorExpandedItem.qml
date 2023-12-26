@@ -7,23 +7,21 @@
  *
  ****************************************************************************/
 
-import QtQuick          2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts  1.11
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import QGroundControl                       1.0
-import QGroundControl.Controls              1.0
-import QGroundControl.MultiVehicleManager   1.0
-import QGroundControl.ScreenTools           1.0
-import QGroundControl.Palette               1.0
-import QGroundControl.FactSystem            1.0
-import QGroundControl.FactControls          1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.MultiVehicleManager
+import QGroundControl.ScreenTools
+import QGroundControl.Palette
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
 
 IndicatorPageGroupLayout {
     spacing:        ScreenTools.defaultFontPixelHeight / 2
     showDivider:    false
-
-    property real valueColumnWidth:         Math.max(ScreenTools.implicitTextFieldWidth, failsafeActionCombo.implicitWidth)
 
     FactPanelController { id: controller }
 
@@ -41,18 +39,16 @@ IndicatorPageGroupLayout {
             }
             FactComboBox {
                 id:                     failsafeActionCombo
-                Layout.minimumWidth:    ScreenTools.implicitTextFieldWidth
                 fact:                   controller.getParameterFact(-1, "NAV_DLL_ACT")
                 indexModel:             false
-                sizeToContents:         true
             }
         }
 
-        IndicatorPageFactTextFieldRow {
-            Layout.fillWidth:           true;
-            label:                      qsTr("Data Link Loss Timeout")
-            fact:                       controller.getParameterFact(-1, "COM_DL_LOSS_T")
-            textFieldPreferredWidth:    valueColumnWidth
+        LabelledFactSlider {
+            Layout.fillWidth:       true
+            label:                  qsTr("Data Link Loss Timeout")
+            fact:                   controller.getParameterFact(-1, "COM_DL_LOSS_T")
+            sliderPreferredWidth:   ScreenTools.defaultFontPixelWidth * 20
         }
     }
 
