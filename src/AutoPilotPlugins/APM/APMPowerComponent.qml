@@ -65,6 +65,7 @@ SetupPage {
                     width:  batt1Column.x + batt1Column.width + _margins
                     height: batt1Column.y + batt1Column.height + _margins
                     color:  ggcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                     ColumnLayout {
                         id:                 batt1Column
@@ -115,6 +116,7 @@ SetupPage {
                     width:  battery1Loader.x + battery1Loader.width + _margins
                     height: battery1Loader.y + battery1Loader.height + _margins
                     color:  ggcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                     Loader {
                         id:                 battery1Loader
@@ -152,6 +154,7 @@ SetupPage {
                     width:  batt2Column.x + batt2Column.width + _margins
                     height: batt2Column.y + batt2Column.height + _margins
                     color:  ggcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                     ColumnLayout {
                         id:                 batt2Column
@@ -202,6 +205,7 @@ SetupPage {
                     width:  battery2Loader.x + battery2Loader.width + _margins
                     height: battery2Loader.y + battery2Loader.height + _margins
                     color:  ggcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                     Loader {
                         id:                 battery2Loader
@@ -238,6 +242,7 @@ SetupPage {
                     width:  escCalibrationHolder.x + escCalibrationHolder.width + _margins
                     height: escCalibrationHolder.y + escCalibrationHolder.height + _margins
                     color:  ggcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                     Column {
                         id:         escCalibrationHolder

@@ -18,36 +18,38 @@ import QGroundControl.ScreenTools
 
 RowLayout {
     id:         control
-    spacing:    _margins
+    spacing:    _margins / 2
 
-    property bool       showExpand:         false   // Controls whether the expand widget is shown or not
-    property bool       waitForParameters:  false   // UI won't show until parameters are ready
-    property Component  contentComponent            // Item for the normal view portion of the page
-    property Component  expandedComponent           // Item for the expanded portion of the page
-    property var        pageProperties              // Allows you to share a QtObject full of properties between pages
-
+    property bool   showExpand:           false   // Controls whether the expand widget is shown or not
+    property bool   waitForParameters:    false   // UI won't show until parameters are ready
+    property Component contentComponent         // Item for the normal view portion of the page
+    property Component expandedComponent        // Item for the expanded portion of the page
+    property var    pageProperties                // Allows you to share a QtObject full of properties between pages
+ 
     // These properties are bound by the MainRoowWindow loader
-    property bool expanded: false
-    property var  drawer
+    property bool   expanded: false
+    property var    drawer
 
     property var    activeVehicle:      QGroundControl.multiVehicleManager.vehicle
     property bool   parametersReady:    QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable
 
-    property real _margins:     ScreenTools.defaultFontPixelHeight
-    property bool _loadPages:   !waitForParameters || parametersReady
-    property real dividerHeight
+    property real   _margins:           ScreenTools.defaultFontPixelHeight
+    property bool   _loadPages:         !waitForParameters || parametersReady
+    property real   dividerHeight
+    property real   editFieldWidth:     ScreenTools.defaultFontPixelWidth * 13
 
     QGCLabel {
-        text:       qsTr("Waiting for parameters...")
+        text:       qsTr("Waiting for paremeters...")
         visible:    waitForParameters && !parametersReady
     }
 
     Loader {
-        id:                 contentItemLoader
-        Layout.alignment:   Qt.AlignTop
-        sourceComponent:    _loadPages ? contentComponent : undefined
+        id:                     contentComponentLoader
+        Layout.alignment:       Qt.AlignTop
+        Layout.minimumWidth:    ScreenTools.defaultFontPixelWidth * 22
+        sourceComponent:        _loadPages ? contentComponent : undefined
 
-        property var pageProperties: control.pageProperties
+        property var pageProperties:    control.pageProperties
     }
 
     Rectangle {
@@ -55,11 +57,12 @@ RowLayout {
         Layout.preferredWidth:  visible ? 1 : -1
         height:                 dividerHeight
         color:                  QGroundControl.globalPalette.text
-        visible:                expanded
+        opacity:                0.5
+        visible:                expanded && expandedComponentLoader.sourceComponent
     }
 
     Loader {
-        id:                     expandedItemLoader
+        id:                     expandedComponentLoader
         Layout.alignment:       Qt.AlignTop
         Layout.preferredWidth:  visible ? -1 : 0
         visible:                expanded

@@ -76,92 +76,99 @@ Item {
 
             FactPanelController { id: controller }
 
-            contentItem: BatteryIndicatorContentItem {
-                Layout.preferredWidth: parent.width
+            contentComponent: Component {
+                BatteryIndicatorContentItem {
+                    Layout.preferredWidth: parent.width
+                }
             }
 
-            expandedItem: ColumnLayout {
-                Layout.fillWidth:   true
-                spacing:            ScreenTools.defaultFontPixelHeight / 2
+            expandedComponent: Component {
+                ColumnLayout {
+                    Layout.fillWidth:   true
+                    spacing:            ScreenTools.defaultFontPixelHeight / 2
 
-                IndicatorPageGroupLayout {
-                    Layout.fillWidth:       true
-                    heading:                qsTr("Battery Settings")
+                    IndicatorPageGroupLayout {
+                        Layout.fillWidth:       true
+                        heading:                qsTr("Battery Settings")
 
-                    GridLayout {
+                        GridLayout {
+                            Layout.fillWidth:   true
+                            columns:            2
+                            columnSpacing:      ScreenTools.defaultFontPixelHeight
+
+                            //QGCLabel { text: qsTr("Show Cell Voltage") }
+                            FactCheckBoxSlider {
+                                text:                   qsTr("Show Cell Voltage")
+                                Layout.columnSpan:      2
+                                Layout.fillWidth:       true
+                                fact:                   _batterySettings.showCellVoltage
+                            }
+
+                            QGCLabel { text: qsTr("Battery Cells"); Layout.fillWidth: true}
+                            FactTextField {
+                                Layout.alignment:       Qt.AlignRight
+                                Layout.preferredWidth:  editFieldWidth
+                                fact:                   _batterySettings.batteryCellCount
+                                horizontalAlignment:    Text.AlignRight;
+                            }
+                        }
+                    }
+
+                    IndicatorPageGroupLayout {
                         Layout.fillWidth:   true
-                        columns:            2
-                        columnSpacing:      ScreenTools.defaultFontPixelHeight
+                        heading:            qsTr("Low Battery Failsafe")
 
-                        QGCLabel { text: qsTr("Battery Cells") }
-                        FactTextField {
-                            Layout.fillWidth:       true
-                            Layout.preferredWidth:  editFieldWidth
-                            fact:                   _batterySettings.batteryCellCount
-                        }
+                        GridLayout {
+                            columns: 2
+                            columnSpacing: ScreenTools.defaultFontPixelHeight
 
-                        //QGCLabel { text: qsTr("Show Cell Voltage") }
-                        FactCheckBoxSlider {
-                            text:                   qsTr("Show Cell Voltage")
-                            Layout.columnSpan:      2
-                            Layout.fillWidth:       true
-                            fact:                   _batterySettings.showCellVoltage
-                        }
-                    }
-                }
+                            QGCLabel { text: qsTr("Battery Low Level") }
+                            FactTextField {
+                                Layout.fillWidth:       true
+                                Layout.preferredWidth:  editFieldWidth
+                                fact:                   controller.getParameterFact(-1, "BATT_LOW_VOLT")
+                                horizontalAlignment:    Text.AlignRight;
+                            }
 
-                IndicatorPageGroupLayout {
-                    Layout.fillWidth:   true
-                    heading:            qsTr("Low Battery Failsafe")
+                            QGCLabel { text: qsTr("Battery Low Action") }
+                            FactComboBox {
+                                Layout.fillWidth:       true
+                                fact:                   controller.getParameterFact(-1, "BATT_FS_LOW_ACT")
+                                indexModel:             false
+                            }
 
-                    GridLayout {
-                        columns: 2
-                        columnSpacing: ScreenTools.defaultFontPixelHeight
+                            QGCLabel { text: qsTr("Battery Critical Level") }
+                            FactTextField {
+                                Layout.fillWidth:       true
+                                Layout.preferredWidth:  editFieldWidth
+                                fact:                   controller.getParameterFact(-1, "BATT_CRT_VOLT")
+                                horizontalAlignment:    Text.AlignRight;
+                            }
 
-                        QGCLabel { text: qsTr("Battery Low Level") }
-                        FactTextField {
-                            Layout.fillWidth:       true
-                            Layout.preferredWidth:  editFieldWidth
-                            fact:                   controller.getParameterFact(-1, "BATT_LOW_VOLT")
-                        }
-
-                        QGCLabel { text: qsTr("Battery Low Action") }
-                        FactComboBox {
-                            Layout.fillWidth:       true
-                            fact:                   controller.getParameterFact(-1, "BATT_FS_LOW_ACT")
-                            indexModel:             false
-                        }
-
-                        QGCLabel { text: qsTr("Battery Critical Level") }
-                        FactTextField {
-                            Layout.fillWidth:       true
-                            Layout.preferredWidth:  editFieldWidth
-                            fact:                   controller.getParameterFact(-1, "BATT_CRT_VOLT")
-                        }
-
-                        QGCLabel { text: qsTr("Battery Critical Action") }
-                        FactComboBox {
-                            Layout.fillWidth:       true
-                            fact:                   controller.getParameterFact(-1, "BATT_FS_CRT_ACT")
-                            indexModel:             false
+                            QGCLabel { text: qsTr("Battery Critical Action") }
+                            FactComboBox {
+                                Layout.fillWidth:       true
+                                fact:                   controller.getParameterFact(-1, "BATT_FS_CRT_ACT")
+                                indexModel:             false
+                            }
                         }
                     }
-                }
 
-                IndicatorPageGroupLayout {
-                    Layout.fillWidth:   true
-                    showDivider:        false
+                    IndicatorPageGroupLayout {
+                        Layout.fillWidth:   true
+                        showDivider:        false
 
-                    RowLayout {
-                        Layout.fillWidth: true
+                        RowLayout {
+                            Layout.fillWidth: true
 
-                        QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Power") }
-                        QGCButton {
-                            text: qsTr("Configure")
-                            onClicked: {
-                                mainWindow.showVehicleSetupTool(qsTr("Power"))
-                                //indicatorDrawer.close()
-                                componentDrawer.visible = false
+                            QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Power") }
+                            QGCButton {
+                                text: qsTr("Configure")
+                                onClicked: {
+                                    mainWindow.showVehicleSetupTool(qsTr("Power"))
+                                    //indicatorDrawer.close()
+                                    componentDrawer.visible = false
+                                }
                             }
                         }
                     }
@@ -309,7 +316,7 @@ Item {
                     anchors.right:          parent.right
                     font.pointSize:         ScreenTools.smallFontPointSize
                     color:                  qgcPal.text
-                    text:                   _activeVehicle ? (_showCellVoltage ? _cellVoltage : battery.voltage.valueString + battery.voltage.units) : ""
+                    text:                   _activeVehicle ? (_showCellVoltage ? _cellVoltage : battery.voltage.value.toFixed(1) + battery.voltage.units) : ""
 
                     property string _cellVoltage: (battery.voltage.value / _batteryCellCount).toFixed(2) + battery.voltage.units
                 }

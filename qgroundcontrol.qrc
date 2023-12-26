@@ -20,6 +20,7 @@
         <file alias="SiyiRSSIIndicator.qml">src/ui/toolbar/SiyiRSSIIndicator.qml</file>
         <file alias="GPS2Indicator.qml">src/ui/toolbar/GPS2Indicator.qml</file>
         <file alias="APMSupportForwardingIndicator.qml">src/ui/toolbar/APMSupportForwardingIndicator.qml</file>
+        <file alias="VehicleIndicator.qml">src/ui/toolbar/VehicleIndicator.qml</file>
     </qresource>
     <qresource prefix="/checklists">
         <file alias="DefaultChecklist.qml">src/FlightDisplay/DefaultChecklist.qml</file>
@@ -331,6 +332,7 @@
         <file alias="QGroundControl/FlightDisplay/GuidedActionMission.qml">src/FlightDisplay/GuidedActionMission.qml</file>
         <file alias="QGroundControl/FlightMap/WinchControlPanel.qml">src/FlightMap/Widgets/WinchControlPanel.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewInsetViewer.qml">src/FlightDisplay/FlyViewInsetViewer.qml</file>
+        <file alias="QGroundControl/Controls/ComponentLabelValueRow.qml">src/QmlControls/ComponentLabelValueRow.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
@@ -405,6 +407,7 @@
         <file alias="Vehicle/TunnelingDataFact.json">src/Vehicle/TunnelingDataFact.json</file>
         <file alias="Vehicle/WinchStatusFactGroup.json">src/Vehicle/WinchStatusFactGroup.json</file>
         <file alias="Battery.SettingsGroup.json">src/Settings/Battery.SettingsGroup.json</file>
+        <file alias="SIYI.SettingsGroup.json">src/Settings/SIYI.SettingsGroup.json</file>
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/comm/APMArduSubMockLink.params</file>

@@ -69,6 +69,8 @@ VehicleBatteryFactGroup::VehicleBatteryFactGroup(uint8_t batteryId, QObject* par
     _instantPowerFact.setRawValue       (qQNaN());
 
     connect(&_timeRemainingFact, &Fact::rawValueChanged, this, &VehicleBatteryFactGroup::_timeRemainingChanged);
+
+    _batteryConsumeTimer.start();
 }
 
 void VehicleBatteryFactGroup::handleMessageForFactGroupCreation(Vehicle* vehicle, mavlink_message_t& message)
@@ -161,6 +163,16 @@ void VehicleBatteryFactGroup::_handleBatteryStatus(Vehicle* vehicle, mavlink_mes
     group->chargeState()->setRawValue       (batteryStatus.charge_state);
     group->instantPower()->setRawValue      (totalVoltage * group->current()->rawValue().toDouble());
     group->_setTelemetryAvailable(true);
+
+    // //group->_calcCurrentRate(batteryStatus.current_battery);
+
+    // float battCurrentRate = 0;
+    // if(batteryStatus.current_battery){
+    //     battCurrentRate = (float) (10000 - batteryStatus.current_consumed) / (batteryStatus.current_battery * 10) * 3600;
+    //     group->timeRemaining()->setRawValue(battCurrentRate);
+    //     printf("Battery Rate: %d \n", batteryStatus.current_battery);
+    //     printf("Battery Rate: %f \n", battCurrentRate);
+    // }
 }
 
 VehicleBatteryFactGroup* VehicleBatteryFactGroup::_findOrAddBatteryGroupById(Vehicle* vehicle, uint8_t batteryId)
@@ -201,3 +213,22 @@ void VehicleBatteryFactGroup::_timeRemainingChanged(QVariant value)
         _timeRemainingStrFact.setRawValue(QString::asprintf("%02dH:%02dM:%02dS", hours, minutes, seconds));
     }
 }
+
+// void VehicleBatteryFactGroup::_calcCurrentRate(int16_t current)
+// {
+//     qint64 elapsed = _batteryConsumeTimer.elapsed();
+
+//     int _currentRateHour = 0;
+//     current = current * 10; // current to mA
+
+//     if (elapsed) {
+//         _currentRate = (float) current / elapsed * 1000.f / 1024.f ;
+//         _currentRateHour = _currentRate * 1000/elapsed * 3600;
+//         _batteryConsumeTimer.restart();
+//         _batteryConsumeCurrent = 0;
+//     }
+//     printf("Battery Rate: %d mA \n", current);
+//     printf("elapsed : %lld \n", elapsed);
+//     printf("Battery Rate: %d mA/s \n", _currentRate);
+//     printf("Battery Rate: %d mA/h \n", _currentRateHour);
+// }

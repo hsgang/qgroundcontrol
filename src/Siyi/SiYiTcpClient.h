@@ -5,6 +5,9 @@
 #include <QThread>
 #include <QVector>
 #include <QTcpSocket>
+#include "QGCLoggingCategory.h"
+
+Q_DECLARE_LOGGING_CATEGORY(SiYiTcpClientLog)
 
 #define PROTOCOL_STX 0x5566AABB
 

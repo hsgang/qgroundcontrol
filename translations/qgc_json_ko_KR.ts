@@ -92,6 +92,15 @@
     </message>
   </context>
   <context>
+    <name>FlyView.SettingsGroup.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[flyviewWidgetOpacity].enumStrings, </extracomment>
+      <location filename="../src/Settings/FlyView.SettingsGroup.json"/>
+      <source>Transparent,Lighten,Normal,Darken,Opaque</source>
+      <translation>투명,연한 투명도,보통,진한 투명도,불투명</translation>
+    </message>
+  </context>
+  <context>
     <name>BatteryFact.json</name>
     <message>
       <extracomment>.QGC.MetaData.Facts[batteryFunction].enumStrings, </extracomment>

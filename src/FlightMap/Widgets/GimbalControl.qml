@@ -26,13 +26,16 @@ Rectangle {
     id:         gimbalControlPannel
     width:      mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-    radius:     _margins
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+    border.color:   qgcPal.text
+    border.width:   1
+    radius:     _margins * 1.5
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:         ScreenTools.defaultFontPixelHeight / 2
-    property real   _idealWidth:      (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8)
-    property real   anchorsMargins:   _margins //ScreenTools.defaultFontPixelWidth * 0.8
+    property real   _idealWidth:      ScreenTools.isMobile ? ScreenTools.minTouchPixels * 0.8 : (ScreenTools.defaultFontPixelWidth * 7)
+    property real   anchorsMargins:   _margins
+    property real   backgroundOpacity:                          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
     property var    _activeVehicle:                             QGroundControl.multiVehicleManager.activeVehicle
 
@@ -109,8 +112,11 @@ Rectangle {
         width:          gimbalAngleValueRow.width
         height:         gimbalAngleValueRow.height
         color:          "transparent"
-        RowLayout{
+        GridLayout{
             id: gimbalAngleValueRow
+            rowSpacing: ScreenTools.defaultFontPixelHeight / 5
+            columns: 3
+
             QGCLabel{
                 text: " R: " +_gimbalRollString
                 Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
@@ -125,14 +131,13 @@ Rectangle {
             }
             QGCLabel{
                 text: "data:" + _gimbalData
+                Layout.columnSpan: 3
             }
         }
     }
 
     GridLayout {
         id:                         mainGridLayout
-        //Layout.alignment:           Qt.AlignHCenter
-        //anchors.margins:            _margins
         anchors.verticalCenter:     parent.verticalCenter
         anchors.horizontalCenter:   parent.horizontalCenter
         columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
@@ -144,7 +149,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              zoomInPress.pressedButtons ? 0.95 : 1
@@ -152,7 +157,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/zoom-in.svg"
                 sourceSize.height:  height
@@ -178,7 +183,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalUpPress.pressedButtons ? 0.95 : 1
@@ -186,7 +191,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-up.svg"
                 sourceSize.height:  height
@@ -201,11 +206,11 @@ Rectangle {
                 id: gimbalUpPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localPitch += 0.03
+                    _localPitch += 2
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
-                    _activeVehicle.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
                 }
             }
         }
@@ -216,7 +221,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              baseDownPress.pressedButtons ? 0.95 : 1
@@ -224,7 +229,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-base-down.svg"
                 sourceSize.height:  height
@@ -239,7 +244,7 @@ Rectangle {
                 id:             baseDownPress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalControlValue(-0.9, 0.0)
+                    _activeVehicle.gimbalController.gimbalControlValue(-90.0, 0.0)
                 }
             }
         }
@@ -250,7 +255,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalLeftPress.pressedButtons ? 0.95 : 1
@@ -258,7 +263,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-left.svg"
                 sourceSize.height:  height
@@ -273,11 +278,11 @@ Rectangle {
                 id:             gimbalLeftPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localYaw += -0.03
+                    _localYaw += -2
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
-                    _activeVehicle.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
                 }
             }
         }
@@ -288,7 +293,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalHomePress.pressedButtons ? 0.95 : 1
@@ -296,7 +301,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/target.svg"
                 sourceSize.height:  height
@@ -311,7 +316,7 @@ Rectangle {
                 id:             gimbalHomePress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalControlValue(0.0, 0.0)
+                    _activeVehicle.gimbalController.gimbalControlValue(0.0, 0.0)
                     _localPitch = 0
                     _localYaw = 0
                 }
@@ -324,7 +329,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalRightPress.pressedButtons ? 0.95 : 1
@@ -332,7 +337,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-right.svg"
                 sourceSize.height:  height
@@ -347,11 +352,11 @@ Rectangle {
                 id:             gimbalRightPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localYaw += 0.03
+                    _localYaw += 2
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
-                    _activeVehicle.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
                 }
             }
         }
@@ -362,7 +367,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              zoomOutPress.pressedButtons ? 0.95 : 1
@@ -370,7 +375,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/zoom-out.svg"
                 sourceSize.height:  height
@@ -396,7 +401,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalDownPress.pressedButtons ? 0.95 : 1
@@ -404,7 +409,7 @@ Rectangle {
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/arrow-thick-down.svg"
                 sourceSize.height:  height
@@ -419,11 +424,11 @@ Rectangle {
                 id:             gimbalDownPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localPitch += -0.03
+                    _localPitch += -2
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
-                    _activeVehicle.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
                 }
             }
         }
@@ -434,25 +439,15 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              gimbalModePress.pressedButtons ? 0.95 : 1
 
-//            function gimbalMode(){
-//                if(_gimbalModeStatus < 7){
-//                    _gimbalModeStatus += 1
-//                    return _gimbalModeStatus-1
-//                }
-//                else{
-//                    _gimbalModeStatus = 0
-//                }
-//            }
-
             QGCColoredImage {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             ScreenTools.implicitComboBoxHeight
+                height:             parent.height * 0.6
                 width:              height
                 source:             "/InstrumentValueIcons/navigation-more.svg"
                 sourceSize.height:  height
@@ -467,10 +462,9 @@ Rectangle {
                 id:             gimbalModePress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.setGimbalRcTargeting()
+                    _activeVehicle.gimbalController.setGimbalRcTargeting()
                 }
             }
         }
-
     }
 }

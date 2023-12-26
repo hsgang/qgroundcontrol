@@ -102,6 +102,7 @@ Rectangle {
                     Rectangle {
                         width:      _summaryBoxWidth
                         height:     ScreenTools.defaultFontPixelHeight * 14
+                        radius:     ScreenTools.defaultFontPixelHeight * 0.25
                         color:      qgcPal.windowShade
                         visible:    modelData.summaryQmlSource.toString() !== ""
                         border.width: 1

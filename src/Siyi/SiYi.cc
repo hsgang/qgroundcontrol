@@ -1,6 +1,9 @@
 #include <QCoreApplication>
 
 #include "SiYi.h"
+#include "QGCApplication.h"
+#include "SettingsManager.h"
+#include "SIYISettings.h"
 
 SiYi *SiYi::instance_ = Q_NULLPTR;
 SiYi::SiYi(QObject *parent)
@@ -8,6 +11,7 @@ SiYi::SiYi(QObject *parent)
 {
     camera_ = new SiYiCamera(this);
     transmitter_ = new SiYiTransmitter(this);
+
     connect(transmitter_, &SiYiCamera::connected, this, [=](){
         this->isTransmitterConnected_ = true;
         camera_->start();

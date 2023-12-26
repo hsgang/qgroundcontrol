@@ -7,6 +7,8 @@
 #include "SiYiCrcApi.h"
 #include "SiYiTcpClient.h"
 
+QGC_LOGGING_CATEGORY(SiYiTcpClientLog, "SiYiTcpClientLog")
+
 SiYiTcpClient::SiYiTcpClient(const QString ip, quint16 port, QObject *parent)
     : QThread(parent)
     , ip_(ip)
@@ -50,7 +52,7 @@ void SiYiTcpClient::run()
     const QString info = QString("[%1:%2]:").arg(ip_, QString::number(port_));
 
     connect(tcpClient, &QTcpSocket::connected, tcpClient, [=](){
-        qInfo() << info << "Connect to server successfully!";
+        qCDebug(SiYiTcpClientLog) << info << "Connect to server successfully!";
 
         heartbeatTimer->start();
         txTimer->start();
@@ -61,7 +63,7 @@ void SiYiTcpClient::run()
         emit isConnectedChanged();
     });
     connect(tcpClient, &QTcpSocket::disconnected, tcpClient, [=](){
-        qInfo() << info << "Disconnect from server!";
+        qCDebug(SiYiTcpClientLog) << info << "Disconnect from server!";
 
         this->isConnected_ = false;
         this->txMessageVectorMutex_.lock();
@@ -76,7 +78,7 @@ void SiYiTcpClient::run()
     connect(tcpClient, &QTcpSocket::errorOccurred, tcpClient, [=](){
         heartbeatTimer->stop();
         exit();
-        qInfo() << info << tcpClient->errorString();
+        qCDebug(SiYiTcpClientLog) << info << tcpClient->errorString();
     });
 
     // 定时发送 예약발송
@@ -94,11 +96,11 @@ void SiYiTcpClient::run()
                 if (tcpClient->write(msg) != -1) {
                     //qInfo() << info << "Tx:" << msg.toHex(' ');
                 } else {
-                    qInfo() << info << tcpClient->errorString();
+                    qCDebug(SiYiTcpClientLog) << info << tcpClient->errorString();
                 }
             } else {
-                qInfo() << info << "Not connected state, the state is:" << tcpClient->state();
-                qInfo() << info << tcpClient->errorString();
+                qCDebug(SiYiTcpClientLog) << info << "Not connected state, the state is:" << tcpClient->state();
+                qCDebug(SiYiTcpClientLog) << info << tcpClient->errorString();
                 exit();
             }
         }

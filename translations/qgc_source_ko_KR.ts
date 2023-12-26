@@ -3661,7 +3661,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/QmlControls/AltModeDialog.qml" line="52"/>
         <source>AMSL</source>
-        <translation>ASML</translation>
+        <translation>AMSL</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AltModeDialog.qml" line="53"/>
@@ -4061,6 +4061,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="46"/>
         <source>Battery Status</source>
         <translation>배터리 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="68"/>
+        <source>Battery ID</source>
+        <translation>배터리 ID</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="69"/>
@@ -4675,7 +4680,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/MissionManager/CorridorScanComplexItem.h" line="52"/>
         <location filename="../src/MissionManager/CorridorScanComplexItem.h" line="53"/>
         <source>Corridor Scan</source>
-        <translation>복도 스캔</translation>
+        <translation>회랑 스캔</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/CorridorScanComplexItem.h" line="54"/>
@@ -4688,7 +4693,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/CorridorScanEditor.qml" line="19"/>
         <source>Corridor</source>
-        <translation>복도</translation>
+        <translation>회랑</translation>
     </message>
     <message>
         <location filename="../src/PlanView/CorridorScanEditor.qml" line="38"/>
@@ -6601,18 +6606,28 @@ Click Ok to start the auto-tuning process.
         <source>Auto Connect</source>
         <translation>자동 연결</translation>
     </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="54"/>
+        <source>Connected</source>
+        <translation>연결됨</translation>
+    </message>
 </context>
 <context>
     <name>FlightModeMenuIndicator</name>
     <message>
-        <location filename="../src/ui/toolbar/FlightModeMenuIndicator.qml" line="358"/>
+        <location filename="../src/ui/toolbar/FlightModeMenuIndicator.qml" line="217"/>
+        <source>Flight Modes Settings</source>
+        <translation>비행 모드 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/FlightModeMenuIndicator.qml" line="219"/>
         <source>Configure</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/FlightModeMenuIndicator.qml" line="360"/>
-        <source>Radio</source>
-        <translation>라디오</translation>
+        <location filename="../src/ui/toolbar/FlightModeMenuIndicator.qml" line="221"/>
+        <source>Flight Modes</source>
+        <translation>비행 모드</translation>
     </message>
 </context>
 <context>
@@ -6902,62 +6917,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="307"/>
         <source>Visibility : </source>
         <translation>시정 : </translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="349"/>
-        <source>FlyView Widget Settings</source>
-        <translation>위젯 설정</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="395"/>
-        <source>PhotoVideo Control</source>
-        <translation>영상캡처 제어</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="398"/>
-        <source>Telemetry Panel</source>
-        <translation>텔레메트리 패널</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="401"/>
-        <source>Chart Widget</source>
-        <translation>대기 상태 차트</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="404"/>
-        <source>Atmospheric Data</source>
-        <translation>대기 측정 정보</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="407"/>
-        <source>Weather Widget</source>
-        <translation>날씨 정보</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="410"/>
-        <source>Mission Progress Bar</source>
-        <translation>미션 진행 정보</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
-        <source>Mount Control Pad</source>
-        <translation>마운트 제어 패드</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
-        <source>Mount Widget</source>
-        <translation>마운트 위젯</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="413"/>
-        <source>Winch Control</source>
-        <translation>윈치 제어</translation>
-    </message>
-    <message>
-        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="416"/>
-        <source>External Power Status</source>
-        <translation>외부 전원 상태</translation>
-    </message>
+    </message>    
     <message>
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="479"/>
         <source>Widget</source>
@@ -7020,7 +6980,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="169"/>
         <source>Path Distance</source>
-        <translation>전체 경로</translation>
+        <translation>계획 경로</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="201"/>
@@ -7143,6 +7103,21 @@ Click Ok to start the auto-tuning process.
         <source>Vehicle GNSS2 Status</source>
         <translation>GNSS2 상태</translation>
     </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>NTRIP Status</source>
+        <translation>네트워크 RTK</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Status</source>
+        <translation>서버 연결</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>BandWidth</source>
+        <translation>전송 속도</translation>
+    </message>
 </context>
 <context>
     <name>GPSRTKIndicator</name>
@@ -7175,6 +7150,198 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/GPSRTKIndicator.qml" line="77"/>
         <source>Satellites:</source>
         <translation>위성:</translation>
+    </message>
+</context>
+
+<context>
+    <name>VehicleIndicator</name>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="92"/>
+        <source>Responsiveness</source>
+        <translation>조작 반응성</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="101"/>
+        <source>Loiter Horizontal Speed(cm/s)</source>
+        <translation>로이터 수평 속도(cm/s)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="109"/>
+        <source>WP Horizontal Speed(cm/s)</source>
+        <translation>WP 수평 속도(cm/s)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="117"/>
+        <source>WP Climb Speed(cm/s)</source>
+        <translation>WP 상승 속도(cm/s)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="125"/>
+        <source>WP Descent Speed(cm/s)</source>
+        <translation>WP 하강 속도(cm/s)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="133"/>
+        <source>Mission Turning Radius(cm)</source>
+        <translation>임무 선회 반경(cm)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="133"/>
+        <source>Vehicle Summary</source>
+        <translation>기체 정보 페이지</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="402"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="133"/>
+        <source>Summary</source>
+        <translation>기체 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="148"/>
+        <source>Vehicle Information</source>
+        <translation>기체 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="158"/>
+        <source>Firmware Type</source>
+        <translation>펌웨어 타입</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="163"/>
+        <source>Firmware Version</source>
+        <translation>펌웨어 버전</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="163"/>
+        <source>Parameter Summary</source>
+        <translation>파라미터 요약</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
+        <source>Loiter Speed</source>
+        <translation>사용자 수평 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
+        <source>Pilot Climb Speed</source>
+        <translation>사용자 상승 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
+        <source>Pilot Descent Speed</source>
+        <translation>사용자 하강 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="185"/>
+        <source>WP Horizontal Speed</source>
+        <translation>WP 수평 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="190"/>
+        <source>WP Climb Speed</source>
+        <translation>WP 상승 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="195"/>
+        <source>WP Descent Speed</source>
+        <translation>WP 하강 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="206"/>
+        <source>RTL Altitude</source>
+        <translation>RTL 고도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="211"/>
+        <source>Land Speed</source>
+        <translation>착륙 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="222"/>
+        <source>Frame Class</source>
+        <translation>프레임 형태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="271"/>
+        <source>Operating Summary</source>
+        <translation>사용 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="227"/>
+        <source>Boot Count</source>
+        <translation>부팅 횟수</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="233"/>
+        <source>Total Runtime</source>
+        <translation>총 작동 시간</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="239"/>
+        <source>Total Flight Time</source>
+        <translation>총 비행 시간</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="239"/>
+        <source>Land Descent Rate</source>
+        <translation>착륙 하강 속도</translation>
+    </message>
+</context>
+<context>
+    <name>SiyiRSSIIndicator</name>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="37"/>
+        <source>Network Status</source>
+        <translation>네트워크 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="48"/>
+        <source>Signal</source>
+        <translation>신호</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="52"/>
+        <source>RSSI</source>
+        <translation>RSSI</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="56"/>
+        <source>Inactive Time</source>
+        <translation>비응답시간</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="60"/>
+        <source>Upstream</source>
+        <translation>업스트림</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="64"/>
+        <source>Downstream</source>
+        <translation>다운스트림</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="68"/>
+        <source>TxBandwidth</source>
+        <translation>송신대역폭</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="72"/>
+        <source>RxBandwidth</source>
+        <translation>수신대역폭</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="76"/>
+        <source>Frequency</source>
+        <translation>주파수</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/SiyiRSSIIndicator.qml" line="80"/>
+        <source>Channel</source>
+        <translation>채널</translation>
     </message>
 </context>
 <context>
@@ -9666,7 +9833,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="36"/>
         <source>Ready To Fly</source>
-        <translation>비행 준비 완료</translation>
+        <translation>비행 가능</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="37"/>
@@ -9775,6 +9942,76 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/MainToolBar.qml" line="134"/>
         <source>Link Management</source>
         <translation>연결 관리</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="391"/>
+        <source>FlyView Widget</source>
+        <translation>비행 화면 위젯</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="414"/>
+        <source>Payload</source>
+        <translation>페이로드 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="416"/>
+        <source>PhotoVideo Control</source>
+        <translation>영상캡처 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="422"/>
+        <source>Mount Control</source>
+        <translation>짐벌 마운트 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="428"/>
+        <source>Winch Control</source>
+        <translation>윈치 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="434"/>
+        <source>Chart Widget</source>
+        <translation>차트 위젯</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="440"/>
+        <source>Atmospheric Data</source>
+        <translation>대기 측정 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="450"/>
+        <source>Status</source>
+        <translation>상태 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="452"/>
+        <source>Mission Progress</source>
+        <translation>미션 진행 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="458"/>
+        <source>Telemetry Panel</source>
+        <translation>텔레메트리 패널</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="464"/>
+        <source>Vibration Status</source>
+        <translation>진동 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="470"/>
+        <source>EKF Status</source>
+        <translation>EKF 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="479"/>
+        <source>FlyView Settings</source>
+        <translation>비행화면 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainToolBar.qml" line="502"/>
+        <source>Background Opacity</source>
+        <translation>배경 투명도</translation>
     </message>
 </context>
 <context>
@@ -10422,7 +10659,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="224"/>
         <source>Hover speed</source>
-        <translation>정지비행 속도</translation>
+        <translation>비행 속도</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="258"/>
@@ -10446,6 +10683,12 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/MissionManager/MissionSettingsItem.cc" line="292"/>
         <source>Launch</source>
         <translation>시작</translation>
+    </message>
+    <message>
+        <location filename="../src/MissionManager/MissionSettingsItem.h" line="74"/>
+        <location filename="../src/MissionManager/MissionSettingsItem.h" line="75"/>
+        <source>Mission Start</source>
+        <translation>자동 경로 개요</translation>
     </message>
 </context>
 <context>
@@ -13096,7 +13339,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1004"/>
         <source>Create complex pattern:</source>
-        <translation>복잡한 패턴 생성:</translation>
+        <translation>패턴 생성</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1029"/>
@@ -14339,7 +14582,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/QGroundControlQmlGlobal.cc" line="292"/>
         <source>AMSL</source>
-        <translation>ASML</translation>
+        <translation>AMSL</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/QGroundControlQmlGlobal.cc" line="294"/>

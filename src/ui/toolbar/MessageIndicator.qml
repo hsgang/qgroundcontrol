@@ -90,23 +90,6 @@ Item {
         }
     }
 
-    Component {
-        id: messageContentComponent
-
-        TextArea {
-            id:                     messageText
-            width:                  Math.max(ScreenTools.defaultFontPixelHeight * 20, contentWidth + ScreenTools.defaultFontPixelWidth)
-            height:                 Math.max(ScreenTools.defaultFontPixelHeight * 20, contentHeight)
-            readOnly:               true
-            textFormat:             TextEdit.RichText
-            color:                  qgcPal.text
-            placeholderText:        qsTr("No Messages")
-            placeholderTextColor:   qgcPal.text
-            padding:                0
-
-            property bool   _noMessages:    messageText.length === 0
-            property var    _fact:          null
-
             function formatMessage(message) {
                 message = message.replace(new RegExp("<#E>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0)) + "pt monospace;");
                 message = message.replace(new RegExp("<#I>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0)) + "pt monospace;");
@@ -114,72 +97,61 @@ Item {
                 return message;
             }
 
-            Component.onCompleted: {
-                messageText.text = formatMessage(_activeVehicle.formattedMessages)
-                _activeVehicle.resetAllMessages()
-                //for (var i = 0; i < _activeVehicle.messageCount; i++)
-                //    messageFlick.flick(0,-5000)
-                //_activeVehicle.resetAllMessages()
-            }
+            contentComponent: Component {
+                TextArea {
+                    id:                     messageText
+                    width:                  Math.max(ScreenTools.defaultFontPixelWidth * 30, contentWidth + ScreenTools.defaultFontPixelWidth)
+                    height:                 Math.max(ScreenTools.defaultFontPixelHeight * 3, contentHeight)
+                    readOnly:               true
+                    textFormat:             TextEdit.RichText
+                    color:                  qgcPal.text
+                    placeholderText:        qsTr("No Messages")
+                    placeholderTextColor:   qgcPal.text
+                    padding:                0
 
-            Connections {
-                target:                 _activeVehicle
-                onNewFormattedMessage:  messageText.insert(0, formatMessage(formattedMessage))
-            }
+                    property bool _noMessages: messageText.length === 0
 
-            FactPanelController {
-                id: controller
-            }
-
-            onLinkActivated: (link) => {
-                if (link.startsWith('param://')) {
-                    var paramName = link.substr(8);
-                    _fact = controller.getParameterFact(-1, paramName, true)
-                    if (_fact != null) {
-                        paramEditorDialogComponent.createObject(mainWindow).open()
+                    Connections {
+                        target:                 _activeVehicle
+                        onNewFormattedMessage:  {
+                            messageText.append(formatMessage(formattedMessage))
+                        }
                     }
-                } else {
-                    Qt.openUrlExternally(link);
-                }
-            }
 
-            Component {
-                id: paramEditorDialogComponent
+                    Component.onCompleted: {
+                        messageText.text = formatMessage(_activeVehicle.formattedMessages)
+                        _activeVehicle.resetAllMessages()
+                    }
 
-                ParameterEditorDialog {
-                    title:          qsTr("Edit Parameter")
-                    fact:           messageText._fact
-                    destroyOnClose: true
-                }
-            }
+                    Rectangle {
+                        anchors.right:              parent.right
+                        anchors.bottom:             parent.bottom
+                        width:                      ScreenTools.defaultFontPixelHeight * 2
+                        height:                     width
+                        radius:                     width / 4
+                        color:                      QGroundControl.globalPalette.windowShadeDark
+                        border.color:               QGroundControl.globalPalette.text
+                        visible:                    !_noMessages
 
-            Rectangle {
-                anchors.right:   parent.right
-                anchors.top:     parent.top
-                width:                      ScreenTools.defaultFontPixelHeight * 1.25
-                height:                     width
-                radius:                     width / 2
-                color:                      QGroundControl.globalPalette.button
-                border.color:               QGroundControl.globalPalette.buttonText
-                visible:                    !_noMessages
+                        QGCColoredImage {
+                            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.25
+                            anchors.centerIn:   parent
+                            anchors.fill:       parent
+                            sourceSize.height:  height
+                            source:             "/res/TrashDelete.svg"
+                            fillMode:           Image.PreserveAspectFit
+                            mipmap:             true
+                            smooth:             true
+                            color:              qgcPal.text
+                        }
 
-                QGCColoredImage {
-                    anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.25
-                    anchors.centerIn:   parent
-                    anchors.fill:       parent
-                    sourceSize.height:  height
-                    source:             "/res/TrashDelete.svg"
-                    fillMode:           Image.PreserveAspectFit
-                    mipmap:             true
-                    smooth:             true
-                    color:              qgcPal.text
-                }
-
-                QGCMouseArea {
-                    fillItem: parent
-                    onClicked: {
-                        _activeVehicle.clearMessages()
-                        drawer.close()
+                        QGCMouseArea {
+                            fillItem: parent
+                            onClicked: {
+                                _activeVehicle.clearMessages()
+                                componentDrawer.visible = false
+                            }
+                        }
                     }
                 }
             }

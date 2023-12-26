@@ -1770,7 +1770,7 @@ void MissionController::_recalcMissionFlightStatus()
     // Add the information for the final segment back to home
     if (foundRTL && lastFlyThroughVI != _settingsItem && homePositionValid) {
         double azimuth, distance, pathDistance, altDifference;
-        _calcPrevWaypointValues(lastFlyThroughVI, _settingsItem, &azimuth, &distance, &pathDistance, &altDifference);
+        _calcPrevWaypointValues(_settingsItem, lastFlyThroughVI, &azimuth, &distance, &pathDistance, &altDifference);
 
         // Calculate time/distance
         double hoverTime = distance / _missionFlightStatus.hoverSpeed;

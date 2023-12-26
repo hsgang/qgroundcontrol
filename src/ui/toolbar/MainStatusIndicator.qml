@@ -162,30 +162,6 @@ RowLayout {
                     id:         mainLayout
                     spacing:    _spacing
 
-                    QGCButton {
-                        // FIXME: forceArm is not possible anymore if _healthAndArmingChecksSupported == true
-                        enabled:    _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
-                        text:       _armed ?  qsTr("Disarm") : (forceArm ? qsTr("Force Arm") : qsTr("Arm"))
-
-                        property bool forceArm: false
-
-                        onPressAndHold: forceArm = true
-
-                        onClicked: {
-                            if (_armed) {
-                                mainWindow.disarmVehicleRequest()
-                            } else {
-                                if (forceArm) {
-                                    mainWindow.forceArmVehicleRequest()
-                                } else {
-                                    mainWindow.armVehicleRequest()
-                                }
-                            }
-                            forceArm = false
-                            drawer.close()
-                        }
-                    }
-
                     QGCLabel {
                         anchors.horizontalCenter:   parent.horizontalCenter
                         text:                       qsTr("Sensor Status")
@@ -284,45 +260,16 @@ RowLayout {
                                     forceArm = false
                                     drawer.close()()
                                 }
-                            }
 
-                            QGCLabel {
-                                anchors.horizontalCenter:   parent.horizontalCenter
-                                text:                       qsTr("Sensor Status")
-                                visible:                    !_healthAndArmingChecksSupported
-                            }
+                                Component {
+                                    id: paramEditorDialogComponent
 
-                            GridLayout {
-                                rowSpacing:     _spacing
-                                columnSpacing:  _spacing
-                                rows:           _activeVehicle.sysStatusSensorInfo.sensorNames.length
-                                flow:           GridLayout.TopToBottom
-                                visible:        !_healthAndArmingChecksSupported
-
-                                Repeater {
-                                    model: _activeVehicle.sysStatusSensorInfo.sensorNames
-                                    QGCLabel { text: modelData }
+                                    ParameterEditorDialog {
+                                        title:          qsTr("Edit Parameter")
+                                        fact:           description.fact
+                                        destroyOnClose: true
+                                    }
                                 }
-
-                                Repeater {
-                                    model: _activeVehicle.sysStatusSensorInfo.sensorStatus
-                                    QGCLabel { text: modelData }
-                                }
-                            }
-
-                            QGCLabel {
-                                text:       qsTr("Overall Status")
-                                visible:    _healthAndArmingChecksSupported && _activeVehicle.healthAndArmingCheckReport.problemsForCurrentMode.count > 0
-                            }
-                            // List health and arming checks
-                            Repeater {
-                                visible:    _healthAndArmingChecksSupported
-                                model:      _activeVehicle ? _activeVehicle.healthAndArmingCheckReport.problemsForCurrentMode : null
-                                delegate:   listdelegate
-                            }
-
-                            FactPanelController {
-                                id: controller
                             }
                         }
                     }

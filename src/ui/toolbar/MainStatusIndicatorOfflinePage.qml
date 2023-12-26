@@ -38,15 +38,15 @@ ToolIndicatorPage {
     }
 
     contentComponent: Component {
-            ColumnLayout { 
+        ColumnLayout {
             spacing: ScreenTools.defaultFontPixelHeight / 2
 
             QGCLabel {
-                Layout.alignment:   Qt.AlignTop
+                Layout.alignment:   {Qt.AlignTop; Qt.AlignHCenter;}
                 text:               noLinks ? qsTr("No Links Configured") : qsTr("Connect To Link")
                 font.pointSize:     noLinks ? ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
             }
-            
+
             Repeater {
                 model: linkConfigs
 
@@ -59,7 +59,8 @@ ToolIndicatorPage {
 
                     onClicked: {
                         QGroundControl.linkManager.createConnectedLink(object)
-                        drawer.close()
+                        //drawer.close()
+                        componentDrawer.visible = false
                     }
                 }
             }
@@ -73,35 +74,43 @@ ToolIndicatorPage {
             IndicatorPageGroupLayout {
                 RowLayout {
                     QGCLabel { Layout.fillWidth: true; text: qsTr("Communication Links") }
-                    
+
                     QGCButton {
                         text:       qsTr("Configure")
                         onClicked: {
                             mainWindow.showSettingsTool(qsTr("Comm Links"))
-                            drawer.close()
+                            //drawer.close()
+                            componentDrawer.visible = false
                         }
                     }
                 }
             }
 
             IndicatorPageGroupLayout {
-                heading:        qsTr("AutoConnect")
+                heading:        qsTr("Auto Connect")
                 visible:        autoConnectSettings.visible
                 showDivider:    false
 
                 Repeater {
                     id: autoConnectRepeater
 
-                    model: [ 
+                    model: [
                         autoConnectSettings.autoConnectPixhawk,
                         autoConnectSettings.autoConnectSiKRadio,
-                        autoConnectSettings.autoConnectPX4Flow,
-                        autoConnectSettings.autoConnectLibrePilot,
+                        //autoConnectSettings.autoConnectPX4Flow,
+                        //autoConnectSettings.autoConnectLibrePilot,
                         autoConnectSettings.autoConnectUDP,
-                        autoConnectSettings.autoConnectZeroConf,
+                        //autoConnectSettings.autoConnectZeroConf,
                     ]
 
-                    property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("PX4 Flow"), qsTr("LibrePilot"), qsTr("UDP"), qsTr("Zero-Conf") ]
+                    property var names: [
+                        qsTr("Pixhawk"),
+                        qsTr("SiK Radio"),
+                        //qsTr("PX4 Flow"),
+                        //qsTr("LibrePilot"),
+                        qsTr("UDP")
+                        //,qsTr("Zero-Conf")
+                    ]
 
                     FactCheckBoxSlider {
                         Layout.fillWidth:   true

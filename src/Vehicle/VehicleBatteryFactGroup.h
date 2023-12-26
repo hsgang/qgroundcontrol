@@ -11,6 +11,7 @@
 
 #include "FactGroup.h"
 #include "QGCMAVLink.h"
+#include <QElapsedTimer>
 
 class Vehicle;
 
@@ -33,6 +34,7 @@ public:
     Q_PROPERTY(Fact* timeRemainingStr   READ timeRemainingStr   CONSTANT)
     Q_PROPERTY(Fact* chargeState        READ chargeState        CONSTANT)
     Q_PROPERTY(Fact* instantPower       READ instantPower       CONSTANT)
+    Q_PROPERTY(Fact* currentRate        READ currentRate        CONSTANT)
 
     Fact* id                        () { return &_batteryIdFact; }
     Fact* function                  () { return &_batteryFunctionFact; }
@@ -46,6 +48,7 @@ public:
     Fact* timeRemaining             () { return &_timeRemainingFact; }
     Fact* timeRemainingStr          () { return &_timeRemainingStrFact; }
     Fact* chargeState               () { return &_chargeStateFact; }
+    Fact* currentRate               () { return &_currentRateFact; }
 
     static const char* _batteryIdFactName;
     static const char* _batteryFunctionFactName;
@@ -59,6 +62,7 @@ public:
     static const char* _timeRemainingStrFactName;
     static const char* _chargeStateFactName;
     static const char* _instantPowerFactName;
+    static const char* _currentRateFactName;
 
     static const char* _settingsGroup;
 
@@ -89,6 +93,13 @@ private:
     Fact            _timeRemainingStrFact;
     Fact            _chargeStateFact;
     Fact            _instantPowerFact;
+    Fact            _currentRateFact;
 
     static const char* _batteryFactGroupNamePrefix;
+
+    QElapsedTimer   _batteryConsumeTimer;
+    qint16          _batteryConsumeCurrent = 0;
+    int16_t           _currentRate = 0;
+
+    void            _calcCurrentRate(int16_t current);
 };

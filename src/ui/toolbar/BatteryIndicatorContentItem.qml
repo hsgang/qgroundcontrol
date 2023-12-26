@@ -19,18 +19,16 @@ import QGroundControl.FactSystem
 import QGroundControl.FactControls
 import MAVLink
 
-// This is the contentItem portion of the ToolIndicatorPage for the Battery toolbar item.
-// It works for both PX4 and APM firmware.
-
 ColumnLayout {
     id:         mainLayout
-    spacing:    ScreenTools.defaultFontPixelHeight
+    spacing:    ScreenTools.defaultFontPixelHeight / 2
     Layout.fillWidth: true
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 
     property var _batterySettings: QGroundControl.settingsManager.batterySettings
     property real _batteryCellCount: _batterySettings.batteryCellCount.value
+    property real _margins: ScreenTools.defaultFontPixelHeight / 2
 
     Component {
         id: batteryValuesAvailableComponent
@@ -52,70 +50,98 @@ ColumnLayout {
         font.family:        ScreenTools.demiboldFontFamily
     }
 
-    RowLayout {
-        Layout.preferredWidth: parent.width
-        spacing: ScreenTools.defaultFontPixelWidth
 
-        ColumnLayout {
-            Repeater {
-                model: _activeVehicle ? _activeVehicle.batteries : 0
+    ColumnLayout {
+        spacing: _margins
+
+        Repeater {
+            model: _activeVehicle ? _activeVehicle.batteries : 0
+
+            Rectangle {
+                Layout.preferredHeight: batteryColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
+                Layout.preferredWidth:  batteryColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                color:                  qgcPal.windowShade
+                radius:                 _margins / 2
+                Layout.fillWidth:       true
+
+                property var batteryValuesAvailable: nameAvailableLoader.item
+
+                Loader {
+                    id:                 nameAvailableLoader
+                    sourceComponent:    batteryValuesAvailableComponent
+
+                    property var battery: object
+                }
 
                 ColumnLayout {
-                    id:      col1Repeater
-                    spacing: ScreenTools.defaultFontPixelHeight / 3
+                    id:                 batteryColumnLayout
+                    anchors.margins:    _margins / 2
+                    anchors.top:        parent.top
+                    anchors.left:       parent.left
+                    anchors.right:      parent.right
+                    spacing:            _margins
 
-                    property var batteryValuesAvailable: nameAvailableLoader.item
+                // ColumnLayout {
+                //     spacing: ScreenTools.defaultFontPixelHeight / 2
+                //     Layout.fillWidth: true
 
-                    Loader {
-                        id:                 nameAvailableLoader
-                        sourceComponent:    batteryValuesAvailableComponent
+                    // property var batteryValuesAvailable: nameAvailableLoader.item
 
-                        property var battery: object
+                    // Loader {
+                    //     id:                 nameAvailableLoader
+                    //     sourceComponent:    batteryValuesAvailableComponent
+
+                    //     property var battery: object
+                    // }
+
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Battery ID")
+                        valueText:  qsTr("Battery %1").arg(object.id.rawValue)
                     }
-
-                    QGCLabel { text: qsTr("Battery %1").arg(object.id.rawValue) }
-                    QGCLabel { text: qsTr("Charge State");                          visible: batteryValuesAvailable.chargeStateAvailable }
-                    QGCLabel { text: qsTr("Remaining Time");                        visible: batteryValuesAvailable.timeRemainingAvailable }
-                    QGCLabel { text: qsTr("Remaining") }
-                    QGCLabel { text: qsTr("Voltage") }
-                    QGCLabel { text: qsTr("Cell Voltage") }
-                    QGCLabel { text: qsTr("Current");                               visible: batteryValuesAvailable.currentAvailable }
-                    QGCLabel { text: qsTr("Consumed");                              visible: batteryValuesAvailable.mahConsumedAvailable }
-                    QGCLabel { text: qsTr("Temperature");                           visible: batteryValuesAvailable.temperatureAvailable }
-                    QGCLabel { text: qsTr("Function");                              visible: batteryValuesAvailable.functionAvailable }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Charge State")
+                        valueText:  object.chargeState.enumStringValue
+                        visible:    batteryValuesAvailable.chargeStateAvailable
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Remaining Time")
+                        valueText:  object.timeRemainingStr.value
+                        visible:    batteryValuesAvailable.timeRemainingAvailable
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Remaining")
+                        valueText:  object.percentRemaining.valueString + " " + object.percentRemaining.units
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Voltage")
+                        valueText:  object.voltage.valueString + " " + object.voltage.units
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Cell Voltage")
+                        valueText:  (object.voltage.value / _batteryCellCount).toFixed(2) + " " + object.voltage.units
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Current")
+                        valueText:  object.current.valueString + " " + object.current.units
+                        visible:    batteryValuesAvailable.currentAvailable
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Consumed")
+                        valueText:  object.mahConsumed.valueString + " " + object.mahConsumed.units
+                        visible:    batteryValuesAvailable.mahConsumedAvailable
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Temperature")
+                        valueText:  object.temperature.valueString + " " + object.temperature.units
+                        visible:    batteryValuesAvailable.temperatureAvailable
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Function")
+                        valueText:  object.function.enumStringValue
+                        visible:    batteryValuesAvailable.functionAvailable
+                    }
                 }
             }
-        }
-
-        ColumnLayout {
-            Repeater {
-                model: _activeVehicle ? _activeVehicle.batteries : 0
-
-                ColumnLayout {
-                    id:      col2Repeater
-                    spacing: ScreenTools.defaultFontPixelHeight / 3
-
-                    property var batteryValuesAvailable: valueAvailableLoader.item
-
-                    Loader {
-                        id:                 valueAvailableLoader
-                        sourceComponent:    batteryValuesAvailableComponent
-
-                        property var battery: object
-                    }
-
-                    QGCLabel { text: "";                                                                        visible: col2Repeater.count !== 1 }
-                    QGCLabel { text: object.chargeState.enumStringValue;                                        visible: batteryValuesAvailable.chargeStateAvailable }
-                    QGCLabel { text: object.timeRemainingStr.value;                                             visible: batteryValuesAvailable.timeRemainingAvailable }
-                    QGCLabel { text: object.percentRemaining.valueString + " " + object.percentRemaining.units }
-                    QGCLabel { text: object.voltage.valueString + " " + object.voltage.units }
-                    QGCLabel { text: (object.voltage.value / _batteryCellCount).toFixed(2) + " " + object.voltage.units }
-                    QGCLabel { text: object.current.valueString + " " + object.current.units;                   visible: batteryValuesAvailable.currentAvailable }
-                    QGCLabel { text: object.mahConsumed.valueString + " " + object.mahConsumed.units;           visible: batteryValuesAvailable.mahConsumedAvailable }
-                    QGCLabel { text: object.temperature.valueString + " " + object.temperature.units;           visible: batteryValuesAvailable.temperatureAvailable }
-                    QGCLabel { text: object.function.enumStringValue;                                           visible: batteryValuesAvailable.functionAvailable }
-                }
-            }
-        }
+        } // columnlayout
     }
 }

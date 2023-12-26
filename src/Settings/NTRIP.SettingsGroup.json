@@ -5,7 +5,7 @@
 [
 {
     "name":                 "ntripServerConnectEnabled",
-    "shortDesc":     "Connect to NTRIP server",
+    "shortDesc":     "Connect to NTRIP server (Required Reboot)",
     "longDesc":      "Connect to NTRIP server using specified address/port",
     "type":                 "bool",
     "default":         false,
@@ -15,7 +15,7 @@
     "name":                 "ntripServerHostAddress",
     "shortDesc":     "Host address",
     "type":                 "string",
-    "default":         "127.0.0.1",
+    "default":         "www.gnssdata.or.kr",
     "qgcRebootRequired":    true
 },
 {
@@ -29,14 +29,14 @@
     "name":                 "ntripUsername",
     "shortDesc":     "Username",
     "type":                 "string",
-    "default":         "",
+    "default":         "email@email.com",
     "qgcRebootRequired":    true
 },
 {
     "name":                 "ntripPassword",
     "shortDesc":     "Password",
     "type":                 "string",
-    "default":         "",
+    "default":         "gnss",
     "qgcRebootRequired":    true
 },
 {
@@ -44,7 +44,7 @@
     "shortDesc":     "Mount Point",
     "longDesc":      "NTRIP Mount Point. Leave blank for RTCM over TCP",
     "type":                 "string",
-    "default":         "",
+    "default":         "PUSN-RTCM32",
     "qgcRebootRequired":    true
 },
 {

@@ -63,6 +63,7 @@ SetupPage {
                     id:     flightModeSettings
                     width:  flightModeColumn.width + (_margins * 2)
                     height: flightModeColumn.height + ScreenTools.defaultFontPixelHeight
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
                     color:  qgcPal.windowShade
 
                     Column {
@@ -191,6 +192,7 @@ SetupPage {
                     width:  channelOptColumn.width + (_margins * 2)
                     height: channelOptColumn.height + ScreenTools.defaultFontPixelHeight
                     color:  qgcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                     Column {
                         id:                 channelOptColumn

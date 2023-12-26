@@ -21,10 +21,10 @@ import QGroundControl.FactControls
 ToolIndicatorPage {
     showExpand: true
 
-    property real   margins:            ScreenTools.defaultFontPixelHeight
-    property var    activeVehicle:      QGroundControl.multiVehicleManager.activeVehicle
-    property string na:                 qsTr("N/A", "No data to display")
-    property string valueNA:            qsTr("--.--", "No data to display")
+    property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
+    property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
+    property string _NA:                qsTr("N/A", "No data to display")
+    property string _valueNA:           qsTr("--.--", "No data to display")
     property var    rtkSettings:        QGroundControl.settingsManager.rtkSettings
     property bool   useFixedPosition:   rtkSettings.useFixedBasePosition.rawValue
 
@@ -32,7 +32,7 @@ ToolIndicatorPage {
 
     contentComponent: Component {
         ColumnLayout {
-            spacing: margins
+            spacing: _margins
 
             QGCLabel {
                 Layout.alignment:   Qt.AlignHCenter
@@ -40,25 +40,43 @@ ToolIndicatorPage {
                 font.family:        ScreenTools.demiboldFontFamily
             }
 
-            GridLayout {
-                Layout.fillWidth:   true
-                columnSpacing:      margins
-                columns:            2
+            Rectangle {
+                Layout.preferredHeight: gnssColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
+                Layout.preferredWidth:  gnssColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                color:                  qgcPal.windowShade
+                radius:                 _margins / 4
+                Layout.fillWidth:       true
 
-                QGCLabel { Layout.fillWidth: true; text: qsTr("Satellites") }
-                QGCLabel { text: activeVehicle ? activeVehicle.gps.count.valueString : na }
+                ColumnLayout {
+                    id:      gnssColumnLayout
+                    //Layout.fillWidth:   true
+                    anchors.margins:    _margins / 2
+                    anchors.top:        parent.top
+                    anchors.left:       parent.left
+                    anchors.right:      parent.right
+                    spacing:            _margins
 
-                QGCLabel { Layout.fillWidth: true; text: qsTr("GPS Lock") }
-                QGCLabel { text: activeVehicle ? activeVehicle.gps.lock.enumStringValue : na }
-
-                QGCLabel { Layout.fillWidth: true; text: qsTr("HDOP") }
-                QGCLabel { text: activeVehicle ? activeVehicle.gps.hdop.valueString : valueNA }
-
-                QGCLabel { Layout.fillWidth: true; text: qsTr("VDOP") }
-                QGCLabel { text: activeVehicle ? activeVehicle.gps.vdop.valueString : valueNA }
-
-                QGCLabel { Layout.fillWidth: true; text: qsTr("Course Over Ground") }
-                QGCLabel { text: activeVehicle ? activeVehicle.gps.courseOverGround.valueString : valueNA }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Satellites")
+                        valueText:  _activeVehicle ? _activeVehicle.gps.count.valueString : _NA
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("GPS Lock")
+                        valueText:  _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : _NA
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("HDOP")
+                        valueText:  _activeVehicle ? _activeVehicle.gps.hdop.valueString : _valueNA
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("VDOP")
+                        valueText:  _activeVehicle ? _activeVehicle.gps.vdop.valueString : _valueNA
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Course Over Ground")
+                        valueText:  _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : _valueNA
+                    }
+                }
             }
 
             QGCLabel {
@@ -68,26 +86,77 @@ ToolIndicatorPage {
                 visible:            isGNSS2
             }
 
-            GridLayout {
-                Layout.fillWidth:   true
-                columnSpacing:      _margins
-                columns:            2
-                visible:            isGNSS2
+            Rectangle {
+                Layout.preferredHeight: gnss2ColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
+                Layout.preferredWidth:  gnss2ColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                color:                  qgcPal.windowShade
+                radius:                 _margins / 2
+                Layout.fillWidth:       true
+                visible:                isGNSS2
 
-                QGCLabel { Layout.fillWidth: true; text: qsTr("Satellites") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.count.valueString : _NA }
+                ColumnLayout {
+                    id:      gnss2ColumnLayout
+                    anchors.margins:    _margins / 2
+                    anchors.top:        parent.top
+                    anchors.left:       parent.left
+                    anchors.right:      parent.right
+                    visible:            isGNSS2
 
-                QGCLabel { Layout.fillWidth: true; text: qsTr("GPS Lock") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.lock.enumStringValue : _NA }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Satellites")
+                        valueText:  _activeVehicle ? _activeVehicle.gps2.count.valueString : _NA
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("GPS Lock")
+                        valueText:  _activeVehicle ? _activeVehicle.gps2.lock.enumStringValue : _NA
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("HDOP")
+                        valueText:  _activeVehicle ? _activeVehicle.gps2.hdop.valueString : _valueNA
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("VDOP")
+                        valueText:  _activeVehicle ? _activeVehicle.gps2.vdop.valueString : _valueNA
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Course Over Ground")
+                        valueText:  _activeVehicle ? _activeVehicle.gps2.courseOverGround.valueString : _valueNA
+                    }
+                }
+            }
 
-                QGCLabel { Layout.fillWidth: true; text: qsTr("HDOP") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.hdop.valueString : _valueNA }
+            QGCLabel {
+                Layout.alignment:   Qt.AlignHCenter
+                text:               qsTr("NTRIP Status")
+                font.family:        ScreenTools.demiboldFontFamily
+                visible:            QGroundControl.ntrip.connected
+            }
 
-                QGCLabel { Layout.fillWidth: true; text: qsTr("VDOP") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.vdop.valueString : _valueNA }
+            Rectangle {
+                Layout.preferredHeight: ntripColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
+                Layout.preferredWidth:  ntripColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                color:                  qgcPal.windowShade
+                radius:                 _margins / 2
+                Layout.fillWidth:       true
+                visible:            QGroundControl.ntrip.connected
 
-                QGCLabel { Layout.fillWidth: true; text: qsTr("Course Over Ground") }
-                QGCLabel { text: _activeVehicle ? _activeVehicle.gps2.courseOverGround.valueString : _valueNA }
+                ColumnLayout {
+                    id:      ntripColumnLayout
+                    anchors.margins:    _margins / 2
+                    anchors.top:        parent.top
+                    anchors.left:       parent.left
+                    anchors.right:      parent.right
+                    visible:            QGroundControl.ntrip.connected
+
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("Status")
+                        valueText:  QGroundControl.ntrip.connected ? "Connected" : "Disconnected"
+                    }
+                    ComponentLabelValueRow {
+                        labelText:  qsTr("BandWidth")
+                        valueText:  QGroundControl.ntrip.connected ? QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s" : "0.00 kB/s"
+                    }
+                }
             }
 
             QGCLabel {
@@ -130,7 +199,8 @@ ToolIndicatorPage {
         }
     }
 
-    expandedComponent: IndicatorPageGroupLayout {
+    expandedComponent: Component {
+        IndicatorPageGroupLayout {
         heading:        qsTr("RTK GPS Settings")
         showDivider:    false
 
@@ -218,19 +288,27 @@ ToolIndicatorPage {
                     enabled:            saveBasePositionButton.enabled
                 }
 
-                QGCButton {
-                    id:         saveBasePositionButton
-                    text:       enabled ? qsTr("Save") : qsTr("Not Yet Valid")
-                    enabled:    QGroundControl.gpsRtk.valid.value
+                Item { width: rtkGrid.firstColWidth; height: 1 }
+                QGCLabel {
+                    text:       rtkGrid.rtkSettings.surveyInAccuracyLimit.shortDescription
+                    visible:    rtkGrid.rtkSettings.surveyInAccuracyLimit.visible
+                    enabled:    !rtkGrid.useFixedPosition
+                }
+                FactTextField {
+                    Layout.preferredWidth:  editFieldWidth
+                    fact:                   rtkGrid.rtkSettings.surveyInAccuracyLimit
+                    visible:                rtkGrid.rtkSettings.surveyInAccuracyLimit.visible
+                    enabled:                !rtkGrid.useFixedPosition
+                }
 
-                    onClicked: {
-                        rtkSettings.fixedBasePositionLatitude.rawValue  = QGroundControl.gpsRtk.currentLatitude.rawValue
-                        rtkSettings.fixedBasePositionLongitude.rawValue = QGroundControl.gpsRtk.currentLongitude.rawValue
-                        rtkSettings.fixedBasePositionAltitude.rawValue  = QGroundControl.gpsRtk.currentAltitude.rawValue
-                        rtkSettings.fixedBasePositionAccuracy.rawValue  = QGroundControl.gpsRtk.currentAccuracy.rawValue
-                    }
+                onClicked: {
+                    rtkSettings.fixedBasePositionLatitude.rawValue  = QGroundControl.gpsRtk.currentLatitude.rawValue
+                    rtkSettings.fixedBasePositionLongitude.rawValue = QGroundControl.gpsRtk.currentLongitude.rawValue
+                    rtkSettings.fixedBasePositionAltitude.rawValue  = QGroundControl.gpsRtk.currentAltitude.rawValue
+                    rtkSettings.fixedBasePositionAccuracy.rawValue  = QGroundControl.gpsRtk.currentAccuracy.rawValue
                 }
             }
         }
+    }
     }
 }

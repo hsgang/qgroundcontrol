@@ -11,13 +11,13 @@ import SiYi.Object 1.0
 
 Item {
     id:             _root
-    width:          siyirssiRow.width //(siyiStatusIcon.width + siyiStatusValuesColumn.width) * 1.1
+    width:          siyirssiRow.width
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
     property SiYiTransmitter transmitter:   SiYi.transmitter
 
-    property bool showIndicator:            transmitter.isConnected //QGroundControl.settingsManager.appSettings.enableSiyiSDK.rawValue//QGroundControl.siyiSDKManager.isConnected
+    property bool showIndicator:            transmitter.isConnected
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
 
     Component {
@@ -26,46 +26,75 @@ Item {
         ToolIndicatorPage{
             showExpand: false
 
-            property real _margins: ScreenTools.defaultFontPixelHeight
+            property real _margins: ScreenTools.defaultFontPixelHeight / 2
 
-            contentComponent: ColumnLayout {
-                Layout.preferredWidth:  parent.width
-                spacing:                ScreenTools.defaultFontPixelHeight * 0.5
+            contentComponent: Component {
+                ColumnLayout {
+                    Layout.preferredWidth:  parent.width
+                    spacing:                _margins
 
-                QGCLabel {
-                    id:                 telemLabel
-                    text:               qsTr("Network Status")
-                    font.family:        ScreenTools.demiboldFontFamily
-                    Layout.alignment:   Qt.AlignHCenter
-                }
+                    QGCLabel {
+                        id:                 telemLabel
+                        text:               qsTr("Network Status")
+                        font.family:        ScreenTools.demiboldFontFamily
+                        Layout.alignment:   Qt.AlignHCenter
+                    }
 
-                GridLayout {
-                    id:                 telemGrid
-                    columnSpacing:      ScreenTools.defaultFontPixelWidth
-                    columns:            2
-                    Layout.fillWidth:   true
+                    Rectangle {
+                        Layout.preferredHeight: siyiColumnLayout.height + _margins
+                        Layout.preferredWidth:  siyiColumnLayout.width + _margins
+                        color:                  qgcPal.windowShade
+                        radius:                 _margins / 4
+                        Layout.fillWidth:       true
 
-                    QGCLabel { text: qsTr("Signal:") }
-                    QGCLabel { text: transmitter.signalQuality + " %"}
-                    QGCLabel { text: qsTr("RSSI:") }
-                    QGCLabel { text: transmitter.rssi + " dBm"}
-                    QGCLabel { text: qsTr("Inactive Time:") }
-                    QGCLabel { text: transmitter.inactiveTime + " ms"}
-                    QGCLabel { text: qsTr("Upstream:") }
-                    QGCLabel { text: (transmitter.upStream / 1024).toFixed(1) + " Kb/s" }
-                    QGCLabel { text: qsTr("Downstream:") }
-                    QGCLabel { text: (transmitter.downStream / 1024).toFixed(1) + " Kb/s" }
-                    QGCLabel { text: qsTr("TxBandwidth:") }
-                    QGCLabel { text: (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s" }
-                    QGCLabel { text: qsTr("RxBandwidth:") }
-                    QGCLabel { text: (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s" }
-                    QGCLabel { text: qsTr("Frequency:") }
-                    QGCLabel { text: transmitter.freq + " Mhz"}
-                    QGCLabel { text: qsTr("Channel:") }
-                    QGCLabel { text: transmitter.channel }
+                        ColumnLayout {
+                            id:                 siyiColumnLayout
+                            anchors.margins:    _margins / 2
+                            anchors.top:        parent.top
+                            anchors.left:       parent.left
+                            anchors.right:      parent.right
+                            spacing:            _margins
+
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Signal")
+                                valueText:  transmitter.signalQuality + " %"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("RSSI")
+                                valueText:  transmitter.rssi + " dBm"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Inactive Time")
+                                valueText:  transmitter.inactiveTime + " ms"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Upstream")
+                                valueText:  (transmitter.upStream / 1024).toFixed(1) + " KB/s"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Downstream")
+                                valueText:  (transmitter.downStream / 1024).toFixed(1) + " KB/s"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("TxBandwidth")
+                                valueText:  (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("RxBandwidth")
+                                valueText:  (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Frequency")
+                                valueText:  transmitter.freq + " Mhz"
+                            }
+                            ComponentLabelValueRow {
+                                labelText:  qsTr("Channel")
+                                valueText:  transmitter.channel
+                            }
+                        }
+                    }
                 }
             }
-//        }
         } //ToolIndicatorPage
     }
 
@@ -73,26 +102,23 @@ Item {
         id:             siyirssiRow
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
-        spacing:        ScreenTools.defaultFontPixelWidth/2
+        spacing:        ScreenTools.defaultFontPixelWidth / 2
 
         Column {
-            id:                     batteryValuesColumn
             anchors.verticalCenter: parent.verticalCenter
             anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
-            //anchors.left:           batteryIcon.right
 
             QGCLabel {
-                id:                 batteryVoltageValue
                 anchors.right:      parent.right
                 font.pointSize:     ScreenTools.smallFontPointSize
                 color:              qgcPal.text
-                text:               (transmitter.downStream / 1024).toFixed(0) + " Kb/s"
+                text:               (transmitter.downStream / 1024).toFixed(0) + "KB"
             }
 
             QGCLabel {
                 anchors.right:      parent.right
                 color:              qgcPal.text
-                text:               transmitter.rssi +" dBm"
+                text:               transmitter.rssi
             }
         }
 

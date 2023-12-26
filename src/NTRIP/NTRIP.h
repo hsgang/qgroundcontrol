@@ -33,9 +33,16 @@ public:
                  const bool&    enableVRS);
     ~NTRIPTCPLink();
 
+public slots:
+    void startConnection();
+    void stopConnection();
+    void reconnect();
+
 signals:
     void error(const QString errorMsg);
     void RTCMDataUpdate(QByteArray message);
+    void connectStatus(bool isConnected);
+    void receivedCount(qint64 recevied);
 
 protected:
     void run() final;
@@ -79,6 +86,8 @@ private:
     NTRIPState _state;
 
     QGCToolbox*  _toolbox = nullptr;
+
+    qint64        _receivedCount = 0;
 };
 
 class NTRIP : public QGCTool {
@@ -90,6 +99,23 @@ public:
     // QGCTool overrides
     void setToolbox(QGCToolbox* toolbox) final;
 
+    Q_INVOKABLE void stopNTRIP();
+    Q_INVOKABLE void reconnectNTRIP();
+
+    Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged);
+    Q_PROPERTY(quint64 ntripReceivedCount READ ntripReceivedCount NOTIFY ntripReceivedCountChanged);
+    Q_PROPERTY(float bandWidth READ bandWidth NOTIFY ntripReceivedCountChanged);
+
+    bool connected () { return _connectedStatus; }
+    void connectStatus (bool isConnected);
+    qint64 ntripReceivedCount() { return _ntripReceivedCount; }
+    void ntripReceivedUpdate(qint64 count);
+    float bandWidth() { return _bandWidth; }
+
+signals:
+    void connectedChanged ();
+    void ntripReceivedCountChanged ();
+
 public slots:
     void _tcpError          (const QString errorMsg);
 
@@ -98,4 +124,9 @@ private slots:
 private:
     NTRIPTCPLink*                    _tcpLink = nullptr;
     RTCMMavlink*                     _rtcmMavlink = nullptr;
+    QElapsedTimer   _bandwidthTimer;
+    int             _bandwidthByteCounter = 0;
+    float           _bandWidth = 0;
+    bool            _connectedStatus = false;
+    qint64          _ntripReceivedCount = 0;
 };

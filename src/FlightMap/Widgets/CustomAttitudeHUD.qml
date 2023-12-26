@@ -40,6 +40,9 @@ Item {
     property string _distanceToNextWPText:  vehicle ? _distanceToNextWP.toFixed(0) : "--"
     property string _windSpdText:           vehicle ? _windSpd.toFixed(1) : "0.0"
 
+    property string _flightMode:            vehicle ? vehicle.flightMode : ""
+    property bool   _vehicleInMissionMode:  vehicle ? _flightMode === vehicle.missionFlightMode : false
+
     width:  size
     height: size
 
@@ -57,11 +60,11 @@ Item {
     }
 
     function isHeadingToNextWPOK(){
-        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_headingToNextWP)
+        return vehicle && _vehicleInMissionMode && _showAdditionalIndicatorsCompass && !isNaN(_headingToNextWP)
     }
 
     function isDistanceToNextWPOK(){
-        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_distanceToNextWP)
+        return vehicle && _vehicleInMissionMode && _showAdditionalIndicatorsCompass && !isNaN(_distanceToNextWP)
     }
 
     function isWindVaneOK(){
@@ -126,15 +129,15 @@ Item {
         height:             width
         radius:             width * 0.5
         anchors.centerIn:   parent
-        color:              qgcPal.text //"transparent"
-        border.color:       qgcPal.alertBackground
+        color:              qgcPal.alertBackground //qgcPal.text
+        border.color:       "black" //qgcPal.alertBackground
 
         QGCLabel {
             text:               "H"
             font.pointSize:     _fontSize < 10 ? 10 : _fontSize;
             font.family:        ScreenTools.demiboldFontFamily
             font.bold:          true
-            color:              qgcPal.alertBackground
+            color:              "black" //qgcPal.alertBackground
             anchors.centerIn:   parent
         }
 
@@ -149,8 +152,8 @@ Item {
         width:                      distanceToHomeText.width + (size * 0.05)
         height:                     size * 0.12
         border.color:               qgcPal.alertBackground
-        color:                      "transparent"
-        radius:                     height * 0.1
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        radius:                     height * 0.2
         visible:                    isHeadingHomeOK()
         anchors.centerIn:           parent
 
@@ -326,8 +329,8 @@ Item {
         width:                      distanceToNextWPText.width + (size * 0.05)
         height:                     size * 0.12
         border.color:               qgcPal.buttonHighlight
-        color:                      "transparent"
-        radius:                     height * 0.1
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        radius:                     height * 0.2
         visible:                    isDistanceToNextWPOK()
         anchors.centerIn:           parent
 
@@ -366,9 +369,9 @@ Item {
     Rectangle {
         width:                      windVaneText.width + (size * 0.05)
         height:                     size * 0.12
-        border.color:               qgcPal.buttonHighlight
-        color:                      "transparent"
-        radius:                     height * 0.1
+        border.color:               qgcPal.colorGreen
+        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        radius:                     height * 0.2
         visible:                    isWindVaneOK()
         anchors.centerIn:           parent
 
@@ -383,8 +386,8 @@ Item {
 
         transform: Translate {
             property double _angle: isNoseUpLocked() ? _windDir - _heading : _windDir
-            x: size/1.85 * Math.sin((_angle)*(3.14/180))
-            y: - size/1.85 * Math.cos((_angle)*(3.14/180))
+            x: size/1.82 * Math.sin((_angle)*(3.14/180))
+            y: - size/1.82 * Math.cos((_angle)*(3.14/180))
         }
     }
 

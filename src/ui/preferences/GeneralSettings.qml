@@ -101,7 +101,8 @@ Rectangle {
                             id:                         unitsGrid
                             anchors.topMargin:          _margins
                             anchors.top:                parent.top
-                            Layout.fillWidth:           false
+                            //Layout.fillWidth:           true
+                            //anchors.fill:               parent
                             anchors.horizontalCenter:   parent.horizontalCenter
                             flow:                       GridLayout.TopToBottom
                             rows:                       4
@@ -1284,12 +1285,6 @@ Rectangle {
 
                             property var  ntripSettings:    QGroundControl.settingsManager.ntripSettings
 
-//                            FactCheckBox {
-//                                text:                   ntripGrid.ntripSettings.ntripServerConnectEnabled.shortDescription
-//                                fact:                   ntripGrid.ntripSettings.ntripServerConnectEnabled
-//                                visible:                ntripGrid.ntripSettings.ntripServerConnectEnabled.visible
-//                                Layout.columnSpan:      2
-//                            }
                             FactCheckBoxSlider {
                                 Layout.fillWidth:   true
                                 text:               ntripGrid.ntripSettings.ntripServerConnectEnabled.shortDescription
@@ -1298,19 +1293,13 @@ Rectangle {
                                 Layout.columnSpan:  2
                             }
 
-//                            FactCheckBox {
-//                                text:                   ntripGrid.ntripSettings.ntripEnableVRS.shortDescription
-//                                fact:                   ntripGrid.ntripSettings.ntripEnableVRS
-//                                visible:                ntripGrid.ntripSettings.ntripEnableVRS.visible
-//                                Layout.columnSpan:      2
-//                            }
-                            FactCheckBoxSlider {
-                                Layout.fillWidth:   true
-                                text:               ntripGrid.ntripSettings.ntripEnableVRS.shortDescription
-                                fact:               ntripGrid.ntripSettings.ntripEnableVRS
-                                visible:            fact.visible
-                                Layout.columnSpan:  2
-                            }
+                            // FactCheckBoxSlider {
+                            //     Layout.fillWidth:   true
+                            //     text:               ntripGrid.ntripSettings.ntripEnableVRS.shortDescription
+                            //     fact:               ntripGrid.ntripSettings.ntripEnableVRS
+                            //     visible:            fact.visible
+                            //     Layout.columnSpan:  2
+                            // }
 
                             QGCLabel {
                                 text:               ntripGrid.ntripSettings.ntripServerHostAddress.shortDescription
@@ -1371,61 +1360,82 @@ Rectangle {
                                 visible:                ntripGrid.ntripSettings.ntripWhitelist.visible
                                 Layout.preferredWidth:  _valueFieldWidth * 2
                             }
-                        }
-                    }
 
-                    Item { width: 1; height: _margins; visible: _openWeatherFact ? _openWeatherFact.visible : false }
-                    
-                    QGCLabel {
-                        id:         openWeatherLabel
-                        text:       qsTr("OpenWeather API Key")
-                        visible:    _openWeatherFact.visible
-                    }
-                    Rectangle {
-                        Layout.preferredHeight: openWeatherViewCol.height + (_margins * 2)
-                        Layout.preferredWidth:  openWeatherViewCol.width + (_margins * 2)
-                        color:                  qgcPal.window
-                        border.color:           qgcPal.windowShade
-                        border.width:           _borderWidth
-                        radius:                 _margins
-                        visible:                openWeatherLabel.visible
-                        Layout.fillWidth:       true
-
-                        ColumnLayout {
-                            id:                         openWeatherViewCol
-                            anchors.margins:            _margins
-                            anchors.top:                parent.top
-                            anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:                    _margins * 2
-
-                            GridLayout {
-                                columns:            2
-                                columnSpacing:      ScreenTools.defaultFontPixelWidth
-                                visible:           _openWeatherFact ? _openWeatherFact.visible : false
-
-//                                FactCheckBox {
-//                                    text:       qsTr("Enable OpenWeatherMap API")
-//                                    fact:       _enableOpenWeatherAPI
-//                                    Layout.columnSpan:      2
-
-//                                    property Fact _enableOpenWeatherAPI : QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
-//                                }
-                                FactCheckBoxSlider {
-                                    Layout.fillWidth:   true
-                                    Layout.columnSpan:      2
-                                    text:               qsTr("Enable OpenWeatherMap API")
-                                    fact:               QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
-                                    visible:            fact.visible
+                            QGCButton {
+                                text: qsTr("Reconnect")
+                                Layout.fillWidth: true
+                                onClicked: {
+                                    QGroundControl.ntrip.reconnectNTRIP()
                                 }
-
-                                QGCLabel { text: qsTr("Enter OpenWeather API Key") }
-                                FactTextField {
-                                    Layout.preferredWidth:  _valueFieldWidth * 3
-                                    fact:                   _openWeatherFact
+                            }
+                            QGCButton {
+                                text: qsTr("Stop")
+                                Layout.fillWidth: true
+                                onClicked: {
+                                    QGroundControl.ntrip.stopNTRIP()
                                 }
+                            }
+                            QGCLabel {
+                                text: QGroundControl.ntrip.connected === true ? "Connected" : "Disconnected"
+                            }
+                            QGCLabel {
+                                text: QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s"
                             }
                         }
                     }
+
+//                     Item { width: 1; height: _margins; visible: _openWeatherFact ? _openWeatherFact.visible : false }
+                    
+//                     QGCLabel {
+//                         id:         openWeatherLabel
+//                         text:       qsTr("OpenWeather API Key")
+//                         visible:    _openWeatherFact.visible
+//                     }
+//                     Rectangle {
+//                         Layout.preferredHeight: openWeatherViewCol.height + (_margins * 2)
+//                         Layout.preferredWidth:  openWeatherViewCol.width + (_margins * 2)
+//                         color:                  qgcPal.window
+//                         border.color:           qgcPal.windowShade
+//                         border.width:           _borderWidth
+//                         radius:                 _margins
+//                         visible:                openWeatherLabel.visible
+//                         Layout.fillWidth:       true
+
+//                         ColumnLayout {
+//                             id:                         openWeatherViewCol
+//                             anchors.margins:            _margins
+//                             anchors.top:                parent.top
+//                             anchors.horizontalCenter:   parent.horizontalCenter
+//                             spacing:                    _margins * 2
+
+//                             GridLayout {
+//                                 columns:            2
+//                                 columnSpacing:      ScreenTools.defaultFontPixelWidth
+//                                 visible:           _openWeatherFact ? _openWeatherFact.visible : false
+
+// //                                FactCheckBox {
+// //                                    text:       qsTr("Enable OpenWeatherMap API")
+// //                                    fact:       _enableOpenWeatherAPI
+// //                                    Layout.columnSpan:      2
+
+// //                                    property Fact _enableOpenWeatherAPI : QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
+// //                                }
+//                                 FactCheckBoxSlider {
+//                                     Layout.fillWidth:   true
+//                                     Layout.columnSpan:      2
+//                                     text:               qsTr("Enable OpenWeatherMap API")
+//                                     fact:               QGroundControl.settingsManager.appSettings.enableOpenWeatherAPI
+//                                     visible:            fact.visible
+//                                 }
+
+//                                 QGCLabel { text: qsTr("Enter OpenWeather API Key") }
+//                                 FactTextField {
+//                                     Layout.preferredWidth:  _valueFieldWidth * 3
+//                                     fact:                   _openWeatherFact
+//                                 }
+//                             }
+//                         }
+//                     }
 
                     Item { width: 1; height: _margins; visible: _openWeatherFact ? _openWeatherFact.visible : false }
 
@@ -1464,8 +1474,8 @@ Rectangle {
 //                                }
                                 FactCheckBoxSlider {
                                     Layout.fillWidth:   true
-                                    text:               qsTr("Enable SiyiSDK Support")
-                                    fact:               QGroundControl.settingsManager.appSettings.enableSiyiSDK
+                                    text:               qsTr("Enable SIYI Transmitter")
+                                    fact:               QGroundControl.settingsManager.siyiSettings.siyiTransmitterEnabled
                                     visible:            fact.visible
                                 }
                             }

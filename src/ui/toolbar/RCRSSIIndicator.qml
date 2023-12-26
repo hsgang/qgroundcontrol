@@ -32,45 +32,36 @@ Item {
     Component {
         id: rcRSSIInfo
 
-//        Rectangle {
-//            width:  rcrssiCol.width   + ScreenTools.defaultFontPixelWidth  * 3
-//            height: rcrssiCol.height  + ScreenTools.defaultFontPixelHeight * 2
-//            radius: ScreenTools.defaultFontPixelHeight * 0.5
-//            color:  qgcPal.window
-//            border.color:   qgcPal.text
         ToolIndicatorPage{
             showExpand: false
 
             property real _margins: ScreenTools.defaultFontPixelHeight
 
-            contentComponent: ColumnLayout {
-                Layout.preferredWidth:  parent.width
-                spacing:                ScreenTools.defaultFontPixelHeight * 0.5
-
-                QGCLabel {
-                    id:                 rssiLabel
-                    text:               _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
-                    font.family:        ScreenTools.demiboldFontFamily
-                    Layout.alignment:   Qt.AlignHCenter
-                }
-
-                GridLayout {
-                    id:                 rcrssiGrid
-                    columnSpacing:      ScreenTools.defaultFontPixelWidth
-                    columns:            2
-                    Layout.alignment: Qt.AlignHCenter
+            contentComponent: Component {
+                ColumnLayout {
+                    Layout.preferredWidth:  parent.width
+                    spacing:                ScreenTools.defaultFontPixelHeight
 
                     QGCLabel {
-                        text: qsTr("RSSI:")
-                        visible: _rcRSSIAvailable
+                        id:                 rssiLabel
+                        text:               _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
+                        font.family:        ScreenTools.demiboldFontFamily
+                        Layout.alignment:   Qt.AlignHCenter
                     }
-                    QGCLabel {
-                        text: _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
-                        visible: _rcRSSIAvailable
+
+                    ColumnLayout {
+                        id:                 rcrssiGrid
+                        spacing:            ScreenTools.defaultFontPixelHeight / 2
+                        Layout.fillWidth:   true
+
+                        ComponentLabelValueRow {
+                            labelText:  qsTr("RC RSSI")
+                            valueText:  _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
+                            visible:    _rcRSSIAvailable
+                        }
                     }
                 }
             }
-//        }
         }
     } //Component
 

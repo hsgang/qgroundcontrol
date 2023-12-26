@@ -157,6 +157,8 @@ SetupPage {
                     height:             tuningSpinBoxGrid.height + (_margins * 2)
                     anchors.top:        tuningSpinboxLabel.bottom
                     color:              qgcPal.windowShade
+                    radius:             ScreenTools.defaultFontPixelHeight * 0.25
+
 
                         GridLayout {
                             id:                 tuningSpinBoxGrid
@@ -867,6 +869,7 @@ SetupPage {
                         height:         autoTuneColumn.y + autoTuneColumn.height + _margins
                         anchors.top:    autoTuneLabel.bottom
                         color:          qgcPal.windowShade
+                        radius:         ScreenTools.defaultFontPixelHeight * 0.25
 
                         Column {
                             id:                 autoTuneColumn
@@ -927,6 +930,7 @@ SetupPage {
                         height:         channel6TuningOptColumn.height + ScreenTools.defaultFontPixelHeight
                         anchors.top:    inFlightTuneLabel.bottom
                         color:          qgcPal.windowShade
+                        radius:         ScreenTools.defaultFontPixelHeight * 0.25
 
                         Column {
                             id:                 channel6TuningOptColumn

@@ -2,6 +2,9 @@
 #define SIYITRANSMITTER_H
 
 #include "SiYiTcpClient.h"
+#include "QGCLoggingCategory.h"
+
+Q_DECLARE_LOGGING_CATEGORY(SiYiTransmitterLog)
 
 class SiYiTransmitter : public SiYiTcpClient
 {

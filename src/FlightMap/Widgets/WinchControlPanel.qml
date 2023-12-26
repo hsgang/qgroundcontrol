@@ -26,11 +26,12 @@ Rectangle {
     id:         winchControlPannel
     width:      mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
     radius:     _margins
     visible:    false
 
     property real   _margins:                   ScreenTools.defaultFontPixelHeight / 2
+    property real   backgroundOpacity:          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
 
     property string   _winchStatus:             _activeVehicle ? _activeVehicle.winchStatus.status.enumStringValue : "unknown"
@@ -57,7 +58,7 @@ Rectangle {
             width:              ScreenTools.defaultFontPixelWidth * 8
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
             border.color:       qgcPal.text
             border.width:       1
             scale:              windUpPress.pressedButtons ? 0.95 : 1
@@ -91,7 +92,7 @@ Rectangle {
             width:              ScreenTools.defaultFontPixelWidth * 8
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
             border.color:       qgcPal.text
             border.width:       1
             scale:              winchStopPress.pressedButtons ? 0.95 : 1
@@ -125,7 +126,7 @@ Rectangle {
             width:              ScreenTools.defaultFontPixelWidth * 8
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
             border.color:       qgcPal.text
             border.width:       1
             scale:              winchReleasePress.pressedButtons ? 0.95 : 1

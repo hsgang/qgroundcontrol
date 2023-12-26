@@ -152,6 +152,7 @@ SetupPage {
                     width:  battery1FailsafeLoader.x + battery1FailsafeLoader.width + _margins
                     height: battery1FailsafeLoader.y + battery1FailsafeLoader.height + _margins
                     color:  ggcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                     Loader {
                         id:                 battery1FailsafeLoader
@@ -186,6 +187,7 @@ SetupPage {
                     width:  battery2FailsafeLoader.x + battery2FailsafeLoader.width + _margins
                     height: battery2FailsafeLoader.y + battery2FailsafeLoader.height + _margins
                     color:  ggcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                     Loader {
                         id:                 battery2FailsafeLoader
@@ -225,6 +227,7 @@ SetupPage {
                         width:  fsColumn.x + fsColumn.width + _margins
                         height: fsColumn.y + fsColumn.height + _margins
                         color:  qgcPal.windowShade
+                        radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                         ColumnLayout {
                             id:                 fsColumn
@@ -285,6 +288,7 @@ SetupPage {
                         width:  fsGrid.x + fsGrid.width + _margins
                         height: fsGrid.y + fsGrid.height + _margins
                         color:  ggcPal.windowShade
+                        radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                         GridLayout {
                             id:                 fsGrid
@@ -350,6 +354,7 @@ SetupPage {
                         width:  generalFailsafeColumn.x + generalFailsafeColumn.width + _margins
                         height: generalFailsafeColumn.y + generalFailsafeColumn.height + _margins
                         color:  ggcPal.windowShade
+                        radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                         Column {
                             id:                 generalFailsafeColumn
@@ -423,6 +428,7 @@ SetupPage {
                         width:  mainLayout.width + (_margins * 2)
                         height: mainLayout.height + (_margins * 2)
                         color:  ggcPal.windowShade
+                        radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                         ColumnLayout {
                             id:         mainLayout
@@ -551,6 +557,7 @@ SetupPage {
                         width:  landSpeedField.x + landSpeedField.width + _margins
                         height: landSpeedField.y + landSpeedField.height + _margins
                         color:  ggcPal.windowShade
+                        radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                         Image {
                             id:                 icon
@@ -679,6 +686,7 @@ SetupPage {
                         width:  rltAltField.x + rltAltField.width + _margins
                         height: rltAltField.y + rltAltField.height + _margins
                         color:  qgcPal.windowShade
+                        radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                         QGCRadioButton {
                             id:                 returnAtCurrentRadio
@@ -731,6 +739,7 @@ SetupPage {
                     width:  flowLayout.width
                     height: armingCheckInnerColumn.height + (_margins * 2)
                     color:  ggcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.25
 
                     Column {
                         id:                 armingCheckInnerColumn

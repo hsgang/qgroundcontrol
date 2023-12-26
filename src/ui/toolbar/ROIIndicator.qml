@@ -28,7 +28,7 @@ Item {
     anchors.top:            parent.top
     anchors.bottom:         parent.bottom
 
-    property bool showIndicator: _activeVehicle && _activeVehicle.roiModeSupported
+    property bool showIndicator: _activeVehicle && _activeVehicle.isROIEnabled
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 
@@ -82,7 +82,7 @@ Item {
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
             sourceSize.height:  height
-            source:             "/qmlimages/roi.svg"
+            source:             "/qmlimages/roi_white.svg"
             color:              _activeVehicle && _activeVehicle.isROIEnabled ? qgcPal.colorGreen : qgcPal.text
             fillMode:           Image.PreserveAspectFit
             opacity:            _activeVehicle && _activeVehicle.isROIEnabled ? 1 : 0.5

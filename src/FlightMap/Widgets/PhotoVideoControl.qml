@@ -27,9 +27,11 @@ import QGroundControl.FactControls
 Rectangle {
     height:     mainLayout.height + (_margins * 2)
     width:      mainLayout.width //+ (_margins * 2)
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
     radius:     _margins + (ScreenTools.defaultFontPixelWidth * 2.5)
     visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && multiVehiclePanelSelector.showSingleVehiclePanel
+
+    property real   backgroundOpacity:                          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
     property real   _margins:                                   ScreenTools.defaultFontPixelHeight / 2
     property var    _activeVehicle:                             QGroundControl.multiVehicleManager.activeVehicle
@@ -89,6 +91,7 @@ Rectangle {
     property bool   _videoIsRecording:                          _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamRecording
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
+    property real   _cameraTriggerCount:                        _activeVehicle ? _activeVehicle.cameraTriggerPoints.count : 0
 //    Component.onCompleted :{
 //        console.log("_mavlinkCameraManagerCurCameraIndex :"+ _mavlinkCameraManagerCurCameraIndex)
 //    }
@@ -153,6 +156,10 @@ Rectangle {
         }
     }
 
+    on_CameraTriggerCountChanged: {
+        onCountChanged: photoCaptureButton.shootEffect()
+    }
+
     Timer {
         id:             simplePhotoCaptureTimer
         interval:       500
@@ -176,7 +183,7 @@ Rectangle {
             Layout.margins:     _margins
             width:              ScreenTools.defaultFontPixelWidth * 10
             height:             width * 0.5
-            color:              qgcPal.window
+            color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:             height * 0.5
             border.color:       qgcPal.colorGrey
 
@@ -187,7 +194,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 height:                 parent.height * 0.9
                 width:                  height
-                color:                  qgcPal.window
+                color:                  "transparent"
                 radius:                 height * 0.5
                 anchors.left:           parent.left
                 anchors.leftMargin:     parent.height * 0.05
@@ -214,7 +221,7 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 height:                 parent.height * 0.9
                 width:                  height
-                color:                  qgcPal.window
+                color:                  "transparent"
                 radius:                 height * 0.5
                 anchors.right:          parent.right
                 anchors.rightMargin:    parent.height * 0.05
@@ -260,7 +267,7 @@ Rectangle {
         Rectangle {
             id:                 videoRecordbutton
             Layout.alignment:   Qt.AlignHCenter
-            color:              qgcPal.window
+            color:              "transparent"
             width:              ScreenTools.defaultFontPixelWidth * 7
             height:             width
             radius:             width * 0.5
@@ -272,7 +279,7 @@ Rectangle {
                 //anchors.centerIn:   parent
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter:   parent.verticalCenter
-                width:              parent.width * (_videoIsRecording ? 0.65 : 0.75)
+                width:              parent.width * (_videoIsRecording ? 0.66 : 0.8)
                 height:             width
                 radius:             _videoIsRecording ? width * 0.2 : width * 0.5
                 color:              qgcPal.colorRed
@@ -295,7 +302,7 @@ Rectangle {
         Rectangle {
            id:                 photoCaptureButton
            Layout.alignment:   Qt.AlignHCenter
-           color:              qgcPal.window
+           color:              "transparent"
            width:              ScreenTools.defaultFontPixelWidth * 7
            height:             width
            radius:             width * 0.5
@@ -306,7 +313,7 @@ Rectangle {
            Rectangle {
                id:                 trigger
                anchors.centerIn:   parent
-               width:              parent.width * 0.75
+               width:              parent.width * 0.8
                height:             width
                radius:             width * 0.5
                color:              qgcPal.colorRed
@@ -318,15 +325,16 @@ Rectangle {
                onTriggered: trigger.color = qgcPal.colorRed
            }
 
-           function shoot() {
+           function shootEffect() {
                trigger.color = qgcPal.text
                colorTimer.start()
+               //playSound.play()
            }
 
            MouseArea {
                anchors.fill:   parent
                onClicked: {
-                   parent.shoot()
+                   parent.shootEffect()
                    toggleShooting()
                    playSound.play()
                }
@@ -356,7 +364,7 @@ Rectangle {
             }
             QGCLabel {
                 Layout.alignment:   Qt.AlignHCenter
-                text:               _activeVehicle ? ('0000' + _activeVehicle.cameraTriggerPoints.count).slice(-4) : "0000"
+                text:               _activeVehicle ? ('0000' + _cameraTriggerCount).slice(-4) : "0000"
                 font.pointSize:     ScreenTools.defaultFontPointSize
                 visible:            _modeIndicatorPhotoMode
             }
