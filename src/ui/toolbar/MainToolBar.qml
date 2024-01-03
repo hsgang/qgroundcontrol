@@ -66,7 +66,7 @@ Rectangle {
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
-        spacing:                ScreenTools.defaultFontPixelWidth / 2
+        spacing:                ScreenTools.defaultFontPixelWidth
 
         Rectangle {
             id:                     currentButton
@@ -125,7 +125,7 @@ Rectangle {
 
         MainStatusIndicator {
             //Layout.preferredHeight: viewButtonRow.height
-            height:                 viewButtonRow.height * 0.8
+            height:                 viewButtonRow.height * 0.7
             visible:                currentToolbar === flyViewToolbar
         }
 

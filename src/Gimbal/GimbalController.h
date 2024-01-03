@@ -26,12 +26,14 @@ public:
     Q_PROPERTY(bool  gimbalOthersHaveControl READ gimbalOthersHaveControl NOTIFY gimbalOthersHaveControlChanged)
     Q_PROPERTY(uint  deviceId                READ deviceId                NOTIFY deviceIdChanged)
 
+    // do this need to be const?
     qreal curRoll()                 { return _curRoll; }
     qreal curPitch()                { return _curPitch; }
     qreal curYaw()                  { return _curYaw; }
     bool  gimbalHaveControl()       { return _haveControl; }
     bool  gimbalOthersHaveControl() { return _othersHaveControl; }
     uint  deviceId()                { return _deviceId; }
+
     // This is called from c++, but must update QML emiting the signals
     void  setGimbalHaveControl(bool set)        { _haveControl = set;       emit gimbalHaveControlChanged(); }
     void  setGimbalOthersHaveControl(bool set)  { _othersHaveControl = set; emit gimbalOthersHaveControlChanged(); }
@@ -46,7 +48,7 @@ signals:
     void deviceIdChanged();
 
 public:
-    unsigned requestInformationRetries = 3;
+    unsigned requestInformationRetries = 5;
     unsigned requestStatusRetries = 6;
     unsigned requestAttitudeRetries = 3;
     bool receivedInformation = false;
@@ -61,8 +63,8 @@ private:
     float _curRoll = 0.0f;
     float _curPitch = 0.0f;
     float _curYaw = 0.0f;
-    bool _haveControl = false;
-    bool _othersHaveControl = false;
+    bool  _haveControl = false;
+    bool  _othersHaveControl = false;
     uint8_t _deviceId = 0;                       // Component ID of gimbal device (or 1-6 for non-MAVLink gimbal)
 
     friend class GimbalController;
@@ -76,10 +78,10 @@ public:
 
     class GimbalManager {
     public:
-        unsigned requestGimbalManagerInformationRetries = 3;
+        unsigned requestGimbalManagerInformationRetries = 5;
         bool receivedInformation = false;
     };
- 
+
     Q_PROPERTY(Gimbal*                       activeGimbal            READ activeGimbal     WRITE setActiveGimbal         NOTIFY activeGimbalChanged)
     Q_PROPERTY(QmlObjectListModel*           gimbals                 READ gimbals          CONSTANT)
 
@@ -105,9 +107,9 @@ public slots:
     Q_INVOKABLE void gimbalStepPitchYaw         (float pitch, float yaw);
 
 signals:
-    void    activeGimbalChanged             ();
-    void    gimbalLabelsChanged             ();
-    void    showAcquireGimbalControlPopup   (); // This triggers a popup in QML asking the user for aproval to take control
+    void    activeGimbalChanged           ();
+    void    gimbalLabelsChanged           ();
+    void    showAcquireGimbalControlPopup (); // This triggers a popup in QML asking the user for aproval to take control
 
 private slots:
     void    _mavlinkMessageReceived (const mavlink_message_t& message);
@@ -116,7 +118,7 @@ private:
 
     float   _gimbalPitchStep                 (int direction);
     float   _gimbalYawStep                   (int direction);
-    void    _requestGimbalInformation        (uint8_t compid);
+    void    _requestGimbalManagerInformation (uint8_t compid);
     void    _handleHeartbeat                 (const mavlink_message_t& message);
     void    _handleGimbalManagerInformation  (const mavlink_message_t& message);
     void    _handleGimbalManagerStatus       (const mavlink_message_t& message);

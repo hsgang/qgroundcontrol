@@ -33,9 +33,11 @@ Item {
     property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
-    property bool _haveGimbal:  vehicle ? vehicle.gimbalContoller._activeGimbal : false
-    property real _gimbalYaw:   vehicle ? vehicle.gimbalContoller._activeGimbal.curYaw.toFixed(1) : 0
-    property real _gimbalPitch: vehicle ? vehicle.gimbalContoller._activeGimbal.curPitch.toFixed(1) : 0
+    property var  _gimbalController:    vehicle ? vehicle.gimbalController : undefined
+    property var  _activeGimbal:        _gimbalController ? _gimbalController.activeGimbal : undefined
+    property bool _gimbalAvailable:     _activeGimbal !== undefined ? true : false
+    property real _gimbalYaw:           _gimbalAvailable ? _activeGimbal.curYaw : 0
+    property real _gimbalPitch:         _gimbalAvailable ? _activeGimbal.curPitch : 0
 
     property string _distanceToHomeText:    vehicle ? _distanceToHome.toFixed(0) : "--"
     property string _distanceToNextWPText:  vehicle ? _distanceToNextWP.toFixed(0) : "--"
@@ -188,7 +190,7 @@ Item {
 
     Rectangle {
         id:             gimbalSight
-        visible:        _haveGimbal & _gimbalPitch >= -85
+        visible:        _gimbalAvailable & _gimbalPitch >= -85
         anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter }
         width:          parent.width * 0.6
         height:         width
@@ -223,7 +225,7 @@ Item {
         transform: Rotation {
             origin.x:       gimbalSight.width / 2
             origin.y:       gimbalSight.height / 2
-            angle:          isNoseUpLocked() ? _gimbalYaw : _heading + _gimbalYaw
+            angle:          isNoseUpLocked() ? _gimbalYaw - _heading : _gimbalYaw//isNoseUpLocked() ? _gimbalYaw : _heading + _gimbalYaw
         }
     }
 

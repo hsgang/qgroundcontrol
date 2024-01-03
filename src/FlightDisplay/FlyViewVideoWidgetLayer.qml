@@ -41,8 +41,8 @@ Item {
         if (rootItem._gimbalAvailable) {
             var xCoocked =  ( (screenX / parent.width)  * 2) - 1
             var yCoocked = -( (screenY / parent.height) * 2) + 1
-            // console.log("X global: " + x + " Y global: " + y)
-            // console.log("X coocked: " + xCoocked + " Y coocked: " + yCoocked)
+            console.log("X global: " + x + " Y global: " + y)
+            console.log("X coocked: " + xCoocked + " Y coocked: " + yCoocked)
             _gimbalController.gimbalOnScreenControl(xCoocked, yCoocked, true, false, false)
         } else {
             console.log("gimbal not available")
@@ -103,7 +103,7 @@ Item {
 
         QGCLabel {
             id: gimbalPitchLabel
-            text: rootItem._gimbalAvailable ? "Tilt: " + rootItem._gimbalController._activeGimbal.curPitch.toFixed(2) : ""
+            text: rootItem._gimbalAvailable ? "Tilt: " + rootItem._activeGimbal.curPitch.toFixed(2) : ""
             visible: rootItem._gimbalAvailable
             anchors.top: parent.top
             anchors.left: parent.horizontalCenter
@@ -112,7 +112,7 @@ Item {
 
         QGCLabel {
             id: gimbalPanLabel
-            text: rootItem._gimbalAvailable ? "Pan: " + rootItem._gimbalController._activeGimbal.curYaw.toFixed(2) : ""
+            text: rootItem._gimbalAvailable ? "Pan: " + rootItem._activeGimbal.curYaw.toFixed(2) : ""
             visible: rootItem._gimbalAvailable
             anchors.top: parent.top
             anchors.right: parent.horizontalCenter

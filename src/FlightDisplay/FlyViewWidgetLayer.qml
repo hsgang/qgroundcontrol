@@ -316,7 +316,7 @@ Item {
 
         property var _gimbalController: _activeVehicle ? _activeVehicle.gimbalController : undefined
         property var _activeGimbal:     _gimbalController ? _gimbalController.activeGimbal : undefined
-        property bool _gimbalAvailable: _activeGimbal !== undefined
+        property bool _gimbalAvailable: _activeGimbal !== undefined ? true : false
 
         QGCLabel {
             id: gimbalPitchLabel

@@ -98,9 +98,9 @@ Rectangle {
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
     property bool     _gimbalData:              _activeVehicle ? _activeVehicle.gimbalController.activeGimbal : false
-    property string   _gimbalRollString:        _activeVehicle ? _activeVehicle.gimbalController._activeGimbal.curRoll.toFixed(2) : "--"
-    property string   _gimbalPitchString:       _activeVehicle ? _activeVehicle.gimbalController._activeGimbal.curPitch.toFixed(2) : "--"
-    property string   _gimbalYawString:         _activeVehicle ? _activeVehicle.gimbalController._activeGimbal.curYaw.toFixed(2) : "--"
+    property string   _gimbalRollString:        _activeVehicle ? _activeVehicle.gimbalController.activeGimbal.curRoll.toFixed(2) : "--"
+    property string   _gimbalPitchString:       _activeVehicle ? _activeVehicle.gimbalController.activeGimbal.curPitch.toFixed(2) : "--"
+    property string   _gimbalYawString:         _activeVehicle ? _activeVehicle.gimbalController.activeGimbal.curYaw.toFixed(2) : "--"
 
     property double _localPitch: 0.0
     property double _localYaw: 0.0
@@ -211,7 +211,7 @@ Rectangle {
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
-                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(_localPitch, _localYaw)
                 }
             }
         }
@@ -245,7 +245,7 @@ Rectangle {
                 id:             baseDownPress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalController.gimbalControlValue(-90.0, 0.0)
+                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(-90, 0)
                 }
             }
         }
@@ -283,7 +283,7 @@ Rectangle {
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
-                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(_localPitch, _localYaw)
                 }
             }
         }
@@ -357,7 +357,7 @@ Rectangle {
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
-                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(_localPitch, _localYaw)
                 }
             }
         }
@@ -429,7 +429,7 @@ Rectangle {
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
-                    _activeVehicle.gimbalController.gimbalControlValue(_localPitch, _localYaw)
+                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(_localPitch, _localYaw)
                 }
             }
         }

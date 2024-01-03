@@ -18,12 +18,12 @@ import QGroundControl.Palette               1.0
 import QGroundControl.FactSystem            1.0
 
 Rectangle {
-    id:         control
+    id:             control
     width:          marqueeRowLayout.width + _margins
     height:         parent.height
-    color:          "transparent" //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.7)
-    border.color:   _mainStatusBGColor //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.2)
-    border.width:   _margins / 8
+    color:          _mainStatusBGColor //"transparent" //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.7)
+    //border.color:   _mainStatusBGColor //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.2)
+    //border.width:   _margins / 8
     radius:         _margins / 4
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
