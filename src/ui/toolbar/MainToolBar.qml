@@ -151,7 +151,7 @@ Rectangle {
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
             anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.66
-            spacing:            ScreenTools.defaultFontPixelWidth * 0.5
+            spacing:            ScreenTools.defaultFontPixelHeight * 0.5
 
             property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
 

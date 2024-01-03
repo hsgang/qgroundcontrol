@@ -97,10 +97,18 @@ Rectangle {
     property bool   _canShootInCurrentMode:                     _mavlinkCamera ? _mavlinkCameraCanShoot : _videoStreamCanShoot || _simpleCameraAvailable
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
-    property bool     _gimbalData:              _activeVehicle ? _activeVehicle.gimbalController.activeGimbal : false
-    property string   _gimbalRollString:        _activeVehicle ? _activeVehicle.gimbalController.activeGimbal.curRoll.toFixed(2) : "--"
-    property string   _gimbalPitchString:       _activeVehicle ? _activeVehicle.gimbalController.activeGimbal.curPitch.toFixed(2) : "--"
-    property string   _gimbalYawString:         _activeVehicle ? _activeVehicle.gimbalController.activeGimbal.curYaw.toFixed(2) : "--"
+    property var    _gimbalController:        _activeVehicle ? _activeVehicle.gimbalController : undefined
+    property var    _activeGimbal:            _gimbalController ? _gimbalController.activeGimbal : undefined
+    property bool   _gimbalAvailable:         _activeGimbal !== undefined ? true : false
+    property bool   _gimbalRollAvailable:     _activeGimbal && _activeGimbal.curRoll ? true : false
+    property bool   _gimbalPitchAvailable:    _activeGimbal && _activeGimbal.curPitch ? true : false
+    property bool   _gimbalYawAvailable:      _activeGimbal && _activeGimbal.curYaw ? true : false
+    property real   _gimbalRoll:              _gimbalAvailable && _gimbalRollAvailable ? _activeGimbal.curRoll : 0
+    property real   _gimbalPitch:             _gimbalAvailable && _gimbalPitchAvailable ? _activeGimbal.curPitch : 0
+    property real   _gimbalYaw:               _gimbalAvailable && _gimbalYawAvailable ? _activeGimbal.curYaw : 0
+    property string _gimbalRollString:        _activeVehicle && _gimbalRollAvailable ? _gimbalRoll.toFixed(2) : "--"
+    property string _gimbalPitchString:       _activeVehicle && _gimbalPitchAvailable ? _gimbalPitch.toFixed(2) : "--"
+    property string _gimbalYawString:         _activeVehicle && _gimbalYawAvailable ? _gimbalYaw.toFixed(2) : "--"
 
     property double _localPitch: 0.0
     property double _localYaw: 0.0
@@ -131,7 +139,7 @@ Rectangle {
                 Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
             }
             QGCLabel{
-                text: "data:" + _gimbalData
+                text: "data:" + _gimbalAvailable
                 Layout.columnSpan: 3
             }
         }
@@ -463,7 +471,7 @@ Rectangle {
                 id:             gimbalModePress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalController.setGimbalRcTargeting()
+                     _activeVehicle.gimbalController.setGimbalRcTargeting()
                 }
             }
         }

@@ -311,6 +311,7 @@ ApplicationWindow {
         edge:           Qt.LeftEdge
         interactive:    true
         dragMargin:     0
+        modal:          false
         visible:        false
 
         property var    _mainWindow:       mainWindow
@@ -320,7 +321,7 @@ ApplicationWindow {
             id:     mainLayoutRect
             width:  mainLayout.width + (mainLayout.anchors.margins * 2)
             height: parent.height
-            color:  qgcPal.window //Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+            color:  qgcPal.window
 
             QGCFlickable {
                 anchors.top:        parent.top

@@ -33,11 +33,13 @@ Item {
     property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
-    property var  _gimbalController:    vehicle ? vehicle.gimbalController : undefined
-    property var  _activeGimbal:        _gimbalController ? _gimbalController.activeGimbal : undefined
-    property bool _gimbalAvailable:     _activeGimbal !== undefined ? true : false
-    property real _gimbalYaw:           _gimbalAvailable ? _activeGimbal.curYaw : 0
-    property real _gimbalPitch:         _gimbalAvailable ? _activeGimbal.curPitch : 0
+    property var  _gimbalController:        vehicle ? vehicle.gimbalController : undefined
+    property var  _activeGimbal:            _gimbalController ? _gimbalController.activeGimbal : undefined
+    property bool _gimbalAvailable:         _activeGimbal !== undefined ? true : false
+    property bool _gimbalPitchAvailable:    _activeGimbal && _activeGimbal.curPitch ? true : false
+    property bool _gimbalYawAvailable:      _activeGimbal && _activeGimbal.curYaw ? true : false
+    property real _gimbalPitch:             _gimbalAvailable && _gimbalPitchAvailable ? _activeGimbal.curPitch : 0
+    property real _gimbalYaw:               _gimbalAvailable && _gimbalYawAvailable ? _activeGimbal.curYaw : 0
 
     property string _distanceToHomeText:    vehicle ? _distanceToHome.toFixed(0) : "--"
     property string _distanceToNextWPText:  vehicle ? _distanceToNextWP.toFixed(0) : "--"

@@ -18,7 +18,7 @@ Item {
 
     property alias maxHeight:               toolStripPanelVideo.maxHeight
     property alias maxWidth:                modesToolStrip.maxWidth
-    property real  _margins:                ScreenTools.defaultFontPixelWidth * 0.75
+    property real  _margins:                ScreenTools.defaultFontPixelHeight / 2
     property bool  _modesPanelVisible:      modesToolStripAction.checked
     property bool  _actionsPanelVisible:    actionsToolStripAction.checked
     property bool  _selectPanelVisible:     selectToolStripAction.checked
@@ -71,7 +71,7 @@ Item {
                 },
                 ToolStripAction {
                     id:                 modesToolStripAction
-                    text:               qsTr("")
+                    text:               qsTr("Modes")
                     iconSource:         "/HA_Icons/MODES.png"
                     checkable:          true
                     visible:            !toolStripPanelVideo.panelHidden
@@ -82,7 +82,7 @@ Item {
                 },
                 ToolStripAction {
                     id:                actionsToolStripAction
-                    text:              qsTr("")
+                    text:              qsTr("Actions")
                     iconSource:        "/HA_Icons/ACTIONS.png"
                     checkable:         true
                     visible:           !toolStripPanelVideo.panelHidden
@@ -105,7 +105,7 @@ Item {
                 },
                 ToolStripAction {
                     id:                 selectToolStripAction
-                     text:               qsTr("Gimbal ") + (_gimbalController && _gimbalController.activeGimbal ? _gimbalController.activeGimbal.deviceId : "")
+                    text:               qsTr("Gimbal ") + (_gimbalController && _gimbalController.activeGimbal ? _gimbalController.activeGimbal.deviceId : "")
                     iconSource:         "/HA_Icons/SELECT.png"
                     checkable:          true
                     visible:            !toolStripPanelVideo.panelHidden && _gimbalController ? _gimbalController.gimbals.count : false
@@ -126,9 +126,9 @@ Item {
         visible:   rootItem._modesPanelVisible
         fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
 
-        anchors.bottom:             toolStripPanelVideo.bottom
+        anchors.top:                toolStripPanelVideo.top
         anchors.right:              toolStripPanelVideo.left
-        anchors.bottomMargin:       (height * 2) + (ScreenTools.defaultFontPixelHeight / 3)
+        anchors.topMargin:          height
         anchors.rightMargin:        _margins
 
         ToolStripActionList {
@@ -161,9 +161,9 @@ Item {
         visible:   rootItem._actionsPanelVisible
         fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
 
-        anchors.bottom:             toolStripPanelVideo.bottom
+        anchors.top:                toolStripPanelVideo.top
         anchors.right:              toolStripPanelVideo.left
-        anchors.bottomMargin:       height + (ScreenTools.defaultFontPixelHeight / 4)
+        anchors.topMargin:          (height * 2) + (_margins / 2)
         anchors.rightMargin:        _margins
 
         ToolStripActionList {
@@ -355,15 +355,15 @@ Item {
 
     Rectangle {
         id:        gimbalSelectorPanel
-        width:     toolStripPanelVideo.height
+        width:     toolStripPanelVideo.width
         height:    panelHeight
         visible:   rootItem._selectPanelVisible
         color:     qgcPal.windowShade
         radius:    ScreenTools.defaultFontPixelWidth / 2
 
-        anchors.top:                toolStripPanelVideo.bottom
-        anchors.right:              toolStripPanelVideo.right
-        anchors.topMargin:          _margins
+        anchors.bottom:             toolStripPanelVideo.bottom
+        anchors.right:              toolStripPanelVideo.left
+        anchors.rightMargin:        _margins
 
         property real buttonWidth:    width - _margins * 2
         property real panelHeight:    gimbalSelectorContentGrid.childrenRect.height + _margins * 2

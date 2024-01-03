@@ -27,7 +27,7 @@ void RTCMMavlink::RTCMDataUpdate(QByteArray message)
     _bandwidthByteCounter += message.size();
     qint64 elapsed = _bandwidthTimer.elapsed();
     if (elapsed > 1000) {
-        printf("RTCM bandwidth: %.2f kB/s\n", (float) _bandwidthByteCounter / elapsed * 1000.f / 1024.f);
+        //printf("RTCM bandwidth: %.2f kB/s\n", (float) _bandwidthByteCounter / elapsed * 1000.f / 1024.f);
         _bandwidthTimer.restart();
         _bandwidthByteCounter = 0;
     }

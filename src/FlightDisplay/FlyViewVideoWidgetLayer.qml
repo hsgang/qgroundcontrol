@@ -21,7 +21,11 @@ Item {
     property bool _gimbalAvailable:          _activeGimbal !== undefined
     property var  _gimbalControllerSettings: QGroundControl.settingsManager.gimbalControllerSettings
     property var  _activeVehicle:            QGroundControl.multiVehicleManager.activeVehicle
-    
+    property bool _gimbalPitch:              _activeGimbal && _activeGimbal.curPitch ? true : false
+    property bool _gimbalYaw:                _activeGimbal && _activeGimbal.curYaw ? true : false
+    property string _gimbalPitchString:      _gimbalAvailable && _gimbalPitch ? "Tilt: " + _activeGimbal.curPitch.toFixed(2) : ""
+    property string _gimbalYawString:        _gimbalAvailable && _gimbalYaw ? "Pan: " + _activeGimbal.curYaw.toFixed(2) : ""
+
     property bool shouldProcessClicks:   QGroundControl.videoManager.fullScreen || flyViewVideoWidgetLayer._gimbalControllerSettings.EnableOnScreenControl.value ||
                                          _activeVehicle
 
@@ -41,8 +45,8 @@ Item {
         if (rootItem._gimbalAvailable) {
             var xCoocked =  ( (screenX / parent.width)  * 2) - 1
             var yCoocked = -( (screenY / parent.height) * 2) + 1
-            console.log("X global: " + x + " Y global: " + y)
-            console.log("X coocked: " + xCoocked + " Y coocked: " + yCoocked)
+            //console.log("X global: " + x + " Y global: " + y)
+            //console.log("X coocked: " + xCoocked + " Y coocked: " + yCoocked)
             _gimbalController.gimbalOnScreenControl(xCoocked, yCoocked, true, false, false)
         } else {
             console.log("gimbal not available")
@@ -100,10 +104,11 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         color: qgcPal.window
         opacity: 0.8
+        visible: rootItem._gimbalAvailable
 
         QGCLabel {
             id: gimbalPitchLabel
-            text: rootItem._gimbalAvailable ? "Tilt: " + rootItem._activeGimbal.curPitch.toFixed(2) : ""
+            text: rootItem._gimbalPitchString
             visible: rootItem._gimbalAvailable
             anchors.top: parent.top
             anchors.left: parent.horizontalCenter
@@ -112,7 +117,7 @@ Item {
 
         QGCLabel {
             id: gimbalPanLabel
-            text: rootItem._gimbalAvailable ? "Pan: " + rootItem._activeGimbal.curYaw.toFixed(2) : ""
+            text: rootItem._gimbalYawString
             visible: rootItem._gimbalAvailable
             anchors.top: parent.top
             anchors.right: parent.horizontalCenter
