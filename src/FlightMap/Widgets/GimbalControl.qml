@@ -97,10 +97,10 @@ Rectangle {
     property bool   _canShootInCurrentMode:                     _mavlinkCamera ? _mavlinkCameraCanShoot : _videoStreamCanShoot || _simpleCameraAvailable
     property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
-    property bool     _gimbalData:              _activeVehicle ? _activeVehicle.gimbalData : false
-    property string   _gimbalRollString:        _activeVehicle ? _activeVehicle.gimbalRoll.toFixed(2) : "--"
-    property string   _gimbalPitchString:       _activeVehicle ? _activeVehicle.gimbalPitch.toFixed(2) : "--"
-    property string   _gimbalYawString:         _activeVehicle ? _activeVehicle.gimbalYaw.toFixed(2) : "--"
+    property bool     _gimbalData:              _activeVehicle ? _activeVehicle.gimbalController.activeGimbal : false
+    property string   _gimbalRollString:        _activeVehicle ? _activeVehicle.gimbalController._activeGimbal.curRoll.toFixed(2) : "--"
+    property string   _gimbalPitchString:       _activeVehicle ? _activeVehicle.gimbalController._activeGimbal.curPitch.toFixed(2) : "--"
+    property string   _gimbalYawString:         _activeVehicle ? _activeVehicle.gimbalController._activeGimbal.curYaw.toFixed(2) : "--"
 
     property double _localPitch: 0.0
     property double _localYaw: 0.0
@@ -317,7 +317,7 @@ Rectangle {
                 id:             gimbalHomePress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalController.gimbalControlValue(0.0, 0.0)
+                    _activeVehicle.gimbalController.centerGimbal()
                     _localPitch = 0
                     _localYaw = 0
                 }

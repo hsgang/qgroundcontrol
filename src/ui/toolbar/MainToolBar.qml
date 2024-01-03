@@ -37,12 +37,6 @@ Rectangle {
 
     property var    _currentSelection:     null
 
-//    function dropMessageIndicatorTool() {
-//        if (currentToolbar === flyViewToolbar) {
-//            indicatorLoader.item.dropMessageIndicatorTool();
-//        }
-//    }
-
     QGCPalette { id: qgcPal }
 
     /// Bottom single pixel divider
@@ -55,17 +49,17 @@ Rectangle {
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
 
-    Rectangle {
-        anchors.fill:   viewButtonRow
-        visible:        currentToolbar === flyViewToolbar
+    // Rectangle {
+    //     anchors.fill:   mainStatusIndicator //viewButtonRow
+    //     visible:        currentToolbar === flyViewToolbar
 
-        gradient: Gradient {
-            orientation: Gradient.Horizontal
-            GradientStop { position: 0;                                     color: _mainStatusBGColor }
-            GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
-            GradientStop { position: 1;                                     color: _root.color }
-        }
-    }
+    //     gradient: Gradient {
+    //         orientation: Gradient.Horizontal
+    //         GradientStop { position: 0;                                     color: _mainStatusBGColor }
+    //         GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
+    //         GradientStop { position: 1;                                     color: _root.color }
+    //     }
+    // }
 
     RowLayout {
         id:                     viewButtonRow
@@ -80,7 +74,7 @@ Rectangle {
             height:                 viewButtonRow.height * 0.8
             width:                  height
             color:                  "transparent"
-            border.color:           qgcPal.text
+            //border.color:           qgcPal.text
             radius:                 ScreenTools.defaultFontPixelHeight / 4
 
             QGCToolBarButton {
@@ -98,8 +92,40 @@ Rectangle {
             }
         }
 
+        Rectangle{
+            id:                     linkManagerButton
+            //anchors.right:          widgetControlButton.left //parent.right
+            //anchors.top:            parent.top
+            //anchors.bottom:         parent.bottom
+            //anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
+            height:                 viewButtonRow.height * 0.7//parent.height - ScreenTools.defaultFontPixelHeight
+            width:                  height
+            color:                  "transparent"
+            radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+            border.color:           qgcPal.text
+            border.width:           1
+            visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
+
+            QGCColoredImage{
+                height:             parent.height * 0.7
+                width:              height
+                anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
+                anchors.fill:       parent
+                source:             "/InstrumentValueIcons/link.svg"
+                sourceSize.height:  height
+                fillMode:           Image.PreserveAspectFit
+                color:              !_activeVehicle ? qgcPal.colorRed : qgcPal.colorGreen
+            }
+
+            MouseArea{
+                anchors.fill:       parent
+                onClicked:          linkManagerDialogComponent.createObject(mainWindow).open()
+            }
+        }
+
         MainStatusIndicator {
-            Layout.preferredHeight: viewButtonRow.height
+            //Layout.preferredHeight: viewButtonRow.height
+            height:                 viewButtonRow.height * 0.8
             visible:                currentToolbar === flyViewToolbar
         }
 
@@ -139,25 +165,6 @@ Rectangle {
             }
         }
     }
-
-//    Rectangle {
-//        id:                     messageIndicatorRect
-//        width:                  height
-//        anchors.top:            parent.top
-//        anchors.bottom:         parent.bottom
-//        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.8
-//        anchors.right:          flightModeIndicatorRect.left
-//        color:                  "transparent"
-//        visible:                currentToolbar == flyViewToolbar
-
-//        Loader{
-//            id:             messageIndicatorLoader
-//            anchors.top:    parent.top
-//            anchors.bottom: parent.bottom
-//            anchors.horizontalCenter: parent.horizontalCenter
-//            source:        "qrc:/toolbar/MessageIndicator.qml"
-//        }
-//    }
 
     Rectangle {
         id:                     flightModeIndicatorRect
@@ -200,7 +207,7 @@ Rectangle {
         anchors.bottomMargin:   1
         anchors.left:           flightModeIndicatorRect.right
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
-        anchors.right:          linkManagerButton.visible ? linkManagerButton.left : widgetControlButton.left
+        anchors.right:          widgetControlButton.left
         anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
         color:                  "transparent"
 
@@ -235,38 +242,7 @@ Rectangle {
             anchors.bottom:     parent.bottom
             source:             currentToolbar == planViewToolbar ? "qrc:/qml/PlanToolBarIndicators.qml" : ""
         }
-    }
-
-    Rectangle{
-        id:                     linkManagerButton
-        anchors.right:          widgetControlButton.left //parent.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
-        height:                 parent.height - ScreenTools.defaultFontPixelHeight
-        width:                  height
-        color:                  "transparent"
-        radius:                 ScreenTools.defaultFontPixelHeight * 0.2
-        border.color:           qgcPal.text
-        border.width:           1
-        visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
-
-        QGCColoredImage{
-            height:             parent.height * 0.7
-            width:              height
-            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
-            anchors.fill:       parent
-            source:             "/InstrumentValueIcons/link.svg"
-            sourceSize.height:  height
-            fillMode:           Image.PreserveAspectFit
-            color:              !_activeVehicle ? qgcPal.colorRed : qgcPal.colorGreen
-        }
-
-        MouseArea{
-            anchors.fill:       parent
-            onClicked:          linkManagerDialogComponent.createObject(mainWindow).open()
-        }
-    }
+    }  
 
     Rectangle {
         id:                     widgetControlButton
@@ -278,8 +254,8 @@ Rectangle {
         width:                  height
         color:                  "transparent"
         radius:                 ScreenTools.defaultFontPixelHeight * 0.2
-        border.color:           qgcPal.text
-        border.width:           1
+        // border.color:           qgcPal.text
+        // border.width:           1
         visible:                currentToolbar === flyViewToolbar
 
         QGCColoredImage{

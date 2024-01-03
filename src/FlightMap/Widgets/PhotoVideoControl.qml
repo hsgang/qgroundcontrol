@@ -210,11 +210,11 @@ Rectangle {
                     fillMode:           Image.PreserveAspectFit
                     sourceSize.height:  height
                     color:              _videoStreamInPhotoMode ? qgcPal.text : qgcPal.colorGreen
-                    MouseArea {
-                        anchors.fill:   parent
-                        //enabled:        _switchToVideoModeAllowed
-                        onClicked:      setCameraMode(false)
-                    }
+                }
+                MouseArea {
+                    anchors.fill:   parent
+                    //enabled:        _switchToVideoModeAllowed
+                    onClicked:      setCameraMode(false)
                 }
             }
             //-- Photo Mode
@@ -236,11 +236,11 @@ Rectangle {
                     fillMode:           Image.PreserveAspectFit
                     sourceSize.height:  height
                     color:              _videoStreamInPhotoMode ? qgcPal.colorGreen : qgcPal.text
-                    MouseArea {
-                        anchors.fill:   parent
-                        enabled:        _switchToPhotoModeAllowed
-                        onClicked:      setCameraMode(true)
-                    }
+                }
+                MouseArea {
+                    anchors.fill:   parent
+                    enabled:        _switchToPhotoModeAllowed
+                    onClicked:      setCameraMode(true)
                 }
             }
         }

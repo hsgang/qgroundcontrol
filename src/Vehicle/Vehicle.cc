@@ -826,10 +826,6 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_FENCE_STATUS:
         _handleFenceStatus(message);
         break;
-    case MAVLINK_MSG_ID_GIMBAL_DEVICE_ATTITUDE_STATUS:
-        _handleGimbalDeviceAttitudeStatus(message);
-        break;
-
     case MAVLINK_MSG_ID_EVENT:
     case MAVLINK_MSG_ID_CURRENT_EVENT_SEQUENCE:
     case MAVLINK_MSG_ID_RESPONSE_EVENT_ERROR:
@@ -4071,23 +4067,6 @@ void Vehicle::_handleRawImuTemp(mavlink_message_t& message)
     _imuTempFact.setRawValue(imuRaw.temperature == 0 ? 0 : imuRaw.temperature * 0.01);
 }
 
-void Vehicle::_handleGimbalDeviceAttitudeStatus(const mavlink_message_t& message)
-{
-    mavlink_gimbal_device_attitude_status_t attitude_status;
-    mavlink_msg_gimbal_device_attitude_status_decode(&message, &attitude_status);
-
-    float roll, pitch, yaw;
-    mavlink_quaternion_to_euler(attitude_status.q, &roll, &pitch, &yaw);
-
-    mountRoll = roll * (180.0f / M_PI);
-    mountPitch = pitch * (180.0f / M_PI);
-    mountYaw   = yaw * (180.0f / M_PI);
-
-    emit gimbalRollChanged();
-    emit gimbalPitchChanged();
-    emit gimbalYawChanged();
-}
-
 void Vehicle::_updateDistanceHeadingToHome()
 {
     if (coordinate().isValid() && homePosition().isValid()) {
@@ -4535,42 +4514,6 @@ void Vehicle::_doSetHomeTerrainReceived(bool success, QList<double> heights)
     // Clean up
     _currentDoSetHomeTerrainAtCoordinateQuery = nullptr;
     _doSetHomeCoordinate = QGeoCoordinate(); // So isValid() will no longer return true, for extra safety
-}
-
-qreal
-Vehicle::gimbalRoll() const
-{
-    return static_cast<qreal>(gimbalData() ? _gimbalController->gimbals()[0]->curRoll() : mountRoll );
-}
-
-qreal
-Vehicle::gimbalPitch() const
-{
-    return static_cast<qreal>(gimbalData() ? _gimbalController->gimbals()[0]->curPitch() : mountPitch );
-}
-
-qreal
-Vehicle::gimbalYaw() const
-{
-    return static_cast<qreal>(gimbalData() ? _gimbalController->gimbals()[0]->curYaw() : mountYaw );
-}
-
-bool
-Vehicle::gimbalData() const
-{
-    return _gimbalController->gimbals().size() > 0;
-}
-
-bool
-Vehicle::gimbalHaveControl() const
-{
-    return gimbalData() ? _gimbalController->gimbals()[0]->haveControl : false;
-}
-
-bool
-Vehicle::gimbalOthersHaveControl() const
-{
-    return gimbalData() ? _gimbalController->gimbals()[0]->othersHaveControl : false;
 }
 
 void Vehicle::_updateAltAboveTerrain()

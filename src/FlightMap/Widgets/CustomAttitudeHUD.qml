@@ -33,9 +33,9 @@ Item {
     property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
-    property bool _haveGimbal:  vehicle ? vehicle.gimbalData : false
-    property real _gimbalYaw:   vehicle ? vehicle.gimbalYaw.toFixed(1) : 0
-    property real _gimbalPitch: vehicle ? vehicle.gimbalPitch.toFixed(1) : 0
+    property bool _haveGimbal:  vehicle ? vehicle.gimbalContoller._activeGimbal : false
+    property real _gimbalYaw:   vehicle ? vehicle.gimbalContoller._activeGimbal.curYaw.toFixed(1) : 0
+    property real _gimbalPitch: vehicle ? vehicle.gimbalContoller._activeGimbal.curPitch.toFixed(1) : 0
 
     property string _distanceToHomeText:    vehicle ? _distanceToHome.toFixed(0) : "--"
     property string _distanceToNextWPText:  vehicle ? _distanceToNextWP.toFixed(0) : "--"
