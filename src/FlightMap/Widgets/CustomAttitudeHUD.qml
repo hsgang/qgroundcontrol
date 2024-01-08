@@ -36,7 +36,7 @@ Item {
 
     property var  _gimbalController:        vehicle ? vehicle.gimbalController : undefined
     property var  _activeGimbal:            _gimbalController ? _gimbalController.activeGimbal : undefined
-    property bool _gimbalAvailable:         _activeGimbal !== undefined ? true : false
+    property bool _gimbalAvailable:         _activeGimbal ? true : false
     property bool _gimbalPitchAvailable:    _activeGimbal && _activeGimbal.curPitch ? true : false
     property bool _gimbalYawAvailable:      _activeGimbal && _activeGimbal.curYaw ? true : false
     property real _gimbalPitch:             _gimbalAvailable && _gimbalPitchAvailable ? _activeGimbal.curPitch : 0
@@ -246,18 +246,6 @@ Item {
         }
     }
 
-
-//    Image {
-//            id:                 gimbalSight
-//            visible:            true //_haveGimbal & _gimbalPitch >= -85
-//            anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-//            source:             "/qmlimages/gimbalSight.svg"
-//            mipmap:             true
-//            width:              parent.width * 0.6
-//            sourceSize.width:   width
-//            antialiasing:       true
-//            fillMode:           Image.PreserveAspectFit
-
     Rectangle {
         id:             gimbalSight
         visible:        _gimbalAvailable & _gimbalPitch >= -85
@@ -265,7 +253,6 @@ Item {
         width:          parent.width * 0.6
         height:         width
         color:          "transparent"
-        //border.color:   qgcPal.text
 
         Canvas {
             id: triangleCanvas

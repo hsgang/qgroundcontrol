@@ -62,32 +62,38 @@ Item {
                             anchors.top:        parent.top
                             anchors.left:       parent.left
                             anchors.right:      parent.right
-                            spacing:            _margins
+                            spacing:            ScreenTools.defaultFontPixelHeight / 3
 
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Local RSSI")
                                 valueText:  _activeVehicle.telemetryLRSSI + " dBm"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Remote RSSI")
                                 valueText:  _activeVehicle.telemetryRRSSI + " dBm"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("RX Errors")
                                 valueText:  _activeVehicle.telemetryRXErrors
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Errors Fixed")
                                 valueText:  _activeVehicle.telemetryFixed
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("TX Buffer")
                                 valueText:  _activeVehicle.telemetryTXBuffer
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Local Noise")
                                 valueText:  _activeVehicle.telemetryLNoise
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Remote Noise")
                                 valueText:  _activeVehicle.telemetryRNoise

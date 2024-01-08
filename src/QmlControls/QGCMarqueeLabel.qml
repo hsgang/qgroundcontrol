@@ -10,10 +10,11 @@ Item {
     property font   font
     property string text:           ""
     property real   maxWidth:       _measureText.implicitWidth
+    property real   minWidth
 
     id:             _root
     clip:           true
-    implicitWidth:  Math.min(_measureText.implicitWidth, maxWidth)
+    implicitWidth:  (_measureText.implicitWidth > maxWidth) ? Math.min(_measureText.implicitWidth, maxWidth) : minWidth
     implicitHeight: _measureText.implicitHeight
     font.pointSize: ScreenTools.defaultFontPointSize
     font.family:    ScreenTools.normalFontFamily
@@ -61,8 +62,9 @@ Item {
     Text {
         id:                     _innerText1
         anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: _scrollMarquee ? undefined : parent.horizontalCenter
         font:                   _root.font
-        color:                 _root.color
+        color:                  _root.color
         antialiasing:           true
         text:                   _root.text
 
@@ -90,7 +92,7 @@ Item {
         id:                     _innerText2
         anchors.verticalCenter: parent.verticalCenter
         font:                   _root.font
-        color:                 _root.color
+        color:                  _root.color
         antialiasing:           true
         text:                   _root.text
         visible:                _scrollMarquee

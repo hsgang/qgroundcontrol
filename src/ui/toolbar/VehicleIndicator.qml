@@ -26,11 +26,10 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property real _margins:     ScreenTools.defaultFontPixelHeight / 2
-
-    property bool showIndicator: _activeVehicle.parameterManager.parametersReady
-
-    property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+    property real _margins:         ScreenTools.defaultFontPixelHeight / 2
+    property real _columnSpacing:   ScreenTools.defaultFontPixelHeight / 3
+    property bool showIndicator:    _activeVehicle.parameterManager.parametersReady
+    property var  _activeVehicle:   QGroundControl.multiVehicleManager.activeVehicle
 
     Row {
         id: vehicleRow
@@ -169,17 +168,19 @@ Item {
                             anchors.top:        parent.top
                             anchors.left:       parent.left
                             anchors.right:      parent.right
-                            spacing:            _margins
+                            spacing:            _columnSpacing
 
                             VehicleSummaryRow {
                                 labelText: qsTr("Firmware Type")
                                 valueText: _activeVehicle.firmwareTypeString
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText: qsTr("Firmware Version")
                                 valueText: globals.activeVehicle.firmwareMajorVersion === -1 ? qsTr("Unknown") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + globals.activeVehicle.firmwareVersionTypeString
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText:  qsTr("Frame Class")
@@ -208,17 +209,19 @@ Item {
                             anchors.top:        parent.top
                             anchors.left:       parent.left
                             anchors.right:      parent.right
-                            spacing:            _margins
+                            spacing:            _columnSpacing
 
                             VehicleSummaryRow {
                                 labelText: qsTr("Loiter Speed")
                                 valueText: (loitSpeedFact.value * 0.01).toFixed(1) + " m/s"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText: qsTr("Pilot Climb Speed")
                                 valueText: (pilotSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText: qsTr("Pilot Descent Speed")
@@ -227,40 +230,31 @@ Item {
                                             (pilotSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
                                 }
                             }
-
-                            Rectangle {
-                                height:             1
-                                Layout.fillWidth:   true
-                                color:              QGroundControl.globalPalette.text
-                                opacity:            0.5
-                            }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText: qsTr("WP Horizontal Speed")
                                 valueText: (wpnavSpeedFact.value * 0.01).toFixed(1) + " m/s"
-                            }
+                            }                            
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText: qsTr("WP Climb Speed")
                                 valueText: (wpnavSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText: qsTr("WP Descent Speed")
                                 valueText: (wpnavSpeedDnFact.value * 0.01).toFixed(1) + " m/s"
                             }
-
-                            Rectangle {
-                                height:             1
-                                Layout.fillWidth:   true
-                                color:              QGroundControl.globalPalette.text
-                                opacity:            0.5
-                            }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText: qsTr("RTL Altitude")
                                 valueText: (rtlAltitudeFact.value * 0.01).toFixed(1) + " m"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText: qsTr("Land Speed")
@@ -289,19 +283,21 @@ Item {
                             anchors.top:        parent.top
                             anchors.left:       parent.left
                             anchors.right:      parent.right
-                            spacing:            _margins
+                            spacing:            _columnSpacing
 
                             VehicleSummaryRow {
                                 labelText:  qsTr("Boot Count")
                                 valueText:  visible ? _stat_bootcnt.valueString : ""
                                 visible:    _frameTypeAvailable
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText:  qsTr("Total Runtime")
                                 valueText:  visible ? _stat_runtime.valueString + " s" : ""
                                 visible:    _frameTypeAvailable
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
 
                             VehicleSummaryRow {
                                 labelText:  qsTr("Total Flight Time")

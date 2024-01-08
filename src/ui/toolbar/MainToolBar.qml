@@ -94,11 +94,7 @@ Rectangle {
 
         Rectangle{
             id:                     linkManagerButton
-            //anchors.right:          widgetControlButton.left //parent.right
-            //anchors.top:            parent.top
-            //anchors.bottom:         parent.bottom
-            //anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
-            height:                 viewButtonRow.height * 0.7//parent.height - ScreenTools.defaultFontPixelHeight
+            height:                 viewButtonRow.height * 0.7
             width:                  height
             color:                  "transparent"
             radius:                 ScreenTools.defaultFontPixelHeight * 0.2
@@ -175,7 +171,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         color:                  qgcPal.windowShade //"transparent"
         border.color:           qgcPal.text
-        radius:                 ScreenTools.defaultFontPixelHeight / 4
+        radius:                 height / 2 //ScreenTools.defaultFontPixelHeight / 4
         visible:                currentToolbar == flyViewToolbar && _activeVehicle
 
         Loader{
@@ -286,36 +282,52 @@ Rectangle {
                 id: _linkRoot
                 color: qgcPal.window
                 width: ScreenTools.defaultFontPixelWidth * 30
-                height: ScreenTools.defaultFontPixelHeight * 15
+                height: ScreenTools.defaultFontPixelHeight * 20
                 anchors.margins: ScreenTools.defaultFontPixelWidth
 
-                QGCFlickable {
-                    clip:               true
+                Rectangle {
+                    id: flickableRect
                     anchors.top:        parent.top
                     anchors.bottom:     buttonRow.top
-                    anchors.bottomMargin: ScreenTools.defaultFontPixelHeight / 5
-                    width:              parent.width
-                    contentHeight:      settingsColumn.height
-                    contentWidth:       _linkRoot.width
-                    flickableDirection: Flickable.VerticalFlick
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight / 2
+                    anchors.left:       parent.left
+                    anchors.right:      parent.right
+                    color:              qgcPal.windowShadeDark
+                    radius:             ScreenTools.defaultFontPixelHeight / 2
 
-                    Column {
-                        id:                 settingsColumn
-                        width:              _linkRoot.width
-                        anchors.margins:    ScreenTools.defaultFontPixelWidth
-                        spacing:            ScreenTools.defaultFontPixelHeight / 2
-                        Repeater {
-                            model: QGroundControl.linkManager.linkConfigurations
-                            delegate: QGCButton {
-                                anchors.horizontalCenter:   settingsColumn.horizontalCenter
-                                width:                      _linkRoot.width * 0.5
-                                text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
-                                autoExclusive:              true
-                                visible:                    !object.dynamic
-                                onClicked: {
-                                    checked = true
-                                    _currentSelection = object
-                                    //console.log("clicked", object, object.link)
+                    QGCFlickable {
+                        clip:               true
+                        anchors.top:        parent.top
+                        anchors.bottom:     parent.bottom
+                        anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
+                        // anchors.bottom:     buttonRow.top
+                        // anchors.bottomMargin: ScreenTools.defaultFontPixelHeight / 5
+                        anchors.left:       parent.left
+                        anchors.right:      parent.right
+                        //width:              parent.width
+                        contentHeight:      settingsColumn.height
+                        //contentWidth:       _linkRoot.width
+                        flickableDirection: Flickable.VerticalFlick
+
+                        Column {
+                            id:                 settingsColumn
+                            width:              flickableRect.width
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            //anchors.margins:    ScreenTools.defaultFontPixelWidth
+                            spacing:            ScreenTools.defaultFontPixelHeight / 2
+                            Repeater {
+                                model: QGroundControl.linkManager.linkConfigurations
+                                delegate: QGCButton {
+                                    anchors.horizontalCenter:   settingsColumn.horizontalCenter
+                                    width:                      _linkRoot.width * 0.7
+                                    text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
+                                    autoExclusive:              true
+                                    visible:                    !object.dynamic
+                                    onClicked: {
+                                        checked = true
+                                        _currentSelection = object
+                                        //console.log("clicked", object, object.link)
+                                    }
                                 }
                             }
                         }
@@ -334,6 +346,7 @@ Rectangle {
                         font.bold: true
                         enabled:    _currentSelection && !_currentSelection.link
                         onClicked:  QGroundControl.linkManager.createConnectedLink(_currentSelection)
+                        implicitWidth: ScreenTools.defaultFontPixelWidth * 12
                     }
                     QGCButton {
                         text:       qsTr("Disconnect")
@@ -343,6 +356,7 @@ Rectangle {
                             _currentSelection.link.disconnect()
                             _currentSelection.linkChanged()
                         }
+                        implicitWidth: ScreenTools.defaultFontPixelWidth * 12
                     }
                 }
             }
@@ -364,84 +378,110 @@ Rectangle {
                     spacing:                _margins
 
                     QGCLabel {
-                        text:                   qsTr("FlyView Widget")
+                        text:                   qsTr("Payload")
                         font.family:            ScreenTools.demiboldFontFamily
                         Layout.fillWidth:       true
                         horizontalAlignment:    Text.AlignHCenter
                     }
 
                     Rectangle {
-                        Layout.preferredHeight: widgetGridLayout.height + _margins
-                        Layout.preferredWidth:  widgetGridLayout.width + _margins
+                        Layout.preferredHeight: payloadGridLayout.height + _margins
+                        Layout.preferredWidth:  payloadGridLayout.width + _margins
                         color:                  qgcPal.windowShade
                         radius:                 _margins / 4
                         Layout.fillWidth:       true
 
                         GridLayout {
-                            id:                 widgetGridLayout
+                            id:                 payloadGridLayout
                             flow:               GridLayout.LeftToRight
                             columns:            2
-                            rowSpacing:         _margins
+                            rowSpacing:         ScreenTools.defaultFontPixelHeight / 3
                             anchors.margins:    _margins / 2
                             anchors.top:        parent.top
                             anchors.left:       parent.left
                             anchors.right:      parent.right
-
-                            QGCLabel{ text: qsTr("Payload"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
 
                             QGCLabel{ text: qsTr("PhotoVideo Control") }
                             QGCSwitch {
                                 checked:            QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue === true ? 1 : 0
                                 onClicked:          QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue = checked ? 1 : 0
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
 
                             QGCLabel{ text: qsTr("Mount Control") }
                             QGCSwitch {
                                 checked:            QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue === true ? 1 : 0
                                 onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
 
                             QGCLabel{ text: qsTr("Winch Control") }
                             QGCSwitch {
                                 checked:            QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue === true ? 1 : 0
                                 onClicked:          QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue = checked ? 1 : 0
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
 
                             QGCLabel{ text: qsTr("Chart Widget") }
                             QGCSwitch {
                                 checked:            QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue === true ? 1 : 0
                                 onClicked:          QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue = checked ? 1 : 0
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
 
                             QGCLabel{ text: qsTr("Atmospheric Data") }
                             QGCSwitch {
                                 checked:            QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue === true ? 1 : 0
                                 onClicked:          QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue = checked ? 1 : 0
                             }
+                        }
+                    }
 
-                            Item{
-                                height: _margins / 2
-                            }
 
-                            QGCLabel{ text: qsTr("Status"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
+                    QGCLabel {
+                        text:                   qsTr("Status")
+                        font.family:            ScreenTools.demiboldFontFamily
+                        Layout.fillWidth:       true
+                        horizontalAlignment:    Text.AlignHCenter
+                    }
+
+                    Rectangle {
+                        Layout.preferredHeight: statusGridLayout.height + _margins
+                        Layout.preferredWidth:  statusGridLayout.width + _margins
+                        color:                  qgcPal.windowShade
+                        radius:                 _margins / 4
+                        Layout.fillWidth:       true
+
+                        GridLayout {
+                            id:                 statusGridLayout
+                            flow:               GridLayout.LeftToRight
+                            columns:            2
+                            rowSpacing:         ScreenTools.defaultFontPixelHeight / 3
+                            anchors.margins:    _margins / 2
+                            anchors.top:        parent.top
+                            anchors.left:       parent.left
+                            anchors.right:      parent.right
 
                             QGCLabel{ text: qsTr("Mission Progress") }
                             QGCSwitch {
                                 checked:            QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue === true ? 1 : 0
                                 onClicked:          QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue = checked ? 1 : 0
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
 
                             QGCLabel{ text: qsTr("Telemetry Panel") }
                             QGCSwitch {
                                 checked:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue === true ? 1 : 0
                                 onClicked:          QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue = checked ? 1 : 0
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
 
                             QGCLabel{ text: qsTr("Vibration Status") }
                             QGCSwitch {
                                 checked:            QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue === true ? 1 : 0
                                 onClicked:          QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue = checked ? 1 : 0
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
 
                             QGCLabel{ text: qsTr("EKF Status") }
                             QGCSwitch {

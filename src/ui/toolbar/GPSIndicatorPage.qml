@@ -22,6 +22,7 @@ ToolIndicatorPage {
     showExpand: true
 
     property real   _margins:       ScreenTools.defaultFontPixelHeight / 2
+    property real _columnSpacing:   ScreenTools.defaultFontPixelHeight / 3
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property string _NA:            qsTr("N/A", "No data to display")
     property string _valueNA:       qsTr("--.--", "No data to display")
@@ -39,8 +40,8 @@ ToolIndicatorPage {
             }
 
             Rectangle {
-                Layout.preferredHeight: gnssColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
-                Layout.preferredWidth:  gnssColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                Layout.preferredHeight: gnssColumnLayout.height + _margins
+                Layout.preferredWidth:  gnssColumnLayout.width + _margins
                 color:                  qgcPal.windowShade
                 radius:                 _margins / 4
                 Layout.fillWidth:       true
@@ -52,24 +53,32 @@ ToolIndicatorPage {
                     anchors.top:        parent.top
                     anchors.left:       parent.left
                     anchors.right:      parent.right
-                    spacing:            _margins
+                    spacing:            _columnSpacing
 
                     ComponentLabelValueRow {
                         labelText:  qsTr("Satellites")
                         valueText:  _activeVehicle ? _activeVehicle.gps.count.valueString : _NA
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("GPS Lock")
                         valueText:  _activeVehicle ? _activeVehicle.gps.lock.enumStringValue : _NA
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("HDOP")
                         valueText:  _activeVehicle ? _activeVehicle.gps.hdop.valueString : _valueNA
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("VDOP")
                         valueText:  _activeVehicle ? _activeVehicle.gps.vdop.valueString : _valueNA
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Course Over Ground")
                         valueText:  _activeVehicle ? _activeVehicle.gps.courseOverGround.valueString : _valueNA
@@ -85,8 +94,8 @@ ToolIndicatorPage {
             }
 
             Rectangle {
-                Layout.preferredHeight: gnss2ColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
-                Layout.preferredWidth:  gnss2ColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
+                Layout.preferredHeight: gnss2ColumnLayout.height + _margins
+                Layout.preferredWidth:  gnss2ColumnLayout.width + _margins
                 color:                  qgcPal.windowShade
                 radius:                 _margins / 2
                 Layout.fillWidth:       true
@@ -99,23 +108,32 @@ ToolIndicatorPage {
                     anchors.left:       parent.left
                     anchors.right:      parent.right
                     visible:            isGNSS2
+                    spacing:            _columnSpacing
 
                     ComponentLabelValueRow {
                         labelText:  qsTr("Satellites")
                         valueText:  _activeVehicle ? _activeVehicle.gps2.count.valueString : _NA
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("GPS Lock")
                         valueText:  _activeVehicle ? _activeVehicle.gps2.lock.enumStringValue : _NA
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("HDOP")
                         valueText:  _activeVehicle ? _activeVehicle.gps2.hdop.valueString : _valueNA
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("VDOP")
                         valueText:  _activeVehicle ? _activeVehicle.gps2.vdop.valueString : _valueNA
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Course Over Ground")
                         valueText:  _activeVehicle ? _activeVehicle.gps2.courseOverGround.valueString : _valueNA
@@ -145,11 +163,14 @@ ToolIndicatorPage {
                     anchors.left:       parent.left
                     anchors.right:      parent.right
                     visible:            QGroundControl.ntrip.connected
+                    spacing:            _columnSpacing
 
                     ComponentLabelValueRow {
                         labelText:  qsTr("Status")
                         valueText:  QGroundControl.ntrip.connected ? "Connected" : "Disconnected"
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("BandWidth")
                         valueText:  QGroundControl.ntrip.connected ? QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s" : "0.00 kB/s"

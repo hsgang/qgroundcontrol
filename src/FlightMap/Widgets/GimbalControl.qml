@@ -99,7 +99,7 @@ Rectangle {
 
     property var    _gimbalController:        _activeVehicle ? _activeVehicle.gimbalController : undefined
     property var    _activeGimbal:            _gimbalController ? _gimbalController.activeGimbal : undefined
-    property bool   _gimbalAvailable:         _activeGimbal !== undefined ? true : false
+    property bool   _gimbalAvailable:         _activeGimbal ? true : false
     property bool   _gimbalRollAvailable:     _activeGimbal && _activeGimbal.curRoll ? true : false
     property bool   _gimbalPitchAvailable:    _activeGimbal && _activeGimbal.curPitch ? true : false
     property bool   _gimbalYawAvailable:      _activeGimbal && _activeGimbal.curYaw ? true : false
@@ -116,32 +116,25 @@ Rectangle {
 
     Rectangle{
         anchors.top: parent.bottom
-        anchors.margins: _margins / 2
+        anchors.topMargin: _margins / 2
+        anchors.right: parent.right
         anchors.horizontalCenter: parent.horizontalCenter
         width:          gimbalAngleValueRow.width
         height:         gimbalAngleValueRow.height
-        color:          "transparent"
+        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+        radius:         _margins / 2
         GridLayout{
             id: gimbalAngleValueRow
-            rowSpacing: ScreenTools.defaultFontPixelHeight / 5
-            columns: 3
+            columns: 2
 
-            QGCLabel{
-                text: " R: " +_gimbalRollString
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
-            }
-            QGCLabel{
-                text: " P: " +_gimbalPitchString
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
-            }
-            QGCLabel{
-                text: " Y: " +_gimbalYawString
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
-            }
-            QGCLabel{
-                text: "data:" + _gimbalAvailable
-                Layout.columnSpan: 3
-            }
+            QGCLabel{ text: "Pitch" }
+            QGCLabel{ text: _gimbalPitchString }
+            QGCLabel{ text: "Yaw" }
+            QGCLabel{ text: _gimbalYawString }
+            QGCLabel{ text: "Roll" }
+            QGCLabel{ text: _gimbalRollString }
+            QGCLabel{ text: "Connected" }
+            QGCLabel{ text: _gimbalAvailable }
         }
     }
 

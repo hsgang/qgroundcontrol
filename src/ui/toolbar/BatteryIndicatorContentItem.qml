@@ -29,6 +29,7 @@ ColumnLayout {
     property var _batterySettings: QGroundControl.settingsManager.batterySettings
     property real _batteryCellCount: _batterySettings.batteryCellCount.value
     property real _margins: ScreenTools.defaultFontPixelHeight / 2
+    property real _columnSpacing:   ScreenTools.defaultFontPixelHeight / 3
 
     Component {
         id: batteryValuesAvailableComponent
@@ -78,7 +79,7 @@ ColumnLayout {
                     anchors.top:        parent.top
                     anchors.left:       parent.left
                     anchors.right:      parent.right
-                    spacing:            _margins
+                    spacing:            _columnSpacing
 
                 // ColumnLayout {
                 //     spacing: ScreenTools.defaultFontPixelHeight / 2
@@ -97,43 +98,61 @@ ColumnLayout {
                         labelText:  qsTr("Battery ID")
                         valueText:  qsTr("Battery %1").arg(object.id.rawValue)
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; visible: batteryValuesAvailable.chargeStateAvailable;}
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Charge State")
                         valueText:  object.chargeState.enumStringValue
                         visible:    batteryValuesAvailable.chargeStateAvailable
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; visible: batteryValuesAvailable.timeRemainingAvailable;}
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Remaining Time")
                         valueText:  object.timeRemainingStr.value
                         visible:    batteryValuesAvailable.timeRemainingAvailable
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Remaining")
                         valueText:  object.percentRemaining.valueString + " " + object.percentRemaining.units
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Voltage")
                         valueText:  object.voltage.valueString + " " + object.voltage.units
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Cell Voltage")
                         valueText:  (object.voltage.value / _batteryCellCount).toFixed(2) + " " + object.voltage.units
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; visible:    batteryValuesAvailable.currentAvailable;}
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Current")
                         valueText:  object.current.valueString + " " + object.current.units
                         visible:    batteryValuesAvailable.currentAvailable
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; visible:    batteryValuesAvailable.mahConsumedAvailable;}
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Consumed")
                         valueText:  object.mahConsumed.valueString + " " + object.mahConsumed.units
                         visible:    batteryValuesAvailable.mahConsumedAvailable
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; visible:    batteryValuesAvailable.temperatureAvailable;}
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Temperature")
                         valueText:  object.temperature.valueString + " " + object.temperature.units
                         visible:    batteryValuesAvailable.temperatureAvailable
                     }
+                    Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; visible:    batteryValuesAvailable.functionAvailable;}
+
                     ComponentLabelValueRow {
                         labelText:  qsTr("Function")
                         valueText:  object.function.enumStringValue

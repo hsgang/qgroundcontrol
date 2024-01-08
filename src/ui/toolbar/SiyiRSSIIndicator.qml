@@ -19,6 +19,8 @@ Item {
 
     property bool showIndicator:            transmitter.isConnected
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
+    property real _columnSpacing:   ScreenTools.defaultFontPixelHeight / 3
+    property real _margins:         ScreenTools.defaultFontPixelHeight / 2
 
     Component {
         id: siyiStatusInfo
@@ -53,40 +55,48 @@ Item {
                             anchors.top:        parent.top
                             anchors.left:       parent.left
                             anchors.right:      parent.right
-                            spacing:            _margins
+                            spacing:            _columnSpacing
 
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Signal")
                                 valueText:  transmitter.signalQuality + " %"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("RSSI")
                                 valueText:  transmitter.rssi + " dBm"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Inactive Time")
                                 valueText:  transmitter.inactiveTime + " ms"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Upstream")
                                 valueText:  (transmitter.upStream / 1024).toFixed(1) + " KB/s"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Downstream")
                                 valueText:  (transmitter.downStream / 1024).toFixed(1) + " KB/s"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("TxBandwidth")
                                 valueText:  (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("RxBandwidth")
                                 valueText:  (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Frequency")
                                 valueText:  transmitter.freq + " Mhz"
                             }
+                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
                             ComponentLabelValueRow {
                                 labelText:  qsTr("Channel")
                                 valueText:  transmitter.channel

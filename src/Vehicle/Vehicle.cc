@@ -4108,10 +4108,10 @@ void Vehicle::_updateDistanceToNextWP()
         && llist[currentIndex]->coordinate().longitude()!=0.0
         && coordinate().distanceTo(llist[currentIndex]->coordinate())>1.0) {
 
-        _distanceToNextWPFact.setRawValue(coordinate().distanceTo(llist[currentIndex]->coordinate()));
+        //_distanceToNextWPFact.setRawValue(coordinate().distanceTo(llist[currentIndex]->coordinate()));
     }
     else{
-        _distanceToNextWPFact.setRawValue(qQNaN());
+        //_distanceToNextWPFact.setRawValue(qQNaN());
     }
 }
 
