@@ -139,8 +139,9 @@ ApplicationWindow {
         if (!flightView.visible) {
             mainWindow.showPreFlightChecklistIfNeeded()
         }
-        viewSwitch(toolbar.flyViewToolbar)
-        flightView.visible = true
+        mainWindow.popView()
+        //viewSwitch(toolbar.flyViewToolbar)
+        //flightView.visible = true
     }
 
     function showPlanView() {
@@ -152,41 +153,30 @@ ApplicationWindow {
     }
 
     function showAnalyzeTool() {
-        viewSwitch(toolbar.flyViewToolbar)
-        analyzeView.visible = true
+        showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
     }
 
-    function showSetupTool() {
-        viewSwitch(toolbar.flyViewToolbar)
-        setupView.visible = true
-    }
-
-    function showVehicleSetupTool(setupPage = "") {
-        setupView.visible = true
+    function showSetupTool(setupPage = "") {
+        showTool(qsTr("Vehicle Setup"), "SetupView.qml", "/qmlimages/Quad.svg")
         if (setupPage !== "") {
-            setupView.showNamedComponentPanel(setupPage)
+            toolDrawerLoader.item.showNamedComponentPanel(setupPage)
         }
     }
 
-    function showAppSettings() {
-        viewSwitch(toolbar.flyViewToolbar)
-        appSettings.visible = true
-    }
-
-    function showSettingsTool(settingsPage = "") {
-        viewSwitch(toolbar.flyViewToolbar)
-        appSettings.visible = true
+    function showAppSettings(settingsPage = "") {
+        showTool(qsTr("Application Settings"), "AppSettings.qml", "/qmlimages/Gears.svg")
         if (settingsPage !== "") {
-            appSettings.showSettingsPage(settingsPage)
+            toolDrawerLoader.item.showSettingsPage(settingsPage)
         }
     }
 
-//    function showSettingsTool(settingsPage = "") {
-//        showTool(qsTr("Application Settings"), "AppSettings.qml", "/res/QGCLogoWhite")
-//        if (settingsPage !== "") {
-//            toolDrawerLoader.item.showSettingsPage(settingsPage)
-//        }
-//    }
+    function showTool(toolTitle, toolSource, toolIcon) {
+        toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
+        toolDrawer.toolTitle    = toolTitle
+        toolDrawer.toolSource   = toolSource
+        toolDrawer.toolIcon     = toolIcon
+        toolDrawer.visible      = true
+    }
 
     function checkedMenu() {
         flyButton.checked = false
@@ -305,8 +295,8 @@ ApplicationWindow {
 
     Drawer {
         id:             viewSelectDrawer
-        y:              stackView.height
-        height:         mainWindow.height - stackView.height
+        y:              ScreenTools.toolbarHeight
+        height:         mainWindow.height - ScreenTools.toolbarHeight
         width:          mainLayoutRect.width
         edge:           Qt.LeftEdge
         interactive:    true
@@ -347,6 +337,7 @@ ApplicationWindow {
                         imageColor:         qgcPal.text
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
+                                toolDrawer.visible = false
                                 mainWindow.showFlyView()
                                 checkedMenu()
                                 flyButton.checked = true
@@ -364,6 +355,7 @@ ApplicationWindow {
                         imageColor:         qgcPal.text
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
+                                toolDrawer.visible = false
                                 mainWindow.showPlanView()
                                 checkedMenu()
                                 planButton.checked = true
@@ -381,6 +373,7 @@ ApplicationWindow {
                         imageResource:      "/qmlimages/Quad.svg"
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
+                                toolDrawer.visible = false
                                 mainWindow.showSetupTool()
                                 checkedMenu()
                                 setupButton.checked = true
@@ -399,6 +392,7 @@ ApplicationWindow {
                         visible:            QGroundControl.corePlugin.showAdvancedUI
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
+                                toolDrawer.visible = false
                                 mainWindow.showAnalyzeTool()
                                 checkedMenu()
                                 analyzeButton.checked = true
@@ -417,6 +411,7 @@ ApplicationWindow {
                         visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
+                                toolDrawer.visible = false
                                 mainWindow.showAppSettings()
                                 checkedMenu()
                                 settingsButton.checked = true
@@ -444,13 +439,6 @@ ApplicationWindow {
                     Layout.alignment:       Qt.AlignHCenter
                 }
 
-//                QGCLabel {
-//                    text:                   qsTr("Version: %1").arg(QGroundControl.qgcVersion)
-//                    font.pointSize:         ScreenTools.smallFontPointSize
-//                    wrapMode:               QGCLabel.WrapAnywhere
-//                    Layout.maximumWidth:    parent.width
-//                    Layout.alignment:       Qt.AlignHCenter
-//                }
                 QGCLabel {
                     text:                   QGroundControl.qgcVersion
                     font.pointSize:         ScreenTools.smallFontPointSize
@@ -547,8 +535,8 @@ ApplicationWindow {
 
     Drawer {
         id:             componentDrawer
-        y:              stackView.height
-        height:         mainWindow.height - stackView.height
+        y:              ScreenTools.toolbarHeight
+        height:         mainWindow.height - ScreenTools.toolbarHeight
         width:          componentDrawerLayoutRect.width
         edge:           Qt.RightEdge
         interactive:    true
@@ -656,22 +644,137 @@ ApplicationWindow {
         }
     }
 
-    AnalyzeView{
-        id:             analyzeView
-        anchors.fill:   parent
-        visible:        false
+    Component {
+        id: analyzeViewComponent
+
+        AnalyzeView{
+            id:             analyzeView
+        }
     }
 
-    SetupView{
-        id:             setupView
-        anchors.fill:   parent
-        visible:        false
+    Component {
+        id: setupViewComponent
+
+        SetupView{
+            id:             setupView
+        }
     }
 
-    AppSettings{
-        id:             appSettings
-        anchors.fill:   parent
+    Component {
+        id: appSettingsComponent
+
+        AppSettings{
+            id:             appSettings
+        }
+    }
+
+//    AnalyzeView{
+//        id:             analyzeView
+//        anchors.fill:   parent
+//        visible:        false
+//    }
+
+//    SetupView{
+//        id:             setupView
+//        anchors.fill:   parent
+//        visible:        false
+//    }
+
+//    AppSettings{
+//        id:             appSettings
+//        anchors.fill:   parent
+//        visible:        false
+//    }
+
+    Drawer {
+        id:             toolDrawer
+        height:         mainWindow.height
+        width:          mainWindow.width
+        edge:           Qt.LeftEdge
+        dragMargin:     0
+        closePolicy:    Drawer.NoAutoClose
+        interactive:    false
         visible:        false
+
+        property alias backIcon:    backIcon.source
+        property alias toolTitle:   toolbarDrawerText.text
+        property alias toolSource:  toolDrawerLoader.source
+        property alias toolIcon:    toolIcon.source
+
+        Rectangle {
+            id:             toolDrawerToolbar
+            anchors.left:   parent.left
+            anchors.right:  parent.right
+            anchors.top:    parent.top
+            height:         ScreenTools.toolbarHeight
+            color:          qgcPal.toolbarBackground
+
+            RowLayout {
+                anchors.leftMargin: ScreenTools.defaultFontPixelWidth
+                anchors.left:       parent.left
+                anchors.top:        parent.top
+                anchors.bottom:     parent.bottom
+                spacing:            ScreenTools.defaultFontPixelWidth
+
+                QGCColoredImage {
+                    id:                     backIcon
+                    width:                  ScreenTools.defaultFontPixelHeight * 2
+                    height:                 ScreenTools.defaultFontPixelHeight * 2
+                    fillMode:               Image.PreserveAspectFit
+                    mipmap:                 true
+                    color:                  qgcPal.text
+                }
+
+                QGCLabel {
+                    id:     backTextLabel
+                    text:   qsTr("Back")
+                }
+
+                QGCLabel {
+                    font.pointSize: ScreenTools.largeFontPointSize
+                    text:           "<"
+                }
+
+                QGCColoredImage {
+                    id:                     toolIcon
+                    width:                  ScreenTools.defaultFontPixelHeight * 2
+                    height:                 ScreenTools.defaultFontPixelHeight * 2
+                    fillMode:               Image.PreserveAspectFit
+                    mipmap:                 true
+                    color:                  qgcPal.text
+                }
+
+                QGCLabel {
+                    id:             toolbarDrawerText
+                    font.pointSize: ScreenTools.largeFontPointSize
+                }
+            }
+
+            QGCMouseArea {
+                anchors.top:        parent.top
+                anchors.bottom:     parent.bottom
+                x:                  parent.mapFromItem(backIcon, backIcon.x, backIcon.y).x
+                width:              (backTextLabel.x + backTextLabel.width) - backIcon.x
+                onClicked: {
+                    toolDrawer.visible      = false
+                    toolDrawer.toolSource   = ""
+                }
+            }
+        }
+
+        Loader {
+            id:             toolDrawerLoader
+            anchors.left:   parent.left
+            anchors.right:  parent.right
+            anchors.top:    toolDrawerToolbar.bottom
+            anchors.bottom: parent.bottom
+
+            Connections {
+                target:                 toolDrawerLoader.item
+                ignoreUnknownSignals:   true
+                onPopout:               toolDrawer.visible = false
+            }
+        }
     }
 
     //-------------------------------------------------------------------------
