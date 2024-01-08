@@ -98,7 +98,7 @@ Rectangle {
 
     property var    _gimbalController:        _activeVehicle ? _activeVehicle.gimbalController : undefined
     property var    _activeGimbal:            _gimbalController ? _gimbalController.activeGimbal : undefined
-    property bool   _gimbalAvailable:         _activeGimbal !== undefined ? true : false
+    property bool   _gimbalAvailable:         _activeGimbal ? true : false
     property bool   _gimbalRollAvailable:     _activeGimbal && _activeGimbal.curRoll ? true : false
     property bool   _gimbalPitchAvailable:    _activeGimbal && _activeGimbal.curPitch ? true : false
     property bool   _gimbalYawAvailable:      _activeGimbal && _activeGimbal.curYaw ? true : false
