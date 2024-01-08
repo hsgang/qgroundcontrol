@@ -1459,6 +1459,7 @@ CONFIG += qmltypes
 QML_IMPORT_NAME = Viewer3DQmlType
 QML_IMPORT_MAJOR_VERSION = 1
 
+QML_IMPORT_PATH += $$PWD/src/Viewer3D
 
 SOURCES += \
     $$PWD/src/Viewer3D/city_map_geometry.cpp \

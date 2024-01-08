@@ -32,7 +32,6 @@
 #include "FactSystem.h"
 #include "GPSRTKFactGroup.h"
 
-
 // This is for 3D viewer
 #include "QGCViewer3D.h"
 

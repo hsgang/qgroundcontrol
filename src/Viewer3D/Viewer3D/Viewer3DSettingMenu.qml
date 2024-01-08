@@ -36,7 +36,7 @@ Rectangle {
         text: qsTr("3D Map File:")
         anchors.left: parent.left
         anchors.top: parent.top
-        font.pixelSize: ScreenTools.defaultFontPixelWidth * 2
+        //font.pixelSize: ScreenTools.defaultFontPixelWidth * 2
         anchors.leftMargin: leftMarginSpace
         anchors.topMargin: ScreenTools.defaultFontPixelWidth * 3
     }
@@ -99,7 +99,7 @@ Rectangle {
         text: qsTr("Vehicle Height Bias:")
         anchors.left: parent.left
         anchors.top: map_file_btn.bottom
-        font.pixelSize: ScreenTools.defaultFontPixelWidth * 2
+        //font.pixelSize: ScreenTools.defaultFontPixelWidth * 2
         anchors.leftMargin: leftMarginSpace
         anchors.topMargin: ScreenTools.defaultFontPixelWidth * 2
     }

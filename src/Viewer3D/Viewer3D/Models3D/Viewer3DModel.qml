@@ -53,7 +53,6 @@ View3D {
                 diffuseColor: "gray"
             }
         ]
-
     }
 
     Repeater3D{
