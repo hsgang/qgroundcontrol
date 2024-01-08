@@ -5,6 +5,7 @@ import QGroundControl.Controls
 import QGroundControl.ScreenTools
 import QGroundControl.Vehicle
 import QGroundControl.Palette
+import QGroundControl.FlightDisplay
 
 Item {
     id: root
@@ -32,9 +33,13 @@ Item {
     property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
-    property bool _haveGimbal:  vehicle ? vehicle.gimbalData : false
-    property real _gimbalYaw:   vehicle ? vehicle.gimbalYaw.toFixed(1) : 0
-    property real _gimbalPitch: vehicle ? vehicle.gimbalPitch.toFixed(1) : 0
+    property var  _gimbalController:        vehicle ? vehicle.gimbalController : undefined
+    property var  _activeGimbal:            _gimbalController ? _gimbalController.activeGimbal : undefined
+    property bool _gimbalAvailable:         _activeGimbal !== undefined ? true : false
+    property bool _gimbalPitchAvailable:    _activeGimbal && _activeGimbal.curPitch ? true : false
+    property bool _gimbalYawAvailable:      _activeGimbal && _activeGimbal.curYaw ? true : false
+    property real _gimbalPitch:             _gimbalAvailable && _gimbalPitchAvailable ? _activeGimbal.curPitch : 0
+    property real _gimbalYaw:               _gimbalAvailable && _gimbalYawAvailable ? _activeGimbal.curYaw : 0
 
     property string _distanceToHomeText:    vehicle ? _distanceToHome.toFixed(0) : "--"
     property string _distanceToNextWPText:  vehicle ? _distanceToNextWP.toFixed(0) : "--"
@@ -95,6 +100,73 @@ Item {
             origin.x:       compassDial.width  / 2
             origin.y:       compassDial.height / 2
             angle:          isNoseUpLocked()?-_heading:0
+        }
+    }
+
+    Item {
+        id:             proximityItem
+        anchors.fill:   parent
+        width:          parent.width
+        height:         parent.height
+
+        property real   range:  20//isNaN(proximityValues.maxDistance)   ///< Default 6m view
+
+        property real   _minlength:    Math.min(proximityItem.width,proximityItem.height)
+        property real   _minRadius:    Math.min(proximityItem.width,proximityItem.height) / 4
+        property real   _ratio:        (_minRadius / 2) / proximityItem.range
+        property real   _warningDistance: 10
+        property real   _maxRange:        50
+
+        ProximityRadarValues {
+            id:                     proximityValues
+            vehicle:                root.vehicle
+            onRotationValueChanged: proximitySensors.requestPaint()
+        }
+
+        Canvas{
+            id:                 proximitySensors
+            anchors.fill:       proximityItem
+
+            transform: Rotation {
+                origin.x:       parent.width  / 2
+                origin.y:       parent.height / 2
+                angle:          isNoseUpLocked() ? 0 : _heading
+            }
+
+            onPaint: {
+                var ctx = getContext("2d");
+                ctx.reset();
+                ctx.translate(width/2, height/2)
+                ctx.lineWidth = width/30;
+                ctx.rotate(-Math.PI/2 - Math.PI/8);
+                for (var i=0; i<proximityValues.rgRotationValues.length; i++) {
+                    var rotationValue = proximityValues.rgRotationValues[i]
+                    if (rotationValue < proximityItem._maxRange) {
+                        var warningColor;
+                        if (rotationValue < proximityItem._warningDistance) { warningColor = Qt.rgba(1, 0, 0, 0.4) }
+                        else if (rotationValue >= proximityItem._warningDistance) { warningColor = Qt.rgba(1, 1, 0, 0.4) }
+                        if (rotationValue > proximityItem.range) { rotationValue = proximityItem.range; }
+                        if (!isNaN(rotationValue)) {
+                            var a=Math.PI/4 * i;
+                            var gradient = ctx.createRadialGradient(0, 0, proximityItem._minRadius + (rotationValue * proximityItem._ratio), 0, 0, (proximityItem.width / 2));
+                            gradient.addColorStop(0, warningColor); // 내부부터 시작하는 색상
+                            gradient.addColorStop(0.3, "transparent");
+                            gradient.addColorStop(1, "transparent"); // 외부로 퍼지는 색상
+                            ctx.beginPath();
+                            //ctx.arc(0, 0, proximityItem._minRadius + (rotationValue * proximityItem._ratio), 0 + a + Math.PI/50, Math.PI/4 + a - Math.PI/50, false);
+                            //ctx.stroke();
+                            ctx.moveTo(0,0);
+                            ctx.arc(0,0, proximityItem._minRadius + (rotationValue * proximityItem._ratio), a + Math.PI/50, Math.PI/4 + a - Math.PI/50);
+                            ctx.lineTo((proximityItem.width / 2) * Math.cos(Math.PI/4 + a - Math.PI/50), (proximityItem.width / 2) * Math.sin(Math.PI/4 + a - Math.PI/50));
+                            ctx.arc(0,0, (proximityItem.width / 2), Math.PI/4 + a - Math.PI/50, a + Math.PI/50, true);
+                            //ctx.lineTo(proximityItem.range * Math.cos(Math.PI/4 + a - Math.PI/50), proximityItem.range * Math.sin(Math.PI/4 + a - Math.PI/50));
+                            ctx.closePath();
+                            ctx.fillStyle = gradient;
+                            ctx.fill();
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -187,7 +259,7 @@ Item {
 
     Rectangle {
         id:             gimbalSight
-        visible:        _haveGimbal & _gimbalPitch >= -85
+        visible:        _gimbalAvailable & _gimbalPitch >= -85
         anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter }
         width:          parent.width * 0.6
         height:         width
@@ -222,7 +294,7 @@ Item {
         transform: Rotation {
             origin.x:       gimbalSight.width / 2
             origin.y:       gimbalSight.height / 2
-            angle:          isNoseUpLocked() ? _gimbalYaw : _heading + _gimbalYaw
+            angle:          isNoseUpLocked() ? _gimbalYaw - _heading : _gimbalYaw//isNoseUpLocked() ? _gimbalYaw : _heading + _gimbalYaw
         }
     }
 
@@ -390,5 +462,4 @@ Item {
             y: - size/1.82 * Math.cos((_angle)*(3.14/180))
         }
     }
-
 }

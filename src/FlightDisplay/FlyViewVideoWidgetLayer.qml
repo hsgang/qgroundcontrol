@@ -7,6 +7,7 @@ import QGroundControl.ScreenTools   1.0
 import QGroundControl.Palette       1.0
 
 Item {
+    id:           rootItem
     anchors.fill: parent
 
     property var screenX
@@ -15,9 +16,16 @@ Item {
     property var screenXrateInitCoocked
     property var screenYrateInitCoocked
 
-    property var _gimbalControllerSettings: QGroundControl.settingsManager.gimbalControllerSettings
-    property var _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle
-    
+    property var  _gimbalController:         _activeVehicle ? _activeVehicle.gimbalController : undefined
+    property var  _activeGimbal:             _gimbalController ? _gimbalController.activeGimbal : undefined
+    property bool _gimbalAvailable:          _activeGimbal !== undefined
+    property var  _gimbalControllerSettings: QGroundControl.settingsManager.gimbalControllerSettings
+    property var  _activeVehicle:            QGroundControl.multiVehicleManager.activeVehicle
+    property bool _gimbalPitch:              _activeGimbal && _activeGimbal.curPitch ? true : false
+    property bool _gimbalYaw:                _activeGimbal && _activeGimbal.curYaw ? true : false
+    property string _gimbalPitchString:      _gimbalAvailable && _gimbalPitch ? "Tilt: " + _activeGimbal.curPitch.toFixed(2) : ""
+    property string _gimbalYawString:        _gimbalAvailable && _gimbalYaw ? "Pan: " + _activeGimbal.curYaw.toFixed(2) : ""
+
     property bool shouldProcessClicks:   QGroundControl.videoManager.fullScreen || flyViewVideoWidgetLayer._gimbalControllerSettings.EnableOnScreenControl.value ||
                                          _activeVehicle
 
@@ -34,11 +42,15 @@ Item {
 
     // Sends a +-(0-1) xy value to vehicle.gimbalController.gimbalOnScreenControl
     function clickAndPoint() {
-        var xCoocked =  ( (screenX / parent.width)  * 2) - 1
-        var yCoocked = -( (screenY / parent.height) * 2) + 1
-        // console.log("X global: " + x + " Y global: " + y)
-        // console.log("X coocked: " + xCoocked + " Y coocked: " + yCoocked)
-        _activeVehicle.gimbalController.gimbalOnScreenControl(xCoocked, yCoocked, true, false, false)
+        if (rootItem._gimbalAvailable) {
+            var xCoocked =  ( (screenX / parent.width)  * 2) - 1
+            var yCoocked = -( (screenY / parent.height) * 2) + 1
+            //console.log("X global: " + x + " Y global: " + y)
+            //console.log("X coocked: " + xCoocked + " Y coocked: " + yCoocked)
+            _gimbalController.gimbalOnScreenControl(xCoocked, yCoocked, true, false, false)
+        } else {
+            console.log("gimbal not available")
+        }
     }
 
     function pressControl() {
@@ -71,12 +83,14 @@ Item {
         interval:       100
         repeat:         true
         onTriggered: {
-            if (_activeVehicle) {
+            if (rootItem._gimbalAvailable) {
                 var xCoocked =  ( ( screenX / parent.width)  * 2) - 1
                 var yCoocked = -( ( screenY / parent.height) * 2) + 1
                 xCoocked -= screenXrateInitCoocked
                 yCoocked -= screenYrateInitCoocked
-                _activeVehicle.gimbalController.gimbalOnScreenControl(xCoocked, yCoocked, false, true, true)
+                _gimbalController.gimbalOnScreenControl(xCoocked, yCoocked, false, true, true)
+            } else {
+                console.log("gimbal not available")
             }
         }
     }
@@ -90,11 +104,12 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         color: qgcPal.window
         opacity: 0.8
+        visible: rootItem._gimbalAvailable
 
         QGCLabel {
             id: gimbalPitchLabel
-            text: _activeVehicle && _activeVehicle.gimbalData ? "Tilt: " + _activeVehicle.gimbalPitch.toFixed(2) : ""
-            visible: _activeVehicle && _activeVehicle.gimbalData
+            text: rootItem._gimbalPitchString
+            visible: rootItem._gimbalAvailable
             anchors.top: parent.top
             anchors.left: parent.horizontalCenter
             anchors.margins: ScreenTools.defaultFontPixelWidth
@@ -102,8 +117,8 @@ Item {
 
         QGCLabel {
             id: gimbalPanLabel
-            text: _activeVehicle && _activeVehicle.gimbalData ? "Pan: " + _activeVehicle.gimbalYaw.toFixed(2) : ""
-            visible: _activeVehicle && _activeVehicle.gimbalData
+            text: rootItem._gimbalYawString
+            visible: rootItem._gimbalAvailable
             anchors.top: parent.top
             anchors.right: parent.horizontalCenter
             anchors.margins: ScreenTools.defaultFontPixelWidth

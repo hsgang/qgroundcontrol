@@ -333,6 +333,7 @@
         <file alias="QGroundControl/FlightMap/WinchControlPanel.qml">src/FlightMap/Widgets/WinchControlPanel.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewInsetViewer.qml">src/FlightDisplay/FlyViewInsetViewer.qml</file>
         <file alias="QGroundControl/Controls/ComponentLabelValueRow.qml">src/QmlControls/ComponentLabelValueRow.qml</file>
+        <file alias="QGroundControl/Controls/FakeToolStripHoverButton.qml">src/QmlControls/FakeToolStripHoverButton.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>

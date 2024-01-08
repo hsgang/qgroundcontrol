@@ -18,14 +18,33 @@ Item {
 
     property alias maxHeight:               toolStripPanelVideo.maxHeight
     property alias maxWidth:                modesToolStrip.maxWidth
-    property real  _margins:                ScreenTools.defaultFontPixelWidth * 0.75
+    property real  _margins:                ScreenTools.defaultFontPixelHeight / 2
     property bool  _modesPanelVisible:      modesToolStripAction.checked
     property bool  _actionsPanelVisible:    actionsToolStripAction.checked
     property bool  _selectPanelVisible:     selectToolStripAction.checked
-    property bool  _actionsMapPanelVisible: mapToolsToolStripAction.checked
+    property bool  _actionsMapPanelVisible: mapToolsToolStripAction.checked && mapToolsToolStripAction.enabled
     property var   _activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
-    property bool  _haveGimbalControl:      _activeVehicle ? _activeVehicle.gimbalHaveControl : false
-    property bool  _othersHaveGimbalControl: _activeVehicle ? _activeVehicle.gimbalOthersHaveControl : false
+    property var   _gimbalController:       _activeVehicle ? _activeVehicle.gimbalController : undefined
+
+    Connections {
+            // Setting target to null makes this connection efectively disabled, dealing with qml warnings
+            target: _gimbalController ? _gimbalController : null
+            onShowAcquireGimbalControlPopup: {
+                showAcquireGimbalControlPopup()
+            }
+    }
+
+    function showAcquireGimbalControlPopup() {
+        // TODO: we should mention who is currently in control
+        mainWindow.showMessageDialog(
+            title,
+            qsTr("Do you want to take over gimbal control?"),
+            StandardButton.Yes | StandardButton.Cancel,
+            function() {
+               _activeVehicle.gimbalController.acquireGimbalControl()
+            }
+        )
+    }
 
     ToolStrip{
         id:                 toolStripPanelVideo
@@ -52,7 +71,7 @@ Item {
                 },
                 ToolStripAction {
                     id:                 modesToolStripAction
-                    text:               qsTr("")
+                    text:               qsTr("Modes")
                     iconSource:         "/HA_Icons/MODES.png"
                     checkable:          true
                     visible:            !toolStripPanelVideo.panelHidden
@@ -63,7 +82,7 @@ Item {
                 },
                 ToolStripAction {
                     id:                actionsToolStripAction
-                    text:              qsTr("")
+                    text:              qsTr("Actions")
                     iconSource:        "/HA_Icons/ACTIONS.png"
                     checkable:         true
                     visible:           !toolStripPanelVideo.panelHidden
@@ -72,12 +91,24 @@ Item {
                         checked = false
                     }
                 },
+                // Change here based on control status?
+                ToolStripAction {
+                    text:              hasControl ? qsTr("Release C.") : qsTr("Acquuire C.")
+                    iconSource:        "/HA_Icons/PAYLOAD.png"
+                    checkable:         false
+                    visible:           !toolStripPanelVideo.panelHidden && _activeVehicle && _gimbalController.activeGimbal
+                    onTriggered:       _activeVehicle ?
+                                            hasControl ? _gimbalController.releaseGimbalControl() : _gimbalController.acquireGimbalControl()
+                                                : undefined
+
+                    property var hasControl: _gimbalController && _gimbalController.activeGimbal && _gimbalController.activeGimbal.gimbalHaveControl
+                },
                 ToolStripAction {
                     id:                 selectToolStripAction
-                    text:               qsTr("")
+                    text:               qsTr("Gimbal ") + (_gimbalController && _gimbalController.activeGimbal ? _gimbalController.activeGimbal.deviceId : "")
                     iconSource:         "/HA_Icons/SELECT.png"
                     checkable:          true
-                    visible:            !toolStripPanelVideo.panelHidden
+                    visible:            !toolStripPanelVideo.panelHidden && _gimbalController ? _gimbalController.gimbals.count : false
                     
                     onVisibleChanged: {
                         checked = false
@@ -95,9 +126,9 @@ Item {
         visible:   rootItem._modesPanelVisible
         fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
 
-        anchors.bottom:             toolStripPanelVideo.bottom
+        anchors.top:                toolStripPanelVideo.top
         anchors.right:              toolStripPanelVideo.left
-        anchors.bottomMargin:       (height * 2) + (ScreenTools.defaultFontPixelHeight / 3)
+        anchors.topMargin:          height
         anchors.rightMargin:        _margins
 
         ToolStripActionList {
@@ -130,9 +161,9 @@ Item {
         visible:   rootItem._actionsPanelVisible
         fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
 
-        anchors.bottom:             toolStripPanelVideo.bottom
+        anchors.top:                toolStripPanelVideo.top
         anchors.right:              toolStripPanelVideo.left
-        anchors.bottomMargin:       height + (ScreenTools.defaultFontPixelHeight / 4)
+        anchors.topMargin:          (height * 2) + (_margins / 2)
         anchors.rightMargin:        _margins
 
         ToolStripActionList {
@@ -153,24 +184,8 @@ Item {
                     iconSource:         "/HA_Icons/CAMERA_90.png"
                     onTriggered: {
                         if (_activeVehicle) {
-                            if (_activeVehicle.gimbalOthersHaveControl) {
-                                 // TODO: we should mention who is currently in control
-                                 mainWindow.showMessageDialog(title,
-                                     qsTr("Do you want to take over gimbal control?"),
-                                     StandardButton.Yes | StandardButton.Cancel,
-                                     function() {
-                                        _activeVehicle.gimbalController.acquireGimbalControl()
-                                        _activeVehicle.gimbalController.toggleGimbalYawLock(true, false) // we need yaw lock for this
-                                        _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(0, -90) // point gimbal down
-                                     })
-                            } else if (!_activeVehicle.othersHaveControl) {
-                                _activeVehicle.gimbalController.gimbalController.acquireGimbalControl()
-                                _activeVehicle.gimbalController.toggleGimbalYawLock(true, false) // we need yaw lock for this
-                                _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(0, -90) // point gimbal down
-                            } else {
-                                _activeVehicle.gimbalController.toggleGimbalYawLock(true, false) // we need yaw lock for this
-                                _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(0, -90) // point gimbal down
-                            }
+                            _activeVehicle.gimbalController.toggleGimbalYawLock(true, false)
+                            _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(-90, 0)
                         }
                     }
                 },
@@ -185,6 +200,7 @@ Item {
                     iconSource:         "/HA_Icons/MAP_CLICK.png"
                     checkable:          true
                     visible:            !toolStripPanelVideo.panelHidden
+                    enabled:            flightView._mainWindowIsMap
 
                     onVisibleChanged: function(visible) {
                         if (!visible)
@@ -209,6 +225,10 @@ Item {
         anchors.topMargin:      _margins
 
         property var roiActive: _activeVehicle && _activeVehicle.isROIEnabled ? true : false
+
+        onVisibleChanged: {
+            getFromMapButton.checked = false
+        }
 
         DeadMouseArea {
             anchors.fill: parent
@@ -273,6 +293,7 @@ Item {
                 Layout.fillWidth:   true
             }
             QGCButton {
+                id:                 getFromMapButton
                 text:              qsTr("Set from map")
                 checkable:         true
                 Layout.columnSpan: 2
@@ -332,33 +353,46 @@ Item {
         }
     }
 
-    ToolStripHorizontal {
-        id:        selectToolStrip
-        model:     selectToolStripActionList.model
-        forceImageScale11: true
-        //width:     toolStripPanelVideo.height
-        maxWidth:  height * 2
+    Rectangle {
+        id:        gimbalSelectorPanel
+        width:     toolStripPanelVideo.width
+        height:    panelHeight
         visible:   rootItem._selectPanelVisible
-        fontSize:  ScreenTools.isMobile ? ScreenTools.smallFontPointSize * 0.7 : ScreenTools.smallFontPointSize
+        color:     qgcPal.windowShade
+        radius:    ScreenTools.defaultFontPixelWidth / 2
 
         anchors.bottom:             toolStripPanelVideo.bottom
         anchors.right:              toolStripPanelVideo.left
         anchors.rightMargin:        _margins
 
-        ToolStripActionList {
-            id: selectToolStripActionList
-            model: [
-                ToolStripAction {
-                    text:               qsTr("Gimbal 1")
-                    iconSource:         "/HA_Icons/PAYLOAD.png"
-                    onTriggered:        undefined
-                },
-                ToolStripAction {
-                    text:               qsTr("Gimbal 2")
-                    iconSource:         "/HA_Icons/PAYLOAD.png"
-                    onTriggered:        undefined
+        property real buttonWidth:    width - _margins * 2
+        property real panelHeight:    gimbalSelectorContentGrid.childrenRect.height + _margins * 2
+        property real gridRowSpacing: _margins
+        property real buttonFontSize: ScreenTools.smallFontPointSize * 0.9
+
+        GridLayout {
+            id:               gimbalSelectorContentGrid
+            width:            parent.width
+            rowSpacing:       gimbalSelectorPanel.gridRowSpacing
+            columns:          1
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top:              parent.top
+            anchors.topMargin:        _margins
+
+            Repeater {
+                model: _gimbalController && _gimbalController.gimbals ? _gimbalController.gimbals : undefined
+                delegate: FakeToolStripHoverButton {
+                    Layout.preferredWidth:  gimbalSelectorPanel.buttonWidth
+                    Layout.preferredHeight: Layout.preferredWidth
+                    Layout.alignment:       Qt.AlignHCenter | Qt.AlignVCenter
+                    text:                   qsTr("Gimbal ") + object.deviceId
+                    fontPointSize:          gimbalSelectorPanel.buttonFontSize
+                    onClicked: {
+                        _gimbalController.activeGimbal = object
+                    }
                 }
-            ]
+            }
         }
-    }   
+    }
 }

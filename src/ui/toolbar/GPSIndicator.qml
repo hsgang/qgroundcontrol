@@ -22,7 +22,7 @@ import QGroundControl.FactControls
 //-- GPS Indicator
 Item {
     id:             control
-    width:          gnssValuesRow.width//(gnssValuesRow.x + gnssValuesRow.width)// * 1.1
+    width:          gnssValuesRow.width
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 

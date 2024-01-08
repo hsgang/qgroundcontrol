@@ -5,7 +5,7 @@ import QGroundControl.Palette
 import QGroundControl.ScreenTools
 
 Item {
-    property color  color:          qgcPal.text
+    property color  color:          "black" //qgcPal.text
     property alias  contentHeight:  _measureText.contentHeight
     property font   font
     property string text:           ""
@@ -117,7 +117,7 @@ Item {
         id:             _measureBlanks
         font:           _root.font
         antialiasing:   true
-        text:           "  "
+        text:           "      "
         visible:        false
     }
 }
