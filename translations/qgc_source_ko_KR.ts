@@ -9907,109 +9907,109 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
-    <name>MainToolBar</name>
+    <name>FlyViewToolBar</name>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="201"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="201"/>
         <source>Downloading</source>
         <translation>다운로드 중</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="327"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="327"/>
         <source>Click anywhere to hide</source>
         <translation>숨기려면 아무 곳이나 클릭하십시오</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="209"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="209"/>
         <source>Connect</source>
         <translation>연결</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="215"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="215"/>
         <source>Disconnect</source>
         <translation>연결 해제</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="184"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="184"/>
         <source>Connected</source>
         <translation>연결됨</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="190"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="190"/>
         <source>Disconnected</source>
         <translation>연결 없음</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="134"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="134"/>
         <source>Link Management</source>
         <translation>연결 관리</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="391"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="391"/>
         <source>FlyView Widget</source>
         <translation>비행 화면 위젯</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="414"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="414"/>
         <source>Payload</source>
         <translation>페이로드 제어</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="416"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="416"/>
         <source>PhotoVideo Control</source>
         <translation>영상캡처 제어</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="422"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="422"/>
         <source>Mount Control</source>
         <translation>짐벌 마운트 제어</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="428"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="428"/>
         <source>Winch Control</source>
         <translation>윈치 제어</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="434"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="434"/>
         <source>Chart Widget</source>
         <translation>차트 위젯</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="440"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="440"/>
         <source>Atmospheric Data</source>
         <translation>대기 측정 정보</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="450"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="450"/>
         <source>Status</source>
         <translation>상태 정보</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="452"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="452"/>
         <source>Mission Progress</source>
         <translation>미션 진행 상태</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="458"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="458"/>
         <source>Telemetry Panel</source>
         <translation>텔레메트리 패널</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="464"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="464"/>
         <source>Vibration Status</source>
         <translation>진동 상태</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="470"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="470"/>
         <source>EKF Status</source>
         <translation>EKF 상태</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="479"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="479"/>
         <source>FlyView Settings</source>
         <translation>비행화면 설정</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="502"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="502"/>
         <source>Background Opacity</source>
         <translation>배경 투명도</translation>
     </message>

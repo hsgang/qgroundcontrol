@@ -227,5 +227,7 @@
         <file alias="battery_80.svg">src/ui/toolbar/Images/battery_80.svg</file>
         <file alias="vehicleQuadRotor.svg">src/FlightMap/Images/vehicleQuadRotor.svg</file>
         <file alias="roi_white.svg">src/ui/toolbar/Images/roi_white.svg</file>
+        <file alias="Viewer3D/GearIcon.png">src/Viewer3D/Images/gear_icon.png</file>
+        <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Images/city_3d_map_icon.svg</file>
     </qresource>
 </RCC>

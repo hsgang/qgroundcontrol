@@ -27,12 +27,20 @@ import QGroundControl.Palette
 import QGroundControl.ScreenTools
 import QGroundControl.Vehicle
 
+// 3D Viewer modules
+import Viewer3DQmlType             1.0
+import Viewer3D                    1.0
+import Viewer3D.Models3D           1.0
+
 Item {
     id: _root
 
     // These should only be used by MainRootWindow
     property var planController:    _planController
     property var guidedController:  _guidedController
+
+    // This initializes the backend for Map 3D viewer
+    property var  backendQml: Viewer3DQmlBackend
 
     PlanMasterController {
         id:                     _planController
@@ -78,63 +86,6 @@ Item {
         visible:    !QGroundControl.videoManager.fullScreen
     }
 
-//    FlyViewCustomLayer {
-//        id:                 customOverlay
-//        anchors.fill:       widgetLayer
-//        z:                  _fullItemZorder + 2
-//        parentToolInsets:   widgetLayer.totalToolInsets
-//        mapControl:         _mapControl
-//        visible:            !QGroundControl.videoManager.fullScreen
-//    }
-
-    // Development tool for visualizing the insets for a paticular layer, enable if needed
-    /*
-    FlyViewInsetViewer {
-        id:                     widgetLayerInsetViewer
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.left:           parent.left
-        anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
-
-        z:                      widgetLayer.z + 1
-
-        insetsToView:           customOverlay.totalToolInsets
-    }*/
-
-//    GuidedActionsController {
-//        id:                 guidedActionsController
-//        missionController:  _missionController
-//        actionList:         _guidedActionList
-//        guidedValueSlider:     _guidedValueSlider
-//    }
-
-    /*GuidedActionConfirm {
-        id:                         guidedActionConfirm
-        anchors.margins:            _margins
-        anchors.bottom:             parent.bottom
-        anchors.horizontalCenter:   parent.horizontalCenter
-        z:                          QGroundControl.zOrderTopMost
-        guidedController:           _guidedController
-        guidedValueSlider:             _guidedValueSlider
-    }*/
-
-//    GuidedActionList {
-//        id:                         guidedActionList
-//        anchors.margins:            _margins
-//        anchors.verticalCenter:     parent.verticalCenter
-//        anchors.horizontalCenter:   parent.horizontalCenter
-//        z:                          QGroundControl.zOrderTopMost
-//        guidedController:           _guidedController
-//    }
-
-//    //-- Guided value slider (e.g. altitude)
-//    GuidedValueSlider {
-//        id:                 guidedValueSlider
-//        anchors.margins:    _toolsMargin
-//        anchors.right:      parent.right
-//        anchors.top:        parent.top
-//    }
-
     Item {
         id:                 mapHolder
         anchors.top:        toolbar.bottom
@@ -148,7 +99,7 @@ Item {
             anchors.bottom:         parent.bottom
             anchors.left:           parent.left
             anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
-            z:                      _fullItemZorder + 1
+            z:                      _fullItemZorder + 2 // we need to add one extra layer for map 3d viewer (normally was 1)
             parentToolInsets:       _toolInsets
             mapControl:             _mapControl
             visible:                !QGroundControl.videoManager.fullScreen
@@ -207,6 +158,15 @@ Item {
             visible:            false
         }
 
+        Viewer3DModel{
+            missionController: _missionController
+            id: city_3d_view
+            backendQml: _root.backendQml
+            anchors.fill: parent
+            z: 0
+        }
+
+
         FlyViewMap {
             id:                     mapControl
             planMasterController:   _planController
@@ -214,6 +174,52 @@ Item {
             pipMode:                !_mainWindowIsMap
             toolInsets:             customOverlay.totalToolInsets
             mapName:                "FlightDisplayView"
+        }
+
+        // The setting menu for 3D viewer
+        Viewer3DSettingMenu{
+            id:app_setting_menu
+            z: QGroundControl.zOrderWidgets
+            visible:false
+
+            anchors{
+                top: mapHolder.top
+                //            left: _root.left
+                bottom: mapHolder.bottom
+            }
+            opacity: 0.95
+
+            city_map_path_text: _root.backendQml.city_map_path
+            bias_height_text: Number(_root.backendQml.height_bias)
+
+            onMapFileChanged: (file_path) => {
+                console.log(file_path)
+                _root.backendQml.city_map_path = file_path
+            }
+
+            onHeightBiasChanged: (height) => {
+                _root.backendQml.height_bias = height
+            }
+
+            Behavior on x{
+                NumberAnimation{
+                    easing.type: Easing.InOutQuad;
+                    duration: 300
+                }
+            }
+
+            state: "SETTING_MENU_CLOSE"
+            states: [
+                State {
+                    name: "SETTING_MENU_OPEN"
+                    PropertyChanges { target: app_setting_menu; x: _root.width - app_setting_menu.width; visible:true}
+
+                },
+                State {
+                    name: "SETTING_MENU_CLOSE"
+                    PropertyChanges { target: app_setting_menu; x: _root.width + app_setting_menu.width}
+                }
+            ]
         }
 
         FlyViewVideo {

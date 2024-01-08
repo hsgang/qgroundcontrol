@@ -515,22 +515,22 @@ ApplicationWindow {
                 }
             }
 
-//            QGCMouseArea {
-//                anchors.fill: qgcVersionLayout
+            QGCMouseArea {
+                anchors.fill: qgcVersionLayout
 
-//                onClicked: {
-//                    if (mouse.modifiers & Qt.ShiftModifier) {
-//                        QGroundControl.corePlugin.showTouchAreas = !QGroundControl.corePlugin.showTouchAreas
-//                    } else {
-//                        if(!QGroundControl.corePlugin.showAdvancedUI) {
-//                            advancedModeOnConfirmation.open()
-//                        } else {
-//                            //QGroundControl.corePlugin.showAdvancedUI = false
-//                            advancedModeOffConfirmation.open()
-//                        }
-//                    }
-//                }
-//            }
+                onClicked: {
+                    if (mouse.modifiers & Qt.ShiftModifier) {
+                        QGroundControl.corePlugin.showTouchAreas = !QGroundControl.corePlugin.showTouchAreas
+                    } else {
+                        if(!QGroundControl.corePlugin.showAdvancedUI) {
+                            advancedModeOnConfirmation.open()
+                        } else {
+                            //QGroundControl.corePlugin.showAdvancedUI = false
+                            advancedModeOffConfirmation.open()
+                        }
+                    }
+                }
+            }
         }
     }
 

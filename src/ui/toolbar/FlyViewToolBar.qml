@@ -99,7 +99,7 @@ Rectangle {
             radius:                 ScreenTools.defaultFontPixelHeight * 0.2
             border.color:           qgcPal.text
             border.width:           1
-            visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
+            visible:                !ScreenTools.isMobile
 
             QGCColoredImage{
                 height:             parent.height * 0.7
@@ -119,9 +119,7 @@ Rectangle {
         }
 
         MainStatusIndicator {
-            //Layout.preferredHeight: viewButtonRow.height
             height:                 viewButtonRow.height * 0.7
-            visible:                currentToolbar === flyViewToolbar
         }
 
         QGCButton {
@@ -224,9 +222,6 @@ Rectangle {
         width:                  height
         color:                  "transparent"
         radius:                 ScreenTools.defaultFontPixelHeight * 0.2
-        // border.color:           qgcPal.text
-        // border.width:           1
-        visible:                currentToolbar === flyViewToolbar
 
         QGCColoredImage{
             height:             parent.height * 0.7
