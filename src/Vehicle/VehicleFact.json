@@ -136,9 +136,9 @@
 },
 {
     "name":             "distanceToNextWP",
-    "shortDesc": "Distance to Next WP",
+    "shortDesc": "Next WP distance",
     "type":             "double",
-    "decimalPlaces":    1,
+    "decimalPlaces":    0,
     "units":            "m"
 },
 {

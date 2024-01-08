@@ -24,6 +24,15 @@ ToolStripActionList {
 //            onTriggered:    mainWindow.showPlanView()
 //        },
         ToolStripAction {
+            text:           qsTr("Plan")
+            iconSource:     "/qmlimages/Plan.svg"
+            onTriggered:
+            {
+                mainWindow.showPlanView()
+                map_icon.showFlyMap()
+            }
+        },
+        ToolStripAction {
             id: map_icon
             text:           qsTr("3D View")
             iconSource:     "/qmlimages/Viewer3D/City3DMapIcon.svg"

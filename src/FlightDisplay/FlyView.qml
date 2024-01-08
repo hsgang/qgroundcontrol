@@ -166,7 +166,6 @@ Item {
             z: 0
         }
 
-
         FlyViewMap {
             id:                     mapControl
             planMasterController:   _planController
