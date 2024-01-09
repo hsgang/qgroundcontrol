@@ -1,9 +1,6 @@
 #include <QCoreApplication>
 
 #include "SiYi.h"
-#include "QGCApplication.h"
-#include "SettingsManager.h"
-#include "SIYISettings.h"
 
 SiYi *SiYi::instance_ = Q_NULLPTR;
 SiYi::SiYi(QObject *parent)
@@ -11,7 +8,6 @@ SiYi::SiYi(QObject *parent)
 {
     camera_ = new SiYiCamera(this);
     transmitter_ = new SiYiTransmitter(this);
-
     connect(transmitter_, &SiYiCamera::connected, this, [=](){
         this->isTransmitterConnected_ = true;
         camera_->start();
@@ -29,7 +25,16 @@ SiYi::SiYi(QObject *parent)
 
         camera_->start();
     });
+#if 0
+    connect(transmitter_, &SiYiCamera::ipChanged, this, [=](){
+        if (transmitter_->isRunning()) {
+            transmitter_->exit();
+            transmitter_->wait();
+        }
 
+        transmitter_->start();
+    });
+#endif
 #ifdef Q_OS_ANDROID
     isAndroid_ = true;
 #else

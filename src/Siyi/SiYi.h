@@ -7,9 +7,6 @@
 
 #include "SiYiCamera.h"
 #include "SiYiTransmitter.h"
-#include "QGCLoggingCategory.h"
-
-Q_DECLARE_LOGGING_CATEGORY(SiYiLog)
 
 class SiYi : public QObject
 {
