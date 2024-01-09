@@ -44,7 +44,6 @@ ToolIndicatorPage {
             QGCLabel {
                 Layout.alignment:   {Qt.AlignTop; Qt.AlignHCenter;}
                 text:               noLinks ? qsTr("No Links Configured") : qsTr("Connect To Link")
-                font.pointSize:     noLinks ? ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
             }
 
             Repeater {

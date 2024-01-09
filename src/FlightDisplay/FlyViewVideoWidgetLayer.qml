@@ -26,8 +26,7 @@ Item {
     property string _gimbalPitchString:      _gimbalAvailable && _gimbalPitch ? "Tilt: " + _activeGimbal.curPitch.toFixed(2) : ""
     property string _gimbalYawString:        _gimbalAvailable && _gimbalYaw ? "Pan: " + _activeGimbal.curYaw.toFixed(2) : ""
 
-    property bool shouldProcessClicks:   QGroundControl.videoManager.fullScreen || flyViewVideoWidgetLayer._gimbalControllerSettings.EnableOnScreenControl.value ||
-                                         _activeVehicle
+    property bool shouldProcessClicks:   QGroundControl.videoManager.fullScreen || (flyViewVideoWidgetLayer._gimbalControllerSettings.EnableOnScreenControl.value && _activeVehicle)
 
     // Functions for on screen gimbal control
     function clickControl() {
