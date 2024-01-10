@@ -38,10 +38,10 @@ Button {
         implicitHeight: ScreenTools.implicitButtonHeight
         radius:         backRadius
         border.width:   showBorder ? 1 : 0
-        border.color:   qgcPal.windowShadeLight
+        border.color:   qgcPal.text
         color:          _showHighlight ?
-                            qgcPal.buttonHighlight :
-                            (primary ? qgcPal.primaryButton : qgcPal.button)
+                            qgcPal.windowShadeLight :
+                            (primary ? qgcPal.windowShadeLight : qgcPal.windowShade)
     }
 
     contentItem: Item {
@@ -73,7 +73,7 @@ Button {
             font.family:            ScreenTools.normalFontFamily
             color:                  _showHighlight ?
                                         qgcPal.buttonHighlightText :
-                                        (primary ? qgcPal.primaryButtonText : qgcPal.buttonText)
+                                        (primary ? qgcPal.buttonHighlightText : qgcPal.buttonText)
         }
     }
 }

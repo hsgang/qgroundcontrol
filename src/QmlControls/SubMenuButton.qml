@@ -37,10 +37,10 @@ Button {
 
         background: Rectangle {
             id:     innerRect
-            color:  showHighlight ? qgcPal.buttonHighlight : qgcPal.window
-            border.width:   ScreenTools.defaultFontPointSize * 0.2
+            color:          showHighlight ? qgcPal.buttonHighlight : qgcPal.window
+            border.width:   ScreenTools.defaultFontPixelHeight / 10
             border.color:   qgcPal.windowShadeLight
-            radius: ScreenTools.defaultFontPointSize * 0.5
+            radius:         ScreenTools.defaultFontPixelHeight / 3
 
             implicitWidth: titleBar.x + titleBar.contentWidth + ScreenTools.defaultFontPixelWidth
 
@@ -64,7 +64,7 @@ Button {
                 anchors.left:           image.right
                 anchors.verticalCenter: parent.verticalCenter
                 verticalAlignment:      TextEdit.AlignVCenter
-                color:                  showHighlight ? qgcPal.buttonHighlightText : qgcPal.buttonText
+                color:                  showHighlight ? qgcPal.buttonHighlightText : qgcPal.buttonText//showHighlight ? qgcPal.buttonHighlightText : qgcPal.buttonText
                 text:                   control.text
             }
         }

@@ -91,7 +91,8 @@ T.ComboBox {
         }
 
         background: Rectangle {
-            color:                  control.currentIndex === index ? _qgcPal.buttonHighlight : _qgcPal.button
+            color:                  control.currentIndex === index ? _qgcPal.windowShadeLight : _qgcPal.window
+            border.color:           _qgcPal.windowShadeLight
         }
 
         highlighted:                control.highlightedIndex === index
@@ -125,7 +126,7 @@ T.ComboBox {
     background: Rectangle {
         implicitWidth:  ScreenTools.implicitComboBoxWidth
         implicitHeight: ScreenTools.implicitComboBoxHeight
-        color:          _qgcPal.window
+        color:          _qgcPal.windowShade
         border.color:   _qgcPal.windowShadeLight
         border.width:   1
         radius:         ScreenTools.defaultFontPixelWidth / 2

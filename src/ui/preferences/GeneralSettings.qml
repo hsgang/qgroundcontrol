@@ -27,9 +27,9 @@ import SiYi.Object 1.0
 
 Rectangle {
     id:                 _root
-    color:              qgcPal.window
+    color:              qgcPal.windowShade
     anchors.fill:       parent
-    anchors.margins:    ScreenTools.defaultFontPixelWidth
+    anchors.margins:    ScreenTools.defaultFontPixelHeight / 3
 
     property Fact _savePath:                            QGroundControl.settingsManager.appSettings.savePath
     property Fact _appFontPointSize:                    QGroundControl.settingsManager.appSettings.appFontPointSize
@@ -47,7 +47,7 @@ Rectangle {
     property Fact   _followTarget:              QGroundControl.settingsManager.appSettings.followTarget
     property Fact   _openWeatherFact:           QGroundControl.settingsManager ? QGroundControl.settingsManager.appSettings.openWeatherApiKey : null
     property real   _panelWidth:                _root.width * _internalWidthRatio
-    property real   _margins:                   ScreenTools.defaultFontPixelWidth
+    property real   _margins:                   ScreenTools.defaultFontPixelHeight / 2
     property var    _planViewSettings:          QGroundControl.settingsManager.planViewSettings
     property var    _flyViewSettings:           QGroundControl.settingsManager.flyViewSettings
     property var    _videoSettings:             QGroundControl.settingsManager.videoSettings
@@ -76,10 +76,11 @@ Rectangle {
             Item {
                 id:     outerItem
                 width:  Math.max(_root.width, settingsColumn.width)
-                height: settingsColumn.height
+                height: settingsColumn.height + (_margins * 2)
 
                 ColumnLayout {
                     id:                         settingsColumn
+                    anchors.topMargin:          _margins
                     anchors.horizontalCenter:   parent.horizontalCenter
 
                     QGCLabel {
@@ -101,11 +102,10 @@ Rectangle {
                             id:                         unitsGrid
                             anchors.topMargin:          _margins
                             anchors.top:                parent.top
-                            //Layout.fillWidth:           true
-                            //anchors.fill:               parent
                             anchors.horizontalCenter:   parent.horizontalCenter
                             flow:                       GridLayout.TopToBottom
                             rows:                       4
+                            rowSpacing:                 _margins
 
                             Repeater {
                                 model: [ qsTr("Distance"),
@@ -124,7 +124,8 @@ Rectangle {
                                         QGroundControl.settingsManager.unitsSettings.speedUnits,
                                         QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
                                 FactComboBox {
-                                    Layout.preferredWidth:  _comboFieldWidth
+                                    Layout.preferredWidth:  _comboFieldWidth * 0.7
+                                    Layout.alignment:       Qt.AlignRight
                                     fact:                   modelData
                                     indexModel:             false
                                 }
@@ -341,8 +342,10 @@ Rectangle {
                             }
 
                             GridLayout {
-                                columns: 2
-                                Layout.alignment: Qt.AlignHCenter
+                                columns:            2
+                                Layout.alignment:   Qt.AlignHCenter
+                                columnSpacing:      _margins
+                                rowSpacing:         _margins
 
                                 QGCLabel {
                                     text:               qsTr("Guided Command Settings")
@@ -407,7 +410,8 @@ Rectangle {
                             anchors.verticalCenter:     parent.verticalCenter
                             columns:                    2
                             visible:                    _videoSettings.visible
-                            rowSpacing:                 _margins * 2
+                            rowSpacing:                 _margins
+                            columnSpacing:              _margins
 
                             QGCLabel {
                                 id:         videoSourceLabel
@@ -573,11 +577,12 @@ Rectangle {
                             anchors.margins:            _margins
                             anchors.top:                parent.top
                             anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:                    _margins * 2
+                            spacing:                    _margins
 
                             GridLayout {
                                 columns:            2
-                                columnSpacing:      _margins * 2
+                                columnSpacing:      _margins
+                                rowSpacing:         _margins
                                 visible:            QGroundControl.settingsManager.appSettings.defaultMissionItemAltitude.visible
 
                                 QGCLabel { text: qsTr("Default Mission Altitude") }
@@ -636,7 +641,7 @@ Rectangle {
                                 id:                         comboGrid
                                 anchors.horizontalCenter:   parent.horizontalCenter
                                 columns:                    2
-                                rowSpacing:                 _margins * 2
+                                rowSpacing:                 _margins
 
                                 QGCLabel {
                                     text:           qsTr("Language")
@@ -772,7 +777,7 @@ Rectangle {
                             ColumnLayout {
                                 id:                         miscCol
                                 anchors.horizontalCenter:   parent.horizontalCenter
-                                spacing:                    _margins * 2
+                                spacing:                    _margins
 
                                 FactCheckBoxSlider {
                                     Layout.fillWidth:   true
@@ -891,7 +896,7 @@ Rectangle {
                             anchors.margins:            _margins
                             anchors.top:                parent.top
                             anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:                    _margins * 2
+                            spacing:                    _margins
 
                             FactCheckBoxSlider {
                                 id:                 promptSaveLog
@@ -953,7 +958,7 @@ Rectangle {
                             //anchors.right:      parent.right
                             anchors.top:        parent.top
                             anchors.horizontalCenter:   parent.horizontalCenter
-                            spacing:            _margins * 2
+                            spacing:            _margins
 
                             ColumnLayout {
                                 spacing: _margins * 2
@@ -1077,7 +1082,7 @@ Rectangle {
                             Layout.fillWidth:           true
                             anchors.horizontalCenter:   parent.horizontalCenter
                             columns:                    3
-                            rowSpacing:                 _margins * 2
+                            rowSpacing:                 _margins
 
                             property var  rtkSettings:      QGroundControl.settingsManager.rtkSettings
                             property bool useFixedPosition: false //rtkSettings.useFixedBasePosition.rawValue
@@ -1283,7 +1288,7 @@ Rectangle {
                             Layout.fillWidth:           true
                             anchors.horizontalCenter:   parent.horizontalCenter
                             columns:                    2
-                            rowSpacing:                 _margins * 2
+                            rowSpacing:                 _margins
 
                             property var  ntripSettings:    QGroundControl.settingsManager.ntripSettings
 

@@ -25,7 +25,7 @@ Switch {
         width:  height * 2
         x:  control.leftPadding
         y:  parent.height / 2 - height / 2
-        color:          (control.checked && control.enabled) ? qgcPal.buttonHighlight : qgcPal.windowShadeLight
+        color:          (control.checked && control.enabled) ? qgcPal.brandingBlue : qgcPal.windowShadeLight
         radius:         height / 2
 
         Rectangle {
@@ -33,7 +33,7 @@ Switch {
             height:  parent.height - 8
             width: height
             anchors.verticalCenter: parent.verticalCenter
-            color:          control.enabled ? qgcPal.colorWhite : qgcPal.colorGrey
+            color:          qgcPal.colorWhite//control.enabled ? qgcPal.colorWhite : qgcPal.colorGrey
             radius:         height / 2
         }
     }
