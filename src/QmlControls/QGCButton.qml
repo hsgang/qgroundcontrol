@@ -71,9 +71,9 @@ Button {
             text:                   control.text
             font.pointSize:         pointSize
             font.family:            ScreenTools.normalFontFamily
-            color:                  _showHighlight ?
-                                        qgcPal.buttonHighlightText :
-                                        (primary ? qgcPal.buttonHighlightText : qgcPal.buttonText)
+            color:                  qgcPal.text//_showHighlight ?
+                                    //    qgcPal.buttonHighlightText :
+                                    //    (primary ? qgcPal.buttonHighlightText : qgcPal.buttonText)
         }
     }
 }

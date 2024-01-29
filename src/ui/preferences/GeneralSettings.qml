@@ -27,7 +27,7 @@ import SiYi.Object 1.0
 
 Rectangle {
     id:                 _root
-    color:              qgcPal.windowShade
+    color:              qgcPal.window
     anchors.fill:       parent
     anchors.margins:    ScreenTools.defaultFontPixelHeight / 3
 

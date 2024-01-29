@@ -22,8 +22,8 @@ Rectangle {
     width:          marqueeRowLayout.width + _margins
     height:         parent.height
     color:          _mainStatusBGColor //"transparent" //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.7)
-    border.color:   qgcPal.text //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.2)
-    border.width:   1
+    //border.color:   qgcPal.text //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.2)
+    //border.width:   1
     radius:         _margins / 4
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle

@@ -97,9 +97,9 @@ Rectangle {
             height:                 viewButtonRow.height * 0.7
             width:                  height
             color:                  "transparent"
-            radius:                 ScreenTools.defaultFontPixelHeight * 0.2
-            border.color:           qgcPal.text
-            border.width:           1
+            //radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+            // border.color:           qgcPal.text
+            // border.width:           1
             visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
 
             QGCColoredImage{

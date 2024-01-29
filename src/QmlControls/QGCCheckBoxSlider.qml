@@ -39,7 +39,7 @@ AbstractButton   {
             height:                 ScreenTools.defaultFontPixelHeight * 0.9
             width:                  height * 2
             radius:                 height / 2
-            color:                  control.checked ? qgcPal.brandingBlue : qgcPal.windowShadeLight
+            color:                  control.checked ? qgcPal.brandingBlue : qgcPal.windowShade
 
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter

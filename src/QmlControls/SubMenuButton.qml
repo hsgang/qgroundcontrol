@@ -33,12 +33,12 @@ Button {
             colorGroupEnabled:  control.enabled
         }
 
-        property bool showHighlight: control.pressed | control.checked
+        property bool showHighlight: control.pressed | control.checked | control.hovered
 
         background: Rectangle {
             id:     innerRect
             color:          showHighlight ? qgcPal.buttonHighlight : qgcPal.window
-            border.width:   ScreenTools.defaultFontPixelHeight / 10
+            border.width:   1
             border.color:   qgcPal.windowShadeLight
             radius:         ScreenTools.defaultFontPixelHeight / 3
 

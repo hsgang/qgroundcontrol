@@ -115,7 +115,7 @@ TextField {
                     Layout.rightMargin: 1
                     Layout.fillHeight:  true
                     width:              helpLabel.contentWidth * 3
-                    color:              qgcPal.buttonHighlight
+                    color:              qgcPal.windowShadeLight
                     visible:            backgroundItem.showHelp
 
                     QGCLabel {

@@ -86,12 +86,12 @@ T.ComboBox {
         contentItem: Text {
             text:                   _text
             font:                   control.font
-            color:                  control.currentIndex === index ? _qgcPal.buttonHighlightText : _qgcPal.buttonText
+            color:                  _qgcPal.text//control.currentIndex === index ? _qgcPal.buttonHighlightText : _qgcPal.buttonText
             verticalAlignment:      Text.AlignVCenter
         }
 
         background: Rectangle {
-            color:                  control.currentIndex === index ? _qgcPal.windowShadeLight : _qgcPal.window
+            color:                  control.currentIndex === index ? _qgcPal.windowShadeLight : _qgcPal.windowShadeDark
             border.color:           _qgcPal.windowShadeLight
         }
 
