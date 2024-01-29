@@ -108,10 +108,6 @@
 #include "GimbalController.h"
 #include "SiYi/SiYi.h"
 
-#if defined(QGC_ENABLE_PAIRING)
-#include "PairingManager.h"
-#endif
-
 #ifndef __mobile__
 #include "FirmwareUpgradeController.h"
 #endif
@@ -486,9 +482,6 @@ void QGCApplication::_initCommon()
     qmlRegisterType<LogReplayLinkController>        (kQGroundControl,                       1, 0, "LogReplayLinkController");
 #if !defined(QGC_DISABLE_MAVLINK_INSPECTOR)
     qmlRegisterUncreatableType<MAVLinkChartController> (kQGroundControl,                    1, 0, "MAVLinkChart",               kRefOnly);
-#endif
-#if defined(QGC_ENABLE_PAIRING)
-    qmlRegisterUncreatableType<PairingManager>      (kQGroundControl,                       1, 0, "PairingManager",             kRefOnly);
 #endif
 
     qmlRegisterUncreatableType<AutoPilotPlugin>     ("QGroundControl.AutoPilotPlugin",      1, 0, "AutoPilotPlugin",            kRefOnly);

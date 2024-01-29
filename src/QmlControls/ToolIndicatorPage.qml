@@ -55,9 +55,9 @@ RowLayout {
     Rectangle {
         id:                     divider
         Layout.preferredWidth:  visible ? 1 : -1
-        height:                 dividerHeight
-        color:                  QGroundControl.globalPalette.text
-        opacity:                0.5
+        Layout.fillHeight:      true
+        //height:                 dividerHeight
+        color:                  Qt.darker(QGroundControl.globalPalette.text, 4)
         visible:                expanded && expandedComponentLoader.sourceComponent
     }
 

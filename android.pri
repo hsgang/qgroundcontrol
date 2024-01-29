@@ -24,8 +24,8 @@ ANDROID_PACKAGE_CUSTOM_SOURCE_DIR   = $$PWD/custom/android                  # Or
 exists($$PWD/custom/android) {
     message("Merging $$PWD/custom/android/ -> $$PWD/android/")
 
-AndroidBuildOnMac {
-    # Latest Mac OSC has different sed than regular linux. Work around this with CONFIG+=AndroidBuildOnMac.
+ equals(QMAKE_HOST.os, Darwin) {
+    # Latest Mac OSX has different sed than regular linux.
     SED_I = '$$QMAKE_STREAM_EDITOR -i \"\"'
 } else {
     SED_I = '$$QMAKE_STREAM_EDITOR -i'

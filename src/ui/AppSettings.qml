@@ -47,12 +47,15 @@ Rectangle {
     Component.onCompleted: {
         //-- Default Settings
         if (globals.commingFromRIDIndicator) {
-            __rightPanel.source = "qrc:/qml/RemoteIDSettings.qml"
+            rightPanel.source = "qrc:/qml/RemoteIDSettings.qml"
             globals.commingFromRIDIndicator = false
         } else {
-            __rightPanel.source = QGroundControl.corePlugin.settingsPages[QGroundControl.corePlugin.defaultSettings].url
+            rightPanel.source =  "/qml/GeneralSettings.qml"
         }
     }
+
+
+    SettingsPagesModel { id: settingsPagesModel }
 
     QGCFlickable {
         id:                 buttonList
@@ -93,22 +96,63 @@ Rectangle {
 
             Repeater {
                 id:     buttonRepeater
-                model:  QGroundControl.corePlugin.settingsPages
+                model:  settingsPagesModel
 
                 Component.onCompleted:  itemAt(0).checked = true
 
-                SubMenuButton {
-                    id:                 subMenu
-                    imageResource:      modelData.icon
-                    setupIndicator:     false
+                //SubMenuButton {
+                //    id:                 subMenu
+                //    imageResource:      modelData.icon
+                //    setupIndicator:     false
+                //    autoExclusive:      true
+                //    text:               modelData.title
+                //    visible:            modelData.url != "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
+
+                //    onClicked: {
+                //        __rightPanel.source = modelData.url
+                //        //__rightPanel.title  = modelData.title
+                //        checked             = true
+                Button {
+                    padding:            ScreenTools.defaultFontPixelWidth / 2
                     autoExclusive:      true
-                    text:               modelData.title
-                    visible:            modelData.url != "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
+                    Layout.fillWidth:   true
+                    visible:            pageVisible()
+
+                    background: Rectangle {
+                        color:  checked ? qgcPal.buttonHighlight : "transparent"
+                        radius: ScreenTools.defaultFontPixelWidth / 2
+                    }
+
+                    contentItem: QGCLabel {
+                        text:   name
+                        color:  checked ? qgcPal.buttonHighlightText : qgcPal.buttonText
+                    }
 
                     onClicked: {
-                        __rightPanel.source = modelData.url
-                        //__rightPanel.title  = modelData.title
-                        checked             = true
+                        if (mainWindow.preventViewSwitch()) {
+                            return
+                        }
+                        if (rightPanel.source !== url) {
+                            rightPanel.source = url
+                        }
+                        checked = true
+                    }
+
+                    Component.onCompleted: {
+                        if (globals.commingFromRIDIndicator) {
+                            _commingFromRIDSettings = true
+                        }
+                        if(_first) {
+                            _first = false
+                            checked = true
+                        }
+                        if (_commingFromRIDSettings) {
+                            checked = false
+                            _commingFromRIDSettings = false
+                            if (modelData.url == "/qml/RemoteIDSettings.qml") {
+                                checked = true
+                            }
+                        }
                     }
                 }
             }
@@ -129,7 +173,7 @@ Rectangle {
 
     //-- Panel Contents
     Loader {
-        id:                     __rightPanel
+        id:                     rightPanel
         anchors.leftMargin:     _horizontalMargin
         anchors.rightMargin:    _horizontalMargin
         anchors.topMargin:      _verticalMargin

@@ -93,6 +93,7 @@ public:
     Q_PROPERTY(QString kmlFileExtension         MEMBER kmlFileExtension         CONSTANT)
     Q_PROPERTY(QString shpFileExtension         MEMBER shpFileExtension         CONSTANT)
     Q_PROPERTY(QString logFileExtension         MEMBER logFileExtension         CONSTANT)
+    Q_PROPERTY(QString tilesetFileExtension     MEMBER tilesetFileExtension     CONSTANT)
 
     QString missionSavePath       ();
     QString parameterSavePath     ();
@@ -120,7 +121,8 @@ public:
     static const char* kmlFileExtension;
     static const char* shpFileExtension;
     static const char* logFileExtension;
-
+    static const char* tilesetFileExtension;
+    
     // Child directories of savePath for specific file types
     static const char* parameterDirectory;
     static const char* telemetryDirectory;

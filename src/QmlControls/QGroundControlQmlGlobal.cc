@@ -80,9 +80,6 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
     _adsbVehicleManager     = toolbox->adsbVehicleManager();
     _ntrip                  = toolbox->ntrip();
     _globalPalette          = new QGCPalette(this);
-#if defined(QGC_ENABLE_PAIRING)
-    _pairingManager         = toolbox->pairingManager();
-#endif
 }
 
 void QGroundControlQmlGlobal::saveGlobalSetting (const QString& key, const QString& value)

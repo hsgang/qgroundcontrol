@@ -34,9 +34,6 @@ class QGCCorePlugin;
 class SettingsManager;
 class ADSBVehicleManager;
 class NTRIP;
-#if defined(QGC_ENABLE_PAIRING)
-class PairingManager;
-#endif
 
 /// This is used to manage all of our top level services/tools
 class QGCToolbox : public QObject {
@@ -63,9 +60,6 @@ public:
     SettingsManager*            settingsManager         () { return _settingsManager; }
     ADSBVehicleManager*         adsbVehicleManager      () { return _adsbVehicleManager; }
     NTRIP*                      ntrip                   () { return _ntrip; }
-#if defined(QGC_ENABLE_PAIRING)
-    PairingManager*             pairingManager          () { return _pairingManager; }
-#endif
 #ifndef __mobile__
     GPSManager*                 gpsManager              () { return _gpsManager; }
 #endif
@@ -97,9 +91,6 @@ private:
     SettingsManager*            _settingsManager        = nullptr;
     ADSBVehicleManager*         _adsbVehicleManager     = nullptr;
     NTRIP*                      _ntrip                  = nullptr;
-#if defined(QGC_ENABLE_PAIRING)
-    PairingManager*             _pairingManager         = nullptr;
-#endif
 
     friend class QGCApplication;
 };
