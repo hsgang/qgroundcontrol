@@ -1,9 +1,9 @@
 
-#ifndef CITY_MAP_GEOMETRY_H
-#define CITY_MAP_GEOMETRY_H
+#ifndef CITYMAPGEOMETRY_H
+#define CITYMAPGEOMETRY_H
 
 #include <QQuick3DGeometry>
-#include "osmparser.h"
+#include "OsmParser.h"
 #include <QTimer>
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
@@ -11,7 +11,6 @@
 class CityMapGeometry : public QQuick3DGeometry
 {
     Q_OBJECT
-    QML_NAMED_ELEMENT(CityMapGeometry)
     Q_PROPERTY(QString model_name READ modelName WRITE setModelName NOTIFY modelNameChanged)
     Q_PROPERTY(QString city_map READ cityMapPath WRITE setCityMap NOTIFY cityMapChanged)
     Q_PROPERTY(OsmParser* bld_map_reader MEMBER m_bld_map_reader NOTIFY bldMapReaderChanged)
@@ -46,4 +45,4 @@ protected slots:
     void mainTimerEvent();
 };
 
-#endif // CITY_MAP_GEOMETRY_H
+#endif // CITYMAPGEOMETRY_H

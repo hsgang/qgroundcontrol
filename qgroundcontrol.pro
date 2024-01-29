@@ -260,7 +260,8 @@ QT += \
     xml \
     texttospeech \
     core-private \
-    core5compat
+    core5compat \
+    quick3d
 
 # Multimedia only used if QVC is enabled
 !contains (DEFINES, QGC_DISABLE_UVC) {
@@ -407,6 +408,8 @@ INCLUDEPATH += \
     src/ui/px4_configuration \
     src/ui/toolbar \
     src/ui/uas \
+    src/Viewer3D \
+    src/Viewer3D/earcut \
 
 #
 # Plugin API
@@ -431,6 +434,7 @@ HEADERS += \
     src/Vehicle/VehicleEscStatusFactGroup.h \
     src/Vehicle/VehicleLandingTargetFactGroup.h \
     src/Vehicle/WinchStatusFactGroup.h \
+    src/Viewer3D/Viewer3DFacts.h \
     src/api/QGCCorePlugin.h \
     src/api/QGCOptions.h \
     src/api/QGCSettings.h \
@@ -454,6 +458,7 @@ SOURCES += \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/Vehicle/VehicleLandingTargetFactGroup.cc \
     src/Vehicle/WinchStatusFactGroup.cc \
+    src/Viewer3D/Viewer3DFacts.cpp \
     src/api/QGCCorePlugin.cc \
     src/api/QGCOptions.cc \
     src/api/QGCSettings.cc \
@@ -771,6 +776,15 @@ HEADERS += \
     src/uas/UASMessageHandler.h \
     src/AnalyzeView/GeoTagController.h \
     src/AnalyzeView/ExifParser.h \
+    src/Viewer3D/QGCViewer3D.h \
+    src/Viewer3D/CityMapGeometry.h \
+    src/Viewer3D/OsmParser.h \
+    src/Viewer3D/Viewer3DCppVariableTypes.h \
+    src/Viewer3D/Viewer3DMetadata.h \
+    src/Viewer3D/Viewer3DQmlBackend.h \
+    src/Viewer3D/Viewer3DQmlVariableTypes.h \
+    src/Viewer3D/Viewer3DUtils.h \
+
 
 # FIXME-QT6: NYI
 AndroidBuild {
@@ -1026,6 +1040,12 @@ SOURCES += \
     src/uas/UASMessageHandler.cc \
     src/AnalyzeView/GeoTagController.cc \
     src/AnalyzeView/ExifParser.cc \
+    src/Viewer3D/QGCViewer3D.cpp \
+    src/Viewer3D/CityMapGeometry.cpp \
+    src/Viewer3D/OsmParser.cpp \
+    src/Viewer3D/Viewer3DMetadata.cpp \
+    src/Viewer3D/Viewer3DQmlBackend.cpp \
+    src/Viewer3D/Viewer3DUtils.cpp \
 
 DebugBuild {
 SOURCES += \
@@ -1388,39 +1408,3 @@ LinuxBuild {
 
     INSTALLS += target share_qgroundcontrol share_icons share_metainfo share_applications
 }
-
-
-#-------------------------------------------------------------------------------------
-#For 3D Viewer
-
-QT += \
-    quick3d \
-    xml
-
-CONFIG += qmltypes
-QML_IMPORT_NAME = Viewer3DQmlType
-QML_IMPORT_MAJOR_VERSION = 1
-
-QML_IMPORT_PATH += $$PWD/src/Viewer3D
-
-SOURCES += \
-    $$PWD/src/Viewer3D/city_map_geometry.cpp \
-    $$PWD/src/Viewer3D/metadatastreamer.cpp \
-    $$PWD/src/Viewer3D/osmparser.cpp \
-    $$PWD/src/Viewer3D/qml_backend.cpp \
-    $$PWD/src/Viewer3D/util_functions.cpp \
-    $$PWD/src/Viewer3D/QGCViewer3D.cpp \
-
-HEADERS += \
-    $$PWD/src/Viewer3D/city_map_geometry.h \
-    $$PWD/src/Viewer3D/cpp_variable_types.h \
-    $$PWD/src/Viewer3D/metadatastreamer.h \
-    $$PWD/src/Viewer3D/osmparser.h \
-    $$PWD/src/Viewer3D/qml_backend.h \
-    $$PWD/src/Viewer3D/qml_variable_types.h \
-    $$PWD/src/Viewer3D/util_functions.h \
-    $$PWD/src/Viewer3D/QGCViewer3D.h \
-
-INCLUDEPATH += \
-    $$PWD/src/Viewer3D \
-    $$PWD/src/Viewer3D/earcut \

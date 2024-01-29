@@ -1,34 +1,34 @@
 import QtQuick3D
 import QtQuick
-import QtQuick.Controls 2.0
-import Viewer3DQmlType 1.0
-import QtQuick.Window   2.2
+import QtQuick.Controls
+import QtQuick.Window
 
-import Viewer3D.Models3D.Drones    1.0
-import Viewer3D.Models3D           1.0
+import Viewer3D.Models3D.Drones
+import Viewer3D.Models3D
 
-import QGroundControl               1.0
-import QGroundControl.Controllers   1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.FlightDisplay 1.0
-import QGroundControl.FlightMap     1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Vehicle       1.0
+import QGroundControl.Viewer3D
+
+import QGroundControl
+import QGroundControl.Controllers
+import QGroundControl.Controls
+import QGroundControl.FlightDisplay
+import QGroundControl.FlightMap
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 View3D {
     id: topRightView
 
-    property var  backendQml:      null
-    property var  missionController
-    readonly property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
-
-
     camera: standAloneScene.camera_main
     importScene: CameraLightModel{
         id: standAloneScene
+    }
+
+    Viewer3DFacts{
+        id: _viewer3DFacts
     }
 
 //    renderMode: View3D.Inline
@@ -45,8 +45,8 @@ View3D {
         geometry: CityMapGeometry {
             id: city_map_geometry
             model_name: "city_map"
-            city_map: backendQml.city_map_path
-            bld_map_reader: Viewer3DOsmReader
+            city_map: (_viewer3DFacts)?(_viewer3DFacts.qmlBackend.city_map_path):("nan")
+            bld_map_reader: _viewer3DFacts.osmParser
         }
 
         materials: [ DefaultMaterial {
@@ -60,7 +60,7 @@ View3D {
 
         delegate: Viewer3DVehicleItems{
             _vehicle: object
-            _backendQml: topRightView.backendQml
+            _backendQml: _viewer3DFacts.qmlBackend
             _planMasterController: masterController
 
             PlanMasterController {
@@ -87,7 +87,7 @@ View3D {
         onPositionChanged: (mouse)=> {
             let roll = standAloneScene.cam_node_in_rotation.x * (3.1415/180)
             let pitch = standAloneScene.cam_node_in_rotation.y * (3.1415/180)
-            let yaw = standAloneScene.cam_node_in_rotation.z * (3.1415/180)
+//            let yaw = standAloneScene.cam_node_in_rotation.z * (3.1415/180)
 
             if (mouse.buttons === Qt.LeftButton) { // Left button for translate
                 let dx_l = (mouse.x - lastPos.x) * transferSpeed

@@ -1,32 +1,32 @@
-import QtQuick 2.9
+import QtQuick
 import QtQuick3D
-import Viewer3DQmlType 1.0
 
-import Viewer3D.Models3D.Drones    1.0
-import Viewer3D.Models3D           1.0
+import Viewer3D.Models3D.Drones
+import Viewer3D.Models3D
+import QGroundControl.Viewer3D
 
-import QGroundControl               1.0
-import QGroundControl.Controllers   1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.FlightDisplay 1.0
-import QGroundControl.FlightMap     1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Vehicle       1.0
+import QGroundControl
+import QGroundControl.Controllers
+import QGroundControl.Controls
+import QGroundControl.FlightDisplay
+import QGroundControl.FlightMap
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 Node {
     id: map3d_item_root
-    property var  _backendQml:      null
-    property var  _vehicle:      null
-    property var  _planMasterController:      null
-    property var  _missionController: (_planMasterController)?(_planMasterController.missionController):(null)
+    property var  _backendQml:                  null
+    property var  _vehicle:                     null
+    property var  _planMasterController:        null
+    property var  _missionController:           (_planMasterController)?(_planMasterController.missionController):(null)
 
     function addMissionItemsToListModel() {
         mission_waypoint_list_model.clear()
         var gps2Local_ = gps2Local
-        gps2Local_.gps_ref = backendQml.gps_ref
+        gps2Local_.gps_ref = _backendQml.gps_ref
 
         for (var i = 1; i < _missionController.visualItems.count; i++) {
             var missionItem = _missionController.visualItems.get(i)
@@ -47,7 +47,7 @@ Node {
         mission_path_model.clear()
         var gps2Local_ = gps2Local
 
-        gps2Local_.gps_ref = backendQml.gps_ref
+        gps2Local_.gps_ref = _backendQml.gps_ref
         for (var i = 2; i < _missionController.visualItems.count; i++) {
             var missionItem = _missionController.visualItems.get(i-1)
             gps2Local_.coordinate.lat = missionItem.coordinate.latitude

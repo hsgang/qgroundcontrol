@@ -1,6 +1,6 @@
 import QtQuick3D
-import QtQuick 2.9
-import Viewer3DQmlType 1.0
+import QtQuick
+import QGroundControl.Viewer3D
 
 import "Djif450/DroneModel_arm_1"
 import "Djif450/DroneModel_arm_2"
@@ -128,6 +128,7 @@ Node{
             }
         }
     }
+
 
     Node
     {

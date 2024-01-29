@@ -1,18 +1,12 @@
 import QtQuick3D
-import QtQuick 2.9
-import QtQuick.Controls 2.0
+import QtQuick
+import QtQuick.Controls
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 Node {
-    property alias cam_node_rotation: camNode.eulerRotation
     property alias cam_node_in_rotation: cameraPerspectiveOne.eulerRotation
-    property alias cam_node_middle_rotation: cameraPerspectiveTwo.eulerRotation
-    property alias cam_node_top_rotation: cameraPerspectiveThree.eulerRotation
-
-    property alias cam_node_position: camNode.position
-     property alias cam_node_middle_position: cameraPerspectiveTwo.position
-    property alias cam_node_in_position: cameraPerspectiveOne.position
+    property alias cam_node_middle_position: cameraPerspectiveTwo.position
     property alias camera_main: cameraPerspectiveOne
 
     property real tilt: 0.001

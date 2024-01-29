@@ -1,7 +1,6 @@
 import QtQuick3D
-import QtQuick 2.9
-import Viewer3DQmlType 1.0
-
+import QtQuick
+import QGroundControl.Viewer3D
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 Node{

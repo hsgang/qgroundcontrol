@@ -1,7 +1,7 @@
 #ifndef OSMPARSER_H
 #define OSMPARSER_H
 
-#include "cpp_variable_types.h"
+#include "Viewer3DCppVariableTypes.h"
 #include "qgeocoordinate.h"
 #include "qqml.h"
 #include <QObject>
@@ -16,9 +16,8 @@
 class OsmParser : public QObject
 {
     Q_OBJECT
-    QML_ELEMENT
-        public:
-                 explicit OsmParser(QObject *parent = nullptr);
+public:
+    explicit OsmParser(QObject *parent = nullptr);
 
     QGeoCoordinate gps_ref_point;
     QMap<uint64_t, QGeoCoordinate> map_nodes;
