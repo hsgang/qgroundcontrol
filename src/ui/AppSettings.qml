@@ -129,6 +129,7 @@ Rectangle {
                     }
 
                     onClicked: {
+                        focus = true
                         if (mainWindow.preventViewSwitch()) {
                             return
                         }
