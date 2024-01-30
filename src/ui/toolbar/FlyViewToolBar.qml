@@ -342,11 +342,9 @@ Rectangle {
                         radius:                 _margins / 4
                         Layout.fillWidth:       true
 
-                        GridLayout {
+                        ColumnLayout {
                             id:                 widgetGridLayout
-                            flow:               GridLayout.LeftToRight
-                            columns:            2
-                            rowSpacing:         _margins
+                            spacing:            _margins
                             anchors.margins:    _margins / 2
                             anchors.top:        parent.top
                             anchors.left:       parent.left
@@ -354,34 +352,45 @@ Rectangle {
 
                             QGCLabel{ text: qsTr("Payload"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
 
-                            QGCLabel{ text: qsTr("PhotoVideo Control") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue = checked ? 1 : 0
+
+                            FactCheckBoxSlider {
+                                Layout.fillWidth: true
+                                text:       qsTr("PhotoVideo Control")
+                                fact:       _showPhotoVideoControl
+                                visible:    _showPhotoVideoControl.visible
+                                property Fact   _showPhotoVideoControl:      QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl
                             }
 
-                            QGCLabel{ text: qsTr("Mount Control") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
+                            FactCheckBoxSlider {
+                                Layout.fillWidth: true
+                                text:       qsTr("Mount Control")
+                                fact:       _showGimbalControlPannel
+                                visible:    _showGimbalControlPannel.visible
+                                property Fact   _showGimbalControlPannel:      QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel
                             }
 
-                            QGCLabel{ text: qsTr("Winch Control") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue = checked ? 1 : 0
+                            FactCheckBoxSlider {
+                                Layout.fillWidth: true
+                                text:       qsTr("Winch Control")
+                                fact:       _showWinchControl
+                                visible:    _showWinchControl.visible
+                                property Fact   _showWinchControl:      QGroundControl.settingsManager.flyViewSettings.showWinchControl
                             }
 
-                            QGCLabel{ text: qsTr("Chart Widget") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue = checked ? 1 : 0
+                            FactCheckBoxSlider {
+                                Layout.fillWidth: true
+                                text:       qsTr("Chart Widget")
+                                fact:       _showChartWidget
+                                visible:    _showChartWidget.visible
+                                property Fact   _showChartWidget:      QGroundControl.settingsManager.flyViewSettings.showChartWidget
                             }
 
-                            QGCLabel{ text: qsTr("Atmospheric Data") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue = checked ? 1 : 0
+                            FactCheckBoxSlider {
+                                Layout.fillWidth: true
+                                text:       qsTr("Atmospheric Data")
+                                fact:       _showAtmosphericValueBar
+                                visible:    _showAtmosphericValueBar.visible
+                                property Fact   _showAtmosphericValueBar:      QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar
                             }
 
                             Item{
@@ -390,28 +399,36 @@ Rectangle {
 
                             QGCLabel{ text: qsTr("Status"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
 
-                            QGCLabel{ text: qsTr("Mission Progress") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue = checked ? 1 : 0
+                            FactCheckBoxSlider {
+                                Layout.fillWidth: true
+                                text:       qsTr("Mission Progress")
+                                fact:       _showMissionProgress
+                                visible:    _showMissionProgress.visible
+                                property Fact   _showMissionProgress:      QGroundControl.settingsManager.flyViewSettings.showMissionProgress
                             }
 
-                            QGCLabel{ text: qsTr("Telemetry Panel") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue = checked ? 1 : 0
+                            FactCheckBoxSlider {
+                                Layout.fillWidth: true
+                                text:       qsTr("Telemetry Panel")
+                                fact:       _showTelemetryPanel
+                                visible:    _showTelemetryPanel.visible
+                                property Fact   _showTelemetryPanel:      QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel
                             }
 
-                            QGCLabel{ text: qsTr("Vibration Status") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue = checked ? 1 : 0
+                            FactCheckBoxSlider {
+                                Layout.fillWidth: true
+                                text:       qsTr("Vibration Status")
+                                fact:       _showVibrationStatus
+                                visible:    _showVibrationStatus.visible
+                                property Fact   _showVibrationStatus:      QGroundControl.settingsManager.flyViewSettings.showVibrationStatus
                             }
 
-                            QGCLabel{ text: qsTr("EKF Status") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue = checked ? 1 : 0
+                            FactCheckBoxSlider {
+                                Layout.fillWidth: true
+                                text:       qsTr("Vibration Status")
+                                fact:       _showEKFStatus
+                                visible:    _showEKFStatus.visible
+                                property Fact   _showEKFStatus:      QGroundControl.settingsManager.flyViewSettings.showEKFStatus
                             }
                         }
                     }

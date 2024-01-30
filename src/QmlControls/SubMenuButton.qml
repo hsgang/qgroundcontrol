@@ -14,7 +14,7 @@ Button {
     property bool   setupIndicator: true                                    ///< true: show setup complete indicator
     property var    imageColor:     undefined
     property string imageResource:  "/qmlimages/subMenuButtonImage.png"     ///< Button image
-    property size   sourceSize:     Qt.size(ScreenTools.defaultFontPixelHeight * 1.2, ScreenTools.defaultFontPixelHeight * 1.2)
+    property size   sourceSize:     Qt.size(ScreenTools.defaultFontPixelHeight * 2, ScreenTools.defaultFontPixelHeight * 2)
 
     text:               "Button"  ///< Pass in your own button text
     focusPolicy:    Qt.ClickFocus
@@ -41,6 +41,7 @@ Button {
     background: Rectangle {
         id:     innerRect
         color:  showHighlight ? qgcPal.buttonHighlight : qgcPal.windowShade
+        radius: ScreenTools.defaultFontPixelHeight * 0.25
 
         implicitWidth: titleBar.x + titleBar.contentWidth + ScreenTools.defaultFontPixelWidth
 
@@ -49,8 +50,8 @@ Button {
             anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
             anchors.left:           parent.left
             anchors.verticalCenter: parent.verticalCenter
-            width:                  ScreenTools.defaultFontPixelHeight * 2
-            height:                 ScreenTools.defaultFontPixelHeight * 2
+            width:                  ScreenTools.defaultFontPixelHeight * 1.5
+            height:                 ScreenTools.defaultFontPixelHeight * 1.5
             fillMode:               Image.PreserveAspectFit
             mipmap:                 true
             color:                  imageColor ? imageColor : (control.setupComplete ? qgcPal.text : "red")

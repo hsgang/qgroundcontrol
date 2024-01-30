@@ -54,7 +54,6 @@ Rectangle {
         }
     }
 
-
     SettingsPagesModel { id: settingsPagesModel }
 
     QGCFlickable {
@@ -100,35 +99,19 @@ Rectangle {
 
                 Component.onCompleted:  itemAt(0).checked = true
 
-                //SubMenuButton {
-                //    id:                 subMenu
-                //    imageResource:      modelData.icon
-                //    setupIndicator:     false
-                //    autoExclusive:      true
-                //    text:               modelData.title
-                //    visible:            modelData.url != "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
-
-                //    onClicked: {
-                //        __rightPanel.source = modelData.url
-                //        //__rightPanel.title  = modelData.title
-                //        checked             = true
-                Button {
-                    padding:            ScreenTools.defaultFontPixelWidth / 2
+                SubMenuButton {
+                    id:                 subMenu
+                    imageResource:      menuIcon
+                    setupIndicator:     false
                     autoExclusive:      true
-                    Layout.fillWidth:   true
-                    visible:            pageVisible()
-
-                    background: Rectangle {
-                        color:  checked ? qgcPal.buttonHighlight : "transparent"
-                        radius: ScreenTools.defaultFontPixelWidth / 2
-                    }
-
-                    contentItem: QGCLabel {
-                        text:   name
-                        color:  checked ? qgcPal.buttonHighlightText : qgcPal.buttonText
-                    }
+                    text:               name
+                    visible:            url !== "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
 
                     onClicked: {
+//                        __rightPanel.source = modelData.url
+//                        //__rightPanel.title  = modelData.title
+//                        checked             = true
+
                         focus = true
                         if (mainWindow.preventViewSwitch()) {
                             return
@@ -138,24 +121,51 @@ Rectangle {
                         }
                         checked = true
                     }
-
-                    Component.onCompleted: {
-                        if (globals.commingFromRIDIndicator) {
-                            _commingFromRIDSettings = true
-                        }
-                        if(_first) {
-                            _first = false
-                            checked = true
-                        }
-                        if (_commingFromRIDSettings) {
-                            checked = false
-                            _commingFromRIDSettings = false
-                            if (modelData.url == "/qml/RemoteIDSettings.qml") {
-                                checked = true
-                            }
-                        }
-                    }
                 }
+//                Button {
+//                    padding:            ScreenTools.defaultFontPixelWidth / 2
+//                    autoExclusive:      true
+//                    Layout.fillWidth:   true
+//                    visible:            pageVisible()
+
+//                    background: Rectangle {
+//                        color:  checked ? qgcPal.buttonHighlight : "transparent"
+//                        radius: ScreenTools.defaultFontPixelWidth / 2
+//                    }
+
+//                    contentItem: QGCLabel {
+//                        text:   name
+//                        color:  checked ? qgcPal.buttonHighlightText : qgcPal.buttonText
+//                    }
+
+//                    onClicked: {
+//                        focus = true
+//                        if (mainWindow.preventViewSwitch()) {
+//                            return
+//                        }
+//                        if (rightPanel.source !== url) {
+//                            rightPanel.source = url
+//                        }
+//                        checked = true
+//                    }
+
+//                    Component.onCompleted: {
+//                        if (globals.commingFromRIDIndicator) {
+//                            _commingFromRIDSettings = true
+//                        }
+//                        if(_first) {
+//                            _first = false
+//                            checked = true
+//                        }
+//                        if (_commingFromRIDSettings) {
+//                            checked = false
+//                            _commingFromRIDSettings = false
+//                            if (modelData.url == "/qml/RemoteIDSettings.qml") {
+//                                checked = true
+//                            }
+//                        }
+//                    }
+//                }
             }
         }
     }

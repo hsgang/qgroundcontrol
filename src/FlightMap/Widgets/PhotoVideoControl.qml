@@ -310,40 +310,41 @@ Rectangle {
            border.width:       3
            visible:            _videoStreamInPhotoMode
 
-           Rectangle {
+            Rectangle {
                id:                 trigger
                anchors.centerIn:   parent
                width:              parent.width * 0.8
                height:             width
                radius:             width * 0.5
                color:              qgcPal.colorRed
-           }
+            }
 
-           Timer {
+            Timer {
                id: colorTimer
                running: false; repeat: false; interval: 150
                onTriggered: trigger.color = qgcPal.colorRed
-           }
+            }
 
-           function shootEffect() {
+            function shootEffect() {
                trigger.color = qgcPal.text
                colorTimer.start()
                //playSound.play()
-           }
+            }
 
-           MouseArea {
+            MouseArea {
                anchors.fill:   parent
                onClicked: {
                    parent.shootEffect()
                    toggleShooting()
                    playSound.play()
                }
-           }
+            }
 
-           SoundEffect {
+            SoundEffect {
                id: playSound
                source: "/res/audio/shutter" //"soundeffect.wav"
-           }
+            }
+        }
         // Tracking button
         Rectangle {
             Layout.alignment:   Qt.AlignHCenter
@@ -708,3 +709,4 @@ Rectangle {
         }
     }
 }
+

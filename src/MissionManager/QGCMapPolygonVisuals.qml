@@ -368,32 +368,32 @@ Item {
         }
     }
 
-    Component {
-        id: edgeLengthHandleComponent
+//    Component {
+//        id: edgeLengthHandleComponent
 
-        MapQuickItem {
-            id:             mapQuickItem
-            anchorPoint.x:  sourceItem.width / 2
-            anchorPoint.y:  sourceItem.height / 2
-            visible:        !_circleMode
+//        MapQuickItem {
+//            id:             mapQuickItem
+//            anchorPoint.x:  sourceItem.width / 2
+//            anchorPoint.y:  sourceItem.height / 2
+//            visible:        !_circleMode
 
-            property int vertexIndex
-            property real distance
-            property string distanceText : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(distance).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+//            property int vertexIndex
+//            property real distance
+//            property string distanceText : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(distance).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
 
-            sourceItem: Rectangle {
-                width: edgeLengthText.width + ScreenTools.defaultFontPixelWidth
-                height: edgeLengthText.height + (ScreenTools.defaultFontPixelHeight * 0.2)
-                radius: height * 0.2
-                color: qgcPal.window
-                QGCLabel{
-                    id: edgeLengthText
-                    anchors.centerIn: parent
-                    text: distanceText //distance.toFixed(1) + "m"
-                }
-            }
-        }
-    }
+//            sourceItem: Rectangle {
+//                width: edgeLengthText.width + ScreenTools.defaultFontPixelWidth
+//                height: edgeLengthText.height + (ScreenTools.defaultFontPixelHeight * 0.2)
+//                radius: height * 0.2
+//                color: qgcPal.window
+//                QGCLabel{
+//                    id: edgeLengthText
+//                    anchors.centerIn: parent
+//                    text: distanceText //distance.toFixed(1) + "m"
+//                }
+//            }
+//        }
+//    }
 
     Component {
         id: splitHandlesComponent
@@ -431,42 +431,42 @@ Item {
         }
     }
 
-    Component {
-        id: edgeLengthHandlesComponent
+//    Component {
+//        id: edgeLengthHandlesComponent
 
-        Repeater {
-            model: mapPolygon.path
+//        Repeater {
+//            model: mapPolygon.path
 
-            delegate: Item {
-                property var _edgeLengthHandle
-                property var _vertices:     mapPolygon.path
+//            delegate: Item {
+//                property var _edgeLengthHandle
+//                property var _vertices:     mapPolygon.path
 
-                function _setHandlePosition() {
-                    var nextIndex = index + 1
-                    if (nextIndex > _vertices.length - 1) {
-                        nextIndex = 0
-                    }
-                    var distance = _vertices[index].distanceTo(_vertices[nextIndex])
-                    var azimuth = _vertices[index].azimuthTo(_vertices[nextIndex])
-                    _edgeLengthHandle.coordinate =_vertices[index].atDistanceAndAzimuth(distance / 3, azimuth)
-                    _edgeLengthHandle.distance = distance
-                }
+//                function _setHandlePosition() {
+//                    var nextIndex = index + 1
+//                    if (nextIndex > _vertices.length - 1) {
+//                        nextIndex = 0
+//                    }
+//                    var distance = _vertices[index].distanceTo(_vertices[nextIndex])
+//                    var azimuth = _vertices[index].azimuthTo(_vertices[nextIndex])
+//                    _edgeLengthHandle.coordinate =_vertices[index].atDistanceAndAzimuth(distance / 3, azimuth)
+//                    _edgeLengthHandle.distance = distance
+//                }
 
-                Component.onCompleted: {
-                    _edgeLengthHandle = edgeLengthHandleComponent.createObject(mapControl)
-                    _edgeLengthHandle.vertexIndex = index
-                    _setHandlePosition()
-                    mapControl.addMapItem(_edgeLengthHandle)
-                }
+//                Component.onCompleted: {
+//                    _edgeLengthHandle = edgeLengthHandleComponent.createObject(mapControl)
+//                    _edgeLengthHandle.vertexIndex = index
+//                    _setHandlePosition()
+//                    mapControl.addMapItem(_edgeLengthHandle)
+//                }
 
-                Component.onDestruction: {
-                    if (_edgeLengthHandle) {
-                        _edgeLengthHandle.destroy()
-                    }
-                }
-            }
-        }
-    }
+//                Component.onDestruction: {
+//                    if (_edgeLengthHandle) {
+//                        _edgeLengthHandle.destroy()
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
     // Control which is used to drag polygon vertices
