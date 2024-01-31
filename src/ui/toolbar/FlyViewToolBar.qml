@@ -89,17 +89,13 @@ Rectangle {
 
         Rectangle{
             id:                     linkManagerButton
-            //anchors.right:          widgetControlButton.left //parent.right
-            //anchors.top:            parent.top
-            //anchors.bottom:         parent.bottom
-            //anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
-            height:                 viewButtonRow.height * 0.7//parent.height - ScreenTools.defaultFontPixelHeight
+            height:                 viewButtonRow.height * 0.7
             width:                  height
             color:                  "transparent"
-            radius:                 ScreenTools.defaultFontPixelHeight * 0.2
-            border.color:           qgcPal.text
-            border.width:           1
-            visible:                !ScreenTools.isMobile
+            //radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+            // border.color:           qgcPal.text
+            // border.width:           1
+            visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
 
             QGCColoredImage{
                 height:             parent.height * 0.7
@@ -167,8 +163,8 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         color:                  qgcPal.windowShade //"transparent"
         border.color:           qgcPal.text
-        radius:                 ScreenTools.defaultFontPixelHeight / 4
-        visible:                _activeVehicle
+        radius:                 height / 2 //ScreenTools.defaultFontPixelHeight / 4
+        visible:                currentToolbar == flyViewToolbar && _activeVehicle
 
         Loader{
             id:             flightModeIndicatorLoader
@@ -251,37 +247,53 @@ Rectangle {
                 id: _linkRoot
                 color: qgcPal.window
                 width: ScreenTools.defaultFontPixelWidth * 30
-                height: ScreenTools.defaultFontPixelHeight * 15
+                height: ScreenTools.defaultFontPixelHeight * 20
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 radius: ScreenTools.defaultFontPixelHeight / 2
 
-                QGCFlickable {
-                    clip:               true
+                Rectangle {
+                    id: flickableRect
                     anchors.top:        parent.top
                     anchors.bottom:     buttonRow.top
-                    anchors.bottomMargin: ScreenTools.defaultFontPixelHeight / 5
-                    width:              parent.width
-                    contentHeight:      settingsColumn.height
-                    contentWidth:       _linkRoot.width
-                    flickableDirection: Flickable.VerticalFlick
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight / 2
+                    anchors.left:       parent.left
+                    anchors.right:      parent.right
+                    color:              qgcPal.windowShadeDark
+                    radius:             ScreenTools.defaultFontPixelHeight / 2
 
-                    Column {
-                        id:                 settingsColumn
-                        width:              _linkRoot.width
-                        anchors.margins:    ScreenTools.defaultFontPixelWidth
-                        spacing:            ScreenTools.defaultFontPixelHeight / 2
-                        Repeater {
-                            model: QGroundControl.linkManager.linkConfigurations
-                            delegate: QGCButton {
-                                anchors.horizontalCenter:   settingsColumn.horizontalCenter
-                                width:                      _linkRoot.width * 0.5
-                                text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
-                                autoExclusive:              true
-                                visible:                    !object.dynamic
-                                onClicked: {
-                                    checked = true
-                                    _currentSelection = object
-                                    //console.log("clicked", object, object.link)
+                    QGCFlickable {
+                        clip:               true
+                        anchors.top:        parent.top
+                        anchors.bottom:     parent.bottom
+                        anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
+                        // anchors.bottom:     buttonRow.top
+                        // anchors.bottomMargin: ScreenTools.defaultFontPixelHeight / 5
+                        anchors.left:       parent.left
+                        anchors.right:      parent.right
+                        //width:              parent.width
+                        contentHeight:      settingsColumn.height
+                        //contentWidth:       _linkRoot.width
+                        flickableDirection: Flickable.VerticalFlick
+
+                        Column {
+                            id:                 settingsColumn
+                            width:              flickableRect.width
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            //anchors.margins:    ScreenTools.defaultFontPixelWidth
+                            spacing:            ScreenTools.defaultFontPixelHeight / 2
+                            Repeater {
+                                model: QGroundControl.linkManager.linkConfigurations
+                                delegate: QGCButton {
+                                    anchors.horizontalCenter:   settingsColumn.horizontalCenter
+                                    width:                      _linkRoot.width * 0.7
+                                    text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
+                                    autoExclusive:              true
+                                    visible:                    !object.dynamic
+                                    onClicked: {
+                                        checked = true
+                                        _currentSelection = object
+                                        //console.log("clicked", object, object.link)
+                                    }
                                 }
                             }
                         }
@@ -300,6 +312,7 @@ Rectangle {
                         font.bold: true
                         enabled:    _currentSelection && !_currentSelection.link
                         onClicked:  QGroundControl.linkManager.createConnectedLink(_currentSelection)
+                        implicitWidth: ScreenTools.defaultFontPixelWidth * 12
                     }
                     QGCButton {
                         text:       qsTr("Disconnect")
@@ -309,6 +322,7 @@ Rectangle {
                             _currentSelection.link.disconnect()
                             _currentSelection.linkChanged()
                         }
+                        implicitWidth: ScreenTools.defaultFontPixelWidth * 12
                     }
                 }
             }

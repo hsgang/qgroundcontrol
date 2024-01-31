@@ -70,7 +70,7 @@ const uint32_t crc32_tab[256]= {
 uint32_t CRC32_cal(uint8_t *ptr, uint32_t len, uint16_t crc_init)
 {
     uint32_t crc,
-             oldcrc32;
+        oldcrc32;
     uint8_t  temp;
     crc = crc_init;
     while (len--!=0)
@@ -94,6 +94,6 @@ quint32 SiYiCrcApi::calculateCrc32(const QByteArray &bytes)
 {
     QByteArray input = bytes;
     uint32_t ret = CRC32_cal(
-                reinterpret_cast<uint8_t*>(input.data()), input.length(), 0);
+        reinterpret_cast<uint8_t*>(input.data()), input.length(), 0);
     return ret;
 }

@@ -22,8 +22,8 @@ Rectangle {
     width:          marqueeRowLayout.width + _margins
     height:         parent.height
     color:          _mainStatusBGColor //"transparent" //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.7)
-    //border.color:   _mainStatusBGColor //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.2)
-    //border.width:   _margins / 8
+    //border.color:   qgcPal.text //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.2)
+    //border.width:   1
     radius:         _margins / 4
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
@@ -46,6 +46,7 @@ Rectangle {
             font.pointSize: ScreenTools.largeFontPointSize
             //implicitWidth:  maxWidth
             maxWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 16
+            minWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 8
 
             property string _commLostText:      qsTr("Communication Lost")
             property string _readyToFlyText:    qsTr("Ready To Fly")

@@ -7,7 +7,7 @@
 #include "SiYiCrcApi.h"
 #include "SiYiTcpClient.h"
 
-QGC_LOGGING_CATEGORY(SiYiTcpClientLog, "SiYiTcpClientLog")
+
 
 SiYiTcpClient::SiYiTcpClient(const QString ip, quint16 port, QObject *parent)
     : QThread(parent)
@@ -15,8 +15,8 @@ SiYiTcpClient::SiYiTcpClient(const QString ip, quint16 port, QObject *parent)
     , port_(port)
 {
     sequence_ = quint16(QDateTime::currentMSecsSinceEpoch());
-    // 自动重连 자동재연결
-    connect(this, &SiYiTcpClient::finished, this, [=](){start();});
+    // 自动重连
+    connect(this, &SiYiTcpClient::finished, this, [=]() { start(); });
 }
 
 SiYiTcpClient::~SiYiTcpClient()
@@ -36,6 +36,32 @@ void SiYiTcpClient::sendMessage(const QByteArray &msg)
     }
 }
 
+void SiYiTcpClient::analyzeIp(QString videoUrl)
+{
+    qWarning() << videoUrl;
+    videoUrl = videoUrl.remove(QString("rtsp://"));
+    QStringList strList = videoUrl.split('/');
+    if (!strList.isEmpty()) {
+        QString ip = strList.first();
+        if (ip.contains(":")) {
+            if (ip.split(':').length() == 2) {
+                ip = ip.split(':').first();
+                if (ip.split('.').length() == 4) {
+                    resetIp(ip);
+                }
+            }
+        } else {
+            if (ip.split('.').length() == 4) {
+                resetIp(ip);
+            } else {
+                qWarning() << "rtsp url is invalid:" << videoUrl;
+            }
+        }
+    } else {
+        qWarning() << "rtsp url is invalid:" << videoUrl;
+    }
+}
+
 quint16 SiYiTcpClient::sequence()
 {
     quint16 seq = sequence_;
@@ -52,7 +78,7 @@ void SiYiTcpClient::run()
     const QString info = QString("[%1:%2]:").arg(ip_, QString::number(port_));
 
     connect(tcpClient, &QTcpSocket::connected, tcpClient, [=](){
-        qCDebug(SiYiTcpClientLog) << info << "Connect to server successfully!";
+        qInfo() << info << "Connect to server successfully!";
 
         heartbeatTimer->start();
         txTimer->start();
@@ -63,7 +89,7 @@ void SiYiTcpClient::run()
         emit isConnectedChanged();
     });
     connect(tcpClient, &QTcpSocket::disconnected, tcpClient, [=](){
-        qCDebug(SiYiTcpClientLog) << info << "Disconnect from server!";
+        qInfo() << info << "Disconnect from server!";
 
         this->isConnected_ = false;
         this->txMessageVectorMutex_.lock();
@@ -78,10 +104,10 @@ void SiYiTcpClient::run()
     connect(tcpClient, &QTcpSocket::errorOccurred, tcpClient, [=](){
         heartbeatTimer->stop();
         exit();
-        qCDebug(SiYiTcpClientLog) << info << tcpClient->errorString();
+        qInfo() << info << tcpClient->errorString();
     });
 
-    // 定时发送 예약발송
+    // 定时发送
     txTimer->setInterval(10);
     txTimer->setSingleShot(true);
     connect(txTimer, &QTimer::timeout, txTimer, [=](){
@@ -94,13 +120,13 @@ void SiYiTcpClient::run()
         if ((!msg.isEmpty())) {
             if ((tcpClient->state() == QTcpSocket::ConnectedState)) {
                 if (tcpClient->write(msg) != -1) {
-                    //qInfo() << info << "Tx:" << msg.toHex(' ');
+                    qInfo() << info << "Tx:" << msg.toHex(' ');
                 } else {
-                    qCDebug(SiYiTcpClientLog) << info << tcpClient->errorString();
+                    qInfo() << info << tcpClient->errorString();
                 }
             } else {
-                qCDebug(SiYiTcpClientLog) << info << "Not connected state, the state is:" << tcpClient->state();
-                qCDebug(SiYiTcpClientLog) << info << tcpClient->errorString();
+                qInfo() << info << "Not connected state, the state is:" << tcpClient->state();
+                qInfo() << info << tcpClient->errorString();
                 exit();
             }
         }
@@ -108,7 +134,7 @@ void SiYiTcpClient::run()
         txTimer->start();
     });
 
-    // 定时处理接收数据 수신데이터의 타이밍처리
+    // 定时处理接收数据
     rxTimer->setInterval(1);
     rxTimer->setSingleShot(true);
     connect(rxTimer, &QTimer::timeout, rxTimer, [=](){
@@ -124,11 +150,11 @@ void SiYiTcpClient::run()
         rxTimer->start();
     });
 
-    // 心跳 하트비트
+    // 心跳
     heartbeatTimer->setInterval(1500);
     heartbeatTimer->setSingleShot(true);
     connect(heartbeatTimer, &QTimer::timeout, heartbeatTimer, [=](){
-        // 心跳超时后退出线程 하트비트 시간 초과 후 스레드 종료
+        // 心跳超时后退出线程
         this->timeoutCountMutex.lock();
         int count = this->timeoutCount;
         this->timeoutCountMutex.unlock();

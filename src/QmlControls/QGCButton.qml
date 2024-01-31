@@ -40,8 +40,8 @@ Button {
         border.width:   showBorder ? 1 : 0
         border.color:   qgcPal.buttonBorder
         color:          _showHighlight ?
-                            qgcPal.buttonHighlight :
-                            (primary ? qgcPal.primaryButton : qgcPal.button)
+                            qgcPal.windowShadeLight :
+                            (primary ? qgcPal.windowShadeLight : qgcPal.windowShade)
     }
 
     contentItem: Item {
@@ -71,9 +71,9 @@ Button {
             text:                   control.text
             font.pointSize:         pointSize
             font.family:            ScreenTools.normalFontFamily
-            color:                  _showHighlight ?
-                                        qgcPal.buttonHighlightText :
-                                        (primary ? qgcPal.primaryButtonText : qgcPal.buttonText)
+            color:                  qgcPal.text//_showHighlight ?
+                                    //    qgcPal.buttonHighlightText :
+                                    //    (primary ? qgcPal.buttonHighlightText : qgcPal.buttonText)
         }
     }
 }

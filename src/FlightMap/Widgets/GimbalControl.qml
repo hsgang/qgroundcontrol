@@ -35,6 +35,7 @@ Rectangle {
     property real   _margins:         ScreenTools.defaultFontPixelHeight / 2
     property real   _idealWidth:      ScreenTools.isMobile ? ScreenTools.minTouchPixels * 0.8 : (ScreenTools.defaultFontPixelWidth * 7)
     property real   anchorsMargins:   _margins
+    property real   _fontSize:        ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
     property real   backgroundOpacity:                          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
     property var    _activeVehicle:                             QGroundControl.multiVehicleManager.activeVehicle
@@ -115,32 +116,25 @@ Rectangle {
 
     Rectangle{
         anchors.top: parent.bottom
-        anchors.margins: _margins / 2
+        anchors.topMargin: _margins / 2
+        anchors.right: parent.right
         anchors.horizontalCenter: parent.horizontalCenter
         width:          gimbalAngleValueRow.width
         height:         gimbalAngleValueRow.height
-        color:          "transparent"
+        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+        radius:         _margins / 2
         GridLayout{
             id: gimbalAngleValueRow
-            rowSpacing: ScreenTools.defaultFontPixelHeight / 5
-            columns: 3
+            columns: 2
 
-            QGCLabel{
-                text: " R: " +_gimbalRollString
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
-            }
-            QGCLabel{
-                text: " P: " +_gimbalPitchString
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
-            }
-            QGCLabel{
-                text: " Y: " +_gimbalYawString
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
-            }
-            QGCLabel{
-                text: "data:" + _gimbalAvailable
-                Layout.columnSpan: 3
-            }
+            QGCLabel{ text: "Pitch"; font.pointSize: _fontSize;}
+            QGCLabel{ text: _gimbalPitchString; font.pointSize: _fontSize; }
+            QGCLabel{ text: "Yaw"; font.pointSize: _fontSize; }
+            QGCLabel{ text: _gimbalYawString; font.pointSize: _fontSize; }
+            QGCLabel{ text: "Roll"; font.pointSize: _fontSize; }
+            QGCLabel{ text: _gimbalRollString; font.pointSize: _fontSize; }
+            QGCLabel{ text: "Connected"; font.pointSize: _fontSize; }
+            QGCLabel{ text: _gimbalAvailable; font.pointSize: _fontSize; }
         }
     }
 

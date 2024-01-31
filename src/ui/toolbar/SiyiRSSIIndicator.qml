@@ -19,6 +19,8 @@ Item {
 
     property bool showIndicator:            transmitter.isConnected
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
+    property real _columnSpacing:   ScreenTools.defaultFontPixelHeight / 3
+    property real _margins:         ScreenTools.defaultFontPixelHeight / 2
 
     Row{
         id:             siyirssiRow

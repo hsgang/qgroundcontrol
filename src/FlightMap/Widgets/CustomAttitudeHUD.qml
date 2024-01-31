@@ -245,18 +245,6 @@ Item {
         }
     }
 
-
-//    Image {
-//            id:                 gimbalSight
-//            visible:            true //_haveGimbal & _gimbalPitch >= -85
-//            anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-//            source:             "/qmlimages/gimbalSight.svg"
-//            mipmap:             true
-//            width:              parent.width * 0.6
-//            sourceSize.width:   width
-//            antialiasing:       true
-//            fillMode:           Image.PreserveAspectFit
-
     Rectangle {
         id:             gimbalSight
         visible:        _gimbalAvailable & _gimbalPitch >= -85
@@ -264,7 +252,6 @@ Item {
         width:          parent.width * 0.6
         height:         width
         color:          "transparent"
-        //border.color:   qgcPal.text
 
         Canvas {
             id: triangleCanvas
