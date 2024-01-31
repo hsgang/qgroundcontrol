@@ -253,6 +253,7 @@ Rectangle {
                 width: ScreenTools.defaultFontPixelWidth * 30
                 height: ScreenTools.defaultFontPixelHeight * 15
                 anchors.margins: ScreenTools.defaultFontPixelWidth
+                radius: ScreenTools.defaultFontPixelHeight / 2
 
                 QGCFlickable {
                     clip:               true
@@ -328,145 +329,95 @@ Rectangle {
                     Layout.alignment:       Qt.AlignTop
                     spacing:                _margins
 
-                    QGCLabel {
-                        text:                   qsTr("FlyView Widget")
-                        font.family:            ScreenTools.demiboldFontFamily
-                        Layout.fillWidth:       true
-                        horizontalAlignment:    Text.AlignHCenter
-                    }
+                    SettingsGroupLayout {
+                        heading:                qsTr("Payload")
 
-                    Rectangle {
-                        Layout.preferredHeight: widgetGridLayout.height + _margins
-                        Layout.preferredWidth:  widgetGridLayout.width + _margins
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 4
-                        Layout.fillWidth:       true
+                        FactCheckBoxSlider {
+                            Layout.fillWidth: true
+                            text:       qsTr("PhotoVideo Control")
+                            fact:       _showPhotoVideoControl
+                            visible:    _showPhotoVideoControl.visible
+                            property Fact   _showPhotoVideoControl:      QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl
+                        }
 
-                        ColumnLayout {
-                            id:                 widgetGridLayout
-                            spacing:            _margins
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
+                        FactCheckBoxSlider {
+                            Layout.fillWidth: true
+                            text:       qsTr("Mount Control")
+                            fact:       _showGimbalControlPannel
+                            visible:    _showGimbalControlPannel.visible
+                            property Fact   _showGimbalControlPannel:      QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel
+                        }
 
-                            QGCLabel{ text: qsTr("Payload"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
+                        FactCheckBoxSlider {
+                            Layout.fillWidth: true
+                            text:       qsTr("Winch Control")
+                            fact:       _showWinchControl
+                            visible:    _showWinchControl.visible
+                            property Fact   _showWinchControl:      QGroundControl.settingsManager.flyViewSettings.showWinchControl
+                        }
 
+                        FactCheckBoxSlider {
+                            Layout.fillWidth: true
+                            text:       qsTr("Chart Widget")
+                            fact:       _showChartWidget
+                            visible:    _showChartWidget.visible
+                            property Fact   _showChartWidget:      QGroundControl.settingsManager.flyViewSettings.showChartWidget
+                        }
 
-                            FactCheckBoxSlider {
-                                Layout.fillWidth: true
-                                text:       qsTr("PhotoVideo Control")
-                                fact:       _showPhotoVideoControl
-                                visible:    _showPhotoVideoControl.visible
-                                property Fact   _showPhotoVideoControl:      QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl
-                            }
-
-                            FactCheckBoxSlider {
-                                Layout.fillWidth: true
-                                text:       qsTr("Mount Control")
-                                fact:       _showGimbalControlPannel
-                                visible:    _showGimbalControlPannel.visible
-                                property Fact   _showGimbalControlPannel:      QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel
-                            }
-
-                            FactCheckBoxSlider {
-                                Layout.fillWidth: true
-                                text:       qsTr("Winch Control")
-                                fact:       _showWinchControl
-                                visible:    _showWinchControl.visible
-                                property Fact   _showWinchControl:      QGroundControl.settingsManager.flyViewSettings.showWinchControl
-                            }
-
-                            FactCheckBoxSlider {
-                                Layout.fillWidth: true
-                                text:       qsTr("Chart Widget")
-                                fact:       _showChartWidget
-                                visible:    _showChartWidget.visible
-                                property Fact   _showChartWidget:      QGroundControl.settingsManager.flyViewSettings.showChartWidget
-                            }
-
-                            FactCheckBoxSlider {
-                                Layout.fillWidth: true
-                                text:       qsTr("Atmospheric Data")
-                                fact:       _showAtmosphericValueBar
-                                visible:    _showAtmosphericValueBar.visible
-                                property Fact   _showAtmosphericValueBar:      QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar
-                            }
-
-                            Item{
-                                height: _margins / 2
-                            }
-
-                            QGCLabel{ text: qsTr("Status"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
-
-                            FactCheckBoxSlider {
-                                Layout.fillWidth: true
-                                text:       qsTr("Mission Progress")
-                                fact:       _showMissionProgress
-                                visible:    _showMissionProgress.visible
-                                property Fact   _showMissionProgress:      QGroundControl.settingsManager.flyViewSettings.showMissionProgress
-                            }
-
-                            FactCheckBoxSlider {
-                                Layout.fillWidth: true
-                                text:       qsTr("Telemetry Panel")
-                                fact:       _showTelemetryPanel
-                                visible:    _showTelemetryPanel.visible
-                                property Fact   _showTelemetryPanel:      QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel
-                            }
-
-                            FactCheckBoxSlider {
-                                Layout.fillWidth: true
-                                text:       qsTr("Vibration Status")
-                                fact:       _showVibrationStatus
-                                visible:    _showVibrationStatus.visible
-                                property Fact   _showVibrationStatus:      QGroundControl.settingsManager.flyViewSettings.showVibrationStatus
-                            }
-
-                            FactCheckBoxSlider {
-                                Layout.fillWidth: true
-                                text:       qsTr("Vibration Status")
-                                fact:       _showEKFStatus
-                                visible:    _showEKFStatus.visible
-                                property Fact   _showEKFStatus:      QGroundControl.settingsManager.flyViewSettings.showEKFStatus
-                            }
+                        FactCheckBoxSlider {
+                            Layout.fillWidth: true
+                            text:       qsTr("Atmospheric Data")
+                            fact:       _showAtmosphericValueBar
+                            visible:    _showAtmosphericValueBar.visible
+                            property Fact   _showAtmosphericValueBar:      QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar
                         }
                     }
 
-                    QGCLabel {
-                        text:                   qsTr("FlyView Settings")
-                        font.family:            ScreenTools.demiboldFontFamily
-                        Layout.fillWidth:       true
-                        horizontalAlignment:    Text.AlignHCenter
-                    }
+                    SettingsGroupLayout {
+                        heading:        qsTr("Status")
 
-                    Rectangle {
-                        Layout.preferredHeight: settingsLayout.height + _margins
-                        Layout.preferredWidth:  settingsLayout.width + _margins
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 4
-                        Layout.fillWidth:       true
+                        FactCheckBoxSlider {
+                            Layout.fillWidth: true
+                            text:       qsTr("Mission Progress")
+                            fact:       _showMissionProgress
+                            visible:    _showMissionProgress.visible
+                            property Fact   _showMissionProgress:      QGroundControl.settingsManager.flyViewSettings.showMissionProgress
+                        }
 
-                        GridLayout {
-                            id:                 settingsLayout
-                            flow:               GridLayout.LeftToRight
-                            columns:            2
-                            rowSpacing:         _margins
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
+                        FactCheckBoxSlider {
+                            Layout.fillWidth: true
+                            text:       qsTr("Telemetry Panel")
+                            fact:       _showTelemetryPanel
+                            visible:    _showTelemetryPanel.visible
+                            property Fact   _showTelemetryPanel:      QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel
+                        }
 
-                            QGCLabel{ text: qsTr("Background Opacity"); Layout.columnSpan: 2; Layout.alignment: Qt.AlignHCenter }
-                            FactComboBox {
-                                Layout.columnSpan:  2
-                                Layout.fillWidth:   true
-                                fact:               QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
-                                indexModel:         false
-                            }
+                        FactCheckBoxSlider {
+                            Layout.fillWidth: true
+                            text:       qsTr("Vibration Status")
+                            fact:       _showVibrationStatus
+                            visible:    _showVibrationStatus.visible
+                            property Fact   _showVibrationStatus:      QGroundControl.settingsManager.flyViewSettings.showVibrationStatus
+                        }
+
+                        FactCheckBoxSlider {
+                            Layout.fillWidth: true
+                            text:       qsTr("Vibration Status")
+                            fact:       _showEKFStatus
+                            visible:    _showEKFStatus.visible
+                            property Fact   _showEKFStatus:      QGroundControl.settingsManager.flyViewSettings.showEKFStatus
                         }
                     }
 
+                    SettingsGroupLayout {
+                        heading:        qsTr("FlyView Settings")
+
+                        LabelledFactComboBox {
+                            label:                  qsTr("Background Opacity")
+                            fact:                   QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
+                            indexModel:             false
+                        }
+                    }
                 }
             }
         }

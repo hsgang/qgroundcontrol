@@ -32,6 +32,7 @@ Item {
     property bool   _showRCToParam:     _activeVehicle.px4Firmware
     property var    _appSettings:       QGroundControl.settingsManager.appSettings
     property var    _controller:        controller
+    property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
 
     ParameterEditorController {
         id: controller
@@ -153,6 +154,7 @@ Item {
         id :                groupScroll
         width:              ScreenTools.defaultFontPixelWidth * 25
         anchors.top:        header.bottom
+        anchors.topMargin:  _margins
         anchors.bottom:     parent.bottom
         clip:               true
         pixelAligned:       true
@@ -180,7 +182,6 @@ Item {
                         anchors.right:  parent.right
                         text:           object.name
                         checked:        object === controller.currentCategory
-                        exclusiveGroup: sectionGroup
 
                         onCheckedChanged: {
                             if (checked) {
@@ -218,6 +219,7 @@ Item {
         anchors.left:       _searchFilter ? parent.left : groupScroll.right
         anchors.right:      parent.right
         anchors.top:        header.bottom
+        anchors.topMargin:  _margins
         anchors.bottom:     parent.bottom
         orientation:        ListView.Vertical
         model:              controller.parameters

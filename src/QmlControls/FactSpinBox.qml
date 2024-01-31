@@ -1,14 +1,14 @@
-import QtQuick                      2.15//2.3
-import QtQuick.Controls             2.15//1.4
+import QtQuick
+import QtQuick.Controls
 //import QtQuick.Controls.Styles      1.4
-import QtQuick.Layouts              1.15
+import QtQuick.Layouts
 
-import QGroundControl.FactSystem    1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl.FactSystem
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
 
 SpinBox {
-    id:             spinbox
+    id:             control
     implicitWidth:  ScreenTools.defaultFontPixelWidth * 12
     implicitHeight: ScreenTools.defaultFontPixelHeight * 1.5
     font.pointSize: ScreenTools.defaultFontPointSize
@@ -36,56 +36,79 @@ SpinBox {
 
     onValueChanged: {
         if (_loadComplete) {
-            fact.value = spinbox.value / exponentiation
+            fact.value = control.value / exponentiation
         }
     }
 
     validator: DoubleValidator {
-            bottom: Math.min(spinbox.from, spinbox.to)
-            top:  Math.max(spinbox.from, spinbox.to)
+            bottom: Math.min(control.from, control.to)
+            top:  Math.max(control.from, control.to)
     }
 
     textFromValue: function(value, locale) {
-        return Number(value / exponentiation).toLocaleString(locale, 'f', spinbox.decimals)
+        return Number(value / exponentiation).toLocaleString(locale, 'f', control.decimals)
     }
 
     valueFromText: function(text, locale) {
         return Number.fromLocaleString(locale, text) * exponentiation
     }
 
-//    style: SpinBoxStyle{
-//        background: Rectangle{
-//            implicitWidth: spinbox.implicitWidth
-//            implicitHeight: ScreenTools.defaultFontPixelHeight * 1.2
-//            border.color: qgcPal.text
-//            radius:         ScreenTools.defaultFontPixelHeight / 4
-//        }
+    contentItem: TextInput {
+        z: 2
+        text: control.textFromValue(control.value, control.locale)
 
-//        incrementControl: Rectangle{
-//            implicitHeight: ScreenTools.defaultFontPixelHeight / 2
-//            implicitWidth:  ScreenTools.defaultFontPixelWidth * 2
-//            color:          qgcPal.button
-//            border.color:   qgcPal.text
-//            radius:         ScreenTools.defaultFontPixelHeight / 4
-//            Text{
-//                text: "▲"
-//                font.pixelSize: ScreenTools.defaultFontPixelHeight / 2
-//                anchors.centerIn: parent
-//                color: qgcPal.text
-//            }
-//        }
-//        decrementControl: Rectangle{
-//            implicitHeight: ScreenTools.defaultFontPixelHeight / 2
-//            implicitWidth:  ScreenTools.defaultFontPixelWidth * 2
-//            color:          qgcPal.button
-//            border.color:   qgcPal.text
-//            radius:         ScreenTools.defaultFontPixelHeight / 4
-//            Text{
-//                text: "▼"
-//                font.pixelSize: ScreenTools.defaultFontPixelHeight / 2
-//                anchors.centerIn: parent
-//                color: qgcPal.text
-//            }
-//        }
-//    }
+        font: control.font
+        color: "#21be2b"
+        selectionColor: "#21be2b"
+        selectedTextColor: "#ffffff"
+        horizontalAlignment: Qt.AlignHCenter
+        verticalAlignment: Qt.AlignVCenter
+
+        readOnly: !control.editable
+        validator: control.validator
+        inputMethodHints: Qt.ImhFormattedNumbersOnly
+    }
+
+    up.indicator: Rectangle {
+        x: control.mirrored ? 0 : parent.width - width
+        height: parent.height
+        implicitWidth: ScreenTools.defaultFontPixelHeight
+        implicitHeight: parent.height
+        color: control.up.pressed ? "#e4e4e4" : "#f6f6f6"
+        border.color: enabled ? "#21be2b" : "#bdbebf"
+
+        Text {
+            text: "+"
+            font.pixelSize: control.font.pixelSize * 2
+            color: "#21be2b"
+            anchors.fill: parent
+            fontSizeMode: Text.Fit
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+    }
+
+    down.indicator: Rectangle {
+        x: control.mirrored ? parent.width - width : 0
+        height: parent.height
+        implicitWidth: ScreenTools.defaultFontPixelHeight
+        implicitHeight: parent.height
+        color: control.down.pressed ? "#e4e4e4" : "#f6f6f6"
+        border.color: enabled ? "#21be2b" : "#bdbebf"
+
+        Text {
+            text: "-"
+            font.pixelSize: control.font.pixelSize * 2
+            color: "#21be2b"
+            anchors.fill: parent
+            fontSizeMode: Text.Fit
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+        }
+    }
+
+    background: Rectangle {
+        implicitWidth: 140
+        border.color: "#bdbebf"
+    }
 }

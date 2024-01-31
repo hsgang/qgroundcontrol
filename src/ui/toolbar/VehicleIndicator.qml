@@ -7,17 +7,17 @@
  *
  ****************************************************************************/
 
-import QtQuick          2.11
-import QtQuick.Layouts  1.11
+import QtQuick
+import QtQuick.Layouts
 
-import QGroundControl                       1.0
-import QGroundControl.Controls              1.0
-import QGroundControl.Controllers           1.0
-import QGroundControl.MultiVehicleManager   1.0
-import QGroundControl.ScreenTools           1.0
-import QGroundControl.Palette               1.0
-import QGroundControl.FactSystem            1.0
-import QGroundControl.FactControls          1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.Controllers
+import QGroundControl.MultiVehicleManager
+import QGroundControl.ScreenTools
+import QGroundControl.Palette
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
 
 //-------------------------------------------------------------------------
 Item {
@@ -26,10 +26,8 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property real _margins:     ScreenTools.defaultFontPixelHeight / 2
-
     property bool showIndicator: _activeVehicle.parameterManager.parametersReady
-
+    property real _margins:     ScreenTools.defaultFontPixelHeight / 2
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 
     Row {
@@ -52,356 +50,365 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked:      mainWindow.showIndicatorDrawer(vehicleInfoComponent)
+        onClicked:      mainWindow.showIndicatorDrawer(vehicleIndicatorPage)
     }
 
     Component {
-        id: vehicleInfoComponent
+        id: vehicleIndicatorPage
 
-        ToolIndicatorPage {
-            id:         mainLayout
-            showExpand: true
+        VehicleIndicatorPage {
 
-            FactPanelController { id: controller }
-            APMAirframeComponentController { id: apmController }
+        }
+    }
+}
 
-            property var  activeVehicle:            QGroundControl.multiVehicleManager.activeVehicle
+//    Component {
+//        id: vehicleInfoComponent
 
-            property Fact _frameClass:              apmController.getParameterFact(-1, "FRAME_CLASS")
-            property Fact _frameType:               apmController.getParameterFact(-1, "FRAME_TYPE", false)
-            property bool _frameTypeAvailable:      apmController.parameterExists(-1, "FRAME_TYPE")
-            property Fact _stat_bootcnt:            apmController.getParameterFact(-1, "STAT_BOOTCNT")
-            property Fact _stat_runtime:            apmController.getParameterFact(-1, "STAT_RUNTIME")
-            property Fact _stat_flttime:            apmController.getParameterFact(-1, "STAT_FLTTIME")
+//        ToolIndicatorPage {
+//            id:         mainLayout
+//            showExpand: true
 
-            property Fact landSpeedFact:            controller.getParameterFact(-1, "LAND_SPEED", false)
-            property Fact precisionLandingFact:     controller.getParameterFact(-1, "PLND_ENABLED", false)
-            property Fact atcInputTCFact:           controller.getParameterFact(-1, "ATC_INPUT_TC", false)
-            property Fact loitSpeedFact:            controller.getParameterFact(-1, "LOIT_SPEED", false)
-            property Fact pilotSpeedUpFact:         controller.getParameterFact(-1, "PILOT_SPEED_UP", false)
-            property Fact pilotSpeedDnFact:         controller.getParameterFact(-1, "PILOT_SPEED_DN", false)
-            property bool isPilotSpeedDn:           (pilotSpeedDnFact.value !== 0) ? true : false
-            property Fact wpnavSpeedFact:           controller.getParameterFact(-1, "WPNAV_SPEED", false)
-            property Fact wpnavSpeedUpFact:         controller.getParameterFact(-1, "WPNAV_SPEED_UP", false)
-            property Fact wpnavSpeedDnFact:         controller.getParameterFact(-1, "WPNAV_SPEED_DN", false)
-            property Fact wpnavRadiusFact:          controller.getParameterFact(-1, "WPNAV_RADIUS", false)
-            property Fact rtlAltitudeFact:          controller.getParameterFact(-1, "RTL_ALT", false)
+//            FactPanelController { id: controller }
+//            APMAirframeComponentController { id: apmController }
 
-            property var  qgcPal:                   QGroundControl.globalPalette
-            property real _margins:                 ScreenTools.defaultFontPixelHeight / 2
-            property real valueColumnWidth:         editFieldWidth
+//            property var  activeVehicle:            QGroundControl.multiVehicleManager.activeVehicle
 
-            property var params : ListModel{
-                ListElement {
-                   title:           qsTr("Responsiveness")
-                   param:           "ATC_INPUT_TC"
-                   description:     ""
-                   min:             0.01
-                   max:             0.5
-                   step:            0.05
-                }
-                ListElement {
-                    title:          qsTr("Loiter Horizontal Speed(cm/s)")
-                    param:          "LOIT_SPEED"
-                    description:    ""
-                    min:            500
-                    max:            1500
-                    step:           100
-                }
-                ListElement {
-                    title:          qsTr("WP Horizontal Speed(cm/s)")
-                    param:          "WPNAV_SPEED"
-                    description:    ""
-                    min:            500
-                    max:            1500
-                    step:           100
-                }
-                ListElement {
-                    title:          qsTr("WP Climb Speed(cm/s)")
-                    param:          "WPNAV_SPEED_UP"
-                    description:    ""
-                    min:            100
-                    max:            500
-                    step:           50
-                }
-                ListElement {
-                    title:          qsTr("WP Descent Speed(cm/s)")
-                    param:          "WPNAV_SPEED_DN"
-                    description:    ""
-                    min:            100
-                    max:            500
-                    step:           50
-                }
-                ListElement {
-                    title:          qsTr("Mission Turning Radius(cm)")
-                    param:          "WPNAV_RADIUS"
-                    description:    ""
-                    min:            200
-                    max:            1000
-                    step:           100
-                }
-            }
+//            property Fact _frameClass:              apmController.getParameterFact(-1, "FRAME_CLASS")
+//            property Fact _frameType:               apmController.getParameterFact(-1, "FRAME_TYPE", false)
+//            property bool _frameTypeAvailable:      apmController.parameterExists(-1, "FRAME_TYPE")
+//            property Fact _stat_bootcnt:            apmController.getParameterFact(-1, "STAT_BOOTCNT")
+//            property Fact _stat_runtime:            apmController.getParameterFact(-1, "STAT_RUNTIME")
+//            property Fact _stat_flttime:            apmController.getParameterFact(-1, "STAT_FLTTIME")
 
-            // Mode list
-            contentComponent: Component {
-                ColumnLayout {
-                    Layout.preferredWidth:  parent.width
-                    Layout.alignment:       Qt.AlignTop
-                    spacing:                _margins
+//            property Fact landSpeedFact:            controller.getParameterFact(-1, "LAND_SPEED", false)
+//            property Fact precisionLandingFact:     controller.getParameterFact(-1, "PLND_ENABLED", false)
+//            property Fact atcInputTCFact:           controller.getParameterFact(-1, "ATC_INPUT_TC", false)
+//            property Fact loitSpeedFact:            controller.getParameterFact(-1, "LOIT_SPEED", false)
+//            property Fact pilotSpeedUpFact:         controller.getParameterFact(-1, "PILOT_SPEED_UP", false)
+//            property Fact pilotSpeedDnFact:         controller.getParameterFact(-1, "PILOT_SPEED_DN", false)
+//            property bool isPilotSpeedDn:           (pilotSpeedDnFact.value !== 0) ? true : false
+//            property Fact wpnavSpeedFact:           controller.getParameterFact(-1, "WPNAV_SPEED", false)
+//            property Fact wpnavSpeedUpFact:         controller.getParameterFact(-1, "WPNAV_SPEED_UP", false)
+//            property Fact wpnavSpeedDnFact:         controller.getParameterFact(-1, "WPNAV_SPEED_DN", false)
+//            property Fact wpnavRadiusFact:          controller.getParameterFact(-1, "WPNAV_RADIUS", false)
+//            property Fact rtlAltitudeFact:          controller.getParameterFact(-1, "RTL_ALT", false)
 
-                    QGCLabel {
-                        text:                   qsTr("Vehicle Information")
-                        font.family:            ScreenTools.demiboldFontFamily
-                        Layout.fillWidth:       true
-                        horizontalAlignment:    Text.AlignHCenter
-                    }
+//            property var  qgcPal:                   QGroundControl.globalPalette
+//            property real _margins:                 ScreenTools.defaultFontPixelHeight / 2
+//            property real valueColumnWidth:         editFieldWidth
 
-                    Rectangle {
-                        Layout.preferredHeight: infoColumnLayout.height + _margins
-                        Layout.preferredWidth:  infoColumnLayout.width + _margins
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 4
-                        Layout.fillWidth:       true
+//            property var params : ListModel{
+//                ListElement {
+//                   title:           qsTr("Responsiveness")
+//                   param:           "ATC_INPUT_TC"
+//                   description:     ""
+//                   min:             0.01
+//                   max:             0.5
+//                   step:            0.05
+//                }
+//                ListElement {
+//                    title:          qsTr("Loiter Horizontal Speed(cm/s)")
+//                    param:          "LOIT_SPEED"
+//                    description:    ""
+//                    min:            500
+//                    max:            1500
+//                    step:           100
+//                }
+//                ListElement {
+//                    title:          qsTr("WP Horizontal Speed(cm/s)")
+//                    param:          "WPNAV_SPEED"
+//                    description:    ""
+//                    min:            500
+//                    max:            1500
+//                    step:           100
+//                }
+//                ListElement {
+//                    title:          qsTr("WP Climb Speed(cm/s)")
+//                    param:          "WPNAV_SPEED_UP"
+//                    description:    ""
+//                    min:            100
+//                    max:            500
+//                    step:           50
+//                }
+//                ListElement {
+//                    title:          qsTr("WP Descent Speed(cm/s)")
+//                    param:          "WPNAV_SPEED_DN"
+//                    description:    ""
+//                    min:            100
+//                    max:            500
+//                    step:           50
+//                }
+//                ListElement {
+//                    title:          qsTr("Mission Turning Radius(cm)")
+//                    param:          "WPNAV_RADIUS"
+//                    description:    ""
+//                    min:            200
+//                    max:            1000
+//                    step:           100
+//                }
+//            }
 
-                        ColumnLayout {
-                            id:                 infoColumnLayout
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
-                            spacing:            _margins
+//            // Mode list
+//            contentComponent: Component {
+//                ColumnLayout {
+//                    Layout.preferredWidth:  parent.width
+//                    Layout.alignment:       Qt.AlignTop
+//                    spacing:                _margins
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("Firmware Type")
-                                valueText: _activeVehicle.firmwareTypeString
-                            }
+//                    QGCLabel {
+//                        text:                   qsTr("Vehicle Information")
+//                        font.family:            ScreenTools.demiboldFontFamily
+//                        Layout.fillWidth:       true
+//                        horizontalAlignment:    Text.AlignHCenter
+//                    }
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("Firmware Version")
-                                valueText: globals.activeVehicle.firmwareMajorVersion === -1 ? qsTr("Unknown") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + globals.activeVehicle.firmwareVersionTypeString
-                            }
+//                    Rectangle {
+//                        Layout.preferredHeight: infoColumnLayout.height + _margins
+//                        Layout.preferredWidth:  infoColumnLayout.width + _margins
+//                        color:                  qgcPal.windowShade
+//                        radius:                 _margins / 4
+//                        Layout.fillWidth:       true
 
-                            VehicleSummaryRow {
-                                labelText:  qsTr("Frame Class")
-                                valueText:  _frameClass.enumStringValue
-                            }
-                        }
-                    }
+//                        ColumnLayout {
+//                            id:                 infoColumnLayout
+//                            anchors.margins:    _margins / 2
+//                            anchors.top:        parent.top
+//                            anchors.left:       parent.left
+//                            anchors.right:      parent.right
+//                            spacing:            _margins
 
-                    QGCLabel {
-                        text:                   qsTr("Parameter Summary")
-                        font.family:            ScreenTools.demiboldFontFamily
-                        Layout.fillWidth:       true
-                        horizontalAlignment:    Text.AlignHCenter
-                    }
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("Firmware Type")
+//                                valueText: _activeVehicle.firmwareTypeString
+//                            }
 
-                    Rectangle {
-                        Layout.preferredHeight: parameterColumnLayout.height + _margins
-                        Layout.preferredWidth:  parameterColumnLayout.width + _margins
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 4
-                        Layout.fillWidth:       true
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("Firmware Version")
+//                                valueText: globals.activeVehicle.firmwareMajorVersion === -1 ? qsTr("Unknown") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + globals.activeVehicle.firmwareVersionTypeString
+//                            }
 
-                        ColumnLayout {
-                            id:                 parameterColumnLayout
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
-                            spacing:            _margins
+//                            VehicleSummaryRow {
+//                                labelText:  qsTr("Frame Class")
+//                                valueText:  _frameClass.enumStringValue
+//                            }
+//                        }
+//                    }
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("Loiter Speed")
-                                valueText: (loitSpeedFact.value * 0.01).toFixed(1) + " m/s"
-                            }
+//                    QGCLabel {
+//                        text:                   qsTr("Parameter Summary")
+//                        font.family:            ScreenTools.demiboldFontFamily
+//                        Layout.fillWidth:       true
+//                        horizontalAlignment:    Text.AlignHCenter
+//                    }
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("Pilot Climb Speed")
-                                valueText: (pilotSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
-                            }
+//                    Rectangle {
+//                        Layout.preferredHeight: parameterColumnLayout.height + _margins
+//                        Layout.preferredWidth:  parameterColumnLayout.width + _margins
+//                        color:                  qgcPal.windowShade
+//                        radius:                 _margins / 4
+//                        Layout.fillWidth:       true
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("Pilot Descent Speed")
-                                valueText: { isPilotSpeedDn ?
-                                            (pilotSpeedDnFact.value * 0.01).toFixed(1) + " m/s" :
-                                            (pilotSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
-                                }
-                            }
+//                        ColumnLayout {
+//                            id:                 parameterColumnLayout
+//                            anchors.margins:    _margins / 2
+//                            anchors.top:        parent.top
+//                            anchors.left:       parent.left
+//                            anchors.right:      parent.right
+//                            spacing:            _margins
 
-                            Rectangle {
-                                height:             1
-                                Layout.fillWidth:   true
-                                color:              QGroundControl.globalPalette.text
-                                opacity:            0.5
-                            }
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("Loiter Speed")
+//                                valueText: (loitSpeedFact.value * 0.01).toFixed(1) + " m/s"
+//                            }
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("WP Horizontal Speed")
-                                valueText: (wpnavSpeedFact.value * 0.01).toFixed(1) + " m/s"
-                            }
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("Pilot Climb Speed")
+//                                valueText: (pilotSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
+//                            }
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("WP Climb Speed")
-                                valueText: (wpnavSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
-                            }
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("Pilot Descent Speed")
+//                                valueText: { isPilotSpeedDn ?
+//                                            (pilotSpeedDnFact.value * 0.01).toFixed(1) + " m/s" :
+//                                            (pilotSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
+//                                }
+//                            }
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("WP Descent Speed")
-                                valueText: (wpnavSpeedDnFact.value * 0.01).toFixed(1) + " m/s"
-                            }
+//                            Rectangle {
+//                                height:             1
+//                                Layout.fillWidth:   true
+//                                color:              QGroundControl.globalPalette.text
+//                                opacity:            0.5
+//                            }
 
-                            Rectangle {
-                                height:             1
-                                Layout.fillWidth:   true
-                                color:              QGroundControl.globalPalette.text
-                                opacity:            0.5
-                            }
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("WP Horizontal Speed")
+//                                valueText: (wpnavSpeedFact.value * 0.01).toFixed(1) + " m/s"
+//                            }
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("RTL Altitude")
-                                valueText: (rtlAltitudeFact.value * 0.01).toFixed(1) + " m"
-                            }
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("WP Climb Speed")
+//                                valueText: (wpnavSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
+//                            }
 
-                            VehicleSummaryRow {
-                                labelText: qsTr("Land Speed")
-                                valueText: (landSpeedFact.value * 0.01).toFixed(1) + " m/s"
-                            }
-                        }
-                    }
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("WP Descent Speed")
+//                                valueText: (wpnavSpeedDnFact.value * 0.01).toFixed(1) + " m/s"
+//                            }
 
-                    QGCLabel {
-                        text:                   qsTr("Operating Summary")
-                        font.family:            ScreenTools.demiboldFontFamily
-                        Layout.fillWidth:       true
-                        horizontalAlignment:    Text.AlignHCenter
-                    }
+//                            Rectangle {
+//                                height:             1
+//                                Layout.fillWidth:   true
+//                                color:              QGroundControl.globalPalette.text
+//                                opacity:            0.5
+//                            }
 
-                    Rectangle {
-                        Layout.preferredHeight: operatingColumnLayout.height + _margins
-                        Layout.preferredWidth:  operatingColumnLayout.width + _margins
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 4
-                        Layout.fillWidth:       true
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("RTL Altitude")
+//                                valueText: (rtlAltitudeFact.value * 0.01).toFixed(1) + " m"
+//                            }
 
-                        ColumnLayout {
-                            id:                 operatingColumnLayout
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
-                            spacing:            _margins
+//                            VehicleSummaryRow {
+//                                labelText: qsTr("Land Speed")
+//                                valueText: (landSpeedFact.value * 0.01).toFixed(1) + " m/s"
+//                            }
+//                        }
+//                    }
 
-                            VehicleSummaryRow {
-                                labelText:  qsTr("Boot Count")
-                                valueText:  visible ? _stat_bootcnt.valueString : ""
-                                visible:    _frameTypeAvailable
-                            }
+//                    QGCLabel {
+//                        text:                   qsTr("Operating Summary")
+//                        font.family:            ScreenTools.demiboldFontFamily
+//                        Layout.fillWidth:       true
+//                        horizontalAlignment:    Text.AlignHCenter
+//                    }
 
-                            VehicleSummaryRow {
-                                labelText:  qsTr("Total Runtime")
-                                valueText:  visible ? _stat_runtime.valueString + " s" : ""
-                                visible:    _frameTypeAvailable
-                            }
+//                    Rectangle {
+//                        Layout.preferredHeight: operatingColumnLayout.height + _margins
+//                        Layout.preferredWidth:  operatingColumnLayout.width + _margins
+//                        color:                  qgcPal.windowShade
+//                        radius:                 _margins / 4
+//                        Layout.fillWidth:       true
 
-                            VehicleSummaryRow {
-                                labelText:  qsTr("Total Flight Time")
-                                valueText:  visible ? _stat_flttime.valueString + " s": ""
-                                visible:    _frameTypeAvailable
-                            }
-                        } // ColumnLayout
-                    }
-                }
-            }
+//                        ColumnLayout {
+//                            id:                 operatingColumnLayout
+//                            anchors.margins:    _margins / 2
+//                            anchors.top:        parent.top
+//                            anchors.left:       parent.left
+//                            anchors.right:      parent.right
+//                            spacing:            _margins
 
-            // Settings
-            expandedComponent: Component {
-                ColumnLayout{
-                    Layout.preferredWidth:  parent.width
-                    spacing:                _margins / 2
+//                            VehicleSummaryRow {
+//                                labelText:  qsTr("Boot Count")
+//                                valueText:  visible ? _stat_bootcnt.valueString : ""
+//                                visible:    _frameTypeAvailable
+//                            }
 
-                    IndicatorPageGroupLayout {
-                        Layout.fillWidth: true
+//                            VehicleSummaryRow {
+//                                labelText:  qsTr("Total Runtime")
+//                                valueText:  visible ? _stat_runtime.valueString + " s" : ""
+//                                visible:    _frameTypeAvailable
+//                            }
 
-                        GridLayout {
-                            Layout.fillWidth:   true
-                            columns:            2
+//                            VehicleSummaryRow {
+//                                labelText:  qsTr("Total Flight Time")
+//                                valueText:  visible ? _stat_flttime.valueString + " s": ""
+//                                visible:    _frameTypeAvailable
+//                            }
+//                        } // ColumnLayout
+//                    }
+//                }
+//            }
 
-                            QGCLabel {
-                                Layout.fillWidth: true
-                                text: qsTr("RTL Altitude")
-                                visible:                landSpeedFact
-                            }
+//            // Settings
+//            expandedComponent: Component {
+//                ColumnLayout{
+//                    Layout.preferredWidth:  parent.width
+//                    spacing:                _margins / 2
 
-                            FactTextField {
-                                fact:                   rtlAltitudeFact
-                                Layout.preferredWidth:  valueColumnWidth
-                                visible:                landSpeedFact
-                                horizontalAlignment:    Text.AlignRight;
-                            }
+//                    IndicatorPageGroupLayout {
+//                        Layout.fillWidth: true
 
-                            QGCLabel {
-                                id:                     landDescentLabel
-                                Layout.fillWidth:       true
-                                text:                   qsTr("Land Descent Rate")
-                                visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
-                            }
+//                        GridLayout {
+//                            Layout.fillWidth:   true
+//                            columns:            2
 
-                            FactTextField {
-                                fact:                   landSpeedFact
-                                Layout.preferredWidth:  valueColumnWidth
-                                visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
-                                horizontalAlignment:    Text.AlignRight;
-                            }
+//                            QGCLabel {
+//                                Layout.fillWidth: true
+//                                text: qsTr("RTL Altitude")
+//                                visible:                landSpeedFact
+//                            }
 
-                            FactCheckBoxSlider {
-                                Layout.fillWidth:   true
-                                Layout.columnSpan:     2
-                                text:               qsTr("Precision Landing")
-                                fact:               precisionLandingFact
-                                visible:            precisionLandingFact
-                            }
-                        }
-                    }
+//                            FactTextField {
+//                                fact:                   rtlAltitudeFact
+//                                Layout.preferredWidth:  valueColumnWidth
+//                                visible:                landSpeedFact
+//                                horizontalAlignment:    Text.AlignRight;
+//                            }
 
-                    IndicatorPageGroupLayout {
-                        Layout.fillWidth:   true
-                        visible:            atcInputTCFact
+//                            QGCLabel {
+//                                id:                     landDescentLabel
+//                                Layout.fillWidth:       true
+//                                text:                   qsTr("Land Descent Rate")
+//                                visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
+//                            }
 
-                        ColumnLayout {
-                            Layout.fillWidth:   true
+//                            FactTextField {
+//                                fact:                   landSpeedFact
+//                                Layout.preferredWidth:  valueColumnWidth
+//                                visible:                landSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
+//                                horizontalAlignment:    Text.AlignRight;
+//                            }
 
-                            FactSliderPanel {
-                                width:       ScreenTools.defaultFontPixelWidth * 40 // parent.width
-                                sliderModel: params
-                            }
-                        }
+//                            FactCheckBoxSlider {
+//                                Layout.fillWidth:   true
+//                                Layout.columnSpan:     2
+//                                text:               qsTr("Precision Landing")
+//                                fact:               precisionLandingFact
+//                                visible:            precisionLandingFact
+//                            }
+//                        }
+//                    }
 
-                        Item {
-                            height:             1
-                            Layout.fillWidth:   true
-                        }
-                    }
+//                    IndicatorPageGroupLayout {
+//                        Layout.fillWidth:   true
+//                        visible:            atcInputTCFact
 
-                    IndicatorPageGroupLayout {
-                        Layout.fillWidth:   true
-                        showDivider:        false
+//                        ColumnLayout {
+//                            Layout.fillWidth:   true
 
-                        RowLayout {
-                            Layout.fillWidth: true
+//                            FactSliderPanel {
+//                                width:       ScreenTools.defaultFontPixelWidth * 40 // parent.width
+//                                sliderModel: params
+//                            }
+//                        }
 
-                            QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Summary") }
-                            QGCButton {
-                                text: qsTr("Configure")
-                                onClicked: {
-                                    mainWindow.showVehicleSetupTool(qsTr("Summary"))
-                                    indicatorDrawer.close()
-                                    componentDrawer.visible = false
-                                }
-                            }
-                        }
-                    } // IndicatorPageGroupLayout
-                } // Component
-            } // expandedItem: ColumnLayout
-        } // ToolIndicatorPage
-    } // Component
-} // Item
+//                        Item {
+//                            height:             1
+//                            Layout.fillWidth:   true
+//                        }
+//                    }
+
+//                    IndicatorPageGroupLayout {
+//                        Layout.fillWidth:   true
+//                        showDivider:        false
+
+//                        RowLayout {
+//                            Layout.fillWidth: true
+
+//                            QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Summary") }
+//                            QGCButton {
+//                                text: qsTr("Configure")
+//                                onClicked: {
+//                                    mainWindow.showVehicleSetupTool(qsTr("Summary"))
+//                                    indicatorDrawer.close()
+//                                    componentDrawer.visible = false
+//                                }
+//                            }
+//                        }
+//                    } // IndicatorPageGroupLayout
+//                } // Component
+//            } // expandedItem: ColumnLayout
+//        } // ToolIndicatorPage
+//    } // Component
+//} // Item

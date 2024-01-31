@@ -6,6 +6,7 @@ AltModeDialog                           1.0 AltModeDialog.qml
 AxisMonitor                             1.0 AxisMonitor.qml
 BatteryIndicator                        1.0 BatteryIndicator.qml
 BatteryIndicatorContentItem             1.0 BatteryIndicatorContentItem.qml
+BatteryIndicatorPage                    1.0 BatteryIndicatorPage.qml
 CameraCalcCamera                        1.0 CameraCalcCamera.qml
 CameraCalcGrid                          1.0 CameraCalcGrid.qml
 ContentAreaCalc                         1.0 ContentAreaCalc.qml
@@ -127,5 +128,6 @@ ToolStripHoverButton                    1.0 ToolStripHoverButton.qml
 FakeToolStripHoverButton                1.0 FakeToolStripHoverButton.qml
 VehicleRotationCal                      1.0 VehicleRotationCal.qml
 VehicleSummaryRow                       1.0 VehicleSummaryRow.qml
+VehicleIndicatorPage                    1.0 VehicleIndicatorPage.qml
 MAVLinkChart                            1.0 MAVLinkChart.qml
 ComponentLabelValueRow                  1.0 ComponentLabelValueRow.qml

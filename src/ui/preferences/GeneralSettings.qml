@@ -203,7 +203,10 @@ SettingsPage {
         visible:            QGroundControl.settingsManager.unitsSettings.visible
 
         Repeater {
-            model: [ QGroundControl.settingsManager.unitsSettings.horizontalDistanceUnits, QGroundControl.settingsManager.unitsSettings.verticalDistanceUnits, QGroundControl.settingsManager.unitsSettings.areaUnits, QGroundControl.settingsManager.unitsSettings.speedUnits, QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
+            model: [ QGroundControl.settingsManager.unitsSettings.distanceUnits,
+                QGroundControl.settingsManager.unitsSettings.areaUnits,
+                QGroundControl.settingsManager.unitsSettings.speedUnits,
+                QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
 
             LabelledFactComboBox {
                 label:                  modelData.shortDescription
@@ -213,84 +216,84 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("Brand Image")
-        visible:            _brandImageSettings.visible && !ScreenTools.isMobile
+//    SettingsGroupLayout {
+//        Layout.fillWidth:   true
+//        heading:            qsTr("Brand Image")
+//        visible:            _brandImageSettings.visible && !ScreenTools.isMobile
         
-        RowLayout {
-            Layout.fillWidth:   true
-            spacing:            ScreenTools.defaultFontPixelWidth * 2
-            visible:            _userBrandImageIndoor.visible
+//        RowLayout {
+//            Layout.fillWidth:   true
+//            spacing:            ScreenTools.defaultFontPixelWidth * 2
+//            visible:            _userBrandImageIndoor.visible
 
-            ColumnLayout {
-                Layout.fillWidth:   true
-                spacing:            0
+//            ColumnLayout {
+//                Layout.fillWidth:   true
+//                spacing:            0
 
-                QGCLabel { text: qsTr("Indoor Image") }
-                QGCLabel { 
-                    Layout.fillWidth:   true
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    text:               _userBrandImageIndoor.valueString.replace("file:///", "") 
-                    elide:              Text.ElideMiddle
-                    visible:            _userBrandImageIndoor.valueString.length > 0
-                    }
-            }
+//                QGCLabel { text: qsTr("Indoor Image") }
+//                QGCLabel {
+//                    Layout.fillWidth:   true
+//                    font.pointSize:     ScreenTools.smallFontPointSize
+//                    text:               _userBrandImageIndoor.valueString.replace("file:///", "")
+//                    elide:              Text.ElideMiddle
+//                    visible:            _userBrandImageIndoor.valueString.length > 0
+//                    }
+//            }
 
-            QGCButton {
-                text:       qsTr("Browse")
-                onClicked:  userBrandImageIndoorBrowseDialog.openForLoad()
+//            QGCButton {
+//                text:       qsTr("Browse")
+//                onClicked:  userBrandImageIndoorBrowseDialog.openForLoad()
 
-                QGCFileDialog {
-                    id:                 userBrandImageIndoorBrowseDialog
-                    title:              qsTr("Choose custom brand image file")
-                    folder:             _userBrandImageIndoor.rawValue.replace("file:///", "")
-                    selectFolder:       false
-                    onAcceptedForLoad:  (file) => _userBrandImageIndoor.rawValue = "file:///" + file
-                }
-            }
-        }
+//                QGCFileDialog {
+//                    id:                 userBrandImageIndoorBrowseDialog
+//                    title:              qsTr("Choose custom brand image file")
+//                    folder:             _userBrandImageIndoor.rawValue.replace("file:///", "")
+//                    selectFolder:       false
+//                    onAcceptedForLoad:  (file) => _userBrandImageIndoor.rawValue = "file:///" + file
+//                }
+//            }
+//        }
 
-        RowLayout {
-            Layout.fillWidth:   true
-            spacing:            ScreenTools.defaultFontPixelWidth * 2
-            visible:            _userBrandImageOutdoor.visible
+//        RowLayout {
+//            Layout.fillWidth:   true
+//            spacing:            ScreenTools.defaultFontPixelWidth * 2
+//            visible:            _userBrandImageOutdoor.visible
 
-            ColumnLayout {
-                Layout.fillWidth:   true
-                spacing:            0
+//            ColumnLayout {
+//                Layout.fillWidth:   true
+//                spacing:            0
 
-                QGCLabel { text: qsTr("Outdoor Image") }
-                QGCLabel { 
-                    Layout.fillWidth:   true
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    text:               _userBrandImageOutdoor.valueString.replace("file:///", "") 
-                    elide:              Text.ElideMiddle
-                    visible:            _userBrandImageOutdoor.valueString.length > 0
-                    }
-            }
+//                QGCLabel { text: qsTr("Outdoor Image") }
+//                QGCLabel {
+//                    Layout.fillWidth:   true
+//                    font.pointSize:     ScreenTools.smallFontPointSize
+//                    text:               _userBrandImageOutdoor.valueString.replace("file:///", "")
+//                    elide:              Text.ElideMiddle
+//                    visible:            _userBrandImageOutdoor.valueString.length > 0
+//                    }
+//            }
 
-            QGCButton {
-                text:       qsTr("Browse")
-                onClicked:  userBrandImageOutdoorBrowseDialog.openForLoad()
+//            QGCButton {
+//                text:       qsTr("Browse")
+//                onClicked:  userBrandImageOutdoorBrowseDialog.openForLoad()
 
-                QGCFileDialog {
-                    id:                 userBrandImageOutdoorBrowseDialog
-                    title:              qsTr("Choose custom brand image file")
-                    folder:             _userBrandImageOutdoor.rawValue.replace("file:///", "")
-                    selectFolder:       false
-                    onAcceptedForLoad:  (file) => _userBrandImageOutdoor.rawValue = "file:///" + file
-                }
-            }
-        }
+//                QGCFileDialog {
+//                    id:                 userBrandImageOutdoorBrowseDialog
+//                    title:              qsTr("Choose custom brand image file")
+//                    folder:             _userBrandImageOutdoor.rawValue.replace("file:///", "")
+//                    selectFolder:       false
+//                    onAcceptedForLoad:  (file) => _userBrandImageOutdoor.rawValue = "file:///" + file
+//                }
+//            }
+//        }
 
-        LabelledButton {
-            label:      qsTr("Reset Images")
-            buttonText: qsTr("Reset")
-            onClicked:  {
-                _userBrandImageIndoor.rawValue = ""
-                _userBrandImageOutdoor.rawValue = ""
-            }
-        }
-    }
+//        LabelledButton {
+//            label:      qsTr("Reset Images")
+//            buttonText: qsTr("Reset")
+//            onClicked:  {
+//                _userBrandImageIndoor.rawValue = ""
+//                _userBrandImageOutdoor.rawValue = ""
+//            }
+//        }
+//    }
 }
