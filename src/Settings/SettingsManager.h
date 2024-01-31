@@ -67,7 +67,6 @@ public:
 #if !defined(NO_ARDUPILOT_DIALECT)
     Q_PROPERTY(QObject* apmMavlinkStreamRateSettings    READ apmMavlinkStreamRateSettings   CONSTANT)
 #endif
-    Q_PROPERTY(QObject* remoteIDSettings                READ remoteIDSettings               CONSTANT)
     Q_PROPERTY(QObject* siyiSettings                    READ siyiSettings                   CONSTANT)
 
     // Override from QGCTool
@@ -95,7 +94,6 @@ public:
 #if !defined(NO_ARDUPILOT_DIALECT)
     APMMavlinkStreamRateSettings*   apmMavlinkStreamRateSettings(void) { return _apmMavlinkStreamRateSettings; }
 #endif
-    RemoteIDSettings*               remoteIDSettings            (void) { return _remoteIDSettings; }
     SIYISettings*                   siyiSettings                (void) { return _siyiSettings; }
 
 private:
@@ -121,7 +119,6 @@ private:
 #if !defined(NO_ARDUPILOT_DIALECT)
     APMMavlinkStreamRateSettings*   _apmMavlinkStreamRateSettings;
 #endif
-    RemoteIDSettings*               _remoteIDSettings;
     SIYISettings*                   _siyiSettings;
 };
 

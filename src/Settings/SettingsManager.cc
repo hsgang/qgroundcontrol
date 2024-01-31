@@ -36,7 +36,6 @@ SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
 #if !defined(NO_ARDUPILOT_DIALECT)
     , _apmMavlinkStreamRateSettings (nullptr)
 #endif
-    , _remoteIDSettings             (nullptr)
     , _siyiSettings                 (nullptr)
 {
 
