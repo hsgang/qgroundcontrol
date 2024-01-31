@@ -54,8 +54,12 @@ SettingsPage {
             model:      QGroundControl.mapEngineManager.mapProviderList
 
             onActivated: (index) => {
+                // _mapProvider = comboBox.textAt(index)
+                // _mapType = QGroundControl.mapEngineManager.mapTypeList(comboBox.textAt(index))[0]
                 _mapProvider = comboBox.textAt(index)
-                _mapType = QGroundControl.mapEngineManager.mapTypeList(comboBox.textAt(index))[0]
+                QGroundControl.settingsManager.flightMapSettings.mapProvider.value = comboBox.textAt(index)
+                QGroundControl.settingsManager.flightMapSettings.mapType.value = QGroundControl.mapEngineManager.mapTypeList(comboBox.textAt(index))[0]
+                console.log("Map Provider Changed to", _mapProvider)
             }
 
             Component.onCompleted: {
@@ -69,7 +73,11 @@ SettingsPage {
             label: qsTr("Map Type")
             model: QGroundControl.mapEngineManager.mapTypeList(_mapProvider)
 
-            onActivated: (index) => { _mapType = comboBox.textAt(index) }
+            onActivated: (index) => {
+                // _mapType = comboBox.textAt(index)
+                _mapType = comboBox.textAt(index)
+                QGroundControl.settingsManager.flightMapSettings.mapType.value = comboBox.textAt(index)
+            }
 
             Component.onCompleted: {
                 var index = comboBox.find(_mapType)

@@ -372,6 +372,7 @@
         <file alias="VideoSettings.qml">src/ui/preferences/VideoSettings.qml</file>
         <file alias="QGroundControl/Controls/BatteryIndicator.qml">src/ui/toolbar/BatteryIndicator.qml</file>
         <file alias="QGroundControl/Controls/BatteryIndicatorContentItem.qml">src/ui/toolbar/BatteryIndicatorContentItem.qml</file>
+        <file alias="QGroundControl/Controls/BatteryIndicatorPage.qml">src/ui/toolbar/BatteryIndicatorPage.qml</file>
         <file alias="QGroundControl/Controls/FlightModeIndicator.qml">src/ui/toolbar/FlightModeIndicator.qml</file>
         <file alias="QGroundControl/Controls/FlightModeMenuIndicator.qml">src/ui/toolbar/FlightModeMenuIndicator.qml</file>
         <file alias="QGroundControl/Controls/FlightModeToolIndicatorContentItem.qml">src/ui/toolbar/FlightModeToolIndicatorContentItem.qml</file>
@@ -383,7 +384,7 @@
         <file alias="PlanViewToolBar.qml">src/ui/toolbar/PlanViewToolBar.qml</file>
         <file alias="QGroundControl/Controls/SignalStrength.qml">src/ui/toolbar/SignalStrength.qml</file>
         <file alias="QGroundControl/Controls/VehicleIndicatorPage.qml">src/ui/toolbar/VehicleIndicatorPage.qml</file>
-        <file alias="QGroundControl/Controls/BatteryIndicatorPage.qml">src/ui/toolbar/BatteryIndicatorPage.qml</file>
+        <file alias="NTRIPSettings.qml">src/ui/preferences/NTRIPSettings.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="OfflineVehicleFirstRunPrompt.qml">src/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml</file>
@@ -402,7 +403,6 @@
         <file alias="MavCmdInfoRover.json">src/MissionManager/MavCmdInfoRover.json</file>
         <file alias="MavCmdInfoSub.json">src/MissionManager/MavCmdInfoSub.json</file>
         <file alias="MavCmdInfoVTOL.json">src/MissionManager/MavCmdInfoVTOL.json</file>
-        <file alias="MavlinkLogManager.SettingsGroup.json">src/Settings/MavlinkLogManager.SettingsGroup.json</file>
         <file alias="MissionSettings.FactMetaData.json">src/MissionManager/MissionSettings.FactMetaData.json</file>
         <file alias="QGCMapCircle.Facts.json">src/MissionManager/QGCMapCircle.Facts.json</file>
         <file alias="RallyPoint.FactMetaData.json">src/MissionManager/RallyPoint.FactMetaData.json</file>
@@ -425,6 +425,7 @@
         <file alias="FlightMode.SettingsGroup.json">src/Settings/FlightMode.SettingsGroup.json</file>
         <file alias="FlyView.SettingsGroup.json">src/Settings/FlyView.SettingsGroup.json</file>
         <file alias="GimbalController.SettingsGroup.json">src/Settings/GimbalController.SettingsGroup.json</file>
+        <file alias="MavlinkLog.SettingsGroup.json">src/Settings/MavlinkLogManager.SettingsGroup.json</file>
         <file alias="NTRIP.SettingsGroup.json">src/Settings/NTRIP.SettingsGroup.json</file>
         <file alias="OfflineMaps.SettingsGroup.json">src/Settings/OfflineMaps.SettingsGroup.json</file>
         <file alias="PlanView.SettingsGroup.json">src/Settings/PlanView.SettingsGroup.json</file>

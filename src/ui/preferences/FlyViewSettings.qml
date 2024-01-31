@@ -143,13 +143,6 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Use Vertical Instruments")
-            visible:            _alternateInstrumentPanel.visible
-            fact:               _alternateInstrumentPanel
-        }
-
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
             text:               qsTr("Show additional heading indicators on Compass")
             visible:            _showAdditionalIndicatorsCompass.visible
             fact:               _showAdditionalIndicatorsCompass
@@ -160,6 +153,87 @@ SettingsPage {
             text:               qsTr("Lock Compass Nose-Up")
             visible:            _lockNoseUpCompass.visible
             fact:               _lockNoseUpCompass
+        }
+
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Show attitude HUD indicators on Compass")
+            fact:               QGroundControl.settingsManager.flyViewSettings.showAttitudeHUD
+            visible:            fact.visible
+        }
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Show Mission Max Altitude Indicator")
+            fact:               QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator
+            visible:            fact.visible
+        }
+
+    }
+
+    SettingsGroupLayout {
+        id:         customActions
+        Layout.fillWidth:   true
+        heading:            qsTr("Custom Actions")
+
+        onVisibleChanged: {
+            if (jsonFile.rawValue === "" && ScreenTools.isMobile) {
+                jsonFile.rawValue = _defaultFile
+            }
+        }
+
+        property Fact   jsonFile:     QGroundControl.settingsManager.flyViewSettings.customActionDefinitions
+        property string _defaultDir:  QGroundControl.settingsManager.appSettings.customActionsSavePath
+        property string _defaultFile: _defaultDir + "/CustomActions.json"
+
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Enable Custom Actions")
+            fact:               QGroundControl.settingsManager.flyViewSettings.enableCustomActions
+            visible:            fact.visible
+        }
+
+        RowLayout {
+            Layout.fillWidth: true
+            spacing: ScreenTools.defaultFontPixelWidth * 2
+            visible:  QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
+
+            ColumnLayout {
+                Layout.fillWidth:   true
+                spacing:            0
+
+                QGCLabel { text: qsTr("Custom Action Definitions") }
+                QGCLabel {
+                    Layout.fillWidth:   true
+                    font.pointSize:     ScreenTools.smallFontPointSize
+                    text:               customActions.jsonFile.rawValue === "" ? qsTr("<not set>") : customActions.jsonFile.rawValue
+                    elide:              Text.ElideMiddle
+                }
+            }
+
+            QGCButton {
+                visible:    !ScreenTools.isMobile
+                text:       qsTr("Browse")
+                onClicked:  customActionPathBrowseDialog.openForLoad()
+                QGCFileDialog {
+                    id:             customActionPathBrowseDialog
+                    title:          qsTr("Choose the Custom Action Definitions file")
+                    folder:         customActions.jsonFile.rawValue.replace("file:///", "")
+                    selectFolder:   false
+                    onAcceptedForLoad: (file) => customActions.jsonFile.rawValue = "file:///" + file
+                    nameFilters: ["JSON files (*.json)"]
+                }
+            }
+
+            // The file loader on Android doesn't work, so we hard code the path to the
+            // JSON file. However, we need a button to force a refresh if the JSON file
+            // is changed.
+            QGCButton {
+                visible:    ScreenTools.isMobile
+                text:       qsTr("Reload")
+                onClicked:  {
+                    customActions.jsonFile.valueChanged(customActions.jsonFile.rawValue)
+                }
+            }
         }
     }
 }

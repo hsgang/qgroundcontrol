@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-//import QtQuick.Controls.Styles      1.4
 import QtQuick.Layouts
 
 import QGroundControl.FactSystem
@@ -32,11 +31,13 @@ SpinBox {
     property real realValue: value / exponentiation
     property real exponentiation : Math.pow(10, decimals)
 
+    QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
+
     Component.onCompleted: _loadComplete = true
 
     onValueChanged: {
         if (_loadComplete) {
-            fact.value = control.value / exponentiation
+            fact.value = parseFloat((control.value/exponentiation).toFixed(decimals))
         }
     }
 
@@ -46,7 +47,7 @@ SpinBox {
     }
 
     textFromValue: function(value, locale) {
-        return Number(value / exponentiation).toLocaleString(locale, 'f', control.decimals)
+        return Number(value/exponentiation).toLocaleString(locale, 'f', control.decimals)
     }
 
     valueFromText: function(text, locale) {
@@ -58,8 +59,8 @@ SpinBox {
         text: control.textFromValue(control.value, control.locale)
 
         font: control.font
-        color: "#21be2b"
-        selectionColor: "#21be2b"
+        color: "#000000"
+        selectionColor: "#000000"
         selectedTextColor: "#ffffff"
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
@@ -74,13 +75,14 @@ SpinBox {
         height: parent.height
         implicitWidth: ScreenTools.defaultFontPixelHeight
         implicitHeight: parent.height
-        color: control.up.pressed ? "#e4e4e4" : "#f6f6f6"
-        border.color: enabled ? "#21be2b" : "#bdbebf"
+        color: control.up.pressed ? qgcPal.windowShadeLight : qgcPal.windowShade
+        radius: ScreenTools.defaultFontPixelHeight / 4
+        border.color: "#ffffff"
 
         Text {
             text: "+"
             font.pixelSize: control.font.pixelSize * 2
-            color: "#21be2b"
+            color: qgcPal.text
             anchors.fill: parent
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
@@ -93,13 +95,14 @@ SpinBox {
         height: parent.height
         implicitWidth: ScreenTools.defaultFontPixelHeight
         implicitHeight: parent.height
-        color: control.down.pressed ? "#e4e4e4" : "#f6f6f6"
-        border.color: enabled ? "#21be2b" : "#bdbebf"
+        color: control.down.pressed ? qgcPal.windowShadeLight : qgcPal.windowShade
+        radius: ScreenTools.defaultFontPixelHeight / 4
+        border.color: "#ffffff"
 
         Text {
             text: "-"
             font.pixelSize: control.font.pixelSize * 2
-            color: "#21be2b"
+            color: qgcPal.text
             anchors.fill: parent
             fontSizeMode: Text.Fit
             horizontalAlignment: Text.AlignHCenter
@@ -108,7 +111,8 @@ SpinBox {
     }
 
     background: Rectangle {
-        implicitWidth: 140
+        implicitWidth: control.implicitWidth
         border.color: "#bdbebf"
+        radius: ScreenTools.defaultFontPixelHeight / 4
     }
 }

@@ -49,6 +49,13 @@ ListModel {
     }
 
     ListElement {
+        name: qsTr("NTRIP")
+        url: "/qml/NTRIPSettings.qml"
+        menuIcon: "/InstrumentValueIcons/radar.svg"
+        pageVisible: function() { return true }
+    }
+
+    ListElement {
         name: qsTr("ADSB Server")
         url: "/qml/ADSBServerSettings.qml"
         menuIcon: "/InstrumentValueIcons/radar.svg"
@@ -71,7 +78,7 @@ ListModel {
     ListElement {
         name: qsTr("Offline Maps")
         url: "/qml/OfflineMap.qml"
-        menuIcon: "/InstrumentValueIcons/map.svg"
+        menuIcon: "/InstrumentValueIcons/outlineMap.svg"
         pageVisible: function() { return true }
     }
 

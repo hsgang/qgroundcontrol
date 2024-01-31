@@ -23,12 +23,12 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, distanceUnits)
         // Distance/Area/Speed units settings can't be loaded from json since it creates an infinite loop of meta data loading.
         QStringList     enumStrings;
         QVariantList    enumValues;
-        enumStrings << "Feet" << "Meters";
+        enumStrings << UnitsSettings::tr("Feet") << UnitsSettings::tr("Meters");
         enumValues << QVariant::fromValue(static_cast<uint32_t>(DistanceUnitsFeet))
                    << QVariant::fromValue(static_cast<uint32_t>(DistanceUnitsMeters));
         FactMetaData* metaData = new FactMetaData(FactMetaData::valueTypeUint32, this);
         metaData->setName(distanceUnitsName);
-        metaData->setShortDescription("distance units");
+        metaData->setShortDescription(UnitsSettings::tr("Distance"));
         metaData->setEnumInfo(enumStrings, enumValues);
         DistanceUnits defaultDistanceUnit = DistanceUnitsMeters;
         switch(QLocale::system().measurementSystem()) {

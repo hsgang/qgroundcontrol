@@ -45,18 +45,6 @@ Rectangle {
         visible:        qgcPal.globalTheme === QGCPalette.Light
     }
 
-    // Rectangle {
-    //     anchors.fill:   mainStatusIndicator //viewButtonRow
-    //     visible:        currentToolbar === flyViewToolbar
-
-    //     gradient: Gradient {
-    //         orientation: Gradient.Horizontal
-    //         GradientStop { position: 0;                                     color: _mainStatusBGColor }
-    //         GradientStop { position: currentButton.x + currentButton.width; color: _mainStatusBGColor }
-    //         GradientStop { position: 1;                                     color: _root.color }
-    //     }
-    // }
-
     RowLayout {
         id:                     viewButtonRow
         anchors.bottomMargin:   1
@@ -95,7 +83,7 @@ Rectangle {
             //radius:                 ScreenTools.defaultFontPixelHeight * 0.2
             // border.color:           qgcPal.text
             // border.width:           1
-            visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
+            visible:                !ScreenTools.isMobile
 
             QGCColoredImage{
                 height:             parent.height * 0.7
@@ -164,7 +152,7 @@ Rectangle {
         color:                  qgcPal.windowShade //"transparent"
         border.color:           qgcPal.text
         radius:                 height / 2 //ScreenTools.defaultFontPixelHeight / 4
-        visible:                currentToolbar == flyViewToolbar && _activeVehicle
+        visible:                _activeVehicle
 
         Loader{
             id:             flightModeIndicatorLoader

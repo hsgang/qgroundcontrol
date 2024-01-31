@@ -298,5 +298,6 @@
         <file alias="cheveron-down.svg">cheveron-down.svg</file>
         <file alias="view-tile.svg">view-tile.svg</file>
         <file alias="path.svg">path.svg</file>
+        <file>outlineMap.svg</file>
     </qresource>
 </RCC>

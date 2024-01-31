@@ -98,6 +98,13 @@ SettingsPage {
             visible:            fact.visible
             property Fact _saveCsvTelemetry: _appSettings.saveCsvTelemetry
         }
+        FactCheckBoxSlider {
+            id:                 sensorSaveLog
+            Layout.fillWidth:   true
+            text:               qsTr("Save SensorData JSON log")
+            fact:               QGroundControl.settingsManager.appSettings.saveSensorLog
+            enabled:            !_disableAllDataPersistence
+        }
     }
 
     SettingsGroupLayout {
