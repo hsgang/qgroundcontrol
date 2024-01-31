@@ -76,10 +76,10 @@ ListModel {
     }
 
     ListElement {
-        name: qsTr("MAVLink")
+        name: qsTr("PX4 Logging")
         url: "/qml/MavlinkSettings.qml"
         menuIcon: "/InstrumentValueIcons/conversation.svg"
-        pageVisible: function() { return true }
+        pageVisible: function() { return globals.activeVehicle ? globals.activeVehicle.px4Firmware : QGroundControl.px4ProFirmwareSupported }
     }
 
     ListElement {

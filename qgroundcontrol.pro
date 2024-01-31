@@ -699,6 +699,7 @@ HEADERS += \
     src/Settings/FlightModeSettings.h \
     src/Settings/FlyViewSettings.h \
     src/Settings/NTRIPSettings.h \
+    src/Settings/MavlinkLogSettings.h \
     src/Settings/OfflineMapsSettings.h \
     src/Settings/PlanViewSettings.h \
     src/Settings/RTKSettings.h \
@@ -963,6 +964,7 @@ SOURCES += \
     src/Settings/NTRIPSettings.cc \
     src/Settings/FlightModeSettings.cc \
     src/Settings/FlyViewSettings.cc \
+    src/Settings/MavlinkLogSettings.cc \
     src/Settings/OfflineMapsSettings.cc \
     src/Settings/PlanViewSettings.cc \
     src/Settings/RTKSettings.cc \
