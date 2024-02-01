@@ -37,6 +37,10 @@
 #include CUSTOMHEADER
 #endif
 
+#ifdef CONFIG_UTM_ADAPTER
+#include "UTMSPManager.h"
+#endif
+
  /**
   * @brief Helper function to register a type with QML that is not creatable from QML
   * @param uri The URI to register the type under
@@ -81,6 +85,9 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
     _mavlinkLogManager      = new MAVLinkLogManager         (app, this);
     _adsbVehicleManager     = new ADSBVehicleManager        (app, this);
     _ntrip                  = new NTRIP                     (app, this);
+#ifdef CONFIG_UTM_ADAPTER
+    _utmspManager            = new UTMSPManager               (app, this);
+#endif
 }
 
 void QGCToolbox::setChildToolboxes(void)
@@ -109,6 +116,9 @@ void QGCToolbox::setChildToolboxes(void)
     _mavlinkLogManager->setToolbox(this);
     _adsbVehicleManager->setToolbox(this);
     _ntrip->setToolbox(this);
+#ifdef CONFIG_UTM_ADAPTER
+    _utmspManager->setToolbox(this);
+#endif
 }
 
 void QGCToolbox::_scanAndLoadPlugins(QGCApplication* app)

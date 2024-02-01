@@ -59,6 +59,11 @@
 #include "VehicleGeneratorFactGroup.h"
 #include "VehicleEFIFactGroup.h"
 
+#ifdef CONFIG_UTM_ADAPTER
+#include "UTMSPVehicle.h"
+#include "UTMSPManager.h"
+#endif
+
 class Actuators;
 class EventHandler;
 class UAS;
@@ -86,6 +91,9 @@ class InitialConnectStateMachine;
 class Autotune;
 class RemoteIDManager;
 class GimbalController;
+#ifdef CONFIG_UTM_ADAPTER
+class UTMSPVehicle;
+#endif
 
 Q_MOC_INCLUDE("AutoPilotPlugin.h")
 Q_MOC_INCLUDE("TrajectoryPoints.h")
@@ -581,20 +589,20 @@ public:
 
     /**
      * @brief Send MAV_CMD_DO_GRIPPER command to trigger specified action in the vehicle
-     * 
+     *
      * @param gripperAction Gripper action to trigger
     */
 
     enum    GRIPPER_OPTIONS
     {
-    Gripper_release = GRIPPER_ACTION_RELEASE, 
+    Gripper_release = GRIPPER_ACTION_RELEASE,
     Gripper_grab    = GRIPPER_ACTION_GRAB,
     Invalid_option  = GRIPPER_ACTIONS_ENUM_END,
-    }; 
+    };
     Q_ENUM(GRIPPER_OPTIONS)
 
     void setGripperAction(GRIPPER_ACTIONS gripperAction);
-    Q_INVOKABLE void sendGripperAction(GRIPPER_OPTIONS gripperOption); 
+    Q_INVOKABLE void sendGripperAction(GRIPPER_OPTIONS gripperOption);
 
     bool fixedWing() const;
     bool multiRotor() const;
@@ -804,6 +812,7 @@ public:
     ///     @param showError true: Display error to user if command failed, false:  no error shown
     /// Signals: mavCommandResult on success or failure
     void sendMavCommand(int compId, MAV_CMD command, bool showError, float param1 = 0.0f, float param2 = 0.0f, float param3 = 0.0f, float param4 = 0.0f, float param5 = 0.0f, float param6 = 0.0f, float param7 = 0.0f);
+    void sendMavCommandDelayed(int compId, MAV_CMD command, bool showError, int milliseconds, float param1 = 0.0f, float param2 = 0.0f, float param3 = 0.0f, float param4 = 0.0f, float param5 = 0.0f, float param6 = 0.0f, float param7 = 0.0f);
     void sendMavCommandInt(int compId, MAV_CMD command, MAV_FRAME frame, bool showError, float param1, float param2, float param3, float param4, double param5, double param6, float param7);
 
     ///
@@ -1284,6 +1293,10 @@ private:
     VehicleObjectAvoidance*         _objectAvoidance                = nullptr;
     Autotune*                       _autotune                       = nullptr;
     GimbalController*               _gimbalController               = nullptr;
+
+#ifdef CONFIG_UTM_ADAPTER
+    UTMSPVehicle*                    _utmspVehicle                    = nullptr;
+#endif
 
     bool    _armed = false;         ///< true: vehicle is armed
     uint8_t _base_mode = 0;     ///< base_mode from HEARTBEAT

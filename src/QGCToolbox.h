@@ -34,6 +34,9 @@ class QGCCorePlugin;
 class SettingsManager;
 class ADSBVehicleManager;
 class NTRIP;
+#ifdef CONFIG_UTM_ADAPTER
+class UTMSPManager;
+#endif
 
 /// This is used to manage all of our top level services/tools
 class QGCToolbox : public QObject {
@@ -62,6 +65,9 @@ public:
     NTRIP*                      ntrip                   () { return _ntrip; }
 #ifndef __mobile__
     GPSManager*                 gpsManager              () { return _gpsManager; }
+#endif
+#ifdef CONFIG_UTM_ADAPTER
+    UTMSPManager*                utmspManager             () { return _utmspManager; }
 #endif
 
 private:
@@ -92,6 +98,9 @@ private:
     ADSBVehicleManager*         _adsbVehicleManager     = nullptr;
     NTRIP*                      _ntrip                  = nullptr;
 
+#ifdef CONFIG_UTM_ADAPTER
+    UTMSPManager*                _utmspManager            = nullptr;
+#endif
     friend class QGCApplication;
 };
 

@@ -31,12 +31,11 @@ SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
     , _gimbalControllerSettings     (nullptr)
     , _batterySettings              (nullptr)
     , _batteryIndicatorSettings     (nullptr)
-    , _remoteIDSettings             (nullptr)
-    , _mavlinkLogSettings           (nullptr)
 #if !defined(NO_ARDUPILOT_DIALECT)
     , _apmMavlinkStreamRateSettings (nullptr)
 #endif
     , _siyiSettings                 (nullptr)
+    , _remoteIDSettings             (nullptr)
 {
 
 }
@@ -64,8 +63,6 @@ void SettingsManager::setToolbox(QGCToolbox *toolbox)
     _gimbalControllerSettings =     new GimbalControllerSettings    (this);
     _batterySettings =              new BatterySettings             (this);
     _batteryIndicatorSettings =     new BatteryIndicatorSettings    (this);
-    _remoteIDSettings =             new RemoteIDSettings            (this); 
-    _mavlinkLogSettings =           new MavlinkLogSettings          (this);
 #if !defined(NO_ARDUPILOT_DIALECT)
     _apmMavlinkStreamRateSettings = new APMMavlinkStreamRateSettings(this);
 #endif

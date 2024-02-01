@@ -80,6 +80,9 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
     _adsbVehicleManager     = toolbox->adsbVehicleManager();
     _ntrip                  = toolbox->ntrip();
     _globalPalette          = new QGCPalette(this);
+#ifdef CONFIG_UTM_ADAPTER
+    _utmspManager            = toolbox->utmspManager();
+#endif
 }
 
 void QGroundControlQmlGlobal::saveGlobalSetting (const QString& key, const QString& value)

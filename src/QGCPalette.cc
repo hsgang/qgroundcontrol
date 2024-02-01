@@ -106,6 +106,19 @@ void QGCPalette::_buildMap()
 //    DECLARE_QGC_SINGLE_COLOR(mapMissionTrajectory,          "#be781c")
 //    DECLARE_QGC_SINGLE_COLOR(surveyPolygonInterior,         "green")
 //    DECLARE_QGC_SINGLE_COLOR(surveyPolygonTerrainCollision, "red")
+    // Colors not affecting by theming or enable/disable
+    DECLARE_QGC_SINGLE_COLOR(mapWidgetBorderLight,          "#ffffff")
+    DECLARE_QGC_SINGLE_COLOR(mapWidgetBorderDark,           "#000000")
+    DECLARE_QGC_SINGLE_COLOR(mapMissionTrajectory,          "#be781c")
+    DECLARE_QGC_SINGLE_COLOR(surveyPolygonInterior,         "green")
+    DECLARE_QGC_SINGLE_COLOR(surveyPolygonTerrainCollision, "red")
+
+// Colors for UTM Adapter
+#ifdef CONFIG_UTM_ADAPTER
+    DECLARE_QGC_COLOR(switchUTMSP,        "#b0e0e6", "#b0e0e6", "#b0e0e6", "#b0e0e6");
+    DECLARE_QGC_COLOR(sliderUTMSP,        "#9370db", "#9370db", "#9370db", "#9370db");
+    DECLARE_QGC_COLOR(successNotifyUTMSP, "#3cb371", "#3cb371", "#3cb371", "#3cb371");
+#endif
 }
 
 void QGCPalette::setColorGroupEnabled(bool enabled)

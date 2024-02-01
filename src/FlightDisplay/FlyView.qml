@@ -39,6 +39,8 @@ Item {
     property var planController:    _planController
     property var guidedController:  _guidedController
 
+    // Properties of UTM adapter
+    property bool utmspSendActTrigger: false
 
     PlanMasterController {
         id:                     _planController
@@ -101,6 +103,7 @@ Item {
             parentToolInsets:       _toolInsets
             mapControl:             _mapControl
             visible:                !QGroundControl.videoManager.fullScreen
+            utmspActTrigger:        utmspSendActTrigger
         }
 
         FlyViewCustomLayer {

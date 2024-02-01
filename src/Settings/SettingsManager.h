@@ -32,7 +32,6 @@
 #include "GimbalControllerSettings.h"
 #include "BatterySettings.h"
 #include "BatteryIndicatorSettings.h"
-#include "MavlinkLogSettings.h"
 #include <QVariantList>
 #include "RemoteIDSettings.h"
 #include "SIYISettings.h"
@@ -62,13 +61,11 @@ public:
     Q_PROPERTY(QObject* gimbalControllerSettings        READ gimbalControllerSettings       CONSTANT)
     Q_PROPERTY(QObject* batterySettings                 READ batterySettings                CONSTANT)
     Q_PROPERTY(QObject* batteryIndicatorSettings        READ batteryIndicatorSettings       CONSTANT)
-    Q_PROPERTY(QObject* remoteIDSettings                READ remoteIDSettings               CONSTANT)
-    Q_PROPERTY(QObject* mavlinkLogSettings              READ mavlinkLogSettings             CONSTANT)
 #if !defined(NO_ARDUPILOT_DIALECT)
     Q_PROPERTY(QObject* apmMavlinkStreamRateSettings    READ apmMavlinkStreamRateSettings   CONSTANT)
 #endif
     Q_PROPERTY(QObject* siyiSettings                    READ siyiSettings                   CONSTANT)
-
+    Q_PROPERTY(QObject* remoteIDSettings                READ remoteIDSettings               CONSTANT)
     // Override from QGCTool
     virtual void setToolbox(QGCToolbox *toolbox);
 
@@ -89,13 +86,11 @@ public:
     GimbalControllerSettings*       gimbalControllerSettings    (void) { return _gimbalControllerSettings; }
     BatterySettings*                batterySettings             (void) { return _batterySettings; }
     BatteryIndicatorSettings*       batteryIndicatorSettings    (void) { return _batteryIndicatorSettings; }
-    RemoteIDSettings*               remoteIDSettings            (void) { return _remoteIDSettings; }
-    MavlinkLogSettings*             mavlinkLogSettings          (void) { return _mavlinkLogSettings; }
 #if !defined(NO_ARDUPILOT_DIALECT)
     APMMavlinkStreamRateSettings*   apmMavlinkStreamRateSettings(void) { return _apmMavlinkStreamRateSettings; }
 #endif
     SIYISettings*                   siyiSettings                (void) { return _siyiSettings; }
-
+    RemoteIDSettings*               remoteIDSettings            (void) { return _remoteIDSettings; }
 private:
     AppSettings*                    _appSettings;
     UnitsSettings*                  _unitsSettings;
@@ -114,12 +109,11 @@ private:
     GimbalControllerSettings*       _gimbalControllerSettings;
     BatterySettings*                _batterySettings;
     BatteryIndicatorSettings*       _batteryIndicatorSettings;
-    RemoteIDSettings*               _remoteIDSettings;
-    MavlinkLogSettings*             _mavlinkLogSettings;
 #if !defined(NO_ARDUPILOT_DIALECT)
     APMMavlinkStreamRateSettings*   _apmMavlinkStreamRateSettings;
 #endif
     SIYISettings*                   _siyiSettings;
+    RemoteIDSettings*               _remoteIDSettings;
 };
 
 #endif
