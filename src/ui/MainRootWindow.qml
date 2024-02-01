@@ -119,23 +119,23 @@ ApplicationWindow {
         return globals.validationError
     }
 
-    function viewSwitch(currentToolbar) {
-        flightView.visible      = false
-        planView.visible        = false
-        analyzeView.visible     = false
-        setupView.visible       = false
-        appSettings.visible     = false
-        toolbar.currentToolbar  = currentToolbar
-    }
+//    function viewSwitch(currentToolbar) {
+//        flightView.visible      = false
+//        planView.visible        = false
+//        analyzeView.visible     = false
+//        setupView.visible       = false
+//        appSettings.visible     = false
+//        toolbar.currentToolbar  = currentToolbar
+//    }
 
-    function showFlyView() {
-        if (!flightView.visible) {
-            mainWindow.showPreFlightChecklistIfNeeded()
-        }
-        mainWindow.popView()
-        //viewSwitch(toolbar.flyViewToolbar)
-        //flightView.visible = true
-    }
+//    function showFlyView() {
+//        if (!flightView.visible) {
+//            mainWindow.showPreFlightChecklistIfNeeded()
+//        }
+//        mainWindow.popView()
+//        //viewSwitch(toolbar.flyViewToolbar)
+//        //flightView.visible = true
+//    }
 
     function showPlanView() {
         stackView.push(planViewComponent)

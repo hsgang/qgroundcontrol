@@ -94,13 +94,12 @@ Rectangle {
                         onClicked: {
                             checked = true
                             _currentSelection = object
-                            //console.log("clicked", object, object.link)
+                            console.log("clicked", object, object.link)
                         }
                     }
                 }
             }
         } // qgcflickable
-
     } //rectangle
 
     Row {
@@ -244,13 +243,12 @@ Rectangle {
                                     model:                  QGroundControl.linkManager.linkTypeStrings
                                     currentIndex:           editingConfig.linkType
 
-                                    onActivated: { (index)=>{
+                                    onActivated: {
                                         if (index !== editingConfig.linkType) {
                                             // Save current name
                                             var name = nameField.text
                                             // Create new link configuration
                                             editingConfig = QGroundControl.linkManager.createConfiguration(index, name)
-                                        }
                                         }
                                     }
                                 }
