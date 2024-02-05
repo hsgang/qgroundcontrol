@@ -50,8 +50,8 @@ Button {
             anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
             anchors.left:           parent.left
             anchors.verticalCenter: parent.verticalCenter
-            width:                  ScreenTools.defaultFontPixelHeight * 1.5
-            height:                 ScreenTools.defaultFontPixelHeight * 1.5
+            width:                  ScreenTools.defaultFontPixelHeight * 1.2
+            height:                 ScreenTools.defaultFontPixelHeight * 1.2
             fillMode:               Image.PreserveAspectFit
             mipmap:                 true
             color:                  imageColor ? imageColor : (control.setupComplete ? qgcPal.text : "red")
