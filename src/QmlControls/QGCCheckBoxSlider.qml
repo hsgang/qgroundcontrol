@@ -11,6 +11,7 @@ import QtQuick          2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts  1.15
 
+import QGroundControl               1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.ScreenTools   1.0
 
@@ -19,17 +20,32 @@ AbstractButton   {
     checkable:      true
     padding:        0
 
+    property alias description:         _description.text
+
     QGCPalette { id: qgcPal; colorGroupEnabled: control.enabled }
 
     contentItem: Item {
         implicitWidth:  label.contentWidth + indicator.width + ScreenTools.defaultFontPixelWidth
-        implicitHeight: label.contentHeight
+        implicitHeight: label.contentHeight + (description.length > 0 ? _description.contentHeight : 0)
 
-        QGCLabel { 
-            id:             label
-            anchors.left:   parent.left
-            text:           visible ? control.text : "X"
-            visible:        control.text !== ""
+        ColumnLayout {
+            id:                 labelLayout
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            spacing : ScreenTools.defaultFontPixelHeight * 0.2
+            QGCLabel {
+                id:             label
+                //anchors.left:   parent.left
+                text:           visible ? control.text : "X"
+                visible:        control.text !== ""
+            }
+            QGCLabel {
+                id:                 _description
+                visible:            description.length > 0
+                Layout.fillWidth:   true
+                font.pointSize:     ScreenTools.smallFontPointSize
+                color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
+            }
         }
     
         Rectangle {

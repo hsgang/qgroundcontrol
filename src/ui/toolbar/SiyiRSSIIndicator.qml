@@ -22,92 +22,6 @@ Item {
     property real _columnSpacing:   ScreenTools.defaultFontPixelHeight / 3
     property real _margins:         ScreenTools.defaultFontPixelHeight / 2
 
-    Component {
-        id: siyiStatusInfo
-
-        ToolIndicatorPage{
-            showExpand: false
-
-            property real _margins: ScreenTools.defaultFontPixelHeight / 2
-
-            contentComponent: Component {
-                ColumnLayout {
-                    Layout.preferredWidth:  parent.width
-                    spacing:                _margins
-
-                    QGCLabel {
-                        id:                 telemLabel
-                        text:               qsTr("Network Status")
-                        font.family:        ScreenTools.demiboldFontFamily
-                        Layout.alignment:   Qt.AlignHCenter
-                    }
-
-                    Rectangle {
-                        Layout.preferredHeight: siyiColumnLayout.height + _margins
-                        Layout.preferredWidth:  siyiColumnLayout.width + _margins
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 4
-                        Layout.fillWidth:       true
-
-                        ColumnLayout {
-                            id:                 siyiColumnLayout
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
-                            spacing:            _columnSpacing
-
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Signal")
-                                valueText:  transmitter.signalQuality + " %"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("RSSI")
-                                valueText:  transmitter.rssi + " dBm"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Inactive Time")
-                                valueText:  transmitter.inactiveTime + " ms"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Upstream")
-                                valueText:  (transmitter.upStream / 1024).toFixed(1) + " KB/s"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Downstream")
-                                valueText:  (transmitter.downStream / 1024).toFixed(1) + " KB/s"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("TxBandwidth")
-                                valueText:  (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("RxBandwidth")
-                                valueText:  (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Frequency")
-                                valueText:  transmitter.freq + " Mhz"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Channel")
-                                valueText:  transmitter.channel
-                            }
-                        }
-                    }
-                }
-            }
-        } //ToolIndicatorPage
-    }
-
     Row{
         id:             siyirssiRow
         anchors.top:    parent.top
@@ -161,10 +75,64 @@ Item {
     }
 
     MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            //mainWindow.showIndicatorPopup(_root, siyiStatusInfo)
-            mainWindow.showIndicatorDrawer(siyiStatusInfo)
-        }
+        anchors.fill:   parent
+        onClicked:      mainWindow.showIndicatorDrawer(siyiStatusInfo)
+    }
+
+    Component {
+        id: siyiStatusInfo
+
+        ToolIndicatorPage{
+            showExpand: false
+
+            property real _margins: ScreenTools.defaultFontPixelHeight / 2
+
+            contentComponent: Component {
+                ColumnLayout {
+                    spacing:                _margins
+
+                    SettingsGroupLayout {
+                        heading:            qsTr("Network Status")
+
+                        LabelledLabel {
+                            label:  qsTr("Signal")
+                            labelText:  transmitter.signalQuality + " %"
+                        }
+                        LabelledLabel {
+                            label:  qsTr("RSSI")
+                            labelText:  transmitter.rssi + " dBm"
+                        }
+                        LabelledLabel {
+                            label:  qsTr("Inactive Time")
+                            labelText:  transmitter.inactiveTime + " ms"
+                        }
+                        LabelledLabel {
+                            label:  qsTr("Upstream")
+                            labelText:  (transmitter.upStream / 1024).toFixed(1) + " KB/s"
+                        }
+                        LabelledLabel {
+                            label:  qsTr("Downstream")
+                            labelText:  (transmitter.downStream / 1024).toFixed(1) + " KB/s"
+                        }
+                        LabelledLabel {
+                            label:  qsTr("TxBandwidth")
+                            labelText:  (transmitter.txBanWidth / 1024).toFixed(1) + " Mb/s"
+                        }
+                        LabelledLabel {
+                            label:  qsTr("RxBandwidth")
+                            labelText:  (transmitter.rxBanWidth / 1024).toFixed(1) + " Mb/s"
+                        }
+                        LabelledLabel {
+                            label:  qsTr("Frequency")
+                            labelText:  transmitter.freq + " Mhz"
+                        }
+                        LabelledLabel {
+                            label:  qsTr("Channel")
+                            labelText:  transmitter.channel
+                        }
+                    }
+                }
+            }
+        } //ToolIndicatorPage
     }
 }

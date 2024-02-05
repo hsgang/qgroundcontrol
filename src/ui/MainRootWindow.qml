@@ -321,7 +321,7 @@ ApplicationWindow {
             id:     mainLayoutRect
             width:  mainLayout.width + (mainLayout.anchors.margins * 2)
             height: parent.height
-            color:  qgcPal.window
+            color:  qgcPal.windowShadeDark
 
             QGCFlickable {
                 anchors.top:        parent.top

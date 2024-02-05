@@ -23,12 +23,12 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, distanceUnits)
         // Distance/Area/Speed units settings can't be loaded from json since it creates an infinite loop of meta data loading.
         QStringList     enumStrings;
         QVariantList    enumValues;
-        enumStrings << "Feet" << "Meters";
+        enumStrings << tr("Feet") << tr("Meters");
         enumValues << QVariant::fromValue(static_cast<uint32_t>(DistanceUnitsFeet))
                    << QVariant::fromValue(static_cast<uint32_t>(DistanceUnitsMeters));
         FactMetaData* metaData = new FactMetaData(FactMetaData::valueTypeUint32, this);
         metaData->setName(distanceUnitsName);
-        metaData->setShortDescription("distance units");
+        metaData->setShortDescription(tr("Distance"));
         metaData->setEnumInfo(enumStrings, enumValues);
         DistanceUnits defaultDistanceUnit = DistanceUnitsMeters;
         switch(QLocale::system().measurementSystem()) {
@@ -53,12 +53,12 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, horizontalDistanceUnits)
         // Distance/Area/Speed units settings can't be loaded from json since it creates an infinite loop of meta data loading.
         QStringList     enumStrings;
         QVariantList    enumValues;
-        enumStrings << "Feet" << "Meters";
+        enumStrings << tr("Feet") << tr("Meters");
         enumValues << QVariant::fromValue(static_cast<uint32_t>(HorizontalDistanceUnitsFeet))
                    << QVariant::fromValue(static_cast<uint32_t>(HorizontalDistanceUnitsMeters));
         FactMetaData* metaData = new FactMetaData(FactMetaData::valueTypeUint32, this);
         metaData->setName(horizontalDistanceUnitsName);
-        metaData->setShortDescription("Distance units");
+        metaData->setShortDescription(tr("Distance units"));
         metaData->setEnumInfo(enumStrings, enumValues);
 
         HorizontalDistanceUnits defaultHorizontalDistanceUnit = HorizontalDistanceUnitsMeters;
@@ -84,12 +84,12 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, verticalDistanceUnits)
         // Distance/Area/Speed units settings can't be loaded from json since it creates an infinite loop of meta data loading.
         QStringList     enumStrings;
         QVariantList    enumValues;
-        enumStrings << "Feet" << "Meters";
+        enumStrings << tr("Feet") << tr("Meters");
         enumValues << QVariant::fromValue(static_cast<uint32_t>(VerticalDistanceUnitsFeet))
                    << QVariant::fromValue(static_cast<uint32_t>(VerticalDistanceUnitsMeters));
         FactMetaData* metaData = new FactMetaData(FactMetaData::valueTypeUint32, this);
         metaData->setName(verticalDistanceUnitsName);
-        metaData->setShortDescription("Altitude units");
+        metaData->setShortDescription(tr("Altitude units"));
         metaData->setEnumInfo(enumStrings, enumValues);
         VerticalDistanceUnits defaultVerticalAltitudeUnit = VerticalDistanceUnitsMeters;
         switch(QLocale::system().measurementSystem()) {
@@ -114,7 +114,7 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, areaUnits)
         // Distance/Area/Speed units settings can't be loaded from json since it creates an infinite loop of meta data loading.
         QStringList     enumStrings;
         QVariantList    enumValues;
-        enumStrings << "SquareFeet" << "SquareMeters" << "SquareKilometers" << "Hectares" << "Acres" << "SquareMiles";
+        enumStrings << tr("SquareFeet") << tr("SquareMeters") << tr("SquareKilometers") << tr("Hectares") << tr("Acres") << tr("SquareMiles");
         enumValues <<
             QVariant::fromValue(static_cast<uint32_t>(AreaUnitsSquareFeet)) <<
             QVariant::fromValue(static_cast<uint32_t>(AreaUnitsSquareMeters)) <<
@@ -124,7 +124,7 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, areaUnits)
             QVariant::fromValue(static_cast<uint32_t>(AreaUnitsSquareMiles));
         FactMetaData* metaData = new FactMetaData(FactMetaData::valueTypeUint32, this);
         metaData->setName(areaUnitsName);
-        metaData->setShortDescription("Area units");
+        metaData->setShortDescription(tr("Area"));
         metaData->setEnumInfo(enumStrings, enumValues);
 
         AreaUnits defaultAreaUnit = AreaUnitsSquareMeters;
@@ -150,7 +150,7 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, speedUnits)
         // Distance/Area/Speed units settings can't be loaded from json since it creates an infinite loop of meta data loading.
         QStringList     enumStrings;
         QVariantList    enumValues;
-        enumStrings << "Feet/second" << "Meters/second" << "Miles/hour" << "Kilometers/hour" << "Knots";
+        enumStrings << tr("Feet/second") << tr("Meters/second") << tr("Miles/hour") << tr("Kilometers/hour") << tr("Knots");
         enumValues <<
             QVariant::fromValue(static_cast<uint32_t>(SpeedUnitsFeetPerSecond)) <<
             QVariant::fromValue(static_cast<uint32_t>(SpeedUnitsMetersPerSecond)) <<
@@ -159,7 +159,7 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, speedUnits)
             QVariant::fromValue(static_cast<uint32_t>(SpeedUnitsKnots));
         FactMetaData* metaData = new FactMetaData(FactMetaData::valueTypeUint32, this);
         metaData->setName(speedUnitsName);
-        metaData->setShortDescription("Speed units");
+        metaData->setShortDescription(tr("Speed"));
         metaData->setEnumInfo(enumStrings, enumValues);
 
         SpeedUnits defaultSpeedUnit = SpeedUnitsMetersPerSecond;
@@ -185,11 +185,11 @@ DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, temperatureUnits)
         // Units settings can't be loaded from json since it creates an infinite loop of meta data loading.
         QStringList     enumStrings;
         QVariantList    enumValues;
-        enumStrings << "Celsius" << "Fahrenheit";
+        enumStrings << tr("Celsius") << tr("Fahrenheit");
         enumValues << QVariant::fromValue(static_cast<uint32_t>(TemperatureUnitsCelsius)) << QVariant::fromValue(static_cast<uint32_t>(TemperatureUnitsFarenheit));
         FactMetaData* metaData = new FactMetaData(FactMetaData::valueTypeUint32, this);
         metaData->setName(temperatureUnitsName);
-        metaData->setShortDescription("Temperature units");
+        metaData->setShortDescription(tr("Temperature"));
         metaData->setEnumInfo(enumStrings, enumValues);
 
         TemperatureUnits defaultTemperatureUnit = TemperatureUnitsCelsius;

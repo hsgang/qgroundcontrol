@@ -29,42 +29,6 @@ Item {
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _rcRSSIAvailable:   _activeVehicle ? _activeVehicle.rcRSSI > 0 && _activeVehicle.rcRSSI <= 100 : false
 
-    Component {
-        id: rcRSSIInfo
-
-        ToolIndicatorPage{
-            showExpand: false
-
-            property real _margins: ScreenTools.defaultFontPixelHeight
-
-            contentComponent: Component {
-                ColumnLayout {
-                    Layout.preferredWidth:  parent.width
-                    spacing:                ScreenTools.defaultFontPixelHeight
-
-                    QGCLabel {
-                        id:                 rssiLabel
-                        text:               _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
-                        font.family:        ScreenTools.demiboldFontFamily
-                        Layout.alignment:   Qt.AlignHCenter
-                    }
-
-                    ColumnLayout {
-                        id:                 rcrssiGrid
-                        spacing:            ScreenTools.defaultFontPixelHeight / 2
-                        Layout.fillWidth:   true
-
-                        ComponentLabelValueRow {
-                            labelText:  qsTr("RC RSSI")
-                            valueText:  _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
-                            visible:    _rcRSSIAvailable
-                        }
-                    }
-                }
-            }
-        }
-    } //Component
-
     Row {
         id:             rssiRow
         anchors.top:    parent.top
@@ -102,9 +66,31 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked: {
-            //mainWindow.showIndicatorPopup(_root, rcRSSIInfo)
-            mainWindow.showIndicatorDrawer(rcRSSIInfo)
+        onClicked:      mainWindow.showIndicatorDrawer(rcRSSIInfo)
+    }
+
+    Component {
+        id: rcRSSIInfo
+
+        ToolIndicatorPage{
+            showExpand: false
+
+            property real _margins: ScreenTools.defaultFontPixelHeight
+
+            contentComponent: Component {
+                ColumnLayout {
+                    spacing:                ScreenTools.defaultFontPixelHeight
+
+                    SettingsGroupLayout {
+                        heading: _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
+
+                        LabelledLabel {
+                            label:      qsTr("RC RSSI")
+                            labelText:  _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
+                        }
+                    }
+                }
+            }
         }
     }
 }

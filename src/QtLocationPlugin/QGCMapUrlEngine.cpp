@@ -52,25 +52,25 @@ UrlFactory::UrlFactory() : _timeout(5 * 1000) {
     _providersTable["Bing Satellite"] = new BingSatelliteMapProvider(this);
     _providersTable["Bing Hybrid"]    = new BingHybridMapProvider(this);
 
-    _providersTable["Statkart Topo"] = new StatkartMapProvider(this);
-    _providersTable["Statkart Basemap"] = new StatkartBaseMapProvider(this);
+    // _providersTable["Statkart Topo"] = new StatkartMapProvider(this);
+    // _providersTable["Statkart Basemap"] = new StatkartBaseMapProvider(this);
 
-    _providersTable["Eniro Topo"] = new EniroMapProvider(this);
+    // _providersTable["Eniro Topo"] = new EniroMapProvider(this);
 
     // To be add later on Token entry !
     //_providersTable["Esri World Street"] = new EsriWorldStreetMapProvider(this);
     //_providersTable["Esri World Satellite"] = new EsriWorldSatelliteMapProvider(this);
     //_providersTable["Esri Terrain"] = new EsriTerrainMapProvider(this);
 
-    _providersTable["Mapbox Streets"]      = new MapboxStreetMapProvider(this);
-    _providersTable["Mapbox Light"]        = new MapboxLightMapProvider(this);
-    _providersTable["Mapbox Dark"]         = new MapboxDarkMapProvider(this);
-    _providersTable["Mapbox Satellite"]    = new MapboxSatelliteMapProvider(this);
-    _providersTable["Mapbox Hybrid"]       = new MapboxHybridMapProvider(this);
-    _providersTable["Mapbox StreetsBasic"] = new MapboxStreetsBasicMapProvider(this);
-    _providersTable["Mapbox Outdoors"]     = new MapboxOutdoorsMapProvider(this);
-    _providersTable["Mapbox Bright"]       = new MapboxBrightMapProvider(this);
-    _providersTable["Mapbox Custom"]       = new MapboxCustomMapProvider(this);
+    // _providersTable["Mapbox Streets"]      = new MapboxStreetMapProvider(this);
+    // _providersTable["Mapbox Light"]        = new MapboxLightMapProvider(this);
+    // _providersTable["Mapbox Dark"]         = new MapboxDarkMapProvider(this);
+    // _providersTable["Mapbox Satellite"]    = new MapboxSatelliteMapProvider(this);
+    // _providersTable["Mapbox Hybrid"]       = new MapboxHybridMapProvider(this);
+    // _providersTable["Mapbox StreetsBasic"] = new MapboxStreetsBasicMapProvider(this);
+    // _providersTable["Mapbox Outdoors"]     = new MapboxOutdoorsMapProvider(this);
+    // _providersTable["Mapbox Bright"]       = new MapboxBrightMapProvider(this);
+    // _providersTable["Mapbox Custom"]       = new MapboxCustomMapProvider(this);
 
     //_providersTable["MapQuest Map"] = new MapQuestMapMapProvider(this);
     //_providersTable["MapQuest Sat"] = new MapQuestSatMapProvider(this);
@@ -78,15 +78,15 @@ UrlFactory::UrlFactory() : _timeout(5 * 1000) {
     _providersTable["VWorld Street Map"] = new VWorldStreetMapProvider(this);
     _providersTable["VWorld Satellite Map"] = new VWorldSatMapProvider(this);
 
-    _providersTable[kCopernicusElevationProviderKey] = new CopernicusElevationProvider(this);
+    // _providersTable[kCopernicusElevationProviderKey] = new CopernicusElevationProvider(this);
 
-    _providersTable["Japan-GSI Contour"] = new JapanStdMapProvider(this);
-    _providersTable["Japan-GSI Seamless"] = new JapanSeamlessMapProvider(this);
-    _providersTable["Japan-GSI Anaglyph"] = new JapanAnaglyphMapProvider(this);
-    _providersTable["Japan-GSI Slope"] = new JapanSlopeMapProvider(this);
-    _providersTable["Japan-GSI Relief"] = new JapanReliefMapProvider(this);
+    // _providersTable["Japan-GSI Contour"] = new JapanStdMapProvider(this);
+    // _providersTable["Japan-GSI Seamless"] = new JapanSeamlessMapProvider(this);
+    // _providersTable["Japan-GSI Anaglyph"] = new JapanAnaglyphMapProvider(this);
+    // _providersTable["Japan-GSI Slope"] = new JapanSlopeMapProvider(this);
+    // _providersTable["Japan-GSI Relief"] = new JapanReliefMapProvider(this);
 
-    _providersTable["LINZ Basemap"] = new LINZBasemapMapProvider(this);
+    // _providersTable["LINZ Basemap"] = new LINZBasemapMapProvider(this);
 
     _providersTable["CustomURL Custom"] = new CustomURLMapProvider(this);
 }

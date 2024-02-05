@@ -8,14 +8,16 @@
     "shortDesc": "Minimum altitude for guided actions altitude slider.",
     "type":             "double",
     "units":            "m",
-    "default":     2
+    "default":     2,
+    "decimalPlaces":    1
 },
 {
     "name":             "guidedMaximumAltitude",
     "shortDesc": "Maximum altitude for guided actions altitude slider.",
     "type":             "double",
     "units":            "m",
-    "default":     150
+    "default":     150,
+    "decimalPlaces":    1
 },
 {
     "name":             "showLogReplayStatusBar",
@@ -77,7 +79,8 @@
     "type":             "double",
     "units":            "m",
     "default":     1000,
-    "min":              1
+    "min":              1,
+    "decimalPlaces":    1
 },
 {
     "name":         "showAtmosphericValueBar",

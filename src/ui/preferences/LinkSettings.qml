@@ -23,7 +23,7 @@ Rectangle {
     anchors.fill:       parent
     anchors.margins:    ScreenTools.defaultFontPixelWidth
 
-    property real   _borderWidth:       ScreenTools.defaultFontPixelWidth * 0.2
+    property real   _borderWidth:       1 //ScreenTools.defaultFontPixelWidth * 0.2
     property real   _margins:           ScreenTools.defaultFontPixelWidth
 
     property var _currentSelection:     null

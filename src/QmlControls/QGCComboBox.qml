@@ -37,7 +37,7 @@ T.ComboBox {
 
     property var    _qgcPal:            QGCPalette { colorGroupEnabled: enabled }
     property real   _largestTextWidth:  0
-    property real   _popupWidth:        sizeToContents ? _largestTextWidth + itemDelegateMetrics.leftPadding + itemDelegateMetrics.rightPadding : control.width
+    property real   _popupWidth:        sizeToContents ? Math.max(_largestTextWidth + itemDelegateMetrics.leftPadding + itemDelegateMetrics.rightPadding, control.width) : control.width
     property bool   _onCompleted:       false
 
     TextMetrics {
@@ -119,6 +119,8 @@ T.ComboBox {
             anchors.horizontalCenter:   centeredLabel ? parent.horizontalCenter : undefined
             text:                       control.alternateText === "" ? control.currentText : control.alternateText
             font:                       control.font
+            width:                      parent.width
+            elide:                      Text.ElideRight
             color:                      _qgcPal.text
         }
     }

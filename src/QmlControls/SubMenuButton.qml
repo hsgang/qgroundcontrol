@@ -1,4 +1,4 @@
-import QtQuick                  2.3
+import QtQuick                  2.15
 import QtQuick.Controls         1.2
 import QtQuick.Controls.Styles  1.4
 import QtGraphicalEffects       1.0
@@ -15,7 +15,7 @@ Button {
     property bool   setupIndicator: true                                    ///< true: show setup complete indicator
     property var    imageColor:     undefined
     property string imageResource:  "/qmlimages/subMenuButtonImage.png"     ///< Button image
-    property size   sourceSize:     Qt.size(ScreenTools.defaultFontPixelHeight * 1.2, ScreenTools.defaultFontPixelHeight * 1.2)
+    property size   sourceSize:     Qt.size(ScreenTools.defaultFontPixelHeight * 2, ScreenTools.defaultFontPixelHeight * 2)
 
     text:               "Button"  ///< Pass in your own button text
     activeFocusOnPress: true
@@ -49,8 +49,8 @@ Button {
                 anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
                 anchors.left:           parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                width:                  ScreenTools.defaultFontPixelHeight * 2
-                height:                 ScreenTools.defaultFontPixelHeight * 2
+                width:                  ScreenTools.defaultFontPixelHeight * 1.2
+                height:                 ScreenTools.defaultFontPixelHeight * 1.2
                 fillMode:               Image.PreserveAspectFit
                 mipmap:                 true
                 color:                  imageColor ? imageColor : (control.setupComplete ? qgcPal.text : "red")

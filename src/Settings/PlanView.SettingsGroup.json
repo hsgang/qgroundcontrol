@@ -39,7 +39,8 @@
     "type":         "double",
     "default":      300.0,
     "units":        "m",
-    "min":          100.0
+    "min":          100.0,
+    "decimalPlaces":    1
 }
 ]
 }

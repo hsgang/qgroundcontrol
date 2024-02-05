@@ -58,7 +58,6 @@ ToolIndicatorPage {
 
                     onClicked: {
                         QGroundControl.linkManager.createConnectedLink(object)
-                        //drawer.close()
                         componentDrawer.visible = false
                     }
                 }
@@ -70,25 +69,21 @@ ToolIndicatorPage {
         ColumnLayout {
             spacing: ScreenTools.defaultFontPixelHeight / 2
 
-            IndicatorPageGroupLayout {
-                RowLayout {
-                    QGCLabel { Layout.fillWidth: true; text: qsTr("Communication Links") }
+            SettingsGroupLayout {
+                LabelledButton {
+                    label:      qsTr("Communication Links")
+                    buttonText: qsTr("Configure")
 
-                    QGCButton {
-                        text:       qsTr("Configure")
-                        onClicked: {
-                            mainWindow.showSettingsTool(qsTr("Comm Links"))
-                            //drawer.close()
-                            componentDrawer.visible = false
-                        }
+                    onClicked: {
+                        mainWindow.showAppSettings(qsTr("Comm Links"))
+                        componentDrawer.visible = false
                     }
                 }
             }
 
-            IndicatorPageGroupLayout {
+            SettingsGroupLayout {
                 heading:        qsTr("Auto Connect")
                 visible:        autoConnectSettings.visible
-                showDivider:    false
 
                 Repeater {
                     id: autoConnectRepeater
@@ -96,19 +91,13 @@ ToolIndicatorPage {
                     model: [
                         autoConnectSettings.autoConnectPixhawk,
                         autoConnectSettings.autoConnectSiKRadio,
-                        //autoConnectSettings.autoConnectPX4Flow,
-                        //autoConnectSettings.autoConnectLibrePilot,
                         autoConnectSettings.autoConnectUDP,
-                        //autoConnectSettings.autoConnectZeroConf,
                     ]
 
                     property var names: [
                         qsTr("Pixhawk"),
                         qsTr("SiK Radio"),
-                        //qsTr("PX4 Flow"),
-                        //qsTr("LibrePilot"),
                         qsTr("UDP")
-                        //,qsTr("Zero-Conf")
                     ]
 
                     FactCheckBoxSlider {

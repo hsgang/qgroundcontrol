@@ -22,14 +22,20 @@ import MAVLink                              1.0
 //-------------------------------------------------------------------------
 //-- Battery Indicator
 Item {
-    id:             _root
+    id:             control
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
     width:          batteryIndicatorRow.width
 
-    property bool showIndicator: true
+    property bool       showIndicator:      true
+    property bool       waitForParameters:  false   // UI won't show until parameters are ready
+    property Component  expandedPageComponent
 
-    property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+    property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
+    // property Fact   _indicatorDisplay:  QGroundControl.settingsManager.batteryIndicatorSettings.display
+    // property bool   _showPercentage:    _indicatorDisplay.rawValue === 0
+    // property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
+    // property bool   _showBoth:          _indicatorDisplay.rawValue === 2
 
     property var _batterySettings:  QGroundControl.settingsManager.batterySettings
     property real _batteryCellCount: _batterySettings.batteryCellCount.value
@@ -53,121 +59,19 @@ Item {
             }
         }
     }
+
     MouseArea {
         anchors.fill:   parent
         onClicked: {
-            mainWindow.showIndicatorDrawer(batteryPopup)
+            mainWindow.showIndicatorDrawer(batteryIndicatorPage)
         }
     }
 
     Component {
-        id: batteryPopup
+        id: batteryIndicatorPage
 
-        ToolIndicatorPage {
-            showExpand: true
+        BatteryIndicatorPage {
 
-            property real _margins: ScreenTools.defaultFontPixelHeight
-
-            FactPanelController { id: controller }
-
-            contentComponent: Component {
-                BatteryIndicatorContentItem {
-                    Layout.preferredWidth: parent.width
-                }
-            }
-
-            expandedComponent: Component {
-                ColumnLayout {
-                    Layout.fillWidth:   true
-                    spacing:            ScreenTools.defaultFontPixelHeight / 2
-
-                    IndicatorPageGroupLayout {
-                        Layout.fillWidth:       true
-                        heading:                qsTr("Battery Settings")
-
-                        GridLayout {
-                            Layout.fillWidth:   true
-                            columns:            2
-                            columnSpacing:      ScreenTools.defaultFontPixelHeight
-
-                            //QGCLabel { text: qsTr("Show Cell Voltage") }
-                            FactCheckBoxSlider {
-                                text:                   qsTr("Show Cell Voltage")
-                                Layout.columnSpan:      2
-                                Layout.fillWidth:       true
-                                fact:                   _batterySettings.showCellVoltage
-                            }
-
-                            QGCLabel { text: qsTr("Battery Cells"); Layout.fillWidth: true}
-                            FactTextField {
-                                Layout.alignment:       Qt.AlignRight
-                                Layout.preferredWidth:  editFieldWidth
-                                fact:                   _batterySettings.batteryCellCount
-                                horizontalAlignment:    Text.AlignRight;
-                            }
-                        }
-                    }
-
-                    IndicatorPageGroupLayout {
-                        Layout.fillWidth:   true
-                        heading:            qsTr("Low Battery Failsafe")
-
-                        GridLayout {
-                            columns: 2
-                            columnSpacing: ScreenTools.defaultFontPixelHeight
-
-                            QGCLabel { text: qsTr("Battery Low Level") }
-                            FactTextField {
-                                Layout.fillWidth:       true
-                                Layout.preferredWidth:  editFieldWidth
-                                fact:                   controller.getParameterFact(-1, "BATT_LOW_VOLT")
-                                horizontalAlignment:    Text.AlignRight;
-                            }
-
-                            QGCLabel { text: qsTr("Battery Low Action") }
-                            FactComboBox {
-                                Layout.fillWidth:       true
-                                fact:                   controller.getParameterFact(-1, "BATT_FS_LOW_ACT")
-                                indexModel:             false
-                            }
-
-                            QGCLabel { text: qsTr("Battery Critical Level") }
-                            FactTextField {
-                                Layout.fillWidth:       true
-                                Layout.preferredWidth:  editFieldWidth
-                                fact:                   controller.getParameterFact(-1, "BATT_CRT_VOLT")
-                                horizontalAlignment:    Text.AlignRight;
-                            }
-
-                            QGCLabel { text: qsTr("Battery Critical Action") }
-                            FactComboBox {
-                                Layout.fillWidth:       true
-                                fact:                   controller.getParameterFact(-1, "BATT_FS_CRT_ACT")
-                                indexModel:             false
-                            }
-                        }
-                    }
-
-                    IndicatorPageGroupLayout {
-                        Layout.fillWidth:   true
-                        showDivider:        false
-
-                        RowLayout {
-                            Layout.fillWidth: true
-
-                            QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Power") }
-                            QGCButton {
-                                text: qsTr("Configure")
-                                onClicked: {
-                                    mainWindow.showVehicleSetupTool(qsTr("Power"))
-                                    //indicatorDrawer.close()
-                                    componentDrawer.visible = false
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -195,7 +99,7 @@ Item {
                             }else if (battery.percentRemaining.rawValue >=30 ) {
                                 isBlink = false
                                 return qgcPal.colorGreen //qgcPal.text
-                            }                            
+                            }
                         } else {
                             return qgcPal.text
                         }
@@ -240,7 +144,16 @@ Item {
                 } else if (battery.chargeState.rawValue !== MAVLink.MAV_BATTERY_CHARGE_STATE_UNDEFINED) {
                     return battery.chargeState.enumStringValue
                 }
-                return ""
+                return qsTr("n/a")
+            }
+
+            function getBatteryVoltageText() {
+                if (!isNaN(battery.voltage.rawValue)) {
+                    return battery.voltage.valueString + battery.voltage.units
+                } else if (battery.chargeState.rawValue !== MAVLink.MAV_BATTERY_CHARGE_STATE_UNDEFINED) {
+                    return battery.chargeState.enumStringValue
+                }
+                return qsTr("n/a")
             }
 
             function getBatteryIcon(){
@@ -324,7 +237,30 @@ Item {
                 fillMode:           Image.PreserveAspectCrop //Image.PreserveAspectFit
                 color:              getBatteryColor()
             }
+
+//            ColumnLayout {
+//                id:                     batteryInfoColumn
+//                anchors.top:            parent.top
+//                anchors.bottom:         parent.bottom
+//                spacing:                0
+
+//                QGCLabel {
+//                    Layout.alignment:       Qt.AlignHCenter
+//                    verticalAlignment:      Text.AlignVCenter
+//                    color:                  getBatteryColor()
+//                    text:                   getBatteryPercentageText()
+//                    font.pointSize:         _showBoth ? ScreenTools.defaultFontPointSize : ScreenTools.mediumFontPointSize
+//                    visible:                _showBoth || _showPercentage
+//                }
+
+//                QGCLabel {
+//                    Layout.alignment:       Qt.AlignHCenter
+//                    font.pointSize:         _showBoth ? ScreenTools.defaultFontPointSize : ScreenTools.mediumFontPointSize
+//                    color:                  getBatteryColor()
+//                    text:                   getBatteryVoltageText()
+//                    visible:                _showBoth || _showVoltage
+//                }
+//            }
         }
     }
-
 }

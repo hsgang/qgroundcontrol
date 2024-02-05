@@ -22,7 +22,7 @@ Rectangle {
     color:  qgcPal.window
     z:      QGroundControl.zOrderTopMost
 
-    ExclusiveGroup { id: setupButtonGroup }
+    ExclusiveGroup { id : setupButtonGroup }
 
     readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
     readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
@@ -33,7 +33,7 @@ Rectangle {
     property bool _first: true
 
     property bool _commingFromRIDSettings:  false
-    
+
     function showSettingsPage(settingsPage) {
         for (var i=0; i<buttonRepeater.count; i++) {
             var button = buttonRepeater.itemAt(i)
@@ -49,12 +49,14 @@ Rectangle {
     Component.onCompleted: {
         //-- Default Settings
         if (globals.commingFromRIDIndicator) {
-            __rightPanel.source = "qrc:/qml/RemoteIDSettings.qml"
+            rightPanel.source = "qrc:/qml/RemoteIDSettings.qml"
             globals.commingFromRIDIndicator = false
         } else {
-            __rightPanel.source = QGroundControl.corePlugin.settingsPages[QGroundControl.corePlugin.defaultSettings].url
+            rightPanel.source =  "/qml/GeneralSettings.qml"
         }
     }
+
+    SettingsPagesModel { id: settingsPagesModel }
 
     QGCFlickable {
         id:                 buttonList
@@ -95,61 +97,43 @@ Rectangle {
 
             Repeater {
                 id:     buttonRepeater
-                model:  QGroundControl.corePlugin.settingsPages
+                model:  settingsPagesModel
 
                 Component.onCompleted:  itemAt(0).checked = true
 
                 SubMenuButton {
                     id:                 subMenu
-                    imageResource:      modelData.icon
+                    imageResource:      menuIcon
                     setupIndicator:     false
-                    exclusiveGroup:     setupButtonGroup
-                    text:               modelData.title
-                    visible:            modelData.url != "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
+                    exclusiveGroup:      setupButtonGroup
+                    // autoExclusive:      true
+                    text:               name
+                    visible:            url !== "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
+                    enabled:            _enabled
 
                     onClicked: {
-                        __rightPanel.source = modelData.url
-                        //__rightPanel.title  = modelData.title
-                        checked             = true
+
+                        focus = true
+                        if (mainWindow.preventViewSwitch()) {
+                            return
+                        }
+                        if (rightPanel.source !== url) {
+                            rightPanel.source = url
+                        }
+                        checked = true
                     }
                 }
-
-//                QGCButton {
-//                    height:             _buttonHeight
-//                    text:               modelData.title
-//                    autoExclusive:      true
-//                    Layout.fillWidth:   true
-//                    visible:            modelData.url != "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
-
-//                    onClicked: {
-//                        if (mainWindow.preventViewSwitch()) {
-//                            return
-//                        }
-//                        if (__rightPanel.source !== modelData.url) {
-//                            __rightPanel.source = modelData.url
-//                        }
-//                        checked = true
-//                    }
-
-//                    Component.onCompleted: {
-//                        if (globals.commingFromRIDIndicator) {
-//                            _commingFromRIDSettings = true
-//                        }
-//                        if(_first) {
-//                            _first = false
-//                            checked = true
-//                        }
-//                        if (_commingFromRIDSettings) {
-//                            checked = false
-//                            _commingFromRIDSettings = false
-//                            if (modelData.url == "qrc:/qml/RemoteIDSettings.qml") {
-//                                checked = true
-//                            }
-//                        }
-//                    }
-//                }
             }
         }
+    }
+
+    Rectangle {
+        id:  topDividerBar
+        anchors.top:            parent.top
+        anchors.right:          parent.right
+        anchors.left:           parent.left
+        height:                 1
+        color:                  Qt.darker(QGroundControl.globalPalette.text, 4)
     }
 
     Rectangle {
@@ -166,7 +150,7 @@ Rectangle {
 
     //-- Panel Contents
     Loader {
-        id:                     __rightPanel
+        id:                     rightPanel
         anchors.leftMargin:     _horizontalMargin
         anchors.rightMargin:    _horizontalMargin
         anchors.topMargin:      _verticalMargin

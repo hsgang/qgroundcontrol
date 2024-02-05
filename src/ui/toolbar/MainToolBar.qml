@@ -171,7 +171,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         color:                  qgcPal.windowShade //"transparent"
         border.color:           qgcPal.text
-        radius:                 height / 2 //ScreenTools.defaultFontPixelHeight / 4
+        radius:                 ScreenTools.defaultFontPixelHeight / 4
         visible:                currentToolbar == flyViewToolbar && _activeVehicle
 
         Loader{
@@ -242,7 +242,7 @@ Rectangle {
 
     Rectangle {
         id:                     widgetControlButton
-        anchors.right:          parent.right
+        anchors.right:          !ScreenTools.isMobile ? brandImageRect.left : parent.right
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
@@ -268,6 +268,79 @@ Rectangle {
         MouseArea{
             anchors.fill:       parent
             onClicked:          mainWindow.showIndicatorDrawer(widgetControlComponent)
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    //-- Branding Logo
+
+    Rectangle {
+        id: brandImageRect
+        anchors.right:          parent.right
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        anchors.margins:        ScreenTools.defaultFontPixelHeight / 2
+        visible:                !ScreenTools.isMobile && currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+        color:                  "transparent"
+        border.color:           qgcPal.text
+        width:                  ScreenTools.defaultFontPixelHeight * 6
+        radius:                 ScreenTools.defaultFontPixelHeight / 4
+
+        Image {
+            id:                     brandImage
+            anchors.fill:           parent
+            anchors.margins:        ScreenTools.defaultFontPixelHeight / 4
+            // anchors.right:          parent.right
+            // anchors.top:            parent.top
+            // anchors.bottom:         parent.bottom
+            // anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
+            // visible:                !ScreenTools.isMobile && currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+            fillMode:               Image.PreserveAspectFit
+            source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
+            sourceSize.width: 256
+            sourceSize.height: 256
+            mipmap:                 true
+
+            property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
+            property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
+            property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
+            property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
+            property bool   _userBrandingIndoor:    _userBrandImageIndoor.length != 0
+            property bool   _userBrandingOutdoor:   _userBrandImageOutdoor.length != 0
+            property string _brandImageIndoor:      brandImageIndoor()
+            property string _brandImageOutdoor:     brandImageOutdoor()
+
+            function brandImageIndoor() {
+               if (_userBrandingIndoor) {
+                   return _userBrandImageIndoor
+               } else {
+                   if (_userBrandingOutdoor) {
+                       return _userBrandingOutdoor
+                   } else {
+                       if (_corePluginBranding) {
+                           return "/qmlimages/amp_logo_white.png" //QGroundControl.corePlugin.brandImageIndoor
+                       } else {
+                           return "/qmlimages/amp_logo_white.png" //_activeVehicle ? _activeVehicle.brandImageIndoor : ""
+                       }
+                   }
+               }
+            }
+
+            function brandImageOutdoor() {
+               if (_userBrandingOutdoor) {
+                   return _userBrandingOutdoor
+               } else {
+                   if (_userBrandingIndoor) {
+                       return _userBrandingIndoor
+                   } else {
+                       if (_corePluginBranding) {
+                           return "/qmlimages/amp_logo_blue.png" //QGroundControl.corePlugin.brandImageOutdoor
+                       } else {
+                           return "/qmlimages/amp_logo_blue.png" //_activeVehicle ? _activeVehicle.brandImageOutdoor : ""
+                       }
+                   }
+               }
+            }
         }
     }
 
@@ -366,223 +439,9 @@ Rectangle {
     Component {
         id: widgetControlComponent
 
-        ToolIndicatorPage{
-            showExpand: false
-
-            property real _margins: ScreenTools.defaultFontPixelHeight / 2
-
-            contentComponent: Component {
-                ColumnLayout {
-                    Layout.preferredWidth:  parent.width
-                    Layout.alignment:       Qt.AlignTop
-                    spacing:                _margins
-
-                    QGCLabel {
-                        text:                   qsTr("Payload")
-                        font.family:            ScreenTools.demiboldFontFamily
-                        Layout.fillWidth:       true
-                        horizontalAlignment:    Text.AlignHCenter
-                    }
-
-                    Rectangle {
-                        Layout.preferredHeight: payloadGridLayout.height + _margins
-                        Layout.preferredWidth:  payloadGridLayout.width + _margins
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 4
-                        Layout.fillWidth:       true
-
-                        GridLayout {
-                            id:                 payloadGridLayout
-                            flow:               GridLayout.LeftToRight
-                            columns:            2
-                            rowSpacing:         ScreenTools.defaultFontPixelHeight / 3
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
-
-                            QGCLabel{ text: qsTr("PhotoVideo Control") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue = checked ? 1 : 0
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
-
-                            QGCLabel{ text: qsTr("Mount Control") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
-
-                            QGCLabel{ text: qsTr("Winch Control") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue = checked ? 1 : 0
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
-
-                            QGCLabel{ text: qsTr("Chart Widget") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue = checked ? 1 : 0
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
-
-                            QGCLabel{ text: qsTr("Atmospheric Data") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue = checked ? 1 : 0
-                            }
-                        }
-                    }
-
-
-                    QGCLabel {
-                        text:                   qsTr("Status")
-                        font.family:            ScreenTools.demiboldFontFamily
-                        Layout.fillWidth:       true
-                        horizontalAlignment:    Text.AlignHCenter
-                    }
-
-                    Rectangle {
-                        Layout.preferredHeight: statusGridLayout.height + _margins
-                        Layout.preferredWidth:  statusGridLayout.width + _margins
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 4
-                        Layout.fillWidth:       true
-
-                        GridLayout {
-                            id:                 statusGridLayout
-                            flow:               GridLayout.LeftToRight
-                            columns:            2
-                            rowSpacing:         ScreenTools.defaultFontPixelHeight / 3
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
-
-                            QGCLabel{ text: qsTr("Mission Progress") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue = checked ? 1 : 0
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
-
-                            QGCLabel{ text: qsTr("Telemetry Panel") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue = checked ? 1 : 0
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
-
-                            QGCLabel{ text: qsTr("Vibration Status") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue = checked ? 1 : 0
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; Layout.columnSpan: 2;}
-
-                            QGCLabel{ text: qsTr("EKF Status") }
-                            QGCSwitch {
-                                checked:            QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue === true ? 1 : 0
-                                onClicked:          QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue = checked ? 1 : 0
-                            }
-                        }
-                    }
-
-                    QGCLabel {
-                        text:                   qsTr("FlyView Settings")
-                        font.family:            ScreenTools.demiboldFontFamily
-                        Layout.fillWidth:       true
-                        horizontalAlignment:    Text.AlignHCenter
-                    }
-
-                    Rectangle {
-                        Layout.preferredHeight: settingsLayout.height + _margins
-                        Layout.preferredWidth:  settingsLayout.width + _margins
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 4
-                        Layout.fillWidth:       true
-
-                        GridLayout {
-                            id:                 settingsLayout
-                            flow:               GridLayout.LeftToRight
-                            columns:            2
-                            rowSpacing:         _margins
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
-
-                            QGCLabel{ text: qsTr("Background Opacity"); Layout.columnSpan: 2; Layout.alignment: Qt.AlignHCenter }
-                            FactComboBox {
-                                Layout.columnSpan:  2
-                                Layout.fillWidth:   true
-                                fact:               QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
-                                indexModel:         false
-                            }
-                        }
-                    }
-
-                }
-            }
+        WidgetControlPanel {
         }
     }
-
-    //-------------------------------------------------------------------------
-    //-- Branding Logo
-//    Image {
-//        anchors.right:          parent.right
-//        anchors.top:            parent.top
-//        anchors.bottom:         parent.bottom
-//        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-//        visible:                currentToolbar !== planViewToolbar && _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
-//        fillMode:               Image.PreserveAspectFit
-//        source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
-//        mipmap:                 true
-
-//        property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
-//        property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
-//        property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
-//        property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
-//        property bool   _userBrandingIndoor:    _userBrandImageIndoor.length != 0
-//        property bool   _userBrandingOutdoor:   _userBrandImageOutdoor.length != 0
-//        property string _brandImageIndoor:      brandImageIndoor()
-//        property string _brandImageOutdoor:     brandImageOutdoor()
-
-//        function brandImageIndoor() {
-//            if (_userBrandingIndoor) {
-//                return _userBrandImageIndoor
-//            } else {
-//                if (_userBrandingOutdoor) {
-//                    return _userBrandingOutdoor
-//                } else {
-//                    if (_corePluginBranding) {
-//                        return QGroundControl.corePlugin.brandImageIndoor
-//                    } else {
-//                        return _activeVehicle ? _activeVehicle.brandImageIndoor : ""
-//                    }
-//                }
-//            }
-//        }
-
-//        function brandImageOutdoor() {
-//            if (_userBrandingOutdoor) {
-//                return _userBrandingOutdoor
-//            } else {
-//                if (_userBrandingIndoor) {
-//                    return _userBrandingIndoor
-//                } else {
-//                    if (_corePluginBranding) {
-//                        return QGroundControl.corePlugin.brandImageOutdoor
-//                    } else {
-//                        return _activeVehicle ? _activeVehicle.brandImageOutdoor : ""
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     // Small parameter download progress bar
     Rectangle {
