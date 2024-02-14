@@ -311,8 +311,6 @@
         <file alias="QGroundControl/FlightMap/QGCAttitudeHUD.qml">src/FlightMap/Widgets/QGCAttitudeHUD.qml</file>
         <file alias="QGroundControl/FlightMap/QGCAttitudeWidget.qml">src/FlightMap/Widgets/QGCAttitudeWidget.qml</file>
         <file alias="QGroundControl/FlightMap/QGCCompassWidget.qml">src/FlightMap/Widgets/QGCCompassWidget.qml</file>
-        <file alias="QGCInstrumentWidget.qml">src/FlightMap/Widgets/QGCInstrumentWidget.qml</file>
-        <file alias="QGCInstrumentWidgetAlternate.qml">src/FlightMap/Widgets/QGCInstrumentWidgetAlternate.qml</file>
         <file alias="QGroundControl/FlightMap/QGCPitchIndicator.qml">src/FlightMap/Widgets/QGCPitchIndicator.qml</file>
         <file alias="QGroundControl/FlightDisplay/SIYICameraControl.qml">src/FlightMap/Widgets/SIYICameraControl.qml</file>
         <file alias="QGroundControl/FlightMap/WinchControlPanel.qml">src/FlightMap/Widgets/WinchControlPanel.qml</file>
@@ -516,11 +514,9 @@
         <file alias="DebugWindow.qml">src/ui/preferences/DebugWindow.qml</file>
         <file alias="FlyViewSettings.qml">src/ui/preferences/FlyViewSettings.qml</file>
         <file alias="GeneralSettings.qml">src/ui/preferences/GeneralSettings.qml</file>
-        <file alias="GeneralSettings2.qml">src/ui/preferences/GeneralSettings2.qml</file>
         <file alias="HelpSettings.qml">src/ui/preferences/HelpSettings.qml</file>
         <file alias="LinkSettings.qml">src/ui/preferences/LinkSettings.qml</file>
         <file alias="LogReplaySettings.qml">src/ui/preferences/LogReplaySettings.qml</file>
-        <file alias="MavlinkSettings.qml">src/ui/preferences/MavlinkSettings.qml</file>
         <file alias="MockLink.qml">src/ui/preferences/MockLink.qml</file>
         <file alias="MockLinkSettings.qml">src/ui/preferences/MockLinkSettings.qml</file>
         <file alias="PlanViewSettings.qml">src/ui/preferences/PlanViewSettings.qml</file>

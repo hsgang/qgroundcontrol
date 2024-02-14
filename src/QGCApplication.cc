@@ -112,7 +112,6 @@
 #include "Viewer3DQmlBackend.h"
 #include "Viewer3DQmlVariableTypes.h"
 #include "OsmParser.h"
-#include "Viewer3DFacts.h"
 
 #if defined(QGC_ENABLE_PAIRING)
 #include "PairingManager.h"
@@ -367,11 +366,6 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     _toolbox = new QGCToolbox(this);
     _toolbox->setChildToolboxes();
 
-
-    // 3D Viewer initialization
-    _viewer3D = new QGCViewer3D(this);
-    _viewer3D->init();
-
 #ifndef __mobile__
     _gpsRtkFactGroup = new GPSRTKFactGroup(this);
     GPSManager *gpsManager = _toolbox->gpsManager();
@@ -472,15 +466,6 @@ void QGCApplication::_initCommon()
 
     qmlRegisterType<QGCPalette>                         ("QGroundControl.Palette", 1, 0, "QGCPalette");
     qmlRegisterType<QGCMapPalette>                      ("QGroundControl.Palette", 1, 0, "QGCMapPalette");
-
-    // For 3D viewer types
-    qmlRegisterType<GpsType>                            (kQGCViewer3D, 1, 0, "GpsType");
-    qmlRegisterType<GeoCoordinateType>                  (kQGCViewer3D, 1, 0, "GeoCoordinateType");
-    qmlRegisterType<CityMapGeometry>                    (kQGCViewer3D, 1, 0, "CityMapGeometry");
-    qmlRegisterType<Viewer3DFacts>                      (kQGCViewer3D, 1, 0, "Viewer3DFacts");
-    qmlRegisterUncreatableType<Viewer3DQmlBackend>      (kQGCViewer3D, 1, 0, "Viewer3DQmlBackend",          kRefOnly);
-    qmlRegisterUncreatableType<OsmParser>               (kQGCViewer3D, 1, 0, "OsmParser",                   kRefOnly);
-
 
     // For 3D viewer types
     qmlRegisterType<GeoCoordinateType>                  (kQGCViewer3D, 1, 0, "GeoCoordinateType");

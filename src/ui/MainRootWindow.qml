@@ -128,14 +128,14 @@ ApplicationWindow {
 //        toolbar.currentToolbar  = currentToolbar
 //    }
 
-//    function showFlyView() {
-//        if (!flightView.visible) {
-//            mainWindow.showPreFlightChecklistIfNeeded()
-//        }
-//        mainWindow.popView()
-//        //viewSwitch(toolbar.flyViewToolbar)
-//        //flightView.visible = true
-//    }
+    function showFlyView() {
+        if (!flightView.visible) {
+            mainWindow.showPreFlightChecklistIfNeeded()
+        }
+        mainWindow.popView()
+        //viewSwitch(toolbar.flyViewToolbar)
+        //flightView.visible = true
+    }
 
     function showPlanView() {
         stackView.push(planViewComponent)
