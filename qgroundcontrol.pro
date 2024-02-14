@@ -786,11 +786,9 @@ HEADERS += \
     src/Viewer3D/Viewer3DUtils.h \
 
 
-# FIXME-QT6: NYI
 AndroidBuild {
-    DEFINES += FIXME_QT6_DISABLE_ANDROID_JOYSTICK
-    #HEADERS += \
-    #    src/Joystick/JoystickAndroid.h \
+    HEADERS += \
+        src/Joystick/JoystickAndroid.h \
 }
 
 DebugBuild {
@@ -840,9 +838,9 @@ iOSBuild {
 }
 
 AndroidBuild {
-    SOURCES += src/MobileScreenMgr.cc
-    # FIXME-QT6: NYI
-    #src/Joystick/JoystickAndroid.cc \
+    SOURCES += \
+        src/MobileScreenMgr.cc \
+        src/Joystick/JoystickAndroid.cc \
 }
 
 SOURCES += \
