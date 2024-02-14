@@ -7416,15 +7416,6 @@
       <decimal>1</decimal>
       <increment>0.5</increment>
     </parameter>
-    <parameter name="RTL_HDG_MD" default="0" type="INT32">
-      <short_desc>RTL heading mode</short_desc>
-      <long_desc>Defines the heading behavior during RTL</long_desc>
-      <values>
-        <value code="0">Towards next waypoint.</value>
-        <value code="1">Heading matches destination.</value>
-        <value code="2">Use current heading.</value>
-      </values>
-    </parameter>
     <parameter name="RTL_LAND_DELAY" default="0.0" type="FLOAT">
       <short_desc>Return mode delay</short_desc>
       <long_desc>Delay before landing (after initial descent) in Return mode. If set to -1 the system will not land but loiter at RTL_DESCEND_ALT.</long_desc>
@@ -7813,6 +7804,10 @@
       <max>86400</max>
       <unit>s</unit>
       <increment>1</increment>
+    </parameter>
+    <parameter name="SIM_BAT_ENABLE" default="1" type="INT32" boolean="true">
+      <short_desc>Simulator Battery enabled</short_desc>
+      <long_desc>Enable or disable the internal battery simulation. This is useful when the battery is simulated externally and interfaced with PX4 through MAVLink for example.</long_desc>
     </parameter>
     <parameter name="SIM_BAT_MIN_PCT" default="50.0" type="FLOAT">
       <short_desc>Simulator Battery minimal percentage</short_desc>
@@ -9324,18 +9319,6 @@
       <short_desc>simulated GPS number of satellites used</short_desc>
       <min>0</min>
       <max>50</max>
-    </parameter>
-    <parameter name="SIM_GZ_HOME_ALT" default="488.0" type="FLOAT">
-      <short_desc>simulator origin altitude</short_desc>
-      <unit>m</unit>
-    </parameter>
-    <parameter name="SIM_GZ_HOME_LAT" default="47.397742" type="FLOAT">
-      <short_desc>simulator origin latitude</short_desc>
-      <unit>deg</unit>
-    </parameter>
-    <parameter name="SIM_GZ_HOME_LON" default="8.545594" type="FLOAT">
-      <short_desc>simulator origin longitude</short_desc>
-      <unit>deg</unit>
     </parameter>
     <parameter name="SIM_MAG_OFFSET_X" default="0.0" type="FLOAT">
       <short_desc>simulated magnetometer X offset</short_desc>

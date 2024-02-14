@@ -13,20 +13,17 @@ import QGroundControl.Viewer3D
 
 Rectangle {
 
-    signal mapFileChanged(string file_path)
-    signal heightBiasChanged(real height)
-    property string windowState: "SETTING_MENU_CLOSE"
-    property real default_width: Screen.width * 0.2
+    signal menuClosed(bool accept)
 
+    property var viewer3DManager: null
     property int leftMarginSpace: ScreenTools.defaultFontPixelWidth
 
     id: window_body
     clip: true
     color: qgcPal.window
-
-    Viewer3DFacts{
-        id: _viewer3DFacts
-    }
+    visible: true
+    width: Screen.width * 0.25
+    height: Screen.width * 0.15
 
     QGCPalette {
         id:                 qgcPal
@@ -66,7 +63,6 @@ Rectangle {
             title:          qsTr("Select map file")
             onAcceptedForLoad: (file) => {
                                    map_file_text_feild.text = file
-                                   mapFileChanged(file)
                                }
         }
     }
@@ -85,7 +81,43 @@ Rectangle {
         anchors.leftMargin: 20
         readOnly: true
 
-        text: (_viewer3DFacts.qmlBackend)?(_viewer3DFacts.qmlBackend.city_map_path):("nan")
+        text: (viewer3DManager)?(viewer3DManager.viewer3DSetting.osmFilePath.rawValue):("nan")
+    }
+
+    QGCLabel {
+        id: bld_level_height
+        Layout.fillWidth:   true
+        wrapMode:           Text.WordWrap
+        visible:            true
+        text: qsTr("Average Building Level Height:")
+        anchors.left: parent.left
+        anchors.top: map_file_btn.bottom
+        anchors.leftMargin: leftMarginSpace
+        anchors.topMargin: ScreenTools.defaultFontPixelWidth * 2
+    }
+
+    QGCTextField {
+        id:                 bld_level_height_textfeild
+        width:              ScreenTools.defaultFontPixelWidth * 15
+        unitsLabel:         "m"
+        showUnits:          true
+        numericValuesOnly:  true
+        visible:            true
+
+        anchors.verticalCenter: bld_level_height.verticalCenter
+        anchors.left:           bld_level_height.right
+        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * 2
+
+        text: (viewer3DManager)?(Number(viewer3DManager.viewer3DSetting.buildingLevelHeight.rawValue)):("nan")
+
+        validator: RegularExpressionValidator{
+            regularExpression: /(-?\d{1,10})([.]\d{1,6})?$/
+        }
+
+        onAccepted:
+        {
+            focus = false
+        }
     }
 
     QGCLabel {
@@ -93,11 +125,11 @@ Rectangle {
         Layout.fillWidth:   true
         wrapMode:           Text.WordWrap
         visible:            true
-        text: qsTr("Vehicle Height Bias:")
+        text: qsTr("Vehicles Altitude Bias:")
         anchors.left: parent.left
-        anchors.top: map_file_btn.bottom
+        anchors.top: bld_level_height.bottom
         anchors.leftMargin: leftMarginSpace
-        anchors.topMargin: ScreenTools.defaultFontPixelWidth * 2
+        anchors.topMargin: ScreenTools.defaultFontPixelWidth * 4
     }
 
     QGCTextField {
@@ -112,7 +144,7 @@ Rectangle {
         anchors.left:           height_bias_label.right
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * 2
 
-        text: (_viewer3DFacts.qmlBackend)?(Number(_viewer3DFacts.qmlBackend.height_bias)):("nan")
+        text: (viewer3DManager)?(Number(viewer3DManager.viewer3DSetting.altitudeBias.rawValue)):("nan")
 
         validator: RegularExpressionValidator{
             regularExpression: /(-?\d{1,10})([.]\d{1,6})?$/
@@ -121,37 +153,19 @@ Rectangle {
         onAccepted:
         {
             focus = false
-            heightBiasChanged(parseFloat(text))
         }
     }
 
-    onMapFileChanged: function(file_path){
-        console.log(file_path)
-        _viewer3DFacts.qmlBackend.city_map_path = file_path
-    }
+    onMenuClosed: function (accept){
+        if(accept === true){
+            viewer3DManager.qmlBackend.osmFilePath = map_file_text_feild.text
+            viewer3DManager.qmlBackend.altitudeBias = parseFloat(height_bias_textfeild.text)
 
-    onHeightBiasChanged: function(height){
-        _viewer3DFacts.qmlBackend.height_bias = height
-    }
+            viewer3DManager.viewer3DSetting.osmFilePath.rawValue = map_file_text_feild.text
+            viewer3DManager.viewer3DSetting.buildingLevelHeight.rawValue = parseFloat(bld_level_height_textfeild.text)
+            viewer3DManager.viewer3DSetting.altitudeBias.rawValue = parseFloat(height_bias_textfeild.text)
 
-    Behavior on width{
-        NumberAnimation{
-            easing.type: Easing.InOutQuad;
-            duration: 300
+            viewer3DManager.osmParser.buildingLevelHeight = parseFloat(bld_level_height_textfeild.text)
         }
     }
-
-    state: windowState
-
-    states: [
-        State {
-            name: "SETTING_MENU_OPEN"
-            PropertyChanges { target: window_body; width: default_width; visible:true}
-
-        },
-        State {
-            name: "SETTING_MENU_CLOSE"
-            PropertyChanges { target: window_body; width: 0}
-        }
-    ]
 }

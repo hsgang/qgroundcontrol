@@ -118,6 +118,12 @@
 #include "PairingManager.h"
 #endif
 
+#include "CityMapGeometry.h"
+#include "Viewer3DQmlBackend.h"
+#include "Viewer3DQmlVariableTypes.h"
+#include "OsmParser.h"
+#include "Viewer3DManager.h"
+
 #ifndef __mobile__
 #include "FirmwareUpgradeController.h"
 #endif
@@ -232,9 +238,6 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
             }
             permFile.close();
         }
-
-        // Always set style to default, this way QT_QUICK_CONTROLS_STYLE environment variable doesn't cause random changes in ui
-        QQuickStyle::setStyle("Default");
     }
 #endif
 #endif
@@ -462,7 +465,7 @@ void QGCApplication::_initCommon()
     static const char* kQGCVehicle      = "QGroundControl.Vehicle";
     static const char* kQGCTemplates    = "QGroundControl.Templates";
     static const char* kQGCViewer3D     = "QGroundControl.Viewer3D";
-
+    
     QSettings settings;
 
     // Register our Qml objects
@@ -479,6 +482,13 @@ void QGCApplication::_initCommon()
     qmlRegisterUncreatableType<OsmParser>               (kQGCViewer3D, 1, 0, "OsmParser",                   kRefOnly);
 
 
+    // For 3D viewer types
+    qmlRegisterType<GeoCoordinateType>                  (kQGCViewer3D, 1, 0, "GeoCoordinateType");
+    qmlRegisterType<CityMapGeometry>                    (kQGCViewer3D, 1, 0, "CityMapGeometry");
+    qmlRegisterType<Viewer3DManager>                    (kQGCViewer3D, 1, 0, "Viewer3DManager");
+    qmlRegisterUncreatableType<Viewer3DQmlBackend>      (kQGCViewer3D, 1, 0, "Viewer3DQmlBackend",          kRefOnly);
+    qmlRegisterUncreatableType<OsmParser>               (kQGCViewer3D, 1, 0, "OsmParser",                   kRefOnly);
+    
     qmlRegisterUncreatableType<Vehicle>                 (kQGCVehicle,                       1, 0, "Vehicle",                    kRefOnly);
     qmlRegisterUncreatableType<MissionManager>          (kQGCVehicle,                       1, 0, "MissionManager",             kRefOnly);
     qmlRegisterUncreatableType<ParameterManager>        (kQGCVehicle,                       1, 0, "ParameterManager",           kRefOnly);

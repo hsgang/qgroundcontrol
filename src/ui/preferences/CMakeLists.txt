@@ -5,11 +5,10 @@ add_custom_target(UiPreferencesQml
 		DebugWindow.qml
         FlyViewSettings.qml
 		GeneralSettings.qml
-		GeneralSettings2.qml
 		HelpSettings.qml
 		LinkSettings.qml
 		LogReplaySettings.qml
-		MavlinkSettings.qml
+		PX4LogTransferSettings.qml
 		MockLink.qml
 		MockLinkSettings.qml
         PlanViewSettings.qml

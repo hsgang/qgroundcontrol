@@ -24,12 +24,6 @@
     "default":     false
 },
 {
-    "name":             "alternateInstrumentPanel",
-    "shortDesc": "Use Vertical Instrument Panel instead of the default one",
-    "type":             "bool",
-    "default":     false
-},
-{
     "name":             "showAdditionalIndicatorsCompass",
     "shortDesc": "Show additional heading indicators on Compass",
     "type":             "bool",
@@ -113,8 +107,8 @@
     "name":         "customActionDefinitions",
     "shortDesc":    "Custom Action Definitions",
     "longDesc":  "File that defines custom actions to send connected vehicle",
-    "type":         "string",
-    "default":      ""
+    "type":      "string",
+    "default":   ""    
 },
 {
     "name":         "showPhotoVideoControl",
@@ -171,6 +165,14 @@
     "enumStrings":      "Transparent,Lighten,Normal,Darken,Opaque",
     "enumValues":       "0,0.3,0.5,0.7,1",
     "default":          0.7
+},
+{
+    "name":         "instrumentQmlFile",
+    "shortDesc":    "Qml file for instrument panel",
+    "type":         "string",
+    "enumStrings":  "Integrated Compass & Attitude,Horizontal Compass & Atttitude,Large Vertical",
+    "enumValues":   "qrc:/qml/IntegratedCompassAttitude.qml,qrc:/qml/HorizontalCompassAttitude.qml,qrc:/qml/VerticalCompassAttitude.qml",
+    "default":      "qrc:/qml/IntegratedCompassAttitude.qml"
 }
 ]
 }

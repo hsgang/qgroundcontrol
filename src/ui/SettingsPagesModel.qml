@@ -62,12 +62,6 @@ ListModel {
         pageVisible: function() { return true }
     }
 
-    //ListElement {
-    //    name: qsTr("General Old")
-    //    url: "/qml/GeneralSettings2.qml"
-    //    pageVisible: function() { return true }
-    //}
-
     ListElement {
         name: qsTr("Comm Links")
         url: "/qml/LinkSettings.qml"
@@ -83,10 +77,15 @@ ListModel {
     }
 
     ListElement {
-        name: qsTr("MAVLink")
-        url: "/qml/MavlinkSettings.qml"
+        name: qsTr("PX4 Log Transfer")
+        url: "/qml/PX4LogTransferSettings.qml"
         menuIcon: "/InstrumentValueIcons/conversation.svg"
-        pageVisible: function() { return true }
+        pageVisible: function() { 
+            var activeVehicle = QGroundControl.multiVehicleManager.activeVehicle
+            return QGroundControl.corePlugin.options.showPX4LogTransferOptions && 
+                        QGroundControl.px4ProFirmwareSupported && 
+                        (activeVehicle ? activeVehicle.px4Firmware : true)
+        }
     }
 
     ListElement {

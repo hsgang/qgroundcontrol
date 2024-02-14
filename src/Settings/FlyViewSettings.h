@@ -22,7 +22,6 @@ public:
     DEFINE_SETTINGFACT(guidedMinimumAltitude)
     DEFINE_SETTINGFACT(guidedMaximumAltitude)
     DEFINE_SETTINGFACT(showLogReplayStatusBar)
-    DEFINE_SETTINGFACT(alternateInstrumentPanel)
     DEFINE_SETTINGFACT(showAdditionalIndicatorsCompass)
     DEFINE_SETTINGFACT(showAttitudeHUD)
     DEFINE_SETTINGFACT(lockNoseUpCompass)
@@ -46,4 +45,5 @@ public:
     DEFINE_SETTINGFACT(showVibrationStatus)
     DEFINE_SETTINGFACT(showEKFStatus)
     DEFINE_SETTINGFACT(flyviewWidgetOpacity)
+    DEFINE_SETTINGFACT(instrumentQmlFile)
 };

@@ -107,13 +107,18 @@ Item {
                     padding:                0
 
                     property bool _noMessages: messageText.length === 0
+            
+                Connections {
+                    target:                 _activeVehicle
+                    onNewFormattedMessage: (formattedMessage) => { messageText.insert(0, formatMessage(formattedMessage)) }
+                }
 
-                    Connections {
-                        target:                 _activeVehicle
-                        onNewFormattedMessage:  (formattedMessage) => {
-                            messageText.append(formatMessage(formattedMessage))
-                        }
-                    }
+            //        Connections {
+            //            target:                 _activeVehicle
+            //            onNewFormattedMessage:  (formattedMessage) => {
+            //                messageText.append(formatMessage(formattedMessage))
+            //            }
+            //        }
 
                     Component.onCompleted: {
                         messageText.text = formatMessage(_activeVehicle.formattedMessages)

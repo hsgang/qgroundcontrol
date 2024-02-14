@@ -28,9 +28,7 @@ import QGroundControl.ScreenTools
 import QGroundControl.Vehicle
 
 // 3D Viewer modules
-import QGroundControl.Viewer3D
 import Viewer3D
-import Viewer3D.Models3D
 
 Item {
     id: _root
@@ -70,9 +68,6 @@ Item {
     function _calcCenterViewPort() {
         var newToolInset = Qt.rect(0, 0, width, height)
         toolstrip.adjustToolInset(newToolInset)
-        if (QGroundControl.corePlugin.options.instrumentWidget) {
-            flightDisplayViewWidgets.adjustToolInset(newToolInset)
-        }
     }
 
     QGCToolInsets {
@@ -154,15 +149,13 @@ Item {
             anchors.bottom:     parent.bottom
             z:                  QGroundControl.zOrderTopMost
             radius:             ScreenTools.defaultFontPixelWidth / 2
-            width:              ScreenTools.defaultFontPixelWidth * 10
             color:              qgcPal.window
             visible:            false
         }
 
-        Viewer3DModel{
+        Viewer3D{
             id:                     viewer3DWindow
             anchors.fill:           parent
-            z:                      0
         }
 
         FlyViewMap {

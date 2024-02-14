@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick3D
+import QtPositioning
 
 import Viewer3D.Models3D.Drones
 import Viewer3D.Models3D
@@ -17,104 +18,95 @@ import QGroundControl.Vehicle
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 Node {
-    id: map3d_item_root
+    id: vehicel3DBody
     property var  _backendQml:                  null
     property var  _vehicle:                     null
     property var  _planMasterController:        null
     property var  _missionController:           (_planMasterController)?(_planMasterController.missionController):(null)
 
     function addMissionItemsToListModel() {
-        mission_waypoint_list_model.clear()
-        var gps2Local_ = gps2Local
-        gps2Local_.gps_ref = _backendQml.gps_ref
+        missionWaypointListModel.clear()
+        var _geo2EnuCopy = goe2Enu
 
         for (var i = 1; i < _missionController.visualItems.count; i++) {
-            var missionItem = _missionController.visualItems.get(i)
-            gps2Local_.coordinate.lat = missionItem.coordinate.latitude
-            gps2Local_.coordinate.lon = missionItem.coordinate.longitude
-            gps2Local_.coordinate.alt = 0
-            mission_waypoint_list_model.append({
-                                                   "x": gps2Local_.localCoordinate.x,
-                                                   "y": gps2Local_.localCoordinate.y,
-                                                   "z": missionItem.altitude.value,
-                                                   "isTakeoffItem": missionItem.isTakeoffItem,
-                                                   "index": missionItem.sequenceNumber,
-                                               })
+            var _missionItem = _missionController.visualItems.get(i)
+            _geo2EnuCopy.coordinate = _missionItem.coordinate
+            _geo2EnuCopy.coordinate.altitude = 0
+            missionWaypointListModel.append({
+                                                "x": _geo2EnuCopy.localCoordinate.x,
+                                                "y": _geo2EnuCopy.localCoordinate.y,
+                                                "z": _missionItem.altitude.value,
+                                                "isTakeoffItem": _missionItem.isTakeoffItem,
+                                                "index": _missionItem.sequenceNumber,
+                                            })
         }
     }
 
     function addSegmentToMissionPathModel() {
-        mission_path_model.clear()
-        var gps2Local_ = gps2Local
+        missionPathModel.clear()
+        var _geo2EnuCopy = goe2Enu
 
-        gps2Local_.gps_ref = _backendQml.gps_ref
         for (var i = 2; i < _missionController.visualItems.count; i++) {
-            var missionItem = _missionController.visualItems.get(i-1)
-            gps2Local_.coordinate.lat = missionItem.coordinate.latitude
-            gps2Local_.coordinate.lon = missionItem.coordinate.longitude
-            gps2Local_.coordinate.alt = 0
-            var p1 = Qt.vector3d(gps2Local_.localCoordinate.x, gps2Local_.localCoordinate.y, missionItem.altitude.value)
+            var _missionItem = _missionController.visualItems.get(i-1)
+            _geo2EnuCopy.coordinate = _missionItem.coordinate
+            _geo2EnuCopy.coordinate.altitude = 0
+            var p1 = Qt.vector3d(_geo2EnuCopy.localCoordinate.x, _geo2EnuCopy.localCoordinate.y, _missionItem.altitude.value)
 
-            missionItem = _missionController.visualItems.get(i)
-            gps2Local_.coordinate.lat = missionItem.coordinate.latitude
-            gps2Local_.coordinate.lon = missionItem.coordinate.longitude
-            gps2Local_.coordinate.alt = 0
-            var p2 = Qt.vector3d(gps2Local_.localCoordinate.x, gps2Local_.localCoordinate.y, missionItem.altitude.value)
+            _missionItem = _missionController.visualItems.get(i)
+            _geo2EnuCopy.coordinate = _missionItem.coordinate
+            _geo2EnuCopy.coordinate.altitude = 0
+            var p2 = Qt.vector3d(_geo2EnuCopy.localCoordinate.x, _geo2EnuCopy.localCoordinate.y, _missionItem.altitude.value)
 
-            mission_path_model.append({
-                                          "x_1": p1.x,
-                                          "y_1": p1.y,
-                                          "z_1": p1.z,
-                                          "x_2": p2.x,
-                                          "y_2": p2.y,
-                                          "z_2": p2.z,
-                                      })
+            missionPathModel.append({
+                                        "x_1": p1.x,
+                                        "y_1": p1.y,
+                                        "z_1": p1.z,
+                                        "x_2": p2.x,
+                                        "y_2": p2.y,
+                                        "z_2": p2.z,
+                                    })
         }
     }
 
     GeoCoordinateType{
-        id:gps2Local
+        id:goe2Enu
+        gpsRef: _backendQml.gpsRef
     }
 
     ListModel{
-        id: mission_waypoint_list_model
+        id: missionWaypointListModel
     }
 
     ListModel{
-        id: mission_path_model
+        id: missionPathModel
     }
 
     DroneModelDjiF450{
-        id: vehicle_3d
+        id: droneDji3DModel
         vehicle: _vehicle
         modelScale: Qt.vector3d(0.05, 0.05, 0.05)
-        heightBias: _backendQml.height_bias
-        gpsRefLat: _backendQml.gps_ref.lat
-        gpsRefLon: _backendQml.gps_ref.lon
-        gpsRefAlt: _backendQml.gps_ref.alt
+        altitudeBias: _backendQml.altitudeBias
+        gpsRef: _backendQml.gpsRef
     }
 
     Repeater3D{
-        id:way3d_rep
-        model: mission_waypoint_list_model
+        id:waypints3DRepeater
+        model: missionWaypointListModel
 
         delegate: Waypoint3DModel{
             opacity: 0.8
             missionItem: model
-            heightBias: _backendQml.height_bias
-            gpsRefLat: _backendQml.gps_ref.lat
-            gpsRefLon: _backendQml.gps_ref.lon
-            gpsRefAlt: _backendQml.gps_ref.alt
+            altitudeBias: _backendQml.altitudeBias
         }
     }
 
     Repeater3D{
-        id:mission_3d_path
-        model: mission_path_model
+        id:mission3DPathRepeater
+        model: missionPathModel
 
         delegate: Line3D{
-            p_1: Qt.vector3d(model.x_1 * 10, model.y_1 * 10, (model.z_1 + _backendQml.height_bias) * 10)
-            p_2: Qt.vector3d(model.x_2 * 10, model.y_2 * 10, (model.z_2 + _backendQml.height_bias) * 10)
+            p_1: Qt.vector3d(model.x_1 * 10, model.y_1 * 10, (model.z_1 + _backendQml.altitudeBias) * 10)
+            p_2: Qt.vector3d(model.x_2 * 10, model.y_2 * 10, (model.z_2 + _backendQml.altitudeBias) * 10)
             lineWidth:8
             color: "orange"
         }

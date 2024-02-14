@@ -2901,7 +2901,7 @@ Blue Robotics 추진기는 물로 윤활되고 대기에서 작동하도록 설�
         <location filename="../src/AutoPilotPlugins/APM/APMSubMotorComponent.qml" line="225"/>
         <source>This will attempt to automatically detect the direction (normal/reversed) of your thrusters.
 Please place your vehicle in water, click the button, and wait. Note that the thrusters still need to be connected to the correct outputs (thrusters 2 and 3 can&apos;t be swapped, for example).</source>
-        <translation type="unfinished">This will attempt to automatically detect the direction (normal/reversed) of your thrusters.
+        <translation>This will attempt to automatically detect the direction (normal/reversed) of your thrusters.
 Please place your vehicle in water, click the button, and wait. Note that the thrusters still need to be connected to the correct outputs (thrusters 2 and 3 can&apos;t be swapped, for example).</translation>
     </message>
 </context>
@@ -3985,7 +3985,7 @@ Before starting the auto-tuning process, make sure that:
 
 Click Ok to start the auto-tuning process.
 </source>
-        <translation type="unfinished">WARNING!
+        <translation>WARNING!
 
 The auto-tuning procedure should be executed with caution and requires the vehicle to fly stable enough before attempting the procedure!
 

@@ -28,7 +28,7 @@ ToolStripActionList {
             text:           qsTr("3D View")
             iconSource:     "/qmlimages/Viewer3D/City3DMapIcon.svg"
             onTriggered:{
-                if(viewer3DWindow.z === 0)
+                if(viewer3DWindow.viewer3DOpen === false)
                 {
                     show3dMap();
                 }
@@ -40,7 +40,7 @@ ToolStripActionList {
 
             function show3dMap()
             {
-                viewer3DWindow.z = 1
+                viewer3DWindow.viewer3DOpen = true
                 map_icon.iconSource =     "/qmlimages/PaperPlane.svg"
                 text=           qsTr("Fly")
                 city_map_setting_icon.enabled = true
@@ -48,11 +48,11 @@ ToolStripActionList {
 
             function showFlyMap()
             {
-                viewer3DWindow.z = 0
+                viewer3DWindow.viewer3DOpen = false
                 iconSource =     "/qmlimages/Viewer3D/City3DMapIcon.svg"
                 text =           qsTr("3D View")
                 city_map_setting_icon.enabled = false
-                viewer3DSettingMenu.windowState = "SETTING_MENU_CLOSE"
+                viewer3DWindow.settingMenuOpen = false
                 city_map_setting_icon.checked = false
             }
         },
@@ -61,9 +61,9 @@ ToolStripActionList {
             text:           qsTr("Setting")
             iconSource:     "/qmlimages/Viewer3D/GearIcon.png"
             enabled: false
+            visible: enabled
             onTriggered:{
-                viewer3DSettingMenu.windowState = (viewer3DSettingMenu.windowState === "SETTING_MENU_OPEN")?("SETTING_MENU_CLOSE"):("SETTING_MENU_OPEN")
-                checked = (viewer3DSettingMenu.windowState === "SETTING_MENU_OPEN")?(true):(false)
+                viewer3DWindow.settingMenuOpen = !viewer3DWindow.settingMenuOpen
             }
         },
         PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() },

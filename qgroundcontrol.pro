@@ -409,7 +409,6 @@ INCLUDEPATH += \
     src/ui/toolbar \
     src/ui/uas \
     src/Viewer3D \
-    src/Viewer3D/earcut \
 
 #
 # Plugin API
@@ -771,19 +770,16 @@ HEADERS += \
     src/comm/TCPLink.h \
     src/comm/UDPLink.h \
     src/comm/UdpIODevice.h \
-    src/uas/UAS.h \
-    src/uas/UASInterface.h \
     src/uas/UASMessageHandler.h \
     src/AnalyzeView/GeoTagController.h \
     src/AnalyzeView/ExifParser.h \
-    src/Viewer3D/QGCViewer3D.h \
     src/Viewer3D/CityMapGeometry.h \
     src/Viewer3D/OsmParser.h \
-    src/Viewer3D/Viewer3DCppVariableTypes.h \
-    src/Viewer3D/Viewer3DMetadata.h \
     src/Viewer3D/Viewer3DQmlBackend.h \
     src/Viewer3D/Viewer3DQmlVariableTypes.h \
     src/Viewer3D/Viewer3DUtils.h \
+    src/Viewer3D/Viewer3DManager.h \
+    src/Settings/Viewer3DSettings.h \
 
 
 AndroidBuild {
@@ -1034,16 +1030,16 @@ SOURCES += \
     src/comm/UDPLink.cc \
     src/comm/UdpIODevice.cc \
     src/main.cc \
-    src/uas/UAS.cc \
     src/uas/UASMessageHandler.cc \
     src/AnalyzeView/GeoTagController.cc \
     src/AnalyzeView/ExifParser.cc \
-    src/Viewer3D/QGCViewer3D.cpp \
-    src/Viewer3D/CityMapGeometry.cpp \
-    src/Viewer3D/OsmParser.cpp \
-    src/Viewer3D/Viewer3DMetadata.cpp \
-    src/Viewer3D/Viewer3DQmlBackend.cpp \
-    src/Viewer3D/Viewer3DUtils.cpp \
+    src/Viewer3D/CityMapGeometry.cc \
+    src/Viewer3D/OsmParser.cc \
+    src/Viewer3D/Viewer3DQmlBackend.cc \
+    src/Viewer3D/Viewer3DUtils.cc \
+    src/Viewer3D/Viewer3DManager.cc \
+    src/Settings/Viewer3DSettings.cc \
+
 
 DebugBuild {
 SOURCES += \

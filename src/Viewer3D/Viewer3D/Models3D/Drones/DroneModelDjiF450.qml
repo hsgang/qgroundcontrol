@@ -1,5 +1,7 @@
 import QtQuick3D
 import QtQuick
+import QtPositioning
+
 import QGroundControl.Viewer3D
 
 import "Djif450/DroneModel_arm_1"
@@ -22,46 +24,32 @@ import "Djif450/DroneModel_propeller2_7"
 Node{
     id: body
 
-    property alias modelScale: inner_node.scale
+    property alias modelScale: innerNode.scale
 
     property var    vehicle
-    property double heightBias: 0
-
-    property double gpsRefLat: 0
-    property double gpsRefLon: 0
-    property double gpsRefAlt: 0
+    property double altitudeBias: 0
+    property var gpsRef: QtPositioning.coordinate(0, 0, 0)
 
     property double roll:        vehicle ? vehicle.roll.value : 0
     property double pitch:        vehicle ? vehicle.pitch.value : 0
     property double heading:        vehicle ? vehicle.heading.value : 0
 
-    property double pose_y: (gps_to_local.localCoordinate.y)?(gps_to_local.localCoordinate.y * 10) : (0)
-    property double pose_z: (vehicle.altitudeRelative.value)?((vehicle.altitudeRelative.value + heightBias) * 10 ): (0)
-    property double pose_x: (gps_to_local.localCoordinate.x)? (gps_to_local.localCoordinate.x * 10) : (0)
+    property double pose_y: (geo2Enu.localCoordinate.y)?(geo2Enu.localCoordinate.y * 10) : (0)
+    property double pose_z: (vehicle.altitudeRelative.value)?((vehicle.altitudeRelative.value + altitudeBias) * 10 ): (0)
+    property double pose_x: (geo2Enu.localCoordinate.x)? (geo2Enu.localCoordinate.x * 10) : (0)
 
-    property int pose_animation_duration: 200
-    property int angle_animation_duration: 100
+    property int _poseAnimationDuration: 200
+    property int _angleAnimationDuration: 100
 
 
     GeoCoordinateType{
-        id: gps_to_local
-
-        gps_ref{
-            lat: body.gpsRefLat
-            lon: body.gpsRefLon
-            alt: body.gpsRefAlt
-        }
-
-        coordinate{
-            lat: body.vehicle.coordinate.latitude
-            lon: body.vehicle.coordinate.longitude
-            alt: body.vehicle.coordinate.altitude
-        }
+        id: geo2Enu
+        gpsRef: body.gpsRef
+        coordinate: body.vehicle.coordinate
     }
 
-
     Node{
-        id: lable_txt
+        id: lableText
 
         Node
         {
@@ -92,7 +80,7 @@ Node{
             easing.type: Easing.Linear
             easing.amplitude: 3.0
             easing.period: 2.0
-            duration: angle_animation_duration
+            duration: _angleAnimationDuration
         }
     }
 
@@ -106,7 +94,7 @@ Node{
                 easing.type: Easing.Linear
                 easing.amplitude: 3.0
                 easing.period: 2.0
-                duration: pose_animation_duration
+                duration: _poseAnimationDuration
             }
         }
 
@@ -115,7 +103,7 @@ Node{
                 easing.type: Easing.Linear
                 easing.amplitude: 3.0
                 easing.period: 2.0
-                duration: pose_animation_duration
+                duration: _poseAnimationDuration
             }
         }
 
@@ -124,7 +112,7 @@ Node{
                 easing.type: Easing.Linear
                 easing.amplitude: 3.0
                 easing.period: 2.0
-                duration: pose_animation_duration
+                duration: _poseAnimationDuration
             }
         }
     }
@@ -132,7 +120,7 @@ Node{
 
     Node
     {
-        id: roll_pitch_rotation_node
+        id: rollPitchRotationNode
 
         rotation: Quaternion.fromEulerAngles(Qt.vector3d(body.roll, -body.pitch, 0))
 
@@ -141,7 +129,7 @@ Node{
                 easing.type: Easing.Linear
                 easing.amplitude: 3.0
                 easing.period: 2.0
-                duration: angle_animation_duration
+                duration: _angleAnimationDuration
             }
         }
 
@@ -152,7 +140,7 @@ Node{
             }
             Node
             {
-                id: inner_node
+                id: innerNode
                 eulerRotation: Qt.vector3d(0, 90, 0)
                 Node{
                     position: Qt.vector3d(-640, -360, -155)
