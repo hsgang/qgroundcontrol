@@ -1027,8 +1027,12 @@ Item {
                         addNewSet()
                     }
                 }
+        QGCLabel { text: QGroundControl.mapEngineManager.tileSets.count }
+
                 Repeater {
+                    id: repeater
                     model: QGroundControl.mapEngineManager.tileSets
+
                     delegate: OfflineMapButton {
                         text:           object.name
                         size:           object.downloadStatus

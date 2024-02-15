@@ -70,8 +70,8 @@ ListModel {
     }
 
     ListElement {
-        name: qsTr("Offline Maps")
-        url: "/qml/OfflineMap.qml"
+        name: qsTr("Maps")
+        url: "/qml/MapSettings.qml"
         menuIcon: "/InstrumentValueIcons/outlineMap.svg"
         pageVisible: function() { return true }
     }
