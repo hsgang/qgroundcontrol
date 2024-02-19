@@ -93,6 +93,7 @@ void QGCPalette::_buildMap()
     DECLARE_QGC_COLOR(mapMissionTrajectory,             "#be781c", "#be781c", "#3db6d8", "#3db6d8")
     DECLARE_QGC_COLOR(surveyPolygonInterior,            "#008000", "#008000", "#008000", "#008000")
     DECLARE_QGC_COLOR(surveyPolygonTerrainCollision,    "#ff0000", "#ff0000", "#ff0000", "#ff0000")
+    DECLARE_QGC_COLOR(groupBorder,                      "#bbbbbb", "#bbbbbb", "#707070", "#707070")
 
 //    // Colors not affecting by theming
 //    //                                              Disabled    Enabled

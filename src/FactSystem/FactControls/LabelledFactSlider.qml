@@ -22,6 +22,7 @@ RowLayout {
     property alias to:                      factSlider.to
     property alias stepSize:                factSlider.stepSize
     property real  sliderPreferredWidth:    -1
+    enabled:       fact
 
     spacing: ScreenTools.defaultFontPixelWidth * 2
 
