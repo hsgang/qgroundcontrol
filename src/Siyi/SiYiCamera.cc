@@ -5,6 +5,8 @@
 
 #include "SiYiCamera.h"
 
+QGC_LOGGING_CATEGORY(SiYiCameraLog, "SiYiCameraLog")
+
 SiYiCamera::SiYiCamera(QObject *parent)
     : SiYiTcpClient("192.168.144.25", 37256)
 {
@@ -82,9 +84,9 @@ bool SiYiCamera::autoFocus(int x, int y, int w, int h)
     if (camera_type_ == CameraTypeZT30) {
         quint16 cookedX = x*m_resolutionWidthMain/w;
         quint16 cookedY = y*m_resolutionHeightMain/h;
-        qInfo() << cookedX << cookedY << x << y << w << h << m_resolutionWidthMain << m_resolutionHeightMain;
+        qCDebug(SiYiCameraLog) << cookedX << cookedY << x << y << w << h << m_resolutionWidthMain << m_resolutionHeightMain;
     } else {
-        qInfo() << cookedX << cookedY << x << y << w << h << resolutionWidth_ << resolutionHeight_;
+        qCDebug(SiYiCameraLog) << cookedX << cookedY << x << y << w << h << resolutionWidth_ << resolutionHeight_;
     }
 
     body.append(reinterpret_cast<char*>(&cookedX), 2);
@@ -355,7 +357,7 @@ void SiYiCamera::analyzeMessage()
                 }
 
                 if (!(msg.header.cmdId == 0x90)) {
-                    qInfo() << info << "Rx:" << packet.toHex(' ');
+                    qCDebug(SiYiCameraLog) << "Rx:" << packet.toHex(' ');
                 }
 
                 rxBytes_.remove(0, msgLen);
@@ -656,7 +658,7 @@ void SiYiCamera::messageHandle0x94(const QByteArray &msg)
         */
         int type = ctx->version >> 24;
         camera_type_ = type;
-        qInfo() << "The camera type is: " << QString("0x").arg(QString::number(type, 16), 2, '0');
+        qCDebug(SiYiCameraLog) << "The camera type is: " << QString("0x").arg(QString::number(type, 16), 2, '0');
         if (type == CameraTypeZR10 || type == CameraTypeZR30 || type == CameraTypeZT30) { // ZR10,ZR30
             enableFocus_ = true;
             enableZoom_ = true;
@@ -698,7 +700,7 @@ void SiYiCamera::messageHandle0x94(const QByteArray &msg)
             enableVideo_ = false;
             enableControl_ = false;
             m_enableLaser = false;
-            qWarning() << "Unknow camera type: " << type << ", disable all functions.";
+            qCDebug(SiYiCameraLog) << "Unknow camera type: " << type << ", disable all functions.";
         }
 
         emit enableFocusChanged();

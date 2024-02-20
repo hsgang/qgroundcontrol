@@ -5,8 +5,11 @@
 #include <QThread>
 #include <QVector>
 #include <QTcpSocket>
+#include "QGCLoggingCategory.h"
 
 #define PROTOCOL_STX 0x5566AABB
+
+Q_DECLARE_LOGGING_CATEGORY(SiYiTcpClientLog)
 
 class SiYiTcpClient : public QThread
 {
