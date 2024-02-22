@@ -3462,16 +3462,16 @@ void Vehicle::_handleCommandAck(mavlink_message_t& message)
                 if (commandEntry.showError) {
                     switch (ack.result) {
                     case MAV_RESULT_TEMPORARILY_REJECTED:
-                        qgcApp()->showAppMessage(tr("%1 command temporarily rejected").arg(rawCommandName));
+                        qgcApp()->showAppMessage(tr("%1 command temporarily rejected on Vehicle %2").arg(rawCommandName).arg(_id));
                         break;
                     case MAV_RESULT_DENIED:
-                        qgcApp()->showAppMessage(tr("%1 command denied").arg(rawCommandName));
+                        qgcApp()->showAppMessage(tr("%1 command denied on Vehicle %2").arg(rawCommandName).arg(_id));
                         break;
                     case MAV_RESULT_UNSUPPORTED:
-                        qgcApp()->showAppMessage(tr("%1 command not supported").arg(rawCommandName));
+                        qgcApp()->showAppMessage(tr("%1 command not supported on vehicle %2").arg(rawCommandName).arg(_id));
                         break;
                     case MAV_RESULT_FAILED:
-                        qgcApp()->showAppMessage(tr("%1 command failed").arg(rawCommandName));
+                        qgcApp()->showAppMessage(tr("%1 command failed on Vehicle %2").arg(rawCommandName).arg(_id));
                         break;
                     default:
                         // Do nothing
