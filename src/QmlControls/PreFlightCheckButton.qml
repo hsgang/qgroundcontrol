@@ -38,14 +38,14 @@ QGCButton {
     property int _telemetryState:       _statePassed
     property int _horizontalPadding:    ScreenTools.defaultFontPixelWidth
     property int _verticalPadding:      Math.round(ScreenTools.defaultFontPixelHeight / 2)
-    property real _stateFlagWidth:      ScreenTools.defaultFontPixelWidth * 4
+    property real _stateFlagWidth:      ScreenTools.defaultFontPixelWidth * 3
 
     readonly property int _statePending:    0   ///< Telemetry check is failing or manual check not yet verified, user can click to make it pass
     readonly property int _stateFailed:     1   ///< Telemetry check is failing, user cannot click to make it pass
     readonly property int _statePassed:     2   ///< Check has passed
 
     readonly property color _passedColor:   "#86cc6a"
-    readonly property color _pendingColor:  "#f7a81f"
+    readonly property color _pendingColor:  "white"//"#f7a81f"
     readonly property color _failedColor:   "#c31818"
 
     property string _text: "<b>" + name +"</b>: " +
@@ -59,6 +59,13 @@ QGCButton {
                                      (_telemetryState === _statePending || _manualState === _statePending ?
                                           _pendingColor :
                                           _failedColor))
+    property string  _mark: _telemetryState === _statePassed && _manualState === _statePassed ?
+                                "/InstrumentValueIcons/checkmark.svg" :
+                                (_telemetryState == _stateFailed ?
+                                     "/InstrumentValueIcons/close.svg" :
+                                     (_telemetryState === _statePending || _manualState === _statePending ?
+                                          "" :
+                                          "/InstrumentValueIcons/close.svg"))
 
     width:          40 * ScreenTools.defaultFontPixelWidth
     topPadding:     _verticalPadding
@@ -69,13 +76,28 @@ QGCButton {
     background: Rectangle {
         color:          qgcPal.button
         border.color:   qgcPal.button;
+        radius:         ScreenTools.defaultFontPixelHeight / 4
 
         Rectangle {
-            color:          _color
+            color:          "transparent"//_color
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left:   parent.left
-            anchors.top:    parent.top
-            anchors.bottom: parent.bottom
+            anchors.leftMargin: ScreenTools.defaultFontPixelWidth
+            //anchors.top:    parent.top
+            //anchors.bottom: parent.bottom
             width:          _stateFlagWidth
+            height:         width
+            radius:         width / 2
+            border.color:   _color
+            border.width:   2
+
+            QGCColoredImage {
+                anchors.fill: parent
+                source:    _mark
+                sourceSize.width: ScreenTools.defaultFontPixelHeight * 1.2
+                sourceSize.height: ScreenTools.defaultFontPixelHeight * 1.2
+                color:      _color
+            }
         }
     }
 

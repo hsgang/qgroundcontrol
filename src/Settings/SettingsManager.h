@@ -22,6 +22,7 @@
 #include "FlightModeSettings.h"
 #include "RTKSettings.h"
 #include "FlyViewSettings.h"
+#include "MapsSettings.h"
 #include "PlanViewSettings.h"
 #include "BrandImageSettings.h"
 #include "OfflineMapsSettings.h"
@@ -59,6 +60,7 @@ public:
     Q_PROPERTY(QObject* ntripSettings                   READ ntripSettings                  CONSTANT)
     Q_PROPERTY(QObject* gimbalControllerSettings        READ gimbalControllerSettings       CONSTANT)
     Q_PROPERTY(QObject* batterySettings                 READ batterySettings                CONSTANT)
+    Q_PROPERTY(QObject* mapsSettings                    READ mapsSettings                   CONSTANT)
 #if !defined(NO_ARDUPILOT_DIALECT)
     Q_PROPERTY(QObject* apmMavlinkStreamRateSettings    READ apmMavlinkStreamRateSettings   CONSTANT)
 #endif
@@ -83,6 +85,7 @@ public:
     NTRIPSettings*                  ntripSettings               (void) { return _ntripSettings; }
     GimbalControllerSettings*       gimbalControllerSettings    (void) { return _gimbalControllerSettings; }
     BatterySettings*                batterySettings             (void) { return _batterySettings; }
+    MapsSettings*                   mapsSettings                (void) { return _mapsSettings; }
 #if !defined(NO_ARDUPILOT_DIALECT)
     APMMavlinkStreamRateSettings*   apmMavlinkStreamRateSettings(void) { return _apmMavlinkStreamRateSettings; }
 #endif
@@ -105,6 +108,7 @@ private:
     NTRIPSettings*                  _ntripSettings;
     GimbalControllerSettings*       _gimbalControllerSettings;
     BatterySettings*                _batterySettings;
+    MapsSettings*                   _mapsSettings;
 #if !defined(NO_ARDUPILOT_DIALECT)
     APMMavlinkStreamRateSettings*   _apmMavlinkStreamRateSettings;
 #endif

@@ -108,7 +108,7 @@ Rectangle {
                     exclusiveGroup:      setupButtonGroup
                     // autoExclusive:      true
                     text:               name
-                    visible:            url !== "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
+                    visible:            url !== "/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
                     enabled:            _enabled
 
                     onClicked: {

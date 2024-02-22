@@ -41,6 +41,12 @@
     "units":        "m",
     "min":          100.0,
     "decimalPlaces":    1
+},
+{
+    "name":         "showROIToolstrip",
+    "shortDesc":    "showROIToolstrip",
+    "type":         "bool",
+    "default":      true
 }
 ]
 }

@@ -149,7 +149,7 @@ ToolIndicatorPage {
             heading: qsTr("Vehicle Parameter")
 
             LabelledFactSlider {
-                label:      "Responsiveness"
+                label:      qsTr("Responsiveness")
                 fact:       atcInputTCFact
                 from:       0.01
                 to:         0.5
@@ -157,7 +157,7 @@ ToolIndicatorPage {
                 visible:    true
             }
             LabelledFactSlider {
-                label:      "Loiter Horizontal Speed(cm/s)"
+                label:      qsTr("Loiter Horizontal Speed(cm/s)")
                 fact:       loitSpeedFact
                 from:       500
                 to:         1500
@@ -165,7 +165,7 @@ ToolIndicatorPage {
                 visible:    true
             }
             LabelledFactSlider {
-                label:      "WP Horizontal Speed(cm/s)"
+                label:      qsTr("WP Horizontal Speed(cm/s)")
                 fact:       wpnavSpeedFact
                 from:       500
                 to:         1500
@@ -173,7 +173,7 @@ ToolIndicatorPage {
                 visible:    true
             }
             LabelledFactSlider {
-                label:      "WP Climb Speed(cm/s)"
+                label:      qsTr("WP Climb Speed(cm/s)")
                 fact:       wpnavSpeedUpFact
                 from:       100
                 to:         500
@@ -181,7 +181,7 @@ ToolIndicatorPage {
                 visible:    true
             }
             LabelledFactSlider {
-                label:      "WP Descent Speed(cm/s)"
+                label:      qsTr("WP Descent Speed(cm/s)")
                 fact:       wpnavSpeedDnFact
                 from:       100
                 to:         500
@@ -189,7 +189,7 @@ ToolIndicatorPage {
                 visible:    true
             }
             LabelledFactSlider {
-                label:      "Mission Turning Radius(cm)"
+                label:      qsTr("Mission Turning Radius(cm)")
                 fact:       wpnavRadiusFact
                 from:       200
                 to:         1000
@@ -198,13 +198,13 @@ ToolIndicatorPage {
             }
 
             LabelledFactTextField {
-                label:      rtlAltitudeFact.name
+                label:      qsTr("RTL Altitude")
                 fact:       rtlAltitudeFact
                 visible:    true
             }
 
             LabelledFactTextField {
-                label:      landSpeedFact.name
+                label:      qsTr("Land Speed")
                 fact:       landSpeedFact
                 visible:    landSpeedFact && controller.vehicle
                 enabled:     !controller.vehicle.fixedWing
@@ -214,6 +214,7 @@ ToolIndicatorPage {
                 Layout.fillWidth:   true
                 Layout.columnSpan:  2
                 text:               qsTr("Precision Landing")
+                description:        "별도의 정밀착륙 장치를 장착하고 추가 설정이 필요"
                 fact:               precisionLandingFact
                 visible:            precisionLandingFact
             }

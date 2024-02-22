@@ -137,7 +137,7 @@ SettingsPage {
         QGCCheckBoxSlider {
             id:                 controllerByVehicleCheckBox
             Layout.fillWidth:   true
-            text:               qsTr("Controlled By vehicle")
+            text:               qsTr("Controlled by Vehicle")
             checked:            !_apmStartMavlinkStreams.rawValue
             onClicked:          _apmStartMavlinkStreams.rawValue = !checked
         }

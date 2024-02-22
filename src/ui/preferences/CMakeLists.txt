@@ -6,6 +6,8 @@ add_custom_target(UiPreferencesQml
 		HelpSettings.qml
 		LinkSettings.qml
 		LogReplaySettings.qml
+		OfflineMapInfo.qml
+		MapSettings.qml
 		MavlinkSettings.qml
 		MockLink.qml
 		MockLinkSettings.qml

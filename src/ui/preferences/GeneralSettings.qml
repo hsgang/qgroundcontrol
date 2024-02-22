@@ -25,8 +25,6 @@ SettingsPage {
     property var    _settingsManager:           QGroundControl.settingsManager
     property var    _appSettings:               _settingsManager.appSettings
     property var    _brandImageSettings:        _settingsManager.brandImageSettings
-    property string _mapProvider:               _settingsManager.flightMapSettings.mapProvider.value
-    property string _mapType:                   _settingsManager.flightMapSettings.mapType.value
     property Fact   _appFontPointSize:          _appSettings.appFontPointSize
     property Fact   _userBrandImageIndoor:      _brandImageSettings.userBrandImageIndoor
     property Fact   _userBrandImageOutdoor:     _brandImageSettings.userBrandImageOutdoor
@@ -96,12 +94,12 @@ SettingsPage {
             property Fact _checkInternet: _appSettings.checkInternet
         }
 
-        // FactCheckBoxSlider {
-        //     Layout.fillWidth:   true
-        //     text:               qsTr("Enable Remote ID")
-        //     fact:               QGroundControl.settingsManager.remoteIDSettings.enable
-        //     visible:            fact.visible
-        // }
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Enable Remote ID")
+            fact:               QGroundControl.settingsManager.remoteIDSettings.enable
+            visible:            fact.visible
+        }
 
         RowLayout {
             Layout.fillWidth:   true
@@ -180,50 +178,6 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:    qsTr("Map Settings")
-
-        LabelledComboBox {
-            label:      qsTr("Map Provider")
-            model:      QGroundControl.mapEngineManager.mapProviderList
-            comboBoxPreferredWidth: _comboBoxPreferredWidth
-
-            onActivated: (index) => {
-                // _mapProvider = comboBox.textAt(index)
-                // _mapType = QGroundControl.mapEngineManager.mapTypeList(comboBox.textAt(index))[0]
-                _mapProvider = comboBox.textAt(index)
-                QGroundControl.settingsManager.flightMapSettings.mapProvider.value = comboBox.textAt(index)
-                QGroundControl.settingsManager.flightMapSettings.mapType.value = QGroundControl.mapEngineManager.mapTypeList(comboBox.textAt(index))[0]
-                console.log("Map Provider Changed to", _mapProvider)
-            }
-
-            Component.onCompleted: {
-                var index = comboBox.find(_mapProvider)
-                if (index < 0) index = 0
-                comboBox.currentIndex = index
-            }
-        }
-
-        LabelledComboBox {
-            label: qsTr("Map Type")
-            model: QGroundControl.mapEngineManager.mapTypeList(_mapProvider)
-            comboBoxPreferredWidth: _comboBoxPreferredWidth
-
-            onActivated: (index) => {
-                // _mapType = comboBox.textAt(index)
-                _mapType = comboBox.textAt(index)
-                QGroundControl.settingsManager.flightMapSettings.mapType.value = comboBox.textAt(index)
-            }
-
-            Component.onCompleted: {
-                var index = comboBox.find(_mapType)
-                if (index < 0) index = 0
-                comboBox.currentIndex = index
-            }
-        }
-    }
-
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
         heading:            qsTr("Units")
         visible:            QGroundControl.settingsManager.unitsSettings.visible
 
@@ -242,86 +196,86 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("Brand Image")
-        visible:            _brandImageSettings.visible && !ScreenTools.isMobile
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("Brand Image")
+    //     visible:            _brandImageSettings.visible && !ScreenTools.isMobile
 
-        RowLayout {
-           Layout.fillWidth:   true
-           spacing:            ScreenTools.defaultFontPixelWidth * 2
-           visible:            _userBrandImageIndoor.visible
+    //     RowLayout {
+    //        Layout.fillWidth:   true
+    //        spacing:            ScreenTools.defaultFontPixelWidth * 2
+    //        visible:            _userBrandImageIndoor.visible
 
-            ColumnLayout {
-                Layout.fillWidth:   true
-                spacing:            0
+    //         ColumnLayout {
+    //             Layout.fillWidth:   true
+    //             spacing:            0
 
-                QGCLabel { text: qsTr("Indoor Image") }
-                QGCLabel {
-                    Layout.fillWidth:   true
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    text:               _userBrandImageIndoor.valueString.replace("file:///", "")
-                    elide:              Text.ElideMiddle
-                    visible:            _userBrandImageIndoor.valueString.length > 0
-                    }
-            }
+    //             QGCLabel { text: qsTr("Indoor Image") }
+    //             QGCLabel {
+    //                 Layout.fillWidth:   true
+    //                 font.pointSize:     ScreenTools.smallFontPointSize
+    //                 text:               _userBrandImageIndoor.valueString.replace("file:///", "")
+    //                 elide:              Text.ElideMiddle
+    //                 visible:            _userBrandImageIndoor.valueString.length > 0
+    //                 }
+    //         }
 
-            QGCButton {
-                text:       qsTr("Browse")
-                onClicked:  userBrandImageIndoorBrowseDialog.openForLoad()
+    //         QGCButton {
+    //             text:       qsTr("Browse")
+    //             onClicked:  userBrandImageIndoorBrowseDialog.openForLoad()
 
-                QGCFileDialog {
-                   id:                 userBrandImageIndoorBrowseDialog
-                   title:              qsTr("Choose custom brand image file")
-                   folder:             _userBrandImageIndoor.rawValue.replace("file:///", "")
-                   selectFolder:       false
-                   onAcceptedForLoad:  (file) => _userBrandImageIndoor.rawValue = "file:///" + file
-                }
-            }
-        }
+    //             QGCFileDialog {
+    //                id:                 userBrandImageIndoorBrowseDialog
+    //                title:              qsTr("Choose custom brand image file")
+    //                folder:             _userBrandImageIndoor.rawValue.replace("file:///", "")
+    //                selectFolder:       false
+    //                onAcceptedForLoad:  (file) => _userBrandImageIndoor.rawValue = "file:///" + file
+    //             }
+    //         }
+    //     }
 
-        RowLayout {
-            Layout.fillWidth:   true
-            spacing:            ScreenTools.defaultFontPixelWidth * 2
-            visible:            _userBrandImageOutdoor.visible
+    //     RowLayout {
+    //         Layout.fillWidth:   true
+    //         spacing:            ScreenTools.defaultFontPixelWidth * 2
+    //         visible:            _userBrandImageOutdoor.visible
 
-            ColumnLayout {
-                Layout.fillWidth:   true
-                spacing:            0
+    //         ColumnLayout {
+    //             Layout.fillWidth:   true
+    //             spacing:            0
 
-                QGCLabel { text: qsTr("Outdoor Image") }
-                QGCLabel {
-                    Layout.fillWidth:   true
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    text:               _userBrandImageOutdoor.valueString.replace("file:///", "")
-                    elide:              Text.ElideMiddle
-                    visible:            _userBrandImageOutdoor.valueString.length > 0
-                    }
-            }
+    //             QGCLabel { text: qsTr("Outdoor Image") }
+    //             QGCLabel {
+    //                 Layout.fillWidth:   true
+    //                 font.pointSize:     ScreenTools.smallFontPointSize
+    //                 text:               _userBrandImageOutdoor.valueString.replace("file:///", "")
+    //                 elide:              Text.ElideMiddle
+    //                 visible:            _userBrandImageOutdoor.valueString.length > 0
+    //                 }
+    //         }
 
-            QGCButton {
-                text:       qsTr("Browse")
-                onClicked:  userBrandImageOutdoorBrowseDialog.openForLoad()
+    //         QGCButton {
+    //             text:       qsTr("Browse")
+    //             onClicked:  userBrandImageOutdoorBrowseDialog.openForLoad()
 
-                QGCFileDialog {
-                   id:                 userBrandImageOutdoorBrowseDialog
-                   title:              qsTr("Choose custom brand image file")
-                   folder:             _userBrandImageOutdoor.rawValue.replace("file:///", "")
-                   selectFolder:       false
-                   onAcceptedForLoad:  (file) => _userBrandImageOutdoor.rawValue = "file:///" + file
-                }
-            }
-        }
+    //             QGCFileDialog {
+    //                id:                 userBrandImageOutdoorBrowseDialog
+    //                title:              qsTr("Choose custom brand image file")
+    //                folder:             _userBrandImageOutdoor.rawValue.replace("file:///", "")
+    //                selectFolder:       false
+    //                onAcceptedForLoad:  (file) => _userBrandImageOutdoor.rawValue = "file:///" + file
+    //             }
+    //         }
+    //     }
 
-        LabelledButton {
-            label:      qsTr("Reset Images")
-            buttonText: qsTr("Reset")
-            onClicked:  {
-               _userBrandImageIndoor.rawValue = ""
-               _userBrandImageOutdoor.rawValue = ""
-            }
-        }
-    }
+    //     LabelledButton {
+    //         label:      qsTr("Reset Images")
+    //         buttonText: qsTr("Reset")
+    //         onClicked:  {
+    //            _userBrandImageIndoor.rawValue = ""
+    //            _userBrandImageOutdoor.rawValue = ""
+    //         }
+    //     }
+    // }
 
     SettingsGroupLayout {
         Layout.fillWidth:   true

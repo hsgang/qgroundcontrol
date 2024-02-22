@@ -260,10 +260,10 @@ Rectangle{
 
         Rectangle {
             id: attitudeIndicatorBase
-            width: ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
+            width:  ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
             height: width
-            radius:                     height * 0.5
-            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
+            radius: height * 0.5
+            color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
 
             CustomAttitudeHUD {
                 size:                       parent.height

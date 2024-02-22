@@ -322,6 +322,16 @@ FlightMap {
         }
     }
 
+    MapItemView {
+        model: QGroundControl.multiVehicleManager.vehicles
+        delegate: VehicleInfoMapItem {
+            coordinate:     object.coordinate
+            map:            _root
+            visible:        QGroundControl.settingsManager.flyViewSettings.showVehicleInfoOnMap.rawValue && !pipMode
+            z:              QGroundControl.zOrderWidgets
+        }
+    }
+
     // Add the items associated with each vehicles flight plan to the map
     Repeater {
         model: QGroundControl.multiVehicleManager.vehicles
@@ -749,17 +759,4 @@ FlightMap {
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }
-
-    MapScale {
-        id:                 mapScale
-        anchors.margins:    _toolsMargin
-        anchors.left:       parent.left
-        anchors.top:        parent.top
-        mapControl:         _root
-        buttonsOnLeft:      true
-        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.windowState
-
-        property real centerInset: visible ? parent.height - y : 0
-    }
-
 }

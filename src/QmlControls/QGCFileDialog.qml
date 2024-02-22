@@ -1,6 +1,6 @@
-import QtQuick                      2.11
+import QtQuick                      2.15
 import QtQuick.Controls             2.4
-import QtQuick.Dialogs              1.2
+import QtQuick.Dialogs              1.3
 import QtQuick.Layouts              1.11
 
 import QGroundControl               1.0
@@ -19,6 +19,7 @@ Item {
     property string title
     property bool   selectExisting: true
     property bool   selectFolder:   false
+    property string defaultSuffix:  ""
 
     signal acceptedForLoad(string file)
     signal acceptedForSave(string file)
@@ -95,6 +96,7 @@ Item {
         selectExisting: _root.selectExisting
         selectMultiple: false
         selectFolder:   _root.selectFolder
+        defaultSuffix:  _root.defaultSuffix
 
         onAccepted: {
             if (_openForLoad) {

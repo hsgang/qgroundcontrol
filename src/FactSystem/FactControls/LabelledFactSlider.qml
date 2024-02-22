@@ -7,7 +7,7 @@ import QGroundControl.ScreenTools   1.0
 import QGroundControl.FactSystem    1.0
 import QGroundControl.FactControls  1.0
 
-RowLayout {
+GridLayout {
     property alias label:                   label.text
     property alias description:             _description.text
     property alias fact:                    factSlider.fact
@@ -15,8 +15,12 @@ RowLayout {
     property alias to:                      factSlider.to
     property alias stepSize:                factSlider.stepSize
     property real  sliderPreferredWidth:    -1
+    property bool  isRow:                   false
 
-    spacing: ScreenTools.defaultFontPixelWidth * 2
+    rowSpacing: ScreenTools.defaultFontPixelWidth
+    columnSpacing: ScreenTools.defaultFontPixelWidth * 2
+
+    flow:    isRow ? GridLayout.LeftToRight : GridLayout.TopToBottom
 
     ColumnLayout {
         spacing : ScreenTools.defaultFontPixelHeight * 0.2

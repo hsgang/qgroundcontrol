@@ -71,16 +71,17 @@ Rectangle {
         Rectangle {
             id:                     currentButton
             Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
-            height:                 viewButtonRow.height * 0.8
+            height:                 viewButtonRow.height * 0.7
             width:                  height
             color:                  "transparent"
-            //border.color:           qgcPal.text
+            border.color:           qgcPal.text
+            border.width:           1
             radius:                 ScreenTools.defaultFontPixelHeight / 4
 
             QGCToolBarButton {
                 anchors.centerIn:       parent
                 //Layout.preferredHeight: currentButton.height
-                icon.source:            "/qmlimages/Hamburger.svg"
+                icon.source:            "/InstrumentValueIcons/menu.svg" //"/qmlimages/Hamburger.svg"
                 logo:                   true
                 onClicked:
                     if(viewSelectDrawer.visible === false){
@@ -97,9 +98,9 @@ Rectangle {
             height:                 viewButtonRow.height * 0.7
             width:                  height
             color:                  "transparent"
-            //radius:                 ScreenTools.defaultFontPixelHeight * 0.2
-            // border.color:           qgcPal.text
-            // border.width:           1
+            radius:                 ScreenTools.defaultFontPixelHeight / 4
+            border.color:           !_activeVehicle ? qgcPal.colorRed : qgcPal.colorGreen
+            border.width:           1
             visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
 
             QGCColoredImage{
@@ -169,7 +170,7 @@ Rectangle {
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.33
         anchors.horizontalCenter: parent.horizontalCenter
-        color:                  qgcPal.windowShade //"transparent"
+        color:                  qgcPal.windowShadeDark //"transparent"
         border.color:           qgcPal.text
         radius:                 ScreenTools.defaultFontPixelHeight / 4
         visible:                currentToolbar == flyViewToolbar && _activeVehicle
@@ -283,6 +284,7 @@ Rectangle {
         visible:                !ScreenTools.isMobile && currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
         color:                  "transparent"
         border.color:           qgcPal.text
+        border.width:           1
         width:                  ScreenTools.defaultFontPixelHeight * 6
         radius:                 ScreenTools.defaultFontPixelHeight / 4
 

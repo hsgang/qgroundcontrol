@@ -578,7 +578,9 @@ void SimpleMissionItem::_rebuildComboBoxFacts(void)
     _comboboxFacts.clear();
 
     if (rawEdit()) {
+        _missionItem._commandFact._setName("Command");
         _comboboxFacts.append(&_missionItem._commandFact);
+        _missionItem._frameFact._setName("Frame");
         _comboboxFacts.append(&_missionItem._frameFact);
     } else {
         Fact*           rgParamFacts[7] =       { &_missionItem._param1Fact, &_missionItem._param2Fact, &_missionItem._param3Fact, &_missionItem._param4Fact, &_missionItem._param5Fact, &_missionItem._param6Fact, &_missionItem._param7Fact };

@@ -21,6 +21,7 @@ RowLayout {
 
     ColumnLayout {
         spacing : ScreenTools.defaultFontPixelHeight * 0.2
+        visible:    label !== ""
 
         QGCLabel {
             id:                 label

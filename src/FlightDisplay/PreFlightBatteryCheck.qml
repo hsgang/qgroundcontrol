@@ -23,7 +23,7 @@ PreFlightCheckButton {
                                         qsTr("Battery charge below %1%. Please recharge.").arg(failurePercent)
     allowTelemetryFailureOverride:  allowFailurePercentOverride
 
-    property int    failurePercent:                 40
+    property int    failurePercent:                 60
     property bool   allowFailurePercentOverride:    false
     property var    _batteryGroup:                  globals.activeVehicle && globals.activeVehicle.batteries.count ? globals.activeVehicle.batteries.get(0) : undefined
     property var    _batteryValue:                  _batteryGroup ? _batteryGroup.percentRemaining.value : 0

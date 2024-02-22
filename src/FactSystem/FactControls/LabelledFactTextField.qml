@@ -9,7 +9,7 @@ import QGroundControl.FactControls  1.0
 
 RowLayout {
     property string label:                   fact.shortDescription
-    property alias description:              _description.text
+    property alias  description:             _description.text
     property alias  fact:                    _factTextField.fact
     property real   textFieldPreferredWidth: -1
     property alias  textFieldUnitsLabel:     _factTextField.unitsLabel
@@ -31,6 +31,8 @@ RowLayout {
             Layout.fillWidth:   true
             font.pointSize:     ScreenTools.smallFontPointSize
             color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
+            wrapMode:           Text.WordWrap
+            width:              parent.width
         }
     }
 

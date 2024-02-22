@@ -14,6 +14,8 @@ import QGroundControl               1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.Palette       1.0
+import QGroundControl.FactSystem    1.0
+
 
 Item {
     id:         _root
@@ -36,9 +38,15 @@ Item {
     property alias  _windowContentItem: window.contentItem
     property bool   _isExpanded:        true
     property real   _pipSize:           parent.width * 0.2
-    property real   _maxSize:           0.35                // Percentage of parent control size
-    property real   _minSize:           0.10
+    property real   _maxSize:           0.30                // Percentage of parent control size
+    property real   _minSize:           0.20
     property bool   _componentComplete: false
+
+    property var    _settingsManager:   QGroundControl.settingsManager
+    property Fact   _mapProviderFact:   _settingsManager.flightMapSettings.mapProvider
+    property Fact   _mapTypeFact:       _settingsManager.flightMapSettings.mapType
+    property var    _mapEngineManager:  QGroundControl.mapEngineManager
+    property var    _mapTypeList:       _mapEngineManager.mapTypeList(_mapProviderFact.rawValue)
 
     Component.onCompleted: {
         _initForItems()
@@ -118,7 +126,11 @@ Item {
         anchors.fill:   parent
         enabled:        _isExpanded
         hoverEnabled:   true
-        onClicked:      _swapPip()
+        onClicked:      {
+            if(ScreenTools.isMobile){
+                _swapPip()
+            }
+        }
     }
 
     // MouseArea to drag in order to resize the PiP area
@@ -190,23 +202,6 @@ Item {
     }
 
     // Pip to Window
-    Image {
-        id:             popupPIP
-        source:         "/qmlimages/PiP.svg"
-        mipmap:         true
-        fillMode:       Image.PreserveAspectFit
-        anchors.left:   parent.left
-        anchors.top:    parent.top
-        visible:        _isExpanded && !ScreenTools.isMobile && pipMouseArea.containsMouse
-        height:         ScreenTools.defaultFontPixelHeight * 2.5
-        width:          ScreenTools.defaultFontPixelHeight * 2.5
-        sourceSize.height:  height
-
-        MouseArea {
-            anchors.fill:   parent
-            onClicked:      _pipOrWindowItem.pipState.state = _pipOrWindowItem.pipState.windowState
-        }
-    }
 
     Image {
         id:             hidePIP
@@ -232,7 +227,7 @@ Item {
         height:                 ScreenTools.defaultFontPixelHeight * 2
         width:                  ScreenTools.defaultFontPixelHeight * 2
         radius:                 ScreenTools.defaultFontPixelHeight / 3
-        visible:                !_isExpanded
+        visible:                !_isExpanded && ScreenTools.isMobile
         color:                  _fullItem.pipState.isDark ? Qt.rgba(0,0,0,0.75) : Qt.rgba(0,0,0,0.5)
         Image {
             width:              parent.width  * 0.75
@@ -247,6 +242,58 @@ Item {
         MouseArea {
             anchors.fill:   parent
             onClicked:      _root._setPipIsExpanded(true)
+        }
+    }
+
+
+    Item {
+        id: toolStrip
+        width:  pipToolStrip.width
+        height: pipToolStrip.height
+        visible: !ScreenTools.isMobile
+
+        anchors.right:          parent.left
+        anchors.rightMargin:    ScreenTools.defaultFontPixelHeight / 5
+        anchors.bottom:         parent.bottom
+
+        ToolStrip {
+            id: pipToolStrip
+            model:  pipToolStripList.model
+            maxHeight:          width * 4
+
+            ToolStripActionList {
+                id: pipToolStripList
+                model: [
+                    ToolStripAction {
+                        text: qsTr("Swap")
+                        iconSource: "/InstrumentValueIcons/copy.svg"
+                        onTriggered: _root._swapPip()
+                        visible:    _isExpanded
+                    },
+                    ToolStripAction {
+                        text: qsTr("Layer")
+                        iconSource: "/InstrumentValueIcons/layers.svg"
+                        onTriggered: {
+                            var currentIndex = _mapTypeList.indexOf(_mapTypeFact.rawValue)
+                            var nextIndex = (currentIndex + 1) % _mapTypeList.length
+                            _mapTypeFact.rawValue = _mapTypeList[nextIndex]
+                        }
+                        visible:    _isExpanded
+                    },
+                    ToolStripAction {
+                        text: qsTr("Show PIP")
+                        iconSource: "/InstrumentValueIcons/cheveron-outline-right.svg"
+                        onTriggered: _root._setPipIsExpanded(true)
+                        visible:    !_isExpanded
+                    },
+                    ToolStripAction {
+                        text: qsTr("Hide PIP")
+                        iconSource: "/InstrumentValueIcons/cheveron-outline-left.svg"
+                        onTriggered: _root._setPipIsExpanded(false)
+                        visible:    _isExpanded
+                    }
+                ]
+            }
         }
     }
 }

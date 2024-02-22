@@ -33,6 +33,7 @@ Item {
 
     property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle
     property bool   _isMessageImportant:    _activeVehicle ? !_activeVehicle.messageTypeNormal && !_activeVehicle.messageTypeNone : false
+    property real   _messageTextLength:     0
 
     function dropMessageIndicator() {
         mainWindow.showIndicatorPopup(_root, vehicleMessagesPopup);
@@ -78,6 +79,25 @@ Item {
                 anchors.fill:   parent
                 onClicked:      mainWindow.showIndicatorDrawer(vehicleMessagesPopup)
             }
+
+            // Rectangle {
+            //     color:          qgcPal.window
+            //     height:         ScreenTools.defaultFontPixelHeight * 0.9
+            //     width:          height * 1.3
+            //     border.color:   qgcPal.text
+            //     radius:         ScreenTools.defaultFontPixelHeight / 4
+            //     anchors.top:    parent.top
+            //     anchors.right:  parent.right
+            //     visible:        _messageTextLength > 0
+
+            //     QGCLabel {
+            //         id:     messageTextLengthLabel
+            //         text:   "99+" //_messageTextLength > 100 ? "99+" : _messageTextLength
+            //         font.pointSize: ScreenTools.smallFontPointSize
+            //         anchors.horizontalCenter: parent.horizontalCenter
+            //         anchors.verticalCenter: parent.verticalCenter
+            //     }
+            // }
         }
     }
 

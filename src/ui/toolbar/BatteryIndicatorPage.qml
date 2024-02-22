@@ -26,6 +26,7 @@ ToolIndicatorPage {
     property real       _margins: ScreenTools.defaultFontPixelHeight / 2
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
+    property real   _labelledItemWidth:     ScreenTools.defaultFontPixelWidth * 10
     // property Fact   _indicatorDisplay:  QGroundControl.settingsManager.batteryIndicatorSettings.display
     // property bool   _showPercentage:    _indicatorDisplay.rawValue === 0
     // property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
@@ -141,28 +142,33 @@ ToolIndicatorPage {
                 label:                  qsTr("Battery Cells")
                 fact:                   _batterySettings.batteryCellCount
                 visible:                true
+                textFieldPreferredWidth: _labelledItemWidth
             }
 
             LabelledFactTextField {
                 label:                  qsTr("Battery Low Level")
                 fact:                   controller.getParameterFact(-1, "BATT_LOW_VOLT")
+                textFieldPreferredWidth: _labelledItemWidth
             }
 
             LabelledFactComboBox {
                 label:                  qsTr("Battery Low Action")
                 fact:                   controller.getParameterFact(-1, "BATT_FS_LOW_ACT")
                 indexModel:             false
+                comboBoxPreferredWidth: _labelledItemWidth
             }
 
             LabelledFactTextField {
                 label:                  qsTr("Battery Critical Level")
                 fact:                   controller.getParameterFact(-1, "BATT_CRT_VOLT")
+                textFieldPreferredWidth: _labelledItemWidth
             }
 
             LabelledFactComboBox {
                 label:                  qsTr("Battery Critical Action")
                 fact:                   controller.getParameterFact(-1, "BATT_FS_CRT_ACT")
                 indexModel:             false
+                comboBoxPreferredWidth: _labelledItemWidth
             }
         }
     }

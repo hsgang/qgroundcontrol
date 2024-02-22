@@ -40,7 +40,7 @@ ListModel {
     ListElement {
         name: qsTr("Comm Links")
         url: "/qml/LinkSettings.qml"
-        menuIcon: "/InstrumentValueIcons/station.svg"
+        menuIcon: "/InstrumentValueIcons/link.svg"
         _enabled: true
         pageVisible: function() { return true }
     }
@@ -70,24 +70,18 @@ ListModel {
     }
 
     ListElement {
+        name: qsTr("Maps")
+        url: "/qml/MapSettings.qml"
+        menuIcon: "/InstrumentValueIcons/globe.svg"
+        _enabled: true
+        pageVisible: function() { return true }
+    }
+
+    ListElement {
         name: qsTr("ADSB Server")
         url: "/qml/ADSBServerSettings.qml"
         menuIcon: "/InstrumentValueIcons/radar.svg"
         _enabled: false
-        pageVisible: function() { return true }
-    }
-
-    //ListElement {
-    //    name: qsTr("General Old")
-    //    url: "/qml/GeneralSettings2.qml"
-    //    pageVisible: function() { return true }
-    //}
-
-    ListElement {
-        name: qsTr("Offline Maps")
-        url: "/qml/OfflineMap.qml"
-        menuIcon: "/InstrumentValueIcons/globe.svg"
-        _enabled: true
         pageVisible: function() { return true }
     }
 
@@ -103,7 +97,7 @@ ListModel {
         name: qsTr("Remote ID")
         url: "/qml/RemoteIDSettings.qml"
         menuIcon: "/InstrumentValueIcons/inbox-full.svg"
-        _enabled: false
+        _enabled: true
         pageVisible: function() { return QGroundControl.settingsManager.remoteIDSettings.enable.rawValue }
     }
 

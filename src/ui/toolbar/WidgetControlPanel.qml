@@ -41,7 +41,7 @@ ToolIndicatorPage{
                     text:       qsTr("PhotoVideo Control")
                     fact:       _showPhotoVideoControl
                     visible:    _showPhotoVideoControl.visible
-                    property Fact   _showPhotoVideoControl:      QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl
+                    property Fact   _showPhotoVideoControl:     QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl
                 }
 
                 FactCheckBoxSlider {
@@ -49,7 +49,7 @@ ToolIndicatorPage{
                     text:       qsTr("Mount Control")
                     fact:       _showGimbalControlPannel
                     visible:    _showGimbalControlPannel.visible
-                    property Fact   _showGimbalControlPannel:      QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel
+                    property Fact   _showGimbalControlPannel:   QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel
                 }
 
                 FactCheckBoxSlider {
@@ -57,7 +57,7 @@ ToolIndicatorPage{
                     text:       qsTr("Winch Control")
                     fact:       _showWinchControl
                     visible:    _showWinchControl.visible
-                    property Fact   _showWinchControl:      QGroundControl.settingsManager.flyViewSettings.showWinchControl
+                    property Fact   _showWinchControl:          QGroundControl.settingsManager.flyViewSettings.showWinchControl
                 }
 
                 FactCheckBoxSlider {
@@ -65,7 +65,7 @@ ToolIndicatorPage{
                     text:       qsTr("Chart Widget")
                     fact:       _showChartWidget
                     visible:    _showChartWidget.visible
-                    property Fact   _showChartWidget:      QGroundControl.settingsManager.flyViewSettings.showChartWidget
+                    property Fact   _showChartWidget:           QGroundControl.settingsManager.flyViewSettings.showChartWidget
                 }
 
                 FactCheckBoxSlider {
@@ -73,12 +73,29 @@ ToolIndicatorPage{
                     text:       qsTr("Atmospheric Data")
                     fact:       _showAtmosphericValueBar
                     visible:    _showAtmosphericValueBar.visible
-                    property Fact   _showAtmosphericValueBar:      QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar
+                    property Fact   _showAtmosphericValueBar:   QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar
                 }
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       qsTr("Windvane")
+                    fact:       _showWindvane
+                    visible:    _showWindvane.visible
+                    property Fact   _showWindvane:              QGroundControl.settingsManager.flyViewSettings.showWindvane
+                }
+
             }
 
             SettingsGroupLayout {
                 heading:        qsTr("Status")
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       qsTr("Vehicle Info on Map")
+                    fact:       _showVehicleInfoOnMap
+                    visible:    _showVehicleInfoOnMap.visible
+                    property Fact   _showVehicleInfoOnMap:      QGroundControl.settingsManager.flyViewSettings.showVehicleInfoOnMap
+                }
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true

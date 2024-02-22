@@ -9,7 +9,7 @@ import QGroundControl.Palette       1.0
 Rectangle {
     id:             _root
     implicitWidth:  label.contentWidth + (_diameter * 2.5) + (_border * 4)
-    implicitHeight: label.height * 2.5
+    implicitHeight: label.height * 2
     radius:         height /2
     color:          qgcPal.windowShade
 

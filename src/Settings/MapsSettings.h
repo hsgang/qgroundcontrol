@@ -7,12 +7,18 @@
  *
  ****************************************************************************/
 
-import QGroundControl.FlightDisplay 1.0
+#pragma once
 
-GuidedToolStripAction {
-    text:       _guidedController.armTitle
-    iconSource: "/res/power.svg"
-    visible:    _guidedController.showArm
-    enabled:    _guidedController.showArm && !_guidedController._vehicleArmed
-    actionID:   _guidedController.actionArm
-}
+#include "SettingsGroup.h"
+
+class MapsSettings : public SettingsGroup
+{
+    Q_OBJECT
+public:
+    MapsSettings(QObject* parent = nullptr);
+
+    DEFINE_SETTING_NAME_GROUP()
+
+    DEFINE_SETTINGFACT(maxCacheDiskSize)
+    DEFINE_SETTINGFACT(maxCacheMemorySize)
+};

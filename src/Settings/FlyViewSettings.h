@@ -46,4 +46,6 @@ public:
     DEFINE_SETTINGFACT(showVibrationStatus)
     DEFINE_SETTINGFACT(showEKFStatus)
     DEFINE_SETTINGFACT(flyviewWidgetOpacity)
+    DEFINE_SETTINGFACT(showWindvane)
+    DEFINE_SETTINGFACT(showVehicleInfoOnMap)
 };

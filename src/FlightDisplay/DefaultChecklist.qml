@@ -30,7 +30,7 @@ Item {
             }
 
             PreFlightBatteryCheck {
-                failurePercent:                 40
+                failurePercent:                 60
                 allowFailurePercentOverride:    false
             }
 

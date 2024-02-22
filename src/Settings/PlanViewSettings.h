@@ -26,4 +26,5 @@ public:
     DEFINE_SETTINGFACT(takeoffItemNotRequired)
     DEFINE_SETTINGFACT(showGimbalOnlyWhenSet)
     DEFINE_SETTINGFACT(vtolTransitionDistance)
+    DEFINE_SETTINGFACT(showROIToolstrip)
 };
