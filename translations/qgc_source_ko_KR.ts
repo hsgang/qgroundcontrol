@@ -384,7 +384,7 @@
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="770"/>
         <source>Unable to change altitude, vehicle altitude not known.</source>
-        <translation>고도를 바꿀 수 없습니다. 기체의 고도를 알 수 없습니다.</translation>
+        <translation>고도 변경 실패 - 기체의 고도를 알 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="775"/>
@@ -399,33 +399,33 @@
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="844"/>
         <source>Unable to takeoff, vehicle position not known.</source>
-        <translation>이륙할 수 없습니다. 기체의 위치를 알 수 없습니다.</translation>
+        <translation>이륙 실패 - 기체의 위치를 알 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="854"/>
         <source>Unable to takeoff: Vehicle failed to change to Guided mode.</source>
-        <translation>이륙할 수 없습니다: 기체가 Guided 모드에 진입할 수 없습니다.</translation>
+        <translation>이륙 실패 - 기체가 Guided 모드에 진입할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="859"/>
         <source>Unable to takeoff: Vehicle failed to arm.</source>
-        <translation>이륙할 수 없습니다: 기체 시동이 되지 않았습니다.</translation>
+        <translation>이륙 실패 - 기체 시동이 되지 않았습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="877"/>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="897"/>
         <source>Unable to start mission: Vehicle failed to change to Auto mode.</source>
-        <translation>미션을 시작할 수 없습니다: 기체가 Auto 모드 진입에 실패했습니다.</translation>
+        <translation>미션 시작 실패 - 기체가 Auto 모드 진입에 실패했습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="885"/>
         <source>Unable to start mission: Vehicle failed to change to Guided mode.</source>
-        <translation>미션을 시작할 수 없습니다: 기체가 Guided 모드에 진입할 수 없습니다.</translation>
+        <translation>미션 시작 실패 - 기체가 Guided 모드에 진입할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="890"/>
         <source>Unable to start mission: Vehicle failed to arm.</source>
-        <translation>미션을 시작할 수 없습니다: 기체 시동에 실패하였습니다.</translation>
+        <translation>미션 시작 실패 - 기체 시동에 실패하였습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="975"/>
@@ -4007,115 +4007,117 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
-    <name>BatteryIndicator</name>
+    <name>BatteryIndicatorPage</name>
     <message>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="82"/>
-        <source>100%</source>
-        <translation>100%</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="145"/>
-        <source>Battery Status</source>
-        <translation>배터리 상태</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="168"/>
-        <source>Battery %1</source>
-        <translation>배터리 %1</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="169"/>
-        <source>Charge State</source>
-        <translation>충전 상태</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="170"/>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="171"/>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="170"/>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="171"/>
         <source>Remaining</source>
         <translation>잔여율</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="172"/>
-        <source>Voltage</source>
-        <translation>전압</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="173"/>
-        <source>Consumed</source>
-        <translation>소비용량</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="174"/>
-        <source>Temperature</source>
-        <translation>온도</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="175"/>
-        <source>Function</source>
-        <translation>기능</translation>
-    </message>
-</context>
-<context>
-    <name>BatteryIndicatorContentItem</name>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="46"/>
-        <source>Battery Status</source>
-        <translation>배터리 상태</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="68"/>
-        <source>Battery ID</source>
-        <translation>배터리 ID</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="69"/>
-        <source>Battery %1</source>
-        <translation>배터리 %1</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="70"/>
-        <source>Charge State</source>
-        <translation>충전 상태</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="71"/>
-        <source>Remaining Time</source>
-        <translation>남은시간</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="72"/>
-        <source>Remaining</source>
-        <translation>잔량</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="73"/>
-        <source>Voltage</source>
-        <translation>전압</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="79"/>
-        <source>Cell Voltage</source>
-        <translation>셀전압</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="74"/>
-        <source>Current</source>
-        <translation>전류</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="75"/>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="173"/>
         <source>Consumed</source>
         <translation>소모량</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="75"/>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="174"/>
         <source>Temperature</source>
         <translation>온도</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorContentItem.qml" line="75"/>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="175"/>
         <source>Function</source>
         <translation>기능</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="46"/>
+        <source>Battery Status</source>
+        <translation>배터리 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="68"/>
+        <source>Battery ID</source>
+        <translation>배터리 ID</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="69"/>
+        <source>Battery %1</source>
+        <translation>배터리 %1</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="70"/>
+        <source>Charge State</source>
+        <translation>충전 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="71"/>
+        <source>Remaining Time</source>
+        <translation>남은시간</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="72"/>
+        <source>Remaining</source>
+        <translation>잔량</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="73"/>
+        <source>Voltage</source>
+        <translation>전압</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="79"/>
+        <source>Cell Voltage</source>
+        <translation>셀 전압</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="74"/>
+        <source>Current</source>
+        <translation>전류</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Temperature</source>
+        <translation>온도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Function</source>
+        <translation>기능</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Battery Settings</source>
+        <translation>배터리 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Show Cell Voltage</source>
+        <translation>셀 전압 보기</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Battery Cells</source>
+        <translation>셀 수량</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Battery Low Level</source>
+        <translation>저전압 수준</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Battery Low Action</source>
+        <translation>저전압시 행동</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Battery Critical Level</source>
+        <translation>위험전압 수준</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Battery Critical Action</source>
+        <translation>위험전압시 행동</translation>
     </message>
 </context>
 <context>
@@ -6869,6 +6871,11 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>FlyViewCustomLayer</name>
     <message>
+        <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="172"/>
+        <source>Show Multi Vehicle Panel</source>
+        <translation>다중 기체 패널 보기</translation>
+    </message>
+    <message>
         <location filename="../src/FlightDisplay/FlyViewCustomLayer.qml" line="395"/>
         <source>Payload Widget</source>
         <translation>임무장치</translation>
@@ -7154,141 +7161,161 @@ Click Ok to start the auto-tuning process.
 </context>
 
 <context>
-    <name>VehicleIndicator</name>
+    <name>VehicleIndicatorPage</name>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="92"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="92"/>
         <source>Responsiveness</source>
         <translation>조작 반응성</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="101"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="101"/>
         <source>Loiter Horizontal Speed(cm/s)</source>
         <translation>로이터 수평 속도(cm/s)</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="109"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="109"/>
         <source>WP Horizontal Speed(cm/s)</source>
         <translation>WP 수평 속도(cm/s)</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="117"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="117"/>
         <source>WP Climb Speed(cm/s)</source>
         <translation>WP 상승 속도(cm/s)</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="125"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="125"/>
         <source>WP Descent Speed(cm/s)</source>
         <translation>WP 하강 속도(cm/s)</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="133"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="133"/>
         <source>Mission Turning Radius(cm)</source>
         <translation>임무 선회 반경(cm)</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="133"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="133"/>
         <source>Vehicle Summary</source>
         <translation>기체 정보 페이지</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="402"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="402"/>
         <source>Configure</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="133"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="133"/>
         <source>Summary</source>
         <translation>기체 정보</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="148"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="148"/>
         <source>Vehicle Information</source>
         <translation>기체 정보</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="158"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="158"/>
         <source>Firmware Type</source>
         <translation>펌웨어 타입</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="163"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="163"/>
         <source>Firmware Version</source>
         <translation>펌웨어 버전</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="163"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="163"/>
         <source>Parameter Summary</source>
         <translation>파라미터 요약</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="174"/>
         <source>Loiter Speed</source>
-        <translation>사용자 수평 속도</translation>
+        <translation>매뉴얼 수평 속도</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="174"/>
         <source>Pilot Climb Speed</source>
-        <translation>사용자 상승 속도</translation>
+        <translation>매뉴얼 상승 속도</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="174"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="174"/>
         <source>Pilot Descent Speed</source>
-        <translation>사용자 하강 속도</translation>
+        <translation>매뉴얼 하강 속도</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="185"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="185"/>
         <source>WP Horizontal Speed</source>
         <translation>WP 수평 속도</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="190"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="190"/>
         <source>WP Climb Speed</source>
         <translation>WP 상승 속도</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="195"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="195"/>
         <source>WP Descent Speed</source>
         <translation>WP 하강 속도</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="206"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="206"/>
         <source>RTL Altitude</source>
         <translation>RTL 고도</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="211"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="211"/>
         <source>Land Speed</source>
         <translation>착륙 속도</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="222"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="222"/>
         <source>Frame Class</source>
         <translation>프레임 형태</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="271"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="271"/>
         <source>Operating Summary</source>
         <translation>사용 정보</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="227"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="227"/>
         <source>Boot Count</source>
         <translation>부팅 횟수</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="233"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="233"/>
         <source>Total Runtime</source>
         <translation>총 작동 시간</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="239"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
         <source>Total Flight Time</source>
         <translation>총 비행 시간</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/VehicleIndicator.qml" line="239"/>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
         <source>Land Descent Rate</source>
         <translation>착륙 하강 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
+        <source>Vehicle Parameter</source>
+        <translation>기체 파라미터</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
+        <source>RTL Altitude</source>
+        <translation>RTL 고도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
+        <source>Land Speed</source>
+        <translation>착륙 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
+        <source>Precision Landing</source>
+        <translation>정밀 착륙</translation>
     </message>
 </context>
 <context>
@@ -7388,8 +7415,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="79"/>
-        <source>Offline Maps</source>
-        <translation>오프라인 지도</translation>
+        <source>Maps</source>
+        <translation>지도</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="86"/>
@@ -7987,6 +8014,41 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Connect to NTRIP server (Required Reboot)</source>
+        <translation>NTRIP 서버 연결 (애플리케이션 재시작 필요)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Host Address</source>
+        <translation>호스트 주소</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Server Port</source>
+        <translation>포트</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>User Name</source>
+        <translation>사용자 이름</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Password</source>
+        <translation>패스워드</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Mount Point</source>
+        <translation>마운트 포인트</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>White List</source>
+        <translation>화이트 리스트</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
@@ -7994,6 +8056,46 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
         <source>Status</source>
         <translation>상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Connection</source>
+        <translation>연결</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Connected</source>
+        <translation>연결됨</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Disconnected</source>
+        <translation>연결 끊김</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>BandWidth</source>
+        <translation>대역폭</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Reconnect NTRIP</source>
+        <translation>NTRIP 재연결</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Reconnect</source>
+        <translation>재연결</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Stop NTRIP</source>
+        <translation>NTRIP 정지</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Stop</source>
+        <translation>정지</translation>
     </message>
 </context>
 <context>
@@ -9244,7 +9346,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/comm/LinkManager.cc" line="683"/>
         <source>Serial</source>
-        <translation>직렬</translation>
+        <translation>시리얼</translation>
     </message>
     <message>
         <location filename="../src/comm/LinkManager.cc" line="685"/>
@@ -9270,6 +9372,21 @@ Click Ok to start the auto-tuning process.
 </context>
 <context>
     <name>LinkSettings</name>
+    <message>
+        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <source>Add New Link</source>
+        <translation>새로운 연결 추가</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <source>Link Manager</source>
+        <translation>연결 관리</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <source>Added Link List</source>
+        <translation>연결 목록</translation>
+    </message>
     <message>
         <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
         <source>Delete</source>
@@ -9333,7 +9450,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/LinkSettings.qml" line="194"/>
         <source>Automatically Connect on Start</source>
-        <translation>시작시 자동으로 연결</translation>
+        <translation>자동 연결</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/LinkSettings.qml" line="201"/>
@@ -10216,9 +10333,19 @@ Click Ok to start the auto-tuning process.
         <translation>대기 측정 정보</translation>
     </message>
     <message>
+        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="440"/>
+        <source>Windvane</source>
+        <translation>풍향계</translation>
+    </message>
+    <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="450"/>
         <source>Status</source>
         <translation>상태 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="452"/>
+        <source>Vehicle Info on Map</source>
+        <translation>지도상에 기체정보 표시</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="452"/>
@@ -10886,7 +11013,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="208"/>
         <source>The following speed values are used to calculate total mission time. They do not affect the flight speed for the mission.</source>
-        <translation>다음 속도 값은 총 임무 시간을 계산하는 데 사용됩니다. 임무의 비행 속도에는 영향을 미치지 않습니다.</translation>
+        <translation>경로 시간을 계산하는 데 사용되며, 실제 비행 속도에는 영향을 미치지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="213"/>
@@ -11106,7 +11233,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="25"/>
         <source>Multirotor Initial Checks</source>
-        <translation>멀티로터 기본사항 확인</translation>
+        <translation>기본점검</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="28"/>
@@ -11116,7 +11243,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="29"/>
         <source>Props mounted and secured?</source>
-        <translation>프로펠러 상태를 확인하였습니까?</translation>
+        <translation>프로펠러 및 기체 외부 상태 확인</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="50"/>
@@ -11156,7 +11283,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="72"/>
         <source>Configured and started? Payload lid closed?</source>
-        <translation>설정과 작동을 확인하였습니까?</translation>
+        <translation>설정과 작동을 확인</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="76"/>
@@ -11166,7 +11293,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="77"/>
         <source>OK for your platform?</source>
-        <translation>기상조건을 확인하였습니까?</translation>
+        <translation>기상조건을 확인</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="81"/>
@@ -11176,7 +11303,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/MultiRotorChecklist.qml" line="82"/>
         <source>Launch area and path free of obstacles/people?</source>
-        <translation>비행 경로와 이륙 위치상에 장애물 또는 사람이 없습니까?</translation>
+        <translation>비행 경로와 이륙 위치상에 장애물 확인</translation>
     </message>
 </context>
 <context>
@@ -11184,8 +11311,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="54"/>
         <source>The following commands will be applied to all vehicles</source>
-        <translation>다음 명령이 모든 기체에 적용됩니다.
-</translation>
+        <translation>모든 기체에 다음 명령을 적용합니다</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
@@ -11196,6 +11322,61 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
         <source>Disarmed</source>
         <translation>시동 꺼짐</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Ready To Fly</source>
+        <translation>비행가능</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Not Ready</source>
+        <translation>비행불가</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Armed</source>
+        <translation>시동</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Flying</source>
+        <translation>비행중</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Landing</source>
+        <translation>착륙중</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Pause</source>
+        <translation>정지</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Start Mission</source>
+        <translation>자동경로</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Arm</source>
+        <translation>시동켜기</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Disarm</source>
+        <translation>시동끄기</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>RTL</source>
+        <translation>복귀</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/MultiVehicleList.qml" line="130"/>
+        <source>Take control</source>
+        <translation>수동제어</translation>
     </message>
 </context>
 <context>
@@ -14042,7 +14223,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/FlightDisplay/PreFlightBatteryCheck.qml" line="23"/>
         <source>Battery charge below %1%. Please recharge.</source>
-        <translation>배터리 잔량이 %1% 보다 적습니다. 충전하십시오.</translation>
+        <translation>배터리 잔량이 %1% 보다 낮음</translation>
     </message>
 </context>
 <context>
@@ -14125,12 +14306,12 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/FlightDisplay/PreFlightRCCheck.qml" line="17"/>
         <source>Radio Control</source>
-        <translation>무선 조종</translation>
+        <translation>조종 신호</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/PreFlightRCCheck.qml" line="18"/>
         <source>Receiving signal. Perform range test &amp; confirm.</source>
-        <translation>신호 수신완료. 통신거리를 테스트하고 확인해주세요.</translation>
+        <translation>조종 신호 확인</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/PreFlightRCCheck.qml" line="19"/>
@@ -14844,7 +15025,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/QGroundControlQmlGlobal.cc" line="296"/>
         <source>Terrain Frame</source>
-        <translation>지형 구조</translation>
+        <translation>지형 고도</translation>
     </message>
 </context>
 <context>
@@ -15517,7 +15698,7 @@ Click the Next button to upload calibration to board. Click Cancel if you don&ap
     <message>
         <location filename="../src/FlightDisplay/RoverChecklist.qml" line="62"/>
         <source>Last preparations before launch</source>
-        <translation>이륙 전 마지막 준비사항</translation>
+        <translation>이륙 전 확인사항</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/RoverChecklist.qml" line="66"/>
@@ -16544,6 +16725,11 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="243"/>
+        <source>Flight Speed Modify</source>
+        <translation>비행속도 변경</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/SimpleItemEditor.qml" line="243"/>
         <source>Flight Speed</source>
         <translation>비행속도</translation>
     </message>
@@ -16786,7 +16972,7 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     <message>
         <location filename="../src/FlightDisplay/SubChecklist.qml" line="72"/>
         <source>Last preparations before launch</source>
-        <translation>이륙 전 마지막 준비사항</translation>
+        <translation>이륙 전 확인사항</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/SubChecklist.qml" line="76"/>
@@ -18316,23 +18502,23 @@ Confirm change?</source>
     </message>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="3012"/>
-        <source>%1 command temporarily rejected</source>
-        <translation>%1 명령이 일시적으로 거절되었습니다</translation>
+        <source>%1 command temporarily rejected on Vehicle %2</source>
+        <translation>기체%2에서 %1 명령이 일시적으로 거절되었습니다</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="3015"/>
-        <source>%1 command denied</source>
-        <translation>%1 명령이 불가합니다</translation>
+        <source>%1 command denied on Vehicle %2</source>
+        <translation>기체%2에서 %1 명령이 불가합니다</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="3018"/>
-        <source>%1 command not supported</source>
-        <translation>%1 명령이 지원되지 않습니다</translation>
+        <source>%1 command not supported on vehicle %2</source>
+        <translation>기체%2에서 %1 명령이 지원되지 않습니다</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="3021"/>
-        <source>%1 command failed</source>
-        <translation>%1 명령이 실패하였습니다</translation>
+        <source>%1 command failed on Vehicle %2</source>
+        <translation>기체%2에서 %1 명령이 실패하였습니다</translation>
     </message>
 </context>
 <context>
@@ -18602,34 +18788,87 @@ Confirm change?</source>
 <context>
     <name>AtmosphericValueMapItem</name>
     <message>
-        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="60"/>
-        <source>ALT:</source>
-        <translation>고도:</translation>
+        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.qml" line="60"/>
+        <source>ALT</source>
+        <translation>고도</translation>
     </message>
     <message>
-        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="63"/>
-        <source>TMP:</source>
-        <translation>기온:</translation>
+        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.qml" line="63"/>
+        <source>TMP</source>
+        <translation>기온</translation>
     </message>
     <message>
-        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="66"/>
-        <source>HMD:</source>
-        <translation>습도:</translation>
+        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.qml" line="66"/>
+        <source>HMD</source>
+        <translation>습도</translation>
     </message>
     <message>
-        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="69"/>
-        <source>PRS:</source>
-        <translation>기압:</translation>
+        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.qml" line="69"/>
+        <source>PRS</source>
+        <translation>기압</translation>
     </message>
     <message>
-        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="72"/>
-        <source>W/D:</source>
-        <translation>풍향:</translation>
+        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.qml" line="72"/>
+        <source>W/D</source>
+        <translation>풍향</translation>
     </message>
     <message>
-        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.cc" line="75"/>
-        <source>W/S:</source>
-        <translation>풍속:</translation>
+        <location filename="../src/FlightMap/MapItems/AtmosphericValueMapItem.qml" line="75"/>
+        <source>W/S</source>
+        <translation>풍속</translation>
+    </message>
+</context>
+<context>
+    <name>VehicleInfoMapItem</name>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>Ready To Fly</source>
+        <translation>비행가능</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>Not Ready</source>
+        <translation>비행불가</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>Armed</source>
+        <translation>시동</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>Flying</source>
+        <translation>비행중</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>Landing</source>
+        <translation>착륙중</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>Unknown</source>
+        <translation>알 수 없음</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>Vehicle</source>
+        <translation>기체</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>STS</source>
+        <translation>상태</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>FLT</source>
+        <translation>모드</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>ALT</source>
+        <translation>고도</translation>
     </message>
 </context>
 </TS>
