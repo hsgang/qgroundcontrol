@@ -87,6 +87,11 @@ SetupPage {
                                 }
                             }
                         }
+
+                        QGCLabel {
+                            anchors.horizontalCenter:   parent.horizontalCenter
+                            text:                       slider.value + " %"
+                        }
                     } // Column
                 } // Repeater
 
@@ -112,6 +117,10 @@ SetupPage {
                             }
                         }
                     }
+                    QGCLabel {
+                        anchors.horizontalCenter:   parent.horizontalCenter
+                        text:                       allSlider.value + " %"
+                    }
                 } // Column
             } // Row
 
@@ -122,26 +131,41 @@ SetupPage {
                 text:           qsTr("Moving the sliders will causes the motors to spin. Make sure you remove all props.")
             }
 
-            Row {
-                spacing: ScreenTools.defaultFontPixelWidth
-
-                Switch {
-                    id: safetySwitch
-                    onClicked: {
-                        if (!checked) {
-                            for (var sliderIndex=0; sliderIndex<sliderRepeater.count; sliderIndex++) {
-                                sliderRepeater.itemAt(sliderIndex).motorSlider.value = 0
-                            }
-                            allSlider.value = 0
+            QGCCheckBoxSlider {
+                id:     safetySwitch
+                text:   checked ? qsTr("Careful: Motor sliders are enabled") : qsTr("Propellers are removed - Enable motor sliders")
+                checked: false
+                onClicked: {
+                    if (!checked) {
+                        for (var sliderIndex=0; sliderIndex<sliderRepeater.count; sliderIndex++) {
+                            sliderRepeater.itemAt(sliderIndex).motorSlider.value = 0
                         }
+                        allSlider.value = 0
                     }
                 }
+            }
 
-                QGCLabel {
-                    color:  qgcPal.warningText
-                    text:   safetySwitch.checked ? qsTr("Careful: Motor sliders are enabled") : qsTr("Propellers are removed - Enable motor sliders")
-                }
-            } // Row
+            // Row {
+            //     spacing: ScreenTools.defaultFontPixelWidth
+
+            //     Switch {
+            //         id: safetySwitch
+            //         onClicked: {
+            //             if (!checked) {
+            //                 for (var sliderIndex=0; sliderIndex<sliderRepeater.count; sliderIndex++) {
+            //                     sliderRepeater.itemAt(sliderIndex).motorSlider.value = 0
+            //                 }
+            //                 allSlider.value = 0
+            //             }
+            //         }
+            //     }
+
+            //     QGCLabel {
+            //         color:  qgcPal.warningText
+            //         text:   safetySwitch.checked ? qsTr("Careful: Motor sliders are enabled") : qsTr("Propellers are removed - Enable motor sliders")
+            //     }
+            // } // Row
+
         } // Column
     } // Component
 } // SetupPahe
