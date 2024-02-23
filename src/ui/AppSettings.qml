@@ -22,7 +22,7 @@ Rectangle {
     color:  qgcPal.window
     z:      QGroundControl.zOrderTopMost
 
-    ExclusiveGroup { id : setupButtonGroup }
+    ExclusiveGroup { id : appSettingButtonGroup }
 
     readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
     readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
@@ -61,39 +61,42 @@ Rectangle {
     QGCFlickable {
         id:                 buttonList
         width:              buttonColumn.width
-        anchors.topMargin:  _verticalMargin
+        anchors.topMargin:  _defaultTextHeight / 2
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
         anchors.leftMargin: _horizontalMargin
         anchors.left:       parent.left
-        contentHeight:      buttonColumn.height + _verticalMargin
+        contentHeight:      buttonColumn.height
         flickableDirection: Flickable.VerticalFlick
         clip:               true
 
-        Column {
+        // Column {
+        //     id:         buttonColumn
+        //     width:      _maxButtonWidth
+        //     spacing:    _verticalMargin
+
+        //     property real _maxButtonWidth: 0
+
+        //     Component.onCompleted: reflowWidths()
+
+        //     // I don't know why this does not work
+        //     Connections {
+        //         target:         QGroundControl.settingsManager.appSettings.appFontPointSize
+        //         onValueChanged: buttonColumn.reflowWidths()
+        //     }
+
+        //     function reflowWidths() {
+        //         buttonColumn._maxButtonWidth = 0
+        //         for (var i = 0; i < children.length; i++) {
+        //             buttonColumn._maxButtonWidth = Math.max(buttonColumn._maxButtonWidth, children[i].width)
+        //         }
+        //         for (var j = 0; j < children.length; j++) {
+        //             children[j].width = buttonColumn._maxButtonWidth
+        //         }
+        //     }
+        ColumnLayout {
             id:         buttonColumn
-            width:      _maxButtonWidth
-            spacing:    _verticalMargin
-
-            property real _maxButtonWidth: 0
-
-            Component.onCompleted: reflowWidths()
-
-            // I don't know why this does not work
-            Connections {
-                target:         QGroundControl.settingsManager.appSettings.appFontPointSize
-                onValueChanged: buttonColumn.reflowWidths()
-            }
-
-            function reflowWidths() {
-                buttonColumn._maxButtonWidth = 0
-                for (var i = 0; i < children.length; i++) {
-                    buttonColumn._maxButtonWidth = Math.max(buttonColumn._maxButtonWidth, children[i].width)
-                }
-                for (var j = 0; j < children.length; j++) {
-                    children[j].width = buttonColumn._maxButtonWidth
-                }
-            }
+            spacing:    _defaultTextHeight / 2
 
             Repeater {
                 id:     buttonRepeater
@@ -105,11 +108,12 @@ Rectangle {
                     id:                 subMenu
                     imageResource:      menuIcon
                     setupIndicator:     false
-                    exclusiveGroup:      setupButtonGroup
+                    exclusiveGroup:     appSettingButtonGroup
                     // autoExclusive:      true
                     text:               name
                     visible:            url !== "/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
                     enabled:            _enabled
+                    Layout.fillWidth:   true
 
                     onClicked: {
 
