@@ -8,7 +8,7 @@
  ****************************************************************************/
 
 import QtQuick          2.15
-import QtQuick.Controls 1.2
+import QtQuick.Controls 2.15
 import QtQuick.Layouts  1.2
 import QtQuick.Shapes   1.15
 
@@ -40,8 +40,7 @@ Item {
         anchors.left:   parent.left
         anchors.right:  parent.right
         height:         mvCommandsColumn.height + (_margin *2)
-        color:          qgcPal.window
-        opacity:        _rectOpacity
+        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _rectOpacity)
         radius:         _margin
 
         DeadMouseArea {
@@ -103,14 +102,17 @@ Item {
             opacity:    _rectOpacity
             radius:     _margin
             border.color: _vehicle.id === QGroundControl.multiVehicleManager.activeVehicle.id ? qgcPal.missionItemEditor : "transparent"
-            border.width: 2
+            border.width: 2           
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    var vehicleId = vehicleIdLabel.text //textAt(index).split(" ")[1]
-                    var vehicle = QGroundControl.multiVehicleManager.getVehicleById(vehicleId)
-                    QGroundControl.multiVehicleManager.activeVehicle = vehicle
+                    if(_vehicle.id !== QGroundControl.multiVehicleManager.activeVehicle.id){
+                        var vehicleId = vehicleIdLabel.text //textAt(index).split(" ")[1]
+                        var vehicle = QGroundControl.multiVehicleManager.getVehicleById(vehicleId)
+                        QGroundControl.multiVehicleManager.activeVehicle = vehicle
+                        busyIndicator.visible = true
+                    }
                 }
             }
 
@@ -459,7 +461,27 @@ Item {
                         onClicked:  _vehicle.flightMode = _vehicle.takeControlFlightMode
                     }
                 } // Row
-            } // ColumnLayout
+            } // ColumnLayout            
+
+            BusyIndicator {
+                id:         busyIndicator
+                height:     ScreenTools.defaultFontPixelHeight * 3
+                width:      height
+                visible:    false
+                anchors.horizontalCenter:   parent.horizontalCenter
+                anchors.verticalCenter:     parent.verticalCenter
+
+                running:    true
+
+                palette.dark: "white"
+
+                property string vehicleId: QGroundControl.multiVehicleManager.activeVehicle.id
+                onVehicleIdChanged: {
+                    if(_vehicle.id === QGroundControl.multiVehicleManager.activeVehicle.id) {
+                        visible = false
+                    }
+                }
+            }
         } // delegate - Rectangle
     } // QGCListView
 } // Item
