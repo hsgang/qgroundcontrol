@@ -16,11 +16,14 @@ import QGroundControl               1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.ScreenTools   1.0
 import QGroundControl.Palette       1.0
+import QGroundControl.FactSystem    1.0
+import QGroundControl.FactControls  1.0
 
 SettingsPage {
     property var    _linkManager: QGroundControl.linkManager
     property real   _comboBoxPreferredWidth:    ScreenTools.defaultFontPixelWidth * 15
     property real   _layoutWidth:   ScreenTools.defaultFontPixelWidth * 42
+    property var    autoConnectSettings:    QGroundControl.settingsManager.autoConnectSettings
 
     SettingsGroupLayout {
         heading:    qsTr("Link Manager")
@@ -83,6 +86,33 @@ SettingsPage {
                                         _linkManager.removeConfiguration(object)
                                     })
                 }
+            }
+        }
+    }
+
+    SettingsGroupLayout {
+        heading:    qsTr("Auto Connect")
+
+        Repeater {
+            id: autoConnectRepeater
+
+            model: [
+                autoConnectSettings.autoConnectPixhawk,
+                autoConnectSettings.autoConnectSiKRadio,
+                autoConnectSettings.autoConnectUDP,
+            ]
+
+            property var names: [
+                qsTr("USB port"),
+                qsTr("RF Telemetry"),
+                qsTr("UDP Network")
+            ]
+
+            FactCheckBoxSlider {
+                Layout.fillWidth:   true
+                text:               autoConnectRepeater.names[index]
+                fact:               modelData
+                visible:            modelData.visible
             }
         }
     }
