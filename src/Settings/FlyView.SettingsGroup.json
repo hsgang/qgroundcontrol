@@ -187,7 +187,12 @@
     "shortDesc": "showVehicleInfoOnMap",
     "type":         "bool",
     "default":      false
-
+},
+{
+    "name":         "showCameraProjectionOnMap",
+    "shortDesc": "showCameraProjectionOnMap",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }

@@ -311,6 +311,18 @@ FlightMap {
             z:              QGroundControl.zOrderVehicles
         }
     }
+
+    // CameraProjection to the map
+    MapItemView {
+        model: QGroundControl.multiVehicleManager.vehicles
+        delegate: CameraProjectionMapItem {
+            coordinate:     object.coordinate
+            map:            _root
+            visible:        QGroundControl.settingsManager.flyViewSettings.showCameraProjectionOnMap.rawValue && !pipMode
+            z:              QGroundControl.zOrderWidgets
+        }
+    }
+
     // AtmosphericValue to the map
     MapItemView {
         model: QGroundControl.multiVehicleManager.vehicles
@@ -322,6 +334,7 @@ FlightMap {
         }
     }
 
+    // VehicleInfo to the map
     MapItemView {
         model: QGroundControl.multiVehicleManager.vehicles
         delegate: VehicleInfoMapItem {

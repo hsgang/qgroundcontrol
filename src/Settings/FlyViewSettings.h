@@ -48,4 +48,5 @@ public:
     DEFINE_SETTINGFACT(flyviewWidgetOpacity)
     DEFINE_SETTINGFACT(showWindvane)
     DEFINE_SETTINGFACT(showVehicleInfoOnMap)
+    DEFINE_SETTINGFACT(showCameraProjectionOnMap)
 };

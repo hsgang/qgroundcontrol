@@ -982,7 +982,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMMotorComponent.qml" line="142"/>
         <source>Propellers are removed - Enable motor sliders</source>
-        <translation>프로펠러를 제거하였습니다 - 모터 슬라이더를 활성화합니다</translation>
+        <translation>프로펠러를 제거하고 모터 슬라이더를 활성화합니다.</translation>
     </message>
 </context>
 <context>
@@ -7909,7 +7909,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/VideoSettings.qml" line="240"/>
         <source>Low Latency Mode</source>
-        <translation>Low Latency Mode</translation>
+        <translation>낮은 지연 모드</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/VideoSettings.qml" line="318"/>
@@ -7930,6 +7930,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/VideoSettings.qml" line="345"/>
         <source>Auto-Delete Saved Recordings</source>
         <translation>저장된 녹화 영상 자동 삭제</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="345"/>
+        <source>Max Storage Usage</source>
+        <translation>최대 저장 공간 사용량</translation>
     </message>
 </context>
 <context>
@@ -9389,6 +9394,11 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <source>Auto Connect</source>
+        <translation>자동 연결</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
@@ -10345,7 +10355,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="452"/>
         <source>Vehicle Info on Map</source>
-        <translation>지도상에 기체정보 표시</translation>
+        <translation>지도에 기체정보 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="452"/>
+        <source>Camera Projection on Map</source>
+        <translation>카메라뷰 투영 표시</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="452"/>
@@ -18869,6 +18884,29 @@ Confirm change?</source>
         <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
         <source>ALT</source>
         <translation>고도</translation>
+    </message>
+</context>
+<context>
+    <name>QGCPipOverlay</name>
+    <message>
+        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="268"/>
+        <source>Swap</source>
+        <translation>화면전환</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="274"/>
+        <source>Layer</source>
+        <translation>레이어</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="284"/>
+        <source>Show PIP</source>
+        <translation>PIP 켬</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="290"/>
+        <source>Hide PIP</source>
+        <translation>숨기기</translation>
     </message>
 </context>
 </TS>

@@ -36,4 +36,5 @@ SplitIndicator              1.0 SplitIndicator.qml
 VehicleMapItem              1.0 VehicleMapItem.qml
 AtmosphericValueMapItem     1.0 AtmosphericValueMapItem.qml
 VehicleInfoMapItem          1.0 VehicleInfoMapItem.qml
+CameraProjectionMapItem     1.0 CameraProjectionMapItem.qml
 CustomAttitudeHUD           1.0 CustomAttitudeHUD.qml

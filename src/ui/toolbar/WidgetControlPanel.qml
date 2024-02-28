@@ -91,10 +91,10 @@ ToolIndicatorPage{
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true
-                    text:       qsTr("Vehicle Info on Map")
-                    fact:       _showVehicleInfoOnMap
-                    visible:    _showVehicleInfoOnMap.visible
-                    property Fact   _showVehicleInfoOnMap:      QGroundControl.settingsManager.flyViewSettings.showVehicleInfoOnMap
+                    text:       qsTr("Telemetry Panel")
+                    fact:       _showTelemetryPanel
+                    visible:    _showTelemetryPanel.visible
+                    property Fact   _showTelemetryPanel:      QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel
                 }
 
                 FactCheckBoxSlider {
@@ -107,10 +107,18 @@ ToolIndicatorPage{
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true
-                    text:       qsTr("Telemetry Panel")
-                    fact:       _showTelemetryPanel
-                    visible:    _showTelemetryPanel.visible
-                    property Fact   _showTelemetryPanel:      QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel
+                    text:       qsTr("Vehicle Info on Map")
+                    fact:       _showVehicleInfoOnMap
+                    visible:    _showVehicleInfoOnMap.visible
+                    property Fact   _showVehicleInfoOnMap:      QGroundControl.settingsManager.flyViewSettings.showVehicleInfoOnMap
+                }
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       qsTr("Camera Projection on Map")
+                    fact:       _showCameraProjectionOnMap
+                    visible:    _showCameraProjectionOnMap.visible
+                    property Fact   _showCameraProjectionOnMap:      QGroundControl.settingsManager.flyViewSettings.showCameraProjectionOnMap
                 }
 
                 FactCheckBoxSlider {
@@ -123,7 +131,7 @@ ToolIndicatorPage{
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true
-                    text:       qsTr("Vibration Status")
+                    text:       qsTr("EKF Status")
                     fact:       _showEKFStatus
                     visible:    _showEKFStatus.visible
                     property Fact   _showEKFStatus:      QGroundControl.settingsManager.flyViewSettings.showEKFStatus
