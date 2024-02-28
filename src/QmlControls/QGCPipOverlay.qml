@@ -278,7 +278,7 @@ Item {
                             var nextIndex = (currentIndex + 1) % _mapTypeList.length
                             _mapTypeFact.rawValue = _mapTypeList[nextIndex]
                         }
-                        visible:    _isExpanded
+                        visible:    true //_isExpanded
                     },
                     ToolStripAction {
                         text: qsTr("Show PIP")
