@@ -167,7 +167,6 @@
         <file alias="FirmwareUpgradeIcon.png">src/VehicleSetup/FirmwareUpgradeIcon.png</file>
         <file alias="VehicleSummaryIcon.png">src/VehicleSetup/VehicleSummaryIcon.png</file>
         <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Images/city_3d_map_icon.svg</file>
-        <file alias="Viewer3D/GearIcon.png">src/Viewer3D/Images/gear_icon.png</file>
         <file alias="Analyze.svg">src/ui/toolbar/Images/Analyze.svg</file>
         <file alias="Armed.svg">src/ui/toolbar/Images/Armed.svg</file>
         <file alias="Battery.svg">src/ui/toolbar/Images/Battery.svg</file>

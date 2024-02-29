@@ -94,8 +94,6 @@ private:
     Fact            _instantPowerFact;
     Fact            _currentRateFact;
 
-    static const char* _batteryFactGroupNamePrefix;
-
     QElapsedTimer   _batteryConsumeTimer;
     qint16          _batteryConsumeCurrent = 0;
     int16_t           _currentRate = 0;

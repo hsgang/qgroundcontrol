@@ -75,7 +75,6 @@ public:
     bool                hasGripper                      (const Vehicle* vehicle) const override;
     QVariant            mainStatusIndicatorContentItem  (const Vehicle* vehicle) const override;
     const QVariantList& toolIndicators                  (const Vehicle* vehicle) override;
-    bool                hasGripper                      (const Vehicle* vehicle) const override;
 
 protected:
     typedef struct {

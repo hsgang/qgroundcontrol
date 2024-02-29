@@ -328,7 +328,6 @@
         <file alias="QGroundControl/FlightDisplay/SIYICameraControl.qml">src/FlightMap/Widgets/SIYICameraControl.qml</file>
         <file alias="QGroundControl/FlightMap/WinchControlPanel.qml">src/FlightMap/Widgets/WinchControlPanel.qml</file>
         <file alias="QGroundControl/FlightMap/MapLineArrow.qml">src/MissionManager/MapLineArrow.qml</file>
-        <file alias="MissionCommandTreeEditorTestWindow.qml">src/MissionManager/MissionCommandTreeEditorTestWindow.qml</file>
         <file alias="QGroundControl/Controls/QGCMapCircleVisuals.qml">src/MissionManager/QGCMapCircleVisuals.qml</file>
         <file alias="QGroundControl/Controls/QGCMapPolygonVisuals.qml">src/MissionManager/QGCMapPolygonVisuals.qml</file>
         <file alias="QGroundControl/Controls/QGCMapPolylineVisuals.qml">src/MissionManager/QGCMapPolylineVisuals.qml</file>
@@ -418,7 +417,6 @@
         <file alias="QGroundControl/Controls/QGCColoredImage.qml">src/QmlControls/QGCColoredImage.qml</file>
         <file alias="QGroundControl/Controls/QGCColumnButton.qml">src/QmlControls/QGCColumnButton.qml</file>
         <file alias="QGroundControl/Controls/QGCComboBox.qml">src/QmlControls/QGCComboBox.qml</file>
-        <file alias="QGroundControl/Controls/QGCControlDebug.qml">src/QmlControls/QGCControlDebug.qml</file>
         <file alias="QGroundControl/Controls/QGCDynamicObjectManager.qml">src/QmlControls/QGCDynamicObjectManager.qml</file>
         <file alias="QGroundControl/Controls/QGCFileDialog.qml">src/QmlControls/QGCFileDialog.qml</file>
         <file alias="QGroundControl/Controls/QGCFlickable.qml">src/QmlControls/QGCFlickable.qml</file>
@@ -435,8 +433,6 @@
         <file alias="QGroundControl/Controls/QGCMouseArea.qml">src/QmlControls/QGCMouseArea.qml</file>
         <file alias="QGroundControl/Controls/QGCMovableItem.qml">src/QmlControls/QGCMovableItem.qml</file>
         <file alias="QGroundControl/Controls/QGCOptionsComboBox.qml">src/QmlControls/QGCOptionsComboBox.qml</file>
-        <file alias="QGroundControl/Controls/QGCPipOverlay.qml">src/QmlControls/QGCPipOverlay.qml</file>
-        <file alias="QGroundControl/Controls/QGCPipState.qml">src/QmlControls/QGCPipState.qml</file>
         <file alias="QGroundControl/Controls/QGCPopupDialog.qml">src/QmlControls/QGCPopupDialog.qml</file>
         <file alias="QGroundControl/Controls/QGCRadioButton.qml">src/QmlControls/QGCRadioButton.qml</file>
         <file alias="QGroundControl/Controls/QGCRoundButton.qml">src/QmlControls/QGCRoundButton.qml</file>
@@ -453,7 +449,6 @@
         <file alias="QGroundControl/FlightDisplay/qmldir">src/QmlControls/QGroundControl/FlightDisplay/qmldir</file>
         <file alias="QGroundControl/FlightMap/qmldir">src/QmlControls/QGroundControl/FlightMap/qmldir</file>
         <file alias="QGroundControl/ScreenTools/qmldir">src/QmlControls/QGroundControl/ScreenTools/qmldir</file>
-        <file alias="QmlTest.qml">src/QmlControls/QmlTest.qml</file>
         <file alias="QGroundControl/Controls/ToolStripHorizontal.qml">src/QmlControls/ToolStripHorizontal.qml</file>
         <file alias="OfflineMap.qml">src/QtLocationPlugin/QMLControl/OfflineMap.qml</file>
         <file alias="QGroundControl/ScreenTools/ScreenTools.qml">src/QmlControls/ScreenTools.qml</file>
@@ -496,24 +491,18 @@
         <file alias="Viewer3D/Models3D/Viewer3DVehicleItems.qml">src/Viewer3D/Viewer3D/Models3D/Viewer3DVehicleItems.qml</file>
         <file alias="Viewer3D/Models3D/Waypoint3DModel.qml">src/Viewer3D/Viewer3D/Models3D/Waypoint3DModel.qml</file>
         <file alias="Viewer3D/Models3D/qmldir">src/Viewer3D/Viewer3D/Models3D/qmldir</file>
-        <file alias="Viewer3D/Viewer3DSettingMenu.qml">src/Viewer3D/Viewer3D/Viewer3DSettingMenu.qml</file>
         <file alias="Viewer3D/qmldir">src/Viewer3D/Viewer3D/qmldir</file>
-        <file alias="QGroundControl/Controls/MockLinkOptionsDlg.qml">src/comm/MockLinkOptionsDlg.qml</file>
-        <file alias="test.qml">src/test.qml</file>
         <file alias="AppSettings.qml">src/ui/AppSettings.qml</file>
         <file alias="ExitWithErrorWindow.qml">src/ui/ExitWithErrorWindow.qml</file>
         <file alias="MainRootWindow.qml">src/ui/MainRootWindow.qml</file>
         <file alias="SettingsPagesModel.qml">src/ui/SettingsPagesModel.qml</file>
         <file alias="ADSBServerSettings.qml">src/ui/preferences/ADSBServerSettings.qml</file>
         <file alias="BluetoothSettings.qml">src/ui/preferences/BluetoothSettings.qml</file>
-        <file alias="DebugWindow.qml">src/ui/preferences/DebugWindow.qml</file>
         <file alias="FlyViewSettings.qml">src/ui/preferences/FlyViewSettings.qml</file>
         <file alias="GeneralSettings.qml">src/ui/preferences/GeneralSettings.qml</file>
         <file alias="HelpSettings.qml">src/ui/preferences/HelpSettings.qml</file>
         <file alias="LinkSettings.qml">src/ui/preferences/LinkSettings.qml</file>
         <file alias="LogReplaySettings.qml">src/ui/preferences/LogReplaySettings.qml</file>
-        <file alias="MockLink.qml">src/ui/preferences/MockLink.qml</file>
-        <file alias="MockLinkSettings.qml">src/ui/preferences/MockLinkSettings.qml</file>
         <file alias="PlanViewSettings.qml">src/ui/preferences/PlanViewSettings.qml</file>
         <file alias="RemoteIDSettings.qml">src/ui/preferences/RemoteIDSettings.qml</file>
         <file alias="SerialSettings.qml">src/ui/preferences/SerialSettings.qml</file>

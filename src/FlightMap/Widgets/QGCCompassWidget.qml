@@ -54,13 +54,6 @@ Rectangle {
         return vehicle && _showAdditionalIndicators && !isNaN(_headingToNextWP)
     }
 
-    function isWindVaneOK(){
-        return vehicle && _showAdditionalIndicatorsCompass && !isNaN(_windDir)
-    }
-
-    function isNoseUpLocked(){
-        return _lockNoseUpCompass
-    }
     function translateCenterToAngleX(radius, angle) {
         return radius * Math.sin(angle * (Math.PI / 180))
     } 
@@ -121,70 +114,6 @@ Rectangle {
                 angle:      _headingToNextWP
             }
         }
-
-        Image {
-            id:                     homePointer
-            width:                  size * 0.1
-            source:                 isHeadingHomeOK()  ? "/qmlimages/Home.svg" : ""
-            mipmap:                 true
-            fillMode:               Image.PreserveAspectFit
-            anchors.centerIn:   	parent
-            sourceSize.width:       width
-
-            transform: Translate {
-                property double _angle: isNoseUpLocked()?-_heading+_headingToHome:_headingToHome
-                x: size/2.3 * Math.sin((_angle)*(3.14/180))
-                y: - size/2.3 * Math.cos((_angle)*(3.14/180))
-            }
-        }
-
-        Image {
-            id:                 windVane
-            source:             isWindVaneOK() ? "/qmlimages/windVaneArrow.svg" : ""
-            mipmap:             true
-            fillMode:           Image.PreserveAspectFit
-            anchors.fill:       parent
-            sourceSize.height:  parent.height
-
-            transform: Rotation {
-                property var _angle:isNoseUpLocked()?_windDir-_heading:_windDir
-                origin.x:       cOGPointer.width  / 2
-                origin.y:       cOGPointer.height / 2
-                angle:         _angle
-            }
-        }
-
-        Image {
-            id:                 pointer
-            width:              size * 0.65
-            source:             vehicle ? vehicle.vehicleImageCompass : ""
-            mipmap:             true
-            sourceSize.width:   width
-            fillMode:           Image.PreserveAspectFit
-            anchors.centerIn:   parent
-            transform: Rotation {
-                origin.x:       pointer.width  / 2
-                origin.y:       pointer.height / 2
-                angle:          isNoseUpLocked()?0:_heading
-            }
-        }
-
-
-        QGCColoredImage {
-            id:                 compassDial
-            source:             "/qmlimages/compassInstrumentDial.svg"
-            mipmap:             true
-            fillMode:           Image.PreserveAspectFit
-            anchors.fill:       parent
-            sourceSize.height:  parent.height
-            color:              qgcPal.text
-            transform: Rotation {
-                origin.x:       compassDial.width  / 2
-                origin.y:       compassDial.height / 2
-                angle:          isNoseUpLocked()?-_heading:0
-            }
-        }
-
 
         // Launch location indicator
         Rectangle {

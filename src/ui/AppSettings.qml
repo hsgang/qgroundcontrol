@@ -101,7 +101,7 @@ Rectangle {
 
                 SubMenuButton {
                     id:                 subMenu
-                    imageResource:      menuIcon
+                    imageResource:      iconUrl
                     setupIndicator:     false
                     autoExclusive:      true
                     text:               name

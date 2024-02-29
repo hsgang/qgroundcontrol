@@ -1507,11 +1507,15 @@ private:
     const QString _hobbsFactName =               QStringLiteral("hobbs");
     const QString _throttlePctFactName =         QStringLiteral("throttlePct");
     const QString _imuTempFactName =             QStringLiteral("imuTemp");
+    const QString _gimbalTargetSetLatitudeFactName =    QStringLiteral("gimbalTargetSetLatitude");
+    const QString _gimbalTargetSetLongitudeFactName =   QStringLiteral("gimbalTargetSetLongitude");
+    const QString _gimbalTargetSetAltitudeFactName =    QStringLiteral("gimbalTargetSetAltitude");
 
     const QString _gpsFactGroupName =                QStringLiteral("gps");
     const QString _gps2FactGroupName =               QStringLiteral("gps2");
     const QString _windFactGroupName =               QStringLiteral("wind");
     const QString _vibrationFactGroupName =          QStringLiteral("vibration");
+    const QString _ekfStatusFactGroupName =          QStringLiteral("ekfStatus");
     const QString _temperatureFactGroupName =        QStringLiteral("temperature");
     const QString _clockFactGroupName =              QStringLiteral("clock");
     const QString _setpointFactGroupName =           QStringLiteral("setpoint");
@@ -1524,6 +1528,13 @@ private:
     const QString _hygrometerFactGroupName =         QStringLiteral("hygrometer");
     const QString _generatorFactGroupName =          QStringLiteral("generator");
     const QString _efiFactGroupName =                QStringLiteral("efi");
+    const QString _atmosphericSensorFactGroupName =  QStringLiteral("atmosphericSensor");
+    const QString _tunnelingDataFactGroupName =      QStringLiteral("tunnelingData");
+    const QString _generatorStatusFactGroupName =    QStringLiteral("generatorStatus");
+    const QString _externalPowerStatusFactGroupName =   QStringLiteral("externalPowerStatus");
+    const QString _winchStatusFactGroupName =        QStringLiteral("winchStatus");
+    const QString _landingTargetFactGroupName =      QStringLiteral("landingTarget");
+
 
     Fact _rollFact;
     Fact _pitchFact;

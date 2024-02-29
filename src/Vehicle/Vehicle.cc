@@ -66,6 +66,12 @@ QGC_LOGGING_CATEGORY(VehicleLog, "VehicleLog")
 
 const QString guided_mode_not_supported_by_vehicle = QObject::tr("Guided mode not supported by Vehicle.");
 
+static int jsonLogSeq = 0;
+static QString StartTime;
+static QString StartLat;
+static QString StartLong;
+static QString StartAltAMSL;
+
 // Standard connected vehicle
 Vehicle::Vehicle(LinkInterface*             link,
                  int                        vehicleId,

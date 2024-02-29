@@ -5,8 +5,6 @@
 #include "QGCApplication.h"
 #include "SettingsManager.h"
 
-#include <Eigen/Eigen>
-
 QGC_LOGGING_CATEGORY(GimbalLog,         "GimbalLog")
 
 Gimbal::Gimbal()

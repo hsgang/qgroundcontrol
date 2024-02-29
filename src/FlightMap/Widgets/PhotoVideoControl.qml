@@ -25,7 +25,7 @@ import QGroundControl.FactSystem
 import QGroundControl.FactControls
 
 Rectangle {
-    implicitHeight:     mainLayout.height + (_margins * 2)
+    height:     mainLayout.height + (_margins * 2)
     width:      mainLayout.width //+ (_margins * 2)
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
     radius:     _margins + (ScreenTools.defaultFontPixelWidth * 2.5)

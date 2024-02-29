@@ -187,32 +187,5 @@ Item {
             id:                     viewer3DWindow
             anchors.fill:           parent
         }
-
-        Viewer3DSettingMenu{
-            id:         viewer3DSettingMenu
-            z:          QGroundControl.zOrderWidgets
-            visible:    false
-            opacity:    0.95
-
-            anchors{
-                top: mapHolder.top
-                bottom: mapHolder.bottom
-                right: mapHolder.right
-            }
-        }
-
-        QGCPipOverlay {
-            id:                     _pipOverlay
-            anchors.left:           parent.left
-            anchors.bottom:         parent.bottom
-            anchors.margins:        _toolsMargin
-            item1IsFullSettingsKey: "MainFlyWindowIsMap"
-            item1:                  mapControl
-            item2:                  QGroundControl.videoManager.hasVideo ? videoControl : null
-            fullZOrder:             _fullItemZorder
-            pipZOrder:              _pipItemZorder
-            show:                   !QGroundControl.videoManager.fullScreen &&
-                                        (videoControl.pipState.state === videoControl.pipState.pipState || mapControl.pipState.state === mapControl.pipState.pipState)
-        }
     }
 }
