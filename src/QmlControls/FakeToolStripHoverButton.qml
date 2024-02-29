@@ -117,6 +117,6 @@ Button {
                             qgcPal.buttonHighlight :
                             (control.hovered ? qgcPal.buttonHighlight : qgcPal.window)
         anchors.fill:   parent
-        radius:         ScreenTools.defaultFontPixelWidth / 2
+        radius:         ScreenTools.defaultFontPixelHeight / 2
     }
 }

@@ -254,12 +254,12 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     if (_runningUnitTests) {
         // We don't want unit tests to use the same QSettings space as the normal app. So we tweak the app
         // name. Also we want to run unit tests with clean settings every time.
-        applicationName = QStringLiteral("%1_unittest").arg(QGC_APPLICATION_NAME);
+        applicationName = "Mission Navigator_unittest";//QStringLiteral("%1_unittest").arg(QGC_APPLICATION_NAME);
     } else {
 #ifdef DAILY_BUILD
         // This gives daily builds their own separate settings space. Allowing you to use daily and stable builds
         // side by side without daily screwing up your stable settings.
-        applicationName = QStringLiteral("%1 AMP").arg(QGC_APPLICATION_NAME);
+        applicationName = "Mission Navigator";//QStringLiteral("%1 AMP").arg(QGC_APPLICATION_NAME);
 #else
         applicationName = QGC_APPLICATION_NAME;
 #endif

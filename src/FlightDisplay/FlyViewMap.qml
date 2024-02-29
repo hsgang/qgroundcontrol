@@ -306,6 +306,18 @@ FlightMap {
             z:              QGroundControl.zOrderVehicles
         }
     }
+
+    // CameraProjection to the map
+    MapItemView {
+        model: QGroundControl.multiVehicleManager.vehicles
+        delegate: CameraProjectionMapItem {
+            coordinate:     object.coordinate
+            map:            _root
+            visible:        QGroundControl.settingsManager.flyViewSettings.showCameraProjectionOnMap.rawValue && !pipMode
+            z:              QGroundControl.zOrderWidgets
+        }
+    }
+
     // AtmosphericValue to the map
     MapItemView {
         model: QGroundControl.multiVehicleManager.vehicles
@@ -313,6 +325,17 @@ FlightMap {
             coordinate:     object.coordinate
             map:            _root
             visible:        QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && !pipMode
+            z:              QGroundControl.zOrderWidgets
+        }
+    }
+
+    // VehicleInfo to the map
+    MapItemView {
+        model: QGroundControl.multiVehicleManager.vehicles
+        delegate: VehicleInfoMapItem {
+            coordinate:     object.coordinate
+            map:            _root
+            visible:        QGroundControl.settingsManager.flyViewSettings.showVehicleInfoOnMap.rawValue && !pipMode
             z:              QGroundControl.zOrderWidgets
         }
     }
@@ -728,17 +751,4 @@ FlightMap {
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }
-
-    MapScale {
-        id:                 mapScale
-        anchors.margins:    _toolsMargin
-        anchors.left:       parent.left
-        anchors.top:        parent.top
-        mapControl:         _root
-        buttonsOnLeft:      true
-        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.windowState
-
-        property real centerInset: visible ? parent.height - y : 0
-    }
-
 }

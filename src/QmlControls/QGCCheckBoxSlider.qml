@@ -20,18 +20,32 @@ AbstractButton   {
     padding:        0
 
     property bool   _showBorder: qgcPal.globalTheme === QGCPalette.Light
+    property alias description:         _description.text
 
     QGCPalette { id: qgcPal; colorGroupEnabled: control.enabled }
 
     contentItem: Item {
-        implicitWidth:  (label.visible ? label.contentWidth + ScreenTools.defaultFontPixelWidth : 0) + indicator.width 
-        implicitHeight: label.contentHeight
+        implicitWidth:  label.contentWidth + indicator.width + ScreenTools.defaultFontPixelWidth
+        implicitHeight: label.contentHeight + (description.length > 0 ? _description.contentHeight : 0)
 
-        QGCLabel { 
-            id:             label
-            anchors.left:   parent.left
-            text:           visible ? control.text : "X"
-            visible:        control.text !== ""
+        ColumnLayout {
+            id:                 labelLayout
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            spacing : ScreenTools.defaultFontPixelHeight * 0.2
+            QGCLabel {
+                id:             label
+                //anchors.left:   parent.left
+                text:           visible ? control.text : "X"
+                visible:        control.text !== ""
+            }
+            QGCLabel {
+                id:                 _description
+                visible:            description.length > 0
+                Layout.fillWidth:   true
+                font.pointSize:     ScreenTools.smallFontPointSize
+                color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
+            }
         }
     
         Rectangle {

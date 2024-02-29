@@ -2,6 +2,7 @@ add_custom_target(FligthMapWidgetsQml
 	SOURCES
 		CenterMapDropButton.qml
 		CenterMapDropPanel.qml
+HEAD
         CompassDial.qml
         CompassHeadingIndicator.qml
 		HorizontalCompassAttitude.qml

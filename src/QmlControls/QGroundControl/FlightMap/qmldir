@@ -21,6 +21,8 @@ QGCAttitudeWidget           1.0 QGCAttitudeWidget.qml
 QGCCompassWidget            1.0 QGCCompassWidget.qml
 QGCPitchIndicator           1.0 QGCPitchIndicator.qml
 WinchControlPanel           1.0 WinchControlPanel.qml
+CompassDial                 1.0 CompassDial.qml
+CompassHeadingIndicator     1.0 CompassHeadingIndicator.qml
 
 # Map items
 CameraTriggerIndicator      1.0 CameraTriggerIndicator.qml
@@ -35,4 +37,6 @@ ProximityRadarMapView       1.0 ProximityRadarMapView.qml
 SplitIndicator              1.0 SplitIndicator.qml
 VehicleMapItem              1.0 VehicleMapItem.qml
 AtmosphericValueMapItem     1.0 AtmosphericValueMapItem.qml
+VehicleInfoMapItem          1.0 VehicleInfoMapItem.qml
+CameraProjectionMapItem     1.0 CameraProjectionMapItem.qml
 CustomAttitudeHUD           1.0 CustomAttitudeHUD.qml

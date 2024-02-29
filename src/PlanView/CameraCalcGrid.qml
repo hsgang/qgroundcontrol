@@ -69,7 +69,7 @@ Column {
 
         QGCLabel {
             wrapMode:               Text.WordWrap
-            text:                   qsTr("Select one:")
+            text:                   qsTr("Select one")
             Layout.preferredWidth:  parent.width
             Layout.columnSpan:      2
         }

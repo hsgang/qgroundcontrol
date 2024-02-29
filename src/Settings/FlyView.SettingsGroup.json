@@ -8,14 +8,16 @@
     "shortDesc": "Minimum altitude for guided actions altitude slider.",
     "type":             "double",
     "units":            "m",
-    "default":     2
+    "default":     2,
+    "decimalPlaces":    1
 },
 {
     "name":             "guidedMaximumAltitude",
     "shortDesc": "Maximum altitude for guided actions altitude slider.",
     "type":             "double",
     "units":            "m",
-    "default":     150
+    "default":     150,
+    "decimalPlaces":    1
 },
 {
     "name":             "showLogReplayStatusBar",
@@ -71,7 +73,8 @@
     "type":             "double",
     "units":            "m",
     "default":     1000,
-    "min":              1
+    "min":              1,
+    "decimalPlaces":    1
 },
 {
     "name":         "showAtmosphericValueBar",
@@ -173,6 +176,24 @@
     "enumStrings":  "Integrated Compass & Attitude,Horizontal Compass & Atttitude,Large Vertical",
     "enumValues":   "qrc:/qml/IntegratedCompassAttitude.qml,qrc:/qml/HorizontalCompassAttitude.qml,qrc:/qml/VerticalCompassAttitude.qml",
     "default":      "qrc:/qml/IntegratedCompassAttitude.qml"
+},
+{
+    "name":         "showWindvane",
+    "shortDesc": "showWindvane",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":         "showVehicleInfoOnMap",
+    "shortDesc": "showVehicleInfoOnMap",
+    "type":         "bool",
+    "default":      false
+},
+{
+    "name":         "showCameraProjectionOnMap",
+    "shortDesc": "showCameraProjectionOnMap",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }

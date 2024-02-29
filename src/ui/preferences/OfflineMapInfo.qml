@@ -27,7 +27,7 @@ RowLayout {
 
     QGCLabel {
         Layout.fillWidth:   true
-        text:               tileSet.name 
+        text:               tileSet.name
     }
 
     QGCLabel {

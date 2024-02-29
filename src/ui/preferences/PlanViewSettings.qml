@@ -16,12 +16,14 @@ import QGroundControl
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
 import QGroundControl.Controls
+import QGroundControl.Palette
 
 SettingsPage {
     property var _settingsManager:  QGroundControl.settingsManager
     property var _planViewSettings: QGroundControl.settingsManager.planViewSettings
 
     SettingsGroupLayout {
+        heading:        qsTr("PlanView Settings")
         Layout.fillWidth: true
 
         LabelledFactTextField {
@@ -49,6 +51,12 @@ SettingsPage {
             Layout.fillWidth:   true
             text:               qsTr("Missions Do Not Require Takeoff Item")
             fact:               _planViewSettings.takeoffItemNotRequired
+            visible:            fact.visible
+        }
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Show ROI function on toolstrip")
+            fact:               _planViewSettings.showROIToolstrip
             visible:            fact.visible
         }
     }

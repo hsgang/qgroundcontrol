@@ -1027,7 +1027,8 @@ Item {
                         addNewSet()
                     }
                 }
-        QGCLabel { text: QGroundControl.mapEngineManager.tileSets.count }
+                
+            QGCLabel { text: QGroundControl.mapEngineManager.tileSets.count }
 
                 Repeater {
                     id: repeater

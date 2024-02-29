@@ -9,7 +9,7 @@ import QGroundControl.Palette
 Rectangle {
     id:             _root
     implicitWidth:  label.contentWidth + (_diameter * 2.5) + (_border * 4)
-    implicitHeight: label.height * 2.5
+    implicitHeight: label.height * 2
     radius:         height /2
     color:          qgcPal.windowShade
 
@@ -69,7 +69,7 @@ Rectangle {
         height:     _diameter
         width:      _diameter
         radius:     _diameter / 2
-        color:      qgcPal.primaryButton
+        color:      qgcPal.brandingBlue
 
         QGCColoredImage {
             anchors.centerIn:       parent
@@ -79,7 +79,7 @@ Rectangle {
             fillMode:               Image.PreserveAspectFit
             smooth:                 false
             mipmap:                 false
-            color:                  qgcPal.buttonText
+            color:                  qgcPal.colorWhite
             cache:                  false
             source:                 "/res/ArrowRight.svg"
         }

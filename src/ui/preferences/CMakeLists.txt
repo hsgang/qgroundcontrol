@@ -11,6 +11,10 @@ add_custom_target(UiPreferencesQml
 		PX4LogTransferSettings.qml
         MapSettings.qml
         PlanViewSettings.qml
+		OfflineMapInfo.qml
+		MapSettings.qml
+		MockLink.qml
+		MockLinkSettings.qml
 		SerialSettings.qml
 		TcpSettings.qml
         TelemetrySettings.qml

@@ -20,6 +20,8 @@ qt_add_library(Settings STATIC
 	FlightModeSettings.h
 	FlyViewSettings.cc
 	FlyViewSettings.h
+	MapsSettings.cc
+	MapsSettings.h
 	NTRIPSettings.cc
 	NTRIPSettings.h
     MapsSettings.cc

@@ -63,8 +63,8 @@ public:
     Q_PROPERTY(QObject* gimbalControllerSettings        READ gimbalControllerSettings       CONSTANT)
     Q_PROPERTY(QObject* batterySettings                 READ batterySettings                CONSTANT)
     Q_PROPERTY(QObject* batteryIndicatorSettings        READ batteryIndicatorSettings       CONSTANT)
-    Q_PROPERTY(QObject* mapsSettings                    READ mapsSettings       CONSTANT)
-    Q_PROPERTY(QObject* viewer3DSettings                READ viewer3DSettings   CONSTANT)
+    Q_PROPERTY(QObject* mapsSettings                    READ mapsSettings                   CONSTANT)
+    Q_PROPERTY(QObject* viewer3DSettings                READ viewer3DSettings               CONSTANT)
 #if !defined(NO_ARDUPILOT_DIALECT)
     Q_PROPERTY(QObject* apmMavlinkStreamRateSettings    READ apmMavlinkStreamRateSettings   CONSTANT)
 #endif

@@ -25,16 +25,16 @@ QtObject {
 
     signal insetsChanged
 
-    onLeftEdgeBottomInsetChanged:       insetsChanged()
-    onLeftEdgeTopInsetChanged:          insetsChanged()
+    onLeftEdgeBottomInsetChanged:   insetsChanged()
+    onLeftEdgeTopInsetChanged:      insetsChanged()
     onLeftEdgeCenterInsetChanged:   insetsChanged()
-    onRightEdgeBottomInsetChanged:      insetsChanged()
+    onRightEdgeBottomInsetChanged:  insetsChanged()
     onRightEdgeCenterInsetChanged:  insetsChanged()
-    onRightEdgeTopInsetChanged:         insetsChanged()
-    onBottomEdgeLeftInsetChanged:       insetsChanged()
-    onBottomEdgeRightInsetChanged:      insetsChanged()
-    onBottomEdgeCenterInsetChanged:   insetsChanged()
-    onTopEdgeLeftInsetChanged:          insetsChanged()
-    onTopEdgeRightInsetChanged:         insetsChanged()
-    onTopEdgeCenterInsetChanged:      insetsChanged()
+    onRightEdgeTopInsetChanged:     insetsChanged()
+    onBottomEdgeLeftInsetChanged:   insetsChanged()
+    onBottomEdgeRightInsetChanged:  insetsChanged()
+    onBottomEdgeCenterInsetChanged: insetsChanged()
+    onTopEdgeLeftInsetChanged:      insetsChanged()
+    onTopEdgeRightInsetChanged:     insetsChanged()
+    onTopEdgeCenterInsetChanged:    insetsChanged()
 }

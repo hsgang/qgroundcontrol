@@ -60,11 +60,11 @@ WindowsBuild {
 # Branding
 #
 
-QGC_APP_NAME        = "MissionNavigator"
+QGC_APP_NAME        = "Mission Navigator"
 QGC_ORG_NAME        = "MissionNavigator.org"
 QGC_ORG_DOMAIN      = "org.MissionNavigator"
-QGC_APP_DESCRIPTION = "MissionNavigator"
-QGC_APP_COPYRIGHT   = "Copyright (C) 2023 QGroundControl Development Team. All rights reserved."
+QGC_APP_DESCRIPTION = "Mission Navigator"
+QGC_APP_COPYRIGHT   = "Copyright (C) 2024 QGroundControl Development Team. All rights reserved."
 
 WindowsBuild {
     QGC_INSTALLER_SCRIPT        = "$$SOURCE_DIR\\deploy\\windows\\nullsoft_installer.nsi"
@@ -333,7 +333,7 @@ CustomBuild {
         RESOURCES += $$PWD/resources/InstrumentValueIcons/InstrumentValueIcons.qrc
     }
 } else {
-    DEFINES += QGC_APPLICATION_NAME=\"\\\"MissionNavigator\\\"\"
+    DEFINES += QGC_APPLICATION_NAME=\"\\\"Mission Navigator\\\"\"
     DEFINES += QGC_ORG_NAME=\"\\\"MissionNavigator.org\\\"\"
     DEFINES += QGC_ORG_DOMAIN=\"\\\"org.MissionNavigator\\\"\"
     RESOURCES += \
@@ -404,6 +404,7 @@ HEADERS += \
     src/QmlControls/CustomActionManager.h \
     src/QmlControls/QmlUnitsConversion.h \
     src/Settings/BatterySettings.h \
+    src/Settings/MapsSettings.h \
     src/Settings/SIYISettings.h \
     src/SiYi/SiYi.h \
     src/SiYi/SiYiCamera.h \
@@ -426,6 +427,7 @@ HEADERS += \
 
 SOURCES += \
     src/Settings/BatterySettings.cc \
+    src/Settings/MapsSettings.cc \
     src/Settings/SIYISettings.cc \
     src/SiYi/SiYi.cc \
     src/SiYi/SiYiCamera.cc \

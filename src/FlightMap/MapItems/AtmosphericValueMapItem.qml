@@ -30,8 +30,6 @@ MapQuickItem {
     property var    map
     property var    _map:                   map
 
-    property string _flightMode:            object ? object.flightMode.toString() : ""
-
     property real   _temperatureValue:      object ? object.atmosphericSensor.temperature.rawValue.toFixed(1) : 0
     property real   _humidityValue:         object ? object.atmosphericSensor.humidity.rawValue.toFixed(1) : 0
     property real   _pressureValue:         object ? object.atmosphericSensor.pressure.rawValue.toFixed(1) : 0
@@ -39,64 +37,8 @@ MapQuickItem {
     property real   _windSpdValue:          object ? object.atmosphericSensor.windSpd.rawValue.toFixed(1) : 0
     property real   _altitudeValue:         object ? object.altitudeRelative.rawValue.toFixed(1) : 0
 
-    property bool   _healthAndArmingChecksSupported: object ? object.healthAndArmingCheckReport.supported : false
-
-    property string _readyToFlyText:    qsTr("Ready To Fly")
-    property string _notReadyToFlyText: qsTr("Not Ready")
-    property string _armedText:         qsTr("Armed")
-    property string _flyingText:        qsTr("Flying")
-    property string _landingText:       qsTr("Landing")
-
-    function mainStatusText() {
-        if (object) {
-            if (object.armed) {
-                if (object.flying) {
-                    return _flyingText
-                } else if (object.landing) {
-                    return _landingText
-                } else {
-                    return _armedText
-                }
-            } else {
-                if (_healthAndArmingChecksSupported) {
-                    if (object.healthAndArmingCheckReport.canArm) {
-                        return _readyToFlyText
-                    } else {
-                        return _notReadyToFlyText
-                    }
-                } else if (object.readyToFlyAvailable) {
-                    if (object.readyToFly) {
-                        return _readyToFlyText
-                    } else {
-                        return _notReadyToFlyText
-                    }
-                } else {
-                    // Best we can do is determine readiness based on AutoPilot component setup and health indicators from SYS_STATUS
-                    if (object.allSensorsHealthy && object.autopilot.setupComplete) {
-                        return _readyToFlyText
-                    } else {
-                        return _notReadyToFlyText
-                    }
-                }
-            }
-        } else {
-            return "Unknown"
-        }
-    }
-
     sourceItem: Item {
         id:         vehicleItem
-
-        property bool viewToggle: false
-
-        Timer {
-            interval:   3000;
-            running:    true;
-            repeat:     true;
-            onTriggered: {
-                vehicleItem.viewToggle = !vehicleItem.viewToggle
-            }
-        }
 
         Rectangle {
             id:         atmosphericValueBar
@@ -104,9 +46,9 @@ MapQuickItem {
             width:      atmosphericValueColumn.width + ScreenTools.defaultFontPixelHeight * 2
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.top
-            anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 3
+            anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 2
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-            radius:     _margins
+            radius:     ScreenTools.defaultFontPixelHeight / 2
 
             Column{
                 id:                 atmosphericValueColumn
@@ -114,7 +56,6 @@ MapQuickItem {
                 width:              Math.max(atmosphericSensorViewLabel.width, atmosphericValueGrid.width)
                 anchors.margins:    ScreenTools.defaultFontPixelHeight
                 anchors.centerIn:   parent
-                visible:            vehicleItem.viewToggle === true
 
                 QGCLabel {
                     id:             atmosphericSensorViewLabel
@@ -173,123 +114,6 @@ MapQuickItem {
                     }
                 }
             } // Column
-
-            Column{
-                id:                 vehicleStatusColumn
-                spacing:            ScreenTools.defaultFontPixelHeight / 5
-                width:              Math.max(vehicleStatusLabel.width, vehicleStatusGrid.width)
-                anchors.margins:    ScreenTools.defaultFontPixelHeight
-                anchors.centerIn:   parent
-                visible:            vehicleItem.viewToggle === false
-
-                QGCLabel {
-                    id:             vehicleStatusLabel
-                    text:           object ? "Vehicle "+object.id : ""
-                    font.family:    ScreenTools.demiboldFontFamily
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                GridLayout {
-                    id:                         vehicleStatusGrid
-                    anchors.margins:            ScreenTools.defaultFontPixelHeight
-                    columnSpacing:              ScreenTools.defaultFontPixelHeight
-                    anchors.horizontalCenter:   parent.horizontalCenter
-                    columns: 2
-
-                    QGCLabel { text: qsTr("STS"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
-                    QGCLabel {
-                        text: mainStatusText()
-                        width: ScreenTools.defaultFontPixelHeight * 11
-                        Layout.alignment: Qt.AlignCenter
-                    }
-
-                    QGCLabel { text: qsTr("FLT"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
-                    QGCLabel {
-                        text: object ? _flightMode : "No Data"
-                        width: ScreenTools.defaultFontPixelHeight * 11
-                        Layout.alignment: Qt.AlignCenter
-                    }
-
-                    QGCLabel { text: qsTr("ALT"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
-                    QGCLabel {
-                        text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"
-                        width: ScreenTools.defaultFontPixelHeight * 11
-                        Layout.alignment: Qt.AlignCenter
-                    }
-
-                    QGCLabel { text: qsTr("VLT"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
-                    Row {
-                        id:             batteryIndicatorRow
-                        spacing:        ScreenTools.defaultFontPixelHeight / 2
-                        Layout.alignment: Qt.AlignCenter
-
-                        Repeater {
-                            model: object ? object.batteries : 0
-
-                            Loader {
-                                sourceComponent:    objectVoltage
-
-                                property var battery: object
-                            }
-                        }
-                    }
-
-//                    QGCLabel {
-//                        text: object ? _battery1volt : "???"
-//                        Layout.preferredWidth: ScreenTools.defaultFontPixelHeight * 11
-//                    }
-
-                    QGCLabel { text: qsTr("SPD"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
-                    QGCLabel {
-                        text: object ? object.groundSpeed.rawValue.toFixed(1) : ""
-                        width: ScreenTools.defaultFontPixelHeight * 11
-                        Layout.alignment: Qt.AlignCenter
-                    }
-
-                    QGCLabel { text: qsTr("GPS"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
-                    QGCLabel {
-                        text: object ? object.gps.lock.enumStringValue + " (" + object.gps.count.valueString + ")" : ""
-                        width: ScreenTools.defaultFontPixelHeight * 11
-                        Layout.alignment: Qt.AlignCenter
-                    }
-                } // GridLayout
-            } // Column
         } // Rectangle
-
-        Item {
-            id : triangleComponent
-            anchors.top:    atmosphericValueBar.bottom
-            anchors.left:   atmosphericValueBar.horizontalCenter
-            width: ScreenTools.defaultFontPixelHeight
-            height: ScreenTools.defaultFontPixelHeight
-            clip : true
-
-            // The index of corner for the triangle to be attached
-            property int corner : 0;
-            property alias color : rect.color
-
-            Rectangle {
-                x : triangleComponent.width * ((triangleComponent.corner + 1) % 4 < 2 ? 0 : 1) - width / 2
-                y : triangleComponent.height * (triangleComponent.corner    % 4 < 2 ? 0 : 1) - height / 2
-                id : rect
-                color : Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-                antialiasing: true
-                width : Math.min(triangleComponent.width,triangleComponent.height)
-                height : width
-                transformOrigin: Item.Center
-                rotation : 45
-                scale : 1.414
-            }
-        } // Item
-    }
-
-    Component {
-        id: objectVoltage
-
-        QGCLabel {
-            text: object ? battery.voltage.valueString : ""
-            Layout.preferredWidth: ScreenTools.defaultFontPixelHeight * 11
-        }
-
     }
 }

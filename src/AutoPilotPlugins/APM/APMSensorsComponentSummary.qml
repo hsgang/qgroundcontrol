@@ -27,7 +27,7 @@ Item {
         anchors.fill:       parent
 
         VehicleSummaryRow {
-        labelText:  qsTr("Compasses:")
+        labelText:  qsTr("Compasses")
         valueText: ""
         }
 
@@ -72,7 +72,7 @@ Item {
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Accelerometer(s):")
+            labelText: qsTr("Accelerometers")
             valueText: controller.accelSetupNeeded ? qsTr("Setup required") : qsTr("Ready")
         }
 
@@ -85,7 +85,7 @@ Item {
         }
 
         VehicleSummaryRow {
-            labelText: qsTr("Barometer(s):")
+            labelText: qsTr("Barometers")
             valueText: sensorParams.baroIdAvailable ? "" : qsTr("Not Supported(Over APM 4.1)")
         }
 

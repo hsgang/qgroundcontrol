@@ -11,7 +11,7 @@ import QGroundControl.FlightDisplay 1.0
 
 GuidedToolStripAction {
     text:       _guidedController.armTitle
-    iconSource: "/InstrumentValueIcons/stand-by.svg"
+    iconSource: "/res/power.svg"
     visible:    _guidedController.showArm
     enabled:    _guidedController.showArm && !_guidedController._vehicleArmed
     actionID:   _guidedController.actionArm

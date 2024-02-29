@@ -54,7 +54,7 @@ SettingsPage {
             text:               qsTr("Enforce Preflight Checklist")
             fact:               _enforceChecklist
             enabled:            _settingsManager.appSettings.useChecklist.value
-            visible:            useCheckList.visible && _enforceChecklist.visible
+            visible:            useCheckList.fact.rawValue && _enforceChecklist.visible
             property Fact _enforceChecklist: _settingsManager.appSettings.enforceChecklist
         }
 
@@ -66,13 +66,13 @@ SettingsPage {
             property Fact _keepMapCenteredOnVehicle: _settingsManager.flyViewSettings.keepMapCenteredOnVehicle
         }
 
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("Show Telemetry Log Replay Status Bar")
-            fact:               _showLogReplayStatusBar
-            visible:            _showLogReplayStatusBar.visible
-            property Fact _showLogReplayStatusBar: _settingsManager.flyViewSettings.showLogReplayStatusBar
-        }
+        // FactCheckBoxSlider {
+        //     Layout.fillWidth:   true
+        //     text:               qsTr("Show Telemetry Log Replay Status Bar")
+        //     fact:               _showLogReplayStatusBar
+        //     visible:            _showLogReplayStatusBar.visible
+        //     property Fact _showLogReplayStatusBar: _settingsManager.flyViewSettings.showLogReplayStatusBar
+        // }
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
@@ -86,9 +86,46 @@ SettingsPage {
         FactCheckBoxSlider {
             Layout.fillWidth:   true
             text:               qsTr("Update return to home position based on device location.")
+            description:        "Update return to home position based on device location."
             fact:               _updateHomePosition
             visible:            _updateHomePosition.visible
             property Fact _updateHomePosition: _settingsManager.flyViewSettings.updateHomePosition
+        }
+    }
+
+    SettingsGroupLayout {
+        Layout.fillWidth:   true
+        heading:            qsTr("Instrument Panel")
+        visible:            _alternateInstrumentPanel.visible || _showAdditionalIndicatorsCompass.visible || _lockNoseUpCompass.visible
+
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Show additional heading indicators on Compass")
+            description:        "홈 위치, 다음경로 위치, 풍향 정보 등을 표시"
+            visible:            _showAdditionalIndicatorsCompass.visible
+            fact:               _showAdditionalIndicatorsCompass
+        }
+
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Lock Compass Nose-Up")
+            visible:            _lockNoseUpCompass.visible
+            fact:               _lockNoseUpCompass
+        }
+
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Show attitude HUD indicators on Compass")
+            description:        "롤 피치 정보를 표시"
+            fact:               QGroundControl.settingsManager.flyViewSettings.showAttitudeHUD
+            visible:            fact.visible
+        }
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Show Mission Max Altitude Indicator")
+            description:        "자동경로상 최대 고도 정보를 표시"
+            fact:               QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator
+            visible:            fact.visible
         }
     }
 

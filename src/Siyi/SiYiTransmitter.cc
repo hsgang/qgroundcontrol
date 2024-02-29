@@ -1,6 +1,8 @@
 ﻿#include <QtEndian>
 #include "SiYiTransmitter.h"
 
+QGC_LOGGING_CATEGORY(SiYiTransmitterLog, "SiYiTransmitterLog")
+
 SiYiTransmitter::SiYiTransmitter(QObject *parent)
     : SiYiTcpClient{"192.168.144.12", 5864, parent}
 {
@@ -78,7 +80,7 @@ void SiYiTransmitter::analyzeMessage()
                     const QString info = QString("[%1:%2]:").arg(ip_, QString::number(port_));
                     QByteArray packet = QByteArray(rxBytes_.data(), msgLen);
 #if 0
-                    qInfo() << info << "Rx:" << packet.toHex(' ');
+                    qCDebug(SiYiTransmitterLog) << "Rx:" << packet.toHex(' ');
 #endif
                     onHeartbeatMessageReceived(packet);
                 } else if (msg.header.cmdId == 0x8a) {
@@ -194,7 +196,7 @@ void SiYiTransmitter::onHeartbeatMessageReceived(const QByteArray &msg)
         emit freqChanged();
         emit channelChanged();
 
-        // qInfo() << "signalQuality_:" << signalQuality_
+        // qInfoqCDebug(SiYiTransmitterLog) << "signalQuality_:" << signalQuality_
         //         << "inactiveTime_:" << inactiveTime_
         //         << "upStream_:" << upStream_
         //         << "downStream_:" << downStream_
@@ -205,6 +207,6 @@ void SiYiTransmitter::onHeartbeatMessageReceived(const QByteArray &msg)
         //         << "channel_:" << channel_;
 
     } else {
-        qWarning() << "bad heartbeat message:" << msg.toHex(' ') ;
+        qCDebug(SiYiTransmitterLog) << "bad heartbeat message:" << msg.toHex(' ') ;
     }
 }

@@ -51,25 +51,25 @@ UrlFactory::UrlFactory() :
     _providers.append(ProviderPair("Bing Satellite", new BingSatelliteMapProvider(this)));
     _providers.append(ProviderPair("Bing Hybrid", new BingHybridMapProvider(this)));
 
-    _providers.append(ProviderPair("Statkart Topo", new StatkartMapProvider(this)));
-    _providers.append(ProviderPair("Statkart Basemap", new StatkartBaseMapProvider(this)));
+    // _providersTable["Statkart Topo"] = new StatkartMapProvider(this);
+    // _providersTable["Statkart Basemap"] = new StatkartBaseMapProvider(this);
 
-    _providers.append(ProviderPair("Eniro Topo", new EniroMapProvider(this)));
+    // _providersTable["Eniro Topo"] = new EniroMapProvider(this);
 
     // To be add later on Token entry !
     //_providers.append(ProviderPair("Esri World Street", new EsriWorldStreetMapProvider(this)));
     //_providers.append(ProviderPair("Esri World Satellite", new EsriWorldSatelliteMapProvider(this)));
     //_providers.append(ProviderPair("Esri Terrain", new EsriTerrainMapProvider(this)));
 
-    _providers.append(ProviderPair("Mapbox Streets", new MapboxStreetMapProvider(this)));
-    _providers.append(ProviderPair("Mapbox Light", new MapboxLightMapProvider(this)));
-    _providers.append(ProviderPair("Mapbox Dark", new MapboxDarkMapProvider(this)));
-    _providers.append(ProviderPair("Mapbox Satellite", new MapboxSatelliteMapProvider(this)));
-    _providers.append(ProviderPair("Mapbox Hybrid", new MapboxHybridMapProvider(this)));
-    _providers.append(ProviderPair("Mapbox StreetsBasic", new MapboxStreetsBasicMapProvider(this)));
-    _providers.append(ProviderPair("Mapbox Outdoors", new MapboxOutdoorsMapProvider(this)));
-    _providers.append(ProviderPair("Mapbox Bright", new MapboxBrightMapProvider(this)));
-    _providers.append(ProviderPair("Mapbox Custom", new MapboxCustomMapProvider(this)));
+    // _providersTable["Mapbox Streets"]      = new MapboxStreetMapProvider(this);
+    // _providersTable["Mapbox Light"]        = new MapboxLightMapProvider(this);
+    // _providersTable["Mapbox Dark"]         = new MapboxDarkMapProvider(this);
+    // _providersTable["Mapbox Satellite"]    = new MapboxSatelliteMapProvider(this);
+    // _providersTable["Mapbox Hybrid"]       = new MapboxHybridMapProvider(this);
+    // _providersTable["Mapbox StreetsBasic"] = new MapboxStreetsBasicMapProvider(this);
+    // _providersTable["Mapbox Outdoors"]     = new MapboxOutdoorsMapProvider(this);
+    // _providersTable["Mapbox Bright"]       = new MapboxBrightMapProvider(this);
+    // _providersTable["Mapbox Custom"]       = new MapboxCustomMapProvider(this);
 
     //_providers.append(ProviderPair("MapQuest Map", new MapQuestMapMapProvider(this)));
     //_providers.append(ProviderPair("MapQuest Sat", new MapQuestSatMapProvider(this)));
@@ -79,13 +79,13 @@ UrlFactory::UrlFactory() :
 
     _providers.append(ProviderPair(kCopernicusElevationProviderKey, new CopernicusElevationProvider(this)));
 
-    _providers.append(ProviderPair("Japan-GSI Contour", new JapanStdMapProvider(this)));
-    _providers.append(ProviderPair("Japan-GSI Seamless", new JapanSeamlessMapProvider(this)));
-    _providers.append(ProviderPair("Japan-GSI Anaglyph", new JapanAnaglyphMapProvider(this)));
-    _providers.append(ProviderPair("Japan-GSI Slope", new JapanSlopeMapProvider(this)));
-    _providers.append(ProviderPair("Japan-GSI Relief", new JapanReliefMapProvider(this)));
+    // _providersTable["Japan-GSI Contour"] = new JapanStdMapProvider(this);
+    // _providersTable["Japan-GSI Seamless"] = new JapanSeamlessMapProvider(this);
+    // _providersTable["Japan-GSI Anaglyph"] = new JapanAnaglyphMapProvider(this);
+    // _providersTable["Japan-GSI Slope"] = new JapanSlopeMapProvider(this);
+    // _providersTable["Japan-GSI Relief"] = new JapanReliefMapProvider(this);
 
-    _providers.append(ProviderPair("LINZ Basemap", new LINZBasemapMapProvider(this)));
+    // _providersTable["LINZ Basemap"] = new LINZBasemapMapProvider(this);
 
     _providers.append(ProviderPair("CustomURL Custom", new CustomURLMapProvider(this)));
 }

@@ -100,7 +100,6 @@ Rectangle {
             width:              __mavlinkRoot.width
             spacing:            ScreenTools.defaultFontPixelHeight * 0.5
             anchors.margins:    ScreenTools.defaultFontPixelWidth
-
             //-----------------------------------------------------------------
             //-- Mavlink Logging
             Item {

@@ -55,10 +55,11 @@ Rectangle {
         Rectangle {
             id:                     currentButton
             Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
-            height:                 viewButtonRow.height * 0.8
+            height:                 viewButtonRow.height * 0.7
             width:                  height
             color:                  "transparent"
-            //border.color:           qgcPal.text
+            border.color:           qgcPal.text
+            border.width:           1
             radius:                 ScreenTools.defaultFontPixelHeight / 4
 
             QGCToolBarButton {
@@ -80,10 +81,10 @@ Rectangle {
             height:                 viewButtonRow.height * 0.7
             width:                  height
             color:                  "transparent"
-            //radius:                 ScreenTools.defaultFontPixelHeight * 0.2
-            // border.color:           qgcPal.text
-            // border.width:           1
-            visible:                !ScreenTools.isMobile
+            radius:                 ScreenTools.defaultFontPixelHeight / 4
+            border.color:           !_activeVehicle ? qgcPal.colorRed : qgcPal.colorGreen
+            border.width:           1
+            visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
 
             QGCColoredImage{
                 height:             parent.height * 0.7
@@ -149,10 +150,10 @@ Rectangle {
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.33
         anchors.horizontalCenter: parent.horizontalCenter
-        color:                  qgcPal.windowShade //"transparent"
+        color:                  qgcPal.windowShadeDark //"transparent"
         border.color:           qgcPal.text
-        radius:                 height / 2 //ScreenTools.defaultFontPixelHeight / 4
-        visible:                _activeVehicle
+        radius:                 ScreenTools.defaultFontPixelHeight / 4
+        visible:                currentToolbar == flyViewToolbar && _activeVehicle
 
         Loader{
             id:             flightModeIndicatorLoader
@@ -198,7 +199,7 @@ Rectangle {
 
     Rectangle {
         id:                     widgetControlButton
-        anchors.right:          parent.right
+        anchors.right:          !ScreenTools.isMobile ? brandImageRect.left : parent.right
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
@@ -221,6 +222,80 @@ Rectangle {
         MouseArea{
             anchors.fill:       parent
             onClicked:          mainWindow.showIndicatorDrawer(widgetControlComponent)
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    //-- Branding Logo
+
+    Rectangle {
+        id: brandImageRect
+        anchors.right:          parent.right
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        anchors.margins:        ScreenTools.defaultFontPixelHeight / 2
+        visible:                !ScreenTools.isMobile && currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+        color:                  "transparent"
+        border.color:           qgcPal.text
+        border.width:           1
+        width:                  ScreenTools.defaultFontPixelHeight * 6
+        radius:                 ScreenTools.defaultFontPixelHeight / 4
+
+        Image {
+            id:                     brandImage
+            anchors.fill:           parent
+            anchors.margins:        ScreenTools.defaultFontPixelHeight / 4
+            // anchors.right:          parent.right
+            // anchors.top:            parent.top
+            // anchors.bottom:         parent.bottom
+            // anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
+            // visible:                !ScreenTools.isMobile && currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+            fillMode:               Image.PreserveAspectFit
+            source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
+            sourceSize.width: 256
+            sourceSize.height: 256
+            mipmap:                 true
+
+            property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
+            property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
+            property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
+            property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
+            property bool   _userBrandingIndoor:    _userBrandImageIndoor.length != 0
+            property bool   _userBrandingOutdoor:   _userBrandImageOutdoor.length != 0
+            property string _brandImageIndoor:      brandImageIndoor()
+            property string _brandImageOutdoor:     brandImageOutdoor()
+
+            function brandImageIndoor() {
+               if (_userBrandingIndoor) {
+                   return _userBrandImageIndoor
+               } else {
+                   if (_userBrandingOutdoor) {
+                       return _userBrandingOutdoor
+                   } else {
+                       if (_corePluginBranding) {
+                           return "/qmlimages/amp_logo_white.png" //QGroundControl.corePlugin.brandImageIndoor
+                       } else {
+                           return "/qmlimages/amp_logo_white.png" //_activeVehicle ? _activeVehicle.brandImageIndoor : ""
+                       }
+                   }
+               }
+            }
+
+            function brandImageOutdoor() {
+               if (_userBrandingOutdoor) {
+                   return _userBrandingOutdoor
+               } else {
+                   if (_userBrandingIndoor) {
+                       return _userBrandingIndoor
+                   } else {
+                       if (_corePluginBranding) {
+                           return "/qmlimages/amp_logo_blue.png" //QGroundControl.corePlugin.brandImageOutdoor
+                       } else {
+                           return "/qmlimages/amp_logo_blue.png" //_activeVehicle ? _activeVehicle.brandImageOutdoor : ""
+                       }
+                   }
+               }
+            }
         }
     }
 
@@ -424,60 +499,6 @@ Rectangle {
             }
         }
     }
-
-    //-------------------------------------------------------------------------
-    //-- Branding Logo
-//    Image {
-//        anchors.right:          parent.right
-//        anchors.top:            parent.top
-//        anchors.bottom:         parent.bottom
-//        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-//        visible:                currentToolbar !== planViewToolbar && _activeVehicle && !_communicationLost && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
-//        fillMode:               Image.PreserveAspectFit
-//        source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
-//        mipmap:                 true
-
-//        property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
-//        property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
-//        property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
-//        property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
-//        property bool   _userBrandingIndoor:    _userBrandImageIndoor.length != 0
-//        property bool   _userBrandingOutdoor:   _userBrandImageOutdoor.length != 0
-//        property string _brandImageIndoor:      brandImageIndoor()
-//        property string _brandImageOutdoor:     brandImageOutdoor()
-
-//        function brandImageIndoor() {
-//            if (_userBrandingIndoor) {
-//                return _userBrandImageIndoor
-//            } else {
-//                if (_userBrandingOutdoor) {
-//                    return _userBrandingOutdoor
-//                } else {
-//                    if (_corePluginBranding) {
-//                        return QGroundControl.corePlugin.brandImageIndoor
-//                    } else {
-//                        return _activeVehicle ? _activeVehicle.brandImageIndoor : ""
-//                    }
-//                }
-//            }
-//        }
-
-//        function brandImageOutdoor() {
-//            if (_userBrandingOutdoor) {
-//                return _userBrandingOutdoor
-//            } else {
-//                if (_userBrandingIndoor) {
-//                    return _userBrandingIndoor
-//                } else {
-//                    if (_corePluginBranding) {
-//                        return QGroundControl.corePlugin.brandImageOutdoor
-//                    } else {
-//                        return _activeVehicle ? _activeVehicle.brandImageOutdoor : ""
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     // Small parameter download progress bar
     Rectangle {

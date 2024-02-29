@@ -7,7 +7,7 @@
 #include "SiYiCrcApi.h"
 #include "SiYiTcpClient.h"
 
-
+QGC_LOGGING_CATEGORY(SiYiTcpClientLog, "SiYiTcpClientLog")
 
 SiYiTcpClient::SiYiTcpClient(const QString ip, quint16 port, QObject *parent)
     : QThread(parent)
@@ -38,7 +38,7 @@ void SiYiTcpClient::sendMessage(const QByteArray &msg)
 
 void SiYiTcpClient::analyzeIp(QString videoUrl)
 {
-    qWarning() << videoUrl;
+    qCDebug(SiYiTcpClientLog) << videoUrl;
     videoUrl = videoUrl.remove(QString("rtsp://"));
     QStringList strList = videoUrl.split('/');
     if (!strList.isEmpty()) {
@@ -54,11 +54,11 @@ void SiYiTcpClient::analyzeIp(QString videoUrl)
             if (ip.split('.').length() == 4) {
                 resetIp(ip);
             } else {
-                qWarning() << "rtsp url is invalid:" << videoUrl;
+                qCDebug(SiYiTcpClientLog) << "rtsp url is invalid:" << videoUrl;
             }
         }
     } else {
-        qWarning() << "rtsp url is invalid:" << videoUrl;
+        qCDebug(SiYiTcpClientLog) << "rtsp url is invalid:" << videoUrl;
     }
 }
 
@@ -78,7 +78,7 @@ void SiYiTcpClient::run()
     const QString info = QString("[%1:%2]:").arg(ip_, QString::number(port_));
 
     connect(tcpClient, &QTcpSocket::connected, tcpClient, [=](){
-        qInfo() << info << "Connect to server successfully!";
+        qCDebug(SiYiTcpClientLog) << "Connect to server successfully!";
 
         heartbeatTimer->start();
         txTimer->start();
@@ -89,7 +89,7 @@ void SiYiTcpClient::run()
         emit isConnectedChanged();
     });
     connect(tcpClient, &QTcpSocket::disconnected, tcpClient, [=](){
-        qInfo() << info << "Disconnect from server!";
+        qCDebug(SiYiTcpClientLog) << "Disconnect from server!";
 
         this->isConnected_ = false;
         this->txMessageVectorMutex_.lock();
@@ -104,7 +104,7 @@ void SiYiTcpClient::run()
     connect(tcpClient, &QTcpSocket::errorOccurred, tcpClient, [=](){
         heartbeatTimer->stop();
         exit();
-        qInfo() << info << tcpClient->errorString();
+        qCDebug(SiYiTcpClientLog) << tcpClient->errorString();
     });
 
     // 定时发送
@@ -120,13 +120,13 @@ void SiYiTcpClient::run()
         if ((!msg.isEmpty())) {
             if ((tcpClient->state() == QTcpSocket::ConnectedState)) {
                 if (tcpClient->write(msg) != -1) {
-                    qInfo() << info << "Tx:" << msg.toHex(' ');
+                    qCDebug(SiYiTcpClientLog) << "Tx:" << msg.toHex(' ');
                 } else {
-                    qInfo() << info << tcpClient->errorString();
+                    qCDebug(SiYiTcpClientLog) << tcpClient->errorString();
                 }
             } else {
-                qInfo() << info << "Not connected state, the state is:" << tcpClient->state();
-                qInfo() << info << tcpClient->errorString();
+                qCDebug(SiYiTcpClientLog) << "Not connected state, the state is:" << tcpClient->state();
+                qCDebug(SiYiTcpClientLog) << tcpClient->errorString();
                 exit();
             }
         }
@@ -164,7 +164,7 @@ void SiYiTcpClient::run()
             this->timeoutCount = 0;
             this->timeoutCountMutex.unlock();
 
-            qWarning() << "Heartbeat timeout, the client will be restart soon!";
+            qCDebug(SiYiTcpClientLog) << "Heartbeat timeout, the client will be restart soon!";
             this->exit();
         }
 

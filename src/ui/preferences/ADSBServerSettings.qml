@@ -16,6 +16,7 @@ import QGroundControl
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
 import QGroundControl.Controls
+import QGroundControl.Palette 
 
 SettingsPage {
     property var    _settingsManager:           QGroundControl.settingsManager
@@ -24,6 +25,7 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
+        heading:            qsTr("ADSB Server")
         visible:            QGroundControl.settingsManager.adsbVehicleManagerSettings.visible
 
         FactCheckBoxSlider {
@@ -36,6 +38,7 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
+        heading:            qsTr("Settings")
         visible:             _adsbSettings.adsbServerHostAddress.visible || _adsbSettings.adsbServerPort.visible
         enabled:             _adsbServerConnectEnabled.rawValue
 

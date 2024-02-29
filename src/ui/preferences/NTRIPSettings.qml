@@ -16,10 +16,13 @@ import QGroundControl
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
 import QGroundControl.Controls
+import QGroundControl.Palette
+import QGroundControl.ScreenTools 
 
 SettingsPage {
     property var    _settingsManager:           QGroundControl.settingsManager
     property var    ntripSettings:    QGroundControl.settingsManager.ntripSettings
+    property real   _urlFieldWidth:             ScreenTools.defaultFontPixelWidth * 25
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -28,7 +31,7 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               ntripSettings.ntripServerConnectEnabled.shortDescription
+            text:               qsTr("Connect to NTRIP server (Required Reboot)")
             fact:               ntripSettings.ntripServerConnectEnabled
             visible:            fact.visible
         }
@@ -36,47 +39,65 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
+        heading:            qsTr("Settings")
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              ntripSettings.ntripServerHostAddress.shortDescription
+            textFieldPreferredWidth:    _urlFieldWidth
+            label:              qsTr("Host Address")
             fact:               ntripSettings.ntripServerHostAddress
             visible:            ntripSettings.ntripServerHostAddress.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              ntripSettings.ntripServerPort.shortDescription
+            label:              qsTr("Server Port")
             fact:               ntripSettings.ntripServerPort
             visible:            ntripSettings.ntripServerPort.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              ntripSettings.ntripUsername.shortDescription
+            textFieldPreferredWidth:    _urlFieldWidth
+            label:              qsTr("User Name")
             fact:               ntripSettings.ntripUsername
             visible:            ntripSettings.ntripUsername.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              ntripSettings.ntripPassword.shortDescription
+            label:              qsTr("Password")
             fact:               ntripSettings.ntripPassword
             visible:            ntripSettings.ntripPassword.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              ntripSettings.ntripMountpoint.shortDescription
+            label:              qsTr("Mount Point")
             fact:               ntripSettings.ntripMountpoint
             visible:            ntripSettings.ntripMountpoint.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              ntripSettings.ntripWhitelist.shortDescription
+            label:              qsTr("White List")
             fact:               ntripSettings.ntripWhitelist
             visible:            ntripSettings.ntripWhitelist.visible
+        }
+    }
+
+    SettingsGroupLayout {
+        Layout.fillWidth:   true
+        heading:            qsTr("Status")
+
+        LabelledLabel {
+            label:          qsTr("Connection")
+            labelText: QGroundControl.ntrip.connected === true ? qsTr("Connected") : qsTr("Disconnected")
+        }
+
+        LabelledLabel {
+            label:          qsTr("BandWidth")
+            labelText: QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s"
         }
 
         LabelledButton {

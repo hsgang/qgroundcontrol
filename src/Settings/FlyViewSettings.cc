@@ -44,3 +44,8 @@ DECLARE_SETTINGSFACT(FlyViewSettings, showVibrationStatus)
 DECLARE_SETTINGSFACT(FlyViewSettings, showEKFStatus)
 DECLARE_SETTINGSFACT(FlyViewSettings, flyviewWidgetOpacity)
 DECLARE_SETTINGSFACT(FlyViewSettings, instrumentQmlFile)
+DECLARE_SETTINGSFACT(FlyViewSettings, showWindvane)
+DECLARE_SETTINGSFACT(FlyViewSettings, showVehicleInfoOnMap)
+DECLARE_SETTINGSFACT(FlyViewSettings, showCameraProjectionOnMap)
+
+

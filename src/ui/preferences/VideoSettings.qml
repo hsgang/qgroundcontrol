@@ -18,6 +18,8 @@ import QGroundControl.FactControls
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
 
+import SiYi.Object 1.0
+
 SettingsPage {
     property var    _settingsManager:            QGroundControl.settingsManager
     property var    _videoSettings:             _settingsManager.videoSettings
@@ -99,7 +101,6 @@ SettingsPage {
             fact:               _videoSettings.lowLatencyMode
             visible:            !_videoAutoStreamConfig && _isGst && fact.visible
         }
-        
         LabelledFactComboBox {
             Layout.fillWidth:   true
             label:              qsTr("Video decode priority")

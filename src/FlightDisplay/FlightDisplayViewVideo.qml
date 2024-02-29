@@ -10,6 +10,7 @@
 
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.FlightDisplay
@@ -42,32 +43,129 @@ Item {
     function getHeight() {
         return videoBackground.getHeight()
     }
+    property var    _settingsManager:   QGroundControl.settingsManager
+    property var    _videoSettings:     _settingsManager.videoSettings
+    property string _videoSource:       _videoSettings.videoSource.rawValue
+    property bool   _isGst:             QGroundControl.videoManager.isGStreamer
+    property bool   _isRTSP:            _isGst && _videoSource === _videoSettings.rtspVideoSource
 
     property double _thermalHeightFactor: 0.85 //-- TODO
 
-        Image {
+        // Image {
+        //     id:             noVideo
+        //     anchors.fill:   parent
+        //     source:         "/res/NoVideoBackground.jpg"
+        //     fillMode:       Image.PreserveAspectCrop
+        //     visible:        !(QGroundControl.videoManager.decoding)
+
+        Rectangle {
             id:             noVideo
             anchors.fill:   parent
-            source:         "/res/NoVideoBackground.jpg"
-            fillMode:       Image.PreserveAspectCrop
             visible:        !(QGroundControl.videoManager.decoding)
+            color:          qgcPal.windowShade
 
             Rectangle {
                 anchors.centerIn:   parent
-                width:              noVideoLabel.contentWidth + ScreenTools.defaultFontPixelHeight
-                height:             noVideoLabel.contentHeight + ScreenTools.defaultFontPixelHeight
-                radius:             ScreenTools.defaultFontPixelWidth / 2
-                color:              "black"
-                opacity:            0.5
-            }
+                width:              noVideoColumn.width + ScreenTools.defaultFontPixelHeight
+                height:             noVideoColumn.height + ScreenTools.defaultFontPixelHeight / 2
+                radius:             ScreenTools.defaultFontPixelHeight / 4
+                color:              "transparent"//Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
+                //opacity:            0.5
 
-            QGCLabel {
-                id:                 noVideoLabel
-                text:               QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("WAITING FOR VIDEO") : qsTr("VIDEO DISABLED")
-                font.family:        ScreenTools.demiboldFontFamily
-                color:              "white"
-                font.pointSize:     useSmallFont ? ScreenTools.smallFontPointSize : ScreenTools.largeFontPointSize
-                anchors.centerIn:   parent
+                RowLayout {
+                    id: noVideoColumn
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing:   ScreenTools.defaultFontPixelHeight / 2
+
+                    BusyIndicator {
+                        id: control
+                        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
+                        Layout.fillWidth: true
+
+                        property real size:ScreenTools.defaultFontPixelHeight * 1.5
+                        property real ballSize: ScreenTools.defaultFontPixelHeight / 6
+
+                        contentItem:  Item {
+                            implicitWidth:  control.size
+                            implicitHeight: control.size
+
+                            Item {
+                                id: item
+                                x: control.size / 2 - control.size / 2
+                                y: control.size / 2 - control.size / 2
+                                width: control.size
+                                height: control.size
+                                //opacity: control.running ? 1 : 0
+
+                                OpacityAnimator on opacity{
+                                    duration: 300
+                                    from: 0
+                                    to: 1
+                                }
+
+                                RotationAnimator {
+                                    target: item
+                                    running: control.visible && control.running
+                                    from: 0
+                                    to: 360
+                                    loops: Animation.Infinite
+                                    duration: 2100
+                                }
+
+                                Repeater {
+                                    id: repeater
+                                    model: 7
+
+                                    Rectangle {
+                                        x: item.width / 2 - width / 2
+                                        y: item.height / 2 - height / 2
+                                        implicitWidth: control.ballSize * 2
+                                        implicitHeight: control.ballSize * 2
+                                        radius: control.ballSize
+                                        color: "transparent"
+                                        border.color: qgcPal.text
+                                        transform: [
+                                            Translate {
+                                                y: -Math.min(item.width, item.height) * 0.5 + control.ballSize
+                                            },
+                                            Rotation {
+                                                angle: index / repeater.count * 360
+                                                origin.x: control.ballSize
+                                                origin.y: control.ballSize
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Column {
+                        Layout.alignment:   Qt.AlignVCenter | Qt.AlignHCenter
+                        Layout.fillWidth:   true
+                        spacing:            ScreenTools.defaultFontPixelHeight / 4
+
+                        QGCLabel {
+                            id:             noVideoLabel
+                            text:           QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("WAITING FOR VIDEO") : qsTr("VIDEO DISABLED")
+                            font.family:    ScreenTools.demiboldFontFamily
+                            color:          qgcPal.text
+                            font.pointSize: useSmallFont ? ScreenTools.smallFontPointSize : ScreenTools.largeFontPointSize
+                        }
+
+                        QGCLabel {
+                            text:           _videoSource
+                            font.pointSize: ScreenTools.smallFontPointSize
+                        }
+
+                        QGCLabel {
+                            text:           _videoSettings.rtspUrl.rawValue
+                            visible:        _isRTSP
+                            font.pointSize: ScreenTools.smallFontPointSize
+                        }
+                    }
+                }
             }
         }
 

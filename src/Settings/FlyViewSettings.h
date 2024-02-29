@@ -46,4 +46,7 @@ public:
     DEFINE_SETTINGFACT(showEKFStatus)
     DEFINE_SETTINGFACT(flyviewWidgetOpacity)
     DEFINE_SETTINGFACT(instrumentQmlFile)
+    DEFINE_SETTINGFACT(showWindvane)
+    DEFINE_SETTINGFACT(showVehicleInfoOnMap)
+    DEFINE_SETTINGFACT(showCameraProjectionOnMap)
 };

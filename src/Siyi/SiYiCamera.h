@@ -5,6 +5,9 @@
 #include <QHostAddress>
 
 #include "SiYiTcpClient.h"
+#include "QGCLoggingCategory.h"
+
+Q_DECLARE_LOGGING_CATEGORY(SiYiCameraLog)
 
 class SiYiCamera : public SiYiTcpClient
 {

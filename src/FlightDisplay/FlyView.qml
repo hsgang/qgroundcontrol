@@ -142,23 +142,25 @@ Item {
             visible:            !QGroundControl.videoManager.fullScreen
         }
 
-        // Development tool for visualizing the insets for a paticular layer, show if needed
-        FlyViewInsetViewer {
-            id:                     widgetLayerInsetViewer
-            anchors.top:            parent.top
-            anchors.bottom:         parent.bottom
-            anchors.left:           parent.left
-            anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
-            z:                      widgetLayer.z + 1
-            insetsToView:           widgetLayer.totalToolInsets
-            visible:                false
-        }
+        // Development tool for visualizing the insets for a paticular layer, enable if needed
+
+        // FlyViewInsetViewer {
+        //     id:                     widgetLayerInsetViewer
+        //     anchors.top:            parent.top
+        //     anchors.bottom:         parent.bottom
+        //     anchors.left:           parent.left
+        //     anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
+
+        //     z:                      widgetLayer.z + 1
+
+        //     insetsToView:           customOverlay.totalToolInsets
+        // }
 
         GuidedActionsController {
             id:                 guidedActionsController
             missionController:  _missionController
             actionList:         _guidedActionList
-            guidedValueSlider:     _guidedValueSlider
+            guidedValueSlider:  _guidedValueSlider
         }
 
         GuidedActionList {

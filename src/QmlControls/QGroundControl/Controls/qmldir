@@ -44,6 +44,10 @@ InstrumentValueEditDialog               1.0 InstrumentValueEditDialog.qml
 JoystickThumbPad                        1.0 JoystickThumbPad.qml
 KMLOrSHPFileDialog                      1.0 KMLOrSHPFileDialog.qml
 LogReplayStatusBar                      1.0 LogReplayStatusBar.qml
+LabelledButton                          1.0 LabelledButton.qml
+LabelledComboBox                        1.0 LabelledComboBox.qml
+LabelledSlider                          1.0 LabelledSlider.qml
+LabelledLabel                           1.0 LabelledLabel.qml
 MainStatusIndicator                     1.0 MainStatusIndicator.qml
 FlightModeMenuIndicator                 1.0 FlightModeMenuIndicator.qml
 MainStatusIndicatorOfflinePage          1.0 MainStatusIndicatorOfflinePage.qml
@@ -110,6 +114,7 @@ RCChannelMonitor                        1.0 RCChannelMonitor.qml
 RCToParamDialog                         1.0 RCToParamDialog.qml
 QCRoundButton                           1.0 QGCRoundButton.qml
 SectionHeader                           1.0 SectionHeader.qml
+SettingsGroupLayout                     1.0 SettingsGroupLayout.qml
 SetupPage                               1.0 SetupPage.qml
 SignalStrength                          1.0 SignalStrength.qml
 SimpleItemMapVisuals                    1.0 SimpleItemMapVisuals.qml
@@ -132,3 +137,4 @@ VehicleSummaryRow                       1.0 VehicleSummaryRow.qml
 VehicleIndicatorPage                    1.0 VehicleIndicatorPage.qml
 MAVLinkChart                            1.0 MAVLinkChart.qml
 ComponentLabelValueRow                  1.0 ComponentLabelValueRow.qml
+WidgetControlPanel                      1.0 WidgetControlPanel.qml

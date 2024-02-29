@@ -32,10 +32,10 @@ Item {
     property Component  expandedPageComponent
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
-    property Fact   _indicatorDisplay:  QGroundControl.settingsManager.batteryIndicatorSettings.display
-    property bool   _showPercentage:    _indicatorDisplay.rawValue === 0
-    property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
-    property bool   _showBoth:          _indicatorDisplay.rawValue === 2
+    // property Fact   _indicatorDisplay:  QGroundControl.settingsManager.batteryIndicatorSettings.display
+    // property bool   _showPercentage:    _indicatorDisplay.rawValue === 0
+    // property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
+    // property bool   _showBoth:          _indicatorDisplay.rawValue === 2
 
     property var _batterySettings:  QGroundControl.settingsManager.batterySettings
     property real _batteryCellCount: _batterySettings.batteryCellCount.value

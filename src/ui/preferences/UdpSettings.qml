@@ -18,6 +18,7 @@ import QGroundControl.Palette
 
 ColumnLayout {
     spacing: _rowSpacing
+    width:  _columnLayoutWidth
 
     function saveSettings() {
         // No need
@@ -70,7 +71,7 @@ ColumnLayout {
 
         QGCTextField {
             id:                     hostField
-            Layout.preferredWidth:  _secondColumnWidth
+            Layout.preferredWidth:  _secondColumnWidth * 0.7
             placeholderText:        qsTr("Example: 127.0.0.1:14550")
         }
         QGCButton {

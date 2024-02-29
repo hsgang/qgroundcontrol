@@ -22,7 +22,7 @@ RowLayout {
     spacing: ScreenTools.defaultFontPixelWidth * 2
 
     ColumnLayout {
-        spacing : 0
+        spacing : ScreenTools.defaultFontPixelHeight * 0.2
 
         QGCLabel {
             id:                 _labelLabel
@@ -34,6 +34,7 @@ RowLayout {
             Layout.fillWidth:   true
             font.pointSize:     ScreenTools.smallFontPointSize
             elide:              Text.ElideMiddle
+            color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
         }
     }
 
@@ -42,4 +43,3 @@ RowLayout {
         Layout.preferredWidth:  labelPreferredWidth
     }
 }
-
