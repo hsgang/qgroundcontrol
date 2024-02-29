@@ -146,7 +146,7 @@ Rectangle {
                 wrapMode:               Text.WordWrap
                 font.pointSize:         ScreenTools.mediumFontPointSize
                 text:                   qsTr("%1 does not currently support setup of your vehicle type. ").arg(QGroundControl.appName) +
-                                        "If your vehicle is already configured you can still Fly."
+                                        qsTr("If your vehicle is already configured you can still Fly.")
                 onLinkActivated: Qt.openUrlExternally(link)
             }
         }
@@ -164,7 +164,7 @@ Rectangle {
                 wrapMode:               Text.WordWrap
                 font.pointSize:         ScreenTools.largeFontPointSize
                 text:                   qsTr("Vehicle settings and info will display after connecting your vehicle.") +
-                                        (ScreenTools.isMobile || !_corePlugin.options.showFirmwareUpgrade ? "" : " Click Firmware on the left to upgrade your vehicle.")
+                                        (ScreenTools.isMobile || !_corePlugin.options.showFirmwareUpgrade ? "" : qsTr(" Click Firmware on the left to upgrade your vehicle."))
 
                 onLinkActivated: Qt.openUrlExternally(link)
             }

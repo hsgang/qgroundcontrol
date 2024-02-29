@@ -34,6 +34,11 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMAirframeComponent.qml" line="75"/>
+        <source> To change this configuration, select the desired frame class below and then reboot the vehicle.</source>
+        <translation> 설정을 변경하기 위해, 아래 프레임 유형 중 원하시는 기체를 선택하고 다시 시작하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMAirframeComponent.qml" line="75"/>
         <source> To change this configuration, select the desired frame class below.</source>
         <translation> 설정을 변경하기 위해, 아래 프레임 유형 중 원하시는 기체를 선택하십시오.</translation>
     </message>
@@ -82,6 +87,21 @@
         <location filename="../src/AutoPilotPlugins/APM/APMAirframeComponentSummary.qml" line="29"/>
         <source>Frame Type</source>
         <translation>기체 유형</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMAirframeComponentSummary.qml" line="29"/>
+        <source>Boot Count</source>
+        <translation>부팅 횟수</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMAirframeComponentSummary.qml" line="29"/>
+        <source>Total Runtime</source>
+        <translation>총 작동 시간</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMAirframeComponentSummary.qml" line="29"/>
+        <source>Total Flight Time</source>
+        <translation>총 비행 시간</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMAirframeComponentSummary.qml" line="35"/>
@@ -2769,7 +2789,7 @@ Click Ok to start calibration.</source>
     <name>APMSensorsComponentSummary</name>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponentSummary.qml" line="33"/>
-        <source>Compass </source>
+        <source>Compasses</source>
         <translation>지자기 센서 </translation>
     </message>
     <message>
@@ -2787,13 +2807,18 @@ Click Ok to start calibration.</source>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponentSummary.qml" line="46"/>
-        <source>Accelerometer(s)</source>
+        <source>Accelerometers</source>
         <translation>가속도 센서</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponentSummary.qml" line="47"/>
         <source>Ready</source>
         <translation>준비 완료</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponentSummary.qml" line="47"/>
+        <source>Barometers</source>
+        <translation>기압 센서</translation>
     </message>
 </context>
 <context>
@@ -16773,7 +16798,7 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="35"/>
         <source>This operation cannot be performed while the vehicle is armed.</source>
-        <translation>이 동작은 기체가 시동되어있는동안은 진행할 수 없습니다</translation>
+        <translation>이 동작은 기체가 시동되어 있는 동안은 진행할 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="38"/>
@@ -16783,7 +16808,7 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="80"/>
         <source>%1 setup must be completed prior to %2 setup.</source>
-        <translation>%1은(는) 반드시 %2이(가) 완료된 후에 진행해야 합니다.</translation>
+        <translation>%1 설정은 %2 설정이 완료된 후에 진행해야 합니다</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="132"/>
@@ -16793,17 +16818,22 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="150"/>
         <source>Vehicle settings and info will display after connecting your vehicle.</source>
-        <translation>기체 정보 및 설정은 기체와 연결된 후 표시됩니다</translation>
+        <translation>기체 정보 및 설정은 기체와 연결된 후 표시됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/VehicleSetup/SetupView.qml" line="150"/>
+        <source> Click Firmware on the left to upgrade your vehicle.</source>
+        <translation> 펌웨어 메뉴에서 기체를 업데이트 할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="171"/>
         <source>You are currently connected to a vehicle but it did not return the full parameter list. </source>
-        <translation>현재 기체에 연결되어있으나 전체 파라미터를 읽어 오지 못했습니다 </translation>
+        <translation>현재 기체에 연결되어 있으나 전체 파라미터를 읽어 오지 못했습니다 </translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="172"/>
         <source>As a result, the full set of vehicle setup options are not available.</source>
-        <translation>그러므로, 기체에 대한 모든 설정옵션을 열수 없습니다</translation>
+        <translation>그러므로, 기체에 대한 모든 설정옵션을 열 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="231"/>
