@@ -435,45 +435,6 @@ Item {
         // }
     }
 
-    // QGCColoredImage {
-    //     id:                 compassDial
-    //     source:             "/qmlimages/compassInstrumentDial.svg"
-    //     mipmap:             true
-    //     fillMode:           Image.PreserveAspectFit
-    //     anchors.fill:       parent
-    //     sourceSize.height:  parent.height
-    //     color:              qgcPal.text
-    //     transform: Rotation {
-    //         origin.x:       compassDial.width  / 2
-    //         origin.y:       compassDial.height / 2
-    //         angle:          isNoseUpLocked()?-_heading:0
-    //     }
-    // }
-
-    // Image {
-    //     id:                 vehicleHeadingDial
-    //     anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-    //     source:             "/qmlimages/vehicleArrowOpaque.svg"
-    //     mipmap:             true
-    //     width:              parent.width * 0.2
-    //     sourceSize.width:   width
-    //     antialiasing:       true
-    //     fillMode:           Image.PreserveAspectFit
-
-    //     layer {
-    //         enabled: true
-    //         effect: ColorOverlay {
-    //             color: qgcPal.text
-    //         }
-    //     }
-
-    //     transform: Rotation {
-    //         origin.x:       vehicleHeadingDial.width / 2
-    //         origin.y:       vehicleHeadingDial.height / 2
-    //         angle:          isNoseUpLocked() ? 0 : _heading
-    //     }
-    // }
-
     Item {
         id:             proximityItem
         anchors.fill:   parent
@@ -641,7 +602,7 @@ Item {
                 // 그라데이션 생성
                 var gradient = ctx.createLinearGradient(triangleCanvas.width / 2, 0, triangleCanvas.width / 2, triangleCanvas.height);
                 gradient.addColorStop(0, "transparent");
-                gradient.addColorStop(0.5, qgcPal.brandingBlue);
+                gradient.addColorStop(0.2, qgcPal.brandingBlue);
 
                 // 삼각형 그리기
                 ctx.beginPath();
