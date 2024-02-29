@@ -6633,6 +6633,19 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>FlightModeToolIndicatorContentItem</name>
+    <message>
+        <location filename="../src/ui/toolbar/FlightModeToolIndicatorContentItem.qml" line="217"/>
+        <source>Edit</source>
+        <translation>모드 수정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/FlightModeToolIndicatorContentItem.qml" line="217"/>
+        <source>Some Modes Hidden</source>
+        <translation>일부 모드 비활성화됨</translation>
+    </message>
+</context>
+<context>
     <name>BatteryIndicator</name>
     <message>
         <location filename="../src/ui/toolbar/BatteryIndicator.qml" line="198"/>
@@ -7122,8 +7135,83 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Connected</source>
+        <translation>연결됨</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Disconnected</source>
+        <translation>연결 끊김</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
         <source>BandWidth</source>
         <translation>전송 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>RTK GPS Settings</source>
+        <translation>RTK GPS 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Auto Connect</source>
+        <translation>자동 연결</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Perform Survey-In</source>
+        <translation>Survey-In 수행</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Survey in accuracy (U-blox only)</source>
+        <translation>관측 정확도 (U-blox only)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Minimum observation time</source>
+        <translation>최소 관측 시간</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Use Specified Base Position</source>
+        <translation>특정 기준 위치 사용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Base Position Latitude</source>
+        <translation>기준 위치 위도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Base Position Longitude</source>
+        <translation>기준 위치 경도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Base Position Alt (WGS84)</source>
+        <translation>기준 위치 고도 (WGS84)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Base Position Accuracy</source>
+        <translation>기준 위치 정확도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Current Base Position</source>
+        <translation>현재 기준 위치</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Save</source>
+        <translation>저장</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Not Yet Valid</source>
+        <translation>아직 유효하지 않음</translation>
     </message>
 </context>
 <context>
@@ -7480,17 +7568,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="490"/>
         <source>Map Settings</source>
         <translation>지도 설정</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="490"/>
-        <source>Map Provider</source>
-        <translation>지도 소스</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="510"/>
-        <source>Map Type</source>
-        <translation>지도 유형</translation>
-    </message>
+    </message>    
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="529"/>
         <source>Stream GCS Position</source>
@@ -8006,8 +8084,33 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>Controlled by Vehicle</source>
+        <translation>기체 설정에 따라 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
         <source>Link Status (Current Vehicle)</source>
         <translation>연결 상태(현재 연결된 기체)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>Total messages sent (computed)</source>
+        <translation>전체 송신 메시지</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>Total messages received</source>
+        <translation>전체 수신 메시지</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>Total messages loss</source>
+        <translation>전체 손실 메시지</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>Loss rate</source>
+        <translation>손실율</translation>
     </message>
 </context>
 <context>
@@ -8104,11 +8207,107 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>MapSettings</name>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="490"/>
+        <source>Map Provider</source>
+        <translation>지도 제공자</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Provider</source>
+        <translation>제공</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Type</source>
+        <translation>유형</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Offline Maps</source>
+        <translation>오프라인 지도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Download map tiles for use when offline</source>
+        <translation>오프라인에서 사용할 지도 타일을 다운로드합니다</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Add New Set</source>
+        <translation>새로운 지도 타일 추가</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Add</source>
+        <translation>추가</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Import Map Tiles</source>
+        <translation>지도 타일 가져오기</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Import</source>
+        <translation>가져오기</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Export Map Tiles</source>
+        <translation>지도 타일 내보내기</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Export</source>
+        <translation>내보내기</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Tokens</source>
+        <translation>토큰</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Allows access to additional providers</source>
+        <translation>추가적인 지도 제공자 토큰</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Custom Map URL</source>
+        <translation>커스텀 지도 URL</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Tile Cache</source>
+        <translation>지도 타일 캐시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Max Disk Cache</source>
+        <translation>최대 디스크 캐시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Max Memory Cache</source>
+        <translation>최대 메모리 캐시</translation>
+    </message>
+</context>
+<context>
+    <name>OfflineMapInfo</name>
+    <message>
+        <location filename="../src/ui/preferences/OfflineMapInfo.qml" line="356"/>
+        <source>Edit</source>
+        <translation>수정</translation>
+    </message>
+</context>
+<context>
     <name>PlanViewSettings</name>
     <message>
         <location filename="../src/ui/preferences/PlanViewSettings.qml" line="356"/>
-        <source>Plan View</source>
-        <translation>자동 경로</translation>
+        <source>PlanView Settings</source>
+        <translation>자동 경로 설정</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/PlanViewSettings.qml" line="378"/>
@@ -8130,7 +8329,11 @@ Click Ok to start the auto-tuning process.
         <source>Missions Do Not Require Takeoff Item</source>
         <translation>자동 경로에서 이륙 항목(Takeoff) 제외</translation>
     </message>
-
+    <message>
+        <location filename="../src/ui/preferences/PlanViewSettings.qml" line="397"/>
+        <source>Show ROI function on toolstrip</source>
+        <translation>ROI 기능 보이기</translation>
+    </message>
 </context>
 <context>
     <name>GeoFenceController</name>

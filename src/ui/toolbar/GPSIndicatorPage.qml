@@ -118,12 +118,12 @@ ToolIndicatorPage {
 
                 LabelledLabel {
                     label:      qsTr("Status")
-                    labelText:  QGroundControl.ntrip.connected ? "Connected" : "Disconnected"
+                    labelText:  QGroundControl.ntrip.connected ? qsTr("Connected") : qsTr("Disconnected")
                 }
 
                 LabelledLabel {
                     label:      qsTr("BandWidth")
-                    labelText:  QGroundControl.ntrip.connected ? QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s" : "0.00 kB/s"
+                    labelText:  QGroundControl.ntrip.connected ? QGroundControl.ntrip.bandWidth.toFixed(2) + " KB/s" : "0.00 KB/s"
                 }
 
             }
@@ -161,7 +161,7 @@ ToolIndicatorPage {
 
             FactCheckBoxSlider {
                 Layout.fillWidth:   true
-                text:               qsTr("AutoConnect")
+                text:               qsTr("Auto Connect")
                 fact:               QGroundControl.settingsManager.autoConnectSettings.autoConnectRTKGPS
                 visible:            fact.visible
             }
@@ -176,7 +176,7 @@ ToolIndicatorPage {
             }
 
             LabelledFactSlider {
-                label:                  rtkSettings.surveyInAccuracyLimit.shortDescription
+                label:                  qsTr("Survey in accuracy (U-blox only)")//rtkSettings.surveyInAccuracyLimit.shortDescription
                 fact:                   QGroundControl.settingsManager.rtkSettings.surveyInAccuracyLimit
                 visible:                rtkSettings.surveyInAccuracyLimit.visible
                 enabled:                !useFixedPosition
@@ -185,7 +185,7 @@ ToolIndicatorPage {
             }
 
             LabelledFactSlider {
-                label:                  rtkSettings.surveyInMinObservationDuration.shortDescription
+                label:                  qsTr("Minimum observation time")//rtkSettings.surveyInMinObservationDuration.shortDescription
                 fact:                   rtkSettings.surveyInMinObservationDuration
                 visible:                rtkSettings.surveyInMinObservationDuration.visible
                 enabled:                !useFixedPosition
@@ -200,28 +200,28 @@ ToolIndicatorPage {
             }
 
             LabelledFactTextField {
-                label:                  rtkSettings.fixedBasePositionLatitude.shortDescription
-                fact:                   rtkSettings.fixedBasePositionLatitude
-                visible:                rtkSettings.fixedBasePositionLatitude.visible
-                enabled:                useFixedPosition
+                label:              qsTr("Base Position Latitude")//rtkSettings.fixedBasePositionLatitude.shortDescription
+                fact:               rtkSettings.fixedBasePositionLatitude
+                visible:            rtkSettings.fixedBasePositionLatitude.visible
+                enabled:            useFixedPosition
             }
 
             LabelledFactTextField {
-                label:              rtkSettings.fixedBasePositionLongitude.shortDescription
+                label:              qsTr("Base Position Longitude")//rtkSettings.fixedBasePositionLongitude.shortDescription
                 fact:               rtkSettings.fixedBasePositionLongitude
                 visible:            rtkSettings.fixedBasePositionLongitude.visible
                 enabled:            useFixedPosition
             }
 
             LabelledFactTextField {
-                label:              rtkSettings.fixedBasePositionAltitude.shortDescription
+                label:              qsTr("Base Position Alt (WGS84)")//rtkSettings.fixedBasePositionAltitude.shortDescription
                 fact:               rtkSettings.fixedBasePositionAltitude
                 visible:            rtkSettings.fixedBasePositionAltitude.visible
                 enabled:            useFixedPosition
             }
 
             LabelledFactTextField {
-                label:              rtkSettings.fixedBasePositionAccuracy.shortDescription
+                label:              qsTr("Base Position Accuracy")//rtkSettings.fixedBasePositionAccuracy.shortDescription
                 fact:               rtkSettings.fixedBasePositionAccuracy
                 visible:            rtkSettings.fixedBasePositionAccuracy.visible
                 enabled:            useFixedPosition

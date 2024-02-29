@@ -44,6 +44,7 @@ ColumnLayout {
         if (hiddenFlightModesFact) {
             hiddenFlightModesList = hiddenFlightModesFact.value.split(",")
         }
+        hiddenModesLabel.calcVisible()
     }
 
     QGCCheckBoxSlider {
@@ -101,8 +102,22 @@ ColumnLayout {
                         }
                     }
                     hiddenFlightModesFact.value = hiddenFlightModesList.join(",")
+                    hiddenModesLabel.calcVisible()
                 }
             }
+        }
+    }
+
+    QGCLabel {
+        id: hiddenModesLabel
+        text: qsTr("Some Modes Hidden")
+        Layout.fillWidth: true
+        font.pointSize: ScreenTools.smallFontPointSize
+        horizontalAlignment: Text.AlignHCenter
+        visible: false
+
+        function calcVisible() {
+            hiddenModesLabel.visible = hiddenFlightModesList.length > 0
         }
     }
 }

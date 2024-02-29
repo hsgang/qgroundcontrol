@@ -111,6 +111,10 @@ Item {
                     onClicked:  offlineMapEditorComponent.createObject(root, { tileSet: object }).showInfo()
                 }
             }
+        }
+
+        SettingsGroupLayout {
+            Layout.fillWidth:   true
 
             LabelledButton {
                 label:      qsTr("Add New Set")
@@ -214,10 +218,12 @@ Item {
             heading:            qsTr("Tile Cache")
 
             LabelledFactTextField {
+                label: qsTr("Max Disk Cache")
                 fact: _mapsSettings.maxCacheDiskSize
             }
 
             LabelledFactTextField {
+                label: qsTr("Max Memory Cache")
                 fact: _mapsSettings.maxCacheMemorySize
             }
         }

@@ -240,13 +240,13 @@ RPM, ESC TELEMETRY, GENERATOR_STATUS, WINCH_STATUS"
 
         LabelledLabel {
             Layout.fillWidth:   true
-            label:              qsTr("Total message loss")
+            label:              qsTr("Total messages loss")
             labelText:          _activeVehicle ? _activeVehicle.mavlinkLossCount : _notConnectedStr
         }
 
         LabelledLabel {
             Layout.fillWidth:   true
-            label:              qsTr("Loss rate:")
+            label:              qsTr("Loss rate")
             labelText:          _activeVehicle ? _activeVehicle.mavlinkLossPercent.toFixed(0) + '%' : _notConnectedStr
         }
     }
