@@ -10,36 +10,38 @@
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
+class Viewer3DSettings;
+
 class Viewer3DQmlBackend : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString osmFilePath MEMBER _osmFilePath NOTIFY cityMapPathChanged)
     Q_PROPERTY(QGeoCoordinate gpsRef READ gpsRef NOTIFY gpsRefChanged)
-    Q_PROPERTY(float altitudeBias MEMBER _altitudeBias NOTIFY altitudeBiasChanged)
 
 public:
     explicit Viewer3DQmlBackend(QObject *parent = nullptr);
 
-    void init(Viewer3DSettings* viewerSettingThr,  OsmParser* osmThr=nullptr);
+    void init(OsmParser* osmThr=nullptr);
 
     QGeoCoordinate gpsRef(){return _gpsRef;}
-    void setGpsRef(const QGeoCoordinate& gpsRef);
 
 signals:
     void gpsRefChanged();
-    void altitudeBiasChanged();
-    void cityMapPathChanged();
 
 private:
     OsmParser *_osmParserThread;
 
-    QString _osmFilePath;
     QGeoCoordinate _gpsRef;
-    float _altitudeBias;
+    uint8_t _gpsRefSet;
+
+    Vehicle *_activeVehicle;
+    Viewer3DSettings* _viewer3DSettings = nullptr;
+
 
 protected slots:
-    void _gpsRefChangedEvent(QGeoCoordinate newGpsRef);
+    void _gpsRefChangedEvent(QGeoCoordinate newGpsRef, bool isRefSet);
+    void _activeVehicleChangedEvent(Vehicle* vehicle);
+    void _activeVehicleCoordinateChanged(QGeoCoordinate newCoordinate);
 };
 
 #endif // Viewer3DQmlBackend_H

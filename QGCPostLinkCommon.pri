@@ -43,8 +43,8 @@ WindowsBuild {
     ReleaseBuild: DLL_QT_DEBUGCHAR = ""
     COPY_FILE_LIST = \
         $$SOURCE_DIR\\libs\\sdl2\\msvc\\lib\\x64\\SDL2.dll \
-        $$SOURCE_DIR\\libs\\OpenSSL\\windows\\libcrypto-1_1-x64.dll \
-        $$SOURCE_DIR\\libs\\OpenSSL\\windows\\libssl-1_1-x64.dll
+        $$SOURCE_DIR\\libs\\OpenSSL\\windows\\libcrypto-3-x64.dll \
+        $$SOURCE_DIR\\libs\\OpenSSL\\windows\\libssl-3-x64.dll
 
     for(COPY_FILE, COPY_FILE_LIST) {
         QMAKE_POST_LINK += $$escape_expand(\\n) $$QMAKE_COPY \"$$COPY_FILE\" \"$$DESTDIR\"
@@ -183,16 +183,16 @@ LinuxBuild {
 
     # QGroundControl start script
     contains (CONFIG, QGC_DISABLE_CUSTOM_BUILD) | !exists($$PWD/custom/custom.pri) {
-        QMAKE_POST_LINK += && $$QMAKE_COPY $$SOURCE_DIR/deploy/missioncontrol-start.sh $$DESTDIR
-        QMAKE_POST_LINK += && $$QMAKE_COPY $$SOURCE_DIR/deploy/missioncontrol.desktop $$DESTDIR
-        QMAKE_POST_LINK += && $$QMAKE_COPY $$SOURCE_DIR/resources/icons/missioncontrol.png $$DESTDIR
+        QMAKE_POST_LINK += && $$QMAKE_COPY $$SOURCE_DIR/deploy/linux/qgroundcontrol-start.sh $$DESTDIR
+        QMAKE_POST_LINK += && $$QMAKE_COPY $$SOURCE_DIR/deploy/linux/qgroundcontrol.desktop $$DESTDIR
+        QMAKE_POST_LINK += && $$QMAKE_COPY $$SOURCE_DIR/resources/icons/qgroundcontrol.png $$DESTDIR
     } else {
         include($$PWD/custom/custom_deploy.pri)
     }
 
     # FIXME-QT6 I don't think this is needed any more -testing
-    #QMAKE_POST_LINK += && SEARCHDIR="$$DESTDIR/Qt" RPATHDIR="$$DESTDIR/Qt/lib" "$$PWD/deploy/linux-fixup-rpaths.bash"
+    #QMAKE_POST_LINK += && SEARCHDIR="$$DESTDIR/Qt" RPATHDIR="$$DESTDIR/Qt/lib" "$$PWD/deploy/linux/linux-fixup-rpaths.bash"
 
     # https://doc.qt.io/qt-5/qt-conf.html
-    QMAKE_POST_LINK += && $$QMAKE_COPY "$$SOURCE_DIR/deploy/qt.conf" "$$DESTDIR"
+    QMAKE_POST_LINK += && $$QMAKE_COPY "$$SOURCE_DIR/deploy/linux/qt.conf" "$$DESTDIR"
 }

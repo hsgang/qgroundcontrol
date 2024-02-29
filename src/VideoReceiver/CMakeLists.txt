@@ -10,11 +10,11 @@ if (GST_FOUND)
     	GstVideoReceiver.cc
     	GstVideoReceiver.h
     )
-   
+
     set(EXTRA_LIBRARIES qmlglsink ${GST_LINK_LIBRARIES})
 endif()
 
-add_library(VideoReceiver
+qt_add_library(VideoReceiver STATIC
     ${EXTRA_SOURCES}
     VideoReceiver.h
 )

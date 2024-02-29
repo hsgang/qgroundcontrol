@@ -19,12 +19,13 @@
 #include "NTRIP.h"
 #include "QGCPalette.h"
 #include "QmlUnitsConversion.h"
+#ifndef QGC_AIRLINK_DISABLED
+#include "AirLinkManager.h"
+#else
+class AirLinkManager;
+#endif
 #ifdef CONFIG_UTM_ADAPTER
 #include "UTMSPManager.h"
-#endif
-
-#ifdef QT_DEBUG
-#include "MockLink.h"
 #endif
 
 class QGCToolbox;
@@ -71,6 +72,10 @@ public:
     Q_PROPERTY(QGCCorePlugin*       corePlugin              READ    corePlugin              CONSTANT)
     Q_PROPERTY(MissionCommandTree*  missionCommandTree      READ    missionCommandTree      CONSTANT)
     Q_PROPERTY(FactGroup*           gpsRtk                  READ    gpsRtkFactGroup         CONSTANT)
+#ifndef QGC_AIRLINK_DISABLED
+    Q_PROPERTY(AirLinkManager*      airlinkManager          READ    airlinkManager          CONSTANT)
+#endif
+    Q_PROPERTY(bool                 airlinkSupported        READ    airlinkSupported        CONSTANT)
     Q_PROPERTY(QGCPalette*          globalPalette           MEMBER  _globalPalette          CONSTANT)   ///< This palette will always return enabled colors
     Q_PROPERTY(QmlUnitsConversion*  unitsConversion         READ    unitsConversion         CONSTANT)
     Q_PROPERTY(bool                 singleFirmwareSupport   READ    singleFirmwareSupport   CONSTANT)
@@ -166,6 +171,12 @@ public:
     static QGeoCoordinate   flightMapPosition   ()  { return _coord; }
     static double           flightMapZoom       ()  { return _zoom; }
 
+    AirLinkManager*         airlinkManager      ()  { return _airlinkManager; }
+#ifndef QGC_AIRLINK_DISABLED
+    bool                    airlinkSupported    ()  { return true; }
+#else
+    bool                    airlinkSupported    () { return false; }
+#endif
 
 #ifdef CONFIG_UTM_ADAPTER
     UTMSPManager*            utmspManager         ()  {return _utmspManager;}
@@ -244,6 +255,7 @@ private:
     FirmwarePluginManager*  _firmwarePluginManager  = nullptr;
     SettingsManager*        _settingsManager        = nullptr;
     FactGroup*              _gpsRtkFactGroup        = nullptr;
+    AirLinkManager*         _airlinkManager         = nullptr;
     ADSBVehicleManager*     _adsbVehicleManager     = nullptr;
     NTRIP*                  _ntrip                  = nullptr;
     QGCPalette*             _globalPalette          = nullptr;

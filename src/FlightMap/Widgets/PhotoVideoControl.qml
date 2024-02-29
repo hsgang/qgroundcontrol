@@ -25,11 +25,11 @@ import QGroundControl.FactSystem
 import QGroundControl.FactControls
 
 Rectangle {
-    height:     mainLayout.height + (_margins * 2)
+    implicitHeight:     mainLayout.height + (_margins * 2)
     width:      mainLayout.width //+ (_margins * 2)
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
     radius:     _margins + (ScreenTools.defaultFontPixelWidth * 2.5)
-    visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && multiVehiclePanelSelector.showSingleVehiclePanel
+    visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showSingleVehicleUI // && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   backgroundOpacity:                          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
@@ -566,7 +566,7 @@ Rectangle {
                         model:              _mavlinkCameraManager ? _mavlinkCameraManager.cameraLabels : []
                         currentIndex:       _mavlinkCameraManagerCurCameraIndex
                         visible:            _multipleMavlinkCameras
-                        onActivated:        _mavlinkCameraManager.currentCamera = index
+                        onActivated: (index) => { _mavlinkCameraManager.currentCamera = index }
                     }
 
                     QGCComboBox {
@@ -575,7 +575,7 @@ Rectangle {
                         model:              _mavlinkCamera ? _mavlinkCamera.streamLabels : []
                         currentIndex:       _mavlinCameraCurStreamIndex
                         visible:            _multipleMavlinkCameraStreams
-                        onActivated:        _mavlinkCamera.currentStream = index
+                        onActivated: (index) => { _mavlinkCamera.currentStream = index }
                     }
 
                     QGCComboBox {
@@ -584,7 +584,7 @@ Rectangle {
                         model:              [ qsTr("Off"), qsTr("Blend"), qsTr("Full"), qsTr("Picture In Picture") ]
                         currentIndex:       _mavlinkCamera ? _mavlinkCamera.thermalMode : -1
                         visible:            _mavlinkCameraHasThermalVideoStream
-                        onActivated:        _mavlinkCamera.thermalMode = index
+                        onActivated: (index) => { _mavlinkCamera.thermalMode = index }
                     }
 
                     QGCSlider {
@@ -658,7 +658,7 @@ Rectangle {
                         model:              [ qsTr("Single"), qsTr("Time Lapse") ]
                         currentIndex:       _mavlinkCamera ? _mavlinkCamera.photoMode : 0
                         visible:            _mavlinkCameraHasModes
-                        onActivated:        _mavlinkCamera.photoMode = index
+                        onActivated: (index) => { _mavlinkCamera.photoMode = index }
                     }
 
                     QGCSlider {

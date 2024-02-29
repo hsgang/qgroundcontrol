@@ -16,70 +16,70 @@ ListModel {
     ListElement {
         name: qsTr("General")
         url: "/qml/GeneralSettings.qml"
-        menuIcon: "/InstrumentValueIcons/view-tile.svg"
+        iconUrl: "/InstrumentValueIcons/view-tile.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Fly View")
         url: "/qml/FlyViewSettings.qml"
-        menuIcon: "/InstrumentValueIcons/send.svg"
+        iconUrl: "/InstrumentValueIcons/send.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Plan View")
         url: "/qml/PlanViewSettings.qml"
-        menuIcon: "/InstrumentValueIcons/path.svg"
+        iconUrl: "/InstrumentValueIcons/path.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Video")
         url: "/qml/VideoSettings.qml"
-        menuIcon: "/InstrumentValueIcons/view-carousel.svg"
+        iconUrl: "/InstrumentValueIcons/view-carousel.svg"
         pageVisible: function() { return QGroundControl.settingsManager.videoSettings.visible }
     }
 
     ListElement {
         name: qsTr("Telemetry")
         url: "/qml/TelemetrySettings.qml"
-        menuIcon: "/InstrumentValueIcons/station.svg"
+        iconUrl: "/InstrumentValueIcons/station.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("NTRIP")
         url: "/qml/NTRIPSettings.qml"
-        menuIcon: "/InstrumentValueIcons/radar.svg"
+        iconUrl: "/InstrumentValueIcons/radar.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("ADSB Server")
         url: "/qml/ADSBServerSettings.qml"
-        menuIcon: "/InstrumentValueIcons/radar.svg"
+        iconUrl: "qrc:/InstrumentValueIcons/airplane.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Comm Links")
         url: "/qml/LinkSettings.qml"
-        menuIcon: "/InstrumentValueIcons/station.svg"
+        iconUrl: "qrc:/InstrumentValueIcons/usb.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Maps")
         url: "/qml/MapSettings.qml"
-        menuIcon: "/InstrumentValueIcons/outlineMap.svg"
+        iconUrl: "qrc:/InstrumentValueIcons/globe.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("PX4 Log Transfer")
         url: "/qml/PX4LogTransferSettings.qml"
-        menuIcon: "/InstrumentValueIcons/conversation.svg"
+        iconUrl: "qrc:/InstrumentValueIcons/inbox-download.svg"
         pageVisible: function() { 
             var activeVehicle = QGroundControl.multiVehicleManager.activeVehicle
             return QGroundControl.corePlugin.options.showPX4LogTransferOptions && 
@@ -91,42 +91,42 @@ ListModel {
     ListElement {
         name: qsTr("Remote ID")
         url: "/qml/RemoteIDSettings.qml"
-        menuIcon: "/InstrumentValueIcons/inbox-full.svg"
+        iconUrl: "qrc:/qmlimages/RidIconGrey.svg"
         pageVisible: function() { return QGroundControl.settingsManager.remoteIDSettings.enable.rawValue }
     }
 
     ListElement {
         name: qsTr("Console")
         url: "/qml/QGroundControl/Controls/AppMessages.qml"
-        menuIcon: "/InstrumentValueIcons/window-open.svg"
+        iconUrl: "qrc:/InstrumentValueIcons/conversation.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Help")
         url: "/qml/HelpSettings.qml"
-        menuIcon: "/InstrumentValueIcons/information-outline.svg"
+        iconUrl: "qrc:/InstrumentValueIcons/question.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Mock Link")
         url: "/qml/MockLink.qml"
-        menuIcon: "/qmlimages/Gears.svg"
+        iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
         pageVisible: function() { return ScreenTools.isDebug }
     }
 
     ListElement {
         name: qsTr("Debug")
         url: "/qml/DebugWindow.qml"
-        menuIcon: "/qmlimages/Gears.svg"
+        iconUrl: "qrc:/InstrumentValueIcons/bug.svg"
         pageVisible: function() { return ScreenTools.isDebug }
     }
 
     ListElement {
         name: qsTr("Palette Test")
         url: "/qml/QmlTest.qml"
-        menuIcon: "/qmlimages/Gears.svg"
+        iconUrl: "qrc:/InstrumentValueIcons/photo.svg"
         pageVisible: function() { return ScreenTools.isDebug }
     }
 }

@@ -296,7 +296,7 @@ Rectangle {
                                 ListElement { text: qsTr("Gale");     value: 8 }
                                 ListElement { text: qsTr("Storm");    value: 10 }
                             }
-                            onActivated: {
+                            onActivated: (index) => {
                                 saveItems();
                                 QGroundControl.mavlinkLogManager.windSpeed = windItems.get(index).value
                                 //console.log('Set Wind: ' + windItems.get(index).value)
@@ -335,7 +335,7 @@ Rectangle {
                                 ListElement { text: qsTr("Good");                     value: "good" }
                                 ListElement { text: qsTr("Great");                    value: "great" }
                             }
-                            onActivated: {
+                            onActivated: (index) => {
                                 saveItems();
                                 QGroundControl.mavlinkLogManager.rating = ratingItems.get(index).value
                                 //console.log('Set Rating: ' + ratingItems.get(index).value)

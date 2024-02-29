@@ -54,7 +54,6 @@ MissionItemEditor                       1.0 MissionItemEditor.qml
 MissionItemIndexLabel                   1.0 MissionItemIndexLabel.qml
 MissionItemMapVisual                    1.0 MissionItemMapVisual.qml
 MissionItemStatus                       1.0 MissionItemStatus.qml
-MockLinkOptionsDlg                      1.0 MockLinkOptionsDlg.qml
 ModeSwitchDisplay                       1.0 ModeSwitchDisplay.qml
 MultiRotorMotorDisplay                  1.0 MultiRotorMotorDisplay.qml
 OfflineMapButton                        1.0 OfflineMapButton.qml
@@ -75,7 +74,6 @@ QGCCheckBox                             1.0 QGCCheckBox.qml
 QGCCheckBoxSlider                       1.0 QGCCheckBoxSlider.qml
 QGCColoredImage                         1.0 QGCColoredImage.qml
 QGCComboBox                             1.0 QGCComboBox.qml
-QGCControlDebug                         1.0 QGCControlDebug.qml
 QGCDynamicObjectManager                 1.0 QGCDynamicObjectManager.qml
 QGCFileDialog                           1.0 QGCFileDialog.qml
 QGCFlickable                            1.0 QGCFlickable.qml
@@ -93,8 +91,8 @@ QGCMenuSeparator                        1.0 QGCMenuSeparator.qml
 QGCMouseArea                            1.0 QGCMouseArea.qml
 QGCMovableItem                          1.0 QGCMovableItem.qml
 QGCOptionsComboBox                      1.0 QGCOptionsComboBox.qml
-QGCPipOverlay                           1.0 QGCPipOverlay.qml
-QGCPipState                             1.0 QGCPipState.qml
+PipView                                 1.0 PipView.qml
+PipState                             1.0 PipState.qml
 QGCPopupDialog                          1.0 QGCPopupDialog.qml
 QGCRadioButton                          1.0 QGCRadioButton.qml
 QGCSimpleMessageDialog                  1.0 QGCSimpleMessageDialog.qml

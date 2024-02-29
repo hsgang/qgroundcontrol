@@ -85,6 +85,7 @@
         <file alias="screen-full.svg">screen-full.svg</file>
         <file alias="education.svg">education.svg</file>
         <file alias="vector.svg">vector.svg</file>
+        <file alias="drone.svg">drone.svg</file>
         <file alias="load-balancer.svg">load-balancer.svg</file>
         <file alias="paste.svg">paste.svg</file>
         <file alias="conversation.svg">conversation.svg</file>
@@ -298,6 +299,6 @@
         <file alias="cheveron-down.svg">cheveron-down.svg</file>
         <file alias="view-tile.svg">view-tile.svg</file>
         <file alias="path.svg">path.svg</file>
-        <file>outlineMap.svg</file>
+        <file alias="outlineMap.svg">outlineMap.svg</file>
     </qresource>
 </RCC>

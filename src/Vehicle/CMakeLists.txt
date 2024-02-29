@@ -1,23 +1,7 @@
 
 add_subdirectory(Actuators)
 
-set(EXTRA_SRC)
-if(BUILD_TESTING)
-	list(APPEND EXTRA_SRC
-		FTPManagerTest.cc
-		FTPManagerTest.h
-		RequestMessageTest.cc
-		RequestMessageTest.h
-		SendMavCommandWithHandlerTest.cc
-		SendMavCommandWithHandlerTest.h
-		SendMavCommandWithSignallingTest.cc
-		SendMavCommandWithSignallingTest.h
-		VehicleLinkManagerTest.cc
-		VehicleLinkManagerTest.h
-	)
-endif()
-
-add_library(Vehicle
+qt_add_library(Vehicle STATIC
 	Autotune.cpp
 	Autotune.h
 	CompInfo.cc
@@ -106,8 +90,6 @@ add_library(Vehicle
         VehicleHygrometerFactGroup.h
 	RemoteIDManager.h
 	RemoteIDManager.cc
-
-	${EXTRA_SRC}
 )
 
 target_link_libraries(Vehicle
@@ -121,4 +103,8 @@ target_link_libraries(Vehicle
 		qgc
 )
 
-target_include_directories(Vehicle INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(Vehicle
+	PUBLIC
+		${CMAKE_CURRENT_SOURCE_DIR}
+		${CMAKE_SOURCE_DIR}/libs/libevents
+)

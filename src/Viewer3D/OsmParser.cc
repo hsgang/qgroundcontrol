@@ -4,7 +4,8 @@
 
 #include "earcut.hpp"
 #include "Viewer3DUtils.h"
-
+#include "QGCApplication.h"
+#include "SettingsManager.h"
 
 typedef union {
     uint array[3];
@@ -19,22 +20,51 @@ typedef union {
 OsmParser::OsmParser(QObject *parent)
     : QObject{parent}
 {
-    _mainThread = new QThread(this);
+    _viewer3DSettings = qgcApp()->toolbox()->settingsManager()->viewer3DSettings();
 
-    this->moveToThread(_mainThread);
     _gpsRefSet = false;
-    _buildingLevelHeight = 0; // meters
+    _mapLoadedFlag = false;
+
+    setBuildingLevelHeight(_viewer3DSettings->buildingLevelHeight()->rawValue()); // meters
+    connect(_viewer3DSettings->buildingLevelHeight(), &Fact::rawValueChanged, this, &OsmParser::setBuildingLevelHeight);
 }
 
 void OsmParser::setGpsRef(QGeoCoordinate gpsRef)
 {
     _gpsRefPoint = gpsRef;
     _gpsRefSet = true;
-    emit gpsRefChanged(_gpsRefPoint);
+    emit gpsRefChanged(_gpsRefPoint, _gpsRefSet);
+}
+
+void OsmParser::resetGpsRef()
+{
+    _gpsRefPoint = QGeoCoordinate(0, 0, 0);
+    _gpsRefSet = false;
+    emit gpsRefChanged(_gpsRefPoint, _gpsRefSet);
+}
+
+void OsmParser::setBuildingLevelHeight(QVariant value)
+{
+    _buildingLevelHeight = value.toFloat();
+    emit buildingLevelHeightChanged();
 }
 
 void OsmParser::parseOsmFile(QString filePath)
 {
+    if(filePath == "Please select an OSM file"){
+        if(_mapLoadedFlag){
+            qDebug("The 3D View has been cleared!");
+            _mapNodes.clear();
+            _mapBuildings.clear();
+            _gpsRefSet = false;
+            _mapLoadedFlag = false;
+            resetGpsRef();
+        }else{
+            qDebug("No OSM File is selected!");
+        }
+        return;
+    }
+
     //The QDomDocument class represents an XML document.
     QDomDocument xml_content;
 // Load xml file as raw data
@@ -57,11 +87,6 @@ void OsmParser::parseOsmFile(QString filePath)
 
     QDomElement component = root.firstChild().toElement();
 
-    _mapNodes.clear();
-    _mapBuildings.clear();
-    _gpsRefSet = false;
-    _mapLoadedFlag = false;
-
     while(!component.isNull()) {
         decodeNodeTags(component, _mapNodes);
         decodeBuildings(component, _mapBuildings, _mapNodes, _gpsRefPoint);
@@ -69,8 +94,8 @@ void OsmParser::parseOsmFile(QString filePath)
         component = component.nextSibling().toElement();
     }
     _mapLoadedFlag = true;
-    emit newMapLoaded();
-    qDebug() << _mapBuildings.size() << " Buildings added to the 3D viewer!!!";
+    emit mapChanged();
+    qDebug() << _mapBuildings.size() << " Buildings loaded!!!";
 }
 
 void OsmParser::decodeNodeTags(QDomElement &xmlComponent, QMap<uint64_t, QGeoCoordinate> &nodeMap)
@@ -151,8 +176,8 @@ void OsmParser::decodeBuildings(QDomElement &xmlComponent, QMap<uint64_t, Buildi
     }
 
     if(bld_points.size() > 2 && (bld_tmp.height > 0 || bld_tmp.levels > 0)) {
-//        float bld_height = (bld_tmp.height >= bld_tmp.levels * _buildingLevelHeight)?(bld_tmp.height):(bld_tmp.levels * _buildingLevelHeight);
-//        bld_tmp.height = bld_height;
+        //        float bld_height = (bld_tmp.height >= bld_tmp.levels * _buildingLevelHeight)?(bld_tmp.height):(bld_tmp.levels * _buildingLevelHeight);
+        //        bld_tmp.height = bld_height;
         bld_tmp.points_gps = bld_points;
         bld_tmp.points_local = bld_points_local;
         bld_tmp.bb_max = QVector2D(bld_x_max, bld_y_max);
@@ -172,7 +197,7 @@ QByteArray OsmParser::buildingToMesh()
         std::vector<std::vector<std::array<float, 2> > > polygon;
         std::vector<QVector3D> triangulated_mesh;
 
-//        bld_height = (ii.value().height >= ii.value().levels * _buildingLevelHeight)?(ii.value().height):(ii.value().levels * _buildingLevelHeight);
+        //        bld_height = (ii.value().height >= ii.value().levels * _buildingLevelHeight)?(ii.value().height):(ii.value().levels * _buildingLevelHeight);
 
         if(ii.value().height > 0){
             bld_height = ii.value().height;

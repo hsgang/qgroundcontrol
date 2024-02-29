@@ -19,7 +19,7 @@ import QGroundControl.Palette
 //-------------------------------------------------------------------------
 //-- Telemetry RSSI
 Item {
-    id:             _root
+    id:             control
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
     width:          telemRow.width

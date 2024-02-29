@@ -11,7 +11,23 @@ Node {
 
     property real _tilt: 0.001
     property real _pan: 0.001
-    property real _zoom: 1000
+    property real _zoom: 1500
+
+    function resetCamera(){
+        camNode.position = Qt.vector3d(0, 0, 0);
+        camNode.eulerRotation = Qt.vector3d(90, 0, 0);
+
+        cameraPerspectiveThree.position = Qt.vector3d(0, 0, 0);
+        cameraPerspectiveThree.eulerRotation = Qt.vector3d(0, 0, 0);
+
+        cameraPerspectiveTwo.position = Qt.vector3d(_zoom * Math.sin(_tilt) * Math.cos(_pan),
+                                                    _zoom * Math.cos(_tilt),
+                                                    _zoom * Math.sin(_tilt) * Math.sin(_pan));
+        cameraPerspectiveTwo.eulerRotation = Qt.vector3d(0, 0, 0);
+
+        cameraPerspectiveOne.position = Qt.vector3d(0, 0, 0);
+        cameraPerspectiveOne.eulerRotation = Qt.vector3d(-90, 0, 0);
+    }
 
 
     DirectionalLight {
@@ -57,6 +73,11 @@ Node {
                 PerspectiveCamera {
 
                     id: cameraPerspectiveOne
+                    clipFar: 100000
+
+                    eulerRotation{
+                        x: -90
+                    }
 
                 }
             }

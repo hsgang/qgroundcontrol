@@ -759,3 +759,33 @@ bool PX4FirmwarePlugin::hasGripper(const Vehicle* vehicle) const
     return false;
 }
 
+QVariant PX4FirmwarePlugin::mainStatusIndicatorContentItem(const Vehicle*) const
+{
+    return QVariant::fromValue(QUrl::fromUserInput("qrc:/PX4/Indicators/PX4MainStatusIndicatorContentItem.qml"));
+}
+
+const QVariantList& PX4FirmwarePlugin::toolIndicators(const Vehicle* vehicle)
+{
+    if (_toolIndicatorList.size() == 0) {
+        // First call the base class to get the standard QGC list
+        _toolIndicatorList = FirmwarePlugin::toolIndicators(vehicle);
+
+        // Find the generic flight mode indicator and replace with the custom one
+        for (int i=0; i<_toolIndicatorList.size(); i++) {
+            if (_toolIndicatorList.at(i).toUrl().toString().contains("FlightModeIndicator.qml")) {
+                _toolIndicatorList[i] = QVariant::fromValue(QUrl::fromUserInput("qrc:/PX4/Indicators/PX4FlightModeIndicator.qml"));
+                break;
+            }
+        }
+
+        // Find the generic battery indicator and replace with the custom one
+        for (int i=0; i<_toolIndicatorList.size(); i++) {
+            if (_toolIndicatorList.at(i).toUrl().toString().contains("BatteryIndicator.qml")) {
+                _toolIndicatorList[i] = QVariant::fromValue(QUrl::fromUserInput("qrc:/PX4/Indicators/PX4BatteryIndicator.qml"));
+                break;
+            }
+        }
+    }
+
+    return _toolIndicatorList;
+}

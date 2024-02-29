@@ -16,6 +16,7 @@ ToolStripActionList {
     id: _root
 
     signal displayPreFlightChecklist
+    property bool   _viewer3DEnabled:        QGroundControl.settingsManager.viewer3DSettings.enabled.rawValue
 
     model: [
 //        ToolStripAction {
@@ -24,46 +25,29 @@ ToolStripActionList {
 //            onTriggered:    mainWindow.showPlanView()
 //        },
         ToolStripAction {
-            id: map_icon
+            property bool _is3DViewOpen: viewer3DWindow.isOpen
+
+            id: view3DIcon
+            visible: _viewer3DEnabled
             text:           qsTr("3D View")
             iconSource:     "/qmlimages/Viewer3D/City3DMapIcon.svg"
             onTriggered:{
-                if(viewer3DWindow.viewer3DOpen === false)
-                {
-                    show3dMap();
-                }
-                else
-                {
-                    showFlyMap();
+                if(_is3DViewOpen === false){
+                    viewer3DWindow.open()
+                }else{
+                    viewer3DWindow.close()
                 }
             }
 
-            function show3dMap()
-            {
-                viewer3DWindow.viewer3DOpen = true
-                map_icon.iconSource =     "/qmlimages/PaperPlane.svg"
-                text=           qsTr("Fly")
-                city_map_setting_icon.enabled = true
-            }
-
-            function showFlyMap()
-            {
-                viewer3DWindow.viewer3DOpen = false
-                iconSource =     "/qmlimages/Viewer3D/City3DMapIcon.svg"
-                text =           qsTr("3D View")
-                city_map_setting_icon.enabled = false
-                viewer3DWindow.settingMenuOpen = false
-                city_map_setting_icon.checked = false
-            }
-        },
-        ToolStripAction {
-            id: city_map_setting_icon
-            text:           qsTr("Setting")
-            iconSource:     "/qmlimages/Viewer3D/GearIcon.png"
-            enabled: false
-            visible: enabled
-            onTriggered:{
-                viewer3DWindow.settingMenuOpen = !viewer3DWindow.settingMenuOpen
+            on_Is3DViewOpenChanged: {
+                if(_is3DViewOpen === true){
+                    view3DIcon.iconSource =     "/qmlimages/PaperPlane.svg"
+                    text=           qsTr("Fly")
+                }else{
+                    viewer3DWindow.close()
+                    iconSource =     "/qmlimages/Viewer3D/City3DMapIcon.svg"
+                    text =           qsTr("3D View")
+                }
             }
         },
         PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() },

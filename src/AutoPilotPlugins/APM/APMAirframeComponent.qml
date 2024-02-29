@@ -175,7 +175,7 @@ SetupPage {
                                     Layout.fillWidth:   true
                                     model:              object.frameTypeEnumStrings
                                     visible:            airframeCheckBox.checked && object.frameTypeSupported
-                                    onActivated:        _frameType.rawValue = object.frameTypeEnumValues[index]
+                                    onActivated: (index) => { _frameType.rawValue = object.frameTypeEnumValues[index] }
 
                                     property bool valid: true
 

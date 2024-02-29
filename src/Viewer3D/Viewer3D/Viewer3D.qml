@@ -3,22 +3,60 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts
 
+import QGroundControl
 import QGroundControl.Palette
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
 
-// 3D Viewer modules
 import QGroundControl.Viewer3D
 import Viewer3D.Models3D
 
 
+///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
+
 Item{
     id: viewer3DBody
-    property bool viewer3DOpen: false
-    property bool settingMenuOpen: false
+    property bool isOpen: false
+    property bool   _viewer3DEnabled:        QGroundControl.settingsManager.viewer3DSettings.enabled.rawValue
 
-    Viewer3DManager{
-        id: _viewer3DManager
+
+    function open(){
+        if(_viewer3DEnabled === true){
+            view3DManagerLoader.sourceComponent = viewer3DManagerComponent
+            view3DManagerLoader.active = true;
+            viewer3DBody.z = 1
+            isOpen = true;
+        }
+    }
+
+    function close(){
+        viewer3DBody.z = 0
+        isOpen = false;
+    }
+
+    on_Viewer3DEnabledChanged: {
+        if(_viewer3DEnabled === false){
+            viewer3DBody.close();
+            view3DLoader.active = false;
+            view3DManagerLoader.active = false;
+        }
+    }
+
+    Component{
+        id: viewer3DManagerComponent
+
+        Viewer3DManager{
+            id: _viewer3DManager
+        }
+    }
+
+    Loader{
+        id: view3DManagerLoader
+
+        onLoaded: {
+            view3DLoader.source = "Models3D/Viewer3DModel.qml"
+            view3DLoader.active = true;
+        }
     }
 
     Loader{
@@ -26,50 +64,14 @@ Item{
         anchors.fill: parent
 
         onLoaded: {
-            item.viewer3DManager = _viewer3DManager
+            item.viewer3DManager = view3DManagerLoader.item
         }
     }
 
-    onViewer3DOpenChanged: {
-        view3DLoader.source = "Models3D/Viewer3DModel.qml"
-        if(viewer3DOpen){
-            viewer3DBody.z = 1
-        }else{
-            viewer3DBody.z = 0
-        }
-    }
-
-    onSettingMenuOpenChanged:{
-        if(settingMenuOpen === true){
-            settingMenuComponent.createObject(mainWindow).open()
-        }
-    }
-
-    Component {
-        id: settingMenuComponent
-
-        QGCPopupDialog{
-            id: settingMenuDialog
-            title:      qsTr("3D view setting")
-            buttons:    Dialog.Ok | Dialog.Cancel
-
-            Viewer3DSettingMenu{
-                id:                     viewer3DSettingMenu
-                viewer3DManager:        _viewer3DManager
-                visible:                true
-            }
-
-            onRejected: {
-                settingMenuOpen = false
-                viewer3DSettingMenu.menuClosed(false)
-                settingMenuDialog.close()
-            }
-
-            onAccepted: {
-                settingMenuOpen = false
-                viewer3DSettingMenu.menuClosed(true)
-                settingMenuDialog.close()
-            }
-        }
+    Binding{
+        target: view3DLoader.item
+        property: "isViewer3DOpen"
+        value: isOpen
+        when: view3DLoader.status == Loader.Ready
     }
 }
