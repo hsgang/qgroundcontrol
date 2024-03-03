@@ -624,23 +624,6 @@ Item {
     }
 
     Image {
-        id:                 vehicleHeadingDial
-        anchors { verticalCenter: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-        source:             "/qmlimages/vehicleArrowOpaque.svg"
-        mipmap:             true
-        width:              parent.width * 0.2
-        sourceSize.width:   width
-        antialiasing:       true
-        fillMode:           Image.PreserveAspectFit
-
-        transform: Rotation {
-            origin.x:       vehicleHeadingDial.width / 2
-            origin.y:       vehicleHeadingDial.height / 2
-            angle:          isNoseUpLocked() ? 0 : _heading
-        }
-    }
-
-    Image {
         id:                 rollDial
         anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
         visible:            _showAttitudeHUD

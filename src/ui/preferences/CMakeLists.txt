@@ -14,7 +14,6 @@ add_custom_target(UiPreferencesQml
 		OfflineMapInfo.qml
 		MapSettings.qml
 		MockLink.qml
-		MockLinkSettings.qml
 		SerialSettings.qml
 		TcpSettings.qml
         TelemetrySettings.qml

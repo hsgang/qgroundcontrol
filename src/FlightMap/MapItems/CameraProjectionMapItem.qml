@@ -1,18 +1,17 @@
-import QtQuick              2.3
-import QtLocation           5.3
-import QtPositioning        5.3
-import QtGraphicalEffects   1.0
-import QtQuick.Layouts      1.2
+import QtQuick
+import QtLocation
+import QtPositioning
+import QtQuick.Layouts
 
-import QGroundControl               1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Vehicle       1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.MultiVehicleManager 1.0
-import QGroundControl.FactSystem    1.0
-import QGroundControl.FactControls  1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.SettingsManager   1.0
+import QGroundControl
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
+import QGroundControl.Controls
+import QGroundControl.MultiVehicleManager
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
+import QGroundControl.Palette
+import QGroundControl.SettingsManager
 
 
 /// Marker for displaying a vehicle location on the map
@@ -159,9 +158,9 @@ MapQuickItem {
             property real cameraRoll:  _rollValue // 카메라의 roll 각도 (degrees)
             property real floorHeight: (_altitudeValue * 100) / _distRatio // 바닥과의 높이 (meters)
 
-            function toRadians(degrees: number): number {
-                return degrees * (Math.PI / 180);
-            }
+//            function toRadians(degrees: number): number {
+//                return degrees * (Math.PI / 180);
+//            }
 
             onCameraFOVChanged: {
                 canvas.requestPaint();
@@ -207,8 +206,8 @@ MapQuickItem {
                 var phi = cameraRoll;   // 프사이 각도
 
                 // 라디안으로 변환
-                var thetaRad = toRadians(phi);
-                var phiRad = toRadians(theta);
+                var thetaRad = phi * (Math.PI / 180);
+                var phiRad = theta * (Math.PI / 180);
 
                 // 회전 행렬 계산
                 // const Rz = [

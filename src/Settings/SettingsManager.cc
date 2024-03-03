@@ -33,7 +33,6 @@ SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
     , _batteryIndicatorSettings     (nullptr)
     , _mapsSettings                 (nullptr)
     , _viewer3DSettings             (nullptr)
-    , _mapsSettings                 (nullptr)
 #if !defined(NO_ARDUPILOT_DIALECT)
     , _apmMavlinkStreamRateSettings (nullptr)
 #endif
