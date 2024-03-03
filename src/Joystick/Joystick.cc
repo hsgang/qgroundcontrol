@@ -14,8 +14,8 @@
 #include "QGCApplication.h"
 #include "VideoManager.h"
 #include "QGCCameraManager.h"
-#include "QGCCameraControl.h"
 #include "GimbalController.h"
+#include "VehicleCameraControl.h"
 
 #include <QSettings>
 

@@ -522,24 +522,17 @@ FlightMap {
         z:              QGroundControl.zOrderMapItems
         anchorPoint.x:  sourceItem.anchorPointX
         anchorPoint.y:  sourceItem.anchorPointY
+
         sourceItem: MissionItemIndexLabel {
             checked:    true
             index:      -1
             label:      qsTr("ROI here", "Make this a Region Of Interest")
+            onClicked:  _activeVehicle.stopGuidedModeROI()
         }
 
         //-- Visibilty controlled by actual state
         function show(coord) {
             roiLocationItem.coordinate = coord
-        }
-
-        function hide() {
-        }
-
-        function actionConfirmed() {
-        }
-
-        function actionCancelled() {
         }
     }
 
@@ -713,14 +706,14 @@ FlightMap {
         }
     }
 
-    onMapClicked: (mouse) => {
+    onMapClicked: (position) => {
         if (!globals.guidedControllerFlyView.guidedUIVisible && 
             (globals.guidedControllerFlyView.showGotoLocation || globals.guidedControllerFlyView.showOrbit || globals.guidedControllerFlyView.showROI || globals.guidedControllerFlyView.showSetHome || globals.guidedControllerFlyView.showSetEstimatorOrigin)) {
             orbitMapCircle.hide()
             gotoLocationItem.hide()
-            var clickCoord = _root.toCoordinate(Qt.point(mouse.x, mouse.y), false /* clipToViewPort */)
+            var clickCoord = _root.toCoordinate(Qt.point(position.x, position.y), false /* clipToViewPort */)
             clickMenu.coord = clickCoord
-            clickMenu.setCoordinates(mouse.x, mouse.y)
+            clickMenu.setCoordinates(position.x, position.y)
             clickMenu.open()
         }
     }

@@ -868,7 +868,7 @@ VideoManager::_setActiveVehicle(Vehicle* vehicle)
     if(_activeVehicle) {
         disconnect(_activeVehicle->vehicleLinkManager(), &VehicleLinkManager::communicationLostChanged, this, &VideoManager::_communicationLostChanged);
         if(_activeVehicle->cameraManager()) {
-            QGCCameraControl* pCamera = _activeVehicle->cameraManager()->currentCameraInstance();
+            auto pCamera = _activeVehicle->cameraManager()->currentCameraInstance();
             if(pCamera) {
                 pCamera->stopStream();
             }
@@ -880,7 +880,7 @@ VideoManager::_setActiveVehicle(Vehicle* vehicle)
         connect(_activeVehicle->vehicleLinkManager(), &VehicleLinkManager::communicationLostChanged, this, &VideoManager::_communicationLostChanged);
         if(_activeVehicle->cameraManager()) {
             connect(_activeVehicle->cameraManager(), &QGCCameraManager::streamChanged, this, &VideoManager::_restartAllVideos);
-            QGCCameraControl* pCamera = _activeVehicle->cameraManager()->currentCameraInstance();
+            auto pCamera = _activeVehicle->cameraManager()->currentCameraInstance();
             if(pCamera) {
                 pCamera->resumeStream();
             }
