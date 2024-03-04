@@ -370,4 +370,3 @@ private:
     QList<double> _requestCoordinateHeights(const QList<QGeoCoordinate>& coordinates);
     PathHeightInfo_t _requestPathHeights(const QGeoCoordinate& fromCoord, const QGeoCoordinate& toCoord);
 };
-

@@ -20,7 +20,6 @@ import QtQml.Models
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.Controllers
-import QGroundControl.Controls
 import QGroundControl.FactSystem
 import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap

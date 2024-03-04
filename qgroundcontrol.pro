@@ -405,7 +405,6 @@ HEADERS += \
     src/QmlControls/CustomActionManager.h \
     src/QmlControls/QmlUnitsConversion.h \
     src/Settings/BatterySettings.h \
-    src/Settings/MapsSettings.h \
     src/Settings/SIYISettings.h \
     src/SiYi/SiYi.h \
     src/SiYi/SiYiCamera.h \
@@ -428,7 +427,6 @@ HEADERS += \
 
 SOURCES += \
     src/Settings/BatterySettings.cc \
-    src/Settings/MapsSettings.cc \
     src/Settings/SIYISettings.cc \
     src/SiYi/SiYi.cc \
     src/SiYi/SiYiCamera.cc \
@@ -846,7 +844,9 @@ SOURCES += \
     src/Settings/VideoSettings.cc \
     src/Settings/GimbalControllerSettings.cc \
     src/Utilities/ShapeFileHelper.cc \
+    src/Utilities/SHPFileHelper.cc \
     src/Terrain/TerrainQuery.cc \
+    src/Terrain/TerrainTile.cc \
     src/Vehicle/Actuators/ActuatorActions.cc \
     src/Vehicle/Actuators/Actuators.cc \
     src/Vehicle/Actuators/ActuatorOutputs.cc \

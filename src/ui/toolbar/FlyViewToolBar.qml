@@ -84,7 +84,7 @@ Rectangle {
             radius:                 ScreenTools.defaultFontPixelHeight / 4
             border.color:           !_activeVehicle ? qgcPal.colorRed : qgcPal.colorGreen
             border.width:           1
-            visible:                !ScreenTools.isMobile && currentToolbar === flyViewToolbar
+            visible:                !ScreenTools.isMobile/* && currentToolbar === flyViewToolbar*/
 
             QGCColoredImage{
                 height:             parent.height * 0.7
@@ -153,7 +153,7 @@ Rectangle {
         color:                  qgcPal.windowShadeDark //"transparent"
         border.color:           qgcPal.text
         radius:                 ScreenTools.defaultFontPixelHeight / 4
-        visible:                currentToolbar == flyViewToolbar && _activeVehicle
+//        visible:                currentToolbar == flyViewToolbar && _activeVehicle
 
         Loader{
             id:             flightModeIndicatorLoader
@@ -234,7 +234,7 @@ Rectangle {
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.margins:        ScreenTools.defaultFontPixelHeight / 2
-        visible:                !ScreenTools.isMobile && currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
+        visible:                !ScreenTools.isMobile /*&& currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth) */
         color:                  "transparent"
         border.color:           qgcPal.text
         border.width:           1
