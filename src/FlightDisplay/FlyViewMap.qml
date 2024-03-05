@@ -253,6 +253,36 @@ FlightMap {
         showText: !pipMode
     }
 
+    // Add the items associated with each vehicles flight plan to the map
+    MapItemView { //Repeater {
+        model: QGroundControl.multiVehicleManager.vehicles
+
+        delegate: PlanMapItems { //PlanMapItems {
+            map:                    _root
+            largeMapView:           !pipMode
+            planMasterController:   masterController
+            vehicle:                _vehicle
+
+            property var _vehicle: object
+
+            PlanMasterController {
+                id: masterController
+                Component.onCompleted: startStaticActiveVehicle(object)
+            }
+        }
+    }
+
+    MapItemView {
+        model: pipMode ? undefined : _missionController.directionArrows
+
+        delegate: MapLineArrow {
+            fromCoord:      object ? object.coordinate1 : undefined
+            toCoord:        object ? object.coordinate2 : undefined
+            arrowPosition:  2
+            z:              QGroundControl.zOrderWaypointLines
+        }
+    }
+
     // Add trajectory lines to the map
     MapPolyline {
         id:         trajectoryPolyline
@@ -287,6 +317,7 @@ FlightMap {
             z:              QGroundControl.zOrderVehicles
         }
     }
+
     // Add distance sensor view
     MapItemView{
         model: QGroundControl.multiVehicleManager.vehicles
@@ -297,6 +328,7 @@ FlightMap {
             z:              QGroundControl.zOrderVehicles
         }
     }
+
     // Add ADSB vehicles to the map
     MapItemView {
         model: QGroundControl.adsbVehicleManager.adsbVehicles
@@ -342,36 +374,6 @@ FlightMap {
             map:            _root
             visible:        QGroundControl.settingsManager.flyViewSettings.showVehicleInfoOnMap.rawValue && !pipMode
             z:              QGroundControl.zOrderWidgets
-        }
-    }
-
-    // Add the items associated with each vehicles flight plan to the map
-    Repeater {
-        model: QGroundControl.multiVehicleManager.vehicles
-
-        PlanMapItems {
-            map:                    _root
-            largeMapView:           !pipMode
-            planMasterController:   masterController
-            vehicle:                _vehicle
-
-            property var _vehicle: object
-
-            PlanMasterController {
-                id: masterController
-                Component.onCompleted: startStaticActiveVehicle(object)
-            }
-        }
-    }
-
-    MapItemView {
-        model: pipMode ? undefined : _missionController.directionArrows
-
-        delegate: MapLineArrow {
-            fromCoord:      object ? object.coordinate1 : undefined
-            toCoord:        object ? object.coordinate2 : undefined
-            arrowPosition:  2
-            z:              QGroundControl.zOrderWaypointLines
         }
     }
 
