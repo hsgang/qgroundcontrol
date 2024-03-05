@@ -21,14 +21,19 @@ Rectangle {
     property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
-    property real   _windDir:       vehicle ? vehicle.wind.direction.rawValue : 0
+    property real   _windDir:       vehicle ? vehicle.wind.direction.rawValue.toFixed(1) : 0
     property real   _windSpd:       vehicle ? vehicle.wind.speed.rawValue : 0
     property string _windSpdText:   vehicle ? + _windSpd.toFixed(1) + " (Est.)" : "0.0"
-    property real   _temperature:   vehicle ? vehicle.atmosphericSensor.temperature.rawValue.toFixed(1) : 0
-    property real   _humidity:      vehicle ? vehicle.atmosphericSensor.humidity.rawValue.toFixed(1) : 0
-    property real   _pressure:      vehicle ? vehicle.atmosphericSensor.pressure.rawValue.toFixed(1) : 0
-    property real   _atmosWindDir:  vehicle ? vehicle.atmosphericSensor.windDir.rawValue.toFixed(1) : 0
-    property real   _atmosWindSpd:  vehicle ? vehicle.atmosphericSensor.windSpd.rawValue.toFixed(1) : 0
+    property real   _temperature:   vehicle ? vehicle.atmosphericSensor.temperature.rawValue.toFixed(1) : NaN
+    property real   _humidity:      vehicle ? vehicle.atmosphericSensor.humidity.rawValue.toFixed(1) : NaN
+    property real   _pressure:      vehicle ? vehicle.atmosphericSensor.pressure.rawValue.toFixed(1) : NaN
+    property real   _atmosWindDir:  vehicle ? vehicle.atmosphericSensor.windDir.rawValue.toFixed(1) : NaN
+    property real   _atmosWindSpd:  vehicle ? vehicle.atmosphericSensor.windSpd.rawValue.toFixed(1) : NaN
+    property string _temperatureString: !isNaN(_temperature)    ? "TMP " + _temperature + " ℃" : "TMP --.- ℃"
+    property string _humidityString:    !isNaN(_humidity)       ? "HMD " + _humidity    + " Rh%" : "HMD --.- Rh%"
+    property string _pressureString:    !isNaN(_pressure)       ? "PRS " + _pressure    + " hPa" : "PRS ----.- hPa"
+    property string _windDirString:     !isNaN(_windDir)        ? "FCWD "+ _windDir     + " °" : "FCWD: -- °"
+    property string _atmosWindDirString:!isNaN(_atmosWindDir)   ? "EXWD: "+_atmosWindDir+ " °" : "EXWD: -- °"
     property string _atmosWindSpdText: vehicle ? _atmosWindSpd.toFixed(1) : "0.0"
 
     height:     size
@@ -134,27 +139,27 @@ Rectangle {
 
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? "TMP: "+ _temperature.toFixed(1) + " ℃" : "TMP: -- ℃"
+            text:                       vehicle ? _temperatureString : "unknown"//"TMP: "+ _temperature + " ℃" : "TMP: -- ℃"
             horizontalAlignment:        Text.AlignHCenter
         }
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? "HMD: "+ _humidity.toFixed(1) + " Rh%" : "HMD: -- Rh%"
+            text:                       vehicle ? _humidityString : "unknown" //"HMD: "+ _humidity + " Rh%" : "HMD: -- Rh%"
             horizontalAlignment:        Text.AlignHCenter
         }
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? "PRS: "+ _pressure.toFixed(1) + " hPa" : "PRS: -- hPa"
+            text:                       vehicle ? _pressureString : "unknown" //"PRS: "+ _pressure + " hPa" : "PRS: -- hPa"
             horizontalAlignment:        Text.AlignHCenter
         }
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? "FCWD: "+ _pressure.toFixed(1) + " °" : "FCWD: -- °"
+            text:                       vehicle ? _windDirString  : "unknown" // "FCWD: "+ _windDir + " °" : "FCWD: -- °"
             horizontalAlignment:        Text.AlignHCenter
         }
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? "EXWD: "+ _pressure.toFixed(1) + " °" : "FCWD: -- °"
+            text:                       vehicle ? _atmosWindDirString : "unknown" //"EXWD: "+ _atmosWindDir + " °" : "FCWD: -- °"
             horizontalAlignment:        Text.AlignHCenter
         }
     }
