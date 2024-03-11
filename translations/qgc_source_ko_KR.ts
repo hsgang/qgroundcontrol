@@ -13735,6 +13735,11 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
         <translation>진행방향:</translation>
     </message>
     <message>
+        <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="177"/>
+        <source>Dist prev WP:</source>
+        <translation>이전WP거리:</translation>
+    </message>
+    <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="192"/>
         <source>Total Mission</source>
         <translation>전체 미션</translation>
