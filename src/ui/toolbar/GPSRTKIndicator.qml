@@ -81,14 +81,6 @@ Item {
         }
     }
 
-    Rectangle{
-        width:              1
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
-        color:              qgcPal.text
-        opacity:            0.5
-    }
-
     QGCColoredImage {
         id:                 gpsIcon
         width:              height
