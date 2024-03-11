@@ -81,8 +81,8 @@ ApplicationWindow {
         readonly property var       activeVehicle:                  QGroundControl.multiVehicleManager.activeVehicle
         readonly property real      defaultTextHeight:              ScreenTools.defaultFontPixelHeight
         readonly property real      defaultTextWidth:               ScreenTools.defaultFontPixelWidth
-        readonly property var       planMasterControllerFlyView:    flightView.planController
-        readonly property var       guidedControllerFlyView:        flightView.guidedController
+        readonly property var       planMasterControllerFlyView:    flyView.planController
+        readonly property var       guidedControllerFlyView:        flyView.guidedController
 
         property var                planMasterControllerPlanView:   null
         property var                currentPlanMissionItem:         planMasterControllerPlanView ? planMasterControllerPlanView.missionController.currentPlanViewItem : null
@@ -127,7 +127,7 @@ ApplicationWindow {
     }
 
     function viewSwitch(currentToolbar) {
-        flightView.visible      = false
+        flyView.visible         = false
         planView.visible        = false
         analyzeView.visible     = false
         setupView.visible       = false
@@ -136,11 +136,11 @@ ApplicationWindow {
     }
 
     function showFlyView() {
-        if (!flightView.visible) {
+        if (!flyView.visible) {
             mainWindow.showPreFlightChecklistIfNeeded()
         }
         viewSwitch(toolbar.flyViewToolbar)
-        flightView.visible = true
+        flyView.visible = true
     }
 
     function showPlanView() {
@@ -290,7 +290,7 @@ ApplicationWindow {
     header: MainToolBar {
         id:         toolbar
         height:     ScreenTools.toolbarHeight
-        visible:    !(QGroundControl.videoManager.fullScreen && flightView.visible)
+        visible:    !(QGroundControl.videoManager.fullScreen && flyView.visible)
     }
 
     footer: LogReplayStatusBar {
@@ -638,7 +638,7 @@ ApplicationWindow {
     }
 
     FlyView {
-        id:             flightView
+        id:             flyView
         anchors.fill:   parent
     }
 
