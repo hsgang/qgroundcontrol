@@ -37,6 +37,7 @@
 #include "RemoteIDSettings.h"
 #include "SIYISettings.h"
 #include "Viewer3DSettings.h"
+#include "CustomMavlinkActionsSettings.h"
 
 /// Provides access to all app settings
 class SettingsManager : public QGCTool
@@ -70,6 +71,9 @@ public:
 #endif
     Q_PROPERTY(QObject* siyiSettings                    READ siyiSettings                   CONSTANT)
     Q_PROPERTY(QObject* remoteIDSettings                READ remoteIDSettings               CONSTANT)
+    Q_PROPERTY(QObject* customMavlinkActionsSettings    READ customMavlinkActionsSettings   CONSTANT)
+
+
     // Override from QGCTool
     virtual void setToolbox(QGCToolbox *toolbox);
 
@@ -97,6 +101,8 @@ public:
 #endif
     SIYISettings*                   siyiSettings                (void) { return _siyiSettings; }
     RemoteIDSettings*               remoteIDSettings            (void) { return _remoteIDSettings; }
+    CustomMavlinkActionsSettings*   customMavlinkActionsSettings(void) { return _customMavlinkActionsSettings; }
+
 private:
     AppSettings*                    _appSettings;
     UnitsSettings*                  _unitsSettings;
@@ -122,6 +128,7 @@ private:
 #endif
     SIYISettings*                   _siyiSettings;
     RemoteIDSettings*               _remoteIDSettings;
+    CustomMavlinkActionsSettings*   _customMavlinkActionsSettings;
 };
 
 #endif

@@ -38,6 +38,7 @@ SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
 #endif
     , _siyiSettings                 (nullptr)
     , _remoteIDSettings             (nullptr)
+    , _customMavlinkActionsSettings (nullptr)
 {
 
 }
@@ -72,4 +73,5 @@ void SettingsManager::setToolbox(QGCToolbox *toolbox)
 #endif
     _remoteIDSettings =             new RemoteIDSettings            (this);
     _siyiSettings =                 new SIYISettings                (this);
+    _customMavlinkActionsSettings = new CustomMavlinkActionsSettings(this);
 }

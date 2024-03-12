@@ -43,8 +43,8 @@ if (STABLE_BUILD)
     message(STATUS "Stable Build")
 else ()
     message(STATUS "Daily Build")
-    add_definitions(-DDAILY_BUILD)
-endif ()
+    add_compile_definitions(DAILY_BUILD)
+endif()
 
 include(CMakeDependentOption)
 cmake_dependent_option(BUILD_TESTING "Enable testing" ON "CMAKE_BUILD_TYPE STREQUAL Debug" OFF)
@@ -57,53 +57,49 @@ if (LINUX)
     set(USE_WAYLAND 1)
 endif ()
 
+include(CompileOptions)
+
 #######################################################
 #               Qt6 Configuration
 #######################################################
 
-option(QT6_DISABLE_DNSENGINE "Disable DNS Engine" OFF)
-
-# Compilation error for deprecated functions
-add_compile_definitions(QT_DISABLE_DEPRECATED_BEFORE=0x060600)
-add_compile_definitions(QT_DEBUG_FIND_PACKAGE=ON)
-if (QT6_DISABLE_DNSENGINE)
-    message(STATUS "DNS Engine disabled")
-    add_compile_definitions(QT6_DISABLE_DNSENGINE=ON)
-endif ()
-# Configure Qt6 to get necessary variables
 include(Qt6QGCConfiguration)
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "Qt version: ${QT_VERSION}")
 message(STATUS "Qt spec: ${QT_MKSPEC}")
 
+if(LINUX)
+    set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/AppDir/usr)
+endif()
 
 # Find Qt6 libraries
 find_package(Qt6
-        REQUIRED
-        COMPONENTS
-                Bluetooth
-                Charts
-                Concurrent
-                Core
-                Core5Compat
-                Location
-                Multimedia
-                Network
-                Positioning
-                Quick
-                QuickControls2
-                QuickWidgets
-                OpenGL
-                Sql
-                Svg
-                Test
-                TextToSpeech
-                Widgets
-                Xml
-        OPTIONAL_COMPONENTS
-                SerialPort
-        HINTS
-                ${QT_LIBRARY_HINTS}
+    REQUIRED
+    COMPONENTS
+        Bluetooth
+        Charts
+        Concurrent
+        Core
+        Core5Compat
+        Location
+        Multimedia
+        Network
+        Positioning
+        Quick
+        QuickControls2
+        QuickWidgets
+        OpenGL
+        Sql
+        Svg
+        Test
+        TextToSpeech
+        Widgets
+        Xml
+    OPTIONAL_COMPONENTS
+        LinguistTools
+        SerialPort
+    HINTS
+        ${QT_LIBRARY_HINTS}
 )
 
 qt_standard_project_setup(REQUIRES 6.6.0)
@@ -121,7 +117,7 @@ qt_policy(
 )
 
 set(QT_QML_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/qml" CACHE PATH "Install path for QML" FORCE)
-set(QML_IMPORT_PATH "${CMAKE_BINARY_DIR}/qml" CACHE STRING "Extra QML Import Paths" FORCE)
+set(QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/qml ${CMAKE_BINARY_DIR}/imports CACHE STRING "Extra QML Import Paths" FORCE)
 
 #######################################################
 #                QML Configuration
@@ -143,8 +139,10 @@ option(DEBUG_QML "Build QGroundControl with QML debugging/profiling support." FA
 add_feature_info(DEBUG_QML DEBUG_QML "Build QGroundControl with QML debugging/profiling support.")
 if(DEBUG_QML)
     message(STATUS "To enable the QML debugger/profiler, run with: '-qmljsdebugger=port:1234'")
-    add_definitions(-DQMLJSDEBUGGER)
-    add_definitions(-DQT_QML_DEBUG)
+    add_compile_definitions(
+        QMLJSDEBUGGER
+        QT_QML_DEBUG
+    )
 endif()
 
 
@@ -157,10 +155,10 @@ set(COMPANY "Mavlink")
 set(COPYRIGHT "Copyright (c) 2018 QGroundControl. All rights reserved.")
 set(IDENTIFIER "io.mavlink.qgroundcontrol")
 
-add_definitions(
-        -DQGC_APPLICATION_NAME="QGroundControl"
-        -DQGC_ORG_NAME="QGroundControl.org"
-        -DQGC_ORG_DOMAIN="org.qgroundcontrol"
+add_compile_definitions(
+    QGC_APPLICATION_NAME="QGroundControl"
+    QGC_ORG_NAME="QGroundControl.org"
+    QGC_ORG_DOMAIN="org.qgroundcontrol"
 )
 
 #######################################################
@@ -169,55 +167,6 @@ add_definitions(
 
 include(Git)
 message(STATUS "QGroundControl version: ${APP_VERSION_STR}")
-
-#######################################################
-#                GStreamer Configuration
-#######################################################
-
-option(ENABLE_VIDEOSTREAMING "Enable video streaming" ON)
-if (ENABLE_VIDEOSTREAMING)
-    message(STATUS "Enabling video streaming support")
-    find_package(PkgConfig)
-
-    set(GST_DEPENDENCIES
-            gstreamer-1.0>=1.20
-            gstreamer-video-1.0>=1.20
-            gstreamer-gl-1.0>=1.20
-    )
-
-    if (LINUX OR ANDROID)
-        set(GST_DEPENDENCIES ${GST_DEPENDENCIES} egl)
-    endif ()
-
-    pkg_check_modules(GST
-            ${GST_DEPENDENCIES}
-    )
-
-    message(STATUS "GStreamer libs: ${GST_LIBRARIES}")
-    message(STATUS "GStreamer include dirs: ${GST_INCLUDE_DIRS}")
-    message(STATUS "GStreamer link dirs: ${GST_LIBRARY_DIRS}")
-    message(STATUS "GStreamer cflags: ${GST_CFLAGS}")
-    message(STATUS "GStreamer ldflags: ${GST_LDFLAGS}")
-    message(STATUS "GStreamer libs: ${GST_LIBS}")
-
-    if (LINUX OR ANDROID)
-        message(STATUS "GStreamer egl libs: ${GST_EGL_LIBRARIES}")
-        message(STATUS "GStreamer egl include dirs: ${GST_EGL_INCLUDE_DIRS}")
-        message(STATUS "GStreamer egl link dirs: ${GST_EGL_LIBRARY_DIRS}")
-        message(STATUS "GStreamer egl cflags: ${GST_EGL_CFLAGS}")
-        message(STATUS "GStreamer egl ldflags: ${GST_EGL_LDFLAGS}")
-        message(STATUS "GStreamer egl libs: ${GST_EGL_LIBS}")
-    endif ()
-
-    add_definitions(-DQGC_GST_STREAMING)
-
-    message(STATUS "gst found ${GST_FOUND}")
-endif ()
-
-option(QGC_AIRLINK_DISABLED "Enable airlink" OFF)
-
-# Sets the default flags for compilation and linking.
-include(CompileOptions)
 
 #######################################################
 #                QGroundControl Resources
@@ -265,7 +214,9 @@ if (BUILD_TESTING)
     list(APPEND QGC_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test/UnitTest.qrc)
 endif()
 
-if(APPLE)
+if(WIN32)
+    list(APPEND QGC_RESOURCES ${CMAKE_SOURCE_DIR}/deploy/windows/QGroundControl.rc)
+elseif(MACOS)
     set(MACOSX_BUNDLE_ICON_FILE macx.icns)
     set(app_icon_macos "${CMAKE_CURRENT_SOURCE_DIR}/resources/icons/macx.icns")
     set_source_files_properties(${app_icon_macos} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
@@ -278,38 +229,52 @@ endif()
 #               QGroundControl Target
 #######################################################
 
-qt_add_executable(${PROJECT_NAME} ${QGC_RESOURCES})
+qt_add_executable(${PROJECT_NAME} src/main.cc ${QGC_RESOURCES})
 
-if(APPLE)
-    set_target_properties(${PROJECT_NAME} PROPERTIES 
-        MACOSX_BUNDLE TRUE
-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake/MacOSXBundleInfo.plist.in) # According to cmake docs this should happen automatically. But it doesn't work so we add manually.
+set_target_properties(${PROJECT_NAME}
+    PROPERTIES
+        QT_RESOURCE_PREFIX "/qgc"
+)
+
+if(Qt6LinguistTools_FOUND)
+    file(GLOB TS_SOURCES RELATIVE ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/translations/qgc_*.ts)
+    # TODO: Update to new qt_add_translations form in Qt6.7
+    qt_add_translations(${PROJECT_NAME}
+        TS_FILES
+            ${TS_SOURCES}
+    )
+endif()
+
+if(MACOS)
+    set_target_properties(${PROJECT_NAME}
+        PROPERTIES
+            MACOSX_BUNDLE TRUE
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/deploy/mac/MacOSXBundleInfo.plist.in
+    )
+elseif(IOS)
+    set_target_properties(${PROJECT_NAME}
+       PROPERTIES
+           QT_IOS_LAUNCH_SCREEN ${CMAKE_SOURCE_DIR}/deploy/ios/QGCLaunchScreen.xib
+    )
 elseif(WIN32)
     set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE TRUE)
 elseif(ANDROID)
     add_android_openssl_libraries(${PROJECT_NAME})
 
-    #set_target_properties(${PROJECT_NAME}
-    #    PROPERTIES
-    #        QT_ANDROID_ABIS ${ANDROID_ABI}
-    #        QT_ANDROID_EXTRA_LIBS "${ANDROID_EXTRA_LIBS_APP}"
-    #        QT_ANDROID_MIN_SDK_VERSION 26
-    #        QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android/deploy
-    #        QT_ANDROID_SDK_BUILD_TOOLS_REVISION 34.0.0
-    #        QT_ANDROID_TARGET_SDK_VERSION 33
-    #        QT_ANDROID_VERSION_NAME '0.1'
-    #        QT_ANDROID_VERSION_CODE 0.1
-    #        QT_QML_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/ui/qml # ${CMAKE_BINARY_DIR}/qml
-    #)
-    #QT_ANDROID_DEPLOY_RELEASE
-    #QT_ANDROID_KEYSTORE_PATH
-    #QT_ANDROID_KEYSTORE_ALIAS
-    #QT_ANDROID_KEYSTORE_STORE_PASS
-    #QT_ANDROID_KEYSTORE_KEY_PASS
-    #QT_ANDROID_SIGN_APK
-    #QT_ENABLE_VERBOSE_DEPLOYMENT
-    #QT_HOST_PATH
-    #QT_PATH_ANDROID_ABI_arm64-v8a
+    set_target_properties(${PROJECT_NAME}
+        PROPERTIES
+            QT_ANDROID_ABIS ${ANDROID_ABI}
+            QT_ANDROID_MIN_SDK_VERSION 26
+            QT_ANDROID_TARGET_SDK_VERSION 33
+            QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/android
+            QT_ANDROID_VERSION_NAME ${APP_VERSION_STR}
+            # QT_ANDROID_VERSION_CODE 5.0
+            QT_QML_ROOT_PATH ${CMAKE_SOURCE_DIR}
+    )
+
+    if(CMAKE_BUILD_TYPE STREQUAL "Release" AND ANDROID_KEYSTORE_PASSWORD)
+        set(QT_ANDROID_SIGN_APK TRUE)
+    endif()
 endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE qgc)
@@ -320,7 +285,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE qgc)
 
 if(BUILD_TESTING)
     add_subdirectory(test)
-    target_link_libraries(qgc PRIVATE qgctest)
+    target_link_libraries(${PROJECT_NAME} PRIVATE qgctest)
 endif()
 
 #######################################################
@@ -340,6 +305,14 @@ install(
         TARGETS ${PROJECT_NAME}
         DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+if(NOT ANDROID)
+    qt_generate_deploy_qml_app_script(
+        TARGET ${PROJECT_NAME}
+        OUTPUT_SCRIPT deploy_script
+        MACOS_BUNDLE_POST_BUILD
+    )
+    install(SCRIPT ${deploy_script})
+endif()
 install(
         DIRECTORY ${CMAKE_SOURCE_DIR}/resources/
         DESTINATION ${CMAKE_INSTALL_DATADIR}/qgroundcontrol
@@ -361,10 +334,8 @@ configure_file(
 install(
         FILES ${CMAKE_BINARY_DIR}/metainfo/org.mavlink.qgroundcontrol.metainfo.xml
         DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo/
-)
-if(NOT ANDROID)
-    qt_generate_deploy_qml_app_script(TARGET ${PROJECT_NAME} OUTPUT_SCRIPT deploy_script)
-    install(SCRIPT ${deploy_script})
+    )
+    install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/CreateAppImage.cmake")
 endif()
 
 #######################################################

@@ -472,7 +472,6 @@ HEADERS += \
     src/GPS/RTCM/RTCMMavlink.h \
     src/Joystick/Joystick.h \
     src/Joystick/JoystickManager.h \
-    src/Joystick/JoystickMavCommand.h \
     src/Utilities/JsonHelper.h \
     src/MissionManager/KMLDomDocument.h \
     src/MissionManager/KMLHelper.h \
@@ -565,6 +564,7 @@ HEADERS += \
     src/Settings/AutoConnectSettings.h \
     src/Settings/BatteryIndicatorSettings.h \
     src/Settings/BrandImageSettings.h \
+    src/Settings/CustomMavlinkActionsSettings.h \
     src/Settings/RemoteIDSettings.h \
     src/Settings/FirmwareUpgradeSettings.h \
     src/Settings/FlightMapSettings.h \
@@ -738,7 +738,6 @@ SOURCES += \
     src/GPS/RTCM/RTCMMavlink.cc \
     src/Joystick/Joystick.cc \
     src/Joystick/JoystickManager.cc \
-    src/Joystick/JoystickMavCommand.cc \
     src/Utilities/JsonHelper.cc \
     src/MissionManager/KMLDomDocument.cc \
     src/MissionManager/KMLHelper.cc \
@@ -828,6 +827,7 @@ SOURCES += \
     src/Settings/AutoConnectSettings.cc \
     src/Settings/BatteryIndicatorSettings.cc \
     src/Settings/BrandImageSettings.cc \
+    src/Settings/CustomMavlinkActionsSettings.cc \
     src/Settings/RemoteIDSettings.cc \
     src/Settings/FirmwareUpgradeSettings.cc \
     src/Settings/FlightMapSettings.cc \

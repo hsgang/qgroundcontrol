@@ -4550,6 +4550,69 @@ void Vehicle::_altitudeAboveTerrainReceived(bool success, QList<double> heights)
     _altitudeAboveTerrTerrainAtCoordinateQuery = nullptr;
 }
 
+void Vehicle::gimbalControlValue(double pitch, double yaw)
+{
+    //qDebug() << "Gimbal:" << pitch << yaw;
+    sendMavCommand(
+                _defaultComponentId,
+                MAV_CMD_DO_MOUNT_CONTROL,
+                false,                               // show errors
+                static_cast<float>(pitch),           // Pitch 0 - 90
+                0,                                   // Roll (not used)
+                static_cast<float>(yaw),             // Yaw -180 - 180
+                0,                                   // Altitude (not used)
+                0,                                   // Latitude (not used)
+                0,                                   // Longitude (not used)
+                MAV_MOUNT_MODE_MAVLINK_TARGETING);   // MAVLink Roll,Pitch,Yaw
+}
+
+void Vehicle::gimbalPitchStep(int direction)
+{
+    if(_haveGimbalData) {
+        //qDebug() << "Pitch:" << _curGimbalPitch << direction << (_curGimbalPitch + direction);
+        double p = static_cast<double>(_curGimbalPitch + direction);
+        gimbalControlValue(p, static_cast<double>(_curGimbalYaw));
+    }
+}
+
+void Vehicle::gimbalYawStep(int direction)
+{
+    if(_haveGimbalData) {
+        //qDebug() << "Yaw:" << _curGimbalYaw << direction << (_curGimbalYaw + direction);
+        double y = static_cast<double>(_curGimbalYaw + direction);
+        gimbalControlValue(static_cast<double>(_curGimbalPitch), y);
+    }
+}
+
+void Vehicle::centerGimbal()
+{
+    if(_haveGimbalData) {
+        gimbalControlValue(0.0, 0.0);
+    }
+}
+
+void Vehicle::_handleGimbalOrientation(const mavlink_message_t& message)
+{
+    mavlink_mount_orientation_t o;
+    mavlink_msg_mount_orientation_decode(&message, &o);
+    if(fabsf(_curGimbalRoll - o.roll) > 0.5f) {
+        _curGimbalRoll = o.roll;
+        emit gimbalRollChanged();
+    }
+    if(fabsf(_curGimbalPitch - o.pitch) > 0.5f) {
+        _curGimbalPitch = o.pitch;
+        emit gimbalPitchChanged();
+    }
+    if(fabsf(_curGimbalYaw - o.yaw) > 0.5f) {
+        _curGimbalYaw = o.yaw;
+        emit gimbalYawChanged();
+    }
+    if(!_haveGimbalData) {
+        _haveGimbalData = true;
+        emit gimbalDataChanged();
+    }
+}
+
 void Vehicle::_handleObstacleDistance(const mavlink_message_t& message)
 {
     mavlink_obstacle_distance_t o;

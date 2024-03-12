@@ -87,11 +87,9 @@ ApplicationWindow {
         readonly property var       activeVehicle:                  QGroundControl.multiVehicleManager.activeVehicle
         readonly property real      defaultTextHeight:              ScreenTools.defaultFontPixelHeight
         readonly property real      defaultTextWidth:               ScreenTools.defaultFontPixelWidth
-        readonly property var       planMasterControllerFlyView:    flightView.planController
-        readonly property var       guidedControllerFlyView:        flightView.guidedController
+        readonly property var       planMasterControllerFlyView:    flyView.planController
+        readonly property var       guidedControllerFlyView:        flyView.guidedController
 
-        property var                planMasterControllerPlanView:   null
-        property var                currentPlanMissionItem:         planMasterControllerPlanView ? planMasterControllerPlanView.missionController.currentPlanViewItem : null
         property bool               validationError:                false   // There is a FactTextField somewhere with a validation error
 
         // Property to manage RemoteID quick acces to settings page
@@ -162,8 +160,12 @@ ApplicationWindow {
         }
     }
 
+    function showFlyView() {
+        planView.visible = false
+    }
+
     function showTool(toolTitle, toolSource, toolIcon) {
-        toolDrawer.backIcon     = flightView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
+        toolDrawer.backIcon     = flyView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
         toolDrawer.toolTitle    = toolTitle
         toolDrawer.toolSource   = toolSource
         toolDrawer.toolIcon     = toolIcon
@@ -222,7 +224,7 @@ ApplicationWindow {
     property string closeDialogTitle: qsTr("Close %1").arg(QGroundControl.appName)
 
     function checkForUnsavedMission() {
-        if (globals.planMasterControllerPlanView && globals.planMasterControllerPlanView.dirty) {
+        if (planView._planMasterController.dirty) {
             showMessageDialog(closeDialogTitle,
                               qsTr("You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?"),
                               Dialog.Yes | Dialog.No,
@@ -269,7 +271,7 @@ ApplicationWindow {
     }
 
     FlyView { 
-        id:                     flightView
+        id:                     flyView
         anchors.fill:           parent
         utmspSendActTrigger:    _utmspSendActTrigger
     }
@@ -900,7 +902,7 @@ ApplicationWindow {
                 if (criticalVehicleMessagePopup.dropMessageIndicatorOnClose) {
                     criticalVehicleMessagePopup.dropMessageIndicatorOnClose = false;
                     QGroundControl.multiVehicleManager.activeVehicle.resetErrorLevelMessages();
-                    flyView.toolbar.dropMessageIndicatorTool();
+                    flyView.dropMessageIndicatorTool();
                 }
             }
         }
