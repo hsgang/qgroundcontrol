@@ -200,7 +200,7 @@ Item {
                     iconSource:         "/HA_Icons/MAP_CLICK.png"
                     checkable:          true
                     visible:            !toolStripPanelVideo.panelHidden
-                    enabled:            flightView._mainWindowIsMap
+                    enabled:            flyView._mainWindowIsMap
 
                     onVisibleChanged: {
                         if (!visible)
