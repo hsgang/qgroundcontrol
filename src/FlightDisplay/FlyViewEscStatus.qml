@@ -56,10 +56,10 @@ Rectangle {
     // property string _current2text:      !isNaN(_current2) ? _current2.toFixed(1) : "--"
     // property string _current3text:      !isNaN(_current3) ? _current3.toFixed(1) : "--"
     // property string _current4text:      !isNaN(_current4) ? _current4.toFixed(1) : "--"
-    property string _temperature1text:  !isNaN(_temperature1) ? _temperature1.toFixed(1) : "--"
-    property string _temperature2text:  !isNaN(_temperature1) ? _temperature1.toFixed(1) : "--"
-    property string _temperature3text:  !isNaN(_temperature1) ? _temperature1.toFixed(1) : "--"
-    property string _temperature4text:  !isNaN(_temperature1) ? _temperature1.toFixed(1) : "--"
+    property string _temperature1text:  !isNaN(_temperature1) ? _temperature1.toFixed(0) : "--"
+    property string _temperature2text:  !isNaN(_temperature2) ? _temperature2.toFixed(0) : "--"
+    property string _temperature3text:  !isNaN(_temperature3) ? _temperature3.toFixed(0) : "--"
+    property string _temperature4text:  !isNaN(_temperature4) ? _temperature4.toFixed(0) : "--"
 
     height:     escIndicatorGrid.height + _toolsMargin * 2
     width:      escIndicatorGrid.width + _toolsMargin * 2
