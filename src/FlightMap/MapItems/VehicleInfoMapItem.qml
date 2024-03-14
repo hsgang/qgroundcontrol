@@ -35,7 +35,7 @@ MapQuickItem {
     property real   _dataFontSize:  ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
 
     property string _flightMode:                        object ? object.flightMode.toString() : ""
-    property real   _altitudeValue:                     object ? object.altitudeRelative.rawValue.toFixed(1) : 0
+    property real   _altitudeValue:                     object ? object.altitudeRelative.rawValue : NaN
     property bool   _healthAndArmingChecksSupported:    object ? object.healthAndArmingCheckReport.supported : false
 
     property string _readyToFlyText:    qsTr("Ready To Fly")
@@ -259,7 +259,7 @@ MapQuickItem {
 
                         LabelledLabel {
                             label: qsTr("ALT")
-                            labelText: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "Unknown"
+                            labelText: !isNaN(_altitudeValue) ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "--.-"
                         }
                     }
                 } // GridLayout
