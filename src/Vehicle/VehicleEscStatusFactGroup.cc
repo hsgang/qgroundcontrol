@@ -27,6 +27,11 @@ const char* VehicleEscStatusFactGroup::_voltageSecondFactName =                 
 const char* VehicleEscStatusFactGroup::_voltageThirdFactName =                      "voltage3";
 const char* VehicleEscStatusFactGroup::_voltageFourthFactName =                     "voltage4";
 
+const char* VehicleEscStatusFactGroup::_temperatureFirstFactName =                  "temperature1";
+const char* VehicleEscStatusFactGroup::_temperatureSecondFactName =                 "temperature2";
+const char* VehicleEscStatusFactGroup::_temperatureThirdFactName =                  "temperature3";
+const char* VehicleEscStatusFactGroup::_temperatureFourthFactName =                 "temperature4";
+
 VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject* parent)
     : FactGroup                         (1000, ":/json/Vehicle/EscStatusFactGroup.json", parent)
     , _indexFact                        (0, _indexFactName,                         FactMetaData::valueTypeUint8)
@@ -45,6 +50,11 @@ VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject* parent)
     , _voltageSecondFact                (0, _voltageSecondFactName,                 FactMetaData::valueTypeFloat)
     , _voltageThirdFact                 (0, _voltageThirdFactName,                  FactMetaData::valueTypeFloat)
     , _voltageFourthFact                (0, _voltageFourthFactName,                 FactMetaData::valueTypeFloat)
+
+    , _temperatureFirstFact             (0, _temperatureFirstFactName,              FactMetaData::valueTypeUint8)
+    , _temperatureSecondFact            (0, _temperatureSecondFactName,             FactMetaData::valueTypeUint8)
+    , _temperatureThirdFact             (0, _temperatureThirdFactName,              FactMetaData::valueTypeUint8)
+    , _temperatureFourthFact            (0, _temperatureFourthFactName,             FactMetaData::valueTypeUint8)
 {
     _addFact(&_indexFact,                       _indexFactName);
 
@@ -62,31 +72,74 @@ VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject* parent)
     _addFact(&_voltageSecondFact,               _voltageSecondFactName);
     _addFact(&_voltageThirdFact,                _voltageThirdFactName);
     _addFact(&_voltageFourthFact,               _voltageFourthFactName);
+
+    _addFact(&_temperatureFirstFact,            _temperatureFirstFactName);
+    _addFact(&_temperatureSecondFact,           _temperatureSecondFactName);
+    _addFact(&_temperatureThirdFact,            _temperatureThirdFactName);
+    _addFact(&_temperatureFourthFact,           _temperatureFourthFactName);
 }
 
-void VehicleEscStatusFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_message_t& message)
+void VehicleEscStatusFactGroup::handleMessage(Vehicle*, mavlink_message_t& message)
 {
-    if (message.msgid != MAVLINK_MSG_ID_ESC_STATUS) {
-        return;
+    switch ( message.msgid) {
+    case MAVLINK_MSG_ID_ESC_STATUS:
+        _handleEscStatus(message);
+        break;
+    case MAVLINK_MSG_ID_ESC_TELEMETRY_1_TO_4:
+        _handleEscTelemetry1to4(message);
+        break;
+    default:
+        break;
     }
-
-    mavlink_esc_status_t content;
-    mavlink_msg_esc_status_decode(&message, &content);
-
-    index()->setRawValue                        (content.index);
-
-    rpmFirst()->setRawValue                     (content.rpm[0]);
-    rpmSecond()->setRawValue                    (content.rpm[1]);
-    rpmThird()->setRawValue                     (content.rpm[2]);
-    rpmFourth()->setRawValue                    (content.rpm[3]);
-
-    currentFirst()->setRawValue                 (content.current[0]);
-    currentSecond()->setRawValue                (content.current[1]);
-    currentThird()->setRawValue                 (content.current[2]);
-    currentFourth()->setRawValue                (content.current[3]);
-
-    voltageFirst()->setRawValue                 (content.voltage[0]);
-    voltageSecond()->setRawValue                (content.voltage[1]);
-    voltageThird()->setRawValue                 (content.voltage[2]);
-    voltageFourth()->setRawValue                (content.voltage[3]);
 }
+
+void VehicleEscStatusFactGroup::_handleEscStatus(mavlink_message_t &message)
+{
+    mavlink_esc_status_t esc;
+    mavlink_msg_esc_status_decode(&message, &esc);
+
+    index()->setRawValue                        (esc.index);
+
+    rpmFirst()->setRawValue                     (esc.rpm[0]);
+    rpmSecond()->setRawValue                    (esc.rpm[1]);
+    rpmThird()->setRawValue                     (esc.rpm[2]);
+    rpmFourth()->setRawValue                    (esc.rpm[3]);
+
+    currentFirst()->setRawValue                 (esc.current[0]);
+    currentSecond()->setRawValue                (esc.current[1]);
+    currentThird()->setRawValue                 (esc.current[2]);
+    currentFourth()->setRawValue                (esc.current[3]);
+
+    voltageFirst()->setRawValue                 (esc.voltage[0]);
+    voltageSecond()->setRawValue                (esc.voltage[1]);
+    voltageThird()->setRawValue                 (esc.voltage[2]);
+    voltageFourth()->setRawValue                (esc.voltage[3]);
+}
+
+void VehicleEscStatusFactGroup::_handleEscTelemetry1to4(mavlink_message_t &message)
+{
+    mavlink_esc_telemetry_1_to_4_t esc4;
+    mavlink_msg_esc_telemetry_1_to_4_decode(&message, &esc4);
+
+    rpmFirst()->setRawValue                     (esc4.rpm[0]);
+    rpmSecond()->setRawValue                    (esc4.rpm[1]);
+    rpmThird()->setRawValue                     (esc4.rpm[2]);
+    rpmFourth()->setRawValue                    (esc4.rpm[3]);
+
+    currentFirst()->setRawValue                 (esc4.current[0] * 0.01);
+    currentSecond()->setRawValue                (esc4.current[1] * 0.01);
+    currentThird()->setRawValue                 (esc4.current[2] * 0.01);
+    currentFourth()->setRawValue                (esc4.current[3] * 0.01);
+
+    voltageFirst()->setRawValue                 (esc4.voltage[0] * 0.01);
+    voltageSecond()->setRawValue                (esc4.voltage[1] * 0.01);
+    voltageThird()->setRawValue                 (esc4.voltage[2] * 0.01);
+    voltageFourth()->setRawValue                (esc4.voltage[3] * 0.01);
+
+    temperatureFirst()->setRawValue             (esc4.temperature[0]);
+    temperatureSecond()->setRawValue            (esc4.temperature[1]);
+    temperatureThird()->setRawValue             (esc4.temperature[2]);
+    temperatureFourth()->setRawValue            (esc4.temperature[3]);
+}
+
+

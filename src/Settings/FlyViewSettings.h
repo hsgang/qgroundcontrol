@@ -49,4 +49,5 @@ public:
     DEFINE_SETTINGFACT(showWindvane)
     DEFINE_SETTINGFACT(showVehicleInfoOnMap)
     DEFINE_SETTINGFACT(showCameraProjectionOnMap)
+    DEFINE_SETTINGFACT(showEscStatus)
 };

@@ -360,6 +360,7 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewWindvane.qml">src/FlightDisplay/FlyViewWindvane.qml</file>
         <file alias="QGroundControl/FlightMap/VehicleInfoMapItem.qml">src/FlightMap/MapItems/VehicleInfoMapItem.qml</file>
         <file alias="QGroundControl/FlightMap/CameraProjectionMapItem.qml">src/FlightMap/MapItems/CameraProjectionMapItem.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewEscStatus.qml">src/FlightDisplay/FlyViewEscStatus.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="OfflineVehicleFirstRunPrompt.qml">src/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml</file>

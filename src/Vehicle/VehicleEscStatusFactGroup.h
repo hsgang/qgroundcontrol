@@ -38,6 +38,11 @@ public:
     Q_PROPERTY(Fact* voltageThird       READ voltageThird       CONSTANT)
     Q_PROPERTY(Fact* voltageFourth      READ voltageFourth      CONSTANT)
 
+    Q_PROPERTY(Fact* temperatureFirst   READ temperatureFirst   CONSTANT)
+    Q_PROPERTY(Fact* temperatureSecond  READ temperatureSecond  CONSTANT)
+    Q_PROPERTY(Fact* temperatureThird   READ temperatureThird   CONSTANT)
+    Q_PROPERTY(Fact* temperatureFourth  READ temperatureFourth  CONSTANT)
+
     Fact* index                         () { return &_indexFact; }
 
     Fact* rpmFirst                      () { return &_rpmFirstFact; }
@@ -54,6 +59,11 @@ public:
     Fact* voltageSecond                 () { return &_voltageSecondFact; }
     Fact* voltageThird                  () { return &_voltageThirdFact; }
     Fact* voltageFourth                 () { return &_voltageFourthFact; }
+
+    Fact* temperatureFirst              () { return &_temperatureFirstFact; }
+    Fact* temperatureSecond             () { return &_temperatureSecondFact; }
+    Fact* temperatureThird              () { return &_temperatureThirdFact; }
+    Fact* temperatureFourth             () { return &_temperatureFourthFact; }
 
     // Overrides from FactGroup
     void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
@@ -74,7 +84,16 @@ public:
     static const char* _voltageSecondFactName;
     static const char* _voltageThirdFactName;
     static const char* _voltageFourthFactName;
+
+    static const char* _temperatureFirstFactName;
+    static const char* _temperatureSecondFactName;
+    static const char* _temperatureThirdFactName;
+    static const char* _temperatureFourthFactName;
+
 private:
+    void _handleEscStatus           (mavlink_message_t& message);
+    void _handleEscTelemetry1to4    (mavlink_message_t& message);
+
     Fact _indexFact;
 
     Fact _rpmFirstFact;
@@ -91,4 +110,9 @@ private:
     Fact _voltageSecondFact;
     Fact _voltageThirdFact;
     Fact _voltageFourthFact;
+
+    Fact _temperatureFirstFact;
+    Fact _temperatureSecondFact;
+    Fact _temperatureThirdFact;
+    Fact _temperatureFourthFact;
 };

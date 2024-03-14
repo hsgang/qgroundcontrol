@@ -101,6 +101,34 @@
     "decimalPlaces":    2,
     "default":          null,
     "units":            "v"
+},
+{
+    "name":             "temperatureFirst",
+    "shortDesc":        "temperature",
+    "type":             "uint8",
+    "default":          0,
+    "units":            "degC"
+},
+{
+    "name":             "temperatureSecond",
+    "shortDesc":        "temperature",
+    "type":             "uint8",
+    "default":          0,
+    "units":            "degC"
+},
+{
+    "name":             "temperatureThird",
+    "shortDesc":        "temperature",
+    "type":             "uint8",
+    "default":          0,
+    "units":            "degC"
+},
+{
+    "name":             "temperatureFourth",
+    "shortDesc":        "temperature",
+    "type":             "uint8",
+    "default":          0,
+    "units":            "degC"
 }
 ]
 }

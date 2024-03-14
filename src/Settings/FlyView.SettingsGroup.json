@@ -193,6 +193,12 @@
     "shortDesc": "showCameraProjectionOnMap",
     "type":         "bool",
     "default":      false
+},
+{
+    "name":         "showEscStatus",
+    "shortDesc": "showEscStatus",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }

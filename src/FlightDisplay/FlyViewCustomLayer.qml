@@ -398,6 +398,15 @@ Item {
         visible:                QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue
     }
 
+    FlyViewEscStatus {
+        id: flyViewEscStatus
+        anchors.margins:        _toolsMargin
+        anchors.bottom:         attitudeIndicator.top
+        anchors.bottomMargin:   _toolsMargin
+        anchors.right:          rightPanelRow.left
+        visible:                QGroundControl.settingsManager.flyViewSettings.showEscStatus.rawValue
+    }
+
     Rectangle {
         id:                         flyviewStatusRect
         anchors.horizontalCenter:   parent.horizontalCenter
