@@ -21,20 +21,20 @@ Rectangle {
     property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
-    property real   _windDir:       vehicle ? vehicle.wind.direction.rawValue.toFixed(1) : 0
-    property real   _windSpd:       vehicle ? vehicle.wind.speed.rawValue : 0
-    property string _windSpdText:   vehicle ? + _windSpd.toFixed(1) + " (Est.)" : "0.0"
-    property real   _temperature:   vehicle ? vehicle.atmosphericSensor.temperature.rawValue.toFixed(1) : NaN
-    property real   _humidity:      vehicle ? vehicle.atmosphericSensor.humidity.rawValue.toFixed(1) : NaN
-    property real   _pressure:      vehicle ? vehicle.atmosphericSensor.pressure.rawValue.toFixed(1) : NaN
-    property real   _atmosWindDir:  vehicle ? vehicle.atmosphericSensor.windDir.rawValue.toFixed(1) : NaN
-    property real   _atmosWindSpd:  vehicle ? vehicle.atmosphericSensor.windSpd.rawValue.toFixed(1) : NaN
-    property string _temperatureString: !isNaN(_temperature)    ? "TMP " + _temperature + " ℃" : "TMP --.- ℃"
-    property string _humidityString:    !isNaN(_humidity)       ? "HMD " + _humidity    + " Rh%" : "HMD --.- Rh%"
-    property string _pressureString:    !isNaN(_pressure)       ? "PRS " + _pressure    + " hPa" : "PRS ----.- hPa"
-    property string _windDirString:     !isNaN(_windDir)        ? "FCWD "+ _windDir     + " °" : "FCWD: -- °"
-    property string _atmosWindDirString:!isNaN(_atmosWindDir)   ? "EXWD: "+_atmosWindDir+ " °" : "EXWD: -- °"
-    property string _atmosWindSpdText: vehicle ? _atmosWindSpd.toFixed(1) : "0.0"
+    property real   _windDir:       vehicle ? vehicle.wind.direction.rawValue : NaN
+    property real   _windSpd:       vehicle ? vehicle.wind.speed.rawValue : NaN
+    property real   _temperature:   vehicle ? vehicle.atmosphericSensor.temperature.rawValue : NaN
+    property real   _humidity:      vehicle ? vehicle.atmosphericSensor.humidity.rawValue : NaN
+    property real   _pressure:      vehicle ? vehicle.atmosphericSensor.pressure.rawValue : NaN
+    property real   _atmosWindDir:  vehicle ? vehicle.atmosphericSensor.windDir.rawValue : NaN
+    property real   _atmosWindSpd:  vehicle ? vehicle.atmosphericSensor.windSpd.rawValue : NaN
+    property string _temperatureText: !isNaN(_temperature)  ? _temperature.toFixed(1)   + " ℃"      : "--.- ℃"
+    property string _humidityText:    !isNaN(_humidity)     ? _humidity.toFixed(1)      + " Rh%"    : "--.- Rh%"
+    property string _pressureText:    !isNaN(_pressure)     ? _pressure.toFixed(1)      + " hPa"    : "----.- hPa"
+    property string _windDirText:     !isNaN(_windDir)      ? _windDir.toFixed(0)       + " °"      : "-- °"
+    property string _windSpdText:     !isNaN(_windSpd)      ? _windSpd.toFixed(1)       + " (Est.)" : "-.- (Est.)"
+    property string _atmosWindDirText:!isNaN(_atmosWindDir) ? _atmosWindDir.toFixed(0)  + " °"      : "-- °"
+    property string _atmosWindSpdText:!isNaN(_atmosWindSpd) ? _atmosWindSpd.toFixed(1)              : "-.-"
 
     height:     size
     width:      size
@@ -133,34 +133,58 @@ Rectangle {
         }
     }
 
-    Column{
+    GridLayout {
+        columns:    2
+        rows:       5
+        flow:       GridLayout.TopToBottom
         anchors.horizontalCenter:   parent.horizontalCenter
         anchors.verticalCenter:     parent.verticalCenter
 
         QGCLabel {
-            anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? _temperatureString : "unknown"//"TMP: "+ _temperature + " ℃" : "TMP: -- ℃"
-            horizontalAlignment:        Text.AlignHCenter
+            text:                   "TMP"
+            horizontalAlignment:    Text.AlignHCenter
+            font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
         }
         QGCLabel {
-            anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? _humidityString : "unknown" //"HMD: "+ _humidity + " Rh%" : "HMD: -- Rh%"
-            horizontalAlignment:        Text.AlignHCenter
+            text:                   "HMD"
+            horizontalAlignment:    Text.AlignHCenter
+            font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
         }
         QGCLabel {
-            anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? _pressureString : "unknown" //"PRS: "+ _pressure + " hPa" : "PRS: -- hPa"
-            horizontalAlignment:        Text.AlignHCenter
+            text:                   "PRS"
+            horizontalAlignment:    Text.AlignHCenter
+            font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
         }
         QGCLabel {
-            anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? _windDirString  : "unknown" // "FCWD: "+ _windDir + " °" : "FCWD: -- °"
-            horizontalAlignment:        Text.AlignHCenter
+            text:                   "FCWD"
+            horizontalAlignment:    Text.AlignHCenter
+            font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
         }
         QGCLabel {
-            anchors.horizontalCenter:   parent.horizontalCenter
-            text:                       vehicle ? _atmosWindDirString : "unknown" //"EXWD: "+ _atmosWindDir + " °" : "FCWD: -- °"
-            horizontalAlignment:        Text.AlignHCenter
+            text:                   "EXWD"
+            horizontalAlignment:    Text.AlignHCenter
+            font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
+        }
+
+        QGCLabel {
+            text:                   vehicle ? _temperatureText : "unknown"
+            horizontalAlignment:    Text.AlignHCenter
+        }
+        QGCLabel {
+            text:                   vehicle ? _humidityText : "unknown"
+            horizontalAlignment:    Text.AlignHCenter
+        }
+        QGCLabel {
+            text:                   vehicle ? _pressureText : "unknown"
+            horizontalAlignment:    Text.AlignHCenter
+        }
+        QGCLabel {
+            text:                   vehicle ? _windDirText  : "unknown"
+            horizontalAlignment:    Text.AlignHCenter
+        }
+        QGCLabel {
+            text:                   vehicle ? _atmosWindDirText : "unknown"
+            horizontalAlignment:    Text.AlignHCenter
         }
     }
 }
