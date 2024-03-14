@@ -31,12 +31,12 @@ MapQuickItem {
     property var    map
     property var    _map:                   map
 
-    property real   _temperatureValue:      object ? object.atmosphericSensor.temperature.rawValue.toFixed(1) : 0
-    property real   _humidityValue:         object ? object.atmosphericSensor.humidity.rawValue.toFixed(1) : 0
-    property real   _pressureValue:         object ? object.atmosphericSensor.pressure.rawValue.toFixed(1) : 0
-    property real   _windDirValue:          object ? object.atmosphericSensor.windDir.rawValue.toFixed(1) : 0
-    property real   _windSpdValue:          object ? object.atmosphericSensor.windSpd.rawValue.toFixed(1) : 0
-    property real   _altitudeValue:         object ? object.altitudeRelative.rawValue.toFixed(1) : 0
+    property real   _temperatureValue:      object ? object.atmosphericSensor.temperature.rawValue : NaN
+    property real   _humidityValue:         object ? object.atmosphericSensor.humidity.rawValue : NaN
+    property real   _pressureValue:         object ? object.atmosphericSensor.pressure.rawValue : NaN
+    property real   _windDirValue:          object ? object.atmosphericSensor.windDir.rawValue : NaN
+    property real   _windSpdValue:          object ? object.atmosphericSensor.windSpd.rawValue : NaN
+    property real   _altitudeValue:         object ? object.altitudeRelative.rawValue : NaN
 
     sourceItem: Item {
         id:         vehicleItem
@@ -74,42 +74,42 @@ MapQuickItem {
 
                     QGCLabel { text: qsTr("ALT"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
                     QGCLabel {
-                        text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"
+                        text: !isNaN(_altitudeValue) ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"
                         width: ScreenTools.defaultFontPixelHeight * 11
                         Layout.alignment: Qt.AlignCenter
                     }
 
                     QGCLabel { text: qsTr("TMP"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
                     QGCLabel {
-                        text: _temperatureValue ? _temperatureValue +" ℃" : "No data"
+                        text: !isNaN(_temperatureValue) ? _temperatureValue.toFixed(1) +" ℃" : "No data"
                         width: ScreenTools.defaultFontPixelHeight * 11
                         Layout.alignment: Qt.AlignCenter
                     }
 
                     QGCLabel { text: qsTr("HMD"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
                     QGCLabel {
-                        text: _humidityValue ? _humidityValue + " Rh%" : "No data"
+                        text: !isNaN(_humidityValue) ? _humidityValue.toFixed(1) + " Rh%" : "No data"
                         width: ScreenTools.defaultFontPixelHeight * 11
                         Layout.alignment: Qt.AlignCenter
                     }
 
                     QGCLabel { text: qsTr("PRS"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
                     QGCLabel {
-                        text: _pressureValue ? _pressureValue + " hPa" : "No data"
+                        text: !isNaN(_pressureValue) ? _pressureValue.toFixed(1) + " hPa" : "No data"
                         width: ScreenTools.defaultFontPixelHeight * 11
                         Layout.alignment: Qt.AlignCenter
                     }
 
                     QGCLabel { text: qsTr("W/D"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
                     QGCLabel {
-                        text: _windDirValue ? _windDirValue + " deg" : "No data"
+                        text: !isNaN(_windDirValue) ? _windDirValue.toFixed(1) + " deg" : "No data"
                         width: ScreenTools.defaultFontPixelHeight * 11
                         Layout.alignment: Qt.AlignCenter
                     }
 
                     QGCLabel { text: qsTr("W/S"); opacity: 0.7; Layout.alignment: Qt.AlignCenter}
                     QGCLabel {
-                        text: _windSpdValue ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " "+QGroundControl.unitsConversion.appSettingsSpeedUnitsString : "No data"
+                        text: !isNaN(_windSpdValue) ? QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_windSpdValue).toFixed(1) + " "+QGroundControl.unitsConversion.appSettingsSpeedUnitsString : "No data"
                         width: ScreenTools.defaultFontPixelHeight * 11
                         Layout.alignment: Qt.AlignCenter
                     }
