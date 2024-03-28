@@ -93,25 +93,6 @@ ToolIndicatorPage {
                 }
             }
 
-            SettingsGroupLayout {
-                heading:    qsTr("RTK GPS Status")
-                visible:    QGroundControl.gpsRtk.connected.value
-
-                QGCLabel {
-                    text: (QGroundControl.gpsRtk.active.value) ? qsTr("Survey-in Active") : qsTr("RTK Streaming")
-                }
-
-                LabelledLabel {
-                    label:      qsTr("status")
-                    labelText:  QGroundControl.ntrip.connected ? "Connected" : "Disconnected"
-                }
-
-                LabelledLabel {
-                    label:      qsTr("BandWidth")
-                    labelText:  QGroundControl.ntrip.connected ? QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s" : "0.00 kB/s"
-                }
-            }
-
             SettingsGroupLayout{
                 heading:    qsTr("NTRIP Status")
                 visible:            QGroundControl.ntrip.connected
