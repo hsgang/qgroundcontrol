@@ -476,7 +476,6 @@ HEADERS += \
     src/FirmwarePlugin/PX4/px4_custom_mode.h \
     src/FollowMe/FollowMe.h \
     src/GPS/Drivers/src/rtcm.h \
-    src/GPS/RTCM/RTCMMavlink.h \
     src/Joystick/Joystick.h \
     src/Joystick/JoystickManager.h \
     src/Utilities/JsonHelper.h \
@@ -528,13 +527,6 @@ HEADERS += \
     src/PositionManager/PositionManager.h \
     src/PositionManager/SimulatedPosition.h \
     src/Geo/QGCGeo.h \
-    src/Geo/Constants.hpp \
-    src/Geo/Math.hpp \
-    src/Geo/Utility.hpp \
-    src/Geo/UTMUPS.hpp \
-    src/Geo/MGRS.hpp \
-    src/Geo/TransverseMercator.hpp \
-    src/Geo/PolarStereographic.hpp \
     src/Gimbal/GimbalController.h \
     src/Utilities/QGC.h \
     src/Utilities/DeviceInfo.h \
@@ -757,7 +749,6 @@ SOURCES += \
     src/Utilities/Compression/QGCZlib.cc \
     src/FollowMe/FollowMe.cc \
     src/GPS/Drivers/src/rtcm.cpp \
-    src/GPS/RTCM/RTCMMavlink.cc \
     src/Joystick/Joystick.cc \
     src/Joystick/JoystickManager.cc \
     src/Utilities/JsonHelper.cc \
@@ -808,12 +799,6 @@ SOURCES += \
     src/PositionManager/PositionManager.cpp \
     src/PositionManager/SimulatedPosition.cc \
     src/Geo/QGCGeo.cc \
-    src/Geo/Math.cpp \
-    src/Geo/Utility.cpp \
-    src/Geo/UTMUPS.cpp \
-    src/Geo/MGRS.cpp \
-    src/Geo/TransverseMercator.cpp \
-    src/Geo/PolarStereographic.cpp \
     src/Gimbal/GimbalController.cc \
     src/Utilities/QGC.cc \
     src/Utilities/DeviceInfo.cc \
