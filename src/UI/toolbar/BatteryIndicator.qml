@@ -179,30 +179,30 @@ Item {
                 }
             ]
 
-            transitions:[
-                Transition {
-                    from: ""
-                    to: "blinking"
+//            transitions:[
+//                Transition {
+//                    from: ""
+//                    to: "blinking"
 
-                    SequentialAnimation{
-                        loops:  Animation.Infinite
-                        PropertyAnimation {
-                            target: batteryIcon
-                            property: "opacity";
-                            from: 1.0;
-                            to: 0.0;
-                            duration: 500;
-                        }
-                        PropertyAnimation {
-                            target: batteryIcon
-                            property: "opacity";
-                            from: 0.0;
-                            to: 1.0;
-                            duration: 500;
-                        }
-                    }
-                }
-            ]
+//                    SequentialAnimation{
+//                        loops:  Animation.Infinite
+//                        PropertyAnimation {
+//                            target: batteryIcon
+//                            property: "opacity";
+//                            from: 1.0;
+//                            to: 0.0;
+//                            duration: 500;
+//                        }
+//                        PropertyAnimation {
+//                            target: batteryIcon
+//                            property: "opacity";
+//                            from: 0.0;
+//                            to: 1.0;
+//                            duration: 500;
+//                        }
+//                    }
+//                }
+//            ]
 
             Column {
                 id:                     batteryValuesColumn
