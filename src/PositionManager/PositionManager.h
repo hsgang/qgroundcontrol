@@ -9,13 +9,10 @@
 
 #pragma once
 
-#include <QGeoPositionInfoSource>
-#include <QNmeaPositionInfoSource>
-
-#include <QVariant>
-
 #include "QGCToolbox.h"
-#include "SimulatedPosition.h"
+#include <QtPositioning/QGeoPositionInfoSource>
+
+class QNmeaPositionInfoSource;
 
 class QGCPositionManager : public QGCTool {
     Q_OBJECT

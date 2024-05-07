@@ -12,8 +12,8 @@
 ///     @author Don Gagne <don@thegagnes.com>
 
 #include "APMSafetyComponent.h"
-#include "APMAutoPilotPlugin.h"
-#include "APMAirframeComponent.h"
+#include "Vehicle.h"
+#include "QGCMAVLink.h"
 
 APMSafetyComponent::APMSafetyComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
     : VehicleComponent(vehicle, autopilot, parent)

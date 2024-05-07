@@ -44,12 +44,9 @@
 **
 ****************************************************************************/
 
-#ifndef QGEOTILEFETCHERQGC_H
-#define QGEOTILEFETCHERQGC_H
+#pragma once
 
 #include <QtLocation/private/qgeotilefetcher_p.h>
-#include <QTimer>
-#include "QGCMapUrlEngine.h"
 
 class QGeoTiledMappingManagerEngine;
 class QNetworkAccessManager;
@@ -60,13 +57,8 @@ class QGeoTileFetcherQGC : public QGeoTileFetcher
 public:
     explicit QGeoTileFetcherQGC             (QGeoTiledMappingManagerEngine *parent = nullptr);
     ~QGeoTileFetcherQGC();
-public slots:
-    void                    timeout         ();
 private:
     QGeoTiledMapReply*      getTileImage    (const QGeoTileSpec &spec);
 private:
     QNetworkAccessManager*  _networkManager;
-    QTimer                  _timer;
 };
-
-#endif // QGEOTILEFETCHERQGC_H

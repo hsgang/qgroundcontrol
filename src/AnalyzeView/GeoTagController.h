@@ -7,19 +7,12 @@
  *
  ****************************************************************************/
 
-#ifndef GeoTagController_H
-#define GeoTagController_H
+#pragma once
 
-#include "QmlObjectListModel.h"
-#include "Fact.h"
-#include "FactMetaData.h"
-#include <QObject>
-#include <QString>
-#include <QThread>
-#include <QFileInfoList>
-#include <QElapsedTimer>
-#include <QDebug>
-#include <QGeoCoordinate>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QThread>
+#include <QtCore/QFileInfoList>
 
 class GeoTagWorker : public QThread
 {
@@ -128,5 +121,3 @@ private:
 
     GeoTagWorker        _worker;
 };
-
-#endif

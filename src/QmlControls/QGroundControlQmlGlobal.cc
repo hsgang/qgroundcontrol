@@ -8,11 +8,19 @@
  ****************************************************************************/
 
 #include "QGroundControlQmlGlobal.h"
+#include "QGCApplication.h"
 #include "LinkManager.h"
-
+#include "MAVLinkProtocol.h"
+#include "QGCMapUrlEngine.h"
+#include "FirmwarePluginManager.h"
+#include "AppSettings.h"
+#include "PositionManager.h"
+#ifndef NO_SERIAL_LINK
+#include "GPSManager.h"
+#endif
+#include "QGCPalette.h"
 #include <QSettings>
 #include <QLineF>
-#include <QPointF>
 #ifdef QT_DEBUG
 #include "MockLink.h"
 #endif
@@ -79,7 +87,9 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
     _corePlugin             = toolbox->corePlugin();
     _firmwarePluginManager  = toolbox->firmwarePluginManager();
     _settingsManager        = toolbox->settingsManager();
-    _gpsRtkFactGroup        = qgcApp()->gpsRtkFactGroup();
+#ifndef NO_SERIAL_LINK
+    _gpsRtkFactGroup        = toolbox->gpsManager()->gpsRtkFactGroup();
+#endif
     _adsbVehicleManager     = toolbox->adsbVehicleManager();
     _ntrip                  = toolbox->ntrip();
     _globalPalette          = new QGCPalette(this);
@@ -316,4 +326,54 @@ QString QGroundControlQmlGlobal::altitudeModeShortDescription(AltMode altMode)
 
     // Should never get here but makes some compilers happy
     return QString();
+}
+
+bool QGroundControlQmlGlobal::isVersionCheckEnabled()
+{
+    return _toolbox->mavlinkProtocol()->versionCheckEnabled();
+}
+
+int QGroundControlQmlGlobal::mavlinkSystemID()
+{
+    return _toolbox->mavlinkProtocol()->getSystemId();
+}
+
+QString QGroundControlQmlGlobal::elevationProviderName()
+{
+    return UrlFactory::kCopernicusElevationProviderKey;
+}
+
+QString QGroundControlQmlGlobal::elevationProviderNotice()
+{
+    return UrlFactory::kCopernicusElevationProviderNotice;
+}
+
+QString QGroundControlQmlGlobal::parameterFileExtension() const
+{
+    return AppSettings::parameterFileExtension;
+}
+
+QString QGroundControlQmlGlobal::missionFileExtension() const
+{
+    return AppSettings::missionFileExtension;
+}
+
+QString QGroundControlQmlGlobal::telemetryFileExtension() const
+{
+    return AppSettings::telemetryFileExtension;
+}
+
+QString QGroundControlQmlGlobal::appName()
+{
+    return qgcApp()->applicationName();
+}
+
+void QGroundControlQmlGlobal::deleteAllSettingsNextBoot()
+{
+    _app->deleteAllSettingsNextBoot();
+}
+
+void QGroundControlQmlGlobal::clearDeleteAllSettingsNextBoot()
+{
+    _app->clearDeleteAllSettingsNextBoot();
 }

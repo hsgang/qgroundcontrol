@@ -9,9 +9,8 @@
 
 #pragma once
 
-#include <QObject>
-#include <QVariant>
-#include <QQmlComponent>
+#include <QtCore/QObject>
+#include <QtQml/QQmlComponent>
 
 class ToolStripAction : public QObject
 {

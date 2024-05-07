@@ -8,10 +8,12 @@
  ****************************************************************************/
 
 
-#ifndef APMAirframeComponent_H
-#define APMAirframeComponent_H
+#pragma once
 
 #include "VehicleComponent.h"
+
+class AutoPilotPlugin;
+class Fact;
 
 class APMAirframeComponent : public VehicleComponent
 {
@@ -39,5 +41,3 @@ private:
 
     static const char* _frameClassParam;
 };
-
-#endif

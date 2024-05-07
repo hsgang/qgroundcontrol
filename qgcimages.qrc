@@ -3,9 +3,8 @@
         <file alias="subMenuButtonImage.png">resources/CogWheels.png</file>
         <file alias="PatternCamera.png">resources/PatternCamera.png</file>
         <file alias="PatternGrid.png">resources/PatternGrid.png</file>
-        <file alias="PatternPresets.png">resources/PatternPresets.png</file>
-        <file alias="PatternTerrain.png">resources/PatternTerrain.png</file>
         <file alias="PrecisionLanding.svg">resources/PrecisionLanding.svg</file>
+        <file alias="APMode.svg">src/AutoPilotPlugins/Common/Images/APMode.svg</file>       
         <file alias="camera.svg">resources/camera.svg</file>
         <file alias="check.svg">resources/check.svg</file>
         <file alias="FloatingWindow.svg">src/AnalyzeView/FloatingWindow.svg</file>
@@ -24,7 +23,6 @@
         <file alias="Frames/SimpleROV-5.png">src/AutoPilotPlugins/APM/Images/simple5-frame.png</file>
         <file alias="Frames/Vectored.png">src/AutoPilotPlugins/APM/Images/vectored-frame.png</file>
         <file alias="Frames/Vectored6DOF.png">src/AutoPilotPlugins/APM/Images/vectored6dof-frame.png</file>
-        <file alias="APMode.svg">src/AutoPilotPlugins/Common/Images/APMode.svg</file>
         <file alias="AirframeComponentIcon.png">src/AutoPilotPlugins/Common/Images/AirframeComponentIcon.png</file>
         <file alias="Airframe/AirframeSimulation">src/AutoPilotPlugins/Common/Images/AirframeSimulation.svg</file>
         <file alias="AirframeSimulation.png">src/AutoPilotPlugins/Common/Images/AirframeSimulation.svg</file>
@@ -130,6 +128,8 @@
         <file alias="MapSyncChanged.svg">src/FlightMap/Images/MapSyncChanged.svg</file>
         <file alias="MapType.svg">src/FlightMap/Images/MapType.svg</file>
         <file alias="MapTypeBlack.svg">src/FlightMap/Images/MapTypeBlack.svg</file>
+        <file alias="PatternPresets.png">resources/PatternPresets.png</file>
+        <file alias="PatternTerrain.png">resources/PatternTerrain.png</file>
         <file alias="PiP.svg">src/FlightMap/Images/PiP.svg</file>
         <file alias="ZoomMinus.svg">src/FlightMap/Images/ZoomMinus.svg</file>
         <file alias="ZoomPlus.svg">src/FlightMap/Images/ZoomPlus.svg</file>

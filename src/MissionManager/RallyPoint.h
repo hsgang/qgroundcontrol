@@ -7,13 +7,12 @@
  *
  ****************************************************************************/
 
-#ifndef RallyPoint_H
-#define RallyPoint_H
+#pragma once
 
-#include <QObject>
-#include <QGeoCoordinate>
+#include <QtCore/QObject>
+#include <QtPositioning/QGeoCoordinate>
 
-#include "FactSystem.h"
+#include "Fact.h"
 
 /// This class is used to encapsulate the QGeoCoordinate associated with a Rally Point into a QObject such
 /// that it can be used in a QmlObjectListMode for Qml.
@@ -65,5 +64,3 @@ private:
     static const char* _latitudeFactName;
     static const char* _altitudeFactName;
 };
-
-#endif

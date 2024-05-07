@@ -1,3 +1,4 @@
+find_package(Qt6 REQUIRED COMPONENTS Core Multimedia Qml)
 
 qt_add_library(Settings STATIC
 	ADSBVehicleManagerSettings.cc
@@ -30,6 +31,8 @@ qt_add_library(Settings STATIC
 	OfflineMapsSettings.h
 	PlanViewSettings.cc
 	PlanViewSettings.h
+	RemoteIDSettings.cc
+	RemoteIDSettings.h
 	RTKSettings.cc
 	RTKSettings.h
 	SettingsGroup.cc
@@ -40,17 +43,24 @@ qt_add_library(Settings STATIC
 	UnitsSettings.h
 	VideoSettings.cc
 	VideoSettings.h
+    MapsSettings.cc
+    MapsSettings.h
     Viewer3DSettings.cc
     Viewer3DSettings.h
-	RemoteIDSettings.h
-	RemoteIDSettings.cc
 )
 
 target_link_libraries(Settings
-	PUBLIC
-		qgc
+	PRIVATE
 		Qt6::Multimedia
+		API
+		QmlControls
+		Vehicle
+	PUBLIC
+		Qt6::Core
+		Qt6::Qml
+		Comms
+		FactSystem
+		QGC
 )
 
 target_include_directories(Settings PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-

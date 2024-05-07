@@ -9,14 +9,12 @@
 
 #pragma once
 
-#include <QObject>
-#include <QMap>
-#include <QXmlStreamReader>
-#include <QLoggingCategory>
 
-#include "FactSystem.h"
-#include "AutoPilotPlugin.h"
-#include "Vehicle.h"
+#include "MAVLinkLib.h"
+#include "FactMetaData.h"
+
+#include <QtCore/QObject>
+#include <QtCore/QLoggingCategory>
 
 /// @file
 ///     @author Don Gagne <don@thegagnes.com>
@@ -29,7 +27,7 @@ Q_DECLARE_LOGGING_CATEGORY(PX4ParameterMetaDataLog)
 class PX4ParameterMetaData : public QObject
 {
     Q_OBJECT
-    
+
 public:
     PX4ParameterMetaData(void);
 
@@ -46,7 +44,7 @@ private:
         XmlStateFoundGroup,
         XmlStateFoundParameter,
         XmlStateDone
-    };    
+    };
 
     QVariant _stringToTypedVariant(const QString& string, FactMetaData::ValueType_t type, bool* convertOk);
     static void _outputFileWarning(const QString& metaDataFile, const QString& error1, const QString& error2);

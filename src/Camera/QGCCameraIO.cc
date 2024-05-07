@@ -9,6 +9,14 @@
 
 #include "MavlinkCameraControl.h"
 #include "QGCCameraIO.h"
+#include "QGCLoggingCategory.h"
+#include "QGCApplication.h"
+#include "QGCToolbox.h"
+#include "LinkInterface.h"
+#include "MAVLinkProtocol.h"
+#include "Vehicle.h"
+
+#include <QtQml/QQmlEngine>
 
 QGC_LOGGING_CATEGORY(CameraIOLog, "CameraIOLog")
 QGC_LOGGING_CATEGORY(CameraIOLogVerbose, "CameraIOLogVerbose")

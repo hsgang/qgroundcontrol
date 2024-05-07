@@ -9,11 +9,10 @@
 
 #pragma once
 
-#include <QObject>
-#include <QVector>
-#include <QMutex>
-
 #include "QGCToolbox.h"
+
+#include <QtCore/QVector>
+#include <QtCore/QMutex>
 
 class Vehicle;
 class UASMessageHandler;

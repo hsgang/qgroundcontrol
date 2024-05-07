@@ -9,15 +9,11 @@
 
 #pragma once
 
-#include "QGCToolbox.h"
 #include "QGCMAVLink.h"
-#include "QGCLoggingCategory.h"
-#include "QmlObjectListModel.h"
 
-#include <QObject>
-#include <QString>
-#include <QJsonObject>
-#include <QJsonValue>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QMap>
 
 class MissionCommandUIInfo;
 

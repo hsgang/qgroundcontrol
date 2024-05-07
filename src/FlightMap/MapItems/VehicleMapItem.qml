@@ -8,9 +8,9 @@
  ****************************************************************************/
 
 import QtQuick
+import QtQuick.Effects
 import QtLocation
 import QtPositioning
-import Qt5Compat.GraphicalEffects
 
 import QGroundControl
 import QGroundControl.ScreenTools
@@ -108,16 +108,20 @@ MapQuickItem {
             radius:             width * 0.5
             visible:            false
         }
-        DropShadow {
-            anchors.fill:       vehicleShadow
-            visible:            vehicleIcon.visible && _adsbVehicle
-            horizontalOffset:   4
-            verticalOffset:     4
-            radius:             32.0
-            samples:            65
-            color:              Qt.rgba(0.94,0.91,0,0.5)
-            source:             vehicleShadow
+        
+        MultiEffect {
+            source: vehicleIcon
+            shadowEnabled: vehicleIcon.visible && _adsbVehicle
+            shadowColor: Qt.rgba(0.94,0.91,0,1.0)
+            shadowVerticalOffset: 4
+            shadowHorizontalOffset: 4
+            shadowBlur: 1.0
+            shadowOpacity: 0.5
+            shadowScale: 1.3
+            blurMax: 32
+            blurMultiplier: .1
         }
+
         Image {
             id:                 vehicleIcon
             source:             _adsbVehicle ? (alert ? "/qmlimages/AlertAircraft.svg" : "/qmlimages/AwarenessAircraft.svg") : vehicle.vehicleImageOpaque

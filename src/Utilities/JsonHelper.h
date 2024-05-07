@@ -9,15 +9,16 @@
 
 #pragma once
 
-#include <QJsonObject>
-#include <QVariantList>
-#include <QGeoCoordinate>
-#include <QCoreApplication>
+#include <QtCore/QJsonObject>
+#include <QtCore/QVariantList>
+#include <QtCore/QCoreApplication>
+#include <QtPositioning/QGeoCoordinate>
 
 /// @file
 /// @author Don Gagne <don@thegagnes.com>
 
 class QmlObjectListModel;
+class QTranslator;
 
 /// @brief Json manipulation helper class.
 /// Primarily used for parsing and processing Fact metadata.
@@ -26,6 +27,8 @@ class JsonHelper
     Q_DECLARE_TR_FUNCTIONS(JsonHelper)
 
 public:
+    static QTranslator* translator();
+
     /// Determines is the specified file is a json file
     /// @return true: file is json, false: file is not json
     static bool isJsonFile(const QString&       fileName,       ///< filename

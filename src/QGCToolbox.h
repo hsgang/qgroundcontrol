@@ -8,14 +8,13 @@
  ****************************************************************************/
 
 
-#ifndef QGCToolbox_h
-#define QGCToolbox_h
+#pragma once
 
-#include <QObject>
+
+#include <QtCore/QObject>
 
 class FactSystem;
 class FirmwarePluginManager;
-class AudioOutput;
 class GPSManager;
 class JoystickManager;
 class FollowMe;
@@ -49,7 +48,6 @@ public:
     QGCToolbox(QGCApplication* app);
 
     FirmwarePluginManager*      firmwarePluginManager   () { return _firmwarePluginManager; }
-    AudioOutput*                audioOutput             () { return _audioOutput; }
     JoystickManager*            joystickManager         () { return _joystickManager; }
     LinkManager*                linkManager             () { return _linkManager; }
     MAVLinkProtocol*            mavlinkProtocol         () { return _mavlinkProtocol; }
@@ -67,6 +65,7 @@ public:
     ADSBVehicleManager*         adsbVehicleManager      () { return _adsbVehicleManager; }
     NTRIP*                      ntrip                   () { return _ntrip; }
 #ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     GPSManager*                 gpsManager              () { return _gpsManager; }
 #endif
 #ifndef QGC_AIRLINK_DISABLED
@@ -81,10 +80,9 @@ private:
     void _scanAndLoadPlugins(QGCApplication *app);
 
 
-    AudioOutput*                _audioOutput            = nullptr;
     FactSystem*                 _factSystem             = nullptr;
     FirmwarePluginManager*      _firmwarePluginManager  = nullptr;
-#ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     GPSManager*                 _gpsManager             = nullptr;
 #endif
     QGCImageProvider*           _imageProvider          = nullptr;
@@ -130,5 +128,3 @@ protected:
     QGCApplication* _app;
     QGCToolbox*     _toolbox;
 };
-
-#endif

@@ -10,15 +10,15 @@
 #pragma once
 
 #include "FactGroup.h"
-#include "QGCLoggingCategory.h"
-#include "QmlObjectListModel.h"
 
-#include <QObject>
-#include <QSizeF>
-#include <QRectF>
-#include <QPointF>
+#include <QtCore/QObject>
+#include <QtCore/QSizeF>
+#include <QtCore/QRectF>
+#include <QtCore/QPointF>
+#include <QtCore/QLoggingCategory>
 
 class QGCCameraParamIO;
+class QmlObjectListModel;
 
 Q_DECLARE_LOGGING_CATEGORY(CameraControlLog)
 Q_DECLARE_LOGGING_CATEGORY(CameraControlVerboseLog)
@@ -29,7 +29,7 @@ Q_DECLARE_LOGGING_CATEGORY(CameraControlVerboseLog)
 class QGCVideoStreamInfo : public QObject
 {
     Q_OBJECT
-
+    Q_MOC_INCLUDE("QmlObjectListModel.h")
 public:
     QGCVideoStreamInfo(QObject* parent, const mavlink_video_stream_information_t* si);
 

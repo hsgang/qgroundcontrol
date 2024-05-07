@@ -46,12 +46,15 @@
 
 #include "QGCMapEngine.h"
 #include "QGeoMapReplyQGC.h"
-#include "QGeoTileFetcherQGC.h"
+#include "TerrainTile.h"
+#include "MapProvider.h"
+#include "QGCMapUrlEngine.h"
+#include "DeviceInfo.h"
 
 #include <QtLocation/private/qgeotilespec_p.h>
 #include <QtNetwork/QNetworkAccessManager>
-#include <QFile>
-#include "TerrainTile.h"
+#include <QtCore/QFile>
+#include <QtNetwork/QNetworkProxy>
 
 int         QGeoTiledMapReplyQGC::_requestCount = 0;
 QByteArray  QGeoTiledMapReplyQGC::_bingNoTileImage;
@@ -189,7 +192,7 @@ QGeoTiledMapReplyQGC::networkReplyError(QNetworkReply::NetworkError error)
 void
 QGeoTiledMapReplyQGC::cacheError(QGCMapTask::TaskType type, QString /*errorString*/)
 {
-    if(!getQGCMapEngine()->isInternetActive()) {
+    if(!QGCDeviceInfo::isInternetAvailable()) {
         if( getQGCMapEngine()->urlFactory()->isElevation(tileSpec().mapId())){
             emit terrainDone(QByteArray(), QNetworkReply::NetworkSessionFailedError);
         } else {

@@ -9,14 +9,18 @@
 
 #pragma once
 
-#include <QObject>
-
 #include "FactPanelController.h"
-#include "QGCLoggingCategory.h"
-#include "APMSensorsComponent.h"
+#include "MAVLinkLib.h"
+
+#include <QtQuick/QQuickItem>
+#include <QtCore/QObject>
+#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(APMSensorsComponentControllerLog)
 Q_DECLARE_LOGGING_CATEGORY(APMSensorsComponentControllerVerboseLog)
+
+class APMSensorsComponent;
+class LinkInterface;
 
 /// Sensors Component MVC Controller for SensorsComponent.qml.
 class APMSensorsComponentController : public FactPanelController

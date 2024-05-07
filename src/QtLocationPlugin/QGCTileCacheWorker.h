@@ -16,19 +16,15 @@
  *
  */
 
-#ifndef QGC_TILE_CACHE_WORKER_H
-#define QGC_TILE_CACHE_WORKER_H
+#pragma once
 
-#include <QString>
-#include <QThread>
-#include <QQueue>
-#include <QMutex>
-#include <QWaitCondition>
-#include <QMutexLocker>
+#include <QtCore/QString>
+#include <QtCore/QThread>
+#include <QtCore/QQueue>
+#include <QtCore/QMutex>
+#include <QtCore/QWaitCondition>
 #include <QtSql/QSqlDatabase>
-#include <QHostInfo>
-
-#include "QGCLoggingCategory.h"
+#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(QGCTileCacheLog)
 
@@ -50,9 +46,6 @@ public:
 protected:
     void    run             ();
 
-private slots:
-    void        _lookupReady            (QHostInfo info);
-
 private:
     void        _runTask                (QGCMapTask* task);
 
@@ -69,7 +62,6 @@ private:
     void        _exportSets             (QGCMapTask* mtask);
     void        _importSets             (QGCMapTask* mtask);
     bool        _testTask               (QGCMapTask* mtask);
-    void        _testInternet           ();
     void        _deleteBingNoTileTiles  ();
 
     quint64     _findTile               (const QString hash);
@@ -85,7 +77,6 @@ private:
 
 signals:
     void        updateTotals            (quint32 totaltiles, quint64 totalsize, quint32 defaulttiles, quint64 defaultsize);
-    void        internetStatus          (bool active);
 
 private:
     QQueue<QGCMapTask*>             _taskQueue;
@@ -102,7 +93,4 @@ private:
     quint32                         _defaultCount;
     time_t                          _lastUpdate;
     int                             _updateTimeout;
-    int                             _hostLookupID;
 };
-
-#endif // QGC_TILE_CACHE_WORKER_H

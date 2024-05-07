@@ -1,4 +1,4 @@
-include($$PWD/libs/qtandroidserialport/src/qtandroidserialport.pri)
+include($$PWD/libs/qtandroidserialport/qtandroidserialport.pri)
 
 ANDROID_MIN_SDK_VERSION = 26
 ANDROID_TARGET_SDK_VERSION = 33
@@ -77,41 +77,41 @@ exists($$PWD/custom/android/AndroidManifest.xml) {
     OTHER_FILES += \
     $$PWD/custom/android/AndroidManifest.xml
 } else {
-    OTHER_FILES += \
-    $$PWD/android/AndroidManifest.xml
+    DISTFILES += \
+        $$ANDROID_PACKAGE_QGC_SOURCE_DIR/AndroidManifest.xml
 }
 
-OTHER_FILES += \
-    $$PWD/android/res/xml/device_filter.xml \
-    $$PWD/android/src/com/hoho/android/usbserial/driver/CdcAcmSerialDriver.java \
-    $$PWD/android/src/com/hoho/android/usbserial/driver/CommonUsbSerialDriver.java \
-    $$PWD/android/src/com/hoho/android/usbserial/driver/Cp2102SerialDriver.java \
-    $$PWD/android/src/com/hoho/android/usbserial/driver/FtdiSerialDriver.java \
-    $$PWD/android/src/com/hoho/android/usbserial/driver/ProlificSerialDriver.java \
-    $$PWD/android/src/com/hoho/android/usbserial/driver/UsbId.java \
-    $$PWD/android/src/com/hoho/android/usbserial/driver/UsbSerialDriver.java \
-    $$PWD/android/src/com/hoho/android/usbserial/driver/UsbSerialProber.java \
-    $$PWD/android/src/com/hoho/android/usbserial/driver/UsbSerialRuntimeException.java \
-    $$PWD/android/src/org/mavlink/qgroundcontrol/QGCActivity.java \
-    $$PWD/android/src/org/mavlink/qgroundcontrol/UsbIoManager.java \
-    $$PWD/android/src/org/freedesktop/gstreamer/androidmedia/GstAhcCallback.java \
-    $$PWD/android/src/org/freedesktop/gstreamer/androidmedia/GstAhsCallback.java \
-    $$PWD/android/src/org/freedesktop/gstreamer/androidmedia/GstAmcOnFrameAvailableListener.java
-
-
 DISTFILES += \
-    $$PWD/android/gradle/wrapper/gradle-wrapper.jar \
-    $$PWD/android/gradlew \
-    $$PWD/android/res/values/libs.xml \
-    $$PWD/android/build.gradle \
-    $$PWD/android/gradle/wrapper/gradle-wrapper.properties \
-    $$PWD/android/gradlew.bat
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/build.gradle \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/gradle/wrapper/gradle-wrapper.jar \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/gradle/wrapper/gradle-wrapper.properties \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/gradlew \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/gradlew.bat \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/res/values/libs.xml \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/res/xml/device_filter.xml \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/res/xml/network_security_config.xml \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/res/xml/qtprovider_paths.xml \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/com/hoho/android/usbserial/driver/CdcAcmSerialDriver.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/com/hoho/android/usbserial/driver/CommonUsbSerialDriver.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/com/hoho/android/usbserial/driver/Cp2102SerialDriver.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/com/hoho/android/usbserial/driver/FtdiSerialDriver.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/com/hoho/android/usbserial/driver/ProlificSerialDriver.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/com/hoho/android/usbserial/driver/UsbId.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/com/hoho/android/usbserial/driver/UsbSerialDriver.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/com/hoho/android/usbserial/driver/UsbSerialProber.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/com/hoho/android/usbserial/driver/UsbSerialRuntimeException.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/org/freedesktop/gstreamer/androidmedia/GstAhcCallback.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/org/freedesktop/gstreamer/androidmedia/GstAhsCallback.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/org/freedesktop/gstreamer/androidmedia/GstAmcOnFrameAvailableListener.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/org/mavlink/qgroundcontrol/QGCActivity.java \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/org/mavlink/qgroundcontrol/UsbIoManager.java
 
 SOURCES += \
-    $$PWD/android/src/AndroidInterface.cc
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/AndroidInit.cpp \
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/AndroidInterface.cc
 
 HEADERS += \
-    $$PWD/android/src/AndroidInterface.h
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src/AndroidInterface.h
 
 INCLUDEPATH += \
-    $$PWD/android/src
+    $$ANDROID_PACKAGE_QGC_SOURCE_DIR/src

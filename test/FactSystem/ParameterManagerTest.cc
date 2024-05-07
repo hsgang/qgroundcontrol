@@ -10,8 +10,12 @@
 
 #include "ParameterManagerTest.h"
 #include "MultiVehicleManager.h"
+#include "Vehicle.h"
 #include "QGCApplication.h"
 #include "ParameterManager.h"
+
+#include <QtTest/QTest>
+#include <QtTest/QSignalSpy>
 
 /// Test failure modes which should still lead to param load success
 void ParameterManagerTest::_noFailureWorker(MockConfiguration::FailureMode_t failureMode)

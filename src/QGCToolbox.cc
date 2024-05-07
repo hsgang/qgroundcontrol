@@ -10,8 +10,7 @@
 
 #include "FactSystem.h"
 #include "FirmwarePluginManager.h"
-#include "AudioOutput.h"
-#ifndef __mobile__
+#ifndef NO_SERIAL_LINK
 #include "GPSManager.h"
 #endif
 #include "JoystickManager.h"
@@ -27,7 +26,6 @@
 #include "VideoManager.h"
 #include "MAVLinkLogManager.h"
 #include "QGCCorePlugin.h"
-#include "QGCOptions.h"
 #include "SettingsManager.h"
 #include "QGCApplication.h"
 #include "ADSBVehicleManager.h"
@@ -65,10 +63,9 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
 
     //-- Scan and load plugins
     _scanAndLoadPlugins(app);
-    _audioOutput            = new AudioOutput               (app, this);
     _factSystem             = new FactSystem                (app, this);
     _firmwarePluginManager  = new FirmwarePluginManager     (app, this);
-#ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     _gpsManager             = new GPSManager                (app, this);
 #endif
     _imageProvider          = new QGCImageProvider          (app, this);
@@ -102,10 +99,9 @@ void QGCToolbox::setChildToolboxes(void)
     _settingsManager->setToolbox(this);
 
     _corePlugin->setToolbox(this);
-    _audioOutput->setToolbox(this);
     _factSystem->setToolbox(this);
     _firmwarePluginManager->setToolbox(this);
-#ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     _gpsManager->setToolbox(this);
 #endif
     _imageProvider->setToolbox(this);

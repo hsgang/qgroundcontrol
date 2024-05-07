@@ -8,12 +8,9 @@
  ****************************************************************************/
 
 
-#ifndef APMSubMotorComponentController_H
-#define APMSubMotorComponentController_H
+#pragma once
 
-#include <QObject>
 #include "FactPanelController.h"
-#include "Vehicle.h"
 
 /// MVC Controller for APMSubMotorComponent.qml.
 class APMSubMotorComponentController : public FactPanelController
@@ -34,5 +31,3 @@ private slots:
 private:
     QString _motorDetectionMessages;
 };
-
-#endif

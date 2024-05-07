@@ -11,10 +11,10 @@
 #include "QGCApplication.h"
 #include "SettingsManager.h"
 #include "RemoteIDSettings.h"
-#include "QGCQGeoCoordinate.h"
 #include "PositionManager.h"
-
-#include <QDebug>
+#include "Vehicle.h"
+#include "MAVLinkProtocol.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(RemoteIDManagerLog, "RemoteIDManagerLog")
 

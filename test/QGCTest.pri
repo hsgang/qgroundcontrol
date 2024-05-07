@@ -18,18 +18,22 @@ ReleaseBuild {
     INCLUDEPATH += \
         $$PWD/AnalyzeView \
         $$PWD/Audio \
-        $$PWD/comm \
+        $$PWD/Comms \
+        $$PWD/Compression \
         $$PWD/FactSystem \
         $$PWD/Geo \
+        $$PWD/MAVLink \
         $$PWD/MissionManager \
         $$PWD/qgcunittest \
         $$PWD/QmlControls \
-        $$PWD/ui \
+        $$PWD/Terrain \
+        $$PWD/UI \
         $$PWD/Vehicle
 
     HEADERS += \
         #$$PWD/AnalyzeView/LogDownloadTest.h \
         $$PWD/Audio/AudioOutputTest.h \
+        $$PWD/Compression/DecompressionTest.h \
         $$PWD/FactSystem/FactSystemTestBase.h \
         $$PWD/FactSystem/FactSystemTestGeneric.h \
         $$PWD/FactSystem/FactSystemTestPX4.h \
@@ -59,7 +63,6 @@ ReleaseBuild {
         $$PWD/MissionManager/TransectStyleComplexItemTestBase.h \
         $$PWD/MissionManager/VisualMissionItemTest.h \
         #$$PWD/qgcunittest/FileDialogTest.h \
-        #$$PWD/qgcunittest/FileManagerTest.h \
         #$$PWD/qgcunittest/MainWindowTest.h \
         #$$PWD/qgcunittest/MessageBoxTest.h \
         #$$PWD/qgcunittest/RadioConfigTest.h \
@@ -69,6 +72,7 @@ ReleaseBuild {
         $$PWD/qgcunittest/MultiSignalSpy.h \
         $$PWD/qgcunittest/MultiSignalSpyV2.h \
         $$PWD/qgcunittest/UnitTest.h \
+        $$PWD/Terrain/TerrainQueryTest.h \
         $$PWD/Vehicle/FTPManagerTest.h \
         $$PWD/Vehicle/InitialConnectTest.h \
         $$PWD/Vehicle/RequestMessageTest.h \
@@ -79,6 +83,7 @@ ReleaseBuild {
     SOURCES += \
         #$$PWD/AnalyzeView/LogDownloadTest.cc \
         $$PWD/Audio/AudioOutputTest.cc \
+        $$PWD/Compression/DecompressionTest.cc \
         $$PWD/FactSystem/FactSystemTestBase.cc \
         $$PWD/FactSystem/FactSystemTestGeneric.cc \
         $$PWD/FactSystem/FactSystemTestPX4.cc \
@@ -108,7 +113,6 @@ ReleaseBuild {
         $$PWD/MissionManager/TransectStyleComplexItemTestBase.cc \
         $$PWD/MissionManager/VisualMissionItemTest.cc \
         #$$PWD/qgcunittest/FileDialogTest.cc \
-        #$$PWD/qgcunittest/FileManagerTest.cc \
         #$$PWD/qgcunittest/MainWindowTest.cc \
         #$$PWD/qgcunittest/MessageBoxTest.cc \
         #$$PWD/qgcunittest/RadioConfigTest.cc \
@@ -118,6 +122,7 @@ ReleaseBuild {
         $$PWD/qgcunittest/MultiSignalSpy.cc \
         $$PWD/qgcunittest/MultiSignalSpyV2.cc \
         $$PWD/qgcunittest/UnitTest.cc \
+        $$PWD/Terrain/TerrainQueryTest.cc \
         $$PWD/UnitTestList.cc \
         $$PWD/Vehicle/FTPManagerTest.cc \
         $$PWD/Vehicle/InitialConnectTest.cc \

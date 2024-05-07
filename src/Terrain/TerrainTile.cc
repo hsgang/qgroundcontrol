@@ -9,16 +9,14 @@
 
 #include "TerrainTile.h"
 #include "JsonHelper.h"
-#include "QGCMapEngine.h"
-#include "QGC.h"
+#include "QGCLoggingCategory.h"
 
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QDataStream>
-#include <QtMath>
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonObject>
+#include <QtCore/QJsonArray>
+#include <QtCore/QtNumeric>
 
-QGC_LOGGING_CATEGORY(TerrainTileLog, "TerrainTileLog");
+QGC_LOGGING_CATEGORY(TerrainTileLog, "qgc.terrain.terraintile");
 
 const char*  TerrainTile::_jsonStatusKey        = "status";
 const char*  TerrainTile::_jsonDataKey          = "data";

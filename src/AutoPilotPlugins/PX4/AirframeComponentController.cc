@@ -9,13 +9,16 @@
 
 #include "AirframeComponentController.h"
 #include "AirframeComponentAirframes.h"
-#include "QGCMAVLink.h"
 #include "MultiVehicleManager.h"
 #include "QGCApplication.h"
 #include "LinkManager.h"
+#include "QGC.h"
+#include "FactSystem.h"
+#include "Fact.h"
+#include "Vehicle.h"
 
-#include <QVariant>
-#include <QQmlProperty>
+#include <QtCore/QVariant>
+#include <QtQml/QtQml>
 
 bool AirframeComponentController::_typesRegistered = false;
 

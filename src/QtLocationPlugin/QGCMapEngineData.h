@@ -16,15 +16,10 @@
  *
  */
 
-#ifndef QGC_MAP_ENGINE_DATA_H
-#define QGC_MAP_ENGINE_DATA_H
+#pragma once
 
-#include <QObject>
-#include <QString>
-#include <QHash>
-#include <QDateTime>
-
-#include "QGCMapUrlEngine.h"
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
 class QGCCachedTileSet;
 
@@ -110,7 +105,6 @@ public:
 
     enum TaskType {
         taskInit,
-        taskTestInternet,
         taskCacheTile,
         taskFetchTile,
         taskFetchTileSets,
@@ -143,16 +137,6 @@ signals:
 
 private:
     TaskType    _type;
-};
-
-//-----------------------------------------------------------------------------
-class QGCTestInternetTask : public QGCMapTask
-{
-    Q_OBJECT
-public:
-    QGCTestInternetTask()
-        : QGCMapTask(QGCMapTask::taskTestInternet)
-    {}
 };
 
 //-----------------------------------------------------------------------------
@@ -462,5 +446,3 @@ signals:
     void actionProgress         (int percentage);
 
 };
-
-#endif // QGC_MAP_ENGINE_DATA_H

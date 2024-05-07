@@ -9,48 +9,28 @@
 
 #include "FirmwarePlugin.h"
 #include "QGCApplication.h"
-#include "Generic/GenericAutoPilotPlugin.h"
+#include "GenericAutoPilotPlugin.h"
+#include "AutoPilotPlugin.h"
 #include "CameraMetaData.h"
-#include "SettingsManager.h"
-#include "AppSettings.h"
 #include "QGCFileDownload.h"
 #include "QGCCameraManager.h"
 #include "RadioComponentController.h"
 #include "Autotune.h"
 #include "VehicleCameraControl.h"
+#include "VehicleComponent.h"
+#include "MAVLinkProtocol.h"
+#include "QGC.h"
+#include "QGCLoggingCategory.h"
 
-#include <QRegularExpression>
-#include <QDebug>
+#include <QtCore/QRegularExpression>
 
 QGC_LOGGING_CATEGORY(FirmwarePluginLog, "FirmwarePluginLog")
-
-static FirmwarePluginFactoryRegister* _instance = nullptr;
 
 const QString guided_mode_not_supported_by_vehicle = QObject::tr("Guided mode not supported by Vehicle.");
 
 QVariantList FirmwarePlugin::_cameraList;
 
 const QString FirmwarePlugin::px4FollowMeFlightMode(QObject::tr("Follow Me"));
-
-FirmwarePluginFactory::FirmwarePluginFactory(void)
-{
-    FirmwarePluginFactoryRegister::instance()->registerPluginFactory(this);
-}
-
-QList<QGCMAVLink::VehicleClass_t> FirmwarePluginFactory::supportedVehicleClasses(void) const
-{
-    return QGCMAVLink::allVehicleClasses();
-}
-
-FirmwarePluginFactoryRegister* FirmwarePluginFactoryRegister::instance(void)
-{
-    if (!_instance) {
-        _instance = new FirmwarePluginFactoryRegister;
-    }
-
-    return _instance;
-}
-
 
 FirmwarePlugin::FirmwarePlugin(void)
 {
@@ -1131,7 +1111,7 @@ void FirmwarePlugin::_versionFileDownloadFinished(QString& remoteFile, QString& 
     }
 }
 
-int FirmwarePlugin::versionCompare(Vehicle* vehicle, int major, int minor, int patch)
+int FirmwarePlugin::versionCompare(const Vehicle* vehicle, int major, int minor, int patch) const
 {
     int currMajor = vehicle->firmwareMajorVersion();
     int currMinor = vehicle->firmwareMinorVersion();
@@ -1150,7 +1130,7 @@ int FirmwarePlugin::versionCompare(Vehicle* vehicle, int major, int minor, int p
     return -1;
 }
 
-int FirmwarePlugin::versionCompare(Vehicle* vehicle, QString& compare)
+int FirmwarePlugin::versionCompare(const Vehicle* vehicle, QString& compare) const
 {
     QStringList versionNumbers = compare.split(".");
     if(versionNumbers.size() != 3) {

@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  *
  * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
  *
@@ -10,17 +10,16 @@
 
 #include "Joystick.h"
 #include "QGC.h"
-#include "AutoPilotPlugin.h"
 #include "QGCApplication.h"
-#include "VideoManager.h"
-#include "QGCCameraManager.h"
-#include "GimbalController.h"
-#include "VehicleCameraControl.h"
 #include "CustomAction.h"
 #include "SettingsManager.h"
 #include "CustomMavlinkActionsSettings.h"
+#include "Vehicle.h"
+#include "MultiVehicleManager.h"
+#include "FirmwarePlugin.h"
+#include "QGCLoggingCategory.h"
 
-#include <QSettings>
+#include <QtCore/QSettings>
 
 // JoystickLog Category declaration moved to QGCLoggingCategory.cc to allow access in Vehicle
 QGC_LOGGING_CATEGORY(JoystickValuesLog, "JoystickValuesLog")
@@ -774,6 +773,7 @@ void Joystick::stopPolling(void)
         }
         _exitThread = true;
     }
+    _activeVehicle = nullptr;
 }
 
 void Joystick::setCalibration(int axis, Calibration_t& calibration)

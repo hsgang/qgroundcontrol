@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include <QAbstractListModel>
+#include <QtCore/QAbstractListModel>
 
-#include "Fact.h"
+class Fact;
 
 /// Provides a list model of values for incrementing/decrementing the value of a Fact
 class FactValueSliderListModel : public QAbstractListModel

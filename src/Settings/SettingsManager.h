@@ -7,12 +7,8 @@
  *
  ****************************************************************************/
 
-#ifndef SettingsManager_H
-#define SettingsManager_H
+#pragma once
 
-#include "QGCLoggingCategory.h"
-#include "Joystick.h"
-#include "MultiVehicleManager.h"
 #include "QGCToolbox.h"
 #include "AppSettings.h"
 #include "UnitsSettings.h"
@@ -33,7 +29,6 @@
 #include "GimbalControllerSettings.h"
 #include "BatterySettings.h"
 #include "BatteryIndicatorSettings.h"
-#include <QVariantList>
 #include "RemoteIDSettings.h"
 #include "SIYISettings.h"
 #include "Viewer3DSettings.h"
@@ -130,5 +125,3 @@ private:
     RemoteIDSettings*               _remoteIDSettings;
     CustomMavlinkActionsSettings*   _customMavlinkActionsSettings;
 };
-
-#endif

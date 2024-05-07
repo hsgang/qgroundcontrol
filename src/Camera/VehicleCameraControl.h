@@ -10,10 +10,9 @@
 #pragma once
 
 #include "MavlinkCameraControl.h"
-#include "QGCApplication.h"
+#include "QmlObjectListModel.h"
 
-#include <QLoggingCategory>
-
+class QNetworkAccessManager;
 class QDomNode;
 class QDomNodeList;
 

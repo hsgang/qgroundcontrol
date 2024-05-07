@@ -11,13 +11,12 @@
 #include "QGCApplication.h"
 #include "VideoManager.h"
 
-#include <QQmlEngine>
-#include <QtQml>
-#include <QVariantList>
+#include <QtQml/QQmlEngine>
+#include <QtCore/QVariantList>
 
 #ifndef QGC_DISABLE_UVC
-#include <QMediaDevices>
-#include <QCameraDevice>
+#include <QtMultimedia/QMediaDevices>
+#include <QtMultimedia/QCameraDevice>
 #endif
 
 const char* VideoSettings::videoSourceNoVideo           = QT_TRANSLATE_NOOP("VideoSettings", "No Video Available");

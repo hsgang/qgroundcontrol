@@ -1,11 +1,12 @@
-
 add_subdirectory(FactControls)
+
+find_package(Qt6 REQUIRED COMPONENTS Core Qml)
 
 qt_add_library(FactSystem STATIC
 	Fact.cc
+	Fact.h
 	FactGroup.cc
 	FactGroup.h
-	Fact.h
 	FactMetaData.cc
 	FactMetaData.h
 	FactSystem.cc
@@ -19,14 +20,20 @@ qt_add_library(FactSystem STATIC
 )
 
 target_link_libraries(FactSystem
-        PRIVATE
-		qgc
+	PRIVATE
+    	Qt6::Qml
+    	API
+		AutoPilotPlugins
 		FactControls
+		FirmwarePlugin
+		Settings
+		Utilities
+		Vehicle
+		VehicleComponents
+    PUBLIC
+    	Qt6::Core
+		Comms
+		QGC
 )
 
-target_include_directories(FactSystem
-	INTERFACE
-		${CMAKE_CURRENT_SOURCE_DIR}
-	PUBLIC
-		FactControls
-)
+target_include_directories(FactSystem PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

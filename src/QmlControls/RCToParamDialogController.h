@@ -9,10 +9,9 @@
 
 #pragma once
 
-#include <QObject>
-#include <QGeoCoordinate>
+#include "Fact.h"
 
-#include "FactSystem.h"
+#include <QtCore/QObject>
 
 class RCToParamDialogController : public QObject
 {

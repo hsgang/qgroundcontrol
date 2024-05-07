@@ -9,19 +9,13 @@
 
 #pragma once
 
-#include <QObject>
-#include <QString>
-
-#include <functional>
-#include <cmath>
-
-#include <QQuickImageProvider>
-#include <QVector2D>
-#include <QPainter>
-
-#include <QGCPalette.h>
-
+#include "QGCPalette.h"
 #include "Common.h"
+
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtQuick/QQuickImageProvider>
+#include <QtGui/QPainter>
 
 
 namespace GeometryImage {

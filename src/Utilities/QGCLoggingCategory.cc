@@ -13,7 +13,7 @@
 
 #include "QGCLoggingCategory.h"
 
-#include <QSettings>
+#include <QtCore/QSettings>
 
 static const char* kVideoAllLogCategory = "VideoAllLog";
 
@@ -79,6 +79,7 @@ void QGCLoggingCategoryRegister::setFilterRulesFromSettings(const QString& comma
     }
 
     filterRules += "*Log.debug=false\n";
+    filterRules += "qgc.*.debug=false\n";
 
     // Set up filters defined in settings
     foreach (QString category, _registeredCategories) {

@@ -10,10 +10,10 @@
 
 #include "QGC.h"
 
-#include <qmath.h>
-#include <float.h>
+#include <QtCore/QDateTime>
+#include <QtCore/QtNumeric>
 
-#include <QtGlobal>
+#include <float.h>
 
 namespace QGC
 {

@@ -14,10 +14,11 @@
  *   @author Gus Grubba <gus@auterion.com>
  */
 
-#include <QDebug>
-
 #include "GStreamer.h"
 #include "GstVideoReceiver.h"
+#include "QGCLoggingCategory.h"
+
+#include <QtCore/QDebug>
 
 QGC_LOGGING_CATEGORY(GStreamerLog, "GStreamerLog")
 QGC_LOGGING_CATEGORY(GStreamerAPILog, "GStreamerAPILog")

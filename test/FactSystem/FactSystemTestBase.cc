@@ -12,15 +12,15 @@
 ///     @author Don Gagne <don@thegagnes.com>
 
 #include "FactSystemTestBase.h"
-#include "LinkManager.h"
-#ifdef QT_DEBUG
-#include "MockLink.h"
-#endif
+#include "FactSystem.h"
 #include "MultiVehicleManager.h"
+#include "Vehicle.h"
 #include "QGCApplication.h"
 #include "ParameterManager.h"
+#include "AutoPilotPlugin.h"
 
-#include <QQuickItem>
+#include <QtTest/QTest>
+#include <QtTest/QSignalSpy>
 
 /// FactSystem Unit Test
 FactSystemTestBase::FactSystemTestBase(void)

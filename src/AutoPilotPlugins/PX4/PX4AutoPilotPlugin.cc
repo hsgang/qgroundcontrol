@@ -10,9 +10,6 @@
 
 #include "PX4AutoPilotPlugin.h"
 #include "PX4AirframeLoader.h"
-#include "AirframeComponentController.h"
-#include "FirmwarePlugin/PX4/PX4ParameterMetaData.h"  // FIXME: Hack
-#include "FirmwarePlugin/PX4/PX4FirmwarePlugin.h"  // FIXME: Hack
 #include "QGCApplication.h"
 #include "FlightModesComponent.h"
 #include "PX4RadioComponent.h"
@@ -20,6 +17,11 @@
 #include "PowerComponent.h"
 #include "SafetyComponent.h"
 #include "SensorsComponent.h"
+#include "FactSystem.h"
+#include "ParameterManager.h"
+#include "Vehicle.h"
+#include "Actuators.h"
+#include "ActuatorComponent.h"
 
 /// @file
 ///     @brief This is the AutoPilotPlugin implementatin for the MAV_AUTOPILOT_PX4 type.

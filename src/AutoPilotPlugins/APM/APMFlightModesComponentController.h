@@ -8,17 +8,13 @@
  ****************************************************************************/
 
 
-#ifndef APMFlightModesComponentController_H
-#define APMFlightModesComponentController_H
+#pragma once
 
-#include <QObject>
-#include <QQuickItem>
-#include <QList>
-#include <QStringList>
+#include <QtCore/QStringList>
+#include <QtCore/QVariantList>
 
-#include "AutoPilotPlugin.h"
 #include "FactPanelController.h"
-#include "Vehicle.h"
+#include "QGCMAVLink.h"
 
 /// MVC Controller for FlightModesComponent.qml.
 class APMFlightModesComponentController : public FactPanelController
@@ -61,7 +57,7 @@ signals:
     void superSimpleModeEnabledChanged  (void);
 
 private slots:
-    void _rcChannelsChanged                     (int channelCount, int pwmValues[Vehicle::cMaxRcChannels]);
+    void _rcChannelsChanged                     (int channelCount, int pwmValues[QGCMAVLink::maxRcChannels]);
     void _updateSimpleParamsFromSimpleMode      (void);
     void _setupSimpleModeEnabled     (void);
 
@@ -89,5 +85,3 @@ private:
 
     static bool _typeRegistered;
 };
-
-#endif

@@ -8,18 +8,16 @@
  ****************************************************************************/
 
 #include "APMAirframeComponentController.h"
-#include "QGCMAVLink.h"
 #include "MultiVehicleManager.h"
 #include "QGCApplication.h"
 #include "QGCFileDownload.h"
 #include "ParameterManager.h"
+#include "FactSystem.h"
+#include "Vehicle.h"
 #include "ArduCopterFirmwarePlugin.h"
 #include "ArduRoverFirmwarePlugin.h"
 
 #include <QVariant>
-#include <QQmlProperty>
-#include <QStandardPaths>
-#include <QDir>
 #include <QJsonParseError>
 #include <QJsonObject>
 
@@ -319,6 +317,11 @@ APMFrameClass::APMFrameClass(const QString& name, bool copter, int frameClass, F
 APMFrameClass::~APMFrameClass()
 {
 
+}
+
+int APMFrameClass::frameType(void)
+{
+    return _frameTypeFact->rawValue().toInt();
 }
 
 QString APMFrameClass::imageResource(void)

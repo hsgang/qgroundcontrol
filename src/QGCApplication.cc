@@ -16,30 +16,27 @@
  *
  */
 
-#include <QFile>
-#include <QRegularExpression>
-#include <QFontDatabase>
-#include <QQuickWindow>
-#include <QQuickImageProvider>
-#include <QQuickStyle>
-
-#ifdef QGC_ENABLE_BLUETOOTH
-#include <QBluetoothLocalDevice>
-#endif
-
-#include <QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QRegularExpression>
+#include <QtGui/QFontDatabase>
+#include <QtQuick/QQuickWindow>
+#include <QtQuick/QQuickImageProvider>
+#include <QtQuickControls2/QQuickStyle>
+#include <QtNetwork/QNetworkProxyFactory>
+#include <QtQml/QQmlContext>
+#include <QtQml/QQmlApplicationEngine>
 
 #if defined(QGC_GST_STREAMING)
 #include "GStreamer.h"
 #endif
 
-#include "QGC.h"
+#include "QGCConfig.h"
 #include "QGCApplication.h"
 #include "CmdLineOptParser.h"
 #include "UDPLink.h"
 #include "LinkManager.h"
+#include "MAVLinkProtocol.h"
 #include "UASMessageHandler.h"
-#include "QGCTemporaryFile.h"
 #include "QGCPalette.h"
 #include "QGCMapPalette.h"
 #include "QGCLoggingCategory.h"
@@ -60,11 +57,9 @@
 #include "QGCGeoBoundingCube.h"
 #include "MissionManager.h"
 #include "QGroundControlQmlGlobal.h"
-#include "FlightMapSettings.h"
 #include "FlightPathSegment.h"
 #include "PlanMasterController.h"
 #include "VideoManager.h"
-#include "VideoReceiver.h"
 #include "LogDownloadController.h"
 #if !defined(QGC_DISABLE_MAVLINK_INSPECTOR)
 #include "MAVLinkInspectorController.h"
@@ -77,6 +72,7 @@
 #include "MissionCommandTree.h"
 #include "QGCMapPolygon.h"
 #include "QGCMapCircle.h"
+#include "QGCMapEngine.h"
 #include "ParameterManager.h"
 #include "SettingsManager.h"
 #include "QGCCorePlugin.h"
@@ -87,7 +83,6 @@
 #include "FactValueSliderListModel.h"
 #include "ShapeFileHelper.h"
 #include "QGCFileDownload.h"
-#include "FirmwareImage.h"
 #include "MavlinkConsoleController.h"
 #include "GeoTagController.h"
 #include "LogReplayLink.h"
@@ -116,36 +111,30 @@
 #include "PairingManager.h"
 #endif
 
+#include "AudioOutput.h"
+#include "LinkConfiguration.h"
+#include "JsonHelper.h"
+// #ifdef QGC_VIEWER3D
 #include "CityMapGeometry.h"
 #include "Viewer3DQmlBackend.h"
 #include "Viewer3DQmlVariableTypes.h"
 #include "OsmParser.h"
 #include "Viewer3DManager.h"
-
-#ifndef __mobile__
-#include "FirmwareUpgradeController.h"
-#endif
-
+#include "Viewer3DTerrainGeometry.h"
+#include "Viewer3DTerrainTexture.h"
+// #endif
 #ifndef NO_SERIAL_LINK
+#include "FirmwareUpgradeController.h"
 #include "SerialLink.h"
 #endif
 
-#ifndef __mobile__
-#include "GPS/GPSManager.h"
-#endif
-
-#ifdef QGC_RTLAB_ENABLED
-#include "OpalLink.h"
-#endif
-
 #ifdef Q_OS_LINUX
-#ifndef __mobile__
+#ifndef Q_OS_ANDROID
 #include <unistd.h>
 #include <sys/types.h>
 #endif
 #endif
 
-#include "QGCMapEngine.h"
 
 class FinishVideoInitialization : public QRunnable
 {
@@ -206,7 +195,7 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     _msecsElapsedTime.start();
 
 #ifdef Q_OS_LINUX
-#ifndef __mobile__
+#ifndef Q_OS_ANDROID
     if (!_runningUnitTests) {
         if (getuid() == 0) {
             _exitWithError(QString(
@@ -319,15 +308,6 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     // Set up our logging filters
     QGCLoggingCategoryRegister::instance()->setFilterRulesFromSettings(loggingOptions);
 
-// Initialize Bluetooth
-#ifdef QGC_ENABLE_BLUETOOTH
-    QBluetoothLocalDevice localDevice;
-    if (localDevice.isValid())
-    {
-        _bluetoothAvailable = true;
-    }
-#endif
-
     // Gstreamer debug settings
     int gstDebugLevel = 0;
     if (settings.contains(AppSettings::gstDebugLevelName)) {
@@ -347,18 +327,9 @@ QGCApplication::QGCApplication(int &argc, char* argv[], bool unitTesting)
     _toolbox = new QGCToolbox(this);
     _toolbox->setChildToolboxes();
 
-#ifndef __mobile__
-    _gpsRtkFactGroup = new GPSRTKFactGroup(this);
-    GPSManager *gpsManager = _toolbox->gpsManager();
-    if (gpsManager) {
-        connect(gpsManager, &GPSManager::onConnect,          this, &QGCApplication::_onGPSConnect);
-        connect(gpsManager, &GPSManager::onDisconnect,       this, &QGCApplication::_onGPSDisconnect);
-        connect(gpsManager, &GPSManager::surveyInStatus,     this, &QGCApplication::_gpsSurveyInStatus);
-        connect(gpsManager, &GPSManager::satelliteUpdate,    this, &QGCApplication::_gpsNumSatellites);
-    }
-#endif /* __mobile__ */
-
-    //_checkForNewVersion();
+#ifndef DAILY_BUILD
+    _checkForNewVersion();
+#endif
 }
 
 void QGCApplication::_exitWithError(QString errorMessage)
@@ -392,7 +363,7 @@ void QGCApplication::setLanguage()
         }
     }
     qCDebug(LocalizationLog) << "Loading localizations for" << _locale.name();
-    _app->removeTranslator(&_qgcTranslatorJSON);
+    _app->removeTranslator(JsonHelper::translator());
     _app->removeTranslator(&_qgcTranslatorSourceCode);
     _app->removeTranslator(&_qgcTranslatorQtLibs);
     if (_locale.name() != "en_US") {
@@ -407,8 +378,8 @@ void QGCApplication::setLanguage()
         } else {
             qCWarning(LocalizationLog) << "Error loading source localization for" << _locale.name();
         }
-        if(_qgcTranslatorJSON.load(_locale, QLatin1String("qgc_json_"), "", ":/i18n")) {
-            _app->installTranslator(&_qgcTranslatorJSON);
+        if(JsonHelper::translator()->load(_locale, QLatin1String("qgc_json_"), "", ":/i18n")) {
+            _app->installTranslator(JsonHelper::translator());
         } else {
             qCWarning(LocalizationLog) << "Error loading json localization for" << _locale.name();
         }
@@ -423,7 +394,6 @@ void QGCApplication::_shutdown()
     // Close out all Qml before we delete toolbox. This way we don't get all sorts of null reference complaints from Qml.
     delete _qmlAppEngine;
     delete _toolbox;
-    delete _gpsRtkFactGroup;
 }
 
 QGCApplication::~QGCApplication()
@@ -439,8 +409,7 @@ void QGCApplication::_initCommon()
     static const char* kQGCControllers  = "QGroundControl.Controllers";
     static const char* kQGCVehicle      = "QGroundControl.Vehicle";
     static const char* kQGCTemplates    = "QGroundControl.Templates";
-    static const char* kQGCViewer3D     = "QGroundControl.Viewer3D";
-    
+
     QSettings settings;
 
     // Register our Qml objects
@@ -449,12 +418,16 @@ void QGCApplication::_initCommon()
     qmlRegisterType<QGCMapPalette>                      ("QGroundControl.Palette", 1, 0, "QGCMapPalette");
 
     // For 3D viewer types
-    qmlRegisterType<GeoCoordinateType>                  (kQGCViewer3D, 1, 0, "GeoCoordinateType");
-    qmlRegisterType<CityMapGeometry>                    (kQGCViewer3D, 1, 0, "CityMapGeometry");
-    qmlRegisterType<Viewer3DManager>                    (kQGCViewer3D, 1, 0, "Viewer3DManager");
-    qmlRegisterUncreatableType<Viewer3DQmlBackend>      (kQGCViewer3D, 1, 0, "Viewer3DQmlBackend",          kRefOnly);
-    qmlRegisterUncreatableType<OsmParser>               (kQGCViewer3D, 1, 0, "OsmParser",                   kRefOnly);
-    
+    // #ifdef QGC_VIEWER3D
+    qmlRegisterType<GeoCoordinateType>                  ("QGroundControl.Viewer3D", 1, 0, "GeoCoordinateType");
+    qmlRegisterType<CityMapGeometry>                    ("QGroundControl.Viewer3D", 1, 0, "CityMapGeometry");
+    qmlRegisterType<Viewer3DManager>                    ("QGroundControl.Viewer3D", 1, 0, "Viewer3DManager");
+    qmlRegisterUncreatableType<Viewer3DQmlBackend>      ("QGroundControl.Viewer3D", 1, 0, "Viewer3DQmlBackend",          kRefOnly);
+    qmlRegisterUncreatableType<OsmParser>               ("QGroundControl.Viewer3D", 1, 0, "OsmParser",                   kRefOnly);
+    qmlRegisterType<Viewer3DTerrainGeometry>            ("QGroundControl.Viewer3D", 1, 0, "Viewer3DTerrainGeometry");
+    qmlRegisterType<Viewer3DTerrainTexture>             ("QGroundControl.Viewer3D", 1, 0, "Viewer3DTerrainTexture");
+    // #endif
+
     qmlRegisterUncreatableType<Vehicle>                 (kQGCVehicle,                       1, 0, "Vehicle",                    kRefOnly);
     qmlRegisterUncreatableType<MissionManager>          (kQGCVehicle,                       1, 0, "MissionManager",             kRefOnly);
     qmlRegisterUncreatableType<ParameterManager>        (kQGCVehicle,                       1, 0, "ParameterManager",           kRefOnly);
@@ -519,10 +492,8 @@ void QGCApplication::_initCommon()
     qmlRegisterType<ToolStripAction>                ("QGroundControl.Controls",             1, 0, "ToolStripAction");
     qmlRegisterType<ToolStripActionList>            ("QGroundControl.Controls",             1, 0, "ToolStripActionList");
 
-#ifndef __mobile__
 #ifndef NO_SERIAL_LINK
     qmlRegisterType<FirmwareUpgradeController>      (kQGCControllers,                       1, 0, "FirmwareUpgradeController");
-#endif
 #endif
     qmlRegisterType<GeoTagController>               (kQGCControllers,                       1, 0, "GeoTagController");
     qmlRegisterType<MavlinkConsoleController>       (kQGCControllers,                       1, 0, "MavlinkConsoleController");
@@ -555,6 +526,12 @@ bool QGCApplication::_initForNormalAppBoot()
 {
     QSettings settings;
 
+    ( void ) connect( toolbox()->settingsManager()->appSettings()->audioMuted(), &Fact::valueChanged, AudioOutput::instance(), []( QVariant value )
+    {
+        AudioOutput::instance()->setMuted( value.toBool() );
+    });
+    AudioOutput::instance()->setMuted( toolbox()->settingsManager()->appSettings()->audioMuted()->rawValue().toBool() );
+
     _qmlAppEngine = toolbox()->corePlugin()->createQmlApplicationEngine(this);
 
     toolbox()->corePlugin()->createRootWindow(_qmlAppEngine);
@@ -577,7 +554,7 @@ bool QGCApplication::_initForNormalAppBoot()
     }
 
     #ifdef Q_OS_LINUX
-    #ifndef __mobile__
+    #ifndef Q_OS_ANDROID
     #ifndef NO_SERIAL_LINK
         if (!_runningUnitTests) {
             // Determine if we have the correct permissions to access USB serial devices
@@ -849,13 +826,6 @@ void QGCApplication::qmlAttemptWindowClose()
     }
 }
 
-bool QGCApplication::isInternetAvailable()
-{
-    if(_toolbox->settingsManager()->appSettings()->checkInternet()->rawValue().toBool())
-        return getQGCMapEngine()->isInternetActive();
-    return true;
-}
-
 void QGCApplication::_checkForNewVersion()
 {
     if (!_runningUnitTests) {
@@ -908,33 +878,6 @@ bool QGCApplication::_parseVersionText(const QString& versionString, int& majorV
     }
 
     return false;
-}
-
-
-void QGCApplication::_onGPSConnect()
-{
-    _gpsRtkFactGroup->connected()->setRawValue(true);
-}
-
-void QGCApplication::_onGPSDisconnect()
-{
-    _gpsRtkFactGroup->connected()->setRawValue(false);
-}
-
-void QGCApplication::_gpsSurveyInStatus(float duration, float accuracyMM,  double latitude, double longitude, float altitude, bool valid, bool active)
-{
-    _gpsRtkFactGroup->currentDuration()->setRawValue(duration);
-    _gpsRtkFactGroup->currentAccuracy()->setRawValue(static_cast<double>(accuracyMM) / 1000.0);
-    _gpsRtkFactGroup->currentLatitude()->setRawValue(latitude);
-    _gpsRtkFactGroup->currentLongitude()->setRawValue(longitude);
-    _gpsRtkFactGroup->currentAltitude()->setRawValue(altitude);
-    _gpsRtkFactGroup->valid()->setRawValue(valid);
-    _gpsRtkFactGroup->active()->setRawValue(active);
-}
-
-void QGCApplication::_gpsNumSatellites(int numSatellites)
-{
-    _gpsRtkFactGroup->numSatellites()->setRawValue(numSatellites);
 }
 
 QString QGCApplication::cachedParameterMetaDataFile(void)

@@ -8,14 +8,10 @@
  ****************************************************************************/
 
 
-#ifndef RCChannelMonitorController_H
-#define RCChannelMonitorController_H
-
-#include <QTimer>
+#pragma once
 
 #include "FactPanelController.h"
-#include "QGCLoggingCategory.h"
-#include "AutoPilotPlugin.h"
+#include "QGCMAVLink.h"
 
 class RCChannelMonitorController : public FactPanelController
 {
@@ -33,10 +29,8 @@ signals:
     void channelRCValueChanged(int channel, int rcValue);
 
 private slots:
-    void _rcChannelsChanged(int channelCount, int pwmValues[Vehicle::cMaxRcChannels]);
+    void _rcChannelsChanged(int channelCount, int pwmValues[QGCMAVLink::maxRcChannels]);
 
 private:
     int _chanCount;
 };
-
-#endif // RCChannelMonitorController_H

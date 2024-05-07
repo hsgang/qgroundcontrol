@@ -8,6 +8,7 @@
  ****************************************************************************/
 
 #include "FirmwareUpgradeController.h"
+#include "PX4FirmwareUpgradeThread.h"
 #include "Bootloader.h"
 #include "QGCApplication.h"
 #include "QGCFileDownload.h"
@@ -18,13 +19,16 @@
 #include "QGCZlib.h"
 #include "JsonHelper.h"
 #include "LinkManager.h"
+#include "MultiVehicleManager.h"
+#include "FirmwareImage.h"
+#include "Fact.h"
+#include "QGCLoggingCategory.h"
 
-#include <QStandardPaths>
-#include <QRegularExpression>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QNetworkProxy>
+#include <QtCore/QDir>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QJsonDocument>
+#include <QtCore/QJsonObject>
+#include <QtCore/QJsonArray>
 
 const char* FirmwareUpgradeController::_manifestFirmwareJsonKey =               "firmware";
 const char* FirmwareUpgradeController::_manifestBoardIdJsonKey =                "board_id";

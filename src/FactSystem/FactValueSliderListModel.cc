@@ -8,12 +8,10 @@
  ****************************************************************************/
 
 #include "FactValueSliderListModel.h"
+#include "Fact.h"
 
-#include <QDebug>
-#include <QQmlEngine>
-#include <QtMath>
-
-#include <math.h>
+#include <QtQml/QQmlEngine>
+#include <QtCore/QtMath>
 
 const int FactValueSliderListModel::_valueRole =        Qt::UserRole;
 const int FactValueSliderListModel::_valueIndexRole =   Qt::UserRole + 1;

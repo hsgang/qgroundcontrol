@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include <QObject>
-#include <QList>
-
-#include "AutoPilotPlugin.h"
 #include "FactPanelController.h"
 #include "QmlObjectListModel.h"
-#include "ParameterManager.h"
+#include "FactMetaData.h"
+
+#include <QtCore/QObject>
+
+class ParameterManager;
 
 class ParameterEditorGroup : public QObject
 {

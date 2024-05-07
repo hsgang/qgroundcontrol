@@ -1,3 +1,4 @@
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Positioning Qml Xml)
 
 qt_add_library(MissionManager STATIC
 	BlankPlanCreator.cc
@@ -20,10 +21,6 @@ qt_add_library(MissionManager STATIC
 	GeoFenceController.h
 	GeoFenceManager.cc
 	GeoFenceManager.h
-    KMLDomDocument.cc
-    KMLDomDocument.h
-    KMLHelper.cc
-    KMLHelper.h
 	KMLPlanDomDocument.cc
 	KMLPlanDomDocument.h
 	LandingComplexItem.cc
@@ -50,16 +47,6 @@ qt_add_library(MissionManager STATIC
 	PlanManager.h
 	PlanMasterController.cc
 	PlanMasterController.h
-	QGCFenceCircle.cc
-	QGCFenceCircle.h
-	QGCFencePolygon.cc
-	QGCFencePolygon.h
-	QGCMapCircle.cc
-	QGCMapCircle.h
-	QGCMapPolygon.cc
-	QGCMapPolygon.h
-	QGCMapPolyline.cc
-	QGCMapPolyline.h
 	RallyPoint.cc
 	RallyPointController.cc
 	RallyPointController.h
@@ -89,21 +76,53 @@ qt_add_library(MissionManager STATIC
 	VTOLLandingComplexItem.h
 )
 
-add_custom_Target(MisionManagerQml
-	SOURCES
-		MapLineArrow.qml
-		QGCMapCircleVisuals.qml
-		QGCMapPolygonVisuals.qml
-		QGCMapPolylineVisuals.qml
-)
-
 target_link_libraries(MissionManager
+	PRIVATE
+		Qt6::Qml
+		API
+		FirmwarePlugin
+		Geo
 	PUBLIC
+		Qt6::Core
+		Qt6::Gui
+		Qt6::Positioning
 		Qt6::Xml
-		qgc
+		Comms
+		FactSystem
+		QGC
+		QmlControls
+		Settings
+		Terrain
+		Utilities
+		Vehicle
 )
 
-target_include_directories(MissionManager
-	PUBLIC
-		${CMAKE_CURRENT_SOURCE_DIR}
-)
+target_include_directories(MissionManager PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# qt_add_qml_module(MissionManager
+#     URI QGroundControl.MissionManager
+#     VERSION 1.0
+#     RESOURCES
+#     	BlankPlanCreator.png
+#     	CogWheel.svg
+#     	StructureScanPlanCreator.png
+#     	SurveyPlanCreator.png
+#     QML_FILES
+#     	MapLineArrow.qml
+# 		QGCMapCircleVisuals.qml
+# 		QGCMapPolygonVisuals.qml
+# 		QGCMapPolylineVisuals.qml
+#     OUTPUT_TARGETS MissionManager_targets
+#     IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY}
+#     IMPORTS
+# 		QtQuick
+# 		QtQuick.Controls
+# 		QtLocation
+# 		QtPositioning
+
+# 		QGroundControl
+# 		QGroundControl.ScreenTools
+# 		QGroundControl.Palette
+# 		QGroundControl.Controls
+# 		QGroundControl.FlightMap
+# )

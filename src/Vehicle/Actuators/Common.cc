@@ -8,8 +8,9 @@
  ****************************************************************************/
 
 #include "Common.h"
-
-#include <QDebug>
+#include "FactSystem.h"
+#include "ParameterManager.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(ActuatorsConfigLog, "ActuatorsConfigLog")
 

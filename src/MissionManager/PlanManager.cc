@@ -13,7 +13,7 @@
 #include "MAVLinkProtocol.h"
 #include "QGCApplication.h"
 #include "MissionCommandTree.h"
-#include "MissionCommandUIInfo.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(PlanManagerLog, "PlanManagerLog")
 
@@ -107,14 +107,17 @@ void PlanManager::_writeMissionCount(void)
         mavlink_message_t       message;
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
-        mavlink_msg_mission_count_pack_chan(qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
-                                            qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
-                                            sharedLink->mavlinkChannel(),
-                                            &message,
-                                            _vehicle->id(),
-                                            MAV_COMP_ID_AUTOPILOT1,
-                                            _writeMissionItems.count(),
-                                            _planType);
+        mavlink_msg_mission_count_pack_chan(
+            qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
+            qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
+            sharedLink->mavlinkChannel(),
+            &message,
+            _vehicle->id(),
+            MAV_COMP_ID_AUTOPILOT1,
+            _writeMissionItems.count(),
+            _planType,
+            0
+        );
 
         _vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
     }
@@ -296,14 +299,17 @@ void PlanManager::_readTransactionComplete(void)
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
         mavlink_message_t       message;
 
-        mavlink_msg_mission_ack_pack_chan(qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
-                                          qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
-                                          sharedLink->mavlinkChannel(),
-                                          &message,
-                                          _vehicle->id(),
-                                          MAV_COMP_ID_AUTOPILOT1,
-                                          MAV_MISSION_ACCEPTED,
-                                          _planType);
+        mavlink_msg_mission_ack_pack_chan(
+            qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
+            qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
+            sharedLink->mavlinkChannel(),
+            &message,
+            _vehicle->id(),
+            MAV_COMP_ID_AUTOPILOT1,
+            MAV_MISSION_ACCEPTED,
+            _planType,
+            0
+        );
 
         _vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
     }

@@ -8,18 +8,13 @@
  ****************************************************************************/
 
 
-#ifndef LogDownloadController_H
-#define LogDownloadController_H
+#pragma once
 
-#include <QObject>
-#include <QTimer>
-#include <QAbstractListModel>
-#include <QLocale>
-#include <QElapsedTimer>
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
+#include <QtCore/QLoggingCategory>
+#include <QtCore/QDateTime>
 
-#include <memory>
-
-#include "AutoPilotPlugin.h"
 #include "QmlObjectListModel.h"
 
 class  MultiVehicleManager;
@@ -137,5 +132,3 @@ private:
     int                 _apmOneBased;
     QString             _downloadPath;
 };
-
-#endif

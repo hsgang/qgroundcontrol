@@ -9,11 +9,8 @@
 
 
 #include "APMAutoPilotPlugin.h"
-#include "APMParameterMetaData.h"
-#include "APMFirmwarePlugin.h"
-#include "ArduCopterFirmwarePlugin.h"
-#include "ArduRoverFirmwarePlugin.h"
 #include "VehicleComponent.h"
+#include "Vehicle.h"
 #include "APMAirframeComponent.h"
 #include "APMFlightModesComponent.h"
 #include "APMRadioComponent.h"
@@ -25,16 +22,15 @@
 #include "APMCameraComponent.h"
 #include "APMLightsComponent.h"
 #include "APMSubFrameComponent.h"
-#include "APMFollowComponent.h"
 #include "ESP8266Component.h"
 #include "APMHeliComponent.h"
 #include "APMRemoteSupportComponent.h"
 #include "QGCApplication.h"
 #include "ParameterManager.h"
 
-#if !defined(NO_SERIAL_LINK) && !defined(Q_OS_ANDROID)
-#include <QSerialPortInfo>
-#endif
+// #if !defined(NO_SERIAL_LINK) && !defined(Q_OS_ANDROID)
+// #include <QSerialPortInfo>
+// #endif
 
 /// This is the AutoPilotPlugin implementatin for the MAV_AUTOPILOT_ARDUPILOT type.
 APMAutoPilotPlugin::APMAutoPilotPlugin(Vehicle* vehicle, QObject* parent)

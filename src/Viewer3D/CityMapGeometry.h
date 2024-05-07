@@ -1,19 +1,18 @@
+#pragma once
 
-#ifndef CITYMAPGEOMETRY_H
-#define CITYMAPGEOMETRY_H
-
-#include <QQuick3DGeometry>
-#include <QTimer>
-
-#include "OsmParser.h"
+#include <QtCore/QString>
+#include <QtQuick3D/QQuick3DGeometry>
 
 ///     @author Omid Esrafilian <esrafilian.omid@gmail.com>
 
 class Viewer3DSettings;
+class OsmParser;
 
 class CityMapGeometry : public QQuick3DGeometry
 {
     Q_OBJECT
+    Q_MOC_INCLUDE("OsmParser.h")
+
     Q_PROPERTY(QString modelName READ modelName WRITE setModelName NOTIFY modelNameChanged)
     Q_PROPERTY(OsmParser* osmParser READ osmParser WRITE setOsmParser NOTIFY osmParserChanged)
 
@@ -49,8 +48,4 @@ private:
 
 private slots:
     void setOsmFilePath(QVariant value);
-
-
 };
-
-#endif // CITYMAPGEOMETRY_H

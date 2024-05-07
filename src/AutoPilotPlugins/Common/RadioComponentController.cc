@@ -14,9 +14,12 @@
 
 #include "RadioComponentController.h"
 #include "QGCApplication.h"
+#include "FactSystem.h"
+#include "Fact.h"
+#include "Vehicle.h"
+#include "QGCLoggingCategory.h"
 
-#include <QElapsedTimer>
-#include <QSettings>
+#include <QtCore/QSettings>
 
 QGC_LOGGING_CATEGORY(RadioComponentControllerLog, "RadioComponentControllerLog")
 QGC_LOGGING_CATEGORY(RadioComponentControllerVerboseLog, "RadioComponentControllerVerboseLog")
@@ -223,7 +226,7 @@ void RadioComponentController::_setupCurrentState(void)
 }
 
 /// Connected to Vehicle::rcChannelsChanged signal
-void RadioComponentController::_rcChannelsChanged(int channelCount, int pwmValues[Vehicle::cMaxRcChannels])
+void RadioComponentController::_rcChannelsChanged(int channelCount, int pwmValues[QGCMAVLink::maxRcChannels])
 {
     for (int channel=0; channel<channelCount; channel++) {
         int channelValue = pwmValues[channel];

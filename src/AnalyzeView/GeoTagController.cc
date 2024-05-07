@@ -8,17 +8,14 @@
  ****************************************************************************/
 
 #include "GeoTagController.h"
-#include "QGCLoggingCategory.h"
-#include <math.h>
-#include <QtEndian>
-#include <QDebug>
-#include <cfloat>
-#include <QDir>
-#include <QUrl>
-
 #include "ExifParser.h"
 #include "ULogParser.h"
 #include "PX4LogParser.h"
+#include "QGCLoggingCategory.h"
+
+#include <QtCore/QtEndian>
+#include <QtCore/QDir>
+#include <QtCore/QUrl>
 
 static const char* kTagged = "/TAGGED";
 

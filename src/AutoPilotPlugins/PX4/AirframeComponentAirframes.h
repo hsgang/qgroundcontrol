@@ -11,15 +11,10 @@
 /// @file
 ///     @author Don Gagne <don@thegagnes.com>
 
-#ifndef AIRFRAMECOMPONENTAIRFRAMES_H
-#define AIRFRAMECOMPONENTAIRFRAMES_H
+#pragma once
 
-#include <QObject>
-#include <QQuickItem>
-#include <QList>
-#include <QMap>
-
-#include "AutoPilotPlugin.h"
+#include <QtCore/QList>
+#include <QtCore/QMap>
 
 /// MVC Controller for AirframeComponent.qml.
 class AirframeComponentAirframes
@@ -45,5 +40,3 @@ protected:
     
 private:
 };
-
-#endif

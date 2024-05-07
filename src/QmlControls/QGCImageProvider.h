@@ -8,11 +8,11 @@
  ****************************************************************************/
 
 #pragma once
-#include <QObject>
-#include <QQmlListProperty>
-#include <QQuickImageProvider>
 
 #include "QGCToolbox.h"
+
+#include <QtCore/QObject>
+#include <QtQuick/QQuickImageProvider>
 
 // This is used to expose images from ImageProtocolHandler
 class QGCImageProvider : public QGCTool, public QQuickImageProvider

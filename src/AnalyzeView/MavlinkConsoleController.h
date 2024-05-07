@@ -9,14 +9,13 @@
 
 #pragma once
 
-#include "QmlObjectListModel.h"
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QMetaObject>
+#include <QtCore/QStringListModel>
+#include <QtQmlIntegration/QtQmlIntegration>
+
 #include "QGCPalette.h"
-#include "Fact.h"
-#include "FactMetaData.h"
-#include <QObject>
-#include <QString>
-#include <QMetaObject>
-#include <QStringListModel>
 
 // Fordward decls
 class Vehicle;
@@ -25,6 +24,8 @@ class Vehicle;
 class MavlinkConsoleController : public QStringListModel
 {
     Q_OBJECT
+    QML_ELEMENT
+    Q_MOC_INCLUDE("Vehicle.h")
 
 public:
     MavlinkConsoleController();

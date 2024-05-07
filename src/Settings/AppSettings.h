@@ -11,10 +11,8 @@
 /// @brief Application Settings
 
 #pragma once
-#include <QTranslator>
 
 #include "SettingsGroup.h"
-#include "QGCMAVLink.h"
 
 /// Application Settings
 class AppSettings : public SettingsGroup
@@ -37,7 +35,6 @@ public:
     DEFINE_SETTINGFACT(telemetrySave)
     DEFINE_SETTINGFACT(telemetrySaveNotArmed)
     DEFINE_SETTINGFACT(audioMuted)
-    DEFINE_SETTINGFACT(checkInternet)
     DEFINE_SETTINGFACT(virtualJoystick)
     DEFINE_SETTINGFACT(virtualJoystickAutoCenterThrottle)
     DEFINE_SETTINGFACT(appFontPointSize)

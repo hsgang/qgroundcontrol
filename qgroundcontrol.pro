@@ -357,10 +357,9 @@ INCLUDEPATH += \
     include/ui \
     src \
     src/ADSB \
-    src/api \
+    src/API \
     src/AnalyzeView \
     src/Camera \
-    src/Compression \
     src/AutoPilotPlugins \
     src/FlightDisplay \
     src/FlightMap \
@@ -370,6 +369,8 @@ INCLUDEPATH += \
     src/Gimbal \
     src/GPS \
     src/Joystick \
+    src/MAVLink \
+    src/MAVLink/LibEvents \
     src/PlanView \
     src/MissionManager \
     src/NTRIP \
@@ -380,8 +381,13 @@ INCLUDEPATH += \
     src/Settings \
     src/Terrain \
     src/Vehicle \
+    src/Vehicle/Actuators \
+    src/Vehicle/Components \
+    src/Vehicle/FactGroups \
+    src/Vehicle/LibEvents \
     src/Audio \
-    src/comm \
+    src/Comms \
+    src/Comms/MockLink \
     src/input \
     src/lib/qmapcontrol \
     src/uas \
@@ -394,7 +400,8 @@ INCLUDEPATH += \
     src/ui/toolbar \
     src/ui/uas \
     src/Viewer3D \
-    src/Utilities
+    src/Utilities \
+    src/Utilities/Compression
 
 #
 # Plugin API
@@ -416,13 +423,13 @@ HEADERS += \
     src/Vehicle/GeneratorStatusFactGroup.h \
     src/Vehicle/TunnelingDataFactGroup.h \
     src/Vehicle/VehicleEKFStatusFactGroup.h \
-    src/Vehicle/VehicleEscStatusFactGroup.h \
+    src/Vehicle/FactGroups/VehicleEscStatusFactGroup.h \
     src/Vehicle/VehicleLandingTargetFactGroup.h \
     src/Vehicle/WinchStatusFactGroup.h \
-    src/api/QGCCorePlugin.h \
-    src/api/QGCOptions.h \
-    src/api/QGCSettings.h \
-    src/api/QmlComponentInfo.h \
+    src/API/QGCCorePlugin.h \
+    src/API/QGCOptions.h \
+    src/API/QGCSettings.h \
+    src/API/QmlComponentInfo.h \
     src/GPS/Drivers/src/base_station.h \
 
 SOURCES += \
@@ -439,13 +446,13 @@ SOURCES += \
     src/QmlControls/CustomActionManager.cc \
     src/Vehicle/TunnelingDataFactGroup.cc \
     src/Vehicle/VehicleEKFStatusFactGroup.cc \
-    src/Vehicle/VehicleEscStatusFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleEscStatusFactGroup.cc \
     src/Vehicle/VehicleLandingTargetFactGroup.cc \
     src/Vehicle/WinchStatusFactGroup.cc \
-    src/api/QGCCorePlugin.cc \
-    src/api/QGCOptions.cc \
-    src/api/QGCSettings.cc \
-    src/api/QmlComponentInfo.cc \
+    src/API/QGCCorePlugin.cc \
+    src/API/QGCOptions.cc \
+    src/API/QGCSettings.cc \
+    src/API/QmlComponentInfo.cc \
 
 # Main QGC Headers and Source files
 
@@ -464,8 +471,8 @@ HEADERS += \
     src/Camera/QGCCameraIO.h \
     src/Camera/QGCCameraManager.h \
     src/CmdLineOptParser.h \
-    src/Compression/QGCLZMA.h \
-    src/Compression/QGCZlib.h \
+    src/Utilities/Compression/QGCLZMA.h \
+    src/Utilities/Compression/QGCZlib.h \
     src/FirmwarePlugin/PX4/px4_custom_mode.h \
     src/FollowMe/FollowMe.h \
     src/GPS/Drivers/src/rtcm.h \
@@ -473,8 +480,8 @@ HEADERS += \
     src/Joystick/Joystick.h \
     src/Joystick/JoystickManager.h \
     src/Utilities/JsonHelper.h \
-    src/MissionManager/KMLDomDocument.h \
-    src/MissionManager/KMLHelper.h \
+    src/Utilities/KMLDomDocument.h \
+    src/Utilities/KMLHelper.h \
     src/MissionManager/CameraCalc.h \
     src/MissionManager/CameraSection.h \
     src/MissionManager/CameraSpec.h \
@@ -498,11 +505,11 @@ HEADERS += \
     src/MissionManager/PlanCreator.h \
     src/MissionManager/PlanManager.h \
     src/MissionManager/PlanMasterController.h \
-    src/MissionManager/QGCFenceCircle.h \
-    src/MissionManager/QGCFencePolygon.h \
-    src/MissionManager/QGCMapCircle.h \
-    src/MissionManager/QGCMapPolygon.h \
-    src/MissionManager/QGCMapPolyline.h \
+    src/QmlControls/QGCFenceCircle.h \
+    src/QmlControls/QGCFencePolygon.h \
+    src/QmlControls/QGCMapCircle.h \
+    src/QmlControls/QGCMapPolygon.h \
+    src/QmlControls/QGCMapPolyline.h \
     src/MissionManager/RallyPoint.h \
     src/MissionManager/RallyPointController.h \
     src/MissionManager/RallyPointManager.h \
@@ -530,6 +537,7 @@ HEADERS += \
     src/Geo/PolarStereographic.hpp \
     src/Gimbal/GimbalController.h \
     src/Utilities/QGC.h \
+    src/Utilities/DeviceInfo.h \
     src/QGCApplication.h \
     src/Utilities/QGCCachedFileDownload.h \
     src/QGCConfig.h \
@@ -537,7 +545,7 @@ HEADERS += \
     src/Utilities/QGCLoggingCategory.h \
     src/QmlControls/QGCMapPalette.h \
     src/QmlControls/QGCPalette.h \
-    src/Utilities/QGCQGeoCoordinate.h \
+    src/QmlControls/QGCQGeoCoordinate.h \
     src/Utilities/QGCTemporaryFile.h \
     src/QGCToolbox.h \
     src/QmlControls/AppMessages.h \
@@ -583,7 +591,9 @@ HEADERS += \
     src/Utilities/ShapeFileHelper.h \
     src/Utilities/SHPFileHelper.h \
     src/Terrain/TerrainQuery.h \
+    src/Terrain/TerrainQueryAirMap.h \
     src/Terrain/TerrainTile.h \
+    src/Terrain/TerrainTileManager.h \
     src/Vehicle/Actuators/ActuatorActions.h \
     src/Vehicle/Actuators/Actuators.h \
     src/Vehicle/Actuators/ActuatorOutputs.h \
@@ -592,58 +602,61 @@ HEADERS += \
     src/Vehicle/Actuators/GeometryImage.h \
     src/Vehicle/Actuators/Mixer.h \
     src/Vehicle/Actuators/MotorAssignment.h \
-    src/Vehicle/CompInfo.h \
-    src/Vehicle/CompInfoActuators.h \
-    src/Vehicle/CompInfoEvents.h \
-    src/Vehicle/CompInfoParam.h \
-    src/Vehicle/CompInfoGeneral.h \
-    src/Vehicle/ComponentInformationCache.h \
-    src/Vehicle/ComponentInformationManager.h \
-    src/Vehicle/ComponentInformationTranslation.h \
-    src/Vehicle/EventHandler.h \
+    src/MAVLink/LibEvents/EventHandler.h \
+    src/MAVLink/LibEvents/HealthAndArmingCheckReport.h \
+    src/MAVLink/LibEvents/libevents_includes.h \
+    src/Vehicle/Components/CompInfo.h \
+    src/Vehicle/Components/CompInfoActuators.h \
+    src/Vehicle/Components/CompInfoEvents.h \
+    src/Vehicle/Components/CompInfoParam.h \
+    src/Vehicle/Components/CompInfoGeneral.h \
+    src/Vehicle/Components/ComponentInformationCache.h \
+    src/Vehicle/Components/ComponentInformationManager.h \
+    src/Vehicle/Components/ComponentInformationTranslation.h \
     src/Vehicle/FTPManager.h \
-    src/Vehicle/GPSRTKFactGroup.h \
-    src/Vehicle/HealthAndArmingCheckReport.h \
-    src/Vehicle/ImageProtocolManager.h \
+    src/Vehicle/FactGroups/GPSRTKFactGroup.h \
+    src/MAVLink/ImageProtocolManager.h \
     src/Vehicle/InitialConnectStateMachine.h \
     src/Vehicle/MAVLinkLogManager.h \
-    src/Vehicle/MAVLinkStreamConfig.h \
+    src/MAVLink/MAVLinkStreamConfig.h \
     src/Vehicle/MultiVehicleManager.h \
     src/Vehicle/RemoteIDManager.h \
-    src/Vehicle/StateMachine.h \
+    src/Utilities/StateMachine.h \
     src/Vehicle/StandardModes.h \
-    src/Vehicle/SysStatusSensorInfo.h \
-    src/Vehicle/TerrainFactGroup.h \
+    src/MAVLink/SysStatusSensorInfo.h \
+    src/Vehicle/FactGroups/TerrainFactGroup.h \
     src/Vehicle/TerrainProtocolHandler.h \
     src/Vehicle/TrajectoryPoints.h \
     src/Vehicle/Vehicle.h \
     src/Vehicle/VehicleObjectAvoidance.h \
-    src/Vehicle/VehicleBatteryFactGroup.h \
-    src/Vehicle/VehicleClockFactGroup.h \
-    src/Vehicle/VehicleDistanceSensorFactGroup.h \
-    src/Vehicle/VehicleEstimatorStatusFactGroup.h \
-    src/Vehicle/VehicleLocalPositionFactGroup.h \
-    src/Vehicle/VehicleLocalPositionSetpointFactGroup.h \
-    src/Vehicle/VehicleGPSFactGroup.h \
-    src/Vehicle/VehicleGPS2FactGroup.h \
+    src/Vehicle/FactGroups/VehicleBatteryFactGroup.h \
+    src/Vehicle/FactGroups/VehicleClockFactGroup.h \
+    src/Vehicle/FactGroups/VehicleDistanceSensorFactGroup.h \
+    src/Vehicle/FactGroups/VehicleEstimatorStatusFactGroup.h \
+    src/Vehicle/FactGroups/VehicleLocalPositionFactGroup.h \
+    src/Vehicle/FactGroups/VehicleLocalPositionSetpointFactGroup.h \
+    src/Vehicle/FactGroups/VehicleGPSFactGroup.h \
+    src/Vehicle/FactGroups/VehicleGPS2FactGroup.h \
     src/Vehicle/VehicleLinkManager.h \
-    src/Vehicle/VehicleSetpointFactGroup.h \
-    src/Vehicle/VehicleTemperatureFactGroup.h \
-    src/Vehicle/VehicleVibrationFactGroup.h \
-    src/Vehicle/VehicleWindFactGroup.h \
-    src/Vehicle/VehicleHygrometerFactGroup.h \
-    src/Vehicle/VehicleGeneratorFactGroup.h \
-    src/Vehicle/VehicleEFIFactGroup.h \
+    src/Vehicle/FactGroups/VehicleSetpointFactGroup.h \
+    src/Vehicle/FactGroups/VehicleTemperatureFactGroup.h \
+    src/Vehicle/FactGroups/VehicleVibrationFactGroup.h \
+    src/Vehicle/FactGroups/VehicleWindFactGroup.h \
+    src/Vehicle/FactGroups/VehicleHygrometerFactGroup.h \
+    src/Vehicle/FactGroups/VehicleGeneratorFactGroup.h \
+    src/Vehicle/FactGroups/VehicleEFIFactGroup.h \
     src/VehicleSetup/JoystickConfigController.h \
-    src/comm/LinkConfiguration.h \
-    src/comm/LinkInterface.h \
-    src/comm/LinkManager.h \
-    src/comm/LogReplayLink.h \
-    src/comm/MAVLinkProtocol.h \
-    src/comm/QGCMAVLink.h \
-    src/comm/TCPLink.h \
-    src/comm/UDPLink.h \
-    src/comm/UdpIODevice.h \
+    src/Comms/LinkConfiguration.h \
+    src/Comms/LinkInterface.h \
+    src/Comms/LinkManager.h \
+    src/Comms/LogReplayLink.h \
+    src/Comms/MAVLinkProtocol.h \
+    src/MAVLink/QGCMAVLink.h \
+    src/MAVLink/MAVLinkLib.h \
+    src/MAVLink/MAVLinkFTP.h \
+    src/Comms/TCPLink.h \
+    src/Comms/UDPLink.h \
+    src/Comms/UdpIODevice.h \
     src/Vehicle/UASMessageHandler.h \
     src/AnalyzeView/GeoTagController.h \
     src/AnalyzeView/ExifParser.h \
@@ -654,7 +667,11 @@ HEADERS += \
     src/Viewer3D/Viewer3DUtils.h \
     src/Viewer3D/Viewer3DManager.h \
     src/Settings/Viewer3DSettings.h \
-
+    src/Viewer3D/Viewer3DTileReply.h \
+    src/Viewer3D/Viewer3DTerrainGeometry.h \
+    src/Viewer3D/Viewer3DTerrainTexture.h \
+    src/Viewer3D/Viewer3DTileQuery.h \
+    src/Viewer3D/OsmParserThread.h \
 
 AndroidBuild {
     HEADERS += \
@@ -663,9 +680,9 @@ AndroidBuild {
 
 DebugBuild {
 HEADERS += \
-    src/comm/MockLink.h \
-    src/comm/MockLinkFTP.h \
-    src/comm/MockLinkMissionItemHandler.h \
+    src/Comms/MockLink/MockLink.h \
+    src/Comms/MockLink/MockLinkFTP.h \
+    src/Comms/MockLink/MockLinkMissionItemHandler.h \
 }
 
 WindowsBuild {
@@ -677,16 +694,16 @@ WindowsBuild {
 
 contains(DEFINES, QGC_ENABLE_BLUETOOTH) {
     HEADERS += \
-    src/comm/BluetoothLink.h \
+    src/Comms/BluetoothLink.h \
 }
 
 !contains(DEFINES, NO_SERIAL_LINK) {
 HEADERS += \
-    src/comm/QGCSerialPortInfo.h \
-    src/comm/SerialLink.h \
+    src/Comms/QGCSerialPortInfo.h \
+    src/Comms/SerialLink.h \
 }
 
-!MobileBuild {
+!iosBuild {
 HEADERS += \
     src/GPS/Drivers/src/gps_helper.h \
     src/GPS/Drivers/src/ashtech.h \
@@ -695,12 +712,17 @@ HEADERS += \
     src/GPS/GPSManager.h \
     src/GPS/GPSPositionMessage.h \
     src/GPS/GPSProvider.h \
+    src/GPS/RTCMMavlink.h \
     src/GPS/definitions.h \
     src/GPS/satellite_info.h \
     src/GPS/sensor_gps.h \
-    src/GPS/sensor_gnss_relative.h \
+    src/GPS/sensor_gnss_relative.h
+}
+
+!MobileBuild {
+HEADERS += \
     src/Joystick/JoystickSDL.h \
-    src/RunGuard.h \
+    src/RunGuard.h
 }
 
 iOSBuild {
@@ -731,16 +753,16 @@ SOURCES += \
     src/Camera/QGCCameraIO.cc \
     src/Camera/QGCCameraManager.cc \
     src/CmdLineOptParser.cc \
-    src/Compression/QGCLZMA.cc \
-    src/Compression/QGCZlib.cc \
+    src/Utilities/Compression/QGCLZMA.cc \
+    src/Utilities/Compression/QGCZlib.cc \
     src/FollowMe/FollowMe.cc \
     src/GPS/Drivers/src/rtcm.cpp \
     src/GPS/RTCM/RTCMMavlink.cc \
     src/Joystick/Joystick.cc \
     src/Joystick/JoystickManager.cc \
     src/Utilities/JsonHelper.cc \
-    src/MissionManager/KMLDomDocument.cc \
-    src/MissionManager/KMLHelper.cc \
+    src/Utilities/KMLDomDocument.cc \
+    src/Utilities/KMLHelper.cc \
     src/MissionManager/CameraCalc.cc \
     src/MissionManager/CameraSection.cc \
     src/MissionManager/CameraSpec.cc \
@@ -764,11 +786,11 @@ SOURCES += \
     src/MissionManager/PlanCreator.cc \
     src/MissionManager/PlanManager.cc \
     src/MissionManager/PlanMasterController.cc \
-    src/MissionManager/QGCFenceCircle.cc \
-    src/MissionManager/QGCFencePolygon.cc \
-    src/MissionManager/QGCMapCircle.cc \
-    src/MissionManager/QGCMapPolygon.cc \
-    src/MissionManager/QGCMapPolyline.cc \
+    src/QmlControls/QGCFenceCircle.cc \
+    src/QmlControls/QGCFencePolygon.cc \
+    src/QmlControls/QGCMapCircle.cc \
+    src/QmlControls/QGCMapPolygon.cc \
+    src/QmlControls/QGCMapPolyline.cc \
     src/MissionManager/RallyPoint.cc \
     src/MissionManager/RallyPointController.cc \
     src/MissionManager/RallyPointManager.cc \
@@ -794,13 +816,14 @@ SOURCES += \
     src/Geo/PolarStereographic.cpp \
     src/Gimbal/GimbalController.cc \
     src/Utilities/QGC.cc \
+    src/Utilities/DeviceInfo.cc \
     src/QGCApplication.cc \
     src/Utilities/QGCCachedFileDownload.cc \
     src/Utilities/QGCFileDownload.cc \
     src/Utilities/QGCLoggingCategory.cc \
     src/QmlControls/QGCMapPalette.cc \
     src/QmlControls/QGCPalette.cc \
-    src/Utilities/QGCQGeoCoordinate.cc \
+    src/QmlControls/QGCQGeoCoordinate.cc \
     src/Utilities/QGCTemporaryFile.cc \
     src/QGCToolbox.cc \
     src/QmlControls/AppMessages.cc \
@@ -846,7 +869,9 @@ SOURCES += \
     src/Utilities/ShapeFileHelper.cc \
     src/Utilities/SHPFileHelper.cc \
     src/Terrain/TerrainQuery.cc \
+    src/Terrain/TerrainQueryAirMap.cc \
     src/Terrain/TerrainTile.cc \
+    src/Terrain/TerrainTileManager.cc \
     src/Vehicle/Actuators/ActuatorActions.cc \
     src/Vehicle/Actuators/Actuators.cc \
     src/Vehicle/Actuators/ActuatorOutputs.cc \
@@ -855,58 +880,60 @@ SOURCES += \
     src/Vehicle/Actuators/GeometryImage.cc \
     src/Vehicle/Actuators/Mixer.cc \
     src/Vehicle/Actuators/MotorAssignment.cc \
-    src/Vehicle/CompInfo.cc \
-    src/Vehicle/CompInfoActuators.cc \
-    src/Vehicle/CompInfoEvents.cc \
-    src/Vehicle/CompInfoParam.cc \
-    src/Vehicle/CompInfoGeneral.cc \
-    src/Vehicle/ComponentInformationCache.cc \
-    src/Vehicle/ComponentInformationManager.cc \
-    src/Vehicle/ComponentInformationTranslation.cc \
-    src/Vehicle/EventHandler.cc \
+    src/MAVLink/LibEvents/EventHandler.cc \
+    src/MAVLink/LibEvents/HealthAndArmingCheckReport.cc \
+    src/MAVLink/LibEvents/logging.cpp \
+    src/Vehicle/Components/CompInfo.cc \
+    src/Vehicle/Components/CompInfoActuators.cc \
+    src/Vehicle/Components/CompInfoEvents.cc \
+    src/Vehicle/Components/CompInfoParam.cc \
+    src/Vehicle/Components/CompInfoGeneral.cc \
+    src/Vehicle/Components/ComponentInformationCache.cc \
+    src/Vehicle/Components/ComponentInformationManager.cc \
+    src/Vehicle/Components/ComponentInformationTranslation.cc \
     src/Vehicle/FTPManager.cc \
-    src/Vehicle/GPSRTKFactGroup.cc \
-    src/Vehicle/HealthAndArmingCheckReport.cc \
-    src/Vehicle/ImageProtocolManager.cc \
+    src/Vehicle/FactGroups/GPSRTKFactGroup.cc \
+    src/MAVLink/ImageProtocolManager.cc \
     src/Vehicle/InitialConnectStateMachine.cc \
     src/Vehicle/MAVLinkLogManager.cc \
-    src/Vehicle/MAVLinkStreamConfig.cc \
+    src/MAVLink/MAVLinkStreamConfig.cc \
     src/Vehicle/MultiVehicleManager.cc \
     src/Vehicle/RemoteIDManager.cc \
-    src/Vehicle/StateMachine.cc \
+    src/Utilities/StateMachine.cc \
     src/Vehicle/StandardModes.cc \
-    src/Vehicle/SysStatusSensorInfo.cc \
-    src/Vehicle/TerrainFactGroup.cc \
+    src/MAVLink/SysStatusSensorInfo.cc \
+    src/Vehicle/FactGroups/TerrainFactGroup.cc \
     src/Vehicle/TerrainProtocolHandler.cc \
     src/Vehicle/TrajectoryPoints.cc \
     src/Vehicle/Vehicle.cc \
     src/Vehicle/VehicleObjectAvoidance.cc \
-    src/Vehicle/VehicleBatteryFactGroup.cc \
-    src/Vehicle/VehicleClockFactGroup.cc \
-    src/Vehicle/VehicleDistanceSensorFactGroup.cc \
-    src/Vehicle/VehicleEstimatorStatusFactGroup.cc \
-    src/Vehicle/VehicleLocalPositionFactGroup.cc \
-    src/Vehicle/VehicleLocalPositionSetpointFactGroup.cc \
-    src/Vehicle/VehicleGPSFactGroup.cc \
-    src/Vehicle/VehicleGPS2FactGroup.cc \
+    src/Vehicle/FactGroups/VehicleBatteryFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleClockFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleDistanceSensorFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleEstimatorStatusFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleLocalPositionFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleLocalPositionSetpointFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleGPSFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleGPS2FactGroup.cc \
     src/Vehicle/VehicleLinkManager.cc \
-    src/Vehicle/VehicleSetpointFactGroup.cc \
-    src/Vehicle/VehicleTemperatureFactGroup.cc \
-    src/Vehicle/VehicleVibrationFactGroup.cc \
-    src/Vehicle/VehicleHygrometerFactGroup.cc \
-    src/Vehicle/VehicleGeneratorFactGroup.cc \
-    src/Vehicle/VehicleEFIFactGroup.cc \
-    src/Vehicle/VehicleWindFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleSetpointFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleTemperatureFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleVibrationFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleHygrometerFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleGeneratorFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleEFIFactGroup.cc \
+    src/Vehicle/FactGroups/VehicleWindFactGroup.cc \
     src/VehicleSetup/JoystickConfigController.cc \
-    src/comm/LinkConfiguration.cc \
-    src/comm/LinkInterface.cc \
-    src/comm/LinkManager.cc \
-    src/comm/LogReplayLink.cc \
-    src/comm/MAVLinkProtocol.cc \
-    src/comm/QGCMAVLink.cc \
-    src/comm/TCPLink.cc \
-    src/comm/UDPLink.cc \
-    src/comm/UdpIODevice.cc \
+    src/Comms/LinkConfiguration.cc \
+    src/Comms/LinkInterface.cc \
+    src/Comms/LinkManager.cc \
+    src/Comms/LogReplayLink.cc \
+    src/Comms/MAVLinkProtocol.cc \
+    src/MAVLink/QGCMAVLink.cc \
+    src/MAVLink/MAVLinkFTP.cc \
+    src/Comms/TCPLink.cc \
+    src/Comms/UDPLink.cc \
+    src/Comms/UdpIODevice.cc \
     src/main.cc \
     src/Vehicle/UASMessageHandler.cc \
     src/AnalyzeView/GeoTagController.cc \
@@ -917,26 +944,31 @@ SOURCES += \
     src/Viewer3D/Viewer3DUtils.cc \
     src/Viewer3D/Viewer3DManager.cc \
     src/Settings/Viewer3DSettings.cc \
+    src/Viewer3D/Viewer3DTileReply.cc \
+    src/Viewer3D/Viewer3DTerrainGeometry.cc \
+    src/Viewer3D/Viewer3DTerrainTexture.cc \
+    src/Viewer3D/Viewer3DTileQuery.cc \
+    src/Viewer3D/OsmParserThread.cc \
 
 DebugBuild {
 SOURCES += \
-    src/comm/MockLink.cc \
-    src/comm/MockLinkFTP.cc \
-    src/comm/MockLinkMissionItemHandler.cc \
+    src/Comms/MockLink/MockLink.cc \
+    src/Comms/MockLink/MockLinkFTP.cc \
+    src/Comms/MockLink/MockLinkMissionItemHandler.cc \
 }
 
 !NoSerialBuild {
 SOURCES += \
-    src/comm/QGCSerialPortInfo.cc \
-    src/comm/SerialLink.cc \
+    src/Comms/QGCSerialPortInfo.cc \
+    src/Comms/SerialLink.cc \
 }
 
 contains(DEFINES, QGC_ENABLE_BLUETOOTH) {
     SOURCES += \
-    src/comm/BluetoothLink.cc \
+    src/Comms/BluetoothLink.cc \
 }
 
-!MobileBuild {
+!iosBuild {
 SOURCES += \
     src/GPS/Drivers/src/gps_helper.cpp \
     src/GPS/Drivers/src/ashtech.cpp \
@@ -944,6 +976,11 @@ SOURCES += \
     src/GPS/Drivers/src/sbf.cpp \
     src/GPS/GPSManager.cc \
     src/GPS/GPSProvider.cc \
+    src/GPS/RTCMMavlink.cc
+}
+
+!MobileBuild {
+SOURCES += \
     src/Joystick/JoystickSDL.cc \
     src/RunGuard.cc \
 }
@@ -954,6 +991,7 @@ SOURCES += \
 
 INCLUDEPATH += \
     src/AutoPilotPlugins/Common \
+    src/AutoPilotPlugins/Generic \
     src/FirmwarePlugin \
     src/VehicleSetup \
 
@@ -968,10 +1006,11 @@ HEADERS+= \
     src/AutoPilotPlugins/Generic/GenericAutoPilotPlugin.h \
     src/FirmwarePlugin/CameraMetaData.h \
     src/FirmwarePlugin/FirmwarePlugin.h \
+    src/FirmwarePlugin/FirmwarePluginFactory.h \
     src/FirmwarePlugin/FirmwarePluginManager.h \
     src/VehicleSetup/VehicleComponent.h \
 
-!MobileBuild { !NoSerialBuild {
+!iosBuild { !contains(DEFINES, NO_SERIAL_LINK) {
     HEADERS += \
         src/VehicleSetup/Bootloader.h \
         src/VehicleSetup/FirmwareImage.h \
@@ -990,10 +1029,11 @@ SOURCES += \
     src/AutoPilotPlugins/Generic/GenericAutoPilotPlugin.cc \
     src/FirmwarePlugin/CameraMetaData.cc \
     src/FirmwarePlugin/FirmwarePlugin.cc \
+    src/FirmwarePlugin/FirmwarePluginFactory.cc \
     src/FirmwarePlugin/FirmwarePluginManager.cc \
     src/VehicleSetup/VehicleComponent.cc \
 
-!MobileBuild { !NoSerialBuild {
+!iosBuild { !contains(DEFINES, NO_SERIAL_LINK) {
     SOURCES += \
         src/VehicleSetup/Bootloader.cc \
         src/VehicleSetup/FirmwareImage.cc \
@@ -1242,7 +1282,6 @@ AndroidBuild {
     contains (CONFIG, DISABLE_BUILTIN_ANDROID) {
         message("Skipping builtin support for Android")
     } else {
-        QT -= core-private
         include(android.pri)
     }
 }

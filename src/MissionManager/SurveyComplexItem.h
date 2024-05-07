@@ -10,13 +10,14 @@
 #pragma once
 
 #include "TransectStyleComplexItem.h"
-#include "MissionItem.h"
 #include "SettingsFact.h"
-#include "QGCLoggingCategory.h"
+
+#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(SurveyComplexItemLog)
 
 class PlanMasterController;
+class MissionItem;
 
 class SurveyComplexItem : public TransectStyleComplexItem
 {

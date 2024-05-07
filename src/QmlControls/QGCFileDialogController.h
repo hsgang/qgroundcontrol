@@ -8,13 +8,11 @@
  ****************************************************************************/
 
 
-#ifndef QGCFileDialogController_H
-#define QGCFileDialogController_H
+#pragma once
 
-#include <QObject>
-#include <QUrl>
-
-#include "QGCLoggingCategory.h"
+#include <QtCore/QObject>
+#include <QtCore/QUrl>
+#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(QGCFileDialogControllerLog)
 
@@ -43,5 +41,3 @@ public:
     /// Example: "/Users/Don/Document/QGroundControl/Missions" returns "QGroundControl/Missions"
     Q_INVOKABLE QString fullFolderPathToShortMobilePath(const QString& fullFolderPath);
 };
-
-#endif

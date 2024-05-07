@@ -9,31 +9,36 @@
 
 #pragma once
 
-#include <QElapsedTimer>
-#include <QObject>
-#include <QVariantList>
-#include <QGeoCoordinate>
-#include <QTime>
-#include <QQueue>
-#include <QSharedPointer>
+#include <QtCore/QElapsedTimer>
+#include <QtCore/QObject>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QTime>
+#include <QtCore/QTimer>
+#include <QtCore/QVariantList>
+#include <QtPositioning/QGeoCoordinate>
+#include <QtCore/QFile>
 
-#include "FactGroup.h"
+#include "HealthAndArmingCheckReport.h"
+#include "MAVLinkStreamConfig.h"
+#include "QGCMapCircle.h"
 #include "QGCMAVLink.h"
 #include "QmlObjectListModel.h"
-#include "MAVLinkProtocol.h"
-#include "MAVLinkStreamConfig.h"
-#include "UASMessageHandler.h"
-#include "SettingsFact.h"
-#include "QGCMapCircle.h"
-#include "TerrainFactGroup.h"
 #include "SysStatusSensorInfo.h"
+#include "VehicleLinkManager.h"
+
+#include "FactGroup.h"
+#include "TerrainFactGroup.h"
 #include "VehicleClockFactGroup.h"
 #include "VehicleDistanceSensorFactGroup.h"
+#include "VehicleEFIFactGroup.h"
+#include "VehicleEscStatusFactGroup.h"
+#include "VehicleEstimatorStatusFactGroup.h"
+#include "VehicleGeneratorFactGroup.h"
+#include "VehicleGPS2FactGroup.h"
+#include "VehicleGPSFactGroup.h"
+#include "VehicleHygrometerFactGroup.h"
 #include "VehicleLocalPositionFactGroup.h"
 #include "VehicleLocalPositionSetpointFactGroup.h"
-#include "VehicleWindFactGroup.h"
-#include "VehicleGPSFactGroup.h"
-#include "VehicleGPS2FactGroup.h"
 #include "VehicleSetpointFactGroup.h"
 #include "VehicleTemperatureFactGroup.h"
 #include "VehicleVibrationFactGroup.h"
@@ -58,6 +63,7 @@
 #include "StandardModes.h"
 #include "VehicleGeneratorFactGroup.h"
 #include "VehicleEFIFactGroup.h"
+#include "VehicleWindFactGroup.h"
 
 #ifdef CONFIG_UTM_ADAPTER
 #include "UTMSPVehicle.h"
@@ -65,43 +71,42 @@
 #endif
 
 class Actuators;
+class AutoPilotPlugin;
+class Autotune;
+class ComponentInformationManager;
 class EventHandler;
-class UAS;
 class FirmwarePlugin;
 class FirmwarePluginManager;
-class AutoPilotPlugin;
-class ParameterManager;
-class JoystickManager;
-class UASMessage;
-class SettingsManager;
-class QGCCameraManager;
+class FTPManager;
+class GeoFenceManager;
+class ImageProtocolManager;
+class InitialConnectStateMachine;
 class Joystick;
-class VehicleObjectAvoidance;
-class TrajectoryPoints;
-class TerrainProtocolHandler;
-class ComponentInformationManager;
-class VehicleBatteryFactGroup;
-class SendMavCommandWithSignallingTest;
-class SendMavCommandWithHandlerTest;
-class RequestMessageTest;
+class JoystickManager;
 class LinkInterface;
 class LinkManager;
-class InitialConnectStateMachine;
-class Autotune;
+class MAVLinkProtocol;
+class MissionManager;
+class ParameterManager;
+class QGCCameraManager;
+class RallyPointManager;
 class RemoteIDManager;
 class GimbalController;
+class RequestMessageTest;
+class SendMavCommandWithHandlerTest;
+class SendMavCommandWithSignallingTest;
+class SettingsManager;
+class StandardModes;
+class TerrainAtCoordinateQuery;
+class TerrainProtocolHandler;
+class TrajectoryPoints;
+class UASMessage;
+class VehicleBatteryFactGroup;
+class VehicleObjectAvoidance;
+class QGCToolbox;
 #ifdef CONFIG_UTM_ADAPTER
 class UTMSPVehicle;
 #endif
-
-Q_MOC_INCLUDE("AutoPilotPlugin.h")
-Q_MOC_INCLUDE("TrajectoryPoints.h")
-Q_MOC_INCLUDE("ParameterManager.h")
-Q_MOC_INCLUDE("VehicleObjectAvoidance.h")
-Q_MOC_INCLUDE("Autotune.h")
-Q_MOC_INCLUDE("RemoteIDManager.h")
-Q_MOC_INCLUDE("QGCCameraManager.h")
-
 #ifndef OPAQUE_PTR_VEHICLE
     #define OPAQUE_PTR_VEHICLE
     Q_DECLARE_OPAQUE_POINTER(Actuators*)
@@ -120,6 +125,13 @@ Q_DECLARE_LOGGING_CATEGORY(VehicleLog)
 class Vehicle : public FactGroup
 {
     Q_OBJECT
+    Q_MOC_INCLUDE("AutoPilotPlugin.h")
+    Q_MOC_INCLUDE("TrajectoryPoints.h")
+    Q_MOC_INCLUDE("ParameterManager.h")
+    Q_MOC_INCLUDE("VehicleObjectAvoidance.h")
+    Q_MOC_INCLUDE("Autotune.h")
+    Q_MOC_INCLUDE("RemoteIDManager.h")
+    Q_MOC_INCLUDE("QGCCameraManager.h")
 
     friend class InitialConnectStateMachine;
     friend class VehicleLinkManager;
@@ -417,7 +429,7 @@ public:
     /// @return Minumum equivalent airspeed.
     Q_INVOKABLE double minimumEquivalentAirspeed();
 
-    /// Command vehicle to move to specified location (altitude is included and relative)
+    /// Command vehicle to move to specified location (altitude is ignored)
     Q_INVOKABLE void guidedModeGotoLocation(const QGeoCoordinate& gotoCoord);
 
     /// Command vehicle to change altitude
@@ -437,7 +449,7 @@ public:
     Q_INVOKABLE void guidedModeChangeEquivalentAirspeedMetersSecond(double airspeed);
 
     /// Command vehicle to orbit given center point
-    ///     @param centerCoord Orit around this point
+    ///     @param centerCoord Orbit around this point
     ///     @param radius Distance from vehicle to centerCoord
     ///     @param amslAltitude Desired vehicle altitude
     Q_INVOKABLE void guidedModeOrbit(const QGeoCoordinate& centerCoord, double radius, double amslAltitude);
@@ -479,8 +491,8 @@ public:
 
     /// Used to check if running current version is equal or higher than the one being compared.
     //  returns 1 if current > compare, 0 if current == compare, -1 if current < compare
-    Q_INVOKABLE int versionCompare(QString& compare);
-    Q_INVOKABLE int versionCompare(int major, int minor, int patch);
+    Q_INVOKABLE int versionCompare(QString& compare) const;
+    Q_INVOKABLE int versionCompare(int major, int minor, int patch) const;
 
     /// Test motor
     ///     @param motor Motor number, 1-based
@@ -553,6 +565,7 @@ public:
     MAV_TYPE vehicleType() const { return _vehicleType; }
     QGCMAVLink::VehicleClass_t vehicleClass(void) const { return QGCMAVLink::vehicleClass(_vehicleType); }
     Q_INVOKABLE QString vehicleTypeName() const;
+    Q_INVOKABLE QString vehicleClassInternalName() const;
 
     /// Sends a message to the specified link
     /// @return true: message sent, false: Link no longer connected
@@ -798,8 +811,6 @@ public:
     VehicleObjectAvoidance*         objectAvoidance     () { return _objectAvoidance; }
     Autotune*                       autotune            () const { return _autotune; }
     RemoteIDManager*                remoteIDManager     () { return _remoteIDManager; }
-
-    static const int cMaxRcChannels = 18;
 
     /// Sends the specified MAV_CMD to the vehicle. If no Ack is received command will be retried. If a sendMavCommand is already in progress
     /// the command will be queued and sent when the previous command completes.
@@ -1061,9 +1072,9 @@ signals:
     void tunnelingDataValueChanged      ();
 
     /// New RC channel values coming from RC_CHANNELS message
-    ///     @param channelCount Number of available channels, cMaxRcChannels max
+    ///     @param channelCount Number of available channels, maxRcChannels max
     ///     @param pwmValues -1 signals channel not available
-    void rcChannelsChanged              (int channelCount, int pwmValues[cMaxRcChannels]);
+    void rcChannelsChanged              (int channelCount, int pwmValues[QGCMAVLink::maxRcChannels]);
 
     /// Remote control RSSI changed  (0% - 100%)
     void remoteControlRSSIChanged       (uint8_t rssi);
@@ -1225,8 +1236,6 @@ private:
     QFile               _jsonLogFile;
 
     bool            _joystickEnabled = false;
-
-    UAS*            _uas = nullptr;
 
     QGeoCoordinate  _coordinate;
     QGeoCoordinate  _homePosition;
@@ -1620,9 +1629,25 @@ private:
     QGeoCoordinate              _altitudeAboveTerrLastCoord;
     float                       _altitudeAboveTerrLastRelAlt = qQNaN();
 
-    float mountRoll = qQNaN();
-    float mountPitch = qQNaN();
-    float mountYaw = qQNaN();
+public:
+    int32_t getMessageRate(uint8_t compId, uint16_t msgId);
+    void setMessageRate(uint8_t compId, uint16_t msgId, int32_t rate);
+
+signals:
+    void mavlinkMsgIntervalsChanged(uint8_t compid, uint16_t msgId, int32_t rate);
+
+private:
+    void _handleMessageInterval(const mavlink_message_t& message);
+
+    static void _requestMessageMessageIntervalResultHandler(void* resultHandlerData, MAV_RESULT result, RequestMessageResultHandlerFailureCode_t failureCode, const mavlink_message_t& message);
+    void _requestMessageInterval(uint8_t compId, uint16_t msgId);
+
+    static void _setMessageRateCommandResultHandler(void* resultHandlerData, int compId, const mavlink_command_ack_t& ack, MavCmdResultFailureCode_t failureCode);
+
+    typedef QPair<uint8_t, uint16_t> MavCompMsgId;
+    QHash<MavCompMsgId, int32_t> _mavlinkMsgIntervals;
+    QMultiHash<uint8_t, uint16_t> _unsupportedMessageIds;
+    uint16_t _lastSetMsgIntervalMsgId = 0;
 };
 
 Q_DECLARE_METATYPE(Vehicle::MavCmdResultFailureCode_t)

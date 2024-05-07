@@ -44,11 +44,11 @@
 **
 ****************************************************************************/
 
-#include "QGCMapEngine.h"
 #include "QGeoTileFetcherQGC.h"
+#include "QGCMapEngine.h"
 #include "QGeoMapReplyQGC.h"
+#include "QGCMapUrlEngine.h"
 
-#include <QtCore/QLocale>
 #include <QtNetwork/QNetworkRequest>
 #include <QtLocation/private/qgeotilespec_p.h>
 #include <QtLocation/private/qgeotiledmappingmanagerengine_p.h>
@@ -58,10 +58,7 @@ QGeoTileFetcherQGC::QGeoTileFetcherQGC(QGeoTiledMappingManagerEngine *parent)
     : QGeoTileFetcher(parent)
     , _networkManager(new QNetworkAccessManager(this))
 {
-    //-- Check internet status every 30 seconds or so
-    connect(&_timer, &QTimer::timeout, this, &QGeoTileFetcherQGC::timeout);
-    _timer.setSingleShot(false);
-    _timer.start(30000);
+
 }
 
 //-----------------------------------------------------------------------------
@@ -82,11 +79,4 @@ QGeoTileFetcherQGC::getTileImage(const QGeoTileSpec &spec)
     else {
         return nullptr;
     }
-}
-
-//-----------------------------------------------------------------------------
-void
-QGeoTileFetcherQGC::timeout()
-{
-    getQGCMapEngine()->testInternet();
 }

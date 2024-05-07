@@ -17,15 +17,15 @@
 //#define DEBUG_GOOGLE_MAPS
 
 #include "QGCMapUrlEngine.h"
+#include "GoogleMapProvider.h"
+#include "BingMapProvider.h"
+#include "GenericMapProvider.h"
+#include "EsriMapProvider.h"
+#include "MapboxMapProvider.h"
+#include "ElevationMapProvider.h"
 #include "QGCLoggingCategory.h"
-QGC_LOGGING_CATEGORY(QGCMapUrlEngineLog, "QGCMapUrlEngineLog")
 
-#include <QByteArray>
-#include <QEventLoop>
-#include <QNetworkReply>
-#include <QtCore5Compat/QRegExp>
-#include <QString>
-#include <QTimer>
+QGC_LOGGING_CATEGORY(QGCMapUrlEngineLog, "QGCMapUrlEngineLog")
 
 const char* UrlFactory::kCopernicusElevationProviderKey = "Copernicus Elevation";
 const char* UrlFactory::kCopernicusElevationProviderNotice = "© Airbus Defence and Space GmbH";

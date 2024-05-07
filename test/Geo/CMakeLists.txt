@@ -1,12 +1,17 @@
+find_package(Qt6 REQUIRED COMPONENTS Core Positioning Test)
 
 qt_add_library(GeoTest
 	STATIC
-		GeoTest.cc GeoTest.h
+        GeoTest.cc
+        GeoTest.h
 )
 
 target_link_libraries(GeoTest
+    PRIVATE
+    	Qt6::Test
+        Geo
 	PUBLIC
-		qgc
+		Qt6::Positioning
 		qgcunittest
 )
 

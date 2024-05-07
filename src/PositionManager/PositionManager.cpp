@@ -10,12 +10,11 @@
 #include "PositionManager.h"
 #include "QGCApplication.h"
 #include "QGCCorePlugin.h"
+#include "SimulatedPosition.h"
 
-#if !defined(NO_SERIAL_LINK) && !defined(Q_OS_ANDROID)
-#include <QSerialPortInfo>
-#endif
-
+#include <QtCore/QPermissions>
 #include <QtPositioning/private/qgeopositioninfosource_p.h>
+#include <QtPositioning/QNmeaPositionInfoSource>
 
 QGCPositionManager::QGCPositionManager(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool           (app, toolbox)

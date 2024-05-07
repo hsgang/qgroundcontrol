@@ -50,8 +50,6 @@
 #include <QtCore/QVariantMap>
 #include <QtCore/QUrl>
 #include <QtCore/QUrlQuery>
-#include <QtCore/QLocale>
-#include <QDebug>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtPositioning/QGeoCoordinate>

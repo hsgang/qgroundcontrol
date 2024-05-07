@@ -10,15 +10,16 @@
 #include "AppSettings.h"
 #include "QGCPalette.h"
 #include "QGCApplication.h"
-#include "ParameterManager.h"
+#include "QGCMAVLink.h"
 
 #ifdef Q_OS_ANDROID
 #include "AndroidInterface.h"
 #endif
 
-#include <QQmlEngine>
-#include <QtQml>
-#include <QStandardPaths>
+#include <QtQml/QQmlEngine>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QDir>
+#include <QtCore/QSettings>
 
 const char* AppSettings::parameterFileExtension =   "params";
 const char* AppSettings::planFileExtension =        "plan";
@@ -47,6 +48,7 @@ QList<int> AppSettings::_rgReleaseLanguages = {
     QLocale::AnyLanguage,  // System
     QLocale::Chinese,
     QLocale::English,
+    QLocale::Japanese,
     QLocale::Korean,
     QLocale::Azerbaijani,
 };
@@ -54,6 +56,7 @@ QList<int> AppSettings::_rgReleaseLanguages = {
 QList<int> AppSettings::_rgPartialLanguages = {
     QLocale::German,
     QLocale::Turkish,
+    QLocale::Ukrainian,
 };
 
 DECLARE_SETTINGGROUP(App, "")
@@ -108,10 +111,10 @@ DECLARE_SETTINGGROUP(App, "")
             qDebug() << "AndroidInterface::getSDCardPath();" << rootDirPath;
                 if (rootDirPath.isEmpty() || !QDir(rootDirPath).exists()) {
                     rootDirPath.clear();
-                    qgcApp()->showAppMessage(tr("Save to SD card specified for application data. But no SD card present. Using internal storage."));
+                    qgcApp()->showAppMessage(AppSettings::tr("Save to SD card specified for application data. But no SD card present. Using internal storage."));
                 } else if (!QFileInfo(rootDirPath).isWritable()) {
                     rootDirPath.clear();
-                    qgcApp()->showAppMessage(tr("Save to SD card specified for application data. But SD card is write protected. Using internal storage."));
+                    qgcApp()->showAppMessage(AppSettings::tr("Save to SD card specified for application data. But SD card is write protected. Using internal storage."));
                 }
             }
         #endif
@@ -144,7 +147,6 @@ DECLARE_SETTINGSFACT(AppSettings, defaultMissionItemAltitude)
 DECLARE_SETTINGSFACT(AppSettings, telemetrySave)
 DECLARE_SETTINGSFACT(AppSettings, telemetrySaveNotArmed)
 DECLARE_SETTINGSFACT(AppSettings, audioMuted)
-DECLARE_SETTINGSFACT(AppSettings, checkInternet)
 DECLARE_SETTINGSFACT(AppSettings, virtualJoystick)
 DECLARE_SETTINGSFACT(AppSettings, virtualJoystickAutoCenterThrottle)
 DECLARE_SETTINGSFACT(AppSettings, appFontPointSize)

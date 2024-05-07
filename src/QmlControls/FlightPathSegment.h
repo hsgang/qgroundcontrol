@@ -9,12 +9,13 @@
 
 #pragma once
 
-#include <QObject>
-#include <QGeoCoordinate>
-#include <QTimer>
-
 #include "TerrainQuery.h"
-#include "QGCLoggingCategory.h"
+
+#include <QtCore/QObject>
+#include <QtPositioning/QGeoCoordinate>
+#include <QtCore/QTimer>
+#include <QtCore/QLoggingCategory>
+
 
 Q_DECLARE_LOGGING_CATEGORY(FlightPathSegmentLog)
 

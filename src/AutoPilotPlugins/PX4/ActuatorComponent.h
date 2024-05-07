@@ -11,9 +11,8 @@
 #pragma once
 
 #include "VehicleComponent.h"
-#include "Fact.h"
 
-#include "Actuators/Actuators.h"
+class Actuators;
 
 class ActuatorComponent : public VehicleComponent
 {
@@ -38,4 +37,3 @@ private:
     const QString   _name;
     Actuators& _actuators;
 };
-

@@ -13,8 +13,6 @@
 ///     @author Jacob Walser <jwalser90@gmail.com>
 
 #include "APMSubFrameComponent.h"
-#include "APMAutoPilotPlugin.h"
-#include "APMAirframeComponent.h"
 
 APMSubFrameComponent::APMSubFrameComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
     : VehicleComponent(vehicle, autopilot, parent)

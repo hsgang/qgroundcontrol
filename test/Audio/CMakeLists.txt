@@ -1,12 +1,16 @@
+find_package(Qt6 REQUIRED COMPONENTS Core Test)
 
 qt_add_library(AudioTest
 	STATIC
-		AudioOutputTest.cc AudioOutputTest.h
+		AudioOutputTest.cc
+		AudioOutputTest.h
 )
 
 target_link_libraries(AudioTest
+        PRIVATE
+        	Qt6::Test
+                Audio
 	PUBLIC
-		qgc
 		qgcunittest
 )
 

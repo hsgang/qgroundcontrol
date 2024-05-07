@@ -11,11 +11,7 @@
 /// @file
 ///     @author Don Gagne <don@thegagnes.com>
 
-#ifndef PowerComponentController_H
-#define PowerComponentController_H
-
-#include <QObject>
-#include <QQuickItem>
+#pragma once
 
 #include "FactPanelController.h"
 
@@ -51,5 +47,3 @@ private:
     QStringList _warningMessages;
     static const int _neededFirmwareRev = 1;
 };
-
-#endif

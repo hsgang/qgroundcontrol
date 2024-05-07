@@ -7,15 +7,10 @@
  *
  ****************************************************************************/
 
-#ifndef SettingsGroup_H
-#define SettingsGroup_H
+#pragma once
 
-#include "QGCLoggingCategory.h"
-#include "Joystick.h"
-#include "MultiVehicleManager.h"
-#include "QGCToolbox.h"
 
-#include <QVariantList>
+#include "SettingsFact.h"
 
 #define DEFINE_SETTING_NAME_GROUP() \
     static const char* name; \
@@ -76,5 +71,3 @@ protected:
 
     QMap<QString, FactMetaData*> _nameToMetaDataMap;
 };
-
-#endif

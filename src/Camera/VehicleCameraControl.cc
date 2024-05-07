@@ -7,6 +7,7 @@
 
 #include "VehicleCameraControl.h"
 #include "QGCCameraIO.h"
+#include "QGCApplication.h"
 #include "SettingsManager.h"
 #include "VideoManager.h"
 #include "QGCMapEngine.h"
@@ -14,11 +15,18 @@
 #include "FTPManager.h"
 #include "QGCLZMA.h"
 #include "QGCCorePlugin.h"
+#include "Vehicle.h"
+#include "LinkInterface.h"
+#include "MAVLinkProtocol.h"
 
-#include <QDir>
-#include <QStandardPaths>
-#include <QDomDocument>
-#include <QDomNodeList>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtCore/QDir>
+#include <QtCore/QSettings>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomNodeList>
+#include <QtQml/QQmlEngine>
+#include <QtNetwork/QNetworkProxy>
+#include <QtNetwork/QNetworkReply>
 
 static const char* kCondition       = "condition";
 static const char* kControl         = "control";

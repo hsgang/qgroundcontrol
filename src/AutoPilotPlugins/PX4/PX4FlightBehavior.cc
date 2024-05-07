@@ -9,8 +9,8 @@
 
 
 #include "PX4FlightBehavior.h"
-#include "PX4AutoPilotPlugin.h"
-#include "AirframeComponent.h"
+#include "QGCMAVLink.h"
+#include "Vehicle.h"
 
 PX4FlightBehavior::PX4FlightBehavior(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
     : VehicleComponent(vehicle, autopilot, parent)
