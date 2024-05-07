@@ -200,7 +200,7 @@ Item {
                     iconSource:         "/HA_Icons/MAP_CLICK.png"
                     checkable:          true
                     visible:            !toolStripPanelVideo.panelHidden
-                    enabled:            flightView._mainWindowIsMap
+                    enabled:            flyView._mainWindowIsMap
 
                     onVisibleChanged: function(visible) {
                         if (!visible)
@@ -299,7 +299,7 @@ Item {
                 Layout.columnSpan: 2
                 Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
                 //Layout.fillWidth:  true
-                pointSize:         ScreenTools.smallFontPointSize
+                font.pointSize:         ScreenTools.smallFontPointSize
                 implicitHeight:    ScreenTools.implicitButtonHeight * 0.6
                 implicitWidth:     ScreenTools.implicitButtonWidth * 2
                 backRadius:        ScreenTools.defaultFontPixelWidth / 2
@@ -324,7 +324,7 @@ Item {
                 Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
                 checkable:          false
                 backRadius:         ScreenTools.defaultFontPixelWidth / 2
-                pointSize:          ScreenTools.smallFontPointSize
+                font.pointSize:          ScreenTools.smallFontPointSize
                 implicitHeight:     ScreenTools.implicitButtonHeight * 0.6
                 implicitWidth:     ScreenTools.implicitButtonWidth * 2
 
@@ -338,7 +338,7 @@ Item {
                 text:             qsTr("Cancel")
                 //visible:          gimbalMapActions.roiActive
                 Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
-                pointSize:        ScreenTools.smallFontPointSize
+                font.pointSize:        ScreenTools.smallFontPointSize
                 implicitHeight:   ScreenTools.implicitButtonHeight * 0.6
                 implicitWidth:     ScreenTools.implicitButtonWidth * 2
                 backRadius:       ScreenTools.defaultFontPixelWidth / 2

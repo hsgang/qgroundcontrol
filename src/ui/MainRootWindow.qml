@@ -118,7 +118,7 @@ ApplicationWindow {
     }
 
     function viewSwitch(currentToolbar) {
-        flightView.visible      = false
+        flyView.visible      = false
         planView.visible        = false
         analyzeView.visible     = false
         setupView.visible       = false
@@ -127,19 +127,19 @@ ApplicationWindow {
     }
 
     function showFlyView() {
-        if (!flightView.visible) {
+        if (!flyView.visible) {
             mainWindow.showPreFlightChecklistIfNeeded()
         }
         //mainWindow.popView()
         //viewSwitch(toolbar.flyViewToolbar)
-        flightView.visible = true
+        flyView.visible = true
         planView.visible = false
     }
 
     function showPlanView() {
         //viewSwitch(toolbar.planViewToolbar)
         planView.visible = true
-        flightView.visible = false
+        flyView.visible = false
     }
 
     function showAnalyzeTool() {
@@ -158,10 +158,6 @@ ApplicationWindow {
         if (settingsPage !== "") {
             toolDrawerLoader.item.showSettingsPage(settingsPage)
         }
-    }
-
-    function showFlyView() {
-        planView.visible = false
     }
 
     function showTool(toolTitle, toolSource, toolIcon) {
