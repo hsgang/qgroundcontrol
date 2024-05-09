@@ -143,13 +143,13 @@ public:
 
     void stop();
 
-/*
+    /*
     // Joystick index used by sdl library
     // Settable because sdl library remaps indices after certain events
     virtual int index(void) = 0;
     virtual void setIndex(int index) = 0;
 */
-	virtual bool requiresCalibration(void) { return true; }
+    virtual bool requiresCalibration(void) { return true; }
 
     int   throttleMode      ();
     void  setThrottleMode   (int mode);
@@ -214,7 +214,7 @@ signals:
     void gimbalPitchStep            (int direction);
     void gimbalYawStep              (int direction);
     void centerGimbal               ();
-    void gimbalStepPitchYaw         (double pitch, double yaw);
+    void gimbalControlValue         (double pitch, double yaw);
     void setArmed                   (bool arm);
     void setVtolInFwdFlight         (bool set);
     void setFlightMode              (const QString& flightMode);
@@ -236,6 +236,11 @@ protected:
     void    _handleAxis             ();
     void    _handleButtons          ();
     void    _buildActionList        (Vehicle* activeVehicle);
+
+    void    _pitchStep              (int direction);
+    void    _yawStep                (int direction);
+    double  _localYaw       = 0.0;
+    double  _localPitch     = 0.0;
 
 private:
     virtual bool _open      ()          = 0;

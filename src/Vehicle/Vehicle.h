@@ -139,7 +139,7 @@ class Vehicle : public FactGroup
     friend class SendMavCommandWithSignallingTest;  // Unit test
     friend class SendMavCommandWithHandlerTest;     // Unit test
     friend class RequestMessageTest;                // Unit test
-
+    friend class GimbalController;                  // Allow GimbalController to call _addFactGroup
 
 public:
     Vehicle(LinkInterface*          link,

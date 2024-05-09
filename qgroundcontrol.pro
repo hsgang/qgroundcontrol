@@ -391,14 +391,14 @@ INCLUDEPATH += \
     src/input \
     src/lib/qmapcontrol \
     src/uas \
-    src/ui \
-    src/ui/linechart \
-    src/ui/map \
-    src/ui/mapdisplay \
-    src/ui/mission \
-    src/ui/px4_configuration \
-    src/ui/toolbar \
-    src/ui/uas \
+    src/UI \
+    src/UI/linechart \
+    src/UI/map \
+    src/UI/mapdisplay \
+    src/UI/mission \
+    src/UI/px4_configuration \
+    src/UI/toolbar \
+    src/UI/uas \
     src/Viewer3D \
     src/Utilities \
     src/Utilities/Compression
@@ -433,6 +433,7 @@ HEADERS += \
     src/GPS/Drivers/src/base_station.h \
 
 SOURCES += \
+    src/QmlControls/CustomAction.cc \
     src/Settings/BatterySettings.cc \
     src/Settings/SIYISettings.cc \
     src/SiYi/SiYi.cc \

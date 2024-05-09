@@ -150,9 +150,9 @@ const QVariantList& APMAutoPilotPlugin::vehicleComponents(void)
                 _components.append(QVariant::fromValue((VehicleComponent*)_esp8266Component));
             }
 
-            _apmRemoteSupportComponent = new APMRemoteSupportComponent(_vehicle, this);
-            _apmRemoteSupportComponent->setupTriggerSignals();
-            _components.append(QVariant::fromValue((VehicleComponent*)_apmRemoteSupportComponent));
+//            _apmRemoteSupportComponent = new APMRemoteSupportComponent(_vehicle, this);
+//            _apmRemoteSupportComponent->setupTriggerSignals();
+//            _components.append(QVariant::fromValue((VehicleComponent*)_apmRemoteSupportComponent));
         } else {
             qWarning() << "Call to vehicleCompenents prior to parametersReady";
         }

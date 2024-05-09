@@ -113,15 +113,5 @@ SettingsPage {
             buttonText: qsTr("Stop")
             onClicked:  QGroundControl.ntrip.stopNTRIP()
         }
-
-        LabelledLabel {
-            label: "Connection"
-            labelText: QGroundControl.ntrip.connected === true ? "Connected" : "Disconnected"
-        }
-
-        LabelledLabel {
-            label: "BandWidth"
-            labelText: QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s"
-        }
     }
 }

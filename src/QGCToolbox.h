@@ -64,7 +64,6 @@ public:
     SettingsManager*            settingsManager         () { return _settingsManager; }
     ADSBVehicleManager*         adsbVehicleManager      () { return _adsbVehicleManager; }
     NTRIP*                      ntrip                   () { return _ntrip; }
-#ifndef __mobile__
 #ifndef NO_SERIAL_LINK
     GPSManager*                 gpsManager              () { return _gpsManager; }
 #endif

@@ -780,30 +780,30 @@ FlightMap {
         }
     }
 
-    Rectangle {
-        id: clickIndicator
-        visible:    clickMenu.visible
-        x: clickMenu.x - (height / 2) - (_toolsMargin * 2)
-        y: clickMenu.y - (height / 2) - (_toolsMargin * 2)
-        height: _toolsMargin * 5
-        width:  height
-        radius: height / 2
-        color: "transparent"
-        border.color: qgcPal.text
-        border.width: 3
+//    Rectangle {
+//        id: clickIndicator
+//        visible:    clickMenu.visible
+//        x: clickMenu.x - (height / 2) - (_toolsMargin * 2)
+//        y: clickMenu.y - (height / 2) - (_toolsMargin * 2)
+//        height: _toolsMargin * 5
+//        width:  height
+//        radius: height / 2
+//        color: "transparent"
+//        border.color: qgcPal.text
+//        border.width: 3
 
-        Rectangle {
-            height: 1
-            width:  _toolsMargin * 7
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
+//        Rectangle {
+//            height: 1
+//            width:  _toolsMargin * 7
+//            anchors.verticalCenter: parent.verticalCenter
+//            anchors.horizontalCenter: parent.horizontalCenter
+//        }
 
-        Rectangle {
-            height: _toolsMargin * 7
-            width:  1
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-    }
+//        Rectangle {
+//            height: _toolsMargin * 7
+//            width:  1
+//            anchors.verticalCenter: parent.verticalCenter
+//            anchors.horizontalCenter: parent.horizontalCenter
+//        }
+//    }
 }

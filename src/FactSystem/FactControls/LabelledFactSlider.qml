@@ -10,12 +10,13 @@
 import QtQuick
 import QtQuick.Layouts
 
+import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
 
-RowLayout {
+ColumnLayout {
     property alias label:                   label.text
     property alias description:             _description.text
     property alias fact:                    factSlider.fact
@@ -25,27 +26,18 @@ RowLayout {
     property real  sliderPreferredWidth:    -1
     
     enabled:       fact
-    property bool  isRow:                   false
 
-    rowSpacing: ScreenTools.defaultFontPixelWidth
-    columnSpacing: ScreenTools.defaultFontPixelWidth * 2
+    QGCLabel {
+        id:                 label
+        Layout.fillWidth:   true
+    }
 
-    flow:    isRow ? GridLayout.LeftToRight : GridLayout.TopToBottom
-
-    ColumnLayout {
-        spacing : ScreenTools.defaultFontPixelHeight * 0.2
-
-        QGCLabel {
-            id:                 label
-            Layout.fillWidth:   true
-        }
-        QGCLabel {
-            id:                 _description
-            visible:            description !== ""
-            Layout.fillWidth:   true
-            font.pointSize:     ScreenTools.smallFontPointSize
-            color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
-        }
+    QGCLabel {
+        id:                 _description
+        visible:            description !== ""
+        Layout.fillWidth:   true
+        font.pointSize:     ScreenTools.smallFontPointSize
+        color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
     }
 
     FactSlider {

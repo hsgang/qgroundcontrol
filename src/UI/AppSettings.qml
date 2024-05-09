@@ -104,6 +104,7 @@ Rectangle {
 
                 SubMenuButton {
                     id:                 subMenu
+                    Layout.fillWidth:   true
                     imageResource:      iconUrl
                     setupIndicator:     false
                     autoExclusive:      true

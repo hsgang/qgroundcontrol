@@ -15,7 +15,7 @@
 #include <QUrl>
 
 #include "Drivers/src/rtcm.h"
-#include "RTCM/RTCMMavlink.h"
+#include "RTCMMavlink.h"
 
 class NTRIPSettings;
 

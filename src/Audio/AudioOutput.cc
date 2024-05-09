@@ -192,7 +192,7 @@ QString AudioOutput::fixTextMessageForAudio(const QString& string)
     }
     if(result.contains("PITOT", Qt::CaseInsensitive)) {
         result.replace("PITOT", "pee toe", Qt::CaseInsensitive);
-
+    }
     if(result.contains("RC not found", Qt::CaseInsensitive)) {
         result.replace("RC not found", tr("RC not found"), Qt::CaseInsensitive);
     }

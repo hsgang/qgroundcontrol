@@ -11,7 +11,7 @@
 #include "Joystick.h"
 #include "QGC.h"
 #include "QGCApplication.h"
-#include "CustomAction.h"
+//#include "CustomAction.h"
 #include "SettingsManager.h"
 #include "CustomMavlinkActionsSettings.h"
 #include "Vehicle.h"
@@ -111,7 +111,7 @@ Joystick::Joystick(const QString& name, int axisCount, int buttonCount, int hatC
     , _hatButtonCount       (4 * hatCount)
     , _totalButtonCount     (_buttonCount+_hatButtonCount)
     , _multiVehicleManager  (multiVehicleManager)
-    , _customActionManager  (qgcApp()->toolbox()->settingsManager()->customMavlinkActionsSettings()->joystickActionsFile())
+    //, _customActionManager  (qgcApp()->toolbox()->settingsManager()->customMavlinkActionsSettings()->joystickActionsFile())
 {
     qRegisterMetaType<GRIPPER_ACTIONS>();
 
@@ -387,13 +387,13 @@ void Joystick::_saveSettings()
         settings.setValue(revTpl.arg(axis), calibration->reversed);
         settings.setValue(deadbndTpl.arg(axis), calibration->deadband);
         qCDebug(JoystickLog) << "_saveSettings name:axis:min:max:trim:reversed:deadband"
-                                << _name
-                                << axis
-                                << calibration->min
-                                << calibration->max
-                                << calibration->center
-                                << calibration->reversed
-                                << calibration->deadband;
+                             << _name
+                             << axis
+                             << calibration->min
+                             << calibration->max
+                             << calibration->center
+                             << calibration->reversed
+                             << calibration->deadband;
     }
 
     // Always save function Axis mappings in TX Mode 2
@@ -410,10 +410,10 @@ void Joystick::_saveSettings()
 // Relative mappings of axis functions between different TX modes
 int Joystick::_mapFunctionMode(int mode, int function) {
     static const int mapping[][6] = {
-        { yawFunction, pitchFunction, rollFunction, throttleFunction, gimbalPitchFunction, gimbalYawFunction },
-        { yawFunction, throttleFunction, rollFunction, pitchFunction, gimbalPitchFunction, gimbalYawFunction },
-        { rollFunction, pitchFunction, yawFunction, throttleFunction, gimbalPitchFunction, gimbalYawFunction },
-        { rollFunction, throttleFunction, yawFunction, pitchFunction, gimbalPitchFunction, gimbalYawFunction }};
+                                     { yawFunction, pitchFunction, rollFunction, throttleFunction, gimbalPitchFunction, gimbalYawFunction },
+                                     { yawFunction, throttleFunction, rollFunction, pitchFunction, gimbalPitchFunction, gimbalYawFunction },
+                                     { rollFunction, pitchFunction, yawFunction, throttleFunction, gimbalPitchFunction, gimbalYawFunction },
+                                     { rollFunction, throttleFunction, yawFunction, pitchFunction, gimbalPitchFunction, gimbalYawFunction }};
     return mapping[mode-1][function];
 }
 
@@ -631,16 +631,15 @@ void Joystick::_handleAxis()
             int     axis = _rgFunctionAxis[rollFunction];
             float   roll = _adjustRange(_rgAxisValues[axis],    _rgCalibration[axis], _deadband);
 
-                    axis = _rgFunctionAxis[pitchFunction];
+            axis = _rgFunctionAxis[pitchFunction];
             float   pitch = _adjustRange(_rgAxisValues[axis],   _rgCalibration[axis], _deadband);
 
-                    axis = _rgFunctionAxis[yawFunction];
+            axis = _rgFunctionAxis[yawFunction];
             float   yaw = _adjustRange(_rgAxisValues[axis],     _rgCalibration[axis],_deadband);
 
-                    axis = _rgFunctionAxis[throttleFunction];
+            axis = _rgFunctionAxis[throttleFunction];
             float   throttle = _adjustRange(_rgAxisValues[axis],_rgCalibration[axis], _throttleMode==ThrottleModeDownZero?false:_deadband);
 
-            // TODO: These are not actually used, just printed for debugging.
             float   gimbalPitch = 0.0f;
             float   gimbalYaw   = 0.0f;
 
@@ -718,8 +717,10 @@ void Joystick::startPolling(Vehicle* vehicle)
             disconnect(this, &Joystick::setArmed,           _activeVehicle, &Vehicle::setArmedShowError);
             disconnect(this, &Joystick::setVtolInFwdFlight, _activeVehicle, &Vehicle::setVtolInFwdFlight);
             disconnect(this, &Joystick::setFlightMode,      _activeVehicle, &Vehicle::setFlightMode);
-            disconnect(this, &Joystick::centerGimbal,       _activeVehicle->gimbalController(), &GimbalController::centerGimbal);
-            disconnect(this, &Joystick::gimbalStepPitchYaw, _activeVehicle->gimbalController(), &GimbalController::gimbalStepPitchYaw);
+//            disconnect(this, &Joystick::gimbalPitchStep,    _activeVehicle, &Vehicle::gimbalPitchStep);
+//            disconnect(this, &Joystick::gimbalYawStep,      _activeVehicle, &Vehicle::gimbalYawStep);
+//            disconnect(this, &Joystick::centerGimbal,       _activeVehicle, &Vehicle::centerGimbal);
+//            disconnect(this, &Joystick::gimbalControlValue, _activeVehicle, &Vehicle::gimbalControlValue);
             disconnect(this, &Joystick::emergencyStop,      _activeVehicle, &Vehicle::emergencyStop);
             disconnect(this, &Joystick::gripperAction,      _activeVehicle, &Vehicle::setGripperAction);
             disconnect(this, &Joystick::landingGearDeploy,  _activeVehicle, &Vehicle::landingGearDeploy);
@@ -742,8 +743,10 @@ void Joystick::startPolling(Vehicle* vehicle)
             connect(this, &Joystick::setArmed,           _activeVehicle, &Vehicle::setArmedShowError);
             connect(this, &Joystick::setVtolInFwdFlight, _activeVehicle, &Vehicle::setVtolInFwdFlight);
             connect(this, &Joystick::setFlightMode,      _activeVehicle, &Vehicle::setFlightMode);
-            connect(this, &Joystick::centerGimbal,       _activeVehicle->gimbalController(), &GimbalController::centerGimbal);
-            connect(this, &Joystick::gimbalStepPitchYaw, _activeVehicle->gimbalController(), &GimbalController::gimbalStepPitchYaw);
+//            connect(this, &Joystick::gimbalPitchStep,    _activeVehicle, &Vehicle::gimbalPitchStep);
+//            connect(this, &Joystick::gimbalYawStep,      _activeVehicle, &Vehicle::gimbalYawStep);
+//            connect(this, &Joystick::centerGimbal,       _activeVehicle, &Vehicle::centerGimbal);
+//            connect(this, &Joystick::gimbalControlValue, _activeVehicle, &Vehicle::gimbalControlValue);
             connect(this, &Joystick::emergencyStop,      _activeVehicle, &Vehicle::emergencyStop);
             connect(this, &Joystick::gripperAction,      _activeVehicle, &Vehicle::setGripperAction);
             connect(this, &Joystick::landingGearDeploy,  _activeVehicle, &Vehicle::landingGearDeploy);
@@ -764,8 +767,10 @@ void Joystick::stopPolling(void)
             disconnect(this, &Joystick::setArmed,           _activeVehicle, &Vehicle::setArmedShowError);
             disconnect(this, &Joystick::setVtolInFwdFlight, _activeVehicle, &Vehicle::setVtolInFwdFlight);
             disconnect(this, &Joystick::setFlightMode,      _activeVehicle, &Vehicle::setFlightMode);
-            disconnect(this, &Joystick::centerGimbal,       _activeVehicle->gimbalController(), &GimbalController::centerGimbal);
-            disconnect(this, &Joystick::gimbalStepPitchYaw, _activeVehicle->gimbalController(), &GimbalController::gimbalStepPitchYaw);
+//            disconnect(this, &Joystick::gimbalPitchStep,    _activeVehicle, &Vehicle::gimbalPitchStep);
+//            disconnect(this, &Joystick::gimbalYawStep,      _activeVehicle, &Vehicle::gimbalYawStep);
+//            disconnect(this, &Joystick::centerGimbal,       _activeVehicle, &Vehicle::centerGimbal);
+//            disconnect(this, &Joystick::gimbalControlValue, _activeVehicle, &Vehicle::gimbalControlValue);
             disconnect(this, &Joystick::gripperAction,      _activeVehicle, &Vehicle::setGripperAction);
             disconnect(this, &Joystick::landingGearDeploy,  _activeVehicle, &Vehicle::landingGearDeploy);
             disconnect(this, &Joystick::landingGearRetract, _activeVehicle, &Vehicle::landingGearRetract);
@@ -1045,17 +1050,21 @@ void Joystick::_executeButtonAction(const QString& action, bool buttonDown)
     } else if(action == _buttonActionToggleVideoRecord) {
         if (buttonDown) emit toggleVideoRecord();
     } else if(action == _buttonActionGimbalUp) {
-        if (buttonDown) emit gimbalStepPitchYaw(1, 0);
+        if (buttonDown) _pitchStep(1);
     } else if(action == _buttonActionGimbalDown) {
-        if (buttonDown) emit gimbalStepPitchYaw(-1, 0);
+        if (buttonDown) _pitchStep(-1);
     } else if(action == _buttonActionGimbalLeft) {
-        if (buttonDown) emit gimbalStepPitchYaw(0, -1);
+        if (buttonDown) _yawStep(-1);
     } else if(action == _buttonActionGimbalRight) {
-        if (buttonDown) emit gimbalStepPitchYaw(0, 1);
+        if (buttonDown) _yawStep(1);
     } else if(action == _buttonActionGimbalCenter) {
-        if (buttonDown) emit centerGimbal();
+        if (buttonDown) {
+            _localPitch = 0.0;
+            _localYaw   = 0.0;
+            emit gimbalControlValue(0.0, 0.0);
+        }
     } else if(action == _buttonActionEmergencyStop) {
-        if (buttonDown) emit emergencyStop();
+        if(buttonDown) emit emergencyStop();
     } else if(action == _buttonActionGripperGrab) {
         if(buttonDown) {
             emit gripperAction(GRIPPER_ACTION_GRAB);
@@ -1068,7 +1077,7 @@ void Joystick::_executeButtonAction(const QString& action, bool buttonDown)
         if (buttonDown) emit landingGearDeploy();
     } else if(action == _buttonActionLandingGearRetract) {
         if (buttonDown) emit landingGearRetract();
-    } else {
+    } /*else {
         if (buttonDown && _activeVehicle) {
             for (int i=0; i<_customActionManager.actions()->count(); i++) {
                 auto customAction = _customActionManager.actions()->value<CustomAction*>(i);
@@ -1078,7 +1087,24 @@ void Joystick::_executeButtonAction(const QString& action, bool buttonDown)
                 }
             }
         }
-    }
+    }*/
+}
+
+void Joystick::_pitchStep(int direction)
+{
+    _localPitch += static_cast<double>(direction);
+    //-- Arbitrary range
+    if(_localPitch < -90.0) _localPitch = -90.0;
+    if(_localPitch >  35.0) _localPitch =  35.0;
+    emit gimbalControlValue(_localPitch, _localYaw);
+}
+
+void Joystick::_yawStep(int direction)
+{
+    _localYaw += static_cast<double>(direction);
+    if(_localYaw < -180.0) _localYaw = -180.0;
+    if(_localYaw >  180.0) _localYaw =  180.0;
+    emit gimbalControlValue(_localPitch, _localYaw);
 }
 
 bool Joystick::_validAxis(int axis) const
@@ -1149,10 +1175,10 @@ void Joystick::_buildActionList(Vehicle* activeVehicle)
     _assignableButtonActions.append(new AssignableButtonAction(this, _buttonActionLandingGearDeploy));
     _assignableButtonActions.append(new AssignableButtonAction(this, _buttonActionLandingGearRetract));
 
-    for (int i=0; i<_customActionManager.actions()->count(); i++) {
-        auto customAction = _customActionManager.actions()->value<CustomAction*>(i);
-        _assignableButtonActions.append(new AssignableButtonAction(this, customAction->label()));
-    }
+//    for (int i=0; i<_customActionManager.actions()->count(); i++) {
+//        auto customAction = _customActionManager.actions()->value<CustomAction*>(i);
+//        _assignableButtonActions.append(new AssignableButtonAction(this, customAction->label()));
+//    }
 
     for(int i = 0; i < _assignableButtonActions.count(); i++) {
         AssignableButtonAction* p = qobject_cast<AssignableButtonAction*>(_assignableButtonActions[i]);

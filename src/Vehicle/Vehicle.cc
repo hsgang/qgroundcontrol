@@ -859,7 +859,7 @@ void Vehicle::_handleCameraFeedback(const mavlink_message_t& message)
     QGeoCoordinate imageCoordinate((double)feedback.lat / qPow(10.0, 7.0), (double)feedback.lng / qPow(10.0, 7.0), feedback.alt_msl);
     qCDebug(VehicleLog) << "_handleCameraFeedback coord:index" << imageCoordinate << feedback.img_idx;
     _cameraTriggerPoints.append(new QGCQGeoCoordinate(imageCoordinate, this));
-    _toolbox->audioOutput()->play(":/res/audio/shutter");
+    //_toolbox->audioOutput()->play(":/res/audio/shutter");
 }
 
 void Vehicle::_handleRangefinder(mavlink_message_t& message)
@@ -917,7 +917,7 @@ void Vehicle::_handleCameraImageCaptured(const mavlink_message_t& message)
     qCDebug(VehicleLog) << "_handleCameraFeedback coord:index" << imageCoordinate << feedback.image_index << feedback.capture_result;
     if (feedback.capture_result == 1) {
         _cameraTriggerPoints.append(new QGCQGeoCoordinate(imageCoordinate, this));
-        _toolbox->audioOutput()->play(":/res/audio/shutter");
+//        _toolbox->audioOutput()->play(":/res/audio/shutter");
     }
 }
 

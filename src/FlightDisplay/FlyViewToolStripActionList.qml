@@ -23,6 +23,7 @@ ToolStripActionList {
 //            iconSource:     "/qmlimages/Plan.svg"
 //            onTriggered:    mainWindow.showPlanView()
 //        },
+
         ToolStripAction {
             property bool _is3DViewOpen:            viewer3DWindow.isOpen
             property bool   _viewer3DEnabled:       QGroundControl.settingsManager.viewer3DSettings.enabled.rawValue
@@ -49,6 +50,7 @@ ToolStripActionList {
                 }
             }
         },
+
         PreFlightCheckListShowAction { onTriggered: displayPreFlightChecklist() },
         GuidedActionArm { },
         GuidedActionDisarm { },
