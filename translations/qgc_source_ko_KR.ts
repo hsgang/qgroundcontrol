@@ -10611,6 +10611,11 @@ Click Ok to start the auto-tuning process.
         <translation>EKF 상태</translation>
     </message>
     <message>
+        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="470"/>
+        <source>ESC Status</source>
+        <translation>추진기 정보</translation>
+    </message>
+    <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="479"/>
         <source>FlyView Settings</source>
         <translation>비행화면 설정</translation>
@@ -13778,6 +13783,11 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="246"/>
         <source>Upload</source>
         <translation>업로드</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="246"/>
+        <source>Uploading... </source>
+        <translation>업로딩... </translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="308"/>

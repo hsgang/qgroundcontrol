@@ -95,33 +95,34 @@ SetupPage {
                     } // Column
                 } // Repeater
 
-                Column {
-                    QGCLabel {
-                        anchors.horizontalCenter:   parent.horizontalCenter
-                        text:                       qsTr("All")
-                    }
+                // Column {
+                //     QGCLabel {
+                //         anchors.horizontalCenter:   parent.horizontalCenter
+                //         text:                       qsTr("All")
+                //     }
 
-                    QGCSlider {
-                        id:                         allSlider
-                        height:                     ScreenTools.defaultFontPixelHeight * _sliderHeight
-                        orientation:                Qt.Vertical
-                        minimumValue:               0
-                        maximumValue:               100
-                        stepSize:                   1
-                        value:                      0
-                        updateValueWhileDragging:   false
+                //     QGCSlider {
+                //         id:                         allSlider
+                //         height:                     ScreenTools.defaultFontPixelHeight * _sliderHeight
+                //         orientation:                Qt.Vertical
+                //         minimumValue:               0
+                //         maximumValue:               100
+                //         stepSize:                   1
+                //         value:                      0
+                //         updateValueWhileDragging:   false
 
-                        onValueChanged: {
-                            for (var sliderIndex=0; sliderIndex<sliderRepeater.count; sliderIndex++) {
-                                sliderRepeater.itemAt(sliderIndex).motorSlider.value = allSlider.value
-                            }
-                        }
-                    }
-                    QGCLabel {
-                        anchors.horizontalCenter:   parent.horizontalCenter
-                        text:                       allSlider.value + " %"
-                    }
-                } // Column
+                //         onValueChanged: {
+                //             for (var sliderIndex=0; sliderIndex<sliderRepeater.count; sliderIndex++) {
+                //                 sliderRepeater.itemAt(sliderIndex).motorSlider.value = allSlider.value
+                //             }
+                //         }
+                //     }
+                //     QGCLabel {
+                //         anchors.horizontalCenter:   parent.horizontalCenter
+                //         text:                       allSlider.value + " %"
+                //     }
+                // } // Column
+
             } // Row
 
             QGCLabel {
