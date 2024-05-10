@@ -25,7 +25,7 @@ MapQuickItem {
     property int    arrowPosition:  1 ///< 1: first quarter, 2: halfway, 3: last quarter
 
     property var    _map:           parent
-    property real   _arrowSize:     15
+    property real   _arrowSize:     ScreenTools.defaultFontPixelHeight
     property real   _arrowHeading:  0
 
     function _updateArrowDetails() {
@@ -50,15 +50,15 @@ MapQuickItem {
 
         onPaint: {
             var ctx = getContext("2d");
-            ctx.lineWidth = 2
+            ctx.lineWidth = 5
             ctx.strokeStyle = arrowColor
             ctx.beginPath();
             ctx.moveTo(_arrowSize, 0);
-            ctx.lineTo(_arrowSize * 2, _arrowSize)
+            ctx.lineTo(_arrowSize * 2, _arrowSize * 1.5)
             ctx.stroke();
             ctx.beginPath();
             ctx.moveTo(_arrowSize, 0);
-            ctx.lineTo(0, _arrowSize)
+            ctx.lineTo(0, _arrowSize * 1.5)
             ctx.stroke();
         }
 

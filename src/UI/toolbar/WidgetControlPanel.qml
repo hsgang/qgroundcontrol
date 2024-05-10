@@ -115,6 +115,14 @@ ToolIndicatorPage{
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true
+                    text:       qsTr("ESC Status")
+                    fact:       _showEscStatus
+                    visible:    _showEscStatus.visible
+                    property Fact   _showEscStatus:      QGroundControl.settingsManager.flyViewSettings.showEscStatus
+                }
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
                     text:       qsTr("Camera Projection on Map")
                     fact:       _showCameraProjectionOnMap
                     visible:    _showCameraProjectionOnMap.visible

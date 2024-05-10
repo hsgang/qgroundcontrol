@@ -25,7 +25,7 @@ import QGroundControl.FactControls
 Rectangle {
     id:         winchControlPannel
     width:      mainGridLayout.width + _margins
-    height:     mainGridLayout.height + _margins
+    height:     mainGridLayout.height + _margins * 11
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
     radius:     _margins
     visible:    false
@@ -37,15 +37,13 @@ Rectangle {
     property string   _winchStatus:             _activeVehicle ? _activeVehicle.winchStatus.status.enumStringValue : "unknown"
     property string   _winchLineLength:         _activeVehicle ? _activeVehicle.winchStatus.lineLength.valueString : "--"
 
-    GridLayout {
+    ColumnLayout {
         id:                         mainGridLayout
         Layout.alignment:           Qt.AlignHCenter
         anchors.margins:            _margins
         anchors.verticalCenter:     parent.verticalCenter
         anchors.horizontalCenter:   parent.horizontalCenter
-        columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
-        rowSpacing:                 columnSpacing
-        columns:                    1
+        spacing:                    ScreenTools.defaultFontPixelHeight / 2
 
         QGCLabel{
             text:               qsTr("Winch")
@@ -58,7 +56,7 @@ Rectangle {
             width:              ScreenTools.defaultFontPixelWidth * 8
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
+            color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
             border.color:       qgcPal.text
             border.width:       1
             scale:              windUpPress.pressedButtons ? 0.95 : 1
@@ -92,7 +90,7 @@ Rectangle {
             width:              ScreenTools.defaultFontPixelWidth * 8
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
+            color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
             border.color:       qgcPal.text
             border.width:       1
             scale:              winchStopPress.pressedButtons ? 0.95 : 1
@@ -126,7 +124,7 @@ Rectangle {
             width:              ScreenTools.defaultFontPixelWidth * 8
             height:             width
             radius:             _margins
-            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
+            color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
             border.color:       qgcPal.text
             border.width:       1
             scale:              winchReleasePress.pressedButtons ? 0.95 : 1
@@ -159,14 +157,28 @@ Rectangle {
             width:          winchValueRow.width
             height:         winchValueRow.height
             color:          "transparent"
+
             ColumnLayout{
                 id: winchValueRow
+
+                QGCLabel{
+                    text: "Status"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
+                }
                 QGCLabel{
                     text: _winchStatus
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
+                }
+                QGCLabel{
+                    text: "Length"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
                 }
                 QGCLabel{
                     text: _winchLineLength + " m"
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
                 }
             }

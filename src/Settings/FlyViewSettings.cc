@@ -46,5 +46,6 @@ DECLARE_SETTINGSFACT(FlyViewSettings, instrumentQmlFile)
 DECLARE_SETTINGSFACT(FlyViewSettings, showWindvane)
 DECLARE_SETTINGSFACT(FlyViewSettings, showVehicleInfoOnMap)
 DECLARE_SETTINGSFACT(FlyViewSettings, showCameraProjectionOnMap)
+DECLARE_SETTINGSFACT(FlyViewSettings, showEscStatus)
 
 

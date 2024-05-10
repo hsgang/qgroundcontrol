@@ -118,7 +118,7 @@ ApplicationWindow {
     }
 
     function viewSwitch(currentToolbar) {
-        flyView.visible      = false
+        flyView.visible         = false
         planView.visible        = false
         analyzeView.visible     = false
         setupView.visible       = false
@@ -285,6 +285,13 @@ ApplicationWindow {
             }
         }
     }
+//    //-------------------------------------------------------------------------
+//    /// Toolbar
+//    header: MainToolBar {
+//        id:         toolbar
+//        height:     ScreenTools.toolbarHeight
+//        visible:    !(QGroundControl.videoManager.fullScreen && flyView.visible)
+//    }
 
     footer: LogReplayStatusBar {
         visible: QGroundControl.settingsManager.flyViewSettings.showLogReplayStatusBar.rawValue
