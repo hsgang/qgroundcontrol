@@ -82,7 +82,7 @@ Item {
         leftEdgeCenterInset:    parentToolInsets.leftEdgeCenterInset
         leftEdgeBottomInset:    parentToolInsets.leftEdgeBottomInset
         rightEdgeTopInset:      parentToolInsets.rightEdgeTopInset
-        rightEdgeCenterInset:   photoVideoControl.visible ? photoVideoControl.rightEdgeCenterInset : parentToolInsets.rightEdgeCenterInset
+        rightEdgeCenterInset:   parentToolInsets.rightEdgeCenterInset
         rightEdgeBottomInset:   parentToolInsets.rightEdgeBottomInset
         topEdgeLeftInset:       parentToolInsets.topEdgeLeftInset
         topEdgeCenterInset:     telemetryPanel.visible ? telemetryPanel.topEdgeCenterInset : parentToolInsets.topEdgeCenterInset

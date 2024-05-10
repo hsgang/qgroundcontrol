@@ -42,22 +42,19 @@ Rectangle {
 
     // The following properties relate to a simple camera
     property var    _flyViewSettings:                           QGroundControl.settingsManager.flyViewSettings
-    property bool   _simpleCameraAvailable:                     !_mavlinkCamera && _activeVehicle && _flyViewSettings.showSimpleCameraControl.rawValue
-    property bool   _onlySimpleCameraAvailable:                 !_anyVideoStreamAvailable && _simpleCameraAvailable
-    property bool   _simpleCameraIsShootingInCurrentMode:       _onlySimpleCameraAvailable && !_simplePhotoCaptureIsIdle
     property bool   _showGimbalControl:                         _flyViewSettings.showGimbalControlPannel.rawValue
 
     // The following properties relate to a simple video stream
-    property bool   _videoStreamAvailable:                      _videoStreamManager.hasVideo
-    property var    _videoStreamSettings:                       QGroundControl.settingsManager.videoSettings
-    property var    _videoStreamManager:                        QGroundControl.videoManager
-    property bool   _videoStreamAllowsPhotoWhileRecording:      true
-    property bool   _videoStreamIsStreaming:                    _videoStreamManager.streaming
-    property bool   _simplePhotoCaptureIsIdle:             true
-    property bool   _videoStreamRecording:                      _videoStreamManager.recording
-    property bool   _videoStreamCanShoot:                       _videoStreamIsStreaming
-    property bool   _videoStreamIsShootingInCurrentMode:        _videoStreamInPhotoMode ? !_simplePhotoCaptureIsIdle : _videoStreamRecording
-    property bool   _videoStreamInPhotoMode:                    false
+//    property bool   _videoStreamAvailable:                      _videoStreamManager.hasVideo
+//    property var    _videoStreamSettings:                       QGroundControl.settingsManager.videoSettings
+//    property var    _videoStreamManager:                        QGroundControl.videoManager
+//    property bool   _videoStreamAllowsPhotoWhileRecording:      true
+//    property bool   _videoStreamIsStreaming:                    _videoStreamManager.streaming
+//    property bool   _simplePhotoCaptureIsIdle:             true
+//    property bool   _videoStreamRecording:                      _videoStreamManager.recording
+//    property bool   _videoStreamCanShoot:                       _videoStreamIsStreaming
+//    property bool   _videoStreamIsShootingInCurrentMode:        _videoStreamInPhotoMode ? !_simplePhotoCaptureIsIdle : _videoStreamRecording
+//    property bool   _videoStreamInPhotoMode:                    false
 
     // The following properties relate to a mavlink protocol camera
     property var    _mavlinkCameraManager:                      _activeVehicle ? _activeVehicle.cameraManager : null
@@ -69,23 +66,8 @@ Rectangle {
     property bool   _noMavlinkCameraStreams:                    _mavlinkCamera ? _mavlinkCamera.streamLabels.length : true
     property bool   _multipleMavlinkCameraStreams:              _mavlinkCamera ? _mavlinkCamera.streamLabels.length > 1 : false
     property int    _mavlinCameraCurStreamIndex:                _mavlinkCamera ? _mavlinkCamera.currentStream : -1
-    property bool   _mavlinkCameraHasThermalVideoStream:        _mavlinkCamera ? _mavlinkCamera.thermalStreamInstance : false
-    property bool   _mavlinkCameraAllowsPhotoWhileRecording:    false
-    property bool   _mavlinkCameraCanShoot:                     (!_mavlinkCameraModeUndefined && ((_mavlinkCameraStorageReady && _mavlinkCamera.storageFree > 0) || !_mavlinkCameraStorageSupported)) || _videoStreamManager.streaming
-    property bool   _mavlinkCameraIsShooting:                   ((_mavlinkCameraInVideoMode && _mavlinkCameraVideoIsRecording) || (_mavlinkCameraInPhotoMode && !_mavlinkCameraPhotoCaptureIsIdle)) || _videoStreamManager.recording
 
     // The following settings and functions unify between a mavlink camera and a simple video stream for simple access
-
-    property bool   _anyVideoStreamAvailable:                   _videoStreamManager.hasVideo
-    property string _cameraName:                                _mavlinkCamera ? _mavlinkCameraName : ""
-    property bool   _showModeIndicator:                         _mavlinkCamera ? _mavlinkCameraHasModes : _videoStreamManager.hasVideo
-    property bool   _modeIndicatorPhotoMode:                    _mavlinkCamera ? _mavlinkCameraInPhotoMode : _videoStreamInPhotoMode || _onlySimpleCameraAvailable
-    property bool   _allowsPhotoWhileRecording:                  _mavlinkCamera ? _mavlinkCameraAllowsPhotoWhileRecording : _videoStreamAllowsPhotoWhileRecording
-    property bool   _switchToPhotoModeAllowed:                  !_modeIndicatorPhotoMode && (_mavlinkCamera ? !_mavlinkCameraIsShooting : true)
-    property bool   _switchToVideoModeAllowed:                  _modeIndicatorPhotoMode && (_mavlinkCamera ? !_mavlinkCameraIsShooting : true)
-    property bool   _videoIsRecording:                          _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamRecording
-    property bool   _canShootInCurrentMode:                     _mavlinkCamera ? _mavlinkCameraCanShoot : _videoStreamCanShoot || _simpleCameraAvailable
-    property bool   _isShootingInCurrentMode:                   _mavlinkCamera ? _mavlinkCameraIsShooting : _videoStreamIsShootingInCurrentMode || _simpleCameraIsShootingInCurrentMode
 
     property var    _gimbalController:        _activeVehicle ? _activeVehicle.gimbalController : undefined
     property var    _activeGimbal:            _gimbalController ? _gimbalController.activeGimbal : undefined
