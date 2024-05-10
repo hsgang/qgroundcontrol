@@ -258,6 +258,11 @@ Item {
                 duration:       2000
             }
         }
+
+        QGCLabel {
+            text: qsTr("Uploading... ") + (_controllerProgressPct * 100).toFixed(0) + "%"
+            visible: _controllerProgressPct !== 1
+        }
     }
 }
 

@@ -20,28 +20,28 @@ import QGroundControl.ScreenTools
 ColumnLayout {
     width: _rightPanelWidth
 
-    RowLayout {
-        id:                 multiVehiclePanelSelector
-        Layout.alignment:   Qt.AlignTop
-        spacing:            ScreenTools.defaultFontPixelWidth
-        visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
+//    RowLayout {
+//        id:                 multiVehiclePanelSelector
+//        Layout.alignment:   Qt.AlignTop
+//        spacing:            ScreenTools.defaultFontPixelWidth
+//        visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
 
-        QGCMapPalette { id: mapPal; lightColors: true }
+//        QGCMapPalette { id: mapPal; lightColors: true }
 
-        QGCRadioButton {
-            id:             singleVehicleRadio
-            text:           qsTr("Single")
-            checked:        _showSingleVehicleUI
-            onClicked:      _showSingleVehicleUI = true
-            textColor:      mapPal.text
-        }
+//        QGCRadioButton {
+//            id:             singleVehicleRadio
+//            text:           qsTr("Single")
+//            checked:        _showSingleVehicleUI
+//            onClicked:      _showSingleVehicleUI = true
+//            textColor:      mapPal.text
+//        }
 
-        QGCRadioButton {
-            text:           qsTr("Multi-Vehicle")
-            textColor:      mapPal.text
-            onClicked:      _showSingleVehicleUI = false
-        }
-    }
+//        QGCRadioButton {
+//            text:           qsTr("Multi-Vehicle")
+//            textColor:      mapPal.text
+//            onClicked:      _showSingleVehicleUI = false
+//        }
+//    }
 
     TerrainProgress {
         Layout.alignment:       Qt.AlignTop
@@ -62,6 +62,7 @@ ColumnLayout {
             id: photoVideoControlComponent
 
             PhotoVideoControl {
+                visible:                    QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue
             }
         }
     }
