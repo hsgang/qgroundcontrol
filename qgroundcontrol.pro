@@ -458,12 +458,17 @@ SOURCES += \
 # Main QGC Headers and Source files
 
 HEADERS += \
+    src/ADSB/ADSBTCPLink.h \
     src/ADSB/ADSBVehicle.h \
     src/ADSB/ADSBVehicleManager.h \
     src/AnalyzeView/LogDownloadController.h \
+    src/AnalyzeView/LogEntry.h \
     src/AnalyzeView/PX4LogParser.h \
     src/AnalyzeView/ULogParser.h \
-    src/AnalyzeView/MavlinkConsoleController.h \
+    src/AnalyzeView/MAVLinkConsoleController.h \
+    src/AnalyzeView/MAVLinkMessage.h \
+    src/AnalyzeView/MAVLinkMessageField.h \
+    src/AnalyzeView/MAVLinkSystem.h \
     src/Audio/AudioOutput.h \
     src/Vehicle/Autotune.h \
     src/Camera/MavlinkCameraControl.h \
@@ -652,6 +657,7 @@ HEADERS += \
     src/Comms/UdpIODevice.h \
     src/Vehicle/UASMessageHandler.h \
     src/AnalyzeView/GeoTagController.h \
+    src/AnalyzeView/GeoTagWorker.h \
     src/AnalyzeView/ExifParser.h \
     src/Viewer3D/CityMapGeometry.h \
     src/Viewer3D/OsmParser.h \
@@ -732,12 +738,17 @@ AndroidBuild {
 }
 
 SOURCES += \
+    src/ADSB/ADSBTCPLink.cc \
     src/ADSB/ADSBVehicle.cc \
     src/ADSB/ADSBVehicleManager.cc \
     src/AnalyzeView/LogDownloadController.cc \
+    src/AnalyzeView/LogEntry.cc \
     src/AnalyzeView/PX4LogParser.cc \
     src/AnalyzeView/ULogParser.cc \
-    src/AnalyzeView/MavlinkConsoleController.cc \
+    src/AnalyzeView/MAVLinkConsoleController.cc \
+    src/AnalyzeView/MAVLinkMessage.cc \
+    src/AnalyzeView/MAVLinkMessageField.cc \
+    src/AnalyzeView/MAVLinkSystem.cc \
     src/Audio/AudioOutput.cc \
     src/Vehicle/Autotune.cpp \
     src/Camera/MavlinkCameraControl.cc \
@@ -923,6 +934,7 @@ SOURCES += \
     src/main.cc \
     src/Vehicle/UASMessageHandler.cc \
     src/AnalyzeView/GeoTagController.cc \
+    src/AnalyzeView/GeoTagWorker.cc \
     src/AnalyzeView/ExifParser.cc \
     src/Viewer3D/CityMapGeometry.cc \
     src/Viewer3D/OsmParser.cc \
@@ -1198,9 +1210,11 @@ contains (DEFINES, QGC_DISABLE_MAVLINK_INSPECTOR) {
     message("Disable mavlink inspector")
 } else {
     HEADERS += \
-        src/AnalyzeView/MAVLinkInspectorController.h
+        src/AnalyzeView/MAVLinkInspectorController.h \
+        src/AnalyzeView/MAVLinkChartController.h
     SOURCES += \
-        src/AnalyzeView/MAVLinkInspectorController.cc
+        src/AnalyzeView/MAVLinkInspectorController.cc \
+        src/AnalyzeView/MAVLinkChartController.cc
     QT += \
         charts
 }

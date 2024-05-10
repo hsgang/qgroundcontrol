@@ -165,7 +165,7 @@ QVariantList& QGCCorePlugin::analyzePages()
 #if !defined(__mobile__)
         _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("GeoTag Images"),    QUrl::fromUserInput("qrc:/qml/GeoTagPage.qml"),             QUrl::fromUserInput("qrc:/qmlimages/GeoTagIcon"))));
 #endif
-        _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("MAVLink Console"),  QUrl::fromUserInput("qrc:/qml/MavlinkConsolePage.qml"),     QUrl::fromUserInput("qrc:/qmlimages/MavlinkConsoleIcon"))));
+        _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("MAVLink Console"),  QUrl::fromUserInput("qrc:/qml/MAVLinkConsolePage.qml"),     QUrl::fromUserInput("qrc:/qmlimages/MAVLinkConsoleIcon"))));
 #if !defined(QGC_DISABLE_MAVLINK_INSPECTOR)
         _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("MAVLink Inspector"),QUrl::fromUserInput("qrc:/qml/MAVLinkInspectorPage.qml"),   QUrl::fromUserInput("qrc:/qmlimages/MAVLinkInspector"))));
 #endif
@@ -339,6 +339,12 @@ void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString& defaultSet
 QQmlApplicationEngine* QGCCorePlugin::createQmlApplicationEngine(QObject* parent)
 {
     QQmlApplicationEngine* qmlEngine = new QQmlApplicationEngine(parent);
+    /* EventDatabase eventDatabase;
+    EventMonitor eventMonitor;
+    qmlEngine->setInitialProperties({
+        { "eventDatabase", QVariant::fromValue(&eventDatabase) },
+        { "eventMonitor", QVariant::fromValue(&eventMonitor) }
+    }); */
     qmlEngine->addImportPath("qrc:/qml");
     qmlEngine->rootContext()->setContextProperty("joystickManager", qgcApp()->toolbox()->joystickManager());
     qmlEngine->rootContext()->setContextProperty("debugMessageModel", AppMessages::getModel());
