@@ -7507,24 +7507,24 @@ Click Ok to start the auto-tuning process.
         <translation>영상 설정</translation>
     </message>
     <message>
+        <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="72"/>
+        <source>Comm Links</source>
+        <translation>연결 관리</translation>
+    </message>
+    <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="45"/>
         <source>Telemetry</source>
         <translation>텔레메트리 설정</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="52"/>
-        <source>NTRIP</source>
-        <translation>NTRIP</translation>
+        <source>Network RTK</source>
+        <translation>네트워크 RTK</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="59"/>
         <source>ADSB Server</source>
         <translation>ADSB 서버</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="72"/>
-        <source>Comm Links</source>
-        <translation>연결 관리</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="79"/>
@@ -8216,7 +8216,7 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/VideoSettings.qml" line="450"/>
-        <source>Video Storage</source>
+        <source>Local Video Storage</source>
         <translation>영상 저장</translation>
     </message>
     <message>
@@ -9817,6 +9817,11 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <source>No Links Configured</source>
+        <translation>연결 목록 없음</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
         <source>Auto Connect</source>
         <translation>자동 연결</translation>
     </message>
@@ -10777,6 +10782,11 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="452"/>
+        <source>ESC Status</source>
+        <translation>ESC 상태정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="452"/>
         <source>Camera Projection on Map</source>
         <translation>카메라뷰 투영 표시</translation>
     </message>
@@ -10793,12 +10803,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="464"/>
         <source>Vibration Status</source>
-        <translation>진동 상태</translation>
+        <translation>진동 상태정보</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="470"/>
         <source>EKF Status</source>
-        <translation>EKF 상태</translation>
+        <translation>EKF 상태정보</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="479"/>
@@ -19315,24 +19325,34 @@ Confirm change?</source>
     </message>
 </context>
 <context>
-    <name>QGCPipOverlay</name>
+    <name>PipView</name>
     <message>
-        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="268"/>
+        <location filename="../src/QmlControls/PipView.qml" line="268"/>
         <source>Swap</source>
         <translation>화면전환</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="274"/>
+        <location filename="../src/QmlControls/PipView.qml" line="290"/>
+        <source>2D View</source>
+        <translation>2D 뷰</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/PipView.qml" line="290"/>
+        <source>3D View</source>
+        <translation>3D 뷰</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/PipView.qml" line="274"/>
         <source>Layer</source>
         <translation>레이어</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="284"/>
+        <location filename="../src/QmlControls/PipView.qml" line="284"/>
         <source>Show PIP</source>
         <translation>PIP 켬</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="290"/>
+        <location filename="../src/QmlControls/PipView.qml" line="290"/>
         <source>Hide PIP</source>
         <translation>숨기기</translation>
     </message>

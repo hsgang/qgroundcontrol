@@ -106,7 +106,7 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Instrument Panel")
-        visible:            _alternateInstrumentPanel.visible || _showAdditionalIndicatorsCompass.visible || _lockNoseUpCompass.visible
+        visible:            _showAdditionalIndicatorsCompass.visible || _lockNoseUpCompass.visible
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true

@@ -22,6 +22,8 @@ Item {
     height:     _pipSize * (9/16)
     visible:    item2 && item2.pipState !== item2.pipState.window && show
 
+    property bool   isViewer3DOpen:         false
+
     property var    item1:                  null    // Required
     property var    item2:                  null    // Optional, may come and go
     property string item1IsFullSettingsKey          // Settings key to save whether item1 was saved in full mode
@@ -256,7 +258,7 @@ Item {
         ToolStrip {
             id: pipToolStrip
             model:  pipToolStripList.model
-            maxHeight:          width * 4
+            maxHeight:          width * 5
 
             ToolStripActionList {
                 id: pipToolStripList
@@ -267,6 +269,34 @@ Item {
                         onTriggered: _root._swapPip()
                         visible:    _isExpanded
                     },
+
+                    ToolStripAction {
+                        property bool _is3DViewOpen:            isViewer3DOpen //viewer3DWindow.isOpen
+                        property bool _viewer3DEnabled:       QGroundControl.settingsManager.viewer3DSettings.enabled.rawValue
+
+                        id: view3DIcon
+                        visible: _viewer3DEnabled && (item1.pipState.state === item1.pipState.fullState)
+                        text:           qsTr("3D View")
+                        iconSource:     "/qmlimages/Viewer3D/City3DMapIcon.svg"
+                        onTriggered:{
+                            if(_is3DViewOpen === false){
+                                viewer3DWindow.open()
+                            }else{
+                                viewer3DWindow.close()
+                            }
+                        }
+
+                        on_Is3DViewOpenChanged: {
+                            if(_is3DViewOpen === true){
+                                view3DIcon.iconSource =     "/InstrumentValueIcons/outlineMap.svg"
+                                text=           qsTr("2D View")
+                            }else{
+                                iconSource =     "/qmlimages/Viewer3D/City3DMapIcon.svg"
+                                text =           qsTr("3D View")
+                            }
+                        }
+                    },
+
                     ToolStripAction {
                         text: qsTr("Layer")
                         iconSource: "/InstrumentValueIcons/layers.svg"

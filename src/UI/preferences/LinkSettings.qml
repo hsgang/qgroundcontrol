@@ -18,7 +18,6 @@ import QGroundControl.FactControls
 import QGroundControl.ScreenTools
 import QGroundControl.Palette
 import QGroundControl.FactSystem
-import QGroundControl.FactControls
 
 SettingsPage {
     property var    _linkManager: QGroundControl.linkManager
@@ -44,6 +43,7 @@ SettingsPage {
         heading:    qsTr("Added Link List")
 
         Repeater {
+            id: linkRepeater
             model: _linkManager.linkConfigurations
 
             RowLayout {
@@ -88,6 +88,11 @@ SettingsPage {
                                     })
                 }
             }
+        }
+
+        QGCLabel {
+            visible: linkRepeater.count < 1
+            text: qsTr("No Links Configured")
         }
     }
 

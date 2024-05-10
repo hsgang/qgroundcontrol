@@ -422,32 +422,32 @@ void SerialConfiguration::_initBaudRates()
         "1800",
 #endif
 #endif
-        "2400",
-        "4800",
+//        "2400",
+//        "4800",
         "9600",
-#if defined(Q_OS_WIN)
-        "14400",
-#endif
-        "19200",
-        "38400",
-#if defined(Q_OS_WIN)
-        "56000",
-#endif
+//#if defined(Q_OS_WIN)
+//        "14400",
+//#endif
+//        "19200",
+//        "38400",
+//#if defined(Q_OS_WIN)
+//        "56000",
+//#endif
         "57600",
         "115200",
-#if defined(Q_OS_WIN)
-        "128000",
-#endif
-        "230400",
-#if defined(Q_OS_WIN)
-        "256000",
-#endif
-        "460800",
-        "500000",
-#if defined(Q_OS_LINUX)
-        "576000",
-#endif
-        "921600",
+//#if defined(Q_OS_WIN)
+//        "128000",
+//#endif
+//        "230400",
+//#if defined(Q_OS_WIN)
+//        "256000",
+//#endif
+//        "460800",
+//        "500000",
+//#if defined(Q_OS_LINUX)
+//        "576000",
+//#endif
+//        "921600",
     });
 }
 

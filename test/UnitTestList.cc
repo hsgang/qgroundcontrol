@@ -57,8 +57,8 @@
 // #include "VisualMissionItemTest.h"
 
 // qgcunittest
-#include "ComponentInformationCacheTest.h"
-#include "ComponentInformationTranslationTest.h"
+#include "Vehicle/Components/ComponentInformationCacheTest.h"
+#include "Vehicle/Components/ComponentInformationTranslationTest.h"
 // #include "FileDialogTest.h"
 // #include "MainWindowTest.h"
 // #include "MessageBoxTest.h"
@@ -76,8 +76,8 @@
 
 // Vehicle
 // Components
-#include "ComponentInformationCacheTest.h"
-#include "ComponentInformationTranslationTest.h"
+#include "Vehicle/Components/ComponentInformationCacheTest.h"
+#include "Vehicle/Components/ComponentInformationTranslationTest.h"
 #include "FTPManagerTest.h"
 // #include "InitialConnectTest.h"
 // #include "RequestMessageTest.h"

@@ -408,8 +408,8 @@ void QGCApplication::init()
     qmlRegisterSingletonType<SiYi>("SiYi.Object", 1, 0, "SiYi", [](QQmlEngine*, QJSEngine*)->QObject*{
         return SiYi::instance();
     });
-    qmlRegisterUncreatableType<SiYiCamera>("SiYi.Object", 1, 0, "SiYiCamera", kRefOnly);
-    qmlRegisterUncreatableType<SiYiTransmitter>("SiYi.Object", 1, 0, "SiYiTransmitter", kRefOnly);
+    qmlRegisterUncreatableType<SiYiCamera>("SiYi.Object", 1, 0, "SiYiCamera", "Reference only");
+    qmlRegisterUncreatableType<SiYiTransmitter>("SiYi.Object", 1, 0, "SiYiTransmitter", "Reference only");
 
     // Although this should really be in _initForNormalAppBoot putting it here allowws us to create unit tests which pop up more easily
     if(QFontDatabase::addApplicationFont(":/fonts/opensans") < 0) {

@@ -117,6 +117,7 @@ T.ComboBox {
         text:                       control.alternateText === "" ? control.currentText : control.alternateText
         font:                       control.font
         color:                      qgcPal.buttonText
+        elide:                      Text.ElideRight
     }
 
     background: Rectangle {

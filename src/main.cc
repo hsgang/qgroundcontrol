@@ -26,7 +26,7 @@
 #include "CmdLineOptParser.h"
 
 #ifdef UNITTEST_BUILD
-#include "UnitTestList.h"
+#include "test/UnitTestList.h"
 #endif
 
 #ifdef Q_OS_WIN
