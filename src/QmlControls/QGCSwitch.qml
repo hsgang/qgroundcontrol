@@ -7,43 +7,44 @@
  *
  ****************************************************************************/
 
-import QtQuick                  2.12 //2.3
-import QtQuick.Controls         2.12 //1.2
-import QtQuick.Controls.Styles  1.4
+import QtQuick
+import QtQuick.Controls
 
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl.Palette
+import QGroundControl.Controls
+import QGroundControl.ScreenTools
 
 Switch {
     id: control
-    text: ""
 
-    QGCPalette { id:qgcPal; colorGroupEnabled: true }
+    readonly property int _radius: 3
 
-    indicator: Rectangle{
-        height: ScreenTools.defaultFontPixelHeight * 0.9
-        width:  height * 2
-        x:  control.leftPadding
-        y:  parent.height / 2 - height / 2
-        color:          (control.checked && control.enabled) ? qgcPal.brandingBlue : qgcPal.windowShadeLight
-        radius:         height / 2
-
-        Rectangle {
-            x: control.checked ? parent.width - width - 4 : 4
-            height:  parent.height - 8
-            width: height
-            anchors.verticalCenter: parent.verticalCenter
-            color:          qgcPal.colorWhite//control.enabled ? qgcPal.colorWhite : qgcPal.colorGrey
-            radius:         height / 2
-        }
+    QGCPalette {
+        id:                 qgcPal
+        colorGroupEnabled:  true
     }
 
-    contentItem: Text {
-            text: control.text
-            font: control.font
-            opacity: enabled ? 1.0 : 0.3
-            color: qgcPal.text
-            verticalAlignment: Text.AlignVCenter
-            leftPadding: control.indicator.width + control.spacing
+    contentItem: QGCLabel {
+        text:               control.text
+        verticalAlignment:  Text.AlignVCenter
+        rightPadding:       control.indicator.width + control.spacing
+    }
+
+    indicator: Rectangle {
+        implicitWidth: knob.width * 2
+        implicitHeight: knob.height
+        x: control.width - width - control.rightPadding
+        y: parent.height / 2 - height / 2
+        radius: knob.radius
+        color: control.checked ? qgcPal.primaryButton : qgcPal.button
+
+        Rectangle {
+            id: knob
+            x: control.checked ? parent.width - width : 0
+            width: ScreenTools.defaultFontPixelHeight
+            height: ScreenTools.defaultFontPixelHeight
+            radius: height / 2
+            color: qgcPal.buttonText
+        }
     }
 }

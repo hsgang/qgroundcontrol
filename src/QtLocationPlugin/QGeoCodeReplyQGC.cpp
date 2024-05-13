@@ -53,8 +53,7 @@
 #include <QtPositioning/QGeoAddress>
 #include <QtPositioning/QGeoLocation>
 #include <QtPositioning/QGeoRectangle>
-#include <QSet>
-#include <QDebug>
+#include <QtCore/QSet>
 
 enum QGCGeoCodeType {
     GeoCodeTypeUnknown,
@@ -275,7 +274,7 @@ void QGeoCodeReplyQGC::networkReplyFinished()
         QGeoLocation location;
         location.setAddress(address);
         location.setCoordinate(coordinate);
-        location.setBoundingBox(boundingBox);
+        location.setBoundingShape(boundingBox);
 
         locations << location;
     }

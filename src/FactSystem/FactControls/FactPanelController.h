@@ -13,19 +13,23 @@
 /// @file
 ///     @author Don Gagne <don@thegagnes.com>
 
-#include <QObject>
-#include <QQuickItem>
-
-#include "UASInterface.h"
-#include "AutoPilotPlugin.h"
-#include "QGCLoggingCategory.h"
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
+#include <QtCore/QTimer>
+#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(FactPanelControllerLog)
+
+class AutoPilotPlugin;
+class Vehicle;
+class Fact;
 
 /// FactPanelController is used for handling missing Facts from C++ code.
 class FactPanelController : public QObject
 {
     Q_OBJECT
+    Q_MOC_INCLUDE("Vehicle.h")
+    Q_MOC_INCLUDE("Fact.h")
 public:
     FactPanelController();
 
@@ -50,7 +54,6 @@ protected:
     void _reportMissingParameter(int componentId, const QString& name);
 
     Vehicle*            _vehicle    = nullptr;
-    UASInterface*       _uas        = nullptr;
     AutoPilotPlugin*    _autopilot  = nullptr;
 
 private slots:

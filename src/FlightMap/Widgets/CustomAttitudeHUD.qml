@@ -1,12 +1,11 @@
-import QtQuick              2.3
-import QtGraphicalEffects   1.0
+import QtQuick
 
-import QGroundControl              1.0
-import QGroundControl.Controls     1.0
-import QGroundControl.ScreenTools  1.0
-import QGroundControl.Vehicle      1.0
-import QGroundControl.Palette      1.0
-import QGroundControl.FlightDisplay 1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
+import QGroundControl.Palette
+import QGroundControl.FlightDisplay
 
 
 // Rectangle {
@@ -634,38 +633,12 @@ Item {
         sourceSize.width:   width
         fillMode:           Image.PreserveAspectFit
 
-        layer {
-            enabled: true
-            effect: ColorOverlay {
-                color: qgcPal.textHighlight
-            }
-        }
-
         transform: Rotation {
             origin.x:       rollDial.width / 2
             origin.y:       rollDial.height
             angle:          -_rollAngle
         }
     }
-
-//    ColorOverlay {
-//        anchors.fill:       rollDial
-//        source:             rollDial
-//        color:              qgcPal.textHighlight
-//        visible:            rollDial.visible
-//    }
-
-//    Image {
-//        id:                 pointer
-//        visible:            _lockNoseUpCompass
-//        anchors { bottom: root.verticalCenter; horizontalCenter: parent.horizontalCenter }
-//        source:             "/qmlimages/rollPointerWhite.svg"
-//        mipmap:             true
-//        width:              rollDial.width
-//        sourceSize.width:   width
-//        fillMode:           Image.PreserveAspectFit
-//    }
-
 
     Image {
         id:                 crossHair
@@ -677,13 +650,6 @@ Item {
         sourceSize.width:   width
         //color:              qgcPal.text
         fillMode:           Image.PreserveAspectFit
-    }
-
-    ColorOverlay {
-        anchors.fill:       crossHair
-        source:             crossHair
-        color:              qgcPal.textHighlight
-        visible:            crossHair.visible
     }
 
     QGCPitchIndicator {

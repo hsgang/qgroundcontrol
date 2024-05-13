@@ -16,13 +16,15 @@
 #endif
 
 #include "QGCMapEngineManager.h"
-#include "QGCApplication.h"
 #include "QGCMapTileSet.h"
 #include "QGCMapUrlEngine.h"
+#include "QGCMapEngine.h"
+#include "QGCLoggingCategory.h"
 
-#include <QSettings>
-#include <QStorageInfo>
-#include <stdio.h>
+#include <QtCore/QSettings>
+#include <QtCore/QRegularExpression>
+#include <QtCore/QStorageInfo>
+#include <QtQml/QQmlEngine>
 
 QGC_LOGGING_CATEGORY(QGCMapEngineManagerLog, "QGCMapEngineManagerLog")
 
@@ -222,14 +224,13 @@ QGCMapEngineManager::mapList()
 QStringList
 QGCMapEngineManager::mapProviderList()
 {
-    // Extract Provider name from MapName ( format : "Provider Type")
     QStringList mapList = getQGCMapEngine()->getMapNameList();
 
     // Don't return the Elevations provider. This is not selectable as a map provider by the user.
     mapList.removeAll(UrlFactory::kCopernicusElevationProviderKey);
 
     // Extract Provider name from MapName ( format : "Provider Type")
-    mapList.replaceInStrings(QRegExp("^([^\\ ]*) (.*)$"),"\\1");
+    mapList.replaceInStrings(QRegularExpression("^([^\\ ]*) (.*)$"),"\\1");
     mapList.removeDuplicates();
 
     return mapList;
@@ -242,7 +243,7 @@ QGCMapEngineManager::mapTypeList(QString provider)
     // Extract type name from MapName ( format : "Provider Type")
     QStringList mapList = getQGCMapEngine()->getMapNameList();
     mapList = mapList.filter(QRegularExpression(provider));
-    mapList.replaceInStrings(QRegExp("^([^\\ ]*) (.*)$"),"\\2");
+    mapList.replaceInStrings(QRegularExpression("^([^\\ ]*) (.*)$"),"\\2");
     mapList.removeDuplicates();
     return mapList;
 }

@@ -8,11 +8,23 @@
  ****************************************************************************/
 
 #include "QGroundControlQmlGlobal.h"
+#include "QGCApplication.h"
 #include "LinkManager.h"
+#include "MAVLinkProtocol.h"
+#include "QGCMapUrlEngine.h"
+#include "FirmwarePluginManager.h"
+#include "AppSettings.h"
+#include "PositionManager.h"
+#ifndef NO_SERIAL_LINK
+#include "GPSManager.h"
+#endif
+#include "QGCPalette.h"
+#ifdef QT_DEBUG
+#include "MockLink.h"
+#endif
 
-#include <QSettings>
-#include <QLineF>
-#include <QPointF>
+#include <QtCore/QSettings>
+#include <QtCore/QLineF>
 
 static const char* kQmlGlobalKeyName = "QGCQml";
 
@@ -28,7 +40,7 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QGCApplication* app, QGCToolbox
     : QGCTool               (app, toolbox)
 {
     // We clear the parent on this object since we run into shutdown problems caused by hybrid qml app. Instead we let it leak on shutdown.
-    setParent(nullptr);
+    // setParent(nullptr);
 
     // Load last coordinates and zoom from config file
     QSettings settings;
@@ -76,18 +88,17 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
     _corePlugin             = toolbox->corePlugin();
     _firmwarePluginManager  = toolbox->firmwarePluginManager();
     _settingsManager        = toolbox->settingsManager();
-    _gpsRtkFactGroup        = qgcApp()->gpsRtkFactGroup();
+#ifndef NO_SERIAL_LINK
+    _gpsRtkFactGroup        = toolbox->gpsManager()->gpsRtkFactGroup();
+#endif
     _adsbVehicleManager     = toolbox->adsbVehicleManager();
     _ntrip                  = toolbox->ntrip();
     _globalPalette          = new QGCPalette(this);
-#if defined(QGC_ENABLE_PAIRING)
-    _pairingManager         = toolbox->pairingManager();
+#ifndef QGC_AIRLINK_DISABLED
+    _airlinkManager         = toolbox->airlinkManager();
 #endif
-#if defined(QGC_GST_TAISYNC_ENABLED)
-    _taisyncManager         = toolbox->taisyncManager();
-#endif
-#if defined(QGC_GST_MICROHARD_ENABLED)
-    _microhardManager       = toolbox->microhardManager();
+#ifdef CONFIG_UTM_ADAPTER
+    _utmspManager            = toolbox->utmspManager();
 #endif
 }
 
@@ -191,13 +202,13 @@ void QGroundControlQmlGlobal::stopOneMockLink(void)
 
 void QGroundControlQmlGlobal::setIsVersionCheckEnabled(bool enable)
 {
-    qgcApp()->toolbox()->mavlinkProtocol()->enableVersionCheck(enable);
+    _toolbox->mavlinkProtocol()->enableVersionCheck(enable);
     emit isVersionCheckEnabledChanged(enable);
 }
 
 void QGroundControlQmlGlobal::setMavlinkSystemID(int id)
 {
-    qgcApp()->toolbox()->mavlinkProtocol()->setSystemId(id);
+    _toolbox->mavlinkProtocol()->setSystemId(id);
     emit mavlinkSystemIDChanged(id);
 }
 
@@ -262,12 +273,15 @@ void QGroundControlQmlGlobal::setFlightMapZoom(double zoom)
 
 QString QGroundControlQmlGlobal::qgcVersion(void) const
 {
-    QString versionStr = qgcApp()->applicationVersion();
-#ifdef __androidArm32__
-    versionStr += QStringLiteral(" %1").arg(tr("32 bit"));
-#elif __androidArm64__
-    versionStr += QStringLiteral(" %1").arg(tr("64 bit"));
-#endif
+    QString versionStr = _app->applicationVersion();
+    if(QSysInfo::buildAbi().contains("32"))
+    {
+        versionStr += QStringLiteral(" %1").arg(tr("32 bit"));
+    }
+    else if(QSysInfo::buildAbi().contains("64"))
+    {
+        versionStr += QStringLiteral(" %1").arg(tr("64 bit"));
+    }
     return versionStr;
 }
 
@@ -313,4 +327,54 @@ QString QGroundControlQmlGlobal::altitudeModeShortDescription(AltMode altMode)
 
     // Should never get here but makes some compilers happy
     return QString();
+}
+
+bool QGroundControlQmlGlobal::isVersionCheckEnabled()
+{
+    return _toolbox->mavlinkProtocol()->versionCheckEnabled();
+}
+
+int QGroundControlQmlGlobal::mavlinkSystemID()
+{
+    return _toolbox->mavlinkProtocol()->getSystemId();
+}
+
+QString QGroundControlQmlGlobal::elevationProviderName()
+{
+    return UrlFactory::kCopernicusElevationProviderKey;
+}
+
+QString QGroundControlQmlGlobal::elevationProviderNotice()
+{
+    return UrlFactory::kCopernicusElevationProviderNotice;
+}
+
+QString QGroundControlQmlGlobal::parameterFileExtension() const
+{
+    return AppSettings::parameterFileExtension;
+}
+
+QString QGroundControlQmlGlobal::missionFileExtension() const
+{
+    return AppSettings::missionFileExtension;
+}
+
+QString QGroundControlQmlGlobal::telemetryFileExtension() const
+{
+    return AppSettings::telemetryFileExtension;
+}
+
+QString QGroundControlQmlGlobal::appName()
+{
+    return _app->applicationName();
+}
+
+void QGroundControlQmlGlobal::deleteAllSettingsNextBoot()
+{
+    _app->deleteAllSettingsNextBoot();
+}
+
+void QGroundControlQmlGlobal::clearDeleteAllSettingsNextBoot()
+{
+    _app->clearDeleteAllSettingsNextBoot();
 }

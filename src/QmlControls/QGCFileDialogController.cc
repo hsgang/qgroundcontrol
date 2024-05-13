@@ -9,13 +9,10 @@
 
 
 #include "QGCFileDialogController.h"
+#include "QGCLoggingCategory.h"
 #include "QGCApplication.h"
 #include "SettingsManager.h"
-#include "AppSettings.h"
-
-#include <QStandardPaths>
-#include <QDebug>
-#include <QDir>
+#include <QtCore/QDir>
 
 QGC_LOGGING_CATEGORY(QGCFileDialogControllerLog, "QGCFileDialogControllerLog")
 
@@ -88,7 +85,7 @@ QString QGCFileDialogController::fullFolderPathToShortMobilePath(const QString& 
     QString defaultSavePath = qgcApp()->toolbox()->settingsManager()->appSettings()->savePath()->rawValueString();
     if (fullFolderPath.startsWith(defaultSavePath)) {
         int lastDirSepIndex = fullFolderPath.lastIndexOf(QStringLiteral("/"));
-        return qgcApp()->applicationName() + QStringLiteral("/") + fullFolderPath.right(fullFolderPath.length() - lastDirSepIndex);
+        return QCoreApplication::applicationName() + QStringLiteral("/") + fullFolderPath.right(fullFolderPath.length() - lastDirSepIndex);
     } else {
         return fullFolderPath;
     }
@@ -96,4 +93,15 @@ QString QGCFileDialogController::fullFolderPathToShortMobilePath(const QString& 
     qWarning() << "QGCFileDialogController::fullFolderPathToShortMobilePath should only be used in mobile builds";
     return fullFolderPath;
 #endif
+}
+
+QString QGCFileDialogController::urlToLocalFile(QUrl url)
+{
+    // For some strange reason on Qt6 running on Linux files returned by FileDialog are not returned as local file urls.
+    // Seems to be new behavior with Qt6.
+    if (url.isLocalFile()) {
+        return url.toLocalFile();
+    } else {
+        return url.toString();
+    }
 }

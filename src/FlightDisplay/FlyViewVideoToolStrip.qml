@@ -1,15 +1,15 @@
-import QtQml.Models                 2.12
-import QtQuick                      2.12
-import QtQuick.Controls             2.15
-import QtQuick.Layouts              1.11
-import QtQuick.Dialogs              1.2
-import QtPositioning                5.3
+import QtQml.Models
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import QtPositioning
 
-import QGroundControl               1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.FlightDisplay 1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.FactControls  1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.FlightDisplay
+import QGroundControl.ScreenTools
+import QGroundControl.FactControls
 
 Item {
     id:     rootItem
@@ -202,7 +202,7 @@ Item {
                     visible:            !toolStripPanelVideo.panelHidden
                     enabled:            flyView._mainWindowIsMap
 
-                    onVisibleChanged: {
+                    onVisibleChanged: function(visible) {
                         if (!visible)
                             checked = false
                     }
@@ -299,7 +299,7 @@ Item {
                 Layout.columnSpan: 2
                 Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
                 //Layout.fillWidth:  true
-                pointSize:         ScreenTools.smallFontPointSize
+                font.pointSize:         ScreenTools.smallFontPointSize
                 implicitHeight:    ScreenTools.implicitButtonHeight * 0.6
                 implicitWidth:     ScreenTools.implicitButtonWidth * 2
                 backRadius:        ScreenTools.defaultFontPixelWidth / 2
@@ -324,7 +324,7 @@ Item {
                 Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
                 checkable:          false
                 backRadius:         ScreenTools.defaultFontPixelWidth / 2
-                pointSize:          ScreenTools.smallFontPointSize
+                font.pointSize:          ScreenTools.smallFontPointSize
                 implicitHeight:     ScreenTools.implicitButtonHeight * 0.6
                 implicitWidth:     ScreenTools.implicitButtonWidth * 2
 
@@ -338,7 +338,7 @@ Item {
                 text:             qsTr("Cancel")
                 //visible:          gimbalMapActions.roiActive
                 Layout.alignment:   Qt.AlignHCenter | Qt.AlignTop
-                pointSize:        ScreenTools.smallFontPointSize
+                font.pointSize:        ScreenTools.smallFontPointSize
                 implicitHeight:   ScreenTools.implicitButtonHeight * 0.6
                 implicitWidth:     ScreenTools.implicitButtonWidth * 2
                 backRadius:       ScreenTools.defaultFontPixelWidth / 2

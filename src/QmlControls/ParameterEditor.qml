@@ -7,18 +7,18 @@
  *
  ****************************************************************************/
 
-import QtQuick                      2.3
-import QtQuick.Controls             1.2
-import QtQuick.Dialogs              1.2
-import QtQuick.Layouts              1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Dialogs
+import QtQuick.Layouts
 
-import QGroundControl               1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Controllers   1.0
-import QGroundControl.FactSystem    1.0
-import QGroundControl.FactControls  1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
+import QGroundControl.Controllers
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
 
 Item {
     id:         _root
@@ -32,12 +32,11 @@ Item {
     property bool   _showRCToParam:     _activeVehicle.px4Firmware
     property var    _appSettings:       QGroundControl.settingsManager.appSettings
     property var    _controller:        controller
+    property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
 
     ParameterEditorController {
         id: controller
     }
-
-    ExclusiveGroup { id: sectionGroup }
 
     //---------------------------------------------
     //-- Header
@@ -95,7 +94,6 @@ Item {
         anchors.bottom: header.bottom
         anchors.right:  parent.right
         text:           qsTr("Tools")
-        visible:        !_searchFilter
         onClicked:      toolsMenu.popup()
     }
 
@@ -109,7 +107,7 @@ Item {
             text:           qsTr("Reset all to firmware's defaults")
             onTriggered:    mainWindow.showMessageDialog(qsTr("Reset All"),
                                                          qsTr("Select Reset to reset all parameters to their defaults.\n\nNote that this will also completely reset everything, including UAVCAN nodes, all vehicle settings, setup and calibrations."),
-                                                         StandardButton.Cancel | StandardButton.Reset,
+                                                         Dialog.Cancel | Dialog.Reset,
                                                          function() { controller.resetAllToDefaults() })
         }
         QGCMenuItem {
@@ -117,7 +115,7 @@ Item {
             visible:        !_activeVehicle.apmFirmware
             onTriggered:    mainWindow.showMessageDialog(qsTr("Reset All"),
                                                          qsTr("Select Reset to reset all parameters to the vehicle's configuration defaults."),
-                                                         StandardButton.Cancel | StandardButton.Reset,
+                                                         Dialog.Cancel | Dialog.Reset,
                                                          function() { controller.resetAllToVehicleConfiguration() })
         }
         QGCMenuSeparator { }
@@ -125,7 +123,6 @@ Item {
             text:           qsTr("Load from file...")
             onTriggered: {
                 fileDialog.title =          qsTr("Load Parameters")
-                fileDialog.selectExisting = true
                 fileDialog.openForLoad()
             }
         }
@@ -133,7 +130,6 @@ Item {
             text:           qsTr("Save to file...")
             onTriggered: {
                 fileDialog.title =          qsTr("Save Parameters")
-                fileDialog.selectExisting = false
                 fileDialog.openForSave()
             }
         }
@@ -148,7 +144,7 @@ Item {
             text:           qsTr("Reboot Vehicle")
             onTriggered:    mainWindow.showMessageDialog(qsTr("Reboot Vehicle"),
                                                          qsTr("Select Ok to reboot vehicle."),
-                                                         StandardButton.Cancel | StandardButton.Ok,
+                                                         Dialog.Cancel | Dialog.Ok,
                                                          function() { _activeVehicle.rebootVehicle() })
         }
     }
@@ -158,6 +154,7 @@ Item {
         id :                groupScroll
         width:              ScreenTools.defaultFontPixelWidth * 25
         anchors.top:        header.bottom
+        anchors.topMargin:  _margins
         anchors.bottom:     parent.bottom
         clip:               true
         pixelAligned:       true
@@ -185,7 +182,6 @@ Item {
                         anchors.right:  parent.right
                         text:           object.name
                         checked:        object === controller.currentCategory
-                        exclusiveGroup: sectionGroup
 
                         onCheckedChanged: {
                             if (checked) {
@@ -223,6 +219,7 @@ Item {
         anchors.left:       _searchFilter ? parent.left : groupScroll.right
         anchors.right:      parent.right
         anchors.top:        header.bottom
+        anchors.topMargin:  _margins
         anchors.bottom:     parent.bottom
         orientation:        ListView.Vertical
         model:              controller.parameters
@@ -302,12 +299,12 @@ Item {
         folder:         _appSettings.parameterSavePath
         nameFilters:    [ qsTr("Parameter Files (*.%1)").arg(_appSettings.parameterFileExtension) , qsTr("All Files (*)") ]
 
-        onAcceptedForSave: {
+        onAcceptedForSave: (file) => {
             controller.saveToFile(file)
             close()
         }
 
-        onAcceptedForLoad: {
+        onAcceptedForLoad: (file) => {
             close()
             if (controller.buildDiffFromFile(file)) {
                 parameterDiffDialog.createObject(mainWindow).open()

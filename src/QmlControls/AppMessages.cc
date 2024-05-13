@@ -17,9 +17,9 @@
 #include "SettingsManager.h"
 #include "AppSettings.h"
 
-#include <QStringListModel>
-#include <QtConcurrent>
-#include <QTextStream>
+#include <QtCore/QStringListModel>
+#include <QtConcurrent/QtConcurrent>
+#include <QtCore/QTextStream>
 
 Q_GLOBAL_STATIC(AppLogModel, debug_model)
 
@@ -68,7 +68,7 @@ void AppLogModel::writeMessages(const QString dest_file)
 {
     const QString writebuffer(stringList().join('\n').append('\n'));
 
-    QtConcurrent::run([dest_file, writebuffer] {
+    QFuture<void> future = QtConcurrent::run([dest_file, writebuffer] {
         emit debug_model->writeStarted();
         bool success = false;
         QFile file(dest_file);

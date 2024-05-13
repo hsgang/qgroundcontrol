@@ -21,7 +21,7 @@ ToolStripAction {
     text:           qsTr("Custom")
     iconSource:     "/InstrumentValueIcons/navigation-more.svg"
     visible:        isEnabled
-    enabled:        manager.hasActions && _activeVehicle
+    enabled:        manager.actions && _activeVehicle
 
     property var _activeVehicle:  QGroundControl.multiVehicleManager.activeVehicle
     property bool isEnabled:      QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue

@@ -12,9 +12,9 @@
 ///     @author Don Gagne <don@thegagnes.com>
 
 #include "ArduCopterFirmwarePlugin.h"
-#include "QGCApplication.h"
-#include "MissionManager.h"
 #include "ParameterManager.h"
+#include "Vehicle.h"
+#include "FactSystem.h"
 
 bool ArduCopterFirmwarePlugin::_remapParamNameIntialized = false;
 FirmwarePlugin::remapParamNameMajorVersionMap_t ArduCopterFirmwarePlugin::_remapParamName;

@@ -15,11 +15,11 @@
  */
 
 #include "GstVideoReceiver.h"
+#include "QGCLoggingCategory.h"
 
-#include <QDebug>
-#include <QUrl>
-#include <QDateTime>
-#include <QSysInfo>
+#include <QtCore/QDebug>
+#include <QtCore/QUrl>
+#include <QtCore/QDateTime>
 
 QGC_LOGGING_CATEGORY(VideoReceiverLog, "VideoReceiverLog")
 
@@ -385,10 +385,10 @@ GstVideoReceiver::startDecoding(void* sink)
 
     if (_needDispatch()) {
         GstElement* videoSink = GST_ELEMENT(sink);
-        gst_object_ref(videoSink);
+        // gst_object_ref(videoSink);
         _slotHandler.dispatch([this, videoSink]() mutable {
             startDecoding(videoSink);
-            gst_object_unref(videoSink);
+            // gst_object_unref(videoSink);
         });
         return;
     }
@@ -717,18 +717,21 @@ GstVideoReceiver::_filterParserCaps(GstElement* bin, GstPad* pad, GstElement* el
 
     GstCaps* filter;
 
-    if ((filter = gst_caps_from_string("video/x-h264")) != nullptr) {
-        if (gst_caps_can_intersect(srcCaps, filter)) {
-            sinkCaps = gst_caps_from_string("video/x-h264,stream-format=avc");
-        }
+    GstStructure* structure;
 
-        gst_caps_unref(filter);
-        filter = nullptr;
-    } else if ((filter = gst_caps_from_string("video/x-h265")) != nullptr) {
+    structure = gst_caps_get_structure(srcCaps, 0);
+    if(gst_structure_has_name(structure, "video/x-h265")){
+        filter = gst_caps_from_string("video/x-h265");
         if (gst_caps_can_intersect(srcCaps, filter)) {
             sinkCaps = gst_caps_from_string("video/x-h265,stream-format=hvc1");
         }
-
+        gst_caps_unref(filter);
+        filter = nullptr;
+    } else if(gst_structure_has_name(structure, "video/x-h264")){
+        filter = gst_caps_from_string("video/x-h264");
+        if (gst_caps_can_intersect(srcCaps, filter)) {
+            sinkCaps = gst_caps_from_string("video/x-h264,stream-format=avc");
+        }
         gst_caps_unref(filter);
         filter = nullptr;
     }
@@ -753,7 +756,6 @@ GstVideoReceiver::_makeSource(const QString& uri)
         return nullptr;
     }
 
-    bool isTaisync  = uri.contains("tsusb://",  Qt::CaseInsensitive);
     bool isUdp264   = uri.contains("udp://",    Qt::CaseInsensitive);
     bool isRtsp     = uri.contains("rtsp://",   Qt::CaseInsensitive);
     bool isUdp265   = uri.contains("udp265://", Qt::CaseInsensitive);
@@ -777,9 +779,8 @@ GstVideoReceiver::_makeSource(const QString& uri)
         } else if (isRtsp) {
             if ((source = gst_element_factory_make("rtspsrc", "source")) != nullptr) {
                 g_object_set(static_cast<gpointer>(source), "location", qPrintable(uri), "latency", 17, "udp-reconnect", 1, "timeout", _udpReconnect_us, NULL);
-                g_object_set(static_cast<gpointer>(source), "protocols", 0x00000004, NULL);
             }
-        } else if(isUdp264 || isUdp265 || isUdpMPEGTS || isTaisync) {
+        } else if(isUdp264 || isUdp265 || isUdpMPEGTS) {
             if ((source = gst_element_factory_make("udpsrc", "source")) != nullptr) {
                 g_object_set(static_cast<gpointer>(source), "uri", QString("udp://%1:%2").arg(qPrintable(url.host()), QString::number(url.port())).toUtf8().data(), nullptr);
 

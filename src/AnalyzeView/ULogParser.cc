@@ -1,16 +1,9 @@
 #include "ULogParser.h"
-#include <math.h>
-#include <QDateTime>
+#include "QGCLoggingCategory.h"
 
-ULogParser::ULogParser()
-{
+QGC_LOGGING_CATEGORY(ULogParserLog, "qgc.analyzeview.ulogparser")
 
-}
-
-ULogParser::~ULogParser()
-{
-
-}
+#define ULOG_FILE_HEADER_LEN 16
 
 int ULogParser::sizeOfType(QString& typeName)
 {
@@ -36,7 +29,7 @@ int ULogParser::sizeOfType(QString& typeName)
         return 1;
     }
 
-    qWarning() << "Unknown type in ULog : " << typeName;
+    qCWarning(ULogParserLog) << "Unknown type in ULog : " << typeName;
     return 0;
 }
 
@@ -57,7 +50,7 @@ QString ULogParser::extractArraySize(QString &typeNameFull, int &arraySize)
         return typeNameFull;
     }
 
-    arraySize = typeNameFull.midRef(startPos + 1, endPos - startPos - 1).toInt();
+    arraySize = typeNameFull.mid(startPos + 1, endPos - startPos - 1).toInt();
     return typeNameFull.mid(0, startPos);
 }
 
@@ -99,7 +92,7 @@ bool ULogParser::getTagsFromLog(QByteArray& log, QList<GeoTagWorker::cameraFeedb
     int index = ULOG_FILE_HEADER_LEN;
     bool geotagFound = false;
 
-    while(index < log.count() - 1) {
+    while(index < log.length() - 1) {
 
         ULogMessageHeader header;
         memset(&header, 0, sizeof(header));

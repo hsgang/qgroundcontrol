@@ -8,12 +8,15 @@
  ****************************************************************************/
 
 #include "Actuators.h"
+#include "GeometryImage.h"
+#include "FactSystem.h"
+#include "ParameterManager.h"
+#include "Vehicle.h"
 
-#include <QString>
-#include <QFile>
-#include <QtGlobal>
-#include <QJsonArray>
-#include <QJsonObject>
+#include <QtCore/QString>
+#include <QtCore/QFile>
+#include <QtCore/QJsonArray>
+#include <QtCore/QJsonObject>
 
 #include <algorithm>
 
@@ -291,7 +294,7 @@ void Actuators::updateFunctionMetadata()
     for (int groupIdx = 0; groupIdx < _actuatorOutputs->count(); groupIdx++) {
         ActuatorOutput* group = qobject_cast<ActuatorOutput*>(_actuatorOutputs->get(groupIdx));
 
-        group->forEachOutputFunction([&](ActuatorOutputSubgroup* subgroup, ChannelConfigInstance*, Fact* fact) {
+        group->forEachOutputFunction([&]([[maybe_unused]] ActuatorOutputSubgroup* subgroup, ChannelConfigInstance*, Fact* fact) {
             QStringList enumStrings = fact->enumStrings();
             if (!enumStrings.empty()) {
                 QVariantList enumValues = fact->enumValues();

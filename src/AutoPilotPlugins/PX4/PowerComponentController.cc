@@ -8,11 +8,7 @@
  ****************************************************************************/
 
 #include "PowerComponentController.h"
-#include "QGCMAVLink.h"
-#include "UAS.h"
-
-#include <QVariant>
-#include <QQmlProperty>
+#include "Vehicle.h"
 
 PowerComponentController::PowerComponentController(void)
 {

@@ -7,13 +7,13 @@
  *
  ****************************************************************************/
 
-#include <QtCore>
-#include <QDateTime>
-#include <QDate>
-
 #include "SimulatedPosition.h"
 #include "QGCApplication.h"
 #include "MultiVehicleManager.h"
+#include "Vehicle.h"
+
+#include <QtCore/QDateTime>
+#include <QtCore/QDate>
 
 SimulatedPosition::SimulatedPosition()
     : QGeoPositionInfoSource(nullptr)
@@ -55,7 +55,7 @@ void SimulatedPosition::stopUpdates(void)
 
 void SimulatedPosition::requestUpdate(int /*timeout*/)
 {
-    emit updateTimeout();
+    emit errorOccurred(QGeoPositionInfoSource::UpdateTimeoutError);
 }
 
 void SimulatedPosition::_updatePosition(void)

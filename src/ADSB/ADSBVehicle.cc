@@ -8,11 +8,12 @@
  ****************************************************************************/
 
 #include "ADSBVehicle.h"
-#include "QGCLoggingCategory.h"
 #include "QGC.h"
+#include "QGCLoggingCategory.h"
 
-#include <QDebug>
-#include <QtMath>
+#include <QtCore/QtNumeric>
+
+QGC_LOGGING_CATEGORY(ADSBVehicleLog, "qgc.adsb.adsbvehicle")
 
 ADSBVehicle::ADSBVehicle(const ADSBVehicleInfo_t & vehicleInfo, QObject* parent)
     : QObject       (parent)
@@ -28,10 +29,10 @@ ADSBVehicle::ADSBVehicle(const ADSBVehicleInfo_t & vehicleInfo, QObject* parent)
 void ADSBVehicle::update(const ADSBVehicleInfo_t & vehicleInfo)
 {
     if (_icaoAddress != vehicleInfo.icaoAddress) {
-        qCWarning(ADSBVehicleManagerLog) << "ICAO address mismatch expected:actual" << _icaoAddress << vehicleInfo.icaoAddress;
+        qCWarning(ADSBVehicleLog) << "ICAO address mismatch expected:actual" << _icaoAddress << vehicleInfo.icaoAddress;
         return;
     }
-    qCDebug(ADSBVehicleManagerLog) << "Updating" << QStringLiteral("%1 Flags: %2").arg(vehicleInfo.icaoAddress, 0, 16).arg(vehicleInfo.availableFlags, 0, 2);
+    qCDebug(ADSBVehicleLog) << "Updating" << QStringLiteral("%1 Flags: %2").arg(vehicleInfo.icaoAddress, 0, 16).arg(vehicleInfo.availableFlags, 0, 2);
 
     if (vehicleInfo.availableFlags & CallsignAvailable) {
         if (vehicleInfo.callsign != _callsign) {

@@ -8,16 +8,16 @@
  ****************************************************************************/
 
 
-import QtQuick              2.3
-import QtQuick.Controls     1.2
-import QtQuick.Layouts      1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import QGroundControl.FactSystem    1.0
-import QGroundControl.FactControls  1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Vehicle       1.0
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
+import QGroundControl.Palette
+import QGroundControl.Controls
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
 
 SetupPage {
     id:             tuningPage
@@ -899,7 +899,7 @@ SetupPage {
                                     model:          [qsTr("None"), qsTr("Channel 7"), qsTr("Channel 8"), qsTr("Channel 9"), qsTr("Channel 10"), qsTr("Channel 11"), qsTr("Channel 12") ]
                                     currentIndex:   _autoTuneSwitchChannelIndex
 
-                                    onActivated: {
+                                    onActivated: (index) => {
                                         var channel = index
 
                                         if (channel > 0) {

@@ -9,8 +9,7 @@
 
 #include "SettingsManager.h"
 
-#include <QQmlEngine>
-#include <QtQml>
+#include <QtQml/QQmlEngine>
 
 SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
@@ -30,12 +29,15 @@ SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
     , _ntripSettings                (nullptr)
     , _gimbalControllerSettings     (nullptr)
     , _batterySettings              (nullptr)
+    , _batteryIndicatorSettings     (nullptr)
     , _mapsSettings                 (nullptr)
+    , _viewer3DSettings             (nullptr)
 #if !defined(NO_ARDUPILOT_DIALECT)
     , _apmMavlinkStreamRateSettings (nullptr)
 #endif
-    , _remoteIDSettings             (nullptr)
     , _siyiSettings                 (nullptr)
+    , _remoteIDSettings             (nullptr)
+    , _customMavlinkActionsSettings (nullptr)
 {
 
 }
@@ -62,10 +64,13 @@ void SettingsManager::setToolbox(QGCToolbox *toolbox)
     _ntripSettings =                new NTRIPSettings               (this);
     _gimbalControllerSettings =     new GimbalControllerSettings    (this);
     _batterySettings =              new BatterySettings             (this);
+    _batteryIndicatorSettings =     new BatteryIndicatorSettings    (this);
     _mapsSettings =                 new MapsSettings                (this);
+    _viewer3DSettings =             new Viewer3DSettings            (this);
 #if !defined(NO_ARDUPILOT_DIALECT)
     _apmMavlinkStreamRateSettings = new APMMavlinkStreamRateSettings(this);
 #endif
     _remoteIDSettings =             new RemoteIDSettings            (this);
     _siyiSettings =                 new SIYISettings                (this);
+    _customMavlinkActionsSettings = new CustomMavlinkActionsSettings(this);
 }

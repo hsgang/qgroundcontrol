@@ -7,19 +7,20 @@
  *
  ****************************************************************************/
 
-import QtQuick          2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts  1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import QGroundControl               1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
 
 AbstractButton   {
     id:             control
     checkable:      true
     padding:        0
 
+    property bool   _showBorder: qgcPal.globalTheme === QGCPalette.Light
     property alias description:         _description.text
 
     QGCPalette { id: qgcPal; colorGroupEnabled: control.enabled }
@@ -52,18 +53,20 @@ AbstractButton   {
             id:                     indicator
             anchors.right:          parent.right
             anchors.verticalCenter: parent.verticalCenter
-            height:                 ScreenTools.defaultFontPixelHeight * 0.9
+            height:                 ScreenTools.defaultFontPixelHeight
             width:                  height * 2
             radius:                 height / 2
             color:                  control.checked ? qgcPal.brandingBlue : qgcPal.windowShade
+            border.width:           _showBorder ? 1 : 0
+            border.color:           qgcPal.buttonBorder
 
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                x:                      checked ? indicator.width - width - 4 : 4
-                height:                 parent.height - 8
+                x:                      checked ? indicator.width - width - 1 : 1
+                height:                 parent.height - 2
                 width:                  height
                 radius:                 height / 2
-                color:                  qgcPal.colorWhite
+                color:                  qgcPal.buttonText
             }
         }
     }

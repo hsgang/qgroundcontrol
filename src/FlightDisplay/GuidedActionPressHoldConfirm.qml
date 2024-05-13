@@ -34,6 +34,10 @@ Item {
     property real _margins:         ScreenTools.defaultFontPixelWidth / 2
     property bool _emergencyAction: action === guidedController.actionEmergencyStop
 
+    // Properties of UTM adapter
+    property bool   utmspSliderTrigger
+    property bool   _utmspEnabled:                       QGroundControl.utmspSupported
+
     Component.onCompleted: guidedController.confirmDialog = this
 
     property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 30
@@ -43,7 +47,7 @@ Item {
 
     width: size
     height: size
-    visible: false
+    visible: _utmspEnabled === true ? utmspSliderTrigger: false
 
     function show(immediate) {
         if (immediate) {
@@ -233,6 +237,8 @@ Item {
         radius: width / 2
         color: qgcPal.brandingBlue
         opacity: onPressSignal ? 1 : 0.5
+        enabled: _utmspEnabled === true? utmspSliderTrigger : true
+        //opacity: if(_utmspEnabled){utmspSliderTrigger === true ? 1 : 0.5} else{1}
     }
 
     MouseArea {

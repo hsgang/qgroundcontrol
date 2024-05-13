@@ -1,16 +1,10 @@
-#ifndef JOYSTICKANDROID_H
-#define JOYSTICKANDROID_H
+#pragma once
 
 #include "Joystick.h"
-#include "Vehicle.h"
-#include "MultiVehicleManager.h"
+#include <QtCore/private/qandroidextras_p.h>
 
-#include <jni.h>
-#include <QtCore/private/qjni_p.h>
-#include <QtCore/private/qjnihelpers_p.h>
-#include <QtAndroidExtras/QtAndroidExtras>
-#include <QtAndroidExtras/QAndroidJniObject>
-
+class MultiVehicleManager;
+class JoystickManager;
 
 class JoystickAndroid : public Joystick, public QtAndroidPrivate::GenericMotionEventListener, public QtAndroidPrivate::KeyEventListener
 {
@@ -50,5 +44,3 @@ private:
 
     int deviceId;
 };
-
-#endif // JOYSTICKANDROID_H

@@ -11,12 +11,10 @@
 /// @file
 ///     @author Gus Grubba <gus@auterion.com>
 
-#ifndef ScreenToolsController_H
-#define ScreenToolsController_H
+#pragma once
 
-#include "QGCApplication.h"
-#include <QQuickItem>
-#include <QCursor>
+#include <QtQuick/QQuickItem>
+#include <QtGui/QCursor>
 
 /*!
     @brief Screen helper tools for QML widgets
@@ -32,6 +30,7 @@ public:
     Q_PROPERTY(bool     isAndroid           READ isAndroid          CONSTANT)
     Q_PROPERTY(bool     isiOS               READ isiOS              CONSTANT)
     Q_PROPERTY(bool     isMobile            READ isMobile           CONSTANT)
+    Q_PROPERTY(bool     fakeMobile          READ fakeMobile         CONSTANT)
     Q_PROPERTY(bool     isDebug             READ isDebug            CONSTANT)
     Q_PROPERTY(bool     isMacOS             READ isMacOS            CONSTANT)
     Q_PROPERTY(bool     isLinux             READ isLinux            CONSTANT)
@@ -52,8 +51,10 @@ public:
 
 #if defined(__mobile__)
     bool    isMobile            () const { return true;  }
+    bool    fakeMobile          () const { return false; }
 #else
-    bool    isMobile            () const { return qgcApp()->fakeMobile(); }
+    bool    isMobile            () const { return fakeMobile(); }
+    bool    fakeMobile          () const;
 #endif
 
 #if defined (Q_OS_ANDROID)
@@ -112,5 +113,3 @@ public:
     QString     normalFontFamily    () const;
     QString     boldFontFamily      () const;
 };
-
-#endif

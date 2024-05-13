@@ -10,11 +10,12 @@
 #pragma once
 
 #include "FirmwarePlugin.h"
-#include "QGCLoggingCategory.h"
-#include "APMParameterMetaData.h"
+#include "QGCMAVLink.h"
 #include "FollowMe.h"
 
-#include <QAbstractSocket>
+#include <QtNetwork/QAbstractSocket>
+#include <QtCore/QMutex>
+#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(APMFirmwarePluginLog)
 
@@ -71,9 +72,9 @@ public:
     void                initializeVehicle               (Vehicle* vehicle) override;
     bool                sendHomePositionToVehicle       (void) override;
     QString             missionCommandOverrides         (QGCMAVLink::VehicleClass_t vehicleClass) const override;
-    QString             _internalParameterMetaDataFile  (Vehicle* vehicle) override;
+    QString             _internalParameterMetaDataFile  (const Vehicle* vehicle) const override;
     FactMetaData*       _getMetaDataForFact             (QObject* parameterMetaData, const QString& name, FactMetaData::ValueType_t type, MAV_TYPE vehicleType) override;
-    void                _getParameterMetaDataVersionInfo(const QString& metaDataFile, int& majorVersion, int& minorVersion) override { APMParameterMetaData::getParameterMetaDataVersionInfo(metaDataFile, majorVersion, minorVersion); }
+    void                _getParameterMetaDataVersionInfo(const QString& metaDataFile, int& majorVersion, int& minorVersion) override;
     QObject*            _loadParameterMetaData          (const QString& metaDataFile) override;
     QString             brandImageIndoor                (const Vehicle* vehicle) const override { Q_UNUSED(vehicle); return QStringLiteral("/qmlimages/APM/BrandImage"); }
     QString             brandImageOutdoor               (const Vehicle* vehicle) const override { Q_UNUSED(vehicle); return QStringLiteral("/qmlimages/APM/BrandImage"); }
@@ -84,6 +85,7 @@ public:
     double              minimumEquivalentAirspeed       (Vehicle* vehicle) override;
     bool                fixedWingAirSpeedLimitsAvailable(Vehicle* vehicle) override;
     void                guidedModeChangeEquivalentAirspeedMetersSecond(Vehicle* vehicle, double airspeed_equiv) override;
+    QVariant            mainStatusIndicatorContentItem  (const Vehicle* vehicle) const override;
 
 protected:
     /// All access to singleton is through stack specific implementation
@@ -106,11 +108,12 @@ private:
     void _handleIncomingHeartbeat(Vehicle* vehicle, mavlink_message_t* message);
     void _handleOutgoingParamSetThreadSafe(Vehicle* vehicle, LinkInterface* outgoingLink, mavlink_message_t* message);
     void _soloVideoHandshake(void);
-    bool _guidedModeTakeoff(Vehicle* vehicle, double altitudeRel);
+    virtual bool _guidedModeTakeoff(Vehicle* vehicle, double altitudeRel);
     void _handleRCChannels(Vehicle* vehicle, mavlink_message_t* message);
     void _handleRCChannelsRaw(Vehicle* vehicle, mavlink_message_t* message);
     QString _getLatestVersionFileUrl(Vehicle* vehicle) override;
     QString _versionRegex() override;
+    QString _vehicleClassToString(QGCMAVLink::VehicleClass_t vehicleClass) const;
 
     // Any instance data here must be global to all vehicles
     // Vehicle specific data should go into APMFirmwarePluginInstanceData

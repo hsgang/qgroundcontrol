@@ -9,38 +9,45 @@
 
 #pragma once
 
-#include <QObject>
-#include <QTimer>
-#include <QThread>
-#include <QStringList>
-#include <QTextToSpeech>
-#include <QSoundEffect>
+#include <QtCore/QLoggingCategory>
+#include <QtQmlIntegration/QtQmlIntegration>
+#include <QtTextToSpeech/QTextToSpeech>
 
-#include "QGCToolbox.h"
+Q_DECLARE_LOGGING_CATEGORY(AudioOutputLog)
 
-class QGCApplication;
-
-/// Text to Speech Interface
-class AudioOutput : public QGCTool
+class AudioOutput : public QTextToSpeech
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
+
+    Q_PROPERTY(bool muted READ isMuted WRITE setMuted NOTIFY mutedChanged)
+
 public:
-    AudioOutput(QGCApplication* app, QGCToolbox* toolbox);
+    enum class TextMod {
+        None = 0,
+        Translate = 1 << 0,
+    };
+    Q_DECLARE_FLAGS(TextMods, TextMod)
+    Q_FLAG(TextMod)
 
-    static bool     getMillisecondString    (const QString& string, QString& match, int& number);
-    static QString  fixTextMessageForAudio  (const QString& string);
+    explicit AudioOutput(QObject* parent = nullptr);
 
-public slots:
-    /// Convert string to speech output and say it
-    void            say                     (const QString& text);
-    void            play                    (const QString& file);
+    bool isMuted() const;
+    void setMuted(bool enable);
 
-private slots:
-    void            _stateChanged           (QTextToSpeech::State state);
+    void read(const QString& text, AudioOutput::TextMods textMods = TextMod::None);
 
-protected:
-    QTextToSpeech*  _tts;
-    QStringList     _texts;
-    QSoundEffect*   _soundEffect;
+    static AudioOutput* instance();
+    static bool getMillisecondString(const QString& string, QString& match, int& number);
+    static QString fixTextMessageForAudio(const QString& string);
+
+signals:
+    void mutedChanged(bool muted);
+
+private:
+    qsizetype m_textQueueSize = 0;
+    bool m_muted = false;
+    static const QHash<QString, QString> s_textHash;
 };
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(AudioOutput::TextMods)

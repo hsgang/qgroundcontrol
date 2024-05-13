@@ -13,10 +13,12 @@
 #pragma once
 
 #include "Joystick.h"
-#include "Vehicle.h"
-#include "MultiVehicleManager.h"
+
+#define SDL_MAIN_HANDLED
 
 #include <SDL.h>
+
+class MultiVehicleManager;
 
 /// @brief SDL Joystick Interface
 class JoystickSDL : public Joystick

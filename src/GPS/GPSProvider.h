@@ -10,15 +10,15 @@
 
 #pragma once
 
-#include <QString>
-#include <QThread>
-#include <QByteArray>
-#include <QSerialPort>
-
-#include <atomic>
 
 #include "GPSPositionMessage.h"
 #include "Drivers/src/gps_helper.h"
+
+#include <QtCore/QString>
+#include <QtCore/QThread>
+#include <QtCore/QByteArray>
+
+class QSerialPort;
 
 
 /**

@@ -9,9 +9,10 @@
 
 #pragma once
 
-#include <QTimer>
 #include "Vehicle.h"
-#include "MAVLinkProtocol.h"
+#include "QGCMAVLink.h"
+
+#include <QtCore/QTimer>
 
 class Autotune : public QObject
 {
@@ -21,7 +22,6 @@ class Autotune : public QObject
 public:
     explicit Autotune(Vehicle *vehicle);
 
-    Q_PROPERTY(bool      autotuneEnabled      READ autotuneEnabled        NOTIFY autotuneChanged)
     Q_PROPERTY(bool      autotuneInProgress   READ autotuneInProgress     NOTIFY autotuneChanged)
     Q_PROPERTY(float     autotuneProgress     READ autotuneProgress       NOTIFY autotuneChanged)
     Q_PROPERTY(QString   autotuneStatus       READ autotuneStatus         NOTIFY autotuneChanged)
@@ -31,16 +31,16 @@ public:
     static void ackHandler      (void* resultHandlerData,   int compId, const mavlink_command_ack_t& ack, Vehicle::MavCmdResultFailureCode_t failureCode);
     static void progressHandler (void* progressHandlerData, int compId, const mavlink_command_ack_t& ack);
 
-    bool      autotuneEnabled    ();
     bool      autotuneInProgress () { return _autotuneInProgress; }
     float     autotuneProgress   () { return _autotuneProgress; }
     QString   autotuneStatus     () { return _autotuneStatus; }
 
 
 public slots:
-    void handleEnabled ();
     void sendMavlinkRequest();
 
+signals:
+    void autotuneChanged ();
 
 private:
     void handleAckStatus(uint8_t ackProgress);
@@ -48,10 +48,6 @@ private:
     void handleAckError(uint8_t ackError);
     void startTimers();
     void stopTimers();
-
-
-private slots:
-
 
 private:
     Vehicle* _vehicle                {nullptr};
@@ -62,7 +58,4 @@ private:
 
     QTimer   _pollTimer;         // the frequency at which the polling should be performed
 
-
-signals:
-    void autotuneChanged ();
 };

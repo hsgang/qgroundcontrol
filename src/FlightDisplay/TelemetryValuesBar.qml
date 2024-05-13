@@ -7,34 +7,41 @@
  *
  ****************************************************************************/
 
-import QtQuick                      2.12
-import QtQuick.Layouts              1.12
+import QtQuick
+import QtQuick.Layouts
 
-import QGroundControl               1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Vehicle       1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.Palette       1.0
+import QGroundControl
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
+import QGroundControl.Controls
+import QGroundControl.Palette
 
-Rectangle {
-    id:                 telemetryPanel
-    height:             telemetryLayout.height + _toolsMargin
-    width:              telemetryLayout.width + (_toolsMargin * 2)
-    color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5) //"transparent"
-    radius:             ScreenTools.defaultFontPixelWidth / 2
+Item {
+    id:             control
+    implicitWidth:  mainLayout.width + (_toolsMargin * 2)
+    implicitHeight: mainLayout.height + (_toolsMargin * 2)
 
-    property bool       editMode: false
+    property real extraWidth: 0 ///< Extra width to add to the background rectangle
 
-    DeadMouseArea { anchors.fill: parent }
+    Rectangle {
+        id:         backgroundRect
+        width:      control.width + extraWidth
+        height:     control.height
+        color:      qgcPal.window
+        radius:     ScreenTools.defaultFontPixelWidth / 2
+        opacity:    0.75
+    }
 
-    RowLayout {
-        id:                 telemetryLayout
-        anchors.margins:    _toolsMargin * 0.5
+    //DeadMouseArea { anchors.fill: parent }
+
+    ColumnLayout {
+        id:                 mainLayout
+        anchors.margins:    _toolsMargin
         anchors.bottom:     parent.bottom
         anchors.left:       parent.left
 
         RowLayout {
-            visible: telemetryPanel.editMode || valueArea.settingsUnlocked
+            visible: mouseArea.containsMouse || valueArea.settingsUnlocked
 
             QGCColoredImage {
                 source:             valueArea.settingsUnlocked ? "/res/LockOpen.svg" : "/res/pencil.svg"
@@ -54,20 +61,30 @@ Rectangle {
             }
         }
 
-        QGCMouseArea {
-            id:                         mouseArea
-            x:                          valueArea.x
-            y:                          valueArea.y
-            width:                      valueArea.width
-            height:                     valueArea.height
-            onClicked:                  telemetryPanel.editMode = !telemetryPanel.editMode
-            //propagateComposedEvents:    true
-        }
-
         HorizontalFactValueGrid {
             id:                     valueArea
             userSettingsGroup:      telemetryBarUserSettingsGroup
             defaultSettingsGroup:   telemetryBarDefaultSettingsGroup
+        }
+    }
+
+    QGCMouseArea {
+        id:                         mouseArea
+        x:                          mainLayout.x
+        y:                          mainLayout.y
+        width:                      mainLayout.width
+        height:                     mainLayout.height
+        hoverEnabled:               !ScreenTools.isMobile
+        propagateComposedEvents:    true
+        visible:                    !valueArea.settingsUnlocked
+
+        onClicked: (mouse) => {
+            if (ScreenTools.isMobile) {
+                valueArea.settingsUnlocked = true
+                mouse.accepted = true
+            } else {
+                mouse.accepted = false
+            }
         }
     }
 }

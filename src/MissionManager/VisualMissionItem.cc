@@ -7,16 +7,10 @@
  *
  ****************************************************************************/
 
-#include <QStringList>
-#include <QDebug>
-
 #include "VisualMissionItem.h"
-#include "FirmwarePluginManager.h"
-#include "QGCApplication.h"
-#include "JsonHelper.h"
 #include "TerrainQuery.h"
-#include "TakeoffMissionItem.h"
 #include "PlanMasterController.h"
+#include "Vehicle.h"
 #include "QGC.h"
 
 const char* VisualMissionItem::jsonTypeKey =                "type";

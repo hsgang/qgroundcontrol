@@ -8,18 +8,15 @@
  ****************************************************************************/
 
 
-#ifndef APMParameterMetaData_H
-#define APMParameterMetaData_H
+#pragma once
 
-#include <QObject>
-#include <QMap>
-#include <QPointer>
-#include <QXmlStreamReader>
-#include <QLoggingCategory>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QXmlStreamReader>
+#include <QtCore/QLoggingCategory>
 
-#include "FactSystem.h"
-#include "AutoPilotPlugin.h"
-#include "Vehicle.h"
+#include "MAVLinkLib.h"
+#include "FactMetaData.h"
 
 Q_DECLARE_LOGGING_CATEGORY(APMParameterMetaDataLog)
 Q_DECLARE_LOGGING_CATEGORY(APMParameterMetaDataVerboseLog)
@@ -88,5 +85,3 @@ private:
     // FIXME: metadata is vehicle type specific now
     QMap<QString, ParameterNametoFactMetaDataMap>   _vehicleTypeToParametersMap;                ///< Maps from a vehicle type to paramametertoFactMeta map>
 };
-
-#endif

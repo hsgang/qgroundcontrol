@@ -7,22 +7,22 @@
  *
  ****************************************************************************/
 
-import QtQuick                  2.11
-import QtQuick.Controls         2.4
-import QtQuick.Layouts          1.11
-import QtQuick.Dialogs          1.3
-import QtQuick.Controls.Styles  1.4
-import QtLocation               5.3
-import QtPositioning            5.3
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import QtQuick.Controls
+import QtLocation
+import QtPositioning
 
-import QGroundControl                       1.0
-import QGroundControl.Controls              1.0
-import QGroundControl.ScreenTools           1.0
-import QGroundControl.Palette               1.0
-import QGroundControl.FlightMap             1.0
-import QGroundControl.QGCMapEngineManager   1.0
-import QGroundControl.FactSystem            1.0
-import QGroundControl.FactControls          1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.ScreenTools
+import QGroundControl.Palette
+import QGroundControl.FlightMap
+import QGroundControl.QGCMapEngineManager
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
 
 FlightMap {
     id:                         _map
@@ -531,7 +531,7 @@ FlightMap {
                                 anchors.left:   parent.left
                                 anchors.right:  parent.right
                                 model:          QGroundControl.mapEngineManager.mapList
-                                onActivated: {
+                                onActivated: (index) => {
                                     mapType = textAt(index)
                                 }
                                 Component.onCompleted: {
@@ -719,7 +719,7 @@ FlightMap {
                         }
                     }
                 }
-            }
+            } 
         }
     }
 

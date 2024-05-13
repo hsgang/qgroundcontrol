@@ -8,14 +8,13 @@
  ****************************************************************************/
 
 
-#ifndef QGCToolbox_h
-#define QGCToolbox_h
+#pragma once
 
-#include <QObject>
+
+#include <QtCore/QObject>
 
 class FactSystem;
 class FirmwarePluginManager;
-class AudioOutput;
 class GPSManager;
 class JoystickManager;
 class FollowMe;
@@ -25,7 +24,6 @@ class MissionCommandTree;
 class MultiVehicleManager;
 class QGCMapEngineManager;
 class QGCApplication;
-class QGCImageProvider;
 class UASMessageHandler;
 class QGCPositionManager;
 class VideoManager;
@@ -34,14 +32,11 @@ class QGCCorePlugin;
 class SettingsManager;
 class ADSBVehicleManager;
 class NTRIP;
-#if defined(QGC_ENABLE_PAIRING)
-class PairingManager;
+#ifndef QGC_AIRLINK_DISABLED
+class AirLinkManager;
 #endif
-#if defined(QGC_GST_TAISYNC_ENABLED)
-class TaisyncManager;
-#endif
-#if defined(QGC_GST_MICROHARD_ENABLED)
-class MicrohardManager;
+#ifdef CONFIG_UTM_ADAPTER
+class UTMSPManager;
 #endif
 
 /// This is used to manage all of our top level services/tools
@@ -52,14 +47,12 @@ public:
     QGCToolbox(QGCApplication* app);
 
     FirmwarePluginManager*      firmwarePluginManager   () { return _firmwarePluginManager; }
-    AudioOutput*                audioOutput             () { return _audioOutput; }
     JoystickManager*            joystickManager         () { return _joystickManager; }
     LinkManager*                linkManager             () { return _linkManager; }
     MAVLinkProtocol*            mavlinkProtocol         () { return _mavlinkProtocol; }
     MissionCommandTree*         missionCommandTree      () { return _missionCommandTree; }
     MultiVehicleManager*        multiVehicleManager     () { return _multiVehicleManager; }
     QGCMapEngineManager*        mapEngineManager        () { return _mapEngineManager; }
-    QGCImageProvider*           imageProvider           () { return _imageProvider; }
     UASMessageHandler*          uasMessageHandler       () { return _uasMessageHandler; }
     FollowMe*                   followMe                () { return _followMe; }
     QGCPositionManager*         qgcPositionManager      () { return _qgcPositionManager; }
@@ -69,17 +62,14 @@ public:
     SettingsManager*            settingsManager         () { return _settingsManager; }
     ADSBVehicleManager*         adsbVehicleManager      () { return _adsbVehicleManager; }
     NTRIP*                      ntrip                   () { return _ntrip; }
-#if defined(QGC_ENABLE_PAIRING)
-    PairingManager*             pairingManager          () { return _pairingManager; }
-#endif
-#ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     GPSManager*                 gpsManager              () { return _gpsManager; }
 #endif
-#if defined(QGC_GST_TAISYNC_ENABLED)
-    TaisyncManager*             taisyncManager          () { return _taisyncManager; }
+#ifndef QGC_AIRLINK_DISABLED
+    AirLinkManager*              airlinkManager          () { return _airlinkManager; }
 #endif
-#if defined(QGC_GST_MICROHARD_ENABLED)
-    MicrohardManager*           microhardManager        () { return _microhardManager; }
+#ifdef CONFIG_UTM_ADAPTER
+    UTMSPManager*                utmspManager             () { return _utmspManager; }
 #endif
 
 private:
@@ -87,13 +77,11 @@ private:
     void _scanAndLoadPlugins(QGCApplication *app);
 
 
-    AudioOutput*                _audioOutput            = nullptr;
     FactSystem*                 _factSystem             = nullptr;
     FirmwarePluginManager*      _firmwarePluginManager  = nullptr;
-#ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     GPSManager*                 _gpsManager             = nullptr;
 #endif
-    QGCImageProvider*           _imageProvider          = nullptr;
     JoystickManager*            _joystickManager        = nullptr;
     LinkManager*                _linkManager            = nullptr;
     MAVLinkProtocol*            _mavlinkProtocol        = nullptr;
@@ -109,14 +97,12 @@ private:
     SettingsManager*            _settingsManager        = nullptr;
     ADSBVehicleManager*         _adsbVehicleManager     = nullptr;
     NTRIP*                      _ntrip                  = nullptr;
-#if defined(QGC_ENABLE_PAIRING)
-    PairingManager*             _pairingManager         = nullptr;
+#ifndef QGC_AIRLINK_DISABLED
+    AirLinkManager*             _airlinkManager         = nullptr;
 #endif
-#if defined(QGC_GST_TAISYNC_ENABLED)
-    TaisyncManager*             _taisyncManager         = nullptr;
-#endif
-#if defined(QGC_GST_MICROHARD_ENABLED)
-    MicrohardManager*           _microhardManager       = nullptr;
+
+#ifdef CONFIG_UTM_ADAPTER
+    UTMSPManager*                _utmspManager            = nullptr;
 #endif
     friend class QGCApplication;
 };
@@ -138,5 +124,3 @@ protected:
     QGCApplication* _app;
     QGCToolbox*     _toolbox;
 };
-
-#endif

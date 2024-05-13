@@ -9,7 +9,7 @@
 
 
 #include "APMSubMotorComponentController.h"
-#include "ParameterManager.h"
+#include "Vehicle.h"
 
 
 APMSubMotorComponentController::APMSubMotorComponentController(void)

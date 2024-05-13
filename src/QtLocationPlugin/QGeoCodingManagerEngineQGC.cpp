@@ -50,8 +50,6 @@
 #include <QtCore/QVariantMap>
 #include <QtCore/QUrl>
 #include <QtCore/QUrlQuery>
-#include <QtCore/QLocale>
-#include <QDebug>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkRequest>
 #include <QtPositioning/QGeoCoordinate>
@@ -174,5 +172,5 @@ void QGeoCodingManagerEngineQGC::replyError(QGeoCodeReply::Error errorCode, cons
 {
     QGeoCodeReply *reply = qobject_cast<QGeoCodeReply *>(sender());
     if (reply)
-        emit error(reply, errorCode, errorString);
+        emit errorOccurred(reply, errorCode, errorString);
 }

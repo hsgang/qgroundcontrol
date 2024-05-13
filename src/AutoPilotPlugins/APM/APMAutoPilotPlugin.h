@@ -8,11 +8,9 @@
  ****************************************************************************/
 
 
-#ifndef APMAutoPilotPlugin_H
-#define APMAutoPilotPlugin_H
+#pragma once
 
 #include "AutoPilotPlugin.h"
-#include "Vehicle.h"
 
 class APMAirframeComponent;
 class APMFlightModesComponent;
@@ -29,6 +27,7 @@ class ESP8266Component;
 class APMHeliComponent;
 class APMRemoteSupportComponent;
 class APMFollowComponent;
+class Vehicle;
 
 /// This is the APM specific implementation of the AutoPilot class.
 class APMAutoPilotPlugin : public AutoPilotPlugin
@@ -64,7 +63,7 @@ protected:
     APMFollowComponent*         _followComponent;
 #endif
 
-#if !defined(NO_SERIAL_LINK) && !defined(__android__)
+#if !defined(NO_SERIAL_LINK) && !defined(Q_OS_ANDROID)
 private slots:
     void _checkForBadCubeBlack(void);
 #endif
@@ -72,5 +71,3 @@ private slots:
 private:
     QVariantList                _components;
 };
-
-#endif

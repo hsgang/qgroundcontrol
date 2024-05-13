@@ -7,22 +7,20 @@
  *
  ****************************************************************************/
 
-#ifndef PlanElementController_H
-#define PlanElementController_H
+#pragma once
 
-#include <QObject>
-
-#include "Vehicle.h"
-#include "MultiVehicleManager.h"
+#include <QtCore/QObject>
 
 class PlanMasterController;
+
 
 /// This is the abstract base clas for Plan Element controllers.
 /// Examples of plan elements are: missions (MissionController), geofence (GeoFenceController)
 class PlanElementController : public QObject
 {
     Q_OBJECT
-    
+    Q_MOC_INCLUDE("PlanMasterController.h")
+
 public:
     PlanElementController(PlanMasterController* masterController, QObject* parent = nullptr);
     ~PlanElementController();
@@ -70,5 +68,3 @@ protected:
     PlanMasterController*   _masterController;
     bool                    _flyView;
 };
-
-#endif

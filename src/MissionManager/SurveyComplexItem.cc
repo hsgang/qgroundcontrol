@@ -10,15 +10,19 @@
 
 #include "SurveyComplexItem.h"
 #include "JsonHelper.h"
-#include "MissionController.h"
 #include "QGCGeo.h"
 #include "QGCQGeoCoordinate.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
 #include "PlanMasterController.h"
+#include "MissionItem.h"
 #include "QGCApplication.h"
+#include "Vehicle.h"
+#include "QGCLoggingCategory.h"
 
-#include <QPolygonF>
+#include <QtGui/QPolygonF>
+#include <QtCore/QJsonArray>
+#include <QtCore/QLineF>
 
 QGC_LOGGING_CATEGORY(SurveyComplexItemLog, "SurveyComplexItemLog")
 
@@ -674,18 +678,9 @@ double SurveyComplexItem::_turnaroundDistance(void) const
 
 void SurveyComplexItem::_rebuildTransectsPhase1(void)
 {
-    bool split = splitConcavePolygons()->rawValue().toBool();
-	if (split) {
-		_rebuildTransectsPhase1WorkerSplitPolygons(false /* refly */);
-	} else {
-		_rebuildTransectsPhase1WorkerSinglePolygon(false /* refly */);
-	}
+    _rebuildTransectsPhase1WorkerSinglePolygon(false /* refly */);
     if (_refly90DegreesFact.rawValue().toBool()) {
-    	if (split) {
-    		_rebuildTransectsPhase1WorkerSplitPolygons(true /* refly */);
-    	} else {
-    		_rebuildTransectsPhase1WorkerSinglePolygon(true /* refly */);
-    	}
+        _rebuildTransectsPhase1WorkerSinglePolygon(true /* refly */);
     }
 }
 
@@ -718,7 +713,7 @@ void SurveyComplexItem::_rebuildTransectsPhase1WorkerSinglePolygon(bool refly)
             // This avoids a nan calculation that comes out of convertGeoToNed
             x = y = 0;
         } else {
-            convertGeoToNed(vertex, tangentOrigin, &y, &x, &down);
+            QGCGeo::convertGeoToNed(vertex, tangentOrigin, y, x, down);
         }
         polygonPoints += QPointF(x, y);
         qCDebug(SurveyComplexItemLog) << "_rebuildTransectsPhase1 vertex:x:y" << vertex << polygonPoints.last().x() << polygonPoints.last().y();
@@ -809,9 +804,9 @@ void SurveyComplexItem::_rebuildTransectsPhase1WorkerSinglePolygon(bool refly)
         QGeoCoordinate          coord;
         QList<QGeoCoordinate>   transect;
 
-        convertNedToGeo(line.p1().y(), line.p1().x(), 0, tangentOrigin, &coord);
+        QGCGeo::convertNedToGeo(line.p1().y(), line.p1().x(), 0, tangentOrigin, coord);
         transect.append(coord);
-        convertNedToGeo(line.p2().y(), line.p2().x(), 0, tangentOrigin, &coord);
+        QGCGeo::convertNedToGeo(line.p2().y(), line.p2().x(), 0, tangentOrigin, coord);
         transect.append(coord);
 
         transects.append(transect);
@@ -904,6 +899,9 @@ void SurveyComplexItem::_rebuildTransectsPhase1WorkerSinglePolygon(bool refly)
     }
 }
 
+#if 0
+    // Splitting polygons is not supported since this code would get stuck in a infinite loop
+    // Code is left here in case someone wants to try to resurrect it
 
 void SurveyComplexItem::_rebuildTransectsPhase1WorkerSplitPolygons(bool refly)
 {
@@ -934,7 +932,7 @@ void SurveyComplexItem::_rebuildTransectsPhase1WorkerSplitPolygons(bool refly)
             // This avoids a nan calculation that comes out of convertGeoToNed
             x = y = 0;
         } else {
-            convertGeoToNed(vertex, tangentOrigin, &y, &x, &down);
+            convertGeoToNed(vertex, tangentOrigin, y, x, down);
         }
         polygonPoints += QPointF(x, y);
         qCDebug(SurveyComplexItemLog) << "_rebuildTransectsPhase1 vertex:x:y" << vertex << polygonPoints.last().x() << polygonPoints.last().y();
@@ -1119,14 +1117,14 @@ bool SurveyComplexItem::_VertexCanSeeOther(const QPolygonF& polygon, const QPoin
     return visible;
 }
 
-bool SurveyComplexItem::_VertexIsReflex(const QPolygonF& polygon, const QPointF* vertex) {
+bool SurveyComplexItem::_VertexIsReflex(const QPolygonF& polygon, QList<QPointF>::const_iterator& vertexIter) {
     auto vertexBefore = vertex == polygon.begin() ? polygon.end() - 1 : vertex - 1;
     auto vertexAfter = vertex == polygon.end() - 1 ? polygon.begin() : vertex + 1;
     auto area = (((vertex->x() - vertexBefore->x())*(vertexAfter->y() - vertexBefore->y()))-((vertexAfter->x() - vertexBefore->x())*(vertex->y() - vertexBefore->y())));
     return area > 0;
 
 }
-
+#endif
 
 void SurveyComplexItem::_rebuildTransectsFromPolygon(bool refly, const QPolygonF& polygon, const QGeoCoordinate& tangentOrigin, const QPointF* const transitionPoint)
 {
@@ -1203,7 +1201,7 @@ void SurveyComplexItem::_rebuildTransectsFromPolygon(bool refly, const QPolygonF
     if (transitionPoint != nullptr) {
         QList<QGeoCoordinate>   transect;
         QGeoCoordinate          coord;
-        convertNedToGeo(transitionPoint->y(), transitionPoint->x(), 0, tangentOrigin, &coord);
+        QGCGeo::convertNedToGeo(transitionPoint->y(), transitionPoint->x(), 0, tangentOrigin, coord);
         transect.append(coord);
         transect.append(coord); //TODO
         transects.append(transect);
@@ -1213,9 +1211,9 @@ void SurveyComplexItem::_rebuildTransectsFromPolygon(bool refly, const QPolygonF
         QList<QGeoCoordinate>   transect;
         QGeoCoordinate          coord;
 
-        convertNedToGeo(line.p1().y(), line.p1().x(), 0, tangentOrigin, &coord);
+        QGCGeo::convertNedToGeo(line.p1().y(), line.p1().x(), 0, tangentOrigin, coord);
         transect.append(coord);
-        convertNedToGeo(line.p2().y(), line.p2().x(), 0, tangentOrigin, &coord);
+        QGCGeo::convertNedToGeo(line.p2().y(), line.p2().x(), 0, tangentOrigin, coord);
         transect.append(coord);
 
         transects.append(transect);

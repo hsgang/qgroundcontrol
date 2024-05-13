@@ -9,6 +9,8 @@ CenterMapDropButton         1.0 CenterMapDropButton.qml
 CenterMapDropPanel          1.0 CenterMapDropPanel.qml
 CompassRing                 1.0 CompassRing.qml
 GimbalControl               1.0 GimbalControl.qml
+CompassDial                 1.0 CompassDial.qml
+CompassHeadingIndicator     1.0 CompassHeadingIndicator.qml
 MapFitFunctions             1.0 MapFitFunctions.qml
 MapLineArrow                1.0 MapLineArrow.qml
 MapScale                    1.0 MapScale.qml
@@ -32,6 +34,9 @@ MissionLineView             1.0 MissionLineView.qml
 PlanMapItems                1.0 PlanMapItems.qml
 PolygonEditor               1.0 PolygonEditor.qml
 ProximityRadarMapView       1.0 ProximityRadarMapView.qml
+QGCMapCircleVisuals         1.0 QGCMapCircleVisuals.qml
+QGCMapPolygonVisuals        1.0 QGCMapPolygonVisuals.qml
+QGCMapPolylineVisuals       1.0 QGCMapPolylineVisuals.qml
 SplitIndicator              1.0 SplitIndicator.qml
 VehicleMapItem              1.0 VehicleMapItem.qml
 AtmosphericValueMapItem     1.0 AtmosphericValueMapItem.qml

@@ -9,14 +9,12 @@
 
 #pragma once
 
-#include <QObject>
-#include <QLoggingCategory>
-#include <QTimer>
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
+#include <QtCore/QLoggingCategory>
 
 #include "MissionItem.h"
 #include "QGCMAVLink.h"
-#include "QGCLoggingCategory.h"
-#include "LinkInterface.h"
 
 class Vehicle;
 class MissionCommandTree;
@@ -82,7 +80,7 @@ signals:
     void error                      (int errorCode, const QString& errorMsg);
     void currentIndexChanged        (int currentIndex);
     void lastCurrentIndexChanged    (int lastCurrentIndex);
-    void progressPct                (double progressPercentPct);
+    void progressPctChanged         (double progressPercentPct);
     void removeAllComplete          (bool error);
     void sendComplete               (bool error);
     void resumeMissionReady         (void);

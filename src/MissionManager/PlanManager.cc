@@ -13,7 +13,7 @@
 #include "MAVLinkProtocol.h"
 #include "QGCApplication.h"
 #include "MissionCommandTree.h"
-#include "MissionCommandUIInfo.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(PlanManagerLog, "PlanManagerLog")
 
@@ -45,7 +45,7 @@ void PlanManager::_writeMissionItemsWorker(void)
 {
     _lastMissionRequest = -1;
 
-    emit progressPct(0);
+    emit progressPctChanged(0);
 
     qCDebug(PlanManagerLog) << QStringLiteral("writeMissionItems %1 count:").arg(_planTypeString()) << _writeMissionItems.count();
 
@@ -107,14 +107,17 @@ void PlanManager::_writeMissionCount(void)
         mavlink_message_t       message;
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
-        mavlink_msg_mission_count_pack_chan(qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
-                                            qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
-                                            sharedLink->mavlinkChannel(),
-                                            &message,
-                                            _vehicle->id(),
-                                            MAV_COMP_ID_AUTOPILOT1,
-                                            _writeMissionItems.count(),
-                                            _planType);
+        mavlink_msg_mission_count_pack_chan(
+            qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
+            qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
+            sharedLink->mavlinkChannel(),
+            &message,
+            _vehicle->id(),
+            MAV_COMP_ID_AUTOPILOT1,
+            _writeMissionItems.count(),
+            _planType,
+            0
+        );
 
         _vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
     }
@@ -296,14 +299,17 @@ void PlanManager::_readTransactionComplete(void)
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
         mavlink_message_t       message;
 
-        mavlink_msg_mission_ack_pack_chan(qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
-                                          qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
-                                          sharedLink->mavlinkChannel(),
-                                          &message,
-                                          _vehicle->id(),
-                                          MAV_COMP_ID_AUTOPILOT1,
-                                          MAV_MISSION_ACCEPTED,
-                                          _planType);
+        mavlink_msg_mission_ack_pack_chan(
+            qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
+            qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
+            sharedLink->mavlinkChannel(),
+            &message,
+            _vehicle->id(),
+            MAV_COMP_ID_AUTOPILOT1,
+            MAV_MISSION_ACCEPTED,
+            _planType,
+            0
+        );
 
         _vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
     }
@@ -466,7 +472,7 @@ void PlanManager::_handleMissionItem(const mavlink_message_t& message)
         return;
     }
 
-    emit progressPct((double)seq / (double)_missionItemCountToRead);
+    emit progressPctChanged((double)seq / (double)_missionItemCountToRead);
     
     _retryCount = 0;
     if (_itemIndicesToRead.count() == 0) {
@@ -511,7 +517,7 @@ void PlanManager::_handleMissionRequest(const mavlink_message_t& message)
         return;
     }
 
-    emit progressPct((double)missionRequestSeq / (double)_writeMissionItems.count());
+    emit progressPctChanged((double)missionRequestSeq / (double)_writeMissionItems.count());
 
     _lastMissionRequest = missionRequestSeq;
     if (!_itemIndicesToWrite.contains(missionRequestSeq)) {
@@ -803,7 +809,7 @@ QString PlanManager::_missionResultToString(MAV_MISSION_RESULT result)
 
 void PlanManager::_finishTransaction(bool success, bool apmGuidedItemWrite)
 {
-    emit progressPct(1);
+    emit progressPctChanged(1);
     _disconnectFromMavlink();
 
     _itemIndicesToRead.clear();
@@ -870,7 +876,7 @@ void PlanManager::_removeAllWorker(void)
 {
     qCDebug(PlanManagerLog) << "_removeAllWorker";
 
-    emit progressPct(0);
+    emit progressPctChanged(0);
 
     _connectToMavlink();
 

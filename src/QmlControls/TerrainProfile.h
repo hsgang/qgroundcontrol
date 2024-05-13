@@ -9,18 +9,18 @@
 
 #pragma once
 
-#include <QQuickItem>
-#include <QTimer>
-#include <QSGGeometryNode>
-#include <QSGGeometry>
-
-#include "QGCLoggingCategory.h"
+#include <QtQuick/QQuickItem>
+#include <QtQuick/QSGGeometryNode>
+#include <QtQuick/QSGGeometry>
+#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(TerrainProfileLog)
 
 class MissionController;
 class QmlObjectListModel;
 class FlightPathSegment;
+
+Q_MOC_INCLUDE("MissionController.h")
 
 class TerrainProfile : public QQuickItem
 {

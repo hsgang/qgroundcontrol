@@ -10,8 +10,7 @@
 
 #include "FactSystem.h"
 #include "FirmwarePluginManager.h"
-#include "AudioOutput.h"
-#ifndef __mobile__
+#ifndef NO_SERIAL_LINK
 #include "GPSManager.h"
 #endif
 #include "JoystickManager.h"
@@ -19,7 +18,6 @@
 #include "MAVLinkProtocol.h"
 #include "MissionCommandTree.h"
 #include "MultiVehicleManager.h"
-#include "QGCImageProvider.h"
 #include "UASMessageHandler.h"
 #include "QGCMapEngineManager.h"
 #include "FollowMe.h"
@@ -27,38 +25,35 @@
 #include "VideoManager.h"
 #include "MAVLinkLogManager.h"
 #include "QGCCorePlugin.h"
-#include "QGCOptions.h"
 #include "SettingsManager.h"
 #include "QGCApplication.h"
 #include "ADSBVehicleManager.h"
 #include "NTRIP.h"
-#if defined(QGC_ENABLE_PAIRING)
-#include "PairingManager.h"
-#endif
-#if defined(QGC_GST_TAISYNC_ENABLED)
-#include "TaisyncManager.h"
-#endif
-#if defined(QGC_GST_MICROHARD_ENABLED)
-#include "MicrohardManager.h"
+#ifndef QGC_AIRLINK_DISABLED
+#include "AirLinkManager.h"
 #endif
 
 #if defined(QGC_CUSTOM_BUILD)
 #include CUSTOMHEADER
 #endif
 
+#ifdef CONFIG_UTM_ADAPTER
+#include "UTMSPManager.h"
+#endif
+
 QGCToolbox::QGCToolbox(QGCApplication* app)
+    : QObject(app)
 {
     // SettingsManager must be first so settings are available to any subsequent tools
     _settingsManager        = new SettingsManager           (app, this);
+
     //-- Scan and load plugins
     _scanAndLoadPlugins(app);
-    _audioOutput            = new AudioOutput               (app, this);
     _factSystem             = new FactSystem                (app, this);
     _firmwarePluginManager  = new FirmwarePluginManager     (app, this);
-#ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     _gpsManager             = new GPSManager                (app, this);
 #endif
-    _imageProvider          = new QGCImageProvider          (app, this);
     _joystickManager        = new JoystickManager           (app, this);
     _linkManager            = new LinkManager               (app, this);
     _mavlinkProtocol        = new MAVLinkProtocol           (app, this);
@@ -69,17 +64,15 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
     _qgcPositionManager     = new QGCPositionManager        (app, this);
     _followMe               = new FollowMe                  (app, this);
     _videoManager           = new VideoManager              (app, this);
+
     _mavlinkLogManager      = new MAVLinkLogManager         (app, this);
     _adsbVehicleManager     = new ADSBVehicleManager        (app, this);
     _ntrip                  = new NTRIP                     (app, this);
-#if defined(QGC_ENABLE_PAIRING)
-    _pairingManager         = new PairingManager            (app, this);
+#ifndef QGC_AIRLINK_DISABLED
+    _airlinkManager         = new AirLinkManager            (app, this);
 #endif
-#if defined(QGC_GST_TAISYNC_ENABLED)
-    _taisyncManager         = new TaisyncManager            (app, this);
-#endif
-#if defined(QGC_GST_MICROHARD_ENABLED)
-    _microhardManager       = new MicrohardManager          (app, this);
+#ifdef CONFIG_UTM_ADAPTER
+    _utmspManager            = new UTMSPManager               (app, this);
 #endif
 }
 
@@ -89,13 +82,11 @@ void QGCToolbox::setChildToolboxes(void)
     _settingsManager->setToolbox(this);
 
     _corePlugin->setToolbox(this);
-    _audioOutput->setToolbox(this);
     _factSystem->setToolbox(this);
     _firmwarePluginManager->setToolbox(this);
-#ifndef __mobile__
+#ifndef NO_SERIAL_LINK
     _gpsManager->setToolbox(this);
 #endif
-    _imageProvider->setToolbox(this);
     _joystickManager->setToolbox(this);
     _linkManager->setToolbox(this);
     _mavlinkProtocol->setToolbox(this);
@@ -109,14 +100,11 @@ void QGCToolbox::setChildToolboxes(void)
     _mavlinkLogManager->setToolbox(this);
     _adsbVehicleManager->setToolbox(this);
     _ntrip->setToolbox(this);
-#if defined(QGC_GST_TAISYNC_ENABLED)
-    _taisyncManager->setToolbox(this);
+#ifndef QGC_AIRLINK_DISABLED
+    _airlinkManager->setToolbox(this);
 #endif
-#if defined(QGC_GST_MICROHARD_ENABLED)
-    _microhardManager->setToolbox(this);
-#endif
-#if defined(QGC_ENABLE_PAIRING)
-    _pairingManager->setToolbox(this);
+#ifdef CONFIG_UTM_ADAPTER
+    _utmspManager->setToolbox(this);
 #endif
 }
 

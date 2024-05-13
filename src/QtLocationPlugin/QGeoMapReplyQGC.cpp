@@ -46,12 +46,15 @@
 
 #include "QGCMapEngine.h"
 #include "QGeoMapReplyQGC.h"
-#include "QGeoTileFetcherQGC.h"
+#include "TerrainTile.h"
+#include "MapProvider.h"
+#include "QGCMapUrlEngine.h"
+#include "DeviceInfo.h"
 
 #include <QtLocation/private/qgeotilespec_p.h>
 #include <QtNetwork/QNetworkAccessManager>
-#include <QFile>
-#include "TerrainTile.h"
+#include <QtCore/QFile>
+#include <QtNetwork/QNetworkProxy>
 
 int         QGeoTiledMapReplyQGC::_requestCount = 0;
 QByteArray  QGeoTiledMapReplyQGC::_bingNoTileImage;
@@ -63,7 +66,7 @@ QGeoTiledMapReplyQGC::QGeoTiledMapReplyQGC(QNetworkAccessManager *networkManager
     , _request(request)
     , _networkManager(networkManager)
 {
-    if (_bingNoTileImage.count() == 0) {
+    if (_bingNoTileImage.length() == 0) {
         QFile file(":/res/BingNoTileBytes.dat");
         file.open(QFile::ReadOnly);
         _bingNoTileImage = file.readAll();
@@ -80,7 +83,7 @@ QGeoTiledMapReplyQGC::QGeoTiledMapReplyQGC(QNetworkAccessManager *networkManager
         setFinished(true);
         setCached(false);
     } else {
-        QGCFetchTileTask* task = getQGCMapEngine()->createFetchTileTask(getQGCMapEngine()->urlFactory()->getTypeFromId(spec.mapId()), spec.x(), spec.y(), spec.zoom());
+        QGCFetchTileTask* task = getQGCMapEngine()->createFetchTileTask(getQGCMapEngine()->urlFactory()->getProviderTypeFromQtMapId(spec.mapId()), spec.x(), spec.y(), spec.zoom());
         connect(task, &QGCFetchTileTask::tileFetched, this, &QGeoTiledMapReplyQGC::cacheReply);
         connect(task, &QGCMapTask::error, this, &QGeoTiledMapReplyQGC::cacheError);
         getQGCMapEngine()->addTask(task);
@@ -137,13 +140,13 @@ QGeoTiledMapReplyQGC::networkReplyFinished()
         //-- Cache it if valid
         if(!a.isEmpty()) {
             getQGCMapEngine()->cacheTile(
-                getQGCMapEngine()->urlFactory()->getTypeFromId(
+                getQGCMapEngine()->urlFactory()->getProviderTypeFromQtMapId(
                     tileSpec().mapId()),
                 tileSpec().x(), tileSpec().y(), tileSpec().zoom(), a, format);
         }
         emit terrainDone(a, QNetworkReply::NoError);
     } else {
-        MapProvider* mapProvider = urlFactory->getMapProviderFromId(tileSpec().mapId());
+        MapProvider* mapProvider = urlFactory->getMapProviderFromQtMapId(tileSpec().mapId());
         if (mapProvider && mapProvider->_isBingProvider() && a.size() && _bingNoTileImage.size() && a == _bingNoTileImage) {
             // Bing doesn't return an error if you request a tile above supported zoom level
             // It instead returns an image of a missing tile graphic. We need to detect that
@@ -155,7 +158,7 @@ QGeoTiledMapReplyQGC::networkReplyFinished()
             setMapImageData(a);
             if(!format.isEmpty()) {
                 setMapImageFormat(format);
-                getQGCMapEngine()->cacheTile(getQGCMapEngine()->urlFactory()->getTypeFromId(tileSpec().mapId()), tileSpec().x(), tileSpec().y(), tileSpec().zoom(), a, format);
+                getQGCMapEngine()->cacheTile(getQGCMapEngine()->urlFactory()->getProviderTypeFromQtMapId(tileSpec().mapId()), tileSpec().x(), tileSpec().y(), tileSpec().zoom(), a, format);
             }
         }
         setFinished(true);
@@ -189,7 +192,7 @@ QGeoTiledMapReplyQGC::networkReplyError(QNetworkReply::NetworkError error)
 void
 QGeoTiledMapReplyQGC::cacheError(QGCMapTask::TaskType type, QString /*errorString*/)
 {
-    if(!getQGCMapEngine()->isInternetActive()) {
+    if(!QGCDeviceInfo::isInternetAvailable()) {
         if( getQGCMapEngine()->urlFactory()->isElevation(tileSpec().mapId())){
             emit terrainDone(QByteArray(), QNetworkReply::NetworkSessionFailedError);
         } else {
@@ -210,7 +213,7 @@ QGeoTiledMapReplyQGC::cacheError(QGCMapTask::TaskType type, QString /*errorStrin
         _reply = _networkManager->get(_request);
         _reply->setParent(nullptr);
         connect(_reply, &QNetworkReply::finished, this, &QGeoTiledMapReplyQGC::networkReplyFinished);
-        connect(_reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(networkReplyError(QNetworkReply::NetworkError)));
+        connect(_reply, &QNetworkReply::errorOccurred, this, &QGeoTiledMapReplyQGC::networkReplyError);
 #if !defined(__mobile__)
         _networkManager->setProxy(proxy);
 #endif

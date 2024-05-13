@@ -8,12 +8,8 @@
  ****************************************************************************/
 
 #include "SyslinkComponentController.h"
-#include "QGCApplication.h"
-#include "UAS.h"
-#include "ParameterManager.h"
-
-#include <QHostAddress>
-#include <QtEndian>
+#include "Vehicle.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(SyslinkComponentControllerLog, "SyslinkComponentControllerLog")
 

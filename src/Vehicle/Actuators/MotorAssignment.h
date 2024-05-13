@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include <QObject>
-#include <QString>
-#include <QTimer>
+#include "Vehicle.h"
 
-#include "Common.h"
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QTimer>
 
-#include "QmlControls/QmlObjectListModel.h"
+class QmlObjectListModel;
 
 /**
  * Handles automatic motor ordering assignment by spinning individual motors, and then having the user

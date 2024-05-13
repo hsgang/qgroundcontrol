@@ -11,15 +11,12 @@
 /// @file
 ///     @author Don Gagne <don@thegagnes.com>
 
-#ifndef SENSORSCOMPONENTCONTROLLER_H
-#define SENSORSCOMPONENTCONTROLLER_H
+#pragma once
 
-#include <QObject>
-#include <QQuickItem>
+#include <QtQuick/QQuickItem>
+#include <QtCore/QLoggingCategory>
 
-#include "UASInterface.h"
 #include "FactPanelController.h"
-#include "QGCLoggingCategory.h"
 
 Q_DECLARE_LOGGING_CATEGORY(SensorsComponentControllerLog)
 
@@ -169,5 +166,3 @@ private:
     
     static const int _supportedFirmwareCalVersion = 2;
 };
-
-#endif

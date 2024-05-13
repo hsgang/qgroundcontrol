@@ -83,27 +83,18 @@ count(MAVLINK_CONF, 1) {
 }
 
 #
-# [REQUIRED] EIGEN matrix library
-# NOMINMAX constant required to make internal min/max work.
-INCLUDEPATH += libs/eigen
-DEFINES += NOMINMAX
-
-#
 # [REQUIRED] Events submodule
 HEADERS+= \
-	libs/libevents/libevents/libs/cpp/protocol/receive.h \
+    libs/libevents/libevents/libs/cpp/common/event_type.h \
+    libs/libevents/libevents/libs/cpp/generated/events_generated.h \
 	libs/libevents/libevents/libs/cpp/parse/health_and_arming_checks.h \
 	libs/libevents/libevents/libs/cpp/parse/parser.h \
-	libs/libevents/libevents/libs/cpp/generated/events_generated.h \
-	libs/libevents/libevents_definitions.h
+    libs/libevents/libevents/libs/cpp/protocol/receive.h
 SOURCES += \
-	libs/libevents/libevents/libs/cpp/protocol/receive.cpp \
-	libs/libevents/libevents/libs/cpp/parse/health_and_arming_checks.cpp \
-	libs/libevents/libevents/libs/cpp/parse/parser.cpp \
-	libs/libevents/definitions.cpp
+    libs/libevents/libevents/libs/cpp/parse/health_and_arming_checks.cpp \
+	libs/libevents/libevents/libs/cpp/parse/parser.cpp
 INCLUDEPATH += \
-        libs/libevents \
-        libs/libevents/libs/cpp/parse
+    libs/libevents/libevents/libs/cpp
 #
 # [REQUIRED] shapelib library
 INCLUDEPATH += libs/shapelib
@@ -116,7 +107,7 @@ SOURCES += \
 WindowsBuild {
     INCLUDEPATH +=  $$SOURCE_DIR/libs/zlib/windows/include
     LIBS += -L$$SOURCE_DIR/libs/zlib/windows/lib
-    LIBS += -lzlibstat
+    LIBS += -lzlibstatic
 } else {
     LIBS += -lz
 }
@@ -218,36 +209,6 @@ AndroidBuild {
     #message($$ANDROID_EXTRA_LIBS)
 }
 
-# Pairing
-contains(DEFINES, QGC_ENABLE_PAIRING) {
-    MacBuild {
-        #- Pairing is generally not supported on macOS. This is here solely for development.
-        exists(/usr/local/Cellar/openssl/1.0.2t/include) {
-            INCLUDEPATH += /usr/local/Cellar/openssl/1.0.2t/include
-            LIBS += -L/usr/local/Cellar/openssl/1.0.2t/lib
-            LIBS += -lcrypto
-        } else {
-            # There is some circular reference settings going on between QGCExternalLibs.pri and gqgroundcontrol.pro.
-            # So this duplicates some of the enable/disable logic which would normally be in qgroundcontrol.pro.
-            DEFINES -= QGC_ENABLE_PAIRING
-        }
-    } else:WindowsBuild {
-        #- Pairing is not supported on Windows
-        DEFINES -= QGC_ENABLE_PAIRING
-    } else {
-        LIBS += -lcrypto
-        AndroidBuild {
-            contains(QT_ARCH, arm) {
-                LIBS += $$ANDROID_EXTRA_LIBS
-                INCLUDEPATH += $$SOURCE_DIR/libs/OpenSSL/Android/arch-armeabi-v7a/include
-            } else {
-                LIBS += $$ANDROID_EXTRA_LIBS
-                INCLUDEPATH += $$SOURCE_DIR/libs/OpenSSL/Android/arch-x86/include
-            }
-        }
-    }
-}
-
 #
 # [OPTIONAL] Zeroconf for UDP links
 #
@@ -264,3 +225,30 @@ contains (DEFINES, DISABLE_ZEROCONF) {
 } else {
     message("Skipping support for Zeroconf (unsupported platform)")
 }
+
+# UTM Adapter Enabled
+contains (DEFINES, CONFIG_UTM_ADAPTER){
+    INCLUDEPATH += $$PWD/libs/libevents/libevents/libs/cpp/parse/nlohmann_json/include
+    LIBS += -lboost_system -lboost_thread -lssl -lcrypto
+}
+
+HEADERS += \
+    libs/GeographicLib/Constants.hpp \
+    libs/GeographicLib/Math.hpp \
+    libs/GeographicLib/Utility.hpp \
+    libs/GeographicLib/UTMUPS.hpp \
+    libs/GeographicLib/MGRS.hpp \
+    libs/GeographicLib/TransverseMercator.hpp \
+    libs/GeographicLib/PolarStereographic.hpp \
+
+SOURCES += \
+    libs/GeographicLib/Math.cpp \
+    libs/GeographicLib/Utility.cpp \
+    libs/GeographicLib/UTMUPS.cpp \
+    libs/GeographicLib/MGRS.cpp \
+    libs/GeographicLib/TransverseMercator.cpp \
+    libs/GeographicLib/PolarStereographic.cpp \
+
+INCLUDEPATH += \
+    libs \
+    libs/GeographicLib

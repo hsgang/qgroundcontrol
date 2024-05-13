@@ -18,15 +18,18 @@
 
 #include "QGCMapEngine.h"
 #include "QGCMapTileSet.h"
+#include "QGCMapUrlEngine.h"
+#include "QGCLoggingCategory.h"
 
-#include <QVariant>
 #include <QtSql/QSqlQuery>
-#include <QSqlError>
-#include <QDebug>
-#include <QDateTime>
-#include <QApplication>
-#include <QFile>
-#include <QSettings>
+#include <QtSql/QSqlError>
+#include <QtCore/QDateTime>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QFile>
+#include <QtCore/QSettings>
+#ifndef Q_OS_ANDROID
+#include <QtNetwork/QNetworkProxy>
+#endif
 
 #include "time.h"
 
@@ -53,7 +56,6 @@ QGCCacheWorker::QGCCacheWorker()
     , _defaultCount(0)
     , _lastUpdate(0)
     , _updateTimeout(SHORT_TIMEOUT)
-    , _hostLookupID(0)
 {
 }
 
@@ -73,9 +75,6 @@ QGCCacheWorker::setDatabaseFile(const QString& path)
 void
 QGCCacheWorker::quit()
 {
-    if(_hostLookupID) {
-        QHostInfo::abortHostLookup(_hostLookupID);
-    }
     QMutexLocker lock(&_taskQueueMutex);
     while(_taskQueue.count()) {
         QGCMapTask* task = _taskQueue.dequeue();
@@ -203,9 +202,6 @@ QGCCacheWorker::_runTask(QGCMapTask *task)
         case QGCMapTask::taskImport:
             _importSets(task);
             return;
-        case QGCMapTask::taskTestInternet:
-            _testInternet();
-            return;
     }
     qCWarning(QGCTileCacheLog) << "_runTask given unhandled task type" << task->type();
 }
@@ -232,7 +228,7 @@ QGCCacheWorker::_deleteBingNoTileTiles()
     QSqlQuery query(*_db);
     QString s;
     //-- Select tiles in default set only, sorted by oldest.
-    s = QString("SELECT tileID, tile, hash FROM Tiles WHERE LENGTH(tile) = %1").arg(noTileBytes.count());
+    s = QString("SELECT tileID, tile, hash FROM Tiles WHERE LENGTH(tile) = %1").arg(noTileBytes.length());
     QList<quint64> idsToDelete;
     if (query.exec(s)) {
         while(query.next()) {
@@ -331,7 +327,7 @@ QGCCacheWorker::_getTile(QGCMapTask* mtask)
         if(query.next()) {
             const QByteArray& arrray   = query.value(0).toByteArray();
             const QString& format  = query.value(1).toString();
-            QString type = getQGCMapEngine()->urlFactory()->getTypeFromId(query.value(2).toInt());
+            const QString& type = query.value(2).toString();
             qCDebug(QGCTileCacheLog) << "_getTile() (Found in DB) HASH:" << task->hash();
             QGCCacheTile* tile = new QGCCacheTile(task->hash(), arrray, format, type);
             task->setTileFetched(tile);
@@ -367,13 +363,13 @@ QGCCacheWorker::_getTileSets(QGCMapTask* mtask)
             set->setBottomRightLon(query.value("bottomRightLon").toDouble());
             set->setMinZoom(query.value("minZoom").toInt());
             set->setMaxZoom(query.value("maxZoom").toInt());
-            set->setType(getQGCMapEngine()->urlFactory()->getTypeFromId(query.value("type").toInt()));
+            set->setType(getQGCMapEngine()->urlFactory()->getProviderTypeFromQtMapId(query.value("type").toInt()));
             set->setTotalTileCount(query.value("numTiles").toUInt());
             set->setDefaultSet(query.value("defaultSet").toInt() != 0);
             set->setCreationDate(QDateTime::fromSecsSinceEpoch(query.value("date").toUInt()));
             _updateSetTotals(set);
             //-- Object created here must be moved to app thread to be used there
-            set->moveToThread(QApplication::instance()->thread());
+            set->moveToThread(QCoreApplication::instance()->thread());
             task->tileSetFetched(set);
         }
     } else {
@@ -497,7 +493,7 @@ QGCCacheWorker::_createTileSet(QGCMapTask *mtask)
         query.addBindValue(task->tileSet()->bottomRightLon());
         query.addBindValue(task->tileSet()->minZoom());
         query.addBindValue(task->tileSet()->maxZoom());
-        query.addBindValue(getQGCMapEngine()->urlFactory()->getIdFromType(task->tileSet()->type()));
+        query.addBindValue(getQGCMapEngine()->urlFactory()->getQtMapIdFromProviderType(task->tileSet()->type()));
         query.addBindValue(task->tileSet()->totalTileCount());
         query.addBindValue(QDateTime::currentDateTime().toSecsSinceEpoch());
         if(!query.exec()) {
@@ -516,14 +512,14 @@ QGCCacheWorker::_createTileSet(QGCMapTask *mtask)
                 for(int x = set.tileX0; x <= set.tileX1; x++) {
                     for(int y = set.tileY0; y <= set.tileY1; y++) {
                         //-- See if tile is already downloaded
-                        QString hash = QGCMapEngine::getTileHash(type, x, y, z);
+                        QString hash = getQGCMapEngine()->getTileHash(type, x, y, z);
                         quint64 tileID = _findTile(hash);
                         if(!tileID) {
                             //-- Set to download
                             query.prepare("INSERT OR IGNORE INTO TilesDownload(setID, hash, type, x, y, z, state) VALUES(?, ?, ?, ?, ? ,? ,?)");
                             query.addBindValue(setID);
                             query.addBindValue(hash);
-                            query.addBindValue(getQGCMapEngine()->urlFactory()->getIdFromType(type));
+                            query.addBindValue(getQGCMapEngine()->urlFactory()->getQtMapIdFromProviderType(type));
                             query.addBindValue(x);
                             query.addBindValue(y);
                             query.addBindValue(z);
@@ -571,7 +567,7 @@ QGCCacheWorker::_getTileDownloadList(QGCMapTask* mtask)
         while(query.next()) {
             QGCTile* tile = new QGCTile;
             tile->setHash(query.value("hash").toString());
-            tile->setType(getQGCMapEngine()->urlFactory()->getTypeFromId(query.value("type").toInt()));
+            tile->setType(getQGCMapEngine()->urlFactory()->getProviderTypeFromQtMapId(query.value("type").toInt()));
             tile->setX(query.value("x").toInt());
             tile->setY(query.value("y").toInt());
             tile->setZ(query.value("z").toInt());
@@ -936,7 +932,7 @@ QGCCacheWorker::_exportSets(QGCMapTask* mtask)
                 exportQuery.addBindValue(set->bottomRightLon());
                 exportQuery.addBindValue(set->minZoom());
                 exportQuery.addBindValue(set->maxZoom());
-                exportQuery.addBindValue(getQGCMapEngine()->urlFactory()->getIdFromType(set->type()));
+                exportQuery.addBindValue(getQGCMapEngine()->urlFactory()->getQtMapIdFromProviderType(set->type()));
                 exportQuery.addBindValue(set->totalTileCount());
                 exportQuery.addBindValue(set->defaultSet());
                 exportQuery.addBindValue(QDateTime::currentDateTime().toSecsSinceEpoch());
@@ -1029,7 +1025,6 @@ QGCCacheWorker::_init()
         qCritical() << "Could not find suitable cache directory.";
         _failed = true;
     }
-    _testInternet();
     return _failed;
 }
 
@@ -1140,66 +1135,4 @@ QGCCacheWorker::_disconnectDB()
         _db.reset();
         QSqlDatabase::removeDatabase(kSession);
     }
-}
-
-//-----------------------------------------------------------------------------
-void
-QGCCacheWorker::_testInternet()
-{
-    /*
-        To test if you have Internet connection, the code tests a connection to
-        8.8.8.8:53 (google DNS). It appears that some routers are now blocking TCP
-        connections to port 53. So instead, we use a TCP connection to "github.com"
-        (80). On exit, if the look up for "github.com" is under way, a call to abort
-        the lookup is made. This abort call on Android has no effect, and the code
-        blocks for a full minute. So to work around the issue, we continue a direct
-        TCP connection to 8.8.8.8:53 on Android and do the lookup/connect on the
-        other platforms.
-    */
-#if defined(__android__)
-    QTcpSocket socket;
-    socket.connectToHost("8.8.8.8", 53);
-    if (socket.waitForConnected(2000)) {
-        qCDebug(QGCTileCacheLog) << "Yes Internet Access";
-        emit internetStatus(true);
-        return;
-    }
-    qWarning() << "No Internet Access";
-    emit internetStatus(false);
-#else
-    if(!_hostLookupID) {
-        _hostLookupID = QHostInfo::lookupHost("www.github.com", this, &QGCCacheWorker::_lookupReady);
-    }
-#endif
-}
-
-//-----------------------------------------------------------------------------
-void
-QGCCacheWorker::_lookupReady(QHostInfo info)
-{
-#if defined(__android__)
-    Q_UNUSED(info);
-#else
-    _hostLookupID = 0;
-    if(info.error() == QHostInfo::NoError && info.addresses().size()) {
-        auto socket = new QTcpSocket();
-        QNetworkProxy tempProxy;
-        tempProxy.setType(QNetworkProxy::DefaultProxy);
-        socket->setProxy(tempProxy);
-        socket->connectToHost(info.addresses().first(), 80);
-        connect(socket, &QTcpSocket::connected, this, [this, socket] {
-            qCDebug(QGCTileCacheLog) << "Yes Internet Access";
-            emit internetStatus(true);
-            socket->deleteLater();
-        });
-        connect(socket, &QAbstractSocket::errorOccurred, this, [this, socket](QAbstractSocket::SocketError error) {
-            qCDebug(QGCTileCacheLog) << "No internet connection, reason:" << error;
-            emit internetStatus(false);
-            socket->deleteLater();
-        });
-    } else {
-        qDebug(QGCTileCacheLog) << "No Internet Access";
-        emit internetStatus(false);
-    }
-#endif
 }

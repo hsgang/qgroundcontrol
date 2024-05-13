@@ -9,8 +9,7 @@
 
 #include "FlyViewSettings.h"
 
-#include <QQmlEngine>
-#include <QtQml>
+#include <QtQml/QQmlEngine>
 
 DECLARE_SETTINGGROUP(FlyView, "FlyView")
 {
@@ -20,7 +19,6 @@ DECLARE_SETTINGGROUP(FlyView, "FlyView")
 DECLARE_SETTINGSFACT(FlyViewSettings, guidedMinimumAltitude)
 DECLARE_SETTINGSFACT(FlyViewSettings, guidedMaximumAltitude)
 DECLARE_SETTINGSFACT(FlyViewSettings, showLogReplayStatusBar)
-DECLARE_SETTINGSFACT(FlyViewSettings, alternateInstrumentPanel)
 DECLARE_SETTINGSFACT(FlyViewSettings, showAdditionalIndicatorsCompass)
 DECLARE_SETTINGSFACT(FlyViewSettings, showAttitudeHUD)
 DECLARE_SETTINGSFACT(FlyViewSettings, lockNoseUpCompass)
@@ -44,6 +42,7 @@ DECLARE_SETTINGSFACT(FlyViewSettings, showTelemetryPanel)
 DECLARE_SETTINGSFACT(FlyViewSettings, showVibrationStatus)
 DECLARE_SETTINGSFACT(FlyViewSettings, showEKFStatus)
 DECLARE_SETTINGSFACT(FlyViewSettings, flyviewWidgetOpacity)
+DECLARE_SETTINGSFACT(FlyViewSettings, instrumentQmlFile)
 DECLARE_SETTINGSFACT(FlyViewSettings, showWindvane)
 DECLARE_SETTINGSFACT(FlyViewSettings, showVehicleInfoOnMap)
 DECLARE_SETTINGSFACT(FlyViewSettings, showCameraProjectionOnMap)

@@ -8,6 +8,8 @@
  ****************************************************************************/
 
 #include "APMFollowComponentController.h"
+#include "ArduRoverFirmwarePlugin.h"
+#include "Vehicle.h"
 
 const char* APMFollowComponentController::settingsGroup =   "APMFollow";
 const char* APMFollowComponentController::angleName =       "angle";
@@ -21,4 +23,9 @@ APMFollowComponentController::APMFollowComponentController(void)
     , _heightFact   (settingsGroup, _metaDataMap[heightName])
 {
 
+}
+
+bool APMFollowComponentController::roverFirmware()
+{
+    return !!qobject_cast<ArduRoverFirmwarePlugin*>(_vehicle->firmwarePlugin());
 }

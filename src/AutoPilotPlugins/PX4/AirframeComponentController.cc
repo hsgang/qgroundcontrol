@@ -9,13 +9,17 @@
 
 #include "AirframeComponentController.h"
 #include "AirframeComponentAirframes.h"
-#include "QGCMAVLink.h"
 #include "MultiVehicleManager.h"
 #include "QGCApplication.h"
 #include "LinkManager.h"
+#include "QGC.h"
+#include "FactSystem.h"
+#include "Fact.h"
+#include "Vehicle.h"
 
-#include <QVariant>
-#include <QQmlProperty>
+#include <QtCore/QVariant>
+#include <QtQml/QtQml>
+#include <QtGui/QCursor>
 
 bool AirframeComponentController::_typesRegistered = false;
 
@@ -85,8 +89,8 @@ void AirframeComponentController::changeAutostart(void)
         qgcApp()->showAppMessage(tr("You cannot change airframe configuration while connected to multiple vehicles."));
 		return;
 	}
-	
-    qgcApp()->setOverrideCursor(Qt::WaitCursor);
+
+    QGuiApplication::overrideCursor()->setShape(Qt::WaitCursor);
     
     Fact* sysAutoStartFact  = getParameterFact(-1, "SYS_AUTOSTART");
     Fact* sysAutoConfigFact = getParameterFact(-1, "SYS_AUTOCONFIG");
@@ -117,12 +121,12 @@ void AirframeComponentController::_waitParamWriteSignal(QVariant value)
 void AirframeComponentController::_rebootAfterStackUnwind(void)
 {    
     _vehicle->sendMavCommand(_vehicle->defaultComponentId(), MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN, true /* showError */, 1.0f);
-    qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
+    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     for (unsigned i = 0; i < 2000; i++) {
         QGC::SLEEP::usleep(500);
-        qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
+        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
-    qgcApp()->restoreOverrideCursor();
+    QGuiApplication::restoreOverrideCursor();
     qgcApp()->toolbox()->linkManager()->disconnectAll();
 }
 

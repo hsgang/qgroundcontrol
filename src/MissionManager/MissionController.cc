@@ -7,9 +7,8 @@
  *
  ****************************************************************************/
 
-#include "MissionCommandUIInfo.h"
 #include "MissionController.h"
-#include "MultiVehicleManager.h"
+#include "Vehicle.h"
 #include "MissionManager.h"
 #include "FlightPathSegment.h"
 #include "FirmwarePlugin.h"
@@ -21,17 +20,21 @@
 #include "StructureScanComplexItem.h"
 #include "CorridorScanComplexItem.h"
 #include "JsonHelper.h"
-#include "ParameterManager.h"
 #include "QGroundControlQmlGlobal.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
 #include "MissionSettingsItem.h"
-#include "QGCQGeoCoordinate.h"
 #include "PlanMasterController.h"
 #include "KMLPlanDomDocument.h"
 #include "QGCCorePlugin.h"
 #include "TakeoffMissionItem.h"
 #include "PlanViewSettings.h"
+#include "MissionCommandTree.h"
+#include "QGC.h"
+#include "QGCLoggingCategory.h"
+
+#include <QtCore/QJsonArray>
+#include <QtCore/QJsonDocument>
 
 #define UPDATE_TIMEOUT 5000 ///< How often we check for bounding box changes
 
@@ -982,7 +985,7 @@ bool MissionController::_loadTextMissionFile(QTextStream& stream, QmlObjectListM
             }
         }
     } else {
-        errorString = tr("The mission file is not compatible with this version of %1.").arg(qgcApp()->applicationName());
+        errorString = tr("The mission file is not compatible with this version of %1.").arg(QCoreApplication::applicationName());
         return false;
     }
 
@@ -2052,7 +2055,7 @@ void MissionController::_managerVehicleChanged(Vehicle* managerVehicle)
     connect(_missionManager, &MissionManager::sendComplete,             this, &MissionController::_managerSendComplete);
     connect(_missionManager, &MissionManager::removeAllComplete,        this, &MissionController::_managerRemoveAllComplete);
     connect(_missionManager, &MissionManager::inProgressChanged,        this, &MissionController::_inProgressChanged);
-    connect(_missionManager, &MissionManager::progressPct,              this, &MissionController::_progressPctChanged);
+    connect(_missionManager, &MissionManager::progressPctChanged,       this, &MissionController::_progressPctChanged);
     connect(_missionManager, &MissionManager::currentIndexChanged,      this, &MissionController::_currentMissionIndexChanged);
     connect(_missionManager, &MissionManager::lastCurrentIndexChanged,  this, &MissionController::resumeMissionIndexChanged);
     connect(_missionManager, &MissionManager::resumeMissionReady,       this, &MissionController::resumeMissionReady);
@@ -2403,7 +2406,7 @@ bool MissionController::_isROICancelItem(SimpleMissionItem* simpleItem)
 void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
 {
     if (_visualItems && (force || sequenceNumber != _currentPlanViewSeqNum)) {
-        //qDebug() << "setCurrentPlanViewSeqNum";
+        qCDebug(MissionControllerLog) << "setCurrentPlanViewSeqNum";
         bool    foundLand =             false;
         int     takeoffSeqNum =         -1;
         int     landSeqNum =            -1;
@@ -2504,10 +2507,8 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
                         for (int j=viIndex-1; j>0; j--) {
                             VisualMissionItem* pPrev = qobject_cast<VisualMissionItem*>(_visualItems->get(j));
                             if (pPrev->specifiesCoordinate() && !pPrev->isStandaloneCoordinate()) {
-                                qDebug() << "Found";
                                 VisualItemPair splitPair(pPrev, pVI);
                                 if (_flightPathSegmentHashTable.contains(splitPair)) {
-                                    qDebug() << "Split segment added in setCurrentPlanViewSeqNum";
                                     _splitSegment = _flightPathSegmentHashTable[splitPair];
                                 } else {
                                     // The recalc of flight path segments hasn't happened yet since it is delayed and compressed.

@@ -11,6 +11,9 @@
 #include "SimpleMissionItem.h"
 #include "FirmwarePlugin.h"
 #include "PlanMasterController.h"
+#include "MissionItem.h"
+#include "Vehicle.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(CameraSectionLog, "CameraSectionLog")
 

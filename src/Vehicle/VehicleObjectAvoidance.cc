@@ -7,10 +7,9 @@
  *
  ****************************************************************************/
 
-#include "Vehicle.h"
 #include "VehicleObjectAvoidance.h"
+#include "Vehicle.h"
 #include "ParameterManager.h"
-#include <cmath>
 
 static const char* kColPrevParam = "CP_DIST";
 

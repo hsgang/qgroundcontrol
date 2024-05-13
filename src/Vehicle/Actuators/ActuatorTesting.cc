@@ -9,12 +9,7 @@
 
 #include "ActuatorTesting.h"
 #include "Common.h"
-
 #include "QGCApplication.h"
-
-#include <QDebug>
-
-#include <cmath>
 
 using namespace ActuatorTesting;
 

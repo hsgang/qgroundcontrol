@@ -2926,7 +2926,7 @@ Blue Robotics 추진기는 물로 윤활되고 대기에서 작동하도록 설�
         <location filename="../src/AutoPilotPlugins/APM/APMSubMotorComponent.qml" line="225"/>
         <source>This will attempt to automatically detect the direction (normal/reversed) of your thrusters.
 Please place your vehicle in water, click the button, and wait. Note that the thrusters still need to be connected to the correct outputs (thrusters 2 and 3 can&apos;t be swapped, for example).</source>
-        <translation type="unfinished">This will attempt to automatically detect the direction (normal/reversed) of your thrusters.
+        <translation>This will attempt to automatically detect the direction (normal/reversed) of your thrusters.
 Please place your vehicle in water, click the button, and wait. Note that the thrusters still need to be connected to the correct outputs (thrusters 2 and 3 can&apos;t be swapped, for example).</translation>
     </message>
 </context>
@@ -4010,7 +4010,7 @@ Before starting the auto-tuning process, make sure that:
 
 Click Ok to start the auto-tuning process.
 </source>
-        <translation type="unfinished">WARNING!
+        <translation>WARNING!
 
 The auto-tuning procedure should be executed with caution and requires the vehicle to fly stable enough before attempting the procedure!
 
@@ -7507,24 +7507,24 @@ Click Ok to start the auto-tuning process.
         <translation>영상 설정</translation>
     </message>
     <message>
+        <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="72"/>
+        <source>Comm Links</source>
+        <translation>연결 관리</translation>
+    </message>
+    <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="45"/>
         <source>Telemetry</source>
         <translation>텔레메트리 설정</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="52"/>
-        <source>NTRIP</source>
-        <translation>NTRIP</translation>
+        <source>Network RTK</source>
+        <translation>네트워크 RTK</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="59"/>
         <source>ADSB Server</source>
         <translation>ADSB 서버</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="72"/>
-        <source>Comm Links</source>
-        <translation>연결 관리</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="79"/>
@@ -7676,6 +7676,201 @@ Click Ok to start the auto-tuning process.
         <source>Save logs even if vehicle was not armed</source>
         <translation>기체를 시동하지 않은 경우에도 로그 저장하기</translation>
     </message>
+</context>
+<context>
+    <name>FlyViewSettings</name>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="84"/>
+        <source>Fly View</source>
+        <translation>비행 화면</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="145"/>
+        <source>Enabled</source>
+        <translation>조이스틱 활성화</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="145"/>
+        <source>Auto-Center Throttle</source>
+        <translation>자동 중립 스로틀</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="239"/>
+        <source>Show Mission Max Altitude Indicator</source>
+        <translation>임무 최대 고도 지시기 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="177"/>
+        <source>Show simple camera controls (DIGICAM_CONTROL)</source>
+        <translation>간단한 카메라 컨트롤 표시 (DIGICAM_CONTROL)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="253"/>
+        <source>Update Home Position</source>
+        <translation>홈 위치 업데이트</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="260"/>
+        <source>Enable Custom Actions</source>
+        <translation>커스텀 명령 사용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="284"/>
+        <source>Custom Action Definitions</source>
+        <translation>커스텀 명령 설정 파일</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="188"/>
+        <source>Guided Command Settings</source>
+        <translation>Guided 명령 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="194"/>
+        <source>Minimum Altitude</source>
+        <translation>최소 고도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="205"/>
+        <source>Maximum Altitude</source>
+        <translation>최대 고도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="539"/>
+        <source>UI Scaling</source>
+        <translation>UI 크기:</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="604"/>
+        <source>Use Vehicle Pairing</source>
+        <translation>기체 페어링 사용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="618"/>
+        <source>Check for Internet connection</source>
+        <translation>인터넷 연결 확인</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="719"/>
+        <source>Save CSV log of telemetry data</source>
+        <translation>텔레메트리 로그를 CSV 로그로 저장</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="103"/>
+        <source>Use Preflight Checklist</source>
+        <translation>비행 전 체크 리스트 사용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="111"/>
+        <source>Enforce Preflight Checklist</source>
+        <translation>비행 전 체크 리스트 강제 사용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="120"/>
+        <source>Keep Map Centered On Vehicle</source>
+        <translation>지도 중앙을 기체에 위치</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="128"/>
+        <source>Show Telemetry Log Replay Status Bar</source>
+        <translation>텔레메트리 재생 로그 바 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="139"/>
+        <source>Virtual Joystick</source>
+        <translation>가상 조이스틱</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="153"/>
+        <source>Instrumen Panel</source>
+        <translation>장치 정보 패널</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="153"/>
+        <source>Use Vertical Instruments</source>
+        <translation>수직 계기판 사용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="161"/>
+        <source>Show additional heading indicators on Compass</source>
+        <translation>나침반에 추가 방향 정보 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="230"/>
+        <source>Show attitude HUD indicators on Compass</source>
+        <translation>나침반에 HUD 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="230"/>
+        <source>Update home position based on device location. This will affect return to home</source>
+        <translation>조종기 기반 홈 위치 업데이트</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="169"/>
+        <source>Lock Compass Nose-Up</source>
+        <translation>나침반 방향 고정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="216"/>
+        <source>Go To Location Max Distance</source>
+        <translation>여기로 가기 명령 최대 지원 거리</translation>
+    </message>
+</context>
+<context>
+    <name>VideoSettings</name>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="233"/>
+        <source>Video Settings</source>
+        <translation>비디오 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="240"/>
+        <source>Source</source>
+        <translation>소스</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="450"/>
+        <source>Record File Format</source>
+        <translation>녹화 파일 형식</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="318"/>
+        <source>Video decode priority</source>
+        <translation>비디오 디코더 우선순위</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="345"/>
+        <source>Auto-Delete Saved Recordings</source>
+        <translation>저장된 기록 자동 삭제</translation>
+    </message>
+</context>
+<context>
+    <name>PlanViewSettings</name>
+    <message>
+        <location filename="../src/ui/preferences/PlanViewSettings.qml" line="356"/>
+        <source>Plan View</source>
+        <translation>자동 경로</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/PlanViewSettings.qml" line="378"/>
+        <source>Default Mission Altitude</source>
+        <translation>미션 기본 고도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/PlanViewSettings.qml" line="384"/>
+        <source>VTOL TransitionDistance</source>
+        <translation>VTOL 천이거리</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/PlanViewSettings.qml" line="392"/>
+        <source>Use MAV_CMD_CONDITION_GATE for pattern generation</source>
+        <translation>자동 경로 생성시 MAV_CMD_CONDITION_GATE 적용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/PlanViewSettings.qml" line="397"/>
+        <source>Missions Do Not Require Takeoff Item</source>
+        <translation>자동 경로에서 이륙 항목(Takeoff) 제외</translation>
+    </message>
+
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="731"/>
         <source>AutoConnect to the following devices</source>
@@ -8021,7 +8216,7 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/VideoSettings.qml" line="450"/>
-        <source>Video Storage</source>
+        <source>Local Video Storage</source>
         <translation>영상 저장</translation>
     </message>
     <message>
@@ -9622,6 +9817,11 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <source>No Links Configured</source>
+        <translation>연결 목록 없음</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
         <source>Auto Connect</source>
         <translation>자동 연결</translation>
     </message>
@@ -10491,44 +10691,39 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
-    <name>MainToolBar</name>
+    <name>FlyViewToolBar</name>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="201"/>
-        <source>Link Management</source>
-        <translation>연결 관리</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="201"/>
-        <source>Connect</source>
-        <translation>연결</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="201"/>
-        <source>Disconnect</source>
-        <translation>연결 해제</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="201"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="201"/>
         <source>Downloading</source>
         <translation>다운로드 중</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="327"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="327"/>
         <source>Click anywhere to hide</source>
         <translation>숨기려면 아무 곳이나 클릭하십시오</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="184"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="209"/>
+        <source>Connect</source>
+        <translation>연결</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="215"/>
+        <source>Disconnect</source>
+        <translation>연결 해제</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="184"/>
         <source>Connected</source>
         <translation>연결됨</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="190"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="190"/>
         <source>Disconnected</source>
         <translation>연결 없음</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/MainToolBar.qml" line="134"/>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="134"/>
         <source>Link Management</source>
         <translation>연결 관리</translation>
     </message>
@@ -10587,6 +10782,11 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="452"/>
+        <source>ESC Status</source>
+        <translation>ESC 상태정보</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="452"/>
         <source>Camera Projection on Map</source>
         <translation>카메라뷰 투영 표시</translation>
     </message>
@@ -10603,12 +10803,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="464"/>
         <source>Vibration Status</source>
-        <translation>진동 상태</translation>
+        <translation>진동 상태정보</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="470"/>
         <source>EKF Status</source>
-        <translation>EKF 상태</translation>
+        <translation>EKF 상태정보</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="470"/>
@@ -19135,24 +19335,34 @@ Confirm change?</source>
     </message>
 </context>
 <context>
-    <name>QGCPipOverlay</name>
+    <name>PipView</name>
     <message>
-        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="268"/>
+        <location filename="../src/QmlControls/PipView.qml" line="268"/>
         <source>Swap</source>
         <translation>화면전환</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="274"/>
+        <location filename="../src/QmlControls/PipView.qml" line="290"/>
+        <source>2D View</source>
+        <translation>2D 뷰</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/PipView.qml" line="290"/>
+        <source>3D View</source>
+        <translation>3D 뷰</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/PipView.qml" line="274"/>
         <source>Layer</source>
         <translation>레이어</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="284"/>
+        <location filename="../src/QmlControls/PipView.qml" line="284"/>
         <source>Show PIP</source>
         <translation>PIP 켬</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPipOverlay.qml" line="290"/>
+        <location filename="../src/QmlControls/PipView.qml" line="290"/>
         <source>Hide PIP</source>
         <translation>숨기기</translation>
     </message>

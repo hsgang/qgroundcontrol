@@ -7,19 +7,18 @@
  *
  ****************************************************************************/
 
-import QtQuick                  2.12
-import QtQuick.Controls         2.4
-import QtQuick.Layouts          1.12
-import QtGraphicalEffects       1.12
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-import QtQuick.Window           2.2
-import QtQml.Models             2.1
+import QtQuick.Window
+import QtQml.Models
 
-import QGroundControl               1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.FactSystem    1.0
-import QGroundControl.Palette       1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.FactSystem
+import QGroundControl.Palette
+import QGroundControl.ScreenTools
 
 Rectangle {
     id:                     weatherBackground

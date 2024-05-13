@@ -10,10 +10,10 @@
 #pragma once
 
 #include "Section.h"
-#include "FactSystem.h"
-#include "QmlObjectListModel.h"
+#include "Fact.h"
 
 class PlanMasterController;
+class QmlObjectListModel;
 
 class SpeedSection : public Section
 {

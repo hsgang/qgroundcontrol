@@ -14,12 +14,11 @@
 
 #include "PX4FirmwareUpgradeThread.h"
 #include "Bootloader.h"
+#include "FirmwareImage.h"
 #include "QGCLoggingCategory.h"
-#include "QGC.h"
 
-#include <QTimer>
-#include <QDebug>
-#include <QSerialPort>
+#include <QtCore/QThread>
+#include <QtCore/QTimer>
 
 PX4FirmwareUpgradeThreadWorker::PX4FirmwareUpgradeThreadWorker(PX4FirmwareUpgradeThreadController* controller)
     : _controller(controller)

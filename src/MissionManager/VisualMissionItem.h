@@ -9,31 +9,25 @@
 
 #pragma once
 
-#include <QObject>
-#include <QString>
-#include <QtQml>
-#include <QTextStream>
-#include <QJsonObject>
-#include <QGeoCoordinate>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtPositioning/QGeoCoordinate>
+#include <QtCore/QLoggingCategory>
 
 #include "QGCMAVLink.h"
-#include "QGC.h"
 #include "QmlObjectListModel.h"
-#include "Fact.h"
-#include "QGCLoggingCategory.h"
-#include "QmlObjectListModel.h"
-#include "Vehicle.h"
 #include "MissionController.h"
 
 class MissionItem;
 class PlanMasterController;
-class MissionController;
 class TerrainAtCoordinateQuery;
+class Vehicle;
 
 // Abstract base class for all Simple and Complex visual mission objects.
 class VisualMissionItem : public QObject
 {
     Q_OBJECT
+    Q_MOC_INCLUDE("PlanMasterController.h")
 
 public:
     VisualMissionItem(PlanMasterController* masterController, bool flyView);

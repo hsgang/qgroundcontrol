@@ -9,47 +9,28 @@
 
 #include "FirmwarePlugin.h"
 #include "QGCApplication.h"
-#include "Generic/GenericAutoPilotPlugin.h"
+#include "GenericAutoPilotPlugin.h"
+#include "AutoPilotPlugin.h"
 #include "CameraMetaData.h"
-#include "SettingsManager.h"
-#include "AppSettings.h"
 #include "QGCFileDownload.h"
 #include "QGCCameraManager.h"
 #include "RadioComponentController.h"
 #include "Autotune.h"
+#include "VehicleCameraControl.h"
+#include "VehicleComponent.h"
+#include "MAVLinkProtocol.h"
+#include "QGC.h"
+#include "QGCLoggingCategory.h"
 
-#include <QRegularExpression>
-#include <QDebug>
+#include <QtCore/QRegularExpression>
 
 QGC_LOGGING_CATEGORY(FirmwarePluginLog, "FirmwarePluginLog")
-
-static FirmwarePluginFactoryRegister* _instance = nullptr;
 
 const QString guided_mode_not_supported_by_vehicle = QObject::tr("Guided mode not supported by Vehicle.");
 
 QVariantList FirmwarePlugin::_cameraList;
 
 const QString FirmwarePlugin::px4FollowMeFlightMode(QObject::tr("Follow Me"));
-
-FirmwarePluginFactory::FirmwarePluginFactory(void)
-{
-    FirmwarePluginFactoryRegister::instance()->registerPluginFactory(this);
-}
-
-QList<QGCMAVLink::VehicleClass_t> FirmwarePluginFactory::supportedVehicleClasses(void) const
-{
-    return QGCMAVLink::allVehicleClasses();
-}
-
-FirmwarePluginFactoryRegister* FirmwarePluginFactoryRegister::instance(void)
-{
-    if (!_instance) {
-        _instance = new FirmwarePluginFactoryRegister;
-    }
-
-    return _instance;
-}
-
 
 FirmwarePlugin::FirmwarePlugin(void)
 {
@@ -332,12 +313,7 @@ QString FirmwarePlugin::vehicleImageOutline(const Vehicle*) const
     return QStringLiteral("/qmlimages/vehicleArrowOutline.svg");
 }
 
-QString FirmwarePlugin::vehicleImageCompass(const Vehicle*) const
-{
-    return QStringLiteral("/qmlimages/compassInstrumentArrow.svg");
-}
-
-QVariant FirmwarePlugin::mainStatusIndicatorExpandedItem(const Vehicle*) const
+QVariant FirmwarePlugin::mainStatusIndicatorContentItem(const Vehicle*) const
 {
     return QVariant();
 }
@@ -350,7 +326,7 @@ const QVariantList& FirmwarePlugin::toolIndicators(const Vehicle*)
             //QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/FlightModeMenuIndicator.qml")),
             //QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/MessageIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/VehicleIndicator.qml")),
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ROIIndicator.qml")),
+//            QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ROIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/GPSRTKIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/GPSIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/TelemetryRSSIIndicator.qml")),
@@ -370,7 +346,6 @@ const QVariantList& FirmwarePlugin::modeIndicators(const Vehicle*)
     //-- Default list of indicators for all vehicles.
     if(_modeIndicatorList.size() == 0) {
         _modeIndicatorList = QVariantList({
-            //QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/ROIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/MultiVehicleSelector.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/LinkIndicator.qml")),
         });
@@ -999,7 +974,7 @@ bool FirmwarePlugin::_armVehicleAndValidate(Vehicle* vehicle)
             break;
         }
         QGC::SLEEP::msleep(100);
-        qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
+        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
     return vehicleArmed;
@@ -1024,7 +999,7 @@ bool FirmwarePlugin::_setFlightModeAndValidate(Vehicle* vehicle, const QString& 
                 break;
             }
             QGC::SLEEP::msleep(100);
-            qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
+            QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         }
         if (flightModeChanged) {
             break;
@@ -1063,9 +1038,9 @@ QGCCameraManager* FirmwarePlugin::createCameraManager(Vehicle* vehicle)
     return new QGCCameraManager(vehicle);
 }
 
-QGCCameraControl* FirmwarePlugin::createCameraControl(const mavlink_camera_information_t *info, Vehicle *vehicle, int compID, QObject* parent)
+MavlinkCameraControl* FirmwarePlugin::createCameraControl(const mavlink_camera_information_t *info, Vehicle *vehicle, int compID, QObject* parent)
 {
-    return new QGCCameraControl(info, vehicle, compID, parent);
+    return new VehicleCameraControl(info, vehicle, compID, parent);
 }
 
 uint32_t FirmwarePlugin::highLatencyCustomModeTo32Bits(uint16_t hlCustomMode)
@@ -1136,7 +1111,7 @@ void FirmwarePlugin::_versionFileDownloadFinished(QString& remoteFile, QString& 
     }
 }
 
-int FirmwarePlugin::versionCompare(Vehicle* vehicle, int major, int minor, int patch)
+int FirmwarePlugin::versionCompare(const Vehicle* vehicle, int major, int minor, int patch) const
 {
     int currMajor = vehicle->firmwareMajorVersion();
     int currMinor = vehicle->firmwareMinorVersion();
@@ -1155,7 +1130,7 @@ int FirmwarePlugin::versionCompare(Vehicle* vehicle, int major, int minor, int p
     return -1;
 }
 
-int FirmwarePlugin::versionCompare(Vehicle* vehicle, QString& compare)
+int FirmwarePlugin::versionCompare(const Vehicle* vehicle, QString& compare) const
 {
     QStringList versionNumbers = compare.split(".");
     if(versionNumbers.size() != 3) {

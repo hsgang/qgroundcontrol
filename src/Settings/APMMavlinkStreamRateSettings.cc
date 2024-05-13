@@ -9,9 +9,10 @@
 
 #include "APMMavlinkStreamRateSettings.h"
 #include "QGCApplication.h"
+#include "Vehicle.h"
+#include "MultiVehicleManager.h"
 
-#include <QQmlEngine>
-#include <QtQml>
+#include <QtQml/QQmlEngine>
 
 DECLARE_SETTINGGROUP(APMMavlinkStreamRate, "APMMavlinkStreamRate")
 {

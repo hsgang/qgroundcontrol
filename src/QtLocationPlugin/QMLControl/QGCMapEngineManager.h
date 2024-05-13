@@ -11,16 +11,18 @@
 /// @file
 ///     @author Gus Grubba <gus@auterion.com>
 
-#ifndef OfflineMapsManager_H
-#define OfflineMapsManager_H
+#pragma once
 
 #include "QmlObjectListModel.h"
 #include "QGCToolbox.h"
-#include "QGCLoggingCategory.h"
-#include "QGCMapEngine.h"
-#include "QGCMapTileSet.h"
+#include "QGCTileSet.h"
+#include "QGCMapEngineData.h"
+
+#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(QGCMapEngineManagerLog)
+
+class QGCCachedTileSet;
 
 class QGCMapEngineManager : public QGCTool
 {
@@ -144,5 +146,3 @@ private:
     ImportAction _importAction;
     bool        _importReplace;
 };
-
-#endif

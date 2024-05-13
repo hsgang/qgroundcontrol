@@ -7,12 +7,7 @@
  *
  ****************************************************************************/
 
-
-#include <QStringList>
-#include <QDebug>
-
 #include "SimpleMissionItem.h"
-#include "FirmwarePluginManager.h"
 #include "QGCApplication.h"
 #include "JsonHelper.h"
 #include "MissionCommandTree.h"
@@ -20,6 +15,14 @@
 #include "QGroundControlQmlGlobal.h"
 #include "SettingsManager.h"
 #include "PlanMasterController.h"
+#include "SpeedSection.h"
+#include "MultiVehicleManager.h"
+#include "CameraSection.h"
+#include "Vehicle.h"
+#include "QGC.h"
+
+#include <QtCore/QStringList>
+#include <QtCore/QJsonArray>
 
 FactMetaData* SimpleMissionItem::_altitudeMetaData =        nullptr;
 FactMetaData* SimpleMissionItem::_commandMetaData =         nullptr;

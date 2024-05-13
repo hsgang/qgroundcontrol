@@ -1,20 +1,23 @@
-import QtQuick          2.3
-import QtQuick.Controls 1.2
-import QtQuick.Layouts  1.2
-import QtQuick.Dialogs  1.2
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
 
-import QGroundControl                   1.0
-import QGroundControl.ScreenTools       1.0
-import QGroundControl.Controls          1.0
-import QGroundControl.FactControls      1.0
-import QGroundControl.Palette           1.0
+import QGroundControl
+import QGroundControl.ScreenTools
+import QGroundControl.Controls
+import QGroundControl.FactControls
+import QGroundControl.Palette
+import QGroundControl.UTMSP
 
 // Toolbar for Plan View
 Item {
     //width: missionStats.width + _margins
 
-    property var    _planMasterController:      globals.planMasterControllerPlanView
-    property var    _currentMissionItem:        globals.currentPlanMissionItem          ///< Mission item to display status for
+    property var    planMasterController
+
+    property var    _planMasterController:      planMasterController
+    property var    _currentMissionItem:        _planMasterController.missionController.currentPlanViewItem ///< Mission item to display status for
 
     property var    missionItems:               _controllerValid ? _planMasterController.missionController.visualItems : undefined
     property real   missionDistance:            _controllerValid ? _planMasterController.missionController.missionDistance : NaN
@@ -50,8 +53,6 @@ Item {
     property int    _batteryChangePoint:        _controllerValid ? _planMasterController.missionController.batteryChangePoint : -1
     property int    _batteriesRequired:         _controllerValid ? _planMasterController.missionController.batteriesRequired : -1
     property bool   _batteryInfoAvailable:      _batteryChangePoint >= 0 || _batteriesRequired >= 0
-    property real   _controllerProgressPct:     _controllerValid ? _planMasterController.missionController.progressPct : 0
-    property bool   _syncInProgress:            _controllerValid ? _planMasterController.missionController.syncInProgress : false
     property real   _gradient:                  _currentMissionItemValid && _currentMissionItem.distance > 0 ?
                                                     (_currentItemIsVTOLTakeoff ?
                                                          0 :
@@ -71,6 +72,22 @@ Item {
 
     readonly property real _margins: ScreenTools.defaultFontPixelWidth
 
+    // Properties of UTM adapter
+    property var    _utmspController:                    _planMasterController.geoFenceController
+    property bool   _utmspEnabled:                       QGroundControl.utmspSupported
+    property bool  responseFlag
+    // Dummy object when utm adapter flag is not enabled
+    QtObject {
+        id: dummyTarget
+        signal uploadFlagSent(bool flag)
+    }
+    Connections {
+        target: _utmspEnabled ? _utmspController: dummyTarget
+        onUploadFlagSent: function(flag) {
+            responseFlag = flag
+        }
+    }
+
     function getMissionTime() {
         if (!_missionTime) {
             return "00:00:00"
@@ -86,42 +103,6 @@ Item {
             complete = days + " days " + Qt.formatTime(t, 'hh:mm:ss')
         }
         return complete
-    }
-
-    // Progress bar
-    Connections {
-        target: _controllerValid ? _planMasterController.missionController : null
-        onProgressPctChanged: {
-            if (_controllerProgressPct === 1) {
-                missionStats.visible = false
-                uploadCompleteText.visible = true
-                progressBar.visible = false
-                resetProgressTimer.start()
-            } else if (_controllerProgressPct > 0) {
-                progressBar.visible = true
-            }
-        }
-    }
-
-    Timer {
-        id:             resetProgressTimer
-        interval:       5000
-        onTriggered: {
-            missionStats.visible = true
-            uploadCompleteText.visible = false
-        }
-    }
-
-    QGCLabel {
-        id:                     uploadCompleteText
-        anchors.left:           parent.left
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
-        anchors.verticalCenter: parent.verticalCenter
-        font.pointSize:         ScreenTools.largeFontPointSize
-        horizontalAlignment:    Text.AlignHCenter
-        verticalAlignment:      Text.AlignVCenter
-        text:                   qsTr("Done")
-        visible:                false
     }
 
     GridLayout {
@@ -256,10 +237,16 @@ Item {
         QGCButton {
             id:          uploadButton
             text:        _controllerDirty ? qsTr("Upload Required") : qsTr("Upload")
-            enabled:     !_controllerSyncInProgress
-            visible:     !_controllerOffline && !_controllerSyncInProgress && !uploadCompleteText.visible
+            enabled:     _utmspEnabled ? !_controllerSyncInProgress && responseFlag : !_controllerSyncInProgress
+            visible:     !_controllerOffline && !_controllerSyncInProgress
             primary:     _controllerDirty
-            onClicked:   _planMasterController.upload()
+            onClicked: {
+                if (_utmspEnabled) {
+                    QGroundControl.utmspManager.utmspVehicle.triggerActivationStatusBar(true);
+                    UTMSPStateStorage.removeFlightPlanState = true
+                }
+                _planMasterController.upload();
+            }
 
             PropertyAnimation on opacity {
                 easing.type:    Easing.OutQuart
@@ -321,23 +308,8 @@ Item {
         }
 
         QGCLabel {
-            anchors.centerIn:   parent
-            text:               qsTr("Syncing Mission")
-            font.pointSize:     ScreenTools.largeFontPointSize
-        }
-
-        QGCLabel {
-            anchors.margins:    _margin
-            anchors.right:      parent.right
-            anchors.bottom:     parent.bottom
-            text:               qsTr("Click anywhere to hide")
-
-            property real _margin: ScreenTools.defaultFontPixelWidth / 2
-        }
-
-        MouseArea {
-            anchors.fill:   parent
-            onClicked:      largeProgressBar._userHide = true
+            text: qsTr("Uploading... ") + (_controllerProgressPct * 100).toFixed(0) + "%"
+            visible: _controllerProgressPct !== 1
         }
     }
 }

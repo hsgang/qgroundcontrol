@@ -1,15 +1,14 @@
-import QtQuick              2.15
-import QtQuick.Controls     1.2
-import QtQuick.Layouts      1.2
-import QtGraphicalEffects   1.0
-import QtQuick.Shapes       1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Shapes
 
-import QGroundControl                   1.0
-import QGroundControl.Vehicle           1.0
-import QGroundControl.ScreenTools       1.0
-import QGroundControl.Controls          1.0
-import QGroundControl.FactControls      1.0
-import QGroundControl.Palette           1.0
+import QGroundControl
+import QGroundControl.Vehicle
+import QGroundControl.ScreenTools
+import QGroundControl.Controls
+import QGroundControl.FactControls
+import QGroundControl.Palette
 
 Rectangle {
     id:         escStatus

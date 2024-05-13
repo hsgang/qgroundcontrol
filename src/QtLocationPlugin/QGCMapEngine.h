@@ -16,15 +16,15 @@
  *
  */
 
-#ifndef QGC_MAP_ENGINE_H
-#define QGC_MAP_ENGINE_H
+#pragma once
 
-#include <QString>
-
-#include "QGCMapUrlEngine.h"
 #include "QGCMapEngineData.h"
 #include "QGCTileCacheWorker.h"
+#include "QGCTileSet.h"
 
+#include <QtCore/QString>
+
+class UrlFactory;
 
 //-----------------------------------------------------------------------------
 class QGCMapEngine : public QObject
@@ -34,6 +34,8 @@ public:
     QGCMapEngine                ();
     ~QGCMapEngine               ();
 
+    static QGCMapEngine* instance();
+
     void                        init                ();
     void                        addTask             (QGCMapTask *task);
     void                        cacheTile           (const QString& type, int x, int y, int z, const QByteArray& image, const QString& format, qulonglong set = UINT64_MAX);
@@ -42,7 +44,8 @@ public:
     QStringList                 getMapNameList      ();
     const QString               userAgent           () { return _userAgent; }
     void                        setUserAgent        (const QString& ua) { _userAgent = ua; }
-    QString                     hashToType          (const QString& hash);
+    QString                     tileHashToType      (const QString& tileHash);
+    QString                     getTileHash         (const QString& type, int x, int y, int z);
     quint32                     getMaxDiskCache     ();
     quint32                     getMaxMemCache      ();
     void                        setMaxMemCache      (quint32 size);
@@ -50,13 +53,11 @@ public:
     const QString               getCacheFilename    () { return _cacheFile; }
     void                        testInternet        ();
     bool                        wasCacheReset       () const{ return _cacheWasReset; }
-    bool                        isInternetActive    () const{ return _isInternetActive; }
 
     UrlFactory*                 urlFactory          () { return _urlFactory; }
 
     //-- Tile Math
     static QGCTileSet           getTileCount        (int zoom, double topleftLon, double topleftLat, double bottomRightLon, double bottomRightLat, const QString& mapType);
-    static QString              getTileHash         (const QString& type, int x, int y, int z);
     static QString              getTypeFromName     (const QString& name);
     static QString              bigSizeToString     (quint64 size);
     static QString              storageFreeSizeToString(quint64 size_MB);
@@ -66,11 +67,9 @@ public:
 private slots:
     void _updateTotals          (quint32 totaltiles, quint64 totalsize, quint32 defaulttiles, quint64 defaultsize);
     void _pruned                ();
-    void _internetStatus        (bool active);
 
 signals:
     void updateTotals           (quint32 totaltiles, quint64 totalsize, quint32 defaulttiles, quint64 defaultsize);
-    void internetUpdated        ();
 
 private:
     void _wipeOldCaches         ();
@@ -85,10 +84,6 @@ private:
     QString                 _userAgent;
     bool                    _prunning;
     bool                    _cacheWasReset;
-    bool                    _isInternetActive;
 };
 
 extern QGCMapEngine*    getQGCMapEngine();
-extern void             destroyMapEngine();
-
-#endif // QGC_MAP_ENGINE_H

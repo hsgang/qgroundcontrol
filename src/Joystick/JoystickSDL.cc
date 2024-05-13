@@ -1,9 +1,10 @@
 #include "JoystickSDL.h"
+#include "MultiVehicleManager.h"
+#include "QGCLoggingCategory.h"
 
-#include "QGCApplication.h"
-
-#include <QQmlEngine>
-#include <QTextStream>
+#include <QtCore/QTextStream>
+#include <QtCore/QFile>
+#include <QtCore/QIODevice>
 
 JoystickSDL::JoystickSDL(const QString& name, int axisCount, int buttonCount, int hatCount, int index, bool isGameController, MultiVehicleManager* multiVehicleManager)
     : Joystick(name,axisCount,buttonCount,hatCount,multiVehicleManager)
@@ -14,6 +15,7 @@ JoystickSDL::JoystickSDL(const QString& name, int axisCount, int buttonCount, in
 }
 
 bool JoystickSDL::init(void) {
+    SDL_SetMainReady();
     if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK) < 0) {
         SDL_JoystickEventState(SDL_ENABLE);
         qWarning() << "Couldn't initialize SimpleDirectMediaLayer:" << SDL_GetError();

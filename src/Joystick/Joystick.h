@@ -12,18 +12,19 @@
 
 #pragma once
 
-#include <QObject>
-#include <QThread>
-#include <atomic>
+#include "QGCMAVLink.h"
+#include "CustomActionManager.h"
 
-#include "QGCLoggingCategory.h"
-#include "Vehicle.h"
-#include "MultiVehicleManager.h"
-#include "JoystickMavCommand.h"
+#include <QtCore/QObject>
+#include <QtCore/QThread>
+#include <QtCore/QLoggingCategory>
 
 // JoystickLog Category declaration moved to QGCLoggingCategory.cc to allow access in Vehicle
 Q_DECLARE_LOGGING_CATEGORY(JoystickValuesLog)
 Q_DECLARE_METATYPE(GRIPPER_ACTIONS)
+
+class MultiVehicleManager;
+class Vehicle;
 
 /// Action assigned to button
 class AssignedButtonAction : public QObject {
@@ -142,13 +143,13 @@ public:
 
     void stop();
 
-/*
+    /*
     // Joystick index used by sdl library
     // Settable because sdl library remaps indices after certain events
     virtual int index(void) = 0;
     virtual void setIndex(int index) = 0;
 */
-	virtual bool requiresCalibration(void) { return true; }
+    virtual bool requiresCalibration(void) { return true; }
 
     int   throttleMode      ();
     void  setThrottleMode   (int mode);
@@ -213,17 +214,14 @@ signals:
     void gimbalPitchStep            (int direction);
     void gimbalYawStep              (int direction);
     void centerGimbal               ();
-    void gimbalStepPitchYaw         (double pitch, double yaw);
+    void gimbalControlValue         (double pitch, double yaw);
     void setArmed                   (bool arm);
     void setVtolInFwdFlight         (bool set);
     void setFlightMode              (const QString& flightMode);
     void emergencyStop              ();
-    /**
-     * @brief Send MAV_CMD_DO_GRIPPER command to the vehicle
-     * 
-     * @param gripperAction (Open / Close) Gripper action to command
-     */
     void gripperAction              (GRIPPER_ACTIONS gripperAction);
+    void landingGearDeploy          ();
+    void landingGearRetract         ();
 
 protected:
     void    _setDefaultCalibration  ();
@@ -238,6 +236,11 @@ protected:
     void    _handleAxis             ();
     void    _handleButtons          ();
     void    _buildActionList        (Vehicle* activeVehicle);
+
+    void    _pitchStep              (int direction);
+    void    _yawStep                (int direction);
+    double  _localYaw       = 0.0;
+    double  _localPitch     = 0.0;
 
 private:
     virtual bool _open      ()          = 0;
@@ -301,7 +304,7 @@ protected:
     QStringList                     _availableActionTitles;
     MultiVehicleManager*            _multiVehicleManager = nullptr;
 
-    QList<JoystickMavCommand> _customMavCommands;
+    CustomActionManager _customActionManager;
 
     static const float  _minAxisFrequencyHz;
     static const float  _maxAxisFrequencyHz;
@@ -356,7 +359,8 @@ private:
     static const char* _buttonActionEmergencyStop;
     static const char* _buttonActionGripperGrab;
     static const char* _buttonActionGripperRelease;
-
+    static const char* _buttonActionLandingGearDeploy;
+    static const char* _buttonActionLandingGearRetract;
 
 private slots:
     void _activeVehicleChanged(Vehicle* activeVehicle);

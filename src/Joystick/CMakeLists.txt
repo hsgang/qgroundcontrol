@@ -1,40 +1,69 @@
+find_package(Qt6 REQUIRED COMPONENTS Core Qml)
 
-set(EXTRA_SRC)
-
-if (ANDROID)
-	list(APPEND EXTRA_SRC
-		JoystickAndroid.cc
-	)
-endif()
-
-add_library(Joystick
+qt_add_library(Joystick STATIC
 	Joystick.cc
+	Joystick.h
 	JoystickManager.cc
-	JoystickSDL.cc
-	JoystickMavCommand.cc
-	${EXTRA_SRC}
+	JoystickManager.h
 )
 
+if(ANDROID)
+	target_sources(Joystick
+		PRIVATE
+			JoystickAndroid.cc
+			JoystickAndroid.h
+	)
+
+	target_link_libraries(Joystick PRIVATE Qt6::CorePrivate)
+else()
+	include(BuildSdl2)
+	build_sdl2()
+
+	if(SDL2_FOUND)
+		message(STATUS "Building JoystickSDL")
+
+		target_sources(Joystick
+			PRIVATE
+				JoystickSDL.cc
+				JoystickSDL.h
+		)
+
+    	target_link_libraries(Joystick PRIVATE SDL2::SDL2-static)
+
+	    target_compile_definitions(Joystick PRIVATE QGC_SDL_JOYSTICK)
+
+    	include(FetchContent)
+	    FetchContent_Declare(sdl_db
+	        GIT_REPOSITORY https://github.com/mdqinc/SDL_GameControllerDB.git
+	        GIT_TAG master
+	        GIT_SHALLOW TRUE
+	    )
+	    FetchContent_MakeAvailable(sdl_db)
+
+	    set_source_files_properties(${sdl_db_SOURCE_DIR}/gamecontrollerdb.txt
+		    PROPERTIES
+		        QT_RESOURCE_ALIAS gamecontrollerdb.txt
+		)
+	    qt_add_resources(Joystick "gamecontrollerdb.txt"
+		    PREFIX "/db/mapping/joystick"
+		    FILES ${sdl_db_SOURCE_DIR}/gamecontrollerdb.txt
+	    )
+
+	endif()
+endif()
+
 target_link_libraries(Joystick
-        PRIVATE
-            ui
+	PRIVATE
+		Qt6::Qml
+        FirmwarePlugin
+		Settings
+		Utilities
+		Vehicle
 	PUBLIC
-		qgc
-		ui
+		Qt6::Core
+		Comms
+		QGC
+		QmlControls
 )
 
 target_include_directories(Joystick PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-if(WIN32)
-	target_link_libraries(Joystick PUBLIC sdl2)
-else()
-	find_package(SDL2 REQUIRED)
-	if (IS_DIRECTORY "${SDL2_INCLUDE_DIRS}")
-		include_directories(${SDL2_INCLUDE_DIRS})
-		string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
-		target_link_libraries(Joystick PRIVATE ${SDL2_LIBRARIES})
-	else()
-		include_directories(${SDL2_DIR})
-		target_link_libraries(Joystick PRIVATE SDL2::SDL2)
-	endif()
-endif()

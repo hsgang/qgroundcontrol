@@ -1,20 +1,19 @@
-import QtQuick              2.15
-import QtQuick.Controls     1.2
-import QtQuick.Layouts      1.2
-import QtQuick.Dialogs      1.2
-import QtGraphicalEffects   1.0
-import QtQuick.Shapes       1.15
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import QtQuick.Dialogs
+import QtQuick.Shapes
 
-import QGroundControl                   1.0
-import QGroundControl.ScreenTools       1.0
-import QGroundControl.Controls          1.0
-import QGroundControl.FactSystem        1.0
-import QGroundControl.FactControls      1.0
-import QGroundControl.Palette           1.0
-import QGroundControl.Controllers       1.0
-import QGroundControl.FlightDisplay     1.0
-import QGroundControl.FlightMap         1.0
-import QGroundControl.Vehicle           1.0
+import QGroundControl
+import QGroundControl.ScreenTools
+import QGroundControl.Controls
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
+import QGroundControl.Palette
+import QGroundControl.Controllers
+import QGroundControl.FlightDisplay
+import QGroundControl.FlightMap
+import QGroundControl.Vehicle
 
 Rectangle{
     width: missionIndicatorRow.width

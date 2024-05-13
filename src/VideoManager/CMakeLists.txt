@@ -1,4 +1,6 @@
-add_library(VideoManager
+find_package(Qt6 REQUIRED COMPONENTS Core Quick)
+
+qt_add_library(VideoManager STATIC
     GLVideoItemStub.cc
     GLVideoItemStub.h
     SubtitleWriter.cc
@@ -8,11 +10,27 @@ add_library(VideoManager
 )
 
 target_link_libraries(VideoManager
+    PRIVATE
+        API
+        Camera
+        FactSystem
+        QmlControls
+        Settings
+        Utilities
+        Vehicle
     PUBLIC
-        qgc
-        Qt5::Multimedia
-        Qt5::OpenGL
+        Qt6::Core
+        Qt6::Quick
+        QGC
         VideoReceiver
 )
 
-target_include_directories(VideoManager INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+option(QGC_DISABLE_UVC "Disable UVC Devices" OFF)
+if(QGC_DISABLE_UVC)
+    target_compile_definitions(VideoManager PUBLIC QGC_DISABLE_UVC)
+else()
+    find_package(Qt6 REQUIRED COMPONENTS Multimedia)
+    target_link_libraries(VideoManager PRIVATE Qt6::Multimedia)
+endif()
+
+target_include_directories(VideoManager PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

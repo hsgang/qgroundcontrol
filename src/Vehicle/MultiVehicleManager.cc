@@ -8,22 +8,20 @@
  ****************************************************************************/
 
 #include "MultiVehicleManager.h"
-#include "AutoPilotPlugin.h"
 #include "MAVLinkProtocol.h"
-#include "UAS.h"
 #include "QGCApplication.h"
-#include "FollowMe.h"
 #include "ParameterManager.h"
 #include "SettingsManager.h"
 #include "QGCCorePlugin.h"
 #include "QGCOptions.h"
 #include "LinkManager.h"
-
-#if defined (__ios__) || defined(__android__)
+#include "Vehicle.h"
+#if defined (Q_OS_IOS) || defined(Q_OS_ANDROID)
 #include "MobileScreenMgr.h"
 #endif
+#include "QGCLoggingCategory.h"
 
-#include <QQmlEngine>
+#include <QtQml/QQmlEngine>
 
 QGC_LOGGING_CATEGORY(MultiVehicleManagerLog, "MultiVehicleManagerLog")
 
@@ -56,6 +54,10 @@ void MultiVehicleManager::setToolbox(QGCToolbox *toolbox)
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     qmlRegisterUncreatableType<MultiVehicleManager>("QGroundControl.MultiVehicleManager", 1, 0, "MultiVehicleManager", "Reference only");
+    qmlRegisterUncreatableType<Vehicle>            ("QGroundControl.Vehicle",             1, 0, "Vehicle",             "Reference only");
+    qmlRegisterUncreatableType<VehicleLinkManager> ("QGroundControl.Vehicle",             1, 0, "VehicleLinkManager",  "Reference only");
+
+    qRegisterMetaType<Vehicle::MavCmdResultFailureCode_t>("MavCmdResultFailureCode_t");
 
     connect(_mavlinkProtocol, &MAVLinkProtocol::vehicleHeartbeatInfo, this, &MultiVehicleManager::_vehicleHeartbeatInfo);
     connect(&_gcsHeartbeatTimer, &QTimer::timeout, this, &MultiVehicleManager::_sendGCSHeartbeat);
@@ -127,7 +129,7 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
                                       << vehicleType;
 
     if (vehicleId == _mavlinkProtocol->getSystemId()) {
-        _app->showAppMessage(tr("Warning: A vehicle is using the same system id as %1: %2").arg(qgcApp()->applicationName()).arg(vehicleId));
+        _app->showAppMessage(tr("Warning: A vehicle is using the same system id as %1: %2").arg(QCoreApplication::applicationName()).arg(vehicleId));
     }
 
     Vehicle* vehicle = new Vehicle(link, vehicleId, componentId, (MAV_AUTOPILOT)vehicleFirmwareType, (MAV_TYPE)vehicleType, _firmwarePluginManager, _joystickManager);
@@ -150,7 +152,7 @@ void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicle
         setActiveVehicle(vehicle);
     }
 
-#if defined (__ios__) || defined(__android__)
+#if defined (Q_OS_IOS) || defined(Q_OS_ANDROID)
     if(_vehicles.count() == 1) {
         //-- Once a vehicle is connected, keep screen from going off
         qCDebug(MultiVehicleManagerLog) << "QAndroidJniObject::keepScreenOn";
@@ -205,8 +207,6 @@ void MultiVehicleManager::_deleteVehiclePhase1(Vehicle* vehicle)
         qWarning() << "Vehicle not found in map!";
     }
 
-    vehicle->uas()->shutdownVehicle();
-
     // First we must signal that a vehicle is no longer available.
     _activeVehicleAvailable = false;
     _parameterReadyVehicleAvailable = false;
@@ -215,7 +215,7 @@ void MultiVehicleManager::_deleteVehiclePhase1(Vehicle* vehicle)
     emit vehicleRemoved(vehicle);
     vehicle->prepareDelete();
 
-#if defined (__ios__) || defined(__android__)
+#if defined (Q_OS_IOS) || defined(Q_OS_ANDROID)
     if(_vehicles.count() == 0) {
         //-- Once no vehicles are connected, we no longer need to keep screen from going off
         qCDebug(MultiVehicleManagerLog) << "QAndroidJniObject::restoreScreenOn";

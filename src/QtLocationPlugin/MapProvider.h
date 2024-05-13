@@ -9,13 +9,11 @@
 
 #pragma once
 
-#include <QByteArray>
-#include <QString>
-
-#include <cmath>
-
-#include "QGCTileSet.h" 
+#include "QGCTileSet.h"
 #include <QtLocation/private/qgeomaptype_p.h>
+
+#include <QtCore/QByteArray>
+#include <QtCore/QString>
 
 static const unsigned char pngSignature[]  = {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0x00};
 static const unsigned char jpegSignature[] = {0xFF, 0xD8, 0xFF, 0x00};
@@ -31,7 +29,7 @@ class MapProvider : public QObject {
 
 public:
     MapProvider(const QString& referrer, const QString& imageFormat, const quint32 averageSize,
-        const QGeoMapType::MapStyle mapType = QGeoMapType::CustomMap, QObject* parent = nullptr);
+        const QGeoMapType::MapStyle mapStyle = QGeoMapType::CustomMap, QObject* parent = nullptr);
 
     virtual QNetworkRequest getTileURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager);
 
@@ -39,7 +37,7 @@ public:
 
     quint32 getAverageSize() const { return _averageSize; }
 
-    QGeoMapType::MapStyle getMapStyle() { return _mapType; }
+    QGeoMapType::MapStyle getMapStyle() { return _mapStyle; }
 
     virtual int long2tileX(const double lon, const int z) const;
 
@@ -64,6 +62,6 @@ protected:
     quint32     _averageSize;
     QByteArray  _userAgent;
     QString     _language;
-    QGeoMapType::MapStyle _mapType;
+    QGeoMapType::MapStyle _mapStyle;
 
 };

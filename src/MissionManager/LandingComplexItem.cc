@@ -8,15 +8,17 @@
  ****************************************************************************/
 
 #include "LandingComplexItem.h"
+#include "QGCApplication.h"
 #include "JsonHelper.h"
 #include "MissionController.h"
-#include "QGCGeo.h"
 #include "SimpleMissionItem.h"
 #include "PlanMasterController.h"
-#include "FlightPathSegment.h"
 #include "TakeoffMissionItem.h"
-
-#include <QPolygonF>
+#include "MissionItem.h"
+#include "Fact.h"
+#include "CameraSection.h"
+#include "Vehicle.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(LandingComplexItemLog, "LandingComplexItemLog")
 
@@ -632,7 +634,7 @@ bool LandingComplexItem::_load(const QJsonObject& complexObject, int sequenceNum
     QString itemType = complexObject[VisualMissionItem::jsonTypeKey].toString();
     QString complexType = complexObject[ComplexMissionItem::jsonComplexItemTypeKey].toString();
     if (itemType != VisualMissionItem::jsonTypeComplexItemValue || complexType != jsonComplexItemTypeValue) {
-        errorString = tr("%1 does not support loading this complex mission item type: %2:%3").arg(qgcApp()->applicationName()).arg(itemType).arg(complexType);
+        errorString = tr("%1 does not support loading this complex mission item type: %2:%3").arg(QCoreApplication::applicationName()).arg(itemType).arg(complexType);
         return false;
     }
 

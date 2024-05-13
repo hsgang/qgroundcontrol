@@ -1,13 +1,22 @@
-import QtQuick          2.3
-import QtQuick.Layouts  1.2
+/****************************************************************************
+ *
+ * (c) 2009-2022 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
+ *
+ * QGroundControl is licensed according to the terms in the file
+ * COPYING.md in the root of the source code directory.
+ *
+ ****************************************************************************/
 
-import QGroundControl               1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.FactSystem    1.0
-import QGroundControl.FactControls  1.0
+import QtQuick
+import QtQuick.Layouts
 
-GridLayout {
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.ScreenTools
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
+
+ColumnLayout {
     property alias label:                   label.text
     property alias description:             _description.text
     property alias fact:                    factSlider.fact
@@ -15,27 +24,20 @@ GridLayout {
     property alias to:                      factSlider.to
     property alias stepSize:                factSlider.stepSize
     property real  sliderPreferredWidth:    -1
-    property bool  isRow:                   false
+    
+    enabled:       fact
 
-    rowSpacing: ScreenTools.defaultFontPixelWidth
-    columnSpacing: ScreenTools.defaultFontPixelWidth * 2
+    QGCLabel {
+        id:                 label
+        Layout.fillWidth:   true
+    }
 
-    flow:    isRow ? GridLayout.LeftToRight : GridLayout.TopToBottom
-
-    ColumnLayout {
-        spacing : ScreenTools.defaultFontPixelHeight * 0.2
-
-        QGCLabel {
-            id:                 label
-            Layout.fillWidth:   true
-        }
-        QGCLabel {
-            id:                 _description
-            visible:            description !== ""
-            Layout.fillWidth:   true
-            font.pointSize:     ScreenTools.smallFontPointSize
-            color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
-        }
+    QGCLabel {
+        id:                 _description
+        visible:            description !== ""
+        Layout.fillWidth:   true
+        font.pointSize:     ScreenTools.smallFontPointSize
+        color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
     }
 
     FactSlider {

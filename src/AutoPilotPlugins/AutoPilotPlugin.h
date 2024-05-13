@@ -7,20 +7,15 @@
  *
  ****************************************************************************/
 
-#ifndef AUTOPILOTPLUGIN_H
-#define AUTOPILOTPLUGIN_H
+#pragma once
 
-#include <QObject>
-#include <QList>
-#include <QString>
-#include <QQmlContext>
-
-#include "VehicleComponent.h"
-#include "FactSystem.h"
-#include "Vehicle.h"
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QVariantList>
 
 class Vehicle;
 class FirmwarePlugin;
+class VehicleComponent;
 
 /// This is the base class for AutoPilot plugins
 ///
@@ -68,5 +63,3 @@ protected:
 private slots:
     void _recalcSetupComplete(void);
 };
-
-#endif

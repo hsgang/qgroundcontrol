@@ -1,12 +1,12 @@
-import QtQuick          2.3
-import QtQuick.Layouts  1.2
+import QtQuick
+import QtQuick.Layouts
 
-import QGroundControl               1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Palette       1.0
+import QGroundControl
+import QGroundControl.ScreenTools
+import QGroundControl.Palette
 
 ColumnLayout {
-    id:             control
+    id:             control    
     spacing:        _margins / 2
     implicitWidth:  _contentLayout.implicitWidth + (_margins * 2)
     implicitHeight: _contentLayout.implicitHeight + (_margins * 2)
@@ -27,13 +27,13 @@ ColumnLayout {
         spacing:            0
         visible:            heading !== ""
 
-        QGCLabel {
+        QGCLabel { 
             text:           heading
             font.pointSize: ScreenTools.defaultFontPointSize + 1
             font.bold:      true
         }
 
-        QGCLabel {
+        QGCLabel { 
             Layout.fillWidth:   true
             text:               headingDescription
             wrapMode:           Text.WordWrap
@@ -48,7 +48,7 @@ ColumnLayout {
         implicitWidth:      _contentLayout.implicitWidth + (_margins * 2)
         implicitHeight:     _contentLayout.implicitHeight + (_margins * 2)
         color:              "transparent"
-        border.color:       QGroundControl.globalPalette.groupBorder //Qt.darker(QGroundControl.globalPalette.text, 4)
+        border.color:       QGroundControl.globalPalette.groupBorder
         border.width:       1
         radius:             ScreenTools.defaultFontPixelHeight / 2
 
@@ -60,21 +60,20 @@ ColumnLayout {
                 y:                  _contentItem.y + _contentItem.height + _margins + _margins
                 width:              parent.width - (_margins * 2)
                 height:             1
-                color:              QGroundControl.globalPalette.groupBorder//outerRect.border.color
-                visible:            _contentItem.visible && //index < _contentLayout.children.length - 1
+                color:              QGroundControl.globalPalette.groupBorder
+                visible:            _contentItem.visible && 
                                         _contentItem.width !== 0 && _contentItem.height !== 0 &&
                                         index < _contentLayout.children.length - 1
 
                 property var _contentItem: _contentLayout.children[index]
             }
         }
-
+ 
         ColumnLayout {
             id:                 _contentLayout
             x:                  _margins
             y:                  _margins
             width:              parent.width - (_margins * 2)
-            height:             parent.height - (_margins * 2)
             spacing:            _margins * 2
         }
     }

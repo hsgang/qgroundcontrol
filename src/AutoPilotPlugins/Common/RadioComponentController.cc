@@ -14,9 +14,12 @@
 
 #include "RadioComponentController.h"
 #include "QGCApplication.h"
+#include "FactSystem.h"
+#include "Fact.h"
+#include "Vehicle.h"
+#include "QGCLoggingCategory.h"
 
-#include <QElapsedTimer>
-#include <QSettings>
+#include <QtCore/QSettings>
 
 QGC_LOGGING_CATEGORY(RadioComponentControllerLog, "RadioComponentControllerLog")
 QGC_LOGGING_CATEGORY(RadioComponentControllerVerboseLog, "RadioComponentControllerVerboseLog")
@@ -223,7 +226,7 @@ void RadioComponentController::_setupCurrentState(void)
 }
 
 /// Connected to Vehicle::rcChannelsChanged signal
-void RadioComponentController::_rcChannelsChanged(int channelCount, int pwmValues[Vehicle::cMaxRcChannels])
+void RadioComponentController::_rcChannelsChanged(int channelCount, int pwmValues[QGCMAVLink::maxRcChannels])
 {
     for (int channel=0; channel<channelCount; channel++) {
         int channelValue = pwmValues[channel];
@@ -650,7 +653,7 @@ void RadioComponentController::_setInternalCalibrationValuesFromParameters(void)
 
 void RadioComponentController::spektrumBindMode(int mode)
 {
-    _uas->pairRX(0, mode);
+    _vehicle->pairRX(0, mode);
 }
 
 /// @brief Validates the current settings against the calibration rules resetting values as necessary.
@@ -702,7 +705,7 @@ void RadioComponentController::_validateCalibration(void)
 /// @brief Saves the rc calibration values to the board parameters.
 void RadioComponentController::_writeCalibration(void)
 {
-    if (!_uas) return;
+    if (!_vehicle) return;
 
     if (!_px4Vehicle() && (_vehicle->vehicleType() == MAV_TYPE_HELICOPTER || _vehicle->multiRotor()) &&  _rgChannelInfo[_rgFunctionChannelMapping[rcCalFunctionThrottle]].reversed) {
         // A reversed throttle could lead to dangerous power up issues if the firmware doesn't handle it absolutely correctly in all places.
@@ -811,7 +814,7 @@ void RadioComponentController::_stopCalibration(void)
 {
     _currentStep = -1;
 
-    if (_uas) {
+    if (_vehicle) {
         // Only PX4 is known to support this command in all versions. For other firmware which may or may not
         // support this we don't show errors on failure.
         _vehicle->stopCalibration(_px4Vehicle() ? true : false /* showError */);

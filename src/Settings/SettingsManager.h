@@ -7,12 +7,8 @@
  *
  ****************************************************************************/
 
-#ifndef SettingsManager_H
-#define SettingsManager_H
+#pragma once
 
-#include "QGCLoggingCategory.h"
-#include "Joystick.h"
-#include "MultiVehicleManager.h"
 #include "QGCToolbox.h"
 #include "AppSettings.h"
 #include "UnitsSettings.h"
@@ -32,9 +28,11 @@
 #include "NTRIPSettings.h"
 #include "GimbalControllerSettings.h"
 #include "BatterySettings.h"
-#include <QVariantList>
+#include "BatteryIndicatorSettings.h"
 #include "RemoteIDSettings.h"
 #include "SIYISettings.h"
+#include "Viewer3DSettings.h"
+#include "CustomMavlinkActionsSettings.h"
 
 /// Provides access to all app settings
 class SettingsManager : public QGCTool
@@ -60,12 +58,17 @@ public:
     Q_PROPERTY(QObject* ntripSettings                   READ ntripSettings                  CONSTANT)
     Q_PROPERTY(QObject* gimbalControllerSettings        READ gimbalControllerSettings       CONSTANT)
     Q_PROPERTY(QObject* batterySettings                 READ batterySettings                CONSTANT)
+    Q_PROPERTY(QObject* batteryIndicatorSettings        READ batteryIndicatorSettings       CONSTANT)
     Q_PROPERTY(QObject* mapsSettings                    READ mapsSettings                   CONSTANT)
+    Q_PROPERTY(QObject* viewer3DSettings                READ viewer3DSettings               CONSTANT)
 #if !defined(NO_ARDUPILOT_DIALECT)
     Q_PROPERTY(QObject* apmMavlinkStreamRateSettings    READ apmMavlinkStreamRateSettings   CONSTANT)
 #endif
-    Q_PROPERTY(QObject* remoteIDSettings                READ remoteIDSettings               CONSTANT)
     Q_PROPERTY(QObject* siyiSettings                    READ siyiSettings                   CONSTANT)
+    Q_PROPERTY(QObject* remoteIDSettings                READ remoteIDSettings               CONSTANT)
+    Q_PROPERTY(QObject* customMavlinkActionsSettings    READ customMavlinkActionsSettings   CONSTANT)
+
+
     // Override from QGCTool
     virtual void setToolbox(QGCToolbox *toolbox);
 
@@ -85,12 +88,16 @@ public:
     NTRIPSettings*                  ntripSettings               (void) { return _ntripSettings; }
     GimbalControllerSettings*       gimbalControllerSettings    (void) { return _gimbalControllerSettings; }
     BatterySettings*                batterySettings             (void) { return _batterySettings; }
+    BatteryIndicatorSettings*       batteryIndicatorSettings    (void) { return _batteryIndicatorSettings; }
     MapsSettings*                   mapsSettings                (void) { return _mapsSettings; }
+    Viewer3DSettings*               viewer3DSettings            (void) { return _viewer3DSettings; }
 #if !defined(NO_ARDUPILOT_DIALECT)
     APMMavlinkStreamRateSettings*   apmMavlinkStreamRateSettings(void) { return _apmMavlinkStreamRateSettings; }
 #endif
-    RemoteIDSettings*               remoteIDSettings            (void) { return _remoteIDSettings; }
     SIYISettings*                   siyiSettings                (void) { return _siyiSettings; }
+    RemoteIDSettings*               remoteIDSettings            (void) { return _remoteIDSettings; }
+    CustomMavlinkActionsSettings*   customMavlinkActionsSettings(void) { return _customMavlinkActionsSettings; }
+
 private:
     AppSettings*                    _appSettings;
     UnitsSettings*                  _unitsSettings;
@@ -108,12 +115,13 @@ private:
     NTRIPSettings*                  _ntripSettings;
     GimbalControllerSettings*       _gimbalControllerSettings;
     BatterySettings*                _batterySettings;
+    BatteryIndicatorSettings*       _batteryIndicatorSettings;
     MapsSettings*                   _mapsSettings;
+    Viewer3DSettings*               _viewer3DSettings;
 #if !defined(NO_ARDUPILOT_DIALECT)
     APMMavlinkStreamRateSettings*   _apmMavlinkStreamRateSettings;
 #endif
-    RemoteIDSettings*               _remoteIDSettings;
     SIYISettings*                   _siyiSettings;
+    RemoteIDSettings*               _remoteIDSettings;
+    CustomMavlinkActionsSettings*   _customMavlinkActionsSettings;
 };
-
-#endif

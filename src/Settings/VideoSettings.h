@@ -7,10 +7,10 @@
  *
  ****************************************************************************/
 
-#ifndef VideoSettings_H
-#define VideoSettings_H
+#pragma once
 
 #include "SettingsGroup.h"
+#include "VideoDecoderOptions.h"
 
 class VideoSettings : public SettingsGroup
 {
@@ -37,14 +37,6 @@ public:
     DEFINE_SETTINGFACT(lowLatencyMode)
     DEFINE_SETTINGFACT(forceVideoDecoder)
 
-    enum VideoDecoderOptions {
-        ForceVideoDecoderDefault = 0,
-        ForceVideoDecoderSoftware,
-        ForceVideoDecoderNVIDIA,
-        ForceVideoDecoderVAAPI,
-        ForceVideoDecoderDirectX3D,
-        ForceVideoDecoderVideoToolbox,
-    };
     Q_ENUM(VideoDecoderOptions)
 
     Q_PROPERTY(bool     streamConfigured        READ streamConfigured       NOTIFY streamConfiguredChanged)
@@ -90,5 +82,3 @@ private:
     bool _noVideo = false;
 
 };
-
-#endif

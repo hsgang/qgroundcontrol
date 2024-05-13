@@ -1,57 +1,6 @@
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Positioning Qml Xml)
 
-set(EXTRA_SRC)
-if(BUILD_TESTING)
-	list(APPEND EXTRA_SRC
-		CameraCalcTest.cc
-		CameraCalcTest.h
-		CameraSectionTest.cc
-		CameraSectionTest.h
-		CorridorScanComplexItemTest.cc
-		CorridorScanComplexItemTest.h
-		FWLandingPatternTest.cc
-		FWLandingPatternTest.h
-		LandingComplexItemTest.cc
-		LandingComplexItemTest.h
-		MissionCommandTreeEditorTest.cc
-		MissionCommandTreeEditorTest.h
-		MissionCommandTreeTest.cc
-		MissionCommandTreeTest.h
-		MissionControllerManagerTest.cc
-		MissionControllerManagerTest.h
-		MissionControllerTest.cc
-		MissionControllerTest.h
-		MissionItemTest.cc
-		MissionItemTest.h
-		MissionManagerTest.cc
-		MissionManagerTest.h
-		MissionSettingsTest.cc
-		MissionSettingsTest.h
-		PlanMasterControllerTest.cc
-		PlanMasterControllerTest.h
-		QGCMapPolygonTest.cc
-		QGCMapPolygonTest.h
-		QGCMapPolylineTest.cc
-		QGCMapPolylineTest.h
-		SectionTest.cc
-		SectionTest.h
-		SimpleMissionItemTest.cc
-		SimpleMissionItemTest.h
-		SpeedSectionTest.cc
-		SpeedSectionTest.h
-		StructureScanComplexItemTest.cc
-		StructureScanComplexItemTest.h
-		SurveyComplexItemTest.cc
-		SurveyComplexItemTest.h
-		TransectStyleComplexItemTestBase.cc
-		TransectStyleComplexItemTestBase.h
-		TransectStyleComplexItemTest.cc
-		TransectStyleComplexItemTest.h
-		VisualMissionItemTest.cc
-		VisualMissionItemTest.h
-	)
-endif()
-
-add_library(MissionManager
+qt_add_library(MissionManager STATIC
 	BlankPlanCreator.cc
 	BlankPlanCreator.h
 	CameraCalc.cc
@@ -98,16 +47,6 @@ add_library(MissionManager
 	PlanManager.h
 	PlanMasterController.cc
 	PlanMasterController.h
-	QGCFenceCircle.cc
-	QGCFenceCircle.h
-	QGCFencePolygon.cc
-	QGCFencePolygon.h
-	QGCMapCircle.cc
-	QGCMapCircle.h
-	QGCMapPolygon.cc
-	QGCMapPolygon.h
-	QGCMapPolyline.cc
-	QGCMapPolyline.h
 	RallyPoint.cc
 	RallyPointController.cc
 	RallyPointController.h
@@ -135,25 +74,55 @@ add_library(MissionManager
 	VisualMissionItem.h
 	VTOLLandingComplexItem.cc
 	VTOLLandingComplexItem.h
-
-	Section.h # shouldn't be listed here, but isn't named properly for AUTOMOC
-
-	${EXTRA_SRC}
-)
-
-add_custom_Target(MisionManagerQml
-	SOURCES
-		MapLineArrow.qml
-		MissionCommandTreeEditorTestWindow.qml
-		QGCMapCircleVisuals.qml
-		QGCMapPolygonVisuals.qml
-		QGCMapPolylineVisuals.qml
 )
 
 target_link_libraries(MissionManager
+	PRIVATE
+		Qt6::Qml
+		API
+		FirmwarePlugin
+		Geo
 	PUBLIC
-		Qt5::Xml
-		qgc
+		Qt6::Core
+		Qt6::Gui
+		Qt6::Positioning
+		Qt6::Xml
+		Comms
+		FactSystem
+		QGC
+		QmlControls
+		Settings
+		Terrain
+		Utilities
+		Vehicle
 )
 
-target_include_directories(MissionManager INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(MissionManager PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+# qt_add_qml_module(MissionManager
+#     URI QGroundControl.MissionManager
+#     VERSION 1.0
+#     RESOURCES
+#     	BlankPlanCreator.png
+#     	CogWheel.svg
+#     	StructureScanPlanCreator.png
+#     	SurveyPlanCreator.png
+#     QML_FILES
+#     	MapLineArrow.qml
+# 		QGCMapCircleVisuals.qml
+# 		QGCMapPolygonVisuals.qml
+# 		QGCMapPolylineVisuals.qml
+#     OUTPUT_TARGETS MissionManager_targets
+#     IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY}
+#     IMPORTS
+# 		QtQuick
+# 		QtQuick.Controls
+# 		QtLocation
+# 		QtPositioning
+
+# 		QGroundControl
+# 		QGroundControl.ScreenTools
+# 		QGroundControl.Palette
+# 		QGroundControl.Controls
+# 		QGroundControl.FlightMap
+# )

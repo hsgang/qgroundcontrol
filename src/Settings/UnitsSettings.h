@@ -7,8 +7,8 @@
  *
  ****************************************************************************/
 
-#ifndef UnitsSettings_H
-#define UnitsSettings_H
+#pragma once
+
 
 #include "SettingsGroup.h"
 
@@ -81,5 +81,3 @@ public:
     DEFINE_SETTINGFACT(temperatureUnits)
     DEFINE_SETTINGFACT(weightUnits)
 };
-
-#endif

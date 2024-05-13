@@ -7,21 +7,13 @@
  *
  ****************************************************************************/
 
+import QtQuick
 
-/**
- * @file
- *   @brief QGC Compass Widget
- *   @author Gus Grubba <gus@auterion.com>
- */
-
-import QtQuick              2.3
-import QtGraphicalEffects   1.0
-
-import QGroundControl              1.0
-import QGroundControl.Controls     1.0
-import QGroundControl.ScreenTools  1.0
-import QGroundControl.Vehicle      1.0
-import QGroundControl.Palette      1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
+import QGroundControl.Palette
 
 Rectangle {
     id:     root
@@ -64,7 +56,7 @@ Rectangle {
 
     function translateCenterToAngleX(radius, angle) {
         return radius * Math.sin(angle * (Math.PI / 180))
-    }
+    } 
 
     function translateCenterToAngleY(radius, angle) {
         return -radius * Math.cos(angle * (Math.PI / 180))

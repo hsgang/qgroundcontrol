@@ -19,14 +19,13 @@
 #include "AppSettings.h"
 #include "MapsSettings.h"
 #include "SettingsManager.h"
-
-#include <math.h>
-#include <QStandardPaths>
-#include <QDir>
-#include <stdio.h>
-
 #include "QGCMapEngine.h"
 #include "QGCMapTileSet.h"
+#include "QGCMapUrlEngine.h"
+
+#include <QtCore/QStandardPaths>
+#include <QtCore/QDir>
+#include <QtCore/qapplicationstatic.h>
 
 Q_DECLARE_METATYPE(QGCMapTask::TaskType)
 Q_DECLARE_METATYPE(QGCTile)
@@ -43,22 +42,17 @@ struct stQGeoTileCacheQGCMapTypes {
 };
 
 //-----------------------------------------------------------------------------
-// Singleton
-static QGCMapEngine* kMapEngine = nullptr;
-QGCMapEngine*
-getQGCMapEngine()
+
+Q_APPLICATION_STATIC(QGCMapEngine, s_mapEngine);
+
+QGCMapEngine* QGCMapEngine::instance()
 {
-    if(!kMapEngine)
-        kMapEngine = new QGCMapEngine();
-    return kMapEngine;
+    return s_mapEngine();
 }
 
-//-----------------------------------------------------------------------------
-void
-destroyMapEngine()
+QGCMapEngine* getQGCMapEngine()
 {
-    delete kMapEngine;
-    kMapEngine = nullptr;
+    return QGCMapEngine::instance();
 }
 
 //-----------------------------------------------------------------------------
@@ -84,13 +78,11 @@ QGCMapEngine::QGCMapEngine()
 #endif
     , _prunning(false)
     , _cacheWasReset(false)
-    , _isInternetActive(false)
 {
     qRegisterMetaType<QGCMapTask::TaskType>();
     qRegisterMetaType<QGCTile>();
     qRegisterMetaType<QList<QGCTile*>>();
     connect(&_worker, &QGCCacheWorker::updateTotals,   this, &QGCMapEngine::_updateTotals);
-    connect(&_worker, &QGCCacheWorker::internetStatus, this, &QGCMapEngine::_internetStatus);
 }
 
 //-----------------------------------------------------------------------------
@@ -217,15 +209,16 @@ QGCMapEngine::cacheTile(const QString& type, const QString& hash, const QByteArr
 QString
 QGCMapEngine::getTileHash(const QString& type, int x, int y, int z)
 {
-    return QString::asprintf("%010d%08d%08d%03d", getQGCMapEngine()->urlFactory()->getIdFromType(type), x, y, z);
+    int hash = urlFactory()->hashFromProviderType(type);
+    return QString::asprintf("%010d%08d%08d%03d", hash, x, y, z);
 }
 
 //-----------------------------------------------------------------------------
 QString
-QGCMapEngine::hashToType(const QString& hash)
+QGCMapEngine::tileHashToType(const QString& tileHash)
 {
-    QString type = hash.mid(0,10);
-    return urlFactory()->getTypeFromId(type.toInt());
+    int providerHash = tileHash.mid(0,10).toInt();
+    return urlFactory()->providerTypeFromHash(providerHash);
 }
 
 //-----------------------------------------------------------------------------
@@ -252,7 +245,7 @@ QGCMapEngine::getTileCount(int zoom, double topleftLon, double topleftLat, doubl
 QStringList
 QGCMapEngine::getMapNameList()
 {
-    return QStringList(getQGCMapEngine()->urlFactory()->getProviderTable().keys());
+    return getQGCMapEngine()->urlFactory()->getProviderTypes();
 }
 
 //-----------------------------------------------------------------------------
@@ -342,26 +335,6 @@ QGCCreateTileSetTask::~QGCCreateTileSetTask()
     //-- If not sent out, delete it
     if(!_saved && _tileSet)
         delete _tileSet;
-}
-
-//-----------------------------------------------------------------------------
-void
-QGCMapEngine::testInternet()
-{
-    if(qgcApp()->toolbox()->settingsManager()->appSettings()->checkInternet()->rawValue().toBool())
-        getQGCMapEngine()->addTask(new QGCTestInternetTask());
-    else
-        _internetStatus(true);
-}
-
-//-----------------------------------------------------------------------------
-void
-QGCMapEngine::_internetStatus(bool active)
-{
-    if(_isInternetActive != active) {
-        _isInternetActive = active;
-        emit internetUpdated();
-    }
 }
 
 // Resolution math: https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Resolution_and_Scale

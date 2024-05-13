@@ -13,7 +13,7 @@
 
 #include "APMCameraComponent.h"
 #include "APMAutoPilotPlugin.h"
-#include "APMAirframeComponent.h"
+#include "Vehicle.h"
 
 APMCameraComponent::APMCameraComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
     : VehicleComponent(vehicle, autopilot, parent)
@@ -62,5 +62,5 @@ QUrl APMCameraComponent::setupSource(void) const
 
 QUrl APMCameraComponent::summaryQmlSource(void) const
 {
-    return QUrl::fromUserInput(QStringLiteral("qrc:/qml/APMCameraComponentSummary.qml"));
+    return QUrl();
 }

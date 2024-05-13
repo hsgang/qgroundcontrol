@@ -8,11 +8,9 @@
  ****************************************************************************/
 
 
-#ifndef MotorComponent_H
-#define MotorComponent_H
+#pragma once
 
 #include "VehicleComponent.h"
-#include "Fact.h"
 
 class MotorComponent : public VehicleComponent
 {
@@ -36,5 +34,3 @@ public:
 private:
     const QString   _name;
 };
-
-#endif

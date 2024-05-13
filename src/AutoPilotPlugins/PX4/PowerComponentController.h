@@ -11,13 +11,8 @@
 /// @file
 ///     @author Don Gagne <don@thegagnes.com>
 
-#ifndef PowerComponentController_H
-#define PowerComponentController_H
+#pragma once
 
-#include <QObject>
-#include <QQuickItem>
-
-#include "UASInterface.h"
 #include "FactPanelController.h"
 
 /// Power Component MVC Controller for PowerComponent.qml.
@@ -52,5 +47,3 @@ private:
     QStringList _warningMessages;
     static const int _neededFirmwareRev = 1;
 };
-
-#endif

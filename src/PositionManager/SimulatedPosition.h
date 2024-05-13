@@ -9,9 +9,8 @@
 
 #pragma once
 
-#include <QtPositioning/qgeopositioninfosource.h>
-#include "QGCToolbox.h"
-#include <QTimer>
+#include <QtCore/QTimer>
+#include <QtPositioning/QGeoPositionInfoSource>
 
 class Vehicle;
 

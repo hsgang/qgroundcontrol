@@ -7,20 +7,19 @@
  *
  ****************************************************************************/
 
-import QtQuick              2.3
-import QtLocation           5.3
-import QtPositioning        5.3
-import QtGraphicalEffects   1.0
-import QtQuick.Layouts  1.2
+import QtQuick
+import QtLocation
+import QtPositioning
+import QtQuick.Layouts
 
-import QGroundControl               1.0
-import QGroundControl.ScreenTools   1.0
-import QGroundControl.Vehicle       1.0
-import QGroundControl.Controls      1.0
-import QGroundControl.MultiVehicleManager 1.0
-import QGroundControl.FactSystem    1.0
-import QGroundControl.FactControls  1.0
-import QGroundControl.Palette       1.0
+import QGroundControl
+import QGroundControl.ScreenTools
+import QGroundControl.Vehicle
+import QGroundControl.Controls
+import QGroundControl.MultiVehicleManager
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
+import QGroundControl.Palette
 
 /// Marker for displaying a vehicle location on the map
 MapQuickItem {

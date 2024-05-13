@@ -7,13 +7,13 @@
  *
  ****************************************************************************/
 
-import QtQuick          2.11
-import QtQuick.Layouts  1.11
+import QtQuick
+import QtQuick.Layouts
 
-import QGroundControl               1.0
-import QGroundControl.ScreenTools   1.0
+import QGroundControl
+import QGroundControl.ScreenTools
 
-// ToolIndicatorPage 
+// ToolIndicatorPage
 //      The base control for all Toolbar Indicator drop down pages. It supports a normal and expanded view.
 
 RowLayout {
@@ -56,9 +56,8 @@ RowLayout {
         id:                     divider
         Layout.preferredWidth:  visible ? 1 : -1
         Layout.fillHeight:      true
-        Layout.minimumHeight:   dividerHeight - _margins
-        color:                  QGroundControl.globalPalette.text
-        opacity:                0.5
+        height:                 dividerHeight - _margins
+        color:                  Qt.darker(QGroundControl.globalPalette.text, 4)
         visible:                expanded && expandedComponentLoader.sourceComponent
     }
 

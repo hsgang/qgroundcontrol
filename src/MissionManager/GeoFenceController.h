@@ -7,25 +7,28 @@
  *
  ****************************************************************************/
 
-#ifndef GeoFenceController_H
-#define GeoFenceController_H
+#pragma once
+
+#include <QtCore/QLoggingCategory>
+#include <QtPositioning/QGeoCoordinate>
 
 #include "PlanElementController.h"
-#include "GeoFenceManager.h"
-#include "QGCFencePolygon.h"
-#include "QGCFenceCircle.h"
-#include "Vehicle.h"
-#include "MultiVehicleManager.h"
-#include "QGCLoggingCategory.h"
+#include "QmlObjectListModel.h"
+#include "Fact.h"
 
 Q_DECLARE_LOGGING_CATEGORY(GeoFenceControllerLog)
 
 class GeoFenceManager;
+class QGCFenceCircle;
+class QGCFencePolygon;
+class Vehicle;
 
 class GeoFenceController : public PlanElementController
 {
     Q_OBJECT
-    
+    Q_MOC_INCLUDE("QGCFencePolygon.h")
+    Q_MOC_INCLUDE("QGCFenceCircle.h")
+
 public:
     GeoFenceController(PlanMasterController* masterController, QObject* parent = nullptr);
     ~GeoFenceController();
@@ -59,6 +62,11 @@ public:
     /// Clears the interactive bit from all fence items
     Q_INVOKABLE void clearAllInteractive(void);
 
+#ifdef CONFIG_UTM_ADAPTER
+    Q_INVOKABLE void loadFlightPlanData(void);
+    Q_INVOKABLE bool loadUploadFlag(void);
+#endif
+
     double  paramCircularFence  (void);
     Fact*   breachReturnAltitude(void) { return &_breachReturnAltitudeFact; }
 
@@ -89,6 +97,11 @@ signals:
     void editorQmlChanged               (QString editorQml);
     void loadComplete                   (void);
     void paramCircularFenceChanged      (void);
+
+#ifdef CONFIG_UTM_ADAPTER
+    void uploadFlagSent         (bool flag);
+    void polygonBoundarySent    (QList<QGeoCoordinate> coords);
+#endif
 
 private slots:
     void _polygonDirtyChanged       (bool dirty);
@@ -136,5 +149,3 @@ private:
 
     static const char* _breachReturnAltitudeFactName;
 };
-
-#endif

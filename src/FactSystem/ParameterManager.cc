@@ -9,21 +9,21 @@
 
 #include "ParameterManager.h"
 #include "QGCApplication.h"
-#include "QGCLoggingCategory.h"
-#include "QGCApplication.h"
-#include "UASMessageHandler.h"
 #include "FirmwarePlugin.h"
-#include "UAS.h"
-#include "JsonHelper.h"
-#include "ComponentInformationManager.h"
 #include "CompInfoParam.h"
 #include "FTPManager.h"
+#include "Vehicle.h"
+#include "AutoPilotPlugin.h"
+#include "MAVLinkProtocol.h"
+#include "FactSystem.h"
+#include "ComponentInformationManager.h"
+#include "QGC.h"
+#include "QGCLoggingCategory.h"
 
-#include <QEasingCurve>
-#include <QFile>
-#include <QDebug>
-#include <QVariantAnimation>
-#include <QJsonArray>
+#include <QtCore/QEasingCurve>
+#include <QtCore/QFile>
+#include <QtCore/QVariantAnimation>
+#include <QtCore/QStandardPaths>
 
 QGC_LOGGING_CATEGORY(ParameterManagerVerbose1Log,           "ParameterManagerVerbose1Log")
 QGC_LOGGING_CATEGORY(ParameterManagerVerbose2Log,           "ParameterManagerVerbose2Log")
@@ -174,8 +174,9 @@ void ParameterManager::mavlinkMessageReceived(mavlink_message_t message)
         mavlink_msg_param_value_decode(&message, &param_value);
 
         // This will null terminate the name string
-        QByteArray bytes(param_value.param_id, MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN);
-        QString parameterName(bytes);
+        char parameterNameWithNull[MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN + 1] = {};
+        strncpy(parameterNameWithNull, param_value.param_id, MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN);
+        QString parameterName(parameterNameWithNull);
 
         mavlink_param_union_t paramUnion;
         paramUnion.param_float  = param_value.param_value;
@@ -1219,7 +1220,7 @@ void ParameterManager::_checkInitialLoadComplete(void)
         QString errorMsg = tr("%1 was unable to retrieve the full set of parameters from vehicle %2. "
                               "This will cause %1 to be unable to display its full user interface. "
                               "If you are using modified firmware, you may need to resolve any vehicle startup errors to resolve the issue. "
-                              "If you are using standard firmware, you may need to upgrade to a newer version to resolve the issue.").arg(qgcApp()->applicationName()).arg(_vehicle->id());
+                              "If you are using standard firmware, you may need to upgrade to a newer version to resolve the issue.").arg(QCoreApplication::applicationName()).arg(_vehicle->id());
         qCDebug(ParameterManagerLog) << errorMsg;
         qgcApp()->showAppMessage(errorMsg);
         if (!qgcApp()->runningUnitTests()) {
@@ -1243,7 +1244,7 @@ void ParameterManager::_initialRequestTimeout(void)
     } else {
         if (!_vehicle->genericFirmware()) {
             QString errorMsg = tr("Vehicle %1 did not respond to request for parameters. "
-                                  "This will cause %2 to be unable to display its full user interface.").arg(_vehicle->id()).arg(qgcApp()->applicationName());
+                                  "This will cause %2 to be unable to display its full user interface.").arg(_vehicle->id()).arg(QCoreApplication::applicationName());
             qCDebug(ParameterManagerLog) << errorMsg;
             qgcApp()->showAppMessage(errorMsg);
         }
@@ -1265,7 +1266,7 @@ QString ParameterManager::_remapParamNameToVersion(const QString& paramName)
 
     qCDebug(ParameterManagerLog) << "_remapParamNameToVersion" << paramName << majorVersion << minorVersion;
 
-    mappedParamName = paramName.right(paramName.count() - 2);
+    mappedParamName = paramName.right(paramName.length() - 2);
 
     if (majorVersion == Vehicle::versionNotSetValue) {
         // Vehicle version unknown
@@ -1422,6 +1423,8 @@ bool ParameterManager::pendingWrites(void)
 
     return false;
 }
+
+Vehicle* ParameterManager::vehicle(void) { return _vehicle; }
 
 
 /* Parse the binary parameter file and inject the parameters in the qgc
