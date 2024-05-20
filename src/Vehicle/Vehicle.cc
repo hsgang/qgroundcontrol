@@ -4158,7 +4158,7 @@ void Vehicle::_initializeJson()
     }
     jsonLogSeq = 1;
     QString Model = "Meteorology UAV";
-    QString Type = vehicleTypeName();
+    QString Type = firmwareTypeString();
     QString SN = "0000-0000-0000";
     StartTime = now;
     StartLat = getFactGroup("gps")->getFact("lat")->cookedValueString();
@@ -4230,7 +4230,7 @@ void Vehicle::_writeJsonLine()
         QString Flystats = "-999";
 
         QString Model = "Meteorology UAV";
-        QString Type = vehicleTypeName();
+        QString Type = firmwareTypeString();
         QString SN = "0000-0000-0000";
         //QString StartTime = "-999";
         //QString StartLat = "-999";
