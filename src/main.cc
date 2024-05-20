@@ -22,7 +22,7 @@
 #endif
 
 #ifdef Q_OS_ANDROID
-#include "AndroidInterface.h"
+    #include "AndroidInterface.h"
 #endif
 
 #ifdef QT_DEBUG
