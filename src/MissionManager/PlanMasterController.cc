@@ -276,7 +276,7 @@ void PlanMasterController::_sendMissionComplete(void)
     if (_sendGeoFence) {
         _sendGeoFence = false;
         _sendRallyPoints = true;
-        if (_geoFenceController.supported()) {
+        if (_geoFenceController.supported() && (_geoFenceController.polygons()->count() > 0 || _geoFenceController.circles()->count() > 0)) {
             qCDebug(PlanMasterControllerLog) << "PlanMasterController::sendToVehicle start GeoFence sendToVehicle";
             _geoFenceController.sendToVehicle();
         } else {
@@ -291,7 +291,7 @@ void PlanMasterController::_sendGeoFenceComplete(void)
 {
     if (_sendRallyPoints) {
         _sendRallyPoints = false;
-        if (_rallyPointController.supported()) {
+        if (_rallyPointController.supported() && _rallyPointController.points()->count() > 0) {
             qCDebug(PlanMasterControllerLog) << "PlanMasterController::sendToVehicle start rally sendToVehicle";
             _rallyPointController.sendToVehicle();
         } else {

@@ -46,7 +46,7 @@ signals:
     void mutedChanged(bool muted);
 
 private:
-    qsizetype m_textQueueSize = 0;
+    unsigned int m_textQueueSize = 0;
     bool m_muted = false;
     static const QHash<QString, QString> s_textHash;
 };

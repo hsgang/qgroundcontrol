@@ -13,6 +13,7 @@
 #include <QTcpSocket>
 #include <QGeoCoordinate>
 #include <QUrl>
+#include <QTimer>
 
 #include "Drivers/src/rtcm.h"
 #include "RTCMMavlink.h"

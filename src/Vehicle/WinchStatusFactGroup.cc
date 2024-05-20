@@ -59,7 +59,7 @@ void WinchStatusFactGroup::_handleWinchStatus(mavlink_message_t &message)
     mavlink_winch_status_t ws;
     mavlink_msg_winch_status_decode(&message, &ws);
 
-    timeUsec() -> setRawValue(ws.time_usec);
+    timeUsec() -> setRawValue(QVariant::fromValue(ws.time_usec));
     lineLength() -> setRawValue(ws.line_length);
     speed() -> setRawValue(ws.speed);
     tension() -> setRawValue(ws.tension);

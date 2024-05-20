@@ -4,6 +4,7 @@
 #pragma once
 
 #include <QLoggingCategory>
+#include <QQmlEngine>
 #include "Vehicle.h"
 #include "QmlObjectListModel.h"
 

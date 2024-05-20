@@ -293,24 +293,6 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("Units")
-        visible:            QGroundControl.settingsManager.unitsSettings.visible
-
-        Repeater {
-            model: [ QGroundControl.settingsManager.unitsSettings.distanceUnits,
-                QGroundControl.settingsManager.unitsSettings.areaUnits,
-                QGroundControl.settingsManager.unitsSettings.speedUnits,
-                QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
-
-            LabelledFactComboBox {
-                label:                  modelData.shortDescription
-                fact:                   modelData
-                indexModel:             false
-            }
-        }
-    }
 
 //    SettingsGroupLayout {
 //        Layout.fillWidth:   true

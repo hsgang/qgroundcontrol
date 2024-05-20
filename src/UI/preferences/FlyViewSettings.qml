@@ -219,40 +219,6 @@ SettingsPage {
     }
 
     SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("Instrument Panel")
-        visible:            _showAdditionalIndicatorsCompass.visible || _lockNoseUpCompass.visible
-
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("Show additional heading indicators on Compass")
-            visible:            _showAdditionalIndicatorsCompass.visible
-            fact:               _showAdditionalIndicatorsCompass
-        }
-
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("Lock Compass Nose-Up")
-            visible:            _lockNoseUpCompass.visible
-            fact:               _lockNoseUpCompass
-        }
-
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("Show attitude HUD indicators on Compass")
-            fact:               QGroundControl.settingsManager.flyViewSettings.showAttitudeHUD
-            visible:            fact.visible
-        }
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("Show Mission Max Altitude Indicator")
-            fact:               QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator
-            visible:            fact.visible
-        }
-
-    }
-
-    SettingsGroupLayout {
         id:         customActions
         Layout.fillWidth:   true
         heading:            qsTr("Custom Actions")

@@ -7687,7 +7687,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="145"/>
         <source>Enabled</source>
-        <translation>조이스틱 활성화</translation>
+        <translation>활성화</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="145"/>
@@ -8044,7 +8044,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="145"/>
         <source>Enabled</source>
-        <translation>가상 조이스틱 활성화</translation>
+        <translation>활성화</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="145"/>

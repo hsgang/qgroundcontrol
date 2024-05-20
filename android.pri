@@ -1,7 +1,7 @@
 include($$PWD/libs/qtandroidserialport/qtandroidserialport.pri)
 
-ANDROID_MIN_SDK_VERSION = 26
-ANDROID_TARGET_SDK_VERSION = 33
+ANDROID_MIN_SDK_VERSION = 25
+ANDROID_TARGET_SDK_VERSION = 34
 
 ANDROID_PACKAGE_SOURCE_DIR          = $$OUT_PWD/ANDROID_PACKAGE_SOURCE_DIR  # Tells Qt location of package files for build
 ANDROID_PACKAGE_QGC_SOURCE_DIR      = $$PWD/android                         # Original location of QGC package files
@@ -9,26 +9,27 @@ ANDROID_PACKAGE_CUSTOM_SOURCE_DIR   = $$PWD/custom/android                  # Or
 
 ## We always move the package files to the ANDROID_PACKAGE_SOURCE_DIR build dir so we can modify the manifest as needed
 
-#android_source_dir_target.target = $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml
-#android_source_dir_target.commands = \
-#    $$QMAKE_MKDIR $$ANDROID_PACKAGE_SOURCE_DIR && \
-#    $$QMAKE_COPY_DIR $$ANDROID_PACKAGE_QGC_SOURCE_DIR/* $$ANDROID_PACKAGE_SOURCE_DIR
-#PRE_TARGETDEPS += $$android_source_dir_target.target
-#QMAKE_EXTRA_TARGETS += android_source_dir_target
-#exists($$ANDROID_PACKAGE_CUSTOM_SOURCE_DIR/AndroidManifest.xml) {
-#    android_source_dir_target.depends = $$ANDROID_PACKAGE_CUSTOM_SOURCE_DIR/AndroidManifest.xml
-#} else {
-#    android_source_dir_target.depends = $$ANDROID_PACKAGE_QGC_SOURCE_DIR/AndroidManifest.xml
-#}
+android_source_dir_target.target = $$ANDROID_PACKAGE_SOURCE_DIR/AndroidManifest.xml
+android_source_dir_target.commands = \
+   $$QMAKE_MKDIR $$ANDROID_PACKAGE_SOURCE_DIR && \
+   $$QMAKE_COPY_DIR $$ANDROID_PACKAGE_QGC_SOURCE_DIR/* $$ANDROID_PACKAGE_SOURCE_DIR
+PRE_TARGETDEPS += $$android_source_dir_target.target
+QMAKE_EXTRA_TARGETS += android_source_dir_target
+exists($$ANDROID_PACKAGE_CUSTOM_SOURCE_DIR/AndroidManifest.xml) {
+   android_source_dir_target.depends = $$ANDROID_PACKAGE_CUSTOM_SOURCE_DIR/AndroidManifest.xml
+} else {
+   android_source_dir_target.depends = $$ANDROID_PACKAGE_QGC_SOURCE_DIR/AndroidManifest.xml
+}
 
 exists($$PWD/custom/android) {
     message("Merging $$PWD/custom/android/ -> $$PWD/android/")
 
- equals(QMAKE_HOST.os, Darwin) {
-    # Latest Mac OSX has different sed than regular linux.
-    SED_I = '$$QMAKE_STREAM_EDITOR -i \"\"'
-} else {
-    SED_I = '$$QMAKE_STREAM_EDITOR -i'
+    equals(QMAKE_HOST.os, Darwin) {
+        # Latest Mac OSX has different sed than regular linux.
+        SED_I = '$$QMAKE_STREAM_EDITOR -i \"\"'
+    } else {
+        SED_I = '$$QMAKE_STREAM_EDITOR -i'
+    }
 }
 
 exists($$ANDROID_PACKAGE_CUSTOM_SOURCE_DIR) {

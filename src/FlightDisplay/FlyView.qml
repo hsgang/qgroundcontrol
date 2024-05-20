@@ -151,17 +151,17 @@ Item {
 
         // Development tool for visualizing the insets for a paticular layer, enable if needed
 
-//         FlyViewInsetViewer {
-//             id:                     widgetLayerInsetViewer
-//             anchors.top:            parent.top
-//             anchors.bottom:         parent.bottom
-//             anchors.left:           parent.left
-//             anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
+        FlyViewInsetViewer {
+            id:                     widgetLayerInsetViewer
+            anchors.top:            parent.top
+            anchors.bottom:         parent.bottom
+            anchors.left:           parent.left
+            anchors.right:          guidedValueSlider.visible ? guidedValueSlider.left : parent.right
 
-//             z:                      widgetLayer.z + 1
+            z:                      widgetLayer.z + 1
 
-//             insetsToView:           customOverlay.totalToolInsets
-//         }
+            insetsToView:           customOverlay.totalToolInsets
+        }
 
         GuidedActionsController {
             id:                 guidedActionsController
