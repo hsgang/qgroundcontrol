@@ -169,26 +169,26 @@ Rectangle {
         }
     }
 
-    QGCColoredImage {
-        id:                     deleteButton
-        anchors.verticalCenter: topRowLayout.verticalCenter
-        anchors.margins:        _margin
-        anchors.right:          hamburger.left
-        height:                 _hamburgerSize
-        width:                  height
-        sourceSize.height:      height
-        fillMode:               Image.PreserveAspectFit
-        mipmap:                 true
-        smooth:                 true
-        color:                  qgcPal.text
-        visible:                _currentItem && missionItem.sequenceNumber !== 0
-        source:                 "/res/TrashDelete.svg"
+    // QGCColoredImage {
+    //     id:                     deleteButton
+    //     anchors.verticalCenter: topRowLayout.verticalCenter
+    //     anchors.margins:        _margin
+    //     anchors.right:          hamburger.left
+    //     height:                 _hamburgerSize
+    //     width:                  height
+    //     sourceSize.height:      height
+    //     fillMode:               Image.PreserveAspectFit
+    //     mipmap:                 true
+    //     smooth:                 true
+    //     color:                  qgcPal.text
+    //     visible:                _currentItem && missionItem.sequenceNumber !== 0
+    //     source:                 "/res/TrashDelete.svg"
 
-        QGCMouseArea {
-            fillItem:   parent
-            onClicked:  remove()
-        }
-    }
+    //     QGCMouseArea {
+    //         fillItem:   parent
+    //         onClicked:  remove()
+    //     }
+    // }
 
 
     QGCColoredImage {
@@ -230,9 +230,15 @@ Rectangle {
                 }
 
                 QGCMenuItem {
-                    text:           qsTr("Edit position...")
+                    text:           qsTr("Edit position")
                     enabled:        missionItem.specifiesCoordinate
                     onTriggered:    editPositionDialog.createObject(mainWindow).open()
+                }
+
+                QGCMenuItem {
+                    text:           qsTr("Delete")
+                    enabled:        missionItem.specifiesCoordinate
+                    onTriggered:    remove()
                 }
 
                 QGCMenuSeparator {
@@ -259,10 +265,10 @@ Rectangle {
                     }
                 }
 
-                QGCMenuItem {
-                    text:       qsTr("Item #%1").arg(missionItem.sequenceNumber)
-                    enabled:    false
-                }
+                // QGCMenuItem {
+                //     text:       qsTr("Item #%1").arg(missionItem.sequenceNumber)
+                //     enabled:    false
+                // }
             }
         }
     }

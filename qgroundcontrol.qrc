@@ -69,6 +69,7 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewAtmosphericSensorView.qml">src/FlightDisplay/FlyViewAtmosphericSensorView.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewAttitudeIndicator.qml">src/FlightDisplay/FlyViewAttitudeIndicator.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewBottomRightRowLayout.qml">src/FlightDisplay/FlyViewBottomRightRowLayout.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewBottomCenterRowLayout.qml">src/FlightDisplay/FlyViewBottomCenterRowLayout.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewCustomLayer.qml">src/FlightDisplay/FlyViewCustomLayer.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewEKFStatus.qml">src/FlightDisplay/FlyViewEKFStatus.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewGeneratorStatusView.qml">src/FlightDisplay/FlyViewGeneratorStatusView.qml</file>

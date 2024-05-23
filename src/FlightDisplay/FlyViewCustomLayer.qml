@@ -85,38 +85,38 @@ Item {
         rightEdgeCenterInset:   parentToolInsets.rightEdgeCenterInset
         rightEdgeBottomInset:   parentToolInsets.rightEdgeBottomInset
         topEdgeLeftInset:       parentToolInsets.topEdgeLeftInset
-        topEdgeCenterInset:     telemetryPanel.visible ? telemetryPanel.topEdgeCenterInset : parentToolInsets.topEdgeCenterInset
+        topEdgeCenterInset:     parentToolInsets.topEdgeCenterInset
         topEdgeRightInset:      parentToolInsets.topEdgeRightInset
         bottomEdgeLeftInset:    parentToolInsets.bottomEdgeLeftInset
-        bottomEdgeCenterInset:  attitudeIndicator.visible ? attitudeIndicator.bottomEdgeCenterInset : parentToolInsets.bottomEdgeCenterInset
+        bottomEdgeCenterInset:  parentToolInsets.bottomEdgeCenterInset
         bottomEdgeRightInset:   parentToolInsets.bottomEdgeRightInset
     }
 
-    TelemetryValuesBar {
-        id:                 telemetryPanel
-        x:                  recalcXPosition()
-        anchors.margins:    _toolsMargin
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:        parent.top
-        visible:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue
+    // TelemetryValuesBar {
+    //     id:                 telemetryPanel
+    //     x:                  recalcXPosition()
+    //     anchors.margins:    _toolsMargin
+    //     anchors.horizontalCenter: parent.horizontalCenter
+    //     anchors.top:        parent.top
+    //     visible:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue
 
-        property real topEdgeCenterInset: visible ? y + height : 0
+    //     property real topEdgeCenterInset: visible ? y + height : 0
 
-        function recalcXPosition() {
-            // First try centered
-            var halfRootWidth   = _root.width / 2
-            var halfPanelWidth  = telemetryPanel.width / 2
-            var leftX           = (halfRootWidth - halfPanelWidth) - _toolsMargin
-            var rightX          = (halfRootWidth + halfPanelWidth) + _toolsMargin
-            if (leftX >= parentToolInsets.leftEdgeTopInset || rightX <= parentToolInsets.rightEdgeTopInset ) {
-                // It will fit in the horizontalCenter
-                return halfRootWidth - halfPanelWidth
-            } else {
-                // Anchor to left edge
-                return parentToolInsets.leftEdgeTopInset + _toolsMargin
-            }
-        }
-    }
+    //     function recalcXPosition() {
+    //         // First try centered
+    //         var halfRootWidth   = _root.width / 2
+    //         var halfPanelWidth  = telemetryPanel.width / 2
+    //         var leftX           = (halfRootWidth - halfPanelWidth) - _toolsMargin
+    //         var rightX          = (halfRootWidth + halfPanelWidth) + _toolsMargin
+    //         if (leftX >= parentToolInsets.leftEdgeTopInset || rightX <= parentToolInsets.rightEdgeTopInset ) {
+    //             // It will fit in the horizontalCenter
+    //             return halfRootWidth - halfPanelWidth
+    //         } else {
+    //             // Anchor to left edge
+    //             return parentToolInsets.leftEdgeTopInset + _toolsMargin
+    //         }
+    //     }
+    // }
 
     //-----------------------------------------------------------------------------------------------------
     //--custom VehicleWarnings Widget-----------------------------------------------------------------------------------
@@ -157,123 +157,123 @@ Item {
     //     }
     // }
 
-    Rectangle {
-        id:                 multiVehiclePanelSelector
-        anchors.top:        parent.top
-        anchors.right:      parent.right
-        anchors.margins:    _toolsMargin
-        height:             multiVehiclePanelSelectorLayout.height + (_toolsMargin * 2)
-        width:              _rightPanelWidth
-        visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
-        color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-        radius:             ScreenTools.defaultFontPixelWidth / 2
+    // Rectangle {
+    //     id:                 multiVehiclePanelSelector
+    //     anchors.top:        parent.top
+    //     anchors.right:      parent.right
+    //     anchors.margins:    _toolsMargin
+    //     height:             multiVehiclePanelSelectorLayout.height + (_toolsMargin * 2)
+    //     width:              _rightPanelWidth
+    //     visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
+    //     color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+    //     radius:             ScreenTools.defaultFontPixelWidth / 2
 
-        property bool showSingleVehiclePanel:  !visible || !selectorCheckBoxSlider.checked
+    //     property bool showSingleVehiclePanel:  !visible || !selectorCheckBoxSlider.checked
 
-        RowLayout {
-            id:                 multiVehiclePanelSelectorLayout
-            // anchors.top:        parent.top
-            // anchors.right:      parent.right
-            // anchors.margins:    _toolsMargin
-            // width:              _rightPanelWidth
-            // visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
+    //     RowLayout {
+    //         id:                 multiVehiclePanelSelectorLayout
+    //         // anchors.top:        parent.top
+    //         // anchors.right:      parent.right
+    //         // anchors.margins:    _toolsMargin
+    //         // width:              _rightPanelWidth
+    //         // visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
 
-            //property bool showSingleVehiclePanel:  !visible || !selectorCheckBoxSlider.checked
-            anchors.right: parent.right
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins: _toolsMargin
+    //         //property bool showSingleVehiclePanel:  !visible || !selectorCheckBoxSlider.checked
+    //         anchors.right: parent.right
+    //         anchors.left: parent.left
+    //         anchors.verticalCenter: parent.verticalCenter
+    //         anchors.margins: _toolsMargin
 
-            QGCLabel{
-                text:   qsTr("Show Multi Vehicle Panel")
-            }
+    //         QGCLabel{
+    //             text:   qsTr("Show Multi Vehicle Panel")
+    //         }
 
-            QGCCheckBoxSlider {
-                id:             selectorCheckBoxSlider
-                checked:            false
-                Layout.alignment:   Qt.AlignRight
-            }
-        }
-    }
+    //         QGCCheckBoxSlider {
+    //             id:             selectorCheckBoxSlider
+    //             checked:            false
+    //             Layout.alignment:   Qt.AlignRight
+    //         }
+    //     }
+    // }
 
-    MultiVehicleList {
-        anchors.margins:    _toolsMargin
-        anchors.top:        multiVehiclePanelSelector.bottom
-        anchors.right:      parent.right
-        width:              _rightPanelWidth
-        height:             parent.height - y - _toolsMargin
-        visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
-    }
+    // MultiVehicleList {
+    //     anchors.margins:    _toolsMargin
+    //     anchors.top:        multiVehiclePanelSelector.bottom
+    //     anchors.right:      parent.right
+    //     width:              _rightPanelWidth
+    //     height:             parent.height - y - _toolsMargin
+    //     visible:            !multiVehiclePanelSelector.showSingleVehiclePanel
+    // }
 
     //-----------------------------------------------------------------------------------------------------
     //--custom ModeChangedIndicator Widget-----------------------------------------------------------------------------------
 
-    ModeChangedIndicator {
-        anchors.centerIn:   parent
-        z:                  QGroundControl.zOrderTopMost
-    }
+    // ModeChangedIndicator {
+    //     anchors.centerIn:   parent
+    //     z:                  QGroundControl.zOrderTopMost
+    // }
 
     //-----------------------------------------------------------------------------------------------------
     //--custom indicator Widget-----------------------------------------------------------------------------------
 
-    FlyViewAltitudeIndicator{
-        id:                         altitudeIndicator
-        anchors.margins:            _toolsMargin
-        height:                     flyviewMissionProgress.height * 0.9
-        anchors.left:               flyviewMissionProgress.right
-        anchors.leftMargin:         _toolsMargin
-        anchors.verticalCenter:     flyviewMissionProgress.verticalCenter
-        visible:                    flyviewMissionProgress.visible && QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
-    }
+    // FlyViewAltitudeIndicator{
+    //     id:                         altitudeIndicator
+    //     anchors.margins:            _toolsMargin
+    //     height:                     flyviewMissionProgress.height * 0.9
+    //     anchors.left:               flyviewMissionProgress.right
+    //     anchors.leftMargin:         _toolsMargin
+    //     anchors.verticalCenter:     flyviewMissionProgress.verticalCenter
+    //     visible:                    flyviewMissionProgress.visible && QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
+    // }
 
-    FlyViewAttitudeIndicator{
-        id:                         attitudeIndicator
-        anchors.margins:            _toolsMargin * 2.5
-        anchors.bottom:             parent.bottom
-        anchors.horizontalCenter:   parent.horizontalCenter
-        visible:                    !flyviewMissionProgress.visible
+    // FlyViewAttitudeIndicator{
+    //     id:                         attitudeIndicator
+    //     anchors.margins:            _toolsMargin * 2.5
+    //     anchors.bottom:             parent.bottom
+    //     anchors.horizontalCenter:   parent.horizontalCenter
+    //     visible:                    !flyviewMissionProgress.visible
 
-        property real bottomEdgeCenterInset: visible ? height + (_toolsMargin * 2.5) : 0
-    }
+    //     property real bottomEdgeCenterInset: visible ? height + (_toolsMargin * 2.5) : 0
+    // }
 
-    FlyViewMissionProgress{
-        id:                         flyviewMissionProgress
-        anchors.margins:            _toolsMargin * 2
-        anchors.bottom:             parent.bottom
-        anchors.horizontalCenter:   parent.horizontalCenter
-        visible:  QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
+    // FlyViewMissionProgress{
+    //     id:                         flyviewMissionProgress
+    //     anchors.margins:            _toolsMargin * 2
+    //     anchors.bottom:             parent.bottom
+    //     anchors.horizontalCenter:   parent.horizontalCenter
+    //     visible:  QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
 
-        Connections{
-            target: _activeVehicle
-            onFlightModeChanged: (flightMode)=> {
-                //console.log(flightMode)
-                if(flightMode === _activeVehicle.missionFlightMode){
-                    flyviewMissionProgress.visible = true
-                } else {
-                    flyviewMissionProgress.visible = false
-                }
-            }
-        }
-    }
+    //     Connections{
+    //         target: _activeVehicle
+    //         onFlightModeChanged: (flightMode)=> {
+    //             //console.log(flightMode)
+    //             if(flightMode === _activeVehicle.missionFlightMode){
+    //                 flyviewMissionProgress.visible = true
+    //             } else {
+    //                 flyviewMissionProgress.visible = false
+    //             }
+    //         }
+    //     }
+    // }
 
-    FlyViewAtmosphericSensorView{
-        id:                         atmosphericSensorView
-        anchors.top:                parent.top
-        anchors.topMargin:          _toolsMargin
-        anchors.left:               parent.left
-        anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
-        visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
-    }
+    // FlyViewAtmosphericSensorView{
+    //     id:                         atmosphericSensorView
+    //     anchors.top:                parent.top
+    //     anchors.topMargin:          _toolsMargin
+    //     anchors.left:               parent.left
+    //     anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
+    //     visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
+    // }
 
-    FlyViewWindvane {
-        id:                         windvane
-        vehicle:                    _activeVehicle
-        anchors.top:                parent.top
-        anchors.topMargin:          _toolsMargin
-        anchors.left:               parent.left
-        anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
-        visible:                    QGroundControl.settingsManager.flyViewSettings.showWindvane.rawValue
-    }
+    // FlyViewWindvane {
+    //     id:                         windvane
+    //     vehicle:                    _activeVehicle
+    //     anchors.top:                parent.top
+    //     anchors.topMargin:          _toolsMargin
+    //     anchors.left:               parent.left
+    //     anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
+    //     visible:                    QGroundControl.settingsManager.flyViewSettings.showWindvane.rawValue
+    // }
 
 //    FlyViewGeneratorStatusView{
 //        id:                         generatorStatusView
@@ -323,17 +323,17 @@ Item {
         }
     }
 
-    FlyViewVideoToolStrip {
-        id:                         videoToolStrip
-        anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-        anchors.topMargin:          _toolsMargin
-        anchors.right:              multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.left : parent.right
-        anchors.rightMargin:        _toolsMargin
-        z:                          QGroundControl.zOrderWidgets
-        maxWidth:                   parent.width * 0.7
-        maxHeight:                  parent.height * 0.7
-        visible:                    !multiVehiclePanelSelector.visible && QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue
-    }
+    // FlyViewVideoToolStrip {
+    //     id:                         videoToolStrip
+    //     anchors.top:                multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
+    //     anchors.topMargin:          _toolsMargin
+    //     anchors.right:              multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.left : parent.right
+    //     anchors.rightMargin:        _toolsMargin
+    //     z:                          QGroundControl.zOrderWidgets
+    //     maxWidth:                   parent.width * 0.7
+    //     maxHeight:                  parent.height * 0.7
+    //     visible:                    !multiVehiclePanelSelector.visible && QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue
+    // }
 
     // FlyViewWeatherWidget{
     //     id:                         weatherWidget
@@ -344,257 +344,93 @@ Item {
     //     visible:                    false
     // }
 
-    Rectangle {
-        id:                         messageToastManagerRect
-        anchors.margins:            _toolsMargin
-        anchors.bottom:             attitudeIndicator.top
-        anchors.horizontalCenter:   parent.horizontalCenter
-        width:                      messageToastManager.width //mainWindow.width  * 0.4
-        height:                     messageToastManager.height < mainWindow.height * 0.14 ? messageToastManager.height : mainWindow.height * 0.14
-        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.4) //"transparent" //qgcPal.window
-        radius:                     _toolsMargin
-        visible:                    messageFlick.contentHeight
-
-        QGCFlickable {
-            id:                 messageFlick
-            anchors.fill:       parent
-            anchors.horizontalCenter: parent.horizontalCenter
-            contentHeight:      messageToastManager.height
-            contentWidth:       messageToastManager.width
-            pixelAligned:       true
-
-            ScrollBar.vertical : ScrollBar{
-                active: false
-            }
-
-            contentY : contentHeight > height ? contentHeight - height + _toolsMargin * 3 : 0
-
-            MessageToastManager{
-                id: messageToastManager
-            }
-
-            Connections {
-                target: _activeVehicle
-                onNewFormattedMessage : function(formattedMessage) {
-                    messageToastManager.show(formattedMessage)
-                }
-            }
-        }
-
-        MouseArea{
-            anchors.fill: parent
-            propagateComposedEvents: true
-        }
-    }
-
-    FlyViewAtmosphericChart{
-        id: flyViewChartWidget
-        anchors.margins:        _toolsMargin
-        anchors.top:            telemetryPanel.bottom
-        anchors.bottom:         attitudeIndicator.top
-        anchors.right:          rightPanelRow.left
-        width:                  ScreenTools.isMobile ? mainWindow.width * 0.7 : mainWindow.width * 0.4
-        visible:                QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue
-    }
-
-    FlyViewEscStatus {
-        id: flyViewEscStatus
-        anchors.margins:        _toolsMargin
-        anchors.bottom:         attitudeIndicator.top
-        anchors.bottomMargin:   _toolsMargin
-        anchors.right:          rightPanelRow.left
-        visible:                QGroundControl.settingsManager.flyViewSettings.showEscStatus.rawValue
-    }
-
-    Rectangle {
-        id:                         flyviewStatusRect
-        anchors.horizontalCenter:   parent.horizontalCenter
-        anchors.bottom:             attitudeIndicator.top
-        anchors.bottomMargin:       _toolsMargin
-        color:                      "transparent"
-        width:                      flyviewStatusRow.width
-        height:                     flyviewStatusRow.height
-
-        RowLayout{
-            id: flyviewStatusRow
-
-            FlyViewVibrationStatus{
-                id:         flyviewVibrationStatus
-                visible:    QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue
-            }
-
-            FlyViewEKFStatus{
-                id:         flyviewEKFStatus
-                visible:    QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue
-            }
-        }
-    }
-
-    Component {
-        id: quickViewControlDialogComponent
-
-        QGCPopupDialog {
-            title:      qsTr("FlyView Widget Settings")
-            buttons:    Dialog.Close //StandardButton.Close
-
-            RowLayout{
-                spacing: _margins * 5
-
-                GridLayout{
-                    id:     quickViewControlStripGrid
-                    flow:   GridLayout.LeftToRight //TopToBottom
-                    columns: 2
-                    rowSpacing: _margins * 2
-                    Layout.alignment: Qt.AlignTop
-
-                    QGCLabel{ text: qsTr("Payload Widget"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
-
-                    QGCLabel{ text: qsTr("PhotoVideo Control") }
-                    QGCSwitch {
-                        checked:            photoVideoControl.visible
-                        onClicked:          photoVideoControl.visible = !photoVideoControl.visible
-                    }
-
-                    QGCLabel{ text: qsTr("Mount Control Pad") }
-                    QGCSwitch {
-                        checked:            QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue === true ? 1 : 0
-                        onClicked:          QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue = checked ? 1 : 0
-                    }
-
-                    QGCLabel{ text: qsTr("Mount Widget") }
-                    QGCSwitch {
-                        checked:            videoToolStrip.visible
-                        onClicked:          videoToolStrip.visible = !videoToolStrip.visible
-                    }
-
-                    QGCLabel{ text: qsTr("Winch Control") }
-                    QGCSwitch {
-                        checked:            winchControlPanel.visible
-                        onClicked:          winchControlPanel.visible = !winchControlPanel.visible
-                    }
-
-                    QGCLabel{ text: qsTr("Chart Widget") }
-                    QGCSwitch {
-                        checked:            flyViewChartWidget.visible
-                        onClicked:          flyViewChartWidget.visible = !flyViewChartWidget.visible
-                    }
-
-                    QGCLabel{ text: qsTr("Atmospheric Data") }
-                    QGCSwitch {
-                        checked:            QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue === true ? 1 : 0
-                        onClicked:          QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue = checked ? 1 : 0
-                    }
-                }
-
-                GridLayout{
-                    id:     quickViewControlStripGrid2
-                    flow:   GridLayout.LeftToRight //TopToBottom
-                    columns: 2
-                    rowSpacing: _margins * 2
-                    Layout.alignment: Qt.AlignTop
-
-                    QGCLabel{ text: qsTr("Status Widget"); Layout.columnSpan : 2; Layout.alignment: Qt.AlignHCenter }
-
-                    QGCLabel{ text: qsTr("Mission Progress Bar") }
-                    QGCSwitch {
-                        checked:            flyviewMissionProgress.visible
-                        onClicked:          flyviewMissionProgress.visible = !flyviewMissionProgress.visible
-                    }
-
-                    QGCLabel{ text: qsTr("Telemetry Panel") }
-                    QGCSwitch {
-                        checked:            telemetryPanel.visible
-                        onClicked:          telemetryPanel.visible = !telemetryPanel.visible
-                    }
-
-                    // QGCLabel{ text: qsTr("Weather Widget") }
-                    // QGCSwitch {
-                    //     checked:            weatherWidget.visible
-                    //     onClicked:          {
-                    //         weatherWidget.visible = !weatherWidget.visible
-                    //         //weatherWidget.getWeatherJSON()
-                    //     }
-                    // }
-
-                    QGCLabel{ text: qsTr("Vibration Status") }
-                    QGCSwitch {
-                        checked:            flyviewVibrationStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
-                        onClicked:          flyviewVibrationStatus.visible = !flyviewVibrationStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
-                    }
-
-                    QGCLabel{ text: qsTr("EKF Status") }
-                    QGCSwitch {
-                        checked:            flyviewEKFStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue === true ? 1 : 0
-                        onClicked:          flyviewEKFStatus.visible = !flyviewEKFStatus.visible //QGroundControl.settingsManager.flyViewSettings.showGeneratorStatus.rawValue = checked ? 1 : 0
-                    }
-                }
-            }
-        }
-    }
-
     // Rectangle {
-    //     id:                 quickViewPopupButton
-    //     anchors.margins:    _toolsMargin + ScreenTools.defaultFontPixelWidth * 0.25
-    //     anchors.top:        multiVehiclePanelSelector.visible ? multiVehiclePanelSelector.bottom : parent.top
-    //     //anchors.right:      multiVehiclePanelSelector.showSingleVehiclePanel ?  (photoVideoControl.visible ? photoVideoControl.left : parent.right) : multiVehiclePanelSelector.left
-    //     anchors.right:      multiVehiclePanelSelector.showSingleVehiclePanel ? rightPanelRow.left : multiVehiclePanelSelector.left
-    //     anchors.rightMargin: _toolsMargin
-    //     color:              qgcPal.window
-    //     width:              _idealWidth - anchorsMargins
-    //     height:             width
-    //     radius:             ScreenTools.defaultFontPixelHeight / 2
-    //     visible:            true
+    //     id:                         messageToastManagerRect
+    //     anchors.margins:            _toolsMargin
+    //     anchors.bottom:             attitudeIndicator.top
+    //     anchors.horizontalCenter:   parent.horizontalCenter
+    //     width:                      messageToastManager.width //mainWindow.width  * 0.4
+    //     height:                     messageToastManager.height < mainWindow.height * 0.14 ? messageToastManager.height : mainWindow.height * 0.14
+    //     color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.4) //"transparent" //qgcPal.window
+    //     radius:                     _toolsMargin
+    //     visible:                    messageFlick.contentHeight
 
-    //     property real _idealWidth:      (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8)
-    //     property real anchorsMargins:   ScreenTools.defaultFontPixelWidth * 0.8
-    //     property real contentMargins:   innerText.height * 0.1
-
-    //     DeadMouseArea {
-    //         anchors.fill: parent
-    //     }
-
-    //     Item{
-    //         id:                 contentLayoutItem
+    //     QGCFlickable {
+    //         id:                 messageFlick
     //         anchors.fill:       parent
-    //         anchors.margins:    quickViewPopupButton.contentMargins
+    //         anchors.horizontalCenter: parent.horizontalCenter
+    //         contentHeight:      messageToastManager.height
+    //         contentWidth:       messageToastManager.width
+    //         pixelAligned:       true
 
-    //         Column {
-    //             anchors.centerIn:   parent
-    //             spacing:            quickViewPopupButton.contentMargins * 2
+    //         ScrollBar.vertical : ScrollBar{
+    //             active: false
+    //         }
 
-    //             QGCColoredImage {
-    //                 id:                         innerImage
-    //                 height:                     contentLayoutItem.height * 0.6
-    //                 width:                      contentLayoutItem.width  * 0.6
-    //                 smooth:                     true
-    //                 mipmap:                     true
-    //                 color:                      qgcPal.text
-    //                 fillMode:                   Image.PreserveAspectFit
-    //                 antialiasing:               true
-    //                 sourceSize.height:          height
-    //                 sourceSize.width:           width
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //                 source:                     "/qmlimages/LogDownloadIcon"
-    //             }
+    //         contentY : contentHeight > height ? contentHeight - height + _toolsMargin * 3 : 0
 
-    //             QGCLabel {
-    //                 id:                         innerText
-    //                 text:                       qsTr("Widget")
-    //                 color:                      qgcPal.text
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //                 font.family:                ScreenTools.normalFontFamily
-    //                 font.pointSize:             ScreenTools.smallFontPointSize
+    //         MessageToastManager{
+    //             id: messageToastManager
+    //         }
+
+    //         Connections {
+    //             target: _activeVehicle
+    //             onNewFormattedMessage : function(formattedMessage) {
+    //                 messageToastManager.show(formattedMessage)
     //             }
     //         }
     //     }
 
-    //     MouseArea {
-    //         anchors.fill: quickViewPopupButton
-    //         onClicked: {
-    //             quickViewControlDialogComponent.createObject(mainWindow).open()
+    //     MouseArea{
+    //         anchors.fill: parent
+    //         propagateComposedEvents: true
+    //     }
+    // }
+
+    // FlyViewAtmosphericChart{
+    //     id: flyViewChartWidget
+    //     anchors.margins:        _toolsMargin
+    //     anchors.top:            telemetryPanel.bottom
+    //     anchors.bottom:         attitudeIndicator.top
+    //     anchors.right:          rightPanelRow.left
+    //     width:                  ScreenTools.isMobile ? mainWindow.width * 0.7 : mainWindow.width * 0.4
+    //     visible:                QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue
+    // }
+
+    // FlyViewEscStatus {
+    //     id: flyViewEscStatus
+    //     anchors.margins:        _toolsMargin
+    //     anchors.bottom:         attitudeIndicator.top
+    //     anchors.bottomMargin:   _toolsMargin
+    //     anchors.right:          rightPanelRow.left
+    //     visible:                QGroundControl.settingsManager.flyViewSettings.showEscStatus.rawValue
+    // }
+
+    // Rectangle {
+    //     id:                         flyviewStatusRect
+    //     anchors.horizontalCenter:   parent.horizontalCenter
+    //     anchors.bottom:             attitudeIndicator.top
+    //     anchors.bottomMargin:       _toolsMargin
+    //     color:                      "transparent"
+    //     width:                      flyviewStatusRow.width
+    //     height:                     flyviewStatusRow.height
+
+    //     RowLayout{
+    //         id: flyviewStatusRow
+
+    //         FlyViewVibrationStatus{
+    //             id:         flyviewVibrationStatus
+    //             visible:    QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue
+    //         }
+
+    //         FlyViewEKFStatus{
+    //             id:         flyviewEKFStatus
+    //             visible:    QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue
     //         }
     //     }
     // }
+
+
 }
 
 

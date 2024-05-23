@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Dialogs
 import QtQuick.Shapes
 
 import QGroundControl
@@ -66,7 +65,7 @@ Rectangle{
     //    FactPanelController { id: controller; }
 
 // Mission
-    property var    _planMasterController:      globals.planMasterControllerPlanView
+    property var    _planMasterController:      _planMasterController //globals.planMasterControllerPlanView
     property var    _currentMissionItem:        globals.currentPlanMissionItem          ///< Mission item to display status for
 
     property var    missionItems:               _controllerValid ? _planMasterController.missionController.visualItems : undefined

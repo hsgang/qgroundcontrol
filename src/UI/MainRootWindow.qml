@@ -161,7 +161,7 @@ ApplicationWindow {
     }
 
     function showTool(toolTitle, toolSource, toolIcon) {
-        toolDrawer.backIcon     = flyView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
+        //toolDrawer.backIcon     = flyView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
         toolDrawer.toolTitle    = toolTitle
         toolDrawer.toolSource   = toolSource
         toolDrawer.toolIcon     = toolIcon
@@ -387,7 +387,7 @@ ApplicationWindow {
                                 toolDrawer.visible = false
                                 mainWindow.showSetupTool()
                                 checkedMenu()
-                                setupButton.checked = true
+                                //setupButton.checked = true
                                 viewSelectDrawer.visible = false
                             }
                         }
@@ -406,7 +406,7 @@ ApplicationWindow {
                                 toolDrawer.visible = false
                                 mainWindow.showAnalyzeTool()
                                 checkedMenu()
-                                analyzeButton.checked = true
+                                //analyzeButton.checked = true
                                 viewSelectDrawer.visible = false
                             }
                         }
@@ -425,7 +425,7 @@ ApplicationWindow {
                                 toolDrawer.visible = false
                                 mainWindow.showAppSettings()
                                 checkedMenu()
-                                settingsButton.checked = true
+                                //settingsButton.checked = true
                                 viewSelectDrawer.visible = false
                             }
                         }
@@ -714,7 +714,7 @@ ApplicationWindow {
         interactive:    false
         visible:        false
 
-        property alias backIcon:    backIcon.source
+        //property alias backIcon:    backIcon.source
         property alias toolTitle:   toolbarDrawerText.text
         property alias toolSource:  toolDrawerLoader.source
         property alias toolIcon:    toolIcon.source
@@ -739,29 +739,52 @@ ApplicationWindow {
                 anchors.bottom:     parent.bottom
                 spacing:            ScreenTools.defaultFontPixelWidth
 
-                QGCColoredImage {
-                    id:                     backIcon
-                    width:                  ScreenTools.defaultFontPixelHeight * 2
-                    height:                 ScreenTools.defaultFontPixelHeight * 2
-                    fillMode:               Image.PreserveAspectFit
-                    mipmap:                 true
-                    color:                  qgcPal.text
+                // QGCColoredImage {
+                //     id:                     backIcon
+                //     width:                  ScreenTools.defaultFontPixelHeight * 2
+                //     height:                 ScreenTools.defaultFontPixelHeight * 2
+                //     fillMode:               Image.PreserveAspectFit
+                //     mipmap:                 true
+                //     color:                  qgcPal.text
+                // }
+
+                Rectangle {
+                    id:    backIcon
+                    height: parent.height * 0.7
+                    width: height
+                    color: "transparent"
+                    border.color: qgcPal.text
+                    border.width: 1
+                    radius: ScreenTools.defaultFontPixelHeight / 4
+
+                    QGCColoredImage{
+                        height:             parent.height * 0.7
+                        width:              height
+                        anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
+                        //anchors.fill:       parent
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        source:             "/InstrumentValueIcons/arrow-thin-left.svg"
+                        sourceSize.height:  height
+                        fillMode:           Image.PreserveAspectFit
+                        color:              qgcPal.text
+                    }
                 }
 
-                QGCLabel {
-                    id:     backTextLabel
-                    text:   qsTr("Back")
-                }
+                // QGCLabel {
+                //     id:     backTextLabel
+                //     text:   qsTr("Back")
+                // }
 
-                QGCLabel {
-                    font.pointSize: ScreenTools.largeFontPointSize
-                    text:           "<"
-                }
+                // QGCLabel {
+                //     font.pointSize: ScreenTools.largeFontPointSize
+                //     text:           "<"
+                // }
 
                 QGCColoredImage {
                     id:                     toolIcon
-                    width:                  ScreenTools.defaultFontPixelHeight * 2
-                    height:                 ScreenTools.defaultFontPixelHeight * 2
+                    width:                  ScreenTools.defaultFontPixelHeight * 1.2
+                    height:                 ScreenTools.defaultFontPixelHeight * 1.2
                     fillMode:               Image.PreserveAspectFit
                     mipmap:                 true
                     color:                  qgcPal.text
@@ -771,13 +794,13 @@ ApplicationWindow {
                     id:             toolbarDrawerText
                     font.pointSize: ScreenTools.largeFontPointSize
                 }
-            }
+            }            
 
             QGCMouseArea {
                 anchors.top:        parent.top
                 anchors.bottom:     parent.bottom
                 x:                  parent.mapFromItem(backIcon, backIcon.x, backIcon.y).x
-                width:              (backTextLabel.x + backTextLabel.width) - backIcon.x
+                width:              backIcon.width //(backTextLabel.x + backTextLabel.width) - backIcon.x
                 onClicked: {
                     toolDrawer.visible      = false
                 }

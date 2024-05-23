@@ -192,6 +192,8 @@ void TerrainProfile::_addFlightProfileSegment(FlightPathSegment* segment, double
 
         }
     } else {
+        qCDebug(TerrainProfileLog) << "segment->" << segment->coord1AMSLAlt() << "/" << segment->coord2AMSLAlt() << "/" << segment->segmentType();
+
         double amslCoord1Height =       segment->coord1AMSLAlt();
         double amslCoord2Height =       segment->coord2AMSLAlt();
         double coord1HeightPercent =    (amslCoord1Height - _minAMSLAlt) / amslAltRange;

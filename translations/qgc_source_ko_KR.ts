@@ -6053,8 +6053,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="47"/>
-        <source>%1 can upgrade the firmware on Pixhawk devices, SiK Radios and PX4 Flow Smart Cameras.</source>
-        <translation>%1은 Pixhawk 장치, SiK Radios 및 PX4 Flow Smart 카메라의 펌웨어를 업그레이드 할 수 있습니다.</translation>
+        <source>%1 can upgrade the firmware on Pixhawk devices.</source>
+        <translation>%1은 Pixhawk Autopilot Standard 장치의 펌웨어를 업그레이드할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="48"/>
@@ -6620,8 +6620,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="45"/>
-        <source>Connect To Link</source>
-        <translation>연결 목록</translation>
+        <source>Select Link to Connect</source>
+        <translation>연결 선택</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicatorOfflinePage.qml" line="45"/>
@@ -6904,6 +6904,14 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/FlightDisplay/ModeChangedIndicator.qml" line="53"/>
         <source>Switched to</source>
         <translation>모드 변경</translation>
+    </message>
+</context>
+<context>
+    <name>FlyViewTopRightColumnLayout</name>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewTopRightColumnLayout.qml" line="72"/>
+        <source>Show Multi Vehicle Panel</source>
+        <translation>다중 기체 패널 보기</translation>
     </message>
 </context>
 <context>
@@ -7414,16 +7422,6 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
         <source>Vehicle Parameter</source>
         <translation>기체 파라미터</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
-        <source>RTL Altitude</source>
-        <translation>RTL 고도</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
-        <source>Land Speed</source>
-        <translation>착륙 속도</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/VehicleIndicatorPage.qml" line="239"/>
@@ -8848,9 +8846,14 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>GuidedActionConfirm</name>
     <message>
-        <location filename="../src/FlightDisplay/GuidedActionConfirm.qml" line="104"/>
+        <location filename="../src/FlightDisplay/GuidedActionConfirm.qml" line="118"/>
         <source>Slide to confirm</source>
-        <translation>계속하려면 밀어주세요</translation>
+        <translation>밀어서 확인하기</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/GuidedActionConfirm.qml" line="118"/>
+        <source>Slide or hold spacebar</source>
+        <translation>밀어서 확인하기</translation>
     </message>
 </context>
 <context>
@@ -11361,13 +11364,13 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/PlanView/MissionItemEditor.qml" line="221"/>
-        <source>Edit position...</source>
-        <translation>위치 편집...</translation>
+        <source>Edit position</source>
+        <translation>위치 편집</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionItemEditor.qml" line="223"/>
-        <source>Edit Position</source>
-        <translation>위치 편집</translation>
+        <source>Delete</source>
+        <translation>삭제</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionItemEditor.qml" line="231"/>
@@ -13986,8 +13989,8 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="246"/>
-        <source>Uploading... </source>
-        <translation>업로딩... </translation>
+        <source>Syncing... </source>
+        <translation>동기화중... </translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="308"/>
@@ -17467,7 +17470,7 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
         <translation>%1 이지만 %2 객체가 없습니다.</translation>
     </message>
     <message>
-        <location filename="../src/MissionManager/SurveyComplexItem.cc" line="25"/>
+        <location filename="../src/MissionManager/SurveyComplexItem.cc" line="29"/>
         <location filename="../src/MissionManager/SurveyComplexItem.h" line="58"/>
         <location filename="../src/MissionManager/SurveyComplexItem.h" line="59"/>
         <source>Survey</source>

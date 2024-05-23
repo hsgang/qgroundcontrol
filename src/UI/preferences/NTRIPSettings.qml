@@ -51,6 +51,7 @@ SettingsPage {
 
         LabelledFactTextField {
             Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth
             label:              qsTr("Server Port")
             fact:               ntripSettings.ntripServerPort
             visible:            ntripSettings.ntripServerPort.visible
@@ -66,6 +67,7 @@ SettingsPage {
 
         LabelledFactTextField {
             Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth
             label:              qsTr("Password")
             fact:               ntripSettings.ntripPassword
             visible:            ntripSettings.ntripPassword.visible
@@ -73,6 +75,7 @@ SettingsPage {
 
         LabelledFactTextField {
             Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth
             label:              qsTr("Mount Point")
             fact:               ntripSettings.ntripMountpoint
             visible:            ntripSettings.ntripMountpoint.visible
@@ -80,6 +83,7 @@ SettingsPage {
 
         LabelledFactTextField {
             Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth
             label:              qsTr("White List")
             fact:               ntripSettings.ntripWhitelist
             visible:            ntripSettings.ntripWhitelist.visible

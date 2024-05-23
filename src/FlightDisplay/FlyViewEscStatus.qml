@@ -157,7 +157,7 @@ Rectangle {
 
         Rectangle{
             id: esc3Indicator
-            width:              ScreenTools.defaultFontPixelHeight * 6
+            width:              ScreenTools.defaultFontPixelHeight * 5
             height:             width
             Layout.alignment:   Qt.AlignHCenter | Qt.AlignVCenter
             color:              "transparent"
@@ -176,7 +176,7 @@ Rectangle {
 
             Rectangle{
                 id: background3
-                width:                      ScreenTools.defaultFontPixelHeight * 6
+                width:                      ScreenTools.defaultFontPixelHeight * 5
                 height:                     width
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
@@ -307,7 +307,7 @@ Rectangle {
 
         Rectangle{
             id: esc1Indicator
-            width:              ScreenTools.defaultFontPixelHeight * 6
+            width:              ScreenTools.defaultFontPixelHeight * 5
             height:             width
             Layout.alignment:   Qt.AlignHCenter | Qt.AlignVCenter
             color:              "transparent"
@@ -326,7 +326,7 @@ Rectangle {
 
             Rectangle{
                 id: background
-                width:                      ScreenTools.defaultFontPixelHeight * 6
+                width:                      ScreenTools.defaultFontPixelHeight * 5
                 height:                     width
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
@@ -457,7 +457,7 @@ Rectangle {
 
         Rectangle{
             id: esc2Indicator
-            width:              ScreenTools.defaultFontPixelHeight * 6
+            width:              ScreenTools.defaultFontPixelHeight * 5
             height:             width
             Layout.alignment:   Qt.AlignHCenter | Qt.AlignVCenter
             color:              "transparent"
@@ -476,7 +476,7 @@ Rectangle {
 
             Rectangle{
                 id: background2
-                width:                      ScreenTools.defaultFontPixelHeight * 6
+                width:                      ScreenTools.defaultFontPixelHeight * 5
                 height:                     width
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
@@ -607,7 +607,7 @@ Rectangle {
 
         Rectangle{
             id: esc4Indicator
-            width:              ScreenTools.defaultFontPixelHeight * 6
+            width:              ScreenTools.defaultFontPixelHeight * 5
             height:             width
             Layout.alignment:   Qt.AlignHCenter | Qt.AlignVCenter
             color:              "transparent"
@@ -626,7 +626,7 @@ Rectangle {
 
             Rectangle{
                 id: background4
-                width:                      ScreenTools.defaultFontPixelHeight * 6
+                width:                      ScreenTools.defaultFontPixelHeight * 5
                 height:                     width
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter

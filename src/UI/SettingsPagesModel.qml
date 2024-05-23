@@ -109,12 +109,12 @@ ListModel {
 //        pageVisible: function() { return true }
 //    }
 
-//    ListElement {
-//        name: qsTr("Mock Link")
-//        url: "/qml/MockLink.qml"
-//        iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
-//        pageVisible: function() { return ScreenTools.isDebug }
-//    }
+   // ListElement {
+   //     name: qsTr("Mock Link")
+   //     url: "/qml/MockLink.qml"
+   //     iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
+   //     pageVisible: function() { return ScreenTools.isDebug }
+   // }
 
 //    ListElement {
 //        name: qsTr("Debug")

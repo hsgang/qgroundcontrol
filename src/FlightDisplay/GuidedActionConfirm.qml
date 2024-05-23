@@ -91,7 +91,7 @@ Rectangle {
         anchors.margins:    _margins
         anchors.left:       parent.left
         anchors.right:      parent.right
-        spacing:            _margins
+        spacing:            _margins * 2
 
         QGCLabel {
             id:                     messageText

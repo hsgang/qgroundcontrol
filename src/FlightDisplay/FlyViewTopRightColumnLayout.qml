@@ -18,7 +18,7 @@ import QGroundControl.Palette
 import QGroundControl.ScreenTools
 
 ColumnLayout {
-    width: _rightPanelWidth
+    width: QGroundControl.multiVehicleManager.vehicles.count > 1 ? ScreenTools.defaultFontPixelWidth * 38 : _rightPanelWidth
 
 //    RowLayout {
 //        id:                 multiVehiclePanelSelector
@@ -43,6 +43,50 @@ ColumnLayout {
 //        }
 //    }
 
+    Rectangle {
+        id:                 multiVehiclePanelSelector
+        Layout.preferredWidth:  parent.width
+        Layout.alignment:   Qt.AlignTop
+        height:             multiVehiclePanelSelectorLayout.height + (_toolsMargin * 2)
+        width:              _rightPanelWidth
+        visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
+        color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+        radius:             ScreenTools.defaultFontPixelWidth / 2
+
+        property bool _showSingleVehicleUI:  !visible || !selectorCheckBoxSlider.checked
+
+        RowLayout {
+            id:                 multiVehiclePanelSelectorLayout
+            // anchors.top:        parent.top
+            // anchors.right:      parent.right
+            // anchors.margins:    _toolsMargin
+            // width:              _rightPanelWidth
+            // visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
+
+            //property bool showSingleVehiclePanel:  !visible || !selectorCheckBoxSlider.checked
+            anchors.right: parent.right
+            anchors.left: parent.left
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: _toolsMargin
+
+            QGCLabel{
+                text:   qsTr("Show Multi Vehicle Panel")
+            }
+
+            QGCCheckBoxSlider {
+                id:             selectorCheckBoxSlider
+                checked:            false
+                Layout.alignment:   Qt.AlignRight
+            }
+        }
+    }
+
+    MultiVehicleList {
+        Layout.preferredWidth:  _rightPanelWidth
+        Layout.fillHeight:      true
+        visible:                !multiVehiclePanelSelector._showSingleVehicleUI
+    }
+
     TerrainProgress {
         Layout.alignment:       Qt.AlignTop
         Layout.preferredWidth:  _rightPanelWidth
@@ -54,7 +98,7 @@ ColumnLayout {
     Loader {
         id:                 photoVideoControlLoader
         Layout.alignment:   Qt.AlignVCenter | Qt.AlignRight
-        sourceComponent:    globals.activeVehicle && _showSingleVehicleUI ? photoVideoControlComponent : undefined
+        sourceComponent:    globals.activeVehicle && multiVehiclePanelSelector._showSingleVehicleUI ? photoVideoControlComponent : undefined
 
         property real rightEdgeCenterInset: visible ? parent.width - x : 0
 
@@ -67,9 +111,5 @@ ColumnLayout {
         }
     }
 
-    MultiVehicleList {
-        Layout.preferredWidth:  _rightPanelWidth
-        Layout.fillHeight:      true
-        visible:                !_showSingleVehicleUI
-    }
+
 }

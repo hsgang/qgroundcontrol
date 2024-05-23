@@ -167,37 +167,6 @@ SettingsPage {
     }
 
     SettingsGroupLayout {
-        Layout.fillWidth:       true
-        Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 35
-        heading:                qsTr("Custom MAVLink Actions")
-        headingDescription:     qsTr("Custom action JSON files should be created in the '%1' folder.").arg(QGroundControl.settingsManager.appSettings.customActionsSavePath)
-
-        LabelledComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("Fly View Custom Actions")
-            model:              customActionList()
-            onActivated:        (index) => index == 0 ? _customMavlinkActionsSettings.flyViewActionsFile.rawValue = "" : _customMavlinkActionsSettings.flyViewActionsFile.rawValue = comboBox.currentText
-
-            Component.onCompleted: {
-                var index = comboBox.find(_customMavlinkActionsSettings.flyViewActionsFile.valueString)
-                comboBox.currentIndex = index == -1 ? 0 : index
-            }
-        }
-
-        LabelledComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("Joystick Custom Actions")
-            model:              customActionList()
-            onActivated:        (index) => index == 0 ? _customMavlinkActionsSettings.joystickActionsFile.rawValue = "" : _customMavlinkActionsSettings.joystickActionsFile.rawValue = comboBox.currentText
-
-            Component.onCompleted: {
-                var index = comboBox.find(_customMavlinkActionsSettings.joystickActionsFile.valueString)
-                comboBox.currentIndex = index == -1 ? 0 : index
-            }
-        }
-    }
-
-    SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Virtual Joystick")
         visible:            _virtualJoystick.visible || _virtualJoystickAutoCenterThrottle.visible
@@ -221,66 +190,93 @@ SettingsPage {
     SettingsGroupLayout {
         id:         customActions
         Layout.fillWidth:   true
+        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 40
         heading:            qsTr("Custom Actions")
+        headingDescription:     qsTr("Custom action JSON files should be created in the '%1' folder.").arg(QGroundControl.settingsManager.appSettings.customActionsSavePath)
 
-        onVisibleChanged: {
-            if (jsonFile.rawValue === "" && ScreenTools.isMobile) {
-                jsonFile.rawValue = _defaultFile
-            }
-        }
 
-        property Fact   jsonFile:     QGroundControl.settingsManager.flyViewSettings.customActionDefinitions
-        property string _defaultDir:  QGroundControl.settingsManager.appSettings.customActionsSavePath
-        property string _defaultFile: _defaultDir + "/CustomActions.json"
+        // onVisibleChanged: {
+        //     if (jsonFile.rawValue === "" && ScreenTools.isMobile) {
+        //         jsonFile.rawValue = _defaultFile
+        //     }
+        // }
 
-        FactCheckBoxSlider {
+        // property Fact   jsonFile:     QGroundControl.settingsManager.flyViewSettings.customActionDefinitions
+        // property string _defaultDir:  QGroundControl.settingsManager.appSettings.customActionsSavePath
+        // property string _defaultFile: _defaultDir + "/CustomActions.json"
+
+        // FactCheckBoxSlider {
+        //     Layout.fillWidth:   true
+        //     text:               qsTr("Enable Custom Actions")
+        //     fact:               QGroundControl.settingsManager.flyViewSettings.enableCustomActions
+        //     visible:            fact.visible
+        // }
+
+        // RowLayout {
+        //     Layout.fillWidth: true
+        //     spacing:  ScreenTools.defaultFontPixelWidth * 2
+        //     visible:  QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
+
+        //     ColumnLayout {
+        //         Layout.fillWidth:   true
+        //         spacing:            0
+
+        //         QGCLabel { text: qsTr("Custom Action Definitions") }
+        //         QGCLabel {
+        //             Layout.fillWidth:   true
+        //             font.pointSize:     ScreenTools.smallFontPointSize
+        //             text:               customActions.jsonFile.rawValue === "" ? qsTr("<not set>") : customActions.jsonFile.rawValue
+        //             elide:              Text.ElideMiddle
+        //         }
+        //     }
+
+        //     QGCButton {
+        //         visible:    !ScreenTools.isMobile
+        //         text:       qsTr("Browse")
+        //         onClicked:  customActionPathBrowseDialog.openForLoad()
+        //         QGCFileDialog {
+        //             id:             customActionPathBrowseDialog
+        //             title:          qsTr("Choose the Custom Action Definitions file")
+        //             folder:         customActions.jsonFile.rawValue.replace("file:///", "")
+        //             selectFolder:   false
+        //             onAcceptedForLoad: (file) => customActions.jsonFile.rawValue = "file:///" + file
+        //             nameFilters: ["JSON files (*.json)"]
+        //         }
+        //     }
+
+        //     // The file loader on Android doesn't work, so we hard code the path to the
+        //     // JSON file. However, we need a button to force a refresh if the JSON file
+        //     // is changed.
+        //     QGCButton {
+        //         visible:    ScreenTools.isMobile
+        //         text:       qsTr("Reload")
+        //         onClicked:  {
+        //             customActions.jsonFile.valueChanged(customActions.jsonFile.rawValue)
+        //         }
+        //     }
+        // }
+
+        LabelledComboBox {
             Layout.fillWidth:   true
-            text:               qsTr("Enable Custom Actions")
-            fact:               QGroundControl.settingsManager.flyViewSettings.enableCustomActions
-            visible:            fact.visible
+            label:              qsTr("Fly View Custom Actions")
+            model:              customActionList()
+            onActivated:        (index) => index == 0 ? _customMavlinkActionsSettings.flyViewActionsFile.rawValue = "" : _customMavlinkActionsSettings.flyViewActionsFile.rawValue = comboBox.currentText
+
+            Component.onCompleted: {
+                var index = comboBox.find(_customMavlinkActionsSettings.flyViewActionsFile.valueString)
+                comboBox.currentIndex = index == -1 ? 0 : index
+            }
         }
 
-        RowLayout {
-            Layout.fillWidth: true
-            spacing: ScreenTools.defaultFontPixelWidth * 2
-            visible:  QGroundControl.settingsManager.flyViewSettings.enableCustomActions.rawValue
+        LabelledComboBox {
+            Layout.fillWidth:   true
+            label:              qsTr("Joystick Custom Actions")
+            model:              customActionList()
+            onActivated:        (index) => index == 0 ? _customMavlinkActionsSettings.joystickActionsFile.rawValue = "" : _customMavlinkActionsSettings.joystickActionsFile.rawValue = comboBox.currentText
 
-            ColumnLayout {
-                Layout.fillWidth:   true
-                spacing:            0
-
-                QGCLabel { text: qsTr("Custom Action Definitions") }
-                QGCLabel {
-                    Layout.fillWidth:   true
-                    font.pointSize:     ScreenTools.smallFontPointSize
-                    text:               customActions.jsonFile.rawValue === "" ? qsTr("<not set>") : customActions.jsonFile.rawValue
-                    elide:              Text.ElideMiddle
-                }
-            }
-
-            QGCButton {
-                visible:    !ScreenTools.isMobile
-                text:       qsTr("Browse")
-                onClicked:  customActionPathBrowseDialog.openForLoad()
-                QGCFileDialog {
-                    id:             customActionPathBrowseDialog
-                    title:          qsTr("Choose the Custom Action Definitions file")
-                    folder:         customActions.jsonFile.rawValue.replace("file:///", "")
-                    selectFolder:   false
-                    onAcceptedForLoad: (file) => customActions.jsonFile.rawValue = "file:///" + file
-                    nameFilters: ["JSON files (*.json)"]
-                }
-            }
-
-            // The file loader on Android doesn't work, so we hard code the path to the
-            // JSON file. However, we need a button to force a refresh if the JSON file
-            // is changed.
-            QGCButton {
-                visible:    ScreenTools.isMobile
-                text:       qsTr("Reload")
-                onClicked:  {
-                    customActions.jsonFile.valueChanged(customActions.jsonFile.rawValue)
-                }
+            Component.onCompleted: {
+                var index = comboBox.find(_customMavlinkActionsSettings.joystickActionsFile.valueString)
+                comboBox.currentIndex = index == -1 ? 0 : index
             }
         }
     }

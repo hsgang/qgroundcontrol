@@ -5,6 +5,7 @@ FlyViewAltitudeIndicator        1.0 FlyViewAltitudeIndicator.qml
 FlyViewAtmosphericSensorView    1.0 FlyViewAtmosphericSensorView.qml
 FlyView                         1.0 FlyView.qml
 FlyViewBottomRightRowLayout     1.0 FlyViewBottomRightRowLayout.qml
+FlyViewBottomCenterRowLayout    1.0 FlyViewBottomCenterRowLayout.qml
 FlyViewCustomLayer              1.0 FlyViewCustomLayer.qml
 FlyViewInstrumentPanel          1.0 FlyViewInstrumentPanel.qml
 FlyViewMap                      1.0 FlyViewMap.qml

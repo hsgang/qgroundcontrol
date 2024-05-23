@@ -330,13 +330,13 @@ Item {
                         spacing:            _margin
 
                         QGCLabel {
-                            Layout.alignment:           Qt.AlignHCenter
+                            Layout.alignment:           Qt.AlignLeft
                             text:                       innerColumn.mainStatusText()//_vehicle && _vehicle.armed ? qsTr("Armed") : qsTr("Disarmed")
                             color:                      _textColor
                         }
 
                         FlightModeMenu {
-                            Layout.alignment:           Qt.AlignHCenter
+                            Layout.alignment:           Qt.AlignLeft
                             font.pointSize:             ScreenTools.largeFontPointSize
                             color:                      _textColor
                             currentVehicle:             _vehicle

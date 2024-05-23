@@ -7,15 +7,15 @@
  *
  ****************************************************************************/
 
-import QtQml.Models 2.12
-import QtQuick                  2.12
-import QtQuick.Layouts          1.12
+import QtQml.Models
+import QtQuick
+import QtQuick.Layouts
 
-import QGroundControl                   1.0
-import QGroundControl.Controls          1.0
-import QGroundControl.Controllers       1.0
-import QGroundControl.FlightDisplay     1.0
-import QGroundControl.ScreenTools       1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.Controllers
+import QGroundControl.FlightDisplay
+import QGroundControl.ScreenTools
 
 ToolStripAction {
     text:           qsTr("Custom")

@@ -260,7 +260,7 @@ Item {
         }
 
         QGCLabel {
-            text: qsTr("Uploading... ") + (_controllerProgressPct * 100).toFixed(0) + "%"
+            text: qsTr("Syncing... ") + (_controllerProgressPct * 100).toFixed(0) + "%"
             visible: !_controllerOffline && _controllerProgressPct !== 1
         }
     }

@@ -149,37 +149,37 @@ Rectangle {
                     } // ColumnLayout
                 } // Repeater
 
-                // These are the user-defined Custom Actions
-//                Repeater {
-//                    id:     customRepeater
-//                    model:  customManager.actions
+                //These are the user-defined Custom Actions
+               Repeater {
+                   id:     customRepeater
+                   model:  customManager.actions
 
-//                    ColumnLayout {
-//                        spacing:            ScreenTools.defaultFontPixelHeight / 2
-//                        Layout.fillHeight:  true
+                   ColumnLayout {
+                       spacing:            ScreenTools.defaultFontPixelHeight / 2
+                       Layout.fillHeight:  true
 
-//                        QGCLabel {
-//                            id:                     customMessage
-//                            text:                   object.description
-//                            horizontalAlignment:    Text.AlignHCenter
-//                            wrapMode:               Text.WordWrap
-//                            Layout.minimumWidth:    _actionWidth
-//                            Layout.maximumWidth:    _actionWidth
-//                            Layout.fillHeight:      true
-//                        }
+                       QGCLabel {
+                           id:                     customMessage
+                           text:                   object.description
+                           horizontalAlignment:    Text.AlignHCenter
+                           wrapMode:               Text.WordWrap
+                           Layout.minimumWidth:    _actionWidth
+                           Layout.maximumWidth:    _actionWidth
+                           Layout.fillHeight:      true
+                       }
 
-//                        QGCButton {
-//                            id:                 customButton
-//                            text:               object.label
-//                            Layout.alignment:   Qt.AlignCenter
+                       QGCButton {
+                           id:                 customButton
+                           text:               object.label
+                           Layout.alignment:   Qt.AlignCenter
 
-//                            onClicked: {
-//                                var vehicle = QGroundControl.multiVehicleManager.activeVehicle
-//                                object.sendTo(vehicle)
-//                            }
-//                        }
-//                    } // ColumnLayout
-//                } // Repeater
+                           onClicked: {
+                               var vehicle = QGroundControl.multiVehicleManager.activeVehicle
+                               object.sendTo(vehicle)
+                           }
+                       }
+                   } // ColumnLayout
+               } // Repeater
             }
         }
     }
