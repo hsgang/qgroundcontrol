@@ -96,12 +96,12 @@ Item {
 
     FlyViewBottomCenterRowLayout {
         id:                 bottomCenterRowLayout
-        anchors.margins:    _layoutMargin
-        anchors.bottom:     parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        spacing:            _layoutSpacing
+        anchors.bottomMargin:       _layoutMargin * 3
+        anchors.bottom:             parent.bottom
+        anchors.horizontalCenter:   parent.horizontalCenter
+        spacing:                    _layoutSpacing
 
-        property real bottomEdgeCenterInset:    height + _layoutMargin
+        property real bottomEdgeCenterInset:    height + (_layoutMargin * 2)
     }
 
     TelemetryValuesBar {

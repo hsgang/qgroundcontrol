@@ -84,18 +84,17 @@ Rectangle{
         return sign + input;
     }
 
-    Row{
+    RowLayout{
         id: attitudeIndicatorRow
-        spacing: _toolsMargin / 2
+        height:     attitudeIndicatorBase.height
+        spacing:    _toolsMargin / 2
 
         //--Ground Speed Value Widget-----------------------------------------------------------------------------------
 
         Rectangle {
             id:                         groundSpeedValue
-            anchors.margins:            _toolsMargin * 6
-            anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
-            width:                      ScreenTools.defaultFontPixelWidth * 14
+            width:                      ScreenTools.defaultFontPixelWidth * 16
             color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:                     _toolsMargin
 
@@ -110,7 +109,7 @@ Rectangle{
                     Layout.fillHeight:      false
 
                     ColumnLayout {
-                        spacing:                0
+                        spacing:                    0
 
                         QGCLabel {
                             Layout.alignment:       Qt.AlignBottom
@@ -169,9 +168,6 @@ Rectangle{
             height:     parent.height * 0.9
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:     _toolsMargin
-
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins:        _toolsMargin
 
             ColumnLayout {
                 anchors.fill:       parent
@@ -283,9 +279,6 @@ Rectangle{
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:     _toolsMargin
 
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.margins:        _toolsMargin
-
             ColumnLayout {
                 anchors.fill:   parent
                 spacing:        0
@@ -361,10 +354,8 @@ Rectangle{
 
         Rectangle {
             id:                         altitudeValue
-            anchors.margins:            _toolsMargin * 6
-            anchors.verticalCenter:     parent.verticalCenter
             height:                     ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
-            width:                      ScreenTools.defaultFontPixelWidth * 14
+            width:                      ScreenTools.defaultFontPixelWidth * 16
             color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:                     _toolsMargin
 
@@ -459,7 +450,7 @@ Rectangle{
                         mipmap:                     true
                         smooth:                     true
                         color:                      qgcPal.text
-                        visible:                    true //_iconVisible
+                        visible:                    true
                         source:                     "/InstrumentValueIcons/arrow-base-down.svg"
                     }
                 }

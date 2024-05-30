@@ -1,6 +1,6 @@
 include($$PWD/libs/qtandroidserialport/qtandroidserialport.pri)
 
-ANDROID_MIN_SDK_VERSION = 25
+ANDROID_MIN_SDK_VERSION = 26
 ANDROID_TARGET_SDK_VERSION = 34
 
 ANDROID_PACKAGE_SOURCE_DIR          = $$OUT_PWD/ANDROID_PACKAGE_SOURCE_DIR  # Tells Qt location of package files for build

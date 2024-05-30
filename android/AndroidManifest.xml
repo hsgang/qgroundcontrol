@@ -60,6 +60,7 @@
                 <!-- TODO: CMake configure xml file -->
                 <!-- %%QGC_INSERT_ACTIVITY_INTENT_FILTER -->
             </intent-filter>
+
             <!-- %%QGC_INSERT_ACTIVITY_META_DATA -->
             <meta-data
                 android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"

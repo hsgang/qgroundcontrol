@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
 
 import QGroundControl
 import QGroundControl.Controls
@@ -17,18 +18,12 @@ import QGroundControl.FlightDisplay
 RowLayout {
     FlyViewAttitudeIndicator{
         id:                         attitudeIndicator
-        // anchors.margins:            _toolsMargin * 2.5
-        // anchors.bottom:             parent.bottom
-        // anchors.horizontalCenter:   parent.horizontalCenter
         visible:                    !flyviewMissionProgress.visible
     }
 
     FlyViewMissionProgress{
         id:                         flyviewMissionProgress
         Layout.alignment:           Qt.AlignHCenter
-        // anchors.margins:            _toolsMargin * 2
-        // anchors.bottom:             parent.bottom
-        // anchors.horizontalCenter:   parent.horizontalCenter
         _planMasterController: planController
         visible:  QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
 
@@ -47,11 +42,7 @@ RowLayout {
 
     FlyViewAltitudeIndicator{
         id:                         altitudeIndicator
-        //anchors.margins:            _toolsMargin
         height:                     flyviewMissionProgress.height * 0.9
-        // anchors.left:               flyviewMissionProgress.right
-        // anchors.leftMargin:         _toolsMargin
-        // anchors.verticalCenter:     flyviewMissionProgress.verticalCenter
         visible:                    flyviewMissionProgress.visible && QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
     }
 }

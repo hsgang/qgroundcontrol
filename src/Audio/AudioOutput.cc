@@ -13,7 +13,7 @@
 #include <QtCore/QRegularExpression>
 #include <QtCore/qapplicationstatic.h>
 
-#define MAX_TEXT_QUEUE_SIZE 20U
+#define MAX_TEXT_QUEUE_SIZE 20
 
 QGC_LOGGING_CATEGORY(AudioOutputLog, "qgc.audio.audiooutput");
 // qt.speech.tts.flite
@@ -109,7 +109,7 @@ void AudioOutput::read(const QString& text, AudioOutput::TextMods textMods)
     }
 
     qsizetype index = -1;
-    (void) QMetaObject::invokeMethod(this, "enqueue", Qt::AutoConnection, qReturnArg(m_textQueueSize), outText);
+    (void) QMetaObject::invokeMethod(this, "enqueue", Qt::AutoConnection, qReturnArg(index), outText);
     if (index != -1) {
         m_textQueueSize = index;
     }
