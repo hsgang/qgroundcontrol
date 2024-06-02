@@ -72,7 +72,6 @@ Item {
     readonly property string landMessage:                       qsTr("Land the vehicle at the current position.")
     readonly property string rtlMessage:                        qsTr("Return to the launch position of the vehicle.")
     readonly property string changeAltMessage:                  qsTr("Change the altitude of the vehicle up or down.")
-    readonly property string changeHeadingMessage:              qsTr("Change the heading of the vehicle toward the specified location.")
     readonly property string changeCruiseSpeedMessage:          qsTr("Change the maximum horizontal cruise speed.")
     readonly property string changeAirspeedMessage:             qsTr("Change the equivalent airspeed setpoint")
     readonly property string gotoMessage:                       qsTr("Move the vehicle to the specified location.")
@@ -86,6 +85,7 @@ Item {
     readonly property string roiMessage:                        qsTr("Make the specified location a Region Of Interest.")
     readonly property string setHomeMessage:                    qsTr("Set vehicle home as the specified location. This will affect Return to Home position")
     readonly property string setEstimatorOriginMessage:         qsTr("Make the specified location the estimator origin.")
+    readonly property string changeHeadingMessage:              qsTr("Set the vehicle heading towards the specified location.")
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2
@@ -116,7 +116,6 @@ Item {
     readonly property int actionGripper:                    27
     readonly property int actionSetHome:                    28
     readonly property int actionSetEstimatorOrigin:         29
-  
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property bool   _useChecklist:              QGroundControl.settingsManager.appSettings.useChecklist.rawValue && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
@@ -138,7 +137,6 @@ Item {
     property bool showContinueMission:      _guidedActionsEnabled && _missionAvailable && !_missionActive && _vehicleArmed && _vehicleFlying && (_currentMissionIndex < _missionItemCount - 1)
     property bool showPause:                _guidedActionsEnabled && _vehicleArmed && _activeVehicle.pauseVehicleSupported && _vehicleFlying && !_vehiclePaused && !_fixedWingOnApproach
     property bool showChangeAlt:            _guidedActionsEnabled && _vehicleFlying && _activeVehicle.guidedModeSupported && _vehicleArmed && !_missionActive
-    property bool showChangeHeading:        _guidedActionsEnabled && _vehicleFlying && _activeVehicle.guidedModeSupported && _vehicleArmed && !_missionActive && _activeVehicle.changeHeadingSupported
     property bool showChangeSpeed:          _guidedActionsEnabled && _vehicleFlying && _activeVehicle.guidedModeSupported && _vehicleArmed && !_missionActive && _speedLimitsAvailable
     property bool showOrbit:                _guidedActionsEnabled && _vehicleFlying && __orbitSupported && !_missionActive
     property bool showROI:                  _guidedActionsEnabled && _vehicleFlying && __roiSupported && !_missionActive
@@ -148,6 +146,8 @@ Item {
     property bool showActionList:           _guidedActionsEnabled && (showStartMission || showResumeMission || showChangeAlt || showLandAbort || actionList.hasCustomActions)
     property bool showGripper:              _initialConnectComplete ? _activeVehicle.hasGripper : false
     property bool showSetEstimatorOrigin:   _activeVehicle && !(_activeVehicle.sensorsPresentBits & Vehicle.SysStatusSensorGPS)
+    property bool showChangeHeading:        _guidedActionsEnabled && _vehicleFlying
+
     property string changeSpeedTitle:   _fixedWing ? changeAirspeedTitle : changeCruiseSpeedTitle
     property string changeSpeedMessage: _fixedWing ? changeAirspeedMessage : changeCruiseSpeedMessage
 
@@ -467,11 +467,6 @@ Item {
             confirmDialog.hideTrigger = Qt.binding(function() { return !showChangeAlt })
             guidedValueSlider.visible = true
             break;
-        case actionChangeHeading:
-            confirmDialog.title = changeHeadingTitle
-            confirmDialog.message = changeHeadingMessage
-            confirmDialog.hideTrigger = Qt.binding(function() { return !showChangeHeading })
-            break;
         case actionGoto:
             confirmDialog.title = gotoTitle
             confirmDialog.message = gotoMessage
@@ -542,6 +537,10 @@ Item {
             confirmDialog.title = setEstimatorOriginTitle
             confirmDialog.message = setEstimatorOriginMessage
             break
+        case actionChangeHeading:
+            confirmDialog.title = changeHeadingTitle
+            confirmDialog.message = changeHeadingMessage
+            break
         default:
             console.warn("Unknown actionCode", actionCode)
             return
@@ -592,9 +591,6 @@ Item {
         case actionChangeAlt:
             _activeVehicle.guidedModeChangeAltitude(sliderOutputValue, false /* pauseVehicle */)
             break
-        case actionChangeHeading:
-            _activeVehicle.guidedModeChangeHeading(actionData)
-            break
         case actionGoto:
             _activeVehicle.guidedModeGotoLocation(actionData)
             break
@@ -644,6 +640,9 @@ Item {
             break
         case actionSetEstimatorOrigin:
             _activeVehicle.setEstimatorOrigin(actionData)
+            break
+        case actionChangeHeading:
+            _activeVehicle.changeHeading(actionData)
             break
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)

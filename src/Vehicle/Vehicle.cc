@@ -2592,11 +2592,6 @@ bool Vehicle::takeoffVehicleSupported() const
     return _firmwarePlugin->isCapable(this, FirmwarePlugin::TakeoffVehicleCapability);
 }
 
-bool Vehicle::changeHeadingSupported() const
-{
-    return _firmwarePlugin->isCapable(this, FirmwarePlugin::ChangeHeadingCapability);
-}
-
 QString Vehicle::gotoFlightMode() const
 {
     return _firmwarePlugin->gotoFlightMode();
@@ -2685,48 +2680,6 @@ void Vehicle::guidedModeChangeAltitude(double altitudeChange, bool pauseVehicle)
         return;
     }
     _firmwarePlugin->guidedModeChangeAltitude(this, altitudeChange, pauseVehicle);
-}
-
-void Vehicle::guidedModeChangeHeading(const QGeoCoordinate& headingCoord)
-{
-    if (!changeHeadingSupported()) {
-        qgcApp()->showAppMessage(QStringLiteral("Changing heading not supported by Vehicle."));
-        return;
-    }
-
-    if (!coordinate().isValid()) {
-    return;
-
-    }
-    if (qIsNaN(heading()->rawValue().toDouble())) {
-        qgcApp()->showAppMessage(QStringLiteral("Unable to yaw to location, vehicle heading not known."));
-        return;
-    }
-
-    bool ok;
-    double delta = (int)(coordinate().azimuthTo(headingCoord) - heading()->rawValue().toDouble(&ok) + 540.0) % 360 - 180.0;
-    if (!ok) {
-        qgcApp()->showAppMessage(QString("Current heading is invalid"));
-        return;
-    }
-    double direction = 1.0f ? delta > 0: -1.0f;
-
-    double maxYawRate = 0;
-    QString maxYawRateParam(QStringLiteral("ATC_RATE_Y_MAX"));
-    if (parameterManager()->parameterExists(defaultComponentId(), maxYawRateParam)) {
-        maxYawRate = parameterManager()->getParameter(defaultComponentId(), maxYawRateParam)->rawValue().toDouble();
-    }
-    if (maxYawRate == 0) {
-        maxYawRate = 60; // Value meaning "Slow" for APM
-    }
-
-    sendMavCommand(defaultComponentId(),
-                            MAV_CMD_CONDITION_YAW,
-                            true, // show error
-                            static_cast<float>(coordinate().azimuthTo(headingCoord)),
-                            maxYawRate,
-                            static_cast<float>(direction),
-                            0.0f);
 }
 
 void Vehicle::guidedModeChangeGroundSpeedMetersSecond(double groundspeed)
@@ -4728,4 +4681,45 @@ void Vehicle::setMessageRate(uint8_t compId, uint16_t msgId, int32_t rate)
         msgId,
         interval
     );
+}
+
+
+void Vehicle::changeHeading(float degrees, float maxYawRate, int8_t direction, bool relative)
+{
+    sendMavCommand(
+        _defaultComponentId,
+        MAV_CMD_CONDITION_YAW,
+        true,
+        degrees,
+        maxYawRate,
+        direction,
+        relative
+        );
+}
+
+void Vehicle::changeHeading(const QGeoCoordinate& headingCoord)
+{
+    const float degrees = _coordinate.azimuthTo(headingCoord);
+    const float currentHeading = _headingFact.rawValue().toFloat();
+
+    float diff = degrees - currentHeading;
+    if(diff < -180)
+    {
+        diff += 360;
+    }
+    if(diff > 180)
+    {
+        diff -= 360;
+    }
+
+    constexpr const bool relative = true;
+    const int8_t direction = (relative && (diff > 0)) ? 1 : -1;
+
+    const QString maxYawRateParam = QStringLiteral("ATC_RATE_Y_MAX");
+    float maxYawRate = 0.f;
+    if (_parameterManager->parameterExists(_defaultComponentId, maxYawRateParam)) {
+        maxYawRate = _parameterManager->getParameter(FactSystem::defaultComponentId, maxYawRateParam)->rawValue().toFloat();
+    }
+
+    changeHeading(diff, maxYawRate, direction, relative);
 }

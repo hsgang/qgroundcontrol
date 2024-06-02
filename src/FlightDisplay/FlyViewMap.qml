@@ -671,6 +671,18 @@ FlightMap {
 
             QGCButton {
                 Layout.fillWidth:   true
+                text:               qsTr("Set Heading")
+                visible:            globals.guidedControllerFlyView.showChangeHeading
+                onClicked: {
+                    if (popup.opened) {
+                        popup.close()
+                    }
+                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionChangeHeading, mapClickCoord, gotoLocationItem)
+                }
+            }
+
+            QGCButton {
+                Layout.fillWidth:   true
                 text:               qsTr("Orbit at location")
                 visible:            globals.guidedControllerFlyView.showOrbit
                 onClicked: {
@@ -704,15 +716,6 @@ FlightMap {
                         popup.close()
                     }
                     globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetHome, mapClickCoord)
-                }
-            }
-            QGCMenuItem {
-                text:           qsTr("Yaw towards location")
-                visible:        globals.guidedControllerFlyView.showChangeHeading
-
-                onTriggered: {
-                     changeHeadingItem.show(clickMenu.coord)
-                     globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionChangeHeading, clickMenu.coord, changeHeadingItem)
                 }
             }
 

@@ -283,7 +283,6 @@ public:
     Q_PROPERTY(bool     orbitModeSupported      READ orbitModeSupported                             CONSTANT)                   ///< Orbit mode is supported by this vehicle
     Q_PROPERTY(bool     roiModeSupported        READ roiModeSupported                               CONSTANT)                   ///< Orbit mode is supported by this vehicle
     Q_PROPERTY(bool     takeoffVehicleSupported READ takeoffVehicleSupported                        CONSTANT)                   ///< Guided takeoff supported
-    Q_PROPERTY(bool     changeHeadingSupported  READ changeHeadingSupported                         CONSTANT)                   ///< Guided change yaw supported
     Q_PROPERTY(QString  gotoFlightMode          READ gotoFlightMode                                 CONSTANT)                   ///< Flight mode vehicle is in while performing goto
     Q_PROPERTY(bool     haveMRSpeedLimits       READ haveMRSpeedLimits                              NOTIFY haveMRSpeedLimChanged)
     Q_PROPERTY(bool     haveFWSpeedLimits       READ haveFWSpeedLimits                              NOTIFY haveFWSpeedLimChanged)
@@ -406,9 +405,6 @@ public:
     ///     @param pauseVehicle true: pause vehicle prior to altitude change
     Q_INVOKABLE void guidedModeChangeAltitude(double altitudeChange, bool pauseVehicle);
 
-    /// Command vehicle to change heading
-    Q_INVOKABLE void guidedModeChangeHeading(const QGeoCoordinate& headingCoord);
-
     /// Command vehicle to change groundspeed
     ///     @param groundspeed Target horizontal groundspeed
     Q_INVOKABLE void guidedModeChangeGroundSpeedMetersSecond(double groundspeed);
@@ -510,7 +506,6 @@ public:
     bool    orbitModeSupported      () const;
     bool    roiModeSupported        () const;
     bool    takeoffVehicleSupported () const;
-    bool    changeHeadingSupported  () const;
     QString gotoFlightMode          () const;
     bool    hasGripper              () const;
     bool haveMRSpeedLimits() const { return _multirotor_speed_limits_available; }
@@ -576,6 +571,9 @@ public:
 
     void setGripperAction(GRIPPER_ACTIONS gripperAction);
     Q_INVOKABLE void sendGripperAction(QGCMAVLink::GRIPPER_OPTIONS gripperOption);
+
+    Q_INVOKABLE void changeHeading(float degrees, float maxYawRate, int8_t direction, bool relative);
+    Q_INVOKABLE void changeHeading(const QGeoCoordinate& headingCoord);
 
     void pairRX(int rxType, int rxSubType);
 
