@@ -53,7 +53,7 @@ Rectangle {
         Rectangle {
             id:                 windUp
             Layout.alignment:   Qt.AlignHCenter
-            width:              ScreenTools.defaultFontPixelWidth * 8
+            width:              ScreenTools.defaultFontPixelWidth * 7
             height:             width
             radius:             _margins
             color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
@@ -87,7 +87,7 @@ Rectangle {
         Rectangle {
             id:                 winchStop
             Layout.alignment:   Qt.AlignHCenter
-            width:              ScreenTools.defaultFontPixelWidth * 8
+            width:              ScreenTools.defaultFontPixelWidth * 7
             height:             width
             radius:             _margins
             color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
@@ -121,7 +121,7 @@ Rectangle {
         Rectangle {
             id:                 winchRelease
             Layout.alignment:   Qt.AlignHCenter
-            width:              ScreenTools.defaultFontPixelWidth * 8
+            width:              ScreenTools.defaultFontPixelWidth * 7
             height:             width
             radius:             _margins
             color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
