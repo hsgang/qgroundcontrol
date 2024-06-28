@@ -301,8 +301,8 @@ Item {
         id:                         atmosphericSensorView
         anchors.top:                parent.top
         anchors.topMargin:          _toolsMargin
-        anchors.left:               parent.left
-        anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
+        anchors.left:               toolStrip.right
+        anchors.leftMargin:         _toolsMargin
         visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     }
 
@@ -311,8 +311,9 @@ Item {
         vehicle:                    _activeVehicle
         anchors.top:                parent.top
         anchors.topMargin:          _toolsMargin
-        anchors.left:               parent.left
-        anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
+        anchors.left:               toolStrip.right
+        anchors.leftMargin:         _toolsMargin
+        //anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
         visible:                    QGroundControl.settingsManager.flyViewSettings.showWindvane.rawValue
     }
 

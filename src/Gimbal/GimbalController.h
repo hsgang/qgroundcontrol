@@ -4,7 +4,6 @@
 #pragma once
 
 #include <QLoggingCategory>
-#include <QQmlEngine>
 #include "Vehicle.h"
 #include "QmlObjectListModel.h"
 
@@ -106,7 +105,7 @@ public:
     };
 
     Q_PROPERTY(Gimbal*              activeGimbal    READ activeGimbal   WRITE setActiveGimbal   NOTIFY activeGimbalChanged)
-    Q_PROPERTY(QmlObjectListModel*  gimbals         READ gimbals        CONSTANT)
+    Q_PROPERTY(QmlObjectListModel*  gimbals         READ gimbals        CONSTANT                NOTIFY gimbalsChanged)
 
     Gimbal*             activeGimbal()  { return _activeGimbal; }
     QmlObjectListModel* gimbals()       { return &_gimbals; }
@@ -132,6 +131,7 @@ public slots:
 signals:
     void    activeGimbalChanged           ();
     void    showAcquireGimbalControlPopup (); // This triggers a popup in QML asking the user for aproval to take control
+    void    gimbalsChanged                ();
 
 private slots:
     void    _mavlinkMessageReceived(const mavlink_message_t& message);

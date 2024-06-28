@@ -4070,11 +4070,6 @@ Click Ok to start the auto-tuning process.
         <translation>남은시간</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="72"/>
-        <source>Remaining</source>
-        <translation>잔량</translation>
-    </message>
-    <message>
         <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="73"/>
         <source>Voltage</source>
         <translation>전압</translation>
@@ -7596,6 +7591,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="611"/>
         <source>Mute all audio output</source>
         <translation>오디오 출력 음소거</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="611"/>
+        <source>Save application data to SD Card</source>
+        <translation>SD카드 저장소 사용</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="618"/>

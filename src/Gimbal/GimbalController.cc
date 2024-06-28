@@ -5,6 +5,8 @@
 #include "SettingsManager.h"
 #include "QGCLoggingCategory.h"
 
+#include <QtQml/QQmlEngine>
+
 //#include <Eigen/Eigen>
 
 QGC_LOGGING_CATEGORY(GimbalLog, "GimbalLog")
@@ -113,6 +115,7 @@ GimbalController::_mavlinkMessageReceived(const mavlink_message_t& message)
         _handleHeartbeat(message);
         break;
     case MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION:
+        qCDebug(GimbalLog) << "Received MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION";
         _handleGimbalManagerInformation(message);
         break;
     case MAVLINK_MSG_ID_GIMBAL_MANAGER_STATUS:
@@ -343,6 +346,7 @@ GimbalController::_checkComplete(Gimbal& gimbal, uint8_t compid)
     }
 
     _gimbals.append(&gimbal);
+    emit gimbalsChanged();
     // This is needed for new Gimbals telemetry to be available for the user to show in flyview telemetry panel
     _vehicle->_addFactGroup(&gimbal, QStringLiteral("%1%2").arg(_gimbalFactGroupNamePrefix).arg(gimbal.deviceId()->rawValue().toUInt()));
 }

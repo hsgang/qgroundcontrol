@@ -21,9 +21,12 @@ Button {
     text:           ""
 
     property bool   primary:        false                               ///< primary button for a group of buttons
+    property real   pointSize:      ScreenTools.defaultFontPointSize    ///< Point size for button text
     property bool   showBorder:     qgcPal.globalTheme === QGCPalette.Light
+    property bool   iconLeft:       false
     property real   backRadius:     ScreenTools.buttonBorderRadius
     property real   heightFactor:   0.5
+    property real   fontWeight:     Font.Normal
     property string iconSource:     ""
 
     property alias wrapMode:            text.wrapMode
@@ -69,6 +72,7 @@ Button {
                 text:                   control.text
                 font.pointSize:         control.font.pointSize
                 font.family:            control.font.family
+                font.weight:            fontWeight
                 color:                  _showHighlight ? qgcPal.buttonHighlightText : (primary ? qgcPal.primaryButtonText : qgcPal.buttonText)
                 visible:                control.text !== "" 
             }

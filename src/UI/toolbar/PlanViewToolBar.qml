@@ -59,8 +59,8 @@ Rectangle {
             radius:                 ScreenTools.defaultFontPixelHeight / 4
 
             QGCToolBarButton {
-                anchors.centerIn:       parent
-                //Layout.preferredHeight: currentButton.height
+                anchors.horizontalCenter:   parent.horizontalCenter
+                anchors.verticalCenter:     parent.verticalCenter
                 icon.source:            "/qmlimages/Hamburger.svg"
                 logo:                   true
                 onClicked:

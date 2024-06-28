@@ -156,4 +156,7 @@
         <file alias="ZoomOut.svg">resources/SiYi/ZoomOut.svg</file>
         <file alias="ZoomOutGreen.svg">resources/SiYi/ZoomOutGreen.svg</file>
     </qresource>
+    <qresource prefix="/gimbal">
+        <file alias="payload.svg">resources/gimbal/payload.svg</file>
+    </qresource>
 </RCC>

@@ -254,7 +254,7 @@ public:
     Q_PROPERTY(quint64              mavlinkReceivedCount        READ mavlinkReceivedCount                                           NOTIFY mavlinkStatusChanged)
     Q_PROPERTY(quint64              mavlinkLossCount            READ mavlinkLossCount                                               NOTIFY mavlinkStatusChanged)
     Q_PROPERTY(float                mavlinkLossPercent          READ mavlinkLossPercent                                             NOTIFY mavlinkStatusChanged)
-    Q_PROPERTY(GimbalController*    gimbalController            READ gimbalController                                               NOTIFY gimbalControllerChanged)
+    Q_PROPERTY(GimbalController*    gimbalController            READ gimbalController                                               CONSTANT)
     Q_PROPERTY(bool                 gimbalRetracted             READ gimbalRetracted                                                NOTIFY gimbalRetractedChanged)
     Q_PROPERTY(bool                 gimbalNeutral               READ gimbalNeutral                                                  NOTIFY gimbalNeutralChanged)
     Q_PROPERTY(bool                 gimbalYawLock               READ gimbalYawLock                                                  NOTIFY gimbalYawLockChanged)
@@ -917,6 +917,9 @@ public:
 
     /// Vehicle is about to be deleted
     void prepareDelete();
+
+    /// Delete gimbal controller, handy for RequestMessageTest.cc, otherwise gimbal controller message requests will mess with this test
+    void deleteGimbalController();
 
     quint64     mavlinkSentCount        () const{ return _mavlinkSentCount; }        /// Calculated total number of messages sent to us
     quint64     mavlinkReceivedCount    () const{ return _mavlinkReceivedCount; }    /// Total number of sucessful messages received

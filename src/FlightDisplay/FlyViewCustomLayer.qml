@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts
+import QtMultimedia
 
 import QtLocation
 import QtPositioning
@@ -91,6 +92,40 @@ Item {
         bottomEdgeCenterInset:  parentToolInsets.bottomEdgeCenterInset
         bottomEdgeRightInset:   parentToolInsets.bottomEdgeRightInset
     }
+
+    // Rectangle {
+    //     anchors.top: parent.top
+    //     anchors.horizontalCenter: parent.horizontalCenter
+    //     width: parent.width / 2
+    //     height: parent.height / 2
+    //     MediaPlayer {
+    //         id: mediaPlayer
+    //         source: "rtsp://210.99.70.120:1935/live/cctv004.stream"
+    //         videoOutput: videoOutput
+    //     }
+    //     VideoOutput {
+    //         id: videoOutput
+    //         anchors.fill: parent
+    //     }
+    //     Row{
+    //         Button {
+    //             text:"click1"
+    //             onClicked: {
+    //                 mediaPlayer.stop()
+    //                 mediaPlayer.source = "rtsp://210.99.70.120:1935/live/cctv004.stream"
+    //                 mediaPlayer.play()
+    //             }
+    //         }
+    //         Button {
+    //             text:"click2"
+    //             onClicked: {
+    //                 mediaPlayer.stop()
+    //                 mediaPlayer.source = "rtsp://192.168.144.26:8554/main.264"
+    //                 mediaPlayer.play()
+    //             }
+    //         }
+    //     }
+    // }
 
     // TelemetryValuesBar {
     //     id:                 telemetryPanel

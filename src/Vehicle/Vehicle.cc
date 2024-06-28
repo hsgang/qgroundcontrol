@@ -524,6 +524,8 @@ Vehicle::~Vehicle()
     delete _autopilotPlugin;
     _autopilotPlugin = nullptr;
 
+    deleteGimbalController();
+
 #ifdef CONFIG_UTM_ADAPTER
     delete _utmspVehicle;
 #endif
@@ -544,6 +546,14 @@ void Vehicle::prepareDelete()
         qApp->processEvents();
     }
 #endif
+}
+
+void Vehicle::deleteGimbalController()
+{
+    if (_gimbalController) {
+        delete _gimbalController;
+        _gimbalController = nullptr;
+    }
 }
 
 void Vehicle::_offlineFirmwareTypeSettingChanged(QVariant varFirmwareType)
@@ -2979,8 +2989,9 @@ void Vehicle::sendMavCommandIntWithHandler(const MavCmdAckHandlerInfo_t* ackHand
 
 bool Vehicle::isMavCommandPending(int targetCompId, MAV_CMD command)
 {
-    return ((-1) < _findMavCommandListEntryIndex(targetCompId, command));
-}
+    bool pending = ((-1) < _findMavCommandListEntryIndex(targetCompId, command));
+    // qDebug() << "Pending target: " << targetCompId << ", command: " << (int)command << ", pending: " << (pending ? "yes" : "no");
+    return pending;}
 
 int Vehicle::_findMavCommandListEntryIndex(int targetCompId, MAV_CMD command)
 {

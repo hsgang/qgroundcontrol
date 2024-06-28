@@ -16,9 +16,10 @@ import QtQuick.Dialogs
 import QGroundControl
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
+import QGroundControl.Controllers
 import QGroundControl.Palette
 import QGroundControl.Vehicle
-import QGroundControl.Controllers
+import QGroundControl.MultiVehicleManager
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
 
@@ -30,57 +31,33 @@ Rectangle {
     border.color:   qgcPal.text
     border.width:   1
     radius:     _margins * 1.5
-    visible:    (_mavlinkCamera || _videoStreamAvailable || _simpleCameraAvailable) && _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
+    visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
-    property real   _margins:         ScreenTools.defaultFontPixelHeight / 2
-    property real   _idealWidth:      ScreenTools.isMobile ? ScreenTools.minTouchPixels * 0.8 : (ScreenTools.defaultFontPixelWidth * 7)
-    property real   anchorsMargins:   _margins
-    property real   _fontSize:        ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
-    property real   backgroundOpacity:                          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
-
-    property var    _activeVehicle:                             QGroundControl.multiVehicleManager.activeVehicle
+    property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
+    property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
+    property real   anchorsMargins:     _margins
+    property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
+    property real   backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
     // The following properties relate to a simple camera
-    property var    _flyViewSettings:                           QGroundControl.settingsManager.flyViewSettings
-    property bool   _showGimbalControl:                         _flyViewSettings.showGimbalControlPannel.rawValue
-
-    // The following properties relate to a simple video stream
-//    property bool   _videoStreamAvailable:                      _videoStreamManager.hasVideo
-//    property var    _videoStreamSettings:                       QGroundControl.settingsManager.videoSettings
-//    property var    _videoStreamManager:                        QGroundControl.videoManager
-//    property bool   _videoStreamAllowsPhotoWhileRecording:      true
-//    property bool   _videoStreamIsStreaming:                    _videoStreamManager.streaming
-//    property bool   _simplePhotoCaptureIsIdle:             true
-//    property bool   _videoStreamRecording:                      _videoStreamManager.recording
-//    property bool   _videoStreamCanShoot:                       _videoStreamIsStreaming
-//    property bool   _videoStreamIsShootingInCurrentMode:        _videoStreamInPhotoMode ? !_simplePhotoCaptureIsIdle : _videoStreamRecording
-//    property bool   _videoStreamInPhotoMode:                    false
-
-    // The following properties relate to a mavlink protocol camera
-    property var    _mavlinkCameraManager:                      _activeVehicle ? _activeVehicle.cameraManager : null
-    property int    _mavlinkCameraManagerCurCameraIndex:        _mavlinkCameraManager ? _mavlinkCameraManager.currentCamera : -1
-    property bool   _noMavlinkCameras:                          _mavlinkCameraManager ? _mavlinkCameraManager.cameras.count === 0 : true
-    property var    _mavlinkCamera:                             !_noMavlinkCameras ? (_mavlinkCameraManager.cameras.get(_mavlinkCameraManagerCurCameraIndex) && _mavlinkCameraManager.cameras.get(_mavlinkCameraManagerCurCameraIndex).paramComplete ? _mavlinkCameraManager.cameras.get(_mavlinkCameraManagerCurCameraIndex) : null) : null
-    property bool   _multipleMavlinkCameras:                    _mavlinkCameraManager ? _mavlinkCameraManager.cameras.count > 1 : false
-    property string _mavlinkCameraName:                         _mavlinkCamera && _multipleMavlinkCameras ? _mavlinkCamera.modelName : ""
-    property bool   _noMavlinkCameraStreams:                    _mavlinkCamera ? _mavlinkCamera.streamLabels.length : true
-    property bool   _multipleMavlinkCameraStreams:              _mavlinkCamera ? _mavlinkCamera.streamLabels.length > 1 : false
-    property int    _mavlinCameraCurStreamIndex:                _mavlinkCamera ? _mavlinkCamera.currentStream : -1
+    property var    _flyViewSettings:       QGroundControl.settingsManager.flyViewSettings
+    property bool   _showGimbalControl:     _flyViewSettings.showGimbalControlPannel.rawValue
 
     // The following settings and functions unify between a mavlink camera and a simple video stream for simple access
 
-    property var    _gimbalController:        _activeVehicle ? _activeVehicle.gimbalController : undefined
-    property var    _activeGimbal:            _gimbalController ? _gimbalController.activeGimbal : undefined
-    property bool   _gimbalAvailable:         _activeGimbal ? true : false
-    property bool   _gimbalRollAvailable:     _activeGimbal && _activeGimbal.curRoll ? true : false
-    property bool   _gimbalPitchAvailable:    _activeGimbal && _activeGimbal.curPitch ? true : false
-    property bool   _gimbalYawAvailable:      _activeGimbal && _activeGimbal.curYaw ? true : false
-    property real   _gimbalRoll:              _gimbalAvailable && _gimbalRollAvailable ? _activeGimbal.curRoll : 0
-    property real   _gimbalPitch:             _gimbalAvailable && _gimbalPitchAvailable ? _activeGimbal.curPitch : 0
-    property real   _gimbalYaw:               _gimbalAvailable && _gimbalYawAvailable ? _activeGimbal.curYaw : 0
-    property string _gimbalRollString:        _activeVehicle && _gimbalRollAvailable ? _gimbalRoll.toFixed(2) : "--"
-    property string _gimbalPitchString:       _activeVehicle && _gimbalPitchAvailable ? _gimbalPitch.toFixed(2) : "--"
-    property string _gimbalYawString:         _activeVehicle && _gimbalYawAvailable ? _gimbalYaw.toFixed(2) : "--"
+    property var    activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
+    property var    gimbalController:         activeVehicle.gimbalController
+    property var    activeGimbal:             gimbalController.activeGimbal
+    property bool   _gimbalAvailable:         activeGimbal ? true : false
+    property bool   _gimbalRollAvailable:     activeGimbal && activeGimbal.curRoll ? true : false
+    property bool   _gimbalPitchAvailable:    activeGimbal && activeGimbal.curPitch ? true : false
+    property bool   _gimbalYawAvailable:      activeGimbal && activeGimbal.curYaw ? true : false
+    property real   _gimbalRoll:              _gimbalAvailable && _gimbalRollAvailable ? activeGimbal.curRoll : 0
+    property real   _gimbalPitch:             _gimbalAvailable && _gimbalPitchAvailable ? activeGimbal.curPitch : 0
+    property real   _gimbalYaw:               _gimbalAvailable && _gimbalYawAvailable ? activeGimbal.curYaw : 0
+    property string _gimbalRollString:        activeVehicle && _gimbalRollAvailable ? _gimbalRoll.toFixed(2) : "--"
+    property string _gimbalPitchString:       activeVehicle && _gimbalPitchAvailable ? _gimbalPitch.toFixed(2) : "--"
+    property string _gimbalYawString:         activeVehicle && _gimbalYawAvailable ? _gimbalYaw.toFixed(2) : "--"
 
     property double _localPitch: 0.0
     property double _localYaw: 0.0
@@ -95,18 +72,29 @@ Rectangle {
         height:         gimbalAngleValueRow.height
         color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
         radius:         _margins / 2
-        GridLayout{
+        ColumnLayout{
             id: gimbalAngleValueRow
-            columns: 2
 
-            QGCLabel{ text: "Pitch"; font.pointSize: _fontSize;}
-            QGCLabel{ text: _gimbalPitchString; font.pointSize: _fontSize; }
-            QGCLabel{ text: "Yaw"; font.pointSize: _fontSize; }
-            QGCLabel{ text: _gimbalYawString; font.pointSize: _fontSize; }
-            QGCLabel{ text: "Roll"; font.pointSize: _fontSize; }
-            QGCLabel{ text: _gimbalRollString; font.pointSize: _fontSize; }
-            QGCLabel{ text: "Connected"; font.pointSize: _fontSize; }
-            QGCLabel{ text: _gimbalAvailable; font.pointSize: _fontSize; }
+            QGCLabel{
+                text: activeGimbal ? "P: " + activeGimbal.absolutePitch.rawValue.toFixed(1) : "no value"
+                font.pointSize: _fontSize
+            }
+            QGCLabel{
+                text: activeGimbal ? "Y: " + activeGimbal.bodyYaw.rawValue.toFixed(1) : "no value"
+                font.pointSize: _fontSize
+            }
+            QGCLabel{
+                text: activeGimbal ? "R: " + activeGimbal.absoluteRoll.rawValue.toFixed(1) : "no value"
+                font.pointSize: _fontSize
+            }
+            QGCLabel{
+                text: activeGimbal ? "gimbalCnt: " + gimbalController.gimbals.count.toFixed(0) : "no value"
+                font.pointSize: _fontSize
+            }
+            QGCLabel{
+                text: activeGimbal ? "gimbalId: " + activeGimbal.deviceId.rawValue.toFixed(0) : "no value"
+                font.pointSize: _fontSize
+            }
         }
     }
 
@@ -123,7 +111,7 @@ Rectangle {
             width:              _idealWidth - anchorsMargins
             height:             width
             radius:             _margins
-            color:      "transparent"
+            color:              "transparent"
             border.color:       qgcPal.text
             border.width:       1
             scale:              zoomInPress.pressedButtons ? 0.95 : 1
@@ -180,11 +168,11 @@ Rectangle {
                 id: gimbalUpPress
                 anchors.fill:   parent
                 onClicked: {
-                    _localPitch += 2
+                    _localPitch += 2.0
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
-                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(_localPitch, _localYaw)
+                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
                 }
             }
         }
@@ -218,7 +206,7 @@ Rectangle {
                 id:             baseDownPress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(-90, 0)
+                    gimbalController.sendPitchBodyYaw(-90.0, 0.0, true)
                 }
             }
         }
@@ -256,7 +244,7 @@ Rectangle {
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
-                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(_localPitch, _localYaw)
+                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
                 }
             }
         }
@@ -290,7 +278,7 @@ Rectangle {
                 id:             gimbalHomePress
                 anchors.fill:   parent
                 onClicked: {
-                    _activeVehicle.gimbalController.centerGimbal()
+                    gimbalController.centerGimbal()
                     _localPitch = 0
                     _localYaw = 0
                 }
@@ -330,7 +318,7 @@ Rectangle {
                     //-- Arbitrary range
                     if(_localYaw < -90.0) _localYaw = -90.0;
                     if(_localYaw >  90.0) _localYaw =  90.0;
-                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(_localPitch, _localYaw)
+                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
                 }
             }
         }
@@ -402,7 +390,7 @@ Rectangle {
                     //-- Arbitrary range
                     if(_localPitch < -90.0) _localPitch = -90.0;
                     if(_localPitch >  35.0) _localPitch =  35.0;
-                    _activeVehicle.gimbalController.sendGimbalManagerPitchYaw(_localPitch, _localYaw)
+                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
                 }
             }
         }
@@ -436,7 +424,7 @@ Rectangle {
                 id:             gimbalModePress
                 anchors.fill:   parent
                 onClicked: {
-                     _activeVehicle.gimbalController.setGimbalRcTargeting()
+                    gimbalController.setGimbalRcTargeting()
                 }
             }
         }

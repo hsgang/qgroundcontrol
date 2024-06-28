@@ -23,4 +23,7 @@ public:
     DEFINE_SETTINGFACT(CameraVFov)
     DEFINE_SETTINGFACT(CameraHFov)
     DEFINE_SETTINGFACT(CameraSlideSpeed)
+    DEFINE_SETTINGFACT(showAzimuthIndicatorOnMap)
+    DEFINE_SETTINGFACT(toolbarIndicatorShowAzimuth)
+    DEFINE_SETTINGFACT(toolbarIndicatorShowAcquireReleaseControl)
 };
