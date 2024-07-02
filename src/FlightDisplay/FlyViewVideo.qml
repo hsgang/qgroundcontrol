@@ -60,13 +60,13 @@ Item {
         useSmallFont:   _root.pipState.state !== _root.pipState.fullState
         visible:        QGroundControl.videoManager.isGStreamer
     }
-    //-- UVC Video (USB Camera or Video Device)
-    Loader {
-        id:             cameraLoader
-        anchors.fill:   parent
-        visible:        !QGroundControl.videoManager.isGStreamer
-        source:         QGroundControl.videoManager.uvcEnabled ? "qrc:/qml/FlightDisplayViewUVC.qml" : "qrc:/qml/FlightDisplayViewDummy.qml"
-    }
+    // //-- UVC Video (USB Camera or Video Device)
+    // Loader {
+    //     id:             cameraLoader
+    //     anchors.fill:   parent
+    //     visible:        !QGroundControl.videoManager.isGStreamer
+    //     source:         QGroundControl.videoManager.uvcEnabled ? "qrc:/qml/FlightDisplayViewUVC.qml" : "qrc:/qml/FlightDisplayViewDummy.qml"
+    // }
 
     QGCLabel {
         text: qsTr("Double-click to exit full screen")
