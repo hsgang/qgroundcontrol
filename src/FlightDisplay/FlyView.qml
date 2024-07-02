@@ -100,7 +100,7 @@ Item {
             pipMode:                !_mainWindowIsMap
             toolInsets:             customOverlay.totalToolInsets
             mapName:                "FlightDisplayView"
-            enabled:                !viewer3DWindow.isOpen
+            //enabled:                !viewer3DWindow.isOpen
         }
 
         FlyViewVideo {
@@ -120,7 +120,7 @@ Item {
             show:                   QGroundControl.videoManager.hasVideo && !QGroundControl.videoManager.fullScreen &&
                                         (videoControl.pipState.state === videoControl.pipState.pipState || mapControl.pipState.state === mapControl.pipState.pipState)
             z:                      QGroundControl.zOrderWidgets
-            isViewer3DOpen:         viewer3DWindow.isOpen
+            //isViewer3DOpen:         viewer3DWindow.isOpen
 
             property real leftEdgeBottomInset: visible ? width + anchors.margins : 0
             property real bottomEdgeLeftInset: visible ? height + anchors.margins : 0
@@ -137,7 +137,7 @@ Item {
             mapControl:             _mapControl
             visible:                !QGroundControl.videoManager.fullScreen
             utmspActTrigger:        utmspSendActTrigger
-            isViewer3DOpen:         viewer3DWindow.isOpen
+            //isViewer3DOpen:         viewer3DWindow.isOpen
         }
 
         FlyViewCustomLayer {
@@ -173,7 +173,7 @@ Item {
         GuidedActionList {
             id:                         guidedActionList
             anchors.margins:            _margins
-            anchors.bottom:             parent.bottom
+            anchors.verticalCenter:     parent.verticalCenter
             anchors.horizontalCenter:   parent.horizontalCenter
             z:                          QGroundControl.zOrderTopMost
             guidedController:           _guidedController
@@ -185,16 +185,16 @@ Item {
             anchors.margins:    _toolsMargin
             anchors.right:      parent.right
             anchors.top:        parent.top
+            anchors.topMargin:  ScreenTools.defaultFontPixelHeight * 5
             anchors.bottom:     parent.bottom
+            anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 5
             z:                  QGroundControl.zOrderTopMost
-            radius:             ScreenTools.defaultFontPixelWidth / 2
-            color:              qgcPal.window
             visible:            false
         }
 
-        Viewer3D{
-            id:                     viewer3DWindow
-            anchors.fill:           parent
-        }
+        // Viewer3D{
+        //     id:                     viewer3DWindow
+        //     anchors.fill:           parent
+        // }
     }
 }
