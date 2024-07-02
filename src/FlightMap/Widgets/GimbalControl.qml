@@ -46,8 +46,8 @@ Rectangle {
     // The following settings and functions unify between a mavlink camera and a simple video stream for simple access
 
     property var    activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
-    property var    gimbalController:         activeVehicle.gimbalController
-    property var    activeGimbal:             gimbalController.activeGimbal
+    property var    gimbalController:         activeVehicle ? activeVehicle.gimbalController : undefined
+    property var    activeGimbal:             activeVehicle ? gimbalController.activeGimbal : undefined
     property bool   _gimbalAvailable:         activeGimbal ? true : false
     property bool   _gimbalRollAvailable:     activeGimbal && activeGimbal.curRoll ? true : false
     property bool   _gimbalPitchAvailable:    activeGimbal && activeGimbal.curPitch ? true : false
