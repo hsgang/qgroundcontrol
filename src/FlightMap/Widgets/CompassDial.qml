@@ -93,7 +93,7 @@ Item {
         model: 8
 
         Rectangle {
-            id:                 majorTick
+            id:                 minorTick
             x:                  size / 2
             y:                  _margin
             width:              1
