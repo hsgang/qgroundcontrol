@@ -54,6 +54,8 @@ ToolStripActionList {
         GuidedActionMission { },
         GuidedActionRTL { },
         GuidedActionPause { },
+        GuidedActionChangeAltitude { },
+        GuidedActionChangeSpeed { },
         GuidedActionActionList { },
         // CustomActionToolStrip { },
         GuidedActionGripper { }

@@ -29,6 +29,8 @@ FlyViewVibrationStatus          1.0 FlyViewVibrationStatus.qml
 FlyViewEKFStatus                1.0 FlyViewEKFStatus.qml
 FlyViewInsetViewer              1.0 FlyViewInsetViewer.qml
 GuidedActionActionList          1.0 GuidedActionActionList.qml
+GuidedActionChangeAltitude      1.0 GuidedActionChangeAltitude.qml
+GuidedActionChangeSpeed         1.0 GuidedActionChangeSpeed.qml
 GuidedActionConfirm             1.0 GuidedActionConfirm.qml
 GuidedActionPressHoldConfirm    1.0 GuidedActionPressHoldConfirm.qml
 GuidedActionsController         1.0 GuidedActionsController.qml
