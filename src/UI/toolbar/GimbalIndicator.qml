@@ -387,7 +387,7 @@ Item {
     //     }
     // }
 
-    ColumnLayout {
+    Column {
         id:                         gimbalTelemetryLayout
         anchors.left:               gimbalIndicatorIcon.right
         anchors.leftMargin:         margins
@@ -397,6 +397,7 @@ Item {
         QGCLabel {
             id:                     pitchLabel
             text:                   activeGimbal ? qsTr("P: ") + activeGimbal.absolutePitch.rawValue.toFixed(1) : ""
+            font.pointSize: ScreenTools.smallFontPointSize
         }
         QGCLabel {
             id:                     panLabel
@@ -404,6 +405,7 @@ Item {
                                         gimbalTelemetryLayout.showAzimuth ? (qsTr("Az: ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
                                             (qsTr("Y: ") + activeGimbal.bodyYaw.rawValue.toFixed(1)) :
                                                 ""
+            font.pointSize: ScreenTools.smallFontPointSize
         }
     }
 

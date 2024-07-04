@@ -84,12 +84,14 @@ ColumnLayout {
     MultiVehicleList {
         Layout.preferredWidth:  _rightPanelWidth
         Layout.fillHeight:      true
+        Layout.fillWidth:       true
         visible:                !multiVehiclePanelSelector._showSingleVehicleUI
     }
 
     TerrainProgress {
         Layout.alignment:       Qt.AlignTop
         Layout.preferredWidth:  _rightPanelWidth
+        Layout.fillWidth:       true
     }
 
     // We use a Loader to load the photoVideoControlComponent only when the active vehicle is not null

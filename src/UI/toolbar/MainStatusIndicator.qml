@@ -21,9 +21,13 @@ Rectangle {
     id:             control
     width:          marqueeRowLayout.width + _margins
     height:         parent.height
-    color:          _mainStatusBGColor //"transparent" //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.7)
-    //border.color:   qgcPal.text //Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.2)
-    //border.width:   1
+    //color:          _mainStatusBGColor
+    gradient: Gradient {
+        orientation: Gradient.Horizontal
+        GradientStop { position: 0;     color: _mainStatusBGColor }
+        //GradientStop { position: 0.7;   color: _mainStatusBGColor }
+        GradientStop { position: 1;     color: _root.color }
+    }
     radius:         _margins / 4
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
@@ -44,6 +48,7 @@ Rectangle {
             id:             mainStatusLabel
             text:           mainStatusText()
             font.pointSize: ScreenTools.largeFontPointSize
+            color:          qgcPal.text
             //implicitWidth:  maxWidth
             maxWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 16
             minWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 8
@@ -51,7 +56,7 @@ Rectangle {
             property string _commLostText:      qsTr("Communication Lost")
             property string _readyToFlyText:    qsTr("Ready To Fly")
             property string _notReadyToFlyText: qsTr("Not Ready")
-            property string _disconnectedText:  qsTr("Disconnected - Click to manually connect")
+            property string _disconnectedText:  qsTr("Disconnected")
             property string _armedText:         qsTr("Armed")
             property string _flyingText:        qsTr("Flying")
             property string _landingText:       qsTr("Landing")
@@ -194,8 +199,26 @@ Rectangle {
                                 model: _activeVehicle.sysStatusSensorInfo.sensorStatus
                                 QGCLabel { text: modelData }
                             }
-                        }
+                            Repeater {
+                                model: _activeVehicle.sysStatusSensorInfo.sensorStatus
+                                Rectangle {
+                                    function markColor() {
+                                        if(modelData === qsTr("Error")){
+                                            return "red"
+                                        } else if (modelData === qsTr("Normal")) {
+                                            return "green"
+                                        } else if (modelData === qsTr("Disabled")) {
+                                            return "gray"
+                                        }
+                                    }
 
+                                    width: ScreenTools.defaultFontPixelWidth
+                                    height: width
+                                    radius: width /2
+                                    color: markColor()
+                                }
+                            }
+                        }
 
                         QGCLabel {
                             text:       qsTr("Overall Status")

@@ -36,12 +36,69 @@ Item {
         height: parent.height
         color: "transparent"
 
-        QGCLabel {
-            id:                 modeLabel
-            text:                       activeVehicle ? activeVehicle.flightMode : qsTr("N/A", "No data to display")
-            font.pointSize:             ScreenTools.largeFontPointSize * 0.9
+        RowLayout {
             anchors.horizontalCenter:   parent.horizontalCenter
             anchors.verticalCenter:     parent.verticalCenter
+
+            Column {
+
+                QGCLabel {
+                    id:                 modeTranslatedLabel
+                    text:               activeVehicle ? flightModeTranslate() : qsTr("비행모드")
+                    font.pointSize:     ScreenTools.largeFontPointSize * 0.9
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    function flightModeTranslate() {
+                        var origin = activeVehicle.flightMode
+                        var translated
+
+                        switch(origin) {
+                        case "Stabilize" :
+                            translated = "수평 유지 모드"
+                            break
+                        case "Altitude Hold" :
+                            translated = "고도 유지 모드"
+                            break
+                        case "Auto" :
+                            translated = "자동 비행 모드"
+                            break
+                        case "Loiter" :
+                            translated = "로이터 모드"
+                            break
+                        case "RTL" :
+                            translated = "복귀 모드"
+                            break
+                        case "Land" :
+                            translated = "착륙 모드"
+                            break
+                        case "Guided" :
+                            translated = "가이디드 모드"
+                            break
+                        case "Brake" :
+                            translated = "정지 모드"
+                            break
+                        default :
+                            translated = origin
+                            break
+                        }
+
+                        return translated
+                    }
+                }
+                // QGCLabel {
+                //     id:                 modeLabel
+                //     text:               activeVehicle ? activeVehicle.flightMode : qsTr("Flight Mode")
+                //     font.pointSize:     ScreenTools.smallFontPointSize
+                //     anchors.horizontalCenter: parent.horizontalCenter
+                // }
+            }
+
+            QGCColoredImage {
+                height:             ScreenTools.defaultFontPixelWidth
+                width:              height
+                source:             "/qmlimages/arrow-down.png"
+                color:              qgcPal.buttonText
+            }
         }
 
         MouseArea {

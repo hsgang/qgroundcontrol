@@ -183,8 +183,8 @@ SettingsPage {
 
         Repeater {
             model: [ QGroundControl.settingsManager.unitsSettings.distanceUnits,
-                QGroundControl.settingsManager.unitsSettings.areaUnits,
                 QGroundControl.settingsManager.unitsSettings.speedUnits,
+                QGroundControl.settingsManager.unitsSettings.areaUnits,
                 QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
 
             LabelledFactComboBox {

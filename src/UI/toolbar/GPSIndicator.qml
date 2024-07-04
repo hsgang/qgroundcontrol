@@ -114,7 +114,6 @@ Item {
         id:             gnssValuesRow
         anchors.top:    parent.top
         anchors.bottom: parent.bottom
-
         spacing: ScreenTools.defaultFontPixelHeight / 5
 
         QGCColoredImage {

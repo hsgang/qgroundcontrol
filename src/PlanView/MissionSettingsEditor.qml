@@ -68,6 +68,9 @@ Rectangle {
         spacing:            _margin
 
         SettingsGroupLayout {
+            _borderColor:   "transparent"
+            _margins:        ScreenTools.defaultFontPixelWidth
+
             RowLayout{
                 Layout.fillWidth: true
 
@@ -140,6 +143,8 @@ Rectangle {
         SettingsGroupLayout {
             heading:    qsTr("Camera")
             visible:    _showCameraSection
+            _borderColor:   "transparent"
+            _margins:        ScreenTools.defaultFontPixelWidth
 
             Column {
                 Layout.fillWidth:   true
@@ -166,6 +171,8 @@ Rectangle {
 
         SettingsGroupLayout {
             Layout.fillWidth: true
+            _borderColor:   "transparent"
+            _margins:        ScreenTools.defaultFontPixelWidth
 
             SectionHeader {
                 id:             vehicleInfoSectionHeader

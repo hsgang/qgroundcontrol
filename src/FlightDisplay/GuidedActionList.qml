@@ -21,7 +21,7 @@ import QGroundControl.Palette
 /// Dialog showing list of available guided actions
 Rectangle {
     id:         _root
-    width:      actionColumn.width  + (_margins * 4)
+    width:      (_actionWidth * 3) + (_actionHorizSpacing * 2) + (_margins * 2)//actionColumn.width  + (_margins * 4)
     height:     actionColumn.height + (_margins * 4)
     radius:     _margins / 2
     color:      qgcPal.window
@@ -102,86 +102,164 @@ Rectangle {
             Layout.alignment:   Qt.AlignHCenter
         }
 
-        QGCFlickable {
-            contentWidth:           actionRow.width
-            contentHeight:          actionRow.height
-            Layout.minimumHeight:   actionRow.height
-            Layout.maximumHeight:   actionRow.height
-            Layout.minimumWidth:    _width
-            Layout.maximumWidth:    _width
-
-            property real _width: Math.min((_actionWidth * 3) + _actionHorizSpacing*2, actionRow.width)
-
-            RowLayout {
-                id:         actionRow
-                spacing:    _actionHorizSpacing
-
-                // These are the pre-defined Actions
-                Repeater {
-                    id:     actionRepeater
-                    model:  _model
-
-                    ColumnLayout {
-                        spacing:            ScreenTools.defaultFontPixelHeight / 2
-                        visible:            modelData.visible
-                        Layout.fillHeight:  true
-
-                        QGCLabel {
-                            id:                     actionMessage
-                            text:                   modelData.text
-                            horizontalAlignment:    Text.AlignHCenter
-                            wrapMode:               Text.WordWrap
-                            Layout.minimumWidth:    _actionWidth
-                            Layout.maximumWidth:    _actionWidth
-                            Layout.fillHeight:      true
-                        }
-
-                        QGCButton {
-                            id:                 actionButton
-                            text:               modelData.title
-                            Layout.alignment:   Qt.AlignCenter
-
-                            onClicked: {
-                                _root.visible = false
-                                guidedController.confirmAction(modelData.action)
-                            }
-                        }
-                    } // ColumnLayout
-                } // Repeater
-
-                //These are the user-defined Custom Actions
-               Repeater {
-                   id:     customRepeater
-                   model:  customManager.actions
-
-                   ColumnLayout {
-                       spacing:            ScreenTools.defaultFontPixelHeight / 2
-                       Layout.fillHeight:  true
-
-                       QGCLabel {
-                           id:                     customMessage
-                           text:                   object.description
-                           horizontalAlignment:    Text.AlignHCenter
-                           wrapMode:               Text.WordWrap
-                           Layout.minimumWidth:    _actionWidth
-                           Layout.maximumWidth:    _actionWidth
-                           Layout.fillHeight:      true
-                       }
-
-                       QGCButton {
-                           id:                 customButton
-                           text:               object.label
-                           Layout.alignment:   Qt.AlignCenter
-
-                           onClicked: {
-                               var vehicle = QGroundControl.multiVehicleManager.activeVehicle
-                               object.sendTo(vehicle)
-                           }
-                       }
-                   } // ColumnLayout
-               } // Repeater
-            }
+        Rectangle {
+            height: 1
+            width:  _root.width - ScreenTools.defaultFontPixelHeight
+            color:  qgcPal.text
         }
+
+        Flow {
+            id:         flow
+            width:      _root.width
+            spacing:    _actionHorizSpacing
+            Layout.alignment: Qt.AlignHCenter
+
+            // These are the pre-defined Actions
+            Repeater {
+                id:     actionRepeater
+                model:  _model
+
+                ColumnLayout {
+                    spacing:            ScreenTools.defaultFontPixelHeight / 2
+                    visible:            modelData.visible
+                    Layout.fillHeight:  true
+
+                    QGCLabel {
+                        id:                     actionMessage
+                        text:                   modelData.text
+                        horizontalAlignment:    Text.AlignHCenter
+                        wrapMode:               Text.WordWrap
+                        Layout.minimumWidth:    _actionWidth
+                        Layout.maximumWidth:    _actionWidth
+                        Layout.fillHeight:      true
+                    }
+
+                    QGCButton {
+                        id:                 actionButton
+                        text:               modelData.title
+                        Layout.alignment:   Qt.AlignCenter
+
+                        onClicked: {
+                            _root.visible = false
+                            guidedController.confirmAction(modelData.action)
+                        }
+                    }
+                } // ColumnLayout
+            } // Repeater
+
+            //These are the user-defined Custom Actions
+            Repeater {
+                id:     customRepeater
+                model:  customManager.actions
+
+                ColumnLayout {
+                    spacing:            ScreenTools.defaultFontPixelHeight / 2
+                    Layout.fillHeight:  true
+
+                    QGCLabel {
+                        id:                     customMessage
+                        text:                   object.description
+                        horizontalAlignment:    Text.AlignHCenter
+                        wrapMode:               Text.WordWrap
+                        Layout.minimumWidth:    _actionWidth
+                        Layout.maximumWidth:    _actionWidth
+                        Layout.fillHeight:      true
+                    }
+
+                    QGCButton {
+                        id:                 customButton
+                        text:               object.label
+                        Layout.alignment:   Qt.AlignCenter
+
+                        onClicked: {
+                           var vehicle = QGroundControl.multiVehicleManager.activeVehicle
+                           object.sendTo(vehicle)
+                        }
+                    }
+                } // ColumnLayout
+            } // Repeater
+        }
+
+        // QGCFlickable {
+        //     contentWidth:           actionRow.width
+        //     contentHeight:          actionRow.height
+        //     Layout.minimumHeight:   actionRow.height
+        //     Layout.maximumHeight:   actionRow.height
+        //     Layout.minimumWidth:    _width
+        //     Layout.maximumWidth:    _width
+
+        //     property real _width: Math.min((_actionWidth * 3) + _actionHorizSpacing*2, actionRow.width)
+
+        //     RowLayout {
+        //         id:         actionRow
+        //         spacing:    _actionHorizSpacing
+
+        //         // These are the pre-defined Actions
+        //         Repeater {
+        //             id:     actionRepeater
+        //             model:  _model
+
+        //             ColumnLayout {
+        //                 spacing:            ScreenTools.defaultFontPixelHeight / 2
+        //                 visible:            modelData.visible
+        //                 Layout.fillHeight:  true
+
+        //                 QGCLabel {
+        //                     id:                     actionMessage
+        //                     text:                   modelData.text
+        //                     horizontalAlignment:    Text.AlignHCenter
+        //                     wrapMode:               Text.WordWrap
+        //                     Layout.minimumWidth:    _actionWidth
+        //                     Layout.maximumWidth:    _actionWidth
+        //                     Layout.fillHeight:      true
+        //                 }
+
+        //                 QGCButton {
+        //                     id:                 actionButton
+        //                     text:               modelData.title
+        //                     Layout.alignment:   Qt.AlignCenter
+
+        //                     onClicked: {
+        //                         _root.visible = false
+        //                         guidedController.confirmAction(modelData.action)
+        //                     }
+        //                 }
+        //             } // ColumnLayout
+        //         } // Repeater
+
+        //         //These are the user-defined Custom Actions
+        //         Repeater {
+        //            id:     customRepeater
+        //            model:  customManager.actions
+
+        //            ColumnLayout {
+        //                spacing:            ScreenTools.defaultFontPixelHeight / 2
+        //                Layout.fillHeight:  true
+
+        //                QGCLabel {
+        //                    id:                     customMessage
+        //                    text:                   object.description
+        //                    horizontalAlignment:    Text.AlignHCenter
+        //                    wrapMode:               Text.WordWrap
+        //                    Layout.minimumWidth:    _actionWidth
+        //                    Layout.maximumWidth:    _actionWidth
+        //                    Layout.fillHeight:      true
+        //                }
+
+        //                QGCButton {
+        //                    id:                 customButton
+        //                    text:               object.label
+        //                    Layout.alignment:   Qt.AlignCenter
+
+        //                    onClicked: {
+        //                        var vehicle = QGroundControl.multiVehicleManager.activeVehicle
+        //                        object.sendTo(vehicle)
+        //                    }
+        //                }
+        //            } // ColumnLayout
+        //        } // Repeater
+        //     }
+        // }
     }
 
     QGCColoredImage {

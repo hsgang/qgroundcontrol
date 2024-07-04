@@ -52,6 +52,9 @@ FlightMap {
     property bool   _keepVehicleCentered:       pipMode ? true : false
     property bool   _saveZoomLevelSetting:      true
 
+    property bool   _vehicleArmed:              _activeVehicle ? _activeVehicle.armed  : false
+    property bool   _vehicleFlying:             _activeVehicle ? _activeVehicle.flying  : false
+
     function _adjustMapZoomForPipMode() {
         _saveZoomLevelSetting = false
         if (pipMode) {
@@ -671,18 +674,6 @@ FlightMap {
 
             QGCButton {
                 Layout.fillWidth:   true
-                text:               qsTr("Set Heading")
-                visible:            globals.guidedControllerFlyView.showChangeHeading
-                onClicked: {
-                    if (popup.opened) {
-                        popup.close()
-                    }
-                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionChangeHeading, mapClickCoord, gotoLocationItem)
-                }
-            }
-
-            QGCButton {
-                Layout.fillWidth:   true
                 text:               qsTr("Orbit at location")
                 visible:            globals.guidedControllerFlyView.showOrbit
                 onClicked: {
@@ -710,7 +701,7 @@ FlightMap {
             QGCButton {
                 Layout.fillWidth:   true
                 text:               qsTr("Set home here")
-                visible:            globals.guidedControllerFlyView.showSetHome
+                visible:            globals.guidedControllerFlyView.showSetHome && !_vehicleArmed && !_vehicleFlying
                 onClicked: {
                     if (popup.opened) {
                         popup.close()
@@ -722,7 +713,7 @@ FlightMap {
             QGCButton {
                 Layout.fillWidth:   true
                 text:               qsTr("Set Estimator Origin")
-                visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
+                visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin && !_vehicleArmed && !_vehicleFlying
                 onClicked: {
                     if (popup.opened) {
                         popup.close()

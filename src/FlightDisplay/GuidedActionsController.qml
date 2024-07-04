@@ -47,7 +47,6 @@ Item {
     readonly property string pauseTitle:                    qsTr("Pause")
     readonly property string mvPauseTitle:                  qsTr("Pause (MV)")
     readonly property string changeAltTitle:                qsTr("Change Altitude")
-    readonly property string changeHeadingTitle:            qsTr("Change Heading")
     readonly property string changeCruiseSpeedTitle:        qsTr("Change Max Ground Speed")
     readonly property string changeAirspeedTitle:           qsTr("Change Airspeed")
     readonly property string orbitTitle:                    qsTr("Orbit")
@@ -65,7 +64,7 @@ Item {
     readonly property string disarmMessage:                     qsTr("Disarm the vehicle")
     readonly property string emergencyStopMessage:              qsTr("WARNING: THIS WILL STOP ALL MOTORS. IF VEHICLE IS CURRENTLY IN THE AIR IT WILL CRASH.")
     readonly property string takeoffMessage:                    qsTr("Takeoff from ground and hold position.")
-    readonly property string gripperMessage:                       qsTr("Grab or Release the cargo")
+    readonly property string gripperMessage:                    qsTr("Grab or Release the cargo")
     readonly property string startMissionMessage:               qsTr("Takeoff from ground and start the current mission.")
     readonly property string continueMissionMessage:            qsTr("Continue the mission from the current waypoint.")
     readonly property string resumeMissionUploadFailMessage:    qsTr("Upload of resume mission failed. Confirm to retry upload")
@@ -85,7 +84,6 @@ Item {
     readonly property string roiMessage:                        qsTr("Make the specified location a Region Of Interest.")
     readonly property string setHomeMessage:                    qsTr("Set vehicle home as the specified location. This will affect Return to Home position")
     readonly property string setEstimatorOriginMessage:         qsTr("Make the specified location the estimator origin.")
-    readonly property string changeHeadingMessage:              qsTr("Set the vehicle heading towards the specified location.")
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2
@@ -112,12 +110,13 @@ Item {
     readonly property int actionActionList:                 23
     readonly property int actionForceArm:                   24
     readonly property int actionChangeSpeed:                25
-    readonly property int actionChangeHeading:              26
-    readonly property int actionGripper:                    27
-    readonly property int actionSetHome:                    28
-    readonly property int actionSetEstimatorOrigin:         29
+    readonly property int actionGripper:                    26
+    readonly property int actionSetHome:                    27
+    readonly property int actionSetEstimatorOrigin:         28
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
+    property var    _flyViewSettings:           QGroundControl.settingsManager.flyViewSettings
+    property var    _unitsConversion:           QGroundControl.unitsConversion
     property bool   _useChecklist:              QGroundControl.settingsManager.appSettings.useChecklist.rawValue && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
     property bool   _enforceChecklist:          _useChecklist && QGroundControl.settingsManager.appSettings.enforceChecklist.rawValue
     property bool   _checklistPassed:           _activeVehicle ? (_useChecklist ? (_enforceChecklist ? _activeVehicle.checkListState === Vehicle.CheckListPassed : true) : true) : true
@@ -146,7 +145,6 @@ Item {
     property bool showActionList:           _guidedActionsEnabled && (showStartMission || showResumeMission || showChangeAlt || showLandAbort || actionList.hasCustomActions)
     property bool showGripper:              _initialConnectComplete ? _activeVehicle.hasGripper : false
     property bool showSetEstimatorOrigin:   _activeVehicle && !(_activeVehicle.sensorsPresentBits & Vehicle.SysStatusSensorGPS)
-    property bool showChangeHeading:        _guidedActionsEnabled && _vehicleFlying
 
     property string changeSpeedTitle:   _fixedWing ? changeAirspeedTitle : changeCruiseSpeedTitle
     property string changeSpeedMessage: _fixedWing ? changeAirspeedMessage : changeCruiseSpeedMessage
@@ -196,30 +194,39 @@ Item {
     }
 
     function setupSlider(actionCode) {
-        // generic defaults
-        guidedValueSlider.configureAsLinearSlider()
-        guidedValueSlider.setIsSpeedSlider(false)
-
         if (actionCode === actionTakeoff) {
-                guidedValueSlider.setMinVal(_activeVehicle.minimumTakeoffAltitude())
-                guidedValueSlider.setValue(_activeVehicle ? _activeVehicle.minimumTakeoffAltitude() : 0)
-                guidedValueSlider.setDisplayText("Height")
+            guidedValueSlider.setupSlider(
+                GuidedValueSlider.SliderType.Takeoff,
+                _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_activeVehicle.minimumTakeoffAltitudeMeters()),
+                _flyViewSettings.guidedMaximumAltitude.value,
+                _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_activeVehicle.minimumTakeoffAltitudeMeters()),
+                qsTr("Height (rel)"))
         } else if (actionCode === actionChangeSpeed) {
-            guidedValueSlider.setIsSpeedSlider(true)
             if (_fixedWing) {
-                guidedValueSlider.setDisplayText("Set Airspeed")
-                guidedValueSlider.setMinVal(QGroundControl.unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.minimumEquivalentAirspeed()).toFixed(1))
-                guidedValueSlider.setMaxVal(QGroundControl.unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumEquivalentAirspeed()).toFixed(1))
-                guidedValueSlider.setValue(_activeVehicle.airSpeed.value)
+                guidedValueSlider.setupSlider(
+                    GuidedValueSlider.SliderType.Speed,
+                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.minimumEquivalentAirspeed().toFixed(1)),
+                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumEquivalentAirspeed().toFixed(1)),
+                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.minimumEquivalentAirspeed()),
+                    qsTr("Airspeed"))
             } else if (!_fixedWing && _activeVehicle.haveMRSpeedLimits) {
-                guidedValueSlider.setDisplayText("Set Speed")
-                guidedValueSlider.setMinVal(QGroundControl.unitsConversion.metersSecondToAppSettingsSpeedUnits(0.1).toFixed(1))
-                guidedValueSlider.setMaxVal(QGroundControl.unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotor()).toFixed(1))
-                guidedValueSlider.setValue(QGroundControl.unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotor()/2).toFixed(1))
+                guidedValueSlider.setupSlider(
+                    GuidedValueSlider.SliderType.Speed,
+                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(0.1).toFixed(1),
+                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotor()).toFixed(1),
+                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotor()/2).toFixed(1),
+                    qsTr("Speed"))
+            } else {
+                console.error("setupSlider called for inapproproate change speed action", _fixedWing, _activeVehicle.haveMRSpeedLimits)
             }
+            // FIXME: What about other choices. Review old code
         } else if (actionCode === actionChangeAlt || actionCode === actionOrbit || actionCode === actionGoto || actionCode === actionPause) {
-            guidedValueSlider.setDisplayText("New Alt(rel)")
-            guidedValueSlider.configureAsRelativeAltSliderExp()
+            guidedValueSlider.setupSlider(
+                GuidedValueSlider.SliderType.Altitude,
+                _flyViewSettings.guidedMinimumAltitude.value,
+                _flyViewSettings.guidedMaximumAltitude.value,
+                _activeVehicle.altitudeRelative.value,
+                qsTr("Alt (rel)"))
         }
     }
 
@@ -258,9 +265,9 @@ Item {
             console.log("showStartMission", showStartMission)
         }
         _outputState()
-//        if (showStartMission) {
-//            confirmAction(actionStartMission)
-//        }
+        if (showStartMission) {
+            confirmAction(actionStartMission)
+        }
     }
     onShowContinueMissionChanged: {
         if (_corePlugin.guidedActionsControllerLogging()) {
@@ -280,12 +287,6 @@ Item {
     onShowChangeAltChanged: {
         if (_corePlugin.guidedActionsControllerLogging()) {
             console.log("showChangeAlt", showChangeAlt)
-        }
-        _outputState()
-    }
-    onShowChangeHeadingChanged: {
-        if (_corePlugin.guidedActionsControllerLogging()) {
-            console.log("showChangeHeading", showChangeHeading)
         }
         _outputState()
     }
@@ -526,7 +527,7 @@ Item {
             confirmDialog.hideTrigger = true
             confirmDialog.title = gripperTitle
             confirmDialog.message = gripperMessage
-            _widgetLayer._gripperMenu.open() //.createObject(mainWindow).open()
+            _widgetLayer._gripperMenu.open()
             break
         case actionSetHome:
             confirmDialog.title = setHomeTitle
@@ -537,10 +538,7 @@ Item {
             confirmDialog.title = setEstimatorOriginTitle
             confirmDialog.message = setEstimatorOriginMessage
             break
-        case actionChangeHeading:
-            confirmDialog.title = changeHeadingTitle
-            confirmDialog.message = changeHeadingMessage
-            break
+
         default:
             console.warn("Unknown actionCode", actionCode)
             return
@@ -560,7 +558,8 @@ Item {
             _activeVehicle.guidedModeLand()
             break
         case actionTakeoff:
-            _activeVehicle.guidedModeTakeoff(sliderOutputValue)
+            var valueInMeters = _unitsConversion.appSettingsVerticalDistanceUnitsToMeters(sliderOutputValue)
+            _activeVehicle.guidedModeTakeoff(valueInMeters)
             break
         case actionResumeMission:
         case actionResumeMissionUploadFail:
@@ -589,7 +588,9 @@ Item {
             _activeVehicle.emergencyStop()
             break
         case actionChangeAlt:
-            _activeVehicle.guidedModeChangeAltitude(sliderOutputValue, false /* pauseVehicle */)
+            var valueInMeters = _unitsConversion.appSettingsVerticalDistanceUnitsToMeters(sliderOutputValue)
+            var altitudeChangeInMeters = valueInMeters - _activeVehicle.altitudeAMSL.rawValue
+            _activeVehicle.guidedModeChangeAltitude(altitudeChangeInMeters, false /* pauseVehicle */)
             break
         case actionGoto:
             _activeVehicle.guidedModeGotoLocation(actionData)
@@ -598,13 +599,16 @@ Item {
             _activeVehicle.setCurrentMissionSequence(actionData)
             break
         case actionOrbit:
-            _activeVehicle.guidedModeOrbit(orbitMapCircle.center, orbitMapCircle.radius() * (orbitMapCircle.clockwiseRotation ? 1 : -1), _activeVehicle.altitudeAMSL.rawValue + sliderOutputValue)
+            var valueInMeters = _unitsConversion.appSettingsVerticalDistanceUnitsToMeters(sliderOutputValue)
+            _activeVehicle.guidedModeOrbit(orbitMapCircle.center, orbitMapCircle.radius() * (orbitMapCircle.clockwiseRotation ? 1 : -1), _activeVehicle.altitudeAMSL.rawValue + valueInMeters)
             break
         case actionLandAbort:
             _activeVehicle.abortLanding(50)     // hardcoded value for climbOutAltitude that is currently ignored
             break
         case actionPause:
-            _activeVehicle.guidedModeChangeAltitude(sliderOutputValue, true /* pauseVehicle */)
+            var valueInMeters = _unitsConversion.appSettingsVerticalDistanceUnitsToMeters(sliderOutputValue)
+            var altitudeChangeInMeters = valueInMeters - _activeVehicle.altitudeAMSL.rawValue
+            _activeVehicle.guidedModeChangeAltitude(altitudeChangeInMeters, true /* pauseVehicle */)
             break
         case actionMVPause:
             rgVehicle = QGroundControl.multiVehicleManager.vehicles
@@ -624,7 +628,7 @@ Item {
         case actionChangeSpeed:
             if (_activeVehicle) {
                 // We need to convert back to m/s as that is what mavlink standard uses for MAV_CMD_DO_CHANGE_SPEED
-                var metersSecondSpeed = QGroundControl.unitsConversion.appSettingsSpeedUnitsToMetersSecond(sliderOutputValue).toFixed(1)
+                var metersSecondSpeed = _unitsConversion.appSettingsSpeedUnitsToMetersSecond(sliderOutputValue) //.toFixed(1)
                 if (_activeVehicle.vtolInFwdFlight || _activeVehicle.fixedWing) {
                    _activeVehicle.guidedModeChangeEquivalentAirspeedMetersSecond(metersSecondSpeed)
                 } else {
@@ -632,7 +636,7 @@ Item {
                 }
             }
             break
-        case actionGripper:           
+        case actionGripper:
             _gripperFunction === undefined ? _activeVehicle.sendGripperAction(Vehicle.Invalid_option) : _activeVehicle.sendGripperAction(_gripperFunction)
             break
         case actionSetHome:
@@ -640,9 +644,6 @@ Item {
             break
         case actionSetEstimatorOrigin:
             _activeVehicle.setEstimatorOrigin(actionData)
-            break
-        case actionChangeHeading:
-            _activeVehicle.changeHeading(actionData)
             break
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)

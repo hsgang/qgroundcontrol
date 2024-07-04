@@ -36,7 +36,7 @@ T.ComboBox {
 
     property real   _popupWidth
     property bool   _onCompleted:   false
-    property bool   _showBorder:    qgcPal.globalTheme === QGCPalette.Light
+    property bool   _showBorder:    true //qgcPal.globalTheme === QGCPalette.Light
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
@@ -121,8 +121,8 @@ T.ComboBox {
     }
 
     background: Rectangle {
-        color:          qgcPal.button
-        border.color:   qgcPal.buttonBorder
+        color:          "transparent" //qgcPal.button
+        border.color:   qgcPal.groupBorder //qgcPal.buttonBorder
         border.width:   _showBorder ? 1 : 0
         radius:         ScreenTools.buttonBorderRadius
     }

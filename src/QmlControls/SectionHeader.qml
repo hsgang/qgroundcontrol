@@ -38,19 +38,19 @@ CheckBox {
             QGCColoredImage {
                 anchors.right:          parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                width:                  parent.height / 2
+                width:                  parent.height * 0.7
                 height:                 width
-                source:                 "/qmlimages/arrow-down.png"
+                source:                 control.checked ? "/InstrumentValueIcons/cheveron-up.svg" : "/InstrumentValueIcons/cheveron-down.svg" //"/qmlimages/arrow-down.png"
                 color:                  qgcPal.text
-                visible:                !control.checked
+                //visible:                !control.checked
             }
         }
 
-        Rectangle {
-            Layout.fillWidth:   true
-            height:             1
-            color:              qgcPal.text
-        }
+        // Rectangle {
+        //     Layout.fillWidth:   true
+        //     height:             1
+        //     color:              qgcPal.text
+        // }
     }
 
     indicator: Item {}

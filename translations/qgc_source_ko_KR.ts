@@ -4526,7 +4526,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/CameraSection.qml" line="29"/>
         <source>Camera</source>
-        <translation>카메라</translation>
+        <translation>카메라 설정</translation>
     </message>
     <message>
         <location filename="../src/PlanView/CameraSection.qml" line="54"/>
@@ -4546,12 +4546,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/CameraSection.qml" line="107"/>
         <source>Pitch</source>
-        <translation>피치</translation>
+        <translation>틸트</translation>
     </message>
     <message>
         <location filename="../src/PlanView/CameraSection.qml" line="108"/>
         <source>Yaw</source>
-        <translation>요</translation>
+        <translation>팬</translation>
     </message>
     <message>
         <location filename="../src/PlanView/CameraSection.qml" line="106"/>
@@ -5192,6 +5192,26 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="144"/>
         <source>Set From Vehicle Position</source>
         <translation>기체 위치로 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/EditPositionDialog.qml" line="24"/>
+        <source>Edit Position</source>
+        <translation>위치 편집</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/EditPositionDialog.qml" line="24"/>
+        <source>Coordinate System</source>
+        <translation>좌표계</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/EditPositionDialog.qml" line="72"/>
+        <source>Set Position</source>
+        <translation>위치 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/EditPositionDialog.qml" line="73"/>
+        <source>Move</source>
+        <translation>확인</translation>
     </message>
 </context>
 <context>
@@ -6782,7 +6802,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/FlyViewMap.qml" line="674"/>
         <source>Set Heading</source>
-        <translation>헤딩 설정</translation>
+        <translation>헤딩 변경</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewMap.qml" line="531"/>
@@ -8563,6 +8583,11 @@ Click Ok to start the auto-tuning process.
         <translation>착륙</translation>
     </message>
     <message>
+        <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="42"/>
+        <source>Gripper Function</source>
+        <translation>그립퍼 기능</translation>
+    </message>
+    <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="43"/>
         <source>Start Mission</source>
         <translation>미션 시작</translation>
@@ -8610,7 +8635,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="51"/>
         <source>Change Max Ground Speed</source>
-        <translation>최고수평속도 변경</translation>
+        <translation>속도 변경</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="52"/>
@@ -8625,7 +8650,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="67"/>
         <source>Return to the launch position of the vehicle.</source>
-        <translation>기체의 홈 포지션(home position)으로 돌아갑니다.</translation>
+        <translation>기체의 이륙지점으로 복귀</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="54"/>
@@ -8645,7 +8670,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="56"/>
         <source>Action</source>
-        <translation>실행</translation>
+        <translation>명령 모음</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="58"/>
@@ -8676,6 +8701,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="63"/>
         <source>Takeoff from ground and start the current mission.</source>
         <translation>이륙 후 현재 미션 시작</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="63"/>
+        <source>Grab or Release the cargo</source>
+        <translation>화물을 잡거나 풀기</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="64"/>
@@ -10292,8 +10322,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="42"/>
-        <source>Disconnected - Click to manually connect</source>
-        <translation>연결 없음 - 수동으로 연결</translation>
+        <source>Disconnected</source>
+        <translation>연결 없음</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="38"/>
@@ -10329,6 +10359,21 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="196"/>
         <source>Sensor Status</source>
         <translation>센서 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="206"/>
+        <source>Error</source>
+        <translation>오류</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="208"/>
+        <source>Normal</source>
+        <translation>정상</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="210"/>
+        <source>Disabled</source>
+        <translation>비활성화</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="173"/>
@@ -11112,7 +11157,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="68"/>
         <source>All Altitudes</source>
-        <translation>모든 고도</translation>
+        <translation>고도 기준</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="103"/>
@@ -14914,87 +14959,87 @@ sudo apt-get remove modemmanager</translation>
     </message>
 </context>
 <context>
-    <name>QGCPopupDialogContainer</name>
+    <name>QGCPopupDialog</name>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="97"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="128"/>
         <source>Ok</source>
         <translation>확인</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="100"/>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="109"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="131"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="140"/>
         <source>Open</source>
         <translation>열기</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="103"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="134"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="106"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="137"/>
         <source>Apply</source>
         <translation>적용</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="112"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="143"/>
         <source>Save All</source>
         <translation>모두 저장</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="115"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="146"/>
         <source>Yes</source>
         <translation>네</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="118"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="149"/>
         <source>Yes to All</source>
         <translation>모두 예</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="121"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="152"/>
         <source>Retry</source>
-        <translation>다시시도</translation>
+        <translation>다시 시도</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="124"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="155"/>
         <source>Reset</source>
-        <translation>재시작</translation>
+        <translation>재설정</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="127"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="158"/>
         <source>Restore to Defaults</source>
-        <translation>기본 값 복원</translation>
+        <translation>기본값 복원</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="130"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="161"/>
         <source>Ignore</source>
         <translation>무시하기</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="136"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="167"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="139"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="170"/>
         <source>Close</source>
         <translation>닫기</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="142"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="173"/>
         <source>No</source>
         <translation>아니오</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="145"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="176"/>
         <source>No to All</source>
         <translation>모두 아니오</translation>
     </message>
     <message>
-        <location filename="../src/QmlControls/QGCPopupDialogContainer.qml" line="148"/>
+        <location filename="../src/QmlControls/QGCPopupDialog.qml" line="179"/>
         <source>Abort</source>
-        <translation>취소</translation>
+        <translation>중단하기</translation>
     </message>
 </context>
 <context>
@@ -16773,6 +16818,16 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
         <translation>고도</translation>
     </message>
     <message>
+        <location filename="../src/PlanView/SimpleItemEditor.qml" line="157"/>
+        <source>Edit Position</source>
+        <translation>좌표 수정</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/SimpleItemEditor.qml" line="157"/>
+        <source>Edit</source>
+        <translation>수정</translation>
+    </message>
+    <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="38"/>
         <source>Internal Error</source>
         <translation>내부 오류</translation>
@@ -17557,12 +17612,12 @@ Confirm change?</source>
     <message>
         <location filename="../src/FlightDisplay/TerrainProgress.qml" line="69"/>
         <source>Terrain Load Progress</source>
-        <translation>지형 정보 불러오는 중</translation>
+        <translation>지형 정보</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/TerrainProgress.qml" line="87"/>
         <source>Done</source>
-        <translation>완료</translation>
+        <translation>다운로드 완료</translation>
     </message>
 </context>
 <context>
@@ -19021,6 +19076,24 @@ Confirm change?</source>
         <location filename="../src/QmlControls/PipView.qml" line="290"/>
         <source>Hide PIP</source>
         <translation>숨기기</translation>
+    </message>
+</context>
+<context>
+    <name>GripperMenu</name>
+    <message>
+        <location filename="../src/FlightDisplay/GripperMenu.qml" line="17"/>
+        <source>Select one action</source>
+        <translation>동작을 선택하세요</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/GripperMenu.qml" line="39"/>
+        <source>Grab</source>
+        <translation>닫기</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/GripperMenu.qml" line="55"/>
+        <source>Release</source>
+        <translation>열기</translation>
     </message>
 </context>
 </TS>

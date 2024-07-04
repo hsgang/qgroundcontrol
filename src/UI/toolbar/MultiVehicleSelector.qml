@@ -25,6 +25,7 @@ QGCComboBox {
     currentIndex:           -1
     sizeToContents:         true
     model:                  _vehicleModel
+    _showBorder:            false
 
     property bool showIndicator: _multipleVehicles
 

@@ -7,9 +7,9 @@ import QGroundControl.ScreenTools
 
 TextField {
     id:                 control
-    color:              qgcPal.textFieldText
-    selectionColor:     qgcPal.textFieldText
-    selectedTextColor:  qgcPal.textField
+    color:              qgcPal.text //textFieldText
+    selectionColor:     qgcPal.text //textFieldText
+    selectedTextColor:  qgcPal.window //textField
     activeFocusOnPress: true
     antialiasing:       true
     font.pointSize:     ScreenTools.defaultFontPointSize
@@ -53,10 +53,10 @@ TextField {
     }
 
     background: Rectangle {
-        border.width:   qgcPal.globalTheme === QGCPalette.Light ? 1 : 0
-        border.color:   qgcPal.buttonBorder
+        border.width:   1
+        border.color:   qgcPal.groupBorder
         radius:         ScreenTools.buttonBorderRadius
-        color:          qgcPal.textField
+        color:          qgcPal.window
         implicitWidth:  ScreenTools.implicitTextFieldWidth
         implicitHeight: ScreenTools.implicitTextFieldHeight
 

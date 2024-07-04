@@ -169,28 +169,6 @@ Rectangle {
         }
     }
 
-    // QGCColoredImage {
-    //     id:                     deleteButton
-    //     anchors.verticalCenter: topRowLayout.verticalCenter
-    //     anchors.margins:        _margin
-    //     anchors.right:          hamburger.left
-    //     height:                 _hamburgerSize
-    //     width:                  height
-    //     sourceSize.height:      height
-    //     fillMode:               Image.PreserveAspectFit
-    //     mipmap:                 true
-    //     smooth:                 true
-    //     color:                  qgcPal.text
-    //     visible:                _currentItem && missionItem.sequenceNumber !== 0
-    //     source:                 "/res/TrashDelete.svg"
-
-    //     QGCMouseArea {
-    //         fillItem:   parent
-    //         onClicked:  remove()
-    //     }
-    // }
-
-
     QGCColoredImage {
         id:                     hamburger
         anchors.margins:        _margin

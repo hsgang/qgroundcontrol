@@ -30,13 +30,13 @@ QGC_LOGGING_CATEGORY(MockLinkVerboseLog, "MockLinkVerboseLog")
 // Vehicle position is set close to default Gazebo vehicle location. This allows for multi-vehicle
 // testing of a gazebo vehicle and a mocklink vehicle
 #if 1
-double      MockLink::_defaultVehicleLatitude =     35.1750860; //47.397;
-double      MockLink::_defaultVehicleLongitude =    129.1246820; //8.5455;
-double      MockLink::_defaultVehicleAltitude =     50; //488.056;
+double      MockLink::_defaultVehicleLatitude =     47.397;
+double      MockLink::_defaultVehicleLongitude =    8.5455;
+double      MockLink::_defaultVehicleHomeAltitude = 488.056;
 #else
 double      MockLink::_defaultVehicleLatitude =     47.6333022928789;
 double      MockLink::_defaultVehicleLongitude =    -122.08833157994995;
-double      MockLink::_defaultVehicleAltitude =     19.0;
+double      MockLink::_defaultVehicleHomeAltitude = 19.0;
 #endif
 int         MockLink::_nextVehicleSystemId =        128;
 const char* MockLink::_failParam =                  "COM_FLTMODE6";
@@ -72,7 +72,7 @@ MockLink::MockLink(SharedLinkConfigurationPtr& config)
     , _mavState                             (MAV_STATE_STANDBY)
     , _firmwareType                         (MAV_AUTOPILOT_PX4)
     , _vehicleType                          (MAV_TYPE_QUADROTOR)
-    , _vehicleAltitude                      (_defaultVehicleAltitude)
+    , _vehicleAltitudeAMSL                      (_defaultVehicleHomeAltitude)
     , _sendStatusText                       (false)
     , _apmSendHomePositionOnEmptyList       (false)
     , _failureMode                          (MockConfiguration::FailNone)
@@ -268,6 +268,8 @@ void MockLink::_run10HzTasks(void)
             _sendGPSPositionDelayCount--;
         } else {
             _sendGpsRawInt();
+            _sendGlobalPositionInt();
+            _sendExtendedSysState();
         }
     }
 }
@@ -368,11 +370,11 @@ void MockLink::_sendHeartBeat(void)
                                     _vehicleComponentId,
                                     mavlinkChannel(),
                                     &msg,
-                                    _vehicleType,        // MAV_TYPE
+                                    _vehicleType,       // MAV_TYPE
                                     _firmwareType,      // MAV_AUTOPILOT
-                                    _mavBaseMode,        // MAV_MODE
-                                    _mavCustomMode,      // custom mode
-                                    _mavState);          // MAV_STATE
+                                    _mavBaseMode,       // MAV_MODE
+                                    _mavCustomMode,     // custom mode
+                                    _mavState);         // MAV_STATE
 
     respondWithMavlinkMessage(msg);
 }
@@ -395,8 +397,8 @@ void MockLink::_sendHighLatency2(void)
                                         px4_cm.custom_mode_hl,      // custom_mode
                                         (int32_t)(_vehicleLatitude  * 1E7),
                                         (int32_t)(_vehicleLongitude * 1E7),
-                                        (int16_t)_vehicleAltitude,
-                                        (int16_t)_vehicleAltitude,  // target_altitude,
+                                        (int16_t)_vehicleAltitudeAMSL,
+                                        (int16_t)_vehicleAltitudeAMSL,  // target_altitude,
                                         0,                          // heading
                                         0,                          // target_heading
                                         0,                          // target_distance
@@ -421,18 +423,18 @@ void MockLink::_sendSysStatus(void)
 {
     mavlink_message_t   msg;
     mavlink_msg_sys_status_pack_chan(
-                _vehicleSystemId,
-                _vehicleComponentId,
-                static_cast<uint8_t>(mavlinkChannel()),
-                &msg,
-                MAV_SYS_STATUS_SENSOR_GPS,  // onboard_control_sensors_present
-                0,                          // onboard_control_sensors_enabled
-                0,                          // onboard_control_sensors_health
-                250,                        // load
-                4200 * 4,                   // voltage_battery
-                8000,                       // current_battery
-                _battery1PctRemaining,      // battery_remaining
-                0,0,0,0,0,0,0,0,0);
+        _vehicleSystemId,
+        _vehicleComponentId,
+        static_cast<uint8_t>(mavlinkChannel()),
+        &msg,
+        MAV_SYS_STATUS_SENSOR_GPS,  // onboard_control_sensors_present
+        0,                          // onboard_control_sensors_enabled
+        0,                          // onboard_control_sensors_health
+        250,                        // load
+        4200 * 4,                   // voltage_battery
+        8000,                       // current_battery
+        _battery1PctRemaining,      // battery_remaining
+        0,0,0,0,0,0,0,0,0);
     respondWithMavlinkMessage(msg);
 }
 
@@ -478,45 +480,45 @@ void MockLink::_sendBatteryStatus(void)
     memset(rgVoltagesExtNone, 0, sizeof(rgVoltagesExtNone));
 
     mavlink_msg_battery_status_pack_chan(
-                _vehicleSystemId,
-                _vehicleComponentId,
-                static_cast<uint8_t>(mavlinkChannel()),
-                &msg,
-                1,                          // battery id
-                MAV_BATTERY_FUNCTION_ALL,
-                MAV_BATTERY_TYPE_LIPO,
-                2100,                       // temp cdegC
-                rgVoltages,
-                600,                        // battery cA
-                100,                        // current consumed mAh
-                -1,                         // energy consumed not supported
-                _battery1PctRemaining,
-                _battery1TimeRemaining,
-                _battery1ChargeState,
-                rgVoltagesExtNone,
-                0, // MAV_BATTERY_MODE
-                0); // MAV_BATTERY_FAULT
+        _vehicleSystemId,
+        _vehicleComponentId,
+        static_cast<uint8_t>(mavlinkChannel()),
+        &msg,
+        1,                          // battery id
+        MAV_BATTERY_FUNCTION_ALL,
+        MAV_BATTERY_TYPE_LIPO,
+        2100,                       // temp cdegC
+        rgVoltages,
+        600,                        // battery cA
+        100,                        // current consumed mAh
+        -1,                         // energy consumed not supported
+        _battery1PctRemaining,
+        _battery1TimeRemaining,
+        _battery1ChargeState,
+        rgVoltagesExtNone,
+        0, // MAV_BATTERY_MODE
+        0); // MAV_BATTERY_FAULT
     respondWithMavlinkMessage(msg);
 
     mavlink_msg_battery_status_pack_chan(
-                _vehicleSystemId,
-                _vehicleComponentId,
-                static_cast<uint8_t>(mavlinkChannel()),
-                &msg,
-                2,                          // battery id
-                MAV_BATTERY_FUNCTION_ALL,
-                MAV_BATTERY_TYPE_LIPO,
-                INT16_MAX,                  // temp cdegC
-                rgVoltagesNone,
-                600,                        // battery cA
-                100,                        // current consumed mAh
-                -1,                         // energy consumed not supported
-                _battery2PctRemaining,
-                _battery2TimeRemaining,
-                _battery2ChargeState,
-                rgVoltagesExtNone,
-                0, // MAV_BATTERY_MODE
-                0); // MAV_BATTERY_FAULT
+        _vehicleSystemId,
+        _vehicleComponentId,
+        static_cast<uint8_t>(mavlinkChannel()),
+        &msg,
+        2,                          // battery id
+        MAV_BATTERY_FUNCTION_ALL,
+        MAV_BATTERY_TYPE_LIPO,
+        INT16_MAX,                  // temp cdegC
+        rgVoltagesNone,
+        600,                        // battery cA
+        100,                        // current consumed mAh
+        -1,                         // energy consumed not supported
+        _battery2PctRemaining,
+        _battery2TimeRemaining,
+        _battery2ChargeState,
+        rgVoltagesExtNone,
+        0, // MAV_BATTERY_MODE
+        0); // MAV_BATTERY_FAULT
 
     respondWithMavlinkMessage(msg);
 }
@@ -544,7 +546,7 @@ void MockLink::respondWithMavlinkMessage(const mavlink_message_t& msg)
 {
     if (!_commLost) {
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
-        usleep(500);
+
         int cBuffer = mavlink_msg_to_send_buffer(buffer, &msg);
         QByteArray bytes((char *)buffer, cBuffer);
         emit bytesReceived(this, bytes);
@@ -586,8 +588,8 @@ void MockLink::_handleIncomingNSHBytes(const char* bytes, int cBytes)
     if (cBytes > 0) {
         qCDebug(MockLinkLog) << "NSH:" << (const char*)bytes;
 
-#if 0
-        // MockLink not quite ready to handle this correctly yet
+#if 0 \
+    // MockLink not quite ready to handle this correctly yet
         if (strncmp(bytes, "sh /etc/init.d/rc.usb\n", cBytes) == 0) {
             // This is the mavlink start command
             _mavlinkStarted = true;
@@ -1027,24 +1029,24 @@ void MockLink::emitRemoteControlChannelRawChanged(int channel, uint16_t raw)
                                       0,                     // time since boot, ignored
                                       18,                    // channel count
                                       chanRaw[0],            // channel raw value
-            chanRaw[1],            // channel raw value
-            chanRaw[2],            // channel raw value
-            chanRaw[3],            // channel raw value
-            chanRaw[4],            // channel raw value
-            chanRaw[5],            // channel raw value
-            chanRaw[6],            // channel raw value
-            chanRaw[7],            // channel raw value
-            chanRaw[8],            // channel raw value
-            chanRaw[9],            // channel raw value
-            chanRaw[10],           // channel raw value
-            chanRaw[11],           // channel raw value
-            chanRaw[12],           // channel raw value
-            chanRaw[13],           // channel raw value
-            chanRaw[14],           // channel raw value
-            chanRaw[15],           // channel raw value
-            chanRaw[16],           // channel raw value
-            chanRaw[17],           // channel raw value
-            0);                    // rss
+                                      chanRaw[1],            // channel raw value
+                                      chanRaw[2],            // channel raw value
+                                      chanRaw[3],            // channel raw value
+                                      chanRaw[4],            // channel raw value
+                                      chanRaw[5],            // channel raw value
+                                      chanRaw[6],            // channel raw value
+                                      chanRaw[7],            // channel raw value
+                                      chanRaw[8],            // channel raw value
+                                      chanRaw[9],            // channel raw value
+                                      chanRaw[10],           // channel raw value
+                                      chanRaw[11],           // channel raw value
+                                      chanRaw[12],           // channel raw value
+                                      chanRaw[13],           // channel raw value
+                                      chanRaw[14],           // channel raw value
+                                      chanRaw[15],           // channel raw value
+                                      chanRaw[16],           // channel raw value
+                                      chanRaw[17],           // channel raw value
+                                      0);                    // rss
     respondWithMavlinkMessage(responseMsg);
 }
 
@@ -1087,15 +1089,15 @@ void MockLink::_handleInProgressCommandLong(const mavlink_command_long_t& reques
 
     if (request.command != MockLink::MAV_CMD_MOCKLINK_RESULT_IN_PROGRESS_NO_ACK) {
         mavlink_msg_command_ack_pack_chan(_vehicleSystemId,
-                                        _vehicleComponentId,
-                                        mavlinkChannel(),
-                                        &commandAck,
-                                        request.command,
-                                        commandResult,
-                                        0,    // progress
-                                        0,    // result_param2
-                                        0,    // target_system
-                                        0);   // target_component
+                                          _vehicleComponentId,
+                                          mavlinkChannel(),
+                                          &commandAck,
+                                          request.command,
+                                          commandResult,
+                                          0,    // progress
+                                          0,    // result_param2
+                                          0,    // target_system
+                                          0);   // target_component
         respondWithMavlinkMessage(commandAck);
     }
 }
@@ -1149,6 +1151,10 @@ void MockLink::_handleCommandLong(const mavlink_message_t& msg)
             }
             commandResult = MAV_RESULT_ACCEPTED;
         }
+        break;
+    case MAV_CMD_NAV_TAKEOFF:
+        _handleTakeoff(request);
+        commandResult = MAV_RESULT_ACCEPTED;
         break;
     case MAV_CMD_MOCKLINK_ALWAYS_RESULT_ACCEPTED:
         // Test command which always returns MAV_RESULT_ACCEPTED
@@ -1249,7 +1255,7 @@ void MockLink::_respondWithAutopilotVersion(void)
     }
 #endif
     uint64_t capabilities = MAV_PROTOCOL_CAPABILITY_MAVLINK2 | MAV_PROTOCOL_CAPABILITY_MISSION_FENCE | MAV_PROTOCOL_CAPABILITY_MISSION_RALLY | MAV_PROTOCOL_CAPABILITY_MISSION_INT |
-            (_firmwareType == MAV_AUTOPILOT_ARDUPILOTMEGA ? MAV_PROTOCOL_CAPABILITY_TERRAIN : 0);
+                            (_firmwareType == MAV_AUTOPILOT_ARDUPILOTMEGA ? MAV_PROTOCOL_CAPABILITY_TERRAIN : 0);
 
     mavlink_msg_autopilot_version_pack_chan(_vehicleSystemId,
                                             _vehicleComponentId,
@@ -1291,11 +1297,11 @@ void MockLink::_sendHomePosition(void)
                                         &msg,
                                         (int32_t)(_vehicleLatitude * 1E7),
                                         (int32_t)(_vehicleLongitude * 1E7),
-                                        (int32_t)(_vehicleAltitude * 1000),
+                                        (int32_t)(_defaultVehicleHomeAltitude * 1000),
                                         0.0f, 0.0f, 0.0f,
                                         &bogus[0],
-            0.0f, 0.0f, 0.0f,
-            0);
+                                        0.0f, 0.0f, 0.0f,
+                                        0);
     respondWithMavlinkMessage(msg);
 }
 
@@ -1309,10 +1315,10 @@ void MockLink::_sendGpsRawInt(void)
                                       mavlinkChannel(),
                                       &msg,
                                       timeTick++,                           // time since boot
-                                      3,                                    // 3D fix
+                                      GPS_FIX_TYPE_3D_FIX,
                                       (int32_t)(_vehicleLatitude  * 1E7),
                                       (int32_t)(_vehicleLongitude * 1E7),
-                                      (int32_t)(_vehicleAltitude  * 1000),
+                                      (int32_t)(_vehicleAltitudeAMSL  * 1000),
                                       UINT16_MAX, UINT16_MAX,               // HDOP/VDOP not known
                                       UINT16_MAX,                           // velocity not known
                                       UINT16_MAX,                           // course over ground not known
@@ -1324,6 +1330,39 @@ void MockLink::_sendGpsRawInt(void)
                                       0,                                    // Speed uncertainty in meters * 1000 (positive for up).
                                       0,                                    // Heading / track uncertainty in degrees * 1e5.
                                       65535);                               // Yaw not provided
+    respondWithMavlinkMessage(msg);
+}
+
+void MockLink::_sendGlobalPositionInt(void)
+{
+    static uint64_t timeTick = 0;
+    mavlink_message_t msg;
+
+    mavlink_msg_global_position_int_pack_chan(_vehicleSystemId,
+                                              _vehicleComponentId,
+                                              mavlinkChannel(),
+                                              &msg,
+                                              timeTick++,                           // time since boot
+                                              (int32_t)(_vehicleLatitude  * 1E7),
+                                              (int32_t)(_vehicleLongitude * 1E7),
+                                              (int32_t)(_vehicleAltitudeAMSL  * 1000),
+                                              (int32_t)((_vehicleAltitudeAMSL - _defaultVehicleHomeAltitude) * 1000),
+                                              0, 0, 0,                              // no speed sent
+                                              UINT16_MAX);                          // no heading sent
+    respondWithMavlinkMessage(msg);
+}
+
+void MockLink::_sendExtendedSysState(void)
+{
+    static uint64_t timeTick = 0;
+    mavlink_message_t msg;
+
+    mavlink_msg_extended_sys_state_pack_chan(_vehicleSystemId,
+                                             _vehicleComponentId,
+                                             mavlinkChannel(),
+                                             &msg,
+                                             MAV_VTOL_STATE_UNDEFINED,
+                                             _vehicleAltitudeAMSL > _defaultVehicleHomeAltitude ? MAV_LANDED_STATE_IN_AIR : MAV_LANDED_STATE_ON_GROUND);
     respondWithMavlinkMessage(msg);
 }
 
@@ -1373,16 +1412,16 @@ void MockLink::_sendStatusTextMessages(void)
     };
 
     static const struct StatusMessage rgMessages[] = {
-    { MAV_SEVERITY_INFO,        "#Testing audio output" },
-    { MAV_SEVERITY_EMERGENCY,   "Status text emergency" },
-    { MAV_SEVERITY_ALERT,       "Status text alert" },
-    { MAV_SEVERITY_CRITICAL,    "Status text critical" },
-    { MAV_SEVERITY_ERROR,       "Status text error" },
-    { MAV_SEVERITY_WARNING,     "Status text warning" },
-    { MAV_SEVERITY_NOTICE,      "Status text notice" },
-    { MAV_SEVERITY_INFO,        "Status text info" },
-    { MAV_SEVERITY_DEBUG,       "Status text debug" },
-};
+                                                      { MAV_SEVERITY_INFO,        "#Testing audio output" },
+                                                      { MAV_SEVERITY_EMERGENCY,   "Status text emergency" },
+                                                      { MAV_SEVERITY_ALERT,       "Status text alert" },
+                                                      { MAV_SEVERITY_CRITICAL,    "Status text critical" },
+                                                      { MAV_SEVERITY_ERROR,       "Status text error" },
+                                                      { MAV_SEVERITY_WARNING,     "Status text warning" },
+                                                      { MAV_SEVERITY_NOTICE,      "Status text notice" },
+                                                      { MAV_SEVERITY_INFO,        "Status text info" },
+                                                      { MAV_SEVERITY_DEBUG,       "Status text debug" },
+                                                      };
 
     mavlink_message_t msg;
 
@@ -1573,6 +1612,12 @@ void MockLink::_handlePreFlightCalibration(const mavlink_command_long_t& request
     respondWithMavlinkMessage(msg);
 }
 
+void MockLink::_handleTakeoff(const mavlink_command_long_t& request)
+{
+    _vehicleAltitudeAMSL = request.param7 + _defaultVehicleHomeAltitude;
+    _mavBaseMode |= MAV_MODE_FLAG_SAFETY_ARMED;
+}
+
 void MockLink::_handleLogRequestList(const mavlink_message_t& msg)
 {
     mavlink_log_request_list_t request;
@@ -1744,9 +1789,9 @@ bool MockLink::_handleRequestMessage(const mavlink_command_long_t& request, bool
         uint8_t             nullHash[8] = { 0 };
         mavlink_message_t   responseMsg;
         mavlink_msg_protocol_version_pack_chan(_vehicleSystemId,
-                                                _vehicleComponentId,
-                                                mavlinkChannel(),
-                                                &responseMsg,
+                                               _vehicleComponentId,
+                                               mavlinkChannel(),
+                                               &responseMsg,
                                                200,
                                                100,
                                                200,
@@ -1774,15 +1819,15 @@ bool MockLink::_handleRequestMessage(const mavlink_command_long_t& request, bool
             noAck = true;
             return true;
         }
-    {
-        mavlink_message_t   responseMsg;
-        mavlink_msg_debug_pack_chan(_vehicleSystemId,
-                                    _vehicleComponentId,
-                                    mavlinkChannel(),
-                                    &responseMsg,
-                                    0, 0, 0);
-        respondWithMavlinkMessage(responseMsg);
-    }
+        {
+            mavlink_message_t   responseMsg;
+            mavlink_msg_debug_pack_chan(_vehicleSystemId,
+                                        _vehicleComponentId,
+                                        mavlinkChannel(),
+                                        &responseMsg,
+                                        0, 0, 0);
+            respondWithMavlinkMessage(responseMsg);
+        }
         return true;
     }
 

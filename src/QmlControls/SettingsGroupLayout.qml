@@ -19,7 +19,8 @@ ColumnLayout {
     property string headingDescription
     property bool   showDividers:       true
 
-    property real _margins: ScreenTools.defaultFontPixelHeight / 2
+    property real   _margins: ScreenTools.defaultFontPixelHeight / 2
+    property var    _borderColor: QGroundControl.globalPalette.groupBorder
 
     ColumnLayout {
         Layout.leftMargin:  _margins
@@ -48,7 +49,7 @@ ColumnLayout {
         implicitWidth:      _contentLayout.implicitWidth + (_margins * 2)
         implicitHeight:     _contentLayout.implicitHeight + (_margins * 2)
         color:              "transparent"
-        border.color:       QGroundControl.globalPalette.groupBorder
+        border.color:       _borderColor
         border.width:       1
         radius:             ScreenTools.defaultFontPixelHeight / 2
 
@@ -57,13 +58,14 @@ ColumnLayout {
 
             Rectangle {
                 x:                  _margins
-                y:                  _contentItem.y + _contentItem.height + _margins + _margins
+                y:                  _contentItem.y + _contentItem.height + _margins + _margins - 1
                 width:              parent.width - (_margins * 2)
                 height:             1
                 color:              QGroundControl.globalPalette.groupBorder
-                visible:            _contentItem.visible && 
-                                        _contentItem.width !== 0 && _contentItem.height !== 0 &&
-                                        index < _contentLayout.children.length - 1
+                visible:            _contentItem.visible &&
+                                    _contentItem.width !== 0 &&
+                                    _contentItem.height !== 0 &&
+                                    index < _contentLayout.children.length - 1
 
                 property var _contentItem: _contentLayout.children[index]
             }
@@ -75,6 +77,6 @@ ColumnLayout {
             y:                  _margins
             width:              parent.width - (_margins * 2)
             spacing:            _margins * 2
-        }
+        }        
     }
 }

@@ -109,7 +109,7 @@ Item {
         x:                  recalcXPosition()
         anchors.margins:    _toolsMargin
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:        guidedActionConfirm.visible ? guidedActionConfirm.bottom : parent.top
+        anchors.top:        parent.top //guidedActionConfirm.visible ? guidedActionConfirm.bottom : parent.top
         visible:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue
 
         property real topEdgeCenterInset: visible ? y + height : 0
@@ -138,8 +138,8 @@ Item {
 
     GuidedActionConfirm {
         id:                         guidedActionConfirm
-        anchors.margins:            _toolsMargin
-        anchors.top:                parent.top
+        anchors.margins:            _toolsMargin * 2
+        anchors.bottom:             bottomCenterRowLayout.top
         anchors.horizontalCenter:   parent.horizontalCenter
         z:                          QGroundControl.zOrderTopMost
         guidedController:           _guidedController

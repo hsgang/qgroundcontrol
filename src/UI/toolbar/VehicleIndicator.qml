@@ -34,7 +34,7 @@ Item {
         id: vehicleRow
         anchors.top: parent.top
         anchors.bottom: parent.bottom
-        spacing: ScreenTools.defaultFontPixelWidth / 2
+        spacing: ScreenTools.defaultFontPixelHeight / 5
 
         QGCColoredImage {
             id:                 roiIcon
@@ -45,6 +45,25 @@ Item {
             source:             "/qmlimages/vehicleQuadRotor.svg"
             color:              _activeVehicle.readyToFlyAvailable && _activeVehicle.readyToFly ? qgcPal.colorGreen : qgcPal.text
             fillMode:           Image.PreserveAspectFit
+        }
+
+        Column {
+            anchors.verticalCenter: parent.verticalCenter
+
+            QGCLabel {
+                anchors.left:   parent.left
+                color:          qgcPal.buttonText
+                font.pointSize: ScreenTools.smallFontPointSize
+                text:           _activeVehicle ? _activeVehicle.imuTemp.valueString + "°C" : ""
+            }
+
+            QGCLabel {
+                id:             hdopValue
+                anchors.left:   parent.left
+                color:          qgcPal.buttonText
+                font.pointSize: ScreenTools.defaultFontPointSize
+                text:           " "//_activeVehicle ? _activeVehicle.imuTemp.valueString + "°C" : ""
+            }
         }
     }
 

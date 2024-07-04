@@ -19,8 +19,8 @@ import QGroundControl.Palette
 Rectangle {
     id:         _root
     width:      ScreenTools.defaultFontPixelWidth * 35
-    height:     mainLayout.height + (_margins * 2)
-    radius:     ScreenTools.defaultFontPixelWidth / 2
+    height:     mainLayout.height + (_margins * 3)
+    radius:     ScreenTools.defaultFontPixelHeight / 2
     color:      qgcPal.window
     visible:    _utmspEnabled === true ? utmspSliderTrigger: false
 
@@ -96,6 +96,7 @@ Rectangle {
         QGCLabel {
             id:                     messageText
             Layout.fillWidth:       true
+            Layout.topMargin:       ScreenTools.defaultFontPixelHeight * 0.3
             horizontalAlignment:    Text.AlignHCenter
             wrapMode:               Text.WordWrap
             font.pointSize:         ScreenTools.defaultFontPointSize
@@ -111,6 +112,8 @@ Rectangle {
 
         RowLayout {
             Layout.fillWidth:   true
+            Layout.leftMargin:  ScreenTools.defaultFontPixelWidth
+            Layout.rightMargin: ScreenTools.defaultFontPixelWidth
             spacing:            ScreenTools.defaultFontPixelWidth
 
             SliderSwitch {

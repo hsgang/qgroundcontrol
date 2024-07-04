@@ -69,7 +69,7 @@ QGCPopupDialog {
         }
 
         LabelledButton {
-            label:               qsTr("Set position")
+            label:               qsTr("Set Position")
             buttonText:          qsTr("Move")
             visible:             _showGeographic
             onClicked: {
