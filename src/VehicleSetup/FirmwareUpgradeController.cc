@@ -30,19 +30,6 @@
 #include <QtCore/QJsonObject>
 #include <QtCore/QJsonArray>
 
-const char* FirmwareUpgradeController::_manifestFirmwareJsonKey =               "firmware";
-const char* FirmwareUpgradeController::_manifestBoardIdJsonKey =                "board_id";
-const char* FirmwareUpgradeController::_manifestMavTypeJsonKey =                "mav-type";
-const char* FirmwareUpgradeController::_manifestFormatJsonKey =                 "format";
-const char* FirmwareUpgradeController::_manifestUrlJsonKey =                    "url";
-const char* FirmwareUpgradeController::_manifestMavFirmwareVersionTypeJsonKey = "mav-firmware-version-type";
-const char* FirmwareUpgradeController::_manifestUSBIDJsonKey =                  "USBID";
-const char* FirmwareUpgradeController::_manifestMavFirmwareVersionJsonKey =     "mav-firmware-version";
-const char* FirmwareUpgradeController::_manifestBootloaderStrJsonKey =          "bootloader_str";
-const char* FirmwareUpgradeController::_manifestLatestKey =                     "latest";
-const char* FirmwareUpgradeController::_manifestPlatformKey =                   "platform";
-const char* FirmwareUpgradeController::_manifestBrandNameKey =                  "brand_name";
-
 struct FirmwareToUrlElement_t {
     FirmwareUpgradeController::AutoPilotStackType_t     stackType;
     FirmwareUpgradeController::FirmwareBuildType_t      firmwareType;
@@ -99,7 +86,8 @@ static QMap<int, QString> px4_board_name_map {
     {1048, "holybro_kakuteh7_default"},
     {1053, "holybro_kakuteh7v2_default"},
     {1054, "holybro_kakuteh7mini_default"},
-    {1110, "jfb_jfb110_default"},    
+    {1110, "jfb_jfb110_default"},
+    {1123, "siyi_n7_default"},    
 };
 
 uint qHash(const FirmwareUpgradeController::FirmwareIdentifier& firmwareId)

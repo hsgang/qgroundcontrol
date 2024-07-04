@@ -99,8 +99,8 @@ ColumnLayout {
     // to be null all over the place
     Loader {
         id:                 photoVideoControlLoader
-        Layout.alignment:   Qt.AlignVCenter | Qt.AlignRight
-        sourceComponent:    globals.activeVehicle && multiVehiclePanelSelector._showSingleVehicleUI ? photoVideoControlComponent : undefined
+        Layout.alignment:   Qt.AlignTop | Qt.AlignRight
+        sourceComponent:    globals.activeVehicle && _showSingleVehicleUI ? photoVideoControlComponent : undefined
 
         property real rightEdgeCenterInset: visible ? parent.width - x : 0
 

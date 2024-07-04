@@ -49,6 +49,8 @@ AudioOutput* AudioOutput::instance()
 AudioOutput::AudioOutput(QObject* parent)
     : QTextToSpeech(QStringLiteral("none"), parent)
 {
+    // qCDebug(AudioOutputLog) << Q_FUNC_INFO << this;
+
     (void) connect(this, &QTextToSpeech::stateChanged, [](QTextToSpeech::State state) {
         qCDebug(AudioOutputLog) << Q_FUNC_INFO << "State:" << state;
     });
@@ -72,6 +74,11 @@ AudioOutput::AudioOutput(QObject* parent)
             });
         }
     }
+}
+
+AudioOutput::~AudioOutput()
+{
+    // qCDebug(AudioOutputLog) << Q_FUNC_INFO << this;
 }
 
 bool AudioOutput::isMuted() const

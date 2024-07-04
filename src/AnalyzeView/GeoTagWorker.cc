@@ -45,7 +45,6 @@ void GeoTagWorker::run()
     emit progressChanged((100/nSteps));
 
     // Parse EXIF
-    ExifParser exifParser;
     _imageTime.clear();
     for (int i = 0; i < _imageList.size(); ++i) {
         QFile file(_imageList.at(i).absoluteFilePath());
@@ -56,7 +55,7 @@ void GeoTagWorker::run()
         QByteArray imageBuffer = file.readAll();
         file.close();
 
-        _imageTime.append(exifParser.readTime(imageBuffer));
+        _imageTime.append(ExifParser::readTime(imageBuffer));
 
         emit progressChanged((100/nSteps) + ((100/nSteps) / _imageList.size())*i);
 
@@ -82,13 +81,9 @@ void GeoTagWorker::run()
     bool parseComplete = false;
     QString errorString;
     if (isULog) {
-        ULogParser parser;
-        parseComplete = parser.getTagsFromLog(log, _triggerList, errorString);
-
+        parseComplete = ULogParser::getTagsFromLog(log, _triggerList, errorString);
     } else {
-        PX4LogParser parser;
-        parseComplete = parser.getTagsFromLog(log, _triggerList);
-
+        parseComplete = PX4LogParser::getTagsFromLog(log, _triggerList);
     }
 
     if (!parseComplete) {
@@ -144,7 +139,7 @@ void GeoTagWorker::run()
         QByteArray imageBuffer = fileRead.readAll();
         fileRead.close();
 
-        if (!exifParser.write(imageBuffer, _triggerList[_triggerIndices[i]])) {
+        if (!ExifParser::write(imageBuffer, _triggerList[_triggerIndices[i]])) {
             emit error(tr("Geotagging failed. Couldn't write to image."));
             return;
         } else {

@@ -1294,6 +1294,14 @@
         <value code="2">Hold mode</value>
       </values>
     </parameter>
+    <parameter name="COM_RAM_MAX" default="95.0" type="FLOAT">
+      <short_desc>Maximum allowed RAM usage to pass checks</short_desc>
+      <long_desc>The check fails if the RAM usage is above this threshold. A negative value disables the check.</long_desc>
+      <min>-1</min>
+      <max>100</max>
+      <unit>%</unit>
+      <increment>1</increment>
+    </parameter>
     <parameter name="COM_RCL_EXCEPT" default="0" type="INT32">
       <short_desc>RC loss exceptions</short_desc>
       <long_desc>Specify modes in which RC loss is ignored and the failsafe action not triggered.</long_desc>
@@ -1496,6 +1504,46 @@
       <min>-1</min>
       <max>6143</max>
     </parameter>
+    <parameter name="UCAN1_FB0_SUB" default="-1" type="INT32">
+      <short_desc>Cyphal ESC 0 zubax feedback port ID</short_desc>
+      <min>-1</min>
+      <max>6143</max>
+    </parameter>
+    <parameter name="UCAN1_FB1_SUB" default="-1" type="INT32">
+      <short_desc>Cyphal ESC 1 zubax feedback port ID</short_desc>
+      <min>-1</min>
+      <max>6143</max>
+    </parameter>
+    <parameter name="UCAN1_FB2_SUB" default="-1" type="INT32">
+      <short_desc>Cyphal ESC 2 zubax feedback port ID</short_desc>
+      <min>-1</min>
+      <max>6143</max>
+    </parameter>
+    <parameter name="UCAN1_FB3_SUB" default="-1" type="INT32">
+      <short_desc>Cyphal ESC 3 zubax feedback port ID</short_desc>
+      <min>-1</min>
+      <max>6143</max>
+    </parameter>
+    <parameter name="UCAN1_FB4_SUB" default="-1" type="INT32">
+      <short_desc>Cyphal ESC 4 zubax feedback port ID</short_desc>
+      <min>-1</min>
+      <max>6143</max>
+    </parameter>
+    <parameter name="UCAN1_FB5_SUB" default="-1" type="INT32">
+      <short_desc>Cyphal ESC 5 zubax feedback port ID</short_desc>
+      <min>-1</min>
+      <max>6143</max>
+    </parameter>
+    <parameter name="UCAN1_FB6_SUB" default="-1" type="INT32">
+      <short_desc>Cyphal ESC 6 zubax feedback port ID</short_desc>
+      <min>-1</min>
+      <max>6143</max>
+    </parameter>
+    <parameter name="UCAN1_FB7_SUB" default="-1" type="INT32">
+      <short_desc>Cyphal ESC 7 zubax feedback port ID</short_desc>
+      <min>-1</min>
+      <max>6143</max>
+    </parameter>
     <parameter name="UCAN1_GPS0_SUB" default="-1" type="INT32">
       <short_desc>GPS 0 subscription port ID</short_desc>
       <min>-1</min>
@@ -1513,6 +1561,11 @@
     </parameter>
     <parameter name="UCAN1_LG_BMS_SUB" default="-1" type="INT32">
       <short_desc>Cyphal legacy battery port ID</short_desc>
+      <min>-1</min>
+      <max>6143</max>
+    </parameter>
+    <parameter name="UCAN1_READ_PUB" default="-1" type="INT32">
+      <short_desc>Cyphal ESC readiness port ID</short_desc>
       <min>-1</min>
       <max>6143</max>
     </parameter>

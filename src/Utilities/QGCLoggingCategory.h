@@ -63,7 +63,7 @@ private:
     QStringList _registeredCategories;
     QString     _commandLineLoggingOptions;
 
-    static const char* _filterRulesSettingsGroup;
+    static constexpr const char* _filterRulesSettingsGroup = "LoggingFilters";
 };
         
 class QGCLoggingCategory

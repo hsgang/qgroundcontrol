@@ -50,7 +50,6 @@
 #include "VehicleBatteryFactGroup.h"
 #include "VehicleObjectAvoidance.h"
 #include "VideoManager.h"
-#include "VideoReceiver.h"
 #include "VideoSettings.h"
 #include <DeviceInfo.h>
 
@@ -1542,11 +1541,9 @@ void Vehicle::_updateArmed(bool armed)
             _trajectoryPoints->stop();
             _flightTimerStop();
             // Also handle Video Streaming
-            if(qgcApp()->toolbox()->videoManager()->videoReceiver()) {
-                if(_settingsManager->videoSettings()->disableWhenDisarmed()->rawValue().toBool()) {
-                    _settingsManager->videoSettings()->streamEnabled()->setRawValue(false);
-                    qgcApp()->toolbox()->videoManager()->videoReceiver()->stop();
-                }
+            if(_settingsManager->videoSettings()->disableWhenDisarmed()->rawValue().toBool()) {
+                _settingsManager->videoSettings()->streamEnabled()->setRawValue(false);
+                qgcApp()->toolbox()->videoManager()->stopVideo();
             }
         }
     }
