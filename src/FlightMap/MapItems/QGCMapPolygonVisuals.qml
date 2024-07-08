@@ -368,33 +368,6 @@ Item {
         }
     }
 
-//    Component {
-//        id: edgeLengthHandleComponent
-
-//        MapQuickItem {
-//            id:             mapQuickItem
-//            anchorPoint.x:  sourceItem.width / 2
-//            anchorPoint.y:  sourceItem.height / 2
-//            visible:        !_circleMode
-
-//            property int vertexIndex
-//            property real distance
-//            property string distanceText : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(distance).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
-
-//            sourceItem: Rectangle {
-//                width: edgeLengthText.width + ScreenTools.defaultFontPixelWidth
-//                height: edgeLengthText.height + (ScreenTools.defaultFontPixelHeight * 0.2)
-//                radius: height * 0.2
-//                color: qgcPal.window
-//                QGCLabel{
-//                    id: edgeLengthText
-//                    anchors.centerIn: parent
-//                    text: distanceText //distance.toFixed(1) + "m"
-//                }
-//            }
-//        }
-//    }
-
     Component {
         id: splitHandlesComponent
 
@@ -430,6 +403,33 @@ Item {
             }
         }
     }
+
+//    Component {
+//        id: edgeLengthHandleComponent
+
+//        MapQuickItem {
+//            id:             mapQuickItem
+//            anchorPoint.x:  sourceItem.width / 2
+//            anchorPoint.y:  sourceItem.height / 2
+//            visible:        !_circleMode
+
+//            property int vertexIndex
+//            property real distance
+//            property string distanceText : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(distance).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+
+//            sourceItem: Rectangle {
+//                width: edgeLengthText.width + ScreenTools.defaultFontPixelWidth
+//                height: edgeLengthText.height + (ScreenTools.defaultFontPixelHeight * 0.2)
+//                radius: height * 0.2
+//                color: qgcPal.window
+//                QGCLabel{
+//                    id: edgeLengthText
+//                    anchors.centerIn: parent
+//                    text: distanceText //distance.toFixed(1) + "m"
+//                }
+//            }
+//        }
+//    }
 
 //    Component {
 //        id: edgeLengthHandlesComponent

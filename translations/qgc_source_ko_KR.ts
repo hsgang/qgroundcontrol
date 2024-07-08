@@ -6830,7 +6830,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/FlyViewMissionCompleteDialog.qml" line="44"/>
         <source>Flight Plan complete</source>
-        <translation>비행 계획 완료</translation>
+        <translation>자동 경로 비행 완료</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewMissionCompleteDialog.qml" line="80"/>
@@ -6840,22 +6840,22 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/FlyViewMissionCompleteDialog.qml" line="87"/>
         <source>Remove plan from vehicle</source>
-        <translation>비행 경로 기체에서 삭제</translation>
+        <translation>비행 경로 기체에서 삭제하기</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewMissionCompleteDialog.qml" line="98"/>
         <source>Leave plan on vehicle</source>
-        <translation>비행 경로 기체에 저장</translation>
+        <translation>비행 경로 기체에 남겨두기</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewMissionCompleteDialog.qml" line="116"/>
         <source>Resume Mission From Waypoint %1</source>
-        <translation>경로 지점 %1로 부터 미션 다시수행</translation>
+        <translation>경로 지점 %1부터 미션 다시수행</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewMissionCompleteDialog.qml" line="127"/>
         <source>Resume Mission will rebuild the current mission from the last flown waypoint and upload it to the vehicle for the next flight.</source>
-        <translation>미션 다시시작은 마지막 비행 경로지점에서 현재 미션을 다시 구축하여, 다음 비행에 사용하기 위해 기체에 미션을 업로드합니다.</translation>
+        <translation>미션 다시시작은 마지막 비행 경로지점에서 현재 미션을 다시 생성하여, 다음 비행에 사용하기 위해 기체에 미션을 업로드합니다.</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewMissionCompleteDialog.qml" line="135"/>
@@ -7694,8 +7694,8 @@ Click Ok to start the auto-tuning process.
     <name>FlyViewSettings</name>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="84"/>
-        <source>General</source>
-        <translation>일반 설정</translation>
+        <source>FlyView General</source>
+        <translation>비행화면 설정</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="103"/>
@@ -7816,6 +7816,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="230"/>
         <source>Update home position based on device location. This will affect return to home</source>
         <translation>조종기 기반 홈 위치 업데이트</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="106"/>
+        <source>Background Opacity</source>
+        <translation>위젯 배경 투명도</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="169"/>
@@ -10343,7 +10348,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="41"/>
         <source>Landing</source>
-        <translation>착륙</translation>
+        <translation>착륙중</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="41"/>
+        <source>Connecting</source>
+        <translation>연결중</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="136"/>
@@ -11063,7 +11073,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/MissionItemEditor.qml" line="215"/>
         <source>Move to previous item position</source>
-        <translation>이전 아이템 위치로 이동</translation>
+        <translation>이전 항목 위치로 이동</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionItemEditor.qml" line="221"/>
@@ -11072,8 +11082,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/PlanView/MissionItemEditor.qml" line="223"/>
-        <source>Delete</source>
-        <translation>삭제</translation>
+        <source>#%1 Item Delete</source>
+        <translation>#%1 항목 삭제</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionItemEditor.qml" line="231"/>
@@ -11162,7 +11172,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="103"/>
         <source>Initial Waypoint Alt</source>
-        <translation>초기 웨이포인트 고도</translation>
+        <translation>기본 경로 고도</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionSettingsEditor.qml" line="208"/>

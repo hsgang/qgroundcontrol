@@ -370,6 +370,7 @@
             "rawName":      "MAV_CMD_NAV_DELAY",
             "friendlyName": "Delay until",
             "description":  "Delay until the specified time is reached.",
+            "category":     "Basic",
             "param1": {
                 "label":            "Hold",
                 "units":            "secs",
@@ -405,7 +406,7 @@
             "friendlyName": "Delay",
             "description":  "Delay the mission for the number of seconds.",
             "friendlyEdit": true,
-            "category":     "Basic",
+            "category":     "Conditionals",
             "param1": {
                 "label":            "Delay",
                 "units":            "secs",

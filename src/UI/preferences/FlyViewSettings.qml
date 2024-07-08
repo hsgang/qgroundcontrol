@@ -37,6 +37,7 @@ SettingsPage {
     property Fact   _viewer3DOsmFilePath:               _settingsManager.viewer3DSettings.osmFilePath
     property Fact   _viewer3DBuildingLevelHeight:       _settingsManager.viewer3DSettings.buildingLevelHeight
     property Fact   _viewer3DAltitudeBias:              _settingsManager.viewer3DSettings.altitudeBias
+    property real   _comboBoxPreferredWidth:            ScreenTools.defaultFontPixelWidth * 15
 
     QGCFileDialogController { id: fileController }
 
@@ -48,7 +49,7 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:            qsTr("General")
+        heading:            qsTr("FlyView General")
 
         FactCheckBoxSlider {
             id:                 useCheckList
@@ -100,6 +101,14 @@ SettingsPage {
             fact:               _updateHomePosition
             visible:            _updateHomePosition.visible
             property Fact _updateHomePosition: _flyViewSettings.updateHomePosition
+        }
+
+        LabelledFactComboBox {
+            Layout.fillWidth:   true
+            label:              qsTr("Background Opacity")
+            fact:               QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
+            indexModel:         false
+            comboBoxPreferredWidth: _comboBoxPreferredWidth
         }
     }
 
@@ -284,6 +293,7 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("3D View")
+        visible:            !ScreenTools.isMobile
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true

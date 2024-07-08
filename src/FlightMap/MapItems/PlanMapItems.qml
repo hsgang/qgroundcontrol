@@ -61,7 +61,7 @@ Item {
         id: missionLineViewComponent
 
         MapPolyline {
-            line.width: 5
+            line.width: 4
             line.color: "#36bc9b"                           // Hack, can't get palette to work in here
             z:          QGroundControl.zOrderWaypointLines
             path:       _missionController.waypointPath

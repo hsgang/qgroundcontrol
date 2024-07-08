@@ -16,6 +16,7 @@
 #include "QGCApplication.h"
 
 #include <QtQuick/QSGFlatColorMaterial>
+#include "QGCPalette.h"
 
 QGC_LOGGING_CATEGORY(TerrainProfileLog, "TerrainProfileLog")
 
@@ -281,7 +282,7 @@ QSGNode* TerrainProfile::updatePaintNode(QSGNode* oldNode, QQuickItem::UpdatePai
 
         _createGeometry(terrainProfileNode,     terrainProfileGeometry,     QSGGeometry::DrawLineStrip, "green");
         _createGeometry(missingTerrainNode,     missingTerrainGeometry,     QSGGeometry::DrawLines,     "yellow");
-        _createGeometry(flightProfileNode,      flightProfileGeometry,      QSGGeometry::DrawLines,     "orange");
+        _createGeometry(flightProfileNode,      flightProfileGeometry,      QSGGeometry::DrawLines,     "#3db6d8"); //"orange");
         _createGeometry(terrainCollisionNode,   terrainCollisionGeometry,   QSGGeometry::DrawLines,     "red");
 
         rootNode->appendChildNode(terrainProfileNode);

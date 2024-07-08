@@ -60,13 +60,13 @@ Item {
         useSmallFont:   _root.pipState.state !== _root.pipState.fullState
         visible:        QGroundControl.videoManager.isGStreamer
     }
-    // //-- UVC Video (USB Camera or Video Device)
-    // Loader {
-    //     id:             cameraLoader
-    //     anchors.fill:   parent
-    //     visible:        !QGroundControl.videoManager.isGStreamer
-    //     source:         QGroundControl.videoManager.uvcEnabled ? "qrc:/qml/FlightDisplayViewUVC.qml" : "qrc:/qml/FlightDisplayViewDummy.qml"
-    // }
+    //-- UVC Video (USB Camera or Video Device)
+    Loader {
+        id:             cameraLoader
+        anchors.fill:   parent
+        visible:        !QGroundControl.videoManager.isGStreamer
+        source:         QGroundControl.videoManager.uvcEnabled ? "qrc:/qml/FlightDisplayViewUVC.qml" : "qrc:/qml/FlightDisplayViewDummy.qml"
+    }
 
     QGCLabel {
         text: qsTr("Double-click to exit full screen")
@@ -211,36 +211,36 @@ Item {
             }
         }
 
-        // Timer {
-        //     id: trackingStatusTimer
-        //     interval:               50
-        //     repeat:                 true
-        //     running:                true
-        //     onTriggered: {
-        //         if (videoStreaming._camera) {
-        //             if (videoStreaming._camera.trackingEnabled && videoStreaming._camera.trackingImageStatus) {
-        //                 var margin_hor = (parent.parent.width - videoStreaming.getWidth()) / 2
-        //                 var margin_ver = (parent.parent.height - videoStreaming.getHeight()) / 2
-        //                 var left = margin_hor + videoStreaming.getWidth() * videoStreaming._camera.trackingImageRect.left
-        //                 var top = margin_ver + videoStreaming.getHeight() * videoStreaming._camera.trackingImageRect.top
-        //                 var right = margin_hor + videoStreaming.getWidth() * videoStreaming._camera.trackingImageRect.right
-        //                 var bottom = margin_ver + !isNaN(videoStreaming._camera.trackingImageRect.bottom) ? videoStreaming.getHeight() * videoStreaming._camera.trackingImageRect.bottom : top + (right - left)
-        //                 var width = right - left
-        //                 var height = bottom - top
+        Timer {
+            id: trackingStatusTimer
+            interval:               50
+            repeat:                 true
+            running:                true
+            onTriggered: {
+                if (videoStreaming._camera) {
+                    if (videoStreaming._camera.trackingEnabled && videoStreaming._camera.trackingImageStatus) {
+                        var margin_hor = (parent.parent.width - videoStreaming.getWidth()) / 2
+                        var margin_ver = (parent.parent.height - videoStreaming.getHeight()) / 2
+                        var left = margin_hor + videoStreaming.getWidth() * videoStreaming._camera.trackingImageRect.left
+                        var top = margin_ver + videoStreaming.getHeight() * videoStreaming._camera.trackingImageRect.top
+                        var right = margin_hor + videoStreaming.getWidth() * videoStreaming._camera.trackingImageRect.right
+                        var bottom = margin_ver + !isNaN(videoStreaming._camera.trackingImageRect.bottom) ? videoStreaming.getHeight() * videoStreaming._camera.trackingImageRect.bottom : top + (right - left)
+                        var width = right - left
+                        var height = bottom - top
 
-        //                 flyViewVideoMouseArea.trackingStatus.x = left
-        //                 flyViewVideoMouseArea.trackingStatus.y = top
-        //                 flyViewVideoMouseArea.trackingStatus.width = width
-        //                 flyViewVideoMouseArea.trackingStatus.height = height
-        //             } else {
-        //                 flyViewVideoMouseArea.trackingStatus.x = 0
-        //                 flyViewVideoMouseArea.trackingStatus.y = 0
-        //                 flyViewVideoMouseArea.trackingStatus.width = 0
-        //                 flyViewVideoMouseArea.trackingStatus.height = 0
-        //             }
-        //         }
-        //     }
-        // }
+                        flyViewVideoMouseArea.trackingStatus.x = left
+                        flyViewVideoMouseArea.trackingStatus.y = top
+                        flyViewVideoMouseArea.trackingStatus.width = width
+                        flyViewVideoMouseArea.trackingStatus.height = height
+                    } else {
+                        flyViewVideoMouseArea.trackingStatus.x = 0
+                        flyViewVideoMouseArea.trackingStatus.y = 0
+                        flyViewVideoMouseArea.trackingStatus.width = 0
+                        flyViewVideoMouseArea.trackingStatus.height = 0
+                    }
+                }
+            }
+        }
     }
 
     ProximityRadarVideoView{

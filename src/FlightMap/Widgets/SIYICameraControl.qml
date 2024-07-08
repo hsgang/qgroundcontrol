@@ -31,13 +31,11 @@ Rectangle {
     property int    minDelta:       5
     property int    buttonSize:     ScreenTools.defaultFontPixelHeight * 1.6
 
-    GridLayout {
+    ColumnLayout {
         id: controlColumn
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.horizontalCenter: parent.horizontalCenter
-
-        columns: 2
 
         Rectangle {
             Layout.alignment:   Qt.AlignHCenter

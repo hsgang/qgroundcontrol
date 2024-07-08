@@ -92,11 +92,11 @@ Rectangle{
         //--Ground Speed Value Widget-----------------------------------------------------------------------------------
 
         Rectangle {
-            id:                         groundSpeedValue
-            height:                     ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
-            width:                      ScreenTools.defaultFontPixelWidth * 16
-            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-            radius:                     _toolsMargin
+            id:                 groundSpeedValue
+            height:             ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
+            width:              ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 12 : ScreenTools.defaultFontPixelWidth * 16
+            color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+            radius:             _toolsMargin
 
             ColumnLayout {
                 id :            spdGrid
@@ -355,7 +355,7 @@ Rectangle{
         Rectangle {
             id:                         altitudeValue
             height:                     ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
-            width:                      ScreenTools.defaultFontPixelWidth * 16
+            width:                      ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 12 : ScreenTools.defaultFontPixelWidth * 16
             color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:                     _toolsMargin
 

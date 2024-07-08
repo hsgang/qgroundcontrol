@@ -49,8 +49,8 @@ Rectangle {
             text:           mainStatusText()
             font.pointSize: ScreenTools.largeFontPointSize
             color:          qgcPal.text
-            //implicitWidth:  maxWidth
-            maxWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 16
+            implicitWidth:  maxWidth
+            maxWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 12
             minWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 8
 
             property string _commLostText:      qsTr("Communication Lost")
@@ -60,6 +60,7 @@ Rectangle {
             property string _armedText:         qsTr("Armed")
             property string _flyingText:        qsTr("Flying")
             property string _landingText:       qsTr("Landing")
+            property string _connectingText:    qsTr("Connecting")
 
             function mainStatusText() {
                 var statusText
@@ -94,13 +95,16 @@ Rectangle {
                                 if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
                                     _mainStatusBGColor = "orange"
                                 } else {
-                                    _mainStatusBGColor = "green"
+                                    _mainStatusBGColor = qgcPal.colorGreen
                                 }
                                 return mainStatusLabel._readyToFlyText
                             } else {
                                 _mainStatusBGColor = "red"
                                 return mainStatusLabel._notReadyToFlyText
                             }
+                        } else if (_activeVehicle.loadProgress) {
+                                _mainStatusBGColor = "yellow"
+                                return mainStatusLabel._connectingText
                         } else if (_activeVehicle.readyToFlyAvailable) {
                             if (_activeVehicle.readyToFly) {
                                 _mainStatusBGColor = qgcPal.colorGreen

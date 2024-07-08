@@ -52,8 +52,8 @@ Rectangle {
         id: editPositionDialog
 
         EditPositionDialog {
-            coordinate:             missionItem.isSurveyItem ?  missionItem.centerCoordinate : missionItem.coordinate
-            onCoordinateChanged:    missionItem.isSurveyItem ?  missionItem.centerCoordinate = coordinate : missionItem.coordinate = coordinate
+            coordinate:             missionItem.coordinate
+            onCoordinateChanged:    missionItem.coordinate = coordinate
         }
     }
 
@@ -121,7 +121,7 @@ Rectangle {
         SettingsGroupLayout{
             anchors.left:   parent.left
             anchors.right:  parent.right
-            visible:        !missionItem.wizardMode && _specifiesAltitude
+            visible:        !missionItem.wizardMode// && _specifiesAltitude
             _borderColor:   "transparent"
             _margins:       ScreenTools.defaultFontPixelWidth
 
@@ -206,7 +206,7 @@ Rectangle {
                     text:               qsTr("AMSL %1 %2").arg(missionItem.amslAltAboveTerrain.valueString).arg(missionItem.amslAltAboveTerrain.units)
                     visible:            missionItem.altitudeMode === QGroundControl.AltitudeModeCalcAboveTerrain
                 }
-            }
+            }           
 
             Repeater {
                 model: missionItem.comboboxFacts
@@ -228,7 +228,6 @@ Rectangle {
                     Layout.fillWidth:   true
                     label:      object.name
                     fact:       object
-                    //showUnits:  true
                     enabled:    !object.readOnly
                     textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
                 }
@@ -238,11 +237,11 @@ Rectangle {
                 model: missionItem.nanFacts
                 Layout.fillWidth: true
 
-                FactCheckBoxSlider {
-                    Layout.fillWidth:   true
-                    text:   object.name
-                    fact:   object.rawValue
-                }
+                // FactCheckBoxSlider {
+                //     Layout.fillWidth:   true
+                //     text:   object.name
+                //     fact:   object.rawValue
+                // }
                 LabelledFactTextField{
                     Layout.fillWidth:   true
                     label:              object.name

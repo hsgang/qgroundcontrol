@@ -146,15 +146,15 @@ ToolIndicatorPage{
                 }
             }
 
-            SettingsGroupLayout {
-                heading:        qsTr("FlyView Settings")
+            // SettingsGroupLayout {
+            //     heading:        qsTr("FlyView Settings")
 
-                LabelledFactComboBox {
-                    label:                  qsTr("Background Opacity")
-                    fact:                   QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
-                    indexModel:             false
-                }
-            }
+            //     LabelledFactComboBox {
+            //         label:                  qsTr("Background Opacity")
+            //         fact:                   QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
+            //         indexModel:             false
+            //     }
+            // }
         }
     }
 }

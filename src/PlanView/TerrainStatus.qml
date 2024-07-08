@@ -186,7 +186,7 @@ Rectangle {
                             x:              (object.distanceFromStart * terrainProfile.pixelsPerMeter)
                             width:          complexItem.visible ? object.complexDistance * terrainProfile.pixelsPerMeter : 0
                             height:         patternNameLabel.height
-                            color:          "green"
+                            color:          qgcPal.colorGreen //"green"
                             opacity:        0.5
                             visible:        !object.isSimpleItem && !object.isSingleItem
 

@@ -209,18 +209,12 @@ Rectangle {
 
                 QGCMenuItem {
                     text:           qsTr("Edit position")
+                    visible:        missionItem.specifiesCoordinate
                     enabled:        missionItem.specifiesCoordinate
                     onTriggered:    editPositionDialog.createObject(mainWindow).open()
                 }
 
-                QGCMenuItem {
-                    text:           qsTr("Delete")
-                    enabled:        missionItem.specifiesCoordinate
-                    onTriggered:    remove()
-                }
-
                 QGCMenuSeparator {
-                    //visible: missionItem.isSimpleItem && !_waypointsOnlyMode
                 }
 
                 QGCMenuItem {
@@ -243,31 +237,16 @@ Rectangle {
                     }
                 }
 
-                // QGCMenuItem {
-                //     text:       qsTr("Item #%1").arg(missionItem.sequenceNumber)
-                //     enabled:    false
-                // }
+                QGCMenuSeparator {
+                }
+
+                QGCMenuItem {
+                    text:           qsTr("#%1 Item Delete").arg(missionItem.sequenceNumber)
+                    onTriggered:    remove()
+                }
             }
         }
     }
-
-    /*
-    QGCLabel {
-        id:                     notReadyForSaveLabel
-        anchors.margins:        _margin
-        anchors.left:           notReadyForSaveIndicator.right
-        anchors.right:          parent.right
-        anchors.top:            commandPicker.bottom
-        visible:                _currentItem && !_readyForSave
-        text:                   missionItem.readyForSaveState === VisualMissionItem.NotReadyForSaveTerrain ?
-                                    qsTr("Incomplete: Waiting on terrain data.") :
-                                    qsTr("Incomplete: Item not fully specified.")
-        wrapMode:               Text.WordWrap
-        horizontalAlignment:    Text.AlignHCenter
-        color:                  qgcPal.warningText
-    }
-
-*/
 
     Loader {
         id:                 editorLoader

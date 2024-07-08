@@ -125,7 +125,7 @@ Item {
     //             }
     //         }
     //     }
-    // }
+    // }카카
 
     // TelemetryValuesBar {
     //     id:                 telemetryPanel

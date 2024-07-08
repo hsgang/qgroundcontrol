@@ -776,12 +776,27 @@ SetupPage {
                 anchors.right:      parent.right
 
                 ProgressBar {
-                    id:             progressBar
+                    id:     progressBar
                     anchors.left:   parent.left
+                    anchors.right:  parent.right
+
+                    contentItem: Item{
+                        Rectangle {
+                            width: progressBar.visualPosition * parent.width
+                            height: parent.height
+                            color: "steelblue"
+                        }
+                    }
+                }
+
+                QGCLabel {
+                    id:     progressLabel
+                    text:   progressBar.value * 100 + "%"
+                    horizontalAlignment:    Text.AlignLeft
                     anchors.right:  parent.right
                 }
 
-                Item { height: ScreenTools.defaultFontPixelHeight; width: 10 } // spacer
+                Item { height: ScreenTools.defaultFontPixelHeight / 2; width: 10 } // spacer
 
                 Item {
                     id:     centerPanel
