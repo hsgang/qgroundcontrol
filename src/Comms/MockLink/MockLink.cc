@@ -55,7 +55,7 @@ MockLink::MockLink(SharedLinkConfigurationPtr& config)
     , _mavState                             (MAV_STATE_STANDBY)
     , _firmwareType                         (MAV_AUTOPILOT_PX4)
     , _vehicleType                          (MAV_TYPE_QUADROTOR)
-    , _vehicleAltitudeAMSL                      (_defaultVehicleHomeAltitude)
+    , _vehicleAltitudeAMSL                  (_defaultVehicleHomeAltitude)
     , _sendStatusText                       (false)
     , _apmSendHomePositionOnEmptyList       (false)
     , _failureMode                          (MockConfiguration::FailNone)
@@ -1337,7 +1337,6 @@ void MockLink::_sendGlobalPositionInt(void)
 
 void MockLink::_sendExtendedSysState(void)
 {
-    static uint64_t timeTick = 0;
     mavlink_message_t msg;
 
     mavlink_msg_extended_sys_state_pack_chan(_vehicleSystemId,

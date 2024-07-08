@@ -246,10 +246,10 @@ FlightMap {
         planMasterController:       _planMasterController
     }
 
-    ObstacleDistanceOverlayMap {
-        id: obstacleDistance
-        showText: !pipMode
-    }
+    // ObstacleDistanceOverlayMap {
+    //     id: obstacleDistance
+    //     showText: !pipMode
+    // }
 
     // Add the items associated with each vehicles flight plan to the map
     MapItemView { //Repeater {
@@ -342,16 +342,16 @@ FlightMap {
         }
     }
 
-    // CameraProjection to the map
-    MapItemView {
-        model: QGroundControl.multiVehicleManager.vehicles
-        delegate: CameraProjectionMapItem {
-            coordinate:     object.coordinate
-            map:            _root
-            visible:        QGroundControl.settingsManager.flyViewSettings.showCameraProjectionOnMap.rawValue && !pipMode
-            z:              QGroundControl.zOrderWidgets
-        }
-    }
+    // // CameraProjection to the map
+    // MapItemView {
+    //     model: QGroundControl.multiVehicleManager.vehicles
+    //     delegate: CameraProjectionMapItem {
+    //         coordinate:     object.coordinate
+    //         map:            _root
+    //         visible:        QGroundControl.settingsManager.flyViewSettings.showCameraProjectionOnMap.rawValue && !pipMode
+    //         z:              QGroundControl.zOrderWidgets
+    //     }
+    // }
 
     // AtmosphericValue to the map
     MapItemView {
