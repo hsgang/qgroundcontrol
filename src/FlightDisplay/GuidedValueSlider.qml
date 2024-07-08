@@ -44,11 +44,10 @@ Item {
     property int    _fullSliderValueRange:  _rgValueRanges[_fullSliderRangeIndex]
     property int    _halfSliderValueRange:  _fullSliderValueRange / 2
 
-    property real   _majorTickWidth:        ScreenTools.largeFontPixelWidth * 2
-    property real   _minorTickWidth:        _majorTickWidth * 0.6
-    property real   _majorTickPixelHeight:  ScreenTools.largeFontPixelHeight * 4
+    property real   _majorTickWidth:        ScreenTools.largeFontPixelWidth * 3
+    property real   _minorTickWidth:        _majorTickWidth / 2
+    property real   _majorTickPixelHeight:  ScreenTools.largeFontPixelHeight * 2
     property real   _sliderValuePerPixel:   _majorTickValueStep / _majorTickPixelHeight
-
 
     property int    _majorTickValueStep:    10
     property int    _minorTickValueStep:    _majorTickValueStep / 2
@@ -64,7 +63,7 @@ Item {
     property int    _majorTickAdjustment:               _majorTicksVisibleAboveIndicator * _majorTickValueStep
 
     // Calculate the next major tick above/below min/max
-    property int    _majorTickMaxValue:     Math.ceil((_sliderMaxVal + _majorTickAdjustment)/ _majorTickValueStep) * _majorTickValueStep
+    property int    _majorTickMaxValue:     Math.ceil((_sliderMaxVal + _majorTickAdjustment)/ _majorTickValueStep) * _majorTickValueStep 
     property int    _majorTickMinValue:     Math.floor((_sliderMinVal - _majorTickAdjustment)/ _majorTickValueStep) * _majorTickValueStep
 
     // Now calculate the position we draw the first tick mark such that we are not allowed to flick above the max value
@@ -75,7 +74,6 @@ Item {
     property real   _sliderHeight:          (_firstPixelValue - _sliderMinVal) / _sliderValuePerPixel + (sliderFlickable.height - _indicatorCenterPos)
 
     property int     _cMajorTicks:          (_majorTickMaxValue - _majorTickMinValue) / _majorTickValueStep + 1
-
 
     property var _qgcPal: QGroundControl.globalPalette
 
@@ -114,22 +112,19 @@ Item {
         spacing:            0
 
         QGCLabel {
-            id:                 sliderTypeLabel
             Layout.fillWidth:   true
             horizontalAlignment: Text.AlignHCenter
             font.pointSize:     ScreenTools.smallFontPointSize
             text:               _displayText
         }
-
+      
         QGCFlickable {
-            id:                      sliderFlickable
-            Layout.fillWidth:        true
-            Layout.fillHeight:       true
-            contentWidth:            sliderContainer.width
-            contentHeight:           sliderContainer.height
-            flickDeceleration:       0.5
-            showHorizontalFlickable: false
-
+            id:                 sliderFlickable
+            Layout.fillWidth:   true
+            Layout.fillHeight:  true
+            contentWidth:       sliderContainer.width
+            contentHeight:      sliderContainer.height
+            flickDeceleration:  0.5
 
             Item {
                 id:     sliderContainer
@@ -138,7 +133,7 @@ Item {
 
                 // Major tick marks
                 Repeater {
-                    model: _cMajorTicks                   
+                    model: _cMajorTicks
 
                     Item {
                         width:      sliderContainer.width
@@ -193,7 +188,7 @@ Item {
 
         property real indicatorHeight:      valueLabel.contentHeight
         property real pointerWidth:         ScreenTools.defaultFontPixelWidth
-        property real minIndicatorWidth:    pointerWidth + (_margins * 3) + ScreenTools.defaultFontPixelWidth * 9 //valueLabel.contentWidth
+        property real minIndicatorWidth:    pointerWidth + (_margins * 2) + valueLabel.contentWidth
         property real minTickDisplayWidth:  _majorTickWidth + ScreenTools.defaultFontPixelWidth + ScreenTools.defaultFontPixelWidth * 3
 
         onPaint: {
@@ -224,9 +219,9 @@ Item {
             text:                   _clampedSliderValue(_sliderValue) + " " + unitsString
             font.pointSize:         ScreenTools.largeFontPointSize
 
-            property var unitsString: _sliderType === GuidedValueSlider.Speed ?
-                                                    QGroundControl.unitsConversion.appSettingsSpeedUnitsString :
-                                                        QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+            property var unitsString: _sliderType === GuidedValueSlider.Speed ? 
+                                        QGroundControl.unitsConversion.appSettingsSpeedUnitsString : 
+                                            QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
         }
     }
 

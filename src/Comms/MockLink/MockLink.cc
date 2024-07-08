@@ -1322,16 +1322,16 @@ void MockLink::_sendGlobalPositionInt(void)
     mavlink_message_t msg;
 
     mavlink_msg_global_position_int_pack_chan(_vehicleSystemId,
-                                              _vehicleComponentId,
-                                              mavlinkChannel(),
-                                              &msg,
-                                              timeTick++,                           // time since boot
-                                              (int32_t)(_vehicleLatitude  * 1E7),
-                                              (int32_t)(_vehicleLongitude * 1E7),
-                                              (int32_t)(_vehicleAltitudeAMSL  * 1000),
-                                              (int32_t)((_vehicleAltitudeAMSL - _defaultVehicleHomeAltitude) * 1000),
-                                              0, 0, 0,                              // no speed sent
-                                              UINT16_MAX);                          // no heading sent
+                                      _vehicleComponentId,
+                                      mavlinkChannel(),
+                                      &msg,
+                                      timeTick++,                           // time since boot
+                                      (int32_t)(_vehicleLatitude  * 1E7),
+                                      (int32_t)(_vehicleLongitude * 1E7),
+                                      (int32_t)(_vehicleAltitudeAMSL  * 1000),
+                                      (int32_t)((_vehicleAltitudeAMSL - _defaultVehicleHomeAltitude) * 1000),
+                                      0, 0, 0,                              // no speed sent
+                                      UINT16_MAX);                          // no heading sent
     respondWithMavlinkMessage(msg);
 }
 
@@ -1340,11 +1340,11 @@ void MockLink::_sendExtendedSysState(void)
     mavlink_message_t msg;
 
     mavlink_msg_extended_sys_state_pack_chan(_vehicleSystemId,
-                                             _vehicleComponentId,
-                                             mavlinkChannel(),
-                                             &msg,
-                                             MAV_VTOL_STATE_UNDEFINED,
-                                             _vehicleAltitudeAMSL > _defaultVehicleHomeAltitude ? MAV_LANDED_STATE_IN_AIR : MAV_LANDED_STATE_ON_GROUND);
+                                      _vehicleComponentId,
+                                      mavlinkChannel(),
+                                      &msg,
+                                      MAV_VTOL_STATE_UNDEFINED,
+                                      _vehicleAltitudeAMSL > _defaultVehicleHomeAltitude ? MAV_LANDED_STATE_IN_AIR : MAV_LANDED_STATE_ON_GROUND);
     respondWithMavlinkMessage(msg);
 }
 
