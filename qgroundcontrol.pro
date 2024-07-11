@@ -1189,7 +1189,6 @@ HEADERS += \
     src/FactSystem/FactControls/FactPanelController.h \
     src/FactSystem/FactGroup.h \
     src/FactSystem/FactMetaData.h \
-    src/FactSystem/FactSystem.h \
     src/FactSystem/FactValueSliderListModel.h \
     src/FactSystem/ParameterManager.h \
     src/FactSystem/SettingsFact.h \
@@ -1199,7 +1198,6 @@ SOURCES += \
     src/FactSystem/FactControls/FactPanelController.cc \
     src/FactSystem/FactGroup.cc \
     src/FactSystem/FactMetaData.cc \
-    src/FactSystem/FactSystem.cc \
     src/FactSystem/FactValueSliderListModel.cc \
     src/FactSystem/ParameterManager.cc \
     src/FactSystem/SettingsFact.cc \
@@ -1261,19 +1259,20 @@ contains (CONFIG, DISABLE_VIDEOSTREAMING) {
     QT += \
         opengl \
         gui-private
-    include(src/VideoReceiver/VideoReceiver.pri)
+    include(src/VideoManager/VideoReceiver/VideoReceiver.pri)
 }
 
 !VideoEnabled {
     INCLUDEPATH += \
-        src/VideoReceiver
+        src/VideoManager/VideoReceiver \
+        src/VideoManager/VideoReceiver/GStreamer
 
     HEADERS += \
-        src/VideoManager/GLVideoItemStub.h \
-        src/VideoReceiver/VideoReceiver.h
+        src/VideoManager/VideoReceiver/GStreamer/GLVideoItemStub.h \
+        src/VideoManager/VideoReceiver/VideoReceiver.h
 
     SOURCES += \
-        src/VideoManager/GLVideoItemStub.cc
+        src/VideoManager/VideoReceiver/GStreamer/GLVideoItemStub.cc
 }
 
 #-------------------------------------------------------------------------------------
