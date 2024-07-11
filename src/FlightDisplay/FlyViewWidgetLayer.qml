@@ -385,9 +385,8 @@ Item {
     FlyViewEscStatus {
         id: flyViewEscStatus
         anchors.margins:        _toolsMargin
-        anchors.top:            parent.top
-        anchors.bottomMargin:   _toolsMargin
-        anchors.right:          topRightColumnLayout.left
+        anchors.bottom:         mapScale.visible ? mapScale.top : parent.bottom
+        anchors.right:          parent.right
         visible:                QGroundControl.settingsManager.flyViewSettings.showEscStatus.rawValue
     }
 }

@@ -127,6 +127,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _missionItemIndexFact         (0, _missionItemIndexFactName,  FactMetaData::valueTypeUint16)
     , _headingToNextWPFact          (0, _headingToNextWPFactName,   FactMetaData::valueTypeDouble)
     , _distanceToNextWPFact         (0, _distanceToNextWPFactName,  FactMetaData::valueTypeDouble)
+    , _timeToNextWPFact             (0, _timeToNextWPFactName,      FactMetaData::valueTypeElapsedTimeInSeconds)
     , _headingToHomeFact            (0, _headingToHomeFactName,     FactMetaData::valueTypeDouble)
     , _distanceToGCSFact            (0, _distanceToGCSFactName,     FactMetaData::valueTypeDouble)
     , _hobbsFact                    (0, _hobbsFactName,             FactMetaData::valueTypeString)
@@ -292,6 +293,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _missionItemIndexFact             (0, _missionItemIndexFactName,  FactMetaData::valueTypeUint16)
     , _headingToNextWPFact              (0, _headingToNextWPFactName,   FactMetaData::valueTypeDouble)
     , _distanceToNextWPFact             (0, _distanceToNextWPFactName,  FactMetaData::valueTypeDouble)
+    , _timeToNextWPFact                 (0, _timeToNextWPFactName,      FactMetaData::valueTypeElapsedTimeInSeconds)
     , _headingToHomeFact                (0, _headingToHomeFactName,     FactMetaData::valueTypeDouble)
     , _distanceToGCSFact                (0, _distanceToGCSFactName,     FactMetaData::valueTypeDouble)
     , _hobbsFact                        (0, _hobbsFactName,             FactMetaData::valueTypeString)
@@ -357,6 +359,7 @@ void Vehicle::_commonInit()
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceHeadingToHome);
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceToGCS);
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceToNextWP);
+    connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateTimeToNextWP);
     connect(this, &Vehicle::homePositionChanged,    this, &Vehicle::_updateDistanceHeadingToHome);
     connect(this, &Vehicle::hobbsMeterChanged,      this, &Vehicle::_updateHobbsMeter);
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateAltAboveTerrain);
@@ -374,6 +377,7 @@ void Vehicle::_commonInit()
     connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateHeadingToNextWP);
     connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateMissionItemIndex);
     connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateDistanceToNextWP);
+    connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateTimeToNextWP);
 
     connect(_missionManager, &MissionManager::sendComplete,             _trajectoryPoints, &TrajectoryPoints::clear);
     connect(_missionManager, &MissionManager::newMissionItemsAvailable, _trajectoryPoints, &TrajectoryPoints::clear);
@@ -444,6 +448,7 @@ void Vehicle::_commonInit()
     _addFact(&_missionItemIndexFact,    _missionItemIndexFactName);
     _addFact(&_headingToNextWPFact,     _headingToNextWPFactName);
     _addFact(&_distanceToNextWPFact,    _distanceToNextWPFactName);
+    _addFact(&_timeToNextWPFact,        _timeToNextWPFactName);
     _addFact(&_headingToHomeFact,       _headingToHomeFactName);
     _addFact(&_distanceToGCSFact,       _distanceToGCSFactName);
     _addFact(&_throttlePctFact,         _throttlePctFactName);
@@ -844,6 +849,7 @@ void Vehicle::_handleCameraFeedback(const mavlink_message_t& message)
     QGeoCoordinate imageCoordinate((double)feedback.lat / qPow(10.0, 7.0), (double)feedback.lng / qPow(10.0, 7.0), feedback.alt_msl);
     qCDebug(VehicleLog) << "_handleCameraFeedback coord:index" << imageCoordinate << feedback.img_idx;
     _cameraTriggerPoints.append(new QGCQGeoCoordinate(imageCoordinate, this));
+
     //_toolbox->audioOutput()->play(":/res/audio/shutter");
 }
 
@@ -2426,13 +2432,13 @@ void Vehicle::guidedModeGotoLocation(const QGeoCoordinate& gotoCoord)
     _firmwarePlugin->guidedModeGotoLocation(this, gotoCoord);
 }
 
-void Vehicle::guidedModeChangeAltitude(double altitudeChange, bool pauseVehicle)
+void Vehicle::guidedModeChangeAltitudeAMSL(double altitudeAMSL, bool pauseVehicle)
 {
     if (!guidedModeSupported()) {
         qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
         return;
     }
-    _firmwarePlugin->guidedModeChangeAltitude(this, altitudeChange, pauseVehicle);
+    _firmwarePlugin->guidedModeChangeAltitudeAMSL(this, altitudeAMSL, pauseVehicle);
 }
 
 void Vehicle::guidedModeChangeGroundSpeedMetersSecond(double groundspeed)
@@ -3656,6 +3662,25 @@ void Vehicle::_updateDistanceToNextWP()
     }
     else{
         //_distanceToNextWPFact.setRawValue(qQNaN());
+    }
+}
+
+void Vehicle::_updateTimeToNextWP()
+{
+    const int currentIndex = _missionManager->currentIndex();
+    QList<MissionItem*> llist = _missionManager->missionItems();
+
+    double speed = (_groundSpeedFact.rawValue()).toDouble();
+
+    if(llist.size()>currentIndex && currentIndex!=-1
+        && llist[currentIndex]->coordinate().longitude()!=0.0
+        && coordinate().distanceTo(llist[currentIndex]->coordinate())>1.0
+        && speed > 1) {
+        double distance = coordinate().distanceTo(llist[currentIndex]->coordinate());
+        _timeToNextWPFact.setRawValue((double)distance/speed);
+    }
+    else{
+        _timeToNextWPFact.setRawValue(0);
     }
 }
 

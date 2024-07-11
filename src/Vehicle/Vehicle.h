@@ -312,6 +312,7 @@ public:
     Q_PROPERTY(Fact* missionItemIndex   READ missionItemIndex   CONSTANT)
     Q_PROPERTY(Fact* headingToNextWP    READ headingToNextWP    CONSTANT)
     Q_PROPERTY(Fact* distanceToNextWP   READ distanceToNextWP   CONSTANT)
+    Q_PROPERTY(Fact* timeToNextWP       READ timeToNextWP       CONSTANT)
     Q_PROPERTY(Fact* headingToHome      READ headingToHome      CONSTANT)
     Q_PROPERTY(Fact* distanceToGCS      READ distanceToGCS      CONSTANT)
     Q_PROPERTY(Fact* hobbs              READ hobbs              CONSTANT)
@@ -390,9 +391,9 @@ public:
     Q_INVOKABLE void guidedModeGotoLocation(const QGeoCoordinate& gotoCoord);
 
     /// Command vehicle to change altitude
-    ///     @param altitudeChange If > 0, go up by amount specified, if < 0, go down by amount specified
+    ///     @param altitudeAMSL New altitude for vehicle in meters above mean sea level
     ///     @param pauseVehicle true: pause vehicle prior to altitude change
-    Q_INVOKABLE void guidedModeChangeAltitude(double altitudeChange, bool pauseVehicle);
+    Q_INVOKABLE void guidedModeChangeAltitudeAMSL(double altitudeAMSL, bool pauseVehicle);
 
     /// Command vehicle to change groundspeed
     ///     @param groundspeed Target horizontal groundspeed
@@ -687,6 +688,7 @@ public:
     Fact* missionItemIndex                  () { return &_missionItemIndexFact; }
     Fact* headingToNextWP                   () { return &_headingToNextWPFact; }
     Fact* distanceToNextWP                  () { return &_distanceToNextWPFact; }
+    Fact* timeToNextWP                      () { return &_timeToNextWPFact; }
     Fact* headingToHome                     () { return &_headingToHomeFact; }
     Fact* distanceToGCS                     () { return &_distanceToGCSFact; }
     Fact* hobbs                             () { return &_hobbsFact; }
@@ -1050,6 +1052,7 @@ private slots:
     void _updateMissionItemIndex            ();
     void _updateHeadingToNextWP             ();
     void _updateDistanceToNextWP            ();
+    void _updateTimeToNextWP                ();
     void _updateDistanceToGCS               ();
     void _updateHomepoint                   ();
     void _updateHobbsMeter                  ();
@@ -1409,6 +1412,7 @@ private:
     const QString _missionItemIndexFactName =    QStringLiteral("missionItemIndex");
     const QString _headingToNextWPFactName =     QStringLiteral("headingToNextWP");
     const QString _distanceToNextWPFactName =    QStringLiteral("distanceToNextWP");
+    const QString _timeToNextWPFactName =        QStringLiteral("timeToNextWP");
     const QString _headingToHomeFactName =       QStringLiteral("headingToHome");
     const QString _distanceToGCSFactName =       QStringLiteral("distanceToGCS");
     const QString _hobbsFactName =               QStringLiteral("hobbs");
@@ -1467,6 +1471,7 @@ private:
     Fact _missionItemIndexFact;
     Fact _headingToNextWPFact;
     Fact _distanceToNextWPFact;
+    Fact _timeToNextWPFact;
     Fact _headingToHomeFact;
     Fact _distanceToGCSFact;
     Fact _hobbsFact;

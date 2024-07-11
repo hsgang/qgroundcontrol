@@ -10248,7 +10248,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/MainRootWindow.qml" line="156"/>
         <location filename="../src/ui/MainRootWindow.qml" line="385"/>
         <source>Analyze Tools</source>
-        <translation>분석 도구</translation>
+        <translation>기체 분석</translation>
     </message>
     <message>
         <location filename="../src/ui/MainRootWindow.qml" line="160"/>
@@ -10352,8 +10352,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="41"/>
-        <source>Connecting</source>
-        <translation>연결중</translation>
+        <source>Parameters Synchronizing</source>
+        <translation>파라미터 동기화중</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="136"/>

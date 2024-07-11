@@ -143,14 +143,14 @@ Rectangle {
                 height: slider.height * 0.75
                 width:  height
                 radius: height / 2
-                color:  qgcPal.primaryButton
+                color:  qgcPal.textHighlight
 
                 QGCColoredImage {
                     anchors.margins:    parent.height / 4
                     anchors.fill:       parent
                     source:             "/res/XDelete.svg"
                     fillMode:           Image.PreserveAspectFit
-                    color:              qgcPal.text
+                    color:              qgcPal.window
                 }
 
                 QGCMouseArea {

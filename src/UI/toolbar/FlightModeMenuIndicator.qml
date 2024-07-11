@@ -60,7 +60,7 @@ Item {
                             translated = "고도 유지 모드"
                             break
                         case "Auto" :
-                            translated = "자동 비행 모드"
+                            translated = "자동 경로 모드"
                             break
                         case "Loiter" :
                             translated = "로이터 모드"
@@ -85,18 +85,12 @@ Item {
                         return translated
                     }
                 }
-                // QGCLabel {
-                //     id:                 modeLabel
-                //     text:               activeVehicle ? activeVehicle.flightMode : qsTr("Flight Mode")
-                //     font.pointSize:     ScreenTools.smallFontPointSize
-                //     anchors.horizontalCenter: parent.horizontalCenter
-                // }
             }
 
             QGCColoredImage {
-                height:             ScreenTools.defaultFontPixelWidth
+                height:             ScreenTools.defaultFontPixelHeight
                 width:              height
-                source:             "/qmlimages/arrow-down.png"
+                source:             "/InstrumentValueIcons/cheveron-down.svg"
                 color:              qgcPal.buttonText
             }
         }

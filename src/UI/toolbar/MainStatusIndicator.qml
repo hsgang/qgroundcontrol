@@ -60,7 +60,7 @@ Rectangle {
             property string _armedText:         qsTr("Armed")
             property string _flyingText:        qsTr("Flying")
             property string _landingText:       qsTr("Landing")
-            property string _connectingText:    qsTr("Connecting")
+            property string _parametersSynchronizingText:    qsTr("Parameters Synchronizing")
 
             function mainStatusText() {
                 var statusText
@@ -75,7 +75,7 @@ Rectangle {
                         if (_healthAndArmingChecksSupported) {
                             if (_activeVehicle.healthAndArmingCheckReport.canArm) {
                                 if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
-                                    _mainStatusBGColor = "orange"
+                                    _mainStatusBGColor = "yellow"
                                 }
                             } else {
                                 _mainStatusBGColor = "red"
@@ -93,7 +93,7 @@ Rectangle {
                         if (_healthAndArmingChecksSupported) {
                             if (_activeVehicle.healthAndArmingCheckReport.canArm) {
                                 if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
-                                    _mainStatusBGColor = "orange"
+                                    _mainStatusBGColor = "yellow"
                                 } else {
                                     _mainStatusBGColor = qgcPal.colorGreen
                                 }
@@ -104,13 +104,13 @@ Rectangle {
                             }
                         } else if (_activeVehicle.loadProgress) {
                                 _mainStatusBGColor = "yellow"
-                                return mainStatusLabel._connectingText
+                                return mainStatusLabel._parametersSynchronizingText
                         } else if (_activeVehicle.readyToFlyAvailable) {
                             if (_activeVehicle.readyToFly) {
                                 _mainStatusBGColor = qgcPal.colorGreen
                                 return mainStatusLabel._readyToFlyText
                             } else {
-                                _mainStatusBGColor = "orange"
+                                _mainStatusBGColor = "yellow"
                                 return mainStatusLabel._notReadyToFlyText
                             }
                         } else {
@@ -119,7 +119,7 @@ Rectangle {
                                 _mainStatusBGColor = qgcPal.colorGreen
                                 return mainStatusLabel._readyToFlyText
                             } else {
-                                _mainStatusBGColor = "orange"
+                                _mainStatusBGColor = "yellow"
                                 return mainStatusLabel._notReadyToFlyText
                             }
                         }

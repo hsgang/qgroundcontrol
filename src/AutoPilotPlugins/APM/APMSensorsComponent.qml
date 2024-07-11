@@ -166,6 +166,10 @@ SetupPage {
                 }
 
                 onCalibrationComplete: {
+                    handleCalibrationComplete
+                }
+
+                function handleCalibrationComplete(calType) {
                     switch (calType) {
                     case MAVLink.CalibrationAccel:
                     case MAVLink.CalibrationMag:
@@ -176,6 +180,10 @@ SetupPage {
                 }
 
                 onSetAllCalButtonsEnabled: {
+                    handleSetAllCalButtonsEnabled
+                }
+
+                function handleSetAllCalButtonsEnabled(enabled) {
                     buttonColumn.enabled = enabled
                 }
             }
@@ -791,7 +799,7 @@ SetupPage {
 
                 QGCLabel {
                     id:     progressLabel
-                    text:   progressBar.value * 100 + "%"
+                    text:   (progressBar.value * 100).toFixed(0) + "%"
                     horizontalAlignment:    Text.AlignLeft
                     anchors.right:  parent.right
                 }

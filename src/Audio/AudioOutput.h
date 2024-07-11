@@ -12,6 +12,7 @@
 #include <QtCore/QLoggingCategory>
 #include <QtQmlIntegration/QtQmlIntegration>
 #include <QtTextToSpeech/QTextToSpeech>
+#include <QSoundEffect>
 
 Q_DECLARE_LOGGING_CATEGORY(AudioOutputLog)
 

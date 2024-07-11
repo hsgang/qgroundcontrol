@@ -57,12 +57,12 @@ SetupPage {
             property Fact _motSpinArm:          controller.getParameterFact(-1, "MOT_SPIN_ARM")
             property Fact _motSpinMin:          controller.getParameterFact(-1, "MOT_SPIN_MIN")
 
-            property Fact _ch7Opt:  controller.getParameterFact(-1, "r.RC7_OPTION")
-            property Fact _ch8Opt:  controller.getParameterFact(-1, "r.RC8_OPTION")
-            property Fact _ch9Opt:  controller.getParameterFact(-1, "r.RC9_OPTION")
-            property Fact _ch10Opt: controller.getParameterFact(-1, "r.RC10_OPTION")
-            property Fact _ch11Opt: controller.getParameterFact(-1, "r.RC11_OPTION")
-            property Fact _ch12Opt: controller.getParameterFact(-1, "r.RC12_OPTION")
+            property Fact _ch7Opt:              controller.getParameterFact(-1, "r.RC7_OPTION")
+            property Fact _ch8Opt:              controller.getParameterFact(-1, "r.RC8_OPTION")
+            property Fact _ch9Opt:              controller.getParameterFact(-1, "r.RC9_OPTION")
+            property Fact _ch10Opt:             controller.getParameterFact(-1, "r.RC10_OPTION")
+            property Fact _ch11Opt:             controller.getParameterFact(-1, "r.RC11_OPTION")
+            property Fact _ch12Opt:             controller.getParameterFact(-1, "r.RC12_OPTION")
 
             readonly property int   _firstOptionChannel:    7
             readonly property int   _lastOptionChannel:     12
@@ -74,6 +74,7 @@ SetupPage {
             property real _margins: ScreenTools.defaultFontPixelHeight
 
             readonly property real factSpinBoxLabelWidth:  ScreenTools.defaultFontPixelWidth * 12
+            readonly property real _spinboxPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
 
             property bool _loadComplete: false
 
@@ -169,30 +170,26 @@ SetupPage {
 
                             Rectangle {
                                 border.width:   1
-                                border.color:   qgcPal.text
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          stabRRow.width + ScreenTools.defaultFontPixelWidth
                                 height:         stabRRow.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             stabRRow
-                                    columns:        2
                                     anchors.horizontalCenter:   parent.horizontalCenter
                                     anchors.verticalCenter:     parent.verticalCenter
 
                                     QGCLabel {
                                         text: qsTr("Stabilize Roll")
-                                        Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("ATC_ANG_P")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("ATC_ANG_P")
                                         fact:   controller.getParameterFact(-1, "ATC_ANG_RLL_P")
                                         toValue:     12
                                         fromValue:    1
@@ -200,12 +197,9 @@ SetupPage {
                                         stepValue:  0.05
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("Accel Max")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Accel Max")
                                         fact:   controller.getParameterFact(-1, "ATC_ACCEL_R_MAX")
                                         toValue:     200000
                                         fromValue:    0
@@ -216,29 +210,27 @@ SetupPage {
                             }
 
                             Rectangle {
-                                border.width: 1
-                                border.color: qgcPal.text
+                                border.width:   1
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          stabPRow.width + ScreenTools.defaultFontPixelWidth
                                 height:         stabPRow.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             stabPRow
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
+
                                     QGCLabel {
                                         text: qsTr("Stabilize Pitch")
-                                        Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
-                                    QGCLabel {
-                                        text: qsTr("ATC_ANG_P")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("ATC_ANG_P")
                                         fact:   controller.getParameterFact(-1, "ATC_ANG_PIT_P")
                                         toValue:     12
                                         fromValue:    1
@@ -246,12 +238,9 @@ SetupPage {
                                         stepValue:  0.05
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("Accel Max")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Accel Max")
                                         fact:   controller.getParameterFact(-1, "ATC_ACCEL_P_MAX")
                                         toValue:     200000
                                         fromValue:    0
@@ -262,29 +251,27 @@ SetupPage {
                             }
 
                             Rectangle {
-                                border.width: 1
-                                border.color: qgcPal.text
+                                border.width:   1
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          stabYRow.width + ScreenTools.defaultFontPixelWidth
                                 height:         stabYRow.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             stabYRow
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
+
                                     QGCLabel {
                                         text: qsTr("Stabilize Yaw")
-                                        Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
-                                    QGCLabel {
-                                        text: qsTr("ATC_ANG_P")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("ATC_ANG_P")
                                         fact:   controller.getParameterFact(-1, "ATC_ANG_YAW_P")
                                         toValue:     12
                                         fromValue:    1
@@ -292,12 +279,9 @@ SetupPage {
                                         stepValue:  0.05
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("Accel Max")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Accel Max")
                                         fact:   controller.getParameterFact(-1, "ATC_ACCEL_Y_MAX")
                                         toValue:     200000
                                         fromValue:    0
@@ -308,30 +292,28 @@ SetupPage {
                             }
 
                             Rectangle {
-                                border.width: 1
-                                border.color: qgcPal.text
+                                border.width:   1
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          rateRollGrid.width + ScreenTools.defaultFontPixelWidth
                                 height:         rateRollGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             rateRollGrid
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
+
                                     QGCLabel {
                                         text: qsTr("Rate Roll")
                                         Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
-                                    QGCLabel {
-                                        text: qsTr("Rate_Roll_P")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
 
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Rate_Roll_P")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_P")
                                         toValue:     1
                                         fromValue:    0
@@ -339,12 +321,9 @@ SetupPage {
                                         stepValue:  0.005
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("Rate_Roll_I")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Rate_Roll_I")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_I")
                                         toValue:     1
                                         fromValue:    0
@@ -352,11 +331,9 @@ SetupPage {
                                         stepValue:  0.005
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("Rate_Roll_D")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Rate_Roll_D")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_D")
                                         toValue:     1
                                         fromValue:    0
@@ -364,33 +341,29 @@ SetupPage {
                                         stepValue:  0.0001
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("FLTE")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("FLTE")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTE")
                                         toValue:     100
                                         fromValue:    0
                                         decimals:     1
                                         stepValue:    1
                                     }
-                                    QGCLabel {
-                                        text: qsTr("FLTD")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("FLTD")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTD")
                                         toValue:     100
                                         fromValue:    0
                                         decimals:     1
                                         stepValue:    1
                                     }
-                                    QGCLabel {
-                                        text: qsTr("FLTT")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("FLTT")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTT")
                                         toValue:     100
                                         fromValue:    0
@@ -401,30 +374,28 @@ SetupPage {
                             }
 
                             Rectangle {
-                                border.width: 1
-                                border.color: qgcPal.text
+                                border.width:   1
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          ratePitchGrid.width + ScreenTools.defaultFontPixelWidth
                                 height:         ratePitchGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             ratePitchGrid
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
+
                                     QGCLabel {
                                         text: qsTr("Rate Pitch")
                                         Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
-                                    QGCLabel {
-                                        text: qsTr("Rate_Pitch_P")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
 
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Rate_Pitch_P")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_P")
                                         toValue:     1
                                         fromValue:    0
@@ -432,12 +403,9 @@ SetupPage {
                                         stepValue:  0.005
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("Rate_Pitch_I")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Rate_Pitch_I")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_I")
                                         toValue:     1
                                         fromValue:    0
@@ -445,12 +413,9 @@ SetupPage {
                                         stepValue:  0.005
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("Rate_Pitch_D")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Rate_Pitch_D")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_D")
                                         toValue:     1
                                         fromValue:    0
@@ -458,33 +423,29 @@ SetupPage {
                                         stepValue:  0.0001
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("FLTE")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("FLTE")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTE")
                                         toValue:     100
                                         fromValue:    0
                                         decimals:     1
                                         stepValue:    1
                                     }
-                                    QGCLabel {
-                                        text: qsTr("FLTD")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("FLTD")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTD")
                                         toValue:     100
                                         fromValue:    0
                                         decimals:     1
                                         stepValue:    1
                                     }
-                                    QGCLabel {
-                                        text: qsTr("FLTT")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("FLTT")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTT")
                                         toValue:     100
                                         fromValue:    0
@@ -495,30 +456,27 @@ SetupPage {
                             }
 
                             Rectangle {
-                                border.width: 1
-                                border.color: qgcPal.text
+                                border.width:   1
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          rateYawGrid.width + ScreenTools.defaultFontPixelWidth
                                 height:         rateYawGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             rateYawGrid
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
+
                                     QGCLabel {
                                         text: qsTr("Rate Yaw")
-                                        Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
-                                    QGCLabel {
-                                        text: qsTr("Rate_Yaw_P")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
 
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Rate_Yaw_P")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_P")
                                         toValue:     1
                                         fromValue:    0
@@ -526,12 +484,9 @@ SetupPage {
                                         stepValue:  0.005
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("Rate_Yaw_I")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Rate_Yaw_I")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_I")
                                         toValue:     1
                                         fromValue:    0
@@ -539,12 +494,9 @@ SetupPage {
                                         stepValue:  0.005
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("Rate_Yaw_D")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("Rate_Yaw_D")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_D")
                                         toValue:     1
                                         fromValue:    0
@@ -552,33 +504,29 @@ SetupPage {
                                         stepValue:  0.0001
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("FLTE")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("FLTE")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTE")
                                         toValue:     100
                                         fromValue:    0
                                         decimals:     1
                                         stepValue:    1
                                     }
-                                    QGCLabel {
-                                        text: qsTr("FLTD")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("FLTD")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTD")
                                         toValue:     100
                                         fromValue:    0
                                         decimals:     1
                                         stepValue:    1
                                     }
-                                    QGCLabel {
-                                        text: qsTr("FLTT")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("FLTT")
                                         fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTT")
                                         toValue:     100
                                         fromValue:    0
@@ -589,30 +537,27 @@ SetupPage {
                             }
 
                             Rectangle {
-                                border.width: 1
-                                border.color: qgcPal.text
+                                border.width:   1
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          pscACCZGrid.width + ScreenTools.defaultFontPixelWidth
                                 height:         pscACCZGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             pscACCZGrid
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
+
                                     QGCLabel {
                                         text: qsTr("Throttle Accel")
-                                        Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
-                                    QGCLabel {
-                                        text: qsTr("PSC_ACCZ_P")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
 
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PSC_ACCZ_P")
                                         fact:   controller.getParameterFact(-1, "PSC_ACCZ_P")
                                         toValue:     2
                                         fromValue:    0
@@ -620,12 +565,9 @@ SetupPage {
                                         stepValue:  0.01
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("PSC_ACCZ_I")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PSC_ACCZ_I")
                                         fact:   controller.getParameterFact(-1, "PSC_ACCZ_I")
                                         toValue:     2
                                         fromValue:    0
@@ -633,11 +575,9 @@ SetupPage {
                                         stepValue:  0.01
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("THR_EXPO")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("THR_EXPO")
                                         fact:   controller.getParameterFact(-1, "MOT_THST_EXPO")
                                         toValue:       1
                                         fromValue:    -1
@@ -648,43 +588,37 @@ SetupPage {
                             }
 
                             Rectangle {
-                                border.width: 1
-                                border.color: qgcPal.text
+                                border.width:   1
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          pscVelGrid.width + ScreenTools.defaultFontPixelWidth
                                 height:         pscVelGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             pscVelGrid
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
+
                                     QGCLabel {
                                         text: qsTr("Velocity XY")
-                                        Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
-                                    QGCLabel {
-                                        text: qsTr("PSC_VELXY_P")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
 
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PSC_VELXY_P")
                                         fact:   controller.getParameterFact(-1, "PSC_VELXY_P")
-                                        toValue:     6
+                                        toValue:      6
                                         fromValue:    0
                                         decimals:     1
                                         stepValue:  0.1
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("PSC_VELXY_I")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PSC_VELXY_I")
                                         fact:   controller.getParameterFact(-1, "PSC_VELXY_I")
                                         toValue:      6
                                         fromValue:    0
@@ -692,12 +626,9 @@ SetupPage {
                                         stepValue:  0.1
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("PSC_VELXY_D")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PSC_VELXY_D")
                                         fact:   controller.getParameterFact(-1, "PSC_VELXY_D")
                                         toValue:      6
                                         fromValue:    0
@@ -709,7 +640,7 @@ SetupPage {
 
                             Rectangle {
                                 border.width:   1
-                                border.color:   qgcPal.text
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          positionGrid.width + ScreenTools.defaultFontPixelWidth
                                 height:         positionGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
@@ -717,23 +648,19 @@ SetupPage {
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
                                 //Layout.top:     Qt.AlignTop
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             positionGrid
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
 
                                     QGCLabel {
                                         text: qsTr("Position XY")
-                                        Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("PSC_POSXY_P")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PSC_POSXY_P")
                                         fact:   controller.getParameterFact(-1, "PSC_POSXY_P")
                                         toValue:       2
                                         fromValue:     0
@@ -741,11 +668,9 @@ SetupPage {
                                         stepValue:     0.1
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("ATC_INPUT_TC")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("ATC_INPUT_TC")
                                         fact:   controller.getParameterFact(-1, "ATC_INPUT_TC")
                                         toValue:    2
                                         fromValue:  0
@@ -757,30 +682,26 @@ SetupPage {
 
                             Rectangle {
                                 border.width:   1
-                                border.color:   qgcPal.text
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          yawGainGrid.width + ScreenTools.defaultFontPixelWidth
                                 height:         yawGainGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             yawGainGrid
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
 
                                     QGCLabel {
                                         text: qsTr("Yaw Gain")
-                                        Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("ATC_SLEW_YAW")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("ATC_SLEW_YAW")
                                         fact:   controller.getParameterFact(-1, "ATC_SLEW_YAW")
                                         toValue:       10000
                                         fromValue:     0
@@ -788,11 +709,9 @@ SetupPage {
                                         stepValue:     500
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("PILOT_Y_RATE")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PILOT_Y_RATE")
                                         fact:   controller.getParameterFact(-1, "PILOT_Y_RATE")
                                         toValue:    1000
                                         fromValue:  0
@@ -804,42 +723,36 @@ SetupPage {
 
                             Rectangle {
                                 border.width:   1
-                                border.color:   qgcPal.text
+                                border.color:   qgcPal.groupBorder
                                 radius:         _margins / 4
                                 width:          filterGrid.width + ScreenTools.defaultFontPixelWidth
                                 height:         filterGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
-                                GridLayout{
+                                ColumnLayout{
                                     id:             filterGrid
-                                    columns:        2
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     anchors.verticalCenter: parent.verticalCenter
 
                                     QGCLabel {
                                         text: qsTr("FILTER")
-                                        Layout.columnSpan: 2
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("ACCEL FILT")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("ACCEL FILT")
                                         fact:   controller.getParameterFact(-1, "INS_ACCEL_FILTER")
-                                        toValue:       100
-                                        fromValue:     0
-                                        decimals:      1
-                                        stepValue:      1
+                                        toValue:    100
+                                        fromValue:  0
+                                        decimals:   1
+                                        stepValue:  1
                                     }
 
-                                    QGCLabel {
-                                        text: qsTr("GYRO FILT")
-                                        Layout.preferredWidth: factSpinBoxLabelWidth
-                                    }
-                                    FactSpinBox{
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("GYRO FILT")
                                         fact:   controller.getParameterFact(-1, "INS_GYRO_FILTER")
                                         toValue:    100
                                         fromValue:  0

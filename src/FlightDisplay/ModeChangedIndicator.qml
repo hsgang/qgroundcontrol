@@ -56,9 +56,51 @@ Rectangle {
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
             color:                      qgcPal.textHighlight
-            //"#EECC44"
-            font.pointSize:             ScreenTools.largeFontPointSize * 2
+            font.pointSize:             ScreenTools.largeFontPointSize * 1.5
             font.weight:                Font.DemiBold
+            text:                       flightModeTranslate()
+
+            function flightModeTranslate() {
+                var origin = flightMode
+                var translated
+
+                switch(origin) {
+                case "Stabilize" :
+                    translated = "수평 유지 모드"
+                    break
+                case "Altitude Hold" :
+                    translated = "고도 유지 모드"
+                    break
+                case "Auto" :
+                    translated = "자동 경로 모드"
+                    break
+                case "Loiter" :
+                    translated = "로이터 모드"
+                    break
+                case "RTL" :
+                    translated = "복귀 모드"
+                    break
+                case "Land" :
+                    translated = "착륙 모드"
+                    break
+                case "Guided" :
+                    translated = "가이디드 모드"
+                    break
+                case "Brake" :
+                    translated = "정지 모드"
+                    break
+                default :
+                    translated = origin
+                    break
+                }
+
+                return translated
+            }
+        }
+        QGCLabel {
+            anchors.horizontalCenter:   parent.horizontalCenter
+            color:                      qgcPal.textHighlight
+            font.pointSize:             ScreenTools.mediumFontPointSize
             text:                       flightMode
         }
     }

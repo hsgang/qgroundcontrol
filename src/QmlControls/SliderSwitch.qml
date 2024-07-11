@@ -60,7 +60,7 @@ Rectangle {
         height:     _diameter
         width:      _diameter
         radius:     _diameter / 2
-        color:      qgcPal.brandingBlue
+        color:      qgcPal.textHighlight
 
         QGCColoredImage {
             anchors.centerIn:       parent
@@ -70,7 +70,7 @@ Rectangle {
             fillMode:               Image.PreserveAspectFit
             smooth:                 false
             mipmap:                 false
-            color:                  qgcPal.colorWhite
+            color:                  qgcPal.window
             cache:                  false
             source:                 "/res/ArrowRight.svg"
         }

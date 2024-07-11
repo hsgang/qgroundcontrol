@@ -142,6 +142,12 @@
     "units":            "m"
 },
 {
+    "name":             "timeToNextWP",
+    "shortDesc": "Next WP ETA",
+    "type":             "elapsedSeconds",
+    "decimalPlaces":    0
+},
+{
     "name":             "flightTime",
     "shortDesc": "Flight Time",
     "type":             "elapsedSeconds",

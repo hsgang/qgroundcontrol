@@ -589,7 +589,7 @@ Item {
         case actionChangeAlt:
             var valueInMeters = _unitsConversion.appSettingsVerticalDistanceUnitsToMeters(sliderOutputValue)
             var altitudeChangeInMeters = valueInMeters - _activeVehicle.altitudeRelative.rawValue
-            _activeVehicle.guidedModeChangeAltitude(altitudeChangeInMeters, false /* pauseVehicle */)
+            _activeVehicle.guidedModeChangeAltitudeAMSL(altitudeChangeInMeters, false /* pauseVehicle */)
             break
         case actionGoto:
             _activeVehicle.guidedModeGotoLocation(actionData)
@@ -607,7 +607,7 @@ Item {
         case actionPause:
             var valueInMeters = _unitsConversion.appSettingsVerticalDistanceUnitsToMeters(sliderOutputValue)
             var altitudeChangeInMeters = valueInMeters - _activeVehicle.altitudeRelative.rawValue
-            _activeVehicle.guidedModeChangeAltitude(altitudeChangeInMeters, true /* pauseVehicle */)
+            _activeVehicle.guidedModeChangeAltitudeAMSL(altitudeChangeInMeters, true /* pauseVehicle */)
             break
         case actionMVPause:
             rgVehicle = QGroundControl.multiVehicleManager.vehicles

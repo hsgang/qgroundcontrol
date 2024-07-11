@@ -83,7 +83,7 @@ Rectangle {
             width:                  height
             color:                  "transparent"
             radius:                 ScreenTools.defaultFontPixelHeight / 4
-            border.color:           !_activeVehicle ? qgcPal.colorRed : qgcPal.colorGreen
+            border.color:           !_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
             border.width:           1
             visible:                !ScreenTools.isMobile/* && currentToolbar === flyViewToolbar*/
 
@@ -95,7 +95,7 @@ Rectangle {
                 source:             "/InstrumentValueIcons/link.svg"
                 sourceSize.height:  height
                 fillMode:           Image.PreserveAspectFit
-                color:              !_activeVehicle ? qgcPal.colorRed : qgcPal.colorGreen
+                color:              !_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
             }
 
             MouseArea{

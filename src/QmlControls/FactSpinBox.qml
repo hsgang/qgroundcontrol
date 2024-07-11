@@ -59,9 +59,9 @@ SpinBox {
         text: control.textFromValue(control.value, control.locale)
 
         font: control.font
-        color: "#000000"
-        selectionColor: "#000000"
-        selectedTextColor: "#ffffff"
+        color: qgcPal.text
+        selectionColor: qgcPal.text
+        selectedTextColor: qgcPal.window
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
 
@@ -75,9 +75,9 @@ SpinBox {
         height: parent.height
         implicitWidth: ScreenTools.defaultFontPixelHeight
         implicitHeight: parent.height
-        color: control.up.pressed ? qgcPal.windowShadeLight : qgcPal.windowShade
+        color: (control.up.hovered || control.up.pressed) ? qgcPal.windowShadeLight : qgcPal.windowShade
         radius: ScreenTools.defaultFontPixelHeight / 4
-        border.color: "#ffffff"
+        border.color: qgcPal.groupBorder
 
         Text {
             text: "+"
@@ -95,9 +95,9 @@ SpinBox {
         height: parent.height
         implicitWidth: ScreenTools.defaultFontPixelHeight
         implicitHeight: parent.height
-        color: control.down.pressed ? qgcPal.windowShadeLight : qgcPal.windowShade
+        color: (control.down.hovered || control.down.pressed) ? qgcPal.windowShadeLight : qgcPal.windowShade
         radius: ScreenTools.defaultFontPixelHeight / 4
-        border.color: "#ffffff"
+        border.color: qgcPal.groupBorder
 
         Text {
             text: "-"
@@ -112,7 +112,7 @@ SpinBox {
 
     background: Rectangle {
         implicitWidth: control.implicitWidth
-        border.color: "#bdbebf"
+        border.color: qgcPal.groupBorder
         radius: ScreenTools.defaultFontPixelHeight / 4
     }
 }

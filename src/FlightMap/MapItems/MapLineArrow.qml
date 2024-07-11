@@ -50,7 +50,7 @@ MapQuickItem {
 
         onPaint: {
             var ctx = getContext("2d");
-            ctx.lineWidth = 5
+            ctx.lineWidth = 3
             ctx.strokeStyle = arrowColor
             ctx.beginPath();
             ctx.moveTo(_arrowSize, 0);
