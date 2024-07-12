@@ -105,6 +105,7 @@ public:
     
     /// Progress bar for you know what
     Q_PROPERTY(QQuickItem* progressBar READ progressBar WRITE setProgressBar)
+    Q_PROPERTY(QQuickItem* progressLabel READ progressLabel WRITE setProgressLabel)
 
     /// Starts searching for boards on the background thread
     Q_INVOKABLE void startBoardSearch(void);
@@ -131,6 +132,9 @@ public:
     
     QQuickItem* progressBar(void) { return _progressBar; }
     void setProgressBar(QQuickItem* progressBar) { _progressBar = progressBar; }
+
+    QQuickItem* progressLabel(void) { return _progressLabel; }
+    void setProgressLabel(QQuickItem* progressLabel) { _progressLabel = progressLabel; }
     
     QQuickItem* statusLog(void) { return _statusLog; }
     void setStatusLog(QQuickItem* statusLog) { _statusLog = statusLog; }
@@ -241,6 +245,7 @@ private:
     
     QQuickItem*     _statusLog;         ///< Status log TextArea Qml control
     QQuickItem*     _progressBar;
+    QQuickItem*     _progressLabel;
     
     bool _searchingForBoard;    ///< true: searching for board, false: search for bootloader
     

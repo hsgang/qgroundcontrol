@@ -6072,7 +6072,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="47"/>
         <source>%1 can upgrade the firmware on Pixhawk devices.</source>
-        <translation>%1은 Pixhawk Autopilot Standard 장치의 펌웨어를 업그레이드할 수 있습니다.</translation>
+        <translation>%1은 Pixhawk Autopilot장치의 펌웨어를 업그레이드할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="48"/>
@@ -6083,6 +6083,16 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="52"/>
         <source>All %1 connections to vehicles must be </source>
         <translation>모든 %1 기체의 연결상태가 되어야합니다 </translation>
+    </message>
+    <message>
+        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="52"/>
+        <source>Please unplug your Pixhawk and/or Radio from USB.</source>
+        <translation>업그레이드 하려는 장치를 USB포트에서 분리하십시오.</translation>
+    </message>
+    <message>
+        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="48"/>
+        <source>Plug in your device via USB to start firmware upgrade.</source>
+        <translation>업그레이드 하려는 장치를 USB포트에 연결하십시오.</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="70"/>

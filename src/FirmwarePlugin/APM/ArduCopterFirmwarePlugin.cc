@@ -14,8 +14,6 @@
 #include "ArduCopterFirmwarePlugin.h"
 #include "ParameterManager.h"
 #include "Vehicle.h"
-#include <QtCore/QObject>
-#include <QtCore/QString>
 
 bool ArduCopterFirmwarePlugin::_remapParamNameIntialized = false;
 FirmwarePlugin::remapParamNameMajorVersionMap_t ArduCopterFirmwarePlugin::_remapParamName;

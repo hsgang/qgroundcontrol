@@ -33,7 +33,7 @@ SetupPage {
         ColumnLayout {
             width:   availableWidth
             height:  availableHeight
-            spacing: ScreenTools.defaultFontPixelHeight
+            spacing: ScreenTools.defaultFontPixelWidth
 
             // Those user visible strings are hard to translate because we can't send the
             // HTML strings to translation as this can create a security risk. we need to find
@@ -45,7 +45,7 @@ SetupPage {
             readonly property string highlightSuffix:   "</font>"
             readonly property string welcomeText:       qsTr("%1 can upgrade the firmware on Pixhawk devices.").arg(QGroundControl.appName)
             readonly property string welcomeTextSingle: qsTr("Update the autopilot firmware to the latest version")
-            readonly property string plugInText:        "<big>" + highlightPrefix + qsTr("Plug in your device") + highlightSuffix + qsTr(" via USB to ") + highlightPrefix + qsTr("start") + highlightSuffix + qsTr(" firmware upgrade.") + "</big>"
+            readonly property string plugInText:        qsTr("Plug in your device via USB to start firmware upgrade.")
             readonly property string flashFailText:     qsTr("If upgrade failed, make sure to connect ") + highlightPrefix + qsTr("directly") + highlightSuffix + qsTr(" to a powered USB port on your computer, not through a USB hub. ") +
                                                         qsTr("Also make sure you are only powered via USB ") + highlightPrefix + qsTr("not battery") + highlightSuffix + "."
             readonly property string qgcUnplugText1:    qsTr("All %1 connections to vehicles must be ").arg(QGroundControl.appName) + highlightPrefix + qsTr(" disconnected ") + highlightSuffix + qsTr("prior to firmware upgrade.")
@@ -85,6 +85,7 @@ SetupPage {
                 id:             controller
                 progressBar:    progressBar
                 statusLog:      statusTextArea
+                progressLabel:  progressLabel
 
                 property var activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 
@@ -111,7 +112,7 @@ SetupPage {
                 onBoardFound: {
                     if (initialBoardSearch) {
                         // Board was found right away, so something is already plugged in before we've started upgrade
-                        statusTextArea.append(qgcUnplugText1)
+                        //statusTextArea.append(qgcUnplugText1)
                         statusTextArea.append(qgcUnplugText2)
 
                         var availableDevices = controller.availableBoardsName()
@@ -463,6 +464,32 @@ SetupPage {
                 id:                     progressBar
                 Layout.preferredWidth:  parent.width
                 visible:                !flashBootloaderButton.visible
+
+                contentItem: Item{
+                    Rectangle {
+                        width: progressBar.visualPosition * parent.width
+                        height: parent.height
+                        color: "steelblue"
+                    }
+                }
+            }
+            RowLayout{
+
+                QGCLabel {
+                    id:     progressLabel
+                    text:   ""
+                    horizontalAlignment:    Text.AlignLeft
+                    Layout.fillWidth:       true
+                    Layout.alignment:       Qt.AlignLeft
+                }
+
+                QGCLabel {
+                    id:     progressValueLabel
+                    text:   (progressBar.value * 100).toFixed(0) + "%"
+                    horizontalAlignment:    Text.AlignRight
+                    Layout.fillWidth:       true
+                    Layout.alignment:       Qt.AlignRight
+                }
             }
 
             QGCButton {
@@ -479,7 +506,7 @@ SetupPage {
                 readOnly:           true
                 font.pointSize:     ScreenTools.defaultFontPointSize
                 textFormat:         TextEdit.RichText
-                text:               _singleFirmwareMode ? welcomeTextSingle : welcomeText
+                text:               _singleFirmwareMode ? welcomeTextSingle : ""
                 color:              qgcPal.text
 
                 background: Rectangle {
