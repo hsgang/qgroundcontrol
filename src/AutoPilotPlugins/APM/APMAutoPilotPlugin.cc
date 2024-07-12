@@ -12,6 +12,7 @@
 #include "VehicleComponent.h"
 #include "Vehicle.h"
 #include "APMAirframeComponent.h"
+#include "APMChannelsComponent.h"
 #include "APMFlightModesComponent.h"
 #include "APMRadioComponent.h"
 #include "APMSafetyComponent.h"
@@ -38,6 +39,7 @@ APMAutoPilotPlugin::APMAutoPilotPlugin(Vehicle* vehicle, QObject* parent)
     , _incorrectParameterVersion(false)
     , _airframeComponent        (nullptr)
     , _cameraComponent          (nullptr)
+    , _channelsComponent        (nullptr)
     , _lightsComponent          (nullptr)
     , _subFrameComponent        (nullptr)
     , _flightModesComponent     (nullptr)
@@ -86,6 +88,10 @@ const QVariantList& APMAutoPilotPlugin::vehicleComponents(void)
                 _components.append(QVariant::fromValue((VehicleComponent*)_flightModesComponent));
             }
 
+            _channelsComponent = new APMChannelsComponent(_vehicle, this);
+            _channelsComponent->setupTriggerSignals();
+            _components.append(QVariant::fromValue((VehicleComponent*)_channelsComponent));
+
             _sensorsComponent = new APMSensorsComponent(_vehicle, this);
             _sensorsComponent->setupTriggerSignals();
             _components.append(QVariant::fromValue((VehicleComponent*)_sensorsComponent));
@@ -125,11 +131,11 @@ const QVariantList& APMAutoPilotPlugin::vehicleComponents(void)
             _tuningComponent->setupTriggerSignals();
             _components.append(QVariant::fromValue((VehicleComponent*)_tuningComponent));
 
-            if(_vehicle->parameterManager()->parameterExists(-1, "MNT1_TYPE")) {
-                _cameraComponent = new APMCameraComponent(_vehicle, this);
-                _cameraComponent->setupTriggerSignals();
-                _components.append(QVariant::fromValue((VehicleComponent*)_cameraComponent));
-            }
+            // if(_vehicle->parameterManager()->parameterExists(-1, "MNT1_TYPE")) {
+            //     _cameraComponent = new APMCameraComponent(_vehicle, this);
+            //     _cameraComponent->setupTriggerSignals();
+            //     _components.append(QVariant::fromValue((VehicleComponent*)_cameraComponent));
+            // }
 
             if (_vehicle->sub()) {
                 _lightsComponent = new APMLightsComponent(_vehicle, this);
@@ -169,9 +175,9 @@ QString APMAutoPilotPlugin::prerequisiteSetup(VehicleComponent* component) const
         if (_airframeComponent && !_airframeComponent->setupComplete()) {
             return _airframeComponent->name();
         }
-        if (_radioComponent && !_radioComponent->setupComplete()) {
-            return _radioComponent->name();
-        }
+        // if (_radioComponent && !_radioComponent->setupComplete()) {
+        //     return _radioComponent->name();
+        // }
         requiresAirframeCheck = true;
     } else if (qobject_cast<const APMRadioComponent*>(component)) {
         requiresAirframeCheck = true;

@@ -14,6 +14,8 @@
 #include "ArduCopterFirmwarePlugin.h"
 #include "ParameterManager.h"
 #include "Vehicle.h"
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
 bool ArduCopterFirmwarePlugin::_remapParamNameIntialized = false;
 FirmwarePlugin::remapParamNameMajorVersionMap_t ArduCopterFirmwarePlugin::_remapParamName;
@@ -55,31 +57,31 @@ ArduCopterFirmwarePlugin::ArduCopterFirmwarePlugin(void)
 {
     setSupportedModes({
         APMCopterMode(APMCopterMode::STABILIZE,     true),
-        APMCopterMode(APMCopterMode::ACRO,          true),
+        APMCopterMode(APMCopterMode::ACRO,          false),
         APMCopterMode(APMCopterMode::ALT_HOLD,      true),
         APMCopterMode(APMCopterMode::AUTO,          true),
         APMCopterMode(APMCopterMode::GUIDED,        true),
         APMCopterMode(APMCopterMode::LOITER,        true),
         APMCopterMode(APMCopterMode::RTL,           true),
-        APMCopterMode(APMCopterMode::CIRCLE,        true),
+        APMCopterMode(APMCopterMode::CIRCLE,        false),
         APMCopterMode(APMCopterMode::LAND,          true),
-        APMCopterMode(APMCopterMode::DRIFT,         true),
-        APMCopterMode(APMCopterMode::SPORT,         true),
-        APMCopterMode(APMCopterMode::FLIP,          true),
+        APMCopterMode(APMCopterMode::DRIFT,         false),
+        APMCopterMode(APMCopterMode::SPORT,         false),
+        APMCopterMode(APMCopterMode::FLIP,          false),
         APMCopterMode(APMCopterMode::AUTOTUNE,      true),
-        APMCopterMode(APMCopterMode::POS_HOLD,      true),
+        APMCopterMode(APMCopterMode::POS_HOLD,      false),
         APMCopterMode(APMCopterMode::BRAKE,         true),
-        APMCopterMode(APMCopterMode::THROW,         true),
-        APMCopterMode(APMCopterMode::AVOID_ADSB,    true),
-        APMCopterMode(APMCopterMode::GUIDED_NOGPS,  true),
+        APMCopterMode(APMCopterMode::THROW,         false),
+        APMCopterMode(APMCopterMode::AVOID_ADSB,    false),
+        APMCopterMode(APMCopterMode::GUIDED_NOGPS,  false),
         APMCopterMode(APMCopterMode::SMART_RTL,     true),
-        APMCopterMode(APMCopterMode::FLOWHOLD,      true),
-        APMCopterMode(APMCopterMode::FOLLOW,        true),
-        APMCopterMode(APMCopterMode::ZIGZAG,        true),
-        APMCopterMode(APMCopterMode::SYSTEMID,      true),
-        APMCopterMode(APMCopterMode::AUTOROTATE,    true),
-        APMCopterMode(APMCopterMode::AUTO_RTL,      true),
-        APMCopterMode(APMCopterMode::TURTLE,        true),
+        APMCopterMode(APMCopterMode::FLOWHOLD,      false),
+        APMCopterMode(APMCopterMode::FOLLOW,        false),
+        APMCopterMode(APMCopterMode::ZIGZAG,        false),
+        APMCopterMode(APMCopterMode::SYSTEMID,      false),
+        APMCopterMode(APMCopterMode::AUTOROTATE,    false),
+        APMCopterMode(APMCopterMode::AUTO_RTL,      false),
+        APMCopterMode(APMCopterMode::TURTLE,        false),
     });
 
     if (!_remapParamNameIntialized) {

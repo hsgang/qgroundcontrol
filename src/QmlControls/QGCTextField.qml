@@ -53,12 +53,29 @@ TextField {
     }
 
     background: Rectangle {
-        border.width:   1
-        border.color:   qgcPal.groupBorder
+        // border.width:   1
+        // border.color:   qgcPal.groupBorder
         radius:         ScreenTools.buttonBorderRadius
-        color:          qgcPal.window
+        color:          "transparent"//qgcPal.window
         implicitWidth:  ScreenTools.implicitTextFieldWidth
         implicitHeight: ScreenTools.implicitTextFieldHeight
+
+        // QGCColoredImage {
+        //     anchors.left: parent.left
+        //     anchors.verticalCenter: parent.verticalCenter
+        //     height:             ScreenTools.defaultFontPixelHeight * 0.8
+        //     width:              height
+        //     source:             "/InstrumentValueIcons/cheveron-right.svg"
+        //     color:              qgcPal.groupBorder
+        // }
+
+        Rectangle {
+            anchors.bottom: parent.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            width:      parent.width
+            height:     1
+            color: qgcPal.groupBorder
+        }
 
         RowLayout {
             id:                     unitsHelpLayout

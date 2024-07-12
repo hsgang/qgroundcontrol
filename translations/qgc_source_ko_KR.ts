@@ -115,6 +115,19 @@
     </message>
 </context>
 <context>
+    <name>APMChannelsComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMChannelsComponent.qml" line="16"/>
+        <source>Channels</source>
+        <translation>채널 기능</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMChannelsComponent.qml" line="27"/>
+        <source>Channels Setup is used to configure the rc/servo functions of the Vehicle.</source>
+        <translation>채널 기능은 RC입력과 서보출력을 구성합니다.</translation>
+    </message>
+</context>
+<context>
     <name>APMAutoPilotPlugin</name>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMAutoPilotPlugin.cc" line="226"/>
@@ -10307,6 +10320,11 @@ Click Ok to start the auto-tuning process.
         <source>Detail</source>
         <translation>상세 설정</translation>
     </message>
+    <message>
+        <location filename="../src/ui/MainRootWindow.qml" line="627"/>
+        <source>Unfold</source>
+        <translation>일반 설정</translation>
+    </message>
 </context>
 <context>
     <name>MainStatusIndicator</name>
@@ -10327,11 +10345,6 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="42"/>
-        <source>Disconnected</source>
-        <translation>연결 없음</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="38"/>
         <source>Disconnected</source>
         <translation>연결 없음</translation>
     </message>
@@ -10416,7 +10429,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="201"/>
         <source>Downloading</source>
-        <translation>다운로드 중</translation>
+        <translation>매개변수 다운로드 중</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="327"/>
@@ -16734,7 +16747,7 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="80"/>
         <source>%1 setup must be completed prior to %2 setup.</source>
-        <translation>%1 설정은 %2 설정이 완료된 후에 진행해야 합니다</translation>
+        <translation>%2 설정은 %1 설정이 완료된 후에 진행해야 합니다</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="132"/>
@@ -18921,7 +18934,7 @@ Confirm change?</source>
     <message>
         <location filename="../src/Settings/VideoSettings.cc" line="22"/>
         <source>No Video Available</source>
-        <translation>비디오 사용 불가</translation>
+        <translation>비디오 소스 없음</translation>
     </message>
     <message>
         <location filename="../src/Settings/VideoSettings.cc" line="23"/>

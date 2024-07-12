@@ -45,7 +45,7 @@ Button {
         implicitWidth:  ScreenTools.implicitButtonWidth
         implicitHeight: ScreenTools.implicitButtonHeight
         border.width:   showBorder ? 1 : 0
-        border.color:   qgcPal.buttonBorder
+        border.color:   qgcPal.groupBorder
         color:          _showHighlight ?
                             qgcPal.windowShadeLight :
                             (primary ? qgcPal.windowShadeLight : qgcPal.windowShade)

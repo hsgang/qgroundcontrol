@@ -54,6 +54,7 @@ VideoManager::VideoManager(QGCApplication* app, QGCToolbox* toolbox)
         qmlRegisterType<GLVideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
         once = true;
     }
+    qCDebug(VideoManagerLog) << "QGC_GST_STREAMING not defined";
 #endif
 }
 

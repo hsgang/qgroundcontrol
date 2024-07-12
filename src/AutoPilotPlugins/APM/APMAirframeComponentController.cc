@@ -37,6 +37,10 @@
 #define FRAME_CLASS_HELI_DUAL       11
 #define FRAME_CLASS_DODECAHEXA      12
 #define FRAME_CLASS_HELIQUAD        13
+#define FRAME_CLASS_DECA            14
+#define FRAME_CLASS_SCRIPTINGMATRIX 15
+#define FRAME_CLASS_6DOFSCRIPTING   16
+#define FRAME_CLASS_DYNAMICSCRIPTINGMATRIX 17
 
 // These should match the ArduCopter FRAME_TYPE parameter enum meta data
 #define FRAME_TYPE_PLUS         0
@@ -168,8 +172,20 @@ void APMAirframeComponentController::_fillFrameClasses()
             QString frameClassName =    _frameClassFact->enumStrings()[i];
             int     frameClass =        _frameClassFact->enumValues()[i].toInt();
 
-            if (frameClass == FRAME_CLASS_HELI) {
+            if (frameClass == FRAME_CLASS_HELI || frameClass == FRAME_CLASS_HELI_DUAL || frameClass == FRAME_CLASS_HELIQUAD) {
                 // Heli requires it's own firmware variant. You can't switch to Heli from a Copter variant firmware.
+                continue;
+            }
+            if (frameClass == FRAME_CLASS_SINGLECOPTER || frameClass == FRAME_CLASS_COAXCOPTER || frameClass == FRAME_CLASS_BICOPTER ) {
+                continue;
+            }
+            if (frameClass == FRAME_CLASS_Y6 || frameClass == FRAME_CLASS_TRI) {
+                continue;
+            }
+            if (frameClass == FRAME_CLASS_DODECAHEXA || frameClass == FRAME_CLASS_DECA ) {
+                continue;
+            }
+            if (frameClass == FRAME_CLASS_SCRIPTINGMATRIX || frameClass == FRAME_CLASS_6DOFSCRIPTING || frameClass == FRAME_CLASS_DYNAMICSCRIPTINGMATRIX ) {
                 continue;
             }
 

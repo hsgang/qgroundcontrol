@@ -86,13 +86,13 @@ SettingsPage {
             property Fact _androidSaveToSDCard: _appSettings.androidSaveToSDCard
         }
 
-//        FactCheckBoxSlider {
-//            Layout.fillWidth: true
-//            text:       qsTr("Check for Internet connection")
-//            fact:       _checkInternet
-//            visible:    _checkInternet.visible
-//            property Fact _checkInternet: _appSettings.checkInternet
-//        }
+        // FactCheckBoxSlider {
+        //    Layout.fillWidth: true
+        //    text:       qsTr("Check for Internet connection")
+        //    fact:       _checkInternet
+        //    visible:    _checkInternet.visible
+        //    property Fact _checkInternet: _appSettings.checkInternet
+        // }
 
 //        FactCheckBoxSlider {
 //            Layout.fillWidth:   true

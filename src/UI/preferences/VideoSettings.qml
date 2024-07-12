@@ -55,12 +55,28 @@ SettingsPage {
         heading:            qsTr("Connection")
         visible:            !_videoAutoStreamConfig && (_isTCP || _isRTSP | _requiresUDPPort)
 
-        LabelledFactTextField {
+        // LabelledFactTextField {
+        //     Layout.fillWidth:           true
+        //     textFieldPreferredWidth:    _urlFieldWidth
+        //     label:                      qsTr("RTSP URL")
+        //     fact:                       _videoSettings.rtspUrl
+        //     visible:                    _isRTSP && _videoSettings.rtspUrl.visible
+        // }
+        ColumnLayout{
             Layout.fillWidth:           true
-            textFieldPreferredWidth:    _urlFieldWidth
-            label:                      qsTr("RTSP URL")
-            fact:                       _videoSettings.rtspUrl
             visible:                    _isRTSP && _videoSettings.rtspUrl.visible
+            spacing:                    0
+
+            QGCLabel {
+                Layout.fillWidth:       true
+                text:                   qsTr("RTSP URL")
+                font.pointSize:         ScreenTools.smallFontPointSize
+                color:                  Qt.darker(QGroundControl.globalPalette.text, 1.5)
+            }
+            FactTextField{
+                Layout.fillWidth:       true
+                fact:                   _videoSettings.rtspUrl
+            }
         }
 
         LabelledFactTextField {

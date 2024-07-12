@@ -13,11 +13,14 @@ SpinBox {
     font.pointSize: ScreenTools.defaultFontPointSize
     font.family:    ScreenTools.normalFontFamily
 
-    stepSize:       stepValue * exponentiation
-    value:          fact.value * exponentiation
-    to:             toValue * exponentiation
-    from:           fromValue * exponentiation
-
+    // from:           fromValue * exponentiation
+    // value:          fact.value * exponentiation
+    // to:             toValue * exponentiation
+    // stepSize:       stepValue * exponentiation
+    from:           decimalToInt(fromValue)
+    value:          decimalToInt(factValue)
+    to:             decimalToInt(toValue)
+    stepSize:       decimalToInt(stepValue)
     editable:       true
     focusPolicy:    Qt.ClickFocus
 
@@ -27,31 +30,40 @@ SpinBox {
     property real toValue
     property real stepValue
     property int  decimals
+    property real factValue: fact.value
 
     property real realValue: value / exponentiation
-    property real exponentiation : Math.pow(10, decimals)
+    property real exponentiation : Math.pow(10, decimals + 3)
+
+    function decimalToInt(decimal) {
+        return decimal * exponentiation
+    }
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
     Component.onCompleted: _loadComplete = true
 
-    onValueChanged: {
+    onValueModified: {
         if (_loadComplete) {
-            fact.value = parseFloat((control.value/exponentiation).toFixed(decimals))
+            console.log(value)
+            fact.value = Number(Math.round(value)/exponentiation.toFixed(decimals))//parseFloat((control.value/exponentiation).toFixed(decimals))
+            console.log(fact.value)
         }
     }
 
     validator: DoubleValidator {
             bottom: Math.min(control.from, control.to)
             top:  Math.max(control.from, control.to)
+            decimals: control.decimals
+            notation: DoubleValidator.StandardNotation
     }
 
     textFromValue: function(value, locale) {
-        return Number(value/exponentiation).toLocaleString(locale, 'f', control.decimals)
+        return Number(Math.round(value)/exponentiation).toLocaleString(locale, 'f', control.decimals)
     }
 
     valueFromText: function(text, locale) {
-        return Number.fromLocaleString(locale, text) * exponentiation
+        return Math.round(Number.fromLocaleString(locale, text) * exponentiation)
     }
 
     contentItem: TextInput {
@@ -113,6 +125,7 @@ SpinBox {
     background: Rectangle {
         implicitWidth: control.implicitWidth
         border.color: qgcPal.groupBorder
+        color: qgcPal.windowShadeLight
         radius: ScreenTools.defaultFontPixelHeight / 4
     }
 }

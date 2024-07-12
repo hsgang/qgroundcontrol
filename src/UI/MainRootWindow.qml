@@ -575,7 +575,7 @@ ApplicationWindow {
             id:     componentDrawerLayoutRect
             width:  componentContents.width + (componentDrawer._margins * 2)
             height: parent.height
-            color:  qgcPal.windowShadeDark
+            color:  qgcPal.window
 
             QGCFlickable {
                 anchors.margins:    componentDrawer._margins
@@ -618,29 +618,19 @@ ApplicationWindow {
                 } //componentContents
             }
 
-            Rectangle {
+            QGCButton {
                 id:                         componentExpandButton
                 anchors.bottom:             componentDrawerLayoutRect.bottom
-                anchors.bottomMargin:       ScreenTools.defaultFontPixelHeight / 4
-                anchors.horizontalCenter:   parent.horizontalCenter
-                width:                      componentExpandButtonLabel.width + (componentDrawer._margins * 2) * 3
-                height:                     componentExpandButtonLabel.height * 2
-                radius:                     componentDrawer._margins
-                color:                      QGroundControl.globalPalette.windowShadeDark
-                border.color:               QGroundControl.globalPalette.text
-                visible:                    componentDrawerLoader.item && componentDrawerLoader.item.showExpand && !componentDrawer._expanded
+                anchors.margins:            ScreenTools.defaultFontPixelHeight / 4
+                anchors.right:              componentDrawerLayoutRect.right
+                visible:                    componentDrawerLoader.item && componentDrawerLoader.item.showExpand //&& !componentDrawer._expanded
+                text:                       !componentDrawer._expanded ? qsTr("Detail") : qsTr("Unfold")
 
-                QGCLabel {
-                    id:                 componentExpandButtonLabel
-                    anchors.centerIn:   parent
-                    text:               qsTr("Detail")
-                    color:              QGroundControl.globalPalette.text
-                }
-
-                QGCMouseArea {
-                    fillItem: parent
-                    onClicked: {
+                onClicked: {
+                    if(!componentDrawer._expanded){
                         componentDrawer._expanded = true
+                    } else if(componentDrawer._expanded) {
+                        componentDrawer._expanded = false
                     }
                 }
             }

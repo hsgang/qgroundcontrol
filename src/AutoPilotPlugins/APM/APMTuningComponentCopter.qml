@@ -146,11 +146,11 @@ SetupPage {
                     width:  tuningSpinBoxRect.width
                     color:  qgcPal.window
 
-                    QGCLabel {
-                        id:                 tuningSpinboxLabel
-                        text:               qsTr("Basic Tuning")
-                        font.family:        ScreenTools.demiboldFontFamily
-                    }
+                    // QGCLabel {
+                    //     id:                 tuningSpinboxLabel
+                    //     text:               qsTr("Basic Tuning")
+                    //     font.family:        ScreenTools.demiboldFontFamily
+                    // }
 
                     Rectangle {
                     id:                 tuningSpinBoxRect
@@ -551,7 +551,7 @@ SetupPage {
                                     anchors.verticalCenter: parent.verticalCenter
 
                                     QGCLabel {
-                                        text: qsTr("Throttle Accel")
+                                        text: qsTr("Throttle Accel(Acc to Mot)")
                                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                                     }
 
@@ -577,12 +577,108 @@ SetupPage {
 
                                     LabelledFactSpinBox{
                                         spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PSC_ACCZ_D")
+                                        fact:   controller.getParameterFact(-1, "PSC_ACCZ_D")
+                                        toValue:    0.1
+                                        fromValue:    0
+                                        decimals:     3
+                                        stepValue:  0.001
+                                    }
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
                                         label: qsTr("THR_EXPO")
                                         fact:   controller.getParameterFact(-1, "MOT_THST_EXPO")
                                         toValue:       1
                                         fromValue:    -1
                                         decimals:      3
                                         stepValue:  0.001
+                                    }
+                                }
+                            }
+
+                            Rectangle {
+                                border.width:   1
+                                border.color:   qgcPal.groupBorder
+                                radius:         _margins / 4
+                                width:          pscThrRateGrid.width + ScreenTools.defaultFontPixelWidth
+                                height:         pscThrRateGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+                                color:          "transparent"
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
+
+                                ColumnLayout{
+                                    id:             pscThrRateGrid
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+
+                                    QGCLabel {
+                                        text: qsTr("Throttle Rate")
+                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                    }
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PSC_VELZ_P")
+                                        description:     "VSpd to Acc"
+                                        fact:   controller.getParameterFact(-1, "PSC_VELZ_P")
+                                        toValue:      6
+                                        fromValue:    0
+                                        decimals:     1
+                                        stepValue:  0.1
+                                    }
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PSC_POSZ_P")
+                                        description:    "Alt to VSpd"
+                                        fact:   controller.getParameterFact(-1, "PSC_POSZ_P")
+                                        toValue:      2
+                                        fromValue:    0
+                                        decimals:     1
+                                        stepValue:  0.1
+                                    }
+                                }
+                            }
+
+                            Rectangle {
+                                border.width:   1
+                                border.color:   qgcPal.groupBorder
+                                radius:         _margins / 4
+                                width:          yawGainGrid.width + ScreenTools.defaultFontPixelWidth
+                                height:         yawGainGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+                                color:          "transparent"
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
+
+                                ColumnLayout{
+                                    id:             yawGainGrid
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.verticalCenter: parent.verticalCenter
+
+                                    QGCLabel {
+                                        text: qsTr("Yaw Gain")
+                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                    }
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("ATC_SLEW_YAW")
+                                        description:    "cdeg/s"
+                                        fact:   controller.getParameterFact(-1, "ATC_SLEW_YAW")
+                                        toValue:       10000
+                                        fromValue:     0
+                                        decimals:      1
+                                        stepValue:     500
+                                    }
+
+                                    LabelledFactSpinBox{
+                                        spinboxPreferredWidth: _spinboxPreferredWidth
+                                        label: qsTr("PILOT_Y_RATE")
+                                        description:    "deg/s"
+                                        fact:   controller.getParameterFact(-1, "PILOT_Y_RATE")
+                                        toValue:    1000
+                                        fromValue:  0
+                                        decimals:   1
+                                        stepValue:  5
                                     }
                                 }
                             }
@@ -646,7 +742,6 @@ SetupPage {
                                 height:         positionGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
                                 Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
-                                //Layout.top:     Qt.AlignTop
 
                                 ColumnLayout{
                                     id:             positionGrid
@@ -678,48 +773,7 @@ SetupPage {
                                         stepValue:  0.01
                                     }
                                 }
-                            }
-
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          yawGainGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         yawGainGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             yawGainGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Yaw Gain")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("ATC_SLEW_YAW")
-                                        fact:   controller.getParameterFact(-1, "ATC_SLEW_YAW")
-                                        toValue:       10000
-                                        fromValue:     0
-                                        decimals:      1
-                                        stepValue:     500
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PILOT_Y_RATE")
-                                        fact:   controller.getParameterFact(-1, "PILOT_Y_RATE")
-                                        toValue:    1000
-                                        fromValue:  0
-                                        decimals:   1
-                                        stepValue:  5
-                                    }
-                                }
-                            }
+                            }                            
 
                             Rectangle {
                                 border.width:   1
@@ -728,7 +782,7 @@ SetupPage {
                                 width:          filterGrid.width + ScreenTools.defaultFontPixelWidth
                                 height:         filterGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
                                 color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
 
                                 ColumnLayout{
                                     id:             filterGrid
@@ -765,142 +819,66 @@ SetupPage {
                     }
                 }
 
-                Rectangle {
-                    height: autoTuneLabel.height + autoTuneRect.height
-                    width:  autoTuneRect.width
-                    color:  qgcPal.window
+                // Rectangle {
+                //     height: autoTuneLabel.height + autoTuneRect.height
+                //     width:  autoTuneRect.width
+                //     color:  qgcPal.window
 
-                    QGCLabel {
-                        id:                 autoTuneLabel
-                        text:               qsTr("AutoTune")
-                        font.family:        ScreenTools.demiboldFontFamily
-                    }
+                //     QGCLabel {
+                //         id:                 autoTuneLabel
+                //         text:               qsTr("AutoTune")
+                //         font.family:        ScreenTools.demiboldFontFamily
+                //     }
 
-                    Rectangle {
-                        id:             autoTuneRect
-                        width:          autoTuneColumn.x + autoTuneColumn.width + _margins
-                        height:         autoTuneColumn.y + autoTuneColumn.height + _margins
-                        anchors.top:    autoTuneLabel.bottom
-                        color:          qgcPal.windowShade
-                        radius:         ScreenTools.defaultFontPixelHeight * 0.25
+                //     Rectangle {
+                //         id:             autoTuneRect
+                //         width:          autoTuneColumn.x + autoTuneColumn.width + _margins
+                //         height:         autoTuneColumn.y + autoTuneColumn.height + _margins
+                //         anchors.top:    autoTuneLabel.bottom
+                //         color:          qgcPal.windowShade
+                //         radius:         ScreenTools.defaultFontPixelHeight * 0.25
 
-                        Column {
-                            id:                 autoTuneColumn
-                            anchors.margins:    _margins
-                            anchors.left:       parent.left
-                            anchors.top:        parent.top
-                            spacing:            _margins
+                //         Column {
+                //             id:                 autoTuneColumn
+                //             anchors.margins:    _margins
+                //             anchors.left:       parent.left
+                //             anchors.top:        parent.top
+                //             spacing:            _margins
 
-                            Row {
-                                spacing: _margins
+                //             Row {
+                //                 spacing: _margins
 
-                                QGCLabel { text: qsTr("Axes to AutoTune:") }
-                                FactBitmask { fact: _autoTuneAxes }
-                            }
+                //                 QGCLabel { text: qsTr("Axes to AutoTune:") }
+                //                 FactBitmask { fact: _autoTuneAxes }
+                //             }
 
-                            Row {
-                                spacing:    _margins
+                //             Row {
+                //                 spacing:    _margins
 
-                                QGCLabel {
-                                    anchors.baseline:   autoTuneChannelCombo.baseline
-                                    text:               qsTr("Channel for AutoTune switch:")
-                                }
+                //                 QGCLabel {
+                //                     anchors.baseline:   autoTuneChannelCombo.baseline
+                //                     text:               qsTr("Channel for AutoTune switch:")
+                //                 }
 
-                                QGCComboBox {
-                                    id:             autoTuneChannelCombo
-                                    width:          ScreenTools.defaultFontPixelWidth * 14
-                                    model:          [qsTr("None"), qsTr("Channel 7"), qsTr("Channel 8"), qsTr("Channel 9"), qsTr("Channel 10"), qsTr("Channel 11"), qsTr("Channel 12") ]
-                                    currentIndex:   _autoTuneSwitchChannelIndex
+                //                 QGCComboBox {
+                //                     id:             autoTuneChannelCombo
+                //                     width:          ScreenTools.defaultFontPixelWidth * 14
+                //                     model:          [qsTr("None"), qsTr("Channel 7"), qsTr("Channel 8"), qsTr("Channel 9"), qsTr("Channel 10"), qsTr("Channel 11"), qsTr("Channel 12") ]
+                //                     currentIndex:   _autoTuneSwitchChannelIndex
 
-                                    onActivated: (index) => {
-                                        var channel = index
+                //                     onActivated: (index) => {
+                //                         var channel = index
 
-                                        if (channel > 0) {
-                                            channel += 6
-                                        }
-                                        setChannelAutoTuneOption(channel)
-                                    }
-                                }
-                            }
-                        }
-                    } // Rectangle - AutoTune
-                } // Rectangle - AutoTuneWrap
-
-                Rectangle {
-                    height:     inFlightTuneLabel.height + channel6TuningOption.height
-                    width:      channel6TuningOption.width
-                    color:      qgcPal.window
-
-                    QGCLabel {
-                        id:                 inFlightTuneLabel
-                        text:               qsTr("In Flight Tuning")
-                        font.family:        ScreenTools.demiboldFontFamily
-                    }
-
-                    Rectangle {
-                        id:             channel6TuningOption
-                        width:          channel6TuningOptColumn.width + (_margins * 2)
-                        height:         channel6TuningOptColumn.height + ScreenTools.defaultFontPixelHeight
-                        anchors.top:    inFlightTuneLabel.bottom
-                        color:          qgcPal.windowShade
-                        radius:         ScreenTools.defaultFontPixelHeight * 0.25
-
-                        Column {
-                            id:                 channel6TuningOptColumn
-                            anchors.margins:    ScreenTools.defaultFontPixelWidth
-                            anchors.left:       parent.left
-                            anchors.top:        parent.top
-                            spacing:            ScreenTools.defaultFontPixelHeight
-
-                            Row {
-                                spacing: ScreenTools.defaultFontPixelWidth
-                                property Fact nullFact: Fact { }
-
-                                QGCLabel {
-                                    anchors.baseline:   optCombo.baseline
-                                    text:               qsTr("RC Channel 6 Option (Tuning):")
-                                    //color:            controller.channelOptionEnabled[modelData] ? "yellow" : qgcPal.text
-                                }
-
-                                FactComboBox {
-                                    id:         optCombo
-                                    width:      ScreenTools.defaultFontPixelWidth * 15
-                                    fact:       controller.getParameterFact(-1, "TUNE")
-                                    indexModel: false
-                                }
-                            }
-
-                            Row {
-                                spacing: ScreenTools.defaultFontPixelWidth
-                                property Fact nullFact: Fact { }
-
-                                QGCLabel {
-                                    anchors.baseline:   tuneMinField.baseline
-                                    text:               qsTr("Min:")
-                                    //color:            controller.channelOptionEnabled[modelData] ? "yellow" : qgcPal.text
-                                }
-
-                                FactTextField {
-                                    id:                 tuneMinField
-                                    validator:          DoubleValidator {bottom: 0; top: 32767;}
-                                    fact:               controller.getParameterFact(-1, "r.TUNE_MAX")
-                                }
-
-                                QGCLabel {
-                                    anchors.baseline:   tuneMaxField.baseline
-                                    text:               qsTr("Max:")
-                                    //color:            controller.channelOptionEnabled[modelData] ? "yellow" : qgcPal.text
-                                }
-
-                                FactTextField {
-                                    id:                 tuneMaxField
-                                    validator:          DoubleValidator {bottom: 0; top: 32767;}
-                                    fact:               controller.getParameterFact(-1, "r.TUNE_MIN")
-                                }
-                            }
-                        } // Column - Channel 6 Tuning option
-                    } // Rectangle - Channel 6 Tuning options
-                } // Rectangle - Channel 6 Tuning options wrap
+                //                         if (channel > 0) {
+                //                             channel += 6
+                //                         }
+                //                         setChannelAutoTuneOption(channel)
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     } // Rectangle - AutoTune
+                // } // Rectangle - AutoTuneWrap
             }
 
             Loader {

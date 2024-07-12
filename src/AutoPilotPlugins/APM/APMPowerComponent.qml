@@ -229,61 +229,61 @@ SetupPage {
                 }
             }
 
-            Column {
-                spacing:    _margins / 2
-                visible:    _escCalibrationAvailable
+            // Column {
+            //     spacing:    _margins / 2
+            //     visible:    _escCalibrationAvailable
 
-                QGCLabel {
-                    text:       qsTr("ESC Calibration")
-                    font.family: ScreenTools.demiboldFontFamily
-                }
+            //     QGCLabel {
+            //         text:       qsTr("ESC Calibration")
+            //         font.family: ScreenTools.demiboldFontFamily
+            //     }
 
-                Rectangle {
-                    width:  escCalibrationHolder.x + escCalibrationHolder.width + _margins
-                    height: escCalibrationHolder.y + escCalibrationHolder.height + _margins
-                    color:  ggcPal.windowShade
-                    radius: ScreenTools.defaultFontPixelHeight * 0.25
+            //     Rectangle {
+            //         width:  escCalibrationHolder.x + escCalibrationHolder.width + _margins
+            //         height: escCalibrationHolder.y + escCalibrationHolder.height + _margins
+            //         color:  ggcPal.windowShade
+            //         radius: ScreenTools.defaultFontPixelHeight * 0.25
 
-                    Column {
-                        id:         escCalibrationHolder
-                        x:          _margins
-                        y:          _margins
-                        spacing:    _margins
+            //         Column {
+            //             id:         escCalibrationHolder
+            //             x:          _margins
+            //             y:          _margins
+            //             spacing:    _margins
 
-                        Column {
-                            spacing: _margins
+            //             Column {
+            //                 spacing: _margins
 
-                            QGCLabel {
-                                text:   qsTr("WARNING: Remove props prior to calibration!")
-                                color:  qgcPal.warningText
-                            }
+            //                 QGCLabel {
+            //                     text:   qsTr("WARNING: Remove props prior to calibration!")
+            //                     color:  qgcPal.warningText
+            //                 }
 
-                            Row {
-                                spacing: _margins
+            //                 Row {
+            //                     spacing: _margins
 
-                                QGCButton {
-                                    text: qsTr("Calibrate")
-                                    enabled:    _escCalibration && _escCalibration.rawValue === 0
-                                    onClicked:  if(_escCalibration) _escCalibration.rawValue = 3
-                                }
+            //                     QGCButton {
+            //                         text: qsTr("Calibrate")
+            //                         enabled:    _escCalibration && _escCalibration.rawValue === 0
+            //                         onClicked:  if(_escCalibration) _escCalibration.rawValue = 3
+            //                     }
 
-                                Column {
-                                    enabled: _escCalibration && _escCalibration.rawValue === 3
-                                    QGCLabel { text:   _escCalibration ? (_escCalibration.rawValue === 3 ? qsTr("Now perform these steps:") : qsTr("Click Calibrate to start, then:")) : "" }
-                                    QGCLabel { text:   qsTr("- Disconnect USB and battery so flight controller powers down") }
-                                    QGCLabel { text:   qsTr("- Connect the battery") }
-                                    QGCLabel { text:   qsTr("- The arming tone will be played (if the vehicle has a buzzer attached)") }
-                                    QGCLabel { text:   qsTr("- If using a flight controller with a safety button press it until it displays solid red") }
-                                    QGCLabel { text:   qsTr("- You will hear a musical tone then two beeps") }
-                                    QGCLabel { text:   qsTr("- A few seconds later you should hear a number of beeps (one for each battery cell you're using)") }
-                                    QGCLabel { text:   qsTr("- And finally a single long beep indicating the end points have been set and the ESC is calibrated") }
-                                    QGCLabel { text:   qsTr("- Disconnect the battery and power up again normally") }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //                     Column {
+            //                         enabled: _escCalibration && _escCalibration.rawValue === 3
+            //                         QGCLabel { text:   _escCalibration ? (_escCalibration.rawValue === 3 ? qsTr("Now perform these steps:") : qsTr("Click Calibrate to start, then:")) : "" }
+            //                         QGCLabel { text:   qsTr("- Disconnect USB and battery so flight controller powers down") }
+            //                         QGCLabel { text:   qsTr("- Connect the battery") }
+            //                         QGCLabel { text:   qsTr("- The arming tone will be played (if the vehicle has a buzzer attached)") }
+            //                         QGCLabel { text:   qsTr("- If using a flight controller with a safety button press it until it displays solid red") }
+            //                         QGCLabel { text:   qsTr("- You will hear a musical tone then two beeps") }
+            //                         QGCLabel { text:   qsTr("- A few seconds later you should hear a number of beeps (one for each battery cell you're using)") }
+            //                         QGCLabel { text:   qsTr("- And finally a single long beep indicating the end points have been set and the ESC is calibrated") }
+            //                         QGCLabel { text:   qsTr("- Disconnect the battery and power up again normally") }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         } // Flow
     } // Component - powerPageComponent
 

@@ -4496,7 +4496,7 @@ void Vehicle::changeHeading(const QGeoCoordinate& headingCoord)
     const QString maxYawRateParam = QStringLiteral("ATC_RATE_Y_MAX");
     float maxYawRate = 0.f;
     if (_parameterManager->parameterExists(_defaultComponentId, maxYawRateParam)) {
-        maxYawRate = _parameterManager->getParameter(FactSystem::defaultComponentId, maxYawRateParam)->rawValue().toFloat();
+        maxYawRate = _parameterManager->getParameter(ParameterManager::defaultComponentId, maxYawRateParam)->rawValue().toFloat();
     }
 
     changeHeading(diff, maxYawRate, direction, relative);

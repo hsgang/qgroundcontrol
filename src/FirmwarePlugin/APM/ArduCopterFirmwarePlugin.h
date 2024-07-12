@@ -13,6 +13,9 @@
 
 #pragma once
 
+#include <QtCore/QObject>
+#include <QtCore/QString>
+
 #include "APMFirmwarePlugin.h"
 
 class APMCopterMode : public APMCustomMode

@@ -28,10 +28,10 @@ DECLARE_SETTINGGROUP(Video, "Video")
 #ifdef QGC_GST_STREAMING
     videoSourceList.append(videoSourceRTSP);
 #ifndef NO_UDP_VIDEO
-    videoSourceList.append(videoSourceUDPH264);
-    videoSourceList.append(videoSourceUDPH265);
+    //videoSourceList.append(videoSourceUDPH264);
+    //videoSourceList.append(videoSourceUDPH265);
 #endif
-    videoSourceList.append(videoSourceTCP);
+    //videoSourceList.append(videoSourceTCP);
     //videoSourceList.append(videoSourceMPEGTS);
     //videoSourceList.append(videoSource3DRSolo);
     //videoSourceList.append(videoSourceParrotDiscovery);
@@ -42,7 +42,7 @@ DECLARE_SETTINGGROUP(Video, "Video")
 #ifdef QGC_HERELINK_AIRUNIT_VIDEO
     videoSourceList.append(videoSourceHerelinkAirUnit);
 #else
-    videoSourceList.append(videoSourceHerelinkHotspot);
+    //videoSourceList.append(videoSourceHerelinkHotspot);
 #endif
 
 #ifndef QGC_DISABLE_UVC

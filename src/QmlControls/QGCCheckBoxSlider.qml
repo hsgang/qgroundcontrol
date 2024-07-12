@@ -58,7 +58,7 @@ AbstractButton   {
             radius:                 height / 2
             color:                  control.checked ? qgcPal.brandingBlue : qgcPal.windowShade
             border.width:           _showBorder ? 1 : 0
-            border.color:           qgcPal.buttonBorder
+            border.color:           qgcPal.groupBorder
 
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
@@ -66,7 +66,9 @@ AbstractButton   {
                 height:                 parent.height - 2
                 width:                  height
                 radius:                 height / 2
-                color:                  qgcPal.buttonText
+                color:                  "white"
+                border.color:           qgcPal.groupBorder
+                border.width:           _showBorder ? 1 : 0
             }
         }
     }

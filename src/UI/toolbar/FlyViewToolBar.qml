@@ -408,7 +408,7 @@ Rectangle {
             anchors.top:    parent.top
             anchors.bottom: parent.bottom
             width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
-            color:          qgcPal.colorGreen
+            color:          qgcPal.textHighlight
         }
 
         QGCLabel {

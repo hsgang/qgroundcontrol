@@ -141,7 +141,7 @@ SetupPage {
                         for (var sliderIndex=0; sliderIndex<sliderRepeater.count; sliderIndex++) {
                             sliderRepeater.itemAt(sliderIndex).motorSlider.value = 0
                         }
-                        allSlider.value = 0
+                        //allSlider.value = 0
                     }
                 }
             }
