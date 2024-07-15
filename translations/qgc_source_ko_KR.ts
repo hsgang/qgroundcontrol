@@ -6127,7 +6127,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="135"/>
         <source>Found device</source>
-        <translation>장치를 찾았습니다</translation>
+        <translation>다음 장치의 연결을 확인하였습니다</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="177"/>
@@ -6182,7 +6182,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="314"/>
         <source>Detected Pixhawk board. You can select from the following flight stacks:</source>
-        <translation>PX4 Flow 보드를 감지했습니다. 아래의 펌웨어 목록에서 선택할 수 있습니다.</translation>
+        <translation>Pixhawk 보드를 감지했습니다. 아래의 펌웨어 목록에서 선택할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="315"/>
@@ -11920,6 +11920,31 @@ Is this really what you want?</source>
         <translation>기체</translation>
     </message>
 </context>
+
+<context>
+    <name>ConnectFirstRunPrompt</name>
+    <message>
+        <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="21"/>
+        <source>Link Management</source>
+        <translation>연결 관리</translation>
+    </message>
+    <message>
+        <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="36"/>
+        <source>Choose the link you want to connect.</source>
+        <translation>연결 항목을 선택하십시오</translation>
+    </message>
+    <message>
+        <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="85"/>
+        <source>Connect</source>
+        <translation>연결</translation>
+    </message>
+    <message>
+        <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
+        <source>Disconnect</source>
+        <translation>연결 해제</translation>
+    </message>
+</context>
+
 <context>
     <name>PIDTuning</name>
     <message>
