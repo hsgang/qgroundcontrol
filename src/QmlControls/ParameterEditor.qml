@@ -87,9 +87,22 @@ Item {
             onClicked:              controller.showModifiedOnly = checked
             visible:                QGroundControl.multiVehicleManager.activeVehicle.px4Firmware
         }
-    } // Row - Header
+    } // Row - Header 
 
     QGCButton {
+        anchors.top:    header.top
+        anchors.bottom: header.bottom
+        anchors.right:  toolsButton.left
+        anchors.rightMargin: _margins
+        text:           qsTr("Reboot")
+        onClicked:      mainWindow.showMessageDialog(qsTr("Reboot Vehicle"),
+                                                     qsTr("Select Ok to reboot vehicle."),
+                                                     Dialog.Cancel | Dialog.Ok,
+                                                     function() { _activeVehicle.rebootVehicle() })
+    }
+
+    QGCButton {
+        id:             toolsButton
         anchors.top:    header.top
         anchors.bottom: header.bottom
         anchors.right:  parent.right
