@@ -101,7 +101,9 @@ Item {
             color:      qgcPal.window
             opacity:    _rectOpacity
             radius:     _margin
-            border.color: _vehicle.id === QGroundControl.multiVehicleManager.activeVehicle.id ? qgcPal.missionItemEditor : "transparent"
+            border.color: _vehicle.id ?
+                              (_vehicle.id === QGroundControl.multiVehicleManager.activeVehicle.id ? qgcPal.missionItemEditor : "transparent")
+                               : "transparent"
             border.width: 2           
 
             MouseArea {
