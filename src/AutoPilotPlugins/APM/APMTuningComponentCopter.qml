@@ -146,11 +146,11 @@ SetupPage {
                     width:  tuningSpinBoxRect.width
                     color:  qgcPal.window
 
-                    // QGCLabel {
-                    //     id:                 tuningSpinboxLabel
-                    //     text:               qsTr("Basic Tuning")
-                    //     font.family:        ScreenTools.demiboldFontFamily
-                    // }
+                    QGCLabel {
+                        id:                 tuningSpinboxLabel
+                        text:               qsTr("Basic Tuning")
+                        font.family:        ScreenTools.demiboldFontFamily
+                    }
 
                     Rectangle {
                     id:                 tuningSpinBoxRect

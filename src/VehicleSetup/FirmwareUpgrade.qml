@@ -49,7 +49,7 @@ SetupPage {
             readonly property string flashFailText:     qsTr("If upgrade failed, make sure to connect ") + highlightPrefix + qsTr("directly") + highlightSuffix + qsTr(" to a powered USB port on your computer, not through a USB hub. ") +
                                                         qsTr("Also make sure you are only powered via USB ") + highlightPrefix + qsTr("not battery") + highlightSuffix + "."
             readonly property string qgcUnplugText1:    qsTr("All %1 connections to vehicles must be ").arg(QGroundControl.appName) + highlightPrefix + qsTr(" disconnected ") + highlightSuffix + qsTr("prior to firmware upgrade.")
-            readonly property string qgcUnplugText2:    highlightPrefix + "<big>" + qsTr("Please unplug your Pixhawk and/or Radio from USB.") + "</big>" + highlightSuffix
+            readonly property string qgcUnplugText2:    highlightPrefix + qsTr("Please unplug your Pixhawk and/or Radio from USB.") + highlightSuffix
 
             readonly property int _defaultFimwareTypePX4:   12
             readonly property int _defaultFimwareTypeAPM:   3
