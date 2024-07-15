@@ -400,6 +400,7 @@
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="OfflineVehicleFirstRunPrompt.qml">src/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml</file>
         <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
+        <file alias="ConnectFirstRunPrompt.qml">src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml</file>
     </qresource>
     <qresource prefix="/json">
         <file alias="USBBoardInfo.json">src/Comms/USBBoardInfo.json</file>

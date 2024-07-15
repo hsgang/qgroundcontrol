@@ -60,6 +60,7 @@ public:
     Q_PROPERTY(QVariantList         toolBarIndicators               READ toolBarIndicators                              NOTIFY toolBarIndicatorsChanged)
     Q_PROPERTY(int                  unitsFirstRunPromptId           MEMBER unitsFirstRunPromptId                        CONSTANT)
     Q_PROPERTY(int                  offlineVehicleFirstRunPromptId  MEMBER offlineVehicleFirstRunPromptId               CONSTANT)
+    Q_PROPERTY(int                  connectFirstRunPromptId         MEMBER connectFirstRunPromptId                      CONSTANT)
 
     Q_INVOKABLE bool guidedActionsControllerLogging() const;
 
@@ -193,6 +194,7 @@ public:
     // Standard first run prompt ids
     static const int unitsFirstRunPromptId =            1;
     static const int offlineVehicleFirstRunPromptId =   2;
+    static const int connectFirstRunPromptId =          3;
 
     // Custom builds can start there first run prompt ids from here
     static const int firstRunPromptIdsFirstCustomId = 10000;

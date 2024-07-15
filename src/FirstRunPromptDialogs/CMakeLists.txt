@@ -9,6 +9,7 @@ qt_add_qml_module(FirstRunPromptDialogs
         FirstRunPrompt.qml
         OfflineVehicleFirstRunPrompt.qml
         UnitsFirstRunPrompt.qml
+        ConnectFirstRunPrompt.qml
     OUTPUT_TARGETS FirstRunPromptDialogs_targets
     IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY}
     IMPORTS

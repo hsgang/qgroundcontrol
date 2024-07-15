@@ -432,7 +432,7 @@ const QVariantList& QGCCorePlugin::toolBarIndicators(void)
 
 QList<int> QGCCorePlugin::firstRunPromptStdIds(void)
 {
-    QList<int> rgStdIds = { unitsFirstRunPromptId, offlineVehicleFirstRunPromptId };
+    QList<int> rgStdIds = { unitsFirstRunPromptId, offlineVehicleFirstRunPromptId, connectFirstRunPromptId };
     return rgStdIds;
 }
 
@@ -469,6 +469,8 @@ QString QGCCorePlugin::firstRunPromptResource(int id)
         return "/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml";
     case offlineVehicleFirstRunPromptId:
         return "/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml";
+    case connectFirstRunPromptId:
+        return "/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml";
         break;
     }
 

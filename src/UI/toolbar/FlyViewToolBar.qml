@@ -287,7 +287,7 @@ Rectangle {
                 id: _linkRoot
                 color: qgcPal.window
                 width: ScreenTools.defaultFontPixelWidth * 30
-                height: ScreenTools.defaultFontPixelHeight * 20
+                height: ScreenTools.defaultFontPixelHeight * 10
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 radius: ScreenTools.defaultFontPixelHeight / 2
 
@@ -306,33 +306,27 @@ Rectangle {
                         anchors.top:        parent.top
                         anchors.bottom:     parent.bottom
                         anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
-                        // anchors.bottom:     buttonRow.top
-                        // anchors.bottomMargin: ScreenTools.defaultFontPixelHeight / 5
                         anchors.left:       parent.left
                         anchors.right:      parent.right
-                        //width:              parent.width
                         contentHeight:      settingsColumn.height
-                        //contentWidth:       _linkRoot.width
                         flickableDirection: Flickable.VerticalFlick
 
                         Column {
                             id:                 settingsColumn
                             width:              flickableRect.width
                             anchors.horizontalCenter: parent.horizontalCenter
-                            //anchors.margins:    ScreenTools.defaultFontPixelWidth
                             spacing:            ScreenTools.defaultFontPixelHeight / 2
                             Repeater {
                                 model: QGroundControl.linkManager.linkConfigurations
                                 delegate: QGCButton {
                                     anchors.horizontalCenter:   settingsColumn.horizontalCenter
-                                    width:                      _linkRoot.width * 0.7
+                                    width:                      ScreenTools.defaultFontPixelWidth * 26
                                     text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
                                     autoExclusive:              true
                                     visible:                    !object.dynamic
                                     onClicked: {
                                         checked = true
                                         _currentSelection = object
-                                        //console.log("clicked", object, object.link)
                                     }
                                 }
                             }
