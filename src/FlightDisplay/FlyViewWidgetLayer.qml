@@ -263,47 +263,6 @@ Item {
         }
     }
 
-    // FlyViewAltitudeIndicator{
-    //     id:                         altitudeIndicator
-    //     anchors.margins:            _toolsMargin
-    //     height:                     flyviewMissionProgress.height * 0.9
-    //     anchors.left:               flyviewMissionProgress.right
-    //     anchors.leftMargin:         _toolsMargin
-    //     anchors.verticalCenter:     flyviewMissionProgress.verticalCenter
-    //     visible:                    flyviewMissionProgress.visible && QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
-    // }
-
-    // FlyViewAttitudeIndicator{
-    //     id:                         attitudeIndicator
-    //     anchors.margins:            _toolsMargin * 2.5
-    //     anchors.bottom:             parent.bottom
-    //     anchors.horizontalCenter:   parent.horizontalCenter
-    //     visible:                    !flyviewMissionProgress.visible
-
-    //     property real bottomEdgeCenterInset: visible ? height + (_toolsMargin * 2.5) : 0
-    // }
-
-    // FlyViewMissionProgress{
-    //     id:                         flyviewMissionProgress
-    //     anchors.margins:            _toolsMargin * 2
-    //     anchors.bottom:             parent.bottom
-    //     anchors.horizontalCenter:   parent.horizontalCenter
-    //     _planMasterController: planController
-    //     visible:  QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
-
-    //     Connections{
-    //         target: _activeVehicle
-    //         onFlightModeChanged: (flightMode)=> {
-    //             //console.log(flightMode)
-    //             if(flightMode === _activeVehicle.missionFlightMode){
-    //                 flyviewMissionProgress.visible = true
-    //             } else {
-    //                 flyviewMissionProgress.visible = false
-    //             }
-    //         }
-    //     }
-    // }
-
     FlyViewAtmosphericSensorView{
         id:                         atmosphericSensorView
         anchors.top:                parent.top

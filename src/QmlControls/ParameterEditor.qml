@@ -262,7 +262,9 @@ Item {
                     id:     valueLabel
                     width:  ScreenTools.defaultFontPixelWidth  * 20
                     color:  factRow.modelFact.defaultValueAvailable ? (factRow.modelFact.valueEqualsDefault ? qgcPal.text : qgcPal.warningText) : qgcPal.text
-                    text:   {
+                    text:   getValueText()
+
+                    function getValueText() {
                         if(factRow.modelFact.enumStrings.length === 0) {
                             return factRow.modelFact.valueString + " " + factRow.modelFact.units
                         }
@@ -275,6 +277,24 @@ Item {
                     }
                     clip:   true
                 }
+
+                // QGCLabel {
+                //     id:     valueLabel
+                //     width:  ScreenTools.defaultFontPixelWidth  * 20
+                //     color:  factRow.modelFact.defaultValueAvailable ? (factRow.modelFact.valueEqualsDefault ? qgcPal.text : qgcPal.warningText) : qgcPal.text
+                //     text:   {
+                //         if(factRow.modelFact.enumStrings.length === 0) {
+                //             return factRow.modelFact.valueString + " " + factRow.modelFact.units
+                //         }
+
+                //         if(factRow.modelFact.bitmaskStrings.length !== 0) {
+                //             return factRow.modelFact.selectedBitmaskStrings.join(',')
+                //         }
+
+                //         return factRow.modelFact.enumStringValue
+                //     }
+                //     clip:   true
+                // }
 
                 QGCLabel {
                     text:   factRow.modelFact.shortDescription

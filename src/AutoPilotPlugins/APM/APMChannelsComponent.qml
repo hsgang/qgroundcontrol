@@ -35,6 +35,7 @@ SetupPage {
             FactPanelController { id: controller; }
 
             RowLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 // rc input
                 Column {
@@ -46,7 +47,9 @@ SetupPage {
                     Rectangle {
                         implicitWidth:                  rcOptionGroupColumn.width + (_margins * 2)
                         implicitHeight:                 rcOptionGroupColumn.height + (_margins * 2)
-                        color:                          qgcPal.windowShade
+                        color:                          qgcPal.window
+                        border.color:                   qgcPal.groupBorder
+                        radius:                         ScreenTools.defaultFontPixelHeight / 2
 
                         Column {
                             id:               rcOptionGroupColumn
@@ -95,7 +98,9 @@ SetupPage {
                     Rectangle {
                         implicitWidth:                  servoOptionGroupColumn.width + (_margins * 2)
                         implicitHeight:                 servoOptionGroupColumn.height + (_margins * 2)
-                        color:                          qgcPal.windowShade
+                        color:                          qgcPal.window
+                        border.color:                   qgcPal.groupBorder
+                        radius:                         ScreenTools.defaultFontPixelHeight / 2
 
                         Column {
                             id:               servoOptionGroupColumn
@@ -134,13 +139,6 @@ SetupPage {
                     }
                 } // Column
             }
-
-//                 FactTextField {
-//                     id:                 tuneMaxField
-//                     validator:          DoubleValidator {bottom: 0; top: 32767;}
-//                     fact:               controller.getParameterFact(-1, "r.TUNE_MIN")
-//                 }
-
         } // Item
     } // Component
 } // SetupView

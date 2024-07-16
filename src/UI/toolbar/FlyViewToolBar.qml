@@ -287,7 +287,7 @@ Rectangle {
                 id: _linkRoot
                 color: qgcPal.window
                 width: ScreenTools.defaultFontPixelWidth * 30
-                height: ScreenTools.defaultFontPixelHeight * 10
+                height: ScreenTools.defaultFontPixelHeight * 16
                 anchors.margins: ScreenTools.defaultFontPixelWidth
                 radius: ScreenTools.defaultFontPixelHeight / 2
 

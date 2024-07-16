@@ -157,8 +157,9 @@ SetupPage {
                     width:              tuningSpinBoxGrid.width + (_margins * 2)
                     height:             tuningSpinBoxGrid.height + (_margins * 2)
                     anchors.top:        tuningSpinboxLabel.bottom
-                    color:              qgcPal.windowShade
-                    radius:             ScreenTools.defaultFontPixelHeight * 0.25
+                    color:              qgcPal.window
+                    radius:             ScreenTools.defaultFontPixelHeight / 2
+                    border.color:       qgcPal.groupBorder
 
 
                         GridLayout {

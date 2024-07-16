@@ -45,13 +45,18 @@ SetupPage {
     Component {
         id: flightModePageComponent
 
-        Flow {
-            id:         flowLayout
-            width:      availableWidth
-            spacing:     _margins
+        // Flow {
+        //     id:         flowLayout
+        //     width:      availableWidth
+        //     spacing:     _margins
+
+        ColumnLayout {
+            width:      Math.max(implicitWidth, ScreenTools.defaultFontPixelWidth * 50)
+            spacing:    ScreenTools.defaultFontPixelHeight
 
             Column {
                 spacing: _margins
+                Layout.alignment:   Qt.AlignHCenter
 
                 QGCLabel {
                     id:             flightModeLabel
@@ -63,8 +68,9 @@ SetupPage {
                     id:     flightModeSettings
                     width:  flightModeColumn.width + (_margins * 2)
                     height: flightModeColumn.height + ScreenTools.defaultFontPixelHeight
-                    radius: ScreenTools.defaultFontPixelHeight * 0.25
-                    color:  qgcPal.windowShade
+                    radius: ScreenTools.defaultFontPixelHeight * 0.5
+                    color:  qgcPal.window
+                    border.color: qgcPal.groupBorder
 
                     Column {
                         id:                 flightModeColumn
@@ -73,31 +79,32 @@ SetupPage {
                         anchors.top:        parent.top
                         spacing:            ScreenTools.defaultFontPixelHeight
 
-                        Row {
-                            spacing:    _margins
-                            visible:    _fltmodeChExists
+                        // Row {
+                        //     spacing:    _margins
+                        //     visible:    _fltmodeChExists
 
-                            QGCLabel {
-                                id:                 modeChannelLabel
-                                anchors.baseline:   modeChannelCombo.baseline
-                                text:               qsTr("Flight mode channel:")
-                            }
+                        //     QGCLabel {
+                        //         id:                 modeChannelLabel
+                        //         anchors.baseline:   modeChannelCombo.baseline
+                        //         text:               qsTr("Flight mode channel:")
+                        //     }
 
-                            QGCComboBox {
-                                id:             modeChannelCombo
-                                width:          ScreenTools.defaultFontPixelWidth * 15
-                                model:          [ qsTr("Not assigned"), qsTr("Channel 1"), qsTr("Channel 2"),
-                                    qsTr("Channel 3"),    qsTr("Channel 4"), qsTr("Channel 5"),
-                                    qsTr("Channel 6"),    qsTr("Channel 7"), qsTr("Channel 8") ]
+                        //     QGCComboBox {
+                        //         id:             modeChannelCombo
+                        //         width:          ScreenTools.defaultFontPixelWidth * 15
+                        //         model:          [ qsTr("Not assigned"), qsTr("Channel 1"), qsTr("Channel 2"),
+                        //             qsTr("Channel 3"),    qsTr("Channel 4"), qsTr("Channel 5"),
+                        //             qsTr("Channel 6"),    qsTr("Channel 7"), qsTr("Channel 8") ]
 
-                                currentIndex:   _fltmodeCh.value
-                                onActivated: (index) => { _fltmodeCh.value = index }
-                            }
-                        }
+                        //         currentIndex:   _fltmodeCh.value
+                        //         onActivated: (index) => { _fltmodeCh.value = index }
+                        //     }
+                        // }
 
                         GridLayout {
                             rows:   _customSimpleMode ? 7 : 6
                             flow:   GridLayout.TopToBottom
+                            columnSpacing: ScreenTools.defaultFontPixelWidth
 
                             QGCLabel { text: ""; visible: _customSimpleMode }
                             Repeater {
@@ -162,24 +169,25 @@ SetupPage {
                             }
                         }
 
-                        RowLayout {
-                            spacing: _margins
-                            visible: controller.simpleModesSupported
+                        // RowLayout {
+                        //     spacing: _margins
+                        //     visible: controller.simpleModesSupported
 
-                            QGCLabel { text: qsTr("Simple Mode") }
+                        //     QGCLabel { text: qsTr("Simple Mode") }
 
-                            QGCComboBox {
-                                model:          controller.simpleModeNames
-                                currentIndex:   controller.simpleMode
-                                onActivated: (index) => { controller.simpleMode = index }
-                            }
-                        }
+                        //     QGCComboBox {
+                        //         model:          controller.simpleModeNames
+                        //         currentIndex:   controller.simpleMode
+                        //         onActivated: (index) => { controller.simpleMode = index }
+                        //     }
+                        // }
                     } // Column - Flight Modes
                 } // Rectangle - Flight Modes
             } // Column - Flight Modes
 
             Column {
                 spacing: _margins
+                Layout.alignment:   Qt.AlignHCenter
 
                 QGCLabel {
                     id:                 channelOptionsLabel
@@ -191,15 +199,16 @@ SetupPage {
                     id:     channelOptionsSettings
                     width:  channelOptColumn.width + (_margins * 2)
                     height: channelOptColumn.height + ScreenTools.defaultFontPixelHeight
-                    color:  qgcPal.windowShade
-                    radius: ScreenTools.defaultFontPixelHeight * 0.25
+                    radius: ScreenTools.defaultFontPixelHeight * 0.5
+                    color:  qgcPal.window
+                    border.color: qgcPal.groupBorder
 
                     Column {
                         id:                 channelOptColumn
                         anchors.margins:    ScreenTools.defaultFontPixelWidth
                         anchors.left:       parent.left
                         anchors.top:        parent.top
-                        spacing:            ScreenTools.defaultFontPixelHeight
+                        spacing:            ScreenTools.defaultFontPixelWidth
 
                         Repeater {
                             model: _rcOptionStop - _rcOptionStart + 1

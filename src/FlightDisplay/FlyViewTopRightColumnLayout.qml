@@ -20,28 +20,13 @@ import QGroundControl.ScreenTools
 ColumnLayout {
     width: QGroundControl.multiVehicleManager.vehicles.count > 1 ? ScreenTools.defaultFontPixelWidth * 38 : _rightPanelWidth
 
-//    RowLayout {
-//        id:                 multiVehiclePanelSelector
-//        Layout.alignment:   Qt.AlignTop
-//        spacing:            ScreenTools.defaultFontPixelWidth
-//        visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
+    property bool _showSingleVehicleUI:  !selectorCheckBoxSlider.checked
 
-//        QGCMapPalette { id: mapPal; lightColors: true }
-
-//        QGCRadioButton {
-//            id:             singleVehicleRadio
-//            text:           qsTr("Single")
-//            checked:        _showSingleVehicleUI
-//            onClicked:      _showSingleVehicleUI = true
-//            textColor:      mapPal.text
-//        }
-
-//        QGCRadioButton {
-//            text:           qsTr("Multi-Vehicle")
-//            textColor:      mapPal.text
-//            onClicked:      _showSingleVehicleUI = false
-//        }
-//    }
+    TerrainProgress {
+        Layout.alignment:       Qt.AlignTop
+        Layout.preferredWidth:  _rightPanelWidth
+        Layout.fillWidth:       true
+    }
 
     Rectangle {
         id:                 multiVehiclePanelSelector
@@ -53,17 +38,8 @@ ColumnLayout {
         color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
         radius:             ScreenTools.defaultFontPixelWidth / 2
 
-        property bool _showSingleVehicleUI:  !visible || !selectorCheckBoxSlider.checked
-
         RowLayout {
             id:                 multiVehiclePanelSelectorLayout
-            // anchors.top:        parent.top
-            // anchors.right:      parent.right
-            // anchors.margins:    _toolsMargin
-            // width:              _rightPanelWidth
-            // visible:            QGroundControl.multiVehicleManager.vehicles.count > 1 && QGroundControl.corePlugin.options.flyView.showMultiVehicleList
-
-            //property bool showSingleVehiclePanel:  !visible || !selectorCheckBoxSlider.checked
             anchors.right: parent.right
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
@@ -85,13 +61,7 @@ ColumnLayout {
         Layout.preferredWidth:  _rightPanelWidth
         Layout.fillHeight:      true
         Layout.fillWidth:       true
-        visible:                !multiVehiclePanelSelector._showSingleVehicleUI
-    }
-
-    TerrainProgress {
-        Layout.alignment:       Qt.AlignTop
-        Layout.preferredWidth:  _rightPanelWidth
-        Layout.fillWidth:       true
+        visible:                !_showSingleVehicleUI
     }
 
     // We use a Loader to load the photoVideoControlComponent only when the active vehicle is not null
@@ -108,10 +78,8 @@ ColumnLayout {
             id: photoVideoControlComponent
 
             PhotoVideoControl {
-                visible:                    QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue
+                visible:    QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue
             }
         }
     }
-
-
 }

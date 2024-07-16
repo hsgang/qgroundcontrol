@@ -1034,6 +1034,16 @@
         <translation>기체 재부팅이 필요합니다</translation>
     </message>
     <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="80"/>
+        <source>Power Sensor 1</source>
+        <translation>전원 센서 1</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="80"/>
+        <source>Power Sensor 2</source>
+        <translation>전원 센서 2</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="60"/>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="110"/>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="60"/>
@@ -1043,8 +1053,8 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="80"/>
-        <source>Battery1 monitor:</source>
-        <translation>배터리1 모니터:</translation>
+        <source>Battery1 monitor</source>
+        <translation>배터리1 모니터</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="95"/>
@@ -1064,8 +1074,8 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="167"/>
-        <source>Battery2 monitor:</source>
-        <translation>배터리2 모니터:</translation>
+        <source>Battery2 monitor</source>
+        <translation>배터리2 모니터</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="233"/>
@@ -1154,46 +1164,46 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="353"/>
-        <source>Other</source>
-        <translation>기타</translation>
+        <source>Custom</source>
+        <translation>사용자 정의</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="363"/>
-        <source>Battery monitor:</source>
-        <translation>배터리 모니터:</translation>
+        <source>Battery monitor</source>
+        <translation>배터리 모니터</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="375"/>
-        <source>Battery capacity:</source>
-        <translation>배터리 용량:</translation>
+        <source>Battery capacity</source>
+        <translation>배터리 용량</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="387"/>
-        <source>Minimum arming voltage:</source>
-        <translation>최소 시동 전압:</translation>
+        <source>Minimum arming voltage</source>
+        <translation>최소 시동 전압</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="399"/>
-        <source>Power sensor:</source>
-        <translation>전원 센서:</translation>
+        <source>Sensor preset</source>
+        <translation>센서 프리셋</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="424"/>
-        <source>Current pin:</source>
-        <translation>전류 측정 포트:</translation>
+        <source>Current pin</source>
+        <translation>전류 측정 포트</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="439"/>
-        <source>Voltage pin:</source>
-        <translation>전압 측정 포트:</translation>
+        <source>Voltage pin</source>
+        <translation>전압 측정 포트</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="454"/>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="579"/>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="454"/>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="579"/>
-        <source>Voltage multiplier:</source>
-        <translation>전압 계수:</translation>
+        <source>Voltage multiplier</source>
+        <translation>전압 계수</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="465"/>
@@ -1218,8 +1228,8 @@
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="641"/>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="486"/>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="641"/>
-        <source>Amps per volt:</source>
-        <translation>전류 계수:</translation>
+        <source>Amps per volt</source>
+        <translation>전류 계수</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="503"/>
@@ -1233,8 +1243,8 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="517"/>
-        <source>Amps Offset:</source>
-        <translation>전류 옵셋:</translation>
+        <source>Amps Offset</source>
+        <translation>전류 옵셋</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="532"/>
@@ -1248,13 +1258,13 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="572"/>
-        <source>Measured voltage:</source>
-        <translation>측정 전압:</translation>
+        <source>Measured voltage</source>
+        <translation>측정 전압</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="576"/>
-        <source>Vehicle voltage:</source>
-        <translation>기체 전압:</translation>
+        <source>Vehicle voltage</source>
+        <translation>기체 전압</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="584"/>
@@ -1271,13 +1281,13 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="634"/>
-        <source>Measured current:</source>
-        <translation>측정 전류:</translation>
+        <source>Measured current</source>
+        <translation>측정 전류</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="638"/>
-        <source>Vehicle current:</source>
-        <translation>기체 전류:</translation>
+        <source>Vehicle current</source>
+        <translation>기체 전류</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.cc" line="18"/>
@@ -1378,37 +1388,37 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="66"/>
         <source>Requires vehicle reboot</source>
-        <translation>기체 리부팅이 필요합니다</translation>
+        <translation>기체 재시작이 필요합니다</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="79"/>
-        <source>Low action:</source>
-        <translation>저전압 시 동작:</translation>
+        <source>Low action</source>
+        <translation>저전압 동작</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="86"/>
-        <source>Critical action:</source>
-        <translation>위험전압 시 동작:</translation>
+        <source>Critical action</source>
+        <translation>위험전압 동작</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="93"/>
-        <source>Low voltage threshold:</source>
-        <translation>저전압 한계점:</translation>
+        <source>Low voltage threshold</source>
+        <translation>저전압 한계점</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="101"/>
-        <source>Critical voltage threshold:</source>
-        <translation>위험전압 한계점:</translation>
+        <source>Critical voltage threshold</source>
+        <translation>위험전압 한계점</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="108"/>
-        <source>Low mAh threshold:</source>
-        <translation>전류량(부족):</translation>
+        <source>Low mAh threshold</source>
+        <translation>전류량(부족)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="115"/>
-        <source>Critical mAh threshold:</source>
-        <translation>전류량(위험):</translation>
+        <source>Critical mAh threshold</source>
+        <translation>전류량(위험)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="136"/>
@@ -1418,12 +1428,17 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="147"/>
         <source>Battery1 Failsafe Triggers</source>
-        <translation>Battery1 안전장치 트리거</translation>
+        <translation>배터리1 페일세이프</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="147"/>
+        <source>Battery Failsafe Triggers</source>
+        <translation>배터리 페일세이프</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="181"/>
         <source>Battery2 Failsafe Triggers</source>
-        <translation>Battery2 안전장치 트리거</translation>
+        <translation>배터리2 페일세이프</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="220"/>
@@ -1433,8 +1448,8 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="238"/>
-        <source>Throttle PWM threshold:</source>
-        <translation>스로틀 PWM 임계값:</translation>
+        <source>Throttle PWM threshold</source>
+        <translation>스로틀 PWM 임계값</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="252"/>
@@ -1444,30 +1459,30 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="296"/>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="366"/>
-        <source>Ground Station failsafe:</source>
-        <translation>지상국 안전장치:</translation>
+        <source>Ground Station failsafe</source>
+        <translation>GCS 페일세이프</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="303"/>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="373"/>
-        <source>Throttle failsafe:</source>
-        <translation>스로틀 안전장치:</translation>
+        <source>Throttle failsafe</source>
+        <translation>RC 페일세이프</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="310"/>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="383"/>
-        <source>PWM threshold:</source>
-        <translation>PWM 임계값:</translation>
+        <source>PWM threshold</source>
+        <translation>PWM 임계값</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="316"/>
         <source>Failsafe Crash Check:</source>
-        <translation>안전장치 충돌 검사:</translation>
+        <translation>페일세이프 충돌 검사:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="345"/>
-        <source>General Failsafe Triggers</source>
-        <translation>일반 안전장치 트리거</translation>
+        <source>Communication Failsafe</source>
+        <translation>통신 페일세이프</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="375"/>
@@ -1492,58 +1507,58 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="414"/>
         <source>GeoFence</source>
-        <translation>비행제한구역(GeoFence)</translation>
+        <translation>지오펜스</translation>
     </message>
     <message>
-        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="429"/>
-        <source>Circle GeoFence enabled</source>
-        <translation>원형 경계선 사용</translation>
+        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="414"/>
+        <source>Enabled</source>
+        <translation>활성화</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="454"/>
-        <source>Altitude GeoFence enabled</source>
+        <source>Altitude Geofence</source>
         <translation>고도 경계선 사용</translation>
     </message>
     <message>
-        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="479"/>
-        <source>Report only</source>
-        <translation>보고만 하기</translation>
+        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="454"/>
+        <source>Maximum Altitude</source>
+        <translation>최대 고도</translation>
     </message>
     <message>
-        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="490"/>
-        <source>RTL or Land</source>
-        <translation>RTL(복귀) 또는 착륙</translation>
+        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="429"/>
+        <source>Circle centered on Home</source>
+        <translation>원형 경계선 사용</translation>
     </message>
     <message>
-        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="500"/>
-        <source>Max radius:</source>
-        <translation>최대 반지름:</translation>
+        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="429"/>
+        <source>Maximum Radius</source>
+        <translation>최대 반경</translation>
     </message>
     <message>
-        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="461"/>
-        <source>Max altitude:</source>
-        <translation>최대 고도:</translation>
-    </message>
-    <message>
-        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="470"/>
-        <source>Min altitude:</source>
-        <translation>최소 고도:</translation>
+        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="429"/>
+        <source>Polygons Fence</source>
+        <translation>폴리곤 경계선 사용</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="434"/>
-        <source>GeoFence Type Options:</source>
-        <translation>지오펜스 종류:</translation>
+        <source>Breach action</source>
+        <translation>지오펜스 동작</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="434"/>
-        <source>GeoFence Actions:</source>
-        <translation>지오펜스 동작:</translation>
+        <source>Fence margin</source>
+        <translation>지오펜스 마진</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="549"/>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="678"/>
         <source>Return to Launch</source>
-        <translation>이륙위치로 귀환</translation>
+        <translation>자동 복귀</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="549"/>
+        <source>Land Mode Settings</source>
+        <translation>착륙 설정</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="585"/>
@@ -1554,23 +1569,23 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="596"/>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="703"/>
-        <source>Return at specified altitude:</source>
-        <translation>설정 고도에서 귀환:</translation>
+        <source>Return at specified altitude</source>
+        <translation>복귀 고도</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="617"/>
-        <source>Loiter above Home for:</source>
-        <translation>홈 위에서 정지비행:</translation>
+        <source>Loiter above Home for</source>
+        <translation>착륙전 대기 시간</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="635"/>
-        <source>Land stage altitude:</source>
-        <translation>착륙 단계 고도:</translation>
+        <source>Land stage altitude</source>
+        <translation>착륙 전환 고도</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="650"/>
-        <source>Land stage descent speed:</source>
-        <translation>착륙 단계 하강 속도:</translation>
+        <source>Land stage descent speed</source>
+        <translation>종단 하강 속도</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="730"/>
@@ -1595,7 +1610,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.cc" line="44"/>
         <source>Safety Setup is used to setup triggers for Return to Land as well as the settings for Return to Land itself.</source>
-        <translation>안전 설정은 페일세이프 동작과 관련된 설정을 합니다.</translation>
+        <translation>페일세이프 동작과 관련된 설정을 합니다.</translation>
     </message>
 </context>
 <context>
@@ -13101,6 +13116,11 @@ Is this really what you want?</source>
         <translation>도구</translation>
     </message>
     <message>
+        <location filename="../src/QmlControls/ParameterEditor.qml" line="97"/>
+        <source>Reboot</source>
+        <translation>기체 재시작</translation>
+    </message>
+    <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="105"/>
         <source>Refresh</source>
         <translation>새로고침</translation>
@@ -13202,6 +13222,11 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
 </context>
 <context>
     <name>ParameterEditorDialog</name>
+    <message>
+        <location filename="../src/QmlControls/ParameterEditorDialog.qml" line="25"/>
+        <source>Parameter Editor</source>
+        <translation>매개변수 변경</translation>
+    </message>
     <message>
         <location filename="../src/QmlControls/ParameterEditorDialog.qml" line="135"/>
         <source>Reset to default</source>

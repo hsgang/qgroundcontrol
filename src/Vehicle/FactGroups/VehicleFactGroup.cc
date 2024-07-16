@@ -40,6 +40,7 @@ VehicleFactGroup::VehicleFactGroup(QObject* parent)
     , _missionItemIndexFact         (0, _missionItemIndexFactName,          FactMetaData::valueTypeUint16)
     , _headingToNextWPFact          (0, _headingToNextWPFactName,           FactMetaData::valueTypeDouble)
     , _distanceToNextWPFact         (0, _distanceToNextWPFactName,          FactMetaData::valueTypeDouble)
+    , _timeToNextWPFact             (0, _timeToNextWPFactName,              FactMetaData::valueTypeElapsedTimeInSeconds)
     , _headingToHomeFact            (0, _headingToHomeFactName,             FactMetaData::valueTypeDouble)
     , _distanceToGCSFact            (0, _distanceToGCSFactName,             FactMetaData::valueTypeDouble)
     , _hobbsFact                    (0, _hobbsFactName,                     FactMetaData::valueTypeString)
@@ -70,6 +71,7 @@ VehicleFactGroup::VehicleFactGroup(QObject* parent)
     _addFact(&_missionItemIndexFact,        _missionItemIndexFactName);
     _addFact(&_headingToNextWPFact,         _headingToNextWPFactName);
     _addFact(&_distanceToNextWPFact,        _distanceToNextWPFactName);
+    _addFact(&_timeToNextWPFact,            _timeToNextWPFactName);
     _addFact(&_headingToHomeFact,           _headingToHomeFactName);
     _addFact(&_distanceToGCSFact,           _distanceToGCSFactName);
     _addFact(&_hobbsFact,                   _hobbsFactName);

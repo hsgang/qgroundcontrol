@@ -106,7 +106,7 @@ VideoManager::setToolbox(QGCToolbox *toolbox)
         gstDebugLevel = settings.value(AppSettings::gstDebugLevelName).toInt();
     }
     QStringList args = _app->arguments();
-    const qsizetype argc = args.size();
+    const size_t argc = args.size();
     char** argv = new char*[argc];
     for (size_t i = 0; i < argc; i++) {
         argv[i] = args[i].toUtf8().data();

@@ -34,11 +34,13 @@ class VehicleFactGroup : public FactGroup
     Q_PROPERTY(Fact* xTrackError            READ xTrackError            CONSTANT)
     Q_PROPERTY(Fact* rangeFinderDist        READ rangeFinderDist        CONSTANT)
     Q_PROPERTY(Fact* flightDistance         READ flightDistance         CONSTANT)
+    Q_PROPERTY(Fact* flightTime             READ flightTime             CONSTANT)
     Q_PROPERTY(Fact* distanceToHome         READ distanceToHome         CONSTANT)
     Q_PROPERTY(Fact* timeToHome             READ timeToHome             CONSTANT)
     Q_PROPERTY(Fact* missionItemIndex       READ missionItemIndex       CONSTANT)
     Q_PROPERTY(Fact* headingToNextWP        READ headingToNextWP        CONSTANT)
     Q_PROPERTY(Fact* distanceToNextWP       READ distanceToNextWP       CONSTANT)
+    Q_PROPERTY(Fact* timeToNextWP           READ timeToNextWP           CONSTANT)
     Q_PROPERTY(Fact* headingToHome          READ headingToHome          CONSTANT)
     Q_PROPERTY(Fact* distanceToGCS          READ distanceToGCS          CONSTANT)
     Q_PROPERTY(Fact* hobbs                  READ hobbs                  CONSTANT)
@@ -66,11 +68,13 @@ public:
     Fact* xTrackError               () { return &_xTrackErrorFact; }
     Fact* rangeFinderDist           () { return &_rangeFinderDistFact; }
     Fact* flightDistance            () { return &_flightDistanceFact; }
+    Fact* flightTime                () { return &_flightTimeFact; }
     Fact* distanceToHome            () { return &_distanceToHomeFact; }
     Fact* timeToHome                () { return &_timeToHomeFact; }
     Fact* missionItemIndex          () { return &_missionItemIndexFact; }
     Fact* headingToNextWP           () { return &_headingToNextWPFact; }
     Fact* distanceToNextWP          () { return &_distanceToNextWPFact; }
+    Fact* timeToNextWP              () { return &_timeToNextWPFact; }
     Fact* headingToHome             () { return &_headingToHomeFact; }
     Fact* distanceToGCS             () { return &_distanceToGCSFact; }
     Fact* hobbs                     () { return &_hobbsFact; }
@@ -114,6 +118,7 @@ protected:
     const QString _missionItemIndexFactName =       QStringLiteral("missionItemIndex");
     const QString _headingToNextWPFactName =        QStringLiteral("headingToNextWP");
     const QString _distanceToNextWPFactName =       QStringLiteral("distanceToNextWP");
+    const QString _timeToNextWPFactName =           QStringLiteral("timeToNextWP");
     const QString _headingToHomeFactName =          QStringLiteral("headingToHome");
     const QString _distanceToGCSFactName =          QStringLiteral("distanceToGCS");
     const QString _hobbsFactName =                  QStringLiteral("hobbs");
@@ -144,6 +149,7 @@ protected:
     Fact _missionItemIndexFact;
     Fact _headingToNextWPFact;
     Fact _distanceToNextWPFact;
+    Fact _timeToNextWPFact;
     Fact _headingToHomeFact;
     Fact _distanceToGCSFact;
     Fact _hobbsFact;

@@ -74,18 +74,19 @@ Rectangle {
             Layout.fillWidth:   true
             height:             ScreenTools.defaultFontPixelHeight
             color:              "transparent"
-            border.color:       "green"
+            border.color:       qgcPal.textHighlight
 
             Rectangle {
                 anchors.top:    parent.top
                 anchors.bottom: parent.bottom
-                color:          "green"
-                width:         parent.width * _pctComplete
+                color:          qgcPal.textHighlight
+                width:          parent.width * _pctComplete
 
                 QGCLabel {
                     anchors.centerIn:   parent
                     text:               qsTr("Done")
                     visible:            _blocksPending == 0
+                    color:              "black"
                 }
             }
         }

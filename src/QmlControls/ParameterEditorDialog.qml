@@ -92,6 +92,11 @@ QGCPopupDialog {
         spacing:    globals.defaultTextHeight
 
         QGCLabel {
+            text:       qsTr("Parameter name: ") + fact.name
+            visible:    fact.componentId > 0 // > 0 means it's a parameter fact
+        }
+
+        QGCLabel {
             id:                 validationError
             Layout.fillWidth:   true
             wrapMode:           Text.WordWrap
@@ -205,11 +210,6 @@ QGCPopupDialog {
         }
 
         QGCLabel {
-            text:       qsTr("Parameter name: ") + fact.name
-            visible:    fact.componentId > 0 // > 0 means it's a parameter fact
-        }
-
-        QGCLabel {
             visible:    fact.vehicleRebootRequired
             text:       qsTr("Vehicle reboot required after change")
         }
@@ -219,13 +219,13 @@ QGCPopupDialog {
             text:       qsTr("Application restart required after change")
         }
 
-        QGCLabel {
-            Layout.fillWidth:   true
-            wrapMode:   Text.WordWrap
-            text:       qsTr("Warning: Modifying values while vehicle is in flight can lead to vehicle instability and possible vehicle loss. ") +
-                        qsTr("Make sure you know what you are doing and double-check your values before Save!")
-            visible:    fact.componentId != -1
-        }
+        // QGCLabel {
+        //     Layout.fillWidth:   true
+        //     wrapMode:   Text.WordWrap
+        //     text:       qsTr("Warning: Modifying values while vehicle is in flight can lead to vehicle instability and possible vehicle loss. ") +
+        //                 qsTr("Make sure you know what you are doing and double-check your values before Save!")
+        //     visible:    fact.componentId != -1
+        // }
 
         QGCCheckBox {
             id:         forceSave

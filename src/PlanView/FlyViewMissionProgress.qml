@@ -38,7 +38,7 @@ Rectangle{
     property real   _longitude:                 _activeVehicle ? _activeVehicle.gps.lon.rawValue : NaN
     property real   _flightDistance:            _activeVehicle ? _activeVehicle.flightDistance.rawValue : 0
     property real   _cameraTriggerCount:        _activeVehicle ? _activeVehicle.cameraTriggerPoints.count : 0
-    property real   _flightTime:                _activeVehicle ? _activeVehicle.flightTime.rawValue : NaN
+    property real   _flightTime:                _activeVehicle ? _activeVehicle.flightTime.rawValue : 0
     property string _latitudeText:              isNaN(_latitude) ? "-.-" : _latitude.toFixed(7)
     property string _longitudeText:             isNaN(_longitude) ? "-.-" : _longitude.toFixed(7)
     property string _flightDistanceText:        isNaN(_flightDistance) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_flightDistance).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString

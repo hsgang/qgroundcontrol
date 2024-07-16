@@ -51,7 +51,7 @@ Item {
 
     QGCFlickable {
         anchors.fill:   parent
-        contentWidth:   Math.max(availableWidth, pageLoader.x + pageLoader.item.width)
+        contentWidth:   Math.max(availableWidth) //, pageLoader.x + pageLoader.item.width)
         contentHeight:  Math.max(availableHeight, pageLoader.y + pageLoader.item.height)
         clip:           true
 
@@ -92,6 +92,8 @@ Item {
             id:                 pageLoader
             anchors.topMargin:  _margins
             anchors.top:        headingRow.bottom
+            anchors.left:       parent.left
+            anchors.right:      parent.right
         }
 
         // Overlay to display when vehicle is armed and this setup page needs
