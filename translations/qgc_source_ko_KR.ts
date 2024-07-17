@@ -13319,8 +13319,8 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     </message>
     <message>
         <location filename="../src/FactSystem/ParameterManager.cc" line="1175"/>
-        <source>Vehicle %1 did not respond to request for parameters. This will cause %2 to be unable to display its full user interface.</source>
-        <translation>기체 %1이(가) 파라미터 요청에 응답하지 않았습니다. 이로인해 %2에서 전체 사용자 인터페이스를 표시할 수 없습니다.</translation>
+        <source>Vehicle %1 did not respond to request for parameters.</source>
+        <translation>기체 %1이(가) 파라미터 요청에 응답하지 않았습니다. 전체 인터페이스를 표시할 수 없습니다.</translation>
     </message>
 </context>
 <context>
