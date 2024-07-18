@@ -19179,4 +19179,47 @@ Confirm change?</source>
         <translation>열기</translation>
     </message>
 </context>
+<context>
+    <name>StatusTextHandler</name>
+    <message>
+        <location filename="../src/MAVLink/StatusTextHandler.qml" line="184"/>
+        <source>EMERGENCY</source>
+        <translation>비상</translation>
+    </message>
+    <message>
+        <location filename="../src/MAVLink/StatusTextHandler.qml" line="184"/>
+        <source>ALERT</source>
+        <translation>경보</translation>
+    </message>
+    <message>
+        <location filename="../src/MAVLink/StatusTextHandler.qml" line="184"/>
+        <source>Critical</source>
+        <translation>치명</translation>
+    </message>
+    <message>
+        <location filename="../src/MAVLink/StatusTextHandler.qml" line="184"/>
+        <source>Error</source>
+        <translation>오류</translation>
+    </message>
+    <message>
+        <location filename="../src/MAVLink/StatusTextHandler.qml" line="184"/>
+        <source>Warning</source>
+        <translation>주의</translation>
+    </message>
+    <message>
+        <location filename="../src/MAVLink/StatusTextHandler.qml" line="184"/>
+        <source>Notice</source>
+        <translation>알림</translation>
+    </message>
+    <message>
+        <location filename="../src/MAVLink/StatusTextHandler.qml" line="184"/>
+        <source>Info</source>
+        <translation>정보</translation>
+    </message>
+    <message>
+        <location filename="../src/MAVLink/StatusTextHandler.qml" line="184"/>
+        <source>Debug</source>
+        <translation>디버그</translation>
+    </message>
+</context>
 </TS>

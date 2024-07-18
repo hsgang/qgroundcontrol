@@ -110,7 +110,7 @@ QGCPopupDialog {
 
             QGCTextField {
                 id:                 valueField
-                width:              _editFieldWidth
+                Layout.preferredWidth:  _editFieldWidth
                 unitsLabel:         fact.units
                 showUnits:          fact.units != ""
                 focus:              setFocus && visible
@@ -122,7 +122,7 @@ QGCPopupDialog {
 
             QGCComboBox {
                 id:         factCombo
-                width:      _editFieldWidth
+                Layout.preferredWidth:  _editFieldWidth
                 model:      fact.enumStrings
                 visible:    _showCombo
                 focus:      setFocus && visible

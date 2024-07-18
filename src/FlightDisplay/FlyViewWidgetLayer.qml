@@ -289,45 +289,23 @@ Item {
     }
 
     Rectangle {
-        id:                         messageToastManagerRect
-        anchors.margins:            _toolsMargin
-        anchors.bottom:             bottomCenterRowLayout.top
-        anchors.horizontalCenter:   parent.horizontalCenter
-        width:                      messageToastManager.width //mainWindow.width  * 0.4
-        height:                     messageToastManager.height < mainWindow.height * 0.14 ? messageToastManager.height : mainWindow.height * 0.14
-        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.4) //"transparent" //qgcPal.window
-        radius:                     _toolsMargin
-        visible:                    messageFlick.contentHeight
+        id:                 messageToastManagerRect
+        anchors.margins:    _toolsMargin * 3
+        anchors.top:        parent.top
+        anchors.left:       toolStrip.right
+        width:              ScreenTools.isMobile ? parent.width / 2 : parent.width / 4
+        height:             parent.height / 2
+        color:              "transparent"
 
-        QGCFlickable {
-            id:                 messageFlick
-            anchors.fill:       parent
-            anchors.horizontalCenter: parent.horizontalCenter
-            contentHeight:      messageToastManager.height
-            contentWidth:       messageToastManager.width
-            pixelAligned:       true
-
-            ScrollBar.vertical : ScrollBar{
-                active: false
-            }
-
-            contentY : contentHeight > height ? contentHeight - height + _toolsMargin * 3 : 0
-
-            MessageToastManager{
-                id: messageToastManager
-            }
+        MessageToastManager {
+            id:                 messageToastManager
 
             Connections {
                 target: _activeVehicle
                 onNewFormattedMessage : function(formattedMessage) {
-                    messageToastManager.show(formattedMessage)
+                    messageToastManager.show(formattedMessage, 5000)
                 }
             }
-        }
-
-        MouseArea{
-            anchors.fill: parent
-            propagateComposedEvents: true
         }
     }
 

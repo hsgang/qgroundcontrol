@@ -66,40 +66,46 @@ SetupPage {
 
                 Rectangle {
                     id:     flightModeSettings
-                    width:  flightModeColumn.width + (_margins * 2)
-                    height: flightModeColumn.height + ScreenTools.defaultFontPixelHeight
+                    width:  flightModeColumn.width + _margins
+                    height: flightModeColumn.height + _margins
                     radius: ScreenTools.defaultFontPixelHeight * 0.5
                     color:  qgcPal.window
                     border.color: qgcPal.groupBorder
 
                     Column {
                         id:                 flightModeColumn
-                        anchors.margins:    ScreenTools.defaultFontPixelWidth
+                        anchors.margins:    _margins / 2
                         anchors.left:       parent.left
                         anchors.top:        parent.top
-                        spacing:            ScreenTools.defaultFontPixelHeight
+                        spacing:            _margins / 2
 
-                        // Row {
-                        //     spacing:    _margins
-                        //     visible:    _fltmodeChExists
+                        Row {
+                            spacing:    _margins
+                            visible:    _fltmodeChExists
 
-                        //     QGCLabel {
-                        //         id:                 modeChannelLabel
-                        //         anchors.baseline:   modeChannelCombo.baseline
-                        //         text:               qsTr("Flight mode channel:")
-                        //     }
+                            QGCLabel {
+                                id:                 modeChannelLabel
+                                anchors.baseline:   modeChannelCombo.baseline
+                                text:               qsTr("Flight mode channel:")
+                            }
 
-                        //     QGCComboBox {
-                        //         id:             modeChannelCombo
-                        //         width:          ScreenTools.defaultFontPixelWidth * 15
-                        //         model:          [ qsTr("Not assigned"), qsTr("Channel 1"), qsTr("Channel 2"),
-                        //             qsTr("Channel 3"),    qsTr("Channel 4"), qsTr("Channel 5"),
-                        //             qsTr("Channel 6"),    qsTr("Channel 7"), qsTr("Channel 8") ]
+                            QGCComboBox {
+                                id:             modeChannelCombo
+                                width:          ScreenTools.defaultFontPixelWidth * 15
+                                model:          [ qsTr("Not assigned"), qsTr("Channel 1"), qsTr("Channel 2"),
+                                    qsTr("Channel 3"),    qsTr("Channel 4"), qsTr("Channel 5"),
+                                    qsTr("Channel 6"),    qsTr("Channel 7"), qsTr("Channel 8") ]
 
-                        //         currentIndex:   _fltmodeCh.value
-                        //         onActivated: (index) => { _fltmodeCh.value = index }
-                        //     }
-                        // }
+                                currentIndex:   _fltmodeCh.value
+                                onActivated: (index) => { _fltmodeCh.value = index }
+                            }
+                        }
+
+                        Rectangle {
+                            width: parent.width
+                            height: 1
+                            color: qgcPal.groupBorder
+                        }
 
                         GridLayout {
                             rows:   _customSimpleMode ? 7 : 6
@@ -197,18 +203,18 @@ SetupPage {
 
                 Rectangle {
                     id:     channelOptionsSettings
-                    width:  channelOptColumn.width + (_margins * 2)
-                    height: channelOptColumn.height + ScreenTools.defaultFontPixelHeight
+                    width:  channelOptColumn.width + _margins
+                    height: channelOptColumn.height + _margins
                     radius: ScreenTools.defaultFontPixelHeight * 0.5
                     color:  qgcPal.window
                     border.color: qgcPal.groupBorder
 
                     Column {
                         id:                 channelOptColumn
-                        anchors.margins:    ScreenTools.defaultFontPixelWidth
+                        anchors.margins:    _margins / 2
                         anchors.left:       parent.left
                         anchors.top:        parent.top
-                        spacing:            ScreenTools.defaultFontPixelWidth
+                        spacing:            _margins / 2
 
                         Repeater {
                             model: _rcOptionStop - _rcOptionStart + 1

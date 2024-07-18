@@ -39,7 +39,7 @@ FirstRunPrompt {
         Rectangle {
             id: flickableRect
             color:              qgcPal.windowShadeDark
-            width:              ScreenTools.defaultFontPixelWidth * 30
+            width:              ScreenTools.defaultFontPixelWidth * 40
             height:             ScreenTools.defaultFontPixelHeight * 10
             radius:             ScreenTools.defaultFontPixelHeight / 2
 
@@ -62,7 +62,7 @@ FirstRunPrompt {
                         model: QGroundControl.linkManager.linkConfigurations
                         delegate: QGCButton {
                             anchors.horizontalCenter:   settingsColumn.horizontalCenter
-                            width:                      ScreenTools.defaultFontPixelWidth * 26
+                            width:                      ScreenTools.defaultFontPixelWidth * 36
                             text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
                             autoExclusive:              true
                             visible:                    !object.dynamic

@@ -59,7 +59,7 @@ Rectangle{
     property string _vehicleGroundSpeedText:    isNaN(_vehicleGroundSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleGroundSpeed).toFixed(1)
     property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceToHome).toFixed(1)
     property string _distanceUnitText:          QGroundControl.unitsConversion.appSettingsDistanceUnitsString
-    property string _distanceDownText:          isNaN(_distanceDown) ? "   " : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceDown).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _distanceDownText:          isNaN(_distanceDown) ? "   " : "RNG " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceDown).toFixed(2) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
 
     function getVerticalSpeedState() {
         if(_activeVehicle){
@@ -428,41 +428,50 @@ Rectangle{
                 }
             }
 
-            RowLayout {
-                id:                     distanceDownRowLayout
+            Rectangle {
                 anchors.bottom:         parent.top
                 anchors.left:           parent.left
                 anchors.bottomMargin:   _toolsMargin * 0.5
-                visible:                _distanceDown
+                width:                  distanceDownRowLayout.width + _toolsMargin * 2
+                height:                 distanceDownRowLayout.height
+                color:                  (_distanceDown > 1 && _distanceDown <= 10) ? "red" : "transparent"
+                radius:                 _toolsMargin / 2
 
-                Rectangle{
-                    height:             valueIcon.height
-                    width:              valueIcon.width
-                    color:              "transparent"
+                RowLayout {
+                    id:                         distanceDownRowLayout
+                    anchors.horizontalCenter:   parent.horizontalCenter
+                    anchors.verticalCenter:     parent.verticalCenter
+                    visible:                    _distanceDown
 
-                    QGCColoredImage {
-                        id:                         valueIcon
-                        Layout.alignment:           Qt.AlignHCenter || Qt.AlignVCenter
-                        height:                     distanceDownLabel.height * 0.6
-                        width:                      height
-                        sourceSize.height:          height
-                        fillMode:                   Image.PreserveAspectFit
-                        mipmap:                     true
-                        smooth:                     true
-                        color:                      qgcPal.text
-                        visible:                    true
-                        source:                     "/InstrumentValueIcons/arrow-base-down.svg"
+                    Rectangle{
+                        height:             valueIcon.height
+                        width:              valueIcon.width
+                        color:              "transparent"
+
+                        QGCColoredImage {
+                            id:                         valueIcon
+                            Layout.alignment:           Qt.AlignHCenter || Qt.AlignVCenter
+                            height:                     distanceDownLabel.height * 0.6
+                            width:                      height
+                            sourceSize.height:          height
+                            fillMode:                   Image.PreserveAspectFit
+                            mipmap:                     true
+                            smooth:                     true
+                            color:                      qgcPal.text
+                            visible:                    true
+                            source:                     "/InstrumentValueIcons/arrow-base-down.svg"
+                        }
                     }
-                }
 
-                QGCLabel {
-                    id:                     distanceDownLabel
-                    text:                   _distanceDownText
-                    font.bold :             true
-                    font.pointSize :        ScreenTools.defaultFontPointSize
-                    Layout.fillWidth:       true
-                    horizontalAlignment:    Text.AlignHCenter
-                    verticalAlignment:      Text.AlignVCenter
+                    QGCLabel {
+                        id:                     distanceDownLabel
+                        text:                   _distanceDownText
+                        font.bold :             true
+                        font.pointSize :        ScreenTools.defaultFontPointSize
+                        Layout.fillWidth:       true
+                        horizontalAlignment:    Text.AlignHCenter
+                        verticalAlignment:      Text.AlignVCenter
+                    }
                 }
             }
 

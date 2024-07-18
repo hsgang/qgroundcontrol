@@ -71,7 +71,11 @@ void VehicleDistanceSensorFactGroup::handleMessage(Vehicle* /* vehicle */, mavli
     for (size_t i=0; i<sizeof(rgOrientation2Fact)/sizeof(rgOrientation2Fact[0]); i++) {
         const orientation2Fact_s& orientation2Fact = rgOrientation2Fact[i];
         if (orientation2Fact.orientation == distanceSensor.orientation) {
-            orientation2Fact.fact->setRawValue(distanceSensor.current_distance / 100.0); // cm to meters
+            if(distanceSensor.current_distance < distanceSensor.max_distance) {
+                orientation2Fact.fact->setRawValue(distanceSensor.current_distance / 100.0); // cm to meters
+            } else {
+                orientation2Fact.fact->setRawValue(qQNaN());
+            }
         }
     }
 
