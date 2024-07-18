@@ -74,15 +74,15 @@ private:
     };
 
     static constexpr const int _rgProgressWeights[] = {
-        1, //_stateRequestCapabilities
-        1, //_stateRequestProtocolVersion
-        1, //_stateRequestStandardModes
-        5, //_stateRequestCompInfo
-        5, //_stateRequestParameters
-        2, //_stateRequestMission
-        1, //_stateRequestGeoFence
-        1, //_stateRequestRallyPoints
-        1, //_stateSignalInitialConnectComplete
+        0, //1_stateRequestCapabilities
+        0, //1_stateRequestProtocolVersion
+        0, //1_stateRequestStandardModes
+        0, //5_stateRequestCompInfo
+        5, //5_stateRequestParameters
+        2, //2_stateRequestMission
+        1, //1_stateRequestGeoFence
+        1, //1_stateRequestRallyPoints
+        1, //1_stateSignalInitialConnectComplete
     };
 
     static constexpr int _cStates = sizeof(_rgStates) / sizeof(_rgStates[0]);
