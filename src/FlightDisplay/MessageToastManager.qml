@@ -4,28 +4,41 @@ import QGroundControl.FlightDisplay
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
 
-Column{
-    id: root
-
-    function show(text, duration){
-        var toast = toastComponent.createObject(root);
-        toast.selfDestroying = true;
+ListView {
+    function show(text, duration) {
         var splitedText = text.split("]");
         var splitedText2 = splitedText[1].split("<");
         text = splitedText2[0].toString();
-        toast.show(text, duration);
+        model.insert(0, {text: text, duration: duration});
     }
 
-    z: Infinity
-    spacing:    0
-    anchors.horizontalCenter:   parent.horizontalCenter
-    anchors.bottom:             parent.bottom
-    width:                      toastComponent ? toastComponent.width : 0//Math.max(toastComponent.width, mainWindow.width * 0.2)
+    id: root
 
-    property var toastComponent
+    z:                          Infinity
+    spacing:                    ScreenTools.defaultFontPixelWidth
+    anchors.fill:               parent
+    anchors.bottomMargin:       ScreenTools.defaultFontPixelHeight
+    verticalLayoutDirection:    ListView.TopToBottom
 
-    Component.onCompleted:
-    {
-        toastComponent = Qt.createComponent("MessageToast.qml")
+    interactive: false
+
+    displaced: Transition {
+            NumberAnimation {
+                properties: "y"
+                easing.type: Easing.InOutQuad
+            }
+        }
+
+    delegate: MessageToast {
+        Component.onCompleted: {
+            if (typeof duration === "undefined") {
+                show(text);
+            }
+            else {
+                show(text, duration);
+            }
+        }
     }
+
+    model: ListModel {id: model}
 }

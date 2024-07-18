@@ -34,6 +34,7 @@ Item {
     property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle
     property bool   _isMessageImportant:    _activeVehicle ? !_activeVehicle.messageTypeNormal && !_activeVehicle.messageTypeNone : false
     property real   _messageTextLength:     0
+    property int    unreadMessageCount: 0
 
     function dropMessageIndicator() {
         mainWindow.showIndicatorDrawer(drawerComponent, control)
@@ -73,31 +74,76 @@ Item {
             fillMode:           Image.PreserveAspectFit
             color:              getMessageColor()
             visible:            _activeVehicle //!criticalMessageIcon.visible
-//            opacity:            _noMessages ? 0.5 : 1
 
             MouseArea {
                 anchors.fill:   parent
                 onClicked:      mainWindow.showIndicatorDrawer(vehicleMessagesPopup)
             }
 
-            // Rectangle {
-            //     color:          qgcPal.window
-            //     height:         ScreenTools.defaultFontPixelHeight * 0.9
-            //     width:          height * 1.3
-            //     border.color:   qgcPal.text
-            //     radius:         ScreenTools.defaultFontPixelHeight / 4
-            //     anchors.top:    parent.top
-            //     anchors.right:  parent.right
-            //     visible:        _messageTextLength > 0
+            Rectangle {
+                color:          qgcPal.window
+                height:         ScreenTools.defaultFontPixelHeight * 0.9
+                width:          height * 1.1
+                border.color:   qgcPal.text
+                radius:         ScreenTools.defaultFontPixelHeight / 4
+                anchors.top:    parent.top
+                anchors.right:  parent.right
+                visible:        unreadMessageCount > 0
 
-            //     QGCLabel {
-            //         id:     messageTextLengthLabel
-            //         text:   "99+" //_messageTextLength > 100 ? "99+" : _messageTextLength
-            //         font.pointSize: ScreenTools.smallFontPointSize
-            //         anchors.horizontalCenter: parent.horizontalCenter
-            //         anchors.verticalCenter: parent.verticalCenter
-            //     }
-            // }
+                QGCLabel {
+                    id:     messageTextLengthLabel
+                    text:   unreadMessageCount > 99 ? "99+" : unreadMessageCount
+                    font.pointSize: ScreenTools.smallFontPointSize
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+        }
+    }
+
+    function countUnreadMessages() {
+            var count = 0;
+            for (var i = 0; i < messageModel.count; i++) {
+                if (!messageModel.get(i).checked) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+    function updateUnreadMessageCount() {
+        unreadMessageCount = countUnreadMessages();
+    }
+
+    function parseMessage(message) {
+        var regex = /<font style="<#E>">\[(\d{2}:\d{2}:\d{2}\.\d{3})\s*\]\s*(.*?)<\/font>/;
+        var match = message.match(regex);
+        if (match) {
+            var time = match[1];
+            var content = match[2];
+            content = content.replace(/<[^>]*>/g, ''); // HTML 태그 제거
+            messageModel.insert(0, {message: content, time: time, checked: false});
+            updateUnreadMessageCount()
+        } else { // 매칭되지 않을 경우 전체 메시지를 content로 반환
+            return {
+                time: "",
+                content: message.replace(/<[^>]*>/g, '') // HTML 태그 제거
+            };
+        }
+    }
+
+    Connections {
+        target:                 _activeVehicle
+        onNewFormattedMessage: function(formattedMessage) {
+            parseMessage(formattedMessage)
+        }
+    }
+
+    ListModel {
+        id: messageModel
+
+        onCountChanged: {
+            updateUnreadMessageCount()
         }
     }
 
@@ -105,55 +151,59 @@ Item {
         id: vehicleMessagesPopup
 
         ToolIndicatorPage {
+            id:             toolIndicatorPage
             showExpand:         false
 
-            function formatMessage(message) {
-                message = message.replace(new RegExp("<#E>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0)) + "pt monospace;");
-                message = message.replace(new RegExp("<#I>", "g"), "color: " + qgcPal.warningText + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0)) + "pt monospace;");
-                message = message.replace(new RegExp("<#N>", "g"), "color: " + qgcPal.text + "; font: " + (ScreenTools.defaultFontPointSize.toFixed(0)) + "pt monospace;");
-                return message;
+            Component.onDestruction: {
+                for (var i = 0; i < messageModel.count; i++) {
+                    messageModel.setProperty(i, "checked", true)
+                }
+                updateUnreadMessageCount()
             }
 
             contentComponent: Component {
-                TextArea {
-                    id:                     messageText
-                    width:                  Math.max(ScreenTools.defaultFontPixelWidth * 30, contentWidth + ScreenTools.defaultFontPixelWidth)
-                    height:                 Math.max(ScreenTools.defaultFontPixelHeight * 3, contentHeight)
-                    readOnly:               true
-                    textFormat:             TextEdit.RichText
-                    color:                  qgcPal.text
-                    placeholderText:        qsTr("No Messages")
-                    placeholderTextColor:   qgcPal.text
-                    padding:                0
+                QGCListView {
+                    id: messageListView
 
-                    property bool _noMessages: messageText.length === 0
-            
-                Connections {
-                    target:                 _activeVehicle
-                    onNewFormattedMessage: (formattedMessage) => { messageText.insert(0, formatMessage(formattedMessage)) }
-                }
+                    width:                      ScreenTools.defaultFontPixelWidth * 60
+                    height:                     dividerHeight - ScreenTools.defaultFontPixelHeight //ScreenTools.defaultFontPixelHeight * 20
+                    verticalLayoutDirection:    ListView.TopToBottom
+                    spacing:                    ScreenTools.defaultFontPixelWidth
 
-            //        Connections {
-            //            target:                 _activeVehicle
-            //            onNewFormattedMessage:  (formattedMessage) => {
-            //                messageText.append(formatMessage(formattedMessage))
-            //            }
-            //        }
+                    delegate: messageDelegate
+                    model: messageModel
 
-                    Component.onCompleted: {
-                        messageText.text = formatMessage(_activeVehicle.formattedMessages)
-                        _activeVehicle.resetAllMessages()
+                    Component {
+                        id: messageDelegate
+                        Item {
+                            width:  messageListView.width
+                            height: childrenRect.height
+                            Column {
+                                QGCLabel{
+                                    text:       "[" + model.time + "]"
+                                    opacity:    0.6
+                                }
+                                QGCLabel {
+                                    width:      messageListView.width - ScreenTools.defaultFontPixelHeight
+                                    text:       model.message
+                                    opacity:    model.checked ? 0.6 : 1
+                                    textFormat: Text.PlainText
+                                    wrapMode:   Text.Wrap
+                                }
+                            }
+                        }
                     }
 
                     Rectangle {
-                        anchors.right:              parent.right
-                        anchors.bottom:             parent.bottom
-                        width:                      ScreenTools.defaultFontPixelHeight * 2
-                        height:                     width
-                        radius:                     width / 4
-                        color:                      QGroundControl.globalPalette.windowShadeDark
-                        border.color:               QGroundControl.globalPalette.text
-                        visible:                    !_noMessages
+                        anchors.right:  parent.right
+                        anchors.top:    parent.top
+                        width:          ScreenTools.defaultFontPixelHeight * 2
+                        height:         width
+                        radius:         width / 4
+                        color:          QGroundControl.globalPalette.windowShadeDark
+                        border.color:   QGroundControl.globalPalette.text
+                        border.width:   1
+                        visible:        messageModel.count > 0
 
                         QGCColoredImage {
                             anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.25
@@ -171,6 +221,8 @@ Item {
                             fillItem: parent
                             onClicked: {
                                 _activeVehicle.clearMessages()
+                                messageModel.clear()
+                                updateUnreadMessageCount()
                                 componentDrawer.visible = false
                             }
                         }

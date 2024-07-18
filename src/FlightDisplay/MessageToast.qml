@@ -3,72 +3,71 @@ import QtQuick
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
+import QGroundControl.Palette
 
-Rectangle{
+Rectangle {
+
+    function show(text, duration) {
+        message.text = text;
+        if (typeof duration !== "undefined") {
+            time = Math.max(duration, 2 * fadeTime);
+        }
+        else {
+            time = defaultTime;
+        }
+        animation.start();
+    }
 
     id: root
 
-    property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.5
+    readonly property real  defaultTime:    3000
+    property real           time:           defaultTime
+    readonly property real  fadeTime:       300
+    property real           margin:         ScreenTools.defaultFontPixelWidth
 
-    function show(text, duration){
-        theText.text = text;
-        if(typeof duration !== "undefined"){
-            if(duration >= 2*fadeTime)
-                time = duration;
-            else
-                time = 2*fadeTime;
-            }
-        else
-            time = defaultTime;
-        anim.start();
+    anchors.left:   (parent != null) ? parent.left : undefined
+    width:          message.implicitWidth + (margin * 2)
+    height:         message.height + margin
+    radius:         margin
+    color:          qgcPal.window
+
+    Text {
+        id:                 message
+        color:              qgcPal.text
+        wrapMode:           Text.Wrap
+        horizontalAlignment:Text.AlignLeft
+        anchors {
+            top:    parent.top
+            left:   parent.left
+            right:  parent.right
+            margins:margin / 2
+        }
     }
 
-    property bool selfDestroying: false ///< Whether this Toast will selfdestroy when it is finished
-
-    property real time: defaultTime
-    readonly property real defaultTime: 10000
-    readonly property real fadeTime: 300
-
-    width: theText.width + _toolsMargin * 3
-    height: theText.height + _toolsMargin * 0.5 // _toolsMargin
-    radius: _toolsMargin
-
-    anchors.horizontalCenter: parent.horizontalCenter
-
-    color: "transparent"
-
-    QGCLabel{
-        id: theText
-        text: ""
-
-        horizontalAlignment: Text.AlignHCenter
-
-        anchors.verticalCenter: parent.verticalCenter
-
-        x: _toolsMargin
-        y: _toolsMargin
-    }
-
-    SequentialAnimation on opacity{
-        id: anim
-
+    SequentialAnimation on opacity {
+        id: animation
         running: false
 
-        NumberAnimation{
-            to: 0.9
+
+        NumberAnimation {
+            to: 1
             duration: fadeTime
         }
-        PauseAnimation{
-            duration: time - 2*fadeTime
+
+        PauseAnimation {
+            duration: time - 2 * fadeTime
         }
-        NumberAnimation{
+
+        NumberAnimation {
             to: 0
             duration: fadeTime
         }
 
-        onRunningChanged:{
-            if(!running && selfDestroying)
-                root.destroy();
+        onRunningChanged: {
+            if (!running) {
+                messageToastManager.model.remove(index);//root.destroy();
+            }
         }
     }
 }
+
