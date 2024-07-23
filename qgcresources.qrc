@@ -155,6 +155,18 @@
         <file alias="ZoomOut.png">resources/SiYi/ZoomOut.png</file>
         <file alias="ZoomOut.svg">resources/SiYi/ZoomOut.svg</file>
         <file alias="ZoomOutGreen.svg">resources/SiYi/ZoomOutGreen.svg</file>
+        <file alias="LaserDistance.png">resources/SiYi/LaserDistance.png</file>
+        <file alias="LaserDistance.svg">resources/SiYi/LaserDistance.svg</file>
+        <file alias="LaserDistanceGreen.svg">resources/SiYi/LaserDistanceGreen.svg</file>
+        <file alias="Ai.svg">resources/SiYi/Ai.svg</file>
+        <file alias="AiGreen.svg">resources/SiYi/AiGreen.svg</file>
+        <file alias="expend.svg">resources/SiYi/expend.svg</file>
+        <file alias="nav.svg">resources/SiYi/nav.svg</file>
+        <file alias="NavRed.svg">resources/SiYi/NavRed.svg</file>
+        <file alias="buttonRight.svg">resources/SiYi/buttonRight.svg</file>
+        <file alias="NavGreen.svg">resources/SiYi/NavGreen.svg</file>
+        <file alias="AiRed.svg">resources/SiYi/AiRed.svg</file>
+        <file alias="+.svg">resources/SiYi/+.svg</file>
     </qresource>
     <qresource prefix="/gimbal">
         <file alias="payload.svg">resources/gimbal/payload.svg</file>

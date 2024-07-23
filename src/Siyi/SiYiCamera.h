@@ -1,8 +1,9 @@
 ﻿#ifndef SIYICAMERA_H
 #define SIYICAMERA_H
 
-#include <QObject>
 #include <QHostAddress>
+#include <QObject>
+#include <QTimer>
 
 #include "SiYiTcpClient.h"
 #include "QGCLoggingCategory.h"
@@ -27,10 +28,20 @@ class SiYiCamera : public SiYiTcpClient
     Q_PROPERTY(int laserCoordsY READ laserCoordsY NOTIFY laserCoordsYChanged FINAL)
     Q_PROPERTY(QString cookedLaserDistance READ cookedLaserDistance NOTIFY cookedLaserDistanceChanged FINAL)
 
-    Q_PROPERTY(qreal resolutionW READ resolutionW NOTIFY resolutionWChanged FINAL)
-    Q_PROPERTY(qreal resolutionH READ resolutionH NOTIFY resolutionHChanged FINAL)
+    Q_PROPERTY(quint16 resolutionW READ resolutionW NOTIFY resolutionWChanged FINAL)
+    Q_PROPERTY(quint16 resolutionH READ resolutionH NOTIFY resolutionHChanged FINAL)
+    Q_PROPERTY(bool isTracking READ isTracking NOTIFY isTrackingChanged FINAL)
 
+    Q_PROPERTY(bool enableAi READ enableAi NOTIFY enableAiChanged FINAL)
     Q_PROPERTY(bool aiModeOn READ aiModeOn NOTIFY aiModeOnChanged FINAL)
+
+    Q_PROPERTY(bool using1080p READ using1080p WRITE setUsing1080p NOTIFY using1080pChanged FINAL)
+    Q_PROPERTY(QString cookedLongitude READ cookedLongitude NOTIFY cookedLongitudeChanged FINAL)
+    Q_PROPERTY(QString cookedLatitude READ cookedLatitude NOTIFY cookedLatitudeChanged FINAL)
+
+    Q_PROPERTY(bool laserStateHasResponse READ laserStateHasResponse NOTIFY laserStateHasResponseChanged FINAL)
+    Q_PROPERTY(int mainStreamSplitMode READ mainStreamSplitMode NOTIFY mainStreamSplitModeChanged FINAL)
+    Q_PROPERTY(int subStreamSplitMode READ subStreamSplitMode NOTIFY subStreamSplitModeChanged FINAL)
 public:
     struct ProtocolMessageHeaderContext {
         quint32 stx;
@@ -59,6 +70,11 @@ public:
         AiModeOn
     };
     Q_ENUM(AiMode);
+    enum LaserState {
+        LaserStateOff,
+        LaserStateOn,
+    };
+    Q_ENUM(LaserState);
 
     enum CameraType {
         CameraTypeR1 = 0x6c,
@@ -68,6 +84,7 @@ public:
         CameraTypeA2 = 0x74,
         CameraTypeZR30 = 0x77,
         CameraTypeZT30 = 0x7B,
+        CameraTypeZT6 = 0x82,
     };
     Q_ENUM(CameraType);
     enum CameraTipOption {
@@ -109,16 +126,20 @@ public:
     Q_INVOKABLE bool focus(int option);
     Q_INVOKABLE bool sendCommand(int cmd);
     Q_INVOKABLE bool sendRecodingCommand(int cmd);
+    void setLogState(int state);
     bool getRecordingState();
     void getResolution();   // 获取录像流分辨率
     void getResolutionMain();// 获取主码流分辨率
     Q_INVOKABLE void emitOperationResultChanged(int result);
     Q_INVOKABLE void getLaserCoords();  // 获取激光测距指示坐标
     Q_INVOKABLE void getLaserDistance();  // 获取激光测距距离
+    Q_INVOKABLE void getLaserState();     // 获取激光测距开关状态
     Q_INVOKABLE void setLaserState(int state); // 激光测距开关，0: 关闭，1: 打开
     Q_INVOKABLE void setAiModel(int mode); // 设置AI模式
     Q_INVOKABLE void getAiModel(); // 获取AI模式
     Q_INVOKABLE void setTrackingTarget(bool tracking, int x, int y); // 设置/取消设置跟踪目标
+    Q_INVOKABLE void getTrackingState();
+    Q_INVOKABLE void getSplitMode(); // 获取分屏模式
 
 protected:
     QByteArray heartbeatMessage() override;
@@ -127,10 +148,13 @@ protected:
 private:
     qint8 recording_state_{0};
     qint8 camera_type_{-1};
-    qint16 resolutionWidth_{0};
-    qint16 resolutionHeight_{0};
-    qint16 m_resolutionWidthMain{0};
-    qint16 m_resolutionHeightMain{0};
+    quint16 resolutionWidth_{0};
+    quint16 resolutionHeight_{0};
+    quint16 m_resolutionWidthMain{0};
+    quint16 m_resolutionHeightMain{0};
+    bool m_isCancelingTracking{false};
+    QTimer *m_laserTimer{nullptr};
+    int m_streamType;
 
 private:
     QByteArray packMessage(quint8 control, quint8 cmd,
@@ -146,14 +170,19 @@ private:
     void messageHandle0x81(const QByteArray &msg);
     void messageHandle0x83(const QByteArray &msg);
     void messageHandle0x89(const QByteArray &msg);
+    void messageHandle0x92(const QByteArray &msg);
     void messageHandle0x94(const QByteArray &msg);
     void messageHandle0x98(const QByteArray &msg);
     void messageHandle0x9e(const QByteArray &msg);
+    void messageHandle0xa1(const QByteArray &msg);
     void messageHandle0xa2(const QByteArray &msg);
     void messageHandle0xa3(const QByteArray &msg);
     void messageHandle0xa6(const QByteArray &msg);
     void messageHandle0xaa(const QByteArray &msg);
     void messageHandle0xab(const QByteArray &msg);
+    void messageHandle0xac(const QByteArray &msg);
+    void messageHandle0xb0(const QByteArray &msg);
+    void messageHandle0xba(const QByteArray &msg);
     void messageHandle0xbb(const QByteArray &msg);
 
 private:
@@ -213,17 +242,49 @@ private:
     QString cookedLaserDistance(){return m_cookedLaserDistance;}
     Q_SIGNAL void cookedLaserDistanceChanged();
 
-    qreal m_resolutionW{1920};
-    qreal resolutionW(){return m_resolutionW;}
+    quint16 m_resolutionW{1920};
+    quint16 resolutionW(){return m_resolutionW;}
     Q_SIGNAL void resolutionWChanged();
 
-    qreal m_resolutionH{1080};
-    qreal resolutionH(){return m_resolutionH;}
+    quint16 m_resolutionH{1080};
+    quint16 resolutionH(){return m_resolutionH;}
     Q_SIGNAL void resolutionHChanged();
 
     bool m_aiModeOn{false};
     bool aiModeOn(){return m_aiModeOn;}
     Q_SIGNAL void aiModeOnChanged();
+
+    bool m_enableAi{false};
+    bool enableAi() { return m_enableAi; }
+    Q_SIGNAL void enableAiChanged();
+
+    bool m_isTracking{false};
+    bool isTracking() { return m_isTracking; }
+    Q_SIGNAL void isTrackingChanged();
+
+    bool using1080p();
+    void setUsing1080p(bool using1080p);
+    Q_SIGNAL void using1080pChanged();
+
+    QString m_cookedLongitude{"-.-"};
+    QString cookedLongitude() { return m_cookedLongitude; }
+    Q_SIGNAL void cookedLongitudeChanged();
+
+    QString m_cookedLatitude{"-.-"};
+    QString cookedLatitude() { return m_cookedLatitude; }
+    Q_SIGNAL void cookedLatitudeChanged();
+
+    bool m_laserStateHasResponse{false};
+    bool laserStateHasResponse() { return m_laserStateHasResponse; }
+    Q_SIGNAL void laserStateHasResponseChanged();
+
+    int m_mainStreamSplitMode{-1};
+    int mainStreamSplitMode() { return m_mainStreamSplitMode; }
+    Q_SIGNAL void mainStreamSplitModeChanged();
+
+    int m_subStreamSplitMode{-1};
+    int subStreamSplitMode() { return m_subStreamSplitMode; }
+    Q_SIGNAL void subStreamSplitModeChanged();
 
 signals:
     void isRecordingChanged();

@@ -19,6 +19,8 @@ FlyViewTopRightColumnLayout     1.0 FlyViewTopRightColumnLayout.qml
 FlyViewVideo                    1.0 FlyViewVideo.qml
 FlyViewVideoWidgetLayer         1.0 FlyViewVideoWidgetLayer.qml
 FlyViewVideoToolStrip           1.0 FlyViewVideoToolStrip.qml
+FlyViewVideoSiYiController      1.0 FlyViewVideoSiYiController.qml
+FlyViewVideoSiYiControllerAiSettings 1.0 FlyViewVideoSiYiControllerAiSettings.qml
 FlyViewWidgetLayer              1.0 FlyViewWidgetLayer.qml
 FlyViewWeatherWidget            1.0 FlyViewWeatherWidget.qml
 FlyViewAttitudeIndicator        1.0 FlyViewAttitudeIndicator.qml

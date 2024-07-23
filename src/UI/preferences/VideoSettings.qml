@@ -76,6 +76,9 @@ SettingsPage {
             FactTextField{
                 Layout.fillWidth:       true
                 fact:                   _videoSettings.rtspUrl
+                onTextChanged: {
+                    SiYi.camera.analyzeIp(text)
+                }
             }
         }
 

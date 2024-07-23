@@ -113,22 +113,22 @@ Item {
             height:                 ScreenTools.defaultFontPixelWidth * 40
             visible:                QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue
         }
-        Column {
-            anchors.verticalCenter: parent.verticalCenter
-            spacing:                _toolsMargin
+        // Column {
+        //     anchors.verticalCenter: parent.verticalCenter
+        //     spacing:                _toolsMargin
 
-//            PhotoVideoControl {
-//                id:                         photoVideoControl
-//                anchors.horizontalCenter:   parent.horizontalCenter
-//                visible:                    QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue
+        //     PhotoVideoControl {
+        //        id:                         photoVideoControl
+        //        anchors.horizontalCenter:   parent.horizontalCenter
+        //        visible:                    QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl.rawValue
 
-//                property real rightEdgeCenterInset: visible ? width + _margins * 2 : 0
-//            }
-            SIYICameraControl {
-                id:                         siyiCameraControl
-                anchors.horizontalCenter:   parent.horizontalCenter
-            }
-        }
+        //        property real rightEdgeCenterInset: visible ? width + _margins * 2 : 0
+        //     }
+        //     SIYICameraControl {
+        //         id:                         siyiCameraControl
+        //         anchors.horizontalCenter:   parent.horizontalCenter
+        //     }
+        // }
     }
 }
 

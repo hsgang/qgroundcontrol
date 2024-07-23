@@ -87,6 +87,8 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewVideo.qml">src/FlightDisplay/FlyViewVideo.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewVideoToolStrip.qml">src/FlightDisplay/FlyViewVideoToolStrip.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewVideoWidgetLayer.qml">src/FlightDisplay/FlyViewVideoWidgetLayer.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewVideoSiYiController.qml">src/FlightDisplay/FlyViewVideoSiYiController.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewVideoSiYiControllerAiSettings.qml">src/FlightDisplay/FlyViewVideoSiYiControllerAiSettings.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewWeatherWidget.qml">src/FlightDisplay/FlyViewWeatherWidget.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewWidgetLayer.qml">src/FlightDisplay/FlyViewWidgetLayer.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewWindvane.qml">src/FlightDisplay/FlyViewWindvane.qml</file>
