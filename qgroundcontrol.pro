@@ -654,6 +654,7 @@ HEADERS += \
     src/MAVLink/QGCMAVLink.h \
     src/MAVLink/MAVLinkLib.h \
     src/MAVLink/MAVLinkFTP.h \
+    src/MAVLink/MAVLinkSigning.h \
     src/MAVLink/StatusTextHandler.h \
     src/Comms/TCPLink.h \
     src/Comms/UDPLink.h \
@@ -931,6 +932,7 @@ SOURCES += \
     src/Comms/MAVLinkProtocol.cc \
     src/MAVLink/QGCMAVLink.cc \
     src/MAVLink/MAVLinkFTP.cc \
+    src/MAVLink/MAVLinkSigning.cc \
     src/MAVLink/StatusTextHandler.cc \
     src/Comms/TCPLink.cc \
     src/Comms/UDPLink.cc \

@@ -11,7 +11,8 @@ include(CustomOptions)
 if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/custom)
     message(STATUS "Enabling custom build")
     set(QGC_CUSTOM_BUILD ON)
-    include(${CMAKE_SOURCE_DIR}/custom/CustomOverrides.cmake)
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/custom/cmake)
+    include(CustomOverrides)
 endif()
 
 #######################################################
@@ -215,6 +216,10 @@ endif()
 
 cmake_dependent_option(QGC_NO_SERIAL_LINK "Build QGroundControl without Serial Support Support." OFF "NOT IOS" ON)
 
+if(QGC_DISABLE_APM_MAVLINK)
+    add_compile_definitions(NO_ARDUPILOT_DIALECT)
+endif()
+
 #######################################################
 #                Custom Build Configuration
 #######################################################
@@ -299,20 +304,25 @@ set_target_properties(${PROJECT_NAME}
 )
 
 if(WIN32)
-    set(QGC_APP_ICON "${CMAKE_SOURCE_DIR}/deploy/windows/WindowsQGC.ico")
+    set(app_icon_resource_windows "${CMAKE_SOURCE_DIR}/deploy/windows/QGroundControl.rc")
+    target_sources(${PROJECT_NAME}
+        PRIVATE
+            ${app_icon_resource_windows}
+    )
     set_target_properties(${PROJECT_NAME}
         PROPERTIES
             WIN32_EXECUTABLE TRUE
-            QT_TARGET_RC_ICONS ${QGC_APP_ICON}
+            QT_TARGET_RC_ICONS "${CMAKE_SOURCE_DIR}/deploy/windows/WindowsQGC.ico"
     )
     add_compile_definitions(_USE_MATH_DEFINES)
 elseif(MACOS)
-    set(QGC_APP_ICON "${QGC_MACOS_ICON_PATH}/macx.icns")
-    set_source_files_properties(${QGC_APP_ICON}
+    set(MACOSX_BUNDLE_ICON_FILE "macx.icns")
+    set(app_icon_macos "${QGC_MACOS_ICON_PATH}/macx.icns")
+    set_source_files_properties(${app_icon_macos}
         PROPERTIES
             MACOSX_PACKAGE_LOCATION "Resources"
     )
-    target_sources(${PROJECT_NAME} PRIVATE ${QGC_APP_ICON})
+    target_sources(${PROJECT_NAME} PRIVATE ${app_icon_macos})
     set_target_properties(${PROJECT_NAME}
         PROPERTIES
             MACOSX_BUNDLE TRUE
@@ -420,8 +430,14 @@ install(
         DIRECTORY ${CMAKE_SOURCE_DIR}/resources/
         DESTINATION ${CMAKE_INSTALL_DATADIR}/qgroundcontrol
 )
-install(
-        FILES ${CMAKE_SOURCE_DIR}/deploy/org.mavlink.qgroundcontrol.desktop
+if(LINUX)
+    configure_file(
+        ${CMAKE_SOURCE_DIR}/deploy/linux/org.mavlink.qgroundcontrol.desktop.in
+        ${CMAKE_BINARY_DIR}/org.mavlink.qgroundcontrol.desktop
+        @ONLY
+    )
+    install(
+        FILES ${CMAKE_BINARY_DIR}/org.mavlink.qgroundcontrol.desktop
         DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
 )
 install(

@@ -69,6 +69,23 @@ SettingsPage {
             checked:            QGroundControl.isVersionCheckEnabled
             onClicked:          QGroundControl.isVersionCheckEnabled = checked
         }
+
+        FactCheckBoxSlider {
+            id:                 mavlinkSigningCheckBox
+            Layout.fillWidth:   true
+            text:               qsTr("MAVLink 2 Signing")
+            fact:               _appSettings.mavlink2Signing
+            visible:            fact.visible
+        }
+
+        LabelledFactTextField {
+            Layout.fillWidth:           true
+            textFieldPreferredWidth:    ScreenTools.defaultFontPixelWidth * 32
+            label:                      qsTr("MAVLink 2 Signing Key")
+            fact:                       _appSettings.mavlink2SigningKey
+            visible:                    fact.visible
+            // enabled:                    mavlinkSigningCheckBox.checked
+        }
     }
 
     SettingsGroupLayout {
@@ -249,6 +266,12 @@ RPM, ESC TELEMETRY, GENERATOR_STATUS, WINCH_STATUS"
             Layout.fillWidth:   true
             label:              qsTr("Loss Rate")
             labelText:          _activeVehicle ? _activeVehicle.mavlinkLossPercent.toFixed(0) + '%' : _notConnectedStr
+        }
+
+        LabelledLabel {
+            Layout.fillWidth:   true
+            label:              qsTr("Signing:")
+            labelText:          _activeVehicle ? (_activeVehicle.mavlinkSigning ? "On" : "Off") : _notConnectedStr
         }
     }
 }

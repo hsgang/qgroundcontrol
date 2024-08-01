@@ -181,6 +181,8 @@ DECLARE_SETTINGSFACT(AppSettings, enableSiyiSDK)
 DECLARE_SETTINGSFACT(AppSettings, forwardMavlinkAPMSupportHostName)
 DECLARE_SETTINGSFACT(AppSettings, loginAirLink)
 DECLARE_SETTINGSFACT(AppSettings, passAirLink)
+DECLARE_SETTINGSFACT(AppSettings, mavlink2Signing)
+DECLARE_SETTINGSFACT(AppSettings, mavlink2SigningKey)
 
 DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, indoorPalette)
 {
