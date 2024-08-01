@@ -265,7 +265,7 @@ void QGCCachedTileSet::_prepareDownload()
 #endif
             delete tile;
             //-- Refill queue if running low
-            if(!_batchRequested && !_noMoreTiles && _tilesToDownload.count() < (QGeoTileFetcherQGC::concurrentDownloads(_type) * 10)) {
+            if(!_batchRequested && !_noMoreTiles && static_cast<uint32_t>(_tilesToDownload.count()) < (QGeoTileFetcherQGC::concurrentDownloads(_type) * 10)) {
                 //-- Request new batch of tiles
                 createDownloadTask();
             }
