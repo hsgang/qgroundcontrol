@@ -174,7 +174,7 @@ void ParameterManager::mavlinkMessageReceived(mavlink_message_t message)
 
         // This will null terminate the name string
         char parameterNameWithNull[MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN + 1] = {};
-        strncpy_s(parameterNameWithNull, param_value.param_id, MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN);
+        strncpy(parameterNameWithNull, param_value.param_id, MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN);
         QString parameterName(parameterNameWithNull);
 
         mavlink_param_union_t paramUnion;
@@ -791,7 +791,7 @@ void ParameterManager::_readParameterRaw(int componentId, const QString& paramNa
         SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
 
-        strncpy_s(fixedParamName, paramName.toStdString().c_str(), sizeof(fixedParamName));
+        strncpy(fixedParamName, paramName.toStdString().c_str(), sizeof(fixedParamName));
         mavlink_msg_param_request_read_pack_chan(_mavlink->getSystemId(),   // QGC system id
                                                  _mavlink->getComponentId(),     // QGC component id
                                                  sharedLink->mavlinkChannel(),
@@ -855,7 +855,7 @@ void ParameterManager::_sendParamSetToVehicle(int componentId, const QString& pa
         p.target_system = (uint8_t)_vehicle->id();
         p.target_component = (uint8_t)componentId;
 
-        strncpy_s(p.param_id, paramName.toStdString().c_str(), sizeof(p.param_id));
+        strncpy(p.param_id, paramName.toStdString().c_str(), sizeof(p.param_id));
 
         mavlink_message_t msg;
         mavlink_msg_param_set_encode_chan(_mavlink->getSystemId(),
@@ -952,7 +952,7 @@ void ParameterManager::_tryCacheHashLoad(int vehicleId, int componentId, QVarian
             // Return the hash value to notify we don't want any more updates
             memset(&p, 0, sizeof(p));
             p.param_type = MAV_PARAM_TYPE_UINT32;
-            strncpy_s(p.param_id, "_HASH_CHECK", sizeof(p.param_id));
+            strncpy(p.param_id, "_HASH_CHECK", sizeof(p.param_id));
             union_value.param_uint32 = crc32_value;
             p.param_value = union_value.param_float;
             p.target_system = (uint8_t)_vehicle->id();
