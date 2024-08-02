@@ -31,9 +31,10 @@ Rectangle {
     radius:         margin
     color:          qgcPal.window
 
-    Text {
+    QGCLabel {
         id:                 message
         color:              qgcPal.text
+        font.pointSize:     ScreenTools.defaultFontPointSize
         wrapMode:           Text.Wrap
         horizontalAlignment:Text.AlignLeft
         anchors {

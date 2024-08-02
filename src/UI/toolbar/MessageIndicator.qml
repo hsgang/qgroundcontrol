@@ -27,9 +27,9 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property bool showIndicator: true
+    property bool   showIndicator: true
 
-    property var qgcPal: QGroundControl.globalPalette
+    property var    qgcPal: QGroundControl.globalPalette
 
     property var    _activeVehicle:         QGroundControl.multiVehicleManager.activeVehicle
     property bool   _isMessageImportant:    _activeVehicle ? !_activeVehicle.messageTypeNormal && !_activeVehicle.messageTypeNone : false
@@ -73,7 +73,6 @@ Item {
             sourceSize.height:  height * 0.7
             fillMode:           Image.PreserveAspectFit
             color:              getMessageColor()
-            visible:            _activeVehicle //!criticalMessageIcon.visible
 
             MouseArea {
                 anchors.fill:   parent
@@ -116,24 +115,22 @@ Item {
     }
 
     function parseMessage(message) {
-        var regex = /<font style="<#E>">\[(\d{2}:\d{2}:\d{2}\.\d{3})\s*\]\s*(.*?)<\/font>/;
+        var regex = /<font style="<#[EIN]>">\[(\d{2}:\d{2}:\d{2}\.\d{3})\s*\]\s*(.*?)<\/font>/;
         var match = message.match(regex);
         if (match) {
             var time = match[1];
             var content = match[2];
             content = content.replace(/<[^>]*>/g, ''); // HTML 태그 제거
             messageModel.insert(0, {message: content, time: time, checked: false});
-            updateUnreadMessageCount()
+            updateUnreadMessageCount();
         } else { // 매칭되지 않을 경우 전체 메시지를 content로 반환
-            return {
-                time: "",
-                content: message.replace(/<[^>]*>/g, '') // HTML 태그 제거
-            };
+            time = "";
+            content = message.replace(/<[^>]*>/g, ''); // HTML 태그 제거
         }
     }
 
     Connections {
-        target:                 _activeVehicle
+        target:                _activeVehicle
         onNewFormattedMessage: function(formattedMessage) {
             parseMessage(formattedMessage)
         }
@@ -166,7 +163,7 @@ Item {
                     id: messageListView
 
                     width:                      ScreenTools.defaultFontPixelWidth * 60
-                    height:                     dividerHeight - ScreenTools.defaultFontPixelHeight //ScreenTools.defaultFontPixelHeight * 20
+                    height:                     dividerHeight - ScreenTools.defaultFontPixelHeight // ScreenTools.defaultFontPixelHeight * 20 //
                     verticalLayoutDirection:    ListView.TopToBottom
                     spacing:                    ScreenTools.defaultFontPixelWidth
 
