@@ -72,7 +72,9 @@ LinuxBuild {
 } else:AndroidBuild {
     GST_VERSION = 1.22.11
     #- gstreamer assumed to be installed in $$PWD/../../gstreamer-1.0-android-universal-$$GST_VERSION/***
-    ANDROID_GST_ROOT = $$PWD/../../gstreamer-1.0-android-universal-$$GST_VERSION
+    # ANDROID_GST_ROOT = $$PWD/../../gstreamer-1.0-android-universal-$$GST_VERSION
+    ANDROID_GST_ROOT = $$PWD/GStreamer/gstreamer-1.0-android-universal-$$GST_VERSION
+    message(ANDROID_GST_ROOT: $$ANDROID_GST_ROOT)
     contains(ANDROID_TARGET_ARCH, armeabi-v7a) {
         GST_ROOT = $$ANDROID_GST_ROOT/armv7
     } else:contains(ANDROID_TARGET_ARCH, arm64-v8a) {
