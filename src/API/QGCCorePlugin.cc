@@ -162,6 +162,7 @@ QVariantList& QGCCorePlugin::analyzePages()
 {
     if (!_p->analyzeList.count()) {
         _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("Log Download"),     QUrl::fromUserInput("qrc:/qml/LogDownloadPage.qml"),        QUrl::fromUserInput("qrc:/qmlimages/LogDownloadIcon"))));
+        _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("Image Download"), QUrl::fromUserInput("qrc:/qml/ImageDownloadPage.qml"),        QUrl::fromUserInput("qrc:/qmlimages/LogDownloadIcon"))));
 // #if !defined(__mobile__)
 //         _p->analyzeList.append(QVariant::fromValue(new QmlComponentInfo(tr("GeoTag Images"),    QUrl::fromUserInput("qrc:/qml/GeoTagPage.qml"),             QUrl::fromUserInput("qrc:/qmlimages/GeoTagIcon"))));
 // #endif
