@@ -219,12 +219,12 @@ void StatusTextHandler::handleTextMessage(MAV_COMPONENT compId, MAV_SEVERITY sev
 
     QString compString;
     if (m_multiComp) {
-        compString = QString("COMP:%1").arg(compId);
+        compString = QString(" COMP:%1").arg(compId);
     }
 
     const QString dateString = QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 
-    const QString formatText = QString("<font style=\"%1\">[%2 %3] %4: %5</font><br/>").arg(style, dateString, compString, severityText, htmlText);
+    const QString formatText = QString("<font style=\"%1\">[%2%3] %4: %5</font><br/>").arg(style, dateString, compString, severityText, htmlText);
 
     StatusText* const message = new StatusText(compId, severity, text);
     message->setFormatedText(formatText);
