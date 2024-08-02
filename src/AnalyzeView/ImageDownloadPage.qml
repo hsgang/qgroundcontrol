@@ -25,7 +25,7 @@ AnalyzePage {
     pageDescription:    qsTr("image Download")
 
     property real _margin:          ScreenTools.defaultFontPixelWidth
-    property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 16
+    property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 20
 
     property var selectedItems: []
 
@@ -94,12 +94,12 @@ AnalyzePage {
         xhr.onreadystatechange = function() {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 console.log("Response received. Status:", xhr.status);
-                console.log("Response text:", xhr.responseText);
+                //console.log("Response text:", xhr.responseText);
 
                 if (xhr.status === 200) {
                     try {
                         var response = JSON.parse(xhr.responseText);
-                        console.log("Parsed response:", JSON.stringify(response, null, 2));
+                        //console.log("Parsed response:", JSON.stringify(response, null, 2));
 
                         if (response && response.success && response.data && Array.isArray(response.data.list)) {
                             mediaListModel.clear();
@@ -178,6 +178,7 @@ AnalyzePage {
                         anchors.fill: parent
                         source: model.url
                         fillMode: Image.PreserveAspectCrop
+                        cache: false
                     }
 
                     Text {
@@ -188,6 +189,7 @@ AnalyzePage {
                         horizontalAlignment: Text.AlignHCenter
                         color: "white"
                     }
+
                     Rectangle {
                         anchors.fill: parent
                         color: "blue"
