@@ -45,7 +45,7 @@ QGCPopupDialog {
             Layout.preferredWidth:  releaseButton.width
 
             onClicked: {
-                _guidedController._gripperFunction = Vehicle.Gripper_grab
+                _guidedController._gripperFunction = 1 //Vehicle.Gripper_grab
                 close()
             }
         }
@@ -61,7 +61,7 @@ QGCPopupDialog {
             Layout.preferredHeight: Layout.preferredWidth / 1.20
 
             onClicked: {
-                _guidedController._gripperFunction = Vehicle.Gripper_release
+                _guidedController._gripperFunction = 0 //Vehicle.Gripper_release
                 close()
             }
         }

@@ -8751,6 +8751,16 @@ Click Ok to start the auto-tuning process.
         <translation>화물을 잡거나 풀기</translation>
     </message>
     <message>
+        <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="63"/>
+        <source>Grab the cargo</source>
+        <translation>화물칸 닫기</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="63"/>
+        <source>Release the cargo</source>
+        <translation>화물칸 열기</translation>
+    </message>
+    <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="64"/>
         <source>Continue the mission from the current waypoint.</source>
         <translation>현재 경로지점에서 미션 계속</translation>

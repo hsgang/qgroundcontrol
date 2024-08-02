@@ -65,6 +65,8 @@ Item {
     readonly property string emergencyStopMessage:              qsTr("WARNING: THIS WILL STOP ALL MOTORS. IF VEHICLE IS CURRENTLY IN THE AIR IT WILL CRASH.")
     readonly property string takeoffMessage:                    qsTr("Takeoff from ground and hold position.")
     readonly property string gripperMessage:                    qsTr("Grab or Release the cargo")
+    readonly property string gripperGrabMessage:                qsTr("Grab the cargo")
+    readonly property string gripperReleaseMessage:             qsTr("Release the cargo")
     readonly property string startMissionMessage:               qsTr("Takeoff from ground and start the current mission.")
     readonly property string continueMissionMessage:            qsTr("Continue the mission from the current waypoint.")
     readonly property string resumeMissionUploadFailMessage:    qsTr("Upload of resume mission failed. Confirm to retry upload")
@@ -329,6 +331,14 @@ Item {
         _vehicleInRTLMode =     _activeVehicle ? _flightMode === _activeVehicle.rtlFlightMode || _flightMode === _activeVehicle.smartRTLFlightMode : false
         _vehicleInLandMode =    _activeVehicle ? _flightMode === _activeVehicle.landFlightMode : false
         _vehicleInMissionMode = _activeVehicle ? _flightMode === _activeVehicle.missionFlightMode : false // Must be last to get correct signalling for showStartMission popups
+    }
+
+    on_GripperFunctionChanged: {
+        if(_gripperFunction === 1) {
+            confirmDialog.message = gripperGrabMessage
+        } else if (_gripperFunction === 0) {
+            confirmDialog.message = gripperReleaseMessage
+        }
     }
 
     Connections {
@@ -636,7 +646,11 @@ Item {
             }
             break
         case actionGripper:
-            _gripperFunction === undefined ? _activeVehicle.sendGripperAction(Vehicle.Invalid_option) : _activeVehicle.sendGripperAction(_gripperFunction)
+            if (_gripperFunction === undefined) {
+                _activeVehicle.sendGripperAction(Vehicle.Invalid_option)
+            } else {
+                _activeVehicle.sendGripperAction(_gripperFunction)
+            }
             break
         case actionSetHome:
             _activeVehicle.doSetHome(actionData)
