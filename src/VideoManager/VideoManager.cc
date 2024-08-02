@@ -187,7 +187,7 @@ VideoManager::setToolbox(QGCToolbox *toolbox)
             emit videoSizeChanged();
         });
 
-        (void) connect(_videoReceiverData[0].receiver, &VideoReceiver::onTakeScreenshotComplete, this, [this](VideoReceiver::STATUS status){
+        (void) connect(_videoReceiverData[0].receiver, &VideoReceiver::onTakeScreenshotComplete, this, [](VideoReceiver::STATUS status){
             if (status == VideoReceiver::STATUS_OK) {
                 qCDebug(VideoManagerLog) << "Video 0 screenshot taken";
             } else {
@@ -650,7 +650,7 @@ VideoManager::_initVideo()
 
 //-----------------------------------------------------------------------------
 bool
-VideoManager::_updateSettings(unsigned id)
+VideoManager::_updateSettings(signed id)
 {
     if(!_videoSettings) {
         return false;
@@ -769,7 +769,7 @@ VideoManager::_updateSettings(unsigned id)
 
 //-----------------------------------------------------------------------------
 bool
-VideoManager::_updateVideoUri(unsigned id, const QString& uri)
+VideoManager::_updateVideoUri(signed id, const QString& uri)
 {
     if (id > (_videoReceiverData.size() - 1)) {
         qCDebug(VideoManagerLog) << "Unsupported receiver id" << id;
@@ -789,7 +789,7 @@ VideoManager::_updateVideoUri(unsigned id, const QString& uri)
 
 //-----------------------------------------------------------------------------
 void
-VideoManager::_restartVideo(unsigned id)
+VideoManager::_restartVideo(signed id)
 {
     if (_app->runningUnitTests()) {
         return;
@@ -820,7 +820,7 @@ VideoManager::_restartAllVideos()
 
 //----------------------------------------------------------------------------------------
 void
-VideoManager::_startReceiver(unsigned id)
+VideoManager::_startReceiver(signed id)
 {
     if (id > (_videoReceiverData.size() - 1)) {
         qCDebug(VideoManagerLog) << "Unsupported receiver id" << id;
@@ -848,7 +848,7 @@ VideoManager::_startReceiver(unsigned id)
 
 //----------------------------------------------------------------------------------------
 void
-VideoManager::_stopReceiver(unsigned id)
+VideoManager::_stopReceiver(signed id)
 {
     if (id > (_videoReceiverData.size() - 1)) {
         qCDebug(VideoManagerLog) << "Unsupported receiver id" << id;

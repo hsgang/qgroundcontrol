@@ -116,13 +116,13 @@ protected:
     friend class FinishVideoInitialization;
 
     void _initVideo       ();
-    bool _updateSettings  (unsigned id);
-    bool _updateVideoUri  (unsigned id, const QString& uri);
+    bool _updateSettings  (signed id);
+    bool _updateVideoUri  (signed id, const QString& uri);
     void _cleanupOldVideos();
     void _restartAllVideos();
-    void _restartVideo    (unsigned id);
-    void _startReceiver   (unsigned id);
-    void _stopReceiver    (unsigned id);
+    void _restartVideo    (signed id);
+    void _startReceiver   (signed id);
+    void _stopReceiver    (signed id);
 
     QString                 _videoFile;
     QString                 _imageFile;
