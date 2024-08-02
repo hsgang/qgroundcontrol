@@ -188,6 +188,11 @@ void SiYiTcpClient::run()
     tcpClient->deleteLater();
 }
 
+quint16 SiYiTcpClient::checkSum16(const QByteArray &bytes)
+{
+    return SiYiCrcApi::calculateCrc16(bytes);
+}
+
 quint32 SiYiTcpClient::checkSum32(const QByteArray &bytes)
 {
     return SiYiCrcApi::calculateCrc32(bytes);

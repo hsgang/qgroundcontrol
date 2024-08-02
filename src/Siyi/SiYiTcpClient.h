@@ -37,6 +37,7 @@ protected:
 protected:
     quint16 sequence();
     void run() override;
+    quint16 checkSum16(const QByteArray &bytes);
     quint32 checkSum32(const QByteArray &bytes);
     void resetIp(const QString &ip);
 private:

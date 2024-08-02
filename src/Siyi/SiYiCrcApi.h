@@ -13,6 +13,7 @@ class SiYiCrcApi : public QObject
 public:
     SiYiCrcApi(QObject *parent = Q_NULLPTR);
     static quint32 calculateCrc32(const QByteArray &bytes);
+    static quint16 calculateCrc16(const QByteArray &bytes);
 };
 
 #endif
