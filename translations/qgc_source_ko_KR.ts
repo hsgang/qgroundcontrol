@@ -8798,7 +8798,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="73"/>
         <source>Pause the vehicle at it&apos;s current position, adjusting altitude up or down as needed.</source>
-        <translation>필요에 따라 고도를 위아래로 조정하여 기체를 현재 위치로 유지</translation>
+        <translation>필요에 따라 고도를 조정하고 기체를 현재 위치에서 유지</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="74"/>
