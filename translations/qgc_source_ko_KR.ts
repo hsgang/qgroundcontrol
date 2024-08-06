@@ -6862,6 +6862,16 @@ Click Ok to start the auto-tuning process.
         <source>Set Estimator Origin</source>
         <translation>추정 원점 설정</translation>
     </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewMap.qml" line="726"/>
+        <source>Lat: %1</source>
+        <translation>위도: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewMap.qml" line="727"/>
+        <source>Lon: %1</source>
+        <translation>경도: %1</translation>
+    </message>
 </context>
 <context>
     <name>FlyViewMissionCompleteDialog</name>
