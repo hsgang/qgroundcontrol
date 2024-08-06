@@ -37,8 +37,6 @@ const QHash<QString, QString> AudioOutput::s_textHash = {
     { "EKF",            "E.K.F." },
     { "PREARM",         "pre arm" },
     { "PITOT",          "pee toe" },
-    { "GPS",            "G.P.S."},
-    { "RC",             "R.C."},
 };
 
 Q_APPLICATION_STATIC(AudioOutput, s_audioOutput);
