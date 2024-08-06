@@ -720,7 +720,12 @@ FlightMap {
                     }
                     globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetEstimatorOrigin, mapClickCoord)
                 }
-            }        
+            }
+            // ColumnLayout {
+            //     spacing: 0
+            //     QGCLabel { text: qsTr("Lat: %1").arg(mapClickCoord.latitude.toFixed(6)) }
+            //     QGCLabel { text: qsTr("Lon: %1").arg(mapClickCoord.longitude.toFixed(6)) }
+            // }
         }
     }
 
@@ -776,30 +781,30 @@ FlightMap {
         }
     }
 
-//    Rectangle {
-//        id: clickIndicator
-//        visible:    clickMenu.visible
-//        x: clickMenu.x - (height / 2) - (_toolsMargin * 2)
-//        y: clickMenu.y - (height / 2) - (_toolsMargin * 2)
-//        height: _toolsMargin * 5
-//        width:  height
-//        radius: height / 2
-//        color: "transparent"
-//        border.color: qgcPal.text
-//        border.width: 3
+    // Rectangle {
+    //    id: clickIndicator
+    //    visible:    mapClickMenu.visible
+    //    x: mapClickMenu.x - (height / 2) - (_toolsMargin * 2)
+    //    y: mapClickMenu.y - (height / 2) - (_toolsMargin * 2)
+    //    height: _toolsMargin * 5
+    //    width:  height
+    //    radius: height / 2
+    //    color: "transparent"
+    //    border.color: qgcPal.text
+    //    border.width: 3
 
-//        Rectangle {
-//            height: 1
-//            width:  _toolsMargin * 7
-//            anchors.verticalCenter: parent.verticalCenter
-//            anchors.horizontalCenter: parent.horizontalCenter
-//        }
+    //    Rectangle {
+    //        height: 1
+    //        width:  _toolsMargin * 7
+    //        anchors.verticalCenter: parent.verticalCenter
+    //        anchors.horizontalCenter: parent.horizontalCenter
+    //    }
 
-//        Rectangle {
-//            height: _toolsMargin * 7
-//            width:  1
-//            anchors.verticalCenter: parent.verticalCenter
-//            anchors.horizontalCenter: parent.horizontalCenter
-//        }
-//    }
+    //    Rectangle {
+    //        height: _toolsMargin * 7
+    //        width:  1
+    //        anchors.verticalCenter: parent.verticalCenter
+    //        anchors.horizontalCenter: parent.horizontalCenter
+    //    }
+    // }
 }
