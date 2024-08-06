@@ -290,94 +290,94 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("3D View")
-        visible:            !ScreenTools.isMobile
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("3D View")
+    //     visible:            !ScreenTools.isMobile
 
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("Enabled")
-            fact:               _viewer3DEnabled
-        }
-        ColumnLayout{
-            Layout.fillWidth:   true
-            spacing: ScreenTools.defaultFontPixelWidth
-            enabled:            _viewer3DEnabled.rawValue
+    //     FactCheckBoxSlider {
+    //         Layout.fillWidth:   true
+    //         text:               qsTr("Enabled")
+    //         fact:               _viewer3DEnabled
+    //     }
+    //     ColumnLayout{
+    //         Layout.fillWidth:   true
+    //         spacing: ScreenTools.defaultFontPixelWidth
+    //         enabled:            _viewer3DEnabled.rawValue
 
-            RowLayout{
-                Layout.fillWidth:   true
-                spacing: ScreenTools.defaultFontPixelWidth
+    //         RowLayout{
+    //             Layout.fillWidth:   true
+    //             spacing: ScreenTools.defaultFontPixelWidth
 
-                QGCLabel {
-                    wrapMode:           Text.WordWrap
-                    visible:            true
-                    text: qsTr("3D Map File:")
-                }
+    //             QGCLabel {
+    //                 wrapMode:           Text.WordWrap
+    //                 visible:            true
+    //                 text: qsTr("3D Map File:")
+    //             }
 
-                QGCTextField {
-                    id:                 osmFileTextField
-                    height:             ScreenTools.defaultFontPixelWidth * 4.5
-                    unitsLabel:         ""
-                    showUnits:          false
-                    visible:            true
-                    Layout.fillWidth:   true
-                    readOnly: true
-                    text: _viewer3DOsmFilePath.rawValue
-                }
-            }
-            RowLayout{
-                Layout.alignment: Qt.AlignRight
-                spacing: ScreenTools.defaultFontPixelWidth
+    //             QGCTextField {
+    //                 id:                 osmFileTextField
+    //                 height:             ScreenTools.defaultFontPixelWidth * 4.5
+    //                 unitsLabel:         ""
+    //                 showUnits:          false
+    //                 visible:            true
+    //                 Layout.fillWidth:   true
+    //                 readOnly: true
+    //                 text: _viewer3DOsmFilePath.rawValue
+    //             }
+    //         }
+    //         RowLayout{
+    //             Layout.alignment: Qt.AlignRight
+    //             spacing: ScreenTools.defaultFontPixelWidth
 
-                QGCButton {
-                    text:       qsTr("Clear")
+    //             QGCButton {
+    //                 text:       qsTr("Clear")
 
-                    onClicked: {
-                        osmFileTextField.text = "Please select an OSM file"
-                        _viewer3DOsmFilePath.value = osmFileTextField.text
-                    }
-                }
+    //                 onClicked: {
+    //                     osmFileTextField.text = "Please select an OSM file"
+    //                     _viewer3DOsmFilePath.value = osmFileTextField.text
+    //                 }
+    //             }
 
-                QGCButton {
-                    text:       qsTr("Select File")
+    //             QGCButton {
+    //                 text:       qsTr("Select File")
 
-                    onClicked: {
-                        var filename = _viewer3DOsmFilePath.rawValue;
-                        const found = filename.match(/(.*)[\/\\]/);
-                        if(found){
-                            filename = found[1]||''; // extracting the directory from the file path
-                            fileDialog.folder = (filename[0] === "/")?(filename.slice(1)):(filename);
-                        }
-                        fileDialog.openForLoad()
-                    }
+    //                 onClicked: {
+    //                     var filename = _viewer3DOsmFilePath.rawValue;
+    //                     const found = filename.match(/(.*)[\/\\]/);
+    //                     if(found){
+    //                         filename = found[1]||''; // extracting the directory from the file path
+    //                         fileDialog.folder = (filename[0] === "/")?(filename.slice(1)):(filename);
+    //                     }
+    //                     fileDialog.openForLoad()
+    //                 }
 
-                    QGCFileDialog {
-                        id:             fileDialog
-                        nameFilters:    [qsTr("OpenStreetMap files (*.osm)")]
-                        title:          qsTr("Select map file")
+    //                 QGCFileDialog {
+    //                     id:             fileDialog
+    //                     nameFilters:    [qsTr("OpenStreetMap files (*.osm)")]
+    //                     title:          qsTr("Select map file")
 
-                        onAcceptedForLoad: (file) => {
-                                               osmFileTextField.text = file
-                                               _viewer3DOsmFilePath.value = osmFileTextField.text
-                                           }
-                    }
-                }
-            }
-        }
+    //                     onAcceptedForLoad: (file) => {
+    //                                            osmFileTextField.text = file
+    //                                            _viewer3DOsmFilePath.value = osmFileTextField.text
+    //                                        }
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        LabelledFactTextField {
-            Layout.fillWidth:   true
-            label:              qsTr("Average Building Level Height")
-            fact:               _viewer3DBuildingLevelHeight
-            enabled:            _viewer3DEnabled.rawValue
-        }
+    //     LabelledFactTextField {
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("Average Building Level Height")
+    //         fact:               _viewer3DBuildingLevelHeight
+    //         enabled:            _viewer3DEnabled.rawValue
+    //     }
 
-        LabelledFactTextField {
-            Layout.fillWidth:   true
-            label:              qsTr("Vehicles Altitude Bias")
-            fact:               _viewer3DAltitudeBias
-            enabled:            _viewer3DEnabled.rawValue
-        }
-    }
+    //     LabelledFactTextField {
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("Vehicles Altitude Bias")
+    //         fact:               _viewer3DAltitudeBias
+    //         enabled:            _viewer3DEnabled.rawValue
+    //     }
+    // }
 }
