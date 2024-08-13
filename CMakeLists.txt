@@ -78,13 +78,20 @@ if(UNIX)
         set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
     endif()
 elseif(WIN32)
-    # find_program(SCCACHE_PROGRAM sccache)
+    find_program(SCCACHE_PROGRAM sccache)
     if(SCCACHE_PROGRAM)
         message(STATUS "Using SCCache")
         set(CMAKE_C_COMPILER_LAUNCHER ${SCCACHE_PROGRAM})
         set(CMAKE_CXX_COMPILER_LAUNCHER ${SCCACHE_PROGRAM})
         if(MSVC)
-            string(APPEND CMAKE_CXX_FLAGS " /FS")
+            if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+                string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+                string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+            elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+                string(REPLACE "/Zi" "/Z7" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+                string(REPLACE "/Zi" "/Z7" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+            endif()
+            set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded)
         endif()
     endif()
 endif()
@@ -426,10 +433,6 @@ qt_generate_deploy_qml_app_script(
 )
 install(SCRIPT ${deploy_script})
 
-install(
-        DIRECTORY ${CMAKE_SOURCE_DIR}/resources/
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/qgroundcontrol
-)
 if(LINUX)
     configure_file(
         ${CMAKE_SOURCE_DIR}/deploy/linux/org.mavlink.qgroundcontrol.desktop.in
