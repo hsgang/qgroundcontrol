@@ -256,6 +256,5 @@ Item {
 
     FlyViewVideoSiYiController {
         anchors.fill: parent
-        visible: !_mainWindowIsMap
     }
 }

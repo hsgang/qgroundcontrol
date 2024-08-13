@@ -68,7 +68,7 @@ Item {
         rightEdgeCenterInset:   topRightColumnLayout.rightEdgeCenterInset
         rightEdgeBottomInset:   bottomRightRowLayout.rightEdgeBottomInset
         topEdgeLeftInset:       toolStrip.topEdgeLeftInset
-        topEdgeCenterInset:     parentToolInsets.topEdgeCenterInset
+        topEdgeCenterInset:     telemetryPanel.topEdgeCenterInset
         topEdgeRightInset:      topRightColumnLayout.topEdgeRightInset
         bottomEdgeLeftInset:    virtualJoystickMultiTouch.visible ? virtualJoystickMultiTouch.bottomEdgeLeftInset : parentToolInsets.bottomEdgeLeftInset
         bottomEdgeCenterInset:  bottomCenterRowLayout.bottomEdgeCenterInset
@@ -338,16 +338,15 @@ Item {
         anchors.top: telemetryPanel.visible ? telemetryPanel.bottom : parent.top
         width: resultLabel.width + resultLabel.width*0.4
         height: resultLabel.height + resultLabel.height*0.4
-        anchors.bottomMargin: 10
+        anchors.margins: _toolsMargin
         anchors.horizontalCenter: telemetryPanel.visible ? telemetryPanel.horizontalCenter : parent.horizontalCenter
-        color: "white"
+        color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
         visible: false
-        radius: 5
+        radius: _toolsMargin / 2
         QGCLabel {
             id: resultLabel
             anchors.centerIn: parent
-            color: "black"
-            font.pixelSize: 48
+            color: qgcPal.text
 
             Timer {
                 id: resultTimer
@@ -358,8 +357,8 @@ Item {
             }
 
             Connections {
-                target: SiYiCamera
-                onOperationResultChanged: {
+                target: camera
+                onOperationResultChanged: function (result) {
                     if (result === 0) {
                         resultLabel.text = qsTr("Take Photo Success")
                     } else if (result === 1) {
@@ -368,15 +367,15 @@ Item {
                         resultLabel.text = qsTr("Video Record Failed")
                     } else if (result === -1) {
                         resultLabel.text = qsTr("Not supportted") //4K视频不支持变倍
-                    } else if (result === SiYiCamera.TipOptionLaserNotInRange) {
+                    } else if (result === camera.TipOptionLaserNotInRange) {
                         resultLabel.text = qsTr("Not in the range of laser")
-                    } else if (result === SiYiCamera.TipOptionSettingOK) {
+                    } else if (result === camera.TipOptionSettingOK) {
                         resultLabel.text = qsTr("Setting OK")
-                    } else if (result === SiYiCamera.TipOptionSettingFailed) {
+                    } else if (result === camera.TipOptionSettingFailed) {
                         resultLabel.text = qsTr("Setting Failed")
-                    } else if (result === SiYiCamera.TipOptionIsNotAiTrackingMode) {
+                    } else if (result === camera.TipOptionIsNotAiTrackingMode) {
                         resultLabel.text = qsTr("Not in AI tracking mode") // 不支持AI跟踪模式
-                    } else if (result === SiYiCamera.TipOptionStreamNotSupportedAiTracking) {
+                    } else if (result === camera.TipOptionStreamNotSupportedAiTracking) {
                         resultLabel.text = qsTr("AI tracking not supportted") //AI跟踪不支持
                     }
 
@@ -390,20 +389,21 @@ Item {
 
     Rectangle {
         id: zoomMultipleRectangle
-        anchors.top: telemetryPanel.bottom
+        anchors.top: telemetryPanel.visible ? telemetryPanel.bottom : parent.top
         width: zoomMultipleLabel.width + zoomMultipleLabel.width * 0.4
         height: zoomMultipleLabel.height + zoomMultipleLabel.height * 0.4
-        color: "white"
-        anchors.bottomMargin: 10
+        color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+        anchors.margins: _toolsMargin
         visible: false
-        anchors.horizontalCenter: telemetryPanel.horizontalCenter
-        radius: 5
+        anchors.horizontalCenter: telemetryPanel.visible ? telemetryPanel.horizontalCenter : parent.horizontalCenter
+        radius: _toolsMargin / 2
+
         QGCLabel {
             id: zoomMultipleLabel
-            text: (zoomMultipleLabel.zoomMultiple / 10).toFixed(1)
+            text: "x " + (zoomMultipleLabel.zoomMultiple / 10).toFixed(1)
+            font.pointSize: ScreenTools.defaultFontPointSize * 1.5
             anchors.centerIn: parent
-            color: "black"
-            font.pixelSize: 48
+            color: qgcPal.text
 
             Timer {
                 id: visibleTimer
@@ -413,7 +413,8 @@ Item {
                 onTriggered: zoomMultipleRectangle.visible = false
             }
 
-            property real zoomMultiple: SiYiCamera.enableZoom ? SiYiCamera.zoomMultiple : 1
+            property real zoomMultiple: camera.enableZoom ? camera.zoomMultiple : 1
+
             onZoomMultipleChanged: {
                 resultRectangle.visible = false
                 zoomMultipleRectangle.visible = true

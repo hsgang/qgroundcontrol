@@ -21,6 +21,7 @@ class SiYiCamera : public SiYiTcpClient
     Q_PROPERTY(bool enableVideo READ enableVideo NOTIFY enableVideoChanged)
     Q_PROPERTY(bool enableControl READ enableControl NOTIFY enableControlChanged)
     Q_PROPERTY(bool is4k READ is4k NOTIFY is4kChanged)
+    Q_PROPERTY(bool enableThermal READ enableThermal NOTIFY enableThermalChanged FINAL)
     Q_PROPERTY(bool enableLaser READ enableLaser NOTIFY enableLaserChanged FINAL)
     Q_PROPERTY(bool laserStateOn READ laserStateOn NOTIFY laserStateOnChanged FINAL)
     Q_PROPERTY(int laserDistance READ laserDistance NOTIFY laserDistanceChanged FINAL)
@@ -56,6 +57,16 @@ public:
         QByteArray data;
         quint32 crc;
     };
+    struct SDKProtocolMsgContext {
+        quint16 stx;
+        quint8 msgControl;
+        quint16 dataLength;
+        quint16 msgSequence;
+        quint8 cmdId;
+        QByteArray msgData;
+        quint16 crc;
+    };
+
     enum CameraCommand {
         CameraCommandTakePhoto
     };
@@ -124,6 +135,8 @@ public:
     Q_INVOKABLE bool zoom(int option);
     // 1: 远景，0：停止，-1：近景
     Q_INVOKABLE bool focus(int option);
+    Q_INVOKABLE bool imageMode(int option1, int option2);
+    Q_INVOKABLE bool thermalPalette(int option);
     Q_INVOKABLE bool sendCommand(int cmd);
     Q_INVOKABLE bool sendRecodingCommand(int cmd);
     void setLogState(int state);
@@ -156,11 +169,18 @@ private:
     QTimer *m_laserTimer{nullptr};
     int m_streamType;
 
+    quint16 CRC16_cal(uint8_t *ptr, uint32_t len, uint16_t crc_init);
+    quint8 crc_check_16bites(uint8_t* pbuf, uint32_t len,uint32_t* p_result);
+
+
 private:
     QByteArray packMessage(quint8 control, quint8 cmd,
                            const QByteArray &payload);
+    QByteArray packMessageSDK(quint8 control, quint8 cmd,
+                           const QByteArray &payload);
     quint32 headerCheckSum32(ProtocolMessageHeaderContext *ctx);
     quint32 packetCheckSum32(ProtocolMessageContext *ctx);
+    quint16 packetCheckSum16(SDKProtocolMsgContext *ctx);
     bool unpackMessage(ProtocolMessageContext *ctx,
                        const QByteArray &msg);
     void getCamerVersion();
@@ -173,6 +193,8 @@ private:
     void messageHandle0x92(const QByteArray &msg);
     void messageHandle0x94(const QByteArray &msg);
     void messageHandle0x98(const QByteArray &msg);
+    void messageHandle0x9a(const QByteArray &msg);
+    void messageHandle0x9b(const QByteArray &msg);
     void messageHandle0x9e(const QByteArray &msg);
     void messageHandle0xa1(const QByteArray &msg);
     void messageHandle0xa2(const QByteArray &msg);
@@ -184,6 +206,7 @@ private:
     void messageHandle0xb0(const QByteArray &msg);
     void messageHandle0xba(const QByteArray &msg);
     void messageHandle0xbb(const QByteArray &msg);
+    void messageHandle0xc6(const QByteArray &msg);
 
 private:
     bool isRecording_{false};
@@ -222,6 +245,10 @@ private:
     bool enableLaser(){return m_enableLaser;}
     Q_SIGNAL void enableLaserChanged();
 
+    bool m_enableThermal{false};
+    bool enableThermal(){return m_enableThermal;}
+    Q_SIGNAL void enableThermalChanged();
+
     int m_laserDistance{0};
     int laserDistance(){return m_laserDistance;}
     Q_SIGNAL void laserDistanceChanged();
@@ -255,11 +282,11 @@ private:
     Q_SIGNAL void aiModeOnChanged();
 
     bool m_enableAi{false};
-    bool enableAi() { return m_enableAi; }
+    bool enableAi() {return m_enableAi;}
     Q_SIGNAL void enableAiChanged();
 
     bool m_isTracking{false};
-    bool isTracking() { return m_isTracking; }
+    bool isTracking() {return m_isTracking;}
     Q_SIGNAL void isTrackingChanged();
 
     bool using1080p();

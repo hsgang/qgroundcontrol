@@ -124,6 +124,38 @@ bool SiYiCamera::focus(int option)
 
     QByteArray msg = packMessage(0x01, cmdId, body);
     sendMessage(msg);
+    qDebug() << "focus : " << option << " " << msg.toHex(' ');
+    return true;
+}
+
+bool SiYiCamera::imageMode(int option1, int option2) // 16용
+{
+    uint8_t cmdId = 0x93;
+    QByteArray body;
+    body.append(char(option1));
+    body.append(char(option2));
+
+    QByteArray msg = packMessage(0x01, cmdId, body);
+    sendMessage(msg);
+
+    getSplitMode();
+
+    qDebug() << "SiYiCamera::imageMode : " << msg.toHex(' ');
+
+    return true;
+}
+
+bool SiYiCamera::thermalPalette(int option)
+{
+    uint8_t cmdId = 0xa5;
+    QByteArray body;
+    body.append(char(option));
+
+    QByteArray msg = packMessage(0x00, cmdId, body);
+    sendMessage(msg);
+
+    qDebug() << "SiYiCamera::thermalPalette : " << msg.toHex(' ');
+
     return true;
 }
 
@@ -413,6 +445,10 @@ void SiYiCamera::analyzeMessage()
                     messageHandle0x94(packet);
                 } else if (msg.header.cmdId == 0x98) {
                     messageHandle0x98(packet);
+                } else if (msg.header.cmdId == 0x9a) {
+                    messageHandle0x9a(packet);
+                } else if (msg.header.cmdId == 0x9b) {
+                    messageHandle0x9b(packet);
                 } else if (msg.header.cmdId == 0x9e) {
                     messageHandle0x9e(packet);
                 } else if (msg.header.cmdId == 0xa1) {
@@ -435,6 +471,8 @@ void SiYiCamera::analyzeMessage()
                     messageHandle0xba(packet);
                 } else if (msg.header.cmdId == 0xbb) {
                     messageHandle0xbb(packet);
+                } else if (msg.header.cmdId == 0xc6) {
+                    messageHandle0xc6(packet);
                 } else {
                     QString id = QString("0x%1").arg(QString::number(msg.header.cmdId, 16), 2, '0');
                     qWarning() << info << "Unknow handle message, cmd id:" << id;
@@ -478,6 +516,30 @@ QByteArray SiYiCamera::packMessage(quint8 control, quint8 cmd,
     return msg;
 }
 
+QByteArray SiYiCamera::packMessageSDK(quint8 control, quint8 cmd, const QByteArray &payload)
+{
+    SDKProtocolMsgContext ctx;
+    ctx.stx = qToBigEndian<quint16>(0x5566);
+    ctx.msgControl = control;
+    ctx.dataLength = payload.length();
+    ctx.msgSequence = sequence();
+    ctx.cmdId = cmd;
+    ctx.msgData = payload;
+    ctx.crc = packetCheckSum16(&ctx);
+
+    QByteArray msg;
+
+    msg.append(reinterpret_cast<char*>(&ctx.stx), 2);           // STX
+    msg.append(reinterpret_cast<char*>(&ctx.msgControl), 1);    // CTRL
+    msg.append(reinterpret_cast<char*>(&ctx.dataLength), 2);    // Data_len
+    msg.append(reinterpret_cast<char*>(&ctx.msgSequence), 2);   // SEQ
+    msg.append(reinterpret_cast<char*>(&ctx.cmdId), 1);         // CMD_ID
+    msg.append(ctx.msgData);                                    // DATA
+    msg.append(reinterpret_cast<char*>(&ctx.crc), 2);           // CRC16(packet)
+
+    return msg;
+}
+
 quint32 SiYiCamera::headerCheckSum32(ProtocolMessageHeaderContext *ctx)
 {
     if (ctx) {
@@ -492,6 +554,22 @@ quint32 SiYiCamera::headerCheckSum32(ProtocolMessageHeaderContext *ctx)
         return checkSum32(bytes);
     }
 
+    return 0;
+}
+
+quint16 SiYiCamera::packetCheckSum16(SDKProtocolMsgContext *ctx)
+{
+    if (ctx) {
+        QByteArray bytes;
+        bytes.append(reinterpret_cast<char*>(&ctx->stx), 2);
+        bytes.append(reinterpret_cast<char*>(&ctx->msgControl), 1);
+        bytes.append(reinterpret_cast<char*>(&ctx->dataLength), 2);
+        bytes.append(reinterpret_cast<char*>(&ctx->msgSequence), 2);
+        bytes.append(reinterpret_cast<char*>(&ctx->cmdId), 1);
+        bytes.append(ctx->msgData);
+
+        return checkSum16(bytes);
+    }
     return 0;
 }
 
@@ -716,7 +794,7 @@ void SiYiCamera::messageHandle0x89(const QByteArray &msg)
             tmp /= 10.0;
             m_cookedLaserDistance = QString::number(tmp, 'f', 1);
             emit cookedLaserDistanceChanged();
-            qDebug() << "laser distance:" << m_laserDistance << "m";
+            //qDebug() << "laser distance:" << m_laserDistance << "m";
         }
     }
 }
@@ -784,6 +862,7 @@ void SiYiCamera::messageHandle0x94(const QByteArray &msg)
             m_enableAi = true;
             if (type == CameraTypeZT30) {
                 m_enableLaser = true;
+                m_enableThermal = true;
                 getLaserState();
 
                 getResolutionMain();
@@ -820,6 +899,7 @@ void SiYiCamera::messageHandle0x94(const QByteArray &msg)
             enableVideo_ = true;
             enableControl_ = true;
             m_enableLaser = false;
+            m_enableThermal = false;
             m_enableAi = true;
         } else {
             enableFocus_ = false;
@@ -828,6 +908,7 @@ void SiYiCamera::messageHandle0x94(const QByteArray &msg)
             enableVideo_ = false;
             enableControl_ = false;
             m_enableLaser = false;
+            m_enableThermal = false;
             qCDebug(SiYiCameraLog) << "Unknow camera type: " << type << ", disable all functions.";
         }
 #if 0
@@ -843,6 +924,7 @@ void SiYiCamera::messageHandle0x94(const QByteArray &msg)
         emit enableVideoChanged();
         emit enableControlChanged();
         emit enableLaserChanged();
+        emit enableThermalChanged();
         emit enableAiChanged();
 
         if (m_enableAi) {
@@ -871,6 +953,39 @@ void SiYiCamera::messageHandle0x98(const QByteArray &msg)
     }
 }
 
+void SiYiCamera::messageHandle0x9a(const QByteArray &msg)
+{
+    // struct ACK {
+    //     qint8 gimbalRotationResult;
+    // };
+
+    // int headerLength = 4 + 1 + 4 + 2 + 1 + 4;
+    // if (msg.length() == int(headerLength + sizeof(ACK) + 4)) {
+    //     const char *ptr = msg.constData();
+    //     ptr += headerLength;
+    //     auto ctx = reinterpret_cast<const ACK*>(ptr);
+
+    //     qreal result = ctx->gimbalRotationResult;
+    //     //emit gimbalRotationChanged();
+    // }
+}
+
+void SiYiCamera::messageHandle0x9b(const QByteArray &msg)
+{
+    // struct ACK {
+    //     qint8 gimbalCenterResult;
+    // };
+    // int headerLength = 4 + 1 + 4 + 2 + 1 + 4;
+    // if (msg.length() == int(headerLength + sizeof(ACK) + 4)) {
+    //     const char *ptr = msg.constData();
+    //     ptr += headerLength;
+    //     auto ctx = reinterpret_cast<const ACK*>(ptr);
+
+    //     qreal result = ctx->gimbalCenterResult;
+    //     //emit gimbalCenterChanged();
+    // }
+}
+
 void SiYiCamera::messageHandle0x9e(const QByteArray &msg)
 {
     struct ACK {
@@ -884,6 +999,8 @@ void SiYiCamera::messageHandle0x9e(const QByteArray &msg)
         auto ctx = reinterpret_cast<const ACK*>(ptr);
 
         emit operationResultChanged(ctx->result);
+
+        qDebug() << "siyi camera operation result :" << ctx->result;
     }
 }
 
@@ -1124,4 +1241,11 @@ void SiYiCamera::messageHandle0xbb(const QByteArray &msg)
         m_laserStateHasResponse = true;
         emit laserStateHasResponseChanged();
     }
+}
+
+void SiYiCamera::messageHandle0xc6(const QByteArray &msg)
+{
+    // 포토 촬영 성공시 응답
+
+    qDebug() << "messageHandle0xc6" << msg.toHex(' ');
 }
