@@ -997,7 +997,7 @@ Item {
                 columnSpacing:      _margin
                 rowSpacing:         _margin
                 Layout.fillWidth:   true
-                visible:            createSection.visible
+                visible:            createSection.checked
 
                 Repeater {
                     model: _planMasterController.planCreators
@@ -1064,7 +1064,7 @@ Item {
                 columns:            3
                 rowSpacing:         _margin
                 columnSpacing:      ScreenTools.defaultFontPixelWidth
-                visible:            storageSection.visible
+                visible:            storageSection.checked
 
                 QGCButton {
                     text:               qsTr("Open...")
@@ -1130,7 +1130,7 @@ Item {
             RowLayout {
                 Layout.fillWidth:   true
                 spacing:            _margin
-                visible:            vehicleSection.visible
+                visible:            vehicleSection.checked
 
                 QGCButton {
                     text:               qsTr("Upload")
