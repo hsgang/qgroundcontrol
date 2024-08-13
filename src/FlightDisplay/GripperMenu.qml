@@ -38,7 +38,7 @@ QGCPopupDialog {
             id: grabButton
             text:                   qsTr("Grab")
             iconSource:             "/res/GripperGrab.svg"
-            font.pointSize:         ScreenTools.defaultFontPointSize * 2.5
+            font.pointSize:         ScreenTools.defaultFontPointSize * 1.2
             backRadius:             width / 40
             heightFactor:           0.75
             Layout.preferredHeight: releaseButton.height
@@ -54,7 +54,7 @@ QGCPopupDialog {
             id: releaseButton
             text:                   qsTr("Release")
             iconSource:             "/res/GripperRelease.svg"
-            font.pointSize:         ScreenTools.defaultFontPointSize * 2.5
+            font.pointSize:         ScreenTools.defaultFontPointSize * 1.2
             backRadius:             width / 40
             heightFactor:           0.75
             Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 20
