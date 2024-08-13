@@ -8637,8 +8637,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="42"/>
-        <source>Gripper Function</source>
-        <translation>그립퍼 기능</translation>
+        <source>Gripper</source>
+        <translation>화물</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="43"/>
@@ -8663,7 +8663,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="47"/>
         <source>Pause</source>
-        <translation>일시 중지</translation>
+        <translation>정지</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="48"/>
@@ -8817,8 +8817,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="73"/>
-        <source>Pause the vehicle at it&apos;s current position, adjusting altitude up or down as needed.</source>
-        <translation>필요에 따라 고도를 조정하고 기체를 현재 위치에서 유지</translation>
+        <source>Pause the vehicle at current position.</source>
+        <translation>기체를 현재 위치에서 정지</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="74"/>
@@ -19191,12 +19191,12 @@ Confirm change?</source>
     <message>
         <location filename="../src/FlightDisplay/GripperMenu.qml" line="39"/>
         <source>Grab</source>
-        <translation>닫기</translation>
+        <translation>화물칸 닫기</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GripperMenu.qml" line="55"/>
         <source>Release</source>
-        <translation>열기</translation>
+        <translation>화물칸 열기</translation>
     </message>
 </context>
 <context>
