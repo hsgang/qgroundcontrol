@@ -20,21 +20,22 @@ import QGroundControl.ScreenTools
 import QGroundControl.Vehicle
 
 SetupPage {
-    id:             tuningPage
-    pageComponent:  tuningPageComponent
+    id:             channelPage
+    pageComponent:  channelPageComponent
 
     Component {
-        id: tuningPageComponent        
+        id: channelPageComponent
 
         Item {
-            width: availableWidth
-            height: availableHeight
+            width: Math.max(availableWidth, rowLayout.width)
+            height: rowLayout.height
 
             property real _comboboxPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
 
             FactPanelController { id: controller; }
 
             RowLayout {
+                id: rowLayout
                 anchors.horizontalCenter: parent.horizontalCenter
 
                 // rc input
