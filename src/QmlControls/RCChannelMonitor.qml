@@ -67,11 +67,11 @@ Item {
             // Indicator
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                width:                  parent.height * 0.75
-                height:                 width
+                width:                  2 //parent.height * 0.75
+                height:                 parent.height * 0.8 //width
                 x:                      (((reversed ? _pwmMax - rcValue : rcValue - _pwmMin) / _pwmRange) * parent.width) - (width / 2)
-                radius:                 width / 2
-                color:                  qgcPal.text
+                //radius:                 width / 2
+                color:                  qgcPal.colorOrange
                 visible:                mapped && (rcValue !== 0)
             }
 
@@ -133,6 +133,7 @@ Item {
                 QGCLabel {
                     id:     channelLabel
                     text:   modelData + 1
+                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 2.4
                 }
 
                 Loader {

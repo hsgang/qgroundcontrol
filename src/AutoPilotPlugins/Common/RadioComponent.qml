@@ -135,12 +135,20 @@ SetupPage {
                     // Indicator
                     Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
-                        width:                  parent.height * 0.75
-                        height:                 width
-                        radius:                 width / 2
-                        color:                  qgcPal.text
+                        width:                  2 //parent.height * 0.75
+                        height:                 parent.height * 0.8
+                        //radius:                 width / 2
+                        color:                  qgcPal.colorOrange
                         visible:                mapped
                         x:                      (((reversed ? _pwmMax - rcValue : rcValue - _pwmMin) / _pwmRange) * parent.width) - (width / 2)
+                    }
+
+                    QGCLabel {
+                        anchors.fill:           parent
+                        horizontalAlignment:    Text.AlignHCenter
+                        verticalAlignment:      Text.AlignVCenter
+                        text:                   rcValue
+                        visible:                mapped
                     }
 
                     QGCLabel {
