@@ -62,6 +62,24 @@ Item {
                 color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 30) ? qgcPal.buttonText : qgcPal.colorOrange
             }
         }
+
+        Column {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
+
+            QGCLabel {
+                anchors.left:   parent.left
+                font.pointSize: ScreenTools.smallFontPointSize
+                color:          qgcPal.text
+                text:           _activeVehicle.rcRSSI + "%"
+            }
+
+            QGCLabel {
+                anchors.left:   parent.left
+                color:          qgcPal.text
+                text:           " "
+            }
+        }
     }
 
     MouseArea {

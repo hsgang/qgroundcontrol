@@ -115,17 +115,28 @@ Item {
     }
 
     function parseMessage(message) {
-        var regex = /<font style="<#[EIN]>">\[(\d{2}:\d{2}:\d{2}\.\d{3})\s*\]\s*(.*?)<\/font>/;
+        //var regex = /<font style="<#[EIN]>">\[(\d{2}:\d{2}:\d{2}\.\d{3})\s*\]\s*(.*?)<\/font>/;
+        //var regex = /<font style="<#[A-Z]+>">\[(\d{2}:\d{2}:\d{2}\.\d{3})(?:\s+[A-Z]+:\d+)?\]\s*(.*?)<\/font>/;
+        var regex = /<font style="<#([A-Z]+)>">\[(\d{2}:\d{2}:\d{2}\.\d{3})\s+[A-Z]+:(\d+)\]\s*(.*?)<\/font>/;
+
         var match = message.match(regex);
         if (match) {
-            var time = match[1];
-            var content = match[2];
+            var type = match[1];
+            var time = match[2];
+            var component = match[3];
+            var content = match[4];
             content = content.replace(/<[^>]*>/g, ''); // HTML 태그 제거
-            messageModel.insert(0, {message: content, time: time, checked: false});
+            messageModel.insert(0, {message: content, time: time, type: type, component: component, checked: false});
             updateUnreadMessageCount();
+            // console.log(message);
+            // console.log(type);
+            // console.log(time);
+            // console.log(component);
+            // console.log(content);
         } else { // 매칭되지 않을 경우 전체 메시지를 content로 반환
             time = "";
             content = message.replace(/<[^>]*>/g, ''); // HTML 태그 제거
+            console.log(message);
         }
     }
 
@@ -177,7 +188,7 @@ Item {
                             height: childrenRect.height
                             Column {
                                 QGCLabel{
-                                    text:       "[" + model.time + "]"
+                                    text:       "[" + model.time + "] - COMP" + model.component
                                     opacity:    0.6
                                 }
                                 QGCLabel {
@@ -186,6 +197,7 @@ Item {
                                     opacity:    model.checked ? 0.6 : 1
                                     textFormat: Text.PlainText
                                     wrapMode:   Text.Wrap
+                                    color:      model.type !== "N" ? qgcPal.colorRed : qgcPal.text
                                 }
                             }
                         }

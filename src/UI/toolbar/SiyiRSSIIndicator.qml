@@ -28,24 +28,6 @@ Item {
         anchors.bottom: parent.bottom
         spacing:        ScreenTools.defaultFontPixelWidth / 2
 
-        Column {
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
-
-            QGCLabel {
-                anchors.right:      parent.right
-                font.pointSize:     ScreenTools.smallFontPointSize
-                color:              qgcPal.text
-                text:               (transmitter.downStream / 1024).toFixed(0) + "KB"
-            }
-
-            QGCLabel {
-                anchors.right:      parent.right
-                color:              qgcPal.text
-                text:               transmitter.rssi
-            }
-        }
-
         Rectangle{
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
@@ -70,6 +52,24 @@ Item {
                 source:             "/qmlimages/TelemRSSI.svg"
                 fillMode:           Image.PreserveAspectFit
                 color:              transmitter.signalQuality > 10 ? qgcPal.buttonText : qgcPal.colorOrange
+            }
+        }
+
+        Column {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
+
+            QGCLabel {
+                anchors.left:   parent.left
+                font.pointSize: ScreenTools.smallFontPointSize
+                color:          qgcPal.text
+                text:           (transmitter.downStream / 1024).toFixed(0) + "KB"
+            }
+
+            QGCLabel {
+                anchors.left:   parent.left
+                color:          qgcPal.text
+                text:           transmitter.rssi
             }
         }
     }

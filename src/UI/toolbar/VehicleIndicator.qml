@@ -54,15 +54,14 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
-                text:           _activeVehicle ? _activeVehicle.imuTemp.valueString + "°C" : ""
+                text:           _activeVehicle ? "ID"+_activeVehicle.id : ""
             }
 
             QGCLabel {
-                id:             hdopValue
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.defaultFontPointSize
-                text:           " "//_activeVehicle ? _activeVehicle.imuTemp.valueString + "°C" : ""
+                text:           _activeVehicle ? _activeVehicle.imuTemp.valueString + "°C" : ""
             }
         }
     }

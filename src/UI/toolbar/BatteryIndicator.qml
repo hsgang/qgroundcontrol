@@ -204,28 +204,6 @@ Item {
 //                }
 //            ]
 
-            Column {
-                id:                     batteryValuesColumn
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
-
-                QGCLabel {
-                    id:                     batteryVoltageValue
-                    anchors.right:          parent.right
-                    font.pointSize:         ScreenTools.smallFontPointSize
-                    color:                  qgcPal.text
-                    text:                   _activeVehicle ? (_showCellVoltage ? _cellVoltage : battery.voltage.value.toFixed(1) + battery.voltage.units) : ""
-
-                    property string _cellVoltage: (battery.voltage.value / _batteryCellCount).toFixed(2) + battery.voltage.units
-                }
-
-                QGCLabel {
-                    anchors.right:          parent.right
-                    color:                  qgcPal.text
-                    text:                   getBatteryPercentageText()
-                }
-            }
-
             QGCColoredImage {
                 id:                 batteryIcon
                 height:             parent.height
@@ -237,6 +215,28 @@ Item {
                 fillMode:           Image.PreserveAspectCrop //Image.PreserveAspectFit
                 color:              getBatteryColor()
             }
+
+            Column {
+                id:                     batteryValuesColumn
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
+
+                QGCLabel {
+                    id:                 batteryVoltageValue
+                    anchors.left:       parent.left
+                    font.pointSize:     ScreenTools.smallFontPointSize
+                    color:              qgcPal.text
+                    text:               _activeVehicle ? (_showCellVoltage ? _cellVoltage : battery.voltage.value.toFixed(1) + battery.voltage.units) : ""
+
+                    property string _cellVoltage: (battery.voltage.value / _batteryCellCount).toFixed(2) + battery.voltage.units
+                }
+
+                QGCLabel {
+                    anchors.left:       parent.left
+                    color:              qgcPal.text
+                    text:               getBatteryPercentageText()
+                }
+            }            
 
 //            ColumnLayout {
 //                id:                     batteryInfoColumn
