@@ -1044,8 +1044,8 @@ private:
     bool _apmArmingNotRequired          ();
     void _initializeCsv                 ();
     void _writeCsvLine                  ();
-    void _initializeJson                ();
-    void _writeJsonLine                 ();
+    void _initializeCustomLog           ();
+    void _writeCustomLogLine            ();
     void _flightTimerStart              ();
     void _flightTimerStop               ();
     void _setMessageInterval            (int messageId, int rate);
@@ -1071,8 +1071,8 @@ private:
     QTimer              _csvLogTimer;
     QFile               _csvLogFile;
 
-    QTimer              _jsonLogTimer;
-    QFile               _jsonLogFile;
+    QTimer              _customLogTimer;
+    QFile               _customLogFile;
 
     bool            _joystickEnabled = false;
     bool _isActiveVehicle = false;

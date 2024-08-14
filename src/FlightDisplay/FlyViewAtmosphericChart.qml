@@ -183,7 +183,7 @@ Item{
 
                     ScatterSeries{
                         id: seriesTemp
-                        name: "Temperature"
+                        name: qsTr("Temperature")
                         visible: tempCheck.checked
                         markerSize: _toolsMargin
                         axisX: ValueAxis {
@@ -202,7 +202,7 @@ Item{
                     }
                     ScatterSeries{
                         id: seriesHumi
-                        name: "Humidity"
+                        name: qsTr("Humidity")
                         visible: humiCheck.checked
                         markerSize: _toolsMargin
                         axisX: ValueAxis {
@@ -215,7 +215,7 @@ Item{
                     }
                     ScatterSeries{
                         id: seriesPress
-                        name: "Pressure"
+                        name: qsTr("Pressure")
                         visible: presCheck.checked
                         markerSize: _toolsMargin
                         axisX: ValueAxis {
@@ -228,7 +228,7 @@ Item{
                     }
                     ScatterSeries{
                         id: seriesWindDir
-                        name: "WindDir"
+                        name: qsTr("WindDir")
                         visible: windDirCheck.checked
                         markerSize: _toolsMargin
                         axisX: ValueAxis {
@@ -241,7 +241,7 @@ Item{
                     }
                     ScatterSeries{
                         id: seriesWindSpd
-                        name: "WindSpd"
+                        name: qsTr("WindSpd")
                         visible: windSpdCheck.checked
                         markerSize: _toolsMargin
                         axisX: ValueAxis {
@@ -284,23 +284,23 @@ Item{
 
                     QGCCheckBox {
                         id: tempCheck
-                        text: "Temperature"
+                        text: qsTr("Temperature")
                     }
                     QGCCheckBox {
                         id: humiCheck
-                        text: "Humidity"
+                        text: qsTr("Humidity")
                     }
                     QGCCheckBox {
                         id: presCheck
-                        text: "Pressure"
+                        text: qsTr("Pressure")
                     }
                     QGCCheckBox {
                         id: windDirCheck
-                        text: "WindDir"
+                        text: qsTr("WindDir")
                     }
                     QGCCheckBox {
                         id: windSpdCheck
-                        text: "WindSpd"
+                        text: qsTr("WindSpd")
                     }
 
                     Item{
@@ -308,7 +308,7 @@ Item{
                     }
 
                     QGCLabel{
-                        text: "Interval(m)"
+                        text: qsTr("Interval(m)")
                     }
 
                     QGCTextField{
@@ -318,18 +318,18 @@ Item{
                     }
 
                     QGCButton{
-                        text:"Set Interval"
+                        text: qsTr("Set Interval")
                         onClicked: {
                             diffGapValue = intervalTextField.text
                         }
                     }
 
                     QGCLabel{
-                        text: "Count : " + count
+                        text: qsTr("Count : ") + count
                     }
 
                     QGCLabel{
-                        text: "Interval : " + diffGapValue
+                        text: qsTr("Interval : ") + diffGapValue
                     }
 
                     Item{
@@ -337,7 +337,7 @@ Item{
                     }
 
                     QGCButton{
-                        text: "Clear"
+                        text: qsTr("Clear")
                         implicitWidth: parent.width
                         onClicked:  {
                             clearChart()

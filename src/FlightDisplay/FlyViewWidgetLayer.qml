@@ -331,9 +331,9 @@ Item {
     FlyViewAtmosphericChart{
         id: flyViewChartWidget
         anchors.margins:        _toolsMargin
-        anchors.top:            telemetryPanel.bottom
+        anchors.top:            telemetryPanel.visible ? telemetryPanel.bottom : parent.top
         anchors.bottom:         bottomCenterRowLayout.top
-        anchors.right:          topRightColumnLayout.left
+        anchors.right:          parent.right //topRightColumnLayout.left
         width:                  ScreenTools.isMobile ? mainWindow.width * 0.7 : mainWindow.width * 0.4
         visible:                QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue
     }

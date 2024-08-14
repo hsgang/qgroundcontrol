@@ -130,7 +130,7 @@ public:
     static constexpr const char* videoDirectory =           QT_TRANSLATE_NOOP("AppSettings", "Video");
     static constexpr const char* photoDirectory =           QT_TRANSLATE_NOOP("AppSettings", "Photo");
     static constexpr const char* crashDirectory =           QT_TRANSLATE_NOOP("AppSettings", "CrashLogs");
-    static constexpr const char* sensorDirectory =          QT_TRANSLATE_NOOP("AppSettings", "SensorLog");
+    static constexpr const char* sensorDirectory =          QT_TRANSLATE_NOOP("AppSettings", "SensorLogs");
     static constexpr const char* customActionsDirectory =   QT_TRANSLATE_NOOP("AppSettings", "CustomActions");
 
 signals:

@@ -141,7 +141,7 @@ SettingsPage {
         FactCheckBoxSlider {
             id:                 sensorSaveLog
             Layout.fillWidth:   true
-            text:               qsTr("Save SensorData JSON log")
+            text:               qsTr("Save CustomLog")
             fact:               QGroundControl.settingsManager.appSettings.saveSensorLog
             enabled:            !_disableAllDataPersistence
         }
