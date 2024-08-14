@@ -487,8 +487,8 @@ Item {
 
             sourceItem: HeightIndicator {
                 map:        _root.map
-                heightText: Math.floor(QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_transitionAltitudeMeters)) +
-                            QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString + "<sup>*</sup>"
+                heightText: Math.floor(QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_transitionAltitudeMeters)) +
+                            QGroundControl.unitsConversion.appSettingsDistanceUnitsString + "<sup>*</sup>"
             }
 
             function recalc() {
@@ -519,8 +519,8 @@ Item {
 
             sourceItem: HeightIndicator {
                 map:        _root.map
-                heightText: Math.floor(QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_midSlopeAltitudeMeters)) +
-                            QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString + "<sup>*</sup>"
+                heightText: Math.floor(QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_midSlopeAltitudeMeters)) +
+                            QGroundControl.unitsConversion.appSettingsDistanceUnitsString + "<sup>*</sup>"
             }
 
             function recalc() {
