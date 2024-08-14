@@ -7044,6 +7044,64 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>FlyViewAtmosphericChart</name>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>Temperature</source>
+        <translation>기온</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>Humidity</source>
+        <translation>습도</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>Pressure</source>
+        <translation>기압</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>WindDir</source>
+        <translation>풍향</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>WindSpd</source>
+        <translation>풍속</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>Interval(m)</source>
+        <translation>측정 간격(m)</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>Alt Interval</source>
+        <translation>고도 간격 입력</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>Set Interval</source>
+        <translation>간격 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>Count : </source>
+        <translation>측정량 : </translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>Interval : </source>
+        <translation>고도 간격 : </translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAtmosphericChart.qml" line="287"/>
+        <source>Clear</source>
+        <translation>모두 삭제</translation>
+    </message>
+</context>
+<context>
     <name>FlyViewVideoToolStrip</name>
     <message>
         <location filename="../src/FlightDisplay/FlyViewVideoToolStrip.qml" line="47"/>
@@ -8023,8 +8081,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
-        <source>Save SensorData JSON log</source>
-        <translation>JSON형식으로 사용자 정의 데이터 로그 저장</translation>
+        <source>Save CustomLog</source>
+        <translation>사용자 정의 로그 저장</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
