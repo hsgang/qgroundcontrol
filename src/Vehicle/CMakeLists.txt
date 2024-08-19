@@ -47,6 +47,7 @@ target_link_libraries(Vehicle
         Utilities
         UTMSP
         VideoManager
+        Gimbal
     PUBLIC
         Qt6::Core
         Qt6::Gui

@@ -187,13 +187,6 @@ find_package(Qt6
 # libQt6QuickControls2BasicStyleImpl.so.6 are missing.
 qt_standard_project_setup(REQUIRES 6.6.3)
 
-# this is required since user can have Qt5 and Qt6 installed at the same time, and then Qt_DIR
-# might point to Qt5, but we want to use Qt6
-# especially qmdnsengine uses Qt_DIR to choose Qt version
-if (Qt6_DIR)
-    set(QT_DIR ${Qt6_DIR})
-endif ()
-
 qt_policy(
     SET QTP0001 NEW
     SET QTP0002 NEW
@@ -242,8 +235,6 @@ endif()
 #######################################################
 #                QGroundControl Resources
 #######################################################
-include_directories(
-        libs/libevents
 
 if(NOT QGC_CUSTOM_BUILD)
     # Custom builds can override the resources
@@ -260,34 +251,14 @@ list(APPEND QGC_RESOURCES
     ${CMAKE_SOURCE_DIR}/src/FirmwarePlugin/PX4/PX4Resources.qrc
 )
 
-set(QGC_RESOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/qgcimages.qrc
-        ${CMAKE_CURRENT_SOURCE_DIR}/qgcresources.qrc
-        ${CMAKE_CURRENT_SOURCE_DIR}/qgroundcontrol.qrc
-        ${CMAKE_CURRENT_SOURCE_DIR}/resources/InstrumentValueIcons/InstrumentValueIcons.qrc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/FirmwarePlugin/APM/APMResources.qrc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/FirmwarePlugin/PX4/PX4Resources.qrc
-)
-
-if (WIN32)
-    # append application icon resource for Windows
-    set(QGC_RESOURCES
-            ${QGC_RESOURCES}
-            ${CMAKE_CURRENT_SOURCE_DIR}/windows/QGroundControl.rc)
-endif()
-
 if(CONFIG_UTM_ADAPTER)
-    list(APPEND QGC_RESOURCES
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/UTMSP/utmsp.qrc
-    )
+    list(APPEND QGC_RESOURCES ${CMAKE_SOURCE_DIR}/src/UTMSP/utmsp.qrc)
 else()
-    list(APPEND QGC_RESOURCES
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/UTMSP/dummy/utmsp_dummy.qrc
-    )
+    list(APPEND QGC_RESOURCES ${CMAKE_SOURCE_DIR}/src/UTMSP/dummy/utmsp_dummy.qrc)
 endif()
 
-if (BUILD_TESTING)
-    list(APPEND QGC_RESOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test/UnitTest.qrc)
+if(QGC_BUILD_TESTING)
+    list(APPEND QGC_RESOURCES ${CMAKE_SOURCE_DIR}/test/UnitTest.qrc)
 endif()
 
 #######################################################
@@ -419,8 +390,11 @@ qt_import_plugins(${PROJECT_NAME}
 )
 
 install(
-        TARGETS ${PROJECT_NAME}
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
+    TARGETS ${PROJECT_NAME}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    BUNDLE  DESTINATION .
 )
 
 qt_generate_deploy_qml_app_script(
@@ -442,18 +416,18 @@ if(LINUX)
     install(
         FILES ${CMAKE_BINARY_DIR}/org.mavlink.qgroundcontrol.desktop
         DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
-)
-install(
+    )
+    install(
         FILES ${CMAKE_SOURCE_DIR}/resources/icons/qgroundcontrol.png
         DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/128x128/apps/
         RENAME org.mavlink.qgroundcontrol.png
-)
-configure_file(
-        ${CMAKE_SOURCE_DIR}/deploy/org.mavlink.qgroundcontrol.metainfo.xml.in
+    )
+    configure_file(
+        ${CMAKE_SOURCE_DIR}/deploy/linux/org.mavlink.qgroundcontrol.metainfo.xml.in
         ${CMAKE_BINARY_DIR}/metainfo/org.mavlink.qgroundcontrol.metainfo.xml
         @ONLY
-)
-install(
+    )
+    install(
         FILES ${CMAKE_BINARY_DIR}/metainfo/org.mavlink.qgroundcontrol.metainfo.xml
         DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo/
     )
@@ -464,15 +438,3 @@ elseif(WIN32)
 elseif(MACOS)
     install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/CreateMacDMG.cmake")
 endif()
-
-#######################################################
-#               Serial Port Configuration
-#######################################################
-if(NOT QT_MKSPEC MATCHES "winrt")
-    target_link_libraries(${PROJECT_NAME}
-        PUBLIC
-            Qt6::SerialPort
-        )
-endif()
-
-#include(QGCDeploy)

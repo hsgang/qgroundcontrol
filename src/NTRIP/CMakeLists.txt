@@ -1,11 +1,16 @@
-add_library(NTRIP
+find_package(Qt6 REQUIRED COMPONENTS Core)
+
+qt_add_library(NTRIP STATIC
     NTRIP.cc
     NTRIP.h
 )
 
 target_link_libraries(NTRIP
     PUBLIC
-        qgc
+        Qt6::Core
+        Qt6::Network
+        QGC
+        GPS
 )
 
 target_include_directories(NTRIP
