@@ -32,6 +32,7 @@ SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
     , _batteryIndicatorSettings     (nullptr)
     , _mapsSettings                 (nullptr)
     , _viewer3DSettings             (nullptr)
+    , _gimbalControllerSettings     (nullptr)
 #if !defined(NO_ARDUPILOT_DIALECT)
     , _apmMavlinkStreamRateSettings (nullptr)
 #endif
@@ -67,6 +68,7 @@ void SettingsManager::setToolbox(QGCToolbox *toolbox)
     _batteryIndicatorSettings =     new BatteryIndicatorSettings    (this);
     _mapsSettings =                 new MapsSettings                (this);
     _viewer3DSettings =             new Viewer3DSettings            (this);
+    _gimbalControllerSettings =     new GimbalControllerSettings    (this);
 #if !defined(NO_ARDUPILOT_DIALECT)
     _apmMavlinkStreamRateSettings = new APMMavlinkStreamRateSettings(this);
 #endif

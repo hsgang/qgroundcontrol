@@ -12,7 +12,6 @@ import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.Controllers
 import QGroundControl.MultiVehicleManager
 import QGroundControl.ScreenTools
 import QGroundControl.Palette
@@ -29,20 +28,20 @@ Item {
     property var    gimbalController:       activeVehicle.gimbalController
     property bool   showIndicator:          gimbalController && gimbalController.gimbals.count
     property var    activeGimbal:           gimbalController.activeGimbal
-    property bool   multiGimbalSetup:       gimbalController.gimbals.count > 1
+    property var    multiGimbalSetup:       gimbalController.gimbals.count > 1
 
     property var    margins:                ScreenTools.defaultFontPixelWidth
-    property real   panelRadius:            ScreenTools.defaultFontPixelWidth * 0.5
-    property real   buttonHeight:           height * 1.6
-    property real   separatorHeight:        buttonHeight * 0.9
-    property bool   settingsPanelVisible:   false
+    property var    panelRadius:            ScreenTools.defaultFontPixelWidth * 0.5
+    property var    buttonHeight:           height * 1.6
+    property var    separatorHeight:        buttonHeight * 0.9
+    property var    settingsPanelVisible:   false
 
     // Popup panel, appears when clicking top toolbar gimbal indicator
     Component {
         id: gimbalControlsPopup
 
         Rectangle {
-            width:          mainLayout.width   + mainLayout.anchors.margins * 2
+            width:          mainLayout.width   + mainLayout.anchors.margins * 2          
             height:         mainLayout.height  + mainLayout.anchors.margins * 2
             color:          qgcPal.window
             radius:         panelRadius
@@ -55,13 +54,13 @@ Item {
 
                 // Label indicating the purpose of the panel and active gimbal instance
                 QGCLabel {
-                    text:                   qsTr("Gimbal ") +
-                                                (multiGimbalSetup ? activeGimbal.deviceId.rawValue : "") +
+                    text:                   qsTr("Gimbal ") + 
+                                                (multiGimbalSetup ? activeGimbal.deviceId.rawValue : "") + 
                                                     qsTr("<br> Controls")
 
                     font.pointSize:         ScreenTools.smallFontPointSize
                     Layout.preferredWidth:  buttonHeight * 1.1
-                    font.weight:            Font.Medium
+                    font.weight:            Font.DemiBold
                 }
 
                 // These are simple buttons that can be grouped on this Repeater
@@ -87,8 +86,8 @@ Item {
                            {"pointHome":    function(){ activeVehicle.guidedModeROI(activeVehicle.homePosition) }       },
                            {"retract":      function(){ gimbalController.toggleGimbalRetracted(true) }                  },
                            // This button changes its action depending on gimbal being under control or not
-                           {"acqControl":   function(){ simpleGimbalButtonsRepeater.hasControl ?
-                                                            gimbalController.releaseGimbalControl() :
+                           {"acqControl":   function(){ simpleGimbalButtonsRepeater.hasControl ? 
+                                                            gimbalController.releaseGimbalControl() : 
                                                                 gimbalController.acquireGimbalControl() }               }
                         ]
 
@@ -96,8 +95,8 @@ Item {
                         Layout.preferredHeight: buttonHeight
                         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                         text: modelData.text
+                        fontWeight: Font.DemiBold
                         visible: modelData.visible
-                        fontWeight: Font.Medium
                         pointSize: ScreenTools.smallFontPointSize
                         backRadius: panelRadius * 0.5
                         onClicked: {
@@ -126,7 +125,7 @@ Item {
                     font.pointSize:         ScreenTools.smallFontPointSize
                     Layout.preferredWidth:  buttonHeight * 1.1
                     Layout.leftMargin:      margins
-                    font.weight:            Font.Medium
+                    font.weight:            Font.DemiBold
                     visible:                multiGimbalSetup
                 }
                 QGCButton {
@@ -135,7 +134,7 @@ Item {
                     Layout.preferredHeight: buttonHeight
                     Layout.alignment:       Qt.AlignHCenter | Qt.AlignBottom
                     text:                   qsTr("Select <br> Gimbal")
-                    fontWeight:             Font.Medium
+                    fontWeight:             Font.DemiBold
                     pointSize:              ScreenTools.smallFontPointSize
                     backRadius:             panelRadius * 0.5
                     visible:                multiGimbalSetup
@@ -151,7 +150,7 @@ Item {
                         color:                      qgcPal.window
                         visible:                    gimbalSelectorPanel.visible
                     }
-
+                    
                     Rectangle {
                         id:                         gimbalSelectorPanel
                         width:                      buttonHeight + margins * 2
@@ -188,7 +187,7 @@ Item {
                                     Layout.preferredWidth:  Layout.preferredHeight
                                     Layout.preferredHeight: buttonHeight
                                     Layout.alignment:       Qt.AlignHCenter | Qt.AlignVCenter
-                                    fontWeight:             Font.Medium
+                                    fontWeight:             Font.DemiBold
                                     pointSize:              ScreenTools.smallFontPointSize
                                     backRadius:             panelRadius * 0.5
                                     text:                   qsTr("Gimbal ") + object.deviceId.rawValue
@@ -212,7 +211,7 @@ Item {
                 }
 
                 // Show settings button. It is thought for persisting popup close actions, hence the visibility
-                // based on a _root.settingsPanelVisible It is interesting as users calibrating onscreen controls
+                // based on a _root.settingsPanelVisible It is interesting as users calibrating onscreen controls 
                 // will be testing and adjusting these frequently, so this way it is handier for them
                 QGCButton {
                     id:                     extendedOptionsButton
@@ -221,7 +220,7 @@ Item {
                     Layout.preferredHeight: buttonHeight
                     Layout.alignment:       Qt.AlignHCenter | Qt.AlignBottom
                     text:                   qsTr("Settings")
-                    fontWeight:             Font.Medium
+                    fontWeight:             Font.DemiBold
                     pointSize:              ScreenTools.smallFontPointSize
                     backRadius:             panelRadius * 0.5
                     checkable:              true
@@ -355,57 +354,35 @@ Item {
     }
 
     // Telemetry and status indicator
-    // GridLayout {
-    //     id:                        gimbalTelemetryLayout
-    //     anchors.left:              gimbalIndicatorIcon.right
-    //     anchors.leftMargin:        margins
-    //     anchors.verticalCenter:    parent.verticalCenter
-    //     columns:                   2
-    //     rows:                      2
-    //     rowSpacing:                0
-    //     columnSpacing:             margins
-    //     property bool showAzimuth: QGroundControl.settingsManager.gimbalControllerSettings.toolbarIndicatorShowAzimuth.rawValue
+    GridLayout {
+        id:                        gimbalTelemetryLayout
+        anchors.left:              gimbalIndicatorIcon.right
+        anchors.leftMargin:        margins
+        anchors.verticalCenter:    parent.verticalCenter
+        columns:                   2
+        rows:                      2
+        rowSpacing:                0
+        columnSpacing:             margins
+        property bool showAzimuth: QGroundControl.settingsManager.gimbalControllerSettings.toolbarIndicatorShowAzimuth.rawValue
 
-    //     QGCLabel {
-    //         id:                     statusLabel
-    //         text:                   activeGimbal && activeGimbal.retracted ?
-    //                                     qsTr("Retracted") :
-    //                                     (activeGimbal && activeGimbal.yawLock ? qsTr("Yaw locked") : qsTr("Yaw follow"))
-    //         Layout.columnSpan:      2
-    //         Layout.alignment:       Qt.AlignHCenter
-    //     }
-    //     QGCLabel {
-    //         id:                     pitchLabel
-    //         text:                   activeGimbal ? qsTr("P: ") + activeGimbal.absolutePitch.rawValue.toFixed(1) : ""
-    //     }
-    //     QGCLabel {
-    //         id:                     panLabel
-    //         text:                   activeGimbal ?
-    //                                     gimbalTelemetryLayout.showAzimuth ? (qsTr("Az: ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
-    //                                         (qsTr("Y: ") + activeGimbal.bodyYaw.rawValue.toFixed(1)) :
-    //                                             ""
-    //     }
-    // }
-
-    Column {
-        id:                         gimbalTelemetryLayout
-        anchors.left:               gimbalIndicatorIcon.right
-        anchors.leftMargin:         margins
-        anchors.verticalCenter:     parent.verticalCenter
-        property bool showAzimuth:  QGroundControl.settingsManager.gimbalControllerSettings.toolbarIndicatorShowAzimuth.rawValue
-
+        QGCLabel {
+            id:                     statusLabel
+            text:                   activeGimbal && activeGimbal.retracted ? 
+                                        qsTr("Retracted") :
+                                        (activeGimbal && activeGimbal.yawLock ? qsTr("Yaw locked") : qsTr("Yaw follow"))
+            Layout.columnSpan:      2
+            Layout.alignment:       Qt.AlignHCenter
+        }
         QGCLabel {
             id:                     pitchLabel
             text:                   activeGimbal ? qsTr("P: ") + activeGimbal.absolutePitch.rawValue.toFixed(1) : ""
-            font.pointSize: ScreenTools.smallFontPointSize
         }
         QGCLabel {
             id:                     panLabel
-            text:                   activeGimbal ?
+            text:                   activeGimbal ? 
                                         gimbalTelemetryLayout.showAzimuth ? (qsTr("Az: ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
                                             (qsTr("Y: ") + activeGimbal.bodyYaw.rawValue.toFixed(1)) :
                                                 ""
-            font.pointSize: ScreenTools.smallFontPointSize
         }
     }
 

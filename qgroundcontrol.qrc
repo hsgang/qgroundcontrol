@@ -91,6 +91,7 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewVideoSiYiController.qml">src/FlightDisplay/FlyViewVideoSiYiController.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewVideoSiYiControllerAiSettings.qml">src/FlightDisplay/FlyViewVideoSiYiControllerAiSettings.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewWeatherWidget.qml">src/FlightDisplay/FlyViewWeatherWidget.qml</file>
+        <file alias="QGroundControl/FlightDisplay/OnScreenGimbalController.qml">src/FlightDisplay/OnScreenGimbalController.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewWidgetLayer.qml">src/FlightDisplay/FlyViewWidgetLayer.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewWindvane.qml">src/FlightDisplay/FlyViewWindvane.qml</file>
         <file alias="QGroundControl/FlightDisplay/GripperMenu.qml">src/FlightDisplay/GripperMenu.qml</file>
@@ -479,7 +480,14 @@
         <file alias="Vehicle/LandingTargetFactGroup.json">src/Vehicle/LandingTargetFactGroup.json</file>
         <file alias="Vehicle/TunnelingDataFact.json">src/Vehicle/TunnelingDataFact.json</file>
         <file alias="Vehicle/WinchStatusFactGroup.json">src/Vehicle/WinchStatusFactGroup.json</file>
+        <file alias="Vehicle/HygrometerFact.json">src/Vehicle/FactGroups/HygrometerFact.json</file>
+        <file alias="Vehicle/GeneratorFact.json">src/Vehicle/FactGroups/GeneratorFact.json</file>
+        <file alias="Vehicle/EFIFact.json">src/Vehicle/FactGroups/EFIFact.json</file>
         <file alias="Vehicle/GimbalFact.json">src/Gimbal/GimbalFact.json</file>
+        <file alias="Video.SettingsGroup.json">src/Settings/Video.SettingsGroup.json</file>
+        <file alias="VTOLLandingPattern.FactMetaData.json">src/MissionManager/VTOLLandingPattern.FactMetaData.json</file>
+        <file alias="Viewer3D.SettingsGroup.json">src/Settings/Viewer3D.SettingsGroup.json</file>
+        <file alias="GimbalController.SettingsGroup.json">src/Settings/GimbalController.SettingsGroup.json</file>
     </qresource>
     <qresource prefix="/MockLink">
         <file alias="APMArduSubMockLink.params">src/Comms/MockLink/APMArduSubMockLink.params</file>

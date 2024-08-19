@@ -108,7 +108,7 @@ VideoManager::setToolbox(QGCToolbox *toolbox)
     QStringList args = _app->arguments();
     const size_t argc = args.size();
     char** argv = new char*[argc];
-    for (size_t i = 0; i < argc; i++) {
+    for (qsizetype i = 0; i < argc; i++) {
         argv[i] = args[i].toUtf8().data();
     }
     GStreamer::initialize(argc, argv, gstDebugLevel);

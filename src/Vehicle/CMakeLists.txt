@@ -54,6 +54,7 @@ target_link_libraries(Vehicle
         Qt6::Positioning
         Comms
         FactSystem
+        Gimbal
         LibEventsWrapper
         MAVLink
         MissionManager

@@ -1,40 +1,40 @@
 {
     "version":      1,
-    "fileType":  "FactMetaData",
+    "fileType":     "FactMetaData",
     "QGC.MetaData.Facts":
 [
 {
-    "name":              "EnableOnScreenControl",
-    "shortDesc":         "Enable on Screen Camera Control",
-    "type":              "bool",
-    "default":           false,
-    "qgcRebootRequired": true
+    "name":             "gimbalRoll",
+    "shortDesc":        "Gimbal Roll",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "units":            "deg"
 },
 {
-    "name":              "ControlType",
-    "shortDesc":         "Type of on-screen control",
-    "type":              "uint32",
-    "enumStrings":       "Click to point(FOV needed), click and drag(speed based)",
-    "enumValues":        "0, 1",
-    "default":           0
+    "name":             "gimbalPitch",
+    "shortDesc":        "Gimbal Pitch",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "units":            "deg"
 },
 {
-    "name":              "CameraVFov",
-    "shortDesc":         "Vertical camera field of view",
-    "type":              "uint32",
-    "default":           70
+    "name":             "gimbalYaw",
+    "shortDesc":        "Gimbal Yaw",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "units":            "deg"
 },
 {
-    "name":              "CameraHFov",
-    "shortDesc":         "Horizontal camera field of view",
-    "type":              "uint32",
-    "default":           70
+    "name":             "gimbalAzimuth",
+    "shortDesc":        "Azimuth",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "units":            "deg"
 },
 {
-    "name":              "CameraSlideSpeed",
-    "shortDesc":         "Camera max speed on click and drag (deg/sec)",
-    "type":              "uint32",
-    "default":           30
+    "name":             "deviceId",
+    "shortDesc":        "gimbal device Id",
+    "type":             "uint8"
 }
 ]
 }

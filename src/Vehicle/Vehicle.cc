@@ -52,6 +52,7 @@
 #include <DeviceInfo.h>
 #include <StatusTextHandler.h>
 #include <MAVLinkSigning.h>
+#include "GimbalController.h"
 
 #ifdef CONFIG_UTM_ADAPTER
 #include "UTMSPVehicle.h"
@@ -406,6 +407,8 @@ void Vehicle::_commonInit()
 
     // enable Joystick if appropriate
     _loadJoystickSettings();
+
+    _gimbalController = new GimbalController(_mavlink, this);
 }
 
 Vehicle::~Vehicle()
@@ -421,6 +424,8 @@ Vehicle::~Vehicle()
 #ifdef CONFIG_UTM_ADAPTER
     delete _utmspVehicle;
 #endif
+
+    deleteGimbalController();
 }
 
 void Vehicle::prepareDelete()
@@ -438,6 +443,22 @@ void Vehicle::prepareDelete()
         qApp->processEvents();
     }
 #endif
+}
+
+void Vehicle::deleteCameraManager()
+{
+    if(_cameraManager) {
+        delete _cameraManager;
+        _cameraManager = nullptr;
+    }
+}
+
+void Vehicle::deleteGimbalController()
+{
+    if (_gimbalController) {
+        delete _gimbalController;
+        _gimbalController = nullptr;
+    }
 }
 
 void Vehicle::_offlineFirmwareTypeSettingChanged(QVariant varFirmwareType)
@@ -617,9 +638,6 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         break;
     case MAVLINK_MSG_ID_PING:
         _handlePing(link, message);
-        break;
-    case MAVLINK_MSG_ID_MOUNT_ORIENTATION:
-        _handleGimbalOrientation(message);
         break;
     case MAVLINK_MSG_ID_OBSTACLE_DISTANCE:
         _handleObstacleDistance(message);
@@ -2241,7 +2259,7 @@ void Vehicle::guidedModeROI(const QGeoCoordinate& centerCoord)
         return;
     }
     // Sanity check Ardupilot. Max altitude processed is 83000
-    if (apmFirmware()) { 
+    if (apmFirmware()) {
         if ((centerCoord.altitude() >= 83000) || (centerCoord.altitude() <= -83000  )) {
             return;
         }
@@ -2276,6 +2294,8 @@ void Vehicle::guidedModeROI(const QGeoCoordinate& centerCoord)
                     static_cast<float>(centerCoord.longitude()),
                     static_cast<float>(centerCoord.altitude()));
     }
+    // This is picked by qml to display coordinate over map
+    emit roiCoordChanged(centerCoord);
 }
 
 void Vehicle::stopGuidedModeROI()
@@ -2484,7 +2504,8 @@ bool Vehicle::isMavCommandPending(int targetCompId, MAV_CMD command)
 {
     bool pending = ((-1) < _findMavCommandListEntryIndex(targetCompId, command));
     // qDebug() << "Pending target: " << targetCompId << ", command: " << (int)command << ", pending: " << (pending ? "yes" : "no");
-    return pending;}
+    return pending;
+}
 
 int Vehicle::_findMavCommandListEntryIndex(int targetCompId, MAV_CMD command)
 {
@@ -3843,69 +3864,6 @@ void Vehicle::_altitudeAboveTerrainReceived(bool success, QList<double> heights)
     _altitudeAboveTerrTerrainAtCoordinateQuery = nullptr;
 }
 
-void Vehicle::gimbalControlValue(double pitch, double yaw)
-{
-    //qDebug() << "Gimbal:" << pitch << yaw;
-    sendMavCommand(
-        _defaultComponentId,
-        MAV_CMD_DO_MOUNT_CONTROL,
-        false,                               // show errors
-        static_cast<float>(pitch),           // Pitch 0 - 90
-        0,                                   // Roll (not used)
-        static_cast<float>(yaw),             // Yaw -180 - 180
-        0,                                   // Altitude (not used)
-        0,                                   // Latitude (not used)
-        0,                                   // Longitude (not used)
-        MAV_MOUNT_MODE_MAVLINK_TARGETING);   // MAVLink Roll,Pitch,Yaw
-}
-
-void Vehicle::gimbalPitchStep(int direction)
-{
-    if(_haveGimbalData) {
-        //qDebug() << "Pitch:" << _curGimbalPitch << direction << (_curGimbalPitch + direction);
-        double p = static_cast<double>(_curGimbalPitch + direction);
-        gimbalControlValue(p, static_cast<double>(_curGimbalYaw));
-    }
-}
-
-void Vehicle::gimbalYawStep(int direction)
-{
-    if(_haveGimbalData) {
-        //qDebug() << "Yaw:" << _curGimbalYaw << direction << (_curGimbalYaw + direction);
-        double y = static_cast<double>(_curGimbalYaw + direction);
-        gimbalControlValue(static_cast<double>(_curGimbalPitch), y);
-    }
-}
-
-void Vehicle::centerGimbal()
-{
-    if(_haveGimbalData) {
-        gimbalControlValue(0.0, 0.0);
-    }
-}
-
-void Vehicle::_handleGimbalOrientation(const mavlink_message_t& message)
-{
-    mavlink_mount_orientation_t o;
-    mavlink_msg_mount_orientation_decode(&message, &o);
-    if(fabsf(_curGimbalRoll - o.roll) > 0.5f) {
-        _curGimbalRoll = o.roll;
-        emit gimbalRollChanged();
-    }
-    if(fabsf(_curGimbalPitch - o.pitch) > 0.5f) {
-        _curGimbalPitch = o.pitch;
-        emit gimbalPitchChanged();
-    }
-    if(fabsf(_curGimbalYaw - o.yaw) > 0.5f) {
-        _curGimbalYaw = o.yaw;
-        emit gimbalYawChanged();
-    }
-    if(!_haveGimbalData) {
-        _haveGimbalData = true;
-        emit gimbalDataChanged();
-    }
-}
-
 void Vehicle::_handleObstacleDistance(const mavlink_message_t& message)
 {
     mavlink_obstacle_distance_t o;
@@ -3949,6 +3907,7 @@ void Vehicle::_handleFenceStatus(const mavlink_message_t& message)
         lastUpdate = now;
     }
 }
+
 void Vehicle::updateFlightDistance(double distance)
 {
     _flightDistanceFact.setRawValue(_flightDistanceFact.rawValue().toDouble() + distance);

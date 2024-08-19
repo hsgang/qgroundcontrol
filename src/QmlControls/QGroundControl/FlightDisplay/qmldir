@@ -70,3 +70,4 @@ SIYICameraControl               1.0 SIYICameraControl.qml
 FlyViewWindvane                 1.0 FlyViewWindvane.qml
 FlyViewEscStatus                1.0 FlyViewEscStatus.qml
 FlyViewEscIndicator             1.0 FlyViewEscIndicator.qml
+OnScreenGimbalController        1.0 OnScreenGimbalController.qml
