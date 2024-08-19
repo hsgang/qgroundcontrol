@@ -200,15 +200,16 @@ void PlanMasterController::_activeVehicleChanged(Vehicle* activeVehicle)
 
 void PlanMasterController::loadFromVehicle(void)
 {
-    SharedLinkInterfacePtr sharedLink = _managerVehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _managerVehicle->vehicleLinkManager()->primaryLink();
+    if (weakLink.expired()) {
+        // Vehicle is shutting down
+        return;
+    } else {
+        SharedLinkInterfacePtr sharedLink = weakLink.lock();
         if (sharedLink->linkConfiguration()->isHighLatency()) {
             qgcApp()->showAppMessage(tr("Download not supported on high latency links."));
             return;
         }
-    } else {
-        // Vehicle is shutting down
-        return;
     }
 
     if (offline()) {
@@ -304,15 +305,16 @@ void PlanMasterController::_sendRallyPointsComplete(void)
 
 void PlanMasterController::sendToVehicle(void)
 {
-    SharedLinkInterfacePtr sharedLink = _managerVehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _managerVehicle->vehicleLinkManager()->primaryLink();
+    if (weakLink.expired()) {
+        // Vehicle is shutting down
+        return;
+    } else {
+        SharedLinkInterfacePtr sharedLink = weakLink.lock();
         if (sharedLink->linkConfiguration()->isHighLatency()) {
             qgcApp()->showAppMessage(tr("Upload not supported on high latency links."));
             return;
         }
-    } else {
-        // Vehicle is shutting down
-        return;
     }
 
     if (offline()) {

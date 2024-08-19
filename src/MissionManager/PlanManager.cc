@@ -18,8 +18,7 @@
 QGC_LOGGING_CATEGORY(PlanManagerLog, "PlanManagerLog")
 
 PlanManager::PlanManager(Vehicle* vehicle, MAV_MISSION_TYPE planType)
-    : QObject                   (vehicle)
-    , _vehicle                  (vehicle)
+    : _vehicle                  (vehicle)
     , _missionCommandTree       (qgcApp()->toolbox()->missionCommandTree())
     , _planType                 (planType)
     , _ackTimeoutTimer          (nullptr)
@@ -103,9 +102,10 @@ void PlanManager::_writeMissionCount(void)
 {
     qCDebug(PlanManagerLog) << QStringLiteral("_writeMissionCount %1 count:_retryCount").arg(_planTypeString()) << _writeMissionItems.count() << _retryCount;
 
-    SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
         mavlink_message_t       message;
+        SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
         mavlink_msg_mission_count_pack_chan(
             qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
@@ -151,9 +151,11 @@ void PlanManager::_requestList(void)
     _itemIndicesToRead.clear();
     _clearMissionItems();
 
-    SharedLinkInterfacePtr  sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink){
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
         mavlink_message_t       message;
+        SharedLinkInterfacePtr  sharedLink = weakLink.lock();
+
         mavlink_msg_mission_request_list_pack_chan(qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
                                                    qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
                                                    sharedLink->mavlinkChannel(),
@@ -292,8 +294,9 @@ void PlanManager::_readTransactionComplete(void)
 {
     qCDebug(PlanManagerLog) << "_readTransactionComplete read sequence complete";
     
-    SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
+        SharedLinkInterfacePtr  sharedLink = weakLink.lock();
         mavlink_message_t       message;
 
         mavlink_msg_mission_ack_pack_chan(
@@ -356,8 +359,9 @@ void PlanManager::_requestNextMissionItem(void)
 
     qCDebug(PlanManagerLog) << QStringLiteral("_requestNextMissionItem %1 sequenceNumber:retry").arg(_planTypeString()) << _itemIndicesToRead[0] << _retryCount;
 
-    SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
+        SharedLinkInterfacePtr  sharedLink = weakLink.lock();
         mavlink_message_t       message;
 
         mavlink_msg_mission_request_int_pack_chan(qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
@@ -525,9 +529,10 @@ void PlanManager::_handleMissionRequest(const mavlink_message_t& message)
     MissionItem* item = _writeMissionItems[missionRequestSeq];
     qCDebug(PlanManagerLog) << QStringLiteral("_handleMissionRequest %1 sequenceNumber:command").arg(_planTypeString()) << missionRequestSeq << item->command();
 
-    SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
         mavlink_message_t       messageOut;
+        SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
         mavlink_msg_mission_item_int_pack_chan(qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
                                                qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
@@ -875,9 +880,10 @@ void PlanManager::_removeAllWorker(void)
 
     _connectToMavlink();
 
-    SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
         mavlink_message_t       message;
+        SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
         mavlink_msg_mission_clear_all_pack_chan(qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
                                                 qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),

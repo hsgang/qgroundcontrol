@@ -457,8 +457,6 @@ public:
     /// Save the joystick enable setting to the settings group
     Q_INVOKABLE void saveJoystickSettings(void);
 
-    Q_INVOKABLE void sendSetupSigning();
-
     bool    isInitialConnectComplete() const;
     bool    guidedModeSupported     () const;
     bool    pauseVehicleSupported   () const;
@@ -1000,6 +998,7 @@ private slots:
     void _doSetHomeTerrainReceived          (bool success, QList<double> heights);
     void _updateAltAboveTerrain             ();
     void _altitudeAboveTerrainReceived      (bool sucess, QList<double> heights);
+    void _sendSetupSigning                  ();
 
 private:
     void _loadJoystickSettings          ();

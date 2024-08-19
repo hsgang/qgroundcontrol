@@ -275,11 +275,6 @@ void SerialLink::_emitLinkError(const QString& errorMsg)
     emit communicationError(tr("Link Error"), msg.arg(m_config->name()).arg(errorMsg));
 }
 
-bool SerialLink::isSecureConnection()
-{
-    return _serialConfig && _serialConfig->usbDirect();
-}
-
 //--------------------------------------------------------------------------
 //-- SerialConfiguration
 

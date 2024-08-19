@@ -98,9 +98,8 @@ public:
     virtual ~UDPLink();
 
     // LinkInterface overrides
-    bool isConnected        (void) const override;
-    void disconnect         (void) override;
-    bool isSecureConnection (void) override;
+    bool isConnected(void) const override;
+    void disconnect (void) override;
 
     // QThread overrides
     void run(void) override;

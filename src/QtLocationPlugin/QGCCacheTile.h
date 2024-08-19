@@ -21,16 +21,16 @@ public:
     ~QGCCacheTile() = default;
 
     quint64 tileSet() const { return m_tileSet; }
-    const QString &hash() const { return m_hash; }
-    const QByteArray &img() const { return m_img; }
-    const QString &format() const { return m_format; }
-    const QString &type() const { return m_type; }
+    QString hash() const { return m_hash; }
+    QByteArray img() const { return m_img; }
+    QString format() const { return m_format; }
+    QString type() const { return m_type; }
 
 private:
-    const quint64 m_tileSet = 0;
-    const QString m_hash;
-    const QByteArray m_img;
-    const QString m_format;
-    const QString m_type;
+    quint64 m_tileSet = 0;
+    QString m_hash;
+    QByteArray m_img;
+    QString m_format;
+    QString m_type;
 };
 Q_DECLARE_METATYPE(QGCCacheTile)

@@ -140,8 +140,10 @@ QGCCameraParamIO::sendParameter(bool updateUI)
 void
 QGCCameraParamIO::_sendParameter()
 {
-    SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
+        SharedLinkInterfacePtr sharedLink = weakLink.lock();
+
         mavlink_param_ext_set_t p;
         memset(&p, 0, sizeof(mavlink_param_ext_set_t));
         param_ext_union_t   union_value;
@@ -362,8 +364,10 @@ QGCCameraParamIO::paramRequest(bool reset)
         _forceUIUpdate  = true;
     }
     qCDebug(CameraIOLog) << "Request parameter:" << _fact->name();
-    SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
+        SharedLinkInterfacePtr sharedLink = weakLink.lock();
+
         char param_id[MAVLINK_MSG_PARAM_EXT_REQUEST_READ_FIELD_PARAM_ID_LEN + 1];
         memset(param_id, 0, sizeof(param_id));
         strncpy(param_id, _fact->name().toStdString().c_str(), MAVLINK_MSG_PARAM_EXT_REQUEST_READ_FIELD_PARAM_ID_LEN);

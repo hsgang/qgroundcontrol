@@ -11,7 +11,6 @@
 #include "QGCApplication.h"
 #include "SettingsManager.h"
 #include "AutoConnectSettings.h"
-#include "DeviceInfo.h"
 
 #include <QtCore/QList>
 #include <QtCore/QMutexLocker>
@@ -303,11 +302,6 @@ void UDPLink::_deregisterZeroconf()
         _dnssServiceRef = NULL;
     }
 #endif
-}
-
-bool UDPLink::isSecureConnection()
-{
-    return QGCDeviceInfo::isNetworkWired();
 }
 
 //--------------------------------------------------------------------------

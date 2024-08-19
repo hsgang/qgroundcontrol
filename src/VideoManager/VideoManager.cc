@@ -696,7 +696,7 @@ VideoManager::_updateSettings(signed id)
                             _toolbox->settingsManager()->videoSettings()->videoSource()->setRawValue(VideoSettings::videoSourceUDPH264);
                         }
                         break;
-                    case VIDEO_STREAM_TYPE_MPEG_TS:
+                    case VIDEO_STREAM_TYPE_MPEG_TS_H264:
                         if ((settingsChanged |= _updateVideoUri(id, QStringLiteral("mpegts://0.0.0.0:%1").arg(pInfo->uri())))) {
                             _toolbox->settingsManager()->videoSettings()->videoSource()->setRawValue(VideoSettings::videoSourceMPEGTS);
                         }
@@ -717,7 +717,7 @@ VideoManager::_updateSettings(signed id)
                         case VIDEO_STREAM_TYPE_RTPUDP:
                             settingsChanged |= _updateVideoUri(id, QStringLiteral("udp://0.0.0.0:%1").arg(pTinfo->uri()));
                             break;
-                        case VIDEO_STREAM_TYPE_MPEG_TS:
+                        case VIDEO_STREAM_TYPE_MPEG_TS_H264:
                             settingsChanged |= _updateVideoUri(id, QStringLiteral("mpegts://0.0.0.0:%1").arg(pTinfo->uri()));
                             break;
                         default:

@@ -46,7 +46,6 @@ void QGCMapPolylineTest::init(void)
 
 void QGCMapPolylineTest::cleanup(void)
 {
-    UnitTest::cleanup();
     delete _mapPolyline;
     delete _multiSpyPolyline;
     delete _multiSpyModel;

@@ -71,9 +71,8 @@ public:
     void        signalBytesWritten  (void);
 
     // LinkInterface overrides
-    bool isConnected        (void) const override;
-    void disconnect         (void) override;
-    bool isSecureConnection (void) override;
+    bool isConnected(void) const override;
+    void disconnect (void) override;
 
 private slots:
     void _socketError   (QAbstractSocket::SocketError socketError);

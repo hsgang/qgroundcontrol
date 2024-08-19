@@ -11,8 +11,6 @@
 #include "QGCPalette.h"
 #include "QGCApplication.h"
 #include "QGCMAVLink.h"
-#include "QGCToolbox.h"
-#include "LinkManager.h"
 
 #ifdef Q_OS_ANDROID
 #include "AndroidInterface.h"
@@ -183,6 +181,8 @@ DECLARE_SETTINGSFACT(AppSettings, enableSiyiSDK)
 DECLARE_SETTINGSFACT(AppSettings, forwardMavlinkAPMSupportHostName)
 DECLARE_SETTINGSFACT(AppSettings, loginAirLink)
 DECLARE_SETTINGSFACT(AppSettings, passAirLink)
+DECLARE_SETTINGSFACT(AppSettings, mavlink2Signing)
+DECLARE_SETTINGSFACT(AppSettings, mavlink2SigningKey)
 
 DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, indoorPalette)
 {
@@ -237,15 +237,6 @@ DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, qLocaleLanguage)
     return _qLocaleLanguageFact;
 }
 
-DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, mavlink2SigningKey)
-{
-    if (!_mavlink2SigningKeyFact) {
-        _mavlink2SigningKeyFact = _createSettingsFact(mavlink2SigningKeyName);
-        connect(_mavlink2SigningKeyFact, &Fact::rawValueChanged, this, &AppSettings::_mavlink2SigningKeyChanged);
-    }
-    return _mavlink2SigningKeyFact;
-}
-
 void AppSettings::_qLocaleLanguageChanged()
 {
     qgcApp()->setLanguage();
@@ -273,11 +264,6 @@ void AppSettings::_checkSavePathDirectories(void)
 void AppSettings::_indoorPaletteChanged(void)
 {
     QGCPalette::setGlobalTheme(indoorPalette()->rawValue().toBool() ? QGCPalette::Dark : QGCPalette::Light);
-}
-
-void AppSettings::_mavlink2SigningKeyChanged(void)
-{
-    qgcApp()->toolbox()->linkManager()->resetMavlinkSigning();
 }
 
 QString AppSettings::missionSavePath(void)

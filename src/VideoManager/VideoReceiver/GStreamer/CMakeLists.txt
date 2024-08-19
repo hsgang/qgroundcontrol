@@ -1,4 +1,4 @@
-add_subdirectory(qmlglsink)
+add_subdirectory(${CMAKE_SOURCE_DIR}/libs/qmlglsink qmlglsink.build)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Quick)
 

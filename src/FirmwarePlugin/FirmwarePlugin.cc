@@ -1149,10 +1149,11 @@ QString FirmwarePlugin::gotoFlightMode(void) const
 
 void FirmwarePlugin::sendGCSMotionReport(Vehicle* vehicle, FollowMe::GCSMotionReport& motionReport, uint8_t estimationCapabilities)
 {
-    SharedLinkInterfacePtr sharedLink = vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
         MAVLinkProtocol*        mavlinkProtocol = qgcApp()->toolbox()->mavlinkProtocol();
         mavlink_follow_target_t follow_target   = {};
+        SharedLinkInterfacePtr  sharedLink      = weakLink.lock();
 
         follow_target.timestamp =           qgcApp()->msecsSinceBoot();
         follow_target.est_capabilities =    estimationCapabilities;

@@ -458,9 +458,10 @@ void APMSensorsComponentController::cancelCalibration(void)
 
 void APMSensorsComponentController::nextClicked(void)
 {
-    SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
         mavlink_message_t       msg;
+        SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
         mavlink_msg_command_ack_pack_chan(qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),
                                           qgcApp()->toolbox()->mavlinkProtocol()->getComponentId(),
@@ -493,11 +494,12 @@ bool APMSensorsComponentController::accelSetupNeeded(void) const
 
 bool APMSensorsComponentController::usingUDPLink(void)
 {
-    SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
-        return sharedLink->linkConfiguration()->type() == LinkConfiguration::TypeUdp;
-    } else {
+    WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+    if (weakLink.expired()) {
         return false;
+    } else {
+        SharedLinkInterfacePtr sharedLink = weakLink.lock();
+        return sharedLink->linkConfiguration()->type() == LinkConfiguration::TypeUdp;
     }
 }
 

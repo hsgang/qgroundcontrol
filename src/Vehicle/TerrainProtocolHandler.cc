@@ -139,9 +139,10 @@ void TerrainProtocolHandler::_sendTerrainData(const QGeoCoordinate& swCorner, ui
                 terrainData[altIndex++] = static_cast<int16_t>(altitude);
             }
 
-            SharedLinkInterfacePtr sharedLink = _vehicle->vehicleLinkManager()->primaryLink().lock();
-            if (sharedLink) {
+            WeakLinkInterfacePtr weakLink = _vehicle->vehicleLinkManager()->primaryLink();
+            if (!weakLink.expired()) {
                 mavlink_message_t       msg;
+                SharedLinkInterfacePtr  sharedLink = weakLink.lock();
 
                 mavlink_msg_terrain_data_pack_chan(
                             qgcApp()->toolbox()->mavlinkProtocol()->getSystemId(),

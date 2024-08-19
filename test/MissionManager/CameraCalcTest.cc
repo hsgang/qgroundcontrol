@@ -35,8 +35,6 @@ void CameraCalcTest::init(void)
 
 void CameraCalcTest::cleanup(void)
 {
-    UnitTest::cleanup();
-    
     delete _masterController;
     delete _cameraCalc;
     delete _multiSpy;
