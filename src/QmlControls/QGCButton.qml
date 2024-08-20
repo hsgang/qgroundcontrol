@@ -25,10 +25,8 @@ Button {
     property bool   iconLeft:       false
     property real   backRadius:     ScreenTools.buttonBorderRadius
     property real   heightFactor:   0.5
-    property real   fontWeight:     Font.Normal
     property string iconSource:     ""
     property real   fontWeight:     Font.Normal // default for qml Text
-    property real   pointSize:      ScreenTools.defaultFontPointSize
 
     property alias wrapMode:            text.wrapMode
     property alias horizontalAlignment: text.horizontalAlignment
