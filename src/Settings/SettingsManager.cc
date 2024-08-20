@@ -32,7 +32,6 @@ SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
     , _batteryIndicatorSettings     (nullptr)
     , _mapsSettings                 (nullptr)
     , _viewer3DSettings             (nullptr)
-    , _gimbalControllerSettings     (nullptr)
 #if !defined(NO_ARDUPILOT_DIALECT)
     , _apmMavlinkStreamRateSettings (nullptr)
 #endif
@@ -63,7 +62,6 @@ void SettingsManager::setToolbox(QGCToolbox *toolbox)
     _firmwareUpgradeSettings =      new FirmwareUpgradeSettings     (this);
     _adsbVehicleManagerSettings =   new ADSBVehicleManagerSettings  (this);
     _ntripSettings =                new NTRIPSettings               (this);
-    _gimbalControllerSettings =     new GimbalControllerSettings    (this);
     _batterySettings =              new BatterySettings             (this);
     _batteryIndicatorSettings =     new BatteryIndicatorSettings    (this);
     _mapsSettings =                 new MapsSettings                (this);
