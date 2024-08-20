@@ -41,7 +41,7 @@ Item {
     }
 
     function getMessageColor() {
-        if (_activeVehicle) {
+        if (_activeVehicle && unreadMessageCount > 0) {
             if (_activeVehicle.messageTypeNone)
                 return qgcPal.text //qgcPal.colorGrey
             if (_activeVehicle.messageTypeNormal)
