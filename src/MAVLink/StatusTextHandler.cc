@@ -218,9 +218,9 @@ void StatusTextHandler::handleTextMessage(MAV_COMPONENT compId, MAV_SEVERITY sev
     }
 
     QString compString;
-    if (m_multiComp) {
-        compString = QString(" COMP:%1").arg(compId);
-    }
+    //if (m_multiComp) {
+    compString = QString(" COMP:%1").arg(compId);
+    //}
 
     const QString dateString = QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 
