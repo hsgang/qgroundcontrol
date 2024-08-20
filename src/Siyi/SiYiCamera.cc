@@ -4,6 +4,7 @@
 #include <QtEndian>
 
 #include "SiYiCamera.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(SiYiCameraLog, "SiYiCameraLog")
 

@@ -1,5 +1,6 @@
 ﻿#include <QtEndian>
 #include "SiYiTransmitter.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(SiYiTransmitterLog, "SiYiTransmitterLog")
 

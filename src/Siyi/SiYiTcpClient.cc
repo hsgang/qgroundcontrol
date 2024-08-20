@@ -6,6 +6,7 @@
 
 #include "SiYiCrcApi.h"
 #include "SiYiTcpClient.h"
+#include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(SiYiTcpClientLog, "SiYiTcpClientLog")
 

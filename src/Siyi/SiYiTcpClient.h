@@ -5,7 +5,7 @@
 #include <QThread>
 #include <QVector>
 #include <QTcpSocket>
-#include "QGCLoggingCategory.h"
+#include <QtCore/QLoggingCategory>
 
 #define PROTOCOL_STX 0x5566AABB
 
