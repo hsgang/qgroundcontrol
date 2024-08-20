@@ -44,6 +44,7 @@ add_subdirectory(PositionManager)
 add_subdirectory(QmlControls)
 add_subdirectory(QtLocationPlugin)
 add_subdirectory(Settings)
+add_subdirectory(SiYi)
 add_subdirectory(Terrain)
 # add_subdirectory(UI)
 add_subdirectory(Utilities)
@@ -83,11 +84,13 @@ target_link_libraries(QGC
         Joystick
         MAVLink
         MissionManager
+        NTRIP
         # PlanView
         PositionManager
         QGCLocation
         QmlControls
         Settings
+        SiYi
         Terrain
         # UI
         Utilities

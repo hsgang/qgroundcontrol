@@ -11,6 +11,8 @@ qt_add_library(Settings STATIC
     AutoConnectSettings.h
     BatteryIndicatorSettings.cc
     BatteryIndicatorSettings.h
+    BatterySettings.cc
+    BatterySettings.h
     BrandImageSettings.cc
     BrandImageSettings.h
     CustomMavlinkActionsSettings.cc
@@ -47,6 +49,8 @@ qt_add_library(Settings STATIC
     MapsSettings.h
     Viewer3DSettings.cc
     Viewer3DSettings.h
+    NTRIPSettings.cc
+    NTRIPSettings.h
 )
 
 target_link_libraries(Settings

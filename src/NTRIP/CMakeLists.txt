@@ -1,4 +1,4 @@
-find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core Network Positioning)
 
 qt_add_library(NTRIP STATIC
     NTRIP.cc
@@ -6,9 +6,13 @@ qt_add_library(NTRIP STATIC
 )
 
 target_link_libraries(NTRIP
+    PRIVATE
+        Utilities
+        Settings
     PUBLIC
         Qt6::Core
         Qt6::Network
+        Qt6::Positioning
         QGC
         GPS
 )

@@ -9,6 +9,8 @@ qt_add_library(APMAutoPilotPlugin STATIC
     APMAutoPilotPlugin.h
     APMCameraComponent.cc
     APMCameraComponent.h
+    APMChannelsComponent.cc
+    APMChannelsComponent.h
     APMFlightModesComponent.cc
     APMFlightModesComponent.h
     APMFlightModesComponentController.cc

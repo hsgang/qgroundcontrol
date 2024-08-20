@@ -29,6 +29,20 @@ qt_add_library(Vehicle STATIC
     VehicleLinkManager.h
     VehicleObjectAvoidance.cc
     VehicleObjectAvoidance.h
+    AtmosphericSensorFactGroup.cc
+    AtmosphericSensorFactGroup.h
+    VehicleEKFStatusFactGroup.cc
+    VehicleEKFStatusFactGroup.h
+    VehicleLandingTargetFactGroup.cc
+    VehicleLandingTargetFactGroup.h
+    WinchStatusFactGroup.cc
+    WinchStatusFactGroup.h
+    TunnelingDataFactGroup.cc
+    TunnelingDataFactGroup.h
+    GeneratorStatusFactGroup.cc
+    GeneratorStatusFactGroup.h
+    ExternalPowerStatusFactGroup.cc
+    ExternalPowerStatusFactGroup.h
 )
 
 target_link_libraries(Vehicle

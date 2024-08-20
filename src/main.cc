@@ -30,7 +30,7 @@
 #include "CmdLineOptParser.h"
 
 #ifdef UNITTEST_BUILD
-#include "test/UnitTestList.h"
+#include "UnitTestList.h"
 #endif
 
 #ifdef Q_OS_WIN
