@@ -190,6 +190,7 @@ Item {
                                 QGCLabel{
                                     text:       "[" + model.time + "] - COMP" + model.component
                                     opacity:    0.6
+                                    font.pointSize: ScreenTools.smallFontPointSize
                                 }
                                 QGCLabel {
                                     width:      messageListView.width - ScreenTools.defaultFontPixelHeight
