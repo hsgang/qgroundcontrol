@@ -30,14 +30,22 @@ runs:
       if: github.event_name == 'push'
       working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
       run: |
-        mc config host add minio ${{ inputs.minio_endpoint }} ${{ inputs.minio_access_key }} ${{ inputs.minio_secret_key }}
-        mc cp ${{ inputs.artifact_name }} minio/qgroundcontrol/builds/${{ github.ref_name }}/${{ inputs.artifact_name }} --region ap-northeast-2
+        MINIO_ACCESS_KEY: ${{ inputs.minio_access_key }}
+        MINIO_SECRET_KEY: ${{ inputs.minio_secret_key }}
+        MINIO_ENDPOINT: ${{ inputs.minio_endpoint }}
+        
+        mc alias set minio $MINIO_ENDPOINT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+        mc cp ${{ inputs.artifact_name }} minio/qgroundcontrol/builds/${{ github.ref_name }}/${{ inputs.artifact_name }}
       shell: bash
 
     - name: Upload tagged stable build to Minio latest Bucket
       if: github.event_name == 'push' && github.ref_type == 'tag'
       working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
-      run: |      
-        mc config host add minio ${{ inputs.minio_endpoint }} ${{ inputs.minio_access_key }} ${{ inputs.minio_secret_key }}
-        mc cp ${{ inputs.artifact_name }} minio/qgroundcontrol/latest/${{ inputs.artifact_name }} --region ap-northeast-2
+      run: |
+        MINIO_ACCESS_KEY: ${{ inputs.minio_access_key }}
+        MINIO_SECRET_KEY: ${{ inputs.minio_secret_key }}
+        MINIO_ENDPOINT: ${{ inputs.minio_endpoint }}
+        
+        mc alias set minio $MINIO_ENDPOINT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+        mc cp ${{ inputs.artifact_name }} minio/qgroundcontrol/latest/${{ inputs.artifact_name }}
       shell: bash
