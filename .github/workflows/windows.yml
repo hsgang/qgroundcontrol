@@ -137,7 +137,7 @@ jobs:
         uses: ./.github/actions/upload
         with:
           artifact_name: ${{ env.ARTIFACT }}
-          minio_key_id: ${{ secrets.MINIO_ACCESS_KEY }}
-          minio_secret_access_key: ${{ secrets.MINIO_SECRET_KEY }}
+          minio_access_key: ${{ secrets.MINIO_ACCESS_KEY }}
+          minio_secret_key: ${{ secrets.MINIO_SECRET_KEY }}
           minio_endpoint: ${{ secrets.MINIO_ENDPOINT }}
           source: ''

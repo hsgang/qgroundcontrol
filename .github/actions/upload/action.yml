@@ -4,11 +4,11 @@ inputs:
   artifact_name:
     description: artifact name
     required: true
-  minio_key_id:
-    description: minio key id
+  minio_access_key:
+    description: minio access key
     required: true
-  minio_secret_access_key:
-    description: minio secret access key
+  minio_secret_key:
+    description: minio secret key
     required: true
   minio_endpoint:
     description: minio endpoint
