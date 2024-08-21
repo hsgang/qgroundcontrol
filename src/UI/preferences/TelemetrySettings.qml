@@ -29,7 +29,7 @@ SettingsPage {
     property string _notConnectedStr:           qsTr("Not Connected")
     property bool   _isAPM:                     _activeVehicle ? _activeVehicle.apmFirmware : true
     property bool   _showAPMStreamRates:        QGroundControl.apmFirmwareSupported && _settingsManager.apmMavlinkStreamRateSettings.visible && _isAPM
-    property var    _apmStartMavlinkStreams:   _appSettings.apmStartMavlinkStreams
+    property var    _apmStartMavlinkStreams:    _appSettings.apmStartMavlinkStreams
     property real   _comboBoxPreferredWidth:    ScreenTools.defaultFontPixelWidth * 8
 
 
@@ -148,22 +148,23 @@ SettingsPage {
             property Fact _telemetrySave: _appSettings.telemetrySave
         }
 
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("Save logs even if vehicle was not armed")
-            fact:               _telemetrySaveNotArmed
-            visible:            fact.visible
-            enabled:            _appSettings.telemetrySave.rawValue
-            property Fact _telemetrySaveNotArmed: _appSettings.telemetrySaveNotArmed
-        }
+        // FactCheckBoxSlider {
+        //     Layout.fillWidth:   true
+        //     text:               qsTr("Save logs even if vehicle was not armed")
+        //     fact:               _telemetrySaveNotArmed
+        //     visible:            fact.visible
+        //     enabled:            _appSettings.telemetrySave.rawValue
+        //     property Fact _telemetrySaveNotArmed: _appSettings.telemetrySaveNotArmed
+        // }
 
-        FactCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("Save CSV log of telemetry data")
-            fact:               _saveCsvTelemetry
-            visible:            fact.visible
-            property Fact _saveCsvTelemetry: _appSettings.saveCsvTelemetry
-        }
+        // FactCheckBoxSlider {
+        //     Layout.fillWidth:   true
+        //     text:               qsTr("Save CSV log of telemetry data")
+        //     fact:               _saveCsvTelemetry
+        //     visible:            fact.visible
+        //     property Fact _saveCsvTelemetry: _appSettings.saveCsvTelemetry
+        // }
+
         FactCheckBoxSlider {
             id:                 sensorSaveLog
             Layout.fillWidth:   true
