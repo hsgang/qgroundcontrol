@@ -11,7 +11,7 @@
         <file alias="GeoTagIcon">src/AnalyzeView/GeoTagIcon.svg</file>
         <file alias="LogDownloadIcon">src/AnalyzeView/LogDownloadIcon.svg</file>
         <file alias="MAVLinkInspector">src/AnalyzeView/MAVLinkInspector.svg</file>
-        <file alias="MavlinkConsoleIcon">src/AnalyzeView/MavlinkConsoleIcon.svg</file>
+        <file alias="MavlinkConsoleIcon">src/AnalyzeView/MAVLinkConsoleIcon.svg</file>
         <file alias="VibrationPageIcon">src/AnalyzeView/VibrationPageIcon.png</file>
         <file alias="ForwardingSupportIcon.svg">src/AutoPilotPlugins/APM/Images/ForwardingSupportIcon.svg</file>
         <file alias="ForwardingSupportIconGreen.svg">src/AutoPilotPlugins/APM/Images/ForwardingSupportIconGreen.svg</file>
