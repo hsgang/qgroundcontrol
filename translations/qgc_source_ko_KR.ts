@@ -8811,7 +8811,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="63"/>
         <source>Takeoff from ground and start the current mission.</source>
-        <translation>이륙 후 현재 미션 시작</translation>
+        <translation>이륙 후 자동 경로 비행 시작</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="63"/>
