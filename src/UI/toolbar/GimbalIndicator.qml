@@ -375,10 +375,12 @@ Item {
         }
         QGCLabel {
             id:                     pitchLabel
+            font.pointSize:         ScreenTools.smallFontPointSize
             text:                   activeGimbal ? qsTr("P: ") + activeGimbal.absolutePitch.rawValue.toFixed(1) : ""
         }
         QGCLabel {
             id:                     panLabel
+            font.pointSize:         ScreenTools.smallFontPointSize
             text:                   activeGimbal ? 
                                         gimbalTelemetryLayout.showAzimuth ? (qsTr("Az: ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
                                             (qsTr("Y: ") + activeGimbal.bodyYaw.rawValue.toFixed(1)) :
