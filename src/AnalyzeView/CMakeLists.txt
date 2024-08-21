@@ -29,13 +29,20 @@ qt_add_library(AnalyzeView STATIC
     ULogParser.h
 )
 
-# TODO: https://github.com/PX4/ulog_cpp.git
+include(FetchContent)
+FetchContent_Declare(ulogparser
+    GIT_REPOSITORY https://github.com/PX4/ulog_cpp.git
+    GIT_TAG main
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(ulogparser)
 
 target_link_libraries(AnalyzeView
     PRIVATE
         Qt6::Charts
         Qt6::Gui
         Qt6::Qml
+        ulog_cpp::ulog_cpp
         FactSystem
         QGC
         Settings
@@ -48,7 +55,25 @@ target_link_libraries(AnalyzeView
         QmlControls
 )
 
-target_include_directories(AnalyzeView PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+include(FetchContent)
+FetchContent_Declare(easyexif
+    GIT_REPOSITORY https://github.com/mayanklahiri/easyexif.git
+    GIT_TAG master
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(easyexif)
+
+target_sources(AnalyzeView
+    PRIVATE
+        ${easyexif_SOURCE_DIR}/exif.cpp
+        ${easyexif_SOURCE_DIR}/exif.h
+)
+
+target_include_directories(AnalyzeView 
+    PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${easyexif_SOURCE_DIR}
+)
 
 # qt_add_qml_module(AnalyzeView
 #     URI QGroundControl.AnalyzeView

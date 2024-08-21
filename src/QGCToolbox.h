@@ -21,7 +21,6 @@ class LinkManager;
 class MAVLinkProtocol;
 class MissionCommandTree;
 class MultiVehicleManager;
-class QGCMapEngineManager;
 class QGCApplication;
 class QGCPositionManager;
 class VideoManager;
@@ -50,7 +49,6 @@ public:
     MAVLinkProtocol*            mavlinkProtocol         () { return _mavlinkProtocol; }
     MissionCommandTree*         missionCommandTree      () { return _missionCommandTree; }
     MultiVehicleManager*        multiVehicleManager     () { return _multiVehicleManager; }
-    QGCMapEngineManager*        mapEngineManager        () { return _mapEngineManager; }
     FollowMe*                   followMe                () { return _followMe; }
     QGCPositionManager*         qgcPositionManager      () { return _qgcPositionManager; }
     VideoManager*               videoManager            () { return _videoManager; }
@@ -82,7 +80,6 @@ private:
     MAVLinkProtocol*            _mavlinkProtocol        = nullptr;
     MissionCommandTree*         _missionCommandTree     = nullptr;
     MultiVehicleManager*        _multiVehicleManager    = nullptr;
-    QGCMapEngineManager*        _mapEngineManager       = nullptr;
     FollowMe*                   _followMe               = nullptr;
     QGCPositionManager*         _qgcPositionManager     = nullptr;
     VideoManager*               _videoManager           = nullptr;
