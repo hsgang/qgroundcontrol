@@ -95,6 +95,8 @@ jobs:
         uses: ./.github/actions/upload
         with:
           artifact_name: ${{ env.ARTIFACT }}
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          minio_key_id: ${{ secrets.MINIO_ACCESS_KEY }}
+          minio_secret_access_key: ${{ secrets.MINIO_SECRET_KEY }}
+          minio_endpoint: ${{ secrets.MINIO_ENDPOINT }}
+
           source: ''
