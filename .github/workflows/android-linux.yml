@@ -64,15 +64,6 @@ jobs:
           cd ccache-*-linux-x86_64
           sudo make install
 
-      - name: Install Minio Client
-        run: |
-          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
-          --create-dirs \
-          -o $HOME/minio-binaries/mc
-          chmod +x $HOME/minio-binaries/mc
-          export PATH=$PATH:$HOME/minio-binaries/
-          mc --help
-
       - name: Install Qt for Android
         uses: ./.github/actions/qt-android
         with:
@@ -104,7 +95,6 @@ jobs:
         uses: ./.github/actions/upload
         with:
           artifact_name: ${{ env.ARTIFACT }}
-          minio_access_key: ${{ secrets.MINIO_ACCESS_KEY }}
-          minio_secret_key: ${{ secrets.MINIO_SECRET_KEY }}
-          minio_endpoint: ${{ secrets.MINIO_ENDPOINT }}
+          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           source: ''

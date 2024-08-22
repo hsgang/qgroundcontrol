@@ -4,14 +4,11 @@ inputs:
   artifact_name:
     description: artifact name
     required: true
-  minio_access_key:
-    description: minio access key
+  aws_key_id:
+    description: aws key id
     required: true
-  minio_secret_key:
-    description: minio secret key
-    required: true
-  minio_endpoint:
-    description: minio endpoint
+  aws_secret_access_key:
+    description: aws secret access key
     required: true
   source:
     description: source location
@@ -26,26 +23,20 @@ runs:
         name: ${{ inputs.artifact_name }}
         path: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}/${{ inputs.artifact_name }}
 
-    - name: Upload build to Minio Bucket
+    - name: Upload build to S3 Bucket
       if: github.event_name == 'push'
       working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
-      env:
-        MINIO_ACCESS_KEY: ${{ inputs.minio_access_key }}
-        MINIO_SECRET_KEY: ${{ inputs.minio_secret_key }}
-        MINIO_ENDPOINT: ${{ inputs.minio_endpoint }}
-      run: |       
-        mc alias set minio $MINIO_ENDPOINT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
-        mc cp ${{ inputs.artifact_name }} minio/data/qgroundcontrol/builds/${{ github.ref_name }}/${{ inputs.artifact_name }}
+      run: |
+        aws configure set aws_access_key_id ${{ inputs.aws_key_id }}
+        aws configure set aws_secret_access_key ${{ inputs.aws_secret_access_key }}
+        aws s3 cp ${{ inputs.artifact_name }} s3://qgroundcontrol/builds/${{ github.ref_name }}/${{ inputs.artifact_name }} --region us-west-2 --acl public-read
       shell: bash
 
-    - name: Upload tagged stable build to Minio latest Bucket
+    - name: Upload tagged stable build to S3 latest Bucket
       if: github.event_name == 'push' && github.ref_type == 'tag'
       working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
-      env:
-        MINIO_ACCESS_KEY: ${{ inputs.minio_access_key }}
-        MINIO_SECRET_KEY: ${{ inputs.minio_secret_key }}
-        MINIO_ENDPOINT: ${{ inputs.minio_endpoint }}
       run: |
-        mc alias set minio $MINIO_ENDPOINT $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
-        mc cp ${{ inputs.artifact_name }} minio/data/qgroundcontrol/latest/${{ inputs.artifact_name }}
+        aws configure set aws_access_key_id ${{ inputs.aws_key_id }}
+        aws configure set aws_secret_access_key ${{ inputs.aws_secret_access_key }}
+        aws s3 cp ${{ inputs.artifact_name }} s3://qgroundcontrol/latest/${{ inputs.artifact_name }} --region us-west-2 --acl public-read
       shell: bash
