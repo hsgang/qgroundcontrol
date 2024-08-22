@@ -90,12 +90,12 @@ jobs:
 
       - run: cp ${{ runner.temp }}/shadow_build_dir/android-build/*.apk ${{ runner.temp }}/shadow_build_dir/${{ env.ARTIFACT }}
 
-      # - name: Upload Build File
-      #   if: matrix.BuildType == 'Release'
-      #   uses: ./.github/actions/upload
-      #   with:
-      #     artifact_name: ${{ env.ARTIFACT }}
-      #     minio_access_key: ${{ secrets.MINIO_ACCESS_KEY }}
-      #     minio_secret_key: ${{ secrets.MINIO_SECRET_KEY }}
-      #     minio_endpoint: ${{ secrets.MINIO_ENDPOINT }}
-      #     source: ''
+      - name: Upload Build File
+        if: matrix.BuildType == 'Release'
+        uses: ./.github/actions/upload
+        with:
+          artifact_name: ${{ env.ARTIFACT }}
+          minio_access_key: ${{ secrets.MINIO_ACCESS_KEY }}
+          minio_secret_key: ${{ secrets.MINIO_SECRET_KEY }}
+          minio_endpoint: ${{ secrets.MINIO_ENDPOINT }}
+          source: ''
