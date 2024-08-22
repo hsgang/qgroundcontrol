@@ -54,6 +54,8 @@ jobs:
         run: |
           choco install --no-progress ninja sccache -y
           choco install --no-progress cmake --installargs 'ADD_CMAKE_TO_PATH=System' --apply-install-arguments-to-dependencies
+          choco install --no-progress minio-client -y
+          mc --version
 
       - name: Install Vulkan
         working-directory: ${{ runner.temp }}

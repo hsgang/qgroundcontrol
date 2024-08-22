@@ -64,6 +64,12 @@ jobs:
           cd ccache-*-linux-x86_64
           sudo make install
 
+      - name: Install Minio Client
+        run: |
+          wget https://dl.min.io/client/mc/release/linux-amd64/mc
+          chmod +x mc
+          ./mc --help
+
       - name: Install Qt for Android
         uses: ./.github/actions/qt-android
         with:

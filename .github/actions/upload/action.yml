@@ -26,12 +26,6 @@ runs:
         name: ${{ inputs.artifact_name }}
         path: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}/${{ inputs.artifact_name }}
 
-    - name: Install Minio Client
-      run: |
-        wget https://dl.min.io/client/mc/release/linux-amd64/mc
-        chmod +x mc
-        ./mc --help
-
     - name: Upload build to Minio Bucket
       if: github.event_name == 'push'
       working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
