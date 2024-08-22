@@ -54,7 +54,9 @@ jobs:
         run: |
           choco install --no-progress ninja sccache -y
           choco install --no-progress cmake --installargs 'ADD_CMAKE_TO_PATH=System' --apply-install-arguments-to-dependencies
-          choco install --no-progress minio-client -y
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest -Uri "https://dl.min.io/client/mc/release/windows-amd64/mc.exe" -OutFile "mc.exe"
+          Move-Item -Path "mc.exe" -Destination "C:\Windows\System32\mc.exe"
           mc --version
 
       - name: Install Vulkan

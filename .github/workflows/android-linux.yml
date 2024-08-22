@@ -66,9 +66,12 @@ jobs:
 
       - name: Install Minio Client
         run: |
-          wget https://dl.min.io/client/mc/release/linux-amd64/mc
-          chmod +x mc
-          ./mc --help
+          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+          --create-dirs \
+          -o $HOME/minio-binaries/mc
+          chmod +x $HOME/minio-binaries/mc
+          export PATH=$PATH:$HOME/minio-binaries/
+          mc --help
 
       - name: Install Qt for Android
         uses: ./.github/actions/qt-android
