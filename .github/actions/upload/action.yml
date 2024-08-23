@@ -53,14 +53,7 @@ runs:
         aws configure set aws_secret_access_key ${{ inputs.aws_secret_access_key }}
         aws configure set default.region ap-northeast-2
         aws configure set default.s3.signature_version s3v4
-        aws s3 ls --endpoint-url ${{ inputs.aws_end_point }}
-        if [ $? -eq 0 ]; then
-          echo "Successfully connected to MinIO"
-        else
-          echo "Failed to connect to MinIO"
-          exit 1
-        fi
-        aws s3 cp ${{ inputs.artifact_name }} s3://data/${{ inputs.artifact_name }} --endpoint-url ${{ inputs.aws_end_point }}
+        aws s3 cp ${{ inputs.artifact_name }} s3://data/builds/${{ inputs.artifact_name }} --endpoint-url ${{ inputs.aws_end_point }}
       shell: bash
 
     - name: Upload to MinIO
@@ -71,12 +64,5 @@ runs:
         aws configure set aws_secret_access_key ${{ inputs.aws_secret_access_key }}
         aws configure set default.region ap-northeast-2
         aws configure set default.s3.signature_version s3v4
-        aws s3 ls --endpoint-url ${{ inputs.aws_end_point }}
-        if [ $? -eq 0 ]; then
-          echo "Successfully connected to MinIO"
-        else
-          echo "Failed to connect to MinIO"
-          exit 1
-        fi
-        aws s3 cp ${{ inputs.artifact_name }} s3://data/${{ inputs.artifact_name }} --endpoint-url ${{ inputs.aws_end_point }}
+        aws s3 cp ${{ inputs.artifact_name }} s3://data/latest/${{ inputs.artifact_name }} --endpoint-url ${{ inputs.aws_end_point }}
       shell: bash
