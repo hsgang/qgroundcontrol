@@ -11,6 +11,9 @@ inputs:
   aws_secret_access_key:
     description: aws secret access key
     required: true
+  aws_end_point:
+    description: aws end point
+    required: true
   source:
     description: source location
     required: false
@@ -43,8 +46,8 @@ runs:
     #   shell: bash
     - name: Configure AWS CLI for MinIO
       run: |
-        aws configure set aws_access_key_id ${{ secrets.MINIO_ACCESS_KEY }}
-        aws configure set aws_secret_access_key ${{ secrets.MINIO_SECRET_KEY }}
+        aws configure set aws_access_key_id ${{ inputs.aws_key_id }}
+        aws configure set aws_secret_access_key ${{ inputs.aws_secret_access_key }}
         aws configure set default.region ap-northeast-2
         aws configure set default.s3.signature_version s3v4
 
@@ -52,4 +55,4 @@ runs:
       if: github.event_name == 'push' && github.ref_type == 'tag'
       working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
       run: |
-        aws s3 cp ${{ inputs.artifact_name }} s3://data/${{ inputs.artifact_name }} --endpoint-url ${{ secret.MINIO_ENDPOINT }}
+        aws s3 cp ${{ inputs.artifact_name }} s3://data/${{ inputs.artifact_name }} --endpoint-url ${{ inputs.aws_end_point }}
