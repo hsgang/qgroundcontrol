@@ -139,5 +139,5 @@ jobs:
           artifact_name: ${{ env.ARTIFACT }}
           aws_key_id: ${{ secrets.MINIO_ACCESS_KEY }}
           aws_secret_access_key: ${{ secrets.MINIO_SECRET_KEY }}
-          aws_endpoint: ${{ secrets.MINIO_ENDPOINT }}
+          aws_end_point: ${{ secrets.MINIO_ENDPOINT }}
           source: ''
