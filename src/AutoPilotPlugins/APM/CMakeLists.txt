@@ -48,7 +48,6 @@ qt_add_library(APMAutoPilotPlugin STATIC
 target_link_libraries(APMAutoPilotPlugin
     PRIVATE
         APMFirmwarePlugin
-        AutoPilotPlugins
         FactSystem
         QGC
         Settings
@@ -58,6 +57,7 @@ target_link_libraries(APMAutoPilotPlugin
     PUBLIC
         Qt6::Core
         Qt6::Quick
+        AutoPilotPlugins
         CommonAutoPilotPlugin
         FactControls
         MAVLink
