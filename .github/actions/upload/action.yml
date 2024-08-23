@@ -46,6 +46,24 @@ runs:
     #   shell: bash
 
     - name: Upload to MinIO
+      if: github.event_name == 'push'
+      working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
+      run: |
+        aws configure set aws_access_key_id ${{ inputs.aws_key_id }}
+        aws configure set aws_secret_access_key ${{ inputs.aws_secret_access_key }}
+        aws configure set default.region ap-northeast-2
+        aws configure set default.s3.signature_version s3v4
+        aws s3 ls --endpoint-url ${{ inputs.aws_end_point }}
+        if [ $? -eq 0 ]; then
+          echo "Successfully connected to MinIO"
+        else
+          echo "Failed to connect to MinIO"
+          exit 1
+        fi
+        aws s3 cp ${{ inputs.artifact_name }} s3://data/${{ inputs.artifact_name }} --endpoint-url ${{ inputs.aws_end_point }}
+      shell: bash
+
+    - name: Upload to MinIO
       if: github.event_name == 'push' && github.ref_type == 'tag'
       working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
       run: |
@@ -53,5 +71,12 @@ runs:
         aws configure set aws_secret_access_key ${{ inputs.aws_secret_access_key }}
         aws configure set default.region ap-northeast-2
         aws configure set default.s3.signature_version s3v4
+        aws s3 ls --endpoint-url ${{ inputs.aws_end_point }}
+        if [ $? -eq 0 ]; then
+          echo "Successfully connected to MinIO"
+        else
+          echo "Failed to connect to MinIO"
+          exit 1
+        fi
         aws s3 cp ${{ inputs.artifact_name }} s3://data/${{ inputs.artifact_name }} --endpoint-url ${{ inputs.aws_end_point }}
       shell: bash
