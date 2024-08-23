@@ -987,6 +987,7 @@ ApplicationWindow {
     }
 
     function closeIndicatorDrawer() {
+        componentDrawer.close()
         indicatorDrawer.close()
     }
 
