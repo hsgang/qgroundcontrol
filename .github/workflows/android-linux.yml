@@ -32,7 +32,7 @@ jobs:
         shell: bash
 
     env:
-      ARTIFACT: QGroundControl.apk
+      ARTIFACT: MissionNavigator.apk
       QT_VERSION: 6.6.3
       GST_VERSION: 1.22.12
       QT_ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/deploy/android/android_release.keystore

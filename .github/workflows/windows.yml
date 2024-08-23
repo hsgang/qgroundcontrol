@@ -35,7 +35,7 @@ jobs:
         shell: cmd
 
     env:
-      ARTIFACT: QGroundControl-installer.exe
+      ARTIFACT: MissionNavigator-installer.exe
       QT_VERSION: 6.6.3
       GST_VERSION: 1.22.12
       SCCACHE_GHA_ENABLED: "true"
