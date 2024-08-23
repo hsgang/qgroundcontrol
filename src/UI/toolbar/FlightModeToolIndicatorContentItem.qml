@@ -84,8 +84,10 @@ ColumnLayout {
                         parent.children[1].toggle()
                         parent.children[1].clicked()
                     } else {
-                        activeVehicle.flightMode = modelData
-                        //drawer.close()
+                        //activeVehicle.flightMode = modelData
+                        var controller = globals.guidedControllerFlyView
+                        controller.confirmAction(controller.actionSetFlightMode, modelData)
+                        mainWindow.closeIndicatorDrawer()
                     }
                 }
             }

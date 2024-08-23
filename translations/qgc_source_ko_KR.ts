@@ -8899,6 +8899,11 @@ Click Ok to start the auto-tuning process.
         <translation>지정 위치에 ROI 설정</translation>
     </message>
     <message>
+        <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="77"/>
+        <source>Set the vehicle flight mode to %1</source>
+        <translation>비행 모드를 %1로 변경</translation>
+    </message>
+    <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="88"/>
         <source>Set the vehicle heading towards the specified location.</source>
         <translation>지정 위치를 향하도록 헤딩 변경</translation>
