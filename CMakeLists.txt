@@ -21,7 +21,7 @@ endif()
 
 include(Git)
 
-project(QGroundControl
+project(MissionNavigator
     VERSION ${QGC_APP_VERSION}
     DESCRIPTION ${QGC_APP_DESCRIPTION}
     HOMEPAGE_URL "https://qgroundcontrol.com/"
