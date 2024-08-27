@@ -46,7 +46,7 @@ execute_process(
 cmake_print_variables(QGC_APP_VERSION_STR)
 
 execute_process(
-    COMMAND ${GIT_EXECUTABLE} describe --always --abbrev=0
+    COMMAND ${GIT_EXECUTABLE} describe --always --tags --abbrev=0
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     OUTPUT_VARIABLE QGC_APP_VERSION
     OUTPUT_STRIP_TRAILING_WHITESPACE
