@@ -72,7 +72,7 @@ Item {
                             translated = "착륙 모드"
                             break
                         case "Guided" :
-                            translated = "가이디드 모드"
+                            translated = "유도 제어 모드"
                             break
                         case "Brake" :
                             translated = "정지 모드"
