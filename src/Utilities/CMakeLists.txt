@@ -27,6 +27,8 @@ qt_add_library(Utilities STATIC
     SHPFileHelper.h
     StateMachine.cc
     StateMachine.h
+    CloudManager.cc
+    CloudManager.h
 )
 
 if(MOBILE)

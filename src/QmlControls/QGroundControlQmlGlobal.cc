@@ -87,6 +87,7 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
 #endif
     _adsbVehicleManager     = toolbox->adsbVehicleManager();
     _ntrip                  = toolbox->ntrip();
+    _cloudManager          = toolbox->cloudManager();
     _globalPalette          = new QGCPalette(this);
 #ifndef QGC_AIRLINK_DISABLED
     _airlinkManager         = toolbox->airlinkManager();

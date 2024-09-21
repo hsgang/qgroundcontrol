@@ -7636,6 +7636,11 @@ Click Ok to start the auto-tuning process.
         <translation>네트워크 RTK</translation>
     </message>
     <message>
+        <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="52"/>
+        <source>Cloud</source>
+        <translation>클라우드</translation>
+    </message>
+    <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="59"/>
         <source>ADSB Server</source>
         <translation>ADSB 서버</translation>
@@ -8118,6 +8123,49 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
         <source>Loss rate</source>
         <translation>손실율</translation>
+    </message>
+</context>
+<context>
+    <name>CloudSettings</name>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Cloud Login</source>
+        <translation>클라우드 로그인</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Email</source>
+        <translation>이메일</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Password</source>
+        <translation>패스워드</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>User</source>
+        <translation>사용자</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Connecting...</source>
+        <translation>연결중...</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Login</source>
+        <translation>로그인</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Logout</source>
+        <translation>로그아웃</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Cloud API Keys</source>
+        <translation>클라우드 API Keys</translation>
     </message>
 </context>
 <context>
@@ -9873,6 +9921,24 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/AnalyzeView/LogDownloadPage.qml" line="189"/>
         <source>Cancel</source>
         <translation>취소</translation>
+    </message>
+</context>
+<context>
+    <name>CloudUploadPage</name>
+    <message>
+        <location filename="../src/AnalyzeView/CloudUploadPage.qml" line="1"/>
+        <source>Cloud Upload Page</source>
+        <translation>클라우드 업로드 페이지</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/CloudUploadPage.qml" line="1"/>
+        <source>Upload Directory</source>
+        <translation>업로드 디렉토리 선택</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/CloudUploadPage.qml" line="1"/>
+        <source>Upload</source>
+        <translation>업로드</translation>
     </message>
 </context>
 <context>
@@ -14850,6 +14916,16 @@ sudo apt-get remove modemmanager</translation>
         <location filename="../src/api/QGCCorePlugin.cc" line="193"/>
         <source>Log Download</source>
         <translation>로그 다운로드</translation>
+    </message>
+    <message>
+        <location filename="../src/api/QGCCorePlugin.cc" line="193"/>
+        <source>Image Download</source>
+        <translation>이미지 다운로드</translation>
+    </message>
+    <message>
+        <location filename="../src/api/QGCCorePlugin.cc" line="193"/>
+        <source>Cloud Upload</source>
+        <translation>클라우드 업로드</translation>
     </message>
     <message>
         <location filename="../src/api/QGCCorePlugin.cc" line="195"/>

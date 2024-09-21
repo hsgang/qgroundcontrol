@@ -1,0 +1,48 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":                 "cloudEmail",
+    "shortDesc":     "cloudEmail",
+    "type":                 "string",
+    "default":         "email@email.com"
+},
+{
+    "name":                 "cloudPassword",
+    "shortDesc":     "cloudPassword",
+    "type":                 "string",
+    "default":         "password"
+},
+{
+    "name":                 "cloudToken",
+    "shortDesc":     "cloudToken",
+    "type":                 "string"
+},
+{
+    "name":                 "minioAccessKey",
+    "shortDesc":     "minioAccessKey",
+    "type":                 "string",
+    "default":         ""
+},
+{
+    "name":                 "minioSecretKey",
+    "shortDesc":     "minioSecretKey",
+    "type":                 "string",
+    "default":         ""
+},
+{
+    "name":                 "firebaseAPIKey",
+    "shortDesc":     "firebaseAPIKey",
+    "type":                 "string",
+    "default":         ""
+},
+{
+    "name":                 "minioEndpoint",
+    "shortDesc":     "minioEndpoint",
+    "type":                 "string",
+    "default":         ""
+}
+]
+}

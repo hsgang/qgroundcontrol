@@ -51,6 +51,8 @@ qt_add_library(Settings STATIC
     Viewer3DSettings.h
     NTRIPSettings.cc
     NTRIPSettings.h
+    CloudSettings.cc
+    CloudSettings.h
 )
 
 target_link_libraries(Settings

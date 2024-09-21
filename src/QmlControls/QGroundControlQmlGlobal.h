@@ -33,6 +33,7 @@ class SettingsManager;
 class VideoManager;
 class UTMSPManager;
 class AirLinkManager;
+class CloudManager;
 
 Q_MOC_INCLUDE("ADSBVehicleManager.h")
 Q_MOC_INCLUDE("FactGroup.h")
@@ -47,6 +48,7 @@ Q_MOC_INCLUDE("QGCPalette.h")
 Q_MOC_INCLUDE("PositionManager.h")
 Q_MOC_INCLUDE("SettingsManager.h")
 Q_MOC_INCLUDE("VideoManager.h")
+Q_MOC_INCLUDE("CloudManager.h")
 #ifdef CONFIG_UTM_ADAPTER
 Q_MOC_INCLUDE("UTMSPManager.h")
 #endif
@@ -82,6 +84,7 @@ public:
     Q_PROPERTY(SettingsManager*     settingsManager         READ    settingsManager         CONSTANT)
     Q_PROPERTY(ADSBVehicleManager*  adsbVehicleManager      READ    adsbVehicleManager      CONSTANT)
     Q_PROPERTY(NTRIP*               ntrip                   READ    ntrip                   CONSTANT)
+    Q_PROPERTY(CloudManager*        cloudManager            READ    cloudManager            CONSTANT)
     Q_PROPERTY(QGCCorePlugin*       corePlugin              READ    corePlugin              CONSTANT)
     Q_PROPERTY(MissionCommandTree*  missionCommandTree      READ    missionCommandTree      CONSTANT)
 #ifndef NO_SERIAL_LINK
@@ -184,6 +187,7 @@ public:
 #endif
     ADSBVehicleManager*     adsbVehicleManager  ()  { return _adsbVehicleManager; }
     NTRIP*                  ntrip               ()  { return _ntrip; }
+    CloudManager*           cloudManager        ()  { return _cloudManager; }
     QmlUnitsConversion*     unitsConversion     ()  { return &_unitsConversion; }
     static QGeoCoordinate   flightMapPosition   ()  { return _coord; }
     static double           flightMapZoom       ()  { return _zoom; }
@@ -277,6 +281,7 @@ private:
     AirLinkManager*         _airlinkManager         = nullptr;
     ADSBVehicleManager*     _adsbVehicleManager     = nullptr;
     NTRIP*                  _ntrip                  = nullptr;
+    CloudManager*           _cloudManager           = nullptr;
     QGCPalette*             _globalPalette          = nullptr;
     QmlUnitsConversion      _unitsConversion;
 #ifdef CONFIG_UTM_ADAPTER

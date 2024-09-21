@@ -70,6 +70,13 @@ ListModel {
     }
 
     ListElement {
+        name: qsTr("Cloud")
+        url: "/qml/CloudSettings.qml"
+        iconUrl: "/InstrumentValueIcons/cloud.svg"
+        pageVisible: function() { return true }
+    }
+
+    ListElement {
         name: qsTr("Console")
         url: "/qml/QGroundControl/Controls/AppMessages.qml"
         iconUrl: "qrc:/InstrumentValueIcons/conversation.svg"
