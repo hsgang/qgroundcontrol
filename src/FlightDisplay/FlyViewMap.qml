@@ -730,11 +730,24 @@ FlightMap {
                     globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetEstimatorOrigin, mapClickCoord)
                 }
             }
-            // ColumnLayout {
-            //     spacing: 0
-            //     QGCLabel { text: qsTr("Lat: %1").arg(mapClickCoord.latitude.toFixed(6)) }
-            //     QGCLabel { text: qsTr("Lon: %1").arg(mapClickCoord.longitude.toFixed(6)) }
-            // }
+
+            QGCButton {
+                Layout.fillWidth:   true
+                text:               qsTr("Set Heading")
+                visible:            globals.guidedControllerFlyView.showChangeHeading
+                onClicked: {
+                    if (popup.opened) {
+                        popup.close()
+                    }
+                    globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionChangeHeading, mapClickCoord)
+                }
+            }
+
+            ColumnLayout {
+                spacing: 0
+                QGCLabel { text: qsTr("Lat: %1").arg(mapClickCoord.latitude.toFixed(6)) }
+                QGCLabel { text: qsTr("Lon: %1").arg(mapClickCoord.longitude.toFixed(6)) }
+            }
         }
     }
 

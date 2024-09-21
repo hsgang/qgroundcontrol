@@ -16,7 +16,6 @@
 class FirmwarePluginManager;
 class GPSManager;
 class JoystickManager;
-class FollowMe;
 class LinkManager;
 class MAVLinkProtocol;
 class MissionCommandTree;
@@ -33,7 +32,7 @@ class CloudManager;
 #ifndef QGC_AIRLINK_DISABLED
 class AirLinkManager;
 #endif
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
 class UTMSPManager;
 #endif
 
@@ -50,7 +49,6 @@ public:
     MAVLinkProtocol*            mavlinkProtocol         () { return _mavlinkProtocol; }
     MissionCommandTree*         missionCommandTree      () { return _missionCommandTree; }
     MultiVehicleManager*        multiVehicleManager     () { return _multiVehicleManager; }
-    FollowMe*                   followMe                () { return _followMe; }
     QGCPositionManager*         qgcPositionManager      () { return _qgcPositionManager; }
     VideoManager*               videoManager            () { return _videoManager; }
     MAVLinkLogManager*          mavlinkLogManager       () { return _mavlinkLogManager; }
@@ -65,7 +63,7 @@ public:
 #ifndef QGC_AIRLINK_DISABLED
     AirLinkManager*              airlinkManager          () { return _airlinkManager; }
 #endif
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
     UTMSPManager*                utmspManager             () { return _utmspManager; }
 #endif
 
@@ -82,7 +80,6 @@ private:
     MAVLinkProtocol*            _mavlinkProtocol        = nullptr;
     MissionCommandTree*         _missionCommandTree     = nullptr;
     MultiVehicleManager*        _multiVehicleManager    = nullptr;
-    FollowMe*                   _followMe               = nullptr;
     QGCPositionManager*         _qgcPositionManager     = nullptr;
     VideoManager*               _videoManager           = nullptr;
     MAVLinkLogManager*          _mavlinkLogManager      = nullptr;
@@ -95,7 +92,7 @@ private:
     AirLinkManager*             _airlinkManager         = nullptr;
 #endif
 
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
     UTMSPManager*                _utmspManager            = nullptr;
 #endif
     friend class QGCApplication;

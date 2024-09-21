@@ -206,13 +206,13 @@ private:
     bool _allowAutoConnectToBoard(QGCSerialPortInfo::BoardType_t boardType);
     bool _portAlreadyConnected(const QString &portName);
 
-    QMap<QString, int> m_autoconnectPortWaitList;   ///< key: QGCSerialPortInfo::systemLocation, value: wait count
-    QList<SerialLink*> m_activeLinkCheckList;       ///< List of links we are waiting for a vehicle to show up on
-    QStringList m_commPortList;
-    QStringList m_commPortDisplayList;
-    QString m_autoConnectRTKPort;
-    QString m_nmeaDeviceName;
-    uint32_t m_nmeaBaud = 0;
-    QSerialPort *m_nmeaPort = nullptr;
+    QMap<QString, int> _autoconnectPortWaitList;   ///< key: QGCSerialPortInfo::systemLocation, value: wait count
+    QList<SerialLink*> _activeLinkCheckList;       ///< List of links we are waiting for a vehicle to show up on
+    QStringList _commPortList;
+    QStringList _commPortDisplayList;
+    QString _autoConnectRTKPort;
+    QString _nmeaDeviceName;
+    uint32_t _nmeaBaud = 0;
+    QSerialPort *_nmeaPort = nullptr;
 #endif // NO_SERIAL_LINK
 };

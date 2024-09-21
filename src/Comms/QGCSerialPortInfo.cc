@@ -9,13 +9,13 @@
 
 #include "QGCSerialPortInfo.h"
 
-#include <JsonHelper.h>
-#include <QGCLoggingCategory.h>
+#include "JsonHelper.h"
+#include "QGCLoggingCategory.h"
 
 #include <QtCore/QFile>
+#include <QtCore/QJsonArray>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
 
 QGC_LOGGING_CATEGORY(QGCSerialPortInfoLog, "qgc.comms.qgcserialportinfo")
 
@@ -95,7 +95,7 @@ void QGCSerialPortInfo::_loadJsonData()
             return;
         }
 
-        const QJsonObject  boardObject = jsonValue.toObject();
+        const QJsonObject boardObject = jsonValue.toObject();
         if (!JsonHelper::validateKeys(boardObject, boardKeyInfoList, errorString)) {
             qCWarning(QGCSerialPortInfoLog) << errorString;
             return;
@@ -126,7 +126,7 @@ void QGCSerialPortInfo::_loadJsonData()
             return;
         }
 
-        const QJsonObject  fallbackObject = jsonValue.toObject();
+        const QJsonObject fallbackObject = jsonValue.toObject();
         if (!JsonHelper::validateKeys(fallbackObject, fallbackKeyInfoList, errorString)) {
             qCWarning(QGCSerialPortInfoLog) << errorString;
             return;
@@ -141,7 +141,6 @@ void QGCSerialPortInfo::_loadJsonData()
             qCWarning(QGCSerialPortInfoLog) << "Bad board class" << fallbackObject[_jsonBoardClassKey].toString();
             return;
         }
-
         (void) _boardDescriptionFallbackList.append(boardFallback);
     }
 
@@ -152,7 +151,7 @@ void QGCSerialPortInfo::_loadJsonData()
             return;
         }
 
-        const QJsonObject  fallbackObject = jsonValue.toObject();
+        const QJsonObject fallbackObject = jsonValue.toObject();
         if (!JsonHelper::validateKeys(fallbackObject, fallbackKeyInfoList, errorString)) {
             qCWarning(QGCSerialPortInfoLog) << errorString;
             return;
@@ -167,7 +166,6 @@ void QGCSerialPortInfo::_loadJsonData()
             qCWarning(QGCSerialPortInfoLog) << "Bad board class" << fallbackObject[_jsonBoardClassKey].toString();
             return;
         }
-
         (void) _boardManufacturerFallbackList.append(boardFallback);
     }
 }
@@ -201,31 +199,31 @@ bool QGCSerialPortInfo::getBoardInfo(QGCSerialPortInfo::BoardType_t &boardType, 
         }
     }
 
-    if (boardType == BoardTypeUnknown) {
-        for (const BoardRegExpFallback_t &boardFallback : _boardDescriptionFallbackList) {
-            if (description().contains(QRegularExpression(boardFallback.regExp, QRegularExpression::CaseInsensitiveOption))) {
-#ifndef Q_OS_ANDROID
-                if (boardFallback.androidOnly) {
-                    continue;
-                }
-#endif
-                boardType = boardFallback.boardType;
-                name = _boardTypeToString(boardType);
-                return true;
-            }
-        }
+    Q_ASSERT(boardType == BoardTypeUnknown);
 
-        for (const BoardRegExpFallback_t &boardFallback : _boardManufacturerFallbackList) {
-            if (manufacturer().contains(QRegularExpression(boardFallback.regExp, QRegularExpression::CaseInsensitiveOption))) {
+    for (const BoardRegExpFallback_t &boardFallback : _boardDescriptionFallbackList) {
+        if (description().contains(QRegularExpression(boardFallback.regExp, QRegularExpression::CaseInsensitiveOption))) {
 #ifndef Q_OS_ANDROID
-                if (boardFallback.androidOnly) {
-                    continue;
-                }
-#endif
-                boardType = boardFallback.boardType;
-                name = _boardTypeToString(boardType);
-                return true;
+            if (boardFallback.androidOnly) {
+                continue;
             }
+#endif
+            boardType = boardFallback.boardType;
+            name = _boardTypeToString(boardType);
+            return true;
+        }
+    }
+
+    for (const BoardRegExpFallback_t &boardFallback : _boardManufacturerFallbackList) {
+        if (manufacturer().contains(QRegularExpression(boardFallback.regExp, QRegularExpression::CaseInsensitiveOption))) {
+#ifndef Q_OS_ANDROID
+            if (boardFallback.androidOnly) {
+                continue;
+            }
+#endif
+            boardType = boardFallback.boardType;
+            name = _boardTypeToString(boardType);
+            return true;
         }
     }
 
@@ -250,7 +248,6 @@ QString QGCSerialPortInfo::_boardTypeToString(BoardType_t boardType)
         return QStringLiteral("Unknown");
     }
 }
-
 
 QList<QGCSerialPortInfo> QGCSerialPortInfo::availablePorts()
 {
@@ -306,7 +303,7 @@ bool QGCSerialPortInfo::canFlash() const
     BoardType_t boardType;
     QString name;
     if (getBoardInfo(boardType, name)) {
-        switch(boardType){
+        switch(boardType) {
         case QGCSerialPortInfo::BoardTypePixhawk:
         case QGCSerialPortInfo::BoardTypePX4Flow:
         case QGCSerialPortInfo::BoardTypeSiKRadio:

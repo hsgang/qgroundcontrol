@@ -66,6 +66,8 @@ public:
     void                pauseVehicle                    (Vehicle* vehicle) override;
     void                guidedModeRTL                   (Vehicle* vehicle, bool smartRTL) override;
     void                guidedModeChangeAltitudeAMSL    (Vehicle* vehicle, double altitudeAMSL, bool pauseVehicle) override;
+    void                guidedModeChangeAltitude        (Vehicle* vehicle, double altitudeChange, bool pauseVehicle) override;
+    void                guidedModeChangeHeading         (Vehicle* vehicle, const QGeoCoordinate &headingCoord) override;
     bool                adjustIncomingMavlinkMessage    (Vehicle* vehicle, mavlink_message_t* message) override;
     void                adjustOutgoingMavlinkMessageThreadSafe(Vehicle* vehicle, LinkInterface* outgoingLink, mavlink_message_t* message) override;
     virtual void        initializeStreamRates           (Vehicle* vehicle);
@@ -86,6 +88,7 @@ public:
     bool                fixedWingAirSpeedLimitsAvailable(Vehicle* vehicle) override;
     void                guidedModeChangeEquivalentAirspeedMetersSecond(Vehicle* vehicle, double airspeed_equiv) override;
     QVariant            mainStatusIndicatorContentItem  (const Vehicle* vehicle) const override;
+    void                sendGCSMotionReport(Vehicle* vehicle, FollowMe::GCSMotionReport& motionReport, uint8_t estimatationCapabilities) override;
 
     // support for changing speed in Copter guide mode:
     bool mulirotorSpeedLimitsAvailable(Vehicle* vehicle) override;
@@ -102,7 +105,6 @@ protected:
     APMFirmwarePlugin(void);
 
     void setSupportedModes  (QList<APMCustomMode> supportedModes);
-    void _sendGCSMotionReport(Vehicle* vehicle, FollowMe::GCSMotionReport& motionReport, uint8_t estimatationCapabilities);
 
     static void _setBaroGndTemp(Vehicle* vehicle, qreal temperature);
     static void _setBaroAltOffset(Vehicle* vehicle, qreal offset);

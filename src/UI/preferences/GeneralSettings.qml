@@ -115,7 +115,7 @@ SettingsPage {
                 spacing: ScreenTools.defaultFontPixelWidth * 2
 
                 QGCButton {
-                    width:                  height
+                    Layout.preferredWidth:  height
                     height:                 baseFontEdit.height * 1.5
                     text:                   "-"
                     onClicked: {
@@ -132,7 +132,7 @@ SettingsPage {
                 }
 
                 QGCButton {
-                    width:                  height
+                    Layout.preferredWidth:  height
                     height:                 baseFontEdit.height * 1.5
                     text:                   "+"
                     onClicked: {

@@ -17,7 +17,6 @@
 #include "MAVLinkProtocol.h"
 #include "MissionCommandTree.h"
 #include "MultiVehicleManager.h"
-#include "FollowMe.h"
 #include "PositionManager.h"
 #include "VideoManager.h"
 #include "MAVLinkLogManager.h"
@@ -35,7 +34,7 @@
 #include CUSTOMHEADER
 #endif
 
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
 #include "UTMSPManager.h"
 #endif
 
@@ -57,7 +56,6 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
     _missionCommandTree     = new MissionCommandTree        (app, this);
     _multiVehicleManager    = new MultiVehicleManager       (app, this);
     _qgcPositionManager     = new QGCPositionManager        (app, this);
-    _followMe               = new FollowMe                  (app, this);
     _videoManager           = new VideoManager              (app, this);
 
     _mavlinkLogManager      = new MAVLinkLogManager         (app, this);
@@ -67,7 +65,7 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
 #ifndef QGC_AIRLINK_DISABLED
     _airlinkManager         = new AirLinkManager            (app, this);
 #endif
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
     _utmspManager            = new UTMSPManager               (app, this);
 #endif
 }
@@ -87,7 +85,6 @@ void QGCToolbox::setChildToolboxes(void)
     _mavlinkProtocol->setToolbox(this);
     _missionCommandTree->setToolbox(this);
     _multiVehicleManager->setToolbox(this);
-    _followMe->setToolbox(this);
     _qgcPositionManager->setToolbox(this);
     _videoManager->setToolbox(this);
     _mavlinkLogManager->setToolbox(this);
@@ -97,7 +94,7 @@ void QGCToolbox::setChildToolboxes(void)
 #ifndef QGC_AIRLINK_DISABLED
     _airlinkManager->setToolbox(this);
 #endif
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
     _utmspManager->setToolbox(this);
 #endif
 }

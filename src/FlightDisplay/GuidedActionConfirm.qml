@@ -15,6 +15,7 @@ import QGroundControl
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
 import QGroundControl.Palette
+import QGroundControl.UTMSP
 
 Rectangle {
     id:         _root
@@ -88,10 +89,9 @@ Rectangle {
 
     ColumnLayout {
         id:                 mainLayout
-        anchors.margins:    _margins
-        anchors.left:       parent.left
-        anchors.right:      parent.right
-        spacing:            _margins * 2
+        anchors.centerIn:   parent
+        width:              parent.width - (_margins * 2)
+        spacing:            _margins
 
         QGCLabel {
             id:                     messageText
@@ -136,6 +136,10 @@ Rectangle {
                         mapIndicator.actionConfirmed()
                         mapIndicator = undefined
                     }
+
+                    UTMSPStateStorage.indicatorOnMissionStatus = true
+                    UTMSPStateStorage.currentNotificationIndex = 7
+                    UTMSPStateStorage.currentStateIndex = 3
                 }
             }
 

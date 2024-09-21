@@ -3,11 +3,11 @@ description: Uploads a built release file
 
 inputs:
   artifact_name:
-    description: artifact name
+    description: Artifact name
     required: true
   aws_key_id:
-    description: aws key id
-    required: true
+    description: AWS access key ID
+    required: false
   aws_secret_access_key:
     description: aws secret access key
     required: true
@@ -15,9 +15,10 @@ inputs:
     description: aws end point
     required: true
   source:
-    description: source location
+    description: Source location
     required: false
     default: package
+
 runs:
   using: "composite"
   steps:

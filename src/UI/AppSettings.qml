@@ -105,11 +105,37 @@ Rectangle {
                 SubMenuButton {
                     id:                 subMenu
                     Layout.fillWidth:   true
-                    imageResource:      iconUrl
-                    setupIndicator:     false
-                    autoExclusive:      true
                     text:               name
-                    visible:            url !== "qrc:/qml/RemoteIDSettings.qml" ? true : QGroundControl.settingsManager.remoteIDSettings.enable.rawValue
+                    padding:            ScreenTools.defaultFontPixelWidth / 2
+                    hoverEnabled:       !ScreenTools.isMobile
+                    autoExclusive:      true
+                    icon.source:        iconUrl
+                    visible:            pageVisible()
+
+                    background: Rectangle {
+                        color:      qgcPal.buttonHighlight
+                        opacity:    checked || pressed ? 1 : enabled && hovered ? .2 : 0
+                        radius:     ScreenTools.defaultFontPixelWidth / 2
+                    }
+
+                    contentItem: RowLayout {
+                        spacing: ScreenTools.defaultFontPixelWidth
+
+                        QGCColoredImage {
+                            source: iconUrl
+                            color:  displayText.color
+                            width:  ScreenTools.defaultFontPixelHeight
+                            height: ScreenTools.defaultFontPixelHeight
+                        }
+
+                        QGCLabel {
+                            id:                     displayText
+                            Layout.fillWidth:       true
+                            text:                   name
+                            color:                  checked || pressed ? qgcPal.buttonHighlightText : qgcPal.buttonText
+                            horizontalAlignment:    QGCLabel.AlignLeft
+                        }
+                    }
 
                     onClicked: {
 //                        __rightPanel.source = modelData.url

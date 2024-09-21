@@ -77,7 +77,7 @@ Rectangle {
                     min:                        0
                     max:                        _unitsConversion.metersToAppSettingsDistanceUnits(missionController.missionDistance)
                     lineVisible:                true
-                    labelsFont.family:          "Fixed"
+                    labelsFont.family:          ScreenTools.fixedFontFamily
                     labelsFont.pointSize:       ScreenTools.smallFontPointSize
                     labelsColor:                "white"
                     labelFormat:                "%d %1".arg(_unitsConversion.appSettingsDistanceUnitsString)
@@ -90,7 +90,7 @@ Rectangle {
                     min:                        _unitsConversion.metersToAppSettingsDistanceUnits(_minAMSLAltitude)
                     max:                        _unitsConversion.metersToAppSettingsDistanceUnits(_maxAMSLAltitude)
                     lineVisible:                true
-                    labelsFont.family:          "Fixed"
+                    labelsFont.family:          ScreenTools.fixedFontFamily
                     labelsFont.pointSize:       ScreenTools.smallFontPointSize
                     labelsColor:                "white"
                     labelFormat:                "%d %1".arg(_unitsConversion.appSettingsDistanceUnitsString)

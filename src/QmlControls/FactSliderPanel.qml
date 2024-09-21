@@ -66,7 +66,7 @@ Column {
 
                     QGCLabel {
                         text:           title
-                        font.family:    ScreenTools.demiboldFontFamily
+                        font.bold:      true
                     }
                     Item {
                         width: 1

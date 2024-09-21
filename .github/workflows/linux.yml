@@ -28,14 +28,14 @@ jobs:
       matrix:
         BuildType: [Debug, Release]
 
+    defaults:
+      run:
+        shell: bash
+
     env:
       ARTIFACT: QGroundControl-x86_64.AppImage
       QT_VERSION: 6.6.3
       # GST_VERSION: 1.22.12
-
-    defaults:
-      run:
-        shell: bash
 
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -97,6 +97,7 @@ jobs:
           aqtversion: ==3.1.*
           host: linux
           target: desktop
+          arch: gcc_64
           dir: ${{ runner.temp }}
           modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
           cache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
@@ -106,13 +107,9 @@ jobs:
 
       - run: mkdir ${{ runner.temp }}/shadow_build_dir
 
-      # - name: Run CMake
-      #   uses: lukka/run-cmake@v10
-      #   with:
-
       - name: Configure
         working-directory: ${{ runner.temp }}/shadow_build_dir
-        run: cmake -S ${{ github.workspace }} -B . -G Ninja
+        run: ${{ env.QT_ROOT_DIR }}/bin/qt-cmake -S ${{ github.workspace }} -B . -G Ninja
               -DCMAKE_BUILD_TYPE=${{ matrix.BuildType }}
               -DQGC_BUILD_TESTING=${{ matrix.BuildType == 'Debug' && 'ON' || 'OFF' }}
               -DQGC_STABLE_BUILD=${{ github.ref_type == 'tag' || contains(github.ref, 'Stable') && 'ON' || 'OFF' }}

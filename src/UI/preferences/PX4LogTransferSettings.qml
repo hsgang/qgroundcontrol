@@ -111,7 +111,7 @@ Rectangle {
                 QGCLabel {
                     id:             mavlogLabel
                     text:           qsTr("MAVLink 2.0 Logging (PX4 Pro Only)")
-                    font.family:    ScreenTools.demiboldFontFamily
+                    font.bold:      true
                 }
             }
             Rectangle {
@@ -176,7 +176,7 @@ Rectangle {
                 QGCLabel {
                     id:             logLabel
                     text:           qsTr("MAVLink 2.0 Log Uploads (PX4 Pro Only)")
-                    font.family:    ScreenTools.demiboldFontFamily
+                    font.bold:      true
                 }
             }
             Rectangle {
@@ -415,7 +415,7 @@ Rectangle {
                 QGCLabel {
                     id:             logFilesLabel
                     text:           qsTr("Saved Log Files")
-                    font.family:    ScreenTools.demiboldFontFamily
+                    font.bold:      true
                 }
             }
             Rectangle {

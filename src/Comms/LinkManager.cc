@@ -71,7 +71,9 @@ LinkManager::LinkManager(QGCApplication* app, QGCToolbox* toolbox)
 
     qRegisterMetaType<QAbstractSocket::SocketError>();
     qRegisterMetaType<LinkInterface*>("LinkInterface*");
+#ifndef NO_SERIAL_LINK
     qRegisterMetaType<QGCSerialPortInfo>("QGCSerialPortInfo");
+#endif
 }
 
 LinkManager::~LinkManager()
@@ -506,12 +508,12 @@ void LinkManager::_updateAutoConnectLinks(void)
             _toolbox->qgcPositionManager()->setNmeaSourceDevice(&_nmeaSocket);
         }
 #ifndef NO_SERIAL_LINK
-        //close serial port
-        if (m_nmeaPort) {
-            m_nmeaPort->close();
-            delete m_nmeaPort;
-            m_nmeaPort = nullptr;
-            m_nmeaDeviceName = "";
+        // close serial port
+        if (_nmeaPort) {
+            _nmeaPort->close();
+            delete _nmeaPort;
+            _nmeaPort = nullptr;
+            _nmeaDeviceName = "";
         }
 #endif
     } else {
@@ -551,23 +553,23 @@ void LinkManager::_updateAutoConnectLinks(void)
 
         // check to see if nmea gps is configured for current Serial port, if so, set it up to connect
         if (portInfo.systemLocation().trimmed() == _autoConnectSettings->autoConnectNmeaPort()->cookedValueString()) {
-            if (portInfo.systemLocation().trimmed() != m_nmeaDeviceName) {
-                m_nmeaDeviceName = portInfo.systemLocation().trimmed();
-                qCDebug(LinkManagerLog) << "Configuring nmea port" << m_nmeaDeviceName;
-                QSerialPort* newPort = new QSerialPort(portInfo);
-                m_nmeaBaud = _autoConnectSettings->autoConnectNmeaBaud()->cookedValue().toUInt();
-                newPort->setBaudRate(static_cast<qint32>(m_nmeaBaud));
-                qCDebug(LinkManagerLog) << "Configuring nmea baudrate" << m_nmeaBaud;
+            if (portInfo.systemLocation().trimmed() != _nmeaDeviceName) {
+                _nmeaDeviceName = portInfo.systemLocation().trimmed();
+                qCDebug(LinkManagerLog) << "Configuring nmea port" << _nmeaDeviceName;
+                QSerialPort* newPort = new QSerialPort(portInfo, this);
+                _nmeaBaud = _autoConnectSettings->autoConnectNmeaBaud()->cookedValue().toUInt();
+                newPort->setBaudRate(static_cast<qint32>(_nmeaBaud));
+                qCDebug(LinkManagerLog) << "Configuring nmea baudrate" << _nmeaBaud;
                 // This will stop polling old device if previously set
                 _toolbox->qgcPositionManager()->setNmeaSourceDevice(newPort);
-                if (m_nmeaPort) {
-                    delete m_nmeaPort;
+                if (_nmeaPort) {
+                    delete _nmeaPort;
                 }
-                m_nmeaPort = newPort;
-            } else if (_autoConnectSettings->autoConnectNmeaBaud()->cookedValue().toUInt() != m_nmeaBaud) {
-                m_nmeaBaud = _autoConnectSettings->autoConnectNmeaBaud()->cookedValue().toUInt();
-                m_nmeaPort->setBaudRate(static_cast<qint32>(m_nmeaBaud));
-                qCDebug(LinkManagerLog) << "Configuring nmea baudrate" << m_nmeaBaud;
+                _nmeaPort = newPort;
+            } else if (_autoConnectSettings->autoConnectNmeaBaud()->cookedValue().toUInt() != _nmeaBaud) {
+                _nmeaBaud = _autoConnectSettings->autoConnectNmeaBaud()->cookedValue().toUInt();
+                _nmeaPort->setBaudRate(static_cast<qint32>(_nmeaBaud));
+                qCDebug(LinkManagerLog) << "Configuring nmea baudrate" << _nmeaBaud;
             }
         } else if (portInfo.getBoardInfo(boardType, boardName)) {
             // Should we be auto-connecting to this board type?
@@ -914,7 +916,8 @@ bool LinkManager::_allowAutoConnectToBoard(QGCSerialPortInfo::BoardType_t boardT
 bool LinkManager::_portAlreadyConnected(const QString &portName)
 {
     const QString searchPort = portName.trimmed();
-    for (const SharedLinkInterfacePtr &linkConfig : _rgLinks) {
+    for (const SharedLinkInterfacePtr &linkInterface : _rgLinks) {
+        const SharedLinkConfigurationPtr linkConfig = linkInterface->linkConfiguration();
         const SerialConfiguration* const serialConfig = qobject_cast<const SerialConfiguration*>(linkConfig.get());
         if (serialConfig && (serialConfig->portName() == searchPort)) {
             return true;
@@ -926,32 +929,32 @@ bool LinkManager::_portAlreadyConnected(const QString &portName)
 
 void LinkManager::_updateSerialPorts()
 {
-    m_commPortList.clear();
-    m_commPortDisplayList.clear();
+    _commPortList.clear();
+    _commPortDisplayList.clear();
     const QList<QGCSerialPortInfo> portList = QGCSerialPortInfo::availablePorts();
     for (const QGCSerialPortInfo &info: portList) {
         const QString port = info.systemLocation().trimmed(); // + " " + info.description();
-        m_commPortList += port;
-        m_commPortDisplayList += SerialConfiguration::cleanPortDisplayname(port);
+        _commPortList += port;
+        _commPortDisplayList += SerialConfiguration::cleanPortDisplayname(port);
     }
 }
 
 QStringList LinkManager::serialPortStrings()
 {
-    if (!m_commPortDisplayList.size())
-    {
+    if (!_commPortDisplayList.size()) {
         _updateSerialPorts();
     }
-    return m_commPortDisplayList;
+
+    return _commPortDisplayList;
 }
 
 QStringList LinkManager::serialPorts()
 {
-    if(!m_commPortList.size())
-    {
+    if (!_commPortList.size()) {
         _updateSerialPorts();
     }
-    return m_commPortList;
+
+    return _commPortList;
 }
 
 QStringList LinkManager::serialBaudRates()

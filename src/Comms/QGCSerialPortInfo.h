@@ -10,13 +10,15 @@
 
 #pragma once
 
+#include <QtCore/QLoggingCategory>
 #include <QtCore/QtSystemDetection>
 #ifdef Q_OS_ANDROID
     #include "qserialportinfo.h"
 #else
     #include <QtSerialPort/QSerialPortInfo>
 #endif
-#include <QtCore/QLoggingCategory>
+
+class QGCSerialPortInfoTest;
 
 Q_DECLARE_LOGGING_CATEGORY(QGCSerialPortInfoLog)
 
@@ -24,13 +26,11 @@ Q_DECLARE_LOGGING_CATEGORY(QGCSerialPortInfoLog)
 /// that QGC cares about.
 class QGCSerialPortInfo : public QSerialPortInfo
 {
+    friend class QGCSerialPortInfoTest;
 public:
     QGCSerialPortInfo();
     explicit QGCSerialPortInfo(const QSerialPort &port);
     ~QGCSerialPortInfo();
-
-    /// Override of QSerialPortInfo::availablePorts
-    static QList<QGCSerialPortInfo> availablePorts();
 
     enum BoardType_t {
         BoardTypePixhawk,
@@ -51,6 +51,9 @@ public:
     /// Known operating system peripherals that are NEVER a peripheral that we should connect to.
     ///     @return true: Port is a system port and not an autopilot
     static bool isSystemPort(const QSerialPortInfo &port);
+
+    /// Override of QSerialPortInfo::availablePorts
+    static QList<QGCSerialPortInfo> availablePorts();
 
 private:
     static void _loadJsonData();

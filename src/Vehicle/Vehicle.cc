@@ -54,7 +54,7 @@
 #include <MAVLinkSigning.h>
 #include "GimbalController.h"
 
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
 #include "UTMSPVehicle.h"
 #include "UTMSPManager.h"
 #endif
@@ -162,7 +162,7 @@ Vehicle::Vehicle(LinkInterface*             link,
         _settingsManager->videoSettings()->lowLatencyMode()->setRawValue(true);
     }
 
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
     UTMSPManager* utmspManager = _toolbox->utmspManager();
     if (utmspManager) {
         _utmspVehicle = utmspManager->instantiateVehicle(*this);
@@ -421,7 +421,7 @@ Vehicle::~Vehicle()
     delete _autopilotPlugin;
     _autopilotPlugin = nullptr;
 
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
     delete _utmspVehicle;
 #endif
 
@@ -1973,7 +1973,7 @@ void Vehicle::virtualTabletJoystickValue(double roll, double pitch, double yaw, 
 
 void Vehicle::_say(const QString& text)
 {
-    AudioOutput::instance()->read(text.toLower());
+    AudioOutput::instance()->say(text.toLower());
 }
 
 bool Vehicle::airship() const
@@ -2111,6 +2111,11 @@ bool Vehicle::roiModeSupported() const
 bool Vehicle::takeoffVehicleSupported() const
 {
     return _firmwarePlugin->isCapable(this, FirmwarePlugin::TakeoffVehicleCapability);
+}
+
+bool Vehicle::changeHeadingSupported() const
+{
+    return _firmwarePlugin->isCapable(this, FirmwarePlugin::ChangeHeadingCapability);
 }
 
 QString Vehicle::gotoFlightMode() const
@@ -2354,6 +2359,16 @@ void Vehicle::stopGuidedModeROI()
     }
 }
 
+void Vehicle::guidedModeChangeHeading(const QGeoCoordinate &headingCoord)
+{
+    if (!changeHeadingSupported()) {
+        qgcApp()->showAppMessage(tr("Change Heading not supported by Vehicle."));
+        return;
+    }
+
+    _firmwarePlugin->guidedModeChangeHeading(this, headingCoord);
+}
+
 void Vehicle::pauseVehicle()
 {
     if (!pauseVehicleSupported()) {
@@ -2581,7 +2596,7 @@ void Vehicle::_sendMavCommandWorker(
         bool    compIdAll       = targetCompId == MAV_COMP_ID_ALL;
         QString rawCommandName  = _toolbox->missionCommandTree()->rawName(command);
 
-        qCDebug(VehicleLog) << QStringLiteral("_sendMavCommandWorker failing %1").arg(compIdAll ? "MAV_COMP_ID_ALL not supported" : "duplicate command") << rawCommandName;
+        qCDebug(VehicleLog) << QStringLiteral("_sendMavCommandWorker failing %1").arg(compIdAll ? "MAV_COMP_ID_ALL not supported" : "duplicate command") << rawCommandName << param1 << param2 << param3 << param4 << param5 << param6 << param7;
 
         MavCmdResultFailureCode_t failureCode = compIdAll ? MavCmdResultCommandResultOnly : MavCmdResultFailureDuplicateCommand;
         if (ackHandlerInfo && ackHandlerInfo->resultHandler) {
@@ -2626,6 +2641,8 @@ void Vehicle::_sendMavCommandWorker(
     entry.ackTimeoutMSecs   = sharedLink->linkConfiguration()->isHighLatency() ? _mavCommandAckTimeoutMSecsHighLatency : _mavCommandAckTimeoutMSecs;
     entry.elapsedTimer.start();
 
+    qCDebug(VehicleLog) << Q_FUNC_INFO << "command:param1-7" << command << param1 << param2 << param3 << param4 << param5 << param6 << param7;
+
     _mavCommandList.append(entry);
     _sendMavCommandFromList(_mavCommandList.count() - 1);
 }
@@ -2637,7 +2654,7 @@ void Vehicle::_sendMavCommandFromList(int index)
     QString rawCommandName  = _toolbox->missionCommandTree()->rawName(commandEntry.command);
 
     if (++_mavCommandList[index].tryCount > commandEntry.maxTries) {
-        qCDebug(VehicleLog) << "_sendMavCommandFromList giving up after max retries" << rawCommandName;
+        qCDebug(VehicleLog) << Q_FUNC_INFO << "giving up after max retries" << rawCommandName;
         _mavCommandList.removeAt(index);
         if (commandEntry.ackHandlerInfo.resultHandler) {
             mavlink_command_ack_t ack = {};
@@ -2658,7 +2675,7 @@ void Vehicle::_sendMavCommandFromList(int index)
         return;
     }
 
-    qCDebug(VehicleLog) << "_sendMavCommandFromList command:tryCount" << rawCommandName << commandEntry.tryCount;
+    qCDebug(VehicleLog) << Q_FUNC_INFO << "command:tryCount:param1-7" << rawCommandName << commandEntry.tryCount << commandEntry.rgParam1 << commandEntry.rgParam2 << commandEntry.rgParam3 << commandEntry.rgParam4 << commandEntry.rgParam5 << commandEntry.rgParam6 << commandEntry.rgParam7;
 
     SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
     if (!sharedLink) {
@@ -2841,6 +2858,15 @@ void Vehicle::_waitForMavlinkMessageMessageReceivedHandler(const mavlink_message
 
         qCDebug(VehicleLog) << Q_FUNC_INFO << "message received - compId:msgId" << message.compid << message.msgid;
 
+        if (!pInfo->commandAckReceived) {
+            qCDebug(VehicleLog) << Q_FUNC_INFO << "message received before ack came back.";
+            int entryIndex = _findMavCommandListEntryIndex(message.compid, MAV_CMD_REQUEST_MESSAGE);
+            if (entryIndex != -1) {
+                _mavCommandList.takeAt(entryIndex);
+            } else {
+                qWarning() << Q_FUNC_INFO << "Removing request message command from list failed - not found in list";
+            }
+        }
         _removeRequestMessageInfo(message.compid, message.msgid);
 
         (*resultHandler)(resultHandlerData, MAV_RESULT_ACCEPTED, RequestMessageNoFailure, message);
@@ -2900,9 +2926,8 @@ void Vehicle::_requestMessageCmdResultHandler(void* resultHandlerData_, [[maybe_
     }
 
     if (requestMessageInfo->messageReceived) {
-        // We got the message before we got the ack back!
-        vehicle->_removeRequestMessageInfo(requestMessageInfo->compId, requestMessageInfo->msgId);
-        (resultHandler)(resultHandlerData, static_cast<MAV_RESULT>(ack.result),  RequestMessageNoFailure, message);
+        // This should never happen. The command should have already been removed from the list when the message was received
+        qWarning() << Q_FUNC_INFO << "Command result handler should now have been called if message has already been received";
     } else {
         // Now that the request has been acked we start the timer to wait for the message
         requestMessageInfo->messageWaitElapsedTimer.start();
@@ -3347,36 +3372,37 @@ bool Vehicle::autoDisarm()
     return false;
 }
 
-void Vehicle::_handleADSBVehicle(const mavlink_message_t& message)
+void Vehicle::_handleADSBVehicle(const mavlink_message_t &message)
 {
     mavlink_adsb_vehicle_t adsbVehicleMsg;
-    static const int maxTimeSinceLastSeen = 15;
-
     mavlink_msg_adsb_vehicle_decode(&message, &adsbVehicleMsg);
-    if ((adsbVehicleMsg.flags & ADSB_FLAGS_VALID_COORDS) && adsbVehicleMsg.tslc <= maxTimeSinceLastSeen) {
-        ADSBVehicle::ADSBVehicleInfo_t vehicleInfo;
 
-        vehicleInfo.availableFlags = 0;
+    static constexpr int maxTimeSinceLastSeen = 15;
+
+    if ((adsbVehicleMsg.flags & ADSB_FLAGS_VALID_COORDS) && (adsbVehicleMsg.tslc <= maxTimeSinceLastSeen)) {
+        ADSB::VehicleInfo_t vehicleInfo;
+
+        vehicleInfo.availableFlags = ADSB::AvailableInfoTypes::fromInt(0);
         vehicleInfo.icaoAddress = adsbVehicleMsg.ICAO_address;
 
         vehicleInfo.location.setLatitude(adsbVehicleMsg.lat / 1e7);
         vehicleInfo.location.setLongitude(adsbVehicleMsg.lon / 1e7);
-        vehicleInfo.availableFlags |= ADSBVehicle::LocationAvailable;
+        vehicleInfo.availableFlags |= ADSB::LocationAvailable;
 
         vehicleInfo.callsign = adsbVehicleMsg.callsign;
-        vehicleInfo.availableFlags |= ADSBVehicle::CallsignAvailable;
+        vehicleInfo.availableFlags |= ADSB::CallsignAvailable;
 
         if (adsbVehicleMsg.flags & ADSB_FLAGS_VALID_ALTITUDE) {
-            vehicleInfo.altitude = (double)adsbVehicleMsg.altitude / 1e3;
-            vehicleInfo.availableFlags |= ADSBVehicle::AltitudeAvailable;
+            vehicleInfo.altitude = adsbVehicleMsg.altitude / 1e3;
+            vehicleInfo.availableFlags |= ADSB::AltitudeAvailable;
         }
 
         if (adsbVehicleMsg.flags & ADSB_FLAGS_VALID_HEADING) {
-            vehicleInfo.heading = (double)adsbVehicleMsg.heading / 100.0;
-            vehicleInfo.availableFlags |= ADSBVehicle::HeadingAvailable;
+            vehicleInfo.heading = adsbVehicleMsg.heading / 1e2;
+            vehicleInfo.availableFlags |= ADSB::HeadingAvailable;
         }
 
-        _toolbox->adsbVehicleManager()->adsbVehicleUpdate(vehicleInfo);
+        (void) QMetaObject::invokeMethod(ADSBVehicleManager::instance(), "adsbVehicleUpdate", Qt::AutoConnection, vehicleInfo);
     }
 }
 

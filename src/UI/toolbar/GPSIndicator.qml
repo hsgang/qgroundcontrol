@@ -18,8 +18,8 @@ import QGroundControl.Palette
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
 
-//-------------------------------------------------------------------------
-//-- GPS Indicator
+// Used as the base class control for nboth VehicleGPSIndicator and RTKGPSIndicator
+
 Item {
     id:             control
     width:          gnssValuesRow.width
@@ -177,8 +177,6 @@ Item {
     Component {
         id: gpsIndicatorPage
 
-        GPSIndicatorPage {
-
-        }
+        GPSIndicatorPage { }
     }
 }

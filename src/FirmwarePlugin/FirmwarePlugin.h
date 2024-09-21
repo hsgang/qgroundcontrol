@@ -51,7 +51,7 @@ public:
         TakeoffVehicleCapability =          1 << 4, ///< Vehicle supports guided takeoff
         ChangeHeadingCapability =           1 << 6, ///< Vehicle supports changing heading at current location
         ROIModeCapability =                 1 << 5, ///< Vehicle supports ROI (both in Fly guided mode and from Plan creation)
-
+        ChangeHeadingCapability =           1 << 6, ///< Vehicle supports changing heading at current location
     } FirmwareCapabilities;
 
     /// Maps from on parameter name to another
@@ -145,6 +145,9 @@ public:
 
     /// Command vehicle to takeoff from current location to a firmware specific height.
     virtual void guidedModeTakeoff(Vehicle* vehicle, double takeoffAltRel);
+
+    /// Command vehicle to rotate towards specified location.
+    virtual void guidedModeChangeHeading(Vehicle *vehicle, const QGeoCoordinate &headingCoord);
 
     /// @return The minimum takeoff altitude (relative) for guided takeoff.
     virtual double minimumTakeoffAltitudeMeters(Vehicle* /*vehicle*/) { return 3; }
@@ -351,10 +354,7 @@ public:
     virtual void adjustMetaData(MAV_TYPE /*vehicleType*/, FactMetaData* /*metaData*/) {}
 
     /// Sends the appropriate mavlink message for follow me support
-    virtual void sendGCSMotionReport(Vehicle* vehicle, FollowMe::GCSMotionReport& motionReport, uint8_t estimatationCapabilities);
-
-    // FIXME: Hack workaround for non pluginize FollowMe support
-    static const QString px4FollowMeFlightMode;
+    virtual void sendGCSMotionReport(Vehicle *vehicle, FollowMe::GCSMotionReport &motionReport, uint8_t estimationCapabilities);
 
     // gets hobbs meter from autopilot. This should be reimplmeented for each firmware
     virtual QString getHobbsMeter(Vehicle* vehicle) { Q_UNUSED(vehicle); return "Not Supported"; }

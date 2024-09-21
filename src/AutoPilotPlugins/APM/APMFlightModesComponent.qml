@@ -61,7 +61,7 @@ SetupPage {
                 QGCLabel {
                     id:             flightModeLabel
                     text:           qsTr("Flight Mode Settings") + (_fltmodeChExists ? "" : qsTr(" (Channel 5)"))
-                    font.family:    ScreenTools.demiboldFontFamily
+                    font.bold:      true
                 }
 
                 Rectangle {
@@ -198,7 +198,7 @@ SetupPage {
                 QGCLabel {
                     id:                 channelOptionsLabel
                     text:               qsTr("Switch Options")
-                    font.family:        ScreenTools.demiboldFontFamily
+                    font.bold:          true
                 }
 
                 Rectangle {

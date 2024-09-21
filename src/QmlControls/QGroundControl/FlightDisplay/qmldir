@@ -71,3 +71,6 @@ FlyViewWindvane                 1.0 FlyViewWindvane.qml
 FlyViewEscStatus                1.0 FlyViewEscStatus.qml
 FlyViewEscIndicator             1.0 FlyViewEscIndicator.qml
 OnScreenGimbalController        1.0 OnScreenGimbalController.qml
+FlightDisplayViewGStreamer      1.0 FlightDisplayViewGStreamer.qml
+FlightDisplayViewQtMultimedia   1.0 FlightDisplayViewQtMultimedia.qml
+QGCVideoBackground              1.0 QGCVideoBackground.qml
