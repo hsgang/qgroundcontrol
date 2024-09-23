@@ -103,7 +103,7 @@ MapQuickItem {
                 QGCLabel {
                     id:             vehicleStatusLabel
                     text:           object ? qsTr("Vehicle")+" "+object.id : ""
-                    font.family:    ScreenTools.demiboldFontFamily
+                    font.bold:      true
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 

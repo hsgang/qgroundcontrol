@@ -55,6 +55,8 @@ SettingsPage {
                     height:     1
                     color: qgcPal.groupBorder
                 }
+
+                KeyNavigation.tab: passwordField
             }
         }
 
@@ -81,9 +83,10 @@ SettingsPage {
                     height:     1
                     color: qgcPal.groupBorder
                 }
+
+                KeyNavigation.tab: loginButton
             }
         }
-        Keys.forwardTo: [emailField, passwordField]
     }
 
     SettingsGroupLayout {
@@ -103,69 +106,45 @@ SettingsPage {
         Layout.alignment: Qt.AlignHCenter
 
         QGCButton {
+            id: loginButton
             text: qsTr("Login")
             visible: !_signedIn
             Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 25
-            //Layout.alignment: Qt.AlignCenter
             onClicked:  {
                 var email = emailField.text
                 var password = passwordField.text
-                // console.log(email)
-                // console.log(password)
                 QGroundControl.cloudManager.signUserIn(email, password)
             }
         }
+
         QGCButton {
             text: qsTr("Logout")
             visible: _signedIn
             Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 25
-            // Layout.fillWidth: true
-            // Layout.alignment: Qt.AlignCenter
+
             onClicked: {
                 QGroundControl.cloudManager.signUserOut()
             }
         }
     }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("SignUp")
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("SignUp")
 
-        // LabelledButton {
-        //     label:      qsTr("Login")
-        //     buttonText: qsTr("Login")
-        //     onClicked:  {
-        //         console.log("Clicked Login");
-        //         var email = emailField.fact.value.toString()
-        //         var password = passwordField.fact.value.toString()
-        //         console.log("email:"+email);
-        //         console.log("password:"+password);
-        //         QGroundControl.cloudManager.signUserIn(email, password)
-        //     }
-        // }
-
-        LabelledButton {
-            label:      qsTr("SignUp")
-            buttonText: qsTr("SignUp")
-            onClicked:  {
-                console.log("Clicked SignUp");
-                var email = emailField.fact.value.toString()
-                var password = passwordField.fact.value.toString()
-                console.log("email:"+email);
-                console.log("password:"+password);
-                QGroundControl.cloudManager.signUserUp(email, password)
-            }
-        }
-
-        // LabelledButton {
-        //     label:      qsTr("Upload test")
-        //     buttonText: qsTr("Upload test")
-        //     onClicked:  {
-        //         console.log("Clicked Upload test");
-        //         QGroundControl.cloudManager.uploadFile("vehicle2_2024_0814_180936.csv", "log", "test.csv");
-        //     }
-        // }
-    }
+    //     LabelledButton {
+    //         label:      qsTr("SignUp")
+    //         buttonText: qsTr("SignUp")
+    //         onClicked:  {
+    //             console.log("Clicked SignUp");
+    //             var email = emailField.fact.value.toString()
+    //             var password = passwordField.fact.value.toString()
+    //             console.log("email:"+email);
+    //             console.log("password:"+password);
+    //             QGroundControl.cloudManager.signUserUp(email, password)
+    //         }
+    //     }
+    // }
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -179,29 +158,5 @@ SettingsPage {
             fact:               cloudSettings.firebaseAPIKey
             visible:            cloudSettings.firebaseAPIKey.visible
         }
-
-        // LabelledFactTextField {
-        //     Layout.fillWidth:   true
-        //     textFieldPreferredWidth:    _urlFieldWidth
-        //     label:              qsTr("minio Endpoint")
-        //     fact:               cloudSettings.minioEndpoint
-        //     visible:            cloudSettings.minioEndpoint.visible
-        // }
-
-        // LabelledFactTextField {
-        //     Layout.fillWidth:   true
-        //     textFieldPreferredWidth:    _urlFieldWidth
-        //     label:              qsTr("minioAccessKey")
-        //     fact:               cloudSettings.minioAccessKey
-        //     visible:            cloudSettings.minioAccessKey.visible
-        // }
-
-        // LabelledFactTextField {
-        //     Layout.fillWidth:   true
-        //     textFieldPreferredWidth:    _urlFieldWidth
-        //     label:              qsTr("minioSecretKey")
-        //     fact:               cloudSettings.minioSecretKey
-        //     visible:            cloudSettings.minioSecretKey.visible
-        // }
     }
 }

@@ -60,7 +60,7 @@ MapQuickItem {
                 QGCLabel {
                     id:             atmosphericSensorViewLabel
                     text:           qsTr("Ext. Sensors")
-                    font.family:    ScreenTools.demiboldFontFamily
+                    font.bold:      true
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 

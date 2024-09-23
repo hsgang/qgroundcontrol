@@ -55,9 +55,9 @@ Popup {
     property alias  acceptButtonEnabled:    acceptButton.enabled
     property alias  rejectButtonEnabled:    rejectButton.enabled
     property var    dialogProperties
-    property bool   destroyOnClose:         false
+    property bool   destroyOnClose:         true
     property bool   preventClose:           false
-    
+
     readonly property real headerMinWidth: titleLabel.implicitWidth + rejectButton.width + acceptButton.width + titleRowLayout.spacing * 2
 
     signal accepted

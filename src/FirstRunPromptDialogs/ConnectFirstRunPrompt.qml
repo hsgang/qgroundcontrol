@@ -22,6 +22,7 @@ FirstRunPrompt {
     title:      qsTr("Link Management")
     promptId:   QGroundControl.corePlugin.connectFirstRunPromptId
     markAsShownOnClose: false
+    buttons: Dialog.Close
 
     property var    _currentSelection:     null
 

@@ -23,7 +23,7 @@ SettingsPage {
     property var    _linkManager: QGroundControl.linkManager
     property real   _comboBoxPreferredWidth:    ScreenTools.defaultFontPixelWidth * 15
     property real   _layoutWidth:   ScreenTools.defaultFontPixelWidth * 42
-    property var    autoConnectSettings:    QGroundControl.settingsManager.autoConnectSettings
+    property var    _autoConnectSettings:    QGroundControl.settingsManager.autoConnectSettings
 
     SettingsGroupLayout {
         heading:    qsTr("Link Manager")
@@ -38,36 +38,12 @@ SettingsPage {
             }
         }
     }
-        heading:        qsTr("AutoConnect")
-        visible:        _autoConnectSettings.visible
-
-        Repeater {
-            id: autoConnectRepeater
-
-            model: [
-                _autoConnectSettings.autoConnectPixhawk,
-                _autoConnectSettings.autoConnectSiKRadio,
-                _autoConnectSettings.autoConnectLibrePilot,
-                _autoConnectSettings.autoConnectUDP,
-                _autoConnectSettings.autoConnectZeroConf,
-                _autoConnectSettings.autoConnectRTKGPS,
-            ]
-
-            property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("LibrePilot"), qsTr("UDP"), qsTr("Zero-Conf"), qsTr("RTK") ]
-
-            FactCheckBoxSlider {
-                Layout.fillWidth:   true
-                text:               autoConnectRepeater.names[index]
-                fact:               modelData
-                visible:            modelData.visible
-            }
-        }
-    }
 
     SettingsGroupLayout {
-        heading: qsTr("Links")
+        heading: qsTr("Added Link List")
 
         Repeater {
+            id: linkRepeater
             model: _linkManager.linkConfigurations
             
             RowLayout {
@@ -142,57 +118,6 @@ SettingsPage {
             }
         }
 
-    SettingsGroupLayout {
-        heading:    qsTr("Added Link List")
-
-        Repeater {
-            id: linkRepeater
-            model: _linkManager.linkConfigurations
-
-            RowLayout {
-                Layout.fillWidth:   true
-                visible:            !object.dynamic
-
-                QGCButton {
-                    text:       object.link ? qsTr("Disconnect") : qsTr("Connect")
-                    onClicked: {
-                        if (object.link) {
-                            object.link.disconnect()
-                            object.linkChanged()
-                        } else {
-                            _linkManager.createConnectedLink(object)
-                        }
-                    }
-                }
-
-                QGCLabel {
-                    Layout.fillWidth:   true
-                    text:               object.name
-                }
-
-                QGCButton {
-                    text:       qsTr("Edit") //object.link ? qsTr("Disconnect") : qsTr("Connect")
-                    enabled:    !object.link
-                    onClicked: {
-                        var editingConfig = _linkManager.startConfigurationEditing(object)
-                        linkDialogComponent.createObject(mainWindow, { editingConfig: editingConfig, originalConfig: object }).open()
-                    }
-                }
-
-                QGCButton {
-                    text:       qsTr("Delete")//object.link ? qsTr("Disconnect") : qsTr("Connect")
-                    enabled:    !object.link
-                    onClicked:  mainWindow.showMessageDialog(
-                                    qsTr("Delete Link"),
-                                    qsTr("Are you sure you want to delete '%1'?").arg(object.name),
-                                    Dialog.Ok | Dialog.Cancel,
-                                    function () {
-                                        _linkManager.removeConfiguration(object)
-                                    })
-                }
-            }
-        }
-
         QGCLabel {
             visible: linkRepeater.count < 1
             text: qsTr("No Links Configured")
@@ -200,32 +125,89 @@ SettingsPage {
     }
 
     // SettingsGroupLayout {
-    //     heading:    qsTr("Auto Connect")
+    //     heading:    qsTr("Added Link List")
 
     //     Repeater {
-    //         id: autoConnectRepeater
+    //         id: linkRepeater
+    //         model: _linkManager.linkConfigurations
 
-    //         model: [
-    //             autoConnectSettings.autoConnectPixhawk,
-    //             autoConnectSettings.autoConnectSiKRadio,
-    //             autoConnectSettings.autoConnectUDP,
-    //         ]
-
-    //         property var names: [
-    //             qsTr("USB port"),
-    //             qsTr("RF Telemetry"),
-    //             qsTr("UDP Network")
-    //         ]
-
-    //         FactCheckBoxSlider {
+    //         RowLayout {
     //             Layout.fillWidth:   true
-    //             text:               autoConnectRepeater.names[index]
-    //             fact:               modelData
-    //             visible:            modelData.visible
+    //             visible:            !object.dynamic
+
+    //             QGCButton {
+    //                 text:       object.link ? qsTr("Disconnect") : qsTr("Connect")
+    //                 onClicked: {
+    //                     if (object.link) {
+    //                         object.link.disconnect()
+    //                         object.linkChanged()
+    //                     } else {
+    //                         _linkManager.createConnectedLink(object)
+    //                     }
+    //                 }
+    //             }
+
+    //             QGCLabel {
+    //                 Layout.fillWidth:   true
+    //                 text:               object.name
+    //             }
+
+    //             QGCButton {
+    //                 text:       qsTr("Edit") //object.link ? qsTr("Disconnect") : qsTr("Connect")
+    //                 enabled:    !object.link
+    //                 onClicked: {
+    //                     var editingConfig = _linkManager.startConfigurationEditing(object)
+    //                     linkDialogComponent.createObject(mainWindow, { editingConfig: editingConfig, originalConfig: object }).open()
+    //                 }
+    //             }
+
+    //             QGCButton {
+    //                 text:       qsTr("Delete")//object.link ? qsTr("Disconnect") : qsTr("Connect")
+    //                 enabled:    !object.link
+    //                 onClicked:  mainWindow.showMessageDialog(
+    //                                 qsTr("Delete Link"),
+    //                                 qsTr("Are you sure you want to delete '%1'?").arg(object.name),
+    //                                 Dialog.Ok | Dialog.Cancel,
+    //                                 function () {
+    //                                     _linkManager.removeConfiguration(object)
+    //                                 })
+    //             }
     //         }
+    //     }
+
+    //     QGCLabel {
+    //         visible: linkRepeater.count < 1
+    //         text: qsTr("No Links Configured")
     //     }
     // }
 
+    SettingsGroupLayout {
+        heading:    qsTr("Auto Connect")
+
+        Repeater {
+            id: autoConnectRepeater
+
+            model: [
+                autoConnectSettings.autoConnectPixhawk,
+                autoConnectSettings.autoConnectSiKRadio,
+                autoConnectSettings.autoConnectUDP,
+            ]
+
+            property var names: [
+                qsTr("USB port"),
+                qsTr("RF Telemetry"),
+                qsTr("UDP Network")
+            ]
+
+            FactCheckBoxSlider {
+                Layout.fillWidth:   true
+                text:               autoConnectRepeater.names[index]
+                fact:               modelData
+                visible:            modelData.visible
+            }
+        }
+    }
+te
     Component {
         id: linkDialogComponent
 

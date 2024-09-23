@@ -45,13 +45,16 @@ AnalyzePage {
             }
 
             ColumnLayout{
-                // width: availableWidth
-                // height: availableHeight
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
+                QGCLabel{
+                    visible: !_isSignIn
+                    color:  qgcPal.colorRed
+                    text: qsTr("클라우드 서비스 계정이 활성화되지 않았습니다.")
+                }
+
                 Rectangle {
-                    //width:  parent.width
                     Layout.fillWidth: true
                     height: 1
                     color:  qgcPal.groupBorder

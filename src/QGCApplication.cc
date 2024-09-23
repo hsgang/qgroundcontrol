@@ -531,7 +531,7 @@ void QGCApplication::saveTelemetryLogOnMainThread(const QString &tempLogfile)
         const QDir saveDir(saveDirPath);
 
         const QString nameFormat("%1%2.%3");
-        const QString dtFormat("yyyy-MM-dd hh-mm-ss");
+        const QString dtFormat("yyyy-MM-dd_hh-mm-ss");
 
         int tryIndex = 1;
         QString saveFileName = nameFormat.arg(

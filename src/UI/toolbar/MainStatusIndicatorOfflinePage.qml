@@ -92,7 +92,7 @@ ToolIndicatorPage {
                     model: [
                         autoConnectSettings.autoConnectPixhawk,
                         autoConnectSettings.autoConnectSiKRadio,
-                        autoConnectSettings.autoConnectUDP,
+                        autoConnectSettings.autoConnectUDP
                     ]
 
                     property var names: [
