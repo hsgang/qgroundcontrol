@@ -188,9 +188,9 @@ SettingsPage {
             id: autoConnectRepeater
 
             model: [
-                autoConnectSettings.autoConnectPixhawk,
-                autoConnectSettings.autoConnectSiKRadio,
-                autoConnectSettings.autoConnectUDP,
+                _autoConnectSettings.autoConnectPixhawk,
+                _autoConnectSettings.autoConnectSiKRadio,
+                _autoConnectSettings.autoConnectUDP,
             ]
 
             property var names: [
@@ -207,7 +207,7 @@ SettingsPage {
             }
         }
     }
-te
+
     Component {
         id: linkDialogComponent
 
