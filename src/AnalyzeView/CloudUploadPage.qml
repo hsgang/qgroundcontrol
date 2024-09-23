@@ -26,8 +26,9 @@ AnalyzePage {
     pageComponent:      pageComponent
     pageDescription:    qsTr("Cloud Upload Page")
 
+    property var  cloudManager:     QGroundControl.cloudManager
     property real _margin:          ScreenTools.defaultFontPixelWidth
-    property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 10
+    property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 18
     property var _isSignIn:         QGroundControl.cloudManager.signedIn
     property string _signedId:      QGroundControl.cloudManager.signedId
 
@@ -42,7 +43,7 @@ AnalyzePage {
 
             function loadFileList() {
                 var dir = dirCombobox.currentText
-                QGroundControl.cloudManager.loadDirFile(dir)
+                cloudManager.loadDirFile(dir)
             }
 
             ColumnLayout{
@@ -110,98 +111,52 @@ AnalyzePage {
                 QGCFlickable {
                     Layout.fillWidth:   true
                     Layout.fillHeight:  true
-                    contentWidth:       columnLayout.width
-                    contentHeight:      columnLayout.height
-                    // contentWidth:       gridLayout.width
-                    // contentHeight:      gridLayout.height
+                    contentWidth:       gridLayout.width
+                    contentHeight:      gridLayout.height
 
-                    // GridLayout {
-                    //     id:                 gridLayout
-                    //     rows:               QGroundControl.cloudManager.fileList.count + 1
-                    //     columns:            3
-                    //     flow:               GridLayout.TopToBottom
-                    //     columnSpacing:      ScreenTools.defaultFontPixelWidth
-                    //     rowSpacing:         0
+                    GridLayout {
+                        id:                 gridLayout
+                        rows:               cloudManager.fileList.length + 1
+                        columns:            3
+                        flow:               GridLayout.TopToBottom
+                        columnSpacing:      ScreenTools.defaultFontPixelHeight
+                        rowSpacing:         ScreenTools.defaultFontPixelWidth
 
-                    //     QGCLabel {
-                    //         text: qsTr("File")
-                    //     }
-                    //     Repeater {
-                    //         model: QGroundControl.cloudManager.fileList
-
-                    //         QGCLabel {
-                    //             text: modelData["fileName"]
-                    //         }
-                    //     }
-
-                    //     QGCLabel {
-                    //         text: qsTr("Size")
-                    //     }
-                    //     Repeater {
-                    //         model: QGroundControl.cloudManager.fileList
-
-                    //         QGCLabel {
-                    //             text: "[" + modelData["fileSize"] + "]"
-                    //         }
-                    //     }
-
-                    //     QGCLabel {
-                    //         text: qsTr("Upload")
-                    //     }
-                    //     Repeater {
-                    //         model: QGroundControl.cloudManager.fileList
-
-                    //         QGCButton {
-                    //             property bool exists : modelData["existsInMinio"]
-                    //             text: exists ? qsTr("Uploaded") : qsTr("Upload")
-                    //             enabled: _isSignIn && !exists
-                    //             onClicked: {
-                    //                 var bucketName = "log/"+dirCombobox.currentText;
-                    //                 QGroundControl.cloudManager.uploadFile(modelData["filePath"], bucketName, modelData["fileName"]);
-                    //             }
-                    //         }
-                    //     }
-                    // }
-                    ColumnLayout {
-                        id: columnLayout
-
+                        QGCLabel {
+                            text: qsTr("File")
+                        }
                         Repeater {
                             model: QGroundControl.cloudManager.fileList
 
-                            Item {
-                                id:    item
-                                width: parent.width
-                                height: rowLayout.height + ScreenTools.defaultFontPixelWidth
+                            QGCLabel {
+                                text: modelData["fileName"]
+                            }
+                        }
 
-                                RowLayout {
-                                    id: rowLayout
-                                    spacing: 10
+                        QGCLabel {
+                            text: qsTr("Size")
+                        }
+                        Repeater {
+                            model: QGroundControl.cloudManager.fileList
 
-                                    QGCLabel {
-                                        text: modelData["fileName"]
-                                        width: parent.width * 0.6
-                                    }
+                            QGCLabel {
+                                text: modelData["fileSize"]
+                            }
+                        }
 
-                                    QGCLabel {
-                                        text: "[" + modelData["fileSize"] + "]"
-                                    }
+                        QGCLabel {
+                            text: qsTr("Upload")
+                        }
+                        Repeater {
+                            model: QGroundControl.cloudManager.fileList
 
-                                    QGCButton {
-                                        property bool exists : modelData["existsInMinio"]
-                                        text: exists ? qsTr("Uploaded") : qsTr("Upload")
-                                        enabled: _isSignIn && !exists
-                                        onClicked: {
-                                            var bucketName = dirCombobox.currentText;
-                                            QGroundControl.cloudManager.uploadFile(modelData["filePath"], bucketName, modelData["fileName"]);
-                                        }
-                                    }
-                                }
-                                Rectangle {
-                                    anchors.top: parent.bottom
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    width:  item.width
-                                    height: 1
-                                    color:  qgcPal.groupBorder
+                            QGCButton {
+                                property bool exists : modelData["existsInMinio"]
+                                text: exists ? qsTr("Uploaded") : qsTr("Upload")
+                                enabled: _isSignIn && !exists
+                                onClicked: {
+                                    var bucketName = "log/"+dirCombobox.currentText;
+                                    QGroundControl.cloudManager.uploadFile(modelData["filePath"], bucketName, modelData["fileName"]);
                                 }
                             }
                         }
