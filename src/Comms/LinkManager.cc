@@ -582,17 +582,17 @@ void LinkManager::_updateAutoConnectLinks(void)
                 qCDebug(LinkManagerLog) << "Waiting for bootloader to finish" << portInfo.systemLocation();
                 continue;
             }
-            if (_portAlreadyConnected(portInfo.systemLocation()) || m_autoConnectRTKPort == portInfo.systemLocation()) {
+            if (_portAlreadyConnected(portInfo.systemLocation()) || _autoConnectRTKPort == portInfo.systemLocation()) {
                 qCDebug(LinkManagerVerboseLog) << "Skipping existing autoconnect" << portInfo.systemLocation();
-            } else if (!m_autoconnectPortWaitList.contains(portInfo.systemLocation())) {
+            } else if (!_autoconnectPortWaitList.contains(portInfo.systemLocation())) {
                 // We don't connect to the port the first time we see it. The ability to correctly detect whether we
                 // are in the bootloader is flaky from a cross-platform standpoint. So by putting it on a wait list
                 // and only connect on the second pass we leave enough time for the board to boot up.
                 qCDebug(LinkManagerLog) << "Waiting for next autoconnect pass" << portInfo.systemLocation() << boardName;
-                m_autoconnectPortWaitList[portInfo.systemLocation()] = 1;
-            } else if (++m_autoconnectPortWaitList[portInfo.systemLocation()] * _autoconnectUpdateTimerMSecs > _autoconnectConnectDelayMSecs) {
+                _autoconnectPortWaitList[portInfo.systemLocation()] = 1;
+            } else if (++_autoconnectPortWaitList[portInfo.systemLocation()] * _autoconnectUpdateTimerMSecs > _autoconnectConnectDelayMSecs) {
                 SerialConfiguration* pSerialConfig = nullptr;
-                m_autoconnectPortWaitList.remove(portInfo.systemLocation());
+                _autoconnectPortWaitList.remove(portInfo.systemLocation());
                 switch (boardType) {
                 case QGCSerialPortInfo::BoardTypePixhawk:
                     pSerialConfig = new SerialConfiguration(tr("%1 on %2 (AutoConnect)").arg(boardName).arg(portInfo.portName().trimmed()));
@@ -609,7 +609,7 @@ void LinkManager::_updateAutoConnectLinks(void)
                     break;
                 case QGCSerialPortInfo::BoardTypeRTKGPS:
                     qCDebug(LinkManagerLog) << "RTK GPS auto-connected" << portInfo.portName().trimmed();
-                    m_autoConnectRTKPort = portInfo.systemLocation();
+                    _autoConnectRTKPort = portInfo.systemLocation();
                     _toolbox->gpsManager()->connectGPS(portInfo.systemLocation(), boardName);
                     break;
                 default:
@@ -631,10 +631,10 @@ void LinkManager::_updateAutoConnectLinks(void)
     }
 
     // Check for RTK GPS connection gone
-    if (!m_autoConnectRTKPort.isEmpty() && !currentPorts.contains(m_autoConnectRTKPort)) {
-        qCDebug(LinkManagerLog) << "RTK GPS disconnected" << m_autoConnectRTKPort;
+    if (!_autoConnectRTKPort.isEmpty() && !currentPorts.contains(_autoConnectRTKPort)) {
+        qCDebug(LinkManagerLog) << "RTK GPS disconnected" << _autoConnectRTKPort;
         _toolbox->gpsManager()->disconnectGPS();
-        m_autoConnectRTKPort.clear();
+        _autoConnectRTKPort.clear();
     }
 
 #endif // NO_SERIAL_LINK

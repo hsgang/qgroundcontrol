@@ -23,7 +23,6 @@
 #include "QGCCorePlugin.h"
 #include "SettingsManager.h"
 #include "QGCApplication.h"
-#include "ADSBVehicleManager.h"
 #include "NTRIP.h"
 #include "CloudManager.h"
 #ifndef QGC_AIRLINK_DISABLED
@@ -59,7 +58,6 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
     _videoManager           = new VideoManager              (app, this);
 
     _mavlinkLogManager      = new MAVLinkLogManager         (app, this);
-    _adsbVehicleManager     = new ADSBVehicleManager        (app, this);
     _ntrip                  = new NTRIP                     (app, this);
     _cloudManager           = new CloudManager              (app, this);
 #ifndef QGC_AIRLINK_DISABLED
@@ -88,7 +86,6 @@ void QGCToolbox::setChildToolboxes(void)
     _qgcPositionManager->setToolbox(this);
     _videoManager->setToolbox(this);
     _mavlinkLogManager->setToolbox(this);
-    _adsbVehicleManager->setToolbox(this);
     _ntrip->setToolbox(this);
     _cloudManager->setToolbox(this);
 #ifndef QGC_AIRLINK_DISABLED

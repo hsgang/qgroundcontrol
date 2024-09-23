@@ -31,6 +31,7 @@ public:
     Q_PROPERTY(bool signedIn READ signedIn WRITE setSignedIn NOTIFY signedInChanged)
     Q_PROPERTY(QString signedId READ signedId WRITE setSignedId NOTIFY signedIdChanged)
     Q_PROPERTY(double uploadProgressValue READ uploadProgressValue WRITE setUploadProgressValue NOTIFY uploadProgressValueChanged)
+    Q_PROPERTY(QString messageString READ messageString WRITE setMessageString NOTIFY messageStringChanged)
 
     QmlObjectListModel* fileModel () { return & _uploadEntriesModel; }
     QList<QVariant> fileList() const { return m_fileList; }
@@ -39,9 +40,11 @@ public:
     void setToolbox (QGCToolbox *toolbox);
     void setSignedIn (bool signedIn);
     void setSignedId (QString signedId);
+    void setMessageString (QString messageString);
 
     bool signedIn              () const{ return m_signedIn; }
     QString signedId           () const{ return m_signedId; }
+    QString messageString      () const{ return m_messageString; }
 
     QString minioEndpoint      () const{ return m_minioEndpoint; }
     QString minioAccessKey     () const{ return m_minioAccessKey;}
@@ -75,6 +78,7 @@ signals:
     void userSignIn();
     void signedInChanged();
     void signedIdChanged();
+    void messageStringChanged();
     void uploadProgressValueChanged();
 
 private:
@@ -97,6 +101,7 @@ private:
 
     bool m_signedIn = false;
     QString m_signedId = "";
+    QString m_messageString;
 
     QString m_minioEndpoint;
     QString m_minioAccessKey;
@@ -106,6 +111,7 @@ private:
     void requestSignIn(const QString & url, const QJsonDocument & payload );
     void sendGetRequest(const QString & databaseUrl);
     void parseResponse(const QByteArray & response );
+    void handleError(const QJsonObject &errorObject);
 
     QString formatFileSize(qint64 bytes);
 

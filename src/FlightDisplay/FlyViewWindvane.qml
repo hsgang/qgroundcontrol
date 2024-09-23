@@ -83,7 +83,7 @@ Rectangle {
             id:                 windVaneText
             text:               _windSpdText
             font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
-            font.family:        ScreenTools.demiboldFontFamily
+            font.bold:          true
             color:              qgcPal.text
             anchors.centerIn:   parent
         }
@@ -122,7 +122,7 @@ Rectangle {
             id:                 windVaneExternalText
             text:               _atmosWindSpdText
             font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
-            font.family:        ScreenTools.demiboldFontFamily
+            font.bold:          true
             color:              qgcPal.text
             anchors.centerIn:   parent
         }

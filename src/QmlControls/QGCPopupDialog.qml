@@ -58,7 +58,7 @@ Popup {
     property bool   destroyOnClose:         false
     property bool   preventClose:           false
     
-    readonly property real headerMinWidth: titleLable.implicitWidth + rejectButton.width + acceptButton.width + titleRowLayout.spacing * 2
+    readonly property real headerMinWidth: titleLabel.implicitWidth + rejectButton.width + acceptButton.width + titleRowLayout.spacing * 2
 
     signal accepted
     signal rejected
@@ -216,7 +216,7 @@ Popup {
             spacing:                _contentMargin
 
             QGCLabel {
-                id: titleLable
+                id: titleLabel
                 Layout.fillWidth:   true
                 text:               root.title
                 font.pointSize:     ScreenTools.mediumFontPointSize

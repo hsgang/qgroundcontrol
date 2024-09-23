@@ -36,7 +36,6 @@ DECLARE_SETTINGGROUP(Video, "Video")
     // videoSourceList.append(videoSourceHerelinkAirUnit);
     // videoSourceList.append(videoSourceHerelinkHotspot);
     videoSourceList.append(videoSourceSiyiA8);
-#endif
 #ifndef QGC_DISABLE_UVC
     QList<QCameraDevice> videoInputs = QMediaDevices::videoInputs();
     for (const auto& cameraDevice: videoInputs) {

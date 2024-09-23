@@ -103,7 +103,7 @@ Item {
                 QGCLabel{
                     id:                 proximityValueLabel
                     text:               proximityValues.rgRotationValueStrings[index]
-                    font.family:        ScreenTools.demiboldFontFamily
+                    font.bold:          true
 
                     transform: Scale {
                         origin.y:       proximityValueLabel.height / 2

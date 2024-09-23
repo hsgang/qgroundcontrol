@@ -185,7 +185,6 @@ Map {
             QGCLabel {
                 text:               "H"
                 font.pointSize:     parent.height * 0.25
-                font.family:        ScreenTools.demiboldFontFamily
                 font.bold:          true
                 color:              qgcPal.alertBackground
                 anchors.centerIn:   parent

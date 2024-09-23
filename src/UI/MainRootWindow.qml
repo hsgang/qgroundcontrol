@@ -633,13 +633,13 @@ ApplicationWindow {
 
         PlanView {
             id: planView
-            onActivationParamsSent:{
-                if(_utmspEnabled){
-                    _startTimeStamp = startTime
-                    _showVisible = activate
-                    _flightID = flightID
-                }
-            }
+            // onActivationParamsSent:{
+            //     if(_utmspEnabled){
+            //         _startTimeStamp = startTime
+            //         _showVisible = activate
+            //         _flightID = flightID
+            //     }
+            // }
         }
     }
 

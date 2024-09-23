@@ -39,7 +39,7 @@ Rectangle {
         QGCLabel {
             id:     atmosphericSensorViewLabel
             text:   qsTr("Ext. Sensors")
-            font.family:    ScreenTools.demiboldFontFamily
+            font.bold:    true
             font.pointSize: _fontSize
             anchors.horizontalCenter: parent.horizontalCenter
         }

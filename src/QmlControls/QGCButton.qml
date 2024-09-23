@@ -52,7 +52,7 @@ Button {
         Rectangle {
             anchors.fill:   parent
             color:          qgcPal.buttonHighlight
-            opacity:        _showHighlight ? 1 : control.enabled && control.hovered ? .2 : 0
+            opacity:        _showHighlight ? 1 : control.enabled && control.hovered ? .3 : 0
             radius:         parent.radius
         }
     }
@@ -79,7 +79,7 @@ Button {
                 font.pointSize:         control.pointSize
                 font.family:            control.font.family
                 font.weight:            fontWeight
-                color:                  _showHighlight ? qgcPal.buttonHighlightText : (primary ? qgcPal.primaryButtonText : qgcPal.buttonText)
+                color:                  qgcPal.text //_showHighlight ? qgcPal.buttonHighlightText : (primary ? qgcPal.primaryButtonText : qgcPal.buttonText)
                 visible:                control.text !== "" 
             }
     }

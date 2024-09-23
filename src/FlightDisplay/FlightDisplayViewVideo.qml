@@ -46,8 +46,8 @@ Item {
     property var    _settingsManager:   QGroundControl.settingsManager
     property var    _videoSettings:     _settingsManager.videoSettings
     property string _videoSource:       _videoSettings.videoSource.rawValue
-    property bool   _isGst:             QGroundControl.videoManager.isGStreamer
-    property bool   _isRTSP:            _isGst && _videoSource === _videoSettings.rtspVideoSource
+    // property bool   _isGst:             QGroundControl.videoManager.isGStreamer
+    property bool   _isRTSP:            _videoSource === _videoSettings.rtspVideoSource
 
     property double _thermalHeightFactor: 0.85 //-- TODO
 
@@ -149,7 +149,7 @@ Item {
                         QGCLabel {
                             id:             noVideoLabel
                             text:           QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("WAITING FOR VIDEO") : qsTr("VIDEO DISABLED")
-                            font.family:    ScreenTools.demiboldFontFamily
+                            font.bold:      true
                             color:          qgcPal.text
                             font.pointSize: useSmallFont ? ScreenTools.smallFontPointSize : ScreenTools.largeFontPointSize
                         }

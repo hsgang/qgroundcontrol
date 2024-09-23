@@ -108,7 +108,7 @@ SettingsPage {
             label:              qsTr("Background Opacity")
             fact:               QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
             indexModel:         false
-            comboBoxPreferredWidth: _comboBoxPreferredWidth
+            comboBoxPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
         }
     }
 

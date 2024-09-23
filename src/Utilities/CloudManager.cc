@@ -55,6 +55,12 @@ void CloudManager::setSignedId(QString signedId)
     emit signedIdChanged();
 }
 
+void CloudManager::setMessageString(QString messageString)
+{
+    m_messageString = messageString;
+    emit messageStringChanged();
+}
+
 void CloudManager::setAPIKey(const QString &apiKey)
 {
     m_apiKey = apiKey;
@@ -103,6 +109,7 @@ void CloudManager::signUserOut()
 {
     m_signedIn = false;
     m_signedId.clear();
+    m_messageString.clear();
     m_idToken.clear();
     m_localId.clear();
     m_signedCompany.clear();
@@ -262,9 +269,15 @@ void CloudManager::sendGetRequest(const QString &databaseUrl)
 void CloudManager::parseResponse(const QByteArray &response)
 {
     QJsonDocument jsonDocument = QJsonDocument::fromJson( response );
+    QJsonObject jsonObject = jsonDocument.object();
+
+    m_messageString.clear();
+    setMessageString("");
+
     if ( jsonDocument.object().contains("error"))
     {
         qDebug() << "Error occured!" << response;
+        handleError(jsonObject["error"].toObject());
     }
     else if ( jsonDocument.object().contains("kind"))
     {
@@ -272,12 +285,42 @@ void CloudManager::parseResponse(const QByteArray &response)
         m_idToken = idToken;
         // qDebug() << "Obtained user ID Token: " << idToken;
         QString localId = jsonDocument.object().value("localId").toString();
-        qDebug() << "UID: " << localId;
+        //qDebug() << "UID: " << localId;
         m_localId = localId;
 
         emit userSignIn();
         setSignedIn(true);
     }
+}
+
+void CloudManager::handleError(const QJsonObject &errorObject)
+{
+    int errorCode = errorObject["code"].toInt();
+    QString errorMessage = errorObject["message"].toString();
+
+    qDebug() << "Error occurred! Code:" << errorCode << "Message:" << errorMessage;
+
+    QString userMessage;
+    switch (errorCode)
+    {
+    case 400:
+        if (errorMessage == "INVALID_EMAIL")
+            userMessage = "이메일 형식을 확인하세요";
+        else if (errorMessage == "INVALID_LOGIN_CREDENTIALS")
+            userMessage = "패스워드를 확인하세요";
+        else if (errorMessage == "MISSING_PASSWORD")
+            userMessage = "패스워드를 확인하세요";
+        else
+            userMessage = "Invalid request.";
+        break;
+    case 401:
+        userMessage = "Authentication failed. Please check your credentials.";
+        break;
+    default:
+        userMessage = "An error occurred. Please try again later.";
+    }
+
+    setMessageString(userMessage);
 }
 
 void CloudManager::loadDirFile(QString dirName)
@@ -476,7 +519,8 @@ void CloudManager::getKeysInfoReplyReadyRead()
         } else {
             qDebug() << "Invalid JSON";
         }
-        qDebug() << "get keys result: " << m_minioAccessKey;
+        //qDebug() << "get keys result: " << m_minioAccessKey;
+        qDebug() << "Success get keys";
     }
 }
 

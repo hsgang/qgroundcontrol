@@ -96,6 +96,7 @@ elseif(WIN32)
         endif()
         set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT Embedded)
     endif()
+    add_compile_definitions(_USE_MATH_DEFINES)
 endif()
 
 if(CMAKE_CROSSCOMPILING AND ANDROID)
@@ -280,14 +281,16 @@ qt_add_executable(${PROJECT_NAME}
 )
 
 if(Qt6LinguistTools_FOUND)
+    file(GLOB TS_SOURCES RELATIVE ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/translations/qgc_*.ts)
+    qt_add_translations(${PROJECT_NAME} TS_FILES ${TS_SOURCES}) # TODO: Update to new qt_add_translations form in Qt6.7
     # TODO: Update to new qt_add_translations form in Qt6.7
-    file(GLOB TS_SOURCES ${CMAKE_SOURCE_DIR}/translations/qgc_*.ts)
-    set_source_files_properties(${TS_SOURCES} PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/translations")
-    qt_add_translations(${PROJECT_NAME}
-        TS_FILES ${TS_SOURCES}
-        RESOURCE_PREFIX "/i18n"
-        LUPDATE_OPTIONS -no-obsolete
-    )
+    # file(GLOB TS_SOURCES ${CMAKE_SOURCE_DIR}/translations/qgc_*.ts)
+    # set_source_files_properties(${TS_SOURCES} PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/translations")
+    # qt_add_translations(${PROJECT_NAME}
+    #     TS_FILES ${TS_SOURCES}
+    #     RESOURCE_PREFIX "/i18n"
+    #     LUPDATE_OPTIONS -no-obsolete
+    # )
 endif()
 
 set_target_properties(${PROJECT_NAME}
@@ -340,7 +343,6 @@ if(WIN32)
             WIN32_EXECUTABLE TRUE
             QT_TARGET_RC_ICONS "${CMAKE_BINARY_DIR}/deploy/windows/WindowsQGC.ico"
     )
-    add_compile_definitions(_USE_MATH_DEFINES)
 elseif(MACOS)
     set(MACOSX_BUNDLE_ICON_FILE "macx.icns")
     set(app_icon_macos "${QGC_MACOS_ICON_PATH}/macx.icns")

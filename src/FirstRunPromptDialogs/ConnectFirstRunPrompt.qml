@@ -31,6 +31,7 @@ FirstRunPrompt {
 
     property bool   _signedIn: QGroundControl.cloudManager.signedIn
     property string _signedId: QGroundControl.cloudManager.signedId
+    property string _message: QGroundControl.cloudManager.messageString
 
     RowLayout {
         spacing: ScreenTools.defaultFontPixelHeight
@@ -50,7 +51,7 @@ FirstRunPrompt {
             Rectangle {
                 id: flickableRect
                 color:              qgcPal.windowShadeDark
-                width:              ScreenTools.defaultFontPixelWidth * 40
+                width:              ScreenTools.defaultFontPixelWidth * 36
                 height:             ScreenTools.defaultFontPixelHeight * 10
                 radius:             ScreenTools.defaultFontPixelHeight / 2
 
@@ -116,7 +117,11 @@ FirstRunPrompt {
             id:         columnLayout2
             spacing:    ScreenTools.defaultFontPixelHeight
             Layout.alignment: Qt.AlignTop
-            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 40
+            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 36
+
+            Component.onCompleted: {
+                emailField.forceActiveFocus()
+            }
 
             QGCLabel {
                 text:       qsTr("Cloud Login")
@@ -145,6 +150,7 @@ FirstRunPrompt {
                     font.family:    ScreenTools.normalFontFamily
                     color:          qgcPal.text
                     antialiasing:   true
+                    focus:          true
 
                     property string placeholderText: qsTr("Input Email")
 
@@ -163,6 +169,8 @@ FirstRunPrompt {
                         height:     1
                         color: qgcPal.groupBorder
                     }
+
+                    KeyNavigation.tab: passwordField
                 }
             }
 
@@ -201,25 +209,35 @@ FirstRunPrompt {
                         color: qgcPal.groupBorder
                     }
                 }
+
+                KeyNavigation.tab: loginButton
             }
-            Keys.forwardTo: [emailField, passwordField]
+
+            QGCLabel {
+                visible: _message !== "";
+                text: _message
+                color: qgcPal.colorRed
+            }
 
             RowLayout {
                 Layout.fillWidth:   true
                 Layout.alignment: Qt.AlignHCenter
 
                 QGCButton {
+                    id: loginButton
                     text: qsTr("Login")
                     visible: !_signedIn
                     Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 12
-                    //Layout.alignment: Qt.AlignCenter
                     onClicked:  {
                         var email = emailField.text
                         var password = passwordField.text
                         QGroundControl.cloudManager.signUserIn(email, password)
                     }
+                    KeyNavigation.tab: emailField
                 }
+
                 QGCButton {
+                    id: logoutButton
                     text: qsTr("Logout")
                     visible: _signedIn
                     Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 12

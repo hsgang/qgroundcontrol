@@ -87,7 +87,6 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
 #ifndef NO_SERIAL_LINK
     _gpsRtkFactGroup        = toolbox->gpsManager()->gpsRtkFactGroup();
 #endif
-    _adsbVehicleManager     = toolbox->adsbVehicleManager();
     _ntrip                  = toolbox->ntrip();
     _cloudManager           = toolbox->cloudManager();
     _globalPalette          = new QGCPalette(this);

@@ -208,7 +208,6 @@ Item {
         QGCLabel {
             text:               "H"
             font.pointSize:     _fontSize < 10 ? 10 : _fontSize;
-            font.family:        ScreenTools.demiboldFontFamily
             font.bold:          true
             color:              "black" //qgcPal.alertBackground
             anchors.centerIn:   parent
@@ -234,7 +233,7 @@ Item {
             id:                 distanceToHomeText
             text:               _distanceToHomeText
             font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
-            font.family:        ScreenTools.demiboldFontFamily
+            font.bold:          true
             color:              qgcPal.text
             anchors.centerIn:   parent
         }
@@ -356,7 +355,6 @@ Item {
             id:                 wpText
             text:               "WP"
             font.pointSize:     _fontSize < 10 ? 10 : _fontSize;
-            font.family:        ScreenTools.demiboldFontFamily
             font.bold:          true
             color:              qgcPal.buttonHighlight
             anchors.centerIn:   parent
@@ -382,7 +380,7 @@ Item {
             id:                 distanceToNextWPText
             text:               _distanceToNextWPText
             font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
-            font.family:        ScreenTools.demiboldFontFamily
+            font.bold:          true
             color:              qgcPal.text
             anchors.centerIn:   parent
         }
@@ -423,7 +421,7 @@ Item {
             id:                 windVaneText
             text:               _windSpdText
             font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
-            font.family:        ScreenTools.demiboldFontFamily
+            font.bold:          true
             color:              qgcPal.text
             anchors.centerIn:   parent
         }
