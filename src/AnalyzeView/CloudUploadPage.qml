@@ -29,6 +29,7 @@ AnalyzePage {
     property real _margin:          ScreenTools.defaultFontPixelWidth
     property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 10
     property var _isSignIn:         QGroundControl.cloudManager.signedIn
+    property string _signedId:      QGroundControl.cloudManager.signedId
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
@@ -190,7 +191,7 @@ AnalyzePage {
                                         text: exists ? qsTr("Uploaded") : qsTr("Upload")
                                         enabled: _isSignIn && !exists
                                         onClicked: {
-                                            var bucketName = "log/"+dirCombobox.currentText;
+                                            var bucketName = dirCombobox.currentText;
                                             QGroundControl.cloudManager.uploadFile(modelData["filePath"], bucketName, modelData["fileName"]);
                                         }
                                     }

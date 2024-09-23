@@ -169,6 +169,7 @@ QString CloudManager::getAuthorizationHeader(const QString &httpVerb, const QStr
 void CloudManager::uploadFile(const QString &uploadFileName, const QString &bucketName, const QString &objectName)
 {
     const QString saveFilePath = uploadFileName;
+    const QString signedBucketName = "log/"+ m_signedCompany + "/" + m_signedId + "/" + bucketName;
 
     QFile * file = new QFile(saveFilePath);
     if (!file || !file->open(QIODevice::ReadOnly)) {
@@ -187,12 +188,12 @@ void CloudManager::uploadFile(const QString &uploadFileName, const QString &buck
     QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     QString endpointHost = m_minioEndpoint;
-    QString endpoint = QString("http://%1/%2/%3").arg(endpointHost, bucketName, objectName);
+    QString endpoint = QString("http://%1/%2/%3").arg(endpointHost, signedBucketName, objectName);
 
     QDateTime currentTime = QDateTime::currentDateTimeUtc();
     QString amzDate = currentTime.toString("yyyyMMddTHHmmssZ");
 
-    QString canonicalUri = QString("/%1/%2").arg(bucketName, objectName); //put method
+    QString canonicalUri = QString("/%1/%2").arg(signedBucketName,objectName); //put method
     QString canonicalQueryString = "";
 
     QString authorizationHeader = getAuthorizationHeader("PUT", canonicalUri, canonicalQueryString, "UNSIGNED-PAYLOAD");
@@ -374,7 +375,7 @@ void CloudManager::checkFilesExistInMinio(QString dirName)
 
         // Create a HEAD request to check if the file exists in Minio
         QString objectName = dirName+"/"+fileName;  // Adjust this if you use a different naming scheme in Minio
-        QString bucketName = "log";  // Replace with your actual bucket name
+        QString bucketName = "log/"+ m_signedCompany + "/" + m_signedId; //"log";  // Replace with your actual bucket name
 
         QString endpointHost = m_minioEndpoint;
         QString endpoint = QString("http://%1/%2/%3").arg(endpointHost, bucketName, objectName);
@@ -483,7 +484,7 @@ void CloudManager::getSignInfoReplyReadyRead()
         } else {
             qDebug() << "Invalid JSON";
         }
-        m_signedId = m_signedCompany + " " + m_signedNickName;
+        m_signedId = m_signedNickName;
         setSignedId(m_signedId);
     }
 }
