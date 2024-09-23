@@ -3,7 +3,7 @@ name: Docker-Linux
 on:
   push:
     branches:
-      - master
+      #- master
       - 'Stable*'
     tags:
       - 'v*'
