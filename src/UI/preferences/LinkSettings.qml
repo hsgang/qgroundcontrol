@@ -38,6 +38,109 @@ SettingsPage {
             }
         }
     }
+        heading:        qsTr("AutoConnect")
+        visible:        _autoConnectSettings.visible
+
+        Repeater {
+            id: autoConnectRepeater
+
+            model: [
+                _autoConnectSettings.autoConnectPixhawk,
+                _autoConnectSettings.autoConnectSiKRadio,
+                _autoConnectSettings.autoConnectLibrePilot,
+                _autoConnectSettings.autoConnectUDP,
+                _autoConnectSettings.autoConnectZeroConf,
+                _autoConnectSettings.autoConnectRTKGPS,
+            ]
+
+            property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("LibrePilot"), qsTr("UDP"), qsTr("Zero-Conf"), qsTr("RTK") ]
+
+            FactCheckBoxSlider {
+                Layout.fillWidth:   true
+                text:               autoConnectRepeater.names[index]
+                fact:               modelData
+                visible:            modelData.visible
+            }
+        }
+    }
+
+    SettingsGroupLayout {
+        heading: qsTr("Links")
+
+        Repeater {
+            model: _linkManager.linkConfigurations
+            
+            RowLayout {
+                Layout.fillWidth:   true
+                visible:            !object.dynamic
+
+                QGCLabel {
+                    Layout.fillWidth:   true
+                    text:               object.name
+                }
+                QGCColoredImage {
+                    height:                 ScreenTools.minTouchPixels
+                    width:                  height
+                    sourceSize.height:      height
+                    fillMode:               Image.PreserveAspectFit
+                    mipmap:                 true
+                    smooth:                 true
+                    color:                  qgcPalEdit.text
+                    source:                 "/res/pencil.svg"
+                    enabled:                !object.link
+
+                    QGCPalette {
+                        id: qgcPalEdit
+                        colorGroupEnabled: parent.enabled
+                    }
+
+                    QGCMouseArea {
+                        fillItem: parent
+                        onClicked: {
+                            var editingConfig = _linkManager.startConfigurationEditing(object)
+                            linkDialogComponent.createObject(mainWindow, { editingConfig: editingConfig, originalConfig: object }).open()
+                        }
+                    }
+                }
+                QGCColoredImage {
+                    height:                 ScreenTools.minTouchPixels
+                    width:                  height
+                    sourceSize.height:      height
+                    fillMode:               Image.PreserveAspectFit
+                    mipmap:                 true
+                    smooth:                 true
+                    color:                  qgcPalDelete.text
+                    source:                 "/res/TrashDelete.svg"
+
+                    QGCPalette {
+                        id: qgcPalDelete
+                        colorGroupEnabled: parent.enabled
+                    }
+
+                    QGCMouseArea {
+                        fillItem:   parent
+                        onClicked:  mainWindow.showMessageDialog(
+                                        qsTr("Delete Link"), 
+                                        qsTr("Are you sure you want to delete '%1'?").arg(object.name), 
+                                        Dialog.Ok | Dialog.Cancel, 
+                                        function () {
+                                            _linkManager.removeConfiguration(object)
+                                        })
+                    }
+                }
+                QGCButton {
+                    text:       object.link ? qsTr("Disconnect") : qsTr("Connect")
+                    onClicked: {
+                        if (object.link) {
+                            object.link.disconnect()
+                            object.linkChanged()
+                        } else {
+                            _linkManager.createConnectedLink(object)
+                        }
+                    }
+                }
+            }
+        }
 
     SettingsGroupLayout {
         heading:    qsTr("Added Link List")
