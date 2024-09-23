@@ -25,7 +25,7 @@ AnalyzePage {
     pageDescription:    qsTr("Log Download allows you to download binary log files from your vehicle. Click Refresh to get list of available logs.")
 
     property real _margin:          ScreenTools.defaultFontPixelWidth
-    property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 10
+    property real _butttonWidth:    ScreenTools.defaultFontPixelWidth * 18
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
