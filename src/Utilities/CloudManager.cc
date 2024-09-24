@@ -11,6 +11,7 @@
 #include <QMap>
 #include <QMessageAuthenticationCode>
 #include <QHttpMultiPart>
+#include <QXmlStreamReader>
 
 const QString CloudManager::API_BASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:";
 const QString CloudManager::SIGN_UP_ENDPOINT = API_BASE_URL + "signUp?key=";
@@ -22,6 +23,11 @@ CloudManager::CloudManager(QGCApplication* app, QGCToolbox* toolbox)
     , m_apiKey(QString())
     , m_networkAccessManager(nullptr)
 {
+    QSettings settings;
+    settings.beginGroup(kCloudManagerGroup);
+    setEmailAddress(settings.value(kEmailAddress, QString()).toString());
+    setPassword(settings.value(kPassword, QString()).toString());
+
     m_networkAccessManager = new QNetworkAccessManager(this);
     m_networkAccessManager->setTransferTimeout(10000);
 
@@ -39,6 +45,24 @@ void CloudManager::setToolbox(QGCToolbox* toolbox)
 
     QString apiKey = CloudSettings().firebaseAPIKey()->rawValueString();
     this->setAPIKey(apiKey);
+}
+
+void CloudManager::setEmailAddress(QString email)
+{
+    _emailAddress = email;
+    QSettings settings;
+    settings.beginGroup(kCloudManagerGroup);
+    settings.setValue(kEmailAddress, email);
+    emit emailAddressChanged();
+}
+
+void CloudManager::setPassword(QString password)
+{
+    _password = password;
+    QSettings settings;
+    settings.beginGroup(kCloudManagerGroup);
+    settings.setValue(kPassword, password);
+    emit passwordChanged();
 }
 
 void CloudManager::setSignedIn(bool signedIn)
@@ -139,8 +163,8 @@ QString CloudManager::getAuthorizationHeader(const QString &httpVerb, const QStr
     QString dateStamp = currentTime.toString("yyyyMMdd");
 
     // Canonical Request 생성
-    QString canonicalHeaders = QString("host:%1\nx-amz-content-sha256:UNSIGNED-PAYLOAD\nx-amz-date:%3\n")
-                                   .arg(m_minioEndpoint, amzDate);
+    QString canonicalHeaders = QString("host:%1\nx-amz-content-sha256:%2\nx-amz-date:%3\n")
+                                   .arg(m_minioEndpoint, payloadHash, amzDate);
     QString signedHeaders = "host;x-amz-content-sha256;x-amz-date";
 
     QString canonicalRequest = QString("%1\n%2\n%3\n%4\n%5\n%6")
@@ -229,10 +253,149 @@ void CloudManager::uploadFile(const QString &uploadFileName, const QString &buck
     m_networkAccessManager->setProxy(savedProxy);
 }
 
+void CloudManager::uploadJson(const QJsonDocument &jsonDoc, const QString &bucketName, const QString &objectName)
+{
+    const QString signedBucketName = "log/"+ m_signedCompany + "/" + m_signedId + "/" + bucketName;
+
+    QByteArray jsonData = jsonDoc.toJson();
+
+    QNetworkProxy savedProxy = m_networkAccessManager->proxy();
+    QNetworkProxy tempProxy;
+    tempProxy.setType(QNetworkProxy::DefaultProxy);
+    m_networkAccessManager->setProxy(tempProxy);
+
+    QString endpointHost = m_minioEndpoint;
+    QString endpoint = QString("http://%1/%2/%3").arg(endpointHost, signedBucketName, objectName);
+
+    QDateTime currentTime = QDateTime::currentDateTimeUtc();
+    QString amzDate = currentTime.toString("yyyyMMddTHHmmssZ");
+
+    QString canonicalUri = QString("/%1/%2").arg(signedBucketName,objectName);
+    QString canonicalQueryString = "";
+
+    QString authorizationHeader = getAuthorizationHeader("PUT", canonicalUri, canonicalQueryString, "UNSIGNED-PAYLOAD");
+
+    QUrl url(endpoint);
+    QNetworkRequest request(url);
+
+    QString _size = QString::number(jsonData.size());
+
+    request.setRawHeader("Authorization", authorizationHeader.toUtf8());
+    request.setRawHeader("x-amz-content-sha256", "UNSIGNED-PAYLOAD");
+    request.setRawHeader("x-amz-date", amzDate.toUtf8());
+    request.setRawHeader("Host", endpointHost.toUtf8());
+    request.setRawHeader("x-amz-acl", "public-read");
+    request.setRawHeader("x-minio-extract", "true");
+
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    m_networkReply = m_networkAccessManager->put(request, jsonData);
+
+    connect(m_networkReply, &QNetworkReply::finished, this, &CloudManager::onUploadFinished);
+    connect(m_networkReply, &QNetworkReply::uploadProgress, this, &CloudManager::uploadProgress);
+    qDebug() << "JsonObject" << objectName << "Uploading." << _size << "bytes.";
+    m_networkAccessManager->setProxy(savedProxy);
+}
+
+void CloudManager::getListBucket(const QString &bucketName)
+{
+    QString prefix = m_signedCompany + "/" + m_signedId + "/" + bucketName;
+
+    QString endpointHost = m_minioEndpoint;
+    QString endpoint = QString("http://%1/%2").arg(endpointHost, "log");
+    //QString endpoint = "http://ampkorea.synology.me:9000/log?list-type=2&prefix=amp/Tester/Mission";
+    QUrl url(endpoint);
+    QUrlQuery query;
+    query.addQueryItem("list-type", "2");
+    query.addQueryItem("prefix", prefix);
+    url.setQuery(query);
+
+    QNetworkRequest request(url);
+
+    QNetworkReply *reply = m_networkAccessManager->get(request);
+
+    //응답 처리
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            parseXmlResponse(responseData);
+            //qDebug() << "Response:" << responseData;
+        } else {
+            qDebug() << "Error:" << reply->errorString();
+            qDebug() << "HTTP Status Code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            //qDebug() << "Response Headers:" << reply->rawHeaderPairs();
+            qDebug() << "Response Body:" << reply->readAll();
+        }
+        reply->deleteLater();
+    });
+}
+
+void CloudManager::parseXmlResponse(const QString &xmlResponse)
+{
+    QList<DownloadEntryFileInfo> fileInfoList;
+    QXmlStreamReader xml(xmlResponse);
+    DownloadEntryFileInfo currentFile;
+
+    m_dnEntryPlanFile.clear();
+
+    const QStringView sContents = QStringLiteral("Contents");
+    const QStringView sKey = QStringLiteral("Key");
+    const QStringView sLastModified = QStringLiteral("LastModified");
+    const QStringView sETag = QStringLiteral("ETag");
+    const QStringView sSize = QStringLiteral("Size");
+
+    while (!xml.atEnd() && !xml.hasError()) {
+        QXmlStreamReader::TokenType token = xml.readNext();
+
+        if (token == QXmlStreamReader::StartElement) {
+            if (xml.name() == sContents) {
+                currentFile = DownloadEntryFileInfo(); // Reset for new file
+            } else if (xml.name() == sKey) {
+                currentFile.key = xml.readElementText();
+            } else if (xml.name() == sLastModified) {
+                currentFile.lastModified = xml.readElementText();
+            } else if (xml.name() == sETag) {
+                currentFile.eTag = xml.readElementText();
+            } else if (xml.name() == sSize) {
+                currentFile.size = xml.readElementText().toLongLong();
+            }
+        } else if (token == QXmlStreamReader::EndElement) {
+            if (xml.name() == sContents) {
+                fileInfoList.append(currentFile);
+            }
+        }
+    }
+
+    if (xml.hasError()) {
+        qDebug() << "XML parsing error:" << xml.errorString();
+    }
+
+    for (const DownloadEntryFileInfo& file : fileInfoList) {
+        QMap<QString, QVariant> fileInfoMap;
+        fileInfoMap["Key"] = file.key;
+        fileInfoMap["FileName"] = file.key.split("/").last();
+        fileInfoMap["LastModified"] = file.lastModified;
+        fileInfoMap["ETag"] = file.eTag;
+        fileInfoMap["Size"] = file.size;
+        m_dnEntryPlanFile.append(QVariant::fromValue(fileInfoMap));
+
+        qDebug() << "File Information:";
+        qDebug() << "Key:" << file.key;
+        qDebug() << "Last Modified:" << file.lastModified;
+        qDebug() << "ETag:" << file.eTag;
+        qDebug() << "Size:" << file.size;
+        qDebug() << "---------------------------";
+    }
+
+    emit dnEntryPlanFileChanged();
+}
+
+
 void CloudManager::onUploadFinished()
 {
     if (m_networkReply->error() == QNetworkReply::NoError) {
         qDebug() << "업로드 성공!" << m_networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qgcApp()->showAppMessage(tr("클라우드 저장소 업로드 완료"));
     }
     else {
         qDebug() << "업로드 실패: " << m_networkReply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() << " - "<< m_networkReply->errorString();
@@ -611,4 +774,70 @@ void CloudManager::performPOST(const QString &url, const QJsonDocument &payload)
 
     connect(m_networkReply, &QNetworkReply::readyRead, this, &CloudManager::networkReplyReadyRead);
     connect(m_networkReply, &QNetworkReply::errorOccurred, this, &CloudManager::networkReplyErrorOccurred);
+}
+
+void CloudManager::downloadObject(const QString& bucketName, const QString& objectName)
+{
+    const QString signedBucketName = "log/"+ m_signedCompany + "/" + m_signedId + "/" + bucketName;
+
+    QString endpoint = QString("http://%1/%2/%3").arg(m_minioEndpoint, signedBucketName, objectName);
+
+    QUrl url(endpoint);
+    QNetworkRequest request(url);
+
+    // Send the request
+    QNetworkReply* reply = m_networkAccessManager->get(request);
+    //connect(reply, &QNetworkReply::finished, this, &CloudManager::onDownloadFinished);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, objectName]() {
+        onDownloadFinished(reply, objectName);
+    });
+}
+
+void CloudManager::onDownloadFinished(QNetworkReply* reply, const QString& objectName)
+{
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray data = reply->readAll();
+        QString downloadDirPath = _toolbox->settingsManager()->appSettings()->missionSavePath();
+
+        // Save the file using the object name
+        QString filePath = downloadDirPath + "/" + objectName;  // Customize the file path as needed
+        QFile file(filePath);
+        if (file.open(QIODevice::WriteOnly)) {
+            file.write(data);
+            file.close();
+            qDebug() << "Downloaded successfully!" << filePath;
+            qgcApp()->showAppMessage(tr("다운로드 완료"));
+        } else {
+            qDebug() << "Failed to open file for writing.";
+        }
+    } else {
+        qDebug() << "Error downloading object:" << reply->errorString();
+    }
+    reply->deleteLater();
+}
+
+void CloudManager::deleteObject(const QString& bucketName, const QString& objectName)
+{
+    const QString signedBucketName = "log/"+ m_signedCompany + "/" + m_signedId + "/" + bucketName;
+
+    QString endpoint = QString("http://%1/%2/%3").arg(m_minioEndpoint, signedBucketName, objectName);
+
+    QUrl url(endpoint);
+    QNetworkRequest request(url);
+
+    // Send the request
+    QNetworkReply* reply = m_networkAccessManager->deleteResource(request);
+    //connect(reply, &QNetworkReply::finished, this, &CloudManager::onDownloadFinished);
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            QByteArray responseData = reply->readAll();
+            qDebug() << "Response:" << responseData;
+        } else {
+            qDebug() << "Error:" << reply->errorString();
+            qDebug() << "HTTP Status Code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            //qDebug() << "Response Headers:" << reply->rawHeaderPairs();
+            qDebug() << "Response Body:" << reply->readAll();
+        }
+        reply->deleteLater();
+    });
 }

@@ -25,6 +25,7 @@
 #include "GeoFenceManager.h"
 #include "RallyPointManager.h"
 #include "QGCLoggingCategory.h"
+#include "CloudManager.h"
 
 #include <QtCore/QJsonDocument>
 #include <QtCore/QFileInfo>
@@ -643,4 +644,34 @@ void PlanMasterController::showPlanFromManagerVehicle(void)
         qCDebug(PlanMasterControllerLog) << "showPlanFromManagerVehicle: Plan View - New vehicle available, show plan from new manager vehicle";
         _showPlanFromManagerVehicle();
     }
+}
+
+void PlanMasterController::uploadToCloud(const QString& fileName)
+{
+    qDebug() << "uploadToCloud()";
+
+    _uploadToCloud(fileName);
+}
+
+void PlanMasterController::_uploadToCloud(const QString& fileName)
+{
+    qDebug() << "_uploadToCloud()";
+
+    QString uploadFileName = fileName + ".plan";
+    QGCApplication* app = qgcApp();
+    CloudManager* cloudManager = app->toolbox()->cloudManager();
+    QJsonDocument saveDoc = saveToJson();
+    cloudManager->uploadJson(saveDoc, "Mission", uploadFileName);
+}
+
+void PlanMasterController::getListFromCloud()
+{
+    _getListFromCloud();
+}
+
+void PlanMasterController::_getListFromCloud()
+{
+    QGCApplication* app = qgcApp();
+    CloudManager* cloudManager = app->toolbox()->cloudManager();
+    cloudManager->getListBucket("Mission");
 }

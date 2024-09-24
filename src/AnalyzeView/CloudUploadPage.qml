@@ -155,7 +155,7 @@ AnalyzePage {
                                 text: exists ? qsTr("Uploaded") : qsTr("Upload")
                                 enabled: _isSignIn && !exists
                                 onClicked: {
-                                    var bucketName = "log/"+dirCombobox.currentText;
+                                    var bucketName = dirCombobox.currentText;
                                     QGroundControl.cloudManager.uploadFile(modelData["filePath"], bucketName, modelData["fileName"]);
                                 }
                             }

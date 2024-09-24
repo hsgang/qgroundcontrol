@@ -70,6 +70,9 @@ public:
     /// Replaces any current plan with the plan from the manager vehicle even if offline.
     Q_INVOKABLE void showPlanFromManagerVehicle(void);
 
+    Q_INVOKABLE void uploadToCloud(const QString& fileName);
+    Q_INVOKABLE void getListFromCloud(void);
+
     /// Sends a plan to the specified file
     ///     @param[in] vehicle Vehicle we are sending a plan to
     ///     @param[in] filename Plan file to load
@@ -136,6 +139,8 @@ private slots:
 private:
     void _commonInit                (void);
     void _showPlanFromManagerVehicle(void);
+    void _uploadToCloud             (const QString& fileName);
+    void _getListFromCloud          (void);
 
     MultiVehicleManager*    _multiVehicleMgr =          nullptr;
     Vehicle*                _controllerVehicle =        nullptr;    ///< Offline controller vehicle

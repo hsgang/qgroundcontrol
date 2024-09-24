@@ -43,8 +43,8 @@ FirstRunPrompt {
 
             QGCLabel {
                 id:         unitsSectionLabel
-                text:       qsTr("Choose the link you want to connect.")
-
+                text:       qsTr("연결 항목") //qsTr("Choose the link you want to connect.")
+                font.bold:  true
                 Layout.preferredWidth: flickableRect.width
                 wrapMode: Text.WordWrap
             }
@@ -116,17 +116,19 @@ FirstRunPrompt {
 
         ColumnLayout {
             id:         columnLayout2
-            spacing:    ScreenTools.defaultFontPixelHeight
-            Layout.alignment: Qt.AlignTop
+            spacing:    ScreenTools.defaultFontPixelHeight * 2
+            //Layout.alignment: Qt.AlignTop
+            Layout.fillHeight: true
             Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 36
 
-            Component.onCompleted: {
-                emailField.forceActiveFocus()
-            }
+            // Component.onCompleted: {
+            //     emailField.forceActiveFocus()
+            // }
 
             QGCLabel {
                 text:       qsTr("Cloud Login")
                 wrapMode:   Text.WordWrap
+                font.bold:  true
             }
 
             LabelledLabel {
@@ -136,82 +138,90 @@ FirstRunPrompt {
                 labelText:          _signedId == "" ? qsTr("Connecting...") : _signedId
             }
 
-            RowLayout {
+            ColumnLayout {
                 Layout.fillWidth:   true
+                Layout.fillHeight:  true
+                spacing: ScreenTools.defaultFontPixelHeight
                 visible: !_signedIn
 
-                QGCLabel {
+                RowLayout {
                     Layout.fillWidth:   true
-                    text: qsTr("Email")
-                }
-                TextInput {
-                    id: emailField
-                    Layout.preferredWidth: _urlFieldWidth
-                    font.pointSize: ScreenTools.defaultFontPointSize
-                    font.family:    ScreenTools.normalFontFamily
-                    color:          qgcPal.text
-                    antialiasing:   true
-                    focus:          true
+                    //Layout.fillHeight:  true
 
-                    property string placeholderText: qsTr("Input Email")
-
-                    Text {
-                        text: parent.placeholderText
-                        color: "#aaa"
-                        visible: !parent.text && !parent.activeFocus
-                        font: parent.font
-                        verticalAlignment: Text.AlignVCenter
+                    QGCLabel {
+                        Layout.fillWidth:   true
+                        text: qsTr("Email")
                     }
+                    TextInput {
+                        id: emailField
+                        Layout.preferredWidth: _urlFieldWidth
+                        font.pointSize: ScreenTools.defaultFontPointSize
+                        font.family:    ScreenTools.normalFontFamily
+                        color:          qgcPal.text
+                        antialiasing:   true
+                        focus:          true
+                        text:           QGroundControl.cloudManager.emailAddress
 
-                    Rectangle {
-                        anchors.bottom: parent.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        width:      parent.width
-                        height:     1
-                        color: qgcPal.groupBorder
+                        property string placeholderText: qsTr("Input Email")
+
+                        Text {
+                            text: parent.placeholderText
+                            color: "#aaa"
+                            visible: !parent.text && !parent.activeFocus
+                            font: parent.font
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        Rectangle {
+                            anchors.bottom: parent.bottom
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            width:      parent.width
+                            height:     1
+                            color: qgcPal.groupBorder
+                        }
+
+                        KeyNavigation.tab: passwordField
                     }
-
-                    KeyNavigation.tab: passwordField
                 }
-            }
 
-            RowLayout {
-                Layout.fillWidth:   true
-                visible: !_signedIn
-
-                QGCLabel {
+                RowLayout {
                     Layout.fillWidth:   true
-                    text: qsTr("Password")
-                }
-                TextInput {
-                    id: passwordField
-                    Layout.preferredWidth: _urlFieldWidth
-                    font.pointSize: ScreenTools.defaultFontPointSize
-                    font.family:    ScreenTools.normalFontFamily
-                    color:          qgcPal.text
-                    antialiasing:   true
-                    echoMode: TextField.PasswordEchoOnEdit
 
-                    property string placeholderText: qsTr("Input Password")
+                    QGCLabel {
+                        Layout.fillWidth:   true
+                        text: qsTr("Password")
+                    }
+                    TextInput {
+                        id: passwordField
+                        Layout.preferredWidth: _urlFieldWidth
+                        font.pointSize: ScreenTools.defaultFontPointSize
+                        font.family:    ScreenTools.normalFontFamily
+                        color:          qgcPal.text
+                        antialiasing:   true
+                        echoMode: TextField.PasswordEchoOnEdit
+                        text:           QGroundControl.cloudManager.password
 
-                    Text {
-                        text: parent.placeholderText
-                        color: "#aaa"
-                        visible: !parent.text && !parent.activeFocus
-                        font: parent.font
-                        verticalAlignment: Text.AlignVCenter
+                        property string placeholderText: qsTr("Input Password")
+
+                        Text {
+                            text: parent.placeholderText
+                            color: "#aaa"
+                            visible: !parent.text && !parent.activeFocus
+                            font: parent.font
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        Rectangle {
+                            anchors.bottom: parent.bottom
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            width:      parent.width
+                            height:     1
+                            color: qgcPal.groupBorder
+                        }
                     }
 
-                    Rectangle {
-                        anchors.bottom: parent.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        width:      parent.width
-                        height:     1
-                        color: qgcPal.groupBorder
-                    }
+                    KeyNavigation.tab: loginButton
                 }
-
-                KeyNavigation.tab: loginButton
             }
 
             QGCLabel {
@@ -233,6 +243,8 @@ FirstRunPrompt {
                         var email = emailField.text
                         var password = passwordField.text
                         QGroundControl.cloudManager.signUserIn(email, password)
+                        QGroundControl.cloudManager.emailAddress = emailField.text
+                        QGroundControl.cloudManager.password = passwordField.text
                     }
                     KeyNavigation.tab: emailField
                 }
@@ -244,6 +256,8 @@ FirstRunPrompt {
                     Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 12
                     onClicked: {
                         QGroundControl.cloudManager.signUserOut()
+                        passwordField.text = "";
+                        QGroundControl.cloudManager.password = "";
                     }
                 }
             }
