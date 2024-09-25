@@ -177,7 +177,7 @@ Item {
 
         function waitingOnIncompleteDataMessage(save) {
             var saveOrUpload = save ? qsTr("Save") : qsTr("Upload")
-            mainWindow.showMessageDialog(qsTr("Unable to %1").arg(saveOrUpload), qsTr("Plan has incomplete items. Complete all items and %1 again.").arg(saveOrUpload))
+            mainWindow.showMessageDialog(qsTr("Unable to %1").arg(saveOrUpload), qsTr("Plan has incomplete items. Complete all items."))
         }
 
         function waitingOnTerrainDataMessage(save) {
@@ -963,7 +963,7 @@ Item {
         RowLayout {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            spacing: ScreenTools.defaultFontPixelWidth
+            spacing: ScreenTools.defaultFontPixelHeight
 
             ColumnLayout {
                 id:         columnHolder
@@ -1182,7 +1182,7 @@ Item {
                         enabled:            !_planMasterController.syncInProgress && _planMasterController.containsItems
                         visible:            QGroundControl.cloudManager.signedIn
                         onClicked: {
-                            uploadNameLayout.visible = !uploadNameLayout.visible;
+                            uploadNameRect.visible = !uploadNameRect.visible;
                         }
                     }
 
@@ -1196,50 +1196,65 @@ Item {
                             console.log("Clicked Cloud Download")
                             cloudDownloadLayout.visible = !cloudDownloadLayout.visible;
                             _planMasterController.getListFromCloud();
-                            //downloadClicked(columnHolder._overwriteText)
                         }
                     }
                 }
 
-                QGCLabel {
-                    visible: uploadNameLayout.visible
-                    text: qsTr("자동 경로 파일 이름을 입력하세요")
-                }
+                Rectangle {
+                    id: uploadNameRect
+                    Layout.fillWidth: true
+                    height: ScreenTools.defaultFontPixelHeight * 4
+                    color: "transparent"
+                    border.width: 1
+                    border.color: qgcPal.groupBorder
+                    radius: ScreenTools.defaultFontPixelWidth / 2
 
-                RowLayout {
-                    id: uploadNameLayout
-                    Layout.fillWidth:   true
-                    spacing:            _margin
                     visible: false
 
-                    TextInput {
-                        id: uploadNameField
-                        Layout.fillWidth:   true
-                        //Layout.preferredWidth: _urlFieldWidth
-                        font.pointSize: ScreenTools.defaultFontPointSize
-                        font.family:    ScreenTools.normalFontFamily
-                        color:          qgcPal.text
-                        antialiasing:   true
+                    GridLayout {
+                        id: uploadGridLayout
+                        anchors.fill:   parent
+                        anchors.margins: ScreenTools.defaultFontPixelWidth
+                        rowSpacing:     ScreenTools.defaultFontPixelWidth
+                        columnSpacing:  ScreenTools.defaultFontPixelWidth
+                        rows:           2
+                        columns:        2
 
-                        Rectangle {
-                            anchors.bottom: parent.bottom
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            width:      parent.width
-                            height:     1
-                            color: qgcPal.groupBorder
+                        QGCLabel {
+                            text: qsTr("경로 이름 입력(영문)")
+                            Layout.columnSpan: 2
+                            Layout.fillWidth: true
                         }
-                    }
 
-                    QGCButton {
-                        id: uploadButton
-                        text: qsTr("확인")
-                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 12
-                        onClicked:  {
-                            var uploadName = uploadNameField.text
-                            if(uploadName.length > 0) {
-                                _planMasterController.uploadToCloud(uploadName);
-                                uploadNameField.text = "";
-                                _planMasterController.getListFromCloud();
+                        TextInput {
+                            id: uploadNameField
+                            Layout.fillWidth:   true
+                            font.pointSize: ScreenTools.defaultFontPointSize
+                            font.family:    ScreenTools.normalFontFamily
+                            color:          qgcPal.text
+                            antialiasing:   true
+
+                            Rectangle {
+                                anchors.top: parent.bottom
+                                anchors.topMargin: ScreenTools.defaultFontPixelWidth * 0.2
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                width:      parent.width
+                                height:     1
+                                color: qgcPal.groupBorder
+                            }
+                        }
+
+                        QGCButton {
+                            id: uploadButton
+                            text: qsTr("확인")
+                            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 12
+                            onClicked:  {
+                                var uploadName = uploadNameField.text
+                                if(uploadName.length > 0) {
+                                    _planMasterController.uploadToCloud(uploadName);
+                                    uploadNameField.text = "";
+                                    _planMasterController.getListFromCloud();
+                                }
                             }
                         }
                     }
