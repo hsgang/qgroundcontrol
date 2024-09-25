@@ -543,7 +543,7 @@ Item {
             confirmDialog.hideTrigger = true
             confirmDialog.title = gripperTitle
             confirmDialog.message = gripperMessage
-            _widgetLayer._gripperMenu.open()
+            _widgetLayer._gripperMenu.createObject(mainWindow).open()
             break
         case actionSetHome:
             confirmDialog.title = setHomeTitle
