@@ -47,11 +47,11 @@ CheckBox {
             }
         }
 
-        // Rectangle {
-        //     Layout.fillWidth:   true
-        //     height:             1
-        //     color:              qgcPal.text
-        // }
+        Rectangle {
+            Layout.fillWidth:   true
+            height:             1
+            color:              qgcPal.groupBorder
+        }
     }
 
     indicator: Item {}

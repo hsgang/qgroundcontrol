@@ -982,74 +982,74 @@ Item {
                     visible:            _planMasterController.dirty
                 }
 
-                SectionHeader {
-                    id:                 createSection
-                    Layout.fillWidth:   true
-                    text:               qsTr("Create Plan")
-                    showSpacer:         false
-                }
+                // SectionHeader {
+                //     id:                 createSection
+                //     Layout.fillWidth:   true
+                //     text:               qsTr("Create Plan")
+                //     showSpacer:         false
+                // }
 
-                GridLayout {
-                    columns:            3
-                    columnSpacing:      _margin
-                    rowSpacing:         _margin
-                    Layout.fillWidth:   true
-                    visible:            createSection.checked
+                // GridLayout {
+                //     columns:            3
+                //     columnSpacing:      _margin
+                //     rowSpacing:         _margin
+                //     Layout.fillWidth:   true
+                //     visible:            createSection.checked
 
-                    Repeater {
-                        model: _planMasterController.planCreators
+                //     Repeater {
+                //         model: _planMasterController.planCreators
 
-                        Rectangle {
-                            id:     button
-                            width:  ScreenTools.defaultFontPixelHeight * 5
-                            height: planCreatorNameLabel.y + planCreatorNameLabel.height
-                            color:  button.pressed || button.highlighted ? qgcPal.buttonHighlight : qgcPal.button
+                //         Rectangle {
+                //             id:     button
+                //             width:  ScreenTools.defaultFontPixelHeight * 5
+                //             height: planCreatorNameLabel.y + planCreatorNameLabel.height
+                //             color:  button.pressed || button.highlighted ? qgcPal.buttonHighlight : qgcPal.button
 
-                            property bool highlighted: mouseArea.containsMouse
-                            property bool pressed:     mouseArea.pressed
+                //             property bool highlighted: mouseArea.containsMouse
+                //             property bool pressed:     mouseArea.pressed
 
-                            Image {
-                                id:                 planCreatorImage
-                                anchors.left:       parent.left
-                                anchors.right:      parent.right
-                                source:             object.imageResource
-                                sourceSize.width:   width
-                                fillMode:           Image.PreserveAspectFit
-                                mipmap:             true
-                            }
+                //             Image {
+                //                 id:                 planCreatorImage
+                //                 anchors.left:       parent.left
+                //                 anchors.right:      parent.right
+                //                 source:             object.imageResource
+                //                 sourceSize.width:   width
+                //                 fillMode:           Image.PreserveAspectFit
+                //                 mipmap:             true
+                //             }
 
-                            QGCLabel {
-                                id:                     planCreatorNameLabel
-                                anchors.top:            planCreatorImage.bottom
-                                anchors.left:           parent.left
-                                anchors.right:          parent.right
-                                horizontalAlignment:    Text.AlignHCenter
-                                text:                   object.name
-                                color:                  button.pressed || button.highlighted ? qgcPal.buttonHighlightText : qgcPal.buttonText
-                            }
+                //             QGCLabel {
+                //                 id:                     planCreatorNameLabel
+                //                 anchors.top:            planCreatorImage.bottom
+                //                 anchors.left:           parent.left
+                //                 anchors.right:          parent.right
+                //                 horizontalAlignment:    Text.AlignHCenter
+                //                 text:                   object.name
+                //                 color:                  button.pressed || button.highlighted ? qgcPal.buttonHighlightText : qgcPal.buttonText
+                //             }
 
-                            QGCMouseArea {
-                                id:                 mouseArea
-                                anchors.fill:       parent
-                                hoverEnabled:       true
-                                preventStealing:    true
-                                onClicked:          {
-                                    if (_planMasterController.containsItems) {
-                                        createPlanRemoveAllPromptDialog.createObject(mainWindow, { mapCenter: _mapCenter(), planCreator: object }).open()
-                                    } else {
-                                        object.createPlan(_mapCenter())
-                                    }
-                                    dropPanel.hide()
-                                }
+                //             QGCMouseArea {
+                //                 id:                 mouseArea
+                //                 anchors.fill:       parent
+                //                 hoverEnabled:       true
+                //                 preventStealing:    true
+                //                 onClicked:          {
+                //                     if (_planMasterController.containsItems) {
+                //                         createPlanRemoveAllPromptDialog.createObject(mainWindow, { mapCenter: _mapCenter(), planCreator: object }).open()
+                //                     } else {
+                //                         object.createPlan(_mapCenter())
+                //                     }
+                //                     dropPanel.hide()
+                //                 }
 
-                                function _mapCenter() {
-                                    var centerPoint = Qt.point(editorMap.centerViewport.left + (editorMap.centerViewport.width / 2), editorMap.centerViewport.top + (editorMap.centerViewport.height / 2))
-                                    return editorMap.toCoordinate(centerPoint, false /* clipToViewPort */)
-                                }
-                            }
-                        }
-                    }
-                }
+                //                 function _mapCenter() {
+                //                     var centerPoint = Qt.point(editorMap.centerViewport.left + (editorMap.centerViewport.width / 2), editorMap.centerViewport.top + (editorMap.centerViewport.height / 2))
+                //                     return editorMap.toCoordinate(centerPoint, false /* clipToViewPort */)
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
 
                 SectionHeader {
                     id:                 storageSection
@@ -1193,7 +1193,6 @@ Item {
                         visible:            QGroundControl.cloudManager.signedIn
 
                         onClicked: {
-                            console.log("Clicked Cloud Download")
                             cloudDownloadLayout.visible = !cloudDownloadLayout.visible;
                             _planMasterController.getListFromCloud();
                         }
@@ -1203,7 +1202,8 @@ Item {
                 Rectangle {
                     id: uploadNameRect
                     Layout.fillWidth: true
-                    height: ScreenTools.defaultFontPixelHeight * 4
+                    Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 30
+                    height: ScreenTools.defaultFontPixelHeight * 5
                     color: "transparent"
                     border.width: 1
                     border.color: qgcPal.groupBorder
@@ -1311,11 +1311,11 @@ Item {
                                         text: modelData["LastModified"]
                                         font.pointSize: ScreenTools.smallFontPointSize
                                         Layout.alignment: Qt.AlignRight
+                                        opacity: 0.7
                                     }
                                 }
 
                                 onClicked: {
-                                    console.log(modelData["Key"])
                                     QGroundControl.cloudManager.downloadObject("Missions", modelData["FileName"])
                                 }
                             }
