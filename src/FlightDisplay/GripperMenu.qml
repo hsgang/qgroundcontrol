@@ -13,59 +13,56 @@ import QGroundControl.Palette
 import QGroundControl.Vehicle
 import QGroundControl.FlightMap
 
-Component {
+QGCPopupDialog {
+    title: qsTr("Select one action")
+    property var  acceptFunction:     null
+    buttons:  Dialog.Cancel
 
-    QGCPopupDialog {
-        title: qsTr("Select one action")
-        property var  acceptFunction:     null
-        buttons:  Dialog.Cancel
+    onRejected:{
+        _guidedController._gripperFunction = Vehicle.Invalid_option
+        _guidedController.closeAll()
+        close()
+    }
 
-        onRejected:{
+    onAccepted: {
+        if (acceptFunction) {
             _guidedController._gripperFunction = Vehicle.Invalid_option
-            _guidedController.closeAll()
             close()
         }
+    }
 
-        onAccepted: {
-            if (acceptFunction) {
-                _guidedController._gripperFunction = Vehicle.Invalid_option
+    RowLayout {
+        spacing: ScreenTools.defaultFontPixelHeight
+
+        QGCColumnButton {
+            id: grabButton
+            text:                   qsTr("Grab")
+            iconSource:             "/res/GripperGrab.svg"
+            font.pointSize:         ScreenTools.defaultFontPointSize * 1.2
+            backRadius:             width / 40
+            heightFactor:           0.75
+            Layout.preferredHeight: releaseButton.height
+            Layout.preferredWidth:  releaseButton.width
+
+            onClicked: {
+                _guidedController._gripperFunction = 1 //Vehicle.Gripper_grab
                 close()
             }
         }
 
-        RowLayout {
-            spacing: ScreenTools.defaultFontPixelHeight
+        QGCColumnButton {
+            id: releaseButton
+            text:                   qsTr("Release")
+            iconSource:             "/res/GripperRelease.svg"
+            font.pointSize:         ScreenTools.defaultFontPointSize * 1.2
+            backRadius:             width / 40
+            heightFactor:           0.75
+            Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 20
+            Layout.preferredHeight: Layout.preferredWidth / 1.20
 
-            QGCColumnButton {
-                id: grabButton
-                text:                   qsTr("Grab")
-                iconSource:             "/res/GripperGrab.svg"
-                font.pointSize:         ScreenTools.defaultFontPointSize * 1.2
-                backRadius:             width / 40
-                heightFactor:           0.75
-                Layout.preferredHeight: releaseButton.height
-                Layout.preferredWidth:  releaseButton.width
-
-                onClicked: {
-                    _guidedController._gripperFunction = 1 //Vehicle.Gripper_grab
-                    close()
-                }
-            }
-
-            QGCColumnButton {
-                id: releaseButton
-                text:                   qsTr("Release")
-                iconSource:             "/res/GripperRelease.svg"
-                font.pointSize:         ScreenTools.defaultFontPointSize * 1.2
-                backRadius:             width / 40
-                heightFactor:           0.75
-                Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 20
-                Layout.preferredHeight: Layout.preferredWidth / 1.20
-
-                onClicked: {
-                    _guidedController._gripperFunction = 0 //Vehicle.Gripper_release
-                    close()
-                }
+            onClicked: {
+                _guidedController._gripperFunction = 0 //Vehicle.Gripper_release
+                close()
             }
         }
     }
