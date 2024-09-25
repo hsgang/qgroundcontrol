@@ -1316,7 +1316,7 @@ Item {
 
                                 onClicked: {
                                     console.log(modelData["Key"])
-                                    QGroundControl.cloudManager.downloadObject("Mission", modelData["FileName"])
+                                    QGroundControl.cloudManager.downloadObject("Missions", modelData["FileName"])
                                 }
                             }
 
@@ -1342,7 +1342,7 @@ Item {
                                         qsTr("'%1'파일을 클라우드 저장소에서 삭제하시겠습니까?").arg(modelData["FileName"]),
                                         Dialog.Ok | Dialog.Cancel,
                                         function () {
-                                            QGroundControl.cloudManager.deleteObject("Mission", modelData["FileName"])
+                                            QGroundControl.cloudManager.deleteObject("Missions", modelData["FileName"])
                                             _planMasterController.getListFromCloud();
                                         })
                                 }
