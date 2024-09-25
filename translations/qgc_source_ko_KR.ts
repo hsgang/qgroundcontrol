@@ -14231,12 +14231,12 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
         <location filename="../src/PlanView/PlanView.qml" line="232"/>
         <location filename="../src/PlanView/PlanView.qml" line="237"/>
         <source>Unable to %1</source>
-        <translation>라이딩 종료 불가</translation>
+        <translation>%1 오류</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="232"/>
-        <source>Plan has incomplete items. Complete all items and %1 again.</source>
-        <translation>플랜에 불완전한 항목이 있습니다. 모든 항목과 %1을(를)다시 완료하십시오.</translation>
+        <source>Plan has incomplete items. Complete all items.</source>
+        <translation>플랜에 불완전한 항목이 있습니다. 모든 항목을 완료하십시오.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="967"/>
