@@ -109,33 +109,34 @@ Rectangle {
                     padding:            ScreenTools.defaultFontPixelWidth / 2
                     hoverEnabled:       !ScreenTools.isMobile
                     autoExclusive:      true
-                    icon.source:        iconUrl
+                    //icon.source:        iconUrl
                     visible:            pageVisible()
+                    imageResource:      iconUrl
 
-                    background: Rectangle {
-                        color:      qgcPal.buttonHighlight
-                        opacity:    checked || pressed ? 1 : enabled && hovered ? .2 : 0
-                        radius:     ScreenTools.defaultFontPixelWidth / 2
-                    }
+                    // background: Rectangle {
+                    //     color:      qgcPal.buttonHighlight
+                    //     opacity:    checked || pressed ? 1 : enabled && hovered ? .2 : 0
+                    //     radius:     ScreenTools.defaultFontPixelWidth / 2
+                    // }
 
-                    contentItem: RowLayout {
-                        spacing: ScreenTools.defaultFontPixelWidth
+                    // contentItem: RowLayout {
+                    //     spacing: ScreenTools.defaultFontPixelWidth
 
-                        QGCColoredImage {
-                            source: iconUrl
-                            color:  displayText.color
-                            width:  ScreenTools.defaultFontPixelHeight
-                            height: ScreenTools.defaultFontPixelHeight
-                        }
+                    //     QGCColoredImage {
+                    //         source: iconUrl
+                    //         color:  displayText.color
+                    //         width:  ScreenTools.defaultFontPixelHeight
+                    //         height: ScreenTools.defaultFontPixelHeight
+                    //     }
 
-                        QGCLabel {
-                            id:                     displayText
-                            Layout.fillWidth:       true
-                            text:                   name
-                            color:                  checked || pressed ? qgcPal.buttonHighlightText : qgcPal.buttonText
-                            horizontalAlignment:    QGCLabel.AlignLeft
-                        }
-                    }
+                    //     QGCLabel {
+                    //         id:                     displayText
+                    //         Layout.fillWidth:       true
+                    //         text:                   name
+                    //         color:                  checked || pressed ? qgcPal.buttonHighlightText : qgcPal.buttonText
+                    //         horizontalAlignment:    QGCLabel.AlignLeft
+                    //     }
+                    // }
 
                     onClicked: {
 //                        __rightPanel.source = modelData.url
