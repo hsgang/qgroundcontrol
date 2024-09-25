@@ -75,7 +75,7 @@ FirstRunPrompt {
                             model: QGroundControl.linkManager.linkConfigurations
                             delegate: QGCButton {
                                 anchors.horizontalCenter:   settingsColumn.horizontalCenter
-                                width:                      ScreenTools.defaultFontPixelWidth * 36
+                                width:                      ScreenTools.defaultFontPixelWidth * 34
                                 text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
                                 autoExclusive:              true
                                 visible:                    !object.dynamic
