@@ -38,7 +38,7 @@ QGCPopupDialog {
         id: noFactComponent
 
         QGCLabel {
-            text: qsTr("Valuec requires a connected vehicle for setup.")
+            text: qsTr("Value requires a connected vehicle for setup.")
         }
     }
 
@@ -55,12 +55,13 @@ QGCPopupDialog {
                     heading: qsTr("Telemetry")
 
                     LabelledComboBox {
-                        id:             factGroupCombo
-                        label:          qsTr("Group")
-                        model:          instrumentValueData.factGroupNames
-                        currentIndex:   comboBox.find(instrumentValueData.factGroupName)
+                        id:                     factGroupCombo
+                        label:                  qsTr("Group")
+                        comboBoxPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
+                        model:                  instrumentValueData.factGroupNames
+                        currentIndex:           comboBox.find(instrumentValueData.factGroupName)
                         onActivated: (index) => {
-                            instrumentValueData.setFact(currentText, "")
+                            instrumentValueData.setFact(comboBox.currentText, "")
                             instrumentValueData.icon = ""
                             instrumentValueData.text = instrumentValueData.fact.shortDescription
                         }
@@ -73,10 +74,11 @@ QGCPopupDialog {
                     LabelledComboBox {
                         id:                     factNamesCombo
                         label:                  qsTr("Value")
+                        comboBoxPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
                         model:                  instrumentValueData.factValueNames
                         currentIndex:           comboBox.find(instrumentValueData.factName)
                         onActivated: (index) => {
-                            instrumentValueData.setFact(instrumentValueData.factGroupName, currentText)
+                            instrumentValueData.setFact(instrumentValueData.factGroupName, comboBox.currentText)
                             instrumentValueData.icon = ""
                             instrumentValueData.text = instrumentValueData.fact.shortDescription
                         }
@@ -172,6 +174,7 @@ QGCPopupDialog {
                     LabelledComboBox {
                         label:          qsTr("Size") 
                         model:          instrumentValueData.factValueGrid.fontSizeNames
+                        comboBoxPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
                         currentIndex:   instrumentValueData.factValueGrid.fontSize
                         onActivated:    (index) => { instrumentValueData.factValueGrid.fontSize = index }
                     }
@@ -203,6 +206,7 @@ QGCPopupDialog {
 
                         QGCComboBox {
                             id:                 rangeTypeCombo
+                            Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 16
                             model:              instrumentValueData.rangeTypeNames
                             currentIndex:       instrumentValueData.rangeType
                             sizeToContents:     true

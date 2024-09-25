@@ -9083,7 +9083,7 @@ Click Ok to start the auto-tuning process.
     <name>InstrumentValueEditDialog</name>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="25"/>
-        <source>Value Display</source>
+        <source>Telemetry Display</source>
         <translation>값 표시</translation>
     </message>
     <message>
@@ -9105,6 +9105,31 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="133"/>
         <source>Label</source>
         <translation>레이블</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="133"/>
+        <source>Telemetry</source>
+        <translation>항목</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="133"/>
+        <source>Group</source>
+        <translation>그룹</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="133"/>
+        <source>Value</source>
+        <translation>값</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="133"/>
+        <source>Value range</source>
+        <translation>범위 표현</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="133"/>
+        <source>Type</source>
+        <translation>타입</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="146"/>
