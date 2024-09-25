@@ -975,6 +975,7 @@ Item {
                 QGCLabel {
                     id:                 unsavedChangedLabel
                     Layout.fillWidth:   true
+                    Layout.maximumWidth: ScreenTools.defaultFontPixelWidth * 50
                     wrapMode:           Text.WordWrap
                     text:               globals.activeVehicle ?
                                             qsTr("You have unsaved changes. You should upload to your vehicle, or save to a file.") :
@@ -1169,6 +1170,7 @@ Item {
                     id:                 cloudMissionSection
                     Layout.fillWidth:   true
                     text:               qsTr("클라우드 저장소")
+                    visible:            QGroundControl.cloudManager.signedIn
                 }
 
                 RowLayout {
