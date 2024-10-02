@@ -12,6 +12,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMessageBox>
 #include <QtQuick/QQuickWindow>
+#include <QSplashScreen>
 
 #include "QGCApplication.h"
 #include "QGC.h"
@@ -201,12 +202,20 @@ int main(int argc, char *argv[])
 
     QGCApplication app(argc, argv, runUnitTests);
 
+    QPixmap pixmap(":/qmlimages/circle_icon.png");
+    QSplashScreen splash(pixmap);
+    splash.show();
+
+    app.processEvents();
+
     #ifdef Q_OS_LINUX
         std::signal(SIGINT, sigHandler);
         std::signal(SIGTERM, sigHandler);
     #endif
 
     app.init();
+
+    splash.close();
 
     int exitCode = 0;
 
