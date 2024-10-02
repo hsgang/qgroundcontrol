@@ -137,8 +137,7 @@ Rectangle {
             id:                 flightModeIndicatorRect
             width:              ScreenTools.defaultFontPixelHeight * 8
             height:             viewButtonRow.height * 0.7
-            color:              "transparent" //qgcPal.windowShadeDark
-            //border.color:           qgcPal.text
+            color:              "transparent"
             radius:             ScreenTools.defaultFontPixelHeight / 4
             visible:            _activeVehicle
 
@@ -298,8 +297,9 @@ Rectangle {
                     anchors.margins:    ScreenTools.defaultFontPixelHeight / 2
                     anchors.left:       parent.left
                     anchors.right:      parent.right
-                    color:              qgcPal.windowShadeDark
+                    color:              "transparent"
                     radius:             ScreenTools.defaultFontPixelHeight / 2
+                    border.color:       qgcPal.groupBorder
 
                     QGCFlickable {
                         clip:               true
@@ -320,7 +320,7 @@ Rectangle {
                                 model: QGroundControl.linkManager.linkConfigurations
                                 delegate: QGCButton {
                                     anchors.horizontalCenter:   settingsColumn.horizontalCenter
-                                    width:                      ScreenTools.defaultFontPixelWidth * 36
+                                    width:                      ScreenTools.defaultFontPixelWidth * 32
                                     text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
                                     autoExclusive:              true
                                     visible:                    !object.dynamic
