@@ -4,7 +4,7 @@
         <file alias="PatternCamera.png">resources/PatternCamera.png</file>
         <file alias="PatternGrid.png">resources/PatternGrid.png</file>
         <file alias="PrecisionLanding.svg">resources/PrecisionLanding.svg</file>
-        <file alias="APMode.svg">src/AutoPilotPlugins/Common/Images/APMode.svg</file>       
+        <file alias="APMode.svg">src/AutoPilotPlugins/Common/Images/APMode.svg</file>
         <file alias="camera.svg">resources/camera.svg</file>
         <file alias="check.svg">resources/check.svg</file>
         <file alias="FloatingWindow.svg">src/AnalyzeView/FloatingWindow.svg</file>
@@ -248,5 +248,6 @@
         <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Images/city_3d_map_icon.svg</file>
         <file alias="amp_logo_blue.png">resources/amp logo.png</file>
         <file alias="amp_logo_white.png">resources/amp logo_white.png</file>
+        <file alias="circle_icon.png">resources/icon.png</file>
     </qresource>
 </RCC>
