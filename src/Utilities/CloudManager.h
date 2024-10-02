@@ -5,6 +5,7 @@
 #include "QGCApplication.h"
 
 #include <QObject>
+#include <QNetworkInformation>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
@@ -17,6 +18,7 @@
 #include "QmlObjectListModel.h"
 
 class CloudManager;
+class DatabaseManager;
 
 class CloudManager : public QGCTool
 {
@@ -25,6 +27,7 @@ public:
     CloudManager     (QGCApplication* app, QGCToolbox* toolbox);
     ~CloudManager    ();
 
+    Q_PROPERTY(QString networkStatus READ networkStatus NOTIFY networkStatusChanged)
     Q_PROPERTY(QString emailAddress READ emailAddress WRITE setEmailAddress NOTIFY emailAddressChanged)
     Q_PROPERTY(QString password READ password WRITE setPassword NOTIFY passwordChanged)
     Q_PROPERTY(QmlObjectListModel* fileModel READ fileModel NOTIFY fileModelChanged)
@@ -43,36 +46,6 @@ public:
     Q_INVOKABLE void downloadObject(const QString& bucketName, const QString& objectName);
     Q_INVOKABLE void deleteObject(const QString& bucketName, const QString& objectName);
 
-    void uploadJson(const QJsonDocument &jsonDoc, const QString& bucketName, const QString& objectName);
-    void getListBucket(const QString &bucketName);
-
-    QmlObjectListModel* fileModel () { return & _uploadEntriesModel; }
-    QList<QVariant> fileList() const { return m_fileList; }
-    QList<QVariant> dnEntryPlanFile() const { return m_dnEntryPlanFile; }
-
-    void setAPIKey (const QString & apiKey);
-    void setToolbox (QGCToolbox *toolbox);
-    void setSignedIn (bool signedIn);
-    void setSignedId (QString signedId);
-    void setMessageString (QString messageString);
-
-    QString emailAddress () { return _emailAddress; }
-    QString password () { return _password; }
-
-    void setEmailAddress (QString email);
-    void setPassword (QString password);
-
-    bool signedIn              () const{ return m_signedIn; }
-    QString signedId           () const{ return m_signedId; }
-    QString messageString      () const{ return m_messageString; }
-
-    QString minioEndpoint      () const{ return m_minioEndpoint; }
-    QString minioAccessKey     () const{ return m_minioAccessKey; }
-    QString minioSecretKey     () const{ return m_minioSecretKey; }
-
-    double uploadProgressValue() const {return m_uploadProgressValue; }
-    void setUploadProgressValue(double progress);
-
     struct DownloadEntryFileInfo {
         QString key;
         QString lastModified;
@@ -80,6 +53,33 @@ public:
         QString eTag;
     };
 
+    void uploadJson(const QJsonDocument &jsonDoc, const QString& bucketName, const QString& objectName);
+    void getListBucket(const QString &bucketName);
+    void sendToDb(const QString &measurement, const QMap<QString, QString> &tags, const QMap<QString, QVariant> &fields);
+
+    void setAPIKey (const QString & apiKey);
+    void setToolbox (QGCToolbox *toolbox);
+    void setSignedIn (bool signedIn);
+    void setSignedId (QString signedId);
+    void setMessageString (QString messageString);
+    void setEmailAddress (QString email);
+    void setPassword (QString password);
+    void setUploadProgressValue(double progress);
+
+    QmlObjectListModel* fileModel () { return & _uploadEntriesModel; }
+    QList<QVariant> fileList() const { return m_fileList; }
+    QList<QVariant> dnEntryPlanFile() const { return m_dnEntryPlanFile; }
+    QString networkStatus() { return m_networkStatus; }
+    QString emailAddress () { return _emailAddress; }
+    QString password () { return _password; }
+    bool signedIn              () const{ return m_signedIn; }
+    QString signedId           () const{ return m_signedId; }
+    QString messageString      () const{ return m_messageString; }
+    QString minioEndpoint      () const{ return m_minioEndpoint; }
+    QString minioAccessKey     () const{ return m_minioAccessKey; }
+    QString minioSecretKey     () const{ return m_minioSecretKey; }
+    QString endPoint           () const{ return m_endPoint; }
+    double uploadProgressValue() const {return m_uploadProgressValue; }
     QList<DownloadEntryFileInfo> downloadEntryFileInfo() const { return m_downloadEntryFileInfo; }
 
 public slots:
@@ -94,6 +94,7 @@ public slots:
     void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
     void onUploadFinished();
     void onDownloadFinished(QNetworkReply* reply, const QString& objectName);
+    void onDbReplyFinished(QNetworkReply* reply);
 
 signals:
     void fileListChanged();
@@ -106,82 +107,67 @@ signals:
     void dnEntryPlanFileChanged();
     void emailAddressChanged();
     void passwordChanged();
+    void networkStatusChanged();
 
 private:
-
     static const QString API_BASE_URL;
     static const QString SIGN_UP_ENDPOINT;
     static const QString SIGN_IN_ENDPOINT;
     static const QString USER_INFO_ENDPOINT;
 
-    QNetworkAccessManager *m_networkAccessManager;
+    static constexpr const char* kCloudManagerGroup = "CloudManagerGroup";
+    static constexpr const char* kEmailAddress      = "Email";
+    static constexpr const char* kPassword          = "Password";
+
+    QNetworkInformation *m_networkInfo = nullptr;
+    QNetworkAccessManager *_nam;
     QNetworkReply *m_networkReply;
     QNetworkRequest m_networkRequest;
     QString databaseUrl;
-
+    QString m_networkStatus;
     QString _emailAddress;
     QString _password;
-
     QString m_apiKey;
     QString m_idToken;
     QString m_localId;
     QString m_signedCompany;
     QString m_signedNickName;
-
     bool m_signedIn = false;
     QString m_signedId = "";
     QString m_messageString;
-
     QString m_minioEndpoint;
     QString m_minioAccessKey;
     QString m_minioSecretKey;
+    QString m_endPoint;
+    QString formatFileSize(qint64 bytes);
+    QmlObjectListModel _uploadEntriesModel;
+    QList<QVariant> m_fileList;
+    QString m_uploadId;
+    QList<QString> m_partETags;
+    int m_currentPart;
+    QSharedPointer<QFile> m_file;
+    QFile* _file;
+    QByteArray getSignatureKey(const QByteArray &key, const QByteArray &dateStamp, const QByteArray &regionName, const QByteArray &serviceName);
+    QString getAuthorizationHeader(const QString &httpVerb, const QString &canonicalUri, const QString &canonicalQueryString, const QString &payloadHash);
+    double m_uploadProgressValue = 0.0;
+    QString generateAuthorizationHeader(const QString &accessKey, const QString &secretKey, const QString &bucketName);
+    QList<DownloadEntryFileInfo> m_downloadEntryFileInfo;
+    QList<QVariant> m_dnEntryPlanFile;
 
     void performPOST(const QString & url, const QJsonDocument & payload );
     void requestSignIn(const QString & url, const QJsonDocument & payload );
     void sendGetRequest(const QString & databaseUrl);
     void parseResponse(const QByteArray & response );
     void handleError(const QJsonObject &errorObject);
-
-    QString formatFileSize(qint64 bytes);
-
-    QmlObjectListModel _uploadEntriesModel;
-    QList<QVariant> m_fileList;
-
-    QString m_uploadId;
-    QList<QString> m_partETags;
-    int m_currentPart;
-    QSharedPointer<QFile> m_file;
-    QFile* _file;
-
-    QNetworkAccessManager*  _nam;
-
     void initiateMultipartUpload(const QString &bucketName, const QString &objectName);
     void uploadPart(const QString &bucketName, const QString &objectName, int partNumber);
     void completeMultipartUpload(const QString &bucketName, const QString &objectName);
-
-    QByteArray getSignatureKey(const QByteArray &key, const QByteArray &dateStamp, const QByteArray &regionName, const QByteArray &serviceName);
-    QString getAuthorizationHeader(const QString &httpVerb, const QString &canonicalUri, const QString &canonicalQueryString, const QString &payloadHash);
-
     void getPresignedUrl(const QString &bucketName, const QString &objectName, int expirationSeconds);
-
     void requestPresignedUrl(const QString &serverUrl, const QString &bucketName, const QString &objectName);
     void onRequestFinished();
-
-    double m_uploadProgressValue = 0.0;
-
     void checkFilesExistInMinio(QString dirName);
-
-    QString generateAuthorizationHeader(const QString &accessKey, const QString &secretKey, const QString &bucketName);
-
-    QList<DownloadEntryFileInfo> m_downloadEntryFileInfo;
-
-    QList<QVariant> m_dnEntryPlanFile;
-
     void parseXmlResponse(const QString &xmlResponse);
-
-    static constexpr const char* kCloudManagerGroup = "CloudManagerGroup";
-    static constexpr const char* kEmailAddress      = "Email";
-    static constexpr const char* kPassword          = "Password";
+    void updateNetworkStatus();
 };
 
 #endif // CLOUDMANAGER_H
