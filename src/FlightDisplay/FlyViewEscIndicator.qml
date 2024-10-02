@@ -20,6 +20,7 @@ Rectangle {
     property real rpm
     property real voltage
     property real temperature
+    property real current
     property real maxRpm
     property real maxTemperature
 
@@ -80,6 +81,19 @@ Rectangle {
 
         QGCLabel {
             anchors.horizontalCenter: parent.horizontalCenter
+            text: "Power"
+            font.pointSize: _dataFontSize * 0.7
+        }
+
+        QGCLabel {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: isNaN(voltage) ? "--" : voltage.toFixed(1) + " V" + (isNaN(current) ? "" : "/ " + current.toFixed(1) + " A")
+            font.bold: true
+            font.pointSize: _dataFontSize * 1.1
+        }
+
+        QGCLabel {
+            anchors.horizontalCenter: parent.horizontalCenter
             text: "Temp"
             font.pointSize: _dataFontSize * 0.7
         }
@@ -89,20 +103,7 @@ Rectangle {
             text: isNaN(temperature) ? "--" : temperature.toFixed(0) + " ℃"
             font.bold: true
             font.pointSize: _dataFontSize * 1.1
-        }
-
-        QGCLabel {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: "Volt"
-            font.pointSize: _dataFontSize * 0.7
-        }
-
-        QGCLabel {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: isNaN(voltage) ? "--" : voltage.toFixed(1) + " V"
-            font.bold: true
-            font.pointSize: _dataFontSize * 1.1
-        }
+        }        
     }
 
     SequentialAnimation {
