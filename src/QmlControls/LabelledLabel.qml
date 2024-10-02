@@ -42,5 +42,6 @@ RowLayout {
     QGCLabel {
         id:                     _label
         Layout.preferredWidth:  labelPreferredWidth
+        wrapMode:               Text.WrapAnywhere
     }
 }
