@@ -178,7 +178,10 @@ find_package(Qt6
         Xml
     OPTIONAL_COMPONENTS
         LinguistTools
+        MultimediaQuickPrivate
+        Quick3D
         SerialPort
+        WaylandClient
     HINTS
         ${QT_LIBRARY_HINTS}
 )
