@@ -20,6 +20,7 @@ Button {
     hoverEnabled:   !ScreenTools.isMobile
 
     implicitHeight: ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelHeight * 3.5 : ScreenTools.defaultFontPixelHeight * 2.5
+
     //implicitWidth:  __panel.implicitWidth
 
     property ButtonGroup buttonGroup:    null
@@ -43,7 +44,7 @@ Button {
         color:  qgcPal.windowShade
         radius: ScreenTools.defaultFontPixelHeight * 0.25
 
-        implicitWidth: titleBar.x + titleBar.contentWidth + ScreenTools.defaultFontPixelWidth
+        implicitWidth: Math.max(titleBar.x + titleBar.contentWidth + ScreenTools.defaultFontPixelWidth, ScreenTools.defaultFontPixelWidth * 20)
 
         Rectangle {
             anchors.fill:   parent
