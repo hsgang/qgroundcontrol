@@ -30,7 +30,7 @@ Rectangle {
     clip: true
     anchors.fill: parent
     color: "#00000000"
-    visible:   !_mainWindowIsMap && camera.isConnected
+    visible:   !_mainWindowIsMap && camera.isConnected && QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl.rawValue
 
     property var siyi: SiYi
     property SiYiCamera camera: siyi.camera
