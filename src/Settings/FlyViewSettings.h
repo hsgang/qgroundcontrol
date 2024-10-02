@@ -50,4 +50,5 @@ public:
     DEFINE_SETTINGFACT(showVehicleInfoOnMap)
     DEFINE_SETTINGFACT(showCameraProjectionOnMap)
     DEFINE_SETTINGFACT(showEscStatus)
+    DEFINE_SETTINGFACT(showSiyiCameraControl)
 };

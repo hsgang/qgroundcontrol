@@ -187,6 +187,12 @@
     "shortDesc": "showEscStatus",
     "type":         "bool",
     "default":      false
+},
+{
+    "name":         "showSiyiCameraControl",
+    "shortDesc": "showSiyiCameraControl",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }

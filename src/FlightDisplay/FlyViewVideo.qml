@@ -260,6 +260,7 @@ Item {
     }
 
     FlyViewVideoSiYiController {
+        visible:        QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl.rawValue
         anchors.fill: parent
     }
 }

@@ -46,6 +46,14 @@ ToolIndicatorPage{
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true
+                    text:       qsTr("Siyi Camera Control")
+                    fact:       _showSiyiCameraControl
+                    visible:    _showSiyiCameraControl.visible
+                    property Fact   _showSiyiCameraControl:     QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl
+                }
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
                     text:       qsTr("Mount Control")
                     fact:       _showGimbalControlPannel
                     visible:    _showGimbalControlPannel.visible
