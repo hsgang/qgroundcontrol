@@ -70,6 +70,11 @@ ToolIndicatorPage {
                     label:  qsTr("Frame Class")
                     labelText:  _frameClass.enumStringValue
                 }
+                LabelledLabel {
+                    label:  qsTr("UID")
+                    labelText:  _activeVehicle.vehicleUID2Str
+                    labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 28
+                }
             }
 
             SettingsGroupLayout{

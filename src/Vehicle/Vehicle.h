@@ -324,6 +324,8 @@ public:
     Q_PROPERTY(QString  gitHash                     READ gitHash                    NOTIFY gitHashChanged)
     Q_PROPERTY(quint64  vehicleUID                  READ vehicleUID                 NOTIFY vehicleUIDChanged)
     Q_PROPERTY(QString  vehicleUIDStr               READ vehicleUIDStr              NOTIFY vehicleUIDChanged)
+    Q_PROPERTY(QString  vehicleUID2                 READ vehicleUID2                NOTIFY vehicleUID2Changed)
+    Q_PROPERTY(QString  vehicleUID2Str              READ vehicleUID2Str             NOTIFY vehicleUID2Changed)
 
     Q_PROPERTY(bool     mavlinkSigning              READ mavlinkSigning             NOTIFY mavlinkSigningChanged)
 
@@ -778,6 +780,8 @@ public:
     QString gitHash() const { return _gitHash; }
     quint64 vehicleUID() const { return _uid; }
     QString vehicleUIDStr();
+    QString vehicleUID2() const { return _uid2Str; }
+    QString vehicleUID2Str();
 
     bool soloFirmware() const { return _soloFirmware; }
     void setSoloFirmware(bool soloFirmware);
@@ -1204,6 +1208,8 @@ private:
 
     QString _gitHash;
     quint64 _uid = 0;
+    quint8  _uid2[18];
+    QString _uid2Str;
 
     uint64_t    _mavlinkSentCount       = 0;
     uint64_t    _mavlinkReceivedCount   = 0;

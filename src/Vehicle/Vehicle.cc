@@ -980,6 +980,24 @@ QString Vehicle::vehicleUIDStr()
     return uid;
 }
 
+QString Vehicle::vehicleUID2Str()
+{
+    QString uid2;
+    uid2.reserve(53);
+
+    for (int i = 0; i < 18; ++i) {
+        if (i > 0) {
+            uid2.append(':');
+        }
+        uid2.append(QString("%1").arg(_uid2[i], 2, 16, QChar('0')).toUpper());
+    }
+    _uid2Str = uid2;
+
+    qDebug() << "uid2:" << _uid2;
+
+    return uid2;
+}
+
 void Vehicle::_handleExtendedSysState(mavlink_message_t& message)
 {
     mavlink_extended_sys_state_t extendedState;
