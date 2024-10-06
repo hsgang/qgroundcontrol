@@ -928,6 +928,7 @@ signals:
     void firmwareCustomVersionChanged   ();
     void gitHashChanged                 (QString hash);
     void vehicleUIDChanged              ();
+    void vehicleUID2Changed             ();
     void loadProgressChanged            (float value);
 
     void atmosphericValueChanged        ();
