@@ -10680,6 +10680,11 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="422"/>
+        <source>Camera Payload Control</source>
+        <translation>카메라 페이로드 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="422"/>
         <source>Mount Control</source>
         <translation>짐벌 마운트 제어</translation>
     </message>
