@@ -216,7 +216,7 @@ FirstRunPrompt {
                             font.family:    ScreenTools.normalFontFamily
                             color:          qgcPal.text
                             antialiasing:   true
-                            echoMode: TextField.PasswordEchoOnEdit
+                            echoMode:       TextField.PasswordEchoOnEdit
                             text:           QGroundControl.cloudManager.password
 
                             property string placeholderText: qsTr("Input Password")
