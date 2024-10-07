@@ -25,8 +25,8 @@ SettingsPage {
     property var    cloudSettings:      _settingsManager.cloudSettings
     property real   _urlFieldWidth:     ScreenTools.defaultFontPixelWidth * 25
 
-    property bool _signedIn: QGroundControl.cloudManager.signedIn
-    property string _signedId: QGroundControl.cloudManager.signedId
+    property bool   _signedIn:          QGroundControl.cloudManager.signedIn
+    property string _signedId:          QGroundControl.cloudManager.signedId
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -47,13 +47,14 @@ SettingsPage {
                 font.family:    ScreenTools.normalFontFamily
                 color:          qgcPal.text
                 antialiasing:   true
+                text:           QGroundControl.cloudManager.emailAddress
 
                 Rectangle {
                     anchors.bottom: parent.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
-                    width:      parent.width
-                    height:     1
-                    color: qgcPal.groupBorder
+                    width:          parent.width
+                    height:         1
+                    color:          qgcPal.groupBorder
                 }
 
                 KeyNavigation.tab: passwordField
@@ -74,14 +75,15 @@ SettingsPage {
                 font.family:    ScreenTools.normalFontFamily
                 color:          qgcPal.text
                 antialiasing:   true
-                echoMode: TextField.PasswordEchoOnEdit
+                echoMode:       TextField.PasswordEchoOnEdit
+                text:           QGroundControl.cloudManager.password
 
                 Rectangle {
                     anchors.bottom: parent.bottom
                     anchors.horizontalCenter: parent.horizontalCenter
                     width:      parent.width
                     height:     1
-                    color: qgcPal.groupBorder
+                    color:      qgcPal.groupBorder
                 }
 
                 KeyNavigation.tab: loginButton
