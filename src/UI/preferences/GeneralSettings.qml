@@ -53,19 +53,11 @@ SettingsPage {
             comboBoxPreferredWidth: _comboBoxPreferredWidth
         }      
 
-        // FactCheckBoxSlider {
-        //     Layout.fillWidth: true
-        //     text:       qsTr("Stream GCS Position")
-        //     fact:       _followTarget
-        //     visible:    _followTarget.visible
-        //     property Fact   _followTarget:      QGroundControl.settingsManager.appSettings.followTarget
-        // }
-
         LabelledFactComboBox {
-            label:      qsTr("Stream GCS Position")
-            fact:       QGroundControl.settingsManager.appSettings.followTarget
+            label:       qsTr("Stream GCS Position")
+            fact:       _appSettings.followTarget
             indexModel: false
-            visible:    QGroundControl.settingsManager.appSettings.followTarget.visible
+            visible:    _appSettings.followTarget.visible
             comboBoxPreferredWidth: _comboBoxPreferredWidth
             description:    "지상국 위치 정보를 기체에 전송"
         }
