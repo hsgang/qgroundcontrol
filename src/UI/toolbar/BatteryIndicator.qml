@@ -32,26 +32,26 @@ Item {
     property Component  expandedPageComponent
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
-    // property Fact   _indicatorDisplay:  QGroundControl.settingsManager.batteryIndicatorSettings.display
-    // property bool   _showPercentage:    _indicatorDisplay.rawValue === 0
-    // property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
-    // property bool   _showBoth:          _indicatorDisplay.rawValue === 2
+    property Fact   _indicatorDisplay:  QGroundControl.settingsManager.batteryIndicatorSettings.display
+    property bool   _showPercentage:    _indicatorDisplay.rawValue === 0
+    property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
+    property bool   _showBoth:          _indicatorDisplay.rawValue === 2
 
-    property var _batterySettings:  QGroundControl.settingsManager.batterySettings
-    property real _batteryCellCount: _batterySettings.batteryCellCount.value
-    property bool _showCellVoltage: QGroundControl.settingsManager.batterySettings.showCellVoltage.value
+    property var    _batterySettings:   QGroundControl.settingsManager.batterySettings
+    property real   _batteryCellCount:  _batterySettings.batteryCellCount.value
+    property bool   _showCellVoltage:   QGroundControl.settingsManager.batterySettings.showCellVoltage.value
 
     // Fetch battery settings
-    property var batterySettings: QGroundControl.settingsManager.batteryIndicatorSettings
+    property var    batterySettings:    QGroundControl.settingsManager.batteryIndicatorSettings
 
     // Properties to hold the thresholds
-    property int threshold1: batterySettings.threshold1.rawValue
-    property int threshold2: batterySettings.threshold2.rawValue   
+    property int    threshold1:         batterySettings.threshold1.rawValue
+    property int    threshold2:         batterySettings.threshold2.rawValue
 
     // Control visibility based on battery state display setting
-    property bool batteryState: batterySettings.battery_state_display.rawValue
-    property bool threshold1visible: batterySettings.threshold1visible.rawValue
-    property bool threshold2visible: batterySettings.threshold2visible.rawValue
+    property bool   batteryState:       batterySettings.battery_state_display.rawValue
+    property bool   threshold1visible:  batterySettings.threshold1visible.rawValue
+    property bool   threshold2visible:  batterySettings.threshold2visible.rawValue
 
     Row {
         id:             batteryIndicatorRow
@@ -241,19 +241,19 @@ Item {
 
                 QGCLabel {
                     Layout.alignment:       Qt.AlignHCenter
+                    font.pointSize:         _showBoth ? ScreenTools.smallFontPointSize : ScreenTools.mediumFontPointSize
+                    color:                  qgcPal.text
+                    text:                   getBatteryVoltageText()
+                    visible:                _showBoth || _showVoltage
+                }
+
+                QGCLabel {
+                    Layout.alignment:       Qt.AlignHCenter
                     verticalAlignment:      Text.AlignVCenter
                     color:                  qgcPal.text
                     text:                   getBatteryPercentageText()
                     font.pointSize:         _showBoth ? ScreenTools.defaultFontPointSize : ScreenTools.mediumFontPointSize
                     visible:                _showBoth || _showPercentage
-                }
-
-                QGCLabel {
-                    Layout.alignment:       Qt.AlignHCenter
-                    font.pointSize:         _showBoth ? ScreenTools.defaultFontPointSize : ScreenTools.mediumFontPointSize
-                    color:                  qgcPal.text
-                    text:                   getBatteryVoltageText()
-                    visible:                _showBoth || _showVoltage
                 }
             }            
 
