@@ -215,16 +215,16 @@ RowLayout {
                     }
                 }
 
-                LabelledButton {
-                    Layout.fillWidth:   true
-                    label:              qsTr("RC Transmitter Flight Modes")
-                    buttonText:         qsTr("Configure")
+                // LabelledButton {
+                //     Layout.fillWidth:   true
+                //     label:              qsTr("RC Transmitter Flight Modes")
+                //     buttonText:         qsTr("Configure")
 
-                    onClicked: {
-                        mainWindow.showVehicleSetupTool(qsTr("Radio"))
-                        mainWindow.closeIndicatorDrawer()
-                    }
-                }
+                //     onClicked: {
+                //         mainWindow.showVehicleSetupTool(qsTr("Radio"))
+                //         mainWindow.closeIndicatorDrawer()
+                //     }
+                // }
             }
         }
     }
