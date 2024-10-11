@@ -252,10 +252,10 @@ FlightMap {
     // }
 
     // Add the items associated with each vehicles flight plan to the map
-    MapItemView { //Repeater {
+    Repeater {
         model: QGroundControl.multiVehicleManager.vehicles
 
-        delegate: PlanMapItems { //PlanMapItems {
+        PlanMapItems {
             map:                    _root
             largeMapView:           !pipMode
             planMasterController:   masterController
@@ -284,7 +284,7 @@ FlightMap {
     // Add trajectory lines to the map
     MapPolyline {
         id:         trajectoryPolyline
-        line.width: 5
+        line.width: 3
         line.color: "#9c1bff"
         z:          QGroundControl.zOrderTrajectoryLines
         visible:    !pipMode
