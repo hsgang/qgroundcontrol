@@ -27,6 +27,9 @@ Item {
     property var    _guidedController:  globals.guidedControllerFlyView
     property real   _dataFontSize:  ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
 
+    property var    activeVehicle:      QGroundControl.multiVehicleManager.activeVehicle
+    property real   _activeVehicleId:   activeVehicle ? activeVehicle.id : NaN
+
     property string _readyToFlyText:    qsTr("Ready To Fly")
     property string _notReadyToFlyText: qsTr("Not Ready")
     property string _armedText:         qsTr("Armed")
@@ -102,14 +105,14 @@ Item {
             opacity:    _rectOpacity
             radius:     _margin
             border.color: _id ?
-                              (_id === QGroundControl.multiVehicleManager.activeVehicle.id ? qgcPal.missionItemEditor : "transparent")
+                              (_id === _activeVehicleId ? qgcPal.missionItemEditor : "transparent")
                                : "transparent"
             border.width: 2           
 
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    if(_vehicle.id !== QGroundControl.multiVehicleManager.activeVehicle.id){
+                    if(_id !== _activeVehicleId){
                         var vehicleId = vehicleIdLabel.text //textAt(index).split(" ")[1]
                         var vehicle = QGroundControl.multiVehicleManager.getVehicleById(vehicleId)
                         QGroundControl.multiVehicleManager.activeVehicle = vehicle
@@ -478,10 +481,10 @@ Item {
 
                 palette.dark: "white"
 
-                property string vehicleId: QGroundControl.multiVehicleManager.activeVehicle.id
+                property real vehicleId: _activeVehicleId
 
                 onVehicleIdChanged: {
-                    if(_id === QGroundControl.multiVehicleManager.activeVehicle.id) {
+                    if(_id === _activeVehicleId) {
                         visible = false
                     }
                 }
