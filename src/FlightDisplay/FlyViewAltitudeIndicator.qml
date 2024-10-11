@@ -8,23 +8,24 @@ import QGroundControl.ScreenTools
 import QGroundControl.Controls
 import QGroundControl.FactControls
 import QGroundControl.Palette
+import QGroundControl.Controllers
 
 Rectangle {
     id:         altitudeIndicator
-    //height:     parent.height * 0.32
     width:      ScreenTools.defaultFontPixelWidth * 1.4
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:     ScreenTools.defaultFontPixelWidth * 0.7
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
-    property var    _planMasterController:      globals.planMasterControllerPlanView
 
-    property bool   _controllerValid:           _planMasterController !== undefined && _planMasterController !== null
-    property var    missionItems:               _controllerValid ? _planMasterController.missionController.visualItems : undefined
+    property var    _planMasterController:      globals.planMasterControllerFlyView
+    property var    _missionController:         _planMasterController.missionController
+
+    property bool   _controllerValid:           _planMasterController !== undefined
+    property var    missionItems:               _controllerValid ? _missionController.visualItems : undefined
     property bool   _missionValid:              missionItems !== undefined
 
-    property real   missionMaxAltitude:         _controllerValid ? _planMasterController.missionController.missionMaxAltitude : NaN
-    property real   _missionMaxAltitude:        _missionValid ? missionMaxAltitude : NaN
+    property real   _missionMaxAltitude:        _missionValid ? _missionController.missionMaxAltitude : NaN
     property real   _vehicleAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : 0
 
     property string _missionMaxAltitudeText:    (isNaN(_missionMaxAltitude) || (_missionMaxAltitude <= 0)) ? "--" + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_missionMaxAltitude).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
@@ -87,6 +88,6 @@ Rectangle {
         anchors.top:                parent.bottom
         anchors.horizontalCenter:   parent.horizontalCenter
         font.pointSize:             ScreenTools.defaultFontPointSize * 0.8
-        text:                       "GND" //_startAltitudeText
+        text:                       "GND"
     }
 }
