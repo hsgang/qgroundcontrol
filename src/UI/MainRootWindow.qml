@@ -143,7 +143,7 @@ ApplicationWindow {
         showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
     }
 
-    function showSetupTool(setupPage = "") {
+    function showVehicleSetupTool(setupPage = "") {
         showTool(qsTr("Vehicle Setup"), "SetupView.qml", "/qmlimages/Quad.svg")
         if (setupPage !== "") {
             toolDrawerLoader.item.showNamedComponentPanel(setupPage)
@@ -376,7 +376,7 @@ ApplicationWindow {
                         onClicked: {
                             if (!mainWindow.preventViewSwitch()) {
                                 toolDrawer.visible = false
-                                mainWindow.showSetupTool()
+                                mainWindow.showVehicleSetupTool()
                                 checkedMenu()
                                 //setupButton.checked = true
                                 viewSelectDrawer.visible = false
