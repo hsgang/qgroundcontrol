@@ -12182,6 +12182,11 @@ Is this really what you want?</source>
         <source>Connecting...</source>
         <translation>연결중...</translation>
     </message>
+    <message>
+        <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
+        <source>Connected</source>
+        <translation>연결됨</translation>
+    </message>
 </context>
 
 <context>
