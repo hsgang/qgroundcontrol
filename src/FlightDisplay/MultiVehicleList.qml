@@ -101,8 +101,8 @@ Item {
             color:      qgcPal.window
             opacity:    _rectOpacity
             radius:     _margin
-            border.color: _vehicle.id ?
-                              (_vehicle.id === QGroundControl.multiVehicleManager.activeVehicle.id ? qgcPal.missionItemEditor : "transparent")
+            border.color: _id ?
+                              (_id === QGroundControl.multiVehicleManager.activeVehicle.id ? qgcPal.missionItemEditor : "transparent")
                                : "transparent"
             border.width: 2           
 
@@ -118,7 +118,8 @@ Item {
                 }
             }
 
-            property var    _vehicle:   object           
+            property var    _vehicle:   object
+            property real   _id: _vehicle ? _vehicle.id : 0
 
             ColumnLayout {
                 id:                 innerColumn
@@ -478,8 +479,9 @@ Item {
                 palette.dark: "white"
 
                 property string vehicleId: QGroundControl.multiVehicleManager.activeVehicle.id
+
                 onVehicleIdChanged: {
-                    if(_vehicle.id === QGroundControl.multiVehicleManager.activeVehicle.id) {
+                    if(_id === QGroundControl.multiVehicleManager.activeVehicle.id) {
                         visible = false
                     }
                 }
