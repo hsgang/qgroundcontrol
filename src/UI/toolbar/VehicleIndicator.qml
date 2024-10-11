@@ -43,7 +43,7 @@ Item {
             anchors.bottom:     parent.bottom
             sourceSize.height:  height
             source:             "/qmlimages/vehicleQuadRotor.svg"
-            color:              _activeVehicle.readyToFlyAvailable && _activeVehicle.readyToFly ? qgcPal.colorGreen : qgcPal.text
+            color:              _activeVehicle.readyToFlyAvailable && _activeVehicle.readyToFly ? qgcPal.text : qgcPal.colorGrey
             fillMode:           Image.PreserveAspectFit
         }
 
