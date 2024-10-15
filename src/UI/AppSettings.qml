@@ -139,18 +139,12 @@ Rectangle {
                     // }
 
                     onClicked: {
-//                        __rightPanel.source = modelData.url
-//                        //__rightPanel.title  = modelData.title
-//                        checked             = true
-
-                        focus = true
-                        if (mainWindow.preventViewSwitch()) {
-                            return
+                        if (mainWindow.allowViewSwitch()) {
+                            if (rightPanel.source !== url) {
+                                rightPanel.source = url
+                            }
+                            checked = true
                         }
-                        if (rightPanel.source !== url) {
-                            rightPanel.source = url
-                        }
-                        checked = true
                     }
                 }
 //                Button {
