@@ -313,14 +313,15 @@ void NTRIPTCPLink::_sendNMEA() {
 
         // Calculrate checksum and send message
         QString checkSum = _getCheckSum(line);
-        QString* nmeaMessage = new QString(line + "*" + checkSum + "\r\n");
+        //QString* nmeaMessage = new QString(line + "*" + checkSum + "\r\n");
+        QString nmeaMessage = line + "*" + checkSum + "\r\n";
 
         // Write nmea message
         if(_socket) {
-            _socket->write(nmeaMessage->toUtf8());
+            _socket->write(nmeaMessage.toUtf8());
         }
 
-        qCDebug(NTRIPLog) << "NMEA Message : " << nmeaMessage->toUtf8();
+        qCDebug(NTRIPLog) << "NMEA Message : " << nmeaMessage.toUtf8();
     }
 }
 
