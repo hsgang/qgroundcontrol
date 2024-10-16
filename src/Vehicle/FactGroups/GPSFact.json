@@ -51,6 +51,12 @@
     "name":             "count",
     "shortDesc": "Sat Count",
     "type":             "uint32"
+},
+{
+    "name":             "yaw",
+    "shortDesc": "GPS Yaw",
+    "type":             "double",
+    "decimalPlaces":    2
 }
 ]
 }

@@ -27,6 +27,7 @@ public:
     Q_PROPERTY(Fact* courseOverGround   READ courseOverGround   CONSTANT)
     Q_PROPERTY(Fact* count              READ count              CONSTANT)
     Q_PROPERTY(Fact* lock               READ lock               CONSTANT)
+    Q_PROPERTY(Fact* yaw                READ yaw                CONSTANT)
 
     Fact* lat               () { return &_latFact; }
     Fact* lon               () { return &_lonFact; }
@@ -36,6 +37,7 @@ public:
     Fact* courseOverGround  () { return &_courseOverGroundFact; }
     Fact* count             () { return &_countFact; }
     Fact* lock              () { return &_lockFact; }
+    Fact* yaw               () { return &_yawFact; }
 
     // Overrides from FactGroup
     virtual void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
@@ -53,6 +55,7 @@ protected:
     const QString _courseOverGroundFactName =    QStringLiteral("courseOverGround");
     const QString _countFactName =               QStringLiteral("count");
     const QString _lockFactName =                QStringLiteral("lock");
+    const QString _yawFactName =                 QStringLiteral("yaw");
 
     Fact _latFact;
     Fact _lonFact;
@@ -62,4 +65,5 @@ protected:
     Fact _courseOverGroundFact;
     Fact _countFact;
     Fact _lockFact;
+    Fact _yawFact;
 };
