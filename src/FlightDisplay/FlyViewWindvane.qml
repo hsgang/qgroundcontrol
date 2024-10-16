@@ -34,7 +34,7 @@ Rectangle {
     property string _windDirText:     !isNaN(_windDir)      ? _windDir.toFixed(0)       + " °"      : "-- °"
     property string _windSpdText:     !isNaN(_windSpd)      ? _windSpd.toFixed(1)       + " (Est.)" : "-.- (Est.)"
     property string _atmosWindDirText:!isNaN(_atmosWindDir) ? _atmosWindDir.toFixed(0)  + " °"      : "-- °"
-    property string _atmosWindSpdText:!isNaN(_atmosWindSpd) ? _atmosWindSpd.toFixed(1)              : "-.-"
+    property string _atmosWindSpdText:!isNaN(_atmosWindSpd) ? _atmosWindSpd.toFixed(1)  + " m/s"    : "-.- m/s"
 
     height:     size
     width:      size
@@ -55,44 +55,44 @@ Rectangle {
         anchors.fill:   parent
     }
 
-    Image {
-        id:                 windvane
-        source:             isWindVaneOK() ? "/qmlimages/windVaneArrow.svg" : ""
-        mipmap:             true
-        fillMode:           Image.PreserveAspectFit
-        anchors.fill:       parent
-        sourceSize.height:  parent.height
+    // Image {
+    //     id:                 windvane
+    //     source:             isWindVaneOK() ? "/qmlimages/windVaneArrow.svg" : ""
+    //     mipmap:             true
+    //     fillMode:           Image.PreserveAspectFit
+    //     anchors.fill:       parent
+    //     sourceSize.height:  parent.height
 
-        transform: Rotation {
-            origin.x:       windvane.width  / 2
-            origin.y:       windvane.height / 2
-            angle:          _windDir
-        }
-    }
+    //     transform: Rotation {
+    //         origin.x:       windvane.width  / 2
+    //         origin.y:       windvane.height / 2
+    //         angle:          _windDir
+    //     }
+    // }
 
-    Rectangle {
-        width:                      windVaneText.width + (size * 0.05)
-        height:                     size * 0.12
-        border.color:               qgcPal.colorGreen
-        color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
-        radius:                     height * 0.2
-        visible:                    isWindVaneOK()
-        anchors.centerIn:           parent
+    // Rectangle {
+    //     width:                      windVaneText.width + (size * 0.05)
+    //     height:                     size * 0.12
+    //     border.color:               qgcPal.colorGreen
+    //     color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
+    //     radius:                     height * 0.2
+    //     visible:                    isWindVaneOK()
+    //     anchors.centerIn:           parent
 
-        QGCLabel {
-            id:                 windVaneText
-            text:               _windSpdText
-            font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
-            font.bold:          true
-            color:              qgcPal.text
-            anchors.centerIn:   parent
-        }
+    //     QGCLabel {
+    //         id:                 windVaneText
+    //         text:               _windSpdText
+    //         font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
+    //         font.bold:          true
+    //         color:              qgcPal.text
+    //         anchors.centerIn:   parent
+    //     }
 
-        transform: Translate {
-            x: size/2.4 * Math.sin((_windDir)*(3.14/180))
-            y: - size/2.4 * Math.cos((_windDir)*(3.14/180)) + windVaneText.height * 1.1
-        }
-    }
+    //     transform: Translate {
+    //         x: size/2.4 * Math.sin((_windDir)*(3.14/180))
+    //         y: - size/2.4 * Math.cos((_windDir)*(3.14/180)) + windVaneText.height * 1.1
+    //     }
+    // }
 
     Image {
         id:                 windvaneExternal
@@ -155,13 +155,18 @@ Rectangle {
             horizontalAlignment:    Text.AlignHCenter
             font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
         }
+        // QGCLabel {
+        //     text:                   "FCWD"
+        //     horizontalAlignment:    Text.AlignHCenter
+        //     font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
+        // }
         QGCLabel {
-            text:                   "FCWD"
+            text:                   "WD"
             horizontalAlignment:    Text.AlignHCenter
             font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
         }
         QGCLabel {
-            text:                   "EXWD"
+            text:                   "WS"
             horizontalAlignment:    Text.AlignHCenter
             font.pointSize:         ScreenTools.defaultFontPointSize * 0.8
         }
@@ -178,12 +183,16 @@ Rectangle {
             text:                   vehicle ? _pressureText : "unknown"
             horizontalAlignment:    Text.AlignHCenter
         }
+        // QGCLabel {
+        //     text:                   vehicle ? _windDirText  : "unknown"
+        //     horizontalAlignment:    Text.AlignHCenter
+        // }
         QGCLabel {
-            text:                   vehicle ? _windDirText  : "unknown"
+            text:                   vehicle ? _atmosWindDirText : "unknown"
             horizontalAlignment:    Text.AlignHCenter
         }
         QGCLabel {
-            text:                   vehicle ? _atmosWindDirText : "unknown"
+            text:                   vehicle ? _atmosWindSpdText : "unknown"
             horizontalAlignment:    Text.AlignHCenter
         }
     }
