@@ -93,7 +93,14 @@ Item {
             heading:            qsTr("Offline Maps")
             headingDescription: qsTr("Download map tiles for use when offline")
 
+            QGCLabel {
+                Layout.fillWidth:   true
+                text:               qsTr("Loading...")
+                visible:            tileRepeater.model.count === 0
+            }
+
             Repeater {
+                id: tileRepeater
                 model: QGroundControl.mapEngineManager.tileSets
 
                 OfflineMapInfo {
