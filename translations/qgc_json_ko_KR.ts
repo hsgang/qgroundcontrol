@@ -34,7 +34,7 @@
       <extracomment>.QGC.MetaData.Facts[indoorPalette].enumStrings, </extracomment>
       <location filename="../src/Settings/App.SettingsGroup.json"/>
       <source>Indoor,Outdoor</source>
-      <translation>실내,실외</translation>
+      <translation>어두운 테마,밝은 테마</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[followTarget].enumStrings, </extracomment>
