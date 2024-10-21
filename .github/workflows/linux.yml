@@ -35,11 +35,13 @@ jobs:
     env:
       ARTIFACT: QGroundControl-x86_64.AppImage
       QT_VERSION: 6.6.3
-      # GST_VERSION: 1.22.12
+      GST_VERSION: 1.22.12
 
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
+        with:
+          large-packages: false
         continue-on-error: true
 
       - name: Checkout repo
@@ -54,8 +56,6 @@ jobs:
           chmod a+x ./tools/setup/install-dependencies-debian.sh
           sudo ./tools/setup/install-dependencies-debian.sh
           python3 -m pip install --user ninja cmake
-
-      - uses: lukka/get-cmake@latest
 
       - name: Install Vulkan
         run: |
@@ -77,8 +77,6 @@ jobs:
           tar -xvf ccache-*-linux-x86_64.tar.xz
           cd ccache-*-linux-x86_64
           sudo make install
-
-      - uses: seanmiddleditch/gha-setup-ninja@v5
 
       - name: Set Up Cache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -104,6 +102,15 @@ jobs:
 
       # - name: Build GStreamer
       #   uses: ./.github/actions/gstreamer
+
+      - name: Install GStreamer
+        uses: blinemedical/setup-gstreamer@v1
+        with:
+          version: ${{ env.GST_VERSION }}
+
+      - uses: lukka/get-cmake@latest
+
+      - uses: seanmiddleditch/gha-setup-ninja@v5
 
       - run: mkdir ${{ runner.temp }}/shadow_build_dir
 
@@ -137,3 +144,4 @@ jobs:
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           source: ''
+          github_token: ${{ secrets.GITHUB_TOKEN }}

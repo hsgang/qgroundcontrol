@@ -85,6 +85,7 @@ target_link_libraries(QGC
         FollowMe
         Gimbal
         GPS
+        GStreamerReceiver
         Joystick
         MAVLink
         MissionManager
