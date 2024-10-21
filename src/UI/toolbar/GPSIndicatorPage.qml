@@ -101,16 +101,16 @@ ToolIndicatorPage {
 
             SettingsGroupLayout{
                 heading:    qsTr("NTRIP Status")
-                visible:            QGroundControl.ntrip.connected
+                visible:            QGroundControl.ntripManager.connected
 
                 LabelledLabel {
                     label:      qsTr("Status")
-                    labelText:  QGroundControl.ntrip.connected ? qsTr("Connected") : qsTr("Disconnected")
+                    labelText:  QGroundControl.ntripManager.connected ? qsTr("Connected") : qsTr("Disconnected")
                 }
 
                 LabelledLabel {
                     label:      qsTr("BandWidth")
-                    labelText:  QGroundControl.ntrip.connected ? QGroundControl.ntrip.bandWidth.toFixed(2) + " KB/s" : "0.00 KB/s"
+                    labelText:  QGroundControl.ntripManager.connected ? QGroundControl.ntripManager.bandWidth.toFixed(2) + " KB/s" : "0.00 KB/s"
                 }
 
             }

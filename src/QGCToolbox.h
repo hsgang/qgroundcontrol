@@ -26,7 +26,7 @@ class VideoManager;
 class MAVLinkLogManager;
 class QGCCorePlugin;
 class SettingsManager;
-class NTRIP;
+class NTRIPManager;
 class CloudManager;
 #ifndef QGC_AIRLINK_DISABLED
 class AirLinkManager;
@@ -53,8 +53,8 @@ public:
     MAVLinkLogManager*          mavlinkLogManager       () { return _mavlinkLogManager; }
     QGCCorePlugin*              corePlugin              () { return _corePlugin; }
     SettingsManager*            settingsManager         () { return _settingsManager; }
-    NTRIP*                      ntrip                   () { return _ntrip; }
     CloudManager*               cloudManager            () { return _cloudManager; }
+    NTRIPManager*               ntripManager            () { return _ntripManager; }
 #ifndef NO_SERIAL_LINK
     GPSManager*                 gpsManager              () { return _gpsManager; }
 #endif
@@ -83,8 +83,8 @@ private:
     MAVLinkLogManager*          _mavlinkLogManager      = nullptr;
     QGCCorePlugin*              _corePlugin             = nullptr;
     SettingsManager*            _settingsManager        = nullptr;
-    NTRIP*                      _ntrip                  = nullptr;
     CloudManager*               _cloudManager           = nullptr;
+    NTRIPManager*               _ntripManager           = nullptr;
 #ifndef QGC_AIRLINK_DISABLED
     AirLinkManager*             _airlinkManager         = nullptr;
 #endif

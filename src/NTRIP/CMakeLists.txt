@@ -1,8 +1,10 @@
 find_package(Qt6 REQUIRED COMPONENTS Core Network Positioning)
 
 qt_add_library(NTRIP STATIC
-    NTRIP.cc
-    NTRIP.h
+    NTRIPManager.cc
+    NTRIPManager.h
+    NTRIPTCPLink.cc
+    NTRIPTCPLink.h
 )
 
 target_link_libraries(NTRIP

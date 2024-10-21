@@ -17,6 +17,7 @@
 #include "PositionManager.h"
 #include "QGCMapEngineManager.h"
 #include "ADSBVehicleManager.h"
+#include "NTRIPManager.h"
 #ifndef NO_SERIAL_LINK
 #include "GPSManager.h"
 #endif
@@ -87,8 +88,8 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
 #ifndef NO_SERIAL_LINK
     _gpsRtkFactGroup        = toolbox->gpsManager()->gpsRtkFactGroup();
 #endif
-    _ntrip                  = toolbox->ntrip();
     _cloudManager           = toolbox->cloudManager();
+    _ntripManager           = toolbox->ntripManager();
     _globalPalette          = new QGCPalette(this);
 #ifndef QGC_AIRLINK_DISABLED
     _airlinkManager         = toolbox->airlinkManager();

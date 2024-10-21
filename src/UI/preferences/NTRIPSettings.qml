@@ -20,9 +20,10 @@ import QGroundControl.Palette
 import QGroundControl.ScreenTools 
 
 SettingsPage {
-    property var    _settingsManager:           QGroundControl.settingsManager
-    property var    ntripSettings:    QGroundControl.settingsManager.ntripSettings
-    property real   _urlFieldWidth:             ScreenTools.defaultFontPixelWidth * 25
+    property var    _ntripManager:      QGroundControl.ntripManager
+    property var    _settingsManager:   QGroundControl.settingsManager
+    property var    _ntripSettings:     QGroundControl.settingsManager.ntripSettings
+    property real   _urlFieldWidth:     ScreenTools.defaultFontPixelWidth * 25
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -31,8 +32,8 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Connect to NTRIP server (Required Reboot)")
-            fact:               ntripSettings.ntripServerConnectEnabled
+            text:               qsTr("Enable NTRIP")
+            fact:               _ntripSettings.ntripEnabled
             visible:            fact.visible
         }
     }
@@ -45,77 +46,110 @@ SettingsPage {
             Layout.fillWidth:   true
             textFieldPreferredWidth:    _urlFieldWidth
             label:              qsTr("Host Address")
-            fact:               ntripSettings.ntripServerHostAddress
-            visible:            ntripSettings.ntripServerHostAddress.visible
+            fact:               _ntripSettings.ntripServerHostAddress
+            visible:            _ntripSettings.ntripServerHostAddress.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
             textFieldPreferredWidth:    _urlFieldWidth
             label:              qsTr("Server Port")
-            fact:               ntripSettings.ntripServerPort
-            visible:            ntripSettings.ntripServerPort.visible
+            fact:               _ntripSettings.ntripServerPort
+            visible:            _ntripSettings.ntripServerPort.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
             textFieldPreferredWidth:    _urlFieldWidth
             label:              qsTr("User Name")
-            fact:               ntripSettings.ntripUsername
-            visible:            ntripSettings.ntripUsername.visible
+            fact:               _ntripSettings.ntripUsername
+            visible:            _ntripSettings.ntripUsername.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
             textFieldPreferredWidth:    _urlFieldWidth
             label:              qsTr("Password")
-            fact:               ntripSettings.ntripPassword
-            visible:            ntripSettings.ntripPassword.visible
+            fact:               _ntripSettings.ntripPassword
+            visible:            _ntripSettings.ntripPassword.visible
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
             textFieldPreferredWidth:    _urlFieldWidth
             label:              qsTr("Mount Point")
-            fact:               ntripSettings.ntripMountpoint
-            visible:            ntripSettings.ntripMountpoint.visible
+            fact:               _ntripSettings.ntripMountpoint
+            visible:            _ntripSettings.ntripMountpoint.visible
         }
 
-        LabelledFactTextField {
-            Layout.fillWidth:   true
-            textFieldPreferredWidth:    _urlFieldWidth
-            label:              qsTr("White List")
-            fact:               ntripSettings.ntripWhitelist
-            visible:            ntripSettings.ntripWhitelist.visible
-        }
+        // LabelledFactTextField {
+        //     Layout.fillWidth:   true
+        //     textFieldPreferredWidth:    _urlFieldWidth
+        //     label:              qsTr("White List")
+        //     fact:               _ntripSettings.ntripWhitelist
+        //     visible:            _ntripSettings.ntripWhitelist.visible
+        // }
     }
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Status")
 
+        // LabelledLabel {
+        //     label:          qsTr("Connect status")
+        //     labelText: _ntripManager.networkState
+        // }
+
         LabelledLabel {
             label:          qsTr("Connection")
-            labelText: QGroundControl.ntrip.connected === true ? qsTr("Connected") : qsTr("Disconnected")
+            labelText: _ntripManager.connected === true ? qsTr("Connected") : qsTr("Disconnected")
         }
 
         LabelledLabel {
             label:          qsTr("BandWidth")
-            labelText: QGroundControl.ntrip.bandWidth.toFixed(2) + " kB/s"
+            labelText: _ntripManager.bandWidth.toFixed(2) + " kB/s"
         }
 
-        LabelledButton {
-            label:      qsTr("Reconnect NTRIP")
-            buttonText: qsTr("Reconnect")
-            onClicked:  {
-                QGroundControl.ntrip.reconnectNTRIP()
-            }
-        }
+        // RowLayout {
+        //     Rectangle{
+        //         width: ScreenTools.defaultFontPixelHeight * 2
+        //         height: width
+        //         color: red
+        //     }
+        //     Rectangle{
+        //         width: ScreenTools.defaultFontPixelHeight * 2
+        //         height: width
+        //         color: red
+        //     }
+        //     Rectangle{
+        //         width: ScreenTools.defaultFontPixelHeight * 2
+        //         height: width
+        //         color: red
+        //     }
+        //     Rectangle{
+        //         width: ScreenTools.defaultFontPixelHeight * 2
+        //         height: width
+        //         color: red
+        //     }
+        //     Rectangle{
+        //         width: ScreenTools.defaultFontPixelHeight * 2
+        //         height: width
+        //         color: red
+        //     }
+        // }
 
-        LabelledButton {
-            label:      qsTr("Stop NTRIP")
-            buttonText: qsTr("Stop")
-            onClicked:  QGroundControl.ntrip.stopNTRIP()
-        }
+        // LabelledButton {
+        //     label:      qsTr("Reconnect NTRIP")
+        //     buttonText: qsTr("Reconnect")
+        //     onClicked:  {
+        //         _ntripManager.reconnect()
+        //     }
+        // }
+
+        // LabelledButton {
+        //     label:      qsTr("Stop NTRIP")
+        //     buttonText: qsTr("Stop")
+        //     onClicked:  _ntripManager.stop()
+        // }
     }
 }

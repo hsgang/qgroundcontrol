@@ -17,7 +17,7 @@ DECLARE_SETTINGGROUP(NTRIP, "NTRIP")
     qmlRegisterUncreatableType<NTRIPSettings>("QGroundControl.SettingsManager", 1, 0, "NTRIPSettings", "Reference only");
 }
 
-DECLARE_SETTINGSFACT(NTRIPSettings, ntripServerConnectEnabled)
+DECLARE_SETTINGSFACT(NTRIPSettings, ntripEnabled)
 DECLARE_SETTINGSFACT(NTRIPSettings, ntripServerHostAddress)
 DECLARE_SETTINGSFACT(NTRIPSettings, ntripServerPort)
 DECLARE_SETTINGSFACT(NTRIPSettings, ntripUsername)

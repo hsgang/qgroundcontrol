@@ -4,64 +4,56 @@
     "QGC.MetaData.Facts":
 [
 {
-    "name":                 "ntripServerConnectEnabled",
-    "shortDesc":     "Connect to NTRIP server (Required Reboot)",
+    "name":                 "ntripEnabled",
+    "shortDesc":     "Connect to NTRIP server",
     "longDesc":      "Connect to NTRIP server using specified address/port",
     "type":                 "bool",
-    "default":         false,
-    "qgcRebootRequired":    true
+    "default":         false
 },
 {
     "name":                 "ntripServerHostAddress",
     "shortDesc":     "Host address",
     "type":                 "string",
-    "default":         "www.gnssdata.or.kr",
-    "qgcRebootRequired":    true
+    "default":         "www.gnssdata.or.kr"
 },
 {
     "name":                 "ntripServerPort",
     "shortDesc":     "Server port",
     "type":                 "string",
-    "default":         2101,
-    "qgcRebootRequired":    true
+    "default":         2101
 },
 {
     "name":                 "ntripUsername",
     "shortDesc":     "Username",
     "type":                 "string",
-    "default":         "email@email.com",
-    "qgcRebootRequired":    true
+    "default":         "email@email.com"
 },
 {
     "name":                 "ntripPassword",
     "shortDesc":     "Password",
     "type":                 "string",
-    "default":         "gnss",
-    "qgcRebootRequired":    true
+    "default":         "gnss"
 },
 {
     "name":                 "ntripMountpoint",
     "shortDesc":     "Mount Point",
     "longDesc":      "NTRIP Mount Point. Leave blank for RTCM over TCP",
     "type":                 "string",
-    "default":         "PUSN-RTCM32",
-    "qgcRebootRequired":    true
+    "default":         "PUSN-RTCM32"
 },
 {
     "name":                 "ntripWhitelist",
     "shortDesc":     "RTCM Message Whitelist",
     "longDesc":      "RTCM Messages to send over mavlink. Leave blank for all messages",
     "type":                 "string",
-    "default":         "",
-    "qgcRebootRequired":    true
+    "default":         ""
 },
 {
     "name":                 "ntripEnableVRS",
     "shortDesc":     "Enable NTRIP VRS",
     "longDesc":      "Check to Enable VRS RTK",
     "type":                 "bool",
-    "default":         false,
-    "qgcRebootRequired":    true
+    "default":         false
 }
 ]
 }

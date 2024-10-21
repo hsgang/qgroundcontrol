@@ -29,6 +29,7 @@ Item {
     property bool showIndicator: true
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+    property var _ntripManager: QGroundControl.ntripManager
 
     property bool isGNSS2: _activeVehicle.gps2.lock.value
 
@@ -128,11 +129,11 @@ Item {
             color:              (_activeVehicle && _activeVehicle.gps.lock.value >= 3) ? qgcPal.buttonText : qgcPal.colorOrange
 
             Rectangle {
-                visible:        QGroundControl.ntrip.connected
+                visible:        _ntripManager.connected
                 width:          ScreenTools.defaultFontPixelHeight * 0.9
                 height:         width
                 color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-                border.color:   (QGroundControl.ntrip.bandWidth > 0) ? qgcPal.colorGreen : qgcPal.text
+                border.color:   (_ntripManager.bandWidth > 0) ? qgcPal.colorGreen : qgcPal.text
                 border.width:   2
                 radius:         ScreenTools.defaultFontPixelHeight / 5
                 anchors.left:   parent.left
@@ -141,7 +142,7 @@ Item {
                 QGCLabel {
                     text:                       "N"
                     font.bold:                  true
-                    color:                      (QGroundControl.ntrip.bandWidth > 0) ? qgcPal.colorGreen : qgcPal.text
+                    color:                      (_ntripManager.bandWidth > 0) ? qgcPal.colorGreen : qgcPal.text
                     anchors.horizontalCenter:   parent.horizontalCenter
                     anchors.verticalCenter:     parent.verticalCenter
                 }
