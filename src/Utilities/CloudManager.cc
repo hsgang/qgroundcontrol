@@ -13,6 +13,7 @@
 #include <QMessageAuthenticationCode>
 #include <QHttpMultiPart>
 #include <QXmlStreamReader>
+#include <QDateTime>
 
 const QString CloudManager::API_BASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:";
 const QString CloudManager::SIGN_UP_ENDPOINT = API_BASE_URL + "signUp?key=";
@@ -453,7 +454,7 @@ void CloudManager::parseResponse(const QByteArray &response)
     {
         QString idToken = jsonDocument.object().value("idToken").toString();
         m_idToken = idToken;
-        // qDebug() << "Obtained user ID Token: " << idToken;
+        //qDebug() << "Obtained user ID Token: " << idToken;
         QString localId = jsonDocument.object().value("localId").toString();
         //qDebug() << "UID: " << localId;
         m_localId = localId;
@@ -495,6 +496,10 @@ void CloudManager::handleError(const QJsonObject &errorObject)
 
 void CloudManager::loadDirFile(QString dirName)
 {
+    if(!m_signedIn) {
+        return;
+    }
+
     QString uploadDirPath;
     if(dirName == "Sensors"){
         uploadDirPath = _toolbox->settingsManager()->appSettings()->sensorSavePath();
@@ -926,4 +931,72 @@ void CloudManager::updateNetworkStatus() {
         }
     }
     emit networkStatusChanged();
+}
+
+void CloudManager::uploadTakeoffRecord(double latitude, double longitude, double altitude, double voltage)
+{
+    if(!m_signedIn){
+        return;
+    }
+
+    QString documentId = "documentId";
+    //QString endPoint = QString("https://firestore.googleapis.com/v1/projects/next-todo-61f49/databases/(default)/documents/takeoffRecord/%1").arg(documentId);
+    QString endPoint = "https://firestore.googleapis.com/v1/projects/next-todo-61f49/databases/(default)/documents/takeoffRecord";
+
+    QUrl url(endPoint);
+    QNetworkRequest request(url);
+
+    QString bearerToken = QString("Bearer %1").arg(m_idToken);
+    request.setRawHeader("Authorization", bearerToken.toUtf8());
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    // JSON body for the Firestore document
+    QJsonObject json;
+    QJsonObject fields;
+
+    qDebug() << latitude << longitude << altitude << voltage ;
+
+    // Check and create fields only if they are valid doubles
+    if (!std::isnan(latitude)) {
+        fields["latitude"] = QJsonObject{{"doubleValue", latitude}};
+    }
+    if (!std::isnan(longitude)) {
+        fields["longitude"] = QJsonObject{{"doubleValue", longitude}};
+    }
+    if (!std::isnan(altitude)) {
+        fields["altitude"] = QJsonObject{{"doubleValue", altitude}};
+    }
+    if (!std::isnan(voltage)) {
+        fields["voltage"] = QJsonObject{{"doubleValue", voltage}};
+    }
+
+    // 현재 시간을 문자열로 변환 (형식: "YYYY-MM-DD HH:MM:SS.mmm")
+    QString currentTimeString = QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss.zzz");
+
+    fields["timestamp"] = QJsonObject{{"stringValue", currentTimeString}};
+
+    json["fields"] = fields;
+
+    QJsonDocument doc(json);
+    QByteArray data = doc.toJson();
+
+    QNetworkReply* reply = _nam->post(request, data);
+    connect(reply, &QNetworkReply::readyRead, this, &CloudManager::uploadTakeoffRecordReplyReadyRead);
+}
+
+void CloudManager::uploadTakeoffRecordReplyReadyRead()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    if (!reply) {
+        return;
+    }
+
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray responseData = reply->readAll();
+        qDebug() << "Upload successful:" << responseData;
+    } else {
+        qDebug() << "Upload failed:" << reply->errorString();
+    }
+
+    reply->deleteLater();
 }

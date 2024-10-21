@@ -53,6 +53,7 @@
 #include <StatusTextHandler.h>
 #include <MAVLinkSigning.h>
 #include "GimbalController.h"
+#include "CloudManager.h"
 
 #ifdef QGC_UTM_ADAPTER
 #include "UTMSPVehicle.h"
@@ -210,6 +211,9 @@ Vehicle::Vehicle(LinkInterface*             link,
     // Start sensor logger
     connect(&_customLogTimer, &QTimer::timeout, this, &Vehicle::_writeCustomLogLine);
     _customLogTimer.start(1000);
+
+    connect(&_dbWriteTimer, &QTimer::timeout, this, &Vehicle::_sendToDb);
+    _dbWriteTimer.start(1000);
     
     // Start timer to limit altitude above terrain queries
     _altitudeAboveTerrQueryTimer.restart();
@@ -992,9 +996,6 @@ QString Vehicle::vehicleUID2Str()
         uid2.append(QString("%1").arg(_uid2[i], 2, 16, QChar('0')).toUpper());
     }
     _uid2Str = uid2;
-
-    qDebug() << "uid2:" << _uid2;
-
     return uid2;
 }
 
@@ -2077,6 +2078,18 @@ void Vehicle::_announceArmedChanged(bool armed)
     if(armed) {
         //-- Keep track of armed coordinates
         _armedPosition = _coordinate;
+
+        //////////////////////upload takeoff record to firebase////////////////////
+        QGCApplication* app = qgcApp();
+        CloudManager* cloudManager = app->toolbox()->cloudManager();
+
+        double latitude = _coordinate.latitude();
+        double longitude = _coordinate.longitude();
+        double altitude = _coordinate.altitude();
+        double voltage = getFactGroup("battery0")->getFact("voltage")->rawValue().toDouble();
+        cloudManager->uploadTakeoffRecord(latitude, longitude, altitude, voltage);
+        //////////////////////upload takeoff record to firebase////////////////////
+
         emit armedPositionChanged();
     }
 }
@@ -3783,6 +3796,24 @@ void Vehicle::_writeCustomLogLine()
     }
 }
 
+void Vehicle::_sendToDb()
+{
+    QGCApplication* app = qgcApp();
+    CloudManager* cloudManager = app->toolbox()->cloudManager();
+
+    if(cloudManager->signedIn() && _armed) {
+        QMap<QString, QString> tags;
+        tags["vehicle"] = _uid2Str;
+        //tags["device"] = "sensor1";
+
+        QMap<QString, QVariant> fields;
+        fields["lat"] = getFactGroup("gps")->getFact("lat")->rawValue();
+        fields["lon"] = getFactGroup("gps")->getFact("lon")->rawValue();
+        fields["alt"] = getFact("altitudeRelative")->rawValue();
+
+        cloudManager->sendToDb("vehicleLog", tags, fields);
+    }
+}
 
 #if !defined(NO_ARDUPILOT_DIALECT)
 void Vehicle::flashBootloader()

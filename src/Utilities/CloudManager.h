@@ -56,6 +56,7 @@ public:
     void uploadJson(const QJsonDocument &jsonDoc, const QString& bucketName, const QString& objectName);
     void getListBucket(const QString &bucketName);
     void sendToDb(const QString &measurement, const QMap<QString, QString> &tags, const QMap<QString, QVariant> &fields);
+    void uploadTakeoffRecord(double latitude, double longitude, double altitude, double voltage);
 
     void setAPIKey (const QString & apiKey);
     void setToolbox (QGCToolbox *toolbox);
@@ -95,6 +96,7 @@ public slots:
     void onUploadFinished();
     void onDownloadFinished(QNetworkReply* reply, const QString& objectName);
     void onDbReplyFinished(QNetworkReply* reply);
+    void uploadTakeoffRecordReplyReadyRead();
 
 signals:
     void fileListChanged();

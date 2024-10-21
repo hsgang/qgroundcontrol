@@ -1049,6 +1049,7 @@ private:
     void _writeCsvLine                  ();
     void _initializeCustomLog           ();
     void _writeCustomLogLine            ();
+    void _sendToDb                      ();
     void _flightTimerStart              ();
     void _flightTimerStop               ();
     void _setMessageInterval            (int messageId, int rate);
@@ -1076,6 +1077,8 @@ private:
 
     QTimer              _customLogTimer;
     QFile               _customLogFile;
+
+    QTimer              _dbWriteTimer;
 
     bool            _joystickEnabled = false;
     bool _isActiveVehicle = false;
@@ -1205,7 +1208,6 @@ private:
     // by default.
     uint16_t       _firmwareBoardVendorId = 0;
     uint16_t       _firmwareBoardProductId = 0;
-
 
     QString _gitHash;
     quint64 _uid = 0;
