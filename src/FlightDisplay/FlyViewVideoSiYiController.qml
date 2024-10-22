@@ -30,7 +30,7 @@ Rectangle {
     clip: true
     anchors.fill: parent
     color: "#00000000"
-    visible:   !_mainWindowIsMap && camera.isConnected && QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl.rawValue
+    visible: !_mainWindowIsMap && camera.isConnected && QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl.rawValue
 
     property var siyi: SiYi
     property SiYiCamera camera: siyi.camera
@@ -349,7 +349,6 @@ Rectangle {
 
                     onClicked: {
                         imageModePopupDialog.open()
-
                     }
                 }
 
@@ -817,6 +816,7 @@ Rectangle {
         id: imageModePopupDialog
         title: qsTr("Select image mode")
         buttons: Dialog.Cancel
+        destroyOnClose: false
 
         GridLayout {
             //Layout.fillWidth: true
@@ -988,6 +988,7 @@ Rectangle {
         id: thermalPalettePopupDialog
         title: qsTr("Select image mode")
         buttons: Dialog.Cancel
+        destroyOnClose: false
 
         GridLayout {
             rows: 2
@@ -1009,7 +1010,7 @@ Rectangle {
                         anchors.fill: parent
                         onClicked: {
                             camera.thermalPalette(0)
-                            thermalPalettePopupDialog.close()
+                            //thermalPalettePopupDialog.close()
                         }
                     }
                 }
@@ -1032,7 +1033,7 @@ Rectangle {
                         anchors.fill: parent
                         onClicked: {
                             camera.thermalPalette(2)
-                            thermalPalettePopupDialog.close()
+                            //thermalPalettePopupDialog.close()
                         }
                     }
                 }
