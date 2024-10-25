@@ -433,7 +433,8 @@ VideoManager::hasThermal() const
 bool
 VideoManager::autoStreamConfigured() const
 {
-    if(_activeVehicle && _activeVehicle->cameraManager()) {
+    bool enabled = _videoSettings->enableMavlinkCameraStreamInformaion()->rawValue().toBool();
+    if(_activeVehicle && _activeVehicle->cameraManager() && enabled) {
         const QGCVideoStreamInfo* const pInfo = _activeVehicle->cameraManager()->currentStreamInstance();
         if(pInfo) {
             return !pInfo->uri().isEmpty();

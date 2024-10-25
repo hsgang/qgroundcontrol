@@ -131,6 +131,14 @@ SettingsPage {
             visible:            fact.visible
             indexModel:         false
         }
+
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Enable Auto Cofigure")
+            description:        qsTr("Using camera stream information from Mavlink")
+            fact:               _videoSettings.enableMavlinkCameraStreamInformaion
+            visible:            fact.visible
+        }
     }
 
     SettingsGroupLayout {

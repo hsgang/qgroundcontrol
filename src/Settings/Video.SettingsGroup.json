@@ -136,6 +136,13 @@
     "enumValues":       "0,1,2,3,4,5",
     "default":           0,
     "qgcRebootRequired": true
+},
+{
+    "name":             "enableMavlinkCameraStreamInformaion",
+    "shortDesc": "enableMavlinkCameraStreamInformaion",
+    "longDesc":  "enableMavlinkCameraStreamInformaion",
+    "type":             "bool",
+    "default":     false
 }
 ]
 }

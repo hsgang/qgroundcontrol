@@ -35,6 +35,7 @@ public:
     DEFINE_SETTINGFACT(disableWhenDisarmed)
     DEFINE_SETTINGFACT(lowLatencyMode)
     DEFINE_SETTINGFACT(forceVideoDecoder)
+    DEFINE_SETTINGFACT(enableMavlinkCameraStreamInformaion)
 
     Q_PROPERTY(bool     streamConfigured        READ streamConfigured       NOTIFY streamConfiguredChanged)
     Q_PROPERTY(QString  rtspVideoSource         READ rtspVideoSource        CONSTANT)
