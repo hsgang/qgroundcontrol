@@ -47,6 +47,9 @@ public:
     };
 public:
     explicit SiYiTransmitter(QObject *parent = nullptr);
+
+    Q_INVOKABLE void analyzeIp(QString transmitterUrl) override;
+
 protected:
     QByteArray heartbeatMessage() override;
     void analyzeMessage() override;

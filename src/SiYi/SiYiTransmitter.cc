@@ -1,4 +1,6 @@
 ﻿#include <QtEndian>
+#include <QSettings>
+#include <QStandardPaths>
 #include "SiYiTransmitter.h"
 #include "QGCLoggingCategory.h"
 
@@ -7,7 +9,22 @@ QGC_LOGGING_CATEGORY(SiYiTransmitterLog, "SiYiTransmitterLog")
 SiYiTransmitter::SiYiTransmitter(QObject *parent)
     : SiYiTcpClient{"192.168.144.12", 5864, parent}
 {
+    QSettings settings(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
+                       + "/config.ini",
+                       QSettings::IniFormat);
+    QString tmp = settings.value("siyiTransmitterIp").toString();
+    if (!tmp.isEmpty()) {
+        ip_ = tmp;
+    }
+}
 
+void SiYiTransmitter::analyzeIp(QString transmitterUrl)
+{
+    SiYiTcpClient::resetIp(transmitterUrl);
+    QSettings settings(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
+                           + "/config.ini",
+                       QSettings::IniFormat);
+    settings.setValue("siyiTransmitterIp", ip_);
 }
 
 QByteArray SiYiTransmitter::heartbeatMessage()

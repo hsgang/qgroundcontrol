@@ -19,6 +19,8 @@ import QGroundControl.ScreenTools
 import QGroundControl.Palette
 import QGroundControl.FactSystem
 
+import SiYi.Object
+
 SettingsPage {
     property var    _linkManager: QGroundControl.linkManager
     property real   _comboBoxPreferredWidth:    ScreenTools.defaultFontPixelWidth * 15
@@ -204,6 +206,25 @@ SettingsPage {
                 text:               autoConnectRepeater.names[index]
                 fact:               modelData
                 visible:            modelData.visible
+            }
+        }
+    }
+
+    SettingsGroupLayout {
+        heading:    qsTr("SIYI Transmitter")
+
+        RowLayout{
+            QGCTextField {
+                id: ipInput
+                Layout.fillWidth: true
+                text:   SiYi.transmitter.ip
+            }
+            QGCButton {
+                text: qsTr("Change IP")
+                enabled:   ipInput.text !== SiYi.transmitter.ip
+                onClicked: {
+                    SiYi.transmitter.analyzeIp(ipInput.text)
+                }
             }
         }
     }

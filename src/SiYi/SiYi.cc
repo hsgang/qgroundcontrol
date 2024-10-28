@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 
 #include "SiYi.h"
+#include "QGCApplication.h"
 
 SiYi *SiYi::instance_ = Q_NULLPTR;
 SiYi::SiYi(QObject *parent)
@@ -15,6 +16,15 @@ SiYi::SiYi(QObject *parent)
     connect(transmitter_, &SiYiCamera::disconnected, this, [=](){
         this->isTransmitterConnected_ = false;
         transmitter_->exit();
+    });
+
+    connect(transmitter_, &SiYiTransmitter::ipChanged, this, [=](){
+        if (transmitter_->isRunning()) {
+            transmitter_->exit();
+            transmitter_->wait();
+        }
+
+        transmitter_->start();
     });
 
     connect(camera_, &SiYiCamera::ipChanged, this, [=](){
