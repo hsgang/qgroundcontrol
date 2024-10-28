@@ -14,8 +14,6 @@
 #include <QtCore/QObject>
 
 class FirmwarePluginManager;
-class GPSManager;
-class JoystickManager;
 class LinkManager;
 class MAVLinkProtocol;
 class MissionCommandTree;
@@ -43,7 +41,6 @@ public:
     QGCToolbox(QGCApplication* app);
 
     FirmwarePluginManager*      firmwarePluginManager   () { return _firmwarePluginManager; }
-    JoystickManager*            joystickManager         () { return _joystickManager; }
     LinkManager*                linkManager             () { return _linkManager; }
     MAVLinkProtocol*            mavlinkProtocol         () { return _mavlinkProtocol; }
     MissionCommandTree*         missionCommandTree      () { return _missionCommandTree; }
@@ -55,9 +52,6 @@ public:
     SettingsManager*            settingsManager         () { return _settingsManager; }
     CloudManager*               cloudManager            () { return _cloudManager; }
     NTRIPManager*               ntripManager            () { return _ntripManager; }
-#ifndef NO_SERIAL_LINK
-    GPSManager*                 gpsManager              () { return _gpsManager; }
-#endif
 #ifndef QGC_AIRLINK_DISABLED
     AirLinkManager*              airlinkManager          () { return _airlinkManager; }
 #endif
@@ -70,10 +64,6 @@ private:
     void _scanAndLoadPlugins(QGCApplication *app);
 
     FirmwarePluginManager*      _firmwarePluginManager  = nullptr;
-#ifndef NO_SERIAL_LINK
-    GPSManager*                 _gpsManager             = nullptr;
-#endif
-    JoystickManager*            _joystickManager        = nullptr;
     LinkManager*                _linkManager            = nullptr;
     MAVLinkProtocol*            _mavlinkProtocol        = nullptr;
     MissionCommandTree*         _missionCommandTree     = nullptr;
