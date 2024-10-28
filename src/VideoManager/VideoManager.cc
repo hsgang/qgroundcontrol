@@ -99,6 +99,7 @@ VideoManager::setToolbox(QGCToolbox *toolbox)
    connect(_videoSettings->udpPort(),       &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
    connect(_videoSettings->rtspUrl(),       &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
    connect(_videoSettings->tcpUrl(),        &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
+   connect(_videoSettings->enableMavlinkCameraStreamInformaion(), &Fact::rawValueChanged, this, &VideoManager::autoStreamConfiguredChanged);
    connect(_videoSettings->aspectRatio(),   &Fact::rawValueChanged, this, &VideoManager::aspectRatioChanged);
    connect(_videoSettings->lowLatencyMode(),&Fact::rawValueChanged, this, &VideoManager::_lowLatencyModeChanged);
    MultiVehicleManager *pVehicleMgr = _toolbox->multiVehicleManager();
@@ -647,13 +648,21 @@ VideoManager::_updateSettings(signed id)
         const QGCVideoStreamInfo* const pInfo = _activeVehicle->cameraManager()->currentStreamInstance();
         if(pInfo) {
             if (id == 0) {
-                qCDebug(VideoManagerLog) << "Configure primary stream:" << pInfo->uri();
+                // qCDebug(VideoManagerLog) << "Configure primary stream:" << pInfo->uri();
                 switch(pInfo->type()) {
-                    case VIDEO_STREAM_TYPE_RTSP:
-                        if ((settingsChanged |= _updateVideoUri(id, pInfo->uri()))) {
+                    case VIDEO_STREAM_TYPE_RTSP: {
+                        QString rtspUrl = pInfo->uri();
+                        // Check if we need to override the RTSP URL based on settings
+                        if (!_videoSettings->enableMavlinkCameraStreamInformaion()->rawValue().toBool()
+                            /* && !_videoSettings->rtspUrl()->rawValue().toString().isEmpty()) */){
+                            rtspUrl = _videoSettings->rtspUrl()->rawValue().toString();
+                            qCDebug(VideoManagerLog) << "Overriding RTSP URL with:" << rtspUrl;
+                        }
+                        if ((settingsChanged |= _updateVideoUri(id, rtspUrl))) {
                             _toolbox->settingsManager()->videoSettings()->videoSource()->setRawValue(VideoSettings::videoSourceRTSP);
                         }
                         break;
+                    }
                     case VIDEO_STREAM_TYPE_TCP_MPEG:
                         if ((settingsChanged |= _updateVideoUri(id, pInfo->uri()))) {
                             _toolbox->settingsManager()->videoSettings()->videoSource()->setRawValue(VideoSettings::videoSourceTCP);

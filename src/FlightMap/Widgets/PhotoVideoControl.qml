@@ -87,7 +87,7 @@ Rectangle {
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
                     text:               _camera.modelName
-                    visible:            _cameraManager.cameras.length > 1
+                    //visible:            _cameraManager.cameras.length > 1
                 }
 
                 // Photo/Video Mode Selector

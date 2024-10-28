@@ -48,6 +48,9 @@ Item {
     property string _videoSource:       _videoSettings.videoSource.rawValue
     // property bool   _isGst:             QGroundControl.videoManager.isGStreamer
     property bool   _isRTSP:            _videoSource === _videoSettings.rtspVideoSource
+    property var    _videoManager:              QGroundControl.videoManager
+    property bool   _videoAutoStreamConfig:     _videoManager.autoStreamConfigured
+
 
     property double _thermalHeightFactor: 0.85 //-- TODO
 
@@ -155,13 +158,13 @@ Item {
                         }
 
                         QGCLabel {
-                            text:           _videoSource
+                            text:           _videoAutoStreamConfig ? qsTr("Auto Configured") : _videoSource
                             font.pointSize: ScreenTools.smallFontPointSize
                         }
 
                         QGCLabel {
                             text:           _videoSettings.rtspUrl.rawValue
-                            visible:        _isRTSP
+                            visible:        _isRTSP && !_videoAutoStreamConfig
                             font.pointSize: ScreenTools.smallFontPointSize
                         }
                     }

@@ -21,7 +21,7 @@ import QGroundControl.ScreenTools
 import SiYi.Object 1.0
 
 SettingsPage {
-    property var    _settingsManager:            QGroundControl.settingsManager
+    property var    _settingsManager:           QGroundControl.settingsManager
     property var    _videoManager:              QGroundControl.videoManager
     property var    _videoSettings:             _settingsManager.videoSettings
     property string _videoSource:               _videoSettings.videoSource.rawValue
@@ -134,8 +134,8 @@ SettingsPage {
 
         FactCheckBoxSlider {
             Layout.fillWidth:   true
-            text:               qsTr("Enable Auto Cofigure")
-            description:        qsTr("Using camera stream information from Mavlink")
+            text:               qsTr("Enable Auto Configuration")
+            description:        qsTr("Using video_stream_information from Mavlink")
             fact:               _videoSettings.enableMavlinkCameraStreamInformaion
             visible:            fact.visible
         }
