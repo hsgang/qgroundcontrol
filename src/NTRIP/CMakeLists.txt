@@ -9,17 +9,19 @@ qt_add_library(NTRIP STATIC
 
 target_link_libraries(NTRIP
     PRIVATE
+        QGC
         Utilities
         Settings
     PUBLIC
         Qt6::Core
         Qt6::Network
         Qt6::Positioning
-        QGC
         GPS
+	GPSDrivers
 )
 
 target_include_directories(NTRIP
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+	${px4-gpsdrivers_SOURCE_DIR}/src
 )

@@ -16,7 +16,6 @@
 #include <QUrl>
 #include <QTimer>
 
-#include "Drivers/src/rtcm.h"
 #include "RTCMMavlink.h"
 #include "NTRIPTCPLink.h"
 #include "NTRIPSettings.h"

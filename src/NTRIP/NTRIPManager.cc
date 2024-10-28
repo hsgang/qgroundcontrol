@@ -92,7 +92,7 @@ void NTRIPManager::_start(const QString& hostAddress,
         qCWarning(NTRIPManagerLog) << "NTRIP TCP Link already exists. Stopping existing connection.";
         _stop();
     }
-    _rtcmMavlink = new RTCMMavlink(*_toolbox);
+    _rtcmMavlink = new RTCMMavlink(this);
     _ntripTcpLink = new NTRIPTCPLink(hostAddress,
                                      port,
                                      username,
@@ -146,6 +146,10 @@ void NTRIPManager::_stop()
         emit connectedChanged();
         emit ntripReceivedCountChanged();
         emit networkStateChanged();
+    }
+    if(_rtcmMavlink) {
+        _rtcmMavlink->deleteLater();
+        _rtcmMavlink = nullptr;
     }
 }
 

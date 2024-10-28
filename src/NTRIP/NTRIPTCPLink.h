@@ -18,7 +18,7 @@
 #include <QUrl>
 #include <QTimer>
 
-#include "Drivers/src/rtcm.h"
+#include "rtcm.h"
 #include "QGCToolbox.h"
 
 Q_DECLARE_LOGGING_CATEGORY(NTRIPTCPLinkLog)
