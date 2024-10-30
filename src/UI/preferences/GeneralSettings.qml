@@ -269,22 +269,22 @@ SettingsPage {
     //     }
     // }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("Clear all settings")
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("Clear all settings")
 
-        QGCCheckBoxSlider {
-            Layout.fillWidth: true
-            text:       qsTr("Clear all settings on next start")
-            description:    qsTr("애플리케이션 재시작시에 모든 설정을 초기화")
-            checked:    false
-            onClicked: {
-                if (checked) {
-                    QGroundControl.deleteAllSettingsNextBoot()
-                }
-            }
-        }
-    }
+    //     QGCCheckBoxSlider {
+    //         Layout.fillWidth: true
+    //         text:       qsTr("Clear all settings on next start")
+    //         description:    qsTr("애플리케이션 재시작시에 모든 설정을 초기화")
+    //         checked:    false
+    //         onClicked: {
+    //             if (checked) {
+    //                 QGroundControl.deleteAllSettingsNextBoot()
+    //             }
+    //         }
+    //     }
+    // }
 
 
 //    SettingsGroupLayout {
