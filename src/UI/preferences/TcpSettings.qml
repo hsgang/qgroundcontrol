@@ -32,6 +32,11 @@ GridLayout {
         id:                     hostField
         Layout.preferredWidth:  _secondColumnWidth
         text:                   subEditConfig.host
+
+        onTextChanged: {
+            //subEditConfig.hostChanged()
+            saveSettings()
+        }
     }
 
     QGCLabel { text: qsTr("Port") }
@@ -40,5 +45,10 @@ GridLayout {
         Layout.preferredWidth:  _secondColumnWidth
         text:                   subEditConfig.port.toString()
         inputMethodHints:       Qt.ImhFormattedNumbersOnly
+
+        onTextChanged: {
+            //subEditConfig.portChanged()
+            saveSettings()
+        }
     }
 }

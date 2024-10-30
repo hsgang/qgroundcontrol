@@ -9696,114 +9696,119 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>LinkSettings</name>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="95"/>
         <source>Add New Link</source>
         <translation>새로운 연결 추가</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="95"/>
         <source>Link Manager</source>
         <translation>연결 관리</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="95"/>
         <source>Added Link List</source>
         <translation>연결 목록</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="95"/>
         <source>No Links Configured</source>
         <translation>연결 목록 없음</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="95"/>
         <source>Auto Connect</source>
         <translation>자동 연결</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="95"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="95"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="104"/>
-        <source>Remove Link Configuration</source>
-        <translation>링크 설정 지우기</translation>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="104"/>
+        <source>Delete Link</source>
+        <translation>링크 삭제</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="105"/>
-        <source>Remove %1. Is this really what you want?</source>
-        <translation>%1을(를) 삭제합니다. 삭제하시겠습니까?</translation>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="105"/>
+        <source>Are you sure you want to delete '%1'?</source>
+        <translation>[ %1 ] 항목을 삭제하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="116"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="116"/>
         <source>Edit</source>
         <translation>수정</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="121"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="121"/>
         <source>Add</source>
         <translation>추가</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="126"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="126"/>
         <source>Connect</source>
         <translation>연결</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="131"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="131"/>
         <source>Disconnect</source>
         <translation>연결 해제</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="135"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="135"/>
         <source>MockLink Options</source>
         <translation>가상 링크 옵션</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="173"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="173"/>
         <source>Edit Link Configuration Settings</source>
         <translation>링크 설정 편집</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="173"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="173"/>
         <source>Create New Link Configuration</source>
         <translation>새 링크 설정 만들기</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="183"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="183"/>
         <source>Name</source>
         <translation>이름</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="189"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="189"/>
         <source>Enter name</source>
         <translation>이름 입력</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="194"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="194"/>
         <source>Automatically Connect on Start</source>
         <translation>자동 연결</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="201"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="201"/>
         <source>High Latency</source>
         <translation>높은 지연율</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="206"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="206"/>
         <source>Type</source>
         <translation>타입</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="240"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="240"/>
         <source>OK</source>
         <translation>확인</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/LinkSettings.qml" line="260"/>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="260"/>
         <source>Cancel</source>
         <translation>취소</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/LinkSettings.qml" line="236"/>
+        <source>Edit Link</source>
+        <translation>연결 수정</translation>
     </message>
 </context>
 <context>
@@ -18296,7 +18301,12 @@ Confirm change?</source>
     <message>
         <location filename="../src/ui/preferences/UdpSettings.qml" line="31"/>
         <source>Note: For best perfomance, please disable AutoConnect to UDP devices on the General page.</source>
-        <translation>주의: 최적의 성능을 위해서, 일반 설정에서 UDP 자동 연결을 해제해 주세요.</translation>
+        <translation>주의: 최적의 성능을 위해서 UDP 자동 연결을 해제하세요.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/UdpSettings.qml" line="37"/>
+        <source>Server</source>
+        <translation>서버</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/UdpSettings.qml" line="37"/>
@@ -18305,8 +18315,8 @@ Confirm change?</source>
     </message>
     <message>
         <location filename="../src/ui/preferences/UdpSettings.qml" line="48"/>
-        <source>Server Addresses (optional)</source>
-        <translation>서버 주소 (옵션)</translation>
+        <source>Server List</source>
+        <translation>서버 리스트</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/UdpSettings.qml" line="62"/>
@@ -18321,7 +18331,7 @@ Confirm change?</source>
     <message>
         <location filename="../src/ui/preferences/UdpSettings.qml" line="77"/>
         <source>Add Server</source>
-        <translation>서버 추가하기</translation>
+        <translation>서버 추가</translation>
     </message>
 </context>
 <context>

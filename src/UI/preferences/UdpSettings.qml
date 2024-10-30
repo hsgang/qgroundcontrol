@@ -33,20 +33,52 @@ ColumnLayout {
     }
 
     RowLayout {
-        spacing: _colSpacing
+        Layout.fillWidth: true
 
-        QGCLabel { text: qsTr("Port") }
-        QGCTextField {
-            id:                     portField
-            text:                   subEditConfig.localPort.toString()
-            focus:                  true
-            Layout.preferredWidth:  _secondColumnWidth
-            inputMethodHints:       Qt.ImhFormattedNumbersOnly
-            onTextChanged:          subEditConfig.localPort = parseInt(portField.text)
+        ColumnLayout {
+            spacing: 0
+            Layout.fillWidth: true
+
+            RowLayout {
+                spacing: _colSpacing
+                QGCLabel { text: qsTr("Server") }
+                QGCTextField {
+                    id:                     hostField
+                    Layout.preferredWidth:  _secondColumnWidth * 0.7
+                    Layout.fillWidth:       true
+                    //placeholderText:        qsTr("Example: 127.0.0.1")
+                    text:                   "127.0.0.1"
+                }
+            }
+
+            RowLayout {
+                spacing: _colSpacing
+
+                QGCLabel { text: qsTr("Port") }
+                QGCTextField {
+                    id:                     portField
+                    text:                   subEditConfig.localPort.toString()
+                    focus:                  true
+                    Layout.preferredWidth:  _secondColumnWidth * 0.7
+                    Layout.fillWidth:       true
+                    inputMethodHints:       Qt.ImhFormattedNumbersOnly
+                    onTextChanged:          subEditConfig.localPort = parseInt(portField.text)
+                }
+            }
+        }
+
+        QGCButton {
+            text:       qsTr("Add Server")
+            enabled:    hostField.text !== ""
+            onClicked: {
+                subEditConfig.addHost(hostField.text)
+                hostField.text = ""
+                subEditConfig.hostListChanged()
+            }
         }
     }
 
-    QGCLabel { text: qsTr("Server Addresses (optional)") }
+    QGCLabel { text: qsTr("Server List") }
 
     Repeater {
         model: subEditConfig.hostList
@@ -62,24 +94,6 @@ ColumnLayout {
             QGCButton {
                 text:       qsTr("Remove")
                 onClicked:  subEditConfig.removeHost(modelData)
-            }
-        }
-    }
-
-    RowLayout {
-        spacing: _colSpacing
-
-        QGCTextField {
-            id:                     hostField
-            Layout.preferredWidth:  _secondColumnWidth * 0.7
-            placeholderText:        qsTr("Example: 127.0.0.1:14550")
-        }
-        QGCButton {
-            text:       qsTr("Add Server")
-            enabled:    hostField.text !== ""
-            onClicked: {
-                subEditConfig.addHost(hostField.text)
-                hostField.text = ""
             }
         }
     }

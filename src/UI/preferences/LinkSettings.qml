@@ -271,19 +271,33 @@ SettingsPage {
                     }
                 }
 
-                QGCCheckBoxSlider {
-                    Layout.fillWidth:   true
-                    text:               qsTr("Automatically Connect on Start")
-                    checked:            editingConfig.autoConnect
-                    onCheckedChanged:   editingConfig.autoConnect = checked
+                Binding {
+                    target: nameField
+                    property: "text"
+                    value: editingConfig ? (
+                           editingConfig.linkType === LinkConfiguration.TypeSerial ?
+                           qsTr("Serial_") + linkSettingsLoader.subEditConfig.portDisplayName +"_" + linkSettingsLoader.subEditConfig.baud.toString() :
+                           (editingConfig.linkType === LinkConfiguration.TypeUdp ?
+                           qsTr("UDP_") + linkSettingsLoader.subEditConfig.hostList[0] :
+                           (editingConfig.linkType === LinkConfiguration.TypeTcp ?
+                           qsTr("TCP_") + linkSettingsLoader.subEditConfig.host + ":" + linkSettingsLoader.subEditConfig.port.toString() :
+                           qsTr("Other")))
+                        ) : ""
                 }
 
-                QGCCheckBoxSlider {
-                    Layout.fillWidth:   true
-                    text:               qsTr("High Latency")
-                    checked:            editingConfig.highLatency
-                    onCheckedChanged:   editingConfig.highLatency = checked
-                }
+                // QGCCheckBoxSlider {
+                //     Layout.fillWidth:   true
+                //     text:               qsTr("Automatically Connect on Start")
+                //     checked:            editingConfig.autoConnect
+                //     onCheckedChanged:   editingConfig.autoConnect = checked
+                // }
+
+                // QGCCheckBoxSlider {
+                //     Layout.fillWidth:   true
+                //     text:               qsTr("High Latency")
+                //     checked:            editingConfig.highLatency
+                //     onCheckedChanged:   editingConfig.highLatency = checked
+                // }
 
                 LabelledComboBox {
                     label:                  qsTr("Type")
@@ -304,7 +318,8 @@ SettingsPage {
 
                 Loader {
                     id:     linkSettingsLoader
-                    source: subEditConfig.settingsURL
+                    //source: subEditConfig.settingsURL
+                    source: subEditConfig && subEditConfig.settingsURL ? subEditConfig.settingsURL : ""
 
                     property var subEditConfig:         editingConfig
                     property int _firstColumnWidth:     ScreenTools.defaultFontPixelWidth * 12

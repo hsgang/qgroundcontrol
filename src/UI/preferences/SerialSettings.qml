@@ -44,6 +44,8 @@ ColumnLayout {
                     } else {
                         subEditConfig.portName = QGroundControl.linkManager.serialPorts[index]
                     }
+
+                    subEditConfig.portDisplayNameChanged()
                 }
             }
 
@@ -69,6 +71,7 @@ ColumnLayout {
                 }
                 comboBox.model = serialPorts
                 comboBox.currentIndex = index
+                subEditConfig.portDisplayNameChanged()
             }
         }
 
@@ -122,6 +125,7 @@ ColumnLayout {
             onActivated: (index) => {
                 if (index != -1) {
                     subEditConfig.baud = parseInt(QGroundControl.linkManager.serialBaudRates[index])
+                    subEditConfig.baudChanged()
                 }
             }
 
@@ -129,6 +133,7 @@ ColumnLayout {
                 var baud = "57600"
                 if(subEditConfig != null) {
                     baud = subEditConfig.baud.toString()
+                    subEditConfig.baudChanged()
                 }
                 var index = comboBox.find(baud)
                 if (index === -1) {
