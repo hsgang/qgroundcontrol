@@ -33,7 +33,7 @@ QGCPopupDialog {
             spacing: ScreenTools.defaultFontPixelWidth
 
             QGCLabel {
-                text: qsTr("Category:")
+                text: qsTr("Category")
             }
 
             QGCComboBox {
@@ -85,6 +85,7 @@ QGCPopupDialog {
                         anchors.left:       parent.left
                         anchors.right:      parent.right
                         text:               mavCmdInfo.description
+                        font.pointSize:     ScreenTools.smallFontPointSize
                         wrapMode:           Text.WordWrap
                         color:              textColor
                     }

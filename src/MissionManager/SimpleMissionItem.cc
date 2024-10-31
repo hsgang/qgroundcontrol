@@ -382,7 +382,7 @@ QString SimpleMissionItem::commandName(void) const
 QString SimpleMissionItem::abbreviation() const
 {
     if (homePosition())
-        return tr("L");
+        return tr("H");
 
     switch(command()) {
     case MAV_CMD_NAV_TAKEOFF:

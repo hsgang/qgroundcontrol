@@ -260,6 +260,14 @@ Rectangle {
                 visible:    missionItem.speedSection.available
             }
 
+            LabelledFactComboBox {
+                label:      qsTr("Speed Type")
+                fact:       missionItem.speedSection.speedType
+                indexModel: false
+                visible:    missionItem.speedSection.available && flightSpeedCheckbox.checked
+                comboBoxPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
+            }
+
             LabelledFactTextField {
                 Layout.fillWidth:   true
                 label:              qsTr("Flight Speed")

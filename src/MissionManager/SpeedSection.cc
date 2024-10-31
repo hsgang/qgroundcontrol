@@ -14,6 +14,7 @@
 #include "QmlObjectListModel.h"
 
 const char* SpeedSection::_flightSpeedName = "FlightSpeed";
+const char* SpeedSection::_speedTypeName = "SpeedType";
 
 QMap<QString, FactMetaData*> SpeedSection::_metaDataMap;
 
@@ -23,27 +24,35 @@ SpeedSection::SpeedSection(PlanMasterController* masterController, QObject* pare
     , _dirty                (false)
     , _specifyFlightSpeed   (false)
     , _flightSpeedFact      (0, _flightSpeedName,   FactMetaData::valueTypeDouble)
+    , _speedTypeFact        (0, _speedTypeName,     FactMetaData::valueTypeDouble)
 {
     if (_metaDataMap.isEmpty()) {
         _metaDataMap = FactMetaData::createMapFromJsonFile(QStringLiteral(":/json/SpeedSection.FactMetaData.json"), nullptr /* metaDataParent */);
     }
 
     double flightSpeed = 0;
+    int speedType = 0;
     if (_masterController->controllerVehicle()->multiRotor()) {
         flightSpeed = _masterController->controllerVehicle()->defaultHoverSpeed();
+        speedType = 1; // groundspeed;
     } else {
         flightSpeed = _masterController->controllerVehicle()->defaultCruiseSpeed();
+        speedType = 0; // airspeed;
     }
 
     _metaDataMap[_flightSpeedName]->setRawDefaultValue(flightSpeed);
     _flightSpeedFact.setMetaData(_metaDataMap[_flightSpeedName]);
     _flightSpeedFact.setRawValue(flightSpeed);
+    _speedTypeFact.setMetaData(_metaDataMap[_speedTypeName]);
+    _speedTypeFact.setRawValue(speedType);
 
     connect(this,               &SpeedSection::specifyFlightSpeedChanged,   this, &SpeedSection::settingsSpecifiedChanged);
     connect(&_flightSpeedFact,  &Fact::valueChanged,                        this, &SpeedSection::_flightSpeedChanged);
+    connect(&_speedTypeFact,    &Fact::valueChanged,                        this, &SpeedSection::_speedTypeChanged);
 
     connect(this,               &SpeedSection::specifyFlightSpeedChanged,   this, &SpeedSection::_updateSpecifiedFlightSpeed);
     connect(&_flightSpeedFact,  &Fact::valueChanged,                        this, &SpeedSection::_updateSpecifiedFlightSpeed);
+    connect(&_speedTypeFact,    &Fact::valueChanged,                        this, &SpeedSection::_updateSpecifiedFlightSpeed);
 }
 
 bool SpeedSection::settingsSpecified(void) const
@@ -92,7 +101,7 @@ void SpeedSection::appendSectionItems(QList<MissionItem*>& items, QObject* missi
         MissionItem* item = new MissionItem(seqNum++,
                                             MAV_CMD_DO_CHANGE_SPEED,
                                             MAV_FRAME_MISSION,
-                                            _masterController->controllerVehicle()->multiRotor() ? 1 /* groundspeed */ : 0 /* airspeed */,    // Change airspeed or groundspeed
+                                            _speedTypeFact.rawValue().toDouble(),//_masterController->controllerVehicle()->multiRotor() ? 1 /* groundspeed */ : 0 /* airspeed */,    // Change airspeed or groundspeed
                                             _flightSpeedFact.rawValue().toDouble(),
                                             -1,                                                                 // No throttle change
                                             0,                                                                  // Absolute speed change
@@ -151,6 +160,13 @@ void SpeedSection::_flightSpeedChanged(void)
 {
     // We only set the dirty bit if specify flight speed it set. This allows us to change defaults for flight speed
     // without affecting dirty.
+    if (_specifyFlightSpeed) {
+        setDirty(true);
+    }
+}
+
+void SpeedSection::_speedTypeChanged(void)
+{
     if (_specifyFlightSpeed) {
         setDirty(true);
     }

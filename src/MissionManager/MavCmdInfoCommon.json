@@ -68,7 +68,6 @@
             "specifiesCoordinate":  true,
             "isLoiterCommand":      true,
             "friendlyEdit":         true,
-            "category":             "Loiter",
             "param3": {
                 "label":            "Radius",
                 "units":            "m",
@@ -91,7 +90,6 @@
             "specifiesCoordinate":  true,
             "isLoiterCommand":      true,
             "friendlyEdit":         true,
-            "category":             "Loiter",
             "param1": {
                 "label":            "Turns",
                 "default":          1,
@@ -127,7 +125,6 @@
             "specifiesCoordinate":  true,
             "isLoiterCommand":      true,
             "friendlyEdit":         true,
-            "category":             "Loiter",
             "param1": {
                 "label":            "Loiter Time",
                 "units":            "secs",
@@ -233,7 +230,6 @@
             "specifiesCoordinate":  true,
             "isLoiterCommand":      true,
             "friendlyEdit":         true,
-            "category":             "Loiter",
             "param1": {
                 "label":            "Leave Loiter",
                 "enumStrings":      "Direction of next waypoint,Any direction",
@@ -357,6 +353,7 @@
             "rawName":      "MAV_CMD_NAV_GUIDED_ENABLE",
             "friendlyName": "Guided enable",
             "description":  "Enable/Disabled guided mode.",
+            "category":     "Advanced",
             "param1": {
                 "label":            "Enable",
                 "enumStrings":      "On,Off",
@@ -406,7 +403,6 @@
             "friendlyName": "Delay",
             "description":  "Delay the mission for the number of seconds.",
             "friendlyEdit": true,
-            "category":     "Conditionals",
             "param1": {
                 "label":            "Delay",
                 "units":            "secs",
@@ -420,7 +416,6 @@
             "rawName":                  "MAV_CMD_CONDITION_CHANGE_ALT",
             "description":              "Delay the mission until the specified altitide is reached.",
             "friendlyName":             "Wait for altitude",
-            "category":                 "Conditionals",
             "specifiesCoordinate":      false,
             "specifiesAltitudeOnly":    true,
             "param1": {
@@ -435,7 +430,6 @@
             "rawName":      "MAV_CMD_CONDITION_DISTANCE",
             "description":  "Delay the mission until within the specified distance of the next waypoint.",
             "friendlyName": "Wait for distance",
-            "category":     "Conditionals",
             "param1": {
                 "label":            "Distance",
                 "units":            "m",
@@ -449,7 +443,6 @@
             "rawName":      "MAV_CMD_CONDITION_YAW",
             "friendlyName": "Wait for Yaw",
             "description":  "Delay the mission until the specified heading is reached.",
-            "category":     "Conditionals",
             "param1": {
                 "label":            "Heading",
                 "units":            "deg",
@@ -504,7 +497,7 @@
             "friendlyName": "Jump to item",
             "description":  "Mission will continue at the specified item.",
             "friendlyEdit": true,
-            "category":     "Advanced",
+            "category":     "Flight control",
             "param1": {
                 "label":            "Item #",
                 "default":          1,
@@ -557,7 +550,7 @@
             "specifiesCoordinate":  true,
             "standaloneCoordinate": true,
             "friendlyEdit":         true,
-            "category":             "Advanced",
+            "category":             "Flight control",
             "param1": {
                 "label":            "Mode",
                 "enumStrings":      "Vehicle position,Specified position",
@@ -571,6 +564,7 @@
             "rawName":      "MAV_CMD_DO_SET_RELAY",
             "friendlyName": "Set relay",
             "description":  "Set relay to a condition.",
+            "category":             "Attachments",
             "param1": {
                 "label":            "Relay #",
                 "default":          0,
@@ -587,6 +581,7 @@
             "rawName":      "MAV_CMD_DO_REPEAT_RELAY",
             "friendlyName": "Cycle relay",
             "description":  "Cycle relay on/off for desired cycles/time.",
+            "category":             "Attachments",
             "param1": {
                 "label":            "Relay #",
                 "default":          0,
@@ -614,6 +609,7 @@
             "friendlyName": "Set servo",
             "description":  "Set servo to specified PWM value.",
             "friendlyEdit": true,
+            "category":             "Attachments",
             "param1": {
                 "label":            "Servo",
                 "default":          1,
@@ -632,6 +628,7 @@
             "rawName":      "MAV_CMD_DO_REPEAT_SERVO",
             "friendlyName": "Cycle servo",
             "description":  "Set servo to specified PWM value.",
+            "category":             "Attachments",
             "param1": {
                 "label":            "Servo",
                 "default":          1,
@@ -697,7 +694,6 @@
             "friendlyName":         "Land start",
             "description":          "Marker to indicate start of landing sequence.",
             "friendlyEdit":         true,
-            "category":             "Flight control"
         },
         { "id": 190, "rawName": "MAV_CMD_DO_RALLY_LAND", "friendlyName": "Rally land" },
         { "id": 191, "rawName": "MAV_CMD_DO_GO_AROUND", "friendlyName": "Go around" },
@@ -915,7 +911,7 @@
             "rawName":      "MAV_CMD_DO_MOUNT_CONTROL",
             "friendlyName": "Control Mount",
             "description":  "Control the vehicle mount (e.g. gimbal).",
-            "category":     "Advanced",
+            "category":     "Camera",
             "param1": {
                 "label":            "Lat/Pitch",
                 "default":          0,
@@ -946,7 +942,7 @@
             "rawName":              "MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW",
             "friendlyName":         "Gimbal Manager PitchYaw" ,
             "description":          "Control the gimbal during the mission",
-            "category":             "Advanced",
+            "category":             "Camera",
             "param1": {
                 "label":            "Pitch",
                 "default":          0,
@@ -1054,7 +1050,6 @@
             "description":          "Change to/from inverted flight.",
             "specifiesCoordinate":  false,
             "friendlyEdit":         true,
-            "category":             "Flight control",
             "param1": {
                 "label":            "Inverted",
                 "enumStrings":      "Normal,Inverted",
@@ -1069,7 +1064,7 @@
             "description":          "Control a gripper mechanism.",
             "specifiesCoordinate":  false,
             "friendlyEdit":         true,
-            "category":             "Advanced",
+            "category":             "Attachments",
             "param1": {
                 "label":            "Gripper id",
                 "default":          1,
@@ -1089,7 +1084,6 @@
             "description":          "AutoTune Enable.",
             "specifiesCoordinate":  false,
             "friendlyEdit":         true,
-            "category":             "Advanced",
             "param2": {
                 "label":            "Enable",
                 "enumStrings":      "Enable,Disable",
@@ -1104,6 +1098,7 @@
             "rawName":      "MAV_CMD_DO_GUIDED_LIMITS",
             "friendlyName": "Guided limits",
             "description":  "Set limits for external control",
+            "category":             "Advanced",
             "param1": {
                 "label":            "Timeout",
                 "default":          0,

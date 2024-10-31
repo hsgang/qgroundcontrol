@@ -11209,8 +11209,13 @@ Click Ok to start the auto-tuning process.
     <name>MissionCommandDialog</name>
     <message>
         <location filename="../src/QmlControls/MissionCommandDialog.qml" line="32"/>
-        <source>Category:</source>
-        <translation>카테고리:</translation>
+        <source>Select Mission Command</source>
+        <translation>미션 명령 선택</translation>
+    </message>
+    <message>
+        <location filename="../src/QmlControls/MissionCommandDialog.qml" line="32"/>
+        <source>Category</source>
+        <translation>카테고리</translation>
     </message>
 </context>
 <context>
@@ -17231,8 +17236,13 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="243"/>
+        <source>Speed Type</source>
+        <translation>속도 타입</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/SimpleItemEditor.qml" line="243"/>
         <source>Flight Speed</source>
-        <translation>비행속도</translation>
+        <translation>속도</translation>
     </message>
 </context>
 <context>
@@ -17244,18 +17254,18 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/SimpleMissionItem.cc" line="406"/>
-        <source>L</source>
-        <translation>홈</translation>
+        <source>H</source>
+        <translation>H</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/SimpleMissionItem.cc" line="410"/>
         <source>Takeoff</source>
-        <translation>이륙</translation>
+        <translation>T</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/SimpleMissionItem.cc" line="412"/>
         <source>Land</source>
-        <translation>착륙</translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/SimpleMissionItem.cc" line="414"/>

@@ -11,6 +11,14 @@
     "min":              0,
     "decimalPlaces":    1,
     "default":     0
+},
+{
+    "name":             "SpeedType",
+    "shortDesc": "SpeedType",
+    "type":             "double",
+    "enumStrings":      "Air Speed,Ground Speed,Climb Speed,Descent Speed",
+    "enumValues":       "0,1,2,3",
+    "default":          0
 }
 ]
 }
