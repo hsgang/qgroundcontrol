@@ -43,28 +43,30 @@ public:
     Q_PROPERTY(bool connected READ connected NOTIFY connectedChanged);
     Q_PROPERTY(quint64 ntripReceivedCount READ ntripReceivedCount NOTIFY ntripReceivedCountChanged);
     Q_PROPERTY(float bandWidth READ bandWidth NOTIFY ntripReceivedCountChanged);
-    Q_PROPERTY(int networkState READ networkState NOTIFY networkStateChanged)
+    Q_PROPERTY(QString connectionState READ connectionState NOTIFY connectionStateChanged)
+    Q_PROPERTY(QString lastError READ lastError NOTIFY lastErrorChanged)
+    Q_PROPERTY(double dataRate READ dataRate NOTIFY dataRateChanged)
 
-    bool connected () { return _connectedStatus; }
+    bool connected () { return _connected; }
     qint64 ntripReceivedCount() { return _ntripReceivedCount; }
     void ntripReceivedUpdate(qint64 count);
     float bandWidth() { return _bandWidth; }
-    int networkState () { return _networkStatus; }
+    QString connectionState() { return _connectionState; }
+    QString lastError() { return _lastError; }
+    double dataRate() { return _dataRate; }
 
 signals:
     void connectedChanged ();
     void ntripReceivedCountChanged ();
-    void networkStateChanged ();
+    void connectionStateChanged();
+    void lastErrorChanged();
+    void dataRateChanged();
 
 public slots:
     //void ntripUpdate();
 
 private slots:
     void _linkError(const QString &errorMsg, bool stopped = false);
-    void connectStatus (bool isConnected);
-    void networkStatus (NTRIPTCPLink::NetworkState status);
-
-    //void _settingsChanged ();
 
 private:
     void _start(const QString& hostAddress,
@@ -83,9 +85,13 @@ private:
     QElapsedTimer   _bandwidthTimer;
     int             _bandwidthByteCounter = 0;
     float           _bandWidth = 0;
-    bool            _connectedStatus = false;
+    bool            _connected = false;
     qint64          _ntripReceivedCount = 0;
-    int             _networkStatus = 0;
+
+    QString _connectionState;
+    QString _lastError;
+    double _dataRate = 0;
+    void _handleConnectionStats(const NTRIPTCPLink::ConnectionStats& stats);
 
     Fact* _ntripEnabled;
     Fact* _hostAddress;

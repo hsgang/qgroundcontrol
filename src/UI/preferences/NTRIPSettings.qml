@@ -48,6 +48,7 @@ SettingsPage {
             label:              qsTr("Host Address")
             fact:               _ntripSettings.ntripServerHostAddress
             visible:            _ntripSettings.ntripServerHostAddress.visible
+            enabled:            !_ntripSettings.ntripEnabled.rawValue
         }
 
         LabelledFactTextField {
@@ -56,6 +57,7 @@ SettingsPage {
             label:              qsTr("Server Port")
             fact:               _ntripSettings.ntripServerPort
             visible:            _ntripSettings.ntripServerPort.visible
+            enabled:            !_ntripSettings.ntripEnabled.rawValue
         }
 
         LabelledFactTextField {
@@ -64,6 +66,7 @@ SettingsPage {
             label:              qsTr("User Name")
             fact:               _ntripSettings.ntripUsername
             visible:            _ntripSettings.ntripUsername.visible
+            enabled:            !_ntripSettings.ntripEnabled.rawValue
         }
 
         LabelledFactTextField {
@@ -72,6 +75,7 @@ SettingsPage {
             label:              qsTr("Password")
             fact:               _ntripSettings.ntripPassword
             visible:            _ntripSettings.ntripPassword.visible
+            enabled:            !_ntripSettings.ntripEnabled.rawValue
         }
 
         LabelledFactTextField {
@@ -80,6 +84,7 @@ SettingsPage {
             label:              qsTr("Mount Point")
             fact:               _ntripSettings.ntripMountpoint
             visible:            _ntripSettings.ntripMountpoint.visible
+            enabled:            !_ntripSettings.ntripEnabled.rawValue
         }
 
         // LabelledFactTextField {
@@ -88,6 +93,7 @@ SettingsPage {
         //     label:              qsTr("White List")
         //     fact:               _ntripSettings.ntripWhitelist
         //     visible:            _ntripSettings.ntripWhitelist.visible
+        //     enabled:            !_ntripSettings.ntripEnabled.rawValue
         // }
     }
 
@@ -95,10 +101,19 @@ SettingsPage {
         Layout.fillWidth:   true
         heading:            qsTr("Status")
 
-        // LabelledLabel {
-        //     label:          qsTr("Connect status")
-        //     labelText: _ntripManager.networkState
-        // }
+        LabelledLabel {
+            label:          qsTr("Connection State")
+            labelText: _ntripManager.connectionState
+        }
+        LabelledLabel {
+            label:          qsTr("Connect Error")
+            labelText:  _ntripManager.lastError
+            visible:    _ntripManager.lastError !== ""
+        }
+        LabelledLabel {
+            label:          qsTr("Connect Rate")
+            labelText: (_ntripManager.dataRate / 1024).toFixed(2) + " KB/s"
+        }
 
         LabelledLabel {
             label:          qsTr("Connection")
@@ -107,7 +122,7 @@ SettingsPage {
 
         LabelledLabel {
             label:          qsTr("BandWidth")
-            labelText: _ntripManager.bandWidth.toFixed(2) + " kB/s"
+            labelText: _ntripManager.bandWidth.toFixed(2) + " KB/s"
         }
 
         // RowLayout {

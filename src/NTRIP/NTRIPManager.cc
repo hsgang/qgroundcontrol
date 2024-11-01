@@ -22,8 +22,8 @@ QGC_LOGGING_CATEGORY(NTRIPManagerLog, "qgc.ntrip.ntripmanager")
 
 NTRIPManager::NTRIPManager(QGCApplication *app, QGCToolbox *toolbox)
     : QGCTool(app, toolbox)
-{    
-    //qCDebug(NTRIPManagerLog) << "ntripmanager start" << ntripEnabled->rawValue().toBool();
+{
+    qCDebug(NTRIPManagerLog) << "ntripmanager start";
 }
 
 NTRIPManager::~NTRIPManager()
@@ -58,6 +58,8 @@ void NTRIPManager::setToolbox(QGCToolbox* toolbox)
                    enableVRS->rawValue().toBool());
         } else {
             qCDebug(NTRIPManagerLog) << "NTRIPManager is disabled";
+            _connected = false;
+            emit connectedChanged();
             _stop();
         }
     });
@@ -71,13 +73,6 @@ void NTRIPManager::setToolbox(QGCToolbox* toolbox)
                whiteList->rawValue().toString(),
                enableVRS->rawValue().toBool());
     }
-
-    // connect(_tcpLink, &NTRIPTCPLink::error,             this, &NTRIP::_tcpError,           Qt::QueuedConnection);
-    // connect(_tcpLink, &NTRIPTCPLink::RTCMDataUpdate,    _rtcmMavlink, &RTCMMavlink::RTCMDataUpdate);
-    //connect(_tcpLink, &NTRIPTCPLink::connectStatus,     this, &NTRIP::connectStatus);
-
-
-    // updateSettings();
 }
 
 void NTRIPManager::_start(const QString& hostAddress,
@@ -114,11 +109,50 @@ void NTRIPManager::_start(const QString& hostAddress,
 
     connect(_ntripTcpLink, &NTRIPTCPLink::rtcmDataUpdate, _rtcmMavlink, &RTCMMavlink::RTCMDataUpdate, Qt::AutoConnection);
     connect(_ntripTcpLink, &NTRIPTCPLink::errorOccurred, this, &NTRIPManager::_linkError, Qt::AutoConnection);
-    connect(_ntripTcpLink, &NTRIPTCPLink::connectStatus, this, &NTRIPManager::connectStatus);
     connect(_ntripTcpLink, &NTRIPTCPLink::receivedCount, this, &NTRIPManager::ntripReceivedUpdate);
-    connect(_ntripTcpLink, &NTRIPTCPLink::networkStatus, this, &NTRIPManager::networkStatus);
 
     _bandwidthTimer.start();
+
+    connect(_ntripTcpLink, &NTRIPTCPLink::connectionStateChanged, this, [this](NTRIPTCPLink::ConnectionState state) {
+        switch (state) {
+        case NTRIPTCPLink::ConnectionState::Disconnected:
+            _connectionState = tr("Disconnected");
+            _connected = false;
+            break;
+        case NTRIPTCPLink::ConnectionState::Connecting:
+            _connectionState = tr("Socket Connecting");
+            break;
+        case NTRIPTCPLink::ConnectionState::Connected:
+            _connectionState = tr("Socket Connected");
+            break;
+        case NTRIPTCPLink::ConnectionState::AuthenticationPending:
+            _connectionState = tr("Server Authenticating");
+            break;
+        case NTRIPTCPLink::ConnectionState::Authenticated:
+            _connectionState = tr("Server Authenticated");
+            break;
+        case NTRIPTCPLink::ConnectionState::ReceivingData:
+            _connectionState = tr("Receiving Data");
+            _connected = true;
+            break;
+        case NTRIPTCPLink::ConnectionState::Error:
+            _connectionState = tr("Error");
+            break;
+        case NTRIPTCPLink::ConnectionState::Closing:
+            _connectionState = tr("Socket Closing");
+            break;
+        }
+        emit connectionStateChanged();
+        emit connectedChanged();
+        //qCDebug(NTRIPManagerLog) << "connectionStateChanged1 : " << _connectionState;
+    });
+
+    connect(_ntripTcpLink, &NTRIPTCPLink::connectionStatsUpdated, this, &NTRIPManager::_handleConnectionStats);
+
+    connect(_ntripTcpLink, &NTRIPTCPLink::lastErrorChanged, this, [this](const QString& error) {
+        _lastError = error;
+        emit lastErrorChanged();
+    });
 }
 
 void NTRIPManager::stop()
@@ -129,23 +163,26 @@ void NTRIPManager::stop()
 
 void NTRIPManager::_stop()
 {
+    qCDebug(NTRIPManagerLog) << "NTRIP stopped";
     if(_ntripTcpLink)
     {
         disconnect(_ntripTcpLink, &NTRIPTCPLink::rtcmDataUpdate, _rtcmMavlink, &RTCMMavlink::RTCMDataUpdate);
         disconnect(_ntripTcpLink, &NTRIPTCPLink::errorOccurred, this, &NTRIPManager::_linkError);
-        disconnect(_ntripTcpLink, &NTRIPTCPLink::connectStatus, this, &NTRIPManager::connectStatus);
         disconnect(_ntripTcpLink, &NTRIPTCPLink::receivedCount, this, &NTRIPManager::ntripReceivedUpdate);
-        disconnect(_ntripTcpLink, &NTRIPTCPLink::networkStatus, this, &NTRIPManager::networkStatus);
 
         _ntripTcpLink->deleteLater();
         _ntripTcpLink = nullptr;
         _bandwidthTimer.restart();
         _bandWidth = 0;
-        _connectedStatus = false;
-        _networkStatus = 0;
+        _dataRate = 0;
+        _connectionState = tr("Disconnected");
+        _lastError = "";
+
         emit connectedChanged();
         emit ntripReceivedCountChanged();
-        emit networkStateChanged();
+        emit dataRateChanged();
+        emit lastErrorChanged();
+        emit connectionStateChanged();
     }
     if(_rtcmMavlink) {
         _rtcmMavlink->deleteLater();
@@ -163,19 +200,8 @@ void NTRIPManager::_linkError(const QString &errorMsg, bool stopped)
         (void) msg.append("\nNTRIP has been disabled");
         _ntripSettings->ntripEnabled()->setRawValue(false);
     }
-    qgcApp()->showAppMessage(tr("NTRIP Server Error: %1").arg(errorMsg));
+    //qgcApp()->showAppMessage(tr("NTRIP Server Error: %1").arg(errorMsg));
 }
-
-// void NTRIPManager::stopNTRIP(){
-//     if(_tcpLink){
-//         //_tcpLink->stopConnection();
-//         QMetaObject::invokeMethod(_tcpLink, "stopConnection", Qt::QueuedConnection);
-//     }
-//     _bandwidthTimer.restart();
-//     _bandWidth = 0;
-//     emit ntripReceivedCountChanged();
-//     qCDebug(NTRIPManagerLog) << "clicked NTRIP stop";
-// }
 
 void NTRIPManager::reconnect()
 {
@@ -190,16 +216,16 @@ void NTRIPManager::reconnect()
     qCDebug(NTRIPManagerLog) << "clicked NTRIP reconnect";
 }
 
-void NTRIPManager::connectStatus(bool isConnected)
-{
-    if(isConnected == true) {
-        _connectedStatus = true;
-    } else {
-        _connectedStatus = false;
-    }
-    emit connectedChanged();
-    //qCDebug(NTRIPManagerLog) << "connectStatus changed";
-}
+// void NTRIPManager::connectStatus(bool isConnected)
+// {
+//     if(isConnected == true) {
+//         _connectedStatus = true;
+//     } else {
+//         _connectedStatus = false;
+//     }
+//     emit connectedChanged();
+//     //qCDebug(NTRIPManagerLog) << "connectStatus changed";
+// }
 
 void NTRIPManager::ntripReceivedUpdate(qint64 count)
 {
@@ -216,25 +242,56 @@ void NTRIPManager::ntripReceivedUpdate(qint64 count)
     emit ntripReceivedCountChanged();
 }
 
-void NTRIPManager::networkStatus(NTRIPTCPLink::NetworkState status)
+void NTRIPManager::_handleConnectionStats(const NTRIPTCPLink::ConnectionStats& stats)
 {
-    switch(status) {
-    case NTRIPTCPLink::NetworkState::SocketConnecting :
-        _networkStatus = 0;
-        break;
-    case NTRIPTCPLink::NetworkState::SocketConnected :
-        _networkStatus = 1;
-        break;
-    case NTRIPTCPLink::NetworkState::ServerResponseWaiting :
-        _networkStatus = 2;
-        break;
-    case NTRIPTCPLink::NetworkState::NtripConnected :
-        _networkStatus = 3;
-        break;
-    default:
-        _networkStatus = 0;
-        break;
+    static qint64 lastBytes = 0;
+    static qint64 lastTime = 0;
+
+    // Reset stats if ntripTcpLink is null
+    if (!_ntripTcpLink) {
+        lastBytes = 0;
+        lastTime = 0;
+        _dataRate = 0;
+        emit dataRateChanged();
+        return;
     }
-    emit networkStateChanged();
-    qCDebug(NTRIPManagerLog) << "networkState : " << _networkStatus;
+
+    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+    qint64 timeDiff = currentTime - lastTime;
+
+    if (timeDiff > 0) {
+        qint64 bytesDiff = stats.bytesReceived - lastBytes;
+        _dataRate = (bytesDiff * 1000.0) / timeDiff; // bytes per second
+        emit dataRateChanged();
+    }
+
+    lastBytes = stats.bytesReceived;
+    lastTime = currentTime;
+
+    // switch (stats.state) {
+    //     case NTRIPTCPLink::ConnectionState::Disconnected:
+    //         _connectionState = "Disconnected";
+    //         break;
+    //     case NTRIPTCPLink::ConnectionState::Connecting:
+    //         _connectionState = "Connecting";
+    //         break;
+    //     case NTRIPTCPLink::ConnectionState::Connected:
+    //         _connectionState = "Connected";
+    //         break;
+    //     case NTRIPTCPLink::ConnectionState::AuthenticationPending:
+    //         _connectionState = "Authenticating";
+    //         break;
+    //     case NTRIPTCPLink::ConnectionState::Authenticated:
+    //         _connectionState = "Authenticated";
+    //         break;
+    //     case NTRIPTCPLink::ConnectionState::ReceivingData:
+    //         _connectionState = "Receiving Data";
+    //         _connected = true;
+    //         break;
+    //     case NTRIPTCPLink::ConnectionState::Error:
+    //         _connectionState = "Error";
+    //         break;
+    // }
+    // emit connectionStateChanged();
+    // qCDebug(NTRIPManagerLog) << "connectionStateChanged : " << _connectionState;
 }

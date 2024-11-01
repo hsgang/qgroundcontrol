@@ -3785,7 +3785,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/QmlControls/AppMessages.qml" line="189"/>
         <source>Clear All</source>
-        <translation>모두 지우기</translation>
+        <translation>모두 선택 해제</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AppMessages.qml" line="87"/>
@@ -8259,6 +8259,64 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
         <source>Stop</source>
         <translation>정지</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Connection State</source>
+        <translation>연결 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Connect Error</source>
+        <translation>오류</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
+        <source>Connect Rate</source>
+        <translation>연결 속도</translation>
+    </message>
+</context>
+<context>
+    <name>NTRIPManager</name>
+    <message>
+        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <source>Disconnected</source>
+        <translation>연결 끊김</translation>
+    </message>
+    <message>
+        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <source>Socket Connecting</source>
+        <translation>소켓 연결중</translation>
+    </message>
+    <message>
+        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <source>Socket Connected</source>
+        <translation>소켓 연결됨</translation>
+    </message>
+    <message>
+        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <source>Server Authenticating</source>
+        <translation>서버 인증 요청</translation>
+    </message>
+    <message>
+        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <source>Server Authenticated</source>
+        <translation>서버 권한 인증</translation>
+    </message>
+    <message>
+        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <source>Receiving Data</source>
+        <translation>데이터 수신중</translation>
+    </message>
+    <message>
+        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <source>Error</source>
+        <translation>오류</translation>
+    </message>
+    <message>
+        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <source>Socket Closing</source>
+        <translation>소켓 닫는중</translation>
     </message>
 </context>
 <context>

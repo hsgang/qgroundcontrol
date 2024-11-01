@@ -12,6 +12,7 @@
 
 #include <QDebug>
 #include <QHostInfo>
+#include <qdatetime.h>
 
 QGC_LOGGING_CATEGORY(NTRIPTCPLinkLog, "qgc.ntrip.ntriptcplink")
 
@@ -31,10 +32,9 @@ NTRIPTCPLink::NTRIPTCPLink(const QString& hostAddress,
     , _mountpoint(mountpoint)
     //, _whitelist(whitelist)
     , _enableVRS(enableVRS)
-    , _socket(new QTcpSocket(this))
-    , _connectionTimer(new QTimer(this))
     , _rtcm_parsing(new RTCMParsing())
     , _responseTimer(new QTimer(this))
+    , _statsTimer(new QTimer(this))
     , _retryCount(0)
 {
     for(const auto& msg: whitelist.split(',')) {
@@ -46,87 +46,104 @@ NTRIPTCPLink::NTRIPTCPLink(const QString& hostAddress,
     qCDebug(NTRIPTCPLinkLog) << "whitelist: " << _whitelist;
     qCDebug(NTRIPTCPLinkLog) << "_hostAddress" << _hostAddress;
 
-    connect(_socket, &QTcpSocket::stateChanged, this, [this](QTcpSocket::SocketState state) {
-        switch (state) {
-        case QTcpSocket::UnconnectedState:
-            qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket disconnected";
-            break;
-        case QTcpSocket::SocketState::ConnectingState:
-            qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket connecting...";
-            break;
-        case QTcpSocket::SocketState::ConnectedState:
-            qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket connected";
-            break;
-        case QTcpSocket::SocketState::ClosingState:
-            qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket closing...";
-            break;
-        default:
-            break;
-        }
-    }, Qt::AutoConnection);
-
-    connect(_socket, &QTcpSocket::connected, this, [this]() {
-        emit networkStatus(NetworkState::SocketConnected);
-    });
-
-    connect(_socket, &QTcpSocket::errorOccurred, this, [this](QTcpSocket::SocketError error) {
-        qCDebug(NTRIPTCPLinkLog) << "socketError" << error << _socket->errorString();
-        // TODO: Check if it is a critical error or not and send if the socket is stopped/recoverable
-        emit errorOccurred(_socket->errorString(), false);
-    }, Qt::AutoConnection);
-    connect(_socket, &QTcpSocket::errorOccurred, this, &NTRIPTCPLink::_handleSocketError);
-
-    connect(_socket, &QTcpSocket::readyRead, this, &NTRIPTCPLink::_readBytes);
-
-    connect(_connectionTimer, &QTimer::timeout, this, &NTRIPTCPLink::_checkConnection);
-    _connectionTimer->start(_connectionCheckInterval);
-
-    connect(_responseTimer, &QTimer::timeout, this, &NTRIPTCPLink::_handleResponseTimeout);
-    _responseTimer->setSingleShot(true);
-
-    // if (!_rtcm_parsing) {
-    //     _rtcm_parsing = new RTCMParsing();
-    // }
-    // _rtcm_parsing->reset();
+    _statsTimer->start(1000);
 
     init();
 }
 
 NTRIPTCPLink::~NTRIPTCPLink()
 {
-
+    cleanupSocket();
 }
 
 bool NTRIPTCPLink::init()
 {
     if (_hostAddress.isNull()) {
+        qCDebug(NTRIPTCPLinkLog) << "Invalid host address";
         return false;
     }
 
-    _socket->connectToHost(_hostAddress, static_cast<quint16>(_port));
+    cleanupSocket();
 
-    connect(_socket, &QTcpSocket::readyRead, this, &NTRIPTCPLink::_readBytes);
+    try {
 
-    emit networkStatus(NetworkState::ServerResponseWaiting);
+        _socket = new QTcpSocket(this);
 
-    if (!_socket->waitForConnected(5000)) {
-        qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket failed to connect";
-        emit errorOccurred(_socket->errorString());
-        delete _socket;
-        _socket = nullptr;
+        connect(_socket, &QTcpSocket::readyRead, this, &NTRIPTCPLink::_readBytes);
 
-        emit connectStatus(false);
+        connect(_socket, &QTcpSocket::stateChanged, this, &NTRIPTCPLink::handleSocketStateChange);
 
+        // connect(_socket, &QTcpSocket::stateChanged, this, [this](QTcpSocket::SocketState state) {
+        //     switch (state) {
+        //     case QTcpSocket::UnconnectedState:
+        //         qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket disconnected";
+        //         _updateConnectionState(ConnectionState::Disconnected);
+        //         break;
+        //     case QTcpSocket::SocketState::ConnectingState:
+        //         qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket connecting";
+        //         _updateConnectionState(ConnectionState::Connecting);
+        //         break;
+        //     case QTcpSocket::SocketState::ConnectedState:
+        //         qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket connected";
+        //         _updateConnectionState(ConnectionState::Connected);
+        //         break;
+        //     case QTcpSocket::SocketState::ClosingState:
+        //         qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket closing...";
+        //         _updateConnectionState(ConnectionState::Closing);
+        //         break;
+        //     default:
+        //         break;
+        //     }
+        // }, Qt::QueuedConnection);
+
+        connect(_socket, &QTcpSocket::errorOccurred, this, [this](QTcpSocket::SocketError error) {
+            qCDebug(NTRIPTCPLinkLog) << "socketError" << error << _socket->errorString();
+            // TODO: Check if it is a critical error or not and send if the socket is stopped/recoverable
+            emit errorOccurred(_socket->errorString(), false);
+        }, Qt::QueuedConnection);
+
+        connect(_socket, &QTcpSocket::errorOccurred, this, &NTRIPTCPLink::_handleSocketError, Qt::QueuedConnection);
+
+        // connect(_reconnectionTimer, &QTimer::timeout, this, &NTRIPTCPLink::_checkConnection);
+        // _reconnectionTimer->start(_connectionCheckInterval);
+
+        connect(_responseTimer, &QTimer::timeout, this, &NTRIPTCPLink::_handleResponseTimeout, Qt::QueuedConnection);
+        _responseTimer->setSingleShot(true);
+
+        _socket->connectToHost(_hostAddress, static_cast<quint16>(_port));
+
+        // 비동기 연결 타임아웃 설정
+        QTimer::singleShot(5000, this, [this]() {
+            if (_socket && _socket->state() != QTcpSocket::ConnectedState) {
+                qCDebug(NTRIPTCPLinkLog) << "Connection timeout";
+                _handleSocketError(QAbstractSocket::SocketTimeoutError);
+            }
+        });
+
+        // if (!_socket->waitForConnected(5000)) {
+        //     qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket failed to connect";
+        //     emit errorOccurred(_socket->errorString());
+
+        //     // 소켓 정리
+        //     disconnect(_socket, &QTcpSocket::readyRead, this, &NTRIPTCPLink::_readBytes);
+        //     _socket->abort();
+        //     _socket->deleteLater();  // Qt에서는 직접 delete 대신 deleteLater 사용
+        //     _socket = nullptr;
+        //     return false;
+        // }
+
+        if ( _socket->isOpen() && !_mountpoint.isEmpty()) {
+            _sendHttpRequest();
+        } else {
+            _state = NTRIPState::waiting_for_rtcm_header;
+        }
+
+        return true;
+    } catch (const std::exception& e) {
+        qCDebug(NTRIPTCPLinkLog) << "Exception during initialization:" << e.what();
+        cleanupSocket();
         return false;
     }
-
-    if ( !_mountpoint.isEmpty()) {
-        _sendHttpRequest();
-    } else {
-        _state = NTRIPState::waiting_for_rtcm_header;
-    }
-
-    return true;
 }
 
 void NTRIPTCPLink::_sendHttpRequest()
@@ -143,6 +160,7 @@ void NTRIPTCPLink::_sendHttpRequest()
                         "\r\n";
     _socket->write(request.toUtf8());
     _state = NTRIPState::waiting_for_http_response;
+    _updateConnectionState(ConnectionState::AuthenticationPending);
 
     // Start the response timer
     _responseTimer->start(5000); // 5 seconds timeout
@@ -168,31 +186,38 @@ void NTRIPTCPLink::_readBytes()
 {
     if (!_socket) {
         qCDebug(NTRIPTCPLinkLog) << "NTRIP Socket is null";
+        _updateConnectionState(ConnectionState::Error);
         return;
     }
 
     while (_socket->bytesAvailable() > 0) {
         QByteArray data = _socket->readAll();
+
+        _stats.bytesReceived += data.size();
+        _stats.packetsReceived++;
+
         qCDebug(NTRIPTCPLinkLog) << "Data received, size:" << data.size();
 
         if (_state == NTRIPState::waiting_for_http_response) {
             _responseTimer->stop();
             _retryCount = 0;
             if (data.contains("200 OK")) {
+                _updateConnectionState(ConnectionState::Authenticated);
                 qCDebug(NTRIPTCPLinkLog) << "Received HTTP 200 OK";
                 _state = NTRIPState::waiting_for_rtcm_header;
-                emit networkStatus(NetworkState::NtripConnected);
             } else {
+                _updateConnectionState(ConnectionState::Error);
                 qCDebug(NTRIPTCPLinkLog) << "Unexpected server response";
                 _state = NTRIPState::waiting_for_rtcm_header;
                 emit errorOccurred("Invalid server response", true);
             }
         } else {
-            //qCDebug(NTRIPTCPLinkLog) << "parse data:" << data.toHex(' ');
-            emit connectStatus(true);
+            _updateConnectionState(ConnectionState::ReceivingData);
             emit receivedCount(data.size());
             _parse(data);
         }
+
+        _updateStats();
     }
 }
 
@@ -222,75 +247,217 @@ void NTRIPTCPLink::_parse(const QByteArray &buffer)
     }
 }
 
-void NTRIPTCPLink::_checkConnection()
-{
-    if (!_socket) {
-        qCDebug(NTRIPTCPLinkLog) << "Socket is not initialized";
-        return;
-    }
+// void NTRIPTCPLink::_checkConnection()
+// {
+//     if (!_socket) {
+//         qCDebug(NTRIPTCPLinkLog) << "Socket is not initialized";
+//         return;
+//     }
 
-    // // 연결 상태 확인 및 디버그 메시지 출력
-    // switch (_socket->state()) {
-    // case QTcpSocket::UnconnectedState:
-    //     qCDebug(NTRIPTCPLinkLog) << "Socket is currently disconnected.";
-    //     break;
-    // case QTcpSocket::HostLookupState:
-    //     qCDebug(NTRIPTCPLinkLog) << "Looking up host...";
-    //     break;
-    // case QTcpSocket::ConnectingState:
-    //     qCDebug(NTRIPTCPLinkLog) << "Socket is currently connecting...";
-    //     break;
-    // case QTcpSocket::ConnectedState:
-    //     qCDebug(NTRIPTCPLinkLog) << "Socket is connected.";
-    //     break;
-    // case QTcpSocket::BoundState:
-    //     qCDebug(NTRIPTCPLinkLog) << "Socket is bound to an address.";
-    //     break;
-    // case QTcpSocket::ClosingState:
-    //     qCDebug(NTRIPTCPLinkLog) << "Socket is closing...";
-    //     break;
-    // case QTcpSocket::ListeningState:
-    //     qCDebug(NTRIPTCPLinkLog) << "Socket is listening...";
-    //     break;
-    // default:
-    //     qCDebug(NTRIPTCPLinkLog) << "Unknown socket state.";
-    //     break;
-    // }
+//     // // 연결 상태 확인 및 디버그 메시지 출력
+//     // switch (_socket->state()) {
+//     // case QTcpSocket::UnconnectedState:
+//     //     qCDebug(NTRIPTCPLinkLog) << "Socket is currently disconnected.";
+//     //     break;
+//     // case QTcpSocket::HostLookupState:
+//     //     qCDebug(NTRIPTCPLinkLog) << "Looking up host...";
+//     //     break;
+//     // case QTcpSocket::ConnectingState:
+//     //     qCDebug(NTRIPTCPLinkLog) << "Socket is currently connecting...";
+//     //     break;
+//     // case QTcpSocket::ConnectedState:
+//     //     qCDebug(NTRIPTCPLinkLog) << "Socket is connected.";
+//     //     break;
+//     // case QTcpSocket::BoundState:
+//     //     qCDebug(NTRIPTCPLinkLog) << "Socket is bound to an address.";
+//     //     break;
+//     // case QTcpSocket::ClosingState:
+//     //     qCDebug(NTRIPTCPLinkLog) << "Socket is closing...";
+//     //     break;
+//     // case QTcpSocket::ListeningState:
+//     //     qCDebug(NTRIPTCPLinkLog) << "Socket is listening...";
+//     //     break;
+//     // default:
+//     //     qCDebug(NTRIPTCPLinkLog) << "Unknown socket state.";
+//     //     break;
+//     // }
 
-    // 소켓이 연결되어 있지 않으면 재연결 시도
-    if (_socket->state() != QTcpSocket::ConnectedState) {
-        qCDebug(NTRIPTCPLinkLog) << "Connection lost, attempting to reconnect...";
-        init();
-    }
-}
+//     // 소켓이 연결되어 있지 않으면 재연결 시도
+//     if (_socket->state() != QTcpSocket::ConnectedState) {
+//         qCDebug(NTRIPTCPLinkLog) << "Connection lost, attempting to reconnect...";
+//         init();
+//     }
+// }
 
 void NTRIPTCPLink::_handleSocketError(QAbstractSocket::SocketError socketError)
 {
+    if(!_socket) {
+        return;
+    }
+
+    _stats.lastError = _socket->errorString();
     qCDebug(NTRIPTCPLinkLog) << "Socket error occurred:" << _socket->errorString();
+
+    _updateConnectionState(ConnectionState::Error);
+    emit lastErrorChanged(_stats.lastError);
+    _updateStats();
 
     switch (socketError) {
     case QAbstractSocket::HostNotFoundError:
         qCDebug(NTRIPTCPLinkLog) << "Error: Host not found.";
-        break;
     case QAbstractSocket::ConnectionRefusedError:
         qCDebug(NTRIPTCPLinkLog) << "Error: Connection refused by the server.";
+        // 심각한 오류의 경우 재시도 제한
+        if (_reconnectAttempts >= _maxReconnectAttempts) {
+            qCDebug(NTRIPTCPLinkLog) << "Max reconnection attempts reached";
+            cleanupSocket();
+            return;
+        }
         break;
     case QAbstractSocket::RemoteHostClosedError:
         qCDebug(NTRIPTCPLinkLog) << "Error: Remote host closed the connection.";
-        break;
     case QAbstractSocket::NetworkError:
         qCDebug(NTRIPTCPLinkLog) << "Error: Network error occurred.";
+        // 일시적인 오류는 즉시 재연결 시도
+        _scheduleReconnection();
         break;
     default:
-        qCDebug(NTRIPTCPLinkLog) << "Unhandled socket error:" << socketError;
+        if (_reconnectAttempts < _maxReconnectAttempts) {
+            _scheduleReconnection();
+        }
+        break;
+    }
+}
+
+void NTRIPTCPLink::_updateConnectionState(ConnectionState newState)
+{
+    qCDebug(NTRIPTCPLinkLog) << "connectionStateChanged" << newState;
+    emit connectionStateChanged(newState);
+}
+
+void NTRIPTCPLink::_updateStats()
+{
+    _stats.lastPacketTime = QDateTime::currentMSecsSinceEpoch();
+    emit connectionStatsUpdated(_stats);
+}
+
+void NTRIPTCPLink::cleanupSocket()
+{
+    if (_socket) {
+        _socket->disconnect(); // 모든 시그널 연결 해제
+        _socket->abort();
+        _socket->deleteLater();
+        _socket = nullptr;
+    }
+
+    // 타이머 정리
+    if (_reconnectionTimer) {
+        _reconnectionTimer->stop();
+        _reconnectionTimer->deleteLater();
+        _reconnectionTimer = nullptr;
+    }
+
+    _state = NTRIPState::waiting_for_rtcm_header;
+    _retryCount = 0;
+}
+
+
+void NTRIPTCPLink::_scheduleReconnection()
+{
+    if (!_reconnectionTimer) {
+        _reconnectionTimer = new QTimer(this);
+        _reconnectionTimer->setSingleShot(true);
+        connect(_reconnectionTimer, &QTimer::timeout, this, [this]() {
+            if (_reconnectAttempts < _maxReconnectAttempts) {
+                _reconnectAttempts++;
+                qCDebug(NTRIPTCPLinkLog) << "Attempting reconnection" << _reconnectAttempts << "of" << _maxReconnectAttempts;
+                init();
+            }
+        });
+    }
+
+    // 백오프 시간 계산 (지수 백오프)
+    int delay = std::min(1000 * (1 << _reconnectAttempts), 30000); // 최대 30초
+    _reconnectionTimer->start(delay);
+}
+
+void NTRIPTCPLink::_resetReconnectAttempts()
+{
+    _reconnectAttempts = 0;
+    if (_reconnectionTimer) {
+        _reconnectionTimer->stop();
+    }
+}
+
+void NTRIPTCPLink::handleSocketStateChange(QAbstractSocket::SocketState socketState) {
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QString timeInState;
+
+    if (_lastStateChangeTime.isValid()) {
+        qint64 msecsSinceLastState = _lastStateChangeTime.msecsTo(currentTime);
+        timeInState = QString(" (Previous state lasted: %1 ms)").arg(msecsSinceLastState);
+    }
+
+    _lastStateChangeTime = currentTime;
+
+    QString stateStr = getSocketStateString(socketState);
+    qCDebug(NTRIPTCPLinkLog) << "Socket state changed to:" << stateStr << timeInState;
+
+    switch (socketState) {
+    case QAbstractSocket::UnconnectedState:
+        _updateConnectionState(ConnectionState::Disconnected);
+        // 연결이 끊어진 경우 재연결 시도
+        if (_reconnectAttempts < _maxReconnectAttempts) {
+            _scheduleReconnection();
+        }
+        break;
+
+    case QAbstractSocket::HostLookupState:
+        _updateConnectionState(ConnectionState::Connecting);
+        qCDebug(NTRIPTCPLinkLog) << "Looking up host:" << _hostAddress;
+        break;
+
+    case QAbstractSocket::ConnectingState:
+        _updateConnectionState(ConnectionState::Connecting);
+        qCDebug(NTRIPTCPLinkLog) << "Attempting to connect to:" << _hostAddress << ":" << _port;
+        break;
+
+    case QAbstractSocket::ConnectedState:
+        _updateConnectionState(ConnectionState::Connected);
+        _resetReconnectAttempts();
+        // 연결 성공 시 마운트포인트가 설정되어 있다면 HTTP 요청 전송
+        if (!_mountpoint.isEmpty()) {
+            _sendHttpRequest();
+        }
+        break;
+
+    case QAbstractSocket::BoundState:
+        qCDebug(NTRIPTCPLinkLog) << "Socket bound to address";
+        break;
+
+    case QAbstractSocket::ClosingState:
+        _updateConnectionState(ConnectionState::Closing);
+        qCDebug(NTRIPTCPLinkLog) << "Connection is closing";
+        break;
+
+    default:
+        qCDebug(NTRIPTCPLinkLog) << "Unhandled socket state:" << socketState;
         break;
     }
 
-    // 오류 발생 시 소켓을 재연결
-    if (socketError != QAbstractSocket::HostNotFoundError &&
-        socketError != QAbstractSocket::ConnectionRefusedError) {
-        qCDebug(NTRIPTCPLinkLog) << "Attempting to reconnect after error...";
-        _socket->abort();  // 기존 연결 중단
-        init();            // 다시 연결 시도
+    emit socketStateChanged(stateStr);
+    _updateStats();
+}
+
+QString NTRIPTCPLink::getSocketStateString(QAbstractSocket::SocketState state) {
+    switch (state) {
+    case QAbstractSocket::UnconnectedState: return "Unconnected";
+    case QAbstractSocket::HostLookupState: return "HostLookup";
+    case QAbstractSocket::ConnectingState: return "Connecting";
+    case QAbstractSocket::ConnectedState: return "Connected";
+    case QAbstractSocket::BoundState: return "Bound";
+    case QAbstractSocket::ClosingState: return "Closing";
+    case QAbstractSocket::ListeningState: return "Listening";
+    default: return "Unknown";
     }
 }

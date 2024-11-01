@@ -17,6 +17,7 @@
 #include <QGeoCoordinate>
 #include <QUrl>
 #include <QTimer>
+#include <QDateTime>
 
 #include "rtcm.h"
 #include "QGCToolbox.h"
@@ -43,27 +44,39 @@ public:
 
     bool init();
 
-    enum class NetworkState {
-        NetworkDisconnected,
-        SocketConnecting,
-        SocketConnected,
-        ServerResponseWaiting,
-        NtripConnected,
+    enum class ConnectionState {
+        Disconnected,
+        Connecting,
+        Connected,
+        AuthenticationPending,
+        Authenticated,
+        ReceivingData,
+        Error,
+        Closing
     };
+    Q_ENUM(ConnectionState)
 
-public slots:
-    //void reconnect();
+    struct ConnectionStats {
+        qint64 bytesReceived = 0;
+        qint64 packetsReceived = 0;
+        qint64 lastPacketTime = 0;
+        QString lastError;
+        ConnectionState state = ConnectionState::Disconnected;
+    };
 
 signals:
     void rtcmDataUpdate(QByteArray message);
-    void connectStatus(bool isConnected);
     void receivedCount(qint64 recevied);
     void errorOccurred(const QString &errorMsg, bool stopped = false);
-    void networkStatus(NetworkState status);
+
+    void connectionStateChanged(ConnectionState state);
+    void connectionStatsUpdated(const ConnectionStats& stats);
+    void lastErrorChanged(const QString& error);
+    void socketStateChanged(const QString& state);
 
 private slots:
     void _readBytes();
-    void _checkConnection();
+    //void _checkConnection();
     void _handleSocketError(QAbstractSocket::SocketError socketError);
 
 private:
@@ -74,14 +87,23 @@ private:
         accumulating_rtcm_packet,
     };
 
-    //void _hardwareConnect(void);
     void _updateConnection();
     void _parse(const QByteArray &buffer);
     void _sendHttpRequest();
     void _handleResponseTimeout();
+    void cleanupSocket();
+    void _scheduleReconnection();
+    void _resetReconnectAttempts();
+
+    static const int _maxReconnectAttempts = 5;
+    int _reconnectAttempts = 0;
+
+    void handleSocketStateChange(QAbstractSocket::SocketState socketState);
+    QString getSocketStateString(QAbstractSocket::SocketState state);
+    QDateTime _lastStateChangeTime;
 
     QTcpSocket      *_socket =   nullptr;
-    QTimer          *_connectionTimer = nullptr;
+    QTimer          *_reconnectionTimer = nullptr;
     const int       _connectionCheckInterval = 5000;
     QStringList     _lineBuffer;
 
@@ -108,7 +130,11 @@ private:
     int             _retryCount;
     RTCMParsing*    _rtcm_parsing{nullptr};
     NTRIPState      _state;
-    NetworkState    _networkState;
     QGCToolbox      *_toolbox = nullptr;
     qint64          _receivedCount = 0;
+
+    ConnectionStats _stats;
+    void _updateConnectionState(ConnectionState newState);
+    void _updateStats();
+    QTimer* _statsTimer;
 };
