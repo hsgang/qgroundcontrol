@@ -47,6 +47,12 @@
     "shortDesc":    "showROIToolstrip",
     "type":         "bool",
     "default":      true
+},
+{
+    "name":         "missionDownload",
+    "shortDesc":    "missionDownload",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }

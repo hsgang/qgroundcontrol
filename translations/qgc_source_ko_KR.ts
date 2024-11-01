@@ -8447,6 +8447,11 @@ Click Ok to start the auto-tuning process.
         <source>Show ROI function on toolstrip</source>
         <translation>ROI 기능 보이기</translation>
     </message>
+    <message>
+        <location filename="../src/ui/preferences/PlanViewSettings.qml" line="397"/>
+        <source>Download mission when connecting vehicle</source>
+        <translation>기체 연결시에 임무경로 다운로드</translation>
+    </message>
 </context>
 <context>
     <name>GeoFenceController</name>
@@ -17125,6 +17130,11 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
         <location filename="../src/VehicleSetup/SetupView.qml" line="150"/>
         <source>Vehicle settings and info will display after connecting your vehicle.</source>
         <translation>기체 정보 및 설정은 기체와 연결된 후 표시됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/VehicleSetup/SetupView.qml" line="150"/>
+        <source>Refresh parameter</source>
+        <translation>매개변수 불러오기</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="150"/>

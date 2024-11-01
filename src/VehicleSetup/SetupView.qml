@@ -17,6 +17,7 @@ import QGroundControl.Palette
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
 import QGroundControl.MultiVehicleManager
+import QGroundControl.Controllers
 
 Rectangle {
     id:     setupView
@@ -26,6 +27,10 @@ Rectangle {
     QGCPalette { id: qgcPal; colorGroupEnabled: true }
 
     ButtonGroup { id: setupButtonGroup }
+
+    ParameterEditorController {
+        id: parameterEditorController
+    }
 
     readonly property real      _defaultTextHeight: ScreenTools.defaultFontPixelHeight
     readonly property real      _defaultTextWidth:  ScreenTools.defaultFontPixelWidth
@@ -152,16 +157,45 @@ Rectangle {
         id: disconnectedVehicleSummaryComponent
         Rectangle {
             color: qgcPal.windowShade
-            QGCLabel {
+            ColumnLayout {
                 anchors.margins:        _defaultTextWidth * 2
                 anchors.fill:           parent
-                verticalAlignment:      Text.AlignVCenter
-                horizontalAlignment:    Text.AlignHCenter
-                wrapMode:               Text.WordWrap
-                font.pointSize:         ScreenTools.largeFontPointSize
-                text:                   qsTr("Vehicle settings and info will display after connecting your vehicle.")
+                QGCLabel {
+                    Layout.fillWidth: true
+                    verticalAlignment:      Text.AlignVCenter
+                    horizontalAlignment:    Text.AlignHCenter
+                    wrapMode:               Text.WordWrap
+                    font.pointSize:         ScreenTools.largeFontPointSize
+                    text:                   qsTr("Vehicle settings and info will display after connecting your vehicle.")
 
-                onLinkActivated: (link) => Qt.openUrlExternally(link)
+                    onLinkActivated: (link) => Qt.openUrlExternally(link)
+                }
+                Rectangle {
+                    color:              qgcPal.windowShade
+                    height:             ScreenTools.defaultFontPixelHeight * 5
+                    Layout.fillWidth:   true
+                    visible:            QGroundControl.multiVehicleManager.activeVehicle
+                    Column {
+                        anchors.fill:       parent
+                        spacing:            ScreenTools.defaultFontPixelHeight / 2
+                        QGCButton {
+                            anchors.horizontalCenter:   parent.horizontalCenter
+                            text:                       qsTr("Refresh parameter")
+                            onClicked: {
+                                parameterEditorController.refresh()
+                            }
+                        }
+                        ProgressBar {
+                            anchors.horizontalCenter:   parent.horizontalCenter
+                            width:  parent.width * 0.7
+                            value:  QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.loadProgress : 0
+                        }
+                        QGCLabel {
+                            anchors.horizontalCenter:   parent.horizontalCenter
+                            text:   QGroundControl.multiVehicleManager.activeVehicle ? (QGroundControl.multiVehicleManager.activeVehicle.loadProgress * 100).toFixed(1) + " %" : ""
+                        }
+                    }
+                }
             }
         }
     }

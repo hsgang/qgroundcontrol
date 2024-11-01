@@ -59,5 +59,12 @@ SettingsPage {
             fact:               _planViewSettings.showROIToolstrip
             visible:            fact.visible
         }
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Download mission when connecting vehicle")
+            fact:               _planViewSettings.missionDownload
+            visible:            fact.visible
+            description:        "기체 연결시에 임무경로를 자동 다운로드하여 동기화합니다"
+        }
     }
 }

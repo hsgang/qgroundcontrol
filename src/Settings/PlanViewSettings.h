@@ -27,4 +27,5 @@ public:
     DEFINE_SETTINGFACT(showGimbalOnlyWhenSet)
     DEFINE_SETTINGFACT(vtolTransitionDistance)
     DEFINE_SETTINGFACT(showROIToolstrip)
+    DEFINE_SETTINGFACT(missionDownload)
 };
