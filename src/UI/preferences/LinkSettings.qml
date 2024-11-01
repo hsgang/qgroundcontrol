@@ -89,6 +89,7 @@ SettingsPage {
                     smooth:                 true
                     color:                  qgcPalDelete.text
                     source:                 "/res/TrashDelete.svg"
+                    enabled:                !object.link
 
                     QGCPalette {
                         id: qgcPalDelete
@@ -292,12 +293,12 @@ SettingsPage {
                 //     onCheckedChanged:   editingConfig.autoConnect = checked
                 // }
 
-                // QGCCheckBoxSlider {
-                //     Layout.fillWidth:   true
-                //     text:               qsTr("High Latency")
-                //     checked:            editingConfig.highLatency
-                //     onCheckedChanged:   editingConfig.highLatency = checked
-                // }
+                QGCCheckBoxSlider {
+                    Layout.fillWidth:   true
+                    text:               qsTr("High Latency")
+                    checked:            editingConfig.highLatency
+                    onCheckedChanged:   editingConfig.highLatency = checked
+                }
 
                 LabelledComboBox {
                     label:                  qsTr("Type")
