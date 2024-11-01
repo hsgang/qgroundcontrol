@@ -2081,11 +2081,13 @@ void Vehicle::_announceArmedChanged(bool armed)
         QGCApplication* app = qgcApp();
         CloudManager* cloudManager = app->toolbox()->cloudManager();
 
-        double latitude = _coordinate.latitude();
-        double longitude = _coordinate.longitude();
-        double altitude = _coordinate.altitude();
-        double voltage = getFactGroup("battery0")->getFact("voltage")->rawValue().toDouble();
-        cloudManager->uploadTakeoffRecord(latitude, longitude, altitude, voltage);
+        if(!_flying && !_initialConnectStateMachine->active()) {
+            double latitude = _coordinate.latitude();
+            double longitude = _coordinate.longitude();
+            double altitude = _coordinate.altitude();
+            double voltage = getFactGroup("battery0")->getFact("voltage")->rawValue().toDouble();
+            cloudManager->uploadTakeoffRecord(latitude, longitude, altitude, voltage);
+        }
         //////////////////////upload takeoff record to firebase////////////////////
 
         emit armedPositionChanged();
