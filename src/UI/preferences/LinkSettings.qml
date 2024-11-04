@@ -275,7 +275,7 @@ SettingsPage {
                 Binding {
                     target: nameField
                     property: "text"
-                    value: editingConfig ? (
+                    value: (editingConfig.name === "") ? (
                            editingConfig.linkType === LinkConfiguration.TypeSerial ?
                            qsTr("Serial_") + linkSettingsLoader.subEditConfig.portDisplayName +"_" + linkSettingsLoader.subEditConfig.baud.toString() :
                            (editingConfig.linkType === LinkConfiguration.TypeUdp ?
@@ -283,7 +283,7 @@ SettingsPage {
                            (editingConfig.linkType === LinkConfiguration.TypeTcp ?
                            qsTr("TCP_") + linkSettingsLoader.subEditConfig.host + ":" + linkSettingsLoader.subEditConfig.port.toString() :
                            qsTr("Other")))
-                        ) : ""
+                        ) : editingConfig.name
                 }
 
                 // QGCCheckBoxSlider {
