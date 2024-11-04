@@ -28,6 +28,7 @@ Item {
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _rcRSSIAvailable:   _activeVehicle ? _activeVehicle.rcRSSI > 0 && _activeVehicle.rcRSSI <= 100 : false
+    property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
 
     Row {
         id:             rssiRow
@@ -59,7 +60,7 @@ Item {
                 source:             "/qmlimages/RC.svg"
                 fillMode:           Image.PreserveAspectFit
                 //opacity:            _rcRSSIAvailable ? 1 : 0.5
-                color:              (_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 30) ? qgcPal.buttonText : qgcPal.colorOrange
+                color:              _communicationLost ? qgcPal.colorGrey : ((_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 30) ? qgcPal.buttonText : qgcPal.colorOrange)
             }
         }
 

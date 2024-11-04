@@ -32,6 +32,7 @@ Item {
     property Component  expandedPageComponent
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
+    property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
     property Fact   _indicatorDisplay:  QGroundControl.settingsManager.batteryIndicatorSettings.display
     property bool   _showPercentage:    _indicatorDisplay.rawValue === 0
     property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
@@ -231,7 +232,7 @@ Item {
                 sourceSize.width:   width
                 source:             getBatterySvgSource()
                 fillMode:           Image.PreserveAspectFit
-                color:              getBatteryColor()
+                color:              _communicationLost ? qgcPal.colorGrey: getBatteryColor()
             }
 
             Column {

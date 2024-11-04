@@ -25,6 +25,7 @@ Item {
     anchors.bottom: parent.bottom
 
     property var    activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
+    property bool   _communicationLost:     activeVehicle ? activeVehicle.vehicleLinkManager.communicationLost : false
     property var    gimbalController:       activeVehicle.gimbalController
     property bool   showIndicator:          gimbalController && gimbalController.gimbals.count
     property var    activeGimbal:           gimbalController.activeGimbal
@@ -339,7 +340,7 @@ Item {
         source:                  "/gimbal/payload.svg"
         fillMode:                Image.PreserveAspectFit
         sourceSize.height:       height
-        color:                   qgcPal.buttonText
+        color:                   _communicationLost ? qgcPal.colorGrey : qgcPal.buttonText
 
         // Current active gimbal indicator
         QGCLabel {

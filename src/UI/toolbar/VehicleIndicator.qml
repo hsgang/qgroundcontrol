@@ -26,9 +26,10 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property bool showIndicator: _activeVehicle.parameterManager.parametersReady
-    property real _margins:     ScreenTools.defaultFontPixelHeight / 2
-    property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+    property bool showIndicator:        _activeVehicle.parameterManager.parametersReady
+    property real _margins:             ScreenTools.defaultFontPixelHeight / 2
+    property var _activeVehicle:        QGroundControl.multiVehicleManager.activeVehicle
+    property bool _communicationLost:   _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
 
     Row {
         id: vehicleRow
@@ -43,7 +44,7 @@ Item {
             anchors.bottom:     parent.bottom
             sourceSize.height:  height
             source:             "/qmlimages/vehicleQuadRotor.svg"
-            color:              _activeVehicle.readyToFlyAvailable && _activeVehicle.readyToFly ? qgcPal.text : qgcPal.colorGrey
+            color:              _activeVehicle.readyToFlyAvailable && _activeVehicle.readyToFly && !_communicationLost ? qgcPal.text : qgcPal.colorGrey
             fillMode:           Image.PreserveAspectFit
         }
 

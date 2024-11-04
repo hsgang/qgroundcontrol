@@ -28,8 +28,9 @@ Item {
 
     property bool showIndicator: true
 
-    property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
-    property var _ntripManager: QGroundControl.ntripManager
+    property var _activeVehicle:        QGroundControl.multiVehicleManager.activeVehicle
+    property var _ntripManager:         QGroundControl.ntripManager
+    property bool _communicationLost:   _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
 
     property bool isGNSS2: _activeVehicle.gps2.lock.value
 
@@ -126,7 +127,7 @@ Item {
             fillMode:           Image.PreserveAspectFit
             sourceSize.height:  height * 0.9
             opacity:            (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? 1 : 0.5
-            color:              (_activeVehicle && _activeVehicle.gps.lock.value >= 3) ? qgcPal.buttonText : qgcPal.colorOrange
+            color:              _communicationLost ? qgcPal.colorGrey : ((_activeVehicle && _activeVehicle.gps.lock.value >= 3) ? qgcPal.buttonText : qgcPal.colorOrange)
 
             Rectangle {
                 visible:        _ntripManager.connected
