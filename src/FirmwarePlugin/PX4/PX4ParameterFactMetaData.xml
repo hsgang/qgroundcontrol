@@ -16612,10 +16612,10 @@
       <increment>0.5</increment>
     </parameter>
     <parameter name="MIS_DIST_1WP" default="10000" type="FLOAT">
-      <short_desc>Maximal horizontal distance from current position to first waypoint</short_desc>
-      <long_desc>Failsafe check to prevent running mission stored from previous flight at a new takeoff location. Set a value of zero or less to disable. The mission will not be started if the current waypoint is more distant than MIS_DIST_1WP from the current position.</long_desc>
+      <short_desc>Maximal horizontal distance from Home to first waypoint</short_desc>
+      <long_desc>There will be a warning message if the current waypoint is more distant than MIS_DIST_1WP from Home. Has no effect on mission validity. Set a value of zero or less to disable.</long_desc>
       <min>-1</min>
-      <max>10000</max>
+      <max>100000</max>
       <unit>m</unit>
       <decimal>1</decimal>
       <increment>100</increment>
@@ -19538,6 +19538,32 @@
         <value code="18">Channel 18</value>
       </values>
     </parameter>
+    <parameter name="RC_MAP_PAY_SW" default="0" type="INT32">
+      <short_desc>Payload Power Switch RC channel</short_desc>
+      <min>0</min>
+      <max>18</max>
+      <values>
+        <value code="0">Unassigned</value>
+        <value code="1">Channel 1</value>
+        <value code="2">Channel 2</value>
+        <value code="3">Channel 3</value>
+        <value code="4">Channel 4</value>
+        <value code="5">Channel 5</value>
+        <value code="6">Channel 6</value>
+        <value code="7">Channel 7</value>
+        <value code="8">Channel 8</value>
+        <value code="9">Channel 9</value>
+        <value code="10">Channel 10</value>
+        <value code="11">Channel 11</value>
+        <value code="12">Channel 12</value>
+        <value code="13">Channel 13</value>
+        <value code="14">Channel 14</value>
+        <value code="15">Channel 15</value>
+        <value code="16">Channel 16</value>
+        <value code="17">Channel 17</value>
+        <value code="18">Channel 18</value>
+      </values>
+    </parameter>
     <parameter name="RC_MAP_RETURN_SW" default="0" type="INT32">
       <short_desc>Return switch channel</short_desc>
       <min>0</min>
@@ -19592,6 +19618,12 @@
     </parameter>
     <parameter name="RC_OFFB_TH" default="0.75" type="FLOAT">
       <short_desc>Threshold for selecting offboard mode</short_desc>
+      <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
+      <min>-1</min>
+      <max>1</max>
+    </parameter>
+    <parameter name="RC_PAYLOAD_TH" default="0.75" type="FLOAT">
+      <short_desc>Threshold for selecting payload power switch</short_desc>
       <long_desc>0-1 indicate where in the full channel range the threshold sits 0 : min 1 : max sign indicates polarity of comparison positive : true when channel&gt;th negative : true when channel&lt;th</long_desc>
       <min>-1</min>
       <max>1</max>
@@ -19770,6 +19802,20 @@
       <decimal>2</decimal>
       <increment>0.01</increment>
     </parameter>
+    <parameter name="RA_LAT_ACCEL_I" default="0" type="FLOAT">
+      <short_desc>Integral gain for lateral acceleration controller</short_desc>
+      <min>0</min>
+      <max>100</max>
+      <decimal>3</decimal>
+      <increment>0.001</increment>
+    </parameter>
+    <parameter name="RA_LAT_ACCEL_P" default="0" type="FLOAT">
+      <short_desc>Proportional gain for lateral acceleration controller</short_desc>
+      <min>0</min>
+      <max>100</max>
+      <decimal>2</decimal>
+      <increment>0.01</increment>
+    </parameter>
     <parameter name="RA_MAX_ACCEL" default="-1" type="FLOAT">
       <short_desc>Maximum acceleration for the rover</short_desc>
       <long_desc>This is used for the acceleration slew rate, the feed-forward term for the speed controller during missions and the corner slow down effect. Note: For the corner slow down effect RA_MAX_JERK, RA_MISS_VEL_GAIN and RA_MISS_VEL_MIN also have to be set.</long_desc>
@@ -19779,18 +19825,36 @@
       <decimal>2</decimal>
       <increment>0.01</increment>
     </parameter>
+    <parameter name="RA_MAX_DECEL" default="-1" type="FLOAT">
+      <short_desc>Maximum deceleration for the rover</short_desc>
+      <long_desc>This is used for the deceleration slew rate, the feed-forward term for the speed controller during missions and the corner slow down effect. Note: For the corner slow down effect RA_MAX_JERK also has to be set.</long_desc>
+      <min>-1</min>
+      <max>100</max>
+      <unit>m/s^2</unit>
+      <decimal>2</decimal>
+      <increment>0.01</increment>
+    </parameter>
     <parameter name="RA_MAX_JERK" default="-1" type="FLOAT">
       <short_desc>Maximum jerk</short_desc>
-      <long_desc>Limit for forwards acc/deceleration change. This is used for the corner slow down effect. Note: RA_MAX_ACCEL, RA_MISS_VEL_GAIN and RA_MISS_VEL_MIN also have to be set for this to be enabled.</long_desc>
+      <long_desc>Limit for forwards acc/deceleration change. This is used for the corner slow down effect. Note: RA_MAX_ACCEL also has to be set for this to be enabled.</long_desc>
       <min>-1</min>
       <max>100</max>
       <unit>m/s^3</unit>
       <decimal>2</decimal>
       <increment>0.01</increment>
     </parameter>
+    <parameter name="RA_MAX_LAT_ACCEL" default="0.01" type="FLOAT">
+      <short_desc>Maximum allowed lateral acceleration</short_desc>
+      <long_desc>This parameter is used to cap the lateral acceleration and map controller inputs to desired lateral acceleration in Acro, Stabilized and Position mode.</long_desc>
+      <min>0.01</min>
+      <max>1000</max>
+      <unit>m/s^2</unit>
+      <decimal>2</decimal>
+      <increment>0.01</increment>
+    </parameter>
     <parameter name="RA_MAX_SPEED" default="-1" type="FLOAT">
-      <short_desc>Speed the rover drives at maximum throttle</short_desc>
-      <long_desc>This is used for the feed-forward term of the speed controller. A value of -1 disables the feed-forward term in which case the Integrator (RA_SPEED_I) becomes necessary to track speed setpoints.</long_desc>
+      <short_desc>Maximum allowed speed</short_desc>
+      <long_desc>This is the maximum allowed speed setpoint when driving in a mode that uses closed loop speed control.</long_desc>
       <min>-1</min>
       <max>100</max>
       <unit>m/s</unit>
@@ -19814,26 +19878,18 @@
       <decimal>2</decimal>
       <increment>0.01</increment>
     </parameter>
-    <parameter name="RA_MISS_VEL_DEF" default="2" type="FLOAT">
-      <short_desc>Default rover velocity during a mission</short_desc>
-      <min>0</min>
+    <parameter name="RA_MAX_THR_SPEED" default="-1" type="FLOAT">
+      <short_desc>Speed the rover drives at maximum throttle</short_desc>
+      <long_desc>This parameter is used to calculate the feedforward term of the closed loop speed control which linearly maps desired speeds to normalized motor commands [-1. 1]. A good starting point is the observed ground speed when the rover drives at maximum throttle in manual mode. Increase this parameter if the rover is faster than the setpoint, and decrease if the rover is slower.</long_desc>
+      <min>-1</min>
       <max>100</max>
       <unit>m/s</unit>
       <decimal>2</decimal>
       <increment>0.01</increment>
     </parameter>
-    <parameter name="RA_MISS_VEL_GAIN" default="5" type="FLOAT">
-      <short_desc>Tuning parameter for the velocity reduction during cornering</short_desc>
-      <long_desc>The cornering speed is equal to the inverse of the acceptance radius of the WP multiplied with this factor. Lower value -&gt; More velocity reduction during cornering.</long_desc>
-      <min>0.05</min>
-      <max>100</max>
-      <decimal>2</decimal>
-      <increment>0.01</increment>
-    </parameter>
-    <parameter name="RA_MISS_VEL_MIN" default="1" type="FLOAT">
-      <short_desc>Minimum rover velocity during a mission</short_desc>
-      <long_desc>The velocity off the rover is reduced based on the corner it has to take to smooth the trajectory (Set to -1 to disable)</long_desc>
-      <min>-1</min>
+    <parameter name="RA_MISS_SPD_DEF" default="2" type="FLOAT">
+      <short_desc>Default rover speed during a mission</short_desc>
+      <min>0</min>
       <max>100</max>
       <unit>m/s</unit>
       <decimal>2</decimal>
@@ -19843,8 +19899,8 @@
       <short_desc>Integral gain for ground speed controller</short_desc>
       <min>0</min>
       <max>100</max>
-      <decimal>2</decimal>
-      <increment>0.01</increment>
+      <decimal>3</decimal>
+      <increment>0.001</increment>
     </parameter>
     <parameter name="RA_SPEED_P" default="1" type="FLOAT">
       <short_desc>Proportional gain for ground speed controller</short_desc>
