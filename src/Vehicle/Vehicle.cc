@@ -425,8 +425,6 @@ Vehicle::~Vehicle()
 #ifdef QGC_UTM_ADAPTER
     delete _utmspVehicle;
 #endif
-
-    deleteGimbalController();
 }
 
 void Vehicle::prepareDelete()
