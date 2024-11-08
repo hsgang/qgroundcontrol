@@ -264,6 +264,6 @@
         <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Images/city_3d_map_icon.svg</file>
         <file alias="amp_logo_blue.png">resources/amp logo.png</file>
         <file alias="amp_logo_white.png">resources/amp logo_white.png</file>
-        <file alias="circle_icon.png">resources/icon.png</file>
+        <file alias="brandicon.png">resources/brandicon.png</file>
     </qresource>
 </RCC>

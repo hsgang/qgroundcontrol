@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
 
     QGCApplication app(argc, argv, runUnitTests);
 
-    QPixmap pixmap(":/qmlimages/circle_icon.png");
+    QPixmap pixmap(":/qmlimages/brandicon.svg");
     QSplashScreen splash(pixmap);
     splash.show();
 
