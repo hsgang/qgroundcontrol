@@ -265,5 +265,6 @@
         <file alias="amp_logo_blue.png">resources/amp logo.png</file>
         <file alias="amp_logo_white.png">resources/amp logo_white.png</file>
         <file alias="brandicon.png">resources/brandicon.png</file>
+        <file alias="splash.png">resources/splash.png</file>
     </qresource>
 </RCC>
