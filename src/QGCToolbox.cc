@@ -8,12 +8,9 @@
  ****************************************************************************/
 
 
-#include "FirmwarePluginManager.h"
 #include "LinkManager.h"
 #include "MAVLinkProtocol.h"
-#include "MissionCommandTree.h"
 #include "MultiVehicleManager.h"
-#include "PositionManager.h"
 #include "VideoManager.h"
 #include "MAVLinkLogManager.h"
 #include "QGCCorePlugin.h"
@@ -41,12 +38,9 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
 
     //-- Scan and load plugins
     _scanAndLoadPlugins(app);
-    _firmwarePluginManager  = new FirmwarePluginManager     (app, this);
     _linkManager            = new LinkManager               (app, this);
     _mavlinkProtocol        = new MAVLinkProtocol           (app, this);
-    _missionCommandTree     = new MissionCommandTree        (app, this);
     _multiVehicleManager    = new MultiVehicleManager       (app, this);
-    _qgcPositionManager     = new QGCPositionManager        (app, this);
     _videoManager           = new VideoManager              (app, this);
     _mavlinkLogManager      = new MAVLinkLogManager         (app, this);
     _cloudManager           = new CloudManager              (app, this);
@@ -65,12 +59,9 @@ void QGCToolbox::setChildToolboxes(void)
     _settingsManager->setToolbox(this);
 
     _corePlugin->setToolbox(this);
-    _firmwarePluginManager->setToolbox(this);
     _linkManager->setToolbox(this);
     _mavlinkProtocol->setToolbox(this);
-    _missionCommandTree->setToolbox(this);
     _multiVehicleManager->setToolbox(this);
-    _qgcPositionManager->setToolbox(this);
     _videoManager->setToolbox(this);
     _mavlinkLogManager->setToolbox(this);
     _cloudManager->setToolbox(this);

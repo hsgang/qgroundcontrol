@@ -13,13 +13,10 @@
 
 #include <QtCore/QObject>
 
-class FirmwarePluginManager;
 class LinkManager;
 class MAVLinkProtocol;
-class MissionCommandTree;
 class MultiVehicleManager;
 class QGCApplication;
-class QGCPositionManager;
 class VideoManager;
 class MAVLinkLogManager;
 class QGCCorePlugin;
@@ -40,12 +37,9 @@ class QGCToolbox : public QObject {
 public:
     QGCToolbox(QGCApplication* app);
 
-    FirmwarePluginManager*      firmwarePluginManager   () { return _firmwarePluginManager; }
     LinkManager*                linkManager             () { return _linkManager; }
     MAVLinkProtocol*            mavlinkProtocol         () { return _mavlinkProtocol; }
-    MissionCommandTree*         missionCommandTree      () { return _missionCommandTree; }
     MultiVehicleManager*        multiVehicleManager     () { return _multiVehicleManager; }
-    QGCPositionManager*         qgcPositionManager      () { return _qgcPositionManager; }
     VideoManager*               videoManager            () { return _videoManager; }
     MAVLinkLogManager*          mavlinkLogManager       () { return _mavlinkLogManager; }
     QGCCorePlugin*              corePlugin              () { return _corePlugin; }
@@ -63,12 +57,9 @@ private:
     void setChildToolboxes(void);
     void _scanAndLoadPlugins(QGCApplication *app);
 
-    FirmwarePluginManager*      _firmwarePluginManager  = nullptr;
     LinkManager*                _linkManager            = nullptr;
     MAVLinkProtocol*            _mavlinkProtocol        = nullptr;
-    MissionCommandTree*         _missionCommandTree     = nullptr;
     MultiVehicleManager*        _multiVehicleManager    = nullptr;
-    QGCPositionManager*         _qgcPositionManager     = nullptr;
     VideoManager*               _videoManager           = nullptr;
     MAVLinkLogManager*          _mavlinkLogManager      = nullptr;
     QGCCorePlugin*              _corePlugin             = nullptr;
