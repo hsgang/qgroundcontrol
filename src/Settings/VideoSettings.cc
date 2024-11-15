@@ -30,9 +30,9 @@ DECLARE_SETTINGGROUP(Video, "Video")
     // Setup enum values for videoSource settings into meta data
     QVariantList videoSourceList;
     videoSourceList.append(videoSourceRTSP);
-    // videoSourceList.append(videoSourceUDPH264);
-    // videoSourceList.append(videoSourceUDPH265);
-    // videoSourceList.append(videoSourceTCP);
+    videoSourceList.append(videoSourceUDPH264);
+    videoSourceList.append(videoSourceUDPH265);
+    videoSourceList.append(videoSourceTCP);
     // videoSourceList.append(videoSourceMPEGTS);
     // videoSourceList.append(videoSource3DRSolo);
     // videoSourceList.append(videoSourceParrotDiscovery);
