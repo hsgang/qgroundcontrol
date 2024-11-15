@@ -281,7 +281,6 @@ private:
     FactGroup*              _gpsRtkFactGroup        = nullptr;
 #endif
     AirLinkManager*         _airlinkManager         = nullptr;
-    ADSBVehicleManager*     _adsbVehicleManager     = nullptr;
     NTRIPManager*           _ntripManager           = nullptr;
     CloudManager*           _cloudManager           = nullptr;
     QGCPalette*             _globalPalette          = nullptr;
