@@ -40,16 +40,17 @@ Rectangle {
     property bool _isAPM:               _activeVehicle ? _activeVehicle.apmFirmware : true
     property Fact _disableDataPersistenceFact: QGroundControl.settingsManager.appSettings.disableAllPersistence
     property bool _disableDataPersistence:     _disableDataPersistenceFact ? _disableDataPersistenceFact.rawValue : false
+    property var  _mavlinkLogManager:   _activeVehicle ? _activeVehicle.mavlinkLogManager : null
 
     QGCPalette { id: qgcPal }
 
     Connections {
-        target: QGroundControl.mavlinkLogManager
+        target: _mavlinkLogManager
         onSelectedCountChanged: {
             _uploadedSelected = false
             var selected = 0
-            for(var i = 0; i < QGroundControl.mavlinkLogManager.logFiles.count; i++) {
-                var logFile = QGroundControl.mavlinkLogManager.logFiles.get(i)
+            for(var i = 0; i < _mavlinkLogManager.logFiles.count; i++) {
+                var logFile = _mavlinkLogManager.logFiles.get(i)
                 if(logFile.selected) {
                     selected++
                     //-- If an uploaded file is selected, disable "Upload" button
@@ -62,19 +63,17 @@ Rectangle {
         }
     }
 
-    function saveItems()
-    {
-        QGroundControl.mavlinkSystemID = parseInt(sysidField.text)
-        QGroundControl.mavlinkLogManager.videoURL = videoUrlField.text
-        QGroundControl.mavlinkLogManager.feedback = feedbackTextArea.text
-        QGroundControl.mavlinkLogManager.emailAddress = emailField.text
-        QGroundControl.mavlinkLogManager.description = descField.text
-        QGroundControl.mavlinkLogManager.uploadURL = urlField.text
-        QGroundControl.mavlinkLogManager.emailAddress = emailField.text
-        if(autoUploadCheck.checked && QGroundControl.mavlinkLogManager.emailAddress === "") {
+    function saveItems() {
+        _mavlinkLogManager.videoURL = videoUrlField.text
+        _mavlinkLogManager.feedback = feedbackTextArea.text
+        _mavlinkLogManager.emailAddress = emailField.text
+        _mavlinkLogManager.description = descField.text
+        _mavlinkLogManager.uploadURL = urlField.text
+        _mavlinkLogManager.emailAddress = emailField.text
+        if(autoUploadCheck.checked && _mavlinkLogManager.emailAddress === "") {
             autoUploadCheck.checked = false
         } else {
-            QGroundControl.mavlinkLogManager.enableAutoUpload = autoUploadCheck.checked
+            _mavlinkLogManager.enableAutoUpload = autoUploadCheck.checked
         }
     }
 
@@ -141,15 +140,15 @@ Rectangle {
                         QGCButton {
                             text:               qsTr("Start Logging")
                             width:              (_valueWidth * 0.5) - (ScreenTools.defaultFontPixelWidth * 0.5)
-                            enabled:            !QGroundControl.mavlinkLogManager.logRunning && QGroundControl.mavlinkLogManager.canStartLog && !_disableDataPersistence
-                            onClicked:          QGroundControl.mavlinkLogManager.startLogging()
+                            enabled:            !_mavlinkLogManager.logRunning && _mavlinkLogManager.canStartLog && !_disableDataPersistence
+                            onClicked:          _mavlinkLogManager.startLogging()
                             anchors.verticalCenter: parent.verticalCenter
                         }
                         QGCButton {
                             text:               qsTr("Stop Logging")
                             width:              (_valueWidth * 0.5) - (ScreenTools.defaultFontPixelWidth * 0.5)
-                            enabled:            QGroundControl.mavlinkLogManager.logRunning && !_disableDataPersistence
-                            onClicked:          QGroundControl.mavlinkLogManager.stopLogging()
+                            enabled:            _mavlinkLogManager.logRunning && !_disableDataPersistence
+                            onClicked:          _mavlinkLogManager.stopLogging()
                             anchors.verticalCenter: parent.verticalCenter
                         }
                     }
@@ -157,10 +156,10 @@ Rectangle {
                     //-- Enable auto log on arming
                     QGCCheckBox {
                         text:       qsTr("Enable automatic logging")
-                        checked:    QGroundControl.mavlinkLogManager.enableAutoStart
+                        checked:    _mavlinkLogManager.enableAutoStart
                         enabled:    !_disableDataPersistence
                         onClicked: {
-                            QGroundControl.mavlinkLogManager.enableAutoStart = checked
+                            _mavlinkLogManager.enableAutoStart = checked
                         }
                     }
                 }
@@ -204,7 +203,7 @@ Rectangle {
                         }
                         QGCTextField {
                             id:         emailField
-                            text:       QGroundControl.mavlinkLogManager.emailAddress
+                            text:       _mavlinkLogManager.emailAddress
                             width:      _valueWidth
                             enabled:    !_disableDataPersistence
                             inputMethodHints:       Qt.ImhNoAutoUppercase | Qt.ImhEmailCharactersOnly
@@ -225,7 +224,7 @@ Rectangle {
                         }
                         QGCTextField {
                             id:         descField
-                            text:       QGroundControl.mavlinkLogManager.description
+                            text:       _mavlinkLogManager.description
                             width:      _valueWidth
                             enabled:    !_disableDataPersistence
                             anchors.verticalCenter: parent.verticalCenter
@@ -245,7 +244,7 @@ Rectangle {
                         }
                         QGCTextField {
                             id:         urlField
-                            text:       QGroundControl.mavlinkLogManager.uploadURL
+                            text:       _mavlinkLogManager.uploadURL
                             width:      _valueWidth
                             enabled:    !_disableDataPersistence
                             inputMethodHints:       Qt.ImhNoAutoUppercase | Qt.ImhUrlCharactersOnly
@@ -266,7 +265,7 @@ Rectangle {
                         }
                         QGCTextField {
                             id:         videoUrlField
-                            text:       QGroundControl.mavlinkLogManager.videoURL
+                            text:       _mavlinkLogManager.videoURL
                             width:      _valueWidth
                             enabled:    !_disableDataPersistence
                             inputMethodHints:       Qt.ImhNoAutoUppercase | Qt.ImhUrlCharactersOnly
@@ -297,12 +296,12 @@ Rectangle {
                             }
                             onActivated: (index) => {
                                 saveItems();
-                                QGroundControl.mavlinkLogManager.windSpeed = windItems.get(index).value
+                                _mavlinkLogManager.windSpeed = windItems.get(index).value
                                 //console.log('Set Wind: ' + windItems.get(index).value)
                             }
                             Component.onCompleted: {
                                 for(var i = 0; i < windItems.count; i++) {
-                                    if(windItems.get(i).value === QGroundControl.mavlinkLogManager.windSpeed) {
+                                    if(windItems.get(i).value === _mavlinkLogManager.windSpeed) {
                                         windCombo.currentIndex = i;
                                         //console.log('Wind: ' + windItems.get(i).value)
                                         break;
@@ -336,12 +335,12 @@ Rectangle {
                             }
                             onActivated: (index) => {
                                 saveItems();
-                                QGroundControl.mavlinkLogManager.rating = ratingItems.get(index).value
+                                _mavlinkLogManager.rating = ratingItems.get(index).value
                                 //console.log('Set Rating: ' + ratingItems.get(index).value)
                             }
                             Component.onCompleted: {
                                 for(var i = 0; i < ratingItems.count; i++) {
-                                    if(ratingItems.get(i).value === QGroundControl.mavlinkLogManager.rating) {
+                                    if(ratingItems.get(i).value === _mavlinkLogManager.rating) {
                                         ratingCombo.currentIndex = i;
                                         //console.log('Rating: ' + ratingItems.get(i).value)
                                         break;
@@ -363,7 +362,7 @@ Rectangle {
                             width:              _valueWidth
                             height:             ScreenTools.defaultFontPixelHeight * 4
                             font.pointSize:     ScreenTools.defaultFontPointSize
-                            text:               QGroundControl.mavlinkLogManager.feedback
+                            text:               _mavlinkLogManager.feedback
                             enabled:            !_disableDataPersistence
                             color:              qgcPal.textFieldText
                             background:         Rectangle { color: qgcPal.textField }
@@ -373,10 +372,10 @@ Rectangle {
                     //-- Public Log
                     QGCCheckBox {
                         text:       qsTr("Make this log publicly available")
-                        checked:    QGroundControl.mavlinkLogManager.publicLog
+                        checked:    _mavlinkLogManager.publicLog
                         enabled:    !_disableDataPersistence
                         onClicked: {
-                            QGroundControl.mavlinkLogManager.publicLog = checked
+                            _mavlinkLogManager.publicLog = checked
                         }
                     }
                     //-----------------------------------------------------------------
@@ -384,11 +383,11 @@ Rectangle {
                     QGCCheckBox {
                         id:         autoUploadCheck
                         text:       qsTr("Enable automatic log uploads")
-                        checked:    QGroundControl.mavlinkLogManager.enableAutoUpload
+                        checked:    _mavlinkLogManager.enableAutoUpload
                         enabled:    !_disableDataPersistence
                         onClicked: {
                             saveItems();
-                            if(checked && QGroundControl.mavlinkLogManager.emailAddress === "")
+                            if(checked && _mavlinkLogManager.emailAddress === "")
                                 emptyEmailDialog.open()
                         }
                     }
@@ -396,10 +395,10 @@ Rectangle {
                     //-- Delete log after upload
                     QGCCheckBox {
                         text:       qsTr("Delete log file after uploading")
-                        checked:    QGroundControl.mavlinkLogManager.deleteAfterUpload
+                        checked:    _mavlinkLogManager.deleteAfterUpload
                         enabled:    autoUploadCheck.checked && !_disableDataPersistence
                         onClicked: {
-                            QGroundControl.mavlinkLogManager.deleteAfterUpload = checked
+                            _mavlinkLogManager.deleteAfterUpload = checked
                         }
                     }
                 }
@@ -445,7 +444,7 @@ Rectangle {
                             height:         ScreenTools.defaultFontPixelHeight * 12
                             anchors.centerIn: parent
                             orientation:    ListView.Vertical
-                            model:          QGroundControl.mavlinkLogManager.logFiles
+                            model:          _mavlinkLogManager.logFiles
                             clip:           true
                             delegate: Rectangle {
                                 width:          ScreenTools.defaultFontPixelWidth  * 52
@@ -504,27 +503,27 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         QGCButton {
                             text:      qsTr("Check All")
-                            enabled:    !QGroundControl.mavlinkLogManager.uploading && !QGroundControl.mavlinkLogManager.logRunning
+                            enabled:    !_mavlinkLogManager.uploading && !_mavlinkLogManager.logRunning
                             onClicked: {
-                                for(var i = 0; i < QGroundControl.mavlinkLogManager.logFiles.count; i++) {
-                                    var logFile = QGroundControl.mavlinkLogManager.logFiles.get(i)
+                                for(var i = 0; i < _mavlinkLogManager.logFiles.count; i++) {
+                                    var logFile = _mavlinkLogManager.logFiles.get(i)
                                     logFile.selected = true
                                 }
                             }
                         }
                         QGCButton {
                             text:      qsTr("Check None")
-                            enabled:    !QGroundControl.mavlinkLogManager.uploading && !QGroundControl.mavlinkLogManager.logRunning
+                            enabled:    !_mavlinkLogManager.uploading && !_mavlinkLogManager.logRunning
                             onClicked: {
-                                for(var i = 0; i < QGroundControl.mavlinkLogManager.logFiles.count; i++) {
-                                    var logFile = QGroundControl.mavlinkLogManager.logFiles.get(i)
+                                for(var i = 0; i < _mavlinkLogManager.logFiles.count; i++) {
+                                    var logFile = _mavlinkLogManager.logFiles.get(i)
                                     logFile.selected = false
                                 }
                             }
                         }
                         QGCButton {
                             text:      qsTr("Delete Selected")
-                            enabled:    _selectedCount > 0 && !QGroundControl.mavlinkLogManager.uploading && !QGroundControl.mavlinkLogManager.logRunning
+                            enabled:    _selectedCount > 0 && !_mavlinkLogManager.uploading && !_mavlinkLogManager.logRunning
                             onClicked:  deleteDialog.open()
                             MessageDialog {
                                 id:         deleteDialog
@@ -536,7 +535,7 @@ Rectangle {
                                 onButtonClicked: function (button, role) {
                                     switch (button) {
                                     case MessageDialog.Yes:
-                                        QGroundControl.mavlinkLogManager.deleteLog()
+                                        _mavlinkLogManager.deleteLog()
                                         break;
                                     }
                                 }
@@ -544,11 +543,11 @@ Rectangle {
                         }
                         QGCButton {
                             text:      qsTr("Upload Selected")
-                            enabled:    _selectedCount > 0 && !QGroundControl.mavlinkLogManager.uploading && !QGroundControl.mavlinkLogManager.logRunning && !_uploadedSelected
-                            visible:    !QGroundControl.mavlinkLogManager.uploading
+                            enabled:    _selectedCount > 0 && !_mavlinkLogManager.uploading && !_mavlinkLogManager.logRunning && !_uploadedSelected
+                            visible:    !_mavlinkLogManager.uploading
                             onClicked:  {
                                 saveItems();
-                                if(QGroundControl.mavlinkLogManager.emailAddress === "")
+                                if(_mavlinkLogManager.emailAddress === "")
                                     emptyEmailDialog.open()
                                 else
                                     uploadDialog.open()
@@ -563,7 +562,7 @@ Rectangle {
                                 onButtonClicked: function (button, role) {
                                     switch (button) {
                                     case MessageDialog.Yes:
-                                        QGroundControl.mavlinkLogManager.uploadLog()
+                                        _mavlinkLogManager.uploadLog()
                                         break;
                                     }
                                 }
@@ -571,8 +570,8 @@ Rectangle {
                         }
                         QGCButton {
                             text:      qsTr("Cancel")
-                            enabled:    QGroundControl.mavlinkLogManager.uploading && !QGroundControl.mavlinkLogManager.logRunning
-                            visible:    QGroundControl.mavlinkLogManager.uploading
+                            enabled:    _mavlinkLogManager.uploading && !_mavlinkLogManager.logRunning
+                            visible:    _mavlinkLogManager.uploading
                             onClicked:  cancelDialog.open()
                             MessageDialog {
                                 id:         cancelDialog
@@ -584,7 +583,7 @@ Rectangle {
                                 onButtonClicked: function (button, role) {
                                     switch (button) {
                                     case MessageDialog.Yes:
-                                        QGroundControl.mavlinkLogManager.cancelUpload()
+                                        _mavlinkLogManager.cancelUpload()
                                         break;
                                     }
                                 }

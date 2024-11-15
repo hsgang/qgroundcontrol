@@ -431,6 +431,18 @@ ApplicationWindow {
                             }
                         }
                     }
+
+                    SubMenuButton {
+                        id:                 closeButton
+                        height:             viewSelectDrawer._toolButtonHeight
+                        Layout.fillWidth:   true
+                        text:               qsTr("Close %1").arg(QGroundControl.appName)
+                        onClicked: {
+                            if (mainWindow.allowViewSwitch()) {
+                                mainWindow.finishCloseProcess()
+                            }
+                        }
+                    }
                 }
             }
 

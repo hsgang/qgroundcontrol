@@ -18,7 +18,6 @@ class MAVLinkProtocol;
 class MultiVehicleManager;
 class QGCApplication;
 class VideoManager;
-class MAVLinkLogManager;
 class QGCCorePlugin;
 class SettingsManager;
 class NTRIPManager;
@@ -41,7 +40,6 @@ public:
     MAVLinkProtocol*            mavlinkProtocol         () { return _mavlinkProtocol; }
     MultiVehicleManager*        multiVehicleManager     () { return _multiVehicleManager; }
     VideoManager*               videoManager            () { return _videoManager; }
-    MAVLinkLogManager*          mavlinkLogManager       () { return _mavlinkLogManager; }
     QGCCorePlugin*              corePlugin              () { return _corePlugin; }
     SettingsManager*            settingsManager         () { return _settingsManager; }
     CloudManager*               cloudManager            () { return _cloudManager; }
@@ -61,7 +59,6 @@ private:
     MAVLinkProtocol*            _mavlinkProtocol        = nullptr;
     MultiVehicleManager*        _multiVehicleManager    = nullptr;
     VideoManager*               _videoManager           = nullptr;
-    MAVLinkLogManager*          _mavlinkLogManager      = nullptr;
     QGCCorePlugin*              _corePlugin             = nullptr;
     SettingsManager*            _settingsManager        = nullptr;
     CloudManager*               _cloudManager           = nullptr;
