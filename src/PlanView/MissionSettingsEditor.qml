@@ -114,7 +114,7 @@ Rectangle {
             LabelledFactTextField {
                 label:      qsTr("Initial Waypoint Alt")
                 fact:       QGroundControl.settingsManager.appSettings.defaultMissionItemAltitude
-                textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 10
+                textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 12
             }
 
             GridLayout {
@@ -225,7 +225,7 @@ Rectangle {
                 description:        qsTr("The following speed values are used to calculate total mission time. They do not affect the flight speed for the mission.")
                 fact:               QGroundControl.settingsManager.appSettings.offlineEditingHoverSpeed
                 visible:            _showHoverSpeed && vehicleInfoSectionHeader.visible && vehicleInfoSectionHeader.checked
-                textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 10
+                textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 12
             }
 
             SectionHeader {
@@ -238,7 +238,7 @@ Rectangle {
 
             LabelledFactTextField{
                 Layout.fillWidth: true
-                textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 10
+                textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 12
                 label:  qsTr("Altitude")
                 fact:   missionItem.plannedHomePositionAltitude
                 description: qsTr("Actual position set by vehicle at flight time.")

@@ -11372,6 +11372,16 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/PlanView/MissionItemEditor.qml" line="223"/>
+        <source>#%1 Item Move to Up</source>
+        <translation>#%1 항목을 위로 이동</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/MissionItemEditor.qml" line="223"/>
+        <source>#%1 Item Move to Down</source>
+        <translation>#%1 항목을 아래로 이동</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/MissionItemEditor.qml" line="223"/>
         <source>#%1 Item Delete</source>
         <translation>#%1 항목 삭제</translation>
     </message>

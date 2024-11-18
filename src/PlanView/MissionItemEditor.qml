@@ -218,6 +218,21 @@ Rectangle {
                 }
 
                 QGCMenuItem {
+                    visible:        !missionItem.isTakeoffItem
+                    text:           qsTr("#%1 Item Move to Up").arg(missionItem.sequenceNumber)
+                    onTriggered:    _missionController.moveVisualItemUp(missionItem.sequenceNumber)
+                }
+
+                QGCMenuItem {
+                    visible:        !missionItem.isTakeoffItem
+                    text:           qsTr("#%1 Item Move to Down").arg(missionItem.sequenceNumber)
+                    onTriggered:    _missionController.moveVisualItemDown(missionItem.sequenceNumber)
+                }
+
+                QGCMenuSeparator {
+                }
+
+                QGCMenuItem {
                     text:       qsTr("Show all values")
                     checkable:  true
                     checked:    missionItem.isSimpleItem ? missionItem.rawEdit : false

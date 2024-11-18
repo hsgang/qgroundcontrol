@@ -2721,3 +2721,38 @@ void MissionController::setGlobalAltitudeMode(QGroundControlQmlGlobal::AltMode a
         emit globalAltitudeModeChanged();
     }
 }
+
+bool MissionController::moveVisualItemUp(int index)
+{
+    if (!_isValidIndex(index) || index == 1) {
+        return false;
+    }
+
+    if (index - 1 == _takeoffMissionItem->sequenceNumber()) {
+        return false;
+    }
+
+    _visualItems->move(index, index - 1);
+    _recalcAll();
+    setCurrentPlanViewSeqNum(index - 1, true);
+
+    return true;
+}
+
+bool MissionController::moveVisualItemDown(int index)
+{
+    if (!_isValidIndex(index) || index >= _visualItems->count() - 1) {
+        return false;
+    }
+
+    _visualItems->move(index, index + 1);
+    _recalcAll();
+    setCurrentPlanViewSeqNum(index + 1, true);
+
+    return true;
+}
+
+bool MissionController::_isValidIndex(int index) const
+{
+    return index >= 0 && index < _visualItems->count();
+}

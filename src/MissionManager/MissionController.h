@@ -192,6 +192,9 @@ public:
 
     Q_INVOKABLE SendToVehiclePreCheckState sendToVehiclePreCheck(void);
 
+    Q_INVOKABLE bool moveVisualItemUp(int index);
+    Q_INVOKABLE bool moveVisualItemDown(int index);
+
     /// Determines if the mission has all data needed to be saved or sent to the vehicle.
     /// IMPORTANT NOTE: The return value is a VisualMissionItem::ReadForSaveState value. It is an int here to work around
     /// a nightmare of circular header dependency problems.
@@ -366,6 +369,7 @@ private:
     FlightPathSegment*      _createFlightPathSegmentWorker      (VisualItemPair& pair, bool mavlinkTerrainFrame);
     void                    _allItemsRemoved                    (void);
     void                    _firstItemAdded                     (void);
+    bool                    _isValidIndex                       (int index) const;
 
     static double           _calcDistanceToHome                 (VisualMissionItem* currentItem, VisualMissionItem* homeItem);
     static double           _calcPathDistanceToHome             (VisualMissionItem* currentItem, VisualMissionItem* homeItem);
