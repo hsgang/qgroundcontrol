@@ -79,17 +79,22 @@ Item {
         if (!_missionTime) {
             return "00:00:00"
         }
-        var t = new Date(2021, 0, 0, 0, 0, Number(_missionTime))
-        var days = Qt.formatDateTime(t, 'dd')
-        var complete
+        const milliseconds = _missionTime * 1000;
 
-        if (days === 31) {
-            days = '0'
-            complete = Qt.formatTime(t, 'hh:mm:ss')
-        } else {
-            complete = days + " days " + Qt.formatTime(t, 'hh:mm:ss')
-        }
-        return complete
+        // 일, 시간, 분, 초 계산
+        const seconds = Math.floor((milliseconds / 1000) % 60);
+        const minutes = Math.floor((milliseconds / (1000 * 60)) % 60);
+        const hours = Math.floor((milliseconds / (1000 * 60 * 60)) % 24);
+        const days = Math.floor(milliseconds / (1000 * 60 * 60 * 24));
+
+        // 숫자를 두 자리로 포맷팅하는 헬퍼 함수
+        const formatNumber = (num) => num.toString().padStart(2, '0');
+
+        // 시간 문자열 포맷팅
+        const timeString = `${formatNumber(hours)}:${formatNumber(minutes)}:${formatNumber(seconds)}`;
+
+        // 일수에 따라 적절한 형식 반환
+        return days > 0 ? `${days} days ${timeString}` : timeString;
     }
 
     GridLayout {
