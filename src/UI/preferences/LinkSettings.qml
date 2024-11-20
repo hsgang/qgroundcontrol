@@ -275,7 +275,7 @@ SettingsPage {
                 Binding {
                     target: nameField
                     property: "text"
-                    value: (editingConfig.name === "") ? (
+                    value: (originalConfig == null) ? (
                            editingConfig.linkType === LinkConfiguration.TypeSerial ?
                            qsTr("Serial_") + linkSettingsLoader.subEditConfig.portDisplayName +"_" + linkSettingsLoader.subEditConfig.baud.toString() :
                            (editingConfig.linkType === LinkConfiguration.TypeUdp ?
