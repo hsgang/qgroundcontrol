@@ -22,9 +22,6 @@ class QGCCorePlugin;
 class SettingsManager;
 class NTRIPManager;
 class CloudManager;
-#ifndef QGC_AIRLINK_DISABLED
-class AirLinkManager;
-#endif
 #ifdef QGC_UTM_ADAPTER
 class UTMSPManager;
 #endif
@@ -44,9 +41,6 @@ public:
     SettingsManager*            settingsManager         () { return _settingsManager; }
     CloudManager*               cloudManager            () { return _cloudManager; }
     NTRIPManager*               ntripManager            () { return _ntripManager; }
-#ifndef QGC_AIRLINK_DISABLED
-    AirLinkManager*              airlinkManager          () { return _airlinkManager; }
-#endif
 #ifdef QGC_UTM_ADAPTER
     UTMSPManager*                utmspManager             () { return _utmspManager; }
 #endif
@@ -63,12 +57,8 @@ private:
     SettingsManager*            _settingsManager        = nullptr;
     CloudManager*               _cloudManager           = nullptr;
     NTRIPManager*               _ntripManager           = nullptr;
-#ifndef QGC_AIRLINK_DISABLED
-    AirLinkManager*             _airlinkManager         = nullptr;
-#endif
-
 #ifdef QGC_UTM_ADAPTER
-    UTMSPManager*                _utmspManager            = nullptr;
+    UTMSPManager*               _utmspManager           = nullptr;
 #endif
     friend class QGCApplication;
 };

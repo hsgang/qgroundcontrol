@@ -189,11 +189,11 @@ public:
     static QGeoCoordinate   flightMapPosition   ()  { return _coord; }
     static double           flightMapZoom       ()  { return _zoom; }
 
-    AirLinkManager*         airlinkManager      ()  { return _airlinkManager; }
 #ifndef QGC_AIRLINK_DISABLED
+    AirLinkManager*         airlinkManager      ()  { return _airlinkManager; }
     bool                    airlinkSupported    ()  { return true; }
 #else
-    bool                    airlinkSupported    () { return false; }
+    bool                    airlinkSupported    ()  { return false; }
 #endif
 
 #ifdef QGC_UTM_ADAPTER
@@ -265,6 +265,9 @@ private:
     ADSBVehicleManager*     _adsbVehicleManager     = nullptr;
     QGCPositionManager*     _qgcPositionManager     = nullptr;
     MissionCommandTree*     _missionCommandTree     = nullptr;
+#ifndef QGC_AIRLINK_DISABLED
+    AirLinkManager*         _airlinkManager         = nullptr;
+#endif
 
     double                  _flightMapInitialZoom   = 17.0;
     LinkManager*            _linkManager            = nullptr;
@@ -275,7 +278,6 @@ private:
 #ifndef NO_SERIAL_LINK
     FactGroup*              _gpsRtkFactGroup        = nullptr;
 #endif
-    AirLinkManager*         _airlinkManager         = nullptr;
     NTRIPManager*           _ntripManager           = nullptr;
     CloudManager*           _cloudManager           = nullptr;
     QGCPalette*             _globalPalette          = nullptr;
