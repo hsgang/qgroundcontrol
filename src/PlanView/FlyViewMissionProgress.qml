@@ -56,7 +56,7 @@ Rectangle{
     property string _vehicleVerticalSpeedText:  isNaN(_vehicleVerticalSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleVerticalSpeed).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsSpeedUnitsString
     property string _vehicleGroundSpeedText:    isNaN(_vehicleGroundSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleGroundSpeed).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsSpeedUnitsString
     property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceToHome).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
-    property string _distanceDownText:          isNaN(_distanceDown) ? " " : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceDown).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _distanceDownText:          isNaN(_distanceDown) ? "RNG -.-" : "RNG " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceDown).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _vehicleAltitudeTerrainText:isNaN(_vehicleAltitudeTerrain) ? "Terrain -.-" : "Terrain " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitudeTerrain).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     //    property bool parameterAvailable:   _activeVehicle && QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable
     //    property Fact wpnavSpeed:           parameterAvailable ? controller.getParameterFact(-1, "WPNAV_SPEED") : null
@@ -181,6 +181,10 @@ Rectangle{
                 anchors.right: parent.right
                 anchors.rightMargin: _toolsMargin
 
+                QGCLabel {
+                    text:               _distanceDownText
+                    font.pointSize:     _dataFontSize * 0.9
+                }
                 QGCLabel {
                     text:               _vehicleAltitudeASMLText
                     font.pointSize:     _dataFontSize * 0.9
