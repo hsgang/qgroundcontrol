@@ -11,15 +11,11 @@
 #include "LinkManager.h"
 #include "MAVLinkProtocol.h"
 #include "MultiVehicleManager.h"
-#include "VideoManager.h"
 #include "QGCCorePlugin.h"
 #include "SettingsManager.h"
 #include "QGCApplication.h"
 #include "NTRIPManager.h"
 #include "CloudManager.h"
-#ifdef QGC_UTM_ADAPTER
-#include "UTMSPManager.h"
-#endif
 
 #if defined(QGC_CUSTOM_BUILD)
 #include CUSTOMHEADER
@@ -36,12 +32,8 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
     _linkManager            = new LinkManager               (app, this);
     _mavlinkProtocol        = new MAVLinkProtocol           (app, this);
     _multiVehicleManager    = new MultiVehicleManager       (app, this);
-    _videoManager           = new VideoManager              (app, this);
     _cloudManager           = new CloudManager              (app, this);
     _ntripManager           = new NTRIPManager              (app, this);
-#ifdef QGC_UTM_ADAPTER
-    _utmspManager            = new UTMSPManager               (app, this);
-#endif
 }
 
 void QGCToolbox::setChildToolboxes(void)
@@ -53,12 +45,8 @@ void QGCToolbox::setChildToolboxes(void)
     _linkManager->setToolbox(this);
     _mavlinkProtocol->setToolbox(this);
     _multiVehicleManager->setToolbox(this);
-    _videoManager->setToolbox(this);
     _cloudManager->setToolbox(this);
     _ntripManager->setToolbox(this);
-#ifdef QGC_UTM_ADAPTER
-    _utmspManager->setToolbox(this);
-#endif
 }
 
 void QGCToolbox::_scanAndLoadPlugins(QGCApplication* app)

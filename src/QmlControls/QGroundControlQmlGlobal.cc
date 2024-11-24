@@ -8,6 +8,7 @@
  ****************************************************************************/
 
 #include "QGroundControlQmlGlobal.h"
+
 #include "QGCApplication.h"
 #include "LinkManager.h"
 #include "MAVLinkProtocol.h"
@@ -20,23 +21,90 @@
 #include "ADSBVehicleManager.h"
 #include "NTRIPManager.h"
 #include "MissionCommandTree.h"
+#include "HorizontalFactValueGrid.h"
+#include "FlightPathSegment.h"
+#include "InstrumentValueData.h"
+#include "QGCGeoBoundingCube.h"
+#include "QGCMapPolygon.h"
+#include "QGCMapCircle.h"
+#include "CustomAction.h"
+#include "CustomActionManager.h"
+#include "EditPositionDialogController.h"
+#include "ParameterEditorController.h"
+#include "QGCFileDialogController.h"
+#include "RCChannelMonitorController.h"
+#include "ScreenToolsController.h"
+#include "QGCMapPalette.h"
+#include "QGCPalette.h"
+#include "QmlObjectListModel.h"
+#include "RCToParamDialogController.h"
+#include "TerrainProfile.h"
+#include "ToolStripAction.h"
+#include "ToolStripActionList.h"
+#include "VideoManager.h"
 #ifndef NO_SERIAL_LINK
 #include "GPSManager.h"
 #include "GPSRtk.h"
 #endif
-#include "QGCPalette.h"
 #ifdef QT_DEBUG
 #include "MockLink.h"
 #endif
 #ifndef QGC_AIRLINK_DISABLED
 #include "AirLinkManager.h"
 #endif
+#ifdef QGC_UTM_ADAPTER
+#include "UTMSPManager.h"
+#endif
 
 #include <QtCore/QSettings>
 #include <QtCore/QLineF>
 
-QGeoCoordinate   QGroundControlQmlGlobal::_coord = QGeoCoordinate(0.0,0.0);
-double           QGroundControlQmlGlobal::_zoom = 2;
+QGeoCoordinate QGroundControlQmlGlobal::_coord = QGeoCoordinate(0.0,0.0);
+double QGroundControlQmlGlobal::_zoom = 2;
+
+static QObject* screenToolsControllerSingletonFactory(QQmlEngine*, QJSEngine*)
+{
+    ScreenToolsController* screenToolsController = new ScreenToolsController;
+    return screenToolsController;
+}
+
+static QObject* qgroundcontrolQmlGlobalSingletonFactory(QQmlEngine*, QJSEngine*)
+{
+    // We create this object as a QGCTool even though it isn't in the toolbox
+    QGroundControlQmlGlobal* qmlGlobal = new QGroundControlQmlGlobal(qgcApp(), qgcApp()->toolbox());
+    qmlGlobal->setToolbox(qgcApp()->toolbox());
+
+    return qmlGlobal;
+}
+
+void QGroundControlQmlGlobal::registerQmlTypes()
+{
+    qmlRegisterUncreatableType<FactValueGrid>           ("QGroundControl.Templates",             1, 0, "FactValueGrid",       "Reference only");
+    qmlRegisterUncreatableType<FlightPathSegment>       ("QGroundControl",                       1, 0, "FlightPathSegment",   "Reference only");
+    qmlRegisterUncreatableType<InstrumentValueData>     ("QGroundControl",                       1, 0, "InstrumentValueData", "Reference only");
+    qmlRegisterUncreatableType<QGCGeoBoundingCube>      ("QGroundControl.FlightMap",             1, 0, "QGCGeoBoundingCube",  "Reference only");
+    qmlRegisterUncreatableType<QGCMapPolygon>           ("QGroundControl.FlightMap",             1, 0, "QGCMapPolygon",       "Reference only");
+    qmlRegisterUncreatableType<QmlObjectListModel>      ("QGroundControl",                       1, 0, "QmlObjectListModel",  "Reference only");
+
+    qmlRegisterType<CustomAction>                       ("QGroundControl.Controllers",           1, 0, "CustomAction");
+    qmlRegisterType<CustomActionManager>                ("QGroundControl.Controllers",           1, 0, "CustomActionManager");
+    qmlRegisterType<EditPositionDialogController>       ("QGroundControl.Controllers",           1, 0, "EditPositionDialogController");
+    qmlRegisterType<HorizontalFactValueGrid>            ("QGroundControl.Templates",             1, 0, "HorizontalFactValueGrid");
+    qmlRegisterType<ParameterEditorController>          ("QGroundControl.Controllers",           1, 0, "ParameterEditorController");
+    qmlRegisterType<QGCFileDialogController>            ("QGroundControl.Controllers",           1, 0, "QGCFileDialogController");
+    qmlRegisterType<QGCMapCircle>                       ("QGroundControl.FlightMap",             1, 0, "QGCMapCircle");
+    qmlRegisterType<QGCMapPalette>                      ("QGroundControl.Palette",               1, 0, "QGCMapPalette");
+    qmlRegisterType<QGCPalette>                         ("QGroundControl.Palette",               1, 0, "QGCPalette");
+    qmlRegisterType<RCChannelMonitorController>         ("QGroundControl.Controllers",           1, 0, "RCChannelMonitorController");
+    qmlRegisterType<RCToParamDialogController>          ("QGroundControl.Controllers",           1, 0, "RCToParamDialogController");
+    qmlRegisterType<ScreenToolsController>              ("QGroundControl.Controllers",           1, 0, "ScreenToolsController");
+    qmlRegisterType<TerrainProfile>                     ("QGroundControl.Controls",              1, 0, "TerrainProfile");
+    qmlRegisterType<ToolStripAction>                    ("QGroundControl.Controls",              1, 0, "ToolStripAction");
+    qmlRegisterType<ToolStripActionList>                ("QGroundControl.Controls",              1, 0, "ToolStripActionList");
+
+    qmlRegisterSingletonType<QGroundControlQmlGlobal>   ("QGroundControl",                       1, 0, "QGroundControl",         qgroundcontrolQmlGlobalSingletonFactory);
+    qmlRegisterSingletonType<ScreenToolsController>     ("QGroundControl.ScreenToolsController", 1, 0, "ScreenToolsController",  screenToolsControllerSingletonFactory);
+}
 
 QGroundControlQmlGlobal::QGroundControlQmlGlobal(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
@@ -44,8 +112,12 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QGCApplication* app, QGCToolbox
     , _adsbVehicleManager(ADSBVehicleManager::instance())
     , _qgcPositionManager(QGCPositionManager::instance())
     , _missionCommandTree(MissionCommandTree::instance())
+    , _videoManager(VideoManager::instance())
 #ifndef QGC_AIRLINK_DISABLED
     , _airlinkManager(AirLinkManager::instance())
+#endif
+#ifdef QGC_UTM_ADAPTER
+    , _utmspManager(UTMSPManager::instance())
 #endif
 {
     // We clear the parent on this object since we run into shutdown problems caused by hybrid qml app. Instead we let it leak on shutdown.
@@ -89,7 +161,6 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
 
     _linkManager            = toolbox->linkManager();
     _multiVehicleManager    = toolbox->multiVehicleManager();
-    _videoManager           = toolbox->videoManager();
     _corePlugin             = toolbox->corePlugin();
     _settingsManager        = toolbox->settingsManager();
 #ifndef NO_SERIAL_LINK
@@ -98,9 +169,6 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
     _cloudManager           = toolbox->cloudManager();
     _ntripManager           = toolbox->ntripManager();
     _globalPalette          = new QGCPalette(this);
-#ifdef QGC_UTM_ADAPTER
-    _utmspManager            = toolbox->utmspManager();
-#endif
 }
 
 void QGroundControlQmlGlobal::saveGlobalSetting (const QString& key, const QString& value)

@@ -18,10 +18,6 @@ qt_add_library(QGC STATIC
     QGCToolbox.h
 )
 
-if(QGC_UTM_ADAPTER)
-    add_definitions(-DQGC_UTM_ADAPTER)
-endif()
-
 add_subdirectory(ADSB)
 add_subdirectory(AnalyzeView)
 add_subdirectory(API)
@@ -68,7 +64,6 @@ target_link_libraries(QGC
         Qt6::Core5Compat
         Qt6::Bluetooth
         API
-        ADSB
         AnalyzeView
         Audio
         AutoPilotPlugins
@@ -82,7 +77,6 @@ target_link_libraries(QGC
         # FlightDisplay
         FollowMe
         Gimbal
-        GPS
         GStreamerReceiver
         Joystick
         MAVLink
@@ -94,15 +88,12 @@ target_link_libraries(QGC
         QmlControls
         Settings
         SiYi
-        Terrain
         # UI
         Utilities
-        UTMSP
         Vehicle
         VehicleSetup
         Viewer3D
         VideoManager
-        VideoReceiver
     PUBLIC
         Qt6::Core
         Qt6::CorePrivate

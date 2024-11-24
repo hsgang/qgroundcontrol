@@ -17,14 +17,10 @@ class LinkManager;
 class MAVLinkProtocol;
 class MultiVehicleManager;
 class QGCApplication;
-class VideoManager;
 class QGCCorePlugin;
 class SettingsManager;
 class NTRIPManager;
 class CloudManager;
-#ifdef QGC_UTM_ADAPTER
-class UTMSPManager;
-#endif
 
 /// This is used to manage all of our top level services/tools
 class QGCToolbox : public QObject {
@@ -36,14 +32,10 @@ public:
     LinkManager*                linkManager             () { return _linkManager; }
     MAVLinkProtocol*            mavlinkProtocol         () { return _mavlinkProtocol; }
     MultiVehicleManager*        multiVehicleManager     () { return _multiVehicleManager; }
-    VideoManager*               videoManager            () { return _videoManager; }
     QGCCorePlugin*              corePlugin              () { return _corePlugin; }
     SettingsManager*            settingsManager         () { return _settingsManager; }
     CloudManager*               cloudManager            () { return _cloudManager; }
     NTRIPManager*               ntripManager            () { return _ntripManager; }
-#ifdef QGC_UTM_ADAPTER
-    UTMSPManager*                utmspManager             () { return _utmspManager; }
-#endif
 
 private:
     void setChildToolboxes(void);
@@ -52,14 +44,10 @@ private:
     LinkManager*                _linkManager            = nullptr;
     MAVLinkProtocol*            _mavlinkProtocol        = nullptr;
     MultiVehicleManager*        _multiVehicleManager    = nullptr;
-    VideoManager*               _videoManager           = nullptr;
     QGCCorePlugin*              _corePlugin             = nullptr;
     SettingsManager*            _settingsManager        = nullptr;
     CloudManager*               _cloudManager           = nullptr;
     NTRIPManager*               _ntripManager           = nullptr;
-#ifdef QGC_UTM_ADAPTER
-    UTMSPManager*               _utmspManager           = nullptr;
-#endif
     friend class QGCApplication;
 };
 
