@@ -354,6 +354,12 @@ GimbalController::_requestGimbalInformation(uint8_t compid)
                                  MAV_CMD_REQUEST_MESSAGE,
                                  false /* no error */,
                                  MAVLINK_MSG_ID_GIMBAL_MANAGER_INFORMATION);
+
+        _vehicle->sendMavCommand(compid,
+                                 MAV_CMD_SET_MESSAGE_INTERVAL,
+                                 false /* no error */,
+                                 MAVLINK_MSG_ID_CAMERA_FOV_STATUS,
+                                 200000 /* request default rate */);
     }
 }
 

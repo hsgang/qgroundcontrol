@@ -320,6 +320,8 @@ public:
 
     Q_PROPERTY(bool     mavlinkSigning              READ mavlinkSigning             NOTIFY mavlinkSigningChanged)
 
+    Q_PROPERTY(QGeoCoordinate   cameraFovPosition   READ cameraFovPosition          NOTIFY cameraFovPositionChanged)
+
     /// Resets link status counters
     Q_INVOKABLE void resetCounters  ();
 
@@ -622,6 +624,8 @@ public:
 
     bool            mavlinkSigning          () const { return _mavlinkSigning; }
 
+    QGeoCoordinate  cameraFovPosition           () { return _cameraFovPosition; }
+
     void startCalibration   (QGCMAVLink::CalibrationType calType);
     void stopCalibration    (bool showError);
 
@@ -869,7 +873,7 @@ signals:
     void joystickEnabledChanged         (bool enabled);
     void mavlinkMessageReceived         (const mavlink_message_t& message);
     void homePositionChanged            (const QGeoCoordinate& homePosition);
-    void armedPositionChanged();
+    void armedPositionChanged           ();
     void armedChanged                   (bool armed);
     void flightModeChanged              (const QString& flightMode);
     void flyingChanged                  (bool flying);
@@ -952,6 +956,8 @@ signals:
     void mavlinkStatusChanged           ();
     void mavlinkSigningChanged          ();
 
+    void cameraFovPositionChanged       ();
+
     void isROIEnabledChanged            ();
     void roiCoordChanged                (const QGeoCoordinate& centerCoord);
     void initialConnectComplete         ();
@@ -1022,6 +1028,7 @@ private:
     void _handleCameraFeedback          (const mavlink_message_t& message);
 #endif
     void _handleCameraImageCaptured     (const mavlink_message_t& message);
+    void _handleCameraFovStatus         (const mavlink_message_t& message);
     void _handleADSBVehicle             (const mavlink_message_t& message);
     void _missionManagerError           (int errorCode, const QString& errorMsg);
     void _geoFenceManagerError          (int errorCode, const QString& errorMsg);
@@ -1111,6 +1118,8 @@ private:
     bool            _readyToFly                             = false;
     bool            _allSensorsHealthy                      = true;
     bool            _mavlinkSigning                         = false;
+
+    QGeoCoordinate  _cameraFovPosition;
 
     SysStatusSensorInfo _sysStatusSensorInfo;
 

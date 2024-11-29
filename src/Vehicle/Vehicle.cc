@@ -680,6 +680,9 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_CAMERA_FEEDBACK:
         _handleCameraFeedback(message);
         break;
+    case MAVLINK_MSG_ID_CAMERA_FOV_STATUS:
+        _handleCameraFovStatus(message);
+        break;
 #endif
     case MAVLINK_MSG_ID_LOG_ENTRY:
     {
@@ -719,6 +722,17 @@ void Vehicle::_handleCameraFeedback(const mavlink_message_t& message)
     _cameraTriggerPoints.append(new QGCQGeoCoordinate(imageCoordinate, this));
 
     //_toolbox->audioOutput()->play(":/res/audio/shutter");
+}
+void Vehicle::_handleCameraFovStatus(const mavlink_message_t& message)
+{
+    mavlink_camera_fov_status_t fov;
+
+    mavlink_msg_camera_fov_status_decode(&message, &fov);
+
+    QGeoCoordinate imageCoordinate((double)fov.lat_image / qPow(10.0, 7.0), (double)fov.lon_image / qPow(10.0, 7.0), (double)fov.alt_image / qPow(10.0, 3.0));
+    //qCDebug(VehicleLog) << "_handleCameraFovStatus coord" << imageCoordinate;
+    _cameraFovPosition = imageCoordinate;
+    emit cameraFovPositionChanged();
 }
 #endif
 

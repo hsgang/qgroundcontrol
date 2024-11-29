@@ -417,6 +417,19 @@ FlightMap {
         }
     }
 
+    // Camera fov point
+
+    MapQuickItem {
+        id:             cameraFovIndicator
+        anchorPoint.x:  sourceItem.anchorPointX
+        anchorPoint.y:  sourceItem.anchorPointY
+        coordinate:     _activeVehicle ? _activeVehicle.cameraFovPosition : QtPositioning.coordinate()
+        visible:        _activeVehicle ? _activeVehicle.cameraFovPosition : false
+
+        sourceItem: CameraPOIIndicator {
+        }
+    }
+
     // GoTo Location visuals
     MapQuickItem {
         id:             gotoLocationItem

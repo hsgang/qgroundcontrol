@@ -57,6 +57,7 @@ MAVLinkMessageButton                    1.0 MAVLinkMessageButton.qml
 MissionCommandDialog                    1.0 MissionCommandDialog.qml
 MissionItemEditor                       1.0 MissionItemEditor.qml
 MissionItemIndexLabel                   1.0 MissionItemIndexLabel.qml
+CameraPOIIndicator                      1.0 CameraPOIIndicator.qml
 MissionItemMapVisual                    1.0 MissionItemMapVisual.qml
 MissionItemStatus                       1.0 MissionItemStatus.qml
 ModeSwitchDisplay                       1.0 ModeSwitchDisplay.qml
