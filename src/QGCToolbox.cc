@@ -7,9 +7,7 @@
  *
  ****************************************************************************/
 
-
-#include "LinkManager.h"
-#include "MultiVehicleManager.h"
+#include "QGCToolbox.h"
 #include "QGCCorePlugin.h"
 #include "SettingsManager.h"
 #include "QGCApplication.h"
@@ -28,8 +26,7 @@ QGCToolbox::QGCToolbox(QGCApplication* app)
 
     //-- Scan and load plugins
     _scanAndLoadPlugins(app);
-    _linkManager            = new LinkManager               (app, this);
-    _multiVehicleManager    = new MultiVehicleManager       (app, this);
+    
     _cloudManager           = new CloudManager              (app, this);
     _ntripManager           = new NTRIPManager              (app, this);
 }
@@ -40,8 +37,6 @@ void QGCToolbox::setChildToolboxes(void)
     _settingsManager->setToolbox(this);
 
     _corePlugin->setToolbox(this);
-    _linkManager->setToolbox(this);
-    _multiVehicleManager->setToolbox(this);
     _cloudManager->setToolbox(this);
     _ntripManager->setToolbox(this);
 }

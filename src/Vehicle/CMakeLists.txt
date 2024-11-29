@@ -59,7 +59,6 @@ target_link_libraries(Vehicle
         Joystick
         MockLink
         PositionManager
-        Utilities
         UTMSP
         VideoManager
         Gimbal
@@ -73,7 +72,7 @@ target_link_libraries(Vehicle
         LibEventsWrapper
         MAVLink
         MissionManager
-        QGC
+        Utilities
         VehicleFactGroups
 )
 

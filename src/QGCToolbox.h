@@ -13,8 +13,6 @@
 
 #include <QtCore/QObject>
 
-class LinkManager;
-class MultiVehicleManager;
 class QGCApplication;
 class QGCCorePlugin;
 class SettingsManager;
@@ -28,8 +26,6 @@ class QGCToolbox : public QObject {
 public:
     QGCToolbox(QGCApplication* app);
 
-    LinkManager*                linkManager             () { return _linkManager; }
-    MultiVehicleManager*        multiVehicleManager     () { return _multiVehicleManager; }
     QGCCorePlugin*              corePlugin              () { return _corePlugin; }
     SettingsManager*            settingsManager         () { return _settingsManager; }
     CloudManager*               cloudManager            () { return _cloudManager; }
@@ -39,8 +35,6 @@ private:
     void setChildToolboxes(void);
     void _scanAndLoadPlugins(QGCApplication *app);
 
-    LinkManager*                _linkManager            = nullptr;
-    MultiVehicleManager*        _multiVehicleManager    = nullptr;
     QGCCorePlugin*              _corePlugin             = nullptr;
     SettingsManager*            _settingsManager        = nullptr;
     CloudManager*               _cloudManager           = nullptr;

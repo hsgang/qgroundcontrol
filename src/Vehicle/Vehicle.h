@@ -84,7 +84,6 @@ class StatusTextHandler;
 class InitialConnectStateMachine;
 class Joystick;
 class LinkInterface;
-class LinkManager;
 class MAVLinkLogManager;
 class MissionManager;
 class ParameterManager;
@@ -1131,7 +1130,6 @@ private:
 
     bool                _initialPlanRequestComplete = false;
 
-    LinkManager*                    _linkManager                    = nullptr;
     ParameterManager*               _parameterManager               = nullptr;
     ComponentInformationManager*    _componentInformationManager    = nullptr;
     VehicleObjectAvoidance*         _objectAvoidance                = nullptr;

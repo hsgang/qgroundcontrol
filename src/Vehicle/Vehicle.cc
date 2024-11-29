@@ -126,10 +126,8 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _landingTargetFactGroup       (this)
     , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
 {
-    _linkManager = _toolbox->linkManager();
-
     connect(JoystickManager::instance(), &JoystickManager::activeJoystickChanged, this, &Vehicle::_loadJoystickSettings);
-    connect(qgcApp()->toolbox()->multiVehicleManager(), &MultiVehicleManager::activeVehicleChanged, this, &Vehicle::_activeVehicleChanged);
+    connect(MultiVehicleManager::instance(), &MultiVehicleManager::activeVehicleChanged, this, &Vehicle::_activeVehicleChanged);
 
     qCDebug(VehicleLog) << "Link started with Mavlink " << (MAVLinkProtocol::instance()->getCurrentVersion() >= 200 ? "V2" : "V1");
 
@@ -145,7 +143,7 @@ Vehicle::Vehicle(LinkInterface*             link,
         }
     });
 
-    connect(_toolbox->multiVehicleManager(), &MultiVehicleManager::parameterReadyVehicleAvailableChanged, this, &Vehicle::_vehicleParamLoaded);
+    connect(MultiVehicleManager::instance(), &MultiVehicleManager::parameterReadyVehicleAvailableChanged, this, &Vehicle::_vehicleParamLoaded);
 
     connect(this, &Vehicle::remoteControlRSSIChanged,   this, &Vehicle::_remoteControlRSSIChanged);
 
@@ -249,8 +247,6 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _winchStatusFactGroup             (this)
     , _landingTargetFactGroup           (this)
 {
-    _linkManager = _toolbox->linkManager();
-
     // This will also set the settings based firmware/vehicle types. So it needs to happen first.
     if (_firmwareType == MAV_AUTOPILOT_TRACK) {
         trackFirmwareVehicleTypeChanges();
@@ -1622,7 +1618,7 @@ void Vehicle::setJoystickEnabled(bool enabled)
 
     // if we are the active vehicle, call start polling on the active joystick
     // This routes the joystick signals to this vehicle
-    if (enabled && _toolbox->multiVehicleManager()->activeVehicle() == this){
+    if (enabled && MultiVehicleManager::instance()->activeVehicle() == this){
         _captureJoystick();
     }
 
@@ -2059,7 +2055,7 @@ QString Vehicle::vehicleClassInternalName() const
 /// Returns the string to speak to identify the vehicle
 QString Vehicle::_vehicleIdSpeech()
 {
-    if (_toolbox->multiVehicleManager()->vehicles()->count() > 1) {
+    if (MultiVehicleManager::instance()->vehicles()->count() > 1) {
         return tr("Vehicle %1 ").arg(id());
     } else {
         return QString();
