@@ -21,6 +21,7 @@
 #include "QGCLoggingCategory.h"
 #include "QGCApplication.h"
 #include "SettingsManager.h"
+#include "PlanViewSettings.h"
 
 QGC_LOGGING_CATEGORY(InitialConnectStateMachineLog, "InitialConnectStateMachineLog")
 
@@ -314,7 +315,7 @@ void InitialConnectStateMachine::_stateRequestMission(StateMachine* stateMachine
     Vehicle*                    vehicle         = connectMachine->_vehicle;
     SharedLinkInterfacePtr      sharedLink      = vehicle->vehicleLinkManager()->primaryLink().lock();
 
-    bool missionDownload = qgcApp()->toolbox()->settingsManager()->planViewSettings()->missionDownload()->rawValue().toBool();
+    bool missionDownload = SettingsManager::instance()->planViewSettings()->missionDownload()->rawValue().toBool();
 
     disconnect(vehicle->_parameterManager, &ParameterManager::loadProgressChanged, connectMachine,
             &InitialConnectStateMachine::gotProgressUpdate);
@@ -341,7 +342,7 @@ void InitialConnectStateMachine::_stateRequestGeoFence(StateMachine* stateMachin
     Vehicle*                    vehicle         = connectMachine->_vehicle;
     SharedLinkInterfacePtr      sharedLink      = vehicle->vehicleLinkManager()->primaryLink().lock();
 
-    bool missionDownload = qgcApp()->toolbox()->settingsManager()->planViewSettings()->missionDownload()->rawValue().toBool();
+    bool missionDownload = SettingsManager::instance()->planViewSettings()->missionDownload()->rawValue().toBool();
 
     disconnect(vehicle->_missionManager, &MissionManager::progressPctChanged, connectMachine,
                &InitialConnectStateMachine::gotProgressUpdate);
@@ -373,7 +374,7 @@ void InitialConnectStateMachine::_stateRequestRallyPoints(StateMachine* stateMac
     Vehicle*                    vehicle         = connectMachine->_vehicle;
     SharedLinkInterfacePtr      sharedLink      = vehicle->vehicleLinkManager()->primaryLink().lock();
 
-    bool missionDownload = qgcApp()->toolbox()->settingsManager()->planViewSettings()->missionDownload()->rawValue().toBool();
+    bool missionDownload = SettingsManager::instance()->planViewSettings()->missionDownload()->rawValue().toBool();
 
     disconnect(vehicle->_geoFenceManager, &GeoFenceManager::progressPctChanged, connectMachine,
                &InitialConnectStateMachine::gotProgressUpdate);

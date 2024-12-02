@@ -381,7 +381,7 @@ QString QGCCorePlugin::firstRunPromptResource(int id)
         return QStringLiteral("/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml");
     case kOfflineVehicleFirstRunPromptId:
         return QStringLiteral("/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml");
-    case connectFirstRunPromptId:
+    case kConnectFirstRunPromptId:
         return QStringLiteral("/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml");
     default:
         return QString();

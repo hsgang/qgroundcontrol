@@ -66,6 +66,9 @@ class SettingsManager : public QObject
     Q_MOC_INCLUDE("RTKSettings.h")
     Q_MOC_INCLUDE("UnitsSettings.h")
     Q_MOC_INCLUDE("VideoSettings.h")
+    Q_MOC_INCLUDE("SIYISettings.h")
+    Q_MOC_INCLUDE("CloudSettings.h")
+    Q_MOC_INCLUDE("NTRIPSettings.h")
 #ifdef QGC_VIEWER3D
     Q_MOC_INCLUDE("Viewer3DSettings.h")
 #endif
@@ -90,6 +93,9 @@ class SettingsManager : public QObject
     Q_PROPERTY(QObject *rtkSettings                     READ rtkSettings                    CONSTANT)
     Q_PROPERTY(QObject *unitsSettings                   READ unitsSettings                  CONSTANT)
     Q_PROPERTY(QObject *videoSettings                   READ videoSettings                  CONSTANT)
+    Q_PROPERTY(QObject *cloudSettings                   READ cloudSettings                  CONSTANT)
+    Q_PROPERTY(QObject *ntripSettings                   READ ntripSettings                  CONSTANT)
+    Q_PROPERTY(QObject *siyiSettings                    READ siyiSettings                   CONSTANT)
 #ifdef QGC_VIEWER3D
     Q_PROPERTY(QObject *viewer3DSettings                READ viewer3DSettings               CONSTANT)
 #endif

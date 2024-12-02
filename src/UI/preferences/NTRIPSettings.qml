@@ -21,7 +21,6 @@ import QGroundControl.ScreenTools
 
 SettingsPage {
     property var    _ntripManager:      QGroundControl.ntripManager
-    property var    _settingsManager:   QGroundControl.settingsManager
     property var    _ntripSettings:     QGroundControl.settingsManager.ntripSettings
     property real   _urlFieldWidth:     ScreenTools.defaultFontPixelWidth * 25
 

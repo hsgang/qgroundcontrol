@@ -2074,15 +2074,13 @@ void Vehicle::_announceArmedChanged(bool armed)
         _armedPosition = _coordinate;
 
         //////////////////////upload takeoff record to firebase////////////////////
-        QGCApplication* app = qgcApp();
-        CloudManager* cloudManager = app->toolbox()->cloudManager();
 
         if(!_flying && !_initialConnectStateMachine->active()) {
             double latitude = _coordinate.latitude();
             double longitude = _coordinate.longitude();
             double altitude = _coordinate.altitude();
             double voltage = getFactGroup("battery0")->getFact("voltage")->rawValue().toDouble();
-            cloudManager->uploadTakeoffRecord(latitude, longitude, altitude, voltage);
+            CloudManager::instance()->uploadTakeoffRecord(latitude, longitude, altitude, voltage);
         }
         //////////////////////upload takeoff record to firebase////////////////////
 
@@ -3685,14 +3683,14 @@ void Vehicle::_writeCsvLine()
 
 void Vehicle::_initializeCustomLog()
 {
-    if(!_toolbox->settingsManager()->appSettings()->saveSensorLog()->rawValue().toBool()){
+    if(!SettingsManager::instance()->appSettings()->saveSensorLog()->rawValue().toBool()){
         //qInfo() << "disable save Sensor Log" ;
         return;
     }
     //QString now = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss");
     QString now = QDateTime::currentDateTime().toString("yyyy_MMdd_hhmmss");
     QString fileName = QString("vehicle%1_%2.csv").arg(_id).arg(now);
-    QDir saveDir(_toolbox->settingsManager()->appSettings()->sensorSavePath());
+    QDir saveDir(SettingsManager::instance()->appSettings()->sensorSavePath());
     _customLogFile.setFileName(saveDir.absoluteFilePath(fileName));
 
     QString text = "Open file for csv logging, Start csv logging!";
@@ -3794,10 +3792,7 @@ void Vehicle::_writeCustomLogLine()
 
 void Vehicle::_sendToDb()
 {
-    QGCApplication* app = qgcApp();
-    CloudManager* cloudManager = app->toolbox()->cloudManager();
-
-    if(cloudManager->signedIn() && _armed) {
+    if(CloudManager::instance()->signedIn() && _armed) {
         QMap<QString, QString> tags;
         tags["vehicle"] = _uid2Str;
         //tags["device"] = "sensor1";
@@ -3807,7 +3802,7 @@ void Vehicle::_sendToDb()
         fields["lon"] = getFactGroup("gps")->getFact("lon")->rawValue();
         fields["alt"] = getFact("altitudeRelative")->rawValue();
 
-        cloudManager->sendToDb("vehicleLog", tags, fields);
+        CloudManager::instance()->sendToDb("vehicleLog", tags, fields);
     }
 }
 

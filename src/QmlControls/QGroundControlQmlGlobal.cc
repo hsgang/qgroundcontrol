@@ -20,7 +20,6 @@
 #include "PositionManager.h"
 #include "QGCMapEngineManager.h"
 #include "ADSBVehicleManager.h"
-#include "NTRIPManager.h"
 #include "MissionCommandTree.h"
 #include "HorizontalFactValueGrid.h"
 #include "FlightPathSegment.h"
@@ -43,6 +42,8 @@
 #include "ToolStripAction.h"
 #include "ToolStripActionList.h"
 #include "VideoManager.h"
+#include "NTRIPManager.h"
+#include "CloudManager.h"
 #include "MultiVehicleManager.h"
 #ifndef NO_SERIAL_LINK
 #include "GPSManager.h"

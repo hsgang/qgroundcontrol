@@ -1,9 +1,6 @@
 #ifndef CLOUDMANAGER_H
 #define CLOUDMANAGER_H
 
-#include "QGCToolbox.h"
-#include "QGCApplication.h"
-
 #include <QObject>
 #include <QNetworkInformation>
 #include <QtNetwork/QNetworkAccessManager>
@@ -20,12 +17,17 @@
 class CloudManager;
 class DatabaseManager;
 
-class CloudManager : public QGCTool
+class CloudManager : public QObject
 {
     Q_OBJECT
 public:
-    CloudManager     (QGCApplication* app, QGCToolbox* toolbox);
+    CloudManager     (QObject *parent = nullptr);
     ~CloudManager    ();
+
+    static CloudManager *instance();
+    static void registerQmlTypes();
+
+    void init();
 
     Q_PROPERTY(QString networkStatus READ networkStatus NOTIFY networkStatusChanged)
     Q_PROPERTY(QString emailAddress READ emailAddress WRITE setEmailAddress NOTIFY emailAddressChanged)
@@ -59,7 +61,6 @@ public:
     void uploadTakeoffRecord(double latitude, double longitude, double altitude, double voltage);
 
     void setAPIKey (const QString & apiKey);
-    void setToolbox (QGCToolbox *toolbox);
     void setSignedIn (bool signedIn);
     void setSignedId (QString signedId);
     void setMessageString (QString messageString);

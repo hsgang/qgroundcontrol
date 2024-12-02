@@ -1,7 +1,10 @@
+#include "QGCApplication.h"
 #include "CloudManager.h"
 #include "CloudSettings.h"
 #include "SettingsManager.h"
+#include "AppSettings.h"
 
+#include <QtCore/qapplicationstatic.h>
 #include <QDebug>
 #include <QTimer>
 #include <QVariantMap>
@@ -14,14 +17,17 @@
 #include <QHttpMultiPart>
 #include <QXmlStreamReader>
 #include <QDateTime>
+#include <QtQml/qqml.h>
 
 const QString CloudManager::API_BASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:";
 const QString CloudManager::SIGN_UP_ENDPOINT = API_BASE_URL + "signUp?key=";
 const QString CloudManager::SIGN_IN_ENDPOINT = API_BASE_URL + "signInWithPassword?key=";
 const QString CloudManager::USER_INFO_ENDPOINT = "https://firestore.googleapis.com/v1/projects/next-todo-61f49/databases/(default)/documents/users/";
 
-CloudManager::CloudManager(QGCApplication* app, QGCToolbox* toolbox)
-    : QGCTool(app, toolbox)
+Q_APPLICATION_STATIC(CloudManager, _cloudManagerInstance);
+
+CloudManager::CloudManager(QObject *parent)
+    : QObject(parent)
     , m_apiKey(QString())
     , _nam(nullptr)
 {
@@ -51,10 +57,18 @@ CloudManager::~CloudManager()
     delete _nam;
 }
 
-void CloudManager::setToolbox(QGCToolbox* toolbox)
+CloudManager *CloudManager::instance()
 {
-    QGCTool::setToolbox(toolbox);
+    return _cloudManagerInstance();
+}
 
+void CloudManager::registerQmlTypes()
+{
+    (void) qmlRegisterUncreatableType<CloudManager>("QGroundControl", 1, 0, "CloudManager", "Reference only");
+}
+
+void CloudManager::init()
+{
     QString apiKey = CloudSettings().firebaseAPIKey()->rawValueString();
     this->setAPIKey(apiKey);
 }
@@ -502,13 +516,13 @@ void CloudManager::loadDirFile(QString dirName)
 
     QString uploadDirPath;
     if(dirName == "Sensors"){
-        uploadDirPath = _toolbox->settingsManager()->appSettings()->sensorSavePath();
+        uploadDirPath = SettingsManager::instance()->appSettings()->sensorSavePath();
     } else if (dirName == "Missions") {
-        uploadDirPath = _toolbox->settingsManager()->appSettings()->missionSavePath();
+        uploadDirPath = SettingsManager::instance()->appSettings()->missionSavePath();
     } else if (dirName == "Telemetry") {
-        uploadDirPath = _toolbox->settingsManager()->appSettings()->telemetrySavePath();
+        uploadDirPath = SettingsManager::instance()->appSettings()->telemetrySavePath();
     } else {
-        uploadDirPath = _toolbox->settingsManager()->appSettings()->sensorSavePath();
+        uploadDirPath = SettingsManager::instance()->appSettings()->sensorSavePath();
     }
 
     const QDir uploadDir(uploadDirPath);
@@ -815,7 +829,7 @@ void CloudManager::onDownloadFinished(QNetworkReply* reply, const QString& objec
 {
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray data = reply->readAll();
-        QString downloadDirPath = _toolbox->settingsManager()->appSettings()->missionSavePath();
+        QString downloadDirPath = SettingsManager::instance()->appSettings()->missionSavePath();
 
         // Save the file using the object name
         QString filePath = downloadDirPath + "/" + objectName;

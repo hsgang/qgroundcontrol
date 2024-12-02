@@ -119,6 +119,9 @@ RemoteIDSettings *SettingsManager::remoteIDSettings() const { return _remoteIDSe
 RTKSettings *SettingsManager::rtkSettings() const { return _rtkSettings; }
 UnitsSettings *SettingsManager::unitsSettings() const { return _unitsSettings; }
 VideoSettings *SettingsManager::videoSettings() const { return _videoSettings; }
+CloudSettings *SettingsManager::cloudSettings() const { return _cloudSettings; }
+NTRIPSettings *SettingsManager::ntripSettings() const { return _ntripSettings; }
+SIYISettings *SettingsManager::siyiSettings() const {return _siyiSettings; }
 #ifdef QGC_VIEWER3D
 Viewer3DSettings *SettingsManager::viewer3DSettings() const { return _viewer3DSettings; }
 #endif

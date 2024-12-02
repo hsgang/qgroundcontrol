@@ -9,19 +9,21 @@
 
 #include "NTRIPManager.h"
 #include "QGCLoggingCategory.h"
-#include "QGCToolbox.h"
 #include "QGCApplication.h"
 #include "SettingsManager.h"
 #include "NTRIPSettings.h"
+#include "AppSettings.h"
 
+#include <QtCore/qapplicationstatic.h>
+#include <QtQml/qqml.h>
 #include <QDebug>
 
 QGC_LOGGING_CATEGORY(NTRIPManagerLog, "qgc.ntrip.ntripmanager")
 
-//Q_APPLICATION_STATIC(NTRIPManager, _ntripManager, qgcApp()->toolbox()->settingsManager()->ntripSettings());
+Q_APPLICATION_STATIC(NTRIPManager, _ntripManagerInstance);
 
-NTRIPManager::NTRIPManager(QGCApplication *app, QGCToolbox *toolbox)
-    : QGCTool(app, toolbox)
+NTRIPManager::NTRIPManager(QObject *parent)
+    : QObject(parent)
 {
     qCDebug(NTRIPManagerLog) << "ntripmanager start";
 }
@@ -31,12 +33,19 @@ NTRIPManager::~NTRIPManager()
 
 }
 
-void NTRIPManager::setToolbox(QGCToolbox* toolbox)
+NTRIPManager *NTRIPManager::instance()
 {
-    QGCTool::setToolbox(toolbox);
+    return _ntripManagerInstance();
+}
 
-    //_ntripSettings = qgcApp()->toolbox()->settingsManager()->ntripSettings();
-    _ntripSettings = toolbox->settingsManager()->ntripSettings();
+void NTRIPManager::registerQmlTypes()
+{
+    (void) qmlRegisterUncreatableType<NTRIPManager>("QGroundControl", 1, 0, "NTRIPManager", "Reference only");
+}
+
+void NTRIPManager::init()
+{
+    _ntripSettings = SettingsManager::instance()->ntripSettings();
 
     Fact* const ntripEnabled = _ntripSettings->ntripEnabled();
     Fact* const hostAddress = _ntripSettings->ntripServerHostAddress();

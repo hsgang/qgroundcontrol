@@ -658,10 +658,8 @@ void PlanMasterController::_uploadToCloud(const QString& fileName)
     qDebug() << "_uploadToCloud()";
 
     QString uploadFileName = fileName + ".plan";
-    QGCApplication* app = qgcApp();
-    CloudManager* cloudManager = app->toolbox()->cloudManager();
     QJsonDocument saveDoc = saveToJson();
-    cloudManager->uploadJson(saveDoc, "Missions", uploadFileName);
+    CloudManager::instance()->uploadJson(saveDoc, "Missions", uploadFileName);
 }
 
 void PlanMasterController::getListFromCloud()
@@ -671,7 +669,5 @@ void PlanMasterController::getListFromCloud()
 
 void PlanMasterController::_getListFromCloud()
 {
-    QGCApplication* app = qgcApp();
-    CloudManager* cloudManager = app->toolbox()->cloudManager();
-    cloudManager->getListBucket("Missions");
+    CloudManager::instance()->getListBucket("Missions");
 }

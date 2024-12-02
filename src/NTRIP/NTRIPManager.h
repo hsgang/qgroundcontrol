@@ -19,22 +19,22 @@
 #include "RTCMMavlink.h"
 #include "NTRIPTCPLink.h"
 #include "NTRIPSettings.h"
-#include "QGCToolbox.h"
 
 class NTRIPTCPLink;
 class NTRIPSettings;
 
-class NTRIPManager : public QGCTool
+class NTRIPManager : public QObject
 {
     Q_OBJECT
 
 public:
-    NTRIPManager(QGCApplication *app, QGCToolbox *toolbox);
+    NTRIPManager(QObject *parent = nullptr);
     ~NTRIPManager();
 
-    //static NTRIPManager *instance();
+    static NTRIPManager *instance();
+    static void registerQmlTypes();
 
-    void setToolbox(QGCToolbox *toolbox) override;
+    void init();
 
     //Q_INVOKABLE void updateSettings();
     Q_INVOKABLE void stop ();

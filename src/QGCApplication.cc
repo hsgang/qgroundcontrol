@@ -65,6 +65,8 @@
 #include "Vehicle.h"
 #include "VehicleComponent.h"
 #include "VideoManager.h"
+#include "NTRIPManager.h"
+#include "CloudManager.h"
 
 #ifndef QGC_DISABLE_MAVLINK_INSPECTOR
 #include "MAVLinkInspectorController.h"
@@ -282,6 +284,8 @@ void QGCApplication::init()
     VideoManager::registerQmlTypes();
     QGCCorePlugin::registerQmlTypes();
     GPSRtk::registerQmlTypes();
+    CloudManager::registerQmlTypes();
+    NTRIPManager::registerQmlTypes();
 #ifdef QGC_VIEWER3D
     Viewer3DManager::registerQmlTypes();
 #endif
@@ -407,6 +411,9 @@ void QGCApplication::_initForNormalAppBoot()
 
     // Connect links with flag AutoconnectLink
     LinkManager::instance()->startAutoConnectedLinks();
+
+    NTRIPManager::instance()->init();
+    CloudManager::instance()->init();
 }
 
 void QGCApplication::deleteAllSettingsNextBoot(void)

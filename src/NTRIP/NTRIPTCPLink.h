@@ -20,7 +20,6 @@
 #include <QDateTime>
 
 #include "rtcm.h"
-#include "QGCToolbox.h"
 
 Q_DECLARE_LOGGING_CATEGORY(NTRIPTCPLinkLog)
 
@@ -130,7 +129,6 @@ private:
     int             _retryCount;
     RTCMParsing*    _rtcm_parsing{nullptr};
     NTRIPState      _state;
-    QGCToolbox      *_toolbox = nullptr;
     qint64          _receivedCount = 0;
 
     ConnectionStats _stats;

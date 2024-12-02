@@ -49,6 +49,7 @@ class QGCCorePlugin : public QObject
     Q_PROPERTY(int                  defaultSettings                 READ defaultSettings                                                CONSTANT)
     Q_PROPERTY(int                  offlineVehicleFirstRunPromptId  MEMBER kOfflineVehicleFirstRunPromptId                              CONSTANT)
     Q_PROPERTY(int                  unitsFirstRunPromptId           MEMBER kUnitsFirstRunPromptId                                       CONSTANT)
+    Q_PROPERTY(int                  connectFirstRunPromptId         MEMBER kConnectFirstRunPromptId                                     CONSTANT)
     Q_PROPERTY(QGCOptions           *options                        READ options                                                        CONSTANT)
     Q_PROPERTY(QmlObjectListModel   *customMapItems                 READ customMapItems                                                 CONSTANT)
     Q_PROPERTY(QString              brandImageIndoor                READ brandImageIndoor                                               CONSTANT)
