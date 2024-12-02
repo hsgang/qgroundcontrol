@@ -116,6 +116,7 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QGCApplication* app, QGCToolbox
     , _videoManager(VideoManager::instance())
     , _linkManager(LinkManager::instance())
     , _multiVehicleManager(MultiVehicleManager::instance())
+    , _ntripManager(NTRIPManager::instance())
 #ifndef QGC_AIRLINK_DISABLED
     , _airlinkManager(AirLinkManager::instance())
 #endif
@@ -168,7 +169,6 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
     _gpsRtkFactGroup        = GPSManager::instance()->gpsRtk()->gpsRtkFactGroup();
 #endif
     _cloudManager           = toolbox->cloudManager();
-    _ntripManager           = toolbox->ntripManager();
     _globalPalette          = new QGCPalette(this);
 }
 
