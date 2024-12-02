@@ -2,7 +2,7 @@
 
 # General
 
-set(QGC_APP_NAME "MissionNavigator" CACHE STRING "App Name")
+set(QGC_APP_NAME "Mission Navigator" CACHE STRING "App Name")
 set(QGC_APP_COPYRIGHT "Copyright (c) 2024 QGroundControl. All rights reserved." CACHE STRING "Copyright")
 set(QGC_APP_DESCRIPTION "Open Source Ground Control App" CACHE STRING "Description")
 set(QGC_ORG_NAME "MissionNavigator.org" CACHE STRING "Org Name")
