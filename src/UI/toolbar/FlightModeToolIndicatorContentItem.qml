@@ -93,7 +93,7 @@ ColumnLayout {
             }
 
             QGCCheckBoxSlider {
-                visible: modeEditCheckBox.checked
+                visible: modeEditCheckBox.checked && expanded
 
                 onClicked: {
                     hiddenFlightModesList = []

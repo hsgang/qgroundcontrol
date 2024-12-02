@@ -46,6 +46,12 @@
     "default":      "Offboard"
 },
 {
+    "name":         "apmHiddenFlightModes",
+    "shortDesc":    "Comma separated list of hidden flight modes",
+    "type":         "string",
+    "default":      ""
+},
+{
     "name":         "apmHiddenFlightModesMultiRotor",
     "shortDesc":    "Comma separated list of hidden flight modes for MultiRotor",
     "type":         "string",
