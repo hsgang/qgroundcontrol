@@ -47,7 +47,6 @@ target_link_libraries(Utilities
         Qt6::Qml
         FactSystem
         Geo
-        QGC
         QmlControls
         Settings
     PUBLIC

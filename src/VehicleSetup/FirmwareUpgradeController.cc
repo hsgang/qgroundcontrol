@@ -92,6 +92,7 @@ static QMap<int, QString> px4_board_name_map {
     {1123, "siyi_n7_default"},    
     {1124, "3dr_ctrl-zero-h7-oem-revg_default"},
     {5600, "zeroone_x6_default"},
+    {7000, "cuav_7-nano_default"},
 };
 
 uint qHash(const FirmwareUpgradeController::FirmwareIdentifier& firmwareId)
@@ -103,15 +104,15 @@ uint qHash(const FirmwareUpgradeController::FirmwareIdentifier& firmwareId)
 
 /// @Brief Constructs a new FirmwareUpgradeController Widget. This widget is used within the PX4VehicleConfig set of screens.
 FirmwareUpgradeController::FirmwareUpgradeController(void)
-    : _singleFirmwareURL                (qgcApp()->toolbox()->corePlugin()->options()->firmwareUpgradeSingleURL())
+    : _singleFirmwareURL                (QGCCorePlugin::instance()->options()->firmwareUpgradeSingleURL())
     , _singleFirmwareMode               (!_singleFirmwareURL.isEmpty())
     , _downloadingFirmwareList          (false)
     , _statusLog                        (nullptr)
     , _selectedFirmwareBuildType        (StableFirmware)
     , _image                            (nullptr)
     , _apmBoardDescriptionReplaceText   ("<APMBoardDescription>")
-    , _apmChibiOSSetting                (qgcApp()->toolbox()->settingsManager()->firmwareUpgradeSettings()->apmChibiOS())
-    , _apmVehicleTypeSetting            (qgcApp()->toolbox()->settingsManager()->firmwareUpgradeSettings()->apmVehicleType())
+    , _apmChibiOSSetting                (SettingsManager::instance()->firmwareUpgradeSettings()->apmChibiOS())
+    , _apmVehicleTypeSetting            (SettingsManager::instance()->firmwareUpgradeSettings()->apmVehicleType())
 {
     _manifestMavFirmwareVersionTypeToFirmwareBuildTypeMap["OFFICIAL"] =  StableFirmware;
     _manifestMavFirmwareVersionTypeToFirmwareBuildTypeMap["BETA"] =      BetaFirmware;

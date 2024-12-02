@@ -9,15 +9,12 @@
 
 #pragma once
 
-#include "QGCToolbox.h"
 #include "QmlUnitsConversion.h"
 #include "QGCLoggingCategory.h"
 
 #include <QtCore/QTimer>
 #include <QtCore/QPointF>
 #include <QtPositioning/QGeoCoordinate>
-
-class QGCApplication;
 
 class ADSBVehicleManager;
 class FactGroup;
@@ -55,12 +52,12 @@ Q_MOC_INCLUDE("UTMSPManager.h")
 Q_MOC_INCLUDE("AirLinkManager.h")
 #endif
 
-class QGroundControlQmlGlobal : public QGCTool
+class QGroundControlQmlGlobal : public QObject
 {
     Q_OBJECT
 
 public:
-    QGroundControlQmlGlobal(QGCApplication* app, QGCToolbox* toolbox);
+    QGroundControlQmlGlobal(QObject *parent = nullptr);
     ~QGroundControlQmlGlobal();
 
     enum AltMode {
@@ -246,9 +243,6 @@ public:
     bool utmspSupported() { return false; }
 #endif
 
-    // Overrides from QGCTool
-    virtual void setToolbox(QGCToolbox* toolbox);
-
     static void registerQmlTypes();
 
 signals:
@@ -267,22 +261,22 @@ private:
     VideoManager*           _videoManager           = nullptr;
     LinkManager*            _linkManager            = nullptr;
     MultiVehicleManager*    _multiVehicleManager    = nullptr;
+    NTRIPManager*           _ntripManager           = nullptr;
+    CloudManager*           _cloudManager           = nullptr;
+    SettingsManager*        _settingsManager        = nullptr;
+    QGCCorePlugin*          _corePlugin             = nullptr;
+    QGCPalette*             _globalPalette          = nullptr;
+#ifndef NO_SERIAL_LINK
+    FactGroup*              _gpsRtkFactGroup        = nullptr;
+#endif
 #ifndef QGC_AIRLINK_DISABLED
     AirLinkManager*         _airlinkManager         = nullptr;
 #endif
 #ifdef QGC_UTM_ADAPTER
-    UTMSPManager*            _utmspManager;
+    UTMSPManager*           _utmspManager           = nullptr;
 #endif
 
     double                  _flightMapInitialZoom   = 17.0;
-    QGCCorePlugin*          _corePlugin             = nullptr;
-    SettingsManager*        _settingsManager        = nullptr;
-#ifndef NO_SERIAL_LINK
-    FactGroup*              _gpsRtkFactGroup        = nullptr;
-#endif
-    NTRIPManager*           _ntripManager           = nullptr;
-    CloudManager*           _cloudManager           = nullptr;
-    QGCPalette*             _globalPalette          = nullptr;
     QmlUnitsConversion      _unitsConversion;
 
     bool                    _skipSetupPage          = false;
