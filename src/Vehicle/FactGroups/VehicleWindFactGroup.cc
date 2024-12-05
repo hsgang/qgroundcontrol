@@ -30,23 +30,25 @@ VehicleWindFactGroup::VehicleWindFactGroup(QObject* parent)
 
 void VehicleWindFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_message_t& message)
 {
-    switch (message.msgid) {
-    case MAVLINK_MSG_ID_WIND_COV:
-        _handleWindCov(message);
-        break;
-#if !defined(NO_ARDUPILOT_DIALECT)
-    case MAVLINK_MSG_ID_WIND:
-        _handleWind(message);
-        break;
-#endif
-    case MAVLINK_MSG_ID_HIGH_LATENCY:
-        _handleHighLatency(message);
-        break;
-    case MAVLINK_MSG_ID_HIGH_LATENCY2:
-        _handleHighLatency2(message);
-        break;
-    default:
-        break;
+    if(message.compid == MAV_COMPONENT::MAV_COMP_ID_AUTOPILOT1) {
+        switch (message.msgid) {
+        case MAVLINK_MSG_ID_WIND_COV:
+            _handleWindCov(message);
+            break;
+    #if !defined(NO_ARDUPILOT_DIALECT)
+        case MAVLINK_MSG_ID_WIND:
+            _handleWind(message);
+            break;
+    #endif
+        case MAVLINK_MSG_ID_HIGH_LATENCY:
+            _handleHighLatency(message);
+            break;
+        case MAVLINK_MSG_ID_HIGH_LATENCY2:
+            _handleHighLatency2(message);
+            break;
+        default:
+            break;
+        }
     }
 }
 

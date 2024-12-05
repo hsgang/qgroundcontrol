@@ -99,9 +99,9 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
         break;
 #endif
 // #if !defined(NO_ARDUPILOT_DIALECT)
-//     case MAVLINK_MSG_ID_WIND:
-//         _handleWind(message);
-//         break;
+    case MAVLINK_MSG_ID_WIND:
+        _handleWind(message);
+        break;
 // #endif
     default:
         break;
@@ -239,22 +239,22 @@ void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
 }
 
 // #if !defined(NO_ARDUPILOT_DIALECT)
-// void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
-// {
-//     mavlink_wind_t wind;
-//     mavlink_msg_wind_decode(&message, &wind);
+void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
+{
+    mavlink_wind_t wind;
+    mavlink_msg_wind_decode(&message, &wind);
 
-//     float direction = wind.direction;
-//     if (direction < 0) {
-//         direction += 360;
-//     }
+    float direction = wind.direction;
+    if (direction < 0) {
+        direction += 360;
+    }
 
-//     uint8_t compId = message.compid;
+    uint8_t compId = message.compid;
 
-//     if (compId == 158) {
-//         if(wind.direction)  {windDir()->setRawValue(direction);}
-//         if(wind.speed)      {windSpd()->setRawValue(wind.speed);}
-//     }
-// }
+    if (compId == MAV_COMPONENT::MAV_COMP_ID_PERIPHERAL) {
+        if(wind.direction)  {windDir()->setRawValue(direction);}
+        if(wind.speed)      {windSpd()->setRawValue(wind.speed);}
+    }
+}
 // #endif
 
