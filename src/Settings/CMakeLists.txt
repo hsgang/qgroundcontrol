@@ -11,8 +11,6 @@ qt_add_library(Settings STATIC
     AutoConnectSettings.h
     BatteryIndicatorSettings.cc
     BatteryIndicatorSettings.h
-    BatterySettings.cc
-    BatterySettings.h
     BrandImageSettings.cc
     BrandImageSettings.h
     CustomMavlinkActionsSettings.cc

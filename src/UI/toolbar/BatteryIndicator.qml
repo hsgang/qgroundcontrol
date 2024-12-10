@@ -38,12 +38,9 @@ Item {
     property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
     property bool   _showBoth:          _indicatorDisplay.rawValue === 2
 
-    property var    _batterySettings:   QGroundControl.settingsManager.batterySettings
-    property real   _batteryCellCount:  _batterySettings.batteryCellCount.value
-    property bool   _showCellVoltage:   QGroundControl.settingsManager.batterySettings.showCellVoltage.value
-
-    // Fetch battery settings
-    property var    batterySettings:    QGroundControl.settingsManager.batteryIndicatorSettings
+    property var    batterySettings:   QGroundControl.settingsManager.batteryIndicatorSettings
+    property real   batteryCellCount:  batterySettings.batteryCellCount.rawValue
+    property bool   showCellVoltage:   batterySettings.showCellVoltage.rawValue
 
     // Properties to hold the thresholds
     property int    threshold1:         batterySettings.threshold1.rawValue

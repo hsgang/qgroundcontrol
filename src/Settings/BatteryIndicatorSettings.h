@@ -34,6 +34,9 @@ public:
     Q_INVOKABLE void setThreshold1(int value);   // Set threshold1 with validation
     Q_INVOKABLE void setThreshold2(int value);   // Set threshold2 with validation
 
+    DEFINE_SETTINGFACT(batteryCellCount)
+    DEFINE_SETTINGFACT(showCellVoltage)
+
 private:
     void validateThreshold1();                  // Validate threshold1 value
     void validateThreshold2();                  // Validate threshold2 value

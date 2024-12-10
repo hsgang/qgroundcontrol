@@ -41,6 +41,18 @@
             "shortDesc": "Controls the visibility of the 'Battery State Display'",
             "type": "bool",
             "default": true
+        },
+        {
+            "name": "batteryCellCount",
+            "shortDesc": "Battery Cells",
+            "type": "uint8",
+            "default": 6
+        },
+        {
+            "name": "showCellVoltage",
+            "shortDesc": "Show Cell Voltages",
+            "type": "bool",
+            "default": false
         }
     ]
 }

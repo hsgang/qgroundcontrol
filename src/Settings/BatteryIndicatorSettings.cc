@@ -45,6 +45,9 @@ DECLARE_SETTINGSFACT_NO_FUNC(BatteryIndicatorSettings, threshold2)
     return _threshold2Fact;
 }
 
+DECLARE_SETTINGSFACT(BatteryIndicatorSettings, batteryCellCount)
+DECLARE_SETTINGSFACT(BatteryIndicatorSettings, showCellVoltage)
+
 // Change handlers for thresholds
 void BatteryIndicatorSettings::_threshold1Changed() {
     validateThreshold1(); // Call validation when threshold1 value changes

@@ -22,8 +22,8 @@ import MAVLink
 ToolIndicatorPage {
     showExpand: true
 
-    property bool       waitForParameters:  false   // UI won't show until parameters are ready
-    property real       _margins: ScreenTools.defaultFontPixelHeight / 2
+    property bool   waitForParameters:  false   // UI won't show until parameters are ready
+    property real   _margins: ScreenTools.defaultFontPixelHeight / 2
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property real   _labelledItemWidth:     ScreenTools.defaultFontPixelWidth * 10
@@ -34,15 +34,15 @@ ToolIndicatorPage {
 
     FactPanelController { id: controller }
 
-    property var    _batterySettings:  QGroundControl.settingsManager.batterySettings
-    property real   _batteryCellCount: _batterySettings.batteryCellCount.value
-    property bool   _showCellVoltage: QGroundControl.settingsManager.batterySettings.showCellVoltage.value
+    property var    batterySettings:  QGroundControl.settingsManager.batteryIndicatorSettings
+    property real   batteryCellCount: batterySettings.batteryCellCount.rawValue
+    property bool   showCellVoltage:  batterySettings.showCellVoltage.rawValue
 
     contentComponent: Component {
         ColumnLayout {
-            property var _batterySettings: QGroundControl.settingsManager.batterySettings
-            property real _batteryCellCount: _batterySettings.batteryCellCount.value
-            property real _margins: ScreenTools.defaultFontPixelHeight / 2
+            //property var batterySettings: QGroundControl.settingsManager.batteryIndicatorSettings
+            //property real batteryCellCount: batterySettings.batteryCellCount.rawValue
+            //property real margins: ScreenTools.defaultFontPixelHeight / 2
 
             Component {
                 id: batteryValuesAvailableComponent
@@ -100,7 +100,7 @@ ToolIndicatorPage {
                     }
                     LabelledLabel {
                         label:  qsTr("Cell Voltage")
-                        labelText:  (object.voltage.value / _batteryCellCount).toFixed(2) + " " + object.voltage.units
+                        labelText:  (object.voltage.value / batteryCellCount).toFixed(2) + " " + object.voltage.units
                     }
                     LabelledLabel {
                         label:  qsTr("Current")
@@ -167,12 +167,12 @@ ToolIndicatorPage {
                     text:                   qsTr("Show Cell Voltage")
                     Layout.columnSpan:      2
                     Layout.fillWidth:       true
-                    fact:                   _batterySettings.showCellVoltage
+                    fact:                   batterySettings.showCellVoltage
                 }
 
                 LabelledFactTextField {
                     label:                  qsTr("Battery Cells")
-                    fact:                   _batterySettings.batteryCellCount
+                    fact:                   batterySettings.batteryCellCount
                     visible:                true
                     textFieldPreferredWidth: _labelledItemWidth
                 }
