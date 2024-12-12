@@ -14,15 +14,15 @@ Rectangle {
     id:         ekfStatus
     height:     ekfStatusItem.height + ScreenTools.defaultFontPixelHeight / 2
     width:      ekfStatusItem.width + ScreenTools.defaultFontPixelHeight / 2
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.3)
     radius:     _margins
-    border.color: qgcPal.text
+    border.color: Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
 
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
     property bool   _available:     !isNaN(_activeVehicle.vibration.xAxis.rawValue)
     property real   _margins:       ScreenTools.defaultFontPixelWidth / 2
-    property real   _barWidth:      ScreenTools.defaultFontPixelWidth * 7
-    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 10
+    property real   _barWidth:      ScreenTools.defaultFontPixelWidth * 3
+    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 6
     property real   _velocity_variance:     _activeVehicle.ekfStatus.velocity_variance.rawValue
     property real   _pos_horiz_variance:    _activeVehicle.ekfStatus.pos_horiz_variance.rawValue
     property real   _pos_vert_variance:     _activeVehicle.ekfStatus.pos_vert_variance.rawValue
@@ -47,6 +47,8 @@ Rectangle {
             spacing:    ScreenTools.defaultFontPixelWidth * 2
 
             ColumnLayout {
+                Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 7
+
                 Rectangle {
                     id:                 veloVariance
                     height:             _barHeight
@@ -93,6 +95,8 @@ Rectangle {
             }
 
             ColumnLayout {
+                Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 7
+
                 Rectangle {
                     id:                 posHVariance
                     height:             _barHeight
@@ -139,6 +143,8 @@ Rectangle {
             }
 
             ColumnLayout {
+                Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 7
+
                 Rectangle {
                     id:                 posVVariance
                     height:             _barHeight
@@ -185,6 +191,8 @@ Rectangle {
             }
 
             ColumnLayout {
+                Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 7
+
                 Rectangle {
                     id:                 compassVariance
                     height:             _barHeight
@@ -231,6 +239,8 @@ Rectangle {
             }
 
             ColumnLayout {
+                Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 7
+
                 Rectangle {
                     id:                 terrainVariance
                     height:             _barHeight
