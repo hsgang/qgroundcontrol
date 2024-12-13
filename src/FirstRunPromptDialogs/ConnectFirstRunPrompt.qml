@@ -123,7 +123,7 @@ FirstRunPrompt {
                         mainWindow.showAppSettings(qsTr("Comm Links"))
                     }
 
-                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                    implicitWidth: ScreenTools.defaultFontPixelWidth * 8
                 }
             }
         }
