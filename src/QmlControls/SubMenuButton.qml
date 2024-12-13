@@ -49,6 +49,7 @@ Button {
         Rectangle {
             anchors.fill:   parent
             color:          qgcPal.buttonHighlight
+            radius:         ScreenTools.defaultFontPixelHeight * 0.25
             opacity:        showHighlight ? 1 : control.enabled && control.hovered ? .2 : 0
         }
 
