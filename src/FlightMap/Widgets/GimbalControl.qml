@@ -28,7 +28,7 @@ Rectangle {
     width:      mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    border.color:   qgcPal.text
+    border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
     border.width:   1
     radius:     _margins * 1.5
     visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
@@ -46,22 +46,29 @@ Rectangle {
     // The following settings and functions unify between a mavlink camera and a simple video stream for simple access
 
     property var    activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
-    property var    gimbalController:         activeVehicle ? activeVehicle.gimbalController : undefined
-    property var    activeGimbal:             activeVehicle ? gimbalController.activeGimbal : undefined
-    property bool   _gimbalAvailable:         activeGimbal ? true : false
-    property bool   _gimbalRollAvailable:     activeGimbal && activeGimbal.curRoll ? true : false
-    property bool   _gimbalPitchAvailable:    activeGimbal && activeGimbal.curPitch ? true : false
-    property bool   _gimbalYawAvailable:      activeGimbal && activeGimbal.curYaw ? true : false
-    property real   _gimbalRoll:              _gimbalAvailable && _gimbalRollAvailable ? activeGimbal.curRoll : 0
-    property real   _gimbalPitch:             _gimbalAvailable && _gimbalPitchAvailable ? activeGimbal.curPitch : 0
-    property real   _gimbalYaw:               _gimbalAvailable && _gimbalYawAvailable ? activeGimbal.curYaw : 0
-    property string _gimbalRollString:        activeVehicle && _gimbalRollAvailable ? _gimbalRoll.toFixed(2) : "--"
-    property string _gimbalPitchString:       activeVehicle && _gimbalPitchAvailable ? _gimbalPitch.toFixed(2) : "--"
-    property string _gimbalYawString:         activeVehicle && _gimbalYawAvailable ? _gimbalYaw.toFixed(2) : "--"
+    property var    gimbalController:       activeVehicle ? activeVehicle.gimbalController : undefined
+    property var    activeGimbal:           activeVehicle ? gimbalController.activeGimbal : undefined
+    property bool   _gimbalAvailable:       activeGimbal ? true : false
+    property bool   _gimbalRollAvailable:   activeGimbal && activeGimbal.curRoll ? true : false
+    property bool   _gimbalPitchAvailable:  activeGimbal && activeGimbal.curPitch ? true : false
+    property bool   _gimbalYawAvailable:    activeGimbal && activeGimbal.curYaw ? true : false
+    property real   _gimbalRoll:            _gimbalAvailable && _gimbalRollAvailable ? activeGimbal.curRoll : 0
+    property real   _gimbalPitch:           _gimbalAvailable && _gimbalPitchAvailable ? activeGimbal.curPitch : 0
+    property real   _gimbalYaw:             _gimbalAvailable && _gimbalYawAvailable ? activeGimbal.curYaw : 0
+    property string _gimbalRollString:      activeVehicle && _gimbalRollAvailable ? _gimbalRoll.toFixed(2) : "--"
+    property string _gimbalPitchString:     activeVehicle && _gimbalPitchAvailable ? _gimbalPitch.toFixed(2) : "--"
+    property string _gimbalYawString:       activeVehicle && _gimbalYawAvailable ? _gimbalYaw.toFixed(2) : "--"
 
     property double _localPitch: 0.0
     property double _localYaw: 0.0
     property int    _gimbalModeStatus: 0
+
+    property var    _dynamicCameras:    globals.activeVehicle ? globals.activeVehicle.cameraManager : null
+    property bool   _connected:         globals.activeVehicle ? !globals.activeVehicle.communicationLost : false
+    property int    _curCameraIndex:    _dynamicCameras ? _dynamicCameras.currentCamera : 0
+    property bool   _isCamera:          _dynamicCameras ? _dynamicCameras.cameras.count > 0 : false
+    property var    _camera:            _isCamera ? _dynamicCameras.cameras.get(_curCameraIndex) : null
+    property bool   _hasZoom:           _camera && _camera.hasZoom
 
     Rectangle{
         anchors.top: parent.bottom
@@ -83,18 +90,18 @@ Rectangle {
                 text: activeGimbal ? "Y: " + activeGimbal.bodyYaw.rawValue.toFixed(1) : "no value"
                 font.pointSize: _fontSize
             }
-            QGCLabel{
-                text: activeGimbal ? "R: " + activeGimbal.absoluteRoll.rawValue.toFixed(1) : "no value"
-                font.pointSize: _fontSize
-            }
-            QGCLabel{
-                text: activeGimbal ? "gimbalCnt: " + gimbalController.gimbals.count.toFixed(0) : "no value"
-                font.pointSize: _fontSize
-            }
-            QGCLabel{
-                text: activeGimbal ? "gimbalId: " + activeGimbal.deviceId.rawValue.toFixed(0) : "no value"
-                font.pointSize: _fontSize
-            }
+            // QGCLabel{
+            //     text: activeGimbal ? "R: " + activeGimbal.absoluteRoll.rawValue.toFixed(1) : "no value"
+            //     font.pointSize: _fontSize
+            // }
+            // QGCLabel{
+            //     text: activeGimbal ? "gimbalCnt: " + gimbalController.gimbals.count.toFixed(0) : "no value"
+            //     font.pointSize: _fontSize
+            // }
+            // QGCLabel{
+            //     text: activeGimbal ? "gimbalId: " + activeGimbal.deviceId.rawValue.toFixed(0) : "no value"
+            //     font.pointSize: _fontSize
+            // }
         }
     }
 
@@ -134,7 +141,7 @@ Rectangle {
                 id:             zoomInPress
                 anchors.fill:   parent
                 onClicked: {
-                    _mavlinkCamera.stepZoom(1)
+                    _camera.stepZoom(1)
                 }
             }
         }
@@ -352,7 +359,7 @@ Rectangle {
                 id:             zoomOutPress
                 anchors.fill:   parent
                 onClicked: {
-                    _mavlinkCamera.stepZoom(-1)
+                    _camera.stepZoom(-1)
                 }
             }
         }
