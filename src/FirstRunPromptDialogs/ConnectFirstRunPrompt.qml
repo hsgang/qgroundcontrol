@@ -115,6 +115,16 @@ FirstRunPrompt {
                     }
                     implicitWidth: ScreenTools.defaultFontPixelWidth * 12
                 }
+                QGCButton {
+                    text:       qsTr("Configure")
+                    font.bold: true
+                    onClicked: {
+                        close()
+                        mainWindow.showAppSettings(qsTr("Comm Links"))
+                    }
+
+                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                }
             }
         }
 

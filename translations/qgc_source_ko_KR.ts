@@ -12222,6 +12222,16 @@ Is this really what you want?</source>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
+        <source>Comm Links</source>
+        <translation>연결 관리</translation>
+    </message>
+    <message>
+        <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
         <source>Cloud Login</source>
         <translation>클라우드 로그인</translation>
     </message>
