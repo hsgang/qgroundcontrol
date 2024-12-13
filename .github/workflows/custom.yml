@@ -3,7 +3,6 @@ name: Custom build
 on:
   push:
     branches:
-      - master
       - 'Stable*'
     tags:
       - 'v*'
