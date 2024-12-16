@@ -182,7 +182,6 @@ Item {
         //-- Guided value slider (e.g. altitude)
         GuidedValueSlider {
             id:                 guidedValueSlider
-            anchors.margins:    _toolsMargin
             anchors.right:      parent.right
             anchors.top:        parent.top
             anchors.topMargin:  ScreenTools.defaultFontPixelHeight * 5

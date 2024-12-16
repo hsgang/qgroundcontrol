@@ -429,6 +429,19 @@ SetupPage {
                         fillMode:           Image.PreserveAspectFit
                         source:             controller.vehicle.multiRotor ? "/qmlimages/LandModeCopter.svg" : "/qmlimages/LandMode.svg"
                     }
+                    
+                    property Fact _rtlAltFact: {
+                        if (controller.firmwareMajorVersion < 4 || (controller.firmwareMajorVersion === 4 && controller.firmwareMinorVersion < 5)) {
+                            return controller.getParameterFact(-1, "ALT_HOLD_RTL")
+                        } else {
+                            return controller.getParameterFact(-1, "RTL_ALTITUDE")
+                        }
+                    }
+
+                    QGCLabel {
+                        text:           qsTr("Return to Launch")
+                        font.bold:      true
+                    }
 
                     LabelledFactTextField {
                         Layout.fillWidth:   true
