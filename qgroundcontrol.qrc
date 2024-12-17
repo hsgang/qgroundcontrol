@@ -48,6 +48,7 @@
         <file alias="ActuatorComponent.qml">src/AutoPilotPlugins/PX4/ActuatorComponent.qml</file>
         <file alias="ActuatorFact.qml">src/AutoPilotPlugins/PX4/ActuatorFact.qml</file>
         <file alias="ActuatorSlider.qml">src/AutoPilotPlugins/PX4/ActuatorSlider.qml</file>
+        <file alias="QGroundControl/Controls/QGCFlickableScrollIndicator.qml">src/QmlControls/QGCFlickableScrollIndicator.qml</file>
         <file alias="QGroundControl/FactControls/AltitudeFactTextField.qml">src/FactSystem/FactControls/AltitudeFactTextField.qml</file>
         <file alias="QGroundControl/FactControls/FactBitmask.qml">src/FactSystem/FactControls/FactBitmask.qml</file>
         <file alias="QGroundControl/FactControls/FactCheckBox.qml">src/FactSystem/FactControls/FactCheckBox.qml</file>
@@ -274,8 +275,6 @@
         <file alias="QGroundControl/Controls/QGCDynamicObjectManager.qml">src/QmlControls/QGCDynamicObjectManager.qml</file>
         <file alias="QGroundControl/Controls/QGCFileDialog.qml">src/QmlControls/QGCFileDialog.qml</file>
         <file alias="QGroundControl/Controls/QGCFlickable.qml">src/QmlControls/QGCFlickable.qml</file>
-        <file alias="QGroundControl/Controls/QGCFlickableHorizontalIndicator.qml">src/QmlControls/QGCFlickableHorizontalIndicator.qml</file>
-        <file alias="QGroundControl/Controls/QGCFlickableVerticalIndicator.qml">src/QmlControls/QGCFlickableVerticalIndicator.qml</file>
         <file alias="QGroundControl/Controls/QGCGroupBox.qml">src/QmlControls/QGCGroupBox.qml</file>
         <file alias="QGroundControl/Controls/QGCLabel.qml">src/QmlControls/QGCLabel.qml</file>
         <file alias="QGroundControl/Controls/QGCListView.qml">src/QmlControls/QGCListView.qml</file>
