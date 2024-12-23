@@ -75,6 +75,7 @@ private slots:
 
 private:
     void _setDefaults               ();
+    void _setForceVideoDecodeList();
 
 private:
     bool _noVideo = false;

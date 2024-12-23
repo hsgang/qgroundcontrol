@@ -3,6 +3,7 @@ Module QGroundControl.FlightDisplay
 FlightDisplayViewWidgets        1.0 FlightDisplayViewWidgets.qml
 FlyViewAltitudeIndicator        1.0 FlyViewAltitudeIndicator.qml
 FlyViewAtmosphericSensorView    1.0 FlyViewAtmosphericSensorView.qml
+CustomGuidedActionsController   1.0 CustomGuidedActionsController.qml
 FlyView                         1.0 FlyView.qml
 FlyViewBottomRightRowLayout     1.0 FlyViewBottomRightRowLayout.qml
 FlyViewBottomCenterRowLayout    1.0 FlyViewBottomCenterRowLayout.qml

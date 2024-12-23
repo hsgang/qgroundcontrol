@@ -70,6 +70,7 @@
         <file alias="QGroundControl/FlightDisplay/FlightDisplayViewGStreamer.qml">src/FlightDisplay/FlightDisplayViewGStreamer.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlightDisplayViewQtMultimedia.qml">src/FlightDisplay/FlightDisplayViewQtMultimedia.qml</file>
         <file alias="FlightDisplayViewUVC.qml">src/FlightDisplay/FlightDisplayViewUVC.qml</file>
+        <file alias="QGroundControl/FlightDisplay/CustomGuidedActionsController.qml">src/FlightDisplay/CustomGuidedActionsController.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlightDisplayViewVideo.qml">src/FlightDisplay/FlightDisplayViewVideo.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyView.qml">src/FlightDisplay/FlyView.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewAltitudeIndicator.qml">src/FlightDisplay/FlyViewAltitudeIndicator.qml</file>

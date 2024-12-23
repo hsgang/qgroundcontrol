@@ -74,7 +74,7 @@ void QGCCorePlugin::registerQmlTypes()
     (void) qmlRegisterUncreatableType<QGCFlyViewOptions>("QGroundControl", 1, 0, "QGCFlyViewOptions", QStringLiteral("Reference only"));
 }
 
-const QVariantList &QGCCorePlugin::analyzePages() const
+const QVariantList &QGCCorePlugin::analyzePages()
 {
     static const QVariantList analyzeList = {
         QVariant::fromValue(new QmlComponentInfo(
@@ -114,7 +114,7 @@ const QVariantList &QGCCorePlugin::analyzePages() const
     return analyzeList;
 }
 
-const QGCOptions *QGCCorePlugin::options() const
+QGCOptions *QGCCorePlugin::options()
 {
     return _defaultOptions;
 }
@@ -124,7 +124,7 @@ const QmlObjectListModel *QGCCorePlugin::customMapItems()
     return _emptyCustomMapItems;
 }
 
-bool QGCCorePlugin::adjustSettingMetaData(const QString &settingsGroup, FactMetaData &metaData) const
+bool QGCCorePlugin::adjustSettingMetaData(const QString &settingsGroup, FactMetaData &metaData)
 {
     if (settingsGroup == AppSettings::settingsGroup) {
         if (metaData.name() == AppSettings::indoorPaletteName) {
@@ -161,7 +161,7 @@ QString QGCCorePlugin::showAdvancedUIMessage() const
               "Are you sure you want to enable Advanced Mode?");
 }
 
-void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString &defaultSettingsGroup) const
+void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString &defaultSettingsGroup)
 {
     HorizontalFactValueGrid *const factValueGrid = new HorizontalFactValueGrid(defaultSettingsGroup);
 
@@ -240,7 +240,7 @@ void QGCCorePlugin::factValueGridCreateDefaultSettings(const QString &defaultSet
     factValueGrid->deleteLater();
 }
 
-QQmlApplicationEngine *QGCCorePlugin::createQmlApplicationEngine(QObject *parent) const
+QQmlApplicationEngine *QGCCorePlugin::createQmlApplicationEngine(QObject *parent)
 {
     QQmlApplicationEngine *const qmlEngine = new QQmlApplicationEngine(parent);
     qmlEngine->addImportPath(QStringLiteral("qrc:/qml"));
@@ -250,12 +250,12 @@ QQmlApplicationEngine *QGCCorePlugin::createQmlApplicationEngine(QObject *parent
     return qmlEngine;
 }
 
-void QGCCorePlugin::createRootWindow(QQmlApplicationEngine *qmlEngine) const
+void QGCCorePlugin::createRootWindow(QQmlApplicationEngine *qmlEngine)
 {
     qmlEngine->load(QUrl(QStringLiteral("qrc:/qml/MainRootWindow.qml")));
 }
 
-VideoReceiver *QGCCorePlugin::createVideoReceiver(QObject *parent) const
+VideoReceiver *QGCCorePlugin::createVideoReceiver(QObject *parent)
 {
 #ifdef QGC_GST_STREAMING
     return GStreamer::createVideoReceiver(parent);
@@ -266,7 +266,7 @@ VideoReceiver *QGCCorePlugin::createVideoReceiver(QObject *parent) const
 #endif
 }
 
-void *QGCCorePlugin::createVideoSink(QObject *parent, QQuickItem *widget) const
+void *QGCCorePlugin::createVideoSink(QObject *parent, QQuickItem *widget)
 {
 #ifdef QGC_GST_STREAMING
     return GStreamer::createVideoSink(parent, widget);
@@ -279,7 +279,7 @@ void *QGCCorePlugin::createVideoSink(QObject *parent, QQuickItem *widget) const
 #endif
 }
 
-void QGCCorePlugin::releaseVideoSink(void *sink) const
+void QGCCorePlugin::releaseVideoSink(void *sink)
 {
 #ifdef QGC_GST_STREAMING
     GStreamer::releaseVideoSink(sink);
@@ -290,7 +290,7 @@ void QGCCorePlugin::releaseVideoSink(void *sink) const
 #endif
 }
 
-const QVariantList &QGCCorePlugin::toolBarIndicators() const
+const QVariantList &QGCCorePlugin::toolBarIndicators()
 {
     static const QVariantList toolBarIndicatorList = QVariantList(
         {
@@ -301,7 +301,7 @@ const QVariantList &QGCCorePlugin::toolBarIndicators() const
     return toolBarIndicatorList;
 }
 
-QVariantList QGCCorePlugin::firstRunPromptsToShow() const
+QVariantList QGCCorePlugin::firstRunPromptsToShow()
 {
     QList<int> rgIdsToShow;
 

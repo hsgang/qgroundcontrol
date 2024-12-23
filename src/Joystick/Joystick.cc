@@ -15,6 +15,7 @@
 #include "Vehicle.h"
 #include "MultiVehicleManager.h"
 #include "FirmwarePlugin.h"
+#include "QGCCorePlugin.h"
 #include "QGCLoggingCategory.h"
 #include "GimbalController.h"
 #include "QmlObjectListModel.h"
@@ -22,7 +23,7 @@
 #include <QtCore/QSettings>
 #include <QtCore/QThread>
 
-// JoystickLog Category declaration moved to QGCLoggingCategory.cc to allow access in Vehicle
+QGC_LOGGING_CATEGORY(JoystickLog, "Joystick")
 QGC_LOGGING_CATEGORY(JoystickValuesLog, "JoystickValuesLog")
 
 int Joystick::_transmitterMode = 2;
@@ -40,8 +41,9 @@ AssignableButtonAction::AssignableButtonAction(QObject* parent, QString action_,
 {
 }
 
-Joystick::Joystick(const QString& name, int axisCount, int buttonCount, int hatCount)
-    : _name                 (name)
+Joystick::Joystick(const QString& name, int axisCount, int buttonCount, int hatCount, QObject *parent)
+    : QThread(parent)
+    , _name                 (name)
     , _axisCount            (axisCount)
     , _buttonCount          (buttonCount)
     , _hatCount             (hatCount)
@@ -1042,6 +1044,7 @@ void Joystick::_executeButtonAction(const QString& action, bool buttonDown)
         if (buttonDown) emit landingGearRetract();
     } /*else {
         if (buttonDown && _activeVehicle) {
+            emit unknownAction(action);
             for (int i=0; i<_customActionManager.actions()->count(); i++) {
                 auto customAction = _customActionManager.actions()->value<CustomAction*>(i);
                 if (action == customAction->label()) {
@@ -1123,10 +1126,15 @@ void Joystick::_buildActionList(Vehicle* activeVehicle)
     _assignableButtonActions.append(new AssignableButtonAction(this, _buttonActionLandingGearDeploy));
     _assignableButtonActions.append(new AssignableButtonAction(this, _buttonActionLandingGearRetract));
 
-//    for (int i=0; i<_customActionManager.actions()->count(); i++) {
-//        auto customAction = _customActionManager.actions()->value<CustomAction*>(i);
-//        _assignableButtonActions.append(new AssignableButtonAction(this, customAction->label()));
-//    }
+    const auto customActions = QGCCorePlugin::instance()->joystickActions();
+    for (const auto &action : customActions) {
+        _assignableButtonActions.append(new AssignableButtonAction(this, action.name, action.canRepeat));
+    }
+
+    for (int i=0; i<_customActionManager.actions()->count(); i++) {
+        auto customAction = _customActionManager.actions()->value<CustomAction*>(i);
+        _assignableButtonActions.append(new AssignableButtonAction(this, customAction->label()));
+    }
 
     for(int i = 0; i < _assignableButtonActions.count(); i++) {
         AssignableButtonAction* p = qobject_cast<AssignableButtonAction*>(_assignableButtonActions[i]);

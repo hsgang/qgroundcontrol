@@ -40,7 +40,7 @@ target_sources(Joystick
         JoystickSDL.h
 )
 
-target_compile_definitions(Joystick PRIVATE QGC_SDL_JOYSTICK)
+target_compile_definitions(Joystick PRIVATE QGC_SDL_JOYSTICK SDL_MAIN_HANDLED)
 
 FetchContent_Declare(SDL_GameControllerDB
     GIT_REPOSITORY https://github.com/mdqinc/SDL_GameControllerDB.git
@@ -62,14 +62,10 @@ qt_add_resources(Joystick "gamecontrollerdb.txt"
 qt_add_qml_module(Joystick
     URI QGroundControl.JoystickManager
     VERSION 1.0
-    OUTPUT_TARGETS Joystick_targets
     IMPORT_PATH ${QT_QML_OUTPUT_DIRECTORY}
 )
 
-cmake_print_variables(Joystick_targets)
-
-set(MINIMUM_SDL2_VERSION 2.30.0)
-
+set(MINIMUM_SDL2_VERSION 2.24.0)
 if(NOT QGC_BUILD_DEPENDENCIES)
     find_package(SDL2 ${MINIMUM_SDL2_VERSION})
     if(TARGET SDL2::SDL2)
@@ -128,6 +124,10 @@ set(SDL2_DISABLE_SDL2MAIN ON CACHE INTERNAL "" FORCE)
 # set(SDL_IBUS OFF CACHE INTERNAL "" FORCE)
 # set(SDL_MMX OFF CACHE INTERNAL "" FORCE)
 # set(SDL_VIRTUAL_JOYSTICK ON CACHE INTERNAL "" FORCE)
+
+# if(WIN32)
+#     set(SDL_DIRECTX OFF CACHE INTERNAL "" FORCE)
+# endif()
 FetchContent_MakeAvailable(SDL)
 
 target_link_libraries(Joystick PRIVATE SDL2::SDL2-static)
