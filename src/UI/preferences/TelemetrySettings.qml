@@ -297,7 +297,7 @@ RPM, ESC TELEMETRY, GENERATOR_STATUS, WINCH_STATUS"
 
         LabelledLabel {
             Layout.fillWidth:   true
-            label:              qsTr("Signing:")
+            label:              qsTr("Signing")
             labelText:          _activeVehicle ? (_activeVehicle.mavlinkSigning ? "On" : "Off") : _notConnectedStr
         }
     }
