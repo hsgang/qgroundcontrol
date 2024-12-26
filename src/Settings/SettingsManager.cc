@@ -90,7 +90,6 @@ void SettingsManager::init()
     _rtkSettings = new RTKSettings(this);
     _videoSettings = new VideoSettings(this);
     _siyiSettings = new SIYISettings(this);
-    _customMavlinkActionsSettings = new CustomMavlinkActionsSettings(this);
     _cloudSettings = new CloudSettings(this);
     _ntripSettings = new NTRIPSettings(this);
 #ifdef QGC_VIEWER3D
