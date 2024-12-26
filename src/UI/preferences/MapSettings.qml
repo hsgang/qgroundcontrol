@@ -31,6 +31,7 @@ Item {
     property var    _mapEngineManager:              QGroundControl.mapEngineManager
     property bool   _currentlyImportOrExporting:    _mapEngineManager.importAction === QGCMapEngineManager.ActionExporting || _mapEngineManager.importAction === QGCMapEngineManager.ActionImporting
     property real   _largeTextFieldWidth:           ScreenTools.defaultFontPixelWidth * 30
+    property real   _comboBoxPreferredWidth:        ScreenTools.defaultFontPixelWidth * 16
 
     property Fact   _mapProviderFact:   _settingsManager.flightMapSettings.mapProvider
     property Fact   _mapTypeFact:       _settingsManager.flightMapSettings.mapType
@@ -61,6 +62,7 @@ Item {
 
             LabelledComboBox {
                 label:      qsTr("Provider")
+                comboBoxPreferredWidth: _comboBoxPreferredWidth
                 model:      _mapEngineManager.mapProviderList
 
                 onActivated: (index) => {
@@ -77,6 +79,7 @@ Item {
 
             LabelledComboBox {
                 label: qsTr("Type")
+                comboBoxPreferredWidth: _comboBoxPreferredWidth
                 model: _mapEngineManager.mapTypeList(_mapProviderFact.rawValue)
 
                 onActivated: (index) => { _mapTypeFact.rawValue = comboBox.textAt(index) }
@@ -90,6 +93,7 @@ Item {
 
             LabelledComboBox {
                 label: qsTr("Elevation Provider")
+                comboBoxPreferredWidth: _comboBoxPreferredWidth
                 model: _mapEngineManager.elevationProviderList
 
                 onActivated: (index) => { _elevationProviderFact.rawValue = comboBox.textAt(index) }
