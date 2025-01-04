@@ -18,7 +18,7 @@ import QGroundControl.ScreenTools
 
 RowLayout {
     id:         control
-    spacing:    _margins / 2
+    spacing:    ScreenTools.defaultFontPixelWidth
 
     property bool   showExpand:           false   // Controls whether the expand widget is shown or not
     property bool   waitForParameters:    false   // UI won't show until parameters are ready

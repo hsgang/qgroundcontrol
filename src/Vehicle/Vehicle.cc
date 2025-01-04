@@ -1342,7 +1342,7 @@ void Vehicle::setEventsMetadata(uint8_t compid, const QString& metadataJsonFileN
 
     // get the mode group for some well-known flight modes
     int modeGroups[2]{-1, -1};
-    const QString modes[2]{"Takeoff", "Mission"};
+    const QString modes[2]{_firmwarePlugin->takeOffFlightMode(), _firmwarePlugin->missionFlightMode()};
     for (size_t i = 0; i < sizeof(modeGroups)/sizeof(modeGroups[0]); ++i) {
         uint8_t     base_mode;
         uint32_t    custom_mode;
@@ -1691,26 +1691,16 @@ bool Vehicle::flightModeSetAvailable()
 
 QStringList Vehicle::flightModes()
 {
-	if (_standardModes->supported()) {
-		return _standardModes->flightModes();
-	}
     return _firmwarePlugin->flightModes(this);
 }
 
 QString Vehicle::flightMode() const
 {
-    if (_standardModes->supported()) {
-        return _standardModes->flightMode(_custom_mode);
-    }
     return _firmwarePlugin->flightMode(_base_mode, _custom_mode);
 }
 
 bool Vehicle::setFlightModeCustom(const QString& flightMode, uint8_t* base_mode, uint32_t* custom_mode)
 {
-    if (_standardModes->supported()) {
-        *base_mode = MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
-        return _standardModes->setFlightMode(flightMode, custom_mode);
-    }
     return _firmwarePlugin->setFlightMode(flightMode, base_mode, custom_mode);
 }
 
@@ -3323,6 +3313,16 @@ QString Vehicle::takeControlFlightMode() const
 QString Vehicle::followFlightMode() const
 {
     return _firmwarePlugin->followFlightMode();
+}
+
+QString Vehicle::motorDetectionFlightMode() const
+{
+    return _firmwarePlugin->motorDetectionFlightMode();
+}
+
+QString Vehicle::stabilizedFlightMode() const
+{
+    return _firmwarePlugin->stabilizedFlightMode();
 }
 
 QString Vehicle::vehicleImageOpaque() const
