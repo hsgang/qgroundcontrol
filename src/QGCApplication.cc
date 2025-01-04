@@ -67,6 +67,8 @@
 #include "VideoManager.h"
 #include "NTRIPManager.h"
 #include "CloudManager.h"
+#include "ModelProfileManager.h"
+#include "ModelProfileSettings.h"
 
 #ifndef QGC_DISABLE_MAVLINK_INSPECTOR
 #include "MAVLinkInspectorController.h"
@@ -360,6 +362,7 @@ void QGCApplication::_initForNormalAppBoot()
     MultiVehicleManager::instance()->init();
     MAVLinkProtocol::instance()->init();
     VideoManager::instance()->init();
+    ModelProfileManager::instance()->init(SettingsManager::instance()->modelProfileSettings()->modelProfileFile());
 
     // Image provider for Optical Flow
     _qmlAppEngine->addImageProvider(qgcImageProviderId, new QGCImageProvider());

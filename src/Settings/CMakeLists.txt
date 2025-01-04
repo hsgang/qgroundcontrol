@@ -51,6 +51,8 @@ qt_add_library(Settings STATIC
     NTRIPSettings.h
     CloudSettings.cc
     CloudSettings.h
+    ModelProfileSettings.h
+    ModelProfileSettings.cc
 )
 
 target_link_libraries(Settings

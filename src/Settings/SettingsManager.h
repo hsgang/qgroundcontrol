@@ -36,6 +36,7 @@ class Viewer3DSettings;
 class SIYISettings;
 class NTRIPSettings;
 class CloudSettings;
+class ModelProfileSettings;
 
 Q_DECLARE_LOGGING_CATEGORY(SettingsManagerLog)
 
@@ -69,6 +70,7 @@ class SettingsManager : public QObject
     Q_MOC_INCLUDE("SIYISettings.h")
     Q_MOC_INCLUDE("CloudSettings.h")
     Q_MOC_INCLUDE("NTRIPSettings.h")
+    Q_MOC_INCLUDE("ModelProfileSettings.h")
 #ifdef QGC_VIEWER3D
     Q_MOC_INCLUDE("Viewer3DSettings.h")
 #endif
@@ -96,6 +98,7 @@ class SettingsManager : public QObject
     Q_PROPERTY(QObject *cloudSettings                   READ cloudSettings                  CONSTANT)
     Q_PROPERTY(QObject *ntripSettings                   READ ntripSettings                  CONSTANT)
     Q_PROPERTY(QObject *siyiSettings                    READ siyiSettings                   CONSTANT)
+    Q_PROPERTY(QObject *modelProfileSettings            READ modelProfileSettings           CONSTANT)
 #ifdef QGC_VIEWER3D
     Q_PROPERTY(QObject *viewer3DSettings                READ viewer3DSettings               CONSTANT)
 #endif
@@ -132,6 +135,7 @@ public:
     SIYISettings *siyiSettings() const;
     NTRIPSettings *ntripSettings() const;
     CloudSettings *cloudSettings() const;
+    ModelProfileSettings *modelProfileSettings() const;
 #ifdef QGC_VIEWER3D
     Viewer3DSettings *viewer3DSettings() const;
 #endif
@@ -161,6 +165,7 @@ private:
     SIYISettings *_siyiSettings = nullptr;
     NTRIPSettings *_ntripSettings = nullptr;
     CloudSettings *_cloudSettings = nullptr;
+    ModelProfileSettings *_modelProfileSettings = nullptr;
 #ifdef QGC_VIEWER3D
     Viewer3DSettings *_viewer3DSettings = nullptr;
 #endif

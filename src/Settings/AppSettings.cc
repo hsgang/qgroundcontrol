@@ -263,6 +263,7 @@ void AppSettings::_checkSavePathDirectories(void)
         savePathDir.mkdir(crashDirectory);
         savePathDir.mkdir(sensorDirectory);
         savePathDir.mkdir(customActionsDirectory);
+        savePathDir.mkdir(modelProfilesDirectory);
     }
 }
 
@@ -362,6 +363,16 @@ QString AppSettings::customActionsSavePath(void)
     if (!path.isEmpty() && QDir(path).exists()) {
         QDir dir(path);
         return dir.filePath(customActionsDirectory);
+    }
+    return QString();
+}
+
+QString AppSettings::modelProfilesSavePath(void)
+{
+    QString path = savePath()->rawValue().toString();
+    if(!path.isEmpty() && QDir(path).exists()) {
+        QDir dir(path);
+        return dir.filePath(modelProfilesDirectory);
     }
     return QString();
 }

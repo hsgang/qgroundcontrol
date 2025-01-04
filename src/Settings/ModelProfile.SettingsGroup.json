@@ -1,0 +1,13 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":         "modelProfileFile",
+    "shortDesc":    "Name of JSON Model Profile file for Fly View",
+    "type":         "string",
+    "default":      ""
+}
+]
+}

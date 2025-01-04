@@ -26,6 +26,7 @@ SettingsPage {
     property var    _settingsManager:                   QGroundControl.settingsManager
     property var    _flyViewSettings:                   _settingsManager.flyViewSettings
     property var    _customMavlinkActionsSettings:      _settingsManager.customMavlinkActionsSettings
+    property var    _modelProfileSettings:              _settingsManager.modelProfileSettings
     property Fact   _virtualJoystick:                   _settingsManager.appSettings.virtualJoystick
     property Fact   _virtualJoystickAutoCenterThrottle: _settingsManager.appSettings.virtualJoystickAutoCenterThrottle
     property Fact   _showAdditionalIndicatorsCompass:   _flyViewSettings.showAdditionalIndicatorsCompass
@@ -43,6 +44,12 @@ SettingsPage {
 
     function customActionList() {
         var fileModel = fileController.getFiles(_settingsManager.appSettings.customActionsSavePath, "*.json")
+        fileModel.unshift(qsTr("<None>"))
+        return fileModel
+    }
+
+    function modelProfileList() {
+        var fileModel = fileController.getFiles(_settingsManager.appSettings.modelProfilesSavePath, "*.json")
         fileModel.unshift(qsTr("<None>"))
         return fileModel
     }
@@ -109,6 +116,24 @@ SettingsPage {
             fact:               QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
             indexModel:         false
             comboBoxPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
+        }
+    }
+
+    SettingsGroupLayout {
+
+        Layout.fillWidth:   true
+        heading:            qsTr("Model Profiles")
+
+        LabelledComboBox {
+            Layout.fillWidth:   true
+            label:              qsTr("Model Profile")
+            model:              modelProfileList()
+            onActivated:        (index) => index === 0 ? _modelProfileSettings.modelProfileFile.rawValue = "" : _modelProfileSettings.modelProfileFile.rawValue = comboBox.currentText
+
+            Component.onCompleted: {
+                var index = comboBox.find(_modelProfileSettings.modelProfileFile.valueString)
+                comboBox.currentIndex = index === -1 ? 0 : index
+            }
         }
     }
 

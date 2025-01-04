@@ -79,6 +79,7 @@ public:
     Q_PROPERTY(QString crashSavePath            READ crashSavePath              NOTIFY savePathsChanged)
     Q_PROPERTY(QString sensorSavePath           READ sensorSavePath             NOTIFY savePathsChanged)
     Q_PROPERTY(QString customActionsSavePath    READ customActionsSavePath      NOTIFY savePathsChanged)
+    Q_PROPERTY(QString modelProfilesSavePath    READ modelProfilesSavePath      NOTIFY savePathsChanged)
 
     Q_PROPERTY(QString planFileExtension        MEMBER planFileExtension        CONSTANT)
     Q_PROPERTY(QString missionFileExtension     MEMBER missionFileExtension     CONSTANT)
@@ -99,6 +100,7 @@ public:
     QString crashSavePath         ();
     QString sensorSavePath        ();
     QString customActionsSavePath ();
+    QString modelProfilesSavePath ();
 
     // Helper methods for working with firstRunPromptIds QVariant settings string list
     static QList<int> firstRunPromptsIdsVariantToList   (const QVariant& firstRunPromptIds);
@@ -128,6 +130,7 @@ public:
     static constexpr const char* crashDirectory =           QT_TRANSLATE_NOOP("AppSettings", "CrashLogs");
     static constexpr const char* sensorDirectory =          QT_TRANSLATE_NOOP("AppSettings", "SensorLogs");
     static constexpr const char* customActionsDirectory =   QT_TRANSLATE_NOOP("AppSettings", "CustomActions");
+    static constexpr const char* modelProfilesDirectory =   QT_TRANSLATE_NOOP("AppSettings", "ModelProfiles");
 
 signals:
     void savePathsChanged();
