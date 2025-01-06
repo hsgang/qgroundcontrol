@@ -19,16 +19,33 @@ import QGroundControl.Palette
 //-------------------------------------------------------------------------
 //-- RC RSSI Indicator
 Item {
-    id:             _root
-    width:          rssiRow.width
+    id:             control
+    width:          rssiRow.width * 1.1
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
     property bool showIndicator: _activeVehicle.supportsRadio && _rcRSSIAvailable
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
-    property bool   _rcRSSIAvailable:   _activeVehicle ? _activeVehicle.rcRSSI > 0 && _activeVehicle.rcRSSI <= 100 : false
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
+    property bool   _rcRSSIAvailable:   _activeVehicle.rcRSSI > 0 && _activeVehicle.rcRSSI <= 100
+
+    Component {
+        id: rcRSSIInfoPage
+
+        ToolIndicatorPage {
+            showExpand: false
+
+            contentComponent: SettingsGroupLayout {
+                heading: qsTr("RC RSSI Status")
+
+                LabelledLabel {
+                    label:      qsTr("RSSI")
+                    labelText:  _activeVehicle.rcRSSI + "%"
+                }
+            }
+        }
+    }
 
     Row {
         id:             rssiRow
@@ -85,31 +102,6 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked:      mainWindow.showIndicatorDrawer(rcRSSIInfo)
-    }
-
-    Component {
-        id: rcRSSIInfo
-
-        ToolIndicatorPage{
-            showExpand: false
-
-            property real _margins: ScreenTools.defaultFontPixelHeight
-
-            contentComponent: Component {
-                ColumnLayout {
-                    spacing:                ScreenTools.defaultFontPixelHeight
-
-                    SettingsGroupLayout {
-                        heading: _activeVehicle ? (_activeVehicle.rcRSSI !== 255 ? qsTr("RC RSSI Status") : qsTr("RC RSSI Data Unavailable")) : qsTr("N/A", "No data available")
-
-                        LabelledLabel {
-                            label:      qsTr("RC RSSI")
-                            labelText:  _activeVehicle ? (_activeVehicle.rcRSSI + "%") : 0
-                        }
-                    }
-                }
-            }
-        }
+        onClicked:      mainWindow.showIndicatorDrawer(rcRSSIInfoPage, control)
     }
 }

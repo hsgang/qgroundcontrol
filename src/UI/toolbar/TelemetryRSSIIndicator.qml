@@ -27,7 +27,23 @@ Item {
     property bool showIndicator: _hasTelemetry
 
     property var  _activeVehicle:   QGroundControl.multiVehicleManager.activeVehicle
-    property bool _hasTelemetry:    _activeVehicle ? (_activeVehicle.telemetryLRSSI !== 0 || _activeVehicle.telemetryRRSSI !== 0 || _activeVehicle.telemetryTXBuffer !== 0 ) : false
+    property bool _hasTelemetry:    _activeVehicle.telemetryLRSSI !== 0
+
+    QGCColoredImage {
+        id:                 telemIcon
+        anchors.top:        parent.top
+        anchors.bottom:     parent.bottom
+        width:              height
+        sourceSize.height:  height
+        source:             "/qmlimages/TelemRSSI.svg"
+        fillMode:           Image.PreserveAspectFit
+        color:              qgcPal.buttonText
+    }
+
+    MouseArea {
+        anchors.fill:   parent
+        onClicked:      mainWindow.showIndicatorDrawer(telemRSSIInfoPage, control)
+    }
 
     Component {
         id: telemRSSIInfo
@@ -35,71 +51,42 @@ Item {
         ToolIndicatorPage{
             showExpand: false
 
-            property real _margins: ScreenTools.defaultFontPixelHeight / 2
+            contentComponent: SettingsGroupLayout {
+                heading: qsTr("Telemetry RSSI Status")
 
-            contentComponent: Component {
-                ColumnLayout {
-                    Layout.preferredWidth: parent.width
-                    spacing:                _margins
+                LabelledLabel {
+                    label:      qsTr("Local RSSI:")
+                    labelText:  _activeVehicle.telemetryLRSSI + " " + qsTr("dBm")
+                }
 
-                    QGCLabel {
-                        id:                 telemLabel
-                        text:               qsTr("Telemetry RSSI Status")
-                        font.family:        ScreenTools.demiboldFontFamily
-                        Layout.alignment:   Qt.AlignHCenter
-                    }
+                LabelledLabel {
+                    label:      qsTr("Remote RSSI:")
+                    labelText:  _activeVehicle.telemetryRRSSI + " " + qsTr("dBm")
+                }
 
-                    Rectangle {
-                        Layout.preferredHeight: telemColumnLayout.height + _margins //ScreenTools.defaultFontPixelHeight / 2
-                        Layout.preferredWidth:  telemColumnLayout.width + _margins //ScreenTools.defaultFontPixelHeight
-                        color:                  qgcPal.windowShade
-                        radius:                 _margins / 2
-                        Layout.fillWidth:       true
+                LabelledLabel {
+                    label:      qsTr("RX Errors:")
+                    labelText:  _activeVehicle.telemetryRXErrors
+                }
 
-                        ColumnLayout {
-                            id:                 telemColumnLayout
-                            anchors.margins:    _margins / 2
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
-                            spacing:            ScreenTools.defaultFontPixelHeight / 3
+                LabelledLabel {
+                    label:      qsTr("Errors Fixed:")
+                    labelText:  _activeVehicle.telemetryFixed
+                }
 
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Local RSSI")
-                                valueText:  _activeVehicle.telemetryLRSSI + " dBm"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Remote RSSI")
-                                valueText:  _activeVehicle.telemetryRRSSI + " dBm"
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("RX Errors")
-                                valueText:  _activeVehicle.telemetryRXErrors
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Errors Fixed")
-                                valueText:  _activeVehicle.telemetryFixed
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("TX Buffer")
-                                valueText:  _activeVehicle.telemetryTXBuffer
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Local Noise")
-                                valueText:  _activeVehicle.telemetryLNoise
-                            }
-                            Rectangle { height: 1; Layout.fillWidth: true; color: QGroundControl.globalPalette.text; opacity: 0.4; }
-                            ComponentLabelValueRow {
-                                labelText:  qsTr("Remote Noise")
-                                valueText:  _activeVehicle.telemetryRNoise
-                            }
-                        }
-                    }
+                LabelledLabel {
+                    label:      qsTr("TX Buffer:")
+                    labelText:  _activeVehicle.telemetryTXBuffer
+                }
+
+                LabelledLabel {
+                    label:      qsTr("Local Noise:")
+                    labelText:  _activeVehicle.telemetryLNoise
+                }
+
+                LabelledLabel {
+                    label:      qsTr("Remote Noise:")
+                    labelText:  _activeVehicle.telemetryRNoise
                 }
             }
         }

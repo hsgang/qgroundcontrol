@@ -18,43 +18,24 @@ import QGroundControl.Palette
 
 // Joystick Indicator
 Item {
-    id:             _root
-    width:          joystickRow.width
+    id:             control
+    width:          joystickRow.width * 1.1
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
     visible:        globals.activeVehicle ? globals.activeVehicle.sub : false
 
 
     Component {
-        id: joystickInfo
+        id: joystickInfoPage
 
-        Rectangle {
-            width:  joystickCol.width   + ScreenTools.defaultFontPixelWidth  * 3
-            height: joystickCol.height  + ScreenTools.defaultFontPixelHeight * 2
-            radius: ScreenTools.defaultFontPixelHeight * 0.5
-            color:  qgcPal.window
-            border.color:   qgcPal.text
+        ToolIndicatorPage {
+            showExpand: false
 
-            Column {
-                id:                 joystickCol
-                spacing:            ScreenTools.defaultFontPixelHeight * 0.5
-                width:              Math.max(joystickGrid.width, joystickLabel.width)
-                anchors.margins:    ScreenTools.defaultFontPixelHeight
-                anchors.centerIn:   parent
-
-                QGCLabel {
-                    id:             joystickLabel
-                    text:           qsTr("Joystick Status")
-                    font.bold:      true
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
+            contentComponent: SettingsGroupLayout {
+                heading: qsTr("Joystick Status")
 
                 GridLayout {
-                    id:                 joystickGrid
-                    anchors.margins:    ScreenTools.defaultFontPixelHeight
-                    columnSpacing:      ScreenTools.defaultFontPixelWidth
-                    columns:            2
-                    anchors.horizontalCenter: parent.horizontalCenter
+                    columns: 2
 
                     QGCLabel { text: qsTr("Connected:") }
                     QGCLabel {
@@ -109,8 +90,6 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked: {
-            mainWindow.showIndicatorPopup(_root, joystickInfo)
-        }
+        onClicked:      mainWindow.showIndicatorDrawer(joystickInfoPage, control)
     }
 }
