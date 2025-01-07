@@ -22,7 +22,7 @@ Item {
     width:          joystickRow.width * 1.1
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
-    visible:        globals.activeVehicle ? globals.activeVehicle.sub : false
+    visible:        globals.activeVehicle ? joystickManager.activeJoystick : false
 
 
     Component {
@@ -58,14 +58,6 @@ Item {
         anchors.bottom: parent.bottom
         spacing:        ScreenTools.defaultFontPixelWidth
 
-        Rectangle{
-            width:              1
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            color:              qgcPal.text
-            opacity:            0.5
-        }
-
         QGCColoredImage {
             width:              height
             anchors.top:        parent.top
@@ -85,6 +77,14 @@ Item {
                 // Joystick not available or there is no active vehicle
                 return "red"
             }
+        }
+
+        Rectangle{
+            width:              1
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            color:              qgcPal.text
+            opacity:            0.5
         }
     }
 
