@@ -16,7 +16,7 @@
 #include <QtPositioning/QGeoCoordinate>
 
 #include "QGCMAVLink.h"
-#include "FollowMe.h"
+#include "FollowMe/FollowMe.h"
 #include "FactMetaData.h"
 
 class VehicleComponent;

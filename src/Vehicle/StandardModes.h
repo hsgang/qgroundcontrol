@@ -10,7 +10,7 @@
 #pragma once
 
 #include "MAVLinkLib.h"
-#include "FirmwarePlugin.h"
+#include "FirmwarePlugin/FirmwarePlugin.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QString>

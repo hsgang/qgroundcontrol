@@ -76,7 +76,7 @@ Item {
 
             MouseArea {
                 anchors.fill:   parent
-                onClicked:      mainWindow.showIndicatorDrawer(vehicleMessagesPopup)
+                onClicked:      mainWindow.showIndicatorDrawer(vehicleMessagesPopup, control)
             }
 
             Rectangle {

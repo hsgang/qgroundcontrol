@@ -39,9 +39,8 @@ Item {
     property bool   _showVoltage:       _indicatorDisplay.rawValue === 1
     property bool   _showBoth:          _indicatorDisplay.rawValue === 2
 
-    property var    batterySettings:   QGroundControl.settingsManager.batteryIndicatorSettings
-    property real   batteryCellCount:  batterySettings.batteryCellCount.rawValue
-    property bool   showCellVoltage:   batterySettings.showCellVoltage.rawValue
+    property real   _batteryCellCount:  _batterySettings.batteryCellCount.rawValue
+    property bool   _showCellVoltage:   _batterySettings.showCellVoltage.rawValue
 
     // Properties to hold the thresholds
     property int threshold1: _batterySettings.threshold1.rawValue
@@ -160,7 +159,11 @@ Item {
 
             function getBatteryVoltageText() {
                 if (!isNaN(battery.voltage.rawValue)) {
-                    return battery.voltage.valueString + battery.voltage.units
+                    if (_showCellVoltage) {
+                        return (battery.voltage.rawValue / _batteryCellCount).toFixed(2) + battery.voltage.units
+                    } else {
+                        return battery.voltage.valueString + battery.voltage.units
+                    }
                 } else if (battery.chargeState.rawValue !== MAVLink.MAV_BATTERY_CHARGE_STATE_UNDEFINED) {
                     return battery.chargeState.enumStringValue
                 }
@@ -249,31 +252,9 @@ Item {
                     visible:                _showBoth || _showPercentage
                 }
             }            
-
-//            ColumnLayout {
-//                id:                     batteryInfoColumn
-//                anchors.top:            parent.top
-//                anchors.bottom:         parent.bottom
-//                spacing:                0
-
-//                QGCLabel {
-//                    Layout.alignment:       Qt.AlignHCenter
-//                    verticalAlignment:      Text.AlignVCenter
-//                    color:                  getBatteryColor()
-//                    text:                   getBatteryPercentageText()
-//                    font.pointSize:         _showBoth ? ScreenTools.defaultFontPointSize : ScreenTools.mediumFontPointSize
-//                    visible:                _showBoth || _showPercentage
-//                }
-
-//                QGCLabel {
-//                    Layout.alignment:       Qt.AlignHCenter
-//                    font.pointSize:         _showBoth ? ScreenTools.defaultFontPointSize : ScreenTools.mediumFontPointSize
-//                    color:                  getBatteryColor()
-//                    text:                   getBatteryVoltageText()
-//                    visible:                _showBoth || _showVoltage
-//                }
-//            }
         }
+    }
+
     Component {
         id: batteryContentComponent
 
@@ -285,7 +266,7 @@ Item {
 
                 QtObject {
                     property bool functionAvailable:         battery.function.rawValue !== MAVLink.MAV_BATTERY_FUNCTION_UNKNOWN
-                    property bool showFunction:              functionAvailable && battery.function.rawValue != MAVLink.MAV_BATTERY_FUNCTION_ALL
+                    property bool showFunction:              functionAvailable && battery.function.rawValue !== MAVLink.MAV_BATTERY_FUNCTION_ALL
                     property bool temperatureAvailable:      !isNaN(battery.temperature.rawValue)
                     property bool currentAvailable:          !isNaN(battery.current.rawValue)
                     property bool mahConsumedAvailable:      !isNaN(battery.mahConsumed.rawValue)
@@ -373,7 +354,7 @@ Item {
                     id:             editModeCheckBox
                     label:          qsTr("Value")
                     fact:           _fact
-                    visible:        _fact,visible
+                    visible:        _fact.visible
 
                     property Fact _fact: QGroundControl.settingsManager.batteryIndicatorSettings.valueDisplay
                 }

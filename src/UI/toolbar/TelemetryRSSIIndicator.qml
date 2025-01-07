@@ -29,16 +29,16 @@ Item {
     property var  _activeVehicle:   QGroundControl.multiVehicleManager.activeVehicle
     property bool _hasTelemetry:    _activeVehicle.telemetryLRSSI !== 0
 
-    QGCColoredImage {
-        id:                 telemIcon
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
-        width:              height
-        sourceSize.height:  height
-        source:             "/qmlimages/TelemRSSI.svg"
-        fillMode:           Image.PreserveAspectFit
-        color:              qgcPal.buttonText
-    }
+    // QGCColoredImage {
+    //     id:                 telemIcon
+    //     anchors.top:        parent.top
+    //     anchors.bottom:     parent.bottom
+    //     width:              height
+    //     sourceSize.height:  height
+    //     source:             "/qmlimages/TelemRSSI.svg"
+    //     fillMode:           Image.PreserveAspectFit
+    //     color:              qgcPal.buttonText
+    // }
 
     MouseArea {
         anchors.fill:   parent

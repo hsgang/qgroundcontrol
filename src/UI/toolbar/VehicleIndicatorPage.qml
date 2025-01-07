@@ -149,55 +149,63 @@ ToolIndicatorPage {
     }
 
     expandedComponent : Component {
+
         SettingsGroupLayout{
             heading: qsTr("Vehicle Parameter")
 
-            LabelledFactSlider {
+            FactSlider {
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 60
+                Layout.fillWidth:   true
                 label:      "Responsiveness"
                 fact:       atcInputTCFact
-                from:       0.01
-                to:         0.5
-                stepSize:   0.01
+                //from:       0.01
+                //to:         0.5
+                majorTickStepSize:  0.1
                 visible:    true
             }
-            LabelledFactSlider {
+            FactSlider {
+                Layout.fillWidth:   true
                 label:      "Loiter Horizontal Speed(cm/s)"
                 fact:       loitSpeedFact
                 from:       500
                 to:         1500
-                stepSize:   100
+                majorTickStepSize:   10
                 visible:    true
             }
-            LabelledFactSlider {
+            FactSlider {
+                Layout.fillWidth:   true
                 label:      "WP Horizontal Speed(cm/s)"
                 fact:       wpnavSpeedFact
                 from:       500
                 to:         1500
-                stepSize:   100
+                majorTickStepSize:   10
                 visible:    true
             }
-            LabelledFactSlider {
+            FactSlider {
+                Layout.fillWidth:   true
                 label:      "WP Climb Speed(cm/s)"
                 fact:       wpnavSpeedUpFact
                 from:       100
                 to:         500
-                stepSize:   50
+                majorTickStepSize:   10
                 visible:    true
             }
-            LabelledFactSlider {
+            FactSlider {
+                Layout.fillWidth:   true
                 label:      "WP Descent Speed(cm/s)"
                 fact:       wpnavSpeedDnFact
                 from:       100
                 to:         500
-                stepSize:   50
+                majorTickStepSize:   10
                 visible:    true
             }
-            LabelledFactSlider {
+            FactSlider {
+                Layout.fillWidth:   true
                 label:      "Mission Turning Radius(cm)"
                 fact:       wpnavRadiusFact
                 from:       200
                 to:         1000
-                stepSize:   100
+                majorTickStepSize:   10
                 visible:    true
             }
 

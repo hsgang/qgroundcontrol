@@ -21,7 +21,7 @@ import QGroundControl.FactControls
 
 //-------------------------------------------------------------------------
 Item {
-    id:             _root
+    id:             control
     width:          vehicleRow.width
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
@@ -69,7 +69,7 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked:      mainWindow.showIndicatorDrawer(vehicleIndicatorPage)
+        onClicked:      mainWindow.showIndicatorDrawer(vehicleIndicatorPage, control)
     }
 
     Component {

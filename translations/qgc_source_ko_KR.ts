@@ -4124,6 +4124,16 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Battery Display</source>
+        <translation>배터리 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Coloring</source>
+        <translation>표시 색상</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
         <source>Battery Settings</source>
         <translation>배터리 설정</translation>
     </message>
@@ -4156,6 +4166,21 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
         <source>Battery Critical Action</source>
         <translation>위험전압시 행동</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Vehicle Power</source>
+        <translation>전원</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Power</source>
+        <translation>전원</translation>
     </message>
 </context>
 <context>
@@ -5665,6 +5690,59 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/VehicleSetup/FirmwareImage.cc" line="437"/>
         <source>Unabled to open firmware file %1, %2</source>
         <translation>펌웨어 파일 %1을 열 수 없습니다: %2</translation>
+    </message>
+</context>
+<context>
+    <name>ArduCopterFirmwarePlugin</name>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>Stabilize</source>
+        <translation>수평 유지</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>Acro</source>
+        <translation>아크로</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>Altitude Hold</source>
+        <translation>고도 유지</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>Auto</source>
+        <translation>자동 경로</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>Guided</source>
+        <translation>유도 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>Loiter</source>
+        <translation>로이터</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>RTL</source>
+        <translation>복귀</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>Land</source>
+        <translation>착륙</translation>
+    </message>        
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>Brake</source>
+        <translation>정지</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <source>Smart RTL</source>
+        <translation>스마트 복귀</translation>
     </message>
 </context>
 <context>
@@ -7633,7 +7711,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="52"/>
         <source>Network RTK</source>
-        <translation>네트워크 RTK</translation>
+        <translation>RTK 보정신호</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="52"/>
@@ -7648,7 +7726,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="79"/>
         <source>Maps</source>
-        <translation>지도</translation>
+        <translation>지도 데이터</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="86"/>
@@ -7904,6 +7982,16 @@ Click Ok to start the auto-tuning process.
         <translation>가상 조이스틱</translation>
     </message>
     <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="125"/>
+        <source>Model Profiles</source>
+        <translation>기체 프로필</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="129"/>
+        <source>Model Profile</source>
+        <translation>프로필 파일</translation>
+    </message>
+    <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="153"/>
         <source>Instrument Panel</source>
         <translation>장치 정보 패널</translation>
@@ -8056,6 +8144,31 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>MAVLink 2 Signing</source>
+        <translation>MAVLink 2 서명</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>Signing keys should only be sent to the vehicle over secure links.</source>
+        <translation>Signing keys should only be sent to the vehicle over secure links.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>Key</source>
+        <translation>키값</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>Send to Vehicle</source>
+        <translation>기체로 전송</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
+        <source>Signing key has changed. Don't forget to send to Vehicle(s) if needed.</source>
+        <translation>Signing key has changed. Don't forget to send to Vehicle(s) if needed.</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/TelemetrySettings.qml" line="1"/>
         <source>Enable</source>
         <translation>활성화</translation>
     </message>
@@ -8177,8 +8290,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
-        <source>Connect to NTRIP server (Required Reboot)</source>
-        <translation>NTRIP 서버 연결 (애플리케이션 재시작 필요)</translation>
+        <source>Enable NTRIP</source>
+        <translation>NTRIP 활성화</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
@@ -8275,6 +8388,106 @@ Click Ok to start the auto-tuning process.
         <source>Connect Rate</source>
         <translation>연결 속도</translation>
     </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="47"/>
+        <source>Survey-in Active</source>
+        <translation>측량 수행 활성화</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="47"/>
+        <source>RTK Streaming</source>
+        <translation>RTK 스트리밍</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="61"/>
+        <source>Duration</source>
+        <translation>소요 시간</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="61"/>
+        <source>Base RTK Status</source>
+        <translation>기준 RTK 상태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="70"/>
+        <source>Accuracy</source>
+        <translation>정확도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="70"/>
+        <source>Current Accuracy</source>
+        <translation>현재 정확도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="77"/>
+        <source>Satellites</source>
+        <translation>위성수</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="61"/>
+        <source>Base RTK Settings</source>
+        <translation>기준 RTK 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Auto Connect</source>
+        <translation>자동 연결</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Perform Survey-In</source>
+        <translation>Survey-In 수행</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Survey in accuracy (U-blox only)</source>
+        <translation>관측 정확도 (U-blox only)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Minimum observation time</source>
+        <translation>최소 관측 시간</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Use Specified Base Position</source>
+        <translation>특정 기준 위치 사용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Base Position Latitude</source>
+        <translation>기준 위치 위도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Base Position Longitude</source>
+        <translation>기준 위치 경도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Base Position Alt (WGS84)</source>
+        <translation>기준 위치 고도 (WGS84)</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Base Position Accuracy</source>
+        <translation>기준 위치 정확도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Current Base Position</source>
+        <translation>현재 기준 위치</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Save</source>
+        <translation>저장</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
+        <source>Not Yet Valid</source>
+        <translation>아직 유효하지 않음</translation>
+    </message>
 </context>
 <context>
     <name>NTRIPManager</name>
@@ -8335,6 +8548,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
         <source>Type</source>
         <translation>유형</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
+        <source>Elevation Provider</source>
+        <translation>고도 정보 제공</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/MapSettings.qml" line="510"/>
@@ -9012,7 +9230,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="77"/>
         <source>Set the vehicle flight mode to %1</source>
-        <translation>비행 모드를 %1로 변경</translation>
+        <translation>비행 모드를 %1 모드로 변경</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="88"/>

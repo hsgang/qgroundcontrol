@@ -10,7 +10,7 @@ import QGroundControl.Palette               1.0
 import SiYi.Object 1.0
 
 Item {
-    id:             _root
+    id:             control
     width:          siyirssiRow.width
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
@@ -76,11 +76,11 @@ Item {
 
     MouseArea {
         anchors.fill:   parent
-        onClicked:      mainWindow.showIndicatorDrawer(siyiStatusInfo)
+        onClicked:      mainWindow.showIndicatorDrawer(siyiStatusInfoPage, control)
     }
 
     Component {
-        id: siyiStatusInfo
+        id: siyiStatusInfoPage
 
         ToolIndicatorPage{
             showExpand: false
