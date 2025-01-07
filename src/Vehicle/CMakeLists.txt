@@ -55,7 +55,6 @@ target_link_libraries(Vehicle
         Audio
         AutoPilotPlugins
         Camera
-        FirmwarePlugin
         Joystick
         MockLink
         PositionManager
@@ -68,6 +67,7 @@ target_link_libraries(Vehicle
         Qt6::Positioning
         Comms
         FactSystem
+        FirmwarePlugin
         Gimbal
         LibEventsWrapper
         MAVLink

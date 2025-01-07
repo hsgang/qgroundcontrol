@@ -34,7 +34,7 @@ jobs:
 
     env:
       ARTIFACT: QGroundControl.dmg
-      QT_VERSION: 6.6.3
+      QT_VERSION: 6.8.1
       GST_VERSION: 1.22.12
 
     steps:
@@ -69,13 +69,12 @@ jobs:
           echo "PKG_CONFIG_PATH=/Library/Frameworks/GStreamer.framework/lib/pkgconfig:/Library/Frameworks/GStreamer.framework/lib/gstreamer-1.0/pkgconfig:${{ env.PKG_CONFIG_PATH }}" >> "$GITHUB_ENV"
 
       - name: Set Up Cache
-        uses: hendrikmuhs/ccache-action@v1.2
+        uses: hendrikmuhs/ccache-action@main
         with:
           key: ${{ runner.os }}-${{ matrix.BuildType }}
-          restore-keys: ${{ runner.os }}-${{ matrix.BuildType }}
           max-size: 1G
-          append-timestamp: false
           save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+          evict-old-files: 'job'
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v4

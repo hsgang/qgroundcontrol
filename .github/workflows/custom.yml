@@ -35,7 +35,7 @@ jobs:
 
     env:
       ARTIFACT: QGroundControl-installer.exe
-      QT_VERSION: 6.6.3
+      QT_VERSION: 6.8.1
       GST_VERSION: 1.22.12
       SCCACHE_GHA_ENABLED: "true"
 
@@ -77,24 +77,23 @@ jobs:
       #   uses: mozilla-actions/sccache-action@v0.0.5
 
       - name: Set Up Cache
-        uses: hendrikmuhs/ccache-action@v1.2
+        uses: hendrikmuhs/ccache-action@main
         with:
           key: ${{ runner.os }}-${{ matrix.Arch }}-${{ matrix.BuildType }}
-          restore-keys: ${{ runner.os }}-${{ matrix.Arch }}-${{ matrix.BuildType }}
           max-size: 1G
-          append-timestamp: false
           variant: sccache
           save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+          evict-old-files: 'job'
 
       - name: Install Qt for Windows (x64)
         if: matrix.Arch == 'x64'
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          aqtversion: ==3.1.*
+          aqtversion: ==3.1.19
           host: windows
           target: desktop
-          arch: win64_msvc2019_64
+          arch: win64_msvc2022_64
           dir: ${{ runner.temp }}
           modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
           cache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
@@ -107,7 +106,7 @@ jobs:
           aqtversion: ==3.1.*
           host: windows
           target: desktop
-          arch: win64_msvc2019_arm64
+          arch: win64_msvc2022_arm64 # _cross_compiled
           dir: ${{ runner.temp }}
           extra: --autodesktop
           modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
