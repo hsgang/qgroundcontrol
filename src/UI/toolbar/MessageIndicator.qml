@@ -126,9 +126,9 @@ Item {
             var component = match[3];
             var content = match[4];
             content = content.replace(/<[^>]*>/g, ''); // HTML 태그 제거
-            messageModel.insert(0, {message: content, time: time, type: type, component: component, checked: false});
+            messageModel.insert(0, {"message": content, "time": time, "type": type, "component": component, "checked": false});
             updateUnreadMessageCount();
-            // console.log(message);
+            console.log(message);
             // console.log(type);
             // console.log(time);
             // console.log(component);
@@ -160,7 +160,7 @@ Item {
 
         ToolIndicatorPage {
             id:             toolIndicatorPage
-            showExpand:         false
+            showExpand:     false
 
             Component.onDestruction: {
                 for (var i = 0; i < messageModel.count; i++) {
@@ -174,12 +174,12 @@ Item {
                     id: messageListView
 
                     width:                      ScreenTools.defaultFontPixelWidth * 60
-                    height:                     dividerHeight - ScreenTools.defaultFontPixelHeight // ScreenTools.defaultFontPixelHeight * 20 //
+                    height:                     toolIndicatorPage.childrenRect.height //ScreenTools.defaultFontPixelHeight * 20
                     verticalLayoutDirection:    ListView.TopToBottom
                     spacing:                    ScreenTools.defaultFontPixelWidth
 
-                    delegate: messageDelegate
                     model: messageModel
+                    delegate: messageDelegate
 
                     Component {
                         id: messageDelegate
