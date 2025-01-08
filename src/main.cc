@@ -212,8 +212,8 @@ int main(int argc, char *argv[])
 
     // 스플래시 이미지 크기 조절 방법 1: 고정 크기로 조절
     QPixmap scaledPixmap = originalPixmap.scaled(
-        screenGeometry.width()/2,
-        screenGeometry.height()/2,
+        screenGeometry.width()/3,
+        screenGeometry.height()/3,
         Qt::KeepAspectRatio, // 가로세로 비율 유지
         Qt::SmoothTransformation // 고품질 크기 조절
     );
@@ -221,6 +221,7 @@ int main(int argc, char *argv[])
     QSplashScreen splash(scaledPixmap);
     splash.show();
 
+    splash.showMessage(QCoreApplication::applicationVersion(), Qt::AlignRight | Qt::AlignBottom, Qt::white);
     ////////////////Splash image////////////////////////
 
     app.processEvents();
