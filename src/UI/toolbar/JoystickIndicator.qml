@@ -22,8 +22,8 @@ Item {
     width:          joystickRow.width * 1.1
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
-    visible:        globals.activeVehicle ? joystickManager.activeJoystick : false
-
+    property var _activeJoystick:  joystickManager.activeJoystick ? true : false
+    property bool   showIndicator: globals.activeVehicle ? _activeJoystick : false
 
     Component {
         id: joystickInfoPage
@@ -46,6 +46,13 @@ Item {
                     QGCLabel {
                         text:  globals.activeVehicle && globals.activeVehicle.joystickEnabled ? qsTr("Yes") : qsTr("No")
                         color: globals.activeVehicle && globals.activeVehicle.joystickEnabled ? qgcPal.buttonText : "red"
+                    }
+                    QGCLabel { text: qsTr("Controller:") }
+                    QGCLabel {
+                        text:  joystickManager.activeJoystick ? joystickManager.activeJoystickName : qsTr("No")
+                        color: joystickManager.activeJoystick ? qgcPal.buttonText : "red"
+                        elide: Text.ElideRight
+                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 20
                     }
                 }
             }
