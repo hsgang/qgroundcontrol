@@ -847,23 +847,16 @@ ApplicationWindow {
     //-- Critical Vehicle Message Popup
 
     function showCriticalVehicleMessage(message) {
-//        indicatorPopup.close()
-//        if (criticalVehicleMessagePopup.visible || QGroundControl.videoManager.fullScreen) {
-//            _vehicleMessageQueue.push(message)
-//        } else {
-//            _vehicleMessage = message
-//            criticalVehicleMessagePopup.open()
-//        }
-//        indicatorPopup.close()
-//        if (criticalVehicleMessagePopup.visible || QGroundControl.videoManager.fullScreen) {
-//            // We received additional wanring message while an older warning message was still displayed.
-//            // When the user close the older one drop the message indicator tool so they can see the rest of them.
-//            criticalVehicleMessagePopup.dropMessageIndicatorOnClose = true
-//        } else {
-//            criticalVehicleMessagePopup.criticalVehicleMessage      = message
-//            criticalVehicleMessagePopup.dropMessageIndicatorOnClose = false
-//            criticalVehicleMessagePopup.open()
-//        }
+        closeIndicatorDrawer()
+        if (criticalVehicleMessagePopup.visible || QGroundControl.videoManager.fullScreen) {
+            // We received additional wanring message while an older warning message was still displayed.
+            // When the user close the older one drop the message indicator tool so they can see the rest of them.
+            criticalVehicleMessagePopup.dropMessageIndicatorOnClose = true
+        } else {
+            criticalVehicleMessagePopup.criticalVehicleMessage      = message
+            criticalVehicleMessagePopup.dropMessageIndicatorOnClose = false
+            criticalVehicleMessagePopup.open()
+        }
     }
 
     Popup {
