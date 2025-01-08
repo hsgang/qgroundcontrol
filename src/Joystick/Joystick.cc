@@ -1109,7 +1109,7 @@ void Joystick::_executeButtonAction(const QString &action, bool buttonDown)
                 }
             }
         }
-    }*/
+    }
 }
 
 bool Joystick::_validAxis(int axis) const
