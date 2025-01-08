@@ -4373,9 +4373,9 @@ void Vehicle::_textMessageReceived(MAV_COMPONENT componentid, MAV_SEVERITY sever
 
 void Vehicle::_errorMessageReceived(QString message)
 {
-    if (_isActiveVehicle) {
-        qgcApp()->showCriticalVehicleMessage(message);
-    }
+    // if (_isActiveVehicle) {
+    //     qgcApp()->showCriticalVehicleMessage(message);
+    // }
 }
 
 /*---------------------------------------------------------------------------*/
