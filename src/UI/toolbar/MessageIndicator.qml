@@ -128,7 +128,7 @@ Item {
             content = content.replace(/<[^>]*>/g, ''); // HTML 태그 제거
             messageModel.insert(0, {"message": content, "time": time, "type": type, "component": component, "checked": false});
             updateUnreadMessageCount();
-            console.log(message);
+            // console.log(message);
             // console.log(type);
             // console.log(time);
             // console.log(component);
