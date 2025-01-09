@@ -3,6 +3,7 @@
 #include "CloudSettings.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
+#include "QGCFileDownload.h"
 
 #include <QtCore/qapplicationstatic.h>
 #include <QDebug>
@@ -18,6 +19,7 @@
 #include <QXmlStreamReader>
 #include <QDateTime>
 #include <QtQml/qqml.h>
+#include <QtCore/QProcess>
 
 const QString CloudManager::API_BASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:";
 const QString CloudManager::SIGN_UP_ENDPOINT = API_BASE_URL + "signUp?key=";
@@ -1013,4 +1015,41 @@ void CloudManager::uploadTakeoffRecordReplyReadyRead()
     }
 
     reply->deleteLater();
+}
+
+void CloudManager::downloadForNewVersion()
+{
+#ifdef Q_OS_WIN
+    const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator-installer.exe";
+#elif Q_OS_ANDROID
+    const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator.apk";
+#endif
+    QGCFileDownload* download = new QGCFileDownload(this);
+    connect(download, &QGCFileDownload::downloadComplete, this, &CloudManager::installNewVersion);
+    connect(download, &QGCFileDownload::downloadProgress, this, &CloudManager::downloadProgress);
+    download->download(newInstallFileUrl);
+}
+
+void CloudManager::installNewVersion(QString /*remoteFile*/, QString localFile, QString errorMsg)
+{
+    qDebug() << "installNewVersionPath:" << localFile;
+    QFile installFile(localFile);
+    if (installFile.exists()) {
+        // 다운로드 완료 후 새 프로세스 실행
+        if (QProcess::startDetached(localFile)) {
+            qDebug() << "File executed successfully. Exiting current process.";
+            QCoreApplication::quit();  // 현재 프로세스 종료
+        } else {
+            qDebug() << "Failed to execute the downloaded file.";
+        }
+    } else {
+        qDebug() << "Failed to save file.";
+    }
+}
+
+void CloudManager::downloadProgress(qint64 curr, qint64 total)
+{
+    m_fileDownloadProgress = static_cast<double>(curr) / total * 100; // 퍼센트 계산
+    qDebug() << "m_fileDownloadProgress:" << m_fileDownloadProgress << " / " << total;
+    emit fileDownloadProgressChanged();
 }

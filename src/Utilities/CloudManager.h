@@ -38,7 +38,8 @@ public:
     Q_PROPERTY(QString signedId READ signedId WRITE setSignedId NOTIFY signedIdChanged)
     Q_PROPERTY(double uploadProgressValue READ uploadProgressValue WRITE setUploadProgressValue NOTIFY uploadProgressValueChanged)
     Q_PROPERTY(QString messageString READ messageString WRITE setMessageString NOTIFY messageStringChanged)
-    Q_PROPERTY(QList<QVariant> dnEntryPlanFile READ dnEntryPlanFile NOTIFY dnEntryPlanFileChanged)
+    Q_PROPERTY(QList<QVariant> dnEntryPlanFile READ dnEntryPlanFile NOTIFY dnEntryPlanFileChanged);
+    Q_PROPERTY(double fileDownloadProgress READ fileDownloadProgress NOTIFY fileDownloadProgressChanged);
 
     Q_INVOKABLE void signUserUp(const QString & emailAddress, const QString & password);
     Q_INVOKABLE void signUserIn(const QString & emailAddress, const QString & password);
@@ -47,6 +48,8 @@ public:
     Q_INVOKABLE void uploadFile(const QString & filePath, const QString& bucketName, const QString& objectName);
     Q_INVOKABLE void downloadObject(const QString& bucketName, const QString& objectName);
     Q_INVOKABLE void deleteObject(const QString& bucketName, const QString& objectName);
+    Q_INVOKABLE void downloadForNewVersion();
+    Q_INVOKABLE void installNewVersion(QString /*remoteFile*/, QString localFile, QString errorMsg);
 
     struct DownloadEntryFileInfo {
         QString key;
@@ -83,6 +86,7 @@ public:
     QString endPoint           () const{ return m_endPoint; }
     double uploadProgressValue() const {return m_uploadProgressValue; }
     QList<DownloadEntryFileInfo> downloadEntryFileInfo() const { return m_downloadEntryFileInfo; }
+    double fileDownloadProgress () const { return m_fileDownloadProgress; }
 
 public slots:
     void networkReplyReadyRead();
@@ -111,6 +115,7 @@ signals:
     void emailAddressChanged();
     void passwordChanged();
     void networkStatusChanged();
+    void fileDownloadProgressChanged();
 
 private:
     static const QString API_BASE_URL;
@@ -156,6 +161,7 @@ private:
     QString generateAuthorizationHeader(const QString &accessKey, const QString &secretKey, const QString &bucketName);
     QList<DownloadEntryFileInfo> m_downloadEntryFileInfo;
     QList<QVariant> m_dnEntryPlanFile;
+    double m_fileDownloadProgress = 0.0;
 
     void performPOST(const QString & url, const QJsonDocument & payload );
     void requestSignIn(const QString & url, const QJsonDocument & payload );
@@ -171,6 +177,7 @@ private:
     void checkFilesExistInMinio(QString dirName);
     void parseXmlResponse(const QString &xmlResponse);
     void updateNetworkStatus();
+    void downloadProgress(qint64 curr, qint64 total);
 };
 
 #endif // CLOUDMANAGER_H

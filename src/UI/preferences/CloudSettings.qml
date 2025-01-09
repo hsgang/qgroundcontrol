@@ -161,4 +161,26 @@ SettingsPage {
             visible:            cloudSettings.firebaseAPIKey.visible
         }
     }
+
+    SettingsGroupLayout {
+        Layout.fillWidth:   true
+        heading:            qsTr("Download Installer")
+
+        QGCButton {
+            text:                   qsTr("Download and Install")
+            visible:                true
+            Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 25
+            Layout.alignment:       Qt.AlignHCenter
+
+            onClicked: {
+                QGroundControl.cloudManager.downloadForNewVersion()
+            }
+        }
+
+        LabelledLabel {
+            Layout.fillWidth:   true
+            label:              qsTr("Download")
+            labelText:          QGroundControl.cloudManager.fileDownloadProgress.toFixed(1) + " %"
+        }
+    }
 }
