@@ -22,6 +22,10 @@
 #include <QtQml/qqml.h>
 #include <QtCore/QProcess>
 #include <QMessageBox>
+#ifdef __mobile__
+#include <QJniObject>
+#include <QJniEnvironment>
+#endif
 
 QGC_LOGGING_CATEGORY(CloudManagerLog, "CloudManagerLog")
 
@@ -1057,27 +1061,65 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
             if (installFile.rename(targetFilePath)) {
                 qCDebug(CloudManagerLog) << "File moved to:" << targetFilePath;
 
-                // 알림창 띄우기
-                QMessageBox::StandardButton reply;
-                reply = QMessageBox::question(nullptr,
-                                              tr("New Version Downloaded"),
-                                              tr("The new version has been downloaded.\n"
-                                                 "File Path: %1\n"
-                                                 "Do you want to install it now?").arg(targetFilePath),
-                                              QMessageBox::Yes | QMessageBox::No);
+#ifdef Q_OS_ANDROID
+                // 권한 확인 및 요청
+                // if (!checkAndRequestAndroidPermissions()) {
+                //     qCDebug(CloudManagerLog) << "Permission denied. Cannot proceed with APK installation.";
+                //     return;
+                // }
+
+                // Android Intent 호출
+                QString apkUri = "file://" + targetFilePath; // APK 파일 경로
+                QJniObject apkPath = QJniObject::fromString(apkUri);
+
+                QJniObject activity = QNativeInterface::QAndroidApplication::context();
+                if (activity.isValid() && apkPath.isValid()) {
+                    // Intent 생성
+                    QJniObject intent = QJniObject("android/content/Intent",
+                                                   "(Ljava/lang/String;)V",
+                                                   QJniObject::getStaticObjectField(
+                                                       "android/content/Intent",
+                                                       "ACTION_VIEW",
+                                                       "Ljava/lang/String;").object());
+
+                    // Intent에 데이터 및 타입 설정
+                    intent.callMethod<void>("setDataAndType",
+                                            "(Landroid/net/Uri;Ljava/lang/String;)Landroid/content/Intent;",
+                                            QJniObject::callStaticObjectMethod(
+                                                "android/net/Uri",
+                                                "parse",
+                                                "(Ljava/lang/String;)Landroid/net/Uri;",
+                                                apkPath.object()).object(),
+                                            QJniObject::fromString("application/vnd.android.package-archive").object());
+
+                    // 새로운 태스크 플래그 추가
+                    intent.callMethod<void>("addFlags", "(I)V", 0x10000000); // FLAG_ACTIVITY_NEW_TASK
+
+                    // Intent 실행
+                    activity.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", intent.object());
+                } else {
+                    qCDebug(CloudManagerLog) << "Failed to create install intent.";
+                }
+#else
+    // 비 안드로이드 환경에서는 기존 방식 사용
+                QMessageBox::StandardButton reply = QMessageBox::question(
+                    nullptr,
+                    tr("New Version Downloaded"),
+                    tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?")
+                        .arg(targetFilePath),
+                    QMessageBox::Yes | QMessageBox::No);
 
                 if (reply == QMessageBox::Yes) {
-                    // 사용자가 설치를 선택한 경우
                     if (QProcess::startDetached(targetFilePath)) {
                         qDebug() << "File executed successfully. Exiting current process.";
-                        QCoreApplication::quit();  // 현재 프로세스 종료
+                        QCoreApplication::quit();
                     } else {
                         qDebug() << "Failed to execute the downloaded file.";
                     }
                 } else {
-                    // 사용자가 설치를 거부한 경우
                     qDebug() << "User declined to execute the file.";
                 }
+#endif
             } else {
                 qCDebug(CloudManagerLog) << "Failed to move file to target directory.";
             }
