@@ -1017,13 +1017,10 @@ void CloudManager::uploadTakeoffRecordReplyReadyRead()
     reply->deleteLater();
 }
 
-void CloudManager::downloadForNewVersion()
+void CloudManager::downloadForNewVersion(QString fileUrl)
 {
-#ifdef Q_OS_WIN
-    const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator-installer.exe";
-#elif Q_OS_ANDROID
-    const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator.apk";
-#endif
+    const QString newInstallFileUrl = fileUrl;
+
     QGCFileDownload* download = new QGCFileDownload(this);
     connect(download, &QGCFileDownload::downloadComplete, this, &CloudManager::installNewVersion);
     connect(download, &QGCFileDownload::downloadProgress, this, &CloudManager::downloadProgress);

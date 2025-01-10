@@ -28,6 +28,10 @@ SettingsPage {
     property bool   _signedIn:          QGroundControl.cloudManager.signedIn
     property string _signedId:          QGroundControl.cloudManager.signedId
 
+    property string _windowsInstallUrl:     "http://ampkorea.synology.me:9000/data/builds/MissionNavigator-installer.exe"
+    property string _androidInstallUrl: "http://ampkorea.synology.me:9000/data/builds/MissionNavigator.apk"
+    property string _fileUrl:           ScreenTools.isAndroid ? _androidInstallUrl : (ScreenTools.isWindows ? _windowsInstallUrl : "")
+
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Cloud Login")
@@ -173,7 +177,8 @@ SettingsPage {
             Layout.alignment:       Qt.AlignHCenter
 
             onClicked: {
-                QGroundControl.cloudManager.downloadForNewVersion()
+                QGroundControl.cloudManager.downloadForNewVersion(_fileUrl)
+                console.log("_downloadFileUrl:", _fileUrl)
             }
         }
 
