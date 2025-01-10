@@ -11,8 +11,11 @@
 #include <QtCore/QJsonObject>
 #include <QtCore/QUrl>
 #include <QFile>
+#include <QtCore/QLoggingCategory>
 
 #include "QmlObjectListModel.h"
+
+Q_DECLARE_LOGGING_CATEGORY(CloudManagerLog)
 
 class CloudManager;
 class DatabaseManager;

@@ -4,6 +4,7 @@
 #include "SettingsManager.h"
 #include "AppSettings.h"
 #include "QGCFileDownload.h"
+#include "QGCLoggingCategory.h"
 
 #include <QtCore/qapplicationstatic.h>
 #include <QDebug>
@@ -20,6 +21,9 @@
 #include <QDateTime>
 #include <QtQml/qqml.h>
 #include <QtCore/QProcess>
+#include <QMessageBox>
+
+QGC_LOGGING_CATEGORY(CloudManagerLog, "CloudManagerLog")
 
 const QString CloudManager::API_BASE_URL = "https://identitytoolkit.googleapis.com/v1/accounts:";
 const QString CloudManager::SIGN_UP_ENDPOINT = API_BASE_URL + "signUp?key=";
@@ -47,8 +51,8 @@ CloudManager::CloudManager(QObject *parent)
     if (m_networkInfo) {
         connect(m_networkInfo, &QNetworkInformation::reachabilityChanged, this, &CloudManager::updateNetworkStatus);
         updateNetworkStatus();
-        qDebug() << "Network reachability: " << m_networkInfo->reachability();
-        qDebug() << "Nerwork TransportMedium: " << m_networkInfo->transportMedium();
+        qCDebug(CloudManagerLog) << "Network reachability: " << m_networkInfo->reachability();
+        qCDebug(CloudManagerLog) << "Nerwork TransportMedium: " << m_networkInfo->transportMedium();
     } else {
         qWarning() << "Failed to initialize QNetworkInformation instance.";
     }
@@ -248,7 +252,7 @@ void CloudManager::uploadFile(const QString &uploadFileName, const QString &buck
     QNetworkRequest request(url);
 
     QString _size = QString::number(file->size());
-    qDebug() << "fileSize: " << _size;
+    qCDebug(CloudManagerLog) << "fileSize: " << _size;
 
     request.setRawHeader("Authorization", authorizationHeader.toUtf8());
     request.setRawHeader("x-amz-content-sha256", "UNSIGNED-PAYLOAD");
@@ -270,7 +274,7 @@ void CloudManager::uploadFile(const QString &uploadFileName, const QString &buck
     connect(reply, &QNetworkReply::finished, this, &CloudManager::onUploadFinished);
     connect(reply, &QNetworkReply::uploadProgress, this, &CloudManager::uploadProgress);
     multiPart->setParent(reply);
-    qDebug() << "Log" << fi.baseName() << "Uploading." << fi.size() << "bytes.";
+    qCDebug(CloudManagerLog) << "Log" << fi.baseName() << "Uploading." << fi.size() << "bytes.";
     _nam->setProxy(savedProxy);
 }
 
@@ -314,7 +318,7 @@ void CloudManager::uploadJson(const QJsonDocument &jsonDoc, const QString &bucke
 
     connect(reply, &QNetworkReply::finished, this, &CloudManager::onUploadFinished);
     connect(reply, &QNetworkReply::uploadProgress, this, &CloudManager::uploadProgress);
-    qDebug() << "JsonObject" << objectName << "Uploading." << _size << "bytes.";
+    qCDebug(CloudManagerLog) << "JsonObject" << objectName << "Uploading." << _size << "bytes.";
     _nam->setProxy(savedProxy);
 }
 
@@ -339,12 +343,12 @@ void CloudManager::getListBucket(const QString &bucketName)
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
             parseXmlResponse(responseData);
-            //qDebug() << "Response:" << responseData;
+            //qCDebug(CloudManagerLog) << "Response:" << responseData;
         } else {
-            qDebug() << "Error:" << reply->errorString();
-            qDebug() << "HTTP Status Code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            //qDebug() << "Response Headers:" << reply->rawHeaderPairs();
-            qDebug() << "Response Body:" << reply->readAll();
+            qCDebug(CloudManagerLog) << "Error:" << reply->errorString();
+            qCDebug(CloudManagerLog) << "HTTP Status Code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            //qCDebug(CloudManagerLog) << "Response Headers:" << reply->rawHeaderPairs();
+            qCDebug(CloudManagerLog) << "Response Body:" << reply->readAll();
         }
         reply->deleteLater();
     });
@@ -387,7 +391,7 @@ void CloudManager::parseXmlResponse(const QString &xmlResponse)
     }
 
     if (xml.hasError()) {
-        qDebug() << "XML parsing error:" << xml.errorString();
+        qCDebug(CloudManagerLog) << "XML parsing error:" << xml.errorString();
     }
 
     for (const DownloadEntryFileInfo& file : fileInfoList) {
@@ -417,26 +421,26 @@ void CloudManager::onUploadFinished()
     }
 
     if (reply->error() == QNetworkReply::NoError) {
-        qDebug() << "업로드 성공!" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        qCDebug(CloudManagerLog) << "업로드 성공!" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         qgcApp()->showAppMessage(tr("클라우드 저장소에 업로드되었습니다."));
     }
     else {
-        qDebug() << "업로드 실패: " << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() << " - "<< reply->errorString();
-        qDebug() << "StatusCode: " << reply->readAll();
+        qCDebug(CloudManagerLog) << "업로드 실패: " << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() << " - "<< reply->errorString();
+        qCDebug(CloudManagerLog) << "StatusCode: " << reply->readAll();
     }
     reply->deleteLater();
 }
 
 void CloudManager::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
 {
-    qDebug() << "CloudManager::uploadProgress()";
+    qCDebug(CloudManagerLog) << "CloudManager::uploadProgress()";
 
     if (bytesTotal > 0) {
         double percentage = (static_cast<double>(bytesSent) / bytesTotal) * 100.0;
         setUploadProgressValue(percentage);
-        qDebug() << "Upload progress:" << bytesSent << "/" << bytesTotal << "bytes (" << QString::number(percentage, 'f', 2) << "%)";
+        qCDebug(CloudManagerLog) << "Upload progress:" << bytesSent << "/" << bytesTotal << "bytes (" << QString::number(percentage, 'f', 2) << "%)";
     } else {
-        qDebug() << "Upload progress:" << bytesSent << "bytes sent (total size unknown)";
+        qCDebug(CloudManagerLog) << "Upload progress:" << bytesSent << "bytes sent (total size unknown)";
     }
 }
 
@@ -450,7 +454,7 @@ void CloudManager::setUploadProgressValue(double progress) {
 // Firebase GET 요청을 보내는 메소드
 void CloudManager::sendGetRequest(const QString &databaseUrl)
 {
-    qDebug() << "CloudManager: Request sent to" << databaseUrl;
+    qCDebug(CloudManagerLog) << "CloudManager: Request sent to" << databaseUrl;
 }
 
 void CloudManager::parseResponse(const QByteArray &response)
@@ -463,16 +467,16 @@ void CloudManager::parseResponse(const QByteArray &response)
 
     if ( jsonDocument.object().contains("error"))
     {
-        qDebug() << "Error occured!" << response;
+        qCDebug(CloudManagerLog) << "Error occured!" << response;
         handleError(jsonObject["error"].toObject());
     }
     else if ( jsonDocument.object().contains("kind"))
     {
         QString idToken = jsonDocument.object().value("idToken").toString();
         m_idToken = idToken;
-        //qDebug() << "Obtained user ID Token: " << idToken;
+        //qCDebug(CloudManagerLog) << "Obtained user ID Token: " << idToken;
         QString localId = jsonDocument.object().value("localId").toString();
-        //qDebug() << "UID: " << localId;
+        //qCDebug(CloudManagerLog) << "UID: " << localId;
         m_localId = localId;
 
         emit userSignIn();
@@ -485,7 +489,7 @@ void CloudManager::handleError(const QJsonObject &errorObject)
     int errorCode = errorObject["code"].toInt();
     QString errorMessage = errorObject["message"].toString();
 
-    qDebug() << "Error occurred! Code:" << errorCode << "Message:" << errorMessage;
+    qCDebug(CloudManagerLog) << "Error occurred! Code:" << errorCode << "Message:" << errorMessage;
 
     QString userMessage;
     switch (errorCode)
@@ -610,7 +614,7 @@ void CloudManager::checkFilesExistInMinio(QString dirName)
 
 void CloudManager::networkReplyReadyRead()
 {
-    // qDebug() << "CloudManager::networkReplyReadyRead";
+    // qCDebug(CloudManagerLog) << "CloudManager::networkReplyReadyRead";
 
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
     if(!reply) {
@@ -619,19 +623,19 @@ void CloudManager::networkReplyReadyRead()
 
     if (reply && reply->error() == QNetworkReply::NoError) {
         QByteArray response_data = reply->readAll();
-        qDebug() << "Response data received:" << response_data;
+        qCDebug(CloudManagerLog) << "Response data received:" << response_data;
 
         // JSON 데이터 파싱
         QJsonParseError parseError;
         QJsonDocument responseJson = QJsonDocument::fromJson(response_data, &parseError);
 
         if (parseError.error != QJsonParseError::NoError) {
-            qDebug() << "JSON Parse Error:" << parseError.errorString();
+            qCDebug(CloudManagerLog) << "JSON Parse Error:" << parseError.errorString();
             return;
         }
 
         QJsonObject responseObject = responseJson.object();
-        qDebug() << "Parsed JSON:" << responseObject;
+        qCDebug(CloudManagerLog) << "Parsed JSON:" << responseObject;
     }
 
     reply->deleteLater();
@@ -646,7 +650,7 @@ void CloudManager::signInReplyReadyRead()
 
     if (reply && reply->error() == QNetworkReply::NoError) {
         QByteArray response_data = reply->readAll();
-        //qDebug() << "Response data received:" << response_data;
+        //qCDebug(CloudManagerLog) << "Response data received:" << response_data;
 
         parseResponse( response_data );
     }
@@ -681,7 +685,7 @@ void CloudManager::getSignInfoReplyReadyRead()
                 getKeysDatabaseCall();
             }
         } else {
-            qDebug() << "Invalid JSON";
+            qCDebug(CloudManagerLog) << "Invalid JSON";
         }
         m_signedId = m_signedNickName;
         setSignedId(m_signedId);
@@ -720,15 +724,15 @@ void CloudManager::getKeysInfoReplyReadyRead()
                 }
             }
         } else {
-            qDebug() << "Invalid JSON";
+            qCDebug(CloudManagerLog) << "Invalid JSON";
         }
-        qDebug() << "Success get keys";
+        qCDebug(CloudManagerLog) << "Success get keys";
     }
 }
 
 void CloudManager::networkReplyFinished()
 {
-    qDebug() << "CloudManager::networkReplyFinished";
+    qCDebug(CloudManagerLog) << "CloudManager::networkReplyFinished";
 
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
     if(!reply) {
@@ -736,21 +740,21 @@ void CloudManager::networkReplyFinished()
     }
 
     if (reply && reply->error() != QNetworkReply::NoError) {
-        qDebug() << "Network Error after finished:" << reply->errorString();
+        qCDebug(CloudManagerLog) << "Network Error after finished:" << reply->errorString();
     } else {
-        qDebug() << "Request finished successfully.";
+        qCDebug(CloudManagerLog) << "Request finished successfully.";
     }
 
-    qDebug() << "readAll():" << reply->readAll();
-    qDebug() << "errorString():" << reply->errorString();
-    qDebug() << "attribute():" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    qCDebug(CloudManagerLog) << "readAll():" << reply->readAll();
+    qCDebug(CloudManagerLog) << "errorString():" << reply->errorString();
+    qCDebug(CloudManagerLog) << "attribute():" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
     reply->deleteLater();
 }
 
 void CloudManager::networkReplyErrorOccurred(QNetworkReply::NetworkError code)
 {
-    qDebug() << "CloudManager::networkReplyErrorOccurred - Error Code:" << code;
+    qCDebug(CloudManagerLog) << "CloudManager::networkReplyErrorOccurred - Error Code:" << code;
 
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
     if(!reply) {
@@ -758,8 +762,8 @@ void CloudManager::networkReplyErrorOccurred(QNetworkReply::NetworkError code)
     }
 
     if (reply) {
-        qDebug() << "Error String:" << reply->errorString();
-        qDebug() << "Error String All:" << reply->readAll();
+        qCDebug(CloudManagerLog) << "Error String:" << reply->errorString();
+        qCDebug(CloudManagerLog) << "Error String All:" << reply->readAll();
     }
 
     reply->deleteLater();
@@ -767,7 +771,7 @@ void CloudManager::networkReplyErrorOccurred(QNetworkReply::NetworkError code)
 
 void CloudManager::performAuthenticatedDatabaseCall()
 {
-    // qDebug() << "CloudManager::performAuthenticatedDatabaseCall()";
+    // qCDebug(CloudManagerLog) << "CloudManager::performAuthenticatedDatabaseCall()";
     QString endPoint = "https://firestore.googleapis.com/v1/projects/next-todo-61f49/databases/(default)/documents/users/" + m_localId;
 
     QUrl url(endPoint);
@@ -796,7 +800,7 @@ void CloudManager::getKeysDatabaseCall()
 
 void CloudManager::performPOST(const QString &url, const QJsonDocument &payload)
 {
-    qDebug() << "CloudManager::performPOST()";
+    qCDebug(CloudManagerLog) << "CloudManager::performPOST()";
     QNetworkRequest request;
     request.setUrl( (QUrl(url)) );
     request.setHeader(QNetworkRequest::ContentTypeHeader, QString("application/json"));
@@ -839,13 +843,13 @@ void CloudManager::onDownloadFinished(QNetworkReply* reply, const QString& objec
         if (file.open(QIODevice::WriteOnly)) {
             file.write(data);
             file.close();
-            qDebug() << "Downloaded successfully!" << filePath;
+            qCDebug(CloudManagerLog) << "Downloaded successfully!" << filePath;
             qgcApp()->showAppMessage(tr("내부저장소에 다운로드가 완료되었습니다."));
         } else {
-            qDebug() << "Failed to open file for writing.";
+            qCDebug(CloudManagerLog) << "Failed to open file for writing.";
         }
     } else {
-        qDebug() << "Error downloading object:" << reply->errorString();
+        qCDebug(CloudManagerLog) << "Error downloading object:" << reply->errorString();
     }
     reply->deleteLater();
 }
@@ -864,12 +868,12 @@ void CloudManager::deleteObject(const QString& bucketName, const QString& object
     QObject::connect(reply, &QNetworkReply::finished, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
-            qDebug() << "Response:" << responseData;
+            qCDebug(CloudManagerLog) << "Response:" << responseData;
         } else {
-            qDebug() << "Error:" << reply->errorString();
-            qDebug() << "HTTP Status Code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            //qDebug() << "Response Headers:" << reply->rawHeaderPairs();
-            qDebug() << "Response Body:" << reply->readAll();
+            qCDebug(CloudManagerLog) << "Error:" << reply->errorString();
+            qCDebug(CloudManagerLog) << "HTTP Status Code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            //qCDebug(CloudManagerLog) << "Response Headers:" << reply->rawHeaderPairs();
+            qCDebug(CloudManagerLog) << "Response Body:" << reply->readAll();
         }
         reply->deleteLater();
     });
@@ -905,7 +909,7 @@ void CloudManager::sendToDb(const QString &measurement, const QMap<QString, QStr
     // data += " " + QString::number(QDateTime::currentMSecsSinceEpoch() * 1000000); // nanoseconds
 
     QString urlQuery = QString("http://%1:8086/write?db=%2").arg(m_endPoint,"mission_navigator");
-    //qDebug() << urlQuery;
+    //qCDebug(CloudManagerLog) << urlQuery;
     QUrl url(urlQuery);
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -918,9 +922,9 @@ void CloudManager::sendToDb(const QString &measurement, const QMap<QString, QStr
 void CloudManager::onDbReplyFinished(QNetworkReply *reply)
 {
     if (reply->error() == QNetworkReply::NoError) {
-        qDebug() << "Data sent successfully";
+        qCDebug(CloudManagerLog) << "Data sent successfully";
     } else {
-        qDebug() << "Error sending data:" << reply->errorString();
+        qCDebug(CloudManagerLog) << "Error sending data:" << reply->errorString();
     }
     reply->deleteLater();
 }
@@ -970,7 +974,7 @@ void CloudManager::uploadTakeoffRecord(double latitude, double longitude, double
     QJsonObject json;
     QJsonObject fields;
 
-    qDebug() << latitude << longitude << altitude << voltage ;
+    qCDebug(CloudManagerLog) << latitude << longitude << altitude << voltage ;
 
     // Check and create fields only if they are valid doubles
     if (!std::isnan(latitude)) {
@@ -1009,9 +1013,9 @@ void CloudManager::uploadTakeoffRecordReplyReadyRead()
 
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray responseData = reply->readAll();
-        qDebug() << "Upload successful:" << responseData;
+        qCDebug(CloudManagerLog) << "Upload successful:" << responseData;
     } else {
-        qDebug() << "Upload failed:" << reply->errorString();
+        qCDebug(CloudManagerLog) << "Upload failed:" << reply->errorString();
     }
 
     reply->deleteLater();
@@ -1019,7 +1023,11 @@ void CloudManager::uploadTakeoffRecordReplyReadyRead()
 
 void CloudManager::downloadForNewVersion(QString fileUrl)
 {
-    const QString newInstallFileUrl = fileUrl;
+#ifdef __mobile__
+    const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator.apk";
+#else
+    const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator-installer.exe";
+#endif
 
     QGCFileDownload* download = new QGCFileDownload(this);
     connect(download, &QGCFileDownload::downloadComplete, this, &CloudManager::installNewVersion);
@@ -1029,24 +1037,36 @@ void CloudManager::downloadForNewVersion(QString fileUrl)
 
 void CloudManager::installNewVersion(QString /*remoteFile*/, QString localFile, QString errorMsg)
 {
-    qDebug() << "installNewVersionPath:" << localFile;
+    qCDebug(CloudManagerLog) << "installNewVersionPath:" << localFile;
     QFile installFile(localFile);
     if (installFile.exists()) {
-        // 다운로드 완료 후 새 프로세스 실행
-        if (QProcess::startDetached(localFile)) {
-            qDebug() << "File executed successfully. Exiting current process.";
-            QCoreApplication::quit();  // 현재 프로세스 종료
+        // 알림창 띄우기
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(nullptr,
+                                      tr("New Version Downloaded"),
+                                      tr("The new version has been downloaded. Do you want to install it now?"),
+                                      QMessageBox::Yes | QMessageBox::No);
+
+        if (reply == QMessageBox::Yes) {
+            // 사용자가 설치를 선택한 경우
+            if (QProcess::startDetached(localFile)) {
+                qDebug() << "File executed successfully. Exiting current process.";
+                QCoreApplication::quit();  // 현재 프로세스 종료
+            } else {
+                qDebug() << "Failed to execute the downloaded file.";
+            }
         } else {
-            qDebug() << "Failed to execute the downloaded file.";
+            // 사용자가 설치를 거부한 경우
+            qDebug() << "User declined to execute the file.";
         }
     } else {
-        qDebug() << "Failed to save file.";
+        qCDebug(CloudManagerLog) << "Failed to save file.";
     }
 }
 
 void CloudManager::downloadProgress(qint64 curr, qint64 total)
 {
     m_fileDownloadProgress = static_cast<double>(curr) / total * 100; // 퍼센트 계산
-    qDebug() << "m_fileDownloadProgress:" << m_fileDownloadProgress << " / " << total;
+    qCDebug(CloudManagerLog) << "m_fileDownloadProgress:" << m_fileDownloadProgress << " / " << total;
     emit fileDownloadProgressChanged();
 }
