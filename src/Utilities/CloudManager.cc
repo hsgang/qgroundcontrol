@@ -1035,32 +1035,39 @@ void CloudManager::downloadForNewVersion(QString fileUrl)
     download->download(newInstallFileUrl);
 }
 
-void CloudManager::installNewVersion(QString /*remoteFile*/, QString localFile, QString errorMsg)
+void CloudManager::installNewVersion(QString remoteFile, QString localFile, QString errorMsg)
 {
-    qCDebug(CloudManagerLog) << "installNewVersionPath:" << localFile;
-    QFile installFile(localFile);
-    if (installFile.exists()) {
-        // 알림창 띄우기
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(nullptr,
-                                      tr("New Version Downloaded"),
-                                      tr("The new version has been downloaded. Do you want to install it now?"),
-                                      QMessageBox::Yes | QMessageBox::No);
+    if (errorMsg.isEmpty()) {
+        // Delete the QGCFileDownload object
+        sender()->deleteLater();
 
-        if (reply == QMessageBox::Yes) {
-            // 사용자가 설치를 선택한 경우
-            if (QProcess::startDetached(localFile)) {
-                qDebug() << "File executed successfully. Exiting current process.";
-                QCoreApplication::quit();  // 현재 프로세스 종료
+        qCDebug(CloudManagerLog) << "InstallFile Download Complete:" << remoteFile << localFile;
+        QFile installFile(localFile);
+        if (installFile.exists()) {
+            // 알림창 띄우기
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(nullptr,
+                                          tr("New Version Downloaded"),
+                                          tr("The new version has been downloaded.\n\n"
+                                             "File Path: %1\n\n"
+                                             "Do you want to install it now?").arg(localFile),
+                                          QMessageBox::Yes | QMessageBox::No);
+
+            if (reply == QMessageBox::Yes) {
+                // 사용자가 설치를 선택한 경우
+                if (QProcess::startDetached(localFile)) {
+                    qDebug() << "File executed successfully. Exiting current process.";
+                    QCoreApplication::quit();  // 현재 프로세스 종료
+                } else {
+                    qDebug() << "Failed to execute the downloaded file.";
+                }
             } else {
-                qDebug() << "Failed to execute the downloaded file.";
+                // 사용자가 설치를 거부한 경우
+                qDebug() << "User declined to execute the file.";
             }
         } else {
-            // 사용자가 설치를 거부한 경우
-            qDebug() << "User declined to execute the file.";
+            qCDebug(CloudManagerLog) << "Failed to save file.";
         }
-    } else {
-        qCDebug(CloudManagerLog) << "Failed to save file.";
     }
 }
 
