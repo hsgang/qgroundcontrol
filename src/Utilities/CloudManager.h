@@ -12,6 +12,10 @@
 #include <QtCore/QUrl>
 #include <QFile>
 #include <QtCore/QLoggingCategory>
+#ifdef __mobile__
+#include <QJniObject>
+#include <QJniEnvironment>
+#endif
 
 #include "QmlObjectListModel.h"
 
@@ -181,6 +185,11 @@ private:
     void parseXmlResponse(const QString &xmlResponse);
     void updateNetworkStatus();
     void downloadProgress(qint64 curr, qint64 total);
+#ifdef __mobile__
+    void installApkFromInternal(const QString &apkFilePath);
+    void requestUnknownSourcePermission();
+#endif
+
 };
 
 #endif // CLOUDMANAGER_H

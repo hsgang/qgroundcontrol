@@ -22,10 +22,6 @@
 #include <QtQml/qqml.h>
 #include <QtCore/QProcess>
 #include <QMessageBox>
-#ifdef __mobile__
-#include <QJniObject>
-#include <QJniEnvironment>
-#endif
 
 QGC_LOGGING_CATEGORY(CloudManagerLog, "CloudManagerLog")
 
@@ -1051,78 +1047,44 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
 
             // 파일 이동
             //QString targetDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/DownloadedFiles/";
-            QString targetDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/MissionNavigator/";
-            QDir dir;
-            if (!dir.exists(targetDir)) {
-                dir.mkpath(targetDir); // 디렉토리가 없으면 생성
-            }
+            // QString targetDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/MissionNavigator/";
+            // QDir dir;
+            // if (!dir.exists(targetDir)) {
+            //     dir.mkpath(targetDir); // 디렉토리가 없으면 생성
+            // }
 
-            QString targetFilePath = targetDir + QFileInfo(localFile).fileName();
-            if (installFile.rename(targetFilePath)) {
-                qCDebug(CloudManagerLog) << "File moved to:" << targetFilePath;
+            // QString targetFilePath = targetDir + QFileInfo(localFile).fileName();
+            // if (installFile.rename(targetFilePath)) {
+            //     qCDebug(CloudManagerLog) << "File moved to:" << targetFilePath;
 
-#ifdef Q_OS_ANDROID
-                // 권한 확인 및 요청
-                // if (!checkAndRequestAndroidPermissions()) {
-                //     qCDebug(CloudManagerLog) << "Permission denied. Cannot proceed with APK installation.";
-                //     return;
-                // }
-
-                // Android Intent 호출
-                QString apkUri = "file://" + targetFilePath; // APK 파일 경로
-                QJniObject apkPath = QJniObject::fromString(apkUri);
-
-                QJniObject activity = QNativeInterface::QAndroidApplication::context();
-                if (activity.isValid() && apkPath.isValid()) {
-                    // Intent 생성
-                    QJniObject intent = QJniObject("android/content/Intent",
-                                                   "(Ljava/lang/String;)V",
-                                                   QJniObject::getStaticObjectField(
-                                                       "android/content/Intent",
-                                                       "ACTION_VIEW",
-                                                       "Ljava/lang/String;").object());
-
-                    // Intent에 데이터 및 타입 설정
-                    intent.callMethod<void>("setDataAndType",
-                                            "(Landroid/net/Uri;Ljava/lang/String;)Landroid/content/Intent;",
-                                            QJniObject::callStaticObjectMethod(
-                                                "android/net/Uri",
-                                                "parse",
-                                                "(Ljava/lang/String;)Landroid/net/Uri;",
-                                                apkPath.object()).object(),
-                                            QJniObject::fromString("application/vnd.android.package-archive").object());
-
-                    // 새로운 태스크 플래그 추가
-                    intent.callMethod<void>("addFlags", "(I)V", 0x10000000); // FLAG_ACTIVITY_NEW_TASK
-
-                    // Intent 실행
-                    activity.callMethod<void>("startActivity", "(Landroid/content/Intent;)V", intent.object());
-                } else {
-                    qCDebug(CloudManagerLog) << "Failed to create install intent.";
-                }
-#else
-    // 비 안드로이드 환경에서는 기존 방식 사용
                 QMessageBox::StandardButton reply = QMessageBox::question(
                     nullptr,
                     tr("New Version Downloaded"),
                     tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?")
-                        .arg(targetFilePath),
+                        .arg(localFile),
                     QMessageBox::Yes | QMessageBox::No);
 
                 if (reply == QMessageBox::Yes) {
-                    if (QProcess::startDetached(targetFilePath)) {
+#ifdef __mobile__
+                    // 알 수 없는 소스에서 설치 권한 확인 및 요청
+                    requestUnknownSourcePermission();
+
+                    // APK 설치 시도
+                    installApkFromInternal(localFile);
+#else
+                    if (QProcess::startDetached(localFile)) {
                         qDebug() << "File executed successfully. Exiting current process.";
                         QCoreApplication::quit();
                     } else {
                         qDebug() << "Failed to execute the downloaded file.";
                     }
+#endif
                 } else {
                     qDebug() << "User declined to execute the file.";
                 }
-#endif
-            } else {
-                qCDebug(CloudManagerLog) << "Failed to move file to target directory.";
-            }
+            // } else {
+            //     qCDebug(CloudManagerLog) << "Failed to move file to target directory.";
+            // }
         } else {
             qCDebug(CloudManagerLog) << "Failed to save file.";
         }
@@ -1135,3 +1097,155 @@ void CloudManager::downloadProgress(qint64 curr, qint64 total)
     qCDebug(CloudManagerLog) << "m_fileDownloadProgress:" << m_fileDownloadProgress << " / " << total;
     emit fileDownloadProgressChanged();
 }
+
+#ifdef __mobile__
+void installApkFromInternal(const QString &apkFilePath)
+{
+    // Android Context 가져오기
+    QJniObject activity = QJniObject::callStaticObjectMethod(
+        "org/qtproject/qt6/android/QtNative",
+        "activity",
+        "()Landroid/app/Activity;");
+    if (!activity.isValid()) {
+        qWarning() << "Failed to get Android context";
+        return;
+    }
+
+    // APK 파일 경로를 Java String 객체로 변환
+    QJniObject apkPath = QJniObject::fromString(apkFilePath);
+    if (!apkPath.isValid()) {
+        qWarning() << "Invalid APK file path";
+        return;
+    }
+
+    // File 객체 생성
+    QJniObject file = QJniObject("java/io/File", "(Ljava/lang/String;)V", apkPath.object<jstring>());
+    if (!file.isValid()) {
+        qWarning() << "Failed to create File object";
+        return;
+    }
+
+    // FileProvider를 통해 Uri 생성
+    // FileProvider를 통해 content:// URI 생성
+    QJniObject context = activity;
+    QJniObject authority = QJniObject::fromString("com.yourpackage.fileprovider");
+    QJniObject uri = QJniObject::callStaticObjectMethod(
+        "androidx/core/content/FileProvider",
+        "getUriForFile",
+        "(Landroid/content/Context;Ljava/lang/String;Ljava/io/File;)Landroid/net/Uri;",
+        context.object(),
+        authority.object<jstring>(),
+        file.object());
+    if (!uri.isValid()) {
+        qWarning() << "Failed to create URI for APK file";
+        return;
+    }
+
+    // Intent 생성 및 설정
+    QJniObject intent("android/content/Intent", "()V");
+    if (!intent.isValid()) {
+        qWarning() << "Failed to create Intent";
+        return;
+    }
+
+    // ACTION_VIEW 설정
+    QJniObject actionView = QJniObject::getStaticObjectField<jstring>(
+        "android/content/Intent",
+        "ACTION_VIEW");
+    intent.callObjectMethod(
+        "setAction",
+        "(Ljava/lang/String;)Landroid/content/Intent;",
+        actionView.object<jstring>());
+
+    // MIME 타입 설정
+    QJniObject mimeType = QJniObject::fromString("application/vnd.android.package-archive");
+    intent.callObjectMethod(
+        "setDataAndType",
+        "(Landroid/net/Uri;Ljava/lang/String;)Landroid/content/Intent;",
+        uri.object(),
+        mimeType.object<jstring>());
+
+    // 필요한 플래그 추가
+    jint flagActivityNewTask = QJniObject::getStaticField<jint>(
+        "android/content/Intent",
+        "FLAG_ACTIVITY_NEW_TASK");
+    jint flagGrantRead = QJniObject::getStaticField<jint>(
+        "android/content/Intent",
+        "FLAG_GRANT_READ_URI_PERMISSION");
+
+    intent.callObjectMethod(
+        "addFlags",
+        "(I)Landroid/content/Intent;",
+        flagActivityNewTask);
+    intent.callObjectMethod(
+        "addFlags",
+        "(I)Landroid/content/Intent;",
+        flagGrantRead);
+
+    // Intent 실행
+    activity.callMethod<void>(
+        "startActivity",
+        "(Landroid/content/Intent;)V",
+        intent.object());
+}
+
+// 알 수 없는 소스에서 설치 권한 확인 및 요청
+void requestUnknownSourcePermission()
+{
+    // Android Context 가져오기
+    QJniObject activity = QJniObject::callStaticObjectMethod(
+        "org/qtproject/qt6/android/QtNative",
+        "activity",
+        "()Landroid/app/Activity;");
+    if (!activity.isValid()) {
+        qWarning() << "Failed to get Android context";
+        return;
+    }
+
+    // 패키지 이름 가져오기
+    QJniObject packageName = activity.callObjectMethod("getPackageName", "()Ljava/lang/String;");
+    if (!packageName.isValid()) {
+        qWarning() << "Failed to get package name";
+        return;
+    }
+
+    // 권한이 이미 있는지 확인
+    QJniObject packageManager = activity.callObjectMethod("getPackageManager", "()Landroid/content/pm/PackageManager;");
+    jint installPermission = activity.callMethod<jboolean>("canRequestPackageInstalls");
+    if (installPermission) {
+        qDebug() << "Permission to install unknown sources is already granted.";
+        return; // 이미 권한이 있음
+    }
+
+    // 권한이 없는 경우, 설정 화면으로 이동
+    QJniObject intent("android/content/Intent", "()V");
+    QJniObject actionManageUnknownSources = QJniObject::callStaticObjectMethod(
+        "android/provider/Settings",
+        "ACTION_MANAGE_UNKNOWN_APP_SOURCES",
+        "()Ljava/lang/String;");
+
+    intent.callObjectMethod(
+        "setAction",
+        "(Ljava/lang/String;)Landroid/content/Intent;",
+        actionManageUnknownSources.object<jstring>());
+
+    QJniObject uri = QJniObject::callStaticObjectMethod(
+        "android/net/Uri",
+        "parse",
+        "(Ljava/lang/String;)Landroid/net/Uri;",
+        QJniObject::fromString("package:" + packageName.toString()).object<jstring>());
+
+    intent.callObjectMethod(
+        "setData",
+        "(Landroid/net/Uri;)Landroid/content/Intent;",
+        uri.object());
+
+    // 설정 화면으로 이동
+    activity.callMethod<void>(
+        "startActivity",
+        "(Landroid/content/Intent;)V",
+        intent.object());
+
+    qDebug() << "Requested permission to install from unknown sources.";
+}
+#endif
