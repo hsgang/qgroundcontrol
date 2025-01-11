@@ -1099,7 +1099,7 @@ void CloudManager::downloadProgress(qint64 curr, qint64 total)
 }
 
 #ifdef __mobile__
-void installApkFromInternal(const QString &apkFilePath)
+void CloudManager::installApkFromInternal(const QString &apkFilePath)
 {
     // Android Context 가져오기
     QJniObject activity = QJniObject::callStaticObjectMethod(
@@ -1190,7 +1190,7 @@ void installApkFromInternal(const QString &apkFilePath)
 }
 
 // 알 수 없는 소스에서 설치 권한 확인 및 요청
-void requestUnknownSourcePermission()
+void CloudManager::requestUnknownSourcePermission()
 {
     // Android Context 가져오기
     QJniObject activity = QJniObject::callStaticObjectMethod(
