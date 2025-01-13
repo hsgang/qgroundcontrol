@@ -1111,9 +1111,9 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
                 } else {
                     qDebug() << "User declined to execute the file.";
                 }
-            // } else {
-            //     qCDebug(CloudManagerLog) << "Failed to move file to target directory.";
-            // }
+            } else {
+                qCDebug(CloudManagerLog) << "Failed to move file to target directory.";
+            }
         } else {
             qCDebug(CloudManagerLog) << "Failed to save file.";
         }
