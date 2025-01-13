@@ -28,10 +28,6 @@ SettingsPage {
     property bool   _signedIn:          QGroundControl.cloudManager.signedIn
     property string _signedId:          QGroundControl.cloudManager.signedId
 
-    property string _windowsInstallUrl: "http://ampkorea.synology.me:9000/data/builds/MissionNavigator-installer.exe"
-    property string _androidInstallUrl: "http://ampkorea.synology.me:9000/data/builds/MissionNavigator.apk"
-    property string _fileUrl:           ScreenTools.isAndroid ? _androidInstallUrl : (ScreenTools.isWindows ? _windowsInstallUrl : "")
-
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Cloud Login")
@@ -168,17 +164,31 @@ SettingsPage {
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        heading:            qsTr("Download Installer")
+        heading:            qsTr("Installer Download")
 
         QGCButton {
-            text:                   qsTr("Download and Install")
+            text:                   qsTr("Download")
             visible:                true
             Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 25
             Layout.alignment:       Qt.AlignHCenter
 
             onClicked: {
-                QGroundControl.cloudManager.downloadForNewVersion(_fileUrl)
-                console.log("_downloadFileUrl:", _fileUrl)
+                QGroundControl.cloudManager.downloadForNewVersion()
+            }
+        }
+
+        ProgressBar {
+            id:                     progressBar
+            Layout.preferredWidth:  parent.width
+            visible:                QGroundControl.cloudManager.fileDownloadProgress > 0
+            value:                  QGroundControl.cloudManager.fileDownloadProgress * 0.01
+
+            contentItem: Item{
+                Rectangle {
+                    width: progressBar.visualPosition * parent.width
+                    height: parent.height
+                    color: "steelblue"
+                }
             }
         }
 
@@ -186,6 +196,6 @@ SettingsPage {
             Layout.fillWidth:   true
             label:              qsTr("Download")
             labelText:          QGroundControl.cloudManager.fileDownloadProgress.toFixed(1) + " %"
-        }
+        }        
     }
 }

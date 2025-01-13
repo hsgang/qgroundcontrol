@@ -1021,13 +1021,15 @@ void CloudManager::uploadTakeoffRecordReplyReadyRead()
     reply->deleteLater();
 }
 
-void CloudManager::downloadForNewVersion(QString fileUrl)
+void CloudManager::downloadForNewVersion()
 {
 #ifdef __mobile__
     const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator.apk";
 #else
     const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator-installer.exe";
 #endif
+
+    qCDebug(CloudManagerLog) << "install file url: " << newInstallFileUrl;
 
     QGCFileDownload* download = new QGCFileDownload(this);
     connect(download, &QGCFileDownload::downloadComplete, this, &CloudManager::installNewVersion);
@@ -1083,6 +1085,17 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
             }
 
             QString targetFilePath = targetDir + QFileInfo(localFile).fileName();
+
+            // 대상 파일이 이미 존재하면 삭제
+            if (QFile::exists(targetFilePath)) {
+                if (!QFile::remove(targetFilePath)) {
+                    qCDebug(CloudManagerLog) << "Failed to overwrite existing file. Error:" << QFile(targetFilePath).errorString();
+                    return; // 삭제 실패 시 종료
+                }
+            }
+
+            qCDebug(CloudManagerLog) << "TargetFilePath:" << targetFilePath;
+
             if (installFile.rename(targetFilePath)) {
                 qCDebug(CloudManagerLog) << "File moved to:" << targetFilePath;
 
@@ -1112,7 +1125,7 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
                     qDebug() << "User declined to execute the file.";
                 }
             } else {
-                qCDebug(CloudManagerLog) << "Failed to move file to target directory.";
+                qCDebug(CloudManagerLog) << "Failed to move file to target directory." << installFile.errorString();
             }
         } else {
             qCDebug(CloudManagerLog) << "Failed to save file.";

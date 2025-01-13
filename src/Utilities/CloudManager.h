@@ -55,7 +55,7 @@ public:
     Q_INVOKABLE void uploadFile(const QString & filePath, const QString& bucketName, const QString& objectName);
     Q_INVOKABLE void downloadObject(const QString& bucketName, const QString& objectName);
     Q_INVOKABLE void deleteObject(const QString& bucketName, const QString& objectName);
-    Q_INVOKABLE void downloadForNewVersion(QString fileUrl);
+    Q_INVOKABLE void downloadForNewVersion();
     Q_INVOKABLE void installNewVersion(QString /*remoteFile*/, QString localFile, QString errorMsg);
 
     struct DownloadEntryFileInfo {
