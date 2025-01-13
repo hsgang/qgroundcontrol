@@ -1060,8 +1060,8 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
                 QMessageBox::StandardButton reply = QMessageBox::question(
                     nullptr,
                     tr("New Version Downloaded"),
-                    tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?")
-                        .arg(localFile),
+                    tr("The new version has been downloaded.\nDo you want to install it now?"),
+                    //tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(localFile),
                     QMessageBox::Yes | QMessageBox::No);
 
                 if (reply == QMessageBox::Yes) {
