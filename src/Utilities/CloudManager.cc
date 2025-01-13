@@ -1090,7 +1090,7 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
                     nullptr,
                     tr("New Version Downloaded"),
                     //tr("The new version has been downloaded.\nDo you want to install it now?"),
-                    tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(localFile),
+                    tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(targetFilePath),
                     QMessageBox::Yes | QMessageBox::No);
 
                 if (reply == QMessageBox::Yes) {
@@ -1099,9 +1099,9 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
                     requestUnknownSourcePermission();
 
                     // APK 설치 시도
-                    installApkFromInternal(localFile);
+                    installApkFromInternal(targetFilePath);
 #else
-                    if (QProcess::startDetached(localFile)) {
+                    if (QProcess::startDetached(targetFilePath)) {
                         qDebug() << "File executed successfully. Exiting current process.";
                         QCoreApplication::quit();
                     } else {
