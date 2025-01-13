@@ -1165,6 +1165,13 @@ void CloudManager::installApkFromInternal(const QString &apkFilePath)
         uri.object(),
         mimeType.object<jstring>());
 
+    // 특정 패키지로 제한
+    QJniObject packageName = QJniObject::fromString("com.android.packageinstaller");
+    intent.callObjectMethod(
+        "setPackage",
+        "(Ljava/lang/String;)Landroid/content/Intent;",
+        packageName.object<jstring>());
+
     // 필요한 플래그 추가
     jint flagActivityNewTask = QJniObject::getStaticField<jint>(
         "android/content/Intent",
@@ -1187,6 +1194,9 @@ void CloudManager::installApkFromInternal(const QString &apkFilePath)
         "startActivity",
         "(Landroid/content/Intent;)V",
         intent.object());
+
+    // 본 애플리케이션 종료
+    activity.callMethod<void>("finish", "()V");
 }
 
 // 알 수 없는 소스에서 설치 권한 확인 및 요청
