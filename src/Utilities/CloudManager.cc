@@ -1047,21 +1047,50 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
 
             // 파일 이동
             //QString targetDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/DownloadedFiles/";
-            // QString targetDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/MissionNavigator/";
-            // QDir dir;
-            // if (!dir.exists(targetDir)) {
-            //     dir.mkpath(targetDir); // 디렉토리가 없으면 생성
-            // }
+#ifdef __mobile__
+            // 안드로이드 공용 다운로드 폴더 경로 가져오기
+            QJniObject environment = QJniObject::callStaticObjectMethod(
+                "android/os/Environment",
+                "getExternalStoragePublicDirectory",
+                "(Ljava/lang/String;)Ljava/io/File;",
+                QJniObject::getStaticObjectField<jstring>(
+                    "android/os/Environment",
+                    "DIRECTORY_DOWNLOADS").object<jstring>()
+                );
 
-            // QString targetFilePath = targetDir + QFileInfo(localFile).fileName();
-            // if (installFile.rename(targetFilePath)) {
-            //     qCDebug(CloudManagerLog) << "File moved to:" << targetFilePath;
+            if (!environment.isValid()) {
+                qWarning() << "Failed to get Downloads directory";
+                return;
+            }
+
+            // 다운로드 폴더 경로 가져오기
+            QString downloadsPath = environment.callObjectMethod("getAbsolutePath", "()Ljava/lang/String;").toString();
+            if (downloadsPath.isEmpty()) {
+                qWarning() << "Downloads directory path is empty";
+                return;
+            }
+
+            // 저장할 파일의 전체 경로
+            //QString filePath = downloadsPath + "/" + fileName;
+
+            QString targetDir = downloadsPath + "/";
+#else
+            QString targetDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/MissionNavigator/";
+#endif
+            QDir dir;
+            if (!dir.exists(targetDir)) {
+                dir.mkpath(targetDir); // 디렉토리가 없으면 생성
+            }
+
+            QString targetFilePath = targetDir + QFileInfo(localFile).fileName();
+            if (installFile.rename(targetFilePath)) {
+                qCDebug(CloudManagerLog) << "File moved to:" << targetFilePath;
 
                 QMessageBox::StandardButton reply = QMessageBox::question(
                     nullptr,
                     tr("New Version Downloaded"),
-                    tr("The new version has been downloaded.\nDo you want to install it now?"),
-                    //tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(localFile),
+                    //tr("The new version has been downloaded.\nDo you want to install it now?"),
+                    tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(localFile),
                     QMessageBox::Yes | QMessageBox::No);
 
                 if (reply == QMessageBox::Yes) {
