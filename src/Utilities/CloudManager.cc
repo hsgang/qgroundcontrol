@@ -1103,7 +1103,7 @@ void CloudManager::installApkFromInternal(const QString &apkFilePath)
 {
     // Android Context 가져오기
     QJniObject activity = QJniObject::callStaticObjectMethod(
-        "org/qtproject/qt6/android/QtNative",
+        "org/qtproject/qt/android/QtNative",
         "activity",
         "()Landroid/app/Activity;");
     if (!activity.isValid()) {
@@ -1194,7 +1194,7 @@ void CloudManager::requestUnknownSourcePermission()
 {
     // Android Context 가져오기
     QJniObject activity = QJniObject::callStaticObjectMethod(
-        "org/qtproject/qt6/android/QtNative",
+        "org/qtproject/qt/android/QtNative",
         "activity",
         "()Landroid/app/Activity;");
     if (!activity.isValid()) {
