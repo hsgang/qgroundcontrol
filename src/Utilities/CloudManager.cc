@@ -1102,17 +1102,17 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
                 QMessageBox::StandardButton reply = QMessageBox::question(
                     nullptr,
                     tr("New Version Downloaded"),
-                    //tr("The new version has been downloaded.\nDo you want to install it now?"),
-                    tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(targetFilePath),
+                    tr("The new version has been downloaded. Check the Download Folder"),
+                    //tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(targetFilePath),
                     QMessageBox::Yes | QMessageBox::No);
 
                 if (reply == QMessageBox::Yes) {
 #ifdef __mobile__
                     // 알 수 없는 소스에서 설치 권한 확인 및 요청
-                    requestUnknownSourcePermission();
+                    //requestUnknownSourcePermission();
 
                     // APK 설치 시도
-                    installApkFromInternal(targetFilePath);
+                    //installApkFromInternal(targetFilePath);
 #else
                     if (QProcess::startDetached(targetFilePath)) {
                         qDebug() << "File executed successfully. Exiting current process.";

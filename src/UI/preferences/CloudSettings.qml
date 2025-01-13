@@ -193,9 +193,10 @@ SettingsPage {
         }
 
         LabelledLabel {
+            visible:            QGroundControl.cloudManager.fileDownloadProgress > 0
             Layout.fillWidth:   true
-            label:              qsTr("Download")
-            labelText:          QGroundControl.cloudManager.fileDownloadProgress.toFixed(1) + " %"
+            label:              qsTr("Progress")
+            labelText:          QGroundControl.cloudManager.fileDownloadProgress.toFixed(0) + " %"
         }        
     }
 }

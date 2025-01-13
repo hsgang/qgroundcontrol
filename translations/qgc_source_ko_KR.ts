@@ -8239,6 +8239,19 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>CloudManager</name>
+    <message>
+        <location filename="../src/Utilities/CloudManager.cc" line="1"/>
+        <source>New Version Downloaded</source>
+        <translation>신규 버전 다운로드 완료</translation>
+    </message>
+    <message>
+        <location filename="../src/Utilities/CloudManager.cc" line="1"/>
+        <source>The new version has been downloaded. Check the Download Folder</source>
+        <translation>신규 설치파일이 다운로드 되었습니다. 다운로드 폴더를 확인하세요.</translation>
+    </message>
+</context>
+<context>
     <name>CloudSettings</name>
     <message>
         <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
@@ -8279,6 +8292,21 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
         <source>Cloud API Keys</source>
         <translation>클라우드 API Keys</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Installer Download</source>
+        <translation>설치 파일 다운로드</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Download</source>
+        <translation>다운로드</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/preferences/CloudSettings.qml" line="1"/>
+        <source>Progress</source>
+        <translation>진행률</translation>
     </message>
 </context>
 <context>
