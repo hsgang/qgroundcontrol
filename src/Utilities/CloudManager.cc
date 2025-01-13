@@ -1197,6 +1197,9 @@ void CloudManager::installApkFromInternal(const QString &apkFilePath)
 
     // 본 애플리케이션 종료
     activity.callMethod<void>("finish", "()V");
+
+    // 종료를 강제하여 프로세스 정리
+    QCoreApplication::exit(0);
 }
 
 // 알 수 없는 소스에서 설치 권한 확인 및 요청
