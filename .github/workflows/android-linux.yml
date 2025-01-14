@@ -85,9 +85,6 @@ jobs:
               -DQT_ANDROID_SIGN_APK=${{ github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && 'ON' || 'OFF' }}
               -DQT_DEBUG_FIND_PACKAGE=ON
               -DQGC_STABLE_BUILD=${{ github.ref_type == 'tag' || contains(github.ref, 'Stable') && 'ON' || 'OFF' }}
-          echo "$output"
-          version=$(echo "$output" | grep 'QGC_APP_VERSION_STR=' | cut -d'"' -f2)
-          echo "$version" > ${{ runner.temp }}/shadow_build_dir/version.txt
 
       - name: Build
         working-directory: ${{ runner.temp }}/shadow_build_dir

@@ -120,9 +120,6 @@ jobs:
               -DQT_HOST_PATH="${{ env.QT_ROOT_DIR }}/../msvc2022_64"
               -DQT_DEBUG_FIND_PACKAGE=ON
               -DQGC_STABLE_BUILD=${{ github.ref_type == 'tag' || contains(github.ref, 'Stable') && 'ON' || 'OFF' }}
-            echo "$output"
-            version=$(echo "$output" | grep 'QGC_APP_VERSION_STR=' | cut -d'"' -f2)
-            echo "$version" > ${{ runner.temp }}/shadow_build_dir/version.txt
 
       - name: Build
         working-directory: ${{ runner.temp }}\shadow_build_dir
