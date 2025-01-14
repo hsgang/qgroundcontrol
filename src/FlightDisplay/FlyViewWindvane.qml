@@ -28,6 +28,10 @@ Rectangle {
     property real   _pressure:      vehicle ? vehicle.atmosphericSensor.pressure.rawValue : NaN
     property real   _atmosWindDir:  vehicle ? vehicle.atmosphericSensor.windDir.rawValue : NaN
     property real   _atmosWindSpd:  vehicle ? vehicle.atmosphericSensor.windSpd.rawValue : NaN
+    property real   _pm1p0:         vehicle ? vehicle.tunnelingData.pm1p0.rawValue : NaN
+    property real   _pm2p5:         vehicle ? vehicle.tunnelingData.pm2p5.rawValue : NaN
+    property real   _pm10:          vehicle ? vehicle.tunnelingData.pm10.rawValue : NaN
+    property real   _radiation:     vehicle ? vehicle.tunnelingData.radiation.rawValue : NaN
     property string _temperatureText: !isNaN(_temperature)  ? _temperature.toFixed(1)   + " ℃"      : "--.- ℃"
     property string _humidityText:    !isNaN(_humidity)     ? _humidity.toFixed(1)      + " Rh%"    : "--.- Rh%"
     property string _pressureText:    !isNaN(_pressure)     ? _pressure.toFixed(1)      + " hPa"    : "----.- hPa"
@@ -35,6 +39,10 @@ Rectangle {
     property string _windSpdText:     !isNaN(_windSpd)      ? _windSpd.toFixed(1)       + " (Est.)" : "-.- (Est.)"
     property string _atmosWindDirText:!isNaN(_atmosWindDir) ? _atmosWindDir.toFixed(0)  + " °"      : "-- °"
     property string _atmosWindSpdText:!isNaN(_atmosWindSpd) ? _atmosWindSpd.toFixed(1)  + " m/s"    : "-.- m/s"
+    property string _pm1p0Text:       !isNaN(_pm1p0)        ? _pm1p0.toFixed(0)         + " g/㎥"    : "-.- g/㎥"
+    property string _pm2p5Text:       !isNaN(_pm2p5)        ? _pm2p5.toFixed(0)         + " g/㎥"    : "-.- g/㎥"
+    property string _pm10Text:        !isNaN(_pm10)         ? _pm10.toFixed(0)          + " g/㎥"    : "-.- g/㎥"
+    property string _radiationText:   !isNaN(_radiation)    ? _radiation.toFixed(3)     + " mSv"     : "-.--- mSv"
 
     height:     size
     width:      size
@@ -194,6 +202,41 @@ Rectangle {
         QGCLabel {
             text:                   vehicle ? _atmosWindSpdText : "unknown"
             horizontalAlignment:    Text.AlignHCenter
+        }
+    }
+
+    Rectangle {
+        anchors.top:    parent.top
+        anchors.left:   parent.right
+        anchors.leftMargin : ScreenTools.defaultFontPixelWidth
+        width:  externalsensorviewlayout.width * 1.1
+        height: externalsensorviewlayout.height * 1.1
+        color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
+        radius:     ScreenTools.defaultFontPixelHeight / 4
+
+        ColumnLayout {
+            id: externalsensorviewlayout
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            spacing:                ScreenTools.defaultFontPixelWidth * 0.4
+            QGCLabel {
+                text:           "미세먼지 정보"
+            }
+            QGCLabel {
+                text:           "PM1.0 : " + _pm1p0Text
+            }
+            QGCLabel {
+                text:           "PM2.5 : " + _pm2p5Text
+            }
+            QGCLabel {
+                text:           "PM10 : " + _pm10Text
+            }
+            QGCLabel {
+                text:           "방사선량 정보"
+            }
+            QGCLabel {
+                text:           "선량 : " + _radiationText
+            }
         }
     }
 }

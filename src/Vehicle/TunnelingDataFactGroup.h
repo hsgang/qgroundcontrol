@@ -17,6 +17,7 @@ public:
     Q_PROPERTY(Fact* pm1p0          READ pm1p0           CONSTANT)
     Q_PROPERTY(Fact* pm2p5          READ pm2p5           CONSTANT)
     Q_PROPERTY(Fact* pm10           READ pm10            CONSTANT)
+    Q_PROPERTY(Fact* radiation      READ radiation       CONSTANT)
 
     Fact* temperature                 () { return &_temperatureFact; }
     Fact* humidity                    () { return &_humidityFact; }
@@ -26,6 +27,7 @@ public:
     Fact* pm1p0                       () { return &_pm1p0Fact; }
     Fact* pm2p5                       () { return &_pm2p5Fact; }
     Fact* pm10                        () { return &_pm10Fact; }
+    Fact* radiation                   () { return &_radiationFact; }
 
     // Overrides from FactGroup
     void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
@@ -38,6 +40,7 @@ public:
     static const char* _pm1p0FactName;
     static const char* _pm2p5FactName;
     static const char* _pm10FactName;
+    static const char* _radiationFactName;
 
 private:
     void _handleTunnel              (mavlink_message_t& message);
@@ -50,6 +53,7 @@ private:
     Fact _pm1p0Fact;
     Fact _pm2p5Fact;
     Fact _pm10Fact;
+    Fact _radiationFact;
 
     struct tunneling_Payload {
         int16_t temperatureRaw;
@@ -60,5 +64,6 @@ private:
         uint16_t pm1p0Raw;
         uint16_t pm2p5Raw;
         uint16_t pm10Raw;
+        float radiationRaw;
     };
 };
