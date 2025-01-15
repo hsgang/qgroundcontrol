@@ -7972,6 +7972,11 @@ Click Ok to start the auto-tuning process.
         <translation>지도 중앙을 기체에 위치</translation>
     </message>
     <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="120"/>
+        <source>Show Grid on Map</source>
+        <translation>지도상에 그리드 표시</translation>
+    </message>
+    <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="128"/>
         <source>Show Telemetry Log Replay Status Bar</source>
         <translation>텔레메트리 재생 로그 바 표시</translation>

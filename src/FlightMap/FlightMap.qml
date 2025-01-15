@@ -42,6 +42,9 @@ Map {
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property var    _activeVehicleCoordinate:   _activeVehicle ? _activeVehicle.coordinate : QtPositioning.coordinate()
+    property var    _settingsManager:           QGroundControl.settingsManager
+    property var    _flyViewSettings:           _settingsManager.flyViewSettings
+    property Fact   _showGridOnMap:             _flyViewSettings.showGridOnMap
 
     function setVisibleRegion(region) {
         // TODO: Is this still necessary with Qt 5.11?
@@ -175,18 +178,18 @@ Map {
 
         sourceItem: Rectangle {
             id:         homeMarker
-            height:     ScreenTools.defaultFontPixelHeight
+            height:     ScreenTools.defaultFontPixelHeight * 1.4
             width:      height
             radius:     width * 0.5
-            color:      "transparent"
-            border.color: qgcPal.alertBackground
-            border.width: 2
+            color:      qgcPal.alertBackground //"transparent"
+            border.color: "white" //qgcPal.alertBackground
+            border.width: 1
 
             QGCLabel {
-                text:               "H"
+                text:               "GCS"
                 font.pointSize:     parent.height * 0.25
                 font.bold:          true
-                color:              qgcPal.alertBackground
+                //color:              qgcPal.alertBackground
                 anchors.centerIn:   parent
             }
 
@@ -194,6 +197,72 @@ Map {
                 origin.x:       homeMarker.width  / 2
                 origin.y:       homeMarker.height / 2
                 angle:          isNaN(gcsHeading) ? 0 : gcsHeading
+            }
+        }
+    }
+
+    function calculateMetersPerPixel(zoomLevel, latitude) {
+        var earthCircumference = 40075017; // 지구 둘레 (m)
+        var latitudeRadians = latitude * Math.PI / 180;
+        var metersPerPixel = earthCircumference * Math.cos(latitudeRadians) / Math.pow(2, zoomLevel + 8);
+        return metersPerPixel;
+    }
+
+    Canvas {
+        id: gridCanvas
+        renderTarget: Canvas.FramebufferObject
+        anchors.fill: parent
+        visible:      (_showGridOnMap.rawValue == true) && _map.zoomLevel > 16;
+
+        onPaint: {
+            var ctx = getContext("2d");
+            ctx.clearRect(0, 0, width, height);
+
+            var stepMeters = 100; // 500m 간격
+            var centerCoord = _map.center;
+            var metersPerPixel = calculateMetersPerPixel(_map.zoomLevel, centerCoord.latitude);
+            var stepPixels = stepMeters / metersPerPixel;
+
+            var topLeft = _map.toCoordinate(Qt.point(0, 0));
+            var bottomRight = _map.toCoordinate(Qt.point(width, height));
+
+            // 경도 및 위도를 정수 간격으로 맞춤
+            var startLon = Math.floor(topLeft.longitude / (stepMeters / 111000)) * (stepMeters / 111000);
+            var startLat = Math.floor(topLeft.latitude / (stepMeters / 111000)) * (stepMeters / 111000);
+
+            // 세로선 (경도 기준)
+            var lon = startLon;
+            while (lon < bottomRight.longitude) {
+                var x = _map.fromCoordinate(QtPositioning.coordinate(centerCoord.latitude, lon)).x;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, height);
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.4)"; // 파란색 반투명
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                lon += stepMeters / (111000 * Math.cos(centerCoord.latitude * Math.PI / 180)); // 경도 간격 계산
+            }
+
+            // 가로선 (위도 기준)
+            var lat = startLat;
+            while (lat > bottomRight.latitude) {
+                var y = _map.fromCoordinate(QtPositioning.coordinate(lat, centerCoord.longitude)).y;
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(width, y);
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.4)"; // 파란색 반투명
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                lat -= stepMeters / 111000; // 1° 위도 ≈ 111km
+            }
+        }
+
+        Connections {
+            target: _map
+            onCenterChanged: gridCanvas.requestPaint();
+            onZoomLevelChanged: {
+                gridCanvas.requestPaint();
+                //console.log("zoomLevel : " + _map.zoomLevel);
             }
         }
     }

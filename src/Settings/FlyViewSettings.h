@@ -51,4 +51,5 @@ public:
     DEFINE_SETTINGFACT(showCameraProjectionOnMap)
     DEFINE_SETTINGFACT(showEscStatus)
     DEFINE_SETTINGFACT(showSiyiCameraControl)
+    DEFINE_SETTINGFACT(showGridOnMap)
 };

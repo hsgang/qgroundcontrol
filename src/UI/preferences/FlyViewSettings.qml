@@ -84,6 +84,14 @@ SettingsPage {
             property Fact _keepMapCenteredOnVehicle: _flyViewSettings.keepMapCenteredOnVehicle
         }
 
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Show Grid on Map")
+            fact:               _showGridOnMap
+            visible:            _showGridOnMap.visible
+            property Fact _showGridOnMap: _flyViewSettings.showGridOnMap
+        }
+
         // FactCheckBoxSlider {
         //     Layout.fillWidth:   true
         //     text:               qsTr("Show Telemetry Log Replay Status Bar")

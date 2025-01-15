@@ -48,5 +48,7 @@ DECLARE_SETTINGSFACT(FlyViewSettings, showVehicleInfoOnMap)
 DECLARE_SETTINGSFACT(FlyViewSettings, showCameraProjectionOnMap)
 DECLARE_SETTINGSFACT(FlyViewSettings, showEscStatus)
 DECLARE_SETTINGSFACT(FlyViewSettings, showSiyiCameraControl)
+DECLARE_SETTINGSFACT(FlyViewSettings, showGridOnMap)
+
 
 

@@ -56,6 +56,12 @@
     "default":     false
 },
 {
+    "name":             "showGridOnMap",
+    "shortDesc": "Show Grid On Map",
+    "type":             "bool",
+    "default":     false
+},
+{
     "name":         "showSimpleCameraControl",
     "shortDesc":    "Show controls for camera triggering using MAV_CMD_DO_DIGICAM_CONTROL.",
     "type":         "bool",
