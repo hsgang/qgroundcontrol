@@ -357,7 +357,7 @@
             "param1": {
                 "label":            "Enable",
                 "enumStrings":      "On,Off",
-                "enumValues":       "0,1",
+                "enumValues":       "1,0",
                 "default":          1,
                 "decimalPlaces":    0
             }
@@ -1030,7 +1030,7 @@
             "id":                   208,
             "rawName":              "MAV_CMD_DO_PARACHUTE",
             "friendlyName":         "Trigger parachute",
-            "description":          "Enable/Disable geofence.",
+            "description":          "Enable/Disable auto-release or Release a parachute",
             "specifiesCoordinate":  false,
             "friendlyEdit":         true,
             "category":             "Safety",
@@ -1084,7 +1084,8 @@
             "description":          "AutoTune Enable.",
             "specifiesCoordinate":  false,
             "friendlyEdit":         true,
-            "param2": {
+            "category":             "Advanced",
+            "param1": {
                 "label":            "Enable",
                 "enumStrings":      "Enable,Disable",
                 "enumValues":       "1,0",

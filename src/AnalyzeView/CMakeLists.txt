@@ -95,19 +95,22 @@ target_precompile_headers(AnalyzeView
 #===========================================================================#
 
 message(STATUS "Building ULogParser")
-FetchContent_Declare(ulogparser
+
+include(CPM)
+CPMAddPackage(
+    NAME ulog_cpp
     GIT_REPOSITORY https://github.com/PX4/ulog_cpp.git
     GIT_TAG main
     GIT_SHALLOW TRUE
 )
-FetchContent_MakeAvailable(ulogparser)
+
 if(TARGET ulog_cpp::ulog_cpp)
     target_link_libraries(AnalyzeView PRIVATE ulog_cpp::ulog_cpp)
 endif()
 
 #===========================================================================#
 
-set(MINIMUM_EXIV2_VERSION 0.28.0)
+set(MINIMUM_EXIV2_VERSION 0.28)
 set(TARGET_EXIV2_VERSION 0.28.3)
 
 set(MINIMUM_EXPAT_VERSION 2.2.6)
@@ -138,7 +141,7 @@ set(TARGET_EXPAT_VERSION 2.6.4)
 
 if(NOT QGC_BUILD_DEPENDENCIES)
     find_package(exiv2 ${MINIMUM_EXIV2_VERSION})
-    if(TARGET Exiv2::exiv2lib)
+    if(TARGET Exiv2::exiv2lib) # AND exiv2_VERSION VERSION_GREATER_EQUAL ${MINIMUM_EXIV2_VERSION})
         target_link_libraries(AnalyzeView PRIVATE Exiv2::exiv2lib)
         return()
     endif()

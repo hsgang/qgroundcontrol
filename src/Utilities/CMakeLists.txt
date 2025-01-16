@@ -31,7 +31,7 @@ qt_add_library(Utilities STATIC
     CloudManager.h
 )
 
-if(MOBILE)
+if(ANDROID OR IOS)
     target_sources(Utilities PRIVATE MobileScreenMgr.h)
     if(ANDROID)
         target_sources(Utilities PRIVATE MobileScreenMgr.cc)

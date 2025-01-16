@@ -50,17 +50,15 @@ target_compile_definitions(Joystick PRIVATE QGC_SDL_JOYSTICK SDL_MAIN_HANDLED)
 
 #===========================================================================#
 
-FetchContent_Declare(SDL_GameControllerDB
+include(CPM)
+CPMAddPackage(
+    NAME sdl_gamecontrollerdb
     GIT_REPOSITORY https://github.com/mdqinc/SDL_GameControllerDB.git
     GIT_TAG master
     GIT_SHALLOW TRUE
 )
-FetchContent_MakeAvailable(SDL_GameControllerDB)
 
-set_source_files_properties(${sdl_gamecontrollerdb_SOURCE_DIR}/gamecontrollerdb.txt
-    PROPERTIES
-        QT_RESOURCE_ALIAS gamecontrollerdb.txt
-)
+set_source_files_properties(${sdl_gamecontrollerdb_SOURCE_DIR}/gamecontrollerdb.txt PROPERTIES QT_RESOURCE_ALIAS gamecontrollerdb.txt)
 
 qt_add_resources(Joystick "gamecontrollerdb.txt"
     PREFIX "/db/mapping/joystick"
@@ -69,7 +67,7 @@ qt_add_resources(Joystick "gamecontrollerdb.txt"
 
 #===========================================================================#
 
-set(MINIMUM_SDL2_VERSION 2.24.0)
+set(MINIMUM_SDL2_VERSION 2.0.20)
 set(TARGET_SDL2_VERSION 2.30.11)
 
 if(NOT QGC_BUILD_DEPENDENCIES)
