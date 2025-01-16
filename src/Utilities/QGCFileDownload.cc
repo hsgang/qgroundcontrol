@@ -179,6 +179,9 @@ void QGCFileDownload::_downloadError(QNetworkReply::NetworkError code)
     case QNetworkReply::ContentNotFoundError:
         errorMsg = tr("Error: File Not Found");
         break;
+    case QNetworkReply::HostNotFoundError:
+        errorMsg = tr("Error: Host not Found");
+        break;
     default:
         errorMsg = tr("Error during download. Error: %1").arg(code);
         break;

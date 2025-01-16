@@ -8255,6 +8255,11 @@ Click Ok to start the auto-tuning process.
         <source>The new version has been downloaded. Check the Download Folder</source>
         <translation>신규 설치파일이 다운로드 되었습니다. 다운로드 폴더를 확인하세요.</translation>
     </message>
+    <message>
+        <location filename="../src/Utilities/CloudManager.cc" line="1"/>
+        <source>The new version has been downloaded. Do you want to install it now?</source>
+        <translation>신규 설치파일이 다운로드 되었습니다. 지금 바로 설치하시겠습니까?</translation>
+    </message>
 </context>
 <context>
     <name>CloudSettings</name>
@@ -15448,6 +15453,11 @@ sudo apt-get remove modemmanager</translation>
         <location filename="../src/QGCFileDownload.cc" line="138"/>
         <source>Error: File Not Found</source>
         <translation>오류: 파일을 찾을 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../src/QGCFileDownload.cc" line="138"/>
+        <source>Error: Host not Found</source>
+        <translation>오류: 호스트를 찾을 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/QGCFileDownload.cc" line="141"/>

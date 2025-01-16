@@ -1102,9 +1102,14 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
                 QMessageBox::StandardButton reply = QMessageBox::question(
                     nullptr,
                     tr("New Version Downloaded"),
+#ifdef __mobile__
                     tr("The new version has been downloaded. Check the Download Folder"),
-                    //tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(targetFilePath),
+                    QMessageBox::Yes);
+#else
+                    tr("The new version has been downloaded. Do you want to install it now?"),
                     QMessageBox::Yes | QMessageBox::No);
+#endif
+                    //tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(targetFilePath),
 
                 if (reply == QMessageBox::Yes) {
 #ifdef __mobile__
@@ -1130,6 +1135,9 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
         } else {
             qCDebug(CloudManagerLog) << "Failed to save file.";
         }
+    } else {
+        QMessageBox::information(nullptr, "정보", errorMsg);
+        qWarning() << errorMsg;
     }
 }
 
