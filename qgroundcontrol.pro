@@ -60,7 +60,7 @@ WindowsBuild {
 # Branding
 #
 
-QGC_APP_NAME        = "Mission Navigator"
+QGC_APP_NAME        = "MissionNavigator"
 QGC_ORG_NAME        = "MissionNavigator.org"
 QGC_ORG_DOMAIN      = "org.MissionNavigator"
 QGC_APP_DESCRIPTION = "Mission Navigator"

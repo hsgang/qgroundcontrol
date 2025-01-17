@@ -1023,7 +1023,7 @@ void CloudManager::uploadTakeoffRecordReplyReadyRead()
 
 void CloudManager::downloadForNewVersion()
 {
-#ifdef __mobile__
+#if defined(Q_OS_ANDROID)
     const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator.apk";
 #else
     const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator-installer.exe";
@@ -1049,7 +1049,7 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
 
             // 파일 이동
             //QString targetDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/DownloadedFiles/";
-#ifdef __mobile__
+#if defined(Q_OS_ANDROID)
             // 안드로이드 공용 다운로드 폴더 경로 가져오기
             QJniObject environment = QJniObject::callStaticObjectMethod(
                 "android/os/Environment",
@@ -1076,7 +1076,7 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
             //QString filePath = downloadsPath + "/" + fileName;
 
             QString targetDir = downloadsPath + "/";
-#else
+#elif defined(Q_OS_WINDOWS)
             QString targetDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + "/MissionNavigator/";
 #endif
             QDir dir;
@@ -1102,23 +1102,23 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
                 QMessageBox::StandardButton reply = QMessageBox::question(
                     nullptr,
                     tr("New Version Downloaded"),
-#ifdef __mobile__
+#if defined(Q_OS_ANDROID)
                     tr("The new version has been downloaded. Check the Download Folder"),
                     QMessageBox::Yes);
-#else
+#elif defined(Q_OS_WINDOWS)
                     tr("The new version has been downloaded. Do you want to install it now?"),
                     QMessageBox::Yes | QMessageBox::No);
 #endif
                     //tr("The new version has been downloaded.\nFile Path: %1\nDo you want to install it now?").arg(targetFilePath),
 
                 if (reply == QMessageBox::Yes) {
-#ifdef __mobile__
+#if defined(Q_OS_ANDROID)
                     // 알 수 없는 소스에서 설치 권한 확인 및 요청
                     //requestUnknownSourcePermission();
 
                     // APK 설치 시도
                     //installApkFromInternal(targetFilePath);
-#else
+#elif defined(Q_OS_WINDOWS)
                     if (QProcess::startDetached(targetFilePath)) {
                         qDebug() << "File executed successfully. Exiting current process.";
                         QCoreApplication::quit();
@@ -1148,7 +1148,7 @@ void CloudManager::downloadProgress(qint64 curr, qint64 total)
     emit fileDownloadProgressChanged();
 }
 
-#ifdef __mobile__
+#if defined(Q_OS_ANDROID)
 void CloudManager::installApkFromInternal(const QString &apkFilePath)
 {
     // Android Context 가져오기
