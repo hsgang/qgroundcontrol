@@ -215,55 +215,55 @@ Map {
         visible:      (_showGridOnMap.rawValue == true) && _map.zoomLevel > 16;
 
         onPaint: {
-            var ctx = getContext("2d");
-            ctx.clearRect(0, 0, width, height);
+            if(_map.zoomLevel > 16) {
+                var ctx = getContext("2d");
+                ctx.clearRect(0, 0, width, height);
 
-            var stepMeters = 100; // 500m 간격
-            var centerCoord = _map.center;
-            var metersPerPixel = calculateMetersPerPixel(_map.zoomLevel, centerCoord.latitude);
-            var stepPixels = stepMeters / metersPerPixel;
+                var stepMeters = 100; // 500m 간격
+                var centerCoord = _map.center;
 
-            var topLeft = _map.toCoordinate(Qt.point(0, 0));
-            var bottomRight = _map.toCoordinate(Qt.point(width, height));
+                var topLeft = _map.toCoordinate(Qt.point(0, 0));
+                var bottomRight = _map.toCoordinate(Qt.point(width, height));
 
-            // 경도 및 위도를 정수 간격으로 맞춤
-            var startLon = Math.floor(topLeft.longitude / (stepMeters / 111000)) * (stepMeters / 111000);
-            var startLat = Math.floor(topLeft.latitude / (stepMeters / 111000)) * (stepMeters / 111000);
+                // 경도 및 위도를 일정 간격으로 정렬
+                var stepDegreesLon = (stepMeters / (111320 * Math.cos(Math.floor(centerCoord.latitude) * Math.PI / 180))); // 경도 간격 계산
+                var stepDegreesLat = (stepMeters / 111320); // 1° 위도 ≈ 111,320km
 
-            // 세로선 (경도 기준)
-            var lon = startLon;
-            while (lon < bottomRight.longitude) {
-                var x = _map.fromCoordinate(QtPositioning.coordinate(centerCoord.latitude, lon)).x;
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, height);
-                ctx.strokeStyle = "rgba(255, 255, 255, 0.4)"; // 파란색 반투명
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                lon += stepMeters / (111000 * Math.cos(centerCoord.latitude * Math.PI / 180)); // 경도 간격 계산
-            }
+                var startLon = Math.floor(topLeft.longitude / stepDegreesLon) * stepDegreesLon;
+                var startLat = Math.floor(topLeft.latitude / stepDegreesLat) * stepDegreesLat;
 
-            // 가로선 (위도 기준)
-            var lat = startLat;
-            while (lat > bottomRight.latitude) {
-                var y = _map.fromCoordinate(QtPositioning.coordinate(lat, centerCoord.longitude)).y;
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(width, y);
-                ctx.strokeStyle = "rgba(255, 255, 255, 0.4)"; // 파란색 반투명
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                lat -= stepMeters / 111000; // 1° 위도 ≈ 111km
+                // 세로선 (경도 기준)
+                var lon = startLon;
+                while (lon < bottomRight.longitude) {
+                    var x = _map.fromCoordinate(QtPositioning.coordinate(centerCoord.latitude, lon)).x;
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, height);
+                    ctx.strokeStyle = "rgba(255, 255, 255, 0.4)"; // 흰색 반투명
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    lon += stepDegreesLon;
+                }
+
+                // 가로선 (위도 기준)
+                var lat = startLat;
+                while (lat > bottomRight.latitude) {
+                    var y = _map.fromCoordinate(QtPositioning.coordinate(lat, centerCoord.longitude)).y;
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(width, y);
+                    ctx.strokeStyle = "rgba(255, 255, 255, 0.4)"; // 흰색 반투명
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    lat -= stepDegreesLat;
+                }
             }
         }
 
         Connections {
             target: _map
             onCenterChanged: gridCanvas.requestPaint();
-            onZoomLevelChanged: {
-                gridCanvas.requestPaint();
-                //console.log("zoomLevel : " + _map.zoomLevel);
-            }
+            onZoomLevelChanged: gridCanvas.requestPaint();
         }
     }
 } // Map
