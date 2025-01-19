@@ -70,7 +70,7 @@ ColumnLayout {
     Loader {
         id:                 photoVideoControlLoader
         Layout.alignment:   Qt.AlignTop | Qt.AlignRight
-        sourceComponent:    globals.activeVehicle && _showSingleVehicleUI ? photoVideoControlComponent : undefined
+        sourceComponent:    globals.activeVehicle ? photoVideoControlComponent : undefined
 
         property real rightEdgeCenterInset: visible ? parent.width - x : 0
 

@@ -7,17 +7,20 @@
  *
  ****************************************************************************/
 
-#include <QtCore/QProcessEnvironment>
 #include <QtCore/QtPlugin>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QMessageBox>
 #include <QtQuick/QQuickWindow>
 #include <QSplashScreen>
+#include <QtWidgets/QApplication>
+
+#ifdef Q_OS_MACOS
+    #include <QtCore/QProcessEnvironment>
+#endif
 
 #include "QGCApplication.h"
 #include "AppMessages.h"
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
+    #include <QtWidgets/QMessageBox>
     #include "RunGuard.h"
 #endif
 
@@ -29,8 +32,8 @@
 
 #include "CmdLineOptParser.h"
 
-#ifdef UNITTEST_BUILD
-#include "UnitTestList.h"
+#ifdef QGC_UNITTEST_BUILD
+    #include "UnitTestList.h"
 #endif
 
 #ifdef Q_OS_WIN
@@ -54,8 +57,8 @@ int WindowsCrtReportHook(int reportType, char* message, int* returnValue)
 
 #endif // QT_DEBUG
 
-// To shut down QGC on Ctrl+C on Linux
 #ifdef Q_OS_LINUX
+#ifndef Q_OS_ANDROID
 
 #include <csignal>
 
@@ -69,6 +72,7 @@ void sigHandler(int s)
     }
 }
 
+#endif /* Q_OS_ANDROID */
 #endif /* Q_OS_LINUX */
 
 //-----------------------------------------------------------------------------
@@ -91,7 +95,6 @@ int main(int argc, char *argv[])
 
     RunGuard guard(runguardString);
     if (!guard.tryToRun()) {
-        // QApplication is necessary to use QMessageBox
         QApplication errorApp(argc, argv);
         QMessageBox::critical(nullptr, QObject::tr("Error"),
             QObject::tr("A second instance of %1 is already running. Please close the other instance and try again.").arg(QGC_APP_NAME)
@@ -115,21 +118,17 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef Q_OS_UNIX
-    //Force writing to the console on UNIX/BSD devices
     if (!qEnvironmentVariableIsSet("QT_LOGGING_TO_CONSOLE")) {
         qputenv("QT_LOGGING_TO_CONSOLE", "1");
     }
 #endif
 
-    // install the message handler
     AppMessages::installHandler();
 
 #ifdef Q_OS_MACOS
-#ifndef Q_OS_IOS
     // Prevent Apple's app nap from screwing us over
     // tip: the domain can be cross-checked on the command line with <defaults domains>
     QProcess::execute("defaults", {"write org.qgroundcontrol.qgroundcontrol NSAppSleepDisabled -bool YES"});
-#endif
 #endif
 
 #ifdef Q_OS_WIN
@@ -151,16 +150,12 @@ int main(int argc, char *argv[])
             break;
         }
     }
-
-// In Windows, the compiler doesn't see the use of the class created by Q_IMPORT_PLUGIN
-#pragma warning( disable : 4930 4101 )
-
 #endif
 
     // We statically link our own QtLocation plugin
     Q_IMPORT_PLUGIN(QGeoServiceProviderFactoryQGC)
 
-    bool runUnitTests = false;          // Run unit tests
+    bool runUnitTests = false;
 
 #ifdef QT_DEBUG
     // We parse a small set of command line options here prior to QGCApplication in order to handle the ones
@@ -177,7 +172,7 @@ int main(int argc, char *argv[])
         // Add additional command line option flags here
     };
 
-    ParseCmdLineOptions(argc, argv, rgCmdLineOptions, sizeof(rgCmdLineOptions)/sizeof(rgCmdLineOptions[0]), false);
+    ParseCmdLineOptions(argc, argv, rgCmdLineOptions, std::size(rgCmdLineOptions), false);
     if (stressUnitTests) {
         runUnitTests = true;
     }
@@ -223,8 +218,10 @@ int main(int argc, char *argv[])
     app.processEvents();
 
 #ifdef Q_OS_LINUX
+#ifndef Q_OS_ANDROID
     std::signal(SIGINT, sigHandler);
     std::signal(SIGTERM, sigHandler);
+#endif
 #endif
 
     app.init();
@@ -233,7 +230,7 @@ int main(int argc, char *argv[])
 
     int exitCode = 0;
 
-#ifdef UNITTEST_BUILD
+#ifdef QGC_UNITTEST_BUILD
     if (runUnitTests) {
         exitCode = runTests(stressUnitTests, unitTestOptions);
     } else

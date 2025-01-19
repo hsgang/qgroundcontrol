@@ -7,17 +7,17 @@ on:
       - 'Stable*'
     tags:
       - 'v*'
-    paths-ignore:
-      - 'deploy/**'
-      - 'docs/**'
   pull_request:
-    paths-ignore:
-      - 'deploy/**'
-      - 'docs/**'
-      - '.github/workflows/docs_deploy.yml'
-      - '.github/workflows/linux.yml'
-      - '.github/workflows/macos.yml'
-      - '.github/workflows/windows.yml'
+    paths:
+      - '.github/workflows/android-linux.yml'
+      - 'deploy/android/**'
+      - 'src/**'
+      - 'android/**'
+      - 'CMakeLists.txt'
+
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   build:
@@ -33,6 +33,7 @@ jobs:
 
     env:
       ARTIFACT: MissionNavigator.apk
+      PACKAGE: MissionNavigator
       QT_VERSION: 6.8.1
       GST_VERSION: 1.22.12
       QT_ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/deploy/android/android_release.keystore
@@ -42,12 +43,6 @@ jobs:
       QT_ANDROID_ABIS: ${{ matrix.BuildType == 'Release' && 'armeabi-v7a;arm64-v8a' || 'arm64-v8a' }}
 
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          android: 'false'
-        continue-on-error: true
-
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
@@ -97,10 +92,12 @@ jobs:
         uses: ./.github/actions/upload
         with:
           artifact_name: ${{ env.ARTIFACT }}
+          package_name: ${{ env.PACKAGE }}
           aws_key_id: ${{ secrets.MINIO_ACCESS_KEY }}
           aws_secret_access_key: ${{ secrets.MINIO_SECRET_KEY }}
           aws_end_point: ${{ secrets.MINIO_ENDPOINT }}
-          source: ''
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
 
       # - name: Deploy to Play Store
       #   if: matrix.BuildType == 'Release'

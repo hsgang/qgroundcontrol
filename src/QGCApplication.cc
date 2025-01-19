@@ -18,7 +18,10 @@
 
 #include "QGCApplication.h"
 
+#include <QtCore/QEvent>
 #include <QtCore/QFile>
+#include <QtCore/QMetaMethod>
+#include <QtCore/QMetaObject>
 #include <QtCore/QRegularExpression>
 #include <QtGui/QFontDatabase>
 #include <QtGui/QIcon>
@@ -28,6 +31,8 @@
 #include <QtQuick/QQuickImageProvider>
 #include <QtQuick/QQuickWindow>
 #include <QtQuickControls2/QQuickStyle>
+
+#include <QtCore/private/qthread_p.h>
 
 #include "AppMessages.h"
 #include "AudioOutput.h"
@@ -78,7 +83,7 @@
 #ifdef QGC_VIEWER3D
 #include "Viewer3DManager.h"
 #endif
-#ifndef NO_SERIAL_LINK
+#ifndef QGC_NO_SERIAL_LINK
 #include "FirmwareUpgradeController.h"
 #include "SerialLink.h"
 #endif
@@ -142,7 +147,7 @@ QGCApplication::QGCApplication(int &argc, char *argv[], bool unitTesting)
         // name. Also we want to run unit tests with clean settings every time.
         applicationName = QStringLiteral("%1_unittest").arg(QGC_APP_NAME);
     } else {
-#ifdef DAILY_BUILD
+#ifdef QGC_DAILY_BUILD
         // This gives daily builds their own separate settings space. Allowing you to use daily and stable builds
         // side by side without daily screwing up your stable settings.
         applicationName = "Mission Navigator";//QStringLiteral("%1 AMP").arg(QGC_APPLICATION_NAME);
@@ -210,7 +215,7 @@ QGCApplication::QGCApplication(int &argc, char *argv[], bool unitTesting)
     // We need to set language as early as possible prior to loading on JSON files.
     setLanguage();
 
-#ifndef DAILY_BUILD
+#ifndef QGC_DAILY_BUILD
     _checkForNewVersion();
 #endif
 }
@@ -225,7 +230,7 @@ void QGCApplication::setLanguage()
         _locale = QLocale(possibleLocale);
     }
     //-- We have specific fonts for Korean
-    if(_locale == QLocale::Korean) {
+    if (_locale == QLocale::Korean) {
         qCDebug(LocalizationLog) << "Loading Korean fonts" << _locale.name();
         if(QFontDatabase::addApplicationFont(":/fonts/NanumGothic-Regular") < 0) {
             qCWarning(LocalizationLog) << "Could not load /fonts/NanumGothic-Regular font";
@@ -240,17 +245,17 @@ void QGCApplication::setLanguage()
     removeTranslator(&_qgcTranslatorQtLibs);
     if (_locale.name() != "en_US") {
         QLocale::setDefault(_locale);
-        if(_qgcTranslatorQtLibs.load("qt_" + _locale.name(), QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
+        if (_qgcTranslatorQtLibs.load("qt_" + _locale.name(), QLibraryInfo::path(QLibraryInfo::TranslationsPath))) {
             installTranslator(&_qgcTranslatorQtLibs);
         } else {
             qCWarning(LocalizationLog) << "Qt lib localization for" << _locale.name() << "is not present";
         }
-        if(_qgcTranslatorSourceCode.load(_locale, QLatin1String("qgc_source_"), "", ":/i18n")) {
+        if (_qgcTranslatorSourceCode.load(_locale, QLatin1String("qgc_source_"), "", ":/i18n")) {
             installTranslator(&_qgcTranslatorSourceCode);
         } else {
             qCWarning(LocalizationLog) << "Error loading source localization for" << _locale.name();
         }
-        if(JsonHelper::translator()->load(_locale, QLatin1String("qgc_json_"), "", ":/i18n")) {
+        if (JsonHelper::translator()->load(_locale, QLatin1String("qgc_json_"), "", ":/i18n")) {
             installTranslator(JsonHelper::translator());
         } else {
             qCWarning(LocalizationLog) << "Error loading json localization for" << _locale.name();
@@ -308,7 +313,7 @@ void QGCApplication::init()
 
 
     qmlRegisterUncreatableType<VehicleComponent>("QGroundControl.AutoPilotPlugin", 1, 0, "VehicleComponent", "Reference only");
-#ifndef NO_SERIAL_LINK
+#ifndef QGC_NO_SERIAL_LINK
     qmlRegisterType<FirmwareUpgradeController>("QGroundControl.Controllers", 1, 0, "FirmwareUpgradeController");
 #endif
     qmlRegisterType<JoystickConfigController>("QGroundControl.Controllers", 1, 0, "JoystickConfigController");
@@ -372,7 +377,7 @@ void QGCApplication::_initForNormalAppBoot()
 
     #ifdef Q_OS_LINUX
     #ifndef Q_OS_ANDROID
-    #ifndef NO_SERIAL_LINK
+    #ifndef QGC_NO_SERIAL_LINK
         if (!_runningUnitTests) {
             // Determine if we have the correct permissions to access USB serial devices
             QFile permFile("/etc/group");

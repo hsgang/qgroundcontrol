@@ -91,3 +91,5 @@ log/latest_list
 node_modules/
 docs/.vitepress/cache/
 docs/.vitepress/dist/
+
+CMakeUserPresets.json

@@ -3,6 +3,10 @@ name: iOS
 on:
   workflow_dispatch:
 
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 jobs:
   build:
     runs-on: macos-latest
@@ -17,24 +21,11 @@ jobs:
 
     env:
       ARTIFACT: QGroundControl.app
+      PACKAGE: QGroundControl
       QT_VERSION: 6.8.1
       GST_VERSION: 1.22.12
 
     steps:
-      - name: Recover disk space
-        run: |
-          df -h
-          ls /Applications
-          brew uninstall google-chrome
-          sudo rm -rf /Users/runner/Library/Android
-          sudo rm -rf /Applications/Xcode_14*
-          sudo rm -rf /Applications/Xcode_15.0*
-          sudo rm -rf /Applications/Xcode_15.1*
-          sudo rm -rf /Applications/Xcode_15.2*
-          sudo rm -rf /Applications/Xcode_15.3*
-          ls /Applications
-          df -h
-
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
@@ -48,28 +39,27 @@ jobs:
           xcode-version: latest-stable
 
       - uses: seanmiddleditch/gha-setup-ninja@v5
+      - uses: lukka/get-cmake@latest
 
       - name: Install Dependencies
         run: |
           brew update
-          brew install cmake ninja ccache
-
-      - uses: seanmiddleditch/gha-setup-ninja@v5
-      - uses: lukka/get-cmake@latest
+          brew install ccache
 
       - name: Set Up Cache
         uses: hendrikmuhs/ccache-action@main
         with:
+          create-symlink: true
           key: ${{ runner.os }}-iOS-${{ matrix.BuildType }}
           max-size: 1G
           save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+          verbose: 1
           evict-old-files: 'job'
 
       - name: Install Qt for MacOS
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          aqtversion: ==3.1.*
           host: mac
           target: desktop
           arch: clang_64
@@ -81,12 +71,10 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          aqtversion: ==3.1.*
           host: mac
           target: ios
           arch: ios
           dir: ${{ runner.temp }}
-          extra: --autodesktop
           modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
           cache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
@@ -106,5 +94,5 @@ jobs:
       - name: Save App
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.ARTIFACT }}
+          name: ${{ env.PACKAGE }}
           path: ${{ runner.temp }}/shadow_build_dir/*.app

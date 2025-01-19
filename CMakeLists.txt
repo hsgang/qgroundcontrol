@@ -25,7 +25,9 @@ endif()
 
 # set(CMAKE_OSX_ARCHITECTURES "arm64")
 # set(CMAKE_OSX_SYSROOT "iphoneos")
-# set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0")
+if(APPLE AND NOT IOS)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0")
+endif()
 
 include(Git)
 
@@ -65,9 +67,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # set(CMAKE_AUTOGEN_BETTER_GRAPH_MULTI_CONFIG ON)
 
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release")
-if(NOT CMAKE_BUILD_TYPE)
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug;Release")
 endif()
 
 if(LINUX)
@@ -82,6 +84,9 @@ if(UNIX)
         message(STATUS "Using CCache")
         set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
         set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+        if(APPLE)
+            set(CMAKE_OBJC_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+        endif()
     endif()
 elseif(WIN32)
     find_program(SCCACHE_PROGRAM sccache)
@@ -119,9 +124,33 @@ if(POLICY CMP0168)
     set(CMAKE_POLICY_DEFAULT_CMP0168 NEW)
 endif()
 
+# https://cmake.org/cmake/help/latest/policy/CMP0075.html#policy:CMP0075
+if(POLICY CMP0075)
+    cmake_policy(SET CMP0075 NEW)
+    set(CMAKE_POLICY_DEFAULT_CMP0075 NEW)
+endif()
+
+if(QGC_USE_IWYU)
+    include(IWYU)
+endif()
+
 #######################################################
 #               Qt6 Configuration
 #######################################################
+
+if(CMAKE_CROSSCOMPILING AND NOT IS_DIRECTORY ${QT_HOST_PATH})
+    message(FATAL_ERROR "You need to set QT_HOST_PATH to cross compile Qt.")
+endif()
+
+set(QT_SILENCE_MISSING_DEPENDENCY_TARGET_WARNING ON)
+set(QT_MINIMUM_VERSION 6.8.1)
+
+find_program(QMAKE_EXECUTABLE NAMES qmake HINTS ${QT_ROOT_DIR} ${QTDIR} ENV QTDIR PATH_SUFFIXES bin)
+execute_process(COMMAND ${QMAKE_EXECUTABLE} -query QT_VERSION OUTPUT_VARIABLE QT_VERSION)
+if(QT_VERSION LESS QT_MINIMUM_VERSION)
+    MESSAGE(FATAL_ERROR "Minimum supported Qt version: ${QT_MINIMUM_VERSION}.
+    Installed version: ${QT_VERSION}")
+endif()
 
 include(Qt6QGCConfiguration)
 
@@ -165,16 +194,6 @@ if(ANDROID)
     # QT_ANDROID_KEYSTORE_STORE_PASS, QT_ANDROID_KEYSTORE_KEY_PASS
 endif()
 
-set(QT_SILENCE_MISSING_DEPENDENCY_TARGET_WARNING ON)
-set(QT_MINIMUM_VERSION 6.8.1)
-
-find_program(QMAKE_EXECUTABLE NAMES qmake HINTS ${QTDIR} ENV QTDIR PATH_SUFFIXES bin)
-execute_process(COMMAND ${QMAKE_EXECUTABLE} -query QT_VERSION OUTPUT_VARIABLE QT_VERSION)
-if(QT_VERSION LESS QT_MINIMUM_VERSION)
-    MESSAGE(FATAL_ERROR "Minimum supported Qt version: ${QT_MINIMUM_VERSION}.
-    Installed version: ${QT_VERSION}")
-endif()
-
 find_package(Qt6
     ${QT_MINIMUM_VERSION}
     REQUIRED
@@ -195,7 +214,6 @@ find_package(Qt6
         Sensors
         Sql
         Svg
-        Test
         TextToSpeech
         Widgets
         Xml
@@ -207,6 +225,7 @@ find_package(Qt6
         Quick3D
         Quick3DTools
         SerialPort
+        Test
     HINTS
         ${QT_LIBRARY_HINTS}
 )
@@ -234,12 +253,12 @@ qt_policy(
 #######################################################
 
 if(NOT QGC_STABLE_BUILD)
-    add_compile_definitions(DAILY_BUILD)
+    add_compile_definitions(QGC_DAILY_BUILD)
 endif()
 
 cmake_dependent_option(QGC_BUILD_TESTING "Enable testing" ON "CMAKE_BUILD_TYPE STREQUAL Debug" OFF)
 if(QGC_BUILD_TESTING)
-    add_compile_definitions(UNITTEST_BUILD) # TODO: QGC_UNITTEST_BUILD
+    add_compile_definitions(QGC_UNITTEST_BUILD)
 else()
     set(BUILD_TESTING OFF CACHE INTERNAL "")
 endif()
@@ -253,7 +272,7 @@ if(QGC_DEBUG_QML)
 endif()
 
 if(QGC_DISABLE_APM_MAVLINK)
-    add_compile_definitions(NO_ARDUPILOT_DIALECT)
+    add_compile_definitions(QGC_NO_ARDUPILOT_DIALECT)
 endif()
 
 if(QGC_VIEWER3D)
@@ -316,6 +335,16 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
     src/main.cc
     ${QGC_RESOURCES}
 )
+
+if(NOT ANDROID AND NOT IOS)
+    target_sources(${CMAKE_PROJECT_NAME}
+        PRIVATE
+            src/RunGuard.cc
+            src/RunGuard.h
+    )
+endif()
+
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 if(Qt6LinguistTools_FOUND)
     file(GLOB TS_SOURCES ${CMAKE_SOURCE_DIR}/translations/qgc_*.ts)
@@ -410,11 +439,11 @@ elseif(IOS)
     # set(QT_NO_FFMPEG_XCODE_EMBED_FRAMEWORKS_CODE_SIGN_ON_COPY ON)
     # qt_add_ios_ffmpeg_libraries(CMAKE_PROJECT_NAME)
 elseif(ANDROID)
-    FetchContent_Declare(android_openssl
-        DOWNLOAD_EXTRACT_TIMESTAMP true
+    include(CPM)
+    CPMAddPackage(
+        NAME android_openssl
         URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
     )
-    FetchContent_MakeAvailable(android_openssl)
     include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
     add_android_openssl_libraries(${CMAKE_PROJECT_NAME})
 
@@ -439,12 +468,10 @@ elseif(ANDROID)
             QT_ANDROID_PACKAGE_SOURCE_DIR "${QGC_ANDROID_PACKAGE_SOURCE_DIR}"
             QT_ANDROID_VERSION_NAME ${CMAKE_PROJECT_VERSION}
             QT_ANDROID_VERSION_CODE ${ANDROID_VERSION_CODE}
-            QT_QML_ROOT_PATH ${CMAKE_SOURCE_DIR}/src
+            QT_QML_ROOT_PATH ${CMAKE_SOURCE_DIR}
             # QT_ANDROID_SDK_BUILD_TOOLS_REVISION
             # QT_ANDROID_SYSTEM_LIBS_PREFIX
     )
-    get_target_property(QGC_ANDROID_DEPLOY_FILE ${CMAKE_PROJECT_NAME} QT_ANDROID_DEPLOYMENT_SETTINGS_FILE)
-    cmake_print_variables(QGC_ANDROID_DEPLOY_FILE)
 elseif(LINUX)
 
 endif()
@@ -458,17 +485,37 @@ add_compile_definitions(
 )
 
 add_subdirectory(src)
+
 target_link_libraries(${CMAKE_PROJECT_NAME}
     PRIVATE
         Qt6::Core
+        Qt6::Core5Compat
         Qt6::Quick
         Qt6::Widgets
         QGC
         QmlControls
 )
+
 if(QGC_BUILD_TESTING)
     add_subdirectory(test)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE qgctest)
+endif()
+
+if(ANDROID)
+    target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/android/src/AndroidInit.cc)
+
+    target_link_libraries(${CMAKE_PROJECT_NAME}
+        PRIVATE
+            Qt6::Core
+            Joystick
+            Utilities
+    )
+
+    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/android/src)
+
+    if(NOT QGC_NO_SERIAL_LINK)
+        target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Comms)
+    endif()
 endif()
 
 qt_import_plugins(${CMAKE_PROJECT_NAME}
@@ -493,7 +540,10 @@ install(
 
 set(deploy_tool_options_arg "")
 if(MACOS)
-    # set(deploy_tool_options_arg -qmldir=${CMAKE_SOURCE_DIR}/src -verbose=2 -appstore-compliant) # -dmg -hardened-runtime -timestamp
+    if(MACOS_SIGNING_IDENTITY)
+        message(STATUS "Signing MacOS Bundle")
+        set(deploy_tool_options_arg -qmldir=${CMAKE_SOURCE_DIR} -verbose=2 -sign-for-notarization=${MACOS_SIGNING_IDENTITY}) # -dmg
+    endif()
 endif()
 
 qt_generate_deploy_qml_app_script(
@@ -506,7 +556,10 @@ qt_generate_deploy_qml_app_script(
 )
 install(SCRIPT ${deploy_script})
 
-if(LINUX)
+if(ANDROID)
+    # get_target_property(QGC_ANDROID_DEPLOY_FILE ${CMAKE_PROJECT_NAME} QT_ANDROID_DEPLOYMENT_SETTINGS_FILE)
+    # cmake_print_variables(QGC_ANDROID_DEPLOY_FILE)
+elseif(LINUX)
     configure_file(
         ${CMAKE_SOURCE_DIR}/deploy/linux/org.mavlink.qgroundcontrol.desktop.in
         ${CMAKE_BINARY_DIR}/org.mavlink.qgroundcontrol.desktop
@@ -541,14 +594,6 @@ elseif(MACOS)
     install(CODE "set(OSXRELOCATOR ${CMAKE_SOURCE_DIR}/deploy/macos/osxrelocator.py)")
     install(CODE "set(TARGET_NAME ${QGC_APP_NAME})")
     install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/CreateMacDMG.cmake")
-endif()
-
-## Enforce Handling of All Enum Cases
-
-if(WIN32)
-    add_compile_options(/w44265 /we44265)
-else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wswitch -Werror=switch")
 endif()
 
 include(printSummary)

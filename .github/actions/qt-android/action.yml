@@ -56,13 +56,13 @@ runs:
         key: ${{ runner.os }}-Android-${{ matrix.BuildType }}
         max-size: 1G
         save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        verbose: 1
         evict-old-files: 'job'
 
     - name: Install Qt for ${{ runner.os }}
       uses: jurplel/install-qt-action@v4
       with:
         version: ${{ inputs.version }}
-        aqtversion: ==3.1.*
         host: ${{ inputs.host }}
         target: desktop
         arch: ${{ inputs.arch }}
@@ -75,12 +75,10 @@ runs:
       uses: jurplel/install-qt-action@v4
       with:
         version: ${{ inputs.version }}
-        aqtversion: ==3.1.*
         host: ${{ inputs.host }}
         target: android
         arch: android_armv7
         dir: ${{ runner.temp }}
-        extra: --autodesktop
         modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
         cache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
@@ -89,12 +87,10 @@ runs:
       uses: jurplel/install-qt-action@v4
       with:
         version: ${{ inputs.version }}
-        aqtversion: ==3.1.*
         host: ${{ inputs.host }}
         target: android
         arch: android_arm64_v8a
         dir: ${{ runner.temp }}
-        extra: --autodesktop
         modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
         cache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
@@ -103,12 +99,10 @@ runs:
       uses: jurplel/install-qt-action@v4
       with:
         version: ${{ inputs.version }}
-        aqtversion: ==3.1.*
         host: ${{ inputs.host }}
         target: android
         arch: android_x86
         dir: ${{ runner.temp }}
-        extra: --autodesktop
         modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
         cache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
@@ -117,11 +111,9 @@ runs:
       uses: jurplel/install-qt-action@v4
       with:
         version: ${{ inputs.version }}
-        aqtversion: ==3.1.*
         host: ${{ inputs.host }}
         target: android
         arch: android_x86_64
         dir: ${{ runner.temp }}
-        extra: --autodesktop
         modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
         cache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}

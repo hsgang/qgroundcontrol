@@ -6,19 +6,17 @@ on:
       - 'Stable*'
     tags:
       - 'v*'
-    paths-ignore:
-      - 'android/**'
-      - 'deploy/**'
-      - 'docs/**'
   pull_request:
-    paths-ignore:
-      - 'android/**'
-      - 'deploy/**'
-      - 'docs/**'
-      - '.github/workflows/docs_deploy.yml'
-      - '.github/workflows/android.yml'
-      - '.github/workflows/linux.yml'
-      - '.github/workflows/macos.yml'
+    paths:
+      - '.github/workflows/custom.yml'
+      - 'deploy/windows/**'
+      - 'src/**'
+      - 'custom-example/**'
+      - 'CMakeLists.txt'
+
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   build:
@@ -57,23 +55,12 @@ jobs:
       - uses: seanmiddleditch/gha-setup-ninja@v5
       - uses: lukka/get-cmake@latest
 
-      # - name: Install Vulkan
-      #   working-directory: ${{ runner.temp }}
-      #   shell: pwsh
-      #   run: |
-      #     Invoke-WebRequest -Uri "https://sdk.lunarg.com/sdk/download/latest/windows/vulkan-sdk.exe" -OutFile vulkan-sdk.exe
-      #     .\vulkan-sdk.exe --root C:\VulkanSDK\latest --accept-licenses --default-answer --confirm-command install com.lunarg.vulkan.glm com.lunarg.vulkan.volk com.lunarg.vulkan.vma com.lunarg.vulkan.debug
-      #     echo "VULKAN_SDK=C:\VulkanSDK\latest" >> $env:GITHUB_ENV
-
       - name: Install GStreamer
         uses: blinemedical/setup-gstreamer@v1
         with:
           version: ${{ env.GST_VERSION }}
 
-      # - name: Install Gstreamer
-      #   run: choco install --no-progress gstreamer gstreamer-devel --version=${{ env.GST_VERSION }}
-
-      - name: Set Up sccache
+      - name: Set Up SCCache
         uses: mozilla-actions/sccache-action@v0.0.7
 
       - name: Set Up Cache
@@ -83,7 +70,7 @@ jobs:
           max-size: 1G
           variant: sccache
           save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-          evict-old-files: 'job'
+          verbose: 1
 
       - name: Install Qt for Windows (x64)
         if: matrix.Arch == 'x64'

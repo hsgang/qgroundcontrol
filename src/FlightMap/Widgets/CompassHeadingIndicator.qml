@@ -23,6 +23,7 @@ Canvas {
 
     property real compassSize
     property real heading
+    property bool simplified:    false
 
     property var _qgcPal: QGroundControl.globalPalette
 
@@ -33,8 +34,8 @@ Canvas {
 
     onPaint: {
         var ctx = getContext("2d")
-        ctx.strokeStyle = _qgcPal.text
-        ctx.fillStyle = "#0088e4" //"#EE3424"
+        ctx.strokeStyle = simplified ? "#0088e4" : _qgcPal.text
+        ctx.fillStyle = "#0088e4"
         ctx.lineWidth = 1
         ctx.beginPath()
         ctx.moveTo(width / 2, 0)

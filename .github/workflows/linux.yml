@@ -6,19 +6,16 @@ on:
       - 'Stable*'
     tags:
       - 'v*'
-    paths-ignore:
-      - 'android/**'
-      - 'deploy/**'
-      - 'docs/**'
   pull_request:
-    paths-ignore:
-      - 'android/**'
-      - 'deploy/**'
-      - 'docs/**'
-      - '.github/workflows/docs_deploy.yml'
-      - '.github/workflows/android.yml'
-      - '.github/workflows/macos.yml'
-      - '.github/workflows/windows.yml'
+    paths:
+      - '.github/workflows/linux.yml'
+      - 'deploy/linux/**'
+      - 'src/**'
+      - 'CMakeLists.txt'
+
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   build:
@@ -27,6 +24,7 @@ jobs:
     strategy:
       matrix:
         BuildType: [Debug, Release]
+        # Arch: [x64] # Arm64
 
     defaults:
       run:
@@ -34,16 +32,11 @@ jobs:
 
     env:
       ARTIFACT: QGroundControl-x86_64.AppImage
+      PACKAGE: QGroundControl-x86_64
       QT_VERSION: 6.8.1
       GST_VERSION: 1.22.12
 
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
-        with:
-          large-packages: false
-        continue-on-error: true
-
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
@@ -55,7 +48,9 @@ jobs:
         run: |
           chmod a+x ./tools/setup/install-dependencies-debian.sh
           sudo ./tools/setup/install-dependencies-debian.sh
-          python3 -m pip install --user ninja cmake
+
+      - uses: lukka/get-cmake@latest
+      - uses: seanmiddleditch/gha-setup-ninja@v5
 
       - name: Install Vulkan
         run: |
@@ -85,13 +80,13 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.BuildType }}
           max-size: 1G
           save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+          verbose: 1
           evict-old-files: 'job'
 
       - name: Install Qt for Linux (x64)
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          aqtversion: ==3.1.*
           host: linux
           target: desktop
           arch: linux_gcc_64
@@ -101,9 +96,6 @@ jobs:
 
       # - name: Build GStreamer
       #   uses: ./.github/actions/gstreamer
-
-      - uses: lukka/get-cmake@latest
-      - uses: seanmiddleditch/gha-setup-ninja@v5
 
       - run: mkdir ${{ runner.temp }}/shadow_build_dir
 
@@ -132,7 +124,7 @@ jobs:
         uses: ./.github/actions/upload
         with:
           artifact_name: ${{ env.ARTIFACT }}
+          package_name: ${{ env.PACKAGE }}
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          source: ''
           github_token: ${{ secrets.GITHUB_TOKEN }}

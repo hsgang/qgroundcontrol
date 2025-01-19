@@ -29,6 +29,7 @@ SettingsPage {
     property var    _modelProfileSettings:              _settingsManager.modelProfileSettings
     property Fact   _virtualJoystick:                   _settingsManager.appSettings.virtualJoystick
     property Fact   _virtualJoystickAutoCenterThrottle: _settingsManager.appSettings.virtualJoystickAutoCenterThrottle
+    property Fact   _enableMultiVehiclePanel:           _settingsManager.appSettings.enableMultiVehiclePanel
     property Fact   _showAdditionalIndicatorsCompass:   _flyViewSettings.showAdditionalIndicatorsCompass
     property Fact   _lockNoseUpCompass:                 _flyViewSettings.lockNoseUpCompass
     property Fact   _guidedMinimumAltitude:             _flyViewSettings.guidedMinimumAltitude
@@ -74,6 +75,13 @@ SettingsPage {
             enabled:            _settingsManager.appSettings.useChecklist.value
             visible:            useCheckList.fact.rawValue && _enforceChecklist.visible
             property Fact _enforceChecklist: _settingsManager.appSettings.enforceChecklist
+        }
+
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Enable Multi-Vehicle Panel")
+            fact:               _enableMultiVehiclePanel
+            visible:            _enableMultiVehiclePanel.visible
         }
 
         FactCheckBoxSlider {
