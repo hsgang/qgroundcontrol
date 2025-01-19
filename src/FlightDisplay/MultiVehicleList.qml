@@ -31,7 +31,7 @@ Item {
 
     property var    _activeVehicle:       QGroundControl.multiVehicleManager.activeVehicle
     property var    selectedVehicles:     QGroundControl.multiVehicleManager.selectedVehicles
-    property real   _activeVehicleId:     activeVehicle ? activeVehicle.id : NaN
+    property real   _activeVehicleId:     _activeVehicle ? _activeVehicle.id : NaN
 
     property string _readyToFlyText:    qsTr("Ready To Fly")
     property string _notReadyToFlyText: qsTr("Not Ready")
@@ -122,57 +122,56 @@ Item {
         return false
     }
 
-    Rectangle {
-        id:             mvCommands
-        anchors.left:   parent.left
-        anchors.right:  parent.right
-        height:         mvCommandsColumn.height + (_margin *2)
-        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _rectOpacity)
-        radius:         _margin
+    // Rectangle {
+    //     id:             mvCommands
+    //     anchors.left:   parent.left
+    //     anchors.right:  parent.right
+    //     height:         mvCommandsColumn.height + (_margin *2)
+    //     color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _rectOpacity)
+    //     radius:         _margin
 
-        DeadMouseArea {
-            anchors.fill: parent
-        }
+    //     DeadMouseArea {
+    //         anchors.fill: parent
+    //     }
 
-        Column {
-            id:                 mvCommandsColumn
-            anchors.margins:    _margin
-            anchors.top:        parent.top
-            anchors.left:       parent.left
-            anchors.right:      parent.right
-            spacing:            _margin
+    //     Column {
+    //         id:                 mvCommandsColumn
+    //         anchors.margins:    _margin
+    //         anchors.top:        parent.top
+    //         anchors.left:       parent.left
+    //         anchors.right:      parent.right
+    //         spacing:            _margin
 
-            QGCLabel {
-                anchors.left:   parent.left
-                anchors.right:  parent.right
-                text:           qsTr("The following commands will be applied to all vehicles")
-                color:          _textColor
-                wrapMode:       Text.WordWrap
-                font.pointSize: ScreenTools.smallFontPointSize
-            }
+    //         QGCLabel {
+    //             anchors.left:   parent.left
+    //             anchors.right:  parent.right
+    //             text:           qsTr("The following commands will be applied to all vehicles")
+    //             color:          _textColor
+    //             wrapMode:       Text.WordWrap
+    //             font.pointSize: ScreenTools.smallFontPointSize
+    //         }
 
-            Row {
-                spacing:            _margin
+    //         Row {
+    //             spacing:            _margin
 
-                QGCButton {
-                    text:       qsTr("Start Mission")
-                    onClicked:  _guidedController.confirmAction(_guidedController.actionMVStartMission)
-                }
+    //             QGCButton {
+    //                 text:       qsTr("Start Mission")
+    //                 onClicked:  _guidedController.confirmAction(_guidedController.actionMVStartMission)
+    //             }
 
-                QGCButton {
-                    text:       qsTr("Pause")
-                    onClicked:  _guidedController.confirmAction(_guidedController.actionMVPause)
-                }
-            }
-        }
-    }    
+    //             QGCButton {
+    //                 text:       qsTr("Pause")
+    //                 onClicked:  _guidedController.confirmAction(_guidedController.actionMVPause)
+    //             }
+    //         }
+    //     }
+    // }
 
     QGCListView {
-        id:                 vehicleList
+        id:                 missionItemEditorListView
         anchors.left:       parent.left
         anchors.right:      parent.right
-        anchors.top:        mvCommands.bottom
-        anchors.topMargin:  _margin
+        anchors.top:        parent.top
         anchors.bottom:     parent.bottom
         spacing:            ScreenTools.defaultFontPixelHeight / 2
         orientation:        ListView.Vertical
@@ -222,6 +221,7 @@ Item {
                 anchors.left:       parent.left
                 anchors.right:      parent.right
                 spacing:            _margin
+                onHeightChanged: {  innerColumnHeight = height + _margin * 2 + spacing * 2  }
 
                 property bool   _healthAndArmingChecksSupported:    _vehicle ? _vehicle.healthAndArmingCheckReport.supported : false
 
@@ -263,17 +263,10 @@ Item {
                 }
 
                 RowLayout {
-                    id:                 innerColumn
+                    //id:                 innerColumn
                     anchors.margins:    _margin
                     spacing:            _margin
-                    onHeightChanged: {  innerColumnHeight = height + _margin * 2 + spacing * 2  }
-
-                    QGCCompassWidget {
-                        id: compassWidget
-                        size:                        _widgetHeight
-                        usedByMultipleVehicleList:   true
-                        vehicle:                     _vehicle
-                    }
+                    //onHeightChanged: {  innerColumnHeight = height + _margin * 2 + spacing * 2  }
 
                     Rectangle {
                         Layout.alignment: Qt.AlignTop
@@ -300,6 +293,13 @@ Item {
                         //         QGroundControl.multiVehicleManager.activeVehicle = vehicle
                         //     }
                         // }
+                    }
+
+                    QGCCompassWidget {
+                        id: compassWidget
+                        size:                        _widgetHeight
+                        usedByMultipleVehicleList:   true
+                        vehicle:                     _vehicle
                     }
 
                     Rectangle{
