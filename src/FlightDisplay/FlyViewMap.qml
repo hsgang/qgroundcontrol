@@ -56,6 +56,7 @@ FlightMap {
     property bool   _vehicleFlying:             _activeVehicle ? _activeVehicle.flying  : false
 
     property var    _gridManager:               QGroundControl.gridManager
+    property var    gridData:                   _gridManager.gridData
 
     function _adjustMapZoomForPipMode() {
         _saveZoomLevelSetting = false
@@ -326,7 +327,7 @@ FlightMap {
 
     // Add distance sensor view
     MapItemView{
-        model: QGroundControl.multiVehicleManager.vehicles
+        model: QGrProximityRadarValuescleManager.vehicles
         delegate: ProximityRadarMapView {
             vehicle:        object
             coordinate:     object.coordinate
@@ -902,29 +903,27 @@ FlightMap {
         }
     }
 
-    // Component.onCompleted: {
-    //     _gridManager.generateGrid(QtPositioning.coordinate(35.1704328, 129.1312456), 10, 10, 50);
-    //     //console.log("_gridManager.gridData :" + _gridManager.gridData)
+    // onGridDataChanged: {
+    //     //updateGridData(gridData)
+    //     console.log("gridData:" + JSON.stringify(gridData))
     // }
 
     Repeater {
         id: repeater
-        visible:   _activeVehicle && _gridManager.gridData && _gridManager.gridData.length > 0
-        model: 100 //_gridManager.gridData
+        model: 100//_gridManager.gridData
         delegate: MapQuickItem {
-            coordinate: QtPositioning.coordinate(_gridManager.gridData[index].latitude, _gridManager.gridData[index].longitude)
 
-            // coordinate: modelData && modelData.latitude !== undefined && modelData.longitude !== undefined
-            //                     ? QtPositioning.coordinate(modelData.latitude, modelData.longitude)
-            //                     : QtPositioning.coordinate(0, 0) // 기본값
+            //coordinate: QtPositioning.coordinate(modelData.latitude, modelData.longitude)
+            coordinate: QtPositioning.coordinate(gridData[index].latitude, gridData[index].longitude)
+            //coordinate: QtPositioning.coordinate(_gridManager.gridData[index].latitude, _gridManager.gridData[index].longitude)
 
             anchorPoint.x: sourceItem.width / 2
             anchorPoint.y: sourceItem.height / 2
 
-            property real latMin: coordinate.latitude - ((gridSizeForLatLng().latSize)/2) //(0.0009 / 2) //latOffset / 2
-            property real latMax: coordinate.latitude + ((gridSizeForLatLng().latSize)/2) //(0.0009 / 2) //latOffset / 2
-            property real lonMin: coordinate.longitude - ((gridSizeForLatLng().lonSize)/2) //(0.0011 / 2) //lonOffset / 2
-            property real lonMax: coordinate.longitude + ((gridSizeForLatLng().lonSize)/2) //(0.0011 / 2) //lonOffset / 2
+            property real latMin: coordinate.latitude - ((gridSizeForLatLng().latSize)/2)
+            property real latMax: coordinate.latitude + ((gridSizeForLatLng().latSize)/2)
+            property real lonMin: coordinate.longitude - ((gridSizeForLatLng().lonSize)/2)
+            property real lonMax: coordinate.longitude + ((gridSizeForLatLng().lonSize)/2)
 
             sourceItem: Rectangle {
                 id: gridRect

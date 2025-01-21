@@ -39,7 +39,7 @@ void GridManager::init()
 
 void GridManager::generateGrid(const QGeoCoordinate &baseCoordinate, int rowCount, int colCount, double gridSizeMeters) {
 
-    qDebug() << baseCoordinate << rowCount << colCount << gridSizeMeters;
+    //qDebug() << baseCoordinate << rowCount << colCount << gridSizeMeters;
 
     m_gridData.clear();
 
@@ -61,6 +61,14 @@ void GridManager::generateGrid(const QGeoCoordinate &baseCoordinate, int rowCoun
     }
 
     emit gridDataChanged();
+}
+
+void GridManager::deleteGrid() {
+    m_gridData.clear();
+
+    emit gridDataChanged();
+
+    qDebug() << "gridData Cleared";
 }
 
 

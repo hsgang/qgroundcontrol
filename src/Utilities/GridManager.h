@@ -26,6 +26,7 @@ public:
     Q_PROPERTY(QVariant gridData READ gridData NOTIFY gridDataChanged)
 
     Q_INVOKABLE void generateGrid(const QGeoCoordinate &baseCoordinate, int rowCount, int colCount, double gridSizeMeters);
+    Q_INVOKABLE void deleteGrid();
 
     QVariant gridData () const {return m_gridData; }
 
