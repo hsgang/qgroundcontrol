@@ -51,8 +51,8 @@ SetupPage {
                     width:              motorButtons.width
                     label:              qsTr("Throttle")
                     from:               0
-                    to:                 100
-                    majorTickStepSize:  5
+                    to:                 10
+                    majorTickStepSize:  1
                     decimalPlaces: 0
                     unitsString: qsTr("%")
                 }
