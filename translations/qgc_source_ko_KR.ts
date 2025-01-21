@@ -7193,6 +7193,39 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>FlyViewGridSettings</name>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
+        <source>Grid Settings</source>
+        <translation>격자 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
+        <source>Latitude</source>
+        <translation>위도</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
+        <source>Longtitude</source>
+        <translation>경도</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
+        <source>gridSize</source>
+        <translation>격자 크기(m)</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
+        <source>generate</source>
+        <translation>생성</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
+        <source>delete</source>
+        <translation>지우기</translation>
+    </message>
+</context>
+<context>
     <name>FlyViewMissionProgress</name>
     <message>
         <location filename="../src/PlanView/FlyViewMissionProgress.qml" line="138"/>
@@ -10789,7 +10822,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/MainRootWindow.qml" line="160"/>
         <location filename="../src/ui/MainRootWindow.qml" line="370"/>
-        <source>Vehicle Setup</source>
+        <source>Vehicle Configuration</source>
         <translation>기체 설정</translation>
     </message>
     <message>
@@ -11031,6 +11064,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="440"/>
         <source>Windvane</source>
         <translation>풍향계</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="440"/>
+        <source>Grid Viewer</source>
+        <translation>그리드 뷰어</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="450"/>
