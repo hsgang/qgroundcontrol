@@ -29,6 +29,8 @@ qt_add_library(Utilities STATIC
     StateMachine.h
     CloudManager.cc
     CloudManager.h
+    GridManager.cc
+    GridManager.h
 )
 
 if(ANDROID OR IOS)

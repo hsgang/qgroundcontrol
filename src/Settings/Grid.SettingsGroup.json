@@ -1,0 +1,71 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":                 "latitude",
+    "shortDesc":     "latitude",
+    "type":                 "double",
+    "decimalPlaces":    7,
+    "default":         0
+},
+{
+    "name":                 "longitude",
+    "shortDesc":     "longitude",
+    "type":                 "double",
+    "decimalPlaces":    7,
+    "default":         0
+},
+{
+    "name":                 "rows",
+    "shortDesc":     "rows",
+    "type":                 "uint8",
+    "min":                  5,
+    "max":                  20,
+    "default":         10
+},
+{
+    "name":                 "columns",
+    "shortDesc":     "columns",
+    "type":                 "uint8",
+    "min":                  5,
+    "max":                  20,
+    "default":         10
+},
+{
+    "name":                 "value1",
+    "shortDesc":     "value1",
+    "type":                 "float",
+    "decimalPlaces":        2,
+    "default":         10
+},
+{
+    "name":                 "value2",
+    "shortDesc":     "value2",
+    "type":                 "float",
+    "decimalPlaces":        2,
+    "default":         20
+},
+{
+    "name":                 "value3",
+    "shortDesc":     "value3",
+    "type":                 "float",
+    "decimalPlaces":        2,
+    "default":         30
+},
+{
+    "name":                 "value4",
+    "shortDesc":     "value4",
+    "type":                 "float",
+    "decimalPlaces":        2,
+    "default":         40
+},
+{
+    "name":                 "gridSize",
+    "shortDesc":     "gridSize",
+    "type":                 "uint8",
+    "default":         50
+}
+]
+}

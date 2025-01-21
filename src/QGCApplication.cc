@@ -71,6 +71,7 @@
 #include "VideoManager.h"
 #include "NTRIPManager.h"
 #include "CloudManager.h"
+#include "GridManager.h"
 #include "ModelProfileManager.h"
 #include "ModelProfileSettings.h"
 
@@ -290,6 +291,7 @@ void QGCApplication::init()
     QGCCorePlugin::registerQmlTypes();
     GPSRtk::registerQmlTypes();
     CloudManager::registerQmlTypes();
+    GridManager::registerQmlTypes();
     NTRIPManager::registerQmlTypes();
     JoystickManager::registerQmlTypes();
 #ifdef QGC_VIEWER3D
@@ -421,6 +423,7 @@ void QGCApplication::_initForNormalAppBoot()
 
     NTRIPManager::instance()->init();
     CloudManager::instance()->init();
+    GridManager::instance()->init();
 }
 
 void QGCApplication::deleteAllSettingsNextBoot()

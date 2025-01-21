@@ -92,6 +92,13 @@ ToolIndicatorPage{
                     property Fact   _showWindvane:              QGroundControl.settingsManager.flyViewSettings.showWindvane
                 }
 
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       qsTr("Grid Viewer")
+                    fact:       _showGridViewer
+                    visible:    _showGridViewer.visible
+                    property Fact   _showGridViewer:            QGroundControl.settingsManager.flyViewSettings.showGridViewer
+                }
             }
 
             SettingsGroupLayout {

@@ -462,4 +462,12 @@ Item {
             }
         }
     }
+
+    FlyViewGridSettings {
+        id: flyviewGridSettings
+        anchors.margins:        _toolsMargin
+        anchors.bottom:         mapScale.visible ? mapScale.top : parent.bottom
+        anchors.right:          parent.right
+        visible:                QGroundControl.settingsManager.flyViewSettings.showGridViewer.rawValue
+    }
 }

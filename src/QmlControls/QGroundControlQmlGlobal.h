@@ -30,6 +30,7 @@ class VideoManager;
 class UTMSPManager;
 class AirLinkManager;
 class CloudManager;
+class GridManager;
 class NTRIPManager;
 
 Q_MOC_INCLUDE("ADSBVehicleManager.h")
@@ -45,6 +46,7 @@ Q_MOC_INCLUDE("SettingsManager.h")
 Q_MOC_INCLUDE("VideoManager.h")
 Q_MOC_INCLUDE("CloudManager.h")
 Q_MOC_INCLUDE("NTRIPManager.h")
+Q_MOC_INCLUDE("GridManager.h")
 #ifdef QGC_UTM_ADAPTER
 Q_MOC_INCLUDE("UTMSPManager.h")
 #endif
@@ -81,6 +83,7 @@ public:
     Q_PROPERTY(SettingsManager*     settingsManager         READ    settingsManager         CONSTANT)
     Q_PROPERTY(ADSBVehicleManager*  adsbVehicleManager      READ    adsbVehicleManager      CONSTANT)
     Q_PROPERTY(CloudManager*        cloudManager            READ    cloudManager            CONSTANT)
+    Q_PROPERTY(GridManager*         gridManager             READ    gridManager             CONSTANT)
     Q_PROPERTY(NTRIPManager*        ntripManager            READ    ntripManager            CONSTANT)
     Q_PROPERTY(QGCCorePlugin*       corePlugin              READ    corePlugin              CONSTANT)
     Q_PROPERTY(MissionCommandTree*  missionCommandTree      READ    missionCommandTree      CONSTANT)
@@ -182,6 +185,7 @@ public:
 #endif
     ADSBVehicleManager*     adsbVehicleManager  ()  { return _adsbVehicleManager; }
     CloudManager*           cloudManager        ()  { return _cloudManager; }
+    GridManager*            gridManager         ()  { return _gridManager; }
     NTRIPManager*           ntripManager        ()  { return _ntripManager; }
     QmlUnitsConversion*     unitsConversion     ()  { return &_unitsConversion; }
     static QGeoCoordinate   flightMapPosition   ()  { return _coord; }
@@ -259,6 +263,7 @@ private:
     MultiVehicleManager*    _multiVehicleManager    = nullptr;
     NTRIPManager*           _ntripManager           = nullptr;
     CloudManager*           _cloudManager           = nullptr;
+    GridManager*            _gridManager            = nullptr;
     SettingsManager*        _settingsManager        = nullptr;
     QGCCorePlugin*          _corePlugin             = nullptr;
     QGCPalette*             _globalPalette          = nullptr;

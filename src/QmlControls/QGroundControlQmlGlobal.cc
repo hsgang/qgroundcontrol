@@ -44,6 +44,7 @@
 #include "VideoManager.h"
 #include "NTRIPManager.h"
 #include "CloudManager.h"
+#include "GridManager.h"
 #include "MultiVehicleManager.h"
 #ifndef QGC_NO_SERIAL_LINK
 #include "GPSManager.h"
@@ -117,6 +118,7 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QObject *parent)
     , _multiVehicleManager(MultiVehicleManager::instance())
     , _ntripManager(NTRIPManager::instance())
     , _cloudManager(CloudManager::instance())
+    , _gridManager(GridManager::instance())
     , _settingsManager(SettingsManager::instance())
     , _corePlugin(QGCCorePlugin::instance())
     , _globalPalette(new QGCPalette(this))

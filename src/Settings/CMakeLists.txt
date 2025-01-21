@@ -53,6 +53,8 @@ qt_add_library(Settings STATIC
     CloudSettings.h
     ModelProfileSettings.h
     ModelProfileSettings.cc
+    GridSettings.cc
+    GridSettings.h
 )
 
 target_link_libraries(Settings
