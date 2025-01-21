@@ -851,136 +851,7 @@ FlightMap {
     //    }
     // }
 
-    //*******************************************************************************************
-
-    // property var centerCoord: _root.center
-    // property real gridSizeMeters: 50 // 격자의 크기 (미터 단위)
-    // property var baseCoordinate: QtPositioning.coordinate(35.1704328, 129.1312456) //centerCoord.latitude, centerCoord.longitude) // 격자의 기준 좌표 (화면중앙)
-    // property var selectedGrid: null // 현재 선택된 격자
-    // property real mapZoomLevel: _root.zoomLevel // Map의 줌 레벨
-    // property real rowGrid: 12 // 좌우방향
-    // property real colGrid: 10 // 상하방향
-    // property real value1: 30
-    // property real value2: 40
-    // property real value3: 70
-    // property real value4: 100
-
-    // // 격자의 간격 계산 (위도/경도 단위)
-    // function latOffset() {
-    //     return gridSizeMeters / 111320 // 위도 1도 ≈ 111.32km
-    // }
-
-    // function lonOffset() {
-    //     return gridSizeMeters / (111320 * Math.cos(Math.floor(baseCoordinate.latitude) * Math.PI / 180))
-    // }
-
-    // // 위도/경도 계산 함수
-    // function gridCoordinate(index) {
-    //     let row = Math.floor(index / colGrid)
-    //     let col = index % colGrid
-
-    //     return QtPositioning.coordinate(
-    //         baseCoordinate.latitude - row * latOffset(),
-    //         baseCoordinate.longitude + col * lonOffset()
-    //     )
-    // }
-
-    //     // 마커가 어느 격자에도 속하지 않을 경우
-    //     if (selectedGrid !== null) {
-    //         selectedGrid.resetColor()
-    //         selectedGrid = null
-    //     }
-    // }
-
-    // // 격자 크기 계산 함수
-    // function gridSizeForLatLng() {
-    //     // 위도 단위로 미터 계산 (1도 ≈ 111320 미터)
-    //     var latSize = gridSizeMeters / 111320; // 위도 1도에 해당하는 미터 거리
-
-    //     // 경도 단위로 미터 계산 (경도는 위도에 따라 변함)
-    //     var lonSize = gridSizeMeters / (111320 * Math.cos(Math.PI * baseCoordinate.latitude / 180)); // 경도는 위도에 따라 달라짐
-
-    //     return {latSize: latSize, lonSize: lonSize};
-    // }
-
-
-
-    // // 격자 생성
-    // Repeater {
-    //     id: repeater
-    //     model: rowGrid * colGrid // 10x10 격자
-    //     delegate: MapQuickItem {
-    //         coordinate: gridCoordinate(index) // 위도/경도 계산
-    //         anchorPoint.x: gridRect.width / 2
-    //         anchorPoint.y: gridRect.height / 2
-
-    //         property real latMin: coordinate.latitude - ((gridSizeForLatLng().latSize)/2) //(0.0009 / 2) //latOffset / 2
-    //         property real latMax: coordinate.latitude + ((gridSizeForLatLng().latSize)/2) //(0.0009 / 2) //latOffset / 2
-    //         property real lonMin: coordinate.longitude - ((gridSizeForLatLng().lonSize)/2) //(0.0011 / 2) //lonOffset / 2
-    //         property real lonMax: coordinate.longitude + ((gridSizeForLatLng().lonSize)/2) //(0.0011 / 2) //lonOffset / 2
-
-    //         sourceItem: Rectangle {
-    //             id: gridRect
-    //             width: calculateGridSize().width //40 // 경도에 맞는 실제 지도 크기
-    //             height: calculateGridSize().height //40 // 위도에 맞는 실제 지도 크기
-    //             radius: 5
-    //             color: "transparent"
-    //             border.color: Qt.rgba(255, 255, 255, 0.4)
-    //             border.width: 1
-
-    //             QGCLabel{
-    //                 id: gridLabel
-    //             }
-    //             // QGCLabel{
-    //             //     id: topLeftLabel
-    //             //     anchors.bottom: gridRect.top
-    //             //     anchors.left:   gridRect.left
-    //             //     text: latMax + " " + lonMin
-    //             // }
-    //             // QGCLabel{
-    //             //     id: bottomRightLabel
-    //             //     anchors.bottom: gridRect.bottom
-    //             //     anchors.right:   gridRect.right
-    //             //     text: latMin + " " + lonMax
-    //             // }
-    //         }
-
-    //         // 격자 색상 초기화
-    //         function resetColor() {
-    //             gridRect.color = "transparent"
-    //         }
-
-    //         // 격자 선택 시 색상 변경
-    //         function selectColor() {
-    //             if(_activeVehicle) {
-    //                 // rawValue 값에 따라 색상을 변경
-    //                 let rawValue = _activeVehicle.altitudeRelative.rawValue;
-
-    //                 if (rawValue <= value1) {
-    //                     gridRect.color = Qt.rgba(0, 255, 0, 0.4);  // Green
-    //                 } else if (rawValue <= value2) {
-    //                     gridRect.color = Qt.rgba(255, 255, 0, 0.4);  // Yellow
-    //                 } else if (rawValue <= value3) {
-    //                     gridRect.color = Qt.rgba(255, 165, 0, 0.4);  // Orange
-    //                 } else if (rawValue <= value4) {
-    //                     gridRect.color = Qt.rgba(255, 0, 0, 0.4);  // Red
-    //                 } else {
-    //                     gridRect.color = Qt.rgba(128, 0, 128, 0.4);  // Purple for out of range
-    //                 }
-
-    //                 // 레이블에 rawValue 표시
-    //                 gridLabel.text = _activeVehicle.altitudeRelative.rawValue.toFixed(2)
-    //             }
-    //         }
-
-    //         // 특정 좌표가 격자 내부에 있는지 확인
-    //         function isInside(latitude, longitude) {
-    //             //console.log("isInside?")
-    //             return latitude >= latMin && latitude <= latMax &&
-    //                    longitude >= lonMin && longitude <= lonMax
-    //         }
-    //     }
-    // }
+    //*******************************************************************************************   
 
     property int gridSizeMeters: QGroundControl.settingsManager.gridSettings.gridSize.rawValue // 격자의 크기 (미터 단위)
     property real mapZoomLevel: _root.zoomLevel // Map의 줌 레벨
@@ -1038,17 +909,17 @@ FlightMap {
 
     Repeater {
         id: repeater
-        model: 100//_gridManager.gridData
+        visible:   _activeVehicle && _gridManager.gridData && _gridManager.gridData.length > 0
+        model: 100 //_gridManager.gridData
         delegate: MapQuickItem {
             coordinate: QtPositioning.coordinate(_gridManager.gridData[index].latitude, _gridManager.gridData[index].longitude)
-            //coordinate: object.coordinate//QtPositioning.coordinate(modelData.latitude, modelData.longitude)
+
+            // coordinate: modelData && modelData.latitude !== undefined && modelData.longitude !== undefined
+            //                     ? QtPositioning.coordinate(modelData.latitude, modelData.longitude)
+            //                     : QtPositioning.coordinate(0, 0) // 기본값
+
             anchorPoint.x: sourceItem.width / 2
             anchorPoint.y: sourceItem.height / 2
-
-            // Component.onCompleted: {
-            //     //console.log("Latitude:", modelData.latitude, "Longitude:", modelData.longitude);
-            //     console.log("coordinate: ", _gridManager.gridData[index].latitude, _gridManager.gridData[index].longitude);
-            // }
 
             property real latMin: coordinate.latitude - ((gridSizeForLatLng().latSize)/2) //(0.0009 / 2) //latOffset / 2
             property real latMax: coordinate.latitude + ((gridSizeForLatLng().latSize)/2) //(0.0009 / 2) //latOffset / 2
@@ -1093,7 +964,6 @@ FlightMap {
 
             // 특정 좌표가 격자 내부에 있는지 확인
             function isInside(latitude, longitude) {
-                //console.log("isInside?")
                 return latitude >= latMin && latitude <= latMax &&
                        longitude >= lonMin && longitude <= lonMax
             }

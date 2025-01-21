@@ -73,16 +73,16 @@ Rectangle {
             }
         }
 
-        QGCLabel {
-            text:           qsTr("Exit Plan")
-            font.pointSize: ScreenTools.largeFontPointSize
-        }
+        // QGCLabel {
+        //     text:           qsTr("Exit Plan")
+        //     font.pointSize: ScreenTools.largeFontPointSize
+        // }
     }
 
-    QGCMouseArea {
-        anchors.fill:   viewButtonRow
-        onClicked:      mainWindow.showFlyView()
-    }
+    // QGCMouseArea {
+    //     anchors.fill:   viewButtonRow
+    //     onClicked:      mainWindow.showFlyView()
+    // }
 
     QGCFlickable {
         id:                     toolsFlickable

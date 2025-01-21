@@ -233,7 +233,6 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewWidgetLayer.qml">src/FlightDisplay/FlyViewWidgetLayer.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewWindvane.qml">src/FlightDisplay/FlyViewWindvane.qml</file>
         <file alias="QGroundControl/FlightDisplay/GripperMenu.qml">src/FlightDisplay/GripperMenu.qml</file>
-        <file alias="QGroundControl/FlightDisplay/GuidedActionActionList.qml">src/FlightDisplay/GuidedActionActionList.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionArm.qml">src/FlightDisplay/GuidedActionArm.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionChangeAltitude.qml">src/FlightDisplay/GuidedActionChangeAltitude.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionChangeSpeed.qml">src/FlightDisplay/GuidedActionChangeSpeed.qml</file>
@@ -242,7 +241,6 @@
         <file alias="QGroundControl/FlightDisplay/GuidedActionDisarm.qml">src/FlightDisplay/GuidedActionDisarm.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionGripper.qml">src/FlightDisplay/GuidedActionGripper.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionLand.qml">src/FlightDisplay/GuidedActionLand.qml</file>
-        <file alias="QGroundControl/FlightDisplay/GuidedActionList.qml">src/FlightDisplay/GuidedActionList.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionMission.qml">src/FlightDisplay/GuidedActionMission.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewAdditionalActionsList.qml">src/FlightDisplay/FlyViewAdditionalActionsList.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewAdditionalActionsPanel.qml">src/FlightDisplay/FlyViewAdditionalActionsPanel.qml</file>
@@ -578,7 +576,6 @@
         <file alias="BatteryIndicator.SettingsGroup.json">src/Settings/BatteryIndicator.SettingsGroup.json</file>
         <file alias="BrandImage.SettingsGroup.json">src/Settings/BrandImage.SettingsGroup.json</file>
         <file alias="Cloud.SettingsGroup.json">src/Settings/Cloud.SettingsGroup.json</file>
-        <file alias="CustomMavlinkActions.SettingsGroup.json">src/Settings/CustomMavlinkActions.SettingsGroup.json</file>
         <file alias="FirmwareUpgrade.SettingsGroup.json">src/Settings/FirmwareUpgrade.SettingsGroup.json</file>
         <file alias="FlightMap.SettingsGroup.json">src/Settings/FlightMap.SettingsGroup.json</file>
         <file alias="FlightMode.SettingsGroup.json">src/Settings/FlightMode.SettingsGroup.json</file>

@@ -56,8 +56,6 @@ ToolStripActionList {
         GuidedActionPause { },
         GuidedActionChangeAltitude { },
         GuidedActionChangeSpeed { },
-        GuidedActionActionList { },
-        // CustomActionToolStrip { },
         FlyViewAdditionalActionsButton { },
         GuidedActionGripper { }
     ]

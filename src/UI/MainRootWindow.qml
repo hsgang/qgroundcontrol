@@ -394,7 +394,7 @@ ApplicationWindow {
                         id:                 setupButton
                         height:             viewSelectDrawer._toolButtonHeight
                         Layout.fillWidth:   true
-                        text:               qsTr("Vehicle Setup")
+                        text:               qsTr("Vehicle Configuration")
                         imageColor:         qgcPal.text
                         imageResource:      "/qmlimages/Quad.svg"
                         onClicked: {
@@ -814,10 +814,10 @@ ApplicationWindow {
 
                 QGCLabel {
                     id:             toolbarDrawerText
-                    text:           qsTr("Exit") + " " + toolDrawer.toolTitle
+                    text:           toolDrawer.toolTitle
                     font.pointSize: ScreenTools.largeFontPointSize
                 }
-            }            
+            }
 
             QGCMouseArea {
                 anchors.top:        parent.top

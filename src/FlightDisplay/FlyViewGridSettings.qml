@@ -96,14 +96,25 @@ Rectangle {
             textFieldPreferredWidth: _labelledItemWidth
         }
 
-        QGCButton {
-            id:     buttonsss
-            text:   "generate"
-            onClicked: {
-                QGroundControl.gridManager.generateGrid(QtPositioning.coordinate(_latitude, _longitude),
-                                                            _rows,
-                                                            _columns,
-                                                            _gridSize)
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: ScreenTools.defaultFontPixelWidth
+
+            QGCButton {
+                text:   qsTr("generate")
+                onClicked: {
+                    QGroundControl.gridManager.generateGrid(QtPositioning.coordinate(_latitude, _longitude),
+                                                                _rows,
+                                                                _columns,
+                                                                _gridSize)
+                }
+            }
+
+            QGCButton {
+                text:   qsTr("delete")
+                onClicked: {
+                    QGroundControl.gridManager.deleteGrid()
+                }
             }
         }
     }
