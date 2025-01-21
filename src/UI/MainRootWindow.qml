@@ -127,6 +127,7 @@ ApplicationWindow {
         setupView.visible       = false
         appSettings.visible     = false
         toolbar.currentToolbar  = currentToolbar
+        viewer3DWindow.close()
     }
 
     function showFlyView() {
@@ -150,7 +151,7 @@ ApplicationWindow {
     }
 
     function showVehicleSetupTool(setupPage = "") {
-        showTool(qsTr("Vehicle Setup"), "SetupView.qml", "/qmlimages/Quad.svg")
+        showTool(qsTr("Vehicle Configuration"), "SetupView.qml", "/qmlimages/Quad.svg")
         if (setupPage !== "") {
             toolDrawerLoader.item.showNamedComponentPanel(setupPage)
         }
@@ -734,10 +735,10 @@ ApplicationWindow {
         interactive:    false
         visible:        false
 
-        //property alias backIcon:    backIcon.source
-        property alias toolTitle:   toolbarDrawerText.text
+        property var backIcon
+        property string toolTitle:  toolbarDrawerText.text
         property alias toolSource:  toolDrawerLoader.source
-        property alias toolIcon:    toolIcon.source
+        property var toolIcon
 
         // Unload the loader only after closed, otherwise we will see a "blank" loader in the meantime
         onClosed: {
@@ -753,6 +754,7 @@ ApplicationWindow {
             color:          qgcPal.toolbarBackground
 
             RowLayout {
+                id:                 toolDrawerToolbarLayout
                 anchors.leftMargin: ScreenTools.defaultFontPixelWidth
                 anchors.left:       parent.left
                 anchors.top:        parent.top
@@ -812,6 +814,7 @@ ApplicationWindow {
 
                 QGCLabel {
                     id:             toolbarDrawerText
+                    text:           qsTr("Exit") + " " + toolDrawer.toolTitle
                     font.pointSize: ScreenTools.largeFontPointSize
                 }
             }            

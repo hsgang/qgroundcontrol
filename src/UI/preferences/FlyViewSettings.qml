@@ -25,8 +25,8 @@ import QGroundControl.Controllers
 SettingsPage {
     property var    _settingsManager:                   QGroundControl.settingsManager
     property var    _flyViewSettings:                   _settingsManager.flyViewSettings
-    property var    _customMavlinkActionsSettings:      _settingsManager.customMavlinkActionsSettings
     property var    _modelProfileSettings:              _settingsManager.modelProfileSettings
+    property var    _mavlinkActionsSettings:            _settingsManager.mavlinkActionsSettings
     property Fact   _virtualJoystick:                   _settingsManager.appSettings.virtualJoystick
     property Fact   _virtualJoystickAutoCenterThrottle: _settingsManager.appSettings.virtualJoystickAutoCenterThrottle
     property Fact   _enableMultiVehiclePanel:           _settingsManager.appSettings.enableMultiVehiclePanel
@@ -43,8 +43,8 @@ SettingsPage {
 
     QGCFileDialogController { id: fileController }
 
-    function customActionList() {
-        var fileModel = fileController.getFiles(_settingsManager.appSettings.customActionsSavePath, "*.json")
+    function mavlinkActionList() {
+        var fileModel = fileController.getFiles(_settingsManager.appSettings.mavlinkActionsSavePath, "*.json")
         fileModel.unshift(qsTr("<None>"))
         return fileModel
     }
@@ -239,10 +239,10 @@ SettingsPage {
 
     SettingsGroupLayout {
         id:         customActions
-        Layout.fillWidth:   true
         Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 40
-        heading:            qsTr("Custom Actions")
-        headingDescription:     qsTr("Custom action JSON files should be created in the '%1' folder.").arg(QGroundControl.settingsManager.appSettings.customActionsSavePath)
+        Layout.fillWidth:       true
+        heading:                qsTr("MAVLink Actions")
+        headingDescription:     qsTr("Action JSON files should be created in the '%1' folder.").arg(QGroundControl.settingsManager.appSettings.mavlinkActionsSavePath)
 
 
         // onVisibleChanged: {
@@ -308,24 +308,26 @@ SettingsPage {
 
         LabelledComboBox {
             Layout.fillWidth:   true
-            label:              qsTr("Fly View Custom Actions")
-            model:              customActionList()
-            onActivated:        (index) => index == 0 ? _customMavlinkActionsSettings.flyViewActionsFile.rawValue = "" : _customMavlinkActionsSettings.flyViewActionsFile.rawValue = comboBox.currentText
+            label:              qsTr("Fly View Actions")
+            model:              mavlinkActionList()
+            onActivated:        (index) => index == 0 ? _mavlinkActionsSettings.flyViewActionsFile.rawValue = "" : _mavlinkActionsSettings.flyViewActionsFile.rawValue = comboBox.currentText
+            enabled:            model.length > 1
 
             Component.onCompleted: {
-                var index = comboBox.find(_customMavlinkActionsSettings.flyViewActionsFile.valueString)
+                var index = comboBox.find(_mavlinkActionsSettings.flyViewActionsFile.valueString)
                 comboBox.currentIndex = index == -1 ? 0 : index
             }
         }
 
         LabelledComboBox {
             Layout.fillWidth:   true
-            label:              qsTr("Joystick Custom Actions")
-            model:              customActionList()
-            onActivated:        (index) => index == 0 ? _customMavlinkActionsSettings.joystickActionsFile.rawValue = "" : _customMavlinkActionsSettings.joystickActionsFile.rawValue = comboBox.currentText
+            label:              qsTr("Joystick Actions")
+            model:              mavlinkActionList()
+            onActivated:        (index) => index == 0 ? _mavlinkActionsSettings.joystickActionsFile.rawValue = "" : _mavlinkActionsSettings.joystickActionsFile.rawValue = comboBox.currentText
+            enabled:            model.length > 1
 
             Component.onCompleted: {
-                var index = comboBox.find(_customMavlinkActionsSettings.joystickActionsFile.valueString)
+                var index = comboBox.find(_mavlinkActionsSettings.joystickActionsFile.valueString)
                 comboBox.currentIndex = index == -1 ? 0 : index
             }
         }

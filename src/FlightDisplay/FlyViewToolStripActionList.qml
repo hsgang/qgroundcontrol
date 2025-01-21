@@ -20,7 +20,7 @@ ToolStripActionList {
     model: [
 
         ToolStripAction {
-            property bool   _is3DViewOpen:          viewer3DWindow.isOpen
+            property bool _is3DViewOpen:            viewer3DWindow.isOpen
             property bool   _viewer3DEnabled:       QGroundControl.settingsManager.viewer3DSettings.enabled.rawValue
 
             id: view3DIcon
@@ -58,6 +58,7 @@ ToolStripActionList {
         GuidedActionChangeSpeed { },
         GuidedActionActionList { },
         // CustomActionToolStrip { },
+        FlyViewAdditionalActionsButton { },
         GuidedActionGripper { }
     ]
 }

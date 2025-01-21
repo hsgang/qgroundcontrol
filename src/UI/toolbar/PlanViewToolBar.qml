@@ -72,11 +72,21 @@ Rectangle {
                     }
             }
         }
+
+        QGCLabel {
+            text:           qsTr("Exit Plan")
+            font.pointSize: ScreenTools.largeFontPointSize
+        }
+    }
+
+    QGCMouseArea {
+        anchors.fill:   viewButtonRow
+        onClicked:      mainWindow.showFlyView()
     }
 
     QGCFlickable {
         id:                     toolsFlickable
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
+        //anchors.leftMargin:     ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
         anchors.left:           viewButtonRow.right
         anchors.bottomMargin:   1
         anchors.top:            parent.top

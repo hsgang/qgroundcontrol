@@ -38,12 +38,15 @@ GripperMenu                     1.0 GripperMenu.qml
 GuidedActionActionList          1.0 GuidedActionActionList.qml
 GuidedActionChangeAltitude      1.0 GuidedActionChangeAltitude.qml
 GuidedActionChangeSpeed         1.0 GuidedActionChangeSpeed.qml
+FlyViewAdditionalActionsButton  1.0 FlyViewAdditionalActionsButton.qml
 GuidedActionConfirm             1.0 GuidedActionConfirm.qml
 GuidedActionPressHoldConfirm    1.0 GuidedActionPressHoldConfirm.qml
 GuidedActionsController         1.0 GuidedActionsController.qml
 GuidedActionGripper             1.0 GuidedActionGripper.qml
 GuidedActionLand                1.0 GuidedActionLand.qml
-GuidedActionList                1.0 GuidedActionList.qml
+FlyViewAdditionalActionsList    1.0 FlyViewAdditionalActionsList.qml
+FlyViewAdditionalActionsPanel   1.0 FlyViewAdditionalActionsPanel.qml
+FlyViewAdditionalCustomActionsList 1.0 FlyViewAdditionalCustomActionsList.qml
 GuidedActionPause               1.0 GuidedActionPause.qml
 GuidedActionRTL                 1.0 GuidedActionRTL.qml
 GuidedValueSlider               1.0 GuidedValueSlider.qml
