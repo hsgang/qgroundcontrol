@@ -41,6 +41,11 @@ Rectangle {
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
+        LabelledFactComboBox {
+            label:                  qsTr("Label")
+            fact:                   _gridSettings.valueSource
+        }
+
         LabelledFactTextField {
             label:                  qsTr("Latitude")
             fact:                   _gridSettings.latitude
@@ -53,20 +58,20 @@ Rectangle {
             visible:                true
             textFieldPreferredWidth: _labelledItemWidth
         }
-        // LabelledFactTextField {
-        //     label:                  qsTr("rows")
-        //     fact:                   _gridSettings.rows
-        //     visible:                true
-        //     textFieldPreferredWidth: _labelledItemWidth
-        // }
-        // LabelledFactTextField {
-        //     label:                  qsTr("columns")
-        //     fact:                   _gridSettings.columns
-        //     visible:                true
-        //     textFieldPreferredWidth: _labelledItemWidth
-        // }
         LabelledFactTextField {
-            label:                  qsTr("gridSize")
+            label:                  qsTr("Rows")
+            fact:                   _gridSettings.rows
+            visible:                true
+            textFieldPreferredWidth: _labelledItemWidth
+        }
+        LabelledFactTextField {
+            label:                  qsTr("Columns")
+            fact:                   _gridSettings.columns
+            visible:                true
+            textFieldPreferredWidth: _labelledItemWidth
+        }
+        LabelledFactTextField {
+            label:                  qsTr("Grid Size")
             fact:                   _gridSettings.gridSize
             visible:                true
             textFieldPreferredWidth: _labelledItemWidth

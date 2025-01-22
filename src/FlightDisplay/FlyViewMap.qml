@@ -327,7 +327,7 @@ FlightMap {
 
     // Add distance sensor view
     MapItemView{
-        model: QGrProximityRadarValuescleManager.vehicles
+        model: QGroundControl.multiVehicleManager.vehicles
         delegate: ProximityRadarMapView {
             vehicle:        object
             coordinate:     object.coordinate
@@ -423,6 +423,129 @@ FlightMap {
         delegate: CameraTriggerIndicator {
             coordinate:     object.coordinate
             z:              QGroundControl.zOrderTopMost
+        }
+    }
+
+    // GridManager Viewer
+
+    property int valueSource: QGroundControl.settingsManager.gridSettings.valueSource.rawValue
+    property int gridSizeMeters: QGroundControl.settingsManager.gridSettings.gridSize.rawValue // 격자의 크기 (미터 단위)
+    property real mapZoomLevel: _root.zoomLevel // Map의 줌 레벨
+    property var baseCoordinate: QtPositioning.coordinate(35.1704328, 129.1312456)
+    property var selectedGrid: null // 현재 선택된 격자
+    property real value1: QGroundControl.settingsManager.gridSettings.value1.rawValue
+    property real value2: QGroundControl.settingsManager.gridSettings.value2.rawValue
+    property real value3: QGroundControl.settingsManager.gridSettings.value3.rawValue
+    property real value4: QGroundControl.settingsManager.gridSettings.value4.rawValue
+    property int _rows: QGroundControl.settingsManager.gridSettings.rows.rawValue
+    property int _columns: QGroundControl.settingsManager.gridSettings.columns.rawValue
+
+    function valueSouceData() {
+        switch ( valueSource ) {
+            case 0 : return _activeVehicle.altitudeRelative.rawValue
+                break
+            case 1 : return _activeVehicle.roll.rawValue
+                break
+            case 2 : return _activeVehicle.pitch.rawValue
+                break
+            default : return _activeVehicle.altitudeRelative.rawValue
+        }
+    }
+
+    function calculateGridSize() {
+        let scale = Math.pow(2, mapZoomLevel)
+        return {
+            width: gridSizeMeters * scale / 111320 / 1.2, // 1km 기준으로 축척 계산
+            height: gridSizeMeters * scale / 111320 / 1.2
+        }
+    }
+
+    // 격자 크기 계산 함수
+    function gridSizeForLatLng() {
+        var latSize = gridSizeMeters / 111320; // 위도 1도에 해당하는 미터 거리
+        var lonSize = gridSizeMeters / (111320 * Math.cos(Math.round(Math.PI * baseCoordinate.latitude) / 180)); // 경도는 위도에 따라 달라짐
+        return {latSize: latSize, lonSize: lonSize};
+    }
+
+    // 마커의 좌표가 변경되었을 때 격자 색상 업데이트
+    function updateGridColor(latitude, longitude) {
+        //console.log(gridMapItemView.children.length)
+        for (let i = 0; i < gridMapItemView.children.length; i++) {
+            let grid = gridMapItemView.children[i] //gridMapItemView.itemAt(i)
+            if (grid.isInside(latitude, longitude)) {
+                if (selectedGrid !== grid) {
+                    // // 이전 선택된 격자 색상 초기화
+                    // if (selectedGrid !== null) {
+                    //     selectedGrid.resetColor()
+                    // }
+                    // 새로운 격자 선택 및 색상 변경
+                    selectedGrid = grid
+                    selectedGrid.selectColor()
+                }
+                return
+            }
+        }
+    }
+
+    MapItemView {
+        id: gridMapItemView
+        model: _gridManager.gridData
+
+        delegate: MapQuickItem {
+            coordinate: object.coordinate
+            anchorPoint.x:  sourceItem.anchorPointX
+            anchorPoint.y:  sourceItem.anchorPointY
+            z:          QGroundControl.zOrderMapItems
+
+            property real latMin: coordinate.latitude - ((gridSizeForLatLng().latSize)/2)
+            property real latMax: coordinate.latitude + ((gridSizeForLatLng().latSize)/2)
+            property real lonMin: coordinate.longitude - ((gridSizeForLatLng().lonSize)/2)
+            property real lonMax: coordinate.longitude + ((gridSizeForLatLng().lonSize)/2)
+
+            sourceItem: Rectangle {
+                id: gridRect
+                width: calculateGridSize().width
+                height: calculateGridSize().height
+                color: "transparent"
+                border.color: Qt.rgba(255, 255, 255, 0.4)
+                border.width: 1
+                property real anchorPointX: width / 2
+                property real anchorPointY: height / 2
+
+                QGCLabel{
+                    id: gridLabel
+                    anchors.centerIn: parent
+                    text: ""
+                }
+            }
+
+            function selectColor() {
+                if(_activeVehicle) {
+                    // rawValue 값에 따라 색상을 변경
+                    let rawValue = valueSouceData()//_activeVehicle.altitudeRelative.rawValue;
+
+                    if (rawValue <= value1) {
+                        gridRect.color = Qt.rgba(0, 255, 0, 0.4);  // Green
+                    } else if (rawValue <= value2) {
+                        gridRect.color = Qt.rgba(255, 255, 0, 0.4);  // Yellow
+                    } else if (rawValue <= value3) {
+                        gridRect.color = Qt.rgba(255, 165, 0, 0.4);  // Orange
+                    } else if (rawValue <= value4) {
+                        gridRect.color = Qt.rgba(255, 0, 0, 0.4);  // Red
+                    } else {
+                        gridRect.color = Qt.rgba(128, 0, 128, 0.4);  // Purple for out of range
+                    }
+
+                    // 레이블에 rawValue 표시
+                    gridLabel.text = valueSouceData().toFixed(2)//_activeVehicle.altitudeRelative.rawValue.toFixed(2)
+                }
+            }
+
+            // 특정 좌표가 격자 내부에 있는지 확인
+            function isInside(latitude, longitude) {
+                return latitude >= latMin && latitude <= latMax &&
+                       longitude >= lonMin && longitude <= lonMax
+            }
         }
     }
 
@@ -853,121 +976,6 @@ FlightMap {
     // }
 
     //*******************************************************************************************   
-
-    property int gridSizeMeters: QGroundControl.settingsManager.gridSettings.gridSize.rawValue // 격자의 크기 (미터 단위)
-    property real mapZoomLevel: _root.zoomLevel // Map의 줌 레벨
-    property var baseCoordinate: QtPositioning.coordinate(35.1704328, 129.1312456)
-    property var selectedGrid: null // 현재 선택된 격자
-    property real value1: QGroundControl.settingsManager.gridSettings.value1.rawValue
-    property real value2: QGroundControl.settingsManager.gridSettings.value2.rawValue
-    property real value3: QGroundControl.settingsManager.gridSettings.value3.rawValue
-    property real value4: QGroundControl.settingsManager.gridSettings.value4.rawValue
-    property int _rows: QGroundControl.settingsManager.gridSettings.rows.rawValue
-    property int _columns: QGroundControl.settingsManager.gridSettings.columns.rawValue
-
-    function calculateGridSize() {
-        let scale = Math.pow(2, mapZoomLevel)
-        return {
-            width: gridSizeMeters * scale / 111320 / 1.2, // 1km 기준으로 축척 계산
-            height: gridSizeMeters * scale / 111320 / 1.2
-        }
-    }
-
-    // 격자 크기 계산 함수
-    function gridSizeForLatLng() {
-        // 위도 단위로 미터 계산 (1도 ≈ 111320 미터)
-        var latSize = gridSizeMeters / 111320; // 위도 1도에 해당하는 미터 거리
-
-        // 경도 단위로 미터 계산 (경도는 위도에 따라 변함)
-        var lonSize = gridSizeMeters / (111320 * Math.cos(Math.PI * baseCoordinate.latitude / 180)); // 경도는 위도에 따라 달라짐
-
-        return {latSize: latSize, lonSize: lonSize};
-    }
-
-    // 마커의 좌표가 변경되었을 때 격자 색상 업데이트
-    function updateGridColor(latitude, longitude) {
-        for (let i = 0; i < repeater.count; i++) {
-            let grid = repeater.itemAt(i)
-            if (grid.isInside(latitude, longitude)) {
-                if (selectedGrid !== grid) {
-                    // // 이전 선택된 격자 색상 초기화
-                    // if (selectedGrid !== null) {
-                    //     selectedGrid.resetColor()
-                    // }
-                    // 새로운 격자 선택 및 색상 변경
-                    selectedGrid = grid
-                    selectedGrid.selectColor()
-                }
-                return
-            }
-        }
-    }
-
-    // onGridDataChanged: {
-    //     //updateGridData(gridData)
-    //     console.log("gridData:" + JSON.stringify(gridData))
-    // }
-
-    Repeater {
-        id: repeater
-        model: 100//_gridManager.gridData
-        delegate: MapQuickItem {
-
-            //coordinate: QtPositioning.coordinate(modelData.latitude, modelData.longitude)
-            coordinate: QtPositioning.coordinate(gridData[index].latitude, gridData[index].longitude)
-            //coordinate: QtPositioning.coordinate(_gridManager.gridData[index].latitude, _gridManager.gridData[index].longitude)
-
-            anchorPoint.x: sourceItem.width / 2
-            anchorPoint.y: sourceItem.height / 2
-
-            property real latMin: coordinate.latitude - ((gridSizeForLatLng().latSize)/2)
-            property real latMax: coordinate.latitude + ((gridSizeForLatLng().latSize)/2)
-            property real lonMin: coordinate.longitude - ((gridSizeForLatLng().lonSize)/2)
-            property real lonMax: coordinate.longitude + ((gridSizeForLatLng().lonSize)/2)
-
-            sourceItem: Rectangle {
-                id: gridRect
-                width: calculateGridSize().width
-                height: calculateGridSize().height
-                color: "transparent"
-                border.color: Qt.rgba(255, 255, 255, 0.4)
-                border.width: 1
-
-                QGCLabel{
-                    id: gridLabel
-                }
-            }
-
-            // 격자 선택 시 색상 변경
-            function selectColor() {
-                if(_activeVehicle) {
-                    // rawValue 값에 따라 색상을 변경
-                    let rawValue = _activeVehicle.altitudeRelative.rawValue;
-
-                    if (rawValue <= value1) {
-                        gridRect.color = Qt.rgba(0, 255, 0, 0.4);  // Green
-                    } else if (rawValue <= value2) {
-                        gridRect.color = Qt.rgba(255, 255, 0, 0.4);  // Yellow
-                    } else if (rawValue <= value3) {
-                        gridRect.color = Qt.rgba(255, 165, 0, 0.4);  // Orange
-                    } else if (rawValue <= value4) {
-                        gridRect.color = Qt.rgba(255, 0, 0, 0.4);  // Red
-                    } else {
-                        gridRect.color = Qt.rgba(128, 0, 128, 0.4);  // Purple for out of range
-                    }
-
-                    // 레이블에 rawValue 표시
-                    gridLabel.text = _activeVehicle.altitudeRelative.rawValue.toFixed(2)
-                }
-            }
-
-            // 특정 좌표가 격자 내부에 있는지 확인
-            function isInside(latitude, longitude) {
-                return latitude >= latMin && latitude <= latMax &&
-                       longitude >= lonMin && longitude <= lonMax
-            }
-        }
-    }
 
     //*******************************************************************************************
 }

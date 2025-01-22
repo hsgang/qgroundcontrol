@@ -3,6 +3,7 @@
 #include "GridSettings.h"
 #include "SettingsManager.h"
 #include "QGCLoggingCategory.h"
+#include "QGCQGeoCoordinate.h"
 
 #include <QtQml/qqml.h>
 #include <QtMath>
@@ -34,7 +35,7 @@ void GridManager::init()
 {
     // QString apiKey = CloudSettings().firebaseAPIKey()->rawValueString();
     // this->setAPIKey(apiKey);
-    qDebug() << "gridManager init";
+    // qDebug() << "gridManager init";
 }
 
 void GridManager::generateGrid(const QGeoCoordinate &baseCoordinate, int rowCount, int colCount, double gridSizeMeters) {
@@ -52,11 +53,11 @@ void GridManager::generateGrid(const QGeoCoordinate &baseCoordinate, int rowCoun
                 baseCoordinate.latitude() - row * latOffset,
                 baseCoordinate.longitude() + col * lonOffset
                 );
-            QVariantMap gridItem;
-            gridItem["latitude"] = gridCoord.latitude();
-            gridItem["longitude"] = gridCoord.longitude();
+            // QVariantMap gridItem;
+            // gridItem["latitude"] = gridCoord.latitude();
+            // gridItem["longitude"] = gridCoord.longitude();
             //qDebug() << gridItem;
-            m_gridData.append(gridItem);
+            m_gridData.append(new QGCQGeoCoordinate(gridCoord, this));
         }
     }
 
@@ -64,11 +65,11 @@ void GridManager::generateGrid(const QGeoCoordinate &baseCoordinate, int rowCoun
 }
 
 void GridManager::deleteGrid() {
-    m_gridData.clear();
+    m_gridData.clearAndDeleteContents();
 
     emit gridDataChanged();
 
-    qDebug() << "gridData Cleared";
+    //qDebug() << "gridData Cleared";
 }
 
 

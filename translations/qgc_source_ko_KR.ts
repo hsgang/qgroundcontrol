@@ -7211,8 +7211,18 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
-        <source>gridSize</source>
-        <translation>격자 크기(m)</translation>
+        <source>Rows</source>
+        <translation>세로 격자</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
+        <source>Columns</source>
+        <translation>가로 격자</translation>
+    </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
+        <source>Grid Size</source>
+        <translation>격자 크기</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>

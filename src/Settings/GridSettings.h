@@ -18,6 +18,7 @@ public:
     GridSettings(QObject* parent = nullptr);
     DEFINE_SETTING_NAME_GROUP()
 
+    DEFINE_SETTINGFACT(valueSource)
     DEFINE_SETTINGFACT(latitude)
     DEFINE_SETTINGFACT(longitude)
     DEFINE_SETTINGFACT(rows)

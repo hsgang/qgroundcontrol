@@ -23,18 +23,18 @@ public:
 
     void init();
 
-    Q_PROPERTY(QVariant gridData READ gridData NOTIFY gridDataChanged)
+    Q_PROPERTY(QmlObjectListModel* gridData READ gridData NOTIFY gridDataChanged)
 
     Q_INVOKABLE void generateGrid(const QGeoCoordinate &baseCoordinate, int rowCount, int colCount, double gridSizeMeters);
     Q_INVOKABLE void deleteGrid();
 
-    QVariant gridData () const {return m_gridData; }
+    QmlObjectListModel* gridData () { return &m_gridData; }
 
 signals:
     void gridDataChanged();
 
 private:
-    QVariantList m_gridData;
+    QmlObjectListModel m_gridData;
 };
 
 #endif // GRIDMANAGER_H

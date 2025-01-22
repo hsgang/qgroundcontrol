@@ -17,6 +17,7 @@ DECLARE_SETTINGGROUP(Grid, "Grid")
     qmlRegisterUncreatableType<GridSettings>("QGroundControl.SettingsManager", 1, 0, "GridSettings", "Reference only");
 }
 
+DECLARE_SETTINGSFACT(GridSettings, valueSource)
 DECLARE_SETTINGSFACT(GridSettings, latitude)
 DECLARE_SETTINGSFACT(GridSettings, longitude)
 DECLARE_SETTINGSFACT(GridSettings, rows)
