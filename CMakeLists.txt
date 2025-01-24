@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22.1)
+cmake_minimum_required(VERSION 3.25)
 
 list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/cmake
@@ -117,6 +117,8 @@ if(CMAKE_CROSSCOMPILING AND ANDROID)
 endif()
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIGURATION>")
 
 # https://cmake.org/cmake/help/latest/policy/CMP0168.html#policy:CMP0168
 if(POLICY CMP0168)
@@ -156,7 +158,7 @@ include(Qt6QGCConfiguration)
 
 set(QT_QML_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/qml" CACHE PATH "Install path for QML" FORCE)
 set(QML_IMPORT_PATH ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/qml ${CMAKE_BINARY_DIR}/imports CACHE STRING "Extra QML Import Paths" FORCE)
-add_compile_definitions(QT_DISABLE_DEPRECATED_UP_TO=0x060700)
+add_compile_definitions(QT_DISABLE_DEPRECATED_UP_TO=0x060800)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     add_compile_definitions(
@@ -287,6 +289,11 @@ endif()
 # if(CMAKE_OSX_ARCHITECTURES AND NOT "${CMAKE_HOST_SYSTEM_PROCESSOR}" IN_LIST CMAKE_OSX_ARCHITECTURES)
 
 cmake_dependent_option(QGC_BUILD_DEPENDENCIES "Force Building of Dependencies." OFF "NOT CMAKE_CROSSCOMPILING;NOT MACOS_UNIVERSAL_BUILD" ON)
+
+include(CPM)
+if(CMAKE_CROSSCOMPILING OR ANDROID OR MACOS_UNIVERSAL_BUILD)
+    set(CPM_DOWNLOAD_ALL ON CACHE BOOL "Download all Dependencies" FORCE)
+endif()
 
 #######################################################
 #                Custom Build Configuration
