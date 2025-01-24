@@ -149,7 +149,14 @@ Item {
             QGCTextField {
                 id:                     searchText
                 placeholderText:        qsTr("Search")
-                onDisplayTextChanged:   controller.searchText = displayText
+                //onDisplayTextChanged:   controller.searchText = displayText
+            }
+
+            QGCButton {
+                text: qsTr("Search")
+                onClicked: {
+                    controller.searchText = searchText.displayText
+                }
             }
 
             QGCButton {
@@ -169,20 +176,22 @@ Item {
                 visible:    QGroundControl.multiVehicleManager.activeVehicle.px4Firmware
             }
         }
-
-        QGCButton {
+        RowLayout {
             Layout.alignment:   Qt.AlignRight
-            text:               qsTr("Reboot")
-            onClicked:          mainWindow.showMessageDialog(qsTr("Reboot Vehicle"),
-                                                        qsTr("Select Ok to reboot vehicle."),
-                                                        Dialog.Cancel | Dialog.Ok,
-                                                        function() { _activeVehicle.rebootVehicle() })
-        }
+            spacing:            ScreenTools.defaultFontPixelWidth
 
-        QGCButton {
-            Layout.alignment:   Qt.AlignRight
-            text:               qsTr("Tools")
-            onClicked:          toolsMenu.popup()
+            QGCButton {
+                text:               qsTr("Reboot")
+                onClicked:          mainWindow.showMessageDialog(qsTr("Reboot Vehicle"),
+                                                            qsTr("Select Ok to reboot vehicle."),
+                                                            Dialog.Cancel | Dialog.Ok,
+                                                            function() { _activeVehicle.rebootVehicle() })
+            }
+
+            QGCButton {
+                text:               qsTr("Tools")
+                onClicked:          toolsMenu.popup()
+            }
         }
     }
 

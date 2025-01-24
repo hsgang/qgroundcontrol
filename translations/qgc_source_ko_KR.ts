@@ -13726,6 +13726,11 @@ Is this really what you want?</source>
         <source>Search:</source>
         <translation>검색:</translation>
     </message>
+        <message>
+        <location filename="../src/QmlControls/ParameterEditor.qml" line="74"/>
+        <source>Search</source>
+        <translation>찾기</translation>
+    </message>
     <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="74"/>
         <source>Clear</source>
