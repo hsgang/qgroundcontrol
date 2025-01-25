@@ -20,6 +20,10 @@ inputs:
   github_token:
     description: GitHub Token
     required: false
+  source:
+    description: Source location
+    required: false
+    default: package
 
 runs:
   using: "composite"
@@ -27,8 +31,10 @@ runs:
     - name: Save artifact
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.package_name }}
-        path: ${{ runner.temp }}/shadow_build_dir/${{ inputs.artifact_name }}
+        name: ${{ inputs.artifact_name }}
+        path: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}/${{ inputs.artifact_name }}
+        # name: ${{ inputs.package_name }}
+        # path: ${{ runner.temp }}/shadow_build_dir/${{ inputs.artifact_name }}
 
     # - name: Upload build to S3 Bucket
     #   if: github.event_name == 'push'
