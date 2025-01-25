@@ -113,8 +113,6 @@ jobs:
         with:
           arch: ${{ matrix.Arch == 'Arm64' && 'amd64_arm64' || 'x64' }}
 
-      - run: mkdir ${{ runner.temp }}\shadow_build_dir
-
       - name: Configure
         working-directory: ${{ runner.temp }}\shadow_build_dir
         run: ${{ env.QT_ROOT_DIR }}/bin/qt-cmake -S ${{ github.workspace }} -B . -G Ninja
