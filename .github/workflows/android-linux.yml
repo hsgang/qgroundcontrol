@@ -89,7 +89,6 @@ jobs:
           aws_secret_access_key: ${{ secrets.MINIO_SECRET_KEY }}
           aws_end_point: ${{ secrets.MINIO_ENDPOINT }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          source: ''
 
 
       # - name: Deploy to Play Store
