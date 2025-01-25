@@ -69,6 +69,8 @@ jobs:
           version: ${{ env.QT_VERSION }}
           abis: ${{ env.QT_ANDROID_ABIS }}
           cpm-cache: ${{ env.CPM_SOURCE_CACHE }}
+
+        - run: mkdir ${{ runner.temp }}/shadow_build_dir
       
       - name: Configure
         working-directory: ${{ runner.temp }}/shadow_build_dir
