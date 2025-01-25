@@ -32,8 +32,8 @@ jobs:
         shell: cmd
 
     env:
-      ARTIFACT: QGroundControl-installer.exe
-      PACKAGE: QGroundControl-installer
+      ARTIFACT: MissionNavigator-installer.exe
+      PACKAGE: MissionNavigator-installer
       QT_VERSION: 6.8.1
       GST_VERSION: 1.22.12
       CPM_SOURCE_CACHE: ${{ github.workspace }}\cpm_modules
