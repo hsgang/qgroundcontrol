@@ -32,12 +32,11 @@ jobs:
         shell: cmd
 
     env:
-      ARTIFACT: MissionNavigator-installer.exe
-      PACKAGE: MissionNavigator-installer
+      ARTIFACT: QGroundControl-installer.exe
+      PACKAGE: QGroundControl-installer
       QT_VERSION: 6.8.1
       GST_VERSION: 1.22.12
-      SCCACHE_GHA_ENABLED: "true"
-      CPM_SOURCE_CACHE: ${{ github.workspace }}/cpm_modules
+      CPM_SOURCE_CACHE: ${{ github.workspace }}\cpm_modules
 
     steps:
       - name: Checkout repo
@@ -45,10 +44,6 @@ jobs:
         with:
           submodules: recursive
           fetch-tags: true
-          fetch-depth: 0
-
-      - uses: seanmiddleditch/gha-setup-ninja@v5
-      - uses: lukka/get-cmake@latest
 
       - name: Initial Setup
         uses: ./.github/actions/common
@@ -66,21 +61,13 @@ jobs:
         with:
           version: ${{ env.GST_VERSION }}
 
-      - name: Set Up sccache
-        uses: mozilla-actions/sccache-action@v0.0.7
-  
-      - name: Set Up Cache
-        uses: hendrikmuhs/ccache-action@main
+      - name: Setup Caching
+        uses: ./.github/actions/cache
         with:
-          key: ${{ runner.os }}-${{ matrix.Arch }}-${{ matrix.BuildType }}
-          max-size: 1G
-          variant: sccache
-          save: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
-
-      - uses: actions/cache@v4
-        with:
-          path: ${{ env.CPM_SOURCE_CACHE }}
-          key: ${{ github.workflow }}-cpm-modules-${{ hashFiles('**/CMakeLists.txt', '**/*.cmake') }}
+          host: windows
+          target: win64_msvc2022_64
+          build-type: ${{ matrix.BuildType }}
+          cpm-modules: ${{ env.CPM_SOURCE_CACHE }}
 
       - name: Install Qt for Windows (x64)
         uses: jurplel/install-qt-action@v4
@@ -92,7 +79,6 @@ jobs:
           arch: win64_msvc2022_64
           dir: ${{ runner.temp }}
           modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
-          cache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
       # Note: Must Use QtMultimedia VideoReceiver or build GStreamer manually
       - name: Install Qt for Windows (Arm64)
@@ -106,7 +92,6 @@ jobs:
           arch: win64_msvc2022_arm64_cross_compiled
           dir: ${{ runner.temp }}
           modules: qtcharts qtlocation qtpositioning qtspeech qt5compat qtmultimedia qtserialport qtimageformats qtshadertools qtconnectivity qtquick3d qtsensors
-          cache: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
 
       - name: Set up Visual Studio shell
         uses: ilammy/msvc-dev-cmd@v1
@@ -120,7 +105,6 @@ jobs:
               -DQT_HOST_PATH="${{ env.QT_ROOT_DIR }}/../msvc2022_64"
               -DQT_DEBUG_FIND_PACKAGE=ON
               -DQGC_STABLE_BUILD=${{ github.ref_type == 'tag' || contains(github.ref, 'Stable') && 'ON' || 'OFF' }}
-              -DCPM_SOURCE_CACHE=${{ env.CPM_SOURCE_CACHE }}
 
       - name: Build
         working-directory: ${{ runner.temp }}\shadow_build_dir
@@ -136,7 +120,7 @@ jobs:
         with:
           artifact_name: ${{ env.ARTIFACT }}
           package_name: ${{ env.PACKAGE }}
-          aws_key_id: ${{ secrets.MINIO_ACCESS_KEY }}
-          aws_secret_access_key: ${{ secrets.MINIO_SECRET_KEY }}
-          aws_end_point: ${{ secrets.MINIO_ENDPOINT }}
+          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          aws_end_point: ${{ secrets.MINIO_ENDPOINT }}
