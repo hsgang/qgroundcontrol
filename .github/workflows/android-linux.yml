@@ -32,8 +32,8 @@ jobs:
         shell: bash
 
     env:
-      ARTIFACT: QGroundControl.apk
-      PACKAGE: QGroundControl
+      ARTIFACT: MissionNavigator.apk
+      PACKAGE: MissionNavigator
       QT_VERSION: 6.8.1
       GST_VERSION: 1.22.12
       QT_ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/deploy/android/android_release.keystore
