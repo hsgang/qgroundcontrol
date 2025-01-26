@@ -179,7 +179,7 @@ CPMFindPackage(
         "EXIV2_BUILD_UNIT_TESTS OFF"
         "EXIV2_BUILD_FUZZ_TESTS OFF"
         "EXIV2_BUILD_DOC OFF"
-        "BUILD_WITH_CCACHE ON"
+        "BUILD_WITH_CCACHE OFF"
 )
 
 if(TARGET Exiv2::exiv2lib)
