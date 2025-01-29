@@ -182,7 +182,7 @@ CPMFindPackage(
         "BUILD_WITH_CCACHE OFF"
 )
 
-if(TARGET Exiv2::exiv2lib)
-    target_link_libraries(AnalyzeView PRIVATE Exiv2::exiv2lib)
+if(TARGET exiv2::exiv2lib)
+    target_link_libraries(AnalyzeView PRIVATE exiv2::exiv2lib)
     target_include_directories(AnalyzeView PRIVATE ${CMAKE_BINARY_DIR})
 endif()
