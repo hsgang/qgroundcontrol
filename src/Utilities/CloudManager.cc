@@ -1024,9 +1024,11 @@ void CloudManager::uploadTakeoffRecordReplyReadyRead()
 void CloudManager::downloadForNewVersion()
 {
 #if defined(Q_OS_ANDROID)
-    const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator.apk";
+    //const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator.apk";
+    const QString newInstallFileUrl = "https://github.com/hsgang/qgroundcontrol/releases/download/latest/MissionNavigator.apk";
 #else
-    const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator-installer.exe";
+    //const QString newInstallFileUrl = "http://ampkorea.synology.me:9000/data/builds/MissionNavigator-installer.exe";
+    const QString newInstallFileUrl = "https://github.com/hsgang/qgroundcontrol/releases/download/latest/MissionNavigator-installer.exe"
 #endif
 
     qCDebug(CloudManagerLog) << "install file url: " << newInstallFileUrl;
