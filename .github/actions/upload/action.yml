@@ -49,7 +49,7 @@ runs:
     #   shell: bash
 
     - name: Upload to MinIO
-      if: ${{ github.event_name == 'push' && inputs.aws_key_id != '' && inputs.aws_secret_access_key != '' }}
+      if: ${{ github.event_name != 'pull_request' && github.ref_name == 'master' && inputs.github_token != '' }}
       working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
       run: |
         aws configure set aws_access_key_id ${{ inputs.aws_key_id }}
@@ -59,7 +59,7 @@ runs:
       shell: bash
 
     - name: Upload to MinIO latest bucket
-      if: ${{ github.event_name == 'push' && github.ref_type == 'tag' && inputs.aws_key_id != '' && inputs.aws_secret_access_key != '' }}
+      if: ${{ github.event_name != 'pull_request' && github.ref_name == 'master' && inputs.github_token != '' }}
       working-directory: ${{ runner.temp }}/shadow_build_dir/${{ inputs.source }}
       run: |
         aws configure set aws_access_key_id ${{ inputs.aws_key_id }}
