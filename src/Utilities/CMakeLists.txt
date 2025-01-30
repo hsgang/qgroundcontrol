@@ -67,20 +67,15 @@ endif()
 #===========================================================================#
 
 include(CPM)
-CPMAddPackage(
-    NAME Shapelib
-    VERSION 1.6.1
+CPMFindPackage(
+    NAME shapelib
+    VERSION 1.6.0
     GITHUB_REPOSITORY OSGeo/shapelib
+    GIT_TAG v1.6.1
     OPTIONS
         "BUILD_SHAPELIB_CONTRIB OFF"
         "BUILD_APPS OFF"
         "BUILD_TESTING OFF"
 )
 
-if(Shapelib_ADDED)
-    if(TARGET shp)
-        target_link_libraries(Utilities PRIVATE shp)
-    elseif(TARGET shapelib::shp)
-        target_link_libraries(Utilities PRIVATE shapelib::shp)
-    endif()
-endif()
+target_link_libraries(Utilities PRIVATE shp)
