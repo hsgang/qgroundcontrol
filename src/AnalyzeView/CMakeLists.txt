@@ -156,7 +156,7 @@ else()
     set(_EXIV2_ENABLE_XMP OFF)
 endif()
 
-CPMFindPackage(
+CPMAddPackage(
     NAME exiv2
     VERSION ${EXIV2_VERSION}
     GITHUB_REPOSITORY Exiv2/exiv2
@@ -180,6 +180,7 @@ CPMFindPackage(
         "EXIV2_BUILD_FUZZ_TESTS OFF"
         "EXIV2_BUILD_DOC OFF"
         "BUILD_WITH_CCACHE OFF"
+        "BUILD_SHARED_LIBS OFF"
 )
 
 if(TARGET Exiv2::exiv2lib)
