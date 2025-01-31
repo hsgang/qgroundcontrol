@@ -23,7 +23,7 @@ target_include_directories(Compression PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 include(CPM)
 CPMFindPackage(
-    NAME ZLIB
+    NAME zlib
     VERSION 1.3.1
     GITHUB_REPOSITORY madler/zlib
     OPTIONS
@@ -35,12 +35,7 @@ CPMFindPackage(
         "ZLIB_USE_STATIC_LIBS ON"
 )
 
-if(ZLIB_ADDED)
-    target_link_libraries(Compression PRIVATE zlibstatic)
-else()
-    find_package(Qt6ZlibPrivate REQUIRED)
-    target_link_libraries(Compression PRIVATE Qt6::ZlibPrivate)
-endif()
+target_link_libraries(Compression PRIVATE zlibstatic)
 
 #===========================================================================#
 
