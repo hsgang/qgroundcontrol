@@ -18,6 +18,7 @@
 
 #include "QGCApplication.h"
 #include "AppMessages.h"
+#include "CmdLineOptParser.h"
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     #include <QtWidgets/QMessageBox>
@@ -29,9 +30,6 @@
 #endif
 
 #ifdef QT_DEBUG
-
-#include "CmdLineOptParser.h"
-
 #ifdef QGC_UNITTEST_BUILD
     #include "UnitTestList.h"
 #endif
@@ -156,6 +154,7 @@ int main(int argc, char *argv[])
     Q_IMPORT_PLUGIN(QGeoServiceProviderFactoryQGC)
 
     bool runUnitTests = false;
+    bool simpleBootTest = false;
 
 #ifdef QT_DEBUG
     // We parse a small set of command line options here prior to QGCApplication in order to handle the ones
@@ -189,9 +188,14 @@ int main(int argc, char *argv[])
         SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
     }
 #endif // Q_OS_WIN
+#else
+    CmdLineOpt_t rgCmdLineOptions[] = {
+        { "--simple-boot-test", &simpleBootTest, nullptr },
+    };
+    ParseCmdLineOptions(argc, argv, rgCmdLineOptions, std::size(rgCmdLineOptions), false);
 #endif // QT_DEBUG
 
-    QGCApplication app(argc, argv, runUnitTests);
+    QGCApplication app(argc, argv, runUnitTests || simpleBootTest);
 
     ////////////////Splash image////////////////////////
     ///
@@ -240,7 +244,9 @@ int main(int argc, char *argv[])
             AndroidInterface::checkStoragePermissions();
         #endif
 
-        exitCode = app.exec();
+        if (!simpleBootTest) {
+            exitCode = app.exec();
+        }
     }
 
     app.shutdown();
