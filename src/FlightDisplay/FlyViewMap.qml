@@ -892,6 +892,7 @@ FlightMap {
                 spacing: 0
                 QGCLabel { text: qsTr("Lat: %1").arg(mapClickCoord.latitude.toFixed(6)) }
                 QGCLabel { text: qsTr("Lon: %1").arg(mapClickCoord.longitude.toFixed(6)) }
+                QGCLabel { text: qsTr("Az: %1").arg(_activeVehicleCoordinate.azimuthTo(mapClickCoord).toFixed(1)) }
             }
         }
     }
