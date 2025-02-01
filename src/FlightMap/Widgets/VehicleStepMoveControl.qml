@@ -61,21 +61,21 @@ Rectangle {
             id: gimbalAngleValueRow
 
             QGCLabel{
-                text: activeVehicle ? "Local_X: " + activeVehicle.localPosition.x.valueString : "no value"
+                text: activeVehicle ? "Local_X: " + activeVehicle.localPosition.x.valueString : "Local_X: no value"
                 font.pointSize: _fontSize
             }
             QGCLabel{
-                text: activeVehicle ? "Local_Y: " + activeVehicle.localPosition.y.valueString : "no value"
+                text: activeVehicle ? "Local_Y: " + activeVehicle.localPosition.y.valueString : "Local_Y: no value"
                 font.pointSize: _fontSize
             }
             QGCLabel{
-                text: activeVehicle ? "Local_Z: " + activeVehicle.localPosition.z.valueString : "no value"
+                text: activeVehicle ? "Local_Z: " + activeVehicle.localPosition.z.valueString : "Local_Z: no value"
                 font.pointSize: _fontSize
             }
-            // QGCLabel{
-            //     text: activeGimbal ? "gimbalCnt: " + gimbalController.gimbals.count.toFixed(0) : "no value"
-            //     font.pointSize: _fontSize
-            // }
+            QGCLabel{
+                text: activeVehicle ? "RNG.D: " + activeVehicle.distanceSensors.rotationPitch270.valueString : "RNG.D: no value"
+                font.pointSize: _fontSize
+            }
             // QGCLabel{
             //     text: activeGimbal ? "gimbalId: " + activeGimbal.deviceId.rawValue.toFixed(0) : "no value"
             //     font.pointSize: _fontSize
@@ -89,7 +89,7 @@ Rectangle {
         anchors.horizontalCenter:   parent.horizontalCenter
         columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
         rowSpacing:                 columnSpacing
-        columns:                    3
+        columns:                    4
 
         Rectangle {
             id:                 stepUp
@@ -132,6 +132,47 @@ Rectangle {
         }
 
         Rectangle {
+            id:                 stepTurnLeft
+            width:              _idealWidth - anchorsMargins
+            height:             width
+            radius:             _margins
+            color:              "transparent"
+            border.color:       qgcPal.text
+            border.width:       1
+            scale:              stepTurnLeftPress.pressedButtons ? 0.95 : 1
+
+            QGCLabel {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                text:       "<<"
+                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
+            }
+
+            // QGCColoredImage {
+            //     anchors.verticalCenter: parent.verticalCenter
+            //     anchors.horizontalCenter: parent.horizontalCenter
+            //     height:             parent.height * 0.6
+            //     width:              height
+            //     source:             "/InstrumentValueIcons/zoom-in.svg"
+            //     sourceSize.height:  height
+            //     fillMode:           Image.PreserveAspectFit
+            //     mipmap:             true
+            //     smooth:             true
+            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
+            //     enabled:            true
+            // }
+
+            MouseArea {
+                id:             stepTurnLeftPress
+                anchors.fill:   parent
+                onClicked: {
+                    //var targetYaw = (_yaw + 10) % 360 * Math.PI / 180
+                    var targetYaw = -10 * Math.PI / 180
+                    activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)                }
+            }
+        }
+
+        Rectangle {
             id:                 stepForward
             Layout.alignment:   Qt.AlignHCenter
             width:              _idealWidth - anchorsMargins
@@ -166,7 +207,7 @@ Rectangle {
         }
 
         Rectangle {
-            id:                 baseDown
+            id:                 stepTurnRight
             Layout.alignment:   Qt.AlignHCenter
             width:              _idealWidth - anchorsMargins
             height:             width
@@ -174,29 +215,77 @@ Rectangle {
             color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
-            scale:              baseDownPress.pressedButtons ? 0.95 : 1
+            scale:              stepTurnRightPress.pressedButtons ? 0.95 : 1
 
-            QGCColoredImage {
+            QGCLabel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-base-down.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
+                text:       ">>"
+                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
             }
 
+            // QGCColoredImage {
+            //     anchors.verticalCenter: parent.verticalCenter
+            //     anchors.horizontalCenter: parent.horizontalCenter
+            //     height:             parent.height * 0.6
+            //     width:              height
+            //     source:             "/InstrumentValueIcons/arrow-base-down.svg"
+            //     sourceSize.height:  height
+            //     fillMode:           Image.PreserveAspectFit
+            //     mipmap:             true
+            //     smooth:             true
+            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
+            //     enabled:            true
+            // }
+
             MouseArea {
-                id:             baseDownPress
+                id:             stepTurnRightPress
                 anchors.fill:   parent
                 onClicked: {
                     //var targetYaw = (_yaw + 10) % 360 * Math.PI / 180
                     var targetYaw = 10 * Math.PI / 180
                     activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
+                }
+            }
+        }
+
+        Rectangle {
+            id:                 stepAltStop
+            Layout.alignment:   Qt.AlignHCenter
+            width:              _idealWidth - anchorsMargins
+            height:             width
+            radius:             _margins
+            color:      "transparent"
+            border.color:       qgcPal.text
+            border.width:       1
+            scale:              stepAltStopPress.pressedButtons ? 0.95 : 1
+
+            QGCLabel {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                text:       "Stop"
+                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
+            }
+
+            // QGCColoredImage {
+            //     anchors.verticalCenter: parent.verticalCenter
+            //     anchors.horizontalCenter: parent.horizontalCenter
+            //     height:             parent.height * 0.6
+            //     width:              height
+            //     source:             "/InstrumentValueIcons/target.svg"
+            //     sourceSize.height:  height
+            //     fillMode:           Image.PreserveAspectFit
+            //     mipmap:             true
+            //     smooth:             true
+            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
+            //     enabled:            true
+            // }
+
+            MouseArea {
+                id:             stepAltStopPress
+                anchors.fill:   parent
+                onClicked: {
+                    activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
                 }
             }
         }
@@ -352,6 +441,47 @@ Rectangle {
         }
 
         Rectangle {
+            id:                 stepDummy1
+            Layout.alignment:   Qt.AlignHCenter
+            width:              _idealWidth - anchorsMargins
+            height:             width
+            radius:             _margins
+            color:      "transparent"
+            border.color:       qgcPal.text
+            border.width:       1
+            scale:              stepDummy1Press.pressedButtons ? 0.95 : 1
+
+            QGCLabel {
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                text:       "--"
+                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
+            }
+
+            // QGCColoredImage {
+            //     anchors.verticalCenter: parent.verticalCenter
+            //     anchors.horizontalCenter: parent.horizontalCenter
+            //     height:             parent.height * 0.6
+            //     width:              height
+            //     source:             "/InstrumentValueIcons/zoom-out.svg"
+            //     sourceSize.height:  height
+            //     fillMode:           Image.PreserveAspectFit
+            //     mipmap:             true
+            //     smooth:             true
+            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
+            //     enabled:            true
+            // }
+
+            MouseArea {
+                id:             stepDummy1Press
+                anchors.fill:   parent
+                onClicked: {
+                    activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                }
+            }
+        }
+
+        Rectangle {
             id:                 stepBack
             Layout.alignment:   Qt.AlignHCenter
             width:              _idealWidth - anchorsMargins
@@ -386,7 +516,7 @@ Rectangle {
         }
 
         Rectangle {
-            id:                 gimbalMode
+            id:                 stepDummy2
             Layout.alignment:   Qt.AlignHCenter
             width:              _idealWidth - anchorsMargins
             height:             width
@@ -394,24 +524,31 @@ Rectangle {
             color:      "transparent"
             border.color:       qgcPal.text
             border.width:       1
-            scale:              gimbalModePress.pressedButtons ? 0.95 : 1
+            scale:              stepDummy2Press.pressedButtons ? 0.95 : 1
 
-            QGCColoredImage {
+            QGCLabel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/navigation-more.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
+                text:       "--"
+                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
             }
 
+            // QGCColoredImage {
+            //     anchors.verticalCenter: parent.verticalCenter
+            //     anchors.horizontalCenter: parent.horizontalCenter
+            //     height:             parent.height * 0.6
+            //     width:              height
+            //     source:             "/InstrumentValueIcons/zoom-out.svg"
+            //     sourceSize.height:  height
+            //     fillMode:           Image.PreserveAspectFit
+            //     mipmap:             true
+            //     smooth:             true
+            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
+            //     enabled:            true
+            // }
+
             MouseArea {
-                id:             gimbalModePress
+                id:             stepDummy2Press
                 anchors.fill:   parent
                 onClicked: {
                     activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
