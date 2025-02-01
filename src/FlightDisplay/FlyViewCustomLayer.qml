@@ -100,6 +100,12 @@ Item {
         anchors.verticalCenter:     parent.verticalCenter
         spacing:                    _toolsMargin
 
+        VehicleStepMoveControl{
+            id:                     vehicleStepMoveControl
+            anchors.verticalCenter: parent.verticalCenter
+            visible:                QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl.rawValue
+        }
+
         GimbalControl{
             id:                     gimbalControl
             anchors.verticalCenter: parent.verticalCenter

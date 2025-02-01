@@ -893,6 +893,42 @@ void APMFirmwarePlugin::guidedModeChangeAltitudeAMSL(Vehicle* vehicle, double al
     }
 }
 
+void APMFirmwarePlugin::setPositionTargetLocalNed(Vehicle* vehicle, double xValue, double yValue, double zValue, double yaw, bool pauseVehicle)
+{
+    if (pauseVehicle && !_setFlightModeAndValidate(vehicle, pauseFlightMode())) {
+        qgcApp()->showAppMessage(tr("Unable to pause vehicle."));
+        return;
+    }
+
+    setGuidedMode(vehicle, true);
+
+    SharedLinkInterfacePtr sharedLink = vehicle->vehicleLinkManager()->primaryLink().lock();
+    if (sharedLink) {
+        mavlink_message_t                       msg;
+        mavlink_set_position_target_local_ned_t cmd;
+
+        memset(&cmd, 0, sizeof(cmd));
+
+        cmd.target_system    = static_cast<uint8_t>(vehicle->id());
+        cmd.target_component = static_cast<uint8_t>(vehicle->defaultComponentId());
+        cmd.coordinate_frame = MAV_FRAME_BODY_NED; //MAV_FRAME_LOCAL_OFFSET_NED;
+        cmd.type_mask = 0xFBF8; //0xFFF8; // Only x/y/z valid
+        cmd.x = static_cast<float>(xValue);
+        cmd.y = static_cast<float>(yValue);
+        cmd.z = static_cast<float>(-zValue);
+        cmd.yaw = static_cast<float>(yaw);
+
+        mavlink_msg_set_position_target_local_ned_encode_chan(
+            static_cast<uint8_t>(MAVLinkProtocol::instance()->getSystemId()),
+            static_cast<uint8_t>(MAVLinkProtocol::getComponentId()),
+            sharedLink->mavlinkChannel(),
+            &msg,
+            &cmd);
+
+        vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
+    }
+}
+
 bool APMFirmwarePlugin::mulirotorSpeedLimitsAvailable(Vehicle* vehicle)
 {
     return vehicle->parameterManager()->parameterExists(ParameterManager::defaultComponentId, "WPNAV_SPEED");

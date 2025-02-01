@@ -2226,6 +2226,15 @@ void Vehicle::guidedModeChangeAltitudeAMSL(double altitudeAMSL, bool pauseVehicl
     _firmwarePlugin->guidedModeChangeAltitudeAMSL(this, altitudeAMSL, pauseVehicle);
 }
 
+void Vehicle::setPositionTargetLocalNed(double xValue, double yValue, double zValue, double yaw, bool pauseVehicle)
+{
+    if (!guidedModeSupported()) {
+        qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
+        return;
+    }
+    _firmwarePlugin->setPositionTargetLocalNed(this, xValue, yValue, zValue, yaw, pauseVehicle);
+}
+
 void Vehicle::guidedModeChangeGroundSpeedMetersSecond(double groundspeed)
 {
     if (!guidedModeSupported()) {

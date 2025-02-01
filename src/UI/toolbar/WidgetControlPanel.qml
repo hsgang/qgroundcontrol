@@ -99,6 +99,14 @@ ToolIndicatorPage{
                     visible:    _showGridViewer.visible
                     property Fact   _showGridViewer:            QGroundControl.settingsManager.flyViewSettings.showGridViewer
                 }
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       qsTr("Vehicle Step Control")
+                    fact:       _showVehicleStepMoveControl
+                    visible:    _showVehicleStepMoveControl.visible
+                    property Fact   _showVehicleStepMoveControl:    QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl
+                }
             }
 
             SettingsGroupLayout {

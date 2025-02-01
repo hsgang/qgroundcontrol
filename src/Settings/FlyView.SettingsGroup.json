@@ -205,6 +205,12 @@
     "shortDesc": "showSiyiCameraControl",
     "type":         "bool",
     "default":      false
+},
+{
+    "name":         "showVehicleStepMoveControl",
+    "shortDesc": "showVehicleStepMoveControl",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }

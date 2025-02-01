@@ -21,6 +21,7 @@ QGCPitchIndicator           1.0 QGCPitchIndicator.qml
 WinchControlPanel           1.0 WinchControlPanel.qml
 CompassDial                 1.0 CompassDial.qml
 CompassHeadingIndicator     1.0 CompassHeadingIndicator.qml
+VehicleStepMoveControl      1.0 VehicleStepMoveControl.qml
 
 # Map items
 CameraTriggerIndicator      1.0 CameraTriggerIndicator.qml

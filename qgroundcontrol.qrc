@@ -533,6 +533,7 @@
         <file alias="Viewer3D/Viewer3DProgressBar.qml">src/Viewer3D/Viewer3DQml/Viewer3DProgressBar.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewTopRightPanel.qml">src/FlightDisplay/FlyViewTopRightPanel.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewGridSettings.qml">src/FlightDisplay/FlyViewGridSettings.qml</file>
+        <file alias="QGroundControl/FlightMap/VehicleStepMoveControl.qml">src/FlightMap/Widgets/VehicleStepMoveControl.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="ConnectFirstRunPrompt.qml">src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml</file>

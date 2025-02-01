@@ -60,6 +60,7 @@ public:
     void                pauseVehicle                    (Vehicle* vehicle) override;
     void                guidedModeRTL                   (Vehicle* vehicle, bool smartRTL) override;
     void                guidedModeChangeAltitudeAMSL    (Vehicle* vehicle, double altitudeAMSL, bool pauseVehicle) override;
+    void                setPositionTargetLocalNed       (Vehicle* vehicle, double xValue, double yValue, double zValue, double yaw, bool pauseVehicle) override;
     // void                guidedModeChangeAltitude        (Vehicle* vehicle, double altitudeChange, bool pauseVehicle) override;
     void                guidedModeChangeHeading         (Vehicle* vehicle, const QGeoCoordinate &headingCoord) override;
     bool                adjustIncomingMavlinkMessage    (Vehicle* vehicle, mavlink_message_t* message) override;

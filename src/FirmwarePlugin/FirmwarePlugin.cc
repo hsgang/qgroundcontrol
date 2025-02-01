@@ -251,6 +251,13 @@ void FirmwarePlugin::guidedModeChangeAltitudeAMSL(Vehicle*, double, bool pauseVe
     qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
 }
 
+void FirmwarePlugin::setPositionTargetLocalNed(Vehicle*, double, double, double, double, bool pauseVehicle)
+{
+    // Not supported by generic vehicle
+    Q_UNUSED(pauseVehicle);
+    qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
+}
+
 void FirmwarePlugin::guidedModeChangeGroundSpeedMetersSecond(Vehicle*, double)
 {
     // Not supported by generic vehicle
