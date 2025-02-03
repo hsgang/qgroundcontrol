@@ -22,7 +22,7 @@ Rectangle {
     property bool   _available:     !isNaN(_activeVehicle.vibration.xAxis.rawValue)
     property real   _margins:       ScreenTools.defaultFontPixelWidth / 2
     property real   _barWidth:      ScreenTools.defaultFontPixelWidth * 3
-    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 6
+    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 4
     property real   _xValue:        _activeVehicle.vibration.xAxis.rawValue
     property real   _yValue:        _activeVehicle.vibration.yAxis.rawValue
     property real   _zValue:        _activeVehicle.vibration.zAxis.rawValue
@@ -89,6 +89,7 @@ Rectangle {
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
                     text:               qsTr("X \n(%1)").arg(_xValue.toFixed(0))
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.8
                 }
             }
 
@@ -136,6 +137,7 @@ Rectangle {
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
                     text:               qsTr("Y \n(%1)").arg(_yValue.toFixed(0))
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.8
                 }
             }
 
@@ -183,6 +185,7 @@ Rectangle {
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
                     text:               qsTr("Z \n(%1)").arg(_zValue.toFixed(0))
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.8
                 }
             }
         }
@@ -193,18 +196,22 @@ Rectangle {
 
             QGCLabel {
                 text: qsTr("Clip count")
+                font.pointSize: ScreenTools.defaultFontPointSize * 0.8
             }
 
             QGCLabel {
                 text: qsTr("Accel 1: %1").arg(_activeVehicle.vibration.clipCount1.rawValue)
+                font.pointSize: ScreenTools.defaultFontPointSize * 0.8
             }
 
             QGCLabel {
                 text: qsTr("Accel 2: %1").arg(_activeVehicle.vibration.clipCount2.rawValue)
+                font.pointSize: ScreenTools.defaultFontPointSize * 0.8
             }
 
             QGCLabel {
                 text: qsTr("Accel 3: %1").arg(_activeVehicle.vibration.clipCount3.rawValue)
+                font.pointSize: ScreenTools.defaultFontPointSize * 0.8
             }
         }
 

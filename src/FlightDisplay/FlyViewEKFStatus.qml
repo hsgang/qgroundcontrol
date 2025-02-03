@@ -22,7 +22,7 @@ Rectangle {
     property bool   _available:     !isNaN(_activeVehicle.vibration.xAxis.rawValue)
     property real   _margins:       ScreenTools.defaultFontPixelWidth / 2
     property real   _barWidth:      ScreenTools.defaultFontPixelWidth * 3
-    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 6
+    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 4
     property real   _velocity_variance:     _activeVehicle.ekfStatus.velocity_variance.rawValue
     property real   _pos_horiz_variance:    _activeVehicle.ekfStatus.pos_horiz_variance.rawValue
     property real   _pos_vert_variance:     _activeVehicle.ekfStatus.pos_vert_variance.rawValue
@@ -91,6 +91,7 @@ Rectangle {
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
                     text:               qsTr("Velocity\n (%1)").arg(_velocity_variance.toFixed(2))
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.8
                 }
             }
 
@@ -139,6 +140,7 @@ Rectangle {
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
                     text:               qsTr("Pos_H\n (%1)").arg(_pos_horiz_variance.toFixed(2))
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.8
                 }
             }
 
@@ -187,6 +189,7 @@ Rectangle {
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
                     text:               qsTr("Pos_V\n (%1)").arg(_pos_vert_variance.toFixed(2))
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.8
                 }
             }
 
@@ -235,6 +238,7 @@ Rectangle {
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
                     text:               qsTr("Compass\n (%1)").arg(_compass_variance.toFixed(2))
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.8
                 }
             }
 
@@ -283,30 +287,20 @@ Rectangle {
                 QGCLabel {
                     Layout.alignment:   Qt.AlignHCenter
                     text:               qsTr("Terrain\n (%1)").arg(_terrain_alt_variance.toFixed(2))
+                    font.pointSize: ScreenTools.defaultFontPointSize * 0.8
                 }
             }
         }
 
-        Column {
-            anchors.margins:    ScreenTools.defaultFontPixelWidth
-            anchors.left:       barRow.right
+        // Column {
+        //     anchors.margins:    ScreenTools.defaultFontPixelWidth
+        //     anchors.left:       barRow.right
 
-            QGCLabel {
-                text: qsTr("EKF Flags")
-            }
-
-//            QGCLabel {
-//                text: qsTr("Accel 1: %1").arg(_activeVehicle.vibration.clipCount1.rawValue)
-//            }
-
-//            QGCLabel {
-//                text: qsTr("Accel 2: %1").arg(_activeVehicle.vibration.clipCount2.rawValue)
-//            }
-
-//            QGCLabel {
-//                text: qsTr("Accel 3: %1").arg(_activeVehicle.vibration.clipCount3.rawValue)
-//            }
-        }
+        //     QGCLabel {
+        //         text: qsTr("EKF Flags")
+        //         font.pointSize: ScreenTools.defaultFontPointSize * 0.8
+        //     }
+        // }
 
         Rectangle {
             anchors.fill:   parent
