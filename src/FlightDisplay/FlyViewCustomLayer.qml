@@ -115,8 +115,6 @@ Item {
         WinchControlPanel {
             id:                     winchControlPanel
             anchors.verticalCenter: parent.verticalCenter
-            width:                  ScreenTools.defaultFontPixelWidth * 10
-            height:                 ScreenTools.defaultFontPixelWidth * 40
             visible:                QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue
         }
         // Column {
