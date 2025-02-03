@@ -71,6 +71,24 @@ Rectangle {
     property bool   _hasZoom:           _camera && _camera.hasZoom
 
     Rectangle{
+        anchors.bottom: parent.top
+        anchors.bottomMargin: _margins / 2
+        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
+        width:          gimbalAngleValueRow.width
+        height:         titleLabel.height + _margins
+        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+        radius:         _margins / 2
+
+        QGCLabel{
+            id:   titleLabel
+            text: "마운트 제어"
+            anchors.horizontalCenter:   parent.horizontalCenter
+            anchors.verticalCenter:     parent.verticalCenter
+        }
+    }
+
+    Rectangle{
         anchors.top: parent.bottom
         anchors.topMargin: _margins / 2
         anchors.right: parent.right
@@ -115,7 +133,7 @@ Rectangle {
 
         Rectangle {
             id:                 zoomIn
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:              "transparent"
@@ -149,7 +167,7 @@ Rectangle {
         Rectangle {
             id:                 gimbalUp
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -187,7 +205,7 @@ Rectangle {
         Rectangle {
             id:                 baseDown
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -221,7 +239,7 @@ Rectangle {
         Rectangle {
             id:                 gimbalLeft
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -259,7 +277,7 @@ Rectangle {
         Rectangle {
             id:                 gimbalHome
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -295,7 +313,7 @@ Rectangle {
         Rectangle {
             id:                 gimbalRight
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -333,7 +351,7 @@ Rectangle {
         Rectangle {
             id:                 zoomOut
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -367,7 +385,7 @@ Rectangle {
         Rectangle {
             id:                 gimbalDown
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -405,7 +423,7 @@ Rectangle {
         Rectangle {
             id:                 gimbalMode
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"

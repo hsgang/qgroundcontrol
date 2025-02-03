@@ -6950,6 +6950,11 @@ Click Ok to start the auto-tuning process.
         <source>Lon: %1</source>
         <translation>경도: %1</translation>
     </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewMap.qml" line="727"/>
+        <source>Az: %1</source>
+        <translation>방위: %1</translation>
+    </message>
 </context>
 <context>
     <name>FlyViewMissionCompleteDialog</name>
@@ -9144,6 +9149,11 @@ Click Ok to start the auto-tuning process.
         <translation>고도 변경</translation>
     </message>
     <message>
+        <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="49"/>
+        <source>Actions</source>
+        <translation>액션</translation>
+    </message>
+    <message>
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="50"/>
         <source>Orbit</source>
         <translation>Orbit</translation>
@@ -11079,6 +11089,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="440"/>
         <source>Grid Viewer</source>
         <translation>그리드 뷰어</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="440"/>
+        <source>Vehicle Step Control</source>
+        <translation>기체 스텝 제어</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="450"/>

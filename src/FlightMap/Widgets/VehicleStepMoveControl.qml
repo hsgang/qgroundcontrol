@@ -30,7 +30,7 @@ Rectangle {
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
     border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
     border.width:   1
-    radius:     _margins * 1.5
+    radius:     _margins / 2
     visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
@@ -49,37 +49,86 @@ Rectangle {
     property real   _yawRad:                _yaw * Math.PI / 180
 
     Rectangle{
+        anchors.bottom: parent.top
+        anchors.bottomMargin: _margins / 2
+        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
+        width:          valueRowLayout.width
+        height:         titleLabel.height + _margins
+        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+        radius:         _margins / 2
+
+        QGCLabel{
+            id:   titleLabel
+            text: "기체 스텝 제어"
+            anchors.horizontalCenter:   parent.horizontalCenter
+            anchors.verticalCenter:     parent.verticalCenter
+        }
+    }
+
+    Rectangle{
         anchors.top: parent.bottom
         anchors.topMargin: _margins / 2
         anchors.right: parent.right
         anchors.horizontalCenter: parent.horizontalCenter
-        width:          gimbalAngleValueRow.width
-        height:         gimbalAngleValueRow.height
+        width:          valueRowLayout.width
+        height:         valueRowLayout.height + _margins
         color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
         radius:         _margins / 2
-        ColumnLayout{
-            id: gimbalAngleValueRow
 
-            QGCLabel{
-                text: activeVehicle ? "Local_X: " + activeVehicle.localPosition.x.valueString : "Local_X: no value"
-                font.pointSize: _fontSize
+        RowLayout {
+            id: valueRowLayout
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+
+            ColumnLayout{
+
+                QGCLabel{
+                    text: "상대좌표X"
+                    font.pointSize: _fontSize
+                    leftPadding:    ScreenTools.defaultFontPixelWidth
+                }
+                QGCLabel{
+                    text: "상대좌표Y"
+                    font.pointSize: _fontSize
+                    leftPadding:    ScreenTools.defaultFontPixelWidth
+                }
+                QGCLabel{
+                    text: "상대고도"
+                    font.pointSize: _fontSize
+                    leftPadding:    ScreenTools.defaultFontPixelWidth
+                }
+                QGCLabel{
+                    text: "하방라이다"
+                    font.pointSize: _fontSize
+                    leftPadding:    ScreenTools.defaultFontPixelWidth
+                }
             }
-            QGCLabel{
-                text: activeVehicle ? "Local_Y: " + activeVehicle.localPosition.y.valueString : "Local_Y: no value"
-                font.pointSize: _fontSize
+
+            ColumnLayout{
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 10
+
+                QGCLabel{
+                    text: activeVehicle ? activeVehicle.localPosition.x.valueString + " m" : "no value"
+                    font.pointSize: _fontSize
+                    Layout.alignment: Qt.AlignRight
+                }
+                QGCLabel{
+                    text: activeVehicle ? activeVehicle.localPosition.y.valueString + " m" : "no value"
+                    font.pointSize: _fontSize
+                    Layout.alignment: Qt.AlignRight
+                }
+                QGCLabel{
+                    text: activeVehicle ? activeVehicle.altitudeRelative.valueString + " m" : "no value"
+                    font.pointSize: _fontSize
+                    Layout.alignment: Qt.AlignRight
+                }
+                QGCLabel{
+                    text: activeVehicle ? activeVehicle.distanceSensors.rotationPitch270.valueString + " m" : "no value"
+                    font.pointSize: _fontSize
+                    Layout.alignment: Qt.AlignRight
+                }
             }
-            QGCLabel{
-                text: activeVehicle ? "Local_Z: " + activeVehicle.localPosition.z.valueString : "Local_Z: no value"
-                font.pointSize: _fontSize
-            }
-            QGCLabel{
-                text: activeVehicle ? "RNG.D: " + activeVehicle.distanceSensors.rotationPitch270.valueString : "RNG.D: no value"
-                font.pointSize: _fontSize
-            }
-            // QGCLabel{
-            //     text: activeGimbal ? "gimbalId: " + activeGimbal.deviceId.rawValue.toFixed(0) : "no value"
-            //     font.pointSize: _fontSize
-            // }
         }
     }
 
@@ -93,7 +142,7 @@ Rectangle {
 
         Rectangle {
             id:                 stepUp
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth // - anchorsMargins
             height:             width
             radius:             _margins
             color:              "transparent"
@@ -104,8 +153,7 @@ Rectangle {
             QGCLabel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                text:       "UP"
-                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
+                text:       "▲상승"
             }
 
             // QGCColoredImage {
@@ -133,7 +181,7 @@ Rectangle {
 
         Rectangle {
             id:                 stepTurnLeft
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:              "transparent"
@@ -145,7 +193,6 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 text:       "<<"
-                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
             }
 
             // QGCColoredImage {
@@ -175,7 +222,7 @@ Rectangle {
         Rectangle {
             id:                 stepForward
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -209,7 +256,7 @@ Rectangle {
         Rectangle {
             id:                 stepTurnRight
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -221,7 +268,6 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 text:       ">>"
-                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
             }
 
             // QGCColoredImage {
@@ -252,7 +298,7 @@ Rectangle {
         Rectangle {
             id:                 stepAltStop
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -263,8 +309,7 @@ Rectangle {
             QGCLabel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                text:       "Stop"
-                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
+                text:       "정지"
             }
 
             // QGCColoredImage {
@@ -293,7 +338,7 @@ Rectangle {
         Rectangle {
             id:                 stepLeft
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -327,7 +372,7 @@ Rectangle {
         Rectangle {
             id:                 stepStop
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -338,8 +383,7 @@ Rectangle {
             QGCLabel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                text:       "Stop"
-                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
+                text:       "정지"
             }
 
             // QGCColoredImage {
@@ -368,7 +412,7 @@ Rectangle {
         Rectangle {
             id:                 stepRight
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -402,7 +446,7 @@ Rectangle {
         Rectangle {
             id:                 stepDown
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -413,8 +457,7 @@ Rectangle {
             QGCLabel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                text:       "DOWN"
-                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
+                text:       "▼하강"
             }
 
             // QGCColoredImage {
@@ -443,7 +486,7 @@ Rectangle {
         Rectangle {
             id:                 stepDummy1
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -455,7 +498,6 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 text:       "--"
-                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
             }
 
             // QGCColoredImage {
@@ -484,7 +526,7 @@ Rectangle {
         Rectangle {
             id:                 stepBack
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -518,7 +560,7 @@ Rectangle {
         Rectangle {
             id:                 stepDummy2
             Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth - anchorsMargins
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:      "transparent"
@@ -530,7 +572,6 @@ Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
                 text:       "--"
-                font.pointSize: ScreenTools.defaultFontPointSize * 0.6
             }
 
             // QGCColoredImage {

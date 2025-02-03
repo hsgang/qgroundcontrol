@@ -24,18 +24,77 @@ import QGroundControl.FactControls
 
 Rectangle {
     id:         winchControlPannel
-    width:      mainGridLayout.width + _margins
-    height:     mainGridLayout.height + _margins * 11
+    width:      mainGridLayout.width + _margins * 4
+    height:     mainGridLayout.height + _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    radius:     _margins
+    border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
+    border.width:   1
+    radius:     _margins / 2
     visible:    false
 
-    property real   _margins:                   ScreenTools.defaultFontPixelHeight / 2
-    property real   backgroundOpacity:          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
-    property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
+    property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
+    property real   backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
+    property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
+    property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
 
-    property string   _winchStatus:             _activeVehicle ? _activeVehicle.winchStatus.status.enumStringValue : "unknown"
-    property string   _winchLineLength:         _activeVehicle ? _activeVehicle.winchStatus.lineLength.valueString : "--"
+    property string   _winchStatus:     _activeVehicle ? _activeVehicle.winchStatus.status.enumStringValue : "unknown"
+    property string   _winchLineLength: _activeVehicle ? _activeVehicle.winchStatus.lineLength.valueString : "--"
+
+    Rectangle{
+        anchors.bottom:             parent.top
+        anchors.bottomMargin:       _margins / 2
+        anchors.right:              parent.right
+        anchors.horizontalCenter:   parent.horizontalCenter
+        width:                      parent.width
+        height:                     titleLabel.height + _margins
+        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+        radius:                     _margins / 2
+
+        QGCLabel{
+            id:   titleLabel
+            text: "윈치 제어"
+            anchors.horizontalCenter:   parent.horizontalCenter
+            anchors.verticalCenter:     parent.verticalCenter
+        }
+    }
+
+    Rectangle{
+        anchors.top: parent.bottom
+        anchors.topMargin: _margins / 2
+        anchors.right: parent.right
+        anchors.horizontalCenter: parent.horizontalCenter
+        width:          valueColumnLayout.width
+        height:         valueColumnLayout.height
+        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+        radius:         _margins / 2
+
+        ColumnLayout{
+            id: valueColumnLayout
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+
+            QGCLabel{
+                text: "상태"
+                Layout.alignment: Qt.AlignVCenter
+                //Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
+            }
+            QGCLabel{
+                text: _winchStatus
+                Layout.alignment: Qt.AlignVCenter
+                //Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
+            }
+            QGCLabel{
+                text: "라인 길이"
+                Layout.alignment: Qt.AlignVCenter
+                //Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
+            }
+            QGCLabel{
+                text: _winchLineLength + " m"
+                Layout.alignment: Qt.AlignVCenter
+                //Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
+            }
+        }
+    }
 
     ColumnLayout {
         id:                         mainGridLayout
@@ -45,15 +104,10 @@ Rectangle {
         anchors.horizontalCenter:   parent.horizontalCenter
         spacing:                    ScreenTools.defaultFontPixelHeight / 2
 
-        QGCLabel{
-            text:               qsTr("Winch")
-            Layout.alignment:   Qt.AlignHCenter
-        }
-
         Rectangle {
             id:                 windUp
             Layout.alignment:   Qt.AlignHCenter
-            width:              ScreenTools.defaultFontPixelWidth * 7
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
@@ -87,7 +141,7 @@ Rectangle {
         Rectangle {
             id:                 winchStop
             Layout.alignment:   Qt.AlignHCenter
-            width:              ScreenTools.defaultFontPixelWidth * 7
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
@@ -121,7 +175,7 @@ Rectangle {
         Rectangle {
             id:                 winchRelease
             Layout.alignment:   Qt.AlignHCenter
-            width:              ScreenTools.defaultFontPixelWidth * 7
+            width:              _idealWidth
             height:             width
             radius:             _margins
             color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
@@ -148,38 +202,6 @@ Rectangle {
                 anchors.fill:   parent
                 onClicked: {
                     _activeVehicle.winchControlValue(-1)
-                }
-            }
-        }
-
-        Rectangle{
-            Layout.alignment:   Qt.AlignHCenter
-            width:          winchValueRow.width
-            height:         winchValueRow.height
-            color:          "transparent"
-
-            ColumnLayout{
-                id: winchValueRow
-
-                QGCLabel{
-                    text: "Status"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
-                }
-                QGCLabel{
-                    text: _winchStatus
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
-                }
-                QGCLabel{
-                    text: "Length"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
-                }
-                QGCLabel{
-                    text: _winchLineLength + " m"
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 6
                 }
             }
         }
