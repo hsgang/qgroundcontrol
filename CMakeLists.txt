@@ -194,8 +194,6 @@ if(ANDROID)
     # message(STATUS "QT_ANDROID_KEYSTORE_PATH $ENV{QT_ANDROID_KEYSTORE_PATH}")
     # message(STATUS "QT_ANDROID_KEYSTORE_ALIAS $ENV{QT_ANDROID_KEYSTORE_ALIAS}")
     # QT_ANDROID_KEYSTORE_STORE_PASS, QT_ANDROID_KEYSTORE_KEY_PASS
-elseif(MACOS)
-    set(QGC_ENABLE_GST_VIDEOSTREAMING OFF CACHE BOOL "" FORCE)
 endif()
 
 find_package(Qt6
@@ -501,6 +499,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         Qt6::Core5Compat
         Qt6::Quick
         Qt6::Widgets
+        Qt6::Svg
         QGC
         QmlControls
 )
