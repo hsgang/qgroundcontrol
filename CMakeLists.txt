@@ -6,6 +6,8 @@ list(APPEND CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/cmake/find-modules
 )
 
+set(CMAKE_REQUIRED_QUIET ON)
+
 #######################################################
 #                Custom Build Configuration
 #######################################################
@@ -479,8 +481,6 @@ elseif(ANDROID)
             # QT_ANDROID_SDK_BUILD_TOOLS_REVISION
             # QT_ANDROID_SYSTEM_LIBS_PREFIX
     )
-elseif(LINUX)
-
 endif()
 
 add_compile_definitions(
