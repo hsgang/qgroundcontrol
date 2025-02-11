@@ -234,7 +234,7 @@ Rectangle {
                         Layout.fillWidth:   true
                         visible:        !missionItem.isTakeoffItem
                         text:           qsTr("#%1 Item Move to Down").arg(missionItem.sequenceNumber)
-                        onTriggered: {
+                        onClicked: {
                             _missionController.moveVisualItemDown(missionItem.sequenceNumber)
                             hamburgerMenuDropPanel.close()
                         }
