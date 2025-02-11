@@ -913,7 +913,7 @@ Item {
                                                       UTMSPStateStorage.currentStateIndex = 0}})
     }
 
-    //- ToolStrip DropPanel Components
+    //- ToolStrip ToolStripDropPanel Components
 
     Component {
         id: centerMapDropPanel

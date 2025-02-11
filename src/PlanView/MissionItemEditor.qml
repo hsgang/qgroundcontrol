@@ -171,6 +171,115 @@ Rectangle {
         }
     }
 
+    Component {
+        id: hamburgerMenuDropPanelComponent
+
+        DropPanel {
+            id: hamburgerMenuDropPanel
+
+            sourceComponent: Component {
+                ColumnLayout {
+                    spacing: ScreenTools.defaultFontPixelHeight / 2
+
+                    QGCButton {
+                        Layout.fillWidth:   true
+                        text:               qsTr("Move to vehicle position")
+                        enabled:            _activeVehicle && missionItem.specifiesCoordinate
+
+                        onClicked: {
+                            missionItem.coordinate = _activeVehicle.coordinate
+                            hamburgerMenuDropPanel.close()
+                        }
+
+                        property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+                    }
+
+                    QGCButton {
+                        Layout.fillWidth:   true
+                        text:               qsTr("Move to previous item position")
+                        enabled:            _missionController.previousCoordinate.isValid
+                        onClicked: {
+                            missionItem.coordinate = _missionController.previousCoordinate
+                            hamburgerMenuDropPanel.close()
+                        }
+                    }
+
+                    QGCButton {
+                        Layout.fillWidth:   true
+                        text:               qsTr("Edit position...")
+                        enabled:            missionItem.specifiesCoordinate
+                        onClicked: {
+                            editPositionDialog.createObject(mainWindow).open()
+                            hamburgerMenuDropPanel.close()
+                        }
+                    }
+                    
+                    Rectangle {
+                        Layout.fillWidth:       true
+                        Layout.preferredHeight: 1
+                        color:                  qgcPal.groupBorder
+                    }
+
+                    QGCButton {
+                        Layout.fillWidth:   true
+                        visible:        !missionItem.isTakeoffItem
+                        text:           qsTr("#%1 Item Move to Up").arg(missionItem.sequenceNumber)
+                        onClicked: {
+                            _missionController.moveVisualItemUp(missionItem.sequenceNumber)
+                            hamburgerMenuDropPanel.close()
+                        }
+                    }
+
+                    QGCButton {
+                        Layout.fillWidth:   true
+                        visible:        !missionItem.isTakeoffItem
+                        text:           qsTr("#%1 Item Move to Down").arg(missionItem.sequenceNumber)
+                        onTriggered: {
+                            _missionController.moveVisualItemDown(missionItem.sequenceNumber)
+                            hamburgerMenuDropPanel.close()
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth:       true
+                        Layout.preferredHeight: 1
+                        color:                  qgcPal.groupBorder
+                    }
+
+                    QGCCheckBoxSlider {
+                        Layout.fillWidth:   true
+                        text:               qsTr("Show all values")
+                        visible:            QGroundControl.corePlugin.showAdvancedUI
+                        checked:            missionItem.isSimpleItem ? missionItem.rawEdit : false
+                        enabled:            missionItem.isSimpleItem && !_waypointsOnlyMode
+
+                        onClicked: {
+                            missionItem.rawEdit = checked
+                            if (missionItem.rawEdit && !missionItem.friendlyEditAllowed) {
+                                missionItem.rawEdit = false
+                                checked = false
+                                mainWindow.showMessageDialog(qsTr("Mission Edit"), qsTr("You have made changes to the mission item which cannot be shown in Simple Mode"))
+                            }
+                            hamburgerMenuDropPanel.close()
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth:       true
+                        Layout.preferredHeight: 1
+                        color:                  qgcPal.groupBorder
+                    }
+
+                    QGCLabel { 
+                        text:       qsTr("Item #%1").arg(missionItem.sequenceNumber) 
+                        enabled:    false
+                    }
+                }
+            }
+        }
+    }
+
+
     QGCColoredImage {
         id:                     hamburger
         anchors.margins:        _margin
@@ -185,83 +294,13 @@ Rectangle {
 
         QGCMouseArea {
             fillItem:   hamburger
-            onClicked: {
+            onClicked: (position) => {
                 currentItemScope.focus = true
-                hamburgerMenu.popup()
-            }
-
-            QGCMenu {
-                id: hamburgerMenu
-
-                QGCMenuItem {
-                    text:           qsTr("Move to vehicle position")
-                    visible:        missionItem.specifiesCoordinate || missionItem.isTakeoffItem
-                    enabled:        _activeVehicle && missionItem.specifiesCoordinate
-                    onTriggered:    missionItem.coordinate = _activeVehicle.coordinate
-
-                    property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
-                }
-
-                QGCMenuItem {
-                    text:           qsTr("Move to previous item position")
-                    visible:        _missionController.previousCoordinate.isValid && missionItem.specifiesCoordinate
-                    enabled:        _missionController.previousCoordinate.isValid
-                    onTriggered:    missionItem.coordinate = _missionController.previousCoordinate
-                }
-
-                QGCMenuItem {
-                    text:           qsTr("Edit position")
-                    visible:        missionItem.specifiesCoordinate
-                    enabled:        missionItem.specifiesCoordinate
-                    onTriggered:    editPositionDialog.createObject(mainWindow).open()
-                }
-
-                QGCMenuSeparator {
-                }
-
-                QGCMenuItem {
-                    visible:        !missionItem.isTakeoffItem
-                    text:           qsTr("#%1 Item Move to Up").arg(missionItem.sequenceNumber)
-                    onTriggered:    _missionController.moveVisualItemUp(missionItem.sequenceNumber)
-                }
-
-                QGCMenuItem {
-                    visible:        !missionItem.isTakeoffItem
-                    text:           qsTr("#%1 Item Move to Down").arg(missionItem.sequenceNumber)
-                    onTriggered:    _missionController.moveVisualItemDown(missionItem.sequenceNumber)
-                }
-
-                QGCMenuSeparator {
-                }
-
-                QGCMenuItem {
-                    text:       qsTr("Show all values")
-                    visible:    QGroundControl.corePlugin.showAdvancedUI
-                    checkable:  true
-                    checked:    missionItem.isSimpleItem ? missionItem.rawEdit : false
-                    enabled:    missionItem.isSimpleItem && !_waypointsOnlyMode
-
-                    onTriggered:    {
-                        if (missionItem.rawEdit) {
-                            if (missionItem.friendlyEditAllowed) {
-                                missionItem.rawEdit = false
-                            } else {
-                                mainWindow.showMessageDialog(qsTr("Mission Edit"), qsTr("You have made changes to the mission item which cannot be shown in Simple Mode"))
-                            }
-                        } else {
-                            missionItem.rawEdit = true
-                        }
-                        checked = missionItem.rawEdit
-                    }
-                }
-
-                QGCMenuSeparator {
-                }
-
-                QGCMenuItem {
-                    text:           qsTr("#%1 Item Delete").arg(missionItem.sequenceNumber)
-                    onTriggered:    remove()
-                }
+                position = Qt.point(position.x, position.y)
+                // For some strange reason using mainWindow in mapToItem doesn't work, so we use globals.parent instead which also gets us mainWindow
+                position = mapToItem(globals.parent, position)
+                var dropPanel = hamburgerMenuDropPanelComponent.createObject(mainWindow, { clickRect: Qt.rect(position.x, position.y, 0, 0) })
+                dropPanel.open()
             }
         }
     }
