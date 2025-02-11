@@ -53,8 +53,7 @@
             android:label="-- %%INSERT_APP_NAME%% --"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"
-            android:exported="true"
-            android:windowSoftInputMode="adjustPan">
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -96,9 +95,6 @@
                 android:value="false" />
             <!-- <meta-data android:name="android.app.background_running" -->
             <!-- <meta-data android:name="android.app.trace_location" -->
-            <meta-data
-                android:name="android.view.inputmethod.EditorInfo.privateImeOptions"
-                android:value="disablePreview=true" />
         </activity>
 
         <provider
