@@ -42,7 +42,7 @@ ToolIndicatorPage {
     property int    threshold1: _batterySettings.threshold1.rawValue
     property int    threshold2: _batterySettings.threshold2.rawValue
 
-    property string disabledString: qsTr("- disabled")
+    property string disabledString: qsTr(" - disabled")
 
     contentComponent: Component {
         ColumnLayout {
@@ -144,7 +144,7 @@ ToolIndicatorPage {
 
                 LabelledFactComboBox {
                     id:             editModeCheckBox
-                    label:          qsTr("Value")
+                    label:          qsTr("Display Type")
                     fact:           _fact
                     visible:        _fact.visible
 

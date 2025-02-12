@@ -2959,6 +2959,14 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     </message>
 </context>
 <context>
+    <name>APMFollowComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFollowComponent.cc" line="16"/>
+        <source>Follow Me</source>
+        <translation>팔로우미</translation>
+    </message>
+</context>
+<context>
     <name>APMTuningComponent</name>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMTuningComponent.cc" line="18"/>
@@ -4129,6 +4137,16 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Battery Display</source>
+        <translation>배터리 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Display Type</source>
+        <translation>표시 형태</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
         <source>Coloring</source>
         <translation>표시 색상</translation>
     </message>
@@ -4181,6 +4199,21 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
         <source>Power</source>
         <translation>전원</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Voltage Trigger</source>
+        <translation>전압 입계값</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>mAh Trigger</source>
+        <translation>전류 입계값</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source> - disabled</source>
+        <translation> - 비활성화</translation>
     </message>
 </context>
 <context>
@@ -7017,6 +7050,11 @@ Click Ok to start the auto-tuning process.
         <source>Plan</source>
         <translation>계획</translation>
     </message>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewToolStripActionList.qml" line="22"/>
+        <source>3D View</source>
+        <translation>3D뷰어</translation>
+    </message>
 </context>
 <context>
     <name>FlyViewVideo</name>
@@ -9352,6 +9390,14 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/FlightDisplay/GuidedActionsController.qml" line="536"/>
         <source>Internal error: unknown actionCode</source>
         <translation>내부오류: 알 수 없는 액션코드</translation>
+    </message>
+</context>
+<context>
+    <name>FlyViewAdditionalActionsButton</name>
+    <message>
+        <location filename="../src/FlightDisplay/FlyViewAdditionalActionsButton.qml" line="21"/>
+        <source>Actions</source>
+        <translation>액션</translation>
     </message>
 </context>
 <context>
@@ -11982,23 +12028,33 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/MotorComponent.qml" line="96"/>
+        <source>Throttle</source>
+        <translation>스로틀</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/Common/MotorComponent.qml" line="96"/>
         <source>All</source>
         <translation>전체</translation>
     </message>
     <message>
+        <location filename="../src/AutoPilotPlugins/Common/MotorComponent.qml" line="96"/>
+        <source>Stop</source>
+        <translation>정지</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/Common/MotorComponent.qml" line="122"/>
-        <source>Moving the sliders will causes the motors to spin. Make sure you remove all props.</source>
-        <translation>슬라이더를 움직이면 모터가 움직입니다. 프로펠러를 모두 제거하였는지 확인해주십시오</translation>
+        <source>Make sure you remove all props.</source>
+        <translation>프로펠러를 모두 제거하였는지 확인해주십시오</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/MotorComponent.qml" line="142"/>
-        <source>Propellers are removed - Enable motor sliders</source>
+        <source>Propellers are removed - Enable slider and motors</source>
         <translation>프로펠러를 제거하였습니다 - 모터슬라이더를 활성화합니다</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/MotorComponent.qml" line="142"/>
-        <source>Careful: Motor sliders are enabled</source>
-        <translation>주의 : 모터 슬라이더가 활성화 됨</translation>
+        <source>Careful : Motors are enabled</source>
+        <translation>주의 : 모터가 활성화 됨</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/MotorComponent.cc" line="14"/>

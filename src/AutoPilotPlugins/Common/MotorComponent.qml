@@ -62,7 +62,7 @@ SetupPage {
                     width:              motorButtons.width
                     label:              qsTr("Throttle")
                     from:               0
-                    to:                 100
+                    to:                 limitSwitch.checked ? 100 : 10
                     majorTickStepSize:  5
                     decimalPlaces: 0
                     unitsString: qsTr("%")
@@ -119,7 +119,7 @@ SetupPage {
             Row {
                 spacing: ScreenTools.defaultFontPixelWidth
 
-                Switch {
+                QGCSwitch {
                     id: safetySwitch
                     onClicked: {
                         if (!checked) {
@@ -132,6 +132,25 @@ SetupPage {
                     anchors.verticalCenter:     parent.verticalCenter
                     color:  qgcPal.warningText
                     text:   safetySwitch.checked ? qsTr("Careful : Motors are enabled") : qsTr("Propellers are removed - Enable slider and motors")
+                }
+            } // Row
+
+            Row {
+                spacing: ScreenTools.defaultFontPixelWidth
+
+                QGCSwitch {
+                    id: limitSwitch
+                    onClicked: {
+                        if (!checked) {
+                            sliderThrottle.setValue(0);
+                        }
+                    }
+                }
+
+                QGCLabel {
+                    anchors.verticalCenter:     parent.verticalCenter
+                    color:  qgcPal.warningText
+                    text:   limitSwitch.checked ? qsTr("Available 100%") : qsTr("Limited to 10%")
                 }
             } // Row
         } // Column

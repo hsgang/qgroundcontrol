@@ -35,7 +35,7 @@ RowLayout {
         QGCLabel {
             id:                     label
             Layout.fillWidth:       true
-            Layout.minimumWidth:    spinboxPreferredWidth
+            Layout.minimumWidth:    spinboxPreferredWidth * 0.8
 
         }
 

@@ -12,7 +12,7 @@
 
 APMFollowComponent::APMFollowComponent(Vehicle *vehicle, AutoPilotPlugin *autopilot, QObject *parent)
     : VehicleComponent(vehicle, autopilot, parent),
-    _name(QStringLiteral("Follow Me"))
+    _name(tr("Follow Me"))
 {
     // qCDebug() << Q_FUNC_INFO << this;
 }

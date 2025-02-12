@@ -74,7 +74,7 @@ SetupPage {
             property real _margins: ScreenTools.defaultFontPixelHeight
 
             readonly property real factSpinBoxLabelWidth:  ScreenTools.defaultFontPixelWidth * 12
-            readonly property real _spinboxPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
+            readonly property real _spinboxPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
 
             property bool _loadComplete: false
 
@@ -149,7 +149,6 @@ SetupPage {
                     QGCLabel {
                         id:                 tuningSpinboxLabel
                         text:               qsTr("Basic Tuning")
-                        font.family:        ScreenTools.demiboldFontFamily
                     }
 
                     Rectangle {

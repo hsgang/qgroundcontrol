@@ -8,7 +8,7 @@ import QGroundControl.ScreenTools
 
 SpinBox {
     id:             control
-    implicitWidth:  ScreenTools.defaultFontPixelWidth * 12
+    implicitWidth:  ScreenTools.defaultFontPixelWidth * 20
     implicitHeight: ScreenTools.defaultFontPixelHeight * 1.5
     font.pointSize: ScreenTools.defaultFontPointSize
     font.family:    ScreenTools.normalFontFamily
@@ -85,9 +85,9 @@ SpinBox {
     up.indicator: Rectangle {
         x: control.mirrored ? 0 : parent.width - width
         height: parent.height
-        implicitWidth: ScreenTools.defaultFontPixelHeight
+        implicitWidth: ScreenTools.defaultFontPixelHeight * 1.6
         implicitHeight: parent.height
-        color: (control.up.hovered || control.up.pressed) ? qgcPal.windowShadeLight : qgcPal.windowShade
+        color: (control.up.hovered || control.up.pressed) ? qgcPal.buttonHighlight : qgcPal.windowShade
         radius: ScreenTools.defaultFontPixelHeight / 4
         border.color: qgcPal.groupBorder
 
@@ -105,9 +105,9 @@ SpinBox {
     down.indicator: Rectangle {
         x: control.mirrored ? parent.width - width : 0
         height: parent.height
-        implicitWidth: ScreenTools.defaultFontPixelHeight
+        implicitWidth: ScreenTools.defaultFontPixelHeight * 1.6
         implicitHeight: parent.height
-        color: (control.down.hovered || control.down.pressed) ? qgcPal.windowShadeLight : qgcPal.windowShade
+        color: (control.down.hovered || control.down.pressed) ? qgcPal.buttonHighlight : qgcPal.windowShade
         radius: ScreenTools.defaultFontPixelHeight / 4
         border.color: qgcPal.groupBorder
 
