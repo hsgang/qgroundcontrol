@@ -2,11 +2,11 @@ name: Docker-Linux
 
 on:
   push:
-    branches:
-      #- master
-      - 'Stable*'
-    tags:
-      - 'v*'
+    # branches:
+    #   - master
+    #   - 'Stable*'
+    # tags:
+    #   - 'v*'
   pull_request:
     paths:
       - '.github/workflows/docker-linux.yml'

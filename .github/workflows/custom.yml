@@ -2,10 +2,10 @@ name: Custom build
 
 on:
   push:
-    branches:
-      - 'Stable*'
-    tags:
-      - 'v*'
+    # branches:
+    #   - 'Stable*'
+    # tags:
+    #   - 'v*'
   pull_request:
     paths:
       - '.github/workflows/custom.yml'

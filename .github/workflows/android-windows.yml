@@ -2,11 +2,11 @@ name: Android-Windows
 
 on:
   push:
-    branches:
-      # - master
-      - 'Stable*'
-    tags:
-      - 'v*'
+    # branches:
+    #   - master
+    #   - 'Stable*'
+    # tags:
+    #   - 'v*'
   pull_request:
     paths:
       - '.github/workflows/android-windows.yml'

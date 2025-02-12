@@ -2,11 +2,11 @@ name: Docs
 
 on:
   push:
-    branches:
-      # - master
-      - 'Stable*'
-    tags:
-      - 'v*'
+    # branches:
+    #   - master
+    #   - 'Stable*'
+    # tags:
+    #   - 'v*'
     paths:
       - 'docs/**'
       - 'package*.json'
