@@ -47,6 +47,9 @@ Rectangle {
     property var    activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
     property real   _yaw:                   activeVehicle ? activeVehicle.heading.rawValue : 0
     property real   _yawRad:                _yaw * Math.PI / 180
+    property real   _yawStep:               5 //degree
+    property Fact   _moveStepFact:          _flyViewSettings.vehicleMoveStep
+    property real   _moveStep:              _moveStepFact.rawValue
 
     Rectangle{
         anchors.bottom: parent.top
@@ -84,6 +87,11 @@ Rectangle {
             ColumnLayout{
 
                 QGCLabel{
+                    text: "스텝 단위"
+                    font.pointSize: _fontSize
+                    leftPadding:    ScreenTools.defaultFontPixelWidth
+                }
+                QGCLabel{
                     text: "상대좌표X"
                     font.pointSize: _fontSize
                     leftPadding:    ScreenTools.defaultFontPixelWidth
@@ -108,6 +116,11 @@ Rectangle {
             ColumnLayout{
                 Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 10
 
+                QGCLabel{
+                    text: activeVehicle ? _moveStep + " m" : "no value"
+                    font.pointSize: _fontSize
+                    Layout.alignment: Qt.AlignRight
+                }
                 QGCLabel{
                     text: activeVehicle ? activeVehicle.localPosition.x.valueString + " m" : "no value"
                     font.pointSize: _fontSize
@@ -174,7 +187,7 @@ Rectangle {
                 id:             stepUpPress
                 anchors.fill:   parent
                 onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,0,1,0,false)
+                    activeVehicle.setPositionTargetLocalNed(0,0,_moveStep,0,false)
                 }
             }
         }
@@ -214,7 +227,7 @@ Rectangle {
                 anchors.fill:   parent
                 onClicked: {
                     //var targetYaw = (_yaw + 10) % 360 * Math.PI / 180
-                    var targetYaw = -10 * Math.PI / 180
+                    var targetYaw = -_yawStep * Math.PI / 180
                     activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)                }
             }
         }
@@ -248,7 +261,7 @@ Rectangle {
                 id: stepForwardPress
                 anchors.fill:   parent
                 onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(1,0,0,0,false)
+                    activeVehicle.setPositionTargetLocalNed(_moveStep,0,0,0,false)
                 }
             }
         }
@@ -289,7 +302,7 @@ Rectangle {
                 anchors.fill:   parent
                 onClicked: {
                     //var targetYaw = (_yaw + 10) % 360 * Math.PI / 180
-                    var targetYaw = 10 * Math.PI / 180
+                    var targetYaw = _yawStep * Math.PI / 180
                     activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
                 }
             }
@@ -364,7 +377,7 @@ Rectangle {
                 id:             stepLeftPress
                 anchors.fill:   parent
                 onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,-1,0,0,false)
+                    activeVehicle.setPositionTargetLocalNed(0,-_moveStep,0,0,false)
                 }
             }
         }
@@ -438,7 +451,7 @@ Rectangle {
                 id:             stepRightPress
                 anchors.fill:   parent
                 onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,1,0,0,false)
+                    activeVehicle.setPositionTargetLocalNed(0,_moveStep,0,0,false)
                 }
             }
         }
@@ -478,7 +491,7 @@ Rectangle {
                 id:             stepDownPress
                 anchors.fill:   parent
                 onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,0,-1,0,false)
+                    activeVehicle.setPositionTargetLocalNed(0,0,-_moveStep,0,false)
                 }
             }
         }
@@ -497,7 +510,7 @@ Rectangle {
             QGCLabel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                text:       "--"
+                text:       "0.5"
             }
 
             // QGCColoredImage {
@@ -519,6 +532,7 @@ Rectangle {
                 anchors.fill:   parent
                 onClicked: {
                     activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                    _moveStepFact.value = 0.5
                 }
             }
         }
@@ -552,7 +566,7 @@ Rectangle {
                 id:             stepBackPress
                 anchors.fill:   parent
                 onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(-1,0,0,0,false)
+                    activeVehicle.setPositionTargetLocalNed(-_moveStep,0,0,0,false)
                 }
             }
         }
@@ -571,7 +585,7 @@ Rectangle {
             QGCLabel {
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.horizontalCenter: parent.horizontalCenter
-                text:       "--"
+                text:       "1.0"
             }
 
             // QGCColoredImage {
@@ -593,6 +607,7 @@ Rectangle {
                 anchors.fill:   parent
                 onClicked: {
                     activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                    _moveStepFact.value = 1
                 }
             }
         }

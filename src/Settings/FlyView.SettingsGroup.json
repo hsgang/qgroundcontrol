@@ -211,6 +211,15 @@
     "shortDesc": "showVehicleStepMoveControl",
     "type":         "bool",
     "default":      false
+},
+{
+    "name":         "vehicleMoveStep",
+    "shortDesc": "Vehicle Move Step",
+    "type":             "double",
+    "units":            "m",
+    "default":     0.5,
+    "min":              0.1,
+    "decimalPlaces":    1
 }
 ]
 }

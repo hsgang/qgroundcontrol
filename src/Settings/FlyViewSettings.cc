@@ -51,6 +51,7 @@ DECLARE_SETTINGSFACT(FlyViewSettings, showSiyiCameraControl)
 DECLARE_SETTINGSFACT(FlyViewSettings, showGridOnMap)
 DECLARE_SETTINGSFACT(FlyViewSettings, showGridViewer)
 DECLARE_SETTINGSFACT(FlyViewSettings, showVehicleStepMoveControl)
+DECLARE_SETTINGSFACT(FlyViewSettings, vehicleMoveStep)
 
 
 
