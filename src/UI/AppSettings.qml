@@ -100,43 +100,12 @@ Rectangle {
                 id:     buttonRepeater
                 model:  settingsPagesModel
 
-                Component.onCompleted:  itemAt(0).checked = true
-
-                SubMenuButton {
-                    id:                 subMenu
+                SettingsButton {
                     Layout.fillWidth:   true
                     text:               name
-                    padding:            ScreenTools.defaultFontPixelWidth / 2
-                    hoverEnabled:       !ScreenTools.isMobile
-                    autoExclusive:      true
-                    //icon.source:        iconUrl
+                    icon.source:        iconUrl
                     visible:            pageVisible()
                     imageResource:      iconUrl
-
-                    // background: Rectangle {
-                    //     color:      qgcPal.buttonHighlight
-                    //     opacity:    checked || pressed ? 1 : enabled && hovered ? .2 : 0
-                    //     radius:     ScreenTools.defaultFontPixelWidth / 2
-                    // }
-
-                    // contentItem: RowLayout {
-                    //     spacing: ScreenTools.defaultFontPixelWidth
-
-                    //     QGCColoredImage {
-                    //         source: iconUrl
-                    //         color:  displayText.color
-                    //         width:  ScreenTools.defaultFontPixelHeight
-                    //         height: ScreenTools.defaultFontPixelHeight
-                    //     }
-
-                    //     QGCLabel {
-                    //         id:                     displayText
-                    //         Layout.fillWidth:       true
-                    //         text:                   name
-                    //         color:                  checked || pressed ? qgcPal.buttonHighlightText : qgcPal.buttonText
-                    //         horizontalAlignment:    QGCLabel.AlignLeft
-                    //     }
-                    // }
 
                     onClicked: {
                         if (mainWindow.allowViewSwitch()) {
@@ -147,50 +116,6 @@ Rectangle {
                         }
                     }
                 }
-//                Button {
-//                    padding:            ScreenTools.defaultFontPixelWidth / 2
-//                    autoExclusive:      true
-//                    Layout.fillWidth:   true
-//                    visible:            pageVisible()
-
-//                    background: Rectangle {
-//                        color:  checked ? qgcPal.buttonHighlight : "transparent"
-//                        radius: ScreenTools.defaultFontPixelWidth / 2
-//                    }
-
-//                    contentItem: QGCLabel {
-//                        text:   name
-//                        color:  checked ? qgcPal.buttonHighlightText : qgcPal.buttonText
-//                    }
-
-//                    onClicked: {
-//                        focus = true
-//                        if (mainWindow.preventViewSwitch()) {
-//                            return
-//                        }
-//                        if (rightPanel.source !== url) {
-//                            rightPanel.source = url
-//                        }
-//                        checked = true
-//                    }
-
-//                    Component.onCompleted: {
-//                        if (globals.commingFromRIDIndicator) {
-//                            _commingFromRIDSettings = true
-//                        }
-//                        if(_first) {
-//                            _first = false
-//                            checked = true
-//                        }
-//                        if (_commingFromRIDSettings) {
-//                            checked = false
-//                            _commingFromRIDSettings = false
-//                            if (modelData.url == "/qml/RemoteIDSettings.qml") {
-//                                checked = true
-//                            }
-//                        }
-//                    }
-//                }
             }
         }
     }

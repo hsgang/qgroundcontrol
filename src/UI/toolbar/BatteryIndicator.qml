@@ -391,7 +391,7 @@ Item {
                             FactTextField {
                                 id: threshold1Field
                                 fact: _batterySettings.threshold1
-                                implicitWidth: ScreenTools.defaultFontPixelWidth * 5.5
+                                implicitWidth: ScreenTools.defaultFontPixelWidth * 6
                                 height: ScreenTools.defaultFontPixelHeight * 1.5
                                 enabled: fact.visible
                                 onEditingFinished: {
@@ -413,7 +413,7 @@ Item {
                             }
                             FactTextField {
                                 fact: _batterySettings.threshold2
-                                implicitWidth: ScreenTools.defaultFontPixelWidth * 5.5
+                                implicitWidth: ScreenTools.defaultFontPixelWidth * 6
                                 height: ScreenTools.defaultFontPixelHeight * 1.5
                                 enabled: fact.visible
                                 onEditingFinished: {

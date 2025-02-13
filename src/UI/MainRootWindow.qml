@@ -1021,7 +1021,7 @@ ApplicationWindow {
                 anchors.topMargin:          ScreenTools.defaultFontPixelHeight / 4
                 anchors.left:               backgroundRect.right
                 anchors.leftMargin:         ScreenTools.defaultFontPixelHeight / 4
-                width:                      ScreenTools.defaultFontPixelHeight * 2
+                width:                      ScreenTools.largeFontPixelHeight
                 height:                     width
                 radius:                     width / 2
                 color:                      QGroundControl.globalPalette.button
