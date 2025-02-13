@@ -7829,6 +7829,11 @@ Click Ok to start the auto-tuning process.
         <source>Console</source>
         <translation>콘솔 로그</translation>
     </message>
+    <message>
+        <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="99"/>
+        <source>Help</source>
+        <translation>도움말</translation>
+    </message>
 </context>
 <context>
     <name>GeneralSettings</name>

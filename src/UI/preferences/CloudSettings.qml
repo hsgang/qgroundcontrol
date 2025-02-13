@@ -162,41 +162,41 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("Installer Download")
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("Installer Download")
 
-        QGCButton {
-            text:                   qsTr("Download")
-            visible:                true
-            Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 25
-            Layout.alignment:       Qt.AlignHCenter
+    //     QGCButton {
+    //         text:                   qsTr("Download")
+    //         visible:                true
+    //         Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 25
+    //         Layout.alignment:       Qt.AlignHCenter
 
-            onClicked: {
-                QGroundControl.cloudManager.downloadForNewVersion()
-            }
-        }
+    //         onClicked: {
+    //             QGroundControl.cloudManager.downloadForNewVersion()
+    //         }
+    //     }
 
-        ProgressBar {
-            id:                     progressBar
-            Layout.preferredWidth:  parent.width
-            visible:                QGroundControl.cloudManager.fileDownloadProgress > 0
-            value:                  QGroundControl.cloudManager.fileDownloadProgress * 0.01
+    //     ProgressBar {
+    //         id:                     progressBar
+    //         Layout.preferredWidth:  parent.width
+    //         visible:                QGroundControl.cloudManager.fileDownloadProgress > 0
+    //         value:                  QGroundControl.cloudManager.fileDownloadProgress * 0.01
 
-            contentItem: Item{
-                Rectangle {
-                    width: progressBar.visualPosition * parent.width
-                    height: parent.height
-                    color: "steelblue"
-                }
-            }
-        }
+    //         contentItem: Item{
+    //             Rectangle {
+    //                 width: progressBar.visualPosition * parent.width
+    //                 height: parent.height
+    //                 color: "steelblue"
+    //             }
+    //         }
+    //     }
 
-        LabelledLabel {
-            visible:            QGroundControl.cloudManager.fileDownloadProgress > 0
-            Layout.fillWidth:   true
-            label:              qsTr("Progress")
-            labelText:          QGroundControl.cloudManager.fileDownloadProgress.toFixed(0) + " %"
-        }        
-    }
+    //     LabelledLabel {
+    //         visible:            QGroundControl.cloudManager.fileDownloadProgress > 0
+    //         Layout.fillWidth:   true
+    //         label:              qsTr("Progress")
+    //         labelText:          QGroundControl.cloudManager.fileDownloadProgress.toFixed(0) + " %"
+    //     }
+    // }
 }
