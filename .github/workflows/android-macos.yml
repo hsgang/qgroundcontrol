@@ -2,9 +2,9 @@ name: Android-MacOS
 
 on:
   push:
-    # branches:
+    branches:
     #   - master
-    #   - 'Stable*'
+      - 'Stable*'
     # tags:
     #   - 'v*'
   pull_request:

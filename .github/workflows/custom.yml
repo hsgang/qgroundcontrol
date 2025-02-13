@@ -2,8 +2,8 @@ name: Custom build
 
 on:
   push:
-    # branches:
-    #   - 'Stable*'
+    branches:
+      - 'Stable*'
     # tags:
     #   - 'v*'
   pull_request:
