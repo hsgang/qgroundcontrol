@@ -53,6 +53,7 @@ GuidedValueSlider               1.0 GuidedValueSlider.qml
 GuidedActionArm                 1.0 GuidedActionArm.qml
 GuidedActionDisarm              1.0 GuidedActionDisarm.qml
 GuidedActionTakeoff             1.0 GuidedActionTakeoff.qml
+GuidedActionContinueMission     1.0 GuidedActionContinueMission.qml
 GuidedActionMission             1.0 GuidedActionMission.qml
 GuidedToolStripAction           1.0 GuidedToolStripAction.qml
 MessageToast                    1.0 MessageToast.qml

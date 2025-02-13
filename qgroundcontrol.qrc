@@ -541,6 +541,7 @@
         <file alias="QGroundControl/FlightDisplay/FlyViewTopRightPanel.qml">src/FlightDisplay/FlyViewTopRightPanel.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewGridSettings.qml">src/FlightDisplay/FlyViewGridSettings.qml</file>
         <file alias="QGroundControl/FlightMap/VehicleStepMoveControl.qml">src/FlightMap/Widgets/VehicleStepMoveControl.qml</file>
+        <file alias="QGroundControl/FlightDisplay/GuidedActionContinueMission.qml">src/FlightDisplay/GuidedActionContinueMission.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="ConnectFirstRunPrompt.qml">src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml</file>

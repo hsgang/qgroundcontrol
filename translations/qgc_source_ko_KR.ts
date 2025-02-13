@@ -8054,6 +8054,11 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="120"/>
+        <source>Enable Multi-Vehicle Panel</source>
+        <translation>다중 기체 제어 패널 활성화</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="120"/>
         <source>Keep Map Centered On Vehicle</source>
         <translation>지도 중앙을 기체에 위치</translation>
     </message>
@@ -8124,18 +8129,23 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="216"/>
-        <source>Custom Actions</source>
-        <translation>사용자 명령</translation>
+        <source>MAVLink Actions</source>
+        <translation>MAVLink 사용자 명령</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="216"/>
-        <source>Fly View Custom Actions</source>
-        <translation>비행화면 사용자 명령</translation>
+        <source>Action JSON files should be created in the '%1' folder.</source>
+        <translation>다음 경로에 JSON 설정 파일을 사용 - '%1'</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="216"/>
-        <source>Joystick Custom Actions</source>
-        <translation>조이스틱 사용자 명령</translation>
+        <source>Fly View Actions</source>
+        <translation>사용자 명령 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="216"/>
+        <source>Joystick Actions</source>
+        <translation>조이스틱 설정</translation>
     </message>
 </context>
 <context>
