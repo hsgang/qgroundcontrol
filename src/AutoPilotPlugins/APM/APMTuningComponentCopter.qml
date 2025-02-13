@@ -74,7 +74,7 @@ SetupPage {
             property real _margins: ScreenTools.defaultFontPixelHeight
 
             readonly property real factSpinBoxLabelWidth:  ScreenTools.defaultFontPixelWidth * 12
-            readonly property real _spinboxPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
+            readonly property real _spinboxPreferredWidth: ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 14 : ScreenTools.defaultFontPixelWidth * 18
 
             property bool _loadComplete: false
 

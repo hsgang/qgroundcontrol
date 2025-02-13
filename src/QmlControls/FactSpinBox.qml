@@ -8,7 +8,7 @@ import QGroundControl.ScreenTools
 
 SpinBox {
     id:             control
-    implicitWidth:  ScreenTools.defaultFontPixelWidth * 20
+    implicitWidth:  ScreenTools.defaultFontPixelWidth * 18
     implicitHeight: ScreenTools.defaultFontPixelHeight * 1.5
     font.pointSize: ScreenTools.defaultFontPointSize
     font.family:    ScreenTools.normalFontFamily
