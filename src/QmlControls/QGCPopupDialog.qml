@@ -284,7 +284,7 @@ Popup {
                         focus:  true
 
                         Keys.onPressed: (event) => {
-                            if (event.key === Qt.Key_Escape && rejectAllowed) {
+                            if (event.key === Qt.Key_Escape && _rejectAllowed) {
                                 _reject()
                                 event.accepted = true
                             }
