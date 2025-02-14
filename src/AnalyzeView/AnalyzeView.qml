@@ -10,6 +10,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
+import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.Palette
@@ -24,11 +25,12 @@ Rectangle {
 
     signal popout()
 
-    readonly property real  _defaultTextHeight:     ScreenTools.defaultFontPixelHeight
-    readonly property real  _defaultTextWidth:      ScreenTools.defaultFontPixelWidth
-    readonly property real  _horizontalMargin:      _defaultTextWidth / 2
-    readonly property real  _verticalMargin:        _defaultTextHeight / 2
-    readonly property real  _buttonWidth:           _defaultTextWidth * 18
+    readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
+    readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
+    readonly property real _horizontalMargin:   ScreenTools.defaultFontPixelHeight / 2
+    readonly property real _verticalMargin:     ScreenTools.defaultFontPixelHeight / 2
+    readonly property real _buttonHeight:       ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelHeight * 3 : ScreenTools.defaultFontPixelHeight * 2
+
 
     GeoTagController {
         id: geoController
@@ -46,30 +48,9 @@ Rectangle {
         flickableDirection: Flickable.VerticalFlick
         clip:               true
 
-        Column {
+        ColumnLayout {
             id:         buttonColumn
-            width:      _maxButtonWidth
             spacing:    _defaultTextHeight / 2
-
-            property real _maxButtonWidth: 0
-
-            Component.onCompleted: reflowWidths()
-
-            // I don't know why this does not work
-            Connections {
-                target:         QGroundControl.settingsManager.appSettings.appFontPointSize
-                onValueChanged: buttonColumn.reflowWidths()
-            }
-
-            function reflowWidths() {
-                buttonColumn._maxButtonWidth = 0
-                for (var i = 0; i < children.length; i++) {
-                    buttonColumn._maxButtonWidth = Math.max(buttonColumn._maxButtonWidth, children[i].width)
-                }
-                for (var j = 0; j < children.length; j++) {
-                    children[j].width = buttonColumn._maxButtonWidth
-                }
-            }
 
             Repeater {
                 id:     buttonRepeater
@@ -77,11 +58,10 @@ Rectangle {
 
                 Component.onCompleted:  itemAt(0).checked = true
 
-                SubMenuButton {
-                    id:                 subMenu
-                    imageResource:      modelData.icon
-                    autoExclusive:      true
+                SettingsButton {
+                    Layout.fillWidth:   true
                     text:               modelData.title
+                    icon.source:        modelData.icon
 
                     onClicked: {
                         panelLoader.source  = modelData.url

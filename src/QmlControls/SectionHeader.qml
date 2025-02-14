@@ -41,9 +41,11 @@ CheckBox {
                 anchors.verticalCenter: parent.verticalCenter
                 width:                  parent.height * 0.7
                 height:                 width
-                source:                 control.checked ? "/InstrumentValueIcons/cheveron-up.svg" : "/InstrumentValueIcons/cheveron-down.svg" //"/qmlimages/arrow-down.png"
+                source:                 "/InstrumentValueIcons/cheveron-up.svg"//control.checked ? "/InstrumentValueIcons/cheveron-up.svg" : "/InstrumentValueIcons/cheveron-down.svg" //"/qmlimages/arrow-down.png"
                 color:                  qgcPal.text
-                //visible:                !control.checked
+                rotation:               control.checked ? 0 : 180
+                Behavior on rotation { NumberAnimation { duration: 300 }}
+                // visible:                !control.checked
             }
         }
 

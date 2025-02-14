@@ -12064,7 +12064,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/AutoPilotPlugins/Common/MotorComponent.qml" line="142"/>
         <source>Propellers are removed - Enable slider and motors</source>
-        <translation>프로펠러를 제거하였습니다 - 모터슬라이더를 활성화합니다</translation>
+        <translation>스로틀 슬라이더 활성화</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/MotorComponent.qml" line="142"/>
@@ -17510,7 +17510,7 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/SetupPage.qml" line="44"/>
-        <source>%1 Setup</source>
+        <source>%1 Config</source>
         <translation>%1 설정</translation>
     </message>
     <message>

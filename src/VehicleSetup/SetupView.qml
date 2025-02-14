@@ -32,11 +32,11 @@ Rectangle {
         id: parameterEditorController
     }
 
-    readonly property real      _defaultTextHeight: ScreenTools.defaultFontPixelHeight
-    readonly property real      _defaultTextWidth:  ScreenTools.defaultFontPixelWidth
-    readonly property real      _horizontalMargin:  _defaultTextWidth / 2
-    readonly property real      _verticalMargin:    _defaultTextHeight / 2
-    readonly property real      _buttonWidth:       _defaultTextWidth * 18
+    readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
+    readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
+    readonly property real _horizontalMargin:   ScreenTools.defaultFontPixelHeight / 2
+    readonly property real _verticalMargin:     ScreenTools.defaultFontPixelHeight / 2
+    readonly property real _buttonHeight:       ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelHeight * 3 : ScreenTools.defaultFontPixelHeight * 2
     readonly property string    _armedVehicleText:  qsTr("This operation cannot be performed while the vehicle is armed.")
 
     property bool   _vehicleArmed:                  QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.armed : false
@@ -249,7 +249,7 @@ Rectangle {
 
         ColumnLayout {
             id:         buttonColumn
-            spacing:    ScreenTools.defaultFontPixelHeight / 4
+            spacing:    _defaultTextHeight / 2
 
             ConfigButton {
                 id:                 summaryButton

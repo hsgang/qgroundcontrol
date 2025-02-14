@@ -68,30 +68,6 @@ Rectangle {
         flickableDirection: Flickable.VerticalFlick
         clip:               true
 
-        // Column {
-        //     id:         buttonColumn
-        //     width:      _maxButtonWidth
-        //     spacing:    _verticalMargin
-
-        //     property real _maxButtonWidth: 0
-
-        //     Component.onCompleted: reflowWidths()
-
-        //     // I don't know why this does not work
-        //     Connections {
-        //         target:         QGroundControl.settingsManager.appSettings.appFontPointSize
-        //         onValueChanged: buttonColumn.reflowWidths()
-        //     }
-
-        //     function reflowWidths() {
-        //         buttonColumn._maxButtonWidth = 0
-        //         for (var i = 0; i < children.length; i++) {
-        //             buttonColumn._maxButtonWidth = Math.max(buttonColumn._maxButtonWidth, children[i].width)
-        //         }
-        //         for (var j = 0; j < children.length; j++) {
-        //             children[j].width = buttonColumn._maxButtonWidth
-        //         }
-        //     }
         ColumnLayout {
             id:         buttonColumn
             spacing:    _defaultTextHeight / 2
@@ -100,12 +76,13 @@ Rectangle {
                 id:     buttonRepeater
                 model:  settingsPagesModel
 
+                Component.onCompleted:  itemAt(0).checked = true
+
                 SettingsButton {
                     Layout.fillWidth:   true
                     text:               name
                     icon.source:        iconUrl
                     visible:            pageVisible()
-                    imageResource:      iconUrl
 
                     onClicked: {
                         if (mainWindow.allowViewSwitch()) {
