@@ -30,6 +30,7 @@ FirstRunPrompt {
     property var    _settingsManager:   QGroundControl.settingsManager
     property var    cloudSettings:      _settingsManager.cloudSettings
     property real   _urlFieldWidth:     ScreenTools.defaultFontPixelWidth * 25
+    property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
 
     property bool   _signedIn: QGroundControl.cloudManager.signedIn
     property string _signedId: QGroundControl.cloudManager.signedId
@@ -38,102 +39,7 @@ FirstRunPrompt {
     QGCPalette { id: qgcPal }
 
     RowLayout {
-        spacing: ScreenTools.defaultFontPixelHeight
-
-        ColumnLayout {
-            id:         columnLayout
-            spacing:    ScreenTools.defaultFontPixelHeight
-
-            QGCLabel {
-                id:         unitsSectionLabel
-                text:       qsTr("연결 항목") //qsTr("Choose the link you want to connect.")
-                font.bold:  true
-                Layout.preferredWidth: flickableRect.width
-                wrapMode: Text.WordWrap
-            }
-
-            Rectangle {
-                id: flickableRect
-                color:              "transparent"
-                border.color:       qgcPal.groupBorder
-                width:              ScreenTools.defaultFontPixelWidth * 36
-                height:             ScreenTools.defaultFontPixelHeight * 10
-                radius:             ScreenTools.defaultFontPixelHeight / 2
-
-                QGCFlickable {
-                    clip:               true
-                    anchors.top:        parent.top
-                    anchors.bottom:     parent.bottom
-                    anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
-                    anchors.left:       parent.left
-                    anchors.right:      parent.right
-                    contentHeight:      settingsColumn.height
-                    flickableDirection: Flickable.VerticalFlick
-
-                    Column {
-                        id:                 settingsColumn
-                        width:              flickableRect.width
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        spacing:            ScreenTools.defaultFontPixelHeight / 2
-                        Repeater {
-                            model: QGroundControl.linkManager.linkConfigurations
-                            delegate: QGCButton {
-                                anchors.horizontalCenter:   settingsColumn.horizontalCenter
-                                width:                      ScreenTools.defaultFontPixelWidth * 34
-                                text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
-                                autoExclusive:              true
-                                visible:                    !object.dynamic
-                                onClicked: {
-                                    checked = true
-                                    _currentSelection = object
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            RowLayout {
-                spacing:            ScreenTools.defaultFontPixelWidth
-                Layout.fillWidth:   true
-                Layout.alignment:   Qt.AlignCenter
-
-                QGCButton {
-                    text:       qsTr("Connect")
-                    font.bold: true
-                    enabled:    _currentSelection && !_currentSelection.link
-                    onClicked:  QGroundControl.linkManager.createConnectedLink(_currentSelection)
-                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
-                }
-                QGCButton {
-                    text:       qsTr("Disconnect")
-                    font.bold: true
-                    enabled:    _currentSelection && _currentSelection.link
-                    onClicked:  {
-                        _currentSelection.link.disconnect()
-                        _currentSelection.linkChanged()
-                    }
-                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
-                }
-                QGCButton {
-                    text:       qsTr("Configure")
-                    font.bold: true
-                    onClicked: {
-                        close()
-                        mainWindow.showAppSettings(qsTr("Comm Links"))
-                    }
-
-                    implicitWidth: ScreenTools.defaultFontPixelWidth * 8
-                }
-            }
-        }
-
-        Rectangle {
-            Layout.alignment: Qt.AlignCenter
-            width: 1
-            height: columnLayout.height
-            color: qgcPal.groupBorder
-        }
+        spacing: _margins
 
         Rectangle {
             Layout.fillHeight:  true
@@ -143,21 +49,29 @@ FirstRunPrompt {
 
             ColumnLayout {
                 id:         columnLayout2
-                spacing:    ScreenTools.defaultFontPixelHeight * 2
+                spacing:    _margins
                 anchors.fill: parent
                 //Layout.fillWidth:  true
 
+                Image {
+                    Layout.fillWidth:   true
+                    sourceSize.width: ScreenTools.defaultFontPixelHeight * 6
+                    sourceSize.height: ScreenTools.defaultFontPixelHeight * 6
+                    source: "/vehicleImage/amp1600.png"
+                    fillMode: Image.PreserveAspectFit
+                }
+
                 QGCLabel {
-                    text:       qsTr("Cloud Login")
+                    text:       qsTr("Cloud Login [%1]").arg(QGroundControl.cloudManager.networkStatus)
                     wrapMode:   Text.WordWrap
                     font.bold:  true
                 }
 
-                LabelledLabel {
-                    Layout.fillWidth:   true
-                    label:              qsTr("네트워크 상태")
-                    labelText:          QGroundControl.cloudManager.networkStatus
-                }
+                // LabelledLabel {
+                //     Layout.fillWidth:   true
+                //     label:              qsTr("네트워크 상태")
+                //     labelText:          QGroundControl.cloudManager.networkStatus
+                // }
 
                 LabelledLabel {
                     visible:            _signedIn
@@ -169,7 +83,7 @@ FirstRunPrompt {
                 ColumnLayout {
                     Layout.fillWidth:   true
                     Layout.fillHeight:  true
-                    spacing: ScreenTools.defaultFontPixelHeight
+                    spacing: _margins
                     visible: !_signedIn
 
                     RowLayout {
@@ -291,5 +205,101 @@ FirstRunPrompt {
                 }
             }
         }
+
+        Rectangle {
+            Layout.alignment: Qt.AlignCenter
+            width: 1
+            height: columnLayout.height
+            color: qgcPal.groupBorder
+        }
+
+        ColumnLayout {
+            id:         columnLayout
+            spacing:    ScreenTools.defaultFontPixelHeight
+
+            QGCLabel {
+                id:         unitsSectionLabel
+                text:       qsTr("연결 항목") //qsTr("Choose the link you want to connect.")
+                font.bold:  true
+                Layout.preferredWidth: flickableRect.width
+                wrapMode: Text.WordWrap
+            }
+
+            Rectangle {
+                id: flickableRect
+                color:              "transparent"
+                border.color:       qgcPal.groupBorder
+                width:              ScreenTools.defaultFontPixelWidth * 36
+                height:             ScreenTools.defaultFontPixelHeight * 10
+                radius:             _margins
+
+                QGCFlickable {
+                    clip:               true
+                    anchors.top:        parent.top
+                    anchors.bottom:     parent.bottom
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
+                    anchors.left:       parent.left
+                    anchors.right:      parent.right
+                    contentHeight:      settingsColumn.height
+                    flickableDirection: Flickable.VerticalFlick
+
+                    Column {
+                        id:                 settingsColumn
+                        width:              flickableRect.width
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing:            _margins
+                        Repeater {
+                            model: QGroundControl.linkManager.linkConfigurations
+                            delegate: QGCButton {
+                                anchors.horizontalCenter:   settingsColumn.horizontalCenter
+                                width:                      ScreenTools.defaultFontPixelWidth * 34
+                                text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
+                                autoExclusive:              true
+                                visible:                    !object.dynamic
+                                onClicked: {
+                                    checked = true
+                                    _currentSelection = object
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            RowLayout {
+                spacing:            ScreenTools.defaultFontPixelWidth
+                Layout.fillWidth:   true
+                Layout.alignment:   Qt.AlignCenter
+
+                QGCButton {
+                    text:       qsTr("Connect")
+                    font.bold: true
+                    enabled:    _currentSelection && !_currentSelection.link
+                    onClicked:  QGroundControl.linkManager.createConnectedLink(_currentSelection)
+                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                }
+                QGCButton {
+                    text:       qsTr("Disconnect")
+                    font.bold: true
+                    enabled:    _currentSelection && _currentSelection.link
+                    onClicked:  {
+                        _currentSelection.link.disconnect()
+                        _currentSelection.linkChanged()
+                    }
+                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                }
+                QGCButton {
+                    text:       qsTr("Configure")
+                    font.bold: true
+                    onClicked: {
+                        close()
+                        mainWindow.showAppSettings(qsTr("Comm Links"))
+                    }
+
+                    implicitWidth: ScreenTools.defaultFontPixelWidth * 8
+                }
+            }
+        }
+
     }
 }

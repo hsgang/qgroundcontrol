@@ -169,4 +169,10 @@
     <qresource prefix="/gimbal">
         <file alias="payload.svg">resources/gimbal/payload.svg</file>
     </qresource>
+    <qresource prefix="/vehicleImage">
+        <file alias="amp900.png">resources/vehicleImage/amp900.PNG</file>
+        <file alias="amp1100.png">resources/vehicleImage/amp1100.PNG</file>
+        <file alias="amp1200.png">resources/vehicleImage/amp1200.PNG</file>
+        <file alias="amp1600.png">resources/vehicleImage/amp1600.PNG</file>
+    </qresource>
 </RCC>

@@ -12622,8 +12622,8 @@ Is this really what you want?</source>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
-        <source>Cloud Login</source>
-        <translation>클라우드 로그인</translation>
+        <source>Cloud Login [%1]</source>
+        <translation>클라우드 로그인 [%1]</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
