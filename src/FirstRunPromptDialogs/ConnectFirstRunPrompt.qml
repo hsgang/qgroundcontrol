@@ -53,12 +53,56 @@ FirstRunPrompt {
                 anchors.fill: parent
                 //Layout.fillWidth:  true
 
-                Image {
+                // Image {
+                //     Layout.fillWidth:   true
+                //     sourceSize.width: ScreenTools.defaultFontPixelHeight * 6
+                //     sourceSize.height: ScreenTools.defaultFontPixelHeight * 6
+                //     source: "/vehicleImage/amp1600.png"
+                //     fillMode: Image.PreserveAspectFit
+                // }
+
+                Rectangle {
                     Layout.fillWidth:   true
-                    sourceSize.width: ScreenTools.defaultFontPixelHeight * 6
-                    sourceSize.height: ScreenTools.defaultFontPixelHeight * 6
-                    source: "/vehicleImage/amp1600.png"
-                    fillMode: Image.PreserveAspectFit
+                    width: ScreenTools.defaultFontPixelHeight * 6
+                    height: ScreenTools.defaultFontPixelHeight * 6
+                    color: "transparent"
+
+                    SwipeView {
+                        id: swipeView
+                        anchors.fill: parent
+                        interactive: false  // 자동 스와이프를 위해 수동 스와이프 비활성화 (원하면 true로 설정)
+                        clip: true
+
+                        Image {
+                            source: "/vehicleImage/amp1600.png"
+                            fillMode: Image.PreserveAspectFit
+                            visible: swipeView.currentIndex === 0
+                        }
+                        Image {
+                            source: "/vehicleImage/amp1200.png"
+                            fillMode: Image.PreserveAspectFit
+                            visible: swipeView.currentIndex === 1
+                        }
+                        Image {
+                            source: "/vehicleImage/amp1100.png"
+                            fillMode: Image.PreserveAspectFit
+                            visible: swipeView.currentIndex === 2
+                        }
+                        Image {
+                            source: "/vehicleImage/amp900.png"
+                            fillMode: Image.PreserveAspectFit
+                            visible: swipeView.currentIndex === 3
+                        }
+                    }
+
+                    Timer {
+                        interval: 3000  // 3초 간격
+                        running: true
+                        repeat: true
+                        onTriggered: {
+                            swipeView.currentIndex = (swipeView.currentIndex + 1) % swipeView.count
+                        }
+                    }
                 }
 
                 QGCLabel {
