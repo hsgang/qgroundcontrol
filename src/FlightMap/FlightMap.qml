@@ -125,6 +125,7 @@ Map {
     PinchHandler {
         id:     pinchHandler
         target: null
+        grabPermissions:    PointerHandler.TakeOverForbidden
 
         property var pinchStartCentroid
 
@@ -151,6 +152,7 @@ Map {
 
     DragHandler {
         target: null
+        grabPermissions:    PointerHandler.TakeOverForbidden
 
         onActiveChanged: {
             if (active) {

@@ -744,12 +744,6 @@ ApplicationWindow {
         onClosed: {
             toolDrawer.toolSource = ""
         }
-
-        // MouseArea를 추가하여 Drawer가 열려 있을 때 뒷화면 터치 방지
-        MouseArea {
-            anchors.fill: parent
-            preventStealing: true
-        }
         
         Rectangle {
             id:             toolDrawerToolbar
