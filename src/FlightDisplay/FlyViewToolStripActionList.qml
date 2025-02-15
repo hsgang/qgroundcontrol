@@ -52,7 +52,7 @@ ToolStripActionList {
         GuidedActionTakeoff { },
         GuidedActionLand { },
         GuidedActionMission { },
-        GuidedActionContinueMission { },
+        //GuidedActionContinueMission { },
         GuidedActionRTL { },
         GuidedActionPause { },
         GuidedActionChangeAltitude { },
