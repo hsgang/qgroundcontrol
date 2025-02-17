@@ -38,6 +38,9 @@ Item {
     property real _screenWidth: ScreenTools.screenWidth
     property real _screenHeight: ScreenTools.screenHeight
 
+    // 라운드 사각형의 모서리 반경
+    property real cornerRadius: 10
+
     // _roll 값 변경 시 저역통과 필터 적용
     on_RollChanged: {
         filteredRoll = filteredRoll + alpha * (_roll - filteredRoll);
@@ -73,30 +76,48 @@ Item {
             // focal = (화면 반폭) / tan(화각/2)
             var focal = (_screenWidth / 2) / Math.tan((_hFov / 2) * Math.PI / 180);
 
-            // 피사체의 실제 크기를 가정 (예: 2.5미터)
+            // 피사체의 실제 크기를 가정 (예: 3미터)
             var objectPhysicalSize = 3;
+            var cameraPhysicalOffset = 0.3;
 
             // 투영 기하학에 의한 계산:
             // 화면상의 사각형 크기 = (피사체 실제 크기 * focal length) / 거리
             // 단, _distance가 0인 경우를 방지하기 위해 최소값 적용
             var effectiveDistance = Math.max(_distance, 0.001);
             var rectSize = (objectPhysicalSize * focal) / effectiveDistance;
+            var cameraYOffset = (cameraPhysicalOffset * focal) / effectiveDistance;
 
             // 최소/최대 크기 제한 (필요에 따라 조정)
             var minSize = _screenHeight * 0.05;
             var maxSize = _screenHeight * 0.85;
             rectSize = Math.max(minSize, Math.min(maxSize, rectSize));
 
-            // 사각형 그리기 (중심을 기준으로 크기 조절)
+            // 라운드 사각형을 그리기 위한 함수
+            function drawRoundedRect(ctx, x, y, width, height, radius) {
+                ctx.beginPath();
+                ctx.moveTo(x + radius, y);
+                ctx.lineTo(x + width - radius, y);
+                ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+                ctx.lineTo(x + width, y + height - radius);
+                ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+                ctx.lineTo(x + radius, y + height);
+                ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+                ctx.lineTo(x, y + radius);
+                ctx.quadraticCurveTo(x, y, x + radius, y);
+                ctx.closePath();
+            }
+
+            // 라운드 사각형 그리기 (중심을 기준으로)
+            var rectX = centerX - rectSize / 2;
+            var rectY = centerY - rectSize / 2 + cameraYOffset;
+            drawRoundedRect(ctx, rectX, rectY, rectSize, rectSize, rectSize/4);
             ctx.lineWidth = 5;
             ctx.strokeStyle = "rgba(255, 0, 0, 0.2)";
-            ctx.beginPath();
-            ctx.rect(centerX - rectSize / 2, centerY - rectSize / 2, rectSize, rectSize);
             ctx.stroke();
 
             // 세로선 (Roll 적용)
             ctx.lineWidth = 1;
-            ctx.strokeStyle = "lime";
+            ctx.strokeStyle = "#A0FF32";
             ctx.beginPath();
             ctx.moveTo(centerX, 0);
             ctx.lineTo(centerX, height);
@@ -106,6 +127,15 @@ Item {
             ctx.beginPath();
             ctx.moveTo(0, centerY);
             ctx.lineTo(width, centerY);
+            ctx.stroke();
+
+            // 사각형 중심에 원 그리기
+            ctx.beginPath();
+            // 원의 반경: 사각형 크기의 10%
+            var circleRadius = rectSize * 0.05;
+            ctx.arc(centerX, centerY+cameraYOffset, circleRadius, 0, 2 * Math.PI);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#A0FF32";
             ctx.stroke();
         }
     }
