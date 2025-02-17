@@ -220,6 +220,12 @@
     "default":     0.5,
     "min":              0.1,
     "decimalPlaces":    1
+},
+{
+    "name":         "showLandingGuideView",
+    "shortDesc": "showLandingGuideView",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }

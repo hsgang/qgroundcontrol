@@ -107,6 +107,14 @@ ToolIndicatorPage{
                     visible:    _showVehicleStepMoveControl.visible
                     property Fact   _showVehicleStepMoveControl:    QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl
                 }
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       qsTr("Landing Guide View")
+                    fact:       _showLandingGuideView
+                    visible:    _showLandingGuideView.visible
+                    property Fact   _showLandingGuideView:    QGroundControl.settingsManager.flyViewSettings.showLandingGuideView
+                }
             }
 
             SettingsGroupLayout {
