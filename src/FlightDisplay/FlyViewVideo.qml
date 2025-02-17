@@ -262,11 +262,4 @@ Item {
     FlyViewVideoSiYiController {
         anchors.fill: parent
     }
-
-    VideoLandingGuideOverlay {
-        anchors.fill:   parent
-        vehicle:        QGroundControl.multiVehicleManager.activeVehicle
-        visible :       QGroundControl.settingsManager.flyViewSettings.showLandingGuideView.rawValue
-
-    }
 }

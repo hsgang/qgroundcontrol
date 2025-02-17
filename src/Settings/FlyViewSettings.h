@@ -55,5 +55,4 @@ public:
     DEFINE_SETTINGFACT(showGridViewer)
     DEFINE_SETTINGFACT(showVehicleStepMoveControl)
     DEFINE_SETTINGFACT(vehicleMoveStep)
-    DEFINE_SETTINGFACT(showLandingGuideView)
 };

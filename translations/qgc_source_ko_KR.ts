@@ -11157,11 +11157,6 @@ Click Ok to start the auto-tuning process.
         <translation>기체 스텝 제어</translation>
     </message>
     <message>
-        <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="440"/>
-        <source>Landing Guide View</source>
-        <translation>랜딩 가이드 보기</translation>
-    </message>
-    <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="450"/>
         <source>Status</source>
         <translation>상태 정보</translation>
