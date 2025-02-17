@@ -115,7 +115,7 @@ Rectangle {
                             }
                         } else {
                             // Best we can do is determine readiness based on AutoPilot component setup and health indicators from SYS_STATUS
-                            if (_activeVehicle.allSensorsHealthy && _activeVehicle.autopilot.setupComplete) {
+                            if (_activeVehicle.allSensorsHealthy && _activeVehicle.autopilotPlugin.setupComplete) {
                                 _mainStatusBGColor = qgcPal.colorGreen
                                 return mainStatusLabel._readyToFlyText
                             } else {
@@ -313,22 +313,47 @@ Rectangle {
             }
         }
 
-        Component {
-            id: vtolTransitionIndicatorPage
+        // Component {
+        //     id: vtolTransitionIndicatorPage
 
-            ToolIndicatorPage {
-                contentComponent: Component {
-                    QGCButton {
-                        text: _vtolInFWDFlight ? qsTr("Transition to Multi-Rotor") : qsTr("Transition to Fixed Wing")
+        //     ToolIndicatorPage {
+        //         contentComponent: Component {
+        //             QGCButton {
+        //                 text: qsTr("Configure")
+        //                 onClicked: {
+        //                     mainWindow.showVehicleConfigParametersPage()
+        //                     mainWindow.closeIndicatorDrawer()
+        //                 }
+        //             }
 
-                        onClicked: {
-                            if (_vtolInFWDFlight) {
-                                mainWindow.vtolTransitionToMRFlightRequest()
-                            } else {
-                                mainWindow.vtolTransitionToFwdFlightRequest()
-                            }
-                            drawer.close()
+        //             QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Configuration") }
+        //             QGCButton {
+        //                 text: qsTr("Configure")
+        //                 onClicked: {
+        //                     mainWindow.showVehicleConfig()
+        //                     mainWindow.closeIndicatorDrawer()
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+    }
+
+    Component {
+        id: vtolTransitionIndicatorPage
+
+        ToolIndicatorPage {
+            contentComponent: Component {
+                QGCButton {
+                    text: _vtolInFWDFlight ? qsTr("Transition to Multi-Rotor") : qsTr("Transition to Fixed Wing")
+
+                    onClicked: {
+                        if (_vtolInFWDFlight) {
+                            mainWindow.vtolTransitionToMRFlightRequest()
+                        } else {
+                            mainWindow.vtolTransitionToFwdFlightRequest()
                         }
+                        mainWindow.closeIndicatorDrawer()
                     }
                 }
             }

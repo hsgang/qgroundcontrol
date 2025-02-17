@@ -150,10 +150,24 @@ ApplicationWindow {
         showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
     }
 
-    function showVehicleSetupTool(setupPage = "") {
+    // function showVehicleSetupTool(setupPage = "") {
+    //     showTool(qsTr("Vehicle Configuration"), "SetupView.qml", "/qmlimages/Quad.svg")
+    //     if (setupPage !== "") {
+    //         toolDrawerLoader.item.showNamedComponentPanel(setupPage)
+    function showVehicleConfig() {
         showTool(qsTr("Vehicle Configuration"), "SetupView.qml", "/qmlimages/Quad.svg")
-        if (setupPage !== "") {
-            toolDrawerLoader.item.showNamedComponentPanel(setupPage)
+    }
+
+    function showVehicleConfigParametersPage() {
+        showVehicleConfig()
+        toolDrawerLoader.item.showParametersPanel()
+    }
+
+    function showKnownVehicleComponentConfigPage(knownVehicleComponent) {
+        showVehicleConfig()
+        let vehicleComponent = globals.activeVehicle.autopilotPlugin.findKnownVehicleComponent(knownVehicleComponent)
+        if (vehicleComponent) {
+            toolDrawerLoader.item.showVehicleComponentPanel(vehicleComponent)
         }
     }
 
@@ -401,7 +415,7 @@ ApplicationWindow {
                             if (mainWindow.allowViewSwitch()) {
                                 mainWindow.closeIndicatorDrawer()
                                 toolDrawer.visible = false
-                                mainWindow.showVehicleSetupTool()
+                                mainWindow.showVehicleConfig()
                                 checkedMenu()
                                 //setupButton.checked = true
                                 viewSelectDrawer.visible = false

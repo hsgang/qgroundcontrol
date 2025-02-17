@@ -11,8 +11,8 @@
 #include "APMAutoPilotPlugin.h"
 
 APMFollowComponent::APMFollowComponent(Vehicle *vehicle, AutoPilotPlugin *autopilot, QObject *parent)
-    : VehicleComponent(vehicle, autopilot, parent),
-    _name(tr("Follow Me"))
+    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::UnknownVehicleComponent, parent)
+    , _name(tr("Follow Me"))
 {
     // qCDebug() << Q_FUNC_INFO << this;
 }
