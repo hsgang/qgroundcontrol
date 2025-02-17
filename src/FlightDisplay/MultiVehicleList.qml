@@ -250,7 +250,7 @@ Item {
                                 }
                             } else {
                                 // Best we can do is determine readiness based on AutoPilot component setup and health indicators from SYS_STATUS
-                                if (_vehicle.allSensorsHealthy && _vehicle.autopilot.setupComplete) {
+                                if (_vehicle.allSensorsHealthy && _vehicle.autopilotPlugin.setupComplete) {
                                     return _readyToFlyText
                                 } else {
                                     return _notReadyToFlyText

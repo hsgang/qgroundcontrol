@@ -12,7 +12,7 @@
 #include "Vehicle.h"
 
 APMChannelsComponent::APMChannelsComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
-    : VehicleComponent(vehicle, autopilot, parent)
+    : VehicleComponent(vehicle, autopilot, AutoPilotPlugin::KnownChannelVehicleComponent, parent)
     , _name(tr("Channels"))
 {
 }

@@ -95,8 +95,8 @@
 
 // Vehicle
 // Components
-#include "Vehicle/Components/ComponentInformationCacheTest.h"
-#include "Vehicle/Components/ComponentInformationTranslationTest.h"
+#include "ComponentInformationCacheTest.h"
+#include "ComponentInformationTranslationTest.h"
 #include "FTPManagerTest.h"
 // #include "InitialConnectTest.h"
 #include "MAVLinkLogManagerTest.h"

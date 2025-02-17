@@ -68,7 +68,7 @@ MapQuickItem {
                     }
                 } else {
                     // Best we can do is determine readiness based on AutoPilot component setup and health indicators from SYS_STATUS
-                    if (object.allSensorsHealthy && object.autopilot.setupComplete) {
+                    if (object.allSensorsHealthy && object.autopilotPlugin.setupComplete) {
                         return _readyToFlyText
                     } else {
                         return _notReadyToFlyText
