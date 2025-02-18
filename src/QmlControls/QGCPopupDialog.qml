@@ -263,10 +263,10 @@ Popup {
                 Layout.fillWidth:       true
                 Layout.preferredWidth:  Math.min(maxAvailableWidth, totalContentWidth)
                 Layout.preferredHeight: Math.min(maxAvailableHeight, totalContentHeight)
-                color:                  _qgcPal.window
-                border.width:           1
-                border.color:           _qgcPal.windowShadeLight
-                radius:                 ScreenTools.defaultFontPixelHeight / 4
+                color:                  "transparent" //_qgcPal.window
+                // border.width:           1
+                // border.color:           _qgcPal.windowShadeLight
+                // radius:                 ScreenTools.defaultFontPixelHeight / 4
 
                 property real maxAvailableWidth:    mainWindow.width - _contentMargin * 4
                 property real maxAvailableHeight:   mainWindow.height - titleRowLayout.height - _contentMargin * 5
