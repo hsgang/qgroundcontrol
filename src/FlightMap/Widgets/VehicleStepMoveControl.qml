@@ -50,7 +50,7 @@ Rectangle {
     property real   _yawStep:               5 //degree
     property Fact   _moveStepFact:          _flyViewSettings.vehicleMoveStep
     property real   _moveStep:              _moveStepFact.rawValue
-    property real   _altLimit:              9.9 // m
+    property real   _altLimit:              QGroundControl.settingsManager.flyViewSettings.guidedMinimumAltitude.rawValue
     property real   _vx:                    activeVehicle ? activeVehicle.localPosition.vx.rawValue : 0
     property real   _vy:                    activeVehicle ? activeVehicle.localPosition.vy.rawValue : 0
     property real   _vz:                    activeVehicle ? activeVehicle.localPosition.vz.rawValue : 0
@@ -115,12 +115,12 @@ Rectangle {
                 //     leftPadding:    ScreenTools.defaultFontPixelWidth
                 // }
                 QGCLabel{
-                    text: "상대고도"
+                    text: "상대 고도"
                     font.pointSize: _fontSize
                     leftPadding:    ScreenTools.defaultFontPixelWidth
                 }
                 QGCLabel{
-                    text: "하방라이다"
+                    text: "라이다 고도계"
                     font.pointSize: _fontSize
                     leftPadding:    ScreenTools.defaultFontPixelWidth
                 }
@@ -168,7 +168,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepUp
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle && !_isMoving
             opacity:            enabled ? 1 : 0.4
@@ -184,7 +184,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepTurnLeft
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle && !_isMoving
             opacity:            enabled ? 1 : 0.4
@@ -201,7 +201,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepForward
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle && !_isMoving
             opacity:            enabled ? 1 : 0.4
@@ -217,7 +217,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepTurnRight
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle && !_isMoving
             opacity:            enabled ? 1 : 0.4
@@ -234,7 +234,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepAltStop
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle
             opacity:            enabled ? 1 : 0.4
@@ -250,7 +250,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepLeft
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle && !_isMoving
             opacity:            enabled ? 1 : 0.4
@@ -266,7 +266,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepStop
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle
             opacity:            enabled ? 1 : 0.4
@@ -282,7 +282,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepRight
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle && !_isMoving
             opacity:            enabled ? 1 : 0.4
@@ -298,7 +298,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepDown
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle && !_isMoving && (isNaN(_distance) || ((_distance - _moveStep) > _altLimit))
             opacity:            enabled ? 1 : 0.4
@@ -321,7 +321,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepHalf
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle
             opacity:            enabled ? 1 : 0.4
@@ -338,7 +338,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepBack
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle && !_isMoving
             opacity:            enabled ? 1 : 0.4
@@ -354,7 +354,7 @@ Rectangle {
 
         QGCColumnButton{
             id:                 stepOne
-            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitWidth:      _idealWidth
             implicitHeight:     width
             enabled:            activeVehicle
             opacity:            enabled ? 1 : 0.4
