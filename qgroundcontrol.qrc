@@ -545,6 +545,7 @@
         <file alias="QGroundControl/FlightMap/VehicleStepMoveControl.qml">src/FlightMap/Widgets/VehicleStepMoveControl.qml</file>
         <file alias="QGroundControl/FlightDisplay/GuidedActionContinueMission.qml">src/FlightDisplay/GuidedActionContinueMission.qml</file>
         <file alias="QGroundControl/FlightDisplay/VideoLandingGuideOverlay.qml">src/FlightDisplay/VideoLandingGuideOverlay.qml</file>
+        <file alias="QGroundControl/Controls/ProgressTracker.qml">src/QmlControls/ProgressTracker.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="ConnectFirstRunPrompt.qml">src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml</file>
