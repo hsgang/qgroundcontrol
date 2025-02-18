@@ -50,6 +50,17 @@ Rectangle {
     property real   _yawStep:               5 //degree
     property Fact   _moveStepFact:          _flyViewSettings.vehicleMoveStep
     property real   _moveStep:              _moveStepFact.rawValue
+    property real   _altLimit:              9.9 // m
+    property real   _vx:                    activeVehicle ? activeVehicle.localPosition.vx.rawValue : 0
+    property real   _vy:                    activeVehicle ? activeVehicle.localPosition.vy.rawValue : 0
+    property real   _vz:                    activeVehicle ? activeVehicle.localPosition.vz.rawValue : 0
+    property bool   _isMoving:              Math.sqrt(Math.pow(_vx,2) + Math.pow(_vy,2) + Math.pow(_vz,2)) > 0.2
+    property real   _distance:              activeVehicle ? activeVehicle.distanceSensors.rotationPitch270.rawValue : NaN
+
+    MouseArea {
+        anchors.fill: parent
+        propagateComposedEvents: false
+    }
 
     Rectangle{
         anchors.bottom: parent.top
@@ -81,7 +92,9 @@ Rectangle {
 
         RowLayout {
             id: valueRowLayout
-            anchors.horizontalCenter: parent.horizontalCenter
+            //anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left:           parent.left
+            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
             anchors.verticalCenter: parent.verticalCenter
 
             ColumnLayout{
@@ -91,16 +104,16 @@ Rectangle {
                     font.pointSize: _fontSize
                     leftPadding:    ScreenTools.defaultFontPixelWidth
                 }
-                QGCLabel{
-                    text: "상대좌표X"
-                    font.pointSize: _fontSize
-                    leftPadding:    ScreenTools.defaultFontPixelWidth
-                }
-                QGCLabel{
-                    text: "상대좌표Y"
-                    font.pointSize: _fontSize
-                    leftPadding:    ScreenTools.defaultFontPixelWidth
-                }
+                // QGCLabel{
+                //     text: "상대좌표"
+                //     font.pointSize: _fontSize
+                //     leftPadding:    ScreenTools.defaultFontPixelWidth
+                // }
+                // QGCLabel{
+                //     text: "이동속도"
+                //     font.pointSize: _fontSize
+                //     leftPadding:    ScreenTools.defaultFontPixelWidth
+                // }
                 QGCLabel{
                     text: "상대고도"
                     font.pointSize: _fontSize
@@ -114,30 +127,30 @@ Rectangle {
             }
 
             ColumnLayout{
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 10
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 14
 
                 QGCLabel{
                     text: activeVehicle ? _moveStep + " m" : "no value"
                     font.pointSize: _fontSize
                     Layout.alignment: Qt.AlignRight
                 }
-                QGCLabel{
-                    text: activeVehicle ? activeVehicle.localPosition.x.valueString + " m" : "no value"
-                    font.pointSize: _fontSize
-                    Layout.alignment: Qt.AlignRight
-                }
-                QGCLabel{
-                    text: activeVehicle ? activeVehicle.localPosition.y.valueString + " m" : "no value"
-                    font.pointSize: _fontSize
-                    Layout.alignment: Qt.AlignRight
-                }
+                // QGCLabel{
+                //     text: activeVehicle ? activeVehicle.localPosition.x.valueString + "x / " + activeVehicle.localPosition.y.valueString + "y" : "no value"
+                //     font.pointSize: _fontSize
+                //     Layout.alignment: Qt.AlignRight
+                // }
+                // QGCLabel{
+                //     text: activeVehicle ? _vx.toFixed(1) + " / " + _vy.toFixed(1) + " / " + _vz.toFixed(1) : "no value"
+                //     font.pointSize: _fontSize
+                //     Layout.alignment: Qt.AlignRight
+                // }
                 QGCLabel{
                     text: activeVehicle ? activeVehicle.altitudeRelative.valueString + " m" : "no value"
                     font.pointSize: _fontSize
                     Layout.alignment: Qt.AlignRight
                 }
                 QGCLabel{
-                    text: activeVehicle ? activeVehicle.distanceSensors.rotationPitch270.valueString + " m" : "no value"
+                    text: activeVehicle ? _distance.toFixed(1) + " m" : "no value"
                     font.pointSize: _fontSize
                     Layout.alignment: Qt.AlignRight
                 }
@@ -153,462 +166,206 @@ Rectangle {
         rowSpacing:                 columnSpacing
         columns:                    4
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepUp
-            width:              _idealWidth // - anchorsMargins
-            height:             width
-            radius:             _margins
-            color:              "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepUpPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle && !_isMoving
+            opacity:            enabled ? 1 : 0.4
 
-            QGCLabel {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                text:       "▲상승"
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-thin-up.svg"
+            text:               "UP"
+            font.pointSize:     _fontSize * 0.7
 
-            // QGCColoredImage {
-            //     anchors.verticalCenter: parent.verticalCenter
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     height:             parent.height * 0.6
-            //     width:              height
-            //     source:             "/InstrumentValueIcons/zoom-in.svg"
-            //     sourceSize.height:  height
-            //     fillMode:           Image.PreserveAspectFit
-            //     mipmap:             true
-            //     smooth:             true
-            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
-            //     enabled:            true
-            // }
-
-            MouseArea {
-                id:             stepUpPress
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,0,_moveStep,0,false)
-                }
+            onClicked: {
+                activeVehicle.setPositionTargetLocalNed(0,0,_moveStep,0,false)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepTurnLeft
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:              "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepTurnLeftPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle && !_isMoving
+            opacity:            enabled ? 1 : 0.4
 
-            QGCLabel {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                text:       "<<"
-            }
+            iconSource:         "/InstrumentValueIcons/cheveron-left.svg"
+            text:               "T.LFT"
+            font.pointSize:     _fontSize * 0.7
 
-            // QGCColoredImage {
-            //     anchors.verticalCenter: parent.verticalCenter
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     height:             parent.height * 0.6
-            //     width:              height
-            //     source:             "/InstrumentValueIcons/zoom-in.svg"
-            //     sourceSize.height:  height
-            //     fillMode:           Image.PreserveAspectFit
-            //     mipmap:             true
-            //     smooth:             true
-            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
-            //     enabled:            true
-            // }
-
-            MouseArea {
-                id:             stepTurnLeftPress
-                anchors.fill:   parent
-                onClicked: {
-                    //var targetYaw = (_yaw + 10) % 360 * Math.PI / 180
-                    var targetYaw = -_yawStep * Math.PI / 180
-                    activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)                }
+            onClicked: {
+                var targetYaw = -_yawStep * Math.PI / 180
+                activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepForward
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepForwardPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle && !_isMoving
+            opacity:            enabled ? 1 : 0.4
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-thick-up.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-thick-up.svg"
+            text:               "FWD"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id: stepForwardPress
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(_moveStep,0,0,0,false)
-                }
+            onClicked: {
+                activeVehicle.setPositionTargetLocalNed(_moveStep,0,0,0,false)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepTurnRight
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepTurnRightPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle && !_isMoving
+            opacity:            enabled ? 1 : 0.4
 
-            QGCLabel {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                text:       ">>"
-            }
+            iconSource:         "/InstrumentValueIcons/cheveron-right.svg"
+            text:               "T.RGHT"
+            font.pointSize:     _fontSize * 0.7
 
-            // QGCColoredImage {
-            //     anchors.verticalCenter: parent.verticalCenter
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     height:             parent.height * 0.6
-            //     width:              height
-            //     source:             "/InstrumentValueIcons/arrow-base-down.svg"
-            //     sourceSize.height:  height
-            //     fillMode:           Image.PreserveAspectFit
-            //     mipmap:             true
-            //     smooth:             true
-            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
-            //     enabled:            true
-            // }
-
-            MouseArea {
-                id:             stepTurnRightPress
-                anchors.fill:   parent
-                onClicked: {
-                    //var targetYaw = (_yaw + 10) % 360 * Math.PI / 180
-                    var targetYaw = _yawStep * Math.PI / 180
-                    activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
-                }
+            onClicked: {
+                var targetYaw = _yawStep * Math.PI / 180
+                activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepAltStop
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepAltStopPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle
+            opacity:            enabled ? 1 : 0.4
 
-            QGCLabel {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                text:       "정지"
-            }
+            iconSource:         "/InstrumentValueIcons/pause.svg"
+            text:               "STOP"
+            font.pointSize:     _fontSize * 0.7
 
-            // QGCColoredImage {
-            //     anchors.verticalCenter: parent.verticalCenter
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     height:             parent.height * 0.6
-            //     width:              height
-            //     source:             "/InstrumentValueIcons/target.svg"
-            //     sourceSize.height:  height
-            //     fillMode:           Image.PreserveAspectFit
-            //     mipmap:             true
-            //     smooth:             true
-            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
-            //     enabled:            true
-            // }
-
-            MouseArea {
-                id:             stepAltStopPress
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
-                }
+            onClicked: {
+                activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepLeft
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepLeftPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle && !_isMoving
+            opacity:            enabled ? 1 : 0.4
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-thick-left.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-thick-left.svg"
+            text:               "LEFT"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id:             stepLeftPress
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,-_moveStep,0,0,false)
-                }
+            onClicked: {
+                activeVehicle.setPositionTargetLocalNed(0,-_moveStep,0,0,false)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepStop
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepStopPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle
+            opacity:            enabled ? 1 : 0.4
 
-            QGCLabel {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                text:       "정지"
-            }
+            iconSource:         "/InstrumentValueIcons/pause.svg"
+            text:               "STOP"
+            font.pointSize:     _fontSize * 0.7
 
-            // QGCColoredImage {
-            //     anchors.verticalCenter: parent.verticalCenter
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     height:             parent.height * 0.6
-            //     width:              height
-            //     source:             "/InstrumentValueIcons/target.svg"
-            //     sourceSize.height:  height
-            //     fillMode:           Image.PreserveAspectFit
-            //     mipmap:             true
-            //     smooth:             true
-            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
-            //     enabled:            true
-            // }
-
-            MouseArea {
-                id:             stepStopPress
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
-                }
+            onClicked: {
+                activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepRight
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepRightPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle && !_isMoving
+            opacity:            enabled ? 1 : 0.4
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-thick-right.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-thick-right.svg"
+            text:               "RIGHT"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id:             stepRightPress
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,_moveStep,0,0,false)
-                }
+            onClicked: {
+                activeVehicle.setPositionTargetLocalNed(0,_moveStep,0,0,false)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepDown
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepDownPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle && !_isMoving && (isNaN(_distance) || ((_distance - _moveStep) > _altLimit))
+            opacity:            enabled ? 1 : 0.4
 
-            QGCLabel {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                text:       "▼하강"
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-thin-down.svg"
+            text:               "DOWN"
+            font.pointSize:     _fontSize * 0.7
 
-            // QGCColoredImage {
-            //     anchors.verticalCenter: parent.verticalCenter
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     height:             parent.height * 0.6
-            //     width:              height
-            //     source:             "/InstrumentValueIcons/zoom-out.svg"
-            //     sourceSize.height:  height
-            //     fillMode:           Image.PreserveAspectFit
-            //     mipmap:             true
-            //     smooth:             true
-            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
-            //     enabled:            true
-            // }
-
-            MouseArea {
-                id:             stepDownPress
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,0,-_moveStep,0,false)
+            onClicked: {
+                // _distance가 NaN이면 기능 수행
+                if (isNaN(_distance)) {
+                    activeVehicle.setPositionTargetLocalNed(0, 0, -_moveStep, 0, false)
+                }
+                // _distance 값이 유효하면 (_distance - _moveStep)가 _altLimit보다 클 때 기능 수행
+                else if ((_distance - _moveStep) > _altLimit) {
+                    activeVehicle.setPositionTargetLocalNed(0, 0, -_moveStep, 0, false)
                 }
             }
         }
 
-        Rectangle {
-            id:                 stepDummy1
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepDummy1Press.pressedButtons ? 0.95 : 1
+        QGCColumnButton{
+            id:                 stepHalf
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle
+            opacity:            enabled ? 1 : 0.4
 
-            QGCLabel {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                text:       "0.5"
-            }
+            iconSource:         "/InstrumentValueIcons/dots-horizontal-double.svg"
+            text:               "0.5"
+            font.pointSize:     _fontSize * 0.7
 
-            // QGCColoredImage {
-            //     anchors.verticalCenter: parent.verticalCenter
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     height:             parent.height * 0.6
-            //     width:              height
-            //     source:             "/InstrumentValueIcons/zoom-out.svg"
-            //     sourceSize.height:  height
-            //     fillMode:           Image.PreserveAspectFit
-            //     mipmap:             true
-            //     smooth:             true
-            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
-            //     enabled:            true
-            // }
-
-            MouseArea {
-                id:             stepDummy1Press
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
-                    _moveStepFact.value = 0.5
-                }
+            onClicked: {
+                activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                _moveStepFact.value = 0.5
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 stepBack
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepBackPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle && !_isMoving
+            opacity:            enabled ? 1 : 0.4
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-thick-down.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-thick-down.svg"
+            text:               "BACK"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id:             stepBackPress
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(-_moveStep,0,0,0,false)
-                }
+            onClicked: {
+                activeVehicle.setPositionTargetLocalNed(-_moveStep,0,0,0,false)
             }
         }
 
-        Rectangle {
-            id:                 stepDummy2
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              stepDummy2Press.pressedButtons ? 0.95 : 1
+        QGCColumnButton{
+            id:                 stepOne
+            implicitWidth:      _idealWidth // - anchorsMargins
+            implicitHeight:     width
+            enabled:            activeVehicle
+            opacity:            enabled ? 1 : 0.4
 
-            QGCLabel {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                text:       "1.0"
-            }
+            iconSource:         "/InstrumentValueIcons/dots-horizontal-triple.svg"
+            text:               "1.0"
+            font.pointSize:     _fontSize * 0.7
 
-            // QGCColoredImage {
-            //     anchors.verticalCenter: parent.verticalCenter
-            //     anchors.horizontalCenter: parent.horizontalCenter
-            //     height:             parent.height * 0.6
-            //     width:              height
-            //     source:             "/InstrumentValueIcons/zoom-out.svg"
-            //     sourceSize.height:  height
-            //     fillMode:           Image.PreserveAspectFit
-            //     mipmap:             true
-            //     smooth:             true
-            //     color:              enabled ? qgcPal.text : qgcPalDisabled.text
-            //     enabled:            true
-            // }
-
-            MouseArea {
-                id:             stepDummy2Press
-                anchors.fill:   parent
-                onClicked: {
-                    activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
-                    _moveStepFact.value = 1
-                }
+            onClicked: {
+                activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                _moveStepFact.value = 1
             }
         }
     }
