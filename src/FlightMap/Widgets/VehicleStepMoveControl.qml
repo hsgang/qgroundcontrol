@@ -309,11 +309,11 @@ Rectangle {
 
             onClicked: {
                 // _distance가 NaN이면 기능 수행
-                if (isNaN(_distance)) {
+                if (isNaN(_distance) || _distance === 0) {
                     activeVehicle.setPositionTargetLocalNed(0, 0, -_moveStep, 0, false)
                 }
                 // _distance 값이 유효하면 (_distance - _moveStep)가 _altLimit보다 클 때 기능 수행
-                else if ((_distance - _moveStep) > _altLimit) {
+                else if (_distance !== 0 && (_distance - _moveStep) > _altLimit) {
                     activeVehicle.setPositionTargetLocalNed(0, 0, -_moveStep, 0, false)
                 }
             }
