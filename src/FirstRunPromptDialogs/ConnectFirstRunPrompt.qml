@@ -20,6 +20,7 @@ import QGroundControl.SettingsManager
 import QGroundControl.Controls
 
 FirstRunPrompt {
+    id:         root
     title:      qsTr("Link Management")
     promptId:   QGroundControl.corePlugin.connectFirstRunPromptId
     markAsShownOnClose: false
@@ -38,6 +39,12 @@ FirstRunPrompt {
 
     QGCPalette { id: qgcPal }
 
+    ProgressTracker {
+        id:                     closeProgressTracker
+        timeoutSeconds:         5000 * 0.001
+        onTimeout:              root.close()
+    }
+
     RowLayout {
         spacing: _margins
 
@@ -52,14 +59,6 @@ FirstRunPrompt {
                 spacing:    _margins
                 anchors.fill: parent
                 //Layout.fillWidth:  true
-
-                // Image {
-                //     Layout.fillWidth:   true
-                //     sourceSize.width: ScreenTools.defaultFontPixelHeight * 6
-                //     sourceSize.height: ScreenTools.defaultFontPixelHeight * 6
-                //     source: "/vehicleImage/amp1600.png"
-                //     fillMode: Image.PreserveAspectFit
-                // }
 
                 Rectangle {
                     Layout.fillWidth:   true
@@ -259,7 +258,7 @@ FirstRunPrompt {
 
         ColumnLayout {
             id:         columnLayout
-            spacing:    ScreenTools.defaultFontPixelHeight
+            spacing:    ScreenTools.defaultFontPixelHeight / 2
 
             QGCLabel {
                 id:         unitsSectionLabel
@@ -316,32 +315,47 @@ FirstRunPrompt {
                 Layout.alignment:   Qt.AlignCenter
 
                 QGCButton {
+                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
                     text:       qsTr("Connect")
                     font.bold: true
                     enabled:    _currentSelection && !_currentSelection.link
-                    onClicked:  QGroundControl.linkManager.createConnectedLink(_currentSelection)
-                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                    onClicked:  {
+                        QGroundControl.linkManager.createConnectedLink(_currentSelection)
+                        if (_currentSelection && _currentSelection.link) {
+                            closeProgressTracker.start()
+                        }
+                    }
                 }
                 QGCButton {
+                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
                     text:       qsTr("Disconnect")
                     font.bold: true
                     enabled:    _currentSelection && _currentSelection.link
                     onClicked:  {
                         _currentSelection.link.disconnect()
                         _currentSelection.linkChanged()
+                        if (closeProgressTracker.running) {
+                            closeProgressTracker.stop()
+                        }
                     }
-                    implicitWidth: ScreenTools.defaultFontPixelWidth * 12
                 }
                 QGCButton {
+                    implicitWidth: ScreenTools.defaultFontPixelWidth * 8
                     text:       qsTr("Configure")
                     font.bold: true
                     onClicked: {
                         close()
                         mainWindow.showAppSettings(qsTr("Comm Links"))
                     }
-
-                    implicitWidth: ScreenTools.defaultFontPixelWidth * 8
                 }
+            }
+
+            QGCLabel {
+                id:   closeProgressLabel
+                visible:            closeProgressTracker.running && closeProgressTracker.progressLabel
+                Layout.fillWidth:   true
+                horizontalAlignment: Text.AlignRight
+                text: qsTr("Automatically close in %1 seconds").arg(closeProgressTracker.progressLabel)
             }
         }
 

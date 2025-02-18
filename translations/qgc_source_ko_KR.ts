@@ -11098,6 +11098,11 @@ Click Ok to start the auto-tuning process.
         <source>Link Management</source>
         <translation>연결 관리</translation>
     </message>
+    <message>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="134"/>
+        <source>Automatically close in %1 seconds</source>
+        <translation>%1초 후에 팝업이 닫힙니다</translation>
+    </message>
 </context>
 <context>
     <name>WidgetControlPanel</name>
@@ -12628,7 +12633,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
         <source>Cloud Login [%1]</source>
-        <translation>클라우드 로그인 [%1]</translation>
+        <translation>클라우드 서버 [%1]</translation>
     </message>
     <message>
         <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
@@ -12674,6 +12679,11 @@ Is this really what you want?</source>
         <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
         <source>Connected</source>
         <translation>연결됨</translation>
+    </message>
+    <message>
+        <location filename="../src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml" line="92"/>
+        <source>Automatically close in %1 seconds</source>
+        <translation>%1초 후에 팝업이 닫힙니다</translation>
     </message>
 </context>
 

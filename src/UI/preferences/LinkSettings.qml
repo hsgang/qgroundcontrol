@@ -23,6 +23,7 @@ import SiYi.Object
 
 SettingsPage {
     property var    _linkManager: QGroundControl.linkManager
+    property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property real   _comboBoxPreferredWidth:    ScreenTools.defaultFontPixelWidth * 15
     property real   _layoutWidth:   ScreenTools.defaultFontPixelWidth * 42
     property var    _autoConnectSettings:    QGroundControl.settingsManager.autoConnectSettings
@@ -38,6 +39,113 @@ SettingsPage {
                 var editingConfig = _linkManager.createConfiguration(ScreenTools.isSerialAvailable ? LinkConfiguration.TypeSerial : LinkConfiguration.TypeUdp, "")
                 linkDialogComponent.createObject(mainWindow, { editingConfig: editingConfig, originalConfig: null }).open()
             }
+        }
+    }    
+
+    SettingsGroupLayout {
+        heading: qsTr("Added Link List")
+
+        Repeater {
+            id: linkRepeater
+            model: _linkManager.linkConfigurations
+
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: ScreenTools.defaultFontPixelWidth / 2
+
+                RowLayout {
+                    Layout.fillWidth:   true
+                    visible:            !object.dynamic
+
+                    QGCLabel {
+                        Layout.fillWidth:   true
+                        text:               object.name
+                    }
+                    QGCColoredImage {
+                        height:                 ScreenTools.minTouchPixels
+                        width:                  height
+                        sourceSize.height:      height
+                        fillMode:               Image.PreserveAspectFit
+                        mipmap:                 true
+                        smooth:                 true
+                        color:                  qgcPalEdit.text
+                        source:                 "/res/pencil.svg"
+                        enabled:                !object.link
+
+                        QGCPalette {
+                            id: qgcPalEdit
+                            colorGroupEnabled: parent.enabled
+                        }
+
+                        QGCMouseArea {
+                            fillItem: parent
+                            onClicked: {
+                                var editingConfig = _linkManager.startConfigurationEditing(object)
+                                linkDialogComponent.createObject(mainWindow, { editingConfig: editingConfig, originalConfig: object }).open()
+                            }
+                        }
+                    }
+                    QGCColoredImage {
+                        height:                 ScreenTools.minTouchPixels
+                        width:                  height
+                        sourceSize.height:      height
+                        fillMode:               Image.PreserveAspectFit
+                        mipmap:                 true
+                        smooth:                 true
+                        color:                  qgcPalDelete.text
+                        source:                 "/res/TrashDelete.svg"
+                        enabled:                !object.link
+
+                        QGCPalette {
+                            id: qgcPalDelete
+                            colorGroupEnabled: parent.enabled
+                        }
+
+                        QGCMouseArea {
+                            fillItem:   parent
+                            onClicked:  mainWindow.showMessageDialog(
+                                            qsTr("Delete Link"),
+                                            qsTr("Are you sure you want to delete '%1'?").arg(object.name),
+                                            Dialog.Ok | Dialog.Cancel,
+                                            function () {
+                                                _linkManager.removeConfiguration(object)
+                                            })
+                        }
+                    }
+                    QGCButton {
+                        text:       object.link ? qsTr("Disconnect") : qsTr("Connect")
+                        onClicked: {
+                            if (object.link) {
+                                object.link.disconnect()
+                            } else {
+                                _linkManager.createConnectedLink(object)
+                            }
+                        }
+                    }
+                }
+
+                Rectangle {
+                    visible:    object.link && _activeVehicle && _activeVehicle.loadProgress > 0
+                    width:      parent.width
+                    height:     ScreenTools.defaultFontPixelHeight / 4
+                    color:      qgcPal.windowShade
+                    radius:     height / 2
+
+                    Rectangle {
+                        anchors.left: parent.left
+                        height:         parent.height
+                        anchors.verticalCenter: parent.verticalCenter
+                        width:          _activeVehicle ? _activeVehicle.loadProgress * parent.width : 0
+                        color:          qgcPal.colorGreen
+                        radius:         height / 2
+                    }
+                }
+            }
+        }
+
+        QGCLabel {
+            visible: linkRepeater.count < 1
+            text: qsTr("No Links Configured")
         }
     }
 
@@ -101,148 +209,6 @@ SettingsPage {
             fact: QGroundControl.settingsManager.autoConnectSettings.nmeaUdpPort
         }
     }
-
-    SettingsGroupLayout {
-        heading: qsTr("Added Link List")
-
-        Repeater {
-            id: linkRepeater
-            model: _linkManager.linkConfigurations
-
-            RowLayout {
-                Layout.fillWidth:   true
-                visible:            !object.dynamic
-
-                QGCLabel {
-                    Layout.fillWidth:   true
-                    text:               object.name
-                }
-                QGCColoredImage {
-                    height:                 ScreenTools.minTouchPixels
-                    width:                  height
-                    sourceSize.height:      height
-                    fillMode:               Image.PreserveAspectFit
-                    mipmap:                 true
-                    smooth:                 true
-                    color:                  qgcPalEdit.text
-                    source:                 "/res/pencil.svg"
-                    enabled:                !object.link
-
-                    QGCPalette {
-                        id: qgcPalEdit
-                        colorGroupEnabled: parent.enabled
-                    }
-
-                    QGCMouseArea {
-                        fillItem: parent
-                        onClicked: {
-                            var editingConfig = _linkManager.startConfigurationEditing(object)
-                            linkDialogComponent.createObject(mainWindow, { editingConfig: editingConfig, originalConfig: object }).open()
-                        }
-                    }
-                }
-                QGCColoredImage {
-                    height:                 ScreenTools.minTouchPixels
-                    width:                  height
-                    sourceSize.height:      height
-                    fillMode:               Image.PreserveAspectFit
-                    mipmap:                 true
-                    smooth:                 true
-                    color:                  qgcPalDelete.text
-                    source:                 "/res/TrashDelete.svg"
-                    enabled:                !object.link
-
-                    QGCPalette {
-                        id: qgcPalDelete
-                        colorGroupEnabled: parent.enabled
-                    }
-
-                    QGCMouseArea {
-                        fillItem:   parent
-                        onClicked:  mainWindow.showMessageDialog(
-                                        qsTr("Delete Link"), 
-                                        qsTr("Are you sure you want to delete '%1'?").arg(object.name), 
-                                        Dialog.Ok | Dialog.Cancel, 
-                                        function () {
-                                            _linkManager.removeConfiguration(object)
-                                        })
-                    }
-                }
-                QGCButton {
-                    text:       object.link ? qsTr("Disconnect") : qsTr("Connect")
-                    onClicked: {
-                        if (object.link) {
-                            object.link.disconnect()
-                        } else {
-                            _linkManager.createConnectedLink(object)
-                        }
-                    }
-                }
-            }
-        }
-
-        QGCLabel {
-            visible: linkRepeater.count < 1
-            text: qsTr("No Links Configured")
-        }
-    }
-
-    // SettingsGroupLayout {
-    //     heading:    qsTr("Added Link List")
-
-    //     Repeater {
-    //         id: linkRepeater
-    //         model: _linkManager.linkConfigurations
-
-    //         RowLayout {
-    //             Layout.fillWidth:   true
-    //             visible:            !object.dynamic
-
-    //             QGCButton {
-    //                 text:       object.link ? qsTr("Disconnect") : qsTr("Connect")
-    //                 onClicked: {
-    //                     if (object.link) {
-    //                         object.link.disconnect()
-    //                         object.linkChanged()
-    //                     } else {
-    //                         _linkManager.createConnectedLink(object)
-    //                     }
-    //                 }
-    //             }
-
-    //             QGCLabel {
-    //                 Layout.fillWidth:   true
-    //                 text:               object.name
-    //             }
-
-    //             QGCButton {
-    //                 text:       qsTr("Edit") //object.link ? qsTr("Disconnect") : qsTr("Connect")
-    //                 enabled:    !object.link
-    //                 onClicked: {
-    //                     var editingConfig = _linkManager.startConfigurationEditing(object)
-    //                     linkDialogComponent.createObject(mainWindow, { editingConfig: editingConfig, originalConfig: object }).open()
-    //                 }
-    //             }
-
-    //             QGCButton {
-    //                 text:       qsTr("Delete")//object.link ? qsTr("Disconnect") : qsTr("Connect")
-    //                 enabled:    !object.link
-    //                 onClicked:  mainWindow.showMessageDialog(
-    //                                 qsTr("Delete Link"),
-    //                                 qsTr("Are you sure you want to delete '%1'?").arg(object.name),
-    //                                 Dialog.Ok | Dialog.Cancel,
-    //                                 function () {
-    //                                     _linkManager.removeConfiguration(object)
-    //                                 })
-    //             }
-    //         }
-    //     }
-
-    //     QGCLabel {
-    //         visible: linkRepeater.count < 1
-    //         text: qsTr("No Links Configured")
-    //     }
-    // }
 
     SettingsGroupLayout {
         heading:    qsTr("Auto Connect")
