@@ -412,7 +412,7 @@ void SerialLink::_onDisconnected()
 void SerialLink::_onErrorOccurred(const QString &errorString)
 {
     qCWarning(SerialLinkLog) << "Communication error:" << errorString;
-    emit communicationError(tr("Serial Link Error"), tr("Link %1: (Port: %2) %3").arg(_serialConfig->name(), _serialConfig->portName(), errorString));
+    emit communicationError(tr("Link Name : %1\nPort : %2\nError : %3").arg(_serialConfig->name(), _serialConfig->portName(), errorString), tr("Serial Link Error"));
 }
 
 void SerialLink::_onDataReceived(const QByteArray &data)

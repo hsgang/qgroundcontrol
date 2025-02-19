@@ -18132,7 +18132,7 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
 <context>
     <name>TCPConfiguration</name>
     <message>
-        <location filename="../src/comm/TCPLink.h" line="58"/>
+        <location filename="../src/Comms/TCPLink.h" line="58"/>
         <source>TCP Link Settings</source>
         <translation>TCP 링크 설정</translation>
     </message>
@@ -18140,20 +18140,30 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
 <context>
     <name>TCPLink</name>
     <message>
-        <location filename="../src/comm/TCPLink.cc" line="128"/>
-        <location filename="../src/comm/TCPLink.cc" line="142"/>
-        <source>Link Error</source>
-        <translation>링크 오류</translation>
+        <location filename="../src/Comms/TCPLink.cc" line="128"/>
+        <location filename="../src/Comms/TCPLink.cc" line="142"/>
+        <source>TCP Link Error</source>
+        <translation>TCP 연결 오류</translation>
     </message>
     <message>
-        <location filename="../src/comm/TCPLink.cc" line="128"/>
+        <location filename="../src/Comms/TCPLink.cc" line="128"/>
         <source>Error on link %1. Connection failed</source>
-        <translation>링크 %1 오류. 연결에 실패하였습니다</translation>
+        <translation>연결 %1 오류. 연결에 실패하였습니다</translation>
     </message>
     <message>
-        <location filename="../src/comm/TCPLink.cc" line="142"/>
+        <location filename="../src/Comms/TCPLink.cc" line="142"/>
         <source>Error on link %1. Error on socket: %2.</source>
-        <translation>링크 %1 오류. 소켓 %2 오류.</translation>
+        <translation>연결 %1 오류. 소켓 %2 오류.</translation>
+    </message>
+    <message>
+        <location filename="../src/Comms/TCPLink.cc" line="142"/>
+        <source>Connection Failed: %1</source>
+        <translation>연결 실패: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/Comms/TCPLink.cc" line="142"/>
+        <source>Link %1: (Host: %2 Port: %3) %4</source>
+        <translation>링크 %1: (호스트: %2 포트: %3) %4</translation>
     </message>
 </context>
 <context>

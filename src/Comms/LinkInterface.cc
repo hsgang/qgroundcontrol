@@ -140,7 +140,7 @@ void LinkInterface::setSigningSignatureFailure(bool failure)
     if (_signingSignatureFailure != failure) {
         _signingSignatureFailure = failure;
         if (_signingSignatureFailure) {
-            emit communicationError(tr("Signing Failure"), tr("Signing signature mismatch"));
+            emit communicationError(tr("Signing signature mismatch"), tr("Signing Failure"));
         }
     }
 }

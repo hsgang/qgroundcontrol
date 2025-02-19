@@ -51,7 +51,7 @@ signals:
     void bytesSent(LinkInterface *link, const QByteArray &data);
     void connected();
     void disconnected();
-    void communicationError(const QString &title, const QString &error);
+    void communicationError(const QString &error, const QString &title);
 
 protected:
     /// Links are only created by LinkManager so constructor is not public

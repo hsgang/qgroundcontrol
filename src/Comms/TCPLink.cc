@@ -293,7 +293,7 @@ void TCPLink::_onDisconnected()
 void TCPLink::_onErrorOccurred(const QString &errorString)
 {
     qCWarning(TCPLinkLog) << "Communication error:" << errorString;
-    emit communicationError(tr("TCP Link Error"), tr("Link %1: (Host: %2 Port: %3) %4").arg(_tcpConfig->name(), _tcpConfig->host()).arg(_tcpConfig->port()).arg(errorString));
+    emit communicationError(tr("Link Name : %1\nHost : %2\nPort : %3\nError : %4").arg(_tcpConfig->name(), _tcpConfig->host()).arg(_tcpConfig->port()).arg(errorString), tr("TCP Link Error"));
 }
 
 void TCPLink::_onDataReceived(const QByteArray &data)
