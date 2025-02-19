@@ -293,13 +293,15 @@ FirstRunPrompt {
                         spacing:            _margins
                         Repeater {
                             model: QGroundControl.linkManager.linkConfigurations
-                            delegate: QGCButton {
+                            delegate: SettingsButton {
                                 anchors.horizontalCenter:   settingsColumn.horizontalCenter
                                 width:                      ScreenTools.defaultFontPixelWidth * 34
-                                text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
+                                icon.source:                "/InstrumentValueIcons/link.svg"
+                                icon.color:                 object.link ? qgcPal.colorGreen : qgcPal.text
+                                text:                       object.name// + (object.link ? " (" + qsTr("Connected") + ")" : "")
                                 autoExclusive:              true
                                 visible:                    !object.dynamic
-                                onClicked: {
+                                onClicked: {1
                                     checked = true
                                     _currentSelection = object
                                 }
@@ -356,6 +358,15 @@ FirstRunPrompt {
                 Layout.fillWidth:   true
                 horizontalAlignment: Text.AlignRight
                 text: qsTr("Automatically close in %1 seconds").arg(closeProgressTracker.progressLabel)
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        if (closeProgressTracker.running) {
+                            closeProgressTracker.stop()
+                        }
+                    }
+                }
             }
         }
 

@@ -309,6 +309,15 @@ Rectangle {
                         Layout.fillWidth:   true
                         horizontalAlignment: Text.AlignRight
                         text: qsTr("Automatically close in %1 seconds").arg(closeProgressTracker.progressLabel)
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                if (closeProgressTracker.running) {
+                                    closeProgressTracker.stop()
+                                }
+                            }
+                        }
                     }
 
                     Rectangle {
@@ -336,10 +345,12 @@ Rectangle {
                                 spacing:            ScreenTools.defaultFontPixelHeight / 2
                                 Repeater {
                                     model: QGroundControl.linkManager.linkConfigurations
-                                    delegate: QGCButton {
+                                    delegate: SettingsButton {
                                         anchors.horizontalCenter:   settingsColumn.horizontalCenter
-                                        width:                      ScreenTools.defaultFontPixelWidth * 32
-                                        text:                       object.name + (object.link ? " (" + qsTr("Connected") + ")" : "")
+                                        width:                      ScreenTools.defaultFontPixelWidth * 34
+                                        icon.source:                "/InstrumentValueIcons/link.svg"
+                                        icon.color:                 object.link ? qgcPal.colorGreen : qgcPal.text
+                                        text:                       object.name
                                         autoExclusive:              true
                                         visible:                    !object.dynamic
                                         onClicked: {
