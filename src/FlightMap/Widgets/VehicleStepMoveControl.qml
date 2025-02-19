@@ -54,8 +54,10 @@ Rectangle {
     property real   _vx:                    activeVehicle ? activeVehicle.localPosition.vx.rawValue : 0
     property real   _vy:                    activeVehicle ? activeVehicle.localPosition.vy.rawValue : 0
     property real   _vz:                    activeVehicle ? activeVehicle.localPosition.vz.rawValue : 0
-    property bool   _isMoving:              Math.sqrt(Math.pow(_vx,2) + Math.pow(_vy,2) + Math.pow(_vz,2)) > 0.2
+    property bool   _isMoving:              Math.sqrt(Math.pow(_vx,2) + Math.pow(_vy,2) + Math.pow(_vz,2)) > 0.3
     property real   _distance:              activeVehicle ? activeVehicle.distanceSensors.rotationPitch270.rawValue : NaN
+
+    property var    stepValues:             [0.2, 0.5, 1.0, 2.0, 3.0]
 
     MouseArea {
         anchors.fill: parent
@@ -130,7 +132,7 @@ Rectangle {
                 Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 14
 
                 QGCLabel{
-                    text: activeVehicle ? _moveStep + " m" : "no value"
+                    text: activeVehicle ? _moveStep.toFixed(1) + " m" : "no value"
                     font.pointSize: _fontSize
                     Layout.alignment: Qt.AlignRight
                 }
@@ -327,12 +329,14 @@ Rectangle {
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/dots-horizontal-double.svg"
-            text:               "0.5"
+            text:               "STEP"
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
-                _moveStepFact.value = 0.5
+                var index = stepValues.indexOf(_moveStepFact.value);
+                if (index > 0) {
+                    _moveStepFact.value = stepValues[index - 1];
+                }
             }
         }
 
@@ -360,12 +364,14 @@ Rectangle {
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/dots-horizontal-triple.svg"
-            text:               "1.0"
+            text:               "STEP"
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
-                _moveStepFact.value = 1
+                var index = stepValues.indexOf(_moveStepFact.value);
+                if (index !== -1 && index < stepValues.length - 1) {
+                    _moveStepFact.value = stepValues[index + 1];
+                }
             }
         }
     }
