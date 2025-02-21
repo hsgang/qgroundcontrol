@@ -54,8 +54,11 @@ Rectangle {
     property real   _vx:                    activeVehicle ? activeVehicle.localPosition.vx.rawValue : 0
     property real   _vy:                    activeVehicle ? activeVehicle.localPosition.vy.rawValue : 0
     property real   _vz:                    activeVehicle ? activeVehicle.localPosition.vz.rawValue : 0
-    property bool   _isMoving:              Math.sqrt(Math.pow(_vx,2) + Math.pow(_vy,2) + Math.pow(_vz,2)) > 0.3
+    property bool   _isMoving:              Math.sqrt(Math.pow(_vx,2) + Math.pow(_vy,2) + Math.pow(_vz,2)) > 0.5
     property real   _distance:              activeVehicle ? activeVehicle.distanceSensors.rotationPitch270.rawValue : NaN
+    property real   _relAltitude:           activeVehicle ? activeVehicle.altitudeRelative.rawValue : NaN
+
+    property real   _treshHoldAlt : 10.0
 
     property var    stepValues:             [0.2, 0.5, 1.0, 2.0, 3.0]
 
@@ -235,18 +238,34 @@ Rectangle {
         }
 
         QGCColumnButton{
-            id:                 stepAltStop
+            id:                 stepTargetAlt
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle
+            enabled:            activeVehicle && !_isMoving && _distance
             opacity:            enabled ? 1 : 0.4
 
-            iconSource:         "/InstrumentValueIcons/pause.svg"
-            text:               "STOP"
+            iconSource:          _distance ? (_distance >= _treshHoldAlt ? "/InstrumentValueIcons/arrow-thin-down.svg" : "/InstrumentValueIcons/arrow-thin-up.svg") : "/InstrumentValueIcons/pause.svg"
+            text:               _distance ? (_distance >= _treshHoldAlt ? targetAltMin+"M" : targetAltMax+"M") : "NONE"
             font.pointSize:     _fontSize * 0.7
 
+            property real targetAltMin: 3.5
+            property real targetAltMax: 15.0
+
             onClicked: {
-                activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                if(activeVehicle && _distance) {
+                    // var targetMin = 4.5
+                    // var targetMax = 15.0
+                    var altTarget = 0
+                    if( _distance >= _treshHoldAlt ) { // down
+                        altTarget = -(_distance - targetAltMin)
+                        activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
+                    }
+                    else if( _distance < _treshHoldAlt ) { // up
+                        altTarget = (targetAltMax - _relAltitude )
+                        activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
+                    }
+                    console.log(altTarget, _distance, _relAltitude)
+                }
             }
         }
 
@@ -372,6 +391,106 @@ Rectangle {
                 if (index !== -1 && index < stepValues.length - 1) {
                     _moveStepFact.value = stepValues[index + 1];
                 }
+            }
+        }
+
+        // QGCButton{
+        //     id:                 gripperRelease
+        //     //implicitWidth:      _idealWidth
+        //     Layout.fillWidth:   true
+        //     implicitWidth:      _idealWidth
+        //     enabled:            activeVehicle && (_distance && _distance < _treshHoldAlt)
+        //     opacity:            enabled ? 1 : 0.4
+
+        //     Layout.columnSpan:  2
+
+        //     iconSource:         "/res/GripperRelease.svg"
+        //     text:               "화물 열기"
+        //     font.pointSize:     _fontSize * 0.7
+
+        //     onClicked: {
+        //         _activeVehicle.sendGripperAction(0)
+        //     }
+        // }
+
+        DelayButton {
+            id: control
+            checked: false
+            enabled: activeVehicle && (_distance && _distance < _treshHoldAlt)
+            text: qsTr("화물 열기")
+
+            Layout.columnSpan:  2
+            Layout.alignment: Qt.AlignCenter
+
+            delay: 700
+
+            onActivated: {
+                activeVehicle.sendGripperAction(0)
+                control.progress = 0
+            }
+
+            contentItem: Text {
+                text: control.text
+                font: control.font
+                opacity: enabled ? 1.0 : 0.3
+                color: qgcPal.text
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+            }
+
+            background: Rectangle {
+                implicitWidth: _idealWidth * 1.5
+                implicitHeight: _idealWidth * 1.5
+                opacity: enabled ? 1 : 0.3
+                color: control.down ? qgcPal.buttonHighlight : qgcPal.button
+                radius: size / 2
+
+                readonly property real size: Math.min(control.width, control.height)
+                width: size
+                height: size
+                anchors.centerIn: parent
+
+                Canvas {
+                    id: canvas
+                    anchors.fill: parent
+
+                    Connections {
+                        target: control
+                        function onProgressChanged() { canvas.requestPaint(); }
+                    }
+
+                    onPaint: {
+                        var ctx = getContext("2d")
+                        ctx.clearRect(0, 0, width, height)
+                        ctx.strokeStyle = qgcPal.text
+                        ctx.lineWidth = parent.size / 20
+                        ctx.beginPath()
+                        var startAngle = Math.PI / 5 * 3
+                        var endAngle = startAngle + control.progress * Math.PI / 5 * 9
+                        ctx.arc(width / 2, height / 2, width / 2 - ctx.lineWidth / 2 - 2, startAngle, endAngle)
+                        ctx.stroke()
+                    }
+                }
+            }
+        }
+
+        QGCButton{
+            id:                 gripperGrab
+            //implicitWidth:      _idealWidth
+            Layout.fillWidth:   true
+            implicitWidth:      _idealWidth
+            enabled:            activeVehicle
+            opacity:            enabled ? 1 : 0.4
+
+            Layout.columnSpan:  2
+
+            iconSource:         "/res/GripperGrab.svg"
+            text:               "화물 닫기"
+            font.pointSize:     _fontSize * 0.7
+
+            onClicked: {
+                _activeVehicle.sendGripperAction(1)
             }
         }
     }
