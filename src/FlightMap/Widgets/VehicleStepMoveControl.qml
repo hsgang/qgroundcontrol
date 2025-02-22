@@ -258,6 +258,7 @@ Rectangle {
                     var altTarget = 0
                     if( _distance >= _treshHoldAlt ) { // down
                         altTarget = -(_distance - targetAltMin)
+                        activeVehicle.sendCommand(1, 178, 1, 3, 0.7, -1, 0, 0, 0, 0)
                         activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
                     }
                     else if( _distance < _treshHoldAlt ) { // up
