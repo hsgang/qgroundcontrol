@@ -53,7 +53,6 @@ target_link_libraries(APMAutoPilotPlugin
         Settings
         Utilities
         Vehicle
-        VehicleActuators
     PUBLIC
         Qt6::Core
         Qt6::Quick
