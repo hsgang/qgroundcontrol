@@ -10,6 +10,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Effects
 
 import QGroundControl
 import QGroundControl.Palette
@@ -73,24 +74,56 @@ FirstRunPrompt {
                         clip: true
 
                         Image {
+                            id: vehicleImage1
                             source: "/vehicleImage/amp1600.png"
                             fillMode: Image.PreserveAspectFit
                             visible: swipeView.currentIndex === 0
                         }
+                        MultiEffect {
+                            source: vehicleImage1
+                            anchors.fill: vehicleImage1
+                            shadowEnabled: true
+                            shadowBlur: 0.3
+                            shadowColor: qgcPal.text
+                        }
                         Image {
+                            id: vehicleImage2
                             source: "/vehicleImage/amp1200.png"
                             fillMode: Image.PreserveAspectFit
                             visible: swipeView.currentIndex === 1
                         }
+                        MultiEffect {
+                            source: vehicleImage2
+                            anchors.fill: vehicleImage2
+                            shadowEnabled: true
+                            shadowBlur: 0.3
+                            shadowColor: qgcPal.text
+                        }
                         Image {
+                            id: vehicleImage3
                             source: "/vehicleImage/amp1100.png"
                             fillMode: Image.PreserveAspectFit
                             visible: swipeView.currentIndex === 2
                         }
+                        MultiEffect {
+                            source: vehicleImage3
+                            anchors.fill: vehicleImage3
+                            shadowEnabled: true
+                            shadowBlur: 0.3
+                            shadowColor: qgcPal.text
+                        }
                         Image {
+                            id: vehicleImage4
                             source: "/vehicleImage/amp900.png"
                             fillMode: Image.PreserveAspectFit
                             visible: swipeView.currentIndex === 3
+                        }
+                        MultiEffect {
+                            source: vehicleImage4
+                            anchors.fill: vehicleImage4
+                            shadowEnabled: true
+                            shadowBlur: 0.3
+                            shadowColor: qgcPal.text
                         }
                     }
 
