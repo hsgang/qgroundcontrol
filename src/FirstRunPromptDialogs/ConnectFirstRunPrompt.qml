@@ -40,6 +40,36 @@ FirstRunPrompt {
 
     QGCPalette { id: qgcPal }
 
+    on_CurrentSelectionChanged: {
+        console.log(_currentSelection.name, _currentSelection.model, _currentSelection.highLatency)
+
+        if (!_currentSelection || !_currentSelection.model) {
+            vehicleImage0.source = "/qmlimages/amp_logo_white.png"
+            return
+        }
+
+        vehicleImage0.source = ""
+
+        var modelName = _currentSelection.model
+        switch (modelName) {
+        case "AMP1600":
+            vehicleImage0.source = "/vehicleImage/amp1600.png"
+            break
+        case "AMP1150":
+            vehicleImage0.source = "/vehicleImage/amp1200.png"
+            break
+        case "AMP1100":
+            vehicleImage0.source = "/vehicleImage/amp1100.png"
+            break
+        case "AMP850":
+            vehicleImage0.source = "/vehicleImage/amp900.png"
+            break
+        default:
+            vehicleImage0.source = "/qmlimages/amp_logo_white.png"
+            break
+        }
+    }
+
     ProgressTracker {
         id:                     closeProgressTracker
         timeoutSeconds:         5000 * 0.001
@@ -62,79 +92,36 @@ FirstRunPrompt {
                 //Layout.fillWidth:  true
 
                 Rectangle {
-                    Layout.fillWidth:   true
+                    id: imageRect
+                    //Layout.fillWidth:   true
                     width: ScreenTools.defaultFontPixelHeight * 6
                     height: ScreenTools.defaultFontPixelHeight * 6
+                    Layout.alignment: Qt.AlignCenter
                     color: "transparent"
 
-                    SwipeView {
-                        id: swipeView
-                        anchors.fill: parent
-                        interactive: false  // 자동 스와이프를 위해 수동 스와이프 비활성화 (원하면 true로 설정)
-                        clip: true
-
+                    Item {
+                        width: ScreenTools.defaultFontPixelHeight * 6
+                        height: width
+                        //visible: !_currentSelection || _currentSelection.model === "Generic" || !_currentSelection.model
                         Image {
-                            id: vehicleImage1
-                            source: "/vehicleImage/amp1600.png"
+                            id: vehicleImage0
+                            anchors.fill: parent
+                            source: "/qmlimages/amp_logo_white.png"
                             fillMode: Image.PreserveAspectFit
-                            visible: swipeView.currentIndex === 0
                         }
                         MultiEffect {
-                            source: vehicleImage1
-                            anchors.fill: vehicleImage1
+                            source: vehicleImage0
+                            anchors.fill: vehicleImage0
                             shadowEnabled: true
-                            shadowBlur: 0.3
-                            shadowColor: qgcPal.text
-                        }
-                        Image {
-                            id: vehicleImage2
-                            source: "/vehicleImage/amp1200.png"
-                            fillMode: Image.PreserveAspectFit
-                            visible: swipeView.currentIndex === 1
-                        }
-                        MultiEffect {
-                            source: vehicleImage2
-                            anchors.fill: vehicleImage2
-                            shadowEnabled: true
-                            shadowBlur: 0.3
-                            shadowColor: qgcPal.text
-                        }
-                        Image {
-                            id: vehicleImage3
-                            source: "/vehicleImage/amp1100.png"
-                            fillMode: Image.PreserveAspectFit
-                            visible: swipeView.currentIndex === 2
-                        }
-                        MultiEffect {
-                            source: vehicleImage3
-                            anchors.fill: vehicleImage3
-                            shadowEnabled: true
-                            shadowBlur: 0.3
-                            shadowColor: qgcPal.text
-                        }
-                        Image {
-                            id: vehicleImage4
-                            source: "/vehicleImage/amp900.png"
-                            fillMode: Image.PreserveAspectFit
-                            visible: swipeView.currentIndex === 3
-                        }
-                        MultiEffect {
-                            source: vehicleImage4
-                            anchors.fill: vehicleImage4
-                            shadowEnabled: true
-                            shadowBlur: 0.3
-                            shadowColor: qgcPal.text
+                            shadowBlur: 0.3 // _currentSelection ? (_currentSelection.link ? 1.0 : 0.3) : 0.3
+                            shadowColor: qgcPal.text // _currentSelection ? (_currentSelection.link ? qgcPal.colorGreen : qgcPal.text) : qgcPal.text
                         }
                     }
-
-                    Timer {
-                        interval: 3000  // 3초 간격
-                        running: true
-                        repeat: true
-                        onTriggered: {
-                            swipeView.currentIndex = (swipeView.currentIndex + 1) % swipeView.count
-                        }
-                    }
+                    // QGCLabel {
+                    //     text:   _currentSelection ? _currentSelection.model : "NONE"
+                    //     anchors.top:   imageRect.top
+                    //     anchors.right:  imageRect.right
+                    // }
                 }
 
                 QGCLabel {
@@ -390,7 +377,7 @@ FirstRunPrompt {
                 visible:            closeProgressTracker.running && closeProgressTracker.progressLabel
                 Layout.fillWidth:   true
                 horizontalAlignment: Text.AlignRight
-                text: qsTr("Automatically close in %1 seconds").arg(closeProgressTracker.progressLabel)
+                text: "연결되었습니다. " + qsTr("Automatically close in %1 seconds").arg(closeProgressTracker.progressLabel)
 
                 MouseArea {
                     anchors.fill: parent

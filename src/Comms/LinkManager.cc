@@ -289,6 +289,7 @@ void LinkManager::saveLinkConfigurationList()
         settings.setValue(root + "/type", linkConfig->type());
         settings.setValue(root + "/auto", linkConfig->isAutoConnect());
         settings.setValue(root + "/high_latency", linkConfig->isHighLatency());
+        settings.setValue(root + "/model", linkConfig->model());
         linkConfig->saveSettings(settings, root);
     }
 
@@ -368,6 +369,8 @@ void LinkManager::loadLinkConfigurationList()
                 link->setAutoConnect(autoConnect);
                 const bool highLatency = settings.value(root + "/high_latency").toBool();
                 link->setHighLatency(highLatency);
+                const QString model = settings.value(root + "/model").toString();
+                link->setModel(model);
                 link->loadSettings(settings, root);
                 addConfiguration(link);
             }

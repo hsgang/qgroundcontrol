@@ -327,6 +327,21 @@ SettingsPage {
                 }
 
                 LabelledComboBox {
+                    label:                  qsTr("모델")
+                    model:                  ["Generic","AMP1600","AMP1150","AMP1100","AMP850"]
+                    comboBoxPreferredWidth: _comboBoxPreferredWidth
+
+                    Component.onCompleted: {
+                        let index = model.indexOf(editingConfig.model);
+                        comboBox.currentIndex = index !== -1 ? index : 0;
+                    }
+
+                    onActivated: (index) => {
+                        editingConfig.model = model[index]; // 선택된 값 반영
+                    }
+                }
+
+                LabelledComboBox {
                     label:                  qsTr("Type")
                     enabled:                originalConfig == null
                     model:                  _linkManager.linkTypeStrings

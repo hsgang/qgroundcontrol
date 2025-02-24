@@ -38,6 +38,7 @@ LinkConfiguration::LinkConfiguration(const LinkConfiguration *copy, QObject *par
     , _dynamic(copy->isDynamic())
     , _autoConnect(copy->isAutoConnect())
     , _highLatency(copy->isHighLatency())
+    , _model(copy->model())
 {
     // qCDebug(AudioOutputLog) << Q_FUNC_INFO << this;
 
@@ -58,6 +59,7 @@ void LinkConfiguration::copyFrom(const LinkConfiguration *source)
     setDynamic(source->isDynamic());
     setAutoConnect(source->isAutoConnect());
     setHighLatency(source->isHighLatency());
+    setModel(source->model());
 }
 
 LinkConfiguration *LinkConfiguration::createSettings(int type, const QString &name)
@@ -183,5 +185,13 @@ void LinkConfiguration::setHighLatency(bool hl)
     if (hl != _highLatency) {
         _highLatency = hl;
         emit highLatencyChanged();
+    }
+}
+
+void LinkConfiguration::setModel(const QString &model)
+{
+    if (model != _model) {
+        _model = model;
+        emit nameChanged(model);
     }
 }

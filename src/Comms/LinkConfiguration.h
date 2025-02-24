@@ -28,6 +28,7 @@ class LinkConfiguration : public QObject
     Q_PROPERTY(QString          settingsURL     READ settingsURL                            CONSTANT)
     Q_PROPERTY(QString          settingsTitle   READ settingsTitle                          CONSTANT)
     Q_PROPERTY(bool             highLatency     READ isHighLatency  WRITE setHighLatency    NOTIFY highLatencyChanged)
+    Q_PROPERTY(QString          model           READ model          WRITE setModel          NOTIFY modelChanged)
 
 public:
     LinkConfiguration(const QString &name, QObject *parent = nullptr);
@@ -58,6 +59,9 @@ public:
 
     /// Set if this is this an High Latency configuration.
     void setHighLatency(bool hl = false);
+
+    QString model() const { return _model; }
+    void setModel(const QString &model);
 
     /// Copy instance data, When manipulating data, you create a copy of the configuration using the copy constructor,
     /// edit it and then transfer its content to the original using this method.
@@ -124,6 +128,7 @@ signals:
     void dynamicChanged();
     void autoConnectChanged();
     void highLatencyChanged();
+    void modelChanged();
 
 protected:
     std::weak_ptr<LinkInterface> _link; ///< Link currently using this configuration (if any)
@@ -133,6 +138,7 @@ private:
     bool _dynamic = false;     ///< A connection added automatically and not persistent (unless it's edited).
     bool _autoConnect = false; ///< This connection is started automatically at boot
     bool _highLatency = false;
+    QString _model;
 };
 
 typedef std::shared_ptr<LinkConfiguration> SharedLinkConfigurationPtr;
