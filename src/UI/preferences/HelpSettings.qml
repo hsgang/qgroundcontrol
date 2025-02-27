@@ -62,12 +62,12 @@ Rectangle {
                 onLinkActivated:    (link) => Qt.openUrlExternally(link)
             }
 
-            QGCLabel { text: qsTr("Download Releases") }
-            QGCLabel {
-                linkColor:          qgcPal.text
-                text:               "<a href=\"https://github.com/hsgang/qgroundcontrol/releases\">https://github.com</a>"
-                onLinkActivated:    (link) => Qt.openUrlExternally(link)
-            }
+            // QGCLabel { text: qsTr("Download Releases") }
+            // QGCLabel {
+            //     linkColor:          qgcPal.text
+            //     text:               "<a href=\"https://github.com/hsgang/qgroundcontrol/releases\">https://github.com</a>"
+            //     onLinkActivated:    (link) => Qt.openUrlExternally(link)
+            // }
         }
     }
 }
