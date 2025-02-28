@@ -33,8 +33,7 @@ GridLayout {
         Layout.preferredWidth:  _secondColumnWidth
         text:                   subEditConfig.host
 
-        onTextChanged: {
-            //subEditConfig.hostChanged()
+        onEditingFinished: {
             saveSettings()
         }
     }
@@ -46,8 +45,7 @@ GridLayout {
         text:                   subEditConfig.port.toString()
         inputMethodHints:       Qt.ImhFormattedNumbersOnly
 
-        onTextChanged: {
-            //subEditConfig.portChanged()
+        onEditingFinished: {
             saveSettings()
         }
     }
