@@ -62,32 +62,27 @@
 {
     "name":             "extValue1",
     "shortDesc": "Extension Value1",
-    "type":             "int16",
-    "decimalPlaces":    0
+    "type":             "int16"
 },
 {
     "name":             "extValue2",
     "shortDesc": "Extension Value2",
-    "type":             "int16",
-    "decimalPlaces":    0
+    "type":             "int16"
 },
 {
     "name":             "extValue3",
     "shortDesc": "Extension Value3",
-    "type":             "int16",
-    "decimalPlaces":    0
+    "type":             "int16"
 },
 {
     "name":             "extValue4",
     "shortDesc": "Extension Value4",
-    "type":             "int16",
-    "decimalPlaces":    0
+    "type":             "int16"
 },
 {
     "name":             "extValue5",
     "shortDesc": "Extension Value5",
-    "type":             "int16",
-    "decimalPlaces":    0
+    "type":             "int16"
 },
 {
     "name":             "windDir",

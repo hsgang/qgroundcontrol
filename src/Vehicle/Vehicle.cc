@@ -3839,12 +3839,17 @@ void Vehicle::_initializeCustomLog()
     customLogFactValue.append(",Datetime");
     customLogFactValue.append(",Latitude");
     customLogFactValue.append(",Longitude");
+    customLogFactValue.append(",Heading");
     customLogFactValue.append(",Altitude");
     customLogFactValue.append(",Temperature");
     customLogFactValue.append(",Humidity");
     customLogFactValue.append(",Pressure");
     customLogFactValue.append(",WindDir");
     customLogFactValue.append(",WindSpd");
+    customLogFactValue.append(",Ext1");
+    customLogFactValue.append(",Ext2");
+    customLogFactValue.append(",Ext3");
+    customLogFactValue.append(",Ext4");
     customLogFactValue.append("\r\n");
 
     customLogStream << customLogFactValue;
@@ -3870,12 +3875,18 @@ void Vehicle::_writeCustomLogLine()
         QString dateTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMddhhmmss"));
         QString lat = getFactGroup("gps")->getFact("lat")->cookedValueString();
         QString lon = getFactGroup("gps")->getFact("lon")->cookedValueString();
+        QString yaw = getFact("heading")->cookedValueString();
         QString alt = getFact("altitudeRelative")->cookedValueString();
         QString temp = getFactGroup("atmosphericSensor")->getFact("Temperature")->cookedValueString();
         QString humi = getFactGroup("atmosphericSensor")->getFact("Humidity")->cookedValueString();
         QString baro = getFactGroup("atmosphericSensor")->getFact("Pressure")->cookedValueString();
         QString windDir = getFactGroup("atmosphericSensor")->getFact("WindDir")->cookedValueString();
         QString windSpd = getFactGroup("atmosphericSensor")->getFact("WindSpd")->cookedValueString();
+        QString ext1 = getFactGroup("atmosphericSensor")->getFact("extValue1")->cookedValueString();
+        QString ext2 = getFactGroup("atmosphericSensor")->getFact("extValue2")->cookedValueString();
+        QString ext3 = getFactGroup("atmosphericSensor")->getFact("extValue3")->cookedValueString();
+        QString ext4 = getFactGroup("atmosphericSensor")->getFact("extValue4")->cookedValueString();
+
         // QString GroundSpeed = getFact("groundSpeed")->cookedValueString();
         // QString ClimbRate = getFact("climbRate")->cookedValueString();
         // QString Roll = getFact("roll")->cookedValueString();
@@ -3890,12 +3901,17 @@ void Vehicle::_writeCustomLogLine()
         customLogFactValue.append("," + dateTime);
         customLogFactValue.append("," + lat);
         customLogFactValue.append("," + lon);
+        customLogFactValue.append("," + yaw);
         customLogFactValue.append("," + alt);
         customLogFactValue.append("," + temp);
         customLogFactValue.append("," + humi);
         customLogFactValue.append("," + baro);
         customLogFactValue.append("," + windDir);
         customLogFactValue.append("," + windSpd);
+        customLogFactValue.append("," + ext1);
+        customLogFactValue.append("," + ext2);
+        customLogFactValue.append("," + ext3);
+        customLogFactValue.append("," + ext4);
         // jsonFactValue.append("\t\"Speed\": " + GroundSpeed + ",\r\n");
         // jsonFactValue.append("\t\"AscSpd\": " + ClimbRate + ",\r\n");
         // jsonFactValue.append("\t\"Roll\": " + Roll + ",\r\n");

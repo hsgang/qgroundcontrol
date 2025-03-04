@@ -444,9 +444,13 @@ FlightMap {
         switch ( valueSource ) {
             case 0 : return _activeVehicle.altitudeRelative.rawValue
                 break
-            case 1 : return _activeVehicle.roll.rawValue
+            case 1 : return _activeVehicle.atmosphericSensor.extValue1.rawValue
                 break
-            case 2 : return _activeVehicle.pitch.rawValue
+            case 2 : return _activeVehicle.atmosphericSensor.extValue2.rawValue
+                break
+            case 3 : return _activeVehicle.atmosphericSensor.extValue3.rawValue
+                break
+            case 4 : return _activeVehicle.atmosphericSensor.extValue4.rawValue
                 break
             default : return _activeVehicle.altitudeRelative.rawValue
         }

@@ -7,8 +7,8 @@
     "name":             "valueSource",
     "shortDesc": "valueSource",
     "type":             "uint32",
-    "enumStrings":      "Altitude,roll,pitch",
-    "enumValues":       "0,1,2",
+    "enumStrings":      "Altitude,ExtValue1,ExtValue2,ExtValue3,ExtValue4",
+    "enumValues":       "0,1,2,3,4",
     "default":         0
 },
 {
@@ -46,28 +46,28 @@
     "shortDesc":     "value1",
     "type":                 "float",
     "decimalPlaces":        2,
-    "default":         10
+    "default":         90
 },
 {
     "name":                 "value2",
     "shortDesc":     "value2",
     "type":                 "float",
     "decimalPlaces":        2,
-    "default":         20
+    "default":         100
 },
 {
     "name":                 "value3",
     "shortDesc":     "value3",
     "type":                 "float",
     "decimalPlaces":        2,
-    "default":         30
+    "default":         120
 },
 {
     "name":                 "value4",
     "shortDesc":     "value4",
     "type":                 "float",
     "decimalPlaces":        2,
-    "default":         40
+    "default":         200
 },
 {
     "name":                 "gridSize",

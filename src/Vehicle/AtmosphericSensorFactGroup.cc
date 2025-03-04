@@ -235,6 +235,19 @@ void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
             status()->setRawValue(tunnel.payload_type);
             break;
         }
+        case 301: {
+            // sid 방사능 데이터 특수 케이스
+            struct sensor_data32_Payload tPs;
+
+            memcpy(&tPs, &tunnel.payload, sizeof(tPs));
+
+            int16_t extValue4Raw  = tPs.extValue4Raw;
+
+            if(extValue4Raw)    {extValue4()->setRawValue(extValue4Raw);}
+
+            status()->setRawValue(tunnel.payload_type);
+            break;
+        }
     }
 }
 
