@@ -140,6 +140,7 @@ MAVLinkChart                            1.0 MAVLinkChart.qml
 ComponentLabelValueRow                  1.0 ComponentLabelValueRow.qml
 WidgetControlPanel                      1.0 WidgetControlPanel.qml
 ValueSlider                             1.0 ValueSlider.qml
+VehicleMessageList                      1.0 VehicleMessageList.qml
 VehicleRotationCal                      1.0 VehicleRotationCal.qml
 VehicleSummaryRow                       1.0 VehicleSummaryRow.qml
 ProgressTracker                         1.0 ProgressTracker.qml

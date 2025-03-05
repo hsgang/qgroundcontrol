@@ -24,7 +24,7 @@ set(QGC_NSIS_INSTALLER_PARAMETERS
     /DAPPNAME=MissionNavigator
     /DEXENAME=MissionNavigator
     /DORGNAME=org.mavlink.MissionNavigator
-    /DDESTDIR=${CMAKE_BINARY_DIR}/staging
+    /DDESTDIR=${CMAKE_INSTALL_PREFIX}
     /NOCD
     "/XOutFile ${QGC_INSTALLER_OUT}"
     ${QGC_NSIS_INSTALLER_SCRIPT}
