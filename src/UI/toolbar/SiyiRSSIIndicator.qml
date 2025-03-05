@@ -48,10 +48,9 @@ Item {
                 anchors.left:       parent.left
                 width:              parent.width / 2
                 height:             width
-                sourceSize.height:  height
                 source:             "/qmlimages/TelemRSSI.svg"
                 fillMode:           Image.PreserveAspectFit
-                color:              transmitter.signalQuality > 10 ? qgcPal.buttonText : qgcPal.colorOrange
+                color:              qgcPal.text
             }
         }
 

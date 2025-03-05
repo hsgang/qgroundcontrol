@@ -29,25 +29,46 @@ Item {
 
     QGCPalette { id: qgcPal }
 
-    function getIcon() {
-        if (percent < 20)
-            return "/qmlimages/Signal0.svg"
-        if (percent < 40)
-            return "/qmlimages/Signal20.svg"
-        if (percent < 60)
-            return "/qmlimages/Signal40.svg"
-        if (percent < 80)
-            return "/qmlimages/Signal60.svg"
-        if (percent < 90)
-            return "/qmlimages/Signal80.svg"
-        return "/qmlimages/Signal100.svg"
+    Row {
+        width:  parent.width
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+        spacing: 2
+        Rectangle {
+            anchors.bottom: parent.bottom
+            height: parent.height * 0.2
+            width: signalRoot.width / 5 - parent.spacing
+            color: percent > 10 ? qgcPal.text : qgcPal.colorRed
+            radius: width / 3
+        }
+        Rectangle {
+            anchors.bottom: parent.bottom
+            height: parent.height * 0.4
+            width: signalRoot.width / 5 - parent.spacing
+            color: percent > 30 ? qgcPal.text : Qt.rgba(qgcPal.colorGrey.r, qgcPal.colorGrey.g, qgcPal.colorGrey.b, 0.6)
+            radius: width / 3
+        }
+        Rectangle {
+            anchors.bottom: parent.bottom
+            height: parent.height * 0.6
+            width: signalRoot.width / 5 - parent.spacing
+            color: percent > 50 ? qgcPal.text : Qt.rgba(qgcPal.colorGrey.r, qgcPal.colorGrey.g, qgcPal.colorGrey.b, 0.6)
+            radius: width / 3
+        }
+        Rectangle {
+            anchors.bottom: parent.bottom
+            height: parent.height * 0.8
+            width: signalRoot.width / 5 - parent.spacing
+            color: percent > 70 ? qgcPal.text : Qt.rgba(qgcPal.colorGrey.r, qgcPal.colorGrey.g, qgcPal.colorGrey.b, 0.6)
+            radius: width / 3
+        }
+        Rectangle {
+            anchors.bottom: parent.bottom
+            height: parent.height
+            width: signalRoot.width / 5 - parent.spacing
+            color: percent > 90 ? qgcPal.text : Qt.rgba(qgcPal.colorGrey.r, qgcPal.colorGrey.g, qgcPal.colorGrey.b, 0.6)
+            radius: width / 3
+        }
     }
 
-    QGCColoredImage {
-        source:             getIcon()
-        fillMode:           Image.PreserveAspectFit
-        anchors.fill:       parent
-        color:              qgcPal.buttonText
-        sourceSize.height:  size
-    }
 }

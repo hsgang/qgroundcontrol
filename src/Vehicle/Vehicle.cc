@@ -1975,11 +1975,11 @@ void Vehicle::_remoteControlRSSIChanged(uint8_t rssi)
     if(_rcRSSIstore == 255.) {
         _rcRSSIstore = (double)rssi;
     }
-    // Low pass to git rid of jitter
+    // Low pass to get rid of jitter
     _rcRSSIstore = (_rcRSSIstore * 0.9f) + ((float)rssi * 0.1);
     uint8_t filteredRSSI = (uint8_t)ceil(_rcRSSIstore);
     if(_rcRSSIstore < 0.1) {
-        filteredRSSI = 0;
+        filteredRSSI = 1;
     }
     if(_rcRSSI != filteredRSSI) {
         _rcRSSI = filteredRSSI;

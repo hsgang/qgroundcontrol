@@ -193,7 +193,6 @@
         <file alias="PlanCreator/SurveyPlanCreator.png">src/MissionManager/SurveyPlanCreator.png</file>
         <file alias="arrow-down.png">src/QmlControls/arrow-down.png</file>
         <file alias="checkbox-check.svg">src/QmlControls/checkbox-check.svg</file>
-        <file alias="VehicleSummaryIcon.png">src/VehicleSetup/VehicleSummaryIcon.png</file>
         <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Images/city_3d_map_icon.svg</file>
         <file alias="Armed.svg">src/UI/toolbar/Images/Armed.svg</file>
         <file alias="Battery.svg">src/UI/toolbar/Images/Battery.svg</file>

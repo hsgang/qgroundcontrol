@@ -76,8 +76,7 @@ Item {
                 sourceSize.height:  height
                 source:             "/qmlimages/RC.svg"
                 fillMode:           Image.PreserveAspectFit
-                //opacity:            _rcRSSIAvailable ? 1 : 0.5
-                color:              _communicationLost ? qgcPal.colorGrey : ((_activeVehicle && _rcRSSIAvailable && _activeVehicle.rcRSSI >= 30) ? qgcPal.buttonText : qgcPal.colorOrange)
+                color:              qgcPal.text
             }
         }
 

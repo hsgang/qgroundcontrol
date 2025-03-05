@@ -18,6 +18,7 @@
         <file alias="TelemetryRSSIIndicator.qml">src/UI/toolbar/TelemetryRSSIIndicator.qml</file>
         <file alias="VehicleGPSIndicator.qml">src/UI/toolbar/VehicleGPSIndicator.qml</file>
         <file alias="VehicleIndicator.qml">src/UI/toolbar/VehicleIndicator.qml</file>
+        <file alias="MessageIndicator.qml">src/UI/toolbar/MessageIndicator.qml</file>
     </qresource>
     <qresource prefix="/checklists">
         <file alias="DefaultChecklist.qml">src/FlightDisplay/DefaultChecklist.qml</file>
@@ -37,7 +38,6 @@
         <file alias="CorridorScanEditor.qml">src/PlanView/CorridorScanEditor.qml</file>
         <file alias="RemoteIDSettings.qml">src/UI/preferences/RemoteIDSettings.qml</file>
         <file alias="ESP8266Component.qml">src/AutoPilotPlugins/Common/ESP8266Component.qml</file>
-        <file alias="FirmwareUpgrade.qml">src/VehicleSetup/FirmwareUpgrade.qml</file>
         <file alias="FirmwareUpgrade.qml">src/Vehicle/VehicleSetup/FirmwareUpgrade.qml</file>
         <file alias="QGroundControl/FlightDisplay/QGCVideoBackground.qml">src/FlightDisplay/QGCVideoBackground.qml</file>
         <file alias="FlightDisplayViewDummy.qml">src/FlightDisplay/FlightDisplayViewDummy.qml</file>
@@ -487,16 +487,6 @@
         <file alias="QGroundControl/Controls/SignalStrength.qml">src/UI/toolbar/SignalStrength.qml</file>
         <file alias="QGroundControl/Controls/VehicleIndicatorPage.qml">src/UI/toolbar/VehicleIndicatorPage.qml</file>
         <file alias="QGroundControl/Controls/WidgetControlPanel.qml">src/UI/toolbar/WidgetControlPanel.qml</file>
-        <file alias="FirmwareUpgrade.qml">src/VehicleSetup/FirmwareUpgrade.qml</file>
-        <file alias="JoystickConfig.qml">src/VehicleSetup/JoystickConfig.qml</file>
-        <file alias="JoystickConfigAdvanced.qml">src/VehicleSetup/JoystickConfigAdvanced.qml</file>
-        <file alias="JoystickConfigButtons.qml">src/VehicleSetup/JoystickConfigButtons.qml</file>
-        <file alias="JoystickConfigCalibration.qml">src/VehicleSetup/JoystickConfigCalibration.qml</file>
-        <file alias="JoystickConfigGeneral.qml">src/VehicleSetup/JoystickConfigGeneral.qml</file>
-        <file alias="OpticalFlowSensor.qml">src/VehicleSetup/OpticalFlowSensor.qml</file>
-        <file alias="SetupParameterEditor.qml">src/VehicleSetup/SetupParameterEditor.qml</file>
-        <file alias="SetupView.qml">src/VehicleSetup/SetupView.qml</file>
-        <file alias="VehicleSummary.qml">src/VehicleSetup/VehicleSummary.qml</file>
         <file alias="Viewer3D/Models3D/Drones/Djif450/DroneModel_BLDC_1/DroneModel_BLDC_1.qml">src/Viewer3D/Viewer3DQml/Drones/Djif450/DroneModel_BLDC_1/DroneModel_BLDC_1.qml</file>
         <file alias="Viewer3D/Models3D/Drones/Djif450/DroneModel_BLDC_1/node.mesh">src/Viewer3D/Viewer3DQml/Drones/Djif450/DroneModel_BLDC_1/node.mesh</file>
         <file alias="Viewer3D/Models3D/Drones/Djif450/DroneModel_BLDC_2/DroneModel_BLDC_2.qml">src/Viewer3D/Viewer3DQml/Drones/Djif450/DroneModel_BLDC_2/DroneModel_BLDC_2.qml</file>
