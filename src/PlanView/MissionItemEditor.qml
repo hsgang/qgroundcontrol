@@ -181,6 +181,17 @@ Rectangle {
                 ColumnLayout {
                     spacing: ScreenTools.defaultFontPixelHeight / 2
 
+                    QGCLabel {
+                        text:       qsTr("Item #%1").arg(missionItem.sequenceNumber)
+                        //enabled:    false
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth:       true
+                        Layout.preferredHeight: 1
+                        color:                  qgcPal.groupBorder
+                    }
+
                     QGCButton {
                         Layout.fillWidth:   true
                         text:               qsTr("Move to vehicle position")
@@ -244,6 +255,21 @@ Rectangle {
                         Layout.fillWidth:       true
                         Layout.preferredHeight: 1
                         color:                  qgcPal.groupBorder
+                    }                                        
+
+                    QGCButton {
+                        Layout.fillWidth:   true
+                        text:           qsTr("#%1 Item Delete").arg(missionItem.sequenceNumber)
+                        onClicked: {
+                            hamburgerMenuDropPanel.close()
+                            remove()
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth:       true
+                        Layout.preferredHeight: 1
+                        color:                  qgcPal.groupBorder
                     }
 
                     QGCCheckBoxSlider {
@@ -262,17 +288,6 @@ Rectangle {
                             }
                             hamburgerMenuDropPanel.close()
                         }
-                    }
-
-                    Rectangle {
-                        Layout.fillWidth:       true
-                        Layout.preferredHeight: 1
-                        color:                  qgcPal.groupBorder
-                    }
-
-                    QGCLabel { 
-                        text:       qsTr("Item #%1").arg(missionItem.sequenceNumber) 
-                        enabled:    false
                     }
                 }
             }
