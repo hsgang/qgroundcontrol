@@ -641,6 +641,9 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_RESPONSE_EVENT_ERROR:
         _eventHandler(message.compid).handleEvents(message);
         break;
+    case MAVLINK_MSG_ID_COMMAND_LONG:
+        _handleCommandLong(message);
+        break;
 
     case MAVLINK_MSG_ID_SERIAL_CONTROL:
     {
@@ -1356,6 +1359,28 @@ void Vehicle::setEventsMetadata(uint8_t compid, const QString& metadataJsonFileN
     sendMavCommand(_defaultComponentId,
                    MAV_CMD_RUN_PREARM_CHECKS,
                    false);
+}
+
+void Vehicle::_handleCommandRequestConfirmation(const mavlink_command_long_t commandLong)
+{
+    emit requestConfirmationReceived(commandLong.param1, commandLong.param2, commandLong.param3);
+}
+
+void Vehicle::_handleCommandLong(mavlink_message_t& message)
+{
+    mavlink_command_long_t commandLong;
+
+    mavlink_msg_command_long_decode(&message, &commandLong);
+
+    if (commandLong.target_system != MAVLinkProtocol::instance()->getSystemId()) {
+        return;
+    }
+
+    if (commandLong.command == MAV_CMD_USER_1) {
+        _handleCommandRequestConfirmation(commandLong);
+    }
+
+    qCDebug(VehicleLog) << "_handleCommandLong : " << commandLong.command;
 }
 
 void Vehicle::setActuatorsMetadata([[maybe_unused]] uint8_t compid,

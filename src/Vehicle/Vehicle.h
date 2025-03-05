@@ -1039,6 +1039,7 @@ private:
     void _handleObstacleDistance        (const mavlink_message_t& message);
     void _handleFenceStatus             (const mavlink_message_t& message);
     void _handleEvent(uint8_t comp_id, std::unique_ptr<events::parser::ParsedEvent> event);
+    void _handleCommandLong             (mavlink_message_t& message);
     // ArduPilot dialect messages
 #if !defined(QGC_NO_ARDUPILOT_DIALECT)
     void _handleCameraFeedback          (const mavlink_message_t& message);
@@ -1499,6 +1500,16 @@ private:
     void _createMAVLinkLogManager();
 
     MAVLinkLogManager *_mavlinkLogManager = nullptr;
+
+/*---------------------------------------------------------------------------*/
+/*===========================================================================*/
+/*                         MAVLink Command Request Handler                   */
+/*===========================================================================*/
+private:
+    void _handleCommandRequestConfirmation(const mavlink_command_long_t commandLong);
+
+signals:
+    void requestConfirmationReceived(int customCmd, int show, int tagId);
 
 /*---------------------------------------------------------------------------*/
 };

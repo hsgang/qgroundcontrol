@@ -167,6 +167,14 @@ Item {
         utmspSliderTrigger:         utmspActTrigger
     }
 
+    RequestConfirmPopup {
+        id:                         requestConfirmPopup
+        anchors.margins:            _toolsMargin * 2
+        anchors.top:                telemetryPanel.visible ? telemetryPanel.bottom : parent.top
+        anchors.horizontalCenter:   parent.horizontalCenter
+        z:                          QGroundControl.zOrderTopMost
+    }
+
     //-- Virtual Joystick
     Loader {
         id:                         virtualJoystickMultiTouch

@@ -85,3 +85,4 @@ TerrainProgress                 1.0 TerrainProgress.qml
 VehicleWarnings                 1.0 VehicleWarnings.qml
 FlyViewGridSettings             1.0 FlyViewGridSettings.qml
 VideoLandingGuideOverlay        1.0 VideoLandingGuideOverlay.qml
+RequestConfirmPopup             1.0 RequestConfirmPopup.qml
