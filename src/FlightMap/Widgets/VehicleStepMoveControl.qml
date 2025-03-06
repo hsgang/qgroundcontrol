@@ -57,10 +57,28 @@ Rectangle {
     property bool   _isMoving:              Math.sqrt(Math.pow(_vx,2) + Math.pow(_vy,2) + Math.pow(_vz,2)) > 0.5
     property real   _distance:              activeVehicle ? activeVehicle.distanceSensors.rotationPitch270.rawValue : NaN
     property real   _relAltitude:           activeVehicle ? activeVehicle.altitudeRelative.rawValue : NaN
+    property bool   _isCustomCommandEnabled: activeVehicle ? activeVehicle.isCustomCommandEnabled : false
 
     property real   _treshHoldAlt : 10.0
-
     property var    stepValues:             [0.2, 0.5, 1.0, 2.0, 3.0]
+    property int    receivedTagId: 0
+
+    QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
+
+    Connections {
+        target: activeVehicle
+        onRequestConfirmationReceived: (customCmd, show, tagId) => {
+            if (customCmd !== 1) {
+                return
+            }
+            receivedTagId = tagId
+            // if(show > 0) {
+            //     control.visible = true
+            // } else if (show === 0) {
+            //     control.visible = false
+            // }
+        }
+    }
 
     MouseArea {
         anchors.fill: parent
@@ -414,84 +432,123 @@ Rectangle {
         //     }
         // }
 
-        DelayButton {
-            id: control
-            checked: false
-            enabled: activeVehicle && (_distance && _distance < _treshHoldAlt)
-            text: qsTr("화물 열기")
+        // DelayButton {
+        //     id: control
+        //     checked: false
+        //     enabled: activeVehicle && (_distance && _distance < _treshHoldAlt)
+        //     text: qsTr("화물 열기")
 
-            Layout.columnSpan:  2
-            Layout.alignment: Qt.AlignCenter
+        //     //Layout.columnSpan:  2
+        //     Layout.alignment: Qt.AlignCenter
+        //     Layout.fillWidth: true
 
-            delay: 700
+        //     delay: 500
 
-            onActivated: {
-                activeVehicle.sendGripperAction(0)
-                control.progress = 0
-            }
+        //     onActivated: {
+        //         activeVehicle.sendGripperAction(0)
+        //         control.progress = 0
+        //     }
 
-            contentItem: Text {
-                text: control.text
-                font: control.font
-                opacity: enabled ? 1.0 : 0.3
-                color: qgcPal.text
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                elide: Text.ElideRight
-            }
+        //     contentItem: Text {
+        //         text: control.text
+        //         font: control.font
+        //         opacity: enabled ? 1.0 : 0.3
+        //         color: qgcPal.text
+        //         horizontalAlignment: Text.AlignHCenter
+        //         verticalAlignment: Text.AlignVCenter
+        //         elide: Text.ElideRight
+        //     }
 
-            background: Rectangle {
-                implicitWidth: _idealWidth * 1.5
-                implicitHeight: _idealWidth * 1.5
-                opacity: enabled ? 1 : 0.3
-                color: control.down ? qgcPal.buttonHighlight : qgcPal.button
-                radius: size / 2
+        //     background: Rectangle {
+        //         implicitWidth:  _idealWidth
+        //         implicitHeight: _idealWidth
+        //         opacity: enabled ? 1 : 0.3
+        //         color: control.down ? qgcPal.buttonHighlight : qgcPal.button
+        //         radius: ScreenTools.buttonBorderRadius
 
-                readonly property real size: Math.min(control.width, control.height)
-                width: size
-                height: size
-                anchors.centerIn: parent
+        //         // readonly property real size: Math.min(control.width, control.height)
+        //         // width: size
+        //         // height: size
+        //         anchors.centerIn: parent
 
-                Canvas {
-                    id: canvas
-                    anchors.fill: parent
+        //         Canvas {
+        //             id: canvas
+        //             anchors.fill: parent
 
-                    Connections {
-                        target: control
-                        function onProgressChanged() { canvas.requestPaint(); }
-                    }
+        //             Connections {
+        //                 target: control
+        //                 function onProgressChanged() { canvas.requestPaint(); }
+        //             }
 
-                    onPaint: {
-                        var ctx = getContext("2d")
-                        ctx.clearRect(0, 0, width, height)
-                        ctx.strokeStyle = qgcPal.text
-                        ctx.lineWidth = parent.size / 20
-                        ctx.beginPath()
-                        var startAngle = Math.PI / 5 * 3
-                        var endAngle = startAngle + control.progress * Math.PI / 5 * 9
-                        ctx.arc(width / 2, height / 2, width / 2 - ctx.lineWidth / 2 - 2, startAngle, endAngle)
-                        ctx.stroke()
-                    }
-                }
+        //             onPaint: {
+        //                 var ctx = getContext("2d")
+        //                 ctx.clearRect(0, 0, width, height)
+        //                 ctx.strokeStyle = qgcPal.text
+        //                 ctx.lineWidth = parent.size / 20
+        //                 ctx.beginPath()
+        //                 var startAngle = Math.PI / 5 * 3
+        //                 var endAngle = startAngle + control.progress * Math.PI / 5 * 9
+        //                 ctx.arc(width / 2, height / 2, width / 2 - ctx.lineWidth / 2 - 2, startAngle, endAngle)
+        //                 ctx.stroke()
+        //             }
+        //         }
+        //     }
+        // }
+
+        QGCColumnButton{
+            id:                 gripperRelease
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
+            opacity:            enabled ? 1 : 0.4
+            enabled:            activeVehicle && (_distance && _distance < _treshHoldAlt)
+
+            iconSource:         "/res/GripperRelease.svg"
+            text:               "Open"
+            font.pointSize:     _fontSize * 0.7
+
+            onClicked: {
+                _activeVehicle.sendGripperAction(0)
             }
         }
 
-        QGCButton{
+
+        QGCColumnButton{
             id:                 gripperGrab
-            //implicitWidth:      _idealWidth
-            Layout.fillWidth:   true
             implicitWidth:      _idealWidth
+            implicitHeight:     width
             enabled:            activeVehicle
             opacity:            enabled ? 1 : 0.4
 
-            Layout.columnSpan:  2
-
             iconSource:         "/res/GripperGrab.svg"
-            text:               "화물 닫기"
+            text:               "Close"
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
                 _activeVehicle.sendGripperAction(1)
+            }
+        }
+
+        QGCButton{
+            id:                 autoSequence
+            //implicitWidth:      _idealWidth
+            Layout.fillWidth:   true
+            implicitWidth:      _idealWidth
+            enabled:            activeVehicle && _distance
+            opacity:            enabled ? 1 : 0.4
+
+            Layout.columnSpan:  2
+
+            iconSource:         ""//"/InstrumentValueIcons/play.svg"
+            text:               _isCustomCommandEnabled ? "Stop.Seq" : "Auto.Seq"
+            font.pointSize:     _fontSize * 0.7
+
+            onClicked: {
+                if(_isCustomCommandEnabled) {
+                    _activeVehicle.sendCommand(192, 31010, 1, 1, 0, receivedTagId, 2, 0, 0, 0)
+                }
+                else if (!_isCustomCommandEnabled){
+                    _activeVehicle.sendCommand(192, 31010, 1, 1, 0, receivedTagId, 1, 0, 0, 0)
+                }
             }
         }
     }

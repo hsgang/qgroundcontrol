@@ -2926,6 +2926,22 @@ void Vehicle::_handleCommandAck(mavlink_message_t& message)
     QString rawCommandName  = MissionCommandTree::instance()->rawName(static_cast<MAV_CMD>(ack.command));
     qCDebug(VehicleLog) << QStringLiteral("_handleCommandAck command(%1) result(%2)").arg(rawCommandName).arg(QGCMAVLink::mavResultToString(static_cast<MAV_RESULT>(ack.result)));
 
+    if (ack.command == MAV_CMD_USER_1) {
+        if (ack.result == MAV_RESULT_ACCEPTED || ack.result == MAV_RESULT_IN_PROGRESS) {
+            _isCustomCommandEnabled = true;
+            emit isCustomCommandEnabledChanged();
+            qDebug() << QStringLiteral("_handleCommandAck command(%1) result(%2)").arg(rawCommandName).arg(QGCMAVLink::mavResultToString(static_cast<MAV_RESULT>(ack.result)));
+        }
+    }
+
+    if (ack.command == MAV_CMD_USER_1) {
+        if (ack.result == MAV_RESULT_CANCELLED) {
+            _isCustomCommandEnabled = false;
+            emit isCustomCommandEnabledChanged();
+            qDebug() << QStringLiteral("_handleCommandAck command(%1) result(%2)").arg(rawCommandName).arg(QGCMAVLink::mavResultToString(static_cast<MAV_RESULT>(ack.result)));
+        }
+    }
+
     if (ack.command == MAV_CMD_DO_SET_ROI_LOCATION) {
         if (ack.result == MAV_RESULT_ACCEPTED) {
             if (!_roiApmCancelSent) {

@@ -69,23 +69,34 @@ Rectangle {
         QGCLabel {
             id:                 desc
             Layout.alignment:   Qt.AlignHCenter
-            text:               qsTr("배송 태그 %1가 인식되었습니다").arg(receivedTagId)
+            text:               qsTr("배송 태그 %1 인식").arg(receivedTagId)
         }
 
         RowLayout {
             Layout.alignment:   Qt.AlignHCenter
 
             QGCButton {
-                id:                 buttonAuto
-                text:               "자동 시퀀스"
+                id:             buttonAuto
+                text:           "자동 시퀀스"
                 onClicked: {
                     control.visible = false
+                    _activeVehicle.sendCommand(192, 31010, 1, 1, 0, receivedTagId, 1, 0, 0, 0)
+                    //(int compId, int command, bool showError, double param1, double param2, double param3, double param4, double param5, double param6, double param7)
                 }
             }
 
             QGCButton {
-                id:                 buttonManual
-                text:               "수동"
+                id:             buttonManual
+                text:           "수동"
+                onClicked: {
+                    control.visible = false
+                    _activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                }
+            }
+
+            QGCButton {
+                id:             buttonCancel
+                text:           "취소"
                 onClicked: {
                     control.visible = false
                 }

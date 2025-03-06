@@ -240,6 +240,7 @@ public:
     Q_PROPERTY(float                mavlinkLossPercent          READ mavlinkLossPercent                                             NOTIFY mavlinkStatusChanged)
     Q_PROPERTY(GimbalController*    gimbalController            READ gimbalController                                               CONSTANT)
     Q_PROPERTY(bool                 hasGripper                  READ hasGripper                                                     CONSTANT)
+    Q_PROPERTY(bool                 isCustomCommandEnabled      READ isCustomCommandEnabled                                         NOTIFY isCustomCommandEnabledChanged)
     Q_PROPERTY(bool                 isROIEnabled                READ isROIEnabled                                                   NOTIFY isROIEnabledChanged)
     Q_PROPERTY(CheckList            checkListState              READ checkListState             WRITE setCheckListState             NOTIFY checkListStateChanged)
     Q_PROPERTY(bool                 readyToFlyAvailable         READ readyToFlyAvailable                                            NOTIFY readyToFlyAvailableChanged)  ///< true: readyToFly signalling is available on this vehicle
@@ -859,6 +860,7 @@ public:
     float       mavlinkLossPercent      () const{ return _mavlinkLossPercent; }      /// Running loss rate
 
     bool        isROIEnabled            () const{ return _isROIEnabled; }
+    bool        isCustomCommandEnabled  () const{ return _isCustomCommandEnabled; }
 
     //uint32_t    gimbalStatusFlags         ()   const{ return _gimbalStatusFlags; }
     bool        gimbalRetracted           ()   const{ return _gimbalRetracted; }
@@ -973,6 +975,8 @@ signals:
     void mavlinkSigningChanged          ();
 
     void cameraFovPositionChanged       ();
+
+    void isCustomCommandEnabledChanged  ();
 
     void isROIEnabledChanged            ();
     void roiCoordChanged                (const QGeoCoordinate& centerCoord);
@@ -1192,6 +1196,7 @@ private:
     bool                _heardFrom = false;
 
     bool                _isROIEnabled   = false;
+    bool                _isCustomCommandEnabled = false;
     Joystick*           _activeJoystick = nullptr;
     bool                _gimbalRetracted = false;
     bool                _gimbalNeutral = false;
