@@ -59,6 +59,8 @@ Rectangle {
     property real   _relAltitude:           activeVehicle ? activeVehicle.altitudeRelative.rawValue : NaN
     property bool   _isCustomCommandEnabled: activeVehicle ? activeVehicle.isCustomCommandEnabled : false
 
+    property bool   _isGuidedEnable:        activeVehicle && activeVehicle.flying
+
     property real   _treshHoldAlt : 10.0
     property var    stepValues:             [0.2, 0.5, 1.0, 2.0, 3.0]
     property int    receivedTagId: 0
@@ -193,7 +195,7 @@ Rectangle {
             id:                 stepUp
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thin-up.svg"
@@ -209,7 +211,7 @@ Rectangle {
             id:                 stepTurnLeft
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/cheveron-left.svg"
@@ -226,7 +228,7 @@ Rectangle {
             id:                 stepForward
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-up.svg"
@@ -242,7 +244,7 @@ Rectangle {
             id:                 stepTurnRight
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/cheveron-right.svg"
@@ -259,7 +261,7 @@ Rectangle {
             id:                 stepTargetAlt
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isMoving && _distance
+            enabled:            _isGuidedEnable && !_isMoving && _distance
             opacity:            enabled ? 1 : 0.4
 
             iconSource:          _distance ? (_distance >= _treshHoldAlt ? "/InstrumentValueIcons/arrow-thin-down.svg" : "/InstrumentValueIcons/arrow-thin-up.svg") : "/InstrumentValueIcons/pause.svg"
@@ -292,7 +294,7 @@ Rectangle {
             id:                 stepLeft
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-left.svg"
@@ -308,7 +310,7 @@ Rectangle {
             id:                 stepStop
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle
+            enabled:            _isGuidedEnable
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/pause.svg"
@@ -324,7 +326,7 @@ Rectangle {
             id:                 stepRight
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-right.svg"
@@ -340,7 +342,7 @@ Rectangle {
             id:                 stepDown
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isMoving && (isNaN(_distance) || ((_distance - _moveStep) > _altLimit))
+            enabled:            _isGuidedEnable && !_isMoving && (isNaN(_distance) || ((_distance - _moveStep) > _altLimit))
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thin-down.svg"
@@ -363,7 +365,7 @@ Rectangle {
             id:                 stepHalf
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle
+            enabled:            _isGuidedEnable
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/dots-horizontal-double.svg"
@@ -382,7 +384,7 @@ Rectangle {
             id:                 stepBack
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-down.svg"
@@ -398,7 +400,7 @@ Rectangle {
             id:                 stepOne
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle
+            enabled:            _isGuidedEnable
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/dots-horizontal-triple.svg"
@@ -533,7 +535,7 @@ Rectangle {
             //implicitWidth:      _idealWidth
             Layout.fillWidth:   true
             implicitWidth:      _idealWidth
-            enabled:            activeVehicle && _distance
+            enabled:            _isGuidedEnable && activeVehicle.flying && _distance
             opacity:            enabled ? 1 : 0.4
 
             Layout.columnSpan:  2
