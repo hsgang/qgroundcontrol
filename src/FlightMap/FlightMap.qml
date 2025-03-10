@@ -241,7 +241,7 @@ Map {
         id: gridCanvas
         renderTarget: Canvas.FramebufferObject
         anchors.fill: parent
-        visible:      (_showGridOnMap.rawValue == true) && _map.zoomLevel > 16;
+        visible:      (_showGridOnMap.rawValue === true) && _map.zoomLevel > 16;
 
         onPaint: {
             if(_map.zoomLevel > 16) {
