@@ -513,7 +513,6 @@ Rectangle {
             }
         }
 
-
         QGCColumnButton{
             id:                 gripperGrab
             implicitWidth:      _idealWidth
@@ -522,7 +521,7 @@ Rectangle {
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/res/GripperGrab.svg"
-            text:               "Close"
+            text:               "Grab"
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
