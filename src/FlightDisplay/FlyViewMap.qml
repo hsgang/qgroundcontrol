@@ -273,17 +273,6 @@ FlightMap {
         }
     }
 
-    MapItemView {
-        model: pipMode ? undefined : _missionController.directionArrows
-
-        delegate: MapLineArrow {
-            fromCoord:      object ? object.coordinate1 : undefined
-            toCoord:        object ? object.coordinate2 : undefined
-            arrowPosition:  2
-            z:              QGroundControl.zOrderWaypointLines
-        }
-    }
-
     // Add trajectory lines to the map
     MapPolyline {
         id:         trajectoryPolyline
