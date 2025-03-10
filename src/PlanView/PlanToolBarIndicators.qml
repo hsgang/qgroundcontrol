@@ -20,7 +20,6 @@ Item {
     property var    _currentMissionItem:        _planMasterController.missionController.currentPlanViewItem ///< Mission item to display status for
 
     property var    missionItems:               _controllerValid ? _planMasterController.missionController.visualItems : undefined
-    property real   missionPathDistance:        _controllerValid ? _planMasterController.missionController.missionPathDistance : NaN
     property real   missionPlannedDistance:     _controllerValid ? _planMasterController.missionController.missionPlannedDistance : NaN
     property real   missionTime:                _controllerValid ? _planMasterController.missionController.missionTime : 0
     property real   missionMaxTelemetry:        _controllerValid ? _planMasterController.missionController.missionMaxTelemetry : NaN
@@ -46,7 +45,6 @@ Item {
     property real   _altDifference:             _currentMissionItemValid ? _currentMissionItem.altDifference : NaN
     property real   _azimuth:                   _currentMissionItemValid ? _currentMissionItem.azimuth : NaN
     property real   _heading:                   _currentMissionItemValid ? _currentMissionItem.missionVehicleYaw : NaN
-    property real   _missionPathDistance:       _missionValid ? missionPathDistance : NaN
     property real   _missionPlannedDistance:    _missionValid ? missionPlannedDistance : NaN
     property real   _missionMaxTelemetry:       _missionValid ? missionMaxTelemetry : NaN
     property real   _missionTime:               _missionValid ? missionTime : 0
@@ -64,7 +62,6 @@ Item {
     property string _gradientText:                  isNaN(_gradient) ?                  "-.-" : _gradient.toFixed(0) + qsTr(" deg")
     property string _azimuthText:                   isNaN(_azimuth) ?                   "-.-" : Math.round(_azimuth) % 360
     property string _headingText:                   isNaN(_azimuth) ?                   "-.-" : Math.round(_heading) % 360
-    property string _missionPathDistanceText:       isNaN(_missionPathDistance) ?       "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_missionPathDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _missionPlannedDistanceText:    isNaN(_missionPlannedDistance) ?    "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionPlannedDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
     property string _missionMaxTelemetryText:       isNaN(_missionMaxTelemetry) ?       "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionMaxTelemetry).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
     property string _batteryChangePointText:        _batteryChangePoint < 0 ?           qsTr("N/A") : _batteryChangePoint
@@ -214,13 +211,6 @@ Item {
             QGCLabel { text: qsTr("Time:"); font.pointSize: _dataFontSize; }
             QGCLabel {
                 text:                   getMissionTime()
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _largeValueWidth
-            }
-
-            QGCLabel { text: qsTr("Total Path Distance:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _missionPathDistanceText
                 font.pointSize:         _dataFontSize
                 Layout.minimumWidth:    _largeValueWidth
             }

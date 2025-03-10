@@ -32,7 +32,7 @@ Rectangle {
     property real _indicatorSpacing:        5
     property real _minAMSLAltitude:         isNaN(terrainProfile.minAMSLAlt) ? 0 : terrainProfile.minAMSLAlt
     property real _maxAMSLAltitude:         isNaN(terrainProfile.maxAMSLAlt) ? 100 : terrainProfile.maxAMSLAlt
-    property real _missionTotalDistance:    isNaN(missionController.missionTotalDistance) ? 100 : missionController.missionTotalDistance
+    property real _missionPlannedDistance:    isNaN(missionController.missionPlannedDistance) ? 100 : missionController.missionPlannedDistance
     property var  _unitsConversion:         QGroundControl.unitsConversion
 
     QGCPalette { id: qgcPal }
@@ -75,7 +75,7 @@ Rectangle {
                 ValueAxis {
                     id:                         axisX
                     min:                        0
-                    max:                        _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(missionController.missionTotalDistance)
+                    max:                        _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(missionController.missionPlannedDistance)
                     lineVisible:                true
                     labelsFont.family:          ScreenTools.fixedFontFamily
                     labelsFont.pointSize:       ScreenTools.smallFontPointSize
@@ -105,7 +105,7 @@ Rectangle {
                     visible:    true
 
                     XYPoint { x: 0; y: _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_minAMSLAltitude) }
-                    XYPoint { x: _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionTotalDistance); y: _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_maxAMSLAltitude) }
+                    XYPoint { x: _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionPlannedDistance); y: _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_maxAMSLAltitude) }
                 }
             }
 

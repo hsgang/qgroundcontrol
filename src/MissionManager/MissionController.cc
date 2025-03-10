@@ -76,7 +76,6 @@ MissionController::~MissionController()
 void MissionController::_resetMissionFlightStatus(void)
 {
     _missionFlightStatus.totalDistance =        0.0;
-    _missionFlightStatus.totalPathDistance =    0.0;
     _missionFlightStatus.plannedDistance =      0.0;
     _missionFlightStatus.maxTelemetryDistance = 0.0;
     _missionFlightStatus.maxAltitude =          0.0;
@@ -107,7 +106,6 @@ void MissionController::_resetMissionFlightStatus(void)
         _missionFlightStatus.ampMinutesAvailable = static_cast<double>(_missionFlightStatus.mAhBattery) / 1000.0 * 60.0 * ((100.0 - batteryPercentRemainingAnnounce) / 100.0);
     }
 
-    emit missionPathDistanceChanged(_missionFlightStatus.totalPathDistance);
     emit missionPlannedDistanceChanged(_missionFlightStatus.plannedDistance);
     emit missionTimeChanged();
     emit missionHoverDistanceChanged(_missionFlightStatus.hoverDistance);
@@ -1143,7 +1141,7 @@ void MissionController::save(QJsonObject& json)
     json[_jsonItemsKey] = rgJsonMissionItems;
 }
 
-void MissionController::_calcPrevWaypointValues(VisualMissionItem* currentItem, VisualMissionItem* prevItem, double* azimuth, double* distance, double* pathDistance, double* altDifference)
+void MissionController::_calcPrevWaypointValues(VisualMissionItem* currentItem, VisualMissionItem* prevItem, double* azimuth, double* distance, double* altDifference)
 {
     QGeoCoordinate  currentCoord =  currentItem->coordinate();
     QGeoCoordinate  prevCoord =     prevItem->exitCoordinate();
@@ -1152,7 +1150,6 @@ void MissionController::_calcPrevWaypointValues(VisualMissionItem* currentItem, 
 
     *altDifference = currentItem->amslEntryAlt() - prevItem->amslExitAlt();
     *distance = prevCoord.distanceTo(currentCoord);
-    *pathDistance = sqrt(pow(prevCoord.distanceTo(currentCoord),2) + pow(*altDifference, 2));
     *azimuth = prevCoord.azimuthTo(currentCoord);
 }
 
@@ -1166,18 +1163,6 @@ double MissionController::_calcDistanceToHome(VisualMissionItem* currentItem, Vi
 
     return distanceOk ? homeCoord.distanceTo(currentCoord) : 0.0;
 }
-
-//double MissionController::_calcPathDistanceToHome(VisualMissionItem* currentItem, VisualMissionItem* homeItem)
-//{
-//    QGeoCoordinate  currentCoord =  currentItem->coordinate();
-//    QGeoCoordinate  homeCoord =     homeItem->exitCoordinate();
-//    double altDiffToHome = currentItem->amslEntryAlt() - homeItem->amslExitAlt();
-//    bool            distanceOk =    false;
-
-//    distanceOk = true;
-
-//    return distanceOk ? sqrt(pow(homeCoord.distanceTo(currentCoord),2) + pow(altDiffToHome,2)) : 0.0;
-//}
 
 double MissionController::_calcAltitudeToHome(VisualMissionItem* currentItem, VisualMissionItem* homeItem)
 {
@@ -1216,7 +1201,6 @@ FlightPathSegment* MissionController::_createFlightPathSegmentWorker(VisualItemP
     connect(pair.second, &VisualMissionItem::coordinateChanged,         this,       &MissionController::_recalcMissionFlightStatusSignal, Qt::QueuedConnection);
 
     connect(segment,    &FlightPathSegment::totalDistanceChanged,       this,       &MissionController::recalcTerrainProfile,             Qt::QueuedConnection);
-    //connect(segment,    &FlightPathSegment::totalpathDistanceChanged,   this,       &MissionController::recalcTerrainProfile,             Qt::QueuedConnection);
     connect(segment,    &FlightPathSegment::coord1AMSLAltChanged,       this,       &MissionController::_recalcMissionFlightStatusSignal, Qt::QueuedConnection);
     connect(segment,    &FlightPathSegment::coord2AMSLAltChanged,       this,       &MissionController::_recalcMissionFlightStatusSignal, Qt::QueuedConnection);
     connect(segment,    &FlightPathSegment::amslTerrainHeightsChanged,  this,       &MissionController::recalcTerrainProfile,             Qt::QueuedConnection);
@@ -1484,24 +1468,20 @@ void MissionController::_updateBatteryInfo(int waypointIndex)
     }
 }
 
-void MissionController::_addHoverTime(double hoverTime, double hoverDistance, double pathDistance, int waypointIndex)
+void MissionController::_addHoverTime(double hoverTime, double hoverDistance, int waypointIndex)
 {
     _missionFlightStatus.totalTime += hoverTime;
     _missionFlightStatus.hoverTime += hoverTime;
     _missionFlightStatus.hoverDistance += hoverDistance;
-    _missionFlightStatus.totalDistance += hoverDistance;
-    _missionFlightStatus.totalPathDistance += pathDistance;
     _missionFlightStatus.plannedDistance += hoverDistance;
     _updateBatteryInfo(waypointIndex);
 }
 
-void MissionController::_addCruiseTime(double cruiseTime, double cruiseDistance, double pathDistance, int waypointIndex)
+void MissionController::_addCruiseTime(double cruiseTime, double cruiseDistance, int waypointIndex)
 {
     _missionFlightStatus.totalTime += cruiseTime;
     _missionFlightStatus.cruiseTime += cruiseTime;
     _missionFlightStatus.cruiseDistance += cruiseDistance;
-    _missionFlightStatus.totalDistance += cruiseDistance;
-    _missionFlightStatus.totalPathDistance += pathDistance;
     _missionFlightStatus.plannedDistance += cruiseDistance;
     _updateBatteryInfo(waypointIndex);
 }
@@ -1512,23 +1492,23 @@ void MissionController::_addCruiseTime(double cruiseTime, double cruiseDistance,
 ///     @param cruiseTime   Amount of time to add to cruise
 ///     @param extraTime    Amount of additional time to add to hover/cruise
 ///     @param seqNum       Sequence number of waypoint for these values, -1 for no waypoint associated
-void MissionController::_addTimeDistance(bool vtolInHover, double hoverTime, double cruiseTime, double extraTime, double distance, double pathDistance, int seqNum)
+void MissionController::_addTimeDistance(bool vtolInHover, double hoverTime, double cruiseTime, double extraTime, double distance, int seqNum)
 {
     if (_controllerVehicle->vtol()) {
         if (vtolInHover) {
-            _addHoverTime(hoverTime, distance, pathDistance, seqNum);
-            _addHoverTime(extraTime, 0, 0, -1);
-        } else {
-            _addCruiseTime(cruiseTime, distance, pathDistance, seqNum);
-            _addCruiseTime(extraTime, 0, 0, -1);
+            _addHoverTime(hoverTime, distance, seqNum);
+            _addHoverTime(extraTime, 0, -1);
+        } else {           
+            _addCruiseTime(cruiseTime, distance, seqNum);
+            _addCruiseTime(extraTime, 0, -1);
         }
     } else {
         if (_controllerVehicle->multiRotor()) {
-            _addHoverTime(hoverTime, distance, pathDistance, seqNum);
-            _addHoverTime(extraTime, 0, 0, -1);
+            _addHoverTime(hoverTime, distance, seqNum);
+            _addHoverTime(extraTime, 0, -1);
         } else {
-            _addCruiseTime(cruiseTime, distance, pathDistance, seqNum);
-            _addCruiseTime(extraTime, 0, 0, -1);
+            _addCruiseTime(cruiseTime, distance, seqNum);
+            _addCruiseTime(extraTime, 0, -1);
         }
     }
 }
@@ -1554,7 +1534,6 @@ void MissionController::_recalcMissionFlightStatus()
     lastFlyThroughVI->setAltDifference(0);
     lastFlyThroughVI->setAzimuth(0);
     lastFlyThroughVI->setDistance(0);
-    lastFlyThroughVI->setPathDistance(0);
     lastFlyThroughVI->setDistanceFromStart(0);
 
     _minAMSLAltitude = _maxAMSLAltitude = qQNaN();
@@ -1565,7 +1544,6 @@ void MissionController::_recalcMissionFlightStatus()
     bool   foundRTL =                   false;
     bool   pastLandCommand =            false;
     double totalHorizontalDistance =    0;
-    double totalPathDistance =          0;
 
     for (int i=0; i<_visualItems->count(); i++) {
         VisualMissionItem*  item =          qobject_cast<VisualMissionItem*>(_visualItems->get(i));
@@ -1579,7 +1557,6 @@ void MissionController::_recalcMissionFlightStatus()
         // Assume the worst
         item->setAzimuth(0);
         item->setDistance(0);
-        item->setPathDistance(0);
         item->setDistanceFromStart(0);
 
         // Gimbal states reflect the state AFTER executing the item
@@ -1623,10 +1600,10 @@ void MissionController::_recalcMissionFlightStatus()
                     linkStartToHome = true;
                     if (_controllerVehicle->multiRotor() || _controllerVehicle->vtol()) {
                         // We have to special case takeoff, assuming vehicle takes off straight up to specified altitude
-                        double azimuth, distance, pathDistance, altDifference;
-                        _calcPrevWaypointValues(_settingsItem, simpleItem, &azimuth, &distance, &pathDistance, &altDifference);
+                        double azimuth, distance, altDifference;
+                        _calcPrevWaypointValues(_settingsItem, simpleItem, &azimuth, &distance, &altDifference);
                         double takeoffTime = qAbs(altDifference) / _appSettings->offlineEditingAscentSpeed()->rawValue().toDouble();
-                        _addHoverTime(takeoffTime, 0, 0,-1);
+                        _addHoverTime(takeoffTime, 0, -1);
                     }
                 }
             }
@@ -1668,14 +1645,13 @@ void MissionController::_recalcMissionFlightStatus()
 
                     if (lastFlyThroughVI != _settingsItem || linkStartToHome) {
                         // This is a subsequent waypoint or we are forcing the first waypoint back to home
-                        double azimuth, distance, pathDistance, altDifference;
+                        double azimuth, distance, altDifference;
 
-                        _calcPrevWaypointValues(item, lastFlyThroughVI, &azimuth, &distance, &pathDistance, &altDifference);
+                        _calcPrevWaypointValues(item, lastFlyThroughVI, &azimuth, &distance, &altDifference);
 
                         // If the last waypoint was a land command, there's a discontinuity at this point
                         if (!lastFlyThroughVI->isLandCommand()) {
                             totalHorizontalDistance += distance;
-                            totalPathDistance += pathDistance;
                             item->setDistance(distance);
 
                             if (!pastLandCommand) {
@@ -1688,29 +1664,21 @@ void MissionController::_recalcMissionFlightStatus()
 
                         item->setAltDifference(altDifference);
                         item->setAzimuth(azimuth);
-                        item->setPathDistance(pathDistance);
                         item->setDistanceFromStart(totalHorizontalDistance);
-                        item->setTotalPathDistance(totalPathDistance);
 
                         _missionFlightStatus.maxTelemetryDistance = qMax(_missionFlightStatus.maxTelemetryDistance, _calcDistanceToHome(item, _settingsItem));
                         _missionFlightStatus.maxAltitude = qMax(_missionFlightStatus.maxAltitude, _calcAltitudeToHome(item, _settingsItem));
-
-                        // Calculate time/distance
-                        double hoverTime = distance / _missionFlightStatus.hoverSpeed;
-                        double cruiseTime = distance / _missionFlightStatus.cruiseSpeed;
-                        _addTimeDistance(_missionFlightStatus.vtolMode == QGCMAVLink::VehicleClassMultiRotor, hoverTime, cruiseTime, 0, distance, pathDistance, item->sequenceNumber());
                     }
 
                     if (complexItem) {
                         // Add in distance/time inside complex items as well
                         double distance = complexItem->complexDistance();
-                        double pathDistance = complexItem->complexDistance();
                         _missionFlightStatus.maxTelemetryDistance = qMax(_missionFlightStatus.maxTelemetryDistance, complexItem->greatestDistanceTo(complexItem->exitCoordinate()));
 
                         if (!pastLandCommand) {
                             double hoverTime = distance / _missionFlightStatus.hoverSpeed;
                             double cruiseTime = distance / _missionFlightStatus.cruiseSpeed;
-                            _addTimeDistance(_missionFlightStatus.vtolMode == QGCMAVLink::VehicleClassMultiRotor, hoverTime, cruiseTime, 0, distance, pathDistance, item->sequenceNumber());
+                            _addTimeDistance(_missionFlightStatus.vtolMode == QGCMAVLink::VehicleClassMultiRotor, hoverTime, cruiseTime, 0, distance, item->sequenceNumber());
                         }
 
                         totalHorizontalDistance += distance;
@@ -1774,15 +1742,15 @@ void MissionController::_recalcMissionFlightStatus()
 
     // Add the information for the final segment back to home
     if (foundRTL && lastFlyThroughVI != _settingsItem && homePositionValid) {
-        double azimuth, distance, pathDistance, altDifference;
-        _calcPrevWaypointValues(_settingsItem, lastFlyThroughVI, &azimuth, &distance, &pathDistance, &altDifference);
+        double azimuth, distance, altDifference;
+        _calcPrevWaypointValues(_settingsItem, lastFlyThroughVI, &azimuth, &distance, &altDifference);
 
         if (!pastLandCommand) {
             // Calculate time/distance
             double hoverTime = distance / _missionFlightStatus.hoverSpeed;
             double cruiseTime = distance / _missionFlightStatus.cruiseSpeed;
             double landTime = qAbs(altDifference) / _appSettings->offlineEditingDescentSpeed()->rawValue().toDouble();
-            _addTimeDistance(_missionFlightStatus.vtolMode == QGCMAVLink::VehicleClassMultiRotor, hoverTime, cruiseTime, distance, landTime, -1);
+            _addTimeDistance(_missionFlightStatus.vtolMode == QGCMAVLink::VehicleClassMultiRotor, hoverTime, cruiseTime, landTime, distance, -1);
         }
     }
 
@@ -1800,7 +1768,6 @@ void MissionController::_recalcMissionFlightStatus()
 
     emit missionMaxTelemetryChanged     (_missionFlightStatus.maxTelemetryDistance);
     emit missionMaxAltitudeChanged      (_missionFlightStatus.maxAltitude);
-    emit missionPathDistanceChanged     (_missionFlightStatus.totalPathDistance);
     emit missionTotalDistanceChanged    (_missionFlightStatus.totalDistance);
     emit missionPlannedDistanceChanged  (_missionFlightStatus.plannedDistance);
     emit missionHoverDistanceChanged    (_missionFlightStatus.hoverDistance);

@@ -163,7 +163,7 @@ Map {
         property real lastMouseY
 
         onPressed: (touchPoints) => {
-            console.log("onPressed", touchPoints[0].x, touchPoints[0].y)
+            //console.log("onPressed", touchPoints[0].x, touchPoints[0].y)
             lastMouseX = touchPoints[0].x
             lastMouseY = touchPoints[0].y
         }
@@ -175,7 +175,7 @@ Map {
         }
 
         onUpdated: (touchPoints) => {
-            console.log("onUpdated", touchPoints[0].x, touchPoints[0].y, lastMouseX, lastMouseY)
+            //console.log("onUpdated", touchPoints[0].x, touchPoints[0].y, lastMouseX, lastMouseY)
             if (dragActive) {
                 let deltaX = touchPoints[0].x - lastMouseX
                 let deltaY = touchPoints[0].y - lastMouseY

@@ -69,8 +69,7 @@ Rectangle{
     property var    _currentMissionItem:        globals.currentPlanMissionItem          ///< Mission item to display status for
 
     property var    missionItems:               _controllerValid ? _planMasterController.missionController.visualItems : undefined
-    property real   missionDistance:            _controllerValid ? _planMasterController.missionController.missionDistance : NaN
-    property real   missionPathDistance:        _controllerValid ? _planMasterController.missionController.missionPathDistance : NaN
+    property real   missionPlannedDistance:     _controllerValid ? _planMasterController.missionController.missionPlannedDistance : NaN
     property real   missionTime:                _controllerValid ? _planMasterController.missionController.missionTime : 0
     property real   missionItemCount:           _controllerValid ? _planMasterController.missionController.missionItemCount : NaN
 
@@ -80,18 +79,16 @@ Rectangle{
 
     property bool   _missionValid:              missionItems !== undefined
 
-    property real   _missionDistance:           _missionValid ? missionDistance : NaN
-    property real   _missionPathDistance:       _missionValid ? missionPathDistance : NaN
+    property real   _missionPlannedDistance:    _missionValid ? missionPlannedDistance : NaN
     property real   _missionTime:               _missionValid ? missionTime : 0
     property real   _missionItemCount:          _missionValid ? missionItemCount : NaN
 
-    property string _missionDistanceText:       isNaN(_missionDistance) ?       "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
-    property string _missionPathDistanceText:   isNaN(_missionPathDistance) ?   "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionPathDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
+    property string _missionPlannedDistanceText:isNaN(_missionPlannedDistance) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionPlannedDistance).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
 
     property real   _missionProgress:           0
     property string _missionProgressText:       isNaN(_missionProgress) ? "Waiting" : _missionProgress.toFixed(0) + " %"
 
-    property bool   isVerticalMission:          (_missionDistance < (_missionPathDistance - _missionDistance)) ? true : false
+    // property bool   isVerticalMission:          (_missionPlannedDistance < (_missionPathDistance - _missionPlannedDistance)) ? true : false
 
     readonly property real _margins: ScreenTools.defaultFontPixelWidth
 
@@ -130,17 +127,32 @@ Rectangle{
     }
 
     function getMissionProgress() {
-        var pctValue = 0
-        var pct = _flightDistance / _missionDistance
-        var itempct = _missionItemIndex / (_missionItemCount - 1)
-        if (pct > 0.9){
-            pct = 1
+        // 유효한 임무 계획 거리 값이 없으면 진행률 0%
+        if (!_missionPlannedDistance || _missionPlannedDistance <= 0) {
+             _missionProgress = 0;
+             return 0;
         }
-        if (_missionItemIndex > 0) {
-            pctValue = (pct + itempct) / 2;
+
+        // 비행 거리 진행률 계산 (0~1 범위)
+        var distanceProgress = _flightDistance / _missionPlannedDistance;
+        distanceProgress = Math.min(Math.max(distanceProgress, 0), 1);
+
+        // 미션 항목 기반 진행률 계산 (항목 개수가 1 이상일 경우)
+        var itemProgress = 0;
+        if (_missionItemCount > 1) {
+            itemProgress = _missionItemIndex / (_missionItemCount - 1);
+            itemProgress = Math.min(Math.max(itemProgress, 0), 1);
         }
-        _missionProgress = pctValue * 100
-        return pctValue
+
+        // 가중치 적용 (예: 비행거리 70%, 항목 30%)
+        var weightDistance = 0.7;
+        var weightItems = 0.3;
+        var combinedProgress = (distanceProgress * weightDistance) + (itemProgress * weightItems);
+
+        // 전체 진행률을 0~100%로 변환 및 할당
+        _missionProgress = combinedProgress * 100;
+
+        return combinedProgress;
     }
 
     QGCButton {
@@ -274,7 +286,7 @@ Rectangle{
                         }
                         QGCLabel { text: qsTr("Path Distance"); font.pointSize: _dataFontSize; opacity: 0.7; }
                         QGCLabel {
-                            text:                   _missionPathDistanceText
+                            text:                   _missionPlannedDistanceText
                             font.pointSize:         _dataFontSize * 1.2
                             Layout.minimumWidth:    _largeValueWidth
                             horizontalAlignment:    Text.AlignRight
