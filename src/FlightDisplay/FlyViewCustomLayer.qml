@@ -100,23 +100,24 @@ Item {
         anchors.verticalCenter:     parent.verticalCenter
         spacing:                    _toolsMargin
 
-        VehicleStepMoveControl{
-            id:                     vehicleStepMoveControl
-            anchors.verticalCenter: parent.verticalCenter
-            visible:                QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl.rawValue
-        }
+        // VehicleStepMoveControl{
+        //     id:                     vehicleStepMoveControl
+        //     anchors.verticalCenter: parent.verticalCenter
+        //     visible:                QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl.rawValue
+        // }
 
-        GimbalControl{
-            id:                     gimbalControl
-            anchors.verticalCenter: parent.verticalCenter
-            visible:                QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue
-        }
+        // GimbalControl{
+        //     id:                     gimbalControl
+        //     anchors.verticalCenter: parent.verticalCenter
+        //     visible:                QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue
+        // }
 
-        WinchControlPanel {
-            id:                     winchControlPanel
-            anchors.verticalCenter: parent.verticalCenter
-            visible:                QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue
-        }
+        // WinchControlPanel {
+        //     id:                     winchControlPanel
+        //     anchors.verticalCenter: parent.verticalCenter
+        //     visible:                QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue
+        // }
+
         // Column {
         //     anchors.verticalCenter: parent.verticalCenter
         //     spacing:                _toolsMargin

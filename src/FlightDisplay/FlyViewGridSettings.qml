@@ -16,8 +16,8 @@ Rectangle {
     id:         gridSettings
     height:     generatorValueColumn.height + ScreenTools.defaultFontPixelHeight
     width:      ScreenTools.defaultFontPixelWidth * 30
-    color:      "#80000000"
-    radius:     _margins
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+    radius:     ScreenTools.defaultFontPixelHeight / 2
     // border.color: qgcPal.text
 
     property real _labelledItemWidth: ScreenTools.defaultFontPixelWidth * 16

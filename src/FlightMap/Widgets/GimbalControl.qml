@@ -28,10 +28,10 @@ Rectangle {
     width:      mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
-    border.width:   1
+    // border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
+    // border.width:   1
     radius:     _margins * 1.5
-    visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
+    //visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7

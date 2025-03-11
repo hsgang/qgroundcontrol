@@ -121,7 +121,7 @@ Item {
             z:                      QGroundControl.zOrderWidgets
             isViewer3DOpen:         viewer3DWindow.isOpen
 
-            property real leftEdgeBottomInset: visible ? width + anchors.margins : 0
+            property real leftEdgeBottomInset: visible ? width + anchors.margins + ScreenTools.defaultFontPixelHeight * 3 : 0
             property real bottomEdgeLeftInset: visible ? height + anchors.margins : 0
         }
 

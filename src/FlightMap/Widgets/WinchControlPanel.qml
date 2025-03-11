@@ -27,10 +27,10 @@ Rectangle {
     width:      mainGridLayout.width + _margins * 4
     height:     mainGridLayout.height + _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
-    border.width:   1
+    // border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
+    // border.width:   1
     radius:     _margins / 2
-    visible:    false
+    //visible:    false
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
     property real   backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue

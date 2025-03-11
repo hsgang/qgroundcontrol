@@ -530,6 +530,8 @@
         <file alias="QGroundControl/FlightDisplay/VideoLandingGuideOverlay.qml">src/FlightDisplay/VideoLandingGuideOverlay.qml</file>
         <file alias="QGroundControl/Controls/ProgressTracker.qml">src/QmlControls/ProgressTracker.qml</file>
         <file alias="QGroundControl/FlightDisplay/RequestConfirmPopup.qml">src/FlightDisplay/RequestConfirmPopup.qml</file>
+        <file alias="QGroundControl/FlightDisplay/FlyViewValueBar.qml">src/FlightDisplay/FlyViewValueBar.qml</file>
+        <file alias="QGroundControl/Controls/QGCVerticalTabBar.qml">src/QmlControls/QGCVerticalTabBar.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="ConnectFirstRunPrompt.qml">src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml</file>

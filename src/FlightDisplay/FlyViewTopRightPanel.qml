@@ -204,7 +204,6 @@ Rectangle {
                 } // Page 1
 
                 MvPanelPage {
-
                     id:                  photoVideoPage
                     implicitHeight:      photoVideoControlLoader.implicitHeight + ScreenTools.defaultFontPixelHeight * 2
                     implicitWidth:       photoVideoControlLoader.implicitWidth + ScreenTools.defaultFontPixelHeight * 2

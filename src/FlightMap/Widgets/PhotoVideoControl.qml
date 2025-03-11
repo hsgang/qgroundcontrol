@@ -84,11 +84,11 @@ Rectangle {
                 spacing: _margins
 
                 // Camera name
-                QGCLabel {
-                    Layout.alignment:   Qt.AlignHCenter
-                    text:               _camera.modelName
-                    //visible:            _cameraManager.cameras.length > 1
-                }
+                // QGCLabel {
+                //     Layout.alignment:   Qt.AlignHCenter
+                //     text:               _camera.modelName
+                //     //visible:            _cameraManager.cameras.length > 1
+                // }
 
                 // Photo/Video Mode Selector
                 Rectangle {

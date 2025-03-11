@@ -15,13 +15,29 @@ import QGroundControl.Controls
 import QGroundControl.FlightDisplay
 
 RowLayout {
-//    TelemetryValuesBar {
-//        Layout.alignment:   Qt.AlignBottom
-//        extraWidth:         instrumentPanel.extraValuesWidth
-//    }
+    // TelemetryValuesBar {
+    //     Layout.alignment:   Qt.AlignBottom
+    //     visible:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue
+    // }
 
-//    FlyViewInstrumentPanel {
-//        id:         instrumentPanel
-//        visible:    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && _showSingleVehicleUI
-//    }
+    ColumnLayout {
+        Layout.alignment:   Qt.AlignBottom
+
+        TelemetryValuesBar {
+            //Layout.alignment:   Qt.AlignBottom
+            Layout.alignment:   Qt.AlignRight
+            visible:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue
+        }
+        FlyViewValueBar{
+            //Layout.alignment:   Qt.AlignBottom
+            Layout.alignment:   Qt.AlignRight
+            extraWidth:         instrumentPanel.extraValuesWidth
+        }
+    }
+
+    FlyViewInstrumentPanel {
+        id:         instrumentPanel
+        visible:    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && _showSingleVehicleUI
+        Layout.alignment:   Qt.AlignBottom
+    }
 }

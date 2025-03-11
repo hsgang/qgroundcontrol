@@ -68,7 +68,7 @@ Item {
         rightEdgeCenterInset:   topRightPanel.rightEdgeCenterInset
         rightEdgeBottomInset:   bottomRightRowLayout.rightEdgeBottomInset
         topEdgeLeftInset:       toolStrip.topEdgeLeftInset
-        topEdgeCenterInset:     telemetryPanel.topEdgeCenterInset
+        topEdgeCenterInset:     0 //telemetryPanel.topEdgeCenterInset
         topEdgeRightInset:      topRightPanel.topEdgeRightInset
         bottomEdgeLeftInset:    virtualJoystickMultiTouch.visible ? virtualJoystickMultiTouch.bottomEdgeLeftInset : parentToolInsets.bottomEdgeLeftInset
         bottomEdgeCenterInset:  bottomCenterRowLayout.bottomEdgeCenterInset
@@ -78,9 +78,9 @@ Item {
     FlyViewTopRightPanel {
         id:                     topRightPanel
         anchors.top:            parent.top
+        anchors.bottom:         bottomRightRowLayout.top
         anchors.right:          parent.right
-        anchors.topMargin:      _layoutMargin
-        anchors.rightMargin:    _layoutMargin
+        anchors.margins:        _layoutMargin
         maximumHeight:          parent.height - (bottomRightRowLayout.height + _margins * 5)
 
         property real topEdgeRightInset:    height + _layoutMargin
@@ -95,7 +95,7 @@ Item {
         anchors.bottom:     bottomRightRowLayout.top
         anchors.right:      parent.right
         spacing:            _layoutSpacing
-        visible:           !topRightPanel.visible
+        visible:            !topRightPanel.visible
 
         property real topEdgeRightInset:    childrenRect.height + _layoutMargin
         property real rightEdgeTopInset:    width + _layoutMargin
@@ -104,12 +104,12 @@ Item {
 
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout
-        anchors.margins:    _layoutMargin
+        anchors.margins:    _layoutMargin * 3
         anchors.bottom:     parent.bottom
         anchors.right:      parent.right
         spacing:            _layoutSpacing
 
-        property real bottomEdgeRightInset:     height + _layoutMargin
+        property real bottomEdgeRightInset:     height + _layoutMargin * 3
         //property real bottomEdgeCenterInset:    bottomEdgeRightInset
         property real rightEdgeBottomInset:     width + _layoutMargin
     }
@@ -124,31 +124,31 @@ Item {
         property real bottomEdgeCenterInset:    height + (_layoutMargin * 2)
     }
 
-    TelemetryValuesBar {
-        id:                 telemetryPanel
-        x:                  recalcXPosition()
-        anchors.margins:    _toolsMargin
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top:        parent.top //guidedActionConfirm.visible ? guidedActionConfirm.bottom : parent.top
-        visible:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue
+    // TelemetryValuesBar {
+    //     id:                 telemetryPanel
+    //     x:                  recalcXPosition()
+    //     anchors.margins:    _toolsMargin
+    //     anchors.horizontalCenter: parent.horizontalCenter
+    //     anchors.top:        parent.top //guidedActionConfirm.visible ? guidedActionConfirm.bottom : parent.top
+    //     visible:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue
 
-        property real topEdgeCenterInset: visible ? y + height : 0
+    //     property real topEdgeCenterInset: visible ? y + height : 0
 
-        function recalcXPosition() {
-            // First try centered
-            var halfRootWidth   = _root.width / 2
-            var halfPanelWidth  = telemetryPanel.width / 2
-            var leftX           = (halfRootWidth - halfPanelWidth) - _toolsMargin
-            var rightX          = (halfRootWidth + halfPanelWidth) + _toolsMargin
-            if (leftX >= parentToolInsets.leftEdgeTopInset || rightX <= parentToolInsets.rightEdgeTopInset ) {
-                // It will fit in the horizontalCenter
-                return halfRootWidth - halfPanelWidth
-            } else {
-                // Anchor to left edge
-                return parentToolInsets.leftEdgeTopInset + _toolsMargin
-            }
-        }
-    }
+    //     function recalcXPosition() {
+    //         // First try centered
+    //         var halfRootWidth   = _root.width / 2
+    //         var halfPanelWidth  = telemetryPanel.width / 2
+    //         var leftX           = (halfRootWidth - halfPanelWidth) - _toolsMargin
+    //         var rightX          = (halfRootWidth + halfPanelWidth) + _toolsMargin
+    //         if (leftX >= parentToolInsets.leftEdgeTopInset || rightX <= parentToolInsets.rightEdgeTopInset ) {
+    //             // It will fit in the horizontalCenter
+    //             return halfRootWidth - halfPanelWidth
+    //         } else {
+    //             // Anchor to left edge
+    //             return parentToolInsets.leftEdgeTopInset + _toolsMargin
+    //         }
+    //     }
+    // }
 
     FlyViewMissionCompleteDialog {
         missionController:      _missionController
@@ -170,7 +170,7 @@ Item {
     RequestConfirmPopup {
         id:                         requestConfirmPopup
         anchors.margins:            _toolsMargin * 2
-        anchors.top:                telemetryPanel.visible ? telemetryPanel.bottom : parent.top
+        anchors.top:                parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
         anchors.horizontalCenter:   parent.horizontalCenter
         z:                          QGroundControl.zOrderTopMost
     }
@@ -256,8 +256,9 @@ Item {
 
     MapScale {
         id:                 mapScale
-        anchors.margins:    _toolsMargin
-        anchors.right:      parent.right
+        anchors.leftMargin: _totalToolInsets.leftEdgeBottomInset + _toolsMargin
+        anchors.left:       parent.left
+        anchors.bottomMargin: _toolsMargin
         anchors.bottom:     parent.bottom
         mapControl:         _mapControl
         buttonsOnLeft:      true
@@ -366,9 +367,9 @@ Item {
     FlyViewAtmosphericChart{
         id: flyViewChartWidget
         anchors.margins:        _toolsMargin
-        anchors.top:            telemetryPanel.visible ? telemetryPanel.bottom : parent.top
-        anchors.bottom:         bottomCenterRowLayout.top
-        anchors.right:          parent.right //topRightColumnLayout.left
+        anchors.top:            parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
+        anchors.bottom:         bottomRightRowLayout.top
+        anchors.right:          topRightColumnLayout.left
         width:                  ScreenTools.isMobile ? mainWindow.width * 0.7 : mainWindow.width * 0.4
         visible:                QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue
     }
@@ -376,18 +377,19 @@ Item {
     FlyViewEscStatus {
         id: flyViewEscStatus
         anchors.margins:        _toolsMargin
-        anchors.bottom:         mapScale.visible ? mapScale.top : parent.bottom
+        anchors.bottom:         parent.bottom
+        anchors.bottomMargin:   _totalToolInsets.bottomEdgeRightInset + _toolsMargin
         anchors.right:          parent.right
         visible:                QGroundControl.settingsManager.flyViewSettings.showEscStatus.rawValue
     }
 
     Rectangle {
         id: resultRectangle
-        anchors.top: telemetryPanel.visible ? telemetryPanel.bottom : parent.top
+        anchors.top: parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
         width: resultLabel.width + resultLabel.width*0.4
         height: resultLabel.height + resultLabel.height*0.4
         anchors.margins: _toolsMargin
-        anchors.horizontalCenter: telemetryPanel.visible ? telemetryPanel.horizontalCenter : parent.horizontalCenter
+        anchors.horizontalCenter: parent.horizontalCenter //telemetryPanel.visible ? telemetryPanel.horizontalCenter : parent.horizontalCenter
         color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
         visible: false
         radius: _toolsMargin / 2
@@ -437,13 +439,13 @@ Item {
 
     Rectangle {
         id: zoomMultipleRectangle
-        anchors.top: telemetryPanel.visible ? telemetryPanel.bottom : parent.top
+        anchors.top: parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
         width: zoomMultipleLabel.width + zoomMultipleLabel.width * 0.4
         height: zoomMultipleLabel.height + zoomMultipleLabel.height * 0.4
         color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
         anchors.margins: _toolsMargin
         visible: false
-        anchors.horizontalCenter: telemetryPanel.visible ? telemetryPanel.horizontalCenter : parent.horizontalCenter
+        anchors.horizontalCenter: parent.horizontalCenter //telemetryPanel.visible ? telemetryPanel.horizontalCenter : parent.horizontalCenter
         radius: _toolsMargin / 2
 
         QGCLabel {
@@ -471,11 +473,11 @@ Item {
         }
     }
 
-    FlyViewGridSettings {
-        id: flyviewGridSettings
-        anchors.margins:        _toolsMargin
-        anchors.bottom:         mapScale.visible ? mapScale.top : parent.bottom
-        anchors.right:          parent.right
-        visible:                QGroundControl.settingsManager.flyViewSettings.showGridViewer.rawValue
-    }
+    // FlyViewGridSettings {
+    //     id: flyviewGridSettings
+    //     anchors.margins:        _toolsMargin
+    //     anchors.bottom:         mapScale.visible ? mapScale.top : parent.bottom
+    //     anchors.right:          parent.right
+    //     visible:                QGroundControl.settingsManager.flyViewSettings.showGridViewer.rawValue
+    // }
 }

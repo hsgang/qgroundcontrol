@@ -16,10 +16,12 @@ import QGroundControl.Controls
 import QGroundControl.FlightDisplay
 
 RowLayout {
-    FlyViewAttitudeIndicator{
-        id:                         attitudeIndicator
-        visible:                    !flyviewMissionProgress.visible
-    }
+
+    // FlyViewAttitudeIndicator{
+    //     id:                         attitudeIndicator
+    //     Layout.fillHeight: true
+    //     visible:                    !flyviewMissionProgress.visible
+    // }
 
     FlyViewMissionProgress{
         id:                         flyviewMissionProgress

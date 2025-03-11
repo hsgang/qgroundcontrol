@@ -28,10 +28,11 @@ import QGroundControl.Palette
 import QGroundControl.ScreenTools
 import QGroundControl.Vehicle
 
-Rectangle{
-    width: attitudeIndicatorRow.width
-    height: attitudeIndicatorRow.height
-    color: "transparent"
+Item{
+    id:     control
+    width:  attitudeIndicatorRow.implicitWidth
+    height: attitudeIndicatorRow.implicitHeight
+    //color: "transparent"
 
     // Property of Tools
     property real   _toolsMargin:               ScreenTools.defaultFontPixelWidth * 0.75
@@ -86,15 +87,14 @@ Rectangle{
 
     RowLayout{
         id: attitudeIndicatorRow
-        height:     attitudeIndicatorBase.height
         spacing:    _toolsMargin / 2
 
-        //--Ground Speed Value Widget-----------------------------------------------------------------------------------
+        //--Ground Speed Value Widget-----------------------------------------------------------------------------------       
 
         Rectangle {
             id:                 groundSpeedValue
-            height:             ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
-            width:              ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 12 : ScreenTools.defaultFontPixelWidth * 16
+            height:             ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 3.6 : ScreenTools.defaultFontPixelHeight * 3.2
+            width:              ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 14 : ScreenTools.defaultFontPixelWidth * 16
             color:              Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:             _toolsMargin
 
@@ -165,7 +165,7 @@ Rectangle{
         Rectangle {
             id :        gndSpdBarRect
             width:      ScreenTools.defaultFontPixelWidth * 3
-            height:     parent.height * 0.9
+            height:     ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 5.4 : ScreenTools.defaultFontPixelHeight * 7.2
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:     _toolsMargin
 
@@ -192,7 +192,7 @@ Rectangle{
                     Layout.alignment:       Qt.AlignRight
                     Layout.rightMargin:     _toolsMargin
 
-                    property real maxValue:         12
+                    property real maxValue:         20
                     property real minValue:         0
                     property real value:            (_vehicleGroundSpeed > maxValue) ? maxValue : _vehicleGroundSpeed
                     property string maxValueString: maxValue.toString()
@@ -255,8 +255,8 @@ Rectangle{
 
         Rectangle {
             id: attitudeIndicatorBase
-            width:  ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
-            height: width
+            height: ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 6 : ScreenTools.defaultFontPixelHeight * 8
+            width:  height
             radius: height * 0.5
             color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
 
@@ -267,6 +267,18 @@ Rectangle{
             }
         }
 
+        // RowLayout {
+        //     //id: instrumentPanelBase
+        //     width: instrumentPanel.implicitWidth
+        //     height: instrumentPanel.implicitHeight
+        //     //color:  "transparent"
+
+        //     FlyViewInstrumentPanel {
+        //         id:         instrumentPanel
+        //         visible:    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && _showSingleVehicleUI
+        //     }
+        // }
+
         Item {
             width:      _toolsMargin * 2
             height:     parent.height
@@ -275,7 +287,7 @@ Rectangle{
         Rectangle {
             id :        climbSpdBarRect
             width:      ScreenTools.defaultFontPixelWidth * 3
-            height:     parent.height * 0.9
+            height:     ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 5.4 : ScreenTools.defaultFontPixelHeight * 7.2
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:     _toolsMargin
 
@@ -354,7 +366,7 @@ Rectangle{
 
         Rectangle {
             id:                         altitudeValue
-            height:                     ScreenTools.isMobile ? parent.height * 0.6 : parent.height * 0.4
+            height:                     ScreenTools.isMobile ? ScreenTools.defaultFontPixelHeight * 3.6 : ScreenTools.defaultFontPixelHeight * 3.2
             width:                      ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 12 : ScreenTools.defaultFontPixelWidth * 16
             color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:                     _toolsMargin
@@ -418,11 +430,11 @@ Rectangle{
                         font.bold :     true
                     }
                     QGCLabel {
-                        text:           getVerticalSpeedState()
+                        text:           _speedUnitText
                         opacity:        0.7
                     }
                     QGCLabel {
-                        text:           _speedUnitText
+                        text:           getVerticalSpeedState()
                         opacity:        0.7
                     }
                 }
