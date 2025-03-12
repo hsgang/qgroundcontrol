@@ -92,7 +92,6 @@ Item {
         id:                 topRightColumnLayout
         anchors.margins:    _layoutMargin
         anchors.top:        parent.top
-        anchors.bottom:     bottomRightRowLayout.top
         anchors.right:      parent.right
         spacing:            _layoutSpacing
         visible:            !topRightPanel.visible
@@ -100,6 +99,14 @@ Item {
         property real topEdgeRightInset:    childrenRect.height + _layoutMargin
         property real rightEdgeTopInset:    width + _layoutMargin
         property real rightEdgeCenterInset: rightEdgeTopInset
+    }
+
+    FlyViewRightPanel {
+        id:                 rightPanel
+        anchors.margins:    _layoutMargin
+        anchors.top:        topRightColumnLayout.bottom
+        anchors.bottom:     bottomRightRowLayout.top
+        anchors.right:      parent.right
     }
 
     FlyViewBottomRightRowLayout {

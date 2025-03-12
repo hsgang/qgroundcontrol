@@ -16,11 +16,13 @@ Rectangle {
     id:         gridSettings
     height:     generatorValueColumn.height + ScreenTools.defaultFontPixelHeight
     width:      ScreenTools.defaultFontPixelWidth * 30
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _backgroundOpacity)
     radius:     ScreenTools.defaultFontPixelHeight / 2
     // border.color: qgcPal.text
 
     property real _labelledItemWidth: ScreenTools.defaultFontPixelWidth * 16
+
+    property real _backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
     property var _gridSettings: QGroundControl.settingsManager.gridSettings
     property real _latitude:        _gridSettings.latitude.rawValue
