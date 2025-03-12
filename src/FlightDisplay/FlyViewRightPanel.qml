@@ -9,37 +9,44 @@ import QGroundControl.Palette
 import QGroundControl.ScreenTools
 
 ColumnLayout {
-    width: ScreenTools.defaultFontPixelWidth * 50
+    width: swipePages.currentItem
+               ? swipePages.currentItem.contentLoader.implicitWidth + pageIndicatorContainer.width + ScreenTools.defaultFontPixelHeight / 2
+               : ScreenTools.defaultFontPixelWidth * 40
 
-    // 통합된 배열: 각 객체에 컴포넌트와 아이콘 정보 포함
+    property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
+    property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
+
     property var pages: [
-        { comp: photoVideoControlComponent, icon: "/InstrumentValueIcons/gimbal-1.svg" },
-        { comp: siyiCameraControlComponent, icon: "/InstrumentValueIcons/gimbal-1.svg" },
-        { comp: stepMoveControlComponent, icon: "/res/Gripper.svg" },
-        { comp: flyViewGridSettingsComponent, icon: "/InstrumentValueIcons/border-all.svg" },
-        { comp: gimbalControlComponent, icon: "/InstrumentValueIcons/gimbal-2.svg" },
-        { comp: winchControlComponent, icon: "/InstrumentValueIcons/cog.svg" }
+        { comp: photoVideoControlComponent,  label: "Camera", icon: "/InstrumentValueIcons/gimbal-1.svg" },
+        { comp: siyiCameraControlComponent,  label: "SIYI", icon: "/InstrumentValueIcons/gimbal-1.svg" },
+        { comp: stepMoveControlComponent,    label: "Delivery", icon: "/res/Gripper.svg" },
+        { comp: flyViewGridSettingsComponent,label: "GridView", icon: "/InstrumentValueIcons/border-all.svg" },
+        { comp: gimbalControlComponent,      label: "Gimbal", icon: "/InstrumentValueIcons/gimbal-2.svg" },
+        { comp: winchControlComponent,       label: "Winch", icon: "/InstrumentValueIcons/cog.svg" }
     ]
 
     Rectangle {
         id: swipeViewContainer
         Layout.fillWidth: true
         Layout.fillHeight: true
-        Layout.alignment: Qt.AlignTop
-        color: "transparent"
+        //Layout.alignment: Qt.AlignVCenter
+        //color: //"transparent"
+        color:      "transparent"//Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
 
         QGCSwipeView {
             id: swipePages
             anchors.fill: parent
             anchors.rightMargin: pageIndicatorContainer.width
             spacing: ScreenTools.defaultFontPixelHeight
-            height: ScreenTools.defaultFontPixelHeight * 10
             orientation: Qt.Vertical
             clip: true
 
             Repeater {
                 model: pages
                 delegate: MvPanelPage {
+
+                    property alias contentLoader: loader
+
                     implicitHeight: loader.implicitHeight + ScreenTools.defaultFontPixelHeight * 2
                     implicitWidth: loader.implicitWidth + ScreenTools.defaultFontPixelHeight * 2
                     showBorder: false
@@ -83,27 +90,36 @@ ColumnLayout {
         // 페이지 인디케이터 (화면 우측 배치)
         Rectangle {
             id: pageIndicatorContainer
-            width: buttonColumn.implicitWidth
-            height: pages.length * (indicatorSize + indicatorSpacing)
-            color: "transparent"
-            anchors.right: parent.right
+            width:                  buttonColumnLayout.implicitWidth + ScreenTools.defaultFontPixelWidth
+            height:                 buttonColumnLayout.height + ScreenTools.defaultFontPixelWidth
+            color:                  "transparent"
+            anchors.right:          parent.right
             anchors.verticalCenter: parent.verticalCenter
 
-            property int indicatorSize: ScreenTools.implicitButtonHeight
-            property int indicatorSpacing: ScreenTools.defaultFontPixelHeight / 2
+            property int indicatorSize:     ScreenTools.implicitButtonHeight
+            property int indicatorSpacing:  ScreenTools.defaultFontPixelHeight / 2
 
-            Column {
-                id: buttonColumn
-                anchors.verticalCenter: parent.verticalCenter
+            MouseArea {
+                anchors.fill: parent
+                propagateComposedEvents: false
+            }
+
+            ColumnLayout {
+                id: buttonColumnLayout
+                anchors.verticalCenter:     parent.verticalCenter
+                anchors.horizontalCenter:   parent.horizontalCenter
                 spacing: pageIndicatorContainer.indicatorSpacing
 
                 Repeater {
                     model: pages
-                    delegate: QGCButton {
-                        id: indicatorDelegate
-                        checked: swipePages.currentIndex === index && globals.activeVehicle
-                        enabled: globals.activeVehicle
-                        iconSource: modelData.icon
+                    delegate: QGCColumnButton {
+                        implicitWidth:  _idealWidth
+                        implicitHeight: width
+                        checked:        swipePages.currentIndex === index && globals.activeVehicle
+                        enabled:        globals.activeVehicle
+                        iconSource:     modelData.icon
+                        text:           modelData.label
+                        font.pointSize: _fontSize * 0.7
                         onClicked: {
                             swipePages.currentIndex = index
                         }

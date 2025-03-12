@@ -44,13 +44,13 @@ ToolIndicatorPage{
                 //     property Fact   _showPhotoVideoControl:     QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl
                 // }
 
-                FactCheckBoxSlider {
-                    Layout.fillWidth: true
-                    text:       qsTr("Camera Payload Control")
-                    fact:       _showSiyiCameraControl
-                    visible:    _showSiyiCameraControl.visible
-                    property Fact   _showSiyiCameraControl:     QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl
-                }
+                // FactCheckBoxSlider {
+                //     Layout.fillWidth: true
+                //     text:       qsTr("Camera Payload Control")
+                //     fact:       _showSiyiCameraControl
+                //     visible:    _showSiyiCameraControl.visible
+                //     property Fact   _showSiyiCameraControl:     QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl
+                // }
 
                 // FactCheckBoxSlider {
                 //     Layout.fillWidth: true

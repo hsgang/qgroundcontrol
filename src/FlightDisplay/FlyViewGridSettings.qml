@@ -14,10 +14,10 @@ import QGroundControl.Palette
 
 Rectangle {
     id:         gridSettings
-    height:     generatorValueColumn.height + ScreenTools.defaultFontPixelHeight
-    width:      ScreenTools.defaultFontPixelWidth * 30
+    height:     generatorValueColumn.height + ScreenTools.defaultFontPixelHeight / 2
+    width:      generatorValueColumn.width + ScreenTools.defaultFontPixelHeight / 2
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _backgroundOpacity)
-    radius:     ScreenTools.defaultFontPixelHeight / 2
+    radius:     ScreenTools.defaultFontPixelHeight / 4
     // border.color: qgcPal.text
 
     property real _labelledItemWidth: ScreenTools.defaultFontPixelWidth * 16
@@ -31,7 +31,7 @@ Rectangle {
     property real _columns:         _gridSettings.columns.rawValue
     property real _gridSize:        _gridSettings.gridSize.rawValue
 
-    Column{
+    ColumnLayout{
         id:                 generatorValueColumn
         spacing:            ScreenTools.defaultFontPixelWidth
         anchors.margins:    ScreenTools.defaultFontPixelHeight
@@ -40,11 +40,19 @@ Rectangle {
         QGCLabel {
             id:     viewLabel
             text:   qsTr("Grid Settings")
-            anchors.horizontalCenter: parent.horizontalCenter
+            font.bold: true
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            height : 1
+            color : qgcPal.groupBorder
         }
 
         LabelledFactComboBox {
-            label:                  qsTr("Label")
+            label:                  qsTr("표시 항목")
             fact:                   _gridSettings.valueSource
         }
 
@@ -78,33 +86,82 @@ Rectangle {
             visible:                true
             textFieldPreferredWidth: _labelledItemWidth
         }
-        LabelledFactTextField {
-            label:                  qsTr("value1")
-            fact:                   _gridSettings.value1
-            visible:                true
-            textFieldPreferredWidth: _labelledItemWidth
+        RowLayout {
+            ColumnLayout {
+                Layout.fillHeight: true
+                spacing:    2
+                Rectangle {
+                    height: ScreenTools.defaultFontPixelHeight
+                    width:  height
+                    radius: ScreenTools.defaultFontPixelHeight / 4
+                    color: Qt.rgba(0, 255, 0, 0.4)
+                }
+                Rectangle {
+                    height: 1
+                    width:  ScreenTools.defaultFontPixelHeight * 1.5
+                    color: qgcPal.text
+                }
+                Rectangle {
+                    height: ScreenTools.defaultFontPixelHeight
+                    width:  height
+                    radius: ScreenTools.defaultFontPixelHeight / 4
+                    color: Qt.rgba(255, 255, 0, 0.4)
+                }
+                Rectangle {
+                    height: 1
+                    width:  ScreenTools.defaultFontPixelHeight * 1.5
+                    color: qgcPal.text
+                }
+                Rectangle {
+                    height: ScreenTools.defaultFontPixelHeight
+                    width:  height
+                    radius: ScreenTools.defaultFontPixelHeight / 4
+                    color: Qt.rgba(255, 0, 0, 0.4)
+                }
+                Rectangle {
+                    height: 1
+                    width:  ScreenTools.defaultFontPixelHeight * 1.5
+                    color: qgcPal.text
+                }
+                Rectangle {
+                    height: ScreenTools.defaultFontPixelHeight
+                    width:  height
+                    radius: ScreenTools.defaultFontPixelHeight / 4
+                    color: Qt.rgba(128, 0, 128, 0.4)
+                }
+            }
+            ColumnLayout {
+                LabelledFactTextField {
+                    label:                  qsTr("구분1")
+                    fact:                   _gridSettings.value1
+                    visible:                true
+                    textFieldPreferredWidth: _labelledItemWidth
+                }
+                LabelledFactTextField {
+                    label:                  qsTr("구분2")
+                    fact:                   _gridSettings.value2
+                    visible:                true
+                    textFieldPreferredWidth: _labelledItemWidth
+                }
+                LabelledFactTextField {
+                    label:                  qsTr("구분3")
+                    fact:                   _gridSettings.value3
+                    visible:                true
+                    textFieldPreferredWidth: _labelledItemWidth
+                }
+            }
         }
-        LabelledFactTextField {
-            label:                  qsTr("value2")
-            fact:                   _gridSettings.value2
-            visible:                true
-            textFieldPreferredWidth: _labelledItemWidth
-        }
-        LabelledFactTextField {
-            label:                  qsTr("value3")
-            fact:                   _gridSettings.value3
-            visible:                true
-            textFieldPreferredWidth: _labelledItemWidth
-        }
-        LabelledFactTextField {
-            label:                  qsTr("value4")
-            fact:                   _gridSettings.value4
-            visible:                true
-            textFieldPreferredWidth: _labelledItemWidth
+
+        Rectangle {
+            Layout.columnSpan: 2
+            Layout.fillWidth: true
+            height : 1
+            color : qgcPal.groupBorder
         }
 
         Row {
-            anchors.horizontalCenter: parent.horizontalCenter
+            Layout.columnSpan: 2
+            Layout.alignment: Qt.AlignHCenter
             spacing: ScreenTools.defaultFontPixelWidth
 
             QGCButton {

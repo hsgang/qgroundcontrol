@@ -87,102 +87,6 @@ Rectangle {
         propagateComposedEvents: false
     }
 
-    Rectangle{
-        anchors.bottom: parent.top
-        anchors.bottomMargin: _margins / 2
-        anchors.right: parent.right
-        anchors.horizontalCenter: parent.horizontalCenter
-        width:          valueRowLayout.width
-        height:         titleLabel.height + _margins
-        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-        radius:         _margins / 2
-
-        QGCLabel{
-            id:   titleLabel
-            text: "기체 스텝 제어"
-            anchors.horizontalCenter:   parent.horizontalCenter
-            anchors.verticalCenter:     parent.verticalCenter
-        }
-    }
-
-    Rectangle{
-        anchors.top: parent.bottom
-        anchors.topMargin: _margins / 2
-        anchors.right: parent.right
-        anchors.horizontalCenter: parent.horizontalCenter
-        width:          valueRowLayout.width
-        height:         valueRowLayout.height + _margins
-        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-        radius:         _margins / 2
-
-        RowLayout {
-            id: valueRowLayout
-            //anchors.horizontalCenter: parent.horizontalCenter
-            anchors.left:           parent.left
-            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
-            anchors.verticalCenter: parent.verticalCenter
-
-            ColumnLayout{
-
-                QGCLabel{
-                    text: "스텝 단위"
-                    font.pointSize: _fontSize
-                    leftPadding:    ScreenTools.defaultFontPixelWidth
-                }
-                // QGCLabel{
-                //     text: "상대좌표"
-                //     font.pointSize: _fontSize
-                //     leftPadding:    ScreenTools.defaultFontPixelWidth
-                // }
-                // QGCLabel{
-                //     text: "이동속도"
-                //     font.pointSize: _fontSize
-                //     leftPadding:    ScreenTools.defaultFontPixelWidth
-                // }
-                QGCLabel{
-                    text: "상대 고도"
-                    font.pointSize: _fontSize
-                    leftPadding:    ScreenTools.defaultFontPixelWidth
-                }
-                QGCLabel{
-                    text: "라이다 고도계"
-                    font.pointSize: _fontSize
-                    leftPadding:    ScreenTools.defaultFontPixelWidth
-                }
-            }
-
-            ColumnLayout{
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 14
-
-                QGCLabel{
-                    text: activeVehicle ? _moveStep.toFixed(1) + " m" : "no value"
-                    font.pointSize: _fontSize
-                    Layout.alignment: Qt.AlignRight
-                }
-                // QGCLabel{
-                //     text: activeVehicle ? activeVehicle.localPosition.x.valueString + "x / " + activeVehicle.localPosition.y.valueString + "y" : "no value"
-                //     font.pointSize: _fontSize
-                //     Layout.alignment: Qt.AlignRight
-                // }
-                // QGCLabel{
-                //     text: activeVehicle ? _vx.toFixed(1) + " / " + _vy.toFixed(1) + " / " + _vz.toFixed(1) : "no value"
-                //     font.pointSize: _fontSize
-                //     Layout.alignment: Qt.AlignRight
-                // }
-                QGCLabel{
-                    text: activeVehicle ? activeVehicle.altitudeRelative.valueString + " m" : "no value"
-                    font.pointSize: _fontSize
-                    Layout.alignment: Qt.AlignRight
-                }
-                QGCLabel{
-                    text: activeVehicle ? _distance.toFixed(1) + " m" : "no value"
-                    font.pointSize: _fontSize
-                    Layout.alignment: Qt.AlignRight
-                }
-            }
-        }
-    }
-
     GridLayout {
         id:                         mainGridLayout
         anchors.verticalCenter:     parent.verticalCenter
@@ -190,6 +94,21 @@ Rectangle {
         columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
         rowSpacing:                 columnSpacing
         columns:                    4
+
+        QGCLabel{
+            Layout.columnSpan: 4
+            Layout.fillWidth: true
+            text: "기체 스텝 제어"
+            font.bold: true
+            horizontalAlignment: Text.AlignHCenter
+        }
+
+        Rectangle {
+            Layout.columnSpan: 4
+            Layout.fillWidth: true
+            height : 1
+            color : qgcPal.groupBorder
+        }
 
         QGCColumnButton{
             id:                 stepUp
@@ -415,88 +334,6 @@ Rectangle {
             }
         }
 
-        // QGCButton{
-        //     id:                 gripperRelease
-        //     //implicitWidth:      _idealWidth
-        //     Layout.fillWidth:   true
-        //     implicitWidth:      _idealWidth
-        //     enabled:            activeVehicle && (_distance && _distance < _treshHoldAlt)
-        //     opacity:            enabled ? 1 : 0.4
-
-        //     Layout.columnSpan:  2
-
-        //     iconSource:         "/res/GripperRelease.svg"
-        //     text:               "화물 열기"
-        //     font.pointSize:     _fontSize * 0.7
-
-        //     onClicked: {
-        //         _activeVehicle.sendGripperAction(0)
-        //     }
-        // }
-
-        // DelayButton {
-        //     id: control
-        //     checked: false
-        //     enabled: activeVehicle && (_distance && _distance < _treshHoldAlt)
-        //     text: qsTr("화물 열기")
-
-        //     //Layout.columnSpan:  2
-        //     Layout.alignment: Qt.AlignCenter
-        //     Layout.fillWidth: true
-
-        //     delay: 500
-
-        //     onActivated: {
-        //         activeVehicle.sendGripperAction(0)
-        //         control.progress = 0
-        //     }
-
-        //     contentItem: Text {
-        //         text: control.text
-        //         font: control.font
-        //         opacity: enabled ? 1.0 : 0.3
-        //         color: qgcPal.text
-        //         horizontalAlignment: Text.AlignHCenter
-        //         verticalAlignment: Text.AlignVCenter
-        //         elide: Text.ElideRight
-        //     }
-
-        //     background: Rectangle {
-        //         implicitWidth:  _idealWidth
-        //         implicitHeight: _idealWidth
-        //         opacity: enabled ? 1 : 0.3
-        //         color: control.down ? qgcPal.buttonHighlight : qgcPal.button
-        //         radius: ScreenTools.buttonBorderRadius
-
-        //         // readonly property real size: Math.min(control.width, control.height)
-        //         // width: size
-        //         // height: size
-        //         anchors.centerIn: parent
-
-        //         Canvas {
-        //             id: canvas
-        //             anchors.fill: parent
-
-        //             Connections {
-        //                 target: control
-        //                 function onProgressChanged() { canvas.requestPaint(); }
-        //             }
-
-        //             onPaint: {
-        //                 var ctx = getContext("2d")
-        //                 ctx.clearRect(0, 0, width, height)
-        //                 ctx.strokeStyle = qgcPal.text
-        //                 ctx.lineWidth = parent.size / 20
-        //                 ctx.beginPath()
-        //                 var startAngle = Math.PI / 5 * 3
-        //                 var endAngle = startAngle + control.progress * Math.PI / 5 * 9
-        //                 ctx.arc(width / 2, height / 2, width / 2 - ctx.lineWidth / 2 - 2, startAngle, endAngle)
-        //                 ctx.stroke()
-        //             }
-        //         }
-        //     }
-        // }
-
         QGCColumnButton{
             id:                 gripperRelease
             implicitWidth:      _idealWidth
@@ -550,6 +387,34 @@ Rectangle {
                 else if (!_isCustomCommandEnabled){
                     _activeVehicle.sendCommand(192, 31010, 1, 1, 0, receivedTagId, 1, 0, 0, 0)
                 }
+            }
+        }
+
+        Rectangle {
+            Layout.columnSpan: 4
+            Layout.fillWidth: true
+            height : 1
+            color : qgcPal.groupBorder
+        }
+
+        ColumnLayout {
+            Layout.columnSpan: 4
+            Layout.fillWidth: true
+
+            LabelledLabel {
+                Layout.fillWidth:   true
+                label:              "스텝 단위"
+                labelText:          activeVehicle ? _moveStep.toFixed(1) + " m" : "no value"
+            }
+            LabelledLabel {
+                Layout.fillWidth:   true
+                label:              "상대 고도"
+                labelText:          activeVehicle ? activeVehicle.altitudeRelative.valueString + " m" : "no value"
+            }
+            LabelledLabel {
+                Layout.fillWidth:   true
+                label:              "라이다 고도계"
+                labelText:          activeVehicle ? _distance.toFixed(1) + " m" : "no value"
             }
         }
     }

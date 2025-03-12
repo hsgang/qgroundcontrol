@@ -26,6 +26,7 @@ Button {
     property real   backRadius:     ScreenTools.buttonBorderRadius
     property real   heightFactor:   0.5
     property string iconSource:     ""
+    property string iconColor:      ""
     property real   fontWeight:     Font.Normal // default for qml Text
 
     property alias wrapMode:            text.wrapMode

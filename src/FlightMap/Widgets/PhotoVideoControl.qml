@@ -27,7 +27,7 @@ import QGroundControl.FactControls
 Rectangle {
     width:      mainLayout.width + (_margins * 2)
     height:     mainLayout.height + (_margins * 2)
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _backgroundOpacity)
     radius:     _margins
     visible:    _camera.capturesVideo || _camera.capturesPhotos
 
@@ -42,6 +42,8 @@ Rectangle {
     property bool   _photoCaptureSingleIdle:    _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_IDLE
     property bool   _photoCaptureIntervalIdle:  _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IDLE
     property bool   _photoCaptureIdle:          _photoCaptureSingleIdle || _photoCaptureIntervalIdle
+
+    property real   _backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 

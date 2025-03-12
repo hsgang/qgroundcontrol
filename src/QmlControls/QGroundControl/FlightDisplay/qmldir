@@ -88,3 +88,4 @@ VideoLandingGuideOverlay        1.0 VideoLandingGuideOverlay.qml
 RequestConfirmPopup             1.0 RequestConfirmPopup.qml
 FlyViewValueBar                 1.0 FlyViewValueBar.qml
 FlyViewRightPanel               1.0 FlyViewRightPanel.qml
+FlyViewSiYiCameraPanel          1.0 FlyViewSiYiCameraPanel.qml

@@ -36,10 +36,14 @@ Rectangle {
     property real _headingToHome:               vehicle ? vehicle.headingToHome.rawValue : 0
     property real _groundSpeed:                 vehicle ? vehicle.groundSpeed.rawValue : 0
     property real _headingToNextWP:             vehicle ? vehicle.headingToNextWP.rawValue : 0
+    property real _distanceToNextWP:            vehicle ? vehicle.distanceToNextWP.rawValue : 0
     property real _courseOverGround:            vehicle ? vehicle.gps.courseOverGround.rawValue : 0
     property var  _flyViewSettings:             QGroundControl.settingsManager.flyViewSettings
     property bool _showAdditionalIndicators:    _flyViewSettings.showAdditionalIndicatorsCompass.value && !usedByMultipleVehicleList
     property bool _lockNoseUpCompass:           _flyViewSettings.lockNoseUpCompass.value && !usedByMultipleVehicleList
+
+    property string _flightMode:                vehicle ? vehicle.flightMode : ""
+    property bool   _vehicleInMissionMode:      vehicle ? _flightMode === vehicle.missionFlightMode : false
 
     function showCOG(){
         if (_groundSpeed < 0.5) {
@@ -55,6 +59,10 @@ Rectangle {
 
     function showHeadingToNextWP() {
         return vehicle && _showAdditionalIndicators && !isNaN(_headingToNextWP)
+    }
+
+    function showDistanceToNextWP(){
+        return vehicle && _vehicleInMissionMode && _showAdditionalIndicators && !isNaN(_distanceToNextWP)
     }
 
     function translateCenterToAngleX(radius, angle) {
@@ -120,20 +128,48 @@ Rectangle {
             }
         }
 
+        Rectangle {
+            width:                      distanceToNextWPText.width + (size * 0.05)
+            height:                     size * 0.12
+            border.color:               qgcPal.buttonHighlight
+            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
+            radius:                     height * 0.2
+            visible:                    showDistanceToNextWP()
+            anchors.centerIn:           parent
+
+            QGCLabel {
+                id:                 distanceToNextWPText
+                text:               _distanceToNextWP.toFixed(0)
+                font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
+                font.bold:          true
+                color:              qgcPal.text
+                anchors.centerIn:   parent
+            }
+
+            transform: Translate {
+                property double _angle: _headingToNextWP
+
+                x: translateCenterToAngleX(parent.width / 4, _angle)
+                y: translateCenterToAngleY(parent.height / 4, _angle)
+            }
+        }
+
         // Launch location indicator
         Rectangle {
             width:              Math.max(label.contentWidth, label.contentHeight)
             height:             width
-            color:              qgcPal.mapIndicator
             radius:             width / 2
             anchors.centerIn:   parent
             visible:            showHeadingHome()
+            //color:              qgcPal.mapIndicator
+            color:              qgcPal.alertBackground //qgcPal.text
+            border.color:       "black" //qgcPal.alertBackground
 
             QGCLabel {
                 id:                 label
-                text:               qsTr("L")
+                text:               "H"
                 font.bold:          true
-                color:              qgcPal.text
+                color:              "black"
                 anchors.centerIn:   parent
             }
 

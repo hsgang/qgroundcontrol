@@ -425,7 +425,6 @@ FlightMap {
     property real value1: QGroundControl.settingsManager.gridSettings.value1.rawValue
     property real value2: QGroundControl.settingsManager.gridSettings.value2.rawValue
     property real value3: QGroundControl.settingsManager.gridSettings.value3.rawValue
-    property real value4: QGroundControl.settingsManager.gridSettings.value4.rawValue
     property int _rows: QGroundControl.settingsManager.gridSettings.rows.rawValue
     property int _columns: QGroundControl.settingsManager.gridSettings.columns.rawValue
 
@@ -522,8 +521,6 @@ FlightMap {
                     } else if (rawValue <= value2) {
                         gridRect.color = Qt.rgba(255, 255, 0, 0.4);  // Yellow
                     } else if (rawValue <= value3) {
-                        gridRect.color = Qt.rgba(255, 165, 0, 0.4);  // Orange
-                    } else if (rawValue <= value4) {
                         gridRect.color = Qt.rgba(255, 0, 0, 0.4);  // Red
                     } else {
                         gridRect.color = Qt.rgba(128, 0, 128, 0.4);  // Purple for out of range

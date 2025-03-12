@@ -70,59 +70,6 @@ Rectangle {
     property var    _camera:            _isCamera ? _dynamicCameras.cameras.get(_curCameraIndex) : null
     property bool   _hasZoom:           _camera && _camera.hasZoom
 
-    Rectangle{
-        anchors.bottom: parent.top
-        anchors.bottomMargin: _margins / 2
-        anchors.right: parent.right
-        anchors.horizontalCenter: parent.horizontalCenter
-        width:          gimbalAngleValueRow.width
-        height:         titleLabel.height + _margins
-        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-        radius:         _margins / 2
-
-        QGCLabel{
-            id:   titleLabel
-            text: "마운트 제어"
-            anchors.horizontalCenter:   parent.horizontalCenter
-            anchors.verticalCenter:     parent.verticalCenter
-        }
-    }
-
-    Rectangle{
-        anchors.top: parent.bottom
-        anchors.topMargin: _margins / 2
-        anchors.right: parent.right
-        anchors.horizontalCenter: parent.horizontalCenter
-        width:          gimbalAngleValueRow.width
-        height:         gimbalAngleValueRow.height
-        color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-        radius:         _margins / 2
-        ColumnLayout{
-            id: gimbalAngleValueRow
-
-            QGCLabel{
-                text: activeGimbal ? "P: " + activeGimbal.absolutePitch.rawValue.toFixed(1) : "no value"
-                font.pointSize: _fontSize
-            }
-            QGCLabel{
-                text: activeGimbal ? "Y: " + activeGimbal.bodyYaw.rawValue.toFixed(1) : "no value"
-                font.pointSize: _fontSize
-            }
-            // QGCLabel{
-            //     text: activeGimbal ? "R: " + activeGimbal.absoluteRoll.rawValue.toFixed(1) : "no value"
-            //     font.pointSize: _fontSize
-            // }
-            // QGCLabel{
-            //     text: activeGimbal ? "gimbalCnt: " + gimbalController.gimbals.count.toFixed(0) : "no value"
-            //     font.pointSize: _fontSize
-            // }
-            // QGCLabel{
-            //     text: activeGimbal ? "gimbalId: " + activeGimbal.deviceId.rawValue.toFixed(0) : "no value"
-            //     font.pointSize: _fontSize
-            // }
-        }
-    }
-
     GridLayout {
         id:                         mainGridLayout
         anchors.verticalCenter:     parent.verticalCenter
@@ -131,326 +78,185 @@ Rectangle {
         rowSpacing:                 columnSpacing
         columns:                    3
 
+        QGCLabel{
+            Layout.columnSpan: 3
+            Layout.fillWidth: true
+            text: "마운트 제어"
+            font.bold: true
+            horizontalAlignment: Text.AlignHCenter
+        }
+
         Rectangle {
+            Layout.columnSpan: 3
+            Layout.fillWidth: true
+            height : 1
+            color : qgcPal.groupBorder
+        }
+
+        QGCColumnButton{
             id:                 zoomIn
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:              "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              zoomInPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/zoom-in.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/zoom-in.svg"
+            text:               "Zoom+"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id:             zoomInPress
-                anchors.fill:   parent
-                onClicked: {
-                    _camera.stepZoom(1)
-                }
+            onClicked: {
+                _camera.stepZoom(1)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 gimbalUp
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              gimbalUpPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-thick-up.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-thick-up.svg"
+            text:               "UP"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id: gimbalUpPress
-                anchors.fill:   parent
-                onClicked: {
-                    _localPitch += 2.0
-                    //-- Arbitrary range
-                    if(_localPitch < -90.0) _localPitch = -90.0;
-                    if(_localPitch >  35.0) _localPitch =  35.0;
-                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
-                }
+            onClicked: {
+                _localPitch += 2.0
+                //-- Arbitrary range
+                if(_localPitch < -90.0) _localPitch = -90.0;
+                if(_localPitch >  35.0) _localPitch =  35.0;
+                gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 baseDown
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              baseDownPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-base-down.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-base-down.svg"
+            text:               "Down"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id:             baseDownPress
-                anchors.fill:   parent
-                onClicked: {
-                    gimbalController.sendPitchBodyYaw(-90.0, 0.0, true)
-                }
+            onClicked: {
+                gimbalController.sendPitchBodyYaw(-90.0, 0.0, true)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 gimbalLeft
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              gimbalLeftPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-thick-left.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-thick-left.svg"
+            text:               "Left"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id:             gimbalLeftPress
-                anchors.fill:   parent
-                onClicked: {
-                    _localYaw += -2
-                    //-- Arbitrary range
-                    if(_localYaw < -90.0) _localYaw = -90.0;
-                    if(_localYaw >  90.0) _localYaw =  90.0;
-                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
-                }
+            onClicked: {
+                _localYaw += -2
+                //-- Arbitrary range
+                if(_localYaw < -90.0) _localYaw = -90.0;
+                if(_localYaw >  90.0) _localYaw =  90.0;
+                gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 gimbalHome
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              gimbalHomePress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/target.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/target.svg"
+            text:               "Center"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id:             gimbalHomePress
-                anchors.fill:   parent
-                onClicked: {
-                    gimbalController.centerGimbal()
-                    _localPitch = 0
-                    _localYaw = 0
-                }
+            onClicked: {
+                gimbalController.centerGimbal()
+                _localPitch = 0
+                _localYaw = 0
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 gimbalRight
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              gimbalRightPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-thick-right.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/arrow-thick-right.svg"
+            text:               "Right"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id:             gimbalRightPress
-                anchors.fill:   parent
-                onClicked: {
-                    _localYaw += 2
-                    //-- Arbitrary range
-                    if(_localYaw < -90.0) _localYaw = -90.0;
-                    if(_localYaw >  90.0) _localYaw =  90.0;
-                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
-                }
+            onClicked: {
+                _localYaw += 2
+                //-- Arbitrary range
+                if(_localYaw < -90.0) _localYaw = -90.0;
+                if(_localYaw >  90.0) _localYaw =  90.0;
+                gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 zoomOut
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              zoomOutPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/zoom-out.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
-            }
+            iconSource:         "/InstrumentValueIcons/zoom-out.svg"
+            text:               "Zoom-"
+            font.pointSize:     _fontSize * 0.7
 
-            MouseArea {
-                id:             zoomOutPress
-                anchors.fill:   parent
-                onClicked: {
-                    _camera.stepZoom(-1)
-                }
+            onClicked: {
+                _camera.stepZoom(-1)
             }
         }
 
-        Rectangle {
+        QGCColumnButton{
             id:                 gimbalDown
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              gimbalDownPress.pressedButtons ? 0.95 : 1
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/arrow-thick-down.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
+            iconSource:         "/InstrumentValueIcons/arrow-thick-down.svg"
+            text:               "Down"
+            font.pointSize:     _fontSize * 0.7
+
+            onClicked: {
+                _localPitch += -2
+                //-- Arbitrary range
+                if(_localPitch < -90.0) _localPitch = -90.0;
+                if(_localPitch >  35.0) _localPitch =  35.0;
+                gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
             }
+        }
 
-            MouseArea {
-                id:             gimbalDownPress
-                anchors.fill:   parent
-                onClicked: {
-                    _localPitch += -2
-                    //-- Arbitrary range
-                    if(_localPitch < -90.0) _localPitch = -90.0;
-                    if(_localPitch >  35.0) _localPitch =  35.0;
-                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
-                }
+        QGCColumnButton{
+            id:                 gimbalMode
+            implicitWidth:      _idealWidth
+            implicitHeight:     width
+
+            iconSource:         "/InstrumentValueIcons/navigation-more.svg"
+            text:               "RC"
+            font.pointSize:     _fontSize * 0.7
+
+            onClicked: {
+                gimbalController.setGimbalRcTargeting()
             }
         }
 
         Rectangle {
-            id:                 gimbalMode
-            Layout.alignment:   Qt.AlignHCenter
-            width:              _idealWidth
-            height:             width
-            radius:             _margins
-            color:      "transparent"
-            border.color:       qgcPal.text
-            border.width:       1
-            scale:              gimbalModePress.pressedButtons ? 0.95 : 1
+            Layout.columnSpan: 3
+            Layout.fillWidth: true
+            height : 1
+            color : qgcPal.groupBorder
+        }
 
-            QGCColoredImage {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
-                height:             parent.height * 0.6
-                width:              height
-                source:             "/InstrumentValueIcons/navigation-more.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                mipmap:             true
-                smooth:             true
-                color:              enabled ? qgcPal.text : qgcPalDisabled.text
-                enabled:            true
+        ColumnLayout {
+            Layout.columnSpan: 3
+            Layout.fillWidth: true
+
+            LabelledLabel {
+                Layout.fillWidth:   true
+                label:              "Pitch"
+                labelText:          activeGimbal ? activeGimbal.absolutePitch.rawValue.toFixed(1) : "no value"
             }
-
-            MouseArea {
-                id:             gimbalModePress
-                anchors.fill:   parent
-                onClicked: {
-                    gimbalController.setGimbalRcTargeting()
-                }
+            LabelledLabel {
+                Layout.fillWidth:   true
+                label:              "Yaw"
+                labelText:          activeGimbal ? activeGimbal.bodyYaw.rawValue.toFixed(1) : "no value"
             }
         }
     }

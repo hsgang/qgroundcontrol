@@ -26,6 +26,7 @@ QGCButton {
         implicitHeight: iconSource === "" ? textLabel.implicitHeight : textLabel.implicitHeight * 2.5 
         ColumnLayout {
             anchors.fill: parent
+            spacing: 0
             QGCColoredImage {
                 id: icon
                 Layout.fillWidth:       true
@@ -33,7 +34,7 @@ QGCButton {
                 Layout.maximumHeight:   parent.height - textLabelContainer.height
                 Layout.alignment:       control.text !== "" ? Qt.AlignTop : Qt.AlignHCenter | Qt.AlignVCenter
                 source:                 control.iconSource
-                color:                  qgcPal.text
+                color:                  control.iconColor !== "" ? control.iconColor : qgcPal.text
                 fillMode:               Image.PreserveAspectFit
                 sourceSize.height:      height
                 sourceSize.width:       width

@@ -353,7 +353,7 @@ Item {
     Rectangle {
         id:                 messageToastManagerRect
         anchors.margins:    _toolsMargin * 3
-        anchors.top:        parent.top
+        anchors.top:        windvane.visible ? windvane.bottom : parent.top
         anchors.left:       toolStrip.right
         width:              ScreenTools.isMobile ? parent.width / 2 : parent.width / 4
         height:             parent.height / 2
@@ -376,7 +376,7 @@ Item {
         anchors.margins:        _toolsMargin
         anchors.top:            parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
         anchors.bottom:         bottomRightRowLayout.top
-        anchors.right:          topRightColumnLayout.left
+        anchors.right:          rightPanel.left
         width:                  ScreenTools.isMobile ? mainWindow.width * 0.7 : mainWindow.width * 0.4
         visible:                QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue
     }
@@ -391,7 +391,7 @@ Item {
     }
 
     Rectangle {
-        id: resultRectangle
+        id: siyiResultRectangle
         anchors.top: parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
         width: resultLabel.width + resultLabel.width*0.4
         height: resultLabel.height + resultLabel.height*0.4
@@ -410,7 +410,7 @@ Item {
                 interval: 5000
                 running: false
                 repeat: false
-                onTriggered: resultRectangle.visible = false
+                onTriggered: siyiResultRectangle.visible = false
             }
 
             Connections {
@@ -438,7 +438,7 @@ Item {
 
                     resultTimer.restart()
                     zoomMultipleRectangle.visible = false
-                    resultRectangle.visible = true
+                    siyiResultRectangle.visible = true
                 }
             }
         }
@@ -473,18 +473,10 @@ Item {
             property real zoomMultiple: camera.enableZoom ? camera.zoomMultiple : 1
 
             onZoomMultipleChanged: {
-                resultRectangle.visible = false
+                siyiResultRectangle.visible = false
                 zoomMultipleRectangle.visible = true
                 visibleTimer.restart()
             }
         }
     }
-
-    // FlyViewGridSettings {
-    //     id: flyviewGridSettings
-    //     anchors.margins:        _toolsMargin
-    //     anchors.bottom:         mapScale.visible ? mapScale.top : parent.bottom
-    //     anchors.right:          parent.right
-    //     visible:                QGroundControl.settingsManager.flyViewSettings.showGridViewer.rawValue
-    // }
 }
