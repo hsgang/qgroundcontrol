@@ -98,7 +98,7 @@ Rectangle {
         QGCLabel{
             Layout.columnSpan: 4
             Layout.fillWidth: true
-            text: "기체 스텝 제어"
+            text: "기체 배송 제어"
             font.bold: true
             horizontalAlignment: Text.AlignHCenter
         }

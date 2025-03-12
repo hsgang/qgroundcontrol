@@ -7,23 +7,33 @@ import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
 import QGroundControl.Palette
 import QGroundControl.ScreenTools
+import QGroundControl.FactSystem
+import QGroundControl.FactControls
 
 ColumnLayout {
     width: swipePages.currentItem
-               ? swipePages.currentItem.contentLoader.implicitWidth + pageIndicatorContainer.width + ScreenTools.defaultFontPixelHeight / 2
+               ? swipePages.currentItem.contentLoader.implicitWidth + pageIndicatorContainer.width + ScreenTools.defaultFontPixelHeight
                : ScreenTools.defaultFontPixelWidth * 40
 
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
     property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
 
+    property bool   _showGimbalControl:     QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue
+    property bool   _showGridViewer:        QGroundControl.settingsManager.flyViewSettings.showGridViewer.rawValue
+    property bool   _showStepMoveControl:   QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl.rawValue
+    property bool   _showWinchControl:      QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue
+
     property var pages: [
-        { comp: photoVideoControlComponent,  label: "Camera", icon: "/InstrumentValueIcons/gimbal-1.svg" },
-        { comp: siyiCameraControlComponent,  label: "SIYI", icon: "/InstrumentValueIcons/gimbal-1.svg" },
-        { comp: stepMoveControlComponent,    label: "Delivery", icon: "/res/Gripper.svg" },
-        { comp: flyViewGridSettingsComponent,label: "GridView", icon: "/InstrumentValueIcons/border-all.svg" },
-        { comp: gimbalControlComponent,      label: "Gimbal", icon: "/InstrumentValueIcons/gimbal-2.svg" },
-        { comp: winchControlComponent,       label: "Winch", icon: "/InstrumentValueIcons/cog.svg" }
+        { comp: photoVideoControlComponent,  label: "Camera", icon: "/InstrumentValueIcons/gimbal-1.svg",   enabled: true },
+        { comp: siyiCameraControlComponent,  label: "SIYI", icon: "/InstrumentValueIcons/gimbal-1.svg" ,    enabled: true },
+        { comp: stepMoveControlComponent,    label: "Delivery", icon: "/res/Gripper.svg",                   enabled: _showStepMoveControl },
+        { comp: flyViewGridSettingsComponent,label: "GridView", icon: "/InstrumentValueIcons/border-all.svg",enabled: _showGridViewer },
+        { comp: gimbalControlComponent,      label: "Gimbal", icon: "/InstrumentValueIcons/gimbal-2.svg",   enabled: _showGimbalControl },
+        { comp: winchControlComponent,       label: "Winch", icon: "/InstrumentValueIcons/cog.svg",         enabled: _showWinchControl }
     ]
+
+    // enabled가 true인 항목만 activePages에 포함
+        property var activePages: pages.filter(function(item) { return item.enabled; })
 
     Rectangle {
         id: swipeViewContainer
@@ -42,7 +52,7 @@ ColumnLayout {
             clip: true
 
             Repeater {
-                model: pages
+                model: activePages
                 delegate: MvPanelPage {
 
                     property alias contentLoader: loader
@@ -53,6 +63,7 @@ ColumnLayout {
 
                     Loader {
                         id: loader
+                        asynchronous: true
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
                         sourceComponent: globals.activeVehicle ? modelData.comp : undefined
@@ -111,7 +122,7 @@ ColumnLayout {
                 spacing: pageIndicatorContainer.indicatorSpacing
 
                 Repeater {
-                    model: pages
+                    model: activePages
                     delegate: QGCColumnButton {
                         implicitWidth:  _idealWidth
                         implicitHeight: width

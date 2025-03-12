@@ -52,21 +52,37 @@ ToolIndicatorPage{
                 //     property Fact   _showSiyiCameraControl:     QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl
                 // }
 
-                // FactCheckBoxSlider {
-                //     Layout.fillWidth: true
-                //     text:       qsTr("Mount Control")
-                //     fact:       _showGimbalControlPannel
-                //     visible:    _showGimbalControlPannel.visible
-                //     property Fact   _showGimbalControlPannel:   QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel
-                // }
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       qsTr("Grid Viewer")
+                    fact:       _showGridViewer
+                    visible:    _showGridViewer.visible
+                    property Fact   _showGridViewer:            QGroundControl.settingsManager.flyViewSettings.showGridViewer
+                }
 
-                // FactCheckBoxSlider {
-                //     Layout.fillWidth: true
-                //     text:       qsTr("Winch Control")
-                //     fact:       _showWinchControl
-                //     visible:    _showWinchControl.visible
-                //     property Fact   _showWinchControl:          QGroundControl.settingsManager.flyViewSettings.showWinchControl
-                // }
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       "배송 제어"//qsTr("Vehicle Step Control")
+                    fact:       _showVehicleStepMoveControl
+                    visible:    _showVehicleStepMoveControl.visible
+                    property Fact   _showVehicleStepMoveControl:    QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl
+                }
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       qsTr("Mount Control")
+                    fact:       _showGimbalControlPannel
+                    visible:    _showGimbalControlPannel.visible
+                    property Fact   _showGimbalControlPannel:   QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel
+                }
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       qsTr("Winch Control")
+                    fact:       _showWinchControl
+                    visible:    _showWinchControl.visible
+                    property Fact   _showWinchControl:          QGroundControl.settingsManager.flyViewSettings.showWinchControl
+                }
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true
@@ -90,23 +106,7 @@ ToolIndicatorPage{
                     fact:       _showWindvane
                     visible:    _showWindvane.visible
                     property Fact   _showWindvane:              QGroundControl.settingsManager.flyViewSettings.showWindvane
-                }
-
-                // FactCheckBoxSlider {
-                //     Layout.fillWidth: true
-                //     text:       qsTr("Grid Viewer")
-                //     fact:       _showGridViewer
-                //     visible:    _showGridViewer.visible
-                //     property Fact   _showGridViewer:            QGroundControl.settingsManager.flyViewSettings.showGridViewer
-                // }
-
-                // FactCheckBoxSlider {
-                //     Layout.fillWidth: true
-                //     text:       qsTr("Vehicle Step Control")
-                //     fact:       _showVehicleStepMoveControl
-                //     visible:    _showVehicleStepMoveControl.visible
-                //     property Fact   _showVehicleStepMoveControl:    QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl
-                // }
+                }                
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true
