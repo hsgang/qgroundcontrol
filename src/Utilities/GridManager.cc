@@ -72,4 +72,10 @@ void GridManager::deleteGrid() {
     //qDebug() << "gridData Cleared";
 }
 
+void GridManager::toggleAdjustMarker()
+{
+    m_showAdjustMarker = !m_showAdjustMarker;  // 상태 반전
+    emit showAdjustMarkerChanged();            // 변경 알림
+}
+
 

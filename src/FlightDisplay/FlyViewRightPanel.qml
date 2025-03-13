@@ -18,18 +18,20 @@ ColumnLayout {
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
     property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
 
+    property bool   _showPhotoVideoControl: globals.activeVehicle
+    property bool   _showSiyiCameraControl: true
     property bool   _showGimbalControl:     QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue
     property bool   _showGridViewer:        QGroundControl.settingsManager.flyViewSettings.showGridViewer.rawValue
     property bool   _showStepMoveControl:   QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl.rawValue
     property bool   _showWinchControl:      QGroundControl.settingsManager.flyViewSettings.showWinchControl.rawValue
 
     property var pages: [
-        { comp: photoVideoControlComponent,  label: "Camera", icon: "/InstrumentValueIcons/gimbal-1.svg",   enabled: true },
-        { comp: siyiCameraControlComponent,  label: "SIYI", icon: "/InstrumentValueIcons/gimbal-1.svg" ,    enabled: true },
-        { comp: stepMoveControlComponent,    label: "Delivery", icon: "/res/Gripper.svg",                   enabled: _showStepMoveControl },
+        { comp: photoVideoControlComponent,  label: "Camera", icon: "/InstrumentValueIcons/gimbal-1.svg",    enabled: _showPhotoVideoControl },
+        { comp: siyiCameraControlComponent,  label: "SIYI", icon: "/InstrumentValueIcons/gimbal-1.svg" ,     enabled: _showSiyiCameraControl },
+        { comp: stepMoveControlComponent,    label: "Delivery", icon: "/res/Gripper.svg",                    enabled: _showStepMoveControl },
         { comp: flyViewGridSettingsComponent,label: "GridView", icon: "/InstrumentValueIcons/border-all.svg",enabled: _showGridViewer },
-        { comp: gimbalControlComponent,      label: "Gimbal", icon: "/InstrumentValueIcons/gimbal-2.svg",   enabled: _showGimbalControl },
-        { comp: winchControlComponent,       label: "Winch", icon: "/InstrumentValueIcons/cog.svg",         enabled: _showWinchControl }
+        { comp: gimbalControlComponent,      label: "Gimbal", icon: "/InstrumentValueIcons/gimbal-2.svg",    enabled: _showGimbalControl },
+        { comp: winchControlComponent,       label: "Winch", icon: "/InstrumentValueIcons/cog.svg",          enabled: _showWinchControl }
     ]
 
     // enabled가 true인 항목만 activePages에 포함
@@ -66,7 +68,7 @@ ColumnLayout {
                         asynchronous: true
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
-                        sourceComponent: globals.activeVehicle ? modelData.comp : undefined
+                        sourceComponent: modelData.enabled ? modelData.comp : undefined
                         property real rightEdgeCenterInset: visible ? parent.width - x : 0
                     }
                 }
@@ -127,7 +129,6 @@ ColumnLayout {
                         implicitWidth:  _idealWidth
                         implicitHeight: width
                         checked:        swipePages.currentIndex === index && globals.activeVehicle
-                        enabled:        globals.activeVehicle
                         iconSource:     modelData.icon
                         text:           modelData.label
                         font.pointSize: _fontSize * 0.7

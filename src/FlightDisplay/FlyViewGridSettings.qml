@@ -44,29 +44,47 @@ Rectangle {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
         }
-
         Rectangle {
             Layout.fillWidth: true
             height : 1
             color : qgcPal.groupBorder
         }
-
         LabelledFactComboBox {
             label:                  qsTr("표시 항목")
             fact:                   _gridSettings.valueSource
         }
+        RowLayout {
+            ColumnLayout{
+                LabelledFactTextField {
+                    label:                  qsTr("Latitude")
+                    fact:                   _gridSettings.latitude
+                    visible:                true
+                    textFieldPreferredWidth: _labelledItemWidth
+                }
+                LabelledFactTextField {
+                    label:                  qsTr("Longtitude")
+                    fact:                   _gridSettings.longitude
+                    visible:                true
+                    textFieldPreferredWidth: _labelledItemWidth
+                }
+            }
+            QGCColumnButton{
+                id:                 stepTurnLeft
+                Layout.rowSpan: 2
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                //enabled:            _isGuidedEnable && !_isMoving
+                //opacity:            enabled ? 1 : 0.4
 
-        LabelledFactTextField {
-            label:                  qsTr("Latitude")
-            fact:                   _gridSettings.latitude
-            visible:                true
-            textFieldPreferredWidth: _labelledItemWidth
-        }
-        LabelledFactTextField {
-            label:                  qsTr("Longtitude")
-            fact:                   _gridSettings.longitude
-            visible:                true
-            textFieldPreferredWidth: _labelledItemWidth
+                iconSource:         "/InstrumentValueIcons/target.svg"
+                iconColor:          QGroundControl.gridManager.showAdjustMarker ? qgcPal.colorGreen : qgcPal.text
+                text:               "위치"
+                font.pointSize:     _fontSize * 0.7
+
+                onClicked: {
+                    QGroundControl.gridManager.toggleAdjustMarker()
+                }
+            }
         }
         LabelledFactTextField {
             label:                  qsTr("Rows")

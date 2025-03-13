@@ -27,4 +27,3 @@ DECLARE_SETTINGSFACT(GridSettings, value2)
 DECLARE_SETTINGSFACT(GridSettings, value3)
 DECLARE_SETTINGSFACT(GridSettings, value4)
 DECLARE_SETTINGSFACT(GridSettings, gridSize)
-

@@ -431,15 +431,10 @@ FlightMap {
     function valueSouceData() {
         switch ( valueSource ) {
             case 0 : return _activeVehicle.altitudeRelative.rawValue
-                break
             case 1 : return _activeVehicle.atmosphericSensor.extValue1.rawValue
-                break
             case 2 : return _activeVehicle.atmosphericSensor.extValue2.rawValue
-                break
             case 3 : return _activeVehicle.atmosphericSensor.extValue3.rawValue
-                break
             case 4 : return _activeVehicle.atmosphericSensor.extValue4.rawValue
-                break
             default : return _activeVehicle.altitudeRelative.rawValue
         }
     }
@@ -475,6 +470,63 @@ FlightMap {
                     selectedGrid.selectColor()
                 }
                 return
+            }
+        }
+    }
+
+    MapQuickItem {
+        id: gridAdjMarker
+        // 아이템의 anchorPoint는 이미지 하단 중앙에 위치시킵니다.
+        anchorPoint.x: markerRect.width / 2
+        anchorPoint.y: markerRect.height / 2
+        coordinate: QtPositioning.coordinate(initLat, initLon)
+
+        visible : QGroundControl.gridManager.showAdjustMarker
+
+        property real initLat: QGroundControl.settingsManager.gridSettings.latitude.rawValue
+        property real initLon: QGroundControl.settingsManager.gridSettings.longitude.rawValue
+
+        sourceItem: Rectangle {
+            id: markerRect
+            width:      calculateGridSize().width
+            height:     calculateGridSize().height
+            color:      "transparent"
+            border.color: qgcPal.colorGreen
+            border.width: 3
+
+            MouseArea {
+                anchors.fill: parent
+                // MapQuickItem 자체를 드래그 대상으로 지정
+                drag.target: gridAdjMarker
+                drag.axis: Drag.XAndYAxis
+
+                // 드래그 중에는 별도 추가 처리 가능
+                onPressed: {
+                    // 예: 아이템 강조 효과 등
+                }
+
+                onReleased: {
+                    // 드래그가 종료된 후, 현재 화면상의 좌표를 지도 좌표로 변환
+                    var newCoordinate = _root.toCoordinate(
+                        Qt.point(gridAdjMarker.x + gridAdjMarker.anchorPoint.x, gridAdjMarker.y + gridAdjMarker.anchorPoint.y)
+                    )
+                    // MapQuickItem의 좌표를 갱신
+                    gridAdjMarker.coordinate = newCoordinate
+
+                    var _rows = QGroundControl.settingsManager.gridSettings.rows.rawValue
+                    var _columns = QGroundControl.settingsManager.gridSettings.columns.rawValue
+                    var _gridSize = QGroundControl.settingsManager.gridSettings.gridSize.rawValue
+
+                    QGroundControl.gridManager.generateGrid(QtPositioning.coordinate(newCoordinate.latitude, newCoordinate.longitude),
+                                                                _rows,
+                                                                _columns,
+                                                                _gridSize)
+
+                    QGroundControl.settingsManager.gridSettings.latitude.rawValue = newCoordinate.latitude
+                    QGroundControl.settingsManager.gridSettings.longitude.rawValue = newCoordinate.longitude
+
+                    console.log("새로운 좌표:", newCoordinate.latitude, newCoordinate.longitude)
+                }
             }
         }
     }
