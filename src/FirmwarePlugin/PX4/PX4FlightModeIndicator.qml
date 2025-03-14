@@ -51,16 +51,6 @@ FlightModeIndicator {
                     sliderPreferredWidth:   sliderWidth
                     majorTickStepSize:      10
                 }
-
-                FactSlider {
-                    Layout.fillWidth:       true
-                    label:                  qsTr("Land Descent Rate")
-                    fact:                   mpcLandSpeedFact
-                    to:                     fact.maxIsDefaultForType ? QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(4) : fact.max
-                    sliderPreferredWidth:   sliderWidth
-                    majorTickStepSize:      0.5
-                    visible:                mpcLandSpeedFact && controller.vehicle && !controller.vehicle.fixedWing
-                }
             }
 
             SettingsGroupLayout {

@@ -459,7 +459,8 @@ Item {
             }
 
             SettingsGroupLayout {
-                visible: _activeVehicle.autopilotPlugin.knownVehicleComponentAvailable(AutoPilotPlugin.KnownPowerVehicleComponent)
+                visible: _activeVehicle.autopilotPlugin.knownVehicleComponentAvailable(AutoPilotPlugin.KnownPowerVehicleComponent) &&
+                            QGroundControl.corePlugin.showAdvancedUI
 
                 LabelledButton {
                     label:      qsTr("Vehicle Power")
