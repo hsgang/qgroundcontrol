@@ -38,6 +38,7 @@ class NTRIPSettings;
 class CloudSettings;
 class ModelProfileSettings;
 class GridSettings;
+class MavlinkSettings;
 
 Q_DECLARE_LOGGING_CATEGORY(SettingsManagerLog)
 
@@ -73,6 +74,7 @@ class SettingsManager : public QObject
     Q_MOC_INCLUDE("NTRIPSettings.h")
     Q_MOC_INCLUDE("ModelProfileSettings.h")
     Q_MOC_INCLUDE("GridSettings.h")
+    Q_MOC_INCLUDE("MavlinkSettings.h")
 #ifdef QGC_VIEWER3D
     Q_MOC_INCLUDE("Viewer3DSettings.h")
 #endif
@@ -102,6 +104,7 @@ class SettingsManager : public QObject
     Q_PROPERTY(QObject *siyiSettings                    READ siyiSettings                   CONSTANT)
     Q_PROPERTY(QObject *modelProfileSettings            READ modelProfileSettings           CONSTANT)
     Q_PROPERTY(QObject *gridSettings                    READ gridSettings                   CONSTANT)
+    Q_PROPERTY(QObject *mavlinkSettings                 READ mavlinkSettings                CONSTANT)
 #ifdef QGC_VIEWER3D
     Q_PROPERTY(QObject *viewer3DSettings                READ viewer3DSettings               CONSTANT)
 #endif
@@ -140,6 +143,7 @@ public:
     CloudSettings *cloudSettings() const;
     ModelProfileSettings *modelProfileSettings() const;
     GridSettings *gridSettings() const;
+    MavlinkSettings *mavlinkSettings() const;
 #ifdef QGC_VIEWER3D
     Viewer3DSettings *viewer3DSettings() const;
 #endif
@@ -171,6 +175,7 @@ private:
     CloudSettings *_cloudSettings = nullptr;
     ModelProfileSettings *_modelProfileSettings = nullptr;
     GridSettings *_gridSettings = nullptr;
+    MavlinkSettings *_mavlinkSettings = nullptr;
 #ifdef QGC_VIEWER3D
     Viewer3DSettings *_viewer3DSettings = nullptr;
 #endif

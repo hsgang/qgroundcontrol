@@ -23,51 +23,30 @@ import QGroundControl.Palette
 
 SettingsPage {
     property var    _settingsManager:           QGroundControl.settingsManager
+    property var    _mavlinkSettings:           _settingsManager.mavlinkSettings
     property var    _appSettings:               _settingsManager.appSettings
     property bool   _disableAllDataPersistence: _appSettings.disableAllPersistence.rawValue
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property string _notConnectedStr:           qsTr("Not Connected")
     property bool   _isAPM:                     _activeVehicle ? _activeVehicle.apmFirmware : true
     property bool   _showAPMStreamRates:        QGroundControl.apmFirmwareSupported && _settingsManager.apmMavlinkStreamRateSettings.visible && _isAPM
-    property var    _apmStartMavlinkStreams:    _appSettings.apmStartMavlinkStreams
+    property var    _apmStartMavlinkStreams:    _mavlinkSettings.apmStartMavlinkStreams
     property real   _comboBoxPreferredWidth:    ScreenTools.defaultFontPixelWidth * 8
-
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Ground Station")
 
-        RowLayout {
+        LabelledFactTextField {
             Layout.fillWidth:   true
-            spacing:            ScreenTools.defaultFontPixelWidth * 2
-
-            QGCLabel {
-                Layout.fillWidth:   true
-                text:               qsTr("MAVLink System ID")
-            }
-
-            QGCTextField {
-                text:               QGroundControl.mavlinkSystemID.toString()
-                numericValuesOnly:  true
-                onEditingFinished: {
-                    console.log("text", text)
-                    QGroundControl.mavlinkSystemID = parseInt(text)
-                }
-            }
+            label:              qsTr("MAVLink System ID")
+            fact:               _mavlinkSettings.gcsMavlinkSystemID
         }
 
-        QGCCheckBoxSlider {
+        FactCheckBoxSlider {
             Layout.fillWidth:   true
             text:               qsTr("Emit heartbeat")
-            checked:            QGroundControl.multiVehicleManager.gcsHeartBeatEnabled
-            onClicked:          QGroundControl.multiVehicleManager.gcsHeartBeatEnabled = checked
-        }
-
-        QGCCheckBoxSlider {
-            Layout.fillWidth:   true
-            text:               qsTr("Only connect to vehicle with same MAVLink protocol version")
-            checked:            QGroundControl.isVersionCheckEnabled
-            onClicked:          QGroundControl.isVersionCheckEnabled = checked
+            fact:               _mavlinkSettings.sendGCSHeartbeat
         }
     }
 
@@ -78,7 +57,7 @@ SettingsPage {
         headingDescription: qsTr("Signing keys should only be sent to the vehicle over secure links.")
         visible:            _mavlink2SigningKey.visible
 
-        property Fact _mavlink2SigningKey: _appSettings.mavlink2SigningKey
+        property Fact _mavlink2SigningKey: _mavlinkSettings.mavlink2SigningKey
 
         Connections {
             target:             mavlink2SigningGroup._mavlink2SigningKey
@@ -121,7 +100,7 @@ SettingsPage {
         FactCheckBoxSlider {
             Layout.fillWidth:   true
             text:               qsTr("Enable")
-            fact:               _appSettings.forwardMavlink
+            fact:               _mavlinkSettings.forwardMavlink
             visible:            fact.visible
         }
 
@@ -129,9 +108,9 @@ SettingsPage {
             Layout.fillWidth:           true
             textFieldPreferredWidth:    ScreenTools.defaultFontPixelWidth * 20
             label:                      qsTr("Host name")
-            fact:                       _appSettings.forwardMavlinkHostName
+            fact:                       _mavlinkSettings.forwardMavlinkHostName
             visible:                    fact.visible
-            enabled:                    _appSettings.forwardMavlink.rawValue
+            enabled:                    _mavlinkSettings.forwardMavlink.rawValue
         }
     }
 
@@ -145,7 +124,7 @@ SettingsPage {
             text:               qsTr("Save log after each flight")
             fact:               _telemetrySave
             visible:            fact.visible
-            property Fact _telemetrySave: _appSettings.telemetrySave
+            property Fact _telemetrySave: _mavlinkSettings.telemetrySave
         }
 
         // FactCheckBoxSlider {
@@ -160,10 +139,18 @@ SettingsPage {
         // FactCheckBoxSlider {
         //     Layout.fillWidth:   true
         //     text:               qsTr("Save CSV log of telemetry data")
-        //     fact:               _saveCsvTelemetry
-        //     visible:            fact.visible
-        //     property Fact _saveCsvTelemetry: _appSettings.saveCsvTelemetry
+        //    fact:               _saveCsvTelemetry
+        //    visible:            fact.visible
+        //    property Fact _saveCsvTelemetry: _mavlinkSettings.saveCsvTelemetry
         // }
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Save logs even if vehicle was not armed")
+            fact:               _telemetrySaveNotArmed
+            visible:            fact.visible
+            enabled:            _mavlinkSettings.telemetrySave.rawValue
+            property Fact _telemetrySaveNotArmed: _mavlinkSettings.telemetrySaveNotArmed
+        }
 
         FactCheckBoxSlider {
             id:                 sensorSaveLog

@@ -147,8 +147,6 @@ DECLARE_SETTINGSFACT(AppSettings, offlineEditingAscentSpeed)
 DECLARE_SETTINGSFACT(AppSettings, offlineEditingDescentSpeed)
 DECLARE_SETTINGSFACT(AppSettings, batteryPercentRemainingAnnounce)
 DECLARE_SETTINGSFACT(AppSettings, defaultMissionItemAltitude)
-DECLARE_SETTINGSFACT(AppSettings, telemetrySave)
-DECLARE_SETTINGSFACT(AppSettings, telemetrySaveNotArmed)
 DECLARE_SETTINGSFACT(AppSettings, audioMuted)
 DECLARE_SETTINGSFACT(AppSettings, virtualJoystick)
 DECLARE_SETTINGSFACT(AppSettings, virtualJoystickAutoCenterThrottle)
@@ -167,9 +165,7 @@ DECLARE_SETTINGSFACT(AppSettings, vworldToken)
 DECLARE_SETTINGSFACT(AppSettings, openWeatherApiKey)
 DECLARE_SETTINGSFACT(AppSettings, gstDebugLevel)
 DECLARE_SETTINGSFACT(AppSettings, followTarget)
-DECLARE_SETTINGSFACT(AppSettings, apmStartMavlinkStreams)
 DECLARE_SETTINGSFACT(AppSettings, disableAllPersistence)
-DECLARE_SETTINGSFACT(AppSettings, saveCsvTelemetry)
 DECLARE_SETTINGSFACT(AppSettings, firstRunPromptIdsShown)
 DECLARE_SETTINGSFACT(AppSettings, forwardMavlink)
 DECLARE_SETTINGSFACT(AppSettings, forwardMavlinkHostName)
@@ -234,15 +230,6 @@ DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, qLocaleLanguage)
     return _qLocaleLanguageFact;
 }
 
-DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, mavlink2SigningKey)
-{
-    if (!_mavlink2SigningKeyFact) {
-        _mavlink2SigningKeyFact = _createSettingsFact(mavlink2SigningKeyName);
-        connect(_mavlink2SigningKeyFact, &Fact::rawValueChanged, this, &AppSettings::_mavlink2SigningKeyChanged);
-    }
-    return _mavlink2SigningKeyFact;
-}
-
 void AppSettings::_qLocaleLanguageChanged()
 {
     qgcApp()->setLanguage();
@@ -271,11 +258,6 @@ void AppSettings::_checkSavePathDirectories(void)
 void AppSettings::_indoorPaletteChanged(void)
 {
     QGCPalette::setGlobalTheme(indoorPalette()->rawValue().toBool() ? QGCPalette::Dark : QGCPalette::Light);
-}
-
-void AppSettings::_mavlink2SigningKeyChanged(void)
-{
-    LinkManager::instance()->resetMavlinkSigning();
 }
 
 QString AppSettings::missionSavePath(void)

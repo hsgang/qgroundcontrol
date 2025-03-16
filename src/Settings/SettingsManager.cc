@@ -35,6 +35,7 @@
 #include "CloudSettings.h"
 #include "ModelProfileSettings.h"
 #include "GridSettings.h"
+#include "MavlinkSettings.h"
 #ifdef QGC_VIEWER3D
 #include "Viewer3DSettings.h"
 #endif
@@ -96,6 +97,7 @@ void SettingsManager::init()
     _ntripSettings = new NTRIPSettings(this);
     _modelProfileSettings = new ModelProfileSettings(this);
     _gridSettings = new GridSettings(this);
+    _mavlinkSettings = new MavlinkSettings(this);
 #ifdef QGC_VIEWER3D
     _viewer3DSettings = new Viewer3DSettings(this);
 #endif
@@ -127,6 +129,7 @@ NTRIPSettings *SettingsManager::ntripSettings() const { return _ntripSettings; }
 SIYISettings *SettingsManager::siyiSettings() const {return _siyiSettings; }
 ModelProfileSettings *SettingsManager::modelProfileSettings() const { return _modelProfileSettings; }
 GridSettings *SettingsManager::gridSettings() const { return _gridSettings; }
+MavlinkSettings *SettingsManager::mavlinkSettings() const { return _mavlinkSettings; }
 #ifdef QGC_VIEWER3D
 Viewer3DSettings *SettingsManager::viewer3DSettings() const { return _viewer3DSettings; }
 #endif
