@@ -59,6 +59,7 @@ include(CMakePrintHelpers)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -85,6 +86,13 @@ if(QGC_USE_CACHE)
             set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
             if(APPLE)
                 set(CMAKE_OBJC_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+            endif()
+            set(ENV{CCACHE_SLOPPINESS} pch_defines,time_macros,include_file_mtime,include_file_ctime)
+            set(ENV{CCACHE_BASEDIR} ${CMAKE_SOURCE_DIR})
+            if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+                add_compile_options(-Xclang -fno-pch-timestamp)
+            elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+                add_compile_options(-fpch-preprocess)
             endif()
         endif()
     elseif(CMAKE_HOST_WIN32)
@@ -470,7 +478,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         Qt6::Svg
         Qt6::Widgets
         QGC
-        QmlControls
 )
 
 if(QGC_BUILD_TESTING)
@@ -481,18 +488,7 @@ endif()
 if(ANDROID)
     target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/android/src/AndroidInit.cc)
 
-    target_link_libraries(${CMAKE_PROJECT_NAME}
-        PRIVATE
-            Qt6::Core
-            Joystick
-            Utilities
-    )
-
     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/android/src)
-
-    if(NOT QGC_NO_SERIAL_LINK)
-        target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Comms)
-    endif()
 endif()
 
 set_source_files_properties(resources/qtquickcontrols2.conf PROPERTIES QT_RESOURCE_ALIAS qtquickcontrols2.conf)
