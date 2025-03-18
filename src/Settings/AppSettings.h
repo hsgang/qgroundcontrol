@@ -54,13 +54,9 @@ public:
     DEFINE_SETTINGFACT(qLocaleLanguage)
     DEFINE_SETTINGFACT(disableAllPersistence)
     DEFINE_SETTINGFACT(firstRunPromptIdsShown)
-    DEFINE_SETTINGFACT(forwardMavlink)
-    DEFINE_SETTINGFACT(forwardMavlinkHostName)
-    DEFINE_SETTINGFACT(saveSensorLog)
     DEFINE_SETTINGFACT(useComponentInformationQuery)
     DEFINE_SETTINGFACT(enableOpenWeatherAPI)
     DEFINE_SETTINGFACT(enableSiyiSDK)
-    DEFINE_SETTINGFACT(forwardMavlinkAPMSupportHostName)
     DEFINE_SETTINGFACT(loginAirLink)
     DEFINE_SETTINGFACT(passAirLink)
 

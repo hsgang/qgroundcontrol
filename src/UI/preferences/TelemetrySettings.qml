@@ -156,8 +156,9 @@ SettingsPage {
             id:                 sensorSaveLog
             Layout.fillWidth:   true
             text:               qsTr("Save CustomLog")
-            fact:               QGroundControl.settingsManager.appSettings.saveSensorLog
+            fact:               _saveSensorLog
             enabled:            !_disableAllDataPersistence
+            property Fact _saveSensorLog: _mavlinkSettings.saveSensorLog
         }
     }
 

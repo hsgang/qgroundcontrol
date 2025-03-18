@@ -72,6 +72,13 @@
     "default":      255,
     "min":          1,
     "max":          255
+},
+{
+    "name":             "saveSensorLog",
+    "shortDesc": "Save Sensor Data Logs",
+    "longDesc":  "If this option is enabled, Sensor data will be written to a file with a 1 Hertz frequency.",
+    "type":             "bool",
+    "default":     false
 }
 ]
 }

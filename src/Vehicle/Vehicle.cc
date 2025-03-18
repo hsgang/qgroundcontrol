@@ -3850,7 +3850,7 @@ void Vehicle::_writeCsvLine()
 
 void Vehicle::_initializeCustomLog()
 {
-    if(!SettingsManager::instance()->appSettings()->saveSensorLog()->rawValue().toBool()){
+    if(!SettingsManager::instance()->mavlinkSettings()->saveSensorLog()->rawValue().toBool()){
         //qInfo() << "disable save Sensor Log" ;
         return;
     }
