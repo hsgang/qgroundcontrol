@@ -5,7 +5,8 @@ name: Crowdin - Upload Guide sources (en)
 on:
   push:
     branches:
-      - master
+      # - master
+      - 'Stable*'
     paths:
       - 'docs/en/**'
   pull_request:

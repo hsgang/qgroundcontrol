@@ -3,10 +3,10 @@ name: Android-Linux-Qt-6.6.3
 on:
   push:
     branches:
-      - master
+    #  - master
       - 'Stable*'
-    tags:
-      - 'v*'
+    # tags:
+    #   - 'v*'
     paths-ignore:
       - 'docs/**' # Do not trigger for any changes under docs
   pull_request:
