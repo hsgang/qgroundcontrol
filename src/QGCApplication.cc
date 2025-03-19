@@ -79,7 +79,7 @@
 #include "MAVLinkInspectorController.h"
 #endif
 
-#include "SiYi/SiYi.h"
+#include "SiYi.h"
 
 #ifdef QGC_VIEWER3D
 #include "Viewer3DManager.h"

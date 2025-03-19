@@ -59,8 +59,8 @@ target_sources(QGC
         ToolStripAction.h
         ToolStripActionList.cc
         ToolStripActionList.h
-        ModelProfileManager.h
         ModelProfileManager.cc
+        ModelProfileManager.h
 )
 
 target_link_libraries(QGC

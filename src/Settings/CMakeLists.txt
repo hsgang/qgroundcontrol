@@ -46,16 +46,16 @@ target_sources(QGC
         MapsSettings.h
         Viewer3DSettings.cc
         Viewer3DSettings.h
-        SIYISettings.cc
-        SIYISettings.h
         NTRIPSettings.cc
         NTRIPSettings.h
         CloudSettings.cc
         CloudSettings.h
-        ModelProfileSettings.h
         ModelProfileSettings.cc
+        ModelProfileSettings.h
         GridSettings.cc
         GridSettings.h
+        SIYISettings.cc
+        SIYISettings.h
 )
 
 if(NOT QGC_DISABLE_APM_MAVLINK)
