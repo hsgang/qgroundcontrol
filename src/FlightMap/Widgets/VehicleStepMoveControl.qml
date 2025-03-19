@@ -369,6 +369,7 @@ Rectangle {
         QGCButton{
             id:                 autoSequence
             //implicitWidth:      _idealWidth
+            Layout.fillHeight:  true
             Layout.fillWidth:   true
             implicitWidth:      _idealWidth
             enabled:            _isGuidedEnable && activeVehicle.flying && _distance

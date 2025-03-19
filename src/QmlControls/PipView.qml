@@ -37,7 +37,7 @@ Item {
     property alias  _pipContentItem:    pipContent
     property bool   _isExpanded:        true
     property real   _pipSize:           parent.width * 0.2
-    property real   _maxSize:           0.30                // Percentage of parent control size
+    property real   _maxSize:           0.50                // Percentage of parent control size
     property real   _minSize:           0.20
     property bool   _componentComplete: false
 

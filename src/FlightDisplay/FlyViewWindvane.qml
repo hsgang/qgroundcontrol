@@ -17,7 +17,7 @@ Rectangle {
     property var  vehicle:      null
 
     property real size:         _defaultSize
-    property real _defaultSize: ScreenTools.defaultFontPixelHeight * (10)
+    property real _defaultSize: ScreenTools.defaultFontPixelHeight * 8
     property real _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
@@ -145,6 +145,7 @@ Rectangle {
         columns:    2
         rows:       5
         flow:       GridLayout.TopToBottom
+        rowSpacing: 0
         anchors.horizontalCenter:   parent.horizontalCenter
         anchors.verticalCenter:     parent.verticalCenter
 

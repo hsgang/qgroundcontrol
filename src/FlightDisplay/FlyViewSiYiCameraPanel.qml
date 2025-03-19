@@ -128,6 +128,7 @@ Rectangle {
                             videoButton.text = "Recording"
                         } else {
                             videoButton.iconSource = "/SiYi/Video.png"
+                            videoButton.iconColor = qgcPal.text
                             videoButton.text = "Record"
                         }
                     }
@@ -141,6 +142,7 @@ Rectangle {
                         videoButton.text = "Recording"
                     } else {
                         videoButton.iconSource = "/SiYi/Video.png"
+                        videoButton.iconColor = qgcPal.text
                         videoButton.text = "Record"
                     }
                 }
@@ -158,6 +160,8 @@ Rectangle {
             id:                 zoomInButton
             implicitWidth:      _idealWidth
             implicitHeight:     width
+
+            visible:            camera.enableZoom
 
             iconSource:         "/SiYi/ZoomIn.svg"
             text:               "ZoomIn"
@@ -193,6 +197,8 @@ Rectangle {
             implicitWidth:      _idealWidth
             implicitHeight:     width
 
+            visible:            camera.enableZoom
+
             iconSource:         "/SiYi/ZoomOut.svg"
             text:               "ZoomOut"
             font.pointSize:     _fontSize * 0.7
@@ -227,6 +233,8 @@ Rectangle {
             implicitWidth:      _idealWidth
             implicitHeight:     width
 
+            visible:            camera.enableFocus
+
             iconSource:         "/SiYi/far.svg"
             text:               "Far"
             font.pointSize:     _fontSize * 0.7
@@ -255,6 +263,8 @@ Rectangle {
             id:                 neerButton
             implicitWidth:      _idealWidth
             implicitHeight:     width
+
+            visible:            camera.enableFocus
 
             iconSource:         "/SiYi/neer.svg"
             text:               "Neer"
@@ -370,7 +380,7 @@ Rectangle {
             iconSource:         "/InstrumentValueIcons/view-tile.svg"
             text:               "Screen"
             font.pointSize:     _fontSize * 0.7
-            //visible:            camera.enableThermal
+            visible:            camera.enableThermal
 
             onClicked: {
                 imageModePopupDialog.open()
@@ -385,7 +395,7 @@ Rectangle {
             iconSource:         "/InstrumentValueIcons/border-all.svg"
             text:               "Palette"
             font.pointSize:     _fontSize * 0.7
-            //visible:            camera.enableThermal
+            visible:            camera.enableThermal
 
             onClicked: {
                 thermalPalettePopupDialog.open()
@@ -495,403 +505,4 @@ Rectangle {
             }
         }
     }
-
-    // QGCPopupDialog {
-    //     id: imageModePopupDialog
-    //     title: qsTr("Select image mode")
-    //     buttons: Dialog.Cancel
-    //     destroyOnClose: false
-
-    //     GridLayout {
-    //         //Layout.fillWidth: true
-    //         rows: 2
-    //         rowSpacing: _margins * 3
-    //         columns: 3
-    //         columnSpacing: _margins * 3
-
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/view-tile.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         if(currentImageMode < 9){
-    //                             camera.imageMode(0,1)
-    //                         }
-    //                         imageModePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Zoom"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/view-tile.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         if(currentImageMode < 9){
-    //                             camera.imageMode(1,0)
-    //                         }
-    //                         imageModePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Wide"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/view-tile.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         if(currentImageMode < 9){
-    //                             camera.imageMode(2,0)
-    //                         }
-    //                         imageModePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Thermal"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/view-tile.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         if(currentImageMode < 9){
-    //                             camera.imageMode(3,1)
-    //                         }
-    //                         imageModePopupDialog.close()
-    //                         //imageModeControl.visible = false
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Zoom\n/Thermal"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/view-tile.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         if(currentImageMode < 9){
-    //                             camera.imageMode(4,0)
-    //                         }
-    //                         imageModePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Wide\n/Thermal"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/view-tile.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         if(currentImageMode < 9){
-    //                             camera.imageMode(5,0)
-    //                         }
-    //                         imageModePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Zoom\n/Wide"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //     }
-    // }
-
-    // QGCPopupDialog {
-    //     id: thermalPalettePopupDialog
-    //     title: qsTr("Select image mode")
-    //     buttons: Dialog.Cancel
-    //     destroyOnClose: false
-
-    //     GridLayout {
-    //         rows: 2
-    //         rowSpacing: _margins * 3
-    //         columns: 6
-    //         columnSpacing: _margins * 3
-
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(0)
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "White Hot"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(2)
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Sepia"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(3)
-    //                         thermalPalettePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Ironbow"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(4)
-    //                         thermalPalettePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Rainbow"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(5)
-    //                         thermalPalettePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Night"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(6)
-    //                         thermalPalettePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Aurora"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(7)
-    //                         thermalPalettePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Red Hot"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(8)
-    //                         thermalPalettePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Jungle"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(9)
-    //                         thermalPalettePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Medical"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(10)
-    //                         thermalPalettePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Black Hot"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //         Column {
-    //             QGCColoredImage {
-    //                 width: ScreenTools.implicitButtonHeight * 1.5
-    //                 height: width
-    //                 source: "/InstrumentValueIcons/border-all.svg"
-    //                 fillMode: Image.PreserveAspectFit
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-
-    //                 MouseArea {
-    //                     anchors.fill: parent
-    //                     onClicked: {
-    //                         camera.thermalPalette(11)
-    //                         thermalPalettePopupDialog.close()
-    //                     }
-    //                 }
-    //             }
-    //             QGCLabel {
-    //                 text: "Glory Hot"
-    //                 anchors.horizontalCenter:   parent.horizontalCenter
-    //             }
-    //         }
-    //     }
-    // }
 }
