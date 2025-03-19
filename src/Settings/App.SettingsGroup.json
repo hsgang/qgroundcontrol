@@ -282,6 +282,13 @@
     "longDesc":  "Enable SiyiSDK Support",
     "type": "bool",
     "default": false
+},
+{
+    "name": "fullScreen",
+    "shortDesc": "Enable FullScreen",
+    "longDesc":  "Enable FullScreen",
+    "type": "bool",
+    "default": false
 }
 ]
 }

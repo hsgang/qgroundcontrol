@@ -59,6 +59,7 @@ public:
     DEFINE_SETTINGFACT(enableSiyiSDK)
     DEFINE_SETTINGFACT(loginAirLink)
     DEFINE_SETTINGFACT(passAirLink)
+    DEFINE_SETTINGFACT(fullScreen)
 
     Q_PROPERTY(QString missionSavePath          READ missionSavePath            NOTIFY savePathsChanged)
     Q_PROPERTY(QString parameterSavePath        READ parameterSavePath          NOTIFY savePathsChanged)

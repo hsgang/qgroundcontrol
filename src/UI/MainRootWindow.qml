@@ -463,18 +463,27 @@ ApplicationWindow {
                         }
                     }
 
-                    // SubMenuButton {
-                    //     id:                 closeButton
-                    //     height:             viewSelectDrawer._toolButtonHeight
-                    //     Layout.fillWidth:   true
-                    //     text:               qsTr("Close %1").arg(QGroundControl.appName)
-                    //     visible:            mainWindow.visibility === Window.FullScreen
-                    //     onClicked: {
-                    //         if (mainWindow.allowViewSwitch()) {
-                    //             mainWindow.finishCloseProcess()
-                    //         }
-                    //     }
-                    // }
+                    Rectangle {
+                        Layout.fillWidth: true
+                        height : 1
+                        color : qgcPal.groupBorder
+                        visible : closeButton.visible
+                    }
+
+                    SubMenuButton {
+                        id:                 closeButton
+                        height:             viewSelectDrawer._toolButtonHeight
+                        Layout.fillWidth:   true
+                        text:               "종료"//qsTr("Close %1").arg(QGroundControl.appName)
+                        imageResource:      "/InstrumentValueIcons/close.svg"
+                        imageColor:         qgcPal.text
+                        visible:            mainWindow.visibility === Window.FullScreen
+                        onClicked: {
+                            if (mainWindow.allowViewSwitch()) {
+                                mainWindow.finishCloseProcess()
+                            }
+                        }
+                    }
                 }
             }
 

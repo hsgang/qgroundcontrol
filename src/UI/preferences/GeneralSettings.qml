@@ -166,6 +166,13 @@ SettingsPage {
                 }
             }
         }
+
+        FactCheckBoxSlider {
+            Layout.fillWidth: true
+            text:           qsTr("Full Screen")
+            fact:       _fullScreen
+            property Fact _fullScreen: _appSettings.fullScreen
+        }
     }
 
     SettingsGroupLayout {
