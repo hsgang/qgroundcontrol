@@ -616,10 +616,10 @@ ApplicationWindow {
         property real _margins: ScreenTools.defaultFontPixelHeight / 4
 
         onVisibleChanged: {
-            if(visible == true) {
+            if(visible === true) {
                 componentDrawerLoader.sourceComponent   = componentDrawer.sourceComponent
                 _expanded                               = false
-            } else if(visible == false) {
+            } else if(visible === false) {
                 componentDrawerLoader.sourceComponent   = undefined
                 _expanded                               = false
             }
