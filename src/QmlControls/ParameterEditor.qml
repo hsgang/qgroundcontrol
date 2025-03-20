@@ -26,7 +26,7 @@ Item {
     property Fact   _editorDialogFact: Fact { }
     property int    _rowHeight:         ScreenTools.defaultFontPixelHeight * 2
     property int    _rowWidth:          10 // Dynamic adjusted at runtime
-    property bool   _searchFilter:      searchText.text.trim() != "" || controller.showModifiedOnly  ///< true: showing results of search
+    property bool   _searchFilter:      searchText.text.trim() !== "" || controller.showModifiedOnly  ///< true: showing results of search
     property var    _searchResults      ///< List of parameter names from search results
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _showRCToParam:     _activeVehicle.px4Firmware
@@ -304,7 +304,7 @@ Item {
                             if (object.enumStrings.length === 0) {
                                 return object.valueString + " " + object.units
                             }
-                            if (object.bitmaskStrings.length != 0) {
+                            if (object.bitmaskStrings.length !== 0) {
                                 return object.selectedBitmaskStrings.join(',')
                             }
                             return object.enumStringValue
