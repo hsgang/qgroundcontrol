@@ -59,7 +59,9 @@ ToolIndicatorPage {
     function goToSettings() {
         if (mainWindow.allowViewSwitch()) {
             globals.commingFromRIDIndicator = true
-            mainWindow.showSettingsTool()
+            //mainWindow.showSettingsTool()
+            mainWindow.showAppSettings(qsTr("Remote ID"))
+            mainWindow.closeIndicatorDrawer()
         }
     }
 

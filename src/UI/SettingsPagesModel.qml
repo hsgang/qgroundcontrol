@@ -95,12 +95,12 @@ ListModel {
     //     }
     // }
 
-    // ListElement {
-    //    name: qsTr("Remote ID")
-    //    url: "/qml/RemoteIDSettings.qml"
-    //    iconUrl: "qrc:/qmlimages/RidIconManNoID.svg"
-    //    pageVisible: function() { return true }
-    // }
+    ListElement {
+       name: qsTr("Remote ID")
+       url: "/qml/RemoteIDSettings.qml"
+       iconUrl: "qrc:/qmlimages/RidIconManNoID.svg"
+       pageVisible: function() { return true }
+    }
 
     // ListElement {
     //    name: qsTr("ADSB Server")
