@@ -269,7 +269,7 @@ Item {
         anchors.bottom:     parent.bottom
         mapControl:         _mapControl
         buttonsOnLeft:      true
-        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
+        visible:            QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
 
         property real topEdgeCenterInset: visible ? y + height : 0
     }
