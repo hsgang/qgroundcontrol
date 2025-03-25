@@ -76,9 +76,18 @@
 {
     "name":             "saveSensorLog",
     "shortDesc": "Save Sensor Data Logs",
-    "longDesc":  "If this option is enabled, Sensor data will be written to a file with a 1 Hertz frequency.",
+    "longDesc":  "If this option is enabled, Sensor data will be written to a file.",
     "type":             "bool",
     "default":     false
+},
+{
+    "name":             "rateSaveSensorLog",
+    "shortDesc": "Rate Save Sensor Data Logs",
+    "type":             "int32",
+    "enumStrings":      "1 hz,2 hz,5 hz,10 hz",
+    "enumValues":       "1,2,5,10",
+    "default":          1,
+    "qgcRebootRequired":    true
 }
 ]
 }

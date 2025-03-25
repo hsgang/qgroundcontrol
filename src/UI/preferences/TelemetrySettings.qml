@@ -160,6 +160,16 @@ SettingsPage {
             enabled:            !_disableAllDataPersistence
             property Fact _saveSensorLog: _mavlinkSettings.saveSensorLog
         }
+
+        LabelledFactComboBox {
+            Layout.fillWidth:   true
+            label:              qsTr("Rate Save CustomLog")
+            fact:               _rateSaveSensorLog
+            indexModel:         false
+            enabled:            !_disableAllDataPersistence
+            comboBoxPreferredWidth: _comboBoxPreferredWidth
+            property Fact _rateSaveSensorLog: _mavlinkSettings.rateSaveSensorLog
+        }
     }
 
     SettingsGroupLayout {

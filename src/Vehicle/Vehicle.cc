@@ -202,8 +202,9 @@ Vehicle::Vehicle(LinkInterface*             link,
     _csvLogTimer.start(1000);
 
     // Start sensor logger
+    auto customLogTerm = 1000 / (SettingsManager::instance()->mavlinkSettings()->rateSaveSensorLog()->rawValue().toInt());
     connect(&_customLogTimer, &QTimer::timeout, this, &Vehicle::_writeCustomLogLine);
-    _customLogTimer.start(1000);
+    _customLogTimer.start(customLogTerm);
 
     connect(&_dbWriteTimer, &QTimer::timeout, this, &Vehicle::_sendToDb);
     _dbWriteTimer.start(1000);
@@ -3916,7 +3917,7 @@ void Vehicle::_writeCustomLogLine()
         //int Seq = customLogSeq++;
         //QString dataTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm:ss.zzz"));
         QString seq = QString::number(customLogSeq++);
-        QString dateTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMddhhmmss"));
+        QString dateTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMddhhmmsszzz"));
         QString lat = getFactGroup("gps")->getFact("lat")->cookedValueString();
         QString lon = getFactGroup("gps")->getFact("lon")->cookedValueString();
         QString yaw = getFact("heading")->cookedValueString();

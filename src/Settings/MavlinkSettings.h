@@ -32,6 +32,7 @@ public:
     DEFINE_SETTINGFACT(gcsMavlinkSystemID)
     DEFINE_SETTINGFACT(requireMatchingMavlinkVersions)
     DEFINE_SETTINGFACT(saveSensorLog)
+    DEFINE_SETTINGFACT(rateSaveSensorLog)
 
     // Although this is a global setting it only affects ArduPilot vehicle since PX4 automatically starts the stream from the vehicle side
     DEFINE_SETTINGFACT(apmStartMavlinkStreams)

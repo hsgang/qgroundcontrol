@@ -53,6 +53,7 @@ DECLARE_SETTINGSFACT(MavlinkSettings, sendGCSHeartbeat)
 DECLARE_SETTINGSFACT(MavlinkSettings, gcsMavlinkSystemID)
 DECLARE_SETTINGSFACT(MavlinkSettings, requireMatchingMavlinkVersions)
 DECLARE_SETTINGSFACT(MavlinkSettings, saveSensorLog)
+DECLARE_SETTINGSFACT(MavlinkSettings, rateSaveSensorLog)
 
 DECLARE_SETTINGSFACT_NO_FUNC(MavlinkSettings, mavlink2SigningKey)
 {
