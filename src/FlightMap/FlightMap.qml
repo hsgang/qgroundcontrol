@@ -125,7 +125,7 @@ Map {
     PinchHandler {
         id:     pinchHandler
         target: null
-        grabPermissions:    PointerHandler.TakeOverForbidden
+        //grabPermissions:    PointerHandler.TakeOverForbidden
 
         property var pinchStartCentroid
 
