@@ -397,8 +397,7 @@ void LinkManager::_addUDPAutoConnectLink()
     qCDebug(LinkManagerLog) << "New auto-connect UDP port added";
     UDPConfiguration* const udpConfig = new UDPConfiguration(_defaultUDPLinkName);
     udpConfig->setDynamic(true);
-    // FIXME: Default UDPConfiguration is set up for autoconnect
-    // udpConfig->setAutoConnect(true);
+    udpConfig->setAutoConnect(true);
     SharedLinkConfigurationPtr config = addConfiguration(udpConfig);
     createConnectedLink(config);
 }
@@ -746,6 +745,7 @@ void LinkManager::_createDynamicForwardLink(const char *linkName, const QString 
     UDPConfiguration* const udpConfig = new UDPConfiguration(linkName);
 
     udpConfig->setDynamic(true);
+    udpConfig->setForwarding(true);
     udpConfig->addHost(hostName);
 
     SharedLinkConfigurationPtr config = addConfiguration(udpConfig);
