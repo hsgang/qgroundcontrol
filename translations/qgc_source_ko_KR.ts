@@ -7255,12 +7255,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
         <source>Rows</source>
-        <translation>세로 격자</translation>
+        <translation>세로</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>
         <source>Columns</source>
-        <translation>가로 격자</translation>
+        <translation>격자 가로</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/FlyViewGridSettings.qml" line="1"/>

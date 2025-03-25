@@ -128,12 +128,18 @@ ColumnLayout {
                     delegate: QGCColumnButton {
                         implicitWidth:  _idealWidth
                         implicitHeight: width
-                        checked:        swipePages.currentIndex === index && globals.activeVehicle
+                        checked:        swipePages.currentIndex === index
                         iconSource:     modelData.icon
                         text:           modelData.label
                         font.pointSize: _fontSize * 0.7
                         onClicked: {
-                            swipePages.currentIndex = index
+                            if (swipePages.currentIndex === index && swipePages.visible) {
+                                swipePages.visible = false;
+                                swipePages.currentIndex = -1; // 선택 해제
+                            } else {
+                                swipePages.currentIndex = index;
+                                swipePages.visible = true;
+                            }
                         }
                     }
                 }

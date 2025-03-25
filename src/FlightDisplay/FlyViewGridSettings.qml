@@ -20,7 +20,7 @@ Rectangle {
     radius:     ScreenTools.defaultFontPixelHeight / 4
     // border.color: qgcPal.text
 
-    property real _labelledItemWidth: ScreenTools.defaultFontPixelWidth * 16
+    property real _labelledItemWidth: ScreenTools.defaultFontPixelWidth * 10
 
     property real _backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
@@ -59,13 +59,13 @@ Rectangle {
                     label:                  qsTr("Latitude")
                     fact:                   _gridSettings.latitude
                     visible:                true
-                    textFieldPreferredWidth: _labelledItemWidth
+                    textFieldPreferredWidth: _labelledItemWidth * 1.8
                 }
                 LabelledFactTextField {
                     label:                  qsTr("Longtitude")
                     fact:                   _gridSettings.longitude
                     visible:                true
-                    textFieldPreferredWidth: _labelledItemWidth
+                    textFieldPreferredWidth: _labelledItemWidth * 1.8
                 }
             }
             QGCColumnButton{
@@ -86,17 +86,19 @@ Rectangle {
                 }
             }
         }
-        LabelledFactTextField {
-            label:                  qsTr("Rows")
-            fact:                   _gridSettings.rows
-            visible:                true
-            textFieldPreferredWidth: _labelledItemWidth
-        }
-        LabelledFactTextField {
-            label:                  qsTr("Columns")
-            fact:                   _gridSettings.columns
-            visible:                true
-            textFieldPreferredWidth: _labelledItemWidth
+        RowLayout {
+            LabelledFactTextField {
+                label:                  qsTr("Columns")
+                fact:                   _gridSettings.columns
+                visible:                true
+                textFieldPreferredWidth: _labelledItemWidth / 2
+            }
+            LabelledFactTextField {
+                label:                  qsTr("Rows")
+                fact:                   _gridSettings.rows
+                visible:                true
+                textFieldPreferredWidth: _labelledItemWidth / 2
+            }
         }
         LabelledFactTextField {
             label:                  qsTr("Grid Size")
