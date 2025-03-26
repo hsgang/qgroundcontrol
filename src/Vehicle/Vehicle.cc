@@ -2249,7 +2249,7 @@ void Vehicle::guidedModeChangeAltitudeAMSL(double altitudeAMSL, bool pauseVehicl
         qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
         return;
     }
-    _firmwarePlugin->guidedModeChangeAltitudeAMSL(this, altitudeAMSL, pauseVehicle);
+    _firmwarePlugin->guidedModeChangeAltitude(this, altitudeAMSL, pauseVehicle);
 }
 
 void Vehicle::setPositionTargetLocalNed(double xValue, double yValue, double zValue, double yaw, bool pauseVehicle)
@@ -3486,9 +3486,8 @@ QString Vehicle::stabilizedFlightMode() const
 
 QString Vehicle::vehicleImageOpaque() const
 {
-    QString vehicleType = vehicleTypeString();
-    if(_firmwarePlugin)        
-        return _firmwarePlugin->vehicleImageOpaque(this, vehicleType);
+    if(_firmwarePlugin)
+        return _firmwarePlugin->vehicleImageOpaque(this);
     else
         return QString();
 }
