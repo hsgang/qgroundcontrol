@@ -38,7 +38,7 @@ jobs:
     env:
       ARTIFACT: QGroundControl-x86_64.AppImage
       PACKAGE: QGroundControl-x86_64
-      QT_VERSION: 6.8.2
+      QT_VERSION: 6.8.3
 
     steps:
       - name: Checkout repo

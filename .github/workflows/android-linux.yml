@@ -37,7 +37,7 @@ jobs:
     env:
       ARTIFACT: MissionNavigator.apk
       PACKAGE: MissionNavigator
-      QT_VERSION: 6.8.2
+      QT_VERSION: 6.8.3
       QT_ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/deploy/android/android_release.keystore
       QT_ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
