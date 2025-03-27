@@ -479,12 +479,24 @@ void PX4FirmwarePlugin::_changeAltAfterPause(void* resultHandlerData, bool pause
     delete pData;
 }
 
-void PX4FirmwarePlugin::guidedModeChangeAltitudeAMSL(Vehicle* vehicle, double altitudeAMSL, bool pauseVehicle)
+void PX4FirmwarePlugin::guidedModeChangeAltitude(Vehicle* vehicle, double altitudeChange, bool pauseVehicle)
 {
+    if (!vehicle->homePosition().isValid()) {
+        qgcApp()->showAppMessage(tr("Unable to change altitude, home position unknown."));
+        return;
+    }
+    if (qIsNaN(vehicle->homePosition().altitude())) {
+        qgcApp()->showAppMessage(tr("Unable to change altitude, home position altitude unknown."));
+        return;
+    }
+
+    double currentAltRel = vehicle->altitudeRelative()->rawValue().toDouble();
+    double newAltRel = currentAltRel + altitudeChange;
+
     PauseVehicleThenChangeAltData_t* resultData = new PauseVehicleThenChangeAltData_t;
     resultData->plugin      = this;
     resultData->vehicle     = vehicle;
-    resultData->newAMSLAlt  = altitudeAMSL;
+    resultData->newAMSLAlt  = vehicle->homePosition().altitude() + newAltRel;
 
     if (pauseVehicle) {
         Vehicle::MavCmdAckHandlerInfo_t handlerInfo = {};
@@ -492,13 +504,13 @@ void PX4FirmwarePlugin::guidedModeChangeAltitudeAMSL(Vehicle* vehicle, double al
         handlerInfo.resultHandlerData   = resultData;
 
         vehicle->sendMavCommandWithHandler(
-                    &handlerInfo,
-                    vehicle->defaultComponentId(),
-                    MAV_CMD_DO_REPOSITION,
-                    -1.0f,                                  // Don't change groundspeed
-                    MAV_DO_REPOSITION_FLAGS_CHANGE_MODE,
-                    0.0f,                                   // Reserved
-                    qQNaN(), qQNaN(), qQNaN(), qQNaN());    // No change to yaw, lat, lon, alt
+            &handlerInfo,
+            vehicle->defaultComponentId(),
+            MAV_CMD_DO_REPOSITION,
+            -1.0f,                                  // Don't change groundspeed
+            MAV_DO_REPOSITION_FLAGS_CHANGE_MODE,
+            0.0f,                                   // Reserved
+            qQNaN(), qQNaN(), qQNaN(), qQNaN());    // No change to yaw, lat, lon, alt
     } else {
         _changeAltAfterPause(resultData, true /* pauseSucceeded */);
     }

@@ -160,7 +160,7 @@ void FirmwarePlugin::guidedModeGotoLocation(Vehicle *vehicle, const QGeoCoordina
     qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
 }
 
-void FirmwarePlugin::guidedModeChangeAltitudeAMSL(Vehicle*, double, bool pauseVehicle)
+void FirmwarePlugin::guidedModeChangeAltitude(Vehicle*, double, bool pauseVehicle)
 {
     Q_UNUSED(pauseVehicle);
     qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);

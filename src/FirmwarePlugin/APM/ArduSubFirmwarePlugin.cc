@@ -297,7 +297,7 @@ APMSubmarineFactGroup::~APMSubmarineFactGroup()
 
 QString ArduSubFirmwarePlugin::vehicleImageOutline(const Vehicle *vehicle) const
 {
-    return vehicleImageOpaque(vehicle, "sub");
+    return vehicleImageOpaque(vehicle);
 }
 
 void ArduSubFirmwarePlugin::adjustMetaData(MAV_TYPE vehicleType, FactMetaData *metaData)

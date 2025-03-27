@@ -843,8 +843,18 @@ void APMFirmwarePlugin::guidedModeRTL(Vehicle *vehicle, bool smartRTL) const
 
 void APMFirmwarePlugin::guidedModeChangeAltitude(Vehicle *vehicle, double altitudeChange, bool pauseVehicle)
 {
+    if (qIsNaN(vehicle->altitudeRelative()->rawValue().toDouble())) {
+        qgcApp()->showAppMessage(tr("Unable to change altitude, vehicle altitude not known."));
+        return;
+    }
+
     if (pauseVehicle && !_setFlightModeAndValidate(vehicle, pauseFlightMode())) {
         qgcApp()->showAppMessage(tr("Unable to pause vehicle."));
+        return;
+    }
+
+    if (abs(altitudeChange) < 0.01) {
+        // This prevents unecessary changes to Guided mode when the users selects pause and doesn't really touch the altitude slider
         return;
     }
 
@@ -863,7 +873,7 @@ void APMFirmwarePlugin::guidedModeChangeAltitude(Vehicle *vehicle, double altitu
         cmd.type_mask = 0xFFF8; // Only x/y/z valid
         cmd.x = 0.0f;
         cmd.y = 0.0f;
-        cmd.z = static_cast<float>(-altitudeAMSL);
+        cmd.z = static_cast<float>(-(altitudeChange));
 
         mavlink_msg_set_position_target_local_ned_encode_chan(
             static_cast<uint8_t>(MAVLinkProtocol::instance()->getSystemId()),
@@ -871,7 +881,7 @@ void APMFirmwarePlugin::guidedModeChangeAltitude(Vehicle *vehicle, double altitu
             sharedLink->mavlinkChannel(),
             &msg,
             &cmd
-        );
+            );
 
         (void) vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
     }
