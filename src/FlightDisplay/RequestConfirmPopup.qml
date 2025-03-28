@@ -41,7 +41,7 @@ Rectangle {
 
     Connections {
         target: _activeVehicle
-        onRequestConfirmationReceived: (customCmd, show, tagId) => {
+        onRequestConfirmationReceived: (customCmd, show, tagId, enableAutoSequence, sequenceNumber) => {
             if (customCmd !== 1) {
                 return
             }

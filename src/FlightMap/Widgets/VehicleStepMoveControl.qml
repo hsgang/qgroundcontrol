@@ -25,11 +25,9 @@ import QGroundControl.FactControls
 
 Rectangle {
     id:         gimbalControlPannel
-    width:      mainGridLayout.width + _margins
+    width:      _isCustomCommandEnabled ? (mainGridLayout.width + _margins + sequenceIndicator.width) : mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    // border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
-    // border.width:   1
     radius:     _margins / 2
     //visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
@@ -64,21 +62,17 @@ Rectangle {
     property real   _treshHoldAlt : 10.0
     property var    stepValues:             [0.2, 0.5, 1.0, 2.0, 3.0]
     property int    receivedTagId: 0
+    property int    autoSequenceIndex: 0
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
     Connections {
-        target: activeVehicle
-        onRequestConfirmationReceived: (customCmd, show, tagId) => {
+        target: _activeVehicle
+        onRequestConfirmationReceived: (customCmd, show, tagId, enableAutoSequence, sequenceIndex) => {
             if (customCmd !== 1) {
                 return
             }
-            receivedTagId = tagId
-            // if(show > 0) {
-            //     control.visible = true
-            // } else if (show === 0) {
-            //     control.visible = false
-            // }
+            autoSequenceIndex = sequenceIndex
         }
     }
 
@@ -87,10 +81,168 @@ Rectangle {
         propagateComposedEvents: false
     }
 
+    Rectangle {
+        id: sequenceIndicator
+        width: ScreenTools.defaultFontPixelHeight * 5.5
+        height:parent.height
+        color: "transparent"
+        visible: _isCustomCommandEnabled
+
+        anchors.right: mainGridLayout.left
+        anchors.verticalCenter: mainGridLayout.verticalCenter
+        Column {
+            spacing: 8
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            // 시퀀스 모델: sequenceIndex 값과 표시할 텍스트를 정의
+            ListModel {
+                id: sequenceModel
+                ListElement { sequenceIndex: 1; labelText: "S1 시퀀스 시작" }
+                ListElement { sequenceIndex: 2; labelText: "S2 하강 접근" }
+                ListElement { sequenceIndex: 3; labelText: "S3 화물칸 개방" }
+                ListElement { sequenceIndex: 4; labelText: "S4 화물 투하" }
+                ListElement { sequenceIndex: 5; labelText: "S5 화물칸 닫기" }
+                ListElement { sequenceIndex: 6; labelText: "S6 고도 상승" }
+                ListElement { sequenceIndex: 7; labelText: "S7 모드 변경" }
+                ListElement { sequenceIndex: 99; labelText: "S6 시퀀스 종료" }
+            }
+
+            Repeater {
+                model: sequenceModel
+                delegate:   Rectangle {
+                    property int sequenceIndex: model.sequenceIndex
+                    property string labelText: model.labelText
+                    // 상위 컨텍스트의 autoSequenceIndex와 비교하여 선택 상태를 결정
+                    property bool selected: autoSequenceIndex === sequenceIndex
+
+                    // 선택 상태에 따른 배경색 적용 (기본색은 qgcPal.window)
+                    color: selected ? qgcPal.buttonHighlight : qgcPal.window
+                    radius: ScreenTools.defaultFontPixelHeight / 4
+                    width: ScreenTools.defaultFontPixelHeight * 5
+                    height: ScreenTools.defaultFontPixelHeight * 1.5
+                    // 초기 불투명도 값
+                    opacity: 0.6
+
+                    QGCLabel {
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.leftMargin: _margins / 2
+                        text: labelText
+                    }
+
+                    // 선택되었을 때 깜빡이는 효과를 위한 Timer
+                    Timer {
+                        id: blinkTimer
+                        interval: 500    // 0.5초 간격
+                        repeat: true
+                        running: selected
+                        onTriggered: {
+                            // 불투명도를 1과 0.4 사이에서 토글
+                            opacity = (opacity === 1.0) ? 0.6 : 1.0;
+                        }
+                    }
+
+                    // selected 프로퍼티 변경 시 Timer 재시작 및 불투명도 초기화
+                    onSelectedChanged: {
+                        if (selected) {
+                            blinkTimer.start();
+                        } else {
+                            blinkTimer.stop();
+                            opacity = 1.0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Rectangle {
+    //     id: sequenceIndicator
+    //     width: ScreenTools.defaultFontPixelHeight * 6
+    //     height:parent.height
+    //     color: "transparent"
+
+    //     anchors.right: mainGridLayout.left
+    //     anchors.verticalCenter: mainGridLayout.verticalCenter
+
+    //     ColumnLayout {
+    //         id: indicatorColumn
+    //         anchors.fill: parent
+    //         anchors.margins: _margins
+
+    //         property real rectWidth : ScreenTools.defaultFontPixelHeight * 5
+    //         property real rectHeight : ScreenTools.defaultFontPixelHeight * 1.5
+
+    //         Rectangle {
+    //             color: autoSequenceIndex == 1 ? qgcPal.buttonHighlight : qgcPal.window
+    //             radius: ScreenTools.defaultFontPixelHeight / 4
+    //             width: indicatorColumn.rectWidth
+    //             height: indicatorColumn.rectHeight
+    //             QGCLabel {
+    //                 anchors.centerIn: parent
+    //                 text: "S1 시퀀스 시작"
+    //             }
+    //         }
+    //         Rectangle {
+    //             color: autoSequenceIndex == 2 ? qgcPal.buttonHighlight : qgcPal.window
+    //             radius: ScreenTools.defaultFontPixelHeight / 4
+    //             width: indicatorColumn.rectWidth
+    //             height: indicatorColumn.rectHeight
+    //             QGCLabel {
+    //                 anchors.centerIn: parent
+    //                 text: "S2 하강 접근"
+    //             }
+    //         }
+    //         Rectangle {
+    //             color: autoSequenceIndex == 3 ? qgcPal.buttonHighlight : qgcPal.window
+    //             radius: ScreenTools.defaultFontPixelHeight / 4
+    //             width: indicatorColumn.rectWidth
+    //             height: indicatorColumn.rectHeight
+    //             QGCLabel {
+    //                 anchors.centerIn: parent
+    //                 text: "S3 화물 개방"
+    //             }
+    //         }
+    //         Rectangle {
+    //             color: autoSequenceIndex == 4 ? qgcPal.buttonHighlight : qgcPal.window
+    //             radius: ScreenTools.defaultFontPixelHeight / 4
+    //             width: indicatorColumn.rectWidth
+    //             height: indicatorColumn.rectHeight
+    //             QGCLabel {
+    //                 anchors.centerIn: parent
+    //                 text: "S4 고도 상승"
+    //             }
+    //         }
+    //         Rectangle {
+    //             color: autoSequenceIndex == 5 ? qgcPal.buttonHighlight : qgcPal.window
+    //             radius: ScreenTools.defaultFontPixelHeight / 4
+    //             width: indicatorColumn.rectWidth
+    //             height: indicatorColumn.rectHeight
+    //             QGCLabel {
+    //                 anchors.centerIn: parent
+    //                 text: "S5 모드 변경"
+    //             }
+    //         }
+    //         Rectangle {
+    //             color: autoSequenceIndex == 99 ? qgcPal.buttonHighlight : qgcPal.window
+    //             radius: ScreenTools.defaultFontPixelHeight / 4
+    //             width: indicatorColumn.rectWidth
+    //             height: indicatorColumn.rectHeight
+    //             QGCLabel {
+    //                 anchors.centerIn: parent
+    //                 text: "S6 시퀀스 종료"
+    //             }
+    //         }
+    //     }
+    // }
+
     GridLayout {
         id:                         mainGridLayout
         anchors.verticalCenter:     parent.verticalCenter
-        anchors.horizontalCenter:   parent.horizontalCenter
+        //anchors.horizontalCenter:   parent.horizontalCenter
+        anchors.right:              parent.right
+        anchors.margins:            _margins / 2
         columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
         rowSpacing:                 columnSpacing
         columns:                    4
@@ -416,6 +568,16 @@ Rectangle {
                 Layout.fillWidth:   true
                 label:              "라이다 고도계"
                 labelText:          activeVehicle ? _distance.toFixed(1) + " m" : "no value"
+            }
+            LabelledLabel {
+                Layout.fillWidth:   true
+                label:              "시퀀스 인덱스"
+                labelText:          activeVehicle ? autoSequenceIndex : "no value"
+            }
+            LabelledLabel {
+                Layout.fillWidth:   true
+                label:              "커맨드 가능"
+                labelText:          activeVehicle ? _isCustomCommandEnabled : "no value"
             }
         }
     }

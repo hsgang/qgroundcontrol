@@ -1513,7 +1513,7 @@ private:
     void _handleCommandRequestConfirmation(const mavlink_command_long_t commandLong);
 
 signals:
-    void requestConfirmationReceived(int customCmd, int show, int tagId);
+    void requestConfirmationReceived(int customCmd, int show, int tagId, int enableAutoSequence , int sequenceIndex);
 
 /*---------------------------------------------------------------------------*/
 };

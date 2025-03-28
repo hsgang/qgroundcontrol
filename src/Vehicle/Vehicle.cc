@@ -1365,7 +1365,12 @@ void Vehicle::setEventsMetadata(uint8_t compid, const QString& metadataJsonFileN
 
 void Vehicle::_handleCommandRequestConfirmation(const mavlink_command_long_t commandLong)
 {
-    emit requestConfirmationReceived(commandLong.param1, commandLong.param2, commandLong.param3);
+    if (commandLong.param5 == 99) {
+        _isCustomCommandEnabled = false;
+        emit isCustomCommandEnabledChanged();
+    }
+    // param5가 배송 시퀀스 인덱스이고 99면 완료된것으로 판단
+    emit requestConfirmationReceived(commandLong.param1, commandLong.param2, commandLong.param3, commandLong.param4, commandLong.param5);
 }
 
 void Vehicle::_handleCommandLong(mavlink_message_t& message)
