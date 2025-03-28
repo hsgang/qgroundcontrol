@@ -566,9 +566,9 @@ void SimpleMissionItem::_rebuildComboBoxFacts(void)
     _comboboxFacts.clear();
 
     if (rawEdit()) {
-        _missionItem._commandFact._setName("Command");
+        _missionItem._commandFact.setName("Command");
         _comboboxFacts.append(&_missionItem._commandFact);
-        _missionItem._frameFact._setName("Frame");
+        _missionItem._frameFact.setName("Frame");
         _comboboxFacts.append(&_missionItem._frameFact);
     } else {
         _ignoreDirtyChangeSignals = true;
