@@ -40,6 +40,7 @@ Rectangle {
     property bool isRecording: camera.isRecording
     property int minDelta: 5
     property bool hasBeenMoved: false
+    property bool isConnected : camera.isConnected
 
     property real videoW: 1280
     property real videoH: 720

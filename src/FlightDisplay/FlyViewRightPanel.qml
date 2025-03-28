@@ -10,6 +10,8 @@ import QGroundControl.ScreenTools
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
 
+import SiYi.Object
+
 ColumnLayout {
     width: swipePages.currentItem
                ? swipePages.currentItem.contentLoader.implicitWidth + pageIndicatorContainer.width + ScreenTools.defaultFontPixelHeight
@@ -18,8 +20,12 @@ ColumnLayout {
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
     property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
 
+    property var    siyi: SiYi
+    property SiYiCamera camera: siyi.camera
+    property bool   isSiYiCameraConnected : camera.isConnected
+
     property bool   _showPhotoVideoControl: globals.activeVehicle
-    property bool   _showSiyiCameraControl: true
+    property bool   _showSiyiCameraControl: isSiYiCameraConnected
     property bool   _showGimbalControl:     QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue
     property bool   _showGridViewer:        QGroundControl.settingsManager.flyViewSettings.showGridViewer.rawValue
     property bool   _showStepMoveControl:   QGroundControl.settingsManager.flyViewSettings.showVehicleStepMoveControl.rawValue
