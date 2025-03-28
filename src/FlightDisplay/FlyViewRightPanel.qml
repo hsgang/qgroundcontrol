@@ -52,6 +52,7 @@ ColumnLayout {
             spacing: ScreenTools.defaultFontPixelHeight
             orientation: Qt.Vertical
             clip: true
+            interactive: false
 
             Repeater {
                 model: activePages
