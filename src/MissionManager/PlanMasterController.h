@@ -134,6 +134,7 @@ private slots:
     void _sendMissionComplete       (void);
     void _sendGeoFenceComplete      (void);
     void _sendRallyPointsComplete   (void);
+    void _updateOverallDirty        (void);
     void _updatePlanCreatorsList    (void);
 
 private:
@@ -156,5 +157,6 @@ private:
     bool                    _sendRallyPoints =          false;
     QString                 _currentPlanFile;
     bool                    _deleteWhenSendCompleted =  false;
+    bool                    _previousOverallDirty =     false;
     QmlObjectListModel*     _planCreators =             nullptr;
 };
