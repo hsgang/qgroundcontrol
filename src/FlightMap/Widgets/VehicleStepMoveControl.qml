@@ -91,7 +91,7 @@ Rectangle {
         anchors.right: mainGridLayout.left
         anchors.verticalCenter: mainGridLayout.verticalCenter
         Column {
-            spacing: 8
+            spacing: ScreenTools.defaultFontPixelHeight / 4
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
 
@@ -157,86 +157,6 @@ Rectangle {
         }
     }
 
-    // Rectangle {
-    //     id: sequenceIndicator
-    //     width: ScreenTools.defaultFontPixelHeight * 6
-    //     height:parent.height
-    //     color: "transparent"
-
-    //     anchors.right: mainGridLayout.left
-    //     anchors.verticalCenter: mainGridLayout.verticalCenter
-
-    //     ColumnLayout {
-    //         id: indicatorColumn
-    //         anchors.fill: parent
-    //         anchors.margins: _margins
-
-    //         property real rectWidth : ScreenTools.defaultFontPixelHeight * 5
-    //         property real rectHeight : ScreenTools.defaultFontPixelHeight * 1.5
-
-    //         Rectangle {
-    //             color: autoSequenceIndex == 1 ? qgcPal.buttonHighlight : qgcPal.window
-    //             radius: ScreenTools.defaultFontPixelHeight / 4
-    //             width: indicatorColumn.rectWidth
-    //             height: indicatorColumn.rectHeight
-    //             QGCLabel {
-    //                 anchors.centerIn: parent
-    //                 text: "S1 시퀀스 시작"
-    //             }
-    //         }
-    //         Rectangle {
-    //             color: autoSequenceIndex == 2 ? qgcPal.buttonHighlight : qgcPal.window
-    //             radius: ScreenTools.defaultFontPixelHeight / 4
-    //             width: indicatorColumn.rectWidth
-    //             height: indicatorColumn.rectHeight
-    //             QGCLabel {
-    //                 anchors.centerIn: parent
-    //                 text: "S2 하강 접근"
-    //             }
-    //         }
-    //         Rectangle {
-    //             color: autoSequenceIndex == 3 ? qgcPal.buttonHighlight : qgcPal.window
-    //             radius: ScreenTools.defaultFontPixelHeight / 4
-    //             width: indicatorColumn.rectWidth
-    //             height: indicatorColumn.rectHeight
-    //             QGCLabel {
-    //                 anchors.centerIn: parent
-    //                 text: "S3 화물 개방"
-    //             }
-    //         }
-    //         Rectangle {
-    //             color: autoSequenceIndex == 4 ? qgcPal.buttonHighlight : qgcPal.window
-    //             radius: ScreenTools.defaultFontPixelHeight / 4
-    //             width: indicatorColumn.rectWidth
-    //             height: indicatorColumn.rectHeight
-    //             QGCLabel {
-    //                 anchors.centerIn: parent
-    //                 text: "S4 고도 상승"
-    //             }
-    //         }
-    //         Rectangle {
-    //             color: autoSequenceIndex == 5 ? qgcPal.buttonHighlight : qgcPal.window
-    //             radius: ScreenTools.defaultFontPixelHeight / 4
-    //             width: indicatorColumn.rectWidth
-    //             height: indicatorColumn.rectHeight
-    //             QGCLabel {
-    //                 anchors.centerIn: parent
-    //                 text: "S5 모드 변경"
-    //             }
-    //         }
-    //         Rectangle {
-    //             color: autoSequenceIndex == 99 ? qgcPal.buttonHighlight : qgcPal.window
-    //             radius: ScreenTools.defaultFontPixelHeight / 4
-    //             width: indicatorColumn.rectWidth
-    //             height: indicatorColumn.rectHeight
-    //             QGCLabel {
-    //                 anchors.centerIn: parent
-    //                 text: "S6 시퀀스 종료"
-    //             }
-    //         }
-    //     }
-    // }
-
     GridLayout {
         id:                         mainGridLayout
         anchors.verticalCenter:     parent.verticalCenter
@@ -266,7 +186,7 @@ Rectangle {
             id:                 stepUp
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thin-up.svg"
@@ -282,7 +202,7 @@ Rectangle {
             id:                 stepTurnLeft
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/cheveron-left.svg"
@@ -299,7 +219,7 @@ Rectangle {
             id:                 stepForward
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-up.svg"
@@ -315,7 +235,7 @@ Rectangle {
             id:                 stepTurnRight
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/cheveron-right.svg"
@@ -332,7 +252,7 @@ Rectangle {
             id:                 stepTargetAlt
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && _distance
+            enabled:            _isGuidedEnable && !_isMoving && _distance && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:          _distance ? (_distance >= _treshHoldAlt ? "/InstrumentValueIcons/arrow-thin-down.svg" : "/InstrumentValueIcons/arrow-thin-up.svg") : "/InstrumentValueIcons/pause.svg"
@@ -365,7 +285,7 @@ Rectangle {
             id:                 stepLeft
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-left.svg"
@@ -381,7 +301,7 @@ Rectangle {
             id:                 stepStop
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/pause.svg"
@@ -397,7 +317,7 @@ Rectangle {
             id:                 stepRight
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-right.svg"
@@ -413,7 +333,7 @@ Rectangle {
             id:                 stepDown
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && (isNaN(_distance) || ((_distance - _moveStep) > _altLimit))
+            enabled:            _isGuidedEnable && !_isMoving && (isNaN(_distance) || ((_distance - _moveStep) > _altLimit)) && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thin-down.svg"
@@ -436,7 +356,7 @@ Rectangle {
             id:                 stepHalf
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/dots-horizontal-double.svg"
@@ -455,7 +375,7 @@ Rectangle {
             id:                 stepBack
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving
+            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-down.svg"
@@ -471,7 +391,7 @@ Rectangle {
             id:                 stepOne
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/dots-horizontal-triple.svg"
@@ -491,7 +411,7 @@ Rectangle {
             implicitWidth:      _idealWidth
             implicitHeight:     width
             opacity:            enabled ? 1 : 0.4
-            enabled:            activeVehicle && (_distance && _distance < _treshHoldAlt)
+            enabled:            activeVehicle && (_distance && _distance < _treshHoldAlt) && !_isCustomCommandEnabled
 
             iconSource:         "/res/GripperRelease.svg"
             text:               "Open"
@@ -506,7 +426,7 @@ Rectangle {
             id:                 gripperGrab
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle
+            enabled:            activeVehicle && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/res/GripperGrab.svg"
@@ -569,16 +489,16 @@ Rectangle {
                 label:              "라이다 고도계"
                 labelText:          activeVehicle ? _distance.toFixed(1) + " m" : "no value"
             }
-            LabelledLabel {
-                Layout.fillWidth:   true
-                label:              "시퀀스 인덱스"
-                labelText:          activeVehicle ? autoSequenceIndex : "no value"
-            }
-            LabelledLabel {
-                Layout.fillWidth:   true
-                label:              "커맨드 가능"
-                labelText:          activeVehicle ? _isCustomCommandEnabled : "no value"
-            }
+            // LabelledLabel {
+            //     Layout.fillWidth:   true
+            //     label:              "시퀀스 인덱스"
+            //     labelText:          activeVehicle ? autoSequenceIndex : "no value"
+            // }
+            // LabelledLabel {
+            //     Layout.fillWidth:   true
+            //     label:              "커맨드 가능"
+            //     labelText:          activeVehicle ? _isCustomCommandEnabled : "no value"
+            // }
         }
     }
 }
