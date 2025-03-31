@@ -52,7 +52,7 @@ Rectangle {
     property real   _vx:                    activeVehicle ? activeVehicle.localPosition.vx.rawValue : 0
     property real   _vy:                    activeVehicle ? activeVehicle.localPosition.vy.rawValue : 0
     property real   _vz:                    activeVehicle ? activeVehicle.localPosition.vz.rawValue : 0
-    property bool   _isMoving:              Math.sqrt(Math.pow(_vx,2) + Math.pow(_vy,2) + Math.pow(_vz,2)) > 0.5
+    property bool   _isMoving:              false //Math.sqrt(Math.pow(_vx,2) + Math.pow(_vy,2) + Math.pow(_vz,2)) > 0.5
     property real   _distance:              activeVehicle ? activeVehicle.distanceSensors.rotationPitch270.rawValue : NaN
     property real   _relAltitude:           activeVehicle ? activeVehicle.altitudeRelative.rawValue : NaN
     property bool   _isCustomCommandEnabled: activeVehicle ? activeVehicle.isCustomCommandEnabled : false
