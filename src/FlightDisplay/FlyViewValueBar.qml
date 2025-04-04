@@ -39,7 +39,7 @@ Item{
     // Property of Tools
     property real   _toolsMargin:               ScreenTools.defaultFontPixelWidth * 0.75
     property color  _baseBGColor:               qgcPal.window
-    property real   _largeValueWidth:           ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 6 : ScreenTools.defaultFontPixelWidth * 8
+    property real   _largeValueWidth:           ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 7 : ScreenTools.defaultFontPixelWidth * 8
     property real   _mediumValueWidth:          ScreenTools.defaultFontPixelWidth * 6
     property real   _smallValueWidth:           ScreenTools.defaultFontPixelWidth * 4
 
