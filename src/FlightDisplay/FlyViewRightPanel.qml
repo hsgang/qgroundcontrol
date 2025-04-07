@@ -15,7 +15,7 @@ import SiYi.Object
 ColumnLayout {
     width: swipePages.currentItem
                ? swipePages.currentItem.contentLoader.implicitWidth + pageIndicatorContainer.width + ScreenTools.defaultFontPixelHeight
-               : ScreenTools.defaultFontPixelWidth * 40
+               : pageIndicatorContainer.width
 
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
     property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
