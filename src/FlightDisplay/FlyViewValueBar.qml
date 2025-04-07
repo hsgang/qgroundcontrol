@@ -39,7 +39,7 @@ Item{
     // Property of Tools
     property real   _toolsMargin:               ScreenTools.defaultFontPixelWidth * 0.75
     property color  _baseBGColor:               qgcPal.window
-    property real   _largeValueWidth:           ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 7 : ScreenTools.defaultFontPixelWidth * 8
+    property real   _largeValueWidth:           ScreenTools.defaultFontPixelWidth * 8
     property real   _mediumValueWidth:          ScreenTools.defaultFontPixelWidth * 6
     property real   _smallValueWidth:           ScreenTools.defaultFontPixelWidth * 4
 
@@ -50,17 +50,19 @@ Item{
     property real   _heading:                   _activeVehicle   ? _activeVehicle.heading.rawValue : 0
 
     property real   _vehicleAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : 0
+    property real   _alitutdeDecimal:           (_vehicleAltitude >= 100) ? 0 : 1
     property real   _vehicleAltitudeAMSL:       _activeVehicle ? _activeVehicle.altitudeAMSL.rawValue : 0
     property real   _vehicleVerticalSpeed:      _activeVehicle ? _activeVehicle.climbRate.rawValue : 0
     property real   _vehicleGroundSpeed:        _activeVehicle ? _activeVehicle.groundSpeed.rawValue : 0
     property real   _distanceToHome:            _activeVehicle ? _activeVehicle.distanceToHome.rawValue : 0
+    property real   _distanceDecimal:           (_distanceToHome >= 1000) ? 0 : 1
     property real   _distanceDown:              _activeVehicle ? _activeVehicle.distanceSensors.rotationPitch270.rawValue : 0
-    property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitude).toFixed(1)
+    property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitude).toFixed(_alitutdeDecimal)
     property string _vehicleAltitudeAMSLText:   isNaN(_vehicleAltitudeAMSL) ? "-.-" : "ASL " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitudeAMSL).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _vehicleVerticalSpeedText:  isNaN(_vehicleVerticalSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleVerticalSpeed).toFixed(1)
     property string _speedUnitText:             QGroundControl.unitsConversion.appSettingsSpeedUnitsString
     property string _vehicleGroundSpeedText:    isNaN(_vehicleGroundSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleGroundSpeed).toFixed(1)
-    property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceToHome).toFixed(1)
+    property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceToHome).toFixed(_distanceDecimal)
     property string _distanceUnitText:          QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _distanceDownText:          isNaN(_distanceDown) ? "   " : "RNG " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceDown).toFixed(2) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
 
@@ -176,7 +178,7 @@ Item{
             }
             QGCLabel {
                 Layout.preferredWidth:  _largeValueWidth
-                text:   _distanceToHomeText
+                text:                   _distanceToHomeText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
                 color:                  qgcPal.textHighlight
