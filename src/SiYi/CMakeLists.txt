@@ -1,6 +1,6 @@
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
-target_sources(QGC
+target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
         SiYi.cc
         SiYi.h
@@ -14,9 +14,9 @@ target_sources(QGC
         SiYiTransmitter.h
 )
 
-target_link_libraries(QGC
+target_link_libraries(${CMAKE_PROJECT_NAME}
     PUBLIC
         Qt6::Core
 )
 
-target_include_directories(QGC PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
