@@ -71,10 +71,7 @@ void APMAirframeComponentController::_fillFrameClasses()
             if (frameClass == FRAME_CLASS_Y6 || frameClass == FRAME_CLASS_TRI) {
                 continue;
             }
-            if (frameClass == FRAME_CLASS_DODECAHEXA || frameClass == FRAME_CLASS_DECA ) {
-                continue;
-            }
-            if (frameClass == FRAME_CLASS_SCRIPTINGMATRIX || frameClass == FRAME_CLASS_6DOFSCRIPTING || frameClass == FRAME_CLASS_DYNAMICSCRIPTINGMATRIX ) {
+            if (frameClass == FRAME_CLASS_DODECAHEXA) {
                 continue;
             }
 
