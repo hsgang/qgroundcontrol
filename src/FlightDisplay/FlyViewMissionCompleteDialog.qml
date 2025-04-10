@@ -34,17 +34,21 @@ Item {
     property bool _showMissionCompleteDialog:       _vehicleWasArmed && _vehicleWasInMissionFlightMode &&
                                                     (missionController.containsItems || geoFenceController.containsItems || rallyPointController.containsItems ||
                                                      (_activeVehicle ? _activeVehicle.cameraTriggerPoints.count !== 0 : false))
+    property var  _vehicleArmedTime:                new Date()
+    property var  _vehicleDisarmedTime:             new Date()
 
     on_VehicleArmedChanged: {
         if (_vehicleArmed) {
             _vehicleWasArmed = true
             _vehicleWasInMissionFlightMode = _vehicleInMissionFlightMode
+            _vehicleArmedTime = new Date()
         } else {
             if (_showMissionCompleteDialog) {
                 missionCompleteDialogComponent.createObject(mainWindow).open()
             }
             _vehicleWasArmed = false
             _vehicleWasInMissionFlightMode = false
+            _vehicleDisarmedTime = new Date()
         }
     }
 
@@ -73,11 +77,51 @@ Item {
                 width:      40 * ScreenTools.defaultFontPixelWidth
                 spacing:    ScreenTools.defaultFontPixelHeight
 
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: ScreenTools.defaultFontPixelHeight / 2
+
+                    LabelledLabel {
+                        label:      "시동 시각"
+                        labelText:  Qt.formatDateTime(_vehicleArmedTime, "MM-dd hh:mm:ss")
+                    }
+
+                    LabelledLabel {
+                        label:      "종료 시각"
+                        labelText:  Qt.formatDateTime(_vehicleDisarmedTime, "MM-dd hh:mm:ss")
+                    }
+
+                    LabelledLabel {
+                        label:      "비행 시간"
+                        labelText:  _activeVehicle.flightTime.valueString
+                    }
+
+                    LabelledLabel {
+                        label:      "비행 거리"
+                        labelText:  _activeVehicle.flightDistance.valueString + " " + _activeVehicle.flightDistance.units
+                    }
+
+                    Repeater {
+                        model: _activeVehicle ? _activeVehicle.batteries : 0
+
+                        LabelledLabel {
+                            label:      "전원 소모량"
+                            labelText:  object.mahConsumed.valueString + " " + object.mahConsumed.units
+                        }
+                    }
+                }
+
+                Rectangle {
+                    Layout.fillWidth:   true
+                    color:              qgcPal.text
+                    height:             1
+                }
+
                 QGCLabel {
-                    Layout.fillWidth:       true
-                    text:                   qsTr("%1 Images Taken").arg(_activeVehicle.cameraTriggerPoints.count)
-                    horizontalAlignment:    Text.AlignHCenter
-                    visible:                _activeVehicle.cameraTriggerPoints.count !== 0
+                    Layout.fillWidth:   true
+                    text:               qsTr("%1 Images Taken").arg(_activeVehicle.cameraTriggerPoints.count)
+                    horizontalAlignment:Text.AlignHCenter
+                    visible:            _activeVehicle.cameraTriggerPoints.count !== 0
                 }
 
                 QGCButton {
