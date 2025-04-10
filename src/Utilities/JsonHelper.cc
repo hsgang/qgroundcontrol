@@ -37,7 +37,7 @@ namespace JsonHelper
     constexpr const char *_translateKeysKey = "translateKeys";
     constexpr const char *_arrayIDKeysKey = "_arrayIDKeys";
     constexpr const char *_jsonGroundStationKey = "groundStation";
-    constexpr const char *_jsonGroundStationValue = "QGroundControl";
+    constexpr const char *_jsonGroundStationValue = "MissionNavigator";
 }
 
 Q_APPLICATION_STATIC(QTranslator, s_jsonTranslator);
