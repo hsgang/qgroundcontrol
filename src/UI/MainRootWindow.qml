@@ -324,36 +324,36 @@ ApplicationWindow {
     //     visible: QGroundControl.settingsManager.flyViewSettings.showLogReplayStatusBar.rawValue
     // }
 
-    MessageDialog {
-        id:                 showTouchAreasNotification
-        title:              qsTr("Debug Touch Areas")
-        text:               qsTr("Touch Area display toggled")
-        buttons:            MessageDialog.Ok
-    }
+    // MessageDialog {
+    //     id:                 showTouchAreasNotification
+    //     title:              qsTr("Debug Touch Areas")
+    //     text:               qsTr("Touch Area display toggled")
+    //     buttons:            MessageDialog.Ok
+    // }
 
-    MessageDialog {
-        id:                 advancedModeOnConfirmation
-        title:              qsTr("Advanced Mode")
-        text:               QGroundControl.corePlugin.showAdvancedUIMessage
-        buttons:            MessageDialog.Yes | MessageDialog.No
-        onButtonClicked: function (button, role) {
-            if (button === MessageDialog.Yes) {
-                QGroundControl.corePlugin.showAdvancedUI = true
-            }
-        }
-    }
+    // MessageDialog {
+    //     id:                 advancedModeOnConfirmation
+    //     title:              qsTr("Advanced Mode")
+    //     text:               QGroundControl.corePlugin.showAdvancedUIMessage
+    //     buttons:            MessageDialog.Yes | MessageDialog.No
+    //     onButtonClicked: function (button, role) {
+    //         if (button === MessageDialog.Yes) {
+    //             QGroundControl.corePlugin.showAdvancedUI = true
+    //         }
+    //     }
+    // }
 
-    MessageDialog {
-        id:                 advancedModeOffConfirmation
-        title:              qsTr("Advanced Mode")
-        text:               qsTr("Turn off Advanced Mode?")
-        buttons:            MessageDialog.Yes | MessageDialog.No
-        onButtonClicked: function (button, role) {
-            if (button === MessageDialog.Yes) {
-                QGroundControl.corePlugin.showAdvancedUI = false
-            }
-        }
-    }
+    // MessageDialog {
+    //     id:                 advancedModeOffConfirmation
+    //     title:              qsTr("Advanced Mode")
+    //     text:               qsTr("Turn off Advanced Mode?")
+    //     buttons:            MessageDialog.Yes | MessageDialog.No
+    //     onButtonClicked: function (button, role) {
+    //         if (button === MessageDialog.Yes) {
+    //             QGroundControl.corePlugin.showAdvancedUI = false
+    //         }
+    //     }
+    // }
 
     function showToolSelectDialog() {
         if (mainWindow.allowViewSwitch()) {
