@@ -406,6 +406,8 @@ bool APMParameterMetaData::_parseParameterAttributes(QXmlStreamReader &xml, APMF
                     rawMetaData->rebootRequired = true;
                 }
             }
+        } else if (elementName == "bitmask") {
+        } else if (elementName == "bit") {
         } else if (elementName == "values") {
             // doing nothing individual value will follow anyway. May be used for sanity checking.
         } else if (elementName == "value") {
