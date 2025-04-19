@@ -21,13 +21,13 @@ import QGroundControl.FlightMap
 
 Item {
     property real   _margin:              ScreenTools.defaultFontPixelWidth / 2
-    property real   _widgetHeight:        ScreenTools.defaultFontPixelHeight * 3
+    property real   _widgetHeight:        ScreenTools.defaultFontPixelHeight * 2.5
     property color  _textColor:           qgcPal.text
     property var    _activeVehicleColor:  "green"
 
-    property real   _rectOpacity:       0.8
+    property real   _rectOpacity:           0.8
     property var    _guidedController:  globals.guidedControllerFlyView
-    property real   _dataFontSize:  ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
+    property real   _dataFontSize:      ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
 
     property var    _activeVehicle:       QGroundControl.multiVehicleManager.activeVehicle
     property var    selectedVehicles:     QGroundControl.multiVehicleManager.selectedVehicles
@@ -39,7 +39,7 @@ Item {
     property string _flyingText:        qsTr("Flying")
     property string _landingText:       qsTr("Landing")
 
-    property real   innerColumnHeight
+    implicitHeight: vehicleList.contentHeight
 
     function armAvailable() {
         for (var i = 0; i < selectedVehicles.count; i++) {
@@ -192,24 +192,28 @@ Item {
                                : "transparent"
             border.width: 2           
             // width:          vehicleList.width
-            // height:         innerColumn.y + innerColumn.height + _margin
+            // height:         innerColumn.height + _margin * 2
             // color:          QGroundControl.multiVehicleManager.activeVehicle == _vehicle ? _activeVehicleColor : qgcPal.button
             // radius:         _margin
             // border.width:   _vehicle && vehicleSelected(_vehicle.id) ? 2 : 0
             // border.color:   qgcPal.text
             
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if(_id !== _activeVehicleId){
-                        var vehicleId = vehicleIdLabel.text //textAt(index).split(" ")[1]
-                        var vehicle = QGroundControl.multiVehicleManager.getVehicleById(vehicleId)
-                        QGroundControl.multiVehicleManager.activeVehicle = vehicle
-                        busyIndicator.visible = true
-                    }
-                }
-            }
+            // QGCMouseArea {
+            //     anchors.fill: parent
+            //     onClicked: {
+            //         if(_id !== _activeVehicleId){
+            //             var vehicleId = vehicleIdLabel.text //textAt(index).split(" ")[1]
+            //             var vehicle = QGroundControl.multiVehicleManager.getVehicleById(vehicleId)
+            //             QGroundControl.multiVehicleManager.activeVehicle = vehicle
+            //             busyIndicator.visible = true
+            //         }
+            //     }
+            // }
 
+            QGCMouseArea {
+                anchors.fill:       parent
+                onClicked:          toggleSelect(_vehicle.id)
+            }
 
             property var    _vehicle:   object
             property real   _id: _vehicle ? _vehicle.id : 0
@@ -295,9 +299,12 @@ Item {
                         // }
                     }
 
-                    QGCCompassWidget {
+                    IntegratedCompassAttitude {
                         id: compassWidget
-                        size:                        _widgetHeight
+                        compassRadius:              _widgetHeight / 2 - attitudeSize / 2
+                        compassBorder:              0
+                        attitudeSize:               ScreenTools.defaultFontPixelWidth / 2
+                        attitudeSpacing:            attitudeSize / 2
                         usedByMultipleVehicleList:   true
                         vehicle:                     _vehicle
                     }
@@ -569,7 +576,22 @@ Item {
                         onClicked:  _vehicle.flightMode = _vehicle.takeControlFlightMode
                     }
                 } // Row
-            } // ColumnLayout            
+
+                QGCFlickable {
+                    anchors.horizontalCenter:   parent.horizontalCenter
+                    width:          Math.min(contentWidth, vehicleList.width)
+                    height:         control.height
+                    contentWidth:   control.width
+                    contentHeight:  control.height
+
+                    TelemetryValuesBar {
+                        id:                             control
+                        valueArea_userSettingsGroup:    valueArea.vehicleCardUserSettingsGroup
+                        valueArea_defaultSettingsGroup: valueArea.vehicleCardDefaultSettingsGroup
+                        valueArea_vehicle:              _vehicle
+                    }
+                }
+            } // ColumnLayout
 
             BusyIndicator {
                 id:         busyIndicator

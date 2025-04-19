@@ -1,6 +1,3 @@
-add_subdirectory(AirLink)
-add_subdirectory(MockLink)
-
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
         LinkConfiguration.cc
@@ -23,6 +20,8 @@ target_sources(${CMAKE_PROJECT_NAME}
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+# target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE QABSTRACTSOCKET_DEBUG)
+
 #===========================================================================#
 
 if(QGC_NO_SERIAL_LINK)
@@ -38,15 +37,7 @@ else()
             UdpIODevice.h
     )
 
-    if(ANDROID)
-        add_subdirectory(${CMAKE_SOURCE_DIR}/android/libs/qtandroidserialport qtandroidserialport.build)
-        target_sources(${CMAKE_PROJECT_NAME}
-            PRIVATE
-                ${CMAKE_SOURCE_DIR}/android/src/AndroidSerial.cc
-                ${CMAKE_SOURCE_DIR}/android/src/AndroidSerial.h
-        )
-        target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/android/src)
-    else()
+    if(NOT ANDROID AND NOT IOS)
         target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt6::SerialPort)
     endif()
 endif()
@@ -84,4 +75,7 @@ if(QGC_ZEROCONF_ENABLED)
     endif()
 endif()
 
-# target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE QABSTRACTSOCKET_DEBUG)
+#===========================================================================#
+
+add_subdirectory(AirLink)
+add_subdirectory(MockLink)

@@ -10,47 +10,10 @@
 #include "VehicleEscStatusFactGroup.h"
 #include "Vehicle.h"
 
-VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject* parent)
-    : FactGroup                         (1000, ":/json/Vehicle/EscStatusFactGroup.json", parent)
-    , _indexFact                        (0, _indexFactName,                         FactMetaData::valueTypeUint8)
-
-    , _rpmFirstFact                     (0, _rpmFirstFactName,                      FactMetaData::valueTypeFloat)
-    , _rpmSecondFact                    (0, _rpmSecondFactName,                     FactMetaData::valueTypeFloat)
-    , _rpmThirdFact                     (0, _rpmThirdFactName,                      FactMetaData::valueTypeFloat)
-    , _rpmFourthFact                    (0, _rpmFourthFactName,                     FactMetaData::valueTypeFloat)
-    , _rpmFifthFact                     (0, _rpmFifthFactName,                      FactMetaData::valueTypeFloat)
-    , _rpmSixthFact                     (0, _rpmSixthFactName,                      FactMetaData::valueTypeFloat)
-    , _rpmSeventhFact                   (0, _rpmSeventhFactName,                    FactMetaData::valueTypeFloat)
-    , _rpmEighthFact                    (0, _rpmEighthFactName,                     FactMetaData::valueTypeFloat)
-
-    , _currentFirstFact                 (0, _currentFirstFactName,                  FactMetaData::valueTypeFloat)
-    , _currentSecondFact                (0, _currentSecondFactName,                 FactMetaData::valueTypeFloat)
-    , _currentThirdFact                 (0, _currentThirdFactName,                  FactMetaData::valueTypeFloat)
-    , _currentFourthFact                (0, _currentFourthFactName,                 FactMetaData::valueTypeFloat)
-    , _currentFifthFact                 (0, _currentFifthFactName,                  FactMetaData::valueTypeFloat)
-    , _currentSixthFact                 (0, _currentSixthFactName,                  FactMetaData::valueTypeFloat)
-    , _currentSeventhFact               (0, _currentSeventhFactName,                FactMetaData::valueTypeFloat)
-    , _currentEighthFact                (0, _currentEighthFactName,                 FactMetaData::valueTypeFloat)
-
-    , _voltageFirstFact                 (0, _voltageFirstFactName,                  FactMetaData::valueTypeFloat)
-    , _voltageSecondFact                (0, _voltageSecondFactName,                 FactMetaData::valueTypeFloat)
-    , _voltageThirdFact                 (0, _voltageThirdFactName,                  FactMetaData::valueTypeFloat)
-    , _voltageFourthFact                (0, _voltageFourthFactName,                 FactMetaData::valueTypeFloat)
-    , _voltageFifthFact                 (0, _voltageFifthFactName,                  FactMetaData::valueTypeFloat)
-    , _voltageSixthFact                 (0, _voltageSixthFactName,                  FactMetaData::valueTypeFloat)
-    , _voltageSeventhFact               (0, _voltageSeventhFactName,                FactMetaData::valueTypeFloat)
-    , _voltageEighthFact                (0, _voltageEighthFactName,                 FactMetaData::valueTypeFloat)
-
-    , _temperatureFirstFact             (0, _temperatureFirstFactName,              FactMetaData::valueTypeUint8)
-    , _temperatureSecondFact            (0, _temperatureSecondFactName,             FactMetaData::valueTypeUint8)
-    , _temperatureThirdFact             (0, _temperatureThirdFactName,              FactMetaData::valueTypeUint8)
-    , _temperatureFourthFact            (0, _temperatureFourthFactName,             FactMetaData::valueTypeUint8)
-    , _temperatureFifthFact             (0, _temperatureFifthFactName,              FactMetaData::valueTypeUint8)
-    , _temperatureSixthFact             (0, _temperatureSixthFactName,              FactMetaData::valueTypeUint8)
-    , _temperatureSeventhFact           (0, _temperatureSeventhFactName,            FactMetaData::valueTypeUint8)
-    , _temperatureEighthFact            (0, _temperatureEighthFactName,             FactMetaData::valueTypeUint8)
+VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject *parent)
+    : FactGroup(1000, QStringLiteral(":/json/Vehicle/EscStatusFactGroup.json"), parent)
 {
-    _addFact(&_indexFact,                       _indexFactName);
+    _addFact(&_indexFact);
 
     _addFact(&_rpmFirstFact,                    _rpmFirstFactName);
     _addFact(&_rpmSecondFact,                   _rpmSecondFactName);
@@ -108,25 +71,27 @@ void VehicleEscStatusFactGroup::handleMessage(Vehicle*, mavlink_message_t& messa
 
 void VehicleEscStatusFactGroup::_handleEscStatus(mavlink_message_t &message)
 {
-    mavlink_esc_status_t esc;
-    mavlink_msg_esc_status_decode(&message, &esc);
+    mavlink_esc_status_t content{};
+    mavlink_msg_esc_status_decode(&message, &content);
 
-    index()->setRawValue                        (esc.index);
+    index()->setRawValue(content.index);
 
-    rpmFirst()->setRawValue                     (esc.rpm[0]);
-    rpmSecond()->setRawValue                    (esc.rpm[1]);
-    rpmThird()->setRawValue                     (esc.rpm[2]);
-    rpmFourth()->setRawValue                    (esc.rpm[3]);
+    rpmFirst()->setRawValue(content.rpm[0]);
+    rpmSecond()->setRawValue(content.rpm[1]);
+    rpmThird()->setRawValue(content.rpm[2]);
+    rpmFourth()->setRawValue(content.rpm[3]);
 
-    currentFirst()->setRawValue                 (esc.current[0]);
-    currentSecond()->setRawValue                (esc.current[1]);
-    currentThird()->setRawValue                 (esc.current[2]);
-    currentFourth()->setRawValue                (esc.current[3]);
+    currentFirst()->setRawValue(content.current[0]);
+    currentSecond()->setRawValue(content.current[1]);
+    currentThird()->setRawValue(content.current[2]);
+    currentFourth()->setRawValue(content.current[3]);
 
-    voltageFirst()->setRawValue                 (esc.voltage[0]);
-    voltageSecond()->setRawValue                (esc.voltage[1]);
-    voltageThird()->setRawValue                 (esc.voltage[2]);
-    voltageFourth()->setRawValue                (esc.voltage[3]);
+    voltageFirst()->setRawValue(content.voltage[0]);
+    voltageSecond()->setRawValue(content.voltage[1]);
+    voltageThird()->setRawValue(content.voltage[2]);
+    voltageFourth()->setRawValue(content.voltage[3]);
+
+    _setTelemetryAvailable(true);
 }
 
 void VehicleEscStatusFactGroup::_handleEscTelemetry1to4(mavlink_message_t &message)

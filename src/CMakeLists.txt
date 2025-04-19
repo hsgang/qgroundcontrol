@@ -45,39 +45,22 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         Qt6::TextToSpeech
         Qt6::Widgets
         Qt6::Xml
-        QGCLocation
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-if(ANDROID)
-    target_sources(${CMAKE_PROJECT_NAME}
-        PRIVATE
-            ${CMAKE_SOURCE_DIR}/android/src/AndroidInit.cc
-            ${CMAKE_SOURCE_DIR}/android/src/AndroidInterface.cc
-            ${CMAKE_SOURCE_DIR}/android/src/AndroidInterface.h
-    )
-
-    target_link_libraries(${CMAKE_PROJECT_NAME}
-        PRIVATE
-            Qt6::Core
-            Qt6::CorePrivate
-    )
-
-    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/android/src)
-endif()
-
 add_subdirectory(ADSB)
 add_subdirectory(AnalyzeView)
+add_subdirectory(Android)
 add_subdirectory(API)
 add_subdirectory(AutoPilotPlugins)
 add_subdirectory(Camera)
 add_subdirectory(Comms)
 add_subdirectory(FactSystem)
 add_subdirectory(FirmwarePlugin)
-# add_subdirectory(FirstRunPromptDialogs)
-# add_subdirectory(FlightDisplay)
-# add_subdirectory(FlightMap)
+add_subdirectory(FirstRunPromptDialogs)
+add_subdirectory(FlightDisplay)
+add_subdirectory(FlightMap)
 add_subdirectory(FollowMe)
 add_subdirectory(Gimbal)
 add_subdirectory(GPS)
@@ -85,19 +68,20 @@ add_subdirectory(Joystick)
 add_subdirectory(MAVLink)
 add_subdirectory(MissionManager)
 add_subdirectory(NTRIP)
-# add_subdirectory(PlanView)
+add_subdirectory(PlanView)
 add_subdirectory(PositionManager)
 add_subdirectory(QmlControls)
-add_subdirectory(QtLocationPlugin)
 add_subdirectory(Settings)
 add_subdirectory(SiYi)
 add_subdirectory(Terrain)
-# add_subdirectory(UI)
+add_subdirectory(UI)
 add_subdirectory(Utilities)
 add_subdirectory(UTMSP)
 add_subdirectory(Vehicle)
 add_subdirectory(VideoManager)
 add_subdirectory(Viewer3D)
+
+add_subdirectory(QtLocationPlugin)
 
 target_precompile_headers(${CMAKE_PROJECT_NAME}
     PRIVATE

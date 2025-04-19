@@ -10,18 +10,11 @@
 #pragma once
 
 #include "FactGroup.h"
-#include "QGCMAVLink.h"
-
-class Vehicle;
 
 class VehicleEscStatusFactGroup : public FactGroup
 {
     Q_OBJECT
-
-public:
-    VehicleEscStatusFactGroup(QObject* parent = nullptr);
-
-    Q_PROPERTY(Fact* index              READ index              CONSTANT)
+    Q_PROPERTY(Fact *index          READ index          CONSTANT)
 
     Q_PROPERTY(Fact* rpmFirst           READ rpmFirst           CONSTANT)
     Q_PROPERTY(Fact* rpmSecond          READ rpmSecond          CONSTANT)
@@ -58,6 +51,9 @@ public:
     Q_PROPERTY(Fact* temperatureSixth   READ temperatureSixth   CONSTANT)
     Q_PROPERTY(Fact* temperatureSeventh READ temperatureSeventh CONSTANT)
     Q_PROPERTY(Fact* temperatureEighth  READ temperatureEighth  CONSTANT)
+
+public:
+    explicit VehicleEscStatusFactGroup(QObject *parent = nullptr);
 
     Fact* index                         () { return &_indexFact; }
 
@@ -98,86 +94,46 @@ public:
     Fact* temperatureEighth             () { return &_temperatureEighthFact; }
 
     // Overrides from FactGroup
-    void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
-
-private:
-    const QString _indexFactName =                            QStringLiteral("index");
-
-    const QString _rpmFirstFactName =                         QStringLiteral("rpm1");
-    const QString _rpmSecondFactName =                        QStringLiteral("rpm2");
-    const QString _rpmThirdFactName =                         QStringLiteral("rpm3");
-    const QString _rpmFourthFactName =                        QStringLiteral("rpm4");
-    const QString _rpmFifthFactName =                         QStringLiteral("rpm5");
-    const QString _rpmSixthFactName =                         QStringLiteral("rpm6");
-    const QString _rpmSeventhFactName =                       QStringLiteral("rpm7");
-    const QString _rpmEighthFactName =                        QStringLiteral("rpm8");
-
-    const QString _currentFirstFactName =                     QStringLiteral("current1");
-    const QString _currentSecondFactName =                    QStringLiteral("current2");
-    const QString _currentThirdFactName =                     QStringLiteral("current3");
-    const QString _currentFourthFactName =                    QStringLiteral("current4");
-    const QString _currentFifthFactName =                     QStringLiteral("current5");
-    const QString _currentSixthFactName =                     QStringLiteral("current6");
-    const QString _currentSeventhFactName =                   QStringLiteral("current7");
-    const QString _currentEighthFactName =                    QStringLiteral("current8");
-
-    const QString _voltageFirstFactName =                     QStringLiteral("voltage1");
-    const QString _voltageSecondFactName =                    QStringLiteral("voltage2");
-    const QString _voltageThirdFactName =                     QStringLiteral("voltage3");
-    const QString _voltageFourthFactName =                    QStringLiteral("voltage4");
-    const QString _voltageFifthFactName =                     QStringLiteral("voltage5");
-    const QString _voltageSixthFactName =                     QStringLiteral("voltage6");
-    const QString _voltageSeventhFactName =                   QStringLiteral("voltage7");
-    const QString _voltageEighthFactName =                    QStringLiteral("voltage8");
-
-    const QString _temperatureFirstFactName =                 QStringLiteral("temperature1");
-    const QString _temperatureSecondFactName =                QStringLiteral("temperature2");
-    const QString _temperatureThirdFactName =                 QStringLiteral("temperature3");
-    const QString _temperatureFourthFactName =                QStringLiteral("temperature4");
-    const QString _temperatureFifthFactName =                 QStringLiteral("temperature5");
-    const QString _temperatureSixthFactName =                 QStringLiteral("temperature6");
-    const QString _temperatureSeventhFactName =               QStringLiteral("temperature7");
-    const QString _temperatureEighthFactName =                QStringLiteral("temperature8");
-
+    void handleMessage(Vehicle *vehicle, const mavlink_message_t &message) final;
     void _handleEscStatus           (mavlink_message_t& message);
     void _handleEscTelemetry1to4    (mavlink_message_t& message);
     void _handleEscTelemetry5to8    (mavlink_message_t& message);
 
-    Fact _indexFact;
+private:
+    Fact _indexFact = Fact(0, QStringLiteral("index"), FactMetaData::valueTypeUint8);
+    Fact _rpmFirstFact = Fact(0, QStringLiteral("rpm1"), FactMetaData::valueTypeFloat);
+    Fact _rpmSecondFact = Fact(0, QStringLiteral("rpm2"), FactMetaData::valueTypeFloat);
+    Fact _rpmThirdFact = Fact(0, QStringLiteral("rpm3"), FactMetaData::valueTypeFloat);
+    Fact _rpmFourthFact = Fact(0, QStringLiteral("rpm4"), FactMetaData::valueTypeFloat);
+    Fact _rpmFifthFact = Fact(0, QStringLiteral("rpm5"), FactMetaData::valueTypeFloat);
+    Fact _rpmSixthFact = Fact(0, QStringLiteral("rpm6"), FactMetaData::valueTypeFloat);
+    Fact _rpmSeventhFact = Fact(0, QStringLiteral("rpm7"), FactMetaData::valueTypeFloat);
+    Fact _rpmEighthFact = Fact(0, QStringLiteral("rpm8"), FactMetaData::valueTypeFloat);
 
-    Fact _rpmFirstFact;
-    Fact _rpmSecondFact;
-    Fact _rpmThirdFact;
-    Fact _rpmFourthFact;
-    Fact _rpmFifthFact;
-    Fact _rpmSixthFact;
-    Fact _rpmSeventhFact;
-    Fact _rpmEighthFact;
+    Fact _currentFirstFact = Fact(0, QStringLiteral("current1"), FactMetaData::valueTypeFloat);
+    Fact _currentSecondFact = Fact(0, QStringLiteral("current2"), FactMetaData::valueTypeFloat);
+    Fact _currentThirdFact = Fact(0, QStringLiteral("current3"), FactMetaData::valueTypeFloat);
+    Fact _currentFourthFact = Fact(0, QStringLiteral("current4"), FactMetaData::valueTypeFloat);
+    Fact _currentFifthFact = Fact(0, QStringLiteral("current5"), FactMetaData::valueTypeFloat);
+    Fact _currentSixthFact = Fact(0, QStringLiteral("current6"), FactMetaData::valueTypeFloat);
+    Fact _currentSeventhFact = Fact(0, QStringLiteral("current7"), FactMetaData::valueTypeFloat);
+    Fact _currentEighthFact = Fact(0, QStringLiteral("current8"), FactMetaData::valueTypeFloat);
 
-    Fact _currentFirstFact;
-    Fact _currentSecondFact;
-    Fact _currentThirdFact;
-    Fact _currentFourthFact;
-    Fact _currentFifthFact;
-    Fact _currentSixthFact;
-    Fact _currentSeventhFact;
-    Fact _currentEighthFact;
+    Fact _voltageFirstFact = Fact(0, QStringLiteral("voltage1"), FactMetaData::valueTypeFloat);
+    Fact _voltageSecondFact = Fact(0, QStringLiteral("voltage2"), FactMetaData::valueTypeFloat);
+    Fact _voltageThirdFact = Fact(0, QStringLiteral("voltage3"), FactMetaData::valueTypeFloat);
+    Fact _voltageFourthFact = Fact(0, QStringLiteral("voltage4"), FactMetaData::valueTypeFloat);
+    Fact _voltageFifthFact = Fact(0, QStringLiteral("voltage5"), FactMetaData::valueTypeFloat);
+    Fact _voltageSixthFact = Fact(0, QStringLiteral("voltage6"), FactMetaData::valueTypeFloat);
+    Fact _voltageSeventhFact = Fact(0, QStringLiteral("voltage7"), FactMetaData::valueTypeFloat);
+    Fact _voltageEighthFact = Fact(0, QStringLiteral("voltage8"), FactMetaData::valueTypeFloat);
 
-    Fact _voltageFirstFact;
-    Fact _voltageSecondFact;
-    Fact _voltageThirdFact;
-    Fact _voltageFourthFact;
-    Fact _voltageFifthFact;
-    Fact _voltageSixthFact;
-    Fact _voltageSeventhFact;
-    Fact _voltageEighthFact;
-
-    Fact _temperatureFirstFact;
-    Fact _temperatureSecondFact;
-    Fact _temperatureThirdFact;
-    Fact _temperatureFourthFact;
-    Fact _temperatureFifthFact;
-    Fact _temperatureSixthFact;
-    Fact _temperatureSeventhFact;
-    Fact _temperatureEighthFact;
+    Fact _temperatureFirstFact = Fact(0, QStringLiteral("temperature1"), FactMetaData::valueTypeFloat);
+    Fact _temperatureSecondFact = Fact(0, QStringLiteral("temperature2"), FactMetaData::valueTypeFloat);
+    Fact _temperatureThirdFact = Fact(0, QStringLiteral("temperature3"), FactMetaData::valueTypeFloat);
+    Fact _temperatureFourthFact = Fact(0, QStringLiteral("temperature4"), FactMetaData::valueTypeFloat);
+    Fact _temperatureFifthFact = Fact(0, QStringLiteral("temperature5"), FactMetaData::valueTypeFloat);
+    Fact _temperatureSixthFact = Fact(0, QStringLiteral("temperature6"), FactMetaData::valueTypeFloat);
+    Fact _temperatureSeventhFact = Fact(0, QStringLiteral("temperature7"), FactMetaData::valueTypeFloat);
+    Fact _temperatureEighthFact = Fact(0, QStringLiteral("temperature8"), FactMetaData::valueTypeFloat);
 };

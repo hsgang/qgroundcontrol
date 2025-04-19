@@ -30,13 +30,12 @@ target_sources(${CMAKE_PROJECT_NAME}
         GridManager.h
 )
 
-if(ANDROID OR IOS)
-    target_sources(${CMAKE_PROJECT_NAME} PRIVATE MobileScreenMgr.h)
-    if(ANDROID)
-        target_sources(${CMAKE_PROJECT_NAME} PRIVATE MobileScreenMgr.cc)
-    elseif(IOS)
-        target_sources(${CMAKE_PROJECT_NAME} PRIVATE MobileScreenMgr.mm)
-    endif()
+if(IOS)
+    target_sources(${CMAKE_PROJECT_NAME}
+        PRIVATE
+            MobileScreenMgr.mm
+            MobileScreenMgr.h
+    )
 endif()
 
 target_include_directories(${CMAKE_PROJECT_NAME}
@@ -46,10 +45,6 @@ target_include_directories(${CMAKE_PROJECT_NAME}
         KML
         Shape
 )
-
-if(QGC_ENABLE_BLUETOOTH)
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt6::Bluetooth)
-endif()
 
 #===========================================================================#
 
@@ -63,13 +58,7 @@ CPMAddPackage(
         "BUILD_TESTING OFF"
 )
 
-if(Shapelib_ADDED)
-    if(TARGET shp)
-        target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shp)
-    elseif(TARGET shapelib::shp)
-        target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shapelib::shp)
-    endif()
-endif()
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE shp)
 
 #===========================================================================#
 
