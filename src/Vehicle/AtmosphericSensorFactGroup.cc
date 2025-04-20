@@ -3,19 +3,6 @@
 
 #include <QtMath>
 
-const char* AtmosphericSensorFactGroup::_statusFactName =       "status";
-const char* AtmosphericSensorFactGroup::_logCountFactName =     "logCount";
-const char* AtmosphericSensorFactGroup::_temperatureFactName =  "temperature";
-const char* AtmosphericSensorFactGroup::_humidityFactName =     "humidity";
-const char* AtmosphericSensorFactGroup::_pressureFactName =     "pressure";
-const char* AtmosphericSensorFactGroup::_extValue1FactName =    "extValue1";
-const char* AtmosphericSensorFactGroup::_extValue2FactName =    "extValue2";
-const char* AtmosphericSensorFactGroup::_extValue3FactName =    "extValue3";
-const char* AtmosphericSensorFactGroup::_extValue4FactName =    "extValue4";
-const char* AtmosphericSensorFactGroup::_windDirFactName =      "windDir";
-const char* AtmosphericSensorFactGroup::_windSpdFactName =      "windSpd";
-const char* AtmosphericSensorFactGroup::_windSpdVerFactName =   "windSpdVer";
-
 struct sensor_data32_Payload {
     float logCountRaw;
     float temperatureRaw;
@@ -42,31 +29,19 @@ struct sensor_tunnel_forSmartCity {
 
 AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     : FactGroup(500, ":/json/Vehicle/AtmosphericSensorFact.json", parent)
-    , _statusFact     (0, _statusFactName,     FactMetaData::valueTypeUint8)
-    , _logCountFact   (0, _logCountFactName,   FactMetaData::valueTypeDouble)
-    , _temperatureFact(0, _temperatureFactName,FactMetaData::valueTypeDouble)
-    , _humidityFact   (0, _humidityFactName,   FactMetaData::valueTypeDouble)
-    , _pressureFact   (0, _pressureFactName,   FactMetaData::valueTypeDouble)
-    , _extValue1Fact  (0, _extValue1FactName,  FactMetaData::valueTypeInt16)
-    , _extValue2Fact  (0, _extValue2FactName,  FactMetaData::valueTypeInt16)
-    , _extValue3Fact  (0, _extValue3FactName,  FactMetaData::valueTypeInt16)
-    , _extValue4Fact  (0, _extValue4FactName,  FactMetaData::valueTypeInt16)
-    , _windDirFact    (0, _windDirFactName,    FactMetaData::valueTypeDouble)
-    , _windSpdFact    (0, _windSpdFactName,    FactMetaData::valueTypeDouble)
-    , _windSpdVerFact (0, _windSpdVerFactName, FactMetaData::valueTypeDouble)
 {
-    _addFact(&_statusFact,        _statusFactName);
-    _addFact(&_logCountFact,      _logCountFactName);
-    _addFact(&_temperatureFact,   _temperatureFactName);
-    _addFact(&_humidityFact,      _humidityFactName);
-    _addFact(&_pressureFact,      _pressureFactName);
-    _addFact(&_extValue1Fact,     _extValue1FactName);
-    _addFact(&_extValue2Fact,     _extValue2FactName);
-    _addFact(&_extValue3Fact,     _extValue3FactName);
-    _addFact(&_extValue4Fact,     _extValue4FactName);
-    _addFact(&_windDirFact,       _windDirFactName);
-    _addFact(&_windSpdFact,       _windSpdFactName);
-    _addFact(&_windSpdVerFact,    _windSpdVerFactName);
+    _addFact(&_statusFact);
+    _addFact(&_logCountFact);
+    _addFact(&_temperatureFact);
+    _addFact(&_humidityFact);
+    _addFact(&_pressureFact);
+    _addFact(&_extValue1Fact);
+    _addFact(&_extValue2Fact);
+    _addFact(&_extValue3Fact);
+    _addFact(&_extValue4Fact);
+    _addFact(&_windDirFact);
+    _addFact(&_windSpdFact);
+    _addFact(&_windSpdVerFact);
 
     // Start out as not available "--.--"
     _temperatureFact.setRawValue (qQNaN());
@@ -81,8 +56,10 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _windSpdVerFact.setRawValue(qQNaN());
 }
 
-void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message_t& message)
+void AtmosphericSensorFactGroup::handleMessage(Vehicle *vehicle, const mavlink_message_t &message)
 {
+    Q_UNUSED(vehicle);
+
     switch (message.msgid) {
     case MAVLINK_MSG_ID_DATA32:
          _handleData32(message);
@@ -108,7 +85,7 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle* vehicle, mavlink_message
     }
 }
 
-void AtmosphericSensorFactGroup::_handleData32(mavlink_message_t &message)
+void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
 {
     mavlink_data32_t data32;
     mavlink_msg_data32_decode(&message, &data32);
@@ -142,14 +119,14 @@ void AtmosphericSensorFactGroup::_handleData32(mavlink_message_t &message)
     status()->setRawValue(data32.type);
 }
 
-void AtmosphericSensorFactGroup::_handleScaledPressure(mavlink_message_t& message)
+void AtmosphericSensorFactGroup::_handleScaledPressure(const mavlink_message_t& message)
 {
     mavlink_scaled_pressure_t pressure;
     mavlink_msg_scaled_pressure_decode(&message, &pressure);
     //sensorBaro()->setRawValue(pressure.press_abs);
 }
 
-void AtmosphericSensorFactGroup::_handleHygrometerSensor(mavlink_message_t& message)
+void AtmosphericSensorFactGroup::_handleHygrometerSensor(const mavlink_message_t& message)
 {
     mavlink_hygrometer_sensor_t hygrometer;
     mavlink_msg_hygrometer_sensor_decode(&message, &hygrometer);
@@ -173,7 +150,7 @@ void AtmosphericSensorFactGroup::_handleAtmosphericValue(mavlink_message_t& mess
 }
 #endif
 
-void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
+void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
 {
     mavlink_tunnel_t tunnel;
     mavlink_msg_tunnel_decode(&message, &tunnel);
@@ -194,9 +171,9 @@ void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
 
             if(tempRaw)  {temperature()->setRawValue(tempRaw);}
             if(humiRaw)     {humidity()->setRawValue(humiRaw);}
-            if(pressRaw)     {pressure()->setRawValue(pressRaw);}
-            if(windDRaw)      {windDir()->setRawValue(windDRaw);}
-            if(windSRaw)      {windSpd()->setRawValue(windSRaw);}
+            if(pressRaw)    {pressure()->setRawValue(pressRaw);}
+            if(windDRaw)    {windDir()->setRawValue(windDRaw);}
+            if(windSRaw)    {windSpd()->setRawValue(windSRaw);}
             if(ext1Raw)    {extValue1()->setRawValue(ext1Raw);}
             if(ext2Raw)    {extValue2()->setRawValue(ext2Raw);}
             if(ext3Raw)    {extValue3()->setRawValue(ext3Raw);}
@@ -252,7 +229,7 @@ void AtmosphericSensorFactGroup::_handleTunnel(mavlink_message_t &message)
 }
 
 // #if !defined(NO_ARDUPILOT_DIALECT)
-void AtmosphericSensorFactGroup::_handleWind(mavlink_message_t& message)
+void AtmosphericSensorFactGroup::_handleWind(const mavlink_message_t& message)
 {
     mavlink_wind_t wind;
     mavlink_msg_wind_decode(&message, &wind);

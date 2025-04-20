@@ -39,7 +39,7 @@ Item {
     property string _flyingText:        qsTr("Flying")
     property string _landingText:       qsTr("Landing")
 
-    implicitHeight: vehicleList.contentHeight
+    //implicitHeight: vehicleList.contentHeight
 
     function armAvailable() {
         for (var i = 0; i < selectedVehicles.count; i++) {
@@ -187,9 +187,10 @@ Item {
             color:      qgcPal.window
             opacity:    _rectOpacity
             radius:     _margin
-            border.color: _id ?
-                              (_id === _activeVehicleId ? qgcPal.missionItemEditor : "transparent")
-                               : "transparent"
+            border.color: vehicleSelected(_id) ? qgcPal.missionItemEditor : "transparent"
+                              // _id ?
+                              // (_id === _activeVehicleId ? qgcPal.missionItemEditor : "transparent")
+                              //  : "transparent"
             border.width: 2           
             // width:          vehicleList.width
             // height:         innerColumn.height + _margin * 2
@@ -225,7 +226,7 @@ Item {
                 anchors.left:       parent.left
                 anchors.right:      parent.right
                 spacing:            _margin
-                onHeightChanged: {  innerColumnHeight = height + _margin * 2 + spacing * 2  }
+                //onHeightChanged: {  innerColumnHeight = height + _margin * 2 + spacing * 2  }
 
                 property bool   _healthAndArmingChecksSupported:    _vehicle ? _vehicle.healthAndArmingCheckReport.supported : false
 
@@ -577,20 +578,20 @@ Item {
                     }
                 } // Row
 
-                QGCFlickable {
-                    anchors.horizontalCenter:   parent.horizontalCenter
-                    width:          Math.min(contentWidth, vehicleList.width)
-                    height:         control.height
-                    contentWidth:   control.width
-                    contentHeight:  control.height
+                // QGCFlickable {
+                //     anchors.horizontalCenter:   parent.horizontalCenter
+                //     width:          contentWidth // Math.min(contentWidth, vehicleList.width)
+                //     height:         control.height
+                //     contentWidth:   control.width
+                //     contentHeight:  control.height
 
-                    TelemetryValuesBar {
-                        id:                             control
-                        valueArea_userSettingsGroup:    valueArea.vehicleCardUserSettingsGroup
-                        valueArea_defaultSettingsGroup: valueArea.vehicleCardDefaultSettingsGroup
-                        valueArea_vehicle:              _vehicle
-                    }
-                }
+                //     TelemetryValuesBar {
+                //         id:                             control
+                //         valueArea_userSettingsGroup:    valueArea.vehicleCardUserSettingsGroup
+                //         valueArea_defaultSettingsGroup: valueArea.vehicleCardDefaultSettingsGroup
+                //         valueArea_vehicle:              _vehicle
+                //     }
+                // }
             } // ColumnLayout
 
             BusyIndicator {

@@ -15,10 +15,6 @@
 class VehicleEKFStatusFactGroup : public FactGroup
 {
     Q_OBJECT
-
-public:
-    VehicleEKFStatusFactGroup(QObject* parent = nullptr);;
-
     Q_PROPERTY(Fact* flags                  READ flags                  CONSTANT)
     Q_PROPERTY(Fact* velocity_variance      READ velocity_variance      CONSTANT)
     Q_PROPERTY(Fact* pos_horiz_variance     READ pos_horiz_variance     CONSTANT)
@@ -26,6 +22,9 @@ public:
     Q_PROPERTY(Fact* compass_variance       READ compass_variance       CONSTANT)
     Q_PROPERTY(Fact* terrain_alt_variance   READ terrain_alt_variance   CONSTANT)
     Q_PROPERTY(Fact* airspeed_variance      READ airspeed_variance      CONSTANT)
+
+public:
+    VehicleEKFStatusFactGroup(QObject* parent = nullptr);;
 
     Fact* flags                     () { return &_flagsFact; }
     Fact* velocity_variance         () { return &_velocity_varianceFact; }
@@ -36,22 +35,14 @@ public:
     Fact* airspeed_variance         () { return &_airspeed_varianceFact; }
 
     // Overrides from FactGroup
-    void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
-
-    static const char* _flagsFactName;
-    static const char* _velocity_varianceFactName;
-    static const char* _pos_horiz_varianceFactName;
-    static const char* _pos_vert_varianceFactName;
-    static const char* _compass_varianceFactName;
-    static const char* _terrain_alt_varianceFactName;
-    static const char* _airspeed_varianceFactName;
+    void handleMessage(Vehicle *vehicle, const mavlink_message_t &message) override;
 
 private:
-    Fact        _flagsFact;
-    Fact        _velocity_varianceFact;
-    Fact        _pos_horiz_varianceFact;
-    Fact        _pos_vert_varianceFact;
-    Fact        _compass_varianceFact;
-    Fact        _terrain_alt_varianceFact;
-    Fact        _airspeed_varianceFact;
+    Fact _flagsFact = Fact(0, QStringLiteral("flags"), FactMetaData::valueTypeUint16);
+    Fact _velocity_varianceFact = Fact(0, QStringLiteral("velocity_variance"), FactMetaData::valueTypeDouble);
+    Fact _pos_horiz_varianceFact = Fact(0, QStringLiteral("pos_horiz_variance"), FactMetaData::valueTypeDouble);
+    Fact _pos_vert_varianceFact = Fact(0, QStringLiteral("pos_vert_variance"), FactMetaData::valueTypeDouble);
+    Fact _compass_varianceFact = Fact(0, QStringLiteral("compass_variance"), FactMetaData::valueTypeDouble);
+    Fact _terrain_alt_varianceFact = Fact(0, QStringLiteral("terrain_alt_variance"), FactMetaData::valueTypeDouble);
+    Fact _airspeed_varianceFact = Fact(0, QStringLiteral("airspeed_variance"), FactMetaData::valueTypeDouble);
 };

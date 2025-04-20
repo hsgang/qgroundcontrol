@@ -7,10 +7,6 @@
 class AtmosphericSensorFactGroup : public FactGroup
 {
     Q_OBJECT
-
-public:
-    AtmosphericSensorFactGroup(QObject* parent = nullptr);
-
     Q_PROPERTY(Fact* status       READ status       CONSTANT)
     Q_PROPERTY(Fact* logCount     READ logCount     CONSTANT)
     Q_PROPERTY(Fact* temperature  READ temperature  CONSTANT)
@@ -24,57 +20,47 @@ public:
     Q_PROPERTY(Fact* windSpd      READ windSpd      CONSTANT)
     Q_PROPERTY(Fact* windSpdVer   READ windSpdVer   CONSTANT)
 
-    Fact* status                      () { return &_statusFact; }
-    Fact* logCount                    () { return &_logCountFact; }
-    Fact* temperature                 () { return &_temperatureFact; }
-    Fact* humidity                    () { return &_humidityFact; }
-    Fact* pressure                    () { return &_pressureFact; }
-    Fact* extValue1                   () { return &_extValue1Fact; }
-    Fact* extValue2                   () { return &_extValue2Fact; }
-    Fact* extValue3                   () { return &_extValue3Fact; }
-    Fact* extValue4                   () { return &_extValue4Fact; }
-    Fact* windDir                     () { return &_windDirFact; }
-    Fact* windSpd                     () { return &_windSpdFact; }
-    Fact* windSpdVer                  () { return &_windSpdVerFact; }
+public:
+    AtmosphericSensorFactGroup(QObject* parent = nullptr);   
+
+    Fact* status        () { return &_statusFact; }
+    Fact* logCount      () { return &_logCountFact; }
+    Fact* temperature   () { return &_temperatureFact; }
+    Fact* humidity      () { return &_humidityFact; }
+    Fact* pressure      () { return &_pressureFact; }
+    Fact* extValue1     () { return &_extValue1Fact; }
+    Fact* extValue2     () { return &_extValue2Fact; }
+    Fact* extValue3     () { return &_extValue3Fact; }
+    Fact* extValue4     () { return &_extValue4Fact; }
+    Fact* windDir       () { return &_windDirFact; }
+    Fact* windSpd       () { return &_windSpdFact; }
+    Fact* windSpdVer    () { return &_windSpdVerFact; }
 
     // Overrides from FactGroup
-    void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
+    void handleMessage(Vehicle *vehicle, const mavlink_message_t &message) override;
 
-    static const char* _statusFactName;
-    static const char* _logCountFactName;
-    static const char* _temperatureFactName;
-    static const char* _humidityFactName;
-    static const char* _pressureFactName;
-    static const char* _extValue1FactName;
-    static const char* _extValue2FactName;
-    static const char* _extValue3FactName;
-    static const char* _extValue4FactName;
-    static const char* _windDirFactName;
-    static const char* _windSpdFactName;
-    static const char* _windSpdVerFactName;
-
-private:
-    void _handleData32              (mavlink_message_t& message);
-    void _handleTunnel              (mavlink_message_t& message);
-    void _handleScaledPressure      (mavlink_message_t& message);
+protected:
+    void _handleData32              (const mavlink_message_t &message);
+    void _handleTunnel              (const mavlink_message_t &message);
+    void _handleScaledPressure      (const mavlink_message_t &message);
 #if defined(USE_ATMOSPHERIC_VALUE)
     void _handleAtmosphericValue    (mavlink_message_t& message);
 #endif
 // #if !defined(NO_ARDUPILOT_DIALECT)
-    void _handleWind        (mavlink_message_t& message);
+    void _handleWind        (const mavlink_message_t &message);
 // #endif
-    void _handleHygrometerSensor    (mavlink_message_t& message);
+    void _handleHygrometerSensor    (const mavlink_message_t &message);
 
-    Fact _statusFact;
-    Fact _logCountFact;
-    Fact _temperatureFact;
-    Fact _humidityFact;
-    Fact _pressureFact;
-    Fact _extValue1Fact;
-    Fact _extValue2Fact;
-    Fact _extValue3Fact;
-    Fact _extValue4Fact;
-    Fact _windDirFact;
-    Fact _windSpdFact;
-    Fact _windSpdVerFact;
+    Fact _statusFact = Fact(0, QStringLiteral("status"), FactMetaData::valueTypeUint8);
+    Fact _logCountFact = Fact(0, QStringLiteral("logCount"), FactMetaData::valueTypeDouble);
+    Fact _temperatureFact = Fact(0, QStringLiteral("temperature"), FactMetaData::valueTypeDouble);
+    Fact _humidityFact = Fact(0, QStringLiteral("humidity"), FactMetaData::valueTypeDouble);
+    Fact _pressureFact = Fact(0, QStringLiteral("pressure"), FactMetaData::valueTypeDouble);
+    Fact _extValue1Fact = Fact(0, QStringLiteral("extValue1"), FactMetaData::valueTypeInt16);
+    Fact _extValue2Fact = Fact(0, QStringLiteral("extValue2"), FactMetaData::valueTypeInt16);
+    Fact _extValue3Fact = Fact(0, QStringLiteral("extValue3"), FactMetaData::valueTypeInt16);
+    Fact _extValue4Fact = Fact(0, QStringLiteral("extValue4"), FactMetaData::valueTypeInt16);
+    Fact _windDirFact = Fact(0, QStringLiteral("windDir"), FactMetaData::valueTypeDouble);
+    Fact _windSpdFact = Fact(0, QStringLiteral("windSpd"), FactMetaData::valueTypeDouble);
+    Fact _windSpdVerFact = Fact(0, QStringLiteral("windSpdVer"), FactMetaData::valueTypeDouble);;
 };

@@ -3,34 +3,17 @@
 
 #include <QtMath>
 
-const char* WinchStatusFactGroup::_timeUsecFactName =       "timeUsec";
-const char* WinchStatusFactGroup::_lineLengthFactName =     "lineLength";
-const char* WinchStatusFactGroup::_speedFactName =          "speed";
-const char* WinchStatusFactGroup::_tensionFactName =        "tension";
-const char* WinchStatusFactGroup::_voltageFactName =        "voltage";
-const char* WinchStatusFactGroup::_currentFactName =        "current";
-const char* WinchStatusFactGroup::_temperatureFactName =    "temperature";
-const char* WinchStatusFactGroup::_statusFactName =         "status";
-
 WinchStatusFactGroup::WinchStatusFactGroup(QObject* parent)
     : FactGroup(500, ":/json/Vehicle/WinchStatusFactGroup.json", parent)
-    , _timeUsecFact     (0, _timeUsecFactName,      FactMetaData::valueTypeUint64)
-    , _lineLengthFact   (0, _lineLengthFactName,    FactMetaData::valueTypeFloat)
-    , _speedFact        (0, _speedFactName,         FactMetaData::valueTypeFloat)
-    , _tensionFact      (0, _tensionFactName,       FactMetaData::valueTypeFloat)
-    , _voltageFact      (0, _voltageFactName,       FactMetaData::valueTypeFloat)
-    , _currentFact      (0, _currentFactName,       FactMetaData::valueTypeFloat)
-    , _temperatureFact  (0, _temperatureFactName,   FactMetaData::valueTypeInt16)
-    , _statusFact       (0, _statusFactName,        FactMetaData::valueTypeUint32)
 {
-    _addFact(&_timeUsecFact,            _timeUsecFactName);
-    _addFact(&_lineLengthFact,          _lineLengthFactName);
-    _addFact(&_speedFact,               _speedFactName);
-    _addFact(&_tensionFact,             _tensionFactName);
-    _addFact(&_voltageFact,             _voltageFactName);
-    _addFact(&_currentFact,             _currentFactName);
-    _addFact(&_temperatureFact,         _temperatureFactName);
-    _addFact(&_statusFact,              _statusFactName);
+    _addFact(&_timeUsecFact);
+    _addFact(&_lineLengthFact);
+    _addFact(&_speedFact);
+    _addFact(&_tensionFact);
+    _addFact(&_voltageFact);
+    _addFact(&_currentFact);
+    _addFact(&_temperatureFact);
+    _addFact(&_statusFact);
 
     // Start out as not available "--.--"
     _timeUsecFact.setRawValue       (qQNaN());
@@ -43,8 +26,10 @@ WinchStatusFactGroup::WinchStatusFactGroup(QObject* parent)
     _statusFact.setRawValue         (qQNaN());
 }
 
-void WinchStatusFactGroup::handleMessage(Vehicle* vehicle, mavlink_message_t& message)
+void WinchStatusFactGroup::handleMessage(Vehicle *vehicle, const mavlink_message_t &message)
 {
+    Q_UNUSED(vehicle);
+
     switch (message.msgid) {
     case MAVLINK_MSG_ID_WINCH_STATUS:
          _handleWinchStatus(message);
@@ -54,7 +39,7 @@ void WinchStatusFactGroup::handleMessage(Vehicle* vehicle, mavlink_message_t& me
     }
 }
 
-void WinchStatusFactGroup::_handleWinchStatus(mavlink_message_t &message)
+void WinchStatusFactGroup::_handleWinchStatus(const mavlink_message_t &message)
 {
     mavlink_winch_status_t ws;
     mavlink_msg_winch_status_decode(&message, &ws);

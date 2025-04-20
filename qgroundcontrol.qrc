@@ -455,6 +455,8 @@
         <file alias="FlyViewSettings.qml">src/UI/preferences/FlyViewSettings.qml</file>
         <file alias="GeneralSettings.qml">src/UI/preferences/GeneralSettings.qml</file>
         <file alias="HelpSettings.qml">src/UI/preferences/HelpSettings.qml</file>
+        <file alias="IntegratedAttitudeIndicator.qml">src/FlightMap/Widgets/IntegratedAttitudeIndicator.qml</file>
+        <file alias="IntegratedCompassAttitude.qml">src/FlightMap/Widgets/IntegratedCompassAttitude.qml</file>
         <file alias="LinkSettings.qml">src/UI/preferences/LinkSettings.qml</file>
         <file alias="LogReplaySettings.qml">src/UI/preferences/LogReplaySettings.qml</file>
         <file alias="MapSettings.qml">src/UI/preferences/MapSettings.qml</file>

@@ -1,15 +1,10 @@
 #pragma once
 
 #include "FactGroup.h"
-#include "QGCMAVLink.h"
 
 class GeneratorStatusFactGroup : public FactGroup
 {
     Q_OBJECT
-
-public:
-    GeneratorStatusFactGroup(QObject* parent = nullptr);
-
     Q_PROPERTY(Fact* status                 READ status                CONSTANT)
     Q_PROPERTY(Fact* batteryCurrent         READ batteryCurrent        CONSTANT)
     Q_PROPERTY(Fact* loadCurrent            READ loadCurrent           CONSTANT)
@@ -22,45 +17,36 @@ public:
     Q_PROPERTY(Fact* rectifierTemperature   READ rectifierTemperature  CONSTANT)
     Q_PROPERTY(Fact* generatorTemperature   READ generatorTemperature  CONSTANT)
 
-    Fact* status                           () { return &_statusFact; }
-    Fact* batteryCurrent                   () { return &_batteryCurrentFact; }
-    Fact* loadCurrent                      () { return &_loadCurrentFact; }
-    Fact* powerGenerated                   () { return &_powerGeneratedFact; }
-    Fact* busVoltage                       () { return &_busVoltageFact; }
-    Fact* batCurrentSetpoint               () { return &_batCurrentSetpointFact; }
-    Fact* runtime                          () { return &_runtimeFact; }
-    Fact* timeUntilMaintenance             () { return &_timeUntilMaintenanceFact; }
-    Fact* generatorSpeed                   () { return &_generatorSpeedFact; }
-    Fact* rectifierTemperature             () { return &_rectifierTemperatureFact; }
-    Fact* generatorTemperature             () { return &_generatorTemperatureFact; }
+public:
+    GeneratorStatusFactGroup(QObject* parent = nullptr);
+
+    Fact *status                () { return &_statusFact; }
+    Fact *batteryCurrent        () { return &_batteryCurrentFact; }
+    Fact *loadCurrent           () { return &_loadCurrentFact; }
+    Fact *powerGenerated        () { return &_powerGeneratedFact; }
+    Fact *busVoltage            () { return &_busVoltageFact; }
+    Fact *batCurrentSetpoint    () { return &_batCurrentSetpointFact; }
+    Fact *runtime               () { return &_runtimeFact; }
+    Fact *timeUntilMaintenance  () { return &_timeUntilMaintenanceFact; }
+    Fact *generatorSpeed        () { return &_generatorSpeedFact; }
+    Fact *rectifierTemperature  () { return &_rectifierTemperatureFact; }
+    Fact *generatorTemperature  () { return &_generatorTemperatureFact; }
 
     // Overrides from FactGroup
-    void handleMessage(Vehicle* vehicle, mavlink_message_t& message) override;
-
-    static const char* _statusFactName;
-    static const char* _batteryCurrentFactName;
-    static const char* _loadCurrentFactName;
-    static const char* _powerGeneratedFactName;
-    static const char* _busVoltageFactName;
-    static const char* _batCurrentSetpointFactName;
-    static const char* _runtimeFactName;
-    static const char* _timeUntilMaintenanceFactName;
-    static const char* _generatorSpeedFactName;
-    static const char* _rectifierTemperatureFactName;
-    static const char* _generatorTemperatureFactName;
+    void handleMessage(Vehicle *vehicle, const mavlink_message_t &message) override;
 
 private:
-    void _handleGeneratorStatus              (mavlink_message_t& message);
+    void _handleGeneratorStatus (const mavlink_message_t &message);
 
-    Fact _statusFact;
-    Fact _batteryCurrentFact;
-    Fact _loadCurrentFact;
-    Fact _powerGeneratedFact;
-    Fact _busVoltageFact;
-    Fact _batCurrentSetpointFact;
-    Fact _runtimeFact;
-    Fact _timeUntilMaintenanceFact;
-    Fact _generatorSpeedFact;
-    Fact _rectifierTemperatureFact;
-    Fact _generatorTemperatureFact;
+    Fact _statusFact = Fact(0, QStringLiteral("status"), FactMetaData::valueTypeUint64);
+    Fact _batteryCurrentFact = Fact(0, QStringLiteral("batteryCurrent"), FactMetaData::valueTypeFloat);
+    Fact _loadCurrentFact = Fact(0, QStringLiteral("loadCurrent"), FactMetaData::valueTypeFloat);
+    Fact _powerGeneratedFact = Fact(0, QStringLiteral("powerGenerated"), FactMetaData::valueTypeFloat);
+    Fact _busVoltageFact = Fact(0, QStringLiteral("busVoltage"), FactMetaData::valueTypeFloat);
+    Fact _batCurrentSetpointFact = Fact(0, QStringLiteral("batCurrentSetpoint"), FactMetaData::valueTypeFloat);
+    Fact _runtimeFact = Fact(0, QStringLiteral("runtime"), FactMetaData::valueTypeUint32);
+    Fact _timeUntilMaintenanceFact = Fact(0, QStringLiteral("timeUntilMaintenance"), FactMetaData::valueTypeInt32);
+    Fact _generatorSpeedFact = Fact(0, QStringLiteral("generatorSpeed"), FactMetaData::valueTypeUint16);
+    Fact _rectifierTemperatureFact = Fact(0, QStringLiteral("rectifierTemperature"), FactMetaData::valueTypeInt16);
+    Fact _generatorTemperatureFact = Fact(0, QStringLiteral("generatorTemperature"), FactMetaData::valueTypeInt16);
 };

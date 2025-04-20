@@ -95,9 +95,9 @@ public:
 
     // Overrides from FactGroup
     void handleMessage(Vehicle *vehicle, const mavlink_message_t &message) final;
-    void _handleEscStatus           (mavlink_message_t& message);
-    void _handleEscTelemetry1to4    (mavlink_message_t& message);
-    void _handleEscTelemetry5to8    (mavlink_message_t& message);
+    void _handleEscStatus           (const mavlink_message_t& message);
+    void _handleEscTelemetry1to4    (const mavlink_message_t& message);
+    void _handleEscTelemetry5to8    (const mavlink_message_t& message);
 
 private:
     Fact _indexFact = Fact(0, QStringLiteral("index"), FactMetaData::valueTypeUint8);

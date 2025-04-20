@@ -15,45 +15,47 @@ VehicleEscStatusFactGroup::VehicleEscStatusFactGroup(QObject *parent)
 {
     _addFact(&_indexFact);
 
-    _addFact(&_rpmFirstFact,                    _rpmFirstFactName);
-    _addFact(&_rpmSecondFact,                   _rpmSecondFactName);
-    _addFact(&_rpmThirdFact,                    _rpmThirdFactName);
-    _addFact(&_rpmFourthFact,                   _rpmFourthFactName);
-    _addFact(&_rpmFifthFact,                    _rpmFifthFactName);
-    _addFact(&_rpmSixthFact,                    _rpmSixthFactName);
-    _addFact(&_rpmSeventhFact,                  _rpmSeventhFactName);
-    _addFact(&_rpmEighthFact,                   _rpmEighthFactName);
+    _addFact(&_rpmFirstFact);
+    _addFact(&_rpmSecondFact);
+    _addFact(&_rpmThirdFact);
+    _addFact(&_rpmFourthFact);
+    _addFact(&_rpmFifthFact);
+    _addFact(&_rpmSixthFact);
+    _addFact(&_rpmSeventhFact);
+    _addFact(&_rpmEighthFact);
 
-    _addFact(&_currentFirstFact,                _currentFirstFactName);
-    _addFact(&_currentSecondFact,               _currentSecondFactName);
-    _addFact(&_currentThirdFact,                _currentThirdFactName);
-    _addFact(&_currentFourthFact,               _currentFourthFactName);
-    _addFact(&_currentFifthFact,                _currentFifthFactName);
-    _addFact(&_currentSixthFact,                _currentSixthFactName);
-    _addFact(&_currentSeventhFact,              _currentSeventhFactName);
-    _addFact(&_currentEighthFact,               _currentEighthFactName);
+    _addFact(&_currentFirstFact);
+    _addFact(&_currentSecondFact);
+    _addFact(&_currentThirdFact);
+    _addFact(&_currentFourthFact);
+    _addFact(&_currentFifthFact);
+    _addFact(&_currentSixthFact);
+    _addFact(&_currentSeventhFact);
+    _addFact(&_currentEighthFact);
 
-    _addFact(&_voltageFirstFact,                _voltageFirstFactName);
-    _addFact(&_voltageSecondFact,               _voltageSecondFactName);
-    _addFact(&_voltageThirdFact,                _voltageThirdFactName);
-    _addFact(&_voltageFourthFact,               _voltageFourthFactName);
-    _addFact(&_voltageFifthFact,                _voltageFifthFactName);
-    _addFact(&_voltageSixthFact,                _voltageSixthFactName);
-    _addFact(&_voltageSeventhFact,              _voltageSeventhFactName);
-    _addFact(&_voltageEighthFact,               _voltageEighthFactName);
+    _addFact(&_voltageFirstFact);
+    _addFact(&_voltageSecondFact);
+    _addFact(&_voltageThirdFact);
+    _addFact(&_voltageFourthFact);
+    _addFact(&_voltageFifthFact);
+    _addFact(&_voltageSixthFact);
+    _addFact(&_voltageSeventhFact);
+    _addFact(&_voltageEighthFact);
 
-    _addFact(&_temperatureFirstFact,            _temperatureFirstFactName);
-    _addFact(&_temperatureSecondFact,           _temperatureSecondFactName);
-    _addFact(&_temperatureThirdFact,            _temperatureThirdFactName);
-    _addFact(&_temperatureFourthFact,           _temperatureFourthFactName);
-    _addFact(&_temperatureFifthFact,            _temperatureFifthFactName);
-    _addFact(&_temperatureSixthFact,            _temperatureSixthFactName);
-    _addFact(&_temperatureSeventhFact,          _temperatureSeventhFactName);
-    _addFact(&_temperatureEighthFact,           _temperatureEighthFactName);
+    _addFact(&_temperatureFirstFact);
+    _addFact(&_temperatureSecondFact);
+    _addFact(&_temperatureThirdFact);
+    _addFact(&_temperatureFourthFact);
+    _addFact(&_temperatureFifthFact);
+    _addFact(&_temperatureSixthFact);
+    _addFact(&_temperatureSeventhFact);
+    _addFact(&_temperatureEighthFact);
 }
 
-void VehicleEscStatusFactGroup::handleMessage(Vehicle*, mavlink_message_t& message)
+void VehicleEscStatusFactGroup::handleMessage(Vehicle *vehicle, const mavlink_message_t &message)
 {
+    Q_UNUSED(vehicle);
+
     switch ( message.msgid) {
     case MAVLINK_MSG_ID_ESC_STATUS:
         _handleEscStatus(message);
@@ -69,7 +71,7 @@ void VehicleEscStatusFactGroup::handleMessage(Vehicle*, mavlink_message_t& messa
     }
 }
 
-void VehicleEscStatusFactGroup::_handleEscStatus(mavlink_message_t &message)
+void VehicleEscStatusFactGroup::_handleEscStatus(const mavlink_message_t &message)
 {
     mavlink_esc_status_t content{};
     mavlink_msg_esc_status_decode(&message, &content);
@@ -94,7 +96,7 @@ void VehicleEscStatusFactGroup::_handleEscStatus(mavlink_message_t &message)
     _setTelemetryAvailable(true);
 }
 
-void VehicleEscStatusFactGroup::_handleEscTelemetry1to4(mavlink_message_t &message)
+void VehicleEscStatusFactGroup::_handleEscTelemetry1to4(const mavlink_message_t &message)
 {
     mavlink_esc_telemetry_1_to_4_t esc4;
     mavlink_msg_esc_telemetry_1_to_4_decode(&message, &esc4);
@@ -120,7 +122,7 @@ void VehicleEscStatusFactGroup::_handleEscTelemetry1to4(mavlink_message_t &messa
     temperatureFourth()->setRawValue            (esc4.temperature[3]);
 }
 
-void VehicleEscStatusFactGroup::_handleEscTelemetry5to8(mavlink_message_t &message)
+void VehicleEscStatusFactGroup::_handleEscTelemetry5to8(const mavlink_message_t &message)
 {
     mavlink_esc_telemetry_5_to_8_t esc8;
     mavlink_msg_esc_telemetry_5_to_8_decode(&message, &esc8);

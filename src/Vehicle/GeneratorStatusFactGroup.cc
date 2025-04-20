@@ -3,43 +3,20 @@
 
 #include <QtMath>
 
-const char* GeneratorStatusFactGroup::_statusFactName =                 "status";
-const char* GeneratorStatusFactGroup::_batteryCurrentFactName =         "batteryCurrent";
-const char* GeneratorStatusFactGroup::_loadCurrentFactName =            "loadCurrent";
-const char* GeneratorStatusFactGroup::_powerGeneratedFactName =         "powerGenerated";
-const char* GeneratorStatusFactGroup::_busVoltageFactName =             "busVoltage";
-const char* GeneratorStatusFactGroup::_batCurrentSetpointFactName =     "batCurrentSetpoint";
-const char* GeneratorStatusFactGroup::_runtimeFactName =                "runtime";
-const char* GeneratorStatusFactGroup::_timeUntilMaintenanceFactName =   "timeUntilMaintenance";
-const char* GeneratorStatusFactGroup::_generatorSpeedFactName =         "generatorSpeed";
-const char* GeneratorStatusFactGroup::_rectifierTemperatureFactName =   "rectifierTemperature";
-const char* GeneratorStatusFactGroup::_generatorTemperatureFactName =   "generatorTemperature";
-
 GeneratorStatusFactGroup::GeneratorStatusFactGroup(QObject* parent)
     : FactGroup(1000, ":/json/Vehicle/GeneratorStatusFactGroup.json", parent)
-    , _statusFact               (0, _statusFactName,                FactMetaData::valueTypeUint64)
-    , _batteryCurrentFact       (0, _batteryCurrentFactName,        FactMetaData::valueTypeFloat)
-    , _loadCurrentFact          (0, _loadCurrentFactName,           FactMetaData::valueTypeFloat)
-    , _powerGeneratedFact       (0, _powerGeneratedFactName,        FactMetaData::valueTypeFloat)
-    , _busVoltageFact           (0, _busVoltageFactName,            FactMetaData::valueTypeFloat)
-    , _batCurrentSetpointFact   (0, _batCurrentSetpointFactName,    FactMetaData::valueTypeFloat)
-    , _runtimeFact              (0, _runtimeFactName,               FactMetaData::valueTypeUint32)
-    , _timeUntilMaintenanceFact (0, _timeUntilMaintenanceFactName,  FactMetaData::valueTypeInt32)
-    , _generatorSpeedFact       (0, _generatorSpeedFactName,        FactMetaData::valueTypeUint16)
-    , _rectifierTemperatureFact (0, _rectifierTemperatureFactName,  FactMetaData::valueTypeInt16)
-    , _generatorTemperatureFact (0, _generatorTemperatureFactName,  FactMetaData::valueTypeInt16)
 {
-    _addFact(&_statusFact,              _statusFactName);
-    _addFact(&_batteryCurrentFact,      _batteryCurrentFactName);
-    _addFact(&_loadCurrentFact,         _loadCurrentFactName);
-    _addFact(&_powerGeneratedFact,      _powerGeneratedFactName);
-    _addFact(&_busVoltageFact,          _busVoltageFactName);
-    _addFact(&_batCurrentSetpointFact,  _batCurrentSetpointFactName);
-    _addFact(&_runtimeFact,             _runtimeFactName);
-    _addFact(&_timeUntilMaintenanceFact,_timeUntilMaintenanceFactName);
-    _addFact(&_generatorSpeedFact,      _generatorSpeedFactName);
-    _addFact(&_rectifierTemperatureFact,_rectifierTemperatureFactName);
-    _addFact(&_generatorTemperatureFact,_generatorTemperatureFactName);
+    _addFact(&_statusFact);
+    _addFact(&_batteryCurrentFact);
+    _addFact(&_loadCurrentFact);
+    _addFact(&_powerGeneratedFact);
+    _addFact(&_busVoltageFact);
+    _addFact(&_batCurrentSetpointFact);
+    _addFact(&_runtimeFact);
+    _addFact(&_timeUntilMaintenanceFact);
+    _addFact(&_generatorSpeedFact);
+    _addFact(&_rectifierTemperatureFact);
+    _addFact(&_generatorTemperatureFact);
 
     // Start out as not available "--.--"
     _batteryCurrentFact.setRawValue         (qQNaN());
@@ -54,7 +31,7 @@ GeneratorStatusFactGroup::GeneratorStatusFactGroup(QObject* parent)
     _generatorTemperatureFact.setRawValue   (qQNaN());
 }
 
-void GeneratorStatusFactGroup::handleMessage(Vehicle* vehicle, mavlink_message_t& message)
+void GeneratorStatusFactGroup::handleMessage(Vehicle* vehicle, const mavlink_message_t& message)
 {
     switch (message.msgid) {
     case MAVLINK_MSG_ID_GENERATOR_STATUS:
@@ -65,7 +42,7 @@ void GeneratorStatusFactGroup::handleMessage(Vehicle* vehicle, mavlink_message_t
     }
 }
 
-void GeneratorStatusFactGroup::_handleGeneratorStatus(mavlink_message_t &message)
+void GeneratorStatusFactGroup::_handleGeneratorStatus(const mavlink_message_t &message)
 {
     mavlink_generator_status_t generator;
     mavlink_msg_generator_status_decode(&message, &generator);

@@ -1006,7 +1006,6 @@ private slots:
     void _updateMissionItemIndex            ();
     void _updateHeadingToNextWP             ();
     void _updateDistanceToNextWP            ();
-    void _updateTimeToNextWP                ();
     void _updateDistanceToGCS               ();
     void _updateHomepoint                   ();
     void _updateHobbsMeter                  ();

@@ -10,31 +10,16 @@
 #include "VehicleEKFStatusFactGroup.h"
 #include "Vehicle.h"
 
-const char* VehicleEKFStatusFactGroup::_flagsFactName =                 "flags";
-const char* VehicleEKFStatusFactGroup::_velocity_varianceFactName =     "velocity_variance";
-const char* VehicleEKFStatusFactGroup::_pos_horiz_varianceFactName =    "pos_horiz_variance";
-const char* VehicleEKFStatusFactGroup::_pos_vert_varianceFactName =     "pos_vert_variance";
-const char* VehicleEKFStatusFactGroup::_compass_varianceFactName =      "compass_variance";
-const char* VehicleEKFStatusFactGroup::_terrain_alt_varianceFactName =  "terrain_alt_variance";
-const char* VehicleEKFStatusFactGroup::_airspeed_varianceFactName =     "airspeed_variance";
-
 VehicleEKFStatusFactGroup::VehicleEKFStatusFactGroup(QObject* parent)
     : FactGroup         (1000, ":/json/Vehicle/EKFStatusFact.json", parent)
-    , _flagsFact                (0, _flagsFactName,                 FactMetaData::valueTypeUint16)
-    , _velocity_varianceFact    (0, _velocity_varianceFactName,     FactMetaData::valueTypeDouble)
-    , _pos_horiz_varianceFact   (0, _pos_horiz_varianceFactName,    FactMetaData::valueTypeDouble)
-    , _pos_vert_varianceFact    (0, _pos_vert_varianceFactName,     FactMetaData::valueTypeDouble)
-    , _compass_varianceFact     (0, _compass_varianceFactName,      FactMetaData::valueTypeDouble)
-    , _terrain_alt_varianceFact (0, _terrain_alt_varianceFactName,  FactMetaData::valueTypeDouble)
-    , _airspeed_varianceFact    (0, _airspeed_varianceFactName,     FactMetaData::valueTypeDouble)
 {
-    _addFact(&_flagsFact,                   _flagsFactName);
-    _addFact(&_velocity_varianceFact,       _velocity_varianceFactName);
-    _addFact(&_pos_horiz_varianceFact,      _pos_horiz_varianceFactName);
-    _addFact(&_pos_vert_varianceFact,       _pos_vert_varianceFactName);
-    _addFact(&_compass_varianceFact,        _compass_varianceFactName);
-    _addFact(&_terrain_alt_varianceFact,    _terrain_alt_varianceFactName);
-    _addFact(&_airspeed_varianceFact,       _airspeed_varianceFactName);
+    _addFact(&_flagsFact);
+    _addFact(&_velocity_varianceFact);
+    _addFact(&_pos_horiz_varianceFact);
+    _addFact(&_pos_vert_varianceFact);
+    _addFact(&_compass_varianceFact);
+    _addFact(&_terrain_alt_varianceFact);
+    _addFact(&_airspeed_varianceFact);
 
     // Start out as not available "--.--"
     _velocity_varianceFact.setRawValue(qQNaN());
@@ -45,8 +30,10 @@ VehicleEKFStatusFactGroup::VehicleEKFStatusFactGroup(QObject* parent)
     _airspeed_varianceFact.setRawValue(qQNaN());
 }
 
-void VehicleEKFStatusFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_message_t& message)
+void VehicleEKFStatusFactGroup::handleMessage(Vehicle *vehicle, const mavlink_message_t &message)
 {
+    Q_UNUSED(vehicle);
+
     if (message.msgid != MAVLINK_MSG_ID_EKF_STATUS_REPORT) {
         return;
     }

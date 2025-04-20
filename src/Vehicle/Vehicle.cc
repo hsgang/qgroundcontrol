@@ -287,7 +287,6 @@ void Vehicle::_commonInit()
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceHeadingToHome);
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceToGCS);
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceToNextWP);
-    connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateTimeToNextWP);
     connect(this, &Vehicle::homePositionChanged,    this, &Vehicle::_updateDistanceHeadingToHome);
     connect(this, &Vehicle::hobbsMeterChanged,      this, &Vehicle::_updateHobbsMeter);
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateAltAboveTerrain);
@@ -305,7 +304,6 @@ void Vehicle::_commonInit()
     connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateHeadingToNextWP);
     connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateMissionItemIndex);
     connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateDistanceToNextWP);
-    connect(_missionManager, &MissionManager::currentIndexChanged,      this, &Vehicle::_updateTimeToNextWP);
 
     connect(_missionManager, &MissionManager::sendComplete,             _trajectoryPoints, &TrajectoryPoints::clear);
     connect(_missionManager, &MissionManager::newMissionItemsAvailable, _trajectoryPoints, &TrajectoryPoints::clear);
@@ -3607,25 +3605,6 @@ void Vehicle::_updateDistanceToNextWP()
     }
     else{
         //_distanceToNextWPFact.setRawValue(qQNaN());
-    }
-}
-
-void Vehicle::_updateTimeToNextWP()
-{
-    const int currentIndex = _missionManager->currentIndex();
-    QList<MissionItem*> llist = _missionManager->missionItems();
-
-    double speed = (_groundSpeedFact.rawValue()).toDouble();
-
-    if(llist.size()>currentIndex && currentIndex!=-1
-        && llist[currentIndex]->coordinate().longitude()!=0.0
-        && coordinate().distanceTo(llist[currentIndex]->coordinate())>1.0
-        && speed > 1) {
-        double distance = coordinate().distanceTo(llist[currentIndex]->coordinate());
-        _timeToNextWPFact.setRawValue((double)distance/speed);
-    }
-    else{
-        _timeToNextWPFact.setRawValue(0);
     }
 }
 
