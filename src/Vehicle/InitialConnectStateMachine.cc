@@ -65,9 +65,9 @@ void InitialConnectStateMachine::advance()
     emit progressUpdate(_progress());
 }
 
-void InitialConnectStateMachine::gotProgressUpdate(float progressValue)
+void InitialConnectStateMachine::gotProgressUpdate(double progressValue)
 {
-    emit progressUpdate(_progress(progressValue));
+    emit progressUpdate(_progress(static_cast<float>(progressValue)));
 }
 
 float InitialConnectStateMachine::_progress(float subProgress)
@@ -77,7 +77,7 @@ float InitialConnectStateMachine::_progress(float subProgress)
         progressWeight += _rgProgressWeights[i];
     }
     int currentWeight = _stateIndex < _cStates ? _rgProgressWeights[_stateIndex] : 1;
-    return (progressWeight + currentWeight * subProgress) / (float)_progressWeightTotal;
+    return (progressWeight + currentWeight * subProgress) / static_cast<float>(_progressWeightTotal);
 }
 
 void InitialConnectStateMachine::_stateRequestAutopilotVersion(StateMachine* stateMachine)
@@ -337,8 +337,7 @@ void InitialConnectStateMachine::_stateRequestMission(StateMachine* stateMachine
         } else {
             qCDebug(InitialConnectStateMachineLog) << "_stateRequestMission";
             vehicle->_missionManager->loadFromVehicle();
-            connect(vehicle->_missionManager, &MissionManager::progressPctChanged, connectMachine,
-                    &InitialConnectStateMachine::gotProgressUpdate);
+            (void) connect(vehicle->_missionManager, &MissionManager::progressPctChanged, connectMachine, &InitialConnectStateMachine::gotProgressUpdate);
         }
     }
 }
