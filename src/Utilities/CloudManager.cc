@@ -339,7 +339,7 @@ void CloudManager::getListBucket(const QString &bucketName)
     QNetworkReply *reply = _nam->get(request);
 
     //응답 처리
-    QObject::connect(reply, &QNetworkReply::finished, [this, reply]() {
+    QObject::connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
             parseXmlResponse(responseData);
@@ -865,7 +865,7 @@ void CloudManager::deleteObject(const QString& bucketName, const QString& object
 
     // Send the request
     QNetworkReply* reply = _nam->deleteResource(request);
-    QObject::connect(reply, &QNetworkReply::finished, [this, reply]() {
+    QObject::connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
             QByteArray responseData = reply->readAll();
             qCDebug(CloudManagerLog) << "Response:" << responseData;
