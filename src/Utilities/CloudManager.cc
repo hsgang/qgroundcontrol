@@ -1106,7 +1106,7 @@ void CloudManager::installNewVersion(QString remoteFile, QString localFile, QStr
                     tr("New Version Downloaded"),
 #if defined(Q_OS_ANDROID)
                     tr("The new version has been downloaded. Check the Download Folder"),
-                    QMessageBox::Yes);
+                    QMessageBox::Yes | QMessageBox::No);
 #elif defined(Q_OS_WINDOWS)
                     tr("The new version has been downloaded. Do you want to install it now?"),
                     QMessageBox::Yes | QMessageBox::No);
