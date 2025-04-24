@@ -44,14 +44,13 @@ Rectangle {
         anchors.horizontalCenter:   parent.horizontalCenter
         anchors.verticalCenter:     parent.verticalCenter
 
-        QGCMarqueeLabel {
-            id:             mainStatusLabel
-            text:           mainStatusText()
-            font.pointSize: ScreenTools.largeFontPointSize
-            color:          qgcPal.text
-            implicitWidth:  maxWidth
-            maxWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 12
-            minWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 8
+        QGCLabel {
+            id:                 mainStatusLabel
+            Layout.fillHeight:  true
+            Layout.preferredWidth: contentWidth + vehicleMessagesIcon.width + control.spacing
+            verticalAlignment:  Text.AlignVCenter
+            text:               mainStatusText()
+            font.pointSize:     ScreenTools.largeFontPointSize
 
             property string _commLostText:      qsTr("Communication Lost")
             property string _readyToFlyText:    qsTr("Ready To Fly")
@@ -141,29 +140,57 @@ Rectangle {
             }
         }
 
-        Item {
-            visible:                vtolModeLabel.visible
-            implicitWidth:  ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 1.5
-            implicitHeight: 1
-        }
+        QGCColoredImage {
+            id:                     vehicleMessagesIcon
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right:          parent.right
+            width:                  ScreenTools.defaultFontPixelWidth * 2
+            height:                 width
+            source:                 "/res/VehicleMessages.png"
+            color:                  getIconColor()
+            sourceSize.width:       width
+            fillMode:               Image.PreserveAspectFit
+            //visible:                _activeVehicle && _activeVehicle.messageCount > 0// FIXME: Is messageCount check needed?
 
-        QGCLabel {
-            id:                     vtolModeLabel
-            Layout.alignment:       Qt.AlignVCenter
-            text:                   _vtolInFWDFlight ? qsTr("FW(vtol)") : qsTr("MR(vtol)")
-            font.pointSize:         enabled ? ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
-            Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * text.length
-            visible:                _activeVehicle && _activeVehicle.vtol
-            enabled:                _activeVehicle && _activeVehicle.vtol && _vehicleInAir
-
-            QGCMouseArea {
-                anchors.fill:   parent
-                onClicked:      mainWindow.showIndicatorDrawer(vtolTransitionIndicatorPage)
+            function getIconColor() {
+                let iconColor = qgcPal.text
+                if (_activeVehicle) {
+                    if (_activeVehicle.messageTypeWarning) {
+                        iconColor = qgcPal.colorOrange
+                    } else if (_activeVehicle.messageTypeError) {
+                        iconColor = qgcPal.colorRed
+                    }
+                }
+                return iconColor
             }
         }
 
-        Component {
-            id: overallStatusOfflineIndicatorPage
+        QGCMouseArea {
+            anchors.fill:   parent
+            onClicked:      dropMainStatusIndicator()
+        }
+    }
+
+    QGCLabel {
+        id:                 vtolModeLabel
+        Layout.fillHeight:  true
+        verticalAlignment:  Text.AlignVCenter
+        text:               _vtolInFWDFlight ? qsTr("FW(vtol)") : qsTr("MR(vtol)")
+        font.pointSize:     _vehicleInAir ? ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
+        visible:            _activeVehicle && _activeVehicle.vtol
+
+        QGCMouseArea {
+            anchors.fill: parent
+            onClicked: {
+                if (_vehicleInAir) {
+                    mainWindow.showIndicatorDrawer(vtolTransitionIndicatorPage)
+                }
+            }
+        }
+    }
+
+    Component {
+        id: overallStatusOfflineIndicatorPage
 
             MainStatusIndicatorOfflinePage {
 
