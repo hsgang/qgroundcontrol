@@ -55,10 +55,11 @@ elseif(WIN32)
     )
     install(
         DIRECTORY "${GStreamer_ROOT_DIR}/libexec/gstreamer-1.0/"
-        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        DESTINATION "${CMAKE_INSTALL_LIBEXECDIR}/gstreamer-1.0"
         FILE_PERMISSIONS
-            OWNER_EXECUTE
-            GROUP_EXECUTE
+            OWNER_READ OWNER_WRITE OWNER_EXECUTE
+            GROUP_READ             GROUP_EXECUTE
+            WORLD_READ             WORLD_EXECUTE
         FILES_MATCHING
             PATTERN "*.exe"
     )
@@ -148,22 +149,18 @@ target_link_libraries(gstqml6gl
 
 target_include_directories(gstqml6gl PUBLIC ${QGC_GST_QT6_PLUGIN_PATH})
 
-target_precompile_headers(gstqml6gl
-    PRIVATE
-        "${QGC_GST_QT6_PLUGIN_PATH}/gstqml6glsink.h"
-)
+# target_precompile_headers(gstqml6gl
+#     PRIVATE
+#         "${QGC_GST_QT6_PLUGIN_PATH}/gstqml6glsink.h"
+# )
 
 ################################################################################
 
 if(GStreamer_GlX11_FOUND)
-    find_package(OpenGL REQUIRED COMPONENTS GLX)
-    target_link_libraries(gstqml6gl PRIVATE OpenGL::GLX)
     target_compile_definitions(gstqml6gl PRIVATE HAVE_QT_X11)
 endif()
 
 if(GStreamer_GlEgl_FOUND)
-    find_package(OpenGL REQUIRED COMPONENTS EGL)
-    target_link_libraries(gstqml6gl PRIVATE OpenGL::EGL)
     target_compile_definitions(gstqml6gl PRIVATE HAVE_QT_EGLFS)
 endif()
 
@@ -174,14 +171,8 @@ if(GStreamer_GlWayland_FOUND)
 endif()
 
 if(ANDROID)
-    find_package(OpenGL COMPONENTS GLES2)
-    if(TARGET OpenGL::GLES2)
-        target_link_libraries(gstqml6gl PRIVATE OpenGL::GLES2)
-    endif()
     target_compile_definitions(gstqml6gl PRIVATE HAVE_QT_ANDROID)
 elseif(WIN32)
-    find_package(OpenGL REQUIRED COMPONENTS OpenGL)
-    target_link_libraries(gstqml6gl PRIVATE OpenGL::GL)
     target_compile_definitions(gstqml6gl PRIVATE HAVE_QT_WIN32)
 elseif(MACOS)
     target_compile_definitions(gstqml6gl PRIVATE HAVE_QT_MAC)
@@ -226,13 +217,14 @@ if(EXISTS "${QGC_GST_QT6_PLUGIN_PATH}/resources.qrc")
         BATCHABLE
     )
 
-    if(EXISTS "${QGC_GST_QT6_PLUGIN_PATH}/RGBA_gles.frag")
-        file(COPY_FILE "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb" "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb.external")
-        qt6_add_shaders(gstqml6gl "gstqml6gl_shaders1"
-            PREFIX "/org/freedesktop/gstreamer/qml6"
-            OUTPUT_TARGETS gstqml6gl_shaders1
-            FILES "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb.external@glsl,100es,${QGC_GST_QT6_PLUGIN_PATH}/RGBA_gles.frag"
-            OUTPUTS "RGBA.frag.qsb.external"
-        )
-    endif()
+    # if(EXISTS "${QGC_GST_QT6_PLUGIN_PATH}/RGBA_gles.frag")
+    #     set(RGBA_SHADER_EXTERNAL "${CMAKE_CURRENT_BINARY_DIR}/.qsb/_RGBA.frag.qsb")
+    #     file(COPY_FILE "${CMAKE_CURRENT_BINARY_DIR}/.qsb/RGBA.frag.qsb" "${RGBA_SHADER_EXTERNAL}")
+    #     qt6_add_shaders(gstqml6gl "gstqml6gl_shaders1"
+    #         PREFIX "/org/freedesktop/gstreamer/qml6"
+    #         OUTPUT_TARGETS gstqml6gl_shaders1
+    #         FILES "${RGBA_SHADER_EXTERNAL}@glsl,100es,${QGC_GST_QT6_PLUGIN_PATH}/RGBA_gles.frag"
+    #         OUTPUTS "RGBA.frag.qsb.external"
+    #     )
+    # endif()
 endif()
