@@ -169,7 +169,7 @@ Rectangle {
             anchors.bottom:     parent.bottom
             source:             "qrc:/qml/QGroundControl/FlightDisplay/FlyViewToolBarIndicators.qml"
         }
-    }  
+    }
 
     Rectangle {
         id:                     widgetControlButton

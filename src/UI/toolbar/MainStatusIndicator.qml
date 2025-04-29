@@ -9,6 +9,7 @@
 
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 
 import QGroundControl
 import QGroundControl.Controls
@@ -19,7 +20,7 @@ import QGroundControl.FactSystem
 
 Rectangle {
     id:             control
-    width:          marqueeRowLayout.width + _margins
+    width:          Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelWidth * 28)
     height:         parent.height
     //color:          _mainStatusBGColor
     gradient: Gradient {
@@ -39,9 +40,11 @@ Rectangle {
     property bool   _healthAndArmingChecksSupported: _activeVehicle ? _activeVehicle.healthAndArmingCheckReport.supported : false
 
     RowLayout {
-        id:         marqueeRowLayout
+        id:          rowLayout
         spacing:                    0
-        anchors.horizontalCenter:   parent.horizontalCenter
+        anchors.fill:               parent
+        anchors.leftMargin:         ScreenTools.defaultFontPixelHeight
+        //anchors.horizontalCenter:   parent.horizontalCenter
         anchors.verticalCenter:     parent.verticalCenter
 
         QGCLabel {
@@ -51,6 +54,7 @@ Rectangle {
             verticalAlignment:  Text.AlignVCenter
             text:               mainStatusText()
             font.pointSize:     ScreenTools.largeFontPointSize
+            font.bold:          true
 
             property string _commLostText:      qsTr("Communication Lost")
             property string _readyToFlyText:    qsTr("Ready To Fly")
@@ -133,7 +137,7 @@ Rectangle {
                 anchors.left:           parent.left
                 anchors.right:          parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                height:                 marqueeRowLayout.height
+                height:                 rowLayout.height
                 onClicked:              mainWindow.showIndicatorDrawer(overallStatusComponent)
 
                 property Component overallStatusComponent: _activeVehicle ? overallStatusIndicatorPage : overallStatusOfflineIndicatorPage

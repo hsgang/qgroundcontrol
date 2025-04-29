@@ -26,7 +26,7 @@ Item {
 
     property var  activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 
-    width:                      parent.width
+    width:                      ScreenTools.defaultFontPixelWidth * 20
     anchors.top:                parent.top
     anchors.bottom:             parent.bottom
     anchors.horizontalCenter:   parent.horizontalCenter
@@ -35,6 +35,9 @@ Item {
         width:  parent.width
         height: parent.height
         color: "transparent"
+        // radius: ScreenTools.defaultFontPixelHeight / 4
+        // border.width: 1
+        // border.color: qgcPal.text
 
         RowLayout {
             anchors.horizontalCenter:   parent.horizontalCenter
@@ -44,46 +47,9 @@ Item {
 
                 QGCLabel {
                     id:                 modeTranslatedLabel
-                    text:               activeVehicle ? flightModeTranslate() : qsTr("비행모드")
+                    text:               activeVehicle ? activeVehicle.flightMode : qsTr("비행모드")
                     font.pointSize:     ScreenTools.largeFontPointSize * 0.9
                     anchors.horizontalCenter: parent.horizontalCenter
-
-                    function flightModeTranslate() {
-                        var origin = activeVehicle.flightMode
-                        var translated
-
-                        switch(origin) {
-                        case "Stabilize" :
-                            translated = "수평 유지 모드"
-                            break
-                        case "Altitude Hold" :
-                            translated = "고도 유지 모드"
-                            break
-                        case "Auto" :
-                            translated = "자동 경로 모드"
-                            break
-                        case "Loiter" :
-                            translated = "로이터 모드"
-                            break
-                        case "RTL" :
-                            translated = "복귀 모드"
-                            break
-                        case "Land" :
-                            translated = "착륙 모드"
-                            break
-                        case "Guided" :
-                            translated = "유도 제어 모드"
-                            break
-                        case "Brake" :
-                            translated = "정지 모드"
-                            break
-                        default :
-                            translated = origin
-                            break
-                        }
-
-                        return translated
-                    }
                 }
             }
 
