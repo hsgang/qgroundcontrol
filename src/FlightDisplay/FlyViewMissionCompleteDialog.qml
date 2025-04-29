@@ -37,6 +37,8 @@ Item {
     property var  _vehicleArmedTime:                new Date()
     property var  _vehicleDisarmedTime:             new Date()
 
+    property bool _signedIn:                        QGroundControl.cloudManager.signedIn
+
     on_VehicleArmedChanged: {
         if (_vehicleArmed) {
             _vehicleWasArmed = true
@@ -108,6 +110,40 @@ Item {
                             label:      "전원 소모량"
                             labelText:  object.mahConsumed.valueString + " " + object.mahConsumed.units
                         }
+                    }
+                }
+
+                QGCButton {
+                    id:                 insertDBButton
+                    Layout.fillWidth:   true
+                    text:               qsTr("비행 기록 데이터베이스 전송")
+                    visible:            _signedIn
+                    onClicked: {
+                        // 비행시간 계산 (초 단위로 차이 구하고, 필요한 형식으로 변환)
+                        var flightTimeSeconds = (_vehicleDisarmedTime.getTime() - _vehicleArmedTime.getTime()) / 1000;
+                        var flightTimeMinutes = Math.floor(flightTimeSeconds / 60); // 분 단위로 변환
+
+                        var jsonData = {
+                            "time_start": Qt.formatDateTime(_vehicleArmedTime, "yyyy-MM-ddThh:mm:ss"),
+                            "time_end": Qt.formatDateTime(_vehicleDisarmedTime, "yyyy-MM-ddThh:mm:ss"),
+                            "flight_time": flightTimeMinutes,
+                            "distance": Math.floor(Number(_activeVehicle.flightDistance.rawValue)),
+                        };
+                        QGroundControl.cloudManager.insertDataToDB("flight_logs", jsonData)
+                    }
+                }
+
+                // 응답에 따라 UI 반응 추가
+                Connections {
+                    target: QGroundControl.cloudManager
+
+                    onInsertFlightLogSuccess: {
+                        console.log("✅ 비행 기록 삽입 성공");
+                        insertDBButton.text = qsTr("비행 기록 전송 완료");
+                        insertDBButton.enabled = false
+                    }
+                    onInsertFlightLogFailure: {
+                        console.log("❌ 비행 기록 삽입 실패: " + errorMessage);
                     }
                 }
 

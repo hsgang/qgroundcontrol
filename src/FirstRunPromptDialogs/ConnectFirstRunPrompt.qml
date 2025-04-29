@@ -35,7 +35,7 @@ FirstRunPrompt {
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
 
     property bool   _signedIn: QGroundControl.cloudManager.signedIn
-    property string _signedId: QGroundControl.cloudManager.signedId
+    property string _signedId: QGroundControl.cloudManager.signedUserName
     property string _message: QGroundControl.cloudManager.messageString
 
     QGCPalette { id: qgcPal }

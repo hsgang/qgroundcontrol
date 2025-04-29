@@ -2102,18 +2102,6 @@ void Vehicle::_announceArmedChanged(bool armed)
     if(armed) {
         //-- Keep track of armed coordinates
         _armedPosition = _coordinate;
-
-        //////////////////////upload takeoff record to firebase////////////////////
-
-        if(!_flying && !_initialConnectStateMachine->active()) {
-            double latitude = _coordinate.latitude();
-            double longitude = _coordinate.longitude();
-            double altitude = _coordinate.altitude();
-            double voltage = getFactGroup("battery0")->getFact("voltage")->rawValue().toDouble();
-            CloudManager::instance()->uploadTakeoffRecord(latitude, longitude, altitude, voltage);
-        }
-        //////////////////////upload takeoff record to firebase////////////////////
-
         emit armedPositionChanged();
     }
 }
@@ -3876,10 +3864,6 @@ void Vehicle::_writeCustomLogLine()
         QString baro = getFactGroup("atmosphericSensor")->getFact("Pressure")->cookedValueString();
         QString windDir = getFactGroup("atmosphericSensor")->getFact("WindDir")->cookedValueString();
         QString windSpd = getFactGroup("atmosphericSensor")->getFact("WindSpd")->cookedValueString();
-        QString ext1 = getFactGroup("atmosphericSensor")->getFact("extValue1")->cookedValueString();
-        QString ext2 = getFactGroup("atmosphericSensor")->getFact("extValue2")->cookedValueString();
-        QString ext3 = getFactGroup("atmosphericSensor")->getFact("extValue3")->cookedValueString();
-        QString ext4 = getFactGroup("atmosphericSensor")->getFact("extValue4")->cookedValueString();
         QString ext1 = getFactGroup("atmosphericSensor")->getFact("opc1")->cookedValueString();
         QString ext2 = getFactGroup("atmosphericSensor")->getFact("opc2")->cookedValueString();
         QString ext3 = getFactGroup("atmosphericSensor")->getFact("opc3")->cookedValueString();
@@ -3931,18 +3915,18 @@ void Vehicle::_writeCustomLogLine()
 
 void Vehicle::_sendToDb()
 {
-    if(CloudManager::instance()->signedIn() && _armed) {
-        QMap<QString, QString> tags;
-        tags["vehicle"] = _uid2Str;
-        //tags["device"] = "sensor1";
+    // if(CloudManager::instance()->signedIn() && _armed) {
+    //     QMap<QString, QString> tags;
+    //     tags["vehicle"] = _uid2Str;
+    //     //tags["device"] = "sensor1";
 
-        QMap<QString, QVariant> fields;
-        fields["lat"] = getFactGroup("gps")->getFact("lat")->rawValue();
-        fields["lon"] = getFactGroup("gps")->getFact("lon")->rawValue();
-        fields["alt"] = getFact("altitudeRelative")->rawValue();
+    //     QMap<QString, QVariant> fields;
+    //     fields["lat"] = getFactGroup("gps")->getFact("lat")->rawValue();
+    //     fields["lon"] = getFactGroup("gps")->getFact("lon")->rawValue();
+    //     fields["alt"] = getFact("altitudeRelative")->rawValue();
 
-        CloudManager::instance()->sendToDb("vehicleLog", tags, fields);
-    }
+    //     CloudManager::instance()->sendToDb("vehicleLog", tags, fields);
+    // }
 }
 
 void Vehicle::doSetHome(const QGeoCoordinate& coord)

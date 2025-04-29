@@ -668,7 +668,7 @@ void PlanMasterController::_uploadToCloud(const QString& fileName)
 
     QString uploadFileName = fileName + ".plan";
     QJsonDocument saveDoc = saveToJson();
-    CloudManager::instance()->uploadJson(saveDoc, "Missions", uploadFileName);
+    CloudManager::instance()->uploadJsonFile(saveDoc, "amp-mission-files", uploadFileName);
 }
 
 void PlanMasterController::getListFromCloud()
@@ -678,5 +678,5 @@ void PlanMasterController::getListFromCloud()
 
 void PlanMasterController::_getListFromCloud()
 {
-    CloudManager::instance()->getListBucket("Missions");
+    CloudManager::instance()->getListBucket("amp-mission-files");
 }

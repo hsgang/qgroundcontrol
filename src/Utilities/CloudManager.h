@@ -44,20 +44,19 @@ public:
     Q_PROPERTY(QList<QVariant> fileList READ fileList NOTIFY fileListChanged)
     Q_PROPERTY(bool signedIn READ signedIn WRITE setSignedIn NOTIFY signedInChanged)
     Q_PROPERTY(QString signedId READ signedId WRITE setSignedId NOTIFY signedIdChanged)
+    Q_PROPERTY(QString signedUserName READ signedUserName WRITE setSignedUserName NOTIFY signedUserNameChanged)
     Q_PROPERTY(double uploadProgressValue READ uploadProgressValue WRITE setUploadProgressValue NOTIFY uploadProgressValueChanged)
     Q_PROPERTY(QString messageString READ messageString WRITE setMessageString NOTIFY messageStringChanged)
     Q_PROPERTY(QList<QVariant> dnEntryPlanFile READ dnEntryPlanFile NOTIFY dnEntryPlanFileChanged);
     Q_PROPERTY(double fileDownloadProgress READ fileDownloadProgress NOTIFY fileDownloadProgressChanged);
 
-    Q_INVOKABLE void signUserUp(const QString & emailAddress, const QString & password);
-    Q_INVOKABLE void signUserIn(const QString & emailAddress, const QString & password);
+    Q_INVOKABLE void signUserIn(const QString &emailAddress, const QString &password);
     Q_INVOKABLE void signUserOut();
     Q_INVOKABLE void loadDirFile(QString dirName);
-    Q_INVOKABLE void uploadFile(const QString & filePath, const QString& bucketName, const QString& objectName);
-    Q_INVOKABLE void downloadObject(const QString& bucketName, const QString& objectName);
-    Q_INVOKABLE void deleteObject(const QString& bucketName, const QString& objectName);
-    Q_INVOKABLE void downloadForNewVersion();
-    Q_INVOKABLE void installNewVersion(QString /*remoteFile*/, QString localFile, QString errorMsg);
+    //Q_INVOKABLE void uploadFile(const QString &filePath, const QString &bucketName, const QString &objectName);
+    Q_INVOKABLE void downloadObject(const QString &bucketName, const QString &objectName);
+    Q_INVOKABLE void deleteObject(const QString &bucketName, const QString &objectName);
+    Q_INVOKABLE void insertDataToDB(const QString &tableName, const QVariantMap &data);
 
     struct DownloadEntryFileInfo {
         QString key;
@@ -66,14 +65,11 @@ public:
         QString eTag;
     };
 
-    void uploadJson(const QJsonDocument &jsonDoc, const QString& bucketName, const QString& objectName);
+    void uploadJsonFile(const QJsonDocument &jsonDoc, const QString& bucketName, const QString& objectName);
     void getListBucket(const QString &bucketName);
-    void sendToDb(const QString &measurement, const QMap<QString, QString> &tags, const QMap<QString, QVariant> &fields);
-    void uploadTakeoffRecord(double latitude, double longitude, double altitude, double voltage);
-
-    void setAPIKey (const QString & apiKey);
     void setSignedIn (bool signedIn);
     void setSignedId (QString signedId);
+    void setSignedUserName (QString signedUserName);
     void setMessageString (QString messageString);
     void setEmailAddress (QString email);
     void setPassword (QString password);
@@ -87,11 +83,8 @@ public:
     QString password () { return _password; }
     bool signedIn              () const{ return m_signedIn; }
     QString signedId           () const{ return m_signedId; }
+    QString signedUserName     () const{ return m_signedUserName; }
     QString messageString      () const{ return m_messageString; }
-    QString minioEndpoint      () const{ return m_minioEndpoint; }
-    QString minioAccessKey     () const{ return m_minioAccessKey; }
-    QString minioSecretKey     () const{ return m_minioSecretKey; }
-    QString endPoint           () const{ return m_endPoint; }
     double uploadProgressValue() const {return m_uploadProgressValue; }
     QList<DownloadEntryFileInfo> downloadEntryFileInfo() const { return m_downloadEntryFileInfo; }
     double fileDownloadProgress () const { return m_fileDownloadProgress; }
@@ -99,17 +92,11 @@ public:
 public slots:
     void networkReplyReadyRead();
     void signInReplyReadyRead();
-    void getSignInfoReplyReadyRead();
-    void getKeysInfoReplyReadyRead();
     void networkReplyFinished();
     void networkReplyErrorOccurred(QNetworkReply::NetworkError code);
-    void performAuthenticatedDatabaseCall();
-    void getKeysDatabaseCall();
     void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
     void onUploadFinished();
     void onDownloadFinished(QNetworkReply* reply, const QString& objectName);
-    void onDbReplyFinished(QNetworkReply* reply);
-    void uploadTakeoffRecordReplyReadyRead();
 
 signals:
     void fileListChanged();
@@ -117,6 +104,7 @@ signals:
     void userSignIn();
     void signedInChanged();
     void signedIdChanged();
+    void signedUserNameChanged();
     void messageStringChanged();
     void uploadProgressValueChanged();
     void dnEntryPlanFileChanged();
@@ -124,6 +112,9 @@ signals:
     void passwordChanged();
     void networkStatusChanged();
     void fileDownloadProgressChanged();
+
+    void insertFlightLogSuccess();
+    void insertFlightLogFailure(QString errorMessage);
 
 private:
     static const QString API_BASE_URL;
@@ -143,18 +134,16 @@ private:
     QString m_networkStatus;
     QString _emailAddress;
     QString _password;
-    QString m_apiKey;
-    QString m_idToken;
+    static const QString m_apiAnonKey;
+    QString m_accessToken;
+    QString m_signedUserName;
     QString m_localId;
     QString m_signedCompany;
     QString m_signedNickName;
     bool m_signedIn = false;
     QString m_signedId = "";
     QString m_messageString;
-    QString m_minioEndpoint;
-    QString m_minioAccessKey;
-    QString m_minioSecretKey;
-    QString m_endPoint;
+    static const QString m_endPointHost;
     QString formatFileSize(qint64 bytes);
     QmlObjectListModel _uploadEntriesModel;
     QList<QVariant> m_fileList;
@@ -171,7 +160,6 @@ private:
     QList<QVariant> m_dnEntryPlanFile;
     double m_fileDownloadProgress = 0.0;
 
-    void performPOST(const QString & url, const QJsonDocument & payload );
     void requestSignIn(const QString & url, const QJsonDocument & payload );
     void sendGetRequest(const QString & databaseUrl);
     void parseResponse(const QByteArray & response );
@@ -182,8 +170,7 @@ private:
     void getPresignedUrl(const QString &bucketName, const QString &objectName, int expirationSeconds);
     void requestPresignedUrl(const QString &serverUrl, const QString &bucketName, const QString &objectName);
     void onRequestFinished();
-    void checkFilesExistInMinio(QString dirName);
-    void parseXmlResponse(const QString &xmlResponse);
+    void parseJsonResponse(const QString &jsonResponse);
     void updateNetworkStatus();
     void downloadProgress(qint64 curr, qint64 total);
 #if defined(Q_OS_ANDROID)

@@ -26,7 +26,7 @@ SettingsPage {
     property real   _urlFieldWidth:     ScreenTools.defaultFontPixelWidth * 25
 
     property bool   _signedIn:          QGroundControl.cloudManager.signedIn
-    property string _signedId:          QGroundControl.cloudManager.signedId
+    property string _signedUserName:    QGroundControl.cloudManager.signedUserName
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -99,7 +99,7 @@ SettingsPage {
         LabelledLabel {
             Layout.fillWidth:   true
             label:              qsTr("User")
-            labelText:          _signedId == "" ? qsTr("Connecting...") : _signedId
+            labelText:          _signedUserName == "" ? qsTr("Connecting...") : _signedUserName
         }
     }
 
@@ -132,6 +132,26 @@ SettingsPage {
 
     // SettingsGroupLayout {
     //     Layout.fillWidth:   true
+    //     heading:            qsTr("TEST")
+
+    //     LabelledButton {
+    //         label:      qsTr("TEST")
+    //         buttonText: qsTr("TEST")
+
+    //         onClicked:  {
+    //             var jsonData = {
+    //                 "time_start": "2025-04-29T12:03:00",
+    //                 "time_end": "2025-04-29T12:03:00",
+    //                 "flight_time": 1,
+    //                 "distance": 60,
+    //             };
+    //             QGroundControl.cloudManager.insertDataToDB("flight_record", jsonData)
+    //         }
+    //     }
+    // }
+
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
     //     heading:            qsTr("SignUp")
 
     //     LabelledButton {
@@ -148,19 +168,19 @@ SettingsPage {
     //     }
     // }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("Cloud API Keys")
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("Cloud API Keys")
 
-        LabelledFactTextField {
-            Layout.fillWidth:   true
-            textFieldPreferredWidth:    _urlFieldWidth
-            label:              qsTr("API Key")
-            description:        qsTr("google firebase")
-            fact:               cloudSettings.firebaseAPIKey
-            visible:            cloudSettings.firebaseAPIKey.visible
-        }
-    }
+    //     LabelledFactTextField {
+    //         Layout.fillWidth:   true
+    //         textFieldPreferredWidth:    _urlFieldWidth
+    //         label:              qsTr("API Key")
+    //         description:        qsTr("google firebase")
+    //         fact:               cloudSettings.firebaseAPIKey
+    //         visible:            cloudSettings.firebaseAPIKey.visible
+    //     }
+    // }
 
     // SettingsGroupLayout {
     //     Layout.fillWidth:   true

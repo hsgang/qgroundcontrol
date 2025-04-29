@@ -69,25 +69,72 @@ ColumnLayout {
         id:     modeRepeater
         model:  activeVehicle ? activeVehicle.flightModes : []
 
+        // 모든 RowLayout 항목을 추적
+        property var buttonRows: []
+
         RowLayout {
             spacing: ScreenTools.defaultFontPixelHeight
             visible: modeEditCheckBox.checked || !hiddenFlightModesList.find(item => { return item === modelData } )
 
+            property bool clickedOnce: false
+
+            Component.onCompleted: {
+                modeRepeater.buttonRows.push(this)
+            }
+
             QGCButton {
                 id:                 modeButton
-                text:               modelData
+                //text:               clickedOnce ? modelData + "\n 한번더 클릭하여 모드 변경"  : modelData
                 Layout.fillWidth:   true
                 checked:            modeEditCheckBox.checked || (modelData !== activeVehicle.flightMode) ? false : true
+                //wrapMode:           Text.Wrap
+                contentItem: Column {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 0
+
+                    QGCLabel {
+                        text: modelData
+                        //font.pixelSize: ScreenTools.defaultFontPixelHeight  // 첫 번째 줄: 일반 크기
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: Text.Wrap
+                    }
+
+                    QGCLabel {
+                        text: clickedOnce ? "한번더 클릭하여 모드 변경" : ""
+                        font.pointSize: ScreenTools.defaultFontPointSize * 0.8 // 두 번째 줄: 더 작은 크기
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        wrapMode: Text.Wrap
+                        visible: clickedOnce
+                    }
+                }
 
                 onClicked: {
                     if (modeEditCheckBox.checked) {
                         parent.children[1].toggle()
                         parent.children[1].clicked()
                     } else {
-                        //activeVehicle.flightMode = modelData
-                        var controller = globals.guidedControllerFlyView
-                        controller.confirmAction(controller.actionSetFlightMode, modelData)
-                        mainWindow.closeIndicatorDrawer()
+                        // 다른 RowLayout들의 clickedOnce를 초기화
+                        for (var i = 0; i < modeRepeater.buttonRows.length; i++) {
+                            var row = modeRepeater.buttonRows[i]
+                            if (row !== parent) {
+                                row.clickedOnce = false
+                            }
+                        }
+
+                        if (!parent.clickedOnce) {
+                            // 첫 번째 클릭: 자신만 true로
+                            parent.clickedOnce = true
+                        } else {
+                            // 두 번째 클릭: flightMode 설정하고 초기화
+                            activeVehicle.flightMode = modelData
+                            parent.clickedOnce = false
+                        }
+                        // var controller = globals.guidedControllerFlyView
+                        // controller.confirmAction(controller.actionSetFlightMode, modelData)
+                        // mainWindow.closeIndicatorDrawer()
                     }
                 }
             }
