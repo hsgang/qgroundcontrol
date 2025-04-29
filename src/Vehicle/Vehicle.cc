@@ -3880,6 +3880,10 @@ void Vehicle::_writeCustomLogLine()
         QString ext2 = getFactGroup("atmosphericSensor")->getFact("extValue2")->cookedValueString();
         QString ext3 = getFactGroup("atmosphericSensor")->getFact("extValue3")->cookedValueString();
         QString ext4 = getFactGroup("atmosphericSensor")->getFact("extValue4")->cookedValueString();
+        QString ext1 = getFactGroup("atmosphericSensor")->getFact("opc1")->cookedValueString();
+        QString ext2 = getFactGroup("atmosphericSensor")->getFact("opc2")->cookedValueString();
+        QString ext3 = getFactGroup("atmosphericSensor")->getFact("opc3")->cookedValueString();
+        QString ext4 = getFactGroup("atmosphericSensor")->getFact("radiation")->cookedValueString();
 
         // QString GroundSpeed = getFact("groundSpeed")->cookedValueString();
         // QString ClimbRate = getFact("climbRate")->cookedValueString();

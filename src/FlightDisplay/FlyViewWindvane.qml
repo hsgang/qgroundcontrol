@@ -31,7 +31,7 @@ Rectangle {
     property real   _pm1p0:         vehicle ? vehicle.tunnelingData.pm1p0.rawValue : NaN
     property real   _pm2p5:         vehicle ? vehicle.tunnelingData.pm2p5.rawValue : NaN
     property real   _pm10:          vehicle ? vehicle.tunnelingData.pm10.rawValue : NaN
-    property real   _radiation:     vehicle ? vehicle.atmosphericSensor.extValue4.rawValue : NaN
+    property real   _radiation:     vehicle ? vehicle.atmosphericSensor.radiation.rawValue : NaN
     property string _temperatureText: !isNaN(_temperature)  ? _temperature.toFixed(1)   + " ℃"      : "--.- ℃"
     property string _humidityText:    !isNaN(_humidity)     ? _humidity.toFixed(1)      + " Rh%"    : "--.- Rh%"
     property string _pressureText:    !isNaN(_pressure)     ? _pressure.toFixed(1)      + " hPa"    : "----.- hPa"

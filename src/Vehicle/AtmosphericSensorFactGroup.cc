@@ -3,20 +3,25 @@
 
 #include <QtMath>
 
-struct sensor_data32_Payload {
+struct Sensor_Payload {
     float logCountRaw;
     float temperatureRaw;
     float humidityRaw;
     float pressureRaw;
     float windDirRaw;
     float windSpdRaw;
-    int16_t extValue1Raw;
-    int16_t extValue2Raw;
-    int16_t extValue3Raw;
-    int16_t extValue4Raw;
+    float hubTemp1Raw;
+    float hubTemp2Raw;
+    float hubHumi1Raw;
+    float hubHumi2Raw;
+    float hubPressureRaw;
+    float opc1Raw;
+    float opc2Raw;
+    float opc3Raw;
+    float radiationRaw;
 };
 
-struct sensor_tunnel_forSmartCity {
+struct Sensor_Tunnel_Legacy {
     int16_t temperatureRaw;
     uint16_t humidityRaw;
     float pressureRaw;
@@ -35,25 +40,34 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _addFact(&_temperatureFact);
     _addFact(&_humidityFact);
     _addFact(&_pressureFact);
-    _addFact(&_extValue1Fact);
-    _addFact(&_extValue2Fact);
-    _addFact(&_extValue3Fact);
-    _addFact(&_extValue4Fact);
     _addFact(&_windDirFact);
     _addFact(&_windSpdFact);
-    _addFact(&_windSpdVerFact);
+    _addFact(&_hubTemp1Fact);
+    _addFact(&_hubTemp2Fact);
+    _addFact(&_hubHumi1Fact);
+    _addFact(&_hubHumi2Fact);
+    _addFact(&_hubPressureFact);
+    _addFact(&_opc1Fact);
+    _addFact(&_opc2Fact);
+    _addFact(&_opc3Fact);
+    _addFact(&_radiationFact);
 
     // Start out as not available "--.--"
     _temperatureFact.setRawValue (qQNaN());
     _humidityFact.setRawValue  (qQNaN());
     _pressureFact.setRawValue  (qQNaN());
-    _extValue1Fact.setRawValue (qQNaN());
-    _extValue2Fact.setRawValue (qQNaN());
-    _extValue3Fact.setRawValue (qQNaN());
-    _extValue4Fact.setRawValue (qQNaN());
     _windDirFact.setRawValue   (qQNaN());
     _windSpdFact.setRawValue   (qQNaN());
-    _windSpdVerFact.setRawValue(qQNaN());
+    _hubTemp1Fact.setRawValue (qQNaN());
+    _hubTemp2Fact.setRawValue (qQNaN());
+    _hubHumi1Fact.setRawValue (qQNaN());
+    _hubHumi2Fact.setRawValue (qQNaN());
+    _hubPressureFact.setRawValue(qQNaN());
+    _opc1Fact.setRawValue (qQNaN());
+    _opc2Fact.setRawValue (qQNaN());
+    _opc3Fact.setRawValue (qQNaN());
+    _radiationFact.setRawValue (qQNaN());
+
 }
 
 void AtmosphericSensorFactGroup::handleMessage(Vehicle *vehicle, const mavlink_message_t &message)
@@ -90,9 +104,9 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     mavlink_data32_t data32;
     mavlink_msg_data32_decode(&message, &data32);
 
-    struct sensor_data32_Payload sP;
+    struct Sensor_Payload sP;
 
-    memcpy(&sP, &data32.data, sizeof (struct sensor_data32_Payload));
+    memcpy(&sP, &data32.data, sizeof (struct Sensor_Payload));
 
     float logCountRaw     = sP.logCountRaw;
     float temperatureRaw  = sP.temperatureRaw;
@@ -100,10 +114,15 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     float pressureRaw     = sP.pressureRaw;
     float windDirRaw      = sP.windDirRaw;
     float windSpdRaw      = sP.windSpdRaw;
-    int16_t extValue1Raw  = sP.extValue1Raw;
-    int16_t extValue2Raw  = sP.extValue2Raw;
-    int16_t extValue3Raw  = sP.extValue3Raw;
-    int16_t extValue4Raw  = sP.extValue4Raw;
+    float hubTemp1Raw     = sP.hubTemp1Raw;
+    float hubTemp2Raw     = sP.hubTemp2Raw;
+    float hubHumi1Raw     = sP.hubHumi1Raw;
+    float hubHumi2Raw     = sP.hubHumi2Raw;
+    float hubPressureRaw  = sP.hubPressureRaw;
+    float opc1Raw         = sP.opc1Raw;
+    float opc2Raw         = sP.opc2Raw;
+    float opc3Raw         = sP.opc3Raw;
+    float radiationRaw    = sP.radiationRaw;
 
     if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
     if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
@@ -111,10 +130,15 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     if(pressureRaw)     {pressure()->setRawValue(pressureRaw);}
     if(windDirRaw)      {windDir()->setRawValue(windDirRaw);}
     if(windSpdRaw)      {windSpd()->setRawValue(windSpdRaw);}
-    if(extValue1Raw)    {extValue1()->setRawValue(extValue1Raw);}
-    if(extValue2Raw)    {extValue2()->setRawValue(extValue2Raw);}
-    if(extValue3Raw)    {extValue3()->setRawValue(extValue3Raw);}
-    if(extValue4Raw)    {extValue4()->setRawValue(extValue4Raw);}
+    if(hubTemp1Raw)     {hubTemp1()->setRawValue(hubTemp1Raw);}
+    if(hubTemp2Raw)     {hubTemp2()->setRawValue(hubTemp2Raw);}
+    if(hubHumi1Raw)     {hubHumi1()->setRawValue(hubHumi1Raw);}
+    if(hubHumi2Raw)     {hubHumi2()->setRawValue(hubHumi2Raw);}
+    if(hubPressureRaw)  {hubPressure()->setRawValue(hubPressureRaw);}
+    if(opc1Raw)         {opc1()->setRawValue(opc1Raw);}
+    if(opc2Raw)         {opc2()->setRawValue(opc2Raw);}
+    if(opc3Raw)         {opc3()->setRawValue(opc3Raw);}
+    if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
 
     status()->setRawValue(data32.type);
 }
@@ -157,7 +181,7 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
 
     switch(tunnel.payload_type){
         case 0: {
-            struct sensor_tunnel_forSmartCity sC;
+            struct Sensor_Tunnel_Legacy sC;
             memcpy(&sC, &tunnel.payload, sizeof(sC));
 
             float tempRaw = sC.temperatureRaw * 0.01;
@@ -165,38 +189,43 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             float pressRaw = sC.pressureRaw;
             float windDRaw = sC.windHeadingRaw;
             float windSRaw = sC.windSpeedRaw * 0.1;
-            int16_t ext1Raw = sC.pm1p0Raw * 0.1;
-            int16_t ext2Raw = sC.pm2p5Raw * 0.1;
-            int16_t ext3Raw = sC.pm10Raw * 0.1;
+            float opc1Raw = sC.pm1p0Raw * 0.1;
+            float opc2Raw = sC.pm2p5Raw * 0.1;
+            float opc3Raw = sC.pm10Raw * 0.1;
 
             if(tempRaw)  {temperature()->setRawValue(tempRaw);}
             if(humiRaw)     {humidity()->setRawValue(humiRaw);}
             if(pressRaw)    {pressure()->setRawValue(pressRaw);}
             if(windDRaw)    {windDir()->setRawValue(windDRaw);}
             if(windSRaw)    {windSpd()->setRawValue(windSRaw);}
-            if(ext1Raw)    {extValue1()->setRawValue(ext1Raw);}
-            if(ext2Raw)    {extValue2()->setRawValue(ext2Raw);}
-            if(ext3Raw)    {extValue3()->setRawValue(ext3Raw);}
+            if(opc1Raw)    {opc1()->setRawValue(opc1Raw);}
+            if(opc2Raw)    {opc2()->setRawValue(opc2Raw);}
+            if(opc3Raw)    {opc3()->setRawValue(opc3Raw);}
 
             status()->setRawValue(tunnel.payload_type);
 
             break;
         }
         case 300: {
-            struct sensor_data32_Payload tP;
+            struct Sensor_Payload tP;
 
             memcpy(&tP, &tunnel.payload, sizeof(tP));
 
-            float logCountRaw     = tP.logCountRaw;
-            float temperatureRaw  = tP.temperatureRaw;
-            float humidityRaw     = tP.humidityRaw;
-            float pressureRaw     = tP.pressureRaw;
-            float windDirRaw      = tP.windDirRaw;
-            float windSpdRaw      = tP.windSpdRaw;
-            int16_t extValue1Raw  = tP.extValue1Raw;
-            int16_t extValue2Raw  = tP.extValue2Raw;
-            int16_t extValue3Raw  = tP.extValue3Raw;
-            int16_t extValue4Raw  = tP.extValue4Raw;
+            float logCountRaw       = tP.logCountRaw;
+            float temperatureRaw    = tP.temperatureRaw;
+            float humidityRaw       = tP.humidityRaw;
+            float pressureRaw       = tP.pressureRaw;
+            float windDirRaw        = tP.windDirRaw;
+            float windSpdRaw        = tP.windSpdRaw;
+            float hubTemp1Raw       = tP.hubTemp1Raw;
+            float hubTemp2Raw       = tP.hubTemp2Raw;
+            float hubHumi1Raw       = tP.hubHumi1Raw;
+            float hubHumi2Raw       = tP.hubHumi2Raw;
+            float hubPressureRaw    = tP.hubPressureRaw;
+            float opc1Raw           = tP.opc1Raw;
+            float opc2Raw           = tP.opc2Raw;
+            float opc3Raw           = tP.opc3Raw;
+            float radiationRaw      = tP.radiationRaw;
 
             if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
             if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
@@ -204,23 +233,28 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             if(pressureRaw)     {pressure()->setRawValue(pressureRaw);}
             if(windDirRaw)      {windDir()->setRawValue(windDirRaw);}
             if(windSpdRaw)      {windSpd()->setRawValue(windSpdRaw);}
-            if(extValue1Raw)    {extValue1()->setRawValue(extValue1Raw);}
-            if(extValue2Raw)    {extValue2()->setRawValue(extValue2Raw);}
-            if(extValue3Raw)    {extValue3()->setRawValue(extValue3Raw);}
-            if(extValue4Raw)    {extValue4()->setRawValue(extValue4Raw);}
+            if(hubTemp1Raw)     {hubTemp1()->setRawValue(hubTemp1Raw);}
+            if(hubTemp2Raw)     {hubTemp2()->setRawValue(hubTemp2Raw);}
+            if(hubHumi1Raw)     {hubHumi1()->setRawValue(hubHumi1Raw);}
+            if(hubHumi2Raw)     {hubHumi2()->setRawValue(hubHumi2Raw);}
+            if(hubPressureRaw)  {hubPressure()->setRawValue(hubPressureRaw);}
+            if(opc1Raw)         {opc1()->setRawValue(opc1Raw);}
+            if(opc2Raw)         {opc2()->setRawValue(opc2Raw);}
+            if(opc3Raw)         {opc3()->setRawValue(opc3Raw);}
+            if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
 
             status()->setRawValue(tunnel.payload_type);
             break;
         }
         case 301: {
             // sid 방사능 데이터 특수 케이스
-            struct sensor_data32_Payload tPs;
+            struct Sensor_Payload tPs;
 
             memcpy(&tPs, &tunnel.payload, sizeof(tPs));
 
-            int16_t extValue4Raw  = tPs.extValue4Raw;
+            float radiationRaw  = tPs.radiationRaw;
 
-            if(extValue4Raw)    {extValue4()->setRawValue(extValue4Raw);}
+            if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
 
             status()->setRawValue(tunnel.payload_type);
             break;
