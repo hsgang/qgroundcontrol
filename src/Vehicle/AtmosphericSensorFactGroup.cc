@@ -21,7 +21,7 @@ struct Sensor_Payload {
     float radiationRaw;
 };
 
-struct Sensor_Tunnel_Legacy {
+struct Sensor_Tunnel_sC {
     int16_t temperatureRaw;
     uint16_t humidityRaw;
     float pressureRaw;
@@ -30,6 +30,19 @@ struct Sensor_Tunnel_Legacy {
     uint16_t pm1p0Raw;
     uint16_t pm2p5Raw;
     uint16_t pm10Raw;
+};
+
+struct Sensor_Tunnel_Legacy {
+    float logCount;
+    float temp;
+    float humi;
+    float pres;
+    float windDir;
+    float windSpd;
+    int16_t sensor1;
+    int16_t sensor2;
+    int16_t sensor3;
+    int16_t sensor4;
 };
 
 AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
@@ -181,7 +194,7 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
 
     switch(tunnel.payload_type){
         case 0: {
-            struct Sensor_Tunnel_Legacy sC;
+            struct Sensor_Tunnel_sC sC;
             memcpy(&sC, &tunnel.payload, sizeof(sC));
 
             float tempRaw = sC.temperatureRaw * 0.01;
@@ -248,11 +261,11 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
         }
         case 301: {
             // sid 방사능 데이터 특수 케이스
-            struct Sensor_Payload tPs;
+            struct Sensor_Tunnel_Legacy tL;
 
-            memcpy(&tPs, &tunnel.payload, sizeof(tPs));
+            memcpy(&tL, &tunnel.payload, sizeof(tL));
 
-            float radiationRaw  = tPs.radiationRaw;
+            float radiationRaw  = tL.sensor4;
 
             if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
 
