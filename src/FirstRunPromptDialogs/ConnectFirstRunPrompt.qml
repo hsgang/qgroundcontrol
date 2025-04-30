@@ -343,9 +343,6 @@ FirstRunPrompt {
                     enabled:    _currentSelection && !_currentSelection.link
                     onClicked:  {
                         QGroundControl.linkManager.createConnectedLink(_currentSelection)
-                        if (_currentSelection && _currentSelection.link) {
-                            closeProgressTracker.start()
-                        }
                     }
                 }
                 QGCButton {
@@ -356,9 +353,6 @@ FirstRunPrompt {
                     onClicked:  {
                         _currentSelection.link.disconnect()
                         _currentSelection.linkChanged()
-                        if (closeProgressTracker.running) {
-                            closeProgressTracker.stop()
-                        }
                     }
                 }
                 QGCButton {
