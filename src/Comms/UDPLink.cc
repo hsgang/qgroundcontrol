@@ -341,6 +341,8 @@ void UDPWorker::connectLink()
             _errorEmitted = true;
         }
 
+        _onSocketDisconnected();
+
         // Disconnecting here on autoconnect will cause continuous error popups
         /*if (!_udpConfig->isAutoConnect()) {
             _onSocketDisconnected();
