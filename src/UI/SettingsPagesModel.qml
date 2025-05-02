@@ -77,6 +77,13 @@ ListModel {
     }
 
     ListElement {
+       name: qsTr("Remote ID")
+       url: "/qml/RemoteIDSettings.qml"
+       iconUrl: "qrc:/qmlimages/RidIconManNoID.svg"
+       pageVisible: function() { return true }
+    }
+
+    ListElement {
         name: qsTr("Console")
         url: "/qml/QGroundControl/Controls/AppMessages.qml"
         iconUrl: "qrc:/InstrumentValueIcons/conversation.svg"
@@ -93,14 +100,7 @@ ListModel {
     //                     QGroundControl.px4ProFirmwareSupported &&
     //                     (activeVehicle ? activeVehicle.px4Firmware : true)
     //     }
-    // }
-
-    ListElement {
-       name: qsTr("Remote ID")
-       url: "/qml/RemoteIDSettings.qml"
-       iconUrl: "qrc:/qmlimages/RidIconManNoID.svg"
-       pageVisible: function() { return true }
-    }
+    // }    
 
     // ListElement {
     //    name: qsTr("ADSB Server")
