@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
     ParseCmdLineOptions(argc, argv, rgCmdLineOptions, std::size(rgCmdLineOptions), false);
 #endif // QT_DEBUG
 
-    QGCApplication app(argc, argv, runUnitTests || simpleBootTest);
+    QGCApplication app(argc, argv, runUnitTests, simpleBootTest);
 
     ////////////////Splash image////////////////////////
     ///

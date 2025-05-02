@@ -535,6 +535,9 @@
         <file alias="QGroundControl/Controls/QGCVerticalTabBar.qml">src/QmlControls/QGCVerticalTabBar.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewRightPanel.qml">src/FlightDisplay/FlyViewRightPanel.qml</file>
         <file alias="QGroundControl/FlightDisplay/FlyViewSiYiCameraPanel.qml">src/FlightDisplay/FlyViewSiYiCameraPanel.qml</file>
+        <file alias="DebugWindow.qml">src/UI/preferences/DebugWindow.qml</file>
+        <file alias="MockLink.qml">src/UI/preferences/MockLink.qml</file>
+        <file alias="MockLinkSettings.qml">src/UI/preferences/MockLinkSettings.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="ConnectFirstRunPrompt.qml">src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml</file>
