@@ -254,7 +254,7 @@ ApplicationWindow {
 
     function checkForUnsavedMission() {
         if (planView._planMasterController.dirty) {
-            showMessageDialog(closeDialogTitle,
+            mainWindow.showMessageDialog(closeDialogTitle,
                               qsTr("You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?"),
                               Dialog.Yes | Dialog.No,
                               function() { _closeChecksToSkip |= _skipUnsavedMissionCheckMask; performCloseChecks() })
@@ -511,7 +511,11 @@ ApplicationWindow {
                         visible:            mainWindow.visibility === Window.FullScreen
                         onClicked: {
                             if (mainWindow.allowViewSwitch()) {
-                                mainWindow.finishCloseProcess()
+                                mainWindow.showMessageDialog(closeDialogTitle,
+                                                  qsTr("Are you sure you want to close?"),
+                                                  Dialog.Yes | Dialog.No,
+                                                  function() { performCloseChecks() })
+                                //mainWindow.finishCloseProcess()
                             }
                         }
                     }

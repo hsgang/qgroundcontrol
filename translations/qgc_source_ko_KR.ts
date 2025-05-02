@@ -7822,7 +7822,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="93"/>
         <source>Remote ID</source>
-        <translation>Remote ID</translation>
+        <translation>리모트 ID</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="99"/>
@@ -10881,8 +10881,8 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/MainRootWindow.qml" line="270"/>
         <location filename="../src/ui/MainRootWindow.qml" line="287"/>
         <location filename="../src/ui/MainRootWindow.qml" line="306"/>
-        <source>%1 close</source>
-        <translation>%1 닫기</translation>
+        <source>Close %1</source>
+        <translation>%1 종료</translation>
     </message>
     <message>
         <location filename="../src/ui/MainRootWindow.qml" line="307"/>
@@ -10893,6 +10893,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/MainRootWindow.qml" line="271"/>
         <source>You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?</source>
         <translation>진행 중이거나 저장되지 않은 미션 수정이 있습니다. 닫으면 변경 사항이 적용되지 않습니다. 닫으시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/MainRootWindow.qml" line="515"/>
+        <source>Are you sure you want to close?</source>
+        <translation>애플리케이션을 종료하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/ui/MainRootWindow.qml" line="156"/>
