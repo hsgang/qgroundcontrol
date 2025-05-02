@@ -539,7 +539,7 @@ FactMetaData *APMParameterMetaData::getMetaDataForFact(const QString &name, MAV_
 
             bool ok = false;
             unsigned int bitSet = bitmaskPair.first.toUInt(&ok);
-            bitSet <<= 1;
+            bitSet = 1 << bitSet;
 
             QVariant typedBitSet;
 
