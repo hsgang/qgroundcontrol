@@ -149,15 +149,15 @@ Item {
             QGCTextField {
                 id:                     searchText
                 placeholderText:        qsTr("Search")
-                //onDisplayTextChanged:   controller.searchText = displayText
+                onDisplayTextChanged:   controller.searchText = displayText
             }
 
-            QGCButton {
-                text: qsTr("Search")
-                onClicked: {
-                    controller.searchText = searchText.displayText
-                }
-            }
+            // QGCButton {
+            //     text: qsTr("Search")
+            //     onClicked: {
+            //         controller.searchText = searchText.displayText
+            //     }
+            // }
 
             QGCButton {
                 text: qsTr("Clear")
