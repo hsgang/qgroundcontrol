@@ -382,7 +382,7 @@ SetupPage {
                                     var compassId = sensorParams.rgCompassId[_compassIndex].rawValue
                                     for (var prioIndex=0; prioIndex<3; prioIndex++) {
                                         console.log(`comparing ${compassId} with ${sensorParams.rgCompassPrio[prioIndex].rawValue} (index ${prioIndex})`)
-                                        if (compassId == sensorParams.rgCompassPrio[prioIndex].rawValue) {
+                                        if (compassId === sensorParams.rgCompassPrio[prioIndex].rawValue) {
                                             currentIndex = prioIndex
                                             break
                                         }
@@ -392,7 +392,7 @@ SetupPage {
                                 Component.onCompleted: selectPriorityfromParams()
 
                                 onActivated: (index) => {
-                                    if (index == 3) {
+                                    if (index === 3) {
                                         // User cannot select Not Set
                                         selectPriorityfromParams()
                                     } else {
@@ -538,7 +538,7 @@ SetupPage {
                                         qsTr("results in zero diagonal and off-diagonal elements, so is only ") +
                                         qsTr("suitable for vehicles where the field is close to spherical. It is ") +
                                         qsTr("useful for large vehicles where moving the vehicle to calibrate it ") +
-                                        qsTr("is difficult. Point the vehicle North before using it.")
+                                        qsTr("is difficult. Point the vehicle North before using it.") +
                         }
 
                         Column {
