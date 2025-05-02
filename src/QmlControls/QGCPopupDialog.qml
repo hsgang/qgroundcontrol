@@ -261,6 +261,12 @@ Popup {
 
             Rectangle {
                 Layout.fillWidth:       true
+                height: 1
+                color: _qgcPal.windowShadeLight
+            }
+
+            Rectangle {
+                Layout.fillWidth:       true
                 Layout.preferredWidth:  Math.min(maxAvailableWidth, totalContentWidth)
                 Layout.preferredHeight: Math.min(maxAvailableHeight, totalContentHeight)
                 color:                  "transparent" //_qgcPal.window
@@ -293,9 +299,5 @@ Popup {
                 }
             }
         }
-
-
     }
-
-
 }
