@@ -538,7 +538,7 @@ SetupPage {
                                         qsTr("results in zero diagonal and off-diagonal elements, so is only ") +
                                         qsTr("suitable for vehicles where the field is close to spherical. It is ") +
                                         qsTr("useful for large vehicles where moving the vehicle to calibrate it ") +
-                                        qsTr("is difficult. Point the vehicle North before using it.") +
+                                        qsTr("is difficult. Point the vehicle North before using it.")
                         }
 
                         Column {
