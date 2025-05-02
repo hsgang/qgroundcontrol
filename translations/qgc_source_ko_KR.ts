@@ -2370,12 +2370,12 @@
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="95"/>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="645"/>
         <source>Calibrate Compass</source>
-        <translation>지자기 센서 캘리브레이션 시작</translation>
+        <translation>지자기 센서 보정</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="101"/>
         <source>Calibrate Accelerometer</source>
-        <translation>가속도 센서 캘리브레이션 시작</translation>
+        <translation>가속도 센서 보정</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="107"/>
@@ -2388,22 +2388,22 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="155"/>
         <source>Calibration Cancel</source>
-        <translation>캘리브레이션 취소</translation>
+        <translation>센서 보정 취소</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="162"/>
         <source>Accelerometer calibration complete</source>
-        <translation>가속도 센서 캘리브레이션 완료</translation>
+        <translation>가속도 센서 보정 완료</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="165"/>
         <source>Compass calibration complete</source>
-        <translation>지자기 센서 캘리브레이션 완료</translation>
+        <translation>지자기 센서 보정 완료</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="169"/>
         <source>Calibration complete</source>
-        <translation>캘리브레이션 완료</translation>
+        <translation>센서 보정 완료</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="185"/>
