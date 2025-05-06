@@ -16,7 +16,7 @@
 #endif
 
 #include "QGCApplication.h"
-#include "AppMessages.h"
+#include "QGCLogging.h"
 #include "CmdLineOptParser.h"
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    AppMessages::installHandler();
+    QGCLogging::installHandler();
 
 #ifdef Q_OS_MACOS
     // Prevent Apple's app nap from screwing us over
@@ -161,6 +161,10 @@ int main(int argc, char *argv[])
     }
 
 #ifdef Q_OS_WIN
+    if (!qEnvironmentVariableIsSet("QT_WIN_DEBUG_CONSOLE")) {
+        qputenv("QT_WIN_DEBUG_CONSOLE", "attach"); // new
+    }
+
     if (quietWindowsAsserts) {
         _CrtSetReportHook(WindowsCrtReportHook);
     }

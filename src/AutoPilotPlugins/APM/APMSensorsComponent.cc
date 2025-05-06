@@ -52,16 +52,17 @@ bool APMSensorsComponent::compassSetupNeeded() const
     };
 
     for (qsizetype i = 0; i < rgDevicesIds.length(); i++) {
-        const int devId = _vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, rgDevicesIds[i])->rawValue().toInt();
-        const int useFlag = _vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, rgCompassUse[i])->rawValue().toInt();
+        if (_vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, rgDevicesIds[i])->rawValue().toInt() == 0) {
+            continue;
+        }
+        if (_vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, rgCompassUse[i])->rawValue().toInt() == 0) {
+            continue;
+        }
 
-        if (devId != 0 && useFlag != 0) {
-            const QStringList& offsets = rgOffsets[i];
-            for (const QString& offsetParamName : offsets) {
-                float offsetVal = _vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, offsetParamName)->rawValue().toFloat();
-                if (offsetVal == 0.0f) {
-                    return true;
-                }
+        const QStringList &offsets = rgOffsets[i];
+        for (const QString &offset : offsets) {
+            if (_vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, offset)->rawValue().toFloat() == 0.0f) {
+                return true;
             }
         }
     }

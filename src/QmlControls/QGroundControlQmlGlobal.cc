@@ -46,6 +46,7 @@
 #include "CloudManager.h"
 #include "GridManager.h"
 #include "MultiVehicleManager.h"
+#include "QGCLoggingCategory.h"
 #ifndef QGC_NO_SERIAL_LINK
 #include "GPSManager.h"
 #include "GPSRtk.h"
@@ -62,6 +63,8 @@
 
 #include <QtCore/QSettings>
 #include <QtCore/QLineF>
+
+QGC_LOGGING_CATEGORY(GuidedActionsControllerLog, "GuidedActionsControllerLog")
 
 QGeoCoordinate QGroundControlQmlGlobal::_coord = QGeoCoordinate(0.0,0.0);
 double QGroundControlQmlGlobal::_zoom = 2;
@@ -412,4 +415,24 @@ void QGroundControlQmlGlobal::deleteAllSettingsNextBoot()
 void QGroundControlQmlGlobal::clearDeleteAllSettingsNextBoot()
 {
     qgcApp()->clearDeleteAllSettingsNextBoot();
+}
+
+QStringList QGroundControlQmlGlobal::loggingCategories()
+{
+    return QGCLoggingCategoryRegister::instance()->registeredCategories();
+}
+
+void QGroundControlQmlGlobal::setCategoryLoggingOn(const QString &category, bool enable)
+{
+    QGCLoggingCategoryRegister::setCategoryLoggingOn(category, enable);
+}
+
+bool QGroundControlQmlGlobal::categoryLoggingOn(const QString &category)
+{
+    return QGCLoggingCategoryRegister::categoryLoggingOn(category);
+}
+
+void QGroundControlQmlGlobal::updateLoggingFilterRules()
+{
+    QGCLoggingCategoryRegister::instance()->setFilterRulesFromSettings(QString());
 }
