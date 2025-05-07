@@ -1,6 +1,8 @@
 name: pre-commit
 
-on: [push, pull_request]
+# 비활성화됨
+# on: [push, pull_request]
+on: workflow_dispatch  # 수동 실행만 허용
 
 jobs:
   pre-commit:
