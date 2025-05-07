@@ -7938,6 +7938,11 @@ Click Ok to start the auto-tuning process.
         <translation>저장 경로</translation>
     </message>
     <message>
+        <location filename="../src/ui/preferences/GeneralSettings.qml" line="172"/>
+        <source>Full Screen</source>
+        <translation>전체 화면</translation>
+    </message>
+    <message>
         <location filename="../src/ui/preferences/GeneralSettings.qml" line="665"/>
         <source>&lt;not set&gt;</source>
         <translation>&lt;설정되지 않음&lt;&gt;</translation>
