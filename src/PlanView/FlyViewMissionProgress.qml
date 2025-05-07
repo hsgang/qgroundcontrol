@@ -171,16 +171,16 @@ Rectangle{
         routeFlickable.centerCurrentWaypoint();
     }
 
-    QGCButton {
-        visible:        _activeVehicle && (_missionItemCount < 1)
-        anchors.bottom: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.margins: _toolsMargin
-        text:               qsTr("Reload Mission")
-        onClicked: {
-            _planMasterController.loadFromVehicle()
-        }
-    }
+    // QGCButton {
+    //     visible:        _activeVehicle && (_missionItemCount < 1)
+    //     anchors.bottom: parent.top
+    //     anchors.horizontalCenter: parent.horizontalCenter
+    //     anchors.margins: _toolsMargin
+    //     text:               qsTr("Reload Mission")
+    //     onClicked: {
+    //         _planMasterController.loadFromVehicle()
+    //     }
+    // }
 
     Row{
         id: missionIndicatorRow
