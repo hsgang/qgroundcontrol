@@ -2959,14 +2959,6 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     </message>
 </context>
 <context>
-    <name>APMFollowComponent</name>
-    <message>
-        <location filename="../src/AutoPilotPlugins/APM/APMFollowComponent.cc" line="16"/>
-        <source>Follow Me</source>
-        <translation>팔로우미</translation>
-    </message>
-</context>
-<context>
     <name>APMTuningComponent</name>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMTuningComponent.cc" line="18"/>
