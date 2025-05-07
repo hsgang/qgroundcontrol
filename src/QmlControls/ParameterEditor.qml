@@ -11,6 +11,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts
+import Qt.labs.qmlmodels
 
 import QGroundControl
 import QGroundControl.Controls
@@ -149,15 +150,15 @@ Item {
             QGCTextField {
                 id:                     searchText
                 placeholderText:        qsTr("Search")
-                onDisplayTextChanged:   controller.searchText = displayText
+                //onDisplayTextChanged:   controller.searchText = displayText
             }
 
-            // QGCButton {
-            //     text: qsTr("Search")
-            //     onClicked: {
-            //         controller.searchText = searchText.displayText
-            //     }
-            // }
+            QGCButton {
+                text: qsTr("Search")
+                onClicked: {
+                    controller.searchText = searchText.displayText
+                }
+            }
 
             QGCButton {
                 text: qsTr("Clear")
@@ -276,14 +277,14 @@ Item {
             GridLayout {
                 id:             parameterListGridLayout
                 rows:           controller.parameters.count
-                columnSpacing:  ScreenTools.defaultFontPixelWidth
+                columnSpacing:  ScreenTools.defaultFontPixelHeight
                 flow:           GridLayout.TopToBottom
 
                 Repeater {
                     model: controller.parameters
 
-                    QGCLabel { 
-                        text: object.name 
+                    QGCLabel {
+                        text: object.name
                         property Fact fact: object
                     }
                 }
@@ -294,8 +295,8 @@ Item {
                     QGCLabel {
                         Layout.alignment:       Qt.AlignRight
                         Layout.maximumWidth:    ScreenTools.defaultFontPixelWidth * 15
-                        color:                  object.defaultValueAvailable ? 
-                                                    (object.valueEqualsDefault ? qgcPal.text : qgcPal.warningText) : 
+                        color:                  object.defaultValueAvailable ?
+                                                    (object.valueEqualsDefault ? qgcPal.text : qgcPal.warningText) :
                                                     qgcPal.text
                         elide:                  Text.ElideRight
                         clip:                   true
@@ -315,8 +316,8 @@ Item {
                 Repeater {
                     model: controller.parameters
 
-                    QGCLabel { 
-                        text:                   object.shortDescription 
+                    QGCLabel {
+                        text:                   object.shortDescription
                         maximumLineCount:       1
                         elide:                  Text.ElideRight
                     }
@@ -333,108 +334,4 @@ Item {
             }
         }
     }
-
-/*
-    /// Parameter list
-    QGCListView {
-        id:                 editorListView
-        anchors.leftMargin: ScreenTools.defaultFontPixelWidth
-        anchors.left:       _searchFilter ? parent.left : groupScroll.right
-        anchors.right:      parent.right
-        anchors.top:        header.bottom
-        anchors.topMargin:  _margins
-        anchors.bottom:     parent.bottom
-        orientation:        ListView.Vertical
-        model:              controller.parameters
-        cacheBuffer:        height > 0 ? height * 2 : 0
-        clip:               true
-
-        delegate: Rectangle {
-            height: _rowHeight
-            width:  _rowWidth
-            color:  Qt.rgba(0,0,0,0)
-
-            Row {
-                id:     factRow
-                spacing: Math.ceil(ScreenTools.defaultFontPixelWidth * 0.5)
-                anchors.verticalCenter: parent.verticalCenter
-
-                property Fact modelFact: object
-
-                QGCLabel {
-                    id:     nameLabel
-                    width:  ScreenTools.defaultFontPixelWidth  * 20
-                    text:   factRow.modelFact.name
-                    clip:   true
-                }
-
-                QGCLabel {
-                    id:     valueLabel
-                    width:  ScreenTools.defaultFontPixelWidth  * 20
-                    color:  factRow.modelFact.defaultValueAvailable ? (factRow.modelFact.valueEqualsDefault ? qgcPal.text : qgcPal.warningText) : qgcPal.text
-                    text:   getValueText()
-
-                    function getValueText() {
-                        if(factRow.modelFact.enumStrings.length === 0) {
-                            return factRow.modelFact.valueString + " " + factRow.modelFact.units
-                        }
-
-                        if(factRow.modelFact.bitmaskStrings.length !== 0) {
-                            return factRow.modelFact.selectedBitmaskStrings.join(',')
-                        }
-
-                        return factRow.modelFact.enumStringValue
-                    }
-                    clip:   true
-                }
-
-                // QGCLabel {
-                //     id:     valueLabel
-                //     width:  ScreenTools.defaultFontPixelWidth  * 20
-                //     color:  factRow.modelFact.defaultValueAvailable ? (factRow.modelFact.valueEqualsDefault ? qgcPal.text : qgcPal.warningText) : qgcPal.text
-                //     text:   {
-                //         if(factRow.modelFact.enumStrings.length === 0) {
-                //             return factRow.modelFact.valueString + " " + factRow.modelFact.units
-                //         }
-
-                //         if(factRow.modelFact.bitmaskStrings.length !== 0) {
-                //             return factRow.modelFact.selectedBitmaskStrings.join(',')
-                //         }
-
-                //         return factRow.modelFact.enumStringValue
-                //     }
-                //     clip:   true
-                // }
-
-                QGCLabel {
-                    text:   factRow.modelFact.shortDescription
-                }
-
-                Component.onCompleted: {
-                    if(_rowWidth < factRow.width + ScreenTools.defaultFontPixelWidth) {
-                        _rowWidth = factRow.width + ScreenTools.defaultFontPixelWidth
-                    }
-                }
-            }
-
-            Rectangle {
-                width:  _rowWidth
-                height: 1
-                color:  qgcPal.text
-                opacity: 0.15
-                anchors.bottom: parent.bottom
-                anchors.left:   parent.left
-            }
-
-            MouseArea {
-                anchors.fill:       parent
-                acceptedButtons:    Qt.LeftButton
-                onClicked: {
-                    _editorDialogFact = factRow.modelFact
-                    editorDialogComponent.createObject(mainWindow).open()
-                }
-            }
-        }
-    }
-*/
 }

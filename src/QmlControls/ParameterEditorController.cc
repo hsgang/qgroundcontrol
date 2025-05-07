@@ -401,15 +401,15 @@ void ParameterEditorController::_performSearch(void)
                 for (const auto& searchItem : rgSearchStrings) {
                     QRegularExpression re = QRegularExpression(searchItem, QRegularExpression::CaseInsensitiveOption);
                     if (re.isValid()) {
-                        if (!fact->name().contains(re) &&
+                        if (!fact->name().contains(re)/* &&
                                 !fact->shortDescription().contains(re) &&
-                                !fact->longDescription().contains(re)) {
+                                !fact->longDescription().contains(re)*/ ) {
                             matched = false;
                         }
                     } else {
-                        if (!fact->name().contains(searchItem, Qt::CaseInsensitive) &&
+                        if (!fact->name().contains(searchItem, Qt::CaseInsensitive)/* &&
                                 !fact->shortDescription().contains(searchItem, Qt::CaseInsensitive) &&
-                                !fact->longDescription().contains(searchItem, Qt::CaseInsensitive)) {
+                                !fact->longDescription().contains(searchItem, Qt::CaseInsensitive)*/) {
                             matched = false;
                         }
                     }
