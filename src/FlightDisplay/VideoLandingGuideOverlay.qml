@@ -115,18 +115,22 @@ Item {
             ctx.strokeStyle = "rgba(255, 0, 0, 0.2)";
             ctx.stroke();
 
+            // 선의 절대 길이 설정
+            const verticalLineLength = _screenHeight * 0.2;  // 세로선 길이 (픽셀 단위)
+            const horizontalLineLength = _screenHeight * 0.2; // 가로선 길이 (픽셀 단위)
+
             // 세로선 (Roll 적용)
             ctx.lineWidth = 1;
             ctx.strokeStyle = "#A0FF32";
             ctx.beginPath();
-            ctx.moveTo(centerX, 0);
-            ctx.lineTo(centerX, height);
+            ctx.moveTo(centerX, centerY - verticalLineLength / 2);  // 시작 지점 (위쪽)
+            ctx.lineTo(centerX, centerY + verticalLineLength / 2);  // 끝 지점 (아래쪽)
             ctx.stroke();
 
             // 가로선 (Pitch 적용)
             ctx.beginPath();
-            ctx.moveTo(0, centerY);
-            ctx.lineTo(width, centerY);
+            ctx.moveTo(centerX - horizontalLineLength / 2, centerY); // 시작 지점 (왼쪽)
+            ctx.lineTo(centerX + horizontalLineLength / 2, centerY); // 끝 지점 (오른쪽)
             ctx.stroke();
 
             // 사각형 중심에 원 그리기
