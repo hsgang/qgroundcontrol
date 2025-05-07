@@ -381,9 +381,8 @@ void QGCApplication::_initForNormalAppBoot()
     LinkManager::instance()->init();
     MultiVehicleManager::instance()->init();
     MAVLinkProtocol::instance()->init();
-    VideoManager::instance()->init();
-    ModelProfileManager::instance()->init(SettingsManager::instance()->modelProfileSettings()->modelProfileFile());
     VideoManager::instance()->init(mainRootWindow());
+    ModelProfileManager::instance()->init(SettingsManager::instance()->modelProfileSettings()->modelProfileFile());
 
     // Image provider for Optical Flow
     _qmlAppEngine->addImageProvider(_qgcImageProviderId, new QGCImageProvider());
