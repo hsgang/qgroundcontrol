@@ -4137,11 +4137,6 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
-        <source>Battery Display</source>
-        <translation>배터리 표시</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
         <source>Display Type</source>
         <translation>표시 형태</translation>
     </message>
@@ -13097,7 +13092,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="52"/>
         <source>Follow Me</source>
-        <translation>따라다니기</translation>
+        <translation>팔로우미</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="53"/>
@@ -16086,7 +16081,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/FirmwarePlugin/FirmwarePlugin.cc" line="32"/>
         <source>Follow Me</source>
-        <translation>따라다니기</translation>
+        <translation>팔로우미</translation>
     </message>
     <message>
         <location filename="../src/JsonHelper.cc" line="46"/>
