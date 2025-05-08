@@ -29,7 +29,7 @@ Item {
 
     signal terrainButtonClicked
 
-    property var    _scaleLengthsMeters:    [5, 10, 25, 50, 100, 150, 250, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000]
+    property var    _scaleLengthsMeters:    [1, 5, 10, 20, 50, 100, 150, 250, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000, 2000000]
     property var    _scaleLengthsFeet:      [10, 25, 50, 100, 250, 500, 1000, 2000, 3000, 4000, 5280, 5280*2, 5280*5, 5280*10, 5280*25, 5280*50, 5280*100, 5280*250, 5280*500, 5280*1000]
     property bool   _zoomButtonsVisible:    zoomButtonsVisible// && !ScreenTools.isMobile
     property var    _color:                 mapControl.isSatelliteMap ? "white" : "black"
@@ -161,8 +161,8 @@ Item {
         anchors.left:       buttonsOnLeft ?
                                 (_zoomButtonsVisible ? zoomDownButton.right : (terrainButtonVisible ? terrainButton.right : parent.left)) :
                                 parent.left
-        width:              2
-        height:             ScreenTools.defaultFontPixelHeight
+        width:              1
+        height:             ScreenTools.defaultFontPixelHeight / 2
         color:              _color
     }
 
@@ -171,7 +171,7 @@ Item {
         anchors.bottomMargin:   2
         anchors.bottom:     leftEnd.bottom
         anchors.left:       leftEnd.right
-        height:             2
+        height:             1
         color:              _color
     }
 
@@ -179,8 +179,8 @@ Item {
         id:                 rightEnd
         anchors.top:        leftEnd.top
         anchors.left:       centerLine.right
-        width:              2
-        height:             ScreenTools.defaultFontPixelHeight
+        width:              1
+        height:             ScreenTools.defaultFontPixelHeight / 2
         color:              _color
     }
 

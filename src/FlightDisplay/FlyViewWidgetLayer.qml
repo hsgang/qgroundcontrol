@@ -111,7 +111,7 @@ Item {
 
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout
-        anchors.margins:    _layoutMargin * 3
+        anchors.margins:    _layoutMargin
         anchors.bottom:     parent.bottom
         anchors.right:      parent.right
         spacing:            _layoutSpacing
@@ -264,13 +264,13 @@ Item {
 
     MapScale {
         id:                 mapScale
-        anchors.leftMargin: _totalToolInsets.leftEdgeBottomInset + _toolsMargin
-        anchors.left:       parent.left
-        anchors.bottomMargin: _toolsMargin
+        anchors.bottomMargin:_totalToolInsets.bottomEdgeLeftInset + _toolsMargin
         anchors.bottom:     parent.bottom
+        anchors.leftMargin: _toolsMargin
+        anchors.left:       toolStrip.right
         mapControl:         _mapControl
         buttonsOnLeft:      true
-        visible:            QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
+        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
 
         property real topEdgeCenterInset: visible ? y + height : 0
     }
