@@ -55,6 +55,8 @@ Rectangle {
             text:               mainStatusText()
             font.pointSize:     ScreenTools.largeFontPointSize
             font.bold:          true
+            style:              Text.Raised
+            styleColor:         "#2f2f2f"
 
             property string _commLostText:      qsTr("Communication Lost")
             property string _readyToFlyText:    qsTr("Ready To Fly")
