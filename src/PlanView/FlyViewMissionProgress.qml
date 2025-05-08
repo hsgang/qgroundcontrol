@@ -157,11 +157,11 @@ Rectangle{
         return combinedProgress;
     }
 
-    Component.onCompleted: {
-        console.log("missionItems: " + missionItems);
-        console.log("missionItems.count: " + missionItems.count);
-        console.log("_missionValid: " + _missionValid);
-    }
+    // Component.onCompleted: {
+    //     console.log("missionItems: " + missionItems);
+    //     console.log("missionItems.count: " + missionItems.count);
+    //     console.log("_missionValid: " + _missionValid);
+    // }
 
     property int currentWaypointIndex: missionItemIndex
 
