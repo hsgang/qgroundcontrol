@@ -30,8 +30,8 @@ import QGroundControl.Vehicle
 
 Item{
     id:     control
-    width:  attitudeIndicatorRow.implicitWidth
-    height: attitudeIndicatorRow.implicitHeight
+    width:  attitudeIndicatorRow.width
+    height: attitudeIndicatorRow.height
     //color: "transparent"
 
     property real   extraWidth: 0 ///< Extra width to add to the background rectangle
@@ -112,7 +112,8 @@ Item{
             }
             QGCLabel {
                 text:                   _vehicleGroundSpeedText
-                Layout.preferredWidth:  _largeValueWidth
+                Layout.minimumWidth:    _mediumValueWidth
+                Layout.fillWidth:       true
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
                 color:                  qgcPal.textHighlight
@@ -129,16 +130,17 @@ Item{
             spacing: 0
 
             QGCLabel {
-                Layout.alignment:   Qt.AlignHCenter
-                text:   "VS"
+                Layout.alignment:       Qt.AlignHCenter
+                text:                   "VS"
             }
             QGCLabel {
-                Layout.preferredWidth:  _largeValueWidth
-                text:   _vehicleVerticalSpeedText
+                Layout.minimumWidth:    _mediumValueWidth
+                Layout.fillWidth:       true
+                text:                   _vehicleVerticalSpeedText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
                 color:                  qgcPal.textHighlight
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment:    Text.AlignHCenter
             }
             QGCLabel {
                 Layout.alignment: Qt.AlignHCenter
@@ -151,16 +153,17 @@ Item{
             spacing: 0
 
             QGCLabel {
-                Layout.alignment: Qt.AlignHCenter
-                text:   "ALT"
+                Layout.alignment:       Qt.AlignHCenter
+                text:                   "ALT"
             }
             QGCLabel {
-                Layout.preferredWidth:  _largeValueWidth
+                Layout.minimumWidth:    _mediumValueWidth
+                Layout.fillWidth:       true
                 text:                   _vehicleAltitudeText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
                 color:                  qgcPal.textHighlight
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment:    Text.AlignHCenter
             }
             QGCLabel {
                 Layout.alignment: Qt.AlignHCenter
@@ -173,16 +176,17 @@ Item{
             spacing: 0
 
             QGCLabel {
-                Layout.alignment: Qt.AlignHCenter
-                text:   "DIST"
+                Layout.alignment:       Qt.AlignHCenter
+                text:                   "DIST"
             }
             QGCLabel {
-                Layout.preferredWidth:  _largeValueWidth
+                Layout.minimumWidth:    _mediumValueWidth
+                Layout.fillWidth:       true
                 text:                   _distanceToHomeText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
                 color:                  qgcPal.textHighlight
-                horizontalAlignment: Text.AlignHCenter
+                horizontalAlignment:    Text.AlignHCenter
             }
             QGCLabel {
                 Layout.alignment: Qt.AlignHCenter
