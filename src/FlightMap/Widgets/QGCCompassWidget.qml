@@ -176,8 +176,8 @@ Rectangle {
             transform: Translate {
                 property double _angle: _headingToHome
 
-                x: translateCenterToAngleX(parent.width / 2, _angle)
-                y: translateCenterToAngleY(parent.height / 2, _angle)
+                x: translateCenterToAngleX(parent.width / 2.2, _angle)
+                y: translateCenterToAngleY(parent.height / 2.2, _angle)
             }
         }
     }
