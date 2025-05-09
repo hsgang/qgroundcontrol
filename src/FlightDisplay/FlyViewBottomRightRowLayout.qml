@@ -28,9 +28,8 @@ RowLayout {
             Layout.alignment:   Qt.AlignRight
             visible:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue
 
-            valueArea_userSettingsGroup:      valueArea.telemetryBarUserSettingsGroup
-            valueArea_defaultSettingsGroup:   valueArea.telemetryBarDefaultSettingsGroup
-            valueArea_vehicle:                QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
+            settingsGroup:          factValueGrid.telemetryBarSettingsGroup
+            specificVehicleForCard: null // Tracks active vehicle
         }
         FlyViewValueBar{
             //Layout.alignment:   Qt.AlignBottom
