@@ -97,7 +97,7 @@ Item {
             rightPanelWidth:        ScreenTools.defaultFontPixelHeight * 9
             pipView:                _pipView
             pipMode:                !_mainWindowIsMap
-            toolInsets:             customOverlay.totalToolInsets
+            toolInsets:             widgetLayer.totalToolInsets
             mapName:                "FlightDisplayView"
             enabled:                !viewer3DWindow.isOpen
         }
@@ -110,7 +110,7 @@ Item {
         PipView {
             id:                     _pipView
             anchors.left:           parent.left
-            anchors.leftMargin:     ScreenTools.isMobile ? undefined : customOverlay.totalToolInsets.leftEdgeTopInset
+            anchors.leftMargin:     ScreenTools.isMobile ? undefined : widgetLayer.totalToolInsets.leftEdgeTopInset
             anchors.bottom:         parent.bottom
             anchors.margins:        _toolsMargin
             item1IsFullSettingsKey: "MainFlyWindowIsMap"
@@ -139,14 +139,14 @@ Item {
             isViewer3DOpen:         viewer3DWindow.isOpen
         }
 
-        FlyViewCustomLayer {
-            id:                 customOverlay
-            anchors.fill:       widgetLayer
-            z:                  _fullItemZorder + 2
-            parentToolInsets:   widgetLayer.totalToolInsets
-            mapControl:         _mapControl
-            visible:            !QGroundControl.videoManager.fullScreen
-        }
+        // FlyViewCustomLayer {
+        //     id:                 customOverlay
+        //     anchors.fill:       widgetLayer
+        //     z:                  _fullItemZorder + 2
+        //     parentToolInsets:   widgetLayer.totalToolInsets
+        //     mapControl:         _mapControl
+        //     visible:            !QGroundControl.videoManager.fullScreen
+        // }
 
         // Development tool for visualizing the insets for a paticular layer, enable if needed
 
@@ -159,7 +159,7 @@ Item {
 
         //     z:                      widgetLayer.z + 1
 
-        //     insetsToView:           customOverlay.totalToolInsets
+        //     insetsToView:           widgetLayer.totalToolInsets
         // }
 
         GuidedActionsController {

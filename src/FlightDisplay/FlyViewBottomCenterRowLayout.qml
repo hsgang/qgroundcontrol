@@ -28,18 +28,6 @@ RowLayout {
         Layout.alignment:           Qt.AlignHCenter
         _planMasterController: planController
         visible:  QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
-
-        // Connections{
-        //     target: _activeVehicle
-        //     onFlightModeChanged: (flightMode)=> {
-        //         //console.log(flightMode)
-        //         if(flightMode === _activeVehicle.missionFlightMode){
-        //             flyviewMissionProgress.visible = true
-        //         } else {
-        //             flyviewMissionProgress.visible = false
-        //         }
-        //     }
-        // }
     }
 
     FlyViewAltitudeIndicator{

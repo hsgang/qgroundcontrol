@@ -68,10 +68,10 @@ Item {
         rightEdgeCenterInset:   topRightPanel.rightEdgeCenterInset
         rightEdgeBottomInset:   bottomRightRowLayout.rightEdgeBottomInset
         topEdgeLeftInset:       toolStrip.topEdgeLeftInset
-        topEdgeCenterInset:     0 //telemetryPanel.topEdgeCenterInset
+        topEdgeCenterInset:     flyviewMissionProgress.topEdgeCenterInset
         topEdgeRightInset:      topRightPanel.topEdgeRightInset
         bottomEdgeLeftInset:    virtualJoystickMultiTouch.visible ? virtualJoystickMultiTouch.bottomEdgeLeftInset : parentToolInsets.bottomEdgeLeftInset
-        bottomEdgeCenterInset:  bottomCenterRowLayout.bottomEdgeCenterInset
+        bottomEdgeCenterInset:  guidedActionConfirm.bottomEdgeCenterInset
         bottomEdgeRightInset:   virtualJoystickMultiTouch.visible ? virtualJoystickMultiTouch.bottomEdgeRightInset : bottomRightRowLayout.bottomEdgeRightInset
     }
 
@@ -121,15 +121,15 @@ Item {
         property real rightEdgeBottomInset:     width + _layoutMargin
     }
 
-    FlyViewBottomCenterRowLayout {
-        id:                 bottomCenterRowLayout
-        anchors.bottomMargin:       _layoutMargin * 3
-        anchors.bottom:             parent.bottom
-        anchors.horizontalCenter:   parent.horizontalCenter
-        spacing:                    _layoutSpacing
+    // FlyViewBottomCenterRowLayout {
+    //     id:                 bottomCenterRowLayout
+    //     anchors.bottomMargin:       _layoutMargin * 3
+    //     anchors.bottom:             parent.bottom
+    //     anchors.horizontalCenter:   parent.horizontalCenter
+    //     spacing:                    _layoutSpacing
 
-        property real bottomEdgeCenterInset:    height + (_layoutMargin * 2)
-    }
+    //     property real bottomEdgeCenterInset:    height + (_layoutMargin * 2)
+    // }
 
     // TelemetryValuesBar {
     //     id:                 telemetryPanel
@@ -166,12 +166,14 @@ Item {
     GuidedActionConfirm {
         id:                         guidedActionConfirm
         anchors.margins:            _toolsMargin * 2
-        anchors.bottom:             bottomCenterRowLayout.top
+        anchors.bottom:             parent.bottom
         anchors.horizontalCenter:   parent.horizontalCenter
         z:                          QGroundControl.zOrderTopMost
         guidedController:           _guidedController
         guidedValueSlider:          _guidedValueSlider
         utmspSliderTrigger:         utmspActTrigger
+
+        property real bottomEdgeCenterInset: visible ? height + _toolsMargin * 2 : 0
     }
 
     RequestConfirmPopup {
@@ -264,15 +266,13 @@ Item {
 
     MapScale {
         id:                 mapScale
-        anchors.bottomMargin:_totalToolInsets.bottomEdgeLeftInset + _toolsMargin
+        anchors.bottomMargin: _toolsMargin //_pipView.visible ? _totalToolInsets.bottomEdgeLeftInset + _toolsMargin : _toolsMargin
         anchors.bottom:     parent.bottom
-        anchors.leftMargin: _toolsMargin
-        anchors.left:       toolStrip.right
+        anchors.leftMargin: _totalToolInsets.leftEdgeBottomInset + _toolsMargin
+        anchors.left:       parent.left
         mapControl:         _mapControl
         buttonsOnLeft:      true
         visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
-
-        property real topEdgeCenterInset: visible ? y + height : 0
     }
 
     Loader {
@@ -305,7 +305,7 @@ Item {
     Rectangle {
         id:                         flyviewStatusRect
         anchors.horizontalCenter:   parent.horizontalCenter
-        anchors.bottom:             bottomCenterRowLayout.top
+        anchors.bottom:             bottomRightRowLayout.top
         anchors.bottomMargin:       _toolsMargin
         color:                      "transparent"
         width:                      flyviewStatusRow.width
@@ -389,6 +389,17 @@ Item {
         anchors.topMargin:      _toolsMargin
         anchors.right:          rightPanel.left
         visible:                QGroundControl.settingsManager.flyViewSettings.showEscStatus.rawValue
+    }
+
+    FlyViewMissionProgress{
+        id:                     flyviewMissionProgress
+        anchors.margins:        _toolsMargin
+        anchors.top:            parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        _planMasterController: planController
+        visible:  QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
+
+        property real topEdgeCenterInset: visible ? height+_toolsMargin : 0
     }
 
     Rectangle {
