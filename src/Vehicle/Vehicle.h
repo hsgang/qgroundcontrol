@@ -59,7 +59,7 @@
 #include "HealthAndArmingCheckReport.h"
 #include "ExternalPowerStatusFactGroup.h"
 #include "WinchStatusFactGroup.h"
-#include "TunnelingDataFactGroup.h"
+// #include "TunnelingDataFactGroup.h"
 #include "TerrainQuery.h"
 #include "StandardModes.h"
 #include "VehicleGeneratorFactGroup.h"
@@ -298,7 +298,7 @@ public:
     Q_PROPERTY(FactGroup*           efi             READ efiFactGroup               CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
-    Q_PROPERTY(FactGroup*           tunnelingData   READ tunnelingDataFactGroup     CONSTANT)
+    // Q_PROPERTY(FactGroup*           tunnelingData   READ tunnelingDataFactGroup     CONSTANT)
     Q_PROPERTY(FactGroup*           generatorStatus READ generatorStatusFactGroup   CONSTANT)
     Q_PROPERTY(FactGroup*           externalPowerStatus READ externalPowerStatusFactGroup CONSTANT)
     Q_PROPERTY(FactGroup*           winchStatus     READ winchStatusFactGroup       CONSTANT)
@@ -659,7 +659,7 @@ public:
     FactGroup* rpmFactGroup                 () { return &_rpmFactGroup; }
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
     FactGroup* atmosphericSensorFactGroup   () { return &_atmosphericSensorFactGroup; }
-    FactGroup* tunnelingDataFactGroup       () { return &_tunnelingDataFactGroup; }
+    // FactGroup* tunnelingDataFactGroup       () { return &_tunnelingDataFactGroup; }
     FactGroup* generatorStatusFactGroup     () { return &_generatorStatusFactGroup; }
     FactGroup* externalPowerStatusFactGroup () { return &_externalPowerStatusFactGroup; }
     FactGroup* winchStatusFactGroup         () { return &_winchStatusFactGroup; }
@@ -946,7 +946,7 @@ signals:
     void loadProgressChanged            (float value);
 
     void atmosphericValueChanged        ();
-    void tunnelingDataValueChanged      ();
+    // void tunnelingDataValueChanged      ();
 
     /// New RC channel values coming from RC_CHANNELS message
     ///     @param channelCount Number of available channels, maxRcChannels max
@@ -1345,7 +1345,7 @@ private:
     const QString _generatorFactGroupName =          QStringLiteral("generator");
     const QString _efiFactGroupName =                QStringLiteral("efi");
     const QString _atmosphericSensorFactGroupName =  QStringLiteral("atmosphericSensor");
-    const QString _tunnelingDataFactGroupName =      QStringLiteral("tunnelingData");
+    // const QString _tunnelingDataFactGroupName =      QStringLiteral("tunnelingData");
     const QString _generatorStatusFactGroupName =    QStringLiteral("generatorStatus");
     const QString _externalPowerStatusFactGroupName =   QStringLiteral("externalPowerStatus");
     const QString _winchStatusFactGroupName =        QStringLiteral("winchStatus");
@@ -1373,7 +1373,7 @@ private:
     TerrainFactGroup                _terrainFactGroup;
     QmlObjectListModel              _batteryFactGroupListModel;
     AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
-    TunnelingDataFactGroup          _tunnelingDataFactGroup;
+    // TunnelingDataFactGroup          _tunnelingDataFactGroup;
     GeneratorStatusFactGroup        _generatorStatusFactGroup;
     ExternalPowerStatusFactGroup    _externalPowerStatusFactGroup;
     WinchStatusFactGroup            _winchStatusFactGroup;

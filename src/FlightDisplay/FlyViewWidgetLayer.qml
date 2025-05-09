@@ -326,14 +326,14 @@ Item {
         }
     }
 
-    FlyViewAtmosphericSensorView{
-        id:                         atmosphericSensorView
-        anchors.top:                parent.top
-        anchors.topMargin:          _toolsMargin
-        anchors.left:               toolStrip.right
-        anchors.leftMargin:         _toolsMargin
-        visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
-    }
+    // FlyViewAtmosphericSensorView{
+    //     id:                         atmosphericSensorView
+    //     anchors.top:                parent.top
+    //     anchors.topMargin:          _toolsMargin
+    //     anchors.left:               toolStrip.right
+    //     anchors.leftMargin:         _toolsMargin
+    //     visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
+    // }
 
     FlyViewWindvane {
         id:                         windvane

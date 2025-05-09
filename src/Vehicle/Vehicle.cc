@@ -123,7 +123,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _rpmFactGroup                 (this)
     , _terrainFactGroup             (this)
     , _atmosphericSensorFactGroup   (this)
-    , _tunnelingDataFactGroup       (this)
+    // , _tunnelingDataFactGroup       (this)
     , _generatorStatusFactGroup     (this)
     , _externalPowerStatusFactGroup (this)
     , _winchStatusFactGroup         (this)
@@ -240,7 +240,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _localPositionFactGroup           (this)
     , _localPositionSetpointFactGroup   (this)
     , _atmosphericSensorFactGroup       (this)
-    , _tunnelingDataFactGroup           (this)
+    // , _tunnelingDataFactGroup           (this)
     , _generatorStatusFactGroup         (this)
     , _externalPowerStatusFactGroup     (this)
     , _winchStatusFactGroup             (this)
@@ -365,7 +365,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_rpmFactGroup,               _rpmFactGroupName);
     _addFactGroup(&_terrainFactGroup,           _terrainFactGroupName);
     _addFactGroup(&_atmosphericSensorFactGroup, _atmosphericSensorFactGroupName);
-    _addFactGroup(&_tunnelingDataFactGroup,     _tunnelingDataFactGroupName);
+    // _addFactGroup(&_tunnelingDataFactGroup,     _tunnelingDataFactGroupName);
     _addFactGroup(&_generatorStatusFactGroup,   _generatorStatusFactGroupName);
     _addFactGroup(&_externalPowerStatusFactGroup,_externalPowerStatusFactGroupName);
     _addFactGroup(&_winchStatusFactGroup,       _winchStatusFactGroupName);
@@ -627,7 +627,7 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
         break;
     case MAVLINK_MSG_ID_TUNNEL:
         emit atmosphericValueChanged();
-        emit tunnelingDataValueChanged();
+        // emit tunnelingDataValueChanged();
         break;
     case MAVLINK_MSG_ID_DATA32:
         emit atmosphericValueChanged();
@@ -3839,10 +3839,11 @@ void Vehicle::_initializeCustomLog()
     customLogFactValue.append(",Pressure");
     customLogFactValue.append(",WindDir");
     customLogFactValue.append(",WindSpd");
-    customLogFactValue.append(",Ext1");
-    customLogFactValue.append(",Ext2");
-    customLogFactValue.append(",Ext3");
-    customLogFactValue.append(",Ext4");
+    customLogFactValue.append(",HubTemp1");
+    customLogFactValue.append(",HubTemp2");
+    customLogFactValue.append(",HubHumi1");
+    customLogFactValue.append(",HubHumi2");
+    customLogFactValue.append(",HubPressure");
     customLogFactValue.append("\r\n");
 
     customLogStream << customLogFactValue;
@@ -3875,10 +3876,12 @@ void Vehicle::_writeCustomLogLine()
         QString baro = getFactGroup("atmosphericSensor")->getFact("Pressure")->cookedValueString();
         QString windDir = getFactGroup("atmosphericSensor")->getFact("WindDir")->cookedValueString();
         QString windSpd = getFactGroup("atmosphericSensor")->getFact("WindSpd")->cookedValueString();
-        QString ext1 = getFactGroup("atmosphericSensor")->getFact("opc1")->cookedValueString();
-        QString ext2 = getFactGroup("atmosphericSensor")->getFact("opc2")->cookedValueString();
-        QString ext3 = getFactGroup("atmosphericSensor")->getFact("opc3")->cookedValueString();
-        QString ext4 = getFactGroup("atmosphericSensor")->getFact("radiation")->cookedValueString();
+        QString hubTemp1 = getFactGroup("atmosphericSensor")->getFact("HubTemp1")->cookedValueString();
+        QString hubTemp2 = getFactGroup("atmosphericSensor")->getFact("HubTemp2")->cookedValueString();
+        QString hubHumi1 = getFactGroup("atmosphericSensor")->getFact("HubHumi1")->cookedValueString();
+        QString hubHumi2 = getFactGroup("atmosphericSensor")->getFact("HubHumi2")->cookedValueString();
+        QString hubPressure = getFactGroup("atmosphericSensor")->getFact("HubPressure")->cookedValueString();
+        QString radiation = getFactGroup("atmosphericSensor")->getFact("radiation")->cookedValueString();
 
         // QString GroundSpeed = getFact("groundSpeed")->cookedValueString();
         // QString ClimbRate = getFact("climbRate")->cookedValueString();
@@ -3901,10 +3904,11 @@ void Vehicle::_writeCustomLogLine()
         customLogFactValue.append("," + baro);
         customLogFactValue.append("," + windDir);
         customLogFactValue.append("," + windSpd);
-        customLogFactValue.append("," + ext1);
-        customLogFactValue.append("," + ext2);
-        customLogFactValue.append("," + ext3);
-        customLogFactValue.append("," + ext4);
+        customLogFactValue.append("," + hubTemp1);
+        customLogFactValue.append("," + hubTemp2);
+        customLogFactValue.append("," + hubHumi1);
+        customLogFactValue.append("," + hubHumi2);
+        customLogFactValue.append("," + hubPressure);
         // jsonFactValue.append("\t\"Speed\": " + GroundSpeed + ",\r\n");
         // jsonFactValue.append("\t\"AscSpd\": " + ClimbRate + ",\r\n");
         // jsonFactValue.append("\t\"Roll\": " + Roll + ",\r\n");

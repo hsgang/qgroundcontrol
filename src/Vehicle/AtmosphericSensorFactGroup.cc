@@ -19,6 +19,7 @@ struct Sensor_Payload {
     float opc2Raw;
     float opc3Raw;
     float radiationRaw;
+    float battRaw;
 };
 
 struct Sensor_Tunnel_sC {
@@ -64,6 +65,7 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _addFact(&_opc2Fact);
     _addFact(&_opc3Fact);
     _addFact(&_radiationFact);
+    _addFact(&_battFact);
 
     // Start out as not available "--.--"
     _temperatureFact.setRawValue (qQNaN());
@@ -80,6 +82,7 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _opc2Fact.setRawValue (qQNaN());
     _opc3Fact.setRawValue (qQNaN());
     _radiationFact.setRawValue (qQNaN());
+    _battFact.setRawValue(qQNaN());
 
 }
 
@@ -97,16 +100,6 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle *vehicle, const mavlink_m
     case MAVLINK_MSG_ID_TUNNEL:
         _handleTunnel(message);
         break;
-#if defined(USE_ATMOSPHERIC_VALUE)
-    case MAVLINK_MSG_ID_ATMOSPHERIC_VALUE:
-        _handleAtmosphericValue(message);
-        break;
-#endif
-// #if !defined(NO_ARDUPILOT_DIALECT)
-    case MAVLINK_MSG_ID_WIND:
-        _handleWind(message);
-        break;
-// #endif
     default:
         break;
     }
@@ -136,6 +129,7 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     float opc2Raw         = sP.opc2Raw;
     float opc3Raw         = sP.opc3Raw;
     float radiationRaw    = sP.radiationRaw;
+    float battRaw         = sP.battRaw;
 
     if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
     if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
@@ -152,6 +146,7 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     if(opc2Raw)         {opc2()->setRawValue(opc2Raw);}
     if(opc3Raw)         {opc3()->setRawValue(opc3Raw);}
     if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
+    if(battRaw)         {batt()->setRawValue(battRaw);}
 
     status()->setRawValue(data32.type);
 }
@@ -171,21 +166,6 @@ void AtmosphericSensorFactGroup::_handleHygrometerSensor(const mavlink_message_t
     temperature()->setRawValue((hygrometer.temperature) * 0.01);
     humidity()->setRawValue((hygrometer.humidity) * 0.01);
 }
-
-#if defined(USE_ATMOSPHERIC_VALUE)
-void AtmosphericSensorFactGroup::_handleAtmosphericValue(mavlink_message_t& message)
-{
-    mavlink_atmospheric_value_t atmospheric;
-    mavlink_msg_atmospheric_value_decode(&message, &atmospheric);
-
-    logCount()->setRawValue(atmospheric.count);
-    temperature()->setRawValue(atmospheric.temperature);
-    humidity()->setRawValue(atmospheric.humidity);
-    pressure()->setRawValue(atmospheric.pressure);
-    windDir()->setRawValue(atmospheric.wind_direction);
-    windSpd()->setRawValue(atmospheric.wind_speed);
-}
-#endif
 
 void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
 {
@@ -239,6 +219,7 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             float opc2Raw           = tP.opc2Raw;
             float opc3Raw           = tP.opc3Raw;
             float radiationRaw      = tP.radiationRaw;
+            float battRaw           = tP.battRaw;
 
             if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
             if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
@@ -255,6 +236,7 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             if(opc2Raw)         {opc2()->setRawValue(opc2Raw);}
             if(opc3Raw)         {opc3()->setRawValue(opc3Raw);}
             if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
+            if(battRaw)         {batt()->setRawValue(battRaw);}
 
             status()->setRawValue(tunnel.payload_type);
             break;
@@ -274,24 +256,4 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
         }
     }
 }
-
-// #if !defined(NO_ARDUPILOT_DIALECT)
-void AtmosphericSensorFactGroup::_handleWind(const mavlink_message_t& message)
-{
-    mavlink_wind_t wind;
-    mavlink_msg_wind_decode(&message, &wind);
-
-    float direction = wind.direction;
-    if (direction < 0) {
-        direction += 360;
-    }
-
-    uint8_t compId = message.compid;
-
-    if (compId == MAV_COMPONENT::MAV_COMP_ID_PERIPHERAL) {
-        if(wind.direction)  {windDir()->setRawValue(direction);}
-        if(wind.speed)      {windSpd()->setRawValue(wind.speed);}
-    }
-}
-// #endif
 

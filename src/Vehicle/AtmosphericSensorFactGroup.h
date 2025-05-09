@@ -23,6 +23,7 @@ class AtmosphericSensorFactGroup : public FactGroup
     Q_PROPERTY(Fact *opc2         READ opc2         CONSTANT)
     Q_PROPERTY(Fact *opc3         READ opc3         CONSTANT)
     Q_PROPERTY(Fact *radiation    READ radiation    CONSTANT)
+    Q_PROPERTY(Fact *batt         READ batt         CONSTANT)
 
 public:
     AtmosphericSensorFactGroup(QObject* parent = nullptr);   
@@ -43,6 +44,7 @@ public:
     Fact *opc2          () { return &_opc2Fact; }
     Fact *opc3          () { return &_opc3Fact; }
     Fact *radiation     () { return &_radiationFact; }
+    Fact *batt          () { return &_battFact;}
 
     // Overrides from FactGroup
     void handleMessage(Vehicle *vehicle, const mavlink_message_t &message) override;
@@ -51,12 +53,6 @@ protected:
     void _handleData32              (const mavlink_message_t &message);
     void _handleTunnel              (const mavlink_message_t &message);
     void _handleScaledPressure      (const mavlink_message_t &message);
-#if defined(USE_ATMOSPHERIC_VALUE)
-    void _handleAtmosphericValue    (mavlink_message_t& message);
-#endif
-// #if !defined(NO_ARDUPILOT_DIALECT)
-    void _handleWind        (const mavlink_message_t &message);
-// #endif
     void _handleHygrometerSensor    (const mavlink_message_t &message);
 
     Fact _statusFact = Fact(0, QStringLiteral("status"), FactMetaData::valueTypeUint8);
@@ -75,5 +71,5 @@ protected:
     Fact _opc2Fact = Fact(0, QStringLiteral("opc2"), FactMetaData::valueTypeFloat);
     Fact _opc3Fact = Fact(0, QStringLiteral("opc3"), FactMetaData::valueTypeFloat);
     Fact _radiationFact = Fact(0, QStringLiteral("radiation"), FactMetaData::valueTypeFloat);
-
+    Fact _battFact = Fact(0, QStringLiteral("batt"), FactMetaData::valueTypeFloat);
 };
