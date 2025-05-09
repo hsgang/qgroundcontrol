@@ -20,16 +20,19 @@ import QGroundControl.FactSystem
 
 Rectangle {
     id:             control
-    width:          Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelWidth * 28)
+    width:          Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelWidth * 32)
     height:         parent.height
-    //color:          _mainStatusBGColor
-    gradient: Gradient {
-        orientation: Gradient.Horizontal
-        GradientStop { position: 0;     color: _mainStatusBGColor }
-        //GradientStop { position: 0.7;   color: _mainStatusBGColor }
-        GradientStop { position: 1;     color: _root.color }
-    }
-    radius:         _margins / 4
+    color:          "transparent"//_mainStatusBGColor
+    radius:         height/2
+    border.color:   _mainStatusBGColor
+    border.width:   2
+    // gradient: Gradient {
+    //     orientation: Gradient.Horizontal
+    //     GradientStop { position: 0;     color: _mainStatusBGColor }
+    //     //GradientStop { position: 0.7;   color: _mainStatusBGColor }
+    //     GradientStop { position: 1;     color: _root.color }
+    // }
+    // radius:         _margins / 4
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property var    _vehicleInAir:      _activeVehicle ? _activeVehicle.flying || _activeVehicle.landing : false
@@ -44,19 +47,20 @@ Rectangle {
         spacing:                    0
         anchors.fill:               parent
         anchors.leftMargin:         ScreenTools.defaultFontPixelHeight
+        anchors.rightMargin:        ScreenTools.defaultFontPixelHeight
         //anchors.horizontalCenter:   parent.horizontalCenter
         anchors.verticalCenter:     parent.verticalCenter
 
         QGCLabel {
             id:                 mainStatusLabel
             Layout.fillHeight:  true
-            Layout.preferredWidth: contentWidth + control.spacing
+            Layout.fillWidth:   true
+            //Layout.preferredWidth: contentWidth + control.spacing
             verticalAlignment:  Text.AlignVCenter
+            horizontalAlignment:Text.AlignHCenter
             text:               mainStatusText()
             font.pointSize:     ScreenTools.largeFontPointSize
             font.bold:          true
-            style:              Text.Raised
-            styleColor:         "#2f2f2f"
 
             property string _commLostText:      qsTr("Communication Lost")
             property string _readyToFlyText:    qsTr("Ready To Fly")
