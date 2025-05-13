@@ -354,8 +354,8 @@ Item {
     Rectangle {
         id:                 messageToastManagerRect
         anchors.margins:    _toolsMargin * 3
-        anchors.top:        windvane.visible ? windvane.bottom : parent.top
-        anchors.left:       toolStrip.right
+        anchors.top:        parent.top
+        anchors.left:       windvane.visible ? windvane.right : toolStrip.right
         width:              ScreenTools.isMobile ? parent.width / 2 : parent.width / 4
         height:             parent.height / 2
         color:              "transparent"
