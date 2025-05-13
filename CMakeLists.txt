@@ -159,6 +159,20 @@ endif()
 #               Qt6 Configuration
 #######################################################
 
+# The values specified below are the ONLY supported configurations for this version of QGC. 
+# Change these to something else at your own risk. Anything other than what is specified 
+# here is unsupported so don't expect any help with problems.
+
+if(QGC_ENABLE_HERELINK AND ANDROID)
+    set(QGC_QT_MINIMUM_VERSION "6.6.3" CACHE STRING "Minimum Supported Qt Version")
+    set(QGC_QT_MAXIMUM_VERSION "6.6.3" CACHE STRING "Maximum Supported Qt Version")
+    set(QGC_QT_ANDROID_MIN_SDK_VERSION "25" CACHE STRING "Android Min SDK Version")
+else()
+    set(QGC_QT_MINIMUM_VERSION "6.8.3" CACHE STRING "Minimum Supported Qt Version")
+    set(QGC_QT_MAXIMUM_VERSION "6.8.3" CACHE STRING "Maximum Supported Qt Version")
+    set(QGC_QT_ANDROID_MIN_SDK_VERSION "28" CACHE STRING "Android Min SDK Version")
+endif()
+
 find_package(Qt6
     ${QGC_QT_MINIMUM_VERSION}...${QGC_QT_MAXIMUM_VERSION}
     REQUIRED
@@ -512,10 +526,12 @@ qt_add_translations(${CMAKE_PROJECT_NAME}
 )
 
 set_source_files_properties(resources/qtquickcontrols2.conf PROPERTIES QT_RESOURCE_ALIAS qtquickcontrols2.conf)
+set_source_files_properties(${SDL_GAMECONTROLLERDB_PATH} PROPERTIES QT_RESOURCE_ALIAS gamecontrollerdb.txt)
 qt_add_resources(${CMAKE_PROJECT_NAME} "qgcresources_cmake"
     PREFIX "/"
     FILES
         resources/qtquickcontrols2.conf
+        ${SDL_GAMECONTROLLERDB_PATH}
 )
 
 # cmake_print_variables(QT_ALL_PLUGIN_TYPES_FOUND_VIA_FIND_PACKAGE)

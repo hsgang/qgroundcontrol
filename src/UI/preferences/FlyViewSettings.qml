@@ -36,6 +36,8 @@ SettingsPage {
     property Fact   _guidedMinimumAltitude:             _flyViewSettings.guidedMinimumAltitude
     property Fact   _guidedMaximumAltitude:             _flyViewSettings.guidedMaximumAltitude
     property Fact   _maxGoToLocationDistance:           _flyViewSettings.maxGoToLocationDistance
+    property Fact   _forwardFlightGoToLocationLoiterRad:    _flyViewSettings.forwardFlightGoToLocationLoiterRad
+    property Fact   _goToLocationRequiresConfirmInGuided:   _flyViewSettings.goToLocationRequiresConfirmInGuided
     property var    _viewer3DSettings:                  _settingsManager.viewer3DSettings
     property Fact   _viewer3DEnabled:                   _viewer3DSettings.enabled
     property Fact   _viewer3DOsmFilePath:               _viewer3DSettings.osmFilePath
@@ -193,7 +195,9 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Guided Commands")
-        visible:            _guidedMinimumAltitude.visible || _guidedMaximumAltitude.visible || _maxGoToLocationDistance.visible
+        visible:            _guidedMinimumAltitude.visible || _guidedMaximumAltitude.visible ||
+                            _maxGoToLocationDistance.visible || _forwardFlightGoToLocationLoiterRad.visible ||
+                            _goToLocationRequiresConfirmInGuided.visible
 
         LabelledFactTextField {
             Layout.fillWidth:   true
@@ -213,6 +217,20 @@ SettingsPage {
             Layout.fillWidth:   true
             label:              qsTr("Go To Location Max Distance")
             fact:               _maxGoToLocationDistance
+            visible:            fact.visible
+        }
+
+        LabelledFactTextField {
+            Layout.fillWidth:   true
+            label:              qsTr("Loiter Radius in Forward Flight Guided Mode")
+            fact:               _forwardFlightGoToLocationLoiterRad
+            visible:            fact.visible
+        }
+
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Require Confirmation for Go To Location in Guided Mode")
+            fact:               _goToLocationRequiresConfirmInGuided
             visible:            fact.visible
         }
     }

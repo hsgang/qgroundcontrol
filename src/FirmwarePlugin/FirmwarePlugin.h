@@ -217,7 +217,7 @@ public:
     virtual void startMission(Vehicle *vehicle) const;
 
     /// Command vehicle to move to specified location (altitude is included and relative)
-    virtual void guidedModeGotoLocation(Vehicle *vehicle, const QGeoCoordinate &gotoCoord) const;
+    virtual void guidedModeGotoLocation(Vehicle *vehicle, const QGeoCoordinate &gotoCoord, double forwardFlightLoiterRadius = 0.0) const;
 
     /// Command vehicle to change altitude
     ///     @param altitudeAMSL New altitude for vehicle in meters above mean sea level

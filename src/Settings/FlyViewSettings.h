@@ -26,6 +26,8 @@ public:
     DEFINE_SETTINGFACT(showAttitudeHUD)
     DEFINE_SETTINGFACT(lockNoseUpCompass)
     DEFINE_SETTINGFACT(maxGoToLocationDistance)
+    DEFINE_SETTINGFACT(forwardFlightGoToLocationLoiterRad)
+    DEFINE_SETTINGFACT(goToLocationRequiresConfirmInGuided)
     DEFINE_SETTINGFACT(keepMapCenteredOnVehicle)
     DEFINE_SETTINGFACT(showSimpleCameraControl)
     DEFINE_SETTINGFACT(showObstacleDistanceOverlay)
