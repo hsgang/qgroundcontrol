@@ -788,11 +788,20 @@ SetupPage {
                     anchors.left:   parent.left
                     anchors.right:  parent.right
 
+                    background: Rectangle {
+                        implicitWidth: parent.width
+                        implicitHeight: ScreenTools.defaultFontPixelHeight / 2
+                        color: qgcPal.windowShadeLight
+                        radius: height / 2
+                    }
+
                     contentItem: Item{
                         Rectangle {
                             width: progressBar.visualPosition * parent.width
                             height: parent.height
-                            color: "steelblue"
+                            color: qgcPal.colorGreen
+                            radius: height / 2
+                            visible: !progressBar.indeterminate
                         }
                     }
                 }
