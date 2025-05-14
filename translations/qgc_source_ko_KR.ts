@@ -9447,6 +9447,94 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>WelcomeView</name>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Link Management</source>
+        <translation>연결 관리</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Choose the link you want to connect.</source>
+        <translation>연결 항목을 선택하십시오</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Connect</source>
+        <translation>연결</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Disconnect</source>
+        <translation>연결 해제</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="343"/>
+        <source>Comm Links</source>
+        <translation>연결 관리</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Cloud Login [%1]</source>
+        <translation>클라우드 서버 [%1]</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Email</source>
+        <translation>이메일</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Input Email</source>
+        <translation>이메일을 입력하세요</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Password</source>
+        <translation>패스워드</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Input Password</source>
+        <translation>패스워드를 입력하세요</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Login</source>
+        <translation>로그인</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Logout</source>
+        <translation>로그아웃</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>User</source>
+        <translation>사용자</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Connecting...</source>
+        <translation>연결중...</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Connected</source>
+        <translation>연결됨</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/WelcomeView.qml" line="1"/>
+        <source>Automatically close in %1 seconds</source>
+        <translation>%1초 후에 팝업이 닫힙니다</translation>
+    </message>
+</context>
+<context>
     <name>HorizontalFactValueGrid</name>
     <message>
         <location filename="../src/QmlControls/HorizontalFactValueGrid.qml" line="128"/>
@@ -12683,7 +12771,6 @@ Is this really what you want?</source>
         <translation>%1초 후에 팝업이 닫힙니다</translation>
     </message>
 </context>
-
 <context>
     <name>PIDTuning</name>
     <message>

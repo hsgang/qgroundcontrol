@@ -121,10 +121,11 @@ ApplicationWindow {
     }
 
     function viewSwitch(currentToolbar) {
+        welcomeView.visible     = false
         flyView.visible         = false
         planView.visible        = false
-        analyzeView.visible     = false
         setupView.visible       = false
+        analyzeView.visible     = false
         appSettings.visible     = false
         toolbar.currentToolbar  = currentToolbar
         viewer3DWindow.close()
@@ -136,45 +137,70 @@ ApplicationWindow {
         }
         //mainWindow.popView()
         //viewSwitch(toolbar.flyViewToolbar)
-        flyView.visible = true
-        planView.visible = false
+        welcomeView.visible = false
+        flyView.visible     = true
+        planView.visible    = false
+        setupView.visible   = false
+        analyzeView.visible = false
+        appSettings.visible = false
     }
 
     function showPlanView() {
         //viewSwitch(toolbar.planViewToolbar)
-        planView.visible = true
-        flyView.visible = false
+        welcomeView.visible = false
+        flyView.visible     = false
+        planView.visible    = true
+        setupView.visible   = false
+        analyzeView.visible = false
+        appSettings.visible = false
     }
 
     function showAnalyzeTool() {
-        showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
+        //showTool(qsTr("Analyze Tools"), "AnalyzeView.qml", "/qmlimages/Analyze.svg")
+        welcomeView.visible = false
+        flyView.visible     = false
+        planView.visible    = false
+        setupView.visible   = false
+        analyzeView.visible = true
+        appSettings.visible = false
     }
 
-    // function showVehicleSetupTool(setupPage = "") {
-    //     showTool(qsTr("Vehicle Configuration"), "SetupView.qml", "/qmlimages/Quad.svg")
-    //     if (setupPage !== "") {
-    //         toolDrawerLoader.item.showNamedComponentPanel(setupPage)
     function showVehicleConfig() {
-        showTool(qsTr("Vehicle Configuration"), "SetupView.qml", "/qmlimages/Quad.svg")
+        //showTool(qsTr("Vehicle Configuration"), "SetupView.qml", "/qmlimages/Quad.svg")
+        welcomeView.visible = false
+        flyView.visible     = false
+        planView.visible    = false
+        setupView.visible   = true
+        analyzeView.visible = false
+        appSettings.visible = false
     }
 
     function showVehicleConfigParametersPage() {
         showVehicleConfig()
-        toolDrawerLoader.item.showParametersPanel()
+        //toolDrawerLoader.item.showParametersPanel()
+        setupView.showParametersPanel()
     }
 
     function showKnownVehicleComponentConfigPage(knownVehicleComponent) {
         showVehicleConfig()
         let vehicleComponent = globals.activeVehicle.autopilotPlugin.findKnownVehicleComponent(knownVehicleComponent)
         if (vehicleComponent) {
-            toolDrawerLoader.item.showVehicleComponentPanel(vehicleComponent)
+            //toolDrawerLoader.item.showVehicleComponentPanel(vehicleComponent)
+            setupView.showVehicleComponentPanel(vehicleComponent)
         }
     }
 
     function showAppSettings(settingsPage = "") {
-        showTool(qsTr("Application Settings"), "AppSettings.qml", "/qmlimages/Gears.svg")
+        // showTool(qsTr("Application Settings"), "AppSettings.qml", "/qmlimages/Gears.svg")
+        welcomeView.visible = false
+        flyView.visible     = false
+        planView.visible    = false
+        analyzeView.visible = false
+        setupView.visible   = false
+        appSettings.visible = true
         if (settingsPage !== "") {
-            toolDrawerLoader.item.showSettingsPage(settingsPage)
+            //toolDrawerLoader.item.showSettingsPage(settingsPage)
+            appSettings.showSettingsPage(settingsPage)
         }
     }
 
@@ -301,14 +327,38 @@ ApplicationWindow {
         color:          QGroundControl.globalPalette.window
     }
 
+    WelcomeView {
+        id:             welcomeView
+        anchors.fill:   parent
+    }
+
     FlyView { 
         id:                     flyView
         anchors.fill:           parent
         utmspSendActTrigger:    _utmspSendActTrigger
+        visible:        false
     }
 
     PlanView {
         id:             planView
+        anchors.fill:   parent
+        visible:        false
+    }
+
+    SetupView{
+        id:             setupView
+        anchors.fill:   parent
+        visible:        false
+    }
+
+    AnalyzeView{
+        id:             analyzeView
+        anchors.fill:   parent
+        visible:        false
+    }
+
+    AppSettings{
+        id:             appSettings
         anchors.fill:   parent
         visible:        false
     }
@@ -448,7 +498,7 @@ ApplicationWindow {
                                 toolDrawer.visible = false
                                 mainWindow.showVehicleConfig()
                                 checkedMenu()
-                                //setupButton.checked = true
+                                setupButton.checked = true
                                 viewSelectDrawer.visible = false
                             }
                         }
@@ -468,7 +518,7 @@ ApplicationWindow {
                                 toolDrawer.visible = false
                                 mainWindow.showAnalyzeTool()
                                 checkedMenu()
-                                //analyzeButton.checked = true
+                                analyzeButton.checked = true
                                 viewSelectDrawer.visible = false
                             }
                         }
@@ -488,7 +538,7 @@ ApplicationWindow {
                                 toolDrawer.visible = false
                                 mainWindow.showAppSettings()
                                 checkedMenu()
-                                //settingsButton.checked = true
+                                settingsButton.checked = true
                                 viewSelectDrawer.visible = false
                             }
                         }
@@ -726,62 +776,44 @@ ApplicationWindow {
         }
     }
 
-    Component {
-        id: planViewComponent
+    // Component {
+    //     id: planViewComponent
 
-        PlanView {
-            id: planView
-            // onActivationParamsSent:{
-            //     if(_utmspEnabled){
-            //         _startTimeStamp = startTime
-            //         _showVisible = activate
-            //         _flightID = flightID
-            //     }
-            // }
-        }
-    }
+    //     PlanView {
+    //         id: planView
+    //         // onActivationParamsSent:{
+    //         //     if(_utmspEnabled){
+    //         //         _startTimeStamp = startTime
+    //         //         _showVisible = activate
+    //         //         _flightID = flightID
+    //         //     }
+    //         // }
+    //     }
+    // }
 
-    Component {
-        id: analyzeViewComponent
+    // Component {
+    //     id: analyzeViewComponent
 
-        AnalyzeView{
-            id:             analyzeView
-        }
-    }
+    //     AnalyzeView{
+    //         id:             analyzeView
+    //     }
+    // }
 
-    Component {
-        id: setupViewComponent
+    // Component {
+    //     id: setupViewComponent
 
-        SetupView{
-            id:             setupView
-        }
-    }
+    //     SetupView{
+    //         id:             setupView
+    //     }
+    // }
 
-    Component {
-        id: appSettingsComponent
+    // Component {
+    //     id: appSettingsComponent
 
-        AppSettings{
-            id:             appSettings
-        }
-    }
-
-//    AnalyzeView{
-//        id:             analyzeView
-//        anchors.fill:   parent
-//        visible:        false
-//    }
-
-//    SetupView{
-//        id:             setupView
-//        anchors.fill:   parent
-//        visible:        false
-//    }
-
-//    AppSettings{
-//        id:             appSettings
-//        anchors.fill:   parent
-//        visible:        false
-//    }
+    //     AppSettings{
+    //         id:             appSettings
+    //     }
+    // }
 
     Drawer {
         id:             toolDrawer

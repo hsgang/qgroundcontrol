@@ -160,7 +160,7 @@ public:
     /// Returns the standard list of first run prompt ids for possible display. Actual display is based on the
     /// current AppSettings::firstRunPromptIds value. The order of this list also determines the order the prompts
     /// will be displayed in.
-    virtual QList<int> firstRunPromptStdIds() { return QList<int>({ kUnitsFirstRunPromptId, kOfflineVehicleFirstRunPromptId, kConnectFirstRunPromptId }); }
+    virtual QList<int> firstRunPromptStdIds() { return QList<int>({ kUnitsFirstRunPromptId, kOfflineVehicleFirstRunPromptId }); }
 
     /// Returns the custom build list of first run prompt ids for possible display. Actual display is based on the
     /// current AppSettings::firstRunPromptIds value. The order of this list also determines the order the prompts

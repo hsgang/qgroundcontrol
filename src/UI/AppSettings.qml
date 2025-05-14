@@ -16,6 +16,7 @@ import QGroundControl
 import QGroundControl.Palette
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
+import QGroundControl.FlightDisplay
 
 Rectangle {
     id:     settingsView
@@ -56,79 +57,92 @@ Rectangle {
 
     SettingsPagesModel { id: settingsPagesModel }
 
-    QGCFlickable {
-        id:                 buttonList
-        width:              buttonColumn.width
-        anchors.topMargin:  _defaultTextHeight / 2
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
-        anchors.leftMargin: _horizontalMargin
-        anchors.left:       parent.left
-        contentHeight:      buttonColumn.height
-        flickableDirection: Flickable.VerticalFlick
-        clip:               true
+    FlyViewToolBar {
+        id:         toolbar
+        visible:    !QGroundControl.videoManager.fullScreen
+    }
 
-        ColumnLayout {
-            id:         buttonColumn
-            spacing:    _defaultTextHeight / 2
+    Item {
+        id: appsettingsHolder
+        anchors.top:    toolbar.bottom
+        anchors.bottom: parent.bottom
+        anchors.left:   parent.left
+        anchors.right:  parent.right
 
-            Repeater {
-                id:     buttonRepeater
-                model:  settingsPagesModel
+        QGCFlickable {
+            id:                 buttonList
+            width:              buttonColumn.width
+            anchors.topMargin:  _defaultTextHeight / 2
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            anchors.leftMargin: _horizontalMargin
+            anchors.left:       parent.left
+            contentHeight:      buttonColumn.height
+            flickableDirection: Flickable.VerticalFlick
+            clip:               true
 
-                Component.onCompleted:  itemAt(0).checked = true
+            ColumnLayout {
+                id:         buttonColumn
+                spacing:    _defaultTextHeight / 2
 
-                SettingsButton {
-                    Layout.fillWidth:   true
-                    text:               name
-                    icon.source:        iconUrl
-                    visible:            pageVisible()
+                Repeater {
+                    id:     buttonRepeater
+                    model:  settingsPagesModel
 
-                    onClicked: {
-                        if (mainWindow.allowViewSwitch()) {
-                            if (rightPanel.source !== url) {
-                                rightPanel.source = url
+                    Component.onCompleted:  itemAt(0).checked = true
+
+                    SettingsButton {
+                        Layout.fillWidth:   true
+                        text:               name
+                        icon.source:        iconUrl
+                        visible:            pageVisible()
+
+                        onClicked: {
+                            if (mainWindow.allowViewSwitch()) {
+                                if (rightPanel.source !== url) {
+                                    rightPanel.source = url
+                                }
+                                checked = true
                             }
-                            checked = true
                         }
                     }
                 }
             }
         }
-    }
 
-    Rectangle {
-        id:  topDividerBar
-        anchors.top:            parent.top
-        anchors.right:          parent.right
-        anchors.left:           parent.left
-        height:                 1
-        color:                  Qt.darker(QGroundControl.globalPalette.text, 4)
-    }
+        Rectangle {
+            id:  topDividerBar
+            anchors.top:            parent.top
+            anchors.right:          parent.right
+            anchors.left:           parent.left
+            height:                 1
+            color:                  Qt.darker(QGroundControl.globalPalette.text, 4)
+        }
 
-    Rectangle {
-        id:                     divider
-        anchors.topMargin:      _verticalMargin
-        anchors.bottomMargin:   _verticalMargin
-        anchors.leftMargin:     _horizontalMargin
-        anchors.left:           buttonList.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        width:                  1
-        color:                  qgcPal.windowShadeLight
-    }
+        Rectangle {
+            id:                     divider
+            anchors.topMargin:      _verticalMargin
+            anchors.bottomMargin:   _verticalMargin
+            anchors.leftMargin:     _horizontalMargin
+            anchors.left:           buttonList.right
+            anchors.top:            parent.top
+            anchors.bottom:         parent.bottom
+            width:                  1
+            color:                  qgcPal.windowShadeLight
+        }
 
-    //-- Panel Contents
-    Loader {
-        id:                     rightPanel
-        anchors.leftMargin:     _horizontalMargin
-        anchors.rightMargin:    _horizontalMargin
-        anchors.topMargin:      _verticalMargin
-        anchors.bottomMargin:   _verticalMargin
-        anchors.left:           divider.right
-        anchors.right:          parent.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
+        //-- Panel Contents
+        Loader {
+            id:                     rightPanel
+            anchors.leftMargin:     _horizontalMargin
+            anchors.rightMargin:    _horizontalMargin
+            anchors.topMargin:      _verticalMargin
+            anchors.bottomMargin:   _verticalMargin
+            anchors.left:           divider.right
+            anchors.right:          parent.right
+            anchors.top:            parent.top
+            anchors.bottom:         parent.bottom
+        }
     }
 }
 

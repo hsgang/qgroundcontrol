@@ -18,6 +18,7 @@ import QGroundControl.Controls
 import QGroundControl.ScreenTools
 import QGroundControl.MultiVehicleManager
 import QGroundControl.Controllers
+import QGroundControl.FlightDisplay
 
 Rectangle {
     id:     setupView
@@ -227,136 +228,149 @@ Rectangle {
         }
     }
 
-    QGCFlickable {
-        id:                 buttonScroll
-        width:              buttonColumn.width
-        anchors.topMargin:  _defaultTextHeight / 2
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
-        anchors.leftMargin: _horizontalMargin
-        anchors.left:       parent.left
-        contentHeight:      buttonColumn.height
-        flickableDirection: Flickable.VerticalFlick
-        clip:               true
+    FlyViewToolBar {
+        id:         toolbar
+        visible:    !QGroundControl.videoManager.fullScreen
+    }
 
-        ColumnLayout {
-            id:         buttonColumn
-            spacing:    _defaultTextHeight / 2
+    Item {
+        id: setupviewHolder
+        anchors.top:    toolbar.bottom
+        anchors.bottom: parent.bottom
+        anchors.left:   parent.left
+        anchors.right:  parent.right
 
-            ConfigButton {
-                id:                 summaryButton
-                icon.source:        "/qmlimages/VehicleSummaryIcon.png"
-                checked:            true
-                text:               qsTr("Summary")
-                Layout.fillWidth:   true
+        QGCFlickable {
+            id:                 buttonScroll
+            width:              buttonColumn.width
+            anchors.topMargin:  _defaultTextHeight / 2
+            anchors.top:        parent.top
+            anchors.bottom:     parent.bottom
+            anchors.leftMargin: _horizontalMargin
+            anchors.left:       parent.left
+            contentHeight:      buttonColumn.height
+            flickableDirection: Flickable.VerticalFlick
+            clip:               true
 
-                onClicked: showSummaryPanel()
-            }
-
-            ConfigButton {
-                visible:            QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.flowImageIndex > 0 : false
-                text:               qsTr("Optical Flow")
-                Layout.fillWidth:   true
-                onClicked:          showPanel(this, "OpticalFlowSensor.qml")
-            }
-
-            ConfigButton {
-                id:                 joystickButton
-                icon.source:      "/qmlimages/Joystick.png"
-                setupComplete:      _activeJoystick ? _activeJoystick.calibrated || _buttonsOnly : false
-                visible:            _fullParameterVehicleAvailable && joystickManager.joysticks.length !== 0
-                text:               _forcedToButtonsOnly ? qsTr("Buttons") : qsTr("Joystick")
-                Layout.fillWidth:   true
-                onClicked:          showPanel(this, "JoystickConfig.qml")
-
-                property var    _activeJoystick:        joystickManager.activeJoystick
-                property bool   _buttonsOnly:           _activeJoystick ? _activeJoystick.axisCount == 0 : false
-                property bool   _forcedToButtonsOnly:   !QGroundControl.corePlugin.options.allowJoystickSelection && _buttonsOnly
-            }
-
-            Repeater {
-                id:     componentRepeater
-                model:  _fullParameterVehicleAvailable ? QGroundControl.multiVehicleManager.activeVehicle.autopilotPlugin.vehicleComponents : 0
+            ColumnLayout {
+                id:         buttonColumn
+                spacing:    _defaultTextHeight / 2
 
                 ConfigButton {
-                    icon.source:      modelData.iconResource
-                    setupComplete:      modelData.setupComplete
-                    text:               modelData.name
-                    visible:            modelData.setupSource.toString() !== ""
+                    id:                 summaryButton
+                    icon.source:        "/qmlimages/VehicleSummaryIcon.png"
+                    checked:            true
+                    text:               qsTr("Summary")
                     Layout.fillWidth:   true
-                    onClicked:          showVehicleComponentPanel(componentUrl)
 
-                    property var componentUrl: modelData
+                    onClicked: showSummaryPanel()
+                }
+
+                ConfigButton {
+                    visible:            QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.flowImageIndex > 0 : false
+                    text:               qsTr("Optical Flow")
+                    Layout.fillWidth:   true
+                    onClicked:          showPanel(this, "OpticalFlowSensor.qml")
+                }
+
+                ConfigButton {
+                    id:                 joystickButton
+                    icon.source:      "/qmlimages/Joystick.png"
+                    setupComplete:      _activeJoystick ? _activeJoystick.calibrated || _buttonsOnly : false
+                    visible:            _fullParameterVehicleAvailable && joystickManager.joysticks.length !== 0
+                    text:               _forcedToButtonsOnly ? qsTr("Buttons") : qsTr("Joystick")
+                    Layout.fillWidth:   true
+                    onClicked:          showPanel(this, "JoystickConfig.qml")
+
+                    property var    _activeJoystick:        joystickManager.activeJoystick
+                    property bool   _buttonsOnly:           _activeJoystick ? _activeJoystick.axisCount == 0 : false
+                    property bool   _forcedToButtonsOnly:   !QGroundControl.corePlugin.options.allowJoystickSelection && _buttonsOnly
+                }
+
+                Repeater {
+                    id:     componentRepeater
+                    model:  _fullParameterVehicleAvailable ? QGroundControl.multiVehicleManager.activeVehicle.autopilotPlugin.vehicleComponents : 0
+
+                    ConfigButton {
+                        icon.source:      modelData.iconResource
+                        setupComplete:      modelData.setupComplete
+                        text:               modelData.name
+                        visible:            modelData.setupSource.toString() !== ""
+                        Layout.fillWidth:   true
+                        onClicked:          showVehicleComponentPanel(componentUrl)
+
+                        property var componentUrl: modelData
+                    }
+                }
+
+                ConfigButton {
+                    id:                 parametersButton
+                    visible:            QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable &&
+                                        !QGroundControl.multiVehicleManager.activeVehicle.usingHighLatencyLink &&
+                                        _corePlugin.showAdvancedUI
+                    text:               qsTr("Parameters")
+                    Layout.fillWidth:   true
+                    icon.source:        "/qmlimages/subMenuButtonImage.png"
+                    onClicked:          showPanel(this, "SetupParameterEditor.qml")
+                }
+
+                ConfigButton {
+                    id:                 firmwareButton
+                    icon.source:      "/qmlimages/FirmwareUpgradeIcon.png"
+                    visible:            !ScreenTools.isMobile && _corePlugin.options.showFirmwareUpgrade
+                    text:               qsTr("Firmware")
+                    Layout.fillWidth:   true
+
+                    onClicked: showPanel(this, "FirmwareUpgrade.qml")
                 }
             }
+        }
 
-            ConfigButton {
-                id:                 parametersButton
-                visible:            QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable &&
-                                    !QGroundControl.multiVehicleManager.activeVehicle.usingHighLatencyLink &&
-                                    _corePlugin.showAdvancedUI
-                text:               qsTr("Parameters")
-                Layout.fillWidth:   true
-                icon.source:        "/qmlimages/subMenuButtonImage.png"
-                onClicked:          showPanel(this, "SetupParameterEditor.qml")
+        Rectangle {
+            id:  topDividerBar
+            anchors.top:            parent.top
+            anchors.right:          parent.right
+            anchors.left:           parent.left
+            height:                 1
+            color:                  Qt.darker(QGroundControl.globalPalette.text, 4)
+        }
+
+        Rectangle {
+            id:                     divider
+            anchors.topMargin:      _verticalMargin
+            anchors.bottomMargin:   _verticalMargin
+            anchors.leftMargin:     _horizontalMargin
+            anchors.left:           buttonScroll.right
+            anchors.top:            parent.top
+            anchors.bottom:         parent.bottom
+            width:                  1
+            color:                  qgcPal.windowShade
+        }
+
+        Loader {
+            id:                     panelLoader
+            anchors.topMargin:      _verticalMargin
+            anchors.bottomMargin:   _verticalMargin
+            anchors.leftMargin:     _horizontalMargin
+            anchors.rightMargin:    _horizontalMargin
+            anchors.left:           divider.right
+            anchors.right:          parent.right
+            anchors.top:            parent.top
+            anchors.bottom:         parent.bottom
+
+            function setSource(source, vehicleComponent) {
+                panelLoader.source = ""
+                panelLoader.vehicleComponent = vehicleComponent
+                panelLoader.source = source
             }
 
-            ConfigButton {
-                id:                 firmwareButton
-                icon.source:      "/qmlimages/FirmwareUpgradeIcon.png"
-                visible:            !ScreenTools.isMobile && _corePlugin.options.showFirmwareUpgrade
-                text:               qsTr("Firmware")
-                Layout.fillWidth:   true
-
-                onClicked: showPanel(this, "FirmwareUpgrade.qml")
+            function setSourceComponent(sourceComponent, vehicleComponent) {
+                panelLoader.sourceComponent = undefined
+                panelLoader.vehicleComponent = vehicleComponent
+                panelLoader.sourceComponent = sourceComponent
             }
+
+            property var vehicleComponent
         }
-    }
-
-    Rectangle {
-        id:  topDividerBar
-        anchors.top:            parent.top
-        anchors.right:          parent.right
-        anchors.left:           parent.left
-        height:                 1
-        color:                  Qt.darker(QGroundControl.globalPalette.text, 4)
-    }
-
-    Rectangle {
-        id:                     divider
-        anchors.topMargin:      _verticalMargin
-        anchors.bottomMargin:   _verticalMargin
-        anchors.leftMargin:     _horizontalMargin
-        anchors.left:           buttonScroll.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        width:                  1
-        color:                  qgcPal.windowShade
-    }
-
-    Loader {
-        id:                     panelLoader
-        anchors.topMargin:      _verticalMargin
-        anchors.bottomMargin:   _verticalMargin
-        anchors.leftMargin:     _horizontalMargin
-        anchors.rightMargin:    _horizontalMargin
-        anchors.left:           divider.right
-        anchors.right:          parent.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-
-        function setSource(source, vehicleComponent) {
-            panelLoader.source = ""
-            panelLoader.vehicleComponent = vehicleComponent
-            panelLoader.source = source
-        }
-
-        function setSourceComponent(sourceComponent, vehicleComponent) {
-            panelLoader.sourceComponent = undefined
-            panelLoader.vehicleComponent = vehicleComponent
-            panelLoader.sourceComponent = sourceComponent
-        }
-
-        property var vehicleComponent
     }
 }

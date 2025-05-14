@@ -538,6 +538,7 @@
         <file alias="DebugWindow.qml">src/UI/preferences/DebugWindow.qml</file>
         <file alias="MockLink.qml">src/UI/preferences/MockLink.qml</file>
         <file alias="MockLinkSettings.qml">src/UI/preferences/MockLinkSettings.qml</file>
+        <file alias="WelcomeView.qml">src/UI/WelcomeView.qml</file>
     </qresource>
     <qresource prefix="/FirstRunPromptDialogs">
         <file alias="ConnectFirstRunPrompt.qml">src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml</file>
