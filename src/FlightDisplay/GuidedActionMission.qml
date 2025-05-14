@@ -11,7 +11,7 @@ import QGroundControl.FlightDisplay
 
 GuidedToolStripAction {
     text:       _guidedController.startMissionTitle
-    iconSource: "/qmlimages/Plan.svg" //"/InstrumentValueIcons/path.svg"
+    iconSource: "/InstrumentValueIcons/waypoints.svg" //"/qmlimages/Plan.svg"
     visible:    _guidedController.showStartMission
     enabled:    _guidedController.showStartMission && !_guidedController._vehicleInMissionMode && _guidedController._vehicleArmed
     actionID:   _guidedController.actionStartMission

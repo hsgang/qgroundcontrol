@@ -11,7 +11,7 @@ import QGroundControl.FlightDisplay
 
 GuidedToolStripAction {
     text:       _guidedController.changeAltTitle
-    iconSource: "/InstrumentValueIcons/cloud-upload.svg"
+    iconSource: "/InstrumentValueIcons/move-vertical.svg"
     visible:    _guidedController.showChangeAlt
     enabled:    _guidedController.showChangeAlt
     actionID:   _guidedController.actionChangeAlt
