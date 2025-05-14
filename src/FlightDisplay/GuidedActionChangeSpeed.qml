@@ -11,7 +11,7 @@ import QGroundControl.FlightDisplay
 
 GuidedToolStripAction {
     text:       _guidedController.changeCruiseSpeedTitle
-    iconSource: "/InstrumentValueIcons/dashboard.svg"
+    iconSource: "/InstrumentValueIcons/gauge.svg"
     visible:    _guidedController.showChangeSpeed
     enabled:    _guidedController.showChangeSpeed
     actionID:   _guidedController.actionChangeSpeed
