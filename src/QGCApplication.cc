@@ -100,11 +100,6 @@ QGC_LOGGING_CATEGORY(QGCApplicationLog, "qgc.qgcapplication")
 
 // Qml Singleton factories
 
-static QObject *shapeFileHelperSingletonFactory(QQmlEngine*, QJSEngine*)
-{
-    return new ShapeFileHelper;
-}
-
 static QObject *mavlinkSingletonFactory(QQmlEngine*, QJSEngine*)
 {
     return new QGCMAVLink();
@@ -321,11 +316,9 @@ void QGCApplication::init()
 #endif
     qmlRegisterType<JoystickConfigController>("QGroundControl.Controllers", 1, 0, "JoystickConfigController");
 
-
-    qmlRegisterSingletonType<ShapeFileHelper>("QGroundControl.ShapeFileHelper", 1, 0, "ShapeFileHelper", shapeFileHelperSingletonFactory);
+    (void) qmlRegisterSingletonType<ShapeFileHelper>("QGroundControl.ShapeFileHelper", 1, 0, "ShapeFileHelper", [](QQmlEngine *, QJSEngine *) { return new ShapeFileHelper(); });
 
     qmlRegisterSingletonType<QGCMAVLink>("MAVLink", 1, 0, "MAVLink", mavlinkSingletonFactory);
-
 
     qmlRegisterSingletonType<SiYi>("SiYi.Object", 1, 0, "SiYi", [](QQmlEngine*, QJSEngine*)->QObject*{
         return SiYi::instance();
