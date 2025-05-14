@@ -45,8 +45,8 @@ CloudManager::CloudManager(QObject *parent)
     if (m_networkInfo) {
         connect(m_networkInfo, &QNetworkInformation::reachabilityChanged, this, &CloudManager::updateNetworkStatus);
         updateNetworkStatus();
-        qCDebug(CloudManagerLog) << "Network reachability: " << m_networkInfo->reachability();
-        qCDebug(CloudManagerLog) << "Nerwork TransportMedium: " << m_networkInfo->transportMedium();
+        //qCDebug(CloudManagerLog) << "Network reachability: " << m_networkInfo->reachability();
+        //qCDebug(CloudManagerLog) << "Nerwork TransportMedium: " << m_networkInfo->transportMedium();
     } else {
         qWarning() << "Failed to initialize QNetworkInformation instance.";
     }
@@ -114,6 +114,35 @@ void CloudManager::setMessageString(QString messageString)
 {
     m_messageString = messageString;
     emit messageStringChanged();
+}
+
+void CloudManager::checkConnection()
+{
+    QString url = "https://vxtkbbhlxkfzkhfdgtrk.supabase.co/auth/v1/health";
+
+    QNetworkRequest request;
+
+    request.setUrl(QUrl(url));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, QString("application/json"));
+    request.setRawHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dGtiYmhseGtmemtoZmRndHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyODkyNDYsImV4cCI6MjA2MDg2NTI0Nn0.yLo8vPPUhFhKUnt6VqnwSnerLRj3psSEtOZDHhekq2g");
+
+    if (!_nam) {
+        _nam = new QNetworkAccessManager(this);
+    }
+
+    QNetworkReply* reply = _nam->get(request);
+    // 응답 처리 람다 함수
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            qDebug() << "Supabase server is reachable!";
+            emit connectionSuccess(); // 서버 연결 성공 신호 발생
+        } else {
+            QString errorMsg = reply->errorString();
+            qDebug() << "Connection failed: " << errorMsg;
+            emit connectionFailed(errorMsg); // 서버 연결 실패 신호 발생
+        }
+        reply->deleteLater(); // 메모리 해제
+    });
 }
 
 void CloudManager::signUserIn(const QString &emailAddress, const QString &password)
@@ -368,14 +397,16 @@ void CloudManager::parseResponse(const QByteArray &response)
         return;
     }
 
+    // qCDebug(CloudManagerLog) << "parseResponse:" << response;
+
     QJsonObject jsonObject = jsonDocument.object();
 
     m_messageString.clear();
     setMessageString("");
 
-    if (jsonObject.contains("error")) {
+    if (jsonObject.contains("error_code")) {
         qCDebug(CloudManagerLog) << "Error occurred!" << response;
-        handleError(jsonObject["error"].toObject());
+        handleError(jsonObject["error_code"].toObject());
         return;
     }
 
@@ -386,6 +417,7 @@ void CloudManager::parseResponse(const QByteArray &response)
         //qCDebug(CloudManagerLog) << "Access Token:" << accessToken;
     } else {
         qCDebug(CloudManagerLog) << "No access_token found in response.";
+        return;
     }
 
     // full_name 추출
@@ -400,12 +432,15 @@ void CloudManager::parseResponse(const QByteArray &response)
                 //qCDebug(CloudManagerLog) << "User Full Name:" << m_signedUserName;
             } else {
                 qCDebug(CloudManagerLog) << "No full_name found in user_metadata.";
+                return;
             }
         } else {
             qCDebug(CloudManagerLog) << "No user_metadata found in user.";
+            return;
         }
     } else {
         qCDebug(CloudManagerLog) << "No user object found in response.";
+        return;
     }
 
     // 로그인 완료 신호
@@ -437,7 +472,7 @@ void CloudManager::handleError(const QJsonObject &errorObject)
         userMessage = "Authentication failed. Please check your credentials.";
         break;
     default:
-        userMessage = "An error occurred. Please try again later.";
+        userMessage = "응답 에러. 다시 시도해주세요.";
     }
 
     setMessageString(userMessage);

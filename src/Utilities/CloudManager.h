@@ -50,6 +50,7 @@ public:
     Q_PROPERTY(QList<QVariant> dnEntryPlanFile READ dnEntryPlanFile NOTIFY dnEntryPlanFileChanged);
     Q_PROPERTY(double fileDownloadProgress READ fileDownloadProgress NOTIFY fileDownloadProgressChanged);
 
+    Q_INVOKABLE void checkConnection();
     Q_INVOKABLE void signUserIn(const QString &emailAddress, const QString &password);
     Q_INVOKABLE void signUserOut();
     Q_INVOKABLE void loadDirFile(QString dirName);
@@ -115,6 +116,9 @@ signals:
 
     void insertFlightLogSuccess();
     void insertFlightLogFailure(QString errorMessage);
+
+    void connectionSuccess();
+    void connectionFailed(QString message);
 
 private:
     static const QString API_BASE_URL;

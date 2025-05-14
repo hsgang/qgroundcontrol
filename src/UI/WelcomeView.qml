@@ -97,8 +97,30 @@ Rectangle {
 
             ColumnLayout {
                 id:         loginLayout
-                spacing:    ScreenTools.defaultFontPixelHeight * 2
+                spacing:    ScreenTools.defaultFontPixelHeight
                 //anchors.fill: parent
+
+                Component.onCompleted: {
+                    QGroundControl.cloudManager.checkConnection()
+                }
+
+                Connections {
+                    target: QGroundControl.cloudManager
+                    onConnectionSuccess: {
+                        // connectionLabel.text = "인증 서버와 연결되었습니다"
+                        // connectionLabel.color = qgcPal.text
+                        icon1.color = qgcPal.colorGreen
+                        icon2.color = qgcPal.colorGreen
+                        icon3.color = qgcPal.colorGreen
+                    }
+                    onConnectionFailed: {
+                        // connectionLabel.text = "인증 서버 연결 없음"
+                        // connectionLabel.color = qgcPal.colorRed
+                        icon1.color = qgcPal.colorRed
+                        icon2.color = qgcPal.colorRed
+                        icon3.color = qgcPal.colorRed
+                    }
+                }
 
                 Rectangle {
                     id: imageRect
@@ -126,18 +148,54 @@ Rectangle {
                             shadowColor: qgcPal.text // _currentSelection ? (_currentSelection.link ? qgcPal.colorGreen : qgcPal.text) : qgcPal.text
                         }
                     }
-                    // QGCLabel {
-                    //     text:   _currentSelection ? _currentSelection.model : "NONE"
-                    //     anchors.top:   imageRect.top
-                    //     anchors.right:  imageRect.right
-                    // }
                 }
 
                 // QGCLabel {
-                //     text:       qsTr("Cloud Login [%1]").arg(QGroundControl.cloudManager.networkStatus)
+                //     id:         connectionLabel
+                //     text:       qsTr("✅Cloud Login [%1]").arg(QGroundControl.cloudManager.networkStatus)
                 //     wrapMode:   Text.WordWrap
                 //     font.bold:  true
                 // }
+
+                Row{
+                    Layout.alignment:   Qt.AlignHCenter
+                    spacing:            2
+
+                    QGCColoredImage {
+                        id:                 icon1
+                        height:             ScreenTools.defaultFontPixelHeight * 0.6
+                        width:              height
+                        sourceSize.height:  height
+                        source:             "/InstrumentValueIcons/computer-laptop.svg"
+                        fillMode:           Image.PreserveAspectFit
+                        color:              qgcPal.text
+                    }
+                    // Rectangle {
+                    //     id:                 icon2
+                    //     height: 1
+                    //     width:  ScreenTools.defaultFontPixelHeight * 0.6
+                    //     anchors.verticalCenter: parent.verticalCenter
+                    //     color:              qgcPal.text
+                    // }
+                    QGCColoredImage {
+                        id:                 icon2
+                        height:             ScreenTools.defaultFontPixelHeight * 0.6
+                        width:              height
+                        sourceSize.height:  height
+                        source:             "/InstrumentValueIcons/arrow-right-left.svg"
+                        fillMode:           Image.PreserveAspectFit
+                        color:              qgcPal.text
+                    }
+                    QGCColoredImage {
+                        id:                 icon3
+                        height:             ScreenTools.defaultFontPixelHeight * 0.6
+                        width:              height
+                        sourceSize.height:  height
+                        source:             "/InstrumentValueIcons/cloud.svg"
+                        fillMode:           Image.PreserveAspectFit
+                        color:              qgcPal.text
+                    }
+                }
 
                 // LabelledLabel {
                 //     Layout.fillWidth:   true
@@ -246,6 +304,8 @@ Rectangle {
                     }
 
                     QGCLabel {
+                        id:     statusLabel
+                        Layout.alignment: Qt.AlignHCenter
                         visible: _message !== "";
                         text: _message
                         color: qgcPal.colorRed
@@ -471,11 +531,25 @@ Rectangle {
                         implicitWidth: ScreenTools.defaultFontPixelWidth * 24
                         Layout.alignment: Qt.AlignHCenter
                         text:       "비행화면 보기"
+                        iconSource: "/qmlimages/PaperPlane.svg"
                         font.bold: true
                         onClicked: {
                             mainWindow.showFlyView()
                         }
                     }
+
+                    // SubMenuButton {
+                    //     implicitWidth: ScreenTools.defaultFontPixelWidth * 24
+                    //     Layout.alignment: Qt.AlignHCenter
+                    //     //height:             viewSelectDrawer._toolButtonHeight
+                    //     text:               "비행화면 보기"
+
+                    //     imageResource:      "/qmlimages/PaperPlane.svg"
+                    //     imageColor:         qgcPal.text
+                    //     onClicked: {
+                    //         mainWindow.showFlyView()
+                    //     }
+                    // }
                 }
             }
         }
