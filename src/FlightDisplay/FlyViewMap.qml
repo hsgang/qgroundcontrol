@@ -470,6 +470,10 @@ FlightMap {
                     selectedGrid.selectColor()
                 }
                 return
+            }
+        }
+    }
+    
     // GoTo Location forward flight circle visuals
     QGCMapCircleVisuals {
         id:                 fwdFlightGotoMapCircle
