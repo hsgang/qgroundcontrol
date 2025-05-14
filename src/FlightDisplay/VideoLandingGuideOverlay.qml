@@ -89,7 +89,7 @@ Item {
 
             // 최소/최대 크기 제한 (필요에 따라 조정)
             var minSize = _screenHeight * 0.05;
-            var maxSize = _screenHeight * 0.85;
+            var maxSize = _screenHeight * 1.20;
             rectSize = Math.max(minSize, Math.min(maxSize, rectSize));
 
             // 라운드 사각형을 그리기 위한 함수
@@ -108,12 +108,14 @@ Item {
             }
 
             // 라운드 사각형 그리기 (중심을 기준으로)
-            var rectX = centerX - rectSize / 2;
-            var rectY = centerY - rectSize / 2 + cameraYOffset;
-            drawRoundedRect(ctx, rectX, rectY, rectSize, rectSize, rectSize/4);
-            ctx.lineWidth = 5;
-            ctx.strokeStyle = "rgba(255, 0, 0, 0.2)";
-            ctx.stroke();
+            if (_distance >= 1 && _distance <= 20) {
+                var rectX = centerX - rectSize / 2;
+                var rectY = centerY - rectSize / 2 + cameraYOffset;
+                drawRoundedRect(ctx, rectX, rectY, rectSize, rectSize, rectSize / 4);
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = "#A0FF32";
+                ctx.stroke();
+            }
 
             // 선의 절대 길이 설정
             const verticalLineLength = _screenHeight * 0.2;  // 세로선 길이 (픽셀 단위)
