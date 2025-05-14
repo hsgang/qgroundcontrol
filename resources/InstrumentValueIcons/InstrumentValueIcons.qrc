@@ -301,6 +301,9 @@
         <file alias="path.svg">path.svg</file>
         <file alias="outlineMap.svg">outlineMap.svg</file>
         <file alias="gimbal-1.svg">gimbal-1.svg</file>
-		<file alias="gimbal-2.svg">gimbal-2.svg</file>
+        <file alias="gimbal-2.svg">gimbal-2.svg</file>
+        <file>move-vertical.svg</file>
+        <file>gauge.svg</file>
+        <file>waypoints.svg</file>
     </qresource>
 </RCC>
