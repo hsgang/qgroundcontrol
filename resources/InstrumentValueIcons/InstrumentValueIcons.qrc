@@ -305,5 +305,7 @@
         <file>move-vertical.svg</file>
         <file>gauge.svg</file>
         <file>waypoints.svg</file>
+        <file>arrow-right-left.svg</file>
+        <file>tablet-smartphone.svg</file>
     </qresource>
 </RCC>
