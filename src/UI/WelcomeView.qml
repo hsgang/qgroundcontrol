@@ -88,17 +88,20 @@ Rectangle {
 
         Rectangle {
             id: loginRect
-            height:                     loginLayout.height
-            width:                      loginLayout.width //ScreenTools.defaultFontPixelWidth * 36
+            height:                     loginLayout.height + _defaultTextHeight * 3
+            width:                      _defaultTextWidth * 40//loginLayout.width + _defaultTextHeight * 3
             color:                      "transparent"
             anchors.horizontalCenter:   parent.horizontalCenter
             anchors.verticalCenter:     parent.verticalCenter
             visible:                    true
+            border.color:               qgcPal.groupBorder
+            radius:                     _margins
 
             ColumnLayout {
                 id:         loginLayout
                 spacing:    ScreenTools.defaultFontPixelHeight
-                //anchors.fill: parent
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
 
                 Component.onCompleted: {
                     QGroundControl.cloudManager.checkConnection()
@@ -206,11 +209,13 @@ Rectangle {
                 LabelledLabel {
                     visible:            _signedIn
                     Layout.fillWidth:   true
+                    Layout.preferredHeight: loginFormLayout.height
                     label:              qsTr("User")
                     labelText:          _signedId == "" ? qsTr("Connecting...") : _signedId
                 }
 
                 ColumnLayout {
+                    id:                 loginFormLayout
                     Layout.fillWidth:   true
                     Layout.fillHeight:  true
                     spacing: _margins
@@ -310,11 +315,10 @@ Rectangle {
                         text: _message
                         color: qgcPal.colorRed
                     }
-                }
 
-                ColumnLayout {
-                    Layout.fillWidth:   true
-                    Layout.alignment: Qt.AlignHCenter
+                    Item {
+                        height: ScreenTools.defaultFontPixelHeight / 2
+                    }
 
                     QGCButton {
                         id: loginButton
@@ -345,6 +349,11 @@ Rectangle {
                     //         QGroundControl.cloudManager.password = "";
                     //     }
                     // }
+                }
+
+                ColumnLayout {
+                    Layout.fillWidth:   true
+                    Layout.alignment: Qt.AlignHCenter
 
                     QGCButton {
                         id: skipButton
@@ -379,16 +388,20 @@ Rectangle {
 
         Rectangle {
             id: connectRect
-            height:                     connectLayout.height
-            width:                      connectLayout.width
+            height:                     connectLayout.height + _defaultTextHeight * 2
+            width:                      connectLayout.width + _defaultTextHeight * 2
             color:                      "transparent"
             anchors.horizontalCenter:   parent.horizontalCenter
             anchors.verticalCenter:     parent.verticalCenter
             visible:                    false
+            border.color:               qgcPal.groupBorder
+            radius:                     _margins
 
             ColumnLayout {
                 id:         connectLayout
-                spacing:    ScreenTools.defaultFontPixelHeight / 2
+                spacing:    _margins
+                anchors.horizontalCenter:   parent.horizontalCenter
+                anchors.verticalCenter:     parent.verticalCenter
 
                 QGCLabel {
                     id:         connectSectionLabel
