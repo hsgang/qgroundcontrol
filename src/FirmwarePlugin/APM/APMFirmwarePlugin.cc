@@ -284,15 +284,15 @@ void APMFirmwarePlugin::_handleIncomingHeartbeat(Vehicle *vehicle, mavlink_messa
     mavlink_heartbeat_t heartbeat{};
     mavlink_msg_heartbeat_decode(message, &heartbeat);
 
-    if (message->compid == MAV_COMP_ID_AUTOPILOT1) {
-        bool flying = false;
+    // if (message->compid == MAV_COMP_ID_AUTOPILOT1) {
+    //     bool flying = false;
 
-        // We pull Vehicle::flying state from HEARTBEAT on ArduPilot. This is a firmware specific test.
-        if (vehicle->armed() && ((heartbeat.system_status == MAV_STATE_ACTIVE) || (heartbeat.system_status == MAV_STATE_CRITICAL) || (heartbeat.system_status == MAV_STATE_EMERGENCY))) {
-            flying = true;
-        }
-        vehicle->_setFlying(flying);
-    }
+    //     // We pull Vehicle::flying state from HEARTBEAT on ArduPilot. This is a firmware specific test.
+    //     if (vehicle->armed() && ((heartbeat.system_status == MAV_STATE_ACTIVE) || (heartbeat.system_status == MAV_STATE_CRITICAL) || (heartbeat.system_status == MAV_STATE_EMERGENCY))) {
+    //         flying = true;
+    //     }
+    //     vehicle->_setFlying(flying);
+    // }
 
     // We need to know whether this component is part of the ArduPilot stack code or not so we can adjust mavlink quirks appropriately.
     // If the component sends a heartbeat we can know that. If it's doesn't there is pretty much no way to know.
