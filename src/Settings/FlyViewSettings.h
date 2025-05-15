@@ -58,4 +58,6 @@ public:
     DEFINE_SETTINGFACT(showVehicleStepMoveControl)
     DEFINE_SETTINGFACT(vehicleMoveStep)
     DEFINE_SETTINGFACT(showLandingGuideView)
+    DEFINE_SETTINGFACT(requestControlAllowTakeover)
+    DEFINE_SETTINGFACT(requestControlTimeout)
 };

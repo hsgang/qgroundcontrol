@@ -19,6 +19,7 @@
         <file alias="VehicleGPSIndicator.qml">src/UI/toolbar/VehicleGPSIndicator.qml</file>
         <file alias="VehicleIndicator.qml">src/UI/toolbar/VehicleIndicator.qml</file>
         <file alias="MessageIndicator.qml">src/UI/toolbar/MessageIndicator.qml</file>
+        <file alias="GCSControlIndicator.qml">src/UI/toolbar/GCSControlIndicator.qml</file>
     </qresource>
     <qresource prefix="/checklists">
         <file alias="DefaultChecklist.qml">src/FlightDisplay/DefaultChecklist.qml</file>
@@ -199,6 +200,7 @@
         <file alias="QGroundControl/Controls/VehicleRotationCal.qml">src/QmlControls/VehicleRotationCal.qml</file>
         <file alias="QGroundControl/Controls/VehicleSummaryRow.qml">src/QmlControls/VehicleSummaryRow.qml</file>
         <file alias="QGroundControl/Controls/VTOLLandingPatternMapVisual.qml">src/PlanView/VTOLLandingPatternMapVisual.qml</file>
+        <file alias="QGroundControl/Controls/TimedProgressTracker.qml">src/QmlControls/TimedProgressTracker.qml</file>
         <file alias="QGroundControl/FactControls/AltitudeFactTextField.qml">src/FactSystem/FactControls/AltitudeFactTextField.qml</file>
         <file alias="QGroundControl/FactControls/FactBitmask.qml">src/FactSystem/FactControls/FactBitmask.qml</file>
         <file alias="QGroundControl/FactControls/FactCheckBox.qml">src/FactSystem/FactControls/FactCheckBox.qml</file>

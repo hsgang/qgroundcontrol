@@ -163,7 +163,6 @@ Map {
         property real lastMouseY
 
         onPressed: (touchPoints) => {
-            //console.log("onPressed", touchPoints[0].x, touchPoints[0].y)
             lastMouseX = touchPoints[0].x
             lastMouseY = touchPoints[0].y
         }
