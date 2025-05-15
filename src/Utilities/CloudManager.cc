@@ -134,11 +134,11 @@ void CloudManager::checkConnection()
     // 응답 처리 람다 함수
     connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
-            qDebug() << "Supabase server is reachable!";
+            //qDebug() << "Supabase server is reachable!";
             emit connectionSuccess(); // 서버 연결 성공 신호 발생
         } else {
             QString errorMsg = reply->errorString();
-            qDebug() << "Connection failed: " << errorMsg;
+            //qDebug() << "Connection failed: " << errorMsg;
             emit connectionFailed(errorMsg); // 서버 연결 실패 신호 발생
         }
         reply->deleteLater(); // 메모리 해제
