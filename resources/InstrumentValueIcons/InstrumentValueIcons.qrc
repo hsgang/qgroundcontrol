@@ -307,5 +307,8 @@
         <file>waypoints.svg</file>
         <file>arrow-right-left.svg</file>
         <file>tablet-smartphone.svg</file>
+        <file>shield-user.svg</file>
+        <file>log-in.svg</file>
+        <file>square-x.svg</file>
     </qresource>
 </RCC>

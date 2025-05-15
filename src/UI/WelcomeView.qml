@@ -319,6 +319,7 @@ Rectangle {
                     QGCButton {
                         id: loginButton
                         text: qsTr("Login")
+                        iconSource: "/InstrumentValueIcons/log-in.svg"
                         visible: !_signedIn
                         Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 18
                         Layout.alignment: Qt.AlignHCenter
@@ -355,6 +356,23 @@ Rectangle {
                             connectRect.visible = true
                         }
                     }
+
+                    Item {
+                        height: ScreenTools.defaultFontPixelHeight / 2
+                    }
+
+                    QGCButton {
+                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 18
+                        text:               "종료"
+                        onClicked: {
+                            if (mainWindow.allowViewSwitch()) {
+                                mainWindow.showMessageDialog(closeDialogTitle,
+                                                  qsTr("애플리케이션을 종료하시겠습니까?"),
+                                                  Dialog.Yes | Dialog.No,
+                                                  function() { finishCloseProcess() })
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -370,11 +388,11 @@ Rectangle {
 
             ColumnLayout {
                 id:         connectLayout
-                spacing:    ScreenTools.defaultFontPixelHeight
+                spacing:    ScreenTools.defaultFontPixelHeight / 2
 
                 QGCLabel {
                     id:         connectSectionLabel
-                    text:       qsTr("연결 항목")
+                    text:       "기체 연결 리스트"
                     font.bold:  true
                     Layout.preferredWidth: flickableRect.width
                     wrapMode: Text.WordWrap
@@ -538,18 +556,24 @@ Rectangle {
                         }
                     }
 
-                    // SubMenuButton {
-                    //     implicitWidth: ScreenTools.defaultFontPixelWidth * 24
-                    //     Layout.alignment: Qt.AlignHCenter
-                    //     //height:             viewSelectDrawer._toolButtonHeight
-                    //     text:               "비행화면 보기"
+                    Item {
+                        height: ScreenTools.defaultFontPixelHeight / 2
+                    }
 
-                    //     imageResource:      "/qmlimages/PaperPlane.svg"
-                    //     imageColor:         qgcPal.text
-                    //     onClicked: {
-                    //         mainWindow.showFlyView()
-                    //     }
-                    // }
+                    QGCButton {
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 18
+                        text:               "종료"
+                        onClicked: {
+                            if (mainWindow.allowViewSwitch()) {
+                                mainWindow.showMessageDialog(closeDialogTitle,
+                                                  qsTr("애플리케이션을 종료하시겠습니까?"),
+                                                  Dialog.Yes | Dialog.No,
+                                                  function() { finishCloseProcess() })
+                                //mainWindow.finishCloseProcess()
+                            }
+                        }
+                    }
                 }
             }
         }
