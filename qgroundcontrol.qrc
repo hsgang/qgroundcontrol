@@ -2,8 +2,6 @@
     <qresource prefix="/toolbar">
         <file alias="APMSupportForwardingIndicator.qml">src/UI/toolbar/APMSupportForwardingIndicator.qml</file>
         <file alias="ArmedIndicator.qml">src/UI/toolbar/ArmedIndicator.qml</file>
-        <file alias="GPS2Indicator.qml">src/UI/toolbar/GPS2Indicator.qml</file>
-        <file alias="GPSIndicator.qml">src/UI/toolbar/GPSIndicator.qml</file>
         <file alias="GPSRTKIndicator.qml">src/UI/toolbar/GPSRTKIndicator.qml</file>
         <file alias="GimbalIndicator.qml">src/UI/toolbar/GimbalIndicator.qml</file>
         <file alias="JoystickIndicator.qml">src/UI/toolbar/JoystickIndicator.qml</file>

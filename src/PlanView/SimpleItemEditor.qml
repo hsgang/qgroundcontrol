@@ -122,7 +122,7 @@ Rectangle {
             anchors.left:   parent.left
             anchors.right:  parent.right
             visible:        !missionItem.wizardMode// && _specifiesAltitude
-            _borderColor:   "transparent"
+            outerBorderColor:   "transparent"
             _margins:       ScreenTools.defaultFontPixelWidth
 
             LabelledButton {

@@ -144,7 +144,7 @@ Rectangle {
                 anchors.right:          parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 height:                 rowLayout.height
-                onClicked:              mainWindow.showIndicatorDrawer(overallStatusComponent)
+                onClicked:              mainWindow.showIndicatorDrawer(overallStatusComponent, control)
 
                 property Component overallStatusComponent: _activeVehicle ? overallStatusIndicatorPage : overallStatusOfflineIndicatorPage
             }
@@ -167,7 +167,7 @@ Rectangle {
 
             QGCMouseArea {
                 anchors.fill:   parent
-                onClicked:      mainWindow.showIndicatorDrawer(vtolTransitionIndicatorPage)
+                onClicked:      mainWindow.showIndicatorDrawer(vtolTransitionIndicatorPage, control)
             }
         }
 

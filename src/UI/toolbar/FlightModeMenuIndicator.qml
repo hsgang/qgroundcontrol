@@ -20,7 +20,7 @@ import QGroundControl.FactSystem
 import QGroundControl.FactControls
 
 Item {
-    id: _root
+    id: control
 
     property bool showIndicator: true
 
@@ -63,7 +63,7 @@ Item {
 
         MouseArea {
             anchors.fill:   parent
-            onClicked:      mainWindow.showIndicatorDrawer(drawerComponent)
+            onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
         }
     }
 

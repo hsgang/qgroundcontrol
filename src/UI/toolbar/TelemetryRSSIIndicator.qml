@@ -40,11 +40,6 @@ Item {
     //     color:              qgcPal.buttonText
     // }
 
-    MouseArea {
-        anchors.fill:   parent
-        onClicked:      mainWindow.showIndicatorDrawer(telemRSSIInfoPage, control)
-    }
-
     Component {
         id: telemRSSIInfo
 
@@ -132,7 +127,7 @@ Item {
         anchors.fill: parent
         onClicked: {
             //mainWindow.showIndicatorPopup(_root, telemRSSIInfo)
-            mainWindow.showIndicatorDrawer(telemRSSIInfo)
+            mainWindow.showIndicatorDrawer(telemRSSIInfo, control)
         }
     }
 }

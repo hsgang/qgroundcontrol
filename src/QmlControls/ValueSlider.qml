@@ -77,7 +77,7 @@ Control {
             control.value = value
             _recalcSliderPos(false)
         }
-    }    
+    }
 
     Component.onCompleted: {
         _recalcSliderPos(false)

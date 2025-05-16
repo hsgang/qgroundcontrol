@@ -195,7 +195,7 @@ Rectangle {
 
         MouseArea{
             anchors.fill:       parent
-            onClicked:          mainWindow.showIndicatorDrawer(widgetControlComponent)
+            onClicked:          mainWindow.showIndicatorDrawer(widgetControlComponent, widgetControlButton)
         }
     }
 

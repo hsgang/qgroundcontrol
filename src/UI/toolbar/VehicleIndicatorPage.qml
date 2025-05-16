@@ -150,84 +150,117 @@ ToolIndicatorPage {
 
     expandedComponent : Component {
 
-        SettingsGroupLayout{
-            heading: qsTr("Vehicle Parameter")
+        ColumnLayout {
 
-            FactSlider {
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 60
-                Layout.fillWidth:   true
-                label:      "Responsiveness"
-                fact:       atcInputTCFact
-                //from:       0.01
-                //to:         0.5
-                majorTickStepSize:  0.1
-                visible:    true
-            }
-            FactSlider {
-                Layout.fillWidth:   true
-                label:      "Loiter Horizontal Speed(cm/s)"
-                fact:       loitSpeedFact
-                from:       500
-                to:         1500
-                majorTickStepSize:   10
-                visible:    true
-            }
-            FactSlider {
-                Layout.fillWidth:   true
-                label:      "WP Horizontal Speed(cm/s)"
-                fact:       wpnavSpeedFact
-                from:       500
-                to:         1500
-                majorTickStepSize:   10
-                visible:    true
-            }
-            FactSlider {
-                Layout.fillWidth:   true
-                label:      "WP Climb Speed(cm/s)"
-                fact:       wpnavSpeedUpFact
-                from:       100
-                to:         500
-                majorTickStepSize:   10
-                visible:    true
-            }
-            FactSlider {
-                Layout.fillWidth:   true
-                label:      "WP Descent Speed(cm/s)"
-                fact:       wpnavSpeedDnFact
-                from:       100
-                to:         500
-                majorTickStepSize:   10
-                visible:    true
-            }
-            FactSlider {
-                Layout.fillWidth:   true
-                label:      "Mission Turning Radius(cm)"
-                fact:       wpnavRadiusFact
-                from:       200
-                to:         1000
-                majorTickStepSize:   10
-                visible:    true
+            SettingsGroupLayout{
+                heading: qsTr("Vehicle Parameter")
+
+                FactSlider {
+                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 60
+                    Layout.fillWidth:   true
+                    label:      "Responsiveness"
+                    fact:       atcInputTCFact
+                    //from:       0.01
+                    //to:         0.5
+                    majorTickStepSize:  0.1
+                    visible:    true
+                }
+                FactSlider {
+                    Layout.fillWidth:   true
+                    label:      "Loiter Horizontal Speed(cm/s)"
+                    fact:       loitSpeedFact
+                    from:       500
+                    to:         1500
+                    majorTickStepSize:   10
+                    visible:    true
+                }
+                FactSlider {
+                    Layout.fillWidth:   true
+                    label:      "WP Horizontal Speed(cm/s)"
+                    fact:       wpnavSpeedFact
+                    from:       500
+                    to:         1500
+                    majorTickStepSize:   10
+                    visible:    true
+                }
+                FactSlider {
+                    Layout.fillWidth:   true
+                    label:      "WP Climb Speed(cm/s)"
+                    fact:       wpnavSpeedUpFact
+                    from:       100
+                    to:         500
+                    majorTickStepSize:   10
+                    visible:    true
+                }
+                FactSlider {
+                    Layout.fillWidth:   true
+                    label:      "WP Descent Speed(cm/s)"
+                    fact:       wpnavSpeedDnFact
+                    from:       100
+                    to:         500
+                    majorTickStepSize:   10
+                    visible:    true
+                }
+                FactSlider {
+                    Layout.fillWidth:   true
+                    label:      "Mission Turning Radius(cm)"
+                    fact:       wpnavRadiusFact
+                    from:       200
+                    to:         1000
+                    majorTickStepSize:   10
+                    visible:    true
+                }
+
+                LabelledFactTextField {
+                    label:      rtlAltitudeFact.name
+                    fact:       rtlAltitudeFact
+                    visible:    true
+                }
+
+                LabelledFactTextField {
+                    label:      landSpeedFact.name
+                    fact:       landSpeedFact
+                    visible:    landSpeedFact && controller.vehicle
+                    enabled:     !controller.vehicle.fixedWing
+                }
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth:   true
+                    Layout.columnSpan:  2
+                    text:               qsTr("Precision Landing")
+                    fact:               precisionLandingFact
+                    visible:            precisionLandingFact
+                }
             }
 
-            LabelledFactTextField {
-                label:      rtlAltitudeFact.name
-                fact:       rtlAltitudeFact
-                visible:    true
-            }
-
-            LabelledFactTextField {
-                label:      landSpeedFact.name
-                fact:       landSpeedFact
-                visible:    landSpeedFact && controller.vehicle
-                enabled:     !controller.vehicle.fixedWing
-            }
-
-            FactCheckBoxSlider {
+            SettingsGroupLayout {
+                heading:            qsTr("Failsafe Options")
                 Layout.fillWidth:   true
-                Layout.columnSpan:  2
-                text:               qsTr("Precision Landing")
-                fact:               precisionLandingFact
-                visible:            precisionLandingFact
+
+                Repeater {
+                    id:     repeater
+                    model:  fact ? fact.bitmaskStrings : []
+
+                    property Fact fact: controller.getParameterFact(-1, "FS_OPTIONS")
+
+                    QGCCheckBoxSlider {
+                        Layout.fillWidth: true
+                        text:               modelData
+                        checked:            fact.value & fact.bitmaskValues[index]
+
+                        property Fact fact: repeater.fact
+
+                        onClicked: {
+                            var i
+                            var otherCheckbox
+                            if (checked) {
+                                fact.value |= fact.bitmaskValues[index]
+                            } else {
+                                fact.value &= ~fact.bitmaskValues[index]
+                            }
+                        }
+                    }
+                }
             }
         }
     }

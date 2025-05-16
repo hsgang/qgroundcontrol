@@ -683,135 +683,96 @@ ApplicationWindow {
         }
     }
 
-    Drawer {
-        id:             componentDrawer
-        y:              ScreenTools.toolbarHeight
-        height:         mainWindow.height - ScreenTools.toolbarHeight
-        width:          componentDrawerLayoutRect.width
-        edge:           Qt.RightEdge
-        interactive:    true
-        dragMargin:     0
-        visible:        false
-        modal:          true
-        padding:        _margins
+    // Drawer {
+    //     id:             componentDrawer
+    //     y:              ScreenTools.toolbarHeight
+    //     height:         mainWindow.height - ScreenTools.toolbarHeight
+    //     width:          componentDrawerLayoutRect.width
+    //     edge:           Qt.RightEdge
+    //     interactive:    true
+    //     dragMargin:     0
+    //     visible:        false
+    //     modal:          true
+    //     padding:        _margins
 
-        property var sourceComponent
-        property bool _expanded: false
+    //     property var sourceComponent
+    //     property bool _expanded: false
 
-        property real _margins: ScreenTools.defaultFontPixelHeight / 4
+    //     property real _margins: ScreenTools.defaultFontPixelHeight / 4
 
-        onVisibleChanged: {
-            if(visible === true) {
-                componentDrawerLoader.sourceComponent   = componentDrawer.sourceComponent
-                _expanded                               = false
-            } else if(visible === false) {
-                componentDrawerLoader.sourceComponent   = undefined
-                _expanded                               = false
-            }
-        }
-
-        Rectangle {
-            id:     componentDrawerLayoutRect
-            width:  componentContents.width + (componentDrawer._margins * 2)
-            height: parent.height
-            color:  qgcPal.window
-
-            QGCFlickable {
-                anchors.margins:    componentDrawer._margins
-                anchors.top:        parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
-                flickableDirection: QGCFlickable.VerticalFlick
-                width:  Math.min(mainWindow.contentItem.width - (2 * componentDrawer._margins) - (componentDrawer.padding * 2), componentDrawerLoader.width)
-                height: { componentExpandButton.visible ?
-                    parent.height - componentExpandButton.height - ScreenTools.defaultFontPixelHeight :
-                    parent.height - ScreenTools.defaultFontPixelHeight }
-                contentWidth:   componentContents.width
-                contentHeight:  componentContents.height
-
-                Rectangle {
-                    id:         componentContents
-                    anchors.margins: componentDrawer._margins
-                    width:      300 //componentDrawerLoader.width
-                    height:     20
-                    color:      "transparent"
-
-                    Loader {
-                        id: componentDrawerLoader
-                        //anchors.fill: parent
-
-                        onHeightChanged: componentContents.height = height
-                        onWidthChanged: componentContents.width = width + (componentDrawer._margins * 2)
-
-                        Binding {
-                            target:     componentDrawerLoader.item
-                            property:   "expanded"
-                            value:      componentDrawer._expanded
-                        }
-
-                        Binding {
-                            target:     componentDrawerLoader.item
-                            property:   "dividerHeight"
-                            value:      componentDrawer.height
-                        }
-                    }
-                } //componentContents
-            }
-
-            QGCButton {
-                id:                         componentExpandButton
-                anchors.bottom:             componentDrawerLayoutRect.bottom
-                anchors.margins:            ScreenTools.defaultFontPixelHeight / 4
-                anchors.right:              componentDrawerLayoutRect.right
-                visible:                    componentDrawerLoader.item && componentDrawerLoader.item.showExpand //&& !componentDrawer._expanded
-                text:                       !componentDrawer._expanded ? qsTr("Detail") : qsTr("Unfold")
-
-                onClicked: {
-                    if(!componentDrawer._expanded){
-                        componentDrawer._expanded = true
-                    } else if(componentDrawer._expanded) {
-                        componentDrawer._expanded = false
-                    }
-                }
-            }
-        }
-    }
-
-    // Component {
-    //     id: planViewComponent
-
-    //     PlanView {
-    //         id: planView
-    //         // onActivationParamsSent:{
-    //         //     if(_utmspEnabled){
-    //         //         _startTimeStamp = startTime
-    //         //         _showVisible = activate
-    //         //         _flightID = flightID
-    //         //     }
-    //         // }
+    //     onVisibleChanged: {
+    //         if(visible === true) {
+    //             componentDrawerLoader.sourceComponent   = componentDrawer.sourceComponent
+    //             _expanded                               = false
+    //         } else if(visible === false) {
+    //             componentDrawerLoader.sourceComponent   = undefined
+    //             _expanded                               = false
+    //         }
     //     }
-    // }
 
-    // Component {
-    //     id: analyzeViewComponent
+    //     Rectangle {
+    //         id:     componentDrawerLayoutRect
+    //         width:  componentContents.width + (componentDrawer._margins * 2)
+    //         height: parent.height
+    //         color:  qgcPal.window
 
-    //     AnalyzeView{
-    //         id:             analyzeView
-    //     }
-    // }
+    //         QGCFlickable {
+    //             anchors.margins:    componentDrawer._margins
+    //             anchors.top:        parent.top
+    //             anchors.horizontalCenter: parent.horizontalCenter
+    //             flickableDirection: QGCFlickable.VerticalFlick
+    //             width:  Math.min(mainWindow.contentItem.width - (2 * componentDrawer._margins) - (componentDrawer.padding * 2), componentDrawerLoader.width)
+    //             height: { componentExpandButton.visible ?
+    //                 parent.height - componentExpandButton.height - ScreenTools.defaultFontPixelHeight :
+    //                 parent.height - ScreenTools.defaultFontPixelHeight }
+    //             contentWidth:   componentContents.width
+    //             contentHeight:  componentContents.height
 
-    // Component {
-    //     id: setupViewComponent
+    //             Rectangle {
+    //                 id:         componentContents
+    //                 anchors.margins: componentDrawer._margins
+    //                 width:      300 //componentDrawerLoader.width
+    //                 height:     20
+    //                 color:      "transparent"
 
-    //     SetupView{
-    //         id:             setupView
-    //     }
-    // }
+    //                 Loader {
+    //                     id: componentDrawerLoader
+    //                     //anchors.fill: parent
 
-    // Component {
-    //     id: appSettingsComponent
+    //                     onHeightChanged: componentContents.height = height
+    //                     onWidthChanged: componentContents.width = width + (componentDrawer._margins * 2)
 
-    //     AppSettings{
-    //         id:             appSettings
+    //                     Binding {
+    //                         target:     componentDrawerLoader.item
+    //                         property:   "expanded"
+    //                         value:      componentDrawer._expanded
+    //                     }
+
+    //                     Binding {
+    //                         target:     componentDrawerLoader.item
+    //                         property:   "dividerHeight"
+    //                         value:      componentDrawer.height
+    //                     }
+    //                 }
+    //             } //componentContents
+    //         }
+
+    //         QGCButton {
+    //             id:                         componentExpandButton
+    //             anchors.bottom:             componentDrawerLayoutRect.bottom
+    //             anchors.margins:            ScreenTools.defaultFontPixelHeight / 4
+    //             anchors.right:              componentDrawerLayoutRect.right
+    //             visible:                    componentDrawerLoader.item && componentDrawerLoader.item.showExpand //&& !componentDrawer._expanded
+    //             text:                       !componentDrawer._expanded ? qsTr("Detail") : qsTr("Unfold")
+
+    //             onClicked: {
+    //                 if(!componentDrawer._expanded){
+    //                     componentDrawer._expanded = true
+    //                 } else if(componentDrawer._expanded) {
+    //                     componentDrawer._expanded = false
+    //                 }
+    //             }
+    //         }
     //     }
     // }
 
@@ -1045,16 +1006,19 @@ ApplicationWindow {
     //-------------------------------------------------------------------------
     //-- Indicator Drawer
 
-    function showIndicatorDrawer(drawerComponent) {
-        componentDrawer.sourceComponent = drawerComponent
-        componentDrawer.dim = false
-        componentDrawer.visible = true
+    function showIndicatorDrawer(drawerComponent, indicatorItem) {
+        // componentDrawer.sourceComponent = drawerComponent
+        // componentDrawer.dim = false
+        // componentDrawer.visible = true
+        indicatorDrawer.sourceComponent = drawerComponent
+        indicatorDrawer.indicatorItem = indicatorItem
+        indicatorDrawer.open()
     }
 
     function closeIndicatorDrawer() {
-        componentDrawer.close()
+        //componentDrawer.close()
         indicatorDrawer.close()
-        viewSelectDrawer.close()
+        //viewSelectDrawer.close()
     }
 
     Popup {
@@ -1100,17 +1064,14 @@ ApplicationWindow {
             Rectangle {
                 id:             backgroundRect
                 anchors.fill:   parent
-                height:         indicatorDrawerLoader.height
                 color:          QGroundControl.globalPalette.window
                 radius:         indicatorDrawer._margins
                 opacity:        0.85
             }
 
             Rectangle {
-                anchors.top:                backgroundRect.top
-                anchors.topMargin:          ScreenTools.defaultFontPixelHeight / 4
-                anchors.left:               backgroundRect.right
-                anchors.leftMargin:         ScreenTools.defaultFontPixelHeight / 4
+                anchors.horizontalCenter:   backgroundRect.right
+                anchors.verticalCenter:     backgroundRect.top
                 width:                      ScreenTools.largeFontPixelHeight
                 height:                     width
                 radius:                     width / 2
@@ -1122,13 +1083,11 @@ ApplicationWindow {
                     anchors.centerIn:   parent
                     text:               ">"
                     color:              QGroundControl.globalPalette.buttonText
-                }  
+                }
 
                 QGCMouseArea {
                     fillItem: parent
-                    onClicked: {
-                        indicatorDrawer._expanded = true
-                    }
+                    onClicked: indicatorDrawer._expanded = true
                 }
             }
         }
@@ -1154,7 +1113,7 @@ ApplicationWindow {
                     property:   "drawer"
                     value:      indicatorDrawer
                 }
-            } // loader
+            }
         }
     }
 

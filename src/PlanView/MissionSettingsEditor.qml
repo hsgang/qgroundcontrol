@@ -68,7 +68,7 @@ Rectangle {
         spacing:            _margin
 
         SettingsGroupLayout {
-            _borderColor:   "transparent"
+            outerBorderColor:   "transparent"
             _margins:        ScreenTools.defaultFontPixelWidth
 
             RowLayout{
@@ -143,7 +143,7 @@ Rectangle {
         SettingsGroupLayout {
             heading:    qsTr("Camera")
             visible:    _showCameraSection
-            _borderColor:   "transparent"
+            outerBorderColor:   "transparent"
             _margins:        ScreenTools.defaultFontPixelWidth
 
             Column {
@@ -171,7 +171,7 @@ Rectangle {
 
         SettingsGroupLayout {
             Layout.fillWidth: true
-            _borderColor:   "transparent"
+            outerBorderColor:   "transparent"
             _margins:        ScreenTools.defaultFontPixelWidth
 
             SectionHeader {
