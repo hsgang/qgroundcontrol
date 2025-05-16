@@ -28,7 +28,7 @@ Item {
     property var    activeVehicle:              QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost:     activeVehicle ? activeVehicle.vehicleLinkManager.communicationLost : false
     property var    gimbalController:           activeVehicle.gimbalController
-    property bool   showIndicator:              gimbalController && gimbalController.gimbals.count
+    property bool   showIndicator:              true // gimbalController && gimbalController.gimbals.count
     property var    activeGimbal:               gimbalController.activeGimbal
     property var    multiGimbalSetup:           gimbalController.gimbals.count > 1
     property bool   joystickButtonsAvailable:   activeVehicle.joystickEnabled
@@ -386,23 +386,23 @@ Item {
         QGCLabel {
             id:                     statusLabel
             text:                   activeGimbal && activeGimbal.retracted ? 
-                                        qsTr("Retracted") :
-                                        (activeGimbal && activeGimbal.yawLock ? qsTr("Yaw locked") : qsTr("Yaw follow"))
+                                        qsTr("Rtrct") :
+                                        (activeGimbal && activeGimbal.yawLock ? qsTr("Locked") : qsTr("Follow"))
             Layout.columnSpan:      2
-            Layout.alignment:       Qt.AlignHCenter
+            Layout.alignment:       Qt.AlignLeft
         }
         QGCLabel {
             id:                     pitchLabel
             font.pointSize:         ScreenTools.smallFontPointSize
-            text:                   activeGimbal ? qsTr("P: ") + activeGimbal.absolutePitch.rawValue.toFixed(1) : ""
+            text:                   activeGimbal ? qsTr("P ") + activeGimbal.absolutePitch.rawValue.toFixed(1) : "P --.-"
         }
         QGCLabel {
             id:                     panLabel
             font.pointSize:         ScreenTools.smallFontPointSize
             text:                   activeGimbal ? 
-                                        gimbalTelemetryLayout.showAzimuth ? (qsTr("Az: ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
-                                            (qsTr("Y: ") + activeGimbal.bodyYaw.rawValue.toFixed(1)) :
-                                                ""
+                                        gimbalTelemetryLayout.showAzimuth ? (qsTr("Az ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
+                                            (qsTr("Y ") + activeGimbal.bodyYaw.rawValue.toFixed(1)) :
+                                                "Y --.-"
         }
     }
 
