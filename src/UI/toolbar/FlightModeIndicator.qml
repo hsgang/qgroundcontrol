@@ -20,9 +20,12 @@ import QGroundControl.FactSystem
 import QGroundControl.FactControls
 import QGroundControl.AutoPilotPlugin
 
-RowLayout {
+Item {
     id:         control
-    spacing:    0
+    width:      ScreenTools.defaultFontPixelHeight * 6
+    anchors.top:                parent.top
+    anchors.bottom:             parent.bottom
+    anchors.horizontalCenter:   parent.horizontalCenter
 
     property bool   showIndicator:          true
     property var    expandedPageComponent
@@ -33,28 +36,34 @@ RowLayout {
     property bool allowEditMode:    true
     property bool editMode:         false
 
-    RowLayout {
-        Layout.fillWidth: true
+    Rectangle {
+        width:  parent.width
+        height: parent.height
+        color: "transparent"
 
-        QGCColoredImage {
-            id:         flightModeIcon
-            width:      ScreenTools.defaultFontPixelWidth * 3
-            height:     ScreenTools.defaultFontPixelHeight
-            fillMode:   Image.PreserveAspectFit
-            mipmap:     true
-            color:      qgcPal.text
-            source:     "/qmlimages/FlightModesComponentIcon.png"
+        RowLayout {
+            anchors.horizontalCenter:   parent.horizontalCenter
+            anchors.verticalCenter:     parent.verticalCenter
+
+            QGCLabel {
+                id:                 modeTranslatedLabel
+                text:               activeVehicle ? activeVehicle.flightMode : qsTr("비행모드")
+                font.pointSize:     ScreenTools.largeFontPointSize * 0.9
+            }
+
+            QGCColoredImage {
+                height:     ScreenTools.defaultFontPixelHeight
+                width:      height
+                fillMode:   Image.PreserveAspectFit
+                mipmap:     true
+                source:     "/InstrumentValueIcons/cheveron-down.svg"
+                color:      qgcPal.text
+            }
         }
 
-        QGCLabel {
-            text:               activeVehicle ? activeVehicle.flightMode : qsTr("N/A", "No data to display")
-            font.pointSize:     fontPointSize
-            Layout.alignment:   Qt.AlignCenter
-
-            MouseArea {
-                anchors.fill:   parent
-                onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
-            }
+        MouseArea {
+            anchors.fill:   parent
+            onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
         }
     }
 
@@ -81,7 +90,7 @@ RowLayout {
 
         ColumnLayout {
             id:         modeColumn
-            spacing:    ScreenTools.defaultFontPixelWidth / 2
+            spacing:    ScreenTools.defaultFontPixelHeight / 2
 
             property var    activeVehicle:            QGroundControl.multiVehicleManager.activeVehicle
             property var    flightModeSettings:       QGroundControl.settingsManager.flightModeSettings
@@ -131,23 +140,50 @@ RowLayout {
                 id:     modeRepeater
                 model:  activeVehicle ? activeVehicle.flightModes : []
 
+                property var buttonRows: []
+                property var selectedMode: null
+
                 RowLayout {
+                    Layout.minimumWidth: ScreenTools.defaultFontPixelHeight * 8
                     spacing: ScreenTools.defaultFontPixelWidth
-                    visible: editMode || !hiddenFlightModesList.find(item => { return item === modelData } )
+                    visible: editMode || !hiddenFlightModesList.find(item => { return item === modelData })
 
                     QGCButton {
                         id:                 modeButton
                         text:               modelData
                         Layout.fillWidth:   true
 
+                        property bool isSelected: false
+
                         onClicked: {
                             if (editMode) {
                                 parent.children[1].toggle()
                                 parent.children[1].clicked()
                             } else {
-                                var controller = globals.guidedControllerFlyView
-                                controller.confirmAction(controller.actionSetFlightMode, modelData)
-                                mainWindow.closeIndicatorDrawer()
+                                if (modeRepeater.selectedMode !== null && modeRepeater.selectedMode !== modelData) {
+                                    var previousButton = modeRepeater.buttonRows.find(button => button.text === modeRepeater.selectedMode)
+                                    if (previousButton) {
+                                        previousButton.isSelected = false;
+                                        previousButton.primary = false;
+                                    }
+                                }
+
+                                if (!isSelected) {
+                                    modeRepeater.selectedMode = modelData
+                                    isSelected = true
+                                    modeButton.primary = true;
+                                } else {
+                                    activeVehicle.flightMode = modelData
+                                    isSelected = false
+                                    modeRepeater.selectedMode = null
+                                    modeButton.primary = false;
+                                }
+                            }
+                        }
+
+                        Component.onCompleted: {
+                            if (modeRepeater.buttonRows.indexOf(modeButton) === -1) {
+                                modeRepeater.buttonRows.push(modeButton)
                             }
                         }
                     }
@@ -172,7 +208,7 @@ RowLayout {
 
             QGCLabel {
                 id:                     hiddenModesLabel
-                text:                   qsTr("Some Modes Hidden")
+                text:                   qsTr("일부 모드 가려짐")
                 Layout.fillWidth:       true
                 font.pointSize:         ScreenTools.smallFontPointSize
                 horizontalAlignment:    Text.AlignHCenter
@@ -208,7 +244,7 @@ RowLayout {
 
                     QGCLabel {
                         Layout.fillWidth:   true
-                        text:               qsTr("Edit Displayed Flight Modes")
+                        text:               qsTr("선호하는 비행모드 선택")
                     }
 
                     QGCCheckBoxSlider {
@@ -218,8 +254,8 @@ RowLayout {
 
                 LabelledButton {
                     Layout.fillWidth:   true
-                    label:              qsTr("Flight Modes")
-                    buttonText:         qsTr("Configure")
+                    label:              qsTr("비행 모드")
+                    buttonText:         qsTr("설정")
                     visible:            _activeVehicle.autopilotPlugin.knownVehicleComponentAvailable(AutoPilotPlugin.KnownFlightModesVehicleComponent) &&
                                             QGroundControl.corePlugin.showAdvancedUI
 

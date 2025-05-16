@@ -155,66 +155,90 @@ ToolIndicatorPage {
             SettingsGroupLayout{
                 heading: qsTr("Vehicle Parameter")
 
-                FactSlider {
-                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 60
-                    Layout.fillWidth:   true
+                LabelledFactTextField {
                     label:      "Responsiveness"
                     fact:       atcInputTCFact
-                    //from:       0.01
-                    //to:         0.5
-                    majorTickStepSize:  0.1
-                    visible:    true
                 }
-                FactSlider {
-                    Layout.fillWidth:   true
+                LabelledFactTextField {
                     label:      "Loiter Horizontal Speed(cm/s)"
                     fact:       loitSpeedFact
-                    from:       500
-                    to:         1500
-                    majorTickStepSize:   10
-                    visible:    true
                 }
-                FactSlider {
-                    Layout.fillWidth:   true
+                LabelledFactTextField {
                     label:      "WP Horizontal Speed(cm/s)"
                     fact:       wpnavSpeedFact
-                    from:       500
-                    to:         1500
-                    majorTickStepSize:   10
-                    visible:    true
                 }
-                FactSlider {
-                    Layout.fillWidth:   true
+                LabelledFactTextField {
                     label:      "WP Climb Speed(cm/s)"
                     fact:       wpnavSpeedUpFact
-                    from:       100
-                    to:         500
-                    majorTickStepSize:   10
-                    visible:    true
                 }
-                FactSlider {
-                    Layout.fillWidth:   true
+                LabelledFactTextField {
                     label:      "WP Descent Speed(cm/s)"
                     fact:       wpnavSpeedDnFact
-                    from:       100
-                    to:         500
-                    majorTickStepSize:   10
-                    visible:    true
                 }
-                FactSlider {
-                    Layout.fillWidth:   true
+                LabelledFactTextField {
                     label:      "Mission Turning Radius(cm)"
                     fact:       wpnavRadiusFact
-                    from:       200
-                    to:         1000
-                    majorTickStepSize:   10
-                    visible:    true
                 }
+
+                // FactSlider {
+                //     Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 60
+                //     Layout.fillWidth:   true
+                //     label:      "Responsiveness"
+                //     fact:       atcInputTCFact
+                //     //from:       0.01
+                //     //to:         0.5
+                //     majorTickStepSize:  0.1
+                //     visible:    true
+                // }
+                // FactSlider {
+                //     Layout.fillWidth:   true
+                //     label:      "Loiter Horizontal Speed(cm/s)"
+                //     fact:       loitSpeedFact
+                //     from:       500
+                //     to:         1500
+                //     majorTickStepSize:   10
+                //     visible:    true
+                // }
+                // FactSlider {
+                //     Layout.fillWidth:   true
+                //     label:      "WP Horizontal Speed(cm/s)"
+                //     fact:       wpnavSpeedFact
+                //     from:       500
+                //     to:         1500
+                //     majorTickStepSize:   10
+                //     visible:    true
+                // }
+                // FactSlider {
+                //     Layout.fillWidth:   true
+                //     label:      "WP Climb Speed(cm/s)"
+                //     fact:       wpnavSpeedUpFact
+                //     from:       100
+                //     to:         500
+                //     majorTickStepSize:   10
+                //     visible:    true
+                // }
+                // FactSlider {
+                //     Layout.fillWidth:   true
+                //     label:      "WP Descent Speed(cm/s)"
+                //     fact:       wpnavSpeedDnFact
+                //     from:       100
+                //     to:         500
+                //     majorTickStepSize:   10
+                //     visible:    true
+                // }
+                // FactSlider {
+                //     Layout.fillWidth:   true
+                //     label:      "Mission Turning Radius(cm)"
+                //     fact:       wpnavRadiusFact
+                //     from:       200
+                //     to:         1000
+                //     majorTickStepSize:   10
+                //     visible:    true
+                // }
 
                 LabelledFactTextField {
                     label:      rtlAltitudeFact.name
                     fact:       rtlAltitudeFact
-                    visible:    true
                 }
 
                 LabelledFactTextField {

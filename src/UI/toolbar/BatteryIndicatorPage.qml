@@ -243,19 +243,6 @@ ToolIndicatorPage {
                         QGCLabel { text: qsTr("Critical") }
                     }
                 }
-
-                // RowLayout {
-                //     Layout.fillWidth: true
-
-                //     QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Power") }
-                //     QGCButton {
-                //         text: qsTr("Configure")
-                //         onClicked: {
-                //             mainWindow.showVehicleSetupTool(qsTr("Power"))
-                //             mainWindow.closeIndicatorDrawer()
-                //         }
-                //     }
-                // }
             }
 
             SettingsGroupLayout {
@@ -301,23 +288,23 @@ ToolIndicatorPage {
                     comboBoxPreferredWidth: _labelledItemWidth
                 }
 
-                FactSlider {
-                    Layout.fillWidth:   true
-                    label:              qsTr("Voltage Trigger") + (value == 0 ? disabledString : "")
-                    fact:               controller.getParameterFact(-1, "BATT_LOW_VOLT")
-                    from:               0
-                    to:                 100
-                    majorTickStepSize:  1
-                }
+                // FactSlider {
+                //     Layout.fillWidth:   true
+                //     label:              qsTr("Voltage Trigger") + (value == 0 ? disabledString : "")
+                //     fact:               controller.getParameterFact(-1, "BATT_LOW_VOLT")
+                //     from:               0
+                //     to:                 100
+                //     majorTickStepSize:  1
+                // }
 
-                FactSlider {
-                    Layout.fillWidth:   true
-                    label:              qsTr("mAh Trigger") + (value == 0 ? disabledString : "")
-                    fact:               controller.getParameterFact(-1, "BATT_LOW_MAH")
-                    from:               0
-                    to:                 30000
-                    majorTickStepSize:  1000
-                }
+                // FactSlider {
+                //     Layout.fillWidth:   true
+                //     label:              qsTr("mAh Trigger") + (value == 0 ? disabledString : "")
+                //     fact:               controller.getParameterFact(-1, "BATT_LOW_MAH")
+                //     from:               0
+                //     to:                 30000
+                //     majorTickStepSize:  1000
+                // }
             }
 
             SettingsGroupLayout {
