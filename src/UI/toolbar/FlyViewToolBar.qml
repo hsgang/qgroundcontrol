@@ -283,10 +283,9 @@ Rectangle {
 
             property var    _currentSelection:     null
 
-            ProgressTracker {
+            TimedProgressTracker {
                 id:                     closeProgressTracker
-                timeoutSeconds:         5000 * 0.001
-                decimal:                0
+                timeoutSeconds:         5
                 onTimeout:              linkPopup.close()
             }
 
