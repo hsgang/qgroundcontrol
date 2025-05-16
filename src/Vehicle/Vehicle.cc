@@ -647,10 +647,6 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_RESPONSE_EVENT_ERROR:
         _eventHandler(message.compid).handleEvents(message);
         break;
-    case MAVLINK_MSG_ID_COMMAND_LONG:
-        _handleCommandLong(message);
-        break;
-
     case MAVLINK_MSG_ID_SERIAL_CONTROL:
     {
         mavlink_serial_control_t ser;
@@ -1371,33 +1367,6 @@ void Vehicle::setEventsMetadata(uint8_t compid, const QString& metadataJsonFileN
     sendMavCommand(_defaultComponentId,
                    MAV_CMD_RUN_PREARM_CHECKS,
                    false);
-}
-
-void Vehicle::_handleCommandRequestConfirmation(const mavlink_command_long_t commandLong)
-{
-    if (commandLong.param5 == 99) {
-        _isCustomCommandEnabled = false;
-        emit isCustomCommandEnabledChanged();
-    }
-    // param5가 배송 시퀀스 인덱스이고 99면 완료된것으로 판단
-    emit requestConfirmationReceived(commandLong.param1, commandLong.param2, commandLong.param3, commandLong.param4, commandLong.param5);
-}
-
-void Vehicle::_handleCommandLong(mavlink_message_t& message)
-{
-    mavlink_command_long_t commandLong;
-
-    mavlink_msg_command_long_decode(&message, &commandLong);
-
-    if (commandLong.target_system != MAVLinkProtocol::instance()->getSystemId()) {
-        return;
-    }
-
-    if (commandLong.command == MAV_CMD_USER_1) {
-        _handleCommandRequestConfirmation(commandLong);
-    }
-
-    qCDebug(VehicleLog) << "_handleCommandLong : " << commandLong.command;
 }
 
 void Vehicle::setActuatorsMetadata([[maybe_unused]] uint8_t compid,
@@ -4453,6 +4422,16 @@ void Vehicle::_handleCommandRequestOperatorControl(const mavlink_command_long_t 
     emit requestOperatorControlReceived(commandLong.param1, commandLong.param3, commandLong.param4);
 }
 
+void Vehicle::_handleCommandRequestConfirmation(const mavlink_command_long_t commandLong)
+{
+    if (commandLong.param5 == 99) {
+        _isCustomCommandEnabled = false;
+        emit isCustomCommandEnabledChanged();
+    }
+    // param5가 배송 시퀀스 인덱스이고 99면 완료된것으로 판단
+    emit requestConfirmationReceived(commandLong.param1, commandLong.param2, commandLong.param3, commandLong.param4, commandLong.param5);
+}
+
 void Vehicle::_handleCommandLong(const mavlink_message_t& message)
 {
     mavlink_command_long_t commandLong;
@@ -4461,9 +4440,22 @@ void Vehicle::_handleCommandLong(const mavlink_message_t& message)
     if (commandLong.target_system != MAVLinkProtocol::instance()->getSystemId()) {
         return;
     }
-    if (commandLong.command == MAV_CMD_REQUEST_OPERATOR_CONTROL) {
-        _handleCommandRequestOperatorControl(commandLong);
+    switch (commandLong.command) {
+        case MAV_CMD_REQUEST_OPERATOR_CONTROL:
+            _handleCommandRequestOperatorControl(commandLong);
+            break;
+        case MAV_CMD_USER_1:
+            _handleCommandRequestConfirmation(commandLong);
+            break;
+        default:
+            break;
     }
+    // if (commandLong.command == MAV_CMD_REQUEST_OPERATOR_CONTROL) {
+    //     _handleCommandRequestOperatorControl(commandLong);
+    // }
+    // if (commandLong.command == MAV_CMD_USER_1) {
+    //     _handleCommandRequestConfirmation(commandLong);
+    // }
 }
 
 int Vehicle::operatorControlTakeoverTimeoutMsecs() const
