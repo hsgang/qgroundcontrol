@@ -28,7 +28,7 @@ Item {
     property var    activeVehicle:              QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost:     activeVehicle ? activeVehicle.vehicleLinkManager.communicationLost : false
     property var    gimbalController:           activeVehicle.gimbalController
-    property bool   showIndicator:              true // gimbalController && gimbalController.gimbals.count
+    property bool   showIndicator:              gimbalController && gimbalController.gimbals.count
     property var    activeGimbal:               gimbalController.activeGimbal
     property var    multiGimbalSetup:           gimbalController.gimbals.count > 1
     property bool   joystickButtonsAvailable:   activeVehicle.joystickEnabled
