@@ -17,6 +17,7 @@ import QGroundControl.ScreenTools
 import QGroundControl.Palette
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
+import QGroundControl.AutoPilotPlugin
 import MAVLink
 
 ToolIndicatorPage {
@@ -313,7 +314,7 @@ ToolIndicatorPage {
                     buttonText: qsTr("Configure")
 
                     onClicked: {
-                        mainWindow.showVehicleSetupTool(qsTr("Power"))
+                        mainWindow.showKnownVehicleComponentConfigPage(AutoPilotPlugin.KnownPowerVehicleComponent)
                         mainWindow.closeIndicatorDrawer()
                     }
                 }

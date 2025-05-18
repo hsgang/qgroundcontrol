@@ -419,7 +419,7 @@ ApplicationWindow {
         edge:           Qt.LeftEdge
         interactive:    true
         dragMargin:     0
-        modal:          false
+        modal:          true
         visible:        false
 
         property var    _mainWindow:       mainWindow
@@ -427,6 +427,7 @@ ApplicationWindow {
 
         Rectangle {
             id:     mainLayoutRect
+            anchors.top: parent.top
             width:  mainLayout.width + (mainLayout.anchors.margins * 2)
             height: parent.height
             color:  qgcPal.windowShadeDark
@@ -441,19 +442,17 @@ ApplicationWindow {
 
                 ColumnLayout {
                     id:                 mainLayout
-                    anchors.margins:    ScreenTools.defaultFontPixelWidth
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight / 2
                     anchors.left:       parent.left
                     anchors.top:        parent.top
-                    spacing:            ScreenTools.defaultFontPixelWidth
+                    spacing:            ScreenTools.defaultFontPixelHeight
 
-                    SubMenuButton {
+                    SettingsButton {
                         id:                 flyButton
-                        height:             viewSelectDrawer._toolButtonHeight
+                        height:             ScreenTools.defaultFontPixelHeight * 3
                         Layout.fillWidth:   true
-                        checked:            true
                         text:               qsTr("Fly View")
-                        imageResource:      "/qmlimages/PaperPlane.svg"
-                        imageColor:         qgcPal.text
+                        icon.source:        "/qmlimages/PaperPlane.svg"
                         onClicked: {
                             if (mainWindow.allowViewSwitch()) {
                                 mainWindow.closeIndicatorDrawer()
@@ -466,13 +465,32 @@ ApplicationWindow {
                         }
                     }
 
-                    SubMenuButton {
+                    // SubMenuButton {
+                    //     id:                 flyButton
+                    //     height:             viewSelectDrawer._toolButtonHeight
+                    //     Layout.fillWidth:   true
+                    //     checked:            true
+                    //     text:               qsTr("Fly View")
+                    //     imageResource:      "/qmlimages/PaperPlane.svg"
+                    //     imageColor:         qgcPal.text
+                    //     onClicked: {
+                    //         if (mainWindow.allowViewSwitch()) {
+                    //             mainWindow.closeIndicatorDrawer()
+                    //             toolDrawer.visible = false
+                    //             mainWindow.showFlyView()
+                    //             checkedMenu()
+                    //             flyButton.checked = true
+                    //             viewSelectDrawer.visible = false
+                    //         }
+                    //     }
+                    // }
+
+                    SettingsButton {
                         id:                 planButton
-                        height:             viewSelectDrawer._toolButtonHeight
+                        height:             ScreenTools.defaultFontPixelHeight * 3
                         Layout.fillWidth:   true
                         text:               qsTr("Plan View")
-                        imageResource:      "/qmlimages/Plan.svg"
-                        imageColor:         qgcPal.text
+                        icon.source:        "/qmlimages/Plan.svg"
                         onClicked: {
                             if (mainWindow.allowViewSwitch()) {
                                 mainWindow.closeIndicatorDrawer()
@@ -485,13 +503,31 @@ ApplicationWindow {
                         }
                     }
 
-                    SubMenuButton {
+                    // SubMenuButton {
+                    //     id:                 planButton
+                    //     height:             viewSelectDrawer._toolButtonHeight
+                    //     Layout.fillWidth:   true
+                    //     text:               qsTr("Plan View")
+                    //     imageResource:      "/qmlimages/Plan.svg"
+                    //     imageColor:         qgcPal.text
+                    //     onClicked: {
+                    //         if (mainWindow.allowViewSwitch()) {
+                    //             mainWindow.closeIndicatorDrawer()
+                    //             toolDrawer.visible = false
+                    //             mainWindow.showPlanView()
+                    //             checkedMenu()
+                    //             planButton.checked = true
+                    //             viewSelectDrawer.visible = false
+                    //         }
+                    //     }
+                    // }
+
+                    SettingsButton {
                         id:                 setupButton
-                        height:             viewSelectDrawer._toolButtonHeight
+                        height:             ScreenTools.defaultFontPixelHeight * 3
                         Layout.fillWidth:   true
                         text:               qsTr("Vehicle Configuration")
-                        imageColor:         qgcPal.text
-                        imageResource:      "/qmlimages/Quad.svg"
+                        icon.source:        "/qmlimages/Quad.svg"
                         onClicked: {
                             if (mainWindow.allowViewSwitch()) {
                                 mainWindow.closeIndicatorDrawer()
@@ -504,13 +540,31 @@ ApplicationWindow {
                         }
                     }
 
-                    SubMenuButton {
+                    // SubMenuButton {
+                    //     id:                 setupButton
+                    //     height:             viewSelectDrawer._toolButtonHeight
+                    //     Layout.fillWidth:   true
+                    //     text:               qsTr("Vehicle Configuration")
+                    //     imageColor:         qgcPal.text
+                    //     imageResource:      "/qmlimages/Quad.svg"
+                    //     onClicked: {
+                    //         if (mainWindow.allowViewSwitch()) {
+                    //             mainWindow.closeIndicatorDrawer()
+                    //             toolDrawer.visible = false
+                    //             mainWindow.showVehicleConfig()
+                    //             checkedMenu()
+                    //             setupButton.checked = true
+                    //             viewSelectDrawer.visible = false
+                    //         }
+                    //     }
+                    // }
+
+                    SettingsButton {
                         id:                 analyzeButton
-                        height:             viewSelectDrawer._toolButtonHeight
+                        height:             ScreenTools.defaultFontPixelHeight * 3
                         Layout.fillWidth:   true
                         text:               qsTr("Analyze Tools")
-                        imageResource:      "/qmlimages/Analyze.svg"
-                        imageColor:         qgcPal.text
+                        icon.source:        "/qmlimages/Analyze.svg"
                         visible:            QGroundControl.corePlugin.showAdvancedUI
                         onClicked: {
                             if (mainWindow.allowViewSwitch()) {
@@ -522,15 +576,34 @@ ApplicationWindow {
                                 viewSelectDrawer.visible = false
                             }
                         }
-                    }                    
+                    }
 
-                    SubMenuButton {
+                    // SubMenuButton {
+                    //     id:                 analyzeButton
+                    //     height:             viewSelectDrawer._toolButtonHeight
+                    //     Layout.fillWidth:   true
+                    //     text:               qsTr("Analyze Tools")
+                    //     imageResource:      "/qmlimages/Analyze.svg"
+                    //     imageColor:         qgcPal.text
+                    //     visible:            QGroundControl.corePlugin.showAdvancedUI
+                    //     onClicked: {
+                    //         if (mainWindow.allowViewSwitch()) {
+                    //             mainWindow.closeIndicatorDrawer()
+                    //             toolDrawer.visible = false
+                    //             mainWindow.showAnalyzeTool()
+                    //             checkedMenu()
+                    //             analyzeButton.checked = true
+                    //             viewSelectDrawer.visible = false
+                    //         }
+                    //     }
+                    // }
+
+                    SettingsButton {
                         id:                 settingsButton
-                        height:             viewSelectDrawer._toolButtonHeight
+                        height:             ScreenTools.defaultFontPixelHeight * 3
                         Layout.fillWidth:   true
                         text:               qsTr("App Settings")
-                        imageResource:      "/qmlimages/Gears.svg"
-                        imageColor:         qgcPal.text
+                        icon.source:        "/qmlimages/Gears.svg"
                         visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
                         onClicked: {
                             if (mainWindow.allowViewSwitch()) {
@@ -544,6 +617,26 @@ ApplicationWindow {
                         }
                     }
 
+                    // SubMenuButton {
+                    //     id:                 settingsButton
+                    //     height:             viewSelectDrawer._toolButtonHeight
+                    //     Layout.fillWidth:   true
+                    //     text:               qsTr("App Settings")
+                    //     imageResource:      "/qmlimages/Gears.svg"
+                    //     imageColor:         qgcPal.text
+                    //     visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
+                    //     onClicked: {
+                    //         if (mainWindow.allowViewSwitch()) {
+                    //             mainWindow.closeIndicatorDrawer()
+                    //             toolDrawer.visible = false
+                    //             mainWindow.showAppSettings()
+                    //             checkedMenu()
+                    //             settingsButton.checked = true
+                    //             viewSelectDrawer.visible = false
+                    //         }
+                    //     }
+                    // }
+
                     Rectangle {
                         Layout.fillWidth: true
                         height : 1
@@ -551,13 +644,12 @@ ApplicationWindow {
                         visible : closeButton.visible
                     }
 
-                    SubMenuButton {
+                    SettingsButton {
                         id:                 closeButton
-                        height:             viewSelectDrawer._toolButtonHeight
+                        height:             ScreenTools.defaultFontPixelHeight * 3
                         Layout.fillWidth:   true
-                        text:               "종료"//qsTr("Close %1").arg(QGroundControl.appName)
-                        imageResource:      "/InstrumentValueIcons/close.svg"
-                        imageColor:         qgcPal.text
+                        text:               "종료"
+                        icon.source:        "/InstrumentValueIcons/close.svg"
                         visible:            mainWindow.visibility === Window.FullScreen
                         onClicked: {
                             if (mainWindow.allowViewSwitch()) {
@@ -565,10 +657,28 @@ ApplicationWindow {
                                                   qsTr("Are you sure you want to close?"),
                                                   Dialog.Yes | Dialog.No,
                                                   function() { performCloseChecks() })
-                                //mainWindow.finishCloseProcess()
                             }
                         }
                     }
+
+                    // SubMenuButton {
+                    //     id:                 closeButton
+                    //     height:             viewSelectDrawer._toolButtonHeight
+                    //     Layout.fillWidth:   true
+                    //     text:               "종료"//qsTr("Close %1").arg(QGroundControl.appName)
+                    //     imageResource:      "/InstrumentValueIcons/close.svg"
+                    //     imageColor:         qgcPal.text
+                    //     visible:            mainWindow.visibility === Window.FullScreen
+                    //     onClicked: {
+                    //         if (mainWindow.allowViewSwitch()) {
+                    //             mainWindow.showMessageDialog(closeDialogTitle,
+                    //                               qsTr("Are you sure you want to close?"),
+                    //                               Dialog.Yes | Dialog.No,
+                    //                               function() { performCloseChecks() })
+                    //             //mainWindow.finishCloseProcess()
+                    //         }
+                    //     }
+                    // }
                 }
             }
 

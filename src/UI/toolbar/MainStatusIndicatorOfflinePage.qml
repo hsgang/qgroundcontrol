@@ -59,7 +59,7 @@ ToolIndicatorPage {
 
                     onClicked: {
                         QGroundControl.linkManager.createConnectedLink(object)
-                        componentDrawer.visible = false
+                        mainWindow.closeIndicatorDrawer()
                     }
                 }
             }
@@ -77,7 +77,7 @@ ToolIndicatorPage {
 
                     onClicked: {
                         mainWindow.showAppSettings(qsTr("Comm Links"))
-                        componentDrawer.visible = false
+                        mainWindow.closeIndicatorDrawer()
                     }
                 }
             }

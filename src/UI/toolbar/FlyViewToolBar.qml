@@ -66,12 +66,13 @@ Rectangle {
                 icon.source:            "/qmlimages/Hamburger.svg"
                 logo:                   true
                 onClicked:
-                    if(viewSelectDrawer.visible === false){
-                        viewSelectDrawer.visible = true
-                    }
-                    else if(viewSelectDrawer.visible === true){
-                        viewSelectDrawer.visible = false
-                    }
+                    // if(viewSelectDrawer.visible === false){
+                    //     viewSelectDrawer.visible = true
+                    // }
+                    // else if(viewSelectDrawer.visible === true){
+                    //     viewSelectDrawer.visible = false
+                    // }
+                    viewSelectDrawer.open()
             }
         }
 

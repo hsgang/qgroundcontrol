@@ -90,16 +90,16 @@ Rectangle {
             id: loginRect
             height:                     loginLayout.height + _defaultTextHeight * 3
             width:                      _defaultTextWidth * 40//loginLayout.width + _defaultTextHeight * 3
-            color:                      "transparent"
+            color:                      qgcPal.windowShadeDark
             anchors.horizontalCenter:   parent.horizontalCenter
             anchors.verticalCenter:     parent.verticalCenter
             visible:                    true
-            border.color:               qgcPal.groupBorder
+            //border.color:               qgcPal.groupBorder
             radius:                     _margins
 
             ColumnLayout {
                 id:         loginLayout
-                spacing:    ScreenTools.defaultFontPixelHeight
+                spacing:    _margins
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
 
@@ -316,9 +316,9 @@ Rectangle {
                         color: qgcPal.colorRed
                     }
 
-                    Item {
-                        height: ScreenTools.defaultFontPixelHeight / 2
-                    }
+                    // Item {
+                    //     height: ScreenTools.defaultFontPixelHeight / 4
+                    // }
 
                     QGCButton {
                         id: loginButton
@@ -354,6 +354,7 @@ Rectangle {
                 ColumnLayout {
                     Layout.fillWidth:   true
                     Layout.alignment: Qt.AlignHCenter
+                    spacing:            _margins
 
                     QGCButton {
                         id: skipButton
@@ -366,9 +367,9 @@ Rectangle {
                         }
                     }
 
-                    Item {
-                        height: ScreenTools.defaultFontPixelHeight / 2
-                    }
+                    // Item {
+                    //     height: ScreenTools.defaultFontPixelHeight / 4
+                    // }
 
                     QGCButton {
                         Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 18
@@ -390,11 +391,11 @@ Rectangle {
             id: connectRect
             height:                     connectLayout.height + _defaultTextHeight * 2
             width:                      connectLayout.width + _defaultTextHeight * 2
-            color:                      "transparent"
+            color:                      qgcPal.windowShadeDark
             anchors.horizontalCenter:   parent.horizontalCenter
             anchors.verticalCenter:     parent.verticalCenter
             visible:                    false
-            border.color:               qgcPal.groupBorder
+            //border.color:               qgcPal.groupBorder
             radius:                     _margins
 
             ColumnLayout {
@@ -522,7 +523,7 @@ Rectangle {
                 ColumnLayout {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignHCenter
-                    spacing: ScreenTools.defaultFontPixelHeight
+                    spacing: _margins
 
                     RowLayout {
                         spacing:            ScreenTools.defaultFontPixelWidth
@@ -567,10 +568,6 @@ Rectangle {
                         onClicked: {
                             mainWindow.showFlyView()
                         }
-                    }
-
-                    Item {
-                        height: ScreenTools.defaultFontPixelHeight / 2
                     }
 
                     QGCButton {
