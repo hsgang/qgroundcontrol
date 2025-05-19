@@ -87,7 +87,7 @@ SpinBox {
         height: parent.height
         implicitWidth: ScreenTools.defaultFontPixelHeight * 1.6
         implicitHeight: parent.height
-        color: (control.up.hovered || control.up.pressed) ? qgcPal.buttonHighlight : qgcPal.windowShade
+        color: (control.up.hovered || control.up.pressed) ? qgcPal.buttonHighlight : qgcPal.button
         radius: ScreenTools.defaultFontPixelHeight / 4
         border.color: qgcPal.groupBorder
 
@@ -107,7 +107,7 @@ SpinBox {
         height: parent.height
         implicitWidth: ScreenTools.defaultFontPixelHeight * 1.6
         implicitHeight: parent.height
-        color: (control.down.hovered || control.down.pressed) ? qgcPal.buttonHighlight : qgcPal.windowShade
+        color: (control.down.hovered || control.down.pressed) ? qgcPal.buttonHighlight : qgcPal.button
         radius: ScreenTools.defaultFontPixelHeight / 4
         border.color: qgcPal.groupBorder
 
@@ -125,7 +125,7 @@ SpinBox {
     background: Rectangle {
         implicitWidth: control.implicitWidth
         border.color: qgcPal.groupBorder
-        color: qgcPal.windowShadeLight
+        color: qgcPal.windowShadeDark
         radius: ScreenTools.defaultFontPixelHeight / 4
     }
 }

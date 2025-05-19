@@ -24,9 +24,14 @@ SetupPage {
     Component {
         id: safetyPageComponent
 
-        ColumnLayout{
-            width:      Math.max(implicitWidth, ScreenTools.defaultFontPixelWidth * 50)
-            spacing:    ScreenTools.defaultFontPixelHeight
+        Flow {
+            id:         flowLayout
+            width:      availableWidth
+            spacing:     _margins / 2
+
+        // ColumnLayout{
+        //     width:      Math.max(implicitWidth, ScreenTools.defaultFontPixelWidth * 50)
+        //     spacing:    ScreenTools.defaultFontPixelHeight
 
             FactPanelController { id: controller; }
 
@@ -69,7 +74,7 @@ SetupPage {
 
                 SettingsGroupLayout {
                     Layout.fillWidth:       true
-                    Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 40
+                    width: ScreenTools.defaultFontPixelWidth * 40
                     heading:                qsTr("Communication Failsafe")
 
                     Image {
@@ -106,7 +111,7 @@ SetupPage {
 
             Loader {
                 id:                 copterGeneralFSLoader
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 50
+                width: ScreenTools.defaultFontPixelWidth * 40
                 Layout.alignment:   Qt.AlignHCenter
                 sourceComponent: controller.vehicle.multiRotor ? copterGeneralFS : undefined
 
@@ -124,7 +129,7 @@ SetupPage {
 
                 SettingsGroupLayout {
                     Layout.fillWidth:       true
-                    Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 40
+                    width: ScreenTools.defaultFontPixelWidth * 40
                     heading:                title
 
                     Image {
@@ -185,7 +190,7 @@ SetupPage {
 
             Loader {
                 id:                 battery1FailsafeLoader
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 50
+                width: ScreenTools.defaultFontPixelWidth * 40
                 Layout.alignment:   Qt.AlignHCenter
                 sourceComponent:    _batt1ParamsAvailable ? batteryFailsafeComponent : undefined
 
@@ -202,7 +207,7 @@ SetupPage {
 
             Loader {
                 id:                 battery2FailsafeLoader
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 50
+                width: ScreenTools.defaultFontPixelWidth * 40
                 Layout.alignment:   Qt.AlignHCenter
                 sourceComponent:    _batt2ParamsAvailable ? batteryFailsafeComponent : undefined
 
@@ -222,7 +227,8 @@ SetupPage {
 
                 SettingsGroupLayout {
                     Layout.fillWidth:   true
-                    Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 40
+                    //Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 40
+                    width: ScreenTools.defaultFontPixelWidth * 40
                     heading:            qsTr("GeoFence")
 
                     Image {
@@ -238,7 +244,6 @@ SetupPage {
                     FactCheckBoxSlider {
                         Layout.fillWidth:   true
                         text:               qsTr("Enabled")
-                        //description:        "자동경로상 최대 고도 정보를 표시"
                         fact:               _fenceEnable
                     }
 
@@ -346,7 +351,7 @@ SetupPage {
 
             Loader {
                 id:                 copterGeoFenceLoader
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 50
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 40
                 Layout.alignment:   Qt.AlignHCenter
                 sourceComponent: controller.vehicle.multiRotor ? copterGeoFence : undefined
 
@@ -369,7 +374,7 @@ SetupPage {
 
                 SettingsGroupLayout {
                     Layout.fillWidth:       true
-                    Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 40
+                    width: ScreenTools.defaultFontPixelWidth * 40
                     heading:                qsTr("Return to Launch")
 
                     QGCColoredImage {
@@ -403,7 +408,7 @@ SetupPage {
 
             Loader {
                 id:                 copterRTLLoader
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 50
+                width: ScreenTools.defaultFontPixelWidth * 40
                 Layout.alignment:   Qt.AlignHCenter
                 sourceComponent: controller.vehicle.multiRotor ? copterRTL : undefined
 
@@ -416,7 +421,7 @@ SetupPage {
 
                 SettingsGroupLayout {
                     Layout.fillWidth:       true
-                    Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 40
+                    width: ScreenTools.defaultFontPixelWidth * 40
                     heading:                qsTr("Land Mode Settings")
 
                     QGCColoredImage {
@@ -463,7 +468,7 @@ SetupPage {
 
             Loader {
                 id:                 copterLandLoader
-                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 50
+                width: ScreenTools.defaultFontPixelWidth * 40
                 Layout.alignment:   Qt.AlignHCenter
                 sourceComponent: controller.vehicle.multiRotor ? copterLand : undefined
 

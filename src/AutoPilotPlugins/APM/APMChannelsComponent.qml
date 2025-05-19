@@ -23,123 +23,126 @@ SetupPage {
     id:             channelPage
     pageComponent:  channelPageComponent
 
+    property real _comboboxPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
+    property real _margins:                ScreenTools.defaultFontPixelHeight
+
+    FactPanelController { id: controller; }
+
+    QGCPalette { id: qgcPal; colorGroupEnabled: true }
+
     Component {
         id: channelPageComponent
 
-        Item {
-            width: Math.max(availableWidth, rowLayout.width)
-            height: rowLayout.height
+        Flow {
+            id:         flowLayout
+            width:      availableWidth
+            spacing:    _margins/2
 
-            property real _comboboxPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
+            // rc input
+            Column {
+                spacing: _margins / 2
 
-            FactPanelController { id: controller; }
+                QGCLabel {
+                    text:               qsTr("RC 입력")
+                    font.bold:          true
+                }
 
-            RowLayout {
-                id: rowLayout
-                anchors.horizontalCenter: parent.horizontalCenter
+                Rectangle {
+                    implicitWidth:                  rcOptionGroupColumn.width + (_margins * 2)
+                    implicitHeight:                 rcOptionGroupColumn.height + (_margins * 2)
+                    color:                          qgcPal.windowShadeDark
+                    border.color:                   qgcPal.groupBorder
+                    radius:                         _margins / 2
 
-                // rc input
-                Column {
-                    QGCLabel {
-                        text:               qsTr("RC INPUT")
-                        font.pointSize:     ScreenTools.mediumFontPointSize
-                    }
+                    Column {
+                        id:               rcOptionGroupColumn
+                        spacing:          _margins / 2
+                        anchors.centerIn: parent
 
-                    Rectangle {
-                        implicitWidth:                  rcOptionGroupColumn.width + (_margins * 2)
-                        implicitHeight:                 rcOptionGroupColumn.height + (_margins * 2)
-                        color:                          qgcPal.window
-                        border.color:                   qgcPal.groupBorder
-                        radius:                         ScreenTools.defaultFontPixelHeight / 2
+                        Repeater {
+                            model: rcOption(16)
 
-                        Column {
-                            id:               rcOptionGroupColumn
-                            spacing:          _margins
-                            anchors.centerIn: parent
-
-                            Repeater {
-                                model: rcOption(16)
-
-                                function rcOption(count) {
-                                    var result = [];
-                                    for (var i = 1; i <= count; i++){
-                                        result.push("RC"+i+"_OPTION");
-                                    }
-                                    return result;
+                            function rcOption(count) {
+                                var result = [];
+                                for (var i = 1; i <= count; i++){
+                                    result.push("RC"+i+"_OPTION");
                                 }
-
-                                RowLayout {
-                                    required property string modelData
-                                    QGCLabel {
-                                        text:                    modelData
-                                        rightPadding:            ScreenTools.defaultFontPixelWidth * 3
-                                        Layout.preferredWidth: _comboboxPreferredWidth
-                                    }
-
-                                    FactComboBox {
-                                        width:      ScreenTools.defaultFontPixelWidth * 15
-                                        fact:       controller.getParameterFact(-1, modelData)
-                                        indexModel: false
-                                        Layout.preferredWidth: _comboboxPreferredWidth
-                                    }
-                                }
+                                return result;
                             }
 
-                        }
-                    }
-                } // Column
-
-                // servo output
-                Column {
-                    QGCLabel {
-                        text:               qsTr("SERVO OUTPUT")
-                        font.pointSize:     ScreenTools.mediumFontPointSize
-                    }
-
-                    Rectangle {
-                        implicitWidth:                  servoOptionGroupColumn.width + (_margins * 2)
-                        implicitHeight:                 servoOptionGroupColumn.height + (_margins * 2)
-                        color:                          qgcPal.window
-                        border.color:                   qgcPal.groupBorder
-                        radius:                         ScreenTools.defaultFontPixelHeight / 2
-
-                        Column {
-                            id:               servoOptionGroupColumn
-                            spacing:          _margins
-                            anchors.centerIn: parent
-
-                            Repeater {
-                                model: servoOption(16)
-
-                                function servoOption(count) {
-                                    var result = [];
-                                    for (var i = 1; i <= count; i++){
-                                        result.push("SERVO"+i+"_FUNCTION");
-                                    }
-                                    return result;
+                            RowLayout {
+                                required property string modelData
+                                QGCLabel {
+                                    text:                    modelData
+                                    rightPadding:            ScreenTools.defaultFontPixelWidth * 3
+                                    Layout.preferredWidth: _comboboxPreferredWidth
                                 }
 
-                                RowLayout {
-                                    required property string modelData
-                                    QGCLabel {
-                                        text:                    modelData
-                                        rightPadding:            ScreenTools.defaultFontPixelWidth * 3
-                                        Layout.preferredWidth: _comboboxPreferredWidth
-                                    }
-
-                                    FactComboBox {
-                                        width:      ScreenTools.defaultFontPixelWidth * 15
-                                        fact:       controller.getParameterFact(-1, modelData)
-                                        indexModel: false
-                                        Layout.preferredWidth: _comboboxPreferredWidth
-                                    }
+                                FactComboBox {
+                                    width:      ScreenTools.defaultFontPixelWidth * 15
+                                    fact:       controller.getParameterFact(-1, modelData)
+                                    indexModel: false
+                                    Layout.preferredWidth: _comboboxPreferredWidth
                                 }
                             }
-
                         }
+
                     }
-                } // Column
-            }
-        } // Item
+                }
+            } // Column
+
+            // servo output
+            Column {
+                spacing: _margins / 2
+
+                QGCLabel {
+                    text:               qsTr("서보 출력")
+                    font.bold:          true
+                }
+
+                Rectangle {
+                    implicitWidth:                  servoOptionGroupColumn.width + (_margins * 2)
+                    implicitHeight:                 servoOptionGroupColumn.height + (_margins * 2)
+                    color:                          qgcPal.windowShadeDark
+                    border.color:                   qgcPal.groupBorder
+                    radius:                         ScreenTools.defaultFontPixelHeight / 2
+
+                    Column {
+                        id:               servoOptionGroupColumn
+                        spacing:          _margins / 2
+                        anchors.centerIn: parent
+
+                        Repeater {
+                            model: servoOption(16)
+
+                            function servoOption(count) {
+                                var result = [];
+                                for (var i = 1; i <= count; i++){
+                                    result.push("SERVO"+i+"_FUNCTION");
+                                }
+                                return result;
+                            }
+
+                            RowLayout {
+                                required property string modelData
+                                QGCLabel {
+                                    text:                    modelData
+                                    rightPadding:            ScreenTools.defaultFontPixelWidth * 3
+                                    Layout.preferredWidth: _comboboxPreferredWidth
+                                }
+
+                                FactComboBox {
+                                    width:      ScreenTools.defaultFontPixelWidth * 15
+                                    fact:       controller.getParameterFact(-1, modelData)
+                                    indexModel: false
+                                    Layout.preferredWidth: _comboboxPreferredWidth
+                                }
+                            }
+                        }
+
+                    }
+                }
+            } // Column
+        }
     } // Component
 } // SetupView

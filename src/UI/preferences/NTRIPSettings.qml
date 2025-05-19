@@ -217,27 +217,43 @@ SettingsPage {
             visible:            rtkSettings.useFixedBasePosition.visible
         }
 
-        FactSlider {
+        LabelledFactTextField {
             Layout.leftMargin:  _leftMargins
-            Layout.fillWidth:   _sliderWidth
             label:              qsTr("Survey in accuracy (U-blox only)")//rtkSettings.surveyInAccuracyLimit.shortDescription
             fact:               QGroundControl.settingsManager.rtkSettings.surveyInAccuracyLimit
             visible:            rtkSettings.surveyInAccuracyLimit.visible
             enabled:            !useFixedPosition
-            majorTickStepSize:  0.01
-
-            //Component.onCompleted: console.log("increment", fact.increment)
         }
 
-        FactSlider {
+        LabelledFactTextField {
             Layout.leftMargin:  _leftMargins
-            Layout.fillWidth:   _sliderWidth
             label:              qsTr("Minimum observation time")//rtkSettings.surveyInMinObservationDuration.shortDescription
             fact:               rtkSettings.surveyInMinObservationDuration
             visible:            rtkSettings.surveyInMinObservationDuration.visible
             enabled:            !useFixedPosition
-            majorTickStepSize:  5
         }
+
+        // FactSlider {
+        //     Layout.leftMargin:  _leftMargins
+        //     Layout.fillWidth:   _sliderWidth
+        //     label:              qsTr("Survey in accuracy (U-blox only)")//rtkSettings.surveyInAccuracyLimit.shortDescription
+        //     fact:               QGroundControl.settingsManager.rtkSettings.surveyInAccuracyLimit
+        //     visible:            rtkSettings.surveyInAccuracyLimit.visible
+        //     enabled:            !useFixedPosition
+        //     majorTickStepSize:  0.01
+
+        //     //Component.onCompleted: console.log("increment", fact.increment)
+        // }
+
+        // FactSlider {
+        //     Layout.leftMargin:  _leftMargins
+        //     Layout.fillWidth:   _sliderWidth
+        //     label:              qsTr("Minimum observation time")//rtkSettings.surveyInMinObservationDuration.shortDescription
+        //     fact:               rtkSettings.surveyInMinObservationDuration
+        //     visible:            rtkSettings.surveyInMinObservationDuration.visible
+        //     enabled:            !useFixedPosition
+        //     majorTickStepSize:  5
+        // }
 
         FactCheckBoxSlider {
             Layout.columnSpan:  3

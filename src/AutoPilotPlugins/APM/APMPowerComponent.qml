@@ -23,12 +23,21 @@ SetupPage {
     id:             powerPage
     pageComponent:  powerPageComponent
 
+    property real   _margins:                   ScreenTools.defaultFontPixelHeight
+    property real _comboBoxPreferredWidth:  ScreenTools.defaultFontPixelWidth * 20
+    property real _textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
+
     Component {
         id: powerPageComponent
 
-        ColumnLayout {
+        Flow {
+            id:         flowLayout
             width:      availableWidth
-            spacing:    _margins
+            spacing:     _margins / 2
+
+        // ColumnLayout {
+        //     width:      availableWidth
+        //     spacing:    _margins
 
             FactPanelController { id: controller }
             QGCPalette { id: ggcPal; colorGroupEnabled: true }
@@ -46,9 +55,6 @@ SetupPage {
             property Fact _escCalibration:          controller.getParameterFact(-1, "ESC_CALIBRATION", false /* reportMissing */)
 
             property string _restartRequired: qsTr("Requires vehicle reboot")
-
-            property real _comboBoxPreferredWidth:  ScreenTools.defaultFontPixelWidth * 20
-            property real _textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
 
             Component {
                 id: batteryComponent

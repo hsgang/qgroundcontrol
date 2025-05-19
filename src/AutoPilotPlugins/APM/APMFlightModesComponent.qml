@@ -45,17 +45,17 @@ SetupPage {
     Component {
         id: flightModePageComponent
 
-        // Flow {
-        //     id:         flowLayout
-        //     width:      availableWidth
-        //     spacing:     _margins
+        Flow {
+            id:         flowLayout
+            width:      availableWidth
+            spacing:     _margins / 2
 
-        ColumnLayout {
-            width:      Math.max(implicitWidth, ScreenTools.defaultFontPixelWidth * 50)
-            spacing:    ScreenTools.defaultFontPixelHeight
+        // ColumnLayout {
+        //     width:      Math.max(implicitWidth, ScreenTools.defaultFontPixelWidth * 50)
+        //     spacing:    ScreenTools.defaultFontPixelHeight
 
             Column {
-                spacing: _margins
+                spacing: _margins / 2
                 Layout.alignment:   Qt.AlignHCenter
 
                 QGCLabel {
@@ -69,7 +69,7 @@ SetupPage {
                     width:  flightModeColumn.width + _margins
                     height: flightModeColumn.height + _margins
                     radius: ScreenTools.defaultFontPixelHeight * 0.5
-                    color:  qgcPal.window
+                    color:  qgcPal.windowShadeDark
                     border.color: qgcPal.groupBorder
 
                     Column {
@@ -86,7 +86,7 @@ SetupPage {
                             QGCLabel {
                                 id:                 modeChannelLabel
                                 anchors.baseline:   modeChannelCombo.baseline
-                                text:               qsTr("Flight mode channel:")
+                                text:               qsTr("Flight mode channel")
                             }
 
                             QGCComboBox {
@@ -118,7 +118,7 @@ SetupPage {
 
                                 QGCLabel {
                                     text:   qsTr("Flight Mode ") + index
-                                    color:  controller.activeFlightMode == index ? "yellow" : qgcPal.text
+                                    color:  controller.activeFlightMode == index ? qgcPal.colorYellow : qgcPal.text
 
                                     property int index: modelData + 1
                                 }
@@ -192,7 +192,7 @@ SetupPage {
             } // Column - Flight Modes
 
             Column {
-                spacing: _margins
+                spacing: _margins / 2
                 Layout.alignment:   Qt.AlignHCenter
 
                 QGCLabel {
@@ -206,7 +206,7 @@ SetupPage {
                     width:  channelOptColumn.width + _margins
                     height: channelOptColumn.height + _margins
                     radius: ScreenTools.defaultFontPixelHeight * 0.5
-                    color:  qgcPal.window
+                    color:  qgcPal.windowShadeDark
                     border.color: qgcPal.groupBorder
 
                     Column {
@@ -227,8 +227,8 @@ SetupPage {
 
                                 QGCLabel {
                                     anchors.baseline:   optCombo.baseline
-                                    text:               qsTr("Channel option %1 :").arg(index)
-                                    color:              controller.channelOptionEnabled[modelData + (_ch7OptAvailable ? 1 : 0)] ? "yellow" : qgcPal.text
+                                    text:               qsTr("Channel option %1").arg(index)
+                                    color:              controller.channelOptionEnabled[modelData + (_ch7OptAvailable ? 1 : 0)] ? qgcPal.colorYellow : qgcPal.text
                                 }
 
                                 FactComboBox {

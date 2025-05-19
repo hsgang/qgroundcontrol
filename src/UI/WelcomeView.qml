@@ -358,7 +358,7 @@ Rectangle {
 
                     QGCButton {
                         id: skipButton
-                        text: _signedIn ? "기체 선택" : "건너뛰기"
+                        text: _signedIn ? "기체 선택" : "오프라인 모드"
                         Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 18
                         Layout.alignment: Qt.AlignHCenter
                         onClicked: {
@@ -531,7 +531,8 @@ Rectangle {
                         Layout.alignment:   Qt.AlignHCenter
 
                         QGCButton {
-                            implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                            // implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                            Layout.fillWidth:   true
                             text:       qsTr("Connect")
                             font.bold: true
                             enabled:    _currentSelection && !_currentSelection.link
@@ -540,7 +541,8 @@ Rectangle {
                             }
                         }
                         QGCButton {
-                            implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                            // implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                            Layout.fillWidth:   true
                             text:       qsTr("Disconnect")
                             font.bold: true
                             enabled:    _currentSelection && _currentSelection.link
@@ -550,7 +552,8 @@ Rectangle {
                             }
                         }
                         QGCButton {
-                            implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                            // implicitWidth: ScreenTools.defaultFontPixelWidth * 12
+                            Layout.fillWidth:   true
                             text:       qsTr("Configure")
                             font.bold: true
                             onClicked: {
@@ -559,14 +562,33 @@ Rectangle {
                         }
                     }
 
-                    QGCButton {
-                        implicitWidth: ScreenTools.defaultFontPixelWidth * 24
-                        Layout.alignment: Qt.AlignHCenter
-                        text:       "비행화면 보기"
-                        iconSource: "/qmlimages/PaperPlane.svg"
-                        font.bold: true
-                        onClicked: {
-                            mainWindow.showFlyView()
+                    RowLayout {
+                        spacing:            ScreenTools.defaultFontPixelWidth
+                        Layout.fillWidth:   true
+                        Layout.alignment:   Qt.AlignHCenter
+
+                        QGCButton {
+                            //implicitWidth: ScreenTools.defaultFontPixelWidth * 24
+                            Layout.fillWidth:   true
+                            //Layout.alignment: Qt.AlignHCenter
+                            text:       "비행화면"
+                            iconSource: "/qmlimages/PaperPlane.svg"
+                            font.bold: true
+                            onClicked: {
+                                mainWindow.showFlyView()
+                            }
+                        }
+
+                        QGCButton {
+                            //implicitWidth: ScreenTools.defaultFontPixelWidth * 24
+                            Layout.fillWidth:   true
+                            //Layout.alignment: Qt.AlignHCenter
+                            text:       "자동경로"
+                            iconSource: "/qmlimages/Plan.svg"
+                            font.bold: true
+                            onClicked: {
+                                mainWindow.showPlanView()
+                            }
                         }
                     }
 

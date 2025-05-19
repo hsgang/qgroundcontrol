@@ -23,12 +23,16 @@ SetupPage {
     id:             tuningPage
     pageComponent:  tuningPageComponent
 
+    property real _margins: ScreenTools.defaultFontPixelHeight
+
+    QGCPalette { id: qgcPal; colorGroupEnabled: true }
+
     Component {
         id: tuningPageComponent
 
         Item {
-            width: Math.max(availableWidth, outerColumn.width)
-            height: outerColumn.height//availableHeight
+            width: availableWidth//Math.max(availableWidth, outerColumn.width)
+            height: flowLayout.height//availableHeight
 
             FactPanelController { id: controller; }
 
@@ -74,7 +78,7 @@ SetupPage {
             property real _margins: ScreenTools.defaultFontPixelHeight
 
             readonly property real factSpinBoxLabelWidth:  ScreenTools.defaultFontPixelWidth * 12
-            readonly property real _spinboxPreferredWidth: ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth * 14 : ScreenTools.defaultFontPixelWidth * 18
+            readonly property real _spinboxPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
 
             property bool _loadComplete: false
 
@@ -135,689 +139,1286 @@ SetupPage {
             Connections { target: _ch11Opt; onValueChanged: calcAutoTuneChannel() }
             Connections { target: _ch12Opt; onValueChanged: calcAutoTuneChannel() }
 
-            ColumnLayout {
-                id:                         outerColumn
-                anchors.horizontalCenter:   parent.horizontalCenter
-                spacing:                    _margins
-                visible:                    !advanced
+            Flow {
+                id:         flowLayout
+                width:      availableWidth
+                spacing:    _margins / 2
+                visible:    !advanced
 
-                Rectangle {
-                    height: tuningSpinboxLabel.height + tuningSpinBoxRect.height
-                    width:  tuningSpinBoxRect.width
-                    color:  qgcPal.window
+                Column {
+                    spacing: _margins / 2
 
                     QGCLabel {
-                        id:                 tuningSpinboxLabel
-                        text:               qsTr("Basic Tuning")
+                        text: qsTr("Roll")
                     }
 
                     Rectangle {
-                    id:                 tuningSpinBoxRect
-                    width:              tuningSpinBoxGrid.width + (_margins * 2)
-                    height:             tuningSpinBoxGrid.height + (_margins * 2)
-                    anchors.top:        tuningSpinboxLabel.bottom
-                    color:              qgcPal.window
-                    radius:             ScreenTools.defaultFontPixelHeight / 2
-                    border.color:       qgcPal.groupBorder
+                        border.width:   1
+                        border.color:   qgcPal.groupBorder
+                        radius:         _margins / 2
+                        width:          stabRRow.width + _margins
+                        height:         stabRRow.height + _margins
+                        color:          qgcPal.windowShadeDark
 
+                        ColumnLayout{
+                            id:             stabRRow
+                            anchors.horizontalCenter:   parent.horizontalCenter
+                            anchors.verticalCenter:     parent.verticalCenter
+                            spacing: _margins / 2
 
-                        GridLayout {
-                            id:                 tuningSpinBoxGrid
-                            anchors.margins:    _margins
-                            anchors.top:        parent.top
-                            anchors.left:       parent.left
-                            columns:            3
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("ATC_ANG_P")
+                                fact:   controller.getParameterFact(-1, "ATC_ANG_RLL_P")
+                                toValue:     12
+                                fromValue:    1
+                                decimals:     2
+                                stepValue:  0.05
+                            }
 
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          stabRRow.width + ScreenTools.defaultFontPixelWidth
-                                height:         stabRRow.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             stabRRow
-                                    anchors.horizontalCenter:   parent.horizontalCenter
-                                    anchors.verticalCenter:     parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Stabilize Roll")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("ATC_ANG_P")
-                                        fact:   controller.getParameterFact(-1, "ATC_ANG_RLL_P")
-                                        toValue:     12
-                                        fromValue:    1
-                                        decimals:     2
-                                        stepValue:  0.05
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Accel Max")
-                                        fact:   controller.getParameterFact(-1, "ATC_ACCEL_R_MAX")
-                                        toValue:     200000
-                                        fromValue:    0
-                                        decimals:     0
-                                        stepValue:  1000
-                                    }
-                                }
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Accel Max")
+                                fact:   controller.getParameterFact(-1, "ATC_ACCEL_R_MAX")
+                                toValue:     200000
+                                fromValue:    0
+                                decimals:     0
+                                stepValue:  1000
                             }
 
                             Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          stabPRow.width + ScreenTools.defaultFontPixelWidth
-                                height:         stabPRow.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             stabPRow
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Stabilize Pitch")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("ATC_ANG_P")
-                                        fact:   controller.getParameterFact(-1, "ATC_ANG_PIT_P")
-                                        toValue:     12
-                                        fromValue:    1
-                                        decimals:     2
-                                        stepValue:  0.05
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Accel Max")
-                                        fact:   controller.getParameterFact(-1, "ATC_ACCEL_P_MAX")
-                                        toValue:     200000
-                                        fromValue:    0
-                                        decimals:     0
-                                        stepValue:  1000
-                                    }
-                                }
+                                Layout.fillWidth: true
+                                height: 1
+                                color: qgcPal.groupBorder
                             }
 
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          stabYRow.width + ScreenTools.defaultFontPixelWidth
-                                height:         stabYRow.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             stabYRow
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Stabilize Yaw")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("ATC_ANG_P")
-                                        fact:   controller.getParameterFact(-1, "ATC_ANG_YAW_P")
-                                        toValue:     12
-                                        fromValue:    1
-                                        decimals:     2
-                                        stepValue:  0.05
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Accel Max")
-                                        fact:   controller.getParameterFact(-1, "ATC_ACCEL_Y_MAX")
-                                        toValue:     200000
-                                        fromValue:    0
-                                        decimals:     0
-                                        stepValue:  1000
-                                    }
-                                }
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Rate_Roll_P")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_P")
+                                toValue:     1
+                                fromValue:    0
+                                decimals:     3
+                                stepValue:  0.005
                             }
 
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          rateRollGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         rateRollGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             rateRollGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Rate Roll")
-                                        Layout.columnSpan: 2
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Rate_Roll_P")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_P")
-                                        toValue:     1
-                                        fromValue:    0
-                                        decimals:     3
-                                        stepValue:  0.005
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Rate_Roll_I")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_I")
-                                        toValue:     1
-                                        fromValue:    0
-                                        decimals:     3
-                                        stepValue:  0.005
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Rate_Roll_D")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_D")
-                                        toValue:     1
-                                        fromValue:    0
-                                        decimals:     4
-                                        stepValue:  0.0001
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("FLTE")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTE")
-                                        toValue:     100
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:    1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("FLTD")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTD")
-                                        toValue:     100
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:    1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("FLTT")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTT")
-                                        toValue:     100
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:    1
-                                    }
-                                }
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Rate_Roll_I")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_I")
+                                toValue:     1
+                                fromValue:    0
+                                decimals:     3
+                                stepValue:  0.005
                             }
 
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          ratePitchGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         ratePitchGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             ratePitchGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Rate Pitch")
-                                        Layout.columnSpan: 2
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Rate_Pitch_P")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_P")
-                                        toValue:     1
-                                        fromValue:    0
-                                        decimals:     3
-                                        stepValue:  0.005
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Rate_Pitch_I")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_I")
-                                        toValue:     1
-                                        fromValue:    0
-                                        decimals:     3
-                                        stepValue:  0.005
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Rate_Pitch_D")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_D")
-                                        toValue:     1
-                                        fromValue:    0
-                                        decimals:     4
-                                        stepValue:  0.0001
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("FLTE")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTE")
-                                        toValue:     100
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:    1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("FLTD")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTD")
-                                        toValue:     100
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:    1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("FLTT")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTT")
-                                        toValue:     100
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:    1
-                                    }
-                                }
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Rate_Roll_D")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_D")
+                                toValue:     1
+                                fromValue:    0
+                                decimals:     4
+                                stepValue:  0.0001
                             }
 
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          rateYawGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         rateYawGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             rateYawGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Rate Yaw")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Rate_Yaw_P")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_P")
-                                        toValue:     1
-                                        fromValue:    0
-                                        decimals:     3
-                                        stepValue:  0.005
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Rate_Yaw_I")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_I")
-                                        toValue:     1
-                                        fromValue:    0
-                                        decimals:     3
-                                        stepValue:  0.005
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("Rate_Yaw_D")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_D")
-                                        toValue:     1
-                                        fromValue:    0
-                                        decimals:     4
-                                        stepValue:  0.0001
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("FLTE")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTE")
-                                        toValue:     100
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:    1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("FLTD")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTD")
-                                        toValue:     100
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:    1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("FLTT")
-                                        fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTT")
-                                        toValue:     100
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:    1
-                                    }
-                                }
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("FLTE")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTE")
+                                toValue:     100
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:    1
                             }
 
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          pscACCZGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         pscACCZGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             pscACCZGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Throttle Accel(Acc to Mot)")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PSC_ACCZ_P")
-                                        fact:   controller.getParameterFact(-1, "PSC_ACCZ_P")
-                                        toValue:     2
-                                        fromValue:    0
-                                        decimals:     2
-                                        stepValue:  0.01
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PSC_ACCZ_I")
-                                        fact:   controller.getParameterFact(-1, "PSC_ACCZ_I")
-                                        toValue:     2
-                                        fromValue:    0
-                                        decimals:     2
-                                        stepValue:  0.01
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PSC_ACCZ_D")
-                                        fact:   controller.getParameterFact(-1, "PSC_ACCZ_D")
-                                        toValue:    0.1
-                                        fromValue:    0
-                                        decimals:     3
-                                        stepValue:  0.001
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("THR_EXPO")
-                                        fact:   controller.getParameterFact(-1, "MOT_THST_EXPO")
-                                        toValue:       1
-                                        fromValue:    -1
-                                        decimals:      3
-                                        stepValue:  0.001
-                                    }
-                                }
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("FLTD")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTD")
+                                toValue:     100
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:    1
                             }
 
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          pscThrRateGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         pscThrRateGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             pscThrRateGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Throttle Rate")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PSC_VELZ_P")
-                                        description:     "VSpd to Acc"
-                                        fact:   controller.getParameterFact(-1, "PSC_VELZ_P")
-                                        toValue:      6
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:  0.1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PSC_POSZ_P")
-                                        description:    "Alt to VSpd"
-                                        fact:   controller.getParameterFact(-1, "PSC_POSZ_P")
-                                        toValue:      2
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:  0.1
-                                    }
-                                }
-                            }
-
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          yawGainGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         yawGainGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             yawGainGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Yaw Gain")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("ATC_SLEW_YAW")
-                                        description:    "cdeg/s"
-                                        fact:   controller.getParameterFact(-1, "ATC_SLEW_YAW")
-                                        toValue:       10000
-                                        fromValue:     0
-                                        decimals:      1
-                                        stepValue:     500
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PILOT_Y_RATE")
-                                        description:    "deg/s"
-                                        fact:   controller.getParameterFact(-1, "PILOT_Y_RATE")
-                                        toValue:    1000
-                                        fromValue:  0
-                                        decimals:   1
-                                        stepValue:  5
-                                    }
-                                }
-                            }
-
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          pscVelGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         pscVelGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             pscVelGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Velocity XY")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PSC_VELXY_P")
-                                        fact:   controller.getParameterFact(-1, "PSC_VELXY_P")
-                                        toValue:      6
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:  0.1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PSC_VELXY_I")
-                                        fact:   controller.getParameterFact(-1, "PSC_VELXY_I")
-                                        toValue:      6
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:  0.1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PSC_VELXY_D")
-                                        fact:   controller.getParameterFact(-1, "PSC_VELXY_D")
-                                        toValue:      6
-                                        fromValue:    0
-                                        decimals:     1
-                                        stepValue:  0.1
-                                    }
-                                }
-                            }
-
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          positionGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         positionGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             positionGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("Position XY")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("PSC_POSXY_P")
-                                        fact:   controller.getParameterFact(-1, "PSC_POSXY_P")
-                                        toValue:       2
-                                        fromValue:     0
-                                        decimals:      1
-                                        stepValue:     0.1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("ATC_INPUT_TC")
-                                        fact:   controller.getParameterFact(-1, "ATC_INPUT_TC")
-                                        toValue:    2
-                                        fromValue:  0
-                                        decimals:   2
-                                        stepValue:  0.01
-                                    }
-                                }
-                            }                            
-
-                            Rectangle {
-                                border.width:   1
-                                border.color:   qgcPal.groupBorder
-                                radius:         _margins / 4
-                                width:          filterGrid.width + ScreenTools.defaultFontPixelWidth
-                                height:         filterGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
-                                color:          "transparent"
-                                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
-
-                                ColumnLayout{
-                                    id:             filterGrid
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    anchors.verticalCenter: parent.verticalCenter
-
-                                    QGCLabel {
-                                        text: qsTr("FILTER")
-                                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("ACCEL FILT")
-                                        fact:   controller.getParameterFact(-1, "INS_ACCEL_FILTER")
-                                        toValue:    100
-                                        fromValue:  0
-                                        decimals:   1
-                                        stepValue:  1
-                                    }
-
-                                    LabelledFactSpinBox{
-                                        spinboxPreferredWidth: _spinboxPreferredWidth
-                                        label: qsTr("GYRO FILT")
-                                        fact:   controller.getParameterFact(-1, "INS_GYRO_FILTER")
-                                        toValue:    100
-                                        fromValue:  0
-                                        decimals:   1
-                                        stepValue:  1
-                                    }
-                                }
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("FLTT")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTT")
+                                toValue:     100
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:    1
                             }
                         }
                     }
                 }
+
+                Column {
+                    spacing: _margins / 2
+
+                    QGCLabel {
+                        text: qsTr("Pitch")
+                    }
+
+                    Rectangle {
+                        border.width:   1
+                        border.color:   qgcPal.groupBorder
+                        radius:         _margins / 4
+                        width:          stabPRow.width + _margins
+                        height:         stabPRow.height + _margins
+                        color:          qgcPal.windowShadeDark
+
+                        ColumnLayout{
+                            id:             stabPRow
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: _margins / 2
+
+
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("ATC_ANG_P")
+                                fact:   controller.getParameterFact(-1, "ATC_ANG_PIT_P")
+                                toValue:     12
+                                fromValue:    1
+                                decimals:     2
+                                stepValue:  0.05
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Accel Max")
+                                fact:   controller.getParameterFact(-1, "ATC_ACCEL_P_MAX")
+                                toValue:     200000
+                                fromValue:    0
+                                decimals:     0
+                                stepValue:  1000
+                            }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 1
+                                color: qgcPal.groupBorder
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Rate_Pitch_P")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_P")
+                                toValue:     1
+                                fromValue:    0
+                                decimals:     3
+                                stepValue:  0.005
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Rate_Pitch_I")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_I")
+                                toValue:     1
+                                fromValue:    0
+                                decimals:     3
+                                stepValue:  0.005
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Rate_Pitch_D")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_D")
+                                toValue:     1
+                                fromValue:    0
+                                decimals:     4
+                                stepValue:  0.0001
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("FLTE")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTE")
+                                toValue:     100
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:    1
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("FLTD")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTD")
+                                toValue:     100
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:    1
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("FLTT")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTT")
+                                toValue:     100
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:    1
+                            }
+                        }
+                    }
+                }
+
+                Column {
+                    spacing : _margins / 2
+
+                    QGCLabel {
+                        text: qsTr("Yaw")
+                    }
+
+                    Rectangle {
+                        border.width:   1
+                        border.color:   qgcPal.groupBorder
+                        radius:         _margins / 4
+                        width:          stabYRow.width + _margins
+                        height:         stabYRow.height + _margins
+                        color:          qgcPal.windowShadeDark
+
+                        ColumnLayout{
+                            id:             stabYRow
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: _margins / 2
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("ATC_ANG_P")
+                                fact:   controller.getParameterFact(-1, "ATC_ANG_YAW_P")
+                                toValue:     12
+                                fromValue:    1
+                                decimals:     2
+                                stepValue:  0.05
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Accel Max")
+                                fact:   controller.getParameterFact(-1, "ATC_ACCEL_Y_MAX")
+                                toValue:     200000
+                                fromValue:    0
+                                decimals:     0
+                                stepValue:  1000
+                            }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 1
+                                color: qgcPal.groupBorder
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Rate_Yaw_P")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_P")
+                                toValue:     1
+                                fromValue:    0
+                                decimals:     3
+                                stepValue:  0.005
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Rate_Yaw_I")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_I")
+                                toValue:     1
+                                fromValue:    0
+                                decimals:     3
+                                stepValue:  0.005
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("Rate_Yaw_D")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_D")
+                                toValue:     1
+                                fromValue:    0
+                                decimals:     4
+                                stepValue:  0.0001
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("FLTE")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTE")
+                                toValue:     100
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:    1
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("FLTD")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTD")
+                                toValue:     100
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:    1
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("FLTT")
+                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTT")
+                                toValue:     100
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:    1
+                            }
+                        }
+                    }
+                }
+
+                Column {
+                    spacing : _margins / 2
+
+                    QGCLabel {
+                        text: qsTr("Throttle Accel(Acc to Mot)")
+                    }
+
+                    Rectangle {
+                        border.width:   1
+                        border.color:   qgcPal.groupBorder
+                        radius:         _margins / 4
+                        width:          pscACCZGrid.width + _margins
+                        height:         pscACCZGrid.height + _margins
+                        color:          qgcPal.windowShadeDark
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                        ColumnLayout{
+                            id:             pscACCZGrid
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: _margins / 2
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PSC_ACCZ_P")
+                                fact:   controller.getParameterFact(-1, "PSC_ACCZ_P")
+                                toValue:     2
+                                fromValue:    0
+                                decimals:     2
+                                stepValue:  0.01
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PSC_ACCZ_I")
+                                fact:   controller.getParameterFact(-1, "PSC_ACCZ_I")
+                                toValue:     2
+                                fromValue:    0
+                                decimals:     2
+                                stepValue:  0.01
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PSC_ACCZ_D")
+                                fact:   controller.getParameterFact(-1, "PSC_ACCZ_D")
+                                toValue:    0.1
+                                fromValue:    0
+                                decimals:     3
+                                stepValue:  0.001
+                            }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 1
+                                color: qgcPal.groupBorder
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PSC_VELZ_P")
+                                description:     "VSpd to Acc"
+                                fact:   controller.getParameterFact(-1, "PSC_VELZ_P")
+                                toValue:      6
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:  0.1
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PSC_POSZ_P")
+                                description:    "Alt to VSpd"
+                                fact:   controller.getParameterFact(-1, "PSC_POSZ_P")
+                                toValue:      2
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:  0.1
+                            }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 1
+                                color: qgcPal.groupBorder
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("THR_EXPO")
+                                fact:   controller.getParameterFact(-1, "MOT_THST_EXPO")
+                                toValue:       1
+                                fromValue:    -1
+                                decimals:      3
+                                stepValue:  0.001
+                            }
+                        }
+                    }
+                }
+
+                Column {
+                    spacing : _margins / 2
+
+                    QGCLabel {
+                        text: qsTr("Velocity XY")
+                    }
+
+                    Rectangle {
+                        border.width:   1
+                        border.color:   qgcPal.groupBorder
+                        radius:         _margins / 4
+                        width:          pscVelGrid.width + _margins
+                        height:         pscVelGrid.height + _margins
+                        color:          qgcPal.windowShadeDark
+
+                        ColumnLayout{
+                            id:             pscVelGrid
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: _margins / 2
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PSC_VELXY_P")
+                                fact:   controller.getParameterFact(-1, "PSC_VELXY_P")
+                                toValue:      6
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:  0.1
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PSC_VELXY_I")
+                                fact:   controller.getParameterFact(-1, "PSC_VELXY_I")
+                                toValue:      6
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:  0.1
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PSC_VELXY_D")
+                                fact:   controller.getParameterFact(-1, "PSC_VELXY_D")
+                                toValue:      6
+                                fromValue:    0
+                                decimals:     1
+                                stepValue:  0.1
+                            }
+
+                            Rectangle {
+                                Layout.fillWidth: true
+                                height: 1
+                                color: qgcPal.groupBorder
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PSC_POSXY_P")
+                                fact:   controller.getParameterFact(-1, "PSC_POSXY_P")
+                                toValue:       2
+                                fromValue:     0
+                                decimals:      1
+                                stepValue:     0.1
+                            }
+                        }
+                    }
+                }
+
+                Column {
+                    spacing : _margins / 2
+
+                    QGCLabel {
+                        text: qsTr("Yaw Gain")
+                    }
+
+                    Rectangle {
+                        border.width:   1
+                        border.color:   qgcPal.groupBorder
+                        radius:         _margins / 4
+                        width:          yawGainGrid.width + _margins
+                        height:         yawGainGrid.height + _margins
+                        color:          qgcPal.windowShadeDark
+
+                        ColumnLayout{
+                            id:             yawGainGrid
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: _margins / 2
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("ATC_SLEW_YAW")
+                                description:    "cdeg/s"
+                                fact:   controller.getParameterFact(-1, "ATC_SLEW_YAW")
+                                toValue:       10000
+                                fromValue:     0
+                                decimals:      1
+                                stepValue:     500
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("PILOT_Y_RATE")
+                                description:    "deg/s"
+                                fact:   controller.getParameterFact(-1, "PILOT_Y_RATE")
+                                toValue:    1000
+                                fromValue:  0
+                                decimals:   1
+                                stepValue:  5
+                            }
+                        }
+                    }
+                }
+
+                Column {
+                    spacing : _margins / 2
+
+                    QGCLabel {
+                        text: qsTr("FILTER")
+                    }
+
+                    Rectangle {
+                        border.width:   1
+                        border.color:   qgcPal.groupBorder
+                        radius:         _margins / 4
+                        width:          filterGrid.width + _margins
+                        height:         filterGrid.height + _margins
+                        color:          qgcPal.windowShadeDark
+
+                        ColumnLayout{
+                            id:             filterGrid
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing: _margins / 2
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("ACCEL FILT")
+                                fact:   controller.getParameterFact(-1, "INS_ACCEL_FILTER")
+                                toValue:    100
+                                fromValue:  0
+                                decimals:   1
+                                stepValue:  1
+                            }
+
+                            LabelledFactSpinBox{
+                                spinboxPreferredWidth: _spinboxPreferredWidth
+                                label: qsTr("GYRO FILT")
+                                fact:   controller.getParameterFact(-1, "INS_GYRO_FILTER")
+                                toValue:    100
+                                fromValue:  0
+                                decimals:   1
+                                stepValue:  1
+                            }
+                        }
+                    }
+                }
+
+
+            // ColumnLayout {
+            //     id:                         outerColumn
+            //     anchors.horizontalCenter:   parent.horizontalCenter
+            //     spacing:                    _margins
+            //     visible:                    !advanced
+
+            //     Rectangle {
+            //         height: tuningSpinboxLabel.height + tuningSpinBoxRect.height
+            //         width:  tuningSpinBoxRect.width
+            //         color:  qgcPal.window
+
+            //         QGCLabel {
+            //             id:                 tuningSpinboxLabel
+            //             text:               qsTr("Basic Tuning")
+            //         }
+
+            //         Rectangle {
+            //         id:                 tuningSpinBoxRect
+            //         width:              tuningSpinBoxGrid.width + (_margins * 2)
+            //         height:             tuningSpinBoxGrid.height + (_margins * 2)
+            //         anchors.top:        tuningSpinboxLabel.bottom
+            //         color:              qgcPal.windowShadeDark
+            //         radius:             ScreenTools.defaultFontPixelHeight / 2
+            //         border.color:       qgcPal.groupBorder
+
+            //             GridLayout {
+            //                 id:                 tuningSpinBoxGrid
+            //                 anchors.margins:    _margins
+            //                 anchors.top:        parent.top
+            //                 anchors.left:       parent.left
+            //                 columns:            3
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          stabRRow.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         stabRRow.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             stabRRow
+            //                         anchors.horizontalCenter:   parent.horizontalCenter
+            //                         anchors.verticalCenter:     parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Stabilize Roll")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("ATC_ANG_P")
+            //                             fact:   controller.getParameterFact(-1, "ATC_ANG_RLL_P")
+            //                             toValue:     12
+            //                             fromValue:    1
+            //                             decimals:     2
+            //                             stepValue:  0.05
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Accel Max")
+            //                             fact:   controller.getParameterFact(-1, "ATC_ACCEL_R_MAX")
+            //                             toValue:     200000
+            //                             fromValue:    0
+            //                             decimals:     0
+            //                             stepValue:  1000
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          stabPRow.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         stabPRow.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             stabPRow
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Stabilize Pitch")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("ATC_ANG_P")
+            //                             fact:   controller.getParameterFact(-1, "ATC_ANG_PIT_P")
+            //                             toValue:     12
+            //                             fromValue:    1
+            //                             decimals:     2
+            //                             stepValue:  0.05
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Accel Max")
+            //                             fact:   controller.getParameterFact(-1, "ATC_ACCEL_P_MAX")
+            //                             toValue:     200000
+            //                             fromValue:    0
+            //                             decimals:     0
+            //                             stepValue:  1000
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          stabYRow.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         stabYRow.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             stabYRow
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Stabilize Yaw")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("ATC_ANG_P")
+            //                             fact:   controller.getParameterFact(-1, "ATC_ANG_YAW_P")
+            //                             toValue:     12
+            //                             fromValue:    1
+            //                             decimals:     2
+            //                             stepValue:  0.05
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Accel Max")
+            //                             fact:   controller.getParameterFact(-1, "ATC_ACCEL_Y_MAX")
+            //                             toValue:     200000
+            //                             fromValue:    0
+            //                             decimals:     0
+            //                             stepValue:  1000
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          rateRollGrid.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         rateRollGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             rateRollGrid
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Rate Roll")
+            //                             Layout.columnSpan: 2
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Rate_Roll_P")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_P")
+            //                             toValue:     1
+            //                             fromValue:    0
+            //                             decimals:     3
+            //                             stepValue:  0.005
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Rate_Roll_I")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_I")
+            //                             toValue:     1
+            //                             fromValue:    0
+            //                             decimals:     3
+            //                             stepValue:  0.005
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Rate_Roll_D")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_D")
+            //                             toValue:     1
+            //                             fromValue:    0
+            //                             decimals:     4
+            //                             stepValue:  0.0001
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("FLTE")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTE")
+            //                             toValue:     100
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:    1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("FLTD")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTD")
+            //                             toValue:     100
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:    1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("FLTT")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTT")
+            //                             toValue:     100
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:    1
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          ratePitchGrid.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         ratePitchGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             ratePitchGrid
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Rate Pitch")
+            //                             Layout.columnSpan: 2
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Rate_Pitch_P")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_P")
+            //                             toValue:     1
+            //                             fromValue:    0
+            //                             decimals:     3
+            //                             stepValue:  0.005
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Rate_Pitch_I")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_I")
+            //                             toValue:     1
+            //                             fromValue:    0
+            //                             decimals:     3
+            //                             stepValue:  0.005
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Rate_Pitch_D")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_D")
+            //                             toValue:     1
+            //                             fromValue:    0
+            //                             decimals:     4
+            //                             stepValue:  0.0001
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("FLTE")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTE")
+            //                             toValue:     100
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:    1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("FLTD")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTD")
+            //                             toValue:     100
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:    1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("FLTT")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTT")
+            //                             toValue:     100
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:    1
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          rateYawGrid.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         rateYawGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             rateYawGrid
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Rate Yaw")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Rate_Yaw_P")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_P")
+            //                             toValue:     1
+            //                             fromValue:    0
+            //                             decimals:     3
+            //                             stepValue:  0.005
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Rate_Yaw_I")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_I")
+            //                             toValue:     1
+            //                             fromValue:    0
+            //                             decimals:     3
+            //                             stepValue:  0.005
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("Rate_Yaw_D")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_D")
+            //                             toValue:     1
+            //                             fromValue:    0
+            //                             decimals:     4
+            //                             stepValue:  0.0001
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("FLTE")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTE")
+            //                             toValue:     100
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:    1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("FLTD")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTD")
+            //                             toValue:     100
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:    1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("FLTT")
+            //                             fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTT")
+            //                             toValue:     100
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:    1
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          pscACCZGrid.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         pscACCZGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             pscACCZGrid
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Throttle Accel(Acc to Mot)")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PSC_ACCZ_P")
+            //                             fact:   controller.getParameterFact(-1, "PSC_ACCZ_P")
+            //                             toValue:     2
+            //                             fromValue:    0
+            //                             decimals:     2
+            //                             stepValue:  0.01
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PSC_ACCZ_I")
+            //                             fact:   controller.getParameterFact(-1, "PSC_ACCZ_I")
+            //                             toValue:     2
+            //                             fromValue:    0
+            //                             decimals:     2
+            //                             stepValue:  0.01
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PSC_ACCZ_D")
+            //                             fact:   controller.getParameterFact(-1, "PSC_ACCZ_D")
+            //                             toValue:    0.1
+            //                             fromValue:    0
+            //                             decimals:     3
+            //                             stepValue:  0.001
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("THR_EXPO")
+            //                             fact:   controller.getParameterFact(-1, "MOT_THST_EXPO")
+            //                             toValue:       1
+            //                             fromValue:    -1
+            //                             decimals:      3
+            //                             stepValue:  0.001
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          pscThrRateGrid.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         pscThrRateGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             pscThrRateGrid
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Throttle Rate")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PSC_VELZ_P")
+            //                             description:     "VSpd to Acc"
+            //                             fact:   controller.getParameterFact(-1, "PSC_VELZ_P")
+            //                             toValue:      6
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:  0.1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PSC_POSZ_P")
+            //                             description:    "Alt to VSpd"
+            //                             fact:   controller.getParameterFact(-1, "PSC_POSZ_P")
+            //                             toValue:      2
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:  0.1
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          yawGainGrid.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         yawGainGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             yawGainGrid
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Yaw Gain")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("ATC_SLEW_YAW")
+            //                             description:    "cdeg/s"
+            //                             fact:   controller.getParameterFact(-1, "ATC_SLEW_YAW")
+            //                             toValue:       10000
+            //                             fromValue:     0
+            //                             decimals:      1
+            //                             stepValue:     500
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PILOT_Y_RATE")
+            //                             description:    "deg/s"
+            //                             fact:   controller.getParameterFact(-1, "PILOT_Y_RATE")
+            //                             toValue:    1000
+            //                             fromValue:  0
+            //                             decimals:   1
+            //                             stepValue:  5
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          pscVelGrid.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         pscVelGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             pscVelGrid
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Velocity XY")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PSC_VELXY_P")
+            //                             fact:   controller.getParameterFact(-1, "PSC_VELXY_P")
+            //                             toValue:      6
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:  0.1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PSC_VELXY_I")
+            //                             fact:   controller.getParameterFact(-1, "PSC_VELXY_I")
+            //                             toValue:      6
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:  0.1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PSC_VELXY_D")
+            //                             fact:   controller.getParameterFact(-1, "PSC_VELXY_D")
+            //                             toValue:      6
+            //                             fromValue:    0
+            //                             decimals:     1
+            //                             stepValue:  0.1
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          positionGrid.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         positionGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             positionGrid
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("Position XY")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("PSC_POSXY_P")
+            //                             fact:   controller.getParameterFact(-1, "PSC_POSXY_P")
+            //                             toValue:       2
+            //                             fromValue:     0
+            //                             decimals:      1
+            //                             stepValue:     0.1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("ATC_INPUT_TC")
+            //                             fact:   controller.getParameterFact(-1, "ATC_INPUT_TC")
+            //                             toValue:    2
+            //                             fromValue:  0
+            //                             decimals:   2
+            //                             stepValue:  0.01
+            //                         }
+            //                     }
+            //                 }
+
+            //                 Rectangle {
+            //                     border.width:   1
+            //                     border.color:   qgcPal.groupBorder
+            //                     radius:         _margins / 4
+            //                     width:          filterGrid.width + ScreenTools.defaultFontPixelWidth
+            //                     height:         filterGrid.height + (ScreenTools.defaultFontPixelHeight / 2)
+            //                     color:          "transparent"
+            //                     Layout.alignment: Qt.AlignHCenter | Qt.AlignTop // | Qt.AlignVCenter
+
+            //                     ColumnLayout{
+            //                         id:             filterGrid
+            //                         anchors.horizontalCenter: parent.horizontalCenter
+            //                         anchors.verticalCenter: parent.verticalCenter
+
+            //                         QGCLabel {
+            //                             text: qsTr("FILTER")
+            //                             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("ACCEL FILT")
+            //                             fact:   controller.getParameterFact(-1, "INS_ACCEL_FILTER")
+            //                             toValue:    100
+            //                             fromValue:  0
+            //                             decimals:   1
+            //                             stepValue:  1
+            //                         }
+
+            //                         LabelledFactSpinBox{
+            //                             spinboxPreferredWidth: _spinboxPreferredWidth
+            //                             label: qsTr("GYRO FILT")
+            //                             fact:   controller.getParameterFact(-1, "INS_GYRO_FILTER")
+            //                             toValue:    100
+            //                             fromValue:  0
+            //                             decimals:   1
+            //                             stepValue:  1
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
 
                 // Rectangle {
                 //     height: autoTuneLabel.height + autoTuneRect.height

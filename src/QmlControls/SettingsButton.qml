@@ -32,7 +32,7 @@ Button {
 
     background: Rectangle {
         color:      qgcPal.buttonHighlight
-        opacity:    checked || pressed ? 1 : enabled && hovered ? .2 : 0
+        opacity:    checked || pressed ? 1 : enabled && hovered ? .5 : 0
         radius:     ScreenTools.defaultFontPixelWidth / 2
     }
 

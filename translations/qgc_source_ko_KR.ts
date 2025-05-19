@@ -485,8 +485,8 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightModesComponent.qml" line="82"/>
-        <source>Flight mode channel:</source>
-        <translation>비행 모드 채널:</translation>
+        <source>Flight mode channel</source>
+        <translation>비행 모드 채널</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightModesComponent.qml" line="88"/>
@@ -560,8 +560,8 @@
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightModesComponent.qml" line="213"/>
-        <source>Channel option %1 :</source>
-        <translation>채널 옵션 %1 :</translation>
+        <source>Channel option %1</source>
+        <translation>채널 옵션 %1</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightModesComponent.cc" line="18"/>

@@ -20,7 +20,7 @@ import QGroundControl.FactSystem
 
 Rectangle {
     id:             control
-    width:          Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelHeight * 10)
+    width:          ScreenTools.defaultFontPixelHeight * 10//Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelHeight * 10)
     height:         parent.height
     color:          "transparent"//_mainStatusBGColor
     radius:         ScreenTools.defaultFontPixelHeight / 4
