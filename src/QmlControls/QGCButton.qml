@@ -52,7 +52,7 @@ Button {
 
         Rectangle {
             anchors.fill:   parent
-            color:          qgcPal.buttonHighlight
+            color:          qgcPal.buttonText//buttonHighlight
             opacity:        _showHighlight ? 1 : control.enabled && control.hovered ? .3 : 0
             radius:         parent.radius
         }

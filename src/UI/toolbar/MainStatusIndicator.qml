@@ -84,10 +84,10 @@ Rectangle {
                         if (_healthAndArmingChecksSupported) {
                             if (_activeVehicle.healthAndArmingCheckReport.canArm) {
                                 if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
-                                    _mainStatusBGColor = "yellow"
+                                    _mainStatusBGColor = qgcPal.colorYellow
                                 }
                             } else {
-                                _mainStatusBGColor = "red"
+                                _mainStatusBGColor = qgcPal.colorRed
                             }
                         }
 
@@ -102,24 +102,24 @@ Rectangle {
                         if (_healthAndArmingChecksSupported) {
                             if (_activeVehicle.healthAndArmingCheckReport.canArm) {
                                 if (_activeVehicle.healthAndArmingCheckReport.hasWarningsOrErrors) {
-                                    _mainStatusBGColor = "yellow"
+                                    _mainStatusBGColor = qgcPal.colorYellow
                                 } else {
                                     _mainStatusBGColor = qgcPal.colorGreen
                                 }
                                 return mainStatusLabel._readyToFlyText
                             } else {
-                                _mainStatusBGColor = "red"
+                                _mainStatusBGColor = qgcPal.colorRed
                                 return mainStatusLabel._notReadyToFlyText
                             }
                         } else if (_activeVehicle.loadProgress) {
-                                _mainStatusBGColor = "yellow"
+                                _mainStatusBGColor = qgcPal.colorYellow
                                 return mainStatusLabel._parametersSynchronizingText
                         } else if (_activeVehicle.readyToFlyAvailable) {
                             if (_activeVehicle.readyToFly) {
                                 _mainStatusBGColor = qgcPal.colorGreen
                                 return mainStatusLabel._readyToFlyText
                             } else {
-                                _mainStatusBGColor = "yellow"
+                                _mainStatusBGColor = qgcPal.colorYellow
                                 return mainStatusLabel._notReadyToFlyText
                             }
                         } else {
@@ -128,7 +128,7 @@ Rectangle {
                                 _mainStatusBGColor = qgcPal.colorGreen
                                 return mainStatusLabel._readyToFlyText
                             } else {
-                                _mainStatusBGColor = "yellow"
+                                _mainStatusBGColor = qgcPal.colorYellow
                                 return mainStatusLabel._notReadyToFlyText
                             }
                         }
@@ -259,7 +259,7 @@ Rectangle {
                                         id:           message
                                         text:         object.message
                                         textFormat:   TextEdit.RichText
-                                        color:        object.severity == 'error' ? qgcPal.colorRed : object.severity == 'warning' ? qgcPal.colorOrange : qgcPal.text
+                                        color:        object.severity == 'error' ? qgcPal.colorRed : object.severity == 'warning' ? qgcPal.colorYellow : qgcPal.text
                                         MouseArea {
                                             anchors.fill: parent
                                             onClicked: {
