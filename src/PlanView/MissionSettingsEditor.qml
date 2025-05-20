@@ -81,14 +81,26 @@ Rectangle {
                 MouseArea {
                     Layout.preferredWidth:  childrenRect.width
                     Layout.preferredHeight: childrenRect.height
-                    enabled:                _noMissionItemsAdded
-                    Layout.alignment:       Qt.AlignRight
 
                     onClicked: {
                         var removeModes = []
                         var updateFunction = function(altMode){ _missionController.globalAltitudeMode = altMode }
                         if (!_controllerVehicle.supportsTerrainFrame) {
                             removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
+                        }
+                        if (!_noMissionItemsAdded) {
+                            if (_missionController.globalAltitudeMode !== QGroundControl.AltitudeModeRelative) {
+                                removeModes.push(QGroundControl.AltitudeModeRelative)
+                            }
+                            if (_missionController.globalAltitudeMode !== QGroundControl.AltitudeModeAbsolute) {
+                                removeModes.push(QGroundControl.AltitudeModeAbsolute)
+                            }
+                            if (_missionController.globalAltitudeMode !== QGroundControl.AltitudeModeCalcAboveTerrain) {
+                                removeModes.push(QGroundControl.AltitudeModeCalcAboveTerrain)
+                            }
+                            if (_missionController.globalAltitudeMode !== QGroundControl.AltitudeModeTerrainFrame) {
+                                removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
+                            }
                         }
                         altModeDialogComponent.createObject(mainWindow, { rgRemoveModes: removeModes, updateAltModeFn: updateFunction }).open()
                     }

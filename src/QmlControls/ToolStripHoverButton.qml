@@ -131,7 +131,7 @@ Button {
         id:             buttonBkRect
         color:          (control.checked || control.pressed) ?
                             qgcPal.buttonHighlight :
-                            (control.hovered ? qgcPal.buttonHighlight : qgcPal.window)
+                            ((control.enabled && control.hovered) ? qgcPal.buttonHighlight : qgcPal.window)
         anchors.fill:   parent
     }
 }
