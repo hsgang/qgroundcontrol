@@ -126,7 +126,7 @@ Item {
             source:             "/qmlimages/Gps.svg" //getGpsImage()
             fillMode:           Image.PreserveAspectFit
             opacity:            (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? 1 : 0.5
-            color:              _communicationLost ? qgcPal.colorGrey : ((_activeVehicle && _activeVehicle.gps.lock.value >= 3) ? qgcPal.buttonText : qgcPal.colorOrange)
+            color:              _communicationLost ? qgcPal.colorGrey : ((_activeVehicle && _activeVehicle.gps.lock.value < 2) ? qgcPal.colorRed : qgcPal.buttonText)
 
             Rectangle {
                 visible:        _ntripManager.connected
