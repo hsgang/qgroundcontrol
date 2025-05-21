@@ -128,91 +128,122 @@ Item {
             }
         }
 
-        GridLayout {
-            columns:                8
-            rowSpacing:             _rowSpacing
-            columnSpacing:          _labelToValueSpacing
+        // GridLayout {
+        //     columns:                8
+        //     rowSpacing:             _rowSpacing
+        //     columnSpacing:          _labelToValueSpacing
 
-            QGCLabel {
-                text:               qsTr("Selected Waypoint")
-                Layout.columnSpan:  8
-                font.pointSize:     ScreenTools.smallFontPointSize
+        //     QGCLabel {
+        //         text:               qsTr("Selected Waypoint")
+        //         Layout.columnSpan:  8
+        //         font.pointSize:     ScreenTools.smallFontPointSize
+        //     }
+
+        //     QGCLabel { text: qsTr("Alt diff:"); font.pointSize: _dataFontSize; }
+        //     QGCLabel {
+        //         text:                   _altDifferenceText
+        //         font.pointSize:         _dataFontSize
+        //         Layout.minimumWidth:    _mediumValueWidth
+        //     }
+
+        //     Item { width: 1; height: 1 }
+
+        //     QGCLabel { text: qsTr("Azimuth:"); font.pointSize: _dataFontSize; }
+        //     QGCLabel {
+        //         text:                   _azimuthText
+        //         font.pointSize:         _dataFontSize
+        //         Layout.minimumWidth:    _smallValueWidth
+        //     }
+
+        //     Item { width: 1; height: 1 }
+
+        //     QGCLabel { text: qsTr("Dist prev WP:"); font.pointSize: _dataFontSize; }
+        //     QGCLabel {
+        //         text:                   _distanceText
+        //         font.pointSize:         _dataFontSize
+        //         Layout.minimumWidth:    _largeValueWidth
+        //     }
+
+        //     QGCLabel { text: qsTr("Gradient:"); font.pointSize: _dataFontSize; }
+        //     QGCLabel {
+        //         text:                   _gradientText
+        //         font.pointSize:         _dataFontSize
+        //         Layout.minimumWidth:    _mediumValueWidth
+        //     }
+
+        //     Item { width: 1; height: 1 }
+
+        //     QGCLabel { text: qsTr("Heading:"); font.pointSize: _dataFontSize; }
+        //     QGCLabel {
+        //         text:                   _headingText
+        //         font.pointSize:         _dataFontSize
+        //         Layout.minimumWidth:    _smallValueWidth
+        //     }
+        // }
+
+        // GridLayout {
+        //     columns:                4
+        //     rowSpacing:             _rowSpacing
+        //     columnSpacing:          _labelToValueSpacing
+
+        //     QGCLabel {
+        //         text:               qsTr("Total Mission")
+        //         Layout.columnSpan:  4
+        //         font.pointSize:     ScreenTools.smallFontPointSize
+        //     }
+
+        //     QGCLabel { text: qsTr("Distance:"); font.pointSize: _dataFontSize; }
+        //     QGCLabel {
+        //         text:                   _missionPlannedDistanceText
+        //         font.pointSize:         _dataFontSize
+        //         Layout.minimumWidth:    _largeValueWidth
+        //     }
+
+        //     //Item { width: 1; height: 1 }
+
+        //     QGCLabel { text: qsTr("Max Telem Dist:"); font.pointSize: _dataFontSize; }
+        //     QGCLabel {
+        //         text:                   _missionMaxTelemetryText
+        //         font.pointSize:         _dataFontSize
+        //         Layout.minimumWidth:    _largeValueWidth
+        //     }
+
+        //     QGCLabel { text: qsTr("Time:"); font.pointSize: _dataFontSize; }
+        //     QGCLabel {
+        //         text:                   getMissionTime()
+        //         font.pointSize:         _dataFontSize
+        //         Layout.minimumWidth:    _largeValueWidth
+        //     }
+        // }
+
+        RowLayout {
+            spacing : ScreenTools.defaultFontPixelWidth
+
+            LabelledLabel {
+                label:          qsTr("Distance")
+                labelText: _missionPlannedDistanceText
             }
 
-            QGCLabel { text: qsTr("Alt diff:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _altDifferenceText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _mediumValueWidth
+            Rectangle {
+                height: ScreenTools.defaultFontPixelHeight
+                width: 1
+                color: qgcPal.groupBorder
             }
 
-            Item { width: 1; height: 1 }
-
-            QGCLabel { text: qsTr("Azimuth:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _azimuthText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _smallValueWidth
+            LabelledLabel {
+                label:          qsTr("Telem Max")
+                labelText: _missionMaxTelemetryText
             }
 
-            Item { width: 1; height: 1 }
-
-            QGCLabel { text: qsTr("Dist prev WP:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _distanceText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _largeValueWidth
+            Rectangle {
+                height: ScreenTools.defaultFontPixelHeight
+                width: 1
+                color: qgcPal.groupBorder
             }
 
-            QGCLabel { text: qsTr("Gradient:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _gradientText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _mediumValueWidth
-            }
-
-            Item { width: 1; height: 1 }
-
-            QGCLabel { text: qsTr("Heading:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _headingText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _smallValueWidth
-            }
-        }
-
-        GridLayout {
-            columns:                4
-            rowSpacing:             _rowSpacing
-            columnSpacing:          _labelToValueSpacing
-
-            QGCLabel {
-                text:               qsTr("Total Mission")
-                Layout.columnSpan:  4
-                font.pointSize:     ScreenTools.smallFontPointSize
-            }
-
-            QGCLabel { text: qsTr("Distance:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _missionPlannedDistanceText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _largeValueWidth
-            }
-
-            //Item { width: 1; height: 1 }
-
-            QGCLabel { text: qsTr("Max Telem Dist:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   _missionMaxTelemetryText
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _largeValueWidth
-            }
-
-            QGCLabel { text: qsTr("Time:"); font.pointSize: _dataFontSize; }
-            QGCLabel {
-                text:                   getMissionTime()
-                font.pointSize:         _dataFontSize
-                Layout.minimumWidth:    _largeValueWidth
+            LabelledLabel {
+                label:          qsTr("Time")
+                labelText: getMissionTime()
             }
         }
 

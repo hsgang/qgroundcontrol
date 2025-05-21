@@ -177,7 +177,7 @@ Rectangle {
                                 Layout.alignment:   Qt.AlignBaseline
                                 text:               qsTr("Altitude Mode")
                                 visible:            _globalAltModeIsMixed
-                                //font.pointSize:     ScreenTools.smallFontPointSize
+                                font.pointSize:     ScreenTools.smallFontPointSize
                             }
 
                             QGCColoredImage {

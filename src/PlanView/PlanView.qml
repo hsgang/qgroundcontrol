@@ -646,14 +646,14 @@ Item {
                             toolStrip.allAddClickBoolsOff()
                             insertLandItemAfterCurrent()
                         }
-                    },
-                    ToolStripAction {
-                        text:               qsTr("Center")
-                        iconSource:         "/qmlimages/MapCenter.svg"
-                        enabled:            true
-                        visible:            true
-                        dropPanelComponent: centerMapDropPanel
                     }
+                    // ToolStripAction {
+                    //     text:               qsTr("Center")
+                    //     iconSource:         "/qmlimages/MapCenter.svg"
+                    //     enabled:            true
+                    //     visible:            true
+                    //     dropPanelComponent: centerMapDropPanel
+                    // }
                 ]
             }
 
@@ -986,6 +986,7 @@ Item {
                                             qsTr("You have unsaved changes. You should upload to your vehicle, or save to a file.") :
                                             qsTr("You have unsaved changes.")
                     visible:            _planMasterController.dirty
+                    color:              qgcPal.colorRed
                 }
 
                 // SectionHeader {

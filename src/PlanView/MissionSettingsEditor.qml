@@ -76,7 +76,7 @@ Rectangle {
 
                 QGCLabel {
                     text:           qsTr("All Altitudes")
-                    //font.pointSize: ScreenTools.smallFontPointSize
+                    font.pointSize: ScreenTools.smallFontPointSize
                 }
                 MouseArea {
                     Layout.preferredWidth:  childrenRect.width
