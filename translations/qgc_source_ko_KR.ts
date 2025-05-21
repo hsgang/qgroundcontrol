@@ -3699,12 +3699,12 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/QmlControls/AltModeDialog.qml" line="20"/>
         <source>Select Altitude Mode</source>
-        <translation type="unfinished">Select Altitude Mode</translation>
+        <translation>고도 기준 선택</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AltModeDialog.qml" line="47"/>
         <source>Relative To Launch</source>
-        <translation type="unfinished">Relative To Launch</translation>
+        <translation>이륙 위치 기준</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AltModeDialog.qml" line="48"/>
@@ -17735,6 +17735,11 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="76"/>
         <source>Move &apos;%1&apos; %2 to the %3 location. %4</source>
         <translation type="unfinished">Move &apos;%1&apos; %2 to the %3 location. %4</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/SimpleItemEditor.qml" line="157"/>
+        <source>Altitude Mode</source>
+        <translation>고도 모드 선택</translation>
     </message>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="157"/>
