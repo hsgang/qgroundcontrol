@@ -11642,6 +11642,11 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>MessageIndicator</name>
     <message>
+        <location filename="../src/ui/toolbar/MessageIndicator.qml" line="164"/>
+        <source>Vehicle Messages</source>
+        <translation>메시지</translation>
+    </message>
+    <message>
         <location filename="../src/ui/toolbar/MessageIndicator.qml" line="112"/>
         <source>No Messages</source>
         <translation>메시지 없음</translation>
@@ -14879,7 +14884,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1115"/>
         <source>Storage</source>
-        <translation>저장공간</translation>
+        <translation>애플리케이션 저장공간</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="1164"/>
