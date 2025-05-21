@@ -3799,16 +3799,16 @@ void Vehicle::_initializeCustomLog()
     QDir saveDir(SettingsManager::instance()->appSettings()->sensorSavePath());
     _customLogFile.setFileName(saveDir.absoluteFilePath(fileName));
 
-    QString text = "Open file for csv logging, Start csv logging!";
+    QString text = "사용자 정의 로그 저장을 시작합니다";
     QString description = "";
-    _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_INFO, text, description);
+    _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE, text, description);
 
     if (!_customLogFile.open(QIODevice::Append)) {
         qCWarning(VehicleLog) << "unable to open file for csv logging, Stopping csv logging!";
         // qInfo() << "unable to open file for csv logging" ;
         QString text = "Unable to open file for csv logging, Stopping csv logging!";
         QString description = "";
-        _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_PATHPLANNER, MAV_SEVERITY::MAV_SEVERITY_INFO, text, description);
+        _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_INFO, text, description);
         return;
     }
     customLogSeq = 0;
@@ -3910,9 +3910,9 @@ void Vehicle::_writeCustomLogLine()
     else if(!_armed){
         _customLogFile.close();
 
-        QString text = "Close file for csv logging, Stop csv logging!";
+        QString text = "사용자 정의 로그 저장을 종료합니다";
         QString description = "";
-        _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_PATHPLANNER, MAV_SEVERITY::MAV_SEVERITY_INFO, text, description);
+        _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE, text, description);
     }
 }
 

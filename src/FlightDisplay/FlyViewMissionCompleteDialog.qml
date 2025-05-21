@@ -84,13 +84,18 @@ Item {
                     spacing: ScreenTools.defaultFontPixelHeight / 2
 
                     LabelledLabel {
-                        label:      "시동 시각"
-                        labelText:  Qt.formatDateTime(_vehicleArmedTime, "MM-dd hh:mm:ss")
+                        label:      "비행 일자"
+                        labelText:  Qt.formatDateTime(_vehicleArmedTime, "yyyy-MM-dd")
                     }
 
                     LabelledLabel {
-                        label:      "종료 시각"
-                        labelText:  Qt.formatDateTime(_vehicleDisarmedTime, "MM-dd hh:mm:ss")
+                        label:      "이륙 시각"
+                        labelText:  Qt.formatDateTime(_vehicleArmedTime, "hh:mm:ss")
+                    }
+
+                    LabelledLabel {
+                        label:      "착륙 시각"
+                        labelText:  Qt.formatDateTime(_vehicleDisarmedTime, "hh:mm:ss")
                     }
 
                     LabelledLabel {
@@ -121,11 +126,12 @@ Item {
                     onClicked: {
                         // 비행시간 계산 (초 단위로 차이 구하고, 필요한 형식으로 변환)
                         var flightTimeSeconds = (_vehicleDisarmedTime.getTime() - _vehicleArmedTime.getTime()) / 1000;
-                        var flightTimeMinutes = Math.floor(flightTimeSeconds / 60); // 분 단위로 변환
+                        var flightTimeMinutes = Math.ceil(flightTimeSeconds / 60); // 분 단위로 변환
 
                         var jsonData = {
-                            "time_start": Qt.formatDateTime(_vehicleArmedTime, "yyyy-MM-ddThh:mm:ss"),
-                            "time_end": Qt.formatDateTime(_vehicleDisarmedTime, "yyyy-MM-ddThh:mm:ss"),
+                            "date": Qt.formatDateTime(_vehicleArmedTime, "yyyy-MM-dd"),
+                            "time_start": Qt.formatDateTime(_vehicleArmedTime, "hh:mm"),
+                            "time_end": Qt.formatDateTime(_vehicleDisarmedTime, "hh:mm"),
                             "flight_time": flightTimeMinutes,
                             "distance": Math.floor(Number(_activeVehicle.flightDistance.rawValue)),
                         };
@@ -139,7 +145,7 @@ Item {
 
                     onInsertFlightLogSuccess: {
                         console.log("✅ 비행 기록 삽입 성공");
-                        insertDBButton.text = qsTr("비행 기록 전송 완료");
+                        insertDBButton.text = qsTr("비행 기록 전송 완료 ✅");
                         insertDBButton.enabled = false
                     }
                     onInsertFlightLogFailure: {
