@@ -177,6 +177,7 @@ Item {
                                     isSelected = false
                                     modeRepeater.selectedMode = null
                                     modeButton.primary = false;
+                                    mainWindow.closeIndicatorDrawer()
                                 }
                             }
                         }
