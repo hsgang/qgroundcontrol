@@ -512,9 +512,9 @@ void ParameterEditorController::_performSearch(void)
                         const QString &searchItem = rgSearchStrings.at(i);
                         if (!fact->name().contains(searchItem, Qt::CaseInsensitive) &&
                                 !fact->shortDescription().contains(searchItem, Qt::CaseInsensitive) &&
-                                !fact->longDescription().contains(searchItem, Qt::CaseInsensitive)*/) {
+                                !fact->longDescription().contains(searchItem, Qt::CaseInsensitive)) {
                             matched = false;
-                        }                    
+                        }
                     }
                 }
             }
