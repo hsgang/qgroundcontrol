@@ -166,8 +166,7 @@ SetupPage {
 
                         QGCLabel {
                             anchors.verticalCenter:     parent.verticalCenter
-                            color:  qgcPal.warningText
-                            text:   limitSwitch.checked ? qsTr("Available 100%") : qsTr("Limited to 10%")
+                            text:   qsTr("범위 제한 해제")
                         }
                     } // Row
                 } // Column
