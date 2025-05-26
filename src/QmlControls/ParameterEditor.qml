@@ -150,15 +150,15 @@ Item {
             QGCTextField {
                 id:                     searchText
                 placeholderText:        qsTr("Search")
-                //onDisplayTextChanged:   controller.searchText = displayText
+                onDisplayTextChanged:   controller.searchText = displayText
             }
 
-            QGCButton {
-                text: qsTr("Search")
-                onClicked: {
-                    controller.searchText = searchText.displayText
-                }
-            }
+            // QGCButton {
+            //     text: qsTr("Search")
+            //     onClicked: {
+            //         controller.searchText = searchText.displayText
+            //     }
+            // }
 
             QGCButton {
                 text: qsTr("Clear")
@@ -312,7 +312,7 @@ Item {
                     if (fact.enumStrings.length === 0) {
                         return fact.valueString + " " + fact.units
                     }
-                    if (fact.bitmaskStrings.length != 0) {
+                    if (fact.bitmaskStrings.length !== 0) {
                         return fact.selectedBitmaskStrings.join(',')
                     }
                     return fact.enumStringValue
