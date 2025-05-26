@@ -128,6 +128,24 @@
     </message>
 </context>
 <context>
+    <name>APMPortsComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPortsComponent.cc" line="1"/>
+        <source>Ports</source>
+        <translation>포트</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPortsComponent.cc" line="1"/>
+        <source>Ports Setup is used to configure the serial port functions of the Vehicle.</source>
+        <translation>시리얼 포트 입출력을 구성합니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPortsComponent.qml" line="1"/>
+        <source>Serial Ports</source>
+        <translation>시리얼 포트</translation>
+    </message>
+</context>
+<context>
     <name>APMAutoPilotPlugin</name>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMAutoPilotPlugin.cc" line="226"/>

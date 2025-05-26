@@ -16,6 +16,7 @@
 #include "APMLightsComponent.h"
 #include "APMMotorComponent.h"
 #include "APMPowerComponent.h"
+#include "APMPortsComponent.h"
 #include "APMRadioComponent.h"
 #include "APMRemoteSupportComponent.h"
 #include "APMSafetyComponent.h"
@@ -78,7 +79,11 @@ const QVariantList &APMAutoPilotPlugin::vehicleComponents()
 
             _channelsComponent = new APMChannelsComponent(_vehicle, this);
             _channelsComponent->setupTriggerSignals();
-            _components.append(QVariant::fromValue((VehicleComponent*)_channelsComponent));
+            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_channelsComponent)));
+
+            _portsComponent = new APMPortsComponent(_vehicle, this);
+            _portsComponent->setupTriggerSignals();
+            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_portsComponent)));
 
             _sensorsComponent = new APMSensorsComponent(_vehicle, this);
             _sensorsComponent->setupTriggerSignals();
@@ -98,14 +103,14 @@ const QVariantList &APMAutoPilotPlugin::vehicleComponents()
             _safetyComponent->setupTriggerSignals();
             _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_safetyComponent)));
 
-#ifdef QT_DEBUG
-            if ((qobject_cast<ArduCopterFirmwarePlugin*>(_vehicle->firmwarePlugin()) || qobject_cast<ArduRoverFirmwarePlugin*>(_vehicle->firmwarePlugin())) &&
-                    _vehicle->parameterManager()->parameterExists(-1, QStringLiteral("FOLL_ENABLE"))) {
-                _followComponent = new APMFollowComponent(_vehicle, this);
-                _followComponent->setupTriggerSignals();
-                _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_followComponent)));
-            }
-#endif
+// #ifdef QT_DEBUG
+//             if ((qobject_cast<ArduCopterFirmwarePlugin*>(_vehicle->firmwarePlugin()) || qobject_cast<ArduRoverFirmwarePlugin*>(_vehicle->firmwarePlugin())) &&
+//                     _vehicle->parameterManager()->parameterExists(-1, QStringLiteral("FOLL_ENABLE"))) {
+//                 _followComponent = new APMFollowComponent(_vehicle, this);
+//                 _followComponent->setupTriggerSignals();
+//                 _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_followComponent)));
+//             }
+// #endif
 
             if (_vehicle->vehicleType() == MAV_TYPE_HELICOPTER && (_vehicle->versionCompare(4, 0, 0) >= 0)) {
                 _heliComponent = new APMHeliComponent(_vehicle, this);
@@ -117,11 +122,11 @@ const QVariantList &APMAutoPilotPlugin::vehicleComponents()
             _tuningComponent->setupTriggerSignals();
             _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_tuningComponent)));
 
-            if (_vehicle->parameterManager()->parameterExists(-1, "MNT1_TYPE")) {
-                _cameraComponent = new APMCameraComponent(_vehicle, this);
-                _cameraComponent->setupTriggerSignals();
-                _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_cameraComponent)));
-            }
+            // if (_vehicle->parameterManager()->parameterExists(-1, "MNT1_TYPE")) {
+            //     _cameraComponent = new APMCameraComponent(_vehicle, this);
+            //     _cameraComponent->setupTriggerSignals();
+            //     _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_cameraComponent)));
+            // }
 
             if (_vehicle->sub()) {
                 _lightsComponent = new APMLightsComponent(_vehicle, this);

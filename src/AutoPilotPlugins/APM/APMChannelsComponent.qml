@@ -48,8 +48,8 @@ SetupPage {
                 }
 
                 Rectangle {
-                    implicitWidth:                  rcOptionGroupColumn.width + (_margins * 2)
-                    implicitHeight:                 rcOptionGroupColumn.height + (_margins * 2)
+                    implicitWidth:                  rcOptionGroupColumn.width + _margins
+                    implicitHeight:                 rcOptionGroupColumn.height + _margins
                     color:                          qgcPal.windowShadeDark
                     border.color:                   qgcPal.groupBorder
                     radius:                         _margins / 2
@@ -73,9 +73,9 @@ SetupPage {
                             RowLayout {
                                 required property string modelData
                                 QGCLabel {
-                                    text:                    modelData
+                                    text:                    modelData.split("_")[0]
                                     rightPadding:            ScreenTools.defaultFontPixelWidth * 3
-                                    Layout.preferredWidth: _comboboxPreferredWidth
+                                    Layout.preferredWidth: _comboboxPreferredWidth / 2
                                 }
 
                                 FactComboBox {
@@ -101,11 +101,11 @@ SetupPage {
                 }
 
                 Rectangle {
-                    implicitWidth:                  servoOptionGroupColumn.width + (_margins * 2)
-                    implicitHeight:                 servoOptionGroupColumn.height + (_margins * 2)
+                    implicitWidth:                  servoOptionGroupColumn.width + _margins
+                    implicitHeight:                 servoOptionGroupColumn.height + _margins
+                    radius:                         _margins / 2
                     color:                          qgcPal.windowShadeDark
                     border.color:                   qgcPal.groupBorder
-                    radius:                         ScreenTools.defaultFontPixelHeight / 2
 
                     Column {
                         id:               servoOptionGroupColumn
@@ -126,9 +126,9 @@ SetupPage {
                             RowLayout {
                                 required property string modelData
                                 QGCLabel {
-                                    text:                    modelData
+                                    text:                    modelData.split("_")[0]
                                     rightPadding:            ScreenTools.defaultFontPixelWidth * 3
-                                    Layout.preferredWidth: _comboboxPreferredWidth
+                                    Layout.preferredWidth: _comboboxPreferredWidth / 2
                                 }
 
                                 FactComboBox {

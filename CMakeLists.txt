@@ -302,6 +302,8 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
     WIN32
     MACOSX_BUNDLE
     ${QGC_RESOURCES}
+    src/AutoPilotPlugins/APM/APMPortsComponent.h
+    src/AutoPilotPlugins/APM/APMPortsComponent.cc
 )
 
 if(WIN32)

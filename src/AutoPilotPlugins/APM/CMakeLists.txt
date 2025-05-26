@@ -26,6 +26,8 @@ target_sources(${CMAKE_PROJECT_NAME}
         APMMotorComponent.h
         APMPowerComponent.cc
         APMPowerComponent.h
+        APMPortsComponent.cc
+        APMPortsComponent.h
         APMRadioComponent.cc
         APMRadioComponent.h
         APMRemoteSupportComponent.cc

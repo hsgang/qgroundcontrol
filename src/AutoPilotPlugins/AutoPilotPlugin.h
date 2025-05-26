@@ -41,6 +41,7 @@ public:
         KnownSensorsVehicleComponent,
         KnownSafetyVehicleComponent,
         KnownPowerVehicleComponent,
+        KnownPortsVehicleComponent,
         KnownChannelVehicleComponent,
         UnknownVehicleComponent // Firmware specific vehicle components
     };

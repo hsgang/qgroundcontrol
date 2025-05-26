@@ -20,6 +20,7 @@ class APMTuningComponent;
 class APMSafetyComponent;
 class APMSensorsComponent;
 class APMPowerComponent;
+class APMPortsComponent;
 class APMMotorComponent;
 class APMCameraComponent;
 class APMLightsComponent;
@@ -53,6 +54,7 @@ protected:
     APMSubFrameComponent *_subFrameComponent = nullptr;
     APMFlightModesComponent *_flightModesComponent = nullptr;
     APMPowerComponent *_powerComponent = nullptr;
+    APMPortsComponent *_portsComponent = nullptr;
     APMMotorComponent *_motorComponent = nullptr;
     APMRadioComponent *_radioComponent = nullptr;
     APMSafetyComponent *_safetyComponent = nullptr;

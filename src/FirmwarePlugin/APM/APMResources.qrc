@@ -34,6 +34,7 @@
         <file alias="QGroundControl/ArduPilot/APMSensorParams.qml">APMSensorParams.qml</file>
         <file alias="QGroundControl/ArduPilot/APMSensorIdDecoder.qml">APMSensorIdDecoder.qml</file>
         <file alias="QGroundControl/ArduPilot/qmldir">QGroundControl.ArduPilot.qmldir</file>
+        <file alias="APMPortsComponent.qml">../../AutoPilotPlugins/APM/APMPortsComponent.qml</file>
     </qresource>
     <qresource prefix="/APM/Indicators">
         <file alias="APMBatteryIndicator.qml">APMBatteryIndicator.qml</file>
