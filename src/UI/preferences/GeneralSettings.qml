@@ -93,6 +93,7 @@ SettingsPage {
 //            visible:            fact.visible
 //        }
 
+
         RowLayout {
             Layout.fillWidth:   true
             spacing:            ScreenTools.defaultFontPixelWidth * 2
@@ -172,6 +173,24 @@ SettingsPage {
             text:           qsTr("Full Screen")
             fact:       _fullScreen
             property Fact _fullScreen: _appSettings.fullScreen
+        }
+    }
+
+    SettingsGroupLayout {
+        Layout.fillWidth:   true
+        heading:            qsTr("Reset")
+
+        QGCCheckBoxSlider {
+            Layout.fillWidth: true
+            text:       qsTr("Clear all settings on next start")
+            checked:    false
+            onClicked: {
+                if (checked) {
+                    QGroundControl.deleteAllSettingsNextBoot()
+                } else {
+                    QGroundControl.clearDeleteAllSettingsNextBoot()
+                }
+            }
         }
     }
 
