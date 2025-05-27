@@ -22,6 +22,9 @@ qt_add_qml_module(FactControlsModule
         FactTextField.qml
         FactTextFieldGrid.qml
         FactValueSlider.qml
+        FactSpinBox.qml
         LabelledFactComboBox.qml
         LabelledFactTextField.qml
+        LabelledFactSpinBox.qml
+        LabelledFactSlider.qml
 )
