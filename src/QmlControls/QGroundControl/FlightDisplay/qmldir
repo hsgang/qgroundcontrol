@@ -89,3 +89,6 @@ RequestConfirmPopup             1.0 RequestConfirmPopup.qml
 FlyViewValueBar                 1.0 FlyViewValueBar.qml
 FlyViewRightPanel               1.0 FlyViewRightPanel.qml
 FlyViewSiYiCameraPanel          1.0 FlyViewSiYiCameraPanel.qml
+VehicleStepMoveControl          1.0 VehicleStepMoveControl.qml
+GimbalControl                   1.0 GimbalControl.qml
+WinchControlPanel               1.0 WinchControlPanel.qml

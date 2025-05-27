@@ -17,7 +17,11 @@ qt_add_qml_module(FlightMapModule
         MapItems/QGCMapPolygonVisuals.qml
         MapItems/QGCMapPolylineVisuals.qml
         MapItems/SplitIndicator.qml
+        MapItems/AtmosphericValueMapItem.qml
+        MapItems/CameraProjectionMapItem.qml
         MapItems/VehicleMapItem.qml
+        MapItems/VehicleInfoMapItem.qml
+        Widgets/CustomAttitudeHUD.qml
         Widgets/CenterMapDropButton.qml
         Widgets/CenterMapDropPanel.qml
         Widgets/CompassDial.qml
