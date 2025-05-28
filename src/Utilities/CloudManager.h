@@ -120,6 +120,9 @@ signals:
     void connectionSuccess();
     void connectionFailed(QString message);
 
+    void tokenRefreshed(const QString &newToken);
+    void tokenRefreshFailed(const QString &error);
+
 private:
     static const QString API_BASE_URL;
     static const QString SIGN_UP_ENDPOINT;
@@ -140,6 +143,7 @@ private:
     QString _password;
     static const QString m_apiAnonKey;
     QString m_accessToken;
+    QString m_refreshToken;
     QString m_signedUserName;
     QString m_localId;
     QString m_signedCompany;
@@ -177,6 +181,8 @@ private:
     void parseJsonResponse(const QString &jsonResponse);
     void updateNetworkStatus();
     void downloadProgress(qint64 curr, qint64 total);
+    void refreshAccessToken();
+    bool isAccessTokenExpired(const QString &token);
 #if defined(Q_OS_ANDROID)
     void installApkFromInternal(const QString &apkFilePath);
     void requestUnknownSourcePermission();

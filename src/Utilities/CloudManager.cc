@@ -397,7 +397,7 @@ void CloudManager::parseResponse(const QByteArray &response)
         return;
     }
 
-    // qCDebug(CloudManagerLog) << "parseResponse:" << response;
+    //qDebug() << "parseResponse:" << response;
 
     QJsonObject jsonObject = jsonDocument.object();
 
@@ -414,8 +414,15 @@ void CloudManager::parseResponse(const QByteArray &response)
     if (jsonObject.contains("access_token")) {
         QString accessToken = jsonObject.value("access_token").toString();
         m_accessToken = accessToken;
-        //qCDebug(CloudManagerLog) << "Access Token:" << accessToken;
-    } else {
+        //qDebug() << "Access Token:" << accessToken;
+    }
+
+    if (jsonObject.contains("refresh_token")) {
+        m_refreshToken = jsonObject.value("refresh_token").toString();
+        //qDebug() << "Refresh Tokeen:" << m_refreshToken;
+    }
+
+    else {
         qCDebug(CloudManagerLog) << "No access_token found in response.";
         return;
     }
@@ -711,6 +718,18 @@ void CloudManager::insertDataToDB(const QString &tableName, const QVariantMap &d
 {
     qCDebug(CloudManagerLog) << "insertDataToDB " << tableName << data;
 
+    if (isAccessTokenExpired(m_accessToken)) {
+        qDebug() << "Access token expired. Attempting to refresh...";
+        connect(this, &CloudManager::tokenRefreshed, this, [this, tableName, data]() {
+            insertDataToDB(tableName, data);  // 토큰 재발급 후 재시도
+        });
+        connect(this, &CloudManager::tokenRefreshFailed, this, [](const QString &error) {
+            qWarning() << "Token refresh failed:" << error;
+        });
+        refreshAccessToken();
+        return;
+    }
+
     if (m_accessToken.isEmpty() || m_apiAnonKey.isEmpty()) {
         qWarning() << "API Key or Access Token is missing.";
         return;
@@ -748,4 +767,78 @@ void CloudManager::downloadProgress(qint64 curr, qint64 total)
     m_fileDownloadProgress = static_cast<double>(curr) / total * 100; // 퍼센트 계산
     qCDebug(CloudManagerLog) << "m_fileDownloadProgress:" << m_fileDownloadProgress << " / " << total;
     emit fileDownloadProgressChanged();
+}
+
+void CloudManager::refreshAccessToken()
+{
+    if (m_refreshToken.isEmpty() || m_apiAnonKey.isEmpty()) {
+        qWarning() << "Refresh Token or API Key is missing.";
+        emit tokenRefreshFailed("Missing credentials");
+        return;
+    }
+
+    QString urlStr = QString("https://%1/auth/v1/token?grant_type=refresh_token").arg(m_endPointHost);
+    QUrl url(urlStr);
+
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
+
+    QJsonObject payload;
+    payload["refresh_token"] = m_refreshToken;
+
+    QJsonDocument doc(payload);
+    QByteArray body = doc.toJson(QJsonDocument::Compact);
+
+    QNetworkReply *reply = _nam->post(request, body);
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        if (reply->error() != QNetworkReply::NoError) {
+            qWarning() << "Failed to refresh token:" << reply->errorString();
+            emit tokenRefreshFailed(reply->errorString());
+        } else {
+            QByteArray responseData = reply->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(responseData);
+            if (jsonDoc.isObject()) {
+                QJsonObject obj = jsonDoc.object();
+                m_accessToken = obj.value("access_token").toString();
+                m_refreshToken = obj.value("refresh_token").toString();  // Supabase는 새 refresh_token도 제공
+                emit tokenRefreshed(m_accessToken);
+                qDebug() << "Access token refreshed.";
+            } else {
+                qWarning() << "Invalid response while refreshing token.";
+                emit tokenRefreshFailed("Invalid JSON response");
+            }
+        }
+        reply->deleteLater();
+    });
+}
+
+bool CloudManager::isAccessTokenExpired(const QString &token)
+{
+    QStringList parts = token.split('.');
+    if (parts.size() != 3) {
+        qWarning() << "Invalid JWT format";
+        return true; // 토큰 형식이 잘못됨
+    }
+
+    QByteArray payload = QByteArray::fromBase64(parts[1].toUtf8() + "=="); // 패딩 보정
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(payload);
+    if (!jsonDoc.isObject()) {
+        qWarning() << "Invalid JSON in JWT payload";
+        return true;
+    }
+
+    QJsonObject obj = jsonDoc.object();
+    if (!obj.contains("exp")) {
+        qWarning() << "Token does not contain 'exp'";
+        return true;
+    }
+
+    qint64 exp = obj["exp"].toVariant().toLongLong();
+    qint64 current = QDateTime::currentSecsSinceEpoch();
+
+    qDebug() << "Token expiration:" << exp << ", Current time:" << current;
+
+    return current >= exp;
 }

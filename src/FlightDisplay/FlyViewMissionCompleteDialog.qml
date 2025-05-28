@@ -149,6 +149,8 @@ Item {
                         insertDBButton.enabled = false
                     }
                     onInsertFlightLogFailure: {
+                        insertDBButton.text = qsTr("비행 기록 전송 실패 ❌");
+                        insertDBButton.enabled = false
                         console.log("❌ 비행 기록 삽입 실패: " + errorMessage);
                     }
                 }
