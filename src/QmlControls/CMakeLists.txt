@@ -230,6 +230,8 @@ qt_add_qml_module(QGroundControlControlsModule
 
         # src/QtLocationPlugin/QMLControl/
         OfflineMapEditor.qml
+
+        WelcomeView.qml
 )
 
 qt_add_library(ScreenToolsModule STATIC)
