@@ -16,7 +16,7 @@ import QGroundControl
 import QGroundControl.Palette
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
-import QGroundControl.FlightDisplay
+import QGroundControl.AppSettings
 
 Rectangle {
     id:     settingsView
@@ -48,10 +48,10 @@ Rectangle {
     Component.onCompleted: {
         //-- Default Settings
         if (globals.commingFromRIDIndicator) {
-            rightPanel.source = "qrc:/qml/RemoteIDSettings.qml"
+            rightPanel.source = "qrc:/qml/QGroundControl/AppSettings/RemoteIDSettings.qml"
             globals.commingFromRIDIndicator = false
         } else {
-            rightPanel.source =  "/qml/GeneralSettings.qml"
+            rightPanel.source =  "qrc:/qml/QGroundControl/AppSettings/GeneralSettings.qml"
         }
     }
 
