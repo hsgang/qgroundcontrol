@@ -5733,52 +5733,52 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>ArduCopterFirmwarePlugin</name>
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>Stabilize</source>
         <translation>수평 유지</translation>
     </message>
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>Acro</source>
         <translation>아크로</translation>
     </message>
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>Altitude Hold</source>
         <translation>고도 유지</translation>
     </message>
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>Auto</source>
         <translation>자동 경로</translation>
     </message>
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>Guided</source>
         <translation>유도 제어</translation>
     </message>
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>Loiter</source>
         <translation>로이터</translation>
     </message>
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>RTL</source>
         <translation>복귀</translation>
     </message>
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>Land</source>
         <translation>착륙</translation>
     </message>        
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>Brake</source>
         <translation>정지</translation>
     </message>
     <message>
-        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.cc" line="23"/>
+        <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="23"/>
         <source>Smart RTL</source>
         <translation>스마트 복귀</translation>
     </message>
@@ -10974,94 +10974,94 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
-    <name>MainRootWindow</name>
+    <name>MainWindow</name>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="270"/>
-        <location filename="../src/ui/MainRootWindow.qml" line="287"/>
-        <location filename="../src/ui/MainRootWindow.qml" line="306"/>
+        <location filename="../src/ui/MainWindow.qml" line="270"/>
+        <location filename="../src/ui/MainWindow.qml" line="287"/>
+        <location filename="../src/ui/MainWindow.qml" line="306"/>
         <source>Close %1</source>
         <translation>%1 종료</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="307"/>
+        <location filename="../src/ui/MainWindow.qml" line="307"/>
         <source>There are still active connections to vehicles. Are you sure you want to exit?</source>
         <translation>아직 기체에 연결되어 있습니다. 정말로 종료하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="271"/>
+        <location filename="../src/ui/MainWindow.qml" line="271"/>
         <source>You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?</source>
         <translation>진행 중이거나 저장되지 않은 미션 수정이 있습니다. 닫으면 변경 사항이 적용되지 않습니다. 닫으시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="515"/>
+        <location filename="../src/ui/MainWindow.qml" line="515"/>
         <source>Are you sure you want to close?</source>
         <translation>애플리케이션을 종료하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="156"/>
-        <location filename="../src/ui/MainRootWindow.qml" line="385"/>
+        <location filename="../src/ui/MainWindow.qml" line="156"/>
+        <location filename="../src/ui/MainWindow.qml" line="385"/>
         <source>Analyze Tools</source>
         <translation>기체 분석</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="160"/>
-        <location filename="../src/ui/MainRootWindow.qml" line="370"/>
+        <location filename="../src/ui/MainWindow.qml" line="160"/>
+        <location filename="../src/ui/MainWindow.qml" line="370"/>
         <source>Vehicle Configuration</source>
         <translation>기체 설정</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="164"/>
-        <location filename="../src/ui/MainRootWindow.qml" line="401"/>
+        <location filename="../src/ui/MainWindow.qml" line="164"/>
+        <location filename="../src/ui/MainWindow.qml" line="401"/>
         <source>Application Settings</source>
         <translation>애플리케이션 설정</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="447"/>
+        <location filename="../src/ui/MainWindow.qml" line="447"/>
         <source>App Settings</source>
         <translation>애플리케이션 설정</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="384"/>
+        <location filename="../src/ui/MainWindow.qml" line="384"/>
         <source>Fly View</source>
         <translation>비행 화면</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="399"/>
+        <location filename="../src/ui/MainWindow.qml" line="399"/>
         <source>Plan View</source>
         <translation>자동 경로</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="288"/>
+        <location filename="../src/ui/MainWindow.qml" line="288"/>
         <source>You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?</source>
         <translation>기체에 반영하지 않은 파라미터가 있습니다. 닫을 시 반영하지 않은 파라미터는 사라집니다. 정말로 닫으시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="351"/>
+        <location filename="../src/ui/MainWindow.qml" line="351"/>
         <source>Select Tool</source>
         <translation>도구 선택하기</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="419"/>
+        <location filename="../src/ui/MainWindow.qml" line="419"/>
         <source>%1 Version</source>
         <translation>%1 버전</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="452"/>
+        <location filename="../src/ui/MainWindow.qml" line="452"/>
         <source>Advanced Mode</source>
         <translation>고급 모드</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="520"/>
+        <location filename="../src/ui/MainWindow.qml" line="520"/>
         <source>Back</source>
         <translation>뒤로 가기</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="627"/>
+        <location filename="../src/ui/MainWindow.qml" line="627"/>
         <source>Detail</source>
         <translation>상세 설정</translation>
     </message>
     <message>
-        <location filename="../src/ui/MainRootWindow.qml" line="627"/>
+        <location filename="../src/ui/MainWindow.qml" line="627"/>
         <source>Unfold</source>
         <translation>일반 설정</translation>
     </message>

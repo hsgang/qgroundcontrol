@@ -20,6 +20,7 @@ import QGroundControl.ScreenTools
 import QGroundControl.Controllers
 import QGroundControl.FactSystem
 import QGroundControl.FactControls
+import QGroundControl.Toolbar
 
 Rectangle {
     id:     _root
@@ -172,7 +173,7 @@ Rectangle {
             anchors.right:      parent.right
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            source:             "qrc:/qml/QGroundControl/FlightDisplay/FlyViewToolBarIndicators.qml"
+            source:             "qrc:/qml/QGroundControl/Controls/FlyViewToolBarIndicators.qml"
         }
     }
 

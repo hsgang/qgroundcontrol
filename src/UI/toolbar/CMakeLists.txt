@@ -18,4 +18,9 @@ qt_add_qml_module(ToolbarModule
         RTKGPSIndicator.qml
         TelemetryRSSIIndicator.qml
         VehicleGPSIndicator.qml
+        WidgetControlPanel.qml
+        VehicleIndicator.qml
+        VehicleIndicatorPage.qml
+        SiyiRSSIIndicator.qml
+        MessageIndicator.qml
 )

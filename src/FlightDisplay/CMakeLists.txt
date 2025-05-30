@@ -63,4 +63,31 @@ qt_add_qml_module(FlightDisplayModule
         TerrainProgress.qml
         VehicleWarnings.qml
         VirtualJoystick.qml
+        VideoLandingGuideOverlay.qml
+        FlyViewVideoSiYiController.qml
+        MessageToastManager.qml
+        MessageToast.qml
+        FlyViewEKFStatus.qml
+        FlyViewEscIndicator.qml
+        FlyViewEscStatus.qml
+        FlyViewVibrationStatus.qml
+        FlyViewAltitudeIndicator.qml
+        FlyViewAtmosphericChart.qml
+        FlyViewAtmosphericSensorView.qml
+        RequestConfirmPopup.qml
+        FlyViewRightPanel.qml
+        FlyViewWindvane.qml
+        ModeChangedIndicator.qml
+        FlyViewMissionProgress.qml
+        GimbalControl.qml
+        FlyViewGridSettings.qml
+        VehicleStepMoveControl.qml
+        WinchControlPanel.qml
+        FlyViewSiYiCameraPanel.qml
+        FlyViewValueBar.qml
+        GuidedActionArm.qml
+        GuidedActionDisarm.qml
+        GuidedActionChangeAltitude.qml
+        GuidedActionChangeSpeed.qml
+        GuidedActionMission.qml
 )

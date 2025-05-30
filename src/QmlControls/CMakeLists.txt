@@ -210,12 +210,14 @@ qt_add_qml_module(QGroundControlControlsModule
         TransectStyleMapVisuals.qml
         VTOLLandingPatternEditor.qml
         VTOLLandingPatternMapVisual.qml
+        CameraPOIIndicator.qml
 
         # src/UI/preferences/
         OfflineMapInfo.qml
 
         # src/UI/toolbar/
         BatteryIndicator.qml
+        BatteryIndicatorPage.qml
         FlightModeIndicator.qml
         FlightModeMenuIndicator.qml
         FlyViewToolBar.qml

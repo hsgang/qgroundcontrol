@@ -16,7 +16,7 @@ ListModel {
     ListElement {
         name: qsTr("General")
         url: "qrc:/qml/QGroundControl/AppSettings/GeneralSettings.qml"
-        menuIcon: "/InstrumentValueIcons/view-tile.svg"
+        iconUrl: "/InstrumentValueIcons/view-tile.svg"
         pageVisible: function() { return true }
     }
 
@@ -30,15 +30,14 @@ ListModel {
     ListElement {
         name: qsTr("Plan View")
         url: "qrc:/qml/QGroundControl/AppSettings/PlanViewSettings.qml"
-        menuIcon: "/InstrumentValueIcons/path.svg"
+        iconUrl: "/InstrumentValueIcons/path.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Comm Links")
         url: "qrc:/qml/QGroundControl/AppSettings/LinkSettings.qml"
-        menuIcon: "/InstrumentValueIcons/link.svg"
-        _enabled: true
+        iconUrl: "/InstrumentValueIcons/link.svg"
         pageVisible: function() { return true }
     }
 
@@ -52,24 +51,14 @@ ListModel {
     ListElement {
         name: qsTr("Telemetry")
         url: "qrc:/qml/QGroundControl/AppSettings/TelemetrySettings.qml"
-        menuIcon: "/InstrumentValueIcons/station.svg"
-        _enabled: true
-        pageVisible: function() { return true }
-    }
-
-    ListElement {
-        name: qsTr("NTRIP")
-        url: "/qml/NTRIPSettings.qml"
-        menuIcon: "/InstrumentValueIcons/radar.svg"
-        _enabled: true
+        iconUrl: "/InstrumentValueIcons/station.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Maps")
         url: "qrc:/qml/QGroundControl/AppSettings/MapSettings.qml"
-        menuIcon: "/InstrumentValueIcons/globe.svg"
-        _enabled: true
+        iconUrl: "/InstrumentValueIcons/globe.svg"
         pageVisible: function() { return true }
     }
 
@@ -80,24 +69,23 @@ ListModel {
         pageVisible: function() { return true }
     }
 
-    ListElement {
-        name: qsTr("MAVLink")
-        url: "/qml/MavlinkSettings.qml"
-        menuIcon: "/InstrumentValueIcons/conversation.svg"
-        _enabled: false
-        pageVisible: function() { return true }
-    }
+    // ListElement {
+    //     name: qsTr("MAVLink")
+    //     url: "/qml/MavlinkSettings.qml"
+    //     iconUrl: "/InstrumentValueIcons/conversation.svg"
+    //     pageVisible: function() { return true }
+    // }
 
     ListElement {
         name: qsTr("Network RTK")
-        url: "/qml/NTRIPSettings.qml"
+        url: "qrc:/qml/QGroundControl/AppSettings/NTRIPSettings.qml"
         iconUrl: "/InstrumentValueIcons/radar.svg"
         pageVisible: function() { return true }
     }
 
     ListElement {
         name: qsTr("Cloud")
-        url: "/qml/CloudSettings.qml"
+        url: "qrc:/qml/QGroundControl/AppSettings/CloudSettings.qml"
         iconUrl: "/InstrumentValueIcons/cloud.svg"
         pageVisible: function() { return true }
     }
@@ -125,8 +113,7 @@ ListModel {
     ListElement {
         name: qsTr("Console")
         url: "/qml/QGroundControl/Controls/AppMessages.qml"
-        menuIcon: "/InstrumentValueIcons/window-open.svg"
-        _enabled: true
+        iconUrl: "/InstrumentValueIcons/window-open.svg"
         pageVisible: function() { return true }
     }
 
