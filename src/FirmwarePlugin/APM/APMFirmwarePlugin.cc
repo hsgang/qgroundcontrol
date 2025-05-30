@@ -105,7 +105,6 @@ QStringList APMFirmwarePlugin::flightModes(Vehicle *vehicle) const
         if (mode.canBeSet){
             flightModesList += mode.mode_name;
         }
-        //qDebug() << "mode.mode_name " << mode.mode_name << mode.custom_mode;
     }
     return flightModesList;
 }

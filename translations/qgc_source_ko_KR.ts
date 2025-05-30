@@ -20011,6 +20011,11 @@ Confirm change?</source>
         <source>ALT</source>
         <translation>고도</translation>
     </message>
+    <message>
+        <location filename="../src/FlightMap/MapItems/VehicleInfoMapItem.qml" line="40"/>
+        <source>SPD</source>
+        <translation>속도</translation>
+    </message>
 </context>
 <context>
     <name>PipView</name>

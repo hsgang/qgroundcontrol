@@ -35,6 +35,7 @@ MapQuickItem {
 
     property string _flightMode:                        object ? object.flightMode.toString() : ""
     property real   _altitudeValue:                     object ? object.altitudeRelative.rawValue : NaN
+    property real   _groundSpeedValue:                  object ? object.groundSpeed.rawValue : NaN
     property bool   _healthAndArmingChecksSupported:    object ? object.healthAndArmingCheckReport.supported : false
 
     property string _readyToFlyText:    qsTr("Ready To Fly")
@@ -258,7 +259,12 @@ MapQuickItem {
 
                         LabelledLabel {
                             label: qsTr("ALT")
-                            labelText: !isNaN(_altitudeValue) ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "--.-"
+                            labelText: !isNaN(_altitudeValue) ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString: "--.-"
+                        }
+
+                        LabelledLabel {
+                            label: qsTr("SPD")
+                            labelText: !isNaN(_groundSpeedValue) ? QGroundControl.unitsConversion.metersSecondToAppSettingsSpeedUnits(_groundSpeedValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsSpeedUnitsString: "--.-"
                         }
                     }
                 } // GridLayout
