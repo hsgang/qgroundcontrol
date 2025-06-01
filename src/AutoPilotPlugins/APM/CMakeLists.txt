@@ -85,6 +85,8 @@ qt_add_qml_module(AutoPilotPluginsAPMModule
         APMSafetyComponentSummarySub.qml
         APMSensorsComponent.qml
         APMSensorsComponentSummary.qml
+        APMSensorIdDecoder.qml
+        APMSensorParams.qml
         APMSubFrameComponent.qml
         APMSubFrameComponentSummary.qml
         APMSubMotorComponent.qml
