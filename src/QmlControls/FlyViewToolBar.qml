@@ -148,7 +148,7 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 source:         { _activeVehicle
                                     ? (_activeVehicle.apmFirmware
-                                       ? "qrc:/APM/Indicators/APMFlightModeIndicator.qml"
+                                       ? "qrc:/qml/QGroundControl/Toolbar/APMFlightModeIndicator.qml"
                                        : "qrc:/PX4/Indicators/PX4FlightModeIndicator.qml")
                                   : "qrc:/qml/QGroundControl/Controls/FlightModeIndicator.qml" }
                 width:              parent.width
