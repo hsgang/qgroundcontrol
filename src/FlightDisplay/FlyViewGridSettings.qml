@@ -17,10 +17,11 @@ Rectangle {
     height:     generatorValueColumn.height + ScreenTools.defaultFontPixelHeight / 2
     width:      generatorValueColumn.width + ScreenTools.defaultFontPixelHeight / 2
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _backgroundOpacity)
-    radius:     ScreenTools.defaultFontPixelHeight / 4
+    radius:     _margins
     // border.color: qgcPal.text
 
     property real _labelledItemWidth: ScreenTools.defaultFontPixelWidth * 10
+    property real _margins:           ScreenTools.defaultFontPixelHeight / 2
 
     property real _backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 

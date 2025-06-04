@@ -28,7 +28,7 @@ Rectangle {
     width:      _isCustomCommandEnabled ? (mainGridLayout.width + _margins + sequenceIndicator.width) : mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    radius:     _margins / 2
+    radius:     _margins
     //visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
@@ -163,7 +163,7 @@ Rectangle {
         //anchors.horizontalCenter:   parent.horizontalCenter
         anchors.right:              parent.right
         anchors.margins:            _margins / 2
-        columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
+        columnSpacing:              _margins
         rowSpacing:                 columnSpacing
         columns:                    4
 

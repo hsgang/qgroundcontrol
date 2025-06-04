@@ -30,7 +30,7 @@ Rectangle {
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
     // border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
     // border.width:   1
-    radius:     _margins * 1.5
+    radius:     _margins
     //visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
@@ -74,7 +74,7 @@ Rectangle {
         id:                         mainGridLayout
         anchors.verticalCenter:     parent.verticalCenter
         anchors.horizontalCenter:   parent.horizontalCenter
-        columnSpacing:              ScreenTools.defaultFontPixelHeight / 2
+        columnSpacing:              _margins
         rowSpacing:                 columnSpacing
         columns:                    3
 
