@@ -60,6 +60,7 @@ qt_add_qml_module(AutoPilotPluginsAPMModule
         APMCameraComponent.qml
         APMCameraComponentSummary.qml
         APMCameraSubComponent.qml
+        APMChannelsComponent.qml
         APMFlightModesComponent.qml
         APMFlightModesComponentSummary.qml
         APMFollowComponent.qml
@@ -71,6 +72,7 @@ qt_add_qml_module(AutoPilotPluginsAPMModule
         APMNotSupported.qml
         APMPowerComponent.qml
         APMPowerComponentSummary.qml
+        APMPortsComponent.qml
         APMRadioComponentSummary.qml
         APMRemoteSupportComponent.qml
         APMSafetyComponent.qml

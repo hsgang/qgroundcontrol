@@ -17,42 +17,32 @@ APMPortsComponent::APMPortsComponent(Vehicle* vehicle, AutoPilotPlugin* autopilo
 {
 }
 
-QString APMPortsComponent::name(void) const
+QString APMPortsComponent::name() const
 {
     return _name;
 }
 
-QString APMPortsComponent::description(void) const
+QString APMPortsComponent::description() const
 {
     return tr("Ports Setup is used to configure the serial port functions of the Vehicle.");
 }
 
-QString APMPortsComponent::iconResource(void) const
+QString APMPortsComponent::iconResource() const
 {
     return QStringLiteral("/qmlimages/TuningComponentIcon.png");
 }
 
-bool APMPortsComponent::requiresSetup(void) const
+bool APMPortsComponent::requiresSetup() const
 {
     return false;
 }
 
-bool APMPortsComponent::setupComplete(void) const
+bool APMPortsComponent::setupComplete() const
 {
     return true;
 }
 
-QStringList APMPortsComponent::setupCompleteChangedTriggerList(void) const
+QStringList APMPortsComponent::setupCompleteChangedTriggerList() const
 {
     return QStringList();
-}
-
-QUrl APMPortsComponent::setupSource(void) const
-{
-    return QUrl::fromUserInput(QStringLiteral("qrc:/qml/APMPortsComponent.qml"));
-}
-
-QUrl APMPortsComponent::summaryQmlSource(void) const
-{
-    return QUrl();
 }

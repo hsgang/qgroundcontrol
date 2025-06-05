@@ -17,42 +17,32 @@ APMChannelsComponent::APMChannelsComponent(Vehicle* vehicle, AutoPilotPlugin* au
 {
 }
 
-QString APMChannelsComponent::name(void) const
+QString APMChannelsComponent::name() const
 {
     return _name;
 }
 
-QString APMChannelsComponent::description(void) const
+QString APMChannelsComponent::description() const
 {
     return tr("Channels Setup is used to configure the rc/servo functions of the Vehicle.");
 }
 
-QString APMChannelsComponent::iconResource(void) const
+QString APMChannelsComponent::iconResource() const
 {
     return QStringLiteral("/qmlimages/TuningComponentIcon.png");
 }
 
-bool APMChannelsComponent::requiresSetup(void) const
+bool APMChannelsComponent::requiresSetup() const
 {
     return false;
 }
 
-bool APMChannelsComponent::setupComplete(void) const
+bool APMChannelsComponent::setupComplete() const
 {
     return true;
 }
 
-QStringList APMChannelsComponent::setupCompleteChangedTriggerList(void) const
+QStringList APMChannelsComponent::setupCompleteChangedTriggerList() const
 {
     return QStringList();
-}
-
-QUrl APMChannelsComponent::setupSource(void) const
-{
-    return QUrl::fromUserInput(QStringLiteral("qrc:/qml/APMChannelsComponent.qml"));
-}
-
-QUrl APMChannelsComponent::summaryQmlSource(void) const
-{
-    return QUrl();
 }

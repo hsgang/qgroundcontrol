@@ -20,17 +20,17 @@ public:
     APMChannelsComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent = nullptr);
     
     // Virtuals from VehicleComponent
-    QStringList setupCompleteChangedTriggerList(void) const final;
+    QStringList setupCompleteChangedTriggerList() const final;
     
     // Virtuals from VehicleComponent
-    QString name(void) const final;
-    QString description(void) const final;
-    QString iconResource(void) const final;
-    bool requiresSetup(void) const final;
-    bool setupComplete(void) const final;
-    QUrl setupSource(void) const final;
-    QUrl summaryQmlSource(void) const final;
-    bool allowSetupWhileArmed(void) const final { return false; }
+    QString name() const final;
+    QString description() const final;
+    QString iconResource() const final;
+    bool requiresSetup() const final;
+    bool setupComplete() const final;
+    QUrl setupSource() const final { return QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AutoPilotPlugins/APM/APMChannelsComponent.qml")); }
+    QUrl summaryQmlSource() const final { return QUrl(); }
+    bool allowSetupWhileArmed() const final { return false; }
 
 private:
     const QString   _name;
