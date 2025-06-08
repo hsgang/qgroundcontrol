@@ -112,8 +112,8 @@ ListModel {
 
     ListElement {
         name: qsTr("Console")
-        url: "/qml/QGroundControl/Controls/AppMessages.qml"
-        iconUrl: "/InstrumentValueIcons/window-open.svg"
+        url: "qrc:/qml/QGroundControl/Controls/AppMessages.qml"
+        iconUrl: "qrc:/InstrumentValueIcons/conversation.svg"
         pageVisible: function() { return true }
     }
 

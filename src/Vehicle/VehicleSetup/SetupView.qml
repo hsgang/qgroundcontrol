@@ -33,11 +33,12 @@ Rectangle {
         id: parameterEditorController
     }
 
-    readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
-    readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
-    readonly property real _horizontalMargin:   ScreenTools.defaultFontPixelHeight / 2
-    readonly property real _verticalMargin:     ScreenTools.defaultFontPixelHeight / 2
-    readonly property real _buttonHeight:       ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelHeight * 3 : ScreenTools.defaultFontPixelHeight * 2
+    readonly property real      _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
+    readonly property real      _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
+    readonly property real      _horizontalMargin:   _defaultTextWidth / 2
+    readonly property real      _verticalMargin:     _defaultTextHeight / 2
+    readonly property real      _buttonHeight:       ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelHeight * 3 : ScreenTools.defaultFontPixelHeight * 2
+    readonly property real      _buttonWidth:       _defaultTextWidth * 18
     readonly property string    _armedVehicleText:  qsTr("This operation cannot be performed while the vehicle is armed.")
 
     property bool   _vehicleArmed:                  QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.armed : false
@@ -115,7 +116,7 @@ Rectangle {
     Connections {
         target: QGroundControl.multiVehicleManager
         onParameterReadyVehicleAvailableChanged: {
-            if (QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable || summaryButton.checked || setupButtonGroup.current != firmwareButton) {
+            if (QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable || summaryButton.checked || !firmwareButton.checked) {
                 // Show/Reload the Summary panel when:
                 //      A new vehicle shows up
                 //      The summary panel is already showing and the active vehicle goes away
