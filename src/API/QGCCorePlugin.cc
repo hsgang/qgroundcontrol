@@ -89,7 +89,7 @@ const QVariantList &QGCCorePlugin::analyzePages()
         //     QUrl::fromUserInput(QStringLiteral("qrc:/qmlimages/LogDownloadIcon.svg")))),
         QVariant::fromValue(new QmlComponentInfo(
             tr("Cloud Upload"),
-            QUrl::fromUserInput(QStringLiteral("qrc:/qml/CloudUploadPage.qml")),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/CloudUploadPage.qml")),
             QUrl::fromUserInput(QStringLiteral("qrc:/InstrumentValueIcons/cloud-upload.svg")))),
 // #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
 //         QVariant::fromValue(new QmlComponentInfo(
