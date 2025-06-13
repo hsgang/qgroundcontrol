@@ -20,6 +20,7 @@
 #include "AutoConnectSettings.h"
 #include "TCPLink.h"
 #include "UDPLink.h"
+#include "WebRTCLink.h"
 
 #ifdef QGC_ENABLE_BLUETOOTH
 #include "BluetoothLink.h"
@@ -135,6 +136,9 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
         break;
     case LinkConfiguration::TypeTcp:
         link = std::make_shared<TCPLink>(config);
+        break;
+    case LinkConfiguration::TypeWebRTC:
+        link = std::make_shared<WebRTCLink>(config);
         break;
 #ifdef QGC_ENABLE_BLUETOOTH
     case LinkConfiguration::TypeBluetooth:
@@ -345,6 +349,9 @@ void LinkManager::loadLinkConfigurationList()
                 break;
             case LinkConfiguration::TypeTcp:
                 link = new TCPConfiguration(name);
+                break;
+            case LinkConfiguration::TypeWebRTC:
+                link = new WebRTCConfiguration(name);
                 break;
 #ifdef QGC_ENABLE_BLUETOOTH
             case LinkConfiguration::TypeBluetooth:
@@ -560,6 +567,7 @@ QStringList LinkManager::linkTypeStrings() const
 #endif
     list += tr("UDP");
     list += tr("TCP");
+    list += tr("WebRTC");
 #ifdef QGC_ENABLE_BLUETOOTH
     list += tr("Bluetooth");
 #endif

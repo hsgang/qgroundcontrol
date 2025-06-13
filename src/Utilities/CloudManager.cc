@@ -138,7 +138,7 @@ void CloudManager::checkConnection()
             emit connectionSuccess(); // 서버 연결 성공 신호 발생
         } else {
             QString errorMsg = reply->errorString();
-            //qDebug() << "Connection failed: " << errorMsg;
+            qDebug() << "Connection failed: " << errorMsg;
             emit connectionFailed(errorMsg); // 서버 연결 실패 신호 발생
         }
         reply->deleteLater(); // 메모리 해제

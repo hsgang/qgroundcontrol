@@ -13,6 +13,7 @@
 #endif
 #include "UDPLink.h"
 #include "TCPLink.h"
+#include "WebRTCLink.h"
 #include "LogReplayLink.h"
 #ifdef QGC_ENABLE_BLUETOOTH
 #include "BluetoothLink.h"
@@ -78,6 +79,9 @@ LinkConfiguration *LinkConfiguration::createSettings(int type, const QString &na
     case TypeTcp:
         config = new TCPConfiguration(name);
         break;
+    case TypeWebRTC:
+        config = new WebRTCConfiguration(name);
+        break;
 #ifdef QGC_ENABLE_BLUETOOTH
     case TypeBluetooth:
         config = new BluetoothConfiguration(name);
@@ -119,6 +123,9 @@ LinkConfiguration *LinkConfiguration::duplicateSettings(const LinkConfiguration 
         break;
     case TypeTcp:
         dupe = new TCPConfiguration(qobject_cast<const TCPConfiguration*>(source));
+        break;
+    case TypeWebRTC:
+        dupe = new WebRTCConfiguration(qobject_cast<const WebRTCConfiguration*>(source));
         break;
 #ifdef QGC_ENABLE_BLUETOOTH
     case TypeBluetooth:

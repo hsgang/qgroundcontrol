@@ -202,6 +202,7 @@ find_package(Qt6
         TextToSpeech
         Widgets
         Xml
+        WebSockets
     OPTIONAL_COMPONENTS
         Bluetooth
         MultimediaQuickPrivate

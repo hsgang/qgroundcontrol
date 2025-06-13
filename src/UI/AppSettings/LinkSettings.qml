@@ -308,7 +308,9 @@ SettingsPage {
                            qsTr("UDP_") + linkSettingsLoader.subEditConfig.hostList[0] :
                            (editingConfig.linkType === LinkConfiguration.TypeTcp ?
                            qsTr("TCP_") + linkSettingsLoader.subEditConfig.host + ":" + linkSettingsLoader.subEditConfig.port.toString() :
-                           qsTr("Other")))
+                           (editingConfig.linkType === LinkConfiguration.TypeWebRTC ?
+                           qsTr("WEBRTC_") + linkSettingsLoader.subEditConfig.peerId :
+                           qsTr("Other"))))
                         ) : editingConfig.name
                 }
 
