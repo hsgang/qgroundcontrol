@@ -32,9 +32,7 @@ class WebRTCConfiguration : public LinkConfiguration
     Q_PROPERTY(QString peerId READ peerId WRITE setPeerId NOTIFY peerIdChanged)
     Q_PROPERTY(QString targetPeerId READ targetPeerId WRITE setTargetPeerId NOTIFY targetPeerIdChanged)
     Q_PROPERTY(QString signalingServer READ signalingServer WRITE setSignalingServer NOTIFY signalingServerChanged)
-    Q_PROPERTY(int signalingPort READ signalingPort WRITE setSignalingPort NOTIFY signalingPortChanged)
     Q_PROPERTY(QString stunServer READ stunServer WRITE setStunServer NOTIFY stunServerChanged)
-    Q_PROPERTY(int stunPort READ stunPort WRITE setStunPort NOTIFY stunPortChanged)
     Q_PROPERTY(QString turnServer READ turnServer WRITE setTurnServer NOTIFY turnServerChanged)
     Q_PROPERTY(QString turnUsername READ turnUsername WRITE setTurnUsername NOTIFY turnUsernameChanged)
     Q_PROPERTY(QString turnPassword READ turnPassword WRITE setTurnPassword NOTIFY turnPasswordChanged)
@@ -62,14 +60,8 @@ class WebRTCConfiguration : public LinkConfiguration
     QString signalingServer() const { return _signalingServer; }
     void setSignalingServer(const QString &url);
 
-    int signalingPort() const { return _signalingPort; }
-    void setSignalingPort(int port);
-
     QString stunServer() const { return _stunServer; }
     void setStunServer(const QString &url);
-
-    int stunPort() const { return _stunPort; }
-    void setStunPort(int port);
 
     QString turnServer() const { return _turnServer; }
     void setTurnServer(const QString &url);
@@ -98,13 +90,11 @@ class WebRTCConfiguration : public LinkConfiguration
    private:
     QString _peerId;
     QString _targetPeerId;
-    QString _signalingServer = "ampkorea.duckdns.org";
-    int _signalingPort = 3000;
-    QString _stunServer = "stun.l.google.com";
-    int _stunPort = 19302;
-    QString _turnServer = "ampkorea.duckdns.org";
-    QString _turnUsername = "hsgang";
-    QString _turnPassword = "ampkorea";
+    QString _signalingServer;
+    QString _stunServer = "stun.l.google.com:19302";
+    QString _turnServer;
+    QString _turnUsername;
+    QString _turnPassword;
     bool _udpMuxEnabled = false;
 
     QString _generateRandomId(int length = 8) const;

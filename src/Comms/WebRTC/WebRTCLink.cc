@@ -22,9 +22,7 @@ WebRTCConfiguration::WebRTCConfiguration(const WebRTCConfiguration *copy, QObjec
       , _peerId(copy->_peerId)
       , _targetPeerId(copy->_targetPeerId)
       , _signalingServer(copy->_signalingServer)
-      , _signalingPort(copy->_signalingPort)
       , _stunServer(copy->_stunServer)
-      , _stunPort(copy->_stunPort)
       , _turnServer(copy->_turnServer)
       , _turnUsername(copy->_turnUsername)
       , _turnPassword(copy->_turnPassword)
@@ -42,9 +40,7 @@ void WebRTCConfiguration::copyFrom(const LinkConfiguration *source)
         _peerId = src->_peerId;
         _targetPeerId = src->_targetPeerId;
         _signalingServer = src->_signalingServer;
-        _signalingPort = src->_signalingPort;
         _stunServer = src->_stunServer;
-        _stunPort = src->_stunPort;
         _turnServer = src->_turnServer;
         _turnUsername = src->_turnUsername;
         _turnPassword = src->_turnPassword;
@@ -56,11 +52,9 @@ void WebRTCConfiguration::loadSettings(QSettings &settings, const QString &root)
 {
     settings.beginGroup(root);
     _peerId = settings.value("peerId", _generateRandomId()).toString();
-    _targetPeerId = settings.value("targetPeerId", "peer2").toString();
-    _signalingServer = settings.value("signalingServer", "ampkorea.duckdns.org").toString();
-    _signalingPort = settings.value("signalingPort", 3000).toInt();
-    _stunServer = settings.value("stunServer", "stun.l.google.com").toString();
-    _stunPort = settings.value("stunPort", 19302).toInt();
+    _targetPeerId = settings.value("targetPeerId", "").toString();
+    _signalingServer = settings.value("signalingServer", "").toString();
+    _stunServer = settings.value("stunServer", "stun.l.google.com:19302").toString();
     _turnServer = settings.value("turnServer", "").toString();
     _turnUsername = settings.value("turnUsername", "").toString();
     _turnPassword = settings.value("turnPassword", "").toString();
@@ -74,9 +68,7 @@ void WebRTCConfiguration::saveSettings(QSettings &settings, const QString &root)
     settings.setValue("peerId", _peerId);
     settings.setValue("targetPeerId", _targetPeerId);
     settings.setValue("signalingServer", _signalingServer);
-    settings.setValue("signalingPort", _signalingPort);
     settings.setValue("stunServer", _stunServer);
-    settings.setValue("stunPort", _stunPort);
     settings.setValue("turnServer", _turnServer);
     settings.setValue("turnUsername", _turnUsername);
     settings.setValue("turnPassword", _turnPassword);
@@ -108,27 +100,11 @@ void WebRTCConfiguration::setSignalingServer(const QString &url)
     }
 }
 
-void WebRTCConfiguration::setSignalingPort(int port)
-{
-    if (_signalingPort != port) {
-        _signalingPort = port;
-        emit signalingPortChanged();
-    }
-}
-
 void WebRTCConfiguration::setStunServer(const QString &url)
 {
     if (_stunServer != url) {
         _stunServer = url;
         emit stunServerChanged();
-    }
-}
-
-void WebRTCConfiguration::setStunPort(int port)
-{
-    if (_stunPort != port) {
-        _stunPort = port;
-        emit stunPortChanged();
     }
 }
 
