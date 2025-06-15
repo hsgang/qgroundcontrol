@@ -887,7 +887,6 @@ ApplicationWindow {
         closePolicy:    Drawer.NoAutoClose
         interactive:    false
         visible:        false
-        color:          qgcPal.window
 
         property var backIcon
         property string toolTitle:  toolbarDrawerText.text
