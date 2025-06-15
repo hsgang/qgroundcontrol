@@ -16,6 +16,7 @@
 #include "QGCLoggingCategory.h"
 
 #include <QtCore/QLineF>
+#include <QMetaMethod>
 
 QGCMapPolyline::QGCMapPolyline(QObject* parent)
     : QObject               (parent)
@@ -35,6 +36,11 @@ QGCMapPolyline::QGCMapPolyline(const QGCMapPolyline& other, QObject* parent)
     *this = other;
 
     _init();
+}
+
+QGCMapPolyline::~QGCMapPolyline()
+{
+    qgcApp()->removeCompressedSignal(QMetaMethod::fromSignal(&QGCMapPolyline::pathChanged));
 }
 
 const QGCMapPolyline& QGCMapPolyline::operator=(const QGCMapPolyline& other)
@@ -58,6 +64,8 @@ void QGCMapPolyline::_init(void)
 
     connect(this, &QGCMapPolyline::countChanged, this, &QGCMapPolyline::isValidChanged);
     connect(this, &QGCMapPolyline::countChanged, this, &QGCMapPolyline::isEmptyChanged);
+
+    qgcApp()->addCompressedSignal(QMetaMethod::fromSignal(&QGCMapPolyline::pathChanged));
 }
 
 void QGCMapPolyline::clear(void)
@@ -75,8 +83,14 @@ void QGCMapPolyline::clear(void)
 void QGCMapPolyline::adjustVertex(int vertexIndex, const QGeoCoordinate coordinate)
 {
     _polylinePath[vertexIndex] = QVariant::fromValue(coordinate);
-    emit pathChanged();
     _polylineModel.value<QGCQGeoCoordinate*>(vertexIndex)->setCoordinate(coordinate);
+    if (!_deferredPathChanged) {
+        _deferredPathChanged = true;
+        QTimer::singleShot(0, this, [this]() {
+            emit pathChanged();
+            _deferredPathChanged = false;
+        });
+    }
     setDirty(true);
 }
 
