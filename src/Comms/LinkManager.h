@@ -45,6 +45,7 @@ class LinkManager : public QObject
     Q_PROPERTY(QmlObjectListModel *linkConfigurations READ _qmlLinkConfigurations CONSTANT)
     Q_PROPERTY(QStringList linkTypeStrings READ linkTypeStrings CONSTANT)
     Q_PROPERTY(bool mavlinkSupportForwardingEnabled READ mavlinkSupportForwardingEnabled NOTIFY mavlinkSupportForwardingEnabledChanged)
+    Q_PROPERTY(int webRtcRtt READ webRtcRtt NOTIFY webRtcRttChanged)
 
 public:
     explicit LinkManager(QObject *parent = nullptr);
@@ -118,9 +119,12 @@ public:
 
     static constexpr uint8_t invalidMavlinkChannel() { return std::numeric_limits<uint8_t>::max(); }
 
+    int webRtcRtt() const;
+
 signals:
     void mavlinkSupportForwardingEnabledChanged();
     void isBluetoothAvailableChanged();
+    void webRtcRttChanged();
 
 private slots:
     void _linkDisconnected();

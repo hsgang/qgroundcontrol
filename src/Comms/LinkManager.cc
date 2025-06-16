@@ -175,6 +175,10 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
     _rgLinks.append(link);
     config->setLink(link);
 
+    if (auto w = qobject_cast<WebRTCLink*>(link.get())) {
+        connect(w, &WebRTCLink::rttMsChanged, this, &LinkManager::webRtcRttChanged);
+    }
+
     (void) connect(link.get(), &LinkInterface::communicationError, this, &LinkManager::_communicationError);
     (void) connect(link.get(), &LinkInterface::bytesReceived, MAVLinkProtocol::instance(), &MAVLinkProtocol::receiveBytes);
     (void) connect(link.get(), &LinkInterface::bytesSent, MAVLinkProtocol::instance(), &MAVLinkProtocol::logSentBytes);
@@ -236,6 +240,10 @@ void LinkManager::_linkDisconnected()
 
     if (!link || !containsLink(link)) {
         return;
+    }
+
+    if (auto w = qobject_cast<WebRTCLink*>(link)) {
+        disconnect(w, &WebRTCLink::rttMsChanged, this, &LinkManager::webRtcRttChanged);
     }
 
     (void) disconnect(link, &LinkInterface::communicationError, qgcApp(), &QGCApplication::showAppMessage);
@@ -737,6 +745,17 @@ void LinkManager::freeMavlinkChannel(uint8_t channel)
     }
 
     _mavlinkChannelsUsedBitMask &= ~(1 << channel);
+}
+
+int LinkManager::webRtcRtt() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return w->rttMs();
+        }
+    }
+    return -1;
 }
 
 LogReplayLink *LinkManager::startLogReplay(const QString &logFile)

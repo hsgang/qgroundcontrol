@@ -140,6 +140,12 @@ SettingsPage {
                         radius:         height / 2
                     }
                 }
+
+                QGCLabel {
+                    visible: object.link && object.link.rttMs !== undefined
+                    text: qsTr("RTT %1 ms").arg(object.link.rttMs)
+                    font.pointSize: ScreenTools.smallFontPointSize
+                }
             }
         }
 

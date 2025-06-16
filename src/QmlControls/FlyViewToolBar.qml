@@ -279,6 +279,15 @@ Rectangle {
         }
     }
 
+    QGCLabel {
+        anchors.top: brandImageRect.top
+        anchors.right : brandImageRect.right
+        text: qsTr("RTT: %1 ms").arg(QGroundControl.linkManager.webRtcRtt)
+        color: qgcPal.colorGreen
+        //font.pointSize: ScreenTools.smallFontPointSize
+        font.bold :             true
+    }
+
     Component{
         id: linkManagerDialogComponent
 

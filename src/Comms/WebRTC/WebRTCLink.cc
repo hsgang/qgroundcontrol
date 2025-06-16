@@ -1,6 +1,7 @@
 #include "WebRTCLink.h"
 #include <QDebug>
 #include <QUrl>
+#include <QtQml/qqml.h>
 
 Q_LOGGING_CATEGORY(WebRTCLinkLog, "WebRTCLink")
 
@@ -481,23 +482,11 @@ void WebRTCWorker::_onDataChannelOpen()
     emit connected();
 
     // 5초마다 라이브 스트림 통계 로깅
-    auto *statsTimer = new QTimer(this);
-    statsTimer->setInterval(5000);
-    connect(statsTimer, &QTimer::timeout, this, [this]() {
-        // RTT (nullptr 체크)
-        auto rttOpt = _peerConnection->rtt();
-        if (rttOpt.has_value()) {
-            qCDebug(WebRTCLinkLog)
-            << "STATS RTT:" << rttOpt.value().count() << "ms"
-            << " Sent:" << _peerConnection->bytesSent()
-            << " Recv:" << _peerConnection->bytesReceived();
-        } else {
-            qCDebug(WebRTCLinkLog) << "STATS RTT: n/a"
-                                   << " Sent:" << _peerConnection->bytesSent()
-                                   << " Recv:" << _peerConnection->bytesReceived();
-        }
-    });
-    statsTimer->start();
+    if(!_rttTimer) {
+        _rttTimer = new QTimer(this);
+        connect(_rttTimer, &QTimer::timeout, this, &WebRTCWorker::_updateRtt);
+        _rttTimer->start(1000); // 1초 주기 측정
+    }
 }
 
 void WebRTCWorker::_onDataChannelClosed()
@@ -532,6 +521,24 @@ void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
 void WebRTCWorker::_onGatheringStateChanged(rtc::PeerConnection::GatheringState state)
 {
     qCDebug(WebRTCLinkLog) << "ICE gathering state changed:" << _gatheringStateToString(state);
+}
+
+void WebRTCWorker::_updateRtt()
+{
+    if (!_peerConnection) return;
+
+    auto rttOpt = _peerConnection->rtt();
+    if (rttOpt.has_value()) {
+        int rttMs = rttOpt.value().count();
+        emit rttUpdated(rttMs);
+        qCDebug(WebRTCLinkLog) << "STATS RTT:" << rttMs << "ms"
+                               << " Sent:" << _peerConnection->bytesSent()
+                               << " Recv:" << _peerConnection->bytesReceived();
+    } else {
+        qCDebug(WebRTCLinkLog) << "STATS RTT: n/a"
+                               << " Sent:" << _peerConnection->bytesSent()
+                               << " Recv:" << _peerConnection->bytesReceived();
+    }
 }
 
 QString WebRTCWorker::_stateToString(rtc::PeerConnection::State state) const
@@ -597,6 +604,7 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     connect(_worker, &WebRTCWorker::errorOccurred, this, &WebRTCLink::_onErrorOccurred, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::bytesReceived, this, &WebRTCLink::_onDataReceived, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::bytesSent, this, &WebRTCLink::_onDataSent, Qt::QueuedConnection);
+    connect(_worker, &WebRTCWorker::rttUpdated, this, &WebRTCLink::_onRttUpdated);
 
     _workerThread->start();
 }
@@ -662,4 +670,12 @@ void WebRTCLink::_onDataReceived(const QByteArray &data)
 void WebRTCLink::_onDataSent(const QByteArray &data)
 {
     emit bytesSent(this, data);
+}
+
+void WebRTCLink::_onRttUpdated(int rtt)
+{
+    if (_rttMs != rtt) {
+        _rttMs = rtt;
+        emit rttMsChanged();
+    }
 }

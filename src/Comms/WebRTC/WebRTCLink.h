@@ -125,6 +125,7 @@ class WebRTCWorker : public QObject
     void bytesReceived(const QByteArray &data);
     void bytesSent(const QByteArray &data);
     void errorOccurred(const QString &errorString);
+    void rttUpdated(int rtt);  // RTT 측정 signal
 
    private slots:
     void _onWebSocketConnected();
@@ -135,6 +136,7 @@ class WebRTCWorker : public QObject
     void _onDataChannelClosed();
     void _onPeerStateChanged(rtc::PeerConnection::State state);
     void _onGatheringStateChanged(rtc::PeerConnection::GatheringState state);
+    void _updateRtt();  // RTT 측정용 slot
 
    private:
     // WebSocket signaling
@@ -160,6 +162,7 @@ class WebRTCWorker : public QObject
             // WebSocket for signaling
     QWebSocket *_webSocket = nullptr;
     bool _signalingConnected = false;
+    QTimer *_rttTimer = nullptr;
 
             // WebRTC components
     std::shared_ptr<rtc::PeerConnection> _peerConnection;
@@ -182,6 +185,7 @@ class WebRTCWorker : public QObject
 class WebRTCLink : public LinkInterface
 {
     Q_OBJECT
+    Q_PROPERTY(int rttMs READ rttMs NOTIFY rttMsChanged)
 
    public:
     explicit WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent = nullptr);
@@ -189,6 +193,8 @@ class WebRTCLink : public LinkInterface
 
     bool isConnected() const override;
     void connectLink();
+
+    int rttMs() const { return _rttMs; }
 
    protected:
     bool _connect() override;
@@ -201,9 +207,14 @@ class WebRTCLink : public LinkInterface
     void _onErrorOccurred(const QString &errorString);
     void _onDataReceived(const QByteArray &data);
     void _onDataSent(const QByteArray &data);
+    void _onRttUpdated(int rtt);   // RTT 업데이트 슬롯
+
+   signals:
+    void rttMsChanged();
 
    private:
     const WebRTCConfiguration *_rtcConfig = nullptr;
     WebRTCWorker *_worker = nullptr;
     QThread *_workerThread = nullptr;
+    int _rttMs = -1;
 };
