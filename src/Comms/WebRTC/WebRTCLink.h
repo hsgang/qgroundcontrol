@@ -155,6 +155,11 @@ class WebRTCWorker : public QObject
             // Cleanup
     void _cleanup();
 
+    void _startPingTimer();
+    void _sendPing();
+    qint64 _lastPingSent = 0;
+    QTimer *_pingTimer = nullptr;
+
             // Configuration
     const WebRTCConfiguration *_config = nullptr;
     rtc::Configuration _rtcConfig;

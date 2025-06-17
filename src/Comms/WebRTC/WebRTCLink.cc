@@ -282,6 +282,7 @@ void WebRTCWorker::_setupPeerConnection()
     _rtcConfig.enableIceUdpMux = _config->udpMuxEnabled();
 
     try {
+        // _rtcConfig.disableAutoNegotiation = true;
         _peerConnection = std::make_shared<rtc::PeerConnection>(_rtcConfig);
 
         // Set up callbacks
@@ -322,6 +323,26 @@ void WebRTCWorker::_setupPeerConnection()
             _setupDataChannel(_dataChannel);
         });
 
+        // _peerConnection->onTrack([](std::shared_ptr<rtc::Track> track) {
+        //     auto desc = track->description();
+
+        //     if (desc.type() == "video") {
+        //         qCDebug(WebRTCLinkLog) << "Video track received";
+
+        //         track->onFrame([](rtc::binary data, rtc::FrameInfo info) {
+        //             qCDebug(WebRTCLinkLog) << "Received RTP frame, size: " << data.size()
+        //             << ", timestamp: " << info.timestamp;
+
+        //                     // 여기에 디코더 연동
+        //         });
+
+        //     } else if (desc.type() == "audio") {
+        //         qCDebug(WebRTCLinkLog) << "Audio track received";
+        //     } else {
+        //         qCDebug(WebRTCLinkLog) << "Other track type: " << desc.type();
+        //     }
+        // });
+
         qCDebug(WebRTCLinkLog) << "Peer connection created successfully";
 
     } catch (const std::exception& e) {
@@ -342,11 +363,31 @@ void WebRTCWorker::_setupDataChannel(std::shared_ptr<rtc::DataChannel> dc)
         QMetaObject::invokeMethod(this, "_onDataChannelClosed", Qt::QueuedConnection);
     });
 
-    dc->onMessage([this](auto data) {
+    dc->onMessage([this, dc](auto data) {
         if (std::holds_alternative<rtc::binary>(data)) {
             const auto& binaryData = std::get<rtc::binary>(data);
             QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
             emit bytesReceived(byteArray);
+        }
+        else if (std::holds_alternative<std::string>(data)) {
+            const std::string& text = std::get<std::string>(data);
+            QJsonDocument doc = QJsonDocument::fromJson(QString::fromStdString(text).toUtf8());
+            if (doc.isObject()) {
+                QJsonObject obj = doc.object();
+                if (obj["type"] == "ping") {
+                    QJsonObject pong;
+                    pong["type"] = "pong";
+                    pong["timestamp"] = obj["timestamp"];
+                    QJsonDocument docPong(pong);
+                    dc->send(docPong.toJson(QJsonDocument::Compact).toStdString());
+                }
+                else if (obj["type"] == "pong") {
+                    qint64 now = QDateTime::currentMSecsSinceEpoch();
+                    qint64 rtt = now - obj["timestamp"].toVariant().toLongLong();
+                    qCDebug(WebRTCLinkLog) << "[DataChannel] Measured RTT: " << rtt << "ms";
+                    emit rttUpdated(rtt);
+                }
+            }
         }
     });
 }
@@ -481,18 +522,25 @@ void WebRTCWorker::_onDataChannelOpen()
     qCDebug(WebRTCLinkLog) << "Data channel opened";
     emit connected();
 
+    // 별도 만든 rtt 측정 시작
+    _startPingTimer();
+
     // 5초마다 라이브 스트림 통계 로깅
-    if(!_rttTimer) {
-        _rttTimer = new QTimer(this);
-        connect(_rttTimer, &QTimer::timeout, this, &WebRTCWorker::_updateRtt);
-        _rttTimer->start(1000); // 1초 주기 측정
-    }
+    // if(!_rttTimer) {
+    //     _rttTimer = new QTimer(this);
+    //     connect(_rttTimer, &QTimer::timeout, this, &WebRTCWorker::_updateRtt);
+    //     _rttTimer->start(1000); // 1초 주기 측정
+    // }
 }
 
 void WebRTCWorker::_onDataChannelClosed()
 {
     qCDebug(WebRTCLinkLog) << "Data channel closed";
+    if (_pingTimer) {
+        _pingTimer->stop();
+    }
     if (!_isDisconnecting) {
+        emit rttUpdated(-1);
         // emit disconnected();
         // QTimer::singleShot(1000, this, [this]() {
         //     qCDebug(WebRTCLinkLog) << "Recreating PeerConnection and DataChannel";
@@ -530,7 +578,7 @@ void WebRTCWorker::_updateRtt()
     auto rttOpt = _peerConnection->rtt();
     if (rttOpt.has_value()) {
         int rttMs = rttOpt.value().count();
-        emit rttUpdated(rttMs);
+        //emit rttUpdated(rttMs);
         qCDebug(WebRTCLinkLog) << "STATS RTT:" << rttMs << "ms"
                                << " Sent:" << _peerConnection->bytesSent()
                                << " Recv:" << _peerConnection->bytesReceived();
@@ -581,6 +629,28 @@ void WebRTCWorker::_cleanup()
         } catch (...) {}
         _peerConnection.reset();
     }
+}
+
+void WebRTCWorker::_startPingTimer()
+{
+    if (!_pingTimer) {
+        _pingTimer = new QTimer(this);
+        connect(_pingTimer, &QTimer::timeout, this, &WebRTCWorker::_sendPing);
+        _pingTimer->start(1000);
+    }
+}
+
+void WebRTCWorker::_sendPing()
+{
+    if (!_dataChannel || !_dataChannel->isOpen()) return;
+
+    QJsonObject ping;
+    ping["type"] = "ping";
+    ping["timestamp"] = QDateTime::currentMSecsSinceEpoch();
+
+    QString json = QJsonDocument(ping).toJson(QJsonDocument::Compact);
+    _dataChannel->send(json.toStdString());
+    _lastPingSent = ping.value("timestamp").toVariant().toLongLong();
 }
 
 //------------------------------------------------------
