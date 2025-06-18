@@ -39,8 +39,8 @@ RowLayout {
     }
 
     FlyViewInstrumentPanel {
-        id:         instrumentPanel
-        visible:    QGroundControl.corePlugin.options.flyView.showInstrumentPanel && _showSingleVehicleUI
+        id:                 instrumentPanel
         Layout.alignment:   Qt.AlignBottom
+        visible:            QGroundControl.corePlugin.options.flyView.showInstrumentPanel && _showSingleVehicleUI
     }
 }
