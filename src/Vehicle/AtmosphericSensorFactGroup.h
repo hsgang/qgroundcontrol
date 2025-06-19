@@ -54,6 +54,7 @@ protected:
     void _handleTunnel              (const mavlink_message_t &message);
     void _handleScaledPressure      (const mavlink_message_t &message);
     void _handleHygrometerSensor    (const mavlink_message_t &message);
+    void _handleWind                (const mavlink_message_t &message);
 
     Fact _statusFact = Fact(0, QStringLiteral("status"), FactMetaData::valueTypeUint8);
     Fact _logCountFact = Fact(0, QStringLiteral("logCount"), FactMetaData::valueTypeFloat);
@@ -72,4 +73,7 @@ protected:
     Fact _opc3Fact = Fact(0, QStringLiteral("opc3"), FactMetaData::valueTypeFloat);
     Fact _radiationFact = Fact(0, QStringLiteral("radiation"), FactMetaData::valueTypeFloat);
     Fact _battFact = Fact(0, QStringLiteral("batt"), FactMetaData::valueTypeFloat);
+
+   private:
+    bool _windDirByWindPacket = false;
 };

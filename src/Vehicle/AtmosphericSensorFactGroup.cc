@@ -92,7 +92,10 @@ void AtmosphericSensorFactGroup::handleMessage(Vehicle *vehicle, const mavlink_m
 
     switch (message.msgid) {
     case MAVLINK_MSG_ID_DATA32:
-         _handleData32(message);
+        _handleData32(message);
+        break;
+    case MAVLINK_MSG_ID_WIND:
+        _handleWind(message);
         break;
     case MAVLINK_MSG_ID_HYGROMETER_SENSOR:
         _handleHygrometerSensor(message);
@@ -131,22 +134,36 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     float radiationRaw    = sP.radiationRaw;
     float battRaw         = sP.battRaw;
 
-    if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
-    if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
-    if(humidityRaw)     {humidity()->setRawValue(humidityRaw);}
-    if(pressureRaw)     {pressure()->setRawValue(pressureRaw);}
-    if(windDirRaw)      {windDir()->setRawValue(windDirRaw);}
-    if(windSpdRaw)      {windSpd()->setRawValue(windSpdRaw);}
-    if(hubTemp1Raw)     {hubTemp1()->setRawValue(hubTemp1Raw);}
-    if(hubTemp2Raw)     {hubTemp2()->setRawValue(hubTemp2Raw);}
-    if(hubHumi1Raw)     {hubHumi1()->setRawValue(hubHumi1Raw);}
-    if(hubHumi2Raw)     {hubHumi2()->setRawValue(hubHumi2Raw);}
-    if(hubPressureRaw)  {hubPressure()->setRawValue(hubPressureRaw);}
-    if(opc1Raw)         {opc1()->setRawValue(opc1Raw);}
-    if(opc2Raw)         {opc2()->setRawValue(opc2Raw);}
-    if(opc3Raw)         {opc3()->setRawValue(opc3Raw);}
-    if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
-    if(battRaw)         {batt()->setRawValue(battRaw);}
+    if(!qIsNaN(logCountRaw))     {logCount()->setRawValue(logCountRaw);}
+    if(temperatureRaw > -50 && temperatureRaw < 100)  {
+        temperature()->setRawValue(temperatureRaw);
+    }
+    if(!qIsNaN(humidityRaw))     {humidity()->setRawValue(humidityRaw);}
+    if(!qIsNaN(pressureRaw))     {pressure()->setRawValue(pressureRaw);}
+    if(!qIsNaN(windDirRaw) && !_windDirByWindPacket)      {windDir()->setRawValue(windDirRaw);}
+    if(!qIsNaN(windSpdRaw) && !_windDirByWindPacket)      {windSpd()->setRawValue(windSpdRaw);}
+    if(hubTemp1Raw > -50 && hubTemp1Raw < 100) {
+        hubTemp1()->setRawValue(hubTemp1Raw);
+    }
+    if(hubTemp2Raw > -50 && hubTemp2Raw < 100) {
+        hubTemp2()->setRawValue(hubTemp2Raw);
+    }
+    if(hubHumi1Raw > 0 && hubHumi1Raw < 100) {
+        hubHumi1()->setRawValue(hubHumi1Raw);
+    }
+    if(hubHumi2Raw > 0 && hubHumi2Raw < 100) {
+        hubHumi2()->setRawValue(hubHumi2Raw);
+    }
+    if(hubPressureRaw > 0 && hubPressureRaw < 2000) {
+        hubPressure()->setRawValue(hubPressureRaw);
+    }
+    if(!qIsNaN(opc1Raw))         {opc1()->setRawValue(opc1Raw);}
+    if(!qIsNaN(opc2Raw))         {opc2()->setRawValue(opc2Raw);}
+    if(!qIsNaN(opc3Raw))         {opc3()->setRawValue(opc3Raw);}
+    if(!qIsNaN(radiationRaw))    {radiation()->setRawValue(radiationRaw);}
+    if(battRaw > 0 && battRaw < 1000) {
+        batt()->setRawValue(battRaw);
+    }
 
     status()->setRawValue(data32.type);
 }
@@ -189,8 +206,8 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             if(tempRaw)  {temperature()->setRawValue(tempRaw);}
             if(humiRaw)     {humidity()->setRawValue(humiRaw);}
             if(pressRaw)    {pressure()->setRawValue(pressRaw);}
-            if(windDRaw)    {windDir()->setRawValue(windDRaw);}
-            if(windSRaw)    {windSpd()->setRawValue(windSRaw);}
+            if(windDRaw && !_windDirByWindPacket)    {windDir()->setRawValue(windDRaw);}
+            if(windSRaw && !_windDirByWindPacket)    {windSpd()->setRawValue(windSRaw);}
             if(opc1Raw)    {opc1()->setRawValue(opc1Raw);}
             if(opc2Raw)    {opc2()->setRawValue(opc2Raw);}
             if(opc3Raw)    {opc3()->setRawValue(opc3Raw);}
@@ -225,8 +242,8 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
             if(humidityRaw)     {humidity()->setRawValue(humidityRaw);}
             if(pressureRaw)     {pressure()->setRawValue(pressureRaw);}
-            if(windDirRaw)      {windDir()->setRawValue(windDirRaw);}
-            if(windSpdRaw)      {windSpd()->setRawValue(windSpdRaw);}
+            if(windDirRaw && !_windDirByWindPacket)      {windDir()->setRawValue(windDirRaw);}
+            if(windSpdRaw && !_windDirByWindPacket)      {windSpd()->setRawValue(windSpdRaw);}
             if(hubTemp1Raw)     {hubTemp1()->setRawValue(hubTemp1Raw);}
             if(hubTemp2Raw)     {hubTemp2()->setRawValue(hubTemp2Raw);}
             if(hubHumi1Raw)     {hubHumi1()->setRawValue(hubHumi1Raw);}
@@ -257,3 +274,21 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
     }
 }
 
+void AtmosphericSensorFactGroup::_handleWind(const mavlink_message_t &message)
+{
+    mavlink_wind_t wind{};
+    mavlink_msg_wind_decode(&message, &wind);
+
+            // We don't want negative wind angles
+    float windDirection = wind.direction;
+    if (windDirection < 0) {
+        windDirection += 360;
+    }
+    windDir()->setRawValue(windDirection);
+    windSpd()->setRawValue(wind.speed);
+    //windVSpd()->setRawValue(wind.speed_z);
+
+    _windDirByWindPacket = true;
+
+    _setTelemetryAvailable(true);
+}
