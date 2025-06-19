@@ -300,7 +300,7 @@ Rectangle {
 
             TimedProgressTracker {
                 id:                     closeProgressTracker
-                timeoutSeconds:         5
+                timeoutSeconds:         10
                 onTimeout:              linkPopup.close()
             }
 
