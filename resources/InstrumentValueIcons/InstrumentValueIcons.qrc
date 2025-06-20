@@ -310,5 +310,6 @@
         <file>shield-user.svg</file>
         <file>log-in.svg</file>
         <file>square-x.svg</file>
+        <file>network-transmit-receive.svg</file>
     </qresource>
 </RCC>

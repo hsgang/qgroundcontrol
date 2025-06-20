@@ -26,5 +26,7 @@ qt_add_qml_module(ToolbarModule
         VehicleIndicatorPage.qml
         SiyiRSSIIndicator.qml
         MessageIndicator.qml
-    NO_PLUGIN # Required by Qt 6.6.3. TODO: Remove when no longer supported.
+        WEBRTCIndicator.qml
+    NO_PLUGIN
+    QML_FILES WEBRTCIndicator.qml # Required by Qt 6.6.3. TODO: Remove when no longer supported.
 )
