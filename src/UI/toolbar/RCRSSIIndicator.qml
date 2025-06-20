@@ -94,7 +94,7 @@ Item {
             QGCLabel {
                 anchors.left:   parent.left
                 color:          qgcPal.text
-                text:           " "
+                text:           "RC"
             }
         }
     }
