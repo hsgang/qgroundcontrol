@@ -323,25 +323,25 @@ void WebRTCWorker::_setupPeerConnection()
             _setupDataChannel(_dataChannel);
         });
 
-        // _peerConnection->onTrack([](std::shared_ptr<rtc::Track> track) {
-        //     auto desc = track->description();
+        _peerConnection->onTrack([](std::shared_ptr<rtc::Track> track) {
+            auto desc = track->description();
 
-        //     if (desc.type() == "video") {
-        //         qCDebug(WebRTCLinkLog) << "Video track received";
+            if (desc.type() == "video") {
+                qCDebug(WebRTCLinkLog) << "Video track received";
 
-        //         track->onFrame([](rtc::binary data, rtc::FrameInfo info) {
-        //             qCDebug(WebRTCLinkLog) << "Received RTP frame, size: " << data.size()
-        //             << ", timestamp: " << info.timestamp;
+                track->onFrame([](rtc::binary data, rtc::FrameInfo info) {
+                    qCDebug(WebRTCLinkLog) << "Received RTP frame, size: " << data.size()
+                    << ", timestamp: " << info.timestamp;
 
-        //                     // 여기에 디코더 연동
-        //         });
+                            // 여기에 디코더 연동
+                });
 
-        //     } else if (desc.type() == "audio") {
-        //         qCDebug(WebRTCLinkLog) << "Audio track received";
-        //     } else {
-        //         qCDebug(WebRTCLinkLog) << "Other track type: " << desc.type();
-        //     }
-        // });
+            } else if (desc.type() == "audio") {
+                qCDebug(WebRTCLinkLog) << "Audio track received";
+            } else {
+                qCDebug(WebRTCLinkLog) << "Other track type: " << desc.type();
+            }
+        });
 
         qCDebug(WebRTCLinkLog) << "Peer connection created successfully";
 
@@ -385,7 +385,7 @@ void WebRTCWorker::_setupDataChannel(std::shared_ptr<rtc::DataChannel> dc)
                     qint64 now = QDateTime::currentMSecsSinceEpoch();
                     qint64 rtt = now - obj["timestamp"].toVariant().toLongLong();
                     qCDebug(WebRTCLinkLog) << "[DataChannel] Measured RTT: " << rtt << "ms";
-                    emit rttUpdated(rtt);
+                    //emit rttUpdated(rtt);
                 }
             }
         }
@@ -457,25 +457,24 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
             rtc::Description offer(sdp.toStdString(), "offer");
             _peerConnection->setRemoteDescription(offer);
 
-            auto answer = _peerConnection->createAnswer();
-            _peerConnection->setLocalDescription(answer.type(), { std::string(answer) });
-            // _peerConnection->createAnswer();
-            QJsonObject answerMsg;
-            answerMsg["type"] = "answer";
-            answerMsg["sdp"]  = QString::fromStdString(answer);
-            answerMsg["to"]   = _config->targetPeerId();  // peerDrone
-            answerMsg["id"]   = _config->peerId();
-            _sendSignalingMessage(answerMsg);
+            //auto answer = _peerConnection->createAnswer();
+            //_peerConnection->setLocalDescription(answer.type(), { std::string(answer) });
+            // QJsonObject answerMsg;
+            // answerMsg["type"] = "answer";
+            // answerMsg["sdp"]  = QString::fromStdString(answer);
+            // answerMsg["to"]   = _config->targetPeerId();  // peerDrone
+            // answerMsg["id"]   = _config->peerId();
+            // _sendSignalingMessage(answerMsg);
 
             _remoteDescriptionSet = true;
             _processPendingCandidates();
 
-        } else if (type == "answer") {
-            QString sdp = message["sdp"].toString();
-            rtc::Description answer(sdp.toStdString(), "answer");
-            _peerConnection->setRemoteDescription(answer);
-            _remoteDescriptionSet = true;
-            _processPendingCandidates();
+        // } else if (type == "answer") {
+        //     QString sdp = message["sdp"].toString();
+        //     rtc::Description answer(sdp.toStdString(), "answer");
+        //     _peerConnection->setRemoteDescription(answer);
+        //     _remoteDescriptionSet = true;
+        //     _processPendingCandidates();
 
         } else if (type == "candidate") {
             QString candidateStr = message["candidate"].toString();
@@ -489,7 +488,7 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
             }
         }
     } catch (const std::exception& e) {
-        qCWarning(WebRTCLinkLog) << "Error handling signaling message:" << e.what();
+        //qCWarning(WebRTCLinkLog) << "Error handling signaling message:" << e.what();
         emit errorOccurred(QString("Error handling signaling message: %1").arg(e.what()));
     }
 }
@@ -525,12 +524,12 @@ void WebRTCWorker::_onDataChannelOpen()
     // 별도 만든 rtt 측정 시작
     _startPingTimer();
 
-    // 5초마다 라이브 스트림 통계 로깅
-    // if(!_rttTimer) {
-    //     _rttTimer = new QTimer(this);
-    //     connect(_rttTimer, &QTimer::timeout, this, &WebRTCWorker::_updateRtt);
-    //     _rttTimer->start(1000); // 1초 주기 측정
-    // }
+    // 1초마다 라이브 스트림 통계 로깅
+    if(!_rttTimer) {
+        _rttTimer = new QTimer(this);
+        connect(_rttTimer, &QTimer::timeout, this, &WebRTCWorker::_updateRtt);
+        _rttTimer->start(1000); // 1초 주기 측정
+    }
 }
 
 void WebRTCWorker::_onDataChannelClosed()
@@ -578,14 +577,14 @@ void WebRTCWorker::_updateRtt()
     auto rttOpt = _peerConnection->rtt();
     if (rttOpt.has_value()) {
         int rttMs = rttOpt.value().count();
-        //emit rttUpdated(rttMs);
-        qCDebug(WebRTCLinkLog) << "STATS RTT:" << rttMs << "ms"
-                               << " Sent:" << _peerConnection->bytesSent()
-                               << " Recv:" << _peerConnection->bytesReceived();
+        emit rttUpdated(rttMs);
+        // qCDebug(WebRTCLinkLog) << "STATS RTT:" << rttMs << "ms"
+        //                        << " Sent:" << _peerConnection->bytesSent()
+        //                        << " Recv:" << _peerConnection->bytesReceived();
     } else {
-        qCDebug(WebRTCLinkLog) << "STATS RTT: n/a"
-                               << " Sent:" << _peerConnection->bytesSent()
-                               << " Recv:" << _peerConnection->bytesReceived();
+        // qCDebug(WebRTCLinkLog) << "STATS RTT: n/a"
+        //                        << " Sent:" << _peerConnection->bytesSent()
+        //                        << " Recv:" << _peerConnection->bytesReceived();
     }
 }
 
