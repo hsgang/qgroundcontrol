@@ -256,6 +256,7 @@ void WebRTCWorker::_connectToSignalingServer()
 
     qCDebug(WebRTCLinkLog) << "Connecting to signaling server:" << url;
     _webSocket->open(QUrl(url));
+    emit rtcStatusMessageChanged("Connect Socket");
 }
 
 void WebRTCWorker::_setupPeerConnection()
@@ -520,6 +521,7 @@ void WebRTCWorker::_onDataChannelOpen()
 {
     qCDebug(WebRTCLinkLog) << "Data channel opened";
     emit connected();
+    emit rtcStatusMessageChanged("Data Channel Opened");
 
     // 별도 만든 rtt 측정 시작
     _startPingTimer();
@@ -553,6 +555,7 @@ void WebRTCWorker::_onDataChannelClosed()
 void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
 {
     qCDebug(WebRTCLinkLog) << "Peer state changed:" << _stateToString(state);
+    emit rtcStatusMessageChanged(_stateToString(state));
     if ((state == rtc::PeerConnection::State::Failed ||
          state == rtc::PeerConnection::State::Disconnected)
         && !_isDisconnecting) {
@@ -567,6 +570,7 @@ void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
 
 void WebRTCWorker::_onGatheringStateChanged(rtc::PeerConnection::GatheringState state)
 {
+    emit rtcStatusMessageChanged(_gatheringStateToString(state));
     qCDebug(WebRTCLinkLog) << "ICE gathering state changed:" << _gatheringStateToString(state);
 }
 
@@ -591,12 +595,12 @@ void WebRTCWorker::_updateRtt()
 QString WebRTCWorker::_stateToString(rtc::PeerConnection::State state) const
 {
     switch (state) {
-        case rtc::PeerConnection::State::New: return "New";
-        case rtc::PeerConnection::State::Connecting: return "Connecting";
-        case rtc::PeerConnection::State::Connected: return "Connected";
-        case rtc::PeerConnection::State::Disconnected: return "Disconnected";
-        case rtc::PeerConnection::State::Failed: return "Failed";
-        case rtc::PeerConnection::State::Closed: return "Closed";
+        case rtc::PeerConnection::State::New: return "New Peer";
+        case rtc::PeerConnection::State::Connecting: return "Peer Connecting";
+        case rtc::PeerConnection::State::Connected: return "Peer Connected";
+        case rtc::PeerConnection::State::Disconnected: return "Peer Disconnected";
+        case rtc::PeerConnection::State::Failed: return "Peer Failed";
+        case rtc::PeerConnection::State::Closed: return "Peer Closed";
     }
     return "Unknown";
 }
@@ -604,9 +608,9 @@ QString WebRTCWorker::_stateToString(rtc::PeerConnection::State state) const
 QString WebRTCWorker::_gatheringStateToString(rtc::PeerConnection::GatheringState state) const
 {
     switch (state) {
-        case rtc::PeerConnection::GatheringState::New: return "New";
-        case rtc::PeerConnection::GatheringState::InProgress: return "InProgress";
-        case rtc::PeerConnection::GatheringState::Complete: return "Complete";
+        case rtc::PeerConnection::GatheringState::New: return "New ICE Gathering";
+        case rtc::PeerConnection::GatheringState::InProgress: return "ICE Gathering InProgress";
+        case rtc::PeerConnection::GatheringState::Complete: return "ICE Gathering Complete";
     }
     return "Unknown";
 }
@@ -673,7 +677,8 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     connect(_worker, &WebRTCWorker::errorOccurred, this, &WebRTCLink::_onErrorOccurred, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::bytesReceived, this, &WebRTCLink::_onDataReceived, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::bytesSent, this, &WebRTCLink::_onDataSent, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::rttUpdated, this, &WebRTCLink::_onRttUpdated);
+    connect(_worker, &WebRTCWorker::rttUpdated, this, &WebRTCLink::_onRttUpdated, Qt::QueuedConnection);
+    connect(_worker, &WebRTCWorker::rtcStatusMessageChanged, this, &WebRTCLink::_onRtcStatusMessageChanged, Qt::QueuedConnection);
 
     _workerThread->start();
 }
@@ -717,12 +722,14 @@ void WebRTCLink::_writeBytes(const QByteArray& bytes)
 void WebRTCLink::_onConnected()
 {
     qDebug() << "[WebRTCLink] Connected";
+    _onRtcStatusMessageChanged("RTC Connected");
     emit connected();
 }
 
 void WebRTCLink::_onDisconnected()
 {
     qDebug() << "[WebRTCLink] Disconnected";
+    _onRtcStatusMessageChanged("RTC Disconnected");
     emit disconnected();
 }
 
@@ -746,5 +753,13 @@ void WebRTCLink::_onRttUpdated(int rtt)
     if (_rttMs != rtt) {
         _rttMs = rtt;
         emit rttMsChanged();
+    }
+}
+
+void WebRTCLink::_onRtcStatusMessageChanged(QString message)
+{
+    if (_rtcStatusMessage != message) {
+        _rtcStatusMessage = message;
+        emit rtcStatusMessageChanged();
     }
 }

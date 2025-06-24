@@ -50,7 +50,7 @@ Rectangle {
     QGCPalette { id: qgcPal }
 
     on_CurrentSelectionChanged: {
-        console.log(_currentSelection.name, _currentSelection.model, _currentSelection.highLatency)
+        console.log(_currentSelection.name, _currentSelection.model, _currentSelection.linkType)
 
         if (!_currentSelection || !_currentSelection.model) {
             vehicleImage0.source = "/qmlimages/amp_logo_white.png"
@@ -445,7 +445,7 @@ Rectangle {
                                     text:                       object.name// + (object.link ? " (" + qsTr("Connected") + ")" : "")
                                     autoExclusive:              true
                                     visible:                    !object.dynamic
-                                    onClicked: {1
+                                    onClicked: {
                                         checked = true
                                         _currentSelection = object
                                     }
@@ -517,6 +517,13 @@ Rectangle {
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignRight
                         text: _activeVehicle ? (_activeVehicle.initialConnectComplete ? "연결 완료" : "연결중") : "대기중"
+                    }
+
+                    QGCLabel {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                        text: _currentSelection && (_currentSelection.linkType === 3) ? QGroundControl.linkManager.rtcStatusMessage : ""
+                        font.pointSize: ScreenTools.smallFontPointSize
                     }
                 }
 

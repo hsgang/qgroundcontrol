@@ -126,6 +126,7 @@ class WebRTCWorker : public QObject
     void bytesSent(const QByteArray &data);
     void errorOccurred(const QString &errorString);
     void rttUpdated(int rtt);  // RTT 측정 signal
+    void rtcStatusMessageChanged(QString message);
 
    private slots:
     void _onWebSocketConnected();
@@ -191,6 +192,7 @@ class WebRTCLink : public LinkInterface
 {
     Q_OBJECT
     Q_PROPERTY(int rttMs READ rttMs NOTIFY rttMsChanged)
+    Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
 
    public:
     explicit WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent = nullptr);
@@ -200,6 +202,7 @@ class WebRTCLink : public LinkInterface
     void connectLink();
 
     int rttMs() const { return _rttMs; }
+    QString rtcStatusMessage() const { return _rtcStatusMessage; }
 
    protected:
     bool _connect() override;
@@ -213,13 +216,16 @@ class WebRTCLink : public LinkInterface
     void _onDataReceived(const QByteArray &data);
     void _onDataSent(const QByteArray &data);
     void _onRttUpdated(int rtt);   // RTT 업데이트 슬롯
+    void _onRtcStatusMessageChanged(QString message);
 
    signals:
     void rttMsChanged();
+    void rtcStatusMessageChanged();
 
    private:
     const WebRTCConfiguration *_rtcConfig = nullptr;
     WebRTCWorker *_worker = nullptr;
     QThread *_workerThread = nullptr;
     int _rttMs = -1;
+    QString _rtcStatusMessage = "";
 };

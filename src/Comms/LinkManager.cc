@@ -177,6 +177,7 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
 
     if (auto w = qobject_cast<WebRTCLink*>(link.get())) {
         connect(w, &WebRTCLink::rttMsChanged, this, &LinkManager::webRtcRttChanged);
+        connect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
     }
 
     (void) connect(link.get(), &LinkInterface::communicationError, this, &LinkManager::_communicationError);
@@ -244,6 +245,7 @@ void LinkManager::_linkDisconnected()
 
     if (auto w = qobject_cast<WebRTCLink*>(link)) {
         disconnect(w, &WebRTCLink::rttMsChanged, this, &LinkManager::webRtcRttChanged);
+        disconnect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
     }
 
     (void) disconnect(link, &LinkInterface::communicationError, qgcApp(), &QGCApplication::showAppMessage);
@@ -757,6 +759,18 @@ int LinkManager::webRtcRtt() const
     }
     return -1;
 }
+
+QString LinkManager::rtcStatusMessage() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return w->rtcStatusMessage();
+        }
+    }
+    return QString();
+}
+
 
 LogReplayLink *LinkManager::startLogReplay(const QString &logFile)
 {

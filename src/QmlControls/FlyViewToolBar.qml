@@ -368,6 +368,13 @@ Rectangle {
                         }
                     }
 
+                    QGCLabel {
+                        Layout.fillWidth: true
+                        horizontalAlignment: Text.AlignRight
+                        text: _currentSelection && (_currentSelection.linkType === 3) ? QGroundControl.linkManager.rtcStatusMessage : ""
+                        font.pointSize: ScreenTools.smallFontPointSize
+                    }
+
                     Row {
                         id:                 buttonRow
                         spacing:            ScreenTools.defaultFontPixelWidth
