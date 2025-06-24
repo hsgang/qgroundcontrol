@@ -24,7 +24,7 @@ ColumnLayout {
     property SiYiCamera camera: siyi.camera
     property bool   isSiYiCameraConnected : camera.isConnected
 
-    property bool   _showPhotoVideoControl: globals.activeVehicle
+    property bool   _showPhotoVideoControl: !!globals.activeVehicle
     property bool   _showSiyiCameraControl: isSiYiCameraConnected
     property bool   _showGimbalControl:     QGroundControl.settingsManager.flyViewSettings.showGimbalControlPannel.rawValue
     property bool   _showGridViewer:        QGroundControl.settingsManager.flyViewSettings.showGridViewer.rawValue
@@ -41,7 +41,7 @@ ColumnLayout {
     ]
 
     // enabled가 true인 항목만 activePages에 포함
-        property var activePages: pages.filter(function(item) { return item.enabled; })
+    property var activePages: pages.filter(function(item) { return item.enabled; })
 
     Rectangle {
         id: swipeViewContainer
