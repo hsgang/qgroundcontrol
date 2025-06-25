@@ -281,14 +281,16 @@ void AtmosphericSensorFactGroup::_handleWind(const mavlink_message_t &message)
 
             // We don't want negative wind angles
     float windDirection = wind.direction;
-    if (windDirection < 0) {
-        windDirection += 360;
+    if (message.compid != 1) {
+        if (windDirection < 0) {
+            windDirection += 360;
+        }
+        windDir()->setRawValue(windDirection);
+        windSpd()->setRawValue(wind.speed);
+        //windVSpd()->setRawValue(wind.speed_z);
+
+        _windDirByWindPacket = true;
+
+        _setTelemetryAvailable(true);
     }
-    windDir()->setRawValue(windDirection);
-    windSpd()->setRawValue(wind.speed);
-    //windVSpd()->setRawValue(wind.speed_z);
-
-    _windDirByWindPacket = true;
-
-    _setTelemetryAvailable(true);
 }
