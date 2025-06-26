@@ -142,8 +142,8 @@ SettingsPage {
                 }
 
                 QGCLabel {
-                    visible: object.link && object.link.rttMs !== undefined
-                    text: qsTr("RTT %1 ms").arg(object.link.rttMs)
+                    visible: object.link !== null && object.link.rttMs !== undefined
+                    text: object.link ? qsTr("RTT %1 ms").arg(object.link.rttMs) : ""
                     font.pointSize: ScreenTools.smallFontPointSize
                 }
             }
