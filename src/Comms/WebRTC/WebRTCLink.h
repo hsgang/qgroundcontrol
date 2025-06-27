@@ -14,6 +14,8 @@
 #include <QtCore/QLoggingCategory>
 #include <QRandomGenerator>
 #include <set>
+#include <QtNetwork/QUdpSocket>
+#include <QtCore/QByteArray>
 
 #include "LinkConfiguration.h"
 #include "LinkInterface.h"
@@ -102,6 +104,45 @@ class WebRTCConfiguration : public LinkConfiguration
 
 /*===========================================================================*/
 
+class WebRTCVideoBridge : public QObject
+{
+    Q_OBJECT
+
+   public:
+    explicit WebRTCVideoBridge(QObject* parent = nullptr);
+    ~WebRTCVideoBridge();
+
+            // 브리지 시작/중지
+    bool startBridge(quint16 localPort = 0);  // 0이면 자동 할당
+    void stopBridge();
+
+    // 포트 정보
+    quint16 localPort() const { return _localPort; }
+    QString localAddress() const { return "127.0.0.1"; }
+
+    // WebRTC에서 받은 RTP 데이터 전달
+    void forwardRTPData(const QByteArray& rtpData);
+
+    // GStreamer URI 생성
+    QString getGStreamerURI() const;
+
+   signals:
+    void bridgeStarted(quint16 port);
+    void bridgeStopped();
+    void errorOccurred(const QString& error);
+
+   private:
+    QUdpSocket* _udpSocket = nullptr;
+    quint16 _localPort = 0;
+    bool _isRunning = false;
+
+    // 통계
+    qint64 _totalPackets = 0;
+    qint64 _totalBytes = 0;
+};
+
+/*===========================================================================*/
+
 class WebRTCWorker : public QObject
 {
     Q_OBJECT
@@ -111,6 +152,8 @@ class WebRTCWorker : public QObject
     ~WebRTCWorker();
 
     void initializeLogger();
+    bool isVideoStreamActive() const { return _videoStreamActive; }
+    QString currentVideoUri() const { return _currentVideoURI; }
 
    public slots:
     void start();
@@ -127,6 +170,12 @@ class WebRTCWorker : public QObject
     void errorOccurred(const QString &errorString);
     void rttUpdated(int rtt);  // RTT 측정 signal
     void rtcStatusMessageChanged(QString message);
+    void decodingStatsChanged(int total, int decoded, int dropped);
+
+    void videoStreamReady(const QString& uri);
+    void videoTrackReceived();                          // 비디오 트랙 수신 시그널
+    void videoConfigurationChanged(const QString& codec, int width, int height);
+    void videoBridgeError(const QString& error);
 
    private slots:
     void _onWebSocketConnected();
@@ -138,6 +187,7 @@ class WebRTCWorker : public QObject
     void _onPeerStateChanged(rtc::PeerConnection::State state);
     void _onGatheringStateChanged(rtc::PeerConnection::GatheringState state);
     void _updateRtt();  // RTT 측정용 slot
+    void _ensureBridgeReady();
 
    private:
     // WebSocket signaling
@@ -173,6 +223,7 @@ class WebRTCWorker : public QObject
             // WebRTC components
     std::shared_ptr<rtc::PeerConnection> _peerConnection;
     std::shared_ptr<rtc::DataChannel> _dataChannel;
+    std::shared_ptr<rtc::Track> _videoTrack;
 
     // State management
     std::vector<rtc::Candidate> _pendingCandidates;
@@ -184,6 +235,33 @@ class WebRTCWorker : public QObject
             // Constants
     static const QString kDataChannelLabel;
     static const int kReconnectInterval = 5000; // 5 seconds
+
+    bool _videoTrackReceived = false;
+    int _totalFramesReceived = 0;
+    int _decodedFrames = 0;
+    int _droppedFrames = 0;
+
+    WebRTCVideoBridge *_videoBridge = nullptr;
+    bool _videoStreamActive = false;
+    QString _currentVideoURI;
+
+    void _setupVideoBridge();
+    void _cleanupVideoBridge();
+    void _handleVideoTrackData(const rtc::binary &data);
+    void _analyzeFirstRTPPacket(const QByteArray& rtpData);
+
+    enum BridgeState {
+        BRIDGE_NOT_READY,
+        BRIDGE_STARTING,
+        BRIDGE_READY,
+        BRIDGE_STREAMING
+    };
+
+    BridgeState _bridgeState = BRIDGE_NOT_READY;
+    bool _videoManagerNotified = false;
+
+    void _onBridgeReady();
+    void _notifyVideoManager();
 };
 
 /*===========================================================================*/
@@ -204,6 +282,10 @@ class WebRTCLink : public LinkInterface
     int rttMs() const { return _rttMs; }
     QString rtcStatusMessage() const { return _rtcStatusMessage; }
 
+    // 비디오 스트림 상태 확인
+    bool isVideoStreamActive() const;
+    QString videoStreamUri() const;
+
    protected:
     bool _connect() override;
     void disconnect() override;
@@ -217,10 +299,14 @@ class WebRTCLink : public LinkInterface
     void _onDataSent(const QByteArray &data);
     void _onRttUpdated(int rtt);   // RTT 업데이트 슬롯
     void _onRtcStatusMessageChanged(QString message);
+    void _onVideoStreamReady(const QString& uri);
+    void _onVideoBridgeError(const QString& error);
 
    signals:
     void rttMsChanged();
     void rtcStatusMessageChanged();
+    void videoStreamReady(const QString& uri);
+    void videoBridgeError(const QString& error);
 
    private:
     const WebRTCConfiguration *_rtcConfig = nullptr;

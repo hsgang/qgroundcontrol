@@ -155,6 +155,91 @@ QString WebRTCConfiguration::_generateRandomId(int length) const
     return result;
 }
 
+
+/*===========================================================================*/
+// WebRTCVideoBridge
+/*===========================================================================*/
+
+
+WebRTCVideoBridge::WebRTCVideoBridge(QObject* parent)
+    : QObject(parent)
+      , _udpSocket(new QUdpSocket(this))
+{
+}
+
+WebRTCVideoBridge::~WebRTCVideoBridge()
+{
+    stopBridge();
+}
+
+bool WebRTCVideoBridge::startBridge(quint16 localPort)
+{
+    if (_isRunning) {
+        return true;
+    }
+
+    // UDP 소켓 바인딩
+    if (!_udpSocket->bind(QHostAddress::LocalHost, localPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
+        emit errorOccurred(QString("Failed to bind UDP socket: %1").arg(_udpSocket->errorString()));
+        return false;
+    }
+
+    _localPort = _udpSocket->localPort();
+    _isRunning = true;
+
+    qDebug() << "WebRTC video bridge started on port:" << _localPort;
+    emit bridgeStarted(_localPort);
+
+    return true;
+}
+
+void WebRTCVideoBridge::stopBridge()
+{
+    if (!_isRunning) {
+        return;
+    }
+
+    _udpSocket->close();
+    _isRunning = false;
+    _localPort = 0;
+
+    qDebug() << "WebRTC video bridge stopped";
+    emit bridgeStopped();
+}
+
+void WebRTCVideoBridge::forwardRTPData(const QByteArray& rtpData)
+{
+    if (!_isRunning || rtpData.isEmpty()) {
+        return;
+    }
+
+    // 로컬호스트로 RTP 데이터 전송
+    // qDebug() << "_udpSocket->state()" << _udpSocket->state();
+    qint64 sent = _udpSocket->writeDatagram(rtpData,
+                                            QHostAddress::LocalHost,
+                                            _localPort);
+
+    if (sent != rtpData.size()) {
+        qWarning() << "Failed to send complete RTP packet:" << sent << "of" << rtpData.size();
+    } else {
+        _totalPackets++;
+        _totalBytes += sent;
+    }
+}
+
+QString WebRTCVideoBridge::getGStreamerURI() const
+{
+    if (!_isRunning) {
+        return QString();
+    }
+
+    // GStreamer가 이해할 수 있는 UDP URI 반환
+    return QString("udp://127.0.0.1:%1").arg(_localPort);
+}
+
+
+
+
 /*===========================================================================*/
 // WebRTCWorker Implementation
 /*===========================================================================*/
@@ -162,6 +247,8 @@ QString WebRTCConfiguration::_generateRandomId(int length) const
 WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
     : QObject(parent)
       , _config(config)
+      , _videoBridge(nullptr)
+      , _videoStreamActive(false)
 {
     initializeLogger();
     _setupWebSocket();
@@ -210,6 +297,7 @@ void WebRTCWorker::disconnectLink()
     qCDebug(WebRTCLinkLog) << "Disconnecting WebRTC link";
     _isDisconnecting = true;
     _cleanup();
+    _cleanupVideoBridge();
     emit disconnected();
 }
 
@@ -267,7 +355,7 @@ void WebRTCWorker::_setupPeerConnection()
     // Add STUN server
     if (!_config->stunServer().isEmpty()) {
         _rtcConfig.iceServers.emplace_back(_config->stunServer().toStdString());
-        qCDebug(WebRTCLinkLog) << "STUN server configured:" << _config->stunServer().toStdString();
+        //qCDebug(WebRTCLinkLog) << "STUN server configured:" << _config->stunServer().toStdString();
     }
 
     // Add TURN server
@@ -276,7 +364,7 @@ void WebRTCWorker::_setupPeerConnection()
         turnServer.username = _config->turnUsername().toStdString();
         turnServer.password = _config->turnPassword().toStdString();
         _rtcConfig.iceServers.emplace_back(turnServer);
-        qCDebug(WebRTCLinkLog) << "TURN server configured:" << _config->turnServer().toStdString();
+        //qCDebug(WebRTCLinkLog) << "TURN server configured:" << _config->turnServer().toStdString();
     }
 
     // Configure UDP mux
@@ -298,11 +386,14 @@ void WebRTCWorker::_setupPeerConnection()
         });
 
         _peerConnection->onLocalDescription([this](rtc::Description description) {
+            QString descType = QString::fromStdString(description.typeString());
+            QString sdpContent = QString::fromStdString(description);
+
             QJsonObject message;
             message["id"] = _config->peerId();
             message["to"] = _config->targetPeerId();
-            message["type"] = QString::fromStdString(description.typeString());
-            message["sdp"] = QString::fromStdString(description);
+            message["type"] = descType;
+            message["sdp"] = sdpContent;
             _sendSignalingMessage(message);
         });
 
@@ -324,18 +415,29 @@ void WebRTCWorker::_setupPeerConnection()
             _setupDataChannel(_dataChannel);
         });
 
-        _peerConnection->onTrack([](std::shared_ptr<rtc::Track> track) {
+        _peerConnection->onTrack([this](std::shared_ptr<rtc::Track> track) {
             auto desc = track->description();
+
+            _videoTrack = track;
 
             if (desc.type() == "video") {
                 qCDebug(WebRTCLinkLog) << "Video track received";
+                emit videoTrackReceived();
 
-                track->onFrame([](rtc::binary data, rtc::FrameInfo info) {
-                    qCDebug(WebRTCLinkLog) << "Received RTP frame, size: " << data.size()
-                    << ", timestamp: " << info.timestamp;
+                if( !_videoBridge) {
+                    _setupVideoBridge();
+                }
 
-                            // 여기에 디코더 연동
+                track->onMessage([this](rtc::message_variant message) {
+                    if(std::holds_alternative<rtc::binary>(message)) {
+                        const auto& data = std::get<rtc::binary>(message);
+
+                        _handleVideoTrackData(data);
+                    }
                 });
+
+                auto session = std::make_shared<rtc::RtcpReceivingSession>();
+                track->setMediaHandler(session);
 
             } else if (desc.type() == "audio") {
                 qCDebug(WebRTCLinkLog) << "Audio track received";
@@ -427,7 +529,16 @@ void WebRTCWorker::_onWebSocketMessageReceived(const QString& message)
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(message.toUtf8(), &parseError);
 
-    qCDebug(WebRTCLinkLog) << "Received signaling message: " << message;
+    //qCDebug(WebRTCLinkLog) << "Received signaling message: " << message;
+
+    QJsonObject obj = doc.object();
+
+    if (obj.contains("type")) {
+        QString type = obj["type"].toString();
+        qCDebug(WebRTCLinkLog) << "Received signaling message type:" << type;
+    } else {
+        qCWarning(WebRTCLinkLog) << "Received signaling message missing 'type' field";
+    }
 
     if (parseError.error != QJsonParseError::NoError) {
         qCWarning(WebRTCLinkLog) << "Failed to parse signaling message:" << parseError.errorString();
@@ -458,15 +569,6 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
             rtc::Description offer(sdp.toStdString(), "offer");
             _peerConnection->setRemoteDescription(offer);
 
-            //auto answer = _peerConnection->createAnswer();
-            //_peerConnection->setLocalDescription(answer.type(), { std::string(answer) });
-            // QJsonObject answerMsg;
-            // answerMsg["type"] = "answer";
-            // answerMsg["sdp"]  = QString::fromStdString(answer);
-            // answerMsg["to"]   = _config->targetPeerId();  // peerDrone
-            // answerMsg["id"]   = _config->peerId();
-            // _sendSignalingMessage(answerMsg);
-
             _remoteDescriptionSet = true;
             _processPendingCandidates();
 
@@ -486,6 +588,26 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
                 _peerConnection->addRemoteCandidate(candidate);
             } else {
                 _pendingCandidates.push_back(candidate);
+            }
+        } else if (type == "idDisconnected") {
+            QString disconnectedId = message["id"].toString();
+            if (disconnectedId == _config->targetPeerId()) {
+                qCWarning(WebRTCLinkLog) << "Peer disconnected by signaling server:" << disconnectedId;
+
+                if (_dataChannel) {
+                    _dataChannel->close();
+                    _dataChannel = nullptr;
+                }
+
+                emit rttUpdated(-1);
+                emit disconnected(); // -> WebRTCLink::_onDisconnected() 연결
+
+                QTimer::singleShot(3000, this, [this]() {
+                    qCDebug(WebRTCLinkLog) << "Cleaning up after remote disconnect";
+                    _cleanup();
+                    _setupPeerConnection();
+                    createOffer();  // 재연결 시도
+                });
             }
         }
     } catch (const std::exception& e) {
@@ -522,6 +644,8 @@ void WebRTCWorker::_onDataChannelOpen()
     qCDebug(WebRTCLinkLog) << "Data channel opened";
     emit connected();
     emit rtcStatusMessageChanged("Data Channel Opened");
+
+    _ensureBridgeReady();
 
     // 별도 만든 rtt 측정 시작
     _startPingTimer();
@@ -617,21 +741,53 @@ QString WebRTCWorker::_gatheringStateToString(rtc::PeerConnection::GatheringStat
 
 void WebRTCWorker::_cleanup()
 {
+    qCDebug(WebRTCLinkLog) << "Cleaning up WebRTC resources";
     _isDisconnecting = true;
+    _bridgeState = BRIDGE_NOT_READY;
+    _videoManagerNotified = false;
+
+    if (_pingTimer) {
+        _pingTimer->stop();
+        _pingTimer->deleteLater();
+        _pingTimer = nullptr;
+    }
+
+    if (_rttTimer) {
+        _rttTimer->stop();
+        _rttTimer->deleteLater();
+        _rttTimer = nullptr;
+    }
+
+    _cleanupVideoBridge();
 
     if (_dataChannel) {
         try {
-            _dataChannel->close();
-        } catch (...) {}
+            if (_dataChannel->isOpen()) {
+                _dataChannel->close();
+            }
+        } catch (const std::exception& e) {
+            qCWarning(WebRTCLinkLog) << "Error closing data channel:" << e.what();
+        }
         _dataChannel.reset();
     }
 
     if (_peerConnection) {
         try {
             _peerConnection->close();
-        } catch (...) {}
+        } catch (const std::exception& e) {
+            qCWarning(WebRTCLinkLog) << "Error closing peer connection:" << e.what();
+        }
         _peerConnection.reset();
     }
+
+    if (_webSocket && _webSocket->state() != QAbstractSocket::UnconnectedState) {
+        _webSocket->close();
+    }
+
+    _signalingConnected = false;
+    _remoteDescriptionSet = false;
+    _pendingCandidates.clear();
+
 }
 
 void WebRTCWorker::_startPingTimer()
@@ -656,6 +812,182 @@ void WebRTCWorker::_sendPing()
     _lastPingSent = ping.value("timestamp").toVariant().toLongLong();
 }
 
+void WebRTCWorker::_setupVideoBridge()
+{
+    if (_videoBridge) {
+        qCDebug(WebRTCLinkLog) << "Video bridge already exists";
+        return;
+    }
+
+    qCDebug(WebRTCLinkLog) << "Setting up video bridge";
+    _videoBridge = new WebRTCVideoBridge(this);
+
+    // 비디오 브리지 시그널 연결
+    connect(_videoBridge, &WebRTCVideoBridge::bridgeStarted,
+            this, [this](quint16 port) {
+                _currentVideoURI = QString("udp://127.0.0.1:%1").arg(port);
+                _videoStreamActive = true;
+                _bridgeState = BRIDGE_READY;
+
+                qCDebug(WebRTCLinkLog) << "Video bridge ready, URI:" << _currentVideoURI;
+                //emit videoStreamReady(_currentVideoURI);
+
+                _onBridgeReady();
+            });
+
+    connect(_videoBridge, &WebRTCVideoBridge::bridgeStopped,
+            this, [this]() {
+                _videoStreamActive = false;
+                _currentVideoURI.clear();
+                qCDebug(WebRTCLinkLog) << "Video bridge stopped";
+            });
+
+    connect(_videoBridge, &WebRTCVideoBridge::errorOccurred,
+            this, [this](const QString& error) {
+                qCCritical(WebRTCLinkLog) << "Video bridge error:" << error;
+                emit videoBridgeError(error);
+            });
+
+    // 브리지 시작
+    if (!_videoBridge->startBridge(55000)) {
+        qCCritical(WebRTCLinkLog) << "Failed to start video bridge";
+        delete _videoBridge;
+        _videoBridge = nullptr;
+    }
+}
+
+void WebRTCWorker::_onBridgeReady()
+{
+    if (_videoManagerNotified) {
+        qCDebug(WebRTCLinkLog) << "VideoManager already notified, skipping";
+        return;
+    }
+
+    qCDebug(WebRTCLinkLog) << "🎯 Bridge ready";
+
+    _notifyVideoManager();
+}
+
+void WebRTCWorker::_notifyVideoManager()
+{
+    if (_videoManagerNotified) {
+        return;
+    }
+
+    _videoManagerNotified = true;
+    _bridgeState = BRIDGE_STREAMING;
+
+    qCDebug(WebRTCLinkLog) << "📡 Notifying VideoManager - Bridge fully ready:";
+    qCDebug(WebRTCLinkLog) << "   URI:" << _currentVideoURI;
+    qCDebug(WebRTCLinkLog) << "   State:" << _bridgeState;
+
+    emit videoStreamReady(_currentVideoURI);
+}
+
+void WebRTCWorker::_ensureBridgeReady()
+{
+    if (_bridgeState != BRIDGE_NOT_READY) {
+        qCDebug(WebRTCLinkLog) << "Bridge already in progress, state:" << _bridgeState;
+        return;
+    }
+
+    _bridgeState = BRIDGE_STARTING;
+    qCDebug(WebRTCLinkLog) << "🌉 Ensuring video bridge is ready...";
+
+    if (!_videoBridge) {
+        _setupVideoBridge();
+    } else {
+        _onBridgeReady();
+    }
+}
+
+void WebRTCWorker::_cleanupVideoBridge()
+{
+    if (_videoBridge) {
+        _videoBridge->stopBridge();
+        _videoBridge->deleteLater();
+        _videoBridge = nullptr;
+    }
+
+    _videoStreamActive = false;
+    _currentVideoURI.clear();
+}
+
+void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
+{
+    if (!_videoBridge || !_videoStreamActive) {
+        return;
+    }
+    static int packetCount = 0;
+    packetCount++;
+    if (packetCount <= 3/* || packetCount % 1000 == 0*/) {
+        qCDebug(WebRTCLinkLog) << "📦 Video packet" << packetCount
+                               << "size:" << data.size()
+                               << "to bridge port:" << _videoBridge->localPort();
+    }
+
+    QByteArray rtpData(reinterpret_cast<const char*>(data.data()), data.size());
+
+    if (packetCount == 1 && rtpData.size() >= 12) {
+        _analyzeFirstRTPPacket(rtpData);
+    }
+
+    // UDP 소켓으로 전달
+    _videoBridge->forwardRTPData(rtpData);
+
+    // 통계 업데이트
+    _totalFramesReceived++;
+    emit decodingStatsChanged(_totalFramesReceived, _totalFramesReceived, _droppedFrames);
+}
+
+void WebRTCWorker::_analyzeFirstRTPPacket(const QByteArray& rtpData)
+{
+    if (rtpData.size() < 12) return;
+
+    quint8 version = (static_cast<quint8>(rtpData[0]) >> 6) & 0x03;
+    quint8 padding = (static_cast<quint8>(rtpData[0]) >> 5) & 0x01;
+    quint8 extension = (static_cast<quint8>(rtpData[0]) >> 4) & 0x01;
+    quint8 cc = static_cast<quint8>(rtpData[0]) & 0x0F;
+    quint8 marker = (static_cast<quint8>(rtpData[1]) >> 7) & 0x01;
+    quint8 payloadType = static_cast<quint8>(rtpData[1]) & 0x7F;
+    quint16 seqNum = (static_cast<quint8>(rtpData[2]) << 8) | static_cast<quint8>(rtpData[3]);
+    quint32 timestamp = (static_cast<quint8>(rtpData[4]) << 24) |
+                        (static_cast<quint8>(rtpData[5]) << 16) |
+                        (static_cast<quint8>(rtpData[6]) << 8) |
+                        static_cast<quint8>(rtpData[7]);
+    quint32 ssrc = (static_cast<quint8>(rtpData[8]) << 24) |
+                   (static_cast<quint8>(rtpData[9]) << 16) |
+                   (static_cast<quint8>(rtpData[10]) << 8) |
+                   static_cast<quint8>(rtpData[11]);
+
+    qCDebug(WebRTCLinkLog) << "🔍 First RTP packet analysis:";
+    qCDebug(WebRTCLinkLog) << "   Version:" << version << "PT:" << payloadType << "Marker:" << marker;
+    qCDebug(WebRTCLinkLog) << "   Sequence:" << seqNum << "Timestamp:" << timestamp;
+    qCDebug(WebRTCLinkLog) << "   SSRC:" << Qt::hex << ssrc << Qt::dec;
+    qCDebug(WebRTCLinkLog) << "   CC:" << cc << "Padding:" << padding << "Extension:" << extension;
+
+    // 페이로드 시작 부분 덤프
+    if (rtpData.size() > 12) {
+        QString payloadHex;
+        int headerSize = 12 + (cc * 4); // 기본 헤더 + CSRC
+        if (extension && rtpData.size() > headerSize + 4) {
+            // Extension header length 읽기
+            quint16 extLength = (static_cast<quint8>(rtpData[headerSize + 2]) << 8) |
+                                static_cast<quint8>(rtpData[headerSize + 3]);
+            headerSize += 4 + (extLength * 4);
+        }
+
+        if (rtpData.size() > headerSize) {
+            int dumpSize = qMin(16, rtpData.size() - headerSize);
+            for (int i = 0; i < dumpSize; ++i) {
+                payloadHex += QString("%1 ").arg(static_cast<quint8>(rtpData[headerSize + i]), 2, 16, QChar('0'));
+            }
+            qCDebug(WebRTCLinkLog) << "   Payload start:" << payloadHex;
+        }
+    }
+}
+
+
 //------------------------------------------------------
 // WebRTCLink (구현)
 //------------------------------------------------------
@@ -679,6 +1011,9 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     connect(_worker, &WebRTCWorker::bytesSent, this, &WebRTCLink::_onDataSent, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::rttUpdated, this, &WebRTCLink::_onRttUpdated, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::rtcStatusMessageChanged, this, &WebRTCLink::_onRtcStatusMessageChanged, Qt::QueuedConnection);
+
+    connect(_worker, &WebRTCWorker::videoStreamReady, this, &WebRTCLink::_onVideoStreamReady, Qt::QueuedConnection);
+    connect(_worker, &WebRTCWorker::videoBridgeError, this, &WebRTCLink::_onVideoBridgeError, Qt::QueuedConnection);
 
     _workerThread->start();
 }
@@ -762,4 +1097,25 @@ void WebRTCLink::_onRtcStatusMessageChanged(QString message)
         _rtcStatusMessage = message;
         emit rtcStatusMessageChanged();
     }
+}
+
+bool WebRTCLink::isVideoStreamActive() const
+{
+    return _worker ? _worker->isVideoStreamActive() : false;
+}
+
+QString WebRTCLink::videoStreamUri() const
+{
+    return _worker ? _worker->currentVideoUri() : QString();
+}
+
+void WebRTCLink::_onVideoStreamReady(const QString& uri)
+{
+    emit videoStreamReady(uri);
+    qCDebug(WebRTCLinkLog) << "uri: " << uri;
+}
+
+void WebRTCLink::_onVideoBridgeError(const QString& error)
+{
+    emit videoBridgeError(error);
 }
