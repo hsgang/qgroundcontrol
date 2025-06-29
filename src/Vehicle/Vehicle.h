@@ -1006,11 +1006,11 @@ private slots:
     void _firstRallyPointLoadComplete       ();
     void _sendMavCommandResponseTimeoutCheck();
     void _clearCameraTriggerPoints          ();
-    void _updateDistanceHeadingToHome       ();
+    void _updateDistanceHeadingHome         ();
     void _updateMissionItemIndex            ();
     void _updateHeadingToNextWP             ();
     void _updateDistanceToNextWP            ();
-    void _updateDistanceToGCS               ();
+    void _updateDistanceHeadingGCS          ();
     void _updateHomepoint                   ();
     void _updateHobbsMeter                  ();
     void _vehicleParamLoaded                (bool ready);
