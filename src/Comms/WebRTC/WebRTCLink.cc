@@ -2,6 +2,8 @@
 #include <QDebug>
 #include <QUrl>
 #include <QtQml/qqml.h>
+#include "SettingsManager.h"
+#include "VideoSettings.h"
 
 Q_LOGGING_CATEGORY(WebRTCLinkLog, "WebRTCLink")
 
@@ -178,7 +180,6 @@ bool WebRTCVideoBridge::startBridge(quint16 localPort)
         return true;
     }
 
-    // UDP 소켓 바인딩
     if (!_udpSocket->bind(QHostAddress::LocalHost, localPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
         emit errorOccurred(QString("Failed to bind UDP socket: %1").arg(_udpSocket->errorString()));
         return false;
@@ -186,6 +187,11 @@ bool WebRTCVideoBridge::startBridge(quint16 localPort)
 
     _localPort = _udpSocket->localPort();
     _isRunning = true;
+
+    SettingsManager::instance()->videoSettings()->videoSource()->setRawValue(VideoSettings::videoSourceUDPH264);
+    QString udpUrl = QString("127.0.0.1:%1").arg(_localPort);
+    SettingsManager::instance()->videoSettings()->udpUrl()->setRawValue(udpUrl);
+    SettingsManager::instance()->videoSettings()->lowLatencyMode()->setRawValue(true);
 
     qDebug() << "WebRTC video bridge started on port:" << _localPort;
     emit bridgeStarted(_localPort);
@@ -424,7 +430,7 @@ void WebRTCWorker::_setupPeerConnection()
                 qCDebug(WebRTCLinkLog) << "Video track received";
                 emit videoTrackReceived();
 
-                if( !_videoBridge) {
+                if(!_videoBridge) {
                     _setupVideoBridge();
                 }
 
@@ -647,6 +653,8 @@ void WebRTCWorker::_onDataChannelOpen()
 
     _ensureBridgeReady();
 
+    _startVideoStatsMonitoring();
+
     // 별도 만든 rtt 측정 시작
     _startPingTimer();
 
@@ -758,6 +766,19 @@ void WebRTCWorker::_cleanup()
         _rttTimer = nullptr;
     }
 
+    if (_videoStatsTimer) {
+        _videoStatsTimer->stop();
+        _videoStatsTimer->deleteLater();
+        _videoStatsTimer = nullptr;
+    }
+
+    // Reset video statistics
+    _videoBytesReceived = 0;
+    _lastVideoBytesReceived = 0;
+    _videoPacketCount = 0;
+    _currentVideoRateKBps = 0.0;
+    _averagePacketSize = 0.0;
+
     _cleanupVideoBridge();
 
     if (_dataChannel) {
@@ -849,7 +870,7 @@ void WebRTCWorker::_setupVideoBridge()
             });
 
     // 브리지 시작
-    if (!_videoBridge->startBridge(55000)) {
+    if (!_videoBridge->startBridge(55000)) { // 55000
         qCCritical(WebRTCLinkLog) << "Failed to start video bridge";
         delete _videoBridge;
         _videoBridge = nullptr;
@@ -879,7 +900,6 @@ void WebRTCWorker::_notifyVideoManager()
 
     qCDebug(WebRTCLinkLog) << "📡 Notifying VideoManager - Bridge fully ready:";
     qCDebug(WebRTCLinkLog) << "   URI:" << _currentVideoURI;
-    qCDebug(WebRTCLinkLog) << "   State:" << _bridgeState;
 
     emit videoStreamReady(_currentVideoURI);
 }
@@ -918,21 +938,36 @@ void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
     if (!_videoBridge || !_videoStreamActive) {
         return;
     }
-    static int packetCount = 0;
-    packetCount++;
-    if (packetCount <= 3/* || packetCount % 1000 == 0*/) {
-        qCDebug(WebRTCLinkLog) << "📦 Video packet" << packetCount
-                               << "size:" << data.size()
-                               << "to bridge port:" << _videoBridge->localPort();
-    }
+
+    // Update statistics
+    _videoPacketCount++;
+    _videoBytesReceived += data.size();
+
+    // Calculate running average packet size
+    _averagePacketSize = (_averagePacketSize * (_videoPacketCount - 1) + data.size()) / _videoPacketCount;
 
     QByteArray rtpData(reinterpret_cast<const char*>(data.data()), data.size());
+    int headerSize = _parseRtpHeaderOffset(rtpData);
 
-    if (packetCount == 1 && rtpData.size() >= 12) {
-        _analyzeFirstRTPPacket(rtpData);
+    if (headerSize < 0 || headerSize >= rtpData.size()) {
+        qWarning() << "[RTP] Invalid header size, dropping packet";
+        return;
     }
 
-    // UDP 소켓으로 전달
+    QByteArray payload = rtpData.mid(headerSize);
+
+    if (_videoPacketCount <= 3) {
+        qCDebug(WebRTCLinkLog) << "📦 Video packet #" << _videoPacketCount
+                               << " RTP size:" << rtpData.size()
+                               << " Payload offset:" << headerSize
+                               << " Payload size:" << payload.size();
+    }
+
+    // if (_videoPacketCount <= 3 && rtpData.size() >= 12) {
+    //     _analyzeFirstRTPPacket(rtpData);
+    // }
+
+        // UDP 소켓으로 전달
     _videoBridge->forwardRTPData(rtpData);
 
     // 통계 업데이트
@@ -940,51 +975,143 @@ void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
     emit decodingStatsChanged(_totalFramesReceived, _totalFramesReceived, _droppedFrames);
 }
 
+int WebRTCWorker::_parseRtpHeaderOffset(const QByteArray& rtpData)
+{
+    if (rtpData.size() < 12) {
+        qWarning() << "[RTP] Packet too small.";
+        return -1;
+    }
+
+    quint8 b0 = static_cast<quint8>(rtpData[0]);
+    quint8 extension = (b0 >> 4) & 0x01;
+    quint8 cc = b0 & 0x0F;
+
+    int headerSize = 12 + (cc * 4);
+
+    if (rtpData.size() < headerSize) {
+        qWarning() << "[RTP] Packet too small for CSRC.";
+        return -1;
+    }
+
+    if (extension) {
+        if (rtpData.size() < headerSize + 4) {
+            qWarning() << "[RTP] Packet too small for Extension.";
+            return -1;
+        }
+        quint16 extLength = (static_cast<quint8>(rtpData[headerSize + 2]) << 8)
+                            | static_cast<quint8>(rtpData[headerSize + 3]);
+        headerSize += 4 + (extLength * 4);
+    }
+
+    return headerSize;
+}
+
 void WebRTCWorker::_analyzeFirstRTPPacket(const QByteArray& rtpData)
 {
     if (rtpData.size() < 12) return;
 
     quint8 version = (static_cast<quint8>(rtpData[0]) >> 6) & 0x03;
-    quint8 padding = (static_cast<quint8>(rtpData[0]) >> 5) & 0x01;
     quint8 extension = (static_cast<quint8>(rtpData[0]) >> 4) & 0x01;
     quint8 cc = static_cast<quint8>(rtpData[0]) & 0x0F;
-    quint8 marker = (static_cast<quint8>(rtpData[1]) >> 7) & 0x01;
     quint8 payloadType = static_cast<quint8>(rtpData[1]) & 0x7F;
+
     quint16 seqNum = (static_cast<quint8>(rtpData[2]) << 8) | static_cast<quint8>(rtpData[3]);
-    quint32 timestamp = (static_cast<quint8>(rtpData[4]) << 24) |
-                        (static_cast<quint8>(rtpData[5]) << 16) |
-                        (static_cast<quint8>(rtpData[6]) << 8) |
-                        static_cast<quint8>(rtpData[7]);
-    quint32 ssrc = (static_cast<quint8>(rtpData[8]) << 24) |
-                   (static_cast<quint8>(rtpData[9]) << 16) |
-                   (static_cast<quint8>(rtpData[10]) << 8) |
-                   static_cast<quint8>(rtpData[11]);
+    quint32 timestamp = (static_cast<quint8>(rtpData[4]) << 24)
+                        | (static_cast<quint8>(rtpData[5]) << 16)
+                        | (static_cast<quint8>(rtpData[6]) << 8)
+                        | static_cast<quint8>(rtpData[7]);
+    quint32 ssrc = (static_cast<quint8>(rtpData[8]) << 24)
+                   | (static_cast<quint8>(rtpData[9]) << 16)
+                   | (static_cast<quint8>(rtpData[10]) << 8)
+                   | static_cast<quint8>(rtpData[11]);
 
-    qCDebug(WebRTCLinkLog) << "🔍 First RTP packet analysis:";
-    qCDebug(WebRTCLinkLog) << "   Version:" << version << "PT:" << payloadType << "Marker:" << marker;
-    qCDebug(WebRTCLinkLog) << "   Sequence:" << seqNum << "Timestamp:" << timestamp;
-    qCDebug(WebRTCLinkLog) << "   SSRC:" << Qt::hex << ssrc << Qt::dec;
-    qCDebug(WebRTCLinkLog) << "   CC:" << cc << "Padding:" << padding << "Extension:" << extension;
+    int headerSize = _parseRtpHeaderOffset(rtpData);
 
-    // 페이로드 시작 부분 덤프
-    if (rtpData.size() > 12) {
+    qCDebug(WebRTCLinkLog) << "🔍 First RTP packet:"
+                           << "Version:" << version
+                           << "PT:" << payloadType
+                           << "Seq:" << seqNum
+                           << "Timestamp:" << timestamp
+                           << "SSRC:" << Qt::hex << ssrc << Qt::dec
+                           << "CC:" << cc
+                           << "Extension:" << extension
+                           << "HeaderSize:" << headerSize;
+
+    if (headerSize >= 0 && headerSize < rtpData.size()) {
+        int dumpSize = qMin(16, rtpData.size() - headerSize);
         QString payloadHex;
-        int headerSize = 12 + (cc * 4); // 기본 헤더 + CSRC
-        if (extension && rtpData.size() > headerSize + 4) {
-            // Extension header length 읽기
-            quint16 extLength = (static_cast<quint8>(rtpData[headerSize + 2]) << 8) |
-                                static_cast<quint8>(rtpData[headerSize + 3]);
-            headerSize += 4 + (extLength * 4);
+        for (int i = 0; i < dumpSize; ++i) {
+            payloadHex += QString("%1 ").arg(static_cast<quint8>(rtpData[headerSize + i]), 2, 16, QChar('0'));
         }
-
-        if (rtpData.size() > headerSize) {
-            int dumpSize = qMin(16, rtpData.size() - headerSize);
-            for (int i = 0; i < dumpSize; ++i) {
-                payloadHex += QString("%1 ").arg(static_cast<quint8>(rtpData[headerSize + i]), 2, 16, QChar('0'));
-            }
-            qCDebug(WebRTCLinkLog) << "   Payload start:" << payloadHex;
-        }
+        qCDebug(WebRTCLinkLog) << "Payload start:" << payloadHex;
     }
+}
+
+void WebRTCWorker::_startVideoStatsMonitoring()
+{
+    if (!_videoStatsTimer) {
+        _videoStatsTimer = new QTimer(this);
+        connect(_videoStatsTimer, &QTimer::timeout, this, &WebRTCWorker::_updateVideoStats);
+        _videoStatsTimer->start(1000); // Update every second
+    }
+
+    // Initialize timing
+    _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
+    _videoBytesReceived = 0;
+    _lastVideoBytesReceived = 0;
+    _videoPacketCount = 0;
+    _currentVideoRateKBps = 0.0;
+}
+
+void WebRTCWorker::_updateVideoStats()
+{
+    _calculateVideoRate();
+
+    // Emit statistics
+    emit videoRateChanged(_currentVideoRateKBps);
+    emit videoStatsChanged(_videoPacketCount, _averagePacketSize, _currentVideoRateKBps);
+
+    // Log statistics periodically
+    static int logCounter = 0;
+    if (++logCounter % 5 == 0) { // Log every 5 seconds
+        qCDebug(WebRTCLinkLog) << QString("📊 Video Stats: %1 kB/s, %2 packets, avg size: %3 bytes")
+                                      .arg(_currentVideoRateKBps, 0, 'f', 1)
+                                      .arg(_videoPacketCount)
+                                      .arg(_averagePacketSize, 0, 'f', 1);
+    }
+}
+
+void WebRTCWorker::_calculateVideoRate()
+{
+    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+    qint64 timeDiff = currentTime - _lastVideoStatsTime;
+
+    if (timeDiff > 0) {
+        qint64 bytesDiff = _videoBytesReceived - _lastVideoBytesReceived;
+
+        // Calculate rate in kb/s (kilobits per second)
+        // bytes/ms * 8 bits/byte * 1000 ms/s * 1/1000 kb/bits = bytes/ms * 8
+        _currentVideoRateKBps = bytesDiff / timeDiff;
+
+        // Update for next calculation
+        _lastVideoBytesReceived = _videoBytesReceived;
+        _lastVideoStatsTime = currentTime;
+    }
+}
+
+double WebRTCWorker::currentVideoRateKBps() const
+{
+    return _currentVideoRateKBps;
+}
+
+int WebRTCWorker::videoPacketCount() const
+{
+    return _videoPacketCount;
+}
+
+qint64 WebRTCWorker::videoBytesReceived() const
+{
+    return _videoBytesReceived;
 }
 
 
@@ -1014,6 +1141,8 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
 
     connect(_worker, &WebRTCWorker::videoStreamReady, this, &WebRTCLink::_onVideoStreamReady, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::videoBridgeError, this, &WebRTCLink::_onVideoBridgeError, Qt::QueuedConnection);
+    connect(_worker, &WebRTCWorker::videoRateChanged, this, &WebRTCLink::_onVideoRateChanged, Qt::QueuedConnection);
+    connect(_worker, &WebRTCWorker::videoStatsChanged, this, &WebRTCLink::_onVideoStatsChanged, Qt::QueuedConnection);
 
     _workerThread->start();
 }
@@ -1118,4 +1247,33 @@ void WebRTCLink::_onVideoStreamReady(const QString& uri)
 void WebRTCLink::_onVideoBridgeError(const QString& error)
 {
     emit videoBridgeError(error);
+}
+
+void WebRTCLink::_onVideoRateChanged(double KBps)
+{
+    if (_videoRateKBps != KBps) {
+        _videoRateKBps = KBps;
+        emit videoRateKBpsChanged();
+    }
+}
+
+void WebRTCLink::_onVideoStatsChanged(int packets, double avgSize, double rate)
+{
+    bool changed = false;
+
+    if (_videoPacketCount != packets) {
+        _videoPacketCount = packets;
+        emit videoPacketCountChanged();
+        changed = true;
+    }
+
+    if (_videoBytesReceived != _worker->videoBytesReceived()) {
+        _videoBytesReceived = _worker->videoBytesReceived();
+        emit videoBytesReceivedChanged();
+        changed = true;
+    }
+
+    if (changed) {
+        emit videoStatsUpdated(rate, packets, _videoBytesReceived);
+    }
 }

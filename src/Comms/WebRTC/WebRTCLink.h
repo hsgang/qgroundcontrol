@@ -154,6 +154,9 @@ class WebRTCWorker : public QObject
     void initializeLogger();
     bool isVideoStreamActive() const { return _videoStreamActive; }
     QString currentVideoUri() const { return _currentVideoURI; }
+    double currentVideoRateKBps() const ;
+    int videoPacketCount() const ;
+    qint64 videoBytesReceived() const ;
 
    public slots:
     void start();
@@ -176,6 +179,8 @@ class WebRTCWorker : public QObject
     void videoTrackReceived();                          // 비디오 트랙 수신 시그널
     void videoConfigurationChanged(const QString& codec, int width, int height);
     void videoBridgeError(const QString& error);
+    void videoRateChanged(double KBps);
+    void videoStatsChanged(int packets, double avgSize, double rate);
 
    private slots:
     void _onWebSocketConnected();
@@ -249,6 +254,7 @@ class WebRTCWorker : public QObject
     void _cleanupVideoBridge();
     void _handleVideoTrackData(const rtc::binary &data);
     void _analyzeFirstRTPPacket(const QByteArray& rtpData);
+    int _parseRtpHeaderOffset(const QByteArray& rtpData);
 
     enum BridgeState {
         BRIDGE_NOT_READY,
@@ -262,6 +268,21 @@ class WebRTCWorker : public QObject
 
     void _onBridgeReady();
     void _notifyVideoManager();
+
+    // Video rate monitoring
+    QTimer* _videoStatsTimer = nullptr;
+    qint64 _videoBytesReceived = 0;
+    qint64 _lastVideoBytesReceived = 0;
+    qint64 _lastVideoStatsTime = 0;
+    double _currentVideoRateKBps = 0.0;
+
+    // Packet statistics
+    int _videoPacketCount = 0;
+    double _averagePacketSize = 0.0;
+
+    void _startVideoStatsMonitoring();
+    void _updateVideoStats();
+    void _calculateVideoRate();
 };
 
 /*===========================================================================*/
@@ -271,6 +292,10 @@ class WebRTCLink : public LinkInterface
     Q_OBJECT
     Q_PROPERTY(int rttMs READ rttMs NOTIFY rttMsChanged)
     Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
+
+    Q_PROPERTY(double videoRateKBps READ videoRateKBps NOTIFY videoRateKBpsChanged)
+    Q_PROPERTY(int videoPacketCount READ videoPacketCount NOTIFY videoPacketCountChanged)
+    Q_PROPERTY(qint64 videoBytesReceived READ videoBytesReceived NOTIFY videoBytesReceivedChanged)
 
    public:
     explicit WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent = nullptr);
@@ -285,6 +310,10 @@ class WebRTCLink : public LinkInterface
     // 비디오 스트림 상태 확인
     bool isVideoStreamActive() const;
     QString videoStreamUri() const;
+
+    double videoRateKBps() const { return _videoRateKBps; }
+    int videoPacketCount() const { return _videoPacketCount; }
+    qint64 videoBytesReceived() const { return _videoBytesReceived; }
 
    protected:
     bool _connect() override;
@@ -301,17 +330,26 @@ class WebRTCLink : public LinkInterface
     void _onRtcStatusMessageChanged(QString message);
     void _onVideoStreamReady(const QString& uri);
     void _onVideoBridgeError(const QString& error);
+    void _onVideoRateChanged(double KBps);
+    void _onVideoStatsChanged(int packets, double avgSize, double rate);
 
    signals:
     void rttMsChanged();
     void rtcStatusMessageChanged();
     void videoStreamReady(const QString& uri);
     void videoBridgeError(const QString& error);
+    void videoRateKBpsChanged();
+    void videoPacketCountChanged();
+    void videoBytesReceivedChanged();
+    void videoStatsUpdated(double KBps, int packets, qint64 totalBytes);
 
    private:
     const WebRTCConfiguration *_rtcConfig = nullptr;
     WebRTCWorker *_worker = nullptr;
     QThread *_workerThread = nullptr;
     int _rttMs = -1;
+    double _videoRateKBps = 0.0;
+    int _videoPacketCount = 0;
+    qint64 _videoBytesReceived = 0;
     QString _rtcStatusMessage = "";
 };
