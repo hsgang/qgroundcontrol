@@ -17,6 +17,7 @@ on:
       - 'test/**'
       - 'CMakeLists.txt'
       - 'cmake/**'
+      - 'tools/setup/*debian*'
 
 # concurrency:
 #   group: ${{ github.workflow }}-${{ github.ref }}

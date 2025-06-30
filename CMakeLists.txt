@@ -33,8 +33,6 @@ endif()
 #                   Project Info
 #######################################################
 
-# include(Prechecks)
-
 # set(CMAKE_OSX_ARCHITECTURES "arm64")
 # set(CMAKE_OSX_SYSROOT "iphoneos")
 if(APPLE)
@@ -433,21 +431,24 @@ elseif(APPLE)
         qt_add_ios_ffmpeg_libraries(${CMAKE_PROJECT_NAME})
     endif()
 elseif(ANDROID)
-    CPMAddPackage(
-        NAME android_openssl
-        URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
-    )
-    include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
-    add_android_openssl_libraries(${CMAKE_PROJECT_NAME})
+    if(${Qt6_VERSION} VERSION_EQUAL 6.6.3)
+        if(NOT ${CMAKE_ANDROID_NDK_VERSION} VERSION_EQUAL 25.1)
+            message(FATAL_ERROR "Invalid NDK Version: ${CMAKE_ANDROID_NDK_VERSION}, Use Version 25B instead.")
+        endif()
+    elseif(${Qt6_VERSION} VERSION_EQUAL 6.8.3)
+        if(NOT ${CMAKE_ANDROID_NDK_VERSION} VERSION_EQUAL 26.1)
+            message(FATAL_ERROR "Invalid NDK Version: ${CMAKE_ANDROID_NDK_VERSION}, Use Version 26B instead.")
+        endif()
+    endif()
 
     # Generation of android version numbers must be consistent release to release such that they are always increasing
-    if(${PROJECT_VERSION_MAJOR} GREATER 9)
+    if(${CMAKE_PROJECT_VERSION_MAJOR} GREATER 9)
         message(FATAL_ERROR "Major version larger than 1 digit: ${CMAKE_PROJECT_VERSION_MAJOR}")
     endif()
-    if(${PROJECT_VERSION_MINOR} GREATER 9)
+    if(${CMAKE_PROJECT_VERSION_MINOR} GREATER 9)
         message(FATAL_ERROR "Minor version larger than 1 digit: ${CMAKE_PROJECT_VERSION_MINOR}")
     endif()
-    if(${PROJECT_VERSION_PATCH} GREATER 99)
+    if(${CMAKE_PROJECT_VERSION_PATCH} GREATER 99)
         message(FATAL_ERROR "Patch version larger than 2 digits: ${CMAKE_PROJECT_VERSION_PATCH}")
     endif()
 
@@ -493,6 +494,13 @@ elseif(ANDROID)
     # endif()
 
     list(APPEND QT_ANDROID_MULTI_ABI_FORWARD_VARS QGC_STABLE_BUILD QT_HOST_PATH)
+
+    CPMAddPackage(
+        NAME android_openssl
+        URL https://github.com/KDAB/android_openssl/archive/refs/heads/master.zip
+    )
+    include(${android_openssl_SOURCE_DIR}/android_openssl.cmake)
+    add_android_openssl_libraries(${CMAKE_PROJECT_NAME})
 endif()
 
 target_compile_definitions(${CMAKE_PROJECT_NAME}
@@ -519,13 +527,6 @@ target_precompile_headers(${CMAKE_PROJECT_NAME}
         <QtCore/QTimer>
 )
 
-qt_add_qml_module(${CMAKE_PROJECT_NAME}
-    URI QGroundControl
-    VERSION 1.0
-    RESOURCE_PREFIX /qml
-    NO_PLUGIN
-)
-
 add_subdirectory(src)
 if(QGC_BUILD_TESTING)
     add_subdirectory(test)
@@ -536,6 +537,12 @@ if(QGC_CUSTOM_BUILD)
     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${CUSTOM_LIBRARIES})
     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CUSTOM_DIRECTORIES})
 endif()
+
+qt_add_qml_module(${CMAKE_PROJECT_NAME}
+    URI QGroundControl
+    VERSION 1.0
+    RESOURCE_PREFIX /qml
+)
 
 file(GLOB TS_SOURCES ${CMAKE_SOURCE_DIR}/translations/qgc_*.ts)
 set_source_files_properties(${TS_SOURCES} PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/i18n")
@@ -552,14 +559,14 @@ qt_add_translations(${CMAKE_PROJECT_NAME}
 )
 
 qgc_set_qt_resource_alias(
-    resources/qtquickcontrols2.conf
+    ${CMAKE_SOURCE_DIR}/resources/qtquickcontrols2.conf
     ${SDL_GAMECONTROLLERDB_PATH}
 )
 
 qt_add_resources(${CMAKE_PROJECT_NAME} "qgcresources_cmake"
     PREFIX "/"
     FILES
-        resources/qtquickcontrols2.conf
+        ${CMAKE_SOURCE_DIR}/resources/qtquickcontrols2.conf
         ${SDL_GAMECONTROLLERDB_PATH}
         ${QGC_GSTREAMER_SHADER_RESOURCES}
         ${QGC_ARDUPILOT_PARAMS_RESOURCES}
