@@ -23,8 +23,6 @@ import QGroundControl.FlightMap
 import QGroundControl.VehicleSetup
 import QGroundControl.AnalyzeView
 
-import QGroundControl.UTMSP
-
 /// @brief Native QML top level window
 /// All properties defined here are visible to all QML pages.
 ApplicationWindow {
@@ -32,7 +30,6 @@ ApplicationWindow {
     visible:        true
 
     property bool   _utmspSendActTrigger
-    property bool   _utmspStartTelemetry
 
     Component.onCompleted: {
         // Start the sequence of first run prompt(s)
@@ -327,8 +324,6 @@ ApplicationWindow {
     FlyView { 
         id:                     flyView
         anchors.fill:           parent
-        utmspSendActTrigger:    _utmspSendActTrigger
-        visible:        false
     }
 
     PlanView {
@@ -1256,20 +1251,5 @@ ApplicationWindow {
                 source = ""
             }
         }
-    }
-
-    Connections{
-         target: activationbar
-         function onActivationTriggered(value){
-              _utmspSendActTrigger= value
-         }
-    }
-
-    UTMSPActivationStatusBar{
-         id:                         activationbar
-         activationStartTimestamp:   UTMSPStateStorage.startTimeStamp
-         activationApproval:         UTMSPStateStorage.showActivationTab && QGroundControl.utmspManager.utmspVehicle.vehicleActivation
-         flightID:                   UTMSPStateStorage.flightID
-         anchors.fill:               parent
     }
 }
