@@ -2136,6 +2136,705 @@
       <source>North,South</source>
       <translation>북쪽,남쪽</translation>
     </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[MGRS].shortDesc, </extracomment>
+      <location filename="../src/QmlControls/EditPositionDialog.FactMetaData.json"/>
+      <source>MGRS coordinate</source>
+      <translation type="unfinished">MGRS coordinate</translation>
+    </message>
+  </context>
+  <context>
+    <name>SetpointFact.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[roll].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SetpointFact.json"/>
+      <source>Roll Setpoint</source>
+      <translation type="unfinished">Roll Setpoint</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[pitch].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SetpointFact.json"/>
+      <source>Pitch Setpoint</source>
+      <translation type="unfinished">Pitch Setpoint</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[yaw].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SetpointFact.json"/>
+      <source>Yaw Setpoint</source>
+      <translation type="unfinished">Yaw Setpoint</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[rollRate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SetpointFact.json"/>
+      <source>Roll Rate Setpoint</source>
+      <translation type="unfinished">Roll Rate Setpoint</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[pitchRate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SetpointFact.json"/>
+      <source>Pitch Rate Setpoint</source>
+      <translation type="unfinished">Pitch Rate Setpoint</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[yawRate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SetpointFact.json"/>
+      <source>Yaw Rate Setpoint</source>
+      <translation type="unfinished">Yaw Rate Setpoint</translation>
+    </message>
+  </context>
+  <context>
+    <name>GPSFact.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[lat].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>Latitude</source>
+      <translation type="unfinished">Latitude</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[lon].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>Longitude</source>
+      <translation type="unfinished">Longitude</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[mgrs].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>MGRS Position</source>
+      <translation type="unfinished">MGRS Position</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[hdop].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>HDOP</source>
+      <translation type="unfinished">HDOP</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[vdop].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>VDOP</source>
+      <translation type="unfinished">VDOP</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[courseOverGround].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>Course Over Ground</source>
+      <translation type="unfinished">Course Over Ground</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[yaw].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>Yaw</source>
+      <translation type="unfinished">Yaw</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[lock].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>GPS Lock</source>
+      <translation type="unfinished">GPS Lock</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[lock].enumStrings, </extracomment>
+      <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>None,None,2D Lock,3D Lock,3D DGPS Lock,3D RTK GPS Lock (float),3D RTK GPS Lock (fixed),Static (fixed)</source>
+      <translation>None,None,2D Lock,3D Lock,3D DGPS Lock,3D RTK GPS Lock (float),3D RTK GPS Lock (fixed),Static (fixed)</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[count].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GPSFact.json"/>
+      <source>Sat Count</source>
+      <translation type="unfinished">Sat Count</translation>
+    </message>
+  </context>
+  <context>
+    <name>TerrainFactGroup.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[blocksPending].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/TerrainFactGroup.json"/>
+      <source>Blocks Pending</source>
+      <translation type="unfinished">Blocks Pending</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[blocksLoaded].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/TerrainFactGroup.json"/>
+      <source>Blocks Loaded</source>
+      <translation type="unfinished">Blocks Loaded</translation>
+    </message>
+  </context>
+  <context>
+    <name>ClockFact.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[currentTime].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/ClockFact.json"/>
+      <source>Time</source>
+      <translation type="unfinished">Time</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[currentUTCTime].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/ClockFact.json"/>
+      <source>UTC Time</source>
+      <translation type="unfinished">UTC Time</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[currentDate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/ClockFact.json"/>
+      <source>Date</source>
+      <translation type="unfinished">Date</translation>
+    </message>
+  </context>
+  <context>
+    <name>EFIFact.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[health].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Health</source>
+      <translation type="unfinished">Health</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[ecuIndex].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Ecu Index</source>
+      <translation type="unfinished">Ecu Index</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[rpm].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Rpm</source>
+      <translation type="unfinished">Rpm</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[fuelConsumed].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Fuel Consumed</source>
+      <translation type="unfinished">Fuel Consumed</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[fuelFlow].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Fuel Flow</source>
+      <translation type="unfinished">Fuel Flow</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[engineLoad].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Engine Load</source>
+      <translation type="unfinished">Engine Load</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[throttlePos].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Throttle Position</source>
+      <translation type="unfinished">Throttle Position</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[sparkTime].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Spark dwell time</source>
+      <translation type="unfinished">Spark dwell time</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[baroPress].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>BarometricPressure</source>
+      <translation type="unfinished">BarometricPressure</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[intakePress].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Intake mainfold pressure</source>
+      <translation type="unfinished">Intake mainfold pressure</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[intakeTemp].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Intake mainfold temperature</source>
+      <translation type="unfinished">Intake mainfold temperature</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[cylinderTemp].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Cylinder head temperature</source>
+      <translation type="unfinished">Cylinder head temperature</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[ignTime].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Ignition Timing</source>
+      <translation type="unfinished">Ignition Timing</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[injTime].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Injection Time</source>
+      <translation type="unfinished">Injection Time</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[exGasTemp].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Exhaust gas Temperature</source>
+      <translation type="unfinished">Exhaust gas Temperature</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[throttleOut].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Throttle Out</source>
+      <translation type="unfinished">Throttle Out</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[ptComp].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EFIFact.json"/>
+      <source>Pt Compensation</source>
+      <translation type="unfinished">Pt Compensation</translation>
+    </message>
+  </context>
+  <context>
+    <name>VibrationFact.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[xAxis].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VibrationFact.json"/>
+      <source>Vibe xAxis</source>
+      <translation type="unfinished">Vibe xAxis</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[yAxis].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VibrationFact.json"/>
+      <source>Vibe yAxis</source>
+      <translation type="unfinished">Vibe yAxis</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[zAxis].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VibrationFact.json"/>
+      <source>Vibe zAxis</source>
+      <translation type="unfinished">Vibe zAxis</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[clipCount1].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VibrationFact.json"/>
+      <source>Clip Count (1)</source>
+      <translation type="unfinished">Clip Count (1)</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[clipCount2].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VibrationFact.json"/>
+      <source>Clip Count (2)</source>
+      <translation type="unfinished">Clip Count (2)</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[clipCount3].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VibrationFact.json"/>
+      <source>Clip Count (3)</source>
+      <translation type="unfinished">Clip Count (3)</translation>
+    </message>
+  </context>
+  <context>
+    <name>GeneratorFact.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[status].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Status</source>
+      <translation type="unfinished">Status</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[genSpeed].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Generator Speed</source>
+      <translation type="unfinished">Generator Speed</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[batteryCurrent].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Battery Current</source>
+      <translation type="unfinished">Battery Current</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[loadCurrent].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Load Current</source>
+      <translation type="unfinished">Load Current</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[powerGenerated].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Power Generated</source>
+      <translation type="unfinished">Power Generated</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[busVoltage].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Bus Voltage</source>
+      <translation type="unfinished">Bus Voltage</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[rectifierTemp].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Rectifier Temperature</source>
+      <translation type="unfinished">Rectifier Temperature</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[batCurrentSetpoint].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Battery Current Setpoint</source>
+      <translation type="unfinished">Battery Current Setpoint</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[genTemp].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Generator Temperature</source>
+      <translation type="unfinished">Generator Temperature</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[runtime].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>runtime</source>
+      <translation type="unfinished">runtime</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[timeMaintenance].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/GeneratorFact.json"/>
+      <source>Time until Maintenance</source>
+      <translation type="unfinished">Time until Maintenance</translation>
+    </message>
+  </context>
+  <context>
+    <name>SubmarineFact.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[cameraTilt].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Camera Tilt</source>
+      <translation type="unfinished">Camera Tilt</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[tetherTurns].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Tether Turns</source>
+      <translation type="unfinished">Tether Turns</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[lights1].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Lights 1 level</source>
+      <translation type="unfinished">Lights 1 level</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[lights2].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Lights 2 level</source>
+      <translation type="unfinished">Lights 2 level</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[pilotGain].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Pilot Gain</source>
+      <translation type="unfinished">Pilot Gain</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[inputHold].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Input Hold</source>
+      <translation type="unfinished">Input Hold</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[inputHold].enumStrings, </extracomment>
+      <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Disabled,Enabled</source>
+      <translation>사용 안 함,사용</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[rangefinderDistance].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Rangefinder</source>
+      <translation type="unfinished">Rangefinder</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[rangefinderTarget].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>RFTarget</source>
+      <translation type="unfinished">RFTarget</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[rollPitchToggle].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Roll/Pitch Toggle</source>
+      <translation type="unfinished">Roll/Pitch Toggle</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[rollPitchToggle].enumStrings, </extracomment>
+      <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
+      <location filename="../src/Vehicle/FactGroups/SubmarineFact.json"/>
+      <source>Disabled,Enabled,Unavailable</source>
+      <translation>사용 안 함,사용,사용 불가</translation>
+    </message>
+  </context>
+  <context>
+    <name>VehicleFact.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[roll].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Roll</source>
+      <translation type="unfinished">Roll</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[pitch].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Pitch</source>
+      <translation type="unfinished">Pitch</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[heading].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Heading</source>
+      <translation type="unfinished">Heading</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[rollRate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Roll Rate</source>
+      <translation type="unfinished">Roll Rate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[pitchRate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Pitch Rate</source>
+      <translation type="unfinished">Pitch Rate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[yawRate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Yaw Rate</source>
+      <translation type="unfinished">Yaw Rate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[groundSpeed].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Ground Speed</source>
+      <translation type="unfinished">Ground Speed</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[airSpeed].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Air Speed</source>
+      <translation type="unfinished">Air Speed</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[climbRate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Climb Rate</source>
+      <translation type="unfinished">Climb Rate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[altitudeRelative].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Alt (Rel)</source>
+      <translation type="unfinished">Alt (Rel)</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[altitudeAMSL].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Alt (AMSL)</source>
+      <translation type="unfinished">Alt (AMSL)</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[altitudeAboveTerr].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Alt (Above Terrain)</source>
+      <translation type="unfinished">Alt (Above Terrain)</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[flightDistance].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Flight Distance</source>
+      <translation type="unfinished">Flight Distance</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[distanceToHome].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Distance to Home</source>
+      <translation type="unfinished">Distance to Home</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[timeToHome].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Time to Home</source>
+      <translation type="unfinished">Time to Home</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[headingToHome].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Heading to Home</source>
+      <translation type="unfinished">Heading to Home</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[distanceToGCS].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Distance to GCS</source>
+      <translation type="unfinished">Distance to GCS</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[missionItemIndex].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Mission Item Index</source>
+      <translation type="unfinished">Mission Item Index</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[headingToNextWP].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Next WP Heading</source>
+      <translation type="unfinished">Next WP Heading</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[distanceToNextWP].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Next WP distance</source>
+      <translation type="unfinished">Next WP distance</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[flightTime].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Flight Time</source>
+      <translation type="unfinished">Flight Time</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[hobbs].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Hobbs Meter</source>
+      <translation type="unfinished">Hobbs Meter</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[throttlePct].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Throttle %</source>
+      <translation type="unfinished">Throttle %</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[imuTemp].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/VehicleFact.json"/>
+      <source>Imu temperature</source>
+      <translation type="unfinished">Imu temperature</translation>
+    </message>
+  </context>
+  <context>
+    <name>EstimatorStatusFactGroup.json</name>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodAttitudeEsimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Attitude Esimate</source>
+      <translation type="unfinished">Good Attitude Esimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodHorizVelEstimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Horiz Vel Estimate</source>
+      <translation type="unfinished">Good Horiz Vel Estimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodVertVelEstimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Vert Vel Estimate</source>
+      <translation type="unfinished">Good Vert Vel Estimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodHorizPosRelEstimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Horiz Pos Rel Estimate</source>
+      <translation type="unfinished">Good Horiz Pos Rel Estimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodHorizPosAbsEstimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Horiz Pos Abs Estimate</source>
+      <translation type="unfinished">Good Horiz Pos Abs Estimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodVertPosAbsEstimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Vert Pos Abs Estimate</source>
+      <translation type="unfinished">Good Vert Pos Abs Estimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodVertPosAGLEstimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Vert Pos AGL Estimate</source>
+      <translation type="unfinished">Good Vert Pos AGL Estimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodConstPosModeEstimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Const Pos Mode Estimate</source>
+      <translation type="unfinished">Good Const Pos Mode Estimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodPredHorizPosRelEstimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Pred Horiz Pos Rel Estimate</source>
+      <translation type="unfinished">Good Pred Horiz Pos Rel Estimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[goodPredHorizPosAbsEstimate].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Good Pred Horiz Pos Abs Estimate</source>
+      <translation type="unfinished">Good Pred Horiz Pos Abs Estimate</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[gpsGlitch].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Gps Glitch</source>
+      <translation type="unfinished">Gps Glitch</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[accelError].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Accel Error</source>
+      <translation type="unfinished">Accel Error</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[velRatio].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Vel Ratio</source>
+      <translation type="unfinished">Vel Ratio</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[horizPosRatio].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Horiz Pos Ratio</source>
+      <translation type="unfinished">Horiz Pos Ratio</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[vertPosRatio].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Vert Pos Ratio</source>
+      <translation type="unfinished">Vert Pos Ratio</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[magRatio].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Mag Ratio</source>
+      <translation type="unfinished">Mag Ratio</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[haglRatio].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>HAGL Ratio</source>
+      <translation type="unfinished">HAGL Ratio</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[tasRatio].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>TAS Ratio</source>
+      <translation type="unfinished">TAS Ratio</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[horizPosAccuracy].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Horiz Pos Accuracy</source>
+      <translation type="unfinished">Horiz Pos Accuracy</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[vertPosAccuracy].shortDesc, </extracomment>
+      <location filename="../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json"/>
+      <source>Vert Pos Accuracy</source>
+      <translation type="unfinished">Vert Pos Accuracy</translation>
+    </message>
   </context>
   <context>
     <name>BatteryFact.json</name>
