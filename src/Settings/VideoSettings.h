@@ -66,6 +66,7 @@ public:
     static constexpr const char* videoSourceHerelinkAirUnit   = QT_TRANSLATE_NOOP("VideoSettings", "Herelink AirUnit");
     static constexpr const char* videoSourceHerelinkHotspot   = QT_TRANSLATE_NOOP("VideoSettings", "Herelink Hotspot");
     static constexpr const char* videoSourceSiyiA8            = QT_TRANSLATE_NOOP("VideoSettings", "SIYI A8");
+    static constexpr const char* videoSourceWebRTC            = QT_TRANSLATE_NOOP("VideoSettings", "WEBRTC");
 
 signals:
     void streamConfiguredChanged    (bool configured);

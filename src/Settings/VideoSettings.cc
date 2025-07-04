@@ -30,7 +30,7 @@ DECLARE_SETTINGGROUP(Video, "Video")
     videoSourceList.append(videoSourceRTSP);
     videoSourceList.append(videoSourceUDPH264);
     videoSourceList.append(videoSourceUDPH265);
-    videoSourceList.append(videoSourceTCP);
+    // videoSourceList.append(videoSourceTCP);
     // videoSourceList.append(videoSourceMPEGTS);
     // videoSourceList.append(videoSource3DRSolo);
     // videoSourceList.append(videoSourceParrotDiscovery);
@@ -38,11 +38,12 @@ DECLARE_SETTINGGROUP(Video, "Video")
     // videoSourceList.append(videoSourceHerelinkAirUnit);
     // videoSourceList.append(videoSourceHerelinkHotspot);
     videoSourceList.append(videoSourceSiyiA8);
-    #ifdef QGC_HERELINK_AIRUNIT_VIDEO
-        videoSourceList.append(videoSourceHerelinkAirUnit);
-    #else
-        videoSourceList.append(videoSourceHerelinkHotspot);
-    #endif
+    videoSourceList.append(videoSourceWebRTC);
+    // #ifdef QGC_HERELINK_AIRUNIT_VIDEO
+    //     videoSourceList.append(videoSourceHerelinkAirUnit);
+    // #else
+    //     videoSourceList.append(videoSourceHerelinkHotspot);
+    // #endif
 #endif
 #ifndef QGC_DISABLE_UVC
     videoSourceList.append(UVCReceiver::getDeviceNameList());
@@ -201,6 +202,11 @@ bool VideoSettings::streamConfigured(void)
     }
     //-- If UDP, check for URL
     if(vSource == videoSourceUDPH264 || vSource == videoSourceUDPH265) {
+        qCDebug(VideoManagerLog) << "Testing configuration for UDP Stream:" << udpUrl()->rawValue().toString();
+        return !udpUrl()->rawValue().toString().isEmpty();
+    }
+    //-- If UDP, check for URL
+    if(vSource == videoSourceWebRTC) {
         qCDebug(VideoManagerLog) << "Testing configuration for UDP Stream:" << udpUrl()->rawValue().toString();
         return !udpUrl()->rawValue().toString().isEmpty();
     }
