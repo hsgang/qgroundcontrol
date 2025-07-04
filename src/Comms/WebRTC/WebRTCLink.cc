@@ -447,11 +447,14 @@ void WebRTCWorker::_setupPeerConnection()
 
     // Add TURN server
     if (!_config->turnServer().isEmpty()) {
-        rtc::IceServer turnServer(_config->turnServer().toStdString());
-        turnServer.username = _config->turnUsername().toStdString();
-        turnServer.password = _config->turnPassword().toStdString();
+        rtc::IceServer turnServer(
+            _config->turnServer().toStdString(),  // hostname
+            3478,                                 // 포트 (필요시 파싱)
+            _config->turnUsername().toStdString(),
+            _config->turnPassword().toStdString(),
+            rtc::IceServer::RelayType::TurnUdp
+            );
         _rtcConfig.iceServers.emplace_back(turnServer);
-        //qCDebug(WebRTCLinkLog) << "TURN server configured:" << _config->turnServer().toStdString();
     }
 
     // Configure UDP mux
@@ -932,7 +935,7 @@ void WebRTCWorker::_setupVideoBridge()
                 _videoStreamActive = true;
                 _bridgeState = BRIDGE_READY;
 
-                qCDebug(WebRTCLinkLog) << "Video bridge ready, URI:" << _currentVideoURI;
+                //qCDebug(WebRTCLinkLog) << "Video bridge ready, URI:" << _currentVideoURI;
                 //emit videoStreamReady(_currentVideoURI);
 
                 _onBridgeReady();
@@ -974,7 +977,7 @@ void WebRTCWorker::_onBridgeReady()
         return;
     }
 
-    qCDebug(WebRTCLinkLog) << "🎯 Bridge ready";
+    //qCDebug(WebRTCLinkLog) << "🎯 Bridge ready";
 
     _notifyVideoManager();
 }
@@ -988,8 +991,8 @@ void WebRTCWorker::_notifyVideoManager()
     _videoManagerNotified = true;
     _bridgeState = BRIDGE_STREAMING;
 
-    qCDebug(WebRTCLinkLog) << "📡 Notifying VideoManager - Bridge fully ready:";
-    qCDebug(WebRTCLinkLog) << "   URI:" << _currentVideoURI;
+    //qCDebug(WebRTCLinkLog) << "📡 Notifying VideoManager - Bridge fully ready:";
+    //qCDebug(WebRTCLinkLog) << "   URI:" << _currentVideoURI;
 
     emit videoStreamReady(_currentVideoURI);
 }
@@ -1334,7 +1337,7 @@ QString WebRTCLink::videoStreamUri() const
 void WebRTCLink::_onVideoStreamReady(const QString& uri)
 {
     emit videoStreamReady(uri);
-    qCDebug(WebRTCLinkLog) << "uri: " << uri;
+    //qCDebug(WebRTCLinkLog) << "uri: " << uri;
 }
 
 void WebRTCLink::_onVideoBridgeError(const QString& error)
