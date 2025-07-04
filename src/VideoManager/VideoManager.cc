@@ -337,6 +337,7 @@ bool VideoManager::isStreamSource() const
         VideoSettings::videoSourceYuneecMantisG,
         VideoSettings::videoSourceHerelinkAirUnit,
         VideoSettings::videoSourceHerelinkHotspot,
+        VideoSettings::videoSourceWebRTC,
     };
     const QString videoSource = _videoSettings->videoSource()->rawValue().toString();
     return (videoSourceList.contains(videoSource) || autoStreamConfigured());
@@ -530,6 +531,8 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.42.1:554/live"));
     } else if (source == VideoSettings::videoSourceHerelinkAirUnit) {
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.0.10:8554/H264Video"));
+    } else if (source == VideoSettings::videoSourceWebRTC) {
+        settingsChanged |= _updateVideoUri(receiver, QStringLiteral("udp://127.0.0.1:55000"));
     } else if (source == VideoSettings::videoSourceHerelinkHotspot) {
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.43.1:8554/fpv_stream"));
     } else if ((source == VideoSettings::videoDisabled) || (source == VideoSettings::videoSourceNoVideo)) {
