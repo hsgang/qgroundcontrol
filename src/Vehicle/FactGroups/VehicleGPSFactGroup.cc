@@ -68,7 +68,6 @@ void VehicleGPSFactGroup::_handleGpsRawInt(const mavlink_message_t &message)
     courseOverGround()->setRawValue((gpsRawInt.cog == UINT16_MAX) ? qQNaN() : (gpsRawInt.cog / 100.0));
     yaw()->setRawValue((gpsRawInt.yaw == UINT16_MAX) ? qQNaN() : (gpsRawInt.yaw / 100.0));
     lock()->setRawValue(gpsRawInt.fix_type);
-    yaw()->setRawValue(gpsRawInt.yaw == UINT16_MAX ? qQNaN() : gpsRawInt.yaw / 100.0);
 
     _setTelemetryAvailable(true);
 }

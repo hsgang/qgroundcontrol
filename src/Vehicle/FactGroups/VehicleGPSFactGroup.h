@@ -23,7 +23,6 @@ class VehicleGPSFactGroup : public FactGroup
     Q_PROPERTY(Fact *yaw                READ yaw                CONSTANT)
     Q_PROPERTY(Fact *count              READ count              CONSTANT)
     Q_PROPERTY(Fact *lock               READ lock               CONSTANT)
-    Q_PROPERTY(Fact *yaw                READ yaw                CONSTANT)
 
 public:
     explicit VehicleGPSFactGroup(QObject *parent = nullptr);
@@ -37,7 +36,6 @@ public:
     Fact *yaw() { return &_yawFact; }
     Fact *count() { return &_countFact; }
     Fact *lock() { return &_lockFact; }
-    Fact *yaw() { return &_yawFact; }
 
     // Overrides from FactGroup
     void handleMessage(Vehicle *vehicle, const mavlink_message_t &message) override;
@@ -56,5 +54,4 @@ protected:
     Fact _yawFact = Fact(0, QStringLiteral("yaw"), FactMetaData::valueTypeDouble);
     Fact _countFact = Fact(0, QStringLiteral("count"), FactMetaData::valueTypeInt32);
     Fact _lockFact = Fact(0, QStringLiteral("lock"), FactMetaData::valueTypeInt32);
-    Fact _yawFact = Fact(0, QStringLiteral("yaw"), FactMetaData::valueTypeDouble);
 };
