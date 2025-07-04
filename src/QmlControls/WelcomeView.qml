@@ -50,7 +50,7 @@ Rectangle {
     QGCPalette { id: qgcPal }
 
     on_CurrentSelectionChanged: {
-        console.log(_currentSelection.name, _currentSelection.model, _currentSelection.linkType)
+        //console.log(_currentSelection.name, _currentSelection.model, _currentSelection.linkType)
 
         if (!_currentSelection || !_currentSelection.model) {
             vehicleImage0.source = "/qmlimages/amp_logo_white.png"
