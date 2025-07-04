@@ -31,6 +31,7 @@ class WebRTCConfiguration : public LinkConfiguration
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString roomId READ roomId WRITE setRoomId NOTIFY roomIdChanged)
     Q_PROPERTY(QString peerId READ peerId WRITE setPeerId NOTIFY peerIdChanged)
     Q_PROPERTY(QString targetPeerId READ targetPeerId WRITE setTargetPeerId NOTIFY targetPeerIdChanged)
     Q_PROPERTY(QString signalingServer READ signalingServer WRITE setSignalingServer NOTIFY signalingServerChanged)
@@ -53,6 +54,9 @@ class WebRTCConfiguration : public LinkConfiguration
     QString settingsTitle() const override { return tr("WebRTC Link Settings"); }
 
             // Getters and Setters
+    QString roomId() const { return _roomId; }
+    void setRoomId(const QString &id);
+
     QString peerId() const { return _peerId; }
     void setPeerId(const QString &id);
 
@@ -78,6 +82,7 @@ class WebRTCConfiguration : public LinkConfiguration
     void setUdpMuxEnabled(bool enabled);
 
    signals:
+    void roomIdChanged();
     void peerIdChanged();
     void targetPeerIdChanged();
     void signalingServerChanged();
@@ -90,6 +95,7 @@ class WebRTCConfiguration : public LinkConfiguration
     void udpMuxEnabledChanged();
 
    private:
+    QString _roomId;
     QString _peerId;
     QString _targetPeerId;
     QString _signalingServer;
@@ -130,11 +136,21 @@ class WebRTCVideoBridge : public QObject
     void bridgeStarted(quint16 port);
     void bridgeStopped();
     void errorOccurred(const QString& error);
+    void retryBridgeRequested();  // 브리지 재시도 요청 시그널
+
+   private slots:
+    void _startDecodingCheckTimer();
+    void _checkDecodingStatus();
 
    private:
     QUdpSocket* _udpSocket = nullptr;
     quint16 _localPort = 0;
     bool _isRunning = false;
+
+    void resetRetryCount();
+    QTimer* _decodingCheckTimer;  // 디코딩 상태 체크 타이머
+    bool _firstPacketSent = false;  // 첫 패킷 전송 플래그
+    int _retryCount = 0;  // 재시도 횟수
 
     // 통계
     qint64 _totalPackets = 0;

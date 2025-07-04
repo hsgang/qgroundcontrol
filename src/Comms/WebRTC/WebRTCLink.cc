@@ -2,10 +2,12 @@
 #include <QDebug>
 #include <QUrl>
 #include <QtQml/qqml.h>
-#include "SettingsManager.h"
-#include "VideoSettings.h"
+// #include "SettingsManager.h"
+// #include "VideoSettings.h"
+#include "VideoManager.h"
+#include "QGCLoggingCategory.h"
 
-Q_LOGGING_CATEGORY(WebRTCLinkLog, "WebRTCLink")
+QGC_LOGGING_CATEGORY(WebRTCLinkLog, "WebRTCLink")
 
 const QString WebRTCWorker::kDataChannelLabel = "mavlink";
 
@@ -16,12 +18,14 @@ const QString WebRTCWorker::kDataChannelLabel = "mavlink";
 WebRTCConfiguration::WebRTCConfiguration(const QString &name, QObject *parent)
     : LinkConfiguration(name, parent)
 {
-    _peerId = _generateRandomId();
-    _targetPeerId = "peerDrone"; // Default target
+    _roomId = _generateRandomId();
+    _peerId = "app_"+_roomId;
+    _targetPeerId = "vehicle_"+_roomId; // Default target
 }
 
 WebRTCConfiguration::WebRTCConfiguration(const WebRTCConfiguration *copy, QObject *parent)
     : LinkConfiguration(copy, parent)
+      , _roomId(copy->_roomId)
       , _peerId(copy->_peerId)
       , _targetPeerId(copy->_targetPeerId)
       , _signalingServer(copy->_signalingServer)
@@ -40,6 +44,7 @@ void WebRTCConfiguration::copyFrom(const LinkConfiguration *source)
     LinkConfiguration::copyFrom(source);
     auto* src = qobject_cast<const WebRTCConfiguration*>(source);
     if (src) {
+        _roomId = src->_roomId;
         _peerId = src->_peerId;
         _targetPeerId = src->_targetPeerId;
         _signalingServer = src->_signalingServer;
@@ -54,6 +59,7 @@ void WebRTCConfiguration::copyFrom(const LinkConfiguration *source)
 void WebRTCConfiguration::loadSettings(QSettings &settings, const QString &root)
 {
     settings.beginGroup(root);
+    _roomId = settings.value("roomId", "").toString();
     _peerId = settings.value("peerId", _generateRandomId()).toString();
     _targetPeerId = settings.value("targetPeerId", "").toString();
     _signalingServer = settings.value("signalingServer", "").toString();
@@ -68,6 +74,7 @@ void WebRTCConfiguration::loadSettings(QSettings &settings, const QString &root)
 void WebRTCConfiguration::saveSettings(QSettings &settings, const QString &root) const
 {
     settings.beginGroup(root);
+    settings.setValue("roomId", _roomId);
     settings.setValue("peerId", _peerId);
     settings.setValue("targetPeerId", _targetPeerId);
     settings.setValue("signalingServer", _signalingServer);
@@ -78,6 +85,15 @@ void WebRTCConfiguration::saveSettings(QSettings &settings, const QString &root)
     settings.setValue("udpMuxEnabled", _udpMuxEnabled);
     settings.endGroup();
 }
+
+void WebRTCConfiguration::setRoomId(const QString &id)
+{
+    if (_roomId != id) {
+        _roomId = id;
+        emit roomIdChanged();
+    }
+}
+
 
 void WebRTCConfiguration::setPeerId(const QString &id)
 {
@@ -166,7 +182,11 @@ QString WebRTCConfiguration::_generateRandomId(int length) const
 WebRTCVideoBridge::WebRTCVideoBridge(QObject* parent)
     : QObject(parent)
       , _udpSocket(new QUdpSocket(this))
+      , _decodingCheckTimer(new QTimer(this))
+      , _retryCount(0)
 {
+    _decodingCheckTimer->setSingleShot(true);
+    connect(_decodingCheckTimer, &QTimer::timeout, this, &WebRTCVideoBridge::_checkDecodingStatus);
 }
 
 WebRTCVideoBridge::~WebRTCVideoBridge()
@@ -188,10 +208,10 @@ bool WebRTCVideoBridge::startBridge(quint16 localPort)
     _localPort = _udpSocket->localPort();
     _isRunning = true;
 
-    SettingsManager::instance()->videoSettings()->videoSource()->setRawValue(VideoSettings::videoSourceUDPH264);
-    QString udpUrl = QString("127.0.0.1:%1").arg(_localPort);
-    SettingsManager::instance()->videoSettings()->udpUrl()->setRawValue(udpUrl);
-    SettingsManager::instance()->videoSettings()->lowLatencyMode()->setRawValue(true);
+    // SettingsManager::instance()->videoSettings()->videoSource()->setRawValue(VideoSettings::videoSourceUDPH264);
+    // QString udpUrl = QString("127.0.0.1:%1").arg(_localPort);
+    // SettingsManager::instance()->videoSettings()->udpUrl()->setRawValue(udpUrl);
+    // SettingsManager::instance()->videoSettings()->lowLatencyMode()->setRawValue(true);
 
     qDebug() << "WebRTC video bridge started on port:" << _localPort;
     emit bridgeStarted(_localPort);
@@ -205,9 +225,12 @@ void WebRTCVideoBridge::stopBridge()
         return;
     }
 
+    _decodingCheckTimer->stop();
+
     _udpSocket->close();
     _isRunning = false;
     _localPort = 0;
+    _firstPacketSent = false;
 
     qDebug() << "WebRTC video bridge stopped";
     emit bridgeStopped();
@@ -215,12 +238,31 @@ void WebRTCVideoBridge::stopBridge()
 
 void WebRTCVideoBridge::forwardRTPData(const QByteArray& rtpData)
 {
+    //qCDebug(WebRTCLinkLog) << "[UDP] Sending packet size:" << rtpData.size();
+
     if (!_isRunning || rtpData.isEmpty()) {
+        qWarning() << "[Bridge] Not running, drop packet";
         return;
     }
 
+    if( !_udpSocket || !_udpSocket->isValid()) {
+        qWarning() << "[Bridge] UDP socket invalid!";
+        return;
+    }
+
+    if (_localPort == 0) {
+        qWarning() << "[Bridge] Invalid local port!";
+        return;
+    }
+
+    if (!_firstPacketSent) {
+        _firstPacketSent = true;
+        QMetaObject::invokeMethod(this, "_startDecodingCheckTimer", Qt::QueuedConnection);  // 수정
+        //qDebug() << "[Bridge] First RTP packet sent, starting decoding check timer";
+    }
+
     // 로컬호스트로 RTP 데이터 전송
-    // qDebug() << "_udpSocket->state()" << _udpSocket->state();
+    //qDebug() << "_udpSocket->state()" << _udpSocket->state();
     qint64 sent = _udpSocket->writeDatagram(rtpData,
                                             QHostAddress::LocalHost,
                                             _localPort);
@@ -231,6 +273,45 @@ void WebRTCVideoBridge::forwardRTPData(const QByteArray& rtpData)
         _totalPackets++;
         _totalBytes += sent;
     }
+}
+
+void WebRTCVideoBridge::_startDecodingCheckTimer()
+{
+    // 메인 스레드에서 실행되도록 보장
+    if (QThread::currentThread() != this->thread()) {
+        QMetaObject::invokeMethod(this, "_startDecodingCheckTimer", Qt::QueuedConnection);
+        return;
+    }
+
+    // 1초 후에 디코딩 상태 체크
+    _decodingCheckTimer->start(2000);
+}
+
+void WebRTCVideoBridge::_checkDecodingStatus()
+{
+    // VideoManager 인스턴스에서 디코딩 상태 확인
+    VideoManager* videoManager = VideoManager::instance();
+
+    if (!videoManager || !videoManager->decoding()) {
+        _retryCount++;
+        qWarning() << QString("[Bridge] VideoManager not decoding after 2 second (retry %1/3)").arg(_retryCount);
+
+        if (_retryCount <= 5) {  // 최대 3번 재시도
+            qDebug() << "[Bridge] Retrying video bridge setup...";
+            emit retryBridgeRequested();
+        } else {
+            qCritical() << "[Bridge] Max retries reached, giving up";
+            emit errorOccurred("VideoManager failed to start decoding after multiple attempts");
+        }
+    } else {
+        qDebug() << "[Bridge] VideoManager is decoding successfully";
+        _retryCount = 0;  // 성공 시 재시도 카운터 리셋
+    }
+}
+
+void WebRTCVideoBridge::resetRetryCount()
+{
+    _retryCount = 0;
 }
 
 QString WebRTCVideoBridge::getGStreamerURI() const
@@ -259,7 +340,7 @@ WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
     initializeLogger();
     _setupWebSocket();
 
-    qCDebug(WebRTCLinkLog) << "WebRTCWorker created for peer:" << _config->peerId();
+    qCDebug(WebRTCLinkLog) << "WebRTCWorker created for peer:" << _config->roomId();
 }
 
 WebRTCWorker::~WebRTCWorker()
@@ -509,6 +590,7 @@ void WebRTCWorker::_onWebSocketConnected()
     QJsonObject message;
     message["type"] = "register";
     message["id"] = _config->peerId();
+    message["roomId"] = _config->roomId();
     _webSocket->sendTextMessage(QJsonDocument(message).toJson(QJsonDocument::Compact));
 }
 
@@ -541,7 +623,7 @@ void WebRTCWorker::_onWebSocketMessageReceived(const QString& message)
 
     if (obj.contains("type")) {
         QString type = obj["type"].toString();
-        qCDebug(WebRTCLinkLog) << "Received signaling message type:" << type;
+        qCDebug(WebRTCLinkLog) << "Received signaling message type:" << type << message;
     } else {
         qCWarning(WebRTCLinkLog) << "Received signaling message missing 'type' field";
     }
@@ -869,6 +951,14 @@ void WebRTCWorker::_setupVideoBridge()
                 emit videoBridgeError(error);
             });
 
+    connect(_videoBridge, &WebRTCVideoBridge::retryBridgeRequested, this, [this]() {
+        qCDebug(WebRTCLinkLog) << "Retrying video bridge setup...";
+        _cleanupVideoBridge();
+        QTimer::singleShot(100, this, [this]() {
+            _setupVideoBridge();
+        });
+    });
+
     // 브리지 시작
     if (!_videoBridge->startBridge(55000)) { // 55000
         qCCritical(WebRTCLinkLog) << "Failed to start video bridge";
@@ -907,7 +997,7 @@ void WebRTCWorker::_notifyVideoManager()
 void WebRTCWorker::_ensureBridgeReady()
 {
     if (_bridgeState != BRIDGE_NOT_READY) {
-        qCDebug(WebRTCLinkLog) << "Bridge already in progress, state:" << _bridgeState;
+        //qCDebug(WebRTCLinkLog) << "Bridge already in progress, state:" << _bridgeState;
         return;
     }
 
@@ -935,6 +1025,8 @@ void WebRTCWorker::_cleanupVideoBridge()
 
 void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
 {
+    //qCDebug(WebRTCLinkLog) << "[RTP] Got data, size:" << data.size();
+
     if (!_videoBridge || !_videoStreamActive) {
         return;
     }
@@ -948,6 +1040,7 @@ void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
 
     QByteArray rtpData(reinterpret_cast<const char*>(data.data()), data.size());
     int headerSize = _parseRtpHeaderOffset(rtpData);
+    //qCDebug(WebRTCLinkLog) << "[RTP] Parsed header size:" << headerSize;
 
     if (headerSize < 0 || headerSize >= rtpData.size()) {
         qWarning() << "[RTP] Invalid header size, dropping packet";
@@ -956,12 +1049,12 @@ void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
 
     QByteArray payload = rtpData.mid(headerSize);
 
-    if (_videoPacketCount <= 3) {
-        qCDebug(WebRTCLinkLog) << "📦 Video packet #" << _videoPacketCount
-                               << " RTP size:" << rtpData.size()
-                               << " Payload offset:" << headerSize
-                               << " Payload size:" << payload.size();
-    }
+    // if (_videoPacketCount <= 3) {
+    //     qCDebug(WebRTCLinkLog) << "📦 Video packet #" << _videoPacketCount
+    //                            << " RTP size:" << rtpData.size()
+    //                            << " Payload offset:" << headerSize
+    //                            << " Payload size:" << payload.size();
+    // }
 
     // if (_videoPacketCount <= 3 && rtpData.size() >= 12) {
     //     _analyzeFirstRTPPacket(rtpData);
@@ -1073,12 +1166,12 @@ void WebRTCWorker::_updateVideoStats()
 
     // Log statistics periodically
     static int logCounter = 0;
-    if (++logCounter % 5 == 0) { // Log every 5 seconds
-        qCDebug(WebRTCLinkLog) << QString("📊 Video Stats: %1 kB/s, %2 packets, avg size: %3 bytes")
-                                      .arg(_currentVideoRateKBps, 0, 'f', 1)
-                                      .arg(_videoPacketCount)
-                                      .arg(_averagePacketSize, 0, 'f', 1);
-    }
+    // if (++logCounter % 5 == 0) { // Log every 5 seconds
+    //     qCDebug(WebRTCLinkLog) << QString("📊 Video Stats: %1 kB/s, %2 packets, avg size: %3 bytes")
+    //                                   .arg(_currentVideoRateKBps, 0, 'f', 1)
+    //                                   .arg(_videoPacketCount)
+    //                                   .arg(_averagePacketSize, 0, 'f', 1);
+    // }
 }
 
 void WebRTCWorker::_calculateVideoRate()

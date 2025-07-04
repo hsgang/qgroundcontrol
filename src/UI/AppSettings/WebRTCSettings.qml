@@ -21,6 +21,7 @@ ColumnLayout {
     width:  _columnLayoutWidth
 
     function saveSettings() {
+        subEditConfig.roomId = roomIdField.text
         subEditConfig.peerId = peerIdField.text
         subEditConfig.targetPeerId = targetPeerIdField.text
         subEditConfig.signalingServer = signalingServerField.text
@@ -33,6 +34,23 @@ ColumnLayout {
     ColumnLayout {
         spacing: 0
         Layout.fillWidth: true
+
+        RowLayout {
+            spacing: _colSpacing
+            QGCLabel { text: qsTr("roomId") }
+            QGCTextField {
+                id:                     roomIdField
+                Layout.preferredWidth:  _secondColumnWidth * 0.7
+                Layout.fillWidth:       true
+                text:                   subEditConfig.roomId
+
+                onEditingFinished: {
+                    peerIdField.text = "app_" + text
+                    targetPeerIdField.text = "vehicle_" + text
+                    saveSettings()
+                }
+            }
+        }
 
         RowLayout {
             spacing: _colSpacing
