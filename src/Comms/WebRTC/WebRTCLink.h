@@ -129,9 +129,6 @@ class WebRTCVideoBridge : public QObject
     // WebRTC에서 받은 RTP 데이터 전달
     void forwardRTPData(const QByteArray& rtpData);
 
-    // GStreamer URI 생성
-    QString getGStreamerURI() const;
-
    signals:
     void bridgeStarted(quint16 port);
     void bridgeStopped();
@@ -191,7 +188,6 @@ class WebRTCWorker : public QObject
     void rtcStatusMessageChanged(QString message);
     void decodingStatsChanged(int total, int decoded, int dropped);
 
-    void videoStreamReady(const QString& uri);
     void videoTrackReceived();                          // 비디오 트랙 수신 시그널
     void videoConfigurationChanged(const QString& codec, int width, int height);
     void videoBridgeError(const QString& error);
@@ -208,7 +204,6 @@ class WebRTCWorker : public QObject
     void _onPeerStateChanged(rtc::PeerConnection::State state);
     void _onGatheringStateChanged(rtc::PeerConnection::GatheringState state);
     void _updateRtt();  // RTT 측정용 slot
-    void _ensureBridgeReady();
 
    private:
     // WebSocket signaling
@@ -226,11 +221,6 @@ class WebRTCWorker : public QObject
 
             // Cleanup
     void _cleanup();
-
-    void _startPingTimer();
-    void _sendPing();
-    qint64 _lastPingSent = 0;
-    QTimer *_pingTimer = nullptr;
 
             // Configuration
     const WebRTCConfiguration *_config = nullptr;
@@ -280,10 +270,6 @@ class WebRTCWorker : public QObject
     };
 
     BridgeState _bridgeState = BRIDGE_NOT_READY;
-    bool _videoManagerNotified = false;
-
-    void _onBridgeReady();
-    void _notifyVideoManager();
 
     // Video rate monitoring
     QTimer* _videoStatsTimer = nullptr;
