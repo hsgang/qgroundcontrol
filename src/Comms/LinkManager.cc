@@ -578,16 +578,16 @@ QStringList LinkManager::linkTypeStrings() const
     list += tr("UDP");
     list += tr("TCP");
     list += tr("WebRTC");
-#ifdef QGC_ENABLE_BLUETOOTH
-    list += tr("Bluetooth");
-#endif
-#ifdef QT_DEBUG
-    list += tr("Mock Link");
-#endif
-#ifndef QGC_AIRLINK_DISABLED
-    list += tr("AirLink");
-#endif
-    list += tr("Log Replay");
+// #ifdef QGC_ENABLE_BLUETOOTH
+//    list += tr("Bluetooth");
+// #endif
+// #ifdef QT_DEBUG
+//    list += tr("Mock Link");
+// #endif
+// #ifndef QGC_AIRLINK_DISABLED
+//     list += tr("AirLink");
+// #endif
+//     list += tr("Log Replay");
 
     if (list.size() != static_cast<int>(LinkConfiguration::TypeLast)) {
         qCWarning(LinkManagerLog) << "Internal error";
