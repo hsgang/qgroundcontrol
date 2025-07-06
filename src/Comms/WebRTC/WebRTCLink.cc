@@ -754,6 +754,7 @@ void WebRTCWorker::_processPendingCandidates()
     for (const auto& candidate : _pendingCandidates) {
         try {
             _peerConnection->addRemoteCandidate(candidate);
+            qCDebug(WebRTCLinkLog) << "[DEBUG] Added pending remote candidate:" << QString::fromStdString(candidate);
         } catch (const std::exception& e) {
             qCWarning(WebRTCLinkLog) << "Failed to add pending candidate:" << e.what();
         }
@@ -795,16 +796,21 @@ void WebRTCWorker::_onDataChannelClosed()
 
 void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
 {
-    qCDebug(WebRTCLinkLog) << "Peer state changed:" << _stateToString(state);
-    emit rtcStatusMessageChanged(_stateToString(state));
+    QString stateStr = _stateToString(state);
+    qCDebug(WebRTCLinkLog) << "[DEBUG] PeerConnection State Changed:" << stateStr;
+
+    emit rtcStatusMessageChanged(stateStr);
+
+    if (state == rtc::PeerConnection::State::Connected) {
+        qCDebug(WebRTCLinkLog) << "[DEBUG] ✅ PeerConnection fully connected!";
+    }
+
     if ((state == rtc::PeerConnection::State::Failed ||
-         state == rtc::PeerConnection::State::Disconnected)
-        && !_isDisconnecting) {
-        qCDebug(WebRTCLinkLog) << "PeerConnection failed/disconnected – scheduling reconnect";
+         state == rtc::PeerConnection::State::Disconnected) && !_isDisconnecting) {
+        qCDebug(WebRTCLinkLog) << "[DEBUG] PeerConnection failed/disconnected – scheduling reconnect";
         QTimer::singleShot(2000, this, [this]() {
             _cleanup();
             _setupPeerConnection();
-            //createOffer();
         });
     }
 }
@@ -813,6 +819,21 @@ void WebRTCWorker::_onGatheringStateChanged(rtc::PeerConnection::GatheringState 
 {
     emit rtcStatusMessageChanged(_gatheringStateToString(state));
     qCDebug(WebRTCLinkLog) << "ICE gathering state changed:" << _gatheringStateToString(state);
+
+    if (state == rtc::PeerConnection::GatheringState::Complete) {
+        if (_peerConnection->localDescription().has_value()) {
+            auto desc = _peerConnection->localDescription().value();
+            qCDebug(WebRTCLinkLog) << "[DEBUG] ICE Gathering Complete → Local Description:"
+                                   << QString::fromStdString(desc);
+        } else {
+            qCDebug(WebRTCLinkLog) << "[DEBUG] ICE Gathering Complete → Local Description: [None]";
+        }
+
+        for (auto &ice : _rtcConfig.iceServers) {
+            qCDebug(WebRTCLinkLog) << "[DEBUG] Configured ICE Server: "
+                                   << QString::fromStdString(ice.hostname);
+        }
+    }
 }
 
 void WebRTCWorker::_updateRtt()
@@ -857,6 +878,14 @@ void WebRTCWorker::_cleanup()
     qCDebug(WebRTCLinkLog) << "Cleaning up WebRTC resources";
 
     if (_peerConnection) {
+
+        _peerConnection->onStateChange(nullptr);
+        _peerConnection->onGatheringStateChange(nullptr);
+        _peerConnection->onLocalDescription(nullptr);
+        _peerConnection->onLocalCandidate(nullptr);
+        _peerConnection->onDataChannel(nullptr);
+        _peerConnection->onTrack(nullptr);
+
         try {
             _peerConnection->close();
         } catch (const std::exception& e) {
@@ -907,7 +936,6 @@ void WebRTCWorker::_cleanup()
         _currentVideoRateKBps = 0.0;
         _averagePacketSize = 0.0;
     }
-    _isDisconnecting = false;
 }
 
 void WebRTCWorker::_setupVideoBridge()
@@ -1228,8 +1256,9 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
 
 WebRTCLink::~WebRTCLink()
 {
-    disconnect();
-
+    if (_worker) {
+        QMetaObject::invokeMethod(_worker, "disconnectLink", Qt::BlockingQueuedConnection);
+    }
     _workerThread->quit();
     _workerThread->wait();
 }
