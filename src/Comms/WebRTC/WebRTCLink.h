@@ -254,9 +254,8 @@ class WebRTCWorker : public QObject
     int _droppedFrames = 0;
 
     std::atomic<bool> _isShuttingDown{false};
-    mutable QMutex _videoStatsMutex;
-
-    mutable QMutex _videoBridgeMutex;
+    QMutex _videoStatsMutex;
+    QMutex _videoBridgeMutex;
     QAtomicPointer<WebRTCVideoBridge> _videoBridgeAtomic;
     WebRTCVideoBridge *_videoBridge = nullptr;
     bool _videoStreamActive = false;
@@ -279,7 +278,7 @@ class WebRTCWorker : public QObject
     BridgeState _bridgeState = BRIDGE_NOT_READY;
 
     // Video rate monitoring
-    void _updateVideoStatistics(int dataSize);
+    void _updateVideoStatisticsSync(int dataSize);
     QTimer* _videoStatsTimer = nullptr;
     qint64 _videoBytesReceived = 0;
     qint64 _lastVideoBytesReceived = 0;
