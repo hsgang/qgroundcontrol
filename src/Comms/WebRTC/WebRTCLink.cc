@@ -338,7 +338,7 @@ WebRTCWorker::~WebRTCWorker()
 
 void WebRTCWorker::initializeLogger()
 {
-    //rtc::InitLogger(rtc::LogLevel::Debug);
+    rtc::InitLogger(rtc::LogLevel::Debug);
 }
 
 void WebRTCWorker::start()
@@ -456,7 +456,7 @@ void WebRTCWorker::_setupPeerConnection()
     }
 
     // Configure UDP mux
-    _rtcConfig.enableIceUdpMux = _config->udpMuxEnabled();
+    _rtcConfig.enableIceUdpMux = false;
 
     try {
         // _rtcConfig.disableAutoNegotiation = true;
@@ -701,13 +701,6 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
             _remoteDescriptionSet = true;
             _processPendingCandidates();
 
-        } else if (type == "answer") {
-            QString sdp = message["sdp"].toString();
-            rtc::Description answer(sdp.toStdString(), "answer");
-            _peerConnection->setRemoteDescription(answer);
-            _remoteDescriptionSet = true;
-            _processPendingCandidates();
-
         } else if (type == "candidate") {
             QString candidateStr = message["candidate"].toString();
             QString mid = message["sdpMid"].toString();
@@ -735,7 +728,7 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
                     qCDebug(WebRTCLinkLog) << "Cleaning up after remote disconnect";
                     _cleanup();
                     _setupPeerConnection();
-                    createOffer();  // 재연결 시도
+                    //createOffer();  // 재연결 시도
                 });
             }
         }
@@ -811,7 +804,7 @@ void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
         QTimer::singleShot(2000, this, [this]() {
             _cleanup();
             _setupPeerConnection();
-            createOffer();
+            //createOffer();
         });
     }
 }
