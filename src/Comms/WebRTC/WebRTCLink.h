@@ -214,6 +214,7 @@ class WebRTCWorker : public QObject
 
             // WebRTC peer connection
     void _setupPeerConnection();
+    void _handleTrackReceived(std::shared_ptr<rtc::Track> track);
     void _setupDataChannel(std::shared_ptr<rtc::DataChannel> dc);
     void _processPendingCandidates();
     QString _stateToString(rtc::PeerConnection::State state) const;
@@ -252,11 +253,17 @@ class WebRTCWorker : public QObject
     int _decodedFrames = 0;
     int _droppedFrames = 0;
 
+    std::atomic<bool> _isShuttingDown{false};
+    mutable QMutex _videoStatsMutex;
+
+    mutable QMutex _videoBridgeMutex;
+    QAtomicPointer<WebRTCVideoBridge> _videoBridgeAtomic;
     WebRTCVideoBridge *_videoBridge = nullptr;
     bool _videoStreamActive = false;
     QString _currentVideoURI;
 
     void _setupVideoBridge();
+    void _createVideoBridge();
     void _cleanupVideoBridge();
     void _handleVideoTrackData(const rtc::binary &data);
     void _analyzeFirstRTPPacket(const QByteArray& rtpData);
@@ -272,6 +279,7 @@ class WebRTCWorker : public QObject
     BridgeState _bridgeState = BRIDGE_NOT_READY;
 
     // Video rate monitoring
+    void _updateVideoStatistics(int dataSize);
     QTimer* _videoStatsTimer = nullptr;
     qint64 _videoBytesReceived = 0;
     qint64 _lastVideoBytesReceived = 0;
