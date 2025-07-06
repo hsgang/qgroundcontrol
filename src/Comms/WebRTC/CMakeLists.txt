@@ -15,6 +15,7 @@ set(LIBDATACHANNEL_OPTIONS
     "NO_TESTS ON"
     "NO_EXAMPLES ON"
     "BUILD_SHARED_LIBS OFF"
+    "CMAKE_BUILD_TYPE=Release"
 )
 
 # CPMAddPackage 호출
@@ -31,6 +32,7 @@ else()
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
     GIT_TAG master
+    GIT_SHALLOW TRUE
     OPTIONS ${LIBDATACHANNEL_OPTIONS}
   )
 endif()
