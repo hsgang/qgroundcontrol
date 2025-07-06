@@ -44,7 +44,7 @@ Item {
 
                     QGCLabel {
                         id:         field
-                        text:       display
+                        text:       typeof display !== "undefined" ? display : ""
                         width:      parent.width
                         wrapMode:   Text.Wrap
                         anchors.verticalCenter: parent.verticalCenter
