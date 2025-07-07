@@ -401,9 +401,9 @@ Rectangle {
                             onClicked:  {
                                 _currentSelection.link.disconnect()
                                 _currentSelection.linkChanged()
-                                if (closeProgressTracker.running) {
-                                    closeProgressTracker.stop()
-                                }
+                                // if (closeProgressTracker.running) {
+                                //     closeProgressTracker.stop()
+                                // }
                             }
                         }
                     }
