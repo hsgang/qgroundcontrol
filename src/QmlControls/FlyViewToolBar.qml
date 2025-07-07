@@ -289,11 +289,11 @@ Rectangle {
 
             property var    _currentSelection:     null
 
-            TimedProgressTracker {
-                id:                     closeProgressTracker
-                timeoutSeconds:         10
-                onTimeout:              linkPopup.close()
-            }
+            // TimedProgressTracker {
+            //     id:                     closeProgressTracker
+            //     timeoutSeconds:         10
+            //     onTimeout:              linkPopup.close()
+            // }
 
             Rectangle {
                 id: _linkRoot
@@ -308,22 +308,22 @@ Rectangle {
                     width:      ScreenTools.defaultFontPixelWidth * 40
                     spacing:    ScreenTools.defaultFontPixelHeight / 2
 
-                    QGCLabel {
-                        id:   closeProgressLabel
-                        visible:            closeProgressTracker.running && closeProgressTracker.progressLabel
-                        Layout.fillWidth:   true
-                        horizontalAlignment: Text.AlignRight
-                        text: qsTr("Automatically close in %1 seconds").arg(closeProgressTracker.progressLabel)
+                    // QGCLabel {
+                    //     id:   closeProgressLabel
+                    //     visible:            closeProgressTracker.running && closeProgressTracker.progressLabel
+                    //     Layout.fillWidth:   true
+                    //     horizontalAlignment: Text.AlignRight
+                    //     text: qsTr("Automatically close in %1 seconds").arg(closeProgressTracker.progressLabel)
 
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                if (closeProgressTracker.running) {
-                                    closeProgressTracker.stop()
-                                }
-                            }
-                        }
-                    }
+                    //     MouseArea {
+                    //         anchors.fill: parent
+                    //         onClicked: {
+                    //             if (closeProgressTracker.running) {
+                    //                 closeProgressTracker.stop()
+                    //             }
+                    //         }
+                    //     }
+                    // }
 
                     Rectangle {
                         id: flickableRect
@@ -387,9 +387,9 @@ Rectangle {
                             enabled:    _currentSelection && !_currentSelection.link
                             onClicked:  {
                                 QGroundControl.linkManager.createConnectedLink(_currentSelection)
-                                if (_currentSelection && _currentSelection.link) {
-                                    closeProgressTracker.start()
-                                }
+                                // if (_currentSelection && _currentSelection.link) {
+                                //     closeProgressTracker.start()
+                                // }
                             }
                         }
 
