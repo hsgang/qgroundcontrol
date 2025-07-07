@@ -324,6 +324,9 @@ WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
       , _config(config)
       , _videoBridge(nullptr)
       , _videoStreamActive(false)
+      , _signalingConnected(false)
+      , _isDisconnecting(false)
+      , _isOfferer(false)
 {
     initializeLogger();
     _setupWebSocket();
@@ -333,6 +336,9 @@ WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
 
     _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
     _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
+
+    _remoteDescriptionSet.store(false);
+    _videoBridgeAtomic.storeRelease(nullptr);
 }
 
 WebRTCWorker::~WebRTCWorker()
@@ -342,7 +348,7 @@ WebRTCWorker::~WebRTCWorker()
 
 void WebRTCWorker::initializeLogger()
 {
-    //rtc::InitLogger(rtc::LogLevel::Debug);
+    rtc::InitLogger(rtc::LogLevel::Debug);
 }
 
 void WebRTCWorker::start()
@@ -567,9 +573,9 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
         _videoTrack = track;
         emit videoTrackReceived();
 
-        // if (!_videoBridgeAtomic.loadAcquire()) {
-        //     _setupVideoBridge();
-        // }
+        if (!_videoBridgeAtomic.loadAcquire()) {
+            _setupVideoBridge();
+        }
 
                 // weak_ptr로 안전한 콜백 설정
         std::weak_ptr<rtc::Track> weakTrack = track;
@@ -647,6 +653,8 @@ void WebRTCWorker::_onWebSocketConnected()
 
 void WebRTCWorker::_onWebSocketDisconnected()
 {
+    if (!_signalingConnected) return;
+
     _signalingConnected = false;
     qCDebug(WebRTCLinkLog) << "WebSocket disconnected from signaling server";
 
@@ -710,15 +718,14 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
             try {
                 _peerConnection->setRemoteDescription(answer);
 
-                        // ✅ 반드시 여기서 atomic flag 세트
-                _remoteDescriptionSet.store(true, std::memory_order_release);
-
-                        // ✅ pending candidate는 잠금하고 처리
                 QMutexLocker locker(&_candidateMutex);
-                for (const auto& candidate : _pendingCandidates) {
-                    _peerConnection->addRemoteCandidate(candidate);
+                _remoteDescriptionSet.store(true, std::memory_order_release);
+                if(!_pendingCandidates.empty()) {
+                    for (const auto& candidate : _pendingCandidates) {
+                        _peerConnection->addRemoteCandidate(candidate);
+                    }
+                    _pendingCandidates.clear();
                 }
-                _pendingCandidates.clear();
 
                 qCDebug(WebRTCLinkLog) << "RemoteDescription set & pending candidates processed";
 
@@ -754,7 +761,7 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
                     qCDebug(WebRTCLinkLog) << "Cleaning up after remote disconnect";
                     _cleanup();
                     _setupPeerConnection();
-                    createOffer();  // 재연결 시도
+                    // createOffer();  // 재연결 시도
                 });
             }
 
@@ -858,13 +865,6 @@ void WebRTCWorker::_onDataChannelClosed()
 
     if (!_isDisconnecting) {
         emit rttUpdated(-1);
-        // emit disconnected();
-        // QTimer::singleShot(1000, this, [this]() {
-        //     qCDebug(WebRTCLinkLog) << "Recreating PeerConnection and DataChannel";
-        //     _cleanup();           // 기존 리소스 정리
-        //     _setupPeerConnection(); // PeerConnection 재생성
-        //     createOffer();        // Offerer 모드로 재협상 트리거
-        // });
     }
 }
 
@@ -1027,15 +1027,12 @@ void WebRTCWorker::_setupVideoBridge()
 
     qCDebug(WebRTCLinkLog) << "Setting up video bridge";
 
-    if (QThread::currentThread() == this->thread()) {
-        // 같은 스레드면 직접 호출
-        _createVideoBridge();
-    } else {
-        // 다른 스레드면 QueuedConnection
-        QMetaObject::invokeMethod(this, [this]() {
-            _createVideoBridge();
-        }, Qt::QueuedConnection);
+    QMutexLocker locker(&_videoBridgeMutex);
+    if (_videoBridgeAtomic.loadAcquire()) {
+        return;
     }
+
+    _createVideoBridge();
 }
 
 void WebRTCWorker::_createVideoBridge()
