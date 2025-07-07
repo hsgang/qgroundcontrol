@@ -470,16 +470,16 @@ void WebRTCWorker::_setupPeerConnection()
     _rtcConfig.enableIceUdpMux = false;
 
     try {
-        // _rtcConfig.disableAutoNegotiation = true;
         _peerConnection = std::make_shared<rtc::PeerConnection>(_rtcConfig);
 
         // QPointer로 안전한 참조 생성
         QPointer<WebRTCWorker> weakSelf(this);
 
         _peerConnection->onStateChange([weakSelf](rtc::PeerConnection::State state) {
-            if (weakSelf) {
+            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
                 QMetaObject::invokeMethod(weakSelf, [weakSelf, state]() {
                     if (weakSelf && !weakSelf->_isShuttingDown.load()) {
+                        qCCritical(WebRTCLinkLog) << "[STATE] PeerConnection state changed to:" << static_cast<int>(state);
                         weakSelf->_onPeerStateChanged(state);
                     }
                 }, Qt::QueuedConnection);
@@ -487,9 +487,10 @@ void WebRTCWorker::_setupPeerConnection()
         });
 
         _peerConnection->onGatheringStateChange([weakSelf](rtc::PeerConnection::GatheringState state) {
-            if (weakSelf) {
+            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
                 QMetaObject::invokeMethod(weakSelf, [weakSelf, state]() {
                     if (weakSelf && !weakSelf->_isShuttingDown.load()) {
+                        qCCritical(WebRTCLinkLog) << "[GATHERING] ICE gathering state changed to:" << static_cast<int>(state);
                         weakSelf->_onGatheringStateChanged(state);
                     }
                 }, Qt::QueuedConnection);
@@ -497,9 +498,11 @@ void WebRTCWorker::_setupPeerConnection()
         });
 
         _peerConnection->onLocalDescription([weakSelf](rtc::Description description) {
-            if (weakSelf) {
+            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
                 QString descType = QString::fromStdString(description.typeString());
                 QString sdpContent = QString::fromStdString(description);
+
+                qCCritical(WebRTCLinkLog) << "[SDP] Local description created, type:" << descType;
 
                 QMetaObject::invokeMethod(weakSelf, [weakSelf, descType, sdpContent]() {
                     if (weakSelf && !weakSelf->_isShuttingDown.load()) {
@@ -508,6 +511,8 @@ void WebRTCWorker::_setupPeerConnection()
                         message["to"] = weakSelf->_config->targetPeerId();
                         message["type"] = descType;
                         message["sdp"] = sdpContent;
+
+                        qCCritical(WebRTCLinkLog) << "[SDP] Sending local description to peer";
                         weakSelf->_sendSignalingMessage(message);
                     }
                 }, Qt::QueuedConnection);
@@ -515,9 +520,11 @@ void WebRTCWorker::_setupPeerConnection()
         });
 
         _peerConnection->onLocalCandidate([weakSelf](rtc::Candidate candidate) {
-            if (weakSelf) {
+            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
                 QString candidateStr = QString::fromStdString(candidate);
                 QString mid = QString::fromStdString(candidate.mid());
+
+                qCCritical(WebRTCLinkLog) << "[ICE] Local candidate generated:" << candidateStr.left(50) << "...";
 
                 QMetaObject::invokeMethod(weakSelf, [weakSelf, candidateStr, mid]() {
                     if (weakSelf && !weakSelf->_isShuttingDown.load()) {
@@ -547,7 +554,9 @@ void WebRTCWorker::_setupPeerConnection()
         });
 
         _peerConnection->onTrack([weakSelf](std::shared_ptr<rtc::Track> track) {
-            if (weakSelf) {
+            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
+                qCCritical(WebRTCLinkLog) << "[TRACK] Track received";
+
                 QMetaObject::invokeMethod(weakSelf, [weakSelf, track]() {
                     if (weakSelf && !weakSelf->_isShuttingDown.load()) {
                         weakSelf->_handleTrackReceived(track);
@@ -734,6 +743,8 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
             }
 
         } else if (type == "offer") {
+            qCCritical(WebRTCLinkLog) << "[SIGNALING] Processing OFFER as answerer";
+
             QString sdp = message["sdp"].toString();
             rtc::Description offer(sdp.toStdString(), "offer");
             _peerConnection->setRemoteDescription(offer);
