@@ -219,6 +219,7 @@ class WebRTCWorker : public QObject
     void _setupWebSocket();
     void _connectToSignalingServer();
     void _handleSignalingMessage(const QJsonObject& message);
+    void _handleCandidate(const QJsonObject& message);
     void _sendSignalingMessage(const QJsonObject& message);
     void _startTargetIdCheck();
     void _checkTargetId();
@@ -258,7 +259,8 @@ class WebRTCWorker : public QObject
     // State management
     std::vector<rtc::Candidate> _pendingCandidates;
     std::set<std::string> _addedCandidates;
-    bool _remoteDescriptionSet = false;
+    std::atomic_bool _remoteDescriptionSet {false};
+    QMutex _candidateMutex;
     bool _isOfferer = false;
     bool _isDisconnecting = false;
 

@@ -345,7 +345,7 @@ WebRTCWorker::~WebRTCWorker()
 
 void WebRTCWorker::initializeLogger()
 {
-    rtc::InitLogger(rtc::LogLevel::Debug);
+    //rtc::InitLogger(rtc::LogLevel::Debug);
 }
 
 void WebRTCWorker::start()
@@ -885,24 +885,30 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
         } else if (type == "answer") {  // answer 처리 추가
             QString sdp = message["sdp"].toString();
             rtc::Description answer(sdp.toStdString(), "answer");
-            _peerConnection->setRemoteDescription(answer);
 
-            _remoteDescriptionSet = true;
-            _processPendingCandidates();
+            try {
+                _peerConnection->setRemoteDescription(answer);
 
-            qCDebug(WebRTCLinkLog) << "Received answer from peer, connection established";
+                        // ✅ 반드시 여기서 atomic flag 세트
+                _remoteDescriptionSet.store(true, std::memory_order_release);
+
+                        // ✅ pending candidate는 잠금하고 처리
+                QMutexLocker locker(&_candidateMutex);
+                for (const auto& candidate : _pendingCandidates) {
+                    _peerConnection->addRemoteCandidate(candidate);
+                }
+                _pendingCandidates.clear();
+
+                qCDebug(WebRTCLinkLog) << "RemoteDescription set & pending candidates processed";
+
+            } catch (const std::exception& e) {
+                qCCritical(WebRTCLinkLog) << "setRemoteDescription failed:" << e.what();
+            }
 
 
         } else if (type == "candidate") {
-            QString candidateStr = message["candidate"].toString();
-            QString mid = message["sdpMid"].toString();
-            rtc::Candidate candidate(candidateStr.toStdString(), mid.toStdString());
+            _handleCandidate(message);
 
-            if (_remoteDescriptionSet) {
-                _peerConnection->addRemoteCandidate(candidate);
-            } else {
-                _pendingCandidates.push_back(candidate);
-            }
         } else if (type == "idDisconnected") {
             QString disconnectedId = message["id"].toString();
             if (disconnectedId == _config->targetPeerId()) {
@@ -944,6 +950,38 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
     }
 }
 
+void WebRTCWorker::_handleCandidate(const QJsonObject& message)
+{
+    if (!_peerConnection) {
+        qCWarning(WebRTCLinkLog) << "No peer connection available for candidate";
+        return;
+    }
+
+    QString candidateStr = message["candidate"].toString();
+    QString mid = message["sdpMid"].toString();
+
+    if (candidateStr.isEmpty()) {
+        qCWarning(WebRTCLinkLog) << "Empty candidate string received";
+        return;
+    }
+
+    try {
+        rtc::Candidate candidate(candidateStr.toStdString(), mid.toStdString());
+
+        if (_remoteDescriptionSet.load(std::memory_order_acquire)) {
+            qCDebug(WebRTCLinkLog) << "Adding remote candidate immediately";
+            _peerConnection->addRemoteCandidate(candidate);
+
+        } else {
+            QMutexLocker locker(&_candidateMutex);
+            _pendingCandidates.push_back(candidate);
+            qCDebug(WebRTCLinkLog) << "RemoteDescription not set → Candidate queued";
+        }
+    } catch (const std::exception& e) {
+        qCWarning(WebRTCLinkLog) << "Failed to process candidate:" << e.what();
+    }
+}
+
 void WebRTCWorker::_sendSignalingMessage(const QJsonObject& message)
 {
     if (!_signalingConnected) {
@@ -957,15 +995,25 @@ void WebRTCWorker::_sendSignalingMessage(const QJsonObject& message)
 
 void WebRTCWorker::_processPendingCandidates()
 {
-    for (const auto& candidate : _pendingCandidates) {
+    if (!_peerConnection || _pendingCandidates.empty()) {
+        return;
+    }
+
+    qCDebug(WebRTCLinkLog) << "Processing" << _pendingCandidates.size() << "pending candidates";
+
+    auto candidatesToProcess = std::move(_pendingCandidates);
+    _pendingCandidates.clear();
+
+    for (const auto& candidate : candidatesToProcess) {
         try {
             _peerConnection->addRemoteCandidate(candidate);
-            qCDebug(WebRTCLinkLog) << "[DEBUG] Added pending remote candidate:" << QString::fromStdString(candidate);
+            qCDebug(WebRTCLinkLog) << "Added pending candidate:"
+                                   << QString::fromStdString(candidate);
         } catch (const std::exception& e) {
             qCWarning(WebRTCLinkLog) << "Failed to add pending candidate:" << e.what();
+            // 개별 candidate 실패는 무시하고 계속 진행
         }
     }
-    _pendingCandidates.clear();
 }
 
 void WebRTCWorker::_onDataChannelOpen()
