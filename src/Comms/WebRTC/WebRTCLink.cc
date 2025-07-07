@@ -567,9 +567,9 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
         _videoTrack = track;
         emit videoTrackReceived();
 
-        if (!_videoBridgeAtomic.loadAcquire()) {
-            _setupVideoBridge();
-        }
+        // if (!_videoBridgeAtomic.loadAcquire()) {
+        //     _setupVideoBridge();
+        // }
 
                 // weak_ptr로 안전한 콜백 설정
         std::weak_ptr<rtc::Track> weakTrack = track;
