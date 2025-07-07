@@ -170,6 +170,12 @@ class WebRTCWorker : public QObject
     double currentVideoRateKBps() const ;
     int videoPacketCount() const ;
     qint64 videoBytesReceived() const ;
+    void resetStatistics();
+
+    qint64 dataChannelBytesSent() const;
+    qint64 dataChannelBytesReceived() const;
+    double dataChannelSendRateKBps() const;
+    double dataChannelReceiveRateKBps() const;
 
    public slots:
     void start();
@@ -193,6 +199,9 @@ class WebRTCWorker : public QObject
     void videoBridgeError(const QString& error);
     void videoRateChanged(double KBps);
     void videoStatsChanged(int packets, double avgSize, double rate);
+    void statisticsUpdated();
+    void dataChannelStatsChanged(qint64 bytesSent, qint64 bytesReceived,
+                                 double sendRate, double receiveRate);
 
    private slots:
     void _onWebSocketConnected();
@@ -211,6 +220,15 @@ class WebRTCWorker : public QObject
     void _connectToSignalingServer();
     void _handleSignalingMessage(const QJsonObject& message);
     void _sendSignalingMessage(const QJsonObject& message);
+    void _startTargetIdCheck();
+    void _checkTargetId();
+    void _onTargetFound();
+    void _handleIdListResponse(const QJsonObject& message);
+
+    QTimer *_targetCheckTimer = nullptr;
+    bool _targetFound = false;
+    int _targetCheckAttempts = 0;
+    static const int MAX_TARGET_CHECK_ATTEMPTS = 60;
 
             // WebRTC peer connection
     void _setupPeerConnection();
@@ -277,6 +295,28 @@ class WebRTCWorker : public QObject
 
     BridgeState _bridgeState = BRIDGE_NOT_READY;
 
+    QTimer* _statsTimer = nullptr;  // 통합 통계 타이머
+
+    void _updateDataChannelSentStats(int bytes);
+    void _updateDataChannelReceivedStats(int bytes);
+    void _updateAllStatistics();
+    void _calculateDataChannelRates(qint64 currentTime);
+    void _startStatisticsMonitoring();
+
+    // Data Channel 송수신 통계
+    mutable QMutex _dataChannelStatsMutex;
+    qint64 _dataChannelBytesSent = 0;
+    qint64 _dataChannelBytesReceived = 0;
+    qint64 _dataChannelPacketsSent = 0;
+    qint64 _dataChannelPacketsReceived = 0;
+
+    // Data Channel 전송률 계산용
+    qint64 _lastDataChannelBytesSent = 0;
+    qint64 _lastDataChannelBytesReceived = 0;
+    qint64 _lastDataChannelStatsTime = 0;
+    double _dataChannelSendRateKBps = 0.0;
+    double _dataChannelReceiveRateKBps = 0.0;
+
     // Video rate monitoring
     void _updateVideoStatisticsSync(int dataSize);
     QTimer* _videoStatsTimer = nullptr;
@@ -292,6 +332,7 @@ class WebRTCWorker : public QObject
     void _startVideoStatsMonitoring();
     void _updateVideoStats();
     void _calculateVideoRate();
+
 };
 
 /*===========================================================================*/

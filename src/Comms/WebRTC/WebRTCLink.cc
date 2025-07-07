@@ -294,7 +294,7 @@ void WebRTCVideoBridge::_checkDecodingStatus()
 
     if (!videoManager || !videoManager->decoding()) {
         _retryCount++;
-        qWarning() << QString("[Bridge] VideoManager not decoding after 2 second (retry %1/3)").arg(_retryCount);
+        qWarning() << QString("[Bridge] VideoManager not decoding after 2 second (retry %1/5)").arg(_retryCount);
 
         if (_retryCount <= 5) {  // 최대 5번 재시도
             qDebug() << "[Bridge] Retrying video bridge setup...";
@@ -324,11 +324,18 @@ WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
       , _config(config)
       , _videoBridge(nullptr)
       , _videoStreamActive(false)
+      , _targetCheckTimer(nullptr)
+      , _targetFound(false)
+      , _targetCheckAttempts(0)
 {
     initializeLogger();
     _setupWebSocket();
 
-    //qCDebug(WebRTCLinkLog) << "WebRTCWorker created for peer:" << _config->roomId();
+    _statsTimer = new QTimer(this);
+    connect(_statsTimer, &QTimer::timeout, this, &WebRTCWorker::_updateAllStatistics);
+
+    _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
+    _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
 }
 
 WebRTCWorker::~WebRTCWorker()
@@ -365,6 +372,8 @@ void WebRTCWorker::writeData(const QByteArray &data)
         // 원자적 체크 후 전송
         if (!_isShuttingDown.load() && _dataChannel && _dataChannel->isOpen()) {
             _dataChannel->send(binaryData);
+
+            _updateDataChannelSentStats(data.size());
             emit bytesSent(data);
         }
     } catch (const std::exception& e) {
@@ -414,8 +423,7 @@ void WebRTCWorker::_setupWebSocket()
     connect(_webSocket, &QWebSocket::connected, this, &WebRTCWorker::_onWebSocketConnected);
     connect(_webSocket, &QWebSocket::disconnected, this, &WebRTCWorker::_onWebSocketDisconnected);
     connect(_webSocket, &QWebSocket::errorOccurred, this, &WebRTCWorker::_onWebSocketError);
-    connect(_webSocket, &QWebSocket::textMessageReceived,
-            this, &WebRTCWorker::_onWebSocketMessageReceived);
+    connect(_webSocket, &QWebSocket::textMessageReceived, this, &WebRTCWorker::_onWebSocketMessageReceived);
 }
 
 void WebRTCWorker::_connectToSignalingServer()
@@ -598,10 +606,15 @@ void WebRTCWorker::_setupDataChannel(std::shared_ptr<rtc::DataChannel> dc)
         if (std::holds_alternative<rtc::binary>(data)) {
             const auto& binaryData = std::get<rtc::binary>(data);
             QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
+
+            _updateDataChannelReceivedStats(byteArray.size());
             emit bytesReceived(byteArray);
         }
         else if (std::holds_alternative<std::string>(data)) {
             const std::string& text = std::get<std::string>(data);
+
+            _updateDataChannelReceivedStats(text.length());
+
             QJsonDocument doc = QJsonDocument::fromJson(QString::fromStdString(text).toUtf8());
             if (doc.isObject()) {
                 QJsonObject obj = doc.object();
@@ -633,6 +646,169 @@ void WebRTCWorker::_onWebSocketConnected()
     message["id"] = _config->peerId();
     message["roomId"] = _config->roomId();
     _webSocket->sendTextMessage(QJsonDocument(message).toJson(QJsonDocument::Compact));
+
+    // 등록 후 잠시 대기한 후 타겟 ID 확인 시작
+    QTimer::singleShot(1000, this, [this]() {
+        if (_signalingConnected) {
+            _startTargetIdCheck();
+        }
+    });
+}
+
+void WebRTCWorker::_startTargetIdCheck()
+{
+    if (_targetCheckTimer) {
+        _targetCheckTimer->stop();
+        _targetCheckTimer->deleteLater();
+        _targetCheckTimer = nullptr;
+    }
+
+    _targetFound = false;
+    _targetCheckAttempts = 0;
+
+    _targetCheckTimer = new QTimer(this);
+    _targetCheckTimer->setSingleShot(false); // 반복 실행
+    connect(_targetCheckTimer, &QTimer::timeout, this, &WebRTCWorker::_checkTargetId);
+
+    qCDebug(WebRTCLinkLog) << "Starting target ID check for:" << _config->targetPeerId();
+    emit rtcStatusMessageChanged(QString("등록된 기체 확인 중: %1").arg(_config->targetPeerId()));
+
+    // 즉시 첫 번째 확인 수행
+    _checkTargetId();
+
+    // 5초마다 확인
+    _targetCheckTimer->start(5000);
+
+    qCDebug(WebRTCLinkLog) << "Target check timer started with 5 second interval";
+}
+
+void WebRTCWorker::_checkTargetId()
+{
+    if (!_signalingConnected || _targetFound || _isShuttingDown.load()) {
+        qCDebug(WebRTCLinkLog) << "Skipping target check - signaling:" << _signalingConnected
+                               << "targetFound:" << _targetFound
+                               << "shuttingDown:" << _isShuttingDown.load();
+        return;
+    }
+
+    _targetCheckAttempts++;
+    qCDebug(WebRTCLinkLog) << QString("Checking for target ID: %1 (attempt %2/%3)")
+                                  .arg(_config->targetPeerId())
+                                  .arg(_targetCheckAttempts)
+                                  .arg(MAX_TARGET_CHECK_ATTEMPTS);
+
+    // 방의 ID 목록 요청
+    QJsonObject idListMessage;
+    idListMessage["type"] = "queryIds";
+    idListMessage["id"] = _config->peerId();
+    idListMessage["roomId"] = _config->roomId();
+    _webSocket->sendTextMessage(QJsonDocument(idListMessage).toJson(QJsonDocument::Compact));
+
+    // 최대 시도 횟수 확인
+    if (_targetCheckAttempts >= MAX_TARGET_CHECK_ATTEMPTS) {
+        _targetCheckTimer->stop();
+        QString errorMsg = QString("Target ID not found after %1 attempts: %2")
+                               .arg(MAX_TARGET_CHECK_ATTEMPTS)
+                               .arg(_config->targetPeerId());
+        qCWarning(WebRTCLinkLog) << errorMsg;
+        emit errorOccurred(errorMsg);
+        emit rtcStatusMessageChanged("등록된 기체 확인 실패");
+    } else {
+        emit rtcStatusMessageChanged(QString("등록된 기체 확인 중 (%1/%2)")
+                                         .arg(_targetCheckAttempts)
+                                         .arg(MAX_TARGET_CHECK_ATTEMPTS));
+    }
+}
+
+void WebRTCWorker::_onTargetFound()
+{
+    if (_targetFound || _isShuttingDown.load()) {
+        qCDebug(WebRTCLinkLog) << "Target already found or shutting down, skipping offer creation";
+        return; // 이미 발견됨 또는 종료 중
+    }
+
+    _targetFound = true;
+
+    if (_targetCheckTimer) {
+        _targetCheckTimer->stop();
+    }
+
+    qCDebug(WebRTCLinkLog) << "Target ID found, creating offer:" << _config->targetPeerId();
+    emit rtcStatusMessageChanged("기체 등록 확인, 연결 준비중...");
+
+    // PeerConnection 상태 확인
+    if (!_peerConnection) {
+        qCWarning(WebRTCLinkLog) << "PeerConnection not available, recreating before offer...";
+        _setupPeerConnection();
+    }
+
+    // 연결 상태가 이미 활성화되어 있는지 확인
+    if (_dataChannel && _dataChannel->isOpen()) {
+        qCDebug(WebRTCLinkLog) << "Data channel already open, skipping offer creation";
+        emit connected();
+        return;
+    }
+
+    // offer 생성
+    QTimer::singleShot(800, this, [this]() {
+        if (_signalingConnected && _peerConnection && _targetFound && !_isShuttingDown.load()) {
+            // 다시 한번 데이터 채널 상태 확인
+            if (_dataChannel && _dataChannel->isOpen()) {
+                qCDebug(WebRTCLinkLog) << "Data channel opened during delay, skipping offer";
+                return;
+            }
+
+            qCDebug(WebRTCLinkLog) << "🚀 Creating offer for target:" << _config->targetPeerId();
+            emit rtcStatusMessageChanged("Offer 생성 중");
+
+            try {
+                createOffer();
+            } catch (const std::exception& e) {
+                qCWarning(WebRTCLinkLog) << "Failed to create offer:" << e.what();
+                // 실패 시 타겟 상태 리셋하고 재시도
+                _targetFound = false;
+                QTimer::singleShot(2000, this, [this]() {
+                    if (_signalingConnected && !_isShuttingDown.load()) {
+                        _startTargetIdCheck();
+                    }
+                });
+            }
+        } else {
+            qCWarning(WebRTCLinkLog) << "Cannot create offer - conditions not met:"
+                                     << "signaling:" << _signalingConnected
+                                     << "peerConnection:" << (_peerConnection ? "valid" : "null")
+                                     << "targetFound:" << _targetFound
+                                     << "shuttingDown:" << _isShuttingDown.load();
+        }
+    });
+}
+
+void WebRTCWorker::_handleIdListResponse(const QJsonObject& message)
+{
+    if (!message.contains("ids") || !message["ids"].isArray()) {
+        qCWarning(WebRTCLinkLog) << "Invalid idList response format";
+        return;
+    }
+
+    QJsonArray idsArray = message["ids"].toArray();
+    QStringList currentIds;
+
+    for (const auto& value : idsArray) {
+        if (value.isString()) {
+            currentIds.append(value.toString());
+        }
+    }
+
+    qCDebug(WebRTCLinkLog) << "Received room ID list:" << currentIds.join(", ");
+
+    // 타겟 ID가 목록에 있는지 확인
+    if (currentIds.contains(_config->targetPeerId())) {
+        qCDebug(WebRTCLinkLog) << "Target ID found in room:" << _config->targetPeerId();
+        _onTargetFound();
+    } else {
+        qCDebug(WebRTCLinkLog) << "Target ID not found in room yet:" << _config->targetPeerId();
+        // 계속 확인을 위해 타이머는 그대로 둠
+    }
 }
 
 void WebRTCWorker::_onWebSocketDisconnected()
@@ -687,6 +863,11 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
     QString remoteId = message["to"].toString();
     QString type = message["type"].toString();
 
+    if (type == "idList") {
+        _handleIdListResponse(message);
+        return;
+    }
+
     // Only handle messages from our target peer
     if (remoteId != _config->peerId()) {
         return;
@@ -700,6 +881,17 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
 
             _remoteDescriptionSet = true;
             _processPendingCandidates();
+
+        } else if (type == "answer") {  // answer 처리 추가
+            QString sdp = message["sdp"].toString();
+            rtc::Description answer(sdp.toStdString(), "answer");
+            _peerConnection->setRemoteDescription(answer);
+
+            _remoteDescriptionSet = true;
+            _processPendingCandidates();
+
+            qCDebug(WebRTCLinkLog) << "Received answer from peer, connection established";
+
 
         } else if (type == "candidate") {
             QString candidateStr = message["candidate"].toString();
@@ -716,6 +908,8 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
             if (disconnectedId == _config->targetPeerId()) {
                 qCWarning(WebRTCLinkLog) << "Peer disconnected by signaling server:" << disconnectedId;
 
+                _targetFound = false;
+
                 if (_dataChannel) {
                     _dataChannel->close();
                     _dataChannel = nullptr;
@@ -728,10 +922,22 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
                     qCDebug(WebRTCLinkLog) << "Cleaning up after remote disconnect";
                     _cleanup();
                     _setupPeerConnection();
-                    //createOffer();  // 재연결 시도
+                    createOffer();  // 재연결 시도
                 });
             }
+
+        } else if (type == "peerRegistered") {
+            // 새로운 ID가 방에 연결됨
+            QString connectedId = message["id"].toString();
+            if (connectedId == _config->targetPeerId() && !_targetFound) {
+                qCDebug(WebRTCLinkLog) << "Target ID connected to room:" << connectedId;
+                _onTargetFound();
+            }
+
+        } else if (type == "registered") {  // 등록 완료 메시지 처리 (선택사항)
+            qCDebug(WebRTCLinkLog) << "Successfully registered with signaling server";
         }
+
     } catch (const std::exception& e) {
         //qCWarning(WebRTCLinkLog) << "Error handling signaling message:" << e.what();
         emit errorOccurred(QString("Error handling signaling message: %1").arg(e.what()));
@@ -766,9 +972,9 @@ void WebRTCWorker::_onDataChannelOpen()
 {
     qCDebug(WebRTCLinkLog) << "Data channel opened";
     emit connected();
-    emit rtcStatusMessageChanged("데이터 채널 연결 성공");
+    emit rtcStatusMessageChanged("데이터 채널 연결 완료");
 
-    _startVideoStatsMonitoring();
+    _startStatisticsMonitoring();
 
     // 1초마다 라이브 스트림 통계 로깅
     if(!_rttTimer) {
@@ -803,14 +1009,27 @@ void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
 
     if (state == rtc::PeerConnection::State::Connected) {
         qCDebug(WebRTCLinkLog) << "[DEBUG] ✅ PeerConnection fully connected!";
+        if (_targetCheckTimer) {
+            _targetCheckTimer->stop();
+        }
     }
 
     if ((state == rtc::PeerConnection::State::Failed ||
          state == rtc::PeerConnection::State::Disconnected) && !_isDisconnecting) {
         qCDebug(WebRTCLinkLog) << "[DEBUG] PeerConnection failed/disconnected – scheduling reconnect";
+
+        _targetFound = false;
+
         QTimer::singleShot(2000, this, [this]() {
             _cleanup();
             _setupPeerConnection();
+
+            // 재연결 시 다시 offer 생성
+            QTimer::singleShot(1000, this, [this]() {
+                if (_signalingConnected) {
+                    _startTargetIdCheck();
+                }
+            });
         });
     }
 }
@@ -876,6 +1095,22 @@ void WebRTCWorker::_cleanup()
     _isDisconnecting = true;
 
     qCDebug(WebRTCLinkLog) << "Cleaning up WebRTC resources";
+
+    // 통계 타이머 정리
+    if (_statsTimer) {
+        _statsTimer->stop();
+    }
+
+    // 타겟 검색 타이머 정리
+    if (_targetCheckTimer) {
+        _targetCheckTimer->stop();
+        _targetCheckTimer->deleteLater();
+        _targetCheckTimer = nullptr;
+    }
+
+    // 타겟 상태 리셋
+    _targetFound = false;
+    _targetCheckAttempts = 0;
 
     if (_peerConnection) {
 
@@ -1221,6 +1456,143 @@ qint64 WebRTCWorker::videoBytesReceived() const
 {
     return _videoBytesReceived;
 }
+
+// Data Channel 통계 업데이트 함수들
+void WebRTCWorker::_updateDataChannelSentStats(int bytes)
+{
+    QMutexLocker locker(&_dataChannelStatsMutex);
+    _dataChannelBytesSent += bytes;
+    _dataChannelPacketsSent++;
+}
+
+void WebRTCWorker::_updateDataChannelReceivedStats(int bytes)
+{
+    QMutexLocker locker(&_dataChannelStatsMutex);
+    _dataChannelBytesReceived += bytes;
+    _dataChannelPacketsReceived++;
+}
+
+void WebRTCWorker::_updateAllStatistics()
+{
+    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+
+    // Data Channel 전송률 계산
+    _calculateDataChannelRates(currentTime);
+
+    // Video 전송률 계산 (기존 함수 활용)
+    _calculateVideoRate();
+
+    qCDebug(WebRTCLinkLog) << "[DC]" << "SENT:" << dataChannelSendRateKBps() << "KB/s"
+                           << " RECV:" << dataChannelReceiveRateKBps() << "KB/s"
+                           << "[Video]" << "RECV:" << _currentVideoRateKBps << "KB/s";
+
+    // 통계 시그널 발송
+    emit statisticsUpdated();
+}
+
+void WebRTCWorker::_calculateDataChannelRates(qint64 currentTime)
+{
+    qint64 timeDiff = currentTime - _lastDataChannelStatsTime;
+
+    if (timeDiff > 0) {
+        QMutexLocker locker(&_dataChannelStatsMutex);
+
+        // 송신 전송률 계산
+        qint64 sentBytesDiff = _dataChannelBytesSent - _lastDataChannelBytesSent;
+        double rawSentRate = static_cast<double>(sentBytesDiff) / timeDiff;
+        _dataChannelSendRateKBps = std::round(rawSentRate * 100.0) / 100.0; // KB/ms = KB/s
+
+        // 수신 전송률 계산
+        qint64 receivedBytesDiff = _dataChannelBytesReceived - _lastDataChannelBytesReceived;
+        double rawReceiveRate = static_cast<double>(receivedBytesDiff) / timeDiff;
+        _dataChannelReceiveRateKBps = std::round(rawReceiveRate * 100.0) / 100.0;
+
+        // 다음 계산을 위한 업데이트
+        _lastDataChannelBytesSent = _dataChannelBytesSent;
+        _lastDataChannelBytesReceived = _dataChannelBytesReceived;
+        _lastDataChannelStatsTime = currentTime;
+    }
+}
+
+void WebRTCWorker::_startStatisticsMonitoring()
+{
+    if (!_statsTimer->isActive()) {
+        // 통계 초기화
+        _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
+        _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
+
+        QMutexLocker dcLocker(&_dataChannelStatsMutex);
+        _lastDataChannelBytesSent = _dataChannelBytesSent;
+        _lastDataChannelBytesReceived = _dataChannelBytesReceived;
+        dcLocker.unlock();
+
+        QMutexLocker videoLocker(&_videoStatsMutex);
+        _lastVideoBytesReceived = _videoBytesReceived;
+        videoLocker.unlock();
+
+        // 1초마다 통계 업데이트
+        _statsTimer->start(1000);
+
+        qCDebug(WebRTCLinkLog) << "Statistics monitoring started";
+    }
+}
+
+// 통계 리셋 함수
+void WebRTCWorker::resetStatistics()
+{
+    {
+        QMutexLocker locker(&_dataChannelStatsMutex);
+        _dataChannelBytesSent = 0;
+        _dataChannelBytesReceived = 0;
+        _dataChannelPacketsSent = 0;
+        _dataChannelPacketsReceived = 0;
+        _dataChannelSendRateKBps = 0.0;
+        _dataChannelReceiveRateKBps = 0.0;
+        _lastDataChannelBytesSent = 0;
+        _lastDataChannelBytesReceived = 0;
+    }
+
+    {
+        QMutexLocker locker(&_videoStatsMutex);
+        _videoBytesReceived = 0;
+        _videoPacketCount = 0;
+        _currentVideoRateKBps = 0.0;
+        _averagePacketSize = 0.0;
+        _totalFramesReceived = 0;
+        _droppedFrames = 0;
+        _lastVideoBytesReceived = 0;
+    }
+
+    _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
+    _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
+
+    qCDebug(WebRTCLinkLog) << "Statistics reset";
+}
+
+qint64 WebRTCWorker::dataChannelBytesSent() const
+{
+    QMutexLocker locker(&_dataChannelStatsMutex);
+    return _dataChannelBytesSent;
+}
+
+qint64 WebRTCWorker::dataChannelBytesReceived() const
+{
+    QMutexLocker locker(&_dataChannelStatsMutex);
+    return _dataChannelBytesReceived;
+}
+
+double WebRTCWorker::dataChannelSendRateKBps() const
+{
+    QMutexLocker locker(&_dataChannelStatsMutex);
+    return _dataChannelSendRateKBps;
+}
+
+double WebRTCWorker::dataChannelReceiveRateKBps() const
+{
+    QMutexLocker locker(&_dataChannelStatsMutex);
+    return _dataChannelReceiveRateKBps;
+}
+
 
 
 //------------------------------------------------------
