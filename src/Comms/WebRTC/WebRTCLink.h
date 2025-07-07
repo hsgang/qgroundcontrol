@@ -221,15 +221,6 @@ class WebRTCWorker : public QObject
     void _handleSignalingMessage(const QJsonObject& message);
     void _handleCandidate(const QJsonObject& message);
     void _sendSignalingMessage(const QJsonObject& message);
-    void _startTargetIdCheck();
-    void _checkTargetId();
-    void _onTargetFound();
-    void _handleIdListResponse(const QJsonObject& message);
-
-    QTimer *_targetCheckTimer = nullptr;
-    bool _targetFound = false;
-    int _targetCheckAttempts = 0;
-    static const int MAX_TARGET_CHECK_ATTEMPTS = 60;
 
             // WebRTC peer connection
     void _setupPeerConnection();
