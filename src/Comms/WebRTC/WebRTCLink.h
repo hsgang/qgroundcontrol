@@ -181,7 +181,6 @@ class WebRTCWorker : public QObject
     void start();
     void writeData(const QByteArray &data);
     void disconnectLink();
-    void createOffer();
     bool isDataChannelOpen() const;
 
    signals:
@@ -208,8 +207,6 @@ class WebRTCWorker : public QObject
     void _onWebSocketDisconnected();
     void _onWebSocketError(QAbstractSocket::SocketError error);
     void _onWebSocketMessageReceived(const QString& message);
-    void _onDataChannelOpen();
-    void _onDataChannelClosed();
     void _onPeerStateChanged(rtc::PeerConnection::State state);
     void _onGatheringStateChanged(rtc::PeerConnection::GatheringState state);
     void _updateRtt();  // RTT 측정용 slot
@@ -225,8 +222,14 @@ class WebRTCWorker : public QObject
             // WebRTC peer connection
     void _setupPeerConnection();
     void _handleTrackReceived(std::shared_ptr<rtc::Track> track);
-    void _setupDataChannel(std::shared_ptr<rtc::DataChannel> dc);
+    void _setupDataChannelCallbacksOnly(std::shared_ptr<rtc::DataChannel> dc);
+    // void _onDataChannelOpenSynchronous();
+    // void _onDataChannelClosedSynchronous();
+    // void _startStatisticsMonitoringSynchronous();
+    void _initializeStatisticsImmediate();
+    void _processDataChannelOpenImmediate();
     void _processPendingCandidates();
+    void _startQtTimers();
     QString _stateToString(rtc::PeerConnection::State state) const;
     QString _gatheringStateToString(rtc::PeerConnection::GatheringState state) const;
 
@@ -246,6 +249,7 @@ class WebRTCWorker : public QObject
     std::shared_ptr<rtc::PeerConnection> _peerConnection;
     std::shared_ptr<rtc::DataChannel> _dataChannel;
     std::shared_ptr<rtc::Track> _videoTrack;
+    std::shared_ptr<rtc::DataChannel> _strongDataChannelRef;
 
     // State management
     std::vector<rtc::Candidate> _pendingCandidates;
@@ -254,6 +258,7 @@ class WebRTCWorker : public QObject
     QMutex _candidateMutex;
     bool _isOfferer = false;
     bool _isDisconnecting = false;
+    std::atomic<bool> _dataChannelOpened{false};
 
             // Constants
     static const QString kDataChannelLabel;

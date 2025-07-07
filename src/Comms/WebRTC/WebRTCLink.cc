@@ -398,22 +398,6 @@ void WebRTCWorker::disconnectLink()
     emit disconnected();
 }
 
-void WebRTCWorker::createOffer()
-{
-    if (!_peerConnection) {
-        qCWarning(WebRTCLinkLog) << "No peer connection available to create offer";
-        return;
-    }
-
-    qCDebug(WebRTCLinkLog) << "Creating offer for target peer:" << _config->targetPeerId();
-    _isOfferer = true;
-
-    // Create data channel as offerer
-    auto dc = _peerConnection->createDataChannel(kDataChannelLabel.toStdString());
-    _dataChannel = std::shared_ptr<rtc::DataChannel>(dc);
-    _setupDataChannel(_dataChannel);
-}
-
 bool WebRTCWorker::isDataChannelOpen() const
 {
     return _dataChannel && _dataChannel->isOpen();
@@ -540,16 +524,33 @@ void WebRTCWorker::_setupPeerConnection()
             }
         });
 
-        _peerConnection->onDataChannel([weakSelf](std::shared_ptr<rtc::DataChannel> dc) {
-            if (weakSelf) {
-                QMetaObject::invokeMethod(weakSelf, [weakSelf, dc]() {
-                    if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-                        qCDebug(WebRTCLinkLog) << "Data channel received with label:"
-                                               << QString::fromStdString(dc->label());
-                        weakSelf->_dataChannel = dc;
-                        weakSelf->_setupDataChannel(weakSelf->_dataChannel);
-                    }
-                }, Qt::QueuedConnection);
+        _peerConnection->onDataChannel([this](std::shared_ptr<rtc::DataChannel> dc) {
+            qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** onDataChannel callback triggered! ***";
+
+            if (!dc) {
+                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel is null!";
+                return;
+            }
+
+            if (_isShuttingDown.load()) {
+                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Shutting down, ignoring";
+                return;
+            }
+
+            qCCritical(WebRTCLinkLog) << "[DATACHANNEL] DataChannel received - Label:"
+                                      << QString::fromStdString(dc->label());
+
+            // 강한 참조 저장
+            _strongDataChannelRef = dc;
+            _dataChannel = dc;
+
+            // 2단계: DataChannel 콜백 즉시 설정 (Qt 객체 생성 없음)
+            _setupDataChannelCallbacksOnly(dc);
+
+            // 즉시 상태 확인
+            if (dc->isOpen()) {
+                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Already open, processing immediately";
+                _processDataChannelOpenImmediate();
             }
         });
 
@@ -570,6 +571,137 @@ void WebRTCWorker::_setupPeerConnection()
     } catch (const std::exception& e) {
         qCCritical(WebRTCLinkLog) << "Failed to create peer connection:" << e.what();
         emit errorOccurred(QString("Failed to create peer connection: %1").arg(e.what()));
+    }
+}
+
+void WebRTCWorker::_setupDataChannelCallbacksOnly(std::shared_ptr<rtc::DataChannel> dc)
+{
+    if (!dc) return;
+
+    qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Setting up callbacks only";
+
+    // onOpen 콜백 - Qt 객체 생성 없이
+    dc->onOpen([this]() {
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** DataChannel OPENED! ***";
+        if (!_isShuttingDown.load()) {
+            _processDataChannelOpenImmediate();
+        }
+    });
+
+            // onClosed 콜백
+    dc->onClosed([this]() {
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] DataChannel CLOSED";
+        if (!_isShuttingDown.load()) {
+            _dataChannelOpened = false;
+            // UI 업데이트만 메인 스레드로
+            QMetaObject::invokeMethod(this, [this]() {
+                if (!_isDisconnecting) {
+                    emit rttUpdated(-1);
+                }
+            }, Qt::QueuedConnection);
+        }
+    });
+
+            // onError 콜백
+    dc->onError([this](std::string error) {
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR:" << QString::fromStdString(error);
+        if (!_isShuttingDown.load()) {
+            QString errorMsg = QString::fromStdString(error);
+            QMetaObject::invokeMethod(this, [this, errorMsg]() {
+                emit errorOccurred("DataChannel error: " + errorMsg);
+            }, Qt::QueuedConnection);
+        }
+    });
+
+            // onMessage 콜백 - 데이터 처리는 즉시, 시그널만 큐로
+    dc->onMessage([this, dc](auto data) {
+        if (_isShuttingDown.load()) return;
+
+        if (std::holds_alternative<rtc::binary>(data)) {
+            const auto& binaryData = std::get<rtc::binary>(data);
+            QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
+
+                    // 통계 업데이트는 즉시 (스레드 안전)
+            _updateDataChannelReceivedStats(byteArray.size());
+
+            // 시그널만 메인 스레드로
+            QMetaObject::invokeMethod(this, [this, byteArray]() {
+                emit bytesReceived(byteArray);
+            }, Qt::QueuedConnection);
+        }
+        else if (std::holds_alternative<std::string>(data)) {
+            const std::string& text = std::get<std::string>(data);
+            _updateDataChannelReceivedStats(text.length());
+        }
+    });
+}
+
+void WebRTCWorker::_processDataChannelOpenImmediate()
+{
+    // 중복 호출 방지
+    if (_dataChannelOpened.exchange(true)) {
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Already opened, ignoring";
+        return;
+    }
+
+    if (_isShuttingDown.load()) {
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Shutting down, ignoring open";
+        return;
+    }
+
+    if (!_dataChannel || !_dataChannel->isOpen()) {
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel not actually open!";
+        _dataChannelOpened.store(false);
+        return;
+    }
+
+    qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Data channel opened successfully";
+
+    // 통계 초기화 (Qt 객체 없이)
+    _initializeStatisticsImmediate();
+
+    // UI 관련 작업만 메인 스레드로
+    QMetaObject::invokeMethod(this, [this]() {
+        emit connected();
+        emit rtcStatusMessageChanged("데이터 채널 연결 완료");
+
+        // Qt 객체들 생성
+        _startQtTimers();
+    }, Qt::QueuedConnection);
+
+    qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Connection setup completed";
+}
+
+void WebRTCWorker::_initializeStatisticsImmediate()
+{
+    _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
+    _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
+
+    QMutexLocker dcLocker(&_dataChannelStatsMutex);
+    _lastDataChannelBytesSent = _dataChannelBytesSent;
+    _lastDataChannelBytesReceived = _dataChannelBytesReceived;
+    dcLocker.unlock();
+
+    QMutexLocker videoLocker(&_videoStatsMutex);
+    _lastVideoBytesReceived = _videoBytesReceived;
+
+    qCCritical(WebRTCLinkLog) << "[STATS] Statistics initialized immediately";
+}
+
+void WebRTCWorker::_startQtTimers()
+{
+    // RTT 타이머 시작 (메인 스레드에서)
+    if (!_rttTimer) {
+        _rttTimer = new QTimer(this);
+        connect(_rttTimer, &QTimer::timeout, this, &WebRTCWorker::_updateRtt);
+        _rttTimer->start(1000);
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] RTT timer started";
+    }
+
+    // 통계 타이머 시작 (메인 스레드에서)
+    if (!_statsTimer->isActive()) {
+        _statsTimer->start(1000);
+        qCCritical(WebRTCLinkLog) << "[STATS] Statistics monitoring started";
     }
 }
 
@@ -600,52 +732,6 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
         auto session = std::make_shared<rtc::RtcpReceivingSession>();
         track->setMediaHandler(session);
     }
-}
-
-void WebRTCWorker::_setupDataChannel(std::shared_ptr<rtc::DataChannel> dc)
-{
-    if (!dc) return;
-
-    dc->onOpen([this]() {
-        QMetaObject::invokeMethod(this, "_onDataChannelOpen", Qt::QueuedConnection);
-    });
-
-    dc->onClosed([this]() {
-        QMetaObject::invokeMethod(this, "_onDataChannelClosed", Qt::QueuedConnection);
-    });
-
-    dc->onMessage([this, dc](auto data) {
-        if (std::holds_alternative<rtc::binary>(data)) {
-            const auto& binaryData = std::get<rtc::binary>(data);
-            QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
-
-            _updateDataChannelReceivedStats(byteArray.size());
-            emit bytesReceived(byteArray);
-        }
-        else if (std::holds_alternative<std::string>(data)) {
-            const std::string& text = std::get<std::string>(data);
-
-            _updateDataChannelReceivedStats(text.length());
-
-            QJsonDocument doc = QJsonDocument::fromJson(QString::fromStdString(text).toUtf8());
-            if (doc.isObject()) {
-                QJsonObject obj = doc.object();
-                if (obj["type"] == "ping") {
-                    QJsonObject pong;
-                    pong["type"] = "pong";
-                    pong["timestamp"] = obj["timestamp"];
-                    QJsonDocument docPong(pong);
-                    dc->send(docPong.toJson(QJsonDocument::Compact).toStdString());
-                }
-                else if (obj["type"] == "pong") {
-                    qint64 now = QDateTime::currentMSecsSinceEpoch();
-                    qint64 rtt = now - obj["timestamp"].toVariant().toLongLong();
-                    qCDebug(WebRTCLinkLog) << "[DataChannel] Measured RTT: " << rtt << "ms";
-                    //emit rttUpdated(rtt);
-                }
-            }
-        }
-    });
 }
 
 void WebRTCWorker::_onWebSocketConnected()
@@ -772,7 +858,6 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
                     qCDebug(WebRTCLinkLog) << "Cleaning up after remote disconnect";
                     _cleanup();
                     _setupPeerConnection();
-                    // createOffer();  // 재연결 시도
                 });
             }
 
@@ -851,31 +936,6 @@ void WebRTCWorker::_processPendingCandidates()
             qCWarning(WebRTCLinkLog) << "Failed to add pending candidate:" << e.what();
             // 개별 candidate 실패는 무시하고 계속 진행
         }
-    }
-}
-
-void WebRTCWorker::_onDataChannelOpen()
-{
-    qCDebug(WebRTCLinkLog) << "Data channel opened";
-    emit connected();
-    emit rtcStatusMessageChanged("데이터 채널 연결 완료");
-
-    _startStatisticsMonitoring();
-
-    // 1초마다 라이브 스트림 통계 로깅
-    if(!_rttTimer) {
-        _rttTimer = new QTimer(this);
-        connect(_rttTimer, &QTimer::timeout, this, &WebRTCWorker::_updateRtt);
-        _rttTimer->start(1000); // 1초 주기 측정
-    }
-}
-
-void WebRTCWorker::_onDataChannelClosed()
-{
-    qCDebug(WebRTCLinkLog) << "Data channel closed";
-
-    if (!_isDisconnecting) {
-        emit rttUpdated(-1);
     }
 }
 
@@ -960,6 +1020,7 @@ void WebRTCWorker::_cleanup()
 {
     _isShuttingDown.store(true);
     _isDisconnecting = true;
+    _dataChannelOpened.store(false);
 
     qCDebug(WebRTCLinkLog) << "Cleaning up WebRTC resources";
 
