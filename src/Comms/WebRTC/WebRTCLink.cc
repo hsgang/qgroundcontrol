@@ -456,13 +456,13 @@ void WebRTCWorker::_setupPeerConnection()
     try {
         _peerConnection = std::make_shared<rtc::PeerConnection>(_rtcConfig);
 
-        rtc::DataChannelInit dataChannelInit;
-        dataChannelInit.negotiated = true;
-        dataChannelInit.id = 1;  // 양쪽에서 같은 ID 사용
+        // rtc::DataChannelInit dataChannelInit;
+        // dataChannelInit.negotiated = true;
+        // dataChannelInit.id = 1;  // 양쪽에서 같은 ID 사용
 
-        _dataChannel = _peerConnection->createDataChannel(kDataChannelLabel.toStdString(), dataChannelInit);
+        // _dataChannel = _peerConnection->createDataChannel(kDataChannelLabel.toStdString(), dataChannelInit);
 
-        _setupNegotiatedChannelCallbacks();
+        // _setupNegotiatedChannelCallbacks();
 
         // QPointer로 안전한 참조 생성
         QPointer<WebRTCWorker> weakSelf(this);
@@ -532,35 +532,35 @@ void WebRTCWorker::_setupPeerConnection()
             }
         });
 
-        // _peerConnection->onDataChannel([this](std::shared_ptr<rtc::DataChannel> dc) {
-        //     qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** onDataChannel callback triggered! ***";
+        _peerConnection->onDataChannel([this](std::shared_ptr<rtc::DataChannel> dc) {
+            qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** onDataChannel callback triggered! ***";
 
-        //     if (!dc) {
-        //         qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel is null!";
-        //         return;
-        //     }
+            if (!dc) {
+                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel is null!";
+                return;
+            }
 
-        //     if (_isShuttingDown.load()) {
-        //         qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Shutting down, ignoring";
-        //         return;
-        //     }
+            if (_isShuttingDown.load()) {
+                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Shutting down, ignoring";
+                return;
+            }
 
-        //     qCCritical(WebRTCLinkLog) << "[DATACHANNEL] DataChannel received - Label:"
-        //                               << QString::fromStdString(dc->label());
+            qCCritical(WebRTCLinkLog) << "[DATACHANNEL] DataChannel received - Label:"
+                                      << QString::fromStdString(dc->label());
 
-        //     // 강한 참조 저장
-        //     _strongDataChannelRef = dc;
-        //     _dataChannel = dc;
+            // 강한 참조 저장
+            _strongDataChannelRef = dc;
+            _dataChannel = dc;
 
-        //     // 2단계: DataChannel 콜백 즉시 설정 (Qt 객체 생성 없음)
-        //     _setupDataChannelCallbacksOnly(dc);
+            // 2단계: DataChannel 콜백 즉시 설정 (Qt 객체 생성 없음)
+            _setupDataChannelCallbacksOnly(dc);
 
-        //     // 즉시 상태 확인
-        //     if (dc->isOpen()) {
-        //         qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Already open, processing immediately";
-        //         _processDataChannelOpenImmediate();
-        //     }
-        // });
+            // 즉시 상태 확인
+            if (dc->isOpen()) {
+                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Already open, processing immediately";
+                _processDataChannelOpenImmediate();
+            }
+        });
 
         _peerConnection->onTrack([weakSelf](std::shared_ptr<rtc::Track> track) {
             if (weakSelf && !weakSelf->_isShuttingDown.load()) {
