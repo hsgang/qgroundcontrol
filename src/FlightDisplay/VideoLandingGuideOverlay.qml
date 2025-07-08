@@ -43,13 +43,13 @@ Item {
 
     // _roll 값 변경 시 저역통과 필터 적용
     on_RollChanged: {
-        filteredRoll = filteredRoll + alpha * (_roll - filteredRoll);
+        //filteredRoll = filteredRoll + alpha * (_roll - filteredRoll);
         crossCanvas.requestPaint();
     }
 
     // _pitch 값 변경 시 저역통과 필터 적용
     on_PitchChanged: {
-        filteredPitch = filteredPitch + alpha * (_pitch - filteredPitch);
+        //filteredPitch = filteredPitch + alpha * (_pitch - filteredPitch);
         crossCanvas.requestPaint();
     }
 
