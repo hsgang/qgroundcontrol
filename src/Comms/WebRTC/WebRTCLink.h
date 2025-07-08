@@ -223,6 +223,7 @@ class WebRTCWorker : public QObject
     void _setupPeerConnection();
     void _handleTrackReceived(std::shared_ptr<rtc::Track> track);
     void _setupDataChannelCallbacksOnly(std::shared_ptr<rtc::DataChannel> dc);
+    void _setupNegotiatedChannelCallbacks();
     // void _onDataChannelOpenSynchronous();
     // void _onDataChannelClosedSynchronous();
     // void _startStatisticsMonitoringSynchronous();
