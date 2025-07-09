@@ -290,9 +290,9 @@ FlightMap {
 
         Connections {
             target:                             _activeVehicle ? _activeVehicle.trajectoryPoints : null
-            onPointAdded: (coordinate) =>       trajectoryPolyline.addCoordinate(coordinate)
-            onUpdateLastPoint: (coordinate) =>  trajectoryPolyline.replaceCoordinate(trajectoryPolyline.pathLength() - 1, coordinate)
-            onPointsCleared:                    trajectoryPolyline.path = []
+            function onPointAdded(coordinate) { trajectoryPolyline.addCoordinate(coordinate) }
+            function onUpdateLastPoint(coordinate) { trajectoryPolyline.replaceCoordinate(trajectoryPolyline.pathLength() - 1, coordinate) }
+            function onPointsCleared() { trajectoryPolyline.path = [] }
         }
     }
 
@@ -805,7 +805,7 @@ FlightMap {
 
         Connections {
             target: _activeVehicle
-            onRoiCoordChanged: (centerCoord) => {
+            function onRoiCoordChanged(centerCoord) {
                 roiLocationItem.show(centerCoord)
             }
         }

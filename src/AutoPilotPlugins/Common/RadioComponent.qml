@@ -207,7 +207,7 @@ SetupPage {
                         Connections {
                             target: controller
 
-                            onRollChannelRCValueChanged: (rcValue) => rollLoader.item.rcValue = rcValue
+                            function onRollChannelRCValueChanged(rcValue) { rollLoader.item.rcValue = rcValue }
                         }
                     }
 
@@ -236,7 +236,7 @@ SetupPage {
                         Connections {
                             target: controller
 
-                            onPitchChannelRCValueChanged: (rcValue) => pitchLoader.item.rcValue = rcValue
+                            function onPitchChannelRCValueChanged(rcValue) { pitchLoader.item.rcValue = rcValue }
                         }
                     }
 
@@ -265,7 +265,7 @@ SetupPage {
                         Connections {
                             target: controller
 
-                            onYawChannelRCValueChanged: (rcValue) => yawLoader.item.rcValue = rcValue
+                            function onYawChannelRCValueChanged(rcValue) { yawLoader.item.rcValue = rcValue }
                         }
                     }
 
@@ -293,7 +293,7 @@ SetupPage {
 
                         Connections {
                             target:                             controller
-                            onThrottleChannelRCValueChanged:    (rcValue) => throttleLoader.item.rcValue = rcValue
+                            function onThrottleChannelRCValueChanged(rcValue) { throttleLoader.item.rcValue = rcValue }
                         }
                     }
                 } // Column - Attitude Control labels

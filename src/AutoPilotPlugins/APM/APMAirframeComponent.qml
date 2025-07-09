@@ -199,7 +199,7 @@ SetupPage {
                                     Connections {
                                         target:                 _frameTypeAvailable ? _frameType : null
                                         ignoreUnknownSignals:   true
-                                        onRawValueChanged:      combo.selectFrameType()
+                                        function onRawValueChanged(value) { combo.selectFrameType() }
                                     }
                                 }
                             }

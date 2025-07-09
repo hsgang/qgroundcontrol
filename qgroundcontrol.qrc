@@ -105,10 +105,4 @@
         <file alias="Arduplane.params.ftp.bin">src/Comms/MockLink/Mocklink.Arduplane.params.ftp.bin</file>
         <file alias="PX4MockLink.params">src/Comms/MockLink/PX4MockLink.params</file>
     </qresource>
-    <qresource prefix="/ShaderVertex">
-        <file alias="earthMaterial.vert">src/Viewer3D/Shaders/earthMaterial.vert</file>
-    </qresource>
-    <qresource prefix="/ShaderFragment">
-        <file alias="earthMaterial.frag">src/Viewer3D/Shaders/earthMaterial.frag</file>
-    </qresource>
 </RCC>

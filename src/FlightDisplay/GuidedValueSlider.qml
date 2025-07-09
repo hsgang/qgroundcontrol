@@ -292,7 +292,7 @@ Item {
 
             Connections {
                 target: control
-                on_SliderValueChanged: sliderValueTextField.visible = false
+                function on_SliderValueChanged() { sliderValueTextField.visible = false }
             }
         }
     }

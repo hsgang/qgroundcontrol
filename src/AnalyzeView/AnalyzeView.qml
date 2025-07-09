@@ -64,9 +64,11 @@ Rectangle {
                 id:         buttonColumn
                 spacing:    _defaultTextHeight / 2
 
-                Repeater {
-                    id:     buttonRepeater
-                    model:  QGroundControl.corePlugin ? QGroundControl.corePlugin.analyzePages : []
+            // I don't know why this does not work
+            Connections {
+                target:         QGroundControl.settingsManager.appSettings.appFontPointSize
+                function onValueChanged(value) { buttonColumn.reflowWidths() }
+            }
 
                     Component.onCompleted:  itemAt(0).checked = true
 
@@ -118,12 +120,9 @@ Rectangle {
             anchors.bottom:         parent.bottom
             source:                 "LogDownloadPage.qml"
 
-            property string title
-
-            Connections {
-                target:     panelLoader.item
-                onPopout:   mainWindow.createrWindowedAnalyzePage(panelLoader.title, panelLoader.source)
-            }
+        Connections {
+            target:     panelLoader.item
+            function onPopout() { mainWindow.createrWindowedAnalyzePage(panelLoader.title, panelLoader.source) }
         }
     }
 }

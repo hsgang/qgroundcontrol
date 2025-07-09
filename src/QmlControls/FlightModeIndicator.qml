@@ -124,7 +124,7 @@ Item {
 
             Connections {
                 target: control
-                onEditModeChanged: {
+                function onEditModeChanged() {
                     if (editMode) {
                         for (var i=0; i<modeRepeater.count; i++) {
                             var button      = modeRepeater.itemAt(i).children[0]

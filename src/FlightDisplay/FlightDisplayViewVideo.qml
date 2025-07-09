@@ -300,7 +300,7 @@ Item {
             }
             Connections {
                 target:                 _camera
-                onThermalModeChanged:   thermalItem.pipOrNot()
+                function onThermalModeChanged() { thermalItem.pipOrNot() }
             }
             onVisibleChanged: {
                 thermalItem.pipOrNot()

@@ -991,7 +991,7 @@ ApplicationWindow {
             Connections {
                 target:                 toolDrawerLoader.item
                 ignoreUnknownSignals:   true
-                onPopout:               toolDrawer.visible = false
+                function onPopout() { toolDrawer.visible = false }
             }
         }
     }
