@@ -19,6 +19,7 @@
 
 #include "LinkConfiguration.h"
 #include "LinkInterface.h"
+#include "VideoManager.h"
 
 class QThread;
 class WebRTCLink;
@@ -236,6 +237,7 @@ class WebRTCWorker : public QObject
 
             // Cleanup
     void _cleanup();
+    void _cleanupComplete();
 
             // Configuration
     const WebRTCConfiguration *_config = nullptr;
@@ -331,7 +333,6 @@ class WebRTCWorker : public QObject
     void _startVideoStatsMonitoring();
     void _updateVideoStats();
     void _calculateVideoRate();
-
 };
 
 /*===========================================================================*/
@@ -341,7 +342,6 @@ class WebRTCLink : public LinkInterface
     Q_OBJECT
     Q_PROPERTY(int rttMs READ rttMs NOTIFY rttMsChanged)
     Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
-
     Q_PROPERTY(double videoRateKBps READ videoRateKBps NOTIFY videoRateKBpsChanged)
     Q_PROPERTY(int videoPacketCount READ videoPacketCount NOTIFY videoPacketCountChanged)
     Q_PROPERTY(qint64 videoBytesReceived READ videoBytesReceived NOTIFY videoBytesReceivedChanged)
@@ -397,6 +397,7 @@ class WebRTCLink : public LinkInterface
     WebRTCWorker *_worker = nullptr;
     QThread *_workerThread = nullptr;
     int _rttMs = -1;
+    int _videoRate = -1;
     double _videoRateKBps = 0.0;
     int _videoPacketCount = 0;
     qint64 _videoBytesReceived = 0;
