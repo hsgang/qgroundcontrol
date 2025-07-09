@@ -60,8 +60,8 @@ Item {
             QGCLabel {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
-                font.pointSize: ScreenTools.defaultFontPointSize
-                text: qsTr("RTC")
+                font.pointSize: ScreenTools.smallFontPointSize
+                text: qsTr("%1 KB/s").arg(_videoRate)
             }
         }
     }
@@ -78,14 +78,14 @@ Item {
             showExpand: false
 
             contentComponent: SettingsGroupLayout {
-                heading: qsTr("WEBRTC Status")
+                heading: qsTr("RTC Status")
 
                 LabelledLabel {
                     label:      qsTr("RTT")
                     labelText:  qsTr("%1 ms").arg(_rtt)
                 }
                 LabelledLabel {
-                    label:      qsTr("Rate")
+                    label:      qsTr("Down Rate")
                     labelText:  qsTr("%1 KB/s").arg(_videoRate)
                 }
             }
