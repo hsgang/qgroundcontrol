@@ -274,18 +274,18 @@ class WebRTCWorker : public QObject
 
     std::atomic<bool> _isShuttingDown{false};
     QMutex _videoStatsMutex;
-    QMutex _videoBridgeMutex;
+    QRecursiveMutex _videoBridgeMutex;
     QAtomicPointer<WebRTCVideoBridge> _videoBridgeAtomic;
     WebRTCVideoBridge *_videoBridge = nullptr;
     bool _videoStreamActive = false;
     QString _currentVideoURI;
 
-    void _setupVideoBridge();
     void _createVideoBridge();
     void _cleanupVideoBridge();
     void _handleVideoTrackData(const rtc::binary &data);
     void _analyzeFirstRTPPacket(const QByteArray& rtpData);
     int _parseRtpHeaderOffset(const QByteArray& rtpData);
+    void _restartVideoBridge();
 
     enum BridgeState {
         BRIDGE_NOT_READY,

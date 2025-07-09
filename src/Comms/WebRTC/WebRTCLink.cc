@@ -177,7 +177,6 @@ QString WebRTCConfiguration::_generateRandomId(int length) const
 // WebRTCVideoBridge
 /*===========================================================================*/
 
-
 WebRTCVideoBridge::WebRTCVideoBridge(QObject* parent)
     : QObject(parent)
       , _udpSocket(new QUdpSocket(this))
@@ -237,7 +236,7 @@ void WebRTCVideoBridge::stopBridge()
 
 void WebRTCVideoBridge::forwardRTPData(const QByteArray& rtpData)
 {
-    //qCDebug(WebRTCLinkLog) << "[UDP] Sending packet size:" << rtpData.size();
+    //qDebug() << "[DEBUG] forwardRTPData called, _isRunning=" << _isRunning << ", _localPort=" << _localPort;
 
     if (!_isRunning || rtpData.isEmpty()) {
         qWarning() << "[Bridge] Not running, drop packet";
@@ -330,12 +329,23 @@ WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
 
     _statsTimer = new QTimer(this);
     connect(_statsTimer, &QTimer::timeout, this, &WebRTCWorker::_updateAllStatistics);
+    // connect(VideoManager::instance(), &VideoManager::decodingChanged, this, [this]() {
+    //     if (!VideoManager::instance()->decoding()) {
+    //         qCWarning(WebRTCLinkLog) << "[WebRTCWorker] decoding=false, restarting video bridge";
+    //         _restartVideoBridge();
+    //     }
+    // });
+    connect(VideoManager::instance(), &VideoManager::streamingChanged, this, [this]() {
+        if (!VideoManager::instance()->streaming()) {
+            qCWarning(WebRTCLinkLog) << "[WebRTCWorker] streaming=false, restarting video bridge";
+            _restartVideoBridge();
+        }
+    });
 
     _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
     _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
 
     _remoteDescriptionSet.store(false);
-    _videoBridgeAtomic.storeRelease(nullptr);
 }
 
 WebRTCWorker::~WebRTCWorker()
@@ -754,11 +764,10 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
         _videoTrack = track;
         emit videoTrackReceived();
 
-        if (!_videoBridgeAtomic.loadAcquire()) {
-            _setupVideoBridge();
+        if (!_videoBridge) {
+            _createVideoBridge();
         }
 
-                // weak_ptr로 안전한 콜백 설정
         std::weak_ptr<rtc::Track> weakTrack = track;
         track->onMessage([this, weakTrack](rtc::message_variant message) {
             if (auto strongTrack = weakTrack.lock()) {
@@ -881,7 +890,7 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
         } else if (type == "candidate") {
             _handleCandidate(message);
 
-        } else if (type == "idDisconnected") {
+        } else if (type == "peerDisconnected") {
             QString disconnectedId = message["id"].toString();
             if (disconnectedId == _config->targetPeerId()) {
                 qCWarning(WebRTCLinkLog) << "Peer disconnected by signaling server:" << disconnectedId;
@@ -913,23 +922,24 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
                 emit disconnected(); // -> WebRTCLink::_onDisconnected() 연결
 
                 // 5. 새로운 PeerConnection 생성 (WebSocket은 그대로 유지)
-                QTimer::singleShot(1000, this, [this]() {
-                    qCDebug(WebRTCLinkLog) << "Setting up new peer connection (keeping WebSocket)";
-                    _setupPeerConnection();
+                // QTimer::singleShot(1000, this, [this]() {
+                //     qCDebug(WebRTCLinkLog) << "Setting up new peer connection (keeping WebSocket)";
+                //     _setupPeerConnection();
 
-                    // 시그널링 서버에 다시 등록 (WebSocket이 살아있으므로 바로 가능)
-                    if (_signalingConnected) {
-                        QJsonObject message;
-                        message["type"] = "register";
-                        message["id"] = _config->peerId();
-                        message["roomId"] = _config->roomId();
-                        _sendSignalingMessage(message);
-                    }
-                });
+                //     // 시그널링 서버에 다시 등록 (WebSocket이 살아있으므로 바로 가능)
+                //     if (_signalingConnected) {
+                //         QJsonObject message;
+                //         message["type"] = "register";
+                //         message["id"] = _config->peerId();
+                //         message["roomId"] = _config->roomId();
+                //         _sendSignalingMessage(message);
+                //     }
+                // });
             }
 
-        } else if (type == "registered") {  // 등록 완료 메시지 처리 (선택사항)
+        } else if (type == "registered") {
             qCDebug(WebRTCLinkLog) << "Successfully registered with signaling server";
+            emit rtcStatusMessageChanged("등록 완료, 기체 연결 대기중...");
         }
 
     } catch (const std::exception& e) {
@@ -1021,7 +1031,7 @@ void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
          state == rtc::PeerConnection::State::Disconnected) && !_isDisconnecting) {
         qCDebug(WebRTCLinkLog) << "[DEBUG] PeerConnection failed/disconnected – scheduling reconnect";
 
-        QTimer::singleShot(2000, this, [this]() {
+        QTimer::singleShot(1000, this, [this]() {
             _cleanup();
             _setupPeerConnection();
         });
@@ -1142,7 +1152,6 @@ void WebRTCWorker::_cleanup()
     //     _webSocket->close();
     // }
 
-    _signalingConnected = false;
     _remoteDescriptionSet = false;
     _pendingCandidates.clear();
 
@@ -1168,38 +1177,17 @@ void WebRTCWorker::_cleanupComplete()
     _signalingConnected = false;
 }
 
-void WebRTCWorker::_setupVideoBridge()
-{
-    if (_videoBridgeAtomic.loadAcquire()) {
-        qCDebug(WebRTCLinkLog) << "Video bridge already exists";
-        return;
-    }
-
-    qCDebug(WebRTCLinkLog) << "Setting up video bridge";
-
-    QMutexLocker locker(&_videoBridgeMutex);
-    if (_videoBridgeAtomic.loadAcquire()) {
-        return;
-    }
-
-    _createVideoBridge();
-}
-
 void WebRTCWorker::_createVideoBridge()
 {
-    // 이미 생성되었는지 다시 체크
-    if (_videoBridgeAtomic.loadAcquire() || _isShuttingDown.load()) {
+    QMutexLocker locker(&_videoBridgeMutex);
+    if (_videoBridge || _isShuttingDown.load()) {
         return;
     }
 
-    WebRTCVideoBridge* bridge = new WebRTCVideoBridge(this);
-
-    // QPointer로 안전한 참조
-    QPointer<WebRTCVideoBridge> safeBridge(bridge);
-    QPointer<WebRTCWorker> safeSelf(this);
+    _videoBridge = new WebRTCVideoBridge(this);
 
     // 시그널 연결
-    connect(bridge, &WebRTCVideoBridge::bridgeStarted,
+    connect(_videoBridge, &WebRTCVideoBridge::bridgeStarted,
             this, [this](quint16 port) {
                 if (!_isShuttingDown.load()) {
                     QMutexLocker locker(&_videoBridgeMutex);
@@ -1209,7 +1197,7 @@ void WebRTCWorker::_createVideoBridge()
                 }
             }, Qt::QueuedConnection);
 
-    connect(bridge, &WebRTCVideoBridge::bridgeStopped,
+    connect(_videoBridge, &WebRTCVideoBridge::bridgeStopped,
             this, [this]() {
                 QMutexLocker locker(&_videoBridgeMutex);
                 _videoStreamActive = false;
@@ -1217,7 +1205,7 @@ void WebRTCWorker::_createVideoBridge()
                 qCDebug(WebRTCLinkLog) << "Video bridge stopped";
             }, Qt::QueuedConnection);
 
-    connect(bridge, &WebRTCVideoBridge::errorOccurred,
+    connect(_videoBridge, &WebRTCVideoBridge::errorOccurred,
             this, [this](const QString& error) {
                 if (!_isShuttingDown.load()) {
                     qCWarning(WebRTCLinkLog) << "Video bridge error:" << error;
@@ -1225,40 +1213,40 @@ void WebRTCWorker::_createVideoBridge()
                 }
             }, Qt::QueuedConnection);
 
-    connect(bridge, &WebRTCVideoBridge::retryBridgeRequested,
+    connect(_videoBridge, &WebRTCVideoBridge::retryBridgeRequested,
             this, [this]() {
                 if (!_isShuttingDown.load()) {
                     QTimer::singleShot(1000, this, [this]() {
                         _cleanupVideoBridge();
-                        _setupVideoBridge();
+                        _createVideoBridge();
                     });
                 }
             }, Qt::QueuedConnection);
 
-            // 원자적으로 설정
-    _videoBridgeAtomic.storeRelease(bridge);
-
-    // 비동기적으로 시작
-    QTimer::singleShot(0, this, [this, bridge]() {
-        if (!_isShuttingDown.load()) {
-            // 다시 한번 체크 - 다른 스레드에서 변경되었을 수 있음
-            WebRTCVideoBridge* currentBridge = _videoBridgeAtomic.loadAcquire();
-            if (currentBridge == bridge) {
-                if (!bridge->startBridge(55000)) {
-                    qCCritical(WebRTCLinkLog) << "Failed to start video bridge";
-                    // testAndSetOrdered로 안전하게 제거
-                    if (_videoBridgeAtomic.testAndSetOrdered(bridge, nullptr)) {
-                        bridge->deleteLater();
-                    }
-                }
+    QTimer::singleShot(0, this, [this]() {
+        QMutexLocker locker(&_videoBridgeMutex);
+        if (!_isShuttingDown.load() && _videoBridge) {
+            if (!_videoBridge->startBridge(55000)) {
+                qCCritical(WebRTCLinkLog) << "Failed to start video bridge";
+                delete _videoBridge;
+                _videoBridge = nullptr;
             }
         }
     });
 }
 
+void WebRTCWorker::_restartVideoBridge()
+{
+    QMutexLocker locker(&_videoBridgeMutex);
+    _cleanupVideoBridge();
+    _createVideoBridge();
+}
+
 void WebRTCWorker::_cleanupVideoBridge()
 {
-    WebRTCVideoBridge* bridge = _videoBridgeAtomic.fetchAndStoreRelease(nullptr);
+    QMutexLocker locker(&_videoBridgeMutex);
+    WebRTCVideoBridge* bridge = _videoBridge;
+    _videoBridge = nullptr;
 
     if (bridge) {
         // 안전하게 정리
@@ -1268,27 +1256,24 @@ void WebRTCWorker::_cleanupVideoBridge()
         }, Qt::QueuedConnection);
     }
 
-    QMutexLocker locker(&_videoBridgeMutex);
     _videoStreamActive = false;
     _currentVideoURI.clear();
 }
 
 void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
 {
+    //qDebug() << "[DEBUG] _handleVideoTrackData called, _videoStreamActive=" << _videoStreamActive;
+
     if (_isShuttingDown.load() || !_videoStreamActive) {
         return;
     }
 
-    // 데이터 복사 (WebRTC 스레드에서)
     QByteArray rtpData(reinterpret_cast<const char*>(data.data()), data.size());
-
-    // QPointer로 안전한 참조
     QPointer<WebRTCWorker> weakSelf(this);
-
-    // 메인 스레드로 안전하게 전달
     QMetaObject::invokeMethod(this, [weakSelf, rtpData]() {
         if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-            WebRTCVideoBridge* bridge = weakSelf->_videoBridgeAtomic.loadAcquire();
+            QMutexLocker locker(&weakSelf->_videoBridgeMutex);
+            WebRTCVideoBridge* bridge = weakSelf->_videoBridge;
             if (bridge && weakSelf->_videoStreamActive) {
                 bridge->forwardRTPData(rtpData);
                 weakSelf->_updateVideoStatisticsSync(rtpData.size());
