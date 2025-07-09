@@ -29,6 +29,7 @@ Item {
     property bool showIndicator:        QGroundControl.linkManager.webRtcRtt > 0
     property real _margins:             ScreenTools.defaultFontPixelHeight / 2
     property real _rtt:                 QGroundControl.linkManager.webRtcRtt
+    property real _videoRate:           QGroundControl.linkManager.rtcVideoRate
 
     Row {
         id: vehicleRow
@@ -82,6 +83,10 @@ Item {
                 LabelledLabel {
                     label:      qsTr("RTT")
                     labelText:  qsTr("%1 ms").arg(_rtt)
+                }
+                LabelledLabel {
+                    label:      qsTr("Rate")
+                    labelText:  qsTr("%1 KB/s").arg(_videoRate)
                 }
             }
         }

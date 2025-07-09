@@ -47,6 +47,7 @@ class LinkManager : public QObject
     Q_PROPERTY(bool mavlinkSupportForwardingEnabled READ mavlinkSupportForwardingEnabled NOTIFY mavlinkSupportForwardingEnabledChanged)
     Q_PROPERTY(int webRtcRtt READ webRtcRtt NOTIFY webRtcRttChanged)
     Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
+    Q_PROPERTY(double rtcVideoRate READ rtcVideoRate NOTIFY rtcVideoRateChanged)
 
 public:
     explicit LinkManager(QObject *parent = nullptr);
@@ -122,12 +123,14 @@ public:
 
     int webRtcRtt() const;
     QString rtcStatusMessage() const;
+    double rtcVideoRate() const;
 
 signals:
     void mavlinkSupportForwardingEnabledChanged();
     void isBluetoothAvailableChanged();
     void webRtcRttChanged();
     void rtcStatusMessageChanged();
+    void rtcVideoRateChanged();
 
 private slots:
     void _linkDisconnected();
