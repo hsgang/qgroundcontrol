@@ -516,7 +516,7 @@ Rectangle {
                     QGCLabel {
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignRight
-                        text: _activeVehicle ? (_activeVehicle.initialConnectComplete ? "연결 완료" : "연결중") : "대기중"
+                        text: _activeVehicle ? (_activeVehicle.initialConnectComplete ? "동기화 완료" : "매개변수 동기화중") : "대기중"
                     }
 
                     QGCLabel {
