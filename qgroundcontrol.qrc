@@ -1,12 +1,4 @@
 <RCC>
-    <qresource prefix="/qml">
-        <file alias="AirLinkSettings.qml">src/Comms/AirLink/AirLinkSettings.qml</file>
-    </qresource>
-    <qresource prefix="/FirstRunPromptDialogs">
-        <file alias="ConnectFirstRunPrompt.qml">src/FirstRunPromptDialogs/ConnectFirstRunPrompt.qml</file>
-        <file alias="OfflineVehicleFirstRunPrompt.qml">src/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml</file>
-        <file alias="UnitsFirstRunPrompt.qml">src/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml</file>
-    </qresource>
     <qresource prefix="/json">
         <file alias="USBBoardInfo.json">src/Comms/USBBoardInfo.json</file>
         <file alias="BreachReturn.FactMetaData.json">src/MissionManager/BreachReturn.FactMetaData.json</file>
