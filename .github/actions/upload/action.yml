@@ -20,9 +20,13 @@ inputs:
   github_token:
     description: GitHub Token
     required: false
+  upload_aws:
+    description: Upload artifact to AWS
+    required: true
+    default: true
 
 runs:
-  using: "composite"
+  using: composite
   steps:
     - name: Save artifact
       uses: actions/upload-artifact@v4
