@@ -64,11 +64,25 @@ Rectangle {
                 id:         buttonColumn
                 spacing:    _defaultTextHeight / 2
 
-            // I don't know why this does not work
-            Connections {
-                target:         QGroundControl.settingsManager.appSettings.appFontPointSize
-                function onValueChanged(value) { buttonColumn.reflowWidths() }
-            }
+                // I don't know why this does not work
+                Connections {
+                    target:         QGroundControl.settingsManager.appSettings.appFontPointSize
+                    function onValueChanged(value) { buttonColumn.reflowWidths() }
+                }
+
+                function reflowWidths() {
+                    buttonColumn._maxButtonWidth = 0
+                    for (var i = 0; i < children.length; i++) {
+                        buttonColumn._maxButtonWidth = Math.max(buttonColumn._maxButtonWidth, children[i].width)
+                    }
+                    for (var j = 0; j < children.length; j++) {
+                        children[j].width = buttonColumn._maxButtonWidth
+                    }
+                }
+
+                Repeater {
+                    id:     buttonRepeater
+                    model:  QGroundControl.corePlugin ? QGroundControl.corePlugin.analyzePages : []
 
                     Component.onCompleted:  itemAt(0).checked = true
 
@@ -78,9 +92,12 @@ Rectangle {
                         icon.source:        modelData.icon
 
                         onClicked: {
+                            for (var i = 0; i < buttonRepeater.count; i++) {
+                                buttonRepeater.itemAt(i).checked = false;
+                            }
+                            checked = true;
                             panelLoader.source  = modelData.url
-                            panelLoader.title   = modelData.title
-                            checked             = true
+                            //panelLoader.title   = modelData.title
                         }
                     }
                 }
@@ -120,9 +137,10 @@ Rectangle {
             anchors.bottom:         parent.bottom
             source:                 "LogDownloadPage.qml"
 
-        Connections {
-            target:     panelLoader.item
-            function onPopout() { mainWindow.createrWindowedAnalyzePage(panelLoader.title, panelLoader.source) }
+            Connections {
+                target:     panelLoader.item
+                function onPopout() { mainWindow.createrWindowedAnalyzePage(panelLoader.title, panelLoader.source) }
+            }
         }
     }
 }
