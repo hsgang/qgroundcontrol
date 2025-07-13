@@ -42,7 +42,6 @@ class QGCCorePlugin : public QObject
     Q_PROPERTY(int defaultSettings                      READ defaultSettings                                                CONSTANT)
     Q_PROPERTY(int offlineVehicleFirstRunPromptId       MEMBER kOfflineVehicleFirstRunPromptId                              CONSTANT)
     Q_PROPERTY(int unitsFirstRunPromptId                MEMBER kUnitsFirstRunPromptId                                       CONSTANT)
-    Q_PROPERTY(int connectFirstRunPromptId              MEMBER kConnectFirstRunPromptId                                     CONSTANT)
     Q_PROPERTY(const QGCOptions *options                READ options                                                        CONSTANT)
     Q_PROPERTY(const QmlObjectListModel *customMapItems READ customMapItems                                                 CONSTANT)
     Q_PROPERTY(QString brandImageIndoor                 READ brandImageIndoor                                               CONSTANT)
@@ -193,7 +192,6 @@ public:
     // Standard first run prompt ids
     static constexpr int kUnitsFirstRunPromptId = 1;
     static constexpr int kOfflineVehicleFirstRunPromptId = 2;
-    static constexpr int kConnectFirstRunPromptId = 3;
 
     // Custom builds can start there first run prompt ids from here
     static constexpr int kFirstRunPromptIdsFirstCustomId = 10000;
