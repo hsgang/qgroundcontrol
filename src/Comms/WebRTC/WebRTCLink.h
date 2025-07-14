@@ -333,6 +333,11 @@ class WebRTCWorker : public QObject
     void _startVideoStatsMonitoring();
     void _updateVideoStats();
     void _calculateVideoRate();
+
+    void _handlePeerDisconnection();
+    void _cleanupForReconnection();
+    QTimer* _reconnectionTimer = nullptr;
+    std::atomic<bool> _waitingForReconnection{false};
 };
 
 /*===========================================================================*/
