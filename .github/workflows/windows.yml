@@ -110,7 +110,7 @@ jobs:
       - name: Verify executable
         if: matrix.build_type == 'Release' && matrix.arch != 'win64_msvc2022_arm64_cross_compiled'
         working-directory: ${{ runner.temp }}\shadow_build_dir\${{ matrix.build_type }}
-        run: QGroundControl.exe --simple-boot-test
+        run: MissionNavigator.exe --simple-boot-test
 
       - name: Install
         working-directory: ${{ runner.temp }}\shadow_build_dir
