@@ -286,7 +286,7 @@ void WebRTCVideoBridge::_checkDecodingStatus()
         qWarning() << QString("[Bridge] VideoManager not decoding after 2 second (retry %1/5)").arg(_retryCount);
 
         if (_retryCount <= 5) {
-            qDebug() << "[Bridge] Retrying video bridge setup...";
+            qDebug() << "[Bridge] Retrying video bridge setup";
             emit retryBridgeRequested();
         } else {
             qCritical() << "[Bridge] Max retries reached, giving up";
@@ -296,11 +296,6 @@ void WebRTCVideoBridge::_checkDecodingStatus()
         qDebug() << "[Bridge] VideoManager is decoding successfully";
         _retryCount = 0;
     }
-}
-
-void WebRTCVideoBridge::resetRetryCount()
-{
-    _retryCount = 0;
 }
 
 /*===========================================================================*/
@@ -334,9 +329,6 @@ WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
     //         _restartVideoBridge();
     //     }
     // });
-
-    _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
-    _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
 
     _remoteDescriptionSet.store(false);
 }
@@ -372,10 +364,11 @@ void WebRTCWorker::writeData(const QByteArray &data)
     try {
         rtc::binary binaryData(reinterpret_cast<const std::byte*>(data.constData()),
                                reinterpret_cast<const std::byte*>(data.constData()) + data.size());
-        if (!_isShuttingDown.load() && _dataChannel && _dataChannel->isOpen()) {
+        if (_dataChannel && _dataChannel->isOpen()) {
             _dataChannel->send(binaryData);
 
-            _updateDataChannelSentStats(data.size());
+            _dataChannelSentCalc.addData(data.size());
+
             emit bytesSent(data);
         }
     } catch (const std::exception& e) {
@@ -423,7 +416,7 @@ void WebRTCWorker::_connectToSignalingServer()
 
     qCDebug(WebRTCLinkLog) << "Connecting to signaling server:" << url;
     _webSocket->open(QUrl(url));
-    emit rtcStatusMessageChanged("시그널링 서버 연결...");
+    emit rtcStatusMessageChanged("시그널링 서버 연결중");
 }
 
 void WebRTCWorker::_setupPeerConnection()
@@ -453,12 +446,11 @@ void WebRTCWorker::_setupPeerConnection()
 
         QPointer<WebRTCWorker> weakSelf(this);
 
-        _peerConnection->onStateChange([weakSelf](rtc::PeerConnection::State state) {
-            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-                QMetaObject::invokeMethod(weakSelf, [weakSelf, state]() {
-                    if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-                        qCCritical(WebRTCLinkLog) << "[STATE] PeerConnection state changed to:" << static_cast<int>(state);
-                        weakSelf->_onPeerStateChanged(state);
+        _peerConnection->onStateChange([this](rtc::PeerConnection::State state) {
+            if (!_isShuttingDown.load()) {
+                QMetaObject::invokeMethod(this, [this, state]() {
+                    if (!_isShuttingDown.load()) {
+                        _onPeerStateChanged(state);
                     }
                 }, Qt::QueuedConnection);
             }
@@ -519,7 +511,7 @@ void WebRTCWorker::_setupPeerConnection()
         });
 
         _peerConnection->onDataChannel([this](std::shared_ptr<rtc::DataChannel> dc) {
-            qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** onDataChannel callback triggered! ***";
+            //qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** onDataChannel callback triggered! ***";
 
             if (!dc) {
                 qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel is null!";
@@ -537,12 +529,12 @@ void WebRTCWorker::_setupPeerConnection()
             _strongDataChannelRef = dc;
             _dataChannel = dc;
 
-            _setupDataChannelCallbacksOnly(dc);
+            _setupDataChannel(dc);
 
             // 즉시 상태 확인
             if (dc->isOpen()) {
                 qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Already open, processing immediately";
-                _processDataChannelOpenImmediate();
+                _processDataChannelOpen();
             }
         });
 
@@ -566,41 +558,7 @@ void WebRTCWorker::_setupPeerConnection()
     }
 }
 
-void WebRTCWorker::_setupNegotiatedChannelCallbacks()
-{
-    if (_dataChannel) {
-        _dataChannel->onOpen([this]() {
-            qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Data Channel Opened!";
-            _processDataChannelOpenImmediate();
-        });
-
-        _dataChannel->onClosed([this]() {
-            qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Data Channel Closed";
-            if (!_isShuttingDown.load()) {
-                _dataChannelOpened = false;
-                QMetaObject::invokeMethod(this, [this]() {
-                    if (!_isDisconnecting) {
-                        emit rttUpdated(-1);
-                    }
-                }, Qt::QueuedConnection);
-            }
-        });
-
-        _dataChannel->onMessage([this](auto data) {
-            if (_isShuttingDown.load()) return;
-            if (std::holds_alternative<rtc::binary>(data)) {
-                const auto& binaryData = std::get<rtc::binary>(data);
-                QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
-                _updateDataChannelReceivedStats(byteArray.size());
-                QMetaObject::invokeMethod(this, [this, byteArray]() {
-                    emit bytesReceived(byteArray);
-                }, Qt::QueuedConnection);
-            }
-        });
-    }
-}
-
-void WebRTCWorker::_setupDataChannelCallbacksOnly(std::shared_ptr<rtc::DataChannel> dc)
+void WebRTCWorker::_setupDataChannel(std::shared_ptr<rtc::DataChannel> dc)
 {
     if (!dc) return;
 
@@ -609,7 +567,7 @@ void WebRTCWorker::_setupDataChannelCallbacksOnly(std::shared_ptr<rtc::DataChann
     dc->onOpen([this]() {
         qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** DataChannel OPENED! ***";
         if (!_isShuttingDown.load()) {
-            _processDataChannelOpenImmediate();
+            _processDataChannelOpen();
         }
     });
 
@@ -642,7 +600,7 @@ void WebRTCWorker::_setupDataChannelCallbacksOnly(std::shared_ptr<rtc::DataChann
             const auto& binaryData = std::get<rtc::binary>(data);
             QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
 
-            _updateDataChannelReceivedStats(byteArray.size());
+            _dataChannelReceivedCalc.addData(byteArray.size());
 
             QMetaObject::invokeMethod(this, [this, byteArray]() {
                 emit bytesReceived(byteArray);
@@ -650,12 +608,11 @@ void WebRTCWorker::_setupDataChannelCallbacksOnly(std::shared_ptr<rtc::DataChann
         }
         else if (std::holds_alternative<std::string>(data)) {
             const std::string& text = std::get<std::string>(data);
-            _updateDataChannelReceivedStats(text.length());
         }
     });
 }
 
-void WebRTCWorker::_processDataChannelOpenImmediate()
+void WebRTCWorker::_processDataChannelOpen()
 {
     if (_dataChannelOpened.exchange(true)) {
         qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Already opened, ignoring";
@@ -675,8 +632,6 @@ void WebRTCWorker::_processDataChannelOpenImmediate()
 
     qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Data channel opened successfully";
 
-    _initializeStatisticsImmediate();
-
     QMetaObject::invokeMethod(this, [this]() {
         emit connected();
         emit rtcStatusMessageChanged("데이터 채널 연결 완료");
@@ -685,22 +640,6 @@ void WebRTCWorker::_processDataChannelOpenImmediate()
     }, Qt::QueuedConnection);
 
     qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Connection setup completed";
-}
-
-void WebRTCWorker::_initializeStatisticsImmediate()
-{
-    _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
-    _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
-
-    QMutexLocker dcLocker(&_dataChannelStatsMutex);
-    _lastDataChannelBytesSent = _dataChannelBytesSent;
-    _lastDataChannelBytesReceived = _dataChannelBytesReceived;
-    dcLocker.unlock();
-
-    QMutexLocker videoLocker(&_videoStatsMutex);
-    _lastVideoBytesReceived = _videoBytesReceived;
-
-    qCCritical(WebRTCLinkLog) << "[STATS] Statistics initialized immediately";
 }
 
 void WebRTCWorker::_startQtTimers()
@@ -773,6 +712,7 @@ void WebRTCWorker::_onWebSocketError(QAbstractSocket::SocketError error)
     QString errorString = _webSocket->errorString();
     qCWarning(WebRTCLinkLog) << "WebSocket error:" << errorString;
     emit errorOccurred(errorString);
+    emit rtcStatusMessageChanged(errorString);
 }
 
 void WebRTCWorker::_onWebSocketMessageReceived(const QString& message)
@@ -807,9 +747,9 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
     QString remoteId = message["to"].toString();
     QString type = message["type"].toString();
 
-    if (remoteId != _config->peerId()) {
-        return;
-    }
+    // if (remoteId != _config->peerId()) {
+    //     return;
+    // }
 
     try {
         if (type == "offer") {
@@ -848,34 +788,12 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
             if (disconnectedId == _config->targetPeerId()) {
                 qCWarning(WebRTCLinkLog) << "Peer disconnected by signaling server:" << disconnectedId;
 
-                // if (_dataChannel) {
-                //     _dataChannel->close();
-                //     _dataChannel = nullptr;
-                // }
-
-                // if (_peerConnection) {
-                //     try {
-                //         _peerConnection->close();
-                //     } catch (const std::exception& e) {
-                //         qCWarning(WebRTCLinkLog) << "Error closing peer connection:" << e.what();
-                //     }
-                //     _peerConnection.reset();
-                // }
-
-                // _cleanupVideoBridge();
-
-                // _dataChannelOpened.store(false);
-                // _remoteDescriptionSet.store(false);
-                // _pendingCandidates.clear();
-
-                // emit rttUpdated(-1);
-                // emit disconnected();
                 _handlePeerDisconnection();
             }
 
         } else if (type == "registered") {
             qCDebug(WebRTCLinkLog) << "Successfully registered with signaling server";
-            emit rtcStatusMessageChanged("등록 완료, 기체 연결 대기중...");
+            emit rtcStatusMessageChanged("기체 연결 대기중");
         }
 
     } catch (const std::exception& e) {
@@ -894,7 +812,7 @@ void WebRTCWorker::_handlePeerDisconnection()
 
     emit rttUpdated(-1);
     emit disconnected();
-    emit rtcStatusMessageChanged("기체 연결 해제됨, 재연결 대기중...");
+    emit rtcStatusMessageChanged("기체 연결 해제됨, 재연결 대기중");
 
     qCDebug(WebRTCLinkLog) << "[DISCONNECT] Ready for reconnection";
 }
@@ -949,6 +867,10 @@ void WebRTCWorker::_cleanupForReconnection()
     if (_statsTimer && _statsTimer->isActive()) {
         _statsTimer->stop();
     }
+
+    _dataChannelSentCalc.reset();
+    _dataChannelReceivedCalc.reset();
+    _videoReceivedCalc.reset();
 
     qCDebug(WebRTCLinkLog) << "[CLEANUP] Cleanup completed, ready for new connection";
 }
@@ -1028,7 +950,7 @@ void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
     emit rtcStatusMessageChanged(stateStr);
 
     if (state == rtc::PeerConnection::State::Connected) {
-        qCDebug(WebRTCLinkLog) << "[DEBUG] ✅ PeerConnection fully connected!";
+        qCDebug(WebRTCLinkLog) << "[DEBUG] PeerConnection fully connected!";
         if (_dataChannel && _dataChannel->isOpen()) {
             qCDebug(WebRTCLinkLog) << "DataChannel already open, no reconnection needed";
             return;
@@ -1081,7 +1003,7 @@ QString WebRTCWorker::_stateToString(rtc::PeerConnection::State state) const
 {
     switch (state) {
         case rtc::PeerConnection::State::New: return "Peer 생성";
-        case rtc::PeerConnection::State::Connecting: return "피어 연결중...";
+        case rtc::PeerConnection::State::Connecting: return "피어 연결중";
         case rtc::PeerConnection::State::Connected: return "피어 연결됨";
         case rtc::PeerConnection::State::Disconnected: return "피어 연결 끊김";
         case rtc::PeerConnection::State::Failed: return "피어 연결 실패";
@@ -1093,8 +1015,8 @@ QString WebRTCWorker::_stateToString(rtc::PeerConnection::State state) const
 QString WebRTCWorker::_gatheringStateToString(rtc::PeerConnection::GatheringState state) const
 {
     switch (state) {
-        case rtc::PeerConnection::GatheringState::New: return "새로운 ICE 수집중...";
-        case rtc::PeerConnection::GatheringState::InProgress: return "ICE 수집 처리중...";
+        case rtc::PeerConnection::GatheringState::New: return "새로운 ICE 수집중";
+        case rtc::PeerConnection::GatheringState::InProgress: return "ICE 수집 처리중";
         case rtc::PeerConnection::GatheringState::Complete: return "ICE 수집 완료";
     }
     return "Unknown";
@@ -1147,25 +1069,10 @@ void WebRTCWorker::_cleanup()
         _rttTimer = nullptr;
     }
 
-    if (_videoStatsTimer) {
-        _videoStatsTimer->stop();
-        _videoStatsTimer->deleteLater();
-        _videoStatsTimer = nullptr;
-    }
-
     _cleanupVideoBridge();
 
     _remoteDescriptionSet = false;
     _pendingCandidates.clear();
-
-    {
-        QMutexLocker locker(&_videoStatsMutex);
-        _videoBytesReceived = 0;
-        _lastVideoBytesReceived = 0;
-        _videoPacketCount = 0;
-        _currentVideoRateKBps = 0.0;
-        _averagePacketSize = 0.0;
-    }
 }
 
 void WebRTCWorker::_cleanupComplete()
@@ -1286,6 +1193,7 @@ void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
     }
 
     QByteArray rtpData(reinterpret_cast<const char*>(data.data()), data.size());
+    _videoReceivedCalc.addData(rtpData.size());
     QPointer<WebRTCWorker> weakSelf(this);
     QMetaObject::invokeMethod(this, [weakSelf, rtpData]() {
         if (weakSelf && !weakSelf->_isShuttingDown.load()) {
@@ -1293,295 +1201,36 @@ void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
             WebRTCVideoBridge* bridge = weakSelf->_videoBridge;
             if (bridge && weakSelf->_videoStreamActive) {
                 bridge->forwardRTPData(rtpData);
-                weakSelf->_updateVideoStatisticsSync(rtpData.size());
             }
         }
     }, Qt::QueuedConnection);
 }
 
-void WebRTCWorker::_updateVideoStatisticsSync(int dataSize)
-{
-    if (_isShuttingDown.load()) return;
-
-    QMutexLocker locker(&_videoStatsMutex);
-    _videoPacketCount++;
-    _videoBytesReceived += dataSize;
-    _averagePacketSize = (_averagePacketSize * (_videoPacketCount - 1) + dataSize) / _videoPacketCount;
-    _totalFramesReceived++;
-
-    emit decodingStatsChanged(_totalFramesReceived, _totalFramesReceived, _droppedFrames);
-}
-
-int WebRTCWorker::_parseRtpHeaderOffset(const QByteArray& rtpData)
-{
-    if (rtpData.size() < 12) {
-        qWarning() << "[RTP] Packet too small.";
-        return -1;
-    }
-
-    quint8 b0 = static_cast<quint8>(rtpData[0]);
-    quint8 extension = (b0 >> 4) & 0x01;
-    quint8 cc = b0 & 0x0F;
-
-    int headerSize = 12 + (cc * 4);
-
-    if (rtpData.size() < headerSize) {
-        qWarning() << "[RTP] Packet too small for CSRC.";
-        return -1;
-    }
-
-    if (extension) {
-        if (rtpData.size() < headerSize + 4) {
-            qWarning() << "[RTP] Packet too small for Extension.";
-            return -1;
-        }
-        quint16 extLength = (static_cast<quint8>(rtpData[headerSize + 2]) << 8)
-                            | static_cast<quint8>(rtpData[headerSize + 3]);
-        headerSize += 4 + (extLength * 4);
-    }
-
-    return headerSize;
-}
-
-void WebRTCWorker::_analyzeFirstRTPPacket(const QByteArray& rtpData)
-{
-    if (rtpData.size() < 12) return;
-
-    quint8 version = (static_cast<quint8>(rtpData[0]) >> 6) & 0x03;
-    quint8 extension = (static_cast<quint8>(rtpData[0]) >> 4) & 0x01;
-    quint8 cc = static_cast<quint8>(rtpData[0]) & 0x0F;
-    quint8 payloadType = static_cast<quint8>(rtpData[1]) & 0x7F;
-
-    quint16 seqNum = (static_cast<quint8>(rtpData[2]) << 8) | static_cast<quint8>(rtpData[3]);
-    quint32 timestamp = (static_cast<quint8>(rtpData[4]) << 24)
-                        | (static_cast<quint8>(rtpData[5]) << 16)
-                        | (static_cast<quint8>(rtpData[6]) << 8)
-                        | static_cast<quint8>(rtpData[7]);
-    quint32 ssrc = (static_cast<quint8>(rtpData[8]) << 24)
-                   | (static_cast<quint8>(rtpData[9]) << 16)
-                   | (static_cast<quint8>(rtpData[10]) << 8)
-                   | static_cast<quint8>(rtpData[11]);
-
-    int headerSize = _parseRtpHeaderOffset(rtpData);
-
-    qCDebug(WebRTCLinkLog) << "🔍 First RTP packet:"
-                           << "Version:" << version
-                           << "PT:" << payloadType
-                           << "Seq:" << seqNum
-                           << "Timestamp:" << timestamp
-                           << "SSRC:" << Qt::hex << ssrc << Qt::dec
-                           << "CC:" << cc
-                           << "Extension:" << extension
-                           << "HeaderSize:" << headerSize;
-
-    if (headerSize >= 0 && headerSize < rtpData.size()) {
-        int dumpSize = qMin(16, rtpData.size() - headerSize);
-        QString payloadHex;
-        for (int i = 0; i < dumpSize; ++i) {
-            payloadHex += QString("%1 ").arg(static_cast<quint8>(rtpData[headerSize + i]), 2, 16, QChar('0'));
-        }
-        qCDebug(WebRTCLinkLog) << "Payload start:" << payloadHex;
-    }
-}
-
-void WebRTCWorker::_startVideoStatsMonitoring()
-{
-    if (!_videoStatsTimer) {
-        _videoStatsTimer = new QTimer(this);
-        connect(_videoStatsTimer, &QTimer::timeout, this, &WebRTCWorker::_updateVideoStats);
-        _videoStatsTimer->start(1000);
-    }
-
-    _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
-    _videoBytesReceived = 0;
-    _lastVideoBytesReceived = 0;
-    _videoPacketCount = 0;
-    _currentVideoRateKBps = 0.0;
-}
-
-void WebRTCWorker::_updateVideoStats()
-{
-    _calculateVideoRate();
-
-    emit videoRateChanged(_currentVideoRateKBps);
-    emit videoStatsChanged(_videoPacketCount, _averagePacketSize, _currentVideoRateKBps);
-
-    static int logCounter = 0;
-    if (++logCounter % 5 == 0) {
-        qCDebug(WebRTCLinkLog) << QString("📊 Video Stats: %1 kB/s, %2 packets, avg size: %3 bytes")
-                                      .arg(_currentVideoRateKBps, 0, 'f', 1)
-                                      .arg(_videoPacketCount)
-                                      .arg(_averagePacketSize, 0, 'f', 1);
-    }
-}
-
-void WebRTCWorker::_calculateVideoRate()
-{
-    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
-    qint64 timeDiff = currentTime - _lastVideoStatsTime;
-
-    if (timeDiff > 0) {
-        qint64 bytesDiff = _videoBytesReceived - _lastVideoBytesReceived;
-
-        _currentVideoRateKBps = bytesDiff / timeDiff;
-
-        _lastVideoBytesReceived = _videoBytesReceived;
-        _lastVideoStatsTime = currentTime;
-
-        emit videoRateChanged(_currentVideoRateKBps);
-    }
-}
-
-double WebRTCWorker::currentVideoRateKBps() const
-{
-    return _currentVideoRateKBps;
-}
-
-int WebRTCWorker::videoPacketCount() const
-{
-    return _videoPacketCount;
-}
-
-qint64 WebRTCWorker::videoBytesReceived() const
-{
-    return _videoBytesReceived;
-}
-
-void WebRTCWorker::_updateDataChannelSentStats(int bytes)
-{
-    QMutexLocker locker(&_dataChannelStatsMutex);
-    _dataChannelBytesSent += bytes;
-    _dataChannelPacketsSent++;
-}
-
-void WebRTCWorker::_updateDataChannelReceivedStats(int bytes)
-{
-    QMutexLocker locker(&_dataChannelStatsMutex);
-    _dataChannelBytesReceived += bytes;
-    _dataChannelPacketsReceived++;
-}
-
 void WebRTCWorker::_updateAllStatistics()
 {
-    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+    _dataChannelSentCalc.updateRate();
+    _dataChannelReceivedCalc.updateRate();
+    _videoReceivedCalc.updateRate();
 
-    // Data Channel 전송률 계산
-    _calculateDataChannelRates(currentTime);
+    qCDebug(WebRTCLinkLog) << "[DC]" << "SENT:" << _dataChannelSentCalc.getCurrentRate() << "KB/s"
+                            << " RECV:" << _dataChannelReceivedCalc.getCurrentRate() << "KB/s"
+                            << "[Video]" << "RECV:" << _videoReceivedCalc.getCurrentRate() << "KB/s";
 
-    // Video 전송률 계산 (기존 함수 활용)
-    _calculateVideoRate();
+    emit dataChannelStatsUpdated(
+        _dataChannelSentCalc.getCurrentRate(),
+        _dataChannelReceivedCalc.getCurrentRate()
+        );
 
-    qCDebug(WebRTCLinkLog) << "[DC]" << "SENT:" << dataChannelSendRateKBps() << "KB/s"
-                           << " RECV:" << dataChannelReceiveRateKBps() << "KB/s"
-                           << "[Video]" << "RECV:" << _currentVideoRateKBps << "KB/s";
+    emit videoStatsUpdated(
+        _videoReceivedCalc.getCurrentRate(),
+        _videoReceivedCalc.getStats().totalPackets,
+        _videoReceivedCalc.getStats().totalBytes
+        );
 
-    // 통계 시그널 발송
-    emit statisticsUpdated();
+    emit videoRateChanged(
+        _videoReceivedCalc.getCurrentRate()
+        );
 }
-
-void WebRTCWorker::_calculateDataChannelRates(qint64 currentTime)
-{
-    qint64 timeDiff = currentTime - _lastDataChannelStatsTime;
-
-    if (timeDiff > 0) {
-        QMutexLocker locker(&_dataChannelStatsMutex);
-
-        // 송신 전송률 계산
-        qint64 sentBytesDiff = _dataChannelBytesSent - _lastDataChannelBytesSent;
-        double rawSentRate = static_cast<double>(sentBytesDiff) / timeDiff;
-        _dataChannelSendRateKBps = std::round(rawSentRate * 100.0) / 100.0; // KB/ms = KB/s
-
-        // 수신 전송률 계산
-        qint64 receivedBytesDiff = _dataChannelBytesReceived - _lastDataChannelBytesReceived;
-        double rawReceiveRate = static_cast<double>(receivedBytesDiff) / timeDiff;
-        _dataChannelReceiveRateKBps = std::round(rawReceiveRate * 100.0) / 100.0;
-
-        // 다음 계산을 위한 업데이트
-        _lastDataChannelBytesSent = _dataChannelBytesSent;
-        _lastDataChannelBytesReceived = _dataChannelBytesReceived;
-        _lastDataChannelStatsTime = currentTime;
-    }
-}
-
-void WebRTCWorker::_startStatisticsMonitoring()
-{
-    if (!_statsTimer->isActive()) {
-        // 통계 초기화
-        _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
-        _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
-
-        QMutexLocker dcLocker(&_dataChannelStatsMutex);
-        _lastDataChannelBytesSent = _dataChannelBytesSent;
-        _lastDataChannelBytesReceived = _dataChannelBytesReceived;
-        dcLocker.unlock();
-
-        QMutexLocker videoLocker(&_videoStatsMutex);
-        _lastVideoBytesReceived = _videoBytesReceived;
-        videoLocker.unlock();
-
-        // 1초마다 통계 업데이트
-        _statsTimer->start(1000);
-
-        qCDebug(WebRTCLinkLog) << "Statistics monitoring started";
-    }
-}
-
-// 통계 리셋 함수
-void WebRTCWorker::resetStatistics()
-{
-    {
-        QMutexLocker locker(&_dataChannelStatsMutex);
-        _dataChannelBytesSent = 0;
-        _dataChannelBytesReceived = 0;
-        _dataChannelPacketsSent = 0;
-        _dataChannelPacketsReceived = 0;
-        _dataChannelSendRateKBps = 0.0;
-        _dataChannelReceiveRateKBps = 0.0;
-        _lastDataChannelBytesSent = 0;
-        _lastDataChannelBytesReceived = 0;
-    }
-
-    {
-        QMutexLocker locker(&_videoStatsMutex);
-        _videoBytesReceived = 0;
-        _videoPacketCount = 0;
-        _currentVideoRateKBps = 0.0;
-        _averagePacketSize = 0.0;
-        _totalFramesReceived = 0;
-        _droppedFrames = 0;
-        _lastVideoBytesReceived = 0;
-    }
-
-    _lastDataChannelStatsTime = QDateTime::currentMSecsSinceEpoch();
-    _lastVideoStatsTime = QDateTime::currentMSecsSinceEpoch();
-
-    qCDebug(WebRTCLinkLog) << "Statistics reset";
-}
-
-qint64 WebRTCWorker::dataChannelBytesSent() const
-{
-    QMutexLocker locker(&_dataChannelStatsMutex);
-    return _dataChannelBytesSent;
-}
-
-qint64 WebRTCWorker::dataChannelBytesReceived() const
-{
-    QMutexLocker locker(&_dataChannelStatsMutex);
-    return _dataChannelBytesReceived;
-}
-
-double WebRTCWorker::dataChannelSendRateKBps() const
-{
-    QMutexLocker locker(&_dataChannelStatsMutex);
-    return _dataChannelSendRateKBps;
-}
-
-double WebRTCWorker::dataChannelReceiveRateKBps() const
-{
-    QMutexLocker locker(&_dataChannelStatsMutex);
-    return _dataChannelReceiveRateKBps;
-}
-
 
 
 //------------------------------------------------------
@@ -1608,7 +1257,6 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
 
     connect(_worker, &WebRTCWorker::videoBridgeError, this, &WebRTCLink::_onVideoBridgeError, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::videoRateChanged, this, &WebRTCLink::_onVideoRateChanged, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::videoStatsChanged, this, &WebRTCLink::_onVideoStatsChanged, Qt::QueuedConnection);
 
     _workerThread->start();
 }
@@ -1660,7 +1308,7 @@ void WebRTCLink::_onConnected()
 void WebRTCLink::_onDisconnected()
 {
     qDebug() << "[WebRTCLink] Disconnected";
-    _onRtcStatusMessageChanged("RTC 연결 해제");
+    _onRtcStatusMessageChanged("RTC 연결 해제됨");
     emit disconnected();
 }
 
@@ -1705,12 +1353,6 @@ QString WebRTCLink::videoStreamUri() const
     return _worker ? _worker->currentVideoUri() : QString();
 }
 
-void WebRTCLink::_onVideoStreamReady(const QString& uri)
-{
-    emit videoStreamReady(uri);
-    //qCDebug(WebRTCLinkLog) << "uri: " << uri;
-}
-
 void WebRTCLink::_onVideoBridgeError(const QString& error)
 {
     emit videoBridgeError(error);
@@ -1721,26 +1363,5 @@ void WebRTCLink::_onVideoRateChanged(double KBps)
     if (_videoRateKBps != KBps) {
         _videoRateKBps = KBps;
         emit videoRateKBpsChanged();
-    }
-}
-
-void WebRTCLink::_onVideoStatsChanged(int packets, double avgSize, double rate)
-{
-    bool changed = false;
-
-    if (_videoPacketCount != packets) {
-        _videoPacketCount = packets;
-        emit videoPacketCountChanged();
-        changed = true;
-    }
-
-    if (_videoBytesReceived != _worker->videoBytesReceived()) {
-        _videoBytesReceived = _worker->videoBytesReceived();
-        emit videoBytesReceivedChanged();
-        changed = true;
-    }
-
-    if (changed) {
-        emit videoStatsUpdated(rate, packets, _videoBytesReceived);
     }
 }

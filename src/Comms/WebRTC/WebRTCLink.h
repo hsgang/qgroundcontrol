@@ -28,6 +28,57 @@ Q_DECLARE_LOGGING_CATEGORY(WebRTCLinkLog)
 
 /*===========================================================================*/
 
+class TransferRateCalculator {
+   public:
+    struct Stats {
+        qint64 totalBytes = 0;
+        qint64 totalPackets = 0;
+        double currentRateKBps = 0.0;
+        double averagePacketSize = 0.0;
+    };
+
+    TransferRateCalculator() : _lastUpdateTime(QDateTime::currentMSecsSinceEpoch()) {}
+
+    void addData(qint64 bytes, int packets = 1) {
+        _stats.totalBytes += bytes;
+        _stats.totalPackets += packets;
+
+        // 평균 패킷 크기 업데이트 (온라인 평균 계산)
+        if (_stats.totalPackets > 0) {
+            _stats.averagePacketSize = static_cast<double>(_stats.totalBytes) / _stats.totalPackets;
+        }
+    }
+
+    void updateRate() {
+        qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+        qint64 timeDiff = currentTime - _lastUpdateTime;
+
+        if (timeDiff > 0) {
+            qint64 bytesDiff = _stats.totalBytes - _lastBytes;
+            double rate = static_cast<double>(bytesDiff) / timeDiff; // KB/ms = KB/s
+            _stats.currentRateKBps = std::round(rate * 100.0) / 100.0;
+
+            _lastBytes = _stats.totalBytes;
+            _lastUpdateTime = currentTime;
+        }
+    }
+
+    const Stats& getStats() const { return _stats; }
+    double getCurrentRate() const { return _stats.currentRateKBps; }
+
+    void reset() {
+        _stats = Stats{};
+        _lastBytes = 0;
+        _lastUpdateTime = QDateTime::currentMSecsSinceEpoch();
+    }
+
+   private:
+    Stats _stats;
+    qint64 _lastBytes = 0;
+    qint64 _lastUpdateTime;
+};
+
+
 class WebRTCConfiguration : public LinkConfiguration
 {
     Q_OBJECT
@@ -145,7 +196,6 @@ class WebRTCVideoBridge : public QObject
     quint16 _localPort = 0;
     bool _isRunning = false;
 
-    void resetRetryCount();
     QTimer* _decodingCheckTimer;  // 디코딩 상태 체크 타이머
     bool _firstPacketSent = false;  // 첫 패킷 전송 플래그
     int _retryCount = 0;  // 재시도 횟수
@@ -168,15 +218,6 @@ class WebRTCWorker : public QObject
     void initializeLogger();
     bool isVideoStreamActive() const { return _videoStreamActive; }
     QString currentVideoUri() const { return _currentVideoURI; }
-    double currentVideoRateKBps() const ;
-    int videoPacketCount() const ;
-    qint64 videoBytesReceived() const ;
-    void resetStatistics();
-
-    qint64 dataChannelBytesSent() const;
-    qint64 dataChannelBytesReceived() const;
-    double dataChannelSendRateKBps() const;
-    double dataChannelReceiveRateKBps() const;
 
    public slots:
     void start();
@@ -203,6 +244,9 @@ class WebRTCWorker : public QObject
     void dataChannelStatsChanged(qint64 bytesSent, qint64 bytesReceived,
                                  double sendRate, double receiveRate);
 
+    void dataChannelStatsUpdated(double sendRate, double receiveRate);
+    void videoStatsUpdated(double rate, qint64 packets, qint64 bytes);
+
    private slots:
     void _onWebSocketConnected();
     void _onWebSocketDisconnected();
@@ -220,16 +264,11 @@ class WebRTCWorker : public QObject
     void _handleCandidate(const QJsonObject& message);
     void _sendSignalingMessage(const QJsonObject& message);
 
-            // WebRTC peer connection
+    // WebRTC peer connection
     void _setupPeerConnection();
     void _handleTrackReceived(std::shared_ptr<rtc::Track> track);
-    void _setupDataChannelCallbacksOnly(std::shared_ptr<rtc::DataChannel> dc);
-    void _setupNegotiatedChannelCallbacks();
-    // void _onDataChannelOpenSynchronous();
-    // void _onDataChannelClosedSynchronous();
-    // void _startStatisticsMonitoringSynchronous();
-    void _initializeStatisticsImmediate();
-    void _processDataChannelOpenImmediate();
+    void _setupDataChannel(std::shared_ptr<rtc::DataChannel> dc);
+    void _processDataChannelOpen();
     void _processPendingCandidates();
     void _startQtTimers();
     QString _stateToString(rtc::PeerConnection::State state) const;
@@ -283,8 +322,6 @@ class WebRTCWorker : public QObject
     void _createVideoBridge();
     void _cleanupVideoBridge();
     void _handleVideoTrackData(const rtc::binary &data);
-    void _analyzeFirstRTPPacket(const QByteArray& rtpData);
-    int _parseRtpHeaderOffset(const QByteArray& rtpData);
     void _restartVideoBridge();
 
     enum BridgeState {
@@ -296,48 +333,23 @@ class WebRTCWorker : public QObject
 
     BridgeState _bridgeState = BRIDGE_NOT_READY;
 
-    QTimer* _statsTimer = nullptr;  // 통합 통계 타이머
-
-    void _updateDataChannelSentStats(int bytes);
-    void _updateDataChannelReceivedStats(int bytes);
     void _updateAllStatistics();
     void _calculateDataChannelRates(qint64 currentTime);
-    void _startStatisticsMonitoring();
-
-    // Data Channel 송수신 통계
-    mutable QMutex _dataChannelStatsMutex;
-    qint64 _dataChannelBytesSent = 0;
-    qint64 _dataChannelBytesReceived = 0;
-    qint64 _dataChannelPacketsSent = 0;
-    qint64 _dataChannelPacketsReceived = 0;
-
-    // Data Channel 전송률 계산용
-    qint64 _lastDataChannelBytesSent = 0;
-    qint64 _lastDataChannelBytesReceived = 0;
-    qint64 _lastDataChannelStatsTime = 0;
-    double _dataChannelSendRateKBps = 0.0;
-    double _dataChannelReceiveRateKBps = 0.0;
-
-    // Video rate monitoring
-    void _updateVideoStatisticsSync(int dataSize);
-    QTimer* _videoStatsTimer = nullptr;
-    qint64 _videoBytesReceived = 0;
-    qint64 _lastVideoBytesReceived = 0;
-    qint64 _lastVideoStatsTime = 0;
-    double _currentVideoRateKBps = 0.0;
-
-    // Packet statistics
-    int _videoPacketCount = 0;
-    double _averagePacketSize = 0.0;
-
-    void _startVideoStatsMonitoring();
-    void _updateVideoStats();
-    void _calculateVideoRate();
 
     void _handlePeerDisconnection();
     void _cleanupForReconnection();
     QTimer* _reconnectionTimer = nullptr;
     std::atomic<bool> _waitingForReconnection{false};
+
+    TransferRateCalculator _dataChannelSentCalc;
+    TransferRateCalculator _dataChannelReceivedCalc;
+    TransferRateCalculator _videoReceivedCalc;
+
+    QTimer* _statsTimer = nullptr;
+
+    bool isOperational() const {
+        return !_isShuttingDown.load() && !_isDisconnecting;
+    }
 };
 
 /*===========================================================================*/
@@ -382,10 +394,8 @@ class WebRTCLink : public LinkInterface
     void _onDataSent(const QByteArray &data);
     void _onRttUpdated(int rtt);   // RTT 업데이트 슬롯
     void _onRtcStatusMessageChanged(QString message);
-    void _onVideoStreamReady(const QString& uri);
     void _onVideoBridgeError(const QString& error);
     void _onVideoRateChanged(double KBps);
-    void _onVideoStatsChanged(int packets, double avgSize, double rate);
 
    signals:
     void rttMsChanged();
