@@ -28,6 +28,9 @@ Item {
     property var _pitch: vehicle ? vehicle.pitch.rawValue : 0
     property real _rawDistance: vehicle ? vehicle.distanceSensors.rotationPitch270.rawValue : 0
     property real _distance: vehicle ? (_rawDistance ? _rawDistance - 0.4 : 0) : 0
+    property real _minDistance: vehicle ? vehicle.distanceSensors.minDistance.rawValue : 0
+    property real _maxDistance: vehicle ? vehicle.distanceSensors.maxDistance.rawValue : 0
+    property real _verticalSpeed: vehicle ? vehicle.climbRate.rawValue : 0
 
     // 필터링된 값 (초기값은 원시값과 동일)
     property real filteredRoll: _roll
@@ -92,7 +95,7 @@ Item {
             ctx.stroke();
 
             // === 사각형과 원은 distance 범위 조건 ===
-            if (_distance >= 0.3 && _distance <= 20) {
+            if (_distance > _minDistance && _distance < _maxDistance) {
                 var focal = (_screenWidth / 2) / Math.tan((_hFov / 2) * Math.PI / 180);
                 var objectPhysicalSize = 3;
                 var cameraPhysicalOffset = 0.3;
@@ -105,7 +108,7 @@ Item {
                 var maxSize = _screenHeight * 1.20;
                 rectSize = Math.max(minSize, Math.min(maxSize, rectSize));
 
-                // === 거리값 텍스트 ===
+                // === 레인지파인더 텍스트 ===
                 ctx.font = "bold " + fontSize + "px sans-serif"; // 폰트 스타일
                 ctx.fillStyle = "#A0FF32";           // 텍스트 색상
                 ctx.textAlign = "left";              // 정렬
@@ -116,6 +119,18 @@ Item {
                 var textY = centerY + 10;
 
                 ctx.fillText(distanceText, textX, textY);
+
+                // === 수직속도 텍스트 ===
+                ctx.font = "bold " + fontSize/2 + "px sans-serif"; // 폰트 스타일
+                ctx.fillStyle = "#A0FF32";           // 텍스트 색상
+                ctx.textAlign = "left";              // 정렬
+                ctx.textBaseline = "bottom";            // 기준선
+
+                var verticalSpeedText = "V.Spd " + _verticalSpeed.toFixed(1) + " m/s";
+                var text2X = centerX + 10;
+                var text2Y = centerY - 10;
+
+                ctx.fillText(verticalSpeedText, text2X, text2Y);
 
                 // === 사각형 ===
                 function drawRoundedRect(ctx, x, y, width, height, radius) {
@@ -139,9 +154,15 @@ Item {
                 ctx.stroke();
 
                 // === 원 ===
+                // ctx.beginPath();
+                // var circleRadius = rectSize * 0.05;
+                // ctx.arc(centerX, centerY + cameraYOffset, circleRadius, 0, 2 * Math.PI);
+                // ctx.stroke();
+
+                // === 원(1m)반경 ===
                 ctx.beginPath();
-                var circleRadius = rectSize * 0.05;
-                ctx.arc(centerX, centerY + cameraYOffset, circleRadius, 0, 2 * Math.PI);
+                var circle1Radius = rectSize * 0.17;
+                ctx.arc(centerX, centerY + cameraYOffset, circle1Radius, 0, 2 * Math.PI);
                 ctx.stroke();
             }
         }

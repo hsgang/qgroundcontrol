@@ -455,10 +455,10 @@ Rectangle {
 
             onClicked: {
                 if(_isCustomCommandEnabled) {
-                    _activeVehicle.sendCommand(192, 31010, 1, 1, 0, receivedTagId, 2, 0, 0, 0)
+                    _activeVehicle.sendCommand(191, 31010, 1, 1, 0, receivedTagId, 2, 0, 0, 0)
                 }
                 else if (!_isCustomCommandEnabled){
-                    _activeVehicle.sendCommand(192, 31010, 1, 1, 0, receivedTagId, 1, 0, 0, 0)
+                    _activeVehicle.sendCommand(191, 31010, 1, 1, 0, receivedTagId, 1, 0, 0, 0)
                 }
             }
         }
