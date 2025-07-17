@@ -218,12 +218,15 @@ class WebRTCWorker : public QObject
     void initializeLogger();
     bool isVideoStreamActive() const { return _videoStreamActive; }
     QString currentVideoUri() const { return _currentVideoURI; }
+    bool isDataChannelOpen() const;
 
    public slots:
     void start();
     void writeData(const QByteArray &data);
     void disconnectLink();
-    bool isDataChannelOpen() const;
+    void handlePeerStateChange(int stateValue);
+    void handleLocalDescription(const QString& descType, const QString& sdpContent);
+    void handleLocalCandidate(const QString& candidateStr, const QString& mid);
 
    signals:
     void connected();
@@ -347,9 +350,7 @@ class WebRTCWorker : public QObject
 
     QTimer* _statsTimer = nullptr;
 
-    bool isOperational() const {
-        return !_isShuttingDown.load() && !_isDisconnecting;
-    }
+    bool isOperational() const;
 };
 
 /*===========================================================================*/

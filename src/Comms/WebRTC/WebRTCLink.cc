@@ -362,10 +362,10 @@ void WebRTCWorker::writeData(const QByteArray &data)
     }
 
     try {
-        rtc::binary binaryData(reinterpret_cast<const std::byte*>(data.constData()),
-                               reinterpret_cast<const std::byte*>(data.constData()) + data.size());
         if (_dataChannel && _dataChannel->isOpen()) {
-            _dataChannel->send(binaryData);
+            std::string_view view(data.constData(), data.size());
+            _dataChannel->send(rtc::binary(reinterpret_cast<const std::byte*>(view.data()),
+                                           reinterpret_cast<const std::byte*>(view.data() + view.size())));
 
             _dataChannelSentCalc.addData(data.size());
 
@@ -395,6 +395,10 @@ bool WebRTCWorker::isDataChannelOpen() const
     return _dataChannel && _dataChannel->isOpen();
 }
 
+bool WebRTCWorker::isOperational() const {
+    return !_isShuttingDown.load() && !_isDisconnecting;
+}
+
 void WebRTCWorker::_setupWebSocket()
 {
     _webSocket = new QWebSocket(QString(), QWebSocketProtocol::VersionLatest, this);
@@ -416,7 +420,7 @@ void WebRTCWorker::_connectToSignalingServer()
 
     qCDebug(WebRTCLinkLog) << "Connecting to signaling server:" << url;
     _webSocket->open(QUrl(url));
-    emit rtcStatusMessageChanged("시그널링 서버 연결중");
+    emit rtcStatusMessageChanged("중계 서버 연결중");
 }
 
 void WebRTCWorker::_setupPeerConnection()
@@ -444,75 +448,50 @@ void WebRTCWorker::_setupPeerConnection()
     try {
         _peerConnection = std::make_shared<rtc::PeerConnection>(_rtcConfig);
 
-        QPointer<WebRTCWorker> weakSelf(this);
-
         _peerConnection->onStateChange([this](rtc::PeerConnection::State state) {
-            if (!_isShuttingDown.load()) {
-                QMetaObject::invokeMethod(this, [this, state]() {
-                    if (!_isShuttingDown.load()) {
-                        _onPeerStateChanged(state);
-                    }
-                }, Qt::QueuedConnection);
+            if (isOperational()) {
+                QMetaObject::invokeMethod(this, "handlePeerStateChange",
+                                          Qt::QueuedConnection,
+                                          Q_ARG(int, static_cast<int>(state)));
             }
         });
 
-        _peerConnection->onGatheringStateChange([weakSelf](rtc::PeerConnection::GatheringState state) {
-            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-                QMetaObject::invokeMethod(weakSelf, [weakSelf, state]() {
-                    if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-                        qCCritical(WebRTCLinkLog) << "[GATHERING] ICE gathering state changed to:" << static_cast<int>(state);
-                        weakSelf->_onGatheringStateChanged(state);
-                    }
-                }, Qt::QueuedConnection);
-            }
-        });
-
-        _peerConnection->onLocalDescription([weakSelf](rtc::Description description) {
-            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
+        _peerConnection->onLocalDescription([this](rtc::Description description) {
+            if (isOperational()) {
                 QString descType = QString::fromStdString(description.typeString());
                 QString sdpContent = QString::fromStdString(description);
 
-                qCCritical(WebRTCLinkLog) << "[SDP] Local description created, type:" << descType;
-
-                QMetaObject::invokeMethod(weakSelf, [weakSelf, descType, sdpContent]() {
-                    if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-                        QJsonObject message;
-                        message["id"] = weakSelf->_config->peerId();
-                        message["to"] = weakSelf->_config->targetPeerId();
-                        message["type"] = descType;
-                        message["sdp"] = sdpContent;
-
-                        qCCritical(WebRTCLinkLog) << "[SDP] Sending local description to peer";
-                        weakSelf->_sendSignalingMessage(message);
-                    }
-                }, Qt::QueuedConnection);
+                QMetaObject::invokeMethod(this, "handleLocalDescription",
+                                          Qt::QueuedConnection,
+                                          Q_ARG(QString, descType),
+                                          Q_ARG(QString, sdpContent));
             }
         });
 
-        _peerConnection->onLocalCandidate([weakSelf](rtc::Candidate candidate) {
-            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
+        _peerConnection->onLocalCandidate([this](rtc::Candidate candidate) {
+            if (isOperational()) {
                 QString candidateStr = QString::fromStdString(candidate);
                 QString mid = QString::fromStdString(candidate.mid());
 
-                qCCritical(WebRTCLinkLog) << "[ICE] Local candidate generated:" << candidateStr.left(50) << "...";
+                QMetaObject::invokeMethod(this, "handleLocalCandidate",
+                                          Qt::QueuedConnection,
+                                          Q_ARG(QString, candidateStr),
+                                          Q_ARG(QString, mid));
+            }
+        });
 
-                QMetaObject::invokeMethod(weakSelf, [weakSelf, candidateStr, mid]() {
-                    if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-                        QJsonObject message;
-                        message["id"] = weakSelf->_config->peerId();
-                        message["to"] = weakSelf->_config->targetPeerId();
-                        message["type"] = "candidate";
-                        message["candidate"] = candidateStr;
-                        message["sdpMid"] = mid;
-                        weakSelf->_sendSignalingMessage(message);
+        _peerConnection->onTrack([this](std::shared_ptr<rtc::Track> track) {
+            if (isOperational()) {
+                // shared_ptr을 직접 전달하기 위해 람다 사용 (Q_ARG로는 불가능)
+                QMetaObject::invokeMethod(this, [this, track]() {
+                    if (isOperational()) {
+                        _handleTrackReceived(track);
                     }
                 }, Qt::QueuedConnection);
             }
         });
 
         _peerConnection->onDataChannel([this](std::shared_ptr<rtc::DataChannel> dc) {
-            //qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** onDataChannel callback triggered! ***";
-
             if (!dc) {
                 qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel is null!";
                 return;
@@ -538,24 +517,49 @@ void WebRTCWorker::_setupPeerConnection()
             }
         });
 
-        _peerConnection->onTrack([weakSelf](std::shared_ptr<rtc::Track> track) {
-            if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-                qCCritical(WebRTCLinkLog) << "[TRACK] Track received";
-
-                QMetaObject::invokeMethod(weakSelf, [weakSelf, track]() {
-                    if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-                        weakSelf->_handleTrackReceived(track);
-                    }
-                }, Qt::QueuedConnection);
-            }
-        });
-
         qCDebug(WebRTCLinkLog) << "Peer connection created successfully";
 
     } catch (const std::exception& e) {
         qCCritical(WebRTCLinkLog) << "Failed to create peer connection:" << e.what();
         emit errorOccurred(QString("Failed to create peer connection: %1").arg(e.what()));
     }
+}
+
+void WebRTCWorker::handlePeerStateChange(int stateValue) {
+    if (!isOperational()) return;
+
+    auto state = static_cast<rtc::PeerConnection::State>(stateValue);
+    qCDebug(WebRTCLinkLog) << "[STATE] PeerConnection state changed to:" << stateValue;
+    _onPeerStateChanged(state);
+}
+
+void WebRTCWorker::handleLocalDescription(const QString& descType, const QString& sdpContent) {
+    if (!isOperational()) return;
+
+    qCDebug(WebRTCLinkLog) << "[SDP] Local description created, type:" << descType;
+
+    QJsonObject message;
+    message["id"] = _config->peerId();
+    message["to"] = _config->targetPeerId();
+    message["type"] = descType;
+    message["sdp"] = sdpContent;
+
+    _sendSignalingMessage(message);
+}
+
+void WebRTCWorker::handleLocalCandidate(const QString& candidateStr, const QString& mid) {
+    if (!isOperational()) return;
+
+    qCDebug(WebRTCLinkLog) << "[ICE] Local candidate generated:" << candidateStr.left(50) << "...";
+
+    QJsonObject message;
+    message["id"] = _config->peerId();
+    message["to"] = _config->targetPeerId();
+    message["type"] = "candidate";
+    message["candidate"] = candidateStr;
+    message["sdpMid"] = mid;
+
+    _sendSignalingMessage(message);
 }
 
 void WebRTCWorker::_setupDataChannel(std::shared_ptr<rtc::DataChannel> dc)
