@@ -26,10 +26,11 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property bool showIndicator:        QGroundControl.linkManager.webRtcRtt > 0
-    property real _margins:             ScreenTools.defaultFontPixelHeight / 2
-    property real _rtt:                 QGroundControl.linkManager.webRtcRtt
-    property real _videoRate:           QGroundControl.linkManager.rtcVideoRate
+    property bool showIndicator:    QGroundControl.linkManager.webRtcRtt > 0
+    property real _margins:         ScreenTools.defaultFontPixelHeight / 2
+    property real _rtt:             QGroundControl.linkManager.webRtcRtt
+    property real _videoRate:       QGroundControl.linkManager.rtcVideoRate
+    property int  _videoRateInt:    Math.round(_videoRate)
 
     Row {
         id: vehicleRow
@@ -61,7 +62,7 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
-                text: qsTr("%1 KB/s").arg(_videoRate)
+                text: qsTr("%1 KB/s").arg(_videoRateInt)
             }
         }
     }
@@ -86,7 +87,7 @@ Item {
                 }
                 LabelledLabel {
                     label:      qsTr("Down Rate")
-                    labelText:  qsTr("%1 KB/s").arg(_videoRate)
+                    labelText:  qsTr("%1 KB/s").arg(_videoRateInt)
                 }
             }
         }
