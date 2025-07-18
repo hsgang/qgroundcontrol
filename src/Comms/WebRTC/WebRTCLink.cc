@@ -203,13 +203,11 @@ bool WebRTCVideoBridge::startBridge(quint16 localPort)
         return false;
     }
 
+    int bufferSize = 2 * 1024 * 1024; // 버퍼 크기 2MB
+    _udpSocket->setSocketOption(QAbstractSocket::SendBufferSizeSocketOption, bufferSize);
+
     _localPort = _udpSocket->localPort();
     _isRunning = true;
-
-    // SettingsManager::instance()->videoSettings()->videoSource()->setRawValue(VideoSettings::videoSourceUDPH264);
-    // QString udpUrl = QString("127.0.0.1:%1").arg(_localPort);
-    // SettingsManager::instance()->videoSettings()->udpUrl()->setRawValue(udpUrl);
-    // SettingsManager::instance()->videoSettings()->lowLatencyMode()->setRawValue(true);
 
     emit bridgeStarted(_localPort);
 
@@ -233,9 +231,9 @@ void WebRTCVideoBridge::stopBridge()
     emit bridgeStopped();
 }
 
-void WebRTCVideoBridge::forwardRTPData(const QByteArray& rtpData)
+void WebRTCVideoBridge::forwardRTPData(const rtc::binary& rtpData)
 {
-    if (!_isRunning || rtpData.isEmpty()) {
+    if (!_isRunning || rtpData.empty()) {
         qWarning() << "[Bridge] Not running, drop packet";
         return;
     }
@@ -245,19 +243,17 @@ void WebRTCVideoBridge::forwardRTPData(const QByteArray& rtpData)
         return;
     }
 
-    if (_localPort == 0) {
-        qWarning() << "[Bridge] Invalid local port!";
-        return;
-    }
-
     if (!_firstPacketSent) {
         _firstPacketSent = true;
         QMetaObject::invokeMethod(this, "_startDecodingCheckTimer", Qt::QueuedConnection);  // 수정
     }
 
-    qint64 sent = _udpSocket->writeDatagram(rtpData,
-                                            QHostAddress::LocalHost,
-                                            _localPort);
+    qint64 sent = _udpSocket->writeDatagram(
+        reinterpret_cast<const char*>(rtpData.data()),
+        rtpData.size(),
+        QHostAddress::LocalHost,
+        _localPort
+    );
 
     if (sent != rtpData.size()) {
         qWarning() << "Failed to send complete RTP packet:" << sent << "of" << rtpData.size();
@@ -353,11 +349,6 @@ void WebRTCWorker::start()
 void WebRTCWorker::writeData(const QByteArray &data)
 {
     if (_isShuttingDown.load()) {
-        return;
-    }
-
-    if (!_dataChannel || !_dataChannel->isOpen()) {
-        qCWarning(WebRTCLinkLog) << "Data channel not available for sending data";
         return;
     }
 
@@ -602,12 +593,14 @@ void WebRTCWorker::_setupDataChannel(std::shared_ptr<rtc::DataChannel> dc)
 
         if (std::holds_alternative<rtc::binary>(data)) {
             const auto& binaryData = std::get<rtc::binary>(data);
-            QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
+            auto byteArrayPtr = std::make_shared<QByteArray>(
+                reinterpret_cast<const char*>(binaryData.data()), binaryData.size()
+                );
 
-            _dataChannelReceivedCalc.addData(byteArray.size());
+            _dataChannelReceivedCalc.addData(binaryData.size());
 
-            QMetaObject::invokeMethod(this, [this, byteArray]() {
-                emit bytesReceived(byteArray);
+            QMetaObject::invokeMethod(this, [this, byteArrayPtr]() {
+                emit bytesReceived(*byteArrayPtr);
             }, Qt::QueuedConnection);
         }
         else if (std::holds_alternative<std::string>(data)) {
@@ -1196,18 +1189,23 @@ void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
         return;
     }
 
-    QByteArray rtpData(reinterpret_cast<const char*>(data.data()), data.size());
-    _videoReceivedCalc.addData(rtpData.size());
-    QPointer<WebRTCWorker> weakSelf(this);
-    QMetaObject::invokeMethod(this, [weakSelf, rtpData]() {
-        if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-            QMutexLocker locker(&weakSelf->_videoBridgeMutex);
-            WebRTCVideoBridge* bridge = weakSelf->_videoBridge;
-            if (bridge && weakSelf->_videoStreamActive) {
-                bridge->forwardRTPData(rtpData);
-            }
-        }
-    }, Qt::QueuedConnection);
+    _videoReceivedCalc.addData(data.size());
+
+    if(_videoBridge) {
+        _videoBridge->forwardRTPData(data);
+    }
+
+    // QByteArray rtpData(reinterpret_cast<const char*>(data.data()), data.size());
+    // QPointer<WebRTCWorker> weakSelf(this);
+    // QMetaObject::invokeMethod(this, [weakSelf, rtpData]() {
+    //     if (weakSelf && !weakSelf->_isShuttingDown.load()) {
+    //         QMutexLocker locker(&weakSelf->_videoBridgeMutex);
+    //         WebRTCVideoBridge* bridge = weakSelf->_videoBridge;
+    //         if (bridge && weakSelf->_videoStreamActive) {
+    //             bridge->forwardRTPData(rtpData);
+    //         }
+    //     }
+    // }, Qt::QueuedConnection);
 }
 
 void WebRTCWorker::_updateAllStatistics()

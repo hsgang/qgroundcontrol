@@ -179,7 +179,7 @@ class WebRTCVideoBridge : public QObject
     QString localAddress() const { return "127.0.0.1"; }
 
     // WebRTC에서 받은 RTP 데이터 전달
-    void forwardRTPData(const QByteArray& rtpData);
+    void forwardRTPData(const rtc::binary& rtpData);
 
    signals:
     void bridgeStarted(quint16 port);
