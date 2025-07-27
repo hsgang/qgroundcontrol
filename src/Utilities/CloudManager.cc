@@ -62,11 +62,6 @@ CloudManager *CloudManager::instance()
     return _cloudManagerInstance();
 }
 
-void CloudManager::registerQmlTypes()
-{
-    (void) qmlRegisterUncreatableType<CloudManager>("QGroundControl", 1, 0, "CloudManager", "Reference only");
-}
-
 void CloudManager::init()
 {
 

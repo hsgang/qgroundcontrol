@@ -6,11 +6,8 @@ import QtPositioning
 
 import QGroundControl
 import QGroundControl.ScreenTools
-import QGroundControl.MultiVehicleManager
 import QGroundControl.Controls
 import QGroundControl.FactControls
-import QGroundControl.FactSystem
-import QGroundControl.Palette
 
 Rectangle {
     id:         gridSettings

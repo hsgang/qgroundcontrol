@@ -14,11 +14,8 @@ import QtQuick.Layouts
 import Qt.labs.qmlmodels
 
 import QGroundControl
-import QGroundControl.Palette
 import QGroundControl.Controls
-import QGroundControl.Controllers
 import QGroundControl.ScreenTools
-import QGroundControl.FactSystem
 import QGroundControl.FactControls
 
 AnalyzePage {

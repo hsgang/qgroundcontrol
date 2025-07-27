@@ -5,10 +5,8 @@ import QtQuick.Dialogs
 
 import QGroundControl
 import QGroundControl.ScreenTools
-import QGroundControl.MultiVehicleManager
 import QGroundControl.Controls
 import QGroundControl.FactControls
-import QGroundControl.Palette
 
 Rectangle {
     id:         ekfStatus

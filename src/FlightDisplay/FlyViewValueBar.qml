@@ -19,14 +19,10 @@ import QtQuick.Window
 import QtQml.Models
 
 import QGroundControl
-import QGroundControl.Controllers
 import QGroundControl.Controls
-import QGroundControl.FactSystem
 import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
-import QGroundControl.Palette
 import QGroundControl.ScreenTools
-import QGroundControl.Vehicle
 
 Item{
     id:     control

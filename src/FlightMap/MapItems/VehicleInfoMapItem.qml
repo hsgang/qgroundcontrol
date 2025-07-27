@@ -14,13 +14,9 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 
 import QGroundControl
-import QGroundControl.ScreenTools
-import QGroundControl.Vehicle
 import QGroundControl.Controls
-import QGroundControl.MultiVehicleManager
-import QGroundControl.FactSystem
 import QGroundControl.FactControls
-import QGroundControl.Palette
+import QGroundControl.ScreenTools
 
 /// Marker for displaying a vehicle location on the map
 MapQuickItem {

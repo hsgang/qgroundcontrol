@@ -4,11 +4,9 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import QGroundControl
-import QGroundControl.Vehicle
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
 import QGroundControl.FactControls
-import QGroundControl.Palette
 import QGroundControl.FlightMap
 
 Rectangle {
@@ -28,8 +26,8 @@ Rectangle {
     property real   _temperature:   vehicle ? vehicle.atmosphericSensor.temperature.rawValue : NaN
     property real   _humidity:      vehicle ? vehicle.atmosphericSensor.humidity.rawValue : NaN
     property real   _pressure:      vehicle ? vehicle.atmosphericSensor.pressure.rawValue : NaN
-    property real   _windDir:  vehicle ? vehicle.atmosphericSensor.windDir.rawValue : NaN
-    property real   _windSpd:  vehicle ? vehicle.atmosphericSensor.windSpd.rawValue : NaN
+    property real   _windDir:       vehicle ? vehicle.atmosphericSensor.windDir.rawValue : NaN
+    property real   _windSpd:       vehicle ? vehicle.atmosphericSensor.windSpd.rawValue : NaN
     property real   _pm1p0:         vehicle ? vehicle.atmosphericSensor.opc1.rawValue : NaN
     property real   _pm2p5:         vehicle ? vehicle.atmosphericSensor.opc2.rawValue : NaN
     property real   _pm10:          vehicle ? vehicle.atmosphericSensor.opc3.rawValue : NaN

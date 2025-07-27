@@ -231,9 +231,9 @@ void QGCApplication::init()
 {
     SettingsManager::instance()->init();
 
-    CloudManager::registerQmlTypes();
-    GridManager::registerQmlTypes();
-    NTRIPManager::registerQmlTypes();
+    //CloudManager::registerQmlTypes();
+    //GridManager::registerQmlTypes();
+    //NTRIPManager::registerQmlTypes();
 
     qmlRegisterSingletonType<SiYi>("SiYi.Object", 1, 0, "SiYi", [](QQmlEngine*, QJSEngine*)->QObject*{
         return SiYi::instance();

@@ -38,11 +38,6 @@ NTRIPManager *NTRIPManager::instance()
     return _ntripManagerInstance();
 }
 
-void NTRIPManager::registerQmlTypes()
-{
-    (void) qmlRegisterUncreatableType<NTRIPManager>("QGroundControl", 1, 0, "NTRIPManager", "Reference only");
-}
-
 void NTRIPManager::init()
 {
     _ntripSettings = SettingsManager::instance()->ntripSettings();

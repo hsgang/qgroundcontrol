@@ -13,6 +13,7 @@
 #include <QFile>
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QtSystemDetection>
+#include <QtQmlIntegration/QtQmlIntegration>
 #if defined(Q_OS_ANDROID)
 #include <QJniObject>
 #include <QJniEnvironment>
@@ -28,12 +29,13 @@ class DatabaseManager;
 class CloudManager : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 public:
     CloudManager     (QObject *parent = nullptr);
     ~CloudManager    ();
 
     static CloudManager *instance();
-    static void registerQmlTypes();
 
     void init();
 

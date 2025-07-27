@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 
 import QGroundControl.ScreenTools
-import QGroundControl.Palette
 
 Canvas {
     id:     root
@@ -14,8 +13,6 @@ Canvas {
     property real   _height:            ScreenTools.defaultFontPixelHeight * 2
     property real   anchorPointX:       _width / 2
     property real   anchorPointY:       _height / 2
-
-    QGCPalette { id: qgcPal }
 
     property real   _aimLineLength:     ScreenTools.defaultFontPixelWidth
     property var    _aimLineColor:      qgcPal.colorGreen

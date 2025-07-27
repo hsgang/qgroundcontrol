@@ -45,20 +45,7 @@ AnalyzePage {
 
                     QGCCheckBox {
                         id: headerCheckBox
-                        enabled: !logDownloadController.requestingList && !logDownloadController.downloadingLogs && (logDownloadController.model.count > 0)
-                        onClicked: {
-                            if (checkState === Qt.Checked) {
-                                // 체크된 경우: 모든 항목 선택
-                                for (var i = 0; i < logDownloadController.model.count; i++) {
-                                    logDownloadController.model.get(i).selected = true
-                                }
-                            } else {
-                                // 체크 해제된 경우: 모든 항목 해제
-                                for (var i = 0; i < logDownloadController.model.count; i++) {
-                                    logDownloadController.model.get(i).selected = false
-                                }
-                            }
-                        }
+                        enabled: false
                     }
 
                     Repeater {

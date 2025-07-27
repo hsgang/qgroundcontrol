@@ -13,8 +13,6 @@ import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
 
-
-
 Canvas {
     id:                 control
     anchors.centerIn:   parent

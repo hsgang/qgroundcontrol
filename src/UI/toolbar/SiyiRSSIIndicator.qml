@@ -1,11 +1,9 @@
-import QtQuick          2.11
-import QtQuick.Layouts  1.11
+import QtQuick
+import QtQuick.Layouts
 
-import QGroundControl                       1.0
-import QGroundControl.Controls              1.0
-import QGroundControl.MultiVehicleManager   1.0
-import QGroundControl.ScreenTools           1.0
-import QGroundControl.Palette               1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.ScreenTools
 
 import SiYi.Object 1.0
 

@@ -5,6 +5,7 @@
 #include <QtCore/QLoggingCategory>
 #include <QVariant>
 #include <QtPositioning/QGeoCoordinate>
+#include <QtQmlIntegration/QtQmlIntegration>
 
 #include "QmlObjectListModel.h"
 
@@ -13,13 +14,14 @@ Q_DECLARE_LOGGING_CATEGORY(GridManagerLog)
 class GridManager : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
 public:
     GridManager     (QObject *parent = nullptr);
     ~GridManager    ();
 
     static GridManager *instance();
-    static void registerQmlTypes();
 
     void init();
 

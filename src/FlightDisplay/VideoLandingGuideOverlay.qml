@@ -11,10 +11,8 @@ import QtQuick
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.Controllers
-import QGroundControl.ScreenTools
-import QGroundControl.Vehicle
 import QGroundControl.FlightDisplay
+import QGroundControl.ScreenTools
 
 Item {
     id: _root

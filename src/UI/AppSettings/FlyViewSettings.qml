@@ -19,9 +19,6 @@ import QGroundControl.FactControls
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
 
-
-
-
 SettingsPage {
     property var    _settingsManager:                   QGroundControl.settingsManager
     property var    _flyViewSettings:                   _settingsManager.flyViewSettings
@@ -51,7 +48,7 @@ SettingsPage {
     }
 
     function modelProfileList() {
-        var fileModel = fileController.getFiles(_settingsManager.appSettings.modelProfilesSavePath, "*.json")
+        var fileModel = QGCFileDialogController.getFiles(_settingsManager.appSettings.modelProfilesSavePath, "*.json")
         fileModel.unshift(qsTr("<None>"))
         return fileModel
     }

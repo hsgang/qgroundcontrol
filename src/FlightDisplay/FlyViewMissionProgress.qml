@@ -6,13 +6,9 @@ import QtQuick.Shapes
 import QGroundControl
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
-import QGroundControl.FactSystem
 import QGroundControl.FactControls
-import QGroundControl.Palette
-import QGroundControl.Controllers
 import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
-import QGroundControl.Vehicle
 
 Rectangle{
     id: control
@@ -63,8 +59,6 @@ Rectangle{
     //    property bool parameterAvailable:   _activeVehicle && QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable
     //    property Fact wpnavSpeed:           parameterAvailable ? controller.getParameterFact(-1, "WPNAV_SPEED") : null
     //    property string wpnavSpeedString:   parameterAvailable ? wpnavSpeed.valueString + " " + wpnavSpeed.units : "unknown"
-
-    //    FactPanelController { id: controller; }
 
 // Mission
     property var    _planMasterController:      _planMasterController //globals.planMasterControllerPlanView

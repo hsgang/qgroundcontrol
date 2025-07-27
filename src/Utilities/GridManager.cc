@@ -26,11 +26,6 @@ GridManager *GridManager::instance()
     return _gridManagerInstance();
 }
 
-void GridManager::registerQmlTypes()
-{
-    (void) qmlRegisterUncreatableType<GridManager>("QGroundControl", 1, 0, "GridManager", "Reference only");
-}
-
 void GridManager::init()
 {
     // QString apiKey = CloudSettings().firebaseAPIKey()->rawValueString();

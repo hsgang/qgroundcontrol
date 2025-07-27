@@ -5,7 +5,6 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.ScreenTools
 
-
 ColumnLayout {
     id:         _root
     spacing:    0

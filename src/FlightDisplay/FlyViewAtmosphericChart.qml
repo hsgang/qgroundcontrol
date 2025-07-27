@@ -8,11 +8,8 @@ import QtQml.Models
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.FactSystem
 import QGroundControl.FlightDisplay
-import QGroundControl.Palette
 import QGroundControl.ScreenTools
-import QGroundControl.Vehicle
 
 Item{
     id: chartWidgetRoot

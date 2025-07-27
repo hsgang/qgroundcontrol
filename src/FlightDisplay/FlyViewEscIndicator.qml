@@ -4,10 +4,8 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 
 import QGroundControl
-import QGroundControl.Vehicle
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
-import QGroundControl.Palette
 
 Rectangle {
     id: control

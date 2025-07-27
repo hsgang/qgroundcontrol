@@ -15,6 +15,7 @@
 #include <QGeoCoordinate>
 #include <QUrl>
 #include <QTimer>
+#include <QtQmlIntegration/QtQmlIntegration>
 
 #include "RTCMMavlink.h"
 #include "NTRIPTCPLink.h"
@@ -26,13 +27,14 @@ class NTRIPSettings;
 class NTRIPManager : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
 
 public:
     NTRIPManager(QObject *parent = nullptr);
     ~NTRIPManager();
 
     static NTRIPManager *instance();
-    static void registerQmlTypes();
 
     void init();
 

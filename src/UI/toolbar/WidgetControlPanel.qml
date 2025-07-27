@@ -14,13 +14,8 @@ import QtQuick.Dialogs
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.Palette
-import QGroundControl.MultiVehicleManager
-import QGroundControl.ScreenTools
-import QGroundControl.Controllers
-import QGroundControl.FactSystem
 import QGroundControl.FactControls
-
+import QGroundControl.ScreenTools
 
 ToolIndicatorPage{
     showExpand: false
@@ -176,16 +171,6 @@ ToolIndicatorPage{
                     property Fact   _showEKFStatus:      QGroundControl.settingsManager.flyViewSettings.showEKFStatus
                 }
             }
-
-            // SettingsGroupLayout {
-            //     heading:        qsTr("FlyView Settings")
-
-            //     LabelledFactComboBox {
-            //         label:                  qsTr("Background Opacity")
-            //         fact:                   QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity
-            //         indexModel:             false
-            //     }
-            // }
         }
     }
 }
