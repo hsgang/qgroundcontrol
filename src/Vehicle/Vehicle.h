@@ -10,13 +10,14 @@
 #pragma once
 
 #include <QtCore/QElapsedTimer>
+#include <QtCore/QFile>
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
 #include <QtCore/QTime>
 #include <QtCore/QTimer>
 #include <QtCore/QVariantList>
 #include <QtPositioning/QGeoCoordinate>
-#include <QtCore/QFile>
+#include <QtQmlIntegration/QtQmlIntegration>
 
 #include "HealthAndArmingCheckReport.h"
 #include "MAVLinkStreamConfig.h"
@@ -100,7 +101,6 @@ class TerrainProtocolHandler;
 class TrajectoryPoints;
 class VehicleBatteryFactGroup;
 class VehicleObjectAvoidance;
-class GimbalController;
 #ifdef QGC_UTM_ADAPTER
 class UTMSPVehicle;
 #endif
@@ -116,6 +116,8 @@ Q_DECLARE_LOGGING_CATEGORY(VehicleLog)
 class Vehicle : public VehicleFactGroup
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("")
     Q_MOC_INCLUDE("AutoPilotPlugin.h")
     Q_MOC_INCLUDE("TrajectoryPoints.h")
     Q_MOC_INCLUDE("ParameterManager.h")
@@ -124,6 +126,8 @@ class Vehicle : public VehicleFactGroup
     Q_MOC_INCLUDE("RemoteIDManager.h")
     Q_MOC_INCLUDE("QGCCameraManager.h")
     Q_MOC_INCLUDE("Actuators.h")
+    Q_MOC_INCLUDE("MAVLinkLogManager.h")
+    Q_MOC_INCLUDE("LinkInterface.h")
 
     friend class InitialConnectStateMachine;
     friend class VehicleLinkManager;
@@ -415,7 +419,7 @@ public:
 
     /// Used to check if running current version is equal or higher than the one being compared.
     //  returns 1 if current > compare, 0 if current == compare, -1 if current < compare
-    Q_INVOKABLE int versionCompare(QString& compare) const;
+    Q_INVOKABLE int versionCompare(const QString& compare) const;
     Q_INVOKABLE int versionCompare(int major, int minor, int patch) const;
 
     /// Test motor
@@ -1435,7 +1439,6 @@ public:
     Q_INVOKABLE void motorInterlock(bool enable);
 /*---------------------------------------------------------------------------*/
 /*===========================================================================*/
-/*                         Status Text Handler                               */
 /*                         CONTROL STATUS HANDLER                            */
 /*===========================================================================*/
 public:

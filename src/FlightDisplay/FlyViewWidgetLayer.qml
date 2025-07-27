@@ -19,13 +19,12 @@ import QtQml.Models
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.Controllers
-import QGroundControl.FactSystem
+
 import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
-import QGroundControl.Palette
+
 import QGroundControl.ScreenTools
-import QGroundControl.Vehicle
+
 
 import SiYi.Object
 import "qrc:/qml/QGroundControl/Controls"

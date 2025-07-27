@@ -19,11 +19,10 @@ import QGroundControl
 import QGroundControl.FlightMap
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
-import QGroundControl.FactSystem
+
 import QGroundControl.FactControls
-import QGroundControl.Palette
-import QGroundControl.Controllers
-import QGroundControl.ShapeFileHelper
+
+
 import QGroundControl.FlightDisplay
 import QGroundControl.UTMSP
 
@@ -282,7 +281,7 @@ Item {
         _missionController.insertComplexMissionItem(complexItemName, mapCenter(), nextIndex, true /* makeCurrentItem */)
     }
 
-    function insertTakeItemAfterCurrent() {
+    function insertTakeoffItemAfterCurrent() {
         var nextIndex = _missionController.currentPlanViewVIIndex + 1
         _missionController.insertTakeoffItem(mapCenter(), nextIndex, true /* makeCurrentItem */)
     }
@@ -590,7 +589,7 @@ Item {
                         visible:    (toolStrip._isMissionLayer || toolStrip._isUtmspLayer) && !_planMasterController.controllerVehicle.rover
                         onTriggered: {
                             toolStrip.allAddClickBoolsOff()
-                            insertTakeItemAfterCurrent()
+                            insertTakeoffItemAfterCurrent()
                             _triggerSubmit = true
                         }
                     },

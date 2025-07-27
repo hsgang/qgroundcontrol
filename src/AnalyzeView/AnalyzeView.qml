@@ -13,9 +13,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import QGroundControl
-import QGroundControl.Palette
+
 import QGroundControl.Controls
-import QGroundControl.Controllers
+
 import QGroundControl.ScreenTools
 import QGroundControl.FlightDisplay
 

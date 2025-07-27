@@ -14,7 +14,7 @@ import Qt.labs.qmlmodels
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.Controllers
+
 import QGroundControl.ScreenTools
 
 AnalyzePage {
@@ -37,7 +37,7 @@ AnalyzePage {
 
                 GridLayout {
                     id: gridLayout
-                    rows: logDownloadController.model.count + 1
+                    rows: LogDownloadController.model.count + 1
                     columns: 5
                     flow: GridLayout.TopToBottom
                     columnSpacing: ScreenTools.defaultFontPixelWidth
@@ -62,7 +62,7 @@ AnalyzePage {
                     }
 
                     Repeater {
-                        model: logDownloadController.model
+                        model: LogDownloadController.model
 
                         QGCCheckBox {
                             Binding on checkState {
@@ -76,7 +76,7 @@ AnalyzePage {
                     QGCLabel { text: qsTr("Id") }
 
                     Repeater {
-                        model: logDownloadController.model
+                        model: LogDownloadController.model
 
                         QGCLabel { text: object.id }
                     }
@@ -84,7 +84,7 @@ AnalyzePage {
                     QGCLabel { text: qsTr("Date") }
 
                     Repeater {
-                        model: logDownloadController.model
+                        model: LogDownloadController.model
 
                         QGCLabel {
                             text: {
@@ -104,7 +104,7 @@ AnalyzePage {
                     QGCLabel { text: qsTr("Size") }
 
                     Repeater {
-                        model: logDownloadController.model
+                        model: LogDownloadController.model
 
                         QGCLabel { text: object.sizeStr }
                     }
@@ -112,7 +112,7 @@ AnalyzePage {
                     QGCLabel { text: qsTr("Status") }
 
                     Repeater {
-                        model: logDownloadController.model
+                        model: LogDownloadController.model
 
                         QGCLabel { text: object.status }
                     }
@@ -126,7 +126,7 @@ AnalyzePage {
 
                 QGCButton {
                     Layout.fillWidth: true
-                    enabled: !logDownloadController.requestingList && !logDownloadController.downloadingLogs
+                    enabled: !LogDownloadController.requestingList && !LogDownloadController.downloadingLogs
                     text: qsTr("Refresh")
 
                     onClicked: {
@@ -135,19 +135,19 @@ AnalyzePage {
                             return
                         }
 
-                        logDownloadController.refresh()
+                        LogDownloadController.refresh()
                     }
                 }
 
                 QGCButton {
                     Layout.fillWidth: true
-                    enabled: !logDownloadController.requestingList && !logDownloadController.downloadingLogs
+                    enabled: !LogDownloadController.requestingList && !LogDownloadController.downloadingLogs
                     text: qsTr("Download")
 
                     onClicked: {
                         var logsSelected = false
-                        for (var i = 0; i < logDownloadController.model.count; i++) {
-                            if (logDownloadController.model.get(i).selected) {
+                        for (var i = 0; i < LogDownloadController.model.count; i++) {
+                            if (LogDownloadController.model.get(i).selected) {
                                 logsSelected = true
                                 break
                             }
@@ -159,7 +159,7 @@ AnalyzePage {
                         }
 
                         if (ScreenTools.isMobile) {
-                            logDownloadController.download()
+                            LogDownloadController.download()
                             return
                         }
 
@@ -172,7 +172,7 @@ AnalyzePage {
                     QGCFileDialog {
                         id: fileDialog
                         onAcceptedForLoad: (file) => {
-                            logDownloadController.download(file)
+                            LogDownloadController.download(file)
                             close()
                         }
                     }
@@ -180,21 +180,21 @@ AnalyzePage {
 
                 QGCButton {
                     Layout.fillWidth: true
-                    enabled: !logDownloadController.requestingList && !logDownloadController.downloadingLogs && (logDownloadController.model.count > 0)
+                    enabled: !LogDownloadController.requestingList && !LogDownloadController.downloadingLogs && (LogDownloadController.model.count > 0)
                     text: qsTr("Erase All")
                     onClicked: mainWindow.showMessageDialog(
                         qsTr("Delete All Log Files"),
                         qsTr("All log files will be erased permanently. Is this really what you want?"),
                         Dialog.Yes | Dialog.No,
-                        function() { logDownloadController.eraseAll() }
+                        function() { LogDownloadController.eraseAll() }
                     )
                 }
 
                 QGCButton {
                     Layout.fillWidth: true
                     text: qsTr("Cancel")
-                    enabled: logDownloadController.requestingList || logDownloadController.downloadingLogs
-                    onClicked: logDownloadController.cancel()
+                    enabled: LogDownloadController.requestingList || LogDownloadController.downloadingLogs
+                    onClicked: LogDownloadController.cancel()
                 }
             }
         }

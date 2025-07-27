@@ -15,10 +15,10 @@ import QtQuick.Controls
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
-import QGroundControl.FactSystem
+
 import QGroundControl.FactControls
-import QGroundControl.Controllers
-import QGroundControl.Palette
+
+
 
 QGCPopupDialog {
     id:         root
@@ -283,7 +283,7 @@ QGCPopupDialog {
                 id:             colorPickerDialog
                 modality:       Qt.ApplicationModal
                 selectedColor:  instrumentValueData.rangeColors.length ? instrumentValueData.rangeColors[colorIndex] : "white"
-                onAccepted:     updateColorValue(colorIndex, color)
+                onAccepted:     updateColorValue(colorIndex, selectedColor)
 
                 property int colorIndex: 0
             }

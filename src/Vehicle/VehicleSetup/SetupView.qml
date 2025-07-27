@@ -12,13 +12,9 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import QGroundControl
-import QGroundControl.AutoPilotPlugin
-import QGroundControl.Palette
+
 import QGroundControl.Controls
 import QGroundControl.ScreenTools
-import QGroundControl.MultiVehicleManager
-import QGroundControl.Controllers
-import QGroundControl.FlightDisplay
 
 Rectangle {
     id:     setupView
@@ -271,7 +267,7 @@ Rectangle {
                     visible:            QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.flowImageIndex > 0 : false
                     text:               qsTr("Optical Flow")
                     Layout.fillWidth:   true
-                    onClicked:          showPanel(this, "OpticalFlowSensor.qml")
+                    onClicked:          showPanel(this, "qrc:/qml/QGroundControl/VehicleSetup/OpticalFlowSensor.qml");
                 }
 
                 ConfigButton {
@@ -281,7 +277,7 @@ Rectangle {
                     visible:            _fullParameterVehicleAvailable && joystickManager.joysticks.length !== 0
                     text:               _forcedToButtonsOnly ? qsTr("Buttons") : qsTr("Joystick")
                     Layout.fillWidth:   true
-                    onClicked:          showPanel(this, "JoystickConfig.qml")
+                    onClicked:          showPanel(this, "qrc:/qml/QGroundControl/VehicleSetup/JoystickConfig.qml")
 
                     property var    _activeJoystick:        joystickManager.activeJoystick
                     property bool   _buttonsOnly:           _activeJoystick ? _activeJoystick.axisCount == 0 : false

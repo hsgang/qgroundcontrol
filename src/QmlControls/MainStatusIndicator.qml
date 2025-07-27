@@ -13,10 +13,10 @@ import QtQuick.Effects
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.MultiVehicleManager
+
 import QGroundControl.ScreenTools
-import QGroundControl.Palette
-import QGroundControl.FactSystem
+
+
 
 Rectangle {
     id:             control

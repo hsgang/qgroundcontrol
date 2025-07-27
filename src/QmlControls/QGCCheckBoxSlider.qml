@@ -12,7 +12,6 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import QGroundControl
-import QGroundControl.Palette
 import QGroundControl.ScreenTools
 
 AbstractButton   {

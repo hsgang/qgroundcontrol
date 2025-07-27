@@ -17,12 +17,11 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.ScreenTools
 import QGroundControl.Controls
-import QGroundControl.FactSystem
+
 import QGroundControl.FactControls
-import QGroundControl.Palette
-import QGroundControl.MultiVehicleManager
+
+
 import QGroundControl.FlightMap
-import QGroundControl.ShapeFileHelper
 import QGroundControl.UTMSP
 
 QGCFlickable {

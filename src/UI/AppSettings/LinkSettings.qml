@@ -16,9 +16,6 @@ import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.FactControls
 import QGroundControl.ScreenTools
-import QGroundControl.Palette
-import QGroundControl.FactSystem
-
 import SiYi.Object
 
 SettingsPage {
