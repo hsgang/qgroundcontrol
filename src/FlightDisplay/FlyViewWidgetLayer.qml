@@ -19,12 +19,9 @@ import QtQml.Models
 
 import QGroundControl
 import QGroundControl.Controls
-
 import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
-
 import QGroundControl.ScreenTools
-
 
 import SiYi.Object
 import "qrc:/qml/QGroundControl/Controls"

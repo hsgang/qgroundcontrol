@@ -353,9 +353,9 @@ void WebRTCWorker::writeData(const QByteArray &data)
     }
 
     try {
-        if (_dataChannel && _dataChannel->isOpen()) {
+        if (_mavlinkDataChannel && _mavlinkDataChannel->isOpen()) {
             std::string_view view(data.constData(), data.size());
-            _dataChannel->send(rtc::binary(reinterpret_cast<const std::byte*>(view.data()),
+            _mavlinkDataChannel->send(rtc::binary(reinterpret_cast<const std::byte*>(view.data()),
                                            reinterpret_cast<const std::byte*>(view.data() + view.size())));
 
             _dataChannelSentCalc.addData(data.size());
@@ -383,7 +383,7 @@ void WebRTCWorker::disconnectLink()
 
 bool WebRTCWorker::isDataChannelOpen() const
 {
-    return _dataChannel && _dataChannel->isOpen();
+    return _mavlinkDataChannel && _mavlinkDataChannel->isOpen();
 }
 
 bool WebRTCWorker::isOperational() const {
@@ -493,17 +493,21 @@ void WebRTCWorker::_setupPeerConnection()
                 return;
             }
 
+            std::string label = dc->label();
             qCCritical(WebRTCLinkLog) << "[DATACHANNEL] DataChannel received - Label:"
-                                      << QString::fromStdString(dc->label());
+                                      << QString::fromStdString(label);
 
-            _strongDataChannelRef = dc;
-            _dataChannel = dc;
-
-            _setupDataChannel(dc);
+            if (label == "mavlink") {
+                _mavlinkDataChannel = dc;
+                _setupMavlinkDataChannel(dc);
+            } else if (label == "custom") {
+                _customDataChannel = dc;
+                _setupCustomDataChannel(dc);
+            }
 
             // 즉시 상태 확인
             if (dc->isOpen()) {
-                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Already open, processing immediately";
+                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Opened, Processing immediately";
                 _processDataChannelOpen();
             }
         });
@@ -553,7 +557,7 @@ void WebRTCWorker::handleLocalCandidate(const QString& candidateStr, const QStri
     _sendSignalingMessage(message);
 }
 
-void WebRTCWorker::_setupDataChannel(std::shared_ptr<rtc::DataChannel> dc)
+void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc)
 {
     if (!dc) return;
 
@@ -609,6 +613,40 @@ void WebRTCWorker::_setupDataChannel(std::shared_ptr<rtc::DataChannel> dc)
     });
 }
 
+void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
+{
+    if (!dc) return;
+
+    dc->onOpen([this]() {
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** CustomDataChannel OPENED! ***";
+    });
+
+    dc->onClosed([this]() {
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] CustomDataChannel CLOSED";
+    });
+
+    dc->onError([this](std::string error) {
+        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] CustomDataChannel ERROR:" << QString::fromStdString(error);
+    });
+
+    dc->onMessage([this, dc](auto data) {
+        if (_isShuttingDown.load()) return;
+
+        if (std::holds_alternative<rtc::binary>(data)) {
+            const auto& binaryData = std::get<rtc::binary>(data);
+            auto byteArrayPtr = std::make_shared<QByteArray>(
+                reinterpret_cast<const char*>(binaryData.data()), binaryData.size()
+                );
+
+            _dataChannelReceivedCalc.addData(binaryData.size());
+
+            // 바이너리 데이터를 문자열로 출력
+            QString receivedText = QString::fromUtf8(*byteArrayPtr);
+            qCDebug(WebRTCLinkLog) << "CustomDataChannel received:" << receivedText;
+        }
+    });
+}
+
 void WebRTCWorker::_processDataChannelOpen()
 {
     if (_dataChannelOpened.exchange(true)) {
@@ -621,7 +659,7 @@ void WebRTCWorker::_processDataChannelOpen()
         return;
     }
 
-    if (!_dataChannel || !_dataChannel->isOpen()) {
+    if (!_mavlinkDataChannel || !_mavlinkDataChannel->isOpen()) {
         qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel not actually open!";
         _dataChannelOpened.store(false);
         return;
@@ -818,16 +856,26 @@ void WebRTCWorker::_cleanupForReconnection()
 {
     qCDebug(WebRTCLinkLog) << "[CLEANUP] Cleaning up for reconnection (keeping WebSocket)";
 
-    if (_dataChannel) {
+    if (_mavlinkDataChannel) {
         try {
-            if (_dataChannel->isOpen()) {
-                _dataChannel->close();
+            if (_mavlinkDataChannel->isOpen()) {
+                _mavlinkDataChannel->close();
             }
         } catch (const std::exception& e) {
             qCWarning(WebRTCLinkLog) << "Error closing data channel:" << e.what();
         }
-        _dataChannel.reset();
-        _strongDataChannelRef.reset();
+        _mavlinkDataChannel.reset();
+    }
+
+    if (_customDataChannel) {
+        try {
+            if (_customDataChannel->isOpen()) {
+                _customDataChannel->close();
+            }
+        } catch (const std::exception& e) {
+            qCWarning(WebRTCLinkLog) << "Error closing data channel:" << e.what();
+        }
+        _customDataChannel.reset();
     }
 
     if (_peerConnection) {
@@ -948,7 +996,7 @@ void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
 
     if (state == rtc::PeerConnection::State::Connected) {
         qCDebug(WebRTCLinkLog) << "[DEBUG] PeerConnection fully connected!";
-        if (_dataChannel && _dataChannel->isOpen()) {
+        if (_mavlinkDataChannel && _mavlinkDataChannel->isOpen()) {
             qCDebug(WebRTCLinkLog) << "DataChannel already open, no reconnection needed";
             return;
         }
@@ -1049,15 +1097,26 @@ void WebRTCWorker::_cleanup()
         _peerConnection.reset();
     }
 
-    if (_dataChannel) {
+    if (_mavlinkDataChannel) {
         try {
-            if (_dataChannel->isOpen()) {
-                _dataChannel->close();
+            if (_mavlinkDataChannel->isOpen()) {
+                _mavlinkDataChannel->close();
             }
         } catch (const std::exception& e) {
             qCWarning(WebRTCLinkLog) << "Error closing data channel:" << e.what();
         }
-        _dataChannel.reset();
+        _mavlinkDataChannel.reset();
+    }
+
+    if (_customDataChannel) {
+        try {
+            if (_customDataChannel->isOpen()) {
+                _customDataChannel->close();
+            }
+        } catch (const std::exception& e) {
+            qCWarning(WebRTCLinkLog) << "Error closing data channel:" << e.what();
+        }
+        _customDataChannel.reset();
     }
 
     if (_rttTimer) {
@@ -1115,10 +1174,10 @@ void WebRTCWorker::_createVideoBridge()
                 if (!_isShuttingDown.load()) {
                     qCWarning(WebRTCLinkLog) << "[Video] Bridge error (isolated):" << error;
 
-                    if (_dataChannel && _dataChannel->isOpen()) {
+                    if (_mavlinkDataChannel && _mavlinkDataChannel->isOpen()) {
                         qCDebug(WebRTCLinkLog) << "[Video] DataChannel OK, retrying video only";
                         QTimer::singleShot(3000, this, [this]() {
-                            if (_dataChannel && _dataChannel->isOpen()) {
+                            if (_mavlinkDataChannel && _mavlinkDataChannel->isOpen()) {
                                 _restartVideoBridge();
                             }
                         });

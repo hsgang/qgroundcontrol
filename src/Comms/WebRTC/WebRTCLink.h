@@ -270,7 +270,8 @@ class WebRTCWorker : public QObject
     // WebRTC peer connection
     void _setupPeerConnection();
     void _handleTrackReceived(std::shared_ptr<rtc::Track> track);
-    void _setupDataChannel(std::shared_ptr<rtc::DataChannel> dc);
+    void _setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc);
+    void _setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc);
     void _processDataChannelOpen();
     void _processPendingCandidates();
     void _startQtTimers();
@@ -292,9 +293,9 @@ class WebRTCWorker : public QObject
 
             // WebRTC components
     std::shared_ptr<rtc::PeerConnection> _peerConnection;
-    std::shared_ptr<rtc::DataChannel> _dataChannel;
+    std::shared_ptr<rtc::DataChannel> _mavlinkDataChannel;
+    std::shared_ptr<rtc::DataChannel> _customDataChannel;
     std::shared_ptr<rtc::Track> _videoTrack;
-    std::shared_ptr<rtc::DataChannel> _strongDataChannelRef;
 
     // State management
     std::vector<rtc::Candidate> _pendingCandidates;

@@ -2,8 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import QGroundControl.FactSystem
-import QGroundControl.Palette
+import QGroundControl
 import QGroundControl.ScreenTools
 
 SpinBox {
@@ -13,10 +12,6 @@ SpinBox {
     font.pointSize: ScreenTools.defaultFontPointSize
     font.family:    ScreenTools.normalFontFamily
 
-    // from:           fromValue * exponentiation
-    // value:          fact.value * exponentiation
-    // to:             toValue * exponentiation
-    // stepSize:       stepValue * exponentiation
     from:           decimalToInt(fromValue)
     value:          decimalToInt(factValue)
     to:             decimalToInt(toValue)
@@ -24,7 +19,7 @@ SpinBox {
     editable:       true
     focusPolicy:    Qt.ClickFocus
 
-    property Fact fact
+    property Fact fact: Fact { }
 
     property real fromValue
     property real toValue
@@ -38,8 +33,6 @@ SpinBox {
     function decimalToInt(decimal) {
         return decimal * exponentiation
     }
-
-    QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
     Component.onCompleted: _loadComplete = true
 
