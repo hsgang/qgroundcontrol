@@ -566,19 +566,15 @@ void VideoManager::_setActiveVehicle(Vehicle *vehicle)
             if (pCamera) {
                 pCamera->resumeStream();
             }
-        }
 
-        for (VideoReceiver *receiver : std::as_const(_videoReceivers)) {
-            if (_activeVehicle->cameraManager()) {
+            for (VideoReceiver *receiver : std::as_const(_videoReceivers)) {
                 if (receiver->isThermal()) {
                     receiver->setVideoStreamInfo(_activeVehicle->cameraManager()->thermalStreamInstance());
                 } else {
                     receiver->setVideoStreamInfo(_activeVehicle->cameraManager()->currentStreamInstance());
                 }
-            } else {
-                receiver->setVideoStreamInfo(nullptr);
+                // connect(receiver->videoStreamInfo(), &QGCVideoStreamInfo::infoChanged, ))
             }
-            // connect(receiver->videoStreamInfo(), &QGCVideoStreamInfo::infoChanged, ))
         }
     } else {
         setfullScreen(false);
