@@ -283,7 +283,7 @@ Rectangle {
                             onClicked: {
                                 _camera.trackingEnabled = !_camera.trackingEnabled;
                                 if (!_camera.trackingEnabled) {
-                                    !camera.stopTracking()
+                                    _camera.stopTracking()
                                 }
                             }
                         }
