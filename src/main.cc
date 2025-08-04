@@ -149,13 +149,13 @@ int main(int argc, char *argv[])
         }
     }
 
-#ifdef QGC_UNITTEST_BUILD
-    if (runUnitTests) {
-        // Don't pop up Windows Error Reporting dialog when app crashes.
-        const DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
-        SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
-    }
-#endif
+// #ifdef QGC_UNITTEST_BUILD
+//     if (runUnitTests) {
+//         // Don't pop up Windows Error Reporting dialog when app crashes.
+//         const DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
+//         SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
+//     }
+// #endif
 #endif // Q_OS_WIN
 
     QGCApplication app(argc, argv, runUnitTests, simpleBootTest);
