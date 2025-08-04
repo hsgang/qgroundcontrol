@@ -231,9 +231,9 @@ void WebRTCVideoBridge::stopBridge()
     emit bridgeStopped();
 }
 
-void WebRTCVideoBridge::forwardRTPData(const rtc::binary& rtpData)
+void WebRTCVideoBridge::forwardRTPData(const QByteArray& rtpData)
 {
-    if (!_isRunning || rtpData.empty()) {
+    if (!_isRunning || rtpData.isEmpty()) {
         qWarning() << "[Bridge] Not running, drop packet";
         return;
     }
@@ -245,11 +245,11 @@ void WebRTCVideoBridge::forwardRTPData(const rtc::binary& rtpData)
 
     if (!_firstPacketSent) {
         _firstPacketSent = true;
-        QMetaObject::invokeMethod(this, "_startDecodingCheckTimer", Qt::QueuedConnection);  // 수정
+        QMetaObject::invokeMethod(this, "_startDecodingCheckTimer", Qt::QueuedConnection);
     }
 
     qint64 sent = _udpSocket->writeDatagram(
-        reinterpret_cast<const char*>(rtpData.data()),
+        rtpData.constData(),
         rtpData.size(),
         QHostAddress::LocalHost,
         _localPort
@@ -726,13 +726,23 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
             _createVideoBridge();
         }
 
-        std::weak_ptr<rtc::Track> weakTrack = track;
-        track->onMessage([this, weakTrack](rtc::message_variant message) {
-            if (auto strongTrack = weakTrack.lock()) {
-                if (std::holds_alternative<rtc::binary>(message)) {
-                    const auto& data = std::get<rtc::binary>(message);
-                    _handleVideoTrackData(data);
+        track->onMessage([this](rtc::message_variant message) {
+            if (std::holds_alternative<rtc::binary>(message)) {
+                if (_isShuttingDown.load() || !_videoStreamActive) {
+                    return;
                 }
+                
+                // 데이터를 QByteArray로 복사하여 다른 스레드로 안전하게 전달
+                const auto& binaryData = std::get<rtc::binary>(message);
+                QByteArray rtpData(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
+
+                // WebRTCWorker 스레드에서 데이터를 처리하도록 작업을 예약
+                QMetaObject::invokeMethod(this, [this, rtpData]() {
+                    if (_videoBridge) {
+                        _videoReceivedCalc.addData(rtpData.size());
+                        _videoBridge->forwardRTPData(rtpData);
+                    }
+                }, Qt::QueuedConnection);
             }
         });
 
@@ -1257,31 +1267,6 @@ void WebRTCWorker::_cleanupVideoBridge()
 
     _videoStreamActive = false;
     _currentVideoURI.clear();
-}
-
-void WebRTCWorker::_handleVideoTrackData(const rtc::binary& data)
-{
-    if (_isShuttingDown.load() || !_videoStreamActive) {
-        return;
-    }
-
-    _videoReceivedCalc.addData(data.size());
-
-    if(_videoBridge) {
-        _videoBridge->forwardRTPData(data);
-    }
-
-    // QByteArray rtpData(reinterpret_cast<const char*>(data.data()), data.size());
-    // QPointer<WebRTCWorker> weakSelf(this);
-    // QMetaObject::invokeMethod(this, [weakSelf, rtpData]() {
-    //     if (weakSelf && !weakSelf->_isShuttingDown.load()) {
-    //         QMutexLocker locker(&weakSelf->_videoBridgeMutex);
-    //         WebRTCVideoBridge* bridge = weakSelf->_videoBridge;
-    //         if (bridge && weakSelf->_videoStreamActive) {
-    //             bridge->forwardRTPData(rtpData);
-    //         }
-    //     }
-    // }, Qt::QueuedConnection);
 }
 
 void WebRTCWorker::_updateAllStatistics()
