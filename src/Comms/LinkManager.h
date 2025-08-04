@@ -50,6 +50,8 @@ class LinkManager : public QObject
     Q_PROPERTY(QStringList linkTypeStrings READ linkTypeStrings CONSTANT)
     Q_PROPERTY(bool mavlinkSupportForwardingEnabled READ mavlinkSupportForwardingEnabled NOTIFY mavlinkSupportForwardingEnabledChanged)
     Q_PROPERTY(int webRtcRtt READ webRtcRtt NOTIFY webRtcRttChanged)
+    Q_PROPERTY(double webRtcSent READ webRtcSent NOTIFY webRtcSentChanged)
+    Q_PROPERTY(double webRtcRecv READ webRtcRecv NOTIFY webRtcRecvChanged)
     Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
     Q_PROPERTY(double rtcVideoRate READ rtcVideoRate NOTIFY rtcVideoRateChanged)
 
@@ -74,6 +76,8 @@ public:
     /// Called to signal app shutdown. Disconnects all links while turning off auto-connect.
     Q_INVOKABLE void shutdown();
     Q_INVOKABLE LogReplayLink *startLogReplay(const QString &logFile);
+
+    Q_INVOKABLE void sendWebRTCCustomMessage(const QString &message);
 
     QList<SharedLinkInterfacePtr> links() { return _rgLinks; }
     QStringList linkTypeStrings() const;
@@ -125,6 +129,8 @@ public:
     static constexpr uint8_t invalidMavlinkChannel() { return std::numeric_limits<uint8_t>::max(); }
 
     int webRtcRtt() const;
+    double webRtcSent() const;
+    double webRtcRecv() const;
     QString rtcStatusMessage() const;
     double rtcVideoRate() const;
 
@@ -132,6 +138,8 @@ signals:
     void mavlinkSupportForwardingEnabledChanged();
     void isBluetoothAvailableChanged();
     void webRtcRttChanged();
+    void webRtcSentChanged();
+    void webRtcRecvChanged();
     void rtcStatusMessageChanged();
     void rtcVideoRateChanged();
 

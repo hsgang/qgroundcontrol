@@ -25,6 +25,8 @@ Item {
     property bool showIndicator:    QGroundControl.linkManager.webRtcRtt > 0
     property real _margins:         ScreenTools.defaultFontPixelHeight / 2
     property real _rtt:             QGroundControl.linkManager.webRtcRtt
+    property real _webRtcSent:      QGroundControl.linkManager.webRtcSent
+    property real _webRtcRecv:      QGroundControl.linkManager.webRtcRecv
     property real _videoRate:       QGroundControl.linkManager.rtcVideoRate
     property int  _videoRateInt:    Math.round(_videoRate)
 
@@ -75,15 +77,35 @@ Item {
             showExpand: false
 
             contentComponent: SettingsGroupLayout {
-                heading: qsTr("RTC Status")
+                heading: qsTr("RTC 상태 정보")
 
                 LabelledLabel {
-                    label:      qsTr("RTT")
+                    label:      qsTr("응답시간")
                     labelText:  qsTr("%1 ms").arg(_rtt)
                 }
                 LabelledLabel {
-                    label:      qsTr("Down Rate")
+                    label:      qsTr("데이터 송신")
+                    labelText:  qsTr("%1 KB/s").arg(_webRtcSent)
+                }
+                LabelledLabel {
+                    label:      qsTr("데이터 수신")
+                    labelText:  qsTr("%1 KB/s").arg(_webRtcRecv)
+                }
+                LabelledLabel {
+                    label:      qsTr("영상 다운로드")
                     labelText:  qsTr("%1 KB/s").arg(_videoRateInt)
+                }
+                LabelledButton {
+                    label:      qsTr("영상 재시작")
+                    buttonText: qsTr("재시작")
+                    enabled:    true
+                    onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("R")
+                }
+                LabelledButton {
+                    label:      qsTr("모듈 재부팅")
+                    buttonText: qsTr("재부팅")
+                    enabled:    true
+                    onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("B")
                 }
             }
         }

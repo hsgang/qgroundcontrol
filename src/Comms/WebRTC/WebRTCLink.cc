@@ -370,6 +370,34 @@ void WebRTCWorker::writeData(const QByteArray &data)
     }
 }
 
+void WebRTCWorker::sendCustomMessage(const QString& message)
+{
+    if (_isShuttingDown.load()) {
+        qCWarning(WebRTCLinkLog) << "Cannot send custom message: shutting down";
+        return;
+    }
+
+    try {
+        if (_customDataChannel && _customDataChannel->isOpen()) {
+            // QString을 binary 데이터로 변환하여 전송
+            QByteArray data = message.toUtf8();
+            std::string_view view(data.constData(), data.size());
+            _customDataChannel->send(rtc::binary(
+                reinterpret_cast<const std::byte*>(view.data()),
+                reinterpret_cast<const std::byte*>(view.data() + view.size())
+                ));
+
+            qCDebug(WebRTCLinkLog) << "Custom message sent:" << message;
+        } else {
+            qCWarning(WebRTCLinkLog) << "Custom DataChannel not available or not open";
+        }
+    } catch (const std::exception& e) {
+        if (!_isShuttingDown.load()) {
+            qCWarning(WebRTCLinkLog) << "Failed to send custom message:" << e.what();
+        }
+    }
+}
+
 void WebRTCWorker::disconnectLink()
 {
     _isShuttingDown.store(true);
@@ -1273,9 +1301,9 @@ void WebRTCWorker::_updateAllStatistics()
     _dataChannelReceivedCalc.updateRate();
     _videoReceivedCalc.updateRate();
 
-    qCDebug(WebRTCLinkLog) << "[DC]" << "SENT:" << _dataChannelSentCalc.getCurrentRate() << "KB/s"
-                            << " RECV:" << _dataChannelReceivedCalc.getCurrentRate() << "KB/s"
-                            << "[Video]" << "RECV:" << _videoReceivedCalc.getCurrentRate() << "KB/s";
+    // qCDebug(WebRTCLinkLog) << "[DC]" << "SENT:" << _dataChannelSentCalc.getCurrentRate() << "KB/s"
+    //                         << " RECV:" << _dataChannelReceivedCalc.getCurrentRate() << "KB/s"
+    //                         << "[Video]" << "RECV:" << _videoReceivedCalc.getCurrentRate() << "KB/s";
 
     emit dataChannelStatsUpdated(
         _dataChannelSentCalc.getCurrentRate(),
@@ -1314,6 +1342,7 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     connect(_worker, &WebRTCWorker::bytesReceived, this, &WebRTCLink::_onDataReceived, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::bytesSent, this, &WebRTCLink::_onDataSent, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::rttUpdated, this, &WebRTCLink::_onRttUpdated, Qt::QueuedConnection);
+    connect(_worker, &WebRTCWorker::dataChannelStatsUpdated, this, &WebRTCLink::_onDataChannelStatsChanged, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::rtcStatusMessageChanged, this, &WebRTCLink::_onRtcStatusMessageChanged, Qt::QueuedConnection);
 
     connect(_worker, &WebRTCWorker::videoBridgeError, this, &WebRTCLink::_onVideoBridgeError, Qt::QueuedConnection);
@@ -1404,6 +1433,18 @@ void WebRTCLink::_onRtcStatusMessageChanged(QString message)
     }
 }
 
+void WebRTCLink::_onDataChannelStatsChanged(double sendRate, double receiveRate)
+{
+    if (_webRtcSent != sendRate) {
+        _webRtcSent = sendRate;
+        emit webRtcSentChanged();
+    }
+    if (_webRtcRecv != receiveRate) {
+        _webRtcRecv = receiveRate;
+        emit webRtcRecvChanged();
+    }
+}
+
 bool WebRTCLink::isVideoStreamActive() const
 {
     return _worker ? _worker->isVideoStreamActive() : false;
@@ -1424,5 +1465,16 @@ void WebRTCLink::_onVideoRateChanged(double KBps)
     if (_videoRateKBps != KBps) {
         _videoRateKBps = KBps;
         emit videoRateKBpsChanged();
+    }
+}
+
+void WebRTCLink::sendCustomMessage(QString message)
+{
+    if (_worker) {
+        QMetaObject::invokeMethod(_worker, "sendCustomMessage",
+                                  Qt::QueuedConnection,
+                                  Q_ARG(QString, message));
+    } else {
+        qCWarning(WebRTCLinkLog) << "Cannot send custom message: worker not available";
     }
 }

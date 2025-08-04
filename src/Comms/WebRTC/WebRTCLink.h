@@ -227,6 +227,7 @@ class WebRTCWorker : public QObject
     void handlePeerStateChange(int stateValue);
     void handleLocalDescription(const QString& descType, const QString& sdpContent);
     void handleLocalCandidate(const QString& candidateStr, const QString& mid);
+    void sendCustomMessage(const QString &message);
 
    signals:
     void connected();
@@ -369,10 +370,14 @@ class WebRTCLink : public LinkInterface
     explicit WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent = nullptr);
     ~WebRTCLink();
 
+    Q_INVOKABLE void sendCustomMessage(QString message);
+
     bool isConnected() const override;
     void connectLink();
 
     int rttMs() const { return _rttMs; }
+    double webRtcSent() const { return _webRtcSent; }
+    double webRtcRecv() const { return _webRtcRecv; }
     QString rtcStatusMessage() const { return _rtcStatusMessage; }
 
     // 비디오 스트림 상태 확인
@@ -395,12 +400,15 @@ class WebRTCLink : public LinkInterface
     void _onDataReceived(const QByteArray &data);
     void _onDataSent(const QByteArray &data);
     void _onRttUpdated(int rtt);   // RTT 업데이트 슬롯
+    void _onDataChannelStatsChanged(double sendRate, double receiveRate);
     void _onRtcStatusMessageChanged(QString message);
     void _onVideoBridgeError(const QString& error);
     void _onVideoRateChanged(double KBps);
 
    signals:
     void rttMsChanged();
+    void webRtcSentChanged();
+    void webRtcRecvChanged();
     void rtcStatusMessageChanged();
     void videoStreamReady(const QString& uri);
     void videoBridgeError(const QString& error);
@@ -414,6 +422,8 @@ class WebRTCLink : public LinkInterface
     WebRTCWorker *_worker = nullptr;
     QThread *_workerThread = nullptr;
     int _rttMs = -1;
+    double _webRtcSent = -1;
+    double _webRtcRecv = -1;
     int _videoRate = -1;
     double _videoRateKBps = 0.0;
     int _videoPacketCount = 0;

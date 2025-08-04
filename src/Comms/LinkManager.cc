@@ -165,8 +165,11 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
 
     if (auto w = qobject_cast<WebRTCLink*>(link.get())) {
         connect(w, &WebRTCLink::rttMsChanged, this, &LinkManager::webRtcRttChanged);
+        connect(w, &WebRTCLink::webRtcSentChanged, this, &LinkManager::webRtcSentChanged);
+        connect(w, &WebRTCLink::webRtcRecvChanged, this, &LinkManager::webRtcRecvChanged);
         connect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
         connect(w, &WebRTCLink::videoRateKBpsChanged, this, &LinkManager::rtcVideoRateChanged);
+        //connect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
 
     (void) connect(link.get(), &LinkInterface::communicationError, this, &LinkManager::_communicationError);
@@ -234,8 +237,11 @@ void LinkManager::_linkDisconnected()
 
     if (auto w = qobject_cast<WebRTCLink*>(link)) {
         disconnect(w, &WebRTCLink::rttMsChanged, this, &LinkManager::webRtcRttChanged);
+        disconnect(w, &WebRTCLink::webRtcSentChanged, this, &LinkManager::webRtcSentChanged);
+        disconnect(w, &WebRTCLink::webRtcRecvChanged, this, &LinkManager::webRtcRecvChanged);
         disconnect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
         disconnect(w, &WebRTCLink::videoRateKBpsChanged, this, &LinkManager::rtcVideoRateChanged);
+        //disconnect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
 
     (void) disconnect(link, &LinkInterface::communicationError, qgcApp(), &QGCApplication::showAppMessage);
@@ -750,6 +756,28 @@ int LinkManager::webRtcRtt() const
     return -1;
 }
 
+double LinkManager::webRtcSent() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return w->webRtcSent();
+        }
+    }
+    return -1;
+}
+
+double LinkManager::webRtcRecv() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return w->webRtcRecv();
+        }
+    }
+    return -1;
+}
+
 QString LinkManager::rtcStatusMessage() const
 {
     for (auto sharedLink : _rgLinks) {
@@ -772,7 +800,6 @@ double LinkManager::rtcVideoRate() const
     return 0.0;
 }
 
-
 LogReplayLink *LinkManager::startLogReplay(const QString &logFile)
 {
     LogReplayConfiguration* const linkConfig = new LogReplayConfiguration(tr("Log Replay"));
@@ -785,6 +812,31 @@ LogReplayLink *LinkManager::startLogReplay(const QString &logFile)
     }
 
     return nullptr;
+}
+
+void LinkManager::sendWebRTCCustomMessage(const QString &message)
+{
+    if (message.isEmpty()) {
+        qCWarning(LinkManagerLog) << "Cannot send empty WebRTC message";
+        return;
+    }
+
+            // WebRTCLink 찾기
+    for (const SharedLinkInterfacePtr &sharedLink : _rgLinks) {
+        if (auto webrtcLink = qobject_cast<WebRTCLink*>(sharedLink.get())) {
+            if (webrtcLink->isConnected()) {
+                qCDebug(LinkManagerLog) << "Sending WebRTC custom message:" << message;
+                webrtcLink->sendCustomMessage(message);
+                return;
+            } else {
+                qCWarning(LinkManagerLog) << "WebRTC link found but not connected";
+                return;
+            }
+        }
+    }
+
+    qCWarning(LinkManagerLog) << "No WebRTC link found to send message";
+
 }
 
 void LinkManager::_createDynamicForwardLink(const char *linkName, const QString &hostName)
