@@ -236,7 +236,7 @@ class WebRTCWorker : public QObject
     void bytesSent(const QByteArray &data);
     void errorOccurred(const QString &errorString);
     void rttUpdated(int rtt);  // RTT 측정 signal
-    void rtcStatusMessageChanged(QString message);
+    void rtcStatusMessageChanged(const QString& message);
     void decodingStatsChanged(int total, int decoded, int dropped);
 
     void videoTrackReceived();                          // 비디오 트랙 수신 시그널
@@ -300,7 +300,6 @@ class WebRTCWorker : public QObject
 
     // State management
     std::vector<rtc::Candidate> _pendingCandidates;
-    std::set<std::string> _addedCandidates;
     std::atomic_bool _remoteDescriptionSet {false};
     QMutex _candidateMutex;
     bool _isOfferer = false;
@@ -311,15 +310,8 @@ class WebRTCWorker : public QObject
     static const QString kDataChannelLabel;
     static const int kReconnectInterval = 5000; // 5 seconds
 
-    bool _videoTrackReceived = false;
-    int _totalFramesReceived = 0;
-    int _decodedFrames = 0;
-    int _droppedFrames = 0;
-
     std::atomic<bool> _isShuttingDown{false};
-    QMutex _videoStatsMutex;
     QRecursiveMutex _videoBridgeMutex;
-    QAtomicPointer<WebRTCVideoBridge> _videoBridgeAtomic;
     QPointer<WebRTCVideoBridge> _videoBridge;
     bool _videoStreamActive = false;
     QString _currentVideoURI;
@@ -328,20 +320,12 @@ class WebRTCWorker : public QObject
     void _cleanupVideoBridge();
     void _restartVideoBridge();
 
-    enum BridgeState {
-        BRIDGE_NOT_READY,
-        BRIDGE_STARTING,
-        BRIDGE_READY,
-        BRIDGE_STREAMING
-    };
-
-    BridgeState _bridgeState = BRIDGE_NOT_READY;
-
     void _updateAllStatistics();
     void _calculateDataChannelRates(qint64 currentTime);
 
     void _handlePeerDisconnection();
     void _cleanupForReconnection();
+    void _resetPeerConnection();
     QTimer* _reconnectionTimer = nullptr;
     std::atomic<bool> _waitingForReconnection{false};
 
@@ -369,7 +353,7 @@ class WebRTCLink : public LinkInterface
     explicit WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent = nullptr);
     ~WebRTCLink();
 
-    Q_INVOKABLE void sendCustomMessage(QString message);
+    Q_INVOKABLE void sendCustomMessage(const QString& message);
 
     bool isConnected() const override;
     void connectLink();
@@ -400,7 +384,7 @@ class WebRTCLink : public LinkInterface
     void _onDataSent(const QByteArray &data);
     void _onRttUpdated(int rtt);   // RTT 업데이트 슬롯
     void _onDataChannelStatsChanged(double sendRate, double receiveRate);
-    void _onRtcStatusMessageChanged(QString message);
+    void _onRtcStatusMessageChanged(const QString& message);
     void _onVideoBridgeError(const QString& error);
     void _onVideoRateChanged(double KBps);
 

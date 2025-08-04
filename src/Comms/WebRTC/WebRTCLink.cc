@@ -304,7 +304,6 @@ WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
       , _videoStreamActive(false)
       , _signalingConnected(false)
       , _isDisconnecting(false)
-      , _isOfferer(false)
 {
     initializeLogger();
     _setupWebSocket();
@@ -885,17 +884,15 @@ void WebRTCWorker::_handlePeerDisconnection()
     qCDebug(WebRTCLinkLog) << "[DISCONNECT] Ready for reconnection";
 }
 
-void WebRTCWorker::_cleanupForReconnection()
+void WebRTCWorker::_resetPeerConnection()
 {
-    qCDebug(WebRTCLinkLog) << "[CLEANUP] Cleaning up for reconnection (keeping WebSocket)";
-
     if (_mavlinkDataChannel) {
         try {
             if (_mavlinkDataChannel->isOpen()) {
                 _mavlinkDataChannel->close();
             }
         } catch (const std::exception& e) {
-            qCWarning(WebRTCLinkLog) << "Error closing data channel:" << e.what();
+            qCWarning(WebRTCLinkLog) << "Error closing mavlink data channel:" << e.what();
         }
         _mavlinkDataChannel.reset();
     }
@@ -906,7 +903,7 @@ void WebRTCWorker::_cleanupForReconnection()
                 _customDataChannel->close();
             }
         } catch (const std::exception& e) {
-            qCWarning(WebRTCLinkLog) << "Error closing data channel:" << e.what();
+            qCWarning(WebRTCLinkLog) << "Error closing custom data channel:" << e.what();
         }
         _customDataChannel.reset();
     }
@@ -926,6 +923,19 @@ void WebRTCWorker::_cleanupForReconnection()
         }
         _peerConnection.reset();
     }
+
+    _remoteDescriptionSet.store(false);
+    {
+        QMutexLocker locker(&_candidateMutex);
+        _pendingCandidates.clear();
+    }
+}
+
+void WebRTCWorker::_cleanupForReconnection()
+{
+    qCDebug(WebRTCLinkLog) << "[CLEANUP] Cleaning up for reconnection (keeping WebSocket)";
+
+    _resetPeerConnection();
 
     _cleanupVideoBridge();
     _videoTrack.reset();
@@ -1113,44 +1123,7 @@ void WebRTCWorker::_cleanup()
         _statsTimer->stop();
     }
 
-    if (_peerConnection) {
-
-        _peerConnection->onStateChange(nullptr);
-        _peerConnection->onGatheringStateChange(nullptr);
-        _peerConnection->onLocalDescription(nullptr);
-        _peerConnection->onLocalCandidate(nullptr);
-        _peerConnection->onDataChannel(nullptr);
-        _peerConnection->onTrack(nullptr);
-
-        try {
-            _peerConnection->close();
-        } catch (const std::exception& e) {
-            qCWarning(WebRTCLinkLog) << "Error closing peer connection:" << e.what();
-        }
-        _peerConnection.reset();
-    }
-
-    if (_mavlinkDataChannel) {
-        try {
-            if (_mavlinkDataChannel->isOpen()) {
-                _mavlinkDataChannel->close();
-            }
-        } catch (const std::exception& e) {
-            qCWarning(WebRTCLinkLog) << "Error closing data channel:" << e.what();
-        }
-        _mavlinkDataChannel.reset();
-    }
-
-    if (_customDataChannel) {
-        try {
-            if (_customDataChannel->isOpen()) {
-                _customDataChannel->close();
-            }
-        } catch (const std::exception& e) {
-            qCWarning(WebRTCLinkLog) << "Error closing data channel:" << e.what();
-        }
-        _customDataChannel.reset();
-    }
+    _resetPeerConnection();
 
     if (_rttTimer) {
         _rttTimer->stop();
@@ -1399,7 +1372,7 @@ void WebRTCLink::_onRttUpdated(int rtt)
     }
 }
 
-void WebRTCLink::_onRtcStatusMessageChanged(QString message)
+void WebRTCLink::_onRtcStatusMessageChanged(const QString& message)
 {
     if (_rtcStatusMessage != message) {
         _rtcStatusMessage = message;
@@ -1442,7 +1415,7 @@ void WebRTCLink::_onVideoRateChanged(double KBps)
     }
 }
 
-void WebRTCLink::sendCustomMessage(QString message)
+void WebRTCLink::sendCustomMessage(const QString& message)
 {
     if (_worker) {
         QMetaObject::invokeMethod(_worker, "sendCustomMessage",
