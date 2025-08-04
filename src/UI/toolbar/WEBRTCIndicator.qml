@@ -95,15 +95,15 @@ Item {
                     label:      qsTr("영상 다운로드")
                     labelText:  qsTr("%1 KB/s").arg(_videoRateInt)
                 }
+                // LabelledButton {
+                //     label:      qsTr("영상 재시작")
+                //     buttonText: qsTr("재시작")
+                //     enabled:    true
+                //     onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("R")
+                // }
                 LabelledButton {
-                    label:      qsTr("영상 재시작")
+                    label:      qsTr("모듈 재시작")
                     buttonText: qsTr("재시작")
-                    enabled:    true
-                    onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("R")
-                }
-                LabelledButton {
-                    label:      qsTr("모듈 재부팅")
-                    buttonText: qsTr("재부팅")
                     enabled:    true
                     onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("B")
                 }
