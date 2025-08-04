@@ -625,15 +625,10 @@ void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc
 
         if (std::holds_alternative<rtc::binary>(data)) {
             const auto& binaryData = std::get<rtc::binary>(data);
-            auto byteArrayPtr = std::make_shared<QByteArray>(
-                reinterpret_cast<const char*>(binaryData.data()), binaryData.size()
-                );
+            QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
+            _dataChannelReceivedCalc.addData(byteArray.size());
 
-            _dataChannelReceivedCalc.addData(binaryData.size());
-
-            QMetaObject::invokeMethod(this, [this, byteArrayPtr]() {
-                emit bytesReceived(*byteArrayPtr);
-            }, Qt::QueuedConnection);
+            emit bytesReceived(byteArray);
         }
         else if (std::holds_alternative<std::string>(data)) {
             const std::string& text = std::get<std::string>(data);
@@ -1171,7 +1166,6 @@ void WebRTCWorker::_cleanupComplete()
 
 void WebRTCWorker::_createVideoBridge()
 {
-    QMutexLocker locker(&_videoBridgeMutex);
     if (_videoBridge || _isShuttingDown.load()) {
         return;
     }
@@ -1223,12 +1217,10 @@ void WebRTCWorker::_createVideoBridge()
             }, Qt::QueuedConnection);
 
     QTimer::singleShot(0, this, [this]() {
-        QMutexLocker locker(&_videoBridgeMutex);
         if (!_isShuttingDown.load() && _videoBridge) {
             if (!_videoBridge->startBridge(55000)) {
                 qCCritical(WebRTCLinkLog) << "Failed to start video bridge";
                 delete _videoBridge;
-                _videoBridge = nullptr;
             }
         }
     });
@@ -1237,8 +1229,6 @@ void WebRTCWorker::_createVideoBridge()
 void WebRTCWorker::_restartVideoBridge()
 {
     {
-        QMutexLocker locker(&_videoBridgeMutex);
-
         if (_videoBridge) {
             disconnect(_videoBridge, nullptr, this, nullptr);
             _videoBridge->stopBridge();
@@ -1255,7 +1245,6 @@ void WebRTCWorker::_restartVideoBridge()
 
 void WebRTCWorker::_cleanupVideoBridge()
 {
-    QMutexLocker locker(&_videoBridgeMutex);
     WebRTCVideoBridge* bridge = _videoBridge;
     _videoBridge = nullptr;
 

@@ -320,7 +320,7 @@ class WebRTCWorker : public QObject
     QMutex _videoStatsMutex;
     QRecursiveMutex _videoBridgeMutex;
     QAtomicPointer<WebRTCVideoBridge> _videoBridgeAtomic;
-    WebRTCVideoBridge *_videoBridge = nullptr;
+    QPointer<WebRTCVideoBridge> _videoBridge;
     bool _videoStreamActive = false;
     QString _currentVideoURI;
 
