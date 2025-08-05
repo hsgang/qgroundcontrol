@@ -28,5 +28,4 @@ qt_add_qml_module(ToolbarModule
         MessageIndicator.qml
         WEBRTCIndicator.qml
     NO_PLUGIN
-    QML_FILES # Required by Qt 6.6.3. TODO: Remove when no longer supported.
 )

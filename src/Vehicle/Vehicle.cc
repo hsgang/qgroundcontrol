@@ -48,7 +48,6 @@
 #include "TerrainProtocolHandler.h"
 #include "TerrainQuery.h"
 #include "TrajectoryPoints.h"
-#include "VehicleBatteryFactGroup.h"
 #include "VehicleLinkManager.h"
 #include "VehicleObjectAvoidance.h"
 #include "VideoManager.h"
@@ -558,8 +557,8 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
 
     _waitForMavlinkMessageMessageReceivedHandler(message);
 
-    // Battery fact groups are created dynamically as new batteries are discovered
-    VehicleBatteryFactGroup::handleMessageForFactGroupCreation(this, message);
+    // Handle creation of dynamic fact group lists
+    _batteryFactGroupListModel.handleMessageForFactGroupCreation(this, message);
 
     // Let the fact groups take a whack at the mavlink traffic
     for (FactGroup* factGroup : factGroups()) {

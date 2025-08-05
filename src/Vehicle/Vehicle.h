@@ -67,6 +67,7 @@
 #include "VehicleEFIFactGroup.h"
 #include "VehicleWindFactGroup.h"
 #include "GimbalController.h"
+#include "BatteryFactGroupListModel.h"
 
 #ifdef CONFIG_UTM_ADAPTER
 #include "UTMSPVehicle.h"
@@ -99,7 +100,6 @@ class StandardModes;
 class TerrainAtCoordinateQuery;
 class TerrainProtocolHandler;
 class TrajectoryPoints;
-class VehicleBatteryFactGroup;
 class VehicleObjectAvoidance;
 #ifdef QGC_UTM_ADAPTER
 class UTMSPVehicle;
@@ -131,7 +131,7 @@ class Vehicle : public VehicleFactGroup
 
     friend class InitialConnectStateMachine;
     friend class VehicleLinkManager;
-    friend class VehicleBatteryFactGroup;           // Allow VehicleBatteryFactGroup to call _addFactGroup
+    friend class FactGroupListModel;                // Allow call _addFactGroup
     friend class SendMavCommandWithSignallingTest;  // Unit test
     friend class SendMavCommandWithHandlerTest;     // Unit test
     friend class RequestMessageTest;                // Unit test
@@ -1385,6 +1385,9 @@ private:
     ExternalPowerStatusFactGroup    _externalPowerStatusFactGroup;
     WinchStatusFactGroup            _winchStatusFactGroup;
     VehicleLandingTargetFactGroup   _landingTargetFactGroup;
+
+    // Dynamic FactGroups
+    BatteryFactGroupListModel       _batteryFactGroupListModel;
 
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
 
