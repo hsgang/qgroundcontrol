@@ -1378,7 +1378,6 @@ private:
     VehicleEFIFactGroup             _efiFactGroup;
     VehicleRPMFactGroup             _rpmFactGroup;
     TerrainFactGroup                _terrainFactGroup;
-    QmlObjectListModel              _batteryFactGroupListModel;
     AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
     // TunnelingDataFactGroup          _tunnelingDataFactGroup;
     GeneratorStatusFactGroup        _generatorStatusFactGroup;
