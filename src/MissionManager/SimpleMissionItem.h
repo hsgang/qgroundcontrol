@@ -193,7 +193,7 @@ private:
     QmlObjectListModel  _textFieldFacts;
     QmlObjectListModel  _nanFacts;
     QmlObjectListModel  _comboboxFacts;
-    
+
     static FactMetaData*    _altitudeMetaData;
     static FactMetaData*    _commandMetaData;
     static FactMetaData*    _defaultParamMetaData;
