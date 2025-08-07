@@ -125,14 +125,14 @@ Rectangle {
             outerBorderColor:   "transparent"
             _margins:       ScreenTools.defaultFontPixelWidth
 
-            LabelledButton {
-                label:               qsTr("Edit Position")
-                buttonText:          qsTr("Edit")
-                visible:             missionItem.specifiesCoordinate
-                onClicked: {
-                    editPositionDialog.createObject(mainWindow).open()
-                }
-            }
+            // LabelledButton {
+            //     label:               qsTr("Edit Position")
+            //     buttonText:          qsTr("Edit")
+            //     visible:             missionItem.specifiesCoordinate
+            //     onClicked: {
+            //         editPositionDialog.createObject(mainWindow).open()
+            //     }
+            // }
 
             ColumnLayout {
                 Layout.fillWidth: true

@@ -217,7 +217,7 @@ Rectangle {
 
                     QGCButton {
                         Layout.fillWidth:   true
-                        text:               qsTr("Edit position...")
+                        text:               qsTr("위치 수정")
                         enabled:            missionItem.specifiesCoordinate
                         onClicked: {
                             editPositionDialog.createObject(mainWindow).open()
