@@ -224,7 +224,7 @@ Rectangle {
                             hamburgerMenuDropPanel.close()
                         }
                     }
-                    
+
                     Rectangle {
                         Layout.fillWidth:       true
                         Layout.preferredHeight: 1
@@ -255,7 +255,7 @@ Rectangle {
                         Layout.fillWidth:       true
                         Layout.preferredHeight: 1
                         color:                  qgcPal.groupBorder
-                    }                                        
+                    }
 
                     QGCButton {
                         Layout.fillWidth:   true
