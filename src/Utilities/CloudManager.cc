@@ -25,9 +25,6 @@
 
 QGC_LOGGING_CATEGORY(CloudManagerLog, "CloudManagerLog")
 
-const QString CloudManager::m_endPointHost = "vxtkbbhlxkfzkhfdgtrk.supabase.co";
-const QString CloudManager::m_apiAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dGtiYmhseGtmemtoZmRndHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyODkyNDYsImV4cCI6MjA2MDg2NTI0Nn0.yLo8vPPUhFhKUnt6VqnwSnerLRj3psSEtOZDHhekq2g";
-
 Q_APPLICATION_STATIC(CloudManager, _cloudManagerInstance);
 
 CloudManager::CloudManager(QObject *parent)
@@ -155,6 +152,7 @@ void CloudManager::signUserIn(const QString &emailAddress, const QString &passwo
     QJsonDocument jsonPayload = QJsonDocument::fromVariant(variantPayload);
 
     QNetworkRequest request;
+    request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
     request.setUrl(QUrl(signInEndpoint));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QString("application/json"));
     request.setRawHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dGtiYmhseGtmemtoZmRndHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyODkyNDYsImV4cCI6MjA2MDg2NTI0Nn0.yLo8vPPUhFhKUnt6VqnwSnerLRj3psSEtOZDHhekq2g");
@@ -172,7 +170,6 @@ void CloudManager::signUserIn(const QString &emailAddress, const QString &passwo
     QNetworkReply* reply = _nam->post(request, jsonPayload.toJson());
 
     connect(reply, &QNetworkReply::readyRead, this, &CloudManager::signInReplyReadyRead);
-    //connect(reply, &QNetworkReply::errorOccurred, this, &CloudManager::networkReplyErrorOccurred);
 
     connect(reply, &QNetworkReply::finished, this, [reply]() {
         reply->deleteLater();
@@ -202,60 +199,278 @@ QByteArray CloudManager::getSignatureKey(const QByteArray &key, const QByteArray
     return QMessageAuthenticationCode::hash("aws4_request", kService, QCryptographicHash::Sha256);
 }
 
-void CloudManager::uploadJsonFile(const QJsonDocument &jsonDoc, const QString &bucketName, const QString &objectName)
+void CloudManager::uploadJsonFile(const QJsonDocument &jsonDoc,
+                                  const QString &bucketName,
+                                  const QString &originalName)
 {
-    const QString signedBucketName = bucketName + "/missions/";
+    QString fileName = originalName;
+    if (fileName.isEmpty()) {
+        fileName = QString("mission_%1.plan").arg(QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss"));
+    }
 
-    QByteArray jsonData = jsonDoc.toJson();
+    QByteArray jsonData = jsonDoc.toJson(QJsonDocument::Compact);
+    uploadFile(jsonData, bucketName, fileName, "application/octet-stream");
+}
 
+void CloudManager::uploadFile(const QByteArray &fileData,
+                              const QString &bucketName,
+                              const QString &originalFileName,
+                              const QString &mimeType)
+{
+    // 고유한 파일 ID 생성
+    QString fileId = QUuid::createUuid().toString(QUuid::WithoutBraces);
+
+    // 안전한 파일명 생성 (UUID + 확장자)
+    QString safeFileName = generateUniqueFileName(originalFileName);
+
+    // 체크섬 계산
+    QString checksum = calculateChecksum(fileData);
+
+    // 업로드 컨텍스트 생성
+    UploadContext context;
+    context.fileId = fileId;
+    context.originalName = originalFileName;
+    context.storagePath = createStoragePath(bucketName, safeFileName);
+    context.bucketName = bucketName;
+    context.fileSize = fileData.size();
+    context.mimeType = mimeType;
+    context.uploadTime = QDateTime::currentDateTime();
+    context.checksum = checksum;
+
+    qCDebug(CloudManagerLog) << "Starting upload:"
+                             << "FileId:" << fileId
+                             << "Original:" << originalFileName
+                             << "Storage:" << context.storagePath;
+
+    uploadFileInternal(fileData, context);
+}
+
+QString CloudManager::generateUniqueFileName(const QString &originalName)
+{
+    QString extension = extractFileExtension(originalName);
+    QString uniqueId = QUuid::createUuid().toString(QUuid::WithoutBraces);
+
+    // 타임스탬프 추가로 더욱 고유성 보장
+    QString timestamp = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
+
+    return QString("%1_%2%3").arg(timestamp, uniqueId, extension);
+}
+
+QString CloudManager::extractFileExtension(const QString &fileName)
+{
+    int lastDot = fileName.lastIndexOf('.');
+    if (lastDot >= 0) {
+        return fileName.mid(lastDot);
+    }
+    return QString();
+}
+
+void CloudManager::uploadFileInternal(const QByteArray &fileData, const UploadContext &context)
+{
+    // 프록시 설정 임시 변경
     QNetworkProxy savedProxy = _nam->proxy();
     QNetworkProxy tempProxy;
     tempProxy.setType(QNetworkProxy::DefaultProxy);
     _nam->setProxy(tempProxy);
 
-    //QString endpointHost = m_minioEndpoint;
-    //QString endpoint = QString("http://%1/%2/%3").arg(endpointHost, signedBucketName, objectName);
+    // 업로드 요청 생성
+    QNetworkRequest request = createUploadRequest(context.storagePath);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, context.mimeType);
 
-    QString endpointHost = "vxtkbbhlxkfzkhfdgtrk.supabase.co";
-    QString endpoint = QString("https://%1/storage/v1/object/%2/%3").arg(endpointHost, signedBucketName, objectName);
+    // 추가 헤더 설정
+    request.setRawHeader("x-file-id", context.fileId.toUtf8());
+    request.setRawHeader("x-original-name", context.originalName.toUtf8());
+    request.setRawHeader("x-checksum", context.checksum.toUtf8());
+
+    // 업로드 실행
+    QNetworkReply *reply = _nam->put(request, fileData);
+
+    // 컨텍스트 저장
+    UploadContext contextCopy = context;
+    contextCopy.reply = reply;
+    _activeUploads[reply] = contextCopy;
+
+    // 시그널 연결
+    connect(reply, &QNetworkReply::finished, this, &CloudManager::onUploadFinished);
+    connect(reply, &QNetworkReply::uploadProgress, this, [this, fileId = context.fileId](qint64 bytesSent, qint64 bytesTotal) {
+        emit uploadProgress(fileId, bytesSent, bytesTotal);
+    });
+
+    // 프록시 복원
+    _nam->setProxy(savedProxy);
+}
+
+QString CloudManager::createStoragePath(const QString &bucketName, const QString &fileName)
+{
+    // missions 폴더 구조 유지하면서 개선
+    QString cleanBucketName = bucketName;
+    if (!cleanBucketName.endsWith("/")) {
+        cleanBucketName += "/";
+    }
+
+    return QString("%1missions/%2").arg(cleanBucketName, fileName);
+}
+
+QNetworkRequest CloudManager::createUploadRequest(const QString &storagePath)
+{
+    QString endpoint = QString("https://%1/storage/v1/object/%2")
+    .arg(m_supabaseEndpoint, storagePath);
 
     QUrl url(endpoint);
-
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/octet-stream");
+
+    // HTTP/2 negotiation can fail with some proxies, causing upload failures.
+    // Disable it to fall back to HTTP/1.1.
+    request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
+
+    // 인증 헤더 설정
     request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
     request.setRawHeader("Authorization", QString("Bearer %1").arg(m_accessToken).toUtf8());
 
-    QNetworkReply * reply = _nam->put(request, jsonData);
+    // 추가 헤더
+    request.setRawHeader("x-upsert", "true"); // 덮어쓰기 허용
 
-    connect(reply, &QNetworkReply::finished, this, &CloudManager::onUploadFinished);
-    connect(reply, &QNetworkReply::uploadProgress, this, &CloudManager::uploadProgress);
-    qCDebug(CloudManagerLog) << "JsonObject" << objectName << "Uploading.";
-    _nam->setProxy(savedProxy);
+    return request;
+}
+
+QString CloudManager::calculateChecksum(const QByteArray &data)
+{
+    return QCryptographicHash::hash(data, QCryptographicHash::Sha256).toHex();
+}
+
+void CloudManager::onUploadFinished()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    if (!reply || !_activeUploads.contains(reply)) {
+        return;
+    }
+
+    UploadContext context = _activeUploads.take(reply);
+
+    if (reply->error() == QNetworkReply::NoError) {
+        qCDebug(CloudManagerLog) << "Upload successful:" << context.fileId;
+        qgcApp()->showAppMessage(tr("클라우드 저장소에 업로드되었습니다."));
+
+        // 메타데이터 저장
+        FileMetadata metadata;
+        metadata.fileId = context.fileId;
+        metadata.originalName = context.originalName;
+        metadata.storagePath = context.storagePath;
+        metadata.bucketName = context.bucketName;
+        metadata.fileSize = context.fileSize;
+        metadata.mimeType = context.mimeType;
+        metadata.uploadTime = context.uploadTime;
+        metadata.checksum = context.checksum;
+
+        saveFileMetadata(metadata);
+
+        emit uploadFinished(context.fileId, true);
+    } else {
+        QString errorMessage = QString("Upload failed: %1").arg(reply->errorString());
+        qgcApp()->showAppMessage(tr("클라우드 저장소 업로드에 실패하였습니다.") + errorMessage);
+        qCWarning(CloudManagerLog) << errorMessage;
+        handleUploadError(reply, errorMessage);
+        emit uploadFinished(context.fileId, false, errorMessage);
+    }
+
+    reply->deleteLater();
+}
+
+void CloudManager::saveFileMetadata(const FileMetadata &metadata)
+{
+    if (isAccessTokenExpired(m_accessToken)) {
+        qCDebug(CloudManagerLog) << "Access token expired. Attempting to refresh before saving metadata...";
+        connect(this, &CloudManager::tokenRefreshed, this, [this, metadata]() {
+            saveFileMetadata(metadata);
+        });
+        connect(this, &CloudManager::tokenRefreshFailed, this, [](const QString &error) {
+            qCWarning(CloudManagerLog) << "Token refresh failed while trying to save metadata:" << error;
+        });
+        refreshAccessToken();
+        return;
+    }
+
+    // Supabase 데이터베이스에 메타데이터 저장
+    QJsonObject metadataJson;
+    metadataJson["file_id"] = metadata.fileId;
+    metadataJson["original_name"] = metadata.originalName;
+    metadataJson["storage_path"] = metadata.storagePath;
+    metadataJson["bucket_name"] = metadata.bucketName;
+    metadataJson["file_size"] = metadata.fileSize;
+    metadataJson["mime_type"] = metadata.mimeType;
+    metadataJson["upload_time"] = metadata.uploadTime.toString(Qt::ISODate);
+    metadataJson["checksum"] = metadata.checksum;
+
+    QJsonDocument doc(metadataJson);
+    QByteArray data = doc.toJson(QJsonDocument::Compact);
+
+    // 메타데이터 테이블에 INSERT
+    QString endpoint = QString("https://%1/rest/v1/file_metadata").arg(m_supabaseEndpoint);
+    QUrl url(endpoint);
+    QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
+
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
+    request.setRawHeader("Authorization", QString("Bearer %1").arg(m_accessToken).toUtf8());
+    request.setRawHeader("Prefer", "return=minimal");
+
+    QNetworkReply *reply = _nam->post(request, data);
+    connect(reply, &QNetworkReply::finished, this, &CloudManager::onMetadataSaved);
+
+    qCDebug(CloudManagerLog) << "Saving metadata for file:" << metadata.fileId;
+}
+
+void CloudManager::onMetadataSaved()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
+    if (!reply) return;
+
+    if (reply->error() == QNetworkReply::NoError) {
+        qCDebug(CloudManagerLog) << "Metadata saved successfully";
+        emit metadataSaved(QString(), true);
+
+        // 업로드 완료 후 목록 자동 갱신
+        if (!m_lastBucketName.isEmpty()) {
+            getListBucket(m_lastBucketName);
+        }
+    } else {
+        qCWarning(CloudManagerLog) << "Failed to save metadata:" << reply->errorString();
+        emit metadataSaved(QString(), false);
+    }
+
+    reply->deleteLater();
+}
+
+void CloudManager::setSupabaseConfig(const QString &endpoint, const QString &anonKey, const QString &accessToken)
+{
+    m_supabaseEndpoint = endpoint;
+    m_apiAnonKey = anonKey;
+    m_accessToken = accessToken;
+}
+
+void CloudManager::handleUploadError(QNetworkReply *reply, const QString &errorMessage)
+{
+    // 에러 로깅 및 재시도 로직 등을 여기에 구현
+    Q_UNUSED(reply)
+    qCCritical(CloudManagerLog) << "Upload error:" << errorMessage;
 }
 
 void CloudManager::getListBucket(const QString &bucketName)
 {
-    // access token이 필요함
     if (m_accessToken.isEmpty()) {
-        qCDebug(CloudManagerLog) << "Access token is missing. Cannot proceed.";
+        qCDebug(CloudManagerLog) << "Access token is missing. Cannot list bucket contents.";
         return;
     }
 
-    // API Endpoint 설정
-    QString endpointHost = "vxtkbbhlxkfzkhfdgtrk.supabase.co";
-    QString endpoint = QString("https://%1/storage/v1/object/list/%2").arg(endpointHost, bucketName);
+    m_lastBucketName = bucketName;
 
+    // Supabase REST API를 사용하여 메타데이터 가져오기
+    QString endpoint = QString("https://%1/rest/v1/file_metadata?select=*&bucket_name=eq.%2").arg(m_supabaseEndpoint, bucketName);
     QUrl url(endpoint);
 
-    // 요청 본문
-    QVariantMap payload;
-    payload["prefix"] = "missions/"; // + m_signedId + "/"; // 경로 prefix 지정 (필요 시 수정)
-
-    QJsonDocument jsonPayload = QJsonDocument::fromVariant(payload);
-
     QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, QString("application/json"));
+    request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
     request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
     request.setRawHeader("Authorization", QString("Bearer %1").arg(m_accessToken).toUtf8());
 
@@ -263,18 +478,14 @@ void CloudManager::getListBucket(const QString &bucketName)
         _nam = new QNetworkAccessManager(this);
     }
 
-    // POST 요청
-    QNetworkReply *reply = _nam->post(request, jsonPayload.toJson());
+    QNetworkReply *reply = _nam->get(request);
 
-    QObject::connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
         if (reply->error() == QNetworkReply::NoError) {
-            QByteArray responseData = reply->readAll();
-            parseJsonResponse(responseData);
-            //qCDebug(CloudManagerLog) << "List Response:" << responseData;
+            parseJsonResponse(reply->readAll());
         } else {
-            qCDebug(CloudManagerLog) << "Error:" << reply->errorString();
-            qCDebug(CloudManagerLog) << "HTTP Status Code:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-            qCDebug(CloudManagerLog) << "Response Body:" << reply->readAll();
+            qCWarning(CloudManagerLog) << "Failed to get bucket list:" << reply->errorString();
+            qCWarning(CloudManagerLog) << "Response:" << reply->readAll();
         }
         reply->deleteLater();
     });
@@ -282,80 +493,48 @@ void CloudManager::getListBucket(const QString &bucketName)
 
 void CloudManager::parseJsonResponse(const QString &jsonResponse)
 {
-    QList<DownloadEntryFileInfo> fileInfoList;
     m_dnEntryPlanFile.clear();
 
     QJsonParseError parseError;
     QJsonDocument doc = QJsonDocument::fromJson(jsonResponse.toUtf8(), &parseError);
 
     if (parseError.error != QJsonParseError::NoError) {
-        qCDebug(CloudManagerLog) << "JSON parsing error:" << parseError.errorString();
+        qCWarning(CloudManagerLog) << "JSON parsing error:" << parseError.errorString();
+        emit dnEntryPlanFileChanged();
         return;
     }
 
     if (!doc.isArray()) {
-        qCDebug(CloudManagerLog) << "JSON response is not an array.";
+        qCWarning(CloudManagerLog) << "JSON response is not an array.";
+        emit dnEntryPlanFileChanged();
         return;
     }
 
     QJsonArray jsonArray = doc.array();
     for (const QJsonValue &value : jsonArray) {
-        if (!value.isObject())
+        if (!value.isObject()) {
             continue;
+        }
 
         QJsonObject obj = value.toObject();
-        QString fileName = obj.value("name").toString();
-
-                // ".emptyFolderPlaceholder" 파일은 무시
-        if (fileName == ".emptyFolderPlaceholder")
-            continue;
-
-        QJsonObject metadata = obj.value("metadata").toObject();
-
-        DownloadEntryFileInfo currentFile;
-        currentFile.key = fileName;
-        currentFile.lastModified = metadata.value("lastModified").toString();
-        currentFile.eTag = metadata.value("eTag").toString();
-        currentFile.size = metadata.value("size").toVariant().toLongLong();
-
-        fileInfoList.append(currentFile);
-    }
-
-    for (const DownloadEntryFileInfo& file : fileInfoList) {
         QMap<QString, QVariant> fileInfoMap;
-        fileInfoMap["Key"] = file.key;
-        fileInfoMap["FileName"] = file.key.split("/").last();
-        fileInfoMap["LastModified"] = file.lastModified;
-        fileInfoMap["ETag"] = file.eTag;
-        fileInfoMap["Size"] = file.size;
+
+        // UI에 필요한 정보 매핑
+        fileInfoMap["Key"] = obj.value("storage_path").toString();
+        fileInfoMap["FileName"] = obj.value("original_name").toString();
+        fileInfoMap["LastModified"] = obj.value("upload_time").toString();
+        fileInfoMap["ETag"] = obj.value("checksum").toString();
+        fileInfoMap["Size"] = obj.value("file_size").toVariant().toLongLong();
+        
+        // 추가 정보
+        fileInfoMap["FileId"] = obj.value("file_id").toString();
+        fileInfoMap["Bucket"] = obj.value("bucket_name").toString();
+        fileInfoMap["MimeType"] = obj.value("mime_type").toString();
+
         m_dnEntryPlanFile.append(QVariant::fromValue(fileInfoMap));
     }
 
     emit dnEntryPlanFileChanged();
-}
-
-void CloudManager::onUploadFinished()
-{
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if(!reply) {
-        return;
-    }
-
-    // multipart 데이터가 있다면 정리
-    QHttpMultiPart* multiPart = qobject_cast<QHttpMultiPart*>(reply->parent());
-    if (multiPart) {
-        delete multiPart;  // This will also delete the associated QFile
-    }
-
-    if (reply->error() == QNetworkReply::NoError) {
-        qCDebug(CloudManagerLog) << "업로드 성공!" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-        qgcApp()->showAppMessage(tr("클라우드 저장소에 업로드되었습니다."));
-    }
-    else {
-        qCDebug(CloudManagerLog) << "업로드 실패: " << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() << " - "<< reply->errorString();
-        qCDebug(CloudManagerLog) << "StatusCode: " << reply->readAll();
-    }
-    reply->deleteLater();
 }
 
 void CloudManager::uploadProgress(qint64 bytesSent, qint64 bytesTotal)
@@ -376,12 +555,6 @@ void CloudManager::setUploadProgressValue(double progress) {
         m_uploadProgressValue = progress;
         emit uploadProgressValueChanged();
     }
-}
-
-// Firebase GET 요청을 보내는 메소드
-void CloudManager::sendGetRequest(const QString &databaseUrl)
-{
-    qCDebug(CloudManagerLog) << "CloudManager: Request sent to" << databaseUrl;
 }
 
 void CloudManager::parseResponse(const QByteArray &response)
@@ -527,35 +700,6 @@ QString CloudManager::formatFileSize(qint64 bytes)
     return QString("%1 %2").arg(dblBytes, 0, 'f', 1).arg(sizes[i]);
 }
 
-void CloudManager::networkReplyReadyRead()
-{
-    // qCDebug(CloudManagerLog) << "CloudManager::networkReplyReadyRead";
-
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if(!reply) {
-        return;
-    }
-
-    if (reply && reply->error() == QNetworkReply::NoError) {
-        QByteArray response_data = reply->readAll();
-        qCDebug(CloudManagerLog) << "Response data received:" << response_data;
-
-        // JSON 데이터 파싱
-        QJsonParseError parseError;
-        QJsonDocument responseJson = QJsonDocument::fromJson(response_data, &parseError);
-
-        if (parseError.error != QJsonParseError::NoError) {
-            qCDebug(CloudManagerLog) << "JSON Parse Error:" << parseError.errorString();
-            return;
-        }
-
-        QJsonObject responseObject = responseJson.object();
-        qCDebug(CloudManagerLog) << "Parsed JSON:" << responseObject;
-    }
-
-    reply->deleteLater();
-}
-
 void CloudManager::signInReplyReadyRead()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
@@ -565,87 +709,60 @@ void CloudManager::signInReplyReadyRead()
 
     if (reply && reply->error() == QNetworkReply::NoError) {
         QByteArray response_data = reply->readAll();
-        //qCDebug(CloudManagerLog) << "Response data received:" << response_data;
 
         parseResponse( response_data );
     }
 }
 
-void CloudManager::networkReplyFinished()
+void CloudManager::downloadObject(const QString& bucketName, const QString& objectName, const QString& originalFileName)
 {
-    qCDebug(CloudManagerLog) << "CloudManager::networkReplyFinished";
-
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if(!reply) {
-        return;
+    QString cleanObjectName = objectName;
+    QString bucketPrefix = bucketName + "/";
+    if (cleanObjectName.startsWith(bucketPrefix)) {
+        cleanObjectName = cleanObjectName.mid(bucketPrefix.length());
     }
-
-    if (reply && reply->error() != QNetworkReply::NoError) {
-        qCDebug(CloudManagerLog) << "Network Error after finished:" << reply->errorString();
-    } else {
-        qCDebug(CloudManagerLog) << "Request finished successfully.";
-    }
-
-    qCDebug(CloudManagerLog) << "readAll():" << reply->readAll();
-    qCDebug(CloudManagerLog) << "errorString():" << reply->errorString();
-    qCDebug(CloudManagerLog) << "attribute():" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-
-    reply->deleteLater();
-}
-
-void CloudManager::networkReplyErrorOccurred(QNetworkReply::NetworkError code)
-{
-    qCDebug(CloudManagerLog) << "CloudManager::networkReplyErrorOccurred - Error Code:" << code;
-
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if(!reply) {
-        return;
-    }
-
-    if (reply) {
-        qCDebug(CloudManagerLog) << "Error String:" << reply->errorString();
-        qCDebug(CloudManagerLog) << "Error String All:" << reply->readAll();
-    }
-
-    reply->deleteLater();
-}
-
-void CloudManager::downloadObject(const QString& bucketName, const QString& objectName)
-{
-    QString urlStr = QString("https://%1/storage/v1/object/%2/%3").arg(m_endPointHost,bucketName,objectName);
+    
+    QString urlStr = QString("https://%1/storage/v1/object/%2/%3").arg(m_supabaseEndpoint, bucketName, cleanObjectName);
     QUrl url(urlStr);
 
     QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
+    request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
+    request.setRawHeader("Authorization", QString("Bearer %1").arg(m_accessToken).toUtf8());
 
-    // Send the request
+    qCDebug(CloudManagerLog) << "Downloading from URL:" << urlStr;
+
     QNetworkReply* reply = _nam->get(request);
-    connect(reply, &QNetworkReply::finished, this, [this, reply, objectName]() {
-        onDownloadFinished(reply, objectName);
+    connect(reply, &QNetworkReply::finished, this, [this, reply, originalFileName]() {
+        onDownloadFinished(reply, originalFileName);
     });
 }
 
-void CloudManager::onDownloadFinished(QNetworkReply* reply, const QString& objectName)
+void CloudManager::onDownloadFinished(QNetworkReply* reply, const QString& originalFileName)
 {
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray data = reply->readAll();
         QString downloadDirPath = SettingsManager::instance()->appSettings()->missionSavePath();
 
-        QString fileName = QFileInfo(objectName).fileName();
-
-        // Save the file using the object name
-        QString filePath = downloadDirPath + "/" + fileName;
+        // 원본 파일명으로 저장
+        QString filePath = downloadDirPath + "/" + originalFileName;
         QFile file(filePath);
         if (file.open(QIODevice::WriteOnly)) {
             file.write(data);
             file.close();
             qCDebug(CloudManagerLog) << "Downloaded successfully!" << filePath;
-            qgcApp()->showAppMessage(tr("내부저장소에 다운로드가 완료되었습니다."));
+            //qgcApp()->showAppMessage(tr("내부저장소에 다운로드가 완료되었습니다."));
+            
+            // 다운로드 완료 시그널 발생
+            emit downloadCompleted(filePath, true);
         } else {
             qCDebug(CloudManagerLog) << "Failed to open file for writing." << filePath;
+            emit downloadCompleted(QString(), false);
         }
     } else {
-        qCDebug(CloudManagerLog) << "Error downloading object:" << reply->errorString();
-        qCDebug(CloudManagerLog) << "Error downloading object:" << reply->readAll();
+        qCWarning(CloudManagerLog) << "Error downloading object:" << reply->errorString();
+        qCWarning(CloudManagerLog) << "Error response:" << reply->readAll();
+        emit downloadCompleted(QString(), false);
     }
     reply->deleteLater();
 }
@@ -662,24 +779,72 @@ void CloudManager::deleteObject(const QString &bucketName, const QString &object
         return;
     }
 
-    QString urlStr = QString("https://%1/storage/v1/object/%2/%3").arg(m_endPointHost,bucketName,objectName);
+    QString cleanObjectName = objectName;
+    QString bucketPrefix = bucketName + "/";
+    if (cleanObjectName.startsWith(bucketPrefix)) {
+        cleanObjectName = cleanObjectName.mid(bucketPrefix.length());
+    }
+
+    // 1단계: Storage에서 파일 삭제
+    QString urlStr = QString("https://%1/storage/v1/object/%2/%3").arg(m_supabaseEndpoint, bucketName, cleanObjectName);
     QUrl url(urlStr);
 
     QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
     request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
     request.setRawHeader("Authorization", QString("Bearer %1").arg(m_accessToken).toUtf8());
 
-    qDebug() << "Sending DELETE request via POST to:" << urlStr;
+    qCDebug(CloudManagerLog) << "Deleting from URL:" << urlStr;
 
     QNetworkReply *reply = _nam->deleteResource(request);
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply, objectName, bucketName]() {
         if (reply->error() == QNetworkReply::NoError) {
-            qCDebug(CloudManagerLog) << "Delete succeeded:" << reply->readAll();
-            //emit fileDeleteSucceeded();
+            qCDebug(CloudManagerLog) << "File delete succeeded from storage";
+            
+            // 2단계: 메타데이터 테이블에서도 삭제
+            deleteFileMetadata(objectName, bucketName);
         } else {
-            qCDebug(CloudManagerLog) << "Delete failed:" << reply->errorString() << "///////////" << reply->readAll();
-            //emit fileDeleteFailed(reply->errorString());
+            qCWarning(CloudManagerLog) << "Delete failed:" << reply->errorString();
+            qCWarning(CloudManagerLog) << "Delete response:" << reply->readAll();
+            qgcApp()->showAppMessage(tr("클라우드 저장소 파일 삭제에 실패하였습니다."));
+        }
+        reply->deleteLater();
+    });
+}
+
+void CloudManager::deleteFileMetadata(const QString &storagePath, const QString &bucketName)
+{
+    QString endpoint = QString("https://%1/rest/v1/file_metadata").arg(m_supabaseEndpoint);
+    QUrl url(endpoint);
+
+    QUrlQuery query;
+    query.addQueryItem("storage_path", QString("eq.%1").arg(storagePath));
+    query.addQueryItem("bucket_name", QString("eq.%1").arg(bucketName));
+    url.setQuery(query);
+
+    QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
+    request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
+    request.setRawHeader("Authorization", QString("Bearer %1").arg(m_accessToken).toUtf8());
+
+    qCDebug(CloudManagerLog) << "Deleting metadata with URL:" << url.toString();
+    qCDebug(CloudManagerLog) << "Storage path:" << storagePath;
+    qCDebug(CloudManagerLog) << "Bucket name:" << bucketName;
+
+    QNetworkReply *reply = _nam->deleteResource(request);
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, bucketName, storagePath]() {
+        if (reply->error() == QNetworkReply::NoError) {
+            qCDebug(CloudManagerLog) << "Metadata delete succeeded";
+            qgcApp()->showAppMessage(tr("클라우드 저장소에서 파일과 메타데이터가 삭제되었습니다."));
+            
+            // 삭제 완료 후 목록 자동 갱신
+            getListBucket(bucketName);
+        } else {
+            qCWarning(CloudManagerLog) << "Metadata delete failed:" << reply->errorString();
+            qCWarning(CloudManagerLog) << "HTTP Status:" << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            qCWarning(CloudManagerLog) << "Response:" << reply->readAll();
         }
         reply->deleteLater();
     });
@@ -730,10 +895,11 @@ void CloudManager::insertDataToDB(const QString &tableName, const QVariantMap &d
         return;
     }
 
-    QString urlStr = QString("https://%1/rest/v1/%2").arg(m_endPointHost, tableName);
+    QString urlStr = QString("https://%1/rest/v1/%2").arg(m_supabaseEndpoint, tableName);
     QUrl url(urlStr);
 
     QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
     request.setRawHeader("Authorization", QString("Bearer %1").arg(m_accessToken).toUtf8());
@@ -772,10 +938,11 @@ void CloudManager::refreshAccessToken()
         return;
     }
 
-    QString urlStr = QString("https://%1/auth/v1/token?grant_type=refresh_token").arg(m_endPointHost);
+    QString urlStr = QString("https://%1/auth/v1/token?grant_type=refresh_token").arg(m_supabaseEndpoint);
     QUrl url(urlStr);
 
     QNetworkRequest request(url);
+    request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
 
@@ -832,8 +999,7 @@ bool CloudManager::isAccessTokenExpired(const QString &token)
 
     qint64 exp = obj["exp"].toVariant().toLongLong();
     qint64 current = QDateTime::currentSecsSinceEpoch();
+    const qint64 buffer = 30; // 30초의 버퍼
 
-    qDebug() << "Token expiration:" << exp << ", Current time:" << current;
-
-    return current >= exp;
+    return current >= (exp - buffer);
 }

@@ -100,7 +100,7 @@ Item {
         anchors.bottom:         parent.bottom
         anchors.leftMargin:     _margins
         anchors.left:           parent.left
-        spacing:                ScreenTools.defaultFontPixelWidth * 2
+        spacing:                ScreenTools.defaultFontPixelHeight
 
         QGCButton {
             id:          uploadButton
@@ -220,7 +220,7 @@ Item {
             spacing : ScreenTools.defaultFontPixelWidth
 
             LabelledLabel {
-                label:          qsTr("Distance")
+                label:          qsTr("경로 전체 거리")
                 labelText: _missionPlannedDistanceText
             }
 
@@ -231,7 +231,7 @@ Item {
             }
 
             LabelledLabel {
-                label:          qsTr("Telem Max")
+                label:          qsTr("통신 최대 반경")
                 labelText: _missionMaxTelemetryText
             }
 
@@ -242,7 +242,7 @@ Item {
             }
 
             LabelledLabel {
-                label:          qsTr("Time")
+                label:          qsTr("비행 예상 시간")
                 labelText: getMissionTime()
             }
         }

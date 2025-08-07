@@ -23,6 +23,17 @@
 
 Q_DECLARE_LOGGING_CATEGORY(CloudManagerLog)
 
+struct FileMetadata {
+    QString fileId;
+    QString originalName;
+    QString storagePath;
+    QString bucketName;
+    qint64 fileSize;
+    QString mimeType;
+    QDateTime uploadTime;
+    QString checksum;
+};
+
 class CloudManager;
 class DatabaseManager;
 
@@ -57,7 +68,7 @@ public:
     Q_INVOKABLE void signUserOut();
     Q_INVOKABLE void loadDirFile(QString dirName);
     //Q_INVOKABLE void uploadFile(const QString &filePath, const QString &bucketName, const QString &objectName);
-    Q_INVOKABLE void downloadObject(const QString &bucketName, const QString &objectName);
+    Q_INVOKABLE void downloadObject(const QString& bucketName, const QString& objectName, const QString& originalFileName);
     Q_INVOKABLE void deleteObject(const QString &bucketName, const QString &objectName);
     Q_INVOKABLE void insertDataToDB(const QString &tableName, const QVariantMap &data);
 
@@ -68,7 +79,13 @@ public:
         QString eTag;
     };
 
-    void uploadJsonFile(const QJsonDocument &jsonDoc, const QString& bucketName, const QString& objectName);
+    void uploadJsonFile(const QJsonDocument &jsonDoc,
+                        const QString &bucketName,
+                        const QString &objectName = QString());
+    void uploadFile(const QByteArray &fileData,
+                    const QString &bucketName,
+                    const QString &originalFileName,
+                    const QString &mimeType = "application/octet-stream");
     void getListBucket(const QString &bucketName);
     void setSignedIn (bool signedIn);
     void setSignedId (QString signedId);
@@ -92,11 +109,20 @@ public:
     QList<DownloadEntryFileInfo> downloadEntryFileInfo() const { return m_downloadEntryFileInfo; }
     double fileDownloadProgress () const { return m_fileDownloadProgress; }
 
+    // 메타데이터 관리
+    void saveFileMetadata(const FileMetadata &metadata);
+    FileMetadata getFileMetadata(const QString &fileId);
+    QList<FileMetadata> getAllFileMetadata(const QString &bucketName = QString());
+
+    // 파일명 관련 유틸리티
+    static QString generateUniqueFileName(const QString &originalName);
+    static QString extractFileExtension(const QString &fileName);
+
+    // 설정
+    void setSupabaseConfig(const QString &endpoint, const QString &anonKey, const QString &accessToken);
+
 public slots:
-    void networkReplyReadyRead();
     void signInReplyReadyRead();
-    void networkReplyFinished();
-    void networkReplyErrorOccurred(QNetworkReply::NetworkError code);
     void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
     void onUploadFinished();
     void onDownloadFinished(QNetworkReply* reply, const QString& objectName);
@@ -125,7 +151,29 @@ signals:
     void tokenRefreshed(const QString &newToken);
     void tokenRefreshFailed(const QString &error);
 
+    void uploadFinished(const QString &fileId, bool success, const QString &errorMessage = QString());
+    void uploadProgress(const QString &fileId, qint64 bytesSent, qint64 bytesTotal);
+    void metadataSaved(const QString &fileId, bool success);
+    
+    void downloadCompleted(const QString &filePath, bool success);
+
+private slots:
+    void onMetadataSaved();
+
 private:
+
+    struct UploadContext {
+        QString fileId;
+        QString originalName;
+        QString storagePath;
+        QString bucketName;
+        qint64 fileSize;
+        QString mimeType;
+        QDateTime uploadTime;
+        QString checksum;
+        QNetworkReply* reply;
+    };
+
     static const QString API_BASE_URL;
     static const QString SIGN_UP_ENDPOINT;
     static const QString SIGN_IN_ENDPOINT;
@@ -139,11 +187,13 @@ private:
     QNetworkAccessManager *_nam;
     QNetworkReply *m_networkReply;
     QNetworkRequest m_networkRequest;
+    QHash<QNetworkReply*, UploadContext> _activeUploads;
     QString databaseUrl;
     QString m_networkStatus;
     QString _emailAddress;
     QString _password;
-    static const QString m_apiAnonKey;
+    QString m_supabaseEndpoint = "vxtkbbhlxkfzkhfdgtrk.supabase.co";
+    QString m_apiAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dGtiYmhseGtmemtoZmRndHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyODkyNDYsImV4cCI6MjA2MDg2NTI0Nn0.yLo8vPPUhFhKUnt6VqnwSnerLRj3psSEtOZDHhekq2g";
     QString m_accessToken;
     QString m_refreshToken;
     QString m_signedUserName;
@@ -153,7 +203,7 @@ private:
     bool m_signedIn = false;
     QString m_signedId = "";
     QString m_messageString;
-    static const QString m_endPointHost;
+    QString m_lastBucketName;
     QString formatFileSize(qint64 bytes);
     QmlObjectListModel _uploadEntriesModel;
     QList<QVariant> m_fileList;
@@ -171,7 +221,6 @@ private:
     double m_fileDownloadProgress = 0.0;
 
     void requestSignIn(const QString & url, const QJsonDocument & payload );
-    void sendGetRequest(const QString & databaseUrl);
     void parseResponse(const QByteArray & response );
     void handleError(const QJsonObject &errorObject);
     void initiateMultipartUpload(const QString &bucketName, const QString &objectName);
@@ -185,11 +234,14 @@ private:
     void downloadProgress(qint64 curr, qint64 total);
     void refreshAccessToken();
     bool isAccessTokenExpired(const QString &token);
-#if defined(Q_OS_ANDROID)
-    void installApkFromInternal(const QString &apkFilePath);
-    void requestUnknownSourcePermission();
-#endif
 
+    QString createStoragePath(const QString &bucketName, const QString &fileName);
+    QNetworkRequest createUploadRequest(const QString &storagePath);
+    QNetworkRequest createMetadataRequest();
+    QString calculateChecksum(const QByteArray &data);
+    void uploadFileInternal(const QByteArray &fileData, const UploadContext &context);
+    void handleUploadError(QNetworkReply *reply, const QString &errorMessage);
+    void deleteFileMetadata(const QString &storagePath, const QString &bucketName);
 };
 
 #endif // CLOUDMANAGER_H

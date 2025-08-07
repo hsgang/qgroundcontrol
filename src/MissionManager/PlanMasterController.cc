@@ -657,15 +657,11 @@ void PlanMasterController::showPlanFromManagerVehicle(void)
 
 void PlanMasterController::uploadToCloud(const QString& fileName)
 {
-    qDebug() << "uploadToCloud()";
-
     _uploadToCloud(fileName);
 }
 
 void PlanMasterController::_uploadToCloud(const QString& fileName)
 {
-    qDebug() << "_uploadToCloud()";
-
     QString uploadFileName = fileName + ".plan";
     QJsonDocument saveDoc = saveToJson();
     CloudManager::instance()->uploadJsonFile(saveDoc, "amp-mission-files", uploadFileName);

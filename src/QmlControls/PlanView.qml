@@ -111,6 +111,38 @@ Item {
         }
     }
 
+    Connections {
+        target: QGroundControl.cloudManager
+        function onDownloadCompleted(filePath, success) {
+            if (success && filePath !== "") {
+                // 기존 플랜이 수정되었는지 확인
+                if (_planMasterController.dirty) {
+                    mainWindow.showMessageDialog(qsTr("미션 다운로드 완료"),
+                                               qsTr("현재 수정된 미션이 있습니다. 다운로드한 미션 파일로 바꾸시겠습니까?\n(현재 작업은 저장되지 않습니다)"),
+                                               Dialog.Yes | Dialog.No,
+                                               function() {
+                                                   loadDownloadedMission(filePath)
+                                               })
+                } else {
+                    mainWindow.showMessageDialog(qsTr("미션 다운로드 완료"),
+                                               qsTr("다운로드한 미션 파일을 로드하시겠습니까?"),
+                                               Dialog.Yes | Dialog.No,
+                                               function() {
+                                                   loadDownloadedMission(filePath)
+                                               })
+                }
+            } else {
+                mainWindow.showMessageDialog(qsTr("다운로드 실패"), qsTr("미션 파일 다운로드에 실패했습니다."))
+            }
+        }
+    }
+
+    function loadDownloadedMission(filePath) {
+        _planMasterController.loadFromFile(filePath)
+        _planMasterController.fitViewportToItems()
+        _missionController.setCurrentPlanViewSeqNum(0, true)
+    }
+
     Component {
         id: promptForPlanUsageOnVehicleChangePopupComponent
         QGCPopupDialog {
@@ -1228,7 +1260,7 @@ Item {
                         columns:        2
 
                         QGCLabel {
-                            text: qsTr("경로 이름 입력(영문)")
+                            text: qsTr("경로 이름 입력")
                             Layout.columnSpan: 2
                             Layout.fillWidth: true
                         }
@@ -1322,8 +1354,14 @@ Item {
                                     }
                                 }
 
-                                onClicked: {
-                                    QGroundControl.cloudManager.downloadObject("amp-mission-files", "missions/" + modelData["FileName"])
+                                onClicked: { mainWindow.showMessageDialog(
+                                        qsTr("경로 파일 다운로드"),
+                                        qsTr("'%1' 파일을 클라우드 저장소에서 다운로드하시겠습니까?").arg(modelData["FileName"]),
+                                        Dialog.Ok | Dialog.Cancel,
+                                        function () {
+                                            QGroundControl.cloudManager.downloadObject("amp-mission-files", modelData["Key"], modelData["FileName"])
+                                        })
+
                                 }
                             }
 
@@ -1345,11 +1383,11 @@ Item {
                                 QGCMouseArea {
                                     fillItem:   parent
                                     onClicked:  mainWindow.showMessageDialog(
-                                        qsTr("Delete Link"),
-                                        qsTr("'%1'파일을 클라우드 저장소에서 삭제하시겠습니까?").arg(modelData["FileName"]),
+                                        qsTr("경로 파일 삭제"),
+                                        qsTr("'%1' 파일을 클라우드 저장소에서 삭제하시겠습니까?").arg(modelData["FileName"]),
                                         Dialog.Ok | Dialog.Cancel,
                                         function () {
-                                            QGroundControl.cloudManager.deleteObject("amp-mission-files", "missions/" + modelData["FileName"])
+                                            QGroundControl.cloudManager.deleteObject("amp-mission-files", modelData["Key"])
                                             _planMasterController.getListFromCloud();
                                         })
                                 }
