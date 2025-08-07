@@ -206,7 +206,7 @@ Rectangle {
                     text:               qsTr("AMSL %1 %2").arg(missionItem.amslAltAboveTerrain.valueString).arg(missionItem.amslAltAboveTerrain.units)
                     visible:            missionItem.altitudeMode === QGroundControl.AltitudeModeCalcAboveTerrain
                 }
-            }           
+            }
 
             Repeater {
                 model: missionItem.comboboxFacts
@@ -284,4 +284,3 @@ Rectangle {
         }
     }
 }
-
