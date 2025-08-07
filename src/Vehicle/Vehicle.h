@@ -55,7 +55,6 @@
 #include "FTPManager.h"
 #include "ImageProtocolManager.h"
 #include "AtmosphericSensorFactGroup.h"
-#include "GeneratorStatusFactGroup.h"
 #include "VehicleLandingTargetFactGroup.h"
 #include "HealthAndArmingCheckReport.h"
 #include "ExternalPowerStatusFactGroup.h"
@@ -304,7 +303,6 @@ public:
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
     // Q_PROPERTY(FactGroup*           tunnelingData   READ tunnelingDataFactGroup     CONSTANT)
-    Q_PROPERTY(FactGroup*           generatorStatus READ generatorStatusFactGroup   CONSTANT)
     Q_PROPERTY(FactGroup*           externalPowerStatus READ externalPowerStatusFactGroup CONSTANT)
     Q_PROPERTY(FactGroup*           winchStatus     READ winchStatusFactGroup       CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
@@ -666,7 +664,6 @@ public:
     QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
     FactGroup* atmosphericSensorFactGroup   () { return &_atmosphericSensorFactGroup; }
     // FactGroup* tunnelingDataFactGroup       () { return &_tunnelingDataFactGroup; }
-    FactGroup* generatorStatusFactGroup     () { return &_generatorStatusFactGroup; }
     FactGroup* externalPowerStatusFactGroup () { return &_externalPowerStatusFactGroup; }
     FactGroup* winchStatusFactGroup         () { return &_winchStatusFactGroup; }
     FactGroup* landingTargetFactGroup       () { return &_landingTargetFactGroup; }
@@ -1353,7 +1350,6 @@ private:
     const QString _efiFactGroupName =                QStringLiteral("efi");
     const QString _atmosphericSensorFactGroupName =  QStringLiteral("atmosphericSensor");
     // const QString _tunnelingDataFactGroupName =      QStringLiteral("tunnelingData");
-    const QString _generatorStatusFactGroupName =    QStringLiteral("generatorStatus");
     const QString _externalPowerStatusFactGroupName =   QStringLiteral("externalPowerStatus");
     const QString _winchStatusFactGroupName =        QStringLiteral("winchStatus");
     const QString _landingTargetFactGroupName =      QStringLiteral("landingTarget");
@@ -1380,7 +1376,6 @@ private:
     TerrainFactGroup                _terrainFactGroup;
     AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
     // TunnelingDataFactGroup          _tunnelingDataFactGroup;
-    GeneratorStatusFactGroup        _generatorStatusFactGroup;
     ExternalPowerStatusFactGroup    _externalPowerStatusFactGroup;
     WinchStatusFactGroup            _winchStatusFactGroup;
     VehicleLandingTargetFactGroup   _landingTargetFactGroup;

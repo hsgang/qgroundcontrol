@@ -19,7 +19,7 @@ struct externalPower_Payload {
 };
 
 ExternalPowerStatusFactGroup::ExternalPowerStatusFactGroup(QObject* parent)
-    : FactGroup(1000, ":/json/Vehicle/GeneratorStatusFactGroup.json", parent)
+    : FactGroup(1000, ":/json/Vehicle/ExternalPowerStatusFactGroup.json", parent)
 {
     _addFact(&_acInputVolatage1Fact);
     _addFact(&_acInputVolatage2Fact);

@@ -127,7 +127,6 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _terrainFactGroup             (this)
     , _atmosphericSensorFactGroup   (this)
     // , _tunnelingDataFactGroup       (this)
-    , _generatorStatusFactGroup     (this)
     , _externalPowerStatusFactGroup (this)
     , _winchStatusFactGroup         (this)
     , _landingTargetFactGroup       (this)
@@ -244,7 +243,6 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _localPositionSetpointFactGroup   (this)
     , _atmosphericSensorFactGroup       (this)
     // , _tunnelingDataFactGroup           (this)
-    , _generatorStatusFactGroup         (this)
     , _externalPowerStatusFactGroup     (this)
     , _winchStatusFactGroup             (this)
     , _landingTargetFactGroup           (this)
@@ -372,7 +370,6 @@ void Vehicle::_commonInit()
     _addFactGroup(&_terrainFactGroup,           _terrainFactGroupName);
     _addFactGroup(&_atmosphericSensorFactGroup, _atmosphericSensorFactGroupName);
     // _addFactGroup(&_tunnelingDataFactGroup,     _tunnelingDataFactGroupName);
-    _addFactGroup(&_generatorStatusFactGroup,   _generatorStatusFactGroupName);
     _addFactGroup(&_externalPowerStatusFactGroup,_externalPowerStatusFactGroupName);
     _addFactGroup(&_winchStatusFactGroup,       _winchStatusFactGroupName);
     _addFactGroup(&_landingTargetFactGroup,     _landingTargetFactGroupName);

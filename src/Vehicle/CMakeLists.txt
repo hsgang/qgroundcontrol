@@ -24,20 +24,6 @@ target_sources(${CMAKE_PROJECT_NAME}
         VehicleLinkManager.h
         VehicleObjectAvoidance.cc
         VehicleObjectAvoidance.h
-        AtmosphericSensorFactGroup.cc
-        AtmosphericSensorFactGroup.h
-        VehicleEKFStatusFactGroup.cc
-        VehicleEKFStatusFactGroup.h
-        VehicleLandingTargetFactGroup.cc
-        VehicleLandingTargetFactGroup.h
-        WinchStatusFactGroup.cc
-        WinchStatusFactGroup.h
-        TunnelingDataFactGroup.cc
-        TunnelingDataFactGroup.h
-        GeneratorStatusFactGroup.cc
-        GeneratorStatusFactGroup.h
-        ExternalPowerStatusFactGroup.cc
-        ExternalPowerStatusFactGroup.h
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

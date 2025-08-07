@@ -38,6 +38,18 @@ target_sources(${CMAKE_PROJECT_NAME}
         VehicleWindFactGroup.h
         VehicleHygrometerFactGroup.cc
         VehicleHygrometerFactGroup.h
+        VehicleLandingTargetFactGroup.cc
+        VehicleLandingTargetFactGroup.h
+        WinchStatusFactGroup.cc
+        WinchStatusFactGroup.h
+        ExternalPowerStatusFactGroup.cc
+        ExternalPowerStatusFactGroup.h
+        AtmosphericSensorFactGroup.cc
+        AtmosphericSensorFactGroup.h
+        VehicleEKFStatusFactGroup.cc
+        VehicleEKFStatusFactGroup.h
+        TunnelingDataFactGroup.cc
+        TunnelingDataFactGroup.h
 )
 
 # Add JSON files
@@ -60,6 +72,11 @@ set(JSON_FILES
     VehicleFact.json
     VibrationFact.json
     WindFact.json
+    LandingTargetFactGroup.json
+    WinchStatusFactGroup.json
+    AtmosphericSensorFact.json
+    EKFStatusFact.json
+    ExternalPowerStatusFactGroup.json
 )
 qt_add_resources(${CMAKE_PROJECT_NAME} json_vehicle_fact_group
     PREFIX "/json/Vehicle"
