@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 
-import QGroundControl.ScreenTools
+import QGroundControl
 
 MenuItem {
     id: control

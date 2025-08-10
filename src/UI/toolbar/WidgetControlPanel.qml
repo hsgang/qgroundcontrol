@@ -15,7 +15,6 @@ import QtQuick.Dialogs
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.FactControls
-import QGroundControl.ScreenTools
 
 ToolIndicatorPage{
     showExpand: false

@@ -17,7 +17,6 @@ import QtQuick.Effects
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.FactControls
-import QGroundControl.ScreenTools
 import QGroundControl.FlightDisplay
 
 /// @brief Native QML top level window

@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 
 import QGroundControl
-import QGroundControl.ScreenTools
 import QGroundControl.Controls
 import QGroundControl.FactControls
 
