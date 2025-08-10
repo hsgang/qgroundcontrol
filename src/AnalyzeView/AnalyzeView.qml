@@ -16,9 +16,6 @@ import QGroundControl
 
 import QGroundControl.Controls
 
-import QGroundControl.ScreenTools
-import QGroundControl.FlightDisplay
-
 Rectangle {
     id:     _root
     color:  qgcPal.window

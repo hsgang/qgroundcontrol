@@ -16,7 +16,7 @@ import QtQuick.Dialogs
 import QtMultimedia             
 
 import QGroundControl
-import QGroundControl.ScreenTools
+
 import QGroundControl.Controls
 
 

@@ -181,10 +181,6 @@ list(APPEND QGC_RESOURCES
     ${CMAKE_SOURCE_DIR}/resources/InstrumentValueIcons/InstrumentValueIcons.qrc
 )
 
-if(QGC_BUILD_TESTING)
-    list(APPEND QGC_RESOURCES ${CMAKE_SOURCE_DIR}/test/UnitTest.qrc)
-endif()
-
 #######################################################
 #               QGroundControl Target
 #######################################################
@@ -214,7 +210,6 @@ qt_add_qml_module(${CMAKE_PROJECT_NAME}
         QtQuick.Controls
         QtQuick.Dialogs
         QtQuick.Layouts
-        QtQuick.Window
 )
 
 add_subdirectory(src)
@@ -234,19 +229,12 @@ qt_add_translations(${CMAKE_PROJECT_NAME}
     TS_FILE_BASE ${CMAKE_PROJECT_NAME}
 )
 
-qgc_set_qt_resource_alias(
-    ${CMAKE_SOURCE_DIR}/resources/qtquickcontrols2.conf
-    ${SDL_GAMECONTROLLERDB_PATH}
-)
+qgc_set_qt_resource_alias(${CMAKE_SOURCE_DIR}/resources/qtquickcontrols2.conf)
 
 qt_add_resources(${CMAKE_PROJECT_NAME} "qgcresources_cmake"
     PREFIX "/"
     FILES
-        ${CMAKE_SOURCE_DIR}/resources/qtquickcontrols2.conf
-        ${SDL_GAMECONTROLLERDB_PATH}
-        ${QGC_GSTREAMER_SHADER_RESOURCES}
-        ${QGC_ARDUPILOT_PARAMS_RESOURCES}
-        # ${QGC_TEST_RESOURCES}
+        "${CMAKE_SOURCE_DIR}/resources/qtquickcontrols2.conf"
 )
 
 # cmake_print_variables(QT_ALL_PLUGIN_TYPES_FOUND_VIA_FIND_PACKAGE)

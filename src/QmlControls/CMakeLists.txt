@@ -63,6 +63,10 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 
 qt_add_library(QGroundControlControlsModule STATIC)
 
+set_source_files_properties(ScreenTools.qml PROPERTIES
+    QT_QML_SINGLETON_TYPE TRUE
+)
+
 qt_add_qml_module(QGroundControlControlsModule
     URI QGroundControl.Controls
     VERSION 1.0
@@ -234,6 +238,8 @@ qt_add_qml_module(QGroundControlControlsModule
         OfflineMapEditor.qml
 
         WelcomeView.qml
+        
+        ScreenTools.qml
     NO_PLUGIN
 )
 
@@ -243,19 +249,3 @@ qt_add_resources(${CMAKE_PROJECT_NAME} json_controls
     PREFIX "/json"
     FILES ${JSON_FILES}
 )
-
-qt_add_library(ScreenToolsModule STATIC)
-
-set_source_files_properties(ScreenTools.qml PROPERTIES
-    QT_QML_SINGLETON_TYPE TRUE
-)
-
-qt_add_qml_module(ScreenToolsModule
-    URI QGroundControl.ScreenTools
-    VERSION 1.0
-    RESOURCE_PREFIX /qml
-    QML_FILES
-        ScreenTools.qml
-    NO_PLUGIN
-)
-
