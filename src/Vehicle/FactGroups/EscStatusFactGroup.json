@@ -1,252 +1,106 @@
 {
     "version":  1,
     "fileType": "FactMetaData",
-    "QGC.MetaData.Facts": [
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "id",
+    "shortDesc":        "ESC index",
+    "type":             "uint32"
+},
+{
+    "name":             "rpm",
+    "shortDesc":        "Rotation Per Minute",
+    "type":             "float",
+    "decimalPlaces":    2,
+    "default":          null
+},
+{
+    "name":             "current",
+    "shortDesc":        "Current",
+    "type":             "float",
+    "decimalPlaces":    2,
+    "default":          null,
+    "units":            "A"
+
+},
+{
+    "name":             "voltage",
+    "shortDesc":        "Voltage",
+    "type":             "float",
+    "decimalPlaces":    2,
+    "default":          null,
+    "units":            "V"
+},
+{
+    "name":             "count",
+    "shortDesc":        "Total number of ESCs",
+    "type":             "uint8",
+    "default":          0
+},
+{
+    "name":             "connectionType",
+    "shortDesc":        "ESC protocol",
+    "type":             "uint8",
+    "default":          0,
+    "enumStrings":      "PPM,Serial Bus,One Shot,I2C,CAN-Bus,DShot",
+    "enumValues":       "0,1,2,3,4,5"
+},
+{
+    "name":             "info",
+    "shortDesc":        "Online/Offline status",
+    "type":             "uint8",
+    "default":          0
+},
+{
+    "name":             "failureFlags",
+    "shortDesc":        "Failure flags",
+    "type":             "uint16",
+    "default":          0,
+      "bitmask": [
         {
-            "name": "index",
-            "shortDesc": "Index Of The First ESC In This Message",
-            "type": "uint8",
-            "default": 0
+          "index": 0,
+          "description": "Over current failure"
         },
         {
-            "name": "rpmFirst",
-            "shortDesc": "Rotation Per Minute",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null
+          "index": 1,
+          "description": "Over voltage failure"
         },
         {
-            "name": "rpmSecond",
-            "shortDesc": "Rotation Per Minute",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null
+          "index": 2,
+          "description": "Over temperature failure"
         },
         {
-            "name": "rpmThird",
-            "shortDesc": "Rotation Per Minute",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null
+          "index": 3,
+          "description": "Over RPM failure"
         },
         {
-            "name": "rpmFourth",
-            "shortDesc": "Rotation Per Minute",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null
+          "index": 4,
+          "description": "Inconsistent command failure"
         },
         {
-            "name": "rpmFifth",
-            "shortDesc": "Rotation Per Minute",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null
+          "index": 5,
+          "description": "Motor stuck failure"
         },
         {
-            "name": "rpmSixth",
-            "shortDesc": "Rotation Per Minute",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null
-        },
-        {
-            "name": "rpmSeventh",
-            "shortDesc": "Rotation Per Minute",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null
-        },
-        {
-            "name": "rpmEighth",
-            "shortDesc": "Rotation Per Minute",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null
-        },
-        {
-            "name": "currentFirst",
-            "shortDesc": "Current",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "A"
-        },
-        {
-            "name": "currentSecond",
-            "shortDesc": "Current",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "A"
-        },
-        {
-            "name": "currentThird",
-            "shortDesc": "Current",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "A"
-        },
-        {
-            "name": "currentFourth",
-            "shortDesc": "Current",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "A"
-        },
-        {
-            "name": "currentFifth",
-            "shortDesc": "Current",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "A"
-        },
-        {
-            "name": "currentSixth",
-            "shortDesc": "Current",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "A"
-        },
-        {
-            "name": "currentSeventh",
-            "shortDesc": "Current",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "A"
-        },
-        {
-            "name": "currentEighth",
-            "shortDesc": "Current",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "A"
-        },
-        {
-            "name": "voltageFirst",
-            "shortDesc": "Voltage",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "v"
-        },
-        {
-            "name": "voltageSecond",
-            "shortDesc": "Voltage",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "v"
-        },
-        {
-            "name": "voltageThird",
-            "shortDesc": "Voltage",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "v"
-        },
-        {
-            "name": "voltageFourth",
-            "shortDesc": "Voltage",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "v"
-        },
-        {
-            "name": "voltageFifth",
-            "shortDesc": "Voltage",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "v"
-        },
-        {
-            "name": "voltageSixth",
-            "shortDesc": "Voltage",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "v"
-        },
-        {
-            "name": "voltageSeventh",
-            "shortDesc": "Voltage",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "v"
-        },
-        {
-            "name": "voltageEighth",
-            "shortDesc": "Voltage",
-            "type": "float",
-            "decimalPlaces": 2,
-            "default": null,
-            "units": "v"
-        },
-        {
-            "name": "temperatureFirst",
-            "shortDesc": "temperature",
-            "type": "uint8",
-            "default": 0,
-            "units": "degC"
-        },
-        {
-            "name": "temperatureSecond",
-            "shortDesc": "temperature",
-            "type": "uint8",
-            "default": 0,
-            "units": "degC"
-        },
-        {
-            "name": "temperatureThird",
-            "shortDesc": "temperature",
-            "type": "uint8",
-            "default": 0,
-            "units": "degC"
-        },
-        {
-            "name": "temperatureFourth",
-            "shortDesc": "temperature",
-            "type": "uint8",
-            "default": 0,
-            "units": "degC"
-        },
-        {
-            "name": "temperatureFifth",
-            "shortDesc": "temperature",
-            "type": "uint8",
-            "default": 0,
-            "units": "degC"
-        },
-        {
-            "name": "temperatureSixth",
-            "shortDesc": "temperature",
-            "type": "uint8",
-            "default": 0,
-            "units": "degC"
-        },
-        {
-            "name": "temperatureSeventh",
-            "shortDesc": "temperature",
-            "type": "uint8",
-            "default": 0,
-            "units": "degC"
-        },
-        {
-            "name": "temperatureEighth",
-            "shortDesc": "temperature",
-            "type": "uint8",
-            "default": 0,
-            "units": "degC"
+          "index": 6,
+          "description": "Generic ESC failure"
         }
-    ]
+      ]
+},
+{
+    "name":             "temperature",
+    "shortDesc":        "Temperature",
+    "type":             "float",
+    "decimalPlaces":    1,
+    "default":          0,
+    "units":            "centi-celsius"
+},
+{
+    "name":             "errorCount",
+    "shortDesc":        "Error Count",
+    "type":             "uint32",
+    "default":          0
+}
+]
 }

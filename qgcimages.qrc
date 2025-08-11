@@ -71,6 +71,7 @@
         <file alias="BatteryEMERGENCY.svg">src/UI/toolbar/Images/BatteryEMERGENCY.svg</file>
         <file alias="camera.svg">resources/camera.svg</file>
         <file alias="check.svg">resources/check.svg</file>
+        <file alias="EscIndicator.svg">src/UI/toolbar/Images/EscIndicator.svg</file>
         <file alias="FirmwareUpgradeIcon.png">src/Vehicle/VehicleSetup/FirmwareUpgradeIcon.png</file>
         <file alias="FloatingWindow.svg">src/AnalyzeView/FloatingWindow.svg</file>
         <file alias="MAVLinkInspector">src/AnalyzeView/MAVLinkInspector.svg</file>

@@ -24,6 +24,7 @@ qt_add_qml_module(FactControlsModule
         FactValueSlider.qml
         FactSpinBox.qml
         LabelledFactComboBox.qml
+        LabelledFactLabel.qml
         LabelledFactTextField.qml
         LabelledFactSpinBox.qml
         LabelledFactSlider.qml
