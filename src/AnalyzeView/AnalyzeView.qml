@@ -29,6 +29,11 @@ Rectangle {
     readonly property real _verticalMargin:     ScreenTools.defaultFontPixelHeight / 2
     readonly property real _buttonHeight:       ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelHeight * 3 : ScreenTools.defaultFontPixelHeight * 2
 
+    // This need to block click event leakage to underlying map.
+    DeadMouseArea {
+        anchors.fill: parent
+    }
+
     GeoTagController {
         id: geoController
     }
