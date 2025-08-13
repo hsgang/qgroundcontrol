@@ -378,14 +378,14 @@ Item {
         visible:                QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue
     }
 
-    FlyViewEscStatus {
-        id: flyViewEscStatus
-        anchors.margins:        _toolsMargin
-        anchors.top:            parent.top
-        anchors.topMargin:      _toolsMargin
-        anchors.right:          rightPanel.left
-        visible:                QGroundControl.settingsManager.flyViewSettings.showEscStatus.rawValue
-    }
+    // FlyViewEscStatus {
+    //     id: flyViewEscStatus
+    //     anchors.margins:        _toolsMargin
+    //     anchors.top:            parent.top
+    //     anchors.topMargin:      _toolsMargin
+    //     anchors.right:          rightPanel.left
+    //     visible:                QGroundControl.settingsManager.flyViewSettings.showEscStatus.rawValue
+    // }
 
     FlyViewMissionProgress{
         id:                     flyviewMissionProgress
