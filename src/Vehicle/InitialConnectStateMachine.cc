@@ -19,9 +19,6 @@
 #include "GeoFenceManager.h"
 #include "RallyPointManager.h"
 #include "QGCLoggingCategory.h"
-#include "QGCApplication.h"
-#include "SettingsManager.h"
-#include "PlanViewSettings.h"
 
 QGC_LOGGING_CATEGORY(InitialConnectStateMachineLog, "qgc.vehicle.initialconnectstatemachine")
 
@@ -305,15 +302,10 @@ void InitialConnectStateMachine::_stateRequestParameters(StateMachine* stateMach
     InitialConnectStateMachine* connectMachine  = static_cast<InitialConnectStateMachine*>(stateMachine);
     Vehicle*                    vehicle         = connectMachine->_vehicle;
 
-    if(!vehicle->flying()) {
-        qCDebug(InitialConnectStateMachineLog) << "_stateRequestParameters";
-        connect(vehicle->_parameterManager, &ParameterManager::loadProgressChanged, connectMachine,
-                &InitialConnectStateMachine::gotProgressUpdate);
-        vehicle->_parameterManager->refreshAllParameters();
-    } else {
-        qCDebug(InitialConnectStateMachineLog) << "_stateRequestParameters: skipping parameter download during flying";
-        connectMachine->advance();
-    }
+    qCDebug(InitialConnectStateMachineLog) << "_stateRequestParameters";
+    connect(vehicle->_parameterManager, &ParameterManager::loadProgressChanged, connectMachine,
+            &InitialConnectStateMachine::gotProgressUpdate);
+    vehicle->_parameterManager->refreshAllParameters();
 }
 
 void InitialConnectStateMachine::_stateRequestMission(StateMachine* stateMachine)
@@ -322,8 +314,6 @@ void InitialConnectStateMachine::_stateRequestMission(StateMachine* stateMachine
     Vehicle*                    vehicle         = connectMachine->_vehicle;
     SharedLinkInterfacePtr      sharedLink      = vehicle->vehicleLinkManager()->primaryLink().lock();
 
-    bool missionDownload = SettingsManager::instance()->planViewSettings()->missionDownload()->rawValue().toBool();
-
     disconnect(vehicle->_parameterManager, &ParameterManager::loadProgressChanged, connectMachine,
             &InitialConnectStateMachine::gotProgressUpdate);
 
@@ -331,7 +321,7 @@ void InitialConnectStateMachine::_stateRequestMission(StateMachine* stateMachine
         qCDebug(InitialConnectStateMachineLog) << "_stateRequestMission: Skipping first mission load request due to no primary link";
         connectMachine->advance();
     } else {
-        if (sharedLink->linkConfiguration()->isHighLatency() || sharedLink->isLogReplay() || !missionDownload) {
+        if (sharedLink->linkConfiguration()->isHighLatency() || sharedLink->isLogReplay()) {
             qCDebug(InitialConnectStateMachineLog) << "_stateRequestMission: Skipping first mission load request due to link type";
             vehicle->_firstMissionLoadComplete();
         } else {
@@ -348,8 +338,6 @@ void InitialConnectStateMachine::_stateRequestGeoFence(StateMachine* stateMachin
     Vehicle*                    vehicle         = connectMachine->_vehicle;
     SharedLinkInterfacePtr      sharedLink      = vehicle->vehicleLinkManager()->primaryLink().lock();
 
-    bool missionDownload = SettingsManager::instance()->planViewSettings()->missionDownload()->rawValue().toBool();
-
     disconnect(vehicle->_missionManager, &MissionManager::progressPctChanged, connectMachine,
                &InitialConnectStateMachine::gotProgressUpdate);
 
@@ -357,7 +345,7 @@ void InitialConnectStateMachine::_stateRequestGeoFence(StateMachine* stateMachin
         qCDebug(InitialConnectStateMachineLog) << "_stateRequestGeoFence: Skipping first geofence load request due to no primary link";
         connectMachine->advance();
     } else {
-        if (sharedLink->linkConfiguration()->isHighLatency() || sharedLink->isLogReplay() || !missionDownload) {
+        if (sharedLink->linkConfiguration()->isHighLatency() || sharedLink->isLogReplay()) {
             qCDebug(InitialConnectStateMachineLog) << "_stateRequestGeoFence: Skipping first geofence load request due to link type";
             vehicle->_firstGeoFenceLoadComplete();
         } else {
@@ -380,8 +368,6 @@ void InitialConnectStateMachine::_stateRequestRallyPoints(StateMachine* stateMac
     Vehicle*                    vehicle         = connectMachine->_vehicle;
     SharedLinkInterfacePtr      sharedLink      = vehicle->vehicleLinkManager()->primaryLink().lock();
 
-    bool missionDownload = SettingsManager::instance()->planViewSettings()->missionDownload()->rawValue().toBool();
-
     disconnect(vehicle->_geoFenceManager, &GeoFenceManager::progressPctChanged, connectMachine,
                &InitialConnectStateMachine::gotProgressUpdate);
 
@@ -389,7 +375,7 @@ void InitialConnectStateMachine::_stateRequestRallyPoints(StateMachine* stateMac
         qCDebug(InitialConnectStateMachineLog) << "_stateRequestRallyPoints: Skipping first rally point load request due to no primary link";
         connectMachine->advance();
     } else {
-        if (sharedLink->linkConfiguration()->isHighLatency() || sharedLink->isLogReplay() || !missionDownload) {
+        if (sharedLink->linkConfiguration()->isHighLatency() || sharedLink->isLogReplay()) {
             qCDebug(InitialConnectStateMachineLog) << "_stateRequestRallyPoints: Skipping first rally point load request due to link type";
             vehicle->_firstRallyPointLoadComplete();
         } else {
