@@ -173,128 +173,6 @@ QString WebRTCConfiguration::_generateRandomId(int length) const
     return result;
 }
 
-
-/*===========================================================================*/
-// WebRTCVideoBridge
-/*===========================================================================*/
-
-WebRTCVideoBridge::WebRTCVideoBridge(QObject* parent)
-    : QObject(parent)
-      , _udpSocket(new QUdpSocket(this))
-      , _decodingCheckTimer(new QTimer(this))
-      , _retryCount(0)
-{
-    _decodingCheckTimer->setSingleShot(true);
-    connect(_decodingCheckTimer, &QTimer::timeout, this, &WebRTCVideoBridge::_checkDecodingStatus);
-}
-
-WebRTCVideoBridge::~WebRTCVideoBridge()
-{
-    stopBridge();
-}
-
-bool WebRTCVideoBridge::startBridge(quint16 localPort)
-{
-    if (_isRunning) {
-        return true;
-    }
-
-    if (!_udpSocket->bind(QHostAddress::LocalHost, localPort, QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
-        emit errorOccurred(QString("Failed to bind UDP socket: %1").arg(_udpSocket->errorString()));
-        return false;
-    }
-
-    int bufferSize = 2 * 1024 * 1024; // 버퍼 크기 2MB
-    _udpSocket->setSocketOption(QAbstractSocket::SendBufferSizeSocketOption, bufferSize);
-
-    _localPort = _udpSocket->localPort();
-    _isRunning = true;
-
-    emit bridgeStarted(_localPort);
-
-    return true;
-}
-
-void WebRTCVideoBridge::stopBridge()
-{
-    if (!_isRunning) {
-        return;
-    }
-
-    _decodingCheckTimer->stop();
-
-    _udpSocket->close();
-    _isRunning = false;
-    _localPort = 0;
-    _firstPacketSent = false;
-
-    qDebug() << "WebRTC video bridge stopped";
-    emit bridgeStopped();
-}
-
-void WebRTCVideoBridge::forwardRTPData(const QByteArray& rtpData)
-{
-    if (!_isRunning || rtpData.isEmpty()) {
-        qWarning() << "[Bridge] Not running, drop packet";
-        return;
-    }
-
-    if( !_udpSocket || !_udpSocket->isValid()) {
-        qWarning() << "[Bridge] UDP socket invalid!";
-        return;
-    }
-
-    if (!_firstPacketSent) {
-        _firstPacketSent = true;
-        QMetaObject::invokeMethod(this, "_startDecodingCheckTimer", Qt::QueuedConnection);
-    }
-
-    qint64 sent = _udpSocket->writeDatagram(
-        rtpData.constData(),
-        rtpData.size(),
-        QHostAddress::LocalHost,
-        _localPort
-    );
-
-    if (sent != rtpData.size()) {
-        qWarning() << "Failed to send complete RTP packet:" << sent << "of" << rtpData.size();
-    } else {
-        _totalPackets++;
-        _totalBytes += sent;
-    }
-}
-
-void WebRTCVideoBridge::_startDecodingCheckTimer()
-{
-    if (QThread::currentThread() != this->thread()) {
-        QMetaObject::invokeMethod(this, "_startDecodingCheckTimer", Qt::QueuedConnection);
-        return;
-    }
-
-    _decodingCheckTimer->start(2000);
-}
-
-void WebRTCVideoBridge::_checkDecodingStatus()
-{
-    VideoManager* videoManager = VideoManager::instance();
-
-    if (!videoManager || !videoManager->decoding()) {
-        _retryCount++;
-        qWarning() << QString("[Bridge] VideoManager not decoding after 2 second (retry %1/5)").arg(_retryCount);
-
-        if (_retryCount <= 5) {
-            qDebug() << "[Bridge] Retrying video bridge setup";
-            emit retryBridgeRequested();
-        } else {
-            qCritical() << "[Bridge] Max retries reached, giving up";
-            emit errorOccurred("VideoManager failed to start decoding after multiple attempts");
-        }
-    } else {
-        qDebug() << "[Bridge] VideoManager is decoding successfully";
-        _retryCount = 0;
-    }
-}
-
 /*===========================================================================*/
 // WebRTCWorker Implementation
 /*===========================================================================*/
@@ -311,20 +189,6 @@ WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
 
     _statsTimer = new QTimer(this);
     connect(_statsTimer, &QTimer::timeout, this, &WebRTCWorker::_updateAllStatistics);
-
-    connect(VideoManager::instance(), &VideoManager::decodingChanged, this, [this]() {
-        if (!VideoManager::instance()->decoding()) {
-            qCWarning(WebRTCLinkLog) << "[WebRTCWorker] decoding=false, restarting video bridge";
-            _restartVideoBridge();
-        }
-    });
-
-    // connect(VideoManager::instance(), &VideoManager::streamingChanged, this, [this]() {
-    //     if (!VideoManager::instance()->streaming()) {
-    //         qCWarning(WebRTCLinkLog) << "[WebRTCWorker] streaming=false, restarting video bridge";
-    //         _restartVideoBridge();
-    //     }
-    // });
 
     _remoteDescriptionSet.store(false);
 }
@@ -404,7 +268,7 @@ void WebRTCWorker::disconnectLink()
 
     qCDebug(WebRTCLinkLog) << "Disconnecting WebRTC link";
     _cleanupComplete();
-    _cleanupVideoBridge();
+    // Video bridge removed in internal appsrc mode
 
     emit disconnected();
 }
@@ -728,11 +592,7 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
             qCDebug(WebRTCLinkLog) << "[WebRTC] Internal mode: video stream active";
         }
 
-        if (!VideoManager::instance()->isWebRtcInternalModeEnabled()) {
-            if (!_videoBridge) {
-                _createVideoBridge();
-            }
-        }
+        // Internal appsrc mode: no UDP bridge
 
         track->onMessage([this](rtc::message_variant message) {
             if (std::holds_alternative<rtc::binary>(message)) {
@@ -751,10 +611,6 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
                         //qCDebug(WebRTCLinkLog) << "[WebRTC] Forward RTP to VideoManager (internal) size=" << rtpData.size();
                         _videoReceivedCalc.addData(rtpData.size());
                         VideoManager::instance()->pushWebRtcRtp(rtpData);
-                    } else if (_videoBridge) {
-                        //qCDebug(WebRTCLinkLog) << "[WebRTC] Forward RTP to UDP bridge size=" << rtpData.size();
-                        _videoReceivedCalc.addData(rtpData.size());
-                        _videoBridge->forwardRTPData(rtpData);
                     }
                 }, Qt::QueuedConnection);
             }
@@ -951,8 +807,6 @@ void WebRTCWorker::_cleanupForReconnection()
     qCDebug(WebRTCLinkLog) << "[CLEANUP] Cleaning up for reconnection (keeping WebSocket)";
 
     _resetPeerConnection();
-
-    _cleanupVideoBridge();
     _videoTrack.reset();
 
     _remoteDescriptionSet.store(false);
@@ -1146,8 +1000,6 @@ void WebRTCWorker::_cleanup()
         _rttTimer = nullptr;
     }
 
-    _cleanupVideoBridge();
-
     _remoteDescriptionSet = false;
     _pendingCandidates.clear();
 }
@@ -1162,100 +1014,7 @@ void WebRTCWorker::_cleanupComplete()
     _signalingConnected = false;
 }
 
-void WebRTCWorker::_createVideoBridge()
-{
-    if (_videoBridge || _isShuttingDown.load()) {
-        return;
-    }
-
-    _videoBridge = new WebRTCVideoBridge(this);
-
-    // 시그널 연결
-    connect(_videoBridge, &WebRTCVideoBridge::bridgeStarted,
-            this, [this](quint16 port) {
-                if (!_isShuttingDown.load()) {
-                    QMutexLocker locker(&_videoBridgeMutex);
-                    _currentVideoURI = QString("udp://127.0.0.1:%1").arg(port);
-                    _videoStreamActive = true;
-                    qCDebug(WebRTCLinkLog) << "Video bridge started on port:" << port;
-                }
-            }, Qt::QueuedConnection);
-
-    connect(_videoBridge, &WebRTCVideoBridge::bridgeStopped,
-            this, [this]() {
-                QMutexLocker locker(&_videoBridgeMutex);
-                _videoStreamActive = false;
-                _currentVideoURI.clear();
-                qCDebug(WebRTCLinkLog) << "Video bridge stopped";
-            }, Qt::QueuedConnection);
-
-    connect(_videoBridge, &WebRTCVideoBridge::errorOccurred,
-            this, [this](const QString& error) {
-                if (!_isShuttingDown.load()) {
-                    qCWarning(WebRTCLinkLog) << "[Video] Bridge error (isolated):" << error;
-
-                    if (_mavlinkDataChannel && _mavlinkDataChannel->isOpen()) {
-                        qCDebug(WebRTCLinkLog) << "[Video] DataChannel OK, retrying video only";
-                        QTimer::singleShot(3000, this, [this]() {
-                            if (_mavlinkDataChannel && _mavlinkDataChannel->isOpen()) {
-                                _restartVideoBridge();
-                            }
-                        });
-                    }
-                }
-            }, Qt::QueuedConnection);
-
-    connect(_videoBridge, &WebRTCVideoBridge::retryBridgeRequested,
-            this, [this]() {
-                if (!_isShuttingDown.load()) {
-                    QTimer::singleShot(1000, this, [this]() {
-                        _restartVideoBridge();
-                    });
-                }
-            }, Qt::QueuedConnection);
-
-    QTimer::singleShot(0, this, [this]() {
-        if (!_isShuttingDown.load() && _videoBridge) {
-            if (!_videoBridge->startBridge(55000)) {
-                qCCritical(WebRTCLinkLog) << "Failed to start video bridge";
-                delete _videoBridge;
-            }
-        }
-    });
-}
-
-void WebRTCWorker::_restartVideoBridge()
-{
-    {
-        if (_videoBridge) {
-            disconnect(_videoBridge, nullptr, this, nullptr);
-            _videoBridge->stopBridge();
-            _videoBridge->deleteLater();
-            _videoBridge = nullptr;
-        }
-
-        _videoStreamActive = false;
-        _currentVideoURI.clear();
-    }
-
-    _createVideoBridge();
-}
-
-void WebRTCWorker::_cleanupVideoBridge()
-{
-    WebRTCVideoBridge* bridge = _videoBridge;
-    _videoBridge = nullptr;
-
-    if (bridge) {
-        QMetaObject::invokeMethod(bridge, [bridge]() {
-            bridge->stopBridge();
-            bridge->deleteLater();
-        }, Qt::QueuedConnection);
-    }
-
-    _videoStreamActive = false;
-    _currentVideoURI.clear();
-}
+// Video bridge related functions removed
 
 void WebRTCWorker::_updateAllStatistics()
 {
@@ -1306,8 +1065,6 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     connect(_worker, &WebRTCWorker::rttUpdated, this, &WebRTCLink::_onRttUpdated, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::dataChannelStatsUpdated, this, &WebRTCLink::_onDataChannelStatsChanged, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::rtcStatusMessageChanged, this, &WebRTCLink::_onRtcStatusMessageChanged, Qt::QueuedConnection);
-
-    connect(_worker, &WebRTCWorker::videoBridgeError, this, &WebRTCLink::_onVideoBridgeError, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::videoRateChanged, this, &WebRTCLink::_onVideoRateChanged, Qt::QueuedConnection);
 
     _workerThread->start();
@@ -1410,16 +1167,6 @@ void WebRTCLink::_onDataChannelStatsChanged(double sendRate, double receiveRate)
 bool WebRTCLink::isVideoStreamActive() const
 {
     return _worker ? _worker->isVideoStreamActive() : false;
-}
-
-QString WebRTCLink::videoStreamUri() const
-{
-    return _worker ? _worker->currentVideoUri() : QString();
-}
-
-void WebRTCLink::_onVideoBridgeError(const QString& error)
-{
-    emit videoBridgeError(error);
 }
 
 void WebRTCLink::_onVideoRateChanged(double KBps)

@@ -352,7 +352,6 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
         }
 
         _appsrc = appsrc;
-        qCDebug(GstVideoReceiverLog) << "[Pipeline] internal RTP source ready (appsrc+jitter+depay+parser)";
         appsrc = nullptr;
 
         return bin;
