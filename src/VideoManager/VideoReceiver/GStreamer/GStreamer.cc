@@ -111,7 +111,9 @@ void _registerPlugins()
         GST_PLUGIN_STATIC_REGISTER(tcp);
         GST_PLUGIN_STATIC_REGISTER(typefindfunctions);
         GST_PLUGIN_STATIC_REGISTER(udp);
+    #ifdef GST_PLUGIN_app_FOUND
         GST_PLUGIN_STATIC_REGISTER(app);
+    #endif
     #ifdef GST_PLUGIN_va_FOUND
         GST_PLUGIN_STATIC_REGISTER(va);
     #endif
