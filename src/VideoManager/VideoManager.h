@@ -62,6 +62,10 @@ public:
     Q_INVOKABLE void stopRecording();
     Q_INVOKABLE void stopVideo();
 
+    // WebRTC 내부 파이프라인(appsrc) 모드에서 RTP 패킷 주입 API
+    void pushWebRtcRtp(const QByteArray &packet);
+    bool isWebRtcInternalModeEnabled() const { return _webrtcInternalModeEnabled; }
+
     void init(QQuickWindow *rootWindow);
     void cleanup();
     bool autoStreamConfigured() const;
@@ -132,6 +136,8 @@ private:
     QString _imageFile;
     QString _uvcVideoSourceID;
     Vehicle *_activeVehicle = nullptr;
+
+    bool _webrtcInternalModeEnabled = false;
 };
 
 /*===========================================================================*/

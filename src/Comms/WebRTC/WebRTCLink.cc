@@ -5,6 +5,7 @@
 // #include "SettingsManager.h"
 // #include "VideoSettings.h"
 #include "QGCLoggingCategory.h"
+#include "VideoManager.h"
 
 QGC_LOGGING_CATEGORY(WebRTCLinkLog, "WebRTCLink")
 
@@ -721,8 +722,16 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
         _videoTrack = track;
         emit videoTrackReceived();
 
-        if (!_videoBridge) {
-            _createVideoBridge();
+        // 내부(appsrc) 모드에서는 브릿지 없이 직접 주입하므로 즉시 활성화
+        if (VideoManager::instance()->isWebRtcInternalModeEnabled()) {
+            _videoStreamActive = true;
+            qCDebug(WebRTCLinkLog) << "[WebRTC] Internal mode: video stream active";
+        }
+
+        if (!VideoManager::instance()->isWebRtcInternalModeEnabled()) {
+            if (!_videoBridge) {
+                _createVideoBridge();
+            }
         }
 
         track->onMessage([this](rtc::message_variant message) {
@@ -737,7 +746,13 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
 
                 // WebRTCWorker 스레드에서 데이터를 처리하도록 작업을 예약
                 QMetaObject::invokeMethod(this, [this, rtpData]() {
-                    if (_videoBridge) {
+                    // 내부 파이프라인 모드인 경우 직접 GStreamer로 주입
+                    if (VideoManager::instance() && VideoManager::instance()->isWebRtcInternalModeEnabled()) {
+                        //qCDebug(WebRTCLinkLog) << "[WebRTC] Forward RTP to VideoManager (internal) size=" << rtpData.size();
+                        _videoReceivedCalc.addData(rtpData.size());
+                        VideoManager::instance()->pushWebRtcRtp(rtpData);
+                    } else if (_videoBridge) {
+                        //qCDebug(WebRTCLinkLog) << "[WebRTC] Forward RTP to UDP bridge size=" << rtpData.size();
                         _videoReceivedCalc.addData(rtpData.size());
                         _videoBridge->forwardRTPData(rtpData);
                     }

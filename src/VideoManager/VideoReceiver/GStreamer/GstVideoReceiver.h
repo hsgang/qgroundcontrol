@@ -15,6 +15,7 @@
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
 #include <QtCore/QWaitCondition>
+#include <QtCore/QByteArray>
 
 #include <glib.h>
 #include <gst/gstelement.h>
@@ -60,6 +61,13 @@ public:
     explicit GstVideoReceiver(QObject *parent = nullptr);
     ~GstVideoReceiver();
 
+    enum class InternalCodec {
+        H264,
+        H265
+    };
+
+    void enableInternalRtpMode(InternalCodec codec);
+
 public slots:
     void start(uint32_t timeout) override;
     void stop() override;
@@ -68,6 +76,7 @@ public slots:
     void startRecording(const QString &videoFile, FILE_FORMAT format) override;
     void stopRecording() override;
     void takeScreenshot(const QString &imageFile) override;
+    void pushRtpPacket(const QByteArray &packet);
 
 private slots:
     void _watchdog();
@@ -75,6 +84,7 @@ private slots:
 
 private:
     GstElement *_makeSource(const QString &input);
+    GstElement *_makeInternalRtpSource();
     GstElement *_makeDecoder(GstCaps *caps = nullptr, GstElement *videoSink = nullptr);
     GstElement *_makeFileSink(const QString &videoFile, FILE_FORMAT format);
 
@@ -116,6 +126,11 @@ private:
     GstVideoWorker *_worker = nullptr;
     gulong _teeProbeId = 0;
     gulong _videoSinkProbeId = 0;
+
+    bool _useInternalRtp = false;
+    InternalCodec _internalCodec = InternalCodec::H264;
+    GstElement *_appsrc = nullptr;
+    bool _appsrcDataPushed = false;
 
     static constexpr const char *_kFileMux[FILE_FORMAT_MAX + 1] = {
         "matroskamux",

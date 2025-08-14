@@ -26,6 +26,7 @@
 #include <QtQuick/QQuickItem>
 
 #include <gst/gst.h>
+#include <cstring>
 
 QGC_LOGGING_CATEGORY(GstVideoReceiverLog, "qgc.videomanager.videoreceiver.gstreamer.gstvideoreceiver")
 
@@ -61,7 +62,7 @@ void GstVideoReceiver::start(uint32_t timeout)
         return;
     }
 
-    if (_uri.isEmpty()) {
+    if (_uri.isEmpty() && !_useInternalRtp) {
         qCDebug(GstVideoReceiverLog) << "Failed because URI is not specified";
         _dispatchSignal([this]() { emit onStartComplete(STATUS_INVALID_URL); });
         return;
@@ -140,7 +141,7 @@ void GstVideoReceiver::start(uint32_t timeout)
                      "message-forward", TRUE,
                      nullptr);
 
-        _source = _makeSource(_uri);
+        _source = _useInternalRtp ? _makeInternalRtpSource() : _makeSource(_uri);
         if (!_source) {
             qCCritical(GstVideoReceiverLog) << "_makeSource() failed";
             break;
@@ -149,6 +150,12 @@ void GstVideoReceiver::start(uint32_t timeout)
         gst_bin_add_many(GST_BIN(_pipeline), _source, _tee, decoderQueue, _decoderValve, recorderQueue, _recorderValve, nullptr);
 
         pipelineUp = true;
+
+        // 내부 RTP 모드일 때, 스트리밍 시작 신호가 pad-added 없이 지연될 수 있어
+        // appsrc에 첫 데이터가 들어오면 바로 스트리밍 플래그를 세팅하도록 보조 처리
+        if (_useInternalRtp) {
+            _streaming = _appsrcDataPushed;
+        }
 
         GstPad *srcPad = nullptr;
         GstIterator *it = gst_element_iterate_src_pads(_source);
@@ -223,6 +230,141 @@ void GstVideoReceiver::start(uint32_t timeout)
         _dispatchSignal([this]() { emit onStartComplete(STATUS_OK); });
     }
 }
+void GstVideoReceiver::enableInternalRtpMode(InternalCodec codec)
+{
+    _useInternalRtp = true;
+    _internalCodec = codec;
+}
+
+void GstVideoReceiver::pushRtpPacket(const QByteArray &packet)
+{
+    if (_needDispatch()) {
+        const QByteArray copy = packet;
+        _worker->dispatch([this, copy]() { pushRtpPacket(copy); });
+        return;
+    }
+
+    if (!_pipeline || !_appsrc || packet.isEmpty()) {
+        return;
+    }
+
+    GstBuffer *buffer = gst_buffer_new_allocate(nullptr, packet.size(), nullptr);
+    if (!buffer) {
+        return;
+    }
+
+    GstMapInfo map;
+    if (!gst_buffer_map(buffer, &map, GST_MAP_WRITE)) {
+        gst_buffer_unref(buffer);
+        return;
+    }
+    memcpy(map.data, packet.constData(), packet.size());
+    gst_buffer_unmap(buffer, &map);
+
+    GstFlowReturn flow = GST_FLOW_OK;
+    g_signal_emit_by_name(_appsrc, "push-buffer", buffer, &flow);
+    gst_buffer_unref(buffer);
+    _appsrcDataPushed = true;
+}
+
+GstElement *GstVideoReceiver::_makeInternalRtpSource()
+{
+    GstElement *bin = nullptr;
+    GstElement *appsrc = nullptr;
+    GstElement *jitter = nullptr;
+    GstElement *depay = nullptr;
+    GstElement *parser = nullptr;
+
+    do {
+        bin = gst_bin_new("internalrtpsrc");
+        if (!bin) {
+            qCCritical(GstVideoReceiverLog) << "gst_bin_new('internalrtpsrc') failed";
+            break;
+        }
+
+        appsrc = gst_element_factory_make("appsrc", "appsrc");
+        if (!appsrc) {
+            qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('appsrc') failed";
+            break;
+        }
+
+        g_object_set(appsrc,
+                     "is-live", TRUE,
+                     "format", 3 /* GST_FORMAT_TIME */,
+                     "do-timestamp", TRUE,
+                     nullptr);
+
+        GstCaps *caps = nullptr;
+        if (_internalCodec == InternalCodec::H264) {
+            caps = gst_caps_from_string("application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264");
+        } else {
+            caps = gst_caps_from_string("application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265");
+        }
+        if (!caps) {
+            qCCritical(GstVideoReceiverLog) << "gst_caps_from_string() failed";
+            break;
+        }
+        g_object_set(appsrc, "caps", caps, nullptr);
+        gst_clear_caps(&caps);
+
+        jitter = gst_element_factory_make("rtpjitterbuffer", nullptr);
+        if (!jitter) {
+            qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('rtpjitterbuffer') failed";
+            break;
+        }
+        g_object_set(jitter,
+                     "latency", (_buffer >= 0) ? qMax(0, _buffer) : 0,
+                     nullptr);
+
+        const char *depayName = (_internalCodec == InternalCodec::H264) ? "rtph264depay" : "rtph265depay";
+        depay = gst_element_factory_make(depayName, nullptr);
+        if (!depay) {
+            qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('" << depayName << "') failed";
+            break;
+        }
+
+        // 고정 파서 사용 (h264parse/h265parse)
+        const char *parserName = (_internalCodec == InternalCodec::H264) ? "h264parse" : "h265parse";
+        parser = gst_element_factory_make(parserName, "parser");
+        if (!parser) {
+            qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('" << parserName << "') failed";
+            break;
+        }
+
+        gst_bin_add_many(GST_BIN(bin), appsrc, jitter, depay, parser, nullptr);
+
+        if (!gst_element_link_many(appsrc, jitter, depay, parser, nullptr)) {
+            qCCritical(GstVideoReceiverLog) << "gst_element_link_many() failed";
+            break;
+        }
+
+        // parser src를 ghost pad로 노출하여 tee로 연결되도록 함
+        GstPad *srcpad = gst_element_get_static_pad(parser, "src");
+        if (!srcpad) {
+            qCCritical(GstVideoReceiverLog) << "parser src pad not found";
+            break;
+        }
+        GstPad *ghostpad = gst_ghost_pad_new("src", srcpad);
+        gst_object_unref(srcpad);
+        if (!ghostpad || !gst_element_add_pad(bin, ghostpad)) {
+            qCCritical(GstVideoReceiverLog) << "Failed to add ghost pad";
+            break;
+        }
+
+        _appsrc = appsrc;
+        qCDebug(GstVideoReceiverLog) << "[Pipeline] internal RTP source ready (appsrc+jitter+depay+parser)";
+        appsrc = nullptr;
+
+        return bin;
+    } while (0);
+
+    gst_clear_object(&parser);
+    gst_clear_object(&depay);
+    gst_clear_object(&jitter);
+    gst_clear_object(&appsrc);
+    gst_clear_object(&bin);
+    return nullptr;
+}
 
 void GstVideoReceiver::stop()
 {
@@ -231,7 +373,7 @@ void GstVideoReceiver::stop()
         return;
     }
 
-    if (_uri.isEmpty()) {
+    if (_uri.isEmpty() && !_useInternalRtp) {
         qCWarning(GstVideoReceiverLog) << "Stop called on empty URI";
         return;
     }
@@ -906,9 +1048,13 @@ void GstVideoReceiver::_onNewSourcePad(GstPad *pad)
 
     GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(_pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "pipeline-with-new-source-pad");
 
-    if (!_addDecoder(_decoderValve)) {
-        qCCritical(GstVideoReceiverLog) << "_addDecoder() failed";
-        return;
+    if (_decoder) {
+        qCDebug(GstVideoReceiverLog) << "Decoder already present at _onNewSourcePad, skip _addDecoder";
+    } else {
+        if (!_addDecoder(_decoderValve)) {
+            qCCritical(GstVideoReceiverLog) << "_addDecoder() failed";
+            return;
+        }
     }
 
     g_object_set(_decoderValve,

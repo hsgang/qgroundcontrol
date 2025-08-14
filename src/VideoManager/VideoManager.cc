@@ -26,6 +26,7 @@
 #endif
 #include "QtMultimediaReceiver.h"
 #include "UVCReceiver.h"
+#include "VideoReceiver/GStreamer/GstVideoReceiver.h"
 
 #include <QtCore/QApplicationStatic>
 #include <QtCore/QDir>
@@ -187,6 +188,22 @@ void VideoManager::startRecording(const QString &videoFile)
         const QString videoFileName = videoFileNameTemplate.arg(streamName);
         receiver->startRecording(videoFileName, fileFormat);
     }
+}
+void VideoManager::pushWebRtcRtp(const QByteArray &packet)
+{
+#ifdef QGC_GST_STREAMING
+    if (_videoReceivers.isEmpty()) {
+        return;
+    }
+    VideoReceiver *receiver = _videoReceivers.front();
+    auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+    if (gstReceiver) {
+        //qCDebug(VideoManagerLog) << "[VideoManager] pushWebRtcRtp size=" << packet.size();
+        gstReceiver->pushRtpPacket(packet);
+    }
+#else
+    Q_UNUSED(packet)
+#endif
 }
 
 void VideoManager::stopRecording()
@@ -503,9 +520,28 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
     }
 
     settingsChanged |= _updateUVC(receiver);
-    settingsChanged |= _updateAutoStream(receiver);
 
-    const QString source = _videoSettings->videoSource()->rawValue().toString();
+    QString source = _videoSettings->videoSource()->rawValue().toString();
+
+    // 기본값으로 내부 WebRTC 모드 비활성화
+    _webrtcInternalModeEnabled = false;
+
+    // WebRTC 선택 시 자동 스트림 구성으로 덮어쓰지 않고 내부 모드로 진입
+    if (source == VideoSettings::videoSourceWebRTC) {
+        auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+        if (gstReceiver) {
+            gstReceiver->enableInternalRtpMode(GstVideoReceiver::InternalCodec::H264);
+            _webrtcInternalModeEnabled = true;
+            qCDebug(VideoManagerLog) << "WebRTC Internal Mode Enabled";
+            settingsChanged |= _updateVideoUri(receiver, QString());
+            return settingsChanged;
+        }
+    }
+
+    // WebRTC가 아닐 때는 자동 구성으로 소스/URI 갱신 허용
+    settingsChanged |= _updateAutoStream(receiver);
+    source = _videoSettings->videoSource()->rawValue().toString();
+
     if (source == VideoSettings::videoSourceUDPH264) {
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("udp://%1").arg(_videoSettings->udpUrl()->rawValue().toString()));
     } else if (source == VideoSettings::videoSourceUDPH265) {
@@ -524,8 +560,6 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.42.1:554/live"));
     } else if (source == VideoSettings::videoSourceHerelinkAirUnit) {
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.0.10:8554/H264Video"));
-    } else if (source == VideoSettings::videoSourceWebRTC) {
-        settingsChanged |= _updateVideoUri(receiver, QStringLiteral("udp://127.0.0.1:55000"));
     } else if (source == VideoSettings::videoSourceHerelinkHotspot) {
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.43.1:8554/fpv_stream"));
     } else if ((source == VideoSettings::videoDisabled) || (source == VideoSettings::videoSourceNoVideo)) {
@@ -647,7 +681,7 @@ void VideoManager::_startReceiver(VideoReceiver *receiver)
         return;
     }
 
-    if (receiver->uri().isEmpty()) {
+    if (receiver->uri().isEmpty() && !_webrtcInternalModeEnabled) {
         qCDebug(VideoManagerLog) << "VideoUri is NULL" << receiver->name();
         return;
     }
