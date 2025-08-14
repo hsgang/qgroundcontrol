@@ -592,27 +592,19 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
             qCDebug(WebRTCLinkLog) << "[WebRTC] Internal mode: video stream active";
         }
 
-        // Internal appsrc mode: no UDP bridge
-
         track->onMessage([this](rtc::message_variant message) {
             if (std::holds_alternative<rtc::binary>(message)) {
                 if (_isShuttingDown.load() || !_videoStreamActive) {
                     return;
                 }
-                
-                // 데이터를 QByteArray로 복사하여 다른 스레드로 안전하게 전달
+
                 const auto& binaryData = std::get<rtc::binary>(message);
                 QByteArray rtpData(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
 
-                // WebRTCWorker 스레드에서 데이터를 처리하도록 작업을 예약
-                QMetaObject::invokeMethod(this, [this, rtpData]() {
-                    // 내부 파이프라인 모드인 경우 직접 GStreamer로 주입
-                    if (VideoManager::instance() && VideoManager::instance()->isWebRtcInternalModeEnabled()) {
-                        //qCDebug(WebRTCLinkLog) << "[WebRTC] Forward RTP to VideoManager (internal) size=" << rtpData.size();
-                        _videoReceivedCalc.addData(rtpData.size());
-                        VideoManager::instance()->pushWebRtcRtp(rtpData);
-                    }
-                }, Qt::QueuedConnection);
+                if (VideoManager::instance() && VideoManager::instance()->isWebRtcInternalModeEnabled()) {
+                    _videoReceivedCalc.addData(rtpData.size());
+                    VideoManager::instance()->pushWebRtcRtp(rtpData);
+                }
             }
         });
 
