@@ -246,6 +246,7 @@ if(GStreamer_USE_STATIC_LIBS)
 
     set(GSTREAMER_PLUGINS
         coreelements
+        app
         dav1d
         isomp4
         libav
