@@ -202,10 +202,10 @@ bool VideoSettings::streamConfigured(void)
         qCDebug(VideoManagerLog) << "Testing configuration for UDP Stream:" << udpUrl()->rawValue().toString();
         return !udpUrl()->rawValue().toString().isEmpty();
     }
-    //-- If UDP, check for URL
+    //-- If WEBRTC, good to go
     if(vSource == videoSourceWebRTC) {
-        qCDebug(VideoManagerLog) << "Testing configuration for UDP Stream:" << udpUrl()->rawValue().toString();
-        return !udpUrl()->rawValue().toString().isEmpty();
+        qCDebug(VideoManagerLog) << "Testing configuration for WebRTC";
+        return true;
     }
     //-- If RTSP, check for URL
     if(vSource == videoSourceRTSP) {
