@@ -349,48 +349,6 @@ ApplicationWindow {
         anchors.fill:   parent
         visible:        false
     }
-//    //-------------------------------------------------------------------------
-//    /// Toolbar
-//    header: MainToolBar {
-//        id:         toolbar
-//        height:     ScreenTools.toolbarHeight
-//        visible:    !(QGroundControl.videoManager.fullScreen && flyView.visible)
-//    }
-
-    // footer: LogReplayStatusBar {
-    //     visible: QGroundControl.settingsManager.flyViewSettings.showLogReplayStatusBar.rawValue
-    // }
-
-    // MessageDialog {
-    //     id:                 showTouchAreasNotification
-    //     title:              qsTr("Debug Touch Areas")
-    //     text:               qsTr("Touch Area display toggled")
-    //     buttons:            MessageDialog.Ok
-    // }
-
-    // MessageDialog {
-    //     id:                 advancedModeOnConfirmation
-    //     title:              qsTr("Advanced Mode")
-    //     text:               QGroundControl.corePlugin.showAdvancedUIMessage
-    //     buttons:            MessageDialog.Yes | MessageDialog.No
-    //     onButtonClicked: function (button, role) {
-    //         if (button === MessageDialog.Yes) {
-    //             QGroundControl.corePlugin.showAdvancedUI = true
-    //         }
-    //     }
-    // }
-
-    // MessageDialog {
-    //     id:                 advancedModeOffConfirmation
-    //     title:              qsTr("Advanced Mode")
-    //     text:               qsTr("Turn off Advanced Mode?")
-    //     buttons:            MessageDialog.Yes | MessageDialog.No
-    //     onButtonClicked: function (button, role) {
-    //         if (button === MessageDialog.Yes) {
-    //             QGroundControl.corePlugin.showAdvancedUI = false
-    //         }
-    //     }
-    // }
 
     function showToolSelectDialog() {
         if (mainWindow.allowViewSwitch()) {
@@ -452,26 +410,6 @@ ApplicationWindow {
                         }
                     }
 
-                    // SubMenuButton {
-                    //     id:                 flyButton
-                    //     height:             viewSelectDrawer._toolButtonHeight
-                    //     Layout.fillWidth:   true
-                    //     checked:            true
-                    //     text:               qsTr("Fly View")
-                    //     imageResource:      "/qmlimages/PaperPlane.svg"
-                    //     imageColor:         qgcPal.text
-                    //     onClicked: {
-                    //         if (mainWindow.allowViewSwitch()) {
-                    //             mainWindow.closeIndicatorDrawer()
-                    //             toolDrawer.visible = false
-                    //             mainWindow.showFlyView()
-                    //             checkedMenu()
-                    //             flyButton.checked = true
-                    //             viewSelectDrawer.visible = false
-                    //         }
-                    //     }
-                    // }
-
                     SettingsButton {
                         id:                 planButton
                         height:             ScreenTools.defaultFontPixelHeight * 3
@@ -490,25 +428,6 @@ ApplicationWindow {
                         }
                     }
 
-                    // SubMenuButton {
-                    //     id:                 planButton
-                    //     height:             viewSelectDrawer._toolButtonHeight
-                    //     Layout.fillWidth:   true
-                    //     text:               qsTr("Plan View")
-                    //     imageResource:      "/qmlimages/Plan.svg"
-                    //     imageColor:         qgcPal.text
-                    //     onClicked: {
-                    //         if (mainWindow.allowViewSwitch()) {
-                    //             mainWindow.closeIndicatorDrawer()
-                    //             toolDrawer.visible = false
-                    //             mainWindow.showPlanView()
-                    //             checkedMenu()
-                    //             planButton.checked = true
-                    //             viewSelectDrawer.visible = false
-                    //         }
-                    //     }
-                    // }
-
                     SettingsButton {
                         id:                 setupButton
                         height:             ScreenTools.defaultFontPixelHeight * 3
@@ -526,25 +445,6 @@ ApplicationWindow {
                             }
                         }
                     }
-
-                    // SubMenuButton {
-                    //     id:                 setupButton
-                    //     height:             viewSelectDrawer._toolButtonHeight
-                    //     Layout.fillWidth:   true
-                    //     text:               qsTr("Vehicle Configuration")
-                    //     imageColor:         qgcPal.text
-                    //     imageResource:      "/qmlimages/Quad.svg"
-                    //     onClicked: {
-                    //         if (mainWindow.allowViewSwitch()) {
-                    //             mainWindow.closeIndicatorDrawer()
-                    //             toolDrawer.visible = false
-                    //             mainWindow.showVehicleConfig()
-                    //             checkedMenu()
-                    //             setupButton.checked = true
-                    //             viewSelectDrawer.visible = false
-                    //         }
-                    //     }
-                    // }
 
                     SettingsButton {
                         id:                 analyzeButton
@@ -565,26 +465,6 @@ ApplicationWindow {
                         }
                     }
 
-                    // SubMenuButton {
-                    //     id:                 analyzeButton
-                    //     height:             viewSelectDrawer._toolButtonHeight
-                    //     Layout.fillWidth:   true
-                    //     text:               qsTr("Analyze Tools")
-                    //     imageResource:      "/qmlimages/Analyze.svg"
-                    //     imageColor:         qgcPal.text
-                    //     visible:            QGroundControl.corePlugin.showAdvancedUI
-                    //     onClicked: {
-                    //         if (mainWindow.allowViewSwitch()) {
-                    //             mainWindow.closeIndicatorDrawer()
-                    //             toolDrawer.visible = false
-                    //             mainWindow.showAnalyzeTool()
-                    //             checkedMenu()
-                    //             analyzeButton.checked = true
-                    //             viewSelectDrawer.visible = false
-                    //         }
-                    //     }
-                    // }
-
                     SettingsButton {
                         id:                 settingsButton
                         height:             ScreenTools.defaultFontPixelHeight * 3
@@ -603,26 +483,6 @@ ApplicationWindow {
                             }
                         }
                     }
-
-                    // SubMenuButton {
-                    //     id:                 settingsButton
-                    //     height:             viewSelectDrawer._toolButtonHeight
-                    //     Layout.fillWidth:   true
-                    //     text:               qsTr("App Settings")
-                    //     imageResource:      "/qmlimages/Gears.svg"
-                    //     imageColor:         qgcPal.text
-                    //     visible:            !QGroundControl.corePlugin.options.combineSettingsAndSetup
-                    //     onClicked: {
-                    //         if (mainWindow.allowViewSwitch()) {
-                    //             mainWindow.closeIndicatorDrawer()
-                    //             toolDrawer.visible = false
-                    //             mainWindow.showAppSettings()
-                    //             checkedMenu()
-                    //             settingsButton.checked = true
-                    //             viewSelectDrawer.visible = false
-                    //         }
-                    //     }
-                    // }
 
                     Rectangle {
                         Layout.fillWidth: true
@@ -647,25 +507,6 @@ ApplicationWindow {
                             }
                         }
                     }
-
-                    // SubMenuButton {
-                    //     id:                 closeButton
-                    //     height:             viewSelectDrawer._toolButtonHeight
-                    //     Layout.fillWidth:   true
-                    //     text:               "종료"//qsTr("Close %1").arg(QGroundControl.appName)
-                    //     imageResource:      "/InstrumentValueIcons/close.svg"
-                    //     imageColor:         qgcPal.text
-                    //     visible:            mainWindow.visibility === Window.FullScreen
-                    //     onClicked: {
-                    //         if (mainWindow.allowViewSwitch()) {
-                    //             mainWindow.showMessageDialog(closeDialogTitle,
-                    //                               qsTr("Are you sure you want to close?"),
-                    //                               Dialog.Yes | Dialog.No,
-                    //                               function() { performCloseChecks() })
-                    //             //mainWindow.finishCloseProcess()
-                    //         }
-                    //     }
-                    // }
                 }
             }
 
@@ -692,6 +533,15 @@ ApplicationWindow {
                     wrapMode:               QGCLabel.WrapAnywhere
                     Layout.maximumWidth:    parent.width
                     Layout.alignment:       Qt.AlignHCenter
+                }
+
+                QGCLabel {
+                    text:                   QGroundControl.qgcAppDate
+                    font.pointSize:         ScreenTools.smallFontPointSize
+                    wrapMode:               QGCLabel.WrapAnywhere
+                    Layout.maximumWidth:    parent.width
+                    Layout.alignment:       Qt.AlignHCenter
+                    visible:                QGroundControl.qgcDailyBuild
 
                     QGCMouseArea {
                         id:                 easterEggMouseArea
@@ -778,100 +628,7 @@ ApplicationWindow {
                 }
             }
         }
-    }
-
-    // Drawer {
-    //     id:             componentDrawer
-    //     y:              ScreenTools.toolbarHeight
-    //     height:         mainWindow.height - ScreenTools.toolbarHeight
-    //     width:          componentDrawerLayoutRect.width
-    //     edge:           Qt.RightEdge
-    //     interactive:    true
-    //     dragMargin:     0
-    //     visible:        false
-    //     modal:          true
-    //     padding:        _margins
-
-    //     property var sourceComponent
-    //     property bool _expanded: false
-
-    //     property real _margins: ScreenTools.defaultFontPixelHeight / 4
-
-    //     onVisibleChanged: {
-    //         if(visible === true) {
-    //             componentDrawerLoader.sourceComponent   = componentDrawer.sourceComponent
-    //             _expanded                               = false
-    //         } else if(visible === false) {
-    //             componentDrawerLoader.sourceComponent   = undefined
-    //             _expanded                               = false
-    //         }
-    //     }
-
-    //     Rectangle {
-    //         id:     componentDrawerLayoutRect
-    //         width:  componentContents.width + (componentDrawer._margins * 2)
-    //         height: parent.height
-    //         color:  qgcPal.window
-
-    //         QGCFlickable {
-    //             anchors.margins:    componentDrawer._margins
-    //             anchors.top:        parent.top
-    //             anchors.horizontalCenter: parent.horizontalCenter
-    //             flickableDirection: QGCFlickable.VerticalFlick
-    //             width:  Math.min(mainWindow.contentItem.width - (2 * componentDrawer._margins) - (componentDrawer.padding * 2), componentDrawerLoader.width)
-    //             height: { componentExpandButton.visible ?
-    //                 parent.height - componentExpandButton.height - ScreenTools.defaultFontPixelHeight :
-    //                 parent.height - ScreenTools.defaultFontPixelHeight }
-    //             contentWidth:   componentContents.width
-    //             contentHeight:  componentContents.height
-
-    //             Rectangle {
-    //                 id:         componentContents
-    //                 anchors.margins: componentDrawer._margins
-    //                 width:      300 //componentDrawerLoader.width
-    //                 height:     20
-    //                 color:      "transparent"
-
-    //                 Loader {
-    //                     id: componentDrawerLoader
-    //                     //anchors.fill: parent
-
-    //                     onHeightChanged: componentContents.height = height
-    //                     onWidthChanged: componentContents.width = width + (componentDrawer._margins * 2)
-
-    //                     Binding {
-    //                         target:     componentDrawerLoader.item
-    //                         property:   "expanded"
-    //                         value:      componentDrawer._expanded
-    //                     }
-
-    //                     Binding {
-    //                         target:     componentDrawerLoader.item
-    //                         property:   "dividerHeight"
-    //                         value:      componentDrawer.height
-    //                     }
-    //                 }
-    //             } //componentContents
-    //         }
-
-    //         QGCButton {
-    //             id:                         componentExpandButton
-    //             anchors.bottom:             componentDrawerLayoutRect.bottom
-    //             anchors.margins:            ScreenTools.defaultFontPixelHeight / 4
-    //             anchors.right:              componentDrawerLayoutRect.right
-    //             visible:                    componentDrawerLoader.item && componentDrawerLoader.item.showExpand //&& !componentDrawer._expanded
-    //             text:                       !componentDrawer._expanded ? qsTr("Detail") : qsTr("Unfold")
-
-    //             onClicked: {
-    //                 if(!componentDrawer._expanded){
-    //                     componentDrawer._expanded = true
-    //                 } else if(componentDrawer._expanded) {
-    //                     componentDrawer._expanded = false
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+    }    
 
     Drawer {
         id:             toolDrawer
