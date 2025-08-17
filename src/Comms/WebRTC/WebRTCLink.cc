@@ -7,7 +7,7 @@
 #include "QGCLoggingCategory.h"
 #include "VideoManager.h"
 
-QGC_LOGGING_CATEGORY(WebRTCLinkLog, "WebRTCLink")
+QGC_LOGGING_CATEGORY(WebRTCLinkLog, "qgc.comms.webrtclink")
 
 const QString WebRTCWorker::kDataChannelLabel = "mavlink";
 
@@ -376,17 +376,17 @@ void WebRTCWorker::_setupPeerConnection()
 
         _peerConnection->onDataChannel([this](std::shared_ptr<rtc::DataChannel> dc) {
             if (!dc) {
-                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel is null!";
+                qCDebug(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel is null!";
                 return;
             }
 
             if (_isShuttingDown.load()) {
-                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Shutting down, ignoring";
+                qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Shutting down, ignoring";
                 return;
             }
 
             std::string label = dc->label();
-            qCCritical(WebRTCLinkLog) << "[DATACHANNEL] DataChannel received - Label:"
+            qCDebug(WebRTCLinkLog) << "[DATACHANNEL] DataChannel received - Label:"
                                       << QString::fromStdString(label);
 
             if (label == "mavlink") {
@@ -399,7 +399,7 @@ void WebRTCWorker::_setupPeerConnection()
 
             // 즉시 상태 확인
             if (dc->isOpen()) {
-                qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Opened, Processing immediately";
+                qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Opened, Processing immediately";
                 _processDataChannelOpen();
             }
         });
@@ -407,7 +407,7 @@ void WebRTCWorker::_setupPeerConnection()
         qCDebug(WebRTCLinkLog) << "Peer connection created successfully";
 
     } catch (const std::exception& e) {
-        qCCritical(WebRTCLinkLog) << "Failed to create peer connection:" << e.what();
+        qCDebug(WebRTCLinkLog) << "Failed to create peer connection:" << e.what();
         emit errorOccurred(QString("Failed to create peer connection: %1").arg(e.what()));
     }
 }
@@ -416,7 +416,7 @@ void WebRTCWorker::handlePeerStateChange(int stateValue) {
     if (!isOperational()) return;
 
     auto state = static_cast<rtc::PeerConnection::State>(stateValue);
-    qCDebug(WebRTCLinkLog) << "[STATE] PeerConnection state changed to:" << stateValue;
+    //qCDebug(WebRTCLinkLog) << "[STATE] PeerConnection state changed to:" << stateValue;
     _onPeerStateChanged(state);
 }
 
@@ -453,17 +453,17 @@ void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc
 {
     if (!dc) return;
 
-    qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Setting up callbacks only";
+    qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Setting up callbacks only";
 
     dc->onOpen([this]() {
-        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** DataChannel OPENED! ***";
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] *** DataChannel OPENED! ***";
         if (!_isShuttingDown.load()) {
             _processDataChannelOpen();
         }
     });
 
     dc->onClosed([this]() {
-        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] DataChannel CLOSED";
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] DataChannel CLOSED";
         if (!_isShuttingDown.load()) {
             _dataChannelOpened = false;
             QMetaObject::invokeMethod(this, [this]() {
@@ -475,7 +475,7 @@ void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc
     });
 
     dc->onError([this](std::string error) {
-        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR:" << QString::fromStdString(error);
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] ERROR:" << QString::fromStdString(error);
         if (!_isShuttingDown.load()) {
             QString errorMsg = QString::fromStdString(error);
             QMetaObject::invokeMethod(this, [this, errorMsg]() {
@@ -505,15 +505,15 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
     if (!dc) return;
 
     dc->onOpen([this]() {
-        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] *** CustomDataChannel OPENED! ***";
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] *** CustomDataChannel OPENED! ***";
     });
 
     dc->onClosed([this]() {
-        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] CustomDataChannel CLOSED";
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] CustomDataChannel CLOSED";
     });
 
     dc->onError([this](std::string error) {
-        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] CustomDataChannel ERROR:" << QString::fromStdString(error);
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] CustomDataChannel ERROR:" << QString::fromStdString(error);
     });
 
     dc->onMessage([this, dc](auto data) {
@@ -537,22 +537,22 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
 void WebRTCWorker::_processDataChannelOpen()
 {
     if (_dataChannelOpened.exchange(true)) {
-        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Already opened, ignoring";
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Already opened, ignoring";
         return;
     }
 
     if (_isShuttingDown.load()) {
-        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Shutting down, ignoring open";
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Shutting down, ignoring open";
         return;
     }
 
     if (!_mavlinkDataChannel || !_mavlinkDataChannel->isOpen()) {
-        qCCritical(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel not actually open!";
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel not actually open!";
         _dataChannelOpened.store(false);
         return;
     }
 
-    qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Data channel opened successfully";
+    qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Data channel opened successfully";
 
     QMetaObject::invokeMethod(this, [this]() {
         emit connected();
@@ -561,7 +561,7 @@ void WebRTCWorker::_processDataChannelOpen()
         _startQtTimers();
     }, Qt::QueuedConnection);
 
-    qCCritical(WebRTCLinkLog) << "[DATACHANNEL] Connection setup completed";
+    qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Connection setup completed";
 }
 
 void WebRTCWorker::_startQtTimers()
@@ -683,7 +683,7 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
 
     try {
         if (type == "offer") {
-            qCCritical(WebRTCLinkLog) << "[SIGNALING] Processing OFFER as answerer";
+            qCDebug(WebRTCLinkLog) << "[SIGNALING] Processing OFFER as answerer";
 
             try {
                 QString sdp = message["sdp"].toString();
@@ -701,7 +701,7 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
                 qCDebug(WebRTCLinkLog) << "[OFFER] Processed successfully";
 
             } catch (const std::exception& e) {
-                qCCritical(WebRTCLinkLog) << "[OFFER] Processing failed:" << e.what();
+                qCDebug(WebRTCLinkLog) << "[OFFER] Processing failed:" << e.what();
 
                 // 실패 시 재시도 로직
                 QTimer::singleShot(1000, this, [this, message]() {
@@ -894,12 +894,12 @@ void WebRTCWorker::_processPendingCandidates()
 void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
 {
     QString stateStr = _stateToString(state);
-    qCDebug(WebRTCLinkLog) << "[DEBUG] PeerConnection State Changed:" << stateStr;
+    qCDebug(WebRTCLinkLog) << "PeerConnection State Changed:" << stateStr;
 
     emit rtcStatusMessageChanged(stateStr);
 
     if (state == rtc::PeerConnection::State::Connected) {
-        qCDebug(WebRTCLinkLog) << "[DEBUG] PeerConnection fully connected!";
+        qCDebug(WebRTCLinkLog) << "PeerConnection fully connected!";
         if (_mavlinkDataChannel && _mavlinkDataChannel->isOpen()) {
             qCDebug(WebRTCLinkLog) << "DataChannel already open, no reconnection needed";
             return;
@@ -1101,21 +1101,21 @@ void WebRTCLink::_writeBytes(const QByteArray& bytes)
 
 void WebRTCLink::_onConnected()
 {
-    qDebug() << "[WebRTCLink] Connected";
+    qCDebug(WebRTCLinkLog) << "[WebRTCLink] Connected";
     _onRtcStatusMessageChanged("RTC 연결됨");
     emit connected();
 }
 
 void WebRTCLink::_onDisconnected()
 {
-    qDebug() << "[WebRTCLink] Disconnected";
+    qCDebug(WebRTCLinkLog) << "[WebRTCLink] Disconnected";
     _onRtcStatusMessageChanged("RTC 연결 해제됨");
     emit disconnected();
 }
 
 void WebRTCLink::_onErrorOccurred(const QString &errorString)
 {
-    qWarning() << "[WebRTCLink] Error: " << errorString;
+    qCDebug(WebRTCLinkLog) << "[WebRTCLink] Error: " << errorString;
 }
 
 void WebRTCLink::_onDataReceived(const QByteArray &data)
