@@ -15,7 +15,6 @@ import QtQuick.Dialogs
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.FactControls
 
 Rectangle {
     id:         gimbalControlPannel
@@ -36,22 +35,22 @@ Rectangle {
 
     // The following settings and functions unify between a mavlink camera and a simple video stream for simple access
 
-    property var    activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
-    property real   _yaw:                   activeVehicle ? activeVehicle.heading.rawValue : 0
+    property var    _activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
+    property real   _yaw:                   _activeVehicle ? _activeVehicle.heading.rawValue : 0
     property real   _yawRad:                _yaw * Math.PI / 180
     property real   _yawStep:               5 //degree
     property Fact   _moveStepFact:          _flyViewSettings.vehicleMoveStep
     property real   _moveStep:              _moveStepFact.rawValue
     property real   _altLimit:              QGroundControl.settingsManager.flyViewSettings.guidedMinimumAltitude.rawValue
-    property real   _vx:                    activeVehicle ? activeVehicle.localPosition.vx.rawValue : 0
-    property real   _vy:                    activeVehicle ? activeVehicle.localPosition.vy.rawValue : 0
-    property real   _vz:                    activeVehicle ? activeVehicle.localPosition.vz.rawValue : 0
-    property bool   _isMoving:              false //Math.sqrt(Math.pow(_vx,2) + Math.pow(_vy,2) + Math.pow(_vz,2)) > 0.5
-    property real   _distance:              activeVehicle ? activeVehicle.distanceSensors.rotationPitch270.rawValue : NaN
-    property real   _relAltitude:           activeVehicle ? activeVehicle.altitudeRelative.rawValue : NaN
-    property bool   _isCustomCommandEnabled: activeVehicle ? activeVehicle.isCustomCommandEnabled : false
+    property bool   _isMoving:              false
+    property real   _distance:              _activeVehicle ? _activeVehicle.distanceSensors.rotationPitch270.rawValue : NaN
+    property real   _distanceMin:           _activeVehicle ? _activeVehicle.distanceSensors.minDistance.rawValue : NaN
+    property real   _distanceMax:           _activeVehicle ? _activeVehicle.distanceSensors.maxDistance.rawValue : NaN
+    property bool   _distanceAvailable:     _distance && (_distance > _distanceMin) && (_distance < _distanceMax)
+    property real   _relAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : NaN
+    property bool   _isCustomCommandEnabled: _activeVehicle ? _activeVehicle.isCustomCommandEnabled : false
 
-    property bool   _isGuidedEnable:        activeVehicle && activeVehicle.flying
+    property bool   _isGuidedEnable:        _activeVehicle && _activeVehicle.flying
 
     property real   _treshHoldAlt : 10.0
     property var    stepValues:             [0.2, 0.5, 1.0, 2.0, 3.0]
@@ -63,10 +62,9 @@ Rectangle {
     Connections {
         target: _activeVehicle
         onRequestConfirmationReceived: (customCmd, show, tagId, enableAutoSequence, sequenceIndex) => {
-            if (customCmd !== 1) {
-                return
+            if (customCmd === 1) {
+                autoSequenceIndex = sequenceIndex
             }
-            autoSequenceIndex = sequenceIndex
         }
     }
 
@@ -105,46 +103,30 @@ Rectangle {
             Repeater {
                 model: sequenceModel
                 delegate:   Rectangle {
-                    property int sequenceIndex: model.sequenceIndex
-                    property string labelText: model.labelText
-                    // 상위 컨텍스트의 autoSequenceIndex와 비교하여 선택 상태를 결정
-                    property bool selected: autoSequenceIndex === sequenceIndex
+                    readonly property bool selected: autoSequenceIndex === model.sequenceIndex
 
-                    // 선택 상태에 따른 배경색 적용 (기본색은 qgcPal.window)
                     color: selected ? qgcPal.buttonHighlight : qgcPal.window
                     radius: ScreenTools.defaultFontPixelHeight / 4
                     width: ScreenTools.defaultFontPixelHeight * 5
                     height: ScreenTools.defaultFontPixelHeight * 1.5
-                    // 초기 불투명도 값
                     opacity: 0.6
 
                     QGCLabel {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: parent.left
                         anchors.leftMargin: _margins / 2
-                        text: labelText
+                        text: model.labelText
                     }
 
-                    // 선택되었을 때 깜빡이는 효과를 위한 Timer
                     Timer {
-                        id: blinkTimer
-                        interval: 500    // 0.5초 간격
+                        interval: 500
                         repeat: true
-                        running: selected
-                        onTriggered: {
-                            // 불투명도를 1과 0.4 사이에서 토글
-                            opacity = (opacity === 1.0) ? 0.6 : 1.0;
-                        }
+                        running: parent.selected
+                        onTriggered: parent.opacity = (parent.opacity === 1.0) ? 0.6 : 1.0
                     }
 
-                    // selected 프로퍼티 변경 시 Timer 재시작 및 불투명도 초기화
                     onSelectedChanged: {
-                        if (selected) {
-                            blinkTimer.start();
-                        } else {
-                            blinkTimer.stop();
-                            opacity = 1.0;
-                        }
+                        opacity = selected ? 0.6 : 1.0
                     }
                 }
             }
@@ -154,7 +136,6 @@ Rectangle {
     GridLayout {
         id:                         mainGridLayout
         anchors.verticalCenter:     parent.verticalCenter
-        //anchors.horizontalCenter:   parent.horizontalCenter
         anchors.right:              parent.right
         anchors.margins:            _margins / 2
         columnSpacing:              _margins
@@ -180,7 +161,7 @@ Rectangle {
             id:                 stepUp
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thin-up.svg"
@@ -196,7 +177,7 @@ Rectangle {
             id:                 stepTurnLeft
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/cheveron-left.svg"
@@ -213,7 +194,7 @@ Rectangle {
             id:                 stepForward
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-up.svg"
@@ -229,7 +210,7 @@ Rectangle {
             id:                 stepTurnRight
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/cheveron-right.svg"
@@ -246,31 +227,27 @@ Rectangle {
             id:                 stepTargetAlt
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && _distance && !_isCustomCommandEnabled
+            enabled:            _isGuidedEnable && _distanceAvailable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
-            iconSource:          _distance ? (_distance >= _treshHoldAlt ? "/InstrumentValueIcons/arrow-thin-down.svg" : "/InstrumentValueIcons/arrow-thin-up.svg") : "/InstrumentValueIcons/pause.svg"
-            text:               _distance ? (_distance >= _treshHoldAlt ? targetAltMin+"M" : targetAltMax+"M") : "NONE"
+            iconSource:          _distanceAvailable ? (_distance >= _treshHoldAlt ? "/InstrumentValueIcons/arrow-thin-down.svg" : "/InstrumentValueIcons/arrow-thin-up.svg") : "/InstrumentValueIcons/pause.svg"
+            text:               _distanceAvailable ? (_distance >= _treshHoldAlt ? targetAltMin+"M" : targetAltMax+"M") : "NONE"
             font.pointSize:     _fontSize * 0.7
 
             property real targetAltMin: 3.5
             property real targetAltMax: 15.0
 
             onClicked: {
-                if(activeVehicle && _distance) {
-                    // var targetMin = 4.5
-                    // var targetMax = 15.0
+                if(activeVehicle && _distanceAvailable) {
                     var altTarget = 0
                     if( _distance >= _treshHoldAlt ) { // down
                         altTarget = -(_distance - targetAltMin)
                         activeVehicle.sendCommand(1, 178, 1, 3, 0.7, -1, 0, 0, 0, 0)
                         activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
-                    }
-                    else if( _distance < _treshHoldAlt ) { // up
+                    } else { // up
                         altTarget = (targetAltMax - _relAltitude )
                         activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
                     }
-                    console.log(altTarget, _distance, _relAltitude)
                 }
             }
         }
@@ -279,7 +256,7 @@ Rectangle {
             id:                 stepLeft
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-left.svg"
@@ -311,7 +288,7 @@ Rectangle {
             id:                 stepRight
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-right.svg"
@@ -327,7 +304,7 @@ Rectangle {
             id:                 stepDown
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && (isNaN(_distance) || ((_distance - _moveStep) > _altLimit)) && !_isCustomCommandEnabled
+            enabled:            _isGuidedEnable && (_distanceAvailable || ((_distance - _moveStep) > _altLimit)) && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thin-down.svg"
@@ -335,12 +312,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                // _distance가 NaN이면 기능 수행
-                if (isNaN(_distance) || _distance === 0) {
-                    activeVehicle.setPositionTargetLocalNed(0, 0, -_moveStep, 0, false)
-                }
-                // _distance 값이 유효하면 (_distance - _moveStep)가 _altLimit보다 클 때 기능 수행
-                else if (_distance !== 0 && (_distance - _moveStep) > _altLimit) {
+                if (isNaN(_distance) || _distance === 0 || (_distance !== 0 && (_distance - _moveStep) > _altLimit)) {
                     activeVehicle.setPositionTargetLocalNed(0, 0, -_moveStep, 0, false)
                 }
             }
@@ -369,7 +341,7 @@ Rectangle {
             id:                 stepBack
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            _isGuidedEnable && !_isMoving && !_isCustomCommandEnabled
+            enabled:            _isGuidedEnable && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/InstrumentValueIcons/arrow-thick-down.svg"
@@ -405,7 +377,7 @@ Rectangle {
             implicitWidth:      _idealWidth
             implicitHeight:     width
             opacity:            enabled ? 1 : 0.4
-            enabled:            activeVehicle && (_distance && _distance < _treshHoldAlt) && !_isCustomCommandEnabled
+            enabled:            _activeVehicle && (_distanceAvailable && _distance < _treshHoldAlt) && !_isCustomCommandEnabled
 
             iconSource:         "/res/GripperRelease.svg"
             text:               "Open"
@@ -420,7 +392,7 @@ Rectangle {
             id:                 gripperGrab
             implicitWidth:      _idealWidth
             implicitHeight:     width
-            enabled:            activeVehicle && !_isCustomCommandEnabled
+            enabled:            _activeVehicle && !_isCustomCommandEnabled
             opacity:            enabled ? 1 : 0.4
 
             iconSource:         "/res/GripperGrab.svg"
@@ -438,7 +410,7 @@ Rectangle {
             Layout.fillHeight:  true
             Layout.fillWidth:   true
             implicitWidth:      _idealWidth
-            enabled:            _isGuidedEnable && activeVehicle.flying && _distance
+            enabled:            _isGuidedEnable && _activeVehicle.flying && _distanceAvailable
             opacity:            enabled ? 1 : 0.4
 
             Layout.columnSpan:  2
@@ -448,12 +420,8 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                if(_isCustomCommandEnabled) {
-                    _activeVehicle.sendCommand(191, 31010, 1, 1, 0, receivedTagId, 2, 0, 0, 0)
-                }
-                else if (!_isCustomCommandEnabled){
-                    _activeVehicle.sendCommand(191, 31010, 1, 1, 0, receivedTagId, 1, 0, 0, 0)
-                }
+                var autoAction = _isCustomCommandEnabled ? 2 : 1
+                _activeVehicle.sendCommand(191, 31010, 1, 1, 0, receivedTagId, autoAction, 0, 0, 0)
             }
         }
 
@@ -471,17 +439,17 @@ Rectangle {
             LabelledLabel {
                 Layout.fillWidth:   true
                 label:              "스텝 단위"
-                labelText:          activeVehicle ? _moveStep.toFixed(1) + " m" : "no value"
+                labelText:          _activeVehicle ? _moveStep.toFixed(1) + " m" : "no value"
             }
             LabelledLabel {
                 Layout.fillWidth:   true
                 label:              "상대 고도"
-                labelText:          activeVehicle ? activeVehicle.altitudeRelative.valueString + " m" : "no value"
+                labelText:          _activeVehicle ? _activeVehicle.altitudeRelative.valueString + " m" : "no value"
             }
             LabelledLabel {
                 Layout.fillWidth:   true
                 label:              "라이다 고도계"
-                labelText:          activeVehicle ? _distance.toFixed(1) + " m" : "no value"
+                labelText:          _activeVehicle ? _distance.toFixed(1) + " m" : "no value"
             }
             // LabelledLabel {
             //     Layout.fillWidth:   true
