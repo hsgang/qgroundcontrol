@@ -86,7 +86,6 @@ qt_add_qml_module(QGroundControlControlsModule
         EditPositionDialog.qml
         ExclusiveGroupItem.qml
         FactSlider.qml
-        FactSliderPanel.qml
         FileButton.qml
         FlightModeMenu.qml
         HeightIndicator.qml
