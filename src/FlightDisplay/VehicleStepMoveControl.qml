@@ -169,7 +169,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                activeVehicle.setPositionTargetLocalNed(0,0,_moveStep,0,false)
+                _activeVehicle.setPositionTargetLocalNed(0,0,_moveStep,0,false)
             }
         }
 
@@ -186,7 +186,7 @@ Rectangle {
 
             onClicked: {
                 var targetYaw = -_yawStep * Math.PI / 180
-                activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
+                _activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
             }
         }
 
@@ -202,7 +202,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                activeVehicle.setPositionTargetLocalNed(_moveStep,0,0,0,false)
+                _activeVehicle.setPositionTargetLocalNed(_moveStep,0,0,0,false)
             }
         }
 
@@ -219,7 +219,7 @@ Rectangle {
 
             onClicked: {
                 var targetYaw = _yawStep * Math.PI / 180
-                activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
+                _activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
             }
         }
 
@@ -238,15 +238,15 @@ Rectangle {
             property real targetAltMax: 15.0
 
             onClicked: {
-                if(activeVehicle && _distanceAvailable) {
+                if(_activeVehicle && _distanceAvailable) {
                     var altTarget = 0
                     if( _distance >= _treshHoldAlt ) { // down
                         altTarget = -(_distance - targetAltMin)
-                        activeVehicle.sendCommand(1, 178, 1, 3, 0.7, -1, 0, 0, 0, 0)
-                        activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
+                        _activeVehicle.sendCommand(1, 178, 1, 3, 0.7, -1, 0, 0, 0, 0)
+                        _activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
                     } else { // up
                         altTarget = (targetAltMax - _relAltitude )
-                        activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
+                        _activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
                     }
                 }
             }
@@ -264,7 +264,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                activeVehicle.setPositionTargetLocalNed(0,-_moveStep,0,0,false)
+                _activeVehicle.setPositionTargetLocalNed(0,-_moveStep,0,0,false)
             }
         }
 
@@ -280,7 +280,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                _activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
             }
         }
 
@@ -296,7 +296,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                activeVehicle.setPositionTargetLocalNed(0,_moveStep,0,0,false)
+                _activeVehicle.setPositionTargetLocalNed(0,_moveStep,0,0,false)
             }
         }
 
@@ -313,7 +313,7 @@ Rectangle {
 
             onClicked: {
                 if (isNaN(_distance) || _distance === 0 || (_distance !== 0 && (_distance - _moveStep) > _altLimit)) {
-                    activeVehicle.setPositionTargetLocalNed(0, 0, -_moveStep, 0, false)
+                    _activeVehicle.setPositionTargetLocalNed(0, 0, -_moveStep, 0, false)
                 }
             }
         }
@@ -349,7 +349,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                activeVehicle.setPositionTargetLocalNed(-_moveStep,0,0,0,false)
+                _activeVehicle.setPositionTargetLocalNed(-_moveStep,0,0,0,false)
             }
         }
 
