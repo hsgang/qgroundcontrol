@@ -95,7 +95,9 @@ Item{
 
     RowLayout{
         id: attitudeIndicatorRow
-        spacing:    ScreenTools.defaultFontPixelWidth
+        spacing:    ScreenTools.defaultFontPixelWidth * 2
+
+        Item { width: ScreenTools.defaultFontPixelWidth } // 좌측 여백
 
         ColumnLayout {
             Layout.alignment: Qt.AlignHCenter
@@ -188,5 +190,8 @@ Item{
                 text:   _distanceUnitText
             }
         }
+
+        Item { width: ScreenTools.defaultFontPixelWidth } // 우측 여백
+
     }
 }
