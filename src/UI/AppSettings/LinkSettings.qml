@@ -66,7 +66,7 @@ SettingsPage {
                         smooth:                 true
                         color:                  qgcPalEdit.text
                         source:                 "/res/pencil.svg"
-                        enabled:                !object.link
+                        visible:                !object.link
 
                         QGCPalette {
                             id: qgcPalEdit
@@ -90,7 +90,7 @@ SettingsPage {
                         smooth:                 true
                         color:                  qgcPalDelete.text
                         source:                 "/res/TrashDelete.svg"
-                        enabled:                !object.link
+                        visible:                !object.link
 
                         QGCPalette {
                             id: qgcPalDelete
