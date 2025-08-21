@@ -281,7 +281,8 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,0,false)
+                //_activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,0,false)
+                _activeVehicle.pauseVehicle()
             }
         }
 
