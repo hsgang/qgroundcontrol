@@ -87,12 +87,6 @@ class WebRTCConfiguration : public LinkConfiguration
     Q_PROPERTY(QString roomId READ roomId WRITE setRoomId NOTIFY roomIdChanged)
     Q_PROPERTY(QString peerId READ peerId WRITE setPeerId NOTIFY peerIdChanged)
     Q_PROPERTY(QString targetPeerId READ targetPeerId WRITE setTargetPeerId NOTIFY targetPeerIdChanged)
-    Q_PROPERTY(QString signalingServer READ signalingServer WRITE setSignalingServer NOTIFY signalingServerChanged)
-    Q_PROPERTY(QString stunServer READ stunServer WRITE setStunServer NOTIFY stunServerChanged)
-    Q_PROPERTY(QString turnServer READ turnServer WRITE setTurnServer NOTIFY turnServerChanged)
-    Q_PROPERTY(QString turnUsername READ turnUsername WRITE setTurnUsername NOTIFY turnUsernameChanged)
-    Q_PROPERTY(QString turnPassword READ turnPassword WRITE setTurnPassword NOTIFY turnPasswordChanged)
-    Q_PROPERTY(bool udpMuxEnabled READ udpMuxEnabled WRITE setUdpMuxEnabled NOTIFY udpMuxEnabledChanged)
 
    public:
     explicit WebRTCConfiguration(const QString &name, QObject *parent = nullptr);
@@ -116,47 +110,23 @@ class WebRTCConfiguration : public LinkConfiguration
     QString targetPeerId() const { return _targetPeerId; }
     void setTargetPeerId(const QString &id);
 
-    QString signalingServer() const { return _signalingServer; }
-    void setSignalingServer(const QString &url);
-
-    QString stunServer() const { return _stunServer; }
-    void setStunServer(const QString &url);
-
-    QString turnServer() const { return _turnServer; }
-    void setTurnServer(const QString &url);
-
-    QString turnUsername() const { return _turnUsername; }
-    void setTurnUsername(const QString &username);
-
-    QString turnPassword() const { return _turnPassword; }
-    void setTurnPassword(const QString &password);
-
-    bool udpMuxEnabled() const { return _udpMuxEnabled; }
-    void setUdpMuxEnabled(bool enabled);
+    // CloudSettings에서 WebRTC 설정을 가져오는 getter 메서드들
+    QString stunServer() const;
+    QString turnServer() const;
+    QString turnUsername() const;
+    QString turnPassword() const;
 
    signals:
     void roomIdChanged();
     void peerIdChanged();
     void targetPeerIdChanged();
-    void signalingServerChanged();
-    void signalingPortChanged();
-    void stunServerChanged();
-    void stunPortChanged();
-    void turnServerChanged();
-    void turnUsernameChanged();
-    void turnPasswordChanged();
-    void udpMuxEnabledChanged();
 
    private:
     QString _roomId;
     QString _peerId;
     QString _targetPeerId;
-    QString _signalingServer;
-    QString _stunServer = "stun.l.google.com:19302";
-    QString _turnServer;
-    QString _turnUsername;
-    QString _turnPassword;
-    bool _udpMuxEnabled = false;
+
+
 
     QString _generateRandomId(int length = 8) const;
 };
@@ -168,7 +138,12 @@ class WebRTCWorker : public QObject
     Q_OBJECT
 
    public:
-    explicit WebRTCWorker(const WebRTCConfiguration *config, QObject *parent = nullptr);
+    explicit WebRTCWorker(const WebRTCConfiguration *config, 
+                         const QString &stunServer,
+                         const QString &turnServer,
+                         const QString &turnUsername,
+                         const QString &turnPassword,
+                         QObject *parent = nullptr);
     ~WebRTCWorker();
 
     void initializeLogger();
@@ -245,9 +220,15 @@ class WebRTCWorker : public QObject
     void _cleanup();
     void _cleanupComplete();
 
-            // Configuration
+                         // Configuration
     const WebRTCConfiguration *_config = nullptr;
     rtc::Configuration _rtcConfig;
+    
+    // 스레드 안전성을 위한 설정값 복사본
+    QString _stunServer;
+    QString _turnServer;
+    QString _turnUsername;
+    QString _turnPassword;
 
             // Signaling management
     SignalingServerManager *_signalingManager = nullptr;

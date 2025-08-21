@@ -4,6 +4,8 @@
 #include <QRegularExpression>
 #include <QtCore/QApplicationStatic>
 #include "QGCLoggingCategory.h"
+#include "SettingsManager.h"
+#include "CloudSettings.h"
 
 QGC_LOGGING_CATEGORY(SignalingServerManagerLog, "qgc.comms.signaling")
 
@@ -21,6 +23,7 @@ void SignalingServerManager::init()
     // 프로그램 시작 시 자동으로 시그널링 서버에 WebSocket 연결 시작
     QTimer::singleShot(2000, this, [this]() {
         qCDebug(SignalingServerManagerLog) << "Starting automatic WebSocket connection to signaling server";
+        _serverUrl = SettingsManager::instance()->cloudSettings()->webrtcSignalingServer()->rawValue().toString();
         connectToServerWebSocketOnly(_serverUrl);
     });
 }

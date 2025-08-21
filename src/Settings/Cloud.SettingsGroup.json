@@ -43,6 +43,41 @@
     "shortDesc":     "minioEndpoint",
     "type":                 "string",
     "default":         ""
+},
+{
+    "name":                 "webrtcSignalingServer",
+    "shortDesc":     "WebRTC Signaling Server",
+    "longDesc":      "WebRTC 시그널링 서버 URL (예: wss://example.com:3000)",
+    "type":                 "string",
+    "default":         ""
+},
+{
+    "name":                 "webrtcStunServer",
+    "shortDesc":     "WebRTC STUN Server",
+    "longDesc":      "STUN 서버 주소 (예: stun.l.google.com:19302)",
+    "type":                 "string",
+    "default":         "stun.l.google.com:19302"
+},
+{
+    "name":                 "webrtcTurnServer",
+    "shortDesc":     "WebRTC TURN Server",
+    "longDesc":      "TURN 서버 주소 (예: turn.example.com:3478)",
+    "type":                 "string",
+    "default":         ""
+},
+{
+    "name":                 "webrtcTurnUsername",
+    "shortDesc":     "WebRTC TURN Username",
+    "longDesc":      "TURN 서버 인증 사용자명",
+    "type":                 "string",
+    "default":         ""
+},
+{
+    "name":                 "webrtcTurnPassword",
+    "shortDesc":     "WebRTC TURN Password",
+    "longDesc":      "TURN 서버 인증 비밀번호",
+    "type":                 "string",
+    "default":         ""
 }
 ]
 }

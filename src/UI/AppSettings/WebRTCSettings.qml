@@ -22,11 +22,6 @@ ColumnLayout {
         subEditConfig.roomId = roomIdField.text
         subEditConfig.peerId = peerIdField.text
         subEditConfig.targetPeerId = targetPeerIdField.text
-        subEditConfig.signalingServer = signalingServerField.text
-        subEditConfig.stunServer = stunServerField.text
-        subEditConfig.turnServer = turnServerField.text
-        subEditConfig.turnUsername = turnUsernameField.text
-        subEditConfig.turnPassword = turnPasswordField.text
     }
 
     ColumnLayout {
@@ -35,7 +30,7 @@ ColumnLayout {
 
         RowLayout {
             spacing: _colSpacing
-            QGCLabel { text: qsTr("roomId") }
+            QGCLabel { text: qsTr("ID") }
             QGCTextField {
                 id:                     roomIdField
                 Layout.preferredWidth:  _secondColumnWidth * 0.7
@@ -52,7 +47,7 @@ ColumnLayout {
 
         RowLayout {
             spacing: _colSpacing
-            QGCLabel { text: qsTr("peerId") }
+            QGCLabel { text: qsTr("APP ID (자동설정)") }
             QGCTextField {
                 id:                     peerIdField
                 Layout.preferredWidth:  _secondColumnWidth * 0.7
@@ -67,92 +62,12 @@ ColumnLayout {
 
         RowLayout {
             spacing: _colSpacing
-            QGCLabel { text: qsTr("targetPeerId") }
+            QGCLabel { text: qsTr("TARGET ID (자동설정)") }
             QGCTextField {
                 id:                     targetPeerIdField
                 Layout.preferredWidth:  _secondColumnWidth * 0.7
                 Layout.fillWidth:       true
                 text:                   subEditConfig.targetPeerId
-
-                onEditingFinished: {
-                    saveSettings()
-                }
-            }
-        }
-
-        RowLayout {
-            spacing: _colSpacing
-
-            QGCLabel { text: qsTr("signalingServer") }
-            QGCTextField {
-                id:                     signalingServerField
-                Layout.preferredWidth:  _secondColumnWidth * 0.7
-                Layout.fillWidth:       true
-                text:                   subEditConfig.signalingServer
-
-                onEditingFinished: {
-                    saveSettings()
-                }
-            }
-        }
-
-        RowLayout {
-            spacing: _colSpacing
-
-            QGCLabel { text: qsTr("stunServer") }
-            QGCTextField {
-                id:                     stunServerField
-                Layout.preferredWidth:  _secondColumnWidth * 0.7
-                Layout.fillWidth:       true
-                text:                   subEditConfig.stunServer
-
-                onEditingFinished: {
-                    saveSettings()
-                }
-            }
-        }
-
-        RowLayout {
-            spacing: _colSpacing
-
-            QGCLabel { text: qsTr("turnServer") }
-            QGCTextField {
-                id:                     turnServerField
-                Layout.preferredWidth:  _secondColumnWidth * 0.7
-                Layout.fillWidth:       true
-                text:                   subEditConfig.turnServer
-
-                onEditingFinished: {
-                    saveSettings()
-                }
-            }
-        }
-
-        RowLayout {
-            spacing: _colSpacing
-
-            QGCLabel { text: qsTr("turnUsername") }
-            QGCTextField {
-                id:                     turnUsernameField
-                Layout.preferredWidth:  _secondColumnWidth * 0.7
-                Layout.fillWidth:       true
-                text:                   subEditConfig.turnUsername
-
-                onEditingFinished: {
-                    saveSettings()
-                }
-            }
-        }
-
-        RowLayout {
-            spacing: _colSpacing
-
-            QGCLabel { text: qsTr("turnPassword") }
-            QGCTextField {
-                id:                     turnPasswordField
-                Layout.preferredWidth:  _secondColumnWidth * 0.7
-                Layout.fillWidth:       true
-                text:                   subEditConfig.turnPassword
 
                 onEditingFinished: {
                     saveSettings()

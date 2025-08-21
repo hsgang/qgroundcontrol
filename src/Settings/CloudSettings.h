@@ -25,4 +25,11 @@ public:
     DEFINE_SETTINGFACT(minioSecretKey)
     DEFINE_SETTINGFACT(minioEndpoint)
     DEFINE_SETTINGFACT(firebaseAPIKey)
+    
+    // WebRTC 설정
+    DEFINE_SETTINGFACT(webrtcSignalingServer)
+    DEFINE_SETTINGFACT(webrtcStunServer)
+    DEFINE_SETTINGFACT(webrtcTurnServer)
+    DEFINE_SETTINGFACT(webrtcTurnUsername)
+    DEFINE_SETTINGFACT(webrtcTurnPassword)
 };

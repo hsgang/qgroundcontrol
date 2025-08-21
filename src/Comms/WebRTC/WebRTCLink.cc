@@ -2,11 +2,11 @@
 #include <QDebug>
 #include <QUrl>
 #include <QtQml/qqml.h>
-// #include "SettingsManager.h"
-// #include "VideoSettings.h"
 #include "QGCLoggingCategory.h"
 #include "VideoManager.h"
 #include "SignalingServerManager.h"
+#include "SettingsManager.h"
+#include "CloudSettings.h"
 
 QGC_LOGGING_CATEGORY(WebRTCLinkLog, "qgc.comms.webrtclink")
 
@@ -29,12 +29,6 @@ WebRTCConfiguration::WebRTCConfiguration(const WebRTCConfiguration *copy, QObjec
       , _roomId(copy->_roomId)
       , _peerId(copy->_peerId)
       , _targetPeerId(copy->_targetPeerId)
-      , _signalingServer(copy->_signalingServer)
-      , _stunServer(copy->_stunServer)
-      , _turnServer(copy->_turnServer)
-      , _turnUsername(copy->_turnUsername)
-      , _turnPassword(copy->_turnPassword)
-      , _udpMuxEnabled(copy->_udpMuxEnabled)
 {
 }
 
@@ -48,12 +42,6 @@ void WebRTCConfiguration::copyFrom(const LinkConfiguration *source)
         _roomId = src->_roomId;
         _peerId = src->_peerId;
         _targetPeerId = src->_targetPeerId;
-        _signalingServer = src->_signalingServer;
-        _stunServer = src->_stunServer;
-        _turnServer = src->_turnServer;
-        _turnUsername = src->_turnUsername;
-        _turnPassword = src->_turnPassword;
-        _udpMuxEnabled = src->_udpMuxEnabled;
     }
 }
 
@@ -63,12 +51,6 @@ void WebRTCConfiguration::loadSettings(QSettings &settings, const QString &root)
     _roomId = settings.value("roomId", "").toString();
     _peerId = settings.value("peerId", _generateRandomId()).toString();
     _targetPeerId = settings.value("targetPeerId", "").toString();
-    _signalingServer = settings.value("signalingServer", "").toString();
-    _stunServer = settings.value("stunServer", "stun.l.google.com:19302").toString();
-    _turnServer = settings.value("turnServer", "").toString();
-    _turnUsername = settings.value("turnUsername", "").toString();
-    _turnPassword = settings.value("turnPassword", "").toString();
-    _udpMuxEnabled = settings.value("udpMuxEnabled", false).toBool();
     settings.endGroup();
 }
 
@@ -78,12 +60,6 @@ void WebRTCConfiguration::saveSettings(QSettings &settings, const QString &root)
     settings.setValue("roomId", _roomId);
     settings.setValue("peerId", _peerId);
     settings.setValue("targetPeerId", _targetPeerId);
-    settings.setValue("signalingServer", _signalingServer);
-    settings.setValue("stunServer", _stunServer);
-    settings.setValue("turnServer", _turnServer);
-    settings.setValue("turnUsername", _turnUsername);
-    settings.setValue("turnPassword", _turnPassword);
-    settings.setValue("udpMuxEnabled", _udpMuxEnabled);
     settings.endGroup();
 }
 
@@ -112,52 +88,25 @@ void WebRTCConfiguration::setTargetPeerId(const QString &id)
     }
 }
 
-void WebRTCConfiguration::setSignalingServer(const QString &url)
+// CloudSettings에서 WebRTC 설정을 가져오는 getter 메서드들
+QString WebRTCConfiguration::stunServer() const
 {
-    if (_signalingServer != url) {
-        _signalingServer = url;
-        emit signalingServerChanged();
-    }
+    return SettingsManager::instance()->cloudSettings()->webrtcStunServer()->rawValue().toString();
 }
 
-void WebRTCConfiguration::setStunServer(const QString &url)
+QString WebRTCConfiguration::turnServer() const
 {
-    if (_stunServer != url) {
-        _stunServer = url;
-        emit stunServerChanged();
-    }
+    return SettingsManager::instance()->cloudSettings()->webrtcTurnServer()->rawValue().toString();
 }
 
-void WebRTCConfiguration::setTurnServer(const QString &url)
+QString WebRTCConfiguration::turnUsername() const
 {
-    if (_turnServer != url) {
-        _turnServer = url;
-        emit turnServerChanged();
-    }
+    return SettingsManager::instance()->cloudSettings()->webrtcTurnUsername()->rawValue().toString();
 }
 
-void WebRTCConfiguration::setTurnUsername(const QString &username)
+QString WebRTCConfiguration::turnPassword() const
 {
-    if (_turnUsername != username) {
-        _turnUsername = username;
-        emit turnUsernameChanged();
-    }
-}
-
-void WebRTCConfiguration::setTurnPassword(const QString &password)
-{
-    if (_turnPassword != password) {
-        _turnPassword = password;
-        emit turnPasswordChanged();
-    }
-}
-
-void WebRTCConfiguration::setUdpMuxEnabled(bool enabled)
-{
-    if (_udpMuxEnabled != enabled) {
-        _udpMuxEnabled = enabled;
-        emit udpMuxEnabledChanged();
-    }
+    return SettingsManager::instance()->cloudSettings()->webrtcTurnPassword()->rawValue().toString();
 }
 
 QString WebRTCConfiguration::_generateRandomId(int length) const
@@ -178,9 +127,18 @@ QString WebRTCConfiguration::_generateRandomId(int length) const
 // WebRTCWorker Implementation
 /*===========================================================================*/
 
-WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, QObject *parent)
+WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config, 
+    const QString &stunServer, 
+    const QString &turnServer, 
+    const QString &turnUsername, 
+    const QString &turnPassword, 
+    QObject *parent)
     : QObject(parent)
       , _config(config)
+      , _stunServer(stunServer)
+      , _turnServer(turnServer)
+      , _turnUsername(turnUsername)
+      , _turnPassword(turnPassword)
       , _videoStreamActive(false)
       , _isDisconnecting(false)
 {
@@ -232,7 +190,6 @@ void WebRTCWorker::start()
     _roomLeftSuccessfully = false;
     
     // SignalingServerManager에 peer 등록 요청
-    // 프로그램 시작 시 자동으로 WebSocket 연결이 시작되므로 바로 등록 가능
     if (_signalingManager) {
         qCDebug(WebRTCLinkLog) << "Requesting peer registration to SignalingServerManager";
         qCDebug(WebRTCLinkLog) << "Peer ID:" << _config->peerId() << " Room:" << _config->roomId();
@@ -497,10 +454,7 @@ void WebRTCWorker::reconnectToRoom()
     _currentPeerId = _config->peerId();
     _roomLeftSuccessfully = false;
     
-    // SignalingServerManager에 재연결 요청
-    // SignalingServerManager가 연결 상태를 확인하고 적절한 처리를 수행
     if (_signalingManager) {
-        qCDebug(WebRTCLinkLog) << "Requesting reconnection to SignalingServerManager";
         qCDebug(WebRTCLinkLog) << "Reconnection peer ID:" << _config->peerId() << " room:" << _config->roomId();
         _signalingManager->registerPeer(_config->peerId(), _config->roomId());
         emit rtcStatusMessageChanged("재연결 시도 중");
@@ -514,23 +468,22 @@ void WebRTCWorker::_setupPeerConnection()
 {
     _rtcConfig.iceServers.clear();
 
-    if (!_config->stunServer().isEmpty()) {
-        _rtcConfig.iceServers.emplace_back(_config->stunServer().toStdString());
+    // 스레드 안전성을 위해 복사된 설정값 사용
+    if (!_stunServer.isEmpty()) {
+        _rtcConfig.iceServers.emplace_back(_stunServer.toStdString());
     }
 
     // Add TURN server
-    if (!_config->turnServer().isEmpty()) {
+    if (!_turnServer.isEmpty()) {
         rtc::IceServer turnServer(
-            _config->turnServer().toStdString(),  // hostname
-            3478,                                 // 포트 (필요시 파싱)
-            _config->turnUsername().toStdString(),
-            _config->turnPassword().toStdString(),
+            _turnServer.toStdString(),  // hostname
+            3478,                       // 포트 (필요시 파싱)
+            _turnUsername.toStdString(),
+            _turnPassword.toStdString(),
             rtc::IceServer::RelayType::TurnUdp
             );
         _rtcConfig.iceServers.emplace_back(turnServer);
     }
-
-    _rtcConfig.enableIceUdpMux = false;
 
     try {
         _peerConnection = std::make_shared<rtc::PeerConnection>(_rtcConfig);
@@ -569,7 +522,6 @@ void WebRTCWorker::_setupPeerConnection()
 
         _peerConnection->onTrack([this](std::shared_ptr<rtc::Track> track) {
             if (isOperational()) {
-                // shared_ptr을 직접 전달하기 위해 람다 사용 (Q_ARG로는 불가능)
                 QMetaObject::invokeMethod(this, [this, track]() {
                     if (isOperational()) {
                         _handleTrackReceived(track);
@@ -797,8 +749,6 @@ void WebRTCWorker::_processDataChannelOpen()
         return;
     }
 
-    qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Data channel opened successfully";
-
     QMetaObject::invokeMethod(this, [this]() {
         emit connected();
         emit rtcStatusMessageChanged("데이터 채널 연결 완료");
@@ -829,7 +779,6 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
         _videoTrack = track;
         emit videoTrackReceived();
 
-        // 내부(appsrc) 모드에서는 브릿지 없이 직접 주입하므로 즉시 활성화
         if (VideoManager::instance()->isWebRtcInternalModeEnabled()) {
             _videoStreamActive = true;
             qCDebug(WebRTCLinkLog) << "[WebRTC] Internal mode: video stream active";
@@ -937,12 +886,6 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
         } else if (type == "registered") {
             qCDebug(WebRTCLinkLog) << "Successfully registered with signaling server";
             emit rtcStatusMessageChanged("기체 연결 대기중");
-            
-            // 추가 디버깅: 등록 완료 후 상태 확인
-            qCDebug(WebRTCLinkLog) << "Current state - isShuttingDown:" << _isShuttingDown.load() 
-                                  << " isDisconnecting:" << _isDisconnecting
-                                  << " dataChannelOpened:" << _dataChannelOpened.load()
-                                  << " peerConnection:" << (_peerConnection ? "exists" : "null");
         }
 
     } catch (const std::exception& e) {
@@ -1084,15 +1027,10 @@ void WebRTCWorker::_handleCandidate(const QJsonObject& message)
 
 void WebRTCWorker::_sendSignalingMessage(const QJsonObject& message)
 {
-    // SignalingServerManager가 모든 시그널링 메시지 전송을 전담
-    // WebRTCWorker는 메시지 전송 요청만 하고, 실제 전송은 SignalingServerManager가 처리
     if (!_signalingManager) {
         qCWarning(WebRTCLinkLog) << "Cannot send signaling message: signaling manager not available";
         return;
     }
-
-    // SignalingServerManager의 sendMessage 메서드를 통해 전송
-    // SignalingServerManager가 연결 상태를 확인하고 적절히 처리
     _signalingManager->sendMessage(message);
 }
 
@@ -1296,7 +1234,13 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     : LinkInterface(config, parent)
 {
     _rtcConfig = qobject_cast<const WebRTCConfiguration*>(config.get());
-    _worker = new WebRTCWorker(_rtcConfig);
+    
+    QString stunServer = _rtcConfig->stunServer();
+    QString turnServer = _rtcConfig->turnServer();
+    QString turnUsername = _rtcConfig->turnUsername();
+    QString turnPassword = _rtcConfig->turnPassword();
+    
+    _worker = new WebRTCWorker(_rtcConfig, stunServer, turnServer, turnUsername, turnPassword);
     _workerThread = new QThread(this);
     _worker->moveToThread(_workerThread);
 

@@ -118,7 +118,7 @@ private:
     
     // WebSocket 연결
     QWebSocket *_webSocket = nullptr;
-    QString _serverUrl = "wss://ampkorea.duckdns.org:3000";
+    QString _serverUrl;
     QString _peerId;
     QString _roomId;
     

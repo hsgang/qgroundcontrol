@@ -24,3 +24,10 @@ DECLARE_SETTINGSFACT(CloudSettings, minioAccessKey)
 DECLARE_SETTINGSFACT(CloudSettings, minioSecretKey)
 DECLARE_SETTINGSFACT(CloudSettings, minioEndpoint)
 DECLARE_SETTINGSFACT(CloudSettings, firebaseAPIKey)
+
+// WebRTC 설정
+DECLARE_SETTINGSFACT(CloudSettings, webrtcSignalingServer)
+DECLARE_SETTINGSFACT(CloudSettings, webrtcStunServer)
+DECLARE_SETTINGSFACT(CloudSettings, webrtcTurnServer)
+DECLARE_SETTINGSFACT(CloudSettings, webrtcTurnUsername)
+DECLARE_SETTINGSFACT(CloudSettings, webrtcTurnPassword)

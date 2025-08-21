@@ -1,28 +1,22 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.Controls
+import QGroundControl.FactControls
 
 
 SettingsPage {
+    property real   _urlFieldWidth:     ScreenTools.defaultFontPixelWidth * 25
+
     property var    _settingsManager:   QGroundControl.settingsManager
     property var    cloudSettings:      _settingsManager.cloudSettings
-    property real   _urlFieldWidth:     ScreenTools.defaultFontPixelWidth * 25
 
     property bool   _signedIn:          QGroundControl.cloudManager.signedIn
     property string _signedUserName:    QGroundControl.cloudManager.signedUserName
+    
+
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -126,93 +120,49 @@ SettingsPage {
         }
     }
 
-    // SettingsGroupLayout {
-    //     Layout.fillWidth:   true
-    //     heading:            qsTr("TEST")
+    // WebRTC 설정 섹션
+    SettingsGroupLayout {
+        Layout.fillWidth:   true
+        heading:            qsTr("RTC 설정")
 
-    //     LabelledButton {
-    //         label:      qsTr("TEST")
-    //         buttonText: qsTr("TEST")
+        LabelledFactTextField {
+            Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth * 1.4
+            label:              qsTr("시그널링 서버")
+            description:        qsTr("example - wss://example.com:3000")
+            fact:               cloudSettings.webrtcSignalingServer
+        }
 
-    //         onClicked:  {
-    //             var jsonData = {
-    //                 "time_start": "2025-04-29T12:03:00",
-    //                 "time_end": "2025-04-29T12:03:00",
-    //                 "flight_time": 1,
-    //                 "distance": 60,
-    //             };
-    //             QGroundControl.cloudManager.insertDataToDB("flight_record", jsonData)
-    //         }
-    //     }
-    // }
+        LabelledFactTextField {
+            Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth * 1.4
+            label:              qsTr("STUN 서버")
+            description:        qsTr("example - stun.l.google.com:19302")
+            fact:               cloudSettings.webrtcStunServer
+        }
 
-    // SettingsGroupLayout {
-    //     Layout.fillWidth:   true
-    //     heading:            qsTr("SignUp")
+        LabelledFactTextField {
+            Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth * 1.4
+            label:              qsTr("TURN 서버")
+            description:        qsTr("example - turn.example.com:3478")
+            fact:               cloudSettings.webrtcTurnServer
+        }
 
-    //     LabelledButton {
-    //         label:      qsTr("SignUp")
-    //         buttonText: qsTr("SignUp")
-    //         onClicked:  {
-    //             console.log("Clicked SignUp");
-    //             var email = emailField.fact.value.toString()
-    //             var password = passwordField.fact.value.toString()
-    //             console.log("email:"+email);
-    //             console.log("password:"+password);
-    //             QGroundControl.cloudManager.signUserUp(email, password)
-    //         }
-    //     }
-    // }
+        LabelledFactTextField {
+            Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth * 1.4
+            label:              qsTr("TURN 사용자명")
+            description:        qsTr("TURN 서버 인증 사용자명")
+            fact:               cloudSettings.webrtcTurnUsername
+        }
 
-    // SettingsGroupLayout {
-    //     Layout.fillWidth:   true
-    //     heading:            qsTr("Cloud API Keys")
-
-    //     LabelledFactTextField {
-    //         Layout.fillWidth:   true
-    //         textFieldPreferredWidth:    _urlFieldWidth
-    //         label:              qsTr("API Key")
-    //         description:        qsTr("google firebase")
-    //         fact:               cloudSettings.firebaseAPIKey
-    //         visible:            cloudSettings.firebaseAPIKey.visible
-    //     }
-    // }
-
-    // SettingsGroupLayout {
-    //     Layout.fillWidth:   true
-    //     heading:            qsTr("Installer Download")
-
-    //     QGCButton {
-    //         text:                   qsTr("Download")
-    //         visible:                true
-    //         Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 25
-    //         Layout.alignment:       Qt.AlignHCenter
-
-    //         onClicked: {
-    //             QGroundControl.cloudManager.downloadForNewVersion()
-    //         }
-    //     }
-
-    //     ProgressBar {
-    //         id:                     progressBar
-    //         Layout.preferredWidth:  parent.width
-    //         visible:                QGroundControl.cloudManager.fileDownloadProgress > 0
-    //         value:                  QGroundControl.cloudManager.fileDownloadProgress * 0.01
-
-    //         contentItem: Item{
-    //             Rectangle {
-    //                 width: progressBar.visualPosition * parent.width
-    //                 height: parent.height
-    //                 color: "steelblue"
-    //             }
-    //         }
-    //     }
-
-    //     LabelledLabel {
-    //         visible:            QGroundControl.cloudManager.fileDownloadProgress > 0
-    //         Layout.fillWidth:   true
-    //         label:              qsTr("Progress")
-    //         labelText:          QGroundControl.cloudManager.fileDownloadProgress.toFixed(0) + " %"
-    //     }
-    // }
+        LabelledFactTextField {
+            Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth * 1.4
+            label:              qsTr("TURN 비밀번호")
+            description:        qsTr("TURN 서버 인증 비밀번호")
+            fact:               cloudSettings.webrtcTurnPassword
+        }
+    }
 }
