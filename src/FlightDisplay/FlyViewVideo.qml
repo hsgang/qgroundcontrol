@@ -267,6 +267,7 @@ Item {
         anchors.fill:   parent
         vehicle:        QGroundControl.multiVehicleManager.activeVehicle
         visible :       QGroundControl.settingsManager.flyViewSettings.showLandingGuideView.rawValue
-
+        screenWidth:    parent.width
+        screenHeight:   parent.height
     }
 }

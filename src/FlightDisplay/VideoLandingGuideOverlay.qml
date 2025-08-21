@@ -38,8 +38,8 @@ Item {
 
     property real _hFov: 75 //degree
     property real _vFov: 46 //degree
-    property real _screenWidth: ScreenTools.screenWidth
-    property real _screenHeight: ScreenTools.screenHeight
+    property real screenWidth //: ScreenTools.screenWidth
+    property real screenHeight //: ScreenTools.screenHeight
 
     // 라운드 사각형의 모서리 반경
     property real cornerRadius: 10
@@ -68,15 +68,15 @@ Item {
             ctx.clearRect(0, 0, width, height);
 
             // === 오프셋 계산 ===
-            var xOffset = filteredRoll * _screenWidth / _hFov;
-            var yOffset = filteredPitch * _screenHeight / _vFov;
+            var xOffset = filteredRoll * screenWidth / _hFov;
+            var yOffset = filteredPitch * screenHeight / _vFov;
 
             var centerX = width / 2 + xOffset;
             var centerY = height / 2 + yOffset;
 
             // === 십자선은 항상 ===
-            const verticalLineLength = _screenHeight * 0.2;
-            const horizontalLineLength = _screenHeight * 0.2;
+            const verticalLineLength = screenHeight * 0.2;
+            const horizontalLineLength = screenHeight * 0.2;
 
             ctx.lineWidth = 1;
             ctx.strokeStyle = "#A0FF32";
@@ -93,7 +93,7 @@ Item {
 
             // === 사각형과 원은 distance 범위 조건 ===
             if (_distance > _minDistance && _distance < _maxDistance) {
-                var focal = (_screenWidth / 2) / Math.tan((_hFov / 2) * Math.PI / 180);
+                var focal = (screenWidth / 2) / Math.tan((_hFov / 2) * Math.PI / 180);
                 var objectPhysicalSize = 3;
                 var cameraPhysicalOffset = 0.3;
 
@@ -101,8 +101,8 @@ Item {
                 var rectSize = (objectPhysicalSize * focal) / effectiveDistance;
                 var cameraYOffset = (cameraPhysicalOffset * focal) / effectiveDistance;
 
-                var minSize = _screenHeight * 0.05;
-                var maxSize = _screenHeight * 1.20;
+                var minSize = screenHeight * 0.05;
+                var maxSize = screenHeight * 1.20;
                 rectSize = Math.max(minSize, Math.min(maxSize, rectSize));
 
                 // === 레인지파인더 텍스트 ===
