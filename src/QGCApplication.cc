@@ -42,6 +42,7 @@
 #include "QGCLoggingCategory.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
+#include "SignalingServerManager.h"
 #include "UDPLink.h"
 #include "Vehicle.h"
 #include "VehicleComponent.h"
@@ -283,6 +284,7 @@ void QGCApplication::_initForNormalAppBoot()
     FollowMe::instance()->init();
     QGCPositionManager::instance()->init();
     LinkManager::instance()->init();
+    SignalingServerManager::instance()->init();
     MultiVehicleManager::instance()->init();
     MAVLinkProtocol::instance()->init();
     VideoManager::instance()->init(mainRootWindow());
@@ -701,6 +703,9 @@ QGCImageProvider *QGCApplication::qgcImageProvider()
 void QGCApplication::shutdown()
 {
     qCDebug(QGCApplicationLog) << "Exit";
+
+    // Shutdown SignalingServerManager first to properly close connections
+    SignalingServerManager::shutdown();
 
     if (_videoManagerInitialized) {
         VideoManager::instance()->cleanup();

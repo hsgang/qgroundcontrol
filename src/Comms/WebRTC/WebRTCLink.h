@@ -19,9 +19,11 @@
 #include "LinkConfiguration.h"
 #include "LinkInterface.h"
 #include "VideoManager.h"
+#include "SignalingServerManager.h"
 
 class QThread;
 class WebRTCLink;
+class SignalingServerManager;
 
 Q_DECLARE_LOGGING_CATEGORY(WebRTCLinkLog)
 
@@ -177,6 +179,7 @@ class WebRTCWorker : public QObject
     void start();
     void writeData(const QByteArray &data);
     void disconnectLink();
+    void reconnectToRoom();  // 재연결 슬롯 추가
     void handlePeerStateChange(int stateValue);
     void handleLocalDescription(const QString& descType, const QString& sdpContent);
     void handleLocalCandidate(const QString& candidateStr, const QString& mid);
@@ -204,18 +207,23 @@ class WebRTCWorker : public QObject
     void videoStatsUpdated(double rate, qint64 packets, qint64 bytes);
 
    private slots:
-    void _onWebSocketConnected();
-    void _onWebSocketDisconnected();
-    void _onWebSocketError(QAbstractSocket::SocketError error);
-    void _onWebSocketMessageReceived(const QString& message);
+    void _onSignalingConnected();
+    void _onSignalingDisconnected();
+    void _onSignalingError(const QString& error);
+    void _onSignalingMessageReceived(const QJsonObject& message);
+    void _onRegistrationSuccessful();
+    void _onRegistrationFailed(const QString& reason);
     void _onPeerStateChanged(rtc::PeerConnection::State state);
     void _onGatheringStateChanged(rtc::PeerConnection::GatheringState state);
     void _updateRtt();  // RTT 측정용 slot
+    
+    // Room management slots
+    void _onPeerLeftSuccessfully(const QString& peerId, const QString& roomId);
+    void _onPeerLeaveFailed(const QString& peerId, const QString& reason);
 
    private:
-    // WebSocket signaling
-    void _setupWebSocket();
-    void _connectToSignalingServer();
+    // Signaling management
+    void _setupSignalingManager();
     void _handleSignalingMessage(const QJsonObject& message);
     void _handleCandidate(const QJsonObject& message);
     void _sendSignalingMessage(const QJsonObject& message);
@@ -227,7 +235,7 @@ class WebRTCWorker : public QObject
     void _setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc);
     void _processDataChannelOpen();
     void _processPendingCandidates();
-    void _startQtTimers();
+    void _startTimers();
     QString _stateToString(rtc::PeerConnection::State state) const;
     QString _gatheringStateToString(rtc::PeerConnection::GatheringState state) const;
 
@@ -239,9 +247,8 @@ class WebRTCWorker : public QObject
     const WebRTCConfiguration *_config = nullptr;
     rtc::Configuration _rtcConfig;
 
-            // WebSocket for signaling
-    QWebSocket *_webSocket = nullptr;
-    bool _signalingConnected = false;
+            // Signaling management
+    SignalingServerManager *_signalingManager = nullptr;
     QTimer *_rttTimer = nullptr;
 
             // WebRTC components
@@ -254,7 +261,6 @@ class WebRTCWorker : public QObject
     std::vector<rtc::Candidate> _pendingCandidates;
     std::atomic_bool _remoteDescriptionSet {false};
     QMutex _candidateMutex;
-    bool _isOfferer = false;
     bool _isDisconnecting = false;
     std::atomic<bool> _dataChannelOpened{false};
 
@@ -265,6 +271,13 @@ class WebRTCWorker : public QObject
     std::atomic<bool> _isShuttingDown{false};
     bool _videoStreamActive = false;
     QString _currentVideoURI; // kept for API compatibility; unused without bridge
+    
+    // Room management
+    QString _currentRoomId;
+    QString _currentPeerId;
+    bool _roomLeftSuccessfully = false;
+    QTimer* _reconnectTimer = nullptr;  // 수동 재연결용 (자동 재연결 비활성화)
+    bool _waitingForReconnect = false;
 
     void _updateAllStatistics();
     void _calculateDataChannelRates(qint64 currentTime);
@@ -303,6 +316,7 @@ class WebRTCLink : public LinkInterface
 
     bool isConnected() const override;
     void connectLink();
+    void reconnectLink();  // 재연결 메서드 추가
 
     int rttMs() const { return _rttMs; }
     double webRtcSent() const { return _webRtcSent; }
@@ -327,7 +341,7 @@ class WebRTCLink : public LinkInterface
     void _onErrorOccurred(const QString &errorString);
     void _onDataReceived(const QByteArray &data);
     void _onDataSent(const QByteArray &data);
-    void _onRttUpdated(int rtt);   // RTT 업데이트 슬롯
+    void _onRttUpdated(int rtt);
     void _onDataChannelStatsChanged(double sendRate, double receiveRate);
     void _onRtcStatusMessageChanged(const QString& message);
     void _onVideoRateChanged(double KBps);
