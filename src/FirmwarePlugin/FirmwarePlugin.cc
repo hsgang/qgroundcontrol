@@ -164,7 +164,7 @@ void FirmwarePlugin::guidedModeChangeAltitude(Vehicle*, double, bool pauseVehicl
     qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
 }
 
-void FirmwarePlugin::setPositionTargetLocalNed(Vehicle*, double, double, double, double, bool pauseVehicle)
+void FirmwarePlugin::setPositionAndVelocityTargetLocalNed(Vehicle*, double, double, double, double, double, double, double, bool pauseVehicle)
 {
     // Not supported by generic vehicle
     Q_UNUSED(pauseVehicle);

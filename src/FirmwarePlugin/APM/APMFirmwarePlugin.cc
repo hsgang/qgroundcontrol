@@ -892,7 +892,7 @@ void APMFirmwarePlugin::guidedModeChangeAltitude(Vehicle *vehicle, double altitu
     }
 }
 
-void APMFirmwarePlugin::setPositionTargetLocalNed(Vehicle* vehicle, double xValue, double yValue, double zValue, double yaw, bool pauseVehicle)
+void APMFirmwarePlugin::setPositionAndVelocityTargetLocalNed(Vehicle* vehicle, double xValue, double yValue, double zValue, double vxValue, double vyValue, double vzValue, double yaw, bool pauseVehicle)
 {
     if (pauseVehicle && !_setFlightModeAndValidate(vehicle, pauseFlightMode())) {
         qgcApp()->showAppMessage(tr("Unable to pause vehicle."));
@@ -910,11 +910,15 @@ void APMFirmwarePlugin::setPositionTargetLocalNed(Vehicle* vehicle, double xValu
 
         cmd.target_system    = static_cast<uint8_t>(vehicle->id());
         cmd.target_component = static_cast<uint8_t>(vehicle->defaultComponentId());
-        cmd.coordinate_frame = MAV_FRAME_BODY_NED; //MAV_FRAME_LOCAL_OFFSET_NED;
-        cmd.type_mask = 0xFBF8; //0xFFF8; // Only x/y/z valid
+        cmd.coordinate_frame = MAV_FRAME_BODY_NED;
+        // type_mask: 0xFBF8 = position and yaw valid, 0xFC78 = position, velocity and yaw valid
+        cmd.type_mask = 0x09C0; // Position, velocity and yaw valid
         cmd.x = static_cast<float>(xValue);
         cmd.y = static_cast<float>(yValue);
         cmd.z = static_cast<float>(-zValue);
+        cmd.vx = static_cast<float>(vxValue);
+        cmd.vy = static_cast<float>(vyValue);
+        cmd.vz = static_cast<float>(-vzValue);
         cmd.yaw = static_cast<float>(yaw);
 
         mavlink_msg_set_position_target_local_ned_encode_chan(

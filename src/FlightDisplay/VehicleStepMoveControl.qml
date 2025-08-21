@@ -44,6 +44,7 @@ Rectangle {
     property real   _altLimit:              QGroundControl.settingsManager.flyViewSettings.guidedMinimumAltitude.rawValue
     property bool   _isMoving:              false
     property real   _distance:              _activeVehicle ? _activeVehicle.distanceSensors.rotationPitch270.rawValue : NaN
+    property real   _velocityStep:          0.3 // m/s 기본 속도 단위
     property real   _distanceMin:           _activeVehicle ? _activeVehicle.distanceSensors.minDistance.rawValue : NaN
     property real   _distanceMax:           _activeVehicle ? _activeVehicle.distanceSensors.maxDistance.rawValue : NaN
     property bool   _distanceAvailable:     _distance && (_distance > _distanceMin) && (_distance < _distanceMax)
@@ -169,7 +170,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                _activeVehicle.setPositionTargetLocalNed(0,0,_moveStep,0,false)
+                _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,_moveStep,0,0,0,0,false)
             }
         }
 
@@ -186,7 +187,7 @@ Rectangle {
 
             onClicked: {
                 var targetYaw = -_yawStep * Math.PI / 180
-                _activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
+                _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,targetYaw,false)
             }
         }
 
@@ -202,7 +203,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                _activeVehicle.setPositionTargetLocalNed(_moveStep,0,0,0,false)
+                _activeVehicle.setPositionAndVelocityTargetLocalNed(_moveStep,0,0,_velocityStep,0,0,0,false)
             }
         }
 
@@ -219,7 +220,7 @@ Rectangle {
 
             onClicked: {
                 var targetYaw = _yawStep * Math.PI / 180
-                _activeVehicle.setPositionTargetLocalNed(0,0,0,targetYaw,false)
+                _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,targetYaw,false)
             }
         }
 
@@ -243,10 +244,10 @@ Rectangle {
                     if( _distance >= _treshHoldAlt ) { // down
                         altTarget = -(_distance - targetAltMin)
                         _activeVehicle.sendCommand(1, 178, 1, 3, 0.7, -1, 0, 0, 0, 0)
-                        _activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
+                        _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,altTarget,0,0,-_velocityStep,0,false)
                     } else { // up
                         altTarget = (targetAltMax - _relAltitude )
-                        _activeVehicle.setPositionTargetLocalNed(0,0,altTarget,0,false)
+                        _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,altTarget,0,0,_velocityStep,0,false)
                     }
                 }
             }
@@ -264,7 +265,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                _activeVehicle.setPositionTargetLocalNed(0,-_moveStep,0,0,false)
+                _activeVehicle.setPositionAndVelocityTargetLocalNed(0,-_moveStep,0,0,-_velocityStep,0,0,false)
             }
         }
 
@@ -280,7 +281,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                _activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,0,false)
             }
         }
 
@@ -296,7 +297,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                _activeVehicle.setPositionTargetLocalNed(0,_moveStep,0,0,false)
+                _activeVehicle.setPositionAndVelocityTargetLocalNed(0,_moveStep,0,0,_velocityStep,0,0,false)
             }
         }
 
@@ -313,7 +314,7 @@ Rectangle {
 
             onClicked: {
                 if (isNaN(_distance) || _distance === 0 || (_distance !== 0 && (_distance - _moveStep) > _altLimit)) {
-                    _activeVehicle.setPositionTargetLocalNed(0, 0, -_moveStep, 0, false)
+                    _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,-_moveStep,0,0,0,0,false)
                 }
             }
         }
@@ -349,7 +350,7 @@ Rectangle {
             font.pointSize:     _fontSize * 0.7
 
             onClicked: {
-                _activeVehicle.setPositionTargetLocalNed(-_moveStep,0,0,0,false)
+                _activeVehicle.setPositionAndVelocityTargetLocalNed(-_moveStep,0,0,-_velocityStep,0,0,0,false)
             }
         }
 

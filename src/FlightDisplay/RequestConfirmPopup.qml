@@ -88,7 +88,7 @@ Rectangle {
                 text:           "수동"
                 onClicked: {
                     control.visible = false
-                    _activeVehicle.setPositionTargetLocalNed(0,0,0,0,false)
+                    _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,0,false)
                 }
             }
 

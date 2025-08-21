@@ -58,7 +58,7 @@ public:
     void guidedModeRTL(Vehicle *vehicle, bool smartRTL) const override;
     void guidedModeChangeAltitude(Vehicle *vehicle, double altitudeChange, bool pauseVehicle) override;
     void guidedModeChangeHeading(Vehicle *vehicle, const QGeoCoordinate &headingCoord) const override;
-    void setPositionTargetLocalNed(Vehicle* vehicle, double xValue, double yValue, double zValue, double yaw, bool pauseVehicle) override;
+    void setPositionAndVelocityTargetLocalNed(Vehicle* vehicle, double xValue, double yValue, double zValue, double vxValue, double vyValue, double vzValue, double yaw, bool pauseVehicle) override;
     bool adjustIncomingMavlinkMessage(Vehicle *vehicle, mavlink_message_t *message) override;
     void adjustOutgoingMavlinkMessageThreadSafe(Vehicle *vehicle, LinkInterface *outgoingLink, mavlink_message_t *message) override;
     virtual void initializeStreamRates(Vehicle *vehicle);

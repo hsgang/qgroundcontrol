@@ -224,8 +224,8 @@ public:
     ///     @param pauseVehicle true: pause vehicle prior to altitude change
     virtual void guidedModeChangeAltitude(Vehicle *vehicle, double altitudeChange, bool pauseVehicle);
 
-    /// Command vehicle to set postion target local ned
-    virtual void setPositionTargetLocalNed(Vehicle* vehicle, double xValue, double yValue, double zValue, double yaw, bool pauseVehicle);
+    /// Command vehicle to set position and velocity target local ned
+    virtual void setPositionAndVelocityTargetLocalNed(Vehicle* vehicle, double xValue, double yValue, double zValue, double vxValue, double vyValue, double vzValue, double yaw, bool pauseVehicle);
 
     /// Command vehicle to change groundspeed
     ///     @param groundspeed Groundspeed in m/s
