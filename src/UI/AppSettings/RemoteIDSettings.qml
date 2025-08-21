@@ -47,7 +47,7 @@ SettingsPage {
     property var  _remoteIDManager:     _activeVehicle ? _activeVehicle.remoteIDManager : null
 
 
-    property var  remoteIDSettings:QGroundControl.settingsManager.remoteIDSettings
+    property var  remoteIDSettings:     QGroundControl.settingsManager.remoteIDSettings
     property Fact regionFact:           remoteIDSettings.region
     property Fact sendOperatorIdFact:   remoteIDSettings.sendOperatorID
     property Fact locationTypeFact:     remoteIDSettings.locationType
