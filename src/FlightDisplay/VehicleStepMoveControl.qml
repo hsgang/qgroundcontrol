@@ -44,7 +44,7 @@ Rectangle {
     property real   _altLimit:              QGroundControl.settingsManager.flyViewSettings.guidedMinimumAltitude.rawValue
     property bool   _isMoving:              false
     property real   _distance:              _activeVehicle ? _activeVehicle.distanceSensors.rotationPitch270.rawValue : NaN
-    property real   _velocityStep:          0.3 // m/s 기본 속도 단위
+    property real   _velocityStep:          0 // m/s // posvel 제어는 나중에 해보는걸로
     property real   _distanceMin:           _activeVehicle ? _activeVehicle.distanceSensors.minDistance.rawValue : NaN
     property real   _distanceMax:           _activeVehicle ? _activeVehicle.distanceSensors.maxDistance.rawValue : NaN
     property bool   _distanceAvailable:     _distance && (_distance > _distanceMin) && (_distance < _distanceMax)
