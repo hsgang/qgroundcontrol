@@ -543,9 +543,8 @@ Item {
             confirmDialog.hideTrigger = Qt.binding(function() { return !showLandAbort })
             break;
         case actionPause:
-            confirmDialog.title = pauseTitle
-            confirmDialog.message = pauseMessage
-            confirmDialog.hideTrigger = Qt.binding(function() { return !showPause })
+            // Pause 명령은 확인 없이 바로 실행
+            executeAction(actionPause, undefined, undefined, undefined)
             break;
         case actionMVPause:
             confirmDialog.title = mvPauseTitle
