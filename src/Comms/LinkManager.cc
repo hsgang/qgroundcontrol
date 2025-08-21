@@ -169,6 +169,8 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
         connect(w, &WebRTCLink::webRtcRecvChanged, this, &LinkManager::webRtcRecvChanged);
         connect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
         connect(w, &WebRTCLink::videoRateKBpsChanged, this, &LinkManager::rtcVideoRateChanged);
+        connect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, &LinkManager::rtcModuleSystemInfoChanged);
+        qCDebug(LinkManagerLog) << "WebRTCLink system info signal connected";
         //connect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
 
@@ -241,6 +243,7 @@ void LinkManager::_linkDisconnected()
         disconnect(w, &WebRTCLink::webRtcRecvChanged, this, &LinkManager::webRtcRecvChanged);
         disconnect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
         disconnect(w, &WebRTCLink::videoRateKBpsChanged, this, &LinkManager::rtcVideoRateChanged);
+        disconnect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, &LinkManager::rtcModuleSystemInfoChanged);
         //disconnect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
 
@@ -798,6 +801,76 @@ double LinkManager::rtcVideoRate() const
         }
     }
     return 0.0;
+}
+
+// RTC Module 시스템 정보 getter 메서드들
+double LinkManager::rtcModuleCpuUsage() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            double value = w->rtcModuleCpuUsage();
+            qCDebug(LinkManagerLog) << "rtcModuleCpuUsage() called, returning:" << value;
+            return value;
+        }
+    }
+    qCDebug(LinkManagerLog) << "rtcModuleCpuUsage() called, no WebRTCLink found, returning 0.0";
+    return 0.0;
+}
+
+double LinkManager::rtcModuleCpuTemperature() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return w->rtcModuleCpuTemperature();
+        }
+    }
+    return 0.0;
+}
+
+double LinkManager::rtcModuleMemoryUsage() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return w->rtcModuleMemoryUsage();
+        }
+    }
+    return 0.0;
+}
+
+double LinkManager::rtcModuleNetworkRx() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return w->rtcModuleNetworkRx();
+        }
+    }
+    return 0.0;
+}
+
+double LinkManager::rtcModuleNetworkTx() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return w->rtcModuleNetworkTx();
+        }
+    }
+    return 0.0;
+}
+
+QString LinkManager::rtcModuleNetworkInterface() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return w->rtcModuleNetworkInterface();
+        }
+    }
+    return QString();
 }
 
 LogReplayLink *LinkManager::startLogReplay(const QString &logFile)

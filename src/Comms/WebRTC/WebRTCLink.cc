@@ -724,14 +724,10 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
     });
 
     dc->onMessage([this, dc](auto data) {
-        qCDebug(WebRTCLinkLog) << "[CUSTOM] Message received, shutting down:" << _isShuttingDown.load();
         
         if (_isShuttingDown.load()) {
-            qCDebug(WebRTCLinkLog) << "[CUSTOM] Shutting down, ignoring message";
             return;
         }
-
-        qCDebug(WebRTCLinkLog) << "[CUSTOM] Processing message, data type:" << (std::holds_alternative<rtc::binary>(data) ? "binary" : "string");
 
         if (std::holds_alternative<rtc::binary>(data)) {
             const auto& binaryData = std::get<rtc::binary>(data);
@@ -745,7 +741,6 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
 
             // 바이너리 데이터를 문자열로 변환
             QString receivedText = QString::fromUtf8(*byteArrayPtr);
-            qCDebug(WebRTCLinkLog) << "[CUSTOM] Converted to text, length:" << receivedText.length();
             qCDebug(WebRTCLinkLog) << "[CUSTOM] Raw text:" << receivedText;
             
         } else if (std::holds_alternative<std::string>(data)) {
@@ -761,20 +756,21 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
                 
                 // system_info 타입인지 확인
                 if (jsonObj.contains("type") && jsonObj["type"].toString() == "system_info") {
-                    qCDebug(WebRTCLinkLog) << "RTC Module CPU Usage:" << jsonObj["cpu_usage"].toDouble() << "%";
-                    qCDebug(WebRTCLinkLog) << "RTC Module CPU Temperature:" << jsonObj["cpu_temperature"].toDouble() << "°C";
-                    qCDebug(WebRTCLinkLog) << "RTC Module Memory Usage:" << jsonObj["memory_usage_percent"].toDouble() << "%";
-                    qCDebug(WebRTCLinkLog) << "RTC Module Network RX:" << jsonObj["network_rx_mbps"].toDouble() << "Mbps";
-                    qCDebug(WebRTCLinkLog) << "RTC Module Network TX:" << jsonObj["network_tx_mbps"].toDouble() << "Mbps";
-                    qCDebug(WebRTCLinkLog) << "RTC Module Network Interface:" << jsonObj["network_interface"].toString();
-                    qCDebug(WebRTCLinkLog) << "RTC Module Timestamp:" << jsonObj["timestamp"].toString();
+
+                    
+                    emit rtcModuleSystemInfoUpdated(
+                        jsonObj["cpu_usage"].toDouble(),
+                        jsonObj["cpu_temperature"].toDouble(),
+                        jsonObj["memory_usage_percent"].toDouble(),
+                        jsonObj["network_rx_mbps"].toDouble(),
+                        jsonObj["network_tx_mbps"].toDouble(),
+                        jsonObj["network_interface"].toString()
+                    );
                 } else {
                     // 다른 타입의 JSON 데이터인 경우
                     qCDebug(WebRTCLinkLog) << "CustomDataChannel received JSON (String):" << QString::fromStdString(receivedText);
                 }
             } else {
-                qCDebug(WebRTCLinkLog) << "[CUSTOM] JSON parse error from string:" << parseError.errorString();
-                // JSON이 아닌 일반 텍스트인 경우
                 qCDebug(WebRTCLinkLog) << "CustomDataChannel received plain text:" << QString::fromStdString(receivedText);
             }
         } else {
@@ -1316,6 +1312,7 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     connect(_worker, &WebRTCWorker::dataChannelStatsUpdated, this, &WebRTCLink::_onDataChannelStatsChanged, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::rtcStatusMessageChanged, this, &WebRTCLink::_onRtcStatusMessageChanged, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::videoRateChanged, this, &WebRTCLink::_onVideoRateChanged, Qt::QueuedConnection);
+    connect(_worker, &WebRTCWorker::rtcModuleSystemInfoUpdated, this, &WebRTCLink::_onRtcModuleSystemInfoUpdated, Qt::QueuedConnection);
 
     _workerThread->start();
 }
@@ -1431,6 +1428,41 @@ void WebRTCLink::_onVideoRateChanged(double KBps)
     if (_videoRateKBps != KBps) {
         _videoRateKBps = KBps;
         emit videoRateKBpsChanged();
+    }
+}
+
+void WebRTCLink::_onRtcModuleSystemInfoUpdated(double cpuUsage, double cpuTemperature, double memoryUsage,
+                                              double networkRx, double networkTx, const QString& networkInterface)
+{    
+    bool changed = false;
+    
+    if (_rtcModuleCpuUsage != cpuUsage) {
+        _rtcModuleCpuUsage = cpuUsage;
+        changed = true;
+    }
+    if (_rtcModuleCpuTemperature != cpuTemperature) {
+        _rtcModuleCpuTemperature = cpuTemperature;
+        changed = true;
+    }
+    if (_rtcModuleMemoryUsage != memoryUsage) {
+        _rtcModuleMemoryUsage = memoryUsage;
+        changed = true;
+    }
+    if (_rtcModuleNetworkRx != networkRx) {
+        _rtcModuleNetworkRx = networkRx;
+        changed = true;
+    }
+    if (_rtcModuleNetworkTx != networkTx) {
+        _rtcModuleNetworkTx = networkTx;
+        changed = true;
+    }
+    if (_rtcModuleNetworkInterface != networkInterface) {
+        _rtcModuleNetworkInterface = networkInterface;
+        changed = true;
+    }
+    
+    if (changed) {
+        emit rtcModuleSystemInfoChanged(cpuUsage, cpuTemperature, memoryUsage, networkRx, networkTx, networkInterface);
     }
 }
 

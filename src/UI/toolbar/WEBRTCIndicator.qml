@@ -28,6 +28,14 @@ Item {
     property real _webRtcRecv:      QGroundControl.linkManager.webRtcRecv
     property real _videoRate:       QGroundControl.linkManager.rtcVideoRate
     property int  _videoRateInt:    Math.round(_videoRate)
+    
+    // RTC Module 시스템 정보
+    property real _rtcModuleCpuUsage:        QGroundControl.linkManager.rtcModuleCpuUsage
+    property real _rtcModuleCpuTemperature:  QGroundControl.linkManager.rtcModuleCpuTemperature
+    property real _rtcModuleMemoryUsage:     QGroundControl.linkManager.rtcModuleMemoryUsage
+    property real _rtcModuleNetworkRx:       QGroundControl.linkManager.rtcModuleNetworkRx
+    property real _rtcModuleNetworkTx:       QGroundControl.linkManager.rtcModuleNetworkTx
+    property string _rtcModuleNetworkInterface: QGroundControl.linkManager.rtcModuleNetworkInterface
 
     Row {
         id: vehicleRow
@@ -75,37 +83,85 @@ Item {
         ToolIndicatorPage {
             showExpand: false
 
-            contentComponent: SettingsGroupLayout {
-                heading: qsTr("RTC 상태 정보")
+            contentComponent: Component {
+                ColumnLayout {
+                    spacing: _margins
 
-                LabelledLabel {
-                    label:      qsTr("응답시간")
-                    labelText:  qsTr("%1 ms").arg(_rtt)
+                    SettingsGroupLayout {
+                        heading: qsTr("RTC 상태 정보")
+
+                        LabelledLabel {
+                            label:      qsTr("응답시간")
+                            labelText:  qsTr("%1 ms").arg(_rtt)
+                        }
+                        LabelledLabel {
+                            label:      qsTr("데이터 송신")
+                            labelText:  qsTr("%1 KB/s").arg(_webRtcSent)
+                        }
+                        LabelledLabel {
+                            label:      qsTr("데이터 수신")
+                            labelText:  qsTr("%1 KB/s").arg(_webRtcRecv)
+                        }
+                        LabelledLabel {
+                            label:      qsTr("영상 다운로드")
+                            labelText:  qsTr("%1 KB/s").arg(_videoRateInt)
+                        }
+                    }
+
+                    // RTC Module 시스템 정보 섹션
+                    SettingsGroupLayout {
+                        heading: qsTr("RTC 모듈 시스템 정보")
+
+                        LabelledLabel {
+                            label:      qsTr("CPU 사용률")
+                            labelText:  qsTr("%1%").arg(_rtcModuleCpuUsage.toFixed(1))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("CPU 온도")
+                            labelText:  qsTr("%1°C").arg(_rtcModuleCpuTemperature.toFixed(1))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("메모리 사용률")
+                            labelText:  qsTr("%1%").arg(_rtcModuleMemoryUsage.toFixed(1))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("네트워크 수신")
+                            labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkRx.toFixed(2))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("네트워크 송신")
+                            labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkTx.toFixed(2))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("인터페이스")
+                            labelText:  _rtcModuleNetworkInterface
+                        }
+                    }
+
+                    SettingsGroupLayout {
+                        heading: qsTr("RTC 모듈 제어")
+
+                        LabelledButton {
+                            label:      qsTr("모듈 재시작")
+                            buttonText: qsTr("재시작")
+                            enabled:    true
+                            onClicked:  restartConfirmDialogComponent.createObject(mainWindow).open()
+                        }
+                    }
                 }
-                LabelledLabel {
-                    label:      qsTr("데이터 송신")
-                    labelText:  qsTr("%1 KB/s").arg(_webRtcSent)
-                }
-                LabelledLabel {
-                    label:      qsTr("데이터 수신")
-                    labelText:  qsTr("%1 KB/s").arg(_webRtcRecv)
-                }
-                LabelledLabel {
-                    label:      qsTr("영상 다운로드")
-                    labelText:  qsTr("%1 KB/s").arg(_videoRateInt)
-                }
-                // LabelledButton {
-                //     label:      qsTr("영상 재시작")
-                //     buttonText: qsTr("재시작")
-                //     enabled:    true
-                //     onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("R")
-                // }
-                LabelledButton {
-                    label:      qsTr("모듈 재시작")
-                    buttonText: qsTr("재시작")
-                    enabled:    true
-                    onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("B")
-                }
+            }
+        }
+    }
+
+    Component {
+        id: restartConfirmDialogComponent
+
+        QGCSimpleMessageDialog {
+            title: qsTr("모듈 재시작 확인")
+            text: qsTr("RTC 모듈을 재시작하시겠습니까?\n\n재시작 후에는 수동으로 다시 연결하여야 합니다.")
+            buttons: Dialog.Yes | Dialog.No
+            onAccepted: {
+                QGroundControl.linkManager.sendWebRTCCustomMessage("B")
             }
         }
     }

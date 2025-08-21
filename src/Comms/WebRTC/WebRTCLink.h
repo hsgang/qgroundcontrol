@@ -205,6 +205,8 @@ class WebRTCWorker : public QObject
 
     void dataChannelStatsUpdated(double sendRate, double receiveRate);
     void videoStatsUpdated(double rate, qint64 packets, qint64 bytes);
+    void rtcModuleSystemInfoUpdated(double cpuUsage, double cpuTemperature, double memoryUsage,
+                                   double networkRx, double networkTx, const QString& networkInterface);
 
    private slots:
     void _onSignalingConnected();
@@ -307,6 +309,12 @@ class WebRTCLink : public LinkInterface
     Q_PROPERTY(double videoRateKBps READ videoRateKBps NOTIFY videoRateKBpsChanged)
     Q_PROPERTY(int videoPacketCount READ videoPacketCount NOTIFY videoPacketCountChanged)
     Q_PROPERTY(qint64 videoBytesReceived READ videoBytesReceived NOTIFY videoBytesReceivedChanged)
+    Q_PROPERTY(double rtcModuleCpuUsage READ rtcModuleCpuUsage NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleCpuTemperature READ rtcModuleCpuTemperature NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleMemoryUsage READ rtcModuleMemoryUsage NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleNetworkRx READ rtcModuleNetworkRx NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleNetworkTx READ rtcModuleNetworkTx NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(QString rtcModuleNetworkInterface READ rtcModuleNetworkInterface NOTIFY rtcModuleSystemInfoChanged)
 
    public:
     explicit WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent = nullptr);
@@ -329,6 +337,14 @@ class WebRTCLink : public LinkInterface
     double videoRateKBps() const { return _videoRateKBps; }
     int videoPacketCount() const { return _videoPacketCount; }
     qint64 videoBytesReceived() const { return _videoBytesReceived; }
+    
+    // RTC Module 시스템 정보 getter
+    double rtcModuleCpuUsage() const { return _rtcModuleCpuUsage; }
+    double rtcModuleCpuTemperature() const { return _rtcModuleCpuTemperature; }
+    double rtcModuleMemoryUsage() const { return _rtcModuleMemoryUsage; }
+    double rtcModuleNetworkRx() const { return _rtcModuleNetworkRx; }
+    double rtcModuleNetworkTx() const { return _rtcModuleNetworkTx; }
+    QString rtcModuleNetworkInterface() const { return _rtcModuleNetworkInterface; }
 
    protected:
     bool _connect() override;
@@ -345,6 +361,8 @@ class WebRTCLink : public LinkInterface
     void _onDataChannelStatsChanged(double sendRate, double receiveRate);
     void _onRtcStatusMessageChanged(const QString& message);
     void _onVideoRateChanged(double KBps);
+    void _onRtcModuleSystemInfoUpdated(double cpuUsage, double cpuTemperature, double memoryUsage, 
+                                      double networkRx, double networkTx, const QString& networkInterface);
 
    signals:
     void rttMsChanged();
@@ -356,6 +374,8 @@ class WebRTCLink : public LinkInterface
     void videoPacketCountChanged();
     void videoBytesReceivedChanged();
     void videoStatsUpdated(double KBps, int packets, qint64 totalBytes);
+    void rtcModuleSystemInfoChanged(double cpuUsage, double cpuTemperature, double memoryUsage, 
+                                   double networkRx, double networkTx, const QString& networkInterface);
 
    private:
     const WebRTCConfiguration *_rtcConfig = nullptr;
@@ -369,4 +389,12 @@ class WebRTCLink : public LinkInterface
     int _videoPacketCount = 0;
     qint64 _videoBytesReceived = 0;
     QString _rtcStatusMessage = "";
+    
+    // RTC Module 시스템 정보
+    double _rtcModuleCpuUsage = 0.0;
+    double _rtcModuleCpuTemperature = 0.0;
+    double _rtcModuleMemoryUsage = 0.0;
+    double _rtcModuleNetworkRx = 0.0;
+    double _rtcModuleNetworkTx = 0.0;
+    QString _rtcModuleNetworkInterface = "";
 };

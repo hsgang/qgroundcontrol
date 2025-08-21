@@ -54,6 +54,12 @@ class LinkManager : public QObject
     Q_PROPERTY(double webRtcRecv READ webRtcRecv NOTIFY webRtcRecvChanged)
     Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
     Q_PROPERTY(double rtcVideoRate READ rtcVideoRate NOTIFY rtcVideoRateChanged)
+    Q_PROPERTY(double rtcModuleCpuUsage READ rtcModuleCpuUsage NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleCpuTemperature READ rtcModuleCpuTemperature NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleMemoryUsage READ rtcModuleMemoryUsage NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleNetworkRx READ rtcModuleNetworkRx NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleNetworkTx READ rtcModuleNetworkTx NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(QString rtcModuleNetworkInterface READ rtcModuleNetworkInterface NOTIFY rtcModuleSystemInfoChanged)
 
 public:
     explicit LinkManager(QObject *parent = nullptr);
@@ -133,6 +139,14 @@ public:
     double webRtcRecv() const;
     QString rtcStatusMessage() const;
     double rtcVideoRate() const;
+    
+    // RTC Module 시스템 정보
+    double rtcModuleCpuUsage() const;
+    double rtcModuleCpuTemperature() const;
+    double rtcModuleMemoryUsage() const;
+    double rtcModuleNetworkRx() const;
+    double rtcModuleNetworkTx() const;
+    QString rtcModuleNetworkInterface() const;
 
 signals:
     void mavlinkSupportForwardingEnabledChanged();
@@ -142,6 +156,7 @@ signals:
     void webRtcRecvChanged();
     void rtcStatusMessageChanged();
     void rtcVideoRateChanged();
+    void rtcModuleSystemInfoChanged();
 
 private slots:
     void _linkDisconnected();
