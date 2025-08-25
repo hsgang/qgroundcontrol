@@ -2,22 +2,25 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QTimer>
+#include <QtCore/QThread>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
 #include <QtCore/QLoggingCategory>
 #include <QtWebSockets/QWebSocket>
 #include <QtNetwork/QAbstractSocket>
+#include <climits>
 
 Q_DECLARE_LOGGING_CATEGORY(SignalingServerManagerLog)
 
 /**
- * @brief SignalingServerManager - WebRTC 시그널링 서버 연결 관리 (최적화 버전)
+ * @brief SignalingServerManager - WebRTC 시그널링 서버 연결 관리 (강화된 재연결 버전)
  * 
- * 핵심 기능만 포함한 단순화된 버전:
- * - WebSocket 연결 관리
- * - 시그널링 메시지 송수신
- * - Peer 등록/해제
- * - 기본 재연결 기능
+ * 개선된 기능:
+ * - 강화된 WebSocket 연결 관리
+ * - 지수 백오프 재연결 전략
+ * - 연결 상태 모니터링 (핑/퐁)
+ * - 자동 재등록 기능
+ * - 연결 품질 모니터링
  */
 class SignalingServerManager : public QObject
 {
@@ -49,6 +52,10 @@ public:
     void connectToServerWebSocketOnly(const QString &serverUrl);
     void disconnectFromServer();
     
+    // 클라이언트 ID 관리
+    void setClientId(const QString &clientId);
+    QString getClientId() const { return _clientId; }
+    
     // 시그널링 메시지 송수신
     void sendMessage(const QJsonObject &message);
     
@@ -67,6 +74,7 @@ public:
 
 public slots:
     void retryConnection();
+    void sendPing(); // 클라이언트에서 ping을 보내는 public 메서드
 
 signals:
     // 연결 상태 시그널
@@ -92,6 +100,8 @@ private slots:
     void _onWebSocketError(QAbstractSocket::SocketError error);
     void _onWebSocketMessageReceived(const QString &message);
     void _onReconnectTimer();
+    void _onConnectionHealthTimer();
+    void _onPingTimer();
 
 private:
     // WebSocket 관리
@@ -102,17 +112,31 @@ private:
     void _updateConnectionState(ConnectionState newState);
     void _updateConnectionStatus(const QString &status);
     
-    // 재연결 관리
+    // 재연결 관리 (강화됨)
     void _startReconnectTimer();
     void _stopReconnectTimer();
+    int _calculateReconnectDelay() const;
+    void _resetReconnectAttempts();
+    
+    // 연결 모니터링 (클라이언트 ping/pong 기반)
+    void _startConnectionMonitoring();
+    void _stopConnectionMonitoring();
+    void _checkConnectionHealth();
+    void _forceReconnection();
+    void _sendPing();
     
     // 메시지 처리
     void _handleRegistrationResponse(const QJsonObject &message);
     void _handleLeaveResponse(const QJsonObject &message);
+    void _handlePongResponse(const QJsonObject &message);
+    
+    // 자동 재등록
+    void _autoReRegister();
     
     // 유틸리티
     QString _formatWebSocketUrl(const QString &baseUrl) const;
     bool _isValidUrl(const QString &url) const;
+    void _generateClientId();
 
     // === 핵심 멤버 변수 ===
     
@@ -121,18 +145,33 @@ private:
     QString _serverUrl;
     QString _peerId;
     QString _roomId;
+    QString _clientId; // 클라이언트 고유 ID
     
     // 연결 상태
     ConnectionState _connectionState = ConnectionState::Disconnected;
     QString _connectionStatusMessage;
     bool _webSocketOnlyMode = false;
     
-    // 재연결 관리 (단순화)
+    // 재연결 관리 (강화됨)
     QTimer *_reconnectTimer = nullptr;
     int _reconnectAttempts = 0;
     bool _userDisconnected = false;
+    qint64 _lastSuccessfulConnection = 0;
     
-    // 상수
-    static const int DEFAULT_RECONNECT_INTERVAL_MS = 3000;
-    static const int MAX_RECONNECT_ATTEMPTS = 5;
+    // 연결 모니터링 (클라이언트 ping/pong 기반)
+    QTimer *_connectionHealthTimer = nullptr;
+    QTimer *_pingTimer = nullptr;
+    qint64 _lastPingSent = 0;
+    qint64 _lastPongReceived = 0;
+    bool _waitingForPong = false;
+    int _consecutivePingFailures = 0;
+    
+    // 상수 (개선됨)
+    static const int DEFAULT_RECONNECT_INTERVAL_MS = 2000;
+    static const int MAX_RECONNECT_ATTEMPTS = INT_MAX;
+    static const int MAX_RECONNECT_DELAY_MS = 3000; // 3초
+    static const int PING_INTERVAL_MS = 3000; // 3초마다 ping 전송
+    static const int PING_TIMEOUT_MS = 2000; // ping 응답 2초 타임아웃
+    static const int CONNECTION_HEALTH_CHECK_MS = 5000; // 5초마다 상태 체크
+    static const int MAX_CONSECUTIVE_PING_FAILURES = 3;
 };

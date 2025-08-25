@@ -273,7 +273,7 @@ void WebRTCWorker::disconnectLink()
     if (_signalingManager && !_currentRoomId.isEmpty() && !_currentPeerId.isEmpty()) {
         qCDebug(WebRTCLinkLog) << "Leaving room:" << _currentRoomId << "with peer:" << _currentPeerId;
         _signalingManager->leavePeer(_currentPeerId, _currentRoomId);
-        emit rtcStatusMessageChanged("시그널링 서버 룸(Room) 해제 중");
+        emit rtcStatusMessageChanged("시그널링 서버에서 채널 해제 중");
         
         // Give some time for the leave message to be sent before cleanup
         QTimer::singleShot(1000, this, [this]() {
@@ -393,7 +393,7 @@ void WebRTCWorker::_onPeerLeftSuccessfully(const QString& peerId, const QString&
     
     qCDebug(WebRTCLinkLog) << "Signaling room left successfully";
     
-    emit rtcStatusMessageChanged("시그널링 서버 룸(Room) 해제");
+    emit rtcStatusMessageChanged("시그널링 서버에서 채널 해제");
 }
 
 void WebRTCWorker::_onPeerLeaveFailed(const QString& peerId, const QString& reason)
@@ -403,7 +403,7 @@ void WebRTCWorker::_onPeerLeaveFailed(const QString& peerId, const QString& reas
     }
     
     qCWarning(WebRTCLinkLog) << "Failed to leave room:" << reason;
-    emit rtcStatusMessageChanged(QString("시그널링 서버 룸(Room) 해제 실패: %1").arg(reason));
+    emit rtcStatusMessageChanged(QString("시그널링 서버에서 채널 해제 실패: %1").arg(reason));
     
     // Still clear the room info and proceed with cleanup
     _currentRoomId.clear();
