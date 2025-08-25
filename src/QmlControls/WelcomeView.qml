@@ -77,6 +77,10 @@ Rectangle {
         }
     }
 
+    DeadMouseArea {
+        anchors.fill: parent
+    }
+
     Item {
         id: welcomeViewHolder
         anchors.top: parent.top
