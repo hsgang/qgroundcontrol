@@ -466,6 +466,22 @@ void WebRTCWorker::reconnectToRoom()
 
 void WebRTCWorker::_setupPeerConnection()
 {
+    // SCTP 글로벌 설정 적용 (PeerConnection 생성 전에 설정)
+    rtcSctpSettings sctpSettings = {};
+    sctpSettings.recvBufferSize = 262144;          // 256KB 수신 버퍼
+    sctpSettings.sendBufferSize = 262144;          // 256KB 송신 버퍼
+    sctpSettings.maxChunksOnQueue = 1000;          // 큐 최대 청크 수
+    sctpSettings.initialCongestionWindow = 10;     // 초기 혼잡 제어 윈도우
+    sctpSettings.maxBurst = 5;                     // 최대 버스트
+    sctpSettings.congestionControlModule = 0;      // RFC2581 혼잡 제어
+    sctpSettings.delayedSackTimeMs = 200;          // 지연된 SACK
+    sctpSettings.minRetransmitTimeoutMs = 1000;    // 최소 재전송 타임아웃
+    sctpSettings.maxRetransmitTimeoutMs = 5000;   // 최대 재전송 타임아웃
+    sctpSettings.initialRetransmitTimeoutMs = 3000; // 초기 재전송 타임아웃
+    sctpSettings.maxRetransmitAttempts = 5;        // 최대 재전송 시도
+    sctpSettings.heartbeatIntervalMs = 10000;      // 하트비트 간격
+    rtcSetSctpSettings(&sctpSettings);
+
     _rtcConfig.iceServers.clear();
 
     // 스레드 안전성을 위해 복사된 설정값 사용
