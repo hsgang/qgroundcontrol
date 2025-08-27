@@ -1,4 +1,4 @@
-# QGroundControl 데이터 통신 및 영상 스트리밍 구조
+# MissionNavigator 데이터 통신 및 영상 스트리밍 구조
 
 ## 목차
 1. [전체 시스템 아키텍처](#전체-시스템-아키텍처)
@@ -15,7 +15,7 @@
 
 ```mermaid
 graph TB
-    QGC[QGroundControl App]
+    MissionNavigator[MissionNavigator App]
     LinkManager[LinkManager]
     VideoManager[VideoManager]
     
@@ -45,8 +45,8 @@ graph TB
     SignalingServer[Signaling Server]
     VideoServer[Video Server]
     
-    QGC --> LinkManager
-    QGC --> VideoManager
+    MissionNavigator --> LinkManager
+    MissionNavigator --> VideoManager
     
     LinkManager --> SerialLink
     LinkManager --> TCPLink
@@ -89,7 +89,7 @@ graph TB
 
 ```mermaid
 graph LR
-    QGCApp[QGroundControl App]
+    MissionNavigator[MissionNavigator App]
     LinkInterface[Link Interface]
     MAVLinkProtocol[MAVLink Protocol]
     
@@ -115,7 +115,7 @@ graph LR
     Mission[Mission Data]
     Status[Status Data]
     
-    QGCApp --> LinkInterface
+    MissionNavigator --> LinkInterface
     LinkInterface --> MAVLinkProtocol
     
     MAVLinkProtocol --> Serial
@@ -231,7 +231,7 @@ graph TB
 
 ```mermaid
 graph TD
-    QGCApp[QGroundControl Application]
+    MissionNavigator[MissionNavigator Application]
     VehicleApp[Vehicle Application]
     
     MAVLinkProtocol[MAVLink Protocol]
@@ -261,9 +261,9 @@ graph TD
     Wireless[Wireless]
     Optical[Optical]
     
-    QGCApp --> MAVLinkProtocol
-    QGCApp --> VideoProtocol
-    QGCApp --> CustomProtocol
+    MissionNavigator --> MAVLinkProtocol
+    MissionNavigator --> VideoProtocol
+    MissionNavigator --> CustomProtocol
     
     VehicleApp --> MAVLinkProtocol
     VehicleApp --> VideoProtocol
@@ -378,61 +378,61 @@ graph LR
 
 ```mermaid
 sequenceDiagram
-    participant QGC as QGroundControl
+    participant MissionNavigator as MissionNavigator
     participant LinkManager as LinkManager
     participant MAVLink as MAVLink Protocol
     participant Vehicle as Vehicle
     participant VideoManager as VideoManager
     participant Camera as Camera
     
-    Note over QGC,Camera: 1. 연결 수립
-    QGC->>LinkManager: connectLink()
+    Note over MissionNavigator,Camera: 1. 연결 수립
+    MissionNavigator->>LinkManager: connectLink()
     LinkManager->>MAVLink: initializeProtocol()
     MAVLink->>Vehicle: establishConnection()
     Vehicle->>MAVLink: connectionEstablished()
     MAVLink->>LinkManager: linkConnected()
-    LinkManager->>QGC: linkConnected()
+    LinkManager->>MissionNavigator: linkConnected()
     
-    Note over QGC,Camera: 2. 비디오 스트림 시작
-    QGC->>VideoManager: startVideoStream()
+    Note over MissionNavigator,Camera: 2. 비디오 스트림 시작
+    MissionNavigator->>VideoManager: startVideoStream()
     VideoManager->>Camera: requestVideoStream()
     Camera->>VideoManager: videoStreamStarted()
-    VideoManager->>QGC: videoStreamActive()
+    VideoManager->>MissionNavigator: videoStreamActive()
     
-    Note over QGC,Camera: 3. 실시간 데이터 교환
+    Note over MissionNavigator,Camera: 3. 실시간 데이터 교환
     loop Telemetry Data
         Vehicle->>MAVLink: sendTelemetry()
         MAVLink->>LinkManager: processTelemetry()
-        LinkManager->>QGC: telemetryReceived()
+        LinkManager->>MissionNavigator: telemetryReceived()
     end
     
     loop Video Frames
         Camera->>VideoManager: sendVideoFrame()
-        VideoManager->>QGC: videoFrameReceived()
-        QGC->>VideoManager: renderFrame()
+        VideoManager->>MissionNavigator: videoFrameReceived()
+        MissionNavigator->>VideoManager: renderFrame()
     end
     
     loop Command Data
-        QGC->>LinkManager: sendCommand()
+        MissionNavigator->>LinkManager: sendCommand()
         LinkManager->>MAVLink: processCommand()
         MAVLink->>Vehicle: executeCommand()
         Vehicle->>MAVLink: commandAcknowledged()
         MAVLink->>LinkManager: commandResult()
-        LinkManager->>QGC: commandCompleted()
+        LinkManager->>MissionNavigator: commandCompleted()
     end
     
-    Note over QGC,Camera: 4. 연결 종료
-    QGC->>LinkManager: disconnectLink()
+    Note over MissionNavigator,Camera: 4. 연결 종료
+    MissionNavigator->>LinkManager: disconnectLink()
     LinkManager->>MAVLink: closeConnection()
     MAVLink->>Vehicle: disconnect()
     Vehicle->>MAVLink: disconnected()
     MAVLink->>LinkManager: linkDisconnected()
-    LinkManager->>QGC: linkDisconnected()
+    LinkManager->>MissionNavigator: linkDisconnected()
     
-    QGC->>VideoManager: stopVideoStream()
+    MissionNavigator->>VideoManager: stopVideoStream()
     VideoManager->>Camera: stopVideoStream()
     Camera->>VideoManager: videoStreamStopped()
-    VideoManager->>QGC: videoStreamInactive()
+    VideoManager->>MissionNavigator: videoStreamInactive()
 ```
 
 ---
@@ -543,7 +543,6 @@ graph TB
 - **TCP**: 신뢰성 높은 데이터 전송
 - **UDP**: 실시간 저지연 통신
 - **WebRTC**: P2P 연결 및 NAT 통과
-- **Bluetooth**: 근거리 무선 통신
 
 ### 2. **MAVLink 프로토콜**
 - **표준화된 메시지**: 드론 제어 표준
@@ -561,7 +560,7 @@ graph TB
 - **저지연 통신**: < 50ms RTT
 - **고처리량**: > 1MB/s 데이터 전송
 - **안정성**: 자동 재연결, 에러 복구
-- **확장성**: 다중 차량 지원
+- **확장성**: 다중 기체 지원
 
 ### 5. **성능 최적화**
 - **메모리 관리**: 효율적인 버퍼 관리
@@ -569,4 +568,4 @@ graph TB
 - **네트워크 최적화**: 연결 풀링, 압축
 - **전력 관리**: 배터리 효율성
 
-이 도식화를 통해 QGroundControl의 데이터 통신 및 영상 스트리밍 구조를 명확히 이해할 수 있습니다.
+이 도식화를 통해 MissionNavigator의 데이터 통신 및 영상 스트리밍 구조를 명확히 이해할 수 있습니다.

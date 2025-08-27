@@ -15,8 +15,8 @@
 
 ```mermaid
 graph TB
-    subgraph "QGroundControl Application"
-        QGC[QGroundControl App]
+    subgraph "MissionNavigator Application"
+        MissionNavigator[MissionNavigator App]
         LinkManager[LinkManager]
         WebRTCLink[WebRTCLink Interface]
     end
@@ -57,7 +57,7 @@ graph TB
         RemotePeer[Remote Peer]
     end
     
-    QGC --> LinkManager
+    MissionNavigator --> LinkManager
     LinkManager --> WebRTCLink
     WebRTCLink --> WebRTCWorker
     WebRTCWorker --> WebRTCConfig
@@ -154,7 +154,7 @@ classDiagram
 
 ```mermaid
 sequenceDiagram
-    participant QGC as QGroundControl
+    participant MissionNavigator as MissionNavigator
     participant WebRTCLink as WebRTCLink
     participant WebRTCWorker as WebRTCWorker
     participant SignalingManager as SignalingManager
@@ -163,33 +163,33 @@ sequenceDiagram
     participant TURN as TURN Server
     participant RemotePeer as Remote Peer
     
-    Note over QGC,RemotePeer: 1. 초기화 단계
-    QGC->>WebRTCLink: connectLink()
+    Note over MissionNavigator,RemotePeer: 1. 초기화 단계
+    MissionNavigator->>WebRTCLink: connectLink()
     WebRTCLink->>WebRTCWorker: start()
     WebRTCWorker->>WebRTCWorker: initializeLogger()
     WebRTCWorker->>WebRTCWorker: _setupSignalingManager()
     
-    Note over QGC,RemotePeer: 2. SCTP 설정 적용
+    Note over MissionNavigator,RemotePeer: 2. SCTP 설정 적용
     WebRTCWorker->>WebRTCWorker: _setupPeerConnection()
     WebRTCWorker->>WebRTCWorker: rtcSetSctpSettings()
     
-    Note over QGC,RemotePeer: 3. ICE 서버 설정
+    Note over MissionNavigator,RemotePeer: 3. ICE 서버 설정
     WebRTCWorker->>STUN: Configure STUN Server
     WebRTCWorker->>TURN: Configure TURN Server
     
-    Note over QGC,RemotePeer: 4. PeerConnection 생성
+    Note over MissionNavigator,RemotePeer: 4. PeerConnection 생성
     WebRTCWorker->>WebRTCWorker: Create PeerConnection
     WebRTCWorker->>WebRTCWorker: Setup Data Channels
     WebRTCWorker->>WebRTCWorker: Setup Video Tracks
     
-    Note over QGC,RemotePeer: 5. 시그널링 서버 연결
+    Note over MissionNavigator,RemotePeer: 5. 시그널링 서버 연결
     WebRTCWorker->>SignalingManager: registerPeer()
     SignalingManager->>SignalingServer: WebSocket Connect
     SignalingServer->>SignalingManager: Connection Established
     SignalingManager->>SignalingServer: Register Peer
     
-    Note over QGC,RemotePeer: 6. Offer/Answer 교환
-    alt Answerer Mode (QGC)
+    Note over MissionNavigator,RemotePeer: 6. Offer/Answer 교환
+    alt Answerer Mode (MissionNavigator)
         RemotePeer->>SignalingServer: Send Offer
         SignalingServer->>SignalingManager: Receive Offer
         SignalingManager->>WebRTCWorker: handleRemoteDescription()
@@ -197,7 +197,7 @@ sequenceDiagram
         WebRTCWorker->>SignalingManager: handleLocalDescription()
         SignalingManager->>SignalingServer: Send Answer
         SignalingServer->>RemotePeer: Receive Answer
-    else Offerer Mode (QGC)
+    else Offerer Mode (MissionNavigator)
         WebRTCWorker->>WebRTCWorker: Create Offer
         WebRTCWorker->>SignalingManager: handleLocalDescription()
         SignalingManager->>SignalingServer: Send Offer
@@ -207,7 +207,7 @@ sequenceDiagram
         SignalingManager->>WebRTCWorker: handleRemoteDescription()
     end
     
-    Note over QGC,RemotePeer: 7. ICE Candidate 교환
+    Note over MissionNavigator,RemotePeer: 7. ICE Candidate 교환
     WebRTCWorker->>SignalingManager: handleLocalCandidate()
     SignalingManager->>SignalingServer: Send ICE Candidates
     SignalingServer->>RemotePeer: Forward ICE Candidates
@@ -215,12 +215,12 @@ sequenceDiagram
     SignalingServer->>SignalingManager: Forward ICE Candidates
     SignalingManager->>WebRTCWorker: handleRemoteCandidate()
     
-    Note over QGC,RemotePeer: 8. 연결 수립 완료
+    Note over MissionNavigator,RemotePeer: 8. 연결 수립 완료
     WebRTCWorker->>WebRTCWorker: ICE Connection Established
     WebRTCWorker->>WebRTCWorker: Data Channels Open
     WebRTCWorker->>WebRTCWorker: Video Tracks Active
     WebRTCWorker->>WebRTCLink: Connection Ready
-    WebRTCLink->>QGC: Link Connected
+    WebRTCLink->>MissionNavigator: Link Connected
 ```
 
 ---
@@ -229,7 +229,7 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    A[QGroundControl App] --> B[WebRTCLink::writeBytes]
+    A[MissionNavigator App] --> B[WebRTCLink::writeBytes]
     B --> C[WebRTCWorker::writeData]
     
     C --> D{Data Channel Open?}
@@ -254,7 +254,7 @@ flowchart TD
     P --> Q
     
     Q --> R[Emit bytesReceived]
-    R --> S[QGroundControl App]
+    R --> S[MissionNavigator App]
     
     subgraph "Statistics Collection"
         T[DataChannelSentCalc]
