@@ -15,47 +15,35 @@
 
 ```mermaid
 graph TB
-    subgraph "QGroundControl Application"
-        QGC[QGroundControl App]
-        LinkManager[LinkManager]
-        VideoManager[VideoManager]
-        
-        subgraph "Communication Links"
-            SerialLink[Serial Link]
-            TCPLink[TCP Link]
-            UDPLink[UDP Link]
-            WebRTCLink[WebRTC Link]
-            BluetoothLink[Bluetooth Link]
-        end
-        
-        subgraph "Data Processing"
-            MAVLinkProtocol[MAVLink Protocol]
-            VehicleManager[Vehicle Manager]
-            MissionManager[Mission Manager]
-            ParameterManager[Parameter Manager]
-        end
-        
-        subgraph "Video Processing"
-            VideoReceiver[Video Receiver]
-            VideoDecoder[Video Decoder]
-            VideoRenderer[Video Renderer]
-            VideoRecorder[Video Recorder]
-        end
-    end
+    QGC[QGroundControl App]
+    LinkManager[LinkManager]
+    VideoManager[VideoManager]
     
-    subgraph "External Systems"
-        Vehicle[Vehicle/Drone]
-        Camera[Camera System]
-        GCS[Ground Control Station]
-        CloudServer[Cloud Server]
-    end
+    SerialLink[Serial Link]
+    TCPLink[TCP Link]
+    UDPLink[UDP Link]
+    WebRTCLink[WebRTC Link]
+    BluetoothLink[Bluetooth Link]
     
-    subgraph "Network Infrastructure"
-        STUNServer[STUN Server]
-        TURNServer[TURN Server]
-        SignalingServer[Signaling Server]
-        VideoServer[Video Server]
-    end
+    MAVLinkProtocol[MAVLink Protocol]
+    VehicleManager[Vehicle Manager]
+    MissionManager[Mission Manager]
+    ParameterManager[Parameter Manager]
+    
+    VideoReceiver[Video Receiver]
+    VideoDecoder[Video Decoder]
+    VideoRenderer[Video Renderer]
+    VideoRecorder[Video Recorder]
+    
+    Vehicle[Vehicle/Drone]
+    Camera[Camera System]
+    GCS[Ground Control Station]
+    CloudServer[Cloud Server]
+    
+    STUNServer[STUN Server]
+    TURNServer[TURN Server]
+    SignalingServer[Signaling Server]
+    VideoServer[Video Server]
     
     QGC --> LinkManager
     QGC --> VideoManager
@@ -101,41 +89,31 @@ graph TB
 
 ```mermaid
 graph LR
-    subgraph "QGroundControl Data Layer"
-        QGCApp[QGroundControl App]
-        LinkInterface[Link Interface]
-        MAVLinkProtocol[MAVLink Protocol]
-        
-        subgraph "Communication Protocols"
-            Serial[Serial Protocol]
-            TCP[TCP Protocol]
-            UDP[UDP Protocol]
-            WebRTC[WebRTC Protocol]
-            Bluetooth[Bluetooth Protocol]
-        end
-        
-        subgraph "Data Processing"
-            MessageParser[Message Parser]
-            MessageBuilder[Message Builder]
-            DataValidator[Data Validator]
-            StatisticsCollector[Statistics Collector]
-        end
-    end
+    QGCApp[QGroundControl App]
+    LinkInterface[Link Interface]
+    MAVLinkProtocol[MAVLink Protocol]
     
-    subgraph "Vehicle Communication"
-        Vehicle[Vehicle System]
-        Autopilot[Autopilot]
-        Sensors[Sensors]
-        Actuators[Actuators]
-    end
+    Serial[Serial Protocol]
+    TCP[TCP Protocol]
+    UDP[UDP Protocol]
+    WebRTC[WebRTC Protocol]
+    Bluetooth[Bluetooth Protocol]
     
-    subgraph "Data Types"
-        Telemetry[Telemetry Data]
-        Commands[Command Data]
-        Parameters[Parameter Data]
-        Mission[Mission Data]
-        Status[Status Data]
-    end
+    MessageParser[Message Parser]
+    MessageBuilder[Message Builder]
+    DataValidator[Data Validator]
+    StatisticsCollector[Statistics Collector]
+    
+    Vehicle[Vehicle System]
+    Autopilot[Autopilot]
+    Sensors[Sensors]
+    Actuators[Actuators]
+    
+    Telemetry[Telemetry Data]
+    Commands[Command Data]
+    Parameters[Parameter Data]
+    Mission[Mission Data]
+    Status[Status Data]
     
     QGCApp --> LinkInterface
     LinkInterface --> MAVLinkProtocol
@@ -180,46 +158,34 @@ graph LR
 
 ```mermaid
 graph TB
-    subgraph "Video Source"
-        Camera[Camera System]
-        VideoEncoder[Video Encoder]
-        VideoStreamer[Video Streamer]
-    end
+    Camera[Camera System]
+    VideoEncoder[Video Encoder]
+    VideoStreamer[Video Streamer]
     
-    subgraph "Network Transport"
-        UDPStream[UDP Stream]
-        TCPStream[TCP Stream]
-        WebRTCStream[WebRTC Stream]
-        RTSPStream[RTSP Stream]
-    end
+    UDPStream[UDP Stream]
+    TCPStream[TCP Stream]
+    WebRTCStream[WebRTC Stream]
+    RTSPStream[RTSP Stream]
     
-    subgraph "QGroundControl Video Processing"
-        VideoManager[VideoManager]
-        VideoReceiver[Video Receiver]
-        VideoDecoder[Video Decoder]
-        VideoRenderer[Video Renderer]
-        
-        subgraph "Video Formats"
-            H264[H.264 Decoder]
-            H265[H.265 Decoder]
-            MJPEG[MJPEG Decoder]
-            RawVideo[Raw Video]
-        end
-        
-        subgraph "Video Processing"
-            FrameBuffer[Frame Buffer]
-            VideoFilter[Video Filter]
-            VideoScaler[Video Scaler]
-            VideoRecorder[Video Recorder]
-        end
-    end
+    VideoManager[VideoManager]
+    VideoReceiver[Video Receiver]
+    VideoDecoder[Video Decoder]
+    VideoRenderer[Video Renderer]
     
-    subgraph "Display System"
-        QMLRenderer[QML Renderer]
-        OpenGLRenderer[OpenGL Renderer]
-        VideoWidget[Video Widget]
-        FullscreenView[Fullscreen View]
-    end
+    H264[H.264 Decoder]
+    H265[H.265 Decoder]
+    MJPEG[MJPEG Decoder]
+    RawVideo[Raw Video]
+    
+    FrameBuffer[Frame Buffer]
+    VideoFilter[Video Filter]
+    VideoScaler[Video Scaler]
+    VideoRecorder[Video Recorder]
+    
+    QMLRenderer[QML Renderer]
+    OpenGLRenderer[OpenGL Renderer]
+    VideoWidget[Video Widget]
+    FullscreenView[Fullscreen View]
     
     Camera --> VideoEncoder
     VideoEncoder --> VideoStreamer
@@ -265,49 +231,35 @@ graph TB
 
 ```mermaid
 graph TD
-    subgraph "Application Layer"
-        QGCApp[QGroundControl Application]
-        VehicleApp[Vehicle Application]
-    end
+    QGCApp[QGroundControl Application]
+    VehicleApp[Vehicle Application]
     
-    subgraph "Presentation Layer"
-        MAVLinkProtocol[MAVLink Protocol]
-        VideoProtocol[Video Protocol]
-        CustomProtocol[Custom Protocol]
-    end
+    MAVLinkProtocol[MAVLink Protocol]
+    VideoProtocol[Video Protocol]
+    CustomProtocol[Custom Protocol]
     
-    subgraph "Session Layer"
-        ConnectionManager[Connection Manager]
-        SessionHandler[Session Handler]
-        Authentication[Authentication]
-    end
+    ConnectionManager[Connection Manager]
+    SessionHandler[Session Handler]
+    Authentication[Authentication]
     
-    subgraph "Transport Layer"
-        TCP[TCP]
-        UDP[UDP]
-        SCTP[SCTP - WebRTC]
-        Serial[Serial]
-        Bluetooth[Bluetooth]
-    end
+    TCP[TCP]
+    UDP[UDP]
+    SCTP[SCTP - WebRTC]
+    Serial[Serial]
+    Bluetooth[Bluetooth]
     
-    subgraph "Network Layer"
-        IP[IP Protocol]
-        Routing[Routing]
-        NAT[NAT Traversal]
-    end
+    IP[IP Protocol]
+    Routing[Routing]
+    NAT[NAT Traversal]
     
-    subgraph "Data Link Layer"
-        Ethernet[Ethernet]
-        WiFi[WiFi]
-        Cellular[Cellular]
-        Radio[Radio]
-    end
+    Ethernet[Ethernet]
+    WiFi[WiFi]
+    Cellular[Cellular]
+    Radio[Radio]
     
-    subgraph "Physical Layer"
-        Cable[Cable]
-        Wireless[Wireless]
-        Optical[Optical]
-    end
+    Cable[Cable]
+    Wireless[Wireless]
+    Optical[Optical]
     
     QGCApp --> MAVLinkProtocol
     QGCApp --> VideoProtocol
@@ -352,7 +304,7 @@ graph TD
 ## 비디오 처리 파이프라인
 
 ```mermaid
-flowchart LR
+graph LR
     A[Video Source] --> B[Network Transport]
     B --> C[Video Receiver]
     C --> D[Demuxer]
@@ -360,51 +312,37 @@ flowchart LR
     E --> F[Frame Processing]
     F --> G[Display Renderer]
     
-    subgraph "Video Source"
-        A1[Camera]
-        A2[Video File]
-        A3[Network Stream]
-    end
+    A1[Camera]
+    A2[Video File]
+    A3[Network Stream]
     
-    subgraph "Network Transport"
-        B1[UDP]
-        B2[TCP]
-        B3[WebRTC]
-        B4[RTSP]
-    end
+    B1[UDP]
+    B2[TCP]
+    B3[WebRTC]
+    B4[RTSP]
     
-    subgraph "Video Receiver"
-        C1[Buffer Management]
-        C2[Packet Assembly]
-        C3[Error Correction]
-    end
+    C1[Buffer Management]
+    C2[Packet Assembly]
+    C3[Error Correction]
     
-    subgraph "Demuxer"
-        D1[Stream Separation]
-        D2[Format Detection]
-        D3[Metadata Extraction]
-    end
+    D1[Stream Separation]
+    D2[Format Detection]
+    D3[Metadata Extraction]
     
-    subgraph "Video Decoder"
-        E1[H.264 Decoder]
-        E2[H.265 Decoder]
-        E3[MJPEG Decoder]
-        E4[Hardware Acceleration]
-    end
+    E1[H.264 Decoder]
+    E2[H.265 Decoder]
+    E3[MJPEG Decoder]
+    E4[Hardware Acceleration]
     
-    subgraph "Frame Processing"
-        F1[Frame Buffer]
-        F2[Image Scaling]
-        F3[Color Correction]
-        F4[Frame Rate Control]
-    end
+    F1[Frame Buffer]
+    F2[Image Scaling]
+    F3[Color Correction]
+    F4[Frame Rate Control]
     
-    subgraph "Display Renderer"
-        G1[QML Renderer]
-        G2[OpenGL Renderer]
-        G3[Software Renderer]
-        G4[Hardware Renderer]
-    end
+    G1[QML Renderer]
+    G2[OpenGL Renderer]
+    G3[Software Renderer]
+    G4[Hardware Renderer]
     
     A1 --> B1
     A2 --> B2
@@ -505,39 +443,35 @@ sequenceDiagram
 
 ```mermaid
 graph LR
-    subgraph "Communication Optimization"
-        A[Protocol Selection] --> B[Connection Pooling]
-        B --> C[Data Compression]
-        C --> D[Error Correction]
-        D --> E[Load Balancing]
-        
-        A1[UDP for Real-time] --> A
-        A2[TCP for Reliable] --> A
-        A3[WebRTC for P2P] --> A
-        
-        B1[Connection Reuse] --> B
-        B2[Keep-Alive] --> B
-        B3[Connection Limits] --> B
-        
-        C1[MAVLink Compression] --> C
-        C2[Video Compression] --> C
-        C3[Custom Compression] --> C
-        
-        D1[FEC - Forward Error Correction] --> D
-        D2[ARQ - Automatic Repeat Request] --> D
-        D3[CRC Checks] --> D
-        
-        E1[Multiple Links] --> E
-        E2[Failover] --> E
-        E3[Load Distribution] --> E
-    end
+    A[Protocol Selection] --> B[Connection Pooling]
+    B --> C[Data Compression]
+    C --> D[Error Correction]
+    D --> E[Load Balancing]
     
-    subgraph "Performance Benefits"
-        F[Reduced Latency]
-        G[Increased Throughput]
-        H[Better Reliability]
-        I[Resource Efficiency]
-    end
+    A1[UDP for Real-time] --> A
+    A2[TCP for Reliable] --> A
+    A3[WebRTC for P2P] --> A
+    
+    B1[Connection Reuse] --> B
+    B2[Keep-Alive] --> B
+    B3[Connection Limits] --> B
+    
+    C1[MAVLink Compression] --> C
+    C2[Video Compression] --> C
+    C3[Custom Compression] --> C
+    
+    D1[FEC - Forward Error Correction] --> D
+    D2[ARQ - Automatic Repeat Request] --> D
+    D3[CRC Checks] --> D
+    
+    E1[Multiple Links] --> E
+    E2[Failover] --> E
+    E3[Load Distribution] --> E
+    
+    F[Reduced Latency]
+    G[Increased Throughput]
+    H[Better Reliability]
+    I[Resource Efficiency]
     
     A --> F
     B --> G
@@ -550,39 +484,35 @@ graph LR
 
 ```mermaid
 graph TB
-    subgraph "Video Optimization"
-        A[Codec Selection] --> B[Bitrate Control]
-        B --> C[Frame Rate Control]
-        C --> D[Resolution Scaling]
-        D --> E[Hardware Acceleration]
-        
-        A1[H.264 for Compatibility] --> A
-        A2[H.265 for Efficiency] --> A
-        A3[AV1 for Future] --> A
-        
-        B1[Adaptive Bitrate] --> B
-        B2[Bandwidth Monitoring] --> B
-        B3[Quality Adjustment] --> B
-        
-        C1[Variable Frame Rate] --> C
-        C2[Frame Dropping] --> C
-        C3[Smooth Playback] --> C
-        
-        D1[Resolution Scaling] --> D
-        D2[Aspect Ratio] --> D
-        D3[Display Optimization] --> D
-        
-        E1[GPU Decoding] --> E
-        E2[Hardware Encoder] --> E
-        E3[Memory Management] --> E
-    end
+    A[Codec Selection] --> B[Bitrate Control]
+    B --> C[Frame Rate Control]
+    C --> D[Resolution Scaling]
+    D --> E[Hardware Acceleration]
     
-    subgraph "Quality Metrics"
-        F[Low Latency < 100ms]
-        G[High Quality > 720p]
-        H[Smooth Playback 30fps]
-        I[Bandwidth Efficient]
-    end
+    A1[H.264 for Compatibility] --> A
+    A2[H.265 for Efficiency] --> A
+    A3[AV1 for Future] --> A
+    
+    B1[Adaptive Bitrate] --> B
+    B2[Bandwidth Monitoring] --> B
+    B3[Quality Adjustment] --> B
+    
+    C1[Variable Frame Rate] --> C
+    C2[Frame Dropping] --> C
+    C3[Smooth Playback] --> C
+    
+    D1[Resolution Scaling] --> D
+    D2[Aspect Ratio] --> D
+    D3[Display Optimization] --> D
+    
+    E1[GPU Decoding] --> E
+    E2[Hardware Encoder] --> E
+    E3[Memory Management] --> E
+    
+    F[Low Latency < 100ms]
+    G[High Quality > 720p]
+    H[Smooth Playback 30fps]
+    I[Bandwidth Efficient]
     
     A --> F
     B --> G
