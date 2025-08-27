@@ -253,7 +253,16 @@ void WebRTCWorker::sendCustomMessage(const QString& message)
 
 void WebRTCWorker::disconnectLink()
 {
-    qCDebug(WebRTCLinkLog) << "Disconnecting WebRTC link";
+    qCDebug(WebRTCLinkLog) << "Disconnecting WebRTC link (user initiated)";
+    
+    // 사용자 의도적 해제로 표시
+    _isShuttingDown.store(true);
+    
+    // 자동 재연결 중일 때는 실제 연결 해제를 하지 않음
+    if (_waitingForReconnect.load()) {
+        qCDebug(WebRTCLinkLog) << "Auto-reconnection in progress, ignoring manual disconnect request";
+        return;
+    }
     
     // Check signaling server connection status before disconnection
     if (_signalingManager) {
@@ -267,22 +276,29 @@ void WebRTCWorker::disconnectLink()
         _reconnectTimer->stop();
         qCDebug(WebRTCLinkLog) << "Stopped auto-reconnect timer";
     }
-    _waitingForReconnect = false;
+    _waitingForReconnect.store(false);
     
     // Leave the room if we're currently in one
     if (_signalingManager && !_currentRoomId.isEmpty() && !_currentPeerId.isEmpty()) {
         qCDebug(WebRTCLinkLog) << "Leaving room:" << _currentRoomId << "with peer:" << _currentPeerId;
         _signalingManager->leavePeer(_currentPeerId, _currentRoomId);
-        emit rtcStatusMessageChanged("시그널링 서버에서 채널 해제 중");
+        emit rtcStatusMessageChanged("시그널링 서버에서 채널 해제중...");
         
         // Give some time for the leave message to be sent before cleanup
         QTimer::singleShot(1000, this, [this]() {
+                    // 자동 재연결 중이 아닐 때만 완전한 정리 수행
+        if (!_waitingForReconnect.load()) {
             _cleanupComplete();
+        }
+            emit rttUpdated(-1);
             emit disconnected();
         });
     } else {
         // If not in a room, cleanup immediately
-        _cleanupComplete();
+        if (!_waitingForReconnect.load()) {
+            _cleanupComplete();
+        }
+        emit rttUpdated(-1);
         emit disconnected();
     }
 }
@@ -394,6 +410,12 @@ void WebRTCWorker::_onPeerLeftSuccessfully(const QString& peerId, const QString&
     qCDebug(WebRTCLinkLog) << "Signaling room left successfully";
     
     emit rtcStatusMessageChanged("시그널링 서버에서 채널 해제");
+    
+    // 자동 재연결 중일 때는 완전한 정리를 하지 않음
+    if (_waitingForReconnect.load()) {
+        qCDebug(WebRTCLinkLog) << "Auto-reconnection in progress, skipping complete cleanup";
+        return;
+    }
 }
 
 void WebRTCWorker::_onPeerLeaveFailed(const QString& peerId, const QString& reason)
@@ -419,6 +441,12 @@ void WebRTCWorker::_onPeerLeaveFailed(const QString& peerId, const QString& reas
         QMutexLocker locker(&_candidateMutex);
         _pendingCandidates.clear();
     }
+    
+    // 자동 재연결 중일 때는 완전한 정리를 하지 않음
+    if (_waitingForReconnect.load()) {
+        qCDebug(WebRTCLinkLog) << "Auto-reconnection in progress, skipping complete cleanup after leave failure";
+        return;
+    }
 }
 
 void WebRTCWorker::reconnectToRoom()
@@ -428,13 +456,23 @@ void WebRTCWorker::reconnectToRoom()
         return;
     }
     
-    qCDebug(WebRTCLinkLog) << "Attempting to reconnect to room";
+    // 재연결 시도 횟수 체크
+    if (_reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
+        qCWarning(WebRTCLinkLog) << "Max reconnection attempts reached:" << MAX_RECONNECT_ATTEMPTS;
+        emit rtcStatusMessageChanged("최대 재연결 시도 횟수 초과");
+        emit errorOccurred("최대 재연결 시도 횟수를 초과했습니다");
+        _waitingForReconnect.store(false);
+        return;
+    }
+    
+    _reconnectAttempts++;
+    qCDebug(WebRTCLinkLog) << "Attempting to reconnect to room (attempt" << _reconnectAttempts << "/" << MAX_RECONNECT_ATTEMPTS << ")";
     
     // SignalingServerManager가 연결 상태를 자동으로 관리하므로 여기서는 확인만
     qCDebug(WebRTCLinkLog) << "Requesting reconnection, SignalingServerManager handles connection state";
     
     // Reset state properly
-    _waitingForReconnect = false;
+    _waitingForReconnect.store(false);
     _isDisconnecting = false;
     _isShuttingDown.store(false);  // 재연결을 위해 리셋
     _dataChannelOpened.store(false);
@@ -457,7 +495,7 @@ void WebRTCWorker::reconnectToRoom()
     if (_signalingManager) {
         qCDebug(WebRTCLinkLog) << "Reconnection peer ID:" << _config->peerId() << " room:" << _config->roomId();
         _signalingManager->registerPeer(_config->peerId(), _config->roomId());
-        emit rtcStatusMessageChanged("재연결 시도 중");
+        emit rtcStatusMessageChanged(QString("재연결 시도 중 (%1/%2)").arg(_reconnectAttempts).arg(MAX_RECONNECT_ATTEMPTS));
     } else {
         qCWarning(WebRTCLinkLog) << "Signaling manager not available for reconnection";
         emit rtcStatusMessageChanged("시그널링 매니저 사용 불가");
@@ -558,15 +596,15 @@ void WebRTCWorker::_setupPeerConnection()
             }
 
             std::string label = dc->label();
-            qCDebug(WebRTCLinkLog) << "[DATACHANNEL] DataChannel received - Label:"
-                                      << QString::fromStdString(label);
+            // qCDebug(WebRTCLinkLog) << "[DATACHANNEL] DataChannel received - Label:"
+            //                           << QString::fromStdString(label);
 
             if (label == "mavlink") {
-                qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Setting up mavlink DataChannel";
+                //qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Setting up mavlink DataChannel";
                 _mavlinkDataChannel = dc;
                 _setupMavlinkDataChannel(dc);
             } else if (label == "custom") {
-                qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Setting up custom DataChannel";
+                //qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Setting up custom DataChannel";
                 _customDataChannel = dc;
                 _setupCustomDataChannel(dc);
             } else {
@@ -631,7 +669,7 @@ void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc
     if (!dc) return;
 
     dc->onOpen([this]() {
-        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] *** DataChannel OPENED! ***";
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] MavlinkDataChannel OPENED";
         if (!_isShuttingDown.load()) {
             _processDataChannelOpen();
         }
@@ -680,7 +718,7 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
     if (!dc) return;
 
     dc->onOpen([this]() {
-        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] *** CustomDataChannel OPENED! ***";
+        qCDebug(WebRTCLinkLog) << "[DATACHANNEL] CustomDataChannel OPENED";
     });
 
     dc->onClosed([this]() {
@@ -767,7 +805,7 @@ void WebRTCWorker::_processDataChannelOpen()
 
     QMetaObject::invokeMethod(this, [this]() {
         emit connected();
-        emit rtcStatusMessageChanged("데이터 채널 연결 완료");
+        emit rtcStatusMessageChanged("데이터 채널 연결 성공");
 
         _startTimers();
     }, Qt::QueuedConnection);
@@ -901,7 +939,7 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
 
         } else if (type == "registered") {
             qCDebug(WebRTCLinkLog) << "Successfully registered with signaling server";
-            emit rtcStatusMessageChanged("기체 연결 대기중");
+            emit rtcStatusMessageChanged("기체의 연결을 기다리는 중...");
         }
 
     } catch (const std::exception& e) {
@@ -917,19 +955,39 @@ void WebRTCWorker::_handlePeerDisconnection()
     _isDisconnecting = false;
 
     // WebRTC 연결이 끊어지면 방에서 나가기
-            if (_signalingManager && !_currentRoomId.isEmpty() && !_currentPeerId.isEmpty()) {
-            qCDebug(WebRTCLinkLog) << "Leaving room due to peer disconnection:" << _currentRoomId;
-            _signalingManager->leavePeer(_currentPeerId, _currentRoomId);
+    if (_signalingManager && !_currentRoomId.isEmpty() && !_currentPeerId.isEmpty()) {
+        qCDebug(WebRTCLinkLog) << "Leaving room due to peer disconnection:" << _currentRoomId;
+        _signalingManager->leavePeer(_currentPeerId, _currentRoomId);
         emit rtcStatusMessageChanged("피어 연결 해제 - 방에서 나가는 중...");
     }
 
-            _cleanupForReconnection();
+    _cleanupForReconnection();
 
-        emit rttUpdated(-1);
-        emit disconnected();
+    emit rttUpdated(-1);
+    emit disconnected();
+    
+    // 사용자가 의도적으로 해제한 경우가 아닐 때만 자동 재연결 시작
+    if (!_isShuttingDown.load() && !_waitingForReconnect.load()) {
+        qCDebug(WebRTCLinkLog) << "[DISCONNECT] Starting automatic reconnection";
+        emit rtcStatusMessageChanged("자동 재연결 시작...");
+        
+        // 재연결 시도 횟수 증가
+        _reconnectAttempts++;
+        
+        if (_reconnectAttempts <= MAX_RECONNECT_ATTEMPTS) {
+            int reconnectDelay = _calculateReconnectDelay();
+            qCDebug(WebRTCLinkLog) << "[DISCONNECT] Scheduling reconnection in" << reconnectDelay << "ms (attempt" << _reconnectAttempts << "/" << MAX_RECONNECT_ATTEMPTS << ")";
+            
+            _waitingForReconnect.store(true);
+            _reconnectTimer->start(reconnectDelay);
+        } else {
+            qCWarning(WebRTCLinkLog) << "[DISCONNECT] Max reconnection attempts reached, manual reconnection required";
+            emit rtcStatusMessageChanged("최대 재연결 시도 횟수 초과, 수동 재연결 필요");
+        }
+    } else {
+        qCDebug(WebRTCLinkLog) << "[DISCONNECT] Manual reconnection required (shutting down or already reconnecting)";
         emit rtcStatusMessageChanged("기체 연결 해제됨, 수동 재연결 필요");
-
-        qCDebug(WebRTCLinkLog) << "[DISCONNECT] Manual reconnection required";
+    }
 }
 
 void WebRTCWorker::_resetPeerConnection()
@@ -1077,12 +1135,20 @@ void WebRTCWorker::_processPendingCandidates()
 void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
 {
     QString stateStr = _stateToString(state);
-    qCDebug(WebRTCLinkLog) << "PeerConnection State Changed:" << stateStr;
+    //qCDebug(WebRTCLinkLog) << "PeerConnection State Changed:" << stateStr;
 
     emit rtcStatusMessageChanged(stateStr);
 
     if (state == rtc::PeerConnection::State::Connected) {
         qCDebug(WebRTCLinkLog) << "PeerConnection fully connected!";
+        // 연결 성공 시 재연결 타이머 중지
+        if (_reconnectTimer && _reconnectTimer->isActive()) {
+            _reconnectTimer->stop();
+            qCDebug(WebRTCLinkLog) << "Stopped reconnection timer - connection successful";
+        }
+        _waitingForReconnect.store(false);
+        _resetReconnectAttempts(); // 재연결 시도 횟수 리셋
+        
         if (_mavlinkDataChannel && _mavlinkDataChannel->isOpen()) {
             qCDebug(WebRTCLinkLog) << "DataChannel already open, no reconnection needed";
             return;
@@ -1097,16 +1163,13 @@ void WebRTCWorker::_onPeerStateChanged(rtc::PeerConnection::State state)
         // 방에서 나가지 않고 WebRTC만 재연결
         emit rtcStatusMessageChanged("WebRTC 연결 끊김 - 재연결 시도 중...");
 
-        QTimer::singleShot(1000, this, [this]() {
-            _cleanup();
-            _setupPeerConnection();
-            
-            // WebRTC 재연결 시 시그널링 서버에 다시 등록
-            if (_signalingManager && !_currentRoomId.isEmpty() && !_currentPeerId.isEmpty()) {
-                qCDebug(WebRTCLinkLog) << "Re-registering with signaling server after WebRTC reconnection";
-                _signalingManager->registerPeer(_currentPeerId, _currentRoomId);
-            }
-        });
+        // 재연결 타이머 시작 (지수 백오프 적용)
+        if (!_waitingForReconnect.load()) {
+            _waitingForReconnect.store(true);
+            int reconnectDelay = _calculateReconnectDelay();
+            qCDebug(WebRTCLinkLog) << "Starting reconnection timer with delay:" << reconnectDelay << "ms";
+            _reconnectTimer->start(reconnectDelay);
+        }
     }
 }
 
@@ -1144,8 +1207,8 @@ void WebRTCWorker::_updateRtt()
 QString WebRTCWorker::_stateToString(rtc::PeerConnection::State state) const
 {
     switch (state) {
-        case rtc::PeerConnection::State::New: return "Peer 생성";
-        case rtc::PeerConnection::State::Connecting: return "피어 연결중";
+        case rtc::PeerConnection::State::New: return "피어 생성";
+        case rtc::PeerConnection::State::Connecting: return "피어 연결중...";
         case rtc::PeerConnection::State::Connected: return "피어 연결됨";
         case rtc::PeerConnection::State::Disconnected: return "피어 연결 끊김";
         case rtc::PeerConnection::State::Failed: return "피어 연결 실패";
@@ -1157,8 +1220,8 @@ QString WebRTCWorker::_stateToString(rtc::PeerConnection::State state) const
 QString WebRTCWorker::_gatheringStateToString(rtc::PeerConnection::GatheringState state) const
 {
     switch (state) {
-        case rtc::PeerConnection::GatheringState::New: return "새로운 ICE 수집중";
-        case rtc::PeerConnection::GatheringState::InProgress: return "ICE 수집 처리중";
+        case rtc::PeerConnection::GatheringState::New: return "새로운 ICE 수집중...";
+        case rtc::PeerConnection::GatheringState::InProgress: return "ICE 수집 처리중...";
         case rtc::PeerConnection::GatheringState::Complete: return "ICE 수집 완료";
     }
     return "Unknown";
@@ -1194,6 +1257,12 @@ void WebRTCWorker::_cleanup()
 
 void WebRTCWorker::_cleanupComplete()
 {
+    // 자동 재연결 중이 아닐 때만 완전한 종료 수행
+    if (_waitingForReconnect) {
+        qCDebug(WebRTCLinkLog) << "Auto-reconnection in progress, skipping complete cleanup";
+        return;
+    }
+    
     // 완전한 종료 시에만 _isShuttingDown 설정
     _isShuttingDown.store(true);
     _cleanup();
@@ -1242,6 +1311,65 @@ void WebRTCWorker::_updateAllStatistics()
         );
 }
 
+void WebRTCWorker::_calculateDataChannelRates(qint64 currentTime)
+{
+    // DataChannel 송신/수신 통계 업데이트
+    _dataChannelSentCalc.updateRate();
+    _dataChannelReceivedCalc.updateRate();
+    
+    // 비디오 통계 업데이트
+    _videoReceivedCalc.updateRate();
+    
+    // 통계 시그널 발생
+    emit dataChannelStatsUpdated(
+        _dataChannelSentCalc.getCurrentRate(),
+        _dataChannelReceivedCalc.getCurrentRate()
+    );
+    
+    // 비디오 통계 시그널 발생
+    emit videoStatsUpdated(
+        _videoReceivedCalc.getCurrentRate(),
+        _videoReceivedCalc.getStats().totalPackets,
+        _videoReceivedCalc.getStats().totalBytes
+    );
+    
+    // 비디오 전송률 시그널 발생
+    emit videoRateChanged(_videoReceivedCalc.getCurrentRate());
+    
+    // 전체 통계 업데이트 시그널
+    emit statisticsUpdated();
+}
+
+int WebRTCWorker::_calculateReconnectDelay() const
+{
+    // 지수 백오프 전략: 2^attempt * base_delay, 최대 30초
+    int delay = BASE_RECONNECT_DELAY_MS * (1 << _reconnectAttempts);
+    
+    // 최대 지연 시간 제한
+    if (delay > MAX_RECONNECT_DELAY_MS) {
+        delay = MAX_RECONNECT_DELAY_MS;
+    }
+    
+    // 약간의 랜덤성 추가 (네트워크 혼잡 방지)
+    int jitter = (QRandomGenerator::global()->bounded(1000)) - 500; // -500ms ~ +500ms
+    delay += jitter;
+    
+    if (delay < 1000) delay = 1000; // 최소 1초
+    
+    qCDebug(WebRTCLinkLog) << "Calculated reconnect delay:" << delay << "ms (attempt:" << _reconnectAttempts << ")";
+    return delay;
+}
+
+void WebRTCWorker::_resetReconnectAttempts()
+{
+    _reconnectAttempts = 0;
+    qCDebug(WebRTCLinkLog) << "Reconnect attempts reset";
+}
+
+bool WebRTCWorker::isWaitingForReconnect() const
+{
+    return _waitingForReconnect.load();
+}
 
 //------------------------------------------------------
 // WebRTCLink (구현)
@@ -1280,6 +1408,7 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
 WebRTCLink::~WebRTCLink()
 {
     if (_worker) {
+        // 자동 재연결 중이 아닐 때만 disconnectLink 호출
         QMetaObject::invokeMethod(_worker, "disconnectLink", Qt::BlockingQueuedConnection);
     }
     _workerThread->quit();
@@ -1288,7 +1417,22 @@ WebRTCLink::~WebRTCLink()
 
 bool WebRTCLink::isConnected() const
 {
-    return _worker && _worker->isDataChannelOpen();
+    // Worker가 존재하고 DataChannel이 열려있는지 확인
+    if (!_worker) {
+        return false;
+    }
+    
+    // DataChannel 상태 확인
+    if (!_worker->isDataChannelOpen()) {
+        return false;
+    }
+    
+    // Worker의 전체적인 운영 상태 확인
+    if (!_worker->isOperational()) {
+        return false;
+    }
+    
+    return true;
 }
 
 void WebRTCLink::connectLink()
@@ -1298,9 +1442,26 @@ void WebRTCLink::connectLink()
 
 void WebRTCLink::reconnectLink()
 {
+    qCDebug(WebRTCLinkLog) << "Manual reconnection requested";
+    
     if (_worker) {
+        // 수동 재연결 시 재연결 시도 횟수 리셋
+        QMetaObject::invokeMethod(_worker, "_resetReconnectAttempts", Qt::QueuedConnection);
         QMetaObject::invokeMethod(_worker, "reconnectToRoom", Qt::QueuedConnection);
+    } else {
+        qCWarning(WebRTCLinkLog) << "Worker not available for reconnection";
     }
+}
+
+bool WebRTCLink::isReconnecting() const
+{
+    if (!_worker) {
+        return false;
+    }
+    
+    // Worker의 자동 재연결 상태를 직접 확인 (스레드 안전하지 않지만 빠름)
+    // 실제로는 _waitingForReconnect가 atomic이 아니므로 더 안전한 방법 필요
+    return _worker->isWaitingForReconnect();
 }
 
 bool WebRTCLink::_connect()
@@ -1331,8 +1492,16 @@ void WebRTCLink::_onConnected()
 void WebRTCLink::_onDisconnected()
 {
     qCDebug(WebRTCLinkLog) << "[WebRTCLink] Disconnected";
-    _onRtcStatusMessageChanged("RTC 연결 해제됨");
-    emit disconnected();
+    
+    // 재연결 중이 아닐 때만 disconnected 시그널 발생
+    if (_worker && !_worker->isWaitingForReconnect()) {
+        qCDebug(WebRTCLinkLog) << "[WebRTCLink] Emitting disconnected signal (not reconnecting)";
+        _onRtcStatusMessageChanged("RTC 연결 종료");
+        emit disconnected();
+    } else {
+        qCDebug(WebRTCLinkLog) << "[WebRTCLink] Skipping disconnected signal (reconnecting)";
+        _onRtcStatusMessageChanged("RTC 재연결 중...");
+    }
 }
 
 void WebRTCLink::_onErrorOccurred(const QString &errorString)

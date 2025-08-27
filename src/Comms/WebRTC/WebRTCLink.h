@@ -159,6 +159,7 @@ class WebRTCWorker : public QObject
     void handleLocalDescription(const QString& descType, const QString& sdpContent);
     void handleLocalCandidate(const QString& candidateStr, const QString& mid);
     void sendCustomMessage(const QString &message);
+    bool isWaitingForReconnect() const;  // 자동 재연결 상태 확인
 
    signals:
     void connected();
@@ -260,10 +261,18 @@ class WebRTCWorker : public QObject
     QString _currentPeerId;
     bool _roomLeftSuccessfully = false;
     QTimer* _reconnectTimer = nullptr;  // 수동 재연결용 (자동 재연결 비활성화)
-    bool _waitingForReconnect = false;
+    std::atomic<bool> _waitingForReconnect{false};
+    
+    // 재연결 관리 (추가됨)
+    int _reconnectAttempts = 0;
+    static const int MAX_RECONNECT_ATTEMPTS = 10;
+    static const int BASE_RECONNECT_DELAY_MS = 1000;
+    static const int MAX_RECONNECT_DELAY_MS = 30000;
 
     void _updateAllStatistics();
     void _calculateDataChannelRates(qint64 currentTime);
+    int _calculateReconnectDelay() const;  // 지수 백오프 계산
+    void _resetReconnectAttempts();        // 재연결 시도 횟수 리셋
 
     void _handlePeerDisconnection();
     void _cleanupForReconnection();
@@ -277,6 +286,7 @@ class WebRTCWorker : public QObject
 
     QTimer* _statsTimer = nullptr;
 
+   public:
     bool isOperational() const;
 };
 
@@ -306,6 +316,7 @@ class WebRTCLink : public LinkInterface
     bool isConnected() const override;
     void connectLink();
     void reconnectLink();  // 재연결 메서드 추가
+    bool isReconnecting() const;  // 자동 재연결 상태 확인
 
     int rttMs() const { return _rttMs; }
     double webRtcSent() const { return _webRtcSent; }

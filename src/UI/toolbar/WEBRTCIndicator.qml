@@ -21,7 +21,7 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property bool showIndicator:    QGroundControl.linkManager.webRtcRtt > 0
+    property bool showIndicator:    QGroundControl.linkManager.webRtcLinkExists
     property real _margins:         ScreenTools.defaultFontPixelHeight / 2
     property real _rtt:             QGroundControl.linkManager.webRtcRtt
     property real _webRtcSent:      QGroundControl.linkManager.webRtcSent
@@ -42,6 +42,12 @@ Item {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         spacing: ScreenTools.defaultFontPixelHeight / 5
+
+        QGCLabel {
+            horizontalAlignment: Text.AlignRight
+            text: (QGroundControl.linkManager.webRtcLinkExists & QGroundControl.linkManager.webRtcRtt < 0) ? QGroundControl.linkManager.rtcStatusMessage : ""
+            anchors.verticalCenter: parent.verticalCenter
+        }
 
         QGCColoredImage {
             id:                 roiIcon

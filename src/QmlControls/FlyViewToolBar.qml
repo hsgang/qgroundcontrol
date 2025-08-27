@@ -153,12 +153,31 @@ Rectangle {
     }
 
     Rectangle {
+        id: webrtcIndicatorRect
+        anchors.top:            parent.top
+        anchors.bottom:         parent.bottom
+        anchors.bottomMargin:   1
+        // anchors.left:           viewButtonRow.right
+        // anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
+        anchors.right:          vehicleStatusRect.left
+        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
+        width:                  childrenRect.width
+        color:                  "transparent"
+        visible:                QGroundControl.linkManager.webRtcLinkExists
+
+        WEBRTCIndicator{
+            anchors.margins: ScreenTools.defaultFontPixelHeight * 0.66
+        }
+    }
+
+    Rectangle {
         id:                     vehicleStatusRect
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.bottomMargin:   1
-        anchors.left:           viewButtonRow.right
-        anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
+        // anchors.left:           webrtcIndicatorRect.right
+        // anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
+        width:                  statusIndicatorLoader.width
         anchors.right:          widgetControlButton.left
         anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
         color:                  "transparent"
