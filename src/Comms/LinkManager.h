@@ -60,6 +60,7 @@ class LinkManager : public QObject
     Q_PROPERTY(double rtcModuleNetworkRx READ rtcModuleNetworkRx NOTIFY rtcModuleSystemInfoChanged)
     Q_PROPERTY(double rtcModuleNetworkTx READ rtcModuleNetworkTx NOTIFY rtcModuleSystemInfoChanged)
     Q_PROPERTY(QString rtcModuleNetworkInterface READ rtcModuleNetworkInterface NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(bool webRtcLinkExists READ webRtcLinkExists NOTIFY webRtcLinkExistsChanged)
 
 public:
     explicit LinkManager(QObject *parent = nullptr);
@@ -147,6 +148,9 @@ public:
     double rtcModuleNetworkRx() const;
     double rtcModuleNetworkTx() const;
     QString rtcModuleNetworkInterface() const;
+    
+    // WebRTC 링크 존재 여부 확인
+    bool webRtcLinkExists() const;
 
 signals:
     void mavlinkSupportForwardingEnabledChanged();
@@ -157,6 +161,7 @@ signals:
     void rtcStatusMessageChanged();
     void rtcVideoRateChanged();
     void rtcModuleSystemInfoChanged();
+    void webRtcLinkExistsChanged();
 
 private slots:
     void _linkDisconnected();
@@ -171,6 +176,7 @@ private:
     void _addUDPAutoConnectLink();
     void _addMAVLinkForwardingLink();
     void _createDynamicForwardLink(const char *linkName, const QString &hostName);
+    void _updateWebRtcLinkStatus();
 #ifdef QGC_ZEROCONF_ENABLED
     void _addZeroConfAutoConnectLink();
 #endif

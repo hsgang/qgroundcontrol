@@ -170,6 +170,8 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
         connect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
         connect(w, &WebRTCLink::videoRateKBpsChanged, this, &LinkManager::rtcVideoRateChanged);
         connect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, &LinkManager::rtcModuleSystemInfoChanged);
+        // WebRTC 링크가 생성되면 상태 업데이트
+        _updateWebRtcLinkStatus();
         qCDebug(LinkManagerLog) << "WebRTCLink system info signal connected";
         //connect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
@@ -237,6 +239,7 @@ void LinkManager::_linkDisconnected()
         return;
     }
 
+    bool wasWebRTCLink = false;
     if (auto w = qobject_cast<WebRTCLink*>(link)) {
         disconnect(w, &WebRTCLink::rttMsChanged, this, &LinkManager::webRtcRttChanged);
         disconnect(w, &WebRTCLink::webRtcSentChanged, this, &LinkManager::webRtcSentChanged);
@@ -244,6 +247,7 @@ void LinkManager::_linkDisconnected()
         disconnect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
         disconnect(w, &WebRTCLink::videoRateKBpsChanged, this, &LinkManager::rtcVideoRateChanged);
         disconnect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, &LinkManager::rtcModuleSystemInfoChanged);
+        wasWebRTCLink = true;
         //disconnect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
 
@@ -258,6 +262,11 @@ void LinkManager::_linkDisconnected()
         if (it->get() == link) {
             qCDebug(LinkManagerLog) << Q_FUNC_INFO << it->get()->linkConfiguration()->name() << it->use_count();
             (void) _rgLinks.erase(it);
+            
+            // WebRTC 링크가 제거된 후 상태 업데이트
+            if (wasWebRTCLink) {
+                _updateWebRtcLinkStatus();
+            }
             return;
         }
     }
@@ -792,6 +801,17 @@ QString LinkManager::rtcStatusMessage() const
     return QString();
 }
 
+bool LinkManager::webRtcLinkExists() const
+{
+    for (auto sharedLink : _rgLinks) {
+        LinkInterface* link = sharedLink.get();
+        if (auto w = qobject_cast<WebRTCLink*>(link)) {
+            return true; // WebRTCLink가 존재하면 true 반환
+        }
+    }
+    return false;
+}
+
 double LinkManager::rtcVideoRate() const
 {
     for (auto sharedLink : _rgLinks) {
@@ -1188,6 +1208,11 @@ bool LinkManager::_isSerialPortConnected() const
     }
 
     return false;
+}
+
+void LinkManager::_updateWebRtcLinkStatus()
+{
+    emit webRtcLinkExistsChanged();
 }
 
 #endif // QGC_NO_SERIAL_LINK
