@@ -762,16 +762,15 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
                 
                 // system_info 타입인지 확인
                 if (jsonObj.contains("type") && jsonObj["type"].toString() == "system_info") {
-
+                    // RTCModuleSystemInfo 구조체로 파싱하여 효율적으로 전달
+                    RTCModuleSystemInfo systemInfo(jsonObj);
                     
-                    emit rtcModuleSystemInfoUpdated(
-                        jsonObj["cpu_usage"].toDouble(),
-                        jsonObj["cpu_temperature"].toDouble(),
-                        jsonObj["memory_usage_percent"].toDouble(),
-                        jsonObj["network_rx_mbps"].toDouble(),
-                        jsonObj["network_tx_mbps"].toDouble(),
-                        jsonObj["network_interface"].toString()
-                    );
+                    if (systemInfo.isValid()) {
+                        qCDebug(WebRTCLinkLog) << "RTC Module System Info:" << systemInfo.toString();
+                        emit rtcModuleSystemInfoUpdated(systemInfo);
+                    } else {
+                        qCWarning(WebRTCLinkLog) << "Invalid RTC module system info received";
+                    }
                 } else {
                     // 다른 타입의 JSON 데이터인 경우
                     qCDebug(WebRTCLinkLog) << "CustomDataChannel received JSON (String):" << QString::fromStdString(receivedText);
@@ -1200,6 +1199,20 @@ void WebRTCWorker::_updateRtt()
     auto rttOpt = _peerConnection->rtt();
     if (rttOpt.has_value()) {
         int rttMs = rttOpt.value().count();
+        _rttMs = rttMs; // RTT 값을 저장
+        
+        // WebRTCStats 구조체로 통합하여 전달
+        WebRTCStats stats;
+        stats.rttMs = _rttMs;
+        stats.webRtcSent = _dataChannelSentCalc.getCurrentRate();
+        stats.webRtcRecv = _dataChannelReceivedCalc.getCurrentRate();
+        stats.videoRateKBps = _videoReceivedCalc.getCurrentRate();
+        stats.videoPacketCount = _videoReceivedCalc.getStats().totalPackets;
+        stats.videoBytesReceived = _videoReceivedCalc.getStats().totalBytes;
+        
+        emit webRtcStatsUpdated(stats);
+        
+        // 기존 시그널도 유지 (호환성을 위해)
         emit rttUpdated(rttMs);
     }
 }
@@ -1291,24 +1304,26 @@ void WebRTCWorker::_updateAllStatistics()
     _dataChannelReceivedCalc.updateRate();
     _videoReceivedCalc.updateRate();
 
-    // qCDebug(WebRTCLinkLog) << "[DC]" << "SENT:" << _dataChannelSentCalc.getCurrentRate() << "KB/s"
-    //                         << " RECV:" << _dataChannelReceivedCalc.getCurrentRate() << "KB/s"
-    //                         << "[Video]" << "RECV:" << _videoReceivedCalc.getCurrentRate() << "KB/s";
+    // WebRTCStats 구조체로 통합하여 전달
+    WebRTCStats stats;
+    stats.rttMs = _rttMs;
+    stats.webRtcSent = _dataChannelSentCalc.getCurrentRate();
+    stats.webRtcRecv = _dataChannelReceivedCalc.getCurrentRate();
+    stats.videoRateKBps = _videoReceivedCalc.getCurrentRate();
+    stats.videoPacketCount = _videoReceivedCalc.getStats().totalPackets;
+    stats.videoBytesReceived = _videoReceivedCalc.getStats().totalBytes;
 
-    emit dataChannelStatsUpdated(
-        _dataChannelSentCalc.getCurrentRate(),
-        _dataChannelReceivedCalc.getCurrentRate()
-        );
+    // qCDebug(WebRTCLinkLog) << "[DC]" << "SENT:" << stats.webRtcSent << "KB/s"
+    //                         << " RECV:" << stats.webRtcRecv << "KB/s"
+    //                         << "[Video]" << "RECV:" << stats.videoRateKBps << "KB/s";
 
-    emit videoStatsUpdated(
-        _videoReceivedCalc.getCurrentRate(),
-        _videoReceivedCalc.getStats().totalPackets,
-        _videoReceivedCalc.getStats().totalBytes
-        );
-
-    emit videoRateChanged(
-        _videoReceivedCalc.getCurrentRate()
-        );
+    // 통합된 통계 시그널 발생
+    emit webRtcStatsUpdated(stats);
+    
+    // 기존 개별 시그널들도 유지 (호환성을 위해)
+    emit dataChannelStatsUpdated(stats.webRtcSent, stats.webRtcRecv);
+    emit videoStatsUpdated(stats.videoRateKBps, stats.videoPacketCount, stats.videoBytesReceived);
+    emit videoRateChanged(stats.videoRateKBps);
 }
 
 void WebRTCWorker::_calculateDataChannelRates(qint64 currentTime)
@@ -1320,21 +1335,22 @@ void WebRTCWorker::_calculateDataChannelRates(qint64 currentTime)
     // 비디오 통계 업데이트
     _videoReceivedCalc.updateRate();
     
-    // 통계 시그널 발생
-    emit dataChannelStatsUpdated(
-        _dataChannelSentCalc.getCurrentRate(),
-        _dataChannelReceivedCalc.getCurrentRate()
-    );
+    // WebRTCStats 구조체로 통합하여 전달
+    WebRTCStats stats;
+    stats.rttMs = _rttMs;
+    stats.webRtcSent = _dataChannelSentCalc.getCurrentRate();
+    stats.webRtcRecv = _dataChannelReceivedCalc.getCurrentRate();
+    stats.videoRateKBps = _videoReceivedCalc.getCurrentRate();
+    stats.videoPacketCount = _videoReceivedCalc.getStats().totalPackets;
+    stats.videoBytesReceived = _videoReceivedCalc.getStats().totalBytes;
     
-    // 비디오 통계 시그널 발생
-    emit videoStatsUpdated(
-        _videoReceivedCalc.getCurrentRate(),
-        _videoReceivedCalc.getStats().totalPackets,
-        _videoReceivedCalc.getStats().totalBytes
-    );
+    // 통합된 통계 시그널 발생
+    emit webRtcStatsUpdated(stats);
     
-    // 비디오 전송률 시그널 발생
-    emit videoRateChanged(_videoReceivedCalc.getCurrentRate());
+    // 기존 개별 시그널들도 유지 (호환성을 위해)
+    emit dataChannelStatsUpdated(stats.webRtcSent, stats.webRtcRecv);
+    emit videoStatsUpdated(stats.videoRateKBps, stats.videoPacketCount, stats.videoBytesReceived);
+    emit videoRateChanged(stats.videoRateKBps);
     
     // 전체 통계 업데이트 시그널
     emit statisticsUpdated();
@@ -1377,6 +1393,10 @@ bool WebRTCWorker::isWaitingForReconnect() const
 WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     : LinkInterface(config, parent)
 {
+    // 메타타입 등록
+    qRegisterMetaType<RTCModuleSystemInfo>("RTCModuleSystemInfo");
+    qRegisterMetaType<WebRTCStats>("WebRTCStats");
+    
     _rtcConfig = qobject_cast<const WebRTCConfiguration*>(config.get());
     
     QString stunServer = _rtcConfig->stunServer();
@@ -1396,11 +1416,9 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     connect(_worker, &WebRTCWorker::errorOccurred, this, &WebRTCLink::_onErrorOccurred, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::bytesReceived, this, &WebRTCLink::_onDataReceived, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::bytesSent, this, &WebRTCLink::_onDataSent, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::rttUpdated, this, &WebRTCLink::_onRttUpdated, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::dataChannelStatsUpdated, this, &WebRTCLink::_onDataChannelStatsChanged, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::rtcStatusMessageChanged, this, &WebRTCLink::_onRtcStatusMessageChanged, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::videoRateChanged, this, &WebRTCLink::_onVideoRateChanged, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::rtcModuleSystemInfoUpdated, this, &WebRTCLink::_onRtcModuleSystemInfoUpdated, Qt::QueuedConnection);
+    connect(_worker, &WebRTCWorker::webRtcStatsUpdated, this, &WebRTCLink::_onWebRtcStatsUpdated, Qt::QueuedConnection);
 
     _workerThread->start();
 }
@@ -1519,14 +1537,6 @@ void WebRTCLink::_onDataSent(const QByteArray &data)
     emit bytesSent(this, data);
 }
 
-void WebRTCLink::_onRttUpdated(int rtt)
-{
-    if (_rttMs != rtt) {
-        _rttMs = rtt;
-        emit rttMsChanged();
-    }
-}
-
 void WebRTCLink::_onRtcStatusMessageChanged(const QString& message)
 {
     if (_rtcStatusMessage != message) {
@@ -1535,63 +1545,28 @@ void WebRTCLink::_onRtcStatusMessageChanged(const QString& message)
     }
 }
 
-void WebRTCLink::_onDataChannelStatsChanged(double sendRate, double receiveRate)
-{
-    if (_webRtcSent != sendRate) {
-        _webRtcSent = sendRate;
-        emit webRtcSentChanged();
-    }
-    if (_webRtcRecv != receiveRate) {
-        _webRtcRecv = receiveRate;
-        emit webRtcRecvChanged();
-    }
-}
-
 bool WebRTCLink::isVideoStreamActive() const
 {
     return _worker ? _worker->isVideoStreamActive() : false;
 }
 
-void WebRTCLink::_onVideoRateChanged(double KBps)
+void WebRTCLink::_onWebRtcStatsUpdated(const WebRTCStats& stats)
 {
-    if (_videoRateKBps != KBps) {
-        _videoRateKBps = KBps;
-        emit videoRateKBpsChanged();
+    // 구조체 비교를 통한 효율적인 변경 감지
+    if (_webRtcStats != stats) {
+        _webRtcStats = stats;
+        qCDebug(WebRTCLinkLog) << "WebRTC Stats Updated:" << stats.toString();
+        emit webRtcStatsChanged(stats);
     }
 }
 
-void WebRTCLink::_onRtcModuleSystemInfoUpdated(double cpuUsage, double cpuTemperature, double memoryUsage,
-                                              double networkRx, double networkTx, const QString& networkInterface)
+void WebRTCLink::_onRtcModuleSystemInfoUpdated(const RTCModuleSystemInfo& systemInfo)
 {    
-    bool changed = false;
-    
-    if (_rtcModuleCpuUsage != cpuUsage) {
-        _rtcModuleCpuUsage = cpuUsage;
-        changed = true;
-    }
-    if (_rtcModuleCpuTemperature != cpuTemperature) {
-        _rtcModuleCpuTemperature = cpuTemperature;
-        changed = true;
-    }
-    if (_rtcModuleMemoryUsage != memoryUsage) {
-        _rtcModuleMemoryUsage = memoryUsage;
-        changed = true;
-    }
-    if (_rtcModuleNetworkRx != networkRx) {
-        _rtcModuleNetworkRx = networkRx;
-        changed = true;
-    }
-    if (_rtcModuleNetworkTx != networkTx) {
-        _rtcModuleNetworkTx = networkTx;
-        changed = true;
-    }
-    if (_rtcModuleNetworkInterface != networkInterface) {
-        _rtcModuleNetworkInterface = networkInterface;
-        changed = true;
-    }
-    
-    if (changed) {
-        emit rtcModuleSystemInfoChanged(cpuUsage, cpuTemperature, memoryUsage, networkRx, networkTx, networkInterface);
+    // 구조체 비교를 통한 효율적인 변경 감지
+    if (_rtcModuleSystemInfo != systemInfo) {
+        _rtcModuleSystemInfo = systemInfo;
+        qCDebug(WebRTCLinkLog) << "RTC Module System Info Updated:" << systemInfo.toString();
+        emit rtcModuleSystemInfoChanged(systemInfo);
     }
 }
 

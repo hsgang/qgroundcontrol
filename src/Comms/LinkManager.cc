@@ -20,7 +20,7 @@
 #include "AutoConnectSettings.h"
 #include "TCPLink.h"
 #include "UDPLink.h"
-#include "WebRTCLink.h"
+#include "WebRTC/WebRTCLink.h"
 
 #ifdef QGC_ENABLE_BLUETOOTH
 #include "BluetoothLink.h"
@@ -164,15 +164,25 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
     config->setLink(link);
 
     if (auto w = qobject_cast<WebRTCLink*>(link.get())) {
-        connect(w, &WebRTCLink::rttMsChanged, this, &LinkManager::webRtcRttChanged);
-        connect(w, &WebRTCLink::webRtcSentChanged, this, &LinkManager::webRtcSentChanged);
-        connect(w, &WebRTCLink::webRtcRecvChanged, this, &LinkManager::webRtcRecvChanged);
         connect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
-        connect(w, &WebRTCLink::videoRateKBpsChanged, this, &LinkManager::rtcVideoRateChanged);
-        connect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, &LinkManager::rtcModuleSystemInfoChanged);
+        connect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, [this](const RTCModuleSystemInfo& systemInfo) {
+            _rtcModuleSystemInfo = systemInfo;
+            qCDebug(LinkManagerLog) << "RTC Module System Info Updated:" << systemInfo.toString();
+            emit rtcModuleSystemInfoChanged(systemInfo);
+        });
+        connect(w, &WebRTCLink::webRtcStatsChanged, this, [this](const WebRTCStats& stats) {
+            _webRtcRtt = stats.rttMs;
+            _webRtcSent = stats.webRtcSent;
+            _webRtcRecv = stats.webRtcRecv;
+            _rtcVideoRate = stats.videoRateKBps;
+            _rtcVideoPacketCount = stats.videoPacketCount;
+            _rtcVideoBytesReceived = stats.videoBytesReceived;
+            qCDebug(LinkManagerLog) << "WebRTC Stats Updated:" << stats.toString();
+            emit webRtcStatsChanged();
+        });
         // WebRTC 링크가 생성되면 상태 업데이트
         _updateWebRtcLinkStatus();
-        qCDebug(LinkManagerLog) << "WebRTCLink system info signal connected";
+        qCDebug(LinkManagerLog) << "WebRTCLink signals connected";
         //connect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
 
@@ -241,12 +251,9 @@ void LinkManager::_linkDisconnected()
 
     bool wasWebRTCLink = false;
     if (auto w = qobject_cast<WebRTCLink*>(link)) {
-        disconnect(w, &WebRTCLink::rttMsChanged, this, &LinkManager::webRtcRttChanged);
-        disconnect(w, &WebRTCLink::webRtcSentChanged, this, &LinkManager::webRtcSentChanged);
-        disconnect(w, &WebRTCLink::webRtcRecvChanged, this, &LinkManager::webRtcRecvChanged);
         disconnect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
-        disconnect(w, &WebRTCLink::videoRateKBpsChanged, this, &LinkManager::rtcVideoRateChanged);
-        disconnect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, &LinkManager::rtcModuleSystemInfoChanged);
+        disconnect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, nullptr);
+        disconnect(w, &WebRTCLink::webRtcStatsChanged, this, nullptr);
         wasWebRTCLink = true;
         //disconnect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
@@ -757,39 +764,6 @@ void LinkManager::freeMavlinkChannel(uint8_t channel)
     _mavlinkChannelsUsedBitMask &= ~(1 << channel);
 }
 
-int LinkManager::webRtcRtt() const
-{
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            return w->rttMs();
-        }
-    }
-    return -1;
-}
-
-double LinkManager::webRtcSent() const
-{
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            return w->webRtcSent();
-        }
-    }
-    return -1;
-}
-
-double LinkManager::webRtcRecv() const
-{
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            return w->webRtcRecv();
-        }
-    }
-    return -1;
-}
-
 QString LinkManager::rtcStatusMessage() const
 {
     for (auto sharedLink : _rgLinks) {
@@ -812,85 +786,66 @@ bool LinkManager::webRtcLinkExists() const
     return false;
 }
 
-double LinkManager::rtcVideoRate() const
+// WebRTC 개별 통계 정보 getter 메서드들 (캐시된 정보 사용)
+int LinkManager::webRtcRtt() const
 {
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            return w->videoRateKBps();
-        }
-    }
-    return 0.0;
+    return _webRtcRtt;
 }
 
-// RTC Module 시스템 정보 getter 메서드들
+double LinkManager::webRtcSent() const
+{
+    return _webRtcSent;
+}
+
+double LinkManager::webRtcRecv() const
+{
+    return _webRtcRecv;
+}
+
+double LinkManager::rtcVideoRate() const
+{
+    return _rtcVideoRate;
+}
+
+int LinkManager::rtcVideoPacketCount() const
+{
+    return _rtcVideoPacketCount;
+}
+
+qint64 LinkManager::rtcVideoBytesReceived() const
+{
+    return _rtcVideoBytesReceived;
+}
+
+// RTC Module 시스템 정보 getter 메서드들 (캐시된 정보 사용)
 double LinkManager::rtcModuleCpuUsage() const
 {
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            double value = w->rtcModuleCpuUsage();
-            qCDebug(LinkManagerLog) << "rtcModuleCpuUsage() called, returning:" << value;
-            return value;
-        }
-    }
-    qCDebug(LinkManagerLog) << "rtcModuleCpuUsage() called, no WebRTCLink found, returning 0.0";
-    return 0.0;
+    return _rtcModuleSystemInfo.cpuUsage;
 }
 
 double LinkManager::rtcModuleCpuTemperature() const
 {
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            return w->rtcModuleCpuTemperature();
-        }
-    }
-    return 0.0;
+    return _rtcModuleSystemInfo.cpuTemperature;
 }
 
 double LinkManager::rtcModuleMemoryUsage() const
 {
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            return w->rtcModuleMemoryUsage();
-        }
-    }
-    return 0.0;
+    return _rtcModuleSystemInfo.memoryUsage;
 }
 
 double LinkManager::rtcModuleNetworkRx() const
 {
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            return w->rtcModuleNetworkRx();
-        }
-    }
-    return 0.0;
+    return _rtcModuleSystemInfo.networkRx;
 }
 
 double LinkManager::rtcModuleNetworkTx() const
 {
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            return w->rtcModuleNetworkTx();
-        }
-    }
-    return 0.0;
+    return _rtcModuleSystemInfo.networkTx;
 }
 
 QString LinkManager::rtcModuleNetworkInterface() const
 {
-    for (auto sharedLink : _rgLinks) {
-        LinkInterface* link = sharedLink.get();
-        if (auto w = qobject_cast<WebRTCLink*>(link)) {
-            return w->rtcModuleNetworkInterface();
-        }
-    }
-    return QString();
+    return _rtcModuleSystemInfo.networkInterface;
 }
 
 LogReplayLink *LinkManager::startLogReplay(const QString &logFile)

@@ -23,11 +23,15 @@ Item {
 
     property bool showIndicator:    QGroundControl.linkManager.webRtcLinkExists
     property real _margins:         ScreenTools.defaultFontPixelHeight / 2
+    
+    // WebRTC 통계 정보 (개별 속성으로 접근)
     property real _rtt:             QGroundControl.linkManager.webRtcRtt
     property real _webRtcSent:      QGroundControl.linkManager.webRtcSent
     property real _webRtcRecv:      QGroundControl.linkManager.webRtcRecv
     property real _videoRate:       QGroundControl.linkManager.rtcVideoRate
     property int  _videoRateInt:    Math.round(_videoRate)
+    property int  _videoPacketCount: QGroundControl.linkManager.rtcVideoPacketCount
+    property int  _videoBytesReceived: QGroundControl.linkManager.rtcVideoBytesReceived
     
     // RTC Module 시스템 정보
     property real _rtcModuleCpuUsage:        QGroundControl.linkManager.rtcModuleCpuUsage

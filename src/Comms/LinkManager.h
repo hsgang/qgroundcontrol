@@ -18,6 +18,7 @@
 
 #include "LinkConfiguration.h"
 #include "LinkInterface.h"
+#include "WebRTCLink.h"
 #ifndef QGC_NO_SERIAL_LINK
     #include "QGCSerialPortInfo.h"
 #endif
@@ -34,6 +35,10 @@ class SerialLink;
 class UDPConfiguration;
 class UdpIODevice;
 
+// 전방 선언
+struct RTCModuleSystemInfo;
+struct WebRTCStats;
+
 /// @brief Manage communication links
 ///        The Link Manager organizes the physical Links. It can manage arbitrary
 ///        links and takes care of connecting them as well assigning the correct
@@ -49,11 +54,13 @@ class LinkManager : public QObject
     Q_PROPERTY(QmlObjectListModel *linkConfigurations READ _qmlLinkConfigurations CONSTANT)
     Q_PROPERTY(QStringList linkTypeStrings READ linkTypeStrings CONSTANT)
     Q_PROPERTY(bool mavlinkSupportForwardingEnabled READ mavlinkSupportForwardingEnabled NOTIFY mavlinkSupportForwardingEnabledChanged)
-    Q_PROPERTY(int webRtcRtt READ webRtcRtt NOTIFY webRtcRttChanged)
-    Q_PROPERTY(double webRtcSent READ webRtcSent NOTIFY webRtcSentChanged)
-    Q_PROPERTY(double webRtcRecv READ webRtcRecv NOTIFY webRtcRecvChanged)
     Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
-    Q_PROPERTY(double rtcVideoRate READ rtcVideoRate NOTIFY rtcVideoRateChanged)
+    Q_PROPERTY(int webRtcRtt READ webRtcRtt NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(double webRtcSent READ webRtcSent NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(double webRtcRecv READ webRtcRecv NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(double rtcVideoRate READ rtcVideoRate NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(int rtcVideoPacketCount READ rtcVideoPacketCount NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(qint64 rtcVideoBytesReceived READ rtcVideoBytesReceived NOTIFY webRtcStatsChanged)
     Q_PROPERTY(double rtcModuleCpuUsage READ rtcModuleCpuUsage NOTIFY rtcModuleSystemInfoChanged)
     Q_PROPERTY(double rtcModuleCpuTemperature READ rtcModuleCpuTemperature NOTIFY rtcModuleSystemInfoChanged)
     Q_PROPERTY(double rtcModuleMemoryUsage READ rtcModuleMemoryUsage NOTIFY rtcModuleSystemInfoChanged)
@@ -135,11 +142,15 @@ public:
 
     static constexpr uint8_t invalidMavlinkChannel() { return std::numeric_limits<uint8_t>::max(); }
 
+    QString rtcStatusMessage() const;
+    
+    // WebRTC 개별 통계 정보
     int webRtcRtt() const;
     double webRtcSent() const;
     double webRtcRecv() const;
-    QString rtcStatusMessage() const;
     double rtcVideoRate() const;
+    int rtcVideoPacketCount() const;
+    qint64 rtcVideoBytesReceived() const;
     
     // RTC Module 시스템 정보
     double rtcModuleCpuUsage() const;
@@ -155,12 +166,9 @@ public:
 signals:
     void mavlinkSupportForwardingEnabledChanged();
     void isBluetoothAvailableChanged();
-    void webRtcRttChanged();
-    void webRtcSentChanged();
-    void webRtcRecvChanged();
     void rtcStatusMessageChanged();
-    void rtcVideoRateChanged();
-    void rtcModuleSystemInfoChanged();
+    void webRtcStatsChanged();
+    void rtcModuleSystemInfoChanged(const RTCModuleSystemInfo& systemInfo);
     void webRtcLinkExistsChanged();
 
 private slots:
@@ -194,6 +202,17 @@ private:
 
     QList<SharedLinkInterfacePtr> _rgLinks;
     QList<SharedLinkConfigurationPtr> _rgLinkConfigs;
+    
+    // RTC Module 시스템 정보 캐시
+    RTCModuleSystemInfo _rtcModuleSystemInfo;
+    
+    // WebRTC 통계 정보 캐시
+    int _webRtcRtt = -1;
+    double _webRtcSent = -1.0;
+    double _webRtcRecv = -1.0;
+    double _rtcVideoRate = 0.0;
+    int _rtcVideoPacketCount = 0;
+    qint64 _rtcVideoBytesReceived = 0;
 
     static constexpr const char *_defaultUDPLinkName = "UDP Link (AutoConnect)";
     static constexpr const char *_mavlinkForwardingLinkName = "MAVLink Forwarding Link";
