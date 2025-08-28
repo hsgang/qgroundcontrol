@@ -3,37 +3,6 @@ if(NOT WIN32)
     return()
 endif()
 
-# CPMAddPackage(
-#     NAME windows_drivers
-#     URL https://firmware.ardupilot.org/Tools/MissionPlanner/driver.msi
-# )
-# ${windows_drivers_SOURCE_DIR}/driver.msi
-
-# windows installer files shared with core and custom
-set(DEPLOY_WIN_FILES
-    "${CMAKE_SOURCE_DIR}/deploy/windows/driver.msi"
-    "${CMAKE_SOURCE_DIR}/deploy/windows/nullsoft_installer.nsi"
-    "${QGC_WINDOWS_RESOURCE_FILE_PATH}"
-    "${QGC_WINDOWS_INSTALL_HEADER_PATH}"
-    "${QGC_WINDOWS_ICON_PATH}"
-)
-
-# Destination directory where files will be copied
-set(QGC_INSTALLER_SOURCE_WIN "${CMAKE_BINARY_DIR}/deploy/windows")
-file(MAKE_DIRECTORY ${QGC_INSTALLER_SOURCE_WIN})
-foreach(FILE ${DEPLOY_WIN_FILES})
-    # filename without the path
-    get_filename_component(FILE_NAME ${FILE} NAME)
-    # re-copy the file if it changes
-    add_custom_command(
-        OUTPUT "${QGC_INSTALLER_SOURCE_WIN}/${FILE_NAME}"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different "${FILE}" "${QGC_INSTALLER_SOURCE_WIN}/${FILE_NAME}"
-        DEPENDS "${FILE}"  # Depend on the source file so that it re-copies when it changes
-    )
-    list(APPEND QGC_INSTALLER_SOURCE_WIN_FILES "${QGC_INSTALLER_SOURCE_WIN}/${FILE_NAME}")
-endforeach()
-
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${QGC_INSTALLER_SOURCE_WIN_FILES})
 set_target_properties(${CMAKE_PROJECT_NAME}
     PROPERTIES
         WIN32_EXECUTABLE TRUE
