@@ -766,7 +766,7 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
                     RTCModuleSystemInfo systemInfo(jsonObj);
                     
                     if (systemInfo.isValid()) {
-                        qCDebug(WebRTCLinkLog) << "RTC Module System Info:" << systemInfo.toString();
+                        //qCDebug(WebRTCLinkLog) << "RTC Module System Info:" << systemInfo.toString();
                         emit rtcModuleSystemInfoUpdated(systemInfo);
                     } else {
                         qCWarning(WebRTCLinkLog) << "Invalid RTC module system info received";
@@ -1555,7 +1555,7 @@ void WebRTCLink::_onWebRtcStatsUpdated(const WebRTCStats& stats)
     // 구조체 비교를 통한 효율적인 변경 감지
     if (_webRtcStats != stats) {
         _webRtcStats = stats;
-        qCDebug(WebRTCLinkLog) << "WebRTC Stats Updated:" << stats.toString();
+        //qCDebug(WebRTCLinkLog) << "WebRTC Stats Updated:" << stats.toString();
         emit webRtcStatsChanged(stats);
     }
 }
@@ -1565,7 +1565,7 @@ void WebRTCLink::_onRtcModuleSystemInfoUpdated(const RTCModuleSystemInfo& system
     // 구조체 비교를 통한 효율적인 변경 감지
     if (_rtcModuleSystemInfo != systemInfo) {
         _rtcModuleSystemInfo = systemInfo;
-        qCDebug(WebRTCLinkLog) << "RTC Module System Info Updated:" << systemInfo.toString();
+        //qCDebug(WebRTCLinkLog) << "RTC Module System Info Updated:" << systemInfo.toString();
         emit rtcModuleSystemInfoChanged(systemInfo);
     }
 }
