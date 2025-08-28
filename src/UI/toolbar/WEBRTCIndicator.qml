@@ -40,6 +40,11 @@ Item {
     property real _rtcModuleNetworkRx:       QGroundControl.linkManager.rtcModuleNetworkRx
     property real _rtcModuleNetworkTx:       QGroundControl.linkManager.rtcModuleNetworkTx
     property string _rtcModuleNetworkInterface: QGroundControl.linkManager.rtcModuleNetworkInterface
+    
+    // RTC Module 버전 정보
+    property string _rtcModuleCurrentVersion: QGroundControl.linkManager.rtcModuleCurrentVersion
+    property string _rtcModuleLatestVersion:  QGroundControl.linkManager.rtcModuleLatestVersion
+    property bool _rtcModuleUpdateAvailable:  QGroundControl.linkManager.rtcModuleUpdateAvailable
 
     Row {
         id: vehicleRow
@@ -148,6 +153,18 @@ Item {
                         }
                     }
 
+                    // // RTC 모듈 버전 정보 섹션
+                    // SettingsGroupLayout {
+                    //     heading: qsTr("RTC 모듈 버전 정보")
+
+                    //     LabelledLabel {
+                    //         label:      qsTr("업데이트 상태")
+                    //         labelText:  _rtcModuleUpdateAvailable ?
+                    //                    qsTr("업데이트 가능 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음")) :
+                    //                    qsTr("최신 버전 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음"))
+                    //     }
+                    // }
+
                     SettingsGroupLayout {
                         heading: qsTr("RTC 모듈 제어")
 
@@ -156,6 +173,26 @@ Item {
                             buttonText: qsTr("재시작")
                             enabled:    true
                             onClicked:  restartConfirmDialogComponent.createObject(mainWindow).open()
+                        }
+                        LabelledButton {
+                            label:      qsTr("모듈 업데이트 확인")
+                            buttonText: qsTr("확인")
+                            onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("C")
+                        }
+                        
+                        // 업데이트 가능한 경우에만 업데이트 버튼 표시
+                        LabelledButton {
+                            label:      qsTr("모듈 업데이트")
+                            buttonText: qsTr("업데이트")
+                            visible:    _rtcModuleUpdateAvailable
+                            onClicked:  rtcUpdateConfirmDialogComponent.createObject(mainWindow).open()
+                        }
+                        
+                        // 최신 버전인 경우 상태 텍스트 표시
+                        LabelledLabel {
+                            label:      qsTr("업데이트 상태")
+                            labelText:  qsTr("최신 버전 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음"))
+                            visible:    !_rtcModuleUpdateAvailable && _rtcModuleCurrentVersion !== ""
                         }
                     }
                 }
@@ -172,6 +209,19 @@ Item {
             buttons: Dialog.Yes | Dialog.No
             onAccepted: {
                 QGroundControl.linkManager.sendWebRTCCustomMessage("B")
+            }
+        }
+    }
+
+    Component {
+        id: rtcUpdateConfirmDialogComponent
+
+        QGCSimpleMessageDialog {
+            title: qsTr("모듈 업데이트 확인")
+            text: qsTr("RTC 모듈을 업데이트 하시겠습니까?")
+            buttons: Dialog.Yes | Dialog.No
+            onAccepted: {
+                QGroundControl.linkManager.sendWebRTCCustomMessage("U")
             }
         }
     }

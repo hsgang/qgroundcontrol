@@ -12,6 +12,7 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
 #include <QtCore/QLoggingCategory>
+#include <QtCore/QDateTime>
 #include <QRandomGenerator>
 #include <set>
 #include <QtCore/QByteArray>
@@ -127,7 +128,72 @@ struct WebRTCStats {
     }
 };
 
+// RTC 모듈 버전 정보를 저장하기 위한 구조체
+struct RTCModuleVersionInfo {
+    QString currentVersion = "";
+    QString latestVersion = "";
+    qint64 timestamp = 0;
+    bool updateAvailable = false;
+    
+    // JSON에서 파싱하는 생성자
+    RTCModuleVersionInfo(const QJsonObject& json) {
+        currentVersion = json["current_version"].toString();
+        latestVersion = json["latest_version"].toString();
+        timestamp = json["timestamp"].toVariant().toLongLong();
+        updateAvailable = _compareVersions(currentVersion, latestVersion) < 0;
+    }
+    
+    // 기본 생성자
+    RTCModuleVersionInfo() = default;
+    
+    // 비교 연산자 (변경 감지용)
+    bool operator==(const RTCModuleVersionInfo& other) const {
+        return currentVersion == other.currentVersion &&
+               latestVersion == other.latestVersion &&
+               timestamp == other.timestamp &&
+               updateAvailable == other.updateAvailable;
+    }
+    
+    bool operator!=(const RTCModuleVersionInfo& other) const {
+        return !(*this == other);
+    }
+    
+    // 유효성 검사
+    bool isValid() const {
+        return !currentVersion.isEmpty() && !latestVersion.isEmpty() && timestamp > 0;
+    }
+    
+    // 디버그 출력용
+    QString toString() const {
+        return QString("Current: %1, Latest: %2, Update: %3, Time: %4")
+               .arg(currentVersion)
+               .arg(latestVersion)
+               .arg(updateAvailable ? "Available" : "Up to date")
+               .arg(QDateTime::fromMSecsSinceEpoch(timestamp).toString("yyyy-MM-dd hh:mm:ss"));
+    }
+    
+private:
+    // 버전 비교 함수 (semantic versioning 지원)
+    int _compareVersions(const QString& v1, const QString& v2) const {
+        QStringList parts1 = v1.split('.');
+        QStringList parts2 = v2.split('.');
+        
+        int maxLength = qMax(parts1.size(), parts2.size());
+        
+        for (int i = 0; i < maxLength; ++i) {
+            int num1 = (i < parts1.size()) ? parts1[i].toInt() : 0;
+            int num2 = (i < parts2.size()) ? parts2[i].toInt() : 0;
+            
+            if (num1 < num2) return -1;
+            if (num1 > num2) return 1;
+        }
+        
+        return 0; // 동일한 버전
+    }
+};
+
 Q_DECLARE_METATYPE(RTCModuleSystemInfo)
+Q_DECLARE_METATYPE(RTCModuleVersionInfo)
 Q_DECLARE_METATYPE(WebRTCStats)
 
 class TransferRateCalculator {
@@ -284,6 +350,7 @@ class WebRTCWorker : public QObject
     void videoStatsUpdated(double rate, qint64 packets, qint64 bytes);
     void rtcModuleSystemInfoUpdated(const RTCModuleSystemInfo& systemInfo);
     void webRtcStatsUpdated(const WebRTCStats& stats);
+    void rtcModuleVersionInfoUpdated(const RTCModuleVersionInfo& versionInfo);
 
    private slots:
     void _onSignalingConnected();
@@ -402,6 +469,7 @@ class WebRTCLink : public LinkInterface
     Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
     Q_PROPERTY(RTCModuleSystemInfo rtcModuleSystemInfo READ rtcModuleSystemInfo NOTIFY rtcModuleSystemInfoChanged)
     Q_PROPERTY(WebRTCStats webRtcStats READ webRtcStats NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(RTCModuleVersionInfo rtcModuleVersionInfo READ rtcModuleVersionInfo NOTIFY rtcModuleVersionInfoChanged)
 
    public:
     explicit WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent = nullptr);
@@ -424,6 +492,9 @@ class WebRTCLink : public LinkInterface
     
     // WebRTC 통계 정보 getter
     const WebRTCStats& webRtcStats() const { return _webRtcStats; }
+    
+    // RTC Module 버전 정보 getter
+    const RTCModuleVersionInfo& rtcModuleVersionInfo() const { return _rtcModuleVersionInfo; }
 
    protected:
     bool _connect() override;
@@ -439,6 +510,7 @@ class WebRTCLink : public LinkInterface
     void _onRtcStatusMessageChanged(const QString& message);
     void _onRtcModuleSystemInfoUpdated(const RTCModuleSystemInfo& systemInfo);
     void _onWebRtcStatsUpdated(const WebRTCStats& stats);
+    void _onRtcModuleVersionInfoUpdated(const RTCModuleVersionInfo& versionInfo);
 
    signals:
     void rtcStatusMessageChanged();
@@ -446,6 +518,7 @@ class WebRTCLink : public LinkInterface
     void videoStatsUpdated(double KBps, int packets, qint64 totalBytes);
     void rtcModuleSystemInfoChanged(const RTCModuleSystemInfo& systemInfo);
     void webRtcStatsChanged(const WebRTCStats& stats);
+    void rtcModuleVersionInfoChanged(const RTCModuleVersionInfo& versionInfo);
 
    private:
     const WebRTCConfiguration *_rtcConfig = nullptr;
@@ -458,4 +531,7 @@ class WebRTCLink : public LinkInterface
     
     // WebRTC 통계 정보
     WebRTCStats _webRtcStats;
+    
+    // RTC Module 버전 정보
+    RTCModuleVersionInfo _rtcModuleVersionInfo;
 };

@@ -68,6 +68,9 @@ class LinkManager : public QObject
     Q_PROPERTY(double rtcModuleNetworkTx READ rtcModuleNetworkTx NOTIFY rtcModuleSystemInfoChanged)
     Q_PROPERTY(QString rtcModuleNetworkInterface READ rtcModuleNetworkInterface NOTIFY rtcModuleSystemInfoChanged)
     Q_PROPERTY(bool webRtcLinkExists READ webRtcLinkExists NOTIFY webRtcLinkExistsChanged)
+    Q_PROPERTY(QString rtcModuleCurrentVersion READ rtcModuleCurrentVersion NOTIFY rtcModuleVersionInfoChanged)
+    Q_PROPERTY(QString rtcModuleLatestVersion READ rtcModuleLatestVersion NOTIFY rtcModuleVersionInfoChanged)
+    Q_PROPERTY(bool rtcModuleUpdateAvailable READ rtcModuleUpdateAvailable NOTIFY rtcModuleVersionInfoChanged)
 
 public:
     explicit LinkManager(QObject *parent = nullptr);
@@ -160,6 +163,11 @@ public:
     double rtcModuleNetworkTx() const;
     QString rtcModuleNetworkInterface() const;
     
+    // RTC Module 버전 정보
+    QString rtcModuleCurrentVersion() const;
+    QString rtcModuleLatestVersion() const;
+    bool rtcModuleUpdateAvailable() const;
+    
     // WebRTC 링크 존재 여부 확인
     bool webRtcLinkExists() const;
 
@@ -169,6 +177,7 @@ signals:
     void rtcStatusMessageChanged();
     void webRtcStatsChanged();
     void rtcModuleSystemInfoChanged(const RTCModuleSystemInfo& systemInfo);
+    void rtcModuleVersionInfoChanged(const RTCModuleVersionInfo& versionInfo);
     void webRtcLinkExistsChanged();
 
 private slots:
@@ -205,6 +214,9 @@ private:
     
     // RTC Module 시스템 정보 캐시
     RTCModuleSystemInfo _rtcModuleSystemInfo;
+    
+    // RTC Module 버전 정보 캐시
+    RTCModuleVersionInfo _rtcModuleVersionInfo;
     
     // WebRTC 통계 정보 캐시
     int _webRtcRtt = -1;

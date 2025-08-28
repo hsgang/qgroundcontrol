@@ -294,6 +294,11 @@ void QGCApplication::_initForNormalAppBoot()
     windowIcon = _qmlAppEngine->interceptUrl(windowIcon, QQmlAbstractUrlInterceptor::UrlString);
     // The interceptor needs "qrc:/path" but QIcon expects ":/path"
     setWindowIcon(QIcon(":" + windowIcon.path()));
+#elif defined(Q_OS_WIN)
+    QUrl windowIcon = QUrl("qrc:/res/qgroundcontrol.ico");
+    windowIcon = _qmlAppEngine->interceptUrl(windowIcon, QQmlAbstractUrlInterceptor::UrlString);
+    // The interceptor needs "qrc:/path" but QIcon expects ":/path"
+    setWindowIcon(QIcon(":" + windowIcon.path()));
 #endif
 
     // Safe to show popup error messages now that main window is created

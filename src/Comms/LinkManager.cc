@@ -180,6 +180,11 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
             qCDebug(LinkManagerLog) << "WebRTC Stats Updated:" << stats.toString();
             emit webRtcStatsChanged();
         });
+        connect(w, &WebRTCLink::rtcModuleVersionInfoChanged, this, [this](const RTCModuleVersionInfo& versionInfo) {
+            _rtcModuleVersionInfo = versionInfo;
+            qCDebug(LinkManagerLog) << "RTC Module Version Info Updated:" << versionInfo.toString();
+            emit rtcModuleVersionInfoChanged(versionInfo);
+        });
         // WebRTC 링크가 생성되면 상태 업데이트
         _updateWebRtcLinkStatus();
         qCDebug(LinkManagerLog) << "WebRTCLink signals connected";
@@ -254,6 +259,7 @@ void LinkManager::_linkDisconnected()
         disconnect(w, &WebRTCLink::rtcStatusMessageChanged, this, &LinkManager::rtcStatusMessageChanged);
         disconnect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, nullptr);
         disconnect(w, &WebRTCLink::webRtcStatsChanged, this, nullptr);
+        disconnect(w, &WebRTCLink::rtcModuleVersionInfoChanged, this, nullptr);
         wasWebRTCLink = true;
         //disconnect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
@@ -846,6 +852,21 @@ double LinkManager::rtcModuleNetworkTx() const
 QString LinkManager::rtcModuleNetworkInterface() const
 {
     return _rtcModuleSystemInfo.networkInterface;
+}
+
+QString LinkManager::rtcModuleCurrentVersion() const
+{
+    return _rtcModuleVersionInfo.currentVersion;
+}
+
+QString LinkManager::rtcModuleLatestVersion() const
+{
+    return _rtcModuleVersionInfo.latestVersion;
+}
+
+bool LinkManager::rtcModuleUpdateAvailable() const
+{
+    return _rtcModuleVersionInfo.updateAvailable;
 }
 
 LogReplayLink *LinkManager::startLogReplay(const QString &logFile)

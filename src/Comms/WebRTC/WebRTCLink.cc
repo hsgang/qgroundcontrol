@@ -191,8 +191,8 @@ void WebRTCWorker::start()
     
     // SignalingServerManager에 peer 등록 요청
     if (_signalingManager) {
-        qCDebug(WebRTCLinkLog) << "Requesting peer registration to SignalingServerManager";
-        qCDebug(WebRTCLinkLog) << "Peer ID:" << _config->peerId() << " Room:" << _config->roomId();
+        //qCDebug(WebRTCLinkLog) << "Requesting peer registration to SignalingServerManager";
+        //qCDebug(WebRTCLinkLog) << "Peer ID:" << _config->peerId() << " Room:" << _config->roomId();
         _signalingManager->registerPeer(_config->peerId(), _config->roomId());
     } else {
         qCWarning(WebRTCLinkLog) << "Signaling manager not available";
@@ -372,7 +372,7 @@ void WebRTCWorker::_onSignalingMessageReceived(const QJsonObject& message)
 
 void WebRTCWorker::_onRegistrationSuccessful()
 {
-    qCDebug(WebRTCLinkLog) << "Registration successful signal received";
+    //qCDebug(WebRTCLinkLog) << "Registration successful signal received";
     emit rtcStatusMessageChanged("시그널링 서버 등록 완료");
 }
 
@@ -617,7 +617,7 @@ void WebRTCWorker::_setupPeerConnection()
             }
         });
 
-        qCDebug(WebRTCLinkLog) << "Peer connection created successfully";
+        //qCDebug(WebRTCLinkLog) << "Peer connection created successfully";
 
     } catch (const std::exception& e) {
         qCDebug(WebRTCLinkLog) << "Failed to create peer connection:" << e.what();
@@ -770,6 +770,16 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
                         emit rtcModuleSystemInfoUpdated(systemInfo);
                     } else {
                         qCWarning(WebRTCLinkLog) << "Invalid RTC module system info received";
+                    }
+                } else if (jsonObj.contains("type") && jsonObj["type"].toString() == "version_check") {
+                    // RTCModuleVersionInfo 구조체로 파싱하여 효율적으로 전달
+                    RTCModuleVersionInfo versionInfo(jsonObj);
+                    
+                    if (versionInfo.isValid()) {
+                        qCDebug(WebRTCLinkLog) << "RTC Module Version Info:" << versionInfo.toString();
+                        emit rtcModuleVersionInfoUpdated(versionInfo);
+                    } else {
+                        qCWarning(WebRTCLinkLog) << "Invalid RTC module version info received";
                     }
                 } else {
                     // 다른 타입의 JSON 데이터인 경우
@@ -1379,7 +1389,7 @@ int WebRTCWorker::_calculateReconnectDelay() const
 void WebRTCWorker::_resetReconnectAttempts()
 {
     _reconnectAttempts = 0;
-    qCDebug(WebRTCLinkLog) << "Reconnect attempts reset";
+    //qCDebug(WebRTCLinkLog) << "Reconnect attempts reset";
 }
 
 bool WebRTCWorker::isWaitingForReconnect() const
@@ -1396,6 +1406,7 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     // 메타타입 등록
     qRegisterMetaType<RTCModuleSystemInfo>("RTCModuleSystemInfo");
     qRegisterMetaType<WebRTCStats>("WebRTCStats");
+    qRegisterMetaType<RTCModuleVersionInfo>("RTCModuleVersionInfo");
     
     _rtcConfig = qobject_cast<const WebRTCConfiguration*>(config.get());
     
@@ -1419,6 +1430,7 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     connect(_worker, &WebRTCWorker::rtcStatusMessageChanged, this, &WebRTCLink::_onRtcStatusMessageChanged, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::rtcModuleSystemInfoUpdated, this, &WebRTCLink::_onRtcModuleSystemInfoUpdated, Qt::QueuedConnection);
     connect(_worker, &WebRTCWorker::webRtcStatsUpdated, this, &WebRTCLink::_onWebRtcStatsUpdated, Qt::QueuedConnection);
+    connect(_worker, &WebRTCWorker::rtcModuleVersionInfoUpdated, this, &WebRTCLink::_onRtcModuleVersionInfoUpdated, Qt::QueuedConnection);
 
     _workerThread->start();
 }
@@ -1567,6 +1579,16 @@ void WebRTCLink::_onRtcModuleSystemInfoUpdated(const RTCModuleSystemInfo& system
         _rtcModuleSystemInfo = systemInfo;
         //qCDebug(WebRTCLinkLog) << "RTC Module System Info Updated:" << systemInfo.toString();
         emit rtcModuleSystemInfoChanged(systemInfo);
+    }
+}
+
+void WebRTCLink::_onRtcModuleVersionInfoUpdated(const RTCModuleVersionInfo& versionInfo)
+{    
+    // 구조체 비교를 통한 효율적인 변경 감지
+    if (_rtcModuleVersionInfo != versionInfo) {
+        _rtcModuleVersionInfo = versionInfo;
+        qCDebug(WebRTCLinkLog) << "RTC Module Version Info Updated:" << versionInfo.toString();
+        emit rtcModuleVersionInfoChanged(versionInfo);
     }
 }
 
