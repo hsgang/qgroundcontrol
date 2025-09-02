@@ -17686,12 +17686,12 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="171"/>
         <source>You are currently connected to a vehicle but it did not return the full parameter list. </source>
-        <translation>현재 기체에 연결되어 있으나 전체 파라미터를 읽어 오지 못했습니다 </translation>
+        <translation>기체에 연결되어 있으나 전체 파라미터를 읽어 오지 못했습니다. </translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="172"/>
         <source>As a result, the full set of vehicle setup options are not available.</source>
-        <translation>그러므로, 기체에 대한 모든 설정옵션을 열 수 없습니다</translation>
+        <translation>기체에 대한 모든 설정옵션을 열 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/SetupView.qml" line="231"/>

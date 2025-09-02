@@ -168,7 +168,7 @@ void WebRTCWorker::initializeLogger()
 
 void WebRTCWorker::start()
 {
-    qCDebug(WebRTCLinkLog) << "Starting WebRTC worker";
+    //qCDebug(WebRTCLinkLog) << "Starting WebRTC worker";
     
     // Reset shutdown state for new connection
     _isShuttingDown.store(false);
@@ -838,7 +838,7 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
     auto desc = track->description();
 
     if (desc.type() == "video") {
-        qCDebug(WebRTCLinkLog) << "Video track received";
+        qCDebug(WebRTCLinkLog) << "[WebRTC] Video track received";
         _videoTrack = track;
         emit videoTrackReceived();
 
