@@ -19,16 +19,14 @@ const QString WebRTCWorker::kDataChannelLabel = "mavlink";
 WebRTCConfiguration::WebRTCConfiguration(const QString &name, QObject *parent)
     : LinkConfiguration(name, parent)
 {
-    _roomId = _generateRandomId();
-    _peerId = "app_"+_roomId;
-    _targetPeerId = "vehicle_"+_roomId;
+    _gcsId = "gcs_" + _generateRandomId();
+    _targetDroneId = "";
 }
 
 WebRTCConfiguration::WebRTCConfiguration(const WebRTCConfiguration *copy, QObject *parent)
     : LinkConfiguration(copy, parent)
-      , _roomId(copy->_roomId)
-      , _peerId(copy->_peerId)
-      , _targetPeerId(copy->_targetPeerId)
+      , _gcsId(copy->_gcsId)
+      , _targetDroneId(copy->_targetDroneId)
 {
 }
 
@@ -39,52 +37,40 @@ void WebRTCConfiguration::copyFrom(const LinkConfiguration *source)
     LinkConfiguration::copyFrom(source);
     auto* src = qobject_cast<const WebRTCConfiguration*>(source);
     if (src) {
-        _roomId = src->_roomId;
-        _peerId = src->_peerId;
-        _targetPeerId = src->_targetPeerId;
+        _gcsId = src->_gcsId;
+        _targetDroneId = src->_targetDroneId;
     }
 }
 
 void WebRTCConfiguration::loadSettings(QSettings &settings, const QString &root)
 {
     settings.beginGroup(root);
-    _roomId = settings.value("roomId", "").toString();
-    _peerId = settings.value("peerId", _generateRandomId()).toString();
-    _targetPeerId = settings.value("targetPeerId", "").toString();
+    _gcsId = settings.value("gcsId", "gcs_" + _generateRandomId()).toString();
+    _targetDroneId = settings.value("targetDroneId", "").toString();
     settings.endGroup();
 }
 
 void WebRTCConfiguration::saveSettings(QSettings &settings, const QString &root) const
 {
     settings.beginGroup(root);
-    settings.setValue("roomId", _roomId);
-    settings.setValue("peerId", _peerId);
-    settings.setValue("targetPeerId", _targetPeerId);
+    settings.setValue("gcsId", _gcsId);
+    settings.setValue("targetDroneId", _targetDroneId);
     settings.endGroup();
 }
 
-void WebRTCConfiguration::setRoomId(const QString &id)
+void WebRTCConfiguration::setGcsId(const QString &id)
 {
-    if (_roomId != id) {
-        _roomId = id;
-        emit roomIdChanged();
+    if (_gcsId != id) {
+        _gcsId = id;
+        emit gcsIdChanged();
     }
 }
 
-
-void WebRTCConfiguration::setPeerId(const QString &id)
+void WebRTCConfiguration::setTargetDroneId(const QString &id)
 {
-    if (_peerId != id) {
-        _peerId = id;
-        emit peerIdChanged();
-    }
-}
-
-void WebRTCConfiguration::setTargetPeerId(const QString &id)
-{
-    if (_targetPeerId != id) {
-        _targetPeerId = id;
-        emit targetPeerIdChanged();
+    if (_targetDroneId != id) {
+        _targetDroneId = id;
+        emit targetDroneIdChanged();
     }
 }
 
@@ -182,18 +168,16 @@ void WebRTCWorker::start()
         _pendingCandidates.clear();
     }
     
-    _setupPeerConnection();
+    // Store current GCS and target drone information
+    _currentGcsId = _config->gcsId();
+    _currentTargetDroneId = _config->targetDroneId();
+    _gcsRegistered = false;
     
-    // Store current room and peer information
-    _currentRoomId = _config->roomId();
-    _currentPeerId = _config->peerId();
-    _roomLeftSuccessfully = false;
-    
-    // SignalingServerManager에 peer 등록 요청
+    // SignalingServerManager에 GCS 등록 요청
     if (_signalingManager) {
-        //qCDebug(WebRTCLinkLog) << "Requesting peer registration to SignalingServerManager";
-        //qCDebug(WebRTCLinkLog) << "Peer ID:" << _config->peerId() << " Room:" << _config->roomId();
-        _signalingManager->registerPeer(_config->peerId(), _config->roomId());
+        qCDebug(WebRTCLinkLog) << "Requesting GCS registration to SignalingServerManager";
+        qCDebug(WebRTCLinkLog) << "GCS ID:" << _config->gcsId() << " Target Drone:" << _config->targetDroneId();
+        _signalingManager->registerGCS(_config->gcsId(), _config->targetDroneId());
     } else {
         qCWarning(WebRTCLinkLog) << "Signaling manager not available";
     }
@@ -278,11 +262,11 @@ void WebRTCWorker::disconnectLink()
     }
     _waitingForReconnect.store(false);
     
-    // Leave the room if we're currently in one
-    if (_signalingManager && !_currentRoomId.isEmpty() && !_currentPeerId.isEmpty()) {
-        qCDebug(WebRTCLinkLog) << "Leaving room:" << _currentRoomId << "with peer:" << _currentPeerId;
-        _signalingManager->leavePeer(_currentPeerId, _currentRoomId);
-        emit rtcStatusMessageChanged("시그널링 서버에서 채널 해제중...");
+    // Unregister GCS if we're currently registered
+    if (_signalingManager && !_currentGcsId.isEmpty()) {
+        qCDebug(WebRTCLinkLog) << "Unregistering GCS:" << _currentGcsId;
+        _signalingManager->unregisterGCS(_currentGcsId);
+        emit rtcStatusMessageChanged("시그널링 서버에서 GCS 등록 해제중...");
         
         // Give some time for the leave message to be sent before cleanup
         QTimer::singleShot(1000, this, [this]() {
@@ -333,11 +317,11 @@ void WebRTCWorker::_setupSignalingManager()
     connect(_signalingManager, &SignalingServerManager::registrationFailed,
             this, &WebRTCWorker::_onRegistrationFailed, Qt::QueuedConnection);
     
-    // Connect room management signals
-    connect(_signalingManager, &SignalingServerManager::peerLeftSuccessfully,
-            this, &WebRTCWorker::_onPeerLeftSuccessfully, Qt::QueuedConnection);
-    connect(_signalingManager, &SignalingServerManager::peerLeaveFailed,
-            this, &WebRTCWorker::_onPeerLeaveFailed, Qt::QueuedConnection);
+    // Connect GCS management signals
+    connect(_signalingManager, &SignalingServerManager::gcsUnregisteredSuccessfully,
+            this, &WebRTCWorker::_onGcsUnregisteredSuccessfully, Qt::QueuedConnection);
+    connect(_signalingManager, &SignalingServerManager::gcsUnregisterFailed,
+            this, &WebRTCWorker::_onGcsUnregisterFailed, Qt::QueuedConnection);
 }
 
 void WebRTCWorker::_onSignalingConnected()
@@ -383,18 +367,18 @@ void WebRTCWorker::_onRegistrationFailed(const QString& reason)
     emit errorOccurred(QString("Registration failed: %1").arg(reason));
 }
 
-void WebRTCWorker::_onPeerLeftSuccessfully(const QString& peerId, const QString& roomId)
+void WebRTCWorker::_onGcsUnregisteredSuccessfully(const QString& gcsId)
 {
-    if (peerId != _currentPeerId || roomId != _currentRoomId) {
-        return; // Not our peer/room
+    if (gcsId != _currentGcsId) {
+        return; // Not our GCS
     }
     
-    qCDebug(WebRTCLinkLog) << "Successfully left room:" << roomId;
-    _roomLeftSuccessfully = true;
+    qCDebug(WebRTCLinkLog) << "Successfully unregistered GCS:" << gcsId;
+    _gcsRegistered = false;
     
-    // Clear current room information
-    _currentRoomId.clear();
-    _currentPeerId.clear();
+    // Clear current GCS information
+    _currentGcsId.clear();
+    _currentTargetDroneId.clear();
     
     // Reset connection state
     _dataChannelOpened.store(false);
@@ -407,9 +391,9 @@ void WebRTCWorker::_onPeerLeftSuccessfully(const QString& peerId, const QString&
         _pendingCandidates.clear();
     }
     
-    qCDebug(WebRTCLinkLog) << "Signaling room left successfully";
+    qCDebug(WebRTCLinkLog) << "GCS unregistered successfully";
     
-    emit rtcStatusMessageChanged("시그널링 서버에서 채널 해제");
+    emit rtcStatusMessageChanged("시그널링 서버에서 GCS 등록 해제");
     
     // 자동 재연결 중일 때는 완전한 정리를 하지 않음
     if (_waitingForReconnect.load()) {
@@ -418,18 +402,18 @@ void WebRTCWorker::_onPeerLeftSuccessfully(const QString& peerId, const QString&
     }
 }
 
-void WebRTCWorker::_onPeerLeaveFailed(const QString& peerId, const QString& reason)
+void WebRTCWorker::_onGcsUnregisterFailed(const QString& gcsId, const QString& reason)
 {
-    if (peerId != _currentPeerId) {
-        return; // Not our peer
+    if (gcsId != _currentGcsId) {
+        return; // Not our GCS
     }
     
-    qCWarning(WebRTCLinkLog) << "Failed to leave room:" << reason;
-    emit rtcStatusMessageChanged(QString("시그널링 서버에서 채널 해제 실패: %1").arg(reason));
+    qCWarning(WebRTCLinkLog) << "Failed to unregister GCS:" << reason;
+    emit rtcStatusMessageChanged(QString("시그널링 서버에서 GCS 등록 해제 실패: %1").arg(reason));
     
-    // Still clear the room info and proceed with cleanup
-    _currentRoomId.clear();
-    _currentPeerId.clear();
+    // Still clear the GCS info and proceed with cleanup
+    _currentGcsId.clear();
+    _currentTargetDroneId.clear();
     
     // Reset connection state even on failure
     _dataChannelOpened.store(false);
@@ -444,7 +428,7 @@ void WebRTCWorker::_onPeerLeaveFailed(const QString& peerId, const QString& reas
     
     // 자동 재연결 중일 때는 완전한 정리를 하지 않음
     if (_waitingForReconnect.load()) {
-        qCDebug(WebRTCLinkLog) << "Auto-reconnection in progress, skipping complete cleanup after leave failure";
+        qCDebug(WebRTCLinkLog) << "Auto-reconnection in progress, skipping complete cleanup after unregister failure";
         return;
     }
 }
@@ -466,7 +450,7 @@ void WebRTCWorker::reconnectToRoom()
     }
     
     _reconnectAttempts++;
-    qCDebug(WebRTCLinkLog) << "Attempting to reconnect to room (attempt" << _reconnectAttempts << "/" << MAX_RECONNECT_ATTEMPTS << ")";
+    qCDebug(WebRTCLinkLog) << "Attempting to reconnect to signaling server (attempt" << _reconnectAttempts << "/" << MAX_RECONNECT_ATTEMPTS << ")";
     
     // SignalingServerManager가 연결 상태를 자동으로 관리하므로 여기서는 확인만
     qCDebug(WebRTCLinkLog) << "Requesting reconnection, SignalingServerManager handles connection state";
@@ -487,14 +471,14 @@ void WebRTCWorker::reconnectToRoom()
     // Setup new peer connection
     _setupPeerConnection();
     
-    // Store room and peer information again
-    _currentRoomId = _config->roomId();
-    _currentPeerId = _config->peerId();
-    _roomLeftSuccessfully = false;
+    // Store GCS and target drone information again
+    _currentGcsId = _config->gcsId();
+    _currentTargetDroneId = _config->targetDroneId();
+    _gcsRegistered = false;
     
     if (_signalingManager) {
-        qCDebug(WebRTCLinkLog) << "Reconnection peer ID:" << _config->peerId() << " room:" << _config->roomId();
-        _signalingManager->registerPeer(_config->peerId(), _config->roomId());
+        qCDebug(WebRTCLinkLog) << "Reconnection GCS ID:" << _config->gcsId() << " target drone:" << _config->targetDroneId();
+        _signalingManager->registerGCS(_config->gcsId(), _config->targetDroneId());
         emit rtcStatusMessageChanged(QString("재연결 시도 중 (%1/%2)").arg(_reconnectAttempts).arg(MAX_RECONNECT_ATTEMPTS));
     } else {
         qCWarning(WebRTCLinkLog) << "Signaling manager not available for reconnection";
@@ -631,8 +615,8 @@ void WebRTCWorker::handleLocalDescription(const QString& descType, const QString
     qCDebug(WebRTCLinkLog) << "[SDP] Local description created, type:" << descType;
 
     QJsonObject message;
-    message["id"] = _config->peerId();
-    message["to"] = _config->targetPeerId();
+    message["id"] = _currentGcsId;
+    message["to"] = _currentTargetDroneId;
     message["type"] = descType;
     message["sdp"] = sdpContent;
 
@@ -645,8 +629,8 @@ void WebRTCWorker::handleLocalCandidate(const QString& candidateStr, const QStri
     qCDebug(WebRTCLinkLog) << "[ICE] Local candidate generated:" << candidateStr.left(50) << "...";
 
     QJsonObject message;
-    message["id"] = _config->peerId();
-    message["to"] = _config->targetPeerId();
+    message["id"] = _currentGcsId;
+    message["to"] = _currentTargetDroneId;
     message["type"] = "candidate";
     message["candidate"] = candidateStr;
     message["sdpMid"] = mid;
@@ -884,76 +868,176 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
     //     return;
     // }
 
-    try {
-        if (type == "offer") {
-            qCDebug(WebRTCLinkLog) << "[SIGNALING] Processing OFFER as answerer";
+    // offer 타입은 _onWebRTCOfferReceived에서 처리됨
+    
+    if (type == "answer") {
+        qCDebug(WebRTCLinkLog) << "[SIGNALING] Processing ANSWER";
 
-            try {
-                QString sdp = message["sdp"].toString();
-                rtc::Description offer(sdp.toStdString(), "offer");
+        try {
+            QString sdp = message["sdp"].toString();
+            rtc::Description answer(sdp.toStdString(), "answer");
 
-                if (!_peerConnection) {
-                    qCWarning(WebRTCLinkLog) << "[OFFER] No peer connection, setting up new one";
-                    _setupPeerConnection();
-                }
-
-                _peerConnection->setRemoteDescription(offer);
-                _remoteDescriptionSet.store(true);
-                _processPendingCandidates();
-
-                qCDebug(WebRTCLinkLog) << "[OFFER] Processed successfully";
-
-            } catch (const std::exception& e) {
-                qCDebug(WebRTCLinkLog) << "[OFFER] Processing failed:" << e.what();
-
-                // 실패 시 재시도 로직
-                QTimer::singleShot(1000, this, [this, message]() {
-                    qCDebug(WebRTCLinkLog) << "[OFFER] Retrying after failure";
-                    _setupPeerConnection();
-                });
+            if (!_peerConnection) {
+                qCWarning(WebRTCLinkLog) << "[ANSWER] No peer connection available";
+                return;
             }
 
-        } else if (type == "answer") {
-            qCDebug(WebRTCLinkLog) << "[SIGNALING] Processing ANSWER";
+            _peerConnection->setRemoteDescription(answer);
+            _remoteDescriptionSet.store(true);
+            _processPendingCandidates();
 
-            try {
-                QString sdp = message["sdp"].toString();
-                rtc::Description answer(sdp.toStdString(), "answer");
+            qCDebug(WebRTCLinkLog) << "[ANSWER] Processed successfully";
 
-                if (!_peerConnection) {
-                    qCWarning(WebRTCLinkLog) << "[ANSWER] No peer connection available";
-                    return;
-                }
-
-                _peerConnection->setRemoteDescription(answer);
-                _remoteDescriptionSet.store(true);
-                _processPendingCandidates();
-
-                qCDebug(WebRTCLinkLog) << "[ANSWER] Processed successfully";
-
-            } catch (const std::exception& e) {
-                qCWarning(WebRTCLinkLog) << "[ANSWER] Processing failed:" << e.what();
-            }
-
-        } else if (type == "candidate") {
-            _handleCandidate(message);
-
-        } else if (type == "peerDisconnected") {
-            QString disconnectedId = message["id"].toString();
-            if (disconnectedId == _config->targetPeerId()) {
-                qCWarning(WebRTCLinkLog) << "Peer disconnected by signaling server:" << disconnectedId;
-
-                _handlePeerDisconnection();
-            }
-
-        } else if (type == "registered") {
-            qCDebug(WebRTCLinkLog) << "Successfully registered with signaling server";
-            emit rtcStatusMessageChanged("기체의 연결을 기다리는 중...");
+        } catch (const std::exception& e) {
+            qCWarning(WebRTCLinkLog) << "[ANSWER] Processing failed:" << e.what();
         }
 
-    } catch (const std::exception& e) {
-        emit errorOccurred(QString("Error handling signaling message: %1").arg(e.what()));
+    } else if (type == "peerDisconnected") {
+        QString disconnectedId = message["id"].toString();
+        if (disconnectedId == _currentTargetDroneId) {
+            qCWarning(WebRTCLinkLog) << "Peer disconnected by signaling server:" << disconnectedId;
+
+            _handlePeerDisconnection();
+        }
+
+    } else if (type == "registered") {
+        _onGCSRegistered(message);
+    } else if (type == "offer") {
+        _onWebRTCOfferReceived(message);
+    } else if (type == "candidate") {
+        _handleICECandidate(message);
+    } else if (type == "ping") {
+        _sendPongResponse(message);
+    } else if (type == "error") {
+        _onErrorReceived(message);
     }
+}
+
+void WebRTCWorker::_onGCSRegistered(const QJsonObject& message)
+{
+    if (message["success"].toBool()) {
+        QString pairedDroneId = message["pairedWith"].toString();
+        qCDebug(WebRTCLinkLog) << "GCS registered successfully, paired with drone:" << pairedDroneId;
+        
+        // 드론과 페어링 완료, 드론의 WebRTC offer 대기
+        emit rtcStatusMessageChanged("드론과 페어링 완료, WebRTC 연결 대기 중...");
+        
+        // GCS는 offer를 받을 준비만 하고, 직접 연결을 시작하지 않음
+        _prepareForWebRTCOffer();
+    } else {
+        QString reason = message["reason"].toString();
+        qCWarning(WebRTCLinkLog) << "GCS registration failed:" << reason;
+        emit rtcStatusMessageChanged(QString("등록 실패: %1").arg(reason));
+        emit errorOccurred(QString("등록 실패: %1").arg(reason));
+    }
+}
+
+void WebRTCWorker::_prepareForWebRTCOffer()
+{
+    // GCS는 answerer 역할이므로 offer를 기다림
+    // PeerConnection은 offer를 받을 때 설정 (중복 설정 방지)
+    qCDebug(WebRTCLinkLog) << "GCS prepared as WebRTC answerer, waiting for drone offer";
+}
+
+void WebRTCWorker::_onWebRTCOfferReceived(const QJsonObject& message)
+{
+    QString fromDroneId = message["from"].toString();
+    
+    // 표준 WebRTC offer 형식 처리
+    QString sdp = message["sdp"].toString();
+    if (sdp.isEmpty()) {
+        qCWarning(WebRTCLinkLog) << "Invalid offer format: missing 'sdp' field";
+        return;
+    }
+    
+    qCDebug(WebRTCLinkLog) << "Received WebRTC offer from drone:" << fromDroneId;
+    
+    try {
+        // WebRTC offer 처리
+        rtc::Description droneOffer(sdp.toStdString(), "offer");
+        
+        // PeerConnection이 없으면 새로 생성
+        if (!_peerConnection) {
+            qCDebug(WebRTCLinkLog) << "Creating new PeerConnection for drone offer";
+            _setupPeerConnection();
+        } else {
+            qCDebug(WebRTCLinkLog) << "Using existing PeerConnection for drone offer";
+        }
+        
+        // 드론의 offer를 remote description으로 설정
+        _peerConnection->setRemoteDescription(droneOffer);
+        _remoteDescriptionSet.store(true);
+        
+        // pending candidates 처리
+        _processPendingCandidates();
+        
+        qCDebug(WebRTCLinkLog) << "Drone offer processed successfully, creating answer";
+        
+        // GCS는 answerer이므로 answer 생성
+        _peerConnection->setLocalDescription(rtc::Description::Type::Answer);
+        
+        emit rtcStatusMessageChanged("드론으로부터 WebRTC offer 수신, 연결 설정 중...");
+        
+    } catch (const std::exception& e) {
+        qCWarning(WebRTCLinkLog) << "Failed to process drone offer:" << e.what();
+        emit errorOccurred(QString("드론 offer 처리 실패: %1").arg(e.what()));
+    }
+}
+
+void WebRTCWorker::_handleICECandidate(const QJsonObject& message)
+{
+    QString fromDroneId = message["from"].toString();
+    
+    // 표준 WebRTC ICE candidate 형식 처리
+    QString candidateStr = message["candidate"].toString();
+    QString sdpMid = message["sdpMid"].toString();
+    
+    if (candidateStr.isEmpty() || sdpMid.isEmpty()) {
+        qCWarning(WebRTCLinkLog) << "Invalid ICE candidate format: missing 'candidate' or 'sdpMid' field";
+        return;
+    }
+    
+    if (!_peerConnection) {
+        qCWarning(WebRTCLinkLog) << "No peer connection available for candidate";
+        return;
+    }
+    
+    qCDebug(WebRTCLinkLog) << "Received ICE candidate from:" << fromDroneId;
+    
+    try {
+        rtc::Candidate iceCandidate(candidateStr.toStdString(), sdpMid.toStdString());
+        
+        if (_remoteDescriptionSet.load(std::memory_order_acquire)) {
+            qCDebug(WebRTCLinkLog) << "Adding ICE candidate immediately";
+            _peerConnection->addRemoteCandidate(iceCandidate);
+        } else {
+            // Remote description이 설정되지 않았으면 대기
+            QMutexLocker locker(&_candidateMutex);
+            _pendingCandidates.push_back(iceCandidate);
+            qCDebug(WebRTCLinkLog) << "ICE candidate queued, waiting for remote description";
+        }
+    } catch (const std::exception& e) {
+        qCWarning(WebRTCLinkLog) << "Failed to process ICE candidate:" << e.what();
+    }
+}
+
+void WebRTCWorker::_sendPongResponse(const QJsonObject& pingMsg)
+{
+    QJsonObject pongMsg;
+    pongMsg["type"] = "pong";
+    pongMsg["timestamp"] = pingMsg["timestamp"];
+    
+    _sendSignalingMessage(pongMsg);
+}
+
+void WebRTCWorker::_onErrorReceived(const QJsonObject& message)
+{
+    QString errorMessage = message["message"].toString();
+    QString errorCode = message["code"].toString();
+    
+    qCWarning(WebRTCLinkLog) << "Signaling server error:" << errorCode << "-" << errorMessage;
+    emit rtcStatusMessageChanged(QString("시그널링 서버 오류: %1").arg(errorMessage));
+    emit errorOccurred(QString("시그널링 서버 오류: %1").arg(errorMessage));
 }
 
 void WebRTCWorker::_handlePeerDisconnection()
@@ -963,11 +1047,11 @@ void WebRTCWorker::_handlePeerDisconnection()
     _dataChannelOpened.store(false);
     _isDisconnecting = false;
 
-    // WebRTC 연결이 끊어지면 방에서 나가기
-    if (_signalingManager && !_currentRoomId.isEmpty() && !_currentPeerId.isEmpty()) {
-        qCDebug(WebRTCLinkLog) << "Leaving room due to peer disconnection:" << _currentRoomId;
-        _signalingManager->leavePeer(_currentPeerId, _currentRoomId);
-        emit rtcStatusMessageChanged("피어 연결 해제 - 방에서 나가는 중...");
+    // WebRTC 연결이 끊어지면 GCS 등록 해제
+    if (_signalingManager && !_currentGcsId.isEmpty()) {
+        qCDebug(WebRTCLinkLog) << "Unregistering GCS due to peer disconnection:" << _currentGcsId;
+        _signalingManager->unregisterGCS(_currentGcsId);
+        emit rtcStatusMessageChanged("피어 연결 해제 - GCS 등록 해제 중...");
     }
 
     _cleanupForReconnection();
@@ -1076,37 +1160,7 @@ void WebRTCWorker::_cleanupForReconnection()
     qCDebug(WebRTCLinkLog) << "[CLEANUP] Cleanup completed, ready for new connection";
 }
 
-void WebRTCWorker::_handleCandidate(const QJsonObject& message)
-{
-    if (!_peerConnection) {
-        qCWarning(WebRTCLinkLog) << "No peer connection available for candidate";
-        return;
-    }
 
-    QString candidateStr = message["candidate"].toString();
-    QString mid = message["sdpMid"].toString();
-
-    if (candidateStr.isEmpty()) {
-        qCWarning(WebRTCLinkLog) << "Empty candidate string received";
-        return;
-    }
-
-    try {
-        rtc::Candidate candidate(candidateStr.toStdString(), mid.toStdString());
-
-        if (_remoteDescriptionSet.load(std::memory_order_acquire)) {
-            qCDebug(WebRTCLinkLog) << "Adding remote candidate immediately";
-            _peerConnection->addRemoteCandidate(candidate);
-
-        } else {
-            QMutexLocker locker(&_candidateMutex);
-            _pendingCandidates.push_back(candidate);
-            qCDebug(WebRTCLinkLog) << "RemoteDescription not set → Candidate queued";
-        }
-    } catch (const std::exception& e) {
-        qCWarning(WebRTCLinkLog) << "Failed to process candidate:" << e.what();
-    }
-}
 
 void WebRTCWorker::_sendSignalingMessage(const QJsonObject& message)
 {
@@ -1290,10 +1344,10 @@ void WebRTCWorker::_cleanupComplete()
     _isShuttingDown.store(true);
     _cleanup();
     
-    // Clear room information
-    _currentRoomId.clear();
-    _currentPeerId.clear();
-    _roomLeftSuccessfully = false;
+    // Clear GCS information
+    _currentGcsId.clear();
+    _currentTargetDroneId.clear();
+    _gcsRegistered = false;
     
     // Check signaling server connection status after cleanup
     if (_signalingManager) {
@@ -1602,3 +1656,5 @@ void WebRTCLink::sendCustomMessage(const QString& message)
         qCWarning(WebRTCLinkLog) << "Cannot send custom message: worker not available";
     }
 }
+
+

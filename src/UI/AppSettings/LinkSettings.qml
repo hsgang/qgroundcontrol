@@ -311,7 +311,7 @@ SettingsPage {
                            (editingConfig.linkType === LinkConfiguration.TypeTcp ?
                            qsTr("TCP_") + linkSettingsLoader.subEditConfig.host + ":" + linkSettingsLoader.subEditConfig.port.toString() :
                            (editingConfig.linkType === LinkConfiguration.TypeWebRTC ?
-                           qsTr("WEBRTC_") + linkSettingsLoader.subEditConfig.peerId :
+                           qsTr("RTC_") + linkSettingsLoader.subEditConfig.targetDroneId :
                            qsTr("Other"))))
                         ) : editingConfig.name
                 }

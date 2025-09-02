@@ -19,9 +19,8 @@ ColumnLayout {
     width:  _columnLayoutWidth
 
     function saveSettings() {
-        subEditConfig.roomId = roomIdField.text
-        subEditConfig.peerId = peerIdField.text
-        subEditConfig.targetPeerId = targetPeerIdField.text
+        subEditConfig.gcsId = gcsIdField.text
+        subEditConfig.targetDroneId = targetDroneIdField.text
     }
 
     ColumnLayout {
@@ -30,29 +29,13 @@ ColumnLayout {
 
         RowLayout {
             spacing: _colSpacing
-            QGCLabel { text: qsTr("ID") }
+            QGCLabel { text: qsTr("GCS ID") }
             QGCTextField {
-                id:                     roomIdField
+                id:                     gcsIdField
                 Layout.preferredWidth:  _secondColumnWidth * 0.7
                 Layout.fillWidth:       true
-                text:                   subEditConfig.roomId
-
-                onEditingFinished: {
-                    peerIdField.text = "app_" + text
-                    targetPeerIdField.text = "vehicle_" + text
-                    saveSettings()
-                }
-            }
-        }
-
-        RowLayout {
-            spacing: _colSpacing
-            QGCLabel { text: qsTr("APP ID (자동설정)") }
-            QGCTextField {
-                id:                     peerIdField
-                Layout.preferredWidth:  _secondColumnWidth * 0.7
-                Layout.fillWidth:       true
-                text:                   subEditConfig.peerId
+                text:                   subEditConfig.gcsId
+                placeholderText:        qsTr("자동 생성 (gcs_xxxxx)")
 
                 onEditingFinished: {
                     saveSettings()
@@ -62,12 +45,13 @@ ColumnLayout {
 
         RowLayout {
             spacing: _colSpacing
-            QGCLabel { text: qsTr("TARGET ID (자동설정)") }
+            QGCLabel { text: qsTr("Vehicle ID") }
             QGCTextField {
-                id:                     targetPeerIdField
+                id:                     targetDroneIdField
                 Layout.preferredWidth:  _secondColumnWidth * 0.7
                 Layout.fillWidth:       true
-                text:                   subEditConfig.targetPeerId
+                text:                   subEditConfig.targetDroneId
+                placeholderText:        qsTr("연결할 드론의 ID를 입력")
 
                 onEditingFinished: {
                     saveSettings()

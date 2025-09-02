@@ -251,9 +251,8 @@ class WebRTCConfiguration : public LinkConfiguration
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString roomId READ roomId WRITE setRoomId NOTIFY roomIdChanged)
-    Q_PROPERTY(QString peerId READ peerId WRITE setPeerId NOTIFY peerIdChanged)
-    Q_PROPERTY(QString targetPeerId READ targetPeerId WRITE setTargetPeerId NOTIFY targetPeerIdChanged)
+    Q_PROPERTY(QString gcsId READ gcsId WRITE setGcsId NOTIFY gcsIdChanged)
+    Q_PROPERTY(QString targetDroneId READ targetDroneId WRITE setTargetDroneId NOTIFY targetDroneIdChanged)
 
    public:
     explicit WebRTCConfiguration(const QString &name, QObject *parent = nullptr);
@@ -268,14 +267,11 @@ class WebRTCConfiguration : public LinkConfiguration
     QString settingsTitle() const override { return tr("WebRTC Link Settings"); }
 
             // Getters and Setters
-    QString roomId() const { return _roomId; }
-    void setRoomId(const QString &id);
+    QString gcsId() const { return _gcsId; }
+    void setGcsId(const QString &id);
 
-    QString peerId() const { return _peerId; }
-    void setPeerId(const QString &id);
-
-    QString targetPeerId() const { return _targetPeerId; }
-    void setTargetPeerId(const QString &id);
+    QString targetDroneId() const { return _targetDroneId; }
+    void setTargetDroneId(const QString &id);
 
     // CloudSettings에서 WebRTC 설정을 가져오는 getter 메서드들
     QString stunServer() const;
@@ -284,14 +280,12 @@ class WebRTCConfiguration : public LinkConfiguration
     QString turnPassword() const;
 
    signals:
-    void roomIdChanged();
-    void peerIdChanged();
-    void targetPeerIdChanged();
+    void gcsIdChanged();
+    void targetDroneIdChanged();
 
    private:
-    QString _roomId;
-    QString _peerId;
-    QString _targetPeerId;
+    QString _gcsId;
+    QString _targetDroneId;
 
 
 
@@ -363,16 +357,23 @@ class WebRTCWorker : public QObject
     void _onGatheringStateChanged(rtc::PeerConnection::GatheringState state);
     void _updateRtt();  // RTT 측정용 slot
     
-    // Room management slots
-    void _onPeerLeftSuccessfully(const QString& peerId, const QString& roomId);
-    void _onPeerLeaveFailed(const QString& peerId, const QString& reason);
+    // GCS management slots
+    void _onGcsUnregisteredSuccessfully(const QString& gcsId);
+    void _onGcsUnregisterFailed(const QString& gcsId, const QString& reason);
 
    private:
     // Signaling management
     void _setupSignalingManager();
     void _handleSignalingMessage(const QJsonObject& message);
-    void _handleCandidate(const QJsonObject& message);
+    void _handleICECandidate(const QJsonObject& message);
     void _sendSignalingMessage(const QJsonObject& message);
+    
+    // New WebRTC message handlers
+    void _onGCSRegistered(const QJsonObject& message);
+    void _prepareForWebRTCOffer();
+    void _onWebRTCOfferReceived(const QJsonObject& message);
+    void _sendPongResponse(const QJsonObject& pingMsg);
+    void _onErrorReceived(const QJsonObject& message);
 
     // WebRTC peer connection
     void _setupPeerConnection();
@@ -381,6 +382,7 @@ class WebRTCWorker : public QObject
     void _setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc);
     void _processDataChannelOpen();
     void _processPendingCandidates();
+    void _checkIceProcessingStatus();
     void _startTimers();
     QString _stateToString(rtc::PeerConnection::State state) const;
     QString _gatheringStateToString(rtc::PeerConnection::GatheringState state) const;
@@ -424,10 +426,10 @@ class WebRTCWorker : public QObject
     bool _videoStreamActive = false;
     QString _currentVideoURI; // kept for API compatibility; unused without bridge
     
-    // Room management
-    QString _currentRoomId;
-    QString _currentPeerId;
-    bool _roomLeftSuccessfully = false;
+    // GCS connection management
+    QString _currentGcsId;
+    QString _currentTargetDroneId;
+    bool _gcsRegistered = false;
     QTimer* _reconnectTimer = nullptr;  // 수동 재연결용 (자동 재연결 비활성화)
     std::atomic<bool> _waitingForReconnect{false};
     
@@ -445,6 +447,7 @@ class WebRTCWorker : public QObject
     void _handlePeerDisconnection();
     void _cleanupForReconnection();
     void _resetPeerConnection();
+    void _forceReconnection();
     QTimer* _reconnectionTimer = nullptr;
     std::atomic<bool> _waitingForReconnection{false};
 

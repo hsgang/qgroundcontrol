@@ -81,10 +81,10 @@ SignalingServerManager::~SignalingServerManager()
 
 // === 핵심 기능 구현 ===
 
-void SignalingServerManager::connectToServer(const QString &serverUrl, const QString &peerId, const QString &roomId)
+void SignalingServerManager::connectToServer(const QString &serverUrl, const QString &gcsId, const QString &targetDroneId)
 {
     // LinkManager와 동일한 패턴: 메인 스레드에서만 실행되므로 스레드 체크 불필요
-    if (serverUrl.isEmpty() || peerId.isEmpty() || roomId.isEmpty()) {
+    if (serverUrl.isEmpty() || gcsId.isEmpty()) {
         qCWarning(SignalingServerManagerLog) << "Invalid parameters for connection";
         emit connectionError("연결 매개변수가 올바르지 않습니다");
         return;
@@ -96,8 +96,8 @@ void SignalingServerManager::connectToServer(const QString &serverUrl, const QSt
     }
 
     _serverUrl = serverUrl;
-    _peerId = peerId;
-    _roomId = roomId;
+    _gcsId = gcsId;
+    _targetDroneId = targetDroneId;
     _webSocketOnlyMode = false;
     _userDisconnected = false;
     _reconnectAttempts = 0;
@@ -134,8 +134,8 @@ void SignalingServerManager::connectToServerWebSocketOnly(const QString &serverU
     }
 
     _serverUrl = serverUrl;
-    _peerId.clear();
-    _roomId.clear();
+    _gcsId.clear();
+    _targetDroneId.clear();
     _webSocketOnlyMode = true;
     _userDisconnected = false;
     _reconnectAttempts = 0;
@@ -205,24 +205,31 @@ void SignalingServerManager::sendMessage(const QJsonObject &message)
     emit messageSent(message);
 }
 
-void SignalingServerManager::registerPeer(const QString &peerId, const QString &roomId)
+void SignalingServerManager::registerGCS(const QString &gcsId, const QString &targetDroneId)
 {
-    qCDebug(SignalingServerManagerLog) << "Registering peer:" << peerId << " in room:" << roomId;
+    qCDebug(SignalingServerManagerLog) << "Registering GCS:" << gcsId << " with target drone:" << targetDroneId;
     
-    _peerId = peerId;
-    _roomId = roomId;
+    _gcsId = gcsId;
+    _targetDroneId = targetDroneId;
     _webSocketOnlyMode = false;
     
     if (isConnected()) {
         QJsonObject registerMessage;
         registerMessage["type"] = "register";
-        registerMessage["id"] = _peerId;
-        registerMessage["roomId"] = _roomId;
+        registerMessage["id"] = _gcsId;
+        registerMessage["deviceType"] = "gcs";
+        registerMessage["targetDroneId"] = _targetDroneId;
+        registerMessage["capabilities"] = QJsonArray::fromStringList({"telemetry", "webrtc", "control"});
+        registerMessage["metadata"] = QJsonObject{
+            {"model", "QGroundControl"},
+            {"firmware", "1.0.0"},
+            {"software", "QGroundControl"}
+        };
         
-        qCDebug(SignalingServerManagerLog) << "Sending registration message";
+        qCDebug(SignalingServerManagerLog) << "Sending GCS registration message";
         sendMessage(registerMessage);
         
-        _updateConnectionStatus("Room 등록 중...");
+        _updateConnectionStatus("GCS 등록 중...");
 
     } else {
         qCDebug(SignalingServerManagerLog) << "Not connected, establishing WebSocket connection first";
@@ -230,17 +237,16 @@ void SignalingServerManager::registerPeer(const QString &peerId, const QString &
     }
 }
 
-void SignalingServerManager::leavePeer(const QString &peerId, const QString &roomId)
+void SignalingServerManager::unregisterGCS(const QString &gcsId)
 {
     if (!isConnected()) { return; }
 
-    QJsonObject leaveMessage;
-    leaveMessage["type"] = "leave";
-    leaveMessage["id"] = peerId;
-    leaveMessage["roomId"] = roomId;
-    sendMessage(leaveMessage);
+    QJsonObject unregisterMessage;
+    unregisterMessage["type"] = "unregister";
+    unregisterMessage["id"] = gcsId;
+    sendMessage(unregisterMessage);
     
-    qCDebug(SignalingServerManagerLog) << "Leaving room:" << roomId << "with peer ID:" << peerId;
+    qCDebug(SignalingServerManagerLog) << "Unregistering GCS:" << gcsId;
 }
 
 void SignalingServerManager::retryConnection()
@@ -260,7 +266,7 @@ void SignalingServerManager::retryConnection()
     if (_webSocketOnlyMode) {
         connectToServerWebSocketOnly(_serverUrl);
     } else {
-        connectToServer(_serverUrl, _peerId, _roomId);
+        connectToServer(_serverUrl, _gcsId, _targetDroneId);
     }
 }
 
@@ -374,17 +380,24 @@ void SignalingServerManager::_onWebSocketConnected()
     
     if (_webSocketOnlyMode) {
         _updateConnectionStatus("시그널링 서버 연결됨 - WebRTC 대기 중");
-        qCDebug(SignalingServerManagerLog) << "WebSocket-only mode: Ready for room registration";
+        qCDebug(SignalingServerManagerLog) << "WebSocket-only mode: Ready for GCS registration";
     } else {
-        _updateConnectionStatus("시그널링 서버 연결됨 - Peer 등록 중");
+        _updateConnectionStatus("시그널링 서버 연결됨 - GCS 등록 중");
         
-        if (!_peerId.isEmpty() && !_roomId.isEmpty()) {
+        if (!_gcsId.isEmpty()) {
             QJsonObject registerMessage;
             registerMessage["type"] = "register";
-            registerMessage["id"] = _peerId;
-            registerMessage["roomId"] = _roomId;
+            registerMessage["id"] = _gcsId;
+            registerMessage["deviceType"] = "gcs";
+            registerMessage["targetDroneId"] = _targetDroneId;
+            registerMessage["capabilities"] = QJsonArray::fromStringList({"telemetry", "webrtc", "control"});
+            registerMessage["metadata"] = QJsonObject{
+                {"model", "QGroundControl"},
+                {"firmware", "1.0.0"},
+                {"software", "QGroundControl"}
+            };
             
-            qCDebug(SignalingServerManagerLog) << "Auto-sending registration after connection";
+            qCDebug(SignalingServerManagerLog) << "Auto-sending GCS registration after connection";
             sendMessage(registerMessage);
         }
     }
@@ -463,8 +476,8 @@ void SignalingServerManager::_onWebSocketMessageReceived(const QString &message)
     
     if (messageType == "registered") {
         _handleRegistrationResponse(messageObj);
-    } else if (messageType == "left") {
-        _handleLeaveResponse(messageObj);
+    } else if (messageType == "unregistered") {
+        _handleUnregisterResponse(messageObj);
     } else if (messageType == "pong") {
         _handlePongResponse(messageObj);
     } else if (messageType == "connectionReplaced") {
@@ -506,19 +519,18 @@ void SignalingServerManager::_handleRegistrationResponse(const QJsonObject &mess
     }
 }
 
-void SignalingServerManager::_handleLeaveResponse(const QJsonObject &message)
+void SignalingServerManager::_handleUnregisterResponse(const QJsonObject &message)
 {
-    QString peerId = message["id"].toString();
-    QString roomId = message["roomId"].toString();
+    QString gcsId = message["id"].toString();
     
     if (message.contains("success") && message["success"].toBool()) {
-        qCDebug(SignalingServerManagerLog) << "Successfully left room:" << roomId << "with peer:" << peerId;
-        _updateConnectionStatus("Room에서 나감 - WebSocket 연결 유지됨");
-        emit peerLeftSuccessfully(peerId, roomId);
+        qCDebug(SignalingServerManagerLog) << "Successfully unregistered GCS:" << gcsId;
+        _updateConnectionStatus("GCS 등록 해제됨 - WebSocket 연결 유지됨");
+        emit gcsUnregisteredSuccessfully(gcsId);
     } else {
         QString reason = message["reason"].toString();
-        qCWarning(SignalingServerManagerLog) << "Failed to leave room:" << reason;
-        emit peerLeaveFailed(peerId, reason);
+        qCWarning(SignalingServerManagerLog) << "Failed to unregister GCS:" << reason;
+        emit gcsUnregisterFailed(gcsId, reason);
     }
 }
 
@@ -728,9 +740,9 @@ void SignalingServerManager::_generateClientId()
 
 void SignalingServerManager::_autoReRegister()
 {
-    if (!_webSocketOnlyMode && !_peerId.isEmpty() && !_roomId.isEmpty()) {
-        qCDebug(SignalingServerManagerLog) << "Auto re-registering peer after reconnection";
-        registerPeer(_peerId, _roomId);
+    if (!_webSocketOnlyMode && !_gcsId.isEmpty()) {
+        qCDebug(SignalingServerManagerLog) << "Auto re-registering GCS after reconnection";
+        registerGCS(_gcsId, _targetDroneId);
     }
 }
 

@@ -48,7 +48,7 @@ public:
     static void shutdown();
     
     // WebSocket 연결 관리
-    void connectToServer(const QString &serverUrl, const QString &peerId, const QString &roomId);
+    void connectToServer(const QString &serverUrl, const QString &gcsId, const QString &targetDroneId);
     void connectToServerWebSocketOnly(const QString &serverUrl);
     void disconnectFromServer();
     
@@ -59,14 +59,14 @@ public:
     // 시그널링 메시지 송수신
     void sendMessage(const QJsonObject &message);
     
-    // Peer 관리
-    void registerPeer(const QString &peerId, const QString &roomId);
-    void leavePeer(const QString &peerId, const QString &roomId);
+    // GCS 관리
+    void registerGCS(const QString &gcsId, const QString &targetDroneId);
+    void unregisterGCS(const QString &gcsId);
     
     // 상태 확인
     bool isConnected() const { return _connectionState == ConnectionState::Connected; }
     bool isWebSocketOnlyConnected() const { return isConnected() && _webSocketOnlyMode; }
-    bool isReadyForPeers() const { return isConnected() && !_peerId.isEmpty() && !_roomId.isEmpty(); }
+    bool isReadyForGCS() const { return isConnected() && !_gcsId.isEmpty(); }
     
     // 기본 상태 정보
     ConnectionState connectionState() const { return _connectionState; }
@@ -91,8 +91,8 @@ signals:
     // 등록 시그널
     void registrationSuccessful();
     void registrationFailed(const QString &reason);
-    void peerLeftSuccessfully(const QString &peerId, const QString &roomId);
-    void peerLeaveFailed(const QString &peerId, const QString &reason);
+    void gcsUnregisteredSuccessfully(const QString &gcsId);
+    void gcsUnregisterFailed(const QString &gcsId, const QString &reason);
 
 private slots:
     void _onWebSocketConnected();
@@ -127,7 +127,7 @@ private:
     
     // 메시지 처리
     void _handleRegistrationResponse(const QJsonObject &message);
-    void _handleLeaveResponse(const QJsonObject &message);
+    void _handleUnregisterResponse(const QJsonObject &message);
     void _handlePongResponse(const QJsonObject &message);
     
     // 자동 재등록
@@ -143,8 +143,8 @@ private:
     // WebSocket 연결
     QWebSocket *_webSocket = nullptr;
     QString _serverUrl;
-    QString _peerId;
-    QString _roomId;
+    QString _gcsId;
+    QString _targetDroneId;
     QString _clientId; // 클라이언트 고유 ID
     
     // 연결 상태
