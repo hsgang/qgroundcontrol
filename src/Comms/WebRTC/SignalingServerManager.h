@@ -167,11 +167,11 @@ private:
     int _consecutivePingFailures = 0;
     
     // 상수 (개선됨)
-    static const int DEFAULT_RECONNECT_INTERVAL_MS = 2000;
-    static const int MAX_RECONNECT_ATTEMPTS = INT_MAX;
-    static const int MAX_RECONNECT_DELAY_MS = 3000; // 3초
-    static const int PING_INTERVAL_MS = 3000; // 3초마다 ping 전송
-    static const int PING_TIMEOUT_MS = 2000; // ping 응답 2초 타임아웃
-    static const int CONNECTION_HEALTH_CHECK_MS = 5000; // 5초마다 상태 체크
+    static const int DEFAULT_RECONNECT_INTERVAL_MS = 5000; // 5초로 증가
+    static const int MAX_RECONNECT_ATTEMPTS = 10; // 무한 재시도 방지
+    static const int MAX_RECONNECT_DELAY_MS = 30000; // 30초로 증가
+    static const int PING_INTERVAL_MS = 10000; // 10초마다 ping 전송
+    static const int PING_TIMEOUT_MS = 5000; // ping 응답 5초 타임아웃
+    static const int CONNECTION_HEALTH_CHECK_MS = 10000; // 10초마다 상태 체크
     static const int MAX_CONSECUTIVE_PING_FAILURES = 3;
 };

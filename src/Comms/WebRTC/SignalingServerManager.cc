@@ -332,14 +332,15 @@ void SignalingServerManager::_updateConnectionStatus(const QString &status)
 void SignalingServerManager::_startReconnectTimer()
 {
     if (_userDisconnected) {
+        qCDebug(SignalingServerManagerLog) << "User disconnected, skipping reconnection";
         return;
     }
 
     if (_reconnectAttempts >= MAX_RECONNECT_ATTEMPTS) {
-        qCWarning(SignalingServerManagerLog) << "Max reconnection attempts reached";
+        qCWarning(SignalingServerManagerLog) << "Max reconnection attempts reached:" << _reconnectAttempts;
         _updateConnectionState(ConnectionState::Error);
         _updateConnectionStatus("최대 재연결 시도 횟수 초과");
-        emit connectionError("최대 재연결 시도 횟수를 초과했습니다");
+        emit connectionError("최대 재연결 시도를 초과했습니다");
         return;
     }
 
@@ -348,7 +349,7 @@ void SignalingServerManager::_startReconnectTimer()
     int delay = _calculateReconnectDelay();
     _updateConnectionStatus(QString("재연결 시도 중... (%1초 후, 시도 %2/%3)").arg(delay / 1000).arg(_reconnectAttempts + 1).arg(MAX_RECONNECT_ATTEMPTS));
     
-    qCDebug(SignalingServerManagerLog) << "Starting reconnect timer, delay:" << delay << "ms, attempt:" << (_reconnectAttempts + 1);
+    qCDebug(SignalingServerManagerLog) << "Starting reconnect timer, delay:" << delay << "ms, attempt:" << (_reconnectAttempts + 1) << "/" << MAX_RECONNECT_ATTEMPTS;
     _reconnectTimer->start(delay);
 }
 
@@ -398,6 +399,17 @@ void SignalingServerManager::_onWebSocketDisconnected()
     
     if (_connectionState == ConnectionState::Connected) {
         _updateConnectionStatus("시그널링 서버 연결 끊어짐");
+        
+        // 연결이 너무 빨리 끊어지는지 확인 (연결 불안정성 체크)
+        qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+        if (_lastSuccessfulConnection > 0) {
+            qint64 connectionDuration = currentTime - _lastSuccessfulConnection;
+            if (connectionDuration < 10000) { // 10초 미만으로 연결이 유지된 경우
+                qCWarning(SignalingServerManagerLog) << "Connection was unstable, duration:" << connectionDuration << "ms";
+                // 불안정한 연결의 경우 재연결 간격을 늘림
+                _reconnectAttempts = qMin(_reconnectAttempts + 2, MAX_RECONNECT_ATTEMPTS);
+            }
+        }
     }
     
     if (!_userDisconnected) {
@@ -656,20 +668,30 @@ void SignalingServerManager::_onConnectionHealthTimer()
 
 int SignalingServerManager::_calculateReconnectDelay() const
 {
-    // 지수 백오프 전략: 2^attempt * base_delay, 최대 30초
+    // 더 안정적인 재연결 전략: 선형 증가 + 지수 백오프
     int baseDelay = DEFAULT_RECONNECT_INTERVAL_MS;
-    int delay = baseDelay * (1 << _reconnectAttempts);
+    int delay;
+    
+    if (_reconnectAttempts <= 3) {
+        // 처음 3번은 선형 증가
+        delay = baseDelay + (_reconnectAttempts * 2000);
+    } else {
+        // 3번 이후는 지수 백오프
+        delay = baseDelay * (1 << (_reconnectAttempts - 2));
+    }
     
     // 최대 지연 시간 제한
     if (delay > MAX_RECONNECT_DELAY_MS) {
         delay = MAX_RECONNECT_DELAY_MS;
     }
     
-    // 약간의 랜덤성 추가 (네트워크 혼잡 방지)
-    int jitter = (QRandomGenerator::global()->bounded(1000)) - 500; // -500ms ~ +500ms
+    // 더 큰 랜덤성 추가 (네트워크 혼잡 방지)
+    int jitter = (QRandomGenerator::global()->bounded(2000)) - 1000; // -1초 ~ +1초
     delay += jitter;
     
-    if (delay < 1000) delay = 1000; // 최소 1초
+    if (delay < 3000) delay = 3000; // 최소 3초
+    
+    qCDebug(SignalingServerManagerLog) << "Calculated reconnect delay:" << delay << "ms for attempt:" << (_reconnectAttempts + 1);
     
     return delay;
 }
