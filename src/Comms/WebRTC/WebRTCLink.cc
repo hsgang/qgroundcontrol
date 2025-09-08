@@ -266,7 +266,7 @@ void WebRTCWorker::disconnectLink()
     if (_signalingManager && !_currentGcsId.isEmpty()) {
         qCDebug(WebRTCLinkLog) << "Unregistering GCS:" << _currentGcsId;
         _signalingManager->unregisterGCS(_currentGcsId);
-        emit rtcStatusMessageChanged("시그널링 서버에서 GCS 등록 해제중...");
+        emit rtcStatusMessageChanged("서버에서 GCS 등록 해제중...");
         
         // Give some time for the leave message to be sent before cleanup
         QTimer::singleShot(1000, this, [this]() {
@@ -327,7 +327,7 @@ void WebRTCWorker::_setupSignalingManager()
 void WebRTCWorker::_onSignalingConnected()
 {
     qCDebug(WebRTCLinkLog) << "Signaling server connected";
-    emit rtcStatusMessageChanged("시그널링 서버 연결됨");
+    emit rtcStatusMessageChanged("서버와 연결됨");
 }
 
 void WebRTCWorker::_onSignalingDisconnected()
@@ -339,13 +339,13 @@ void WebRTCWorker::_onSignalingDisconnected()
         return;
     }
     
-    emit rtcStatusMessageChanged("시그널링 서버 연결 해제됨");
+    emit rtcStatusMessageChanged("서버와 연결 해제됨");
 }
 
 void WebRTCWorker::_onSignalingError(const QString& error)
 {
     qCWarning(WebRTCLinkLog) << "Signaling error:" << error;
-    emit rtcStatusMessageChanged(QString("시그널링 오류: %1").arg(error));
+    emit rtcStatusMessageChanged(QString("서버 오류: %1").arg(error));
     emit errorOccurred(error);
 }
 
@@ -357,13 +357,13 @@ void WebRTCWorker::_onSignalingMessageReceived(const QJsonObject& message)
 void WebRTCWorker::_onRegistrationSuccessful()
 {
     //qCDebug(WebRTCLinkLog) << "Registration successful signal received";
-    emit rtcStatusMessageChanged("시그널링 서버 등록 완료");
+    emit rtcStatusMessageChanged("서버에 등록 완료");
 }
 
 void WebRTCWorker::_onRegistrationFailed(const QString& reason)
 {
     qCWarning(WebRTCLinkLog) << "Registration failed:" << reason;
-    emit rtcStatusMessageChanged(QString("시그널링 서버 등록 실패: %1").arg(reason));
+    emit rtcStatusMessageChanged(QString("서버에 등록 실패: %1").arg(reason));
     emit errorOccurred(QString("Registration failed: %1").arg(reason));
 }
 
@@ -393,7 +393,7 @@ void WebRTCWorker::_onGcsUnregisteredSuccessfully(const QString& gcsId)
     
     qCDebug(WebRTCLinkLog) << "GCS unregistered successfully";
     
-    emit rtcStatusMessageChanged("시그널링 서버에서 GCS 등록 해제");
+    emit rtcStatusMessageChanged("서버에서 GCS 등록 해제");
     
     // 자동 재연결 중일 때는 완전한 정리를 하지 않음
     if (_waitingForReconnect.load()) {
@@ -409,7 +409,7 @@ void WebRTCWorker::_onGcsUnregisterFailed(const QString& gcsId, const QString& r
     }
     
     qCWarning(WebRTCLinkLog) << "Failed to unregister GCS:" << reason;
-    emit rtcStatusMessageChanged(QString("시그널링 서버에서 GCS 등록 해제 실패: %1").arg(reason));
+    emit rtcStatusMessageChanged(QString("서버에서 GCS 등록 해제 실패: %1").arg(reason));
     
     // Still clear the GCS info and proceed with cleanup
     _currentGcsId.clear();
@@ -920,7 +920,7 @@ void WebRTCWorker::_onGCSRegistered(const QJsonObject& message)
         qCDebug(WebRTCLinkLog) << "GCS registered successfully, paired with drone:" << pairedDroneId;
         
         // 드론과 페어링 완료, 드론의 WebRTC offer 대기
-        emit rtcStatusMessageChanged("드론과 페어링 완료, WebRTC 연결 대기 중...");
+        emit rtcStatusMessageChanged("서버 등록 완료, 기체 연결 대기 중...");
         
         // GCS는 offer를 받을 준비만 하고, 직접 연결을 시작하지 않음
         _prepareForWebRTCOffer();
@@ -1036,8 +1036,12 @@ void WebRTCWorker::_onErrorReceived(const QJsonObject& message)
     QString errorCode = message["code"].toString();
     
     qCWarning(WebRTCLinkLog) << "Signaling server error:" << errorCode << "-" << errorMessage;
-    emit rtcStatusMessageChanged(QString("시그널링 서버 오류: %1").arg(errorMessage));
-    emit errorOccurred(QString("시그널링 서버 오류: %1").arg(errorMessage));
+    if (errorCode == "drone_already_paired") {
+        emit rtcStatusMessageChanged(QString("기체가 다른 장치와 페어링되어 있습니다"));
+    } else {
+        emit rtcStatusMessageChanged(QString("서버 오류: %1").arg(errorMessage));
+    }
+    emit errorOccurred(QString("서버 오류: %1").arg(errorMessage));
 }
 
 void WebRTCWorker::_handlePeerDisconnection()
