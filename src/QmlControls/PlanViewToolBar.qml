@@ -79,10 +79,14 @@ Rectangle {
         // }
     }
 
-    // QGCMouseArea {
-    //     anchors.fill:   viewButtonRow
-    //     onClicked:      mainWindow.showFlyView()
-    // }
+    QGCMouseArea {
+        anchors.fill:   viewButtonRow
+        onClicked:      {
+            if (mainWindow.allowViewSwitch()) {
+                mainWindow.showFlyView()
+            }
+        }
+    }
 
     QGCFlickable {
         id:                     toolsFlickable

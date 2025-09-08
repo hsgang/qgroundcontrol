@@ -411,12 +411,15 @@ Vehicle::~Vehicle()
     _autopilotPlugin = nullptr;
 }
 
-void Vehicle::prepareDelete()
+void Vehicle::_deleteCameraManager()
 {
-
+    if(_cameraManager) {
+        delete _cameraManager;
+        _cameraManager = nullptr;
+    }
 }
 
-void Vehicle::deleteGimbalController()
+void Vehicle::_deleteGimbalController()
 {
     if (_gimbalController) {
         delete _gimbalController;
