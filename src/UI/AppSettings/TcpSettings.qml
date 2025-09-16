@@ -32,6 +32,10 @@ GridLayout {
         text:                   subEditConfig.host
         placeholderText:        qsTr("localhost or 192.168.1.1")
 
+        onEditingFinished: {
+            saveSettings()
+        }
+        
         // Allow IPv4, IPv6, hostnames, and domain names
         // This is permissive - actual validation happens at connection time
         validator: RegularExpressionValidator {
@@ -47,7 +51,11 @@ GridLayout {
         text:                   subEditConfig.port.toString()
         inputMethodHints:       Qt.ImhFormattedNumbersOnly
         placeholderText:        qsTr("5760")
-
+        
+        onEditingFinished: {
+            saveSettings()
+        }
+        
         validator: IntValidator {
             bottom: 1
             top: 65535
