@@ -175,23 +175,23 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        Layout.fillWidth:   true
-        heading:            qsTr("Reset")
+    // SettingsGroupLayout {
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("Reset")
 
-        QGCCheckBoxSlider {
-            Layout.fillWidth: true
-            text:       qsTr("Clear all settings on next start")
-            checked:    false
-            onClicked: {
-                if (checked) {
-                    QGroundControl.deleteAllSettingsNextBoot()
-                } else {
-                    QGroundControl.clearDeleteAllSettingsNextBoot()
-                }
-            }
-        }
-    }
+    //     QGCCheckBoxSlider {
+    //         Layout.fillWidth: true
+    //         text:       qsTr("Clear all settings on next start")
+    //         checked:    false
+    //         onClicked: {
+    //             if (checked) {
+    //                 QGroundControl.deleteAllSettingsNextBoot()
+    //             } else {
+    //                 QGroundControl.clearDeleteAllSettingsNextBoot()
+    //             }
+    //         }
+    //     }
+    // }
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
