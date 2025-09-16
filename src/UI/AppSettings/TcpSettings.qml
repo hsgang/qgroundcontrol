@@ -14,8 +14,6 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.Controls
 
-
-
 GridLayout {
     columns:        2
     rowSpacing:     _rowSpacing
@@ -23,7 +21,7 @@ GridLayout {
     width:  _columnLayoutWidth
 
     function saveSettings() {
-        subEditConfig.host = hostField.text
+        subEditConfig.host = hostField.text.trim()
         subEditConfig.port = parseInt(portField.text)
     }
 
@@ -32,9 +30,13 @@ GridLayout {
         id:                     hostField
         Layout.preferredWidth:  _secondColumnWidth
         text:                   subEditConfig.host
+        placeholderText:        qsTr("localhost or 192.168.1.1")
 
-        onEditingFinished: {
-            saveSettings()
+        // Allow IPv4, IPv6, hostnames, and domain names
+        // This is permissive - actual validation happens at connection time
+        validator: RegularExpressionValidator {
+            // Allow alphanumeric, dots, colons, hyphens, and brackets (for IPv6)
+            regularExpression: /^[a-zA-Z0-9\.\-:\[\]]+$/
         }
     }
 
@@ -44,9 +46,22 @@ GridLayout {
         Layout.preferredWidth:  _secondColumnWidth
         text:                   subEditConfig.port.toString()
         inputMethodHints:       Qt.ImhFormattedNumbersOnly
+        placeholderText:        qsTr("5760")
 
-        onEditingFinished: {
-            saveSettings()
+        validator: IntValidator {
+            bottom: 1
+            top: 65535
         }
+    }
+
+    // Help text
+    QGCLabel {
+        Layout.columnSpan:      2
+        Layout.preferredWidth:  _secondColumnWidth
+        Layout.fillWidth:       true
+        font.pointSize:         ScreenTools.smallFontPointSize
+        wrapMode:               Text.WordWrap
+        text:                   qsTr("You can enter an IP address (e.g. 192.168.1.1) or hostname (e.g. my-drone.local)")
+        color:                  qgcPal.text
     }
 }

@@ -2004,6 +2004,11 @@ bool Vehicle::sub() const
     return QGCMAVLink::isSub(vehicleType());
 }
 
+bool Vehicle::spacecraft() const
+{
+    return QGCMAVLink::isSpacecraft(vehicleType());
+}
+
 bool Vehicle::multiRotor() const
 {
     return QGCMAVLink::isMultiRotor(vehicleType());

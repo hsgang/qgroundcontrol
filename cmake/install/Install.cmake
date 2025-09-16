@@ -115,8 +115,16 @@ elseif(MACOS)
 
     # - or
 
-    install(CODE "
-        include(${CMAKE_SOURCE_DIR}/cmake/modules/CPM.cmake)
-    ")
+    find_program(CREATE_DMG_PROGRAM create-dmg)
+    if(NOT CREATE_DMG_PROGRAM)
+        CPMAddPackage(
+            NAME create-dmg
+            GITHUB_REPOSITORY create-dmg/create-dmg
+            GIT_TAG master
+            DOWNLOAD_ONLY
+        )
+        set(CREATE_DMG_PROGRAM "${create-dmg_SOURCE_DIR}/create-dmg")
+    endif()
+    install(CODE "set(CREATE_DMG_PROGRAM \"${CREATE_DMG_PROGRAM}\")")
     install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/install/CreateMacDMG.cmake")
 endif()
