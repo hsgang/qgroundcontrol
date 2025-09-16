@@ -62,12 +62,12 @@ ListModel {
         pageVisible: function() { return true }
     }
 
-    ListElement {
-        name: qsTr("ADSB Server")
-        url: "qrc:/qml/QGroundControl/AppSettings/ADSBServerSettings.qml"
-        iconUrl: "qrc:/InstrumentValueIcons/airplane.svg"
-        pageVisible: function() { return true }
-    }
+    // ListElement {
+    //     name: qsTr("ADSB Server")
+    //     url: "qrc:/qml/QGroundControl/AppSettings/ADSBServerSettings.qml"
+    //     iconUrl: "qrc:/InstrumentValueIcons/airplane.svg"
+    //     pageVisible: function() { return true }
+    // }
 
     ListElement {
         name: qsTr("Network RTK")
