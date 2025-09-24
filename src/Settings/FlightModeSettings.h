@@ -36,4 +36,5 @@ public:
     DEFINE_SETTINGFACT(apmHiddenFlightModesRoverBoat)
     DEFINE_SETTINGFACT(apmHiddenFlightModesSub)
     DEFINE_SETTINGFACT(apmHiddenFlightModesAirship)
+    DEFINE_SETTINGFACT(requireModeChangeConfirmation)
 };

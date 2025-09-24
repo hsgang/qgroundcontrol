@@ -122,6 +122,7 @@ qt_add_qml_module(QGroundControlControlsModule
         QGCColoredImage.qml
         QGCColumnButton.qml
         QGCComboBox.qml
+        QGCDelayButton.qml
         QGCDynamicObjectManager.qml
         QGCFileDialog.qml
         QGCFlickable.qml

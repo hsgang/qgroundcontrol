@@ -135,6 +135,14 @@ Item {
                 }
             }
 
+            QGCLabel {
+                text:               qsTr("Hold to confirm")
+                font.pointSize:     ScreenTools.smallFontPointSize
+                Layout.fillWidth:   true
+                horizontalAlignment:Text.AlignHCenter
+                visible:            flightModeSettings.requireModeChangeConfirmation.rawValue
+            }
+
             Repeater {
                 id:     modeRepeater
                 model:  activeVehicle ? activeVehicle.flightModes : []
@@ -147,43 +155,21 @@ Item {
                     spacing: ScreenTools.defaultFontPixelWidth
                     visible: editMode || !hiddenFlightModesList.find(item => { return item === modelData })
 
-                    QGCButton {
+                    QGCDelayButton {
                         id:                 modeButton
                         text:               modelData
+                        delay:              flightModeSettings.requireModeChangeConfirmation.rawValue ? 500 : 0
                         Layout.fillWidth:   true
 
-                        property bool isSelected: false
-
-                        onClicked: {
+                        onActivated: {
                             if (editMode) {
                                 parent.children[1].toggle()
                                 parent.children[1].clicked()
                             } else {
-                                if (modeRepeater.selectedMode !== null && modeRepeater.selectedMode !== modelData) {
-                                    var previousButton = modeRepeater.buttonRows.find(button => button.text === modeRepeater.selectedMode)
-                                    if (previousButton) {
-                                        previousButton.isSelected = false;
-                                        previousButton.primary = false;
-                                    }
-                                }
-
-                                if (!isSelected) {
-                                    modeRepeater.selectedMode = modelData
-                                    isSelected = true
-                                    modeButton.primary = true;
-                                } else {
-                                    activeVehicle.flightMode = modelData
-                                    isSelected = false
-                                    modeRepeater.selectedMode = null
-                                    modeButton.primary = false;
-                                    mainWindow.closeIndicatorDrawer()
-                                }
-                            }
-                        }
-
-                        Component.onCompleted: {
-                            if (modeRepeater.buttonRows.indexOf(modeButton) === -1) {
-                                modeRepeater.buttonRows.push(modeButton)
+                                //var controller = globals.guidedControllerFlyView
+                                //controller.confirmAction(controller.actionSetFlightMode, modelData)
+                                activeVehicle.flightMode = modelData
+                                mainWindow.closeIndicatorDrawer()
                             }
                         }
                     }
@@ -228,8 +214,9 @@ Item {
             Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 60
             spacing:                margins / 2
 
-            property var  qgcPal:   QGroundControl.globalPalette
-            property real margins:  ScreenTools.defaultFontPixelHeight
+            property var  qgcPal:               QGroundControl.globalPalette
+            property real margins:              ScreenTools.defaultFontPixelHeight
+            property var  flightModeSettings:   QGroundControl.settingsManager.flightModeSettings
 
             Loader {
                 sourceComponent: expandedPageComponent
@@ -237,6 +224,12 @@ Item {
 
             SettingsGroupLayout {
                 Layout.fillWidth:  true
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth:   true
+                    text:               qsTr("Click and Hold to Confirm Mode Change")
+                    fact:               flightModeSettings.requireModeChangeConfirmation
+                }
 
                 RowLayout {
                     Layout.fillWidth:   true
