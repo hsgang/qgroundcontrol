@@ -18,7 +18,7 @@
 #include <QtQuick/QSGFlatColorMaterial>
 #include "QGCPalette.h"
 
-QGC_LOGGING_CATEGORY(TerrainProfileLog, "TerrainProfileLog")
+QGC_LOGGING_CATEGORY(TerrainProfileLog, "Terrain.TerrainProfile")
 
 TerrainProfile::TerrainProfile(QQuickItem* parent)
     : QQuickItem(parent)
