@@ -158,7 +158,7 @@ Item {
                     QGCDelayButton {
                         id:                 modeButton
                         text:               modelData
-                        delay:              flightModeSettings.requireModeChangeConfirmation.rawValue ? 500 : 0
+                        delay:              flightModeSettings.requireModeChangeConfirmation.rawValue ? defaultDelay : 0
                         Layout.fillWidth:   true
 
                         onActivated: {
