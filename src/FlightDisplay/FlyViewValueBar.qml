@@ -60,6 +60,7 @@ Item{
     property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceToHome).toFixed(_distanceDecimal)
     property string _distanceUnitText:          QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _distanceDownText:          isNaN(_distanceDown) ? "   " : "RNG " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceDown).toFixed(2) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _flightTimeText:            _activeVehicle ? formatFlightTime(_activeVehicle.flightTime.rawValue) : "00:00"
 
     function getVerticalSpeedState() {
         if(_activeVehicle){
@@ -84,6 +85,16 @@ Item{
         return sign + input;
     }
 
+    function formatFlightTime(seconds) {
+        if (isNaN(seconds) || seconds < 0) {
+            return "00:00";
+        }
+        var totalSeconds = Math.floor(seconds);
+        var minutes = Math.floor(totalSeconds / 60);
+        var remainingSeconds = totalSeconds % 60;
+        return zeroPad(minutes.toString(), 2) + ":" + zeroPad(remainingSeconds.toString(), 2);
+    }
+
     Rectangle {
         id:         backgroundRect
         width:      control.width + extraWidth
@@ -98,6 +109,52 @@ Item{
         spacing:    ScreenTools.defaultFontPixelWidth * 2
 
         Item { width: ScreenTools.defaultFontPixelWidth } // 좌측 여백
+
+        ColumnLayout {
+            Layout.alignment: Qt.AlignHCenter
+            spacing: 0
+
+            QGCLabel {
+                Layout.alignment:       Qt.AlignHCenter
+                text:                   "ALT"
+            }
+            QGCLabel {
+                Layout.minimumWidth:    _mediumValueWidth
+                Layout.fillWidth:       true
+                text:                   _vehicleAltitudeText
+                font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
+                font.bold :             true
+                color:                  qgcPal.textHighlight
+                horizontalAlignment:    Text.AlignHCenter
+            }
+            QGCLabel {
+                Layout.alignment: Qt.AlignHCenter
+                text:   _distanceUnitText
+            }
+        }
+
+        // ColumnLayout {
+        //     Layout.alignment: Qt.AlignHCenter
+        //     spacing: 0
+
+        //     QGCLabel {
+        //         Layout.alignment:       Qt.AlignHCenter
+        //         text:                   "DIST"
+        //     }
+        //     QGCLabel {
+        //         Layout.minimumWidth:    _mediumValueWidth
+        //         Layout.fillWidth:       true
+        //         text:                   _distanceToHomeText
+        //         font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
+        //         font.bold :             true
+        //         color:                  qgcPal.textHighlight
+        //         horizontalAlignment:    Text.AlignHCenter
+        //     }
+        //     QGCLabel {
+        //         Layout.alignment: Qt.AlignHCenter
+        //         text:   _distanceUnitText
+        //     }
+        // }
 
         ColumnLayout {
             Layout.alignment: Qt.AlignHCenter
@@ -151,12 +208,12 @@ Item{
 
             QGCLabel {
                 Layout.alignment:       Qt.AlignHCenter
-                text:                   "ALT"
+                text:                   "TIME"
             }
             QGCLabel {
                 Layout.minimumWidth:    _mediumValueWidth
                 Layout.fillWidth:       true
-                text:                   _vehicleAltitudeText
+                text:                   _flightTimeText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
                 color:                  qgcPal.textHighlight
@@ -164,30 +221,7 @@ Item{
             }
             QGCLabel {
                 Layout.alignment: Qt.AlignHCenter
-                text:   _distanceUnitText
-            }
-        }
-
-        ColumnLayout {
-            Layout.alignment: Qt.AlignHCenter
-            spacing: 0
-
-            QGCLabel {
-                Layout.alignment:       Qt.AlignHCenter
-                text:                   "DIST"
-            }
-            QGCLabel {
-                Layout.minimumWidth:    _mediumValueWidth
-                Layout.fillWidth:       true
-                text:                   _distanceToHomeText
-                font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
-                font.bold :             true
-                color:                  qgcPal.textHighlight
-                horizontalAlignment:    Text.AlignHCenter
-            }
-            QGCLabel {
-                Layout.alignment: Qt.AlignHCenter
-                text:   _distanceUnitText
+                text:   "mm:ss"
             }
         }
 

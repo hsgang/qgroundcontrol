@@ -43,12 +43,12 @@ Rectangle {
     property var    gimbalController:       activeVehicle ? activeVehicle.gimbalController : undefined
     property var    activeGimbal:           activeVehicle ? gimbalController.activeGimbal : undefined
     property bool   _gimbalAvailable:       activeGimbal ? true : false
-    property bool   _gimbalRollAvailable:   activeGimbal && activeGimbal.curRoll ? true : false
-    property bool   _gimbalPitchAvailable:  activeGimbal && activeGimbal.curPitch ? true : false
-    property bool   _gimbalYawAvailable:    activeGimbal && activeGimbal.curYaw ? true : false
-    property real   _gimbalRoll:            _gimbalAvailable && _gimbalRollAvailable ? activeGimbal.curRoll : 0
-    property real   _gimbalPitch:           _gimbalAvailable && _gimbalPitchAvailable ? activeGimbal.curPitch : 0
-    property real   _gimbalYaw:             _gimbalAvailable && _gimbalYawAvailable ? activeGimbal.curYaw : 0
+    property bool   _gimbalRollAvailable:   activeGimbal && activeGimbal.absoluteRoll ? true : false
+    property bool   _gimbalPitchAvailable:  activeGimbal && activeGimbal.absolutePitch ? true : false
+    property bool   _gimbalYawAvailable:    activeGimbal && activeGimbal.bodyYaw ? true : false
+    property real   _gimbalRoll:            _gimbalAvailable && _gimbalRollAvailable ? activeGimbal.absoluteRoll.rawValue : 0
+    property real   _gimbalPitch:           _gimbalAvailable && _gimbalPitchAvailable ? activeGimbal.absolutePitch.rawValue : 0
+    property real   _gimbalYaw:             _gimbalAvailable && _gimbalYawAvailable ? activeGimbal.bodyYaw.rawValue : 0
     property string _gimbalRollString:      activeVehicle && _gimbalRollAvailable ? _gimbalRoll.toFixed(2) : "--"
     property string _gimbalPitchString:     activeVehicle && _gimbalPitchAvailable ? _gimbalPitch.toFixed(2) : "--"
     property string _gimbalYawString:       activeVehicle && _gimbalYawAvailable ? _gimbalYaw.toFixed(2) : "--"
@@ -56,6 +56,8 @@ Rectangle {
     property double _localPitch: 0.0
     property double _localYaw: 0.0
     property int    _gimbalModeStatus: 0
+    property bool   _useRateControl: false
+    property real   _stepSize: 2.0
 
     property var    _dynamicCameras:    globals.activeVehicle ? globals.activeVehicle.cameraManager : null
     property bool   _connected:         globals.activeVehicle ? !globals.activeVehicle.communicationLost : false
@@ -87,6 +89,37 @@ Rectangle {
             color : qgcPal.groupBorder
         }
 
+        // Control mode selection
+        // RowLayout {
+        //     Layout.columnSpan: 3
+        //     Layout.fillWidth: true
+
+        //     QGCLabel {
+        //         text: "제어 모드:"
+        //         font.pointSize: _fontSize * 0.8
+        //     }
+
+        //     QGCRadioButton {
+        //         text: "Step"
+        //         checked: !_useRateControl
+        //         onCheckedChanged: {
+        //             if (checked) {
+        //                 _useRateControl = false
+        //             }
+        //         }
+        //     }
+
+        //     QGCRadioButton {
+        //         text: "Rate"
+        //         checked: _useRateControl
+        //         onCheckedChanged: {
+        //             if (checked) {
+        //                 _useRateControl = true
+        //             }
+        //         }
+        //     }
+        // }
+
         QGCColumnButton{
             id:                 zoomIn
             implicitWidth:      _idealWidth
@@ -110,12 +143,22 @@ Rectangle {
             text:               "UP"
             font.pointSize:     _fontSize * 0.7
 
-            onClicked: {
-                _localPitch += 2.0
-                //-- Arbitrary range
-                if(_localPitch < -90.0) _localPitch = -90.0;
-                if(_localPitch >  35.0) _localPitch =  35.0;
-                gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
+            onPressed: {
+                if (_useRateControl) {
+                    gimbalController.gimbalPitchStart(1)
+                } else {
+                    _localPitch += _stepSize
+                    //-- Arbitrary range
+                    if(_localPitch < -90.0) _localPitch = -90.0;
+                    if(_localPitch >  35.0) _localPitch =  35.0;
+                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
+                }
+            }
+
+            onReleased: {
+                if (_useRateControl) {
+                    gimbalController.gimbalPitchStop()
+                }
             }
         }
 
@@ -142,12 +185,22 @@ Rectangle {
             text:               "Left"
             font.pointSize:     _fontSize * 0.7
 
-            onClicked: {
-                _localYaw += -2
-                //-- Arbitrary range
-                if(_localYaw < -90.0) _localYaw = -90.0;
-                if(_localYaw >  90.0) _localYaw =  90.0;
-                gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
+            onPressed: {
+                if (_useRateControl) {
+                    gimbalController.gimbalYawStart(-1)
+                } else {
+                    _localYaw += -_stepSize
+                    //-- Arbitrary range
+                    if(_localYaw < -90.0) _localYaw = -90.0;
+                    if(_localYaw >  90.0) _localYaw =  90.0;
+                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
+                }
+            }
+
+            onReleased: {
+                if (_useRateControl) {
+                    gimbalController.gimbalYawStop()
+                }
             }
         }
 
@@ -176,12 +229,22 @@ Rectangle {
             text:               "Right"
             font.pointSize:     _fontSize * 0.7
 
-            onClicked: {
-                _localYaw += 2
-                //-- Arbitrary range
-                if(_localYaw < -90.0) _localYaw = -90.0;
-                if(_localYaw >  90.0) _localYaw =  90.0;
-                gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
+            onPressed: {
+                if (_useRateControl) {
+                    gimbalController.gimbalYawStart(1)
+                } else {
+                    _localYaw += _stepSize
+                    //-- Arbitrary range
+                    if(_localYaw < -90.0) _localYaw = -90.0;
+                    if(_localYaw >  90.0) _localYaw =  90.0;
+                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
+                }
+            }
+
+            onReleased: {
+                if (_useRateControl) {
+                    gimbalController.gimbalYawStop()
+                }
             }
         }
 
@@ -208,12 +271,22 @@ Rectangle {
             text:               "Down"
             font.pointSize:     _fontSize * 0.7
 
-            onClicked: {
-                _localPitch += -2
-                //-- Arbitrary range
-                if(_localPitch < -90.0) _localPitch = -90.0;
-                if(_localPitch >  35.0) _localPitch =  35.0;
-                gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
+            onPressed: {
+                if (_useRateControl) {
+                    gimbalController.gimbalPitchStart(-1)
+                } else {
+                    _localPitch += -_stepSize
+                    //-- Arbitrary range
+                    if(_localPitch < -90.0) _localPitch = -90.0;
+                    if(_localPitch >  35.0) _localPitch =  35.0;
+                    gimbalController.sendPitchBodyYaw(_localPitch, _localYaw, true)
+                }
+            }
+
+            onReleased: {
+                if (_useRateControl) {
+                    gimbalController.gimbalPitchStop()
+                }
             }
         }
 
@@ -241,6 +314,13 @@ Rectangle {
         ColumnLayout {
             Layout.columnSpan: 3
             Layout.fillWidth: true
+
+            QGCCheckBoxSlider {
+                Layout.fillWidth:   true
+                text:               "Step Control"
+                checked:            !_useRateControl
+                onCheckedChanged:   _useRateControl = !checked
+            }
 
             LabelledLabel {
                 Layout.fillWidth:   true

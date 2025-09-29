@@ -285,7 +285,7 @@ Rectangle {
 
         QGCLabel {
             Layout.alignment: Qt.AlignHCenter
-            text:           "iMet_Batt " + _battText + " %"
+            text:           "HUB_Batt " + _battText + " %"
         }
 
         // Rectangle {

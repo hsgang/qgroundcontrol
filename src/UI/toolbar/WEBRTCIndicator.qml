@@ -165,36 +165,36 @@ Item {
                     //     }
                     // }
 
-                    SettingsGroupLayout {
-                        heading: qsTr("RTC 모듈 제어")
+                    // SettingsGroupLayout {
+                    //     heading: qsTr("RTC 모듈 제어")
 
-                        LabelledButton {
-                            label:      qsTr("모듈 재시작")
-                            buttonText: qsTr("재시작")
-                            enabled:    true
-                            onClicked:  restartConfirmDialogComponent.createObject(mainWindow).open()
-                        }
-                        LabelledButton {
-                            label:      qsTr("모듈 업데이트 확인")
-                            buttonText: qsTr("확인")
-                            onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("C")
-                        }
+                    //     LabelledButton {
+                    //         label:      qsTr("모듈 재시작")
+                    //         buttonText: qsTr("재시작")
+                    //         enabled:    true
+                    //         onClicked:  restartConfirmDialogComponent.createObject(mainWindow).open()
+                    //     }
+                    //     LabelledButton {
+                    //         label:      qsTr("모듈 업데이트 확인")
+                    //         buttonText: qsTr("확인")
+                    //         onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("C")
+                    //     }
                         
-                        // 업데이트 가능한 경우에만 업데이트 버튼 표시
-                        LabelledButton {
-                            label:      qsTr("모듈 업데이트")
-                            buttonText: qsTr("업데이트")
-                            visible:    _rtcModuleUpdateAvailable
-                            onClicked:  rtcUpdateConfirmDialogComponent.createObject(mainWindow).open()
-                        }
+                    //     // 업데이트 가능한 경우에만 업데이트 버튼 표시
+                    //     LabelledButton {
+                    //         label:      qsTr("모듈 업데이트")
+                    //         buttonText: qsTr("업데이트")
+                    //         visible:    _rtcModuleUpdateAvailable
+                    //         onClicked:  rtcUpdateConfirmDialogComponent.createObject(mainWindow).open()
+                    //     }
                         
-                        // 최신 버전인 경우 상태 텍스트 표시
-                        LabelledLabel {
-                            label:      qsTr("업데이트 상태")
-                            labelText:  qsTr("최신 버전 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음"))
-                            visible:    !_rtcModuleUpdateAvailable && _rtcModuleCurrentVersion !== ""
-                        }
-                    }
+                    //     // 최신 버전인 경우 상태 텍스트 표시
+                    //     LabelledLabel {
+                    //         label:      qsTr("업데이트 상태")
+                    //         labelText:  qsTr("최신 버전 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음"))
+                    //         visible:    !_rtcModuleUpdateAvailable && _rtcModuleCurrentVersion !== ""
+                    //     }
+                    // }
                 }
             }
         }
