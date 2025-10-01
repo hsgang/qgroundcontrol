@@ -251,6 +251,14 @@ Item {
             ctx.stroke()
         }
 
+        // Repaint when palette changes
+        Connections {
+            target: _qgcPal
+            function onPaletteChanged() {
+                indicatorCanvas.requestPaint()
+            }
+        }
+
         QGCLabel {
             id:                     valueLabel
             anchors.margins:        indicatorCanvas.indicatorValueMargins

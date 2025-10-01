@@ -605,6 +605,12 @@ ApplicationWindow {
                                     resetPrompt.close()
                                     break;
                                 }
+
+                                // This allows you to change this on mobile
+                                onPressAndHold: {
+                                    QGroundControl.corePlugin.showTouchAreas = !QGroundControl.corePlugin.showTouchAreas
+                                    showTouchAreasNotification.open()
+                                }
                             }
                         }
                     }

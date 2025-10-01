@@ -4755,13 +4755,6 @@ void Vehicle::_createCameraManager()
     }
 }
 
-void Vehicle::stopCameraManager()
-{
-    if (_cameraManager) {
-        _cameraManager->stop();
-    }
-}
-
 const QVariantList &Vehicle::staticCameraList() const
 {
     if (_cameraManager) {

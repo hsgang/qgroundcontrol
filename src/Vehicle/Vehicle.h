@@ -1584,9 +1584,6 @@ public:
     QGCCameraManager *cameraManager() { return _cameraManager; }
     const QVariantList &staticCameraList() const;
 
-    /// Stop CameraManager requests, just for testing
-    void stopCameraManager();
-
 signals:
     void cameraManagerChanged();
 

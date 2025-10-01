@@ -28,7 +28,7 @@
 #include <gst/gst.h>
 #include <cstring>
 
-QGC_LOGGING_CATEGORY(GstVideoReceiverLog, "VideoReceiver.GstVideoReceiver")
+QGC_LOGGING_CATEGORY(GstVideoReceiverLog, "Video.GstVideoReceiver")
 
 GstVideoReceiver::GstVideoReceiver(QObject *parent)
     : VideoReceiver(parent)
