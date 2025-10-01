@@ -8,7 +8,7 @@
 #include <QtQml/qqml.h>
 #include <QtMath>
 
-QGC_LOGGING_CATEGORY(GridManagerLog, "GridManagerLog")
+QGC_LOGGING_CATEGORY(GridManagerLog, "Utilities.GridManager")
 
 Q_APPLICATION_STATIC(GridManager, _gridManagerInstance);
 

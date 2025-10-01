@@ -365,7 +365,7 @@ Item {
 
             Connections {
                 target: _activeVehicle
-                onNewFormattedMessage : function(formattedMessage) {
+                function onNewFormattedMessage(formattedMessage) {
                     messageToastManager.show(formattedMessage, 5000)
                 }
             }
@@ -427,7 +427,7 @@ Item {
 
             Connections {
                 target: camera
-                onOperationResultChanged: function (result) {
+                function onOperationResultChanged(result) {
                     if (result === 0) {
                         resultLabel.text = qsTr("Take Photo Success")
                     } else if (result === 1) {

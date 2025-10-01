@@ -8,7 +8,7 @@
 #include "SettingsManager.h"
 #include "CloudSettings.h"
 
-QGC_LOGGING_CATEGORY(WebRTCLinkLog, "qgc.comms.webrtclink")
+QGC_LOGGING_CATEGORY(WebRTCLinkLog, "Comms.WEBRTCLink")
 
 const QString WebRTCWorker::kDataChannelLabel = "mavlink";
 

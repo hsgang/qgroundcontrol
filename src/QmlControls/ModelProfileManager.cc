@@ -22,7 +22,7 @@
 #include <QtCore/QJsonArray>
 #include <QtQml/QQmlEngine>
 
-QGC_LOGGING_CATEGORY(ModelProfileManagerLog, "qgc.qmlcontrols.modelprofilemanager")
+QGC_LOGGING_CATEGORY(ModelProfileManagerLog, "QMLControls.Modelprofilemanager")
 
 Q_APPLICATION_STATIC(ModelProfileManager, _cloudManagerInstance);
 

@@ -293,8 +293,8 @@ Map {
 
         Connections {
             target: _map
-            onCenterChanged: gridCanvas.requestPaint();
-            onZoomLevelChanged: gridCanvas.requestPaint();
+            function onCenterChanged() { gridCanvas.requestPaint(); }
+            function onZoomLevelChanged() { gridCanvas.requestPaint(); }
         }
     }
 } // Map

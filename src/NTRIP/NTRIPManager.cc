@@ -18,7 +18,7 @@
 #include <QtQml/qqml.h>
 #include <QDebug>
 
-QGC_LOGGING_CATEGORY(NTRIPManagerLog, "qgc.ntrip.ntripmanager")
+QGC_LOGGING_CATEGORY(NTRIPManagerLog, "NTRIP.NTRIPManager")
 
 Q_APPLICATION_STATIC(NTRIPManager, _ntripManagerInstance);
 

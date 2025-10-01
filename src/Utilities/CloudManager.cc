@@ -23,7 +23,7 @@
 #include <QtCore/QProcess>
 #include <QMessageBox>
 
-QGC_LOGGING_CATEGORY(CloudManagerLog, "CloudManagerLog")
+QGC_LOGGING_CATEGORY(CloudManagerLog, "Utilities.CloudManager")
 
 Q_APPLICATION_STATIC(CloudManager, _cloudManagerInstance);
 

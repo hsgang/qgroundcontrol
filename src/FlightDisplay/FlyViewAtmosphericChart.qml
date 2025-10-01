@@ -138,7 +138,7 @@ Item{
 
     Connections{
         target: _activeVehicle
-        onAtmosphericValueChanged: {
+        function onAtmosphericValueChanged() {
             updateAtmosphericData()
         }
     }

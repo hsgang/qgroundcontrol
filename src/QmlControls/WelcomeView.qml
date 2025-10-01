@@ -111,14 +111,14 @@ Rectangle {
 
                 Connections {
                     target: QGroundControl.cloudManager
-                    onConnectionSuccess: {
+                    function onConnectionSuccess() {
                         // connectionLabel.text = "인증 서버와 연결되었습니다"
                         // connectionLabel.color = qgcPal.text
                         icon1.color = qgcPal.colorGreen
                         icon2.color = qgcPal.colorGreen
                         icon3.color = qgcPal.colorGreen
                     }
-                    onConnectionFailed: {
+                    function onConnectionFailed() {
                         // connectionLabel.text = "인증 서버 연결 없음"
                         // connectionLabel.color = qgcPal.colorRed
                         icon1.color = qgcPal.colorRed

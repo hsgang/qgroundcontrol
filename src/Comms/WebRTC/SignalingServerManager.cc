@@ -9,7 +9,7 @@
 #include "SettingsManager.h"
 #include "CloudSettings.h"
 
-QGC_LOGGING_CATEGORY(SignalingServerManagerLog, "qgc.comms.signaling")
+QGC_LOGGING_CATEGORY(SignalingServerManagerLog, "Comms.SignalingServerManager")
 
 Q_APPLICATION_STATIC(SignalingServerManager, _signalingServerManagerInstance);
 

@@ -14,7 +14,7 @@
 #include <QHostInfo>
 #include <qdatetime.h>
 
-QGC_LOGGING_CATEGORY(NTRIPTCPLinkLog, "qgc.ntrip.ntriptcplink")
+QGC_LOGGING_CATEGORY(NTRIPTCPLinkLog, "NTRIP.NTRIPtcplink")
 
 NTRIPTCPLink::NTRIPTCPLink(const QString& hostAddress,
                            int port,
