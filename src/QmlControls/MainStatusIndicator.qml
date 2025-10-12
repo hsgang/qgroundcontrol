@@ -190,6 +190,31 @@ Rectangle {
                         id:         mainLayout
                         spacing:    _spacing
 
+                        QGCButton {
+                            // FIXME: forceArm is not possible anymore if _healthAndArmingChecksSupported == true
+                            enabled:            _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
+                            text:               _armed ?  qsTr("Disarm") : (forceArm ? qsTr("Force Arm") : qsTr("Arm"))
+                            Layout.alignment:   Qt.AlignLeft
+
+                            property bool forceArm: false
+
+                            onPressAndHold: forceArm = true
+
+                            onClicked: {
+                                if (_armed) {
+                                    mainWindow.disarmVehicleRequest()
+                                } else {
+                                    if (forceArm) {
+                                        mainWindow.forceArmVehicleRequest()
+                                    } else {
+                                        mainWindow.armVehicleRequest()
+                                    }
+                                }
+                                forceArm = false
+                                mainWindow.closeIndicatorDrawer()
+                            }
+                        }
+
                         QGCLabel {
                             anchors.horizontalCenter:   parent.horizontalCenter
                             text:                       qsTr("Sensor Status")
