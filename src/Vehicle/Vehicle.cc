@@ -1682,7 +1682,7 @@ void Vehicle::forceArm(void)
                    MAV_CMD_COMPONENT_ARM_DISARM,
                    true,    // show error if fails
                    1.0f,    // arm
-                   2989);   // force arm
+                   21196);   // force arm
 }
 
 bool Vehicle::flightModeSetAvailable()
