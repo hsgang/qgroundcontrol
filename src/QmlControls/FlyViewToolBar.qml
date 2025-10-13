@@ -38,7 +38,7 @@ Rectangle {
     }
 
     RowLayout {
-        id:                     viewButtonRow
+        id:                     mainLayout
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
@@ -101,11 +101,55 @@ Rectangle {
             height:                 viewButtonRow.height * 0.7
         }
 
-        QGCButton {
-            id:                 disconnectButton
-            text:               qsTr("Disconnect")
-            onClicked:          _activeVehicle.closeVehicle()
-            visible:            _activeVehicle && _communicationLost
+        RowLayout {
+            id:                 leftStatusLayout
+            Layout.fillHeight:  true
+            Layout.alignment:   Qt.AlignLeft
+            spacing:            ScreenTools.defaultFontPixelWidth * 2
+
+            RowLayout {
+                id:                 mainStatusLayout
+                Layout.fillHeight:  true
+                spacing:            ScreenTools.defaultFontPixelWidth / 2
+
+                QGCToolBarButton {
+                    id:                 qgcButton
+                    Layout.fillHeight:  true
+                    icon.source:        "/res/QGCLogoFull.svg"
+                    logo:               true
+                    onClicked:          mainWindow.showToolSelectDialog()
+                }
+
+                MainStatusIndicator {
+                    id:                 mainStatusIndicator
+                    Layout.fillHeight:  true
+                }
+
+                QGCButton {
+                    id:                 disconnectButton
+                    text:               qsTr("Disconnect")
+                    onClicked:          _activeVehicle.closeVehicle()
+                    visible:            _activeVehicle && _communicationLost
+                }
+            }
+
+            FlightModeIndicator {
+                Layout.fillHeight:  true
+                visible:            _activeVehicle
+            }
+        }
+
+        QGCFlickable {
+            id:                     indicatorsFlickable
+            Layout.alignment:       Qt.AlignRight
+            Layout.fillHeight:      true
+            Layout.preferredWidth:  Math.min(contentWidth, availableWidth)
+            contentWidth:           toolIndicators.width
+            flickableDirection:     Flickable.HorizontalFlick
+
+            property real availableWidth: mainLayout.width - leftStatusLayout.width
+
+            FlyViewToolBarIndicators { id: toolIndicators }
         }
 
         RowLayout {

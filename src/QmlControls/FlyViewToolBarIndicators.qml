@@ -37,25 +37,4 @@ Row {
             visible:            item.showIndicator
         }
     }
-
-//    Repeater {
-//        model: _activeVehicle ? _activeVehicle.modeIndicators : []
-//        Loader {
-//            anchors.top:        parent.top
-//            anchors.bottom:     parent.bottom
-//            source:             modelData
-//            visible:            item.showIndicator
-//        }
-//    }
-
-//    Repeater {
-//        id:     appRepeater
-//        model:  QGroundControl.corePlugin.toolBarIndicators
-//        Loader {
-//            anchors.top:        parent.top
-//            anchors.bottom:     parent.bottom
-//            source:             modelData
-//            visible:            item.showIndicator
-//        }
-//    }
 }
