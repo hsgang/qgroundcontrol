@@ -942,42 +942,58 @@ void WebRTCWorker::_prepareForWebRTCOffer()
 void WebRTCWorker::_onWebRTCOfferReceived(const QJsonObject& message)
 {
     QString fromDroneId = message["from"].toString();
-    
+
     // 표준 WebRTC offer 형식 처리
     QString sdp = message["sdp"].toString();
     if (sdp.isEmpty()) {
         qCWarning(WebRTCLinkLog) << "Invalid offer format: missing 'sdp' field";
         return;
     }
-    
+
     qCDebug(WebRTCLinkLog) << "Received WebRTC offer from drone:" << fromDroneId;
-    
+
     try {
         // WebRTC offer 처리
         rtc::Description droneOffer(sdp.toStdString(), "offer");
-        
-        // PeerConnection이 없으면 새로 생성
-        if (!_peerConnection) {
-            qCDebug(WebRTCLinkLog) << "Creating new PeerConnection for drone offer";
-            _setupPeerConnection();
-        } else {
-            qCDebug(WebRTCLinkLog) << "Using existing PeerConnection for drone offer";
+
+        // 재협상(re-handshake) 처리: 기존 연결이 있으면 재설정
+        if (_peerConnection) {
+            qCDebug(WebRTCLinkLog) << "Re-handshake detected: resetting existing PeerConnection";
+
+            // 기존 PeerConnection 정리
+            _resetPeerConnection();
+
+            // 재협상을 위한 상태 초기화
+            _remoteDescriptionSet.store(false);
+            _dataChannelOpened.store(false);
+
+            // pending candidates 정리
+            {
+                QMutexLocker locker(&_candidateMutex);
+                _pendingCandidates.clear();
+            }
+
+            emit rtcStatusMessageChanged("재협상 시작: 기존 연결 재설정 중...");
         }
-        
+
+        // 새 PeerConnection 생성 (초기 연결 또는 재협상)
+        qCDebug(WebRTCLinkLog) << "Creating new PeerConnection for drone offer";
+        _setupPeerConnection();
+
         // 드론의 offer를 remote description으로 설정
         _peerConnection->setRemoteDescription(droneOffer);
         _remoteDescriptionSet.store(true);
-        
+
         // pending candidates 처리
         _processPendingCandidates();
-        
+
         qCDebug(WebRTCLinkLog) << "Drone offer processed successfully, creating answer";
-        
+
         // GCS는 answerer이므로 answer 생성
         _peerConnection->setLocalDescription(rtc::Description::Type::Answer);
-        
+
         emit rtcStatusMessageChanged("드론으로부터 WebRTC offer 수신, 연결 설정 중...");
-        
+
     } catch (const std::exception& e) {
         qCWarning(WebRTCLinkLog) << "Failed to process drone offer:" << e.what();
         emit errorOccurred(QString("드론 offer 처리 실패: %1").arg(e.what()));
