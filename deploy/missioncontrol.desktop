@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=MissionControl
-GenericName=Ground Control Station
-Comment=UAS ground control station
-Icon=MissionControl
-Exec=missioncontrol-start.sh
-Terminal=false
-Categories=Utility;
