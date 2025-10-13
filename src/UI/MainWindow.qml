@@ -364,7 +364,7 @@ ApplicationWindow {
         edge:           Qt.LeftEdge
         interactive:    true
         dragMargin:     0
-        modal:          true
+        modal:          false
         visible:        false
 
         property var    _mainWindow:       mainWindow

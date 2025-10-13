@@ -52,7 +52,7 @@ Rectangle {
         Rectangle {
             id:                     currentButton
             Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
-            height:                 viewButtonRow.height * 0.7
+            height:                 viewButtonRow.height * 0.8
             width:                  height
             color:                  "transparent"
             border.color:           qgcPal.text
@@ -66,21 +66,7 @@ Rectangle {
                 onClicked:              viewSelectDrawer.visible ? viewSelectDrawer.close() : viewSelectDrawer.open()
             }
         }
-
-        // QGCLabel {
-        //     text:           qsTr("Exit Plan")
-        //     font.pointSize: ScreenTools.largeFontPointSize
-        // }
     }
-
-    // QGCMouseArea {
-    //     anchors.fill:   viewButtonRow
-    //     onClicked:      {
-    //         if (mainWindow.allowViewSwitch()) {
-    //             mainWindow.showFlyView()
-    //         }
-    //     }
-    // }
 
     QGCFlickable {
         id:                     toolsFlickable

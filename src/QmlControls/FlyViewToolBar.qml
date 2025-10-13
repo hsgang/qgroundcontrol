@@ -57,9 +57,9 @@ Rectangle {
             Rectangle{
                 id:                     menuNavigationButton
                 Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
-                height:                 _root.height * 0.7
+                height:                 _root.height * 0.8
                 width:                  height
-                color:                  "transparent"
+                color:                  QGroundControl.globalPalette.widgetTransparentColor
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
                 border.color:           qgcPal.text
                 border.width:           1
@@ -75,11 +75,11 @@ Rectangle {
 
             Rectangle{
                 id:                     linkManagerButton
-                height:                 _root.height * 0.7
+                height:                 _root.height * 0.8
                 width:                  height
-                color:                  "transparent"
+                color:                  QGroundControl.globalPalette.widgetTransparentColor
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
-                border.color:           !_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
+                border.color:           qgcPal.text //!_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
                 border.width:           1
                 visible:                !ScreenTools.isMobile/* && currentToolbar === flyViewToolbar*/
 
@@ -91,7 +91,7 @@ Rectangle {
                     source:             "/InstrumentValueIcons/link.svg"
                     sourceSize.height:  height
                     fillMode:           Image.PreserveAspectFit
-                    color:              !_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
+                    color:              qgcPal.text
 
                     MouseArea{
                         anchors.fill:       parent
@@ -101,8 +101,8 @@ Rectangle {
             }
 
             MainStatusIndicator {
-                id:                 mainStatusIndicator
-                height:         _root.height * 0.7
+                id:      mainStatusIndicator
+                height:  _root.height * 0.8
             }
 
             QGCButton {
@@ -114,35 +114,30 @@ Rectangle {
             }
         }
 
-        Item {
-            Layout.fillWidth: true
-        }
-
-        FlightModeIndicator {
-            Layout.fillHeight:      true
-            Layout.alignment:       Qt.AlignHCenter
-            visible:                _activeVehicle
-        }
-
-        Item {
-            Layout.fillWidth: true
-        }
-
         RowLayout {
             id:                 rightStatusLayout
             Layout.fillHeight:  true
             Layout.alignment:   Qt.AlignRight
             spacing:            ScreenTools.defaultFontPixelWidth
 
+            FlightModeIndicator {
+                Layout.fillHeight:      true
+                Layout.alignment:       Qt.AlignVCenter
+                visible:                _activeVehicle
+            }
+
             Rectangle {
                 id: webrtcIndicatorRect
-                Layout.fillHeight:      true
-                Layout.preferredWidth:  childrenRect.width
-                color:                  "transparent"
+                //Layout.fillHeight:      true
+                Layout.alignment:       Qt.AlignVCenter
+                height:                 _root.height * 0.8
+                Layout.preferredWidth:  childrenRect.width + ScreenTools.defaultFontPixelWidth * 2
+                color:                  QGroundControl.globalPalette.widgetTransparentColor
+                radius:                 ScreenTools.defaultFontPixelHeight / 4
                 visible:                QGroundControl.linkManager.webRtcLinkExists
 
                 WEBRTCIndicator{
-                    anchors.margins: ScreenTools.defaultFontPixelHeight * 0.66
+                    anchors.margins: ScreenTools.defaultFontPixelHeight * 0.33
                 }
             }
 
@@ -163,13 +158,13 @@ Rectangle {
                 id:                     widgetControlButton
                 //anchors.right:          !ScreenTools.isMobile ? brandImageRect.left : parent.right
                 Layout.alignment:       Qt.AlignVCenter
-                height:                 _root.height * 0.7
+                height:                 _root.height * 0.8
                 width:                  height
-                color:                  "transparent"
+                color:                  QGroundControl.globalPalette.widgetTransparentColor
                 radius:                 ScreenTools.defaultFontPixelHeight * 0.2
 
                 QGCColoredImage{
-                    height:             parent.height * 0.7
+                    height:             parent.height * 0.5
                     width:              height
                     anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
                     anchors.fill:       parent

@@ -30,14 +30,14 @@ RowLayout {
 
     Item {
         Layout.fillHeight:      true
-        Layout.preferredWidth:  ScreenTools.defaultFontPixelHeight * 6
+        Layout.preferredWidth:  ScreenTools.defaultFontPixelHeight * 7
         
         Rectangle {
-            height: parent.height * 0.8
-            width: parent.width
-            anchors.centerIn: parent
-            color: qgcPal.button
-            radius: ScreenTools.defaultFontPixelHeight / 4
+            height:             parent.height * 0.8
+            width:              parent.width
+            anchors.centerIn:   parent
+            color:              QGroundControl.globalPalette.widgetTransparentColor
+            radius:             ScreenTools.defaultFontPixelHeight / 4
 
             RowLayout {
                 id: innerLayout

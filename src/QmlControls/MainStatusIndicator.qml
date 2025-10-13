@@ -22,7 +22,7 @@ Rectangle {
     id:             control
     width:          ScreenTools.defaultFontPixelHeight * 10//Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelHeight * 10)
     height:         parent.height
-    color:          "transparent"//_mainStatusBGColor
+    color:          QGroundControl.globalPalette.widgetTransparentColor
     radius:         ScreenTools.defaultFontPixelHeight / 4
     border.color:   _mainStatusBGColor
     border.width:   2

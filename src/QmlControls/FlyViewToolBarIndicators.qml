@@ -15,15 +15,17 @@ import QGroundControl.Toolbar
 import QGroundControl.Controls
 
 Rectangle {
-    anchors.top:    parent.top
-    anchors.bottom: parent.bottom
+    //anchors.top:    parent.top
+    //anchors.bottom: parent.bottom
+    anchors.verticalCenter: parent.verticalCenter
+    height:         parent.height * 0.8
     width:          mainLayout.width + _widthMargin
     color:          QGroundControl.globalPalette.widgetTransparentColor
-    radius:         ScreenTools.defaultFontPixelHeight / 2
+    radius:         ScreenTools.defaultFontPixelHeight / 4
     visible:        width > _widthMargin
 
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
-    property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.66
+    property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.33
     property real _widthMargin:             _toolIndicatorMargins * 2
 
     Row {
