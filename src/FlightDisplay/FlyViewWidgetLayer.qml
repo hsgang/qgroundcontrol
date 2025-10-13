@@ -24,7 +24,6 @@ import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
 
 import SiYi.Object
-import "qrc:/qml/QGroundControl/Controls"
 
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
@@ -76,8 +75,7 @@ Item {
         anchors.top:            parent.top
         anchors.bottom:         bottomRightRowLayout.top
         anchors.right:          parent.right
-        anchors.margins:        _layoutMargin
-        maximumHeight:          parent.height - (bottomRightRowLayout.height + _margins * 5)
+        maximumHeight:          parent.height - (bottomRightRowLayout.height + _margins * 4)
 
         property real topEdgeRightInset:    height + _layoutMargin
         property real rightEdgeTopInset:    width + _layoutMargin
@@ -86,7 +84,6 @@ Item {
 
     FlyViewTopRightColumnLayout {
         id:                 topRightColumnLayout
-        anchors.margins:    _layoutMargin
         anchors.top:        parent.top
         anchors.right:      parent.right
         spacing:            _layoutSpacing
@@ -107,7 +104,6 @@ Item {
 
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout
-        anchors.margins:    _layoutMargin
         anchors.bottom:     parent.bottom
         anchors.right:      parent.right
         spacing:            _layoutSpacing
@@ -162,7 +158,7 @@ Item {
     GuidedActionConfirm {
         id:                         guidedActionConfirm
         anchors.margins:            _toolsMargin * 2
-        anchors.bottom:             parent.bottom
+        anchors.top:                parent.top
         anchors.horizontalCenter:   parent.horizontalCenter
         z:                          QGroundControl.zOrderTopMost
         guidedController:           _guidedController
@@ -228,8 +224,6 @@ Item {
 
     FlyViewToolStrip {
         id:                     toolStrip
-        anchors.leftMargin:     _toolsMargin + parentToolInsets.leftEdgeCenterInset
-        anchors.topMargin:      _toolsMargin + parentToolInsets.topEdgeLeftInset
         anchors.left:           parent.left
         anchors.top:            parent.top
         z:                      QGroundControl.zOrderWidgets

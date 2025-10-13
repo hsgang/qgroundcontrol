@@ -14,27 +14,47 @@ import QGroundControl.Controls
 import QGroundControl.Toolbar
 import QGroundControl.Controls
 
-//-------------------------------------------------------------------------
-//-- Toolbar Indicators
-Row {
-    id:                 indicatorRow
-    anchors.top:        parent.top
-    anchors.bottom:     parent.bottom
-    anchors.margins:    _toolIndicatorMargins
-    spacing:            ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth : ScreenTools.defaultFontPixelWidth * 1.6
+Rectangle {
+    anchors.top:    parent.top
+    anchors.bottom: parent.bottom
+    width:          mainLayout.width + _widthMargin
+    color:          QGroundControl.globalPalette.widgetTransparentColor
+    radius:         ScreenTools.defaultFontPixelHeight / 2
+    visible:        width > _widthMargin
 
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
     property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.66
+    property real _widthMargin:             _toolIndicatorMargins * 2
 
-    Repeater {
-        id:     toolIndicatorsRepeater
-        model:  _activeVehicle ? _activeVehicle.toolIndicators : []
+    Row {
+        id:                 mainLayout
+        anchors.margins:    _toolIndicatorMargins
+        anchors.left:       parent.left
+        anchors.top:        parent.top
+        anchors.bottom:     parent.bottom
+        spacing:            ScreenTools.defaultFontPixelWidth * 1.75
 
-        Loader {
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            source:             modelData
-            visible:            item.showIndicator
+        Repeater {
+            id:     appRepeater
+            model:  QGroundControl.corePlugin.toolBarIndicators
+            Loader {
+                anchors.top:        parent.top
+                anchors.bottom:     parent.bottom
+                source:             modelData
+                visible:            item.showIndicator
+            }
+        }
+
+        Repeater {
+            id:     toolIndicatorsRepeater
+            model:  _activeVehicle ? _activeVehicle.toolIndicators : []
+
+            Loader {
+                anchors.top:        parent.top
+                anchors.bottom:     parent.bottom
+                source:             modelData
+                visible:            item.showIndicator
+            }
         }
     }
 }
