@@ -21,7 +21,7 @@ Row {
     anchors.top:        parent.top
     anchors.bottom:     parent.bottom
     anchors.margins:    _toolIndicatorMargins
-    spacing:            ScreenTools.defaultFontPixelWidth
+    spacing:            ScreenTools.isMobile ? ScreenTools.defaultFontPixelWidth : ScreenTools.defaultFontPixelWidth * 1.6
 
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
     property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.66

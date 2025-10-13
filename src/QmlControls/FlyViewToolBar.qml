@@ -14,6 +14,7 @@ import QtQuick.Dialogs
 
 import QGroundControl
 import QGroundControl.Controls
+import QGroundControl.Toolbar
 
 Rectangle {
     id:     _root
@@ -42,222 +43,147 @@ Rectangle {
         anchors.bottomMargin:   1
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
+        anchors.left:           parent.left
+        anchors.right:          brandingLogo.visible ? brandingLogo.left : parent.right
+        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
         spacing:                ScreenTools.defaultFontPixelWidth
-
-        Rectangle {
-            id:                     currentButton
-            Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
-            height:                 viewButtonRow.height * 0.7
-            width:                  height
-            color:                  "transparent"
-            border.color:           qgcPal.text
-            border.width:           1
-            radius:                 ScreenTools.defaultFontPixelHeight / 4
-
-            QGCToolBarButton {
-                anchors.horizontalCenter:   parent.horizontalCenter
-                anchors.verticalCenter:     parent.verticalCenter
-                icon.source:            "/qmlimages/Hamburger.svg"
-                logo:                   true
-                onClicked:
-                    // if(viewSelectDrawer.visible === false){
-                    //     viewSelectDrawer.visible = true
-                    // }
-                    // else if(viewSelectDrawer.visible === true){
-                    //     viewSelectDrawer.visible = false
-                    // }
-                    viewSelectDrawer.open()
-            }
-        }
-
-        Rectangle{
-            id:                     linkManagerButton
-            height:                 viewButtonRow.height * 0.7
-            width:                  height
-            color:                  "transparent"
-            radius:                 ScreenTools.defaultFontPixelHeight / 4
-            border.color:           !_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
-            border.width:           1
-            visible:                !ScreenTools.isMobile/* && currentToolbar === flyViewToolbar*/
-
-            QGCColoredImage{
-                height:             parent.height * 0.7
-                width:              height
-                anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
-                anchors.fill:       parent
-                source:             "/InstrumentValueIcons/link.svg"
-                sourceSize.height:  height
-                fillMode:           Image.PreserveAspectFit
-                color:              !_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
-            }
-
-            MouseArea{
-                anchors.fill:       parent
-                onClicked:          linkManagerDialogComponent.createObject(mainWindow).open()
-            }
-        }
-
-        MainStatusIndicator {
-            height:                 viewButtonRow.height * 0.7
-        }
 
         RowLayout {
             id:                 leftStatusLayout
             Layout.fillHeight:  true
             Layout.alignment:   Qt.AlignLeft
-            spacing:            ScreenTools.defaultFontPixelWidth * 2
+            spacing:            ScreenTools.defaultFontPixelWidth
 
-            RowLayout {
-                id:                 mainStatusLayout
-                Layout.fillHeight:  true
-                spacing:            ScreenTools.defaultFontPixelWidth / 2
+            Rectangle{
+                id:                     menuNavigationButton
+                Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
+                height:                 _root.height * 0.7
+                width:                  height
+                color:                  "transparent"
+                radius:                 ScreenTools.defaultFontPixelHeight / 4
+                border.color:           qgcPal.text
+                border.width:           1
 
                 QGCToolBarButton {
-                    id:                 qgcButton
-                    Layout.fillHeight:  true
-                    icon.source:        "/res/QGCLogoFull.svg"
-                    logo:               true
-                    onClicked:          mainWindow.showToolSelectDialog()
-                }
-
-                MainStatusIndicator {
-                    id:                 mainStatusIndicator
-                    Layout.fillHeight:  true
-                }
-
-                QGCButton {
-                    id:                 disconnectButton
-                    text:               qsTr("Disconnect")
-                    onClicked:          _activeVehicle.closeVehicle()
-                    visible:            _activeVehicle && _communicationLost
+                    anchors.horizontalCenter:   parent.horizontalCenter
+                    anchors.verticalCenter:     parent.verticalCenter
+                    icon.source:                "/qmlimages/Hamburger.svg"
+                    logo:                       true
+                    onClicked:                  viewSelectDrawer.visible ? viewSelectDrawer.close() : viewSelectDrawer.open()
                 }
             }
 
-            FlightModeIndicator {
-                Layout.fillHeight:  true
-                visible:            _activeVehicle
+            Rectangle{
+                id:                     linkManagerButton
+                height:                 _root.height * 0.7
+                width:                  height
+                color:                  "transparent"
+                radius:                 ScreenTools.defaultFontPixelHeight / 4
+                border.color:           !_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
+                border.width:           1
+                visible:                !ScreenTools.isMobile/* && currentToolbar === flyViewToolbar*/
+
+                QGCColoredImage{
+                    height:             parent.height * 0.7
+                    width:              height
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
+                    anchors.fill:       parent
+                    source:             "/InstrumentValueIcons/link.svg"
+                    sourceSize.height:  height
+                    fillMode:           Image.PreserveAspectFit
+                    color:              !_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
+
+                    MouseArea{
+                        anchors.fill:       parent
+                        onClicked:          linkManagerDialogComponent.createObject(mainWindow).open()
+                    }
+                }
+            }
+
+            MainStatusIndicator {
+                id:                 mainStatusIndicator
+                height:         _root.height * 0.7
+            }
+
+            QGCButton {
+                id:                 disconnectButton
+                Layout.alignment:       Qt.AlignVCenter
+                text:               qsTr("Disconnect")
+                onClicked:          _activeVehicle.closeVehicle()
+                visible:            _activeVehicle && _communicationLost
             }
         }
 
-        QGCFlickable {
-            id:                     indicatorsFlickable
-            Layout.alignment:       Qt.AlignRight
+        Item {
+            Layout.fillWidth: true
+        }
+
+        FlightModeIndicator {
             Layout.fillHeight:      true
-            Layout.preferredWidth:  Math.min(contentWidth, availableWidth)
-            contentWidth:           toolIndicators.width
-            flickableDirection:     Flickable.HorizontalFlick
+            Layout.alignment:       Qt.AlignHCenter
+            visible:                _activeVehicle
+        }
 
-            property real availableWidth: mainLayout.width - leftStatusLayout.width
-
-            FlyViewToolBarIndicators { id: toolIndicators }
+        Item {
+            Layout.fillWidth: true
         }
 
         RowLayout {
-            // anchors.top:        parent.top
-            // anchors.bottom:     parent.bottom
-            // anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.66
-            spacing:            ScreenTools.defaultFontPixelHeight * 0.5
+            id:                 rightStatusLayout
+            Layout.fillHeight:  true
+            Layout.alignment:   Qt.AlignRight
+            spacing:            ScreenTools.defaultFontPixelWidth
 
-            property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
+            Rectangle {
+                id: webrtcIndicatorRect
+                Layout.fillHeight:      true
+                Layout.preferredWidth:  childrenRect.width
+                color:                  "transparent"
+                visible:                QGroundControl.linkManager.webRtcLinkExists
 
-            Repeater {
-                model: _activeVehicle ? _activeVehicle.modeIndicators : []
-                Loader {
-                    //anchors.verticalCenter: parent.verticalCenter
-                    source:             modelData
-                    visible:            item.showIndicator
+                WEBRTCIndicator{
+                    anchors.margins: ScreenTools.defaultFontPixelHeight * 0.66
                 }
             }
-        }
 
-        Rectangle {
-            id:                 flightModeIndicatorRect
-            width:              ScreenTools.defaultFontPixelHeight * 8
-            height:             viewButtonRow.height * 0.7
-            color:              "transparent"
-            radius:             ScreenTools.defaultFontPixelHeight / 4
-            visible:            _activeVehicle
+            QGCFlickable {
+                id:                     indicatorsFlickable
+                Layout.alignment:       Qt.AlignRight
+                Layout.fillHeight:      true
+                Layout.preferredWidth:  Math.min(contentWidth, availableWidth)
+                contentWidth:           toolIndicators.width
+                flickableDirection:     Flickable.HorizontalFlick
 
-            Loader{
-                id:             flightModeIndicatorLoader
-                anchors.top:    parent.top
-                anchors.bottom: parent.bottom
-                anchors.horizontalCenter: parent.horizontalCenter
-                source:         { _activeVehicle
-                                    ? (_activeVehicle.apmFirmware
-                                       ? "qrc:/qml/QGroundControl/Toolbar/APMFlightModeIndicator.qml"
-                                       : "qrc:/PX4/Indicators/PX4FlightModeIndicator.qml")
-                                  : "qrc:/qml/QGroundControl/Controls/FlightModeIndicator.qml" }
-                width:              parent.width
+                property real availableWidth: mainLayout.width - leftStatusLayout.width
+
+                FlyViewToolBarIndicators { id: toolIndicators }
             }
-        }
-    }
 
-    Rectangle {
-        id: webrtcIndicatorRect
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.bottomMargin:   1
-        // anchors.left:           viewButtonRow.right
-        // anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
-        anchors.right:          vehicleStatusRect.left
-        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
-        width:                  childrenRect.width
-        color:                  "transparent"
-        visible:                QGroundControl.linkManager.webRtcLinkExists
+            Rectangle {
+                id:                     widgetControlButton
+                //anchors.right:          !ScreenTools.isMobile ? brandImageRect.left : parent.right
+                Layout.alignment:       Qt.AlignVCenter
+                height:                 _root.height * 0.7
+                width:                  height
+                color:                  "transparent"
+                radius:                 ScreenTools.defaultFontPixelHeight * 0.2
 
-        WEBRTCIndicator{
-            anchors.margins: ScreenTools.defaultFontPixelHeight * 0.66
-        }
-    }
+                QGCColoredImage{
+                    height:             parent.height * 0.7
+                    width:              height
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
+                    anchors.fill:       parent
+                    source:             "/InstrumentValueIcons/navigation-more.svg"
+                    sourceSize.height:  height
+                    fillMode:           Image.PreserveAspectFit
+                    color:              qgcPal.text
+                }
 
-    Rectangle {
-        id:                     vehicleStatusRect
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.bottomMargin:   1
-        // anchors.left:           webrtcIndicatorRect.right
-        // anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
-        width:                  statusIndicatorLoader.width
-        anchors.right:          widgetControlButton.left
-        anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
-        color:                  "transparent"
-
-        Loader {
-            id:                 statusIndicatorLoader
-            //anchors.left:       parent.left
-            anchors.right:      parent.right
-            anchors.top:        parent.top
-            anchors.bottom:     parent.bottom
-            source:             "qrc:/qml/QGroundControl/Controls/FlyViewToolBarIndicators.qml"
-        }
-    }
-
-    Rectangle {
-        id:                     widgetControlButton
-        anchors.right:          !ScreenTools.isMobile ? brandImageRect.left : parent.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.5
-        height:                 parent.height - ScreenTools.defaultFontPixelHeight
-        width:                  height
-        color:                  "transparent"
-        radius:                 ScreenTools.defaultFontPixelHeight * 0.2
-
-        QGCColoredImage{
-            height:             parent.height * 0.7
-            width:              height
-            anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
-            anchors.fill:       parent
-            source:             "/InstrumentValueIcons/navigation-more.svg"
-            sourceSize.height:  height
-            fillMode:           Image.PreserveAspectFit
-            color:              qgcPal.text
-        }
-
-        MouseArea{
-            anchors.fill:       parent
-            onClicked:          mainWindow.showIndicatorDrawer(widgetControlComponent, widgetControlButton)
+                MouseArea{
+                    anchors.fill:       parent
+                    onClicked:          mainWindow.showIndicatorDrawer(widgetControlComponent, widgetControlButton)
+                }
+            }
         }
     }
 
@@ -265,7 +191,7 @@ Rectangle {
     //-- Branding Logo
 
     Rectangle {
-        id: brandImageRect
+        id: brandingLogo
         anchors.right:          parent.right
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
@@ -281,11 +207,6 @@ Rectangle {
             id:                     brandImage
             anchors.fill:           parent
             anchors.margins:        ScreenTools.defaultFontPixelHeight / 4
-            // anchors.right:          parent.right
-            // anchors.top:            parent.top
-            // anchors.bottom:         parent.bottom
-            // anchors.margins:        ScreenTools.defaultFontPixelHeight * 0.66
-            // visible:                !ScreenTools.isMobile && currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth)
             fillMode:               Image.PreserveAspectFit
             source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
             sourceSize.width: 256
@@ -345,12 +266,6 @@ Rectangle {
 
             property var    _currentSelection:     null
 
-            // TimedProgressTracker {
-            //     id:                     closeProgressTracker
-            //     timeoutSeconds:         10
-            //     onTimeout:              linkPopup.close()
-            // }
-
             Rectangle {
                 id: _linkRoot
                 color: qgcPal.window
@@ -363,23 +278,6 @@ Rectangle {
                     id: contentsColumnLayout
                     width:      ScreenTools.defaultFontPixelWidth * 40
                     spacing:    ScreenTools.defaultFontPixelHeight / 2
-
-                    // QGCLabel {
-                    //     id:   closeProgressLabel
-                    //     visible:            closeProgressTracker.running && closeProgressTracker.progressLabel
-                    //     Layout.fillWidth:   true
-                    //     horizontalAlignment: Text.AlignRight
-                    //     text: qsTr("Automatically close in %1 seconds").arg(closeProgressTracker.progressLabel)
-
-                    //     MouseArea {
-                    //         anchors.fill: parent
-                    //         onClicked: {
-                    //             if (closeProgressTracker.running) {
-                    //                 closeProgressTracker.stop()
-                    //             }
-                    //         }
-                    //     }
-                    // }
 
                     Rectangle {
                         id: flickableRect
@@ -443,9 +341,6 @@ Rectangle {
                             enabled:    _currentSelection && !_currentSelection.link
                             onClicked:  {
                                 QGroundControl.linkManager.createConnectedLink(_currentSelection)
-                                // if (_currentSelection && _currentSelection.link) {
-                                //     closeProgressTracker.start()
-                                // }
                             }
                         }
 
@@ -457,9 +352,6 @@ Rectangle {
                             onClicked:  {
                                 _currentSelection.link.disconnect()
                                 _currentSelection.linkChanged()
-                                // if (closeProgressTracker.running) {
-                                //     closeProgressTracker.stop()
-                                // }
                             }
                         }
                     }

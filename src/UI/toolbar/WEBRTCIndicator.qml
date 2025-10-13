@@ -56,6 +56,7 @@ Item {
             horizontalAlignment: Text.AlignRight
             text: (QGroundControl.linkManager.webRtcLinkExists & QGroundControl.linkManager.webRtcRtt < 0) ? QGroundControl.linkManager.rtcStatusMessage : ""
             anchors.verticalCenter: parent.verticalCenter
+            visible: text !== ""
         }
 
         QGCColoredImage {

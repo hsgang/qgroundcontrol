@@ -37,6 +37,11 @@ Rectangle {
     property bool   _healthAndArmingChecksSupported: _activeVehicle ? _activeVehicle.healthAndArmingCheckReport.supported : false
     property bool   _vehicleFlies:      _activeVehicle ? _activeVehicle.airShip || _activeVehicle.fixedWing || _activeVehicle.vtol || _activeVehicle.multiRotor : false
 
+    function dropMainStatusIndicator() {
+        let overallStatusComponent = _activeVehicle ? overallStatusIndicatorPage : overallStatusOfflineIndicatorPage
+        mainWindow.showIndicatorDrawer(overallStatusComponent, control)
+    }
+
     RowLayout {
         id:          rowLayout
         spacing:                    0
@@ -45,11 +50,6 @@ Rectangle {
         anchors.rightMargin:        ScreenTools.defaultFontPixelHeight
         //anchors.horizontalCenter:   parent.horizontalCenter
         anchors.verticalCenter:     parent.verticalCenter
-
-        function dropMainStatusIndicator() {
-            let overallStatusComponent = _activeVehicle ? overallStatusIndicatorPage : overallStatusOfflineIndicatorPage
-            mainWindow.showIndicatorDrawer(overallStatusComponent, control)
-        }
 
         QGCLabel {
             id:                 mainStatusLabel
@@ -247,15 +247,15 @@ Rectangle {
                     }
                 }
 
-                SettingsGroupLayout {
-                    //Layout.fillWidth:   true
-                    heading:            qsTr("Vehicle Messages")
-                    visible:            !vehicleMessageList.noMessages
+                // SettingsGroupLayout {
+                //     //Layout.fillWidth:   true
+                //     heading:            qsTr("Vehicle Messages")
+                //     visible:            !vehicleMessageList.noMessages
 
-                    VehicleMessageList { 
-                        id: vehicleMessageList
-                    }
-                }
+                //     VehicleMessageList {
+                //         id: vehicleMessageList
+                //     }
+                // }
 
                 SettingsGroupLayout {
                     //Layout.fillWidth:   true

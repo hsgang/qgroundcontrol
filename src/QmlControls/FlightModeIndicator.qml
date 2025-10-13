@@ -15,12 +15,8 @@ import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.FactControls
 
-Item {
+RowLayout {
     id:         control
-    width:      ScreenTools.defaultFontPixelHeight * 6
-    anchors.top:                parent.top
-    anchors.bottom:             parent.bottom
-    anchors.horizontalCenter:   parent.horizontalCenter
 
     property bool   showIndicator:          true
     property bool   waitForParameters:      true   // UI won't show until parameters are ready
@@ -30,34 +26,44 @@ Item {
     property bool allowEditMode:    true
     property bool editMode:         false
 
-    Rectangle {
-        width:  parent.width
-        height: parent.height
-        color: "transparent"
+    QGCPalette { id: qgcPal }
 
-        RowLayout {
-            anchors.horizontalCenter:   parent.horizontalCenter
-            anchors.verticalCenter:     parent.verticalCenter
+    Item {
+        Layout.fillHeight:      true
+        Layout.preferredWidth:  ScreenTools.defaultFontPixelHeight * 6
+        
+        Rectangle {
+            height: parent.height * 0.8
+            width: parent.width
+            anchors.centerIn: parent
+            color: qgcPal.button
+            radius: ScreenTools.defaultFontPixelHeight / 4
 
-            QGCLabel {
-                id:                 modeTranslatedLabel
-                text:               activeVehicle ? activeVehicle.flightMode : qsTr("비행모드")
-                font.pointSize:     ScreenTools.largeFontPointSize * 0.9
+            RowLayout {
+                id: innerLayout
+                anchors.centerIn: parent
+                spacing: ScreenTools.defaultFontPixelWidth / 2
+
+                QGCLabel {
+                    id:                 modeTranslatedLabel
+                    text:               activeVehicle ? activeVehicle.flightMode : qsTr("비행모드")
+                    font.pointSize:     ScreenTools.largeFontPointSize * 0.9
+                }
+
+                QGCColoredImage {
+                    height:     ScreenTools.defaultFontPixelHeight
+                    width:      height
+                    fillMode:   Image.PreserveAspectFit
+                    mipmap:     true
+                    source:     "/InstrumentValueIcons/cheveron-down.svg"
+                    color:      qgcPal.text
+                }
             }
 
-            QGCColoredImage {
-                height:     ScreenTools.defaultFontPixelHeight
-                width:      height
-                fillMode:   Image.PreserveAspectFit
-                mipmap:     true
-                source:     "/InstrumentValueIcons/cheveron-down.svg"
-                color:      qgcPal.text
+            MouseArea {
+                anchors.fill:   parent
+                onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
             }
-        }
-
-        MouseArea {
-            anchors.fill:   parent
-            onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
         }
     }
 

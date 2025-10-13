@@ -63,13 +63,7 @@ Rectangle {
                 anchors.verticalCenter:     parent.verticalCenter
                 icon.source:            "/qmlimages/Hamburger.svg"
                 logo:                   true
-                onClicked:
-                    if(viewSelectDrawer.visible === false){
-                        viewSelectDrawer.visible = true
-                    }
-                    else if(viewSelectDrawer.visible === true){
-                        viewSelectDrawer.visible = false
-                    }
+                onClicked:              viewSelectDrawer.visible ? viewSelectDrawer.close() : viewSelectDrawer.open()
             }
         }
 
@@ -79,14 +73,14 @@ Rectangle {
         // }
     }
 
-    QGCMouseArea {
-        anchors.fill:   viewButtonRow
-        onClicked:      {
-            if (mainWindow.allowViewSwitch()) {
-                mainWindow.showFlyView()
-            }
-        }
-    }
+    // QGCMouseArea {
+    //     anchors.fill:   viewButtonRow
+    //     onClicked:      {
+    //         if (mainWindow.allowViewSwitch()) {
+    //             mainWindow.showFlyView()
+    //         }
+    //     }
+    // }
 
     QGCFlickable {
         id:                     toolsFlickable
