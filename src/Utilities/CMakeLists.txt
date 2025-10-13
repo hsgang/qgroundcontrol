@@ -1,3 +1,11 @@
+# ============================================================================
+# Utilities Module
+# Core utilities, logging, file system helpers, and platform abstractions
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Core Utility Sources
+# ----------------------------------------------------------------------------
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
         DeviceInfo.cc
@@ -28,6 +36,10 @@ target_sources(${CMAKE_PROJECT_NAME}
         GridManager.h
 )
 
+# ----------------------------------------------------------------------------
+# Platform-Specific Sources
+# ----------------------------------------------------------------------------
+# Signal handling not available on mobile platforms
 if(NOT ANDROID AND NOT IOS)
     target_sources(${CMAKE_PROJECT_NAME}
         PRIVATE
@@ -36,6 +48,7 @@ if(NOT ANDROID AND NOT IOS)
     )
 endif()
 
+# iOS-specific screen management
 if(IOS)
     target_sources(${CMAKE_PROJECT_NAME}
         PRIVATE
@@ -50,7 +63,9 @@ target_include_directories(${CMAKE_PROJECT_NAME}
         FileSystem
 )
 
-#===========================================================================#
+# ============================================================================
+# Utility Subdirectories
+# ============================================================================
 
 add_subdirectory(Audio)
 add_subdirectory(Compression)

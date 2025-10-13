@@ -254,6 +254,12 @@
     "shortDesc": "showLandingGuideView",
     "type":         "bool",
     "default":      false
+},
+{
+    "name":         "showJoystickIndicatorInToolbar",
+    "shortDesc":    "Show joystick indicator in toolbar",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }

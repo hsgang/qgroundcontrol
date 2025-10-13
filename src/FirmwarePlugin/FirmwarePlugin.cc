@@ -226,6 +226,8 @@ const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/RemoteIDIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/MessageIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/EscIndicator.qml")),
+            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/JoystickIndicator.qml")),
+            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/MultiVehicleSelector.qml")),
 #ifdef QT_DEBUG
             // ControlIndicator is only available in debug builds for the moment
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/GCSControlIndicator.qml")),
@@ -234,19 +236,6 @@ const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
     }
 
     return _toolIndicatorList;
-}
-
-const QVariantList &FirmwarePlugin::modeIndicators(const Vehicle*)
-{
-    //-- Default list of indicators for all vehicles.
-    if (_modeIndicatorList.isEmpty()) {
-        _modeIndicatorList = QVariantList({
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/MultiVehicleSelector.qml")),
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/LinkIndicator.qml")),
-        });
-    }
-
-    return _modeIndicatorList;
 }
 
 bool FirmwarePlugin::_armVehicleAndValidate(Vehicle *vehicle) const

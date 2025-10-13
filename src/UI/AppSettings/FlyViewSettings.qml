@@ -185,6 +185,12 @@ SettingsPage {
             fact:               QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator
             visible:            fact.visible
         }
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Show Joystick Status in Toolbar")
+            fact:               _flyViewSettings.showJoystickIndicatorInToolbar
+            visible:            fact.visible
+        }
     }
 
     SettingsGroupLayout {

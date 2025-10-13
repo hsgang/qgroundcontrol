@@ -280,7 +280,6 @@ void Vehicle::_commonInit()
     _firmwarePlugin = FirmwarePluginManager::instance()->firmwarePluginForAutopilot(_firmwareType, _vehicleType);
 
     connect(_firmwarePlugin, &FirmwarePlugin::toolIndicatorsChanged, this, &Vehicle::toolIndicatorsChanged);
-    connect(_firmwarePlugin, &FirmwarePlugin::modeIndicatorsChanged, this, &Vehicle::modeIndicatorsChanged);
 
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceHeadingHome);
     connect(this, &Vehicle::coordinateChanged,      this, &Vehicle::_updateDistanceHeadingGCS);
@@ -1975,7 +1974,7 @@ void Vehicle::virtualTabletJoystickValue(double roll, double pitch, double yaw, 
                     static_cast<float>(pitch),
                     static_cast<float>(yaw),
                     static_cast<float>(thrust),
-                    0, 0);
+                    0, 0, NAN, NAN);
     }
 }
 
@@ -3486,27 +3485,10 @@ QString Vehicle::vehicleImageOutline() const
         return QString();
 }
 
-QVariant Vehicle::mainStatusIndicatorContentItem()
-{
-    if(_firmwarePlugin) {
-        return _firmwarePlugin->mainStatusIndicatorContentItem(this);
-    }
-    return QVariant();
-}
-
 const QVariantList& Vehicle::toolIndicators()
 {
     if(_firmwarePlugin) {
         return _firmwarePlugin->toolIndicators(this);
-    }
-    static QVariantList emptyList;
-    return emptyList;
-}
-
-const QVariantList& Vehicle::modeIndicators()
-{
-    if(_firmwarePlugin) {
-        return _firmwarePlugin->modeIndicators(this);
     }
     static QVariantList emptyList;
     return emptyList;
@@ -4145,7 +4127,7 @@ void Vehicle::clearAllParamMapRC(void)
     }
 }
 
-void Vehicle::sendJoystickDataThreadSafe(float roll, float pitch, float yaw, float thrust, quint16 buttons, quint16 buttons2)
+void Vehicle::sendJoystickDataThreadSafe(float roll, float pitch, float yaw, float thrust, quint16 buttons, quint16 buttons2, float gimbalPitch, float gimbalYaw)
 {
     SharedLinkInterfacePtr sharedLink = vehicleLinkManager()->primaryLink().lock();
     if (!sharedLink) {
@@ -4165,6 +4147,17 @@ void Vehicle::sendJoystickDataThreadSafe(float roll, float pitch, float yaw, flo
     float newPitchCommand  =    pitch * axesScaling;    // Joystick data is reverse of mavlink values
     float newYawCommand    =    yaw * axesScaling;
     float newThrustCommand =    thrust * axesScaling;
+    float newGimbalPitch   =    gimbalPitch * axesScaling;
+    float newGimbalYaw     =    gimbalYaw * axesScaling;
+    uint8_t extensions     =    0;
+
+    if (std::isfinite(gimbalPitch)) {
+        extensions |= 1;
+    }
+
+    if (std::isfinite(gimbalYaw)) {
+        extensions |= 2;
+    }
 
     mavlink_msg_manual_control_pack_chan(
         static_cast<uint8_t>(MAVLinkProtocol::instance()->getSystemId()),
@@ -4177,8 +4170,9 @@ void Vehicle::sendJoystickDataThreadSafe(float roll, float pitch, float yaw, flo
         static_cast<int16_t>(newThrustCommand),
         static_cast<int16_t>(newYawCommand),
         buttons, buttons2,
-        0,
-        0, 0,
+        extensions,
+        static_cast<int16_t>(newGimbalPitch),
+        static_cast<int16_t>(newGimbalYaw),
         0, 0, 0, 0, 0, 0
     );
     sendMessageOnLinkThreadSafe(sharedLink.get(), message);
@@ -4570,6 +4564,12 @@ void Vehicle::changeHeading(const QGeoCoordinate& headingCoord)
 
     changeHeading(diff, maxYawRate, direction, relative);
 }
+
+QVariant Vehicle::expandedToolbarIndicatorSource(const QString& indicatorName)
+{
+    return _firmwarePlugin->expandedToolbarIndicatorSource(this, indicatorName);
+}
+
 /*===========================================================================*/
 /*                         ardupilotmega Dialect                             */
 /*===========================================================================*/

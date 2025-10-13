@@ -13,10 +13,6 @@ import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.Controls
-
-
-
-
 import QGroundControl.FactControls
 
 Item {
@@ -27,8 +23,7 @@ Item {
     anchors.horizontalCenter:   parent.horizontalCenter
 
     property bool   showIndicator:          true
-    property var    expandedPageComponent
-    property bool   waitForParameters:      false
+    property bool   waitForParameters:      true   // UI won't show until parameters are ready
 
     property real fontPointSize:    ScreenTools.largeFontPointSize
     property var  activeVehicle:    QGroundControl.multiVehicleManager.activeVehicle
@@ -219,7 +214,8 @@ Item {
             property var  flightModeSettings:   QGroundControl.settingsManager.flightModeSettings
 
             Loader {
-                sourceComponent: expandedPageComponent
+                Layout.fillWidth:   true
+                source:             _activeVehicle.expandedToolbarIndicatorSource("FlightMode")
             }
 
             SettingsGroupLayout {
