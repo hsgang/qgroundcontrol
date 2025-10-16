@@ -48,6 +48,7 @@ RowLayout {
                     id:                 modeTranslatedLabel
                     text:               activeVehicle ? activeVehicle.flightMode : qsTr("비행모드")
                     font.pointSize:     ScreenTools.largeFontPointSize * 0.9
+                    font.bold:          true
                 }
 
                 QGCColoredImage {
