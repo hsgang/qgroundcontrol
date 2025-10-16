@@ -477,8 +477,8 @@ QQuickWindow *QGCApplication::mainRootWindow()
         _mainRootWindow = qobject_cast<QQuickWindow*>(_rootQmlObject());
         bool _fullScreen = SettingsManager::instance()->appSettings()->fullScreen()->rawValue().toBool();
         if (_fullScreen) {
-            // 기존 flags에 FramelessWindowHint 추가 및 전체화면 전환
-            _mainRootWindow->setFlags(_mainRootWindow->flags() | Qt::FramelessWindowHint);
+            Qt::WindowFlags flags = _mainRootWindow->flags() | Qt::FramelessWindowHint | Qt::ExpandedClientAreaHint;
+            _mainRootWindow->setFlags(flags);
             _mainRootWindow->setVisibility(QWindow::FullScreen);
         } else {
             _mainRootWindow->setVisibility(QWindow::Maximized);
