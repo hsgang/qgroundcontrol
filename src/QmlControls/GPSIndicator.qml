@@ -29,7 +29,7 @@ Item {
     property var _ntripManager:         QGroundControl.ntripManager
     property bool _communicationLost:   _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
 
-    property bool isGNSS2: _activeVehicle.gps2.lock.value
+    property bool isGNSS2:              _activeVehicle ? _activeVehicle.gps2.lock.value : false
 
     function getGpsImage() {
         if (_activeVehicle.gps.lock.value) {
