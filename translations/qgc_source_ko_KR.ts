@@ -8033,6 +8033,11 @@ Click Ok to start the auto-tuning process.
         <translation>임무 최대 고도 지시기 표시</translation>
     </message>
     <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="190"/>
+        <source>Show Joystick Status in Toolbar</source>
+        <translation>툴바에 조이스틱 상태 표시</translation>
+    </message>
+    <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="260"/>
         <source>Enable Custom Actions</source>
         <translation>커스텀 명령 사용</translation>
@@ -8141,6 +8146,16 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="216"/>
         <source>Go To Location Max Distance</source>
         <translation>여기로 가기 명령 최대 지원 거리</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="226"/>
+        <source>Loiter Radius in Forward Flight Guided Mode</source>
+        <translation>전진비행 로이터 반경</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/FlyViewSettings.qml" line="233"/>
+        <source>Require Confirmation for Go To Location in Guided Mode</source>
+        <translation>GoTo 명령시 확인 요청</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="216"/>
@@ -11070,13 +11085,18 @@ Click Ok to start the auto-tuning process.
     <name>MainStatusIndicator</name>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="35"/>
-        <source>Communication Lost</source>
+        <source>Comms Lost</source>
         <translation>연결 끊김</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="36"/>
         <source>Ready To Fly</source>
         <translation>비행 가능</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="36"/>
+        <source>Ready</source>
+        <translation>준비 완료</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="37"/>
@@ -11162,6 +11182,54 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="241"/>
         <source>Transition to Fixed Wing</source>
         <translation>고정익으로 변경</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="241"/>
+        <source>Allow Force Arm</source>
+        <translation>강제 시동 허용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="241"/>
+        <source>Force arming bypasses pre-arm checks. Use with caution.</source>
+        <translation>사전비행점검을 무시하고 강제시동 허용</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="241"/>
+        <source>Vehicle Parameters</source>
+        <translation>기체 파라미터</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="241"/>
+        <source>Vehicle Configuration</source>
+        <translation>기체 설정</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="241"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+</context>
+<context>
+    <name>APMMainStatusIndicator</name>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM//APMMainStatusIndicator.qml" line="24"/>
+        <source>Ground Control Comm Loss Failsafe</source>
+        <translation>지상 제어 통신 페일세이프</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM//APMMainStatusIndicator.qml" line="24"/>
+        <source>Vehicle Action</source>
+        <translation>기체 액션</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM//APMMainStatusIndicator.qml" line="24"/>
+        <source>Loss Timeout</source>
+        <translation>타임아웃</translation>
+    </message>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM//APMMainStatusIndicator.qml" line="24"/>
+        <source>Failsafe Options</source>
+        <translation>페일세이프 옵션</translation>
     </message>
 </context>
 <context>
