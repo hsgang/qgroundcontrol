@@ -17,7 +17,7 @@ import QGroundControl.Controls
 import QGroundControl.Toolbar
 
 Rectangle {
-    id:     _root
+    id:     control
     width:  parent.width
     height: ScreenTools.toolbarHeight
     color:  "transparent"
@@ -25,6 +25,7 @@ Rectangle {
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
     property color  _mainStatusBGColor: qgcPal.brandingPurple
+    property real   _leftRightMargin:   ScreenTools.defaultFontPixelWidth * 0.75
 
     QGCPalette { id: qgcPal }
 
@@ -34,13 +35,29 @@ Rectangle {
         anchors.right:  parent.right
         anchors.bottom: parent.bottom
         height:         1
-        color:          "black"
-        visible:        qgcPal.globalTheme === QGCPalette.Light
+        color:          qgcPal.toolbarDivider
+    }
+
+    Rectangle {
+        id:             gradientBackground
+        anchors.top:    parent.top
+        anchors.bottom: parent.bottom
+        anchors.left:   parent.left
+        width:          mainStatusLayout.width
+        opacity:        qgcPal.windowTransparent.a
+        
+        gradient: Gradient {
+            orientation: Gradient.Horizontal
+            GradientStop { position: 0; color: _mainStatusBGColor }
+            //GradientStop { position: qgcButton.x + qgcButton.width; color: _mainStatusBGColor }
+            GradientStop { position: 1; color: qgcPal.window }
+        }
     }
 
     RowLayout {
         id:                     mainLayout
         anchors.bottomMargin:   1
+        anchors.rightMargin:    control._leftRightMargin
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.left:           parent.left

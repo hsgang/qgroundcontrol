@@ -25,6 +25,9 @@ RowLayout {
     property var  activeVehicle:    QGroundControl.multiVehicleManager.activeVehicle
     property bool allowEditMode:    true
     property bool editMode:         false
+    property bool _isVTOL:          activeVehicle ? activeVehicle.vtol : false
+    property bool _vtolInFWDFlight: activeVehicle ? activeVehicle.vtolInFwdFlight : false
+    property var  _vehicleInAir:    activeVehicle ? activeVehicle.flying || activeVehicle.landing : false
 
     QGCPalette { id: qgcPal }
 
@@ -49,6 +52,7 @@ RowLayout {
                     text:               activeVehicle ? activeVehicle.flightMode : qsTr("비행모드")
                     font.pointSize:     ScreenTools.largeFontPointSize * 0.9
                     font.bold:          true
+                    color:              qgcPal.windowTransparentText
                 }
 
                 QGCColoredImage {
@@ -57,15 +61,26 @@ RowLayout {
                     fillMode:   Image.PreserveAspectFit
                     mipmap:     true
                     source:     "/InstrumentValueIcons/cheveron-down.svg"
-                    color:      qgcPal.text
+                    color:      qgcPal.windowTransparentText
                 }
             }
 
-            MouseArea {
-                anchors.fill:   parent
-                onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
-            }
         }
+
+        QGCLabel {
+            id:                     vtolModeLabel
+            Layout.alignment:       Qt.AlignVCenter
+            horizontalAlignment:    Text.AlignHCenter
+            text:                   _vtolInFWDFlight ? qsTr("FW\nVTOL") : qsTr("MR\nVTOL")
+            font.pointSize:         ScreenTools.smallFontPointSize
+            wrapMode:               Text.WordWrap
+            visible:                _isVTOL
+        }
+    }
+
+    MouseArea {
+        anchors.fill:   mainLayout
+        onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
     }
 
     Component {
@@ -143,6 +158,18 @@ RowLayout {
                 Layout.fillWidth:   true
                 horizontalAlignment:Text.AlignHCenter
                 visible:            flightModeSettings.requireModeChangeConfirmation.rawValue
+            }
+
+            QGCDelayButton {
+                id:                 vtolTransitionButton
+                Layout.fillWidth:   true
+                text:               _vtolInFWDFlight ? qsTr("Transition to Multi-Rotor") : qsTr("Transition to Fixed Wing")
+                visible:            _isVTOL && _vehicleInAir
+
+                onActivated: {
+                    _activeVehicle.vtolInFwdFlight = !_vtolInFWDFlight
+                    mainWindow.closeIndicatorDrawer()
+                }
             }
 
             Repeater {

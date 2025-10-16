@@ -46,22 +46,24 @@ QGCPalette::~QGCPalette()
 
 void QGCPalette::_buildMap()
 {
-//                                          Light                 Dark
-//                                          Disabled   Enabled    Disabled   Enabled
-    DECLARE_QGC_COLOR(window,               "#ffffff", "#ffffff", "#121212", "#121212")
-    DECLARE_QGC_COLOR(windowShadeLight,     "#909090", "#828282", "#4f4f4f", "#4f4f4f")
-    DECLARE_QGC_COLOR(windowShade,          "#d9d9d9", "#d9d9d9", "#3a3a3a", "#3a3a3a")
-    DECLARE_QGC_COLOR(windowShadeDark,      "#bdbdbd", "#bdbdbd", "#262626", "#202020")
-    DECLARE_QGC_COLOR(text,                 "#898989", "#000000", "#898989", "#ffffff")
+    //                                      Light                 Dark
+    //                                      Disabled   Enabled    Disabled   Enabled
+    DECLARE_QGC_COLOR(window,               "#ffffff", "#ffffff", "#222222", "#222222")
+    DECLARE_QGC_COLOR(windowTransparent,    "#ccffffff", "#ccffffff", "#cc222222", "#cc222222")
+    DECLARE_QGC_COLOR(windowShadeLight,     "#909090", "#828282", "#707070", "#626262")
+    DECLARE_QGC_COLOR(windowShade,          "#d9d9d9", "#d9d9d9", "#333333", "#333333")
+    DECLARE_QGC_COLOR(windowShadeDark,      "#bdbdbd", "#bdbdbd", "#282828", "#282828")
+    DECLARE_QGC_COLOR(text,                 "#9d9d9d", "#000000", "#707070", "#ffffff")
     DECLARE_QGC_COLOR(textHighlight,        "#019ae8", "#019ae8", "#A0FF32", "#A0FF32")
-    DECLARE_QGC_COLOR(warningText,          "#B00020", "#B00020", "#F44336", "#F44336")
-    DECLARE_QGC_COLOR(button,               "#ffffff", "#ffffff", "#707070", "#3a3a3a")
-    DECLARE_QGC_COLOR(buttonBorder,         "#d9d9d9", "#909090", "#707070", "#adadb8")
-    DECLARE_QGC_COLOR(buttonText,           "#9d9d9d", "#000000", "#707070", "#ffffff")
-    DECLARE_QGC_COLOR(buttonHighlight,      "#e4e4e4", "#1E88E5", "#262626", "#4f4f4f") //"#484848")
-    DECLARE_QGC_COLOR(buttonHighlightText,  "#2c2c2c", "#303030", "#303030", "#ffffff")
-    DECLARE_QGC_COLOR(primaryButton,        "#585858", "#1976d2", "#585858", "#1565C0")
-    DECLARE_QGC_COLOR(primaryButtonText,    "#2c2c2c", "#000000", "#2c2c2c", "#ffffff")
+    DECLARE_QGC_COLOR(windowTransparentText,"#9d9d9d", "#000000", "#707070", "#ffffff")
+    DECLARE_QGC_COLOR(warningText,          "#cc0808", "#cc0808", "#f85761", "#f85761")
+    DECLARE_QGC_COLOR(button,               "#ffffff", "#ffffff", "#707070", "#626270")
+    DECLARE_QGC_COLOR(buttonBorder,         "#ffffff", "#d9d9d9", "#707070", "#adadb8")
+    DECLARE_QGC_COLOR(buttonText,           "#9d9d9d", "#000000", "#A6A6A6", "#ffffff")
+    DECLARE_QGC_COLOR(buttonHighlight,      "#e4e4e4", "#946120", "#3a3a3a", "#fff291")
+    DECLARE_QGC_COLOR(buttonHighlightText,  "#2c2c2c", "#ffffff", "#2c2c2c", "#000000")
+    DECLARE_QGC_COLOR(primaryButton,        "#585858", "#8cb3be", "#585858", "#8cb3be")
+    DECLARE_QGC_COLOR(primaryButtonText,    "#2c2c2c", "#000000", "#2c2c2c", "#000000")
     DECLARE_QGC_COLOR(textField,            "#ffffff", "#ffffff", "#707070", "#ffffff")
     DECLARE_QGC_COLOR(textFieldText,        "#808080", "#000000", "#000000", "#000000")
     DECLARE_QGC_COLOR(mapButton,            "#585858", "#000000", "#585858", "#000000")
@@ -84,12 +86,15 @@ void QGCPalette::_buildMap()
     DECLARE_QGC_COLOR(statusFailedText,     "#9d9d9d", "#000000", "#707070", "#ffffff")
     DECLARE_QGC_COLOR(statusPassedText,     "#9d9d9d", "#000000", "#707070", "#ffffff")
     DECLARE_QGC_COLOR(statusPendingText,    "#9d9d9d", "#000000", "#707070", "#ffffff")
-    DECLARE_QGC_COLOR(toolbarBackground,    "#ffffff", "#ffffff", "#000000", "#000000")
-    DECLARE_QGC_COLOR(brandingPurple,       "#4a2c6d", "#4a2c6d", "#4a2c6d", "#4a2c6d")
-    DECLARE_QGC_COLOR(brandingBlue,         "#019ae8", "#019ae8", "#019ae8", "#019ae8")
-    DECLARE_QGC_COLOR(toolStripFGColor,     "#707070", "#ffffff", "#707070", "#ffffff")
-    DECLARE_QGC_COLOR(toolbarBackground,    "#ffffff", "#ffffff", "#222222", "#222222")
-    DECLARE_QGC_COLOR(groupBorder,          "#E0E0E0", "#E0E0E0", "#424242", "#424242")
+    DECLARE_QGC_COLOR(toolbarBackground,    "#00ffffff", "#00ffffff", "#00222222", "#00222222")
+    DECLARE_QGC_COLOR(toolbarDivider,       "#00000000", "#00000000", "#00000000", "#00000000")
+    DECLARE_QGC_COLOR(groupBorder,          "#bbbbbb", "#bbbbbb", "#707070", "#707070")
+
+    // Colors not affecting by theming
+    //                                              Disabled    Enabled
+    DECLARE_QGC_NONTHEMED_COLOR(brandingPurple,     "#4A2C6D", "#4A2C6D")
+    DECLARE_QGC_NONTHEMED_COLOR(brandingBlue,       "#48D6FF", "#6045c5")
+    DECLARE_QGC_NONTHEMED_COLOR(toolStripFGColor,   "#707070", "#ffffff")
 
     // Colors not affecting by theming or enable/disable
     DECLARE_QGC_SINGLE_COLOR(mapWidgetBorderLight,          "#ffffff")
@@ -97,7 +102,6 @@ void QGCPalette::_buildMap()
     DECLARE_QGC_SINGLE_COLOR(mapMissionTrajectory,          "#3db6d8")
     DECLARE_QGC_SINGLE_COLOR(surveyPolygonInterior,         "green")
     DECLARE_QGC_SINGLE_COLOR(surveyPolygonTerrainCollision, "red")
-    DECLARE_QGC_SINGLE_COLOR(widgetTransparentColor,        "#B3000000")
 
 // Colors for UTM Adapter
 #ifdef QGC_UTM_ADAPTER

@@ -114,11 +114,13 @@ public:
     Q_PROPERTY(QStringList  colors              READ colors             CONSTANT)
 
     DEFINE_QGC_COLOR(window,                        setWindow)
+    DEFINE_QGC_COLOR(windowTransparent,             setWindowTransparent)
     DEFINE_QGC_COLOR(windowShadeLight,              setWindowShadeLight)
     DEFINE_QGC_COLOR(windowShade,                   setWindowShade)
     DEFINE_QGC_COLOR(windowShadeDark,               setWindowShadeDark)
     DEFINE_QGC_COLOR(text,                          setText)
     DEFINE_QGC_COLOR(textHighlight,                 setTextHighlight)
+    DEFINE_QGC_COLOR(windowTransparentText,         setWindowTransparentText)
     DEFINE_QGC_COLOR(warningText,                   setWarningText)
     DEFINE_QGC_COLOR(button,                        setButton)
     DEFINE_QGC_COLOR(buttonBorder,                  setButtonBorder)
@@ -156,10 +158,10 @@ public:
     DEFINE_QGC_COLOR(surveyPolygonInterior,         setSurveyPolygonInterior)
     DEFINE_QGC_COLOR(surveyPolygonTerrainCollision, setSurveyPolygonTerrainCollision)
     DEFINE_QGC_COLOR(toolbarBackground,             setToolbarBackground)
+    DEFINE_QGC_COLOR(toolbarDivider,                setToolbarDivider)
     DEFINE_QGC_COLOR(toolStripFGColor,              setToolStripFGColor)
     DEFINE_QGC_COLOR(toolStripHoverColor,           setToolStripHoverColor)
     DEFINE_QGC_COLOR(groupBorder,                   setGroupBorder)
-    DEFINE_QGC_COLOR(widgetTransparentColor,        setWidgetTransparentColor)
 
 #ifdef QGC_UTM_ADAPTER
     DEFINE_QGC_COLOR(switchUTMSP,                    setSwitchUTMSP)

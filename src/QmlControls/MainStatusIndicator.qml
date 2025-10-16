@@ -28,19 +28,21 @@ Rectangle {
     border.width:   2
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
-    property var    _vehicleInAir:      _activeVehicle ? _activeVehicle.flying || _activeVehicle.landing : false
-    property bool   _vtolInFWDFlight:   _activeVehicle ? _activeVehicle.vtolInFwdFlight : false
     property bool   _armed:             _activeVehicle ? _activeVehicle.armed : false
     property real   _margins:           ScreenTools.defaultFontPixelHeight
     property real   _spacing:           ScreenTools.defaultFontPixelHeight / 2
     property bool   _allowForceArm:      false
     property bool   _healthAndArmingChecksSupported: _activeVehicle ? _activeVehicle.healthAndArmingCheckReport.supported : false
     property bool   _vehicleFlies:      _activeVehicle ? _activeVehicle.airShip || _activeVehicle.fixedWing || _activeVehicle.vtol || _activeVehicle.multiRotor : false
+    property var    _vehicleInAir:      _activeVehicle ? _activeVehicle.flying || _activeVehicle.landing : false
+    property bool   _vtolInFWDFlight:   _activeVehicle ? _activeVehicle.vtolInFwdFlight : false
 
     function dropMainStatusIndicator() {
         let overallStatusComponent = _activeVehicle ? overallStatusIndicatorPage : overallStatusOfflineIndicatorPage
         mainWindow.showIndicatorDrawer(overallStatusComponent, control)
     }
+
+    QGCPalette { id: qgcPal }
 
     RowLayout {
         id:          rowLayout
@@ -460,6 +462,15 @@ Rectangle {
                             } else {
                                 mainWindow.vtolTransitionToFwdFlightRequest()
                             }
+                            mainWindow.closeIndicatorDrawer()
+                        }
+                    }
+
+                    QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Configuration") }
+                    QGCButton {
+                        text: qsTr("Configure")
+                        onClicked: {                            
+                            mainWindow.showVehicleConfig()
                             mainWindow.closeIndicatorDrawer()
                         }
                     }

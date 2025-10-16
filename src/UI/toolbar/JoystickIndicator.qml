@@ -26,6 +26,8 @@ Item {
     property bool _vehicleIsSub: _activeVehicle && _activeVehicle.sub
     property bool _showJoystickIndicator: QGroundControl.settingsManager.flyViewSettings.showJoystickIndicatorInToolbar.rawValue
 
+    QGCPalette { id: qgcPal }
+
     Component {
         id: joystickInfoPage
 
@@ -77,7 +79,7 @@ Item {
                 if(globals.activeVehicle && joystickManager.activeJoystick) {
                     if(globals.activeVehicle.joystickEnabled) {
                         // Everything ready to use joystick
-                        return qgcPal.buttonText
+                        return qgcPal.windowTransparentText
                     }
                     // Joystick is not enabled in the joystick configuration page
                     return "yellow"

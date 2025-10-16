@@ -15,8 +15,6 @@ import QGroundControl.Toolbar
 import QGroundControl.Controls
 
 Rectangle {
-    //anchors.top:    parent.top
-    //anchors.bottom: parent.bottom
     anchors.verticalCenter: parent.verticalCenter
     height:         parent.height * 0.8
     width:          mainLayout.width + _widthMargin

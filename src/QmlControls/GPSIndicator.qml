@@ -13,8 +13,6 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.Controls
 
-
-
 // Used as the base class control for nboth VehicleGPSIndicator and RTKGPSIndicator
 
 Item {
@@ -109,6 +107,8 @@ Item {
         }
     }
 
+    QGCPalette { id: qgcPal }
+
     Row {
         id:             gnssValuesRow
         anchors.top:    parent.top
@@ -120,7 +120,7 @@ Item {
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            source:             "/qmlimages/Gps.svg" //getGpsImage()
+            source:             "/qmlimages/Gps.svg"
             fillMode:           Image.PreserveAspectFit
             opacity:            (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? 1 : 0.5
             color:              _communicationLost ? qgcPal.colorGrey : ((_activeVehicle && _activeVehicle.gps.lock.value < 2) ? qgcPal.colorRed : qgcPal.buttonText)
@@ -152,7 +152,7 @@ Item {
 
             QGCLabel {
                 anchors.left:   parent.left
-                color:          qgcPal.buttonText
+                color:          qgcPal.windowTransparentText
                 font.pointSize: ScreenTools.smallFontPointSize
                 text:           _activeVehicle ? (isGNSS2 ? getGpsLock() + "("+ _activeVehicle.gps.count.valueString +")" : getGpsLock()) : ""
             }
@@ -160,7 +160,7 @@ Item {
             QGCLabel {
                 id:             hdopValue
                 anchors.left:   parent.left
-                color:          qgcPal.buttonText
+                color:          qgcPal.windowTransparentText
                 font.pointSize: isGNSS2 ? ScreenTools.smallFontPointSize : ScreenTools.defaultFontPointSize
                 text:           _activeVehicle ? (isGNSS2 ? getGps2Lock() + "("+ _activeVehicle.gps2.count.valueString +")" : _activeVehicle.gps.count.valueString) : ""
             }

@@ -42,6 +42,8 @@ Item {
 
     property var _gimbalControllerSettings: QGroundControl.settingsManager.gimbalControllerSettings
 
+    QGCPalette { id: qgcPal }
+
     Row {
         id:             gimbalIndicatorRow
         anchors.top:    parent.top
@@ -61,7 +63,7 @@ Item {
                 source:                  "/gimbal/payload.png"
                 fillMode:                Image.PreserveAspectFit
                 sourceSize.height:       height
-                color:                   qgcPal.buttonText
+                color:                   qgcPal.windowTransparentText
 
             }
 
@@ -70,6 +72,7 @@ Item {
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.pointSize:         ScreenTools.smallFontPointSize
                 text:                   activeGimbal ? activeGimbal.deviceId.rawValue : ""
+                color:                  qgcPal.windowTransparentText
                 visible:                multiGimbalSetup
             }
         }
@@ -88,6 +91,7 @@ Item {
                 text:                   activeGimbal && activeGimbal.retracted ? 
                                             qsTr("Retracted") :
                                             (activeGimbal && activeGimbal.yawLock ? qsTr("Yaw locked") : qsTr("Yaw follow"))
+                color:                  qgcPal.windowTransparentText
                 Layout.columnSpan:      2
                 Layout.alignment:       Qt.AlignHCenter
             }
@@ -95,6 +99,7 @@ Item {
                 id:             pitchLabel
                 font.pointSize: ScreenTools.smallFontPointSize
                 text:           activeGimbal ? qsTr("P: ") + activeGimbal.absolutePitch.rawValue.toFixed(1) : ""
+                color:          qgcPal.windowTransparentText
             }
             QGCLabel {
                 id:             panLabel
@@ -104,6 +109,7 @@ Item {
                                         (qsTr("Az: ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
                                         (qsTr("Y: ") + activeGimbal.bodyYaw.rawValue.toFixed(1))) :
                                     ""
+                color:          qgcPal.windowTransparentText
             }
         }
     }
