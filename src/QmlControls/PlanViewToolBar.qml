@@ -52,7 +52,7 @@ Rectangle {
         Rectangle {
             id:                     currentButton
             Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
-            height:                 viewButtonRow.height * 0.8
+            height:                 _root.height * 0.8
             width:                  height
             color:                  "transparent"
             border.color:           qgcPal.text

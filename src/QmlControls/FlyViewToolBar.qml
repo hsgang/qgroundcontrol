@@ -38,26 +38,25 @@ Rectangle {
         color:          qgcPal.toolbarDivider
     }
 
-    Rectangle {
-        id:             gradientBackground
-        anchors.top:    parent.top
-        anchors.bottom: parent.bottom
-        anchors.left:   parent.left
-        width:          mainStatusLayout.width
-        opacity:        qgcPal.windowTransparent.a
+    // Rectangle {
+    //     id:             gradientBackground
+    //     anchors.top:    parent.top
+    //     anchors.bottom: parent.bottom
+    //     anchors.left:   parent.left
+    //     width:          leftStatusLayout.width
+    //     opacity:        qgcPal.windowTransparent.a
         
-        gradient: Gradient {
-            orientation: Gradient.Horizontal
-            GradientStop { position: 0; color: _mainStatusBGColor }
-            //GradientStop { position: qgcButton.x + qgcButton.width; color: _mainStatusBGColor }
-            GradientStop { position: 1; color: qgcPal.window }
-        }
-    }
+    //     gradient: Gradient {
+    //         orientation: Gradient.Horizontal
+    //         GradientStop { position: 0; color: _mainStatusBGColor }
+    //         //GradientStop { position: qgcButton.x + qgcButton.width; color: _mainStatusBGColor }
+    //         GradientStop { position: 1; color: qgcPal.window }
+    //     }
+    // }
 
     RowLayout {
         id:                     mainLayout
         anchors.bottomMargin:   1
-        anchors.rightMargin:    control._leftRightMargin
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.left:           parent.left
@@ -74,11 +73,11 @@ Rectangle {
             Rectangle{
                 id:                     menuNavigationButton
                 Layout.leftMargin:      ScreenTools.defaultFontPixelWidth / 2
-                height:                 _root.height * 0.8
+                height:                 control.height * 0.8
                 width:                  height
-                color:                  QGroundControl.globalPalette.widgetTransparentColor
+                color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
-                border.color:           qgcPal.text
+                border.color:           qgcPal.windowTransparentText
                 border.width:           1
 
                 QGCToolBarButton {
@@ -92,23 +91,23 @@ Rectangle {
 
             Rectangle{
                 id:                     linkManagerButton
-                height:                 _root.height * 0.8
+                height:                 control.height * 0.8
                 width:                  height
-                color:                  QGroundControl.globalPalette.widgetTransparentColor
+                color:                  QGroundControl.globalPalette.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
-                border.color:           qgcPal.text //!_activeVehicle ? qgcPal.brandingBlue : qgcPal.colorGreen
+                border.color:           qgcPal.windowTransparentText
                 border.width:           1
                 visible:                !ScreenTools.isMobile/* && currentToolbar === flyViewToolbar*/
 
                 QGCColoredImage{
-                    height:             parent.height * 0.7
+                    height:             control.height * 0.5
                     width:              height
                     anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
                     anchors.fill:       parent
                     source:             "/InstrumentValueIcons/link.svg"
                     sourceSize.height:  height
                     fillMode:           Image.PreserveAspectFit
-                    color:              qgcPal.text
+                    color:              qgcPal.windowTransparentText
 
                     MouseArea{
                         anchors.fill:       parent
@@ -119,7 +118,7 @@ Rectangle {
 
             MainStatusIndicator {
                 id:      mainStatusIndicator
-                height:  _root.height * 0.8
+                height:  control.height * 0.8
             }
 
             QGCButton {
@@ -147,9 +146,9 @@ Rectangle {
                 id: webrtcIndicatorRect
                 //Layout.fillHeight:      true
                 Layout.alignment:       Qt.AlignVCenter
-                height:                 _root.height * 0.8
+                height:                 control.height * 0.8
                 Layout.preferredWidth:  childrenRect.width + ScreenTools.defaultFontPixelWidth * 2
-                color:                  QGroundControl.globalPalette.widgetTransparentColor
+                color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
                 visible:                QGroundControl.linkManager.webRtcLinkExists
 
@@ -175,9 +174,9 @@ Rectangle {
                 id:                     widgetControlButton
                 //anchors.right:          !ScreenTools.isMobile ? brandImageRect.left : parent.right
                 Layout.alignment:       Qt.AlignVCenter
-                height:                 _root.height * 0.8
+                height:                 control.height * 0.8
                 width:                  height
-                color:                  QGroundControl.globalPalette.widgetTransparentColor
+                color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight * 0.2
 
                 QGCColoredImage{
@@ -188,7 +187,7 @@ Rectangle {
                     source:             "/InstrumentValueIcons/navigation-more.svg"
                     sourceSize.height:  height
                     fillMode:           Image.PreserveAspectFit
-                    color:              qgcPal.text
+                    color:              qgcPal.windowTransparentText
                 }
 
                 MouseArea{
@@ -210,7 +209,7 @@ Rectangle {
         anchors.margins:        ScreenTools.defaultFontPixelHeight / 2
         visible:                !ScreenTools.isMobile /*&& currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth) */
         color:                  "transparent"
-        border.color:           qgcPal.text
+        border.color:           qgcPal.windowTransparentText
         border.width:           1
         width:                  ScreenTools.defaultFontPixelHeight * 6
         radius:                 ScreenTools.defaultFontPixelHeight / 4
@@ -320,7 +319,7 @@ Rectangle {
                                         anchors.horizontalCenter:   settingsColumn.horizontalCenter
                                         width:                      ScreenTools.defaultFontPixelWidth * 34
                                         icon.source:                "/InstrumentValueIcons/link.svg"
-                                        icon.color:                 object.link ? qgcPal.colorGreen : qgcPal.text
+                                        icon.color:                 object.link ? qgcPal.colorGreen : qgcPal.windowTransparentText
                                         text:                       object.name
                                         autoExclusive:              true
                                         visible:                    !object.dynamic

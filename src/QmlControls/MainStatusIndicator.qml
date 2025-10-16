@@ -22,10 +22,10 @@ Rectangle {
     id:             control
     width:          ScreenTools.defaultFontPixelHeight * 10//Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelHeight * 10)
     height:         parent.height
-    color:          QGroundControl.globalPalette.widgetTransparentColor
+    color:          QGroundControl.globalPalette.windowTransparent
     radius:         ScreenTools.defaultFontPixelHeight / 4
     border.color:   _mainStatusBGColor
-    border.width:   2
+    border.width:   1
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _armed:             _activeVehicle ? _activeVehicle.armed : false
@@ -63,6 +63,8 @@ Rectangle {
             text:               mainStatusText()
             font.pointSize:     ScreenTools.largeFontPointSize
             font.bold:          true
+            style:              Text.Outline
+            styleColor:         qgcPal.windowTransparent
 
             property string _commLostText:      qsTr("Comms Lost")
             property string _readyToFlyText:    control._vehicleFlies ? qsTr("Ready To Fly") : qsTr("Ready")
@@ -462,15 +464,6 @@ Rectangle {
                             } else {
                                 mainWindow.vtolTransitionToFwdFlightRequest()
                             }
-                            mainWindow.closeIndicatorDrawer()
-                        }
-                    }
-
-                    QGCLabel { Layout.fillWidth: true; text: qsTr("Vehicle Configuration") }
-                    QGCButton {
-                        text: qsTr("Configure")
-                        onClicked: {                            
-                            mainWindow.showVehicleConfig()
                             mainWindow.closeIndicatorDrawer()
                         }
                     }

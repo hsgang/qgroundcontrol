@@ -39,7 +39,7 @@ RowLayout {
             height:             parent.height * 0.8
             width:              parent.width
             anchors.centerIn:   parent
-            color:              QGroundControl.globalPalette.widgetTransparentColor
+            color:              qgcPal.windowTransparent
             radius:             ScreenTools.defaultFontPixelHeight / 4
 
             RowLayout {
@@ -76,11 +76,11 @@ RowLayout {
             wrapMode:               Text.WordWrap
             visible:                _isVTOL
         }
-    }
 
-    MouseArea {
-        anchors.fill:   mainLayout
-        onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
+        MouseArea {
+            anchors.fill:   parent
+            onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
+        }
     }
 
     Component {

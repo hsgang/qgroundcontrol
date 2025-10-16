@@ -18,7 +18,7 @@ Rectangle {
     anchors.verticalCenter: parent.verticalCenter
     height:         parent.height * 0.8
     width:          mainLayout.width + _widthMargin
-    color:          QGroundControl.globalPalette.widgetTransparentColor
+    color:          QGroundControl.globalPalette.windowTransparent
     radius:         ScreenTools.defaultFontPixelHeight / 4
     visible:        width > _widthMargin
 
