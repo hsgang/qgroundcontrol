@@ -94,7 +94,7 @@ TextArea {
             anchors.centerIn:   parent
             anchors.fill:       parent
             sourceSize.height:  height
-            source:             "/res/TrashDelete.svg"
+            source:             "/InstrumentValueIcons/trash.svg"
             fillMode:           Image.PreserveAspectFit
             mipmap:             true
             smooth:             true

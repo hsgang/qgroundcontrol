@@ -100,19 +100,20 @@ Rectangle {
                 visible:                !ScreenTools.isMobile/* && currentToolbar === flyViewToolbar*/
 
                 QGCColoredImage{
-                    height:             control.height * 0.5
+                    height:             parent.height * 0.6
                     width:              height
-                    anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
-                    anchors.fill:       parent
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                     source:             "/InstrumentValueIcons/link.svg"
                     sourceSize.height:  height
                     fillMode:           Image.PreserveAspectFit
+                    mipmap:             true
                     color:              qgcPal.windowTransparentText
+                }
 
-                    MouseArea{
-                        anchors.fill:       parent
-                        onClicked:          linkManagerDialogComponent.createObject(mainWindow).open()
-                    }
+                MouseArea{
+                    anchors.fill:       parent
+                    onClicked:          linkManagerDialogComponent.createObject(mainWindow).open()
                 }
             }
 
@@ -172,7 +173,6 @@ Rectangle {
 
             Rectangle {
                 id:                     widgetControlButton
-                //anchors.right:          !ScreenTools.isMobile ? brandImageRect.left : parent.right
                 Layout.alignment:       Qt.AlignVCenter
                 height:                 control.height * 0.8
                 width:                  height
@@ -182,11 +182,12 @@ Rectangle {
                 QGCColoredImage{
                     height:             parent.height * 0.5
                     width:              height
-                    anchors.margins:    ScreenTools.defaultFontPixelHeight * 0.2
-                    anchors.fill:       parent
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.horizontalCenter: parent.horizontalCenter
                     source:             "/InstrumentValueIcons/navigation-more.svg"
                     sourceSize.height:  height
                     fillMode:           Image.PreserveAspectFit
+                    mipmap:             true
                     color:              qgcPal.windowTransparentText
                 }
 

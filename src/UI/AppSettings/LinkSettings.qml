@@ -58,14 +58,14 @@ SettingsPage {
                         text:               object.name
                     }
                     QGCColoredImage {
-                        height:                 ScreenTools.minTouchPixels
+                        height:                 ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelHeight * 1.2
                         width:                  height
                         sourceSize.height:      height
                         fillMode:               Image.PreserveAspectFit
                         mipmap:                 true
                         smooth:                 true
                         color:                  qgcPalEdit.text
-                        source:                 "/res/pencil.svg"
+                        source:                 "/InstrumentValueIcons/edit-pencil.svg"
                         visible:                !object.link
 
                         QGCPalette {
@@ -82,14 +82,14 @@ SettingsPage {
                         }
                     }
                     QGCColoredImage {
-                        height:                 ScreenTools.minTouchPixels
+                        height:                 ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelHeight * 1.2
                         width:                  height
                         sourceSize.height:      height
                         fillMode:               Image.PreserveAspectFit
                         mipmap:                 true
                         smooth:                 true
                         color:                  qgcPalDelete.text
-                        source:                 "/res/TrashDelete.svg"
+                        source:                 "/InstrumentValueIcons/trash.svg"
                         visible:                !object.link
 
                         QGCPalette {
