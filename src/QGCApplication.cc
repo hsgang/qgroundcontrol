@@ -475,6 +475,7 @@ QQuickWindow *QGCApplication::mainRootWindow()
 {
     if (!_mainRootWindow) {
         _mainRootWindow = qobject_cast<QQuickWindow*>(_rootQmlObject());
+    }
     return _mainRootWindow;
 }
 
