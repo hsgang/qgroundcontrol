@@ -537,15 +537,19 @@ void SignalingServerManager::_handleUnregisterResponse(const QJsonObject &messag
 QString SignalingServerManager::_formatWebSocketUrl(const QString &baseUrl) const
 {
     QString url = baseUrl;
-    
+
+    // wss:// 프로토콜 추가 (없는 경우)
     if (!url.startsWith("ws://") && !url.startsWith("wss://")) {
         url = "wss://" + url;
     }
-    
-    if (!url.contains(":") || url.count(":") == 1) {
+
+    // 포트 번호 추가: wss:// 이후에만 포트를 확인
+    QUrl qurl(url);
+    if (qurl.port() == -1) {
+        // 포트가 지정되지 않은 경우 :3000 추가
         url += ":3000";
     }
-    
+
     return url;
 }
 

@@ -82,7 +82,26 @@ QString WebRTCConfiguration::stunServer() const
 
 QString WebRTCConfiguration::turnServer() const
 {
-    return SettingsManager::instance()->cloudSettings()->webrtcTurnServer()->rawValue().toString();
+    QString turnServerHost = SettingsManager::instance()->cloudSettings()->webrtcTurnServer()->rawValue().toString();
+
+    if (turnServerHost.isEmpty()) {
+        return turnServerHost;
+    }
+
+    // turn. + turnserver + :3478 형식으로 변환
+    QString result = turnServerHost;
+
+    // turn. 프리픽스 추가 (없는 경우)
+    if (!result.startsWith("turn.") && !result.startsWith("turn://") && !result.startsWith("turns://")) {
+        result = "turn." + result;
+    }
+
+    // 포트 번호 추가 (없는 경우)
+    if (!result.contains(":")) {
+        result += ":3478";
+    }
+
+    return result;
 }
 
 QString WebRTCConfiguration::turnUsername() const
