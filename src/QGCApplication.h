@@ -78,9 +78,6 @@ public:
 
     void setLanguage();
     QQuickWindow *mainRootWindow();
-#ifdef Q_OS_ANDROID
-    void setupAndroidFullScreen(QQuickWindow* window);
-#endif
     uint64_t msecsSinceBoot() const { return _msecsElapsedTime.elapsed(); }
     QString numberToString(quint64 number);
     QString bigSizeToString(quint64 size);
