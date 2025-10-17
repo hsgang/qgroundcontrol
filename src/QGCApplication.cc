@@ -475,14 +475,6 @@ QQuickWindow *QGCApplication::mainRootWindow()
 {
     if (!_mainRootWindow) {
         _mainRootWindow = qobject_cast<QQuickWindow*>(_rootQmlObject());
-        // bool _fullScreen = SettingsManager::instance()->appSettings()->fullScreen()->rawValue().toBool();
-        // if (_fullScreen) {
-        //     Qt::WindowFlags flags = _mainRootWindow->flags() | Qt::FramelessWindowHint | Qt::ExpandedClientAreaHint | Qt.MaximizeUsingFullscreenGeometryHint;
-        //     _mainRootWindow->setFlags(flags);
-        //     _mainRootWindow->setVisibility(QWindow::FullScreen);
-        // } else {
-        //     _mainRootWindow->setVisibility(QWindow::Maximized);
-        // }
     }
 
     return _mainRootWindow;
