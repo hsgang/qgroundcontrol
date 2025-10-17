@@ -56,6 +56,9 @@ Popup {
     property bool   destroyOnClose:         true
     property bool   preventClose:           false
 
+    property real maxContentAvailableWidth:    mainWindow.width - _contentMargin * 6
+    property real maxContentAvailableHeight:   mainWindow.height - titleRowLayout.height - _contentMargin * 7
+
     readonly property real headerMinWidth: titleLabel.implicitWidth + rejectButton.width + acceptButton.width + titleRowLayout.spacing * 2
 
     signal accepted
@@ -228,8 +231,8 @@ Popup {
         ColumnLayout {
             id:                 mainLayout
             anchors.centerIn:   parent
-            //x:          _contentMargin
-            //y:          _contentMargin
+            x:          _contentMargin
+            y:          _contentMargin
             spacing:    _contentMargin
 
             RowLayout {
@@ -238,7 +241,7 @@ Popup {
                 spacing:                _contentMargin
 
                 QGCLabel {
-                    id: titleLabel
+                    id:                 titleLabel
                     Layout.fillWidth:   true
                     text:               root.title
                     font.pointSize:     ScreenTools.mediumFontPointSize

@@ -152,9 +152,7 @@ Vehicle::Vehicle(LinkInterface*             link,
 
     connect(this, &Vehicle::remoteControlRSSIChanged,   this, &Vehicle::_remoteControlRSSIChanged);
 
-    _commonInit();
-
-    _vehicleLinkManager->_addLink(link);
+    _commonInit(link);
 
     // Set video stream to udp if running ArduSub and Video is disabled
     if (sub() && SettingsManager::instance()->videoSettings()->videoSource()->rawValue() == VideoSettings::videoDisabled) {
@@ -251,7 +249,7 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
         trackFirmwareVehicleTypeChanges();
     }
 
-    _commonInit();
+    _commonInit(nullptr /* link */);
 
     connect(SettingsManager::instance()->appSettings()->offlineEditingCruiseSpeed(),   &Fact::rawValueChanged, this, &Vehicle::_offlineCruiseSpeedSettingChanged);
     connect(SettingsManager::instance()->appSettings()->offlineEditingHoverSpeed(),    &Fact::rawValueChanged, this, &Vehicle::_offlineHoverSpeedSettingChanged);
@@ -275,7 +273,7 @@ void Vehicle::stopTrackingFirmwareVehicleTypeChanges(void)
     disconnect(SettingsManager::instance()->appSettings()->offlineEditingVehicleClass(),  &Fact::rawValueChanged, this, &Vehicle::_offlineVehicleTypeSettingChanged);
 }
 
-void Vehicle::_commonInit()
+void Vehicle::_commonInit(LinkInterface* link)
 {
     _firmwarePlugin = FirmwarePluginManager::instance()->firmwarePluginForAutopilot(_firmwareType, _vehicleType);
 
@@ -313,9 +311,17 @@ void Vehicle::_commonInit()
     _initialConnectStateMachine     = new InitialConnectStateMachine    (this, this);
     _ftpManager                     = new FTPManager                    (this);
 
-    _vehicleLinkManager             = new VehicleLinkManager            (this);
+    _vehicleLinkManager = new VehicleLinkManager(this);
+    if (link) {
+        _vehicleLinkManager->_addLink(link);
+    }
 
     connect(_standardModes, &StandardModes::modesUpdated, this, &Vehicle::flightModesChanged);
+    // Re-emit flightModeChanged after available modes mapping updates so UI refreshes
+    // the human-readable mode name even if HEARTBEAT arrived earlier.
+    connect(_standardModes, &StandardModes::modesUpdated, this, [this]() {
+        emit flightModeChanged(flightMode());
+    });
 
     _parameterManager = new ParameterManager(this);
     connect(_parameterManager, &ParameterManager::parametersReadyChanged, this, &Vehicle::_parametersReady);
@@ -4568,6 +4574,40 @@ void Vehicle::changeHeading(const QGeoCoordinate& headingCoord)
 QVariant Vehicle::expandedToolbarIndicatorSource(const QString& indicatorName)
 {
     return _firmwarePlugin->expandedToolbarIndicatorSource(this, indicatorName);
+}
+
+QString Vehicle::requestMessageResultHandlerFailureCodeToString(RequestMessageResultHandlerFailureCode_t failureCode)
+{
+    switch(failureCode)
+    {
+    case RequestMessageNoFailure:
+        return QStringLiteral("No Failure");
+    case RequestMessageFailureCommandError:
+        return QStringLiteral("Command Error");
+    case RequestMessageFailureCommandNotAcked:
+        return QStringLiteral("Command Not Acked");
+    case RequestMessageFailureMessageNotReceived:
+        return QStringLiteral("Message Not Received");
+    case RequestMessageFailureDuplicateCommand:
+        return QStringLiteral("Duplicate Command");
+    default:
+        return QStringLiteral("Unknown (%1)").arg(failureCode);
+    }
+}
+
+QString Vehicle::mavCmdResultFailureCodeToString(MavCmdResultFailureCode_t failureCode)
+{
+    switch(failureCode)
+    {
+    case MavCmdResultCommandResultOnly:
+        return QStringLiteral("Command Result Only");
+    case MavCmdResultFailureNoResponseToCommand:
+        return QStringLiteral("No Response To Command");    
+    case MavCmdResultFailureDuplicateCommand:
+        return QStringLiteral("Duplicate Command"); 
+    default:
+        return QStringLiteral("Unknown (%1)").arg(failureCode);
+    }
 }
 
 /*===========================================================================*/
