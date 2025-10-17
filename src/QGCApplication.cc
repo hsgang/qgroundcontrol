@@ -475,10 +475,92 @@ QQuickWindow *QGCApplication::mainRootWindow()
 {
     if (!_mainRootWindow) {
         _mainRootWindow = qobject_cast<QQuickWindow*>(_rootQmlObject());
+
+#ifdef Q_OS_ANDROID
+        setupAndroidFullScreen(_mainRootWindow);
+#endif
     }
 
     return _mainRootWindow;
 }
+
+#ifdef Q_OS_ANDROID
+#include <QJniObject>
+#include <QNativeInterface>
+
+void QGCApplication::setupAndroidFullScreen(QQuickWindow* window)
+{
+    auto applyFullScreen = [window]() {
+        QNativeInterface::QAndroidApplication::runOnAndroidMainThread([window]() {
+            QJniObject activity = QNativeInterface::QAndroidApplication::context();
+            if (!activity.isValid()) return;
+
+            QJniObject windowObj = activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
+            if (!windowObj.isValid()) return;
+
+            // 1. DecorView 설정
+            QJniObject decorView = windowObj.callObjectMethod("getDecorView", "()Landroid/view/View;");
+
+            // Android API 30+ (Android 11+)
+            if (QNativeInterface::QAndroidApplication::sdkVersion() >= 30) {
+                QJniObject insetsController = windowObj.callObjectMethod(
+                    "getInsetsController", "()Landroid/view/WindowInsetsController;");
+
+                if (insetsController.isValid()) {
+                    // BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE = 2
+                    insetsController.callMethod<void>("setSystemBarsBehavior", "(I)V", 2);
+
+                    // statusBars() | navigationBars()
+                    int statusBars = QJniObject::callStaticMethod<int>(
+                        "android/view/WindowInsets$Type", "statusBars", "()I");
+                    int navBars = QJniObject::callStaticMethod<int>(
+                        "android/view/WindowInsets$Type", "navigationBars", "()I");
+
+                    insetsController.callMethod<void>("hide", "(I)V", statusBars | navBars);
+                }
+            } else {
+                // Android API < 30 (구버전)
+                const int SYSTEM_UI_FLAGS =
+                    0x00000100 |  // LAYOUT_STABLE
+                    0x00000400 |  // LAYOUT_FULLSCREEN
+                    0x00000004 |  // FULLSCREEN
+                    0x00000200 |  // LAYOUT_HIDE_NAVIGATION
+                    0x00000002 |  // HIDE_NAVIGATION
+                    0x00001000;   // IMMERSIVE_STICKY
+
+                decorView.callMethod<void>("setSystemUiVisibility", "(I)V", SYSTEM_UI_FLAGS);
+            }
+
+            // 2. Window 플래그 설정
+            const int FLAG_FULLSCREEN = 0x00000400;
+            const int FLAG_LAYOUT_NO_LIMITS = 0x00000200;
+            const int FLAG_TRANSLUCENT_STATUS = 0x04000000;
+            const int FLAG_TRANSLUCENT_NAVIGATION = 0x08000000;
+
+            windowObj.callMethod<void>("addFlags", "(I)V",
+                                       FLAG_FULLSCREEN | FLAG_LAYOUT_NO_LIMITS |
+                                           FLAG_TRANSLUCENT_STATUS | FLAG_TRANSLUCENT_NAVIGATION);
+
+            // 3. 상태바/네비게이션바 투명화
+            windowObj.callMethod<void>("setStatusBarColor", "(I)V", 0x00000000);
+            windowObj.callMethod<void>("setNavigationBarColor", "(I)V", 0x00000000);
+        });
+    };
+
+    // 즉시 적용
+    applyFullScreen();
+
+    // 200ms 후 재적용 (Qt 윈도우 초기화 완료 대기)
+    QTimer::singleShot(200, applyFullScreen);
+
+    // 포커스 복귀 시 재적용
+    QObject::connect(window, &QQuickWindow::activeChanged, window, [applyFullScreen, window]() {
+        if (window->isActive()) {
+            applyFullScreen();
+        }
+    });
+}
+#endif
 
 void QGCApplication::showVehicleConfig()
 {
