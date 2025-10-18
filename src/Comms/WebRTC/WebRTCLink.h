@@ -84,6 +84,67 @@ struct RTCModuleSystemInfo {
     }
 };
 
+// 비디오 메트릭 정보를 효율적으로 묶어서 전달하기 위한 구조체
+struct VideoMetrics {
+    double rtspPacketsPerSec = 0.0;
+    double decodedFramesPerSec = 0.0;
+    double encodedFramesPerSec = 0.0;
+    double teeFramesPerSec = 0.0;
+    double srtFramesPerSec = 0.0;
+    double rtpFramesPerSec = 0.0;
+    qint64 timestamp = 0;
+
+    // JSON에서 파싱하는 생성자
+    VideoMetrics(const QJsonObject& json) {
+        timestamp = json["timestamp"].toVariant().toLongLong();
+
+        QJsonObject perSecond = json["per_second"].toObject();
+        rtspPacketsPerSec = perSecond["rtsp_packets_ps"].toDouble();
+        decodedFramesPerSec = perSecond["decoded_frames_ps"].toDouble();
+        encodedFramesPerSec = perSecond["encoded_frames_ps"].toDouble();
+        teeFramesPerSec = perSecond["tee_frames_ps"].toDouble();
+        srtFramesPerSec = perSecond["srt_frames_ps"].toDouble();
+        rtpFramesPerSec = perSecond["rtp_frames_ps"].toDouble();
+    }
+
+    // 기본 생성자
+    VideoMetrics() = default;
+
+    // 비교 연산자 (변경 감지용)
+    bool operator==(const VideoMetrics& other) const {
+        return qFuzzyCompare(rtspPacketsPerSec, other.rtspPacketsPerSec) &&
+               qFuzzyCompare(decodedFramesPerSec, other.decodedFramesPerSec) &&
+               qFuzzyCompare(encodedFramesPerSec, other.encodedFramesPerSec) &&
+               qFuzzyCompare(teeFramesPerSec, other.teeFramesPerSec) &&
+               qFuzzyCompare(srtFramesPerSec, other.srtFramesPerSec) &&
+               qFuzzyCompare(rtpFramesPerSec, other.rtpFramesPerSec) &&
+               timestamp == other.timestamp;
+    }
+
+    bool operator!=(const VideoMetrics& other) const {
+        return !(*this == other);
+    }
+
+    // 유효성 검사
+    bool isValid() const {
+        return rtspPacketsPerSec >= 0.0 && decodedFramesPerSec >= 0.0 &&
+               encodedFramesPerSec >= 0.0 && teeFramesPerSec >= 0.0 &&
+               srtFramesPerSec >= 0.0 && rtpFramesPerSec >= 0.0 &&
+               timestamp > 0;
+    }
+
+    // 디버그 출력용
+    QString toString() const {
+        return QString("RTSP: %1 pkt/s, Decoded: %2 fps, Encoded: %3 fps, Tee: %4 fps, SRT: %5 fps, RTP: %6 fps")
+               .arg(rtspPacketsPerSec, 0, 'f', 2)
+               .arg(decodedFramesPerSec, 0, 'f', 2)
+               .arg(encodedFramesPerSec, 0, 'f', 2)
+               .arg(teeFramesPerSec, 0, 'f', 2)
+               .arg(srtFramesPerSec, 0, 'f', 2)
+               .arg(rtpFramesPerSec, 0, 'f', 2);
+    }
+};
+
 // WebRTC 통계 정보를 효율적으로 묶어서 전달하기 위한 구조체
 struct WebRTCStats {
     int rttMs = -1;
@@ -92,10 +153,10 @@ struct WebRTCStats {
     double videoRateKBps = 0.0;
     int videoPacketCount = 0;
     qint64 videoBytesReceived = 0;
-    
+
     // 기본 생성자
     WebRTCStats() = default;
-    
+
     // 비교 연산자 (변경 감지용)
     bool operator==(const WebRTCStats& other) const {
         return rttMs == other.rttMs &&
@@ -105,17 +166,17 @@ struct WebRTCStats {
                videoPacketCount == other.videoPacketCount &&
                videoBytesReceived == other.videoBytesReceived;
     }
-    
+
     bool operator!=(const WebRTCStats& other) const {
         return !(*this == other);
     }
-    
+
     // 유효성 검사
     bool isValid() const {
         return rttMs >= -1 && webRtcSent >= -1.0 && webRtcRecv >= -1.0 &&
                videoRateKBps >= 0.0 && videoPacketCount >= 0 && videoBytesReceived >= 0;
     }
-    
+
     // 디버그 출력용
     QString toString() const {
         return QString("RTT: %1ms, Sent: %2 KB/s, Recv: %3 KB/s, Video: %4 KB/s (%5 packets, %6 bytes)")
@@ -193,6 +254,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(RTCModuleSystemInfo)
+Q_DECLARE_METATYPE(VideoMetrics)
 Q_DECLARE_METATYPE(RTCModuleVersionInfo)
 Q_DECLARE_METATYPE(WebRTCStats)
 
@@ -344,6 +406,7 @@ class WebRTCWorker : public QObject
     void videoStatsUpdated(double rate, qint64 packets, qint64 bytes);
     void rtcModuleSystemInfoUpdated(const RTCModuleSystemInfo& systemInfo);
     void webRtcStatsUpdated(const WebRTCStats& stats);
+    void videoMetricsUpdated(const VideoMetrics& videoMetrics);
     void rtcModuleVersionInfoUpdated(const RTCModuleVersionInfo& versionInfo);
 
    private slots:
@@ -472,6 +535,7 @@ class WebRTCLink : public LinkInterface
     Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
     Q_PROPERTY(RTCModuleSystemInfo rtcModuleSystemInfo READ rtcModuleSystemInfo NOTIFY rtcModuleSystemInfoChanged)
     Q_PROPERTY(WebRTCStats webRtcStats READ webRtcStats NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(VideoMetrics videoMetrics READ videoMetrics NOTIFY videoMetricsChanged)
     Q_PROPERTY(RTCModuleVersionInfo rtcModuleVersionInfo READ rtcModuleVersionInfo NOTIFY rtcModuleVersionInfoChanged)
 
    public:
@@ -495,7 +559,10 @@ class WebRTCLink : public LinkInterface
     
     // WebRTC 통계 정보 getter
     const WebRTCStats& webRtcStats() const { return _webRtcStats; }
-    
+
+    // 비디오 메트릭 정보 getter
+    const VideoMetrics& videoMetrics() const { return _videoMetrics; }
+
     // RTC Module 버전 정보 getter
     const RTCModuleVersionInfo& rtcModuleVersionInfo() const { return _rtcModuleVersionInfo; }
 
@@ -513,6 +580,7 @@ class WebRTCLink : public LinkInterface
     void _onRtcStatusMessageChanged(const QString& message);
     void _onRtcModuleSystemInfoUpdated(const RTCModuleSystemInfo& systemInfo);
     void _onWebRtcStatsUpdated(const WebRTCStats& stats);
+    void _onVideoMetricsUpdated(const VideoMetrics& videoMetrics);
     void _onRtcModuleVersionInfoUpdated(const RTCModuleVersionInfo& versionInfo);
 
    signals:
@@ -521,6 +589,7 @@ class WebRTCLink : public LinkInterface
     void videoStatsUpdated(double KBps, int packets, qint64 totalBytes);
     void rtcModuleSystemInfoChanged(const RTCModuleSystemInfo& systemInfo);
     void webRtcStatsChanged(const WebRTCStats& stats);
+    void videoMetricsChanged(const VideoMetrics& videoMetrics);
     void rtcModuleVersionInfoChanged(const RTCModuleVersionInfo& versionInfo);
 
    private:
@@ -528,13 +597,16 @@ class WebRTCLink : public LinkInterface
     WebRTCWorker *_worker = nullptr;
     QThread *_workerThread = nullptr;
     QString _rtcStatusMessage = "";
-    
+
     // RTC Module 시스템 정보
     RTCModuleSystemInfo _rtcModuleSystemInfo;
-    
+
     // WebRTC 통계 정보
     WebRTCStats _webRtcStats;
-    
+
+    // 비디오 메트릭 정보
+    VideoMetrics _videoMetrics;
+
     // RTC Module 버전 정보
     RTCModuleVersionInfo _rtcModuleVersionInfo;
 };
