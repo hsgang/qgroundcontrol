@@ -23,6 +23,8 @@ Item {
     property var gimbalController: vehicle ? vehicle.gimbalController : null
     property var activeGimbal: gimbalController ? gimbalController.activeGimbal : null
 
+    property var _gimbalControllerSettings: QGroundControl.settingsManager.gimbalControllerSettings
+
     property real fontSize: ScreenTools.defaultFontPointSize * 3
 
     property var _roll:  vehicle ? vehicle.roll.rawValue : 0
@@ -47,8 +49,8 @@ Item {
     // 필터 계수 (0 < alpha <= 1)
     property real alpha: 0.1
 
-    property real _hFov: 81 //75 //degree
-    property real _vFov: 63 //46 //degree
+    property real _hFov: _gimbalControllerSettings.CameraHFov.rawValue //81 //75 //degree
+    property real _vFov: _gimbalControllerSettings.CameraVFov.rawValue //54 //46 //degree
     property real screenWidth //: ScreenTools.screenWidth
     property real screenHeight //: ScreenTools.screenHeight
 
