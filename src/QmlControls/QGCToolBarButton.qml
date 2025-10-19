@@ -49,6 +49,7 @@ Button {
             fillMode:               Image.PreserveAspectFit
             color:                  logo ? qgcPal.text : (button.checked ? qgcPal.buttonHighlightText : qgcPal.buttonText)
             source:                 button.icon.source
+            mipmap:                 true
             anchors.verticalCenter: parent.verticalCenter
         }
         Label {
