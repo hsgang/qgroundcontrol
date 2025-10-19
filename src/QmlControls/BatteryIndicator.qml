@@ -220,8 +220,6 @@ Item {
 
             property bool isBlink : false
 
-            spacing: ScreenTools.defaultFontPixelHeight / 5
-
             function getBatteryColor() {
                 switch (battery.chargeState.rawValue) {
                     case MAVLink.MAV_BATTERY_CHARGE_STATE_OK:
@@ -485,13 +483,6 @@ Item {
             SettingsGroupLayout {
                 heading:            qsTr("Battery Display")
                 Layout.fillWidth:   true
-
-                LabelledFactComboBox {
-                    id:             editModeCheckBox
-                    label:          qsTr("Value")
-                    fact:           _fact
-                    visible:        _fact.visible
-                }
                 
                 FactCheckBoxSlider {
                     Layout.fillWidth:   true

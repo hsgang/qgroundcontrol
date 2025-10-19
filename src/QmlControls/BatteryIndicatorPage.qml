@@ -133,17 +133,23 @@ ToolIndicatorPage {
         ColumnLayout {
             spacing: ScreenTools.defaultFontPixelHeight / 2
 
+            property real batteryIconHeight: ScreenTools.defaultFontPixelWidth * 3
+
             SettingsGroupLayout {
                 heading:            qsTr("Battery Display")
                 Layout.fillWidth:   true
 
-                LabelledFactComboBox {
-                    id:             editModeCheckBox
-                    label:          qsTr("Display Type")
-                    fact:           _fact
-                    visible:        _fact.visible
+                FactCheckBoxSlider {
+                    Layout.fillWidth:   true
+                    fact:               _batterySettings.consolidateMultipleBatteries
+                    text:               qsTr("Only show battery with lowest charge")
+                    visible:            fact.visible
+                }
 
-                    property Fact _fact: QGroundControl.settingsManager.batteryIndicatorSettings.valueDisplay
+                LabelledFactComboBox {
+                    label:              qsTr("Display Type")
+                    fact:               _batterySettings.valueDisplay
+                    visible:            fact.visible
                 }
             }
 
@@ -159,8 +165,8 @@ ToolIndicatorPage {
                         spacing: ScreenTools.defaultFontPixelWidth * 0.05  // Tighter spacing for icon and label
                         QGCColoredImage {
                             source: "/qmlimages/BatteryGreen.svg"
-                            width: ScreenTools.defaultFontPixelWidth * 6
-                            height: width
+                            width: height
+                            height: batteryIconHeight
                             fillMode: Image.PreserveAspectFit
                             color: qgcPal.colorGreen
                         }
@@ -172,8 +178,8 @@ ToolIndicatorPage {
                         spacing: ScreenTools.defaultFontPixelWidth * 0.05  // Tighter spacing for icon and field
                         QGCColoredImage {
                             source: "/qmlimages/BatteryYellowGreen.svg"
-                            width: ScreenTools.defaultFontPixelWidth * 6
-                            height: width
+                            width: height
+                            height: batteryIconHeight
                             fillMode: Image.PreserveAspectFit
                             color: qgcPal.colorYellowGreen
                         }
@@ -195,8 +201,8 @@ ToolIndicatorPage {
                         spacing: ScreenTools.defaultFontPixelWidth * 0.05  // Tighter spacing for icon and field
                         QGCColoredImage {
                             source: "/qmlimages/BatteryYellow.svg"
-                            width: ScreenTools.defaultFontPixelWidth * 6
-                            height: width
+                            width: height
+                            height: batteryIconHeight
                             fillMode: Image.PreserveAspectFit
                             color: qgcPal.colorYellow
                         }
@@ -217,8 +223,8 @@ ToolIndicatorPage {
                         spacing: ScreenTools.defaultFontPixelWidth * 0.05  // Tighter spacing for icon and label
                         QGCColoredImage {
                             source: "/qmlimages/BatteryOrange.svg"
-                            width: ScreenTools.defaultFontPixelWidth * 6
-                            height: width
+                            width: height
+                            height: batteryIconHeight
                             fillMode: Image.PreserveAspectFit
                             color: qgcPal.colorOrange
                         }
@@ -230,8 +236,8 @@ ToolIndicatorPage {
                         spacing: ScreenTools.defaultFontPixelWidth * 0.05  // Tighter spacing for icon and label
                         QGCColoredImage {
                             source: "/qmlimages/BatteryCritical.svg"
-                            width: ScreenTools.defaultFontPixelWidth * 6
-                            height: width
+                            width: height
+                            height: batteryIconHeight
                             fillMode: Image.PreserveAspectFit
                             color: qgcPal.colorRed
                         }
