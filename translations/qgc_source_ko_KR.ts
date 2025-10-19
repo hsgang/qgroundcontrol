@@ -4147,6 +4147,11 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
+        <source>Only show battery with lowest charge</source>
+        <translation>충전량이 낮은 배터리만 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/BatteryIndicatorPage.qml" line="75"/>
         <source>Display Type</source>
         <translation>표시 형태</translation>
     </message>
