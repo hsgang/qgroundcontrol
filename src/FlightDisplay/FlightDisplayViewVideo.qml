@@ -72,7 +72,7 @@ Item {
             id:             noVideo
             anchors.fill:   parent
             visible:        !(QGroundControl.videoManager.decoding)
-            color:          qgcPal.windowShade
+            color:          qgcPal.window
 
             Rectangle {
                 anchors.centerIn:   parent
