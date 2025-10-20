@@ -146,7 +146,7 @@ private:
 
     /// @brief A set of information associated with a radio axis.
     struct AxisInfo {
-        Joystick::AxisFunction_t    function;   ///< Function mapped to this axis, Joystick::maxFunction for none
+        Joystick::AxisFunction_t    function;   ///< Function mapped to this axis, Joystick::maxAxisFunction for none
         bool                        reversed;   ///< true: axis is reverse, false: not reversed
         int                         axisMin;    ///< Minimum axis value
         int                         axisMax;    ///< Maximum axis value
@@ -187,13 +187,15 @@ private:
     void _startCalibration      ();
     void _stopCalibration       ();
 
-    void _calSaveCurrentValues  ();
+    void _saveCurrentAxisValues  ();
 
     void _setStickPositions     ();
 
     void _signalAllAttitudeValueChanges();
 
     void _setStatusText         (const QString& text);
+
+    void _logJoystickInfo(const QString &methodName, Joystick::AxisFunction_t function, int axis, int value);
 
     stateStickPositions _sticksCentered;
     stateStickPositions _sticksThrottleUp;
@@ -207,7 +209,7 @@ private:
 
     QList<qreal> _currentStickPositions;
 
-    int _rgFunctionAxisMapping[Joystick::maxFunction]; ///< Maps from joystick function to axis index. _axisMax indicates axis not set for this function.
+    int _rgFunctionAxisMapping[Joystick::maxAxisFunction]; ///< Maps from joystick function to axis index. _axisMax indicates axis not set for this function.
 
     static const int _attitudeControls  = 5;
 
@@ -230,6 +232,7 @@ private:
     int     _stickDetectValue;
     bool    _stickDetectSettleStarted;
     QElapsedTimer   _stickDetectSettleElapsed;
+    QMap<int, int> _loggingLastValuesMap;
 
     QString             _statusText;
 

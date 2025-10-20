@@ -108,8 +108,9 @@ public:
         throttleFunction,
         gimbalPitchFunction,
         gimbalYawFunction,
-        maxFunction
+        maxAxisFunction
     };
+    static QString axisFunctionToString(AxisFunction_t function);
 
     enum ThrottleMode_t {
         ThrottleModeCenterZero,
@@ -254,6 +255,7 @@ private:
 
     /// Adjust the raw axis value to the -1:1 range given calibration information
     float _adjustRange(int value, const Calibration_t &calibration, bool withDeadbands);
+
     void _executeButtonAction(const QString &action, bool buttonDown);
     int  _findAssignableButtonAction(const QString &action);
     bool _validAxis(int axis) const;
@@ -268,7 +270,7 @@ private:
     int _mapFunctionMode(int mode, int function);
 
     /// Remap current axis functions from current TX mode to new TX mode
-    void _remapAxes(int currentMode, int newMode, int (&newMapping)[maxFunction]);
+    void _remapAxes(int currentMode, int newMode, int (&newMapping)[maxAxisFunction]);
 
     int _hatButtonCount = 0;
     int _totalButtonCount = 0;
@@ -288,7 +290,7 @@ private:
     float _axisFrequencyHz = _defaultAxisFrequencyHz;
     float _buttonFrequencyHz = _defaultButtonFrequencyHz;
     float _exponential = 0;
-    int _rgFunctionAxis[maxFunction] = {};
+    int _rgFunctionAxis[maxAxisFunction] = {};
     QElapsedTimer _axisTime;
     QList<AssignedButtonAction*> _buttonActionArray;
     QStringList _availableActionTitles;
@@ -307,7 +309,7 @@ private:
     static constexpr float _minButtonFrequencyHz = 0.25f;
     static constexpr float _maxButtonFrequencyHz = 50.0f;
 
-    static constexpr const char *_rgFunctionSettingsKey[maxFunction] = {
+    static constexpr const char *_rgFunctionSettingsKey[maxAxisFunction] = {
         "RollAxis",
         "PitchAxis",
         "YawAxis",
