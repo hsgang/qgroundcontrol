@@ -20,7 +20,7 @@ import QGroundControl.Controls
 
 Rectangle {
     id:             control
-    width:          ScreenTools.defaultFontPixelHeight * 10//Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelHeight * 10)
+    width:          ScreenTools.defaultFontPixelHeight * 8//Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelHeight * 10)
     height:         parent.height
     color:          QGroundControl.globalPalette.windowTransparent
     radius:         ScreenTools.defaultFontPixelHeight / 4
@@ -198,26 +198,6 @@ Rectangle {
 
                 RowLayout {
                     spacing: ScreenTools.defaultFontPixelWidth
-
-                    QGCDelayButton {
-                        enabled:    _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
-                        text:       _armed ? qsTr("Disarm") : (control._allowForceArm ? qsTr("Force Arm") : qsTr("Arm"))
-                        showHelp:   true
-
-                        onActivated: {
-                            if (_armed) {
-                                _activeVehicle.armed = false
-                            } else {
-                                if (_allowForceArm) {
-                                    _allowForceArm = false
-                                    _activeVehicle.forceArm()
-                                } else {
-                                    _activeVehicle.armed = true
-                                }
-                            }
-                            mainWindow.closeIndicatorDrawer()
-                        }
-                    }
 
                     LabelledComboBox {
                         id:                 primaryLinkCombo
@@ -414,7 +394,33 @@ Rectangle {
                         Layout.fillWidth:   true
                         text:               qsTr("Allow Force Arm")
                         checked:            false
-                        onClicked:          _allowForceArm = true
+                        onClicked: {
+                            if (checked) {
+                                _allowForceArm = true
+                            } else {
+                                _allowForceArm = false
+                            }
+                        }
+                    }
+
+                    QGCDelayButton {
+                        enabled:    _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
+                        text:       _armed ? qsTr("Disarm") : (control._allowForceArm ? qsTr("Force Arm") : qsTr("Arm"))
+                        showHelp:   true
+
+                        onActivated: {
+                            if (_armed) {
+                                _activeVehicle.armed = false
+                            } else {
+                                if (_allowForceArm) {
+                                    _allowForceArm = false
+                                    _activeVehicle.forceArm()
+                                } else {
+                                    _activeVehicle.armed = true
+                                }
+                            }
+                            mainWindow.closeIndicatorDrawer()
+                        }
                     }
                 }
 
