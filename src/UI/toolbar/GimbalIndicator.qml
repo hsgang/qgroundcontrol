@@ -172,15 +172,15 @@ Item {
                 heading:        qsTr("Commands")
                 showDividers:   false
 
-                QGCButton {
-                    Layout.fillWidth:   true
-                    text:               activeGimbal.yawLock ? qsTr("Yaw Follow") : qsTr("Yaw Lock")
-                    visible:            activeGimbal.supportsYawLock
-                    onClicked: {
-                        gimbalController.setGimbalYawLock(!activeGimbal.yawLock)
-                        mainWindow.closeIndicatorDrawer()
-                    }
-                }
+                // QGCButton {
+                //     Layout.fillWidth:   true
+                //     text:               activeGimbal.yawLock ? qsTr("Yaw Follow") : qsTr("Yaw Lock")
+                //     visible:            activeGimbal.supportsYawLock
+                //     onClicked: {
+                //         gimbalController.setGimbalYawLock(!activeGimbal.yawLock)
+                //         mainWindow.closeIndicatorDrawer()
+                //     }
+                // }
 
                 QGCButton {
                     Layout.fillWidth:   true
@@ -200,14 +200,14 @@ Item {
                     }
                 }
 
-                QGCButton {
-                    Layout.fillWidth:   true
-                    text:               qsTr("Point Home")
-                    onClicked: {
-                        activeVehicle.guidedModeROI(activeVehicle.homePosition)
-                        mainWindow.closeIndicatorDrawer()
-                    }
-                }
+                // QGCButton {
+                //     Layout.fillWidth:   true
+                //     text:               qsTr("Point Home")
+                //     onClicked: {
+                //         activeVehicle.guidedModeROI(activeVehicle.homePosition)
+                //         mainWindow.closeIndicatorDrawer()
+                //     }
+                // }
 
                 QGCButton {
                     Layout.fillWidth:   true
