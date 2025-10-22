@@ -239,26 +239,8 @@ ToolIndicatorPage {
                 )
             }
 
-            // FactSlider {
-            //     Layout.fillWidth:       true
-            //     Layout.preferredWidth:  sliderWidth
-            //     label:                  qsTr("Accuracy (u-blox only)")
-            //     fact:                   QGroundControl.settingsManager.rtkSettings.surveyInAccuracyLimit
-            //     majorTickStepSize:      0.1
-            //     visible:                !useFixedPosition && rtkSettings.surveyInAccuracyLimit.visible
-            // }
-
-            // FactSlider {
-            //     Layout.fillWidth:       true
-            //     Layout.preferredWidth:  sliderWidth
-            //     label:                  qsTr("Min Duration")
-            //     fact:                   rtkSettings.surveyInMinObservationDuration
-            //     majorTickStepSize:      10
-            //     visible:                !useFixedPosition && rtkSettings.surveyInMinObservationDuration.visible
-            // }
-
             LabelledFactTextField {
-                label:                  rtkSettings.fixedBasePositionLatitude.shortDescription
+                label:                  qsTr("Base Position Latitude")
                 fact:                   rtkSettings.fixedBasePositionLatitude
                 visible:                (
                     useFixedPosition == BaseModeDefinition.BaseFixed
