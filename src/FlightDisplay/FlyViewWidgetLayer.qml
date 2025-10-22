@@ -44,7 +44,6 @@ Item {
     property real   _toolsMargin:           ScreenTools.defaultFontPixelWidth * 0.75
     property rect   _centerViewport:        Qt.rect(0, 0, width, height)
     property real   _rightPanelWidth:       ScreenTools.defaultFontPixelWidth * 30
-    property alias  _gripperMenu:           gripperMenuComponent
     property real   _layoutMargin:          ScreenTools.defaultFontPixelWidth * 0.75
     property bool   _layoutSpacing:         ScreenTools.defaultFontPixelWidth
     property bool   _showSingleVehicleUI:   true
@@ -242,17 +241,10 @@ Item {
         property real leftEdgeCenterInset:  leftEdgeTopInset
     }
 
-    Component {
-        id: gripperMenuComponent
-        GripperMenu {
-            // id: gripperOptions
-        }
+    VehicleWarnings {
+        anchors.centerIn:   parent
+        z:                  QGroundControl.zOrderTopMost
     }
-
-//    VehicleWarnings {
-//        anchors.centerIn:   parent
-//        z:                  QGroundControl.zOrderTopMost
-//    }
 
     MapScale {
         id:                 mapScale

@@ -30,6 +30,7 @@ class VideoManager : public QObject
     QML_ELEMENT
     QML_UNCREATABLE("")
     Q_MOC_INCLUDE("Vehicle.h")
+
     Q_PROPERTY(bool     gstreamerEnabled        READ gstreamerEnabled                           CONSTANT)
     Q_PROPERTY(bool     qtmultimediaEnabled     READ qtmultimediaEnabled                        CONSTANT)
     Q_PROPERTY(bool     uvcEnabled              READ uvcEnabled                                 CONSTANT)
@@ -53,6 +54,8 @@ class VideoManager : public QObject
 public:
     explicit VideoManager(QObject *parent = nullptr);
     ~VideoManager();
+
+    friend class FinishVideoInitialization;
 
     static VideoManager *instance();
 
@@ -111,6 +114,7 @@ private slots:
     void _videoSourceChanged();
 
 private:
+    void _initAfterQmlIsReady();
     void _initVideoReceiver(VideoReceiver *receiver, QQuickWindow *window);
     bool _updateAutoStream(VideoReceiver *receiver);
     bool _updateUVC(VideoReceiver *receiver);
@@ -128,6 +132,7 @@ private:
     VideoSettings *_videoSettings = nullptr;
 
     bool _initialized = false;
+    bool _initAfterQmlIsReadyDone = false;
     bool _fullScreen = false;
     QAtomicInteger<bool> _decoding = false;
     QAtomicInteger<bool> _recording = false;
@@ -136,8 +141,8 @@ private:
     QString _imageFile;
     QString _uvcVideoSourceID;
     Vehicle *_activeVehicle = nullptr;
-
     bool _webrtcInternalModeEnabled = false;
+    QQuickWindow *_mainWindow = nullptr;
 };
 
 /*===========================================================================*/

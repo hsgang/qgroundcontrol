@@ -152,14 +152,6 @@ RowLayout {
                 }
             }
 
-            QGCLabel {
-                text:               qsTr("Hold to confirm")
-                font.pointSize:     ScreenTools.smallFontPointSize
-                Layout.fillWidth:   true
-                horizontalAlignment:Text.AlignHCenter
-                visible:            flightModeSettings.requireModeChangeConfirmation.rawValue
-            }
-
             QGCDelayButton {
                 id:                 vtolTransitionButton
                 Layout.fillWidth:   true

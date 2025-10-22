@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "MAVLinkLib.h"
+#include "QGCMAVLink.h"
 
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QObject>
@@ -82,6 +82,7 @@ class Joystick : public QThread
     Q_PROPERTY(QString                  name                    READ    name                                                CONSTANT)
     Q_PROPERTY(QStringList              assignableActionTitles  READ    assignableActionTitles                              NOTIFY assignableActionsChanged)
     Q_PROPERTY(QStringList              buttonActions           READ    buttonActions                                       NOTIFY buttonActionsChanged)
+    Q_PROPERTY(bool                     enableManualControlExtensions READ enableManualControlExtensions WRITE setEnableManualControlExtensions NOTIFY enableManualControlExtensionsChanged)
 
     enum ButtonEvent_t {
         BUTTON_UP,
@@ -184,6 +185,9 @@ public:
     /// Set joystick button repeat rate (in Hz)
     void setButtonFrequency(float val);
 
+    bool enableManualControlExtensions() const { return _enableManualControlExtensions; }
+    void setEnableManualControlExtensions(bool enable);
+
 signals:
     // The raw signals are only meant for use by calibration
     void rawAxisValueChanged(int index, int value);
@@ -197,6 +201,7 @@ signals:
     void accumulatorChanged(bool accumulator);
     void enabledChanged(bool enabled);
     void circleCorrectionChanged(bool circleCorrection);
+    void enableManualControlExtensionsChanged();
     void axisValues(float roll, float pitch, float yaw, float throttle);
     void axisFrequencyHzChanged();
     void buttonFrequencyHzChanged();
@@ -219,7 +224,7 @@ signals:
     void setVtolInFwdFlight(bool set);
     void setFlightMode(const QString &flightMode);
     void emergencyStop();
-    void gripperAction(GRIPPER_ACTIONS gripperAction);
+    void gripperAction(QGCMAVLink::GripperActions gripperAction);
     void landingGearDeploy();
     void landingGearRetract();
     void motorInterlock(bool enable);
@@ -287,6 +292,7 @@ private:
     bool _deadband = false;
     bool _negativeThrust = false;
     bool _pollingStartedForCalibration = false;
+    bool _enableManualControlExtensions = false;
     float _axisFrequencyHz = _defaultAxisFrequencyHz;
     float _buttonFrequencyHz = _defaultButtonFrequencyHz;
     float _exponential = 0;
@@ -335,6 +341,7 @@ private:
     static constexpr const char *_roverTXModeSettingsKey =         "TXMode_Rover";
     static constexpr const char *_vtolTXModeSettingsKey =          "TXMode_VTOL";
     static constexpr const char *_submarineTXModeSettingsKey =     "TXMode_Submarine";
+    static constexpr const char *_manualControlExtensionsEnabledKey = "ManualControlExtensionsEnabled";
 
     static constexpr const char *_buttonActionNone =               QT_TR_NOOP("No Action");
     static constexpr const char *_buttonActionArm =                QT_TR_NOOP("Arm");
@@ -362,8 +369,9 @@ private:
     static constexpr const char *_buttonActionGimbalYawLock =      QT_TR_NOOP("Gimbal Yaw Lock");
     static constexpr const char *_buttonActionGimbalYawFollow =    QT_TR_NOOP("Gimbal Yaw Follow");
     static constexpr const char *_buttonActionEmergencyStop =      QT_TR_NOOP("Emergency Stop");
-    static constexpr const char *_buttonActionGripperGrab =        QT_TR_NOOP("Gripper Close");
-    static constexpr const char *_buttonActionGripperRelease =     QT_TR_NOOP("Gripper Open");
+    static constexpr const char *_buttonActionGripperClose =       QT_TR_NOOP("Gripper Close");
+    static constexpr const char *_buttonActionGripperOpen =        QT_TR_NOOP("Gripper Open");
+    static constexpr const char *_buttonActionGripperStop =        QT_TR_NOOP("Gripper Stop");
     static constexpr const char *_buttonActionLandingGearDeploy=   QT_TR_NOOP("Landing gear deploy");
     static constexpr const char *_buttonActionLandingGearRetract=  QT_TR_NOOP("Landing gear retract");
     static constexpr const char *_buttonActionMotorInterlockEnable=   QT_TR_NOOP("Motor Interlock enable");
