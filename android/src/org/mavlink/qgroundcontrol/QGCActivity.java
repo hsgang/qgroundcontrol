@@ -52,12 +52,14 @@ public class QGCActivity extends QtActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Setup fullscreen BEFORE super.onCreate() to ensure Qt uses correct geometry
+        setupFullscreen();
+
         super.onCreate(savedInstanceState);
 
         nativeInit();
         acquireWakeLock();
         keepScreenOn();
-        setupFullscreen();
         setupMulticastLock();
 
         QGCUsbSerialManager.initialize(this);
@@ -103,26 +105,21 @@ public class QGCActivity extends QtActivity {
      */
     private void setupFullscreen() {
         try {
-            final View decorView = getWindow().getDecorView();
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                // Android 11+ (API 30+): Use WindowInsetsController
+                // Android 11+ (API 30+): Use WindowInsetsController with setDecorFitsSystemWindows
+                // This is critical for Qt 6.10 to recognize the full screen area
+                getWindow().setDecorFitsSystemWindows(false);
+
                 final WindowInsetsController controller = getWindow().getInsetsController();
                 if (controller != null) {
                     // Hide both status bar and navigation bar
                     controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
-                    // Use BEHAVIOR_DEFAULT for consistent immersive behavior
-                    controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_DEFAULT);
+                    // Use BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE for better UX
+                    controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
                 }
-
-                // Also set layout flags for proper content layout
-                decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                );
-            } else {
-                // Android 10 and below: Use legacy system UI flags
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                // Android 4.4+ (API 19+): Use immersive mode
+                final View decorView = getWindow().getDecorView();
                 decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                     | View.SYSTEM_UI_FLAG_FULLSCREEN
