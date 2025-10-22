@@ -57,6 +57,7 @@ Item {
             sourceSize.height:  height
             source:             "/InstrumentValueIcons/notifications-outline.svg"
             fillMode:           Image.PreserveAspectFit
+            mipmap:             true
             color:              getMessageColor()
 
             Rectangle {
