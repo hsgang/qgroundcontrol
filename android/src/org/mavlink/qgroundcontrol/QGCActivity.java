@@ -15,10 +15,7 @@ import android.os.PowerManager;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
-import android.view.WindowInsets;
-import android.view.WindowInsetsController;
 import android.app.Activity;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
@@ -57,24 +54,9 @@ public class QGCActivity extends QtActivity {
         nativeInit();
         acquireWakeLock();
         keepScreenOn();
-        setupFullscreen();
         setupMulticastLock();
 
         QGCUsbSerialManager.initialize(this);
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            setupFullscreen();
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        setupFullscreen();
     }
 
     @Override
@@ -95,46 +77,6 @@ public class QGCActivity extends QtActivity {
      */
     private void keepScreenOn() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    }
-
-    /**
-     * Sets up fullscreen mode to hide system UI (status bar and navigation bar).
-     * Uses WindowInsetsController for Android 11+ (API 30+) and legacy flags for older versions.
-     */
-    private void setupFullscreen() {
-        try {
-            final View decorView = getWindow().getDecorView();
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                // Android 11+ (API 30+): Use WindowInsetsController
-                final WindowInsetsController controller = getWindow().getInsetsController();
-                if (controller != null) {
-                    // Hide both status bar and navigation bar
-                    controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
-                    // Use BEHAVIOR_DEFAULT for consistent immersive behavior
-                    controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_DEFAULT);
-                }
-
-                // Also set layout flags for proper content layout
-                decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                );
-            } else {
-                // Android 10 and below: Use legacy system UI flags
-                decorView.setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                );
-            }
-        } catch (final Exception e) {
-            Log.e(TAG, "Exception in setupFullscreen()", e);
-        }
     }
 
     /**
