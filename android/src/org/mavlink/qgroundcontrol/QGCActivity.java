@@ -110,6 +110,11 @@ public class QGCActivity extends QtActivity {
                 // This is critical for Qt 6.10 to recognize the full screen area
                 getWindow().setDecorFitsSystemWindows(false);
 
+                // Force window to extend into the full screen area including system bars
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                getWindow().setAttributes(params);
+
                 final WindowInsetsController controller = getWindow().getInsetsController();
                 if (controller != null) {
                     // Hide both status bar and navigation bar
@@ -117,6 +122,21 @@ public class QGCActivity extends QtActivity {
                     // Use BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE for better UX
                     controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
                 }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                // Android 9+ (API 28+): Add notch support
+                WindowManager.LayoutParams params = getWindow().getAttributes();
+                params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                getWindow().setAttributes(params);
+
+                final View decorView = getWindow().getDecorView();
+                decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                );
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 // Android 4.4+ (API 19+): Use immersive mode
                 final View decorView = getWindow().getDecorView();
