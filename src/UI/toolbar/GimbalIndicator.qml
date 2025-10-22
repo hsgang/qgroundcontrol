@@ -276,7 +276,7 @@ Item {
 
             SettingsGroupLayout {
                 LabelledFactTextField {
-                    label:      qsTr("Joystick buttons speed:")
+                    label:      qsTr("Joystick buttons speed")
                     fact:       _gimbalControllerSettings.joystickButtonsSpeed
                     enabled:    joystickButtonsAvailable && _gimbalControllerSettings.visible
                 }
