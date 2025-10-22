@@ -404,6 +404,7 @@ Rectangle {
                     }
 
                     QGCDelayButton {
+                        Layout.alignment: Qt.AlignRight
                         enabled:    _armed || !_healthAndArmingChecksSupported || _activeVehicle.healthAndArmingCheckReport.canArm
                         text:       _armed ? qsTr("Disarm") : (control._allowForceArm ? qsTr("Force Arm") : qsTr("Arm"))
 
