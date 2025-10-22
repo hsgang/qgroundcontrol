@@ -122,11 +122,49 @@ Rectangle {
                 height:  control.height * 0.8
             }
 
+            Rectangle {
+                id: messageIndicator
+                Layout.alignment:       Qt.AlignVCenter
+                height:                 control.height * 0.8
+                Layout.preferredWidth:  childrenRect.width + ScreenTools.defaultFontPixelWidth * 2
+                color:                  qgcPal.windowTransparent
+                radius:                 ScreenTools.defaultFontPixelHeight / 4
+                visible:                _activeVehicle
+
+                MessageIndicator{
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.margins: ScreenTools.defaultFontPixelHeight * 0.4
+                }
+            }
+
             QGCButton {
                 id:                 disconnectButton
                 Layout.alignment:       Qt.AlignVCenter
                 text:               qsTr("Disconnect")
                 onClicked:          _activeVehicle.closeVehicle()
+                visible:            _activeVehicle && _communicationLost
+            }
+
+            QGCButton {
+                id:                 reconnectButton
+                Layout.alignment:       Qt.AlignVCenter
+                text:               qsTr("Reconnect")
+                onClicked:          {
+                    if (_activeVehicle) {
+                        var primaryLinkName = _activeVehicle.vehicleLinkManager.primaryLinkName
+                        var linkConfigs = QGroundControl.linkManager.linkConfigurations
+                        for (var i = 0; i < linkConfigs.count; i++) {
+                            var config = linkConfigs.get(i)
+                            if (config.name === primaryLinkName) {
+                                if (config.link) {
+                                    config.link.disconnect()
+                                }
+                                QGroundControl.linkManager.createConnectedLink(config)
+                                break
+                            }
+                        }
+                    }
+                }
                 visible:            _activeVehicle && _communicationLost
             }
         }
@@ -154,6 +192,7 @@ Rectangle {
                 visible:                QGroundControl.linkManager.webRtcLinkExists
 
                 WEBRTCIndicator{
+                    anchors.right:   parent.right
                     anchors.margins: ScreenTools.defaultFontPixelHeight * 0.33
                 }
             }
