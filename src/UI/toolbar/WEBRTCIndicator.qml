@@ -46,6 +46,14 @@ Item {
     property string _rtcModuleLatestVersion:  QGroundControl.linkManager.rtcModuleLatestVersion
     property bool _rtcModuleUpdateAvailable:  QGroundControl.linkManager.rtcModuleUpdateAvailable
 
+    // Video Metrics 정보
+    property real _videoRtspPacketsPerSec:    QGroundControl.linkManager.videoRtspPacketsPerSec
+    property real _videoDecodedFramesPerSec:  QGroundControl.linkManager.videoDecodedFramesPerSec
+    property real _videoEncodedFramesPerSec:  QGroundControl.linkManager.videoEncodedFramesPerSec
+    property real _videoTeeFramesPerSec:      QGroundControl.linkManager.videoTeeFramesPerSec
+    property real _videoSrtFramesPerSec:      QGroundControl.linkManager.videoSrtFramesPerSec
+    property real _videoRtpFramesPerSec:      QGroundControl.linkManager.videoRtpFramesPerSec
+
     Row {
         id: vehicleRow
         anchors.top: parent.top
@@ -152,6 +160,32 @@ Item {
                         LabelledLabel {
                             label:      qsTr("인터페이스")
                             labelText:  _rtcModuleNetworkInterface
+                        }
+                    }
+
+                    // Video Metrics 정보 섹션
+                    SettingsGroupLayout {
+                        heading: qsTr("비디오 메트릭 정보")
+
+                        LabelledLabel {
+                            label:      qsTr("RTSP 소스 패킷")
+                            labelText:  qsTr("%1 pkt/s").arg(_videoRtspPacketsPerSec.toFixed(1))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("디코딩 프레임")
+                            labelText:  qsTr("%1 fps").arg(_videoDecodedFramesPerSec.toFixed(1))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("인코딩 프레임")
+                            labelText:  qsTr("%1 fps").arg(_videoEncodedFramesPerSec.toFixed(1))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("SRT 프레임")
+                            labelText:  qsTr("%1 fps").arg(_videoSrtFramesPerSec.toFixed(1))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("RTP 프레임")
+                            labelText:  qsTr("%1 fps").arg(_videoRtpFramesPerSec.toFixed(1))
                         }
                     }
 

@@ -38,6 +38,7 @@ class UdpIODevice;
 // 전방 선언
 struct RTCModuleSystemInfo;
 struct WebRTCStats;
+struct VideoMetrics;
 
 /// @brief Manage communication links
 ///        The Link Manager organizes the physical Links. It can manage arbitrary
@@ -71,6 +72,12 @@ class LinkManager : public QObject
     Q_PROPERTY(QString rtcModuleCurrentVersion READ rtcModuleCurrentVersion NOTIFY rtcModuleVersionInfoChanged)
     Q_PROPERTY(QString rtcModuleLatestVersion READ rtcModuleLatestVersion NOTIFY rtcModuleVersionInfoChanged)
     Q_PROPERTY(bool rtcModuleUpdateAvailable READ rtcModuleUpdateAvailable NOTIFY rtcModuleVersionInfoChanged)
+    Q_PROPERTY(double videoRtspPacketsPerSec READ videoRtspPacketsPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoDecodedFramesPerSec READ videoDecodedFramesPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoEncodedFramesPerSec READ videoEncodedFramesPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoTeeFramesPerSec READ videoTeeFramesPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoSrtFramesPerSec READ videoSrtFramesPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoRtpFramesPerSec READ videoRtpFramesPerSec NOTIFY videoMetricsChanged)
 
 public:
     explicit LinkManager(QObject *parent = nullptr);
@@ -167,7 +174,15 @@ public:
     QString rtcModuleCurrentVersion() const;
     QString rtcModuleLatestVersion() const;
     bool rtcModuleUpdateAvailable() const;
-    
+
+    // Video Metrics
+    double videoRtspPacketsPerSec() const;
+    double videoDecodedFramesPerSec() const;
+    double videoEncodedFramesPerSec() const;
+    double videoTeeFramesPerSec() const;
+    double videoSrtFramesPerSec() const;
+    double videoRtpFramesPerSec() const;
+
     // WebRTC 링크 존재 여부 확인
     bool webRtcLinkExists() const;
 
@@ -178,6 +193,7 @@ signals:
     void webRtcStatsChanged();
     void rtcModuleSystemInfoChanged(const RTCModuleSystemInfo& systemInfo);
     void rtcModuleVersionInfoChanged(const RTCModuleVersionInfo& versionInfo);
+    void videoMetricsChanged(const VideoMetrics& videoMetrics);
     void webRtcLinkExistsChanged();
 
 private slots:
@@ -214,10 +230,10 @@ private:
     
     // RTC Module 시스템 정보 캐시
     RTCModuleSystemInfo _rtcModuleSystemInfo;
-    
+
     // RTC Module 버전 정보 캐시
     RTCModuleVersionInfo _rtcModuleVersionInfo;
-    
+
     // WebRTC 통계 정보 캐시
     int _webRtcRtt = -1;
     double _webRtcSent = -1.0;
@@ -225,6 +241,9 @@ private:
     double _rtcVideoRate = 0.0;
     int _rtcVideoPacketCount = 0;
     qint64 _rtcVideoBytesReceived = 0;
+
+    // Video Metrics 캐시
+    VideoMetrics _videoMetrics;
 
     static constexpr const char *_defaultUDPLinkName = "UDP Link (AutoConnect)";
     static constexpr const char *_mavlinkForwardingLinkName = "MAVLink Forwarding Link";

@@ -135,13 +135,11 @@ struct VideoMetrics {
 
     // 디버그 출력용
     QString toString() const {
-        return QString("RTSP: %1 pkt/s, Decoded: %2 fps, Encoded: %3 fps, Tee: %4 fps, SRT: %5 fps, RTP: %6 fps")
-               .arg(rtspPacketsPerSec, 0, 'f', 2)
-               .arg(decodedFramesPerSec, 0, 'f', 2)
-               .arg(encodedFramesPerSec, 0, 'f', 2)
-               .arg(teeFramesPerSec, 0, 'f', 2)
-               .arg(srtFramesPerSec, 0, 'f', 2)
-               .arg(rtpFramesPerSec, 0, 'f', 2);
+        return QString("RTSP: %1 pkt/s, Decoded: %2 fps, Encoded: %3 fps, RTP: %6 fps")
+               .arg(rtspPacketsPerSec, 0, 'f', 1)
+               .arg(decodedFramesPerSec, 0, 'f', 1)
+               .arg(encodedFramesPerSec, 0, 'f', 1)
+               .arg(rtpFramesPerSec, 0, 'f', 1);
     }
 };
 

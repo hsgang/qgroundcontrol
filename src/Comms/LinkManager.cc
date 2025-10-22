@@ -185,6 +185,11 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
             qCDebug(LinkManagerLog) << "RTC Module Version Info Updated:" << versionInfo.toString();
             emit rtcModuleVersionInfoChanged(versionInfo);
         });
+        connect(w, &WebRTCLink::videoMetricsChanged, this, [this](const VideoMetrics& videoMetrics) {
+            _videoMetrics = videoMetrics;
+            qCDebug(LinkManagerLog) << "Video Metrics Updated:" << videoMetrics.toString();
+            emit videoMetricsChanged(videoMetrics);
+        });
         // WebRTC 링크가 생성되면 상태 업데이트
         _updateWebRtcLinkStatus();
         qCDebug(LinkManagerLog) << "WebRTCLink signals connected";
@@ -260,6 +265,7 @@ void LinkManager::_linkDisconnected()
         disconnect(w, &WebRTCLink::rtcModuleSystemInfoChanged, this, nullptr);
         disconnect(w, &WebRTCLink::webRtcStatsChanged, this, nullptr);
         disconnect(w, &WebRTCLink::rtcModuleVersionInfoChanged, this, nullptr);
+        disconnect(w, &WebRTCLink::videoMetricsChanged, this, nullptr);
         wasWebRTCLink = true;
         //disconnect(this, &LinkManager::sendWebRTCCustomMessage, w, &WebRTCLink::sendCustomMessage);
     }
@@ -867,6 +873,36 @@ QString LinkManager::rtcModuleLatestVersion() const
 bool LinkManager::rtcModuleUpdateAvailable() const
 {
     return _rtcModuleVersionInfo.updateAvailable;
+}
+
+double LinkManager::videoRtspPacketsPerSec() const
+{
+    return _videoMetrics.rtspPacketsPerSec;
+}
+
+double LinkManager::videoDecodedFramesPerSec() const
+{
+    return _videoMetrics.decodedFramesPerSec;
+}
+
+double LinkManager::videoEncodedFramesPerSec() const
+{
+    return _videoMetrics.encodedFramesPerSec;
+}
+
+double LinkManager::videoTeeFramesPerSec() const
+{
+    return _videoMetrics.teeFramesPerSec;
+}
+
+double LinkManager::videoSrtFramesPerSec() const
+{
+    return _videoMetrics.srtFramesPerSec;
+}
+
+double LinkManager::videoRtpFramesPerSec() const
+{
+    return _videoMetrics.rtpFramesPerSec;
 }
 
 LogReplayLink *LinkManager::startLogReplay(const QString &logFile)
