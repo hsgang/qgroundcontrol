@@ -6804,6 +6804,22 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>FlightModeIndicator</name>
+    <message>
+        <location filename="../src/QmlControls/FlightModeIndicator.qml" line="1"/>
+        <source>Click and Hold to Confirm Mode Change</source>
+        <translation>길게 눌러서 모드 변경 확인</translation>
+    </message>
+</context>
+<context>
+    <name>APMFlightModeIndicator</name>
+    <message>
+        <location filename="../src/FirmwarePlugin/APM/APMFlightModeIndicator.qml" line="1"/>
+        <source>Return to Launch</source>
+        <translation>복귀</translation>
+    </message>
+</context>
+<context>
     <name>FlightModeMenuIndicator</name>
     <message>
         <location filename="../src/ui/toolbar/FlightModeMenuIndicator.qml" line="217"/>
@@ -7483,23 +7499,28 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
-        <source>Perform Survey-In</source>
-        <translation>Survey-In 수행</translation>
+        <source>Settings displayed</source>
+        <translation>설정 표시</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
-        <source>Survey in accuracy (U-blox only)</source>
-        <translation>관측 정확도 (U-blox only)</translation>
+        <source>Survey-In</source>
+        <translation>기준국 초기화</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
-        <source>Minimum observation time</source>
-        <translation>최소 관측 시간</translation>
+        <source>Specify position</source>
+        <translation>지정 위치</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
-        <source>Use Specified Base Position</source>
-        <translation>특정 기준 위치 사용</translation>
+        <source>Accuracy</source>
+        <translation>정확도</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
+        <source>Min Duration</source>
+        <translation>최소 시간</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/GPSIndicatorPage.qml" line="40"/>
@@ -7570,7 +7591,94 @@ Click Ok to start the auto-tuning process.
         <translation>위성:</translation>
     </message>
 </context>
-
+<context>
+    <name>GimbalIndicator</name>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Commands</source>
+        <translation>마운트 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Yaw Follow</source>
+        <translation>팬팔로우</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Yaw Lock</source>
+        <translation>팬잠금</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Center</source>
+        <translation>센터</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Tilt 90</source>
+        <translation>틸트90</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Point Home</source>
+        <translation>홈포인트</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Retract</source>
+        <translation>리트랙트</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>On-Screen Control</source>
+        <translation>화면 제어</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Enabled</source>
+        <translation>활성화</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Control type</source>
+        <translation>제어 방식</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Horizontal FOV</source>
+        <translation>수평 화각</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Vertical FOV</source>
+        <translation>수직 화각</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Max speed</source>
+        <translation>최대 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Joystick buttons speed</source>
+        <translation>조이스틱 버튼 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Show gimbal Azimuth indicator in map</source>
+        <translation>지도에 마운트 방향 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Use Azimuth instead of local yaw on top toolbar indicator</source>
+        <translation>방위각 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="1"/>
+        <source>Show Acquire/Release control button</source>
+        <translation>제어 전환 버튼 표시</translation>
+    </message>
+</context>
 <context>
     <name>VehicleIndicatorPage</name>
     <message>
@@ -7838,6 +7946,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="99"/>
         <source>Console</source>
         <translation>콘솔 로그</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="99"/>
+        <source>Logging</source>
+        <translation>로깅</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/SettingsPagesModel.qml" line="99"/>
@@ -8227,8 +8340,13 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/VideoSettings.qml" line="318"/>
-        <source>Video decode priority</source>
+        <source>Force video decoder priority</source>
         <translation>비디오 디코더 우선순위</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="318"/>
+        <source>Enable Auto Configuration</source>
+        <translation>비디오 자동 설정 허용</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/VideoSettings.qml" line="450"/>
@@ -8605,12 +8723,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
         <source>Perform Survey-In</source>
-        <translation>Survey-In 수행</translation>
+        <translation>기준국 초기화 수행</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
-        <source>Survey in accuracy (U-blox only)</source>
-        <translation>관측 정확도 (U-blox only)</translation>
+        <source>Survey in accuracy</source>
+        <translation>관측 정확도</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="40"/>
@@ -8826,8 +8944,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/PlanViewSettings.qml" line="397"/>
-        <source>Missions Do Not Require Takeoff Item</source>
-        <translation>자동 경로에서 이륙 항목(Takeoff) 제외</translation>
+        <source>Missions do not require takeoff item</source>
+        <translation>이륙 항목 없이 미션 수행 허용</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/PlanViewSettings.qml" line="397"/>
@@ -8838,6 +8956,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/preferences/PlanViewSettings.qml" line="397"/>
         <source>Download mission when connecting vehicle</source>
         <translation>기체 연결시에 임무경로 다운로드</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/PlanViewSettings.qml" line="397"/>
+        <source>Allow configuring multiple landing sequences</source>
+        <translation>다중 착륙 시퀀스 설정 허용</translation>
     </message>
 </context>
 <context>
@@ -11258,6 +11381,11 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="215"/>
         <source>Disconnect</source>
         <translation>연결 해제</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="215"/>
+        <source>Reconnect</source>
+        <translation>재연결</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/FlyViewToolBar.qml" line="184"/>
