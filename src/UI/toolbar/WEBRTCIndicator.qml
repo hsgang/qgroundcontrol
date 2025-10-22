@@ -29,7 +29,7 @@ Item {
     property real _webRtcSent:      QGroundControl.linkManager.webRtcSent
     property real _webRtcRecv:      QGroundControl.linkManager.webRtcRecv
     property real _videoRate:       QGroundControl.linkManager.rtcVideoRate
-    property int  _videoRateInt:    Math.round(_videoRate)
+    property real  _videoRateMbps:   (_videoRate / 125.0).toFixed(2)  // Mbps 단위 변환
     property int  _videoPacketCount: QGroundControl.linkManager.rtcVideoPacketCount
     property int  _videoBytesReceived: QGroundControl.linkManager.rtcVideoBytesReceived
     
@@ -76,14 +76,15 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
-                text: qsTr("%1 ms").arg(_rtt)
+                text:           qsTr("%1 ms").arg(_rtt)
             }
 
             QGCLabel {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
-                text: qsTr("%1 KB/s").arg(_videoRateInt)
+                text:           qsTr("%1 Mbps").arg(_videoRateMbps)
+                width:          ScreenTools.smallFontPixelWidth * 10
             }
         }
     }
@@ -120,7 +121,7 @@ Item {
                         }
                         LabelledLabel {
                             label:      qsTr("영상 다운로드")
-                            labelText:  qsTr("%1 KB/s").arg(_videoRateInt)
+                            labelText:  qsTr("%1 Mbps").arg(_videoRateMbps)
                         }
                     }
 
