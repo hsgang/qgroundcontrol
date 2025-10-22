@@ -897,7 +897,7 @@ ApplicationWindow {
         bottomInset:    0
         padding:        _margins * 2
         visible:        false
-        modal:          true
+        modal:          false
         focus:          true
         closePolicy:    Popup.CloseOnEscape | Popup.CloseOnPressOutside
 
