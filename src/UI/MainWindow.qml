@@ -29,6 +29,11 @@ ApplicationWindow {
     id:             mainWindow
     visible:        true
 
+    x:              0
+    y:              0
+    width:          Screen.width
+    height:         Screen.height
+
     property bool   _utmspSendActTrigger
 
     Component.onCompleted: {
