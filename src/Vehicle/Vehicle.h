@@ -458,6 +458,9 @@ public:
 
     Q_INVOKABLE QVariant expandedToolbarIndicatorSource(const QString& indicatorName);
 
+    Q_INVOKABLE void changeHeading(float degrees, float maxYawRate, int8_t direction, bool relative);
+    Q_INVOKABLE void changeHeading(const QGeoCoordinate& headingCoord);
+
     bool    isInitialConnectComplete() const;
     bool    guidedModeSupported     () const;
     bool    pauseVehicleSupported   () const;
