@@ -348,14 +348,6 @@ Item {
         _vehicleInMissionMode = _activeVehicle ? _flightMode === _activeVehicle.missionFlightMode : false // Must be last to get correct signalling for showStartMission popups
     }
 
-    on_GripperFunctionChanged: {
-        if(_gripperFunction === 1) {
-            confirmDialog.message = gripperGrabMessage
-        } else if (_gripperFunction === 0) {
-            confirmDialog.message = gripperReleaseMessage
-        }
-    }
-
     Connections {
         target:                     missionController
         function onResumeMissionUploadFail() { confirmAction(actionResumeMissionUploadFail) }
