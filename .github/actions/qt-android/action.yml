@@ -36,7 +36,7 @@ runs:
       id: setup-android
       with:
         cmdline-tools-version: 13114758
-        packages: 'platform-tools platforms;android-35 build-tools;35.0.0' # ndk;27.2.12479018'
+        packages: 'platform-tools platforms;android-36 build-tools;36.0.0' # ndk;27.2.12479018'
         log-accepted-android-sdk-licenses: false
 
     - name: Install Android NDK
