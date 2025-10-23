@@ -6,7 +6,7 @@
 #include "SiYiCamera.h"
 #include "QGCLoggingCategory.h"
 
-QGC_LOGGING_CATEGORY(SiYiCameraLog, "Siyi.SiYiCamera")
+QGC_LOGGING_CATEGORY(SiYiCameraLog, "SiYi.SiYiCamera")
 
 SiYiCamera::SiYiCamera(QObject *parent)
     : SiYiTcpClient("192.168.144.25", 37256)

@@ -8,7 +8,7 @@
 #include "SiYiTcpClient.h"
 #include "QGCLoggingCategory.h"
 
-QGC_LOGGING_CATEGORY(SiYiTcpClientLog, "Siyi.SiYiTcpClient")
+QGC_LOGGING_CATEGORY(SiYiTcpClientLog, "SiYi.SiYiTcpClient")
 
 SiYiTcpClient::SiYiTcpClient(const QString ip, quint16 port, QObject *parent)
     : QThread(parent)

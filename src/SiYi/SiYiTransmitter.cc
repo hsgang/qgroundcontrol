@@ -4,7 +4,7 @@
 #include "SiYiTransmitter.h"
 #include "QGCLoggingCategory.h"
 
-QGC_LOGGING_CATEGORY(SiYiTransmitterLog, "Siyi.SiYiTransmitter")
+QGC_LOGGING_CATEGORY(SiYiTransmitterLog, "SiYi.SiYiTransmitter")
 
 SiYiTransmitter::SiYiTransmitter(QObject *parent)
     : SiYiTcpClient{"192.168.144.12", 5864, parent}
