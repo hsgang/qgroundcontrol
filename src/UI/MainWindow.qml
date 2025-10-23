@@ -28,6 +28,11 @@ import QGroundControl.AnalyzeView
 ApplicationWindow {
     id:             mainWindow
     visible:        true
+    flags:          Qt.Window | (ScreenTools.isMobile ? (Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint) : 0)
+    topPadding:     ScreenTools.isMobile ? 0 : undefined
+    bottomPadding:  ScreenTools.isMobile ? 0 : undefined
+    leftPadding:    ScreenTools.isMobile ? 0 : undefined
+    rightPadding:   ScreenTools.isMobile ? 0 : undefined
 
     property bool   _utmspSendActTrigger
 
