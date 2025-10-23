@@ -9,9 +9,9 @@ endif()
 # ----------------------------------------------------------------------------
 # Android NDK Version Validation
 # ----------------------------------------------------------------------------
-if(Qt6_VERSION VERSION_EQUAL "6.10.0")
+if(Qt6_VERSION VERSION_EQUAL "6.8.3")
     if(NOT CMAKE_ANDROID_NDK_VERSION VERSION_EQUAL "27.2")
-        message(FATAL_ERROR "QGC: Invalid NDK Version: ${CMAKE_ANDROID_NDK_VERSION}. Qt 6.10.0 requires NDK 27.2")
+        message(FATAL_ERROR "QGC: Invalid NDK Version: ${CMAKE_ANDROID_NDK_VERSION}. Qt 6.8.3 requires NDK 27.2")
     endif()
 endif()
 
