@@ -7,8 +7,6 @@ import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
 import QGroundControl.FactControls
 
-import SiYi.Object
-
 ColumnLayout {
     width: swipePages.currentItem
                ? swipePages.currentItem.contentLoader.implicitWidth + pageIndicatorContainer.width + ScreenTools.defaultFontPixelHeight
@@ -17,7 +15,7 @@ ColumnLayout {
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
     property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
 
-    property var    siyi: SiYi
+    property var    siyi: QGroundControl.siyi
     property SiYiCamera camera: siyi.camera
     property bool   isSiYiCameraConnected : camera.isConnected
 

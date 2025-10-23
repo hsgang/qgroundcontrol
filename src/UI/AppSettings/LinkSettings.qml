@@ -15,10 +15,10 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.FactControls
-import SiYi.Object
 
 SettingsPage {
     property var    _linkManager: QGroundControl.linkManager
+    property var    _siyi: QGroundControl.siyi
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property real   _comboBoxPreferredWidth:    ScreenTools.defaultFontPixelWidth * 15
     property real   _layoutWidth:   ScreenTools.defaultFontPixelWidth * 42
@@ -246,13 +246,13 @@ SettingsPage {
             QGCTextField {
                 id: ipInput
                 Layout.fillWidth: true
-                text:   SiYi.transmitter.ip
+                text:   _siyi.transmitter.ip
             }
             QGCButton {
                 text: qsTr("Change IP")
-                enabled:   ipInput.text !== SiYi.transmitter.ip
+                enabled:   ipInput.text !== _siyi.transmitter.ip
                 onClicked: {
-                    SiYi.transmitter.analyzeIp(ipInput.text)
+                    _siyi.transmitter.analyzeIp(ipInput.text)
                 }
             }
         }

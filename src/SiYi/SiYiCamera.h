@@ -1,18 +1,21 @@
 ﻿#ifndef SIYICAMERA_H
 #define SIYICAMERA_H
 
+#include <QtCore/QLoggingCategory>
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
+#include <QtQmlIntegration/QtQmlIntegration>
 #include <QHostAddress>
-#include <QObject>
-#include <QTimer>
 
 #include "SiYiTcpClient.h"
-#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(SiYiCameraLog)
 
 class SiYiCamera : public SiYiTcpClient
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Reference only")
     Q_PROPERTY(bool isRecording READ isRecording NOTIFY isRecordingChanged)
     Q_PROPERTY(int zoomMultiple READ zoomMultiple NOTIFY zoomMultipleChanged)
     Q_PROPERTY(bool enableZoom READ enableZoom NOTIFY enableZoomChanged)

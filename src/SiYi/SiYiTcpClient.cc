@@ -16,7 +16,6 @@ SiYiTcpClient::SiYiTcpClient(const QString ip, quint16 port, QObject *parent)
     , port_(port)
 {
     sequence_ = quint16(QDateTime::currentMSecsSinceEpoch());
-    // 自动重连
     connect(this, &SiYiTcpClient::finished, this, [=]() { start(); });
 }
 

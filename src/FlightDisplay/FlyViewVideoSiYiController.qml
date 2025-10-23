@@ -17,10 +17,6 @@ import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
 import QGroundControl.Controls
 
-import SiYi.Object
-import "qrc:/qml/QGroundControl/Controls"
-import "qrc:/qml/QGroundControl/FlightDisplay"
-
 Rectangle {
     id: root
     clip: true
@@ -28,9 +24,9 @@ Rectangle {
     color: "#00000000"
     visible: !_mainWindowIsMap && camera.isConnected && QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl.rawValue
 
-    property var siyi: SiYi
-    property SiYiCamera camera: siyi.camera
-    property SiYiTransmitter transmitter: siyi.transmitter
+    property var _siyi: QGroundControl.siyi
+    property SiYiCamera camera: _siyi.camera
+    property SiYiTransmitter transmitter: _siyi.transmitter
     property bool isRecording: camera.isRecording
     property int minDelta: 5
     property bool hasBeenMoved: false
@@ -41,7 +37,7 @@ Rectangle {
     property real videoH: 720
     property bool expended: true
     property bool using1080p: false //camera.using1080p
-    property real iconScale: SiYi.isAndroid ? 0.7 : 1.5
+    property real iconScale: _siyi.isAndroid ? 0.7 : 1.5
     //property int  iconLeftMargin: 150
     property bool laserIconShow: false
     property bool showLaserOnLeft: camera.mainStreamSplitMode === 3

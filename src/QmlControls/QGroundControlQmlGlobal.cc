@@ -25,6 +25,7 @@
 #include "NTRIPManager.h"
 #include "CloudManager.h"
 #include "GridManager.h"
+#include "SiYi.h"
 #include "MultiVehicleManager.h"
 #include "QGCLoggingCategory.h"
 #ifndef QGC_NO_SERIAL_LINK
@@ -61,6 +62,7 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QObject *parent)
     , _ntripManager(NTRIPManager::instance())
     , _cloudManager(CloudManager::instance())
     , _gridManager(GridManager::instance())
+    , _siyi(SiYi::instance())
     , _settingsManager(SettingsManager::instance())
     , _corePlugin(QGCCorePlugin::instance())
     , _globalPalette(new QGCPalette(this))

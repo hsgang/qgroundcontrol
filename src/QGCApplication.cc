@@ -227,11 +227,6 @@ void QGCApplication::init()
     //GridManager::registerQmlTypes();
     //NTRIPManager::registerQmlTypes();
 
-    qmlRegisterSingletonType<SiYi>("SiYi.Object", 1, 0, "SiYi", [](QQmlEngine*, QJSEngine*)->QObject*{
-        return SiYi::instance();
-    });
-    qmlRegisterUncreatableType<SiYiCamera>("SiYi.Object", 1, 0, "SiYiCamera", "Reference only");
-    qmlRegisterUncreatableType<SiYiTransmitter>("SiYi.Object", 1, 0, "SiYiTransmitter", "Reference only");
     // Although this should really be in _initForNormalAppBoot putting it here allowws us to create unit tests which pop up more easily
     if (QFontDatabase::addApplicationFont(":/fonts/opensans") < 0) {
         qCWarning(QGCApplicationLog) << "Could not load /fonts/opensans font";
@@ -270,10 +265,10 @@ void QGCApplication::_initForNormalAppBoot()
     QGCCorePlugin::instance()->init();
     MAVLinkProtocol::instance()->init();
     MultiVehicleManager::instance()->init();
+    SiYi::instance()->init();
     _qmlAppEngine = QGCCorePlugin::instance()->createQmlApplicationEngine(this);
     QObject::connect(_qmlAppEngine, &QQmlApplicationEngine::objectCreationFailed, this, QCoreApplication::quit, Qt::QueuedConnection);
     QGCCorePlugin::instance()->createRootWindow(_qmlAppEngine);
-
     AudioOutput::instance()->init(SettingsManager::instance()->appSettings()->audioMuted());
     FollowMe::instance()->init();
     QGCPositionManager::instance()->init();

@@ -11,9 +11,6 @@ import QGroundControl.Palette
 import QGroundControl.Vehicle
 import QGroundControl.Controllers
 
-import SiYi.Object 1.0
-//import "qrc:/qml/QGroundControl/Controls"
-
 Rectangle {
     id: controlRectangle
     width:      controlColumn.width + (_margins * 2)
@@ -25,8 +22,8 @@ Rectangle {
     property real   _margins:       ScreenTools.defaultFontPixelHeight / 2
     property real   backgroundOpacity: QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 
-    property var    siyi:           SiYi
-    property SiYiCamera camera:     siyi.camera
+    property var    _siyi:           QGroundControl.siyi
+    property SiYiCamera camera:     _siyi.camera
     property bool   isRecording:    camera.isRecording
     property int    minDelta:       5
     property int    buttonSize:     ScreenTools.defaultFontPixelHeight * 1.6

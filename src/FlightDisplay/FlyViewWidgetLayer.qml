@@ -23,8 +23,6 @@ import QGroundControl.Controls
 import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
 
-import SiYi.Object
-
 // This is the ui overlay layer for the widgets/tools for Fly View
 Item {
     id: _root
@@ -50,8 +48,8 @@ Item {
 
     property bool utmspActTrigger
 
-    property var siyi: SiYi
-    property SiYiCamera camera: siyi.camera
+    property var _siyi: QGroundControl.siyi
+    property SiYiCamera camera: _siyi.camera
 
     QGCToolInsets {
         id:                     _totalToolInsets

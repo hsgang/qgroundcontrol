@@ -4,7 +4,6 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.Controls
 
-import SiYi.Object 1.0
 
 Item {
     id:             control
@@ -12,7 +11,8 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property SiYiTransmitter transmitter:   SiYi.transmitter
+    property var _siyi:                     QGroundControl.siyi
+    property SiYiTransmitter transmitter:   _siyi.transmitter
 
     property bool showIndicator:            transmitter.isConnected
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle

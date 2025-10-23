@@ -18,11 +18,11 @@ import QGroundControl.FactControls
 import QGroundControl.Controls
 
 
-import SiYi.Object 1.0
 
 SettingsPage {
     property var    _settingsManager:           QGroundControl.settingsManager
     property var    _videoManager:              QGroundControl.videoManager
+    property var    _siyi:                      QGroundControl.siyi
     property var    _videoSettings:             _settingsManager.videoSettings
     property string _videoSource:               _videoSettings.videoSource.rawValue
     property bool   _isGST:                     _videoManager.gstreamerEnabled
@@ -79,7 +79,7 @@ SettingsPage {
                 Layout.fillWidth:       true
                 fact:                   _videoSettings.rtspUrl
                 onTextChanged: {
-                    SiYi.camera.analyzeIp(text)
+                    _siyi.camera.analyzeIp(text)
                 }
             }
         }

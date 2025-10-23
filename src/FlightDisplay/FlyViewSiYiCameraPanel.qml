@@ -17,10 +17,6 @@ import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
 import QGroundControl.Controls
 
-import SiYi.Object
-import "qrc:/qml/QGroundControl/Controls"
-import "qrc:/qml/QGroundControl/FlightDisplay"
-
 Rectangle {
     id: root
     //clip: true
@@ -30,7 +26,7 @@ Rectangle {
     height: mainGridLayout.height + _margins
     radius: _margins
 
-    property var siyi: SiYi
+    property var siyi: QGroundControl.siyi
     property SiYiCamera camera: siyi.camera
     property SiYiTransmitter transmitter: siyi.transmitter
     property bool isRecording: camera.isRecording

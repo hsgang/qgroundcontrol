@@ -1,14 +1,18 @@
 #ifndef SIYITRANSMITTER_H
 #define SIYITRANSMITTER_H
 
-#include "SiYiTcpClient.h"
 #include <QtCore/QLoggingCategory>
+#include <QtQmlIntegration/QtQmlIntegration>
+
+#include "SiYiTcpClient.h"
 
 Q_DECLARE_LOGGING_CATEGORY(SiYiTransmitterLog)
 
 class SiYiTransmitter : public SiYiTcpClient
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_UNCREATABLE("Reference only")
     Q_PROPERTY(int signalQuality READ signalQuality NOTIFY signalQualityChanged)
     Q_PROPERTY(int inactiveTime READ inactiveTime NOTIFY inactiveTimeChanged)
     Q_PROPERTY(int upStream READ upStream NOTIFY upStreamChanged)
