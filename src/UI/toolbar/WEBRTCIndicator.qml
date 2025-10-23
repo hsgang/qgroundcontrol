@@ -145,10 +145,10 @@ Item {
                             label:      qsTr("CPU 온도")
                             labelText:  qsTr("%1°C").arg(_rtcModuleCpuTemperature.toFixed(1))
                         }
-                        LabelledLabel {
-                            label:      qsTr("메모리 사용률")
-                            labelText:  qsTr("%1%").arg(_rtcModuleMemoryUsage.toFixed(1))
-                        }
+                        // LabelledLabel {
+                        //     label:      qsTr("메모리 사용률")
+                        //     labelText:  qsTr("%1%").arg(_rtcModuleMemoryUsage.toFixed(1))
+                        // }
                         LabelledLabel {
                             label:      qsTr("네트워크 수신")
                             labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkRx.toFixed(2))

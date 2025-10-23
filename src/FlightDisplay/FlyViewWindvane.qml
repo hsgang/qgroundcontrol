@@ -12,7 +12,7 @@ Rectangle {
     id: root
     height: columnLayout.height + _toolsMargin * 2
     width:  columnLayout.width + _toolsMargin * 2
-    color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
+    color:  "transparent" //Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
     radius: ScreenTools.defaultFontPixelHeight / 2
 
     property var  vehicle:      null
@@ -37,27 +37,27 @@ Rectangle {
     property real   _hubHumi2:      vehicle ? vehicle.atmosphericSensor.hubHumi2.rawValue : NaN
     property real   _hubPressure:   vehicle ? vehicle.atmosphericSensor.hubPressure.rawValue : NaN
     property real   _batt:          vehicle ? vehicle.atmosphericSensor.batt.rawValue : NaN
-    property string _temperatureText: !isNaN(_temperature)  ? _temperature.toFixed(2) : "--.-"
-    property string _humidityText:    !isNaN(_humidity)     ? _humidity.toFixed(2)    : "--.-"
-    property string _pressureText:    !isNaN(_pressure)     ? _pressure.toFixed(2)    : "----.-"
-    property string _windDirText:     !isNaN(_windDir)      ? _windDir.toFixed(0)     : "---"
-    property string _windSpdText:     !isNaN(_windSpd)      ? _windSpd.toFixed(1)     : "--.-"
+    property string _temperatureText: !isNaN(_temperature)  ? _temperature.toFixed(2) + " ℃" : "--.- ℃"
+    property string _humidityText:    !isNaN(_humidity)     ? _humidity.toFixed(2) + " Rh%" : "--.- Rh%"
+    property string _pressureText:    !isNaN(_pressure)     ? _pressure.toFixed(2) + " hPa" : "----.- hPa"
+    property string _windDirText:     !isNaN(_windDir)      ? _windDir.toFixed(0) + " °" : "--- °"
+    property string _windSpdText:     !isNaN(_windSpd)      ? _windSpd.toFixed(1) + " ㎧" : "--.- ㎧"
     property string _pm1p0Text:       !isNaN(_pm1p0)        ? _pm1p0.toFixed(0)       : "-.-"
     property string _pm2p5Text:       !isNaN(_pm2p5)        ? _pm2p5.toFixed(0)       : "-.-"
     property string _pm10Text:        !isNaN(_pm10)         ? _pm10.toFixed(0)        : "-.-"
     property string _radiationText:   !isNaN(_radiation)    ? _radiation.toFixed(0)   : "-.-"
-    property string _hubTemp1Text:    !isNaN(_hubTemp1)     ? _hubTemp1.toFixed(2)    : "--.-"
-    property string _hubTemp2Text:    !isNaN(_hubTemp2)     ? _hubTemp2.toFixed(2)    : "--.-"
-    property string _hubHumi1Text:    !isNaN(_hubHumi1)     ? _hubHumi1.toFixed(2)    : "--.-"
-    property string _hubHumi2Text:    !isNaN(_hubHumi2)     ? _hubHumi2.toFixed(2)    : "--.-"
-    property string _hubPressureText: !isNaN(_hubPressure)  ? _hubPressure.toFixed(2) : "----.-"
-    property string _battText:        !isNaN(_batt)         ? _batt.toFixed(0)        : "---"
+    property string _hubTemp1Text:    !isNaN(_hubTemp1)     ? _hubTemp1.toFixed(2) + " ℃" : "--.- ℃"
+    property string _hubTemp2Text:    !isNaN(_hubTemp2)     ? _hubTemp2.toFixed(2) + " ℃" : "--.- ℃"
+    property string _hubHumi1Text:    !isNaN(_hubHumi1)     ? _hubHumi1.toFixed(2) + " Rh%" : "--.- Rh%"
+    property string _hubHumi2Text:    !isNaN(_hubHumi2)     ? _hubHumi2.toFixed(2) + " Rh%" : "--.- Rh%"
+    property string _hubPressureText: !isNaN(_hubPressure)  ? _hubPressure.toFixed(2) + " hPa" : "----.- hPa"
+    property string _battText:        !isNaN(_batt)         ? _batt.toFixed(0) + " %" : "--- %"
 
     function isWindVaneOK(){
         return vehicle && !isNaN(_windDir)
     }
 
-    ColumnLayout {
+    RowLayout {
         id: columnLayout
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -69,8 +69,6 @@ Rectangle {
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
             radius:     size / 2
             border.color: qgcPal.text
-
-
 
             CompassDial {
                 id: compassDial
@@ -120,205 +118,71 @@ Rectangle {
             }
         }
 
-        GridLayout {
-            Layout.alignment: Qt.AlignHCenter
-            Layout.fillWidth: true
-            columns:    3
-            rows:       10
-            flow:       GridLayout.TopToBottom
-            rowSpacing: 0
+        Rectangle {
+            Layout.alignment: Qt.AlignTop
+            height:     valueGridLayout.height + _toolsMargin * 2
+            width:      valueGridLayout.width + _toolsMargin * 2
+            color:      qgcPal.windowTransparent
+            radius:     _toolsMargin
+            border.color: qgcPal.groupBorder
 
-            QGCLabel {
-                text:                   "풍속"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "풍향"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "기온[1]"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "기온[2]"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "기온[3]"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "습도[1]"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "습도[2]"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "습도[3]"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "기압[1]"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "기압[2]"
-                horizontalAlignment:    Text.AlignHCenter
-                Layout.fillWidth: true
-            }
+            GridLayout {
+                id: valueGridLayout
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                //Layout.alignment: Qt.AlignHCenter
+                //Layout.fillWidth: true
+                rows:       3
+                flow:       GridLayout.TopToBottom
+                rowSpacing: ScreenTools.defaultFontPixelHeight / 4
+                columnSpacing: ScreenTools.defaultFontPixelHeight / 2
 
-            QGCLabel {
-                text:                   _windSpdText
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
+                // LabelledLabel {
+                //     label:      "풍속"
+                //     labelText: _windSpdText
+                // }
+                // LabelledLabel {
+                //     label:      "풍향"
+                //     labelText: _windDirText
+                // }
+                LabelledLabel {
+                    label:      "SHT_Temp"
+                    labelText: _temperatureText
+                }
+                LabelledLabel {
+                    label:      "HUB_Temp1"
+                    labelText: _hubTemp1Text
+                }
+                LabelledLabel {
+                    label:      "HUB_Temp2"
+                    labelText: _hubTemp2Text
+                }
+                LabelledLabel {
+                    label:      "SHT_Humi"
+                    labelText: _humidityText
+                }
+                LabelledLabel {
+                    label:      "HUB_Humi1"
+                    labelText: _hubHumi1Text
+                }
+                LabelledLabel {
+                    label:      "HUB_Humi2"
+                    labelText: _hubHumi2Text
+                }
+                LabelledLabel {
+                    label:      "Pressure"
+                    labelText: _pressureText
+                }
+                LabelledLabel {
+                    label:      "HUB_Pres"
+                    labelText: _hubPressureText
+                }
+                LabelledLabel {
+                    label:      "HUB_Batt"
+                    labelText: _battText
+                }
             }
-            QGCLabel {
-                text:                   _windDirText
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   _temperatureText
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   _hubTemp1Text
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   _hubTemp2Text
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   _humidityText
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   _hubHumi1Text
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   _hubHumi2Text
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   _pressureText
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   _hubPressureText
-                horizontalAlignment:    Text.AlignRight
-                Layout.fillWidth: true
-            }
-
-            QGCLabel {
-                text:                   "㎧"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "°"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "℃"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "℃"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "℃"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "Rh%"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "Rh%"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "Rh%"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "hPa"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-            QGCLabel {
-                text:                   "hPa"
-                horizontalAlignment:    Text.AlignLeft
-                Layout.fillWidth: true
-            }
-
         }
-
-        QGCLabel {
-            Layout.alignment: Qt.AlignHCenter
-            text:           "HUB_Batt " + _battText + " %"
-        }
-
-        // Rectangle {
-        //     width:  externalsensorviewlayout.width * 1.1
-        //     height: externalsensorviewlayout.height * 1.1
-        //     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
-        //     radius:     ScreenTools.defaultFontPixelHeight / 4
-
-        //     ColumnLayout {
-        //         id: externalsensorviewlayout
-        //         anchors.horizontalCenter: parent.horizontalCenter
-        //         anchors.verticalCenter: parent.verticalCenter
-        //         spacing:                ScreenTools.defaultFontPixelWidth * 0.4
-        //         QGCLabel {
-        //             text:           "미세먼지 정보"
-        //         }
-        //         QGCLabel {
-        //             text:           "PM1.0 : " + _pm1p0Text + "g/㎥"
-        //         }
-        //         QGCLabel {
-        //             text:           "PM2.5 : " + _pm2p5Text + "g/㎥"
-        //         }
-        //         QGCLabel {
-        //             text:           "PM10 : " + _pm10Text + "g/㎥"
-        //         }
-        //         QGCLabel {
-        //             text:           "방사선량 정보"
-        //         }
-        //         QGCLabel {
-        //             text:           "선량 : " + _radiationText
-        //         }
-        //     }
-        // }
     }
 }
 

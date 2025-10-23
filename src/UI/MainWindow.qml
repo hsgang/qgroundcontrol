@@ -371,6 +371,7 @@ ApplicationWindow {
         dragMargin:     0
         modal:          false
         visible:        false
+        leftPadding:    0
 
         property var    _mainWindow:       mainWindow
         property real   _toolButtonHeight: ScreenTools.defaultFontPixelHeight * 3
@@ -395,7 +396,7 @@ ApplicationWindow {
                     anchors.margins:    ScreenTools.defaultFontPixelHeight / 2
                     anchors.left:       parent.left
                     anchors.top:        parent.top
-                    spacing:            ScreenTools.defaultFontPixelHeight
+                    spacing:            ScreenTools.defaultFontPixelHeight / 2
 
                     SettingsButton {
                         id:                 flyButton
@@ -413,6 +414,12 @@ ApplicationWindow {
                                 viewSelectDrawer.visible = false
                             }
                         }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        height : 1
+                        color : qgcPal.groupBorder
                     }
 
                     SettingsButton {
@@ -433,6 +440,12 @@ ApplicationWindow {
                         }
                     }
 
+                    Rectangle {
+                        Layout.fillWidth: true
+                        height : 1
+                        color : qgcPal.groupBorder
+                    }
+
                     SettingsButton {
                         id:                 setupButton
                         height:             ScreenTools.defaultFontPixelHeight * 3
@@ -449,6 +462,12 @@ ApplicationWindow {
                                 viewSelectDrawer.visible = false
                             }
                         }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        height : 1
+                        color : qgcPal.groupBorder
                     }
 
                     SettingsButton {
@@ -468,6 +487,12 @@ ApplicationWindow {
                                 viewSelectDrawer.visible = false
                             }
                         }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        height : 1
+                        color : qgcPal.groupBorder
                     }
 
                     SettingsButton {
@@ -878,18 +903,13 @@ ApplicationWindow {
     //-- Indicator Drawer
 
     function showIndicatorDrawer(drawerComponent, indicatorItem) {
-        // componentDrawer.sourceComponent = drawerComponent
-        // componentDrawer.dim = false
-        // componentDrawer.visible = true
         indicatorDrawer.sourceComponent = drawerComponent
         indicatorDrawer.indicatorItem = indicatorItem
         indicatorDrawer.open()
     }
 
     function closeIndicatorDrawer() {
-        //componentDrawer.close()
         indicatorDrawer.close()
-        //viewSelectDrawer.close()
     }
 
     Popup {
@@ -938,6 +958,8 @@ ApplicationWindow {
                 color:          QGroundControl.globalPalette.window
                 radius:         indicatorDrawer._margins
                 opacity:        0.85
+                border.color:   qgcPal.groupBorder
+                border.width:   1
             }
 
             Rectangle {

@@ -22,8 +22,8 @@ Rectangle {
     width:      mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    // border.color:   Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.5)
-    // border.width:   1
+    border.color: qgcPal.groupBorder
+    border.width: 1
     radius:     _margins
     //visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 

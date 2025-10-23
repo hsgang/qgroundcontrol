@@ -14,7 +14,8 @@ Rectangle {
     width:      generatorValueColumn.width + ScreenTools.defaultFontPixelHeight / 2
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _backgroundOpacity)
     radius:     _margins
-    // border.color: qgcPal.text
+    border.color: qgcPal.groupBorder
+    border.width: 1
 
     property real _labelledItemWidth: ScreenTools.defaultFontPixelWidth * 10
     property real _margins:           ScreenTools.defaultFontPixelHeight / 2

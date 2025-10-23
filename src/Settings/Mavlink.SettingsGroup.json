@@ -78,7 +78,7 @@
     "shortDesc":        "Save Sensor Data Logs",
     "longDesc":         "If this option is enabled, Sensor data will be written to a file.",
     "type":             "bool",
-    "default":          false
+    "default":          true
 },
 {
     "name":             "rateSaveSensorLog",

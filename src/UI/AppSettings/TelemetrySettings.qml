@@ -50,48 +50,48 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        id:                 mavlink2SigningGroup
-        Layout.fillWidth:   true
-        heading:            qsTr("MAVLink 2 Signing")
-        headingDescription: qsTr("Signing keys should only be sent to the vehicle over secure links.")
-        visible:            _mavlink2SigningKey.visible
+    // SettingsGroupLayout {
+    //     id:                 mavlink2SigningGroup
+    //     Layout.fillWidth:   true
+    //     heading:            qsTr("MAVLink 2 Signing")
+    //     headingDescription: qsTr("Signing keys should only be sent to the vehicle over secure links.")
+    //     visible:            _mavlink2SigningKey.visible
 
-        property Fact _mavlink2SigningKey: _mavlinkSettings.mavlink2SigningKey
+    //     property Fact _mavlink2SigningKey: _mavlinkSettings.mavlink2SigningKey
 
-        Connections {
-            target:             mavlink2SigningGroup._mavlink2SigningKey
-            function onRawValueChanged(value) { sendToVehiclePrompt.visible = true }
-        }
+    //     Connections {
+    //         target:             mavlink2SigningGroup._mavlink2SigningKey
+    //         function onRawValueChanged(value) { sendToVehiclePrompt.visible = true }
+    //     }
 
-        RowLayout {
-            spacing: ScreenTools.defaultFontPixelWidth
+    //     RowLayout {
+    //         spacing: ScreenTools.defaultFontPixelWidth
 
-            LabelledFactTextField {
-                Layout.fillWidth:           true
-                textFieldPreferredWidth:    ScreenTools.defaultFontPixelWidth * 32
-                label:                      qsTr("Key")
-                fact:                       mavlink2SigningGroup._mavlink2SigningKey
-            }
+    //         LabelledFactTextField {
+    //             Layout.fillWidth:           true
+    //             textFieldPreferredWidth:    ScreenTools.defaultFontPixelWidth * 32
+    //             label:                      qsTr("Key")
+    //             fact:                       mavlink2SigningGroup._mavlink2SigningKey
+    //         }
 
-            QGCButton {
-                text:       qsTr("Send to Vehicle")
-                enabled:    _activeVehicle
+    //         QGCButton {
+    //             text:       qsTr("Send to Vehicle")
+    //             enabled:    _activeVehicle
 
-                onClicked: {
-                    sendToVehiclePrompt.visible = false
-                    _activeVehicle.sendSetupSigning()
-                }
-            }
-        }
+    //             onClicked: {
+    //                 sendToVehiclePrompt.visible = false
+    //                 _activeVehicle.sendSetupSigning()
+    //             }
+    //         }
+    //     }
 
-        QGCLabel {
-            id:                 sendToVehiclePrompt
-            Layout.fillWidth:   true
-            text:               qsTr("Signing key has changed. Don't forget to send to Vehicle(s) if needed.")
-            visible:            false
-        }
-    }
+    //     QGCLabel {
+    //         id:                 sendToVehiclePrompt
+    //         Layout.fillWidth:   true
+    //         text:               qsTr("Signing key has changed. Don't forget to send to Vehicle(s) if needed.")
+    //         visible:            false
+    //     }
+    // }
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -161,15 +161,15 @@ SettingsPage {
             property Fact _saveSensorLog: _mavlinkSettings.saveSensorLog
         }
 
-        LabelledFactComboBox {
-            Layout.fillWidth:   true
-            label:              qsTr("Rate Save CustomLog")
-            fact:               _rateSaveSensorLog
-            indexModel:         false
-            enabled:            !_disableAllDataPersistence
-            comboBoxPreferredWidth: _comboBoxPreferredWidth
-            property Fact _rateSaveSensorLog: _mavlinkSettings.rateSaveSensorLog
-        }
+        // LabelledFactComboBox {
+        //     Layout.fillWidth:   true
+        //     label:              qsTr("Rate Save CustomLog")
+        //     fact:               _rateSaveSensorLog
+        //     indexModel:         false
+        //     enabled:            !_disableAllDataPersistence
+        //     comboBoxPreferredWidth: _comboBoxPreferredWidth
+        //     property Fact _rateSaveSensorLog: _mavlinkSettings.rateSaveSensorLog
+        // }
     }
 
     SettingsGroupLayout {

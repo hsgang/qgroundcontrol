@@ -87,7 +87,7 @@ Rectangle {
 
             ColumnLayout {
                 id:         loginLayout
-                spacing:    _margins * 4
+                spacing:    _margins
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
 
@@ -111,8 +111,8 @@ Rectangle {
 
                 Rectangle {
                     id: imageRect
-                    width: ScreenTools.defaultFontPixelHeight * 8
-                    height: ScreenTools.defaultFontPixelHeight * 8
+                    width: ScreenTools.defaultFontPixelHeight * 10
+                    height: ScreenTools.defaultFontPixelHeight * 10
                     Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     color: "transparent"
 
@@ -374,6 +374,18 @@ Rectangle {
                             }
                         }
                     }
+                }
+                QGCLabel {
+                    text:                   QGroundControl.qgcVersion
+                    font.pointSize:         ScreenTools.smallFontPointSize
+                    Layout.alignment:       Qt.AlignHCenter
+                }
+
+                QGCLabel {
+                    text:                   QGroundControl.qgcAppDate
+                    font.pointSize:         ScreenTools.smallFontPointSize
+                    Layout.alignment:       Qt.AlignHCenter
+                    visible:                QGroundControl.qgcDailyBuild
                 }
             }
         }

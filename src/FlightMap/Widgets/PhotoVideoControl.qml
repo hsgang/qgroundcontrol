@@ -24,6 +24,8 @@ Rectangle {
     height:     mainLayout.height + (_smallMargins * 2)
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _backgroundOpacity)
     radius:     _margins
+    border.color: qgcPal.groupBorder
+    border.width: 1
     visible:    _camera.capturesVideo || _camera.capturesPhotos || _camera.hasTracking || _camera.hasVideoStream
 
     property real   _margins:                   ScreenTools.defaultFontPixelHeight / 2
