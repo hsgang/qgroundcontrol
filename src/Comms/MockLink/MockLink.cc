@@ -934,10 +934,21 @@ void MockLink::_handleParamSet(const mavlink_message_t &msg)
     Q_ASSERT(_mapParamName2Value[componentId].contains(paramId));
     Q_ASSERT(request.param_type == _mapParamName2MavParamType[componentId][paramId]);
 
-    // Save the new value
+    // Apply failure behaviors before committing change.
+    if (_paramSetFailureMode == FailParamSetFirstAttemptNoAck && _paramSetFailureFirstAttemptPending) {
+        qCDebug(MockLinkLog) << "Param set failure: first attempt no ack" << paramId;
+        _paramSetFailureFirstAttemptPending = false;
+        return;
+    }
+
+    if (_paramSetFailureMode == FailParamSetNoAck) {
+        qCDebug(MockLinkLog) << "Param set failure: no ack" << paramId;
+        return;
+    }
+
+    // Normal success path
     _setParamFloatUnionIntoMap(componentId, paramId, request.param_value);
 
-    // Respond with a param_value to ack
     mavlink_message_t responseMsg;
     mavlink_msg_param_value_pack_chan(
         _vehicleSystemId,
@@ -1008,6 +1019,17 @@ void MockLink::_handleParamRequestRead(const mavlink_message_t &msg)
     if ((_failureMode == MockConfiguration::FailMissingParamOnAllRequests) && (strcmp(paramId, _failParam) == 0)) {
         qCDebug(MockLinkLog) << "Ignoring request read for " << _failParam;
         // Fail to send this param no matter what
+        return;
+    }
+
+    if (_paramRequestReadFailureMode == FailParamRequestReadFirstAttemptNoResponse && _paramRequestReadFailureFirstAttemptPending) {
+        qCDebug(MockLinkLog) << "Param request read failure: first attempt no response" << paramId;
+        _paramRequestReadFailureFirstAttemptPending = false;
+        return;
+    }
+
+    if (_paramRequestReadFailureMode == FailParamRequestReadNoResponse) {
+        qCDebug(MockLinkLog) << "Param request read failure: no response" << paramId;
         return;
     }
 
