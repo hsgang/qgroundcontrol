@@ -21,7 +21,7 @@ struct Sensor_Payload {
     float opc3Raw;
     float radiationRaw;
     float battRaw;
-    uint64_t unixTime;
+    quint64 unixTime;
     float sdVolume;
 };
 
