@@ -53,11 +53,11 @@ Rectangle {
     property string _gimbalPitchString:     activeVehicle && _gimbalPitchAvailable ? _gimbalPitch.toFixed(2) : "--"
     property string _gimbalYawString:       activeVehicle && _gimbalYawAvailable ? _gimbalYaw.toFixed(2) : "--"
 
-    property double _localPitch: 0.0
-    property double _localYaw: 0.0
-    property int    _gimbalModeStatus: 0
-    property bool   _useRateControl: false
-    property real   _stepSize: 2.0
+    property double _localPitch:            0.0
+    property double _localYaw:              0.0
+    property int    _gimbalModeStatus:      0
+    property bool   _useRateControl:        true
+    property real   _stepSize:              2.0
 
     property var    _dynamicCameras:    globals.activeVehicle ? globals.activeVehicle.cameraManager : null
     property bool   _connected:         globals.activeVehicle ? !globals.activeVehicle.communicationLost : false
