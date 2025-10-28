@@ -77,18 +77,15 @@ Item {
             }
         }
 
-        // Telemetry and status indicator
-        GridLayout {
-            anchors.verticalCenter:  parent.verticalCenter
-            columns:        2
-            rows:           2
-            rowSpacing:     0
-            columnSpacing:  margins / 2
+        Column {
+            id:                     gimbalValuesColumn
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
 
             QGCLabel {
                 id:                     statusLabel
                 font.pointSize:         ScreenTools.smallFontPointSize
-                text:                   activeGimbal && activeGimbal.retracted ? 
+                text:                   activeGimbal && activeGimbal.retracted ?
                                             qsTr("Retracted") :
                                             (activeGimbal && activeGimbal.yawLock ? qsTr("Yaw locked") : qsTr("Yaw follow"))
                 color:                  qgcPal.windowTransparentText
@@ -101,17 +98,43 @@ Item {
                 text:           activeGimbal ? qsTr("P: ") + activeGimbal.absolutePitch.rawValue.toFixed(1) : ""
                 color:          qgcPal.windowTransparentText
             }
-            QGCLabel {
-                id:             panLabel
-                font.pointSize: ScreenTools.smallFontPointSize
-                text:           activeGimbal ?
-                                    (showAzimuth ?
-                                        (qsTr("Az: ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
-                                        (qsTr("Y: ") + activeGimbal.bodyYaw.rawValue.toFixed(1))) :
-                                    ""
-                color:          qgcPal.windowTransparentText
-            }
         }
+
+        // Telemetry and status indicator
+        // GridLayout {
+        //     anchors.verticalCenter:  parent.verticalCenter
+        //     columns:        2
+        //     rows:           2
+        //     rowSpacing:     0
+        //     columnSpacing:  margins / 2
+
+        //     QGCLabel {
+        //         id:                     statusLabel
+        //         font.pointSize:         ScreenTools.smallFontPointSize
+        //         text:                   activeGimbal && activeGimbal.retracted ?
+        //                                     qsTr("Retracted") :
+        //                                     (activeGimbal && activeGimbal.yawLock ? qsTr("Yaw locked") : qsTr("Yaw follow"))
+        //         color:                  qgcPal.windowTransparentText
+        //         Layout.columnSpan:      2
+        //         Layout.alignment:       Qt.AlignHCenter
+        //     }
+        //     QGCLabel {
+        //         id:             pitchLabel
+        //         font.pointSize: ScreenTools.smallFontPointSize
+        //         text:           activeGimbal ? qsTr("P: ") + activeGimbal.absolutePitch.rawValue.toFixed(1) : ""
+        //         color:          qgcPal.windowTransparentText
+        //     }
+        //     QGCLabel {
+        //         id:             panLabel
+        //         font.pointSize: ScreenTools.smallFontPointSize
+        //         text:           activeGimbal ?
+        //                             (showAzimuth ?
+        //                                 (qsTr("Az: ") + activeGimbal.absoluteYaw.rawValue.toFixed(1)) :
+        //                                 (qsTr("Y: ") + activeGimbal.bodyYaw.rawValue.toFixed(1))) :
+        //                             ""
+        //         color:          qgcPal.windowTransparentText
+        //     }
+        // }
     }
 
     MouseArea {

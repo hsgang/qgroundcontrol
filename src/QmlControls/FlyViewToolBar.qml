@@ -133,7 +133,7 @@ Rectangle {
 
                 MessageIndicator{
                     anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.margins: ScreenTools.defaultFontPixelHeight * 0.4
+                    anchors.margins: ScreenTools.defaultFontPixelHeight * 0.3
                 }
             }
 
@@ -193,7 +193,7 @@ Rectangle {
 
                 WEBRTCIndicator{
                     anchors.right:   parent.right
-                    anchors.margins: ScreenTools.defaultFontPixelHeight * 0.33
+                    anchors.margins: ScreenTools.defaultFontPixelHeight * 0.3
                 }
             }
 

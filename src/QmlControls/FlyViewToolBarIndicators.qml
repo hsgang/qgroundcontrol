@@ -12,7 +12,6 @@ import QtQuick
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.Toolbar
-import QGroundControl.Controls
 
 Rectangle {
     anchors.verticalCenter: parent.verticalCenter
@@ -23,7 +22,7 @@ Rectangle {
     visible:        width > _widthMargin
 
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
-    property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.33
+    property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.3
     property real _widthMargin:             _toolIndicatorMargins * 2
 
     Row {
@@ -32,7 +31,7 @@ Rectangle {
         anchors.left:       parent.left
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
-        spacing:            ScreenTools.defaultFontPixelWidth * 1.75
+        spacing:            ScreenTools.defaultFontPixelWidth
 
         Repeater {
             id:     appRepeater

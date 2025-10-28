@@ -132,7 +132,7 @@ Rectangle {
                 anchors.horizontalCenter: parent.horizontalCenter
                 //Layout.alignment: Qt.AlignHCenter
                 //Layout.fillWidth: true
-                rows:       3
+                rows:       6
                 flow:       GridLayout.TopToBottom
                 rowSpacing: ScreenTools.defaultFontPixelHeight / 4
                 columnSpacing: ScreenTools.defaultFontPixelHeight / 2
