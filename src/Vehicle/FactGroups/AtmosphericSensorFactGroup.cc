@@ -21,8 +21,8 @@ struct Sensor_Payload {
     float opc3Raw;
     float radiationRaw;
     float battRaw;
-    quint64 unixTime;
-    float sdVolume;
+    quint64 unixTimeRaw;
+    float sdVolumeRaw;
 };
 
 struct Sensor_Tunnel_sC {
@@ -139,8 +139,8 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     float opc3Raw         = sP.opc3Raw;
     float radiationRaw    = sP.radiationRaw;
     float battRaw         = sP.battRaw;
-    uint64_t unixTimeRaw  = sP.unixTime;
-    float sdVolumeRaw     = sP.sdVolume;
+    quint64 unixTimeRaw   = sP.unixTimeRaw;
+    float sdVolumeRaw     = sP.sdVolumeRaw;
 
     if(!qIsNaN(logCountRaw))     {logCount()->setRawValue(logCountRaw);}
     if(temperatureRaw > -50 && temperatureRaw < 100)  {
@@ -254,8 +254,8 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             float opc3Raw           = tP.opc3Raw;
             float radiationRaw      = tP.radiationRaw;
             float battRaw           = tP.battRaw;
-            uint64_t unixTimeRaw    = tP.unixTime;
-            float sdVolumeRaw       = tP.sdVolume;
+            quint64 unixTimeRaw     = tP.unixTimeRaw;
+            float sdVolumeRaw       = tP.sdVolumeRaw;
 
             if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
             if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
