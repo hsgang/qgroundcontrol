@@ -319,16 +319,16 @@ Item {
     //     visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
     // }
 
-    FlyViewWindvane {
-        id:                         windvane
-        vehicle:                    _activeVehicle
-        anchors.top:                parent.top
-        anchors.topMargin:          _toolsMargin
-        anchors.left:               toolStrip.right
-        anchors.leftMargin:         _toolsMargin
-        //anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
-        visible:                    QGroundControl.settingsManager.flyViewSettings.showWindvane.rawValue
-    }
+    // FlyViewWindvane {
+    //     id:                         windvane
+    //     vehicle:                    _activeVehicle
+    //     anchors.top:                parent.top
+    //     anchors.topMargin:          _toolsMargin
+    //     anchors.left:               toolStrip.right
+    //     anchors.leftMargin:         _toolsMargin
+    //     //anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
+    //     visible:                    QGroundControl.settingsManager.flyViewSettings.showWindvane.rawValue
+    // }
 
     ModeChangedIndicator {
         anchors.centerIn:   parent
@@ -339,7 +339,7 @@ Item {
         id:                 messageToastManagerRect
         anchors.margins:    _toolsMargin * 3
         anchors.top:        parent.top
-        anchors.left:       windvane.visible ? windvane.right : toolStrip.right
+        anchors.left:       toolStrip.right
         width:              ScreenTools.isMobile ? parent.width / 2 : parent.width / 4
         height:             parent.height / 2
         color:              "transparent"

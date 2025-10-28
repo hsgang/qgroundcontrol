@@ -2,6 +2,7 @@
 #include "Vehicle.h"
 
 #include <QtMath>
+#include <QDateTime>
 
 struct Sensor_Payload {
     float logCountRaw;
@@ -20,6 +21,8 @@ struct Sensor_Payload {
     float opc3Raw;
     float radiationRaw;
     float battRaw;
+    uint64_t unixTime;
+    float sdVolume;
 };
 
 struct Sensor_Tunnel_sC {
@@ -66,6 +69,9 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _addFact(&_opc3Fact);
     _addFact(&_radiationFact);
     _addFact(&_battFact);
+    _addFact(&_unixTimeFact);
+    _addFact(&_timeHMSFact);
+    _addFact(&_sdVolumeFact);
 
     // Start out as not available "--.--"
     _temperatureFact.setRawValue (qQNaN());
@@ -133,6 +139,8 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     float opc3Raw         = sP.opc3Raw;
     float radiationRaw    = sP.radiationRaw;
     float battRaw         = sP.battRaw;
+    uint64_t unixTimeRaw  = sP.unixTime;
+    float sdVolumeRaw     = sP.sdVolume;
 
     if(!qIsNaN(logCountRaw))     {logCount()->setRawValue(logCountRaw);}
     if(temperatureRaw > -50 && temperatureRaw < 100)  {
@@ -163,6 +171,15 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     if(!qIsNaN(radiationRaw))    {radiation()->setRawValue(radiationRaw);}
     if(battRaw > 0 && battRaw < 1000) {
         batt()->setRawValue(battRaw);
+    }
+    if(unixTimeRaw > 0) {
+        unixTime()->setRawValue(unixTimeRaw);
+        QDateTime dateTime = QDateTime::fromSecsSinceEpoch(unixTimeRaw);
+        QString timeString = dateTime.toString("hh:mm:ss");
+        timeHMS()->setRawValue(timeString);
+    }
+    if(!qIsNaN(sdVolumeRaw)) {
+        sdVolume()->setRawValue(sdVolumeRaw);
     }
 
     status()->setRawValue(data32.type);
@@ -237,6 +254,8 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             float opc3Raw           = tP.opc3Raw;
             float radiationRaw      = tP.radiationRaw;
             float battRaw           = tP.battRaw;
+            uint64_t unixTimeRaw    = tP.unixTime;
+            float sdVolumeRaw       = tP.sdVolume;
 
             if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
             if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
@@ -254,6 +273,13 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             if(opc3Raw)         {opc3()->setRawValue(opc3Raw);}
             if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
             if(battRaw)         {batt()->setRawValue(battRaw);}
+            if(unixTimeRaw)     {
+                unixTime()->setRawValue(unixTimeRaw);
+                QDateTime dateTime = QDateTime::fromSecsSinceEpoch(unixTimeRaw);
+                QString timeString = dateTime.toString("hh:mm:ss");
+                timeHMS()->setRawValue(timeString);
+            }
+            if(sdVolumeRaw)     {sdVolume()->setRawValue(sdVolumeRaw);}
 
             status()->setRawValue(tunnel.payload_type);
             break;

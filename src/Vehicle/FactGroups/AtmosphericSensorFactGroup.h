@@ -24,6 +24,9 @@ class AtmosphericSensorFactGroup : public FactGroup
     Q_PROPERTY(Fact *opc3         READ opc3         CONSTANT)
     Q_PROPERTY(Fact *radiation    READ radiation    CONSTANT)
     Q_PROPERTY(Fact *batt         READ batt         CONSTANT)
+    Q_PROPERTY(Fact *unixTime     READ unixTime     CONSTANT)
+    Q_PROPERTY(Fact *timeHMS      READ timeHMS      CONSTANT)
+    Q_PROPERTY(Fact *sdVolume     READ sdVolume     CONSTANT)
 
 public:
     AtmosphericSensorFactGroup(QObject* parent = nullptr);   
@@ -45,6 +48,9 @@ public:
     Fact *opc3          () { return &_opc3Fact; }
     Fact *radiation     () { return &_radiationFact; }
     Fact *batt          () { return &_battFact;}
+    Fact *unixTime      () { return &_unixTimeFact; }
+    Fact *timeHMS       () { return &_timeHMSFact; }
+    Fact *sdVolume      () { return &_sdVolumeFact; }
 
     // Overrides from FactGroup
     void handleMessage(Vehicle *vehicle, const mavlink_message_t &message) override;
@@ -73,6 +79,9 @@ protected:
     Fact _opc3Fact = Fact(0, QStringLiteral("opc3"), FactMetaData::valueTypeFloat);
     Fact _radiationFact = Fact(0, QStringLiteral("radiation"), FactMetaData::valueTypeFloat);
     Fact _battFact = Fact(0, QStringLiteral("batt"), FactMetaData::valueTypeFloat);
+    Fact _unixTimeFact = Fact(0, QStringLiteral("unixTime"), FactMetaData::valueTypeUint64);
+    Fact _timeHMSFact = Fact(0, QStringLiteral("timeHMS"), FactMetaData::valueTypeString);
+    Fact _sdVolumeFact = Fact(0, QStringLiteral("sdVolume"), FactMetaData::valueTypeFloat);
 
    private:
     bool _windDirByWindPacket = false;
