@@ -59,6 +59,7 @@
 #include "CloudManager.h"
 #include "MavlinkSettings.h"
 #include "APM.h"
+#include "DropSequence.h"
 
 #ifdef QGC_UTM_ADAPTER
 #include "UTMSPVehicle.h"
@@ -335,6 +336,8 @@ void Vehicle::_commonInit(LinkInterface* link)
     _objectAvoidance = new VehicleObjectAvoidance(this, this);
 
     _autotune = _firmwarePlugin->createAutotune(this);
+
+    _dropSequence = new DropSequence(this);
 
     // GeoFenceManager needs to access ParameterManager so make sure to create after
     _geoFenceManager = new GeoFenceManager(this);
@@ -2925,22 +2928,6 @@ void Vehicle::_handleCommandAck(mavlink_message_t& message)
     QString rawCommandName  = MissionCommandTree::instance()->rawName(static_cast<MAV_CMD>(ack.command));
     qCDebug(VehicleLog) << QStringLiteral("_handleCommandAck command(%1) result(%2)").arg(rawCommandName).arg(QGCMAVLink::mavResultToString(static_cast<MAV_RESULT>(ack.result)));
 
-    if (ack.command == MAV_CMD_USER_1) {
-        if (ack.result == MAV_RESULT_ACCEPTED || ack.result == MAV_RESULT_IN_PROGRESS) {
-            _isCustomCommandEnabled = true;
-            emit isCustomCommandEnabledChanged();
-            qDebug() << QStringLiteral("_handleCommandAck command(%1) result(%2)").arg(rawCommandName).arg(QGCMAVLink::mavResultToString(static_cast<MAV_RESULT>(ack.result)));
-        }
-    }
-
-    if (ack.command == MAV_CMD_USER_1) {
-        if (ack.result == MAV_RESULT_CANCELLED) {
-            _isCustomCommandEnabled = false;
-            emit isCustomCommandEnabledChanged();
-            qDebug() << QStringLiteral("_handleCommandAck command(%1) result(%2)").arg(rawCommandName).arg(QGCMAVLink::mavResultToString(static_cast<MAV_RESULT>(ack.result)));
-        }
-    }
-
     if (ack.command == MAV_CMD_DO_SET_ROI_LOCATION) {
         if (ack.result == MAV_RESULT_ACCEPTED) {
             if (!_roiApmCancelSent) {
@@ -4400,16 +4387,6 @@ void Vehicle::_handleCommandRequestOperatorControl(const mavlink_command_long_t 
     emit requestOperatorControlReceived(commandLong.param1, commandLong.param3, commandLong.param4);
 }
 
-void Vehicle::_handleCommandRequestConfirmation(const mavlink_command_long_t commandLong)
-{
-    if (commandLong.param5 == 99) {
-        _isCustomCommandEnabled = false;
-        emit isCustomCommandEnabledChanged();
-    }
-    // param5가 배송 시퀀스 인덱스이고 99면 완료된것으로 판단
-    emit requestConfirmationReceived(commandLong.param1, commandLong.param2, commandLong.param3, commandLong.param4, commandLong.param5);
-}
-
 void Vehicle::_handleCommandLong(const mavlink_message_t& message)
 {
     mavlink_command_long_t commandLong;
@@ -4418,22 +4395,9 @@ void Vehicle::_handleCommandLong(const mavlink_message_t& message)
     if (commandLong.target_system != MAVLinkProtocol::instance()->getSystemId()) {
         return;
     }
-    switch (commandLong.command) {
-        case MAV_CMD_REQUEST_OPERATOR_CONTROL:
-            _handleCommandRequestOperatorControl(commandLong);
-            break;
-        case MAV_CMD_USER_1:
-            _handleCommandRequestConfirmation(commandLong);
-            break;
-        default:
-            break;
+    if (commandLong.command == MAV_CMD_REQUEST_OPERATOR_CONTROL) {
+        _handleCommandRequestOperatorControl(commandLong);
     }
-    // if (commandLong.command == MAV_CMD_REQUEST_OPERATOR_CONTROL) {
-    //     _handleCommandRequestOperatorControl(commandLong);
-    // }
-    // if (commandLong.command == MAV_CMD_USER_1) {
-    //     _handleCommandRequestConfirmation(commandLong);
-    // }
 }
 
 int Vehicle::operatorControlTakeoverTimeoutMsecs() const

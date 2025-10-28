@@ -383,7 +383,7 @@ Item {
                     font.pointSize:         _showBoth ? ScreenTools.defaultFontPointSize : ScreenTools.mediumFontPointSize
                     visible:                _showBoth || _showPercentage
                 }
-            }            
+            }
         }
     }
 

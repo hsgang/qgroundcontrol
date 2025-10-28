@@ -37,20 +37,20 @@ Rectangle {
 
     QGCPalette { id: qgcPal }
 
-    Connections {
-        target: _activeVehicle
-        function onRequestConfirmationReceived(customCmd, show, tagId, enableAutoSequence, sequenceNumber) {
-            if (customCmd !== 1) {
-                return
-            }
-            receivedTagId = tagId
-            if(show > 0) {
-                control.visible = true
-            } else if (show === 0) {
-                control.visible = false
-            }
-        }
-    }
+    // Connections {
+    //     target: _activeVehicle
+    //     function onRequestConfirmationReceived(customCmd, show, tagId, enableAutoSequence, sequenceNumber) {
+    //         if (customCmd !== 1) {
+    //             return
+    //         }
+    //         receivedTagId = tagId
+    //         if(show > 0) {
+    //             control.visible = true
+    //         } else if (show === 0) {
+    //             control.visible = false
+    //         }
+    //     }
+    // }
 
     ColumnLayout {
         id:     mainLayout

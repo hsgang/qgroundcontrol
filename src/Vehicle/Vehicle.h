@@ -77,6 +77,7 @@ class Actuators;
 class AutoPilotPlugin;
 class Autotune;
 class ComponentInformationManager;
+class DropSequence;
 class EventHandler;
 class FirmwarePlugin;
 class FTPManager;
@@ -272,6 +273,7 @@ public:
     Q_PROPERTY(VehicleLinkManager*      vehicleLinkManager  READ vehicleLinkManager CONSTANT)
     Q_PROPERTY(VehicleObjectAvoidance*  objectAvoidance     READ objectAvoidance    CONSTANT)
     Q_PROPERTY(Autotune*                autotune            READ autotune           CONSTANT)
+    Q_PROPERTY(DropSequence*            dropSequence        READ dropSequence       CONSTANT)
     Q_PROPERTY(RemoteIDManager*         remoteIDManager     READ remoteIDManager    CONSTANT)
 
     // FactGroup object model properties
@@ -668,6 +670,7 @@ public:
     ComponentInformationManager*    compInfoManager     () { return _componentInformationManager; }
     VehicleObjectAvoidance*         objectAvoidance     () { return _objectAvoidance; }
     Autotune*                       autotune            () const { return _autotune; }
+    DropSequence*                   dropSequence        () const { return _dropSequence; }
     RemoteIDManager*                remoteIDManager     () { return _remoteIDManager; }
 
     static void showCommandAckError(const mavlink_command_ack_t& ack);
@@ -851,7 +854,6 @@ public:
     float       mavlinkLossPercent      () const{ return _mavlinkLossPercent; }      /// Running loss rate
 
     bool        isROIEnabled            () const{ return _isROIEnabled; }
-    bool        isCustomCommandEnabled  () const{ return _isCustomCommandEnabled; }
 
     //uint32_t    gimbalStatusFlags         ()   const{ return _gimbalStatusFlags; }
     bool        gimbalRetracted           ()   const{ return _gimbalRetracted; }
@@ -967,8 +969,6 @@ signals:
     void mavlinkSigningChanged          ();
 
     void cameraFovPositionChanged       ();
-
-    void isCustomCommandEnabledChanged  ();
 
     void isROIEnabledChanged            ();
     void roiCoordChanged                (const QGeoCoordinate& centerCoord);
@@ -1147,6 +1147,7 @@ private:
     ComponentInformationManager*    _componentInformationManager    = nullptr;
     VehicleObjectAvoidance*         _objectAvoidance                = nullptr;
     Autotune*                       _autotune                       = nullptr;
+    DropSequence*                   _dropSequence                   = nullptr;
     GimbalController*               _gimbalController               = nullptr;
 
 #ifdef QGC_UTM_ADAPTER
@@ -1189,7 +1190,6 @@ private:
     bool                _heardFrom = false;
 
     bool                _isROIEnabled   = false;
-    bool                _isCustomCommandEnabled = false;
     Joystick*           _activeJoystick = nullptr;
     bool                _gimbalRetracted = false;
     bool                _gimbalNeutral = false;
@@ -1553,16 +1553,6 @@ private:
     void _createMAVLinkLogManager();
 
     MAVLinkLogManager *_mavlinkLogManager = nullptr;
-
-/*---------------------------------------------------------------------------*/
-/*===========================================================================*/
-/*                         MAVLink Command Request Handler                   */
-/*===========================================================================*/
-private:
-    void _handleCommandRequestConfirmation(const mavlink_command_long_t commandLong);
-
-signals:
-    void requestConfirmationReceived(int customCmd, int show, int tagId, int enableAutoSequence , int sequenceIndex);
 
 /*---------------------------------------------------------------------------*/
 /*===========================================================================*/
