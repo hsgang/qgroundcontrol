@@ -920,7 +920,7 @@ ApplicationWindow {
         rightInset:     0
         topInset:       0
         bottomInset:    0
-        padding:        _margins * 2
+        padding:        _margins
         visible:        false
         modal:          false
         focus:          true
