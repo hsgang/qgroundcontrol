@@ -64,7 +64,7 @@ Rectangle {
         return _activeVehicle && !isNaN(_windDir)
     }
 
-    ColumnLayout {
+    RowLayout {
         id: columnLayout
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
@@ -76,7 +76,7 @@ Rectangle {
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
             radius:     size / 2
             border.color: qgcPal.text
-            Layout.alignment: Qt.AlignHCenter
+            Layout.alignment: Qt.AlignTop
 
             CompassDial {
                 id: compassDial
