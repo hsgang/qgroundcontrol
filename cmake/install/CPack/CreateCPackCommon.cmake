@@ -29,8 +29,13 @@ set(CPACK_PACKAGE_ICON "${CMAKE_SOURCE_DIR}/resources/icons/qgroundcontrol.png")
 # ----------------------------------------------------------------------------
 # Resource Files
 # ----------------------------------------------------------------------------
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/.github/COPYING.md")
-set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
+# Use variables passed from Install.cmake if available, otherwise use defaults
+if(NOT CPACK_RESOURCE_FILE_LICENSE)
+    set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE-GPL")
+endif()
+if(NOT CPACK_RESOURCE_FILE_README)
+    set(CPACK_RESOURCE_FILE_README "${CMAKE_SOURCE_DIR}/README.md")
+endif()
 # set(CPACK_RESOURCE_FILE_WELCOME "${CMAKE_CURRENT_SOURCE_DIR}/desc/welcome.txt")
 
 # ----------------------------------------------------------------------------
