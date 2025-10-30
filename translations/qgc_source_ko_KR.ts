@@ -4286,158 +4286,158 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>Bootloader</name>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="224"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="224"/>
         <source>Write failed: %1</source>
         <translation>쓰기 오류: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="229"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="229"/>
         <source>Incorrect number of bytes returned for write: actual(%1) expected(%2)</source>
         <translation>쓰기 위해 반환된 바이트 수가 잘못되었습니다: 실제값(%1) 기대값(%2)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="250"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="250"/>
         <source>Timeout waiting for bytes to be available</source>
         <translation>바이트 사용 대기 시간 초과</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="260"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="260"/>
         <source>Read failed: error: %1</source>
         <translation>읽기 실패: 오류: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="274"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="274"/>
         <source>Get Command Response: </source>
         <translation>명령 반응 가져오기: </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="280"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="280"/>
         <source>Invalid sync response: 0x%1 0x%2</source>
         <translation>유효하지 않은 동기화 응답입니다: 0x%1 0x%2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="283"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="283"/>
         <source>This board is using a microcontroller with faulty silicon and an incorrect configuration and should be put out of service.</source>
         <translation>이 보드는 실리콘 결함이 있고, 잘못 설정된 마이크로컨트롤러가 있어 사용을 권장하지 않습니다.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="286"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="286"/>
         <source>Unknown response code</source>
         <translation>알수없는 응답 코드</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="292"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="292"/>
         <source>Command failed: 0x%1 (%2)</source>
         <translation>명령 오류: 0x%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="156"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="156"/>
         <source>Get Board Info: </source>
         <translation>보드 정보 가져오기: </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="342"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="342"/>
         <source>Send Command: </source>
         <translation>명령 전송: </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="350"/>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="516"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="350"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="516"/>
         <source>Unable to open firmware file %1: %2</source>
         <translation>펌웨어 파일 %1을(를) 열 수 없습니다: %2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="371"/>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="541"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="371"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="541"/>
         <source>Firmware file read failed: %1</source>
         <translation>펌웨어 파일 읽기 실패: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="387"/>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="470"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="387"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="470"/>
         <source>Flash failed: %1 at address 0x%2</source>
         <translation>펌웨어 설치 실패: 주소 0x%2, %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="421"/>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="593"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="421"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="593"/>
         <source>Unable to retrieve block from ihx: index %1</source>
         <translation>Ihx로부터 블록을 불러오는데 실패하였습니다: index %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="441"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="441"/>
         <source>Unable to set flash start address: 0x%2</source>
         <translation>플래시 시작 주소를 설정할 수 없습니다:%2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="559"/>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="644"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="559"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="644"/>
         <source>Read failed: %1 at address: 0x%2</source>
         <translation>읽기 실패: %1 주소: 0x%2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="565"/>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="652"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="565"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="652"/>
         <source>Compare failed: expected(0x%1) actual(0x%2) at address: 0x%3</source>
         <translation>검증 실패: 주소: (0x%3) 에서 예상(0x%1) 실제(0x%2)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="613"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="613"/>
         <source>Unable to set read start address: 0x%2</source>
         <translation>시작주소를 설정할수 없습니다: 0x%2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="689"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="689"/>
         <source>CRC mismatch: board(0x%1) file(0x%2)</source>
         <translation>CRC 불일치: 보드(0x%1) 파일(0x%2)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="40"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="40"/>
         <source>Open failed on port %1: %2</source>
         <translation>포트 %1:%2 를 여는데 실패하였습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="92"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="92"/>
         <source>Unable to put radio into command mode +++</source>
         <translation type="unfinished">Unable to put radio into command mode +++</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="97"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="97"/>
         <source>Radio did not respond to command mode</source>
         <translation>라디오가 명령 모드에 응답 하지 않습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="105"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="105"/>
         <source>Radio did not respond to ATI2 command</source>
         <translation type="unfinished">Radio did not respond to ATI2 command</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="112"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="112"/>
         <source>Radio did not return board id</source>
         <translation type="unfinished">Radio did not return board id</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="129"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="129"/>
         <source>Found unsupported bootloader version: %1</source>
         <translation>지원되지 않는 부트로더 버전입니다: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="165"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="165"/>
         <source>Unable to reboot radio (ready read)</source>
         <translation>라디오를 리부팅 할수 없습니다.(읽기 준비완료)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="181"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="181"/>
         <source>Erase failed: %1</source>
         <translation>삭제 실패: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="319"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="319"/>
         <source>Get Device: </source>
         <translation type="unfinished">Get Device: </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/Bootloader.cc" line="747"/>
+        <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="747"/>
         <source>Get Board Id: </source>
         <translation>보드 id 가져오기: </translation>
     </message>
@@ -5635,102 +5635,102 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>FirmwareImage</name>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="143"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="143"/>
         <source>Incorrectly formatted line in .ihx file, line too short</source>
         <translation>.ihx 파일에 잘못된 형식의 줄이 있습니다. 줄이 너무 짧습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="148"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="148"/>
         <source>Unsupported record type in file: %1</source>
         <translation>지원되지 않는 저장타입 파일: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="218"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="218"/>
         <source>Unable to open firmware file %1, error: %2</source>
         <translation>펌웨어 파일 %1을 열수 없습니다. 오류: %2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="227"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="227"/>
         <source>Supplied file is not a valid JSON document</source>
         <translation>파일이 올바른 JSON 문서가 아닙니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="238"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="238"/>
         <source>Firmware file missing required key: %1</source>
         <translation>펌웨어 파일에 요구 키가 없습니다: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="248"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="248"/>
         <source>Firmware file has invalid key: %1</source>
         <translation>펌웨어 파일이 잘못된 키를 가지고 있습니다: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="254"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="254"/>
         <source>Downloaded firmware board id does not match hardware board id: %1 != %2</source>
         <translation>다운로드된 펌웨어 보드 id가 하드웨어 보드 id와 일치하지 않습니다: %1 !=%2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="276"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="276"/>
         <source>Write failed for parameter meta data file, error: %1</source>
         <translation>파라미터 메타 데이터를 쓰는데 실패하였습니다, 오류: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="283"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="283"/>
         <source>Unable to open parameter meta data file %1 for writing, error: %2</source>
         <translation>파라미터 메타 데이터 파일 %1을 쓰기위해 여는데 실패하였습니다, 오류: %2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="305"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="305"/>
         <source>Write failed for airframe meta data file, error: %1</source>
         <translation>기체 메타 데이터를 쓰는데 실패하였습니다, 오류: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="312"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="312"/>
         <source>Unable to open airframe meta data file %1 for writing, error: %2</source>
         <translation>기체 메타 데이터 파일 %1을 쓰기위해 여는데 실패하였습니다, 오류: %2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="338"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="338"/>
         <source>Unable to open decompressed file %1 for writing, error: %2</source>
         <translation>압축을 푼 파일 %1을 여는데 실패하였습니다, 오류: %2</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="344"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="344"/>
         <source>Write failed for decompressed image file, error: %1</source>
         <translation>압축이 풀린 이미지 파일을 쓰는데 실패하였습니다, 오류: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="368"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="368"/>
         <source>Firmware file has invalid decompressed size for %1</source>
         <translation>압축을 푼 펌웨어 파일이 %1에 대한 크기가 올바르지 않습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="380"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="380"/>
         <source>Could not find compressed bytes for %1 in Firmware file</source>
         <translation>펌웨어 파일에서 %1에 대한 압축 데이터를 찾을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="385"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="385"/>
         <source>Incorrectly formed compressed bytes section for %1 in Firmware file</source>
         <translation>펌웨어 파일에서 %1에 대한 압축 바이트 세션이 잘못되었습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="401"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="401"/>
         <source>Firmware file has 0 length %1</source>
         <translation>펌웨어파일이 길이 0입니다 %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="405"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="405"/>
         <source>Size for decompressed %1 does not match stored size: Expected(%1) Actual(%2)</source>
         <translation>압축 해제된 %1의 크기가 저장된 크기와 일치하지 않습니다 : 예상 (%1) 실제 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="409"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="409"/>
         <source>Successfully decompressed %1</source>
         <translation>압축풀기 성공 %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareImage.cc" line="437"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareImage.cc" line="437"/>
         <source>Unabled to open firmware file %1, %2</source>
         <translation>펌웨어 파일 %1을 열 수 없습니다: %2</translation>
     </message>
@@ -6196,222 +6196,222 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>FirmwareUpgrade</name>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="28"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="28"/>
         <source>Firmware</source>
         <translation>펌웨어</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="44"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="44"/>
         <source>Firmware Setup</source>
         <translation>펌웨어 설정</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="47"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="47"/>
         <source>%1 can upgrade the firmware on Pixhawk devices.</source>
         <translation>%1은 Pixhawk Autopilot장치의 펌웨어를 업그레이드할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="48"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="48"/>
         <source>Update the autopilot firmware to the latest version</source>
         <translation>비행 컨트롤러의 펌웨어를 최신 버전으로 업데이트하십시오.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="52"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="52"/>
         <source>All %1 connections to vehicles must be </source>
         <translation>모든 %1 기체의 연결상태가 되어야합니다 </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="52"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="52"/>
         <source>Please unplug your Pixhawk and/or Radio from USB.</source>
         <translation>업그레이드 하려는 장치를 USB포트에서 분리하십시오.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="48"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="48"/>
         <source>Plug in your device via USB to start firmware upgrade.</source>
         <translation>업그레이드 하려는 장치를 USB포트에 연결하십시오.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="70"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="70"/>
         <source>Upgrade cancelled</source>
         <translation>업그레이드 취소</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="82"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="82"/>
         <source>Select Firmware File</source>
         <translation>펌웨어 파일을 선택하여 주십시오</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="83"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="83"/>
         <source>Firmware Files (*.px4 *.apj *.bin *.ihx)</source>
         <translation>펌웨어 파일 (*.px4 *.apj *.bin *.ihx)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="83"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="83"/>
         <source>All Files (*)</source>
         <translation>모든 파일 (*)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="127"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="127"/>
         <source>Multiple devices detected! Remove all detected devices to perform the firmware upgrade.</source>
         <translation>여러 디바이스가 감지되었습니다! 펌웨어 업그레이드를 진행하려면 모든 디바이스를 제거하십시오.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="128"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="128"/>
         <source>Detected [%1]: </source>
         <translation>[%1] 감지됨: </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="135"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="135"/>
         <source>Found device</source>
         <translation>다음 장치의 연결을 확인하였습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="177"/>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="331"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="177"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="331"/>
         <source>PX4 Pro </source>
         <translation>PX4 Pro </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="242"/>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="276"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="242"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="276"/>
         <source>Standard Version (stable)</source>
         <translation>표준 버전 (stable)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="246"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="246"/>
         <source>Beta Testing (beta)</source>
         <translation>베타 테스팅 (beta)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="250"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="250"/>
         <source>Developer Build (master)</source>
         <translation>개발자 빌드(master)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="254"/>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="280"/>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="293"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="254"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="280"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="293"/>
         <source>Custom firmware file...</source>
         <translation>사용자 정의 펌웨어 파일...</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="263"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="263"/>
         <source>PX4 Pro</source>
         <translation>PX4 Pro</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="267"/>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="344"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="267"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="344"/>
         <source>ArduPilot</source>
         <translation>ArduPilot</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="289"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="289"/>
         <source>Standard Version</source>
         <translation>표준 버전</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="313"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="313"/>
         <source>Detected PX4 Flow board. The firmware you use on the PX4 Flow must match the AutoPilot firmware type you are using on the vehicle:</source>
         <translation>PX4 Flow 보드를 감지했습니다. PX4 Flow에서 사용하는 펌웨어는 기체에서 사용중인 비행제어보드의 펌웨어 유형과 일치해야합니다:</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="314"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="314"/>
         <source>Detected Pixhawk board. You can select from the following flight stacks:</source>
         <translation>Pixhawk 보드를 감지했습니다. 아래의 펌웨어 목록에서 선택할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="315"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="315"/>
         <source>Press Ok to upgrade your vehicle.</source>
         <translation>기체를 업그레이드하기 위해 확인버튼을 눌러주십시오.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="318"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="318"/>
         <source>Flight Stack</source>
         <translation>펌웨어</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="386"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="386"/>
         <source>Downloading list of available firmwares...</source>
         <translation>사용 가능한 펌웨어 리스트 다운로드 중...</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="394"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="394"/>
         <source>No Firmware Available</source>
         <translation>사용할 수 있는 펌웨어가 없습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="422"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="422"/>
         <source>Advanced settings</source>
         <translation>고급 설정</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="444"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="444"/>
         <source>Select the standard version or one from the file system (previously downloaded):</source>
         <translation>표준 버전을 선택하거나 (이미 다운로드한) 펌웨어 파일 시스템을 지정하십시오:</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="445"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="445"/>
         <source>Select which version of the firmware you would like to install:</source>
         <translation>설치를 원하는 펌웨어 버전을 선택하십시오:</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="446"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="446"/>
         <source>Select which version of the above flight stack you would like to install:</source>
         <translation>다음 중 설치할 비행 소프트웨어 버전을 지정해주십시오:</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="461"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="461"/>
         <source>WARNING: BETA FIRMWARE. </source>
         <translation>경고: 베타 펌웨어입니다. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="462"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="462"/>
         <source>This firmware version is ONLY intended for beta testers. </source>
         <translation>이 펌웨어 버전은 베타 테스터만을 위한 펌웨어입니다. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="463"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="463"/>
         <source>Although it has received FLIGHT TESTING, it represents actively changed code. </source>
         <translation>비행 테스트중인 펌웨어를 받았지만, 비행 테스트 중인 펌웨어는 코드가 자주 변경됩니다. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="464"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="464"/>
         <source>Do NOT use for normal operation.</source>
         <translation>일반 운용에 사용하지 마십시오.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="467"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="467"/>
         <source>WARNING: CONTINUOUS BUILD FIRMWARE. </source>
         <translation>경고: CONTINUOUS BUILD FIRMWARE. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="468"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="468"/>
         <source>This firmware has NOT BEEN FLIGHT TESTED. </source>
         <translation>이 펌웨어는 비행 테스트를 한 적이 없습니다. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="469"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="469"/>
         <source>It is only intended for DEVELOPERS. </source>
         <translation>개발자를 위한 펌웨어입니다. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="470"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="470"/>
         <source>Run bench tests without props first. </source>
         <translation>우선 프로펠러를 장착하지 않고 벤치 테스트를 진행하십시오. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="471"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="471"/>
         <source>Do NOT fly this without additional safety precautions. </source>
         <translation>추가적인 안전장치 없이 비행을 삼가해주십시오. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="472"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="472"/>
         <source>Follow the forums actively when using it.</source>
         <translation>포럼을 적극적으로 따르십시오.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgrade.qml" line="512"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="512"/>
         <source>Flash ChibiOS Bootloader</source>
         <translation>ChibiOS 부트로더 설치</translation>
     </message>
@@ -6419,87 +6419,87 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>FirmwareUpgradeController</name>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="162"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="162"/>
         <source>Connect not allowed during Firmware Upgrade.</source>
         <translation>펌웨어 업그레이드 중 연결할 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="280"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="280"/>
         <source>Connected to bootloader:</source>
         <translation>부트로더에 연결했습니다:</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="281"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="281"/>
         <source>  Version: %1</source>
         <translation>  버전: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="282"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="282"/>
         <source>  Board ID: %1</source>
         <translation>  보드 ID: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="283"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="283"/>
         <source>  Flash size: %1</source>
         <translation>  플래시 용량: %1</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="366"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="366"/>
         <source>Custom firmware selected but no filename given.</source>
         <translation>사용자 정의 펌웨어가 선택 되었지만 파일 이름이 지정되지 않았습니다.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="371"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="371"/>
         <source>Unable to find specified firmware for board type</source>
         <translation>해당 보드 유형에 대해 지정된 펌웨어를 찾을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="377"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="377"/>
         <source>No firmware file selected</source>
         <translation>펌웨어 파일이 선택되지 않았습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="388"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="388"/>
         <source>Downloading firmware...</source>
         <translation>펌웨어 다운로드 중...</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="389"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="389"/>
         <source> From: %1</source>
         <translation> %1 부터</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="410"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="410"/>
         <source>Download complete</source>
         <translation>다운로드 완료</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="418"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="418"/>
         <source>Image load failed</source>
         <translation>이미지 로드에 실패했습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="424"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="424"/>
         <source>Bootloader not found</source>
         <translation>부트로더를 찾을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="429"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="429"/>
         <source>Image size of %1 is too large for board flash size %2</source>
         <translation>보드 플래시 사이즈:%2에 비해 이미지사이즈:%1이 큽니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="461"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="461"/>
         <source>Upgrade complete</source>
         <translation>업그레이드 완료</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="519"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="519"/>
         <source>Upgrade cancelled</source>
         <translation>업그레이드 취소</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/FirmwareUpgradeController.cc" line="595"/>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="595"/>
         <source>Choose board type</source>
         <translation>보드 유형 선택</translation>
     </message>
@@ -10017,72 +10017,72 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>JoystickConfigAdvanced</name>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="36"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="36"/>
         <source>Full down stick is zero throttle</source>
         <translation>스틱 최하단을 스로틀 0으로 설정</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="42"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="42"/>
         <source>Center stick is zero throttle</source>
         <translation>조이스틱의 중앙이 스로틀 0으로 설정</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="49"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="49"/>
         <source>Spring loaded throttle smoothing</source>
         <translation>탄성이 적용된 스로틀 스무딩</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="61"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="61"/>
         <source>Allow negative Thrust</source>
         <translation>음수 추력 허용</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="73"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="73"/>
         <source>Exponential:</source>
         <translation>지수 곡선:</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="93"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="93"/>
         <source>Enable further advanced settings (careful!)</source>
         <translation>추가 고급 설정 활성화(주의!)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="109"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="109"/>
         <source>Axis frequency (Hz):</source>
         <translation>스틱 주파수 (Hz):</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="127"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="127"/>
         <source>Button repeat frequency (Hz):</source>
         <translation>버튼 반복 주기 (Hz):</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="145"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="145"/>
         <source>Enable circle correction</source>
         <translation>원형 보정 활성화</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="163"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="163"/>
         <source>Deadbands</source>
         <translation>데드밴드</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="180"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="180"/>
         <source>Deadband can be set during the first </source>
         <translation>첫 비행동안 데드밴드를 설정할 수 있습니다 </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="181"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="181"/>
         <source>step of calibration by gently wiggling each axis. </source>
         <translation>각 축을 부드럽게 움직여 캘리브레이션하는 단계입니다. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="182"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="182"/>
         <source>Deadband can also be adjusted by clicking and </source>
         <translation>데드밴드를 설정할 수 있고 </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigAdvanced.qml" line="183"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigAdvanced.qml" line="183"/>
         <source>dragging vertically on the corresponding axis monitor.</source>
         <translation>해당 축 모니터에서 수직으로 드래그합니다.</translation>
     </message>
@@ -10090,32 +10090,32 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>JoystickConfigButtons</name>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigButtons.qml" line="45"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigButtons.qml" line="45"/>
         <source> Multiple buttons that have the same action must be pressed simultaneously to invoke the action.</source>
         <translation type="unfinished"> Multiple buttons that have the same action must be pressed simultaneously to invoke the action.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigButtons.qml" line="94"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigButtons.qml" line="94"/>
         <source>Repeat</source>
         <translation>반복</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigButtons.qml" line="124"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigButtons.qml" line="124"/>
         <source>#</source>
         <translation>#</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigButtons.qml" line="128"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigButtons.qml" line="128"/>
         <source>Function: </source>
         <translation>기능: </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigButtons.qml" line="132"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigButtons.qml" line="132"/>
         <source>Shift Function: </source>
         <translation>Shift 기능: </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigButtons.qml" line="185"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigButtons.qml" line="185"/>
         <source>No firmware support</source>
         <translation type="unfinished">No firmware support</translation>
     </message>
@@ -10123,22 +10123,22 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>JoystickConfigCalibration</name>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigCalibration.qml" line="169"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigCalibration.qml" line="169"/>
         <source>Skip</source>
         <translation>건너뛰기</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigCalibration.qml" line="175"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigCalibration.qml" line="175"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigCalibration.qml" line="187"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigCalibration.qml" line="187"/>
         <source>Next</source>
         <translation>다음</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigCalibration.qml" line="187"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigCalibration.qml" line="187"/>
         <source>Start</source>
         <translation>시작</translation>
     </message>
@@ -10146,7 +10146,7 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>JoystickConfigController</name>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigController.cc" line="197"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigController.cc" line="197"/>
         <source>Detected %1 joystick axes. To operate PX4, you need at least %2 axes.</source>
         <translation>%1개의 조이스틱 축을 감지하였습니다. PX4를 운용하려면 최소 %2개의 축이 필요합니다.</translation>
     </message>
@@ -10154,57 +10154,57 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>JoystickConfigGeneral</name>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="38"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="38"/>
         <source>Enable joystick input</source>
         <translation>조이스틱 입력 사용</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="38"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="38"/>
         <source>Enable not allowed (Calibrate First)</source>
         <translation>활성화 불가(먼저 캘리브레이션 하십시오.)</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="67"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="67"/>
         <source>Active joystick:</source>
         <translation>활성 조이스틱:</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="79"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="79"/>
         <source>Active joystick name not in combo</source>
         <translation>활성 조이스틱이 콤보에 포함되어 있지 않습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="97"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="97"/>
         <source>RC Mode:</source>
         <translation>RC 모드</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="151"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="151"/>
         <source>Lateral</source>
         <translation>측면</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="151"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="151"/>
         <source>Roll</source>
         <translation>롤</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="165"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="165"/>
         <source>Forward</source>
         <translation>앞으로</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="165"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="165"/>
         <source>Pitch</source>
         <translation>피치</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="178"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="178"/>
         <source>Yaw</source>
         <translation>요</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfigGeneral.qml" line="191"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfigGeneral.qml" line="191"/>
         <source>Throttle</source>
         <translation>스로틀</translation>
     </message>
@@ -13456,32 +13456,32 @@ Is this really what you want?</source>
 <context>
     <name>PX4FirmwareUpgradeThreadWorker</name>
     <message>
-        <location filename="../src/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="153"/>
+        <location filename="../src/Vehicle/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="153"/>
         <source>Programming new version...</source>
         <translation>새로운 버전을 프로그래밍중...</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="163"/>
+        <location filename="../src/Vehicle/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="163"/>
         <source>Verifying program...</source>
         <translation>프로그램 확인중...</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="167"/>
+        <location filename="../src/Vehicle/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="167"/>
         <source>Verify complete</source>
         <translation>확인 완료</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="174"/>
+        <location filename="../src/Vehicle/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="174"/>
         <source>Rebooting board</source>
         <translation>보드 재부팅</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="198"/>
+        <location filename="../src/Vehicle/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="198"/>
         <source>Erasing previous program...</source>
         <translation>이전 프로그램 삭제중...</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="202"/>
+        <location filename="../src/Vehicle/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="202"/>
         <source>Erase complete</source>
         <translation>삭제 완료</translation>
     </message>
@@ -13560,7 +13560,7 @@ Is this really what you want?</source>
 <context>
     <name>PX4FlowSensor</name>
     <message>
-        <location filename="../src/VehicleSetup/PX4FlowSensor.qml" line="23"/>
+        <location filename="../src/Vehicle/VehicleSetup/PX4FlowSensor.qml" line="23"/>
         <source>PX4Flow Camera</source>
         <translation>PX4Flow 카메라</translation>
     </message>
@@ -17850,72 +17850,72 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
 <context>
     <name>SetupView</name>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="35"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="35"/>
         <source>This operation cannot be performed while the vehicle is armed.</source>
         <translation>이 동작은 기체가 시동되어 있는 동안은 진행할 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="38"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="38"/>
         <source>missing message panel text</source>
         <translation>메세지 패널 텍스트를 찾을 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="80"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="80"/>
         <source>%1 setup must be completed prior to %2 setup.</source>
         <translation>%2 설정은 %1 설정이 완료된 후에 진행해야 합니다</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="132"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="132"/>
         <source>%1 does not currently support setup of your vehicle type. </source>
         <translation>%1은(는) 현재 기체종류를 지원하지 않습니다 </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="150"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="150"/>
         <source>Vehicle settings and info will display after connecting your vehicle.</source>
         <translation>기체 정보 및 설정은 기체와 연결된 후 표시됩니다.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="150"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="150"/>
         <source>Refresh parameter</source>
         <translation>매개변수 불러오기</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="150"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="150"/>
         <source> Click Firmware on the left to upgrade your vehicle.</source>
         <translation> 펌웨어 메뉴에서 기체를 업데이트 할 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="171"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="171"/>
         <source>You are currently connected to a vehicle but it did not return the full parameter list. </source>
         <translation>기체에 연결되어 있으나 전체 파라미터를 읽어 오지 못했습니다. </translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="172"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="172"/>
         <source>As a result, the full set of vehicle setup options are not available.</source>
         <translation>기체에 대한 모든 설정옵션을 열 수 없습니다.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="231"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="231"/>
         <source>Summary</source>
         <translation>기체 정보</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="243"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="243"/>
         <source>Firmware</source>
         <translation>펌웨어</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="254"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="254"/>
         <source>PX4Flow</source>
         <translation>PX4Flow</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="266"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="266"/>
         <source>Joystick</source>
         <translation>조이스틱</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/SetupView.qml" line="293"/>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="293"/>
         <source>Parameters</source>
         <translation>파라미터</translation>
     </message>
@@ -19985,12 +19985,12 @@ Confirm change?</source>
 <context>
     <name>VehicleSummary</name>
     <message>
-        <location filename="../src/VehicleSetup/VehicleSummary.qml" line="87"/>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleSummary.qml" line="87"/>
         <source>Below you will find a summary of the settings for your vehicle. To the left are the setup menus for each component.</source>
         <translation>기체의 설정에 대한 요약을 아래에서 찾을 수 있습니다. 왼쪽에는 각 항목에 대한 설정메뉴가 있습니다.</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/VehicleSummary.qml" line="88"/>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleSummary.qml" line="88"/>
         <source>WARNING: Your vehicle requires setup prior to flight. Please resolve the items marked in red using the menu on the left.</source>
         <translation>경고: 비행 전 기체설정이 필요합니다. 빨간색으로 표시되어있는 항목을 확인해주십시오.</translation>
     </message>
