@@ -18,8 +18,8 @@ Rectangle {
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
     property bool   _available:     !isNaN(_activeVehicle.vibration.xAxis.rawValue)
     property real   _margins:       ScreenTools.defaultFontPixelWidth / 2
-    property real   _barWidth:      ScreenTools.defaultFontPixelWidth * 3
-    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 4
+    property real   _barWidth:      ScreenTools.defaultFontPixelWidth * 2
+    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 3
     property real   _velocity_variance:     _activeVehicle.ekfStatus.velocity_variance.rawValue
     property real   _pos_horiz_variance:    _activeVehicle.ekfStatus.pos_horiz_variance.rawValue
     property real   _pos_vert_variance:     _activeVehicle.ekfStatus.pos_vert_variance.rawValue
@@ -41,7 +41,7 @@ Rectangle {
 
         RowLayout {
             id:         barRow
-            spacing:    ScreenTools.defaultFontPixelWidth * 2
+            spacing:    ScreenTools.defaultFontPixelWidth
 
             ColumnLayout {
                 Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 7
@@ -81,7 +81,7 @@ Rectangle {
                         anchors.right:          parent.right
                         width:                  parent.width
                         height:                 1
-                        color:                  "red"
+                        color:                  "orange"
                     }
                 }
 
@@ -130,7 +130,7 @@ Rectangle {
                         anchors.right:          parent.right
                         width:                  parent.width
                         height:                 1
-                        color:                  "red"
+                        color:                  "orange"
                     }
                 }
 
@@ -179,7 +179,7 @@ Rectangle {
                         anchors.right:          parent.right
                         width:                  parent.width
                         height:                 1
-                        color:                  "red"
+                        color:                  "orange"
                     }
                 }
 
@@ -228,7 +228,7 @@ Rectangle {
                         anchors.right:          parent.right
                         width:                  parent.width
                         height:                 1
-                        color:                  "red"
+                        color:                  "orange"
                     }
                 }
 
@@ -277,7 +277,7 @@ Rectangle {
                         anchors.right:          parent.right
                         width:                  parent.width
                         height:                 1
-                        color:                  "red"
+                        color:                  "orange"
                     }
                 }
 

@@ -18,8 +18,8 @@ Rectangle {
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle : QGroundControl.multiVehicleManager.offlineEditingVehicle
     property bool   _available:     !isNaN(_activeVehicle.vibration.xAxis.rawValue)
     property real   _margins:       ScreenTools.defaultFontPixelWidth / 2
-    property real   _barWidth:      ScreenTools.defaultFontPixelWidth * 3
-    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 4
+    property real   _barWidth:      ScreenTools.defaultFontPixelWidth * 2
+    property real   _barHeight:     ScreenTools.defaultFontPixelHeight * 3
     property real   _xValue:        _activeVehicle.vibration.xAxis.rawValue
     property real   _yValue:        _activeVehicle.vibration.yAxis.rawValue
     property real   _zValue:        _activeVehicle.vibration.zAxis.rawValue
@@ -39,7 +39,7 @@ Rectangle {
 
         RowLayout {
             id:         barRow
-            spacing:    ScreenTools.defaultFontPixelWidth * 2
+            spacing:    ScreenTools.defaultFontPixelWidth
 
             ColumnLayout {
                 Layout.minimumWidth: ScreenTools.defaultFontPixelWidth * 7
@@ -79,7 +79,7 @@ Rectangle {
                         anchors.right:          parent.right
                         width:                  parent.width
                         height:                 1
-                        color:                  "red"
+                        color:                  "orange"
                     }
                 }
 
@@ -127,7 +127,7 @@ Rectangle {
                         anchors.right:          parent.right
                         width:                  parent.width
                         height:                 1
-                        color:                  "red"
+                        color:                  "orange"
                     }
                 }
 
@@ -175,7 +175,7 @@ Rectangle {
                         anchors.right:          parent.right
                         width:                  parent.width
                         height:                 1
-                        color:                  "red"
+                        color:                  "orange"
                     }
                 }
 
