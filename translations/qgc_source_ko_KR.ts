@@ -9989,12 +9989,12 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>JoystickConfig</name>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfig.qml" line="28"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfig.qml" line="28"/>
         <source>Joystick</source>
         <translation>조이스틱</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfig.qml" line="69"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfig.qml" line="69"/>
         <source>General</source>
         <translation>일반</translation>
     </message>
@@ -10004,12 +10004,12 @@ Click Ok to start the auto-tuning process.
       <translation>버튼 할당</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfig.qml" line="75"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfig.qml" line="75"/>
         <source>Calibration</source>
         <translation>보정</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfig.qml" line="78"/>
+        <location filename="../src/Vehicle/VehicleSetup/JoystickConfig.qml" line="78"/>
         <source>Advanced</source>
         <translation>고급 설정</translation>
     </message>
