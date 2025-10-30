@@ -12,7 +12,7 @@ Component.prototype.createOperations = function()
     }
 
     if (systemInfo.productType === "windows") {
-        component.addOperation("CreateShortcut", "@TargetDir@/bin/qgroundcontrol.exe", "@StartMenuDir@/QGroundControl.lnk");
-        component.addOperation("CreateShortcut", "@TargetDir@/bin/qgroundcontrol.exe", "@DesktopDir@/QGroundControl.lnk");
+        component.addOperation("CreateShortcut", "@TargetDir@/bin/missionnavigator.exe", "@StartMenuDir@/MissionNavigator.lnk");
+        component.addOperation("CreateShortcut", "@TargetDir@/bin/missionnavigator.exe", "@DesktopDir@/MissionNavigator.lnk");
     }
 }
