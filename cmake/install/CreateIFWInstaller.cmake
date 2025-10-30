@@ -50,19 +50,53 @@ file(MAKE_DIRECTORY "${IFW_PACKAGE_DIR}/meta")
 file(MAKE_DIRECTORY "${IFW_PACKAGE_DIR}/data")
 
 # ----------------------------------------------------------------------------
+# Prepare Icon Resources
+# ----------------------------------------------------------------------------
+# Convert ICO to PNG for IFW (IFW prefers PNG)
+set(IFW_ICON_SOURCE "${QGC_WINDOWS_ICON_PATH}")
+set(IFW_LOGO_SOURCE "${CMAKE_SOURCE_DIR}/resources/icons/qgroundcontrol.png")
+
+# Copy icon files to config directory
+if(EXISTS "${IFW_ICON_SOURCE}")
+    file(COPY "${IFW_ICON_SOURCE}" DESTINATION "${IFW_CONFIG_DIR}/")
+    get_filename_component(ICON_FILENAME "${IFW_ICON_SOURCE}" NAME_WE)
+    set(HAS_INSTALLER_ICON TRUE)
+endif()
+
+if(EXISTS "${IFW_LOGO_SOURCE}")
+    file(COPY "${IFW_LOGO_SOURCE}" DESTINATION "${IFW_CONFIG_DIR}/")
+    set(HAS_WINDOW_ICON TRUE)
+endif()
+
+# ----------------------------------------------------------------------------
 # Generate config.xml
 # ----------------------------------------------------------------------------
-file(WRITE "${IFW_CONFIG_DIR}/config.xml" "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+set(CONFIG_XML_CONTENT "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <Installer>
     <Name>${CMAKE_PROJECT_NAME}</Name>
-    <Version>${CMAKE_PROJECT_VERSION}</Version>
+    <Version>1.0.0</Version>
     <Title>${CMAKE_PROJECT_NAME} Installer</Title>
     <Publisher>${QGC_ORG_NAME}</Publisher>
     <StartMenuDir>${CMAKE_PROJECT_NAME}</StartMenuDir>
-    <TargetDir>@HomeDir@/${CMAKE_PROJECT_NAME}</TargetDir>
-    <WizardStyle>Modern</WizardStyle>
+    <TargetDir>@ApplicationsDir@/MissionNavigator</TargetDir>
+    <WizardStyle>Modern</WizardStyle>")
+
+# Add icon if available
+if(HAS_INSTALLER_ICON)
+    string(APPEND CONFIG_XML_CONTENT "
+    <InstallerApplicationIcon>WindowsQGC</InstallerApplicationIcon>")
+endif()
+
+if(HAS_WINDOW_ICON)
+    string(APPEND CONFIG_XML_CONTENT "
+    <InstallerWindowIcon>qgroundcontrol</InstallerWindowIcon>")
+endif()
+
+string(APPEND CONFIG_XML_CONTENT "
 </Installer>
 ")
+
+file(WRITE "${IFW_CONFIG_DIR}/config.xml" "${CONFIG_XML_CONTENT}")
 
 # ----------------------------------------------------------------------------
 # Generate package.xml

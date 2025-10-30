@@ -3,11 +3,6 @@
 # Qt Installer Framework (IFW) package generator for cross-platform installers
 # ============================================================================
 
-# Set module path when called from install(SCRIPT)
-if(NOT CMAKE_MODULE_PATH)
-    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
-endif()
-
 include(CreateCPackCommon)
 
 # ----------------------------------------------------------------------------
@@ -37,7 +32,7 @@ set(CPACK_IFW_PRODUCT_URL "${CMAKE_PROJECT_HOMEPAGE_URL}")
 set(CPACK_IFW_PACKAGE_ICON "${QGC_APP_ICON}")
 set(CPACK_IFW_PACKAGE_WINDOW_ICON "${CMAKE_SOURCE_DIR}/resources/icons/qgroundcontrol.png")
 set(CPACK_IFW_PACKAGE_LOGO "${CMAKE_SOURCE_DIR}/resources/QGCLogoFull.svg")
-set(CPACK_IFW_PACKAGE_WATERMARK "${CMAKE_SOURCE_DIR}/deploy/windows/installheader.bmp")
+set(CPACK_IFW_PACKAGE_WATERMARK "${INSTALLER_ROOT}/config/qgroundcontrol.png")
 # set(CPACK_IFW_PACKAGE_BANNER "")
 # set(CPACK_IFW_PACKAGE_BACKGROUND "")
 set(CPACK_IFW_PACKAGE_WIZARD_STYLE "Modern")
@@ -101,7 +96,7 @@ cpack_ifw_configure_component(${CMAKE_PROJECT_NAME}
     VERSION ${CMAKE_PROJECT_VERSION}
     DESCRIPTION "Welcome to the ${CMAKE_PROJECT_NAME} installer."
     LICENSES "GPL LICENSE" ${CPACK_RESOURCE_FILE_LICENSE}
-    SCRIPT "${CMAKE_SOURCE_DIR}/deploy/installer/packages/org.mavlink.qgroundcontrol/meta/installscript.js"
+    SCRIPT "${CMAKE_SOURCE_DIR}/deploy/installer/packages/org.mavlink.qgroundcontrol/meta/installerscript.js"
 )
 # cpack_ifw_configure_component_group
 # cpack_ifw_add_repository
@@ -112,52 +107,3 @@ include(CPackIFWConfigureFile)
 # cpack_ifw_configure_file(<input> <output>)
 
 include(CPack)
-
-# ----------------------------------------------------------------------------
-# Generate CPack Configuration File for IFW
-# ----------------------------------------------------------------------------
-message(STATUS "QGC: Creating IFW CPack configuration...")
-
-# Set output installer name
-if(CMAKE_CROSSCOMPILING)
-    set(QGC_IFW_OUTPUT "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}-installer-${CMAKE_HOST_SYSTEM_PROCESSOR}-${CMAKE_SYSTEM_PROCESSOR}.exe")
-else()
-    set(QGC_IFW_OUTPUT "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}-installer-${CMAKE_SYSTEM_PROCESSOR}.exe")
-endif()
-
-# Create a custom CPack config file for IFW
-set(CPACK_CONFIG_FILE "${CMAKE_BINARY_DIR}/CPackIFWConfig.cmake")
-file(WRITE "${CPACK_CONFIG_FILE}" "
-# Generated CPack IFW Configuration
-set(CPACK_PACKAGE_NAME \"${CMAKE_PROJECT_NAME}\")
-set(CPACK_PACKAGE_VERSION \"${CMAKE_PROJECT_VERSION}\")
-set(CPACK_PACKAGE_VENDOR \"${QGC_ORG_NAME}\")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY \"${CMAKE_PROJECT_NAME}\")
-set(CPACK_RESOURCE_FILE_LICENSE \"${CPACK_RESOURCE_FILE_LICENSE}\")
-set(CPACK_RESOURCE_FILE_README \"${CPACK_RESOURCE_FILE_README}\")
-set(CPACK_GENERATOR \"IFW\")
-set(CPACK_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
-
-# IFW specific settings
-set(CPACK_IFW_PACKAGE_TITLE \"${QGC_INSTALLER_NAME}\")
-set(CPACK_IFW_PACKAGE_PUBLISHER \"${QGC_ORG_NAME}\")
-set(CPACK_IFW_PRODUCT_URL \"${CMAKE_PROJECT_HOMEPAGE_URL}\")
-set(CPACK_IFW_PACKAGE_WIZARD_STYLE \"Modern\")
-set(CPACK_IFW_TARGET_DIRECTORY \"@HomeDir@\\\\${CMAKE_PROJECT_NAME}\")
-set(CPACK_IFW_ADMIN_TARGET_DIRECTORY \"@HomeDir@\\\\${CMAKE_PROJECT_NAME}\")
-set(CPACK_IFW_VERBOSE ON)
-")
-
-message(STATUS "QGC: Executing CPack to generate IFW installer...")
-execute_process(
-    COMMAND \"${CMAKE_CPACK_COMMAND}\" --config \"${CPACK_CONFIG_FILE}\" -C Release
-    WORKING_DIRECTORY \"${CMAKE_BINARY_DIR}\"
-    COMMAND_ECHO STDOUT
-    RESULT_VARIABLE CPACK_RESULT
-)
-
-if(NOT CPACK_RESULT EQUAL 0)
-    message(FATAL_ERROR \"QGC: CPack IFW installer generation failed\")
-endif()
-
-message(STATUS \"QGC: IFW installer should be created at: ${QGC_IFW_OUTPUT}\")
