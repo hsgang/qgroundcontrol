@@ -3,6 +3,11 @@
 # Qt Installer Framework (IFW) package generator for cross-platform installers
 # ============================================================================
 
+# Set module path when called from install(SCRIPT)
+if(NOT CMAKE_MODULE_PATH)
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+endif()
+
 include(CreateCPackCommon)
 
 # ----------------------------------------------------------------------------
