@@ -105,20 +105,20 @@ elseif(LINUX)
 # ----------------------------------------------------------------------------
 elseif(WIN32)
     # Pass variables to Windows installer creation script
+    # Qt Installer Framework (IFW)
+    message(STATUS "QGC: Using Qt Installer Framework (IFW)")
     install(CODE "
         set(CMAKE_PROJECT_NAME ${CMAKE_PROJECT_NAME})
         set(CMAKE_PROJECT_VERSION ${CMAKE_PROJECT_VERSION})
         set(QGC_ORG_NAME ${QGC_ORG_NAME})
-        set(QGC_WINDOWS_ICON_PATH \"${QGC_WINDOWS_ICON_PATH}\")
-        set(QGC_WINDOWS_INSTALL_HEADER_PATH \"${QGC_WINDOWS_INSTALL_HEADER_PATH}\")
-        if(CMAKE_CROSSCOMPILING)
-            set(QGC_WINDOWS_OUT \"${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}-installer-${CMAKE_HOST_SYSTEM_PROCESSOR}-${CMAKE_SYSTEM_PROCESSOR}.exe\")
-        else()
-            set(QGC_WINDOWS_OUT \"${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}-installer-${CMAKE_SYSTEM_PROCESSOR}.exe\")
-        endif()
-        set(QGC_WINDOWS_INSTALLER_SCRIPT \"${CMAKE_SOURCE_DIR}/deploy/windows/nullsoft_installer.nsi\")
+        set(QGC_INSTALLER_NAME \"${CMAKE_PROJECT_NAME}\")
+        set(QGC_APP_ICON \"${QGC_WINDOWS_ICON_PATH}\")
+        set(CMAKE_PROJECT_HOMEPAGE_URL \"${CMAKE_PROJECT_HOMEPAGE_URL}\")
+        set(INSTALLER_ROOT \"${CMAKE_SOURCE_DIR}/deploy/installer\")
+        set(CPACK_RESOURCE_FILE_LICENSE \"${CMAKE_SOURCE_DIR}/.github/COPYING.md\")
+        set(Qt6_ROOT_DIR \"${Qt6_DIR}/../../..\")
     ")
-    install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/install/CreateWinInstaller.cmake")
+    install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/install/CPack/CreateCPackIFW.cmake")
 
 # ----------------------------------------------------------------------------
 # macOS Installation, Code Signing & DMG Creation
