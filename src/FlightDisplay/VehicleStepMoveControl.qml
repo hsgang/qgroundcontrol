@@ -16,14 +16,14 @@ import QtQuick.Dialogs
 import QGroundControl
 import QGroundControl.Controls
 
-Rectangle {
+Item {
     id:         gimbalControlPannel
-    width:      _dropSequenceInProgress ? (mainLayout.width + _margins + sequenceIndicator.width) : mainLayout.width + _margins
+    width:      mainLayout.width + _margins //_dropSequenceInProgress ? (mainLayout.width + _margins + sequenceIndicator.width) : mainLayout.width + _margins
     height:     mainLayout.height + _margins
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    radius:     _margins
-    border.color: qgcPal.groupBorder
-    border.width: 1
+    // color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+    // radius:     _margins
+    // border.color: qgcPal.groupBorder
+    // border.width: 1
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
@@ -66,466 +66,485 @@ Rectangle {
         propagateComposedEvents: false
     }
 
-    Rectangle {
-        id: sequenceIndicator
-        width: ScreenTools.defaultFontPixelHeight * 5.5
-        height:parent.height
-        color: "transparent"
-        visible: _dropSequenceInProgress
+    RowLayout {
+        id: mainLayout
+        Layout.alignment: Qt.AlignTop
 
-        anchors.right: mainLayout.left
-        anchors.verticalCenter: mainLayout.verticalCenter
-        Column {
-            spacing: ScreenTools.defaultFontPixelHeight / 4
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.horizontalCenter: parent.horizontalCenter
+        Rectangle {
+            id: sequenceIndicator
+            width: ScreenTools.defaultFontPixelHeight * 5.5
+            height:parent.height
+            color: "transparent"
+            visible: _dropSequenceInProgress
 
-            // 시퀀스 모델: sequenceIndex 값과 표시할 텍스트를 정의
-            ListModel {
-                id: sequenceModel
-                ListElement { sequenceIndex: 1; labelText: "S1 시퀀스 시작" }
-                ListElement { sequenceIndex: 2; labelText: "S2 하강 접근" }
-                ListElement { sequenceIndex: 3; labelText: "S3 화물칸 개방" }
-                ListElement { sequenceIndex: 4; labelText: "S4 화물 투하" }
-                ListElement { sequenceIndex: 5; labelText: "S5 화물칸 닫기" }
-                ListElement { sequenceIndex: 6; labelText: "S6 고도 상승" }
-                ListElement { sequenceIndex: 7; labelText: "S7 모드 변경" }
-                ListElement { sequenceIndex: 99; labelText: "S6 시퀀스 종료" }
-            }
+            Column {
+                spacing: ScreenTools.defaultFontPixelHeight / 4
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
 
-            Repeater {
-                model: sequenceModel
-                delegate:   Rectangle {
-                    readonly property bool selected: autoSequenceIndex === model.sequenceIndex
-
-                    color: selected ? qgcPal.buttonHighlight : qgcPal.window
-                    radius: ScreenTools.defaultFontPixelHeight / 4
-                    width: ScreenTools.defaultFontPixelHeight * 5
-                    height: ScreenTools.defaultFontPixelHeight * 1.5
-                    opacity: 0.6
-
-                    QGCLabel {
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left
-                        anchors.leftMargin: _margins / 2
-                        text: model.labelText
-                    }
-
-                    Timer {
-                        interval: 500
-                        repeat: true
-                        running: parent.selected
-                        onTriggered: parent.opacity = (parent.opacity === 1.0) ? 0.6 : 1.0
-                    }
-
-                    onSelectedChanged: {
-                        opacity = selected ? 0.6 : 1.0
-                    }
+                // 시퀀스 모델: sequenceIndex 값과 표시할 텍스트를 정의
+                ListModel {
+                    id: sequenceModel
+                    ListElement { sequenceIndex: 1; labelText: "S1 시퀀스 시작" }
+                    ListElement { sequenceIndex: 2; labelText: "S2 하강 접근" }
+                    ListElement { sequenceIndex: 3; labelText: "S3 화물칸 개방" }
+                    ListElement { sequenceIndex: 4; labelText: "S4 화물 투하" }
+                    ListElement { sequenceIndex: 5; labelText: "S5 화물칸 닫기" }
+                    ListElement { sequenceIndex: 6; labelText: "S6 고도 상승" }
+                    ListElement { sequenceIndex: 7; labelText: "S7 모드 변경" }
+                    ListElement { sequenceIndex: 99; labelText: "S6 시퀀스 종료" }
                 }
-            }
-        }
-    }
 
-    ColumnLayout {
-        id:                         mainLayout
-        anchors.verticalCenter:     parent.verticalCenter
-        anchors.right:              parent.right
-        anchors.margins:            _margins / 2
+                Repeater {
+                    model: sequenceModel
+                    delegate:   Rectangle {
+                        readonly property bool selected: autoSequenceIndex === model.sequenceIndex
 
-        GridLayout {
-            id:                         mainGridLayout
-            // anchors.verticalCenter:     parent.verticalCenter
-            // anchors.right:              parent.right
-            // anchors.margins:            _margins / 2
-            columnSpacing:              _margins
-            rowSpacing:                 columnSpacing
-            columns:                    4
+                        color: selected ? qgcPal.buttonHighlight : qgcPal.window
+                        radius: ScreenTools.defaultFontPixelHeight / 4
+                        width: ScreenTools.defaultFontPixelHeight * 5
+                        height: ScreenTools.defaultFontPixelHeight * 1.5
+                        opacity: 0.6
+                        border.color: qgcPal.groupBorder
+                        border.width: 1
 
-            QGCLabel{
-                Layout.columnSpan: 4
-                Layout.fillWidth: true
-                text: "기체 배송 제어"
-                font.bold: true
-                horizontalAlignment: Text.AlignHCenter
-            }
+                        QGCLabel {
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.left
+                            anchors.leftMargin: _margins / 2
+                            text: model.labelText
+                        }
 
-            Rectangle {
-                Layout.columnSpan: 4
-                Layout.fillWidth: true
-                height : 1
-                color : qgcPal.groupBorder
-            }
+                        Timer {
+                            interval: 500
+                            repeat: true
+                            running: parent.selected
+                            onTriggered: parent.opacity = (parent.opacity === 1.0) ? 0.6 : 1.0
+                        }
 
-            QGCColumnButton{
-                id:                 stepUp
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/arrow-thin-up.svg"
-                text:               "UP"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,_moveStep,0,0,0,0,false)
-                }
-            }
-
-            QGCColumnButton{
-                id:                 stepTurnLeft
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/cheveron-left.svg"
-                text:               "T.LFT"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    var targetYaw = -_yawStep * Math.PI / 180
-                    _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,targetYaw,false)
-                }
-            }
-
-            QGCColumnButton{
-                id:                 stepForward
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/arrow-thick-up.svg"
-                text:               "FWD"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    _activeVehicle.setPositionAndVelocityTargetLocalNed(_moveStep,0,0,_velocityStep,0,0,0,false)
-                }
-            }
-
-            QGCColumnButton{
-                id:                 stepTurnRight
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/cheveron-right.svg"
-                text:               "T.RGHT"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    var targetYaw = _yawStep * Math.PI / 180
-                    _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,targetYaw,false)
-                }
-            }
-
-            QGCColumnButton{
-                id:                 stepTargetAlt
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && _distanceAvailable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:          _distanceAvailable ? (_distance >= _treshHoldAlt ? "/InstrumentValueIcons/arrow-thin-down.svg" : "/InstrumentValueIcons/arrow-thin-up.svg") : "/InstrumentValueIcons/pause.svg"
-                text:               _distanceAvailable ? (_distance >= _treshHoldAlt ? targetAltMin+"M" : targetAltMax+"M") : "NONE"
-                font.pointSize:     _fontSize * 0.7
-
-                property real targetAltMin: 3.5
-                property real targetAltMax: 15.0
-
-                onClicked: {
-                    if(_activeVehicle && _distanceAvailable) {
-                        var altTarget = 0
-                        if( _distance >= _treshHoldAlt ) { // down
-                            altTarget = -(_distance - targetAltMin)
-                            _activeVehicle.sendCommand(1, 178, 1, 3, 0.7, -1, 0, 0, 0, 0)
-                            _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,altTarget,0,0,-_velocityStep,0,false)
-                        } else { // up
-                            altTarget = (targetAltMax - _relAltitude )
-                            _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,altTarget,0,0,_velocityStep,0,false)
+                        onSelectedChanged: {
+                            opacity = selected ? 0.6 : 1.0
                         }
                     }
                 }
             }
+        }
 
-            QGCColumnButton{
-                id:                 stepLeft
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
+        Rectangle {
+            id:         statusRect
+            width:      statusLayout.width + _margins
+            height:     statusLayout.height + _margins
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+            radius:     _margins
+            border.color: qgcPal.groupBorder
+            border.width: 1
+            Layout.alignment: Qt.AlignTop
 
-                iconSource:         "/InstrumentValueIcons/arrow-thick-left.svg"
-                text:               "LEFT"
-                font.pointSize:     _fontSize * 0.7
+            ColumnLayout {
+                id: statusLayout
+                anchors.horizontalCenter:   parent.horizontalCenter
+                anchors.verticalCenter:     parent.verticalCenter
+                width:                      ScreenTools.defaultFontPixelWidth * 20
 
-                onClicked: {
-                    _activeVehicle.setPositionAndVelocityTargetLocalNed(0,-_moveStep,0,0,-_velocityStep,0,0,false)
+                LabelledLabel {
+                    Layout.fillWidth:   true
+                    label:              "진행률"
+                    labelText:          _activeVehicle && _activeVehicle.dropSequence ?
+                                        (_activeVehicle.dropSequence.dropSequenceProgress * 100).toFixed(0) + " %" : "0 %"
                 }
-            }
-
-            QGCColumnButton{
-                id:                 stepStop
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/pause.svg"
-                text:               "STOP"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    //_activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,0,false)
-                    _activeVehicle.pauseVehicle()
+                LabelledLabel {
+                    Layout.fillWidth:   true
+                    label:              "상태"
+                    labelText:          _activeVehicle && _activeVehicle.dropSequence ?
+                                        _activeVehicle.dropSequence.dropSequenceStatus : "준비 안됨"
                 }
-            }
-
-            QGCColumnButton{
-                id:                 stepRight
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/arrow-thick-right.svg"
-                text:               "RIGHT"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    _activeVehicle.setPositionAndVelocityTargetLocalNed(0,_moveStep,0,0,_velocityStep,0,0,false)
+                LabelledLabel {
+                    Layout.fillWidth:   true
+                    label:              "드롭 높이"
+                    labelText:          _activeVehicle ? _autoSeqAltValue.toFixed(1) + " m" : "no value"
                 }
-            }
-
-            QGCColumnButton{
-                id:                 stepDown
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && (_distanceAvailable || ((_distance - _moveStep) > _altLimit)) && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/arrow-thin-down.svg"
-                text:               "DOWN"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    if (isNaN(_distance) || _distance === 0 || (_distance !== 0 && (_distance - _moveStep) > _altLimit)) {
-                        _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,-_moveStep,0,0,0,0,false)
-                    }
+                LabelledLabel {
+                    Layout.fillWidth:   true
+                    label:              "이동 단위"
+                    labelText:          _activeVehicle ? _moveStep.toFixed(1) + " m" : "no value"
                 }
-            }
-
-            QGCColumnButton{
-                id:                 stepHalf
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/dots-horizontal-double.svg"
-                text:               "STEP"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    var index = stepValues.indexOf(_moveStepFact.value);
-                    if (index > 0) {
-                        _moveStepFact.value = stepValues[index - 1];
-                    }
+                LabelledLabel {
+                    Layout.fillWidth:   true
+                    label:              "상대 고도"
+                    labelText:          _activeVehicle ? _activeVehicle.altitudeRelative.valueString + " m" : "no value"
                 }
-            }
-
-            QGCColumnButton{
-                id:                 stepBack
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/arrow-thick-down.svg"
-                text:               "BACK"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    _activeVehicle.setPositionAndVelocityTargetLocalNed(-_moveStep,0,0,-_velocityStep,0,0,0,false)
-                }
-            }
-
-            QGCColumnButton{
-                id:                 stepOne
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _isGuidedEnable && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
-
-                iconSource:         "/InstrumentValueIcons/dots-horizontal-triple.svg"
-                text:               "STEP"
-                font.pointSize:     _fontSize * 0.7
-
-                onClicked: {
-                    var index = stepValues.indexOf(_moveStepFact.value);
-                    if (index !== -1 && index < stepValues.length - 1) {
-                        _moveStepFact.value = stepValues[index + 1];
-                    }
+                LabelledLabel {
+                    Layout.fillWidth:   true
+                    label:              "라이다 고도"
+                    labelText:          _activeVehicle ? _distance.toFixed(1) + " m" : "no value"
                 }
             }
         }
 
         Rectangle {
-            Layout.fillWidth: true
-            height: 1
-            color:  qgcPal.groupBorder
-        }
+            id:         controlRect
+            width:      controlLayout.width + _margins
+            height:     controlLayout.height + _margins
+            color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+            radius:     _margins
+            border.color: qgcPal.groupBorder
+            border.width: 1
 
-        RowLayout {
-            spacing: _margins
+            ColumnLayout {
+                id:                         controlLayout
+                anchors.verticalCenter:     parent.verticalCenter
+                anchors.horizontalCenter:   parent.horizontalCenter
 
-            QGCColumnButton{
-                id:                 gripperRelease
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                opacity:            enabled ? 1 : 0.4
-                enabled:            _activeVehicle && (_distanceAvailable && _distance < _treshHoldAlt) && !_dropSequenceInProgress
+                GridLayout {
+                    id:                         gridLayout
+                    columnSpacing:              _margins
+                    rowSpacing:                 columnSpacing
+                    columns:                    4
 
-                iconSource:         "/res/GripperRelease.svg"
-                text:               "열기"
-                font.pointSize:     _fontSize * 0.7
+                    QGCLabel{
+                        Layout.columnSpan: 4
+                        Layout.fillWidth: true
+                        text: "기체 배송 제어"
+                        font.bold: true
+                        horizontalAlignment: Text.AlignHCenter
+                    }
 
-                onClicked: {
-                    _activeVehicle.sendGripperAction(0)
-                }
-            }
+                    Rectangle {
+                        Layout.columnSpan: 4
+                        Layout.fillWidth: true
+                        height : 1
+                        color : qgcPal.groupBorder
+                    }
 
-            QGCColumnButton{
-                id:                 gripperGrab
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _activeVehicle && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
+                    QGCColumnButton{
+                        id:                 stepUp
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
 
-                iconSource:         "/res/GripperGrab.svg"
-                text:               "닫기"
-                font.pointSize:     _fontSize * 0.7
+                        iconSource:         "/InstrumentValueIcons/arrow-thin-up.svg"
+                        text:               "UP"
+                        font.pointSize:     _fontSize * 0.7
 
-                onClicked: {
-                    _activeVehicle.sendGripperAction(1)
-                }
-            }
-        }
+                        onClicked: {
+                            _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,_moveStep,0,0,0,0,false)
+                        }
+                    }
 
-        Rectangle {
-            Layout.fillWidth: true
-            height: 1
-            color:  qgcPal.groupBorder
-        }
+                    QGCColumnButton{
+                        id:                 stepTurnLeft
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
 
-        RowLayout {
-            spacing: _margins
+                        iconSource:         "/InstrumentValueIcons/cheveron-left.svg"
+                        text:               "T.LFT"
+                        font.pointSize:     _fontSize * 0.7
 
-            QGCColumnButton{
-                id:                 autoSeqLow
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _activeVehicle && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
+                        onClicked: {
+                            var targetYaw = -_yawStep * Math.PI / 180
+                            _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,targetYaw,false)
+                        }
+                    }
 
-                iconSource:         "/InstrumentValueIcons/dots-horizontal-double.svg"
-                text:               "Low"
-                font.pointSize:     _fontSize * 0.7
+                    QGCColumnButton{
+                        id:                 stepForward
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
 
-                onClicked: {
-                    if (_autoSeqAltIndex > 0) {
-                        _autoSeqAltIndex--
-                        _autoSeqAltValue = autoSeqAltArray[_autoSeqAltIndex]
+                        iconSource:         "/InstrumentValueIcons/arrow-thick-up.svg"
+                        text:               "FWD"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            _activeVehicle.setPositionAndVelocityTargetLocalNed(_moveStep,0,0,_velocityStep,0,0,0,false)
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 stepTurnRight
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/cheveron-right.svg"
+                        text:               "T.RGHT"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            var targetYaw = _yawStep * Math.PI / 180
+                            _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,targetYaw,false)
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 stepTargetAlt
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && _distanceAvailable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:          _distanceAvailable ? (_distance >= _treshHoldAlt ? "/InstrumentValueIcons/arrow-thin-down.svg" : "/InstrumentValueIcons/arrow-thin-up.svg") : "/InstrumentValueIcons/pause.svg"
+                        text:               _distanceAvailable ? (_distance >= _treshHoldAlt ? targetAltMin+"M" : targetAltMax+"M") : "NONE"
+                        font.pointSize:     _fontSize * 0.7
+
+                        property real targetAltMin: 3.5
+                        property real targetAltMax: 15.0
+
+                        onClicked: {
+                            if(_activeVehicle && _distanceAvailable) {
+                                var altTarget = 0
+                                if( _distance >= _treshHoldAlt ) { // down
+                                    altTarget = -(_distance - targetAltMin)
+                                    _activeVehicle.sendCommand(1, 178, 1, 3, 0.7, -1, 0, 0, 0, 0)
+                                    _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,altTarget,0,0,-_velocityStep,0,false)
+                                } else { // up
+                                    altTarget = (targetAltMax - _relAltitude )
+                                    _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,altTarget,0,0,_velocityStep,0,false)
+                                }
+                            }
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 stepLeft
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/arrow-thick-left.svg"
+                        text:               "LEFT"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            _activeVehicle.setPositionAndVelocityTargetLocalNed(0,-_moveStep,0,0,-_velocityStep,0,0,false)
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 stepStop
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/pause.svg"
+                        text:               "STOP"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            //_activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,0,0,0,0,0,false)
+                            _activeVehicle.pauseVehicle()
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 stepRight
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/arrow-thick-right.svg"
+                        text:               "RIGHT"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            _activeVehicle.setPositionAndVelocityTargetLocalNed(0,_moveStep,0,0,_velocityStep,0,0,false)
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 stepDown
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && (_distanceAvailable || ((_distance - _moveStep) > _altLimit)) && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/arrow-thin-down.svg"
+                        text:               "DOWN"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            if (isNaN(_distance) || _distance === 0 || (_distance !== 0 && (_distance - _moveStep) > _altLimit)) {
+                                _activeVehicle.setPositionAndVelocityTargetLocalNed(0,0,-_moveStep,0,0,0,0,false)
+                            }
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 stepHalf
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/dots-horizontal-double.svg"
+                        text:               "STEP"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            var index = stepValues.indexOf(_moveStepFact.value);
+                            if (index > 0) {
+                                _moveStepFact.value = stepValues[index - 1];
+                            }
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 stepBack
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/arrow-thick-down.svg"
+                        text:               "BACK"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            _activeVehicle.setPositionAndVelocityTargetLocalNed(-_moveStep,0,0,-_velocityStep,0,0,0,false)
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 stepOne
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _isGuidedEnable && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/dots-horizontal-triple.svg"
+                        text:               "STEP"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            var index = stepValues.indexOf(_moveStepFact.value);
+                            if (index !== -1 && index < stepValues.length - 1) {
+                                _moveStepFact.value = stepValues[index + 1];
+                            }
+                        }
                     }
                 }
-            }
 
-            QGCButton{
-                id:                 autoSequence
-                Layout.fillHeight:  true
-                Layout.fillWidth:   true
-                implicitWidth:      _idealWidth
-                enabled:            _isGuidedEnable && _activeVehicle.flying && _distanceAvailable
-                opacity:            enabled ? 1 : 0.4
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 1
+                    color:  qgcPal.groupBorder
+                }
 
-                Layout.columnSpan:  2
+                RowLayout {
+                    spacing: _margins
 
-                iconSource:         ""/*"/InstrumentValueIcons/play.svg"*/
-                text:               _dropSequenceInProgress ? "시퀀스 정지" : "자동 [" + _autoSeqAltValue.toFixed(1) + "m]"
-                font.pointSize:     _fontSize * 0.7
+                    QGCColumnButton{
+                        id:                 gripperRelease
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        opacity:            enabled ? 1 : 0.4
+                        enabled:            _activeVehicle && (_distanceAvailable && _distance < _treshHoldAlt) && !_dropSequenceInProgress
 
-                onClicked: {
-                    if (_dropSequenceInProgress) {
-                        _activeVehicle.dropSequence.stopDropSequence()
-                    } else {
-                        _activeVehicle.dropSequence.startDropSequence(receivedTagId, _autoSeqAltValue)
+                        iconSource:         "/res/GripperRelease.svg"
+                        text:               "열기"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            _activeVehicle.sendGripperAction(0)
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 gripperGrab
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _activeVehicle && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/res/GripperGrab.svg"
+                        text:               "닫기"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            _activeVehicle.sendGripperAction(1)
+                        }
                     }
                 }
-            }
 
-            QGCColumnButton{
-                id:                 autoSeqHigh
-                implicitWidth:      _idealWidth
-                implicitHeight:     width
-                enabled:            _activeVehicle && !_dropSequenceInProgress
-                opacity:            enabled ? 1 : 0.4
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 1
+                    color:  qgcPal.groupBorder
+                }
 
-                iconSource:         "/InstrumentValueIcons/dots-horizontal-triple.svg"
-                text:               "High"
-                font.pointSize:     _fontSize * 0.7
+                RowLayout {
+                    spacing: _margins
 
-                onClicked: {
-                    if (_autoSeqAltIndex < autoSeqAltArray.length - 1) {
-                        _autoSeqAltIndex++
-                        _autoSeqAltValue = autoSeqAltArray[_autoSeqAltIndex]
+                    QGCColumnButton{
+                        id:                 autoSeqLow
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _activeVehicle && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/dots-horizontal-double.svg"
+                        text:               "Low"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            if (_autoSeqAltIndex > 0) {
+                                _autoSeqAltIndex--
+                                _autoSeqAltValue = autoSeqAltArray[_autoSeqAltIndex]
+                            }
+                        }
+                    }
+
+                    QGCButton{
+                        id:                 autoSequence
+                        Layout.fillHeight:  true
+                        Layout.fillWidth:   true
+                        implicitWidth:      _idealWidth
+                        enabled:            _isGuidedEnable && _activeVehicle.flying && _distanceAvailable
+                        opacity:            enabled ? 1 : 0.4
+
+                        Layout.columnSpan:  2
+
+                        iconSource:         ""/*"/InstrumentValueIcons/play.svg"*/
+                        text:               _dropSequenceInProgress ? "시퀀스 정지" : "자동 [" + _autoSeqAltValue.toFixed(1) + "m]"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            if (_dropSequenceInProgress) {
+                                _activeVehicle.dropSequence.stopDropSequence()
+                            } else {
+                                _activeVehicle.dropSequence.startDropSequence(receivedTagId, _autoSeqAltValue)
+                            }
+                        }
+                    }
+
+                    QGCColumnButton{
+                        id:                 autoSeqHigh
+                        implicitWidth:      _idealWidth
+                        implicitHeight:     width
+                        enabled:            _activeVehicle && !_dropSequenceInProgress
+                        opacity:            enabled ? 1 : 0.4
+
+                        iconSource:         "/InstrumentValueIcons/dots-horizontal-triple.svg"
+                        text:               "High"
+                        font.pointSize:     _fontSize * 0.7
+
+                        onClicked: {
+                            if (_autoSeqAltIndex < autoSeqAltArray.length - 1) {
+                                _autoSeqAltIndex++
+                                _autoSeqAltValue = autoSeqAltArray[_autoSeqAltIndex]
+                            }
+                        }
                     }
                 }
-            }
-        }
-
-        Rectangle {
-            Layout.fillWidth: true
-            height: 1
-            color:  qgcPal.groupBorder
-        }
-
-        ColumnLayout {
-            spacing: _margins / 2
-
-            LabelledLabel {
-                Layout.fillWidth:   true
-                label:              "시퀀스 진행률"
-                labelText:          _activeVehicle && _activeVehicle.dropSequence ?
-                                    (_activeVehicle.dropSequence.dropSequenceProgress * 100).toFixed(0) + " %" : "0 %"
-            }
-            LabelledLabel {
-                Layout.fillWidth:   true
-                label:              "시퀀스 상태"
-                labelText:          _activeVehicle && _activeVehicle.dropSequence ?
-                                    _activeVehicle.dropSequence.dropSequenceStatus : "준비 안됨"
-            }
-            LabelledLabel {
-                Layout.fillWidth:   true
-                label:              "자동 배송 높이"
-                labelText:          _activeVehicle ? _autoSeqAltValue.toFixed(1) + " m" : "no value"
-            }
-            LabelledLabel {
-                Layout.fillWidth:   true
-                label:              "이동 스텝 단위"
-                labelText:          _activeVehicle ? _moveStep.toFixed(1) + " m" : "no value"
-            }
-            LabelledLabel {
-                Layout.fillWidth:   true
-                label:              "상대 고도"
-                labelText:          _activeVehicle ? _activeVehicle.altitudeRelative.valueString + " m" : "no value"
-            }
-            LabelledLabel {
-                Layout.fillWidth:   true
-                label:              "라이다 고도계"
-                labelText:          _activeVehicle ? _distance.toFixed(1) + " m" : "no value"
             }
         }
     }

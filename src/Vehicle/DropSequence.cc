@@ -136,28 +136,28 @@ void DropSequence::handleAckStatus(uint8_t ackProgress, uint8_t sequenceIndex)
     // Update status based on sequence index
     switch (sequenceIndex) {
         case 1:
-            _dropSequenceStatus = tr("S1 - Sequence Start");
+            _dropSequenceStatus = tr("절차 시작");
             break;
         case 2:
-            _dropSequenceStatus = tr("S2 - Descending");
+            _dropSequenceStatus = tr("기체 하강");
             break;
         case 3:
-            _dropSequenceStatus = tr("S3 - Opening Bay");
+            _dropSequenceStatus = tr("베이 열림");
             break;
         case 4:
-            _dropSequenceStatus = tr("S4 - Dropping Cargo");
+            _dropSequenceStatus = tr("카고 드롭");
             break;
         case 5:
-            _dropSequenceStatus = tr("S5 - Closing Bay");
+            _dropSequenceStatus = tr("베이 닫힘");
             break;
         case 6:
-            _dropSequenceStatus = tr("S6 - Ascending");
+            _dropSequenceStatus = tr("기체 상승");
             break;
         case 7:
-            _dropSequenceStatus = tr("S7 - Changing Mode");
+            _dropSequenceStatus = tr("모드 변경");
             break;
         case 99:
-            _dropSequenceStatus = tr("Complete");
+            _dropSequenceStatus = tr("완료");
             _dropSequenceInProgress = false;
             qgcApp()->showAppMessage(tr("드롭 시퀀스가 완료되었습니다."));
             break;
