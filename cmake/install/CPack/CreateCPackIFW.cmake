@@ -112,3 +112,28 @@ include(CPackIFWConfigureFile)
 # cpack_ifw_configure_file(<input> <output>)
 
 include(CPack)
+
+# ----------------------------------------------------------------------------
+# Execute CPack to Generate IFW Installer
+# ----------------------------------------------------------------------------
+message(STATUS "QGC: Generating IFW installer...")
+
+# Set output installer name
+if(CMAKE_CROSSCOMPILING)
+    set(QGC_IFW_OUTPUT "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}-installer-${CMAKE_HOST_SYSTEM_PROCESSOR}-${CMAKE_SYSTEM_PROCESSOR}.exe")
+else()
+    set(QGC_IFW_OUTPUT "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}-installer-${CMAKE_SYSTEM_PROCESSOR}.exe")
+endif()
+
+execute_process(
+    COMMAND ${CMAKE_CPACK_COMMAND} -G IFW -C Release
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMAND_ECHO STDOUT
+    RESULT_VARIABLE CPACK_RESULT
+)
+
+if(NOT CPACK_RESULT EQUAL 0)
+    message(FATAL_ERROR "QGC: CPack IFW installer generation failed")
+endif()
+
+message(STATUS "QGC: IFW installer created: ${QGC_IFW_OUTPUT}")
