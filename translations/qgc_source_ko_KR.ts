@@ -9999,9 +9999,9 @@ Click Ok to start the auto-tuning process.
         <translation>일반</translation>
     </message>
     <message>
-        <location filename="../src/VehicleSetup/JoystickConfig.qml" line="72"/>
-        <source>Button Assigment</source>
-        <translation>버튼 할당</translation>
+      <location filename="../src/Vehicle/VehicleSetup/JoystickConfig.qml" line="83"/>
+      <source>Button Assignment</source>
+      <translation>버튼 할당</translation>
     </message>
     <message>
         <location filename="../src/VehicleSetup/JoystickConfig.qml" line="75"/>
