@@ -114,9 +114,9 @@ include(CPackIFWConfigureFile)
 include(CPack)
 
 # ----------------------------------------------------------------------------
-# Execute CPack to Generate IFW Installer
+# Generate CPack Configuration File for IFW
 # ----------------------------------------------------------------------------
-message(STATUS "QGC: Generating IFW installer...")
+message(STATUS "QGC: Creating IFW CPack configuration...")
 
 # Set output installer name
 if(CMAKE_CROSSCOMPILING)
@@ -125,15 +125,39 @@ else()
     set(QGC_IFW_OUTPUT "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}-installer-${CMAKE_SYSTEM_PROCESSOR}.exe")
 endif()
 
+# Create a custom CPack config file for IFW
+set(CPACK_CONFIG_FILE "${CMAKE_BINARY_DIR}/CPackIFWConfig.cmake")
+file(WRITE "${CPACK_CONFIG_FILE}" "
+# Generated CPack IFW Configuration
+set(CPACK_PACKAGE_NAME \"${CMAKE_PROJECT_NAME}\")
+set(CPACK_PACKAGE_VERSION \"${CMAKE_PROJECT_VERSION}\")
+set(CPACK_PACKAGE_VENDOR \"${QGC_ORG_NAME}\")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY \"${CMAKE_PROJECT_NAME}\")
+set(CPACK_RESOURCE_FILE_LICENSE \"${CPACK_RESOURCE_FILE_LICENSE}\")
+set(CPACK_RESOURCE_FILE_README \"${CPACK_RESOURCE_FILE_README}\")
+set(CPACK_GENERATOR \"IFW\")
+set(CPACK_INSTALL_PREFIX \"${CMAKE_INSTALL_PREFIX}\")
+
+# IFW specific settings
+set(CPACK_IFW_PACKAGE_TITLE \"${QGC_INSTALLER_NAME}\")
+set(CPACK_IFW_PACKAGE_PUBLISHER \"${QGC_ORG_NAME}\")
+set(CPACK_IFW_PRODUCT_URL \"${CMAKE_PROJECT_HOMEPAGE_URL}\")
+set(CPACK_IFW_PACKAGE_WIZARD_STYLE \"Modern\")
+set(CPACK_IFW_TARGET_DIRECTORY \"@HomeDir@\\\\${CMAKE_PROJECT_NAME}\")
+set(CPACK_IFW_ADMIN_TARGET_DIRECTORY \"@HomeDir@\\\\${CMAKE_PROJECT_NAME}\")
+set(CPACK_IFW_VERBOSE ON)
+")
+
+message(STATUS "QGC: Executing CPack to generate IFW installer...")
 execute_process(
-    COMMAND ${CMAKE_CPACK_COMMAND} -G IFW -C Release
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    COMMAND \"${CMAKE_CPACK_COMMAND}\" --config \"${CPACK_CONFIG_FILE}\" -C Release
+    WORKING_DIRECTORY \"${CMAKE_BINARY_DIR}\"
     COMMAND_ECHO STDOUT
     RESULT_VARIABLE CPACK_RESULT
 )
 
 if(NOT CPACK_RESULT EQUAL 0)
-    message(FATAL_ERROR "QGC: CPack IFW installer generation failed")
+    message(FATAL_ERROR \"QGC: CPack IFW installer generation failed\")
 endif()
 
-message(STATUS "QGC: IFW installer created: ${QGC_IFW_OUTPUT}")
+message(STATUS \"QGC: IFW installer should be created at: ${QGC_IFW_OUTPUT}\")
