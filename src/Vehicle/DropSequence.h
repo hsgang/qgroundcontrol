@@ -21,6 +21,7 @@ public:
 
     Q_INVOKABLE void startDropSequence(int tagId, float targetAltitude);
     Q_INVOKABLE void stopDropSequence();
+    Q_INVOKABLE void testDropSequence(int tagId, float targetAltitude);
 
     static void ackHandler      (void* resultHandlerData,   int compId, const mavlink_command_ack_t& ack, Vehicle::MavCmdResultFailureCode_t failureCode);
     static void progressHandler (void* progressHandlerData, int compId, const mavlink_command_ack_t& ack);
@@ -31,7 +32,7 @@ public:
     int       dropSequenceIndex      () { return _dropSequenceIndex; }
 
 public slots:
-    void sendMavlinkRequest();
+    void sendMavlinkRequest(int autoAction);
 
 signals:
     void dropSequenceChanged ();

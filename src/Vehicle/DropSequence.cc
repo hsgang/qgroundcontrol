@@ -16,7 +16,7 @@ void DropSequence::startDropSequence(int tagId, float targetAltitude)
     _tagId = tagId;
     _targetAltitude = targetAltitude;
 
-    sendMavlinkRequest();
+    sendMavlinkRequest(1);
 
     _dropSequenceInProgress = true;
     _dropSequenceStatus = tr("Starting");
@@ -32,28 +32,26 @@ void DropSequence::stopDropSequence()
         return;
     }
 
-    // Send stop command (autoAction = 2)
-    Vehicle::MavCmdAckHandlerInfo_t handlerInfo = {};
-    handlerInfo.resultHandler       = ackHandler;
-    handlerInfo.resultHandlerData   = this;
-    handlerInfo.progressHandler     = progressHandler;
-    handlerInfo.progressHandlerData = this;
-
-    _vehicle->sendMavCommandWithHandler(
-            &handlerInfo,
-            1,                         // MAV_COMP_ID_AUTOPILOT1 (changed from 191)
-            (MAV_CMD)31010,            // Custom command
-            1,                         // param1: component ID
-            0,                         // param2: unused
-            _tagId,                    // param3: tag ID
-            2,                         // param4: autoAction (2 = stop)
-            _targetAltitude,           // param5: target altitude
-            0,                         // param6: unused
-            0);                        // param7: unused
+    sendMavlinkRequest(2);
 
     _dropSequenceInProgress = false;
     _dropSequenceStatus = tr("Stopped");
     _dropSequenceIndex = 0;
+
+    emit dropSequenceChanged();
+}
+
+
+//-----------------------------------------------------------------------------
+void DropSequence::testDropSequence(int tagId, float targetAltitude)
+{
+        _tagId = tagId;
+    _targetAltitude = targetAltitude;
+
+    sendMavlinkRequest(99);
+
+    _dropSequenceInProgress = true;
+    _dropSequenceStatus = tr("Starting");
 
     emit dropSequenceChanged();
 }
@@ -195,7 +193,7 @@ void DropSequence::handleAckError(uint8_t ackError)
 
 
 //-----------------------------------------------------------------------------
-void DropSequence::sendMavlinkRequest()
+void DropSequence::sendMavlinkRequest(int autoAction)
 {
     Vehicle::MavCmdAckHandlerInfo_t handlerInfo = {};
     handlerInfo.resultHandler       = ackHandler;
@@ -210,7 +208,7 @@ void DropSequence::sendMavlinkRequest()
             1,                         // param1: component ID
             0,                         // param2: unused
             _tagId,                    // param3: tag ID
-            1,                         // param4: autoAction (1 = start)
+            autoAction,                // param4: autoAction (1 = start, 2 = stop)
             _targetAltitude,           // param5: target altitude
             0,                         // param6: unused
             0);                        // param7: unused
