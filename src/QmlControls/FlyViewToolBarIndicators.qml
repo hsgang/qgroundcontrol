@@ -36,6 +36,7 @@ Rectangle {
         Repeater {
             id:     appRepeater
             model:  QGroundControl.corePlugin.toolBarIndicators
+
             Loader {
                 anchors.top:        parent.top
                 anchors.bottom:     parent.bottom
