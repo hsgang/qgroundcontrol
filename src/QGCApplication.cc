@@ -94,12 +94,16 @@ QGCApplication::QGCApplication(int &argc, char *argv[], const QGCCommandLinePars
 #ifdef QGC_DAILY_BUILD
         // This gives daily builds their own separate settings space. Allowing you to use daily and stable builds
         // side by side without daily screwing up your stable settings.
-        applicationName = "Mission Navigator";//QStringLiteral("%1 AMP").arg(QGC_APPLICATION_NAME);
+        applicationName = "AMC";//QStringLiteral("%1 AMP").arg(QGC_APPLICATION_NAME);
 #else
-        applicationName = QGC_APP_NAME;
+        applicationName = "AMC";
 #endif
     }
     setApplicationName(applicationName);
+
+    // Set display name for window title (can be different from applicationName)
+    _displayName = "AMC - AMP Mission Control";
+
     setOrganizationName(QGC_ORG_NAME);
     setOrganizationDomain(QGC_ORG_DOMAIN);
     setApplicationVersion(QString(QGC_APP_VERSION_STR));

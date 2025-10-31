@@ -27,6 +27,7 @@ import QGroundControl.AnalyzeView
 /// All properties defined here are visible to all QML pages.
 ApplicationWindow {
     id:             mainWindow
+    title:          QGroundControl.displayName
     visible:        true
     flags:          Qt.Window | (ScreenTools.isMobile ? (Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint) : 0)
     topPadding:     ScreenTools.isMobile ? 0 : undefined

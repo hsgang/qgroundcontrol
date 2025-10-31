@@ -124,6 +124,9 @@ public slots:
 
     QGCImageProvider *qgcImageProvider();
 
+    /// Get the display name for window title (can be different from applicationName)
+    QString displayName() const { return _displayName; }
+
 private slots:
     /// Called when the delay timer fires to show the missing parameters warning
     void _missingParamsDisplay();
@@ -167,6 +170,7 @@ private:
     bool _videoManagerInitialized = false;
 
     QList<QPair<QString /* title */, QString /* message */>> _delayedAppMessages;
+    QString _displayName;   ///< Display name for window title (separate from applicationName)
 
     class CompressedSignalList
     {

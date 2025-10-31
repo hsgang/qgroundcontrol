@@ -9,12 +9,12 @@ include(CMakeDependentOption)
 # Application Metadata
 # ============================================================================
 
-set(QGC_APP_NAME "MissionNavigator" CACHE STRING "Application name")
+set(QGC_APP_NAME "AMPMissionControl" CACHE STRING "Application name")
 set(QGC_APP_COPYRIGHT "Copyright (c) 2025 QGroundControl. All rights reserved." CACHE STRING "Copyright notice")
 set(QGC_APP_DESCRIPTION "Open Source Ground Control App" CACHE STRING "Application description")
-set(QGC_ORG_NAME "MissionNavigator" CACHE STRING "Organization name")
-set(QGC_ORG_DOMAIN "MissionNavigator.com" CACHE STRING "Organization domain")
-set(QGC_PACKAGE_NAME "org.mavlink.MissionNavigator" CACHE STRING "Package identifier")
+set(QGC_ORG_NAME "AMPMissionControl" CACHE STRING "Organization name")
+set(QGC_ORG_DOMAIN "AMPMissionControl.com" CACHE STRING "Organization domain")
+set(QGC_PACKAGE_NAME "org.mavlink.AMPMissionControl" CACHE STRING "Package identifier")
 
 # Settings version - increment to clear stored settings on next boot after incompatible changes
 set(QGC_SETTINGS_VERSION "9" CACHE STRING "Settings schema version")

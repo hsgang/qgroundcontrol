@@ -27,7 +27,7 @@ message(Qt version $$[QT_VERSION])
 
 include(QGCCommon.pri)
 
-TARGET   = MissionNavigator
+TARGET   = AMPMissionControl
 TEMPLATE = app
 QGCROOT  = $$PWD
 
@@ -60,10 +60,10 @@ WindowsBuild {
 # Branding
 #
 
-QGC_APP_NAME        = "MissionNavigator"
-QGC_ORG_NAME        = "MissionNavigator.org"
-QGC_ORG_DOMAIN      = "org.MissionNavigator"
-QGC_APP_DESCRIPTION = "Mission Navigator"
+QGC_APP_NAME        = "AMPMissionControl"
+QGC_ORG_NAME        = "AMPMissionControl.org"
+QGC_ORG_DOMAIN      = "org.AMPMissionControl"
+QGC_APP_DESCRIPTION = "AMPMissionControl"
 QGC_APP_COPYRIGHT   = "Copyright (C) 2024 QGroundControl Development Team. All rights reserved."
 
 WindowsBuild {
@@ -334,9 +334,9 @@ CustomBuild {
         RESOURCES += $$PWD/resources/InstrumentValueIcons/InstrumentValueIcons.qrc
     }
 } else {
-    DEFINES += QGC_APP_NAME=\"\\\"Mission Navigator\\\"\"
-    DEFINES += QGC_ORG_NAME=\"\\\"MissionNavigator.org\\\"\"
-    DEFINES += QGC_ORG_DOMAIN=\"\\\"org.MissionNavigator\\\"\"
+    DEFINES += QGC_APP_NAME=\"\\\"AMPMissionControl\\\"\"
+    DEFINES += QGC_ORG_NAME=\"\\\"AMPMissionControl.org\\\"\"
+    DEFINES += QGC_ORG_DOMAIN=\"\\\"org.AMPMissionControl\\\"\"
     RESOURCES += \
         $$PWD/qgroundcontrol.qrc \
         $$PWD/qgcresources.qrc \

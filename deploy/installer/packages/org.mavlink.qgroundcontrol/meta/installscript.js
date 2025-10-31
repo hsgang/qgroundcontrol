@@ -12,7 +12,7 @@ Component.prototype.createOperations = function()
     }
 
     if (systemInfo.productType === "windows") {
-        component.addOperation("CreateShortcut", "@TargetDir@/bin/missionnavigator.exe", "@StartMenuDir@/MissionNavigator.lnk");
-        component.addOperation("CreateShortcut", "@TargetDir@/bin/missionnavigator.exe", "@DesktopDir@/MissionNavigator.lnk");
+        component.addOperation("CreateShortcut", "@TargetDir@/bin/AMC.exe", "@StartMenuDir@/AMC.lnk");
+        component.addOperation("CreateShortcut", "@TargetDir@/bin/AMC.exe", "@DesktopDir@/AMC.lnk");
     }
 }

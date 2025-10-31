@@ -205,7 +205,7 @@ endif()
 set_target_properties(${CMAKE_PROJECT_NAME}
     PROPERTIES
         QT_RESOURCE_PREFIX "/qml"
-        OUTPUT_NAME ${CMAKE_PROJECT_NAME}
+        OUTPUT_NAME "AMC"
 )
 
 # ----------------------------------------------------------------------------

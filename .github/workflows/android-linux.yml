@@ -39,7 +39,7 @@ jobs:
         shell: bash
 
     env:
-      PACKAGE: MissionNavigator
+      PACKAGE: AMC
       QT_VERSION: ${{ matrix.qt_version }}
       QT_ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/deploy/android/android_release.keystore
       QT_ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}

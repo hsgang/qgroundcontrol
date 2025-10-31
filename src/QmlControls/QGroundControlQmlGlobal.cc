@@ -348,6 +348,11 @@ QString QGroundControlQmlGlobal::appName()
     return QCoreApplication::applicationName();
 }
 
+QString QGroundControlQmlGlobal::displayName()
+{
+    return qgcApp()->displayName();
+}
+
 void QGroundControlQmlGlobal::deleteAllSettingsNextBoot()
 {
     QGCApplication::deleteAllSettingsNextBoot();

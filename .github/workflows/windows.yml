@@ -35,19 +35,19 @@ jobs:
             host: windows
             arch: win64_msvc2022_64
             build_type: Release
-            package: MissionNavigator-installer-AMD64
+            package: AMC-installer
 
           # - os: windows-11-arm
           #   host: windows_arm64
           #   arch: win64_msvc2022_arm64
           #   build_type: Release
-          #   package: MissionNavigator-installer-ARM64
+          #   package: AMPMissionControl-installer-ARM64
 
           # - os: windows-2022
           #   host: windows
           #   arch: win64_msvc2022_arm64_cross_compiled
           #   build_type: Release
-          #   package: MissionNavigator-installer-AMD64-ARM64
+          #   package: AMPMissionControl-installer-AMD64-ARM64
     defaults:
       run:
         shell: cmd
@@ -118,7 +118,7 @@ jobs:
       - name: Verify Executable
         if: matrix.build_type == 'Release' && matrix.arch != 'win64_msvc2022_arm64_cross_compiled'
         working-directory: ${{ runner.temp }}\build\${{ matrix.build_type }}
-        run: MissionNavigator.exe --simple-boot-test
+        run: AMC.exe --simple-boot-test
 
       - name: Create Installer
         working-directory: ${{ runner.temp }}\build

@@ -78,7 +78,7 @@ set(CONFIG_XML_CONTENT "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
     <Title>${CMAKE_PROJECT_NAME} Installer</Title>
     <Publisher>${QGC_ORG_NAME}</Publisher>
     <StartMenuDir>${CMAKE_PROJECT_NAME}</StartMenuDir>
-    <TargetDir>@ApplicationsDir@/MissionNavigator</TargetDir>
+    <TargetDir>@ApplicationsDir@/AMC</TargetDir>
     <WizardStyle>Modern</WizardStyle>")
 
 # Add icon if available
