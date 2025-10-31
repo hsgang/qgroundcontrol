@@ -58,17 +58,17 @@ ToolIndicatorPage {
                         }
                     }
 
-                    LabelledLabel {
-                        Layout.fillWidth: true
-                        label:      qsTr("Total Errors")
-                        labelText:  {
-                            let totalErrors = 0
-                            for (let i = 0; i < _escs.count; i++) {
-                                totalErrors += _escs.get(i).errorCount.rawValue
-                            }
-                            return totalErrors.toString()
-                        }
-                    }
+                    // LabelledLabel {
+                    //     Layout.fillWidth: true
+                    //     label:      qsTr("Total Errors")
+                    //     labelText:  {
+                    //         let totalErrors = 0
+                    //         for (let i = 0; i < _escs.count; i++) {
+                    //             totalErrors += _escs.get(i).errorCount.rawValue
+                    //         }
+                    //         return totalErrors.toString()
+                    //     }
+                    // }
                 }
             }
 
@@ -107,10 +107,10 @@ ToolIndicatorPage {
                             fact:       object.current
                         }
 
-                        LabelledFactLabel {
-                            label:      qsTr("Errors")
-                            fact:       object.errorCount
-                        }
+                        // LabelledFactLabel {
+                        //     label:      qsTr("Errors")
+                        //     fact:       object.errorCount
+                        // }
                     }
                 }
             }

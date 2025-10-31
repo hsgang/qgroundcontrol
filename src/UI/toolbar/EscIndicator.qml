@@ -63,7 +63,7 @@ Item {
     }
 
     function getEscStatusColor() {
-        return _escHealthy ? qgcPal.colorGreen : qgcPal.colorRed
+        return _escHealthy ? qgcPal.text : qgcPal.colorRed
     }
 
     QGCPalette { id: qgcPal }

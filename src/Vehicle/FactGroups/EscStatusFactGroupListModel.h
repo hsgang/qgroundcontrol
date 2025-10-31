@@ -59,6 +59,7 @@ public:
 private:
     void _handleEscInfo(Vehicle *vehicle, const mavlink_message_t &message);
     void _handleEscStatus(Vehicle *vehicle, const mavlink_message_t &message);
+    void _handleEscTelemetry1to4(Vehicle *vehicle, const mavlink_message_t &message);
 
     Fact _rpmFact =             Fact(0, QStringLiteral("rpm"),              FactMetaData::valueTypeInt32);
     Fact _currentFact =         Fact(0, QStringLiteral("current"),          FactMetaData::valueTypeFloat);
@@ -69,4 +70,11 @@ private:
     Fact _failureFlagsFact =    Fact(0, QStringLiteral("failureFlags"),     FactMetaData::valueTypeUint16);
     Fact _errorCountFact =      Fact(0, QStringLiteral("errorCount"),       FactMetaData::valueTypeUint32);
     Fact _temperatureFact =     Fact(0, QStringLiteral("temperature"),      FactMetaData::valueTypeFloat);
+
+    struct EscTelemetryTracker {
+        uint32_t lastCount = 0;
+        qint64 lastUpdateTime = 0;  // Milliseconds since epoch
+    };
+    EscTelemetryTracker _escTrackers[4];
+    static constexpr qint64 ESC_TIMEOUT_MS = 1000;  // 1 seconds timeout
 };
