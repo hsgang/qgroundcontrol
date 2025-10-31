@@ -35,7 +35,7 @@ jobs:
             host: windows
             arch: win64_msvc2022_64
             build_type: Release
-            package: AMC-installer-AMD64
+            package: AMPMissionControl-installer-AMD64
 
           # - os: windows-11-arm
           #   host: windows_arm64
