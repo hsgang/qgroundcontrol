@@ -73,6 +73,7 @@ Rectangle {
             property string _armedText:         qsTr("Armed")
             property string _flyingText:        qsTr("Flying")
             property string _landingText:       qsTr("Landing")
+            property string _parametersSynchronizingText: qsTr("Synchronizing")
 
             function mainStatusText() {
                 var statusText

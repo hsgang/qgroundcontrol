@@ -11253,8 +11253,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="41"/>
-        <source>Parameters Synchronizing</source>
-        <translation>파라미터 동기화중</translation>
+        <source>Synchronizing</source>
+        <translation>동기화중</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/MainStatusIndicator.qml" line="136"/>
