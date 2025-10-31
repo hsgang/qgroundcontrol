@@ -79,6 +79,7 @@ Item {
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
+            anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
             source:             "/qmlimages/EscIndicator.svg"
             fillMode:           Image.PreserveAspectFit
             sourceSize.height:  height

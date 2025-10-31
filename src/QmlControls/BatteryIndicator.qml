@@ -355,6 +355,7 @@ Item {
                 height:             parent.height
                 anchors.top:        parent.top
                 anchors.bottom:     parent.bottom
+                anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
                 width:              height
                 sourceSize.width:   width
                 source:             getBatterySvgSource()

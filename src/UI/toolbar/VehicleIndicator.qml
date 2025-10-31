@@ -37,6 +37,7 @@ Item {
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
+            anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
             source:             "/qmlimages/vehicleQuadRotor.svg"
             color:              _activeVehicle.readyToFlyAvailable && _activeVehicle.readyToFly && !_communicationLost ? qgcPal.windowTransparentText : qgcPal.colorGrey
             fillMode:           Image.PreserveAspectFit

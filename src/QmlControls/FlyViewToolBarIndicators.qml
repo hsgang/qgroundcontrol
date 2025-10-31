@@ -31,7 +31,7 @@ Rectangle {
         anchors.left:       parent.left
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
-        spacing:            ScreenTools.defaultFontPixelWidth
+        spacing:            ScreenTools.defaultFontPixelWidth * 1.5
 
         Repeater {
             id:     appRepeater

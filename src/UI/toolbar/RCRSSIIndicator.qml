@@ -53,6 +53,7 @@ Item {
         Rectangle{
             anchors.top:    parent.top
             anchors.bottom: parent.bottom
+            anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
             height:         parent.height
             width:          height
             color:          "transparent"

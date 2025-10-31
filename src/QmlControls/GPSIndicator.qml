@@ -120,6 +120,7 @@ Item {
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
+            anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
             source:             "/qmlimages/Gps.svg"
             fillMode:           Image.PreserveAspectFit
             opacity:            (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? 1 : 0.5

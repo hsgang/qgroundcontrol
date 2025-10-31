@@ -20000,12 +20000,12 @@ Confirm change?</source>
     <message>
         <location filename="../src/FlightDisplay/VehicleWarnings.qml" line="37"/>
         <source>No GPS Lock for Vehicle</source>
-        <translation>기체의 GPS 위치가 고정되지 않았습니다</translation>
+        <translation>GNSS 수신 정보 없음</translation>
     </message>
     <message>
         <location filename="../src/FlightDisplay/VehicleWarnings.qml" line="56"/>
         <source>The vehicle has failed a pre-arm check. In order to arm the vehicle, resolve the failure.</source>
-        <translation>기체가 시동 전 점검에 실패하였습니다. 기체를 시동 걸기 위해 문제를 해결하십시오.</translation>
+        <translation>기체 점검 필요</translation>
     </message>
 </context>
 <context>

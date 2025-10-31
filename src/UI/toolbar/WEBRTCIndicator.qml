@@ -72,6 +72,7 @@ Item {
             width:              height
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
+            anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
             source:             "/InstrumentValueIcons/network-transmit-receive.svg"
             color:              qgcPal.text
             fillMode:           Image.PreserveAspectFit
@@ -92,7 +93,7 @@ Item {
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
                 text:           qsTr("%1 Mbps").arg(_videoRateMbps)
-                width:          ScreenTools.smallFontPixelWidth * 10
+                width:          ScreenTools.smallFontPixelWidth * 9
             }
         }
     }

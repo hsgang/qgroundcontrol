@@ -53,6 +53,7 @@ Item {
         Column {
             anchors.top:    parent.top
             anchors.bottom: parent.bottom
+            anchors.margins:    ScreenTools.defaultFontPixelHeight / 4
             spacing:        0
 
             QGCColoredImage {
@@ -64,7 +65,6 @@ Item {
                 fillMode:                Image.PreserveAspectFit
                 sourceSize.height:       height
                 color:                   qgcPal.windowTransparentText
-
             }
 
             QGCLabel {

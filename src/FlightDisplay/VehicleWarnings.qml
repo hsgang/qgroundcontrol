@@ -17,7 +17,7 @@ Rectangle {
     anchors.margins:    ScreenTools.defaultFontPixelHeight
     height:             warningsCol.height
     width:              warningsCol.width
-    color:              Qt.rgba(1, 1, 1, 0.5)
+    color:              Qt.rgba(qgcPal.colorOrange.r, qgcPal.colorOrange.g, qgcPal.colorOrange.b, 0.7)//Qt.rgba(1, 1, 1, 0.5)
     radius:             ScreenTools.defaultFontPixelWidth / 2
     visible:            _noGPSLockVisible || _prearmErrorVisible
 
@@ -27,7 +27,7 @@ Rectangle {
 
     Column {
         id:         warningsCol
-        spacing:    ScreenTools.defaultFontPixelHeight
+        spacing:    ScreenTools.defaultFontPixelHeight / 2
 
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
