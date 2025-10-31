@@ -8,7 +8,7 @@ import android.util.Log;
  */
 public class QGCLogger {
     // Determine if the build is a debug build
-    private static final boolean DEBUG = BuildConfig.DEBUG;
+    private static final boolean DEBUG = false;
 
     /**
      * Logs a debug message.
