@@ -11,6 +11,7 @@ TextField {
     color:              qgcPal.text //textFieldText
     selectionColor:     qgcPal.text //textFieldText
     selectedTextColor:  qgcPal.window //textField
+    cursorDelegate:     cursorComponent
     activeFocusOnPress: true
     antialiasing:       true
     font.pointSize:     ScreenTools.defaultFontPointSize
@@ -41,6 +42,21 @@ TextField {
     onActiveFocusChanged: checkActiveFocus()
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
+
+    Component {
+        id: cursorComponent
+        Rectangle {
+            width: 2
+            color: qgcPal.text
+
+            SequentialAnimation on opacity {
+                loops: Animation.Infinite
+                running: control.activeFocus
+                PropertyAnimation { to: 1; duration: 500 }
+                PropertyAnimation { to: 0; duration: 500 }
+            }
+        }
+    }
 
     onEditingFinished: {
         if (ScreenTools.isMobile) {
@@ -87,7 +103,7 @@ TextField {
         border.width:   control.validationError ? 2 : (qgcPal.globalTheme === QGCPalette.Light ? 1 : 0)
         border.color:   control.validationError ? qgcPal.colorRed : qgcPal.buttonBorder
         radius:         ScreenTools.buttonBorderRadius
-        color:          "transparent"//qgcPal.window
+        color:          "transparent"
         implicitWidth:  ScreenTools.implicitTextFieldWidth
         implicitHeight: ScreenTools.implicitTextFieldHeight
 
