@@ -1,5 +1,9 @@
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
+        WebRTCConfiguration.cc
+        WebRTCConfiguration.h
+        WebRTCWorker.cc
+        WebRTCWorker.h
         WebRTCLink.cc
         WebRTCLink.h
         SignalingServerManager.cc
@@ -25,7 +29,7 @@ if(ANDROID)
   CPMAddPackage(
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
-    GIT_TAG v0.23.1
+    GIT_TAG v0.23.2
     OPTIONS ${LIBDATACHANNEL_OPTIONS}
     PATCH_COMMAND ${CMAKE_COMMAND} -E echo "include_directories(${OPENSSL_INCLUDE_DIR})" >> ${CMAKE_CURRENT_BINARY_DIR}/cpm_modules/libdatachannel/deps/libsrtp/CMakeLists.txt
   )
@@ -33,7 +37,7 @@ else()
   CPMAddPackage(
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
-    GIT_TAG v0.23.1
+    GIT_TAG v0.23.2
     GIT_SHALLOW TRUE
     OPTIONS ${LIBDATACHANNEL_OPTIONS}
   )
