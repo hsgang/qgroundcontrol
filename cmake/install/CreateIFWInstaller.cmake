@@ -76,8 +76,9 @@ set(CONFIG_XML_CONTENT "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
     <Name>${CMAKE_PROJECT_NAME}</Name>
     <Version>1.0.0</Version>
     <Title>${CMAKE_PROJECT_NAME} Installer</Title>
-    <Publisher>${QGC_ORG_NAME}</Publisher>
+    <Publisher>AMP</Publisher>
     <StartMenuDir>${CMAKE_PROJECT_NAME}</StartMenuDir>
+    <MaintenanceToolName>AMC Maintenance Tool</MaintenanceToolName>
     <TargetDir>@ApplicationsDir@/AMC</TargetDir>
     <WizardStyle>Modern</WizardStyle>")
 
@@ -104,7 +105,7 @@ file(WRITE "${IFW_CONFIG_DIR}/config.xml" "${CONFIG_XML_CONTENT}")
 file(WRITE "${IFW_PACKAGE_DIR}/meta/package.xml" "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <Package>
     <DisplayName>${CMAKE_PROJECT_NAME}</DisplayName>
-    <Description>${CMAKE_PROJECT_NAME} Ground Control Station</Description>
+    <Description>${CMAKE_PROJECT_NAME} Ground Control Software</Description>
     <Version>${CMAKE_PROJECT_VERSION}</Version>
     <ReleaseDate>${QGC_BUILD_DATE}</ReleaseDate>
     <Default>true</Default>
@@ -114,12 +115,28 @@ file(WRITE "${IFW_PACKAGE_DIR}/meta/package.xml" "<?xml version=\"1.0\" encoding
 ")
 
 # ----------------------------------------------------------------------------
-# Copy installscript.js if exists
+# Generate installscript.js
 # ----------------------------------------------------------------------------
-set(INSTALL_SCRIPT_SRC "${CMAKE_SOURCE_DIR}/deploy/installer/packages/org.mavlink.qgroundcontrol/meta/installscript.js")
-if(EXISTS "${INSTALL_SCRIPT_SRC}")
-    file(COPY "${INSTALL_SCRIPT_SRC}" DESTINATION "${IFW_PACKAGE_DIR}/meta/")
-endif()
+file(WRITE "${IFW_PACKAGE_DIR}/meta/installscript.js" "function Component()
+{
+
+}
+
+Component.prototype.createOperations = function()
+{
+    try {
+        component.createOperations();
+    } catch (e) {
+        console.log(e);
+    }
+
+    if (systemInfo.productType === \"windows\") {
+        component.addOperation(\"CreateShortcut\", \"@TargetDir@/bin/AMC.exe\", \"@StartMenuDir@/AMC.lnk\");
+        component.addOperation(\"CreateShortcut\", \"@TargetDir@/bin/AMC.exe\", \"@DesktopDir@/AMC.lnk\");
+        component.addOperation(\"CreateShortcut\", \"@TargetDir@/maintenancetool.exe\", \"@StartMenuDir@/AMC Maintenance Tool.lnk\");
+    }
+}
+")
 
 # ----------------------------------------------------------------------------
 # Copy installed files to package data directory
