@@ -11,6 +11,8 @@
 
 #include <QtCore/QList>
 #include <QtCore/QLoggingCategory>
+#include <QtCore/QMutex>
+#include <QtCore/QMutexLocker>
 #include <QtCore/QStringList>
 #include <QtQmlIntegration/QtQmlIntegration>
 
@@ -102,8 +104,8 @@ public:
     Q_INVOKABLE LogReplayLink *startLogReplay(const QString &logFile);
 
     Q_INVOKABLE void sendWebRTCCustomMessage(const QString &message);
-
-    QList<SharedLinkInterfacePtr> links() { return _rgLinks; }
+    
+    QList<SharedLinkInterfacePtr> links();
     QStringList linkTypeStrings() const;
     bool mavlinkSupportForwardingEnabled() const { return _mavlinkSupportForwardingEnabled; }
 
@@ -140,7 +142,7 @@ public:
     /// by using this method to get access to the shared pointer.
     SharedLinkInterfacePtr sharedLinkInterfacePointerForLink(const LinkInterface *link);
 
-    bool containsLink(const LinkInterface *link) const;
+    bool containsLink(const LinkInterface *link);
 
     SharedLinkConfigurationPtr addConfiguration(LinkConfiguration *config);
 
@@ -225,6 +227,7 @@ private:
     uint32_t _mavlinkChannelsUsedBitMask = 1;
     QString _connectionsSuspendedReason;            ///< User visible reason for suspension
 
+    QMutex _linksMutex;                             ///< Protects _rgLinks access from multiple threads
     QList<SharedLinkInterfacePtr> _rgLinks;
     QList<SharedLinkConfigurationPtr> _rgLinkConfigs;
     
@@ -273,11 +276,11 @@ signals:
     void commPortsChanged();
 
 private:
-    bool _isSerialPortConnected() const;
+    bool _isSerialPortConnected();
     void _updateSerialPorts();
     bool _allowAutoConnectToBoard(QGCSerialPortInfo::BoardType_t boardType) const;
     void _addSerialAutoConnectLink();
-    bool _portAlreadyConnected(const QString &portName) const;
+    bool _portAlreadyConnected(const QString &portName);
     void _filterCompositePorts(QList<QGCSerialPortInfo> &portList);
 
     UdpIODevice *_nmeaSocket = nullptr;
