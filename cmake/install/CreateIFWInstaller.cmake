@@ -100,21 +100,6 @@ string(APPEND CONFIG_XML_CONTENT "
 file(WRITE "${IFW_CONFIG_DIR}/config.xml" "${CONFIG_XML_CONTENT}")
 
 # ----------------------------------------------------------------------------
-# Generate package.xml
-# ----------------------------------------------------------------------------
-file(WRITE "${IFW_PACKAGE_DIR}/meta/package.xml" "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<Package>
-    <DisplayName>${CMAKE_PROJECT_NAME}</DisplayName>
-    <Description>${CMAKE_PROJECT_NAME} Ground Control Software</Description>
-    <Version>${CMAKE_PROJECT_VERSION}</Version>
-    <ReleaseDate>${QGC_BUILD_DATE}</ReleaseDate>
-    <Default>true</Default>
-    <Essential>true</Essential>
-    <ForcedInstallation>true</ForcedInstallation>
-</Package>
-")
-
-# ----------------------------------------------------------------------------
 # Generate installscript.js
 # ----------------------------------------------------------------------------
 file(WRITE "${IFW_PACKAGE_DIR}/meta/installscript.js" "function Component()
@@ -136,6 +121,22 @@ Component.prototype.createOperations = function()
         component.addOperation(\"CreateShortcut\", \"@TargetDir@/maintenancetool.exe\", \"@StartMenuDir@/AMC Maintenance Tool.lnk\");
     }
 }
+")
+
+# ----------------------------------------------------------------------------
+# Generate package.xml
+# ----------------------------------------------------------------------------
+file(WRITE "${IFW_PACKAGE_DIR}/meta/package.xml" "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<Package>
+    <DisplayName>${CMAKE_PROJECT_NAME}</DisplayName>
+    <Description>${CMAKE_PROJECT_NAME} Ground Control Software</Description>
+    <Version>${CMAKE_PROJECT_VERSION}</Version>
+    <ReleaseDate>${QGC_BUILD_DATE}</ReleaseDate>
+    <Default>true</Default>
+    <Essential>true</Essential>
+    <Script>installscript.js</Script>
+    <ForcedInstallation>true</ForcedInstallation>
+</Package>
 ")
 
 # ----------------------------------------------------------------------------
