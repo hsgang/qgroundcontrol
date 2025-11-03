@@ -37,7 +37,7 @@ else()
   CPMAddPackage(
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
-    GIT_TAG v0.23.2
+    GIT_TAG master
     GIT_SHALLOW TRUE
     OPTIONS ${LIBDATACHANNEL_OPTIONS}
   )
