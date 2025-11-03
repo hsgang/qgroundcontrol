@@ -270,7 +270,6 @@ void LinkManager::_linkDisconnected()
             if (it->get() == link) {
                 config = it->get()->linkConfiguration();
                 const QString linkName = config ? config->name() : QStringLiteral("<null config>");
-                qCDebug(LinkManagerLog) << linkName << "use_count:" << it->use_count();
                 linkToCleanup = *it;
                 (void) _rgLinks.erase(it);
                 break;
@@ -279,7 +278,6 @@ void LinkManager::_linkDisconnected()
     }
 
     if (!linkToCleanup) {
-        qCDebug(LinkManagerLog) << "link already removed";
         return;
     }
 
@@ -294,18 +292,9 @@ void LinkManager::_linkDisconnected()
 
     link->_freeMavlinkChannel();
 
-    for (auto it = _rgLinks.begin(); it != _rgLinks.end(); ++it) {
-        if (it->get() == link) {
-            qCDebug(LinkManagerLog) << Q_FUNC_INFO << it->get()->linkConfiguration()->name() << it->use_count();
+    _qmlLinksModel->removeOne(link);
 
-            // QML 모델에서도 제거
-            _qmlLinksModel->removeOne(link);
-
-            (void) _rgLinks.erase(it);
-            emit linksChanged();
-            return;
-        }
-    }
+    emit linksChanged();
 }
 
 SharedLinkInterfacePtr LinkManager::sharedLinkInterfacePointerForLink(const LinkInterface *link)

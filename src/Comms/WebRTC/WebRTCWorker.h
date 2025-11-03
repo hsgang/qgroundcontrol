@@ -318,6 +318,7 @@ class WebRTCWorker : public QObject
     void start();
     void writeData(const QByteArray &data);
     void disconnectLink();
+    void disconnectFromSignalingManager();  // SignalingServerManager 연결 끊기
     void reconnectToRoom();  // 재연결 슬롯 추가
     void handlePeerStateChange(int stateValue);
     void handleLocalDescription(const QString& descType, const QString& sdpContent);
@@ -398,22 +399,36 @@ class WebRTCWorker : public QObject
     QString _gatheringStateToString(rtc::PeerConnection::GatheringState state) const;
 
     // Cleanup
-    void _cleanup();
-    void _cleanupComplete();
+    enum class CleanupMode {
+        ForReconnection,  // WebRTC만 정리, 시그널링은 유지
+        Complete          // 모든 리소스 정리
+    };
+    void _cleanup(CleanupMode mode = CleanupMode::ForReconnection);
 
-    // Configuration
-    const WebRTCConfiguration *_config = nullptr;
+    // Configuration - 값 객체로 복사하여 포인터 의존성 제거
+    struct ConnectionConfig {
+        QString gcsId;
+        QString targetDroneId;
+        QString stunServer;
+        QString turnServer;
+        QString turnUsername;
+        QString turnPassword;
+    } _connectionConfig;
+
     rtc::Configuration _rtcConfig;
 
-    // 스레드 안전성을 위한 설정값 복사본
-    QString _stunServer;
-    QString _turnServer;
-    QString _turnUsername;
-    QString _turnPassword;
-
-    // Signaling management
+    // Signaling and reconnection management
     SignalingServerManager *_signalingManager = nullptr;
     QTimer *_rttTimer = nullptr;
+    QTimer *_cleanupTimer = nullptr;  // disconnect 후 cleanup용 타이머
+    QTimer *_reconnectTimer = nullptr;  // 재연결용 타이머
+
+    // 재연결 상태
+    std::atomic<bool> _waitingForReconnect{false};
+    int _reconnectAttempts = 0;
+    static constexpr int MAX_RECONNECT_ATTEMPTS = 10;
+    static constexpr int BASE_RECONNECT_DELAY_MS = 1000;
+    static constexpr int MAX_RECONNECT_DELAY_MS = 30000;
 
     // WebRTC components
     std::shared_ptr<rtc::PeerConnection> _peerConnection;
@@ -421,45 +436,64 @@ class WebRTCWorker : public QObject
     std::shared_ptr<rtc::DataChannel> _customDataChannel;
     std::shared_ptr<rtc::Track> _videoTrack;
 
-    // State management
+    // State management - 스레드 안전성을 위한 atomic 변수들
     std::vector<rtc::Candidate> _pendingCandidates;
-    std::atomic_bool _remoteDescriptionSet {false};
-    QMutex _candidateMutex;
-    bool _isDisconnecting = false;
+    QMutex _candidateMutex;  // _pendingCandidates 보호용
+
+    // 연결 상태 플래그들 (atomic으로 통일)
+    std::atomic<bool> _remoteDescriptionSet{false};
     std::atomic<bool> _dataChannelOpened{false};
+    std::atomic<bool> _isDisconnecting{false};
+    std::atomic<bool> _isShuttingDown{false};
+    std::atomic<bool> _isCleaningUp{false};  // cleanup 진행 중 플래그
 
     // Constants
     static const QString kDataChannelLabel;
     static const int kReconnectInterval = 5000; // 5 seconds
 
-    std::atomic<bool> _isShuttingDown{false};
-    bool _videoStreamActive = false;
+    // SCTP Configuration Constants
+    static constexpr int SCTP_RECV_BUFFER_SIZE = 262144;        // 256KB
+    static constexpr int SCTP_SEND_BUFFER_SIZE = 262144;        // 256KB
+    static constexpr int SCTP_MAX_CHUNKS_ON_QUEUE = 1000;
+    static constexpr int SCTP_INITIAL_CONGESTION_WINDOW = 10;
+    static constexpr int SCTP_MAX_BURST = 5;
+    static constexpr int SCTP_CONGESTION_CONTROL_MODULE = 0;    // RFC2581
+    static constexpr int SCTP_DELAYED_SACK_TIME_MS = 200;
+    static constexpr int SCTP_MIN_RETRANSMIT_TIMEOUT_MS = 1000;
+    static constexpr int SCTP_MAX_RETRANSMIT_TIMEOUT_MS = 5000;
+    static constexpr int SCTP_INITIAL_RETRANSMIT_TIMEOUT_MS = 3000;
+    static constexpr int SCTP_MAX_RETRANSMIT_ATTEMPTS = 5;
+    static constexpr int SCTP_HEARTBEAT_INTERVAL_MS = 10000;
+
+    // Timer Intervals
+    static constexpr int RTT_UPDATE_INTERVAL_MS = 1000;
+    static constexpr int STATS_UPDATE_INTERVAL_MS = 1000;
+
+    // Reconnection Constants
+    static constexpr int RECONNECT_DELAY_MIN_MS = 1000;
+    static constexpr int RECONNECT_JITTER_MS = 500;
+
+    // Video stream state
+    std::atomic<bool> _videoStreamActive{false};
     QString _currentVideoURI; // kept for API compatibility; unused without bridge
 
     // GCS connection management
     QString _currentGcsId;
     QString _currentTargetDroneId;
     bool _gcsRegistered = false;
-    QTimer* _reconnectTimer = nullptr;  // 수동 재연결용 (자동 재연결 비활성화)
-    std::atomic<bool> _waitingForReconnect{false};
-
-    // 재연결 관리 (추가됨)
-    int _reconnectAttempts = 0;
-    static const int MAX_RECONNECT_ATTEMPTS = 10;
-    static const int BASE_RECONNECT_DELAY_MS = 1000;
-    static const int MAX_RECONNECT_DELAY_MS = 30000;
 
     void _updateAllStatistics();
+    WebRTCStats _collectWebRTCStats() const;  // 통합 통계 수집 메서드
     void _calculateDataChannelRates(qint64 currentTime);
-    int _calculateReconnectDelay() const;  // 지수 백오프 계산
-    void _resetReconnectAttempts();        // 재연결 시도 횟수 리셋
 
     void _handlePeerDisconnection();
-    void _cleanupForReconnection();
     void _resetPeerConnection();
-    void _forceReconnection();
-    QTimer* _reconnectionTimer = nullptr;
-    std::atomic<bool> _waitingForReconnection{false};
+
+    // 재연결 관리
+    int _calculateReconnectDelay() const;
+    void _scheduleReconnect();
+    void _cancelReconnect();
+    void _onReconnectSuccess();
 
     TransferRateCalculator _dataChannelSentCalc;
     TransferRateCalculator _dataChannelReceivedCalc;

@@ -45,12 +45,27 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
 
 WebRTCLink::~WebRTCLink()
 {
+    qCDebug(WebRTCLinkLog) << "[WebRTCLink] Destructor called";
+
     if (_worker) {
-        // 자동 재연결 중이 아닐 때만 disconnectLink 호출
+        // SignalingServerManager와의 연결을 먼저 끊음 (싱글톤이므로 매우 중요!)
+        QMetaObject::invokeMethod(_worker, "disconnectFromSignalingManager", Qt::BlockingQueuedConnection);
+
+        // 워커에게 정리 요청
         QMetaObject::invokeMethod(_worker, "disconnectLink", Qt::BlockingQueuedConnection);
     }
+
+    // 스레드 종료 요청
     _workerThread->quit();
-    _workerThread->wait();
+
+    // 최대 5초 대기
+    if (!_workerThread->wait(5000)) {
+        qCWarning(WebRTCLinkLog) << "[WebRTCLink] Worker thread did not finish in time, forcing termination";
+        _workerThread->terminate();
+        _workerThread->wait(1000);
+    }
+
+    qCDebug(WebRTCLinkLog) << "[WebRTCLink] Destructor completed";
 }
 
 bool WebRTCLink::isConnected() const
@@ -83,8 +98,7 @@ void WebRTCLink::reconnectLink()
     qCDebug(WebRTCLinkLog) << "Manual reconnection requested";
 
     if (_worker) {
-        // 수동 재연결 시 재연결 시도 횟수 리셋
-        QMetaObject::invokeMethod(_worker, "_resetReconnectAttempts", Qt::QueuedConnection);
+        // 수동 재연결 요청
         QMetaObject::invokeMethod(_worker, "reconnectToRoom", Qt::QueuedConnection);
     } else {
         qCWarning(WebRTCLinkLog) << "Worker not available for reconnection";
