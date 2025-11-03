@@ -17,6 +17,35 @@ class WebRTCLink : public LinkInterface
     Q_PROPERTY(VideoMetrics videoMetrics READ videoMetrics NOTIFY videoMetricsChanged)
     Q_PROPERTY(RTCModuleVersionInfo rtcModuleVersionInfo READ rtcModuleVersionInfo NOTIFY rtcModuleVersionInfoChanged)
 
+    // WebRTC 개별 통계 프로퍼티 (QML에서 편리하게 접근하기 위해)
+    Q_PROPERTY(int webRtcRtt READ webRtcRtt NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(double webRtcSent READ webRtcSent NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(double webRtcRecv READ webRtcRecv NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(double rtcVideoRate READ rtcVideoRate NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(int rtcVideoPacketCount READ rtcVideoPacketCount NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(qint64 rtcVideoBytesReceived READ rtcVideoBytesReceived NOTIFY webRtcStatsChanged)
+
+    // RTC Module 시스템 정보 개별 프로퍼티
+    Q_PROPERTY(double rtcModuleCpuUsage READ rtcModuleCpuUsage NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleCpuTemperature READ rtcModuleCpuTemperature NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleMemoryUsage READ rtcModuleMemoryUsage NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleNetworkRx READ rtcModuleNetworkRx NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(double rtcModuleNetworkTx READ rtcModuleNetworkTx NOTIFY rtcModuleSystemInfoChanged)
+    Q_PROPERTY(QString rtcModuleNetworkInterface READ rtcModuleNetworkInterface NOTIFY rtcModuleSystemInfoChanged)
+
+    // RTC Module 버전 정보 개별 프로퍼티
+    Q_PROPERTY(QString rtcModuleCurrentVersion READ rtcModuleCurrentVersion NOTIFY rtcModuleVersionInfoChanged)
+    Q_PROPERTY(QString rtcModuleLatestVersion READ rtcModuleLatestVersion NOTIFY rtcModuleVersionInfoChanged)
+    Q_PROPERTY(bool rtcModuleUpdateAvailable READ rtcModuleUpdateAvailable NOTIFY rtcModuleVersionInfoChanged)
+
+    // Video Metrics 개별 프로퍼티
+    Q_PROPERTY(double videoRtspPacketsPerSec READ videoRtspPacketsPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoDecodedFramesPerSec READ videoDecodedFramesPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoEncodedFramesPerSec READ videoEncodedFramesPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoTeeFramesPerSec READ videoTeeFramesPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoSrtFramesPerSec READ videoSrtFramesPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoRtpFramesPerSec READ videoRtpFramesPerSec NOTIFY videoMetricsChanged)
+
    public:
     explicit WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent = nullptr);
     ~WebRTCLink();
@@ -44,6 +73,35 @@ class WebRTCLink : public LinkInterface
 
     // RTC Module 버전 정보 getter
     const RTCModuleVersionInfo& rtcModuleVersionInfo() const { return _rtcModuleVersionInfo; }
+
+    // WebRTC 개별 통계 getter 메서드들
+    int webRtcRtt() const { return _webRtcStats.rttMs; }
+    double webRtcSent() const { return _webRtcStats.webRtcSent; }
+    double webRtcRecv() const { return _webRtcStats.webRtcRecv; }
+    double rtcVideoRate() const { return _webRtcStats.videoRateKBps; }
+    int rtcVideoPacketCount() const { return _webRtcStats.videoPacketCount; }
+    qint64 rtcVideoBytesReceived() const { return _webRtcStats.videoBytesReceived; }
+
+    // RTC Module 시스템 정보 개별 getter 메서드들
+    double rtcModuleCpuUsage() const { return _rtcModuleSystemInfo.cpuUsage; }
+    double rtcModuleCpuTemperature() const { return _rtcModuleSystemInfo.cpuTemperature; }
+    double rtcModuleMemoryUsage() const { return _rtcModuleSystemInfo.memoryUsage; }
+    double rtcModuleNetworkRx() const { return _rtcModuleSystemInfo.networkRx; }
+    double rtcModuleNetworkTx() const { return _rtcModuleSystemInfo.networkTx; }
+    QString rtcModuleNetworkInterface() const { return _rtcModuleSystemInfo.networkInterface; }
+
+    // RTC Module 버전 정보 개별 getter 메서드들
+    QString rtcModuleCurrentVersion() const { return _rtcModuleVersionInfo.currentVersion; }
+    QString rtcModuleLatestVersion() const { return _rtcModuleVersionInfo.latestVersion; }
+    bool rtcModuleUpdateAvailable() const { return _rtcModuleVersionInfo.updateAvailable; }
+
+    // Video Metrics 개별 getter 메서드들
+    double videoRtspPacketsPerSec() const { return _videoMetrics.rtspPacketsPerSec; }
+    double videoDecodedFramesPerSec() const { return _videoMetrics.decodedFramesPerSec; }
+    double videoEncodedFramesPerSec() const { return _videoMetrics.encodedFramesPerSec; }
+    double videoTeeFramesPerSec() const { return _videoMetrics.teeFramesPerSec; }
+    double videoSrtFramesPerSec() const { return _videoMetrics.srtFramesPerSec; }
+    double videoRtpFramesPerSec() const { return _videoMetrics.rtpFramesPerSec; }
 
    protected:
     bool _connect() override;

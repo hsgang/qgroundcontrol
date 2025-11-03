@@ -189,9 +189,10 @@ Rectangle {
                 Layout.preferredWidth:  childrenRect.width + ScreenTools.defaultFontPixelWidth * 2
                 color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
-                visible:                QGroundControl.linkManager.webRtcLinkExists
+                visible:                webrtcIndicator.showIndicator // WEBRTCIndicator의 showIndicator 프로퍼티를 사용하여 표시 여부 결정
 
                 WEBRTCIndicator{
+                    id: webrtcIndicator
                     anchors.right:   parent.right
                     anchors.margins: ScreenTools.defaultFontPixelHeight * 0.3
                 }

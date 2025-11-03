@@ -21,38 +21,70 @@ Item {
     anchors.top:    parent.top
     anchors.bottom: parent.bottom
 
-    property bool showIndicator:    QGroundControl.linkManager.webRtcLinkExists
     property real _margins:         ScreenTools.defaultFontPixelHeight / 2
-    
-    // WebRTC 통계 정보 (개별 속성으로 접근)
-    property real _rtt:             QGroundControl.linkManager.webRtcRtt
-    property real _webRtcSent:      QGroundControl.linkManager.webRtcSent
-    property real _webRtcRecv:      QGroundControl.linkManager.webRtcRecv
-    property real _videoRate:       QGroundControl.linkManager.rtcVideoRate
+
+    // WebRTC Link를 찾아서 참조 (rtcStatusMessage 속성 존재 여부로 확인)
+    function findWebRtcLink() {
+        var linksList = QGroundControl.linkManager.links
+        if (!linksList) {
+            return null
+        }
+
+        for (var i = 0; i < linksList.count; i++) {
+            var link = linksList.get(i)
+            // WebRTCLink는 rtcStatusMessage 프로퍼티를 가지고 있음
+            if (link && typeof link.rtcStatusMessage !== 'undefined') {
+                return link
+            }
+        }
+        return null
+    }
+
+    property var _webrtcLink: null
+    property bool showIndicator: _webrtcLink !== null
+
+    // 초기화 시 한번만 WebRTC Link 찾기
+    Component.onCompleted: {
+        _webrtcLink = findWebRtcLink()
+    }
+
+    // links 목록이 변경될 때마다 WebRTC Link를 다시 찾음
+    Connections {
+        target: QGroundControl.linkManager
+        function onLinksChanged() {
+            _webrtcLink = findWebRtcLink()
+        }
+    }
+
+    // WebRTC 통계 정보 (WebRTCLink에서 직접 접근)
+    property real _rtt:             _webrtcLink ? _webrtcLink.webRtcRtt : -1
+    property real _webRtcSent:      _webrtcLink ? _webrtcLink.webRtcSent : 0
+    property real _webRtcRecv:      _webrtcLink ? _webrtcLink.webRtcRecv : 0
+    property real _videoRate:       _webrtcLink ? _webrtcLink.rtcVideoRate : 0
     property real  _videoRateMbps:   (_videoRate / 125.0).toFixed(2)  // Mbps 단위 변환
-    property int  _videoPacketCount: QGroundControl.linkManager.rtcVideoPacketCount
-    property int  _videoBytesReceived: QGroundControl.linkManager.rtcVideoBytesReceived
-    
+    property int  _videoPacketCount: _webrtcLink ? _webrtcLink.rtcVideoPacketCount : 0
+    property int  _videoBytesReceived: _webrtcLink ? _webrtcLink.rtcVideoBytesReceived : 0
+
     // RTC Module 시스템 정보
-    property real _rtcModuleCpuUsage:        QGroundControl.linkManager.rtcModuleCpuUsage
-    property real _rtcModuleCpuTemperature:  QGroundControl.linkManager.rtcModuleCpuTemperature
-    property real _rtcModuleMemoryUsage:     QGroundControl.linkManager.rtcModuleMemoryUsage
-    property real _rtcModuleNetworkRx:       QGroundControl.linkManager.rtcModuleNetworkRx
-    property real _rtcModuleNetworkTx:       QGroundControl.linkManager.rtcModuleNetworkTx
-    property string _rtcModuleNetworkInterface: QGroundControl.linkManager.rtcModuleNetworkInterface
-    
+    property real _rtcModuleCpuUsage:        _webrtcLink ? _webrtcLink.rtcModuleCpuUsage : 0
+    property real _rtcModuleCpuTemperature:  _webrtcLink ? _webrtcLink.rtcModuleCpuTemperature : 0
+    property real _rtcModuleMemoryUsage:     _webrtcLink ? _webrtcLink.rtcModuleMemoryUsage : 0
+    property real _rtcModuleNetworkRx:       _webrtcLink ? _webrtcLink.rtcModuleNetworkRx : 0
+    property real _rtcModuleNetworkTx:       _webrtcLink ? _webrtcLink.rtcModuleNetworkTx : 0
+    property string _rtcModuleNetworkInterface: _webrtcLink ? _webrtcLink.rtcModuleNetworkInterface : ""
+
     // RTC Module 버전 정보
-    property string _rtcModuleCurrentVersion: QGroundControl.linkManager.rtcModuleCurrentVersion
-    property string _rtcModuleLatestVersion:  QGroundControl.linkManager.rtcModuleLatestVersion
-    property bool _rtcModuleUpdateAvailable:  QGroundControl.linkManager.rtcModuleUpdateAvailable
+    property string _rtcModuleCurrentVersion: _webrtcLink ? _webrtcLink.rtcModuleCurrentVersion : ""
+    property string _rtcModuleLatestVersion:  _webrtcLink ? _webrtcLink.rtcModuleLatestVersion : ""
+    property bool _rtcModuleUpdateAvailable:  _webrtcLink ? _webrtcLink.rtcModuleUpdateAvailable : false
 
     // Video Metrics 정보
-    property real _videoRtspPacketsPerSec:    QGroundControl.linkManager.videoRtspPacketsPerSec
-    property real _videoDecodedFramesPerSec:  QGroundControl.linkManager.videoDecodedFramesPerSec
-    property real _videoEncodedFramesPerSec:  QGroundControl.linkManager.videoEncodedFramesPerSec
-    property real _videoTeeFramesPerSec:      QGroundControl.linkManager.videoTeeFramesPerSec
-    property real _videoSrtFramesPerSec:      QGroundControl.linkManager.videoSrtFramesPerSec
-    property real _videoRtpFramesPerSec:      QGroundControl.linkManager.videoRtpFramesPerSec
+    property real _videoRtspPacketsPerSec:    _webrtcLink ? _webrtcLink.videoRtspPacketsPerSec : 0
+    property real _videoDecodedFramesPerSec:  _webrtcLink ? _webrtcLink.videoDecodedFramesPerSec : 0
+    property real _videoEncodedFramesPerSec:  _webrtcLink ? _webrtcLink.videoEncodedFramesPerSec : 0
+    property real _videoTeeFramesPerSec:      _webrtcLink ? _webrtcLink.videoTeeFramesPerSec : 0
+    property real _videoSrtFramesPerSec:      _webrtcLink ? _webrtcLink.videoSrtFramesPerSec : 0
+    property real _videoRtpFramesPerSec:      _webrtcLink ? _webrtcLink.videoRtpFramesPerSec : 0
 
     Row {
         id: vehicleRow
@@ -62,7 +94,7 @@ Item {
 
         QGCLabel {
             horizontalAlignment: Text.AlignRight
-            text: (QGroundControl.linkManager.webRtcLinkExists & QGroundControl.linkManager.webRtcRtt < 0) ? QGroundControl.linkManager.rtcStatusMessage : ""
+            text: (_webrtcLink && _webrtcLink.webRtcRtt < 0) ? _webrtcLink.rtcStatusMessage : ""
             anchors.verticalCenter: parent.verticalCenter
             visible: text !== ""
         }
@@ -214,7 +246,7 @@ Item {
                     //     LabelledButton {
                     //         label:      qsTr("모듈 업데이트 확인")
                     //         buttonText: qsTr("확인")
-                    //         onClicked:  QGroundControl.linkManager.sendWebRTCCustomMessage("C")
+                    //         onClicked:  if (_webrtcLink) _webrtcLink.sendCustomMessage("C")
                     //     }
                         
                     //     // 업데이트 가능한 경우에만 업데이트 버튼 표시
@@ -245,7 +277,7 @@ Item {
             text: qsTr("RTC 모듈을 재시작하시겠습니까?\n\n재시작 후에는 수동으로 다시 연결하여야 합니다.")
             buttons: Dialog.Yes | Dialog.No
             onAccepted: {
-                QGroundControl.linkManager.sendWebRTCCustomMessage("B")
+                if (_webrtcLink) _webrtcLink.sendCustomMessage("B")
             }
         }
     }
@@ -258,7 +290,7 @@ Item {
             text: qsTr("RTC 모듈을 업데이트 하시겠습니까?")
             buttons: Dialog.Yes | Dialog.No
             onAccepted: {
-                QGroundControl.linkManager.sendWebRTCCustomMessage("U")
+                if (_webrtcLink) _webrtcLink.sendCustomMessage("U")
             }
         }
     }

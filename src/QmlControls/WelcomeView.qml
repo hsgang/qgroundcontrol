@@ -530,7 +530,13 @@ Rectangle {
                             QGCLabel {
                                 Layout.fillWidth: true
                                 horizontalAlignment: Text.AlignRight
-                                text: _currentSelection && (_currentSelection.linkType === 3) ? QGroundControl.linkManager.rtcStatusMessage : ""
+                                text: {
+                                    // WebRTC Link(linkType === 3)인 경우 해당 링크의 상태 메시지 표시
+                                    if (_currentSelection && _currentSelection.linkType === 3 && _currentSelection.link) {
+                                        return _currentSelection.link.rtcStatusMessage || ""
+                                    }
+                                    return ""
+                                }
                                 font.pointSize: ScreenTools.smallFontPointSize
                             }
                         }

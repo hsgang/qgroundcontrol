@@ -57,29 +57,7 @@ class LinkManager : public QObject
     Q_PROPERTY(QmlObjectListModel *linkConfigurations READ _qmlLinkConfigurations CONSTANT)
     Q_PROPERTY(QStringList linkTypeStrings READ linkTypeStrings CONSTANT)
     Q_PROPERTY(bool mavlinkSupportForwardingEnabled READ mavlinkSupportForwardingEnabled NOTIFY mavlinkSupportForwardingEnabledChanged)
-    Q_PROPERTY(QString rtcStatusMessage READ rtcStatusMessage NOTIFY rtcStatusMessageChanged)
-    Q_PROPERTY(int webRtcRtt READ webRtcRtt NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(double webRtcSent READ webRtcSent NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(double webRtcRecv READ webRtcRecv NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(double rtcVideoRate READ rtcVideoRate NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(int rtcVideoPacketCount READ rtcVideoPacketCount NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(qint64 rtcVideoBytesReceived READ rtcVideoBytesReceived NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(double rtcModuleCpuUsage READ rtcModuleCpuUsage NOTIFY rtcModuleSystemInfoChanged)
-    Q_PROPERTY(double rtcModuleCpuTemperature READ rtcModuleCpuTemperature NOTIFY rtcModuleSystemInfoChanged)
-    Q_PROPERTY(double rtcModuleMemoryUsage READ rtcModuleMemoryUsage NOTIFY rtcModuleSystemInfoChanged)
-    Q_PROPERTY(double rtcModuleNetworkRx READ rtcModuleNetworkRx NOTIFY rtcModuleSystemInfoChanged)
-    Q_PROPERTY(double rtcModuleNetworkTx READ rtcModuleNetworkTx NOTIFY rtcModuleSystemInfoChanged)
-    Q_PROPERTY(QString rtcModuleNetworkInterface READ rtcModuleNetworkInterface NOTIFY rtcModuleSystemInfoChanged)
-    Q_PROPERTY(bool webRtcLinkExists READ webRtcLinkExists NOTIFY webRtcLinkExistsChanged)
-    Q_PROPERTY(QString rtcModuleCurrentVersion READ rtcModuleCurrentVersion NOTIFY rtcModuleVersionInfoChanged)
-    Q_PROPERTY(QString rtcModuleLatestVersion READ rtcModuleLatestVersion NOTIFY rtcModuleVersionInfoChanged)
-    Q_PROPERTY(bool rtcModuleUpdateAvailable READ rtcModuleUpdateAvailable NOTIFY rtcModuleVersionInfoChanged)
-    Q_PROPERTY(double videoRtspPacketsPerSec READ videoRtspPacketsPerSec NOTIFY videoMetricsChanged)
-    Q_PROPERTY(double videoDecodedFramesPerSec READ videoDecodedFramesPerSec NOTIFY videoMetricsChanged)
-    Q_PROPERTY(double videoEncodedFramesPerSec READ videoEncodedFramesPerSec NOTIFY videoMetricsChanged)
-    Q_PROPERTY(double videoTeeFramesPerSec READ videoTeeFramesPerSec NOTIFY videoMetricsChanged)
-    Q_PROPERTY(double videoSrtFramesPerSec READ videoSrtFramesPerSec NOTIFY videoMetricsChanged)
-    Q_PROPERTY(double videoRtpFramesPerSec READ videoRtpFramesPerSec NOTIFY videoMetricsChanged)
+    Q_PROPERTY(QmlObjectListModel *links READ _qmlLinks NOTIFY linksChanged)
 
 public:
     explicit LinkManager(QObject *parent = nullptr);
@@ -102,8 +80,6 @@ public:
     /// Called to signal app shutdown. Disconnects all links while turning off auto-connect.
     Q_INVOKABLE void shutdown();
     Q_INVOKABLE LogReplayLink *startLogReplay(const QString &logFile);
-
-    Q_INVOKABLE void sendWebRTCCustomMessage(const QString &message);
     
     QList<SharedLinkInterfacePtr> links();
     QStringList linkTypeStrings() const;
@@ -154,49 +130,10 @@ public:
 
     static constexpr uint8_t invalidMavlinkChannel() { return std::numeric_limits<uint8_t>::max(); }
 
-    QString rtcStatusMessage() const;
-    
-    // WebRTC 개별 통계 정보
-    int webRtcRtt() const;
-    double webRtcSent() const;
-    double webRtcRecv() const;
-    double rtcVideoRate() const;
-    int rtcVideoPacketCount() const;
-    qint64 rtcVideoBytesReceived() const;
-    
-    // RTC Module 시스템 정보
-    double rtcModuleCpuUsage() const;
-    double rtcModuleCpuTemperature() const;
-    double rtcModuleMemoryUsage() const;
-    double rtcModuleNetworkRx() const;
-    double rtcModuleNetworkTx() const;
-    QString rtcModuleNetworkInterface() const;
-    
-    // RTC Module 버전 정보
-    QString rtcModuleCurrentVersion() const;
-    QString rtcModuleLatestVersion() const;
-    bool rtcModuleUpdateAvailable() const;
-
-    // Video Metrics
-    double videoRtspPacketsPerSec() const;
-    double videoDecodedFramesPerSec() const;
-    double videoEncodedFramesPerSec() const;
-    double videoTeeFramesPerSec() const;
-    double videoSrtFramesPerSec() const;
-    double videoRtpFramesPerSec() const;
-
-    // WebRTC 링크 존재 여부 확인
-    bool webRtcLinkExists() const;
-
 signals:
     void mavlinkSupportForwardingEnabledChanged();
     void isBluetoothAvailableChanged();
-    void rtcStatusMessageChanged();
-    void webRtcStatsChanged();
-    void rtcModuleSystemInfoChanged(const RTCModuleSystemInfo& systemInfo);
-    void rtcModuleVersionInfoChanged(const RTCModuleVersionInfo& versionInfo);
-    void videoMetricsChanged(const VideoMetrics& videoMetrics);
-    void webRtcLinkExistsChanged();
+    void linksChanged();
 
 private slots:
     void _linkDisconnected();
@@ -204,6 +141,7 @@ private slots:
 
 private:
     QmlObjectListModel *_qmlLinkConfigurations();
+    QmlObjectListModel *_qmlLinks();
     /// If all new connections should be suspended a message is displayed to the user and true is returned;
     bool _connectionsSuspendedMsg() const;
     void _updateAutoConnectLinks();
@@ -211,13 +149,13 @@ private:
     void _addUDPAutoConnectLink();
     void _addMAVLinkForwardingLink();
     void _createDynamicForwardLink(const char *linkName, const QString &hostName);
-    void _updateWebRtcLinkStatus();
 #ifdef QGC_ZEROCONF_ENABLED
     void _addZeroConfAutoConnectLink();
 #endif
 
     QTimer *_portListTimer = nullptr;
     QmlObjectListModel *_qmlConfigurations = nullptr;
+    QmlObjectListModel *_qmlLinksModel = nullptr;
     AutoConnectSettings *_autoConnectSettings = nullptr;
 
     bool _configUpdateSuspended = false;            ///< true: stop updating configuration list
@@ -230,23 +168,6 @@ private:
     QMutex _linksMutex;                             ///< Protects _rgLinks access from multiple threads
     QList<SharedLinkInterfacePtr> _rgLinks;
     QList<SharedLinkConfigurationPtr> _rgLinkConfigs;
-    
-    // RTC Module 시스템 정보 캐시
-    RTCModuleSystemInfo _rtcModuleSystemInfo;
-
-    // RTC Module 버전 정보 캐시
-    RTCModuleVersionInfo _rtcModuleVersionInfo;
-
-    // WebRTC 통계 정보 캐시
-    int _webRtcRtt = -1;
-    double _webRtcSent = -1.0;
-    double _webRtcRecv = -1.0;
-    double _rtcVideoRate = 0.0;
-    int _rtcVideoPacketCount = 0;
-    qint64 _rtcVideoBytesReceived = 0;
-
-    // Video Metrics 캐시
-    VideoMetrics _videoMetrics;
 
     static constexpr const char *_defaultUDPLinkName = "UDP Link (AutoConnect)";
     static constexpr const char *_mavlinkForwardingLinkName = "MAVLink Forwarding Link";

@@ -88,16 +88,63 @@ void WebRTCWorker::writeData(const QByteArray &data)
         return;
     }
 
+    if (!_mavlinkDataChannel || !_mavlinkDataChannel->isOpen()) {
+        return;
+    }
+
     try {
-        if (_mavlinkDataChannel && _mavlinkDataChannel->isOpen()) {
-            std::string_view view(data.constData(), data.size());
-            _mavlinkDataChannel->send(rtc::binary(reinterpret_cast<const std::byte*>(view.data()),
-                                           reinterpret_cast<const std::byte*>(view.data() + view.size())));
+        // 버퍼 상태 확인
+        size_t buffered = _mavlinkDataChannel->bufferedAmount();
 
-            _dataChannelSentCalc.addData(data.size());
+        // Critical 상태: 버퍼가 75% 이상 차면 큐에 저장
+        if (buffered > BUFFER_CRITICAL_THRESHOLD) {
+            if (_pendingMessages.size() < MAX_PENDING_MESSAGES) {
+                _pendingMessages.append(data);
+                qCDebug(WebRTCLinkLog) << "Buffer critical:" << buffered
+                                       << "bytes, queued message. Queue size:"
+                                       << _pendingMessages.size();
 
-            emit bytesSent(data);
+                if (!_isCongested) {
+                    _isCongested = true;
+                    emit congestionDetected();
+                    emit bufferCritical(buffered);
+                }
+            } else {
+                qCWarning(WebRTCLinkLog) << "Message queue full, dropping packet";
+            }
+            return;
         }
+
+        // Warning 상태: 버퍼가 25% 이상 차면 경고
+        if (buffered > BUFFER_WARNING_THRESHOLD) {
+            _consecutiveBufferWarnings++;
+            if (_consecutiveBufferWarnings == 1) {
+                qCDebug(WebRTCLinkLog) << "Buffer warning:" << buffered << "bytes";
+                emit bufferWarning(buffered);
+            }
+        } else {
+            _consecutiveBufferWarnings = 0;
+
+            // 혼잡 상태에서 정상으로 회복
+            if (_isCongested) {
+                _isCongested = false;
+                emit congestionCleared();
+                qCDebug(WebRTCLinkLog) << "Congestion cleared, buffer:" << buffered << "bytes";
+            }
+        }
+
+        // 데이터 전송
+        std::string_view view(data.constData(), data.size());
+        _mavlinkDataChannel->send(rtc::binary(reinterpret_cast<const std::byte*>(view.data()),
+                                       reinterpret_cast<const std::byte*>(view.data() + view.size())));
+
+        _dataChannelSentCalc.addData(data.size());
+        emit bytesSent(data);
+
+        // 버퍼 상태 업데이트
+        _lastBufferedAmount = buffered;
+        _lastBufferCheckTime = QDateTime::currentMSecsSinceEpoch();
+
     } catch (const std::exception& e) {
         if (!_isShuttingDown.load()) {
             qCWarning(WebRTCLinkLog) << "Failed to send data:" << e.what();
@@ -551,9 +598,26 @@ void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc
 {
     if (!dc) return;
 
+    // BufferedAmountLow 임계값 설정
+    dc->setBufferedAmountLowThreshold(BUFFER_LOW_THRESHOLD);
+
+    // BufferedAmountLow 콜백 설정 - 버퍼가 비워지면 대기 중인 메시지 전송
+    dc->onBufferedAmountLow([this]() {
+        if (!_isShuttingDown.load()) {
+            qCDebug(WebRTCLinkLog) << "[BUFFER] Buffer low, processing pending messages";
+            _processPendingMessages();
+        }
+    });
+
     dc->onOpen([this]() {
         qCDebug(WebRTCLinkLog) << "[DATACHANNEL] MavlinkDataChannel OPENED";
         if (!_isShuttingDown.load()) {
+            // 버퍼 상태 초기화
+            _lastBufferedAmount = 0;
+            _consecutiveBufferWarnings = 0;
+            _isCongested = false;
+            _pendingMessages.clear();
+
             _processDataChannelOpen();
         }
     });
@@ -1378,4 +1442,95 @@ void WebRTCWorker::_resetReconnectAttempts()
 bool WebRTCWorker::isWaitingForReconnect() const
 {
     return _waitingForReconnect.load();
+}
+
+void WebRTCWorker::_processPendingMessages()
+{
+    if (!_mavlinkDataChannel || !_mavlinkDataChannel->isOpen()) {
+        return;
+    }
+
+    if (_pendingMessages.isEmpty()) {
+        return;
+    }
+
+    qCDebug(WebRTCLinkLog) << "[BUFFER] Processing" << _pendingMessages.size() << "pending messages";
+
+    int sentCount = 0;
+    while (!_pendingMessages.isEmpty()) {
+        size_t buffered = _mavlinkDataChannel->bufferedAmount();
+
+        // 버퍼가 다시 경고 수준에 도달하면 중단
+        if (buffered > BUFFER_WARNING_THRESHOLD) {
+            qCDebug(WebRTCLinkLog) << "[BUFFER] Buffer filling up again, pausing at"
+                                   << buffered << "bytes. Remaining messages:"
+                                   << _pendingMessages.size();
+            break;
+        }
+
+        QByteArray data = _pendingMessages.takeFirst();
+
+        try {
+            std::string_view view(data.constData(), data.size());
+            _mavlinkDataChannel->send(rtc::binary(
+                reinterpret_cast<const std::byte*>(view.data()),
+                reinterpret_cast<const std::byte*>(view.data() + view.size())
+            ));
+
+            _dataChannelSentCalc.addData(data.size());
+            emit bytesSent(data);
+            sentCount++;
+
+        } catch (const std::exception& e) {
+            qCWarning(WebRTCLinkLog) << "[BUFFER] Failed to send pending message:" << e.what();
+            // 실패한 메시지는 큐 앞에 다시 추가
+            _pendingMessages.prepend(data);
+            break;
+        }
+    }
+
+    qCDebug(WebRTCLinkLog) << "[BUFFER] Sent" << sentCount << "pending messages."
+                           << "Remaining:" << _pendingMessages.size();
+
+    // 모든 대기 메시지가 전송되면 혼잡 상태 해제
+    if (_pendingMessages.isEmpty() && _isCongested) {
+        _isCongested = false;
+        emit congestionCleared();
+    }
+}
+
+void WebRTCWorker::_checkBufferHealth()
+{
+    if (!_mavlinkDataChannel || !_mavlinkDataChannel->isOpen()) {
+        return;
+    }
+
+    size_t buffered = _mavlinkDataChannel->bufferedAmount();
+    qint64 now = QDateTime::currentMSecsSinceEpoch();
+
+    // 버퍼 증가율 계산 (bytes/sec)
+    if (_lastBufferCheckTime > 0) {
+        qint64 timeDiff = now - _lastBufferCheckTime;
+        if (timeDiff > 0) {
+            double bufferGrowthRate = static_cast<double>(buffered - _lastBufferedAmount) / timeDiff * 1000;
+
+            if (bufferGrowthRate > 100000) {  // 100KB/s 이상 증가
+                qCDebug(WebRTCLinkLog) << "[BUFFER] Rapid buffer growth detected:"
+                                       << bufferGrowthRate / 1024 << "KB/s";
+            }
+        }
+    }
+
+    _lastBufferedAmount = buffered;
+    _lastBufferCheckTime = now;
+}
+
+bool WebRTCWorker::_canSendData() const
+{
+    if (!_mavlinkDataChannel || !_mavlinkDataChannel->isOpen()) {
+        return false;
+    }
+
+    size_t buffered = _mavlinkDataChannel->bufferedAmount();
+    return buffered < BUFFER_CRITICAL_THRESHOLD;
 }

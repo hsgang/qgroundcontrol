@@ -350,6 +350,12 @@ class WebRTCWorker : public QObject
     void videoMetricsUpdated(const VideoMetrics& videoMetrics);
     void rtcModuleVersionInfoUpdated(const RTCModuleVersionInfo& versionInfo);
 
+    // 버퍼 및 혼잡 관련 시그널
+    void bufferWarning(size_t bufferedAmount);
+    void bufferCritical(size_t bufferedAmount);
+    void congestionDetected();
+    void congestionCleared();
+
    private slots:
     void _onSignalingConnected();
     void _onSignalingDisconnected();
@@ -463,6 +469,25 @@ class WebRTCWorker : public QObject
 
     // RTT 값 저장
     int _rttMs = -1;
+
+    // 버퍼 관리 및 혼잡 제어
+    static const size_t MAX_BUFFER_SIZE = 32 * 1024;         // 32KB (libdatachannel 최대 16MB)
+    static const size_t BUFFER_LOW_THRESHOLD = 8 * 1024;      // 8KB
+    static const size_t BUFFER_WARNING_THRESHOLD = 12 * 1024; // 12KB
+    static const size_t BUFFER_CRITICAL_THRESHOLD = 24 * 1024; // 24KB
+
+    size_t _lastBufferedAmount = 0;
+    qint64 _lastBufferCheckTime = 0;
+    int _consecutiveBufferWarnings = 0;
+    bool _isCongested = false;
+
+    // 대기 큐 (버퍼 가득 찰 때 사용)
+    QList<QByteArray> _pendingMessages;
+    static const int MAX_PENDING_MESSAGES = 100;
+
+    void _checkBufferHealth();
+    void _processPendingMessages();
+    bool _canSendData() const;
 
    public:
     bool isOperational() const;
