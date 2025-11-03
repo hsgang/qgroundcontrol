@@ -20,6 +20,8 @@ Rectangle {
     color:          QGroundControl.globalPalette.windowTransparent
     radius:         ScreenTools.defaultFontPixelHeight / 4
     visible:        width > _widthMargin
+    border.color:   qgcPal.groupBorder
+    border.width:   1
 
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
     property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.3

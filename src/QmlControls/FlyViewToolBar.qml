@@ -130,6 +130,8 @@ Rectangle {
                 color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
                 visible:                _activeVehicle
+                border.color:           qgcPal.groupBorder
+                border.width:           1
 
                 MessageIndicator{
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -190,6 +192,8 @@ Rectangle {
                 color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
                 visible:                webrtcIndicator.showIndicator // WEBRTCIndicator의 showIndicator 프로퍼티를 사용하여 표시 여부 결정
+                border.color:           qgcPal.groupBorder
+                border.width:           1
 
                 WEBRTCIndicator{
                     id: webrtcIndicator
@@ -218,6 +222,8 @@ Rectangle {
                 width:                  height
                 color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+                border.color:           qgcPal.groupBorder
+                border.width:           1
 
                 QGCColoredImage{
                     height:             parent.height * 0.5
