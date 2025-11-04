@@ -317,22 +317,22 @@ void WebRTCWorker::disconnectFromSignalingManager()
 
 void WebRTCWorker::disconnectLink()
 {
-    // 이미 종료 중이면 중복 호출 방지
-    if (_isShuttingDown.load()) {
-        qCDebug(WebRTCLinkLog) << "Already shutting down, ignoring duplicate disconnect request";
-        return;
+    qCDebug(WebRTCLinkLog) << "Disconnecting WebRTC link (user initiated)";
+
+    // 자동 재연결 중일 때는 먼저 재연결을 취소하고 진행
+    if (_waitingForReconnect.load()) {
+        qCDebug(WebRTCLinkLog) << "Canceling auto-reconnection for manual disconnect";
+        _cancelReconnect();
     }
 
-    qCDebug(WebRTCLinkLog) << "Disconnecting WebRTC link (user initiated)";
+    // 이미 종료 중이고 cleanup 타이머가 실행 중이면 중복 호출 방지
+    if (_isShuttingDown.load() && _cleanupTimer && _cleanupTimer->isActive()) {
+        qCDebug(WebRTCLinkLog) << "Already shutting down with active cleanup timer, ignoring duplicate disconnect request";
+        return;
+    }
 
     // 사용자 의도적 해제로 표시
     _isShuttingDown.store(true);
-
-    // 자동 재연결 중일 때는 실제 연결 해제를 하지 않음
-    if (_waitingForReconnect.load()) {
-        qCDebug(WebRTCLinkLog) << "Auto-reconnection in progress, ignoring manual disconnect request";
-        return;
-    }
 
     // Check signaling server connection status before disconnection
     if (_signalingManager) {
@@ -356,7 +356,8 @@ void WebRTCWorker::disconnectLink()
         // 기존 타이머가 있으면 취소
         if (_cleanupTimer) {
             _cleanupTimer->stop();
-            delete _cleanupTimer;
+            _cleanupTimer->deleteLater();
+            _cleanupTimer = nullptr;
         }
 
         // Give some time for the leave message to be sent before cleanup
@@ -371,10 +372,8 @@ void WebRTCWorker::disconnectLink()
                 return;
             }
 
-            // 자동 재연결 중이 아닐 때만 완전한 정리 수행
-            if (!self->_waitingForReconnect.load()) {
-                self->_cleanup(CleanupMode::Complete);
-            }
+            // 완전한 정리 수행 (재연결 플래그는 이미 취소됨)
+            self->_cleanup(CleanupMode::Complete);
             emit self->rttUpdated(-1);
             emit self->disconnected();
 
@@ -387,9 +386,7 @@ void WebRTCWorker::disconnectLink()
         _cleanupTimer->start(1000);
     } else {
         // If not in a room, cleanup immediately
-        if (!_waitingForReconnect.load()) {
-            _cleanup(CleanupMode::Complete);
-        }
+        _cleanup(CleanupMode::Complete);
         emit rttUpdated(-1);
         emit disconnected();
     }
