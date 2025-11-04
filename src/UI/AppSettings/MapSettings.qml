@@ -181,24 +181,18 @@ Item {
             heading:            qsTr("Tokens")
             headingDescription: qsTr("Allows access to additional providers")
 
-        //     LabelledFactTextField {
-        //         textFieldPreferredWidth:    _largeTextFieldWidth
-        //         label:                      qsTr("Mapbox")
-        //         fact:                       _appSettings.mapboxToken
-        //     }
+            LabelledFactTextField {
+                textFieldPreferredWidth:    _largeTextFieldWidth
+                label:                      qsTr("Mapbox")
+                fact:                       _appSettings.mapboxToken
+            }
 
-        //     LabelledFactTextField {
-        //         textFieldPreferredWidth:    _largeTextFieldWidth
-        //         label:                      qsTr("Esri")
-        //         fact:                       _appSettings.esriToken
-        //     }
-
-        //     LabelledFactTextField {
-        //         textFieldPreferredWidth:    _largeTextFieldWidth
-        //         label:                      qsTr("VWorld")
-        //         fact:                       _appSettings.vworldToken
-        //     }
-        // }        
+            LabelledFactTextField {
+                textFieldPreferredWidth:    _largeTextFieldWidth
+                label:                      qsTr("Esri")
+                fact:                       _appSettings.esriToken
+            }
+            
             LabelledFactTextField {
                 textFieldPreferredWidth:    _largeTextFieldWidth
                 label:                      qsTr("VWorld")
