@@ -176,22 +176,16 @@ Item {
             }
         }
 
-        // SettingsGroupLayout {
-        //     Layout.fillWidth:   true
-        //     heading:            qsTr("Tokens")
-        //     headingDescription: qsTr("Allows access to additional providers")
+        SettingsGroupLayout {
+            Layout.fillWidth:   true
+            heading:            qsTr("Tokens")
+            headingDescription: qsTr("Allows access to additional providers")
 
         //     LabelledFactTextField {
         //         textFieldPreferredWidth:    _largeTextFieldWidth
         //         label:                      qsTr("Mapbox")
         //         fact:                       _appSettings.mapboxToken
         //     }
-        
-        // LabelledFactTextField {
-        //     textFieldPreferredWidth:    _largeTextFieldWidth
-        //     label:                      qsTr("TianDiTu")
-        //     fact:                       _appSettings.tiandituToken
-        // }
 
         //     LabelledFactTextField {
         //         textFieldPreferredWidth:    _largeTextFieldWidth
@@ -204,7 +198,19 @@ Item {
         //         label:                      qsTr("VWorld")
         //         fact:                       _appSettings.vworldToken
         //     }
-        // }
+        // }        
+            LabelledFactTextField {
+                textFieldPreferredWidth:    _largeTextFieldWidth
+                label:                      qsTr("VWorld")
+                fact:                       _appSettings.vworldToken
+            }
+
+            LabelledFactTextField {
+                textFieldPreferredWidth:    _largeTextFieldWidth
+                label:                      qsTr("OpenAIP")
+                fact:                       _appSettings.openaipToken
+            }
+        }
 
         // SettingsGroupLayout {
         //     Layout.fillWidth:   true
