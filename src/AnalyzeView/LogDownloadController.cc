@@ -22,6 +22,8 @@
 #include <QtCore/QApplicationStatic>
 #include <QtCore/QTimer>
 
+#include <algorithm>
+
 QGC_LOGGING_CATEGORY(LogDownloadControllerLog, "AnalyzeView.LogDownloadController")
 
 LogDownloadController::LogDownloadController(QObject *parent)
@@ -203,6 +205,27 @@ void LogDownloadController::_receivedAllEntries()
 {
     _timer->stop();
     _setListing(false);
+
+    // Sort log entries by time (newest first)
+    const int num_logs = _logEntriesModel->count();
+    if (num_logs > 1) {
+        QList<QObject*> sortedList;
+        for (int i = 0; i < num_logs; i++) {
+            sortedList.append(_logEntriesModel->removeAt(0));
+        }
+
+        std::sort(sortedList.begin(), sortedList.end(), [](QObject* a, QObject* b) {
+            const QGCLogEntry* entryA = qobject_cast<QGCLogEntry*>(a);
+            const QGCLogEntry* entryB = qobject_cast<QGCLogEntry*>(b);
+            if (!entryA || !entryB) {
+                return false;
+            }
+            // Sort by time in descending order (newest first)
+            return entryA->time() > entryB->time();
+        });
+
+        _logEntriesModel->append(sortedList);
+    }
 }
 
 bool LogDownloadController::_entriesComplete() const
