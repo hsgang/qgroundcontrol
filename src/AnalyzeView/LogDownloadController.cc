@@ -362,8 +362,31 @@ void LogDownloadController::_updateDataRate()
     _downloadData->rate_avg = (_downloadData->rate_avg * 0.95) + (rate * 0.05);
     _downloadData->rate_bytes = 0;
 
-    const QString status = QStringLiteral("%1 (%2/s)").arg(qgcApp()->bigSizeToString(_downloadData->written),
-                                                           qgcApp()->bigSizeToString(_downloadData->rate_avg));
+    // 남은 시간 계산
+    QString remainingInfo = QStringLiteral("N/A");
+    const qreal rateAvg = _downloadData->rate_avg;
+    if (rateAvg > 0.1 && _downloadData->entry) {
+        const qint64 totalBytes = static_cast<qint64>(_downloadData->entry->size());
+        const qint64 written = static_cast<qint64>(_downloadData->written); 
+        const qint64 remainingBytes = qMax<qint64>(0, totalBytes - written);
+        if (remainingBytes > 0) {
+            const qint64 secs = static_cast<qint64>(remainingBytes / rateAvg + 0.5);
+            const int hours = static_cast<int>(secs / 3600);
+            const int mins  = static_cast<int>((secs % 3600) / 60);
+            const int secsR = static_cast<int>(secs % 60);
+            remainingInfo = QStringLiteral("%1:%2:%3")
+                                .arg(hours, 2, 10, QChar('0'))
+                                .arg(mins,  2, 10, QChar('0'))
+                                .arg(secsR, 2, 10, QChar('0'));
+        } else {
+            remainingInfo = QStringLiteral("00:00:00");
+        }
+    }
+
+    const QString status = QStringLiteral("%1 (%2/s) - %3")
+                               .arg(qgcApp()->bigSizeToString(_downloadData->written),
+                                    qgcApp()->bigSizeToString(_downloadData->rate_avg),
+                                    remainingInfo);
 
     _downloadData->entry->setStatus(status);
     _downloadData->elapsed.start();
