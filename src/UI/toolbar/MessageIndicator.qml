@@ -51,7 +51,7 @@ Item {
         spacing:        ScreenTools.defaultFontPixelWidth/2
 
         QGCColoredImage {
-            height:             parent.height * 0.9
+            height:             parent.height * 0.8
             width:              height
             anchors.verticalCenter:   parent.verticalCenter
             sourceSize.height:  height
