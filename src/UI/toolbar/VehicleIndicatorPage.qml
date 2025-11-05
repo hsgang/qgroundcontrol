@@ -68,7 +68,8 @@ ToolIndicatorPage {
                 LabelledLabel {
                     label:  qsTr("UID")
                     labelText:  _activeVehicle.vehicleUID2Str
-                    labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 28
+                    labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
+                    labelTextElide: Text.ElideRight
                 }
             }
 
