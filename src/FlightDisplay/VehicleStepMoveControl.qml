@@ -148,15 +148,15 @@ Item {
 
                 LabelledLabel {
                     Layout.fillWidth:   true
-                    label:              "진행률"
-                    labelText:          _activeVehicle && _activeVehicle.dropSequence ?
-                                        (_activeVehicle.dropSequence.dropSequenceProgress * 100).toFixed(0) + " %" : "0 %"
-                }
-                LabelledLabel {
-                    Layout.fillWidth:   true
                     label:              "상태"
                     labelText:          _activeVehicle && _activeVehicle.dropSequence ?
                                         _activeVehicle.dropSequence.dropSequenceStatus : "준비 안됨"
+                }
+                LabelledLabel {
+                    Layout.fillWidth:   true
+                    label:              "진행률"
+                    labelText:          _activeVehicle && _activeVehicle.dropSequence ?
+                                        (_activeVehicle.dropSequence.dropSequenceProgress * 100).toFixed(0) + " %" : "0 %"
                 }
                 LabelledLabel {
                     Layout.fillWidth:   true
@@ -492,7 +492,7 @@ Item {
                         opacity:            enabled ? 1 : 0.4
 
                         iconSource:         "/InstrumentValueIcons/dots-horizontal-double.svg"
-                        text:               "Low"
+                        text:               "낮게"
                         font.pointSize:     _fontSize * 0.7
 
                         onClicked: {
@@ -534,7 +534,7 @@ Item {
                         opacity:            enabled ? 1 : 0.4
 
                         iconSource:         "/InstrumentValueIcons/dots-horizontal-triple.svg"
-                        text:               "High"
+                        text:               "높게"
                         font.pointSize:     _fontSize * 0.7
 
                         onClicked: {

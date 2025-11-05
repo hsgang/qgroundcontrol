@@ -46,7 +46,7 @@ private:
     Vehicle* _vehicle                    {nullptr};
     bool     _dropSequenceInProgress     {false};
     float    _dropSequenceProgress       {0.0};
-    QString  _dropSequenceStatus         {tr("Not started")};
+    QString  _dropSequenceStatus         {tr("준비")};
     int      _dropSequenceIndex          {0};
     int      _tagId                      {0};
     float    _targetAltitude             {3.0};
