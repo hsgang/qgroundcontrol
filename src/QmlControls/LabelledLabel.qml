@@ -19,6 +19,7 @@ RowLayout {
     property alias description:             _description.text
     property alias labelText:              _label.text
     property real  labelPreferredWidth:    -1
+    property int   labelTextElide:         Text.ElideNone
 
     spacing: ScreenTools.defaultFontPixelWidth * 2
 
@@ -42,6 +43,7 @@ RowLayout {
     QGCLabel {
         id:                     _label
         Layout.preferredWidth:  labelPreferredWidth
-        wrapMode:               Text.WrapAnywhere
+        wrapMode:               labelTextElide !== Text.ElideNone ? Text.NoWrap : Text.WrapAnywhere
+        elide:                  labelTextElide
     }
 }
