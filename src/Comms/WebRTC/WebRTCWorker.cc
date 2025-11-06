@@ -216,8 +216,8 @@ void WebRTCWorker::writeData(const QByteArray &data)
         return;
     }
 
-    // 이중 경로 모드인지 확인: 양쪽 경로가 모두 존재해야 함
-    bool dualPathMode = (_mavlinkDataChannelDirect && _mavlinkDataChannelRelay);
+    // 이중 경로 모드인지 확인: 양쪽 경로중에 하나라도 존재
+    bool dualPathMode = (_mavlinkDataChannelDirect || _mavlinkDataChannelRelay);
 
     if (dualPathMode) {
         // 이중 경로 사용: 양쪽 모두 전송 (진정한 이중화)
