@@ -86,13 +86,13 @@ ToolIndicatorPage{
                     property Fact   _showChartWidget:           QGroundControl.settingsManager.flyViewSettings.showChartWidget
                 }
 
-                FactCheckBoxSlider {
-                    Layout.fillWidth: true
-                    text:       qsTr("Atmospheric Data")
-                    fact:       _showAtmosphericValueBar
-                    visible:    _showAtmosphericValueBar.visible
-                    property Fact   _showAtmosphericValueBar:   QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar
-                }
+                // FactCheckBoxSlider {
+                //     Layout.fillWidth: true
+                //     text:       qsTr("Atmospheric Data")
+                //     fact:       _showAtmosphericValueBar
+                //     visible:    _showAtmosphericValueBar.visible
+                //     property Fact   _showAtmosphericValueBar:   QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar
+                // }
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true
