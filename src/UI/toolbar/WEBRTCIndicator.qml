@@ -57,13 +57,41 @@ Item {
     }
 
     // WebRTC 통계 정보 (WebRTCLink에서 직접 접근)
-    property real _rtt:             _webrtcLink ? _webrtcLink.webRtcRtt : -1
+    property real _rtt:             _webrtcLink ? _webrtcLink.webRtcRtt : 0
+    property real _rttDirect:       _webrtcLink ? _webrtcLink.webRtcRttDirect : 0  // Direct 경로 RTT
+    property real _rttRelay:        _webrtcLink ? _webrtcLink.webRtcRttRelay : 0   // Relay 경로 RTT
+    property string _iceCandidateDirect: _webrtcLink ? _webrtcLink.iceCandidateDirect : ""  // Direct ICE candidate
+    property string _iceCandidateRelay:  _webrtcLink ? _webrtcLink.iceCandidateRelay : ""   // Relay ICE candidate
+
+    // 통합 송수신 속도
     property real _webRtcSent:      _webrtcLink ? _webrtcLink.webRtcSent : 0
     property real _webRtcRecv:      _webrtcLink ? _webrtcLink.webRtcRecv : 0
+
+    // Direct 경로 송수신 속도
+    property real _webRtcSentDirect: _webrtcLink ? _webrtcLink.webRtcSentDirect : 0
+    property real _webRtcRecvDirect: _webrtcLink ? _webrtcLink.webRtcRecvDirect : 0
+
+    // Relay 경로 송수신 속도
+    property real _webRtcSentRelay:  _webrtcLink ? _webrtcLink.webRtcSentRelay : 0
+    property real _webRtcRecvRelay:  _webrtcLink ? _webrtcLink.webRtcRecvRelay : 0
+
+    // 통합 비디오 수신 통계
     property real _videoRate:       _webrtcLink ? _webrtcLink.rtcVideoRate : 0
     property real  _videoRateMbps:   (_videoRate / 125.0).toFixed(2)  // Mbps 단위 변환
     property int  _videoPacketCount: _webrtcLink ? _webrtcLink.rtcVideoPacketCount : 0
     property int  _videoBytesReceived: _webrtcLink ? _webrtcLink.rtcVideoBytesReceived : 0
+
+    // Direct 경로 비디오 수신 통계
+    property real _videoRateDirect: _webrtcLink ? _webrtcLink.rtcVideoDirectRate : 0
+    property real _videoRateDirectMbps: _webrtcLink ? (_videoRateDirect / 125.0).toFixed(2) : 0
+    property int _videoPacketCountDirect: _webrtcLink ? _webrtcLink.rtcVideoDirectPacketCount : 0
+    property int _videoBytesReceivedDirect: _webrtcLink ? _webrtcLink.rtcVideoDirectBytesReceived : 0
+
+    // Relay 경로 비디오 수신 통계
+    property real _videoRateRelay: _webrtcLink ? _webrtcLink.rtcVideoRelayRate : 0
+    property real _videoRateRelayMbps: _webrtcLink ? (_videoRateRelay / 125.0).toFixed(2) : 0
+    property int _videoPacketCountRelay: _webrtcLink ? _webrtcLink.rtcVideoRelayPacketCount : 0
+    property int _videoBytesReceivedRelay: _webrtcLink ? _webrtcLink.rtcVideoRelayBytesReceived : 0
 
     // RTC Module 시스템 정보
     property real _rtcModuleCpuUsage:        _webrtcLink ? _webrtcLink.rtcModuleCpuUsage : 0
@@ -125,7 +153,7 @@ Item {
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
                 text:           qsTr("%1 Mbps").arg(_videoRateMbps)
-                width:          ScreenTools.smallFontPixelWidth * 9
+                width:          ScreenTools.smallFontPixelWidth * 10
             }
         }
     }
@@ -142,128 +170,190 @@ Item {
             showExpand: false
 
             contentComponent: Component {
-                ColumnLayout {
+                RowLayout {
                     spacing: _margins
 
                     SettingsGroupLayout {
                         heading: qsTr("RTC 상태 정보")
+                        Layout.alignment: Qt.AlignTop
 
                         LabelledLabel {
-                            label:      qsTr("응답시간")
+                            label:      qsTr("응답지연")
                             labelText:  qsTr("%1 ms").arg(_rtt)
+                            visible:    !(_rttDirect > 0 || _rttRelay > 0)// dual-path가 아닌 경우만 표시
                         }
                         LabelledLabel {
-                            label:      qsTr("데이터 송신")
-                            labelText:  qsTr("%1 KB/s").arg(_webRtcSent)
+                            label:      qsTr("우선 채널 응답지연")
+                            labelText:  _rttDirect > 0 ? qsTr("%1 ms").arg(_rttDirect) : qsTr("N/A")
+                            //visible:    _rttDirect > 0 || _rttRelay > 0  // Dual-path인 경우만 표시
                         }
                         LabelledLabel {
-                            label:      qsTr("데이터 수신")
-                            labelText:  qsTr("%1 KB/s").arg(_webRtcRecv)
+                            label:      qsTr("백업 채널 응답지연")
+                            labelText:  _rttRelay > 0 ? qsTr("%1 ms").arg(_rttRelay) : qsTr("N/A")
+                            //visible:    _rttDirect > 0 || _rttRelay > 0  // Dual-path인 경우만 표시
                         }
                         LabelledLabel {
-                            label:      qsTr("영상 다운로드")
+                            label:      qsTr("통합 데이터 송신")
+                            labelText:  qsTr("%1 KB/s").arg(_webRtcSent.toFixed(2))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("우선 채널 송신")
+                            labelText:  _webRtcSentDirect > 0 ? qsTr("%1 KB/s").arg(_webRtcSentDirect.toFixed(2)) : qsTr("N/A")
+                            visible:    _webRtcSentDirect > 0 || _webRtcSentRelay > 0
+                        }
+                        LabelledLabel {
+                            label:      qsTr("백업 채널 송신")
+                            labelText:  _webRtcSentRelay > 0 ? qsTr("%1 KB/s").arg(_webRtcSentRelay.toFixed(2)) : qsTr("N/A")
+                            visible:    _webRtcSentDirect > 0 || _webRtcSentRelay > 0
+                        }
+                        LabelledLabel {
+                            label:      qsTr("통합 데이터 수신")
+                            labelText:  qsTr("%1 KB/s").arg(_webRtcRecv.toFixed(2))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("우선 채널 수신")
+                            labelText:  _webRtcRecvDirect > 0 ? qsTr("%1 KB/s").arg(_webRtcRecvDirect.toFixed(2)) : qsTr("N/A")
+                            visible:    _webRtcRecvDirect > 0 || _webRtcRecvRelay > 0
+                        }
+                        LabelledLabel {
+                            label:      qsTr("백업 채널 수신")
+                            labelText:  _webRtcRecvRelay > 0 ? qsTr("%1 KB/s").arg(_webRtcRecvRelay.toFixed(2)) : qsTr("N/A")
+                            visible:    _webRtcRecvDirect > 0 || _webRtcRecvRelay > 0
+                        }
+                        LabelledLabel {
+                            label:      qsTr("통합 영상 수신")
                             labelText:  qsTr("%1 Mbps").arg(_videoRateMbps)
+                            visible:    !(_videoRateDirect > 0 || _videoRateRelay > 0)  // dual-path가 아닌 경우만 표시
+                        }
+                        LabelledLabel {
+                            label:      qsTr("우선 채널 영상")
+                            labelText:  qsTr("%1 Mbps").arg(_videoRateDirectMbps)
+                            visible:    _videoRateDirect > 0 || _videoRateRelay > 0
+                        }
+                        LabelledLabel {
+                            label:      qsTr("백업 채널 영상")
+                            labelText:  qsTr("%1 Mbps").arg(_videoRateRelayMbps)
+                            visible:    _videoRateDirect > 0 || _videoRateRelay > 0
+                        }
+                        LabelledLabel {
+                            label:      qsTr("우선 채널 ICE")
+                            labelText:  _iceCandidateDirect !== "" ? _iceCandidateDirect : qsTr("N/A")
+                            labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
+                            labelTextElide: Text.ElideMiddle
+                            visible:    _rttDirect > 0
+                        }
+                        LabelledLabel {
+                            label:      qsTr("백업 채널 ICE")
+                            labelText:  _iceCandidateRelay !== "" ? _iceCandidateRelay : qsTr("N/A")
+                            labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
+                            labelTextElide: Text.ElideMiddle
+                            visible:    _rttRelay > 0
                         }
                     }
 
                     // RTC Module 시스템 정보 섹션
-                    SettingsGroupLayout {
-                        heading: qsTr("RTC 모듈 시스템 정보")
+                    ColumnLayout {
+                        spacing: _margins
+                        Layout.alignment: Qt.AlignTop
+                    
+                        SettingsGroupLayout {
+                            heading: qsTr("RTC 모듈 시스템 정보")
 
-                        LabelledLabel {
-                            label:      qsTr("CPU 사용률")
-                            labelText:  qsTr("%1%").arg(_rtcModuleCpuUsage.toFixed(1))
+                            LabelledLabel {
+                                label:      qsTr("CPU 사용률")
+                                labelText:  qsTr("%1%").arg(_rtcModuleCpuUsage.toFixed(1))
+                            }
+                            LabelledLabel {
+                                label:      qsTr("CPU 온도")
+                                labelText:  qsTr("%1°C").arg(_rtcModuleCpuTemperature.toFixed(1))
+                            }
+                            // LabelledLabel {
+                            //     label:      qsTr("메모리 사용률")
+                            //     labelText:  qsTr("%1%").arg(_rtcModuleMemoryUsage.toFixed(1))
+                            // }
+                            LabelledLabel {
+                                label:      qsTr("네트워크 수신")
+                                labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkRx.toFixed(2))
+                            }
+                            LabelledLabel {
+                                label:      qsTr("네트워크 송신")
+                                labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkTx.toFixed(2))
+                            }
+                            LabelledLabel {
+                                label:      qsTr("인터페이스")
+                                labelText:  _rtcModuleNetworkInterface
+                            }
                         }
-                        LabelledLabel {
-                            label:      qsTr("CPU 온도")
-                            labelText:  qsTr("%1°C").arg(_rtcModuleCpuTemperature.toFixed(1))
+
+                        // Video Metrics 정보 섹션
+                        SettingsGroupLayout {
+                            heading: qsTr("비디오 메트릭 정보")
+
+                            LabelledLabel {
+                                label:      qsTr("RTSP 소스 패킷")
+                                labelText:  qsTr("%1 pkt/s").arg(_videoRtspPacketsPerSec.toFixed(1))
+                            }
+                            // LabelledLabel {
+                            //     label:      qsTr("디코딩 프레임")
+                            //     labelText:  qsTr("%1 fps").arg(_videoDecodedFramesPerSec.toFixed(1))
+                            // }
+                            LabelledLabel {
+                                label:      qsTr("인코딩 프레임")
+                                labelText:  qsTr("%1 fps").arg(_videoEncodedFramesPerSec.toFixed(1))
+                            }
+                            // LabelledLabel {
+                            //     label:      qsTr("SRT 프레임")
+                            //     labelText:  qsTr("%1 fps").arg(_videoSrtFramesPerSec.toFixed(1))
+                            // }
+                            LabelledLabel {
+                                label:      qsTr("RTP 프레임")
+                                labelText:  qsTr("%1 fps").arg(_videoRtpFramesPerSec.toFixed(1))
+                            }
                         }
-                        // LabelledLabel {
-                        //     label:      qsTr("메모리 사용률")
-                        //     labelText:  qsTr("%1%").arg(_rtcModuleMemoryUsage.toFixed(1))
+
+                        // // RTC 모듈 버전 정보 섹션
+                        // SettingsGroupLayout {
+                        //     heading: qsTr("RTC 모듈 버전 정보")
+
+                        //     LabelledLabel {
+                        //         label:      qsTr("업데이트 상태")
+                        //         labelText:  _rtcModuleUpdateAvailable ?
+                        //                    qsTr("업데이트 가능 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음")) :
+                        //                    qsTr("최신 버전 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음"))
+                        //     }
                         // }
-                        LabelledLabel {
-                            label:      qsTr("네트워크 수신")
-                            labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkRx.toFixed(2))
-                        }
-                        LabelledLabel {
-                            label:      qsTr("네트워크 송신")
-                            labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkTx.toFixed(2))
-                        }
-                        LabelledLabel {
-                            label:      qsTr("인터페이스")
-                            labelText:  _rtcModuleNetworkInterface
-                        }
-                    }
 
-                    // Video Metrics 정보 섹션
-                    SettingsGroupLayout {
-                        heading: qsTr("비디오 메트릭 정보")
+                        // SettingsGroupLayout {
+                        //     heading: qsTr("RTC 모듈 제어")
 
-                        LabelledLabel {
-                            label:      qsTr("RTSP 소스 패킷")
-                            labelText:  qsTr("%1 pkt/s").arg(_videoRtspPacketsPerSec.toFixed(1))
-                        }
-                        LabelledLabel {
-                            label:      qsTr("디코딩 프레임")
-                            labelText:  qsTr("%1 fps").arg(_videoDecodedFramesPerSec.toFixed(1))
-                        }
-                        LabelledLabel {
-                            label:      qsTr("인코딩 프레임")
-                            labelText:  qsTr("%1 fps").arg(_videoEncodedFramesPerSec.toFixed(1))
-                        }
-                        LabelledLabel {
-                            label:      qsTr("SRT 프레임")
-                            labelText:  qsTr("%1 fps").arg(_videoSrtFramesPerSec.toFixed(1))
-                        }
-                        LabelledLabel {
-                            label:      qsTr("RTP 프레임")
-                            labelText:  qsTr("%1 fps").arg(_videoRtpFramesPerSec.toFixed(1))
-                        }
-                    }
-
-                    // // RTC 모듈 버전 정보 섹션
-                    // SettingsGroupLayout {
-                    //     heading: qsTr("RTC 모듈 버전 정보")
-
-                    //     LabelledLabel {
-                    //         label:      qsTr("업데이트 상태")
-                    //         labelText:  _rtcModuleUpdateAvailable ?
-                    //                    qsTr("업데이트 가능 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음")) :
-                    //                    qsTr("최신 버전 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음"))
-                    //     }
-                    // }
-
-                    // SettingsGroupLayout {
-                    //     heading: qsTr("RTC 모듈 제어")
-
-                    //     LabelledButton {
-                    //         label:      qsTr("모듈 재시작")
-                    //         buttonText: qsTr("재시작")
-                    //         enabled:    true
-                    //         onClicked:  restartConfirmDialogComponent.createObject(mainWindow).open()
-                    //     }
-                    //     LabelledButton {
-                    //         label:      qsTr("모듈 업데이트 확인")
-                    //         buttonText: qsTr("확인")
-                    //         onClicked:  if (_webrtcLink) _webrtcLink.sendCustomMessage("C")
-                    //     }
-                        
-                    //     // 업데이트 가능한 경우에만 업데이트 버튼 표시
-                    //     LabelledButton {
-                    //         label:      qsTr("모듈 업데이트")
-                    //         buttonText: qsTr("업데이트")
-                    //         visible:    _rtcModuleUpdateAvailable
-                    //         onClicked:  rtcUpdateConfirmDialogComponent.createObject(mainWindow).open()
-                    //     }
-                        
-                    //     // 최신 버전인 경우 상태 텍스트 표시
-                    //     LabelledLabel {
-                    //         label:      qsTr("업데이트 상태")
-                    //         labelText:  qsTr("최신 버전 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음"))
-                    //         visible:    !_rtcModuleUpdateAvailable && _rtcModuleCurrentVersion !== ""
-                    //     }
-                    // }
+                        //     LabelledButton {
+                        //         label:      qsTr("모듈 재시작")
+                        //         buttonText: qsTr("재시작")
+                        //         enabled:    true
+                        //         onClicked:  restartConfirmDialogComponent.createObject(mainWindow).open()
+                        //     }
+                        //     LabelledButton {
+                        //         label:      qsTr("모듈 업데이트 확인")
+                        //         buttonText: qsTr("확인")
+                        //         onClicked:  if (_webrtcLink) _webrtcLink.sendCustomMessage("C")
+                        //     }
+                            
+                        //     // 업데이트 가능한 경우에만 업데이트 버튼 표시
+                        //     LabelledButton {
+                        //         label:      qsTr("모듈 업데이트")
+                        //         buttonText: qsTr("업데이트")
+                        //         visible:    _rtcModuleUpdateAvailable
+                        //         onClicked:  rtcUpdateConfirmDialogComponent.createObject(mainWindow).open()
+                        //     }
+                            
+                        //     // 최신 버전인 경우 상태 텍스트 표시
+                        //     LabelledLabel {
+                        //         label:      qsTr("업데이트 상태")
+                        //         labelText:  qsTr("최신 버전 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음"))
+                        //         visible:    !_rtcModuleUpdateAvailable && _rtcModuleCurrentVersion !== ""
+                        //     }
+                        // }
+                    }                    
                 }
             }
         }

@@ -48,31 +48,6 @@ ToolIndicatorPage {
         ColumnLayout {
             spacing: _margins
 
-            SettingsGroupLayout {
-                heading: qsTr("Vehicle Information")
-
-                LabelledLabel {
-                    label: qsTr("Firmware Type")
-                    labelText: _activeVehicle.firmwareTypeString
-                }
-
-                LabelledLabel {
-                    label: qsTr("Firmware Version")
-                    labelText: globals.activeVehicle.firmwareMajorVersion === -1 ? qsTr("Unknown") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + globals.activeVehicle.firmwareVersionTypeString
-                }
-
-                LabelledLabel {
-                    label:  qsTr("Frame Class")
-                    labelText:  _frameClass.enumStringValue
-                }
-                LabelledLabel {
-                    label:  qsTr("UID")
-                    labelText:  _activeVehicle.vehicleUID2Str
-                    labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
-                    labelTextElide: Text.ElideRight
-                }
-            }
-
             SettingsGroupLayout{
                 heading: qsTr("Parameter Summary")
 
@@ -117,6 +92,31 @@ ToolIndicatorPage {
                 LabelledLabel {
                     label: qsTr("Land Speed")
                     labelText: (landSpeedFact.value * 0.01).toFixed(1) + " m/s"
+                }
+            }
+
+            SettingsGroupLayout {
+                heading: qsTr("Vehicle Information")
+
+                LabelledLabel {
+                    label: qsTr("Firmware Type")
+                    labelText: _activeVehicle.firmwareTypeString
+                }
+
+                LabelledLabel {
+                    label: qsTr("Firmware Version")
+                    labelText: globals.activeVehicle.firmwareMajorVersion === -1 ? qsTr("Unknown") : globals.activeVehicle.firmwareMajorVersion + "." + globals.activeVehicle.firmwareMinorVersion + "." + globals.activeVehicle.firmwarePatchVersion + globals.activeVehicle.firmwareVersionTypeString
+                }
+
+                LabelledLabel {
+                    label:  qsTr("Frame Class")
+                    labelText:  _frameClass.enumStringValue
+                }
+                LabelledLabel {
+                    label:  qsTr("UID")
+                    labelText:  _activeVehicle.vehicleUID2Str
+                    labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
+                    labelTextElide: Text.ElideRight
                 }
             }
 

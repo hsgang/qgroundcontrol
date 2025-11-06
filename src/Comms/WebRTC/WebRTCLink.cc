@@ -70,21 +70,39 @@ WebRTCLink::~WebRTCLink()
 
 bool WebRTCLink::isConnected() const
 {
+    // 디버깅: 각 조건 확인
+    static int debugCount = 0;
+    bool shouldDebug = (++debugCount % 100 == 1); // 첫 번째와 100번마다
+
     // Worker가 존재하고 DataChannel이 열려있는지 확인
     if (!_worker) {
+        if (shouldDebug) {
+            qCDebug(WebRTCLinkLog) << "[isConnected] FALSE: _worker is null";
+        }
         return false;
     }
 
     // DataChannel 상태 확인
-    if (!_worker->isDataChannelOpen()) {
+    bool dcOpen = _worker->isDataChannelOpen();
+    if (!dcOpen) {
+        if (shouldDebug) {
+            qCDebug(WebRTCLinkLog) << "[isConnected] FALSE: DataChannel not open";
+        }
         return false;
     }
 
     // Worker의 전체적인 운영 상태 확인
-    if (!_worker->isOperational()) {
+    bool operational = _worker->isOperational();
+    if (!operational) {
+        if (shouldDebug) {
+            qCDebug(WebRTCLinkLog) << "[isConnected] FALSE: Worker not operational";
+        }
         return false;
     }
 
+    if (shouldDebug) {
+        qCDebug(WebRTCLinkLog) << "[isConnected] TRUE: All checks passed";
+    }
     return true;
 }
 
@@ -137,6 +155,7 @@ void WebRTCLink::_writeBytes(const QByteArray& bytes)
 void WebRTCLink::_onConnected()
 {
     qCDebug(WebRTCLinkLog) << "[WebRTCLink] Connected";
+
     _onRtcStatusMessageChanged("RTC 연결됨");
     emit connected();
 }

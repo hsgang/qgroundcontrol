@@ -4,6 +4,7 @@
 #include <memory>
 #include <QtCore/QObject>
 #include <QtCore/QString>
+#include <QtCore/QMutex>
 #include <QtCore/QMutexLocker>
 #include <QtCore/QTimer>
 #include <QtCore/QJsonObject>
@@ -12,8 +13,10 @@
 #include <QRandomGenerator>
 #include <atomic>
 #include <vector>
+#include <array>
 
 #include "WebRTCConfiguration.h"
+#include "WebRTCStats.h"
 
 class SignalingServerManager;
 
@@ -134,50 +137,6 @@ struct VideoMetrics {
     }
 };
 
-// WebRTC 통계 정보를 효율적으로 묶어서 전달하기 위한 구조체
-struct WebRTCStats {
-    int rttMs = -1;
-    double webRtcSent = -1.0;
-    double webRtcRecv = -1.0;
-    double videoRateKBps = 0.0;
-    int videoPacketCount = 0;
-    qint64 videoBytesReceived = 0;
-
-    // 기본 생성자
-    WebRTCStats() = default;
-
-    // 비교 연산자 (변경 감지용)
-    bool operator==(const WebRTCStats& other) const {
-        return rttMs == other.rttMs &&
-               qFuzzyCompare(webRtcSent, other.webRtcSent) &&
-               qFuzzyCompare(webRtcRecv, other.webRtcRecv) &&
-               qFuzzyCompare(videoRateKBps, other.videoRateKBps) &&
-               videoPacketCount == other.videoPacketCount &&
-               videoBytesReceived == other.videoBytesReceived;
-    }
-
-    bool operator!=(const WebRTCStats& other) const {
-        return !(*this == other);
-    }
-
-    // 유효성 검사
-    bool isValid() const {
-        return rttMs >= -1 && webRtcSent >= -1.0 && webRtcRecv >= -1.0 &&
-               videoRateKBps >= 0.0 && videoPacketCount >= 0 && videoBytesReceived >= 0;
-    }
-
-    // 디버그 출력용
-    QString toString() const {
-        return QString("RTT: %1ms, Sent: %2 KB/s, Recv: %3 KB/s, Video: %4 KB/s (%5 packets, %6 bytes)")
-               .arg(rttMs)
-               .arg(webRtcSent, 0, 'f', 2)
-               .arg(webRtcRecv, 0, 'f', 2)
-               .arg(videoRateKBps, 0, 'f', 2)
-               .arg(videoPacketCount)
-               .arg(videoBytesReceived);
-    }
-};
-
 // RTC 모듈 버전 정보를 저장하기 위한 구조체
 struct RTCModuleVersionInfo {
     QString currentVersion = "";
@@ -245,7 +204,6 @@ private:
 Q_DECLARE_METATYPE(RTCModuleSystemInfo)
 Q_DECLARE_METATYPE(VideoMetrics)
 Q_DECLARE_METATYPE(RTCModuleVersionInfo)
-Q_DECLARE_METATYPE(WebRTCStats)
 
 class TransferRateCalculator {
    public:
@@ -388,9 +346,9 @@ class WebRTCWorker : public QObject
 
     // WebRTC peer connection
     void _setupPeerConnection();
-    void _handleTrackReceived(std::shared_ptr<rtc::Track> track);
-    void _setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc);
-    void _setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc);
+    void _handleTrackReceived(std::shared_ptr<rtc::Track> track, bool isDirect = false);
+    void _setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc, bool isDirect = false);
+    void _setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc, bool isDirect = false);
     void _processDataChannelOpen();
     void _processPendingCandidates();
     void _checkIceProcessingStatus();
@@ -430,11 +388,21 @@ class WebRTCWorker : public QObject
     static constexpr int BASE_RECONNECT_DELAY_MS = 1000;
     static constexpr int MAX_RECONNECT_DELAY_MS = 30000;
 
-    // WebRTC components
-    std::shared_ptr<rtc::PeerConnection> _peerConnection;
-    std::shared_ptr<rtc::DataChannel> _mavlinkDataChannel;
+    // WebRTC components - Dual Path Support (Direct + Relay)
+    std::shared_ptr<rtc::PeerConnection> _peerConnection;          // Legacy single connection
+    std::shared_ptr<rtc::DataChannel> _mavlinkDataChannel;         // Legacy single channel
     std::shared_ptr<rtc::DataChannel> _customDataChannel;
     std::shared_ptr<rtc::Track> _videoTrack;
+
+    // Dual-path connections
+    std::shared_ptr<rtc::PeerConnection> _peerConnectionDirect;    // Direct P2P path
+    std::shared_ptr<rtc::PeerConnection> _peerConnectionRelay;     // TURN Relay path
+    std::shared_ptr<rtc::DataChannel> _mavlinkDataChannelDirect;   // Direct data channel
+    std::shared_ptr<rtc::DataChannel> _mavlinkDataChannelRelay;    // Relay data channel
+    std::shared_ptr<rtc::DataChannel> _customDataChannelDirect;    // Direct custom channel
+    std::shared_ptr<rtc::DataChannel> _customDataChannelRelay;     // Relay custom channel
+    std::shared_ptr<rtc::Track> _videoTrackDirect;                 // Direct video track
+    std::shared_ptr<rtc::Track> _videoTrackRelay;                  // Relay video track
 
     // State management - 스레드 안전성을 위한 atomic 변수들
     std::vector<rtc::Candidate> _pendingCandidates;
@@ -446,6 +414,14 @@ class WebRTCWorker : public QObject
     std::atomic<bool> _isDisconnecting{false};
     std::atomic<bool> _isShuttingDown{false};
     std::atomic<bool> _isCleaningUp{false};  // cleanup 진행 중 플래그
+
+    // Dual-path 상태
+    std::atomic<bool> _directPathActive{false};
+    std::atomic<bool> _relayPathActive{false};
+    std::atomic<bool> _remoteDescriptionSetDirect{false};
+    std::atomic<bool> _remoteDescriptionSetRelay{false};
+    std::atomic<bool> _dataChannelOpenedDirect{false};
+    std::atomic<bool> _dataChannelOpenedRelay{false};
 
     // Constants
     static const QString kDataChannelLabel;
@@ -466,8 +442,8 @@ class WebRTCWorker : public QObject
     static constexpr int SCTP_HEARTBEAT_INTERVAL_MS = 10000;
 
     // Timer Intervals
-    static constexpr int RTT_UPDATE_INTERVAL_MS = 1000;
-    static constexpr int STATS_UPDATE_INTERVAL_MS = 1000;
+    static constexpr int RTT_UPDATE_INTERVAL_MS = 200;
+    static constexpr int STATS_UPDATE_INTERVAL_MS = 500;
 
     // Reconnection Constants
     static constexpr int RECONNECT_DELAY_MIN_MS = 1000;
@@ -489,20 +465,48 @@ class WebRTCWorker : public QObject
     void _handlePeerDisconnection();
     void _resetPeerConnection();
 
+    // Dual-path methods
+    void _setupDualPathConnections();
+    void _setupSinglePeerConnection(std::shared_ptr<rtc::PeerConnection>& pc, bool isDirect);
+    void _setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnection> pc, bool isDirect);
+    void _resetDualPathConnections();
+    enum class PathType { Direct, Relay, Best, Both };
+    void _sendDataViaPath(const QByteArray& data, PathType pathType);
+    PathType _selectBestPath() const;
+    void _processReceivedData(const QByteArray& data, bool fromDirect);
+
     // 재연결 관리
     int _calculateReconnectDelay() const;
     void _scheduleReconnect();
     void _cancelReconnect();
     void _onReconnectSuccess();
 
+    // 통합 송수신 통계 (기존 호환성 유지)
     TransferRateCalculator _dataChannelSentCalc;
     TransferRateCalculator _dataChannelReceivedCalc;
+
+    // Dual-path 경로별 통계
+    TransferRateCalculator _dataChannelSentDirectCalc;
+    TransferRateCalculator _dataChannelRecvDirectCalc;
+    TransferRateCalculator _dataChannelSentRelayCalc;
+    TransferRateCalculator _dataChannelRecvRelayCalc;
+
     TransferRateCalculator _videoReceivedCalc;
+
+    // Dual-path 비디오 수신 통계
+    TransferRateCalculator _videoReceivedDirectCalc;
+    TransferRateCalculator _videoReceivedRelayCalc;
 
     QTimer* _statsTimer = nullptr;
 
     // RTT 값 저장
-    int _rttMs = -1;
+    int _rttMs = 0;
+    int _rttDirectMs = 0;
+    int _rttRelayMs = 0;
+
+    // ICE candidate 캐시
+    QString _cachedDirectCandidate;
+    QString _cachedRelayCandidate;
 
     // 버퍼 관리 및 혼잡 제어
     static const size_t MAX_BUFFER_SIZE = 32 * 1024;         // 32KB (libdatachannel 최대 16MB)
@@ -518,6 +522,17 @@ class WebRTCWorker : public QObject
     // 대기 큐 (버퍼 가득 찰 때 사용)
     QList<QByteArray> _pendingMessages;
     static const int MAX_PENDING_MESSAGES = 100;
+
+    // 중복 제거 (이중화 시 사용) - 해시 기반 (Thread-safe)
+    static constexpr int MAX_HASH_HISTORY = 200;
+    std::array<uint, MAX_HASH_HISTORY> _hashRingBuffer;  // 원형 버퍼
+    std::atomic<int> _hashRingIndex{0};  // 현재 인덱스
+    QMutex _hashMutex;  // 해시 접근 보호
+
+    // 중복 패킷 통계
+    std::atomic<uint64_t> _duplicatePacketsFromDirect{0};
+    std::atomic<uint64_t> _duplicatePacketsFromRelay{0};
+    std::atomic<uint64_t> _totalPacketsReceived{0};
 
     void _checkBufferHealth();
     void _processPendingMessages();
