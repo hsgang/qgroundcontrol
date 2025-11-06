@@ -93,7 +93,6 @@ Item {
 
     FlyViewRightPanel {
         id:                 rightPanel
-        anchors.margins:    _layoutMargin
         anchors.top:        topRightColumnLayout.bottom
         anchors.bottom:     bottomRightRowLayout.top
         anchors.right:      parent.right
