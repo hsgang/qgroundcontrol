@@ -424,7 +424,7 @@ SetupPage {
                     Rectangle {
                         width: progressBar.visualPosition * parent.width
                         height: parent.height
-                        color: "steelblue"
+                        color: qgcPal.colorGreen
                     }
                 }
             }
@@ -433,17 +433,12 @@ SetupPage {
                 QGCLabel {
                     id:     progressLabel
                     text:   ""
-                    horizontalAlignment:    Text.AlignLeft
-                    Layout.fillWidth:       true
-                    Layout.alignment:       Qt.AlignLeft
                 }
 
                 QGCLabel {
                     id:     progressValueLabel
                     text:   (progressBar.value * 100).toFixed(0) + "%"
-                    horizontalAlignment:    Text.AlignRight
-                    Layout.fillWidth:       true
-                    Layout.alignment:       Qt.AlignRight
+                    visible: progressLabel !== "" && (progressBar.value > 0 && progressBar.value < 1)
                 }
             }
 

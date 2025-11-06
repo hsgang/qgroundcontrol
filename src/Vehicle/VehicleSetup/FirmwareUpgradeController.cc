@@ -376,7 +376,7 @@ void FirmwareUpgradeController::_firmwareDownloadProgress(qint64 curr, qint64 to
     // Take care of cases where 0 / 0 is emitted as error return value
     if (total > 0) {
         _progressBar->setProperty("value", static_cast<float>(curr) / static_cast<float>(total));
-        _progressLabel->setProperty("text", "Downloading Firmware");
+        _progressLabel->setProperty("text", tr("Downloading firmware"));
     }
 }
 
@@ -435,7 +435,7 @@ void FirmwareUpgradeController::_flashComplete(void)
     delete _image;
     _image = nullptr;
     
-    _progressLabel->setProperty("text", "Upgrade complete");
+    _progressLabel->setProperty("text", tr("Upgrade complete"));
     _appendStatusLog(tr("Upgrade complete"), true);
     _appendStatusLog("------------------------------------------", false);
     emit flashComplete();
@@ -461,7 +461,7 @@ void FirmwareUpgradeController::_updateProgress(int curr, int total)
     // Take care of cases where 0 / 0 is emitted as error return value
     if (total > 0) {
         _progressBar->setProperty("value", static_cast<float>(curr) / static_cast<float>(total));
-        _progressLabel->setProperty("text", "Writing Firmware");
+        _progressLabel->setProperty("text", tr("Writing Firmware"));
     }
 }
 
@@ -470,7 +470,7 @@ void FirmwareUpgradeController::_eraseProgressTick(void)
 {
     _eraseTickCount++;
     _progressBar->setProperty("value", static_cast<float>(_eraseTickCount*_eraseTickMsec) / static_cast<float>(_eraseTotalMsec));
-    _progressLabel->setProperty("text", "Erasing Firmware");
+    _progressLabel->setProperty("text", tr("Erasing Firmware"));
 }
 
 /// Appends the specified text to the status log area in the ui
@@ -493,7 +493,7 @@ void FirmwareUpgradeController::_appendStatusLog(const QString& text, bool criti
 
 void FirmwareUpgradeController::_errorCancel(const QString& msg)
 {
-    _progressLabel->setProperty("text", "Upgrade cancelled");
+    _progressLabel->setProperty("text", tr("Upgrade cancelled"));
     _appendStatusLog(msg, false);
     _appendStatusLog(tr("Upgrade cancelled"), true);
     _appendStatusLog("------------------------------------------", false);

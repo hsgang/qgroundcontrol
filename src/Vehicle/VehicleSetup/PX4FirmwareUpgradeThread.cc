@@ -153,7 +153,7 @@ void PX4FirmwareUpgradeThreadWorker::_flash(void)
         
         if (_bootloader->program(_controller->image())) {
             qCDebug(FirmwareUpgradeLog) << "Program complete";
-            emit status("Program complete");
+            emit status(tr("Program complete"));
         } else {
             qCDebug(FirmwareUpgradeLog) << "Program failed:" << _bootloader->errorString();
             goto Error;

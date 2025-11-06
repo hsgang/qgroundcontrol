@@ -6318,7 +6318,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="314"/>
         <source>Detected Pixhawk board. You can select from the following flight stacks:</source>
-        <translation>Pixhawk 보드를 감지했습니다. 아래의 펌웨어 목록에서 선택할 수 있습니다.</translation>
+        <translation>장치가 연결되었습니다. 펌웨어를 선택하십시오.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="315"/>
@@ -6466,7 +6466,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="389"/>
         <source> From: %1</source>
-        <translation> %1 부터</translation>
+        <translation>저장소 %1</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="410"/>
@@ -6492,6 +6492,21 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="461"/>
         <source>Upgrade complete</source>
         <translation>업그레이드 완료</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="461"/>
+        <source>Downloading firmware</source>
+        <translation>새 펌웨어 다운로드 중...</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="461"/>
+        <source>Writing Firmware</source>
+        <translation>새 펌웨어 쓰는 중...</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="461"/>
+        <source>Erasing Firmware</source>
+        <translation>기존 펌웨어 지우는 중...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="519"/>
@@ -11443,7 +11458,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="434"/>
         <source>Chart Widget</source>
-        <translation>차트 위젯</translation>
+        <translation>기상 정보 차트</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="440"/>
@@ -11453,7 +11468,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="440"/>
         <source>Windvane</source>
-        <translation>풍향계</translation>
+        <translation>기상 정보</translation>
     </message>
     <message>
         <location filename="../src/ui/toolbar/WidgetControlPanel.qml" line="440"/>
@@ -13464,6 +13479,11 @@ Is this really what you want?</source>
         <location filename="../src/Vehicle/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="163"/>
         <source>Verifying program...</source>
         <translation>프로그램 확인중...</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="167"/>
+        <source>Program complete</source>
+        <translation>프로그램 완료</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/PX4FirmwareUpgradeThread.cc" line="167"/>
