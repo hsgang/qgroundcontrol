@@ -44,11 +44,7 @@ ColumnLayout {
         id: swipeViewContainer
         Layout.fillWidth: true
         Layout.fillHeight: true
-        //Layout.alignment: Qt.AlignVCenter
-        //color: //"transparent"
         color:      "transparent"//Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
-        border.width:1
-        border.color:"white"
 
         QGCSwipeView {
             id: swipePages
