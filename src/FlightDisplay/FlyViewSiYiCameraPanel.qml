@@ -22,8 +22,8 @@ Rectangle {
     //clip: true
     //anchors.fill: parent
     color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _backgroundOpacity)
-    width:  mainGridLayout.width + _margins
-    height: mainGridLayout.height + _margins
+    width:  mainGridLayout.width
+    height: mainGridLayout.height
     radius: _margins
 
     property var siyi: QGroundControl.siyi

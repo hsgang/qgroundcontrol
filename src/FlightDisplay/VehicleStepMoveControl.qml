@@ -18,8 +18,8 @@ import QGroundControl.Controls
 
 Item {
     id:         gimbalControlPannel
-    width:      mainLayout.width + _margins //_dropSequenceInProgress ? (mainLayout.width + _margins + sequenceIndicator.width) : mainLayout.width + _margins
-    height:     mainLayout.height + _margins
+    width:      mainLayout.width//_dropSequenceInProgress ? (mainLayout.width + _margins + sequenceIndicator.width) : mainLayout.width + _margins
+    height:     mainLayout.height
     // color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
     // radius:     _margins
     // border.color: qgcPal.groupBorder

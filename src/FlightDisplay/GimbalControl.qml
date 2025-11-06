@@ -25,7 +25,6 @@ Rectangle {
     border.color: qgcPal.groupBorder
     border.width: 1
     radius:     _margins
-    //visible:    _showGimbalControl && multiVehiclePanelSelector.showSingleVehiclePanel
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7

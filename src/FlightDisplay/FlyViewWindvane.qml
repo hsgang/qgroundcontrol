@@ -8,12 +8,10 @@ import QGroundControl.Controls
 import QGroundControl.FactControls
 import QGroundControl.FlightMap
 
-Rectangle {
+Item {
     id: root
-    height: columnLayout.height + _toolsMargin * 2
-    width:  columnLayout.width + _toolsMargin * 2
-    color:  "transparent" //Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.9)
-    radius: ScreenTools.defaultFontPixelHeight / 2
+    height: columnLayout.height
+    width:  columnLayout.width
 
     property var    _activeVehicle:          QGroundControl.multiVehicleManager.activeVehicle
 
