@@ -450,10 +450,11 @@ Rectangle {
                                             anchors.horizontalCenter:   settingsColumn.horizontalCenter
                                             width:                      ScreenTools.defaultFontPixelWidth * 34
                                             icon.source:                "/InstrumentValueIcons/link.svg"
-                                            icon.color:                 object.link ? qgcPal.colorGreen : qgcPal.text
+                                            icon.color:                 object.link ? qgcPal.colorGreen : (object.serverConnected ? qgcPal.colorBlue : qgcPal.text)
                                             text:                       object.name
                                             autoExclusive:              true
                                             visible:                    !object.dynamic
+
                                             onClicked: {
                                                 checked = true
                                                 _currentSelection = object

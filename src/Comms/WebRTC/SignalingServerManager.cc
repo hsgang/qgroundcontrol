@@ -66,7 +66,12 @@ SignalingServerManager::SignalingServerManager(QObject *parent)
     _pingTimer = new QTimer(this);
     _pingTimer->setSingleShot(false);
     connect(_pingTimer, &QTimer::timeout, this, &SignalingServerManager::_onPingTimer);
-    
+
+    // getDrones 타이머 설정
+    _getDronesTimer = new QTimer(this);
+    _getDronesTimer->setSingleShot(false);
+    connect(_getDronesTimer, &QTimer::timeout, this, &SignalingServerManager::_sendGetDronesRequest);
+
     _updateConnectionState(ConnectionState::Disconnected);
     _updateConnectionStatus("초기화됨");
 }
@@ -483,6 +488,8 @@ void SignalingServerManager::_onWebSocketMessageReceived(const QString &message)
     } else if (messageType == "connectionReplaced") {
         qCDebug(SignalingServerManagerLog) << "Ignoring connectionReplaced message";
         _updateConnectionStatus("연결 대체 무시됨 - WebSocket 연결 유지");
+    } else if (messageType == "drones:status" || messageType == "drones:list") {
+        _handleDronesStatusBroadcast(messageObj);
     } else if (messageType == "error") {
         qCWarning(SignalingServerManagerLog) << "Received error message from server:" << messageObj;
     } else {
@@ -522,7 +529,7 @@ void SignalingServerManager::_handleRegistrationResponse(const QJsonObject &mess
 void SignalingServerManager::_handleUnregisterResponse(const QJsonObject &message)
 {
     QString gcsId = message["id"].toString();
-    
+
     if (message.contains("success") && message["success"].toBool()) {
         qCDebug(SignalingServerManagerLog) << "Successfully unregistered GCS:" << gcsId;
         _updateConnectionStatus("GCS 등록 해제됨 - WebSocket 연결 유지됨");
@@ -532,6 +539,63 @@ void SignalingServerManager::_handleUnregisterResponse(const QJsonObject &messag
         qCWarning(SignalingServerManagerLog) << "Failed to unregister GCS:" << reason;
         emit gcsUnregisterFailed(gcsId, reason);
     }
+}
+
+void SignalingServerManager::_handleDronesStatusBroadcast(const QJsonObject &message)
+{
+    // drones:status 브로드캐스트 메시지 수신 및 로깅
+    if (!message.contains("drones") || !message.contains("totalDrones")) {
+        qCWarning(SignalingServerManagerLog) << "Invalid drones:status message format";
+        return;
+    }
+
+    QJsonArray dronesArray = message["drones"].toArray();
+    int totalDrones = message["totalDrones"].toInt();
+    QString timestamp = message["timestamp"].toString();
+
+    // 드론 목록 업데이트
+    QStringList newDronesList;
+    for (int i = 0; i < dronesArray.size(); ++i) {
+        QJsonObject drone = dronesArray[i].toObject();
+        QString droneId = drone["id"].toString();
+        QString status = drone["status"].toString();
+
+        if (!droneId.isEmpty() && status == "connected") {
+            newDronesList.append(droneId);
+
+            qCDebug(SignalingServerManagerLog) << " ["<<(i + 1)<<"]"
+                                              << "ID:" << droneId
+                                              << "Status:" << status;
+        }
+    }
+
+    // 드론 목록이 변경된 경우에만 시그널 emit
+    bool countChanged = (_connectedDronesCount != totalDrones);
+    bool listChanged = (_connectedDronesList != newDronesList);
+
+    if (countChanged) {
+        qCDebug(SignalingServerManagerLog) << "[Signal] Emitting connectedDronesCountChanged:"
+                                           << _connectedDronesCount << "->" << totalDrones;
+        _connectedDronesCount = totalDrones;
+        emit connectedDronesCountChanged();
+    }
+
+    if (listChanged) {
+        qCDebug(SignalingServerManagerLog) << "[Signal] Emitting connectedDronesListChanged";
+        qCDebug(SignalingServerManagerLog) << "  Old list:" << _connectedDronesList;
+        qCDebug(SignalingServerManagerLog) << "  New list:" << newDronesList;
+        _connectedDronesList = newDronesList;
+        emit connectedDronesListChanged();
+    }
+
+    if (totalDrones == 0) {
+        qCDebug(SignalingServerManagerLog) << "No drones currently connected";
+    }
+}
+
+bool SignalingServerManager::isDroneConnected(const QString &droneId) const
+{
+    return _connectedDronesList.contains(droneId);
 }
 
 QString SignalingServerManager::_formatWebSocketUrl(const QString &baseUrl) const
@@ -606,14 +670,20 @@ void SignalingServerManager::_startConnectionMonitoring()
     if (_connectionHealthTimer) {
         _connectionHealthTimer->start(CONNECTION_HEALTH_CHECK_MS);
     }
-    
+
     if (_pingTimer) {
         _pingTimer->start(PING_INTERVAL_MS);
     }
-    
+
+    if (_getDronesTimer) {
+        _getDronesTimer->start(GET_DRONES_INTERVAL_MS);
+        // 즉시 한 번 실행
+        _sendGetDronesRequest();
+    }
+
     _consecutivePingFailures = 0;
     _waitingForPong = false;
-    
+
     qCDebug(SignalingServerManagerLog) << "Connection monitoring started (client ping/pong based)";
 }
 
@@ -623,14 +693,18 @@ void SignalingServerManager::_stopConnectionMonitoring()
     if (_connectionHealthTimer && _connectionHealthTimer->isActive()) {
         _connectionHealthTimer->stop();
     }
-    
+
     if (_pingTimer && _pingTimer->isActive()) {
         _pingTimer->stop();
     }
-    
+
+    if (_getDronesTimer && _getDronesTimer->isActive()) {
+        _getDronesTimer->stop();
+    }
+
     _consecutivePingFailures = 0;
     _waitingForPong = false;
-    
+
     qCDebug(SignalingServerManagerLog) << "Connection monitoring stopped";
 }
 
@@ -748,6 +822,19 @@ void SignalingServerManager::_autoReRegister()
         qCDebug(SignalingServerManagerLog) << "Auto re-registering GCS after reconnection";
         registerGCS(_gcsId, _targetDroneId);
     }
+}
+
+void SignalingServerManager::_sendGetDronesRequest()
+{
+    if (!isConnected() || _userDisconnected) {
+        return;
+    }
+
+    QJsonObject getDronesMessage;
+    getDronesMessage["type"] = "getDrones";
+
+    qCDebug(SignalingServerManagerLog) << "Requesting drones list from server";
+    sendMessage(getDronesMessage);
 }
 
 // 클라이언트 ping/pong 기반 연결 모니터링 완료

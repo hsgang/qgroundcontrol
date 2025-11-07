@@ -7,12 +7,15 @@
 
 #include "LinkConfiguration.h"
 
+class SignalingServerManager;
+
 class WebRTCConfiguration : public LinkConfiguration
 {
     Q_OBJECT
 
     Q_PROPERTY(QString gcsId READ gcsId WRITE setGcsId NOTIFY gcsIdChanged)
     Q_PROPERTY(QString targetDroneId READ targetDroneId WRITE setTargetDroneId NOTIFY targetDroneIdChanged)
+    Q_PROPERTY(bool serverConnected READ serverConnected NOTIFY serverConnectedChanged)
 
    public:
     explicit WebRTCConfiguration(const QString &name, QObject *parent = nullptr);
@@ -33,6 +36,9 @@ class WebRTCConfiguration : public LinkConfiguration
     QString targetDroneId() const { return _targetDroneId; }
     void setTargetDroneId(const QString &id);
 
+    // 대상 드론의 시그널링 서버 연결 상태
+    bool serverConnected() const;
+
     // CloudSettings에서 WebRTC 설정을 가져오는 getter 메서드들
     QString stunServer() const;
     QString turnServer() const;
@@ -42,6 +48,7 @@ class WebRTCConfiguration : public LinkConfiguration
    signals:
     void gcsIdChanged();
     void targetDroneIdChanged();
+    void serverConnectedChanged();
 
    private:
     QString _gcsId;

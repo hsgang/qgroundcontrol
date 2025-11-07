@@ -26,6 +26,7 @@
 #include "CloudManager.h"
 #include "GridManager.h"
 #include "SiYi.h"
+#include "SignalingServerManager.h"
 #include "MultiVehicleManager.h"
 #include "QGCLoggingCategory.h"
 #ifndef QGC_NO_SERIAL_LINK
@@ -63,6 +64,7 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QObject *parent)
     , _cloudManager(CloudManager::instance())
     , _gridManager(GridManager::instance())
     , _siyi(SiYi::instance())
+    , _signalingServerManager(SignalingServerManager::instance())
     , _settingsManager(SettingsManager::instance())
     , _corePlugin(QGCCorePlugin::instance())
     , _globalPalette(new QGCPalette(this))

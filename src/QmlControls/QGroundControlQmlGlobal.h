@@ -37,6 +37,7 @@ class GridManager;
 class NTRIPManager;
 class SiYi;
 class QmlObjectListModel;
+class SignalingServerManager;
 
 Q_MOC_INCLUDE("ADSBVehicleManager.h")
 Q_MOC_INCLUDE("FactGroup.h")
@@ -53,6 +54,7 @@ Q_MOC_INCLUDE("CloudManager.h")
 Q_MOC_INCLUDE("NTRIPManager.h")
 Q_MOC_INCLUDE("GridManager.h")
 Q_MOC_INCLUDE("SiYi.h")
+Q_MOC_INCLUDE("SignalingServerManager.h")
 #ifdef QGC_UTM_ADAPTER
 Q_MOC_INCLUDE("UTMSPManager.h")
 #endif
@@ -89,10 +91,11 @@ public:
     Q_PROPERTY(VideoManager*        videoManager            READ    videoManager            CONSTANT)
     Q_PROPERTY(SettingsManager*     settingsManager         READ    settingsManager         CONSTANT)
     Q_PROPERTY(ADSBVehicleManager*  adsbVehicleManager      READ    adsbVehicleManager      CONSTANT)
-    Q_PROPERTY(CloudManager*        cloudManager            READ    cloudManager            CONSTANT)
-    Q_PROPERTY(GridManager*         gridManager             READ    gridManager             CONSTANT)
-    Q_PROPERTY(NTRIPManager*        ntripManager            READ    ntripManager            CONSTANT)
-    Q_PROPERTY(SiYi*                siyi                    READ    siyi                    CONSTANT)
+    Q_PROPERTY(CloudManager*            cloudManager            READ    cloudManager            CONSTANT)
+    Q_PROPERTY(GridManager*             gridManager             READ    gridManager             CONSTANT)
+    Q_PROPERTY(NTRIPManager*            ntripManager            READ    ntripManager            CONSTANT)
+    Q_PROPERTY(SiYi*                    siyi                    READ    siyi                    CONSTANT)
+    Q_PROPERTY(SignalingServerManager*  signalingServerManager  READ    signalingServerManager  CONSTANT)
     Q_PROPERTY(QGCCorePlugin*       corePlugin              READ    corePlugin              CONSTANT)
     Q_PROPERTY(MissionCommandTree*  missionCommandTree      READ    missionCommandTree      CONSTANT)
 #ifndef QGC_NO_SERIAL_LINK
@@ -193,10 +196,11 @@ public:
     FactGroup*              gpsRtkFactGroup     ()  { return _gpsRtkFactGroup; }
 #endif
     ADSBVehicleManager*     adsbVehicleManager  ()  { return _adsbVehicleManager; }
-    CloudManager*           cloudManager        ()  { return _cloudManager; }
-    GridManager*            gridManager         ()  { return _gridManager; }
-    NTRIPManager*           ntripManager        ()  { return _ntripManager; }
-    SiYi*                   siyi                ()  { return _siyi; }
+    CloudManager*               cloudManager            ()  { return _cloudManager; }
+    GridManager*                gridManager             ()  { return _gridManager; }
+    NTRIPManager*               ntripManager            ()  { return _ntripManager; }
+    SiYi*                       siyi                    ()  { return _siyi; }
+    SignalingServerManager*     signalingServerManager  ()  { return _signalingServerManager; }
     QmlUnitsConversion*     unitsConversion     ()  { return &_unitsConversion; }
     static QGeoCoordinate   flightMapPosition   ()  { return _coord; }
     static double           flightMapZoom       ()  { return _zoom; }
@@ -272,11 +276,12 @@ private:
     VideoManager*           _videoManager           = nullptr;
     LinkManager*            _linkManager            = nullptr;
     MultiVehicleManager*    _multiVehicleManager    = nullptr;
-    NTRIPManager*           _ntripManager           = nullptr;
-    CloudManager*           _cloudManager           = nullptr;
-    GridManager*            _gridManager            = nullptr;
-    SiYi*                   _siyi                   = nullptr;
-    SettingsManager*        _settingsManager        = nullptr;
+    NTRIPManager*               _ntripManager               = nullptr;
+    CloudManager*               _cloudManager               = nullptr;
+    GridManager*                _gridManager                = nullptr;
+    SiYi*                       _siyi                       = nullptr;
+    SignalingServerManager*     _signalingServerManager     = nullptr;
+    SettingsManager*            _settingsManager            = nullptr;
     QGCCorePlugin*          _corePlugin             = nullptr;
     QGCPalette*             _globalPalette          = nullptr;
 #ifndef QGC_NO_SERIAL_LINK

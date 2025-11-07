@@ -183,26 +183,26 @@ Item {
                             visible:    !(_rttDirect > 0 || _rttRelay > 0)// dual-path가 아닌 경우만 표시
                         }
                         LabelledLabel {
-                            label:      qsTr("우선 채널 응답지연")
+                            label:      qsTr("CH1 응답지연")
                             labelText:  _rttDirect > 0 ? qsTr("%1 ms").arg(_rttDirect) : qsTr("N/A")
-                            //visible:    _rttDirect > 0 || _rttRelay > 0  // Dual-path인 경우만 표시
+                            visible:    _rttDirect > 0 || _rttRelay > 0  // Dual-path인 경우만 표시
                         }
                         LabelledLabel {
-                            label:      qsTr("백업 채널 응답지연")
+                            label:      qsTr("CH2 응답지연")
                             labelText:  _rttRelay > 0 ? qsTr("%1 ms").arg(_rttRelay) : qsTr("N/A")
-                            //visible:    _rttDirect > 0 || _rttRelay > 0  // Dual-path인 경우만 표시
+                            visible:    _rttDirect > 0 || _rttRelay > 0  // Dual-path인 경우만 표시
                         }
                         LabelledLabel {
                             label:      qsTr("통합 데이터 송신")
                             labelText:  qsTr("%1 KB/s").arg(_webRtcSent.toFixed(2))
                         }
                         LabelledLabel {
-                            label:      qsTr("우선 채널 송신")
+                            label:      qsTr("CH1 데이터 송신")
                             labelText:  _webRtcSentDirect > 0 ? qsTr("%1 KB/s").arg(_webRtcSentDirect.toFixed(2)) : qsTr("N/A")
                             visible:    _webRtcSentDirect > 0 || _webRtcSentRelay > 0
                         }
                         LabelledLabel {
-                            label:      qsTr("백업 채널 송신")
+                            label:      qsTr("CH2 데이터 송신")
                             labelText:  _webRtcSentRelay > 0 ? qsTr("%1 KB/s").arg(_webRtcSentRelay.toFixed(2)) : qsTr("N/A")
                             visible:    _webRtcSentDirect > 0 || _webRtcSentRelay > 0
                         }
@@ -211,12 +211,12 @@ Item {
                             labelText:  qsTr("%1 KB/s").arg(_webRtcRecv.toFixed(2))
                         }
                         LabelledLabel {
-                            label:      qsTr("우선 채널 수신")
+                            label:      qsTr("CH1 데이터 수신")
                             labelText:  _webRtcRecvDirect > 0 ? qsTr("%1 KB/s").arg(_webRtcRecvDirect.toFixed(2)) : qsTr("N/A")
                             visible:    _webRtcRecvDirect > 0 || _webRtcRecvRelay > 0
                         }
                         LabelledLabel {
-                            label:      qsTr("백업 채널 수신")
+                            label:      qsTr("CH2 데이터 수신")
                             labelText:  _webRtcRecvRelay > 0 ? qsTr("%1 KB/s").arg(_webRtcRecvRelay.toFixed(2)) : qsTr("N/A")
                             visible:    _webRtcRecvDirect > 0 || _webRtcRecvRelay > 0
                         }
@@ -226,24 +226,24 @@ Item {
                             visible:    !(_videoRateDirect > 0 || _videoRateRelay > 0)  // dual-path가 아닌 경우만 표시
                         }
                         LabelledLabel {
-                            label:      qsTr("우선 채널 영상")
+                            label:      qsTr("CH1 영상 수신")
                             labelText:  qsTr("%1 Mbps").arg(_videoRateDirectMbps)
                             visible:    _videoRateDirect > 0 || _videoRateRelay > 0
                         }
                         LabelledLabel {
-                            label:      qsTr("백업 채널 영상")
+                            label:      qsTr("CH2 영상 수신")
                             labelText:  qsTr("%1 Mbps").arg(_videoRateRelayMbps)
                             visible:    _videoRateDirect > 0 || _videoRateRelay > 0
                         }
                         LabelledLabel {
-                            label:      qsTr("우선 채널 ICE")
+                            label:      qsTr("CH1 ICE")
                             labelText:  _iceCandidateDirect !== "" ? _iceCandidateDirect : qsTr("N/A")
                             labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
                             labelTextElide: Text.ElideMiddle
                             visible:    _rttDirect > 0
                         }
                         LabelledLabel {
-                            label:      qsTr("백업 채널 ICE")
+                            label:      qsTr("CH2 ICE")
                             labelText:  _iceCandidateRelay !== "" ? _iceCandidateRelay : qsTr("N/A")
                             labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
                             labelTextElide: Text.ElideMiddle

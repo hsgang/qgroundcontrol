@@ -28,6 +28,8 @@ class SignalingServerManager : public QObject
 
     Q_PROPERTY(bool isConnected READ isConnected NOTIFY connectionStateChanged)
     Q_PROPERTY(QString connectionStatus READ connectionStatus NOTIFY connectionStatusChanged)
+    Q_PROPERTY(int connectedDronesCount READ connectedDronesCount NOTIFY connectedDronesCountChanged)
+    Q_PROPERTY(QStringList connectedDronesList READ connectedDronesList NOTIFY connectedDronesListChanged)
 
 public:
     enum class ConnectionState {
@@ -72,6 +74,11 @@ public:
     ConnectionState connectionState() const { return _connectionState; }
     QString connectionStatus() const { return _connectionStatusMessage; }
 
+    // 드론 연결 상태
+    int connectedDronesCount() const { return _connectedDronesCount; }
+    QStringList connectedDronesList() const { return _connectedDronesList; }
+    Q_INVOKABLE bool isDroneConnected(const QString &droneId) const;
+
 public slots:
     void retryConnection();
     void sendPing(); // 클라이언트에서 ping을 보내는 public 메서드
@@ -93,6 +100,10 @@ signals:
     void registrationFailed(const QString &reason);
     void gcsUnregisteredSuccessfully(const QString &gcsId);
     void gcsUnregisterFailed(const QString &gcsId, const QString &reason);
+
+    // 드론 상태 시그널
+    void connectedDronesCountChanged();
+    void connectedDronesListChanged();
 
 private slots:
     void _onWebSocketConnected();
@@ -129,6 +140,7 @@ private:
     void _handleRegistrationResponse(const QJsonObject &message);
     void _handleUnregisterResponse(const QJsonObject &message);
     void _handlePongResponse(const QJsonObject &message);
+    void _handleDronesStatusBroadcast(const QJsonObject &message);
     
     // 자동 재등록
     void _autoReRegister();
@@ -165,6 +177,14 @@ private:
     qint64 _lastPongReceived = 0;
     bool _waitingForPong = false;
     int _consecutivePingFailures = 0;
+
+    // 드론 상태 요청
+    QTimer *_getDronesTimer = nullptr;
+    void _sendGetDronesRequest();
+
+    // 드론 연결 상태 추적
+    int _connectedDronesCount = 0;
+    QStringList _connectedDronesList;
     
     // 상수 (개선됨)
     static const int DEFAULT_RECONNECT_INTERVAL_MS = 5000; // 5초로 증가
@@ -174,4 +194,5 @@ private:
     static const int PING_TIMEOUT_MS = 5000; // ping 응답 5초 타임아웃
     static const int CONNECTION_HEALTH_CHECK_MS = 10000; // 10초마다 상태 체크
     static const int MAX_CONSECUTIVE_PING_FAILURES = 3;
+    static const int GET_DRONES_INTERVAL_MS = 2500; // 2.5초마다 드론 목록 요청
 };

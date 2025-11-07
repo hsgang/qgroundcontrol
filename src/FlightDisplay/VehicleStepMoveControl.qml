@@ -49,7 +49,7 @@ Item {
 
     property real   _treshHoldAlt : 10.0
     property var    stepValues:             [0.2, 0.5, 1.0, 2.0, 3.0]
-    property var    autoSeqAltArray:        [2.0, 3.0, 4.0]
+    property var    autoSeqAltArray:        [2.0, 2.5, 3.0, 3.5, 4.0]
     property real   _autoSeqAltValue:       autoSeqAltArray[1]  // default 3.0m
     property int    _autoSeqAltIndex:       1  // default index
     property int    receivedTagId: 0

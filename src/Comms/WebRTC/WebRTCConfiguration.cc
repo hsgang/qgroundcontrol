@@ -2,6 +2,7 @@
 #include <QRandomGenerator>
 #include "SettingsManager.h"
 #include "CloudSettings.h"
+#include "SignalingServerManager.h"
 
 /*===========================================================================*/
 // WebRTCConfiguration Implementation
@@ -12,6 +13,10 @@ WebRTCConfiguration::WebRTCConfiguration(const QString &name, QObject *parent)
 {
     _gcsId = "gcs_" + _generateRandomId();
     _targetDroneId = "";
+
+    // SignalingServerManager의 드론 리스트 변경 감지
+    connect(SignalingServerManager::instance(), &SignalingServerManager::connectedDronesListChanged,
+            this, &WebRTCConfiguration::serverConnectedChanged);
 }
 
 WebRTCConfiguration::WebRTCConfiguration(const WebRTCConfiguration *copy, QObject *parent)
@@ -19,6 +24,9 @@ WebRTCConfiguration::WebRTCConfiguration(const WebRTCConfiguration *copy, QObjec
       , _gcsId(copy->_gcsId)
       , _targetDroneId(copy->_targetDroneId)
 {
+    // SignalingServerManager의 드론 리스트 변경 감지
+    connect(SignalingServerManager::instance(), &SignalingServerManager::connectedDronesListChanged,
+            this, &WebRTCConfiguration::serverConnectedChanged);
 }
 
 WebRTCConfiguration::~WebRTCConfiguration() = default;
@@ -62,7 +70,22 @@ void WebRTCConfiguration::setTargetDroneId(const QString &id)
     if (_targetDroneId != id) {
         _targetDroneId = id;
         emit targetDroneIdChanged();
+        emit serverConnectedChanged(); // targetDroneId 변경 시에도 serverConnected 상태가 바뀜
     }
+}
+
+bool WebRTCConfiguration::serverConnected() const
+{
+    if (_targetDroneId.isEmpty()) {
+        return false;
+    }
+
+    SignalingServerManager* signalingManager = SignalingServerManager::instance();
+    if (!signalingManager) {
+        return false;
+    }
+
+    return signalingManager->isDroneConnected(_targetDroneId);
 }
 
 // CloudSettings에서 WebRTC 설정을 가져오는 getter 메서드들

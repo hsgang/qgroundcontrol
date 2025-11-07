@@ -373,8 +373,6 @@ class WebRTCWorker : public QObject
         QString turnPassword;
     } _connectionConfig;
 
-    rtc::Configuration _rtcConfig;
-
     // Signaling and reconnection management
     SignalingServerManager *_signalingManager = nullptr;
     QTimer *_rttTimer = nullptr;
@@ -389,11 +387,6 @@ class WebRTCWorker : public QObject
     static constexpr int MAX_RECONNECT_DELAY_MS = 30000;
 
     // WebRTC components - Dual Path Support (Direct + Relay)
-    std::shared_ptr<rtc::PeerConnection> _peerConnection;          // Legacy single connection
-    std::shared_ptr<rtc::DataChannel> _mavlinkDataChannel;         // Legacy single channel
-    std::shared_ptr<rtc::DataChannel> _customDataChannel;
-    std::shared_ptr<rtc::Track> _videoTrack;
-
     // Dual-path connections
     std::shared_ptr<rtc::PeerConnection> _peerConnectionDirect;    // Direct P2P path
     std::shared_ptr<rtc::PeerConnection> _peerConnectionRelay;     // TURN Relay path
@@ -480,6 +473,8 @@ class WebRTCWorker : public QObject
     void _scheduleReconnect();
     void _cancelReconnect();
     void _onReconnectSuccess();
+    void _handleBothPathsDisconnected();
+    bool _areBothPathsDisconnected() const;
 
     // 통합 송수신 통계 (기존 호환성 유지)
     TransferRateCalculator _dataChannelSentCalc;
