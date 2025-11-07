@@ -27,7 +27,7 @@ Rectangle {
     radius:     _margins
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
-    property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
+    property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 6
     property real   anchorsMargins:     _margins
     property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
     property real   backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
@@ -316,19 +316,19 @@ Rectangle {
 
             QGCCheckBoxSlider {
                 Layout.fillWidth:   true
-                text:               "Step Control"
+                text:               "스텝 제어"
                 checked:            !_useRateControl
                 onCheckedChanged:   _useRateControl = !checked
             }
 
             LabelledLabel {
                 Layout.fillWidth:   true
-                label:              "Pitch"
+                label:              "틸트"
                 labelText:          activeGimbal ? activeGimbal.absolutePitch.rawValue.toFixed(1) : "no value"
             }
             LabelledLabel {
                 Layout.fillWidth:   true
-                label:              "Yaw"
+                label:              "팬"
                 labelText:          activeGimbal ? activeGimbal.bodyYaw.rawValue.toFixed(1) : "no value"
             }
         }

@@ -18,15 +18,11 @@ import QGroundControl.Controls
 
 Item {
     id:         gimbalControlPannel
-    width:      mainLayout.width//_dropSequenceInProgress ? (mainLayout.width + _margins + sequenceIndicator.width) : mainLayout.width + _margins
+    width:      mainLayout.width
     height:     mainLayout.height
-    // color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    // radius:     _margins
-    // border.color: qgcPal.groupBorder
-    // border.width: 1
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
-    property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
+    property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 6
     property real   anchorsMargins:     _margins
     property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
     property real   backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue

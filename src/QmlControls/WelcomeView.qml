@@ -140,7 +140,7 @@ Rectangle {
                 Rectangle {
                     implicitWidth:  loginInputLayout.implicitWidth + _defaultTextHeight
                     implicitHeight: loginInputLayout.implicitHeight + _defaultTextHeight
-                    color:          Qt.darker(qgcPal.windowShadeDark, 1.3)
+                    color:          qgcPal.windowShadeDark
                     radius:         _margins
                     border.color:   qgcPal.groupBorder
                     border.width:   1
@@ -397,7 +397,7 @@ Rectangle {
             anchors.horizontalCenter:   parent.horizontalCenter
             anchors.verticalCenter:     parent.verticalCenter
             visible:                    false
-            color:          Qt.darker(qgcPal.windowShadeDark, 1.3)
+            color:                      qgcPal.windowShadeDark
             radius:         _margins
             border.color:   qgcPal.groupBorder
             border.width:   1

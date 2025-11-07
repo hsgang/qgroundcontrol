@@ -9,30 +9,32 @@ import QGroundControl.Controls
 QGCButton {
     id:             control     //This is a button rework from DonLakeFlyer's QGCButton that allows to contain a text and an Icon with a column look and the same capabilites
 
-    background: Rectangle {
-        id:             backRect
-        width:          control.width
-        height:         control.height
-        radius:         backRadius
-        border.width:   showBorder ? 1 : 0
-        border.color:   qgcPal.buttonText
-        color:          _showHighlight ?
-                            qgcPal.buttonHighlight :
-                            (primary ? qgcPal.primaryButton : qgcPal.button)
-    }
+    // background: Rectangle {
+    //     id:             backRect
+    //     width:          control.width
+    //     height:         control.height
+    //     radius:         backRadius
+    //     border.width:   showBorder ? 1 : 0
+    //     border.color:   qgcPal.buttonText
+    //     color:          _showHighlight ?
+    //                         qgcPal.buttonHighlight :
+    //                         (primary ? qgcPal.primaryButton : qgcPal.button)
+    // }
 
     contentItem: Item {
         id: contItem
         implicitWidth:  Math.max(textLabel.implicitWidth , icon.implicitWidth ) * 1.1
-        implicitHeight: iconSource === "" ? textLabel.implicitHeight : textLabel.implicitHeight * 2.5 
+        implicitHeight: iconSource === "" ? textLabel.implicitHeight : textLabel.implicitHeight * 2.5
         ColumnLayout {
             anchors.fill: parent
             spacing: 0
             QGCColoredImage {
                 id: icon
                 Layout.fillWidth:       true
-                Layout.fillHeight:      true
-                Layout.maximumHeight:   parent.height - textLabelContainer.height
+                //Layout.fillHeight:      true
+                // Layout.maximumHeight:   parent.height - textLabelContainer.height
+                height:                 control.font.pointSize * 2
+                width:                  control.font.pointSize * 2
                 Layout.alignment:       control.text !== "" ? Qt.AlignTop : Qt.AlignHCenter | Qt.AlignVCenter
                 source:                 control.iconSource
                 color:                  control.iconColor !== "" ? control.iconColor : qgcPal.text
