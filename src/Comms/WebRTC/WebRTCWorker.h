@@ -214,7 +214,10 @@ class TransferRateCalculator {
         double averagePacketSize = 0.0;
     };
 
-    TransferRateCalculator() : _lastUpdateTime(QDateTime::currentMSecsSinceEpoch()) {}
+    TransferRateCalculator()
+        : _lastUpdateTime(QDateTime::currentMSecsSinceEpoch())
+        , _smoothedRate(0.0)
+    {}
 
     void addData(qint64 bytes, int packets = 1) {
         _stats.totalBytes += bytes;
@@ -232,8 +235,19 @@ class TransferRateCalculator {
 
         if (timeDiff > 0) {
             qint64 bytesDiff = _stats.totalBytes - _lastBytes;
-            double rate = static_cast<double>(bytesDiff) / timeDiff; // KB/ms = KB/s
-            _stats.currentRateKBps = std::round(rate * 100.0) / 100.0;
+
+            // 올바른 단위 변환: Bytes/ms -> KB/s
+            // = (Bytes / 1024) / (ms / 1000)
+            // = Bytes * 1000 / 1024 / ms
+            // = Bytes * 0.9765625 / ms
+            double instantRate = static_cast<double>(bytesDiff) * 1000.0 / 1024.0 / timeDiff;
+
+            // 지수 이동 평균 (EMA)으로 급격한 변동 완화
+            // alpha = 0.3: 현재 값 20%, 이전 값 80% 반영
+            const double alpha = 0.2;
+            _smoothedRate = (_smoothedRate == 0.0) ? instantRate : (alpha * instantRate + (1.0 - alpha) * _smoothedRate);
+
+            _stats.currentRateKBps = std::round(_smoothedRate * 100.0) / 100.0;
 
             _lastBytes = _stats.totalBytes;
             _lastUpdateTime = currentTime;
@@ -247,12 +261,14 @@ class TransferRateCalculator {
         _stats = Stats{};
         _lastBytes = 0;
         _lastUpdateTime = QDateTime::currentMSecsSinceEpoch();
+        _smoothedRate = 0.0;
     }
 
    private:
     Stats _stats;
     qint64 _lastBytes = 0;
     qint64 _lastUpdateTime;
+    double _smoothedRate;  // 이동 평균을 위한 상태 변수
 };
 
 class WebRTCWorker : public QObject

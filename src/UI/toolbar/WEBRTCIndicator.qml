@@ -77,19 +77,19 @@ Item {
 
     // 통합 비디오 수신 통계
     property real _videoRate:       _webrtcLink ? _webrtcLink.rtcVideoRate : 0
-    property real  _videoRateMbps:   (_videoRate / 125.0).toFixed(2)  // Mbps 단위 변환
+    property real  _videoRateMbps:   (_videoRate * 8.192 / 1000.0).toFixed(2)  // KB/s -> Mbps (정확한 변환: KB * 8.192 bits/KB / 1000)
     property int  _videoPacketCount: _webrtcLink ? _webrtcLink.rtcVideoPacketCount : 0
     property int  _videoBytesReceived: _webrtcLink ? _webrtcLink.rtcVideoBytesReceived : 0
 
     // Direct 경로 비디오 수신 통계
     property real _videoRateDirect: _webrtcLink ? _webrtcLink.rtcVideoDirectRate : 0
-    property real _videoRateDirectMbps: _webrtcLink ? (_videoRateDirect / 125.0).toFixed(2) : 0
+    property real _videoRateDirectMbps: _webrtcLink ? (_videoRateDirect * 8.192 / 1000.0).toFixed(2) : 0
     property int _videoPacketCountDirect: _webrtcLink ? _webrtcLink.rtcVideoDirectPacketCount : 0
     property int _videoBytesReceivedDirect: _webrtcLink ? _webrtcLink.rtcVideoDirectBytesReceived : 0
 
     // Relay 경로 비디오 수신 통계
     property real _videoRateRelay: _webrtcLink ? _webrtcLink.rtcVideoRelayRate : 0
-    property real _videoRateRelayMbps: _webrtcLink ? (_videoRateRelay / 125.0).toFixed(2) : 0
+    property real _videoRateRelayMbps: _webrtcLink ? (_videoRateRelay * 8.192 / 1000.0).toFixed(2) : 0
     property int _videoPacketCountRelay: _webrtcLink ? _webrtcLink.rtcVideoRelayPacketCount : 0
     property int _videoBytesReceivedRelay: _webrtcLink ? _webrtcLink.rtcVideoRelayBytesReceived : 0
 

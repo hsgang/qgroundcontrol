@@ -572,11 +572,11 @@ void WebRTCWorker::_setupDualPathConnections()
     sctpSettings.heartbeatIntervalMs = SCTP_HEARTBEAT_INTERVAL_MS;
     rtcSetSctpSettings(&sctpSettings);
 
+    // Relay 연결 생성 (우선 연결)
+    _setupSinglePeerConnection(_peerConnectionRelay, false);
+
     // Direct P2P 연결 생성
     _setupSinglePeerConnection(_peerConnectionDirect, true);
-
-    // Relay 연결 생성
-    _setupSinglePeerConnection(_peerConnectionRelay, false);
 
     qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Both connections created successfully";
 }
