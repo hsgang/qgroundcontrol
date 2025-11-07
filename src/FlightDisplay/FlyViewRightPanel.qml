@@ -28,13 +28,13 @@ ColumnLayout {
     property bool   _showWindvane:          QGroundControl.settingsManager.flyViewSettings.showWindvane.rawValue
 
     property var pages: [
-        { comp: photoVideoControlComponent,  label: "Camera", icon: "/InstrumentValueIcons/gimbal-1.svg",    enabled: _showPhotoVideoControl },
+        { comp: photoVideoControlComponent,  label: "카메라", icon: "/InstrumentValueIcons/gimbal-1.svg",    enabled: _showPhotoVideoControl },
         { comp: siyiCameraControlComponent,  label: "SIYI", icon: "/InstrumentValueIcons/gimbal-1.svg" ,     enabled: _showSiyiCameraControl },
-        { comp: stepMoveControlComponent,    label: "Delivery", icon: "/res/Gripper.svg",                    enabled: _showStepMoveControl },
-        { comp: flyViewGridSettingsComponent,label: "GridView", icon: "/InstrumentValueIcons/border-all.svg",enabled: _showGridViewer },
-        { comp: gimbalControlComponent,      label: "Gimbal", icon: "/InstrumentValueIcons/gimbal-2.svg",    enabled: _showGimbalControl },
-        { comp: winchControlComponent,       label: "Winch", icon: "/InstrumentValueIcons/cog.svg",          enabled: _showWinchControl },
-        { comp: windvaneControlComponent,    label: "Atmos", icon: "/InstrumentValueIcons/cloud.svg",        enabled: _showWindvane }
+        { comp: stepMoveControlComponent,    label: "배송", icon: "/res/Gripper.svg",                    enabled: _showStepMoveControl },
+        { comp: flyViewGridSettingsComponent,label: "그리드", icon: "/InstrumentValueIcons/border-all.svg",enabled: _showGridViewer },
+        { comp: gimbalControlComponent,      label: "짐벌", icon: "/InstrumentValueIcons/gimbal-2.svg",    enabled: _showGimbalControl },
+        { comp: winchControlComponent,       label: "윈치", icon: "/InstrumentValueIcons/cog.svg",          enabled: _showWinchControl },
+        { comp: windvaneControlComponent,    label: "기상", icon: "/InstrumentValueIcons/cloud.svg",        enabled: _showWindvane }
     ]
 
     // enabled가 true인 항목만 activePages에 포함
