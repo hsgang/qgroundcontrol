@@ -569,13 +569,13 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
                         auto localAddr = pc->localAddress();
                         auto remoteAddr = pc->remoteAddress();
                         if (localAddr.has_value() && remoteAddr.has_value()) {
-                            QString candidateType = "unknown";
                             QString localAddrStr = QString::fromStdString(*localAddr);
                             QString remoteAddrStr = QString::fromStdString(*remoteAddr);
 
                             // getSelectedCandidatePair() API 사용하여 candidate 타입 확인
                             rtc::Candidate localCand, remoteCand;
                             if (pc->getSelectedCandidatePair(&localCand, &remoteCand)) {
+                                QString candidateType = "unknown";
                                 // Candidate::Type enum을 사용하여 타입 확인
                                 switch (localCand.type()) {
                                     case rtc::Candidate::Type::Relayed:
@@ -597,15 +597,18 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
                                 qCDebug(WebRTCLinkLog) << "[WEBRTC] Selected candidate type:" << candidateType
                                                       << "Local:" << QString::fromStdString(localCand.candidate())
                                                       << "Remote:" << QString::fromStdString(remoteCand.candidate());
-                            } else {
-                                qCDebug(WebRTCLinkLog) << "[WEBRTC] Cannot get candidate pair";
-                            }
 
-                            self->_cachedCandidate = QString("%1 ↔ %2 [%3]")
-                                                            .arg(localAddrStr)
-                                                            .arg(remoteAddrStr)
-                                                            .arg(candidateType);
-                            qCDebug(WebRTCLinkLog) << "[WEBRTC] Candidate cached:" << self->_cachedCandidate;
+                                // candidate pair를 성공적으로 가져왔을 때만 캐시 업데이트
+                                self->_cachedCandidate = QString("%1 ↔ %2 [%3]")
+                                                                .arg(localAddrStr)
+                                                                .arg(remoteAddrStr)
+                                                                .arg(candidateType);
+                                qCDebug(WebRTCLinkLog) << "[WEBRTC] Candidate cached:" << self->_cachedCandidate;
+                            } else {
+                                // candidate pair를 가져오지 못했을 때는 이전 캐시 유지
+                                qCDebug(WebRTCLinkLog) << "[WEBRTC] Cannot get candidate pair, keeping previous cached value:"
+                                                      << self->_cachedCandidate;
+                            }
                         }
                     } catch (const std::exception& e) {
                         qCWarning(WebRTCLinkLog) << "[WEBRTC] Failed to cache candidate:" << e.what();
@@ -1267,8 +1270,32 @@ void WebRTCWorker::_onErrorReceived(const QJsonObject& message)
     QString errorCode = message["code"].toString();
 
     qCWarning(WebRTCLinkLog) << "Signaling server error:" << errorCode << "-" << errorMessage;
+
     if (errorCode == "drone_already_paired") {
-        emit rtcStatusMessageChanged(QString("기체가 다른 장치와 페어링되어 있습니다"));
+        // 재연결 시 발생할 수 있는 정상적인 상황
+        QString pairedWith = message["pairedWith"].toString();
+
+        // 자신과 페어링된 경우라면 재등록 시도
+        if (pairedWith == _currentGcsId) {
+            qCDebug(WebRTCLinkLog) << "Already paired with self, forcing re-registration";
+            emit rtcStatusMessageChanged("재연결 중 - 기존 세션 정리");
+
+            // 강제 unregister 후 재등록
+            if (_signalingManager && !_currentGcsId.isEmpty()) {
+                _signalingManager->unregisterGCS(_currentGcsId);
+
+                // 짧은 지연 후 재등록 시도
+                QTimer::singleShot(500, this, [this]() {
+                    if (!_isShuttingDown.load() && !_currentGcsId.isEmpty() && !_currentTargetDroneId.isEmpty()) {
+                        qCDebug(WebRTCLinkLog) << "Retrying registration after forced unregister";
+                        _signalingManager->registerGCS(_currentGcsId, _currentTargetDroneId);
+                    }
+                });
+            }
+            return; // 에러로 처리하지 않음
+        } else {
+            emit rtcStatusMessageChanged(QString("기체가 다른 장치와 페어링되어 있습니다: %1").arg(pairedWith));
+        }
     } else {
         emit rtcStatusMessageChanged(QString("서버 오류: %1").arg(errorMessage));
     }
@@ -1401,11 +1428,12 @@ void WebRTCWorker::_updateRtt()
     // WebRTCStats 수집 (RTT와 candidate 정보 모두 포함)
     WebRTCStats stats = _collectWebRTCStats();
 
-    // 디버그: Candidate가 비어있는지 확인
+    // 디버그: Candidate가 실제로 변경되었을 때만 로그 출력 (빈 값 무시)
     static QString lastCandidate;
-    if (_cachedCandidate != lastCandidate) {
+    if (!_cachedCandidate.isEmpty() && _cachedCandidate != lastCandidate) {
         qCDebug(WebRTCLinkLog) << "[RTT_UPDATE] Candidate changed:"
-                              << lastCandidate << "->" << _cachedCandidate;
+                              << (lastCandidate.isEmpty() ? "(empty)" : lastCandidate)
+                              << "->" << _cachedCandidate;
         lastCandidate = _cachedCandidate;
     }
 
