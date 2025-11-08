@@ -58,40 +58,17 @@ Item {
 
     // WebRTC 통계 정보 (WebRTCLink에서 직접 접근)
     property real _rtt:             _webrtcLink ? _webrtcLink.webRtcRtt : 0
-    property real _rttDirect:       _webrtcLink ? _webrtcLink.webRtcRttDirect : 0  // Direct 경로 RTT
-    property real _rttRelay:        _webrtcLink ? _webrtcLink.webRtcRttRelay : 0   // Relay 경로 RTT
-    property string _iceCandidateDirect: _webrtcLink ? _webrtcLink.iceCandidateDirect : ""  // Direct ICE candidate
-    property string _iceCandidateRelay:  _webrtcLink ? _webrtcLink.iceCandidateRelay : ""   // Relay ICE candidate
+    property string _iceCandidate:  _webrtcLink ? _webrtcLink.iceCandidate : ""
 
-    // 통합 송수신 속도
+    // 송수신 속도
     property real _webRtcSent:      _webrtcLink ? _webrtcLink.webRtcSent : 0
     property real _webRtcRecv:      _webrtcLink ? _webrtcLink.webRtcRecv : 0
 
-    // Direct 경로 송수신 속도
-    property real _webRtcSentDirect: _webrtcLink ? _webrtcLink.webRtcSentDirect : 0
-    property real _webRtcRecvDirect: _webrtcLink ? _webrtcLink.webRtcRecvDirect : 0
-
-    // Relay 경로 송수신 속도
-    property real _webRtcSentRelay:  _webrtcLink ? _webrtcLink.webRtcSentRelay : 0
-    property real _webRtcRecvRelay:  _webrtcLink ? _webrtcLink.webRtcRecvRelay : 0
-
-    // 통합 비디오 수신 통계
+    // 비디오 수신 통계
     property real _videoRate:       _webrtcLink ? _webrtcLink.rtcVideoRate : 0
     property real  _videoRateMbps:   (_videoRate * 8.192 / 1000.0).toFixed(2)  // KB/s -> Mbps (정확한 변환: KB * 8.192 bits/KB / 1000)
     property int  _videoPacketCount: _webrtcLink ? _webrtcLink.rtcVideoPacketCount : 0
     property int  _videoBytesReceived: _webrtcLink ? _webrtcLink.rtcVideoBytesReceived : 0
-
-    // Direct 경로 비디오 수신 통계
-    property real _videoRateDirect: _webrtcLink ? _webrtcLink.rtcVideoDirectRate : 0
-    property real _videoRateDirectMbps: _webrtcLink ? (_videoRateDirect * 8.192 / 1000.0).toFixed(2) : 0
-    property int _videoPacketCountDirect: _webrtcLink ? _webrtcLink.rtcVideoDirectPacketCount : 0
-    property int _videoBytesReceivedDirect: _webrtcLink ? _webrtcLink.rtcVideoDirectBytesReceived : 0
-
-    // Relay 경로 비디오 수신 통계
-    property real _videoRateRelay: _webrtcLink ? _webrtcLink.rtcVideoRelayRate : 0
-    property real _videoRateRelayMbps: _webrtcLink ? (_videoRateRelay * 8.192 / 1000.0).toFixed(2) : 0
-    property int _videoPacketCountRelay: _webrtcLink ? _webrtcLink.rtcVideoRelayPacketCount : 0
-    property int _videoBytesReceivedRelay: _webrtcLink ? _webrtcLink.rtcVideoRelayBytesReceived : 0
 
     // RTC Module 시스템 정보
     property real _rtcModuleCpuUsage:        _webrtcLink ? _webrtcLink.rtcModuleCpuUsage : 0
@@ -180,74 +157,25 @@ Item {
                         LabelledLabel {
                             label:      qsTr("응답지연")
                             labelText:  qsTr("%1 ms").arg(_rtt)
-                            visible:    !(_rttDirect > 0 || _rttRelay > 0)// dual-path가 아닌 경우만 표시
                         }
                         LabelledLabel {
-                            label:      qsTr("CH1 응답지연")
-                            labelText:  _rttDirect > 0 ? qsTr("%1 ms").arg(_rttDirect) : qsTr("N/A")
-                            visible:    _rttDirect > 0 || _rttRelay > 0  // Dual-path인 경우만 표시
-                        }
-                        LabelledLabel {
-                            label:      qsTr("CH2 응답지연")
-                            labelText:  _rttRelay > 0 ? qsTr("%1 ms").arg(_rttRelay) : qsTr("N/A")
-                            visible:    _rttDirect > 0 || _rttRelay > 0  // Dual-path인 경우만 표시
-                        }
-                        LabelledLabel {
-                            label:      qsTr("통합 데이터 송신")
+                            label:      qsTr("데이터 송신")
                             labelText:  qsTr("%1 KB/s").arg(_webRtcSent.toFixed(2))
                         }
                         LabelledLabel {
-                            label:      qsTr("CH1 데이터 송신")
-                            labelText:  _webRtcSentDirect > 0 ? qsTr("%1 KB/s").arg(_webRtcSentDirect.toFixed(2)) : qsTr("N/A")
-                            visible:    _webRtcSentDirect > 0 || _webRtcSentRelay > 0
-                        }
-                        LabelledLabel {
-                            label:      qsTr("CH2 데이터 송신")
-                            labelText:  _webRtcSentRelay > 0 ? qsTr("%1 KB/s").arg(_webRtcSentRelay.toFixed(2)) : qsTr("N/A")
-                            visible:    _webRtcSentDirect > 0 || _webRtcSentRelay > 0
-                        }
-                        LabelledLabel {
-                            label:      qsTr("통합 데이터 수신")
+                            label:      qsTr("데이터 수신")
                             labelText:  qsTr("%1 KB/s").arg(_webRtcRecv.toFixed(2))
                         }
                         LabelledLabel {
-                            label:      qsTr("CH1 데이터 수신")
-                            labelText:  _webRtcRecvDirect > 0 ? qsTr("%1 KB/s").arg(_webRtcRecvDirect.toFixed(2)) : qsTr("N/A")
-                            visible:    _webRtcRecvDirect > 0 || _webRtcRecvRelay > 0
-                        }
-                        LabelledLabel {
-                            label:      qsTr("CH2 데이터 수신")
-                            labelText:  _webRtcRecvRelay > 0 ? qsTr("%1 KB/s").arg(_webRtcRecvRelay.toFixed(2)) : qsTr("N/A")
-                            visible:    _webRtcRecvDirect > 0 || _webRtcRecvRelay > 0
-                        }
-                        LabelledLabel {
-                            label:      qsTr("통합 영상 수신")
+                            label:      qsTr("영상 수신")
                             labelText:  qsTr("%1 Mbps").arg(_videoRateMbps)
-                            visible:    !(_videoRateDirect > 0 || _videoRateRelay > 0)  // dual-path가 아닌 경우만 표시
                         }
                         LabelledLabel {
-                            label:      qsTr("CH1 영상 수신")
-                            labelText:  qsTr("%1 Mbps").arg(_videoRateDirectMbps)
-                            visible:    _videoRateDirect > 0 || _videoRateRelay > 0
-                        }
-                        LabelledLabel {
-                            label:      qsTr("CH2 영상 수신")
-                            labelText:  qsTr("%1 Mbps").arg(_videoRateRelayMbps)
-                            visible:    _videoRateDirect > 0 || _videoRateRelay > 0
-                        }
-                        LabelledLabel {
-                            label:      qsTr("CH1 ICE")
-                            labelText:  _iceCandidateDirect !== "" ? _iceCandidateDirect : qsTr("N/A")
-                            labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
+                            label:      qsTr("ICE")
+                            labelText:  _iceCandidate !== "" ? _iceCandidate : qsTr("N/A")
+                            labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 26
                             labelTextElide: Text.ElideMiddle
-                            visible:    _rttDirect > 0
-                        }
-                        LabelledLabel {
-                            label:      qsTr("CH2 ICE")
-                            labelText:  _iceCandidateRelay !== "" ? _iceCandidateRelay : qsTr("N/A")
-                            labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
-                            labelTextElide: Text.ElideMiddle
-                            visible:    _rttRelay > 0
+                            visible:    _iceCandidate !== ""
                         }
                     }
 

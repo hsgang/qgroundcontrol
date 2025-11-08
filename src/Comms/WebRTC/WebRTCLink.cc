@@ -208,13 +208,9 @@ void WebRTCLink::_onWebRtcStatsUpdated(const WebRTCStats& stats)
     // 구조체 비교를 통한 효율적인 변경 감지
     if (_webRtcStats != stats) {
         // Candidate 변경 여부 로그
-        if (_webRtcStats.iceCandidateDirect != stats.iceCandidateDirect) {
-            qCDebug(WebRTCLinkLog) << "Direct candidate changed:"
-                                  << _webRtcStats.iceCandidateDirect << "->" << stats.iceCandidateDirect;
-        }
-        if (_webRtcStats.iceCandidateRelay != stats.iceCandidateRelay) {
-            qCDebug(WebRTCLinkLog) << "Relay candidate changed:"
-                                  << _webRtcStats.iceCandidateRelay << "->" << stats.iceCandidateRelay;
+        if (_webRtcStats.iceCandidate != stats.iceCandidate) {
+            qCDebug(WebRTCLinkLog) << "ICE candidate changed:"
+                                  << _webRtcStats.iceCandidate << "->" << stats.iceCandidate;
         }
 
         _webRtcStats = stats;

@@ -17,36 +17,18 @@ class WebRTCLink : public LinkInterface
     Q_PROPERTY(VideoMetrics videoMetrics READ videoMetrics NOTIFY videoMetricsChanged)
     Q_PROPERTY(RTCModuleVersionInfo rtcModuleVersionInfo READ rtcModuleVersionInfo NOTIFY rtcModuleVersionInfoChanged)
 
-    // WebRTC 개별 통계 프로퍼티 (QML에서 편리하게 접근하기 위해)
+    // WebRTC 통계 프로퍼티 (QML에서 편리하게 접근하기 위해)
     Q_PROPERTY(int webRtcRtt READ webRtcRtt NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(int webRtcRttDirect READ webRtcRttDirect NOTIFY webRtcStatsChanged)  // Direct 경로 RTT
-    Q_PROPERTY(int webRtcRttRelay READ webRtcRttRelay NOTIFY webRtcStatsChanged)    // Relay 경로 RTT
-    Q_PROPERTY(QString iceCandidateDirect READ iceCandidateDirect NOTIFY webRtcStatsChanged)  // Direct ICE candidate
-    Q_PROPERTY(QString iceCandidateRelay READ iceCandidateRelay NOTIFY webRtcStatsChanged)    // Relay ICE candidate
+    Q_PROPERTY(QString iceCandidate READ iceCandidate NOTIFY webRtcStatsChanged)
 
-    // 통합 송수신 속도
+    // 송수신 속도
     Q_PROPERTY(double webRtcSent READ webRtcSent NOTIFY webRtcStatsChanged)
     Q_PROPERTY(double webRtcRecv READ webRtcRecv NOTIFY webRtcStatsChanged)
 
-    // Direct 경로 송수신 속도
-    Q_PROPERTY(double webRtcSentDirect READ webRtcSentDirect NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(double webRtcRecvDirect READ webRtcRecvDirect NOTIFY webRtcStatsChanged)
-
-    // Relay 경로 송수신 속도
-    Q_PROPERTY(double webRtcSentRelay READ webRtcSentRelay NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(double webRtcRecvRelay READ webRtcRecvRelay NOTIFY webRtcStatsChanged)
-
+    // 비디오 통계
     Q_PROPERTY(double rtcVideoRate READ rtcVideoRate NOTIFY webRtcStatsChanged)
     Q_PROPERTY(int rtcVideoPacketCount READ rtcVideoPacketCount NOTIFY webRtcStatsChanged)
     Q_PROPERTY(qint64 rtcVideoBytesReceived READ rtcVideoBytesReceived NOTIFY webRtcStatsChanged)
-
-    Q_PROPERTY(double rtcVideoDirectRate READ rtcVideoDirectRate NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(int rtcVideoDirectPacketCount READ rtcVideoDirectPacketCount NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(qint64 rtcVideoDirectBytesReceived READ rtcVideoDirectBytesReceived NOTIFY webRtcStatsChanged)
-
-    Q_PROPERTY(double rtcVideoRelayRate READ rtcVideoRelayRate NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(int rtcVideoRelayPacketCount READ rtcVideoRelayPacketCount NOTIFY webRtcStatsChanged)
-    Q_PROPERTY(qint64 rtcVideoRelayBytesReceived READ rtcVideoRelayBytesReceived NOTIFY webRtcStatsChanged)
 
     // RTC Module 시스템 정보 개별 프로퍼티
     Q_PROPERTY(double rtcModuleCpuUsage READ rtcModuleCpuUsage NOTIFY rtcModuleSystemInfoChanged)
@@ -97,34 +79,18 @@ class WebRTCLink : public LinkInterface
     // RTC Module 버전 정보 getter
     const RTCModuleVersionInfo& rtcModuleVersionInfo() const { return _rtcModuleVersionInfo; }
 
-    // WebRTC 개별 통계 getter 메서드들
+    // WebRTC 통계 getter 메서드들
     int webRtcRtt() const { return _webRtcStats.rttMs; }
-    int webRtcRttDirect() const { return _webRtcStats.rttDirectMs; }
-    int webRtcRttRelay() const { return _webRtcStats.rttRelayMs; }
-    QString iceCandidateDirect() const { return _webRtcStats.iceCandidateDirect; }
-    QString iceCandidateRelay() const { return _webRtcStats.iceCandidateRelay; }
+    QString iceCandidate() const { return _webRtcStats.iceCandidate; }
 
-    // 통합 송수신 속도 getter
+    // 송수신 속도 getter
     double webRtcSent() const { return _webRtcStats.webRtcSent; }
     double webRtcRecv() const { return _webRtcStats.webRtcRecv; }
 
-    // 경로별 송수신 속도 getter
-    double webRtcSentDirect() const { return _webRtcStats.webRtcSentDirect; }
-    double webRtcRecvDirect() const { return _webRtcStats.webRtcRecvDirect; }
-    double webRtcSentRelay() const { return _webRtcStats.webRtcSentRelay; }
-    double webRtcRecvRelay() const { return _webRtcStats.webRtcRecvRelay; }
-
+    // 비디오 통계 getter
     double rtcVideoRate() const { return _webRtcStats.videoRateKBps; }
     int rtcVideoPacketCount() const { return _webRtcStats.videoPacketCount; }
     qint64 rtcVideoBytesReceived() const { return _webRtcStats.videoBytesReceived; }
-
-    double rtcVideoDirectRate() const { return _webRtcStats.videoRateDirectKBps; }
-    int rtcVideoDirectPacketCount() const { return _webRtcStats.videoPacketCountDirect; }
-    qint64 rtcVideoDirectBytesReceived() const { return _webRtcStats.videoBytesReceivedDirect; }
-
-    double rtcVideoRelayRate() const { return _webRtcStats.videoRateRelayKBps; }
-    int rtcVideoRelayPacketCount() const { return _webRtcStats.videoPacketCountRelay; }
-    qint64 rtcVideoRelayBytesReceived() const { return _webRtcStats.videoBytesReceivedRelay; }
 
     // RTC Module 시스템 정보 개별 getter 메서드들
     double rtcModuleCpuUsage() const { return _rtcModuleSystemInfo.cpuUsage; }

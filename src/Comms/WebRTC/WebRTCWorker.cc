@@ -40,10 +40,7 @@ WebRTCWorker::WebRTCWorker(const WebRTCConfiguration *config,
     _reconnectTimer->setSingleShot(true);
     connect(_reconnectTimer, &QTimer::timeout, this, &WebRTCWorker::reconnectToRoom);
 
-    _remoteDescriptionSet.store(false);
-
-    // 해시 링 버퍼 초기화
-    _hashRingBuffer.fill(0);
+    _pcContext.remoteDescriptionSet.store(false);
 }
 
 WebRTCWorker::~WebRTCWorker()
@@ -103,8 +100,8 @@ void WebRTCWorker::start()
     _isShuttingDown.store(false);
     _isDisconnecting.store(false);
     _isCleaningUp.store(false);
-    _dataChannelOpened.store(false);
-    _remoteDescriptionSet.store(false);
+    _pcContext.dataChannelOpened.store(false);
+    _pcContext.remoteDescriptionSet.store(false);
     _videoStreamActive.store(false);
     _waitingForReconnect.store(false);  // 재연결 플래그도 리셋
 
@@ -148,19 +145,16 @@ void WebRTCWorker::start()
         _reconnectTimer->stop();
     }
 
-    // 이전 Dual-path connections이 남아있으면 완전히 정리
-    if (_peerConnectionDirect || _peerConnectionRelay ||
-        _mavlinkDataChannelDirect || _mavlinkDataChannelRelay ||
-        _customDataChannelDirect || _customDataChannelRelay ||
-        _videoTrackDirect || _videoTrackRelay) {
-        qCDebug(WebRTCLinkLog) << "Cleaning up previous dual-path connections before start";
+    // 이전 connections이 남아있으면 완전히 정리
+    if (_pcContext.pc || _pcContext.mavlinkDc || _pcContext.customDc || _pcContext.videoTrack) {
+        qCDebug(WebRTCLinkLog) << "Cleaning up previous connections before start";
         _resetPeerConnection();
     }
 
     // Clear any existing state
     {
-        QMutexLocker locker(&_candidateMutex);
-        _pendingCandidates.clear();
+        QMutexLocker locker(&_pcContext.candidateMutex);
+        _pcContext.pendingCandidates.clear();
     }
 
     // Store current GCS and target drone information
@@ -219,14 +213,37 @@ void WebRTCWorker::writeData(const QByteArray &data)
         return;
     }
 
-    // Dual-path 모드: 양쪽 모두 전송 (진정한 이중화)
-    _sendDataViaPath(data, PathType::Both);
+    if (!_pcContext.mavlinkDc || !_pcContext.mavlinkDc->isOpen()) {
+        qCWarning(WebRTCLinkLog) << "[WRITE] DataChannel not available or not open";
+        return;
+    }
+
+    // Single path: send data directly
+    std::string_view view(data.constData(), data.size());
+    auto binaryData = rtc::binary(
+        reinterpret_cast<const std::byte*>(view.data()),
+        reinterpret_cast<const std::byte*>(view.data() + view.size())
+    );
+
+    try {
+        _pcContext.mavlinkDc->send(binaryData);
+        _dataChannelSentCalc.addData(data.size());
+        emit bytesSent(data);
+    } catch (const std::exception& e) {
+        qCWarning(WebRTCLinkLog) << "[WRITE] Failed to send data:" << e.what();
+        emit errorOccurred(QString("Failed to send data: %1").arg(e.what()));
+    }
 }
 
 void WebRTCWorker::sendCustomMessage(const QString& message)
 {
     if (_isShuttingDown.load()) {
         qCWarning(WebRTCLinkLog) << "Cannot send custom message: shutting down";
+        return;
+    }
+
+    if (!_pcContext.customDc || !_pcContext.customDc->isOpen()) {
+        qCWarning(WebRTCLinkLog) << "Custom DataChannel not available or not open";
         return;
     }
 
@@ -239,25 +256,8 @@ void WebRTCWorker::sendCustomMessage(const QString& message)
     );
 
     try {
-        bool sent = false;
-
-        // Direct 경로로 전송 시도
-        if (_customDataChannelDirect && _customDataChannelDirect->isOpen()) {
-            _customDataChannelDirect->send(binaryData);
-            sent = true;
-            qCDebug(WebRTCLinkLog) << "Custom message sent via Direct path:" << message;
-        }
-
-        // Relay 경로로도 전송 시도
-        if (_customDataChannelRelay && _customDataChannelRelay->isOpen()) {
-            _customDataChannelRelay->send(binaryData);
-            sent = true;
-            qCDebug(WebRTCLinkLog) << "Custom message sent via Relay path:" << message;
-        }
-
-        if (!sent) {
-            qCWarning(WebRTCLinkLog) << "Custom DataChannel not available or not open on any path";
-        }
+        _pcContext.customDc->send(binaryData);
+        qCDebug(WebRTCLinkLog) << "Custom message sent:" << message;
     } catch (const std::exception& e) {
         if (!_isShuttingDown.load()) {
             qCWarning(WebRTCLinkLog) << "Failed to send custom message:" << e.what();
@@ -354,10 +354,7 @@ void WebRTCWorker::disconnectLink()
 
 bool WebRTCWorker::isDataChannelOpen() const
 {
-    // Dual-path: 둘 중 하나라도 열려있으면 true
-    bool directOpen = _mavlinkDataChannelDirect && _mavlinkDataChannelDirect->isOpen();
-    bool relayOpen = _mavlinkDataChannelRelay && _mavlinkDataChannelRelay->isOpen();
-    return directOpen || relayOpen;
+    return _pcContext.mavlinkDc && _pcContext.mavlinkDc->isOpen();
 }
 
 bool WebRTCWorker::isOperational() const {
@@ -449,14 +446,14 @@ void WebRTCWorker::_onGcsUnregisteredSuccessfully(const QString& gcsId)
     _currentTargetDroneId.clear();
 
     // Reset connection state
-    _dataChannelOpened.store(false);
-    _remoteDescriptionSet.store(false);
+    _pcContext.dataChannelOpened.store(false);
+    _pcContext.remoteDescriptionSet.store(false);
     _isDisconnecting.store(false);
 
     // Clear pending candidates
     {
-        QMutexLocker locker(&_candidateMutex);
-        _pendingCandidates.clear();
+        QMutexLocker locker(&_pcContext.candidateMutex);
+        _pcContext.pendingCandidates.clear();
     }
 
     qCDebug(WebRTCLinkLog) << "GCS unregistered successfully";
@@ -484,14 +481,14 @@ void WebRTCWorker::_onGcsUnregisterFailed(const QString& gcsId, const QString& r
     _currentTargetDroneId.clear();
 
     // Reset connection state even on failure
-    _dataChannelOpened.store(false);
-    _remoteDescriptionSet.store(false);
+    _pcContext.dataChannelOpened.store(false);
+    _pcContext.remoteDescriptionSet.store(false);
     _isDisconnecting.store(false);
 
     // Clear pending candidates
     {
-        QMutexLocker locker(&_candidateMutex);
-        _pendingCandidates.clear();
+        QMutexLocker locker(&_pcContext.candidateMutex);
+        _pcContext.pendingCandidates.clear();
     }
 
     // 자동 재연결 중일 때는 완전한 정리를 하지 않음
@@ -505,9 +502,9 @@ void WebRTCWorker::reconnectToRoom()
 {
     qCDebug(WebRTCLinkLog) << "Reconnect requested";
 
-    // 이전 Dual-path connections이 아직 남아있으면 정리
-    if (_peerConnectionDirect || _peerConnectionRelay) {
-        qCDebug(WebRTCLinkLog) << "Cleaning up existing dual-path connections before reconnect";
+    // 이전 connections이 아직 남아있으면 정리
+    if (_pcContext.pc) {
+        qCDebug(WebRTCLinkLog) << "Cleaning up existing connections before reconnect";
         _resetPeerConnection();
     }
 
@@ -516,22 +513,14 @@ void WebRTCWorker::reconnectToRoom()
     // Reset ALL state flags for reconnection
     _isShuttingDown.store(false);      // 재연결을 위해 리셋 (중요!)
     _isDisconnecting.store(false);
-    _dataChannelOpened.store(false);
-    _remoteDescriptionSet.store(false);
+    _pcContext.dataChannelOpened.store(false);
+    _pcContext.remoteDescriptionSet.store(false);
     _videoStreamActive.store(false);
-
-    // Dual-path 상태 플래그 초기화
-    _directPathActive.store(false);
-    _relayPathActive.store(false);
-    _remoteDescriptionSetDirect.store(false);
-    _remoteDescriptionSetRelay.store(false);
-    _dataChannelOpenedDirect.store(false);
-    _dataChannelOpenedRelay.store(false);
 
     // Clear pending candidates
     {
-        QMutexLocker locker(&_candidateMutex);
-        _pendingCandidates.clear();
+        QMutexLocker locker(&_pcContext.candidateMutex);
+        _pcContext.pendingCandidates.clear();
     }
 
     // Setup new peer connection
@@ -552,212 +541,125 @@ void WebRTCWorker::reconnectToRoom()
     }
 }
 
-void WebRTCWorker::_setupDualPathConnections()
-{
-    qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Setting up dual connections (Direct + Relay)";
-
-    // SCTP 글로벌 설정 적용
-    rtcSctpSettings sctpSettings = {};
-    sctpSettings.recvBufferSize = SCTP_RECV_BUFFER_SIZE;
-    sctpSettings.sendBufferSize = SCTP_SEND_BUFFER_SIZE;
-    sctpSettings.maxChunksOnQueue = SCTP_MAX_CHUNKS_ON_QUEUE;
-    sctpSettings.initialCongestionWindow = SCTP_INITIAL_CONGESTION_WINDOW;
-    sctpSettings.maxBurst = SCTP_MAX_BURST;
-    sctpSettings.congestionControlModule = SCTP_CONGESTION_CONTROL_MODULE;
-    sctpSettings.delayedSackTimeMs = SCTP_DELAYED_SACK_TIME_MS;
-    sctpSettings.minRetransmitTimeoutMs = SCTP_MIN_RETRANSMIT_TIMEOUT_MS;
-    sctpSettings.maxRetransmitTimeoutMs = SCTP_MAX_RETRANSMIT_TIMEOUT_MS;
-    sctpSettings.initialRetransmitTimeoutMs = SCTP_INITIAL_RETRANSMIT_TIMEOUT_MS;
-    sctpSettings.maxRetransmitAttempts = SCTP_MAX_RETRANSMIT_ATTEMPTS;
-    sctpSettings.heartbeatIntervalMs = SCTP_HEARTBEAT_INTERVAL_MS;
-    rtcSetSctpSettings(&sctpSettings);
-
-    // Relay 연결 생성 (우선 연결)
-    _setupSinglePeerConnection(_peerConnectionRelay, false);
-
-    // Direct P2P 연결 생성
-    _setupSinglePeerConnection(_peerConnectionDirect, true);
-
-    qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Both connections created successfully";
-}
-
-void WebRTCWorker::_setupSinglePeerConnection(std::shared_ptr<rtc::PeerConnection>& pc, bool isDirect)
-{
-    QString pathName = isDirect ? "direct" : "relay";
-    qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Creating" << pathName << "PeerConnection";
-
-    rtc::Configuration config;
-    config.iceServers.clear();
-
-    if (isDirect) {
-        // Direct P2P: STUN만 사용
-        if (!_connectionConfig.stunServer.isEmpty()) {
-            config.iceServers.emplace_back(_connectionConfig.stunServer.toStdString());
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Direct: Added STUN server";
-        }
-    } else {
-        // Relay: TURN만 사용 (Direct 차단)
-        if (!_connectionConfig.turnServer.isEmpty()) {
-            rtc::IceServer turnServer(
-                _connectionConfig.turnServer.toStdString(),
-                3478,
-                _connectionConfig.turnUsername.toStdString(),
-                _connectionConfig.turnPassword.toStdString(),
-                rtc::IceServer::RelayType::TurnUdp
-            );
-            config.iceServers.emplace_back(turnServer);
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Relay: Added TURN server";
-        }
-    }
-
-    try {
-        pc = std::make_shared<rtc::PeerConnection>(config);
-        _setupPeerConnectionCallbacks(pc, isDirect);
-        qCDebug(WebRTCLinkLog) << "[DUAL-PATH]" << pathName << "PeerConnection created successfully";
-    } catch (const std::exception& e) {
-        qCWarning(WebRTCLinkLog) << "[DUAL-PATH] Failed to create" << pathName << "PC:" << e.what();
-        emit errorOccurred(QString("Failed to create %1 connection: %2").arg(pathName, e.what()));
-    }
-}
-
-void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnection> pc, bool isDirect)
+void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnection> pc)
 {
     if (!pc) return;
 
-    QString pathName = isDirect ? "direct" : "relay";
     QPointer<WebRTCWorker> self(this);
     std::weak_ptr<rtc::PeerConnection> weakPC = pc;
 
-    pc->onStateChange([self, weakPC, isDirect, pathName](rtc::PeerConnection::State state) {
+    // State change callback
+    pc->onStateChange([self, weakPC](rtc::PeerConnection::State state) {
         auto pc = weakPC.lock();
         if (!pc || !self || !self->isOperational()) return;
 
-        QMetaObject::invokeMethod(self, [self, weakPC, state, isDirect, pathName]() {
+        QMetaObject::invokeMethod(self, [self, weakPC, state]() {
             if (!self) return;
 
             QString stateStr = self->_stateToString(state);
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH]" << pathName << "state:" << stateStr;
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] PeerConnection state:" << stateStr;
 
             if (state == rtc::PeerConnection::State::Connected) {
-                if (isDirect) {
-                    self->_directPathActive.store(true);
-                    qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Direct P2P connected!";
-                    emit self->rtcStatusMessageChanged("연결됨(Direct)");
+                qCDebug(WebRTCLinkLog) << "[WEBRTC] Connected!";
+                emit self->rtcStatusMessageChanged("연결됨");
 
-                    // Direct 경로 연결 완료 시 ICE candidate 정보 캐싱
-                    if (auto pc = weakPC.lock()) {
-                        try {
-                            auto localAddr = pc->localAddress();
-                            auto remoteAddr = pc->remoteAddress();
-                            if (localAddr.has_value() && remoteAddr.has_value()) {
-                                self->_cachedDirectCandidate = QString("%1 ↔ %2")
-                                                                .arg(QString::fromStdString(*localAddr))
-                                                                .arg(QString::fromStdString(*remoteAddr));
-                                qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Direct candidate cached:" << self->_cachedDirectCandidate;
-                            }
-                        } catch (const std::exception& e) {
-                            qCWarning(WebRTCLinkLog) << "[DUAL-PATH] Failed to cache Direct candidate:" << e.what();
-                        }
-                    }
-                } else {
-                    self->_relayPathActive.store(true);
-                    qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Relay connected!";
-                    emit self->rtcStatusMessageChanged("연결됨(Relay)");
+                // ICE candidate 정보 캐싱 (타입 포함)
+                if (auto pc = weakPC.lock()) {
+                    try {
+                        auto localAddr = pc->localAddress();
+                        auto remoteAddr = pc->remoteAddress();
+                        if (localAddr.has_value() && remoteAddr.has_value()) {
+                            QString candidateType = "unknown";
+                            QString localAddrStr = QString::fromStdString(*localAddr);
+                            QString remoteAddrStr = QString::fromStdString(*remoteAddr);
 
-                    // Relay 경로 연결 완료 시 ICE candidate 정보 캐싱
-                    if (auto pc = weakPC.lock()) {
-                        try {
-                            auto localAddr = pc->localAddress();
-                            auto remoteAddr = pc->remoteAddress();
-                            if (localAddr.has_value() && remoteAddr.has_value()) {
-                                self->_cachedRelayCandidate = QString("%1 ↔ %2")
-                                                               .arg(QString::fromStdString(*localAddr))
-                                                               .arg(QString::fromStdString(*remoteAddr));
-                                qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Relay candidate cached:" << self->_cachedRelayCandidate;
+                            // getSelectedCandidatePair() API 사용하여 candidate 타입 확인
+                            rtc::Candidate localCand, remoteCand;
+                            if (pc->getSelectedCandidatePair(&localCand, &remoteCand)) {
+                                // Candidate::Type enum을 사용하여 타입 확인
+                                switch (localCand.type()) {
+                                    case rtc::Candidate::Type::Relayed:
+                                        candidateType = "relay (TURN)";
+                                        break;
+                                    case rtc::Candidate::Type::ServerReflexive:
+                                        candidateType = "srflx (STUN)";
+                                        break;
+                                    case rtc::Candidate::Type::PeerReflexive:
+                                        candidateType = "prflx (Peer Reflexive)";
+                                        break;
+                                    case rtc::Candidate::Type::Host:
+                                        candidateType = "host (Direct)";
+                                        break;
+                                    default:
+                                        candidateType = "unknown";
+                                        break;
+                                }
+                                qCDebug(WebRTCLinkLog) << "[WEBRTC] Selected candidate type:" << candidateType
+                                                      << "Local:" << QString::fromStdString(localCand.candidate())
+                                                      << "Remote:" << QString::fromStdString(remoteCand.candidate());
+                            } else {
+                                qCDebug(WebRTCLinkLog) << "[WEBRTC] Cannot get candidate pair";
                             }
-                        } catch (const std::exception& e) {
-                            qCWarning(WebRTCLinkLog) << "[DUAL-PATH] Failed to cache Relay candidate:" << e.what();
+
+                            self->_cachedCandidate = QString("%1 ↔ %2 [%3]")
+                                                            .arg(localAddrStr)
+                                                            .arg(remoteAddrStr)
+                                                            .arg(candidateType);
+                            qCDebug(WebRTCLinkLog) << "[WEBRTC] Candidate cached:" << self->_cachedCandidate;
                         }
+                    } catch (const std::exception& e) {
+                        qCWarning(WebRTCLinkLog) << "[WEBRTC] Failed to cache candidate:" << e.what();
                     }
                 }
             } else if (state == rtc::PeerConnection::State::Failed ||
                        state == rtc::PeerConnection::State::Disconnected ||
                        state == rtc::PeerConnection::State::Closed) {
-                if (isDirect) {
-                    self->_directPathActive.store(false);
-                    self->_cachedDirectCandidate.clear();  // Direct 경로 실패 시 candidate 초기화
-                    self->_rttDirectMs = 0;  // Direct 경로 RTT 초기화
-                    qCWarning(WebRTCLinkLog) << "[DUAL-PATH] Direct path failed/disconnected, candidate and RTT cleared";
-                    if (self->_relayPathActive.load()) {
-                        emit self->rtcStatusMessageChanged("Direct 실패, Relay 사용 중");
-                        // Relay만 남았으므로 통합 RTT를 Relay RTT로 업데이트
-                        self->_rttMs = self->_rttRelayMs;
-                        emit self->rttUpdated(self->_rttMs);
-                    } else {
-                        // 양쪽 모두 끊어짐 → 재연결 트리거
-                        emit self->rtcStatusMessageChanged("모든 경로 연결 끊김 - 재연결 시도");
-                        QMetaObject::invokeMethod(self, [self]() {
-                            if (self && !self->_waitingForReconnect.load() && !self->_isShuttingDown.load()) {
-                                self->_handleBothPathsDisconnected();
-                            }
-                        }, Qt::QueuedConnection);
+                self->_cachedCandidate.clear();
+                self->_rttMs = 0;
+                qCWarning(WebRTCLinkLog) << "[WEBRTC] Connection failed/disconnected, candidate and RTT cleared";
+
+                emit self->rtcStatusMessageChanged("연결 끊김 - 재연결 시도");
+                QMetaObject::invokeMethod(self, [self]() {
+                    if (self && !self->_waitingForReconnect.load() && !self->_isShuttingDown.load()) {
+                        self->_handlePeerDisconnection();
                     }
-                } else {
-                    self->_relayPathActive.store(false);
-                    self->_cachedRelayCandidate.clear();  // Relay 경로 실패 시 candidate 초기화
-                    self->_rttRelayMs = 0;  // Relay 경로 RTT 초기화
-                    qCWarning(WebRTCLinkLog) << "[DUAL-PATH] Relay path failed/disconnected, candidate and RTT cleared";
-                    if (self->_directPathActive.load()) {
-                        emit self->rtcStatusMessageChanged("Relay 실패, Direct 사용 중");
-                        // Direct만 남았으므로 통합 RTT를 Direct RTT로 업데이트
-                        self->_rttMs = self->_rttDirectMs;
-                        emit self->rttUpdated(self->_rttMs);
-                    } else {
-                        // 양쪽 모두 끊어짐 → 재연결 트리거
-                        emit self->rtcStatusMessageChanged("모든 경로 연결 끊김 - 재연결 시도");
-                        QMetaObject::invokeMethod(self, [self]() {
-                            if (self && !self->_waitingForReconnect.load() && !self->_isShuttingDown.load()) {
-                                self->_handleBothPathsDisconnected();
-                            }
-                        }, Qt::QueuedConnection);
-                    }
-                }
+                }, Qt::QueuedConnection);
             }
         }, Qt::QueuedConnection);
     });
 
-    pc->onLocalDescription([self, weakPC, isDirect, pathName](rtc::Description description) {
+    // Local description callback
+    pc->onLocalDescription([self, weakPC](rtc::Description description) {
         auto pc = weakPC.lock();
         if (!pc || !self || !self->isOperational()) return;
 
         QString descType = QString::fromStdString(description.typeString());
         QString sdpContent = QString::fromStdString(description);
 
-        qCDebug(WebRTCLinkLog) << "[DUAL-PATH]" << pathName << "local description created:" << descType;
+        qCDebug(WebRTCLinkLog) << "[WEBRTC] Local description created:" << descType;
 
-        QMetaObject::invokeMethod(self, [self, descType, sdpContent, isDirect, pathName]() {
+        QMetaObject::invokeMethod(self, [self, descType, sdpContent]() {
             if (!self) return;
 
-            // SDP에 경로 정보 추가
             QJsonObject message;
             message["id"] = self->_currentGcsId;
             message["to"] = self->_currentTargetDroneId;
             message["type"] = descType;
             message["sdp"] = sdpContent;
-            message["path"] = isDirect ? "direct" : "relay";  // 경로 식별자 추가
 
             self->_sendSignalingMessage(message);
         }, Qt::QueuedConnection);
     });
 
-    pc->onLocalCandidate([self, weakPC, isDirect, pathName](rtc::Candidate candidate) {
+    // Local candidate callback
+    pc->onLocalCandidate([self, weakPC](rtc::Candidate candidate) {
         auto pc = weakPC.lock();
         if (!pc || !self || !self->isOperational()) return;
 
         QString candidateStr = QString::fromStdString(candidate);
         QString mid = QString::fromStdString(candidate.mid());
 
-        QMetaObject::invokeMethod(self, [self, candidateStr, mid, isDirect, pathName]() {
+        QMetaObject::invokeMethod(self, [self, candidateStr, mid]() {
             if (!self) return;
 
             QJsonObject message;
@@ -766,93 +668,111 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
             message["type"] = "candidate";
             message["candidate"] = candidateStr;
             message["sdpMid"] = mid;
-            message["path"] = isDirect ? "direct" : "relay";  // 경로 식별자 추가
 
             self->_sendSignalingMessage(message);
         }, Qt::QueuedConnection);
     });
 
-    pc->onDataChannel([self, weakPC, isDirect, pathName](std::shared_ptr<rtc::DataChannel> dc) {
+    // Data channel callback
+    pc->onDataChannel([self, weakPC](std::shared_ptr<rtc::DataChannel> dc) {
         auto pc = weakPC.lock();
         if (!pc || !self || !dc) {
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH] ERROR: PeerConnection, Worker or DataChannel is null!";
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] ERROR: PeerConnection, Worker or DataChannel is null!";
             return;
         }
 
         if (self->_isShuttingDown.load()) {
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Shutting down, ignoring";
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] Shutting down, ignoring";
             return;
         }
 
         std::string label = dc->label();
 
-        QMetaObject::invokeMethod(self, [self, dc, label, isDirect, pathName]() {
+        QMetaObject::invokeMethod(self, [self, dc, label]() {
             if (!self || !self->isOperational()) return;
 
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH]" << pathName << "DataChannel received:"
-                                   << QString::fromStdString(label);
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] DataChannel received:" << QString::fromStdString(label);
 
             if (label == "mavlink") {
-                if (isDirect) {
-                    self->_mavlinkDataChannelDirect = dc;
-                    qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Direct mavlink DataChannel created";
-                } else {
-                    self->_mavlinkDataChannelRelay = dc;
-                    qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Relay mavlink DataChannel created";
-                }
-                self->_setupMavlinkDataChannel(dc, isDirect);
+                self->_pcContext.mavlinkDc = dc;
+                qCDebug(WebRTCLinkLog) << "[WEBRTC] mavlink DataChannel created";
+                self->_setupMavlinkDataChannel(dc);
             } else if (label == "custom") {
-                if (isDirect) {
-                    self->_customDataChannelDirect = dc;
-                } else {
-                    self->_customDataChannelRelay = dc;
-                }
-                self->_setupCustomDataChannel(dc, isDirect);
+                self->_pcContext.customDc = dc;
+                self->_setupCustomDataChannel(dc);
             }
 
             // 즉시 상태 확인
             if (dc->isOpen()) {
-                if (isDirect) {
-                    self->_dataChannelOpenedDirect.store(true);
-                } else {
-                    self->_dataChannelOpenedRelay.store(true);
-                }
                 self->_processDataChannelOpen();
             }
         }, Qt::QueuedConnection);
     });
 
-    pc->onTrack([self, weakPC, isDirect, pathName](std::shared_ptr<rtc::Track> track) {
+    // Track callback
+    pc->onTrack([self, weakPC](std::shared_ptr<rtc::Track> track) {
         auto pc = weakPC.lock();
         if (!pc || !self || !self->isOperational()) return;
 
-        QMetaObject::invokeMethod(self, [self, track, isDirect, pathName]() {
+        QMetaObject::invokeMethod(self, [self, track]() {
             if (!self || !self->isOperational()) return;
 
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH]" << pathName << "video track received";
-
-            if (isDirect) {
-                self->_videoTrackDirect = track;
-            } else {
-                self->_videoTrackRelay = track;
-            }
-
-            self->_handleTrackReceived(track, isDirect);
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] video track received";
+            self->_pcContext.videoTrack = track;
+            self->_handleTrackReceived(track);
         }, Qt::QueuedConnection);
     });
 }
 
 void WebRTCWorker::_setupPeerConnection()
 {
-    // Dual-path 모드만 지원 (STUN과 TURN 서버 모두 필요)
-    if (_connectionConfig.turnServer.isEmpty() || _connectionConfig.stunServer.isEmpty()) {
-        qCWarning(WebRTCLinkLog) << "Both STUN and TURN servers are required for dual-path mode";
-        emit errorOccurred("Both STUN and TURN servers must be configured");
-        return;
-    }
+    qCDebug(WebRTCLinkLog) << "Setting up single PeerConnection with ICE auto-selection";
 
-    qCDebug(WebRTCLinkLog) << "Setting up dual-path mode (Direct + Relay)";
-    _setupDualPathConnections();
+    try {
+        // SCTP 글로벌 설정 적용
+        rtcSctpSettings sctpSettings = {};
+        sctpSettings.recvBufferSize = SCTP_RECV_BUFFER_SIZE;
+        sctpSettings.sendBufferSize = SCTP_SEND_BUFFER_SIZE;
+        sctpSettings.maxChunksOnQueue = SCTP_MAX_CHUNKS_ON_QUEUE;
+        sctpSettings.initialCongestionWindow = SCTP_INITIAL_CONGESTION_WINDOW;
+        sctpSettings.maxBurst = SCTP_MAX_BURST;
+        sctpSettings.congestionControlModule = SCTP_CONGESTION_CONTROL_MODULE;
+        sctpSettings.delayedSackTimeMs = SCTP_DELAYED_SACK_TIME_MS;
+        sctpSettings.minRetransmitTimeoutMs = SCTP_MIN_RETRANSMIT_TIMEOUT_MS;
+        sctpSettings.maxRetransmitTimeoutMs = SCTP_MAX_RETRANSMIT_TIMEOUT_MS;
+        sctpSettings.initialRetransmitTimeoutMs = SCTP_INITIAL_RETRANSMIT_TIMEOUT_MS;
+        sctpSettings.maxRetransmitAttempts = SCTP_MAX_RETRANSMIT_ATTEMPTS;
+        sctpSettings.heartbeatIntervalMs = SCTP_HEARTBEAT_INTERVAL_MS;
+        rtcSetSctpSettings(&sctpSettings);
+
+        // Configuration 생성 (STUN + TURN 모두 포함)
+        rtc::Configuration config;
+        config.iceServers.clear();
+
+        // STUN 서버 추가 (P2P 직접 연결용)
+        if (!_connectionConfig.stunServer.isEmpty()) {
+            config.iceServers.emplace_back(_connectionConfig.stunServer.toStdString());
+            qCDebug(WebRTCLinkLog) << "Added STUN server:" << _connectionConfig.stunServer;
+        }
+
+        // TURN 서버 추가 (중계 연결용)
+        if (!_connectionConfig.turnServer.isEmpty()) {
+            rtc::IceServer turnServer(_connectionConfig.turnServer.toStdString());
+            turnServer.username = _connectionConfig.turnUsername.toStdString();
+            turnServer.password = _connectionConfig.turnPassword.toStdString();
+            config.iceServers.emplace_back(turnServer);
+            qCDebug(WebRTCLinkLog) << "Added TURN server:" << _connectionConfig.turnServer;
+        }
+
+        // PeerConnection 생성
+        _pcContext.pc = std::make_shared<rtc::PeerConnection>(config);
+        _setupPeerConnectionCallbacks(_pcContext.pc);
+        qCDebug(WebRTCLinkLog) << "PeerConnection created successfully with STUN+TURN (ICE auto-selection)";
+
+    } catch (const std::exception& e) {
+        qCWarning(WebRTCLinkLog) << "Failed to create PeerConnection:" << e.what();
+        emit errorOccurred(QString("Failed to create PeerConnection: %1").arg(e.what()));
+    }
 }
 
 void WebRTCWorker::handleLocalDescription(const QString& descType, const QString& sdpContent) {
@@ -894,7 +814,7 @@ void WebRTCWorker::handlePeerStateChange(int stateValue) {
 
 
 
-void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc, bool isDirect)
+void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc)
 {
     if (!dc) return;
 
@@ -928,7 +848,7 @@ void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc
         qCDebug(WebRTCLinkLog) << "[DATACHANNEL] DataChannel CLOSED";
         if (!self || self->_isShuttingDown.load()) return;
 
-        self->_dataChannelOpened.store(false);
+        self->_pcContext.dataChannelOpened.store(false);
         QMetaObject::invokeMethod(self, [self]() {
             if (!self || self->_isDisconnecting.load()) return;
             emit self->rttUpdated(0);
@@ -946,29 +866,21 @@ void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc
         }, Qt::QueuedConnection);
     });
 
-    dc->onMessage([self, isDirect](auto data) {
+    dc->onMessage([self](auto data) {
         if (!self || self->_isShuttingDown.load()) return;
 
         if (std::holds_alternative<rtc::binary>(data)) {
             const auto& binaryData = std::get<rtc::binary>(data);
             QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
 
-            // 이중 경로 모드인지 확인: 양쪽 경로가 모두 존재해야 함
-            bool dualPathMode = (self->_mavlinkDataChannelDirect && self->_mavlinkDataChannelRelay);
-
-            if (dualPathMode) {
-                // 이중 경로: 중복 제거 처리
-                self->_processReceivedData(byteArray, isDirect);
-            } else {
-                // 단일 경로: 직접 전달
-                self->_dataChannelReceivedCalc.addData(byteArray.size());
-                emit self->bytesReceived(byteArray);
-            }
+            // 단일 경로: 직접 전달
+            self->_dataChannelReceivedCalc.addData(byteArray.size());
+            emit self->bytesReceived(byteArray);
         }
     });
 }
 
-void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc, bool isDirect)
+void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
 {
     if (!dc) return;
 
@@ -1051,7 +963,7 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc,
 
 void WebRTCWorker::_processDataChannelOpen()
 {
-    if (_dataChannelOpened.exchange(true)) {
+    if (_pcContext.dataChannelOpened.exchange(true)) {
         qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Already opened, ignoring";
         return;
     }
@@ -1061,21 +973,18 @@ void WebRTCWorker::_processDataChannelOpen()
         return;
     }
 
-    // Dual-path: 둘 중 하나라도 열려있으면 연결됨
-    bool directOpen = _mavlinkDataChannelDirect && _mavlinkDataChannelDirect->isOpen();
-    bool relayOpen = _mavlinkDataChannelRelay && _mavlinkDataChannelRelay->isOpen();
-    bool isConnected = directOpen || relayOpen;
+    // Single path: check if mavlink data channel is open
+    bool isConnected = _pcContext.mavlinkDc && _pcContext.mavlinkDc->isOpen();
 
-    qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Dual-path check - Direct:" << directOpen
-                           << "Relay:" << relayOpen << "Connected:" << isConnected;
+    qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Connection check - Connected:" << isConnected;
 
     if (!isConnected) {
-        qCWarning(WebRTCLinkLog) << "[DATACHANNEL] ERROR: No DataChannel is actually open!";
-        _dataChannelOpened.store(false);
+        qCWarning(WebRTCLinkLog) << "[DATACHANNEL] ERROR: DataChannel is not actually open!";
+        _pcContext.dataChannelOpened.store(false);
         return;
     }
 
-    qCDebug(WebRTCLinkLog) << "[DATACHANNEL] ✅ Connection established! Emitting connected signal";
+    qCDebug(WebRTCLinkLog) << "[DATACHANNEL] Connection established! Emitting connected signal";
 
     QMetaObject::invokeMethod(this, [this]() {
         emit connected();
@@ -1098,32 +1007,25 @@ void WebRTCWorker::_startTimers()
     }
 }
 
-void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track, bool isDirect)
+void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
 {
     auto desc = track->description();
 
     if (desc.type() == "video") {
-        QString pathName = isDirect ? "Direct" : "Relay";
-        qCDebug(WebRTCLinkLog) << "[WebRTC]" << pathName << "video track received";
+        qCDebug(WebRTCLinkLog) << "[WebRTC] video track received";
 
-        // Dual-path: 각 경로별로 비디오 트랙 저장
-        if (isDirect) {
-            _videoTrackDirect = track;
-        } else {
-            _videoTrackRelay = track;
-        }
-
+        _pcContext.videoTrack = track;
         emit videoTrackReceived();
 
         if (VideoManager::instance()->isWebRtcInternalModeEnabled()) {
             _videoStreamActive.store(true);
-            qCDebug(WebRTCLinkLog) << "[WebRTC] Internal mode: video stream active on" << pathName << "path";
+            qCDebug(WebRTCLinkLog) << "[WebRTC] Internal mode: video stream active";
         }
 
         // QPointer로 객체 수명 보호
         QPointer<WebRTCWorker> self(this);
 
-        track->onMessage([self, isDirect, pathName](rtc::message_variant message) {
+        track->onMessage([self](rtc::message_variant message) {
             if (!self || !std::holds_alternative<rtc::binary>(message)) return;
             if (self->_isShuttingDown.load() || !self->_videoStreamActive.load()) return;
 
@@ -1131,16 +1033,8 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track, bool 
             QByteArray rtpData(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
 
             if (VideoManager::instance() && VideoManager::instance()->isWebRtcInternalModeEnabled()) {
-                // 전체 통계
+                // 통계
                 self->_videoReceivedCalc.addData(rtpData.size());
-
-                // 경로별 통계
-                if (isDirect) {
-                    self->_videoReceivedDirectCalc.addData(rtpData.size());
-                } else {
-                    self->_videoReceivedRelayCalc.addData(rtpData.size());
-                }
-
                 VideoManager::instance()->pushWebRtcRtp(rtpData);
             }
         });
@@ -1173,26 +1067,18 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
 
         try {
             QString sdp = message["sdp"].toString();
-            QString path = message["path"].toString();  // "direct" 또는 "relay"
             rtc::Description answer(sdp.toStdString(), "answer");
 
-            // 이중 경로 모드
-            if (!path.isEmpty()) {
-                bool isDirect = (path == "direct");
-                auto& pc = isDirect ? _peerConnectionDirect : _peerConnectionRelay;
-                auto& remoteDescSet = isDirect ? _remoteDescriptionSetDirect : _remoteDescriptionSetRelay;
-
-                if (!pc) {
-                    qCWarning(WebRTCLinkLog) << "[ANSWER] No" << path << "peer connection available";
-                    return;
-                }
-
-                qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Setting remote description for" << path << "path";
-                pc->setRemoteDescription(answer);
-                remoteDescSet.store(true);
-
-                qCDebug(WebRTCLinkLog) << "[ANSWER]" << path << "path processed successfully";
+            if (!_pcContext.pc) {
+                qCWarning(WebRTCLinkLog) << "[ANSWER] No peer connection available";
+                return;
             }
+
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] Setting remote description for answer";
+            _pcContext.pc->setRemoteDescription(answer);
+            _pcContext.remoteDescriptionSet.store(true);
+
+            qCDebug(WebRTCLinkLog) << "[ANSWER] Processed successfully";
 
         } catch (const std::exception& e) {
             qCWarning(WebRTCLinkLog) << "[ANSWER] Processing failed:" << e.what();
@@ -1254,7 +1140,6 @@ void WebRTCWorker::_onWebRTCOfferReceived(const QJsonObject& message)
     }
 
     QString fromDroneId = message["from"].toString();
-    QString path = message["path"].toString();  // Drone이 보낸 경로 정보
 
     // 표준 WebRTC offer 형식 처리
     QString sdp = message["sdp"].toString();
@@ -1263,8 +1148,7 @@ void WebRTCWorker::_onWebRTCOfferReceived(const QJsonObject& message)
         return;
     }
 
-    qCDebug(WebRTCLinkLog) << "Received WebRTC offer from drone:" << fromDroneId
-                           << "path:" << (path.isEmpty() ? "not specified" : path);
+    qCDebug(WebRTCLinkLog) << "Received WebRTC offer from drone:" << fromDroneId;
 
     // Offer를 받았으므로 재연결 모드 활성화 (shutdown 해제)
     _isShuttingDown.store(false);
@@ -1273,54 +1157,64 @@ void WebRTCWorker::_onWebRTCOfferReceived(const QJsonObject& message)
         // WebRTC offer 처리
         rtc::Description droneOffer(sdp.toStdString(), "offer");
 
-        // Drone이 path 정보를 보냈는지 확인 (이중 경로 지원 여부)
-        bool droneSupportsPath = !path.isEmpty();
+        // 기존 PeerConnection이 있는 경우의 처리
+        if (_pcContext.pc) {
+            auto currentState = _pcContext.pc->state();
+            auto signalingState = _pcContext.pc->signalingState();
 
-        // 이중 경로 모드에서는 두 개의 offer가 순차적으로 도착함
-        // 재협상 여부 판단: path가 다르면 같은 세션의 두 번째 offer
-        bool isDualPathSecondOffer = droneSupportsPath &&
-                                     (_peerConnectionDirect || _peerConnectionRelay) &&
-                                     ((path == "relay" && _peerConnectionDirect) ||
-                                      (path == "direct" && _peerConnectionRelay));
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] Existing connection found -"
+                                  << "State:" << _stateToString(currentState)
+                                  << "Signaling:" << static_cast<int>(signalingState);
 
-        // 재협상(re-handshake) 처리: 기존 연결이 있고, 이중 경로의 두 번째 offer가 아닌 경우에만 리셋
-        if ((_peerConnectionDirect || _peerConnectionRelay) && !isDualPathSecondOffer) {
-            qCDebug(WebRTCLinkLog) << "Re-handshake detected: resetting existing dual-path connections";
-            emit rtcStatusMessageChanged("재협상 시작: 기존 연결 재설정 중...");
+            // 연결이 이미 진행 중이거나 연결되어 있으면 offer 무시 (중복 방지)
+            if (currentState == rtc::PeerConnection::State::Connecting ||
+                currentState == rtc::PeerConnection::State::Connected) {
+                qCDebug(WebRTCLinkLog) << "[WEBRTC] Ignoring duplicate offer - connection already in progress/connected";
+                return;
+            }
 
-            // 기존 연결 정리
-            _resetPeerConnection();
+            // Failed/Disconnected 상태인 경우에만 리셋
+            if (currentState == rtc::PeerConnection::State::Failed ||
+                currentState == rtc::PeerConnection::State::Disconnected) {
+                qCDebug(WebRTCLinkLog) << "[WEBRTC] Resetting failed/disconnected connection";
+                emit rtcStatusMessageChanged("재연결 시작: 기존 연결 재설정 중...");
+                _resetPeerConnection();
+            }
         }
 
         // PeerConnection이 없으면 새로 생성
-        if (!_peerConnectionDirect && !_peerConnectionRelay) {
-            qCDebug(WebRTCLinkLog) << "Creating new dual-path PeerConnections for drone offer";
+        if (!_pcContext.pc) {
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] Creating new PeerConnection for drone offer";
             _setupPeerConnection();
-        } else if (isDualPathSecondOffer) {
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Received second offer for" << path << "path (dual-path mode)";
+
+            if (!_pcContext.pc) {
+                qCWarning(WebRTCLinkLog) << "[WEBRTC] Failed to create PeerConnection";
+                emit errorOccurred("PeerConnection 생성 실패");
+                return;
+            }
+
+            // PeerConnection이 제대로 생성되었는지 확인
+            auto newState = _pcContext.pc->state();
+            auto newSignalingState = _pcContext.pc->signalingState();
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] New PeerConnection created -"
+                                  << "State:" << _stateToString(newState)
+                                  << "Signaling:" << static_cast<int>(newSignalingState);
         }
 
-        // Dual-path 모드: path에 따라 해당 PeerConnection에만 설정
-        qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Processing offer for" << path << "path";
-
-        bool isDirect = (path == "direct");
-        auto& pc = isDirect ? _peerConnectionDirect : _peerConnectionRelay;
-        auto& remoteDescSet = isDirect ? _remoteDescriptionSetDirect : _remoteDescriptionSetRelay;
-
-        if (pc) {
-            pc->setRemoteDescription(droneOffer);
-            remoteDescSet.store(true);
-            pc->setLocalDescription(rtc::Description::Type::Answer);
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH]" << path << "answer will be created";
-        } else {
-            qCWarning(WebRTCLinkLog) << "[DUAL-PATH] No PeerConnection for" << path << "path";
-        }
-
-        emit rtcStatusMessageChanged(QString("드론으로부터 %1 offer 수신 중...").arg(path));
+        // Remote description 설정 (answer는 onLocalDescription 콜백에서 자동 생성됨)
+        qCDebug(WebRTCLinkLog) << "[WEBRTC] Setting remote description (answer will be auto-generated)...";
+        _pcContext.pc->setRemoteDescription(droneOffer);
+        _pcContext.remoteDescriptionSet.store(true);
+        qCDebug(WebRTCLinkLog) << "[WEBRTC] Remote description set, answer will be sent via onLocalDescription callback";
+        emit rtcStatusMessageChanged("드론으로부터 offer 수신 완료");
 
     } catch (const std::exception& e) {
-        qCWarning(WebRTCLinkLog) << "Failed to process drone offer:" << e.what();
+        qCWarning(WebRTCLinkLog) << "[WEBRTC] Failed to process drone offer:" << e.what();
         emit errorOccurred(QString("드론 offer 처리 실패: %1").arg(e.what()));
+
+        // 실패 시 연결 완전히 리셋
+        qCWarning(WebRTCLinkLog) << "[WEBRTC] Resetting connection after offer processing failure";
+        _resetPeerConnection();
     }
 }
 
@@ -1329,36 +1223,29 @@ void WebRTCWorker::_handleICECandidate(const QJsonObject& message)
     QString fromDroneId = message["from"].toString();
     QString candidateStr = message["candidate"].toString();
     QString sdpMid = message["sdpMid"].toString();
-    QString path = message["path"].toString();  // "direct" 또는 "relay"
 
     if (candidateStr.isEmpty() || sdpMid.isEmpty()) {
         qCWarning(WebRTCLinkLog) << "Invalid ICE candidate format: missing 'candidate' or 'sdpMid' field";
         return;
     }
 
-    qCDebug(WebRTCLinkLog) << "Received ICE candidate from:" << fromDroneId << "path:" << path;
+    qCDebug(WebRTCLinkLog) << "Received ICE candidate from:" << fromDroneId;
 
     try {
         rtc::Candidate iceCandidate(candidateStr.toStdString(), sdpMid.toStdString());
 
-        // 이중 경로 모드
-        if (!path.isEmpty()) {
-            bool isDirect = (path == "direct");
-            auto& pc = isDirect ? _peerConnectionDirect : _peerConnectionRelay;
-            auto& remoteDescSet = isDirect ? _remoteDescriptionSetDirect : _remoteDescriptionSetRelay;
+        if (!_pcContext.pc) {
+            qCWarning(WebRTCLinkLog) << "[WEBRTC] No PeerConnection available for candidate";
+            return;
+        }
 
-            if (!pc) {
-                qCWarning(WebRTCLinkLog) << "No" << path << "peer connection available for candidate";
-                return;
-            }
-
-            if (remoteDescSet.load(std::memory_order_acquire)) {
-                qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Adding ICE candidate to" << path << "path immediately";
-                pc->addRemoteCandidate(iceCandidate);
-            } else {
-                qCDebug(WebRTCLinkLog) << "[DUAL-PATH] ICE candidate for" << path << "queued, waiting for remote description";
-                // TODO: 경로별 pending candidate 큐 구현 필요
-            }
+        if (_pcContext.remoteDescriptionSet.load(std::memory_order_acquire)) {
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] Adding ICE candidate immediately";
+            _pcContext.pc->addRemoteCandidate(iceCandidate);
+        } else {
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] ICE candidate queued, waiting for remote description";
+            QMutexLocker locker(&_pcContext.candidateMutex);
+            _pcContext.pendingCandidates.push_back(iceCandidate);
         }
     } catch (const std::exception& e) {
         qCWarning(WebRTCLinkLog) << "Failed to process ICE candidate:" << e.what();
@@ -1400,7 +1287,7 @@ void WebRTCWorker::_handlePeerDisconnection()
         _rttTimer->stop();
     }
 
-    _dataChannelOpened.store(false);
+    _pcContext.dataChannelOpened.store(false);
     _isDisconnecting.store(false);
 
     // WebRTC 연결이 끊어지면 GCS 등록 해제
@@ -1429,19 +1316,19 @@ void WebRTCWorker::_handlePeerDisconnection()
 
 void WebRTCWorker::_resetPeerConnection()
 {
-    qCDebug(WebRTCLinkLog) << "[RESET] Resetting dual-path peer connections";
+    qCDebug(WebRTCLinkLog) << "[RESET] Resetting peer connection";
 
-    // Dual-path connections 정리
-    _resetDualPathConnections();
+    // Use PeerConnectionContext reset method
+    _pcContext.reset();
 
-    // 상태 초기화
-    _remoteDescriptionSet.store(false);
-    _remoteDescriptionSetDirect.store(false);
-    _remoteDescriptionSetRelay.store(false);
-    {
-        QMutexLocker locker(&_candidateMutex);
-        _pendingCandidates.clear();
-    }
+    // RTT 및 통계 정보 초기화
+    _rttMs = 0;
+    _cachedCandidate.clear();
+
+    // 통계 계산기 초기화
+    _dataChannelSentCalc.reset();
+    _dataChannelReceivedCalc.reset();
+    _videoReceivedCalc.reset();
 
     qCDebug(WebRTCLinkLog) << "[RESET] Peer connection reset completed";
 }
@@ -1501,53 +1388,30 @@ void WebRTCWorker::_onGatheringStateChanged(rtc::PeerConnection::GatheringState 
 
 void WebRTCWorker::_updateRtt()
 {
-    // Dual-path: 양쪽 RTT 모두 수집
-    if (_peerConnectionDirect) {
-        auto rttOpt = _peerConnectionDirect->rtt();
+    // Single path: collect RTT from the single peer connection
+    if (_pcContext.pc) {
+        auto rttOpt = _pcContext.pc->rtt();
         if (rttOpt.has_value()) {
-            _rttDirectMs = rttOpt.value().count();
+            _rttMs = rttOpt.value().count();
         }
-    }
-
-    if (_peerConnectionRelay) {
-        auto rttOpt = _peerConnectionRelay->rtt();
-        if (rttOpt.has_value()) {
-            _rttRelayMs = rttOpt.value().count();
-        }
-    }
-
-    // 통합 RTT: 더 낮은 값 사용 (또는 사용 가능한 것)
-    if (_rttDirectMs > 0 && _rttRelayMs > 0) {
-        _rttMs = std::min(_rttDirectMs, _rttRelayMs);
-    } else if (_rttDirectMs > 0) {
-        _rttMs = _rttDirectMs;
-    } else if (_rttRelayMs > 0) {
-        _rttMs = _rttRelayMs;
     } else {
-        _rttMs = 0; // 둘 다 없음
+        _rttMs = 0;
     }
 
     // WebRTCStats 수집 (RTT와 candidate 정보 모두 포함)
-    // _collectWebRTCStats()에서 모든 통계를 수집하므로 추가 설정 불필요
     WebRTCStats stats = _collectWebRTCStats();
 
     // 디버그: Candidate가 비어있는지 확인
-    static QString lastDirectCandidate;
-    static QString lastRelayCandidate;
-    if (_cachedDirectCandidate != lastDirectCandidate) {
-        qCDebug(WebRTCLinkLog) << "[RTT_UPDATE] Direct candidate changed:"
-                              << lastDirectCandidate << "->" << _cachedDirectCandidate;
-        lastDirectCandidate = _cachedDirectCandidate;
-    }
-    if (_cachedRelayCandidate != lastRelayCandidate) {
-        qCDebug(WebRTCLinkLog) << "[RTT_UPDATE] Relay candidate changed:"
-                              << lastRelayCandidate << "->" << _cachedRelayCandidate;
-        lastRelayCandidate = _cachedRelayCandidate;
+    static QString lastCandidate;
+    if (_cachedCandidate != lastCandidate) {
+        qCDebug(WebRTCLinkLog) << "[RTT_UPDATE] Candidate changed:"
+                              << lastCandidate << "->" << _cachedCandidate;
+        lastCandidate = _cachedCandidate;
     }
 
     emit webRtcStatsUpdated(stats);
 
-    // 기존 시그널도 유지 (통합 RTT)
+    // 기존 시그널도 유지
     if (_rttMs > 0) {
         emit rttUpdated(_rttMs);
     }
@@ -1595,7 +1459,7 @@ void WebRTCWorker::_cleanup(CleanupMode mode)
     }
 
     _isDisconnecting.store(true);
-    _dataChannelOpened.store(false);
+    _pcContext.dataChannelOpened.store(false);
 
     // 통계 타이머 정리
     if (_statsTimer) {
@@ -1612,37 +1476,12 @@ void WebRTCWorker::_cleanup(CleanupMode mode)
     // PeerConnection 정리 (콜백과 DataChannel, VideoTrack 모두 정리)
     _resetPeerConnection();
 
-    // 상태 초기화
-    _remoteDescriptionSet.store(false);
-    {
-        QMutexLocker locker(&_candidateMutex);
-        _pendingCandidates.clear();
-    }
-
     // 통계 초기화
     _rttMs = 0;
-    _rttDirectMs = 0;
-    _rttRelayMs = 0;
-    _cachedDirectCandidate.clear();
-    _cachedRelayCandidate.clear();
+    _cachedCandidate.clear();
     _dataChannelSentCalc.reset();
     _dataChannelReceivedCalc.reset();
-    _dataChannelSentDirectCalc.reset();
-    _dataChannelRecvDirectCalc.reset();
-    _dataChannelSentRelayCalc.reset();
-    _dataChannelRecvRelayCalc.reset();
     _videoReceivedCalc.reset();
-    _videoReceivedDirectCalc.reset();
-    _videoReceivedRelayCalc.reset();
-
-    // Dual-path 중복 제거 통계 초기화
-    {
-        QMutexLocker locker(&_hashMutex);
-        _hashRingBuffer.fill(0);
-        _hashRingIndex.store(0);
-    }
-    _duplicatePacketsFromDirect.store(0);
-    _duplicatePacketsFromRelay.store(0);
     _totalPacketsReceived.store(0);
 
     // WebRTCStats 초기화하여 UI 업데이트
@@ -1673,56 +1512,28 @@ WebRTCStats WebRTCWorker::_collectWebRTCStats() const
 {
     WebRTCStats stats;
     stats.rttMs = _rttMs;
-    stats.rttDirectMs = _rttDirectMs;
-    stats.rttRelayMs = _rttRelayMs;
 
-    // ICE Candidate 정보 (항상 포함)
-    stats.iceCandidateDirect = _cachedDirectCandidate;
-    stats.iceCandidateRelay = _cachedRelayCandidate;
+    // ICE Candidate 정보
+    stats.iceCandidate = _cachedCandidate;
 
-    // 통합 송수신 통계
+    // 송수신 통계
     stats.webRtcSent = _dataChannelSentCalc.getCurrentRate();
     stats.webRtcRecv = _dataChannelReceivedCalc.getCurrentRate();
-
-    // 경로별 송수신 통계
-    stats.webRtcSentDirect = _dataChannelSentDirectCalc.getCurrentRate();
-    stats.webRtcRecvDirect = _dataChannelRecvDirectCalc.getCurrentRate();
-    stats.webRtcSentRelay = _dataChannelSentRelayCalc.getCurrentRate();
-    stats.webRtcRecvRelay = _dataChannelRecvRelayCalc.getCurrentRate();
 
     // 비디오 통계
     stats.videoRateKBps = _videoReceivedCalc.getCurrentRate();
     stats.videoPacketCount = _videoReceivedCalc.getStats().totalPackets;
     stats.videoBytesReceived = _videoReceivedCalc.getStats().totalBytes;
 
-    // 경로별 비디오 통계
-    stats.videoRateDirectKBps = _videoReceivedDirectCalc.getCurrentRate();
-    stats.videoPacketCountDirect = _videoReceivedDirectCalc.getStats().totalPackets;
-    stats.videoBytesReceivedDirect = _videoReceivedDirectCalc.getStats().totalBytes;
-
-    stats.videoRateRelayKBps = _videoReceivedRelayCalc.getCurrentRate();
-    stats.videoPacketCountRelay = _videoReceivedRelayCalc.getStats().totalPackets;
-    stats.videoBytesReceivedRelay = _videoReceivedRelayCalc.getStats().totalBytes;
-
     return stats;
 }
 
 void WebRTCWorker::_updateAllStatistics()
 {
-    // 통합 통계 업데이트
+    // 통계 업데이트
     _dataChannelSentCalc.updateRate();
     _dataChannelReceivedCalc.updateRate();
     _videoReceivedCalc.updateRate();
-
-    // 경로별 통계 업데이트
-    _dataChannelSentDirectCalc.updateRate();
-    _dataChannelRecvDirectCalc.updateRate();
-    _dataChannelSentRelayCalc.updateRate();
-    _dataChannelRecvRelayCalc.updateRate();
-
-    // 경로별 비디오 통계 업데이트
-    _videoReceivedDirectCalc.updateRate();
-    _videoReceivedRelayCalc.updateRate();
 
     WebRTCStats stats = _collectWebRTCStats();
 
@@ -1737,20 +1548,10 @@ void WebRTCWorker::_updateAllStatistics()
 
 void WebRTCWorker::_calculateDataChannelRates(qint64 currentTime)
 {
-    // 통합 통계 업데이트
+    // 통계 업데이트
     _dataChannelSentCalc.updateRate();
     _dataChannelReceivedCalc.updateRate();
     _videoReceivedCalc.updateRate();
-
-    // 경로별 통계 업데이트
-    _dataChannelSentDirectCalc.updateRate();
-    _dataChannelRecvDirectCalc.updateRate();
-    _dataChannelSentRelayCalc.updateRate();
-    _dataChannelRecvRelayCalc.updateRate();
-
-    // 경로별 비디오 통계 업데이트
-    _videoReceivedDirectCalc.updateRate();
-    _videoReceivedRelayCalc.updateRate();
 
     WebRTCStats stats = _collectWebRTCStats();
 
@@ -1773,11 +1574,7 @@ bool WebRTCWorker::isWaitingForReconnect() const
 
 void WebRTCWorker::_processPendingMessages()
 {
-    // Dual-path: 하나라도 열려있으면 전송 시도
-    bool directOpen = _mavlinkDataChannelDirect && _mavlinkDataChannelDirect->isOpen();
-    bool relayOpen = _mavlinkDataChannelRelay && _mavlinkDataChannelRelay->isOpen();
-
-    if (!directOpen && !relayOpen) {
+    if (!_pcContext.mavlinkDc || !_pcContext.mavlinkDc->isOpen()) {
         return;
     }
 
@@ -1789,31 +1586,16 @@ void WebRTCWorker::_processPendingMessages()
 
     int sentCount = 0;
     while (!_pendingMessages.isEmpty()) {
-        // 양쪽 경로의 버퍼 상태 확인
-        bool canSendDirect = false;
-        bool canSendRelay = false;
-
-        if (directOpen) {
-            size_t buffered = _mavlinkDataChannelDirect->bufferedAmount();
-            canSendDirect = (buffered <= BUFFER_WARNING_THRESHOLD);
-        }
-
-        if (relayOpen) {
-            size_t buffered = _mavlinkDataChannelRelay->bufferedAmount();
-            canSendRelay = (buffered <= BUFFER_WARNING_THRESHOLD);
-        }
-
-        // 둘 다 버퍼가 가득 차면 중단
-        if (!canSendDirect && !canSendRelay) {
-            qCDebug(WebRTCLinkLog) << "[BUFFER] Both paths full, pausing. Remaining messages:"
+        // 버퍼 상태 확인
+        size_t buffered = _pcContext.mavlinkDc->bufferedAmount();
+        if (buffered > BUFFER_WARNING_THRESHOLD) {
+            qCDebug(WebRTCLinkLog) << "[BUFFER] Buffer full, pausing. Remaining messages:"
                                    << _pendingMessages.size();
             break;
         }
 
         QByteArray data = _pendingMessages.takeFirst();
-
-        // Dual-path로 전송 시도
-        _sendDataViaPath(data, PathType::Both);
+        writeData(data);
         sentCount++;
     }
 
@@ -1829,33 +1611,18 @@ void WebRTCWorker::_processPendingMessages()
 
 void WebRTCWorker::_checkBufferHealth()
 {
-    // Dual-path: 양쪽 경로 모두 체크
-    size_t totalBuffered = 0;
-    int openChannels = 0;
-
-    if (_mavlinkDataChannelDirect && _mavlinkDataChannelDirect->isOpen()) {
-        totalBuffered += _mavlinkDataChannelDirect->bufferedAmount();
-        openChannels++;
-    }
-
-    if (_mavlinkDataChannelRelay && _mavlinkDataChannelRelay->isOpen()) {
-        totalBuffered += _mavlinkDataChannelRelay->bufferedAmount();
-        openChannels++;
-    }
-
-    if (openChannels == 0) {
+    if (!_pcContext.mavlinkDc || !_pcContext.mavlinkDc->isOpen()) {
         return;
     }
 
-    // 평균 버퍼 사용량
-    size_t avgBuffered = totalBuffered / openChannels;
+    size_t buffered = _pcContext.mavlinkDc->bufferedAmount();
     qint64 now = QDateTime::currentMSecsSinceEpoch();
 
     // 버퍼 증가율 계산 (bytes/sec)
     if (_lastBufferCheckTime > 0) {
         qint64 timeDiff = now - _lastBufferCheckTime;
         if (timeDiff > 0) {
-            double bufferGrowthRate = static_cast<double>(avgBuffered - _lastBufferedAmount) / timeDiff * 1000;
+            double bufferGrowthRate = static_cast<double>(buffered - _lastBufferedAmount) / timeDiff * 1000;
 
             static constexpr double RAPID_BUFFER_GROWTH_THRESHOLD = 100000.0; // 100KB/s
             if (bufferGrowthRate > RAPID_BUFFER_GROWTH_THRESHOLD) {
@@ -1865,36 +1632,19 @@ void WebRTCWorker::_checkBufferHealth()
         }
     }
 
-    _lastBufferedAmount = avgBuffered;
+    _lastBufferedAmount = buffered;
     _lastBufferCheckTime = now;
 }
 
 bool WebRTCWorker::_canSendData() const
 {
-    // Dual-path: 하나라도 열려있으면 전송 가능
-    bool directOpen = _mavlinkDataChannelDirect && _mavlinkDataChannelDirect->isOpen();
-    bool relayOpen = _mavlinkDataChannelRelay && _mavlinkDataChannelRelay->isOpen();
-
-    if (!directOpen && !relayOpen) {
+    if (!_pcContext.mavlinkDc || !_pcContext.mavlinkDc->isOpen()) {
         return false;
     }
 
     // 버퍼가 가득 차지 않았는지 확인
-    if (directOpen) {
-        size_t buffered = _mavlinkDataChannelDirect->bufferedAmount();
-        if (buffered < BUFFER_CRITICAL_THRESHOLD) {
-            return true;
-        }
-    }
-
-    if (relayOpen) {
-        size_t buffered = _mavlinkDataChannelRelay->bufferedAmount();
-        if (buffered < BUFFER_CRITICAL_THRESHOLD) {
-            return true;
-        }
-    }
-
-    return false;
+    size_t buffered = _pcContext.mavlinkDc->bufferedAmount();
+    return buffered < BUFFER_CRITICAL_THRESHOLD;
 }
 
 /*===========================================================================*/
@@ -1969,382 +1719,3 @@ void WebRTCWorker::_onReconnectSuccess()
     }
 }
 
-bool WebRTCWorker::_areBothPathsDisconnected() const
-{
-    return !_directPathActive.load() && !_relayPathActive.load();
-}
-
-void WebRTCWorker::_handleBothPathsDisconnected()
-{
-    qCWarning(WebRTCLinkLog) << "[DUAL-PATH] Both paths disconnected, initiating reconnection";
-
-    // GCS 등록 해제
-    if (_signalingManager && !_currentGcsId.isEmpty()) {
-        qCDebug(WebRTCLinkLog) << "Unregistering GCS due to both paths disconnection:" << _currentGcsId;
-        _signalingManager->unregisterGCS(_currentGcsId);
-        emit rtcStatusMessageChanged("모든 경로 연결 끊김 - GCS 등록 해제 중...");
-    }
-
-    _cleanup(CleanupMode::ForReconnection);
-    emit rttUpdated(0);
-    emit disconnected();
-
-    // 약간의 지연 후 재연결 (서버 측 unregister 처리 시간 확보)
-    QTimer::singleShot(500, this, [this]() {
-        if (!_isShuttingDown.load() && !_waitingForReconnect.load()) {
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Starting automatic reconnection after both paths failed";
-            emit rtcStatusMessageChanged("자동 재연결 시작...");
-            _scheduleReconnect();
-        }
-    });
-}
-
-/*===========================================================================*/
-// Dual-Path Data Transmission Methods
-/*===========================================================================*/
-
-WebRTCWorker::PathType WebRTCWorker::_selectBestPath() const
-{
-    // 연결 상태 확인
-    bool directOpen = _mavlinkDataChannelDirect && _mavlinkDataChannelDirect->isOpen();
-    bool relayOpen = _mavlinkDataChannelRelay && _mavlinkDataChannelRelay->isOpen();
-
-    if (!directOpen && !relayOpen) {
-        return PathType::Direct;  // 기본값 (실패하겠지만)
-    }
-
-    if (directOpen && !relayOpen) {
-        return PathType::Direct;
-    }
-
-    if (!directOpen && relayOpen) {
-        return PathType::Relay;
-    }
-
-    // 둘 다 열려있으면 품질 기반 선택
-
-    // 1. 중복 패킷 통계 기반: 어느 경로가 더 자주 먼저 도착하는지
-    uint64_t directDuplicates = _duplicatePacketsFromDirect.load();
-    uint64_t relayDuplicates = _duplicatePacketsFromRelay.load();
-    uint64_t totalPackets = _totalPacketsReceived.load();
-
-    // 충분한 통계가 쌓이면 (100개 이상) 통계 기반 선택
-    if (totalPackets > 100 && (directDuplicates + relayDuplicates) > 50) {
-        // Direct에서 중복이 많이 발생 = Relay가 더 자주 먼저 도착
-        // Relay에서 중복이 많이 발생 = Direct가 더 자주 먼저 도착
-        if (directDuplicates > relayDuplicates * 1.5) {
-            // Direct가 느림 -> Relay 선택
-            return PathType::Relay;
-        } else if (relayDuplicates > directDuplicates * 1.5) {
-            // Relay가 느림 -> Direct 선택
-            return PathType::Direct;
-        }
-    }
-
-    // 2. RTT 비교 (낮을수록 좋음)
-    if (_peerConnectionDirect && _peerConnectionRelay) {
-        if (_rttDirectMs && _rttRelayMs) {
-            // Direct가 Relay보다 10% 이상 빠르면 Direct 선택
-            if (_rttDirectMs < _rttRelayMs * 0.9) {
-                return PathType::Direct;
-            } else if (_rttRelayMs < _rttDirectMs * 0.9) {
-                // Relay가 Direct보다 10% 이상 빠르면 Relay 선택
-                return PathType::Relay;
-            }
-        }
-    }
-
-    // 버퍼 상태 비교
-    if (_mavlinkDataChannelDirect && _mavlinkDataChannelRelay) {
-        size_t directBuffer = _mavlinkDataChannelDirect->bufferedAmount();
-        size_t relayBuffer = _mavlinkDataChannelRelay->bufferedAmount();
-
-        // Direct 버퍼가 덜 차있으면 Direct 선택
-        if (directBuffer < relayBuffer * 0.8) {
-            return PathType::Direct;
-        }
-    }
-
-    // 기본값: Direct (지연시간 우선)
-    return PathType::Direct;
-}
-
-void WebRTCWorker::_sendDataViaPath(const QByteArray& data, PathType pathType)
-{
-    if (_isShuttingDown.load()) {
-        return;
-    }
-
-    // 원본 MAVLink 패킷 그대로 전송 (변형 없음)
-    std::string_view view(data.constData(), data.size());
-    auto binaryData = rtc::binary(
-        reinterpret_cast<const std::byte*>(view.data()),
-        reinterpret_cast<const std::byte*>(view.data() + view.size())
-    );
-
-    try {
-        switch (pathType) {
-        case PathType::Direct:
-            if (_mavlinkDataChannelDirect && _mavlinkDataChannelDirect->isOpen()) {
-                _mavlinkDataChannelDirect->send(binaryData);
-                _dataChannelSentCalc.addData(data.size());
-                _dataChannelSentDirectCalc.addData(data.size());  // Direct 경로 통계
-                qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Sent via Direct:" << data.size() << "bytes";
-            }
-            break;
-
-        case PathType::Relay:
-            if (_mavlinkDataChannelRelay && _mavlinkDataChannelRelay->isOpen()) {
-                _mavlinkDataChannelRelay->send(binaryData);
-                _dataChannelSentCalc.addData(data.size());
-                _dataChannelSentRelayCalc.addData(data.size());  // Relay 경로 통계
-                qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Sent via Relay:" << data.size() << "bytes";
-            }
-            break;
-
-        case PathType::Best:
-        {
-            // 최적 경로 선택
-            PathType bestPath = _selectBestPath();
-            _sendDataViaPath(data, bestPath);
-            break;
-        }
-
-        case PathType::Both:
-        {
-            // 양쪽 경로로 모두 전송 (중복 전송)
-            bool directSent = false;
-            bool relaySent = false;
-            bool directExists = (bool)_mavlinkDataChannelDirect;
-            bool directOpen = directExists && _mavlinkDataChannelDirect->isOpen();
-            bool relayExists = (bool)_mavlinkDataChannelRelay;
-            bool relayOpen = relayExists && _mavlinkDataChannelRelay->isOpen();
-
-            if (directOpen) {
-                _mavlinkDataChannelDirect->send(binaryData);
-                _dataChannelSentCalc.addData(data.size());
-                _dataChannelSentDirectCalc.addData(data.size());  // Direct 경로 통계
-                directSent = true;
-            }
-
-            if (relayOpen) {
-                _mavlinkDataChannelRelay->send(binaryData);
-                _dataChannelSentCalc.addData(data.size());
-                _dataChannelSentRelayCalc.addData(data.size());  // Relay 경로 통계
-                relaySent = true;
-            }
-
-            // 경고: 한쪽만 전송된 경우
-            if (directSent && !relaySent) {
-                static int directOnlyCount = 0;
-                if (++directOnlyCount % 50 == 1) {  // 처음과 50번마다
-                    qCWarning(WebRTCLinkLog) << "[DUAL-PATH] WARNING: Only Direct sent (Relay exist="
-                                             << relayExists << "open=" << relayOpen << ")";
-                }
-            } else if (!directSent && relaySent) {
-                static int relayOnlyCount = 0;
-                if (++relayOnlyCount % 50 == 1) {  // 처음과 50번마다
-                    qCWarning(WebRTCLinkLog) << "[DUAL-PATH] WARNING: Only Relay sent (Direct exist="
-                                             << directExists << "open=" << directOpen << ")";
-                }
-            } else if (!directSent && !relaySent) {
-                qCWarning(WebRTCLinkLog) << "[DUAL-PATH] ERROR: Both paths failed! (Direct exist="
-                                         << directExists << "open=" << directOpen
-                                         << ", Relay exist=" << relayExists << "open=" << relayOpen << ")";
-            }
-            break;
-        }
-        }
-
-        emit bytesSent(data);
-
-    } catch (const std::exception& e) {
-        qCWarning(WebRTCLinkLog) << "[DUAL-PATH] Failed to send data:" << e.what();
-        emit errorOccurred(QString("Failed to send data: %1").arg(e.what()));
-    }
-}
-
-void WebRTCWorker::_processReceivedData(const QByteArray& data, bool fromDirect)
-{
-    if (_isShuttingDown.load()) {
-        return;
-    }
-
-    // 패킷 크기 검증 (MAVLink 최소 패킷: 8바이트)
-    if (data.size() < 8) {
-        qCWarning(WebRTCLinkLog) << "[DUAL-PATH] Received packet too small:" << data.size();
-        return;
-    }
-
-    // 패킷 해시 계산 (원본 데이터 그대로 사용)
-    // 해시값이 0인 경우를 처리하기 위해 1을 더함 (0은 빈 슬롯을 의미)
-    uint rawHash = qHash(data);
-    uint packetHash = (rawHash == 0) ? 1 : rawHash;
-
-    // Thread-safe 중복 검사
-    bool isDuplicate = false;
-    {
-        QMutexLocker locker(&_hashMutex);
-
-        // 원형 버퍼에서 중복 검사 (0은 빈 슬롯이므로 건너뜀)
-        for (int i = 0; i < MAX_HASH_HISTORY; ++i) {
-            if (_hashRingBuffer[i] != 0 && _hashRingBuffer[i] == packetHash) {
-                isDuplicate = true;
-                break;
-            }
-        }
-
-        if (!isDuplicate) {
-            // 새 패킷: 원형 버퍼에 추가
-            int index = _hashRingIndex.fetch_add(1) % MAX_HASH_HISTORY;
-            _hashRingBuffer[index] = packetHash;
-        }
-    }
-
-    if (isDuplicate) {
-        // 중복 패킷 통계 업데이트
-        if (fromDirect) {
-            _duplicatePacketsFromDirect.fetch_add(1);
-        } else {
-            _duplicatePacketsFromRelay.fetch_add(1);
-        }
-
-        // 로그는 100개마다 한 번씩만 출력
-        uint64_t totalDuplicates = _duplicatePacketsFromDirect.load() + _duplicatePacketsFromRelay.load();
-        if (totalDuplicates % 100 == 0) {
-            qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Duplicate stats - Direct:"
-                                   << _duplicatePacketsFromDirect.load()
-                                   << "Relay:" << _duplicatePacketsFromRelay.load()
-                                   << "Total received:" << _totalPacketsReceived.load();
-        }
-        return;
-    }
-
-    // 새 패킷 처리
-    uint64_t packetCount = _totalPacketsReceived.fetch_add(1) + 1;
-
-    // 처음 100개 패킷은 어느 경로가 먼저 도착했는지 로그 출력
-    if (packetCount <= 100 && packetCount % 10 == 0) {
-        QString path = fromDirect ? "Direct" : "Relay";
-        qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Packet" << packetCount << "arrived first from" << path;
-    }
-
-    // 원본 MAVLink 패킷을 그대로 전달 (변형 없음)
-    _dataChannelReceivedCalc.addData(data.size());
-
-    // 경로별 수신 통계 기록
-    if (fromDirect) {
-        _dataChannelRecvDirectCalc.addData(data.size());
-    } else {
-        _dataChannelRecvRelayCalc.addData(data.size());
-    }
-
-    emit bytesReceived(data);
-}
-
-void WebRTCWorker::_resetDualPathConnections()
-{
-    qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Resetting dual path connections";
-
-    // Direct 경로 정리
-    if (_peerConnectionDirect) {
-        try {
-            _peerConnectionDirect->close();
-        } catch (...) {}
-        _peerConnectionDirect.reset();
-    }
-
-    if (_mavlinkDataChannelDirect) {
-        try {
-            if (_mavlinkDataChannelDirect->isOpen()) {
-                _mavlinkDataChannelDirect->close();
-            }
-        } catch (...) {}
-        _mavlinkDataChannelDirect.reset();
-    }
-
-    if (_customDataChannelDirect) {
-        try {
-            if (_customDataChannelDirect->isOpen()) {
-                _customDataChannelDirect->close();
-            }
-        } catch (...) {}
-        _customDataChannelDirect.reset();
-    }
-
-    if (_videoTrackDirect) {
-        _videoTrackDirect.reset();
-    }
-
-    // Relay 경로 정리
-    if (_peerConnectionRelay) {
-        try {
-            _peerConnectionRelay->close();
-        } catch (...) {}
-        _peerConnectionRelay.reset();
-    }
-
-    if (_mavlinkDataChannelRelay) {
-        try {
-            if (_mavlinkDataChannelRelay->isOpen()) {
-                _mavlinkDataChannelRelay->close();
-            }
-        } catch (...) {}
-        _mavlinkDataChannelRelay.reset();
-    }
-
-    if (_customDataChannelRelay) {
-        try {
-            if (_customDataChannelRelay->isOpen()) {
-                _customDataChannelRelay->close();
-            }
-        } catch (...) {}
-        _customDataChannelRelay.reset();
-    }
-
-    if (_videoTrackRelay) {
-        _videoTrackRelay.reset();
-    }
-
-    // 상태 초기화
-    _directPathActive.store(false);
-    _relayPathActive.store(false);
-    _remoteDescriptionSetDirect.store(false);
-    _remoteDescriptionSetRelay.store(false);
-    _dataChannelOpenedDirect.store(false);
-    _dataChannelOpenedRelay.store(false);
-
-    // RTT 및 통계 정보 초기화
-    _rttMs = 0;
-    _rttDirectMs = 0;
-    _rttRelayMs = 0;
-    _cachedDirectCandidate.clear();
-    _cachedRelayCandidate.clear();
-
-    // 통계 계산기 초기화
-    _dataChannelSentCalc.reset();
-    _dataChannelReceivedCalc.reset();
-    _dataChannelSentDirectCalc.reset();
-    _dataChannelRecvDirectCalc.reset();
-    _dataChannelSentRelayCalc.reset();
-    _dataChannelRecvRelayCalc.reset();
-    _videoReceivedCalc.reset();
-    _videoReceivedDirectCalc.reset();
-    _videoReceivedRelayCalc.reset();
-
-    // Dual-path 중복 제거 통계 초기화
-    {
-        QMutexLocker locker(&_hashMutex);
-        _hashRingBuffer.fill(0);
-        _hashRingIndex.store(0);
-    }
-    _duplicatePacketsFromDirect.store(0);
-    _duplicatePacketsFromRelay.store(0);
-    _totalPacketsReceived.store(0);
-
-    // WebRTCStats 초기화하여 UI 업데이트
-    // WebRTCStats emptyStats;
-    // emit webRtcStatsUpdated(emptyStats);
-
-    qCDebug(WebRTCLinkLog) << "[DUAL-PATH] Dual path connections reset completed";
-}

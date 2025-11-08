@@ -362,9 +362,9 @@ class WebRTCWorker : public QObject
 
     // WebRTC peer connection
     void _setupPeerConnection();
-    void _handleTrackReceived(std::shared_ptr<rtc::Track> track, bool isDirect = false);
-    void _setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc, bool isDirect = false);
-    void _setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc, bool isDirect = false);
+    void _handleTrackReceived(std::shared_ptr<rtc::Track> track);
+    void _setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc);
+    void _setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc);
     void _processDataChannelOpen();
     void _processPendingCandidates();
     void _checkIceProcessingStatus();
@@ -402,35 +402,86 @@ class WebRTCWorker : public QObject
     static constexpr int BASE_RECONNECT_DELAY_MS = 1000;
     static constexpr int MAX_RECONNECT_DELAY_MS = 30000;
 
-    // WebRTC components - Dual Path Support (Direct + Relay)
-    // Dual-path connections
-    std::shared_ptr<rtc::PeerConnection> _peerConnectionDirect;    // Direct P2P path
-    std::shared_ptr<rtc::PeerConnection> _peerConnectionRelay;     // TURN Relay path
-    std::shared_ptr<rtc::DataChannel> _mavlinkDataChannelDirect;   // Direct data channel
-    std::shared_ptr<rtc::DataChannel> _mavlinkDataChannelRelay;    // Relay data channel
-    std::shared_ptr<rtc::DataChannel> _customDataChannelDirect;    // Direct custom channel
-    std::shared_ptr<rtc::DataChannel> _customDataChannelRelay;     // Relay custom channel
-    std::shared_ptr<rtc::Track> _videoTrackDirect;                 // Direct video track
-    std::shared_ptr<rtc::Track> _videoTrackRelay;                  // Relay video track
+    // PeerConnection 컨텍스트 구조체
+    struct PeerConnectionContext {
+        // WebRTC components
+        std::shared_ptr<rtc::PeerConnection> pc;              // PeerConnection (STUN+TURN)
+        std::shared_ptr<rtc::DataChannel> mavlinkDc;          // MAVLink DataChannel
+        std::shared_ptr<rtc::DataChannel> customDc;           // Custom DataChannel
+        std::shared_ptr<rtc::Track> videoTrack;               // Video track
 
-    // State management - 스레드 안전성을 위한 atomic 변수들
-    std::vector<rtc::Candidate> _pendingCandidates;
-    QMutex _candidateMutex;  // _pendingCandidates 보호용
+        // State management
+        std::vector<rtc::Candidate> pendingCandidates;        // 대기 중인 ICE candidates
+        QMutex candidateMutex;                                // pendingCandidates 보호용 mutex
 
-    // 연결 상태 플래그들 (atomic으로 통일)
-    std::atomic<bool> _remoteDescriptionSet{false};
-    std::atomic<bool> _dataChannelOpened{false};
+        // Connection state flags (atomic for thread-safety)
+        std::atomic<bool> remoteDescriptionSet{false};        // Remote description 설정 여부
+        std::atomic<bool> dataChannelOpened{false};           // DataChannel 오픈 여부
+
+        // Constructor
+        PeerConnectionContext() = default;
+
+        // 리셋 메서드
+        void reset() {
+            // Close and reset peer connection
+            if (pc) {
+                try {
+                    pc->close();
+                } catch (...) {}
+                pc.reset();
+            }
+
+            // Close and reset data channels
+            if (mavlinkDc) {
+                try {
+                    if (mavlinkDc->isOpen()) {
+                        mavlinkDc->close();
+                    }
+                } catch (...) {}
+                mavlinkDc.reset();
+            }
+
+            if (customDc) {
+                try {
+                    if (customDc->isOpen()) {
+                        customDc->close();
+                    }
+                } catch (...) {}
+                customDc.reset();
+            }
+
+            // Reset video track
+            if (videoTrack) {
+                videoTrack.reset();
+            }
+
+            // Clear state
+            remoteDescriptionSet.store(false);
+            dataChannelOpened.store(false);
+            {
+                QMutexLocker locker(&candidateMutex);
+                pendingCandidates.clear();
+            }
+        }
+
+        // 연결 여부 확인
+        bool isConnected() const {
+            return pc && pc->state() == rtc::PeerConnection::State::Connected;
+        }
+
+        // DataChannel 열림 여부 확인
+        bool hasOpenDataChannel() const {
+            return (mavlinkDc && mavlinkDc->isOpen()) || (customDc && customDc->isOpen());
+        }
+    };
+
+    // Single PeerConnection context with ICE auto-selection
+    PeerConnectionContext _pcContext;
+
+    // Global state flags (not per-connection)
     std::atomic<bool> _isDisconnecting{false};
     std::atomic<bool> _isShuttingDown{false};
     std::atomic<bool> _isCleaningUp{false};  // cleanup 진행 중 플래그
-
-    // Dual-path 상태
-    std::atomic<bool> _directPathActive{false};
-    std::atomic<bool> _relayPathActive{false};
-    std::atomic<bool> _remoteDescriptionSetDirect{false};
-    std::atomic<bool> _remoteDescriptionSetRelay{false};
-    std::atomic<bool> _dataChannelOpenedDirect{false};
-    std::atomic<bool> _dataChannelOpenedRelay{false};
 
     // Constants
     static const QString kDataChannelLabel;
@@ -473,51 +524,27 @@ class WebRTCWorker : public QObject
 
     void _handlePeerDisconnection();
     void _resetPeerConnection();
-
-    // Dual-path methods
-    void _setupDualPathConnections();
-    void _setupSinglePeerConnection(std::shared_ptr<rtc::PeerConnection>& pc, bool isDirect);
-    void _setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnection> pc, bool isDirect);
-    void _resetDualPathConnections();
-    enum class PathType { Direct, Relay, Best, Both };
-    void _sendDataViaPath(const QByteArray& data, PathType pathType);
-    PathType _selectBestPath() const;
-    void _processReceivedData(const QByteArray& data, bool fromDirect);
+    void _setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnection> pc);
+    void _processReceivedData(const QByteArray& data);
 
     // 재연결 관리
     int _calculateReconnectDelay() const;
     void _scheduleReconnect();
     void _cancelReconnect();
     void _onReconnectSuccess();
-    void _handleBothPathsDisconnected();
-    bool _areBothPathsDisconnected() const;
 
-    // 통합 송수신 통계 (기존 호환성 유지)
+    // 송수신 통계
     TransferRateCalculator _dataChannelSentCalc;
     TransferRateCalculator _dataChannelReceivedCalc;
-
-    // Dual-path 경로별 통계
-    TransferRateCalculator _dataChannelSentDirectCalc;
-    TransferRateCalculator _dataChannelRecvDirectCalc;
-    TransferRateCalculator _dataChannelSentRelayCalc;
-    TransferRateCalculator _dataChannelRecvRelayCalc;
-
     TransferRateCalculator _videoReceivedCalc;
-
-    // Dual-path 비디오 수신 통계
-    TransferRateCalculator _videoReceivedDirectCalc;
-    TransferRateCalculator _videoReceivedRelayCalc;
 
     QTimer* _statsTimer = nullptr;
 
     // RTT 값 저장
     int _rttMs = 0;
-    int _rttDirectMs = 0;
-    int _rttRelayMs = 0;
 
     // ICE candidate 캐시
-    QString _cachedDirectCandidate;
-    QString _cachedRelayCandidate;
+    QString _cachedCandidate;
 
     // 버퍼 관리 및 혼잡 제어
     static const size_t MAX_BUFFER_SIZE = 32 * 1024;         // 32KB (libdatachannel 최대 16MB)
