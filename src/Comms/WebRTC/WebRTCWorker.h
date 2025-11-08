@@ -478,10 +478,37 @@ class WebRTCWorker : public QObject
     // Single PeerConnection context with ICE auto-selection
     PeerConnectionContext _pcContext;
 
-    // Global state flags (not per-connection)
-    std::atomic<bool> _isDisconnecting{false};
-    std::atomic<bool> _isShuttingDown{false};
-    std::atomic<bool> _isCleaningUp{false};  // cleanup 진행 중 플래그
+    // State Machine for Worker State Management
+    enum class WorkerState : uint8_t {
+        Idle,                  // 초기 상태 또는 완전히 정지된 상태
+        Starting,              // start() 호출 후 초기화 중
+        Connecting,            // 시그널링 연결 및 GCS 등록 중
+        WaitingForOffer,       // 시그널링 연결됨, offer 대기 중
+        EstablishingPeer,      // PeerConnection 설정 중 (offer/answer 교환)
+        Connected,             // DataChannel 오픈, 통신 가능
+        Disconnecting,         // 사용자 요청으로 연결 해제 중
+        Reconnecting,          // 자동 재연결 대기 중
+        CleaningUp,           // 리소스 정리 중
+        Shutdown               // 완전 종료 (소멸자 호출)
+    };
+
+    // 상태 머신 관리
+    std::atomic<WorkerState> _state{WorkerState::Idle};
+
+    // 상태 전이 헬퍼 메서드
+    bool transitionState(WorkerState expected, WorkerState desired);
+    bool isInState(WorkerState state) const { return _state.load() == state; }
+    bool canTransitionTo(WorkerState newState) const;
+    QString stateToString() const;
+    QString stateToString(WorkerState state) const;
+
+    // 상태 체크 헬퍼 메서드
+    bool isShuttingDown() const { return isInState(WorkerState::Shutdown); }
+    bool isDisconnecting() const { return isInState(WorkerState::Disconnecting); }
+    bool isCallbackSafe() const {
+        WorkerState state = _state.load();
+        return state != WorkerState::Shutdown && state != WorkerState::CleaningUp;
+    }
 
     // Constants
     static const QString kDataChannelLabel;
@@ -532,6 +559,9 @@ class WebRTCWorker : public QObject
     void _scheduleReconnect();
     void _cancelReconnect();
     void _onReconnectSuccess();
+
+    // 타이머 관리
+    void _safeDeleteTimer(QTimer*& timer, const char* name);
 
     // 송수신 통계
     TransferRateCalculator _dataChannelSentCalc;
