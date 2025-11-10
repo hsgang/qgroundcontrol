@@ -150,66 +150,35 @@ Item {
                 RowLayout {
                     spacing: _margins
 
-                    SettingsGroupLayout {
-                        heading: qsTr("RTC 상태 정보")
-                        Layout.alignment: Qt.AlignTop
-
-                        LabelledLabel {
-                            label:      qsTr("응답지연")
-                            labelText:  qsTr("%1 ms").arg(_rtt)
-                        }
-                        LabelledLabel {
-                            label:      qsTr("데이터 송신")
-                            labelText:  qsTr("%1 KB/s").arg(_webRtcSent.toFixed(2))
-                        }
-                        LabelledLabel {
-                            label:      qsTr("데이터 수신")
-                            labelText:  qsTr("%1 KB/s").arg(_webRtcRecv.toFixed(2))
-                        }
-                        LabelledLabel {
-                            label:      qsTr("영상 수신")
-                            labelText:  qsTr("%1 Mbps").arg(_videoRateMbps)
-                        }
-                        LabelledLabel {
-                            label:      qsTr("ICE")
-                            labelText:  _iceCandidate !== "" ? _iceCandidate : qsTr("N/A")
-                            labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 26
-                            labelTextElide: Text.ElideMiddle
-                            visible:    _iceCandidate !== ""
-                        }
-                    }
-
-                    // RTC Module 시스템 정보 섹션
                     ColumnLayout {
                         spacing: _margins
                         Layout.alignment: Qt.AlignTop
-                    
+
                         SettingsGroupLayout {
-                            heading: qsTr("RTC 모듈 시스템 정보")
+                            heading: qsTr("RTC 상태 정보")
 
                             LabelledLabel {
-                                label:      qsTr("CPU 사용률")
-                                labelText:  qsTr("%1%").arg(_rtcModuleCpuUsage.toFixed(1))
+                                label:      qsTr("응답지연")
+                                labelText:  qsTr("%1 ms").arg(_rtt)
                             }
                             LabelledLabel {
-                                label:      qsTr("CPU 온도")
-                                labelText:  qsTr("%1°C").arg(_rtcModuleCpuTemperature.toFixed(1))
-                            }
-                            // LabelledLabel {
-                            //     label:      qsTr("메모리 사용률")
-                            //     labelText:  qsTr("%1%").arg(_rtcModuleMemoryUsage.toFixed(1))
-                            // }
-                            LabelledLabel {
-                                label:      qsTr("네트워크 수신")
-                                labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkRx.toFixed(2))
+                                label:      qsTr("데이터 송신")
+                                labelText:  qsTr("%1 KB/s").arg(_webRtcSent.toFixed(2))
                             }
                             LabelledLabel {
-                                label:      qsTr("네트워크 송신")
-                                labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkTx.toFixed(2))
+                                label:      qsTr("데이터 수신")
+                                labelText:  qsTr("%1 KB/s").arg(_webRtcRecv.toFixed(2))
                             }
                             LabelledLabel {
-                                label:      qsTr("인터페이스")
-                                labelText:  _rtcModuleNetworkInterface
+                                label:      qsTr("영상 수신")
+                                labelText:  qsTr("%1 Mbps").arg(_videoRateMbps)
+                            }
+                            LabelledLabel {
+                                label:      qsTr("ICE")
+                                labelText:  _iceCandidate !== "" ? _iceCandidate : qsTr("N/A")
+                                labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 26
+                                labelTextElide: Text.ElideMiddle
+                                visible:    _iceCandidate !== ""
                             }
                         }
 
@@ -238,6 +207,38 @@ Item {
                                 labelText:  qsTr("%1 fps").arg(_videoRtpFramesPerSec.toFixed(1))
                             }
                         }
+                    }
+
+                    // RTC Module 시스템 정보 섹션                    
+                    SettingsGroupLayout {
+                        heading: qsTr("RTC 모듈 시스템 정보")
+                        Layout.alignment: Qt.AlignTop
+
+                        LabelledLabel {
+                            label:      qsTr("CPU 사용률")
+                            labelText:  qsTr("%1%").arg(_rtcModuleCpuUsage.toFixed(1))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("CPU 온도")
+                            labelText:  qsTr("%1°C").arg(_rtcModuleCpuTemperature.toFixed(1))
+                        }
+                        // LabelledLabel {
+                        //     label:      qsTr("메모리 사용률")
+                        //     labelText:  qsTr("%1%").arg(_rtcModuleMemoryUsage.toFixed(1))
+                        // }
+                        LabelledLabel {
+                            label:      qsTr("네트워크 수신")
+                            labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkRx.toFixed(2))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("네트워크 송신")
+                            labelText:  qsTr("%1 Mbps").arg(_rtcModuleNetworkTx.toFixed(2))
+                        }
+                        LabelledLabel {
+                            label:      qsTr("인터페이스")
+                            labelText:  _rtcModuleNetworkInterface
+                        }
+                    }
 
                         // // RTC 모듈 버전 정보 섹션
                         // SettingsGroupLayout {
@@ -280,8 +281,7 @@ Item {
                         //         labelText:  qsTr("최신 버전 (%1)").arg(_rtcModuleCurrentVersion || qsTr("알 수 없음"))
                         //         visible:    !_rtcModuleUpdateAvailable && _rtcModuleCurrentVersion !== ""
                         //     }
-                        // }
-                    }                    
+                        // }                    
                 }
             }
         }

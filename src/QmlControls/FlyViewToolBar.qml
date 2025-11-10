@@ -159,9 +159,18 @@ Rectangle {
                             var config = linkConfigs.get(i)
                             if (config.name === primaryLinkName) {
                                 if (config.link) {
-                                    config.link.disconnect()
+                                    // WebRTC 링크인 경우 재연결 메서드 사용
+                                    if (config.linkType === 3) { // LinkConfiguration.TypeWebRTC = 3
+                                        config.link.reconnectLink()
+                                    } else {
+                                        // 다른 링크는 기존 방식 사용
+                                        config.link.disconnect()
+                                        QGroundControl.linkManager.createConnectedLink(config)
+                                    }
+                                } else {
+                                    // 링크가 없으면 새로 생성
+                                    QGroundControl.linkManager.createConnectedLink(config)
                                 }
-                                QGroundControl.linkManager.createConnectedLink(config)
                                 break
                             }
                         }

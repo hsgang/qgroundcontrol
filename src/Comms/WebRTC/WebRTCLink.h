@@ -56,10 +56,10 @@ class WebRTCLink : public LinkInterface
     ~WebRTCLink();
 
     Q_INVOKABLE void sendCustomMessage(const QString& message);
+    Q_INVOKABLE void reconnectLink();  // 재연결 메서드 (QML에서 호출 가능)
 
     bool isConnected() const override;
     void connectLink();
-    void reconnectLink();  // 재연결 메서드 추가
     bool isReconnecting() const;  // 자동 재연결 상태 확인
 
     QString rtcStatusMessage() const { return _rtcStatusMessage; }

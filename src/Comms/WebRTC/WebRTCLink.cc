@@ -116,8 +116,8 @@ void WebRTCLink::reconnectLink()
     qCDebug(WebRTCLinkLog) << "Manual reconnection requested";
 
     if (_worker) {
-        // 수동 재연결 요청
-        QMetaObject::invokeMethod(_worker, "reconnectToRoom", Qt::QueuedConnection);
+        // 수동 재연결 요청 (manualReconnect는 어떤 상태에서든 작동)
+        QMetaObject::invokeMethod(_worker, "manualReconnect", Qt::QueuedConnection);
     } else {
         qCWarning(WebRTCLinkLog) << "Worker not available for reconnection";
     }
