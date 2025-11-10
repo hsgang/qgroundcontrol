@@ -38,6 +38,9 @@ class NTRIPManager;
 class SiYi;
 class QmlObjectListModel;
 class SignalingServerManager;
+#ifdef Q_OS_ANDROID
+class AndroidBatteryMonitor;
+#endif
 
 Q_MOC_INCLUDE("ADSBVehicleManager.h")
 Q_MOC_INCLUDE("FactGroup.h")
@@ -55,6 +58,9 @@ Q_MOC_INCLUDE("NTRIPManager.h")
 Q_MOC_INCLUDE("GridManager.h")
 Q_MOC_INCLUDE("SiYi.h")
 Q_MOC_INCLUDE("SignalingServerManager.h")
+#ifdef Q_OS_ANDROID
+Q_MOC_INCLUDE("AndroidBatteryMonitor.h")
+#endif
 #ifdef QGC_UTM_ADAPTER
 Q_MOC_INCLUDE("UTMSPManager.h")
 #endif
@@ -96,6 +102,9 @@ public:
     Q_PROPERTY(NTRIPManager*            ntripManager            READ    ntripManager            CONSTANT)
     Q_PROPERTY(SiYi*                    siyi                    READ    siyi                    CONSTANT)
     Q_PROPERTY(SignalingServerManager*  signalingServerManager  READ    signalingServerManager  CONSTANT)
+#ifdef Q_OS_ANDROID
+    Q_PROPERTY(AndroidBatteryMonitor*   androidBattery          READ    androidBattery          CONSTANT)
+#endif
     Q_PROPERTY(QGCCorePlugin*       corePlugin              READ    corePlugin              CONSTANT)
     Q_PROPERTY(MissionCommandTree*  missionCommandTree      READ    missionCommandTree      CONSTANT)
 #ifndef QGC_NO_SERIAL_LINK
@@ -201,6 +210,9 @@ public:
     NTRIPManager*               ntripManager            ()  { return _ntripManager; }
     SiYi*                       siyi                    ()  { return _siyi; }
     SignalingServerManager*     signalingServerManager  ()  { return _signalingServerManager; }
+#ifdef Q_OS_ANDROID
+    AndroidBatteryMonitor*      androidBattery          ()  { return _androidBatteryMonitor; }
+#endif
     QmlUnitsConversion*     unitsConversion     ()  { return &_unitsConversion; }
     static QGeoCoordinate   flightMapPosition   ()  { return _coord; }
     static double           flightMapZoom       ()  { return _zoom; }
@@ -281,6 +293,9 @@ private:
     GridManager*                _gridManager                = nullptr;
     SiYi*                       _siyi                       = nullptr;
     SignalingServerManager*     _signalingServerManager     = nullptr;
+#ifdef Q_OS_ANDROID
+    AndroidBatteryMonitor*      _androidBatteryMonitor      = nullptr;
+#endif
     SettingsManager*            _settingsManager            = nullptr;
     QGCCorePlugin*          _corePlugin             = nullptr;
     QGCPalette*             _globalPalette          = nullptr;

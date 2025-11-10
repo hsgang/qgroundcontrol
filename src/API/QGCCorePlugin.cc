@@ -320,6 +320,7 @@ const QVariantList &QGCCorePlugin::toolBarIndicators()
     static const QVariantList toolBarIndicatorList = QVariantList(
         {
             QVariant::fromValue(QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/Toolbar/RTKGPSIndicator.qml"))),
+            QVariant::fromValue(QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/Toolbar/AndroidBatteryIndicator.qml"))),
         }
     );
 

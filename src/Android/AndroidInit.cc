@@ -1,4 +1,5 @@
 #include "AndroidInterface.h"
+#include "AndroidBatteryMonitor.h"
 #ifndef QGC_NO_SERIAL_LINK
     #include "AndroidSerial.h"
 #endif
@@ -103,6 +104,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
     #endif
 
     AndroidInterface::setNativeMethods();
+    AndroidBatteryMonitor::setNativeMethods();
 
     #ifndef QGC_NO_SERIAL_LINK
         AndroidSerial::setNativeMethods();
