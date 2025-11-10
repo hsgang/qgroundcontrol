@@ -42,9 +42,6 @@
 #ifdef QGC_UTM_ADAPTER
 #include "UTMSPManager.h"
 #endif
-#ifdef Q_OS_ANDROID
-#include "AndroidBatteryMonitor.h"
-#endif
 
 #include <QtCore/QSettings>
 #include <QtCore/QLineF>
@@ -68,9 +65,6 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QObject *parent)
     , _gridManager(GridManager::instance())
     , _siyi(SiYi::instance())
     , _signalingServerManager(SignalingServerManager::instance())
-#ifdef Q_OS_ANDROID
-    , _androidBatteryMonitor(AndroidBatteryMonitor::instance())
-#endif
     , _settingsManager(SettingsManager::instance())
     , _corePlugin(QGCCorePlugin::instance())
     , _globalPalette(new QGCPalette(this))

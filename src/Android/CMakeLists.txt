@@ -13,8 +13,6 @@ target_sources(${CMAKE_PROJECT_NAME}
         AndroidInit.cc
         AndroidInterface.cc
         AndroidInterface.h
-        AndroidBatteryMonitor.cc
-        AndroidBatteryMonitor.h
         AndroidSerial.cc
         AndroidSerial.h
 )

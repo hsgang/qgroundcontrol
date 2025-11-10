@@ -75,7 +75,6 @@ public class QGCActivity extends QtActivity {
         goImmersive();
 
         QGCUsbSerialManager.initialize(this);
-        QGCBatteryMonitor.initialize(this);
     }
 
     @Override
@@ -90,7 +89,6 @@ public class QGCActivity extends QtActivity {
             releaseMulticastLock();
             releaseWakeLock();
             QGCUsbSerialManager.cleanup(this);
-            QGCBatteryMonitor.cleanup(this);
         } catch (final Exception e) {
             Log.e(TAG, "Exception onDestroy()", e);
         }
