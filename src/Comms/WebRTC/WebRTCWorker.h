@@ -591,17 +591,6 @@ class WebRTCWorker : public QObject
     QList<QByteArray> _pendingMessages;
     static const int MAX_PENDING_MESSAGES = 100;
 
-    // 중복 제거 (이중화 시 사용) - 해시 기반 (Thread-safe)
-    static constexpr int MAX_HASH_HISTORY = 200;
-    std::array<uint, MAX_HASH_HISTORY> _hashRingBuffer;  // 원형 버퍼
-    std::atomic<int> _hashRingIndex{0};  // 현재 인덱스
-    QMutex _hashMutex;  // 해시 접근 보호
-
-    // 중복 패킷 통계
-    std::atomic<uint64_t> _duplicatePacketsFromDirect{0};
-    std::atomic<uint64_t> _duplicatePacketsFromRelay{0};
-    std::atomic<uint64_t> _totalPacketsReceived{0};
-
     void _checkBufferHealth();
     void _processPendingMessages();
     bool _canSendData() const;
