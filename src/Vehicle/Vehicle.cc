@@ -85,12 +85,6 @@ QGC_LOGGING_CATEGORY(VehicleLog, "Vehicle.Vehicle")
 
 const QString guided_mode_not_supported_by_vehicle = QObject::tr("Guided mode not supported by Vehicle.");
 
-static int customLogSeq = 0;
-static QString StartTime;
-static QString StartLat;
-static QString StartLong;
-static QString StartAltAMSL;
-
 // Standard connected vehicle
 Vehicle::Vehicle(LinkInterface*             link,
                  int                        vehicleId,
@@ -3764,9 +3758,8 @@ void Vehicle::_initializeCustomLog()
         //qInfo() << "disable save Sensor Log" ;
         return;
     }
-    //QString now = QDateTime::currentDateTime().toString("yyyy-MM-dd hh-mm-ss");
-    QString now = QDateTime::currentDateTime().toString("yyyy_MMdd_hhmmss");
-    QString fileName = QString("vehicle%1_%2.csv").arg(_id).arg(now);
+    QString now = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
+    QString fileName = QString("vehicle%1_%2.txt").arg(_id).arg(now);
     QDir saveDir(SettingsManager::instance()->appSettings()->sensorSavePath());
     _customLogFile.setFileName(saveDir.absoluteFilePath(fileName));
 
@@ -3782,13 +3775,14 @@ void Vehicle::_initializeCustomLog()
         _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_INFO, text, description);
         return;
     }
-    customLogSeq = 0;
+    _customLogSeq = 1;
 
     QTextStream customLogStream(&_customLogFile);
     QString customLogFactValue;
 
     customLogFactValue = "Sequence";
-    customLogFactValue.append(",Datetime");
+    customLogFactValue.append(",Date");
+    customLogFactValue.append(",Time");
     customLogFactValue.append(",Latitude");
     customLogFactValue.append(",Longitude");
     customLogFactValue.append(",Heading");
@@ -3803,6 +3797,7 @@ void Vehicle::_initializeCustomLog()
     customLogFactValue.append(",HubHumi1");
     customLogFactValue.append(",HubHumi2");
     customLogFactValue.append(",HubPressure");
+    customLogFactValue.append(",Radiation");
     customLogFactValue.append("\r\n");
 
     customLogStream << customLogFactValue;
@@ -3822,10 +3817,9 @@ void Vehicle::_writeCustomLogLine()
 
     if(_armed==true){
         QTextStream customLogStream(&_customLogFile);
-        //int Seq = customLogSeq++;
-        //QString dataTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd hh:mm:ss.zzz"));
-        QString seq = QString::number(customLogSeq++);
-        QString dateTime = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMddhhmmsszzz"));
+        QString seq = QString::number(_customLogSeq++);
+        QString date = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd"));
+        QString time = getFactGroup("atmosphericSensor")->getFact("timeHMS")->cookedValueString();
         QString lat = getFactGroup("gps")->getFact("lat")->cookedValueString();
         QString lon = getFactGroup("gps")->getFact("lon")->cookedValueString();
         QString yaw = getFact("heading")->cookedValueString();
@@ -3853,7 +3847,8 @@ void Vehicle::_writeCustomLogLine()
         QString customLogFactValue;
 
         customLogFactValue = seq;
-        customLogFactValue.append("," + dateTime);
+        customLogFactValue.append("," + date);
+        customLogFactValue.append("," + time);
         customLogFactValue.append("," + lat);
         customLogFactValue.append("," + lon);
         customLogFactValue.append("," + yaw);
@@ -3868,6 +3863,7 @@ void Vehicle::_writeCustomLogLine()
         customLogFactValue.append("," + hubHumi1);
         customLogFactValue.append("," + hubHumi2);
         customLogFactValue.append("," + hubPressure);
+        customLogFactValue.append("," + radiation);
         // jsonFactValue.append("\t\"Speed\": " + GroundSpeed + ",\r\n");
         // jsonFactValue.append("\t\"AscSpd\": " + ClimbRate + ",\r\n");
         // jsonFactValue.append("\t\"Roll\": " + Roll + ",\r\n");
@@ -3880,6 +3876,7 @@ void Vehicle::_writeCustomLogLine()
 
     else if(!_armed){
         _customLogFile.close();
+        _customLogSeq = 0;
 
         QString text = "사용자 정의 로그 저장을 종료합니다";
         QString description = "";
