@@ -70,10 +70,13 @@ ListModel {
     // }
 
     ListElement {
-        name: qsTr("Network RTK")
+        name: qsTr("NTRIP/RTK")
         url: "qrc:/qml/QGroundControl/AppSettings/NTRIPSettings.qml"
-        iconUrl: "/InstrumentValueIcons/radar.svg"
-        pageVisible: function() { return true }
+        iconUrl: "qrc:/InstrumentValueIcons/globe.svg"
+        pageVisible: function() {
+            return QGroundControl.settingsManager &&
+                   QGroundControl.settingsManager.ntripSettings !== undefined
+        }
     }
 
     ListElement {

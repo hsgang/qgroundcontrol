@@ -29,6 +29,7 @@
 #include "RemoteIDSettings.h"
 #include "RTKSettings.h"
 #include "UnitsSettings.h"
+#include "NTRIPSettings.h"
 #include "VideoSettings.h"
 #include "SIYISettings.h"
 #include "NTRIPSettings.h"
@@ -66,6 +67,13 @@ SettingsManager *SettingsManager::instance()
     return _settingsManagerInstance();
 }
 
+void SettingsManager::registerQmlTypes()
+{
+    (void) qmlRegisterUncreatableType<SettingsManager>("QGroundControl.SettingsManager", 1, 0, "SettingsManager", "Reference only");
+    (void) qmlRegisterUncreatableType<NTRIPSettings>("QGroundControl", 1, 0, "NTRIPSettings", "Reference only");
+
+}
+
 void SettingsManager::init()
 {
     _unitsSettings = new UnitsSettings(this); // Must be first since AppSettings references it
@@ -87,6 +95,7 @@ void SettingsManager::init()
     _planViewSettings = new PlanViewSettings(this);
     _remoteIDSettings = new RemoteIDSettings(this);
     _rtkSettings = new RTKSettings(this);
+    _ntripSettings = new NTRIPSettings(this);
     _videoSettings = new VideoSettings(this);
     _siyiSettings = new SIYISettings(this);
     _cloudSettings = new CloudSettings(this);
@@ -123,6 +132,7 @@ PlanViewSettings *SettingsManager::planViewSettings() const { return _planViewSe
 RemoteIDSettings *SettingsManager::remoteIDSettings() const { return _remoteIDSettings; }
 RTKSettings *SettingsManager::rtkSettings() const { return _rtkSettings; }
 UnitsSettings *SettingsManager::unitsSettings() const { return _unitsSettings; }
+NTRIPSettings *SettingsManager::ntripSettings() const { return _ntripSettings; }
 VideoSettings *SettingsManager::videoSettings() const { return _videoSettings; }
 CloudSettings *SettingsManager::cloudSettings() const { return _cloudSettings; }
 NTRIPSettings *SettingsManager::ntripSettings() const { return _ntripSettings; }

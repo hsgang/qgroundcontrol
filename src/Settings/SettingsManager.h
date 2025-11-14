@@ -33,6 +33,7 @@ class PlanViewSettings;
 class RemoteIDSettings;
 class RTKSettings;
 class UnitsSettings;
+class NTRIPSettings;
 class VideoSettings;
 class Viewer3DSettings;
 class SIYISettings;
@@ -71,6 +72,7 @@ class SettingsManager : public QObject
     Q_MOC_INCLUDE("RemoteIDSettings.h")
     Q_MOC_INCLUDE("RTKSettings.h")
     Q_MOC_INCLUDE("UnitsSettings.h")
+    Q_MOC_INCLUDE("NTRIPSettings.h")
     Q_MOC_INCLUDE("VideoSettings.h")
     Q_MOC_INCLUDE("SIYISettings.h")
     Q_MOC_INCLUDE("CloudSettings.h")
@@ -101,6 +103,7 @@ class SettingsManager : public QObject
     Q_PROPERTY(QObject *remoteIDSettings                READ remoteIDSettings               CONSTANT)
     Q_PROPERTY(QObject *rtkSettings                     READ rtkSettings                    CONSTANT)
     Q_PROPERTY(QObject *unitsSettings                   READ unitsSettings                  CONSTANT)
+    Q_PROPERTY(QObject *ntripSettings                   READ ntripSettings                  CONSTANT)
     Q_PROPERTY(QObject *videoSettings                   READ videoSettings                  CONSTANT)
     Q_PROPERTY(QObject *cloudSettings                   READ cloudSettings                  CONSTANT)
     Q_PROPERTY(QObject *ntripSettings                   READ ntripSettings                  CONSTANT)
@@ -146,6 +149,7 @@ public:
     RemoteIDSettings *remoteIDSettings() const;
     RTKSettings *rtkSettings() const;
     UnitsSettings *unitsSettings() const;
+    NTRIPSettings *ntripSettings() const;
     VideoSettings *videoSettings() const;
     SIYISettings *siyiSettings() const;
     NTRIPSettings *ntripSettings() const;
@@ -180,6 +184,7 @@ private:
     RemoteIDSettings *_remoteIDSettings = nullptr;
     RTKSettings *_rtkSettings = nullptr;
     UnitsSettings *_unitsSettings = nullptr;
+    NTRIPSettings *_ntripSettings = nullptr;
     VideoSettings *_videoSettings = nullptr;
     SIYISettings *_siyiSettings = nullptr;
     NTRIPSettings *_ntripSettings = nullptr;
