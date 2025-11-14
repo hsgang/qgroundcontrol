@@ -24,8 +24,12 @@ ToolIndicatorPage {
     property string na:                 qsTr("N/A", "No data to display")
     property string valueNA:            qsTr("--.--", "No data to display")
     property var    rtkSettings:        QGroundControl.settingsManager.rtkSettings
-    property var    useFixedPosition:           rtkSettings.useFixedBasePosition.rawValue
+    property var    useFixedPosition:   rtkSettings.useFixedBasePosition.rawValue
     property var    manufacturer:       rtkSettings.baseReceiverManufacturers.rawValue
+
+    property var _settingsManager:      QGroundControl.settingsManager
+    property var _ntrip:                _settingsManager.ntripSettings
+    property Fact _ntripEnabled:        _ntrip.ntripServerConnectEnabled
 
     readonly property var    _trimble:            0b0001
     readonly property var    _septentrio:         0b0010
@@ -136,18 +140,17 @@ ToolIndicatorPage {
 
             SettingsGroupLayout{
                 heading:    qsTr("NTRIP Status")
-                visible:            QGroundControl.ntripManager.connected
+                visible:    _ntripEnabled.rawValue
 
                 LabelledLabel {
-                    label:      qsTr("Status")
-                    labelText:  QGroundControl.ntripManager.connected ? qsTr("Connected") : qsTr("Disconnected")
+                    label:      qsTr("NTRIP")
+                    labelText:  QGroundControl.ntripManager.ntripStatus
                 }
 
-                LabelledLabel {
-                    label:      qsTr("BandWidth")
-                    labelText:  QGroundControl.ntripManager.connected ? QGroundControl.ntripManager.bandWidth.toFixed(2) + " KB/s" : "0.00 KB/s"
-                }
-
+                // LabelledLabel {
+                //     label:      qsTr("BandWidth")
+                //     labelText:  QGroundControl.ntripManager.connected ? QGroundControl.ntripManager.bandWidth.toFixed(2) + " KB/s" : "0.00 KB/s"
+                // }
             }
 
             SettingsGroupLayout {
@@ -178,114 +181,130 @@ ToolIndicatorPage {
     }
 
     expandedComponent: Component {
-        SettingsGroupLayout {
-            heading:        qsTr("RTK GPS Settings")
+        ColumnLayout {
 
-            property real sliderWidth: ScreenTools.defaultFontPixelWidth * 40
-
-            FactCheckBoxSlider {
+            SettingsGroupLayout {
                 Layout.fillWidth:   true
-                text:               qsTr("Auto Connect")
-                fact:               QGroundControl.settingsManager.autoConnectSettings.autoConnectRTKGPS
-                visible:            fact.visible
-            }
+                heading:            qsTr("NTRIP")
+                visible:            _ntrip.visible
 
-            GridLayout {
-                columns: 2
-
-                QGCLabel {
-                    text: qsTr("Settings displayed")
-                }
-                FactComboBox {
+                FactCheckBoxSlider {
                     Layout.fillWidth:   true
-                    fact:               QGroundControl.settingsManager.rtkSettings.baseReceiverManufacturers
-                    visible:            QGroundControl.settingsManager.rtkSettings.baseReceiverManufacturers.visible
+                    text:               _ntripEnabled.shortDescription
+                    fact:               _ntripEnabled
+                    visible:            _ntripEnabled.visible
                 }
             }
 
-            RowLayout {
-                QGCRadioButton {
-                    text:       qsTr("Survey-In")
-                    checked:    useFixedPosition == BaseModeDefinition.BaseSurveyIn
-                    onClicked:  rtkSettings.useFixedBasePosition.rawValue = BaseModeDefinition.BaseSurveyIn
-                    visible:    settingsDisplayId & _all
+            SettingsGroupLayout {
+                heading:        qsTr("RTK GPS Settings")
+
+                property real sliderWidth: ScreenTools.defaultFontPixelWidth * 40
+
+                FactCheckBoxSlider {
+                    Layout.fillWidth:   true
+                    text:               qsTr("Auto Connect")
+                    fact:               QGroundControl.settingsManager.autoConnectSettings.autoConnectRTKGPS
+                    visible:            fact.visible
                 }
 
-                QGCRadioButton {
-                    text: qsTr("Specify position")
-                    checked:    useFixedPosition == BaseModeDefinition.BaseFixed
-                    onClicked:  rtkSettings.useFixedBasePosition.rawValue = BaseModeDefinition.BaseFixed
-                    visible:    settingsDisplayId & _all
+                GridLayout {
+                    columns: 2
+
+                    QGCLabel {
+                        text: qsTr("Settings displayed")
+                    }
+                    FactComboBox {
+                        Layout.fillWidth:   true
+                        fact:               QGroundControl.settingsManager.rtkSettings.baseReceiverManufacturers
+                        visible:            QGroundControl.settingsManager.rtkSettings.baseReceiverManufacturers.visible
+                    }
                 }
-            }
 
-            LabelledFactTextField {
-                label:                  qsTr("Accuracy")
-                fact:                   QGroundControl.settingsManager.rtkSettings.surveyInAccuracyLimit
-                visible:                (
-                    useFixedPosition == BaseModeDefinition.BaseSurveyIn
-                    && rtkSettings.surveyInAccuracyLimit.visible
-                    && (settingsDisplayId & _ublox)
-                )
-            }
+                RowLayout {
+                    QGCRadioButton {
+                        text:       qsTr("Survey-In")
+                        checked:    useFixedPosition == BaseModeDefinition.BaseSurveyIn
+                        onClicked:  rtkSettings.useFixedBasePosition.rawValue = BaseModeDefinition.BaseSurveyIn
+                        visible:    settingsDisplayId & _all
+                    }
 
-            LabelledFactTextField {
-                label:                  qsTr("Min Duration")
-                fact:                   rtkSettings.surveyInMinObservationDuration
-                visible:                ( 
-                    useFixedPosition == BaseModeDefinition.BaseSurveyIn
-                    && rtkSettings.surveyInMinObservationDuration.visible
-                    && (settingsDisplayId & (_ublox | _femtomes | _trimble))
-                )
-            }
+                    QGCRadioButton {
+                        text: qsTr("Specify position")
+                        checked:    useFixedPosition == BaseModeDefinition.BaseFixed
+                        onClicked:  rtkSettings.useFixedBasePosition.rawValue = BaseModeDefinition.BaseFixed
+                        visible:    settingsDisplayId & _all
+                    }
+                }
 
-            LabelledFactTextField {
-                label:                  qsTr("Base Position Latitude")
-                fact:                   rtkSettings.fixedBasePositionLatitude
-                visible:                (
-                    useFixedPosition == BaseModeDefinition.BaseFixed
-                    && (settingsDisplayId & _all)
-                )
-            }
+                LabelledFactTextField {
+                    label:                  qsTr("Accuracy")
+                    fact:                   QGroundControl.settingsManager.rtkSettings.surveyInAccuracyLimit
+                    visible:                (
+                        useFixedPosition == BaseModeDefinition.BaseSurveyIn
+                        && rtkSettings.surveyInAccuracyLimit.visible
+                        && (settingsDisplayId & _ublox)
+                    )
+                }
 
-            LabelledFactTextField {
-                label:              qsTr("Base Position Longitude")//rtkSettings.fixedBasePositionLongitude.shortDescription
-                fact:               rtkSettings.fixedBasePositionLongitude
-                visible:            (
-                    useFixedPosition == BaseModeDefinition.BaseFixed
-                    && (settingsDisplayId & _all)
-                )
-            }
+                LabelledFactTextField {
+                    label:                  qsTr("Min Duration")
+                    fact:                   rtkSettings.surveyInMinObservationDuration
+                    visible:                (
+                        useFixedPosition == BaseModeDefinition.BaseSurveyIn
+                        && rtkSettings.surveyInMinObservationDuration.visible
+                        && (settingsDisplayId & (_ublox | _femtomes | _trimble))
+                    )
+                }
 
-            LabelledFactTextField {
-                label:              qsTr("Base Position Alt (WGS84)")//rtkSettings.fixedBasePositionAltitude.shortDescription
-                fact:               rtkSettings.fixedBasePositionAltitude
-                visible:            (
-                    useFixedPosition == BaseModeDefinition.BaseFixed
-                    && (settingsDisplayId & _all)
-                )
-            }
+                LabelledFactTextField {
+                    label:                  qsTr("Base Position Latitude")
+                    fact:                   rtkSettings.fixedBasePositionLatitude
+                    visible:                (
+                        useFixedPosition == BaseModeDefinition.BaseFixed
+                        && (settingsDisplayId & _all)
+                    )
+                }
 
-            LabelledFactTextField {
-                label:              qsTr("Base Position Accuracy")//rtkSettings.fixedBasePositionAccuracy.shortDescription
-                fact:               rtkSettings.fixedBasePositionAccuracy
-                visible:            (
-                    useFixedPosition == BaseModeDefinition.BaseFixed
-                    && (settingsDisplayId & _ublox)
-                )
-            }
+                LabelledFactTextField {
+                    label:              qsTr("Base Position Longitude")//rtkSettings.fixedBasePositionLongitude.shortDescription
+                    fact:               rtkSettings.fixedBasePositionLongitude
+                    visible:            (
+                        useFixedPosition == BaseModeDefinition.BaseFixed
+                        && (settingsDisplayId & _all)
+                    )
+                }
 
-            LabelledButton {
-                label:              qsTr("Current Base Position")
-                buttonText:         enabled ? qsTr("Save") : qsTr("Not Yet Valid")
-                visible:            useFixedPosition == BaseModeDefinition.BaseFixed
-                enabled:            QGroundControl.gpsRtk.valid.value
+                LabelledFactTextField {
+                    label:              qsTr("Base Position Alt (WGS84)")//rtkSettings.fixedBasePositionAltitude.shortDescription
+                    fact:               rtkSettings.fixedBasePositionAltitude
+                    visible:            (
+                        useFixedPosition == BaseModeDefinition.BaseFixed
+                        && (settingsDisplayId & _all)
+                    )
+                }
 
-                onClicked: {
-                    rtkSettings.fixedBasePositionLatitude.rawValue  = QGroundControl.gpsRtk.currentLatitude.rawValue
-                    rtkSettings.fixedBasePositionLongitude.rawValue = QGroundControl.gpsRtk.currentLongitude.rawValue
-                    rtkSettings.fixedBasePositionAltitude.rawValue  = QGroundControl.gpsRtk.currentAltitude.rawValue
-                    rtkSettings.fixedBasePositionAccuracy.rawValue  = QGroundControl.gpsRtk.currentAccuracy.rawValue
+                LabelledFactTextField {
+                    label:              qsTr("Base Position Accuracy")//rtkSettings.fixedBasePositionAccuracy.shortDescription
+                    fact:               rtkSettings.fixedBasePositionAccuracy
+                    visible:            (
+                        useFixedPosition == BaseModeDefinition.BaseFixed
+                        && (settingsDisplayId & _ublox)
+                    )
+                }
+
+                LabelledButton {
+                    label:              qsTr("Current Base Position")
+                    buttonText:         enabled ? qsTr("Save") : qsTr("Not Yet Valid")
+                    visible:            useFixedPosition == BaseModeDefinition.BaseFixed
+                    enabled:            QGroundControl.gpsRtk.valid.value
+
+                    onClicked: {
+                        rtkSettings.fixedBasePositionLatitude.rawValue  = QGroundControl.gpsRtk.currentLatitude.rawValue
+                        rtkSettings.fixedBasePositionLongitude.rawValue = QGroundControl.gpsRtk.currentLongitude.rawValue
+                        rtkSettings.fixedBasePositionAltitude.rawValue  = QGroundControl.gpsRtk.currentAltitude.rawValue
+                        rtkSettings.fixedBasePositionAccuracy.rawValue  = QGroundControl.gpsRtk.currentAccuracy.rawValue
+                    }
                 }
             }
         }

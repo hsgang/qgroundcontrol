@@ -29,6 +29,10 @@ Item {
 
     property bool isGNSS2:              _activeVehicle ? _activeVehicle.gps2.lock.value : false
 
+    property var _settingsManager:      QGroundControl.settingsManager
+    property var _ntrip:                _settingsManager.ntripSettings
+    property Fact _ntripEnabled:        _ntrip.ntripServerConnectEnabled
+
     function getGpsImage() {
         if (_activeVehicle.gps.lock.value) {
             switch (_activeVehicle.gps.lock.value) {
@@ -127,12 +131,12 @@ Item {
             color:              _communicationLost ? qgcPal.colorGrey : ((_activeVehicle && _activeVehicle.gps.lock.value < 2) ? qgcPal.colorRed : qgcPal.buttonText)
 
             Rectangle {
-                visible:        _ntripManager.connected
-                width:          ScreenTools.defaultFontPixelHeight * 0.9
+                visible:        _ntripEnabled.rawValue
+                width:          ScreenTools.defaultFontPixelHeight * 0.7
                 height:         width
                 color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-                border.color:   (_ntripManager.bandWidth > 0) ? qgcPal.colorGreen : qgcPal.text
-                border.width:   2
+                border.color:   _ntripManager && _ntripManager.ntripStatus == "Connected" ? qgcPal.colorGreen : qgcPal.text
+                border.width:   1
                 radius:         ScreenTools.defaultFontPixelHeight / 5
                 anchors.left:   parent.left
                 anchors.bottom: parent.bottom
@@ -140,9 +144,10 @@ Item {
                 QGCLabel {
                     text:                       "N"
                     font.bold:                  true
-                    color:                      (_ntripManager.bandWidth > 0) ? qgcPal.colorGreen : qgcPal.text
+                    color:                      (_ntripManager && _ntripManager.ntripStatus == "Connected") ? qgcPal.colorGreen : qgcPal.text
                     anchors.horizontalCenter:   parent.horizontalCenter
                     anchors.verticalCenter:     parent.verticalCenter
+                    font.pointSize:             ScreenTools.smallFontPointSize
                 }
             }
         }
