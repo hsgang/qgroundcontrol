@@ -135,7 +135,6 @@ UnitsSettings *SettingsManager::unitsSettings() const { return _unitsSettings; }
 NTRIPSettings *SettingsManager::ntripSettings() const { return _ntripSettings; }
 VideoSettings *SettingsManager::videoSettings() const { return _videoSettings; }
 CloudSettings *SettingsManager::cloudSettings() const { return _cloudSettings; }
-NTRIPSettings *SettingsManager::ntripSettings() const { return _ntripSettings; }
 SIYISettings *SettingsManager::siyiSettings() const {return _siyiSettings; }
 ModelProfileSettings *SettingsManager::modelProfileSettings() const { return _modelProfileSettings; }
 GridSettings *SettingsManager::gridSettings() const { return _gridSettings; }

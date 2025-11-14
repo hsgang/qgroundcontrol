@@ -22,7 +22,7 @@
 #include "ADSBVehicleManager.h"
 #include "MissionCommandTree.h"
 #include "VideoManager.h"
-#include "NTRIPManager.h"
+#include "GPS/NTRIP.h"
 #include "CloudManager.h"
 #include "GridManager.h"
 #include "SiYi.h"

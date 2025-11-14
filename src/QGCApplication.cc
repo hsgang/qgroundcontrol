@@ -48,7 +48,7 @@
 #include "Vehicle.h"
 #include "VehicleComponent.h"
 #include "VideoManager.h"
-#include "NTRIPManager.h"
+#include "GPS/NTRIP.h"
 #include "CloudManager.h"
 #include "GridManager.h"
 #include "ModelProfileManager.h"
@@ -346,7 +346,6 @@ void QGCApplication::_initForNormalAppBoot()
     // Connect links with flag AutoconnectLink
     LinkManager::instance()->startAutoConnectedLinks();
 
-    NTRIPManager::instance()->init();
     CloudManager::instance()->init();
     GridManager::instance()->init();
 }

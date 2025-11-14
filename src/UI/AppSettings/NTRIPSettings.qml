@@ -18,6 +18,8 @@ SettingsPage {
     property var _settingsManager:   QGroundControl.settingsManager
     property var _ntrip:             _settingsManager.ntripSettings
     property Fact _enabled:          _ntrip.ntripServerConnectEnabled
+
+    property real _urlFieldWidth:    ScreenTools.defaultFontPixelWidth * 25
     
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -72,7 +74,7 @@ SettingsPage {
             label:              _ntrip.ntripServerHostAddress.shortDescription
             fact:               _ntrip.ntripServerHostAddress
             visible:            _ntrip.ntripServerHostAddress.visible
-            textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 60
+            textFieldPreferredWidth: _urlFieldWidth * 1.4
         }
         
         LabelledFactTextField {
@@ -80,7 +82,7 @@ SettingsPage {
             label:              _ntrip.ntripServerPort.shortDescription
             fact:               _ntrip.ntripServerPort
             visible:            _ntrip.ntripServerPort.visible
-            textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
+            textFieldPreferredWidth: _urlFieldWidth * 1.4
         }
         
         LabelledFactTextField {
@@ -88,7 +90,7 @@ SettingsPage {
             label:              _ntrip.ntripUsername.shortDescription
             fact:               _ntrip.ntripUsername
             visible:            _ntrip.ntripUsername.visible
-            textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 60
+            textFieldPreferredWidth: _urlFieldWidth * 1.4
         }
         
         LabelledFactTextField {
@@ -97,7 +99,7 @@ SettingsPage {
             fact:               _ntrip.ntripPassword
             visible:            _ntrip.ntripPassword.visible
             textField.echoMode: TextInput.Password
-            textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 60
+            textFieldPreferredWidth: _urlFieldWidth * 1.4
         }
         
         LabelledFactTextField {
@@ -105,7 +107,7 @@ SettingsPage {
             label:              _ntrip.ntripMountpoint.shortDescription
             fact:               _ntrip.ntripMountpoint
             visible:            _ntrip.ntripMountpoint.visible
-            textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 40
+            textFieldPreferredWidth: _urlFieldWidth * 1.4
         }
         
         LabelledFactTextField {
@@ -113,7 +115,7 @@ SettingsPage {
             label:              _ntrip.ntripWhitelist.shortDescription
             fact:               _ntrip.ntripWhitelist
             visible:            _ntrip.ntripWhitelist.visible
-            textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 40
+            textFieldPreferredWidth: _urlFieldWidth * 1.4
         }
         
         FactCheckBoxSlider {

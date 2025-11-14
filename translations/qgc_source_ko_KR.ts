@@ -8587,8 +8587,8 @@ Click Ok to start the auto-tuning process.
     <name>NTRIPSettings</name>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
-        <source>NTRIP / RTCM</source>
-        <translation>네트워크 GNSS 보정신호(NTRIP/RTCM)</translation>
+        <source>NTRIP / RTK</source>
+        <translation>네트워크 위치 보정(NTRIP/RTCM)</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
@@ -8602,13 +8602,13 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
-        <source>Server Port</source>
+        <source>Port</source>
         <translation>포트</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
-        <source>User Name</source>
-        <translation>사용자 이름</translation>
+        <source>Username</source>
+        <translation>사용자 ID</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
@@ -8622,8 +8622,8 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
-        <source>White List</source>
-        <translation>화이트 리스트</translation>
+        <source>RTCM Message Whitelist</source>
+        <translation>RTCM 화이트 리스트</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/NTRIPSettings.qml" line="1"/>
@@ -8792,44 +8792,54 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
-    <name>NTRIPManager</name>
+    <name>NTRIP</name>
     <message>
-        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
         <source>Disconnected</source>
         <translation>연결 끊김</translation>
     </message>
     <message>
-        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
+        <source>Connecting...</source>
+        <translation>연결중...</translation>
+    </message>
+    <message>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
+        <source>Connected</source>
+        <translation>연결됨</translation>
+    </message>
+    <message>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
         <source>Socket Connecting</source>
         <translation>소켓 연결중</translation>
     </message>
     <message>
-        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
         <source>Socket Connected</source>
         <translation>소켓 연결됨</translation>
     </message>
     <message>
-        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
         <source>Server Authenticating</source>
         <translation>서버 인증 요청</translation>
     </message>
     <message>
-        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
         <source>Server Authenticated</source>
         <translation>서버 권한 인증</translation>
     </message>
     <message>
-        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
         <source>Receiving Data</source>
         <translation>데이터 수신중</translation>
     </message>
     <message>
-        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
         <source>Error</source>
         <translation>오류</translation>
     </message>
     <message>
-        <location filename="../src/NTRIP/NTRIPManager.cc" line="1"/>
+        <location filename="../src/GPS/NTRIP.cc" line="1"/>
         <source>Socket Closing</source>
         <translation>소켓 닫는중</translation>
     </message>

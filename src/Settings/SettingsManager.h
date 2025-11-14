@@ -37,7 +37,6 @@ class NTRIPSettings;
 class VideoSettings;
 class Viewer3DSettings;
 class SIYISettings;
-class NTRIPSettings;
 class CloudSettings;
 class ModelProfileSettings;
 class GridSettings;
@@ -152,7 +151,6 @@ public:
     NTRIPSettings *ntripSettings() const;
     VideoSettings *videoSettings() const;
     SIYISettings *siyiSettings() const;
-    NTRIPSettings *ntripSettings() const;
     CloudSettings *cloudSettings() const;
     ModelProfileSettings *modelProfileSettings() const;
     GridSettings *gridSettings() const;
@@ -187,7 +185,6 @@ private:
     NTRIPSettings *_ntripSettings = nullptr;
     VideoSettings *_videoSettings = nullptr;
     SIYISettings *_siyiSettings = nullptr;
-    NTRIPSettings *_ntripSettings = nullptr;
     CloudSettings *_cloudSettings = nullptr;
     ModelProfileSettings *_modelProfileSettings = nullptr;
     GridSettings *_gridSettings = nullptr;
