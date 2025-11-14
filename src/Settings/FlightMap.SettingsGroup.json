@@ -4,22 +4,29 @@
     "QGC.MetaData.Facts":
 [
 {
-    "name":             "mapProvider",
-    "shortDesc": "Currently selected map provider for flight maps",
-    "type":             "string",
-    "default":     "Bing"
+    "name":         "mapProvider",
+    "shortDesc":    "Currently selected map provider for flight maps",
+    "type":         "string",
+    "default":      "Bing"
 },
 {
-    "name":             "mapType",
-    "shortDesc": "Currently selected map type for flight maps",
-    "type":             "string",
-    "default":     "Hybrid"
+    "name":         "mapType",
+    "shortDesc":    "Currently selected map type for flight maps",
+    "type":         "string",
+    "default":      "Hybrid"
 },
 {
-    "name":      "elevationMapProvider",
-    "shortDesc": "Currently selected elevation map provider",
-    "type":      "string",
-    "default":   "Copernicus"
+    "name":         "elevationMapProvider",
+    "shortDesc":    "Currently selected elevation map provider",
+    "type":         "string",
+    "default":      "Copernicus"
+},
+{
+    "name":         "kmlOverlayFile",
+    "shortDesc":    "KML/SHP file path for map overlay",
+    "longDesc":     "Path to the KML or SHP file to display on the map. Leave empty to disable overlay.",
+    "type":         "string",
+    "default":      ""
 }
 ]
 }

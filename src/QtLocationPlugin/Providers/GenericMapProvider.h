@@ -266,7 +266,7 @@ protected:
             imageFormat,
             averageSize,
             mapStyle)
-        , _mapTypeId(mapName) {}
+        , _mapTypeId(mapTypeId) {}
 
 private:
     QString _getURL(int x, int y, int zoom) const final;
@@ -275,12 +275,12 @@ private:
     const QString _mapUrl = QStringLiteral("http://api.vworld.kr/req/wmts/1.0.0/%1/%2/%3/%4/%5.%6");
 };
 
-class VWorldStreetMapProvider : public VWorldMapProvider
+class VWorldBaseMapProvider : public VWorldMapProvider
 {
 public:
-    VWorldStreetMapProvider()
+    VWorldBaseMapProvider()
         : VWorldMapProvider(
-            QStringLiteral("VWorld Street Map"),
+            QStringLiteral("VWorld Base Map"),
             QStringLiteral("Base"),
             QStringLiteral("png"),
             QGC_AVERAGE_TILE_SIZE,
@@ -297,4 +297,16 @@ public:
             QStringLiteral("jpeg"),
             QGC_AVERAGE_TILE_SIZE,
             QGeoMapType::SatelliteMapDay) {}
+};
+
+class VWorldHybridMapProvider : public VWorldMapProvider
+{
+public:
+    VWorldHybridMapProvider()
+        : VWorldMapProvider(
+            QStringLiteral("VWorld Hybrid Map"),
+            QStringLiteral("Hybrid"),
+            QStringLiteral("png"),
+            QGC_AVERAGE_TILE_SIZE,
+            QGeoMapType::HybridMap) {}
 };

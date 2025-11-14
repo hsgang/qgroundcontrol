@@ -46,6 +46,7 @@ FlightMap {
     property real   _toolButtonTopMargin:       parent.height - mainWindow.height + (ScreenTools.defaultFontPixelHeight / 2)
     property real   _toolsMargin:               ScreenTools.defaultFontPixelWidth * 0.75
     property var    _flyViewSettings:           QGroundControl.settingsManager.flyViewSettings
+    property var    _flightMapSettings:         QGroundControl.settingsManager.flightMapSettings
     property bool   _keepMapCenteredOnVehicle:  _flyViewSettings.keepMapCenteredOnVehicle.rawValue
 
     property bool   _disableVehicleTracking:    false
@@ -1076,7 +1077,87 @@ FlightMap {
     //    }
     // }
 
-    //*******************************************************************************************   
+    //*******************************************************************************************
 
     //*******************************************************************************************
+
+    // KML Overlay initialization
+    Component.onCompleted: {
+        if (_flightMapSettings.kmlOverlayFile.rawValue !== "") {
+            QGroundControl.kmlOverlayManager.loadKML(_flightMapSettings.kmlOverlayFile.rawValue)
+        }
+    }
+
+    Connections {
+        target: _flightMapSettings.kmlOverlayFile
+        function onRawValueChanged() {
+            if (_flightMapSettings.kmlOverlayFile.rawValue !== "") {
+                QGroundControl.kmlOverlayManager.loadKML(_flightMapSettings.kmlOverlayFile.rawValue)
+            } else {
+                QGroundControl.kmlOverlayManager.clearAll()
+            }
+        }
+    }
+
+    // KML Overlay Polylines
+    MapItemView {
+        model: QGroundControl.kmlOverlayManager.polylines
+
+        delegate: MapPolyline {
+            path: modelData.path
+            line.width: {
+                var zoom = _root.zoomLevel
+                if (zoom >= 18) return 5
+                if (zoom >= 16) return 4
+                if (zoom >= 14) return 3
+                if (zoom >= 12) return 2
+                return 1
+            }
+            line.color: "white"
+            z: QGroundControl.zOrderMapItems
+            opacity: 0.5
+        }
+    }
+
+    // KML Overlay Polygons
+    MapItemView {
+        model: QGroundControl.kmlOverlayManager.polygons
+
+        delegate: MapPolygon {
+            path: modelData.path
+            color: "transparent"
+            border.color: Qt.rgba(0, 1, 0, 0.5)
+            border.width: 2
+            z: QGroundControl.zOrderMapItems
+        }
+    }
+
+    // KML Labels
+    MapItemView {
+        model: QGroundControl.kmlOverlayManager.labels
+
+        delegate: MapQuickItem {
+            coordinate: modelData.coordinate
+            anchorPoint.x: labelBackground.width / 2
+            anchorPoint.y: labelBackground.height / 2
+            z: QGroundControl.zOrderMapItems + 20
+
+            sourceItem: Rectangle {
+                id: labelBackground
+                width: labelText.width + (ScreenTools.defaultFontPixelHeight / 4)
+                height: labelText.height + (ScreenTools.defaultFontPixelHeight / 4)
+                color: Qt.rgba(0, 0, 0, 0.5)
+                border.width: 1
+                border.color: "white"
+                radius: ScreenTools.defaultFontPixelHeight / 4
+
+                QGCLabel {
+                    id: labelText
+                    anchors.centerIn: parent
+                    text: modelData.text
+                    color: "white"
+                }
+            }
+        }
+    }
 }

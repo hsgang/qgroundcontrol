@@ -75,20 +75,14 @@ QString VWorldMapProvider::_getURL(int x, int y, int zoom) const
         return QString();
     }
 
-    const int gap = zoom - 6;
-
-    const int x_min = 53 * pow(2, gap);
-    const int x_max = (55 * pow(2, gap)) + (2 * gap - 1);
-    if ((x < x_min) || (x > x_max)) {
-        return QString();
-    }
-
-    const int y_min = 22 * pow(2, gap);
-    const int y_max = (26 * pow(2, gap)) + (2 * gap - 1);
-    if ((y < y_min) || (y > y_max)) {
-        return QString();
-    }
+    // VWorld WMTS API supports Korea region only
+    // Tile coordinate range validation removed - let VWorld API return 404 for out-of-range tiles
 
     const QString VWorldMapToken = SettingsManager::instance()->appSettings()->vworldToken()->rawValue().toString();
-    return _mapUrl.arg(VWorldMapToken, _mapName).arg(zoom).arg(y).arg(x).arg(_imageFormat);
+    if (VWorldMapToken.isEmpty()) {
+        qWarning() << "VWorldMapProvider: API token is empty";
+        return QString();
+    }
+
+    return _mapUrl.arg(VWorldMapToken).arg(_mapTypeId).arg(zoom).arg(y).arg(x).arg(_imageFormat);
 }

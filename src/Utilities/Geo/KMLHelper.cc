@@ -141,7 +141,29 @@ bool KMLHelper::loadPolylineFromFile(const QString &kmlFile, QList<QGeoCoordinat
         return false;
     }
 
-    const QDomNode coordinatesNode = rgNodes.item(0).namedItem("coordinates");
+    QList<QGeoCoordinate> rgCoords;
+
+    // Load all LineString nodes and merge them
+    int largestLineStringIndex = 0;
+    int largestLineStringSize = 0;
+
+    // First pass: find the LineString with the most coordinates
+    for (int i = 0; i < rgNodes.count(); i++) {
+        const QDomNode coordinatesNode = rgNodes.item(i).namedItem("coordinates");
+        if (!coordinatesNode.isNull()) {
+            const QString coordinatesString = coordinatesNode.toElement().text().simplified();
+            const QStringList rgCoordinateStrings = coordinatesString.split(" ");
+            if (rgCoordinateStrings.count() > largestLineStringSize) {
+                largestLineStringSize = rgCoordinateStrings.count();
+                largestLineStringIndex = i;
+            }
+        }
+    }
+
+    qCDebug(KMLHelperLog) << "Found" << rgNodes.count() << "LineString nodes, using largest with" << largestLineStringSize << "coordinates";
+
+    // Load coordinates from the largest LineString
+    const QDomNode coordinatesNode = rgNodes.item(largestLineStringIndex).namedItem("coordinates");
     if (coordinatesNode.isNull()) {
         errorString = QString(_errorPrefix).arg(QT_TRANSLATE_NOOP("KML", "Internal error: Unable to find coordinates node in KML"));
         return false;
@@ -150,14 +172,17 @@ bool KMLHelper::loadPolylineFromFile(const QString &kmlFile, QList<QGeoCoordinat
     const QString coordinatesString = coordinatesNode.toElement().text().simplified();
     const QStringList rgCoordinateStrings = coordinatesString.split(" ");
 
-    QList<QGeoCoordinate> rgCoords;
     for (const QString &coordinateString : rgCoordinateStrings) {
         const QStringList rgValueStrings = coordinateString.split(",");
-        const QGeoCoordinate coord(rgValueStrings[1].toDouble(), rgValueStrings[0].toDouble());
-        rgCoords.append(coord);
+        if (rgValueStrings.count() >= 2) {
+            const QGeoCoordinate coord(rgValueStrings[1].toDouble(), rgValueStrings[0].toDouble());
+            if (coord.isValid()) {
+                rgCoords.append(coord);
+            }
+        }
     }
 
     coords = rgCoords;
 
-    return true;
+    return !rgCoords.isEmpty();
 }

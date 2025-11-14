@@ -59,8 +59,9 @@ const QList<SharedMapProvider> UrlFactory::_providers = {
     std::make_shared<MapQuestMapMapProvider>(),
     std::make_shared<MapQuestSatMapProvider>(),
 
-    std::make_shared<VWorldStreetMapProvider>(),
+    std::make_shared<VWorldBaseMapProvider>(),
     std::make_shared<VWorldSatMapProvider>(),
+    std::make_shared<VWorldHybridMapProvider>(),
 
     std::make_shared<JapanStdMapProvider>(),
     std::make_shared<JapanSeamlessMapProvider>(),

@@ -35,6 +35,7 @@ Item {
     property Fact   _mapProviderFact:   _settingsManager.flightMapSettings.mapProvider
     property Fact   _mapTypeFact:       _settingsManager.flightMapSettings.mapType
     property Fact   _elevationProviderFact: _settingsManager.flightMapSettings.elevationMapProvider
+    property Fact   _kmlOverlayFileFact:    _settingsManager.flightMapSettings.kmlOverlayFile
     property Fact   _tiandituFac:       _settingsManager ? _settingsManager.appSettings.tiandituToken : null
     property Fact   _mapboxFact:        _settingsManager ? _settingsManager.appSettings.mapboxToken : null
     property Fact   _mapboxAccountFact: _settingsManager ? _settingsManager.appSettings.mapboxAccount : null
@@ -102,6 +103,41 @@ Item {
                     var index = comboBox.find(_elevationProviderFact.rawValue)
                     if (index < 0) index = 0
                     comboBox.currentIndex = index
+                }
+            }
+        }
+
+        SettingsGroupLayout {
+            Layout.fillWidth:   true
+            heading:            qsTr("지도 오버레이")
+            headingDescription: qsTr("Display KML/SHP files on the flight map background.")
+
+            RowLayout {
+                Layout.fillWidth:   true
+                spacing:            ScreenTools.defaultFontPixelWidth
+
+                QGCLabel {
+                    Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 15
+                    text:                   qsTr("KML File")
+                }
+
+                QGCTextField {
+                    id:                     kmlFilePathField
+                    Layout.fillWidth:       true
+                    readOnly:               true
+                    text:                   _kmlOverlayFileFact.rawValue
+                    placeholderText:        qsTr("No file selected")
+                }
+
+                QGCButton {
+                    text:       qsTr("파일 선택")
+                    onClicked:  kmlFileDialog.openForLoad()
+                }
+
+                QGCButton {
+                    text:       qsTr("초기화")
+                    enabled:    _kmlOverlayFileFact.rawValue !== ""
+                    onClicked:  _kmlOverlayFileFact.rawValue = ""
                 }
             }
         }
@@ -264,6 +300,23 @@ Item {
             onAcceptedForLoad: (file) => {
                 close()
                 _mapEngineManager.importSets(file)
+            }
+        }
+
+        QGCFileDialog {
+            id:             kmlFileDialog
+            folder:         _appSettings.missionSavePath
+            title:          qsTr("Select KML/SHP File")
+            nameFilters:    [
+                qsTr("All Supported Files (*.kml *.shp)"),
+                qsTr("KML Files (*.kml)"),
+                qsTr("Shapefile (*.shp)"),
+                qsTr("All Files (*)")
+            ]
+
+            onAcceptedForLoad: (file) => {
+                _kmlOverlayFileFact.rawValue = file
+                close()
             }
         }
 
