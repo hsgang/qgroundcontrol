@@ -44,6 +44,7 @@ Map {
     property var    _flyViewSettings:           _settingsManager.flyViewSettings
     property var    _flightMapSettings:         _settingsManager.flightMapSettings
     property Fact   _showGridOnMap:             _flyViewSettings.showGridOnMap
+    property bool   _isDragging:                false
 
     function setVisibleRegion(region) {
         // TODO: Is this still necessary with Qt 5.11?
@@ -175,6 +176,7 @@ Map {
         onGestureStarted: (gesture) => {
             dragActive = true
             gesture.grab()
+            _isDragging = true
             mapPanStart()
         }
 
@@ -182,7 +184,7 @@ Map {
             if (dragActive) {
                 let deltaX = touchPoints[0].x - lastMouseX
                 let deltaY = touchPoints[0].y - lastMouseY
-                if (Math.abs(deltaX) >= 1.0 || Math.abs(deltaY) >= 1.0) {
+                if (Math.abs(deltaX) >= 2.0 || Math.abs(deltaY) >= 2.0) {
                     _map.pan(lastMouseX - touchPoints[0].x, lastMouseY - touchPoints[0].y)
                     lastMouseX = touchPoints[0].x
                     lastMouseY = touchPoints[0].y
@@ -194,6 +196,7 @@ Map {
             if (dragActive) {
                 _map.pan(lastMouseX - touchPoints[0].x, lastMouseY - touchPoints[0].y)
                 dragActive = false
+                _isDragging = false
                 mapPanStop()
             } else {
                 mapClicked(Qt.point(touchPoints[0].x, touchPoints[0].y))
@@ -240,11 +243,19 @@ Map {
         return metersPerPixel;
     }
 
+    Timer {
+        id: gridRepaintTimer
+        interval: 100
+        repeat: false
+        onTriggered: gridCanvas.requestPaint()
+    }
+
     Canvas {
         id: gridCanvas
         renderTarget: Canvas.FramebufferObject
+        renderStrategy: Canvas.Threaded
         anchors.fill: parent
-        visible:      (_showGridOnMap.rawValue === true) && _map.zoomLevel > 16;
+        visible: (_showGridOnMap.rawValue === true) && _map.zoomLevel > 16 && !_isDragging
 
         onPaint: {
             if(_map.zoomLevel > 16) {
@@ -294,8 +305,18 @@ Map {
 
         Connections {
             target: _map
-            function onCenterChanged() { gridCanvas.requestPaint(); }
-            function onZoomLevelChanged() { gridCanvas.requestPaint(); }
+            function onCenterChanged() {
+                if (!_isDragging) {
+                    gridRepaintTimer.restart()
+                }
+            }
+            function onZoomLevelChanged() { gridRepaintTimer.restart() }
+        }
+
+        onVisibleChanged: {
+            if (visible) {
+                gridRepaintTimer.restart()
+            }
         }
     }
 
