@@ -46,8 +46,8 @@ ColumnLayout {
                     id:                     hostField
                     Layout.preferredWidth:  _secondColumnWidth * 0.7
                     Layout.fillWidth:       true
-                    //placeholderText:        qsTr("Example: 127.0.0.1")
-                    text:                   "127.0.0.1"
+                    placeholderText:        "192.168.144.12"
+                    text:                   "192.168.144.12"
                 }
             }
 
@@ -57,8 +57,8 @@ ColumnLayout {
                 QGCLabel { text: qsTr("Port") }
                 QGCTextField {
                     id:                     portField
-                    text:                   subEditConfig.localPort.toString()
-                    focus:                  true
+                    text:                   "19856" //subEditConfig.localPort.toString()
+                    placeholderText:        "19856"
                     Layout.preferredWidth:  _secondColumnWidth * 0.7
                     Layout.fillWidth:       true
                     inputMethodHints:       Qt.ImhFormattedNumbersOnly
@@ -71,8 +71,13 @@ ColumnLayout {
             text:       qsTr("Add Server")
             enabled:    hostField.text !== ""
             onClicked: {
-                subEditConfig.addHost(hostField.text)
-                hostField.text = ""
+                // Combine host and port before adding
+                var hostWithPort = hostField.text
+                if (hostWithPort.indexOf(":") === -1) {
+                    hostWithPort = hostWithPort + ":" + portField.text
+                }
+                subEditConfig.addHost(hostWithPort)
+                //hostField.text = ""
                 subEditConfig.hostListChanged()
             }
         }
