@@ -403,4 +403,3 @@ void InitialConnectStateMachine::_stateSignalInitialConnectComplete(StateMachine
     qCDebug(InitialConnectStateMachineLog) << "Signalling initialConnectComplete";
     emit vehicle->initialConnectComplete();
 }
-

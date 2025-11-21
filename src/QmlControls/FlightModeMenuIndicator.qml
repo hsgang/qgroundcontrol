@@ -76,7 +76,6 @@ Item {
 
             // Mode list
             contentComponent: FlightModeToolIndicatorContentItem { }
-
         }
     }
 }

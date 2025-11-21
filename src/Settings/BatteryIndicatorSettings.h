@@ -36,7 +36,7 @@ public:
 
 private:
     void validateThreshold1();
-    void validateThreshold2(); 
+    void validateThreshold2();
     void _threshold1Changed();
     void _threshold2Changed();
 };

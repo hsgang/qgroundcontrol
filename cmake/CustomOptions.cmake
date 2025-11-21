@@ -72,8 +72,10 @@ option(QGC_ENABLE_QT_VIDEOSTREAMING "Enable QtMultimedia video backend" OFF)
 # MAVLink Configuration
 # ============================================================================
 
-set(QGC_MAVLINK_GIT_REPO "https://github.com/mavlink/c_library_v2.git" CACHE STRING "MAVLink repository URL")
-set(QGC_MAVLINK_GIT_TAG "a9a10b52a6c87e54676fea22d2936c1b8b733f99" CACHE STRING "MAVLink repository commit/tag")
+set(QGC_MAVLINK_GIT_REPO "https://github.com/mavlink/mavlink.git" CACHE STRING "MAVLink repository URL")
+set(QGC_MAVLINK_GIT_TAG "dd17c1a65de7b9ad8dd6e3491a8690c0d0b27ba1" CACHE STRING "MAVLink repository commit/tag")
+set(QGC_MAVLINK_DIALECT "all" CACHE STRING "MAVLink dialect")
+set(QGC_MAVLINK_VERSION "2.0" CACHE STRING "MAVLink protocol version")
 
 # ============================================================================
 # Autopilot Plugin Configuration
@@ -146,6 +148,7 @@ option(QT_SILENCE_MISSING_DEPENDENCY_TARGET_WARNING "Silence missing dependency 
 option(QT_ENABLE_VERBOSE_DEPLOYMENT "Enable verbose deployment output" OFF)
 option(QT_DEBUG_FIND_PACKAGE "Print search paths when package not found" ON)
 option(QT_QML_GENERATE_QMLLS_INI "Generate qmlls.ini for QML language server" ON)
+option(QGC_ENABLE_QMLLINT "Enable automatic QML linting during build" OFF)
 
 # Debug environment variables (uncomment to enable)
 # set(ENV{QT_DEBUG_PLUGINS} "1")

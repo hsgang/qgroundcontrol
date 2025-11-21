@@ -63,8 +63,8 @@ Item {
     function addEditingVisuals() {
         if (_objMgrEditingVisuals.empty) {
             _objMgrEditingVisuals.createObjects(
-                [ dragHandlesComponent, splitHandlesComponent, centerDragHandleComponent, edgeLengthHandlesComponent ], 
-                mapControl, 
+                [ dragHandlesComponent, splitHandlesComponent, centerDragHandleComponent, edgeLengthHandlesComponent ],
+                mapControl,
                 false /* addToMap */)
         }
     }
@@ -745,4 +745,3 @@ Item {
         }
     }
 }
-

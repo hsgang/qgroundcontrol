@@ -113,7 +113,7 @@ RowLayout {
             property var    activeVehicle:            QGroundControl.multiVehicleManager.activeVehicle
             property var    flightModeSettings:       QGroundControl.settingsManager.flightModeSettings
             property var    hiddenFlightModesFact:    null
-            property var    hiddenFlightModesList:    [] 
+            property var    hiddenFlightModesList:    []
 
             Component.onCompleted: {
                 // Hidden flight modes are classified by firmware and vehicle class

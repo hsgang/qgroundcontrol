@@ -47,7 +47,7 @@ AbstractButton   {
                 color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
             }
         }
-    
+
         Rectangle {
             id:                     indicator
             anchors.right:          parent.right

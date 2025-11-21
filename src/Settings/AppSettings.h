@@ -156,6 +156,6 @@ private:
         const char*         languageName;
     } LanguageInfo_t;
     static LanguageInfo_t _rgLanguageInfo[];
-    
+
     friend class QGCApplication;
 };

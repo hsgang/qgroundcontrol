@@ -42,7 +42,7 @@ QGCButton {
                 sourceSize.height:      height
                 sourceSize.width:       width
                 visible:                control.iconSource !== "" ? true : false
-            }   
+            }
 
             Item {
                 id:                     textLabelContainer
@@ -57,7 +57,7 @@ QGCButton {
                     font.pointSize:             control.font.pointSize
                     color:                      _showHighlight ? qgcPal.buttonHighlightText : (primary ? qgcPal.primaryButtonText : qgcPal.buttonText)
                     anchors.baseline:           iconSource !== "" ? parent.bottom : undefined
-                    anchors.centerIn:           iconSource === "" ? parent : undefined   
+                    anchors.centerIn:           iconSource === "" ? parent : undefined
                     anchors.horizontalCenter:   parent.horizontalCenter
                 }
             }

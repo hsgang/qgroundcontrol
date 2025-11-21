@@ -115,7 +115,7 @@ Rectangle {
                 onValueChanged:     _camera.zoomLevel = value
             }
         }
-        
+
         ColumnLayout {
             spacing: _margins
 
@@ -162,7 +162,7 @@ Rectangle {
                         }
                     }
                 }
-                
+
                 //-- Photo Mode
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
@@ -313,7 +313,7 @@ Rectangle {
                     Layout.preferredHeight: Layout.preferredWidth
                     border.color:           qgcPal.buttonText
                     border.width:           3
-                    
+
                     QGCColoredImage {
                         height:             parent.height * 0.5
                         width:              height
