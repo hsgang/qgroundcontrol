@@ -39,6 +39,7 @@ Rectangle {
     property bool   _photoCaptureSingleIdle:    _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_IDLE
     property bool   _photoCaptureIntervalIdle:  _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IDLE
     property bool   _photoCaptureIdle:          _photoCaptureSingleIdle || _photoCaptureIntervalIdle
+    property color  _captureButtonColor:       _cameraInPhotoMode ? qgcPal.photoCaptureButtonColor : qgcPal.videoCaptureButtonColor
 
     property real   _backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 /*
@@ -79,6 +80,25 @@ Rectangle {
             videoCaptureStatus = MavlinkCameraControl.VIDEO_CAPTURE_STATUS_STOPPED;
             photoCaptureStatus = MavlinkCameraControl.PHOTO_CAPTURE_IDLE;
         }
+
+        function takePhoto() {
+            photoCaptureStatus = MavlinkCameraControl.PHOTO_CAPTURE_IN_PROGRESS;
+            takePhotoTimer.start();
+        }
+
+        function toggleVideoRecording() {
+            if (videoCaptureStatus === MavlinkCameraControl.VIDEO_CAPTURE_STATUS_RUNNING) {
+                videoCaptureStatus = MavlinkCameraControl.VIDEO_CAPTURE_STATUS_STOPPED;
+            } else {
+                videoCaptureStatus = MavlinkCameraControl.VIDEO_CAPTURE_STATUS_RUNNING;
+            }
+        }
+    }
+
+    Timer {
+        id:             takePhotoTimer
+        interval:       500
+        onTriggered:    testCamera.photoCaptureStatus = MavlinkCameraControl.PHOTO_CAPTURE_IDLE
     }
 */
 
@@ -200,12 +220,27 @@ Rectangle {
                 // Take Photo, Start/Stop Video button
                 Rectangle {
                     Layout.alignment:   Qt.AlignHCenter
-                    color:              Qt.rgba(0,0,0,0)
+                    //color:              "transparent"
                     width:              ScreenTools.defaultFontPixelWidth * 6
                     height:             width
                     radius:             width * 0.5
-                    border.color:       Qt.rgba(0,0,0,0.2)
-                    border.width:       width * 0.1
+                    color:              Qt.rgba(0,0,0,.1)
+                    //border.color:       qgcPal.photoCaptureButtonColor
+                    //border.width:       width * 0.1
+
+                    // outer ring color fill
+                    Rectangle {
+                        anchors {
+                            centerIn:           parent
+                            alignWhenCentered:  false
+                        }
+                        color:              "transparent"
+                        width:              parent.width - 2
+                        height:             width
+                        radius:             width * 0.5
+                        border.color:       qgcPal.photoCaptureButtonColor
+                        border.width:       3
+                    }
 
                     Rectangle {
                         anchors {
@@ -230,8 +265,8 @@ Rectangle {
                         }
                         width:              parent.width * (_isShootingInPhotoMode ? 0.6 : (_isShootingInVideoMode ? 0.4 : 0.7))
                         height:             width
-                        radius:             _isShootingInVideoMode ? _smallMargins : width * 0.5
-                        color:              _isShootingInCurrentMode || _canShootInCurrentMode ? (_cameraInVideoMode ? "#f32836" : "white") : qgcPal.colorGrey
+                        radius:             _isShootingInCurrentMode ? ScreenTools.defaultFontPixelWidth * 0.5 : width * 0.5
+                        color:              _captureButtonColor
                         border.color:       Qt.rgba(0,0,0,.2)
                         border.width:       .5
 
@@ -265,7 +300,7 @@ Rectangle {
                 // Record time / Capture count
                 Rectangle {
                     Layout.alignment:       Qt.AlignHCenter
-                    color:                  _videoCaptureIdle && _photoCaptureIdle ? "transparent" : "#f32836"
+                    color:                  _videoCaptureIdle && _photoCaptureIdle ? "transparent" : _captureButtonColor
                     Layout.preferredWidth:  (_cameraInVideoMode ? videoRecordTime.width : photoCaptureCount.width) + (_smallMargins * 2)
                     Layout.preferredHeight: (_cameraInVideoMode ? videoRecordTime.height : photoCaptureCount.height)
                     radius:                 _smallMargins
