@@ -33,7 +33,6 @@ public:
     DEFINE_SETTINGFACT(mavlink2SigningKey)
     DEFINE_SETTINGFACT(sendGCSHeartbeat)
     DEFINE_SETTINGFACT(gcsMavlinkSystemID)
-    DEFINE_SETTINGFACT(requireMatchingMavlinkVersions)
     DEFINE_SETTINGFACT(saveSensorLog)
     DEFINE_SETTINGFACT(rateSaveSensorLog)
 

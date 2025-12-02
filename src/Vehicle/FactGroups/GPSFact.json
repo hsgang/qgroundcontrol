@@ -50,7 +50,7 @@
     "name":             "lock",
     "shortDesc": "GPS Lock",
     "type":             "uint32",
-    "enumStrings":      "No GNSS,No Fix,2D Fix,3D Fix,3D DGPS,RTK Float,RTK Fixed,Static Fixed",
+    "enumStrings":      "No GNSS,No Fix,2D Lock,3D Lock,3D DGPS,RTK Float,RTK Fixed,Static Fixed",
     "enumValues":       "0,1,2,3,4,5,6,7",
     "decimalPlaces":    0
 },

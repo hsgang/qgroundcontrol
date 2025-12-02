@@ -220,55 +220,31 @@ Rectangle {
                 // Take Photo, Start/Stop Video button
                 Rectangle {
                     Layout.alignment:   Qt.AlignHCenter
-                    //color:              "transparent"
+                    color:              qgcPal.button
                     width:              ScreenTools.defaultFontPixelWidth * 6
                     height:             width
                     radius:             width * 0.5
-                    color:              Qt.rgba(0,0,0,.1)
-                    //border.color:       qgcPal.photoCaptureButtonColor
-                    //border.width:       width * 0.1
+                    border.width:       1
+                    border.color:       qgcPal.buttonBorder
 
-                    // outer ring color fill
                     Rectangle {
-                        anchors {
-                            centerIn:           parent
-                            alignWhenCentered:  false
-                        }
-                        color:              "transparent"
-                        width:              parent.width - 2
-                        height:             width
-                        radius:             width * 0.5
-                        border.color:       qgcPal.photoCaptureButtonColor
-                        border.width:       3
+                        anchors.centerIn:           parent
+                        anchors.alignWhenCentered:  false // Prevents anchors.centerIn from snapping to integer coordinates, which can throw off centering.
+                        color:                      qgcPal.buttonBorder
+                        width:                      parent.width * 0.75
+                        height:                     width
+                        radius:                     width * 0.5
                     }
 
                     Rectangle {
-                        anchors {
-                            centerIn:           parent
-                            alignWhenCentered:  false
-                        }
-                        color:              Qt.rgba(0,0,0,0)
-                        width:              parent.width - 1
-                        height:             width
-                        radius:             width * 0.5
-                        border.color:       "white"
-                        border.width:       parent.border.width - 1
-                    }
-
-                    Rectangle {
-                        // anchors.centerIn snaps to integer coordinates, which
-                        // depending on DPI can throw the centering off.
-                        // Setting alignWhenCentered to false avoids this issue.
-                        anchors {
-                            centerIn:           parent
-                            alignWhenCentered:  false
-                        }
-                        width:              parent.width * (_isShootingInPhotoMode ? 0.6 : (_isShootingInVideoMode ? 0.4 : 0.7))
-                        height:             width
-                        radius:             _isShootingInCurrentMode ? ScreenTools.defaultFontPixelWidth * 0.5 : width * 0.5
-                        color:              _captureButtonColor
-                        border.color:       Qt.rgba(0,0,0,.2)
-                        border.width:       .5
+                        anchors.centerIn:           parent
+                        anchors.alignWhenCentered:  false // Prevents anchors.centerIn from snapping to integer coordinates, which can throw off centering.
+                        width:                      parent.width * (_isShootingInPhotoMode ? 0.6 : (_isShootingInVideoMode ? 0.4 : 0.7))
+                        height:                     width
+                        radius:                     _isShootingInCurrentMode ? ScreenTools.defaultFontPixelWidth * 0.5 : width * 0.5
+                        color:                      _captureButtonColor
+                        border.width:               1
+                        border.color:               qgcPal.buttonBorder
 
                         property bool _isShootingInPhotoMode:   _cameraInPhotoMode && _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_IN_PROGRESS
                         property bool _isShootingInVideoMode:   (!_cameraInPhotoMode && _camera.videoCaptureStatus === MavlinkCameraControl.VIDEO_CAPTURE_STATUS_RUNNING)
