@@ -25,8 +25,8 @@ Rectangle {
 
     readonly property real _defaultTextHeight:  ScreenTools.defaultFontPixelHeight
     readonly property real _defaultTextWidth:   ScreenTools.defaultFontPixelWidth
-    readonly property real _horizontalMargin:   ScreenTools.defaultFontPixelHeight / 2
-    readonly property real _verticalMargin:     ScreenTools.defaultFontPixelHeight / 2
+    readonly property real _horizontalMargin:   _defaultTextWidth / 2
+    readonly property real _verticalMargin:     _defaultTextHeight / 2
     readonly property real _buttonHeight:       ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelHeight * 3 : ScreenTools.defaultFontPixelHeight * 2
 
     property bool _first: true
@@ -64,100 +64,94 @@ Rectangle {
 
     ButtonGroup { id: buttonGroup }
 
-    QGCFlickable {
-        id:                 buttonList
-        width:              buttonColumn.width
-        anchors.topMargin:  _verticalMargin
-        anchors.top:        parent.top
-        anchors.bottom:     parent.bottom
-        anchors.leftMargin: _horizontalMargin
-        anchors.left:       parent.left
-        contentHeight:      buttonColumn.height + _verticalMargin
-        flickableDirection: Flickable.VerticalFlick
-        clip:               true
+    FlyViewToolBar {
+        id:         toolbar
+        visible:    !QGroundControl.videoManager.fullScreen
+    }
 
-        ColumnLayout {
-            id:         buttonColumn
-            spacing:    0
+    Item {
+        id: appsettingsHolder
+        anchors.top:    toolbar.bottom
+        anchors.bottom: parent.bottom
+        anchors.left:   parent.left
+        anchors.right:  parent.right
 
         QGCFlickable {
             id:                 buttonList
             width:              buttonColumn.width
-            anchors.topMargin:  _defaultTextHeight / 2
+            anchors.topMargin:  _verticalMargin
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
             anchors.leftMargin: _horizontalMargin
             anchors.left:       parent.left
-            contentHeight:      buttonColumn.height
+            contentHeight:      buttonColumn.height + _verticalMargin
             flickableDirection: Flickable.VerticalFlick
             clip:               true
 
-            Component {
-                id: dividerComponent
+            ColumnLayout {
+                id:         buttonColumn
+                spacing:    _defaultTextHeight / 2
 
-                Item { height: ScreenTools.defaultFontPixelHeight / 2 }
-            }
+                property real _maxButtonWidth: 0
 
-            Component {
-                id: buttonComponent
+                Component {
+                    id: dividerComponent
 
-                SettingsButton {
-                    text:               modelName
-                    icon.source:        modelIconUrl
-                    visible:            modelPageVisible()
-                    ButtonGroup.group:  buttonGroup
+                    Item { height: ScreenTools.defaultFontPixelHeight / 2 }
+                }
 
-                    onClicked: {
-                        if (mainWindow.allowViewSwitch()) {
-                            if (rightPanel.source !== modelUrl) {
-                                rightPanel.source = modelUrl
-                            }
-                            checked = true
-                        }
-                    }
+                Component {
+                    id: buttonComponent
 
-                    Component.onCompleted: {
-                        if (globals.commingFromRIDIndicator) {
-                            _commingFromRIDSettings = true
-                        }
-                        if(_first) {
-                            _first = false
-                            checked = true
-                        }
-                        if (_commingFromRIDSettings) {
-                            checked = false
-                            _commingFromRIDSettings = false
-                            if (modelUrl == "qrc:/qml/QGroundControl/AppSettings/RemoteIDSettings.qml") {
+                    SettingsButton {
+                        text:               modelName
+                        icon.source:        modelIconUrl
+                        visible:            modelPageVisible()
+                        ButtonGroup.group:  buttonGroup
+
+                        onClicked: {
+                            if (mainWindow.allowViewSwitch()) {
+                                if (rightPanel.source !== modelUrl) {
+                                    rightPanel.source = modelUrl
+                                }
                                 checked = true
                             }
                         }
+
+                        Component.onCompleted: {
+                            if (globals.commingFromRIDIndicator) {
+                                _commingFromRIDSettings = true
+                            }
+                            if(_first) {
+                                _first = false
+                                checked = true
+                            }
+                            if (_commingFromRIDSettings) {
+                                checked = false
+                                _commingFromRIDSettings = false
+                                if (modelUrl == "qrc:/qml/QGroundControl/AppSettings/RemoteIDSettings.qml") {
+                                    checked = true
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Repeater {
+                    id:     buttonRepeater
+                    model:  settingsPagesModel
+
+                    Loader {
+                        Layout.fillWidth: true
+                        sourceComponent: name === "Divider" ? dividerComponent : buttonComponent
+
+                        property var modelName: name
+                        property var modelIconUrl: iconUrl
+                        property var modelUrl: url
+                        property var modelPageVisible: pageVisible
                     }
                 }
             }
-
-            Repeater {
-                id:     buttonRepeater
-                model:  settingsPagesModel
-
-                Loader {
-                    Layout.fillWidth: true
-                    sourceComponent: name === "Divider" ? dividerComponent : buttonComponent
-
-                    property var modelName: name
-                    property var modelIconUrl: iconUrl
-                    property var modelUrl: url
-                    property var modelPageVisible: pageVisible
-                }
-            }
-        }
-
-        Rectangle {
-            id:  topDividerBar
-            anchors.top:            parent.top
-            anchors.right:          parent.right
-            anchors.left:           parent.left
-            height:                 1
-            color:                  Qt.darker(QGroundControl.globalPalette.text, 4)
         }
 
         Rectangle {
@@ -169,7 +163,7 @@ Rectangle {
             anchors.top:            parent.top
             anchors.bottom:         parent.bottom
             width:                  1
-            color:                  qgcPal.windowShadeLight
+            color:                  qgcPal.windowShade
         }
 
         //-- Panel Contents
