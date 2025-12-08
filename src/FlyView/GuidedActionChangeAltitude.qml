@@ -7,7 +7,7 @@
  *
  ****************************************************************************/
 
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 
 GuidedToolStripAction {
     text:       _guidedController.changeAltTitle

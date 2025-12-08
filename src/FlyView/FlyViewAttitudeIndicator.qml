@@ -22,7 +22,7 @@ import QGroundControl
 import QGroundControl.Controllers
 import QGroundControl.Controls
 import QGroundControl.FactSystem
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 import QGroundControl.FlightMap
 import QGroundControl.Palette
 import QGroundControl.ScreenTools

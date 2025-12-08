@@ -8,7 +8,7 @@ import QtQuick.Effects
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.FactControls
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 
 Rectangle {
     id:     welcomeView

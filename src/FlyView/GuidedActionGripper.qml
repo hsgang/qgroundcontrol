@@ -7,7 +7,7 @@
  *
  ****************************************************************************/
 
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 import QGroundControl
 
 GuidedToolStripAction {

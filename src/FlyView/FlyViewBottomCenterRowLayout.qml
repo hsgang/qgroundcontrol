@@ -13,7 +13,7 @@ import QtQuick.Controls
 
 import QGroundControl
 import QGroundControl.Controls
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 
 RowLayout {
 

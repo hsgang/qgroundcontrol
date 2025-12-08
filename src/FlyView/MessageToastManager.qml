@@ -1,6 +1,6 @@
 import QtQuick
 
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 import QGroundControl.Controls
 
 ListView {

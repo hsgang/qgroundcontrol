@@ -14,7 +14,7 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.Controllers
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 import QGroundControl.ScreenTools
 
 ToolStripAction {
