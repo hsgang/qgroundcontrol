@@ -334,7 +334,7 @@ Rectangle {
             anchors.right:          parent.right
             anchors.left:           parent.left
             height:                 1
-            color:                  Qt.darker(QGroundControl.globalPalette.text, 4)
+            color:                  qgcPal.windowShade
         }
 
         Rectangle {

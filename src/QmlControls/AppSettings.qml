@@ -155,6 +155,15 @@ Rectangle {
         }
 
         Rectangle {
+            id:                     topDividerBar
+            anchors.top:            parent.top
+            anchors.right:          parent.right
+            anchors.left:           parent.left
+            height:                 1
+            color:                  qgcPal.windowShade
+        }
+
+        Rectangle {
             id:                     divider
             anchors.topMargin:      _verticalMargin
             anchors.bottomMargin:   _verticalMargin

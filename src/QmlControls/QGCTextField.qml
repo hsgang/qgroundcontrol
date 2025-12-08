@@ -103,7 +103,7 @@ TextField {
         border.width:   control.validationError ? 2 : (qgcPal.globalTheme === QGCPalette.Light ? 1 : 0)
         border.color:   control.validationError ? qgcPal.colorRed : qgcPal.buttonBorder
         radius:         ScreenTools.defaultBorderRadius
-        color:          qgcPal.textField
+        color:          "transparent"
         implicitWidth:  ScreenTools.implicitTextFieldWidth
         implicitHeight: ScreenTools.implicitTextFieldHeight
 
