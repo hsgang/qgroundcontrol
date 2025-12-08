@@ -66,7 +66,7 @@ AbstractButton   {
                 height:                 parent.height - (_sliderInset * 2)
                 width:                  height
                 radius:                 height / 2
-                color:                  control.checked ? qgcPal.buttonHighlight : qgcPal.buttonText
+                color:                  control.checked ? qgcPal.primaryButton : qgcPal.buttonText
             }
         }
     }

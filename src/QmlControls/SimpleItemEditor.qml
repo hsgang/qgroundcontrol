@@ -153,11 +153,15 @@ Rectangle {
                     }
                 }
 
-                FactTextFieldSlider {
-                    id:                 altField
+                FactValueStepper {
+                    id:                 altValueStepper
                     Layout.fillWidth:   true
-                    label:              qsTr("Altitude")
                     fact:               missionItem.altitude
+                    showUnits:          true
+                    showLabel:          true
+                    label:              qsTr("Altitude")
+                    largeStep:          10
+                    smallStep:          1
                 }
 
                 QGCLabel {
@@ -197,10 +201,14 @@ Rectangle {
             Repeater {
                 model: missionItem.textFieldFacts
 
-                FactTextFieldSlider {
-                    width:          parent.width
+                FactValueStepper {
+                    width:              parent.width
                     label:              object.name
                     fact:               object
+                    showUnits:          true
+                    showLabel:          true
+                    largeStep:          10
+                    smallStep:          1
                     enabled:            !object.readOnly
                 }
             }
@@ -208,10 +216,14 @@ Rectangle {
             Repeater {
                 model: missionItem.nanFacts
 
-                FactTextFieldSlider {
+                FactValueStepper {
                     width:                  parent.width
                     label:                  object.name
                     fact:                   object
+                    showUnits:              true
+                    showLabel:              true
+                    largeStep:              10
+                    smallStep:              1
                     showEnableCheckbox:     true
                     enableCheckBoxChecked:  !isNaN(object.rawValue)
 
@@ -219,10 +231,14 @@ Rectangle {
                 }
             }
 
-            FactTextFieldSlider {
+            FactValueStepper {
                 width:                  parent.width
                 label:                  qsTr("Flight Speed")
                 fact:                   missionItem.speedSection.flightSpeed
+                showUnits:              true
+                showLabel:              true
+                largeStep:              10
+                smallStep:              1
                 showEnableCheckbox:     true
                 enableCheckBoxChecked:  missionItem.speedSection.specifyFlightSpeed
                 visible:                missionItem.speedSection.available

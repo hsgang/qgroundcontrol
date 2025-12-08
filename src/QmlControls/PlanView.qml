@@ -135,7 +135,7 @@ Item {
     function loadDownloadedMission(filePath) {
         _planMasterController.loadFromFile(filePath)
         _planMasterController.fitViewportToItems()
-        _missionController.setCurrentPlanViewSeqNum(0, true)
+        _missionController.setCurrentPlanViewSeqNum(1, true)
     }
 
     Component {
@@ -284,7 +284,7 @@ Item {
             if (_visualItems && _visualItems.count !== 1) {
                 mapFitFunctions.fitMapViewportToMissionItems()
             }
-            _missionController.setCurrentPlanViewSeqNum(0, true)
+            _missionController.setCurrentPlanViewSeqNum(1, true)
         }
     }
 
@@ -348,7 +348,7 @@ Item {
         onAcceptedForLoad: (file) => {
             _planMasterController.loadFromFile(file)
             _planMasterController.fitViewportToItems()
-            _missionController.setCurrentPlanViewSeqNum(0, true)
+            _missionController.setCurrentPlanViewSeqNum(1, true)
             close()
         }
     }
@@ -779,7 +779,7 @@ Item {
                             QGCLabel {
                                 Layout.fillWidth:       true
                                 horizontalAlignment:    Text.AlignHCenter
-                                text:                   _missionController.currentPlanViewItem.commandName
+                                text:                   _missionController.currentPlanViewItem ? "#" + _missionController.currentPlanViewItem.sequenceNumber + " " + _missionController.currentPlanViewItem.commandName : ""
                             }
 
                             QGCColoredImage {

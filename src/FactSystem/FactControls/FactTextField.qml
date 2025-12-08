@@ -9,12 +9,13 @@ import QGroundControl.Controls
 
 
 QGCTextField {
-    id:                 control
-    text:               fact ? fact.valueString : ""
-    unitsLabel:         fact ? fact.units : ""
-    showUnits:          true
-    showHelp:           false
-    numericValuesOnly:  fact && !fact.typeIsString
+    id:                     control
+    text:                   fact ? fact.valueString : ""
+    unitsLabel:             fact ? fact.units : ""
+    showUnits:              true
+    showHelp:               false
+    numericValuesOnly:      fact && !fact.typeIsString
+    horizontalAlignment:    Text.AlignLeft
 
     signal updated()
 

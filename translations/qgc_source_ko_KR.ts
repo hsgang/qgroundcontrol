@@ -15033,8 +15033,18 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="817"/>
+        <source>Start</source>
+        <translation>시작</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/PlanView.qml" line="817"/>
         <source>Mission</source>
         <translation>미션</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/PlanView.qml" line="817"/>
+        <source>Other</source>
+        <translation>기타</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="820"/>

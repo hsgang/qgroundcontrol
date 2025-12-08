@@ -55,9 +55,10 @@ Rectangle {
 
         Loader {
             id:             editorLoader
-            source:         missionItem.editorQml
+            source:         missionItem ? missionItem.editorQml : ""
 
             property var    masterController:   _masterController
+            property var    missionItem:        _root.missionItem
             property real   availableWidth:     parent.width
             property var    editorRoot:         _root
         }
