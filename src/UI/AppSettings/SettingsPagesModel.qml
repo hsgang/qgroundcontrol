@@ -106,10 +106,14 @@ ListModel {
     }
 
     ListElement {
-        name: qsTr("Logging")
-        url: "qrc:/qml/QGroundControl/Controls/AppLogging.qml"
-        iconUrl: "qrc:/InstrumentValueIcons/conversation.svg"
+        name: qsTr("Telemetry")
+        url: "qrc:/qml/QGroundControl/AppSettings/TelemetrySettings.qml"
+        iconUrl: "qrc:/InstrumentValueIcons/drone.svg"
         pageVisible: function() { return true }
+    }
+
+    ListElement {
+        name: "Divider"
     }
 
     ListElement {

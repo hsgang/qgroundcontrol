@@ -8,12 +8,12 @@
  ****************************************************************************/
 
 import QGroundControl
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 
 GuidedToolStripAction {
-    text:       _guidedController.rtlTitle
-    iconSource: "/res/rtl.svg"
-    visible:    true
-    enabled:    _guidedController.showRTL
-    actionID:   _guidedController.actionRTL
+    text:       _guidedController.pauseTitle
+    iconSource: "/res/pause-mission.svg"
+    visible:    _guidedController.showPause
+    enabled:    _guidedController.showPause
+    actionID:   _guidedController.actionPause
 }

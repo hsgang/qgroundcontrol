@@ -8,12 +8,13 @@
  ****************************************************************************/
 
 import QGroundControl
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 
 GuidedToolStripAction {
-    text:       _guidedController.takeoffTitle
-    iconSource: "/res/takeoff.svg"
-    visible:    _guidedController.showTakeoff || !_guidedController.showLand
-    enabled:    _guidedController.showTakeoff && _guidedController._vehicleArmed
-    actionID:   _guidedController.actionTakeoff
+    text:       _guidedController.landTitle
+    message:    _guidedController.landMessage
+    iconSource: "/res/land.svg"
+    visible:    _guidedController.showLand && !_guidedController.showTakeoff
+    enabled:    _guidedController.showLand
+    actionID:   _guidedController.actionLand
 }

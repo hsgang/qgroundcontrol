@@ -14,7 +14,7 @@ import QtQml.Models
 import QGroundControl
 
 import QGroundControl.Controls
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 
 
 Item {
@@ -22,15 +22,15 @@ Item {
     PreFlightCheckModel {
         id:     listModel
         PreFlightCheckGroup {
-            name: qsTr("Rover Initial Checks")
+            name: qsTr("Generic Initial checks")
 
             PreFlightCheckButton {
                 name:           qsTr("Hardware")
-                manualText:     qsTr("Battery mounted and secured?")
+                manualText:     qsTr("Props mounted? Wings secured? Tail secured?")
             }
 
             PreFlightBatteryCheck {
-                failurePercent:                 40
+                failurePercent:                 60
                 allowFailurePercentOverride:    false
             }
 
@@ -48,6 +48,16 @@ Item {
 
         PreFlightCheckGroup {
             name: qsTr("Please arm the vehicle here")
+
+            PreFlightCheckButton {
+                name:            qsTr("Actuators")
+                manualText:      qsTr("Move all control surfaces. Did they work properly?")
+            }
+
+            PreFlightCheckButton {
+                name:            qsTr("Motors")
+                manualText:      qsTr("Propellers free? Then throttle up gently. Working properly?")
+            }
 
             PreFlightCheckButton {
                 name:           qsTr("Mission")
@@ -69,12 +79,12 @@ Item {
 
             PreFlightCheckButton {
                 name:           qsTr("Wind & weather")
-                manualText:     qsTr("OK for your platform?")
+                manualText:     qsTr("OK for your platform? Lauching into the wind?")
             }
 
             PreFlightCheckButton {
-                name:           qsTr("Mission area")
-                manualText:     qsTr("Mission area and path free of obstacles/people?")
+                name:           qsTr("Flight area")
+                manualText:     qsTr("Launch area and path free of obstacles/people?")
             }
         }
     }

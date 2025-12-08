@@ -12,6 +12,7 @@ import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.Controls
+import QGroundControl.FlyView
 
 RowLayout {
     // TelemetryValuesBar {

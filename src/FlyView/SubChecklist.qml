@@ -14,7 +14,7 @@ import QtQml.Models
 import QGroundControl
 
 import QGroundControl.Controls
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 
 
 Item {
@@ -22,11 +22,11 @@ Item {
     PreFlightCheckModel {
         id:     listModel
         PreFlightCheckGroup {
-            name: qsTr("VTOL Initial Checks")
+            name: qsTr("Submarine Initial checks")
 
             PreFlightCheckButton {
                 name:           qsTr("Hardware")
-                manualText:     qsTr("Props mounted? Wings secured? Tail secured?")
+                manualText:     qsTr("All seals in place?")
             }
 
             PreFlightBatteryCheck {
@@ -60,8 +60,8 @@ Item {
             }
 
             PreFlightCheckButton {
-                name:        qsTr("Mission")
-                manualText:  qsTr("Please confirm mission is valid (waypoints valid, no terrain collision).")
+                name:           qsTr("Mission")
+                manualText:     qsTr("Please confirm mission is valid (waypoints valid, no terrain collision).")
             }
 
             PreFlightSoundCheck {
@@ -73,19 +73,10 @@ Item {
 
             // Check list item group 2 - Final checks before launch
             PreFlightCheckButton {
-                name:        qsTr("Payload")
-                manualText:  qsTr("Configured and started? Payload lid closed?")
+                name:           qsTr("Payload")
+                manualText:     qsTr("Configured and started? Payload lid closed?")
             }
 
-            PreFlightCheckButton {
-                name:        "Wind & weather"
-                manualText:  qsTr("OK for your platform? Lauching into the wind?")
-            }
-
-            PreFlightCheckButton {
-                name:        qsTr("Flight area")
-                manualText:  qsTr("Launch area and path free of obstacles/people?")
-            }
         }
     }
 }

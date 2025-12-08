@@ -35,9 +35,9 @@ Rectangle {
 
     function showSettingsPage(settingsPage) {
         for (var i=0; i<buttonRepeater.count; i++) {
-            var button = buttonRepeater.itemAt(i)
-            if (button.text === settingsPage) {
-                button.clicked()
+            var loader = buttonRepeater.itemAt(i)
+            if (loader && loader.item && loader.item.text === settingsPage) {
+                loader.item.clicked()
                 break
             }
         }
@@ -62,17 +62,23 @@ Rectangle {
 
     SettingsPagesModel { id: settingsPagesModel }
 
-    FlyViewToolBar {
-        id:         toolbar
-        visible:    !QGroundControl.videoManager.fullScreen
-    }
+    ButtonGroup { id: buttonGroup }
 
-    Item {
-        id: appsettingsHolder
-        anchors.top:    toolbar.bottom
-        anchors.bottom: parent.bottom
-        anchors.left:   parent.left
-        anchors.right:  parent.right
+    QGCFlickable {
+        id:                 buttonList
+        width:              buttonColumn.width
+        anchors.topMargin:  _verticalMargin
+        anchors.top:        parent.top
+        anchors.bottom:     parent.bottom
+        anchors.leftMargin: _horizontalMargin
+        anchors.left:       parent.left
+        contentHeight:      buttonColumn.height + _verticalMargin
+        flickableDirection: Flickable.VerticalFlick
+        clip:               true
+
+        ColumnLayout {
+            id:         buttonColumn
+            spacing:    0
 
         QGCFlickable {
             id:                 buttonList
@@ -86,31 +92,61 @@ Rectangle {
             flickableDirection: Flickable.VerticalFlick
             clip:               true
 
-            ColumnLayout {
-                id:         buttonColumn
-                spacing:    _defaultTextHeight / 2
+            Component {
+                id: dividerComponent
 
-                Repeater {
-                    id:     buttonRepeater
-                    model:  settingsPagesModel
+                Item { height: ScreenTools.defaultFontPixelHeight / 2 }
+            }
 
-                    Component.onCompleted:  itemAt(0).checked = true
+            Component {
+                id: buttonComponent
 
-                    SettingsButton {
-                        Layout.fillWidth:   true
-                        text:               name
-                        icon.source:        iconUrl
-                        visible:            pageVisible()
+                SettingsButton {
+                    text:               modelName
+                    icon.source:        modelIconUrl
+                    visible:            modelPageVisible()
+                    ButtonGroup.group:  buttonGroup
 
-                        onClicked: {
-                            if (mainWindow.allowViewSwitch()) {
-                                if (rightPanel.source !== url) {
-                                    rightPanel.source = url
-                                }
+                    onClicked: {
+                        if (mainWindow.allowViewSwitch()) {
+                            if (rightPanel.source !== modelUrl) {
+                                rightPanel.source = modelUrl
+                            }
+                            checked = true
+                        }
+                    }
+
+                    Component.onCompleted: {
+                        if (globals.commingFromRIDIndicator) {
+                            _commingFromRIDSettings = true
+                        }
+                        if(_first) {
+                            _first = false
+                            checked = true
+                        }
+                        if (_commingFromRIDSettings) {
+                            checked = false
+                            _commingFromRIDSettings = false
+                            if (modelUrl == "qrc:/qml/QGroundControl/AppSettings/RemoteIDSettings.qml") {
                                 checked = true
                             }
                         }
                     }
+                }
+            }
+
+            Repeater {
+                id:     buttonRepeater
+                model:  settingsPagesModel
+
+                Loader {
+                    Layout.fillWidth: true
+                    sourceComponent: name === "Divider" ? dividerComponent : buttonComponent
+
+                    property var modelName: name
+                    property var modelIconUrl: iconUrl
+                    property var modelUrl: url
+                    property var modelPageVisible: pageVisible
                 }
             }
         }

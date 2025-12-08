@@ -14,11 +14,9 @@ import QtQuick.Layouts
 import QtQuick.Window
 
 import QGroundControl
-
 import QGroundControl.Controls
 import QGroundControl.FactControls
-
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 import QGroundControl.FlightMap
 import QGroundControl.VehicleSetup
 import QGroundControl.AnalyzeView
@@ -29,11 +27,11 @@ ApplicationWindow {
     id:             mainWindow
     title:          QGroundControl.displayName
     visible:        true
-    flags:          Qt.Window | (ScreenTools.isMobile ? (Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint) : 0)
-    topPadding:     ScreenTools.isMobile ? 0 : undefined
-    bottomPadding:  ScreenTools.isMobile ? 0 : undefined
-    leftPadding:    ScreenTools.isMobile ? 0 : undefined
-    rightPadding:   ScreenTools.isMobile ? 0 : undefined
+    flags:          Qt.Window | (ScreenTools.isAndroid ? (Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint) : 0)
+    topPadding:     ScreenTools.isAndroid ? 0 : undefined
+    bottomPadding:  ScreenTools.isAndroid ? 0 : undefined
+    leftPadding:    ScreenTools.isAndroid ? 0 : undefined
+    rightPadding:   ScreenTools.isAndroid ? 0 : undefined
 
     property bool   _utmspSendActTrigger
 

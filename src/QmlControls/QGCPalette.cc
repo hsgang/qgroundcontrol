@@ -60,7 +60,7 @@ void QGCPalette::_buildMap()
     DECLARE_QGC_COLOR(button,               "#eeeeee", "#eeeeee", "#707070", "#3a3a3a")
     DECLARE_QGC_COLOR(buttonBorder,         "#d9d9d9", "#909090", "#707070", "#adadb8")
     DECLARE_QGC_COLOR(buttonText,           "#9d9d9d", "#000000", "#707070", "#ffffff")
-    DECLARE_QGC_COLOR(buttonHighlight,      "#e4e4e4", "#1E88E5", "#262626", "#4f4f4f") //"#484848")
+    DECLARE_QGC_COLOR(buttonHighlight,      "#e4e4e4", "#1E88E5", "#262626", "#4f4f4f")
     DECLARE_QGC_COLOR(buttonHighlightText,  "#2c2c2c", "#303030", "#303030", "#ffffff")
     DECLARE_QGC_COLOR(primaryButton,        "#585858", "#1976d2", "#585858", "#1565C0")
     DECLARE_QGC_COLOR(primaryButtonText,    "#2c2c2c", "#000000", "#2c2c2c", "#ffffff")
@@ -88,7 +88,7 @@ void QGCPalette::_buildMap()
     DECLARE_QGC_COLOR(statusPendingText,    "#9d9d9d", "#000000", "#707070", "#ffffff")
     DECLARE_QGC_COLOR(toolbarBackground,    "#00ffffff", "#00ffffff", "#00121212", "#00121212")
     DECLARE_QGC_COLOR(toolbarDivider,       "#00000000", "#00000000", "#00000000", "#00000000")
-    DECLARE_QGC_COLOR(groupBorder,          "#bbbbbb", "#bbbbbb", "#424242", "#424242")
+    DECLARE_QGC_COLOR(groupBorder,          "#bbbbbb", "#3A9BDC", "#424242", "#424242")
 
     // Colors not affecting by theming
     //                                                      Disabled     Enabled

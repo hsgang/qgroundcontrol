@@ -561,7 +561,7 @@ Rectangle {
                                         initialized = true
                                     }
                                 }
-                                QGCSwitch {
+                                QGCCheckBoxSlider {
                                     checked:    parent._fact ? parent._fact.value : false
                                     visible:    parent._isBool
                                     onClicked:  parent._fact.value = checked ? 1 : 0
@@ -590,7 +590,7 @@ Rectangle {
                             onValueChanged:     _camera.photoLapse = value
                         }
 
-                        QGCSwitch {
+                        QGCCheckBoxSlider {
                             checked:    _videoSettings.gridLines.rawValue
                             visible:    _camera.hasVideoStream
                             onClicked:  _videoSettings.gridLines.rawValue = checked ? 1 : 0

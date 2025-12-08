@@ -15,12 +15,13 @@ import QGroundControl
 import QGroundControl.Controls
 
 AbstractButton   {
-    id:             control
-    checkable:      true
-    padding:        0
+    id:         control
+    checkable:  true
+    padding:    0
 
-    property bool   _showBorder: qgcPal.globalTheme === QGCPalette.Light
+    property bool _showBorder:  qgcPal.globalTheme === QGCPalette.Light
     property alias description:         _description.text
+    property int  _sliderInset: 2
 
     QGCPalette { id: qgcPal; colorGroupEnabled: control.enabled }
 
@@ -55,19 +56,17 @@ AbstractButton   {
             height:                 ScreenTools.defaultFontPixelHeight
             width:                  height * 2
             radius:                 height / 2
-            color:                  control.checked ? qgcPal.primaryButton : qgcPal.windowShade
+            color:                  qgcPal.button
             border.width:           _showBorder ? 1 : 0
             border.color:           qgcPal.groupBorder
 
             Rectangle {
                 anchors.verticalCenter: parent.verticalCenter
-                x:                      checked ? indicator.width - width - 2 : 2
-                height:                 parent.height - 4
+                x:                      checked ? indicator.width - width - _sliderInset : _sliderInset
+                height:                 parent.height - (_sliderInset * 2)
                 width:                  height
                 radius:                 height / 2
-                color:                  "white"
-                border.color:           qgcPal.groupBorder
-                border.width:           _showBorder ? 1 : 0
+                color:                  control.checked ? qgcPal.buttonHighlight : qgcPal.buttonText
             }
         }
     }

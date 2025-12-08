@@ -14,7 +14,7 @@ import QtQml.Models
 import QGroundControl
 
 import QGroundControl.Controls
-import QGroundControl.FlightDisplay
+import QGroundControl.FlyView
 
 
 Item {
@@ -22,11 +22,11 @@ Item {
     PreFlightCheckModel {
         id:     listModel
         PreFlightCheckGroup {
-            name: qsTr("Submarine Initial checks")
+            name: qsTr("Fixed Wing Initial Checks")
 
             PreFlightCheckButton {
                 name:           qsTr("Hardware")
-                manualText:     qsTr("All seals in place?")
+                manualText:     qsTr("Props mounted? Wings secured? Tail secured?")
             }
 
             PreFlightBatteryCheck {
@@ -77,6 +77,15 @@ Item {
                 manualText:     qsTr("Configured and started? Payload lid closed?")
             }
 
+            PreFlightCheckButton {
+                name:           qsTr("Wind & weather")
+                manualText:     qsTr("OK for your platform? Lauching into the wind?")
+            }
+
+            PreFlightCheckButton {
+                name:           qsTr("Flight area")
+                manualText:     qsTr("Launch area and path free of obstacles/people?")
+            }
         }
     }
 }
