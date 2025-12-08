@@ -9,10 +9,10 @@ CheckBox {
     id:             control
     spacing:        _noText ? 0 : ScreenTools.defaultFontPixelWidth
     focusPolicy:    Qt.ClickFocus
+    leftPadding:    0
 
     Component.onCompleted: {
         if (_noText) {
-            leftPadding = 0
             rightPadding = 0
         }
     }
