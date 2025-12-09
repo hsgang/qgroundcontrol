@@ -69,7 +69,7 @@ ToolIndicatorPage {
     }
 
 
-    property bool   isGNSS2:            _activeVehicle.gps2.lock.value
+    property bool isGNSS2: _activeVehicle && _activeVehicle.gps2.lock.rawValue !== undefined && _activeVehicle.gps2.lock.rawValue !== null ? _activeVehicle.gps2.lock.value > 0 : false
 
     contentComponent: Component {
         ColumnLayout {

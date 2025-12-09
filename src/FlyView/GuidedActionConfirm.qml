@@ -33,13 +33,17 @@ Item {
     property alias  optionChecked:      optionCheckBox.checked
 
     property real _margins:         2
-    property bool _emergencyAction: action === guidedController.actionEmergencyStop
+    property bool _emergencyAction: guidedController ? (action === guidedController.actionEmergencyStop) : false
 
     // Properties of UTM adapter
     property bool   utmspSliderTrigger
     property bool   _utmspEnabled:                       QGroundControl.utmspSupported
 
-    Component.onCompleted: guidedController.confirmDialog = this
+    Component.onCompleted: {
+        if (guidedController) {
+            guidedController.confirmDialog = this
+        }
+    }
 
     onHideTriggerChanged: {
         if (hideTrigger) {
@@ -105,7 +109,9 @@ Item {
                     guidedValueSlider.visible = false
                 }
                 hideTrigger = false
-                guidedController.executeAction(control.action, control.actionData, sliderOutputValue, control.optionChecked)
+                if (guidedController) {
+                    guidedController.executeAction(control.action, control.actionData, sliderOutputValue, control.optionChecked)
+                }
                 if (mapIndicator) {
                     mapIndicator.actionConfirmed()
                     mapIndicator = undefined
@@ -124,9 +130,9 @@ Item {
 
         QGCColoredImage {
             id:                 closeButton
-            Layout.alignment:   Qt.AlignTop
+            //Layout.alignment:   Qt.AlignVCenter
             width:              height
-            height:             ScreenTools.defaultFontPixelHeight * 0.5
+            height:             parent.height * 0.3
             source:             "/res/XDelete.svg"
             fillMode:           Image.PreserveAspectFit
             color:              qgcPal.text

@@ -63,7 +63,7 @@ DelayButton {
     background: Rectangle {
         id:             backRect
         radius:         backRadius
-        implicitWidth:  Math.max(control._showHelp ? helpText.contentWidth : 0, ScreenTools.implicitButtonWidth)
+        implicitWidth:  Math.max(ScreenTools.defaultFontPixelWidth * 16, Math.max(control._showHelp ? helpText.contentWidth : 0, ScreenTools.implicitButtonWidth))
         implicitHeight: ScreenTools.implicitButtonHeight
         color:          qgcPal.button
         border.width:   showBorder ? 1 : 0
