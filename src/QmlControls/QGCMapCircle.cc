@@ -14,10 +14,12 @@
 QGCMapCircle::QGCMapCircle(QObject* parent)
     : QObject           (parent)
     , _dirty            (false)
+    , _radius           (ParameterManager::defaultComponentId, _radiusFactName, FactMetaData::valueTypeDouble)
     , _interactive      (false)
     , _showRotation     (false)
     , _clockwiseRotation(true)
 {
+    _radius.setRawValue(0.0);
     _init();
 }
 

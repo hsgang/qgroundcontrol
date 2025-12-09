@@ -27,7 +27,7 @@ Item {
     property var _ntripManager:         QGroundControl.ntripManager
     property bool _communicationLost:   _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
 
-    property bool isGNSS2:              _activeVehicle ? _activeVehicle.gps2.lock.value : false
+    property bool isGNSS2:              _activeVehicle && _activeVehicle.gps2.lock.rawValue !== undefined && _activeVehicle.gps2.lock.rawValue !== null ? _activeVehicle.gps2.lock.value > 0 : false
 
     property var _settingsManager:      QGroundControl.settingsManager
     property var _ntrip:                _settingsManager.ntripSettings
