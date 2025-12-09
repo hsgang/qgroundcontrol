@@ -132,7 +132,6 @@ Item {
             parentToolInsets:       _toolInsets
             mapControl:             _mapControl
             visible:                !QGroundControl.videoManager.fullScreen
-            utmspActTrigger:        utmspSendActTrigger
             isViewer3DOpen:         viewer3DWindow.isOpen
         }
 
@@ -195,7 +194,9 @@ Item {
     }
 
     FlyViewToolBar {
-        id:         toolbar
-        visible:    !QGroundControl.videoManager.fullScreen
+        id:                 toolbar
+        guidedValueSlider:  _guidedValueSlider
+        utmspSliderTrigger: utmspSendActTrigger
+        visible:            !QGroundControl.videoManager.fullScreen
     }
 }

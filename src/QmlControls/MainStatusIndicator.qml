@@ -67,7 +67,7 @@ Rectangle {
             styleColor:         qgcPal.windowTransparent
 
             property string _commLostText:      qsTr("Comms Lost")
-            property string _readyToFlyText:    control._vehicleFlies ? qsTr("Ready To Fly") : qsTr("Ready")
+            property string _readyToFlyText:    qsTr("Ready")
             property string _notReadyToFlyText: qsTr("Not Ready")
             property string _disconnectedText:  qsTr("Disconnected")
             property string _armedText:         qsTr("Armed")

@@ -46,8 +46,6 @@ Item {
     property bool   _layoutSpacing:         ScreenTools.defaultFontPixelWidth
     property bool   _showSingleVehicleUI:   true
 
-    property bool utmspActTrigger
-
     property var _siyi: QGroundControl.siyi
     property SiYiCamera camera: _siyi.camera
 
@@ -149,19 +147,6 @@ Item {
         missionController:      _missionController
         geoFenceController:     _geoFenceController
         rallyPointController:   _rallyPointController
-    }
-
-    GuidedActionConfirm {
-        id:                         guidedActionConfirm
-        anchors.margins:            _toolsMargin * 2
-        anchors.top:                parent.top
-        anchors.horizontalCenter:   parent.horizontalCenter
-        z:                          QGroundControl.zOrderTopMost
-        guidedController:           _guidedController
-        guidedValueSlider:          _guidedValueSlider
-        utmspSliderTrigger:         utmspActTrigger
-
-        property real bottomEdgeCenterInset: visible ? height + _toolsMargin * 2 : 0
     }
 
     RequestConfirmPopup {
