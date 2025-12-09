@@ -2411,7 +2411,7 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
             SimpleMissionItem*  simpleItem = qobject_cast<SimpleMissionItem*>(pVI);
             int                 currentSeqNumber = pVI->sequenceNumber();
 
-            if (sequenceNumber != 0 && currentSeqNumber <= sequenceNumber && currentSeqNumber != 0) {
+            if (sequenceNumber != 0 && currentSeqNumber < sequenceNumber && currentSeqNumber != 0) {
                 if (pVI->specifiesCoordinate() && !pVI->isStandaloneCoordinate()) {
                     // Coordinate based flight commands prior to where the takeoff would be inserted
                     // Exclude Home position (sequence 0) from this check
