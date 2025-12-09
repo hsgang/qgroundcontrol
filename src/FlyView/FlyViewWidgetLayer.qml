@@ -61,7 +61,7 @@ Item {
         topEdgeCenterInset:     flyviewMissionProgress.topEdgeCenterInset
         topEdgeRightInset:      topRightPanel.topEdgeRightInset
         bottomEdgeLeftInset:    virtualJoystickMultiTouch.visible ? virtualJoystickMultiTouch.bottomEdgeLeftInset : parentToolInsets.bottomEdgeLeftInset
-        bottomEdgeCenterInset:  guidedActionConfirm.bottomEdgeCenterInset
+        bottomEdgeCenterInset:  parentToolInsets.bottomEdgeCenterInset
         bottomEdgeRightInset:   virtualJoystickMultiTouch.visible ? virtualJoystickMultiTouch.bottomEdgeRightInset : bottomRightRowLayout.bottomEdgeRightInset
     }
 
@@ -420,42 +420,6 @@ Item {
                     zoomMultipleRectangle.visible = false
                     siyiResultRectangle.visible = true
                 }
-            }
-        }
-    }
-
-    Rectangle {
-        id: zoomMultipleRectangle
-        anchors.top: parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
-        width: zoomMultipleLabel.width + zoomMultipleLabel.width * 0.4
-        height: zoomMultipleLabel.height + zoomMultipleLabel.height * 0.4
-        color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-        anchors.margins: _toolsMargin
-        visible: false
-        anchors.horizontalCenter: parent.horizontalCenter //telemetryPanel.visible ? telemetryPanel.horizontalCenter : parent.horizontalCenter
-        radius: _toolsMargin / 2
-
-        QGCLabel {
-            id: zoomMultipleLabel
-            text: "x " + (zoomMultipleLabel.zoomMultiple / 10).toFixed(1)
-            font.pointSize: ScreenTools.defaultFontPointSize * 1.5
-            anchors.centerIn: parent
-            color: qgcPal.text
-
-            Timer {
-                id: visibleTimer
-                interval: 5000
-                running: false
-                repeat: false
-                onTriggered: zoomMultipleRectangle.visible = false
-            }
-
-            property real zoomMultiple: camera.enableZoom ? camera.zoomMultiple : 1
-
-            onZoomMultipleChanged: {
-                siyiResultRectangle.visible = false
-                zoomMultipleRectangle.visible = true
-                visibleTimer.restart()
             }
         }
     }

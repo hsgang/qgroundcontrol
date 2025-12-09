@@ -65,8 +65,10 @@ Rectangle {
     ButtonGroup { id: buttonGroup }
 
     FlyViewToolBar {
-        id:         toolbar
-        visible:    !QGroundControl.videoManager.fullScreen
+        id:                 toolbar
+        guidedValueSlider:  null
+        utmspSliderTrigger: false
+        visible:            !QGroundControl.videoManager.fullScreen
     }
 
     Item {
