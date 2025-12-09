@@ -205,6 +205,7 @@ qt_add_qml_module(QGroundControlControlsModule
         PlanEditToolbar.qml
         PlanToolBarIndicators.qml
         PlanView.qml
+        PlanViewRightPanel.qml
         RallyPointEditorHeader.qml
         RallyPointItemEditor.qml
         RallyPointMapVisuals.qml
