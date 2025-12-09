@@ -78,7 +78,6 @@ void MissionController::_resetMissionFlightStatus(void)
     _missionFlightStatus.totalDistance =        0.0;
     _missionFlightStatus.plannedDistance =      0.0;
     _missionFlightStatus.maxTelemetryDistance = 0.0;
-    _missionFlightStatus.maxAltitude =          0.0;
     _missionFlightStatus.totalTime =            0.0;
     _missionFlightStatus.hoverTime =            0.0;
     _missionFlightStatus.cruiseTime =           0.0;
@@ -113,7 +112,6 @@ void MissionController::_resetMissionFlightStatus(void)
     emit missionHoverTimeChanged();
     emit missionCruiseTimeChanged();
     emit missionMaxTelemetryChanged(_missionFlightStatus.maxTelemetryDistance);
-    emit missionMaxAltitudeChanged(_missionFlightStatus.maxAltitude);
     emit batteryChangePointChanged(_missionFlightStatus.batteryChangePoint);
     emit batteriesRequiredChanged(_missionFlightStatus.batteriesRequired);
 
@@ -1167,11 +1165,6 @@ double MissionController::_calcDistanceToHome(VisualMissionItem* currentItem, Vi
     return distanceOk ? homeCoord.distanceTo(currentCoord) : 0.0;
 }
 
-double MissionController::_calcAltitudeToHome(VisualMissionItem* currentItem, VisualMissionItem* homeItem)
-{
-    return currentItem ? currentItem->amslEntryAlt() - homeItem->amslExitAlt() : 0.0;
-}
-
 FlightPathSegment* MissionController::_createFlightPathSegmentWorker(VisualItemPair& pair, bool mavlinkTerrainFrame)
 {
     // The takeoff goes straight up from ground to alt and then over to specified position at same alt. Which means
@@ -1501,7 +1494,7 @@ void MissionController::_addTimeDistance(bool vtolInHover, double hoverTime, dou
         if (vtolInHover) {
             _addHoverTime(hoverTime, distance, seqNum);
             _addHoverTime(extraTime, 0, -1);
-        } else {           
+        } else {
             _addCruiseTime(cruiseTime, distance, seqNum);
             _addCruiseTime(extraTime, 0, -1);
         }
@@ -1670,7 +1663,6 @@ void MissionController::_recalcMissionFlightStatus()
                         item->setDistanceFromStart(totalHorizontalDistance);
 
                         _missionFlightStatus.maxTelemetryDistance = qMax(_missionFlightStatus.maxTelemetryDistance, _calcDistanceToHome(item, _settingsItem));
-                        _missionFlightStatus.maxAltitude = qMax(_missionFlightStatus.maxAltitude, _calcAltitudeToHome(item, _settingsItem));
                     }
 
                     if (complexItem) {
@@ -1746,7 +1738,7 @@ void MissionController::_recalcMissionFlightStatus()
     // Add the information for the final segment back to home
     if (foundRTL && lastFlyThroughVI != _settingsItem && homePositionValid) {
         double azimuth, distance, altDifference;
-        _calcPrevWaypointValues(_settingsItem, lastFlyThroughVI, &azimuth, &distance, &altDifference);
+        _calcPrevWaypointValues(lastFlyThroughVI, _settingsItem, &azimuth, &distance, &altDifference);
 
         if (!pastLandCommand) {
             // Calculate time/distance
@@ -1770,7 +1762,6 @@ void MissionController::_recalcMissionFlightStatus()
     }
 
     emit missionMaxTelemetryChanged     (_missionFlightStatus.maxTelemetryDistance);
-    emit missionMaxAltitudeChanged      (_missionFlightStatus.maxAltitude);
     emit missionTotalDistanceChanged    (_missionFlightStatus.totalDistance);
     emit missionPlannedDistanceChanged  (_missionFlightStatus.plannedDistance);
     emit missionHoverDistanceChanged    (_missionFlightStatus.hoverDistance);
@@ -2411,10 +2402,9 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
             SimpleMissionItem*  simpleItem = qobject_cast<SimpleMissionItem*>(pVI);
             int                 currentSeqNumber = pVI->sequenceNumber();
 
-            if (sequenceNumber != 0 && currentSeqNumber < sequenceNumber && currentSeqNumber != 0) {
+            if (sequenceNumber != 0 && currentSeqNumber <= sequenceNumber) {
                 if (pVI->specifiesCoordinate() && !pVI->isStandaloneCoordinate()) {
                     // Coordinate based flight commands prior to where the takeoff would be inserted
-                    // Exclude Home position (sequence 0) from this check
                     _isInsertTakeoffValid = false;
                 }
             }
@@ -2739,39 +2729,4 @@ void MissionController::setGlobalAltitudeMode(QGroundControlQmlGlobal::AltMode a
         _globalAltMode = altMode;
         emit globalAltitudeModeChanged();
     }
-}
-
-bool MissionController::moveVisualItemUp(int index)
-{
-    if (!_isValidIndex(index) || index == 1) {
-        return false;
-    }
-
-    if (index - 1 == _takeoffMissionItem->sequenceNumber()) {
-        return false;
-    }
-
-    _visualItems->move(index, index - 1);
-    _recalcAll();
-    setCurrentPlanViewSeqNum(index - 1, true);
-
-    return true;
-}
-
-bool MissionController::moveVisualItemDown(int index)
-{
-    if (!_isValidIndex(index) || index >= _visualItems->count() - 1) {
-        return false;
-    }
-
-    _visualItems->move(index, index + 1);
-    _recalcAll();
-    setCurrentPlanViewSeqNum(index + 1, true);
-
-    return true;
-}
-
-bool MissionController::_isValidIndex(int index) const
-{
-    return index >= 0 && index < _visualItems->count();
 }
