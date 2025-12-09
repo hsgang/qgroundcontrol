@@ -247,26 +247,6 @@ Rectangle {
                         color:                  qgcPal.groupBorder
                     }
 
-                    QGCButton {
-                        Layout.fillWidth:   true
-                        visible:        !missionItem.isTakeoffItem
-                        text:           qsTr("#%1 Item Move to Up").arg(missionItem.sequenceNumber)
-                        onClicked: {
-                            _missionController.moveVisualItemUp(missionItem.sequenceNumber)
-                            hamburgerMenuDropPanel.close()
-                        }
-                    }
-
-                    QGCButton {
-                        Layout.fillWidth:   true
-                        visible:        !missionItem.isTakeoffItem
-                        text:           qsTr("#%1 Item Move to Down").arg(missionItem.sequenceNumber)
-                        onClicked: {
-                            _missionController.moveVisualItemDown(missionItem.sequenceNumber)
-                            hamburgerMenuDropPanel.close()
-                        }
-                    }
-
                     Rectangle {
                         Layout.fillWidth:       true
                         Layout.preferredHeight: 1
