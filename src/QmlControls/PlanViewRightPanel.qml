@@ -124,9 +124,11 @@ Item {
                             Layout.preferredWidth:  height
                             source:                 "/InstrumentValueIcons/backward.svg"
                             color:                  qgcPal.buttonText
+                            enabled:                root._missionController.currentPlanViewVIIndex > 1
 
                             MouseArea {
                                 anchors.fill: parent
+                                enabled:      parent.enabled
                                 onClicked: {
                                     if (root._missionController.currentPlanViewVIIndex > 1) {
                                         let prevItem = root._missionController.visualItems.get(root._missionController.currentPlanViewVIIndex - 1)
@@ -134,6 +136,12 @@ Item {
                                     }
                                 }
                             }
+                        }
+
+                        QGCLabel {
+                            width:                  parent.width
+                            horizontalAlignment:    Text.AlignHCenter
+                            text:                   root._missionController.currentPlanViewItem.sequenceNumber + " / " + (root._missionController.visualItems.count - 1)
                         }
 
                         QGCLabel {
@@ -147,9 +155,11 @@ Item {
                             Layout.preferredWidth:  height
                             source:                 "/InstrumentValueIcons/forward.svg"
                             color:                  qgcPal.buttonText
+                            enabled:                root._missionController.currentPlanViewVIIndex < root._missionController.visualItems.count - 1
 
                             MouseArea {
                                 anchors.fill: parent
+                                enabled:      parent.enabled
                                 onClicked: {
                                     if (root._missionController.currentPlanViewVIIndex < root._missionController.visualItems.count - 1) {
                                         let nextItem = root._missionController.visualItems.get(root._missionController.currentPlanViewVIIndex + 1)
