@@ -45,7 +45,7 @@ jobs:
       QT_ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      #QT_ANDROID_ABIS: ${{ matrix.build_type == 'Release' && 'arm64-v8a;armeabi-v7a' || 'arm64-v8a' }}
+      # QT_ANDROID_ABIS: ${{ matrix.build_type == 'Release' && 'arm64-v8a;armeabi-v7a' || 'arm64-v8a' }}
       QT_ANDROID_ABIS: 'arm64-v8a'
 
 
@@ -105,6 +105,13 @@ jobs:
           aws_distribution_id: ${{ secrets.AWS_DISTRIBUTION_ID }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           upload_aws: true
+
+      - name: Save APK
+        if: matrix.build_type != 'Release'
+        uses: actions/upload-artifact@v5
+        with:
+          name: ${{ env.PACKAGE }}-linux-qt${{ matrix.qt_version }}.apk
+          path: ${{ runner.temp }}/build/${{ env.PACKAGE }}.apk
 
       # - name: Deploy to Play Store
       #   if: matrix.build_type == 'Release'
