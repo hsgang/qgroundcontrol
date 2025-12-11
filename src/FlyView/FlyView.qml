@@ -169,7 +169,7 @@ Item {
             id:                 guidedValueSlider
             anchors.right:      parent.right
             anchors.top:        parent.top
-            anchors.topMargin:  ScreenTools.defaultFontPixelHeight * 5
+            anchors.topMargin:  toolbar.height
             anchors.bottom:     parent.bottom
             anchors.bottomMargin: ScreenTools.defaultFontPixelHeight * 5
             z:                  QGroundControl.zOrderTopMost
