@@ -525,7 +525,8 @@ ApplicationWindow {
                         height:             ScreenTools.defaultFontPixelHeight * 3
                         Layout.fillWidth:   true
                         text:               "종료"
-                        icon.source:        "/InstrumentValueIcons/close.svg"
+                        imageResource:      "/res/XDeleteBlack.svg"
+                        imageColor:         QGroundControl.globalPalette.brandingPurple
                         visible:            mainWindow.visibility === Window.FullScreen
                         onClicked: {
                             if (mainWindow.allowViewSwitch()) {
