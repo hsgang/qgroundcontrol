@@ -12,8 +12,6 @@ import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.Controls
-
-
 import QGroundControl.FactControls
 
 RowLayout {
@@ -34,6 +32,7 @@ RowLayout {
         QGCLabel {
             Layout.fillWidth:   true
             text:               label
+            visible:            label !== ""
         }
         QGCLabel {
             id:                 _description

@@ -15,10 +15,6 @@ import Qt.labs.qmlmodels
 
 import QGroundControl
 import QGroundControl.Controls
-
-
-
-
 import QGroundControl.FactControls
 
 Item {

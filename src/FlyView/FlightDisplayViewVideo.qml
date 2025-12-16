@@ -15,11 +15,7 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.FlyView
 import QGroundControl.FlightMap
-
 import QGroundControl.Controls
-
-
-
 
 Item {
     id:     root

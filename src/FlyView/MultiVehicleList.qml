@@ -13,10 +13,7 @@ import QtQuick.Layouts
 import QtQuick.Shapes
 
 import QGroundControl
-
 import QGroundControl.Controls
-
-
 import QGroundControl.FlightMap
 import QGroundControl.FlyView
 

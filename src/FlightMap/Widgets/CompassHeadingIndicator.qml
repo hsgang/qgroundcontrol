@@ -12,7 +12,6 @@ import QtQuick
 import QGroundControl
 import QGroundControl.Controls
 
-
 Canvas {
     id:                 control
     anchors.centerIn:   parent

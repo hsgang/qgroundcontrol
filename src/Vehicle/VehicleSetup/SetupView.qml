@@ -12,9 +12,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 
 import QGroundControl
-
 import QGroundControl.Controls
-
 
 Rectangle {
     id:     setupView
@@ -42,9 +40,10 @@ Rectangle {
     readonly property real      _buttonWidth:       _defaultTextWidth * 18
     readonly property string    _armedVehicleText:  qsTr("This operation cannot be performed while the vehicle is armed.")
 
-    property bool   _vehicleArmed:                  QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.armed : false
+    property var    _activeVehicle:                 QGroundControl.multiVehicleManager.activeVehicle
+    property bool   _vehicleArmed:                  _activeVehicle ? _activeVehicle.armed : false
     property string _messagePanelText:              qsTr("missing message panel text")
-    property bool   _fullParameterVehicleAvailable: QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable && !QGroundControl.multiVehicleManager.activeVehicle.parameterManager.missingParameters
+    property bool   _fullParameterVehicleAvailable: QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable && !_activeVehicle.parameterManager.missingParameters
     property var    _corePlugin:                    QGroundControl.corePlugin
 
     function showSummaryPanel() {
@@ -55,7 +54,7 @@ Rectangle {
 
     function _showSummaryPanel() {
         if (_fullParameterVehicleAvailable) {
-            if (QGroundControl.multiVehicleManager.activeVehicle.autopilotPlugin.vehicleComponents.length === 0) {
+            if (_activeVehicle.autopilotPlugin.vehicleComponents.length === 0) {
                 panelLoader.setSourceComponent(noComponentsVehicleSummaryComponent)
             } else {
                 panelLoader.setSource("qrc:/qml/QGroundControl/VehicleSetup/VehicleSummary.qml")
@@ -63,7 +62,7 @@ Rectangle {
         } else if (QGroundControl.multiVehicleManager.parameterReadyVehicleAvailable) {
             panelLoader.setSourceComponent(missingParametersVehicleSummaryComponent)
         } else {
-            panelLoader.setSourceComponent(disconnectedVehicleSummaryComponent)
+            panelLoader.setSourceComponent(disconnectedVehicleAndParamsSummaryComponent)
         }
         summaryButton.checked = true
     }
@@ -78,7 +77,7 @@ Rectangle {
     function showVehicleComponentPanel(vehicleComponent)
     {
         if (mainWindow.allowViewSwitch()) {
-            var autopilotPlugin = QGroundControl.multiVehicleManager.activeVehicle.autopilotPlugin
+            var autopilotPlugin = _activeVehicle.autopilotPlugin
             var prereq = autopilotPlugin.prerequisiteSetup(vehicleComponent)
             if (prereq !== "") {
                 _messagePanelText = qsTr("%1 setup must be completed prior to %2 setup.").arg(prereq).arg(vehicleComponent.name)
@@ -139,15 +138,14 @@ Rectangle {
                 horizontalAlignment:    Text.AlignHCenter
                 wrapMode:               Text.WordWrap
                 font.pointSize:         ScreenTools.mediumFontPointSize
-                text:                   qsTr("%1 does not currently support setup of your vehicle type. ").arg(QGroundControl.appName) +
+                text:                   qsTr("%1 does not currently support configuration of your vehicle. ").arg(QGroundControl.appName) +
                                         qsTr("If your vehicle is already configured you can still Fly.")
-                onLinkActivated: Qt.openUrlExternally(link)
             }
         }
     }
 
     Component {
-        id: disconnectedVehicleSummaryComponent
+        id: disconnectedVehicleAndParamsSummaryComponent
         Rectangle {
             color: qgcPal.windowShade
             ColumnLayout {
@@ -206,10 +204,8 @@ Rectangle {
                 horizontalAlignment:    Text.AlignHCenter
                 wrapMode:               Text.WordWrap
                 font.pointSize:         ScreenTools.mediumFontPointSize
-                text:                   qsTr("You are currently connected to a vehicle but it did not return the full parameter list. ") +
-                                        qsTr("As a result, the full set of vehicle setup options are not available.")
-
-                onLinkActivated: (link) => Qt.openUrlExternally(link)
+                text:                   qsTr("Vehicle did not return the full parameter list. ") +
+                                        qsTr("As a result, the configuration pages are not available.")
             }
         }
     }
@@ -286,7 +282,7 @@ Rectangle {
                     Layout.fillWidth:   true
                     onClicked:          showPanel(this, "qrc:/qml/QGroundControl/VehicleSetup/JoystickConfig.qml")
 
-                    property var    _activeJoystick:        joystickManager.activeJoystick
+                    property Joystick _activeJoystick: joystickManager.activeJoystick
                     property bool   _buttonsOnly:           _activeJoystick ? _activeJoystick.axisCount == 0 : false
                     property bool   _forcedToButtonsOnly:   !QGroundControl.corePlugin.options.allowJoystickSelection && _buttonsOnly
                 }

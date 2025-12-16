@@ -16,7 +16,6 @@ import QGroundControl
 import QGroundControl.FactControls
 import QGroundControl.Controls
 
-
 SettingsPage {
 
     // Visual properties

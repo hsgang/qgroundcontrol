@@ -16,9 +16,6 @@ import QGroundControl
 import QGroundControl.FactControls
 import QGroundControl.Controls
 
-
-
-
 SettingsPage {
     property var    _settingsManager:           QGroundControl.settingsManager
     property var    _appSettings:               _settingsManager.appSettings
