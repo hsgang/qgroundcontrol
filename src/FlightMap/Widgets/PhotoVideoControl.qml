@@ -13,19 +13,15 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import QtQuick.Dialogs
 
-import QtMultimedia             
-
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.FactControls
 
 Rectangle {
-    width:      mainLayout.width + (_margins * 2)
-    height:     mainLayout.height + (_margins * 2)
-    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, _backgroundOpacity)
+    width:      mainLayout.width + (_smallMargins * 2)
+    height:     mainLayout.height + (_smallMargins * 2)
+    color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius:     _margins
-    border.color: qgcPal.groupBorder
-    border.width: 1
     visible:    _camera.capturesVideo || _camera.capturesPhotos || _camera.hasTracking || _camera.hasVideoStream
 
     property real   _margins:                   ScreenTools.defaultFontPixelHeight / 2
@@ -40,7 +36,6 @@ Rectangle {
     property bool   _photoCaptureIntervalIdle:  _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IDLE
     property bool   _photoCaptureIdle:          _photoCaptureSingleIdle || _photoCaptureIntervalIdle
 
-    property real   _backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
 /*
     // Used for testing camera ui options. Set _camera to testCamera to use.
     QtObject {
@@ -107,7 +102,7 @@ Rectangle {
 
     RowLayout {
         id:                 mainLayout
-        anchors.margins:    _margins
+        anchors.margins:    _smallMargins
         anchors.top:        parent.top
         anchors.left:       parent.left
         spacing:            _margins
@@ -232,19 +227,19 @@ Rectangle {
 
                     QGCPalette { id: captureButtonPalette; colorGroupEnabled: captureButton.enabled }
 
-                    Rectangle {
-                        anchors.centerIn:           parent
-                        anchors.alignWhenCentered:  false // Prevents anchors.centerIn from snapping to integer coordinates, which can throw off centering.
-                        color:                      captureButton.captureButtonPalette.buttonBorder
-                        width:                      parent.width * 0.75
-                        height:                     width
-                        radius:                     width * 0.5
-                    }
+                    // Rectangle {
+                    //     anchors.centerIn:           parent
+                    //     anchors.alignWhenCentered:  false // Prevents anchors.centerIn from snapping to integer coordinates, which can throw off centering.
+                    //     color:                      captureButton.captureButtonPalette.buttonBorder
+                    //     width:                      parent.width * 0.75
+                    //     height:                     width
+                    //     radius:                     width * 0.5
+                    // }
 
                     Rectangle {
                         anchors.centerIn:           parent
                         anchors.alignWhenCentered:  false // Prevents anchors.centerIn from snapping to integer coordinates, which can throw off centering.
-                        width:                      parent.width * (_isShootingInPhotoMode ? 0.6 : (_isShootingInVideoMode ? 0.4 : 0.7))
+                        width:                      parent.width * (_isShootingInCurrentMode ? 0.5 : 0.75)
                         height:                     width
                         radius:                     _isShootingInCurrentMode ? ScreenTools.defaultFontPixelWidth * 0.5 : width * 0.5
                         color:                      captureButton.captureButtonColor
@@ -663,4 +658,3 @@ Rectangle {
         }
     }
 }
-
