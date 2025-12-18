@@ -193,7 +193,7 @@ void PlanMasterController::_activeVehicleChanged(Vehicle* activeVehicle)
     }
 
     // Vehicle changed so we need to signal everything
-    emit containsItemsChanged(containsItems());
+    emit containsItemsChanged();
     emit syncInProgressChanged();
     emit dirtyChanged(dirty());
 
@@ -510,6 +510,7 @@ void PlanMasterController::removeAll(void)
         _currentPlanFile.clear();
         emit currentPlanFileChanged();
     }
+    setManualCreation(false);
 }
 
 void PlanMasterController::removeAllFromVehicle(void)
@@ -526,6 +527,7 @@ void PlanMasterController::removeAllFromVehicle(void)
     } else {
         qWarning() << "PlanMasterController::removeAllFromVehicle called while offline";
     }
+    setManualCreation(false);
 }
 
 bool PlanMasterController::containsItems(void) const
@@ -675,4 +677,12 @@ void PlanMasterController::getListFromCloud()
 void PlanMasterController::_getListFromCloud()
 {
     CloudManager::instance()->getListBucket("amp-mission-files");
+}
+
+void PlanMasterController::setManualCreation(bool manualCreation)
+{
+    if (_manualCreation != manualCreation) {
+        _manualCreation = manualCreation;
+        emit manualCreationChanged();
+    }
 }

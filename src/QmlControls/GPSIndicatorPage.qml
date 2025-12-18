@@ -22,7 +22,7 @@ ToolIndicatorPage {
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
     property var    activeVehicle:      QGroundControl.multiVehicleManager.activeVehicle
     property string na:                 qsTr("N/A", "No data to display")
-    property string valueNA:            qsTr("--.--", "No data to display")
+    property string valueNA:            qsTr("–.––", "No data to display")
     property var    rtkSettings:        QGroundControl.settingsManager.rtkSettings
     property var    useFixedPosition:   rtkSettings.useFixedBasePosition.rawValue
     property var    manufacturer:       rtkSettings.baseReceiverManufacturers.rawValue

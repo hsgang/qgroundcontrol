@@ -234,8 +234,6 @@ Item {
         anchors.leftMargin: _totalToolInsets.leftEdgeBottomInset + _toolsMargin
         anchors.left:       parent.left
         mapControl:         _mapControl
-        buttonsOnLeft:      true
-        zoomButtonsVisible: false
         autoHide:           true
         visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && !isViewer3DOpen && mapControl.pipState.state === mapControl.pipState.fullState
 

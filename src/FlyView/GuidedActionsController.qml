@@ -278,16 +278,18 @@ Item {
             console.log("showStartMission", showStartMission)
         }
         _outputState()
-        // if (showStartMission) {
-        //     confirmAction(actionStartMission)
-        // }
+        if (showStartMission &&
+            _flyViewSettings.enableAutomaticMissionPopups.rawValue) {
+            confirmAction(actionStartMission)
+        }
     }
     onShowContinueMissionChanged: {
         if (_isGuidedActionsControllerLogEnabled()) {
             console.log("showContinueMission", showContinueMission)
         }
         _outputState()
-        if (showContinueMission) {
+        if (showContinueMission &&
+            _flyViewSettings.enableAutomaticMissionPopups.rawValue) {
             confirmAction(actionContinueMission)
         }
     }

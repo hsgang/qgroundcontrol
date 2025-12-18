@@ -260,6 +260,12 @@
     "shortDesc":    "Show joystick indicator in toolbar",
     "type":         "bool",
     "default":      false
+},
+{
+    "name":         "enableAutomaticMissionPopups",
+    "shortDesc":    "Enable automatic mission start/resume popups",
+    "type":         "bool",
+    "default":      true
 }
 ]
 }

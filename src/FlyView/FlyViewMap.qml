@@ -1045,17 +1045,13 @@ FlightMap {
         }
     }
 
-    // Rectangle {
-    //    id: clickIndicator
-    //    visible:    mapClickMenu.visible
-    //    x: mapClickMenu.x - (height / 2) - (_toolsMargin * 2)
-    //    y: mapClickMenu.y - (height / 2) - (_toolsMargin * 2)
-    //    height: _toolsMargin * 5
-    //    width:  height
-    //    radius: height / 2
-    //    color: "transparent"
-    //    border.color: qgcPal.text
-    //    border.width: 3
+    MapScale {
+        id:                 mapScale
+        anchors.margins:    _toolsMargin
+        anchors.left:       parent.left
+        anchors.top:        parent.top
+        mapControl:         _root
+        visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.windowState
 
     //    Rectangle {
     //        height: 1
