@@ -786,7 +786,7 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
     GstElement *buffer = nullptr;
     GstElement *tsdemux = nullptr;
     GstElement *parser = nullptr;
-    GstElement *capssetter = nullptr;
+    GstElement *capsfilter = nullptr;
     GstElement *bin = nullptr;
     GstElement *srcbin = nullptr;
 
@@ -876,24 +876,24 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
 
         (void) g_signal_connect(parser, "autoplug-query", G_CALLBACK(_filterParserCaps), nullptr);
 
-        // RTSP 소스의 경우 capssetter 추가하여 RTP caps 강제 설정
+        // RTSP 소스의 경우 capsfilter 추가하여 clock-rate 강제 수정 (9000 -> 90000)
         if (isRtsp) {
-            capssetter = gst_element_factory_make("capssetter", nullptr);
-            if (!capssetter) {
-                qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('capssetter') failed";
+            capsfilter = gst_element_factory_make("capsfilter", nullptr);
+            if (!capsfilter) {
+                qCCritical(GstVideoReceiverLog) << "gst_element_factory_make('capsfilter') failed";
                 break;
             }
 
-            // RTP H.264 caps를 명시적으로 설정 (gst-launch에서 검증된 설정)
-            GstCaps *forcedCaps = gst_caps_from_string("application/x-rtp,media=video,encoding-name=H264,clock-rate=90000");
-            if (forcedCaps) {
-                g_object_set(capssetter, "caps", forcedCaps, nullptr);
-                gst_clear_caps(&forcedCaps);
+            // clock-rate=90000으로 강제 설정 (H264/H265 모두 지원)
+            GstCaps *filterCaps = gst_caps_from_string("application/x-rtp,media=video,clock-rate=90000");
+            if (filterCaps) {
+                g_object_set(capsfilter, "caps", filterCaps, nullptr);
+                gst_clear_caps(&filterCaps);
             } else {
                 qCCritical(GstVideoReceiverLog) << "gst_caps_from_string() failed for RTP caps";
             }
 
-            gst_bin_add_many(GST_BIN(bin), source, capssetter, parser, nullptr);
+            gst_bin_add_many(GST_BIN(bin), source, capsfilter, parser, nullptr);
         } else {
             gst_bin_add_many(GST_BIN(bin), source, parser, nullptr);
         }
@@ -931,9 +931,9 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
 
                 (void) gst_bin_add(GST_BIN(bin), buffer);
 
-                // RTSP의 경우 capssetter를 경유
-                if (isRtsp && capssetter) {
-                    if (!gst_element_link_many(source, buffer, capssetter, parser, nullptr)) {
+                // RTSP의 경우 capsfilter를 경유
+                if (isRtsp && capsfilter) {
+                    if (!gst_element_link_many(source, buffer, capsfilter, parser, nullptr)) {
                         qCCritical(GstVideoReceiverLog) << "gst_element_link() failed";
                         break;
                     }
@@ -944,9 +944,9 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
                     }
                 }
             } else {
-                // RTSP의 경우 capssetter를 경유
-                if (isRtsp && capssetter) {
-                    if (!gst_element_link_many(source, capssetter, parser, nullptr)) {
+                // RTSP의 경우 capsfilter를 경유
+                if (isRtsp && capsfilter) {
+                    if (!gst_element_link_many(source, capsfilter, parser, nullptr)) {
                         qCCritical(GstVideoReceiverLog) << "gst_element_link() failed";
                         break;
                     }
@@ -958,12 +958,12 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
                 }
             }
         } else {
-            // 동적 패드의 경우: RTSP는 capssetter를 거쳐 parser로 연결
-            if (isRtsp && capssetter) {
-                (void) g_signal_connect(source, "pad-added", G_CALLBACK(_linkPad), capssetter);
-                // capssetter는 정적 패드이므로 직접 parser와 연결
-                if (!gst_element_link(capssetter, parser)) {
-                    qCCritical(GstVideoReceiverLog) << "gst_element_link(capssetter, parser) failed";
+            // 동적 패드의 경우: RTSP는 capsfilter를 거쳐 parser로 연결
+            if (isRtsp && capsfilter) {
+                (void) g_signal_connect(source, "pad-added", G_CALLBACK(_linkPad), capsfilter);
+                // capsfilter는 정적 패드이므로 직접 parser와 연결
+                if (!gst_element_link(capsfilter, parser)) {
+                    qCCritical(GstVideoReceiverLog) << "gst_element_link(capsfilter, parser) failed";
                     break;
                 }
             } else {
@@ -973,7 +973,7 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
 
         (void) g_signal_connect(parser, "pad-added", G_CALLBACK(_wrapWithGhostPad), nullptr);
 
-        source = tsdemux = buffer = parser = capssetter = nullptr;
+        source = tsdemux = buffer = parser = capsfilter = nullptr;
 
         srcbin = bin;
         bin = nullptr;
@@ -981,7 +981,7 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
 
     gst_clear_object(&bin);
     gst_clear_object(&parser);
-    gst_clear_object(&capssetter);
+    gst_clear_object(&capsfilter);
     gst_clear_object(&tsdemux);
     gst_clear_object(&buffer);
     gst_clear_object(&source);
