@@ -127,9 +127,6 @@ jobs:
           host: ${{ matrix.host }}
           arch: ${{ matrix.arch }}
           modules: ${{ steps.config.outputs.qt_modules }}
-          tools: 'tools_ifw'
-          setup-python: false
-          cache: true
 
       - name: Set up MSVC environment
         uses: ilammy/msvc-dev-cmd@v1
