@@ -35,7 +35,7 @@ Button {
     property bool _showHighlight: enabled && (pressed | checked)
     property int _horizontalPadding: ScreenTools.defaultFontPixelWidth * 2
     property int _verticalPadding: Math.round(ScreenTools.defaultFontPixelHeight * heightFactor) - (iconSource === "" ? 0 : (_iconHeight - ScreenTools.defaultFontPixelHeight)  / 2)
-    property real _iconHeight: text.height * 1.5
+    property real _iconHeight: text.height * 1.0
 
     QGCPalette { id: qgcPal; colorGroupEnabled: control.enabled }
 

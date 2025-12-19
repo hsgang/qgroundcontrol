@@ -36,7 +36,6 @@ QGCButton {
                 width:                  control.font.pointSize * 2
                 Layout.alignment:       control.text !== "" ? Qt.AlignTop : Qt.AlignHCenter | Qt.AlignVCenter
                 source:                 control.iconSource
-                color:                  control.iconColor !== "" ? control.iconColor : qgcPal.text
                 fillMode:               Image.PreserveAspectFit
                 sourceSize.height:      height
                 sourceSize.width:       width

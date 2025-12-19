@@ -50,7 +50,7 @@ RowLayout {
         }
     }
 
-    function _openButtonClicked() {
+    function _loadFromFile() {
         if (_planMasterController.dirty) {
             mainWindow.showMessageDialog(qsTr("Open Plan"),
                                         qsTr("You have unsaved/unsent changes. Loading a new Plan will lose these changes. Are you sure?"),
@@ -61,7 +61,27 @@ RowLayout {
         }
     }
 
-    function _saveButtonClicked() {
+    function _loadFromCloud() {
+        if (_planMasterController.dirty) {
+            mainWindow.showMessageDialog(qsTr("Open Plan from Cloud"),
+                                        qsTr("You have unsaved/unsent changes. Loading a new Plan will lose these changes. Are you sure?"),
+                                        Dialog.Yes | Dialog.Cancel,
+                                        function() {
+                                            _planMasterController.getListFromCloud()
+                                            showCloudDownloadDialog()
+                                        } )
+        } else {
+            _planMasterController.getListFromCloud()
+            showCloudDownloadDialog()
+        }
+    }
+
+    function showCloudDownloadDialog() {
+        var dialog = cloudDownloadDialogComponent.createObject(mainWindow)
+        dialog.open()
+    }
+
+    function _saveToCurrentFile() {
         if(_planMasterController.currentPlanFile !== "") {
             _planMasterController.saveToCurrent()
             mainWindow.showMessageDialog(qsTr("Save"),
@@ -70,6 +90,19 @@ RowLayout {
         } else {
             _planMasterController.saveToSelectedFile()
         }
+    }
+
+    function _saveAsNewFile() {
+        _planMasterController.saveToSelectedFile()
+    }
+
+    function _saveToCloud() {
+        if (!_planMasterController.containsItems) {
+            mainWindow.showMessageDialog(qsTr("Save to Cloud"), qsTr("No mission items to save."))
+            return
+        }
+        var dialog = cloudUploadDialogComponent.createObject(mainWindow)
+        dialog.open()
     }
 
     function _saveAsKMLClicked() {
@@ -116,18 +149,32 @@ RowLayout {
     QGCPalette { id: qgcPal }
 
     QGCButton {
+        id: openButton
         text: qsTr("Open")
-        iconSource: "/qmlimages/Plan.svg"
+        iconSource: "/InstrumentValueIcons/download.svg"
         enabled: !_planMasterController.syncInProgress
-        onClicked: _openButtonClicked()
+
+        onClicked: {
+            let position = Qt.point(0, 0)
+            position = mapToItem(globals.parent, position)
+            var dropPanel = openDropPanelComponent.createObject(mainWindow, { clickRect: Qt.rect(position.x, position.y, width, height) })
+            dropPanel.open()
+        }
     }
 
     QGCButton {
-        text: _planMasterController.currentPlanFile === "" ? qsTr("Save As") : qsTr("Save")
-        iconSource: "/res/SaveToDisk.svg"
+        id: saveButton
+        text: qsTr("Save")
+        iconSource: "/InstrumentValueIcons/upload.svg"
         enabled: !_syncInProgress && _hasPlanItems
         primary: _controllerDirty
-        onClicked: _saveButtonClicked()
+
+        onClicked: {
+            let position = Qt.point(0, 0)
+            position = mapToItem(globals.parent, position)
+            var dropPanel = saveDropPanelComponent.createObject(mainWindow, { clickRect: Qt.rect(position.x, position.y, width, height) })
+            dropPanel.open()
+        }
     }
 
     QGCButton {
@@ -148,7 +195,7 @@ RowLayout {
     }
 
     QGCButton {
-        iconSource: "qrc:/qmlimages/Hamburger.svg"
+        iconSource: "/InstrumentValueIcons/navigation-more.svg"
 
         onClicked: {
             let position = Qt.point(width, height / 2)
@@ -159,6 +206,283 @@ RowLayout {
         }
     }
 
+
+    Component {
+        id: openDropPanelComponent
+
+        DropPanel {
+            id: openDropPanel
+
+            sourceComponent: Component {
+                ColumnLayout {
+                    spacing: ScreenTools.defaultFontPixelHeight / 2
+
+                    QGCButton {
+                        Layout.fillWidth: true
+                        text: qsTr("From Vehicle")
+                        iconSource: "/qmlimages/vehicleQuadRotor.svg"
+                        enabled: _utmspEnabled ? !_syncInProgress && UTMSPStateStorage.enableMissionDownloadButton : !_syncInProgress
+
+                        onClicked: {
+                            openDropPanel.close()
+                            _downloadClicked()
+                        }
+                    }
+
+                    QGCButton {
+                        Layout.fillWidth: true
+                        text: qsTr("From File")
+                        iconSource: "/qmlimages/Plan.svg"
+                        enabled: !_syncInProgress
+
+                        onClicked: {
+                            openDropPanel.close()
+                            _loadFromFile()
+                        }
+                    }
+
+                    QGCButton {
+                        Layout.fillWidth: true
+                        text: qsTr("From Cloud")
+                        iconSource: "/InstrumentValueIcons/cloud-download.svg"
+                        enabled: !_syncInProgress
+                        visible: QGroundControl.cloudManager.signedIn
+
+                        onClicked: {
+                            openDropPanel.close()
+                            _loadFromCloud()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: saveDropPanelComponent
+
+        DropPanel {
+            id: saveDropPanel
+
+            sourceComponent: Component {
+                ColumnLayout {
+                    spacing: ScreenTools.defaultFontPixelHeight / 2
+
+                    QGCButton {
+                        Layout.fillWidth: true
+                        text: qsTr("Save")
+                        iconSource: "/res/SaveToDisk.svg"
+                        enabled: !_syncInProgress && _planMasterController.currentPlanFile !== ""
+
+                        onClicked: {
+                            saveDropPanel.close()
+                            _saveToCurrentFile()
+                        }
+                    }
+
+                    QGCButton {
+                        Layout.fillWidth: true
+                        text: qsTr("Save As...")
+                        iconSource: "/res/SaveToDisk.svg"
+                        enabled: !_syncInProgress
+
+                        onClicked: {
+                            saveDropPanel.close()
+                            _saveAsNewFile()
+                        }
+                    }
+
+                    QGCButton {
+                        Layout.fillWidth: true
+                        text: qsTr("Save to Cloud")
+                        iconSource: "/InstrumentValueIcons/cloud-upload.svg"
+                        enabled: !_syncInProgress
+                        visible: QGroundControl.cloudManager.signedIn
+
+                        onClicked: {
+                            saveDropPanel.close()
+                            _saveToCloud()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: cloudUploadDialogComponent
+
+        QGCPopupDialog {
+            title: qsTr("Save to Cloud")
+            buttons: Dialog.Close
+
+            ColumnLayout {
+                spacing: ScreenTools.defaultFontPixelHeight / 2
+                width: ScreenTools.defaultFontPixelWidth * 40
+
+                QGCLabel {
+                    text: qsTr("Enter mission file name:")
+                    Layout.fillWidth: true
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: ScreenTools.defaultFontPixelHeight * 3
+                    color: "transparent"
+                    border.width: 1
+                    border.color: qgcPal.groupBorder
+                    radius: ScreenTools.defaultFontPixelWidth / 4
+
+                    TextInput {
+                        id: uploadNameField
+                        anchors.fill: parent
+                        anchors.margins: ScreenTools.defaultFontPixelWidth / 2
+                        verticalAlignment: TextInput.AlignVCenter
+                        font.pointSize: ScreenTools.defaultFontPointSize
+                        font.family: ScreenTools.normalFontFamily
+                        color: qgcPal.text
+                        antialiasing: true
+                    }
+                }
+
+                RowLayout {
+                    Layout.fillWidth: true
+                    spacing: ScreenTools.defaultFontPixelWidth
+
+                    Item { Layout.fillWidth: true }
+
+                    QGCButton {
+                        text: qsTr("Cancel")
+                        onClicked: close()
+                    }
+
+                    QGCButton {
+                        text: qsTr("Upload")
+                        primary: true
+                        enabled: uploadNameField.text.length > 0
+
+                        onClicked: {
+                            var uploadName = uploadNameField.text
+                            if (uploadName.length > 0) {
+                                _planMasterController.uploadToCloud(uploadName)
+                                _planMasterController.getListFromCloud()
+                                mainWindow.showMessageDialog(
+                                    qsTr("Upload Complete"),
+                                    qsTr("Mission '%1' uploaded to cloud successfully.").arg(uploadName),
+                                    Dialog.Ok
+                                )
+                                close()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: cloudDownloadDialogComponent
+
+        QGCPopupDialog {
+            title: qsTr("Download from Cloud")
+            buttons: Dialog.Close
+
+            ColumnLayout {
+                spacing: ScreenTools.defaultFontPixelHeight / 2
+                width: ScreenTools.defaultFontPixelWidth * 50
+
+                QGCLabel {
+                    text: qsTr("Select a mission file to download:")
+                    Layout.fillWidth: true
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 1
+                    color: qgcPal.groupBorder
+                }
+
+                ListView {
+                    id: cloudListView
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 20
+                    clip: true
+
+                    model: QGroundControl.cloudManager.dnEntryPlanFile
+
+                    delegate: Item {
+                        width: parent.width
+                        height: cloudFileButton.height + ScreenTools.defaultFontPixelWidth
+
+                        QGCButton {
+                            id: cloudFileButton
+                            width: parent.width - deleteIcon.width - ScreenTools.defaultFontPixelWidth
+                            height: ScreenTools.implicitButtonHeight * 1.2
+
+                            ColumnLayout {
+                                anchors.fill: parent
+                                anchors.leftMargin: ScreenTools.defaultFontPixelWidth
+                                anchors.rightMargin: ScreenTools.defaultFontPixelWidth
+                                spacing: 0
+
+                                QGCLabel {
+                                    text: modelData["FileName"]
+                                }
+                                QGCLabel {
+                                    text: modelData["LastModified"]
+                                    font.pointSize: ScreenTools.smallFontPointSize
+                                    Layout.alignment: Qt.AlignRight
+                                    opacity: 0.7
+                                }
+                            }
+
+                            onClicked: {
+                                mainWindow.showMessageDialog(
+                                    qsTr("Download Mission File"),
+                                    qsTr("Download '%1' from cloud storage?").arg(modelData["FileName"]),
+                                    Dialog.Ok | Dialog.Cancel,
+                                    function () {
+                                        QGroundControl.cloudManager.downloadObject("amp-mission-files", modelData["Key"], modelData["FileName"])
+                                        close()
+                                    }
+                                )
+                            }
+                        }
+
+                        QGCColoredImage {
+                            id: deleteIcon
+                            anchors.left: cloudFileButton.right
+                            anchors.leftMargin: ScreenTools.defaultFontPixelWidth / 2
+                            anchors.verticalCenter: cloudFileButton.verticalCenter
+                            height: ScreenTools.minTouchPixels
+                            width: height
+                            sourceSize.height: height
+                            fillMode: Image.PreserveAspectFit
+                            mipmap: true
+                            smooth: true
+                            color: qgcPal.text
+                            source: "/res/TrashDelete.svg"
+
+                            QGCMouseArea {
+                                fillItem: parent
+                                onClicked: {
+                                    mainWindow.showMessageDialog(
+                                        qsTr("Delete Mission File"),
+                                        qsTr("Delete '%1' from cloud storage?").arg(modelData["FileName"]),
+                                        Dialog.Ok | Dialog.Cancel,
+                                        function () {
+                                            QGroundControl.cloudManager.deleteObject("amp-mission-files", modelData["Key"])
+                                            _planMasterController.getListFromCloud()
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     Component {
         id: hamburgerDropPanelComponent
@@ -194,59 +518,6 @@ RowLayout {
                     }
                 }
             }
-        }
-
-        QGCLabel {
-            text: qsTr("Syncing... ") + (_controllerProgressPct * 100).toFixed(0) + "%"
-            visible: !_controllerOffline && _controllerProgressPct !== 1
-        }
-    }
-
-    // Small mission download progress bar
-    Rectangle {
-        id:             progressBar
-        anchors.left:   parent.left
-        anchors.bottom: parent.bottom
-        height:         4
-        width:          _controllerProgressPct * parent.width
-        color:          qgcPal.colorGreen
-        visible:        false
-
-        onVisibleChanged: {
-            if (visible) {
-                largeProgressBar._userHide = false
-            }
-        }
-    }
-
-    // Large mission download progress bar
-    Rectangle {
-        id:             largeProgressBar
-        anchors.bottom: parent.bottom
-        anchors.left:   parent.left
-        anchors.right:  parent.right
-        height:         parent.height
-        color:          qgcPal.window
-        visible:        _showLargeProgress
-
-        property bool _userHide:                false
-        property bool _showLargeProgress:       progressBar.visible && !_userHide && qgcPal.globalTheme === QGCPalette.Light
-
-        Connections {
-            target:                 QGroundControl.multiVehicleManager
-            function onActiveVehicleChanged() { largeProgressBar._userHide = false }
-        }
-
-        Rectangle {
-            anchors.top:    parent.top
-            anchors.bottom: parent.bottom
-            width:          _controllerProgressPct * parent.width
-            color:          qgcPal.colorGreen
-        }
-
-        QGCLabel {
-            text: qsTr("Uploading... ") + (_controllerProgressPct * 100).toFixed(0) + "%"
-            visible: _controllerProgressPct !== 1
         }
     }
 }

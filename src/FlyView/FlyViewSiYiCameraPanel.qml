@@ -117,11 +117,9 @@ Rectangle {
                     if (camera.enableVideo) {
                         if (camera.isRecording) {
                             videoButton.iconSource = "/SiYi/Stop.svg"
-                            videoButton.iconColor = qgcPal.colorRed
                             videoButton.text = "Recording"
                         } else {
                             videoButton.iconSource = "/SiYi/Video.png"
-                            videoButton.iconColor = qgcPal.text
                             videoButton.text = "Record"
                         }
                     }
@@ -131,11 +129,9 @@ Rectangle {
                     videoButton.iconSource = "/SiYi/empty.png"
                     if (camera.isRecording) {
                         videoButton.iconSource = "/SiYi/Stop.svg"
-                        videoButton.iconColor = qgcPal.colorRed
                         videoButton.text = "Recording"
                     } else {
                         videoButton.iconSource = "/SiYi/Video.png"
-                        videoButton.iconColor = qgcPal.text
                         videoButton.text = "Record"
                     }
                 }
@@ -310,7 +306,6 @@ Rectangle {
             implicitHeight:     width
 
             iconSource:         "/SiYi/AiGreen.svg"
-            iconColor:          camera.aiModeOn ? (camera.isTracking ? qgcPal.colorRed : qgcPal.colorGreen) : qgcPal.text
             text:               "AI"
             font.pointSize:     _fontSize * 0.7
             visible:            camera.enableAi
@@ -334,21 +329,6 @@ Rectangle {
             implicitHeight:     width
 
             iconSource:         "/SiYi/LaserDistance.svg"
-            iconColor:          {
-                if (camera.laserStateHasResponse) {
-                    if (camera.laserStateOn) {
-                        return qgcPal.colorGreen
-                    } else {
-                        return qgcPal.text
-                    }
-                } else {
-                    if (root.laserIconShow) {
-                        return qgcPal.colorGreen
-                    } else {
-                        return qgcPal.text
-                    }
-                }
-            }
             text:               "Laser"
             font.pointSize:     _fontSize * 0.7
             visible:            camera.enableLaser

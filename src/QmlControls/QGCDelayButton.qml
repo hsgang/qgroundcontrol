@@ -83,7 +83,7 @@ DelayButton {
             color:                  control._showHighlight ? qgcPal.buttonHighlightText : qgcPal.buttonText
             opacity:                control._showHighlight ? 0.75 : 0.2
 
-            property real _sliderIndicatorMargin: ScreenTools.defaultFontPixelWidth * 0.5
+            property real _sliderIndicatorMargin: ScreenTools.defaultFontPixelHeight * 0.5
         }
 
         QGCLabel {

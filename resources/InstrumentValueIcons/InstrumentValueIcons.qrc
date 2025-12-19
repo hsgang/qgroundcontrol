@@ -302,14 +302,17 @@
         <file alias="outlineMap.svg">outlineMap.svg</file>
         <file alias="gimbal-1.svg">gimbal-1.svg</file>
         <file alias="gimbal-2.svg">gimbal-2.svg</file>
-        <file>move-vertical.svg</file>
-        <file>gauge.svg</file>
-        <file>waypoints.svg</file>
-        <file>arrow-right-left.svg</file>
+        <file alias="move-vertical.svg">move-vertical.svg</file>
+        <file alias="gauge.svg">gauge.svg</file>
+        <file alias="waypoints.svg">waypoints.svg</file>
+        <file alias="arrow-right-left.svg">arrow-right-left.svg</file>
         <file>tablet-smartphone.svg</file>
-        <file>shield-user.svg</file>
-        <file>log-in.svg</file>
+        <file alias="shield-user.svg">shield-user.svg</file>
+        <file alias="log-in.svg">log-in.svg</file>
         <file>square-x.svg</file>
         <file>network-transmit-receive.svg</file>
+        <file alias="cloud-download.svg">cloud-download.svg</file>
+        <file alias="download.svg">download.svg</file>
+        <file alias="upload.svg">upload.svg</file>
     </qresource>
 </RCC>

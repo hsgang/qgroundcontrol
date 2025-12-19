@@ -244,7 +244,7 @@ Rectangle {
                         radius:                     _isShootingInCurrentMode ? ScreenTools.defaultFontPixelWidth * 0.5 : width * 0.5
                         color:                      captureButton.captureButtonColor
                         border.width:               1
-                        border.color:               captureButton.captureButtonPalette.buttonBorder
+                        border.color:               captureButtonPalette.buttonBorder
 
                         property bool _isShootingInPhotoMode:   _cameraInPhotoMode && _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_IN_PROGRESS
                         property bool _isShootingInVideoMode:   (!_cameraInPhotoMode && _camera.videoCaptureStatus === MavlinkCameraControl.VIDEO_CAPTURE_STATUS_RUNNING)

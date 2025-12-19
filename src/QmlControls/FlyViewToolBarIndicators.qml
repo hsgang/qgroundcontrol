@@ -35,7 +35,7 @@ Item {
             anchors.left:       parent.left
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            spacing:            ScreenTools.defaultFontPixelWidth * 1.5
+            spacing:            ScreenTools.defaultFontPixelWidth
 
             Repeater {
                 id:     appRepeater

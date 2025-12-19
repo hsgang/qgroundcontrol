@@ -75,7 +75,6 @@ Rectangle {
                 //opacity:            enabled ? 1 : 0.4
 
                 iconSource:         "/InstrumentValueIcons/target.svg"
-                iconColor:          QGroundControl.gridManager.showAdjustMarker ? qgcPal.colorGreen : qgcPal.text
                 text:               "위치"
                 font.pointSize:     _fontSize * 0.7
 

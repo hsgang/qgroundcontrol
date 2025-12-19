@@ -16,13 +16,11 @@ import QGroundControl.FlyView
 import QGroundControl.FlightMap
 
 ColumnLayout {
-    width: QGroundControl.multiVehicleManager.vehicles.count > 1 ? ScreenTools.defaultFontPixelWidth * 38 : _rightPanelWidth
+    spacing: ScreenTools.defaultFontPixelHeight / 2
 
     property bool _showSingleVehicleUI:  !selectorCheckBoxSlider.checked
 
     TerrainProgress {
-        Layout.alignment:       Qt.AlignTop
-        Layout.preferredWidth:  _rightPanelWidth
         Layout.fillWidth:       true
     }
 
