@@ -57,18 +57,18 @@ jobs:
             qt_host_path: gcc_64
             shell: bash
             primary: true
-          - host: mac
-            runner: macos-latest
-            arch: clang_64
-            qt_host_path: macos
-            shell: bash
-            primary: false
-          - host: windows
-            runner: windows-latest
-            arch: win64_msvc2022_64
-            qt_host_path: msvc2022_64
-            shell: pwsh
-            primary: false
+          # - host: mac
+          #   runner: macos-latest
+          #   arch: clang_64
+          #   qt_host_path: macos
+          #   shell: bash
+          #   primary: false
+          # - host: windows
+          #   runner: windows-latest
+          #   arch: win64_msvc2022_64
+          #   qt_host_path: msvc2022_64
+          #   shell: pwsh
+          #   primary: false
 
     defaults:
       run:

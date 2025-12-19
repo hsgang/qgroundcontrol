@@ -36,3 +36,15 @@ runs:
         modules: ${{ inputs.modules }}
         setup-python: false
         cache: true
+
+    - name: Install Qt Installer Framework
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{ inputs.version }}
+        host: ${{ inputs.host }}
+        target: ${{ inputs.target }}
+        arch: ''
+        dir: ${{ inputs.dir }}
+        tools: 'tools_ifw'
+        setup-python: false
+        cache: true
