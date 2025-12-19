@@ -4,7 +4,7 @@ on:
   push:
     branches:
     #   - master
-      - 'Stable*'
+    #  - 'Stable*'
     # tags:
     #   - 'v*'
     paths-ignore:

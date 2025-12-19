@@ -3,7 +3,7 @@ name: Linux
 on:
   push:
     branches:
-      - 'Stable*'
+    #  - 'Stable*'
     # tags:
     #   - 'v*'
     paths-ignore:
