@@ -96,6 +96,13 @@ void VideoManager::init(QQuickWindow *mainWindow)
     (void) connect(_videoSettings->lowLatencyMode(), &Fact::rawValueChanged, this, [this](const QVariant &value) { Q_UNUSED(value); _restartAllVideos(); });
     (void) connect(MultiVehicleManager::instance(), &MultiVehicleManager::activeVehicleChanged, this, &VideoManager::_setActiveVehicle);
 
+    // Thermal video settings connections
+    (void) connect(_videoSettings->enableManualThermalConfig(), &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
+    (void) connect(_videoSettings->thermalVideoSource(), &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
+    (void) connect(_videoSettings->thermalUdpUrl(), &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
+    (void) connect(_videoSettings->thermalRtspUrl(), &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
+    (void) connect(_videoSettings->thermalTcpUrl(), &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
+
     (void) connect(this, &VideoManager::autoStreamConfiguredChanged, this, &VideoManager::_videoSourceChanged);
 
     _mainWindow->scheduleRenderJob(new FinishVideoInitialization(), QQuickWindow::BeforeSynchronizingStage);
@@ -270,6 +277,11 @@ double VideoManager::thermalAspectRatio() const
         }
     }
 
+    // For manual thermal configuration, use the same aspect ratio setting as main video
+    if (manualThermalConfigured()) {
+        return _videoSettings->aspectRatio()->rawValue().toDouble();
+    }
+
     return 1.0;
 }
 
@@ -294,19 +306,43 @@ double VideoManager::thermalHfov() const
         }
     }
 
+    // For manual thermal configuration, return default hfov (aspect ratio is used as fallback)
+    if (manualThermalConfigured()) {
+        return _videoSettings->aspectRatio()->rawValue().toDouble();
+    }
+
     return _videoSettings->aspectRatio()->rawValue().toDouble();
 }
 
 bool VideoManager::hasThermal() const
 {
+    // Check if manual thermal configuration is enabled
+    bool manualConfigured = manualThermalConfigured();
+    qCDebug(VideoManagerLog) << "hasThermal() - Manual configured:" << manualConfigured;
+
+    if (manualConfigured) {
+        return true;
+    }
+
+    // Check for auto-configured thermal stream from MAVLink
     for (VideoReceiver *receiver : _videoReceivers) {
         QGCVideoStreamInfo *pInfo = receiver->videoStreamInfo();
         if (receiver->isThermal() && pInfo && pInfo->isThermal()) {
+            qCDebug(VideoManagerLog) << "hasThermal() - Auto configured via MAVLink";
             return true;
         }
     }
 
+    qCDebug(VideoManagerLog) << "hasThermal() - No thermal video";
     return false;
+}
+
+bool VideoManager::manualThermalConfigured() const
+{
+    bool enabled = _videoSettings->enableManualThermalConfig()->rawValue().toBool();
+    bool streamConfigured = _videoSettings->thermalStreamConfigured();
+    qCDebug(VideoManagerLog) << "manualThermalConfigured() - Enabled:" << enabled << "Stream configured:" << streamConfigured;
+    return enabled && streamConfigured;
 }
 
 bool VideoManager::hasVideo() const
@@ -398,8 +434,10 @@ void VideoManager::_videoSourceChanged()
         emit hasVideoChanged();
         emit isStreamSourceChanged();
         emit isAutoStreamChanged();
+        emit decodingChanged();  // Notify thermal video availability change
 
-        if (hasVideo()) {
+        // Restart videos based on their configuration
+        if (hasVideo() || hasThermal()) {
             _restartAllVideos();
         } else {
             stopVideo();
@@ -500,6 +538,57 @@ bool VideoManager::_updateAutoStream(VideoReceiver *receiver)
     return settingsChanged;
 }
 
+bool VideoManager::_updateManualThermalStream(VideoReceiver *receiver)
+{
+    if (!receiver || !receiver->isThermal()) {
+        qCDebug(VideoManagerLog) << "Manual thermal stream update skipped - invalid receiver";
+        return false;
+    }
+
+    bool settingsChanged = false;
+    QString source = _videoSettings->thermalVideoSource()->rawValue().toString();
+
+    qCDebug(VideoManagerLog) << "===== Manual thermal configuration =====";
+    qCDebug(VideoManagerLog) << "Thermal source:" << source;
+    qCDebug(VideoManagerLog) << "Receiver name:" << receiver->name();
+    qCDebug(VideoManagerLog) << "Current URI:" << receiver->uri();
+
+#ifdef QGC_GST_STREAMING
+    // Handle WebRTC thermal stream
+    if (source == VideoSettings::videoSourceWebRTC) {
+        auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+        if (gstReceiver) {
+            gstReceiver->enableInternalRtpMode(GstVideoReceiver::InternalCodec::H264);
+            settingsChanged |= _updateVideoUri(receiver, QString());
+        }
+    } else
+#endif
+    if (source == VideoSettings::videoSourceUDPH264) {
+        settingsChanged |= _updateVideoUri(receiver, QStringLiteral("udp://%1").arg(_videoSettings->thermalUdpUrl()->rawValue().toString()));
+    } else if (source == VideoSettings::videoSourceUDPH265) {
+        settingsChanged |= _updateVideoUri(receiver, QStringLiteral("udp265://%1").arg(_videoSettings->thermalUdpUrl()->rawValue().toString()));
+    } else if (source == VideoSettings::videoSourceRTSP) {
+        settingsChanged |= _updateVideoUri(receiver, _videoSettings->thermalRtspUrl()->rawValue().toString());
+    } else if (source == VideoSettings::videoSourceTCP) {
+        settingsChanged |= _updateVideoUri(receiver, QStringLiteral("tcp://%1").arg(_videoSettings->thermalTcpUrl()->rawValue().toString()));
+    } else if ((source == VideoSettings::videoDisabled) || (source == VideoSettings::videoSourceNoVideo)) {
+        settingsChanged |= _updateVideoUri(receiver, QString());
+    } else {
+        qCWarning(VideoManagerLog) << "Unknown thermal video source:" << source;
+        settingsChanged |= _updateVideoUri(receiver, QString());
+    }
+
+    qCDebug(VideoManagerLog) << "Settings changed:" << settingsChanged;
+    qCDebug(VideoManagerLog) << "New URI:" << receiver->uri();
+    qCDebug(VideoManagerLog) << "========================================";
+
+    if (settingsChanged) {
+        emit manualThermalConfiguredChanged();
+    }
+
+    return settingsChanged;
+}
+
 bool VideoManager::_updateVideoUri(VideoReceiver *receiver, const QString &uri)
 {
     if (!receiver) {
@@ -533,7 +622,16 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
         settingsChanged = true;
     }
 
+    // Handle thermal receiver separately
     if (receiver->isThermal()) {
+        // Check if manual thermal configuration is enabled
+        if (_videoSettings->enableManualThermalConfig()->rawValue().toBool()) {
+            qCDebug(VideoManagerLog) << "Using manual thermal configuration";
+            settingsChanged |= _updateManualThermalStream(receiver);
+        } else {
+            qCDebug(VideoManagerLog) << "Using auto thermal configuration";
+            settingsChanged |= _updateAutoStream(receiver);
+        }
         return settingsChanged;
     }
 
@@ -696,23 +794,52 @@ void VideoManager::_startReceiver(VideoReceiver *receiver)
         return;
     }
 
+    qCDebug(VideoManagerLog) << "===== _startReceiver called =====";
+    qCDebug(VideoManagerLog) << "Receiver name:" << receiver->name();
+    qCDebug(VideoManagerLog) << "Is thermal:" << receiver->isThermal();
+    qCDebug(VideoManagerLog) << "Already started:" << receiver->started();
+
     if (receiver->started()) {
         qCDebug(VideoManagerLog) << "VideoReceiver is already started" << receiver->name();
         return;
     }
 
-    if (receiver->uri().isEmpty() && !_webrtcInternalModeEnabled) {
-        qCDebug(VideoManagerLog) << "VideoUri is NULL" << receiver->name();
+    // Check if WebRTC internal mode is enabled for this receiver
+    bool isWebRtcInternal = false;
+    if (receiver->isThermal()) {
+        // Thermal receiver: check if it's using WebRTC
+        QString thermalSource = _videoSettings->thermalVideoSource()->rawValue().toString();
+        isWebRtcInternal = (thermalSource == VideoSettings::videoSourceWebRTC);
+        qCDebug(VideoManagerLog) << "Thermal source:" << thermalSource;
+        qCDebug(VideoManagerLog) << "Is WebRTC internal:" << isWebRtcInternal;
+    } else {
+        // Main video receiver: check global WebRTC mode
+        isWebRtcInternal = _webrtcInternalModeEnabled;
+        qCDebug(VideoManagerLog) << "Is WebRTC internal (main):" << isWebRtcInternal;
+    }
+
+    qCDebug(VideoManagerLog) << "Current URI:" << receiver->uri();
+    qCDebug(VideoManagerLog) << "URI empty:" << receiver->uri().isEmpty();
+
+    if (receiver->uri().isEmpty() && !isWebRtcInternal) {
+        qCWarning(VideoManagerLog) << "Cannot start receiver - URI is empty and not WebRTC mode:" << receiver->name();
         return;
     }
 
-    const QString source = _videoSettings->videoSource()->rawValue().toString();
+    const QString source = receiver->isThermal()
+        ? _videoSettings->thermalVideoSource()->rawValue().toString()
+        : _videoSettings->videoSource()->rawValue().toString();
+
+    qCDebug(VideoManagerLog) << "Video source:" << source;
     /* The gstreamer rtsp source will switch to tcp if udp is not available after 5 seconds.
        So we should allow for some negotiation time for rtsp */
 
     const uint32_t timeout = ((source == VideoSettings::videoSourceRTSP) ? _videoSettings->rtspTimeout()->rawValue().toUInt() : 3);
 
+    qCDebug(VideoManagerLog) << "Starting receiver with timeout:" << timeout;
     receiver->start(timeout);
+    qCDebug(VideoManagerLog) << "receiver->start() called";
+    qCDebug(VideoManagerLog) << "====================================";
 }
 
 void VideoManager::_initVideoReceiver(VideoReceiver *receiver, QQuickWindow *window)

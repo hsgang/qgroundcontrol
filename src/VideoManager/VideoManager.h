@@ -35,6 +35,7 @@ class VideoManager : public QObject
     Q_PROPERTY(bool     qtmultimediaEnabled     READ qtmultimediaEnabled                        CONSTANT)
     Q_PROPERTY(bool     uvcEnabled              READ uvcEnabled                                 CONSTANT)
     Q_PROPERTY(bool     autoStreamConfigured    READ autoStreamConfigured                       NOTIFY autoStreamConfiguredChanged)
+    Q_PROPERTY(bool     manualThermalConfigured READ manualThermalConfigured                    NOTIFY manualThermalConfiguredChanged)
     Q_PROPERTY(bool     decoding                READ decoding                                   NOTIFY decodingChanged)
     Q_PROPERTY(bool     fullScreen              READ fullScreen             WRITE setfullScreen NOTIFY fullScreenChanged)
     Q_PROPERTY(bool     hasThermal              READ hasThermal                                 NOTIFY decodingChanged)
@@ -72,6 +73,7 @@ public:
     void init(QQuickWindow *rootWindow);
     void cleanup();
     bool autoStreamConfigured() const;
+    bool manualThermalConfigured() const;
     bool decoding() const { return _decoding; }
     bool fullScreen() const { return _fullScreen; }
     bool hasThermal() const;
@@ -95,6 +97,7 @@ public:
 signals:
     void aspectRatioChanged();
     void autoStreamConfiguredChanged();
+    void manualThermalConfiguredChanged();
     void decodingChanged();
     void fullScreenChanged();
     void hasVideoChanged();
@@ -117,6 +120,7 @@ private:
     void _initAfterQmlIsReady();
     void _initVideoReceiver(VideoReceiver *receiver, QQuickWindow *window);
     bool _updateAutoStream(VideoReceiver *receiver);
+    bool _updateManualThermalStream(VideoReceiver *receiver);
     bool _updateUVC(VideoReceiver *receiver);
     bool _updateSettings(VideoReceiver *receiver);
     bool _updateVideoUri(VideoReceiver *receiver, const QString &uri);

@@ -39,8 +39,16 @@ public:
     DEFINE_SETTINGFACT(lowLatencyMode)
     DEFINE_SETTINGFACT(forceVideoDecoder)
     DEFINE_SETTINGFACT(enableMavlinkCameraStreamInformaion)
+    DEFINE_SETTINGFACT(enableManualThermalConfig)
+    DEFINE_SETTINGFACT(thermalVideoSource)
+    DEFINE_SETTINGFACT(thermalUdpUrl)
+    DEFINE_SETTINGFACT(thermalTcpUrl)
+    DEFINE_SETTINGFACT(thermalRtspUrl)
+    DEFINE_SETTINGFACT(thermalViewMode)
+    DEFINE_SETTINGFACT(thermalOpacity)
 
     Q_PROPERTY(bool     streamConfigured        READ streamConfigured       NOTIFY streamConfiguredChanged)
+    Q_PROPERTY(bool     thermalStreamConfigured READ thermalStreamConfigured NOTIFY thermalStreamConfiguredChanged)
     Q_PROPERTY(QString  rtspVideoSource         READ rtspVideoSource        CONSTANT)
     Q_PROPERTY(QString  udp264VideoSource       READ udp264VideoSource      CONSTANT)
     Q_PROPERTY(QString  udp265VideoSource       READ udp265VideoSource      CONSTANT)
@@ -49,6 +57,7 @@ public:
     Q_PROPERTY(QString  disabledVideoSource     READ disabledVideoSource    CONSTANT)
 
     bool     streamConfigured       ();
+    bool     thermalStreamConfigured();
     QString  rtspVideoSource        () { return videoSourceRTSP; }
     QString  udp264VideoSource      () { return videoSourceUDPH264; }
     QString  udp265VideoSource      () { return videoSourceUDPH265; }
@@ -72,7 +81,8 @@ public:
     static constexpr const char* videoSourceWebRTC            = QT_TRANSLATE_NOOP("VideoSettings", "WEBRTC");
 
 signals:
-    void streamConfiguredChanged    (bool configured);
+    void streamConfiguredChanged        (bool configured);
+    void thermalStreamConfiguredChanged (bool configured);
 
 private slots:
     void _configChanged             (QVariant value);

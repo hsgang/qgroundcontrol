@@ -64,6 +64,28 @@ DECLARE_SETTINGGROUP(Video, "Video")
 
     _nameToMetaDataMap[videoSourceName]->setEnumInfo(videoSourceCookedList, videoSourceList);
 
+    // Setup enum values for thermalVideoSource settings into meta data
+    QVariantList thermalVideoSourceList;
+#if defined(QGC_GST_STREAMING) || defined(QGC_QT_STREAMING)
+    thermalVideoSourceList.append(videoSourceRTSP);
+    thermalVideoSourceList.append(videoSourceUDPH264);
+    thermalVideoSourceList.append(videoSourceUDPH265);
+    thermalVideoSourceList.append(videoSourceWebRTC);
+#endif
+    if (thermalVideoSourceList.count() == 0) {
+        thermalVideoSourceList.append(videoSourceNoVideo);
+    } else {
+        thermalVideoSourceList.insert(0, videoDisabled);
+    }
+
+    // make translated strings for thermal video source
+    QStringList thermalVideoSourceCookedList;
+    for (const QVariant& source: thermalVideoSourceList) {
+        thermalVideoSourceCookedList.append(VideoSettings::tr(source.toString().toStdString().c_str()));
+    }
+
+    _nameToMetaDataMap[thermalVideoSourceName]->setEnumInfo(thermalVideoSourceCookedList, thermalVideoSourceList);
+
     _setForceVideoDecodeList();
 
     // Set default value for videoSource
@@ -89,6 +111,7 @@ DECLARE_SETTINGSFACT(VideoSettings, enableStorageLimit)
 DECLARE_SETTINGSFACT(VideoSettings, streamEnabled)
 DECLARE_SETTINGSFACT(VideoSettings, disableWhenDisarmed)
 DECLARE_SETTINGSFACT(VideoSettings, enableMavlinkCameraStreamInformaion)
+DECLARE_SETTINGSFACT(VideoSettings, enableManualThermalConfig)
 
 DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, videoSource)
 {
@@ -188,6 +211,49 @@ DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, tcpUrl)
     return _tcpUrlFact;
 }
 
+DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, thermalVideoSource)
+{
+    if (!_thermalVideoSourceFact) {
+        _thermalVideoSourceFact = _createSettingsFact(thermalVideoSourceName);
+        //-- Check for sources no longer available
+        if(!_thermalVideoSourceFact->enumValues().contains(_thermalVideoSourceFact->rawValue().toString())) {
+            _thermalVideoSourceFact->setRawValue(videoDisabled);
+        }
+        connect(_thermalVideoSourceFact, &Fact::valueChanged, this, &VideoSettings::_configChanged);
+    }
+    return _thermalVideoSourceFact;
+}
+
+DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, thermalUdpUrl)
+{
+    if (!_thermalUdpUrlFact) {
+        _thermalUdpUrlFact = _createSettingsFact(thermalUdpUrlName);
+        connect(_thermalUdpUrlFact, &Fact::valueChanged, this, &VideoSettings::_configChanged);
+    }
+    return _thermalUdpUrlFact;
+}
+
+DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, thermalRtspUrl)
+{
+    if (!_thermalRtspUrlFact) {
+        _thermalRtspUrlFact = _createSettingsFact(thermalRtspUrlName);
+        connect(_thermalRtspUrlFact, &Fact::valueChanged, this, &VideoSettings::_configChanged);
+    }
+    return _thermalRtspUrlFact;
+}
+
+DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, thermalTcpUrl)
+{
+    if (!_thermalTcpUrlFact) {
+        _thermalTcpUrlFact = _createSettingsFact(thermalTcpUrlName);
+        connect(_thermalTcpUrlFact, &Fact::valueChanged, this, &VideoSettings::_configChanged);
+    }
+    return _thermalTcpUrlFact;
+}
+
+DECLARE_SETTINGSFACT(VideoSettings, thermalViewMode)
+DECLARE_SETTINGSFACT(VideoSettings, thermalOpacity)
+
 bool VideoSettings::streamConfigured(void)
 {
     //-- First, check if it's autoconfigured
@@ -244,9 +310,45 @@ bool VideoSettings::streamConfigured(void)
     return false;
 }
 
+bool VideoSettings::thermalStreamConfigured(void)
+{
+    // If manual thermal config is disabled, return false (use auto-configuration)
+    if (!enableManualThermalConfig()->rawValue().toBool()) {
+        return false;
+    }
+
+    //-- Check if it's disabled
+    QString vSource = thermalVideoSource()->rawValue().toString();
+    if(vSource == videoSourceNoVideo || vSource == videoDisabled) {
+        return false;
+    }
+    //-- If UDP, check for URL
+    if(vSource == videoSourceUDPH264 || vSource == videoSourceUDPH265) {
+        qCDebug(VideoManagerLog) << "Testing thermal configuration for UDP Stream:" << thermalUdpUrl()->rawValue().toString();
+        return !thermalUdpUrl()->rawValue().toString().isEmpty();
+    }
+    //-- If WEBRTC, good to go
+    if(vSource == videoSourceWebRTC) {
+        qCDebug(VideoManagerLog) << "Testing thermal configuration for WebRTC";
+        return true;
+    }
+    //-- If RTSP, check for URL
+    if(vSource == videoSourceRTSP) {
+        qCDebug(VideoManagerLog) << "Testing thermal configuration for RTSP Stream:" << thermalRtspUrl()->rawValue().toString();
+        return !thermalRtspUrl()->rawValue().toString().isEmpty();
+    }
+    //-- If TCP, check for URL
+    if(vSource == videoSourceTCP) {
+        qCDebug(VideoManagerLog) << "Testing thermal configuration for TCP Stream:" << thermalTcpUrl()->rawValue().toString();
+        return !thermalTcpUrl()->rawValue().toString().isEmpty();
+    }
+    return false;
+}
+
 void VideoSettings::_configChanged(QVariant)
 {
     emit streamConfiguredChanged(streamConfigured());
+    emit thermalStreamConfiguredChanged(thermalStreamConfigured());
 }
 
 void VideoSettings::_setForceVideoDecodeList()

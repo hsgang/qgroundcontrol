@@ -142,6 +142,59 @@
     "longDesc":  "enableMavlinkCameraStreamInformaion",
     "type":             "bool",
     "default":     false
+},
+{
+    "name":             "enableManualThermalConfig",
+    "shortDesc": "Enable Manual Thermal Configuration",
+    "longDesc":  "Enable manual thermal video stream configuration. When disabled, thermal stream is auto-configured from MAVLink VIDEO_STREAM_INFORMATION.",
+    "type":             "bool",
+    "default":     false
+},
+{
+    "name":             "thermalVideoSource",
+    "shortDesc": "Thermal Video source",
+    "longDesc":  "Source for thermal video. When disabled, thermal video is auto-configured from MAVLink.",
+    "type":             "string",
+    "default":     ""
+},
+{
+    "name":             "thermalUdpUrl",
+    "shortDesc": "Thermal Video UDP Url",
+    "longDesc":  "UDP url address and port for thermal video stream. Example: 0.0.0.0:5601",
+    "type":             "string",
+    "default":     "0.0.0.0:5601"
+},
+{
+    "name":             "thermalRtspUrl",
+    "shortDesc": "Thermal Video RTSP Url",
+    "longDesc":  "RTSP url for thermal video stream. Example: rtsp://192.168.42.1:554/thermal",
+    "type":             "string",
+    "default":     ""
+},
+{
+    "name":             "thermalTcpUrl",
+    "shortDesc": "Thermal Video TCP Url",
+    "longDesc":  "TCP url for thermal video stream. Example: 192.168.143.200:3002",
+    "type":             "string",
+    "default":     ""
+},
+{
+    "name":             "thermalViewMode",
+    "shortDesc": "Thermal View Mode",
+    "longDesc":  "Display mode for thermal video overlay: Off, Blend, Full, or Picture-in-Picture",
+    "type":             "uint32",
+    "default":     2,
+    "min":              0,
+    "max":              3
+},
+{
+    "name":             "thermalOpacity",
+    "shortDesc": "Thermal Blend Opacity",
+    "longDesc":  "Opacity percentage for thermal video in Blend mode",
+    "type":             "uint32",
+    "default":     85,
+    "min":              0,
+    "max":              100
 }
 ]
 }

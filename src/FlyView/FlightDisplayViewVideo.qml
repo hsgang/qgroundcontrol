@@ -46,14 +46,14 @@ Item {
     function getHeight() {
         return videoBackground.getHeight()
     }
-    property var    _settingsManager:   QGroundControl.settingsManager
-    property var    _videoSettings:     _settingsManager.videoSettings
-    property string _videoSource:       _videoSettings.videoSource.rawValue
-    // property bool   _isGst:             QGroundControl.videoManager.isGStreamer
-    property bool   _isRTSP:            _videoSource === _videoSettings.rtspVideoSource
+    property var    _settingsManager:           QGroundControl.settingsManager
+    property var    _videoSettings:             _settingsManager.videoSettings
+    property string _videoSource:               _videoSettings.videoSource.rawValue
+    // property bool   _isGst:                  QGroundControl.videoManager.isGStreamer
+    property bool   _isRTSP:                    _videoSource === _videoSettings.rtspVideoSource
     property var    _videoManager:              QGroundControl.videoManager
     property bool   _videoAutoStreamConfig:     _videoManager.autoStreamConfigured
-
+    property bool   _manualThermalConfig:       _videoSettings.enableManualThermalConfig.rawValue
 
     property double _thermalHeightFactor: 0.85 //-- TODO
 
@@ -274,38 +274,62 @@ Item {
         Item {
             id:                 thermalItem
             width:              height * QGroundControl.videoManager.thermalAspectRatio
-            height:             _camera ? (_camera.thermalMode === MavlinkCameraControl.THERMAL_FULL ? parent.height : (_camera.thermalMode === MavlinkCameraControl.THERMAL_PIP ? ScreenTools.defaultFontPixelHeight * 12 : parent.height * _thermalHeightFactor)) : 0
+            height: {
+                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
+                if (mode === MavlinkCameraControl.THERMAL_FULL) {
+                    return parent.height
+                } else if (mode === MavlinkCameraControl.THERMAL_PIP) {
+                    return parent.height / 3
+                } else {
+                    return parent.height * _thermalHeightFactor
+                }
+            }
             anchors.centerIn:   parent
-            visible:            QGroundControl.videoManager.hasThermal && _camera.thermalMode !== MavlinkCameraControl.THERMAL_OFF
+            visible: {
+                if (!QGroundControl.videoManager.hasThermal) return false
+                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
+                return mode !== MavlinkCameraControl.THERMAL_OFF
+            }
+
             function pipOrNot() {
-                if(_camera) {
-                    if(_camera.thermalMode === MavlinkCameraControl.THERMAL_PIP) {
-                        anchors.centerIn    = undefined
-                        anchors.top         = parent.top
-                        anchors.topMargin   = mainWindow.header.height + (ScreenTools.defaultFontPixelHeight * 0.5)
-                        anchors.left        = parent.left
-                        anchors.leftMargin  = ScreenTools.defaultFontPixelWidth * 12
-                    } else {
-                        anchors.top         = undefined
-                        anchors.topMargin   = undefined
-                        anchors.left        = undefined
-                        anchors.leftMargin  = undefined
-                        anchors.centerIn    = parent
-                    }
+                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
+
+                if(mode === MavlinkCameraControl.THERMAL_PIP) {
+                    anchors.centerIn    = undefined
+                    anchors.bottom      = parent.bottom
+                    anchors.bottomMargin= ScreenTools.defaultFontPixelHeight * 0.5
+                    anchors.horizontalCenter = parent.horizontalCenter
+                } else {
+                    anchors.top         = undefined
+                    anchors.topMargin   = undefined
+                    anchors.left        = undefined
+                    anchors.leftMargin  = undefined
+                    anchors.centerIn    = parent
                 }
             }
             Connections {
                 target:                 _camera
-                function onThermalModeChanged() { thermalItem.pipOrNot() }
+                function onThermalModeChanged() {
+                    thermalItem.pipOrNot()
+                }
             }
-            onVisibleChanged: {
-                thermalItem.pipOrNot()
+            Connections {
+                target:                 _videoSettings.thermalViewMode
+                function onRawValueChanged() {
+                    thermalItem.pipOrNot()
+                }
             }
             QGCVideoBackground {
                 id:             thermalVideo
                 objectName:     "thermalVideo"
                 anchors.fill:   parent
-                opacity:        _camera ? (_camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND ? _camera.thermalOpacity / 100 : 1.0) : 0
+                opacity: {
+                    var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
+                    if (mode === MavlinkCameraControl.THERMAL_BLEND) {
+                        return _manualThermalConfig ? (_videoSettings.thermalOpacity.rawValue / 100) : (_camera ? _camera.thermalOpacity / 100 : 0.85)
+                    }
+                    return 1.0
+                }
             }
         }
         //-- Zoom

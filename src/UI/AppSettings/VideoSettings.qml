@@ -34,6 +34,14 @@ SettingsPage {
     property real   _urlFieldWidth:             ScreenTools.defaultFontPixelWidth * 40
     property bool   _requiresUDPUrl:            _isUDP264 || _isUDP265 || _isMPEGTS
 
+    // Thermal video properties
+    property string _thermalVideoSource:        _videoSettings.thermalVideoSource.rawValue
+    property bool   _isThermalUDP264:           _thermalVideoSource === _videoSettings.udp264VideoSource
+    property bool   _isThermalUDP265:           _thermalVideoSource === _videoSettings.udp265VideoSource
+    property bool   _isThermalRTSP:             _thermalVideoSource === _videoSettings.rtspVideoSource
+    property bool   _isThermalTCP:              _thermalVideoSource === _videoSettings.tcpVideoSource
+    property bool   _requiresThermalUDPUrl:     _isThermalUDP264 || _isThermalUDP265
+
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Video Source")
@@ -138,6 +146,112 @@ SettingsPage {
             description:        qsTr("Using video_stream_information from Mavlink")
             fact:               _videoSettings.enableMavlinkCameraStreamInformaion
             visible:            fact.visible
+        }
+    }
+
+    SettingsGroupLayout {
+        Layout.fillWidth:   true
+        heading:            qsTr("Thermal Video Source")
+        headingDescription: _videoSettings.enableManualThermalConfig.rawValue ? qsTr("Manual thermal video stream configuration") : ""
+        visible:            !_videoSourceDisabled
+
+        FactCheckBoxSlider {
+            Layout.fillWidth:   true
+            text:               qsTr("Enable Manual Thermal Configuration")
+            description:        qsTr("Override MAVLink auto-configuration for thermal video")
+            fact:               _videoSettings.enableManualThermalConfig
+            visible:            fact.visible
+        }
+
+        LabelledFactComboBox {
+            Layout.fillWidth:   true
+            label:              qsTr("Source")
+            indexModel:         false
+            fact:               _videoSettings.thermalVideoSource
+            visible:            fact.visible && _videoSettings.enableManualThermalConfig.rawValue
+            enabled:            _videoSettings.enableManualThermalConfig.rawValue
+        }
+    }
+
+    SettingsGroupLayout {
+        Layout.fillWidth:   true
+        heading:            qsTr("Thermal Video Connection")
+        visible:            !_videoSourceDisabled &&
+                           _videoSettings.enableManualThermalConfig.rawValue &&
+                           (_isThermalTCP || _isThermalRTSP || _requiresThermalUDPUrl)
+
+        ColumnLayout {
+            Layout.fillWidth:   true
+            visible:            _isThermalRTSP && _videoSettings.thermalRtspUrl.visible
+            spacing:            0
+
+            QGCLabel {
+                Layout.fillWidth:   true
+                text:               qsTr("RTSP URL")
+                font.pointSize:     ScreenTools.smallFontPointSize
+                color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
+            }
+            FactTextField {
+                Layout.fillWidth:   true
+                fact:               _videoSettings.thermalRtspUrl
+            }
+        }
+
+        LabelledFactTextField {
+            Layout.fillWidth:           true
+            label:                      qsTr("TCP URL")
+            textFieldPreferredWidth:    _urlFieldWidth
+            fact:                       _videoSettings.thermalTcpUrl
+            visible:                    _isThermalTCP && _videoSettings.thermalTcpUrl.visible
+        }
+
+        LabelledFactTextField {
+            Layout.fillWidth:           true
+            textFieldPreferredWidth:    _urlFieldWidth
+            label:                      qsTr("UDP URL")
+            fact:                       _videoSettings.thermalUdpUrl
+            visible:                    _requiresThermalUDPUrl && _videoSettings.thermalUdpUrl.visible
+        }
+    }
+
+    SettingsGroupLayout {
+        Layout.fillWidth:   true
+        heading:            qsTr("Thermal Video Display")
+        visible:            !_videoSourceDisabled && QGroundControl.videoManager.hasThermal
+
+        QGCLabel {
+            Layout.fillWidth:   true
+            text:               qsTr("View Mode")
+            font.pointSize:     ScreenTools.smallFontPointSize
+        }
+
+        QGCComboBox {
+            Layout.fillWidth:   true
+            sizeToContents:     true
+            model:              [ qsTr("Off"), qsTr("Blend"), qsTr("Full"), qsTr("Picture In Picture") ]
+            currentIndex:       _videoSettings.thermalViewMode.rawValue
+            onActivated:        (index) => {
+                _videoSettings.thermalViewMode.rawValue = index
+            }
+        }
+
+        QGCLabel {
+            Layout.fillWidth:   true
+            text:               qsTr("Blend Opacity")
+            font.pointSize:     ScreenTools.smallFontPointSize
+            visible:            _videoSettings.thermalViewMode.rawValue === 1
+        }
+
+        QGCSlider {
+            Layout.fillWidth:   true
+            to:                 100
+            from:               0
+            value:              _videoSettings.thermalOpacity.rawValue
+            live:               true
+            visible:            _videoSettings.thermalViewMode.rawValue === 1
+            onValueChanged:     {
+                _videoSettings.thermalOpacity.rawValue = value
+            }
         }
     }
 

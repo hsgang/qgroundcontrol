@@ -396,6 +396,8 @@ Rectangle {
                 property bool _multipleMavlinkCameraStreams:    _camera.streamLabels.length > 1
                 property bool _cameraStorageSupported:          _camera.storageStatus !== MavlinkCameraControl.STORAGE_NOT_SUPPORTED
                 property var  _videoSettings:                   QGroundControl.settingsManager.videoSettings
+                property bool _manualThermalConfig:             _videoSettings.enableManualThermalConfig.rawValue
+                property bool _hasThermal:                      QGroundControl.videoManager.hasThermal
 
                 ColumnLayout {
                     spacing: _margins
@@ -422,13 +424,13 @@ Rectangle {
 
                         QGCLabel {
                             text:               qsTr("Thermal View Mode")
-                            visible:            _camera.thermalStreamInstance
+                            visible:            _hasThermal
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
                         QGCLabel {
                             text:               qsTr("Blend Opacity")
-                            visible:            _camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND
+                            visible:            _hasThermal && (_manualThermalConfig || (_camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND))
                             onVisibleChanged:   gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
@@ -499,19 +501,31 @@ Rectangle {
                             Layout.fillWidth:   true
                             sizeToContents:     true
                             model:              [ qsTr("Off"), qsTr("Blend"), qsTr("Full"), qsTr("Picture In Picture") ]
-                            currentIndex:       _camera.thermalMode
-                            visible:            _camera.thermalStreamInstance
-                            onActivated:        (index) => { _camera.thermalMode = index }
+                            currentIndex:       _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : _camera.thermalMode
+                            visible:            _hasThermal
+                            onActivated:        (index) => {
+                                if (_manualThermalConfig) {
+                                    _videoSettings.thermalViewMode.rawValue = index
+                                } else {
+                                    _camera.thermalMode = index
+                                }
+                            }
                         }
 
                         QGCSlider {
                             Layout.fillWidth:   true
                             to:                 100
                             from:               0
-                            value:              _camera.thermalOpacity
+                            value:              _manualThermalConfig ? _videoSettings.thermalOpacity.rawValue : _camera.thermalOpacity
                             live:               true
-                            visible:            _camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND
-                            onValueChanged:     _camera.thermalOpacity = value
+                            visible:            _hasThermal && (_manualThermalConfig ? (_videoSettings.thermalViewMode.rawValue === MavlinkCameraControl.THERMAL_BLEND) : (_camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND))
+                            onValueChanged:     {
+                                if (_manualThermalConfig) {
+                                    _videoSettings.thermalOpacity.rawValue = value
+                                } else {
+                                    _camera.thermalOpacity = value
+                                }
+                            }
                         }
 
                         // Mavlink Camera Protocol active settings
