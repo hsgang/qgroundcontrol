@@ -1,47 +1,47 @@
 name: Linux
 
 on:
-  push:
-    branches:
-    #  - 'Stable*'
-    # tags:
-    #   - 'v*'
-    paths-ignore:
-      - 'docs/**'
-  pull_request:
-    paths:
-      - '.github/workflows/linux.yml'
-      - '.github/actions/**'
-      - 'deploy/linux/**'
-      - 'src/**'
-      - 'test/**'
-      - 'CMakeLists.txt'
-      - 'cmake/**'
-      - 'tools/setup/*debian*'
-  workflow_dispatch:
-    inputs:
-      build_type:
-        description: 'Build type'
-        required: false
-        default: 'Release'
-        type: choice
-        options:
-          - Release
-          - Debug
-      codeql:
-        description: 'Run CodeQL security analysis (disabled by default - conflicts with GitHub default setup)'
-        required: false
-        default: false
-        type: boolean
-      codeql_suite:
-        description: 'CodeQL query suite'
-        required: false
-        default: 'security-extended'
-        type: choice
-        options:
-          - default
-          - security-extended
-          - security-and-quality
+  # push:
+  #   branches:
+  #   #  - 'Stable*'
+  #   # tags:
+  #   #   - 'v*'
+  #   paths-ignore:
+  #     - 'docs/**'
+  # pull_request:
+  #   paths:
+  #     - '.github/workflows/linux.yml'
+  #     - '.github/actions/**'
+  #     - 'deploy/linux/**'
+  #     - 'src/**'
+  #     - 'test/**'
+  #     - 'CMakeLists.txt'
+  #     - 'cmake/**'
+  #     - 'tools/setup/*debian*'
+  # workflow_dispatch:
+  #   inputs:
+  #     build_type:
+  #       description: 'Build type'
+  #       required: false
+  #       default: 'Release'
+  #       type: choice
+  #       options:
+  #         - Release
+  #         - Debug
+  #     codeql:
+  #       description: 'Run CodeQL security analysis (disabled by default - conflicts with GitHub default setup)'
+  #       required: false
+  #       default: false
+  #       type: boolean
+  #     codeql_suite:
+  #       description: 'CodeQL query suite'
+  #       required: false
+  #       default: 'security-extended'
+  #       type: choice
+  #       options:
+  #         - default
+  #         - security-extended
+  #         - security-and-quality
   workflow_call:
 
 concurrency:

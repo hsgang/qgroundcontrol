@@ -1,25 +1,25 @@
 name: Docker
 
 on:
-  push:
-    # branches:
-    #   - master
-    #   - 'Stable*'
-    # tags:
-    #   - 'v*'
-    paths-ignore:
-      - 'docs/**'
-  pull_request:
-    paths:
-      - '.github/workflows/docker.yml'
-      - '.github/actions/docker/**'
-      - '.github/build-config.json'
-      - 'deploy/docker/**'
-      - 'deploy/linux/**'
-      - 'tools/setup/**'
-      - 'src/**'
-      - 'CMakeLists.txt'
-      - 'cmake/**'
+  # push:
+  #   # branches:
+  #   #   - master
+  #   #   - 'Stable*'
+  #   # tags:
+  #   #   - 'v*'
+  #   paths-ignore:
+  #     - 'docs/**'
+  # pull_request:
+  #   paths:
+  #     - '.github/workflows/docker.yml'
+  #     - '.github/actions/docker/**'
+  #     - '.github/build-config.json'
+  #     - 'deploy/docker/**'
+  #     - 'deploy/linux/**'
+  #     - 'tools/setup/**'
+  #     - 'src/**'
+  #     - 'CMakeLists.txt'
+  #     - 'cmake/**'
   workflow_dispatch:
 
 concurrency:
