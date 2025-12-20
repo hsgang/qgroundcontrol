@@ -20,6 +20,7 @@ import QGroundControl.FlyView
 import QGroundControl.FlightMap
 import QGroundControl.VehicleSetup
 import QGroundControl.AnalyzeView
+import QGroundControl.Toolbar
 
 /// @brief Native QML top level window
 /// All properties defined here are visible to all QML pages.
