@@ -334,7 +334,7 @@ Item {
     }
 
     Item {
-        id: panel
+        id: mainPlanViewArea
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: planToolBar.bottom
@@ -647,7 +647,7 @@ Item {
         RowLayout {
             id: missionStatus
             anchors.margins: _toolsMargin
-            anchors.left: toolStrip.right
+            anchors.left: _calcLeftAnchor()
             anchors.right: rightPanel.left
             anchors.bottom: parent.bottom
             spacing: 0
@@ -657,6 +657,15 @@ Item {
 
             function showMissionStatus() {
                 _planViewSettings.showMissionItemStatus.rawValue = true
+            }
+
+            function _calcLeftAnchor() {
+                let bottomOfToolStrip = toolStrip.y + toolStrip.height
+                let largestStatsHeight = Math.max(terrainStatus.height, missionStats.height)
+                if (bottomOfToolStrip + largestStatsHeight > parent.height - missionStatus.anchors.margins) {
+                    return toolStrip.right
+                }
+                return parent.left
             }
 
             function _toggleMissionStatusVisibility() {
