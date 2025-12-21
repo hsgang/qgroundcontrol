@@ -71,6 +71,7 @@ Rectangle {
         Rectangle {
             Layout.fillWidth:   true
             height:             ScreenTools.defaultFontPixelHeight
+            width:              ScreenTools.defaultFontPixelWidth * 18
             color:              "transparent"
             border.color:       qgcPal.textHighlight
 
