@@ -113,21 +113,6 @@ Rectangle {
                     }
                 }
 
-                FactValueStepper {
-                    id:                 altValueStepper
-                    Layout.fillWidth:   true
-                    label:              qsTr("Altitude%1").arg(_extraLabelText())
-                    fact:               missionItem.altitude
-
-                    function _extraLabelText() {
-                        if (!_globalAltModeIsMixed && missionItem.altitudeMode !== QGroundControl.AltitudeModeRelative) {
-                            return qsTr(" (%1)").arg(QGroundControl.altitudeModeShortDescription(missionItem.altitudeMode))
-                        } else {
-                            return ""
-                        }
-                    }
-                }
-
                 QGCTabButton {
                     id: basicItemsTab
                     icon.source: "/res/PlanSimpleItemBasic.svg"
@@ -247,49 +232,16 @@ Rectangle {
                     }
                 }
 
-                FactValueStepper {
-                    width:              parent.width
-                    label:              object.name
-                    fact:               object
-                    showUnits:          true
-                    showLabel:          true
-                    largeStep:          10
-                    smallStep:          1
-                    enabled:            !object.readOnly
+                FactTextFieldSlider {
+                    Layout.fillWidth: true
+                    label: qsTr("Flight Speed")
+                    fact: missionItem.speedSection.flightSpeed
+                    showEnableCheckbox: true
+                    enableCheckBoxChecked: missionItem.speedSection.specifyFlightSpeed
+                    visible: missionItem.speedSection.available
+
+                    onEnableCheckboxClicked: missionItem.speedSection.specifyFlightSpeed = enableCheckBoxChecked
                 }
-            }
-
-            Repeater {
-                model: missionItem.nanFacts
-
-                FactValueStepper {
-                    width:                  parent.width
-                    label:                  object.name
-                    fact:                   object
-                    showUnits:              true
-                    showLabel:              true
-                    largeStep:              10
-                    smallStep:              1
-                    showEnableCheckbox:     true
-                    enableCheckBoxChecked:  !isNaN(object.rawValue)
-
-                    onEnableCheckboxClicked: object.rawValue = enableCheckBoxChecked ? 0 : NaN
-                }
-            }
-
-            FactValueStepper {
-                width:                  parent.width
-                label:                  qsTr("Flight Speed")
-                fact:                   missionItem.speedSection.flightSpeed
-                showUnits:              true
-                showLabel:              true
-                largeStep:              10
-                smallStep:              1
-                showEnableCheckbox:     true
-                enableCheckBoxChecked:  missionItem.speedSection.specifyFlightSpeed
-                visible:                missionItem.speedSection.available
-
-                onEnableCheckboxClicked: missionItem.speedSection.specifyFlightSpeed = enableCheckBoxChecked
             }
 
             CameraSection {
