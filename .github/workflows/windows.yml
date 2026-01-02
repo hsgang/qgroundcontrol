@@ -57,7 +57,7 @@ jobs:
             os: windows-2022
             host: windows
             arch: win64_msvc2022_64
-            package: QGroundControl-installer-AMD64
+            package: AMPMissionControl-installer-AMD64
 
           # - variant: arm64
           #   os: windows-11-arm
