@@ -1,9 +1,10 @@
 name: Build Results
 
 on:
-  workflow_run:
-    workflows: [Linux, Windows, MacOS, Android]
-    types: [completed]
+  # workflow_run:
+  #   workflows: [Linux, Windows, MacOS, Android]
+  #   types: [completed]
+  workflow_dispatch:
 
 permissions:
   contents: read

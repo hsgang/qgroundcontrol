@@ -1,24 +1,24 @@
 name: Linux
 
 on:
-  push:
-    # branches:
-      # - master
-      # - 'Stable*'
-    # tags:
-    #   - 'v*'
-    paths-ignore:
-      - 'docs/**'
-  pull_request:
-    paths:
-      - '.github/workflows/linux.yml'
-      - '.github/actions/**'
-      - 'deploy/linux/**'
-      - 'src/**'
-      - 'test/**'
-      - 'CMakeLists.txt'
-      - 'cmake/**'
-      - 'tools/setup/*debian*'
+  # push:
+  #   # branches:
+  #     # - master
+  #     # - 'Stable*'
+  #   # tags:
+  #   #   - 'v*'
+  #   paths-ignore:
+  #     - 'docs/**'
+  # pull_request:
+  #   paths:
+  #     - '.github/workflows/linux.yml'
+  #     - '.github/actions/**'
+  #     - 'deploy/linux/**'
+  #     - 'src/**'
+  #     - 'test/**'
+  #     - 'CMakeLists.txt'
+  #     - 'cmake/**'
+  #     - 'tools/setup/*debian*'
   workflow_dispatch:
     inputs:
       build_type:

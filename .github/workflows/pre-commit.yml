@@ -1,19 +1,20 @@
 name: pre-commit
 
 on:
-  push:
-    branches:
-      - master
-      - 'Stable*'
-    paths:
-      - 'src/**'
-      - 'test/**'
-      - '.pre-commit-config.yaml'
-  pull_request:
-    paths:
-      - 'src/**'
-      - 'test/**'
-      - '.pre-commit-config.yaml'
+  # push:
+  #   branches:
+  #     - master
+  #     - 'Stable*'
+  #   paths:
+  #     - 'src/**'
+  #     - 'test/**'
+  #     - '.pre-commit-config.yaml'
+  # pull_request:
+  #   paths:
+  #     - 'src/**'
+  #     - 'test/**'
+  #     - '.pre-commit-config.yaml'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
