@@ -74,13 +74,16 @@ endif()
 set(CONFIG_XML_CONTENT "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <Installer>
     <Name>${CMAKE_PROJECT_NAME}</Name>
-    <Version>1.0.0</Version>
+    <Version>${CMAKE_PROJECT_VERSION}</Version>
     <Title>${CMAKE_PROJECT_NAME} Installer</Title>
     <Publisher>AMP</Publisher>
     <StartMenuDir>${CMAKE_PROJECT_NAME}</StartMenuDir>
-    <MaintenanceToolName>AMC Maintenance Tool</MaintenanceToolName>
-    <TargetDir>@ApplicationsDir@/AMC</TargetDir>
-    <WizardStyle>Modern</WizardStyle>")
+    <MaintenanceToolName>${CMAKE_PROJECT_NAME} Maintenance Tool</MaintenanceToolName>
+    <TargetDir>@ApplicationsDir@/${CMAKE_PROJECT_NAME}</TargetDir>
+    <WizardStyle>Modern</WizardStyle>
+    <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+    <AllowSpaceInPath>true</AllowSpaceInPath>
+    <RemoveTargetDir>true</RemoveTargetDir>")
 
 # Add icon if available
 if(HAS_INSTALLER_ICON)
@@ -104,7 +107,6 @@ file(WRITE "${IFW_CONFIG_DIR}/config.xml" "${CONFIG_XML_CONTENT}")
 # ----------------------------------------------------------------------------
 file(WRITE "${IFW_PACKAGE_DIR}/meta/installscript.js" "function Component()
 {
-
 }
 
 Component.prototype.createOperations = function()
@@ -116,9 +118,11 @@ Component.prototype.createOperations = function()
     }
 
     if (systemInfo.productType === \"windows\") {
-        component.addOperation(\"CreateShortcut\", \"@TargetDir@/bin/AMC.exe\", \"@StartMenuDir@/AMC.lnk\");
-        component.addOperation(\"CreateShortcut\", \"@TargetDir@/bin/AMC.exe\", \"@DesktopDir@/AMC.lnk\");
-        component.addOperation(\"CreateShortcut\", \"@TargetDir@/maintenancetool.exe\", \"@StartMenuDir@/AMC Maintenance Tool.lnk\");
+        component.addOperation(\"CreateShortcut\", \"@TargetDir@/bin/${CMAKE_PROJECT_NAME}.exe\", \"@StartMenuDir@/${CMAKE_PROJECT_NAME}.lnk\",
+            \"workingDirectory=@TargetDir@/bin\", \"iconPath=@TargetDir@/bin/${CMAKE_PROJECT_NAME}.exe\");
+        component.addOperation(\"CreateShortcut\", \"@TargetDir@/bin/${CMAKE_PROJECT_NAME}.exe\", \"@DesktopDir@/${CMAKE_PROJECT_NAME}.lnk\",
+            \"workingDirectory=@TargetDir@/bin\", \"iconPath=@TargetDir@/bin/${CMAKE_PROJECT_NAME}.exe\");
+        component.addOperation(\"CreateShortcut\", \"@TargetDir@/maintenancetool.exe\", \"@StartMenuDir@/${CMAKE_PROJECT_NAME} Maintenance Tool.lnk\");
     }
 }
 ")
