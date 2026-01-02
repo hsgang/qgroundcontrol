@@ -252,6 +252,17 @@ Item {
         }
     }
 
+    GuidedActionConfirm {
+        id:                         guidedActionConfirm
+        height:                     ScreenTools.defaultFontPixelHeight * 2
+        anchors.top:                parent.top
+        anchors.horizontalCenter:   parent.horizontalCenter
+        guidedController:           _guidedController
+        guidedValueSlider:          guidedValueSlider
+        utmspSliderTrigger:         utmspSliderTrigger
+        messageDisplay:             undefined
+    }
+
     // GuidedActionPressHoldConfirm{
     //     Layout.fillWidth:   true
     //     z:                  QGroundControl.zOrderTopMost
@@ -261,11 +272,6 @@ Item {
     //     guidedValueSlider:  _guidedValueSlider
     //     utmspSliderTrigger:          utmspActTrigger
     // }
-
-//    PowerEstimatedIndicator{
-//        id:                         powerEstimatedIndicator
-
-//    }
 
     Rectangle {
         id:                         flyviewStatusRect

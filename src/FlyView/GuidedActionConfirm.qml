@@ -62,13 +62,17 @@ Item {
     }
 
     function confirmCancelled() {
-        guidedValueSlider.visible = false
+        if (guidedValueSlider) {
+            guidedValueSlider.visible = false
+        }
         visible = false
         hideTrigger = false
         visibleTimer.stop()
-        messageDisplay.opacity = 1.0
-        messageFadeTimer.stop()
-        messageOpacityAnimation.stop()
+        if (messageDisplay) {
+            messageDisplay.opacity = 1.0
+        }
+        // messageFadeTimer.stop()
+        // messageOpacityAnimation.stop()
         if (mapIndicator) {
             mapIndicator.actionCancelled()
             mapIndicator = undefined
@@ -77,8 +81,10 @@ Item {
 
     function _reallyShow() {
         visible = true
-        messageDisplay.opacity = 1.0
-        messageFadeTimer.start()
+        if (messageDisplay) {
+            messageDisplay.opacity = 1.0
+        }
+        // messageFadeTimer.start()
     }
 
     Timer {
