@@ -1,12 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 import QtQuick
 import QtPositioning
 import QtQuick.Layouts
@@ -227,14 +218,14 @@ Rectangle {
 
                     QGCPalette { id: captureButtonPalette; colorGroupEnabled: captureButton.enabled }
 
-                    // Rectangle {
-                    //     anchors.centerIn:           parent
-                    //     anchors.alignWhenCentered:  false // Prevents anchors.centerIn from snapping to integer coordinates, which can throw off centering.
-                    //     color:                      captureButton.captureButtonPalette.buttonBorder
-                    //     width:                      parent.width * 0.75
-                    //     height:                     width
-                    //     radius:                     width * 0.5
-                    // }
+                    Rectangle {
+                        anchors.centerIn:           parent
+                        anchors.alignWhenCentered:  false // Prevents anchors.centerIn from snapping to integer coordinates, which can throw off centering.
+                        color:                      captureButtonPalette.buttonBorder
+                        width:                      parent.width * 0.75
+                        height:                     width
+                        radius:                     width * 0.5
+                    }
 
                     Rectangle {
                         anchors.centerIn:           parent

@@ -1,12 +1,3 @@
-/****************************************************************************
- *
- * (c) 2009-2020 QGROUNDCONTROL PROJECT <http://www.qgroundcontrol.org>
- *
- * QGroundControl is licensed according to the terms in the file
- * COPYING.md in the root of the source code directory.
- *
- ****************************************************************************/
-
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Dialogs
@@ -82,97 +73,6 @@ Item {
         map: editorMap
         usePlannedHomePosition: true
         planMasterController: _planMasterController
-    }
-
-    Connections {
-        target: _appSettings ? _appSettings.defaultMissionItemAltitude : null
-        function onRawValueChanged() {
-            if (_visualItems.count > 1) {
-                mainWindow.showMessageDialog(qsTr("Apply new altitude"),
-                                             qsTr("You have changed the default altitude for mission items. Would you like to apply that altitude to all the items in the current mission?"),
-                                             Dialog.Yes | Dialog.No,
-                                             function() { _missionController.applyDefaultMissionAltitude() })
-            }
-        }
-    }
-
-    Connections {
-        target: QGroundControl.cloudManager
-        function onDownloadCompleted(filePath, success) {
-            if (success && filePath !== "") {
-                // 기존 플랜이 수정되었는지 확인
-                if (_planMasterController.dirty) {
-                    mainWindow.showMessageDialog(qsTr("미션 다운로드 완료"),
-                                               qsTr("현재 수정된 미션이 있습니다. 다운로드한 미션 파일로 바꾸시겠습니까?\n(현재 작업은 저장되지 않습니다)"),
-                                               Dialog.Yes | Dialog.No,
-                                               function() {
-                                                   loadDownloadedMission(filePath)
-                                               })
-                } else {
-                    mainWindow.showMessageDialog(qsTr("미션 다운로드 완료"),
-                                               qsTr("다운로드한 미션 파일을 로드하시겠습니까?"),
-                                               Dialog.Yes | Dialog.No,
-                                               function() {
-                                                   loadDownloadedMission(filePath)
-                                               })
-                }
-            } else {
-                mainWindow.showMessageDialog(qsTr("다운로드 실패"), qsTr("미션 파일 다운로드에 실패했습니다."))
-            }
-        }
-    }
-
-    function loadDownloadedMission(filePath) {
-        _planMasterController.loadFromFile(filePath)
-        _planMasterController.fitViewportToItems()
-        _missionController.setCurrentPlanViewSeqNum(1, true)
-    }
-
-    Component {
-        id: promptForPlanUsageOnVehicleChangePopupComponent
-        QGCPopupDialog {
-            title:      _planMasterController.managerVehicle.isOfflineEditingVehicle ? qsTr("Plan View - Vehicle Disconnected") : qsTr("Plan View - Vehicle Changed")
-            buttons:    Dialog.NoButton
-
-            ColumnLayout {
-                QGCLabel {
-                    Layout.preferredWidth:  parent.width
-                    Layout.maximumWidth:    parent.width
-                    wrapMode:               QGCLabel.WordWrap
-                    text:                   _planMasterController.managerVehicle.isOfflineEditingVehicle ?
-                                                qsTr("The vehicle associated with the plan in the Plan View is no longer available. What would you like to do with that plan?") :
-                                                qsTr("The plan being worked on in the Plan View is not from the current vehicle. What would you like to do with that plan?")
-                }
-
-                QGCButton {
-                    Layout.fillWidth:   true
-                    text:               _planMasterController.dirty ?
-                                            (_planMasterController.managerVehicle.isOfflineEditingVehicle ?
-                                                 qsTr("Discard Unsaved Changes") :
-                                                 qsTr("Discard Unsaved Changes, Load New Plan From Vehicle")) :
-                                            qsTr("Load New Plan From Vehicle")
-                    onClicked: {
-                        _planMasterController.showPlanFromManagerVehicle()
-                        _promptForPlanUsageShowing = false
-                        close();
-                    }
-                }
-
-                QGCButton {
-                    Layout.fillWidth:   true
-                    text:               _planMasterController.managerVehicle.isOfflineEditingVehicle ?
-                                            qsTr("Keep Current Plan") :
-                                            qsTr("Keep Current Plan, Don't Update From Vehicle")
-                    onClicked: {
-                        if (!_planMasterController.managerVehicle.isOfflineEditingVehicle) {
-                            _planMasterController.dirty = true
-                        }
-                        _promptForPlanUsageShowing = false
-                        close()
-                    }
-                }
-            }
-        }
     }
 
     PlanMasterController {
@@ -453,19 +353,6 @@ Item {
                     toCoord: object ? object.coordinate2 : undefined
                     arrowPosition: 3
                     z: QGroundControl.zOrderWaypointLines + 1
-                }
-            }
-
-            // Incomplete segment lines
-            MapItemView {
-                model: _missionController.incompleteComplexItemLines
-
-                delegate: MapPolyline {
-                    path: [ object.coordinate1, object.coordinate2 ]
-                    line.width: 1
-                    line.color: "red"
-                    z: QGroundControl.zOrderWaypointLines
-                    opacity: _editingLayer == _layerMission ? 1 : editorMap._nonInteractiveOpacity
                 }
             }
 
