@@ -832,13 +832,6 @@ public:
 
     bool        isROIEnabled            () const{ return _isROIEnabled; }
 
-    //uint32_t    gimbalStatusFlags         ()   const{ return _gimbalStatusFlags; }
-    bool        gimbalRetracted           ()   const{ return _gimbalRetracted; }
-    bool        gimbalNeutral             ()   const{ return _gimbalNeutral; }
-    bool        gimbalYawLock             ()   const{ return _gimbalYawLock; }
-    bool        gimbalClickOnMapActive    ()   const{ return _gimbalClickOnMapActive; }
-    void        setGimbalClickOnMapActive(bool set) { _gimbalClickOnMapActive = set; }
-
     CheckList   checkListState          () { return _checkListState; }
     void        setCheckListState       (CheckList cl)  { _checkListState = cl; emit checkListStateChanged(); }
 
@@ -1056,6 +1049,10 @@ void _activeVehicleChanged          (Vehicle* newActiveVehicle);
 
     QTimer              _csvLogTimer;
     QFile               _csvLogFile;
+
+    QTimer              _customLogTimer;
+    QFile               _customLogFile;
+    int                 _customLogSeq = 0;
 
     QTimer              _dbWriteTimer;
 

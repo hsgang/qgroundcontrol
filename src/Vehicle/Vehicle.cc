@@ -2220,9 +2220,6 @@ void Vehicle::stopGuidedModeROI()
     // Ardupilot manages differently here, command with lat,long and alt to 0
     if (apmFirmware()) {
         if (capabilityBits() & MAV_PROTOCOL_CAPABILITY_COMMAND_INT) {
-        _isROIEnabled = false; // remove map indicator
-        _roiApmCancelSent = true; // workaround until ardupilot implements MAV_CMD_DO_SET_ROI_NONE, to hide properly map item
-        emit isROIEnabledChanged();
 
         sendMavCommandInt(
                     defaultComponentId(),
@@ -2802,12 +2799,8 @@ void Vehicle::_handleCommandAck(mavlink_message_t& message)
 
     if (ack.command == MAV_CMD_DO_SET_ROI_LOCATION) {
         if (ack.result == MAV_RESULT_ACCEPTED) {
-            if (!_roiApmCancelSent) {
-                _isROIEnabled = true;
-                emit isROIEnabledChanged();
-            } else {
-                _roiApmCancelSent = false;
-            }
+            _isROIEnabled = true;
+            emit isROIEnabledChanged();
         }
     }
 
