@@ -9,6 +9,8 @@ target_sources(${CMAKE_PROJECT_NAME}
         Autotune.h
         DropSequence.cc
         DropSequence.h
+        FTPController.cc
+        FTPController.h
         FTPManager.cc
         FTPManager.h
         InitialConnectStateMachine.cc

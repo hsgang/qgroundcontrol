@@ -37,6 +37,7 @@ public:
         KnownPowerVehicleComponent,
         KnownPortsVehicleComponent,
         KnownChannelVehicleComponent,
+        KnownJoystickVehicleComponent,
         UnknownVehicleComponent // Firmware specific vehicle components
     };
     Q_ENUM(KnownVehicleComponent)

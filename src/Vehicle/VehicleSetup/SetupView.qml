@@ -280,7 +280,7 @@ Rectangle {
 
                 Repeater {
                     id:     componentRepeater
-                    model:  _fullParameterVehicleAvailable ? QGroundControl.multiVehicleManager.activeVehicle.autopilotPlugin.vehicleComponents : 0
+                    model:  _fullParameterVehicleAvailable ? _activeVehicle.autopilotPlugin.vehicleComponents : 0
 
                     ConfigButton {
                         icon.source:      modelData.iconResource

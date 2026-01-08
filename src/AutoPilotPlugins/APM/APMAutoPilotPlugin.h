@@ -13,13 +13,15 @@ class APMSensorsComponent;
 class APMPowerComponent;
 class APMPortsComponent;
 class APMMotorComponent;
-class APMCameraComponent;
+class APMGimbalComponent;
 class APMLightsComponent;
 class APMSubFrameComponent;
 class ESP8266Component;
 class APMHeliComponent;
 class APMRemoteSupportComponent;
 class APMFollowComponent;
+class JoystickComponent;
+class ScriptingComponent;
 class Vehicle;
 
 Q_DECLARE_LOGGING_CATEGORY(APMAutoPilotPluginLog)
@@ -39,8 +41,8 @@ public:
 protected:
     bool _incorrectParameterVersion = false; ///< true: parameter version incorrect, setup not allowed
     APMAirframeComponent *_airframeComponent = nullptr;
-    APMCameraComponent *_cameraComponent = nullptr;
     APMChannelsComponent* _channelsComponent = nullptr;
+    APMGimbalComponent *_gimbalComponent = nullptr;
     APMLightsComponent *_lightsComponent = nullptr;
     APMSubFrameComponent *_subFrameComponent = nullptr;
     APMFlightModesComponent *_flightModesComponent = nullptr;
@@ -55,6 +57,8 @@ protected:
     APMHeliComponent *_heliComponent = nullptr;
     APMRemoteSupportComponent *_apmRemoteSupportComponent = nullptr;
     APMFollowComponent *_followComponent = nullptr;
+    JoystickComponent *_joystickComponent = nullptr;
+    ScriptingComponent *_scriptingComponent = nullptr;
 
 #ifndef QGC_NO_SERIAL_LINK
 private slots:
