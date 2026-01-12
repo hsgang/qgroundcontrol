@@ -332,9 +332,6 @@ void QGCFileDownload::_onDownloadError(QNetworkReply::NetworkError code)
     case QNetworkReply::SslHandshakeFailedError:
         errorMsg = tr("SSL handshake failed");
         break;
-    case QNetworkReply::HostNotFoundError:
-        errorMsg = tr("Error: Host not Found");
-        break;
     default:
         if (_currentReply != nullptr) {
             errorMsg = QGCNetworkHelper::errorMessage(_currentReply);
