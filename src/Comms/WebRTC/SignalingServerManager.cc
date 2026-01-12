@@ -488,8 +488,8 @@ void SignalingServerManager::_onWebSocketMessageReceived(const QString &message)
     } else if (messageType == "connectionReplaced") {
         qCDebug(SignalingServerManagerLog) << "Ignoring connectionReplaced message";
         _updateConnectionStatus("연결 대체 무시됨 - WebSocket 연결 유지");
-    } else if (messageType == "drones:status" || messageType == "drones:list") {
-        _handleDronesStatusBroadcast(messageObj);
+    } else if (messageType == "drones:list") {
+        _handleDronesListResponse(messageObj);
     } else if (messageType == "error") {
         qCWarning(SignalingServerManagerLog) << "Received error message from server:" << messageObj;
     } else {
@@ -541,11 +541,11 @@ void SignalingServerManager::_handleUnregisterResponse(const QJsonObject &messag
     }
 }
 
-void SignalingServerManager::_handleDronesStatusBroadcast(const QJsonObject &message)
+void SignalingServerManager::_handleDronesListResponse(const QJsonObject &message)
 {
-    // drones:status 브로드캐스트 메시지 수신 및 로깅
+    // drones:list 응답 메시지 수신 및 로깅
     if (!message.contains("drones") || !message.contains("totalDrones")) {
-        qCWarning(SignalingServerManagerLog) << "Invalid drones:status message format";
+        qCWarning(SignalingServerManagerLog) << "Invalid drones:list message format";
         return;
     }
 
@@ -553,19 +553,29 @@ void SignalingServerManager::_handleDronesStatusBroadcast(const QJsonObject &mes
     int totalDrones = message["totalDrones"].toInt();
     QString timestamp = message["timestamp"].toString();
 
+    qCDebug(SignalingServerManagerLog) << "=== drones:list received ==="
+                                       << "Total:" << totalDrones
+                                       << "Timestamp:" << timestamp;
+
     // 드론 목록 업데이트
     QStringList newDronesList;
     for (int i = 0; i < dronesArray.size(); ++i) {
         QJsonObject drone = dronesArray[i].toObject();
         QString droneId = drone["id"].toString();
         QString status = drone["status"].toString();
+        bool paired = drone["paired"].toBool();
+        QString pairedWith = drone["pairedWith"].toString();
+        int rtt = drone["rtt"].toInt();
+
+        qCDebug(SignalingServerManagerLog) << "  [" << (i + 1) << "]"
+                                           << "ID:" << droneId
+                                           << "Status:" << status
+                                           << "Paired:" << paired
+                                           << "PairedWith:" << pairedWith
+                                           << "RTT:" << rtt << "ms";
 
         if (!droneId.isEmpty() && status == "connected") {
             newDronesList.append(droneId);
-
-            qCDebug(SignalingServerManagerLog) << " ["<<(i + 1)<<"]"
-                                              << "ID:" << droneId
-                                              << "Status:" << status;
         }
     }
 

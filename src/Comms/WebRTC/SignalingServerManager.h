@@ -140,7 +140,7 @@ private:
     void _handleRegistrationResponse(const QJsonObject &message);
     void _handleUnregisterResponse(const QJsonObject &message);
     void _handlePongResponse(const QJsonObject &message);
-    void _handleDronesStatusBroadcast(const QJsonObject &message);
+    void _handleDronesListResponse(const QJsonObject &message);
     
     // 자동 재등록
     void _autoReRegister();

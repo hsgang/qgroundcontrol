@@ -44,8 +44,8 @@ void WebRTCConfiguration::copyFrom(const LinkConfiguration *source)
 void WebRTCConfiguration::loadSettings(QSettings &settings, const QString &root)
 {
     settings.beginGroup(root);
-    _gcsId = settings.value("gcsId", "gcs_" + _generateRandomId()).toString();
-    _targetDroneId = settings.value("targetDroneId", "").toString();
+    _gcsId = settings.value("gcsId", "gcs_" + _generateRandomId()).toString().trimmed();
+    _targetDroneId = settings.value("targetDroneId", "").toString().trimmed();
     settings.endGroup();
 }
 
@@ -67,8 +67,9 @@ void WebRTCConfiguration::setGcsId(const QString &id)
 
 void WebRTCConfiguration::setTargetDroneId(const QString &id)
 {
-    if (_targetDroneId != id) {
-        _targetDroneId = id;
+    QString trimmedId = id.trimmed(); // 앞뒤 공백 및 줄바꿈 제거
+    if (_targetDroneId != trimmedId) {
+        _targetDroneId = trimmedId;
         emit targetDroneIdChanged();
         emit serverConnectedChanged(); // targetDroneId 변경 시에도 serverConnected 상태가 바뀜
     }
@@ -77,15 +78,21 @@ void WebRTCConfiguration::setTargetDroneId(const QString &id)
 bool WebRTCConfiguration::serverConnected() const
 {
     if (_targetDroneId.isEmpty()) {
+        qDebug() << "WebRTCConfiguration::serverConnected - targetDroneId is empty";
         return false;
     }
 
     SignalingServerManager* signalingManager = SignalingServerManager::instance();
     if (!signalingManager) {
+        qDebug() << "WebRTCConfiguration::serverConnected - SignalingServerManager is null";
         return false;
     }
 
-    return signalingManager->isDroneConnected(_targetDroneId);
+    bool connected = signalingManager->isDroneConnected(_targetDroneId);
+    qDebug() << "WebRTCConfiguration::serverConnected - targetDroneId:" << _targetDroneId
+             << "connected:" << connected
+             << "dronesList:" << signalingManager->connectedDronesList();
+    return connected;
 }
 
 // CloudSettings에서 WebRTC 설정을 가져오는 getter 메서드들
