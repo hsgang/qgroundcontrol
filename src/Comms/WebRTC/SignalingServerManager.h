@@ -81,7 +81,6 @@ public:
 
 public slots:
     void retryConnection();
-    void sendPing(); // 클라이언트에서 ping을 보내는 public 메서드
 
 signals:
     // 연결 상태 시그널
@@ -111,8 +110,6 @@ private slots:
     void _onWebSocketError(QAbstractSocket::SocketError error);
     void _onWebSocketMessageReceived(const QString &message);
     void _onReconnectTimer();
-    void _onConnectionHealthTimer();
-    void _onPingTimer();
 
 private:
     // WebSocket 관리
@@ -129,17 +126,13 @@ private:
     int _calculateReconnectDelay() const;
     void _resetReconnectAttempts();
     
-    // 연결 모니터링 (클라이언트 ping/pong 기반)
+    // 연결 모니터링
     void _startConnectionMonitoring();
     void _stopConnectionMonitoring();
-    void _checkConnectionHealth();
-    void _forceReconnection();
-    void _sendPing();
-    
+
     // 메시지 처리
     void _handleRegistrationResponse(const QJsonObject &message);
     void _handleUnregisterResponse(const QJsonObject &message);
-    void _handlePongResponse(const QJsonObject &message);
     void _handleDronesListResponse(const QJsonObject &message);
     
     // 자동 재등록
@@ -169,14 +162,6 @@ private:
     int _reconnectAttempts = 0;
     bool _userDisconnected = false;
     qint64 _lastSuccessfulConnection = 0;
-    
-    // 연결 모니터링 (클라이언트 ping/pong 기반)
-    QTimer *_connectionHealthTimer = nullptr;
-    QTimer *_pingTimer = nullptr;
-    qint64 _lastPingSent = 0;
-    qint64 _lastPongReceived = 0;
-    bool _waitingForPong = false;
-    int _consecutivePingFailures = 0;
 
     // 드론 상태 요청
     QTimer *_getDronesTimer = nullptr;
@@ -186,13 +171,9 @@ private:
     int _connectedDronesCount = 0;
     QStringList _connectedDronesList;
     
-    // 상수 (개선됨)
-    static const int DEFAULT_RECONNECT_INTERVAL_MS = 5000; // 5초로 증가
-    static const int MAX_RECONNECT_ATTEMPTS = 10; // 무한 재시도 방지
-    static const int MAX_RECONNECT_DELAY_MS = 30000; // 30초로 증가
-    static const int PING_INTERVAL_MS = 10000; // 10초마다 ping 전송
-    static const int PING_TIMEOUT_MS = 5000; // ping 응답 5초 타임아웃
-    static const int CONNECTION_HEALTH_CHECK_MS = 10000; // 10초마다 상태 체크
-    static const int MAX_CONSECUTIVE_PING_FAILURES = 3;
-    static const int GET_DRONES_INTERVAL_MS = 2500; // 2.5초마다 드론 목록 요청
+    // 상수
+    static const int DEFAULT_RECONNECT_INTERVAL_MS = 5000;
+    static const int MAX_RECONNECT_ATTEMPTS = 10;
+    static const int MAX_RECONNECT_DELAY_MS = 30000;
+    static const int GET_DRONES_INTERVAL_MS = 2500;
 };

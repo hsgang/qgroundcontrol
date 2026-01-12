@@ -57,15 +57,6 @@ SignalingServerManager::SignalingServerManager(QObject *parent)
     _reconnectTimer->setSingleShot(true);
     connect(_reconnectTimer, &QTimer::timeout, this, &SignalingServerManager::_onReconnectTimer);
     
-    // 연결 모니터링 타이머 설정 (클라이언트 ping/pong 기반)
-    _connectionHealthTimer = new QTimer(this);
-    _connectionHealthTimer->setSingleShot(false);
-    connect(_connectionHealthTimer, &QTimer::timeout, this, &SignalingServerManager::_onConnectionHealthTimer);
-    
-    // ping 타이머 설정
-    _pingTimer = new QTimer(this);
-    _pingTimer->setSingleShot(false);
-    connect(_pingTimer, &QTimer::timeout, this, &SignalingServerManager::_onPingTimer);
 
     // getDrones 타이머 설정
     _getDronesTimer = new QTimer(this);
@@ -483,8 +474,6 @@ void SignalingServerManager::_onWebSocketMessageReceived(const QString &message)
         _handleRegistrationResponse(messageObj);
     } else if (messageType == "unregistered") {
         _handleUnregisterResponse(messageObj);
-    } else if (messageType == "pong") {
-        _handlePongResponse(messageObj);
     } else if (messageType == "connectionReplaced") {
         qCDebug(SignalingServerManagerLog) << "Ignoring connectionReplaced message";
         _updateConnectionStatus("연결 대체 무시됨 - WebSocket 연결 유지");
@@ -565,14 +554,12 @@ void SignalingServerManager::_handleDronesListResponse(const QJsonObject &messag
         QString status = drone["status"].toString();
         bool paired = drone["paired"].toBool();
         QString pairedWith = drone["pairedWith"].toString();
-        int rtt = drone["rtt"].toInt();
 
         qCDebug(SignalingServerManagerLog) << "  [" << (i + 1) << "]"
                                            << "ID:" << droneId
                                            << "Status:" << status
                                            << "Paired:" << paired
-                                           << "PairedWith:" << pairedWith
-                                           << "RTT:" << rtt << "ms";
+                                           << "PairedWith:" << pairedWith;
 
         if (!droneId.isEmpty() && status == "connected") {
             newDronesList.append(droneId);
@@ -637,134 +624,27 @@ bool SignalingServerManager::_isValidUrl(const QString &url) const
     return qurl.isValid() || QRegularExpression(R"(^[\w\.-]+$)").match(url).hasMatch();
 }
 
-void SignalingServerManager::sendPing()
-{
-    if (isConnected() && !_userDisconnected) {
-        _sendPing();
-    }
-}
-
-void SignalingServerManager::_sendPing()
-{
-    if (!isConnected() || _userDisconnected || _waitingForPong) {
-        return;
-    }
-    
-    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
-    
-    QJsonObject pingMessage;
-    pingMessage["type"] = "ping";
-    pingMessage["timestamp"] = currentTime;
-    
-    qCDebug(SignalingServerManagerLog) << "Sending ping to server";
-    sendMessage(pingMessage);
-    
-    _lastPingSent = currentTime;
-    _waitingForPong = true;
-}
-
-void SignalingServerManager::_handlePongResponse(const QJsonObject &message)
-{
-    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
-    _lastPongReceived = currentTime;
-    _waitingForPong = false;
-    _consecutivePingFailures = 0; // pong을 받았으므로 연결 상태 양호
-    
-    qint64 pingLatency = currentTime - _lastPingSent;
-    qCDebug(SignalingServerManagerLog) << "Received pong from server, latency:" << pingLatency << "ms";
-}
 
 void SignalingServerManager::_startConnectionMonitoring()
 {
-    // LinkManager와 동일한 패턴: 메인 스레드에서만 실행되므로 스레드 체크 불필요
-    if (_connectionHealthTimer) {
-        _connectionHealthTimer->start(CONNECTION_HEALTH_CHECK_MS);
-    }
-
-    if (_pingTimer) {
-        _pingTimer->start(PING_INTERVAL_MS);
-    }
-
     if (_getDronesTimer) {
         _getDronesTimer->start(GET_DRONES_INTERVAL_MS);
         // 즉시 한 번 실행
         _sendGetDronesRequest();
     }
 
-    _consecutivePingFailures = 0;
-    _waitingForPong = false;
-
-    qCDebug(SignalingServerManagerLog) << "Connection monitoring started (client ping/pong based)";
+    qCDebug(SignalingServerManagerLog) << "Connection monitoring started";
 }
 
 void SignalingServerManager::_stopConnectionMonitoring()
 {
-    // LinkManager와 동일한 패턴: 메인 스레드에서만 실행되므로 스레드 체크 불필요
-    if (_connectionHealthTimer && _connectionHealthTimer->isActive()) {
-        _connectionHealthTimer->stop();
-    }
-
-    if (_pingTimer && _pingTimer->isActive()) {
-        _pingTimer->stop();
-    }
-
     if (_getDronesTimer && _getDronesTimer->isActive()) {
         _getDronesTimer->stop();
     }
 
-    _consecutivePingFailures = 0;
-    _waitingForPong = false;
-
     qCDebug(SignalingServerManagerLog) << "Connection monitoring stopped";
 }
 
-void SignalingServerManager::_checkConnectionHealth()
-{
-    if (!isConnected() || _userDisconnected) {
-        return;
-    }
-
-    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
-    
-    // ping 타임아웃 체크 (pong 응답을 10초 이상 받지 않으면 연결 문제로 간주)
-    if (_waitingForPong && (currentTime - _lastPingSent) > PING_TIMEOUT_MS) {
-        _consecutivePingFailures++;
-        qCWarning(SignalingServerManagerLog) << "Ping timeout, consecutive failures:" << _consecutivePingFailures;
-        
-        if (_consecutivePingFailures >= MAX_CONSECUTIVE_PING_FAILURES) {
-            qCWarning(SignalingServerManagerLog) << "Too many consecutive ping failures, forcing reconnection";
-            _updateConnectionStatus("서버 연결 상태 불량 - 재연결 시도");
-            _forceReconnection();
-        } else {
-            // 다시 ping 시도
-            _sendPing();
-        }
-    }
-}
-
-void SignalingServerManager::_forceReconnection()
-{
-    qCDebug(SignalingServerManagerLog) << "Forcing reconnection due to connection health issues";
-    
-    if (_webSocket && _webSocket->state() != QAbstractSocket::UnconnectedState) {
-        _webSocket->close();
-    }
-    
-    _reconnectAttempts = 0; // 강제 재연결이므로 시도 횟수 리셋
-    _startReconnectTimer();
-}
-
-void SignalingServerManager::_onPingTimer()
-{
-    if (isConnected() && !_userDisconnected && !_waitingForPong) {
-        _sendPing();
-    }
-}
-
-void SignalingServerManager::_onConnectionHealthTimer()
-{
-    _checkConnectionHealth();
-}
 
 int SignalingServerManager::_calculateReconnectDelay() const
 {
