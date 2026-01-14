@@ -825,7 +825,9 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
                 self->_setupCustomDataChannel(dc);
             }
 
-            if (dc->isOpen()) {
+            // mavlink 채널일 때만 _processDataChannelOpen 호출
+            // (custom 채널이 먼저 열리면 mavlinkDc가 아직 없어서 경고 발생 방지)
+            if (label == "mavlink" && dc->isOpen()) {
                 self->_processDataChannelOpen();
             }
         }, Qt::QueuedConnection);
