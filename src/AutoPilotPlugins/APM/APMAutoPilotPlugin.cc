@@ -138,9 +138,9 @@ const QVariantList &APMAutoPilotPlugin::vehicleComponents()
                 _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_esp8266Component)));
             }
 
-            _apmRemoteSupportComponent = new APMRemoteSupportComponent(_vehicle, this);
-            _apmRemoteSupportComponent->setupTriggerSignals();
-            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_apmRemoteSupportComponent)));
+            // _apmRemoteSupportComponent = new APMRemoteSupportComponent(_vehicle, this);
+            // _apmRemoteSupportComponent->setupTriggerSignals();
+            // _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_apmRemoteSupportComponent)));
 
             _joystickComponent = new JoystickComponent(_vehicle, this, this);
             _joystickComponent->setupTriggerSignals();
