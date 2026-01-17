@@ -426,6 +426,30 @@
     </message>
 </context>
 <context>
+    <name>APMGimbalComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMGimbalComponent.qml" line="1"/>
+        <source>Gimbal</source>
+        <translation>짐벌</translation>
+    </message>
+</context>
+<context>
+    <name>ScriptingComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="1"/>
+        <source>Scripting</source>
+        <translation>스크립트</translation>
+    </message>
+</context>
+<context>
+    <name>JoystickComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/JoystickComponent.qml" line="1"/>
+        <source>Joystick</source>
+        <translation>조이스틱</translation>
+    </message>
+</context>
+<context>
     <name>APMFirmwarePlugin</name>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="648"/>
@@ -14758,9 +14782,44 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
 <context>
     <name>PlanToolBarIndicators</name>
     <message>
+        <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="153"/>
+        <source>Open</source>
+        <translation>불러오기</translation>
+    </message>
+    <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="121"/>
-        <source>Done</source>
-        <translation>업로드 완료</translation>
+        <source>Save</source>
+        <translation>저장하기</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="121"/>
+        <source>Clear</source>
+        <translation>초기화</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="121"/>
+        <source>From Vehicle</source>
+        <translation>기체에서 불러오기</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="121"/>
+        <source>From File</source>
+        <translation>파일 불러오기</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="121"/>
+        <source>From Cloud</source>
+        <translation>클라우드 불러오기</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="121"/>
+        <source>Save As...</source>
+        <translation>다른 이름으로 저장</translation>
+    </message>
+    <message>
+        <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="121"/>
+        <source>Save to Cloud</source>
+        <translation>클라우드에 저장</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="138"/>
