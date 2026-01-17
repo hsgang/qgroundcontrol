@@ -180,13 +180,12 @@ Item {
 
             Rectangle {
                 id: webrtcIndicatorRect
-                //Layout.fillHeight:      true
                 Layout.alignment:       Qt.AlignVCenter
                 height:                 control.height * 0.8
                 Layout.preferredWidth:  childrenRect.width + ScreenTools.defaultFontPixelWidth * 2
                 color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
-                visible:                webrtcIndicator.showIndicator // WEBRTCIndicator의 showIndicator 프로퍼티를 사용하여 표시 여부 결정
+                visible:                webrtcIndicator.showIndicator
                 border.color:           qgcPal.groupBorder
                 border.width:           1
 
