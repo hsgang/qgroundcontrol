@@ -39,9 +39,9 @@ Rectangle{
     property real   _vehicleAltitudeASML:       _activeVehicle ? _activeVehicle.altitudeAMSL.rawValue : 0
     property real   _vehicleVerticalSpeed:      _activeVehicle ? _activeVehicle.climbRate.rawValue : 0
     property real   _vehicleGroundSpeed:        _activeVehicle ? _activeVehicle.groundSpeed.rawValue : 0
-    property real   _distanceToHome:            _activeVehicle ? _activeVehicle.distanceToHome.rawValue : 0
-    property real   _distanceDown:              _activeVehicle ? _activeVehicle.distanceSensors.rotationPitch270.rawValue : 0
-    property real   _vehicleAltitudeTerrain:    _activeVehicle ? _activeVehicle.altitudeAboveTerr.rawValue : 0
+    property real   _distanceToHome:            _activeVehicle?.distanceToHome?.rawValue ?? 0
+    property real   _distanceDown:              _activeVehicle?.distanceSensors?.rotationPitch270?.rawValue ?? 0
+    property real   _vehicleAltitudeTerrain:    _activeVehicle?.altitudeAboveTerr?.rawValue ?? 0
     property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitude).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _vehicleAltitudeASMLText:   isNaN(_vehicleAltitudeASML) ? "ASML -.-" : "ASML " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitudeASML).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
     property string _vehicleVerticalSpeedText:  isNaN(_vehicleVerticalSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleVerticalSpeed).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsSpeedUnitsString
