@@ -894,9 +894,16 @@ ApplicationWindow {
     //-- Indicator Drawer
 
     function showIndicatorDrawer(drawerComponent, indicatorItem) {
+        // Toggle: 같은 인디케이터를 다시 클릭하면 닫기
+        if (indicatorDrawer.visible && indicatorDrawer.indicatorItem === indicatorItem) {
+            indicatorDrawer.close()
+            return
+        }
         indicatorDrawer.sourceComponent = drawerComponent
         indicatorDrawer.indicatorItem = indicatorItem
-        indicatorDrawer.open()
+        if (!indicatorDrawer.visible) {
+            indicatorDrawer.open()
+        }
     }
 
     function closeIndicatorDrawer() {
@@ -915,13 +922,14 @@ ApplicationWindow {
         visible:        false
         modal:          false
         focus:          true
-        closePolicy:    Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        closePolicy:    Popup.CloseOnEscape
 
         property var sourceComponent
         property var indicatorItem
 
         property bool _expanded:    false
         property real _margins:     ScreenTools.defaultFontPixelHeight / 4
+
 
         function calcXPosition() {
             if (indicatorItem) {
@@ -933,12 +941,12 @@ ApplicationWindow {
         }
 
         onOpened: {
-            _expanded                               = false;
+            indicatorDrawer._expanded               = false
             indicatorDrawerLoader.sourceComponent   = indicatorDrawer.sourceComponent
         }
         onClosed: {
-            _expanded                               = false
-            indicatorItem                           = undefined
+            indicatorDrawer._expanded               = false
+            indicatorDrawer.indicatorItem           = undefined
             indicatorDrawerLoader.sourceComponent   = undefined
         }
 
@@ -985,6 +993,15 @@ ApplicationWindow {
 
             Loader {
                 id: indicatorDrawerLoader
+
+                Connections {
+                    target: indicatorDrawer
+                    function onSourceComponentChanged() {
+                        if (indicatorDrawer.visible) {
+                            indicatorDrawerLoader.sourceComponent = indicatorDrawer.sourceComponent
+                        }
+                    }
+                }
 
                 Binding {
                     target:     indicatorDrawerLoader.item
