@@ -196,11 +196,10 @@ void WebRTCWorker::writeData(const QByteArray &data)
         return;
     }
 
-    // Single path: send data directly
-    std::string_view view(data.constData(), data.size());
+    // 성능 최적화: 불필요한 string_view 래퍼 제거, 직접 변환
     auto binaryData = rtc::binary(
-        reinterpret_cast<const std::byte*>(view.data()),
-        reinterpret_cast<const std::byte*>(view.data() + view.size())
+        reinterpret_cast<const std::byte*>(data.constData()),
+        reinterpret_cast<const std::byte*>(data.constData() + data.size())
     );
 
     try {
@@ -971,7 +970,9 @@ void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc
 
         if (std::holds_alternative<rtc::binary>(data)) {
             const auto& binaryData = std::get<rtc::binary>(data);
-            QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
+            // Deep copy 필수: 시그널이 비동기로 처리될 수 있어 원본 데이터 수명 보장 안됨
+            QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()),
+                                 static_cast<int>(binaryData.size()));
 
             self->_dataChannelReceivedCalc.addData(byteArray.size());
             emit self->bytesReceived(byteArray);
@@ -1006,19 +1007,16 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
         try {
             if (std::holds_alternative<rtc::binary>(data)) {
                 const auto& binaryData = std::get<rtc::binary>(data);
-                qCDebug(WebRTCLinkLog) << "[CUSTOM] Binary data size:" << binaryData.size() << "bytes";
-
+                // 고빈도 경로 - 디버그 로깅 제거 (성능 최적화)
                 self->_dataChannelReceivedCalc.addData(binaryData.size());
-
-                QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
-                QString receivedText = QString::fromUtf8(byteArray);
-                qCDebug(WebRTCLinkLog) << "[CUSTOM] Binary data:" << receivedText;
 
             } else if (std::holds_alternative<std::string>(data)) {
                 const std::string& receivedText = std::get<std::string>(data);
 
                 QJsonParseError parseError;
-                QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(receivedText).toUtf8(), &parseError);
+                // 성능 최적화: std::string → QByteArray 직접 변환 (3중 복사 → 1회 복사)
+                QByteArray jsonData(receivedText.data(), static_cast<int>(receivedText.size()));
+                QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonData, &parseError);
 
                 if (parseError.error == QJsonParseError::NoError) {
                     QJsonObject jsonObj = jsonDoc.object();
@@ -1133,11 +1131,13 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
             if (self->isShuttingDown() || !self->_videoStreamActive.load()) return;
 
             const auto& binaryData = std::get<rtc::binary>(message);
-            QByteArray rtpData(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
 
             auto* vidMgr = VideoManager::instance();
             if (vidMgr && vidMgr->isWebRtcInternalModeEnabled()) {
-                self->_videoReceivedCalc.addData(rtpData.size());
+                self->_videoReceivedCalc.addData(binaryData.size());
+                // Deep copy 필수: VideoManager가 데이터를 버퍼링할 수 있어 원본 수명 보장 안됨
+                QByteArray rtpData(reinterpret_cast<const char*>(binaryData.data()),
+                                   static_cast<int>(binaryData.size()));
                 vidMgr->pushWebRtcRtp(rtpData);
             }
         });
@@ -1796,7 +1796,7 @@ void WebRTCWorker::_updateAllStatistics()
 
     emit dataChannelStatsUpdated(stats.webRtcSent, stats.webRtcRecv);
     emit videoStatsUpdated(stats.videoRateKBps, stats.videoPacketCount, stats.videoBytesReceived);
-    emit videoRateChanged(stats.videoRateKBps);
+    // 성능 최적화: videoRateChanged 제거 (videoStatsUpdated에 이미 포함)
 
     emit statisticsUpdated();
 }
