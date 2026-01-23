@@ -48,57 +48,7 @@ SettingsPage {
                         Layout.fillWidth:   true
                         text:               object.name
                     }
-                    QGCColoredImage {
-                        height:                 ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelHeight * 1.2
-                        width:                  height
-                        sourceSize.height:      height
-                        fillMode:               Image.PreserveAspectFit
-                        mipmap:                 true
-                        smooth:                 true
-                        color:                  qgcPalEdit.text
-                        source:                 "/InstrumentValueIcons/edit-pencil.svg"
-                        visible:                !object.link
 
-                        QGCPalette {
-                            id: qgcPalEdit
-                            colorGroupEnabled: parent.enabled
-                        }
-
-                        QGCMouseArea {
-                            fillItem: parent
-                            onClicked: {
-                                var editingConfig = _linkManager.startConfigurationEditing(object)
-                                linkDialogComponent.createObject(mainWindow, { editingConfig: editingConfig, originalConfig: object }).open()
-                            }
-                        }
-                    }
-                    QGCColoredImage {
-                        height:                 ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelHeight * 1.2
-                        width:                  height
-                        sourceSize.height:      height
-                        fillMode:               Image.PreserveAspectFit
-                        mipmap:                 true
-                        smooth:                 true
-                        color:                  qgcPalDelete.text
-                        source:                 "/InstrumentValueIcons/trash.svg"
-                        visible:                !object.link
-
-                        QGCPalette {
-                            id: qgcPalDelete
-                            colorGroupEnabled: parent.enabled
-                        }
-
-                        QGCMouseArea {
-                            fillItem:   parent
-                            onClicked:  mainWindow.showMessageDialog(
-                                            qsTr("Delete Link"),
-                                            qsTr("Are you sure you want to delete '%1'?").arg(object.name),
-                                            Dialog.Ok | Dialog.Cancel,
-                                            function () {
-                                                _linkManager.removeConfiguration(object)
-                                            })
-                        }
-                    }
                     QGCButton {
                         text:       object.link ? qsTr("Disconnect") : qsTr("Connect")
                         onClicked: {
@@ -109,6 +59,29 @@ SettingsPage {
                             }
                         }
                     }
+
+                    QGCButton {
+                        iconSource:             "/InstrumentValueIcons/edit-pencil.svg"
+                        visible:                !object.link
+                        onClicked: {
+                            var editingConfig = _linkManager.startConfigurationEditing(object)
+                            linkDialogComponent.createObject(mainWindow, { editingConfig: editingConfig, originalConfig: object }).open()
+                        }
+                    }
+
+                    QGCButton {
+                        iconSource:             "/InstrumentValueIcons/trash.svg"
+                        visible:                !object.link
+                        textColor:              qgcPal.colorRed
+                        onClicked:  mainWindow.showMessageDialog(
+                                        qsTr("Delete Link"),
+                                        qsTr("Are you sure you want to delete '%1'?").arg(object.name),
+                                        Dialog.Ok | Dialog.Cancel,
+                                        function () {
+                                            _linkManager.removeConfiguration(object)
+                                        })
+                    }
+                    
                 }
 
                 Rectangle {
