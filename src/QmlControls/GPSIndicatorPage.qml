@@ -59,6 +59,30 @@ ToolIndicatorPage {
         updateSettingsDisplayId()
     }
 
+    function errorText() {
+        if (!_activeVehicle) {
+            return qsTr("Disconnected");
+        }
+
+        switch (_activeVehicle.gps.systemErrors.value) {
+            case 1:
+                return qsTr("Incoming correction");
+            case 2:
+                return qsTr("Configuration");
+            case 4:
+                return qsTr("Software");
+            case 8:
+                return qsTr("Antenna");
+            case 16:
+                return qsTr("Event congestion");
+            case 32:
+                return qsTr("CPU overload");
+            case 64:
+                return qsTr("Output congestion");
+            default:
+                return qsTr("Multiple errors");
+        }
+    }
 
     property bool isGNSS2: _activeVehicle && _activeVehicle.gps2.lock.rawValue !== undefined && _activeVehicle.gps2.lock.rawValue !== null ? _activeVehicle.gps2.lock.value > 0 : false
 
@@ -96,6 +120,12 @@ ToolIndicatorPage {
                 LabelledLabel {
                     label:      qsTr("Yaw")
                     labelText:  activeVehicle ? activeVehicle.gps.yaw.valueString : valueNA
+                }
+
+                LabelledLabel {
+                    label: qsTr("GPS Error")
+                    labelText: errorText()
+                    visible: activeVehicle && activeVehicle.gps.systemErrors.value > 0
                 }
             }
 
@@ -141,7 +171,7 @@ ToolIndicatorPage {
                 // LabelledLabel {
                 //     label:      qsTr("BandWidth")
                 //     labelText:  QGroundControl.ntripManager.connected ? QGroundControl.ntripManager.bandWidth.toFixed(2) + " KB/s" : "0.00 KB/s"
-                // }
+                // }                
             }
 
             SettingsGroupLayout {

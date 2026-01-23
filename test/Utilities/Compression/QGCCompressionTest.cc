@@ -2,6 +2,8 @@
 #include "QGCCompression.h"
 #include "QGCCompressionJob.h"
 
+#include <vector>
+
 #include <QtCore/QBuffer>
 #include <QtCore/QCollator>
 #include <QtCore/QDir>
@@ -107,9 +109,11 @@ void QGCCompressionTest::_testFormatDetectionFromContent()
     QCOMPARE(QGCCompression::detectFormatFromFile(":/unittest/manifest.json.zst"),
              QGCCompression::Format::ZSTD);
 
+#ifdef QGC_ENABLE_BZIP2
     // BZ2 compressed file
     QCOMPARE(QGCCompression::detectFormatFromFile(":/unittest/manifest.json.bz2"),
              QGCCompression::Format::BZIP2);
+#endif
 
     // 7z archive
     QCOMPARE(QGCCompression::detectFormatFromFile(":/unittest/manifest.json.7z"),
@@ -308,7 +312,7 @@ void QGCCompressionTest::_testListArchiveNaturalSort()
     QStringList expected = {"dir/file3.txt", "dir/file11.txt", "file1.txt", "file2.txt", "file10.txt", "file20.txt"};
 
     // Simulate the sorting done by listArchive (using English locale for cross-platform consistency)
-    QCollator collator(QLocale(QLocale::English, QLocale::UnitedStates));
+    QCollator collator(QLocale(QLocale::English, QLocale::AnyCountry));
     collator.setNumericMode(true);
     collator.setCaseSensitivity(Qt::CaseInsensitive);
     std::sort(unsorted.begin(), unsorted.end(), collator);
@@ -569,12 +573,16 @@ void QGCCompressionTest::_testDecompressFromResource()
         const char *name;
     };
 
-    const ResourceTest resources[] = {
+    std::vector<ResourceTest> resources = {
         { ":/unittest/manifest.json.gz",  "manifest_gz.json",  "GZIP" },
         { ":/unittest/manifest.json.xz",  "manifest_xz.json",  "XZ" },
         { ":/unittest/manifest.json.zst", "manifest_zst.json", "ZSTD" },
+#ifdef QGC_ENABLE_BZIP2
         { ":/unittest/manifest.json.bz2", "manifest_bz2.json", "BZip2" },
+#endif
+#ifdef QGC_ENABLE_LZ4
         { ":/unittest/manifest.json.lz4", "manifest_lz4.json", "LZ4" },
+#endif
     };
 
     for (const auto &res : resources) {
@@ -595,12 +603,16 @@ void QGCCompressionTest::_testDecompressData()
         const char *name;
     };
 
-    const ResourceTest resources[] = {
+    std::vector<ResourceTest> resources = {
         { ":/unittest/manifest.json.gz",  "GZIP" },
         { ":/unittest/manifest.json.xz",  "XZ" },
         { ":/unittest/manifest.json.zst", "ZSTD" },
+#ifdef QGC_ENABLE_BZIP2
         { ":/unittest/manifest.json.bz2", "BZip2" },
+#endif
+#ifdef QGC_ENABLE_LZ4
         { ":/unittest/manifest.json.lz4", "LZ4" },
+#endif
     };
 
     for (const auto &res : resources) {
