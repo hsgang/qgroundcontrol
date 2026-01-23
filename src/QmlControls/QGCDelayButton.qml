@@ -67,7 +67,14 @@ DelayButton {
         implicitHeight: ScreenTools.implicitButtonHeight
         border.width:   showBorder ? 1 : 0
         border.color:   qgcPal.buttonBorder
-        color:          control._showHighlight ? qgcPal.buttonHighlight : qgcPal.button
+        color:          qgcPal.button
+
+        Rectangle {
+            anchors.fill:   parent
+            color:          qgcPal.buttonHighlight
+            opacity:        control._showHighlight ? 1 : (control.enabled && control.hovered ? 0.2 : 0)
+            radius:         parent.radius
+        }
 
         QGCColoredImage {
             anchors.topMargin:      _sliderIndicatorMargin

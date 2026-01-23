@@ -12,13 +12,11 @@
 // ToolStripAction, which is handy to work on toolbars with simpler action
 // Complexity
 
-import QtQuick            2.12
-import QtQuick.Controls   2.2
+import QtQuick
+import QtQuick.Controls
 
-import QGroundControl              1.0
-import QGroundControl.Controls     1.0
-import QGroundControl.ScreenTools  1.0
-import QGroundControl.Palette      1.0
+import QGroundControl
+import QGroundControl.Controls
 
 Button {
     id:             control
@@ -39,8 +37,8 @@ Button {
     property bool forceImageScale11: false
     property real imageScale:        forceImageScale11 && (text == "") ? 0.8 : 0.6
     property real contentMargins:    innerText.height * 0.1
-    property color currentContentColor:  (checked || pressed) ? qgcPal.buttonHighlightText : qgcPal.buttonText
-    property color currentContentColorSecondary:  (checked || pressed) ? qgcPal.buttonText : qgcPal.buttonHighlight
+    property color currentContentColor:  (checked || pressed) ? qgcPal.buttonHighlightText : qgcPal.windowTransparentText
+    property color currentContentColorSecondary:  (checked || pressed) ? qgcPal.windowTransparentText : qgcPal.buttonHighlight
 
     QGCPalette { id: qgcPal; colorGroupEnabled: control.enabled }
 
@@ -51,7 +49,7 @@ Button {
 
         Column {
             anchors.centerIn:   parent
-            spacing:        control.contentMargins * 2
+            spacing:            0
 
             Image {
                 id:                         innerImageColorful
@@ -115,7 +113,7 @@ Button {
         id:             buttonBkRect
         color:          (control.checked || control.pressed) ?
                             qgcPal.buttonHighlight :
-                            (control.hovered ? qgcPal.buttonHighlight : qgcPal.window)
+                            ((control.enabled && control.hovered) ? qgcPal.buttonHighlight : "transparent")
         anchors.fill:   parent
         radius:         ScreenTools.defaultFontPixelHeight / 2
     }

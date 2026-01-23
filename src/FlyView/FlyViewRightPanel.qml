@@ -8,9 +8,11 @@ import QGroundControl.FlightMap
 import QGroundControl.FactControls
 
 ColumnLayout {
-    width: swipePages.currentItem
-               ? swipePages.currentItem.contentLoader.implicitWidth + pageIndicatorContainer.width + ScreenTools.defaultFontPixelHeight
+    width: contentLoader.item
+               ? contentLoader.item.width + pageIndicatorContainer.width + ScreenTools.defaultFontPixelHeight
                : pageIndicatorContainer.width
+
+    QGCPalette { id: qgcPal; colorGroupEnabled: true }
 
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 7
     property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
@@ -40,111 +42,99 @@ ColumnLayout {
     // enabled가 true인 항목만 activePages에 포함
     property var activePages: pages.filter(function(item) { return item.enabled; })
 
+    property int _currentIndex: -1  // 현재 선택된 인덱스 (-1이면 선택 안됨)
+
     Rectangle {
-        id: swipeViewContainer
+        id: contentContainer
         Layout.fillWidth: true
         Layout.fillHeight: true
-        color:      "transparent"//Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.8)
+        color: "transparent"
 
-        QGCSwipeView {
-            id: swipePages
-            anchors.fill: parent
-            anchors.rightMargin: pageIndicatorContainer.width
-            spacing: ScreenTools.defaultFontPixelHeight
-            orientation: Qt.Vertical
-            clip: true
-            interactive: false
+        // 컨텐츠 Loader
+        Loader {
+            id: contentLoader
+            anchors.right: pageIndicatorContainer.left
+            anchors.rightMargin: ScreenTools.defaultFontPixelHeight / 2
+            anchors.verticalCenter: parent.verticalCenter
+            sourceComponent: _currentIndex >= 0 && _currentIndex < activePages.length
+                             ? activePages[_currentIndex].comp
+                             : null
+        }
 
-            Repeater {
-                model: activePages
-                delegate: MvPanelPage {
+        Component {
+            id: photoVideoControlComponent
+            PhotoVideoControl { }
+        }
+        Component {
+            id: siyiCameraControlComponent
+            FlyViewSiYiCameraPanel { }
+        }
+        Component {
+            id: stepMoveControlComponent
+            VehicleStepMoveControl { }
+        }
+        Component {
+            id: flyViewGridSettingsComponent
+            FlyViewGridSettings { }
+        }
+        Component {
+            id: gimbalControlComponent
+            GimbalControl { }
+        }
+        Component {
+            id: winchControlComponent
+            WinchControlPanel { }
+        }
+        Component {
+            id: windvaneControlComponent
+            FlyViewWindvane { }
+        }
 
-                    property alias contentLoader: loader
-
-                    implicitHeight: loader.implicitHeight + ScreenTools.defaultFontPixelHeight * 2
-                    implicitWidth: loader.implicitWidth + ScreenTools.defaultFontPixelHeight * 2
-                    showBorder: false
-
-                    Loader {
-                        id: loader
-                        asynchronous: true
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        sourceComponent: modelData.enabled ? modelData.comp : undefined
-                        property real rightEdgeCenterInset: visible ? parent.width - x : 0
-                    }
-                }
-            }
-
-            Component {
-                id: photoVideoControlComponent
-                PhotoVideoControl { }
-            }
-            Component {
-                id: siyiCameraControlComponent
-                FlyViewSiYiCameraPanel { }
-            }
-            Component {
-                id: stepMoveControlComponent
-                VehicleStepMoveControl { }
-            }
-            Component {
-                id: flyViewGridSettingsComponent
-                FlyViewGridSettings { }
-            }
-            Component {
-                id: gimbalControlComponent
-                GimbalControl { }
-            }
-            Component {
-                id: winchControlComponent
-                WinchControlPanel { }
-            }
-            Component {
-                id: windvaneControlComponent
-                FlyViewWindvane { }
-            }
-        } // QGCSwipeView
-
-        // 페이지 인디케이터 (화면 우측 배치)
+        // 페이지 인디케이터 (화면 우측 배치) - ToolStrip 구조와 동일
         Rectangle {
             id: pageIndicatorContainer
-            width:                  buttonColumnLayout.implicitWidth + ScreenTools.defaultFontPixelWidth
-            height:                 buttonColumnLayout.height + ScreenTools.defaultFontPixelWidth
-            color:                  "transparent"
+            width:                  ScreenTools.defaultFontPixelWidth * 7
+            height:                 Math.min(parent.height, buttonColumn.height + (flickable.anchors.margins * 2))
+            color:                  qgcPal.windowTransparent
+            radius:                 ScreenTools.defaultFontPixelWidth / 2
             anchors.right:          parent.right
             anchors.verticalCenter: parent.verticalCenter
 
-            property int indicatorSize:     ScreenTools.implicitButtonHeight
-            property int indicatorSpacing:  ScreenTools.defaultFontPixelHeight / 2
-
-            MouseArea {
+            DeadMouseArea {
                 anchors.fill: parent
-                propagateComposedEvents: false
             }
 
-            ColumnLayout {
-                id: buttonColumnLayout
-                anchors.verticalCenter:     parent.verticalCenter
-                anchors.horizontalCenter:   parent.horizontalCenter
-                spacing: pageIndicatorContainer.indicatorSpacing
+            QGCFlickable {
+                id:                 flickable
+                anchors.margins:    ScreenTools.defaultFontPixelWidth * 0.4
+                anchors.fill:       parent
+                contentHeight:      buttonColumn.height
+                flickableDirection: Flickable.VerticalFlick
+                clip:               true
 
-                Repeater {
-                    model: activePages
-                    delegate: QGCColumnButton {
-                        implicitWidth:  _idealWidth
-                        implicitHeight: width
-                        checked:        swipePages.currentIndex === index
-                        iconSource:     modelData.icon
-                        text:           modelData.label
-                        font.pointSize: _fontSize * 0.7
-                        onClicked: {
-                            if (swipePages.currentIndex === index && swipePages.visible) {
-                                swipePages.visible = false;
-                                swipePages.currentIndex = -1; // 선택 해제
-                            } else {
-                                swipePages.currentIndex = index;
-                                swipePages.visible = true;
+                Column {
+                    id:             buttonColumn
+                    anchors.left:   parent.left
+                    anchors.right:  parent.right
+                    spacing:        ScreenTools.defaultFontPixelHeight * 0.5
+
+                    Repeater {
+                        model: activePages
+                        delegate: FakeToolStripHoverButton {
+                            anchors.left:   buttonColumn.left
+                            anchors.right:  buttonColumn.right
+                            height:         width
+                            radius:         ScreenTools.defaultFontPixelHeight / 4
+                            fontPointSize:  ScreenTools.smallFontPointSize
+                            checked:        _currentIndex === index
+                            iconSource:     modelData.icon
+                            text:           modelData.label
+                            onClicked: {
+                                if (_currentIndex === index) {
+                                    _currentIndex = -1  // 선택 해제
+                                } else {
+                                    _currentIndex = index
+                                }
                             }
                         }
                     }
