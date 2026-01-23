@@ -368,5 +368,5 @@ bool KMLHelper::loadPointsFromFile(const QString &kmlFile, QList<QGeoCoordinate>
         return false;
     }
 
-    return !rgCoords.isEmpty();
+    return true;
 }
