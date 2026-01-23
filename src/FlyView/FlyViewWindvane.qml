@@ -20,25 +20,25 @@ Item {
     property real   _sizeRatio:   ScreenTools.isTinyScreen ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int    _fontSize:    ScreenTools.defaultFontPointSize * _sizeRatio
 
-    property real   _logCount:      _activeVehicle ? _activeVehicle.atmosphericSensor.logCount.rawValue : NaN
-    property real   _temperature:   _activeVehicle ? _activeVehicle.atmosphericSensor.temperature.rawValue : NaN
-    property real   _humidity:      _activeVehicle ? _activeVehicle.atmosphericSensor.humidity.rawValue : NaN
-    property real   _pressure:      _activeVehicle ? _activeVehicle.atmosphericSensor.pressure.rawValue : NaN
-    property real   _windDir:       _activeVehicle ? _activeVehicle.atmosphericSensor.windDir.rawValue : NaN
-    property real   _windSpd:       _activeVehicle ? _activeVehicle.atmosphericSensor.windSpd.rawValue : NaN
-    property real   _pm1p0:         _activeVehicle ? _activeVehicle.atmosphericSensor.opc1.rawValue : NaN
-    property real   _pm2p5:         _activeVehicle ? _activeVehicle.atmosphericSensor.opc2.rawValue : NaN
-    property real   _pm10:          _activeVehicle ? _activeVehicle.atmosphericSensor.opc3.rawValue : NaN
-    property real   _radiation:     _activeVehicle ? _activeVehicle.atmosphericSensor.radiation.rawValue : NaN
-    property real   _hubTemp1:      _activeVehicle ? _activeVehicle.atmosphericSensor.hubTemp1.rawValue : NaN
-    property real   _hubTemp2:      _activeVehicle ? _activeVehicle.atmosphericSensor.hubTemp2.rawValue : NaN
-    property real   _hubHumi1:      _activeVehicle ? _activeVehicle.atmosphericSensor.hubHumi1.rawValue : NaN
-    property real   _hubHumi2:      _activeVehicle ? _activeVehicle.atmosphericSensor.hubHumi2.rawValue : NaN
-    property real   _hubPressure:   _activeVehicle ? _activeVehicle.atmosphericSensor.hubPressure.rawValue : NaN
-    property real   _batt:          _activeVehicle ? _activeVehicle.atmosphericSensor.batt.rawValue : NaN
-    property real   _sdVolume:      _activeVehicle ? _activeVehicle.atmosphericSensor.sdVolume.rawValue : NaN
-    property var    _timeHMS:       _activeVehicle ? _activeVehicle.atmosphericSensor.timeHMS.rawValue : "--:--:--"
-    
+    property real   _logCount:      _activeVehicle?.atmosphericSensor?.logCount?.rawValue ?? NaN
+    property real   _temperature:   _activeVehicle?.atmosphericSensor?.temperature?.rawValue ?? NaN
+    property real   _humidity:      _activeVehicle?.atmosphericSensor?.humidity?.rawValue ?? NaN
+    property real   _pressure:      _activeVehicle?.atmosphericSensor?.pressure?.rawValue ?? NaN
+    property real   _windDir:       _activeVehicle?.atmosphericSensor?.windDir?.rawValue ?? NaN
+    property real   _windSpd:       _activeVehicle?.atmosphericSensor?.windSpd?.rawValue ?? NaN
+    property real   _pm1p0:         _activeVehicle?.atmosphericSensor?.opc1?.rawValue ?? NaN
+    property real   _pm2p5:         _activeVehicle?.atmosphericSensor?.opc2?.rawValue ?? NaN
+    property real   _pm10:          _activeVehicle?.atmosphericSensor?.opc3?.rawValue ?? NaN
+    property real   _radiation:     _activeVehicle?.atmosphericSensor?.radiation?.rawValue ?? NaN
+    property real   _hubTemp1:      _activeVehicle?.atmosphericSensor?.hubTemp1?.rawValue ?? NaN
+    property real   _hubTemp2:      _activeVehicle?.atmosphericSensor?.hubTemp2?.rawValue ?? NaN
+    property real   _hubHumi1:      _activeVehicle?.atmosphericSensor?.hubHumi1?.rawValue ?? NaN
+    property real   _hubHumi2:      _activeVehicle?.atmosphericSensor?.hubHumi2?.rawValue ?? NaN
+    property real   _hubPressure:   _activeVehicle?.atmosphericSensor?.hubPressure?.rawValue ?? NaN
+    property real   _batt:          _activeVehicle?.atmosphericSensor?.batt?.rawValue ?? NaN
+    property real   _sdVolume:      _activeVehicle?.atmosphericSensor?.sdVolume?.rawValue ?? NaN
+    property var    _timeHMS:       _activeVehicle?.atmosphericSensor?.timeHMS?.rawValue ?? "--:--:--"
+
     property string _logCountText:    !isNaN(_logCount)     ? _logCount.toFixed(0)     : "--"
     property string _temperatureText: !isNaN(_temperature)  ? _temperature.toFixed(2) + " ℃" : "--.- ℃"
     property string _humidityText:    !isNaN(_humidity)     ? _humidity.toFixed(2) + " Rh%" : "--.- Rh%"
