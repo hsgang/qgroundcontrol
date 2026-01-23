@@ -787,23 +787,22 @@ SetupPage {
         //                 font.family: ScreenTools.demiboldFontFamily
         //             }
 
-                        FactBitmask {
-                            id:                 armingCheckBitmask
-                            anchors.left:       parent.left
-                            anchors.right:      parent.right
-                            firstEntryIsAll:    _armingCheck ? true : false
-                            fact:               _armingCheck ? _armingCheck : _armingSkipCheck
-                        }
+                    FactBitmask {
+                        id:                 armingCheckBitmask
+                        anchors.left:       parent.left
+                        anchors.right:      parent.right
+                        firstEntryIsAll:    _armingCheck ? true : false
+                        fact:               _armingCheck ? _armingCheck : _armingSkipCheck
+                    }
 
-                        QGCLabel {
-                            id:             armingCheckWarning
-                            anchors.left:   parent.left
-                            anchors.right:  parent.right
-                            wrapMode:       Text.WordWrap
-                            color:          qgcPal.warningText
-                            text:            qsTr("Warning: Turning off arming checks can lead to loss of Vehicle control.")
-                            visible:        _armingCheck ? _armingCheck.value != 1 : _armingSkipCheck.value != 0
-                        }
+                    QGCLabel {
+                        id:             armingCheckWarning
+                        anchors.left:   parent.left
+                        anchors.right:  parent.right
+                        wrapMode:       Text.WordWrap
+                        color:          qgcPal.warningText
+                        text:            qsTr("Warning: Turning off arming checks can lead to loss of Vehicle control.")
+                        visible:        _armingCheck ? _armingCheck.value != 1 : _armingSkipCheck.value != 0
                     }
                 } // Rectangle - Arming checks
             } // Column - Arming Checks
