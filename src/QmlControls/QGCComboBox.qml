@@ -95,9 +95,9 @@ T.ComboBox {
         anchors.rightMargin: control.padding
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
-        height: ScreenTools.defaultFontPixelWidth
+        height: ScreenTools.defaultFontPixelHeight * 0.8
         width: height
-        source: "/qmlimages/arrow-down.png"
+        source: "/InstrumentValueIcons/cheveron-down.svg"
         color: qgcPal.buttonText
     }
 
@@ -107,12 +107,13 @@ T.ComboBox {
         text: control.alternateText === "" ? control.currentText : control.alternateText
         font: control.font
         color: qgcPal.buttonText
+        elide: Text.ElideRight
     }
 
     background: Rectangle {
         color: qgcPal.button
         border.color: qgcPal.buttonBorder
-        border.width: _showBorder ? 1 : 0
+        border.width: 1
         radius: ScreenTools.defaultBorderRadius
 
         Rectangle {
