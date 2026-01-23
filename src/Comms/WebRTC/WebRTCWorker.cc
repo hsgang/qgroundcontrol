@@ -1,11 +1,16 @@
 #include "WebRTCWorker.h"
 #include <QDebug>
 #include <QRandomGenerator>
+#include <mutex>
 #include "QGCLoggingCategory.h"
 #include "VideoManager.h"
 #include "SignalingServerManager.h"
 
 QGC_LOGGING_CATEGORY(WebRTCLinkLog, "Comms.WEBRTCLink")
+
+namespace {
+    std::once_flag s_sctpSettingsInitialized;
+}
 
 const QString WebRTCWorker::kDataChannelLabel = "mavlink";
 
@@ -50,41 +55,39 @@ WebRTCWorker::~WebRTCWorker()
         transitionState(currentState, WorkerState::Shutdown);
     }
 
-    if (_cleanupTimer) {
-        _cleanupTimer->stop();
-        _cleanupTimer->disconnect();
-        delete _cleanupTimer; // deleteLater → delete
-        _cleanupTimer = nullptr;
-    }
-
-    if (_reconnectTimer) {
-        _reconnectTimer->stop();
-        _reconnectTimer->disconnect();
-        delete _reconnectTimer; // deleteLater → delete
-        _reconnectTimer = nullptr;
-    }
-
-    if (_rttTimer) {
-        _rttTimer->stop();
-        _rttTimer->disconnect();
-        delete _rttTimer; // deleteLater → delete
-        _rttTimer = nullptr;
-    }
-
-    if (_statsTimer) {
-        _statsTimer->stop();
-        _statsTimer->disconnect();
-        delete _statsTimer; // deleteLater → delete
-        _statsTimer = nullptr;
-    }
-
-    // SignalingServerManager와의 모든 시그널 연결 끊기 (싱글톤이므로 중요!)
+    // 1. SignalingServerManager 시그널 연결 끊기 (싱글톤이 콜백을 호출하지 않도록)
     if (_signalingManager) {
         disconnect(_signalingManager, nullptr, this, nullptr);
     }
 
-    // 리소스 정리
+    // 2. 모든 타이머 stop/disconnect (cleanup 전에 콜백 방지)
+    auto safeStopTimer = [](QTimer* timer) {
+        if (timer) {
+            timer->stop();
+            timer->disconnect();
+        }
+    };
+
+    safeStopTimer(_cleanupTimer);
+    safeStopTimer(_reconnectTimer);
+    safeStopTimer(_rttTimer);
+    safeStopTimer(_statsTimer);
+
+    // 3. 리소스 정리
     _cleanup(CleanupMode::Complete);
+
+    // 4. 타이머 삭제 (소멸자에서는 직접 delete가 올바름)
+    delete _cleanupTimer;
+    _cleanupTimer = nullptr;
+
+    delete _reconnectTimer;
+    _reconnectTimer = nullptr;
+
+    delete _rttTimer;
+    _rttTimer = nullptr;
+
+    delete _statsTimer;
+    _statsTimer = nullptr;
 
     qCDebug(WebRTCLinkLog) << "WebRTCWorker destructor completed";
 }
@@ -155,37 +158,21 @@ void WebRTCWorker::start()
 
     qCDebug(WebRTCLinkLog) << "start() completed successfully";
 
-    // TEMPORARY DEBUG: registerGCS 호출 전후 상세 로깅
-    qCDebug(WebRTCLinkLog) << "[DEBUG] About to schedule registerGCS call";
-    qCDebug(WebRTCLinkLog) << "[DEBUG] _signalingManager pointer:" << (void*)_signalingManager;
-    qCDebug(WebRTCLinkLog) << "[DEBUG] SignalingServerManager::instance():" << (void*)SignalingServerManager::instance();
-
     // SignalingServerManager에 GCS 등록 요청 (비동기로 실행하여 start()가 완전히 완료된 후 실행)
     QPointer<WebRTCWorker> self(this);
     QMetaObject::invokeMethod(this, [self]() {
-        qCDebug(WebRTCLinkLog) << "[DEBUG] Lambda for registerGCS started";
-
         if (!self) {
             qCWarning(WebRTCLinkLog) << "Worker deleted before GCS registration";
             return;
         }
 
-        qCDebug(WebRTCLinkLog) << "[DEBUG] Worker still alive, checking managers";
-        qCDebug(WebRTCLinkLog) << "[DEBUG] _signalingManager:" << (void*)self->_signalingManager;
-        qCDebug(WebRTCLinkLog) << "[DEBUG] instance():" << (void*)SignalingServerManager::instance();
-        qCDebug(WebRTCLinkLog) << "[DEBUG] Current state:" << self->stateToString();
-
         try {
             // Starting 또는 Connecting 상태에서만 등록 진행
             if (self->_signalingManager && SignalingServerManager::instance() &&
                 (self->isInState(WorkerState::Starting) || self->isInState(WorkerState::Connecting))) {
-                qCDebug(WebRTCLinkLog) << "[DEBUG] About to call registerGCS";
-                qCDebug(WebRTCLinkLog) << "Requesting GCS registration to SignalingServerManager";
-                qCDebug(WebRTCLinkLog) << "GCS ID:" << self->_connectionConfig.gcsId << " Target Drone:" << self->_connectionConfig.targetDroneId;
-
-                qCDebug(WebRTCLinkLog) << "[DEBUG] Calling registerGCS NOW";
+                qCDebug(WebRTCLinkLog) << "Requesting GCS registration - GCS ID:" << self->_connectionConfig.gcsId
+                                       << "Target Drone:" << self->_connectionConfig.targetDroneId;
                 self->_signalingManager->registerGCS(self->_connectionConfig.gcsId, self->_connectionConfig.targetDroneId);
-                qCDebug(WebRTCLinkLog) << "[DEBUG] registerGCS call completed successfully";
             } else {
                 qCWarning(WebRTCLinkLog) << "Signaling manager not available or worker shutting down";
             }
@@ -194,8 +181,6 @@ void WebRTCWorker::start()
         } catch (...) {
             qCWarning(WebRTCLinkLog) << "Unknown exception during GCS registration";
         }
-
-        qCDebug(WebRTCLinkLog) << "[DEBUG] Lambda for registerGCS completed";
     }, Qt::QueuedConnection);
 }
 
@@ -250,6 +235,7 @@ void WebRTCWorker::sendCustomMessage(const QString& message)
 
     try {
         _pcContext.customDc->send(binaryData);
+        _dataChannelSentCalc.addData(data.size());  // 바이트 통계 추가
         qCDebug(WebRTCLinkLog) << "Custom message sent:" << message;
     } catch (const std::exception& e) {
         if (!isShuttingDown()) {
@@ -340,6 +326,11 @@ void WebRTCWorker::disconnectLink()
             if (state != WorkerState::Disconnecting && state != WorkerState::CleaningUp) {
                 qCDebug(WebRTCLinkLog) << "Cleanup timer fired but state changed to"
                                       << self->stateToString(state) << ", skipping cleanup";
+                // 타이머 자체는 정리 (리소스 누수 방지)
+                if (self->_cleanupTimer) {
+                    self->_cleanupTimer->deleteLater();
+                    self->_cleanupTimer = nullptr;
+                }
                 return;
             }
 
@@ -658,10 +649,11 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
 
     // State change callback
     pc->onStateChange([self, weakPC](rtc::PeerConnection::State state) {
-        auto pc = weakPC.lock();
-        if (!pc || !self || !self->isOperational()) return;
+        auto lockedPC = weakPC.lock();
+        if (!lockedPC || !self || !self->isOperational()) return;
 
-        QMetaObject::invokeMethod(self, [self, weakPC, state]() {
+        // Capture the shared_ptr by value in the inner lambda to keep it alive
+        QMetaObject::invokeMethod(self, [self, lockedPC, state]() {
             if (!self) return;
 
             QString stateStr = self->_stateToString(state);
@@ -671,65 +663,63 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
                 qCDebug(WebRTCLinkLog) << "[WEBRTC] Connected!";
                 emit self->rtcStatusMessageChanged("연결됨");
 
-                // ICE candidate 정보 캐싱 (타입 포함)
-                if (auto pc = weakPC.lock()) {
-                    try {
-                        auto localAddr = pc->localAddress();
-                        auto remoteAddr = pc->remoteAddress();
-                        if (localAddr.has_value() && remoteAddr.has_value()) {
-                            QString localAddrStr = QString::fromStdString(*localAddr);
-                            QString remoteAddrStr = QString::fromStdString(*remoteAddr);
+                // ICE candidate 정보 캐싱 (타입 포함) - use lockedPC directly
+                try {
+                    auto localAddr = lockedPC->localAddress();
+                    auto remoteAddr = lockedPC->remoteAddress();
+                    if (localAddr.has_value() && remoteAddr.has_value()) {
+                        QString localAddrStr = QString::fromStdString(*localAddr);
+                        QString remoteAddrStr = QString::fromStdString(*remoteAddr);
 
-                            // getSelectedCandidatePair() API 사용하여 candidate 타입 확인
-                            rtc::Candidate localCand, remoteCand;
-                            if (pc->getSelectedCandidatePair(&localCand, &remoteCand)) {
-                                QString candidateType = "unknown";
-                                // Candidate::Type enum을 사용하여 타입 확인
-                                switch (localCand.type()) {
-                                    case rtc::Candidate::Type::Relayed:
-                                        candidateType = "relay (TURN)";
-                                        break;
-                                    case rtc::Candidate::Type::ServerReflexive:
-                                        candidateType = "srflx (STUN)";
-                                        break;
-                                    case rtc::Candidate::Type::PeerReflexive:
-                                        candidateType = "prflx (Peer Reflexive)";
-                                        break;
-                                    case rtc::Candidate::Type::Host:
-                                        candidateType = "host (Direct)";
-                                        break;
-                                    default:
-                                        candidateType = "unknown";
-                                        break;
-                                }
-                                qCDebug(WebRTCLinkLog) << "[WEBRTC] Selected candidate type:" << candidateType
-                                                      << "Local:" << QString::fromStdString(localCand.candidate())
-                                                      << "Remote:" << QString::fromStdString(remoteCand.candidate());
-
-                                // candidate pair를 성공적으로 가져왔을 때만 캐시 업데이트
-                                QString candidateInfo = QString("%1 ↔ %2 [%3]")
-                                                                .arg(localAddrStr)
-                                                                .arg(remoteAddrStr)
-                                                                .arg(candidateType);
-                                {
-                                    QMutexLocker locker(&self->_cachedCandidateMutex);
-                                    self->_cachedCandidate = candidateInfo;
-                                }
-                                qCDebug(WebRTCLinkLog) << "[WEBRTC] Candidate cached:" << candidateInfo;
-                            } else {
-                                // candidate pair를 가져오지 못했을 때는 이전 캐시 유지
-                                QString currentCache;
-                                {
-                                    QMutexLocker locker(&self->_cachedCandidateMutex);
-                                    currentCache = self->_cachedCandidate;
-                                }
-                                qCDebug(WebRTCLinkLog) << "[WEBRTC] Cannot get candidate pair, keeping previous cached value:"
-                                                      << currentCache;
+                        // getSelectedCandidatePair() API 사용하여 candidate 타입 확인
+                        rtc::Candidate localCand, remoteCand;
+                        if (lockedPC->getSelectedCandidatePair(&localCand, &remoteCand)) {
+                            QString candidateType = "unknown";
+                            // Candidate::Type enum을 사용하여 타입 확인
+                            switch (localCand.type()) {
+                                case rtc::Candidate::Type::Relayed:
+                                    candidateType = "relay (TURN)";
+                                    break;
+                                case rtc::Candidate::Type::ServerReflexive:
+                                    candidateType = "srflx (STUN)";
+                                    break;
+                                case rtc::Candidate::Type::PeerReflexive:
+                                    candidateType = "prflx (Peer Reflexive)";
+                                    break;
+                                case rtc::Candidate::Type::Host:
+                                    candidateType = "host (Direct)";
+                                    break;
+                                default:
+                                    candidateType = "unknown";
+                                    break;
                             }
+                            qCDebug(WebRTCLinkLog) << "[WEBRTC] Selected candidate type:" << candidateType
+                                                  << "Local:" << QString::fromStdString(localCand.candidate())
+                                                  << "Remote:" << QString::fromStdString(remoteCand.candidate());
+
+                            // candidate pair를 성공적으로 가져왔을 때만 캐시 업데이트
+                            QString candidateInfo = QString("%1 ↔ %2 [%3]")
+                                                            .arg(localAddrStr)
+                                                            .arg(remoteAddrStr)
+                                                            .arg(candidateType);
+                            {
+                                QMutexLocker locker(&self->_cachedCandidateMutex);
+                                self->_cachedCandidate = candidateInfo;
+                            }
+                            qCDebug(WebRTCLinkLog) << "[WEBRTC] Candidate cached:" << candidateInfo;
+                        } else {
+                            // candidate pair를 가져오지 못했을 때는 이전 캐시 유지
+                            QString currentCache;
+                            {
+                                QMutexLocker locker(&self->_cachedCandidateMutex);
+                                currentCache = self->_cachedCandidate;
+                            }
+                            qCDebug(WebRTCLinkLog) << "[WEBRTC] Cannot get candidate pair, keeping previous cached value:"
+                                                  << currentCache;
                         }
-                    } catch (const std::exception& e) {
-                        qCWarning(WebRTCLinkLog) << "[WEBRTC] Failed to cache candidate:" << e.what();
                     }
+                } catch (const std::exception& e) {
+                    qCWarning(WebRTCLinkLog) << "[WEBRTC] Failed to cache candidate:" << e.what();
                 }
             } else if (state == rtc::PeerConnection::State::Failed ||
                        state == rtc::PeerConnection::State::Disconnected ||
@@ -852,21 +842,24 @@ void WebRTCWorker::_setupPeerConnection()
     qCDebug(WebRTCLinkLog) << "Setting up single PeerConnection with ICE auto-selection";
 
     try {
-        // SCTP 글로벌 설정 적용
-        rtcSctpSettings sctpSettings = {};
-        sctpSettings.recvBufferSize = SCTP_RECV_BUFFER_SIZE;
-        sctpSettings.sendBufferSize = SCTP_SEND_BUFFER_SIZE;
-        sctpSettings.maxChunksOnQueue = SCTP_MAX_CHUNKS_ON_QUEUE;
-        sctpSettings.initialCongestionWindow = SCTP_INITIAL_CONGESTION_WINDOW;
-        sctpSettings.maxBurst = SCTP_MAX_BURST;
-        sctpSettings.congestionControlModule = SCTP_CONGESTION_CONTROL_MODULE;
-        sctpSettings.delayedSackTimeMs = SCTP_DELAYED_SACK_TIME_MS;
-        sctpSettings.minRetransmitTimeoutMs = SCTP_MIN_RETRANSMIT_TIMEOUT_MS;
-        sctpSettings.maxRetransmitTimeoutMs = SCTP_MAX_RETRANSMIT_TIMEOUT_MS;
-        sctpSettings.initialRetransmitTimeoutMs = SCTP_INITIAL_RETRANSMIT_TIMEOUT_MS;
-        sctpSettings.maxRetransmitAttempts = SCTP_MAX_RETRANSMIT_ATTEMPTS;
-        sctpSettings.heartbeatIntervalMs = SCTP_HEARTBEAT_INTERVAL_MS;
-        rtcSetSctpSettings(&sctpSettings);
+        // SCTP 글로벌 설정 적용 (한 번만 - 다중 인스턴스 안전)
+        std::call_once(s_sctpSettingsInitialized, []() {
+            rtcSctpSettings sctpSettings = {};
+            sctpSettings.recvBufferSize = SCTP_RECV_BUFFER_SIZE;
+            sctpSettings.sendBufferSize = SCTP_SEND_BUFFER_SIZE;
+            sctpSettings.maxChunksOnQueue = SCTP_MAX_CHUNKS_ON_QUEUE;
+            sctpSettings.initialCongestionWindow = SCTP_INITIAL_CONGESTION_WINDOW;
+            sctpSettings.maxBurst = SCTP_MAX_BURST;
+            sctpSettings.congestionControlModule = SCTP_CONGESTION_CONTROL_MODULE;
+            sctpSettings.delayedSackTimeMs = SCTP_DELAYED_SACK_TIME_MS;
+            sctpSettings.minRetransmitTimeoutMs = SCTP_MIN_RETRANSMIT_TIMEOUT_MS;
+            sctpSettings.maxRetransmitTimeoutMs = SCTP_MAX_RETRANSMIT_TIMEOUT_MS;
+            sctpSettings.initialRetransmitTimeoutMs = SCTP_INITIAL_RETRANSMIT_TIMEOUT_MS;
+            sctpSettings.maxRetransmitAttempts = SCTP_MAX_RETRANSMIT_ATTEMPTS;
+            sctpSettings.heartbeatIntervalMs = SCTP_HEARTBEAT_INTERVAL_MS;
+            rtcSetSctpSettings(&sctpSettings);
+            qCDebug(WebRTCLinkLog) << "SCTP global settings initialized";
+        });
 
         // Configuration 생성 (STUN + TURN 모두 포함)
         rtc::Configuration config;
@@ -1010,56 +1003,62 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
     dc->onMessage([self](auto data) {
         if (!self || self->isShuttingDown()) return;
 
-        if (std::holds_alternative<rtc::binary>(data)) {
-            const auto& binaryData = std::get<rtc::binary>(data);
-            qCDebug(WebRTCLinkLog) << "[CUSTOM] Binary data size:" << binaryData.size() << "bytes";
+        try {
+            if (std::holds_alternative<rtc::binary>(data)) {
+                const auto& binaryData = std::get<rtc::binary>(data);
+                qCDebug(WebRTCLinkLog) << "[CUSTOM] Binary data size:" << binaryData.size() << "bytes";
 
-            self->_dataChannelReceivedCalc.addData(binaryData.size());
+                self->_dataChannelReceivedCalc.addData(binaryData.size());
 
-            QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
-            QString receivedText = QString::fromUtf8(byteArray);
-            qCDebug(WebRTCLinkLog) << "[CUSTOM] Binary data:" << receivedText;
+                QByteArray byteArray(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
+                QString receivedText = QString::fromUtf8(byteArray);
+                qCDebug(WebRTCLinkLog) << "[CUSTOM] Binary data:" << receivedText;
 
-        } else if (std::holds_alternative<std::string>(data)) {
-            const std::string& receivedText = std::get<std::string>(data);
+            } else if (std::holds_alternative<std::string>(data)) {
+                const std::string& receivedText = std::get<std::string>(data);
 
-            QJsonParseError parseError;
-            QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(receivedText).toUtf8(), &parseError);
+                QJsonParseError parseError;
+                QJsonDocument jsonDoc = QJsonDocument::fromJson(QString::fromStdString(receivedText).toUtf8(), &parseError);
 
-            if (parseError.error == QJsonParseError::NoError) {
-                QJsonObject jsonObj = jsonDoc.object();
+                if (parseError.error == QJsonParseError::NoError) {
+                    QJsonObject jsonObj = jsonDoc.object();
 
-                if (jsonObj.contains("type") && jsonObj["type"].toString() == "system_info") {
-                    RTCModuleSystemInfo systemInfo(jsonObj);
-                    if (systemInfo.isValid()) {
-                        emit self->rtcModuleSystemInfoUpdated(systemInfo);
+                    if (jsonObj.contains("type") && jsonObj["type"].toString() == "system_info") {
+                        RTCModuleSystemInfo systemInfo(jsonObj);
+                        if (systemInfo.isValid()) {
+                            emit self->rtcModuleSystemInfoUpdated(systemInfo);
+                        } else {
+                            qCWarning(WebRTCLinkLog) << "Invalid RTC module system info received";
+                        }
+                    } else if (jsonObj.contains("type") && jsonObj["type"].toString() == "video_metrics") {
+                        VideoMetrics videoMetrics(jsonObj);
+                        if (videoMetrics.isValid()) {
+                            qCDebug(WebRTCLinkLog) << "[Video Metrics]" << videoMetrics.toString();
+                            emit self->videoMetricsUpdated(videoMetrics);
+                        } else {
+                            qCWarning(WebRTCLinkLog) << "Invalid video metrics received";
+                        }
+                    } else if (jsonObj.contains("type") && jsonObj["type"].toString() == "version_check") {
+                        RTCModuleVersionInfo versionInfo(jsonObj);
+                        if (versionInfo.isValid()) {
+                            qCDebug(WebRTCLinkLog) << "RTC Module Version Info:" << versionInfo.toString();
+                            emit self->rtcModuleVersionInfoUpdated(versionInfo);
+                        } else {
+                            qCWarning(WebRTCLinkLog) << "Invalid RTC module version info received";
+                        }
                     } else {
-                        qCWarning(WebRTCLinkLog) << "Invalid RTC module system info received";
-                    }
-                } else if (jsonObj.contains("type") && jsonObj["type"].toString() == "video_metrics") {
-                    VideoMetrics videoMetrics(jsonObj);
-                    if (videoMetrics.isValid()) {
-                        qCDebug(WebRTCLinkLog) << "[Video Metrics]" << videoMetrics.toString();
-                        emit self->videoMetricsUpdated(videoMetrics);
-                    } else {
-                        qCWarning(WebRTCLinkLog) << "Invalid video metrics received";
-                    }
-                } else if (jsonObj.contains("type") && jsonObj["type"].toString() == "version_check") {
-                    RTCModuleVersionInfo versionInfo(jsonObj);
-                    if (versionInfo.isValid()) {
-                        qCDebug(WebRTCLinkLog) << "RTC Module Version Info:" << versionInfo.toString();
-                        emit self->rtcModuleVersionInfoUpdated(versionInfo);
-                    } else {
-                        qCWarning(WebRTCLinkLog) << "Invalid RTC module version info received";
+                        qCDebug(WebRTCLinkLog) << "CustomDataChannel received JSON:" << QString::fromStdString(receivedText);
                     }
                 } else {
-                    qCDebug(WebRTCLinkLog) << "CustomDataChannel received JSON:" << QString::fromStdString(receivedText);
+                    qCDebug(WebRTCLinkLog) << "CustomDataChannel received plain text:" << QString::fromStdString(receivedText);
                 }
             } else {
-                qCDebug(WebRTCLinkLog) << "CustomDataChannel received plain text:" << QString::fromStdString(receivedText);
+                qCDebug(WebRTCLinkLog) << "[CUSTOM] Unknown data type received";
             }
-        } else {
-            qCDebug(WebRTCLinkLog) << "[CUSTOM] Unknown data type received";
+        } catch (const std::exception& e) {
+            qCWarning(WebRTCLinkLog) << "[CUSTOM] Exception processing message:" << e.what();
+        } catch (...) {
+            qCWarning(WebRTCLinkLog) << "[CUSTOM] Unknown exception processing message";
         }
     });
 }
@@ -1121,7 +1120,8 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
         _pcContext.videoTrack = track;
         emit videoTrackReceived();
 
-        if (VideoManager::instance()->isWebRtcInternalModeEnabled()) {
+        auto* videoManager = VideoManager::instance();
+        if (videoManager && videoManager->isWebRtcInternalModeEnabled()) {
             _videoStreamActive.store(true);
             qCDebug(WebRTCLinkLog) << "[WebRTC] Internal mode: video stream active";
         }
@@ -1135,9 +1135,10 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
             const auto& binaryData = std::get<rtc::binary>(message);
             QByteArray rtpData(reinterpret_cast<const char*>(binaryData.data()), binaryData.size());
 
-            if (VideoManager::instance() && VideoManager::instance()->isWebRtcInternalModeEnabled()) {
+            auto* vidMgr = VideoManager::instance();
+            if (vidMgr && vidMgr->isWebRtcInternalModeEnabled()) {
                 self->_videoReceivedCalc.addData(rtpData.size());
-                VideoManager::instance()->pushWebRtcRtp(rtpData);
+                vidMgr->pushWebRtcRtp(rtpData);
             }
         });
 
@@ -1159,6 +1160,10 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
     QString type = message["type"].toString();
 
     if (type == "answer") {
+        if (!_validateSignalingMessage(message, {"sdp"})) {
+            qCWarning(WebRTCLinkLog) << "[SIGNALING] Invalid answer message: missing sdp";
+            return;
+        }
         qCDebug(WebRTCLinkLog) << "[SIGNALING] Processing ANSWER";
 
         try {
@@ -1173,6 +1178,7 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
             qCDebug(WebRTCLinkLog) << "[WEBRTC] Setting remote description for answer";
             _pcContext.pc->setRemoteDescription(answer);
             _pcContext.remoteDescriptionSet.store(true);
+            _processPendingICECandidates();
 
             qCDebug(WebRTCLinkLog) << "[ANSWER] Processed successfully";
 
@@ -1191,8 +1197,16 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
     } else if (type == "registered") {
         _onGCSRegistered(message);
     } else if (type == "offer") {
+        if (!_validateSignalingMessage(message, {"sdp", "from"})) {
+            qCWarning(WebRTCLinkLog) << "[SIGNALING] Invalid offer message: missing required fields";
+            return;
+        }
         _onWebRTCOfferReceived(message);
     } else if (type == "candidate") {
+        if (!_validateSignalingMessage(message, {"candidate", "sdpMid"})) {
+            qCWarning(WebRTCLinkLog) << "[SIGNALING] Invalid candidate message: missing required fields";
+            return;
+        }
         _handleICECandidate(message);
     } else if (type == "ping") {
         _sendPongResponse(message);
@@ -1229,6 +1243,13 @@ void WebRTCWorker::_onWebRTCOfferReceived(const QJsonObject& message)
     }
 
     QString fromDroneId = message["from"].toString();
+
+    // 보안: 예상된 드론으로부터의 offer인지 검증
+    if (!_currentTargetDroneId.isEmpty() && fromDroneId != _currentTargetDroneId) {
+        qCWarning(WebRTCLinkLog) << "[SECURITY] Ignoring offer from unexpected drone:" << fromDroneId
+                                 << "Expected:" << _currentTargetDroneId;
+        return;
+    }
 
     QString sdp = message["sdp"].toString();
     if (sdp.isEmpty()) {
@@ -1288,6 +1309,7 @@ void WebRTCWorker::_onWebRTCOfferReceived(const QJsonObject& message)
         qCDebug(WebRTCLinkLog) << "[WEBRTC] Setting remote description (answer will be auto-generated)...";
         _pcContext.pc->setRemoteDescription(droneOffer);
         _pcContext.remoteDescriptionSet.store(true);
+        _processPendingICECandidates();
         qCDebug(WebRTCLinkLog) << "[WEBRTC] Remote description set, answer will be sent via onLocalDescription callback";
         emit rtcStatusMessageChanged("드론으로부터 offer 수신 완료");
 
@@ -1322,7 +1344,7 @@ void WebRTCWorker::_handleICECandidate(const QJsonObject& message)
             return;
         }
 
-        if (_pcContext.remoteDescriptionSet.load(std::memory_order_acquire)) {
+        if (_pcContext.remoteDescriptionSet.load()) {
             qCDebug(WebRTCLinkLog) << "[WEBRTC] Adding ICE candidate immediately";
 
             if (pc) {
@@ -1343,6 +1365,52 @@ void WebRTCWorker::_handleICECandidate(const QJsonObject& message)
     } catch (const std::exception& e) {
         qCWarning(WebRTCLinkLog) << "Failed to process ICE candidate:" << e.what();
     }
+}
+
+void WebRTCWorker::_processPendingICECandidates()
+{
+    if (!_pcContext.pc) {
+        qCWarning(WebRTCLinkLog) << "[ICE] Cannot process pending candidates: no PeerConnection";
+        return;
+    }
+
+    std::vector<rtc::Candidate> candidatesToProcess;
+    {
+        QMutexLocker locker(&_pcContext.candidateMutex);
+        candidatesToProcess = std::move(_pcContext.pendingCandidates);
+        _pcContext.pendingCandidates.clear();
+    }
+
+    if (candidatesToProcess.empty()) {
+        return;
+    }
+
+    qCDebug(WebRTCLinkLog) << "[ICE] Processing" << candidatesToProcess.size() << "pending ICE candidates";
+
+    for (const auto& candidate : candidatesToProcess) {
+        try {
+            _pcContext.pc->addRemoteCandidate(candidate);
+            qCDebug(WebRTCLinkLog) << "[ICE] Pending candidate added successfully";
+        } catch (const std::exception& e) {
+            qCWarning(WebRTCLinkLog) << "[ICE] Failed to add pending candidate:" << e.what();
+        }
+    }
+}
+
+bool WebRTCWorker::_validateSignalingMessage(const QJsonObject& message, const QStringList& requiredFields) const
+{
+    for (const QString& field : requiredFields) {
+        if (!message.contains(field)) {
+            qCWarning(WebRTCLinkLog) << "[SIGNALING] Missing required field:" << field;
+            return false;
+        }
+        QJsonValue value = message[field];
+        if (value.isNull() || (value.isString() && value.toString().isEmpty())) {
+            qCWarning(WebRTCLinkLog) << "[SIGNALING] Empty or null field:" << field;
+            return false;
+        }
+    }
+    return true;
 }
 
 void WebRTCWorker::_sendPongResponse(const QJsonObject& pingMsg)
@@ -1375,7 +1443,8 @@ void WebRTCWorker::_onErrorReceived(const QJsonObject& message)
 
                 QPointer<WebRTCWorker> self(this);
 
-                QTimer::singleShot(1000, this, [self]() {
+                // Remove 'this' as context object to avoid crash if worker is deleted before timer fires
+                QTimer::singleShot(1000, [self]() {
                     if (!self || self->isShuttingDown()) {
                         return;
                     }
@@ -1384,7 +1453,9 @@ void WebRTCWorker::_onErrorReceived(const QJsonObject& message)
                     }
 
                     qCDebug(WebRTCLinkLog) << "Retrying registration after forced unregister";
-                    self->_signalingManager->registerGCS(self->_currentGcsId, self->_currentTargetDroneId);
+                    if (self->_signalingManager) {
+                        self->_signalingManager->registerGCS(self->_currentGcsId, self->_currentTargetDroneId);
+                    }
                 });
             }
             return; // 에러로 처리하지 않음
@@ -1565,17 +1636,16 @@ void WebRTCWorker::_updateRtt()
     WebRTCStats stats = _collectWebRTCStats();
 
     // 디버그: Candidate가 실제로 변경되었을 때만 로그 출력 (빈 값 무시)
-    static QString lastCandidate;
     QString currentCandidate;
     {
         QMutexLocker locker(&_cachedCandidateMutex);
         currentCandidate = _cachedCandidate;
     }
-    if (!currentCandidate.isEmpty() && currentCandidate != lastCandidate) {
+    if (!currentCandidate.isEmpty() && currentCandidate != _lastCandidateForLog) {
         qCDebug(WebRTCLinkLog) << "[RTT_UPDATE] Candidate changed:"
-                              << (lastCandidate.isEmpty() ? "(empty)" : lastCandidate)
+                              << (_lastCandidateForLog.isEmpty() ? "(empty)" : _lastCandidateForLog)
                               << "->" << currentCandidate;
-        lastCandidate = currentCandidate;
+        _lastCandidateForLog = currentCandidate;
     }
 
     emit webRtcStatsUpdated(stats);
@@ -1611,16 +1681,24 @@ QString WebRTCWorker::_gatheringStateToString(rtc::PeerConnection::GatheringStat
 
 void WebRTCWorker::_cleanup(CleanupMode mode)
 {
-    WorkerState currentState = _state.load();
-
-    if (isInState(WorkerState::CleaningUp)) {
-        qCDebug(WebRTCLinkLog) << "Already in CleaningUp state, ignoring duplicate call";
+    // Re-entrancy guard using atomic exchange
+    bool expected = false;
+    if (!_cleanupInProgress.compare_exchange_strong(expected, true)) {
+        qCDebug(WebRTCLinkLog) << "Cleanup already in progress, ignoring duplicate call";
         return;
     }
 
+    // RAII guard to reset flag on any exit path
+    struct CleanupGuard {
+        std::atomic<bool>& flag;
+        ~CleanupGuard() { flag.store(false); }
+    } guard{_cleanupInProgress};
+
+    WorkerState currentState = _state.load();
+
     bool transitioned = false;
     if (mode == CleanupMode::Complete) {
-        if (currentState != WorkerState::Shutdown) {
+        if (currentState != WorkerState::Shutdown && currentState != WorkerState::CleaningUp) {
             transitioned = transitionState(currentState, WorkerState::CleaningUp);
         }
     } else {
@@ -1631,7 +1709,7 @@ void WebRTCWorker::_cleanup(CleanupMode mode)
         }
     }
 
-    if (!transitioned && currentState != WorkerState::CleaningUp) {
+    if (!transitioned && currentState != WorkerState::CleaningUp && currentState != WorkerState::Shutdown) {
         qCWarning(WebRTCLinkLog) << "Cannot transition to CleaningUp from state:"
                                  << stateToString(currentState) << "mode:"
                                  << (mode == CleanupMode::Complete ? "Complete" : "ForReconnection");
@@ -1799,11 +1877,14 @@ bool WebRTCWorker::canTransitionTo(WorkerState newState) const
                    newState == WorkerState::Reconnecting;
 
         case WorkerState::Disconnecting:
-            return newState == WorkerState::Idle;
+            return newState == WorkerState::Idle ||
+                   newState == WorkerState::Reconnecting;
 
         case WorkerState::Reconnecting:
             return newState == WorkerState::Starting ||
                    newState == WorkerState::Connecting ||
+                   newState == WorkerState::EstablishingPeer ||
+                   newState == WorkerState::Connected ||
                    newState == WorkerState::Disconnecting;
 
         case WorkerState::CleaningUp:

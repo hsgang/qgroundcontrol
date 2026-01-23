@@ -558,6 +558,8 @@ class WebRTCWorker : public QObject
     void _resetPeerConnection();
     void _setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnection> pc);
     void _processReceivedData(const QByteArray& data);
+    void _processPendingICECandidates();
+    bool _validateSignalingMessage(const QJsonObject& message, const QStringList& requiredFields) const;
 
     // 재연결 관리
     int _calculateReconnectDelay() const;
@@ -578,9 +580,15 @@ class WebRTCWorker : public QObject
     // RTT 값 저장
     int _rttMs = 0;
 
+    // Cleanup 재진입성 가드
+    std::atomic<bool> _cleanupInProgress{false};
+
     // ICE candidate 캐시
     QString _cachedCandidate;
     mutable QMutex _cachedCandidateMutex;  // _cachedCandidate 보호용 mutex (const 메서드에서도 사용 가능)
+
+    // RTT 업데이트 로깅용 (static 변수 대체)
+    QString _lastCandidateForLog;
 
     // 버퍼 관리
     static const size_t BUFFER_LOW_THRESHOLD = 8 * 1024;  // 8KB - DataChannel bufferedAmountLow 임계값
