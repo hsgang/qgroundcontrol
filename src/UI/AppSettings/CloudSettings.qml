@@ -128,25 +128,9 @@ SettingsPage {
         LabelledFactTextField {
             Layout.fillWidth:   true
             textFieldPreferredWidth:    _urlFieldWidth * 1.4
-            label:              qsTr("시그널링 서버")
-            description:        qsTr("example - wss://example.com:3000")
+            label:              qsTr("서버 주소")
+            description:        qsTr("example - example.host.com")
             fact:               cloudSettings.webrtcSignalingServer
-        }
-
-        LabelledFactTextField {
-            Layout.fillWidth:   true
-            textFieldPreferredWidth:    _urlFieldWidth * 1.4
-            label:              qsTr("STUN 서버")
-            description:        qsTr("example - stun.l.google.com:19302")
-            fact:               cloudSettings.webrtcStunServer
-        }
-
-        LabelledFactTextField {
-            Layout.fillWidth:   true
-            textFieldPreferredWidth:    _urlFieldWidth * 1.4
-            label:              qsTr("TURN 서버")
-            description:        qsTr("example - turn.example.com:3478")
-            fact:               cloudSettings.webrtcTurnServer
         }
 
         LabelledFactTextField {
