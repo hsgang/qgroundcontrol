@@ -962,24 +962,25 @@ ApplicationWindow {
             }
 
             Rectangle {
-                anchors.horizontalCenter:   backgroundRect.right
-                anchors.verticalCenter:     backgroundRect.top
+                anchors.left:   backgroundRect.right
+                anchors.leftMargin: ScreenTools.defaultFontPixelWidth / 2
+                anchors.top:    backgroundRect.top
                 width:                      ScreenTools.largeFontPixelHeight
                 height:                     width
-                radius:                     width / 2
+                radius:                     ScreenTools.defaultFontPixelHeight / 4
                 color:                      QGroundControl.globalPalette.button
-                border.color:               QGroundControl.globalPalette.buttonText
-                visible:                    indicatorDrawerLoader.item && indicatorDrawerLoader.item.showExpand && !indicatorDrawer._expanded
+                border.color:               QGroundControl.globalPalette.groupBorder
+                visible:                    indicatorDrawerLoader.item && indicatorDrawerLoader.item.showExpand
 
                 QGCLabel {
                     anchors.centerIn:   parent
-                    text:               ">"
+                    text:               indicatorDrawer._expanded ? "<" : ">"
                     color:              QGroundControl.globalPalette.buttonText
                 }
 
                 QGCMouseArea {
                     fillItem: parent
-                    onClicked: indicatorDrawer._expanded = true
+                    onClicked: indicatorDrawer._expanded = !indicatorDrawer._expanded
                 }
             }
         }
