@@ -21,9 +21,9 @@ Rectangle {
     property real _sizeRatio:                   (usedByMultipleVehicleList || ScreenTools.isTinyScreen) ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:                    ScreenTools.defaultFontPointSize * _sizeRatio < 8 ? 8 : ScreenTools.defaultFontPointSize * _sizeRatio
     property real _heading:                     vehicle?.heading?.rawValue ?? 0
-    property real _headingToHome:               vehicle?.headingToHome?.rawValue ?? NaN
+    property real _headingToHome:               vehicle?.headingToHome?.rawValue ?? 0
     property real _groundSpeed:                 vehicle?.groundSpeed?.rawValue ?? 0
-    property real _headingToNextWP:             vehicle?.headingToNextWP?.rawValue ?? NaN
+    property real _headingToNextWP:             vehicle?.headingToNextWP?.rawValue ?? 0
     property real _distanceToNextWP:            vehicle?.distanceToNextWP?.rawValue ?? 0
     property real _courseOverGround:            vehicle?.gps?.courseOverGround?.rawValue ?? 0
     property var  _flyViewSettings:             QGroundControl.settingsManager.flyViewSettings

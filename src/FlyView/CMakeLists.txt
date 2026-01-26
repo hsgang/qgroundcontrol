@@ -95,5 +95,6 @@ qt_add_qml_module(FlyViewModule
         GuidedActionChangeAltitude.qml
         GuidedActionChangeSpeed.qml
         GuidedActionMission.qml
+        VTOLChecklist.qml
     NO_PLUGIN
 )
