@@ -25,8 +25,6 @@ ApplicationWindow {
     leftPadding:    ScreenTools.isAndroid ? 0 : undefined
     rightPadding:   ScreenTools.isAndroid ? 0 : undefined
 
-    property bool   _utmspSendActTrigger
-
     Component.onCompleted: {
         // Start the sequence of first run prompt(s)
         firstRunPromptManager.nextPrompt()

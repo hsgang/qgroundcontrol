@@ -3,6 +3,7 @@
 #include <QtCore/QElapsedTimer>
 #include <QtCore/QFile>
 #include <QtCore/QObject>
+#include <QtCore/QPointer>
 #include <QtCore/QSharedPointer>
 #include <QtCore/QTime>
 #include <QtCore/QTimer>
@@ -92,9 +93,6 @@ class TerrainAtCoordinateQuery;
 class TerrainProtocolHandler;
 class TrajectoryPoints;
 class VehicleObjectAvoidance;
-#ifdef QGC_UTM_ADAPTER
-class UTMSPVehicle;
-#endif
 
 namespace events {
 namespace parser {
@@ -977,6 +975,8 @@ private slots:
     void _updateFlightTime                  ();
     void _gotProgressUpdate                 (float progressValue);
     void _doSetHomeTerrainReceived          (bool success, QList<double> heights);
+    void _roiTerrainReceived                (bool success, QList<double> heights);
+    void _sendROICommand                    (const QGeoCoordinate& coord, MAV_FRAME frame, float altitude);
     void _updateAltAboveTerrain             ();
     void _altitudeAboveTerrainReceived      (bool sucess, QList<double> heights);
 
@@ -1035,9 +1035,13 @@ void _activeVehicleChanged          (Vehicle* newActiveVehicle);
 
     static void _rebootCommandResultHandler(void* resultHandlerData, int compId, const mavlink_command_ack_t& ack, MavCmdResultFailureCode_t failureCode);
 
-    // The following two methods should only be called by unit tests
+    // The following methods should only be called by unit tests
     void _deleteGimbalController();
     void _deleteCameraManager();
+
+    /// Called by VehicleLinkManager when all links are removed.
+    /// Stops command processing timers to prevent callbacks during vehicle destruction.
+    void _stopCommandProcessing();
 
     int     _id;                    ///< Mavlink system id
     int     _defaultComponentId;
@@ -1114,10 +1118,6 @@ void _activeVehicleChanged          (Vehicle* newActiveVehicle);
     Autotune*                       _autotune                       = nullptr;
     DropSequence*                   _dropSequence                   = nullptr;
     GimbalController*               _gimbalController               = nullptr;
-
-#ifdef QGC_UTM_ADAPTER
-    UTMSPVehicle*                    _utmspVehicle                    = nullptr;
-#endif
 
     bool    _armed = false;         ///< true: vehicle is armed
     uint8_t _base_mode = 0;     ///< base_mode from HEARTBEAT
@@ -1207,7 +1207,7 @@ void _activeVehicleChanged          (Vehicle* newActiveVehicle);
     // requestMessage handling
 
     typedef struct RequestMessageInfo {
-        Vehicle*                    vehicle             = nullptr;
+        QPointer<Vehicle>           vehicle;                        // QPointer automatically becomes null when Vehicle is destroyed
         int                         compId;
         int                         msgId;
         RequestMessageResultHandler resultHandler       = nullptr;
@@ -1242,15 +1242,21 @@ void _activeVehicleChanged          (Vehicle* newActiveVehicle);
         int                     maxTries            = _mavCommandMaxRetryCount;
         int                     tryCount            = 0;
         QElapsedTimer           elapsedTimer;
-        int                     ackTimeoutMSecs     = _mavCommandAckTimeoutMSecs;
+        int                     ackTimeoutMSecs     = 0;
     } MavCommandListEntry_t;
 
     QList<MavCommandListEntry_t>    _mavCommandList;
     QTimer                          _mavCommandResponseCheckTimer;
-    static const int                _mavCommandMaxRetryCount                = 3;
-    static const int                _mavCommandResponseCheckTimeoutMSecs    = 500;
-    static const int                _mavCommandAckTimeoutMSecs              = 3000;
-    static const int                _mavCommandAckTimeoutMSecsHighLatency   = 120000;
+    static constexpr int _mavCommandMaxRetryCount = 3;
+    static int _mavCommandResponseCheckTimeoutMSecs();
+    static int _mavCommandAckTimeoutMSecs();
+    static constexpr int _mavCommandAckTimeoutMSecsHighLatency = 120000;
+
+public:
+    /// Ack timeout used in unit tests (much shorter for faster tests)
+    static constexpr int kTestMavCommandAckTimeoutMs = 100;
+    /// Maximum wait time for mav command in unit tests (all retries + overhead)
+    static constexpr int kTestMavCommandMaxWaitMs = kTestMavCommandAckTimeoutMs * _mavCommandMaxRetryCount * 2;
 
     void _sendMavCommandWorker  (
             bool commandInt, bool showError,
@@ -1341,6 +1347,10 @@ void _activeVehicleChanged          (Vehicle* newActiveVehicle);
     // Terrain query members, used to get terrain altitude for doSetHome()
     TerrainAtCoordinateQuery*   _currentDoSetHomeTerrainAtCoordinateQuery = nullptr;
     QGeoCoordinate              _doSetHomeCoordinate;
+
+    // Terrain query members, used to get terrain altitude for guidedModeROI()
+    TerrainAtCoordinateQuery*   _roiTerrainAtCoordinateQuery = nullptr;
+    QGeoCoordinate              _roiCoordinate;
 
     // Terrain query members, used to get altitude above terrain Fact
     QElapsedTimer               _altitudeAboveTerrQueryTimer;

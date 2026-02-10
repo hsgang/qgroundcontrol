@@ -52,10 +52,6 @@
 #include "APM.h"
 #include "DropSequence.h"
 
-#ifdef QGC_UTM_ADAPTER
-#include "UTMSPVehicle.h"
-#include "UTMSPManager.h"
-#endif
 #ifdef QT_DEBUG
 #include "MockLink.h"
 #endif
@@ -144,10 +140,6 @@ Vehicle::Vehicle(LinkInterface*             link,
         SettingsManager::instance()->videoSettings()->lowLatencyMode()->setRawValue(true);
     }
 
-#ifdef QGC_UTM_ADAPTER
-    _utmspVehicle = UTMSPManager::instance()->instantiateVehicle(this);
-#endif
-
     _autopilotPlugin = _firmwarePlugin->autopilotPlugin(this);
     _autopilotPlugin->setParent(this);
 
@@ -158,7 +150,7 @@ Vehicle::Vehicle(LinkInterface*             link,
 
     // Send MAV_CMD ack timer
     _mavCommandResponseCheckTimer.setSingleShot(false);
-    _mavCommandResponseCheckTimer.setInterval(_mavCommandResponseCheckTimeoutMSecs);
+    _mavCommandResponseCheckTimer.setInterval(_mavCommandResponseCheckTimeoutMSecs());
     _mavCommandResponseCheckTimer.start();
     connect(&_mavCommandResponseCheckTimer, &QTimer::timeout, this, &Vehicle::_sendMavCommandResponseTimeoutCheck);
 
@@ -391,6 +383,17 @@ Vehicle::~Vehicle()
 {
     qCDebug(VehicleLog) << "~Vehicle" << this;
 
+    // Stop all timers and disconnect their signals to prevent any callbacks during destruction.
+    // Even though _stopCommandProcessing() should have been called earlier via VehicleLinkManager,
+    // we do it again here defensively in case the vehicle is destroyed without going through
+    // the normal link removal path (e.g., in unit tests).
+    _mavCommandResponseCheckTimer.stop();
+    _mavCommandResponseCheckTimer.disconnect();
+    _sendMultipleTimer.stop();
+    _sendMultipleTimer.disconnect();
+    _prearmErrorTimer.stop();
+    _prearmErrorTimer.disconnect();
+
     delete _missionManager;
     _missionManager = nullptr;
 
@@ -401,6 +404,8 @@ Vehicle::~Vehicle()
 void Vehicle::_deleteCameraManager()
 {
     if(_cameraManager) {
+        // Disconnect all signals to prevent any callbacks during or after deletion
+        _cameraManager->disconnect();
         delete _cameraManager;
         _cameraManager = nullptr;
     }
@@ -409,9 +414,33 @@ void Vehicle::_deleteCameraManager()
 void Vehicle::_deleteGimbalController()
 {
     if (_gimbalController) {
+        // Disconnect all signals to prevent any callbacks during or after deletion
+        _gimbalController->disconnect();
         delete _gimbalController;
         _gimbalController = nullptr;
     }
+}
+
+void Vehicle::_stopCommandProcessing()
+{
+    qCDebug(VehicleLog) << "_stopCommandProcessing - stopping timers and clearing pending commands";
+
+    // Stop timers AND disconnect their signals to prevent any pending callbacks
+    // from being delivered after this point. This is critical during vehicle destruction
+    // where a queued callback could access a partially-destroyed vehicle.
+    _mavCommandResponseCheckTimer.stop();
+    _mavCommandResponseCheckTimer.disconnect();
+    _sendMultipleTimer.stop();
+    _sendMultipleTimer.disconnect();
+
+    // Clear pending commands without calling callbacks (vehicle is being destroyed)
+    _mavCommandList.clear();
+
+    // Clear request message info map - delete the allocated RequestMessageInfo objects
+    for (auto& compIdEntry : _requestMessageInfoMap) {
+        qDeleteAll(compIdEntry);
+    }
+    _requestMessageInfoMap.clear();
 }
 
 void Vehicle::_offlineFirmwareTypeSettingChanged(QVariant varFirmwareType)
@@ -2176,29 +2205,78 @@ void Vehicle::guidedModeROI(const QGeoCoordinate& centerCoord)
     if (!centerCoord.isValid()) {
         return;
     }
-    // Sanity check Ardupilot. Max altitude processed is 83000
-    if (apmFirmware()) {
-        if ((centerCoord.altitude() >= 83000) || (centerCoord.altitude() <= -83000  )) {
-            return;
-        }
-    }
     if (!roiModeSupported()) {
         qgcApp()->showAppMessage(QStringLiteral("ROI mode not supported by Vehicle."));
         return;
     }
+
+    if (px4Firmware()) {
+        // PX4 ignores the coordinate frame in COMMAND_INT and treats the altitude as AMSL.
+        // The map click provides no altitude, so we query terrain to get a proper AMSL altitude.
+        if (_roiTerrainAtCoordinateQuery) {
+            disconnect(_roiTerrainAtCoordinateQuery, &TerrainAtCoordinateQuery::terrainDataReceived, this, &Vehicle::_roiTerrainReceived);
+            _roiTerrainAtCoordinateQuery = nullptr;
+        }
+
+        _roiCoordinate = centerCoord;
+
+        _roiTerrainAtCoordinateQuery = new TerrainAtCoordinateQuery(true /* autoDelete */);
+        connect(_roiTerrainAtCoordinateQuery, &TerrainAtCoordinateQuery::terrainDataReceived, this, &Vehicle::_roiTerrainReceived);
+        QList<QGeoCoordinate> rgCoord;
+        rgCoord.append(centerCoord);
+        _roiTerrainAtCoordinateQuery->requestData(rgCoord);
+    } else {
+        // ArduPilot handles MAV_FRAME_GLOBAL_RELATIVE_ALT correctly, so altitude 0 relative to
+        // home is a reasonable default for a map click with no altitude info.
+        // Sanity check Ardupilot. Max altitude processed is 83000
+        if ((centerCoord.altitude() >= 83000) || (centerCoord.altitude() <= -83000)) {
+            return;
+        }
+        _sendROICommand(centerCoord, MAV_FRAME_GLOBAL_RELATIVE_ALT, static_cast<float>(centerCoord.altitude()));
+    }
+
+    // This is picked by qml to display coordinate over map
+    emit roiCoordChanged(centerCoord);
+}
+
+void Vehicle::_roiTerrainReceived(bool success, QList<double> heights)
+{
+    _roiTerrainAtCoordinateQuery = nullptr;
+
+    if (!_roiCoordinate.isValid()) {
+        return;
+    }
+
+    float roiAltitude;
+    if (success) {
+        roiAltitude = static_cast<float>(heights[0]);
+    } else {
+        qCDebug(VehicleLog) << "_roiTerrainReceived: terrain query failed, falling back to home altitude";
+        roiAltitude = static_cast<float>(_homePosition.altitude());
+    }
+
+    qCDebug(VehicleLog) << "guidedModeROI: lat" << _roiCoordinate.latitude() << "lon" << _roiCoordinate.longitude() << "terrainAltAMSL" << roiAltitude << "success" << success;
+
+    _sendROICommand(_roiCoordinate, MAV_FRAME_GLOBAL, roiAltitude);
+
+    _roiCoordinate = QGeoCoordinate();
+}
+
+void Vehicle::_sendROICommand(const QGeoCoordinate& coord, MAV_FRAME frame, float altitude)
+{
     if (capabilityBits() & MAV_PROTOCOL_CAPABILITY_COMMAND_INT) {
         sendMavCommandInt(
                     defaultComponentId(),
                     MAV_CMD_DO_SET_ROI_LOCATION,
-                    apmFirmware() ? MAV_FRAME_GLOBAL_RELATIVE_ALT : MAV_FRAME_GLOBAL,
+                    frame,
                     true,                           // show error if fails
                     static_cast<float>(qQNaN()),    // Empty
                     static_cast<float>(qQNaN()),    // Empty
                     static_cast<float>(qQNaN()),    // Empty
                     static_cast<float>(qQNaN()),    // Empty
-                    centerCoord.latitude(),
-                    centerCoord.longitude(),
-                    static_cast<float>(centerCoord.altitude()));
+                    coord.latitude(),
+                    coord.longitude(),
+                    altitude);
     } else {
         sendMavCommand(
                     defaultComponentId(),
@@ -2208,12 +2286,10 @@ void Vehicle::guidedModeROI(const QGeoCoordinate& centerCoord)
                     static_cast<float>(qQNaN()),    // Empty
                     static_cast<float>(qQNaN()),    // Empty
                     static_cast<float>(qQNaN()),    // Empty
-                    static_cast<float>(centerCoord.latitude()),
-                    static_cast<float>(centerCoord.longitude()),
-                    static_cast<float>(centerCoord.altitude()));
+                    static_cast<float>(coord.latitude()),
+                    static_cast<float>(coord.longitude()),
+                    altitude);
     }
-    // This is picked by qml to display coordinate over map
-    emit roiCoordChanged(centerCoord);
 }
 
 void Vehicle::stopGuidedModeROI()
@@ -2549,6 +2625,18 @@ int Vehicle::_findMavCommandListEntryIndex(int targetCompId, MAV_CMD command)
     return -1;
 }
 
+int Vehicle::_mavCommandResponseCheckTimeoutMSecs()
+{
+    // Use shorter check interval during unit tests for faster test execution
+    return qgcApp()->runningUnitTests() ? 50 : 500;
+}
+
+int Vehicle::_mavCommandAckTimeoutMSecs()
+{
+    // Use shorter ack timeout during unit tests for faster test execution
+    return qgcApp()->runningUnitTests() ? kTestMavCommandAckTimeoutMs : 3000;
+}
+
 bool Vehicle::_sendMavCommandShouldRetry(MAV_CMD command)
 {
     switch (command) {
@@ -2654,7 +2742,7 @@ void Vehicle::_sendMavCommandWorker(
     entry.rgParam6          = param6;
     entry.rgParam7          = param7;
     entry.maxTries          = _sendMavCommandShouldRetry(command) ? _mavCommandMaxRetryCount : 1;
-    entry.ackTimeoutMSecs   = sharedLink->linkConfiguration()->isHighLatency() ? _mavCommandAckTimeoutMSecsHighLatency : _mavCommandAckTimeoutMSecs;
+    entry.ackTimeoutMSecs   = sharedLink->linkConfiguration()->isHighLatency() ? _mavCommandAckTimeoutMSecsHighLatency : _mavCommandAckTimeoutMSecs();
     entry.elapsedTimer.start();
 
     qCDebug(VehicleLog) << Q_FUNC_INFO << "command:param1-7" << command << param1 << param2 << param3 << param4 << param5 << param6 << param7;
@@ -2926,8 +3014,15 @@ void Vehicle::_requestMessageCmdResultHandler(void* resultHandlerData_, [[maybe_
     auto requestMessageInfo = static_cast<RequestMessageInfo_t*>(resultHandlerData_);
     auto resultHandler      = requestMessageInfo->resultHandler;
     auto resultHandlerData  = requestMessageInfo->resultHandlerData;
-    auto vehicle            = requestMessageInfo->vehicle;
+    Vehicle* vehicle        = requestMessageInfo->vehicle;  // QPointer converts to raw pointer, null if Vehicle destroyed
     auto message            = requestMessageInfo->message;
+
+    // Vehicle was destroyed before callback fired - clean up and return without accessing vehicle
+    if (!vehicle) {
+        qCDebug(VehicleLog) << Q_FUNC_INFO << "Vehicle destroyed before callback - skipping";
+        delete requestMessageInfo;
+        return;
+    }
 
     requestMessageInfo->commandAckReceived = true;
     if (ack.result != MAV_RESULT_ACCEPTED) {

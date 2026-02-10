@@ -51,8 +51,6 @@ public:
     DEFINE_SETTINGFACT(useComponentInformationQuery)
     DEFINE_SETTINGFACT(enableOpenWeatherAPI)
     DEFINE_SETTINGFACT(enableSiyiSDK)
-    DEFINE_SETTINGFACT(loginAirLink)
-    DEFINE_SETTINGFACT(passAirLink)
     DEFINE_SETTINGFACT(fullScreen)
 
     Q_PROPERTY(QString missionSavePath          READ missionSavePath            NOTIFY savePathsChanged)

@@ -141,8 +141,6 @@ DECLARE_SETTINGSFACT(AppSettings, firstRunPromptIdsShown)
 DECLARE_SETTINGSFACT(AppSettings, useComponentInformationQuery)
 DECLARE_SETTINGSFACT(AppSettings, enableOpenWeatherAPI)
 DECLARE_SETTINGSFACT(AppSettings, enableSiyiSDK)
-DECLARE_SETTINGSFACT(AppSettings, loginAirLink)
-DECLARE_SETTINGSFACT(AppSettings, passAirLink)
 DECLARE_SETTINGSFACT(AppSettings, fullScreen)
 
 DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, indoorPalette)

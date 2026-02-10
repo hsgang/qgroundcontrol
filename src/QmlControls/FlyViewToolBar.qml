@@ -10,7 +10,6 @@ import QGroundControl.Toolbar
 
 Item {
     required property var guidedValueSlider
-    required property bool utmspSliderTrigger
 
     id:     control
     width:  parent.width

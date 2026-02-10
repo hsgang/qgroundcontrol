@@ -7,6 +7,7 @@
 #include <QtQmlIntegration/QtQmlIntegration>
 
 #include "QmlUnitsConversion.h"
+#include "qgc_version.h"
 
 Q_DECLARE_LOGGING_CATEGORY(GuidedActionsControllerLog)
 
@@ -21,8 +22,6 @@ class QGCPalette;
 class QGCPositionManager;
 class SettingsManager;
 class VideoManager;
-class UTMSPManager;
-class AirLinkManager;
 class CloudManager;
 class GridManager;
 class NTRIPManager;
@@ -48,12 +47,6 @@ Q_MOC_INCLUDE("GridManager.h")
 Q_MOC_INCLUDE("SiYi.h")
 Q_MOC_INCLUDE("SignalingServerManager.h")
 Q_MOC_INCLUDE("KMLOverlayManager.h")
-#ifdef QGC_UTM_ADAPTER
-Q_MOC_INCLUDE("UTMSPManager.h")
-#endif
-#ifndef QGC_AIRLINK_DISABLED
-Q_MOC_INCLUDE("AirLinkManager.h")
-#endif
 
 class QGroundControlQmlGlobal : public QObject
 {
@@ -95,10 +88,6 @@ public:
 #ifndef QGC_NO_SERIAL_LINK
     Q_PROPERTY(FactGroup*           gpsRtk                  READ    gpsRtkFactGroup         CONSTANT)
 #endif
-#ifndef QGC_AIRLINK_DISABLED
-    Q_PROPERTY(AirLinkManager*      airlinkManager          READ    airlinkManager          CONSTANT)
-#endif
-    Q_PROPERTY(bool                 airlinkSupported        READ    airlinkSupported        CONSTANT)
     Q_PROPERTY(QGCPalette*          globalPalette           MEMBER  _globalPalette          CONSTANT)   ///< This palette will always return enabled colors
     Q_PROPERTY(QmlUnitsConversion*  unitsConversion         READ    unitsConversion         CONSTANT)
     Q_PROPERTY(bool                 singleFirmwareSupport   READ    singleFirmwareSupport   CONSTANT)
@@ -131,12 +120,6 @@ public:
     // Elevation Provider
     Q_PROPERTY(QString  elevationProviderName           READ elevationProviderName              CONSTANT)
     Q_PROPERTY(QString  elevationProviderNotice         READ elevationProviderNotice            CONSTANT)
-
-    Q_PROPERTY(bool              utmspSupported           READ    utmspSupported              CONSTANT)
-
-#ifdef QGC_UTM_ADAPTER
-    Q_PROPERTY(UTMSPManager*     utmspManager             READ    utmspManager                CONSTANT)
-#endif
 
     Q_INVOKABLE void    saveGlobalSetting       (const QString& key, const QString& value);
     Q_INVOKABLE QString loadGlobalSetting       (const QString& key, const QString& defaultValue);
@@ -199,13 +182,6 @@ public:
     static QGeoCoordinate   flightMapPosition   ()  { return _coord; }
     static double           flightMapZoom       ()  { return _zoom; }
 
-#ifndef QGC_AIRLINK_DISABLED
-    AirLinkManager*         airlinkManager      ()  { return _airlinkManager; }
-    bool                    airlinkSupported    ()  { return true; }
-#else
-    bool                    airlinkSupported    ()  { return false; }
-#endif
-
     qreal zOrderTopMost             () { return 1000; }
     qreal zOrderWidgets             () { return 100; }
     qreal zOrderMapItems            () { return 50; }
@@ -248,13 +224,6 @@ public:
     static bool qgcDailyBuild() { return false; }
 #endif
 
-#ifdef QGC_UTM_ADAPTER
-    UTMSPManager* utmspManager() {return _utmspManager;}
-    bool utmspSupported() { return true; }
-#else
-    bool utmspSupported() { return false; }
-#endif
-
 signals:
     void isMultiplexingEnabledChanged   (bool enabled);
     void mavlinkSystemIDChanged         (int id);
@@ -280,12 +249,6 @@ private:
     QGCPalette*             _globalPalette          = nullptr;
 #ifndef QGC_NO_SERIAL_LINK
     FactGroup*              _gpsRtkFactGroup        = nullptr;
-#endif
-#ifndef QGC_AIRLINK_DISABLED
-    AirLinkManager*         _airlinkManager         = nullptr;
-#endif
-#ifdef QGC_UTM_ADAPTER
-    UTMSPManager*           _utmspManager           = nullptr;
 #endif
 
     double                  _flightMapInitialZoom   = 17.0;

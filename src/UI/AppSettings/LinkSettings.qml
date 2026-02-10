@@ -328,8 +328,8 @@ SettingsPage {
 
                 Loader {
                     id:     linkSettingsLoader
-                    //source: subEditConfig.settingsURL
                     source: subEditConfig && subEditConfig.settingsURL ? subEditConfig.settingsURL : ""
+                    asynchronous: true
 
                     property var subEditConfig:         editingConfig
                     property int _firstColumnWidth:     ScreenTools.defaultFontPixelWidth * 12
@@ -337,6 +337,12 @@ SettingsPage {
                     property int _rowSpacing:           ScreenTools.defaultFontPixelHeight / 2
                     property int _colSpacing:           ScreenTools.defaultFontPixelWidth / 2
                     property real _columnLayoutWidth:   _layoutWidth
+
+                    onStatusChanged: {
+                        if (status === Loader.Error) {
+                            console.warn("Failed to load link settings page:", source)
+                        }
+                    }
                 }
             }
         }

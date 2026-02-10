@@ -288,18 +288,6 @@
     "default":     ""
 },
 {
-    "name": "loginAirLink",
-    "shortDesc": "AirLink User Name",
-    "type": "string",
-    "default": ""
-},
-{
-    "name": "passAirLink",
-    "shortDesc": "AirLink Password",
-    "type": "string",
-    "default": ""
-},
-{
     "name": "enableSiyiSDK",
     "shortDesc": "Enable SiyiSDK Support",
     "longDesc":  "Enable SiyiSDK Support",
