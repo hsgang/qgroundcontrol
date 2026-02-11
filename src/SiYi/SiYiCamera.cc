@@ -418,7 +418,7 @@ void SiYiCamera::analyzeMessage()
                 int msgLen = headerLength + header.dataLength + 4;
                 if (rxBytes_.length() >= msgLen) {
                     msg.data = QByteArray(rxBytes_.data() + headerLength);
-                    int offset = headerLength + header.dataLength;
+                    offset = headerLength + header.dataLength;
                     msg.crc = *reinterpret_cast<quint16*>(rxBytes_.data() + offset);
                     msg.crc = qToBigEndian<quint32>(msg.crc);
                 } else {
