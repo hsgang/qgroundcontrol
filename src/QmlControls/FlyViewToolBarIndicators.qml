@@ -6,6 +6,7 @@ import QGroundControl.Toolbar
 
 Item {
     implicitWidth:      mainLayout.width + _widthMargin
+    visible:            mainLayout.implicitWidth > 0
 
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
     property real _toolIndicatorMargins:    ScreenTools.defaultFontPixelHeight * 0.3

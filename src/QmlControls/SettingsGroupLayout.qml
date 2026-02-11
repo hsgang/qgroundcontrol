@@ -72,13 +72,13 @@ ColumnLayout {
 
             Rectangle {
                 x:          showBorder ? _margins : 0
-                y:          _contentItem.y + _contentItem.height + _margins + (showBorder ? _margins : 0)
+                y:          _contentItem ? _contentItem.y + _contentItem.height + _margins + (showBorder ? _margins : 0) : 0
                 width:      parent.width - (showBorder ? _margins * 2 : 0)
                 height:     1
                 color:      QGroundControl.globalPalette.groupBorder
-                visible:    _isContentItemVisible()
+                visible:    _contentItem ? _isContentItemVisible() : false
 
-                property var _contentItem: _ySortedChildren[index]
+                property var _contentItem: index < _ySortedChildren.length ? _ySortedChildren[index] : null
 
                 function _isRepeater(item) {
                     return item.toString().startsWith("QQuickRepeater");
