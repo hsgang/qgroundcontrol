@@ -29,7 +29,6 @@ class VideoSettings;
 class Viewer3DSettings;
 class SIYISettings;
 class CloudSettings;
-class ModelProfileSettings;
 class GridSettings;
 class MavlinkSettings;
 class FactMetaData;
@@ -68,7 +67,6 @@ class SettingsManager : public QObject
     Q_MOC_INCLUDE("SIYISettings.h")
     Q_MOC_INCLUDE("CloudSettings.h")
     Q_MOC_INCLUDE("NTRIPSettings.h")
-    Q_MOC_INCLUDE("ModelProfileSettings.h")
     Q_MOC_INCLUDE("GridSettings.h")
     Q_MOC_INCLUDE("MavlinkSettings.h")
     Q_MOC_INCLUDE("JoystickManagerSettings.h")
@@ -100,7 +98,6 @@ class SettingsManager : public QObject
     Q_PROPERTY(QObject *cloudSettings                   READ cloudSettings                  CONSTANT)
     Q_PROPERTY(QObject *ntripSettings                   READ ntripSettings                  CONSTANT)
     Q_PROPERTY(QObject *siyiSettings                    READ siyiSettings                   CONSTANT)
-    Q_PROPERTY(QObject *modelProfileSettings            READ modelProfileSettings           CONSTANT)
     Q_PROPERTY(QObject *gridSettings                    READ gridSettings                   CONSTANT)
     Q_PROPERTY(QObject *mavlinkSettings                 READ mavlinkSettings                CONSTANT)
     Q_PROPERTY(QObject *joystickManagerSettings         READ joystickManagerSettings        CONSTANT)
@@ -146,7 +143,6 @@ public:
     VideoSettings *videoSettings() const;
     SIYISettings *siyiSettings() const;
     CloudSettings *cloudSettings() const;
-    ModelProfileSettings *modelProfileSettings() const;
     GridSettings *gridSettings() const;
     MavlinkSettings *mavlinkSettings() const;
     JoystickManagerSettings *joystickManagerSettings() const;
@@ -181,7 +177,6 @@ private:
     VideoSettings *_videoSettings = nullptr;
     SIYISettings *_siyiSettings = nullptr;
     CloudSettings *_cloudSettings = nullptr;
-    ModelProfileSettings *_modelProfileSettings = nullptr;
     GridSettings *_gridSettings = nullptr;
     MavlinkSettings *_mavlinkSettings = nullptr;
     JoystickManagerSettings *_joystickManagerSettings = nullptr;

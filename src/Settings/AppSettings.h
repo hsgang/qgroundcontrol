@@ -61,7 +61,6 @@ public:
     Q_PROPERTY(QString photoSavePath            READ photoSavePath              NOTIFY savePathsChanged)
     Q_PROPERTY(QString crashSavePath            READ crashSavePath              NOTIFY savePathsChanged)
     Q_PROPERTY(QString sensorSavePath           READ sensorSavePath             NOTIFY savePathsChanged)
-    Q_PROPERTY(QString modelProfilesSavePath    READ modelProfilesSavePath      NOTIFY savePathsChanged)
     Q_PROPERTY(QString mavlinkActionsSavePath   READ mavlinkActionsSavePath     NOTIFY savePathsChanged)
     Q_PROPERTY(QString settingsSavePath         READ settingsSavePath           NOTIFY savePathsChanged)
 
@@ -84,7 +83,6 @@ public:
     QString photoSavePath         ();
     QString crashSavePath         ();
     QString sensorSavePath        ();
-    QString modelProfilesSavePath ();
     QString mavlinkActionsSavePath();
     QString settingsSavePath      ();
 
@@ -113,7 +111,6 @@ public:
     static constexpr const char* photoDirectory =           QT_TRANSLATE_NOOP("AppSettings", "Photo");
     static constexpr const char* crashDirectory =           QT_TRANSLATE_NOOP("AppSettings", "CrashLogs");
     static constexpr const char* sensorDirectory =          QT_TRANSLATE_NOOP("AppSettings", "SensorLogs");
-    static constexpr const char* modelProfilesDirectory =   QT_TRANSLATE_NOOP("AppSettings", "ModelProfiles");
     static constexpr const char* mavlinkActionsDirectory =  QT_TRANSLATE_NOOP("AppSettings", "MavlinkActions");
     static constexpr const char* settingsDirectory =        QT_TRANSLATE_NOOP("AppSettings", "Settings");
 

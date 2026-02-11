@@ -59,8 +59,6 @@ target_sources(${CMAKE_PROJECT_NAME}
         NTRIPSettings.h
         CloudSettings.cc
         CloudSettings.h
-        ModelProfileSettings.cc
-        ModelProfileSettings.h
         GridSettings.cc
         GridSettings.h
         SIYISettings.cc

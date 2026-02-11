@@ -44,8 +44,6 @@
 #include "GPS/NTRIP.h"
 #include "CloudManager.h"
 #include "GridManager.h"
-#include "ModelProfileManager.h"
-#include "ModelProfileSettings.h"
 
 #ifndef QGC_NO_SERIAL_LINK
 #include "SerialLink.h"
@@ -282,7 +280,6 @@ void QGCApplication::_initForNormalAppBoot()
     MultiVehicleManager::instance()->init();
     MAVLinkProtocol::instance()->init();
     VideoManager::instance()->init(mainRootWindow());
-    ModelProfileManager::instance()->init(SettingsManager::instance()->modelProfileSettings()->modelProfileFile());
 
     // Image provider for Optical Flow
     _qmlAppEngine->addImageProvider(_qgcImageProviderId, new QGCImageProvider());

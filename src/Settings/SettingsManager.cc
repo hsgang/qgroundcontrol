@@ -25,7 +25,6 @@
 #include "SIYISettings.h"
 #include "NTRIPSettings.h"
 #include "CloudSettings.h"
-#include "ModelProfileSettings.h"
 #include "GridSettings.h"
 #include "MavlinkSettings.h"
 #include "JoystickManagerSettings.h"
@@ -92,7 +91,6 @@ void SettingsManager::init()
     _siyiSettings = new SIYISettings(this);
     _cloudSettings = new CloudSettings(this);
     _ntripSettings = new NTRIPSettings(this);
-    _modelProfileSettings = new ModelProfileSettings(this);
     _gridSettings = new GridSettings(this);
     _mavlinkSettings = new MavlinkSettings(this);
     _joystickManagerSettings = new JoystickManagerSettings(this);
@@ -129,7 +127,6 @@ NTRIPSettings *SettingsManager::ntripSettings() const { return _ntripSettings; }
 VideoSettings *SettingsManager::videoSettings() const { return _videoSettings; }
 CloudSettings *SettingsManager::cloudSettings() const { return _cloudSettings; }
 SIYISettings *SettingsManager::siyiSettings() const {return _siyiSettings; }
-ModelProfileSettings *SettingsManager::modelProfileSettings() const { return _modelProfileSettings; }
 GridSettings *SettingsManager::gridSettings() const { return _gridSettings; }
 MavlinkSettings *SettingsManager::mavlinkSettings() const { return _mavlinkSettings; }
 JoystickManagerSettings *SettingsManager::joystickManagerSettings() const { return _joystickManagerSettings; }
