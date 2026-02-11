@@ -142,7 +142,7 @@ void EscStatusFactGroup::_handleEscStatus(Vehicle * /*vehicle*/, const mavlink_m
     _setTelemetryAvailable(true);
 }
 
-void EscStatusFactGroup::_handleEscTelemetry1to4(Vehicle *vehicle, const mavlink_message_t &message)
+void EscStatusFactGroup::_handleEscTelemetry1to4(Vehicle */*vehicle*/, const mavlink_message_t &message)
 {
     mavlink_esc_telemetry_1_to_4_t escTelemetry{};
     mavlink_msg_esc_telemetry_1_to_4_decode(&message, &escTelemetry);
