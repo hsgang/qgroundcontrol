@@ -13,13 +13,13 @@ SiYiCamera::SiYiCamera(QObject *parent)
 {
     m_laserTimer = new QTimer(this);
     m_laserTimer->setInterval(1000);
-    connect(m_laserTimer, &QTimer::timeout, this, [=]() {
+    connect(m_laserTimer, &QTimer::timeout, this, [=, this]() {
         getLaserCoords();
         getLaserDistance();
     });
 
     connect(this, &SiYiCamera::connected,
-            this, [=](){
+            this, [=, this](){
         getCamerVersion();
         getResolution();
         getResolutionMain();
@@ -30,7 +30,7 @@ SiYiCamera::SiYiCamera(QObject *parent)
         setLogState(1);
 #endif
     });
-    connect(this, &SiYiCamera::disconnected, this, [=]() { m_laserTimer->stop(); });
+    connect(this, &SiYiCamera::disconnected, this, [=, this]() { m_laserTimer->stop(); });
 
     QSettings settings(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
                            + "/config.ini",

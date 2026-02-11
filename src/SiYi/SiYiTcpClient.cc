@@ -16,7 +16,7 @@ SiYiTcpClient::SiYiTcpClient(const QString ip, quint16 port, QObject *parent)
     , port_(port)
 {
     sequence_ = quint16(QDateTime::currentMSecsSinceEpoch());
-    connect(this, &SiYiTcpClient::finished, this, [=]() { start(); });
+    connect(this, &SiYiTcpClient::finished, this, [=, this]() { start(); });
 }
 
 SiYiTcpClient::~SiYiTcpClient()
@@ -79,7 +79,7 @@ void SiYiTcpClient::run()
     QTimer *heartbeatTimer = new QTimer();
     const QString info = QString("[%1:%2]:").arg(ip_, QString::number(port_));
 
-    connect(tcpClient, &QTcpSocket::connected, tcpClient, [=](){
+    connect(tcpClient, &QTcpSocket::connected, tcpClient, [=, this](){
         qCDebug(SiYiTcpClientLog) << "Connect to server successfully!";
 
         heartbeatTimer->start();
@@ -90,7 +90,7 @@ void SiYiTcpClient::run()
         emit connected();
         emit isConnectedChanged();
     });
-    connect(tcpClient, &QTcpSocket::disconnected, tcpClient, [=](){
+    connect(tcpClient, &QTcpSocket::disconnected, tcpClient, [=, this](){
         qCDebug(SiYiTcpClientLog) << "Disconnect from server:" << tcpClient->errorString();
 
         this->isConnected_ = false;
@@ -103,7 +103,7 @@ void SiYiTcpClient::run()
         heartbeatTimer->stop();
         exit();
     });
-    connect(tcpClient, &QTcpSocket::errorOccurred, tcpClient, [=](){
+    connect(tcpClient, &QTcpSocket::errorOccurred, tcpClient, [=, this](){
         heartbeatTimer->stop();
         exit();
         qCDebug(SiYiTcpClientLog) << tcpClient->errorString();
@@ -112,7 +112,7 @@ void SiYiTcpClient::run()
     // 定时发送
     txTimer->setInterval(10);
     txTimer->setSingleShot(true);
-    connect(txTimer, &QTimer::timeout, txTimer, [=](){
+    connect(txTimer, &QTimer::timeout, txTimer, [=, this](){
         this->txMessageVectorMutex_.lock();
         QByteArray msg = this->txMessageVector_.isEmpty()
                              ? QByteArray()
@@ -139,7 +139,7 @@ void SiYiTcpClient::run()
     // 定时处理接收数据
     rxTimer->setInterval(1);
     rxTimer->setSingleShot(true);
-    connect(rxTimer, &QTimer::timeout, rxTimer, [=](){
+    connect(rxTimer, &QTimer::timeout, rxTimer, [=, this](){
         this->rxBytesMutex_.lock();
 
         QByteArray bytes = tcpClient->readAll();
@@ -155,7 +155,7 @@ void SiYiTcpClient::run()
     // 心跳
     heartbeatTimer->setInterval(1500);
     heartbeatTimer->setSingleShot(true);
-    connect(heartbeatTimer, &QTimer::timeout, heartbeatTimer, [=](){
+    connect(heartbeatTimer, &QTimer::timeout, heartbeatTimer, [=, this](){
         // 心跳超时后退出线程
         this->timeoutCountMutex.lock();
         int count = this->timeoutCount;
