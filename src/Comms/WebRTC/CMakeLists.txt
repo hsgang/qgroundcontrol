@@ -54,9 +54,11 @@ endif()
 #     "BUILD_SHARED_LIBS OFF"
 # )
 
-if(TARGET usrsctp)
-    qgc_disable_dependency_warnings(usrsctp)
-endif()
+foreach(dep_target usrsctp srtp2 juice)
+    if(TARGET ${dep_target})
+        qgc_disable_dependency_warnings(${dep_target})
+    endif()
+endforeach()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE LibDataChannel::LibDataChannel)
 
