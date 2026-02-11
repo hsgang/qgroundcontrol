@@ -23,6 +23,7 @@ set(LIBDATACHANNEL_OPTIONS
     "NO_EXAMPLES ON"
     "BUILD_SHARED_LIBS OFF"
     "CMAKE_BUILD_TYPE=Release"
+    "sctp_werror OFF"
 )
 
 # CPMAddPackage 호출
