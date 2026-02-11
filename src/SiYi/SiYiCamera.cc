@@ -8,9 +8,10 @@
 
 QGC_LOGGING_CATEGORY(SiYiCameraLog, "SiYi.SiYiCamera")
 
-SiYiCamera::SiYiCamera(QObject * /* parent */)
+SiYiCamera::SiYiCamera(QObject *parent)
     : SiYiTcpClient("192.168.144.25", 37256)
 {
+    Q_UNUSED(parent);
     m_laserTimer = new QTimer(this);
     m_laserTimer->setInterval(1000);
     connect(m_laserTimer, &QTimer::timeout, this, [=, this]() {
@@ -954,8 +955,9 @@ void SiYiCamera::messageHandle0x98(const QByteArray &msg)
     }
 }
 
-void SiYiCamera::messageHandle0x9a(const QByteArray & /* msg */)
+void SiYiCamera::messageHandle0x9a(const QByteArray &msg)
 {
+    Q_UNUSED(msg);
     // struct ACK {
     //     qint8 gimbalRotationResult;
     // };
@@ -971,8 +973,9 @@ void SiYiCamera::messageHandle0x9a(const QByteArray & /* msg */)
     // }
 }
 
-void SiYiCamera::messageHandle0x9b(const QByteArray & /* msg */)
+void SiYiCamera::messageHandle0x9b(const QByteArray &msg)
 {
+    Q_UNUSED(msg);
     // struct ACK {
     //     qint8 gimbalCenterResult;
     // };

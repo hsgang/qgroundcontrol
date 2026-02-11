@@ -51,6 +51,7 @@ ExternalPowerStatusFactGroup::ExternalPowerStatusFactGroup(QObject* parent)
 
 void ExternalPowerStatusFactGroup::handleMessage(Vehicle* vehicle, const mavlink_message_t& message)
 {
+    Q_UNUSED(vehicle);
     switch (message.msgid) {
     case MAVLINK_MSG_ID_TUNNEL:
          _handleExternalPowerStatus(message);

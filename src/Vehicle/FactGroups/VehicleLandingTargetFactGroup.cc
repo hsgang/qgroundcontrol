@@ -43,8 +43,9 @@ VehicleLandingTargetFactGroup::VehicleLandingTargetFactGroup(QObject* parent)
     _addFact(&_positionValidFact,   _positionValidFactName);
 }
 
-void VehicleLandingTargetFactGroup::handleMessage(Vehicle* /* vehicle */, const mavlink_message_t& message)
+void VehicleLandingTargetFactGroup::handleMessage(Vehicle* vehicle, const mavlink_message_t& message)
 {
+    Q_UNUSED(vehicle);
     switch (message.msgid) {
     case MAVLINK_MSG_ID_LANDING_TARGET:
         _handleLandingTarget(message);
