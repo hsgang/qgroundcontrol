@@ -30,7 +30,7 @@ if(ANDROID)
   CPMAddPackage(
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
-    GIT_TAG v0.23.2
+    GIT_TAG v0.24.1
     OPTIONS ${LIBDATACHANNEL_OPTIONS}
     PATCH_COMMAND ${CMAKE_COMMAND} -E echo "include_directories(${OPENSSL_INCLUDE_DIR})" >> ${CMAKE_CURRENT_BINARY_DIR}/cpm_modules/libdatachannel/deps/libsrtp/CMakeLists.txt
   )
@@ -38,7 +38,7 @@ else()
   CPMAddPackage(
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
-    GIT_TAG master
+    GIT_TAG v0.24.1
     GIT_SHALLOW TRUE
     OPTIONS ${LIBDATACHANNEL_OPTIONS}
   )
