@@ -250,7 +250,6 @@ Item {
         anchors.horizontalCenter:   parent.horizontalCenter
         guidedController:           _guidedController
         guidedValueSlider:          guidedValueSlider
-        utmspSliderTrigger:         utmspSliderTrigger
         messageDisplay:             undefined
     }
 
@@ -261,7 +260,6 @@ Item {
     //     anchors.horizontalCenter: parent.horizontalCenter
     //     guidedController:   _guidedController
     //     guidedValueSlider:  _guidedValueSlider
-    //     utmspSliderTrigger:          utmspActTrigger
     // }
 
     Rectangle {

@@ -411,44 +411,6 @@ Item {
         }
     }
 
-    // The guided action message display is outside of the GuidedActionConfirm control so that it doesn't end up as
-    // part of the Flickable
-    // Rectangle {
-    //     id:                         guidedActionMessageDisplay
-    //     anchors.top:                control.bottom
-    //     anchors.topMargin:          _margins
-    //     anchors.horizontalCenter:   parent.horizontalCenter
-    //     width:                      messageLabel.contentWidth + (_margins * 2)
-    //     height:                     messageLabel.contentHeight + (_margins * 2)
-    //     color:                      qgcPal.windowTransparent
-    //     radius:                     ScreenTools.defaultBorderRadius
-    //     visible:                    guidedActionConfirm.visible
-
-    //     QGCLabel {
-    //         id:         messageLabel
-    //         x:          _margins
-    //         y:          _margins
-    //         width:      ScreenTools.defaultFontPixelWidth * 30
-    //         wrapMode:   Text.WordWrap
-    //         text:       guidedActionConfirm.message
-    //     }
-
-    //     PropertyAnimation {
-    //         id:         messageOpacityAnimation
-    //         target:     guidedActionMessageDisplay
-    //         property:   "opacity"
-    //         from:       1
-    //         to:         0
-    //         duration:   500
-    //     }
-
-    //     Timer {
-    //         id:             messageFadeTimer
-    //         interval:       4000
-    //         onTriggered:    messageOpacityAnimation.start()
-    //     }
-    // }
-
     ParameterDownloadProgress {
         anchors.fill: parent
     }

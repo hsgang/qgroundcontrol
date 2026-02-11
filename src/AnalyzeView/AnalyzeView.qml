@@ -31,7 +31,6 @@ Rectangle {
     FlyViewToolBar {
         id:                 toolbar
         guidedValueSlider:  null
-        utmspSliderTrigger: false
         visible:            !QGroundControl.videoManager.fullScreen
     }
 
