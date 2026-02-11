@@ -153,16 +153,6 @@ Item {
         RowLayout {
             id:                 centerPanel
             Layout.fillHeight:  true
-
-            // GuidedActionConfirm {
-            //     id:                         guidedActionConfirm
-            //     height:                     parent.height
-            //     //anchors.horizontalCenter:   parent.horizontalCenter
-            //     guidedController:           control._guidedController
-            //     guidedValueSlider:          control.guidedValueSlider
-            //     utmspSliderTrigger:         control.utmspSliderTrigger
-            //     messageDisplay:             guidedActionMessageDisplay
-            // }
         }
 
         RowLayout {

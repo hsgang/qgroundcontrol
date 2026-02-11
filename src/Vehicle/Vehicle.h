@@ -61,11 +61,6 @@
 #include "BatteryFactGroupListModel.h"
 #include "EscStatusFactGroupListModel.h"
 
-#ifdef CONFIG_UTM_ADAPTER
-#include "UTMSPVehicle.h"
-#include "UTMSPManager.h"
-#endif
-
 class Actuators;
 class AutoPilotPlugin;
 class Autotune;

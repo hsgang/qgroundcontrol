@@ -226,7 +226,7 @@ RowLayout {
                         Layout.fillWidth: true
                         text: qsTr("From Vehicle")
                         iconSource: "/qmlimages/vehicleQuadRotor.svg"
-                        enabled: _utmspEnabled ? !_syncInProgress && UTMSPStateStorage.enableMissionDownloadButton : !_syncInProgress
+                        enabled: !_syncInProgress
 
                         onClicked: {
                             openDropPanel.close()
