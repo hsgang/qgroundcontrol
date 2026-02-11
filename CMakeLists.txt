@@ -262,6 +262,9 @@ qt_add_executable(${CMAKE_PROJECT_NAME}
     src/AutoPilotPlugins/APM/APMPortsComponent.cc
 )
 
+# Apply compiler warning configuration to QGC target
+qgc_apply_warning_flags()
+
 # ----------------------------------------------------------------------------
 # Platform-Specific Configuration
 # ----------------------------------------------------------------------------
