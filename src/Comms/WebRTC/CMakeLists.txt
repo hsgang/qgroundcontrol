@@ -60,6 +60,11 @@ foreach(dep_target usrsctp srtp2 juice)
     endif()
 endforeach()
 
+# Hide internal symbols in juice-static to avoid collision with GStreamer's tcp_create_socket
+if(TARGET juice-static)
+    set_target_properties(juice-static PROPERTIES C_VISIBILITY_PRESET hidden)
+endif()
+
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE LibDataChannel::LibDataChannel)
 
 find_package(Qt6 REQUIRED COMPONENTS WebSockets)
