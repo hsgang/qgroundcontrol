@@ -5,6 +5,8 @@
 #include "QGCLoggingCategory.h"
 #include "VideoManager.h"
 #include "SignalingServerManager.h"
+#include "SettingsManager.h"
+#include "CloudSettings.h"
 
 QGC_LOGGING_CATEGORY(WebRTCLinkLog, "Comms.WEBRTCLink")
 
@@ -771,6 +773,14 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
         QString candidateStr = QString::fromStdString(candidate);
         QString mid = QString::fromStdString(candidate.mid());
 
+        // candidate 타입 추출 (host, srflx, relay)
+        QString candidateType = "unknown";
+        if (candidateStr.contains("typ host")) candidateType = "host (Direct)";
+        else if (candidateStr.contains("typ srflx")) candidateType = "srflx (STUN)";
+        else if (candidateStr.contains("typ relay")) candidateType = "relay (TURN)";
+
+        qCDebug(WebRTCLinkLog) << "[ICE] Local candidate generated -" << candidateType << ":" << candidateStr.left(80);
+
         QMetaObject::invokeMethod(self, [self, candidateStr, mid]() {
             if (!self) return;
 
@@ -861,22 +871,35 @@ void WebRTCWorker::_setupPeerConnection()
         });
 
         // Configuration 생성 (STUN + TURN 모두 포함)
+        // 매번 최신 설정을 읽어서 적용 (UI에서 변경된 설정 반영)
         rtc::Configuration config;
         config.iceServers.clear();
 
+        auto* cloudSettings = SettingsManager::instance()->cloudSettings();
+        QString stunServer = cloudSettings->webrtcStunServer()->rawValue().toString();
+        QString turnServer = cloudSettings->webrtcTurnServer()->rawValue().toString();
+        QString turnUsername = cloudSettings->webrtcTurnUsername()->rawValue().toString();
+        QString turnPassword = cloudSettings->webrtcTurnPassword()->rawValue().toString();
+
         // STUN 서버 추가 (P2P 직접 연결용)
-        if (!_connectionConfig.stunServer.isEmpty()) {
-            config.iceServers.emplace_back(_connectionConfig.stunServer.toStdString());
-            qCDebug(WebRTCLinkLog) << "Added STUN server:" << _connectionConfig.stunServer;
+        if (!stunServer.isEmpty()) {
+            config.iceServers.emplace_back(stunServer.toStdString());
+            qCDebug(WebRTCLinkLog) << "Added STUN server:" << stunServer;
         }
 
         // TURN 서버 추가 (중계 연결용)
-        if (!_connectionConfig.turnServer.isEmpty()) {
-            rtc::IceServer turnServer(_connectionConfig.turnServer.toStdString());
-            turnServer.username = _connectionConfig.turnUsername.toStdString();
-            turnServer.password = _connectionConfig.turnPassword.toStdString();
-            config.iceServers.emplace_back(turnServer);
-            qCDebug(WebRTCLinkLog) << "Added TURN server:" << _connectionConfig.turnServer;
+        if (!turnServer.isEmpty()) {
+            QString turnUrl = turnServer;
+            // turn: 접두사가 없으면 자동 추가
+            if (!turnUrl.startsWith("turn:") && !turnUrl.startsWith("turns:")) {
+                turnUrl = "turn:" + turnUrl;
+            }
+            rtc::IceServer rtcTurnServer(turnUrl.toStdString());
+            rtcTurnServer.username = turnUsername.toStdString();
+            rtcTurnServer.password = turnPassword.toStdString();
+            config.iceServers.emplace_back(rtcTurnServer);
+            qCDebug(WebRTCLinkLog) << "Added TURN server:" << turnUrl
+                                   << "username:" << turnUsername;
         }
 
         // PeerConnection 생성

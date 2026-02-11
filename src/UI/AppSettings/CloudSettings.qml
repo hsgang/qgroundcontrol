@@ -125,12 +125,43 @@ SettingsPage {
         Layout.fillWidth:   true
         heading:            qsTr("RTC 설정")
 
+        RowLayout {
+            Layout.fillWidth:   true
+            spacing:            ScreenTools.defaultFontPixelWidth
+
+            QGCLabel {
+                text:               qsTr("연결 상태:")
+                Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 12
+            }
+
+            Rectangle {
+                width:  ScreenTools.defaultFontPixelHeight * 0.6
+                height: width
+                radius: width / 2
+                color:  QGroundControl.signalingServerManager.isConnected ? qgcPal.colorGreen : qgcPal.colorRed
+            }
+
+            QGCLabel {
+                text:               QGroundControl.signalingServerManager.connectionStatus
+                Layout.fillWidth:   true
+                elide:              Text.ElideRight
+            }
+        }
+
         LabelledFactTextField {
             Layout.fillWidth:   true
             textFieldPreferredWidth:    _urlFieldWidth * 1.4
             label:              qsTr("서버 주소")
-            description:        qsTr("example - example.host.com")
+            description:        qsTr("ex)example.host.com")
             fact:               cloudSettings.webrtcSignalingServer
+        }
+
+        LabelledFactTextField {
+            Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth * 1.4
+            label:              qsTr("TURN 서버")
+            description:        qsTr("ex)turn:www.example.com:3478")
+            fact:               cloudSettings.webrtcTurnServer
         }
 
         LabelledFactTextField {
@@ -147,6 +178,19 @@ SettingsPage {
             label:              qsTr("TURN 비밀번호")
             description:        qsTr("TURN 서버 인증 비밀번호")
             fact:               cloudSettings.webrtcTurnPassword
+        }
+
+        RowLayout {
+            Layout.fillWidth:   true
+            Layout.topMargin:   ScreenTools.defaultFontPixelHeight
+
+            QGCButton {
+                text:               qsTr("설정 적용")
+                Layout.fillWidth:   true
+                onClicked: {
+                    QGroundControl.signalingServerManager.applyNewSettings()
+                }
+            }
         }
     }
 }

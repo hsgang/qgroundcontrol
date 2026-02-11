@@ -15,17 +15,13 @@ Q_APPLICATION_STATIC(SignalingServerManager, _signalingServerManagerInstance);
 
 SignalingServerManager* SignalingServerManager::instance()
 {
-    // LinkManager와 동일한 패턴: 단순한 싱글톤 접근
-    // QGCApplication에서 메인 스레드에서만 호출되므로 스레드 안전성 보장됨
     return _signalingServerManagerInstance();
 }
 
 void SignalingServerManager::init()
 {
-    // LinkManager와 동일한 패턴: 메인 스레드에서만 실행
     qCDebug(SignalingServerManagerLog) << "SignalingServerManager initialized";
     
-    // 프로그램 시작 시 자동으로 시그널링 서버에 WebSocket 연결 시작
     QTimer::singleShot(3000, this, [this]() {
         qCDebug(SignalingServerManagerLog) << "Starting automatic WebSocket connection to signaling server";
         _serverUrl = SettingsManager::instance()->cloudSettings()->webrtcSignalingServer()->rawValue().toString();
@@ -44,7 +40,6 @@ void SignalingServerManager::shutdown()
 SignalingServerManager::SignalingServerManager(QObject *parent)
     : QObject(parent)
 {
-    // LinkManager와 동일한 패턴: 생성자에서 메인 스레드 보장
     qCDebug(SignalingServerManagerLog) << "SignalingServerManager created";
     
     // 클라이언트 ID 자동 생성
@@ -79,7 +74,6 @@ SignalingServerManager::~SignalingServerManager()
 
 void SignalingServerManager::connectToServer(const QString &serverUrl, const QString &gcsId, const QString &targetDroneId)
 {
-    // LinkManager와 동일한 패턴: 메인 스레드에서만 실행되므로 스레드 체크 불필요
     if (serverUrl.isEmpty() || gcsId.isEmpty()) {
         qCWarning(SignalingServerManagerLog) << "Invalid parameters for connection";
         emit connectionError("연결 매개변수가 올바르지 않습니다");
@@ -117,7 +111,6 @@ void SignalingServerManager::connectToServer(const QString &serverUrl, const QSt
 
 void SignalingServerManager::connectToServerWebSocketOnly(const QString &serverUrl)
 {
-    // LinkManager와 동일한 패턴: 메인 스레드에서만 실행되므로 스레드 체크 불필요
     if (serverUrl.isEmpty()) {
         qCWarning(SignalingServerManagerLog) << "Invalid server URL for WebSocket-only connection";
         emit connectionError("WebSocket 연결을 위한 서버 URL이 올바르지 않습니다");
@@ -155,19 +148,49 @@ void SignalingServerManager::connectToServerWebSocketOnly(const QString &serverU
 
 void SignalingServerManager::disconnectFromServer()
 {
-    // LinkManager와 동일한 패턴: 메인 스레드에서만 실행되므로 스레드 체크 불필요
     qCDebug(SignalingServerManagerLog) << "Disconnecting from signaling server";
-    
+
     _userDisconnected = true;
     _stopReconnectTimer();
     _stopConnectionMonitoring();
-    
+
     if (_webSocket && _webSocket->state() != QAbstractSocket::UnconnectedState) {
         _webSocket->close();
     }
-    
+
     _updateConnectionState(ConnectionState::Disconnected);
     _updateConnectionStatus("연결 해제됨");
+}
+
+void SignalingServerManager::applyNewSettings()
+{
+    qCDebug(SignalingServerManagerLog) << "Applying new settings - reconnecting to signaling server";
+
+    // 1. 기존 연결 해제
+    _userDisconnected = false;  // 자동 재연결 방지를 위해 먼저 false로 설정
+    _stopReconnectTimer();
+    _stopConnectionMonitoring();
+
+    if (_webSocket && _webSocket->state() != QAbstractSocket::UnconnectedState) {
+        _webSocket->close();
+    }
+
+    _updateConnectionState(ConnectionState::Disconnected);
+    _updateConnectionStatus("설정 적용 중...");
+
+    // 2. 최신 설정으로 재연결 (약간의 딜레이 후)
+    QTimer::singleShot(500, this, [this]() {
+        _serverUrl = SettingsManager::instance()->cloudSettings()->webrtcSignalingServer()->rawValue().toString();
+        qCDebug(SignalingServerManagerLog) << "Reconnecting with new server URL:" << _serverUrl;
+
+        if (_serverUrl.isEmpty()) {
+            _updateConnectionStatus("서버 주소가 설정되지 않음");
+            _updateConnectionState(ConnectionState::Error);
+            return;
+        }
+
+        connectToServerWebSocketOnly(_serverUrl);
+    });
 }
 
 void SignalingServerManager::sendMessage(const QJsonObject &message)
@@ -189,9 +212,7 @@ void SignalingServerManager::sendMessage(const QJsonObject &message)
 
     QJsonDocument doc(message);
     QString jsonString = doc.toJson(QJsonDocument::Compact);
-    
-    // qCDebug(SignalingServerManagerLog) << "Sending message:" << message["type"].toString();
-    
+      
     qint64 bytesSent = _webSocket->sendTextMessage(jsonString);
     
     if (bytesSent == -1) {
@@ -498,7 +519,7 @@ void SignalingServerManager::_handleRegistrationResponse(const QJsonObject &mess
 {    
     if (message.contains("success") && message["success"].toBool()) {
         qCDebug(SignalingServerManagerLog) << "Registration successful";
-        _updateConnectionStatus("등록 완료 - 피어 대기 중");
+        _updateConnectionStatus("등록 완료");
         emit registrationSuccessful();
     } else {
         QString reason = message["reason"].toString();
@@ -629,7 +650,6 @@ void SignalingServerManager::_startConnectionMonitoring()
 {
     if (_getDronesTimer) {
         _getDronesTimer->start(GET_DRONES_INTERVAL_MS);
-        // 즉시 한 번 실행
         _sendGetDronesRequest();
     }
 
@@ -726,5 +746,3 @@ void SignalingServerManager::_sendGetDronesRequest()
     qCDebug(SignalingServerManagerLog) << "Requesting drones list from server";
     sendMessage(getDronesMessage);
 }
-
-// 클라이언트 ping/pong 기반 연결 모니터링 완료

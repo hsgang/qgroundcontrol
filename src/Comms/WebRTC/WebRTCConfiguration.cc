@@ -97,18 +97,7 @@ QString WebRTCConfiguration::stunServer() const
 
 QString WebRTCConfiguration::turnServer() const
 {
-    // 시그널링 서버에서 호스트 추출하여 TURN 서버 주소 생성
-    QString signalingUrl = SettingsManager::instance()->cloudSettings()->webrtcSignalingServer()->rawValue().toString();
-    QUrl url(signalingUrl);
-    if (!url.isValid() || url.host().isEmpty()) {
-        return QString();
-    }
-
-    QString host = url.host();
-    if (!host.startsWith("turn.")) {
-        host = "turn." + host;
-    }
-    return host + ":3478";
+    return SettingsManager::instance()->cloudSettings()->webrtcTurnServer()->rawValue().toString();
 }
 
 QString WebRTCConfiguration::turnUsername() const

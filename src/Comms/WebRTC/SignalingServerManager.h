@@ -78,6 +78,7 @@ public:
     int connectedDronesCount() const { return _connectedDronesCount; }
     QStringList connectedDronesList() const { return _connectedDronesList; }
     Q_INVOKABLE bool isDroneConnected(const QString &droneId) const;
+    Q_INVOKABLE void applyNewSettings();  // 설정 변경 후 재연결
 
 public slots:
     void retryConnection();
