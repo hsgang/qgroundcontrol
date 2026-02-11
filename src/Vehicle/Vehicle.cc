@@ -3741,8 +3741,8 @@ void Vehicle::_initializeCustomLog()
     if (!_customLogFile.open(QIODevice::Append)) {
         qCWarning(VehicleLog) << "unable to open file for csv logging, Stopping csv logging!";
         // qInfo() << "unable to open file for csv logging" ;
-        QString text = "Unable to open file for csv logging, Stopping csv logging!";
-        QString description = "";
+        text = "Unable to open file for csv logging, Stopping csv logging!";
+        description = "";
         _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_INFO, text, description);
         return;
     }
@@ -4628,9 +4628,9 @@ void Vehicle::_textMessageReceived(MAV_COMPONENT componentid, MAV_SEVERITY sever
 
 void Vehicle::_errorMessageReceived(QString message)
 {
-    // if (_isActiveVehicle) {
-    //     qgcApp()->showCriticalVehicleMessage(message);
-    // }
+    if (_isActiveVehicle) {
+        qgcApp()->showCriticalVehicleMessage(message);
+    }
 }
 
 /*---------------------------------------------------------------------------*/
