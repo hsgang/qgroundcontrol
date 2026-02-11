@@ -103,6 +103,7 @@ SettingsPage {
 
         LabelledFactTextField {
             Layout.fillWidth:   true
+            textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
             label:              qsTr("Aspect Ratio")
             fact:               _videoSettings.aspectRatio
             visible:            !_videoAutoStreamConfig && _isStreamSource && _videoSettings.aspectRatio.visible
@@ -142,7 +143,6 @@ SettingsPage {
     SettingsGroupLayout {
         Layout.fillWidth:   true
         heading:            qsTr("Thermal Video Source")
-        headingDescription: _videoSettings.enableManualThermalConfig.rawValue ? qsTr("Manual thermal video stream configuration") : ""
         visible:            !_videoSourceDisabled
 
         FactCheckBoxSlider {
@@ -170,21 +170,12 @@ SettingsPage {
                            _videoSettings.enableManualThermalConfig.rawValue &&
                            (_isThermalTCP || _isThermalRTSP || _requiresThermalUDPUrl)
 
-        ColumnLayout {
-            Layout.fillWidth:   true
-            visible:            _isThermalRTSP && _videoSettings.thermalRtspUrl.visible
-            spacing:            0
-
-            QGCLabel {
-                Layout.fillWidth:   true
-                text:               qsTr("RTSP URL")
-                font.pointSize:     ScreenTools.smallFontPointSize
-                color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
-            }
-            FactTextField {
-                Layout.fillWidth:   true
-                fact:               _videoSettings.thermalRtspUrl
-            }
+        LabelledFactTextField {
+            Layout.fillWidth:           true
+            label:                      qsTr("RTSP URL")
+            textFieldPreferredWidth:    _urlFieldWidth
+            fact:                       _videoSettings.thermalRtspUrl
+            visible:                    _isThermalRTSP && _videoSettings.thermalRtspUrl.visible
         }
 
         LabelledFactTextField {
@@ -209,38 +200,35 @@ SettingsPage {
         heading:            qsTr("Thermal Video Display")
         visible:            !_videoSourceDisabled && QGroundControl.videoManager.hasThermal
 
-        QGCLabel {
+        LabelledFactComboBox {
             Layout.fillWidth:   true
-            text:               qsTr("View Mode")
-            font.pointSize:     ScreenTools.smallFontPointSize
+            label:              qsTr("View Mode")
+            fact:               _videoSettings.thermalViewMode
+            indexModel:         false
         }
 
-        QGCComboBox {
+        ColumnLayout {
             Layout.fillWidth:   true
-            sizeToContents:     true
-            model:              [ qsTr("Off"), qsTr("Blend"), qsTr("Full"), qsTr("Picture In Picture") ]
-            currentIndex:       _videoSettings.thermalViewMode.rawValue
-            onActivated:        (index) => {
-                _videoSettings.thermalViewMode.rawValue = index
+            spacing:            0
+            visible:            _videoSettings.thermalViewMode.rawValue === 1
+
+            QGCLabel {
+                Layout.fillWidth:   true
+                text:               qsTr("Blend Opacity")
+                font.pointSize:     ScreenTools.smallFontPointSize
             }
-        }
 
-        QGCLabel {
-            Layout.fillWidth:   true
-            text:               qsTr("Blend Opacity")
-            font.pointSize:     ScreenTools.smallFontPointSize
-            visible:            _videoSettings.thermalViewMode.rawValue === 1
-        }
-
-        QGCSlider {
-            Layout.fillWidth:   true
-            to:                 100
-            from:               0
-            value:              _videoSettings.thermalOpacity.rawValue
-            live:               true
-            visible:            _videoSettings.thermalViewMode.rawValue === 1
-            onValueChanged:     {
-                _videoSettings.thermalOpacity.rawValue = value
+            QGCSlider {
+                Layout.fillWidth:   true
+                displayValue:       true
+                to:                 100
+                from:               0
+                stepSize:           10
+                value:              _videoSettings.thermalOpacity.rawValue
+                live:               false
+                onValueChanged:     {
+                    _videoSettings.thermalOpacity.rawValue = value
+                }
             }
         }
     }
@@ -265,6 +253,7 @@ SettingsPage {
 
         LabelledFactTextField {
             Layout.fillWidth:   true
+            textFieldPreferredWidth: ScreenTools.defaultFontPixelWidth * 16
             label:              qsTr("Max Storage Usage")
             fact:               _videoSettings.maxVideoSize
             visible:            fact.visible

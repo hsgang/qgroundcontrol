@@ -183,9 +183,9 @@
     "shortDesc": "Thermal View Mode",
     "longDesc":  "Display mode for thermal video overlay: Off, Blend, Full, or Picture-in-Picture",
     "type":             "uint32",
-    "default":     2,
-    "min":              0,
-    "max":              3
+    "enumStrings":      "Off,Blend,Full,Picture In Picture",
+    "enumValues":       "0,1,2,3",
+    "default":     2
 },
 {
     "name":             "thermalOpacity",
