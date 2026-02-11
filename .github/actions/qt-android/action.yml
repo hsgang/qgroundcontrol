@@ -75,7 +75,7 @@ runs:
       with:
         ndk-version: ${{ inputs.ndk-version }}
         add-to-path: false
-        local-cache: true
+        local-cache: false
 
     - name: Update Android SDK / NDK / Tools
       shell: bash
