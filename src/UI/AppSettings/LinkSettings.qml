@@ -176,32 +176,32 @@ SettingsPage {
         }
     }
 
-    SettingsGroupLayout {
-        heading:    qsTr("Auto Connect")
+    // SettingsGroupLayout {
+    //     heading:    qsTr("Auto Connect")
 
-        Repeater {
-            id: autoConnectRepeater
+    //     Repeater {
+    //         id: autoConnectRepeater
 
-            model: [
-                _autoConnectSettings.autoConnectPixhawk,
-                _autoConnectSettings.autoConnectSiKRadio,
-                _autoConnectSettings.autoConnectUDP,
-            ]
+    //         model: [
+    //             _autoConnectSettings.autoConnectPixhawk,
+    //             _autoConnectSettings.autoConnectSiKRadio,
+    //             _autoConnectSettings.autoConnectUDP,
+    //         ]
 
-            property var names: [
-                qsTr("USB port"),
-                qsTr("RF Telemetry"),
-                qsTr("UDP Network")
-            ]
+    //         property var names: [
+    //             qsTr("USB port"),
+    //             qsTr("RF Telemetry"),
+    //             qsTr("UDP Network")
+    //         ]
 
-            FactCheckBoxSlider {
-                Layout.fillWidth:   true
-                text:               autoConnectRepeater.names[index]
-                fact:               modelData
-                visible:            modelData.visible
-            }
-        }
-    }
+    //         FactCheckBoxSlider {
+    //             Layout.fillWidth:   true
+    //             text:               autoConnectRepeater.names[index]
+    //             fact:               modelData
+    //             visible:            modelData.visible
+    //         }
+    //     }
+    // }
 
     SettingsGroupLayout {
         heading:    qsTr("SIYI Transmitter")

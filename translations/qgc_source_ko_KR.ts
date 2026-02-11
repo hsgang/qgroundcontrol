@@ -8394,6 +8394,26 @@ Click Ok to start the auto-tuning process.
     </message>
     <message>
         <location filename="../src/ui/preferences/VideoSettings.qml" line="450"/>
+        <source>Thermal Video Source</source>
+        <translation>보조 영상 소스</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="450"/>
+        <source>Enable Manual Thermal Configuration</source>
+        <translation>보조 영상 수동 설정 활성화</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="450"/>
+        <source>Thermal Video Connection</source>
+        <translation>보조 영상 연결 주소</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="450"/>
+        <source>Thermal Video Display</source>
+        <translation>보조 영상 표시</translation>
+    </message>
+    <message>
+        <location filename="../src/ui/preferences/VideoSettings.qml" line="450"/>
         <source>Record File Format</source>
         <translation>녹화 파일 형식</translation>
     </message>
