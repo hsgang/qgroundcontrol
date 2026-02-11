@@ -60,9 +60,10 @@ foreach(dep_target usrsctp srtp2 juice)
     endif()
 endforeach()
 
-# Hide internal symbols in juice-static to avoid collision with GStreamer's tcp_create_socket
-if(TARGET juice-static)
-    set_target_properties(juice-static PROPERTIES C_VISIBILITY_PRESET hidden)
+# Android: rename libjuice's tcp_create_socket to avoid duplicate symbol
+# with GStreamer's static libgsttcp.a (desktop uses shared GStreamer, no conflict)
+if(ANDROID AND TARGET juice-static)
+    target_compile_definitions(juice-static PRIVATE tcp_create_socket=juice_tcp_create_socket)
 endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE LibDataChannel::LibDataChannel)
