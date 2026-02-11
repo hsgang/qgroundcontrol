@@ -95,7 +95,6 @@ void SiYiTransmitter::analyzeMessage()
                 }
 
                 if ((msg.header.cmdId == 0x83) || (msg.header.cmdId == 0x2f)) {
-                    const QString info = QString("[%1:%2]:").arg(ip_, QString::number(port_));
                     QByteArray packet = QByteArray(rxBytes_.data(), msgLen);
 #if 0
                     qCDebug(SiYiTransmitterLog) << "Rx:" << packet.toHex(' ');

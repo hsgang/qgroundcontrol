@@ -47,17 +47,17 @@ private:
 
     bool hideWidgets_ = false;
     bool hideWidgets() { return hideWidgets_; }
-    void setHideWidgets(bool hideWidgets)
+    void setHideWidgets(bool value)
     {
-        hideWidgets_ = hideWidgets;
+        hideWidgets_ = value;
         emit hideWidgetsChanged();
     }
 
     int iconsHeight_ = 54;
     int iconsHeight() { return iconsHeight_; }
-    void setIconsHeight(int iconsHeight)
+    void setIconsHeight(int value)
     {
-        iconsHeight_ = iconsHeight;
+        iconsHeight_ = value;
         emit iconsHeightChanged();
     }
 

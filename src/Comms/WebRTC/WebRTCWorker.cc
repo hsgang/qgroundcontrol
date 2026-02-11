@@ -744,8 +744,8 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
 
     // Local description callback
     pc->onLocalDescription([self, weakPC](rtc::Description description) {
-        auto pc = weakPC.lock();
-        if (!pc || !self || !self->isOperational()) return;
+        auto lockedPC = weakPC.lock();
+        if (!lockedPC || !self || !self->isOperational()) return;
 
         QString descType = QString::fromStdString(description.typeString());
         QString sdpContent = QString::fromStdString(description);
@@ -767,8 +767,8 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
 
     // Local candidate callback
     pc->onLocalCandidate([self, weakPC](rtc::Candidate candidate) {
-        auto pc = weakPC.lock();
-        if (!pc || !self || !self->isOperational()) return;
+        auto lockedPC = weakPC.lock();
+        if (!lockedPC || !self || !self->isOperational()) return;
 
         QString candidateStr = QString::fromStdString(candidate);
         QString mid = QString::fromStdString(candidate.mid());
@@ -797,8 +797,8 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
 
     // Data channel callback
     pc->onDataChannel([self, weakPC](std::shared_ptr<rtc::DataChannel> dc) {
-        auto pc = weakPC.lock();
-        if (!pc || !self || !dc) {
+        auto lockedPC = weakPC.lock();
+        if (!lockedPC || !self || !dc) {
             qCDebug(WebRTCLinkLog) << "[WEBRTC] ERROR: PeerConnection, Worker or DataChannel is null!";
             return;
         }
@@ -833,8 +833,8 @@ void WebRTCWorker::_setupPeerConnectionCallbacks(std::shared_ptr<rtc::PeerConnec
     });
 
     pc->onTrack([self, weakPC](std::shared_ptr<rtc::Track> track) {
-        auto pc = weakPC.lock();
-        if (!pc || !self || !self->isOperational()) return;
+        auto lockedPC = weakPC.lock();
+        if (!lockedPC || !self || !self->isOperational()) return;
 
         QMetaObject::invokeMethod(self, [self, track]() {
             if (!self || !self->isOperational()) return;

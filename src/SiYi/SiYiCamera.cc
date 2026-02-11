@@ -285,12 +285,12 @@ bool SiYiCamera::using1080p()
     return tmp.toBool();
 }
 
-void SiYiCamera::setUsing1080p(bool using1080p)
+void SiYiCamera::setUsing1080p(bool value)
 {
     QSettings settings(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
                            + "/config.ini",
                        QSettings::IniFormat);
-    settings.setValue("using1080p", using1080p);
+    settings.setValue("using1080p", value);
     emit using1080pChanged();
 }
 

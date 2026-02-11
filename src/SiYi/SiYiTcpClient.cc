@@ -43,18 +43,18 @@ void SiYiTcpClient::analyzeIp(QString videoUrl)
     QStringList strList = videoUrl.split('/');
     if (!strList.isEmpty()) {
         // rtsp://192/168.144.25:8554/video1
-        QString ip = strList.first();
-        if (ip.contains(":")) {
-            if (ip.split(':').length() == 2) {
-                ip = ip.split(':').first();
-                if (ip.split('.').length() == 4) {
-                    resetIp(ip);
+        QString parsedIp = strList.first();
+        if (parsedIp.contains(":")) {
+            if (parsedIp.split(':').length() == 2) {
+                parsedIp = parsedIp.split(':').first();
+                if (parsedIp.split('.').length() == 4) {
+                    resetIp(parsedIp);
                 }
             }
         } else {
             // rtsp://192.168.144.60/video0
-            if (ip.split('.').length() == 4) {
-                resetIp(ip);
+            if (parsedIp.split('.').length() == 4) {
+                resetIp(parsedIp);
             } else {
                 qWarning() << "rtsp url is invalid:" << videoUrl;
             }
