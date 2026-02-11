@@ -54,6 +54,10 @@ endif()
 #     "BUILD_SHARED_LIBS OFF"
 # )
 
+if(TARGET usrsctp)
+    qgc_disable_dependency_warnings(usrsctp)
+endif()
+
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE LibDataChannel::LibDataChannel)
 
 find_package(Qt6 REQUIRED COMPONENTS WebSockets)
