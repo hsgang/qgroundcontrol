@@ -48,7 +48,7 @@ public:
     Fact* positionValid () { return &_positionValidFact; }
 
     // Overrides from FactGroup
-    void handleMessage(Vehicle* vehicle, mavlink_message_t& message);
+    void handleMessage(Vehicle* vehicle, const mavlink_message_t& message) override;
 
     static const char* _targetNumFactName;
     static const char* _angleXFactName;
@@ -64,7 +64,7 @@ public:
     static const char* _positionValidFactName;
 
 private:
-    void _handleLandingTarget (mavlink_message_t &message);
+    void _handleLandingTarget (const mavlink_message_t &message);
 
     Fact _targetNumFact;
     Fact _angleXFact;

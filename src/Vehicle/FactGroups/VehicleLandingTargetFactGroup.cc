@@ -43,7 +43,7 @@ VehicleLandingTargetFactGroup::VehicleLandingTargetFactGroup(QObject* parent)
     _addFact(&_positionValidFact,   _positionValidFactName);
 }
 
-void VehicleLandingTargetFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_message_t& message)
+void VehicleLandingTargetFactGroup::handleMessage(Vehicle* /* vehicle */, const mavlink_message_t& message)
 {
     switch (message.msgid) {
     case MAVLINK_MSG_ID_LANDING_TARGET:
@@ -54,7 +54,7 @@ void VehicleLandingTargetFactGroup::handleMessage(Vehicle* /* vehicle */, mavlin
     }
 }
 
-void VehicleLandingTargetFactGroup::_handleLandingTarget(mavlink_message_t &message)
+void VehicleLandingTargetFactGroup::_handleLandingTarget(const mavlink_message_t &message)
 {
     mavlink_landing_target_t landingtarget;
     mavlink_msg_landing_target_decode(&message, &landingtarget);
