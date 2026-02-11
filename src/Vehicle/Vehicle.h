@@ -49,7 +49,6 @@
 #include "AtmosphericSensorFactGroup.h"
 #include "VehicleLandingTargetFactGroup.h"
 #include "HealthAndArmingCheckReport.h"
-#include "ExternalPowerStatusFactGroup.h"
 #include "WinchStatusFactGroup.h"
 // #include "TunnelingDataFactGroup.h"
 #include "TerrainQuery.h"
@@ -280,7 +279,6 @@ public:
     Q_PROPERTY(FactGroup*           generator       READ generatorFactGroup         CONSTANT)
     Q_PROPERTY(FactGroup*           efi             READ efiFactGroup               CONSTANT)
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
-    Q_PROPERTY(FactGroup*           externalPowerStatus READ externalPowerStatusFactGroup CONSTANT)
     Q_PROPERTY(FactGroup*           winchStatus     READ winchStatusFactGroup       CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
     Q_PROPERTY(FactGroup*           landingTarget   READ landingTargetFactGroup     CONSTANT)
@@ -628,7 +626,6 @@ public:
     FactGroup* efiFactGroup                 () { return &_efiFactGroup; }
     FactGroup* rpmFactGroup                 () { return &_rpmFactGroup; }
     FactGroup* atmosphericSensorFactGroup   () { return &_atmosphericSensorFactGroup; }
-    FactGroup* externalPowerStatusFactGroup () { return &_externalPowerStatusFactGroup; }
     FactGroup* winchStatusFactGroup         () { return &_winchStatusFactGroup; }
     FactGroup* landingTargetFactGroup       () { return &_landingTargetFactGroup; }
 
@@ -1293,7 +1290,6 @@ public:
     const QString _efiFactGroupName =                QStringLiteral("efi");
     const QString _atmosphericSensorFactGroupName =  QStringLiteral("atmosphericSensor");
     // const QString _tunnelingDataFactGroupName =      QStringLiteral("tunnelingData");
-    const QString _externalPowerStatusFactGroupName =   QStringLiteral("externalPowerStatus");
     const QString _winchStatusFactGroupName =        QStringLiteral("winchStatus");
     const QString _landingTargetFactGroupName =      QStringLiteral("landingTarget");
     const QString _rpmFactGroupName =                QStringLiteral("rpm");
@@ -1319,7 +1315,6 @@ public:
     TerrainFactGroup                _terrainFactGroup;
     AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
     // TunnelingDataFactGroup          _tunnelingDataFactGroup;
-    ExternalPowerStatusFactGroup    _externalPowerStatusFactGroup;
     WinchStatusFactGroup            _winchStatusFactGroup;
     VehicleLandingTargetFactGroup   _landingTargetFactGroup;
 
