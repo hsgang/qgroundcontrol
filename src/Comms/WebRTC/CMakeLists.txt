@@ -73,6 +73,6 @@ endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE LibDataChannel::LibDataChannel)
 
-find_package(Qt6 REQUIRED COMPONENTS WebSockets)
+find_package(Qt6 REQUIRED COMPONENTS Network WebSockets)
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt6::WebSockets)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt6::Network Qt6::WebSockets)

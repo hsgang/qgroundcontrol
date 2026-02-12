@@ -14,6 +14,7 @@ RowLayout {
     property alias  textFieldShowUnits:      _factTextField.showUnits
     property alias  textFieldShowHelp:       _factTextField.showHelp
     property alias  textField:               _factTextField
+    property alias  echoMode:                _factTextField.echoMode
 
     spacing: ScreenTools.defaultFontPixelWidth * 2
 

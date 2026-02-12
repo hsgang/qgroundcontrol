@@ -4,6 +4,7 @@
 #include <QRegularExpression>
 #include <QDateTime>
 #include <QRandomGenerator>
+#include <QNetworkRequest>
 #include <QtCore/QApplicationStatic>
 #include "QGCLoggingCategory.h"
 #include "SettingsManager.h"
@@ -745,7 +746,8 @@ void SignalingServerManager::_openWebSocketWithAuth(const QString &wsUrl)
         return;
     }
 
-    QNetworkRequest request(QUrl(wsUrl));
+    const QUrl url(wsUrl);
+    QNetworkRequest request(url);
     request.setRawHeader("x-api-key", apiKey.toUtf8());
     qCDebug(SignalingServerManagerLog) << "API key authentication header added";
 

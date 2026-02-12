@@ -159,6 +159,15 @@ SettingsPage {
         LabelledFactTextField {
             Layout.fillWidth:   true
             textFieldPreferredWidth:    _urlFieldWidth * 1.4
+            label:              qsTr("API 키")
+            description:        qsTr("시그널링 서버 인증 키")
+            fact:               cloudSettings.webrtcApiKey
+            echoMode:           TextField.PasswordEchoOnEdit
+        }
+
+        LabelledFactTextField {
+            Layout.fillWidth:   true
+            textFieldPreferredWidth:    _urlFieldWidth * 1.4
             label:              qsTr("TURN 서버")
             description:        qsTr("ex)turn:www.example.com:3478")
             fact:               cloudSettings.webrtcTurnServer
@@ -178,6 +187,7 @@ SettingsPage {
             label:              qsTr("TURN 비밀번호")
             description:        qsTr("TURN 서버 인증 비밀번호")
             fact:               cloudSettings.webrtcTurnPassword
+            echoMode:           TextField.PasswordEchoOnEdit
         }
 
         RowLayout {
