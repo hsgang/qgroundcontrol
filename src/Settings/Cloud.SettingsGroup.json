@@ -54,7 +54,7 @@
 {
     "name":                 "webrtcSignalingServer",
     "shortDesc":     "WebRTC Signaling Server",
-    "longDesc":      "WebRTC 시그널링 서버 URL (예: wss://example.com:3000)",
+    "longDesc":      "WebRTC 시그널링 서버 주소 (예: example.host.com)",
     "type":                 "string",
     "default":         ""
 },

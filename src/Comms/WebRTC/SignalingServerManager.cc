@@ -626,13 +626,6 @@ QString SignalingServerManager::_formatWebSocketUrl(const QString &baseUrl) cons
         url = "wss://" + url;
     }
 
-    // 포트 번호 추가: wss:// 이후에만 포트를 확인
-    QUrl qurl(url);
-    if (qurl.port() == -1) {
-        // 포트가 지정되지 않은 경우 :3000 추가
-        url += ":3000";
-    }
-
     return url;
 }
 
