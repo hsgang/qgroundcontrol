@@ -105,8 +105,8 @@ void SignalingServerManager::connectToServer(const QString &serverUrl, const QSt
 
     QString wsUrl = _formatWebSocketUrl(_serverUrl);
     qCDebug(SignalingServerManagerLog) << "WebSocket URL:" << wsUrl;
-    
-    _webSocket->open(QUrl(wsUrl));
+
+    _openWebSocketWithAuth(wsUrl);
 }
 
 void SignalingServerManager::connectToServerWebSocketOnly(const QString &serverUrl)
@@ -142,8 +142,8 @@ void SignalingServerManager::connectToServerWebSocketOnly(const QString &serverU
 
     QString wsUrl = _formatWebSocketUrl(_serverUrl);
     qCDebug(SignalingServerManagerLog) << "WebSocket URL:" << wsUrl;
-    
-    _webSocket->open(QUrl(wsUrl));
+
+    _openWebSocketWithAuth(wsUrl);
 }
 
 void SignalingServerManager::disconnectFromServer()
@@ -732,6 +732,24 @@ void SignalingServerManager::_autoReRegister()
         qCDebug(SignalingServerManagerLog) << "Auto re-registering GCS after reconnection";
         registerGCS(_gcsId, _targetDroneId);
     }
+}
+
+void SignalingServerManager::_openWebSocketWithAuth(const QString &wsUrl)
+{
+    const QString apiKey = SettingsManager::instance()->cloudSettings()->webrtcApiKey()->rawValue().toString();
+    if (apiKey.isEmpty()) {
+        qCWarning(SignalingServerManagerLog) << "API key is not configured, connection rejected";
+        _updateConnectionState(ConnectionState::Error);
+        _updateConnectionStatus("API 키가 설정되지 않았습니다");
+        emit connectionError("API 키가 설정되지 않았습니다");
+        return;
+    }
+
+    QNetworkRequest request(QUrl(wsUrl));
+    request.setRawHeader("x-api-key", apiKey.toUtf8());
+    qCDebug(SignalingServerManagerLog) << "API key authentication header added";
+
+    _webSocket->open(request);
 }
 
 void SignalingServerManager::_sendGetDronesRequest()

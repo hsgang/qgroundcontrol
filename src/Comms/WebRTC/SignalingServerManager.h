@@ -143,6 +143,7 @@ private:
     QString _formatWebSocketUrl(const QString &baseUrl) const;
     bool _isValidUrl(const QString &url) const;
     void _generateClientId();
+    void _openWebSocketWithAuth(const QString &wsUrl);
 
     // === 핵심 멤버 변수 ===
     

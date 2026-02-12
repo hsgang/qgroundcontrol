@@ -45,6 +45,13 @@
     "default":         ""
 },
 {
+    "name":                 "webrtcApiKey",
+    "shortDesc":     "WebRTC API Key",
+    "longDesc":      "시그널링 서버 API 인증 키",
+    "type":                 "string",
+    "default":         ""
+},
+{
     "name":                 "webrtcSignalingServer",
     "shortDesc":     "WebRTC Signaling Server",
     "longDesc":      "WebRTC 시그널링 서버 URL (예: wss://example.com:3000)",

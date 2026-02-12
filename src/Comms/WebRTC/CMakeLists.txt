@@ -62,8 +62,13 @@ endforeach()
 
 # Android: rename libjuice's tcp_create_socket to avoid duplicate symbol
 # with GStreamer's static libgsttcp.a (desktop uses shared GStreamer, no conflict)
-if(ANDROID AND TARGET juice-static)
-    target_compile_definitions(juice-static PRIVATE tcp_create_socket=juice_tcp_create_socket)
+if(ANDROID)
+    if(TARGET juice)
+        target_compile_definitions(juice PRIVATE tcp_create_socket=juice_tcp_create_socket)
+    endif()
+    if(TARGET juice-static)
+        target_compile_definitions(juice-static PRIVATE tcp_create_socket=juice_tcp_create_socket)
+    endif()
 endif()
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE LibDataChannel::LibDataChannel)

@@ -27,6 +27,7 @@ public:
     DEFINE_SETTINGFACT(firebaseAPIKey)
     
     // WebRTC 설정
+    DEFINE_SETTINGFACT(webrtcApiKey)
     DEFINE_SETTINGFACT(webrtcSignalingServer)
     DEFINE_SETTINGFACT(webrtcStunServer)
     DEFINE_SETTINGFACT(webrtcTurnServer)
