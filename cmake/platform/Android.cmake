@@ -99,6 +99,10 @@ file(GLOB _qt_libs "${_qt_android_lib_dir}/libQt6*_${_abi}.so")
 file(GLOB_RECURSE _qt_plugins "${_qt_android_plugins_dir}/*_${_abi}.so")
 
 set(_qt_all_extra_libs ${_qt_libs} ${_qt_plugins})
+
+# Exclude plugins with external dependencies not bundled in the APK
+list(FILTER _qt_all_extra_libs EXCLUDE REGEX "ffmpegmediaplugin")
+
 list(LENGTH _qt_all_extra_libs _qt_extra_count)
 
 if(_qt_extra_count GREATER 0)
