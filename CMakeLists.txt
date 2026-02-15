@@ -187,13 +187,13 @@ find_package(Qt6
         TextToSpeech
         Widgets
         Xml
+        Quick3D
         StateMachine
         WebSockets
     OPTIONAL_COMPONENTS
         Bluetooth
         MultimediaQuickPrivate
         OpenGL
-        Quick3D
         QuickTest
         SerialPort
         Test

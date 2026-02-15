@@ -272,21 +272,89 @@ SetupPage {
                 Layout.alignment:       Qt.AlignHCenter
                 sourceComponent:        (_batt2MonitorEnabled && _batt2ParamsAvailable) ? batteryComponent : undefined
 
-                property string title:          qsTr("Power Sensor 2")
-                property Fact armVoltMin:       controller.getParameterFact(-1, "r.BATT2_ARM_VOLT", false /* reportMissing */)
-                property Fact battAmpPerVolt:   controller.getParameterFact(-1, "r.BATT2_AMP_PERVLT", false /* reportMissing */)
-                property Fact battAmpOffset:    controller.getParameterFact(-1, "BATT2_AMP_OFFSET", false /* reportMissing */)
-                property Fact battCapacity:     controller.getParameterFact(-1, "BATT2_CAPACITY", false /* reportMissing */)
-                property Fact battCurrPin:      controller.getParameterFact(-1, "BATT2_CURR_PIN", false /* reportMissing */)
-                property Fact battMonitor:      controller.getParameterFact(-1, "BATT2_MONITOR", false /* reportMissing */)
-                property Fact battVoltMult:     controller.getParameterFact(-1, "BATT2_VOLT_MULT", false /* reportMissing */)
-                property Fact battVoltPin:      controller.getParameterFact(-1, "BATT2_VOLT_PIN", false /* reportMissing */)
-                property FactGroup  _batteryFactGroup:  _batt2MonitorEnabled && _batt2ParamsAvailable ? controller.vehicle.getFactGroup("battery1") : null
-                property Fact vehicleVoltage:   _batteryFactGroup ? _batteryFactGroup.voltage : null
-                property Fact vehicleCurrent:   _batteryFactGroup ? _batteryFactGroup.current : null
-            }
-        }
-    } // Component - powerPageComponent    
+                QGCLabel {
+                    Layout.row:     6
+                    Layout.column:  0
+                    text:           qsTr("Voltage multiplier:")
+                    visible:        _showAdvanced
+                }
+
+                FactTextField {
+                    width:      _fieldWidth
+                    fact:       battVoltMult
+                    visible:    _showAdvanced
+                }
+
+                QGCButton {
+                    text:       qsTr("Calculate")
+                    visible:    _showAdvanced
+                    onClicked:  calcVoltageMultiplierDlgFactory.open({ vehicleVoltageFact: vehicleVoltage, battVoltMultFact: battVoltMult })
+                }
+
+                QGCLabel {
+                    Layout.columnSpan:  3
+                    Layout.fillWidth:   true
+                    font.pointSize:     ScreenTools.smallFontPointSize
+                    wrapMode:           Text.WordWrap
+                    text:               qsTr("If the battery voltage reported by the vehicle is largely different than the voltage read externally using a voltmeter you can adjust the voltage multiplier value to correct this. Click the Calculate button for help with calculating a new value.")
+                    visible:            _showAdvanced
+                }
+
+                QGCLabel {
+                    text:       qsTr("Amps per volt:")
+                    visible:    _showAdvanced
+                }
+
+                FactTextField {
+                    width:      _fieldWidth
+                    fact:       battAmpPerVolt
+                    visible:    _showAdvanced
+                }
+
+                QGCButton {
+                    text:       qsTr("Calculate")
+                    visible:    _showAdvanced
+                    onClicked:  calcAmpsPerVoltDlgFactory.open({ vehicleCurrentFact: vehicleCurrent, battAmpPerVoltFact: battAmpPerVolt })
+                }
+
+                QGCLabel {
+                    Layout.columnSpan:  3
+                    Layout.fillWidth:   true
+                    font.pointSize:     ScreenTools.smallFontPointSize
+                    wrapMode:           Text.WordWrap
+                    text:               qsTr("If the current draw reported by the vehicle is largely different than the current read externally using a current meter you can adjust the amps per volt value to correct this. Click the Calculate button for help with calculating a new value.")
+                    visible:            _showAdvanced
+                }
+
+                QGCLabel {
+                    text:       qsTr("Amps Offset:")
+                    visible:    _showAdvanced
+                }
+
+                FactTextField {
+                    width:      _fieldWidth
+                    fact:       battAmpOffset
+                    visible:    _showAdvanced
+                }
+
+                QGCLabel {
+                    Layout.columnSpan:  3
+                    Layout.fillWidth:   true
+                    font.pointSize:     ScreenTools.smallFontPointSize
+                    wrapMode:           Text.WordWrap
+                    text:               qsTr("If the vehicle reports a high current read when there is little or no current going through it, adjust the Amps Offset. It should be equal to the voltage reported by the sensor when the current is zero.")
+                    visible:            _showAdvanced
+                }
+
+            } // GridLayout
+        } // Column
+    } // Component - powerSetupComponent
+
+    QGCPopupDialogFactory {
+        id: calcVoltageMultiplierDlgFactory
+
+        dialogComponent: calcVoltageMultiplierDlgComponent
+    }
 
     Component {
         id: calcVoltageMultiplierDlgComponent
@@ -341,6 +409,12 @@ SetupPage {
         }
     }
 
+    QGCPopupDialogFactory {
+        id: calcAmpsPerVoltDlgFactory
+
+        dialogComponent: calcAmpsPerVoltDlgComponent
+    }
+
     Component {
         id: calcAmpsPerVoltDlgComponent
 
@@ -393,4 +467,5 @@ SetupPage {
             }
         }
     }
+
 } // SetupPage

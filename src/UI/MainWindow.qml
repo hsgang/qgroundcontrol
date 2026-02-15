@@ -211,13 +211,22 @@ ApplicationWindow {
     //-------------------------------------------------------------------------
     //-- Global simple message dialog
 
-    function showMessageDialog(dialogTitle, dialogText, buttons = Dialog.Ok, acceptFunction = null, closeFunction = null) {
-        simpleMessageDialogComponent.createObject(mainWindow, { title: dialogTitle, text: dialogText, buttons: buttons, acceptFunction: acceptFunction, closeFunction: closeFunction }).open()
+    function _showMessageDialogWorker(owner, dialogTitle, dialogText, buttons = Dialog.Ok, acceptFunction = null, closeFunction = null) {
+        let dialog = simpleMessageDialogComponent.createObject(owner, { title: dialogTitle, text: dialogText, buttons: buttons, acceptFunction: acceptFunction, closeFunction: closeFunction })
+        dialog.open()
     }
 
     // This variant is only meant to be called by QGCApplication
     function _showMessageDialog(dialogTitle, dialogText) {
-        showMessageDialog(dialogTitle, dialogText)
+        _showMessageDialogWorker(mainWindow, dialogTitle, dialogText)
+    }
+
+    Connections {
+        target: QGroundControl
+
+        function onShowMessageDialogRequested(owner, title, text, buttons, acceptFunction, closeFunction) {
+            _showMessageDialogWorker(owner, title, text, buttons, acceptFunction, closeFunction)
+        }
     }
 
     Component {
@@ -263,7 +272,7 @@ ApplicationWindow {
 
     function checkForUnsavedMission() {
         if (planView._planMasterController.dirty) {
-            mainWindow.showMessageDialog(closeDialogTitle,
+            QGroundControl.showMessageDialog(mainWindow, closeDialogTitle,
                               qsTr("You have a mission edit in progress which has not been saved/sent. If you close you will lose changes. Are you sure you want to close?"),
                               Dialog.Yes | Dialog.No,
                               function() { _closeChecksToSkip |= _skipUnsavedMissionCheckMask; performCloseChecks() })
@@ -276,7 +285,7 @@ ApplicationWindow {
     function checkForPendingParameterWrites() {
         for (var index=0; index<QGroundControl.multiVehicleManager.vehicles.count; index++) {
             if (QGroundControl.multiVehicleManager.vehicles.get(index).parameterManager.pendingWrites) {
-                mainWindow.showMessageDialog(closeDialogTitle,
+                QGroundControl.showMessageDialog(mainWindow, closeDialogTitle,
                     qsTr("You have pending parameter updates to a vehicle. If you close you will lose changes. Are you sure you want to close?"),
                     Dialog.Yes | Dialog.No,
                     function() { _closeChecksToSkip |= _skipPendingParameterWritesCheckMask; performCloseChecks() })
@@ -287,8 +296,8 @@ ApplicationWindow {
     }
 
     function checkForActiveConnections() {
-        if (globals.activeVehicle) {
-            mainWindow.showMessageDialog(closeDialogTitle,
+        if (QGroundControl.multiVehicleManager.activeVehicle) {
+            QGroundControl.showMessageDialog(mainWindow, closeDialogTitle,
                 qsTr("There are still active connections to vehicles. Are you sure you want to exit?"),
                 Dialog.Yes | Dialog.No,
                 function() { _closeChecksToSkip |= _skipActiveConnectionsCheckMask; performCloseChecks() })

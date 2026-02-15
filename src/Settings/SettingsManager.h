@@ -70,9 +70,7 @@ class SettingsManager : public QObject
     Q_MOC_INCLUDE("GridSettings.h")
     Q_MOC_INCLUDE("MavlinkSettings.h")
     Q_MOC_INCLUDE("JoystickManagerSettings.h")
-#ifdef QGC_VIEWER3D
     Q_MOC_INCLUDE("Viewer3DSettings.h")
-#endif
     Q_PROPERTY(QObject *adsbVehicleManagerSettings      READ adsbVehicleManagerSettings     CONSTANT)
 #ifndef QGC_NO_ARDUPILOT_DIALECT
     Q_PROPERTY(QObject *apmMavlinkStreamRateSettings    READ apmMavlinkStreamRateSettings   CONSTANT)
@@ -101,9 +99,7 @@ class SettingsManager : public QObject
     Q_PROPERTY(QObject *gridSettings                    READ gridSettings                   CONSTANT)
     Q_PROPERTY(QObject *mavlinkSettings                 READ mavlinkSettings                CONSTANT)
     Q_PROPERTY(QObject *joystickManagerSettings         READ joystickManagerSettings        CONSTANT)
-#ifdef QGC_VIEWER3D
     Q_PROPERTY(QObject *viewer3DSettings                READ viewer3DSettings               CONSTANT)
-#endif
 public:
     SettingsManager(QObject *parent = nullptr);
     ~SettingsManager();
@@ -146,9 +142,7 @@ public:
     GridSettings *gridSettings() const;
     MavlinkSettings *mavlinkSettings() const;
     JoystickManagerSettings *joystickManagerSettings() const;
-#ifdef QGC_VIEWER3D
     Viewer3DSettings *viewer3DSettings() const;
-#endif
 
 private:
     void _loadSettingsFiles();
@@ -180,9 +174,7 @@ private:
     GridSettings *_gridSettings = nullptr;
     MavlinkSettings *_mavlinkSettings = nullptr;
     JoystickManagerSettings *_joystickManagerSettings = nullptr;
-#ifdef QGC_VIEWER3D
     Viewer3DSettings *_viewer3DSettings = nullptr;
-#endif
 
     QMap<QString, QMap<QString, QJsonObject>> _settingsFileOverrides;   // groupName:settingName:metaDataObject
 

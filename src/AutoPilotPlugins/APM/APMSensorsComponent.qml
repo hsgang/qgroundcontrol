@@ -96,7 +96,7 @@ SetupPage {
                     break
                 }
 
-                orientationsDialogComponent.createObject(mainWindow, { title: dialogTitle, buttons: dialogButtons }).open()
+                orientationsDialogFactory.open({ title: dialogTitle, buttons: dialogButtons })
             }
 
             function showSimpleAccelCalOption() {
@@ -144,7 +144,7 @@ SetupPage {
 
                 onWaitingForCancelChanged: {
                     if (controller.waitingForCancel) {
-                        waitForCancelDialogComponent.createObject(mainWindow).open()
+                        waitForCancelDialogFactory.open()
                     }
                 }
 
@@ -157,7 +157,7 @@ SetupPage {
                     case MAVLink.CalibrationAccel:
                     case MAVLink.CalibrationMag:
                         _singleCompassSettingsComponentShowPriority = true
-                        postOnboardCompassCalibrationComponent.createObject(mainWindow).open()
+                        postOnboardCompassCalibrationFactory.open()
                         break
                     }
                 }
@@ -172,6 +172,12 @@ SetupPage {
             }
 
             QGCPalette { id: qgcPal; colorGroupEnabled: true }
+
+            QGCPopupDialogFactory {
+                id: waitForCancelDialogFactory
+
+                dialogComponent: waitForCancelDialogComponent
+            }
 
             Component {
                 id: waitForCancelDialogComponent
@@ -254,6 +260,12 @@ SetupPage {
                         property int index: _index
                     }
                 }
+            }
+
+            QGCPopupDialogFactory {
+                id: postOnboardCompassCalibrationFactory
+
+                dialogComponent: postOnboardCompassCalibrationComponent
             }
 
             Component {
@@ -398,6 +410,12 @@ SetupPage {
                         }
                     }
                 }
+            }
+
+            QGCPopupDialogFactory {
+                id: orientationsDialogFactory
+
+                dialogComponent: orientationsDialogComponent
             }
 
             Component {
@@ -584,6 +602,12 @@ SetupPage {
                 }
             }
 
+            QGCPopupDialogFactory {
+                id: compassMotDialogFactory
+
+                dialogComponent: compassMotDialogComponent
+            }
+
             Component {
                 id: compassMotDialogComponent
 
@@ -671,7 +695,7 @@ SetupPage {
 
                         onClicked: {
                             if (controller.accelSetupNeeded) {
-                                mainWindow.showMessageDialog(qsTr("Calibrate Compass"), qsTr("Accelerometer must be calibrated prior to Compass."))
+                                QGroundControl.showMessageDialog(sensorsPage, qsTr("Calibrate Compass"), qsTr("Accelerometer must be calibrated prior to Compass."))
                             } else {
                                 showOrientationsDialog(_calTypeCompass)
                             }
@@ -686,9 +710,9 @@ SetupPage {
 
                         onClicked: {
                             if (controller.accelSetupNeeded) {
-                                mainWindow.showMessageDialog(_levelHorizonText, qsTr("Accelerometer must be calibrated prior to Level Horizon."))
+                                QGroundControl.showMessageDialog(sensorsPage, _levelHorizonText, qsTr("Accelerometer must be calibrated prior to Level Horizon."))
                             } else {
-                                mainWindow.showMessageDialog(_levelHorizonText,
+                                QGroundControl.showMessageDialog(sensorsPage, _levelHorizonText,
                                                              qsTr("To level the horizon you need to place the vehicle in its level flight position and press Ok."),
                                                              Dialog.Cancel | Dialog.Ok,
                                                              function() { controller.levelHorizon() })
@@ -700,31 +724,31 @@ SetupPage {
                         width:      _buttonWidth
                         text:       qsTr("Gyro")
                         visible:    globals.activeVehicle && (globals.activeVehicle.multiRotor | globals.activeVehicle.rover | globals.activeVehicle.sub)
-                        onClicked:  mainWindow.showMessageDialog(qsTr("Calibrate Gyro"),
+                        onClicked:  QGroundControl.showMessageDialog(sensorsPage, qsTr("Calibrate Gyro"),
                                                                  qsTr("For Gyroscope calibration you will need to place your vehicle on a surface and leave it still.\n\nClick Ok to start calibration."),
                                                                  Dialog.Cancel | Dialog.Ok,
                                                                  function() { controller.calibrateGyro() })
                     }
 
-                    // QGCButton {
-                    //     width:      _buttonWidth
-                    //     text:       _calibratePressureText
-                    //     onClicked:  mainWindow.showMessageDialog(_calibratePressureText,
-                    //                                              qsTr("Pressure calibration will set the %1 to zero at the current pressure reading. %2").arg(_altText).arg(_helpTextFW),
-                    //                                              Dialog.Cancel | Dialog.Ok,
-                    //                                              function() { controller.calibratePressure() })
+                    QGCButton {
+                        width:      _buttonWidth
+                        text:       _calibratePressureText
+                        onClicked:  QGroundControl.showMessageDialog(sensorsPage, _calibratePressureText,
+                                                                 qsTr("Pressure calibration will set the %1 to zero at the current pressure reading. %2").arg(_altText).arg(_helpTextFW),
+                                                                 Dialog.Cancel | Dialog.Ok,
+                                                                 function() { controller.calibratePressure() })
 
                     //     readonly property string _altText:                  globals.activeVehicle.sub ? qsTr("depth") : qsTr("altitude")
                     //     readonly property string _helpTextFW:               globals.activeVehicle.fixedWing ? qsTr("To calibrate the airspeed sensor shield it from the wind. Do not touch the sensor or obstruct any holes during the calibration.") : ""
                     //     readonly property string _calibratePressureText:    globals.activeVehicle.fixedWing ? qsTr("Baro/Airspeed") : qsTr("Pressure")
                     // }
 
-                    // QGCButton {
-                    //     width:      _buttonWidth
-                    //     text:       qsTr("CompassMot")
-                    //     visible:    globals.activeVehicle ? globals.activeVehicle.supportsMotorInterference : false
-                    //     onClicked:  compassMotDialogComponent.createObject(mainWindow).open()
-                    // }
+                    QGCButton {
+                        width:      _buttonWidth
+                        text:       qsTr("CompassMot")
+                        visible:    globals.activeVehicle ? globals.activeVehicle.supportsMotorInterference : false
+                        onClicked:  compassMotDialogFactory.open()
+                    }
 
                     QGCButton {
                         width:      _buttonWidth

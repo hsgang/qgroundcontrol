@@ -8,6 +8,7 @@ import QGroundControl.Controls
 import QGroundControl.FactControls
 
 SettingsPage {
+    id:                             _root
     property var    _linkManager: QGroundControl.linkManager
     property var    _siyi: QGroundControl.siyi
     property var    _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
@@ -220,6 +221,12 @@ SettingsPage {
                 }
             }
         }
+    }
+
+    QGCPopupDialogFactory {
+        id: linkDialogFactory
+
+        dialogComponent: linkDialogComponent
     }
 
     Component {

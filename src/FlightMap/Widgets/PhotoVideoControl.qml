@@ -9,6 +9,7 @@ import QGroundControl.Controls
 import QGroundControl.FactControls
 
 Rectangle {
+    id:         photoVideoControl
     width:      mainLayout.width + (_smallMargins * 2)
     height:     mainLayout.height + (_smallMargins * 2)
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
@@ -372,9 +373,15 @@ Rectangle {
 
                 QGCMouseArea {
                     fillItem:   parent
-                    onClicked:  settingsDialogComponent.createObject(mainWindow).open()
+                    onClicked:  settingsDialogFactory.open()
                 }
             }
+        }
+
+        QGCPopupDialogFactory {
+            id: settingsDialogFactory
+
+            dialogComponent: settingsDialogComponent
         }
 
         Component {

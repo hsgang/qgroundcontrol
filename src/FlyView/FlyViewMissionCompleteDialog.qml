@@ -8,6 +8,7 @@ import QGroundControl.Controls
 
 /// Dialog which shows up when a flight completes. Prompts the user for things like whether they should remove the plan from the vehicle.
 Item {
+    id:      missionCompleteDialogHelper
     visible: false
 
     property var missionController
@@ -35,7 +36,7 @@ Item {
             _vehicleArmedTime = new Date()
         } else {
             if (_showMissionCompleteDialog) {
-                missionCompleteDialogComponent.createObject(mainWindow).open()
+                missionCompleteDialogFactory.open()
             }
             _vehicleWasArmed = false
             _vehicleWasInMissionFlightMode = false
@@ -47,6 +48,12 @@ Item {
         if (_vehicleInMissionFlightMode && _vehicleArmed) {
             _vehicleWasInMissionFlightMode = true
         }
+    }
+
+    QGCPopupDialogFactory {
+        id: missionCompleteDialogFactory
+
+        dialogComponent: missionCompleteDialogComponent
     }
 
     Component {

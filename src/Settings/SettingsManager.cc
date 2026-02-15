@@ -28,10 +28,9 @@
 #include "GridSettings.h"
 #include "MavlinkSettings.h"
 #include "JoystickManagerSettings.h"
-#ifdef QGC_VIEWER3D
 #include "Viewer3DSettings.h"
-#endif
 #include "JsonHelper.h"
+#include "JsonParsing.h"
 #include "QGCCorePlugin.h"
 #include "QGCApplication.h"
 
@@ -94,9 +93,7 @@ void SettingsManager::init()
     _gridSettings = new GridSettings(this);
     _mavlinkSettings = new MavlinkSettings(this);
     _joystickManagerSettings = new JoystickManagerSettings(this);
-#ifdef QGC_VIEWER3D
     _viewer3DSettings = new Viewer3DSettings(this);
-#endif
     _adsbVehicleManagerSettings = new ADSBVehicleManagerSettings(this);
 #ifndef QGC_NO_ARDUPILOT_DIALECT
     _apmMavlinkStreamRateSettings = new APMMavlinkStreamRateSettings(this);
@@ -130,9 +127,7 @@ SIYISettings *SettingsManager::siyiSettings() const {return _siyiSettings; }
 GridSettings *SettingsManager::gridSettings() const { return _gridSettings; }
 MavlinkSettings *SettingsManager::mavlinkSettings() const { return _mavlinkSettings; }
 JoystickManagerSettings *SettingsManager::joystickManagerSettings() const { return _joystickManagerSettings; }
-#ifdef QGC_VIEWER3D
 Viewer3DSettings *SettingsManager::viewer3DSettings() const { return _viewer3DSettings; }
-#endif
 
 void SettingsManager::_loadSettingsFiles()
 {
@@ -171,7 +166,7 @@ void SettingsManager::_loadSettingsFiles()
 
         QJsonDocument jsonDoc;
         QString errorString;
-        if (!JsonHelper::isJsonFile(fileInfo.absoluteFilePath(), jsonDoc, errorString)) {
+        if (!JsonParsing::isJsonFile(fileInfo.absoluteFilePath(), jsonDoc, errorString)) {
             qCWarning(SettingsManagerLog) << "Failed to load settings file:" << fileInfo.absoluteFilePath() << errorString;
             continue;
         }

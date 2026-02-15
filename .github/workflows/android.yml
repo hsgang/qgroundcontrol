@@ -20,6 +20,7 @@ on:
       - 'CMakeLists.txt'
       - 'cmake/**'
       - 'translations/*'
+  merge_group:
   workflow_dispatch:
     inputs:
       build_type:
@@ -96,7 +97,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           submodules: recursive
-          fetch-depth: 1
+          fetch-depth: 0
           fetch-tags: true
 
       - name: Get build config
@@ -116,7 +117,7 @@ jobs:
           abis: ${{ env.QT_ANDROID_ABIS }}
           build-type: ${{ inputs.build_type || 'Release' }}
           cpm-modules: ${{ runner.temp }}/build/cpm_modules
-          ndk-version: ${{ steps.config.outputs.ndk_version }}
+          ndk-full-version: ${{ steps.config.outputs.ndk_full_version }}
           java-version: ${{ steps.config.outputs.java_version }}
           android-platform: ${{ steps.config.outputs.android_platform }}
           android-cmdline-tools: ${{ steps.config.outputs.android_cmdline_tools }}
@@ -137,7 +138,7 @@ jobs:
             -DQT_ANDROID_ABIS="${{ env.QT_ANDROID_ABIS }}" \
             -DQT_HOST_PATH="${QT_DIR}/../${{ matrix.qt_host_path }}" \
             -DQT_ANDROID_SIGN_APK=${{ matrix.primary && env.QT_ANDROID_KEYSTORE_STORE_PASS != '' && 'ON' || 'OFF' }} \
-            -DQGC_STABLE_BUILD=${{ github.ref_type == 'tag' || contains(github.ref, 'Stable') && 'ON' || 'OFF' }}
+            -DQGC_STABLE_BUILD=${{ (github.ref_type == 'tag' || contains(github.ref, 'Stable')) && 'ON' || 'OFF' }}
 
       - name: Build
         shell: bash
@@ -167,6 +168,7 @@ jobs:
         with:
           artifact_name: ${{ env.PACKAGE }}.apk
           package_name: ${{ matrix.primary && env.PACKAGE || format('{0}-{1}', env.PACKAGE, matrix.host) }}
+          aws_role_arn: ${{ secrets.AWS_ROLE_ARN }}
           aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_distribution_id: ${{ secrets.AWS_DISTRIBUTION_ID }}

@@ -126,7 +126,7 @@ QGCPopupDialog {
                                     enabled:    iconRadio.checked
                                     onClicked: {
                                         var updateFunction = function(icon){ instrumentValueData.icon = icon }
-                                        iconPickerDialog.createObject(mainWindow, { iconNames: instrumentValueData.factValueGrid.iconNames, icon: instrumentValueData.icon, updateIconFunction: updateFunction }).open()
+                                        iconPickerDialogFactory.open({ iconNames: instrumentValueData.factValueGrid.iconNames, icon: instrumentValueData.icon, updateIconFunction: updateFunction })
                                     }
                                 }
                             }
@@ -458,7 +458,7 @@ QGCPopupDialog {
                                     anchors.fill:   parent
                                     onClicked: {
                                         var updateFunction = function(icon){ updateIconValue(index, icon) }
-                                        iconPickerDialog.createObject(mainWindow, { iconNames: instrumentValueData.factValueGrid.iconNames, icon: modelData, updateIconFunction: updateFunction }).open()
+                                        iconPickerDialogFactory.open({ iconNames: instrumentValueData.factValueGrid.iconNames, icon: modelData, updateIconFunction: updateFunction })
                                     }
                                 }
                             }
@@ -564,6 +564,12 @@ QGCPopupDialog {
                 }
             }
         }
+    }
+
+    QGCPopupDialogFactory {
+        id: iconPickerDialogFactory
+
+        dialogComponent: iconPickerDialog
     }
 
     Component {

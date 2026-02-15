@@ -31,7 +31,13 @@ QGCTextField {
         }
     }
 
-    onHelpClicked: helpDialogComponent.createObject(mainWindow).open()
+    onHelpClicked: helpDialogFactory.open()
+
+    QGCPopupDialogFactory {
+        id: helpDialogFactory
+
+        dialogComponent: helpDialogComponent
+    }
 
     Component {
         id: helpDialogComponent

@@ -146,6 +146,7 @@ add_subdirectory(QtLocationPlugin)
 add_qgc_test(MapProviderTest LABELS Unit)
 add_qgc_test(QGCCacheWorkerTest LABELS Unit)
 add_qgc_test(QGCCachedTileSetTest LABELS Unit)
+add_qgc_test(QGCMapEngineManagerArchiveTest LABELS Unit)
 add_qgc_test(QGCTileCacheDatabaseTest LABELS Unit)
 add_qgc_test(QGCTileSetTest LABELS Unit)
 add_qgc_test(UrlFactoryTest LABELS Unit)
@@ -167,12 +168,16 @@ add_qgc_test(AudioOutputTest LABELS Unit Utilities)
 add_qgc_test(QGCArchiveModelTest LABELS Unit Utilities)
 add_qgc_test(QGCCompressionTest LABELS Unit Utilities)
 add_qgc_test(QGCStreamingDecompressionTest LABELS Unit Utilities)
+# Network
+add_qgc_test(QGCNetworkHelperTest LABELS Unit Utilities Network)
 # Parsing
 add_qgc_test(DataFlashUtilityTest LABELS Unit Utilities)
 add_qgc_test(ExifUtilityTest LABELS Unit Utilities)
+add_qgc_test(JsonParsingTest LABELS Unit Utilities)
 add_qgc_test(ULogUtilityTest LABELS Unit Utilities)
 # FileSystem
 add_qgc_test(QGCArchiveWatcherTest LABELS Unit Utilities)
+add_qgc_test(QGCCachedFileDownloadTest LABELS Integration Network Utilities)
 add_qgc_test(QGCFileDownloadTest LABELS Integration Network Utilities)
 add_qgc_test(QGCFileHelperTest LABELS Unit Utilities)
 add_qgc_test(QGCFileWatcherTest LABELS Unit Utilities)
@@ -188,12 +193,29 @@ endif()
 add_qgc_test(ShapeTest LABELS Unit Utilities)
 
 # ----------------------------------------------------------------------------
+# Viewer3D
+# ----------------------------------------------------------------------------
+add_subdirectory(Viewer3D)
+add_qgc_test(CityMapGeometryTest LABELS Unit Viewer3D)
+add_qgc_test(OsmParserTest LABELS Unit Viewer3D)
+add_qgc_test(OsmParserThreadTest LABELS Unit Viewer3D)
+add_qgc_test(Viewer3DTerrainGeometryTest LABELS Unit Viewer3D)
+add_qgc_test(Viewer3DTileQueryTest LABELS Unit Viewer3D)
+add_qgc_test(GeoCoordinateTypeTest LABELS Unit Viewer3D)
+add_qgc_test(Viewer3DInstancingTest LABELS Unit Viewer3D)
+add_qgc_test(Viewer3DManagerTest LABELS Unit Viewer3D)
+add_qgc_test(Viewer3DMapProviderTest LABELS Unit Viewer3D)
+
+# ----------------------------------------------------------------------------
 # Vehicle
 # ----------------------------------------------------------------------------
 add_subdirectory(Vehicle)
+add_qgc_test(APMAirframeComponentControllerTest LABELS Integration Vehicle RESOURCE_LOCK MockLink)
 add_qgc_test(ComponentInformationCacheTest LABELS Unit Vehicle)
 add_qgc_test(ComponentInformationTranslationTest LABELS Unit Vehicle)
+add_qgc_test(FTPControllerTest LABELS Integration Vehicle RESOURCE_LOCK MockLink)
 add_qgc_test(FTPManagerTest LABELS Integration Vehicle SERIAL)
+add_qgc_test(FirmwareUpgradeControllerTest LABELS Unit Vehicle)
 # add_qgc_test(InitialConnectTest LABELS Integration Vehicle)
 add_qgc_test(MAVLinkLogManagerTest LABELS Integration Vehicle RESOURCE_LOCK MockLink)
 # add_qgc_test(RequestMessageTest LABELS Integration Vehicle)
