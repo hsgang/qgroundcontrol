@@ -96,20 +96,23 @@ set(_qt_android_plugins_dir "${QT6_INSTALL_PREFIX}/plugins")
 set(_abi "${CMAKE_ANDROID_ARCH_ABI}")
 
 file(GLOB _qt_libs "${_qt_android_lib_dir}/libQt6*_${_abi}.so")
-file(GLOB _qt_platform_plugins "${_qt_android_plugins_dir}/platforms/libplugins_platforms_*_${_abi}.so")
+file(GLOB_RECURSE _qt_plugins "${_qt_android_plugins_dir}/*_${_abi}.so")
 
-if(_qt_libs)
-    set_property(TARGET ${CMAKE_PROJECT_NAME} APPEND PROPERTY QT_ANDROID_EXTRA_LIBS ${_qt_libs} ${_qt_platform_plugins})
-    list(LENGTH _qt_libs _qt_libs_count)
-    message(STATUS "QGC: Force-included ${_qt_libs_count} Qt libraries for Android deployment workaround")
+set(_qt_all_extra_libs ${_qt_libs} ${_qt_plugins})
+list(LENGTH _qt_all_extra_libs _qt_extra_count)
+
+if(_qt_extra_count GREATER 0)
+    set_property(TARGET ${CMAKE_PROJECT_NAME} APPEND PROPERTY QT_ANDROID_EXTRA_LIBS ${_qt_all_extra_libs})
+    message(STATUS "QGC: Force-included ${_qt_extra_count} Qt libraries/plugins for Android deployment workaround")
 endif()
 
 unset(_qt_android_lib_dir)
 unset(_qt_android_plugins_dir)
 unset(_abi)
 unset(_qt_libs)
-unset(_qt_platform_plugins)
-unset(_qt_libs_count)
+unset(_qt_plugins)
+unset(_qt_all_extra_libs)
+unset(_qt_extra_count)
 
 # ----------------------------------------------------------------------------
 # Android OpenSSL Libraries
