@@ -32,6 +32,7 @@ jobs:
         id: list
         env:
           INPUT_BRANCH: ${{ inputs.branch }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "## Cache Summary" >> "$GITHUB_STEP_SUMMARY"
 
@@ -60,13 +61,12 @@ jobs:
 
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "**Total: $COUNT caches**" >> "$GITHUB_STEP_SUMMARY"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete caches
         if: inputs.dry-run == false && steps.list.outputs.count != '0'
         env:
           INPUT_BRANCH: ${{ inputs.branch }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "## Deletion Results" >> "$GITHUB_STEP_SUMMARY"
@@ -94,8 +94,6 @@ jobs:
           if [[ $FAILED -gt 0 ]]; then
             echo "Failed: $FAILED" >> "$GITHUB_STEP_SUMMARY"
           fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Dry run notice
         if: inputs.dry-run == true

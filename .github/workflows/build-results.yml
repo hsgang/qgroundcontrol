@@ -2,8 +2,8 @@ name: Build Results
 
 on:
   workflow_run:
-  #   workflows: [Linux, Windows, MacOS, Android, pre-commit]
-  #   types: [completed]
+    workflows: [Linux, Windows, MacOS, Android, pre-commit]
+    types: [completed]
 
 permissions:
   contents: read
