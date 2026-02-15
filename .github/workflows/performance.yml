@@ -1,18 +1,6 @@
 name: Performance Metrics
 
 on:
-  push:
-    branches: [master]
-    paths:
-      - 'src/**'
-      - 'CMakeLists.txt'
-      - 'cmake/**'
-  pull_request:
-    branches: [master]
-    paths:
-      - 'src/**'
-      - 'CMakeLists.txt'
-      - 'cmake/**'
   workflow_dispatch:
     inputs:
       run_benchmarks:
