@@ -977,7 +977,7 @@ ApplicationWindow {
                 radius:                     ScreenTools.defaultFontPixelHeight / 4
                 color:                      QGroundControl.globalPalette.button
                 border.color:               QGroundControl.globalPalette.groupBorder
-                visible:                    indicatorDrawerLoader.item && indicatorDrawerLoader.item.showExpand
+                visible:                    indicatorDrawerLoader.item && indicatorDrawerLoader.item._showExpand && !indicatorDrawer._expanded
 
                 QGCLabel {
                     anchors.centerIn:   parent
