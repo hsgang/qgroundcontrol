@@ -280,7 +280,6 @@
         <file alias="roi_white.svg">src/UI/toolbar/Images/roi_white.svg</file>
         <file alias="ZoomMinus.svg">src/FlightMap/Images/ZoomMinus.svg</file>
         <file alias="ZoomPlus.svg">src/FlightMap/Images/ZoomPlus.svg</file>
-        <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Viewer3DQml/Images/city_3d_map_icon.svg</file>
         <file alias="amp_logo_blue.png">resources/amp logo.png</file>
         <file alias="amp_logo_white.png">resources/amp logo_white.png</file>
         <file alias="brandicon.png">resources/brandicon.png</file>
