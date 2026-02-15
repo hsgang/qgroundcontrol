@@ -87,6 +87,31 @@ set_target_properties(${CMAKE_PROJECT_NAME}
 list(APPEND QT_ANDROID_MULTI_ABI_FORWARD_VARS QGC_STABLE_BUILD QT_HOST_PATH)
 
 # ----------------------------------------------------------------------------
+# Workaround: Qt 6.10.x androiddeployqt unmet dependencies (QTBUG-106035)
+# androiddeployqt fails to resolve libQt6Core dependency, causing all Qt
+# libraries and plugins to be skipped from the APK. Force include them.
+# ----------------------------------------------------------------------------
+set(_qt_android_lib_dir "${QT6_INSTALL_PREFIX}/lib")
+set(_qt_android_plugins_dir "${QT6_INSTALL_PREFIX}/plugins")
+set(_abi "${CMAKE_ANDROID_ARCH_ABI}")
+
+file(GLOB _qt_libs "${_qt_android_lib_dir}/libQt6*_${_abi}.so")
+file(GLOB _qt_platform_plugins "${_qt_android_plugins_dir}/platforms/libplugins_platforms_*_${_abi}.so")
+
+if(_qt_libs)
+    set_property(TARGET ${CMAKE_PROJECT_NAME} APPEND PROPERTY QT_ANDROID_EXTRA_LIBS ${_qt_libs} ${_qt_platform_plugins})
+    list(LENGTH _qt_libs _qt_libs_count)
+    message(STATUS "QGC: Force-included ${_qt_libs_count} Qt libraries for Android deployment workaround")
+endif()
+
+unset(_qt_android_lib_dir)
+unset(_qt_android_plugins_dir)
+unset(_abi)
+unset(_qt_libs)
+unset(_qt_platform_plugins)
+unset(_qt_libs_count)
+
+# ----------------------------------------------------------------------------
 # Android OpenSSL Libraries
 # ----------------------------------------------------------------------------
 CPMAddPackage(
