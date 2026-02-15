@@ -730,13 +730,13 @@ SetupPage {
                                                                  function() { controller.calibrateGyro() })
                     }
 
-                    QGCButton {
-                        width:      _buttonWidth
-                        text:       _calibratePressureText
-                        onClicked:  QGroundControl.showMessageDialog(sensorsPage, _calibratePressureText,
-                                                                 qsTr("Pressure calibration will set the %1 to zero at the current pressure reading. %2").arg(_altText).arg(_helpTextFW),
-                                                                 Dialog.Cancel | Dialog.Ok,
-                                                                 function() { controller.calibratePressure() })
+                    // QGCButton {
+                    //     width:      _buttonWidth
+                    //     text:       _calibratePressureText
+                    //     onClicked:  QGroundControl.showMessageDialog(sensorsPage, _calibratePressureText,
+                    //                                              qsTr("Pressure calibration will set the %1 to zero at the current pressure reading. %2").arg(_altText).arg(_helpTextFW),
+                    //                                              Dialog.Cancel | Dialog.Ok,
+                    //                                              function() { controller.calibratePressure() })
 
                     //     readonly property string _altText:                  globals.activeVehicle.sub ? qsTr("depth") : qsTr("altitude")
                     //     readonly property string _helpTextFW:               globals.activeVehicle.fixedWing ? qsTr("To calibrate the airspeed sensor shield it from the wind. Do not touch the sensor or obstruct any holes during the calibration.") : ""

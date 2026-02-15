@@ -198,7 +198,7 @@
         <file alias="PlanCreator/SurveyPlanCreator.png">src/MissionManager/SurveyPlanCreator.png</file>
         <file alias="arrow-down.png">src/QmlControls/arrow-down.png</file>
         <file alias="checkbox-check.svg">src/QmlControls/checkbox-check.svg</file>
-        <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Images/city_3d_map_icon.svg</file>
+        <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Viewer3DQml/Images/city_3d_map_icon.svg</file>
         <file alias="Armed.svg">src/UI/toolbar/Images/Armed.svg</file>
         <file alias="Battery.svg">src/UI/toolbar/Images/Battery.svg</file>
         <file alias="CameraIcon.svg">src/UI/toolbar/Images/CameraIcon.svg</file>
@@ -280,7 +280,7 @@
         <file alias="roi_white.svg">src/UI/toolbar/Images/roi_white.svg</file>
         <file alias="ZoomMinus.svg">src/FlightMap/Images/ZoomMinus.svg</file>
         <file alias="ZoomPlus.svg">src/FlightMap/Images/ZoomPlus.svg</file>
-        <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Images/city_3d_map_icon.svg</file>
+        <file alias="Viewer3D/City3DMapIcon.svg">src/Viewer3D/Viewer3DQml/Images/city_3d_map_icon.svg</file>
         <file alias="amp_logo_blue.png">resources/amp logo.png</file>
         <file alias="amp_logo_white.png">resources/amp logo_white.png</file>
         <file alias="brandicon.png">resources/brandicon.png</file>
