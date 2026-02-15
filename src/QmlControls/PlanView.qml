@@ -667,7 +667,7 @@ Item {
     }
 
     Component {
-        id: promptForPlanUsageOnVehicleChangePopupComponent2
+        id: promptForPlanUsageOnVehicleChangePopupComponent
 
         QGCPopupDialog {
             title: _planMasterController.managerVehicle.isOfflineEditingVehicle ? qsTr("Plan View - Vehicle Disconnected") : qsTr("Plan View - Vehicle Changed")

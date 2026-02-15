@@ -260,11 +260,7 @@ Item {
                         text:           qsTr("3D View")
                         iconSource:     "/qmlimages/Viewer3D/City3DMapIcon.svg"
                         onTriggered:{
-                            if(_is3DViewOpen === false){
-                                viewer3DWindow.open()
-                            }else{
-                                viewer3DWindow.close()
-                            }
+                            _root.isViewer3DOpen = !_root.isViewer3DOpen
                         }
 
                         on_Is3DViewOpenChanged: {

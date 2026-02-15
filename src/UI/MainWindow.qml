@@ -116,7 +116,6 @@ ApplicationWindow {
         analyzeView.visible     = false
         appSettings.visible     = false
         toolbar.currentToolbar  = currentToolbar
-        viewer3DWindow.close()
     }
 
     function showFlyView() {
