@@ -338,6 +338,7 @@ qt_import_plugins(${CMAKE_PROJECT_NAME}
     INCLUDE Qt6::QSvgPlugin
     EXCLUDE_BY_TYPE geoservices  # Use built-in location plugins
     INCLUDE_BY_TYPE sqldrivers Qt6::QSQLiteDriverPlugin
+    EXCLUDE Qt6::QFFmpegMediaPlugin  # QGC uses GStreamer, not FFmpeg
 )
 
 # Linux-specific Qt platform plugins
