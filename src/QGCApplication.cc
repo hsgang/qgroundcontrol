@@ -670,6 +670,9 @@ bool QGCApplication::event(QEvent *e)
         // On OSX if the user selects Quit from the menu (or Command-Q) the ApplicationWindow does not signal closing. Instead you get a Quit event here only.
         // This in turn causes the standard QGC shutdown sequence to not run. So in this case we close the window ourselves such that the
         // signal is sent and the normal shutdown sequence runs.
+        if (!_mainRootWindow) {
+            return QApplication::event(e);
+        }
         const bool forceClose = _mainRootWindow->property("_forceClose").toBool();
         qCDebug(QGCApplicationLog) << "Quit event" << forceClose;
         // forceClose

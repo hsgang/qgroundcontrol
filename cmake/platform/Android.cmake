@@ -93,15 +93,17 @@ list(APPEND QT_ANDROID_MULTI_ABI_FORWARD_VARS QGC_STABLE_BUILD QT_HOST_PATH)
 # ----------------------------------------------------------------------------
 set(_qt_android_lib_dir "${QT6_INSTALL_PREFIX}/lib")
 set(_qt_android_plugins_dir "${QT6_INSTALL_PREFIX}/plugins")
+set(_qt_android_qml_dir "${QT6_INSTALL_PREFIX}/qml")
 set(_abi "${CMAKE_ANDROID_ARCH_ABI}")
 
 file(GLOB _qt_libs "${_qt_android_lib_dir}/libQt6*_${_abi}.so")
 file(GLOB_RECURSE _qt_plugins "${_qt_android_plugins_dir}/*_${_abi}.so")
+file(GLOB_RECURSE _qt_qml_plugins "${_qt_android_qml_dir}/*_${_abi}.so")
 
 # Exclude FFmpeg plugin - QGC uses GStreamer, and androiddeployqt can't resolve FFmpeg deps
 list(FILTER _qt_plugins EXCLUDE REGEX "ffmpegmediaplugin")
 
-set(_qt_all_extra_libs ${_qt_libs} ${_qt_plugins})
+set(_qt_all_extra_libs ${_qt_libs} ${_qt_plugins} ${_qt_qml_plugins})
 list(LENGTH _qt_all_extra_libs _qt_extra_count)
 
 if(_qt_extra_count GREATER 0)
@@ -111,9 +113,11 @@ endif()
 
 unset(_qt_android_lib_dir)
 unset(_qt_android_plugins_dir)
+unset(_qt_android_qml_dir)
 unset(_abi)
 unset(_qt_libs)
 unset(_qt_plugins)
+unset(_qt_qml_plugins)
 unset(_qt_all_extra_libs)
 unset(_qt_extra_count)
 
