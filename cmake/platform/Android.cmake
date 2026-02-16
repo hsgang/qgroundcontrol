@@ -99,7 +99,18 @@ file(GLOB _qt_libs "${_qt_android_lib_dir}/libQt6*_${_abi}.so")
 file(GLOB_RECURSE _qt_plugins "${_qt_android_plugins_dir}/*_${_abi}.so")
 
 # Also include FFmpeg and other third-party libs bundled with Qt
-file(GLOB _qt_3rdparty_libs "${_qt_android_lib_dir}/libav*_${_abi}.so" "${_qt_android_lib_dir}/libsw*_${_abi}.so")
+# FFmpeg libs don't use the ABI suffix convention (e.g. libavformat.so, not libavformat_arm64-v8a.so)
+file(GLOB _qt_3rdparty_libs
+    "${_qt_android_lib_dir}/libav*_${_abi}.so"
+    "${_qt_android_lib_dir}/libsw*_${_abi}.so"
+    "${_qt_android_lib_dir}/libavformat.so"
+    "${_qt_android_lib_dir}/libavcodec.so"
+    "${_qt_android_lib_dir}/libavutil.so"
+    "${_qt_android_lib_dir}/libavfilter.so"
+    "${_qt_android_lib_dir}/libavdevice.so"
+    "${_qt_android_lib_dir}/libswresample.so"
+    "${_qt_android_lib_dir}/libswscale.so"
+)
 
 set(_qt_all_extra_libs ${_qt_libs} ${_qt_plugins} ${_qt_3rdparty_libs})
 list(LENGTH _qt_all_extra_libs _qt_extra_count)
