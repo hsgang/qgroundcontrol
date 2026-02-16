@@ -86,9 +86,6 @@ set_target_properties(${CMAKE_PROJECT_NAME}
 
 list(APPEND QT_ANDROID_MULTI_ABI_FORWARD_VARS QGC_STABLE_BUILD QT_HOST_PATH)
 
-unset(_qt_deploy_deps)
-unset(_qt_deploy_count)
-
 # ----------------------------------------------------------------------------
 # Android OpenSSL Libraries
 # ----------------------------------------------------------------------------

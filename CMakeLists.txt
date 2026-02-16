@@ -149,17 +149,6 @@ set(CMAKE_POLICY_DEFAULT_CMP0075 NEW)
 
 set(QT_NO_PRIVATE_MODULE_WARNING ON)
 
-find_package(Qt6 ${QGC_QT_MINIMUM_VERSION} QUIET COMPONENTS Core)
-if(NOT Qt6_FOUND)
-    message(FATAL_ERROR
-        "Qt6 ${QGC_QT_MINIMUM_VERSION}+ not found.\n"
-        "Set CMAKE_PREFIX_PATH to your Qt installation, e.g.:\n"
-        "  cmake -DCMAKE_PREFIX_PATH=~/Qt/6.8.3/gcc_64 ..\n"
-        "  (or use qt-cmake which sets this automatically)\n"
-        "Searched: ${CMAKE_PREFIX_PATH}"
-    )
-endif()
-
 find_package(Qt6
     ${QGC_QT_MINIMUM_VERSION}...${QGC_QT_MAXIMUM_VERSION}
     REQUIRED
