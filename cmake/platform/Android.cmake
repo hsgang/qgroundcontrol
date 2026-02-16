@@ -87,39 +87,46 @@ set_target_properties(${CMAKE_PROJECT_NAME}
 list(APPEND QT_ANDROID_MULTI_ABI_FORWARD_VARS QGC_STABLE_BUILD QT_HOST_PATH)
 
 # ----------------------------------------------------------------------------
-# Workaround: Qt 6.10.x androiddeployqt unmet dependencies (QTBUG-106035)
+# Workaround: Qt 6.10.x androiddeployqt unmet dependencies
 # androiddeployqt fails to resolve libQt6Core dependency, causing all Qt
-# libraries and plugins to be skipped from the APK. Force include them.
+# libraries and plugins to be skipped from the APK.
+# Use QT_ANDROID_DEPLOYMENT_DEPENDENCIES to completely override the broken
+# automatic dependency detection with an explicit list.
 # ----------------------------------------------------------------------------
-set(_qt_android_lib_dir "${QT6_INSTALL_PREFIX}/lib")
-set(_qt_android_plugins_dir "${QT6_INSTALL_PREFIX}/plugins")
-set(_qt_android_qml_dir "${QT6_INSTALL_PREFIX}/qml")
+set(_qt_prefix "${QT6_INSTALL_PREFIX}")
 set(_abi "${CMAKE_ANDROID_ARCH_ABI}")
 
-file(GLOB _qt_libs "${_qt_android_lib_dir}/libQt6*_${_abi}.so")
-file(GLOB_RECURSE _qt_plugins "${_qt_android_plugins_dir}/*_${_abi}.so")
-file(GLOB_RECURSE _qt_qml_plugins "${_qt_android_qml_dir}/*_${_abi}.so")
+file(GLOB _qt_libs "${_qt_prefix}/lib/libQt6*_${_abi}.so")
+file(GLOB_RECURSE _qt_plugins "${_qt_prefix}/plugins/*_${_abi}.so")
+file(GLOB_RECURSE _qt_qml_plugins "${_qt_prefix}/qml/*_${_abi}.so")
 
-# Exclude FFmpeg plugin - QGC uses GStreamer, and androiddeployqt can't resolve FFmpeg deps
-list(FILTER _qt_plugins EXCLUDE REGEX "ffmpegmediaplugin")
+set(_qt_all_libs ${_qt_libs} ${_qt_plugins} ${_qt_qml_plugins})
 
-set(_qt_all_extra_libs ${_qt_libs} ${_qt_plugins} ${_qt_qml_plugins})
-list(LENGTH _qt_all_extra_libs _qt_extra_count)
+# Exclude plugins with unresolvable external dependencies
+list(FILTER _qt_all_libs EXCLUDE REGEX "ffmpegmediaplugin")
 
-if(_qt_extra_count GREATER 0)
-    set_property(TARGET ${CMAKE_PROJECT_NAME} APPEND PROPERTY QT_ANDROID_EXTRA_LIBS ${_qt_all_extra_libs})
-    message(STATUS "QGC: Force-included ${_qt_extra_count} Qt libraries/plugins for Android deployment workaround")
+# Convert absolute paths to relative paths for QT_ANDROID_DEPLOYMENT_DEPENDENCIES
+set(_qt_deploy_deps "")
+foreach(_lib IN LISTS _qt_all_libs)
+    file(RELATIVE_PATH _rel_path "${_qt_prefix}" "${_lib}")
+    list(APPEND _qt_deploy_deps "${_rel_path}")
+endforeach()
+
+list(LENGTH _qt_deploy_deps _qt_deploy_count)
+
+if(_qt_deploy_count GREATER 0)
+    set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY QT_ANDROID_DEPLOYMENT_DEPENDENCIES "${_qt_deploy_deps}")
+    message(STATUS "QGC: Set ${_qt_deploy_count} explicit deployment dependencies for Android (bypassing androiddeployqt auto-detection)")
 endif()
 
-unset(_qt_android_lib_dir)
-unset(_qt_android_plugins_dir)
-unset(_qt_android_qml_dir)
+unset(_qt_prefix)
 unset(_abi)
 unset(_qt_libs)
 unset(_qt_plugins)
 unset(_qt_qml_plugins)
-unset(_qt_all_extra_libs)
-unset(_qt_extra_count)
+unset(_qt_all_libs)
+unset(_qt_deploy_deps)
+unset(_qt_deploy_count)
 
 # ----------------------------------------------------------------------------
 # Android OpenSSL Libraries
