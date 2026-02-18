@@ -60,7 +60,7 @@ android {
             resources.srcDirs = ['resources']
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
-            jniLibs.srcDirs = ['libs', '../qt_libs']
+            jniLibs.srcDirs = ['libs']
        }
     }
 
@@ -113,10 +113,7 @@ android {
 
     packaging {
         jniLibs {
-            // Allow duplicate .so files from libs/ and qt_libs/ (androiddeployqt workaround)
-            pickFirsts += ['**/*.so']
             // Exclude unused Qt Quick Controls styles
-            // excludes += ['lib/*/*_qmltooling_*']
             excludes += ['lib/*/*_Controls_FluentWinUI3_*']
             excludes += ['lib/*/*_Controls_Fusion_*']
             excludes += ['lib/*/*_Controls_Imagine_*']
