@@ -117,18 +117,22 @@ file(COPY ${_qt_all_so} DESTINATION "${_qt_jnilib_dir}")
 list(LENGTH _qt_all_so _qt_so_count)
 message(STATUS "QGC: Copied ${_qt_so_count} Qt libraries to qt_libs/${_abi}/ (bypassing androiddeployqt)")
 
-# Set jar files via QT_ANDROID_DEPLOYMENT_DEPENDENCIES (required for Java compilation)
+# Set QT_ANDROID_DEPLOYMENT_DEPENDENCIES with both .so and jar files.
+# The .so entries prevent androiddeployqt from failing with "No platform plugin" error.
+# Even though androiddeployqt Skips most .so files, the actual inclusion comes from qt_libs/.
 file(GLOB _qt_jars "${_qt_prefix}/jar/*.jar")
-set(_qt_jar_deps "")
-foreach(_jar IN LISTS _qt_jars)
-    file(RELATIVE_PATH _rel "${_qt_prefix}" "${_jar}")
-    list(APPEND _qt_jar_deps "${_rel}")
+
+set(_qt_all_deps ${_qt_all_so} ${_qt_jars})
+set(_qt_deploy_deps "")
+foreach(_dep IN LISTS _qt_all_deps)
+    file(RELATIVE_PATH _rel "${_qt_prefix}" "${_dep}")
+    list(APPEND _qt_deploy_deps "${_rel}")
 endforeach()
 
-list(LENGTH _qt_jar_deps _jar_count)
-if(_jar_count GREATER 0)
-    set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY QT_ANDROID_DEPLOYMENT_DEPENDENCIES "${_qt_jar_deps}")
-    message(STATUS "QGC: Set ${_jar_count} jar deployment dependencies for Java compilation")
+list(LENGTH _qt_deploy_deps _deploy_count)
+if(_deploy_count GREATER 0)
+    set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY QT_ANDROID_DEPLOYMENT_DEPENDENCIES "${_qt_deploy_deps}")
+    message(STATUS "QGC: Set ${_deploy_count} deployment dependencies (${_qt_so_count} .so + jars)")
 endif()
 
 unset(_qt_prefix)
@@ -140,8 +144,9 @@ unset(_qt_qml_plugins)
 unset(_qt_all_so)
 unset(_qt_so_count)
 unset(_qt_jars)
-unset(_qt_jar_deps)
-unset(_jar_count)
+unset(_qt_all_deps)
+unset(_qt_deploy_deps)
+unset(_deploy_count)
 
 # ----------------------------------------------------------------------------
 # Android OpenSSL Libraries
