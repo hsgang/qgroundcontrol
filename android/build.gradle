@@ -111,14 +111,17 @@ android {
     println "qtAndroidDir: ${qtAndroidDir}"
     println "Java Version: " + JavaVersion.current()
 
-    packagingOptions {
-        // Allow duplicate .so files from libs/ and qt_libs/ (androiddeployqt workaround)
-        pickFirst 'lib/**/*.so'
-        // exclude 'lib/*/*_qmltooling_*'
-        exclude 'lib/*/*_Controls_FluentWinUI3_*'
-        exclude 'lib/*/*_Controls_Fusion_*'
-        exclude 'lib/*/*_Controls_Imagine_*'
-        exclude 'lib/*/*_Controls_Material_*'
-        exclude 'lib/*/*_Controls_Universal_*'
+    packaging {
+        jniLibs {
+            // Allow duplicate .so files from libs/ and qt_libs/ (androiddeployqt workaround)
+            pickFirsts += ['**/*.so']
+            // Exclude unused Qt Quick Controls styles
+            // excludes += ['lib/*/*_qmltooling_*']
+            excludes += ['lib/*/*_Controls_FluentWinUI3_*']
+            excludes += ['lib/*/*_Controls_Fusion_*']
+            excludes += ['lib/*/*_Controls_Imagine_*']
+            excludes += ['lib/*/*_Controls_Material_*']
+            excludes += ['lib/*/*_Controls_Universal_*']
+        }
     }
 }
