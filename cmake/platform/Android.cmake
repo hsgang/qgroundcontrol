@@ -90,47 +90,58 @@ list(APPEND QT_ANDROID_MULTI_ABI_FORWARD_VARS QGC_STABLE_BUILD QT_HOST_PATH)
 # Workaround: Qt 6.10.x androiddeployqt dependency resolution failure
 # androiddeployqt fails to resolve libQt6Core for arm64-v8a, causing all
 # Qt libraries/plugins to be skipped from the APK.
-# QT_ANDROID_DEPLOYMENT_DEPENDENCIES completely replaces the broken automatic
-# dependency detection with an explicit list of libraries to include.
+# Strategy: Copy Qt .so files directly into a jniLibs directory that Gradle
+# picks up (configured via build.gradle jniLibs.srcDirs = ['libs', '../qt_libs']).
+# This completely bypasses androiddeployqt's broken dependency validation.
+# Jar files are still set via QT_ANDROID_DEPLOYMENT_DEPENDENCIES for Java compilation.
 # ----------------------------------------------------------------------------
 set(_qt_prefix "${QT6_INSTALL_PREFIX}")
 set(_abi "${CMAKE_ANDROID_ARCH_ABI}")
+set(_qt_jnilib_dir "${CMAKE_BINARY_DIR}/qt_libs/${_abi}")
+
+file(MAKE_DIRECTORY "${_qt_jnilib_dir}")
 
 # Collect all Qt native libraries, plugins, and QML plugins
 file(GLOB _qt_libs "${_qt_prefix}/lib/libQt6*_${_abi}.so")
 file(GLOB_RECURSE _qt_plugins "${_qt_prefix}/plugins/*_${_abi}.so")
 file(GLOB_RECURSE _qt_qml_plugins "${_qt_prefix}/qml/*_${_abi}.so")
 
-# Collect Qt jar files (required for Java compilation of Qt Android bindings)
-file(GLOB _qt_jars "${_qt_prefix}/jar/*.jar")
-
-set(_qt_all_deps ${_qt_libs} ${_qt_plugins} ${_qt_qml_plugins} ${_qt_jars})
+set(_qt_all_so ${_qt_libs} ${_qt_plugins} ${_qt_qml_plugins})
 
 # Exclude FFmpeg multimedia plugin (QGC uses GStreamer; FFmpeg has unresolvable deps)
-list(FILTER _qt_all_deps EXCLUDE REGEX "ffmpegmediaplugin")
+list(FILTER _qt_all_so EXCLUDE REGEX "ffmpegmediaplugin")
 
-# Convert absolute paths to relative paths (required by QT_ANDROID_DEPLOYMENT_DEPENDENCIES)
-set(_qt_deploy_deps "")
-foreach(_dep IN LISTS _qt_all_deps)
-    file(RELATIVE_PATH _rel_path "${_qt_prefix}" "${_dep}")
-    list(APPEND _qt_deploy_deps "${_rel_path}")
+# Copy all Qt .so files into qt_libs/${ABI}/ for Gradle to include in APK
+file(COPY ${_qt_all_so} DESTINATION "${_qt_jnilib_dir}")
+
+list(LENGTH _qt_all_so _qt_so_count)
+message(STATUS "QGC: Copied ${_qt_so_count} Qt libraries to qt_libs/${_abi}/ (bypassing androiddeployqt)")
+
+# Set jar files via QT_ANDROID_DEPLOYMENT_DEPENDENCIES (required for Java compilation)
+file(GLOB _qt_jars "${_qt_prefix}/jar/*.jar")
+set(_qt_jar_deps "")
+foreach(_jar IN LISTS _qt_jars)
+    file(RELATIVE_PATH _rel "${_qt_prefix}" "${_jar}")
+    list(APPEND _qt_jar_deps "${_rel}")
 endforeach()
 
-list(LENGTH _qt_deploy_deps _qt_deploy_count)
-if(_qt_deploy_count GREATER 0)
-    set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY QT_ANDROID_DEPLOYMENT_DEPENDENCIES "${_qt_deploy_deps}")
-    message(STATUS "QGC: Set ${_qt_deploy_count} explicit deployment dependencies (bypassing androiddeployqt auto-detection)")
+list(LENGTH _qt_jar_deps _jar_count)
+if(_jar_count GREATER 0)
+    set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY QT_ANDROID_DEPLOYMENT_DEPENDENCIES "${_qt_jar_deps}")
+    message(STATUS "QGC: Set ${_jar_count} jar deployment dependencies for Java compilation")
 endif()
 
 unset(_qt_prefix)
 unset(_abi)
+unset(_qt_jnilib_dir)
 unset(_qt_libs)
 unset(_qt_plugins)
 unset(_qt_qml_plugins)
+unset(_qt_all_so)
+unset(_qt_so_count)
 unset(_qt_jars)
-unset(_qt_all_deps)
-unset(_qt_deploy_deps)
-unset(_qt_deploy_count)
+unset(_qt_jar_deps)
+unset(_jar_count)
 
 # ----------------------------------------------------------------------------
 # Android OpenSSL Libraries

@@ -60,7 +60,7 @@ android {
             resources.srcDirs = ['resources']
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
-            jniLibs.srcDirs = ['libs']
+            jniLibs.srcDirs = ['libs', '../qt_libs']
        }
     }
 
@@ -112,6 +112,8 @@ android {
     println "Java Version: " + JavaVersion.current()
 
     packagingOptions {
+        // Allow duplicate .so files from libs/ and qt_libs/ (androiddeployqt workaround)
+        pickFirst 'lib/**/*.so'
         // exclude 'lib/*/*_qmltooling_*'
         exclude 'lib/*/*_Controls_FluentWinUI3_*'
         exclude 'lib/*/*_Controls_Fusion_*'
