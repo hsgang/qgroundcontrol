@@ -111,14 +111,12 @@ android {
     println "qtAndroidDir: ${qtAndroidDir}"
     println "Java Version: " + JavaVersion.current()
 
-    packaging {
-        jniLibs {
-            // Exclude unused Qt Quick Controls styles
-            excludes += ['lib/*/*_Controls_FluentWinUI3_*']
-            excludes += ['lib/*/*_Controls_Fusion_*']
-            excludes += ['lib/*/*_Controls_Imagine_*']
-            excludes += ['lib/*/*_Controls_Material_*']
-            excludes += ['lib/*/*_Controls_Universal_*']
-        }
+    packagingOptions {
+        // exclude 'lib/*/*_qmltooling_*'
+        exclude 'lib/*/*_Controls_FluentWinUI3_*'
+        exclude 'lib/*/*_Controls_Fusion_*'
+        exclude 'lib/*/*_Controls_Imagine_*'
+        exclude 'lib/*/*_Controls_Material_*'
+        exclude 'lib/*/*_Controls_Universal_*'
     }
 }

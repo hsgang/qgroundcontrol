@@ -83,12 +83,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
         qgc_set_linker()
     endif()
 
-    # Use thin LTO for Clang to produce correct ELF NEEDED entries.
-    # CMAKE_INTERPROCEDURAL_OPTIMIZATION sets full -flto which causes
-    # androiddeployqt to fail dependency resolution on arm64-v8a.
-    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-        add_link_options("$<$<CONFIG:Release>:-flto=thin>")
-    endif()
+    # LTO is handled by qgc_enable_ipo() above
 elseif(MSVC)
     # MSVC-specific optimizations
     add_link_options("$<$<CONFIG:Release>:/LTCG:INCREMENTAL>")
