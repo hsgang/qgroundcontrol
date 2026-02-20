@@ -77,9 +77,7 @@ public:
         TypeUdp,        ///< UDP Link
         TypeTcp,        ///< TCP Link
         TypeWebRTC,
-#ifdef QGC_ENABLE_BLUETOOTH
         TypeBluetooth,  ///< Bluetooth Link
-#endif
 #ifdef QT_DEBUG
         TypeMock,       ///< Mock Link for Unitesting
 #endif

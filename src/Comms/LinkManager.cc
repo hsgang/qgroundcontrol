@@ -13,9 +13,7 @@
 #include "UDPLink.h"
 #include "WebRTC/WebRTCLink.h"
 
-#ifdef QGC_ENABLE_BLUETOOTH
 #include "BluetoothLink.h"
-#endif
 
 #ifndef QGC_NO_SERIAL_LINK
 #include "SerialLink.h"
@@ -127,11 +125,9 @@ bool LinkManager::createConnectedLink(SharedLinkConfigurationPtr &config)
     case LinkConfiguration::TypeWebRTC:
         link = std::make_shared<WebRTCLink>(config);
         break;
-#ifdef QGC_ENABLE_BLUETOOTH
     case LinkConfiguration::TypeBluetooth:
         link = std::make_shared<BluetoothLink>(config);
         break;
-#endif
     case LinkConfiguration::TypeLogReplay:
         link = std::make_shared<LogReplayLink>(config);
         break;
@@ -380,11 +376,9 @@ void LinkManager::loadLinkConfigurationList()
             case LinkConfiguration::TypeWebRTC:
                 link = new WebRTCConfiguration(name);
                 break;
-#ifdef QGC_ENABLE_BLUETOOTH
             case LinkConfiguration::TypeBluetooth:
                 link = new BluetoothConfiguration(name);
                 break;
-#endif
             case LinkConfiguration::TypeLogReplay:
                 link = new LogReplayConfiguration(name);
                 break;
@@ -595,6 +589,11 @@ QStringList LinkManager::linkTypeStrings() const
     list += tr("UDP");
     list += tr("TCP");
     list += tr("WebRTC");
+    list += tr("Bluetooth");
+#ifdef QT_DEBUG
+    list += tr("Mock Link");
+#endif
+    list += tr("Log Replay");
 
     if (list.size() != static_cast<int>(LinkConfiguration::TypeLast)) {
         qCWarning(LinkManagerLog) << "Internal error";

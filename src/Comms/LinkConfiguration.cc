@@ -7,9 +7,7 @@
 #include "TCPLink.h"
 #include "WebRTCLink.h"
 #include "LogReplayLink.h"
-#ifdef QGC_ENABLE_BLUETOOTH
 #include "BluetoothLink.h"
-#endif
 #ifdef QT_DEBUG
 #include "MockLink.h"
 #endif
@@ -71,11 +69,9 @@ LinkConfiguration *LinkConfiguration::createSettings(int type, const QString &na
     case TypeWebRTC:
         config = new WebRTCConfiguration(name);
         break;
-#ifdef QGC_ENABLE_BLUETOOTH
     case TypeBluetooth:
         config = new BluetoothConfiguration(name);
         break;
-#endif
     case TypeLogReplay:
         config = new LogReplayConfiguration(name);
         break;
@@ -111,11 +107,9 @@ LinkConfiguration *LinkConfiguration::duplicateSettings(const LinkConfiguration 
     case TypeWebRTC:
         dupe = new WebRTCConfiguration(qobject_cast<const WebRTCConfiguration*>(source));
         break;
-#ifdef QGC_ENABLE_BLUETOOTH
     case TypeBluetooth:
         dupe = new BluetoothConfiguration(qobject_cast<const BluetoothConfiguration*>(source));
         break;
-#endif
     case TypeLogReplay:
         dupe = new LogReplayConfiguration(qobject_cast<const LogReplayConfiguration*>(source));
         break;

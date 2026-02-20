@@ -37,7 +37,9 @@ class QGCCameraManager : public QObject
     Q_PROPERTY(int currentCamera READ currentCamera WRITE setCurrentCamera NOTIFY currentCameraChanged)
     Q_PROPERTY(int currentZoomLevel READ currentZoomLevel NOTIFY currentZoomLevelChanged)
 
+#ifdef QGC_UNITTEST_BUILD
     friend class QGCCameraManagerTest;
+#endif
 
 public:
     explicit QGCCameraManager(Vehicle* vehicle);
@@ -113,12 +115,12 @@ private:
     void _requestCameraInfo(CameraStruct* cameraInfo);
     void _handleHeartbeat(const mavlink_message_t& message);
     void _handleCameraInfo(const mavlink_message_t& message);
-    void _handleStorageInfo(const mavlink_message_t& message);
+    void _handleStorageInformation(const mavlink_message_t& message);
     void _handleCameraSettings(const mavlink_message_t& message);
-    void _handleParamAck(const mavlink_message_t& message);
-    void _handleParamValue(const mavlink_message_t& message);
-    void _handleCaptureStatus(const mavlink_message_t& message);
-    void _handleVideoStreamInfo(const mavlink_message_t& message);
+    void _handleParamExtAck(const mavlink_message_t& message);
+    void _handleParamExtValue(const mavlink_message_t& message);
+    void _handleCameraCaptureStatus(const mavlink_message_t& message);
+    void _handleVideoStreamInformation(const mavlink_message_t& message);
     void _handleVideoStreamStatus(const mavlink_message_t& message);
     void _handleBatteryStatus(const mavlink_message_t& message);
     void _handleTrackingImageStatus(const mavlink_message_t& message);
