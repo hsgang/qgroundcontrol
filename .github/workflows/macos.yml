@@ -132,13 +132,13 @@ jobs:
         with:
           binary-path: /Volumes/QGroundControl/QGroundControl.app/Contents/MacOS/QGroundControl
 
-      - name: Attest Build with SBOM
-        if: matrix.build_type == 'Release'
-        uses: ./.github/actions/attest-sbom
-        with:
-          subject-path: ${{ runner.temp }}/build/QGroundControl.dmg
-          subject-name: QGroundControl
-          scan-path: ${{ runner.temp }}/build
+      # - name: Attest Build with SBOM
+      #   if: matrix.build_type == 'Release'
+      #   uses: ./.github/actions/attest-sbom
+      #   with:
+      #     subject-path: ${{ runner.temp }}/build/QGroundControl.dmg
+      #     subject-name: QGroundControl
+      #     scan-path: ${{ runner.temp }}/build
 
       - name: Upload Build File
         if: matrix.build_type == 'Release'
