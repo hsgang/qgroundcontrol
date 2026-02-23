@@ -78,7 +78,7 @@ ColumnLayout {
                 color:      QGroundControl.globalPalette.groupBorder
                 visible:    _contentItem ? _isContentItemVisible() : false
 
-                property var _contentItem: index < _ySortedChildren.length ? _ySortedChildren[index] : null
+                property var _contentItem: index < _ySortedChildren.length ? _ySortedChildren[index] : undefined
 
                 function _isRepeater(item) {
                     return item && item.toString().startsWith("QQuickRepeater");

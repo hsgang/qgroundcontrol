@@ -30,8 +30,6 @@ target_sources(${CMAKE_PROJECT_NAME}
         QGCLogging.h
         QGCLoggingCategory.cc
         QGCLoggingCategory.h
-        StateMachine.cc
-        StateMachine.h
         CloudManager.cc
         CloudManager.h
         GridManager.cc

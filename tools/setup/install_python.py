@@ -25,6 +25,8 @@ PACKAGE_GROUPS: dict[str, list[str]] = {
     ],
     "test": [
         "pytest",
+        "jinja2",
+        "pyyaml",
     ],
     "ci": [
         "pre-commit",
@@ -102,7 +104,7 @@ def create_venv(venv_path: Path) -> None:
     print(f"Creating virtual environment: {venv_path}")
 
     if has_uv():
-        subprocess.run(["uv", "venv", str(venv_path)], check=True)
+        subprocess.run(["uv", "venv", "--seed", str(venv_path)], check=True)
     else:
         subprocess.run([sys.executable, "-m", "venv", str(venv_path)], check=True)
 
@@ -161,7 +163,7 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
         epilog="""
 Groups:
   precommit Pre-commit hooks only
-  test      Python test runner only
+  test      Python test tools (pytest, jinja2, pyyaml)
   ci        Pre-commit hooks, meson, ninja (default)
   qt        Qt installation tools (aqtinstall)
   coverage  Code coverage tools (gcovr)
