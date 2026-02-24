@@ -73,12 +73,14 @@ Item {
         root.visible = false
         feeder.value = 0
         var sliderOutputValue = 0
-        if (guidedValueSlider.visible) {
+        if (guidedValueSlider && guidedValueSlider.visible) {
             sliderOutputValue = guidedValueSlider.getOutputValue()
             guidedValueSlider.visible = false
         }
         hideTrigger = false
-        guidedController.executeAction(root.action, root.actionData, sliderOutputValue, root.optionChecked)
+        if (guidedController) {
+            guidedController.executeAction(root.action, root.actionData, sliderOutputValue, root.optionChecked)
+        }
         if (mapIndicator) {
             mapIndicator.actionConfirmed()
             mapIndicator = undefined

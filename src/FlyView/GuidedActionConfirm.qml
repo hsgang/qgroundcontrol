@@ -91,7 +91,7 @@ Item {
             onActivated: {
                 control.visible = false
                 var sliderOutputValue = 0
-                if (guidedValueSlider.visible) {
+                if (guidedValueSlider && guidedValueSlider.visible) {
                     sliderOutputValue = guidedValueSlider.getOutputValue()
                     guidedValueSlider.visible = false
                 }
