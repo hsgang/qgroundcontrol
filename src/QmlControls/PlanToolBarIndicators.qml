@@ -150,7 +150,16 @@ RowLayout {
         iconSource: "/res/SaveToDisk.svg"
         enabled: !_syncInProgress && _hasPlanItems
         primary: _saveDirty
-        onClicked: _saveButtonClicked()
+        onClicked: {
+            if (_planMasterController.currentPlanFile === "") {
+                _saveAsNewFile()
+            } else {
+                let position = Qt.point(0, 0)
+                position = mapToItem(globals.parent, position)
+                var dropPanel = saveDropPanelComponent.createObject(mainWindow, { clickRect: Qt.rect(position.x, position.y, width, height) })
+                dropPanel.open()
+            }
+        }
     }
 
     QGCButton {
@@ -212,7 +221,7 @@ RowLayout {
 
                         onClicked: {
                             openDropPanel.close()
-                            _loadFromFile()
+                            _openButtonClicked()
                         }
                     }
 
