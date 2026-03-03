@@ -19,7 +19,8 @@ RowLayout {
     property var _geoFenceController: _planMasterController.geoFenceController
     property var _rallyPointController: _planMasterController.rallyPointController
     property bool _controllerOffline: _planMasterController.offline
-    property var _controllerDirty: _planMasterController.dirty
+    property var _saveDirty: _planMasterController.dirtyForSave
+    property var _uploadDirty: _planMasterController.dirtyForUpload
     property var _syncInProgress: _planMasterController.syncInProgress
     property var _visualItems: _missionController.visualItems
     property bool _hasPlanItems: _planMasterController.containsItems
@@ -31,9 +32,9 @@ RowLayout {
     }
 
     function _downloadClicked() {
-        if (_planMasterController.dirty) {
+        if (_saveDirty) {
             QGroundControl.showMessageDialog(root, qsTr("Download"),
-                                         qsTr("You have unsaved/unsent changes. Downloading from the Vehicle will lose these changes. Are you sure?"),
+                                         qsTr("You have unsaved changes. Downloading from the Vehicle will lose these changes. Are you sure?"),
                                          Dialog.Yes | Dialog.Cancel,
                                          function() { _planMasterController.loadFromVehicle() })
         } else {
@@ -41,8 +42,8 @@ RowLayout {
         }
     }
 
-    function _loadFromFile() {
-        if (_planMasterController.dirty) {
+    function _openButtonClicked() {
+        if (_saveDirty || _uploadDirty) {
             QGroundControl.showMessageDialog(root, qsTr("Open Plan"),
                                         qsTr("You have unsaved/unsent changes. Loading a new Plan will lose these changes. Are you sure?"),
                                         Dialog.Yes | Dialog.Cancel,
@@ -74,10 +75,11 @@ RowLayout {
 
     function _saveToCurrentFile() {
         if(_planMasterController.currentPlanFile !== "") {
-            _planMasterController.saveToCurrent()
-            QGroundControl.showMessageDialog(root, qsTr("Save"),
-                                        qsTr("Plan saved to `%1`").arg(_planMasterController.currentPlanFile),
-                                        Dialog.Ok)
+            if (_planMasterController.saveToCurrent()) {
+                QGroundControl.showMessageDialog(root, qsTr("Save"),
+                                            qsTr("Plan saved to `%1`").arg(_planMasterController.currentPlanFile),
+                                            Dialog.Ok)
+            }
         } else {
             _planMasterController.saveToSelectedFile()
         }
@@ -144,18 +146,11 @@ RowLayout {
     }
 
     QGCButton {
-        id: saveButton
-        text: qsTr("Save")
-        iconSource: "/InstrumentValueIcons/upload.svg"
+        text: _planMasterController.currentPlanFile === "" ? qsTr("Save As") : _planMasterController.currentPlanFileName
+        iconSource: "/res/SaveToDisk.svg"
         enabled: !_syncInProgress && _hasPlanItems
-        primary: _controllerDirty
-
-        onClicked: {
-            let position = Qt.point(0, 0)
-            position = mapToItem(globals.parent, position)
-            var dropPanel = saveDropPanelComponent.createObject(mainWindow, { clickRect: Qt.rect(position.x, position.y, width, height) })
-            dropPanel.open()
-        }
+        primary: _saveDirty
+        onClicked: _saveButtonClicked()
     }
 
     QGCButton {
@@ -164,7 +159,7 @@ RowLayout {
         iconSource: "/res/UploadToVehicle.svg"
         enabled: !_syncInProgress && _hasPlanItems
         visible: !_syncInProgress
-        primary: _controllerDirty
+        primary: _uploadDirty
         onClicked: _uploadClicked()
     }
 
@@ -184,31 +179,6 @@ RowLayout {
             position = mapToItem(globals.parent, position)
             var dropPanel = hamburgerDropPanelComponent.createObject(mainWindow, { clickRect: Qt.rect(position.x, position.y, 0, 0) })
             dropPanel.open()
-        }
-    }
-
-    ColumnLayout {
-        Layout.alignment: Qt.AlignVCenter
-        spacing: 0
-
-        QGCLabel {
-            text: _leftClickText()
-            font.pointSize: ScreenTools.smallFontPointSize
-            visible: _editingLayer === _layerMission || _editingLayer === _layerRally
-
-            function _leftClickText() {
-                if (_editingLayer === _layerMission) {
-                    return qsTr("- Click on the map to add Waypoint")
-                } else {
-                    return qsTr("- Click on the map to add Rally Point")
-                }
-            }
-        }
-
-        QGCLabel {
-            text: qsTr("- %1 to add ROI %2").arg(ScreenTools.isMobile ? qsTr("Press and hold") : qsTr("Right click")).arg(_missionController.isROIActive ? qsTr("or Cancel ROI") : "")
-            font.pointSize: ScreenTools.smallFontPointSize
-            visible: _editingLayer === _layerMission && _planMasterController.controllerVehicle.roiModeSupported
         }
     }
 
@@ -513,7 +483,7 @@ RowLayout {
                     QGCButton {
                         Layout.fillWidth: true
                         text: qsTr("Download")
-                        enabled: !_syncInProgress
+                        enabled: !_syncInProgress && !_controllerOffline
                         visible: !_syncInProgress
 
                         onClicked: {
