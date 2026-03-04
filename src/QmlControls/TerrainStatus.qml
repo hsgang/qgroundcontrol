@@ -173,7 +173,7 @@ Rectangle {
                             id:             complexItem
                             anchors.bottom: parent.bottom
                             x:              (object.distanceFromStart * terrainProfile.pixelsPerMeter)
-                            width:          complexItem.visible ? object.complexDistance * terrainProfile.pixelsPerMeter : 0
+                            width:          visible ? object.complexDistance * terrainProfile.pixelsPerMeter : 0
                             height:         patternNameLabel.height
                             color:          qgcPal.colorGreen //"green"
                             opacity:        0.5

@@ -146,7 +146,7 @@ RowLayout {
     }
 
     QGCButton {
-        text: _planMasterController.currentPlanFile === "" ? qsTr("Save As") : _planMasterController.currentPlanFileName
+        text: qsTr("Save")
         iconSource: "/res/SaveToDisk.svg"
         enabled: !_syncInProgress && _hasPlanItems
         primary: _saveDirty

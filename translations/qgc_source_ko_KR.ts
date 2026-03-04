@@ -14796,7 +14796,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/MissionManager/PlanMasterController.cc" line="594"/>
         <source>Plan Files (*.%1)</source>
-        <translation>계획 파일 (*.*)</translation>
+        <translation>계획 파일 (*.%1)</translation>
     </message>
 </context>
 <context>
@@ -14958,17 +14958,17 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="263"/>
         <source>Plan Upload</source>
-        <translation>계획 업로드</translation>
+        <translation>미션 업로드</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="269"/>
         <source>Select Plan File</source>
-        <translation>계획 파일 선택</translation>
+        <translation>미션 파일 선택</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="280"/>
         <source>Save Plan</source>
-        <translation>계획을 저장합니다</translation>
+        <translation>미션 파일 저장</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="295"/>
