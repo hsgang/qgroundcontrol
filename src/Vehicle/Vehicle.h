@@ -874,9 +874,13 @@ signals:
     void atmosphericValueChanged        ();
     // void tunnelingDataValueChanged      ();
 
-    /// New RC channel values coming from RC_CHANNELS message
-    ///     @param channelValues The current values for rc channels
-    void rcChannelsChanged(QVector<int> channelValues);
+    /// Raw RC channel values coming from RC_CHANNELS message
+    ///     @param channelValues The current raw values for rc channels
+    void rcChannelsRawChanged(QVector<int> channelValues);
+
+    /// Filtered RC channel values coming from RC_CHANNELS message: clamped 1000:2000
+    ///     @param channelValues The clamped values for rc channels
+    void rcChannelsClampedChanged(QVector<int> channelValues);
 
     /// Remote control RSSI changed  (0% - 100%)
     void remoteControlRSSIChanged       (uint8_t rssi);

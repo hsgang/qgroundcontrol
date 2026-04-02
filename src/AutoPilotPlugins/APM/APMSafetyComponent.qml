@@ -26,6 +26,25 @@ SetupPage {
 
             QGCPalette { id: qgcPal; colorGroupEnabled: true }
 
+            RCChannelMonitorController {
+                id: rcMonitor
+                clampValues: false
+            }
+
+            // Throttle channel PWM tracking (RCMAP_THROTTLE is 1-indexed)
+            property Fact _rcmapThrottle: controller.getParameterFact(-1, "RCMAP_THROTTLE")
+            property int  _zeroBasedThrottleChannel: _rcmapThrottle.rawValue - 1
+            property int  _throttlePwm: -1
+
+            Connections {
+                target: rcMonitor
+                function onChannelValueChanged(channel, rcValue) {
+                    if (channel === _zeroBasedThrottleChannel) {
+                        _throttlePwm = rcValue
+                    }
+                }
+            }
+
             property Fact _batt1Monitor:                    controller.getParameterFact(-1, "BATT_MONITOR")
             property Fact _batt2Monitor:                    controller.getParameterFact(-1, "BATT2_MONITOR", false /* reportMissing */)
             property bool _batt2MonitorAvailable:           controller.parameterExists(-1, "BATT2_MONITOR")
@@ -113,6 +132,22 @@ SetupPage {
                 property Fact _failsafeThrEnable:               controller.getParameterFact(-1, "FS_THR_ENABLE")
                 property Fact _failsafeThrValue:                controller.getParameterFact(-1, "FS_THR_VALUE")
 
+            }
+
+            Component {
+                id: throttlePwmStatusComponent
+
+                QGCLabel {
+                    property Fact thrThreshold
+
+                    font.pointSize:   ScreenTools.smallFontPointSize
+                    property bool hasData: _throttlePwm >= 0
+                    property bool fsActive: hasData && _throttlePwm < thrThreshold.rawValue
+                    text: hasData
+                          ? qsTr("Current throttle PWM: %1 (%2)").arg(_throttlePwm).arg(fsActive ? qsTr("failsafe active") : qsTr("failsafe inactive"))
+                          : qsTr("Current throttle PWM: waiting for data")
+                    color: fsActive ? qgcPal.warningText : qgcPal.text
+                }
             }
 
             Component {
@@ -290,6 +325,13 @@ SetupPage {
                                 }
                             }
 
+                            Loader {
+                                Layout.fillWidth:   true
+                                visible:            throttleEnableCheckBox.checked
+                                sourceComponent:    throttlePwmStatusComponent
+                                onLoaded: item.thrThreshold = _failsafeThrValue
+                            }
+
                             QGCCheckBox {
                                 text:       qsTr("GCS failsafe")
                                 checked:    _failsafeGCSEnable.value != 0
@@ -305,6 +347,564 @@ SetupPage {
                 width: ScreenTools.defaultFontPixelWidth * 40
                 Layout.alignment:   Qt.AlignHCenter
                 sourceComponent:    _batt2ParamsAvailable ? batteryFailsafeComponent : undefined
+            }
+
+            Component {
+                id: copterThrottleFailsafe
+
+                QGCGroupBox {
+                    title: qsTr("Throttle Failsafe")
+
+                    property Fact _failsafeThrEnable:   controller.getParameterFact(-1, "FS_THR_ENABLE")
+                    property Fact _failsafeThrValue:    controller.getParameterFact(-1, "FS_THR_VALUE")
+                    property bool _thrEnabled:          _failsafeThrEnable.rawValue !== _fsThrDisabled
+
+                    ColumnLayout {
+                        spacing: _margins
+
+                        QGCCheckBoxSlider {
+                            Layout.fillWidth:   true
+                            text:               qsTr("Enabled")
+                            checked:            _thrEnabled
+
+                            onClicked: {
+                                if (checked) {
+                                    _failsafeThrEnable.rawValue = _fsThrEnabledAlwaysRTL
+                                } else {
+                                    _failsafeThrEnable.rawValue = _fsThrDisabled
+                                }
+                            }
+                        }
+
+                        LabelledFactTextField {
+                            label:              qsTr("PWM threshold")
+                            fact:               _failsafeThrValue
+                            textFieldShowUnits: true
+                            Layout.fillWidth:   true
+                            visible:            _thrEnabled
+                        }
+
+                        Loader {
+                            Layout.fillWidth:   true
+                            visible:            _thrEnabled
+                            sourceComponent:    throttlePwmStatusComponent
+                            onLoaded: item.thrThreshold = _failsafeThrValue
+                        }
+
+                        ColumnLayout {
+                            spacing: 0
+                            visible: _thrEnabled
+
+                            QGCLabel { text: qsTr("Action:") }
+
+                            QGCRadioButton {
+                                text:      qsTr("Always RTL")
+                                checked:   _failsafeThrEnable.rawValue === _fsThrEnabledAlwaysRTL
+                                onClicked: _failsafeThrEnable.rawValue = _fsThrEnabledAlwaysRTL
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Always Land")
+                                checked:   _failsafeThrEnable.rawValue === _fsThrEnabledAlwaysLand
+                                onClicked: _failsafeThrEnable.rawValue = _fsThrEnabledAlwaysLand
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Always SmartRTL or RTL")
+                                checked:   _failsafeThrEnable.rawValue === _fsThrEnabledAlwaysSmartRTLOrRTL
+                                onClicked: _failsafeThrEnable.rawValue = _fsThrEnabledAlwaysSmartRTLOrRTL
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Always SmartRTL or Land")
+                                checked:   _failsafeThrEnable.rawValue === _fsThrEnabledAlwaysSmartRTLOrLand
+                                onClicked: _failsafeThrEnable.rawValue = _fsThrEnabledAlwaysSmartRTLOrLand
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Auto DO_LAND_START or RTL")
+                                checked:   _failsafeThrEnable.rawValue === _fsThrEnabledAutoDoLandOrRTL
+                                onClicked: _failsafeThrEnable.rawValue = _fsThrEnabledAutoDoLandOrRTL
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Always Brake or Land")
+                                checked:   _failsafeThrEnable.rawValue === _fsThrEnabledAlwaysBrakeOrLand
+                                onClicked: _failsafeThrEnable.rawValue = _fsThrEnabledAlwaysBrakeOrLand
+                            }
+                        }
+
+                        QGCLabel {
+                            text:    qsTr("Ignore failsafe if:")
+                            visible: _fsOptionsAvailable && _thrEnabled
+                        }
+
+                        ColumnLayout {
+                            Layout.fillWidth:   true
+                            Layout.leftMargin:  ScreenTools.defaultFontPixelWidth * 2
+                            spacing:            _margins
+                            visible:            _fsOptionsAvailable && _thrEnabled
+
+                            FactBitMaskCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("In Auto mode")
+                                fact:               _fsOptions
+                                bitMask:            _fsOptionRCContinueAuto
+                            }
+
+                            FactBitMaskCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("In Guided mode")
+                                fact:               _fsOptions
+                                bitMask:            _fsOptionRCContinueGuided
+                            }
+
+                            FactBitMaskCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Landing")
+                                fact:               _fsOptions
+                                bitMask:            _fsOptionContinueLanding
+                            }
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: roverThrottleFailsafe
+
+                QGCGroupBox {
+                    title: qsTr("Throttle Failsafe")
+
+                    // Rover: 0=Disabled, 1=Enabled, 2=Continue with Mission in Auto
+                    readonly property int _roverThrDisabled:             0
+                    readonly property int _roverThrEnabled:              1
+                    readonly property int _roverThrContinueAutoMission:  2
+
+                    // Rover FS_ACTION value constants
+                    readonly property int _roverActionNothing:           0
+                    readonly property int _roverActionRTL:               1
+                    readonly property int _roverActionHold:              2
+                    readonly property int _roverActionSmartRTLOrRTL:     3
+                    readonly property int _roverActionSmartRTLOrHold:    4
+                    readonly property int _roverActionTerminate:         5
+                    readonly property int _roverActionLoiterOrHold:      6
+
+                    property Fact _failsafeThrEnable: controller.getParameterFact(-1, "FS_THR_ENABLE")
+                    property Fact _failsafeThrValue:  controller.getParameterFact(-1, "FS_THR_VALUE")
+                    property Fact _failsafeAction:    controller.getParameterFact(-1, "FS_ACTION")
+                    property Fact _failsafeTimeout:   controller.getParameterFact(-1, "FS_TIMEOUT")
+                    property bool _thrEnabled:        _failsafeThrEnable.rawValue !== _roverThrDisabled
+
+                    ColumnLayout {
+                        spacing: _margins
+
+                        QGCCheckBoxSlider {
+                            Layout.fillWidth:   true
+                            text:               qsTr("Enabled")
+                            checked:            _thrEnabled
+
+                            onClicked: {
+                                if (checked) {
+                                    _failsafeThrEnable.rawValue = _roverThrEnabled
+                                } else {
+                                    _failsafeThrEnable.rawValue = _roverThrDisabled
+                                }
+                            }
+                        }
+
+                        LabelledFactTextField {
+                            label:              qsTr("PWM threshold")
+                            fact:               _failsafeThrValue
+                            textFieldShowUnits: true
+                            Layout.fillWidth:   true
+                            visible:            _thrEnabled
+                        }
+
+                        Loader {
+                            Layout.fillWidth:   true
+                            visible:            _thrEnabled
+                            sourceComponent:    throttlePwmStatusComponent
+                            onLoaded: item.thrThreshold = _failsafeThrValue
+                        }
+
+                        LabelledFactTextField {
+                            label:              qsTr("Timeout")
+                            fact:               _failsafeTimeout
+                            textFieldShowUnits: true
+                            Layout.fillWidth:   true
+                            visible:            _thrEnabled
+                        }
+
+                        ColumnLayout {
+                            spacing: 0
+                            visible: _thrEnabled
+
+                            QGCLabel { text: qsTr("Action:") }
+
+                            QGCRadioButton {
+                                text:      qsTr("Nothing")
+                                checked:   _failsafeAction.rawValue === _roverActionNothing
+                                onClicked: _failsafeAction.rawValue = _roverActionNothing
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("RTL")
+                                checked:   _failsafeAction.rawValue === _roverActionRTL
+                                onClicked: _failsafeAction.rawValue = _roverActionRTL
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Hold")
+                                checked:   _failsafeAction.rawValue === _roverActionHold
+                                onClicked: _failsafeAction.rawValue = _roverActionHold
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("SmartRTL or RTL")
+                                checked:   _failsafeAction.rawValue === _roverActionSmartRTLOrRTL
+                                onClicked: _failsafeAction.rawValue = _roverActionSmartRTLOrRTL
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("SmartRTL or Hold")
+                                checked:   _failsafeAction.rawValue === _roverActionSmartRTLOrHold
+                                onClicked: _failsafeAction.rawValue = _roverActionSmartRTLOrHold
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Terminate")
+                                checked:   _failsafeAction.rawValue === _roverActionTerminate
+                                onClicked: _failsafeAction.rawValue = _roverActionTerminate
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Loiter or Hold")
+                                checked:   _failsafeAction.rawValue === _roverActionLoiterOrHold
+                                onClicked: _failsafeAction.rawValue = _roverActionLoiterOrHold
+                            }
+                        }
+
+                        QGCLabel {
+                            text:    qsTr("Ignore failsafe if:")
+                            visible: _thrEnabled
+                        }
+
+                        ColumnLayout {
+                            Layout.fillWidth:   true
+                            Layout.leftMargin:  ScreenTools.defaultFontPixelWidth * 2
+                            spacing:            _margins
+                            visible:            _thrEnabled
+
+                            QGCCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("In Auto mode")
+                                checked:            _failsafeThrEnable.rawValue === _roverThrContinueAutoMission
+
+                                onClicked: {
+                                    _failsafeThrEnable.rawValue = checked ? _roverThrContinueAutoMission : _roverThrEnabled
+                                }
+                            }
+
+                            FactBitMaskCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("In Hold mode")
+                                visible:            _fsOptionsAvailable
+                                fact:               _fsOptions
+                                bitMask:            1  // Rover FS_OPTIONS bit 0
+                            }
+                        }
+                    }
+                }
+            }
+
+            // FS_EKF_ACTION: Copter (0=Report,1=Land,2=AltHold,3=LandAlways) vs Rover (0=Disabled,1=Hold,2=ReportOnly)
+            Component {
+                id: copterEkfFailsafe
+
+                QGCGroupBox {
+                    title: qsTr("EKF Failsafe")
+
+                    // Copter FS_EKF_ACTION value constants
+                    readonly property int _fsEkfReportOnly:     0
+                    readonly property int _fsEkfLandIfNoPos:    1
+                    readonly property int _fsEkfAltHoldIfNoPos: 2
+                    readonly property int _fsEkfLandAlways:     3
+
+                    property Fact _failsafeEkfAction:   controller.getParameterFact(-1, "FS_EKF_ACTION")
+                    property Fact _failsafeEkfThresh:   controller.getParameterFact(-1, "FS_EKF_THRESH")
+                    property Fact _failsafeEkfFilt:     controller.getParameterFact(-1, "FS_EKF_FILT", false /* reportMissing */)
+                    property bool _ekfEnabled:          _failsafeEkfAction.rawValue !== _fsEkfReportOnly
+
+                    ColumnLayout {
+                        spacing: _margins
+
+                        QGCCheckBoxSlider {
+                            Layout.fillWidth:   true
+                            text:               qsTr("Enabled")
+                            checked:            _ekfEnabled
+
+                            onClicked: {
+                                if (checked) {
+                                    _failsafeEkfAction.rawValue = _fsEkfLandIfNoPos
+                                } else {
+                                    _failsafeEkfAction.rawValue = _fsEkfReportOnly
+                                }
+                            }
+                        }
+
+                        LabelledFactTextField {
+                            label:            qsTr("Threshold")
+                            fact:             _failsafeEkfThresh
+                            Layout.fillWidth: true
+                            visible:          _ekfEnabled
+                        }
+
+                        LabelledFactTextField {
+                            label:              qsTr("Filter")
+                            fact:               _failsafeEkfFilt
+                            textFieldShowUnits: true
+                            Layout.fillWidth:   true
+                            visible:            _ekfEnabled
+                        }
+
+                        ColumnLayout {
+                            spacing: 0
+                            visible: _ekfEnabled
+
+                            QGCLabel { text: qsTr("Action:") }
+
+                            QGCRadioButton {
+                                text:      qsTr("Land if position required")
+                                checked:   _failsafeEkfAction.rawValue === _fsEkfLandIfNoPos
+                                onClicked: _failsafeEkfAction.rawValue = _fsEkfLandIfNoPos
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("AltHold if position required")
+                                checked:   _failsafeEkfAction.rawValue === _fsEkfAltHoldIfNoPos
+                                onClicked: _failsafeEkfAction.rawValue = _fsEkfAltHoldIfNoPos
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Land from all modes")
+                                checked:   _failsafeEkfAction.rawValue === _fsEkfLandAlways
+                                onClicked: _failsafeEkfAction.rawValue = _fsEkfLandAlways
+                            }
+                        }
+
+                        QGCLabel {
+                            text:    qsTr("Ignore failsafe if:")
+                            visible: _fsOptionsAvailable && _ekfEnabled
+                        }
+
+                        ColumnLayout {
+                            Layout.fillWidth:   true
+                            Layout.leftMargin:  ScreenTools.defaultFontPixelWidth * 2
+                            spacing:            _margins
+                            visible:            _fsOptionsAvailable && _ekfEnabled
+
+                            FactBitMaskCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Landing")
+                                fact:               _fsOptions
+                                bitMask:            _fsOptionContinueLanding
+                            }
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: roverEkfFailsafe
+
+                QGCGroupBox {
+                    title: qsTr("EKF Failsafe")
+
+                    // Rover FS_EKF_ACTION value constants
+                    readonly property int _roverEkfDisabled:   0
+                    readonly property int _roverEkfHold:       1
+                    readonly property int _roverEkfReportOnly: 2
+
+                    property Fact _failsafeEkfAction:   controller.getParameterFact(-1, "FS_EKF_ACTION")
+                    property Fact _failsafeEkfThresh:   controller.getParameterFact(-1, "FS_EKF_THRESH")
+                    property bool _ekfEnabled:          _failsafeEkfAction.rawValue !== _roverEkfDisabled
+
+                    ColumnLayout {
+                        spacing: _margins
+
+                        QGCCheckBoxSlider {
+                            Layout.fillWidth:   true
+                            text:               qsTr("Enabled")
+                            checked:            _ekfEnabled
+
+                            onClicked: {
+                                if (checked) {
+                                    _failsafeEkfAction.rawValue = _roverEkfHold
+                                } else {
+                                    _failsafeEkfAction.rawValue = _roverEkfDisabled
+                                }
+                            }
+                        }
+
+                        LabelledFactTextField {
+                            label:            qsTr("Threshold")
+                            fact:             _failsafeEkfThresh
+                            Layout.fillWidth: true
+                            visible:          _ekfEnabled
+                        }
+
+                        ColumnLayout {
+                            spacing: 0
+                            visible: _ekfEnabled
+
+                            QGCLabel { text: qsTr("Action:") }
+
+                            QGCRadioButton {
+                                text:      qsTr("Hold")
+                                checked:   _failsafeEkfAction.rawValue === _roverEkfHold
+                                onClicked: _failsafeEkfAction.rawValue = _roverEkfHold
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Report only")
+                                checked:   _failsafeEkfAction.rawValue === _roverEkfReportOnly
+                                onClicked: _failsafeEkfAction.rawValue = _roverEkfReportOnly
+                            }
+                        }
+                    }
+                }
+            }
+
+            Component {
+                id: deadReckoningFailsafeComponent
+
+                QGCGroupBox {
+                    title: qsTr("Dead Reckoning Failsafe")
+
+                    property Fact _failsafeDREnable:    controller.getParameterFact(-1, "FS_DR_ENABLE")
+                    property Fact _failsafeDRTimeout:   controller.getParameterFact(-1, "FS_DR_TIMEOUT")
+                    property bool _drEnabled:           _failsafeDREnable.rawValue !== _fsDrDisabled
+
+                    ColumnLayout {
+                        spacing: _margins
+
+                        QGCCheckBoxSlider {
+                            Layout.fillWidth:   true
+                            text:               qsTr("Enabled")
+                            checked:            _drEnabled
+
+                            onClicked: {
+                                if (checked) {
+                                    _failsafeDREnable.rawValue = _fsDrLand
+                                } else {
+                                    _failsafeDREnable.rawValue = _fsDrDisabled
+                                }
+                            }
+                        }
+
+                        LabelledFactTextField {
+                            label:              qsTr("Timeout")
+                            fact:               _failsafeDRTimeout
+                            textFieldShowUnits: true
+                            Layout.fillWidth:   true
+                            visible:            _drEnabled
+                        }
+
+                        ColumnLayout {
+                            spacing: 0
+                            visible: _drEnabled
+
+                            QGCLabel { text: qsTr("Action:") }
+
+                            QGCRadioButton {
+                                text:      qsTr("Land")
+                                checked:   _failsafeDREnable.rawValue === _fsDrLand
+                                onClicked: _failsafeDREnable.rawValue = _fsDrLand
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("RTL")
+                                checked:   _failsafeDREnable.rawValue === _fsDrRTL
+                                onClicked: _failsafeDREnable.rawValue = _fsDrRTL
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("SmartRTL or RTL")
+                                checked:   _failsafeDREnable.rawValue === _fsDrSmartRTLOrRTL
+                                onClicked: _failsafeDREnable.rawValue = _fsDrSmartRTLOrRTL
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("SmartRTL or Land")
+                                checked:   _failsafeDREnable.rawValue === _fsDrSmartRTLOrLand
+                                onClicked: _failsafeDREnable.rawValue = _fsDrSmartRTLOrLand
+                            }
+
+                            QGCRadioButton {
+                                text:      qsTr("Auto Land/Return or RTL")
+                                checked:   _failsafeDREnable.rawValue === _fsDrAutoDoLandOrRTL
+                                onClicked: _failsafeDREnable.rawValue = _fsDrAutoDoLandOrRTL
+                            }
+                        }
+
+                        QGCLabel {
+                            text:    qsTr("Ignore failsafe if:")
+                            visible: _fsOptionsAvailable && _drEnabled
+                        }
+
+                        ColumnLayout {
+                            Layout.fillWidth:   true
+                            Layout.leftMargin:  ScreenTools.defaultFontPixelWidth * 2
+                            spacing:            _margins
+                            visible:            _fsOptionsAvailable && _drEnabled
+
+                            FactBitMaskCheckBoxSlider {
+                                Layout.fillWidth:   true
+                                text:               qsTr("Landing")
+                                fact:               _fsOptions
+                                bitMask:            _fsOptionContinueLanding
+                            }
+                        }
+                    }
+                }
+            }
+
+            // FS_CRASH_CHECK: Copter (0=Disabled,1=Enabled) vs Rover (0=Disabled,1=Hold,2=HoldAndDisarm)
+            Component {
+                id: copterGeneralFS
+
+                QGCGroupBox {
+                    title: qsTr("Other Failsafe Options")
+
+                    property Fact _failsafeCrashCheck:  controller.getParameterFact(-1, "FS_CRASH_CHECK")
+                    property Fact _failsafeVibeEnable:  controller.getParameterFact(-1, "FS_VIBE_ENABLE", false /* reportMissing */)
+
+                    ColumnLayout {
+                        spacing: _margins
+
+                        FactCheckBoxSlider {
+                            Layout.fillWidth:   true
+                            text:               qsTr("Crash check failsafe")
+                            fact:               _failsafeCrashCheck
+                        }
+
+                        FactCheckBoxSlider {
+                            Layout.fillWidth:   true
+                            text:               qsTr("Vibration failsafe")
+                            fact:               _failsafeVibeEnable
+                        }
+
+                        FactBitMaskCheckBoxSlider {
+                            Layout.fillWidth:   true
+                            text:               qsTr("Release gripper on any failsafe")
+                            visible:            _fsOptionsAvailable
+                            fact:               _fsOptions
+                            bitMask:            _fsOptionReleaseGripper
+                        }
+                    }
+                }
+            }
 
             Component {
                 id: roverGeneralFS
