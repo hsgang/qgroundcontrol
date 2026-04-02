@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.AppSettings
+import QGroundControl.Toolbar
 
 Rectangle {
     id:     settingsView

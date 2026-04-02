@@ -90,6 +90,10 @@ project(${QGC_APP_NAME}
     LANGUAGES C CXX
 )
 
+if(MSVC)
+    add_compile_options(/bigobj /Zc:preprocessor)
+endif()
+
 # ============================================================================
 # CMake & Build System Configuration
 # ============================================================================

@@ -11,6 +11,7 @@ import QGroundControl.FlyView
 import QGroundControl.FlightMap
 import QGroundControl.VehicleSetup
 import QGroundControl.AnalyzeView
+import QGroundControl.PlanView
 import QGroundControl.Toolbar
 
 /// @brief Native QML top level window
