@@ -2086,9 +2086,9 @@ double Vehicle::minimumTakeoffAltitudeMeters()
     return _firmwarePlugin->minimumTakeoffAltitudeMeters(this);
 }
 
-double Vehicle::maximumHorizontalSpeedMultirotor()
+double Vehicle::maximumHorizontalSpeedMultirotorMetersSecond()
 {
-    return _firmwarePlugin->maximumHorizontalSpeedMultirotor(this);
+    return _firmwarePlugin->maximumHorizontalSpeedMultirotorMetersSecond(this);
 }
 
 

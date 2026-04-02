@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.FactControls
@@ -13,7 +12,7 @@ SetupPage {
     Component {
         id: tuningPageComponent
 
-        ColumnLayout {
+        Column {
             width:      availableWidth
             spacing:    _margins
 
@@ -48,14 +47,21 @@ SetupPage {
                 }
             }
 
-            QGCGroupBox {
+            Rectangle {
                 id:                 atcParams
-                Layout.preferredWidth: tuningPage.availableWidth * 0.75
                 visible:            atcButton.checked
-                title:              qsTr("Attitude Controller Parameters")
+                anchors.left:       parent.left
+                anchors.right:      parent.right
+                height:             posColumn.height + _margins*2
+                color:              qgcPal.windowShade
 
                 Column {
                     id:                 posColumn
+                    width:              parent.width/2
+                    anchors.margins:    _margins
+                    anchors.left:       parent.left
+                    anchors.right:      parent.right
+                    anchors.top:        parent.top
                     spacing:            _margins*1.5
 
                     FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "ATC_ANG_PIT_P") }
@@ -74,14 +80,16 @@ SetupPage {
                     FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "ATC_RAT_YAW_IMAX") }
                     FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "ATC_RAT_YAW_D") }
 
-                } // Column - Attitude Controller Parameters
-            } // QGCGroupBox - Attitude Controller Parameters
+                } // Column - Position Controller Parameters
+            } // Rectangle - Position Controller Parameters
 
-            QGCGroupBox {
+            Rectangle {
                 id:                 posParams
-                Layout.preferredWidth: tuningPage.availableWidth * 0.75
                 visible:            posButton.checked
-                title:              qsTr("Position Controller Parameters")
+                anchors.left:       parent.left
+                anchors.right:      parent.right
+                height:             velColumn.height + _margins*2
+                color:              qgcPal.windowShade
 
                 Component {
                     id: velColumnUpTo36
@@ -142,13 +150,15 @@ SetupPage {
 
                     sourceComponent: globals.activeVehicle.versionCompare(3, 6, 0) <= 0 ? velColumnUpTo36 :velColumn40
                 }
-            } // QGCGroupBox - Position Controller Parameters
+            } // Rectangle - VEL parameters
 
-            QGCGroupBox {
+            Rectangle {
                 id:                 navParams
-                Layout.preferredWidth: tuningPage.availableWidth * 0.75
                 visible:            navButton.checked
-                title:              qsTr("Waypoint Navigation Parameters")
+                anchors.left:       parent.left
+                anchors.right:      parent.right
+                height:             wpnavColumn.height + _margins*2
+                color:              qgcPal.windowShade
 
                 // WPNAV parameters up to 3.5
                 Component {
@@ -190,30 +200,12 @@ SetupPage {
                         FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "WP_SPD") }
                         FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "WP_SPD_DN") }
                         FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "WP_SPD_UP") }
-                        FactTextFieldSlider2 {
-                            visible: controller.parameterExists(-1, "LOIT_SPEED")
-                            fact:    visible ? controller.getParameterFact(-1, "LOIT_SPEED") : null
-                        }
-                        FactTextFieldSlider2 {
-                            visible: controller.parameterExists(-1, "LOIT_ACC_MAX")
-                            fact:    visible ? controller.getParameterFact(-1, "LOIT_ACC_MAX") : null
-                        }
-                        FactTextFieldSlider2 {
-                            visible: controller.parameterExists(-1, "LOIT_ANG_MAX")
-                            fact:    visible ? controller.getParameterFact(-1, "LOIT_ANG_MAX") : null
-                        }
-                        FactTextFieldSlider2 {
-                            visible: controller.parameterExists(-1, "LOIT_BRK_ACCEL")
-                            fact:    visible ? controller.getParameterFact(-1, "LOIT_BRK_ACCEL") : null
-                        }
-                        FactTextFieldSlider2 {
-                            visible: controller.parameterExists(-1, "LOIT_BRK_DELAY")
-                            fact:    visible ? controller.getParameterFact(-1, "LOIT_BRK_DELAY") : null
-                        }
-                        FactTextFieldSlider2 {
-                            visible: controller.parameterExists(-1, "LOIT_BRK_JERK")
-                            fact:    visible ? controller.getParameterFact(-1, "LOIT_BRK_JERK") : null
-                        }
+                        FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "LOIT_SPEED") }
+                        FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "LOIT_ACC_MAX") }
+                        FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "LOIT_ANG_MAX") }
+                        FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "LOIT_BRK_ACCEL") }
+                        FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "LOIT_BRK_DELAY") }
+                        FactTextFieldSlider2 { fact: controller.getParameterFact(-1, "LOIT_BRK_JERK") }
                     }
                 }
 
@@ -225,7 +217,7 @@ SetupPage {
 
                     sourceComponent: globals.activeVehicle.versionCompare(3, 6, 0) < 0 ? wpnavColumn35 : wpnavColumn36
                     }
-            } // QGCGroupBox - WPNAV parameters
-        } // ColumnLayout
+            } // Rectangle - WPNAV parameters
+        } // Column
     } // Component
-} // SetupPage
+} // SetupView
