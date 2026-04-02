@@ -302,6 +302,24 @@
             "max": 200,
             "default": 100,
             "label": "UI Scaling"
+        },
+        {
+            "name": "preferredFirmwareClass",
+            "shortDesc": "Preferred firmware class for simplified UI.",
+            "type": "uint32",
+            "enumStrings": "All,PX4 Pro,ArduPilot",
+            "enumValues": "0,12,3",
+            "default": 0,
+            "label": "Preferred Firmware"
+        },
+        {
+            "name": "preferredVehicleClass",
+            "shortDesc": "Preferred vehicle class for simplified UI.",
+            "type": "uint32",
+            "enumStrings": "All,Multi-Rotor,Fixed Wing,VTOL,Rover,Sub",
+            "enumValues": "0,2,1,19,10,12",
+            "default": 0,
+            "label": "Preferred Vehicle"
         }
     ]
 }
