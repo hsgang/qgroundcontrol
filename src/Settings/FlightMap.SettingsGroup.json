@@ -23,6 +23,13 @@
             "type": "string",
             "default": "Copernicus",
             "label": "Currently selected elevation map provider"
+        },
+        {
+            "name": "kmlOverlayFile",
+            "shortDesc": "KML/SHP file path for map overlay",
+            "type": "string",
+            "default": "",
+            "label": "KML Overlay File"
         }
     ]
 }

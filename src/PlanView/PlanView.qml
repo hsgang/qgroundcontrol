@@ -36,6 +36,8 @@ Item {
     property bool   _promptForPlanUsageShowing: false
     property bool   _addROIOnClick: false
     property bool   _addWaypointOnClick: false
+    property bool   _homeTrackingMapCenter: true
+    property bool   _updatingHomeFromMapCenter: false
     property bool   _homePositionSet: _missionController.homePositionSet
 
     readonly property int _layerMission: 1
