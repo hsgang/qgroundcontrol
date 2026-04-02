@@ -1,80 +1,89 @@
 {
-    "version":      1,
-    "fileType":  "FactMetaData",
-    "QGC.MetaData.Facts":
-[
-{
-    "name":             "valueSource",
-    "shortDesc": "valueSource",
-    "type":             "uint32",
-    "enumStrings":      "Altitude,ExtValue1,ExtValue2,ExtValue3,ExtValue4",
-    "enumValues":       "0,1,2,3,4",
-    "default":         0
-},
-{
-    "name":                 "latitude",
-    "shortDesc":     "latitude",
-    "type":                 "double",
-    "decimalPlaces":    7,
-    "default":         0
-},
-{
-    "name":                 "longitude",
-    "shortDesc":     "longitude",
-    "type":                 "double",
-    "decimalPlaces":    7,
-    "default":         0
-},
-{
-    "name":                 "rows",
-    "shortDesc":     "rows",
-    "type":                 "uint8",
-    "min":                  5,
-    "max":                  20,
-    "default":         10
-},
-{
-    "name":                 "columns",
-    "shortDesc":     "columns",
-    "type":                 "uint8",
-    "min":                  5,
-    "max":                  20,
-    "default":         10
-},
-{
-    "name":                 "value1",
-    "shortDesc":     "value1",
-    "type":                 "float",
-    "decimalPlaces":        2,
-    "default":         90
-},
-{
-    "name":                 "value2",
-    "shortDesc":     "value2",
-    "type":                 "float",
-    "decimalPlaces":        2,
-    "default":         100
-},
-{
-    "name":                 "value3",
-    "shortDesc":     "value3",
-    "type":                 "float",
-    "decimalPlaces":        2,
-    "default":         120
-},
-{
-    "name":                 "value4",
-    "shortDesc":     "value4",
-    "type":                 "float",
-    "decimalPlaces":        2,
-    "default":         200
-},
-{
-    "name":                 "gridSize",
-    "shortDesc":     "gridSize",
-    "type":                 "uint8",
-    "default":         50,
-    "units":                "m"
-}
-]
+    "version": 1,
+    "fileType": "FactMetaData",
+    "QGC.MetaData.Facts": [
+        {
+            "name": "valueSource",
+            "shortDesc": "valueSource",
+            "type": "uint32",
+            "enumStrings": "Altitude,ExtValue1,ExtValue2,ExtValue3,ExtValue4",
+            "enumValues": "0,1,2,3,4",
+            "default": 0,
+            "label": "valueSource"
+        },
+        {
+            "name": "latitude",
+            "shortDesc": "latitude",
+            "type": "double",
+            "decimalPlaces": 7,
+            "default": 0,
+            "label": "latitude"
+        },
+        {
+            "name": "longitude",
+            "shortDesc": "longitude",
+            "type": "double",
+            "decimalPlaces": 7,
+            "default": 0,
+            "label": "longitude"
+        },
+        {
+            "name": "rows",
+            "shortDesc": "rows",
+            "type": "uint8",
+            "min": 5,
+            "max": 20,
+            "default": 10,
+            "label": "rows"
+        },
+        {
+            "name": "columns",
+            "shortDesc": "columns",
+            "type": "uint8",
+            "min": 5,
+            "max": 20,
+            "default": 10,
+            "label": "columns"
+        },
+        {
+            "name": "value1",
+            "shortDesc": "value1",
+            "type": "float",
+            "decimalPlaces": 2,
+            "default": 90,
+            "label": "value1"
+        },
+        {
+            "name": "value2",
+            "shortDesc": "value2",
+            "type": "float",
+            "decimalPlaces": 2,
+            "default": 100,
+            "label": "value2"
+        },
+        {
+            "name": "value3",
+            "shortDesc": "value3",
+            "type": "float",
+            "decimalPlaces": 2,
+            "default": 120,
+            "label": "value3"
+        },
+        {
+            "name": "value4",
+            "shortDesc": "value4",
+            "type": "float",
+            "decimalPlaces": 2,
+            "default": 200,
+            "label": "value4"
+        },
+        {
+            "name": "gridSize",
+            "shortDesc": "gridSize",
+            "type": "uint8",
+            "default": 50,
+            "units": "m",
+            "label": "gridSize"
+        }
+    ]
 }

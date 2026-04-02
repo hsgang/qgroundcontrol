@@ -1,90 +1,102 @@
 {
-    "version":      1,
-    "fileType":  "FactMetaData",
-    "QGC.MetaData.Facts":
-[
-{
-    "name":                 "cloudEmail",
-    "shortDesc":     "cloudEmail",
-    "type":                 "string",
-    "default":         "email@email.com"
-},
-{
-    "name":                 "cloudPassword",
-    "shortDesc":     "cloudPassword",
-    "type":                 "string",
-    "default":         "password"
-},
-{
-    "name":                 "cloudToken",
-    "shortDesc":     "cloudToken",
-    "type":                 "string"
-},
-{
-    "name":                 "minioAccessKey",
-    "shortDesc":     "minioAccessKey",
-    "type":                 "string",
-    "default":         ""
-},
-{
-    "name":                 "minioSecretKey",
-    "shortDesc":     "minioSecretKey",
-    "type":                 "string",
-    "default":         ""
-},
-{
-    "name":                 "firebaseAPIKey",
-    "shortDesc":     "firebaseAPIKey",
-    "type":                 "string",
-    "default":         ""
-},
-{
-    "name":                 "minioEndpoint",
-    "shortDesc":     "minioEndpoint",
-    "type":                 "string",
-    "default":         ""
-},
-{
-    "name":                 "webrtcApiKey",
-    "shortDesc":     "WebRTC API Key",
-    "longDesc":      "시그널링 서버 API 인증 키",
-    "type":                 "string",
-    "default":         ""
-},
-{
-    "name":                 "webrtcSignalingServer",
-    "shortDesc":     "WebRTC Signaling Server",
-    "longDesc":      "WebRTC 시그널링 서버 주소 (예: example.host.com)",
-    "type":                 "string",
-    "default":         ""
-},
-{
-    "name":                 "webrtcStunServer",
-    "shortDesc":     "WebRTC STUN Server",
-    "longDesc":      "STUN 서버 주소 (예: stun.l.google.com:19302)",
-    "type":                 "string",
-    "default":         "stun.l.google.com:19302"
-},
-{
-    "name":                 "webrtcTurnServer",
-    "shortDesc":     "WebRTC TURN Server",
-    "longDesc":      "TURN 서버 주소 (예: turn.example.com:3478)",
-    "type":                 "string",
-    "default":         ""
-},
-{
-    "name":                 "webrtcTurnUsername",
-    "shortDesc":     "WebRTC TURN Username",
-    "longDesc":      "TURN 서버 인증 사용자명",
-    "type":                 "string",
-    "default":         ""
-},
-{
-    "name":                 "webrtcTurnPassword",
-    "shortDesc":     "WebRTC TURN Password",
-    "longDesc":      "TURN 서버 인증 비밀번호",
-    "type":                 "string",
-    "default":         ""
-}
-]
+    "version": 1,
+    "fileType": "FactMetaData",
+    "QGC.MetaData.Facts": [
+        {
+            "name": "cloudEmail",
+            "shortDesc": "cloudEmail",
+            "type": "string",
+            "default": "email@email.com",
+            "label": "cloudEmail"
+        },
+        {
+            "name": "cloudPassword",
+            "shortDesc": "cloudPassword",
+            "type": "string",
+            "default": "password",
+            "label": "cloudPassword"
+        },
+        {
+            "name": "cloudToken",
+            "shortDesc": "cloudToken",
+            "type": "string",
+            "label": "cloudToken"
+        },
+        {
+            "name": "minioAccessKey",
+            "shortDesc": "minioAccessKey",
+            "type": "string",
+            "default": "",
+            "label": "minioAccessKey"
+        },
+        {
+            "name": "minioSecretKey",
+            "shortDesc": "minioSecretKey",
+            "type": "string",
+            "default": "",
+            "label": "minioSecretKey"
+        },
+        {
+            "name": "firebaseAPIKey",
+            "shortDesc": "firebaseAPIKey",
+            "type": "string",
+            "default": "",
+            "label": "firebaseAPIKey"
+        },
+        {
+            "name": "minioEndpoint",
+            "shortDesc": "minioEndpoint",
+            "type": "string",
+            "default": "",
+            "label": "minioEndpoint"
+        },
+        {
+            "name": "webrtcApiKey",
+            "shortDesc": "WebRTC API Key",
+            "longDesc": "\uc2dc\uadf8\ub110\ub9c1 \uc11c\ubc84 API \uc778\uc99d \ud0a4",
+            "type": "string",
+            "default": "",
+            "label": "WebRTC API Key"
+        },
+        {
+            "name": "webrtcSignalingServer",
+            "shortDesc": "WebRTC Signaling Server",
+            "longDesc": "WebRTC \uc2dc\uadf8\ub110\ub9c1 \uc11c\ubc84 \uc8fc\uc18c (\uc608: example.host.com)",
+            "type": "string",
+            "default": "",
+            "label": "WebRTC Signaling Server"
+        },
+        {
+            "name": "webrtcStunServer",
+            "shortDesc": "WebRTC STUN Server",
+            "longDesc": "STUN \uc11c\ubc84 \uc8fc\uc18c (\uc608: stun.l.google.com:19302)",
+            "type": "string",
+            "default": "stun.l.google.com:19302",
+            "label": "WebRTC STUN Server"
+        },
+        {
+            "name": "webrtcTurnServer",
+            "shortDesc": "WebRTC TURN Server",
+            "longDesc": "TURN \uc11c\ubc84 \uc8fc\uc18c (\uc608: turn.example.com:3478)",
+            "type": "string",
+            "default": "",
+            "label": "WebRTC TURN Server"
+        },
+        {
+            "name": "webrtcTurnUsername",
+            "shortDesc": "WebRTC TURN Username",
+            "longDesc": "TURN \uc11c\ubc84 \uc778\uc99d \uc0ac\uc6a9\uc790\uba85",
+            "type": "string",
+            "default": "",
+            "label": "WebRTC TURN Username"
+        },
+        {
+            "name": "webrtcTurnPassword",
+            "shortDesc": "WebRTC TURN Password",
+            "longDesc": "TURN \uc11c\ubc84 \uc778\uc99d \ube44\ubc00\ubc88\ud638",
+            "type": "string",
+            "default": "",
+            "label": "WebRTC TURN Password"
+        }
+    ]
 }
