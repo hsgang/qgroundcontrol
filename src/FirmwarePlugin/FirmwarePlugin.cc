@@ -212,7 +212,6 @@ const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/RCRSSIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/SiyiRSSIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/BatteryIndicator.qml")),
-            //QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/PrecisionLandingIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/RemoteIDIndicator.qml")),
             //QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/MessageIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/JoystickIndicator.qml")),
