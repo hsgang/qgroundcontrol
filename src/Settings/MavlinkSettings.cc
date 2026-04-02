@@ -1,5 +1,4 @@
 #include "MavlinkSettings.h"
-#include "LinkManager.h"
 
 DECLARE_SETTINGGROUP(Mavlink, "")
 {
@@ -39,17 +38,3 @@ DECLARE_SETTINGSFACT(MavlinkSettings, sendGCSHeartbeat)
 DECLARE_SETTINGSFACT(MavlinkSettings, gcsMavlinkSystemID)
 DECLARE_SETTINGSFACT(MavlinkSettings, saveSensorLog)
 DECLARE_SETTINGSFACT(MavlinkSettings, rateSaveSensorLog)
-
-DECLARE_SETTINGSFACT_NO_FUNC(MavlinkSettings, mavlink2SigningKey)
-{
-    if (!_mavlink2SigningKeyFact) {
-        _mavlink2SigningKeyFact = _createSettingsFact(mavlink2SigningKeyName);
-        connect(_mavlink2SigningKeyFact, &Fact::rawValueChanged, this, &MavlinkSettings::_mavlink2SigningKeyChanged);
-    }
-    return _mavlink2SigningKeyFact;
-}
-
-void MavlinkSettings::_mavlink2SigningKeyChanged(void)
-{
-    LinkManager::instance()->resetMavlinkSigning();
-}

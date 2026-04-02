@@ -39,6 +39,7 @@ qt_add_qml_module(ToolbarModule
         RTKGPSIndicator.qml
         SelectViewDropdown.qml
         SignalStrength.qml
+        SigningIndicator.qml
         SiyiRSSIIndicator.qml
         LinkIndicator.qml
         TelemetryRSSIIndicator.qml
