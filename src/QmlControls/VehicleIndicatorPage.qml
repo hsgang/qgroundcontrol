@@ -11,14 +11,9 @@
 import QtQuick 2.3
 import QtQuick.Layouts 1.2
 
-import QGroundControl                       1.0
-import QGroundControl.Controls              1.0
-import QGroundControl.Controllers           1.0
-import QGroundControl.MultiVehicleManager   1.0
-import QGroundControl.ScreenTools           1.0
-import QGroundControl.Palette               1.0
-import QGroundControl.FactSystem            1.0
-import QGroundControl.FactControls          1.0
+import QGroundControl
+import QGroundControl.Controls
+import QGroundControl.FactControls
 
 //-------------------------------------------------------------------------
 ToolIndicatorPage {
@@ -153,7 +148,6 @@ ToolIndicatorPage {
                 fact:       atcInputTCFact
                 from:       0.01
                 to:         0.5
-                stepSize:   0.01
                 visible:    true
             }
             LabelledFactSlider {
@@ -161,7 +155,6 @@ ToolIndicatorPage {
                 fact:       loitSpeedFact
                 from:       500
                 to:         1500
-                stepSize:   100
                 visible:    true
             }
             LabelledFactSlider {
@@ -169,7 +162,6 @@ ToolIndicatorPage {
                 fact:       wpnavSpeedFact
                 from:       500
                 to:         1500
-                stepSize:   100
                 visible:    true
             }
             LabelledFactSlider {
@@ -177,7 +169,6 @@ ToolIndicatorPage {
                 fact:       wpnavSpeedUpFact
                 from:       100
                 to:         500
-                stepSize:   50
                 visible:    true
             }
             LabelledFactSlider {
@@ -185,7 +176,6 @@ ToolIndicatorPage {
                 fact:       wpnavSpeedDnFact
                 from:       100
                 to:         500
-                stepSize:   50
                 visible:    true
             }
             LabelledFactSlider {
@@ -193,7 +183,6 @@ ToolIndicatorPage {
                 fact:       wpnavRadiusFact
                 from:       200
                 to:         1000
-                stepSize:   100
                 visible:    true
             }
 

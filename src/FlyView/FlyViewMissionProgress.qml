@@ -54,13 +54,13 @@ Rectangle{
     //    property string wpnavSpeedString:   parameterAvailable ? wpnavSpeed.valueString + " " + wpnavSpeed.units : "unknown"
 
 // Mission
-    property var    _planMasterController:      _planMasterController //globals.planMasterControllerPlanView
+    property var    _planMasterController:      globals.planMasterControllerFlyView
     property var    _currentMissionItem:        globals.currentPlanMissionItem          ///< Mission item to display status for
 
     property var    missionItems:               _controllerValid ? _planMasterController.missionController.visualItems : undefined
     property real   missionPlannedDistance:     _controllerValid ? _planMasterController.missionController.missionPlannedDistance : NaN
     property real   missionTime:                _controllerValid ? _planMasterController.missionController.missionTime : 0
-    property real   missionItemCount:           _controllerValid ? _planMasterController.missionController.missionItemCount : NaN
+    property real   missionItemCount:           _controllerValid && missionItems ? missionItems.count : 0
 
     property bool   _controllerValid:           _planMasterController !== undefined && _planMasterController !== null
     property bool   _controllerOffline:         _controllerValid ? _planMasterController.offline : true

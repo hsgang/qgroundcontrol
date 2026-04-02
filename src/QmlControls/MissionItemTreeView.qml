@@ -258,10 +258,10 @@ TreeView {
                     }
                 }
 
-                Component { id: altModeDialogComponent; AltModeDialog { } }
+                Component { id: altModeDialogComponent; AltFrameDialog { } }
 
                 QGCPopupDialogFactory {
-                    id: defaultsAltModeDialogFactory
+                    id: defaultsAltFrameDialogFactory
                     dialogComponent: altModeDialogComponent
                 }
 
@@ -298,7 +298,7 @@ TreeView {
                                     removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
                                 }
                             }
-                            defaultsAltModeDialogFactory.open({ rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
+                            defaultsAltFrameDialogFactory.open({ rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
                         }
                     }
 
@@ -459,9 +459,7 @@ TreeView {
             MissionItemEditor {
                 width: delegateRoot.width
                 map: root.editorMap
-                masterController: root.planMasterController
                 missionItem: delegateRoot.nodeObject
-                readOnly: false
 
                 onClicked:  root._missionController.setCurrentPlanViewSeqNum(delegateRoot.nodeObject.sequenceNumber, false)
 

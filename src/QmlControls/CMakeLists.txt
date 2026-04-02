@@ -5,6 +5,8 @@
 
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
+        KMLOverlayManager.cc
+        KMLOverlayManager.h
         FactValueGrid.cc
         FactValueGrid.h
         FlightPathSegment.cc
@@ -92,13 +94,16 @@ qt_add_qml_module(QGroundControlControlsModule
         AutotuneUI.qml
         AxisMonitor.qml
         ClickableColor.qml
+        ComponentLabelValueRow.qml
         ConfigButton.qml
         DeadMouseArea.qml
         DropButton.qml
         DropPanel.qml
         EditPositionDialog.qml
         ExclusiveGroupItem.qml
+        FakeToolStripHoverButton.qml
         FactSlider.qml
+        FactSliderPanel.qml
         FileButton.qml
         FlightModeMenu.qml
         HeightIndicator.qml
@@ -112,6 +117,7 @@ qt_add_qml_module(QGroundControlControlsModule
         LabelledButton.qml
         LabelledComboBox.qml
         LabelledLabel.qml
+        LabelledSlider.qml
         LogReplayStatusBar.qml
         MainWindowSavedState.qml
         MAVLinkChart.qml
@@ -158,9 +164,12 @@ qt_add_qml_module(QGroundControlControlsModule
         QGCSimpleMessageDialog.qml
         QGCSlider.qml
         QGCSwipeView.qml
+        QGCSwitch.qml
         QGCTabBar.qml
         QGCTabButton.qml
         QGCTextField.qml
+        QGCVerticalTabBar.qml
+        QGCViewDialogContainer.qml
         QGCToolBarButton.qml
         QGCToolInsets.qml
         RCChannelMonitor.qml
@@ -176,11 +185,14 @@ qt_add_qml_module(QGroundControlControlsModule
         ToolIndicatorPage.qml
         ToolStrip.qml
         ToolStripDropPanel.qml
+        ToolStripHorizontal.qml
         ToolStripHoverButton.qml
         TransformEditor.qml
         ValueSlider.qml
+        VehicleIndicatorPage.qml
         VehicleRotationCal.qml
         VehicleSummaryRow.qml
+        WelcomeView.qml
 
 # NOTE: Due to Windows limitations with set_source_files_properties and qt_add_qml_module,
 # various QML files from other modules are temporarily included here.

@@ -56,7 +56,7 @@ Item {
                     anchors.verticalCenter:     parent.verticalCenter
                     icon.source:                "/qmlimages/Hamburger.svg"
                     logo:                       true
-                    onClicked:                  viewSelectDrawer.visible ? viewSelectDrawer.close() : viewSelectDrawer.open()
+                    onClicked:                  mainWindow.showToolSelectDialog()
                 }
             }
 

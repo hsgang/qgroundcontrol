@@ -250,16 +250,16 @@ TreeView {
                     target: defaultsRect._controllerVehicle
                     function onFirmwareTypeChanged() {
                         if (!defaultsRect._controllerVehicle.supports.terrainFrame
-                                && defaultsRect._missionController.globalAltitudeFrame === QGroundControl.AltitudeModeTerrainFrame) {
-                            defaultsRect._missionController.globalAltitudeFrame = QGroundControl.AltitudeModeCalcAboveTerrain
+                                && defaultsRect._missionController.globalAltitudeFrame === QGroundControl.AltitudeFrameTerrain) {
+                            defaultsRect._missionController.globalAltitudeFrame = QGroundControl.AltitudeFrameCalcAboveTerrain
                         }
                     }
                 }
 
-                Component { id: altModeDialogComponent; AltModeDialog { } }
+                Component { id: altModeDialogComponent; AltFrameDialog { } }
 
                 QGCPopupDialogFactory {
-                    id: defaultsAltModeDialogFactory
+                    id: defaultsAltFrameDialogFactory
                     dialogComponent: altModeDialogComponent
                 }
 
@@ -280,23 +280,23 @@ TreeView {
                             let removeModes = []
                             let updateFunction = function(altMode) { defaultsRect._missionController.globalAltitudeFrame = altMode }
                             if (!defaultsRect._controllerVehicle.supports.terrainFrame) {
-                                removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
+                                removeModes.push(QGroundControl.AltitudeFrameTerrain)
                             }
                             if (!defaultsRect._noMissionItemsAdded) {
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeRelative) {
-                                    removeModes.push(QGroundControl.AltitudeModeRelative)
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameRelative) {
+                                    removeModes.push(QGroundControl.AltitudeFrameRelative)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeAbsolute) {
-                                    removeModes.push(QGroundControl.AltitudeModeAbsolute)
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameAbsolute) {
+                                    removeModes.push(QGroundControl.AltitudeFrameAbsolute)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeCalcAboveTerrain) {
-                                    removeModes.push(QGroundControl.AltitudeModeCalcAboveTerrain)
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameCalcAboveTerrain) {
+                                    removeModes.push(QGroundControl.AltitudeFrameCalcAboveTerrain)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeTerrainFrame) {
-                                    removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameTerrain) {
+                                    removeModes.push(QGroundControl.AltitudeFrameTerrain)
                                 }
                             }
-                            defaultsAltModeDialogFactory.open({ rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
+                            defaultsAltFrameDialogFactory.open({ rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
                         }
                     }
 
@@ -457,9 +457,7 @@ TreeView {
             MissionItemEditor {
                 width: delegateRoot.width
                 map: root.editorMap
-                masterController: root.planMasterController
                 missionItem: delegateRoot.nodeObject
-                readOnly: false
 
                 onClicked:  root._missionController.setCurrentPlanViewSeqNum(delegateRoot.nodeObject.sequenceNumber, false)
 

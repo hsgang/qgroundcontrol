@@ -209,9 +209,7 @@ Rectangle {
                         Layout.fillWidth: true
                         text:          pageName
                         icon.source:   pageIconUrl
-                        expandable:    hasMultipleSections
-                        expanded:      isExpanded
-                        checked:       isSelected && settingsView._selectedSectionIndex === -1
+                        checked:       isSelected
                         visible:       pageName !== "Divider" && pageVisible()
 
                         onClicked: {
@@ -224,12 +222,7 @@ Rectangle {
                             }
                         }
 
-                        onToggleExpand: {
-                            if (!mainWindow.allowViewSwitch()) {
-                                return
-                            }
-                            settingsView._setExpanded(index, !isExpanded)
-                        }
+                        // toggleExpand removed - not available in current SettingsButton
                     }
 
                     // Section sub-items (indented, shown when page is expanded)
