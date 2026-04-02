@@ -143,6 +143,188 @@
             "type": "bool",
             "default": false,
             "label": "Show Grid On Map"
+        },
+        {
+            "name": "showMissionProgress",
+            "shortDesc": "Show Mission Progress",
+            "type": "bool",
+            "default": true,
+            "label": "Show Mission Progress"
+        },
+        {
+            "name": "showAttitudeHUD",
+            "shortDesc": "Show Attitude HUD",
+            "type": "bool",
+            "default": true,
+            "label": "Attitude HUD"
+        },
+        {
+            "name": "missionMaxAltitudeIndicator",
+            "shortDesc": "Show Mission Max Altitude Indicator",
+            "type": "bool",
+            "default": true,
+            "label": "Mission Max Altitude"
+        },
+        {
+            "name": "showAtmosphericValueBar",
+            "shortDesc": "Show Atmospheric Value Bar",
+            "type": "bool",
+            "default": false,
+            "label": "Atmospheric Values"
+        },
+        {
+            "name": "showGeneratorStatus",
+            "shortDesc": "Show Generator Status",
+            "type": "bool",
+            "default": false,
+            "label": "Generator Status"
+        },
+        {
+            "name": "showGimbalControlPannel",
+            "shortDesc": "Show Gimbal Control Panel",
+            "type": "bool",
+            "default": false,
+            "label": "Gimbal Control"
+        },
+        {
+            "name": "enableCustomActions",
+            "shortDesc": "Enable Custom Actions",
+            "type": "bool",
+            "default": false,
+            "label": "Custom Actions"
+        },
+        {
+            "name": "customActionDefinitions",
+            "shortDesc": "Custom Action Definitions File",
+            "type": "string",
+            "default": "",
+            "label": "Custom Actions File"
+        },
+        {
+            "name": "showPhotoVideoControl",
+            "shortDesc": "Show Photo/Video Control",
+            "type": "bool",
+            "default": true,
+            "label": "Photo/Video Control"
+        },
+        {
+            "name": "showMountControl",
+            "shortDesc": "Show Mount Control",
+            "type": "bool",
+            "default": false,
+            "label": "Mount Control"
+        },
+        {
+            "name": "showWinchControl",
+            "shortDesc": "Show Winch Control",
+            "type": "bool",
+            "default": false,
+            "label": "Winch Control"
+        },
+        {
+            "name": "showChartWidget",
+            "shortDesc": "Show Chart Widget",
+            "type": "bool",
+            "default": false,
+            "label": "Chart Widget"
+        },
+        {
+            "name": "showTelemetryPanel",
+            "shortDesc": "Show Telemetry Panel",
+            "type": "bool",
+            "default": true,
+            "label": "Telemetry Panel"
+        },
+        {
+            "name": "showVibrationStatus",
+            "shortDesc": "Show Vibration Status",
+            "type": "bool",
+            "default": false,
+            "label": "Vibration Status"
+        },
+        {
+            "name": "showEKFStatus",
+            "shortDesc": "Show EKF Status",
+            "type": "bool",
+            "default": false,
+            "label": "EKF Status"
+        },
+        {
+            "name": "flyviewWidgetOpacity",
+            "shortDesc": "Flyview Widget Opacity",
+            "type": "double",
+            "default": 0.8,
+            "label": "Widget Opacity"
+        },
+        {
+            "name": "instrumentQmlFile",
+            "shortDesc": "Instrument QML File",
+            "type": "string",
+            "default": "",
+            "label": "Instrument QML"
+        },
+        {
+            "name": "showWindvane",
+            "shortDesc": "Show Wind Vane",
+            "type": "bool",
+            "default": false,
+            "label": "Wind Vane"
+        },
+        {
+            "name": "showVehicleInfoOnMap",
+            "shortDesc": "Show Vehicle Info On Map",
+            "type": "bool",
+            "default": true,
+            "label": "Vehicle Info On Map"
+        },
+        {
+            "name": "showCameraProjectionOnMap",
+            "shortDesc": "Show Camera Projection On Map",
+            "type": "bool",
+            "default": false,
+            "label": "Camera Projection"
+        },
+        {
+            "name": "showEscStatus",
+            "shortDesc": "Show ESC Status",
+            "type": "bool",
+            "default": false,
+            "label": "ESC Status"
+        },
+        {
+            "name": "showSiyiCameraControl",
+            "shortDesc": "Show SiYi Camera Control",
+            "type": "bool",
+            "default": false,
+            "label": "SiYi Camera"
+        },
+        {
+            "name": "showGridViewer",
+            "shortDesc": "Show Grid Viewer",
+            "type": "bool",
+            "default": false,
+            "label": "Grid Viewer"
+        },
+        {
+            "name": "showVehicleStepMoveControl",
+            "shortDesc": "Show Vehicle Step Move Control",
+            "type": "bool",
+            "default": false,
+            "label": "Step Move Control"
+        },
+        {
+            "name": "vehicleMoveStep",
+            "shortDesc": "Vehicle Move Step Distance",
+            "type": "double",
+            "default": 1.0,
+            "label": "Move Step (m)"
+        },
+        {
+            "name": "showLandingGuideView",
+            "shortDesc": "Show Landing Guide View",
+            "type": "bool",
+            "default": false,
+            "label": "Landing Guide"
         }
     ]
 }
