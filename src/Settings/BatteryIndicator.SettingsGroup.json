@@ -31,13 +31,15 @@
             "name": "batteryCellCount",
             "shortDesc": "Battery Cells",
             "type": "uint8",
-            "default": 6
+            "default": 6,
+            "label": "Battery Cells"
         },
         {
             "name": "showCellVoltage",
             "shortDesc": "Show Cell Voltages",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Show Cell Voltages"
         },
         {
             "name": "consolidateMultipleBatteries",
