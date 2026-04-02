@@ -1309,9 +1309,6 @@ public:
     WinchStatusFactGroup            _winchStatusFactGroup;
     VehicleLandingTargetFactGroup   _landingTargetFactGroup;
 
-    // Live SERVO_OUTPUT_RAW values (microseconds). Indexed 0..15 -> SERVO1..SERVO16.
-    QVector<int>                       _servoOutputRawValues = QVector<int>(16, -1);
-
     // Dynamic FactGroups
     BatteryFactGroupListModel       _batteryFactGroupListModel;
     EscStatusFactGroupListModel     _escStatusFactGroupListModel;
