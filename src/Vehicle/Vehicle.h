@@ -872,6 +872,7 @@ signals:
     void loadProgressChanged            (float value);
 
     void atmosphericValueChanged        ();
+    void servoOutputsChanged(QVector<int> servoValues);
     // void tunnelingDataValueChanged      ();
 
     /// Raw RC channel values coming from RC_CHANNELS message
@@ -1095,6 +1096,7 @@ void _activeVehicleChanged          (Vehicle* newActiveVehicle);
     uint32_t _custom_mode_user_intention = 0;  ///< custom_mode_user_intention from CURRENT_MODE
     bool _has_custom_mode_user_intention = false;
     QString _lastAnnouncedFlightMode;
+    QVector<int> _servoOutputRawValues = QVector<int>(16, -1);
 
     /// Used to store a message being sent by sendMessageMultiple
     typedef struct {
