@@ -10,43 +10,32 @@ import QGroundControl.Controls
 SettingsPage {
     property var    _settingsManager:           QGroundControl.settingsManager
     property var    _appSettings:               _settingsManager.appSettings
-    property var    _brandImageSettings:        _settingsManager.brandImageSettings
     property Fact   _appFontPointSize:          _appSettings.appFontPointSize
-    property Fact   _userBrandImageIndoor:      _brandImageSettings.userBrandImageIndoor
-    property Fact   _userBrandImageOutdoor:     _brandImageSettings.userBrandImageOutdoor
     property Fact   _appSavePath:               _appSettings.savePath
-    property real   _comboBoxPreferredWidth:    ScreenTools.defaultFontPixelWidth * 15
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
-        Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 40
         heading:            qsTr("General")
 
         LabelledFactComboBox {
             label:      qsTr("Language")
             fact:       _appSettings.qLocaleLanguage
-            description: "애플리케이션 언어 환경을 설정"
             indexModel: false
             visible:    _appSettings.qLocaleLanguage.visible
-            comboBoxPreferredWidth: _comboBoxPreferredWidth
         }
 
         LabelledFactComboBox {
             label:      qsTr("Color Scheme")
             fact:       _appSettings.indoorPalette
-            description: "애플리케이션 테마 색상을 설정"
             indexModel: false
             visible:    _appSettings.indoorPalette.visible
-            comboBoxPreferredWidth: _comboBoxPreferredWidth
-        }      
+        }
 
         LabelledFactComboBox {
             label:       qsTr("Stream GCS Position")
             fact:       _appSettings.followTarget
             indexModel: false
             visible:    _appSettings.followTarget.visible
-            comboBoxPreferredWidth: _comboBoxPreferredWidth
-            description:    "지상국 위치 정보를 기체에 전송"
         }
 
         FactCheckBoxSlider {
@@ -64,21 +53,18 @@ SettingsPage {
             visible:    fact.visible
         }
 
-        // FactCheckBoxSlider {
-        //    Layout.fillWidth: true
-        //    text:       qsTr("Check for Internet connection")
-        //    fact:       _checkInternet
-        //    visible:    _checkInternet.visible
-        //    property Fact _checkInternet: _appSettings.checkInternet
-        // }
-
-//        FactCheckBoxSlider {
-//            Layout.fillWidth:   true
-//            text:               qsTr("Enable Remote ID")
-//            fact:               QGroundControl.settingsManager.remoteIDSettings.enable
-//            visible:            fact.visible
-//        }
-
+        QGCCheckBoxSlider {
+            Layout.fillWidth: true
+            text:       qsTr("Clear all settings on next start")
+            checked:    false
+            onClicked: {
+                if (checked) {
+                    QGroundControl.deleteAllSettingsNextBoot()
+                } else {
+                    QGroundControl.clearDeleteAllSettingsNextBoot()
+                }
+            }
+        }
 
         RowLayout {
             Layout.fillWidth:   true
@@ -153,32 +139,7 @@ SettingsPage {
                 }
             }
         }
-
-        // FactCheckBoxSlider {
-        //     Layout.fillWidth: true
-        //     text:           qsTr("Full Screen")
-        //     fact:       _fullScreen
-        //     property Fact _fullScreen: _appSettings.fullScreen
-        // }
     }
-
-    // SettingsGroupLayout {
-    //     Layout.fillWidth:   true
-    //     heading:            qsTr("Reset")
-
-    //     QGCCheckBoxSlider {
-    //         Layout.fillWidth: true
-    //         text:       qsTr("Clear all settings on next start")
-    //         checked:    false
-    //         onClicked: {
-    //             if (checked) {
-    //                 QGroundControl.deleteAllSettingsNextBoot()
-    //             } else {
-    //                 QGroundControl.clearDeleteAllSettingsNextBoot()
-    //             }
-    //         }
-    //     }
-    // }
 
     SettingsGroupLayout {
         Layout.fillWidth:   true
@@ -186,197 +147,14 @@ SettingsPage {
         visible:            QGroundControl.settingsManager.unitsSettings.visible
 
         Repeater {
-            model: [ QGroundControl.settingsManager.unitsSettings.distanceUnits,
-                QGroundControl.settingsManager.unitsSettings.speedUnits,
-                QGroundControl.settingsManager.unitsSettings.areaUnits,
-                QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
+            model: [ QGroundControl.settingsManager.unitsSettings.horizontalDistanceUnits, QGroundControl.settingsManager.unitsSettings.verticalDistanceUnits, QGroundControl.settingsManager.unitsSettings.areaUnits, QGroundControl.settingsManager.unitsSettings.speedUnits, QGroundControl.settingsManager.unitsSettings.temperatureUnits ]
 
             LabelledFactComboBox {
                 label:                  modelData.shortDescription
                 fact:                   modelData
                 indexModel:             false
-                comboBoxPreferredWidth: _comboBoxPreferredWidth
             }
         }
     }
 
-    // SettingsGroupLayout {
-    //     Layout.fillWidth:   true
-    //     heading:            qsTr("Brand Image")
-    //     visible:            _brandImageSettings.visible && !ScreenTools.isMobile
-
-    //     RowLayout {
-    //        Layout.fillWidth:   true
-    //        spacing:            ScreenTools.defaultFontPixelWidth * 2
-    //        visible:            _userBrandImageIndoor.visible
-
-    //         ColumnLayout {
-    //             Layout.fillWidth:   true
-    //             spacing:            0
-
-    //             QGCLabel { text: qsTr("Indoor Image") }
-    //             QGCLabel {
-    //                 Layout.fillWidth:   true
-    //                 font.pointSize:     ScreenTools.smallFontPointSize
-    //                 text:               _userBrandImageIndoor.valueString.replace("file:///", "")
-    //                 elide:              Text.ElideMiddle
-    //                 visible:            _userBrandImageIndoor.valueString.length > 0
-    //                 }
-    //         }
-
-    //         QGCButton {
-    //             text:       qsTr("Browse")
-    //             onClicked:  userBrandImageIndoorBrowseDialog.openForLoad()
-
-    //             QGCFileDialog {
-    //                id:                 userBrandImageIndoorBrowseDialog
-    //                title:              qsTr("Choose custom brand image file")
-    //                folder:             _userBrandImageIndoor.rawValue.replace("file:///", "")
-    //                selectFolder:       false
-    //                onAcceptedForLoad:  (file) => _userBrandImageIndoor.rawValue = "file:///" + file
-    //             }
-    //         }
-    //     }
-
-    //     RowLayout {
-    //         Layout.fillWidth:   true
-    //         spacing:            ScreenTools.defaultFontPixelWidth * 2
-    //         visible:            _userBrandImageOutdoor.visible
-
-    //         ColumnLayout {
-    //             Layout.fillWidth:   true
-    //             spacing:            0
-
-    //             QGCLabel { text: qsTr("Outdoor Image") }
-    //             QGCLabel {
-    //                 Layout.fillWidth:   true
-    //                 font.pointSize:     ScreenTools.smallFontPointSize
-    //                 text:               _userBrandImageOutdoor.valueString.replace("file:///", "")
-    //                 elide:              Text.ElideMiddle
-    //                 visible:            _userBrandImageOutdoor.valueString.length > 0
-    //                 }
-    //         }
-
-    //         QGCButton {
-    //             text:       qsTr("Browse")
-    //             onClicked:  userBrandImageOutdoorBrowseDialog.openForLoad()
-
-    //             QGCFileDialog {
-    //                id:                 userBrandImageOutdoorBrowseDialog
-    //                title:              qsTr("Choose custom brand image file")
-    //                folder:             _userBrandImageOutdoor.rawValue.replace("file:///", "")
-    //                selectFolder:       false
-    //                onAcceptedForLoad:  (file) => _userBrandImageOutdoor.rawValue = "file:///" + file
-    //             }
-    //         }
-    //     }
-
-    //     LabelledButton {
-    //         label:      qsTr("Reset Images")
-    //         buttonText: qsTr("Reset")
-    //         onClicked:  {
-    //            _userBrandImageIndoor.rawValue = ""
-    //            _userBrandImageOutdoor.rawValue = ""
-    //         }
-    //     }
-    // }
-
-    // SettingsGroupLayout {
-    //     Layout.fillWidth:   true
-    //     heading:            qsTr("Clear all settings")
-
-    //     QGCCheckBoxSlider {
-    //         Layout.fillWidth: true
-    //         text:       qsTr("Clear all settings on next start")
-    //         description:    qsTr("애플리케이션 재시작시에 모든 설정을 초기화")
-    //         checked:    false
-    //         onClicked: {
-    //             if (checked) {
-    //                 QGroundControl.deleteAllSettingsNextBoot()
-    //             }
-    //         }
-    //     }
-    // }
-
-
-//    SettingsGroupLayout {
-//        Layout.fillWidth:   true
-//        heading:            qsTr("Brand Image")
-//        visible:            _brandImageSettings.visible && !ScreenTools.isMobile
-        
-//        RowLayout {
-//            Layout.fillWidth:   true
-//            spacing:            ScreenTools.defaultFontPixelWidth * 2
-//            visible:            _userBrandImageIndoor.visible
-
-//            ColumnLayout {
-//                Layout.fillWidth:   true
-//                spacing:            0
-
-//                QGCLabel { text: qsTr("Indoor Image") }
-//                QGCLabel {
-//                    Layout.fillWidth:   true
-//                    font.pointSize:     ScreenTools.smallFontPointSize
-//                    text:               _userBrandImageIndoor.valueString.replace("file:///", "")
-//                    elide:              Text.ElideMiddle
-//                    visible:            _userBrandImageIndoor.valueString.length > 0
-//                    }
-//            }
-
-//            QGCButton {
-//                text:       qsTr("Browse")
-//                onClicked:  userBrandImageIndoorBrowseDialog.openForLoad()
-
-//                QGCFileDialog {
-//                    id:                 userBrandImageIndoorBrowseDialog
-//                    title:              qsTr("Choose custom brand image file")
-//                    folder:             _userBrandImageIndoor.rawValue.replace("file:///", "")
-//                    selectFolder:       false
-//                    onAcceptedForLoad:  (file) => _userBrandImageIndoor.rawValue = "file:///" + file
-//                }
-//            }
-//        }
-
-//        RowLayout {
-//            Layout.fillWidth:   true
-//            spacing:            ScreenTools.defaultFontPixelWidth * 2
-//            visible:            _userBrandImageOutdoor.visible
-
-//            ColumnLayout {
-//                Layout.fillWidth:   true
-//                spacing:            0
-
-//                QGCLabel { text: qsTr("Outdoor Image") }
-//                QGCLabel {
-//                    Layout.fillWidth:   true
-//                    font.pointSize:     ScreenTools.smallFontPointSize
-//                    text:               _userBrandImageOutdoor.valueString.replace("file:///", "")
-//                    elide:              Text.ElideMiddle
-//                    visible:            _userBrandImageOutdoor.valueString.length > 0
-//                    }
-//            }
-
-//            QGCButton {
-//                text:       qsTr("Browse")
-//                onClicked:  userBrandImageOutdoorBrowseDialog.openForLoad()
-
-//                QGCFileDialog {
-//                    id:                 userBrandImageOutdoorBrowseDialog
-//                    title:              qsTr("Choose custom brand image file")
-//                    folder:             _userBrandImageOutdoor.rawValue.replace("file:///", "")
-//                    selectFolder:       false
-//                    onAcceptedForLoad:  (file) => _userBrandImageOutdoor.rawValue = "file:///" + file
-//                }
-//            }
-//        }
-
-//        LabelledButton {
-//            label:      qsTr("Reset Images")
-//            buttonText: qsTr("Reset")
-//            onClicked:  {
-//                _userBrandImageIndoor.rawValue = ""
-//                _userBrandImageOutdoor.rawValue = ""
-//            }
-//        }
-//    }
 }
