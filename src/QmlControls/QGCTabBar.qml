@@ -46,6 +46,15 @@ RowLayout {
     onCurrentIndexChanged: _selectCurrentIndexButton()
     onVisibleChildrenChanged: _selectCurrentIndexButton()
 
+    onVisibleChanged: {
+        if (visible) {
+            // When becoming visible, ensure the current index is valid and a button is selected
+            currentIndex = 0
+            _selectCurrentIndexButton()
+        }
+    }
+
+
     ButtonGroup {
         buttons: control.children
 
