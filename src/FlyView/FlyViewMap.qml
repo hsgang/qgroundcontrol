@@ -40,17 +40,11 @@ FlightMap {
     property bool   _keepVehicleCentered:       pipMode ? true : false
     property bool   _saveZoomLevelSetting:      true
 
-    property bool   _vehicleArmed:              _activeVehicle ? _activeVehicle.armed  : false
-    property bool   _vehicleFlying:             _activeVehicle ? _activeVehicle.flying  : false
-
-    property var    _gridManager:               QGroundControl.gridManager
-    property var    gridData:                   _gridManager.gridData
-
     function _adjustMapZoomForPipMode() {
         _saveZoomLevelSetting = false
         if (pipMode) {
             if (QGroundControl.flightMapZoom > 3) {
-                zoomLevel = QGroundControl.flightMapZoom - 1
+                zoomLevel = QGroundControl.flightMapZoom - 3
             }
         } else {
             zoomLevel = QGroundControl.flightMapZoom
@@ -237,35 +231,16 @@ FlightMap {
         planMasterController:       _planMasterController
     }
 
-    // ObstacleDistanceOverlayMap {
-    //     id: obstacleDistance
-    //     showText: !pipMode
-    // }
-
-    // Add the items associated with each vehicles flight plan to the map
-    Repeater {
-        model: QGroundControl.multiVehicleManager.vehicles
-
-        PlanMapItems {
-            map:                    _root
-            largeMapView:           !pipMode
-            planMasterController:   masterController
-            vehicle:                _vehicle
-
-            property var _vehicle: object
-
-            PlanMasterController {
-                id: masterController
-                Component.onCompleted: startStaticActiveVehicle(object)
-            }
-        }
+    ObstacleDistanceOverlayMap {
+        id: obstacleDistance
+        showText: !pipMode
     }
 
     // Add trajectory lines to the map
     MapPolyline {
         id:         trajectoryPolyline
         line.width: 3
-        line.color: "#9c1bff"
+        line.color: "red"
         z:          QGroundControl.zOrderTrajectoryLines
         visible:    !pipMode
 
@@ -291,17 +266,10 @@ FlightMap {
             vehicle:        object
             coordinate:     object.coordinate
             map:            _root
-            size:           pipMode ? ScreenTools.defaultFontPixelHeight * 2 : ScreenTools.defaultFontPixelHeight * 3
+            size:           pipMode ? ScreenTools.defaultFontPixelHeight : ScreenTools.defaultFontPixelHeight * 3
             z:              QGroundControl.zOrderVehicles
-
-            // 좌표 변경 시 처리
-            onCoordinateChanged: {
-                //console.log("Vehicle 좌표 변경됨:", coordinate.latitude, coordinate.longitude);
-                updateGridColor(coordinate.latitude, coordinate.longitude);
-            }
         }
     }
-
     // Add distance sensor view
     MapItemView{
         model: QGroundControl.multiVehicleManager.vehicles
@@ -312,7 +280,6 @@ FlightMap {
             z:              QGroundControl.zOrderVehicles
         }
     }
-
     // Add ADSB vehicles to the map
     MapItemView {
         model: QGroundControl.adsbVehicleManager.adsbVehicles
@@ -328,36 +295,22 @@ FlightMap {
         }
     }
 
-    // // CameraProjection to the map
-    // MapItemView {
-    //     model: QGroundControl.multiVehicleManager.vehicles
-    //     delegate: CameraProjectionMapItem {
-    //         coordinate:     object.coordinate
-    //         map:            _root
-    //         visible:        QGroundControl.settingsManager.flyViewSettings.showCameraProjectionOnMap.rawValue && !pipMode
-    //         z:              QGroundControl.zOrderWidgets
-    //     }
-    // }
-
-    // AtmosphericValue to the map
-    MapItemView {
+    // Add the items associated with each vehicles flight plan to the map
+    Repeater {
         model: QGroundControl.multiVehicleManager.vehicles
-        delegate: AtmosphericValueMapItem {
-            coordinate:     object.coordinate
-            map:            _root
-            visible:        QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && !pipMode
-            z:              QGroundControl.zOrderWidgets
-        }
-    }
 
-    // VehicleInfo to the map
-    MapItemView {
-        model: QGroundControl.multiVehicleManager.vehicles
-        delegate: VehicleInfoMapItem {
-            coordinate:     object.coordinate
-            map:            _root
-            visible:        QGroundControl.settingsManager.flyViewSettings.showVehicleInfoOnMap.rawValue && !pipMode
-            z:              QGroundControl.zOrderWidgets
+        PlanMapItems {
+            map:                    _root
+            largeMapView:           !pipMode
+            planMasterController:   masterController
+            vehicle:                _vehicle
+
+            property var _vehicle: object
+
+            PlanMasterController {
+                id: masterController
+                Component.onCompleted: startStaticActiveVehicle(object)
+            }
         }
     }
 
@@ -403,65 +356,6 @@ FlightMap {
         }
     }
 
-    // GridManager Viewer
-
-    property int valueSource: QGroundControl.settingsManager.gridSettings.valueSource.rawValue
-    property int gridSizeMeters: QGroundControl.settingsManager.gridSettings.gridSize.rawValue // 격자의 크기 (미터 단위)
-    property real mapZoomLevel: _root.zoomLevel // Map의 줌 레벨
-    property var baseCoordinate: QtPositioning.coordinate(35.1704328, 129.1312456)
-    property var selectedGrid: null // 현재 선택된 격자
-    property real value1: QGroundControl.settingsManager.gridSettings.value1.rawValue
-    property real value2: QGroundControl.settingsManager.gridSettings.value2.rawValue
-    property real value3: QGroundControl.settingsManager.gridSettings.value3.rawValue
-    property int _rows: QGroundControl.settingsManager.gridSettings.rows.rawValue
-    property int _columns: QGroundControl.settingsManager.gridSettings.columns.rawValue
-
-    function valueSouceData() {
-        switch ( valueSource ) {
-            case 0 : return _activeVehicle.altitudeRelative.rawValue
-            case 1 : return _activeVehicle.atmosphericSensor.extValue1.rawValue
-            case 2 : return _activeVehicle.atmosphericSensor.extValue2.rawValue
-            case 3 : return _activeVehicle.atmosphericSensor.extValue3.rawValue
-            case 4 : return _activeVehicle.atmosphericSensor.extValue4.rawValue
-            default : return _activeVehicle.altitudeRelative.rawValue
-        }
-    }
-
-    function calculateGridSize() {
-        let scale = Math.pow(2, mapZoomLevel)
-        return {
-            width: gridSizeMeters * scale / 111320 / 1.2, // 1km 기준으로 축척 계산
-            height: gridSizeMeters * scale / 111320 / 1.2
-        }
-    }
-
-    // 격자 크기 계산 함수
-    function gridSizeForLatLng() {
-        var latSize = gridSizeMeters / 111320; // 위도 1도에 해당하는 미터 거리
-        var lonSize = gridSizeMeters / (111320 * Math.cos(Math.round(Math.PI * baseCoordinate.latitude) / 180)); // 경도는 위도에 따라 달라짐
-        return {latSize: latSize, lonSize: lonSize};
-    }
-
-    // 마커의 좌표가 변경되었을 때 격자 색상 업데이트
-    function updateGridColor(latitude, longitude) {
-        //console.log(gridMapItemView.children.length)
-        for (let i = 0; i < gridMapItemView.children.length; i++) {
-            let grid = gridMapItemView.children[i] //gridMapItemView.itemAt(i)
-            if (grid.isInside(latitude, longitude)) {
-                if (selectedGrid !== grid) {
-                    // // 이전 선택된 격자 색상 초기화
-                    // if (selectedGrid !== null) {
-                    //     selectedGrid.resetColor()
-                    // }
-                    // 새로운 격자 선택 및 색상 변경
-                    selectedGrid = grid
-                    selectedGrid.selectColor()
-                }
-                return
-            }
-        }
-    }
-    
     // GoTo Location forward flight circle visuals
     QGCMapCircleVisuals {
         id:                 fwdFlightGotoMapCircle
@@ -531,136 +425,6 @@ FlightMap {
             function _restoreRadius() {
                 radius.rawValue = _committedRadius
             }
-        }
-    }
-
-    MapQuickItem {
-        id: gridAdjMarker
-        // 아이템의 anchorPoint는 이미지 하단 중앙에 위치시킵니다.
-        anchorPoint.x: markerRect.width / 2
-        anchorPoint.y: markerRect.height / 2
-        coordinate: QtPositioning.coordinate(initLat, initLon)
-
-        visible : QGroundControl.gridManager.showAdjustMarker
-
-        property real initLat: QGroundControl.settingsManager.gridSettings.latitude.rawValue
-        property real initLon: QGroundControl.settingsManager.gridSettings.longitude.rawValue
-
-        sourceItem: Rectangle {
-            id: markerRect
-            width:      calculateGridSize().width
-            height:     calculateGridSize().height
-            color:      "transparent"
-            border.color: qgcPal.colorGreen
-            border.width: 3
-
-            MouseArea {
-                anchors.fill: parent
-                // MapQuickItem 자체를 드래그 대상으로 지정
-                drag.target: gridAdjMarker
-                drag.axis: Drag.XAndYAxis
-
-                // 드래그 중에는 별도 추가 처리 가능
-                onPressed: {
-                    // 예: 아이템 강조 효과 등
-                }
-
-                onReleased: {
-                    // 드래그가 종료된 후, 현재 화면상의 좌표를 지도 좌표로 변환
-                    var newCoordinate = _root.toCoordinate(
-                        Qt.point(gridAdjMarker.x + gridAdjMarker.anchorPoint.x, gridAdjMarker.y + gridAdjMarker.anchorPoint.y)
-                    )
-                    // MapQuickItem의 좌표를 갱신
-                    gridAdjMarker.coordinate = newCoordinate
-
-                    var _rows = QGroundControl.settingsManager.gridSettings.rows.rawValue
-                    var _columns = QGroundControl.settingsManager.gridSettings.columns.rawValue
-                    var _gridSize = QGroundControl.settingsManager.gridSettings.gridSize.rawValue
-
-                    QGroundControl.gridManager.generateGrid(QtPositioning.coordinate(newCoordinate.latitude, newCoordinate.longitude),
-                                                                _rows,
-                                                                _columns,
-                                                                _gridSize)
-
-                    QGroundControl.settingsManager.gridSettings.latitude.rawValue = newCoordinate.latitude
-                    QGroundControl.settingsManager.gridSettings.longitude.rawValue = newCoordinate.longitude
-
-                    console.log("새로운 좌표:", newCoordinate.latitude, newCoordinate.longitude)
-                }
-            }
-        }
-    }
-
-    MapItemView {
-        id: gridMapItemView
-        model: _gridManager.gridData
-
-        delegate: MapQuickItem {
-            coordinate: object.coordinate
-            anchorPoint.x:  sourceItem.anchorPointX
-            anchorPoint.y:  sourceItem.anchorPointY
-            z:          QGroundControl.zOrderMapItems
-
-            property real latMin: coordinate.latitude - ((gridSizeForLatLng().latSize)/2)
-            property real latMax: coordinate.latitude + ((gridSizeForLatLng().latSize)/2)
-            property real lonMin: coordinate.longitude - ((gridSizeForLatLng().lonSize)/2)
-            property real lonMax: coordinate.longitude + ((gridSizeForLatLng().lonSize)/2)
-
-            sourceItem: Rectangle {
-                id: gridRect
-                width: calculateGridSize().width
-                height: calculateGridSize().height
-                color: "transparent"
-                border.color: Qt.rgba(255, 255, 255, 0.4)
-                border.width: 1
-                property real anchorPointX: width / 2
-                property real anchorPointY: height / 2
-
-                QGCLabel{
-                    id: gridLabel
-                    anchors.centerIn: parent
-                    text: ""
-                }
-            }
-
-            function selectColor() {
-                if(_activeVehicle) {
-                    // rawValue 값에 따라 색상을 변경
-                    let rawValue = valueSouceData()//_activeVehicle.altitudeRelative.rawValue;
-
-                    if (rawValue <= value1) {
-                        gridRect.color = Qt.rgba(0, 255, 0, 0.4);  // Green
-                    } else if (rawValue <= value2) {
-                        gridRect.color = Qt.rgba(255, 255, 0, 0.4);  // Yellow
-                    } else if (rawValue <= value3) {
-                        gridRect.color = Qt.rgba(255, 0, 0, 0.4);  // Red
-                    } else {
-                        gridRect.color = Qt.rgba(128, 0, 128, 0.4);  // Purple for out of range
-                    }
-
-                    // 레이블에 rawValue 표시
-                    gridLabel.text = valueSouceData().toFixed(2)//_activeVehicle.altitudeRelative.rawValue.toFixed(2)
-                }
-            }
-
-            // 특정 좌표가 격자 내부에 있는지 확인
-            function isInside(latitude, longitude) {
-                return latitude >= latMin && latitude <= latMax &&
-                       longitude >= lonMin && longitude <= lonMax
-            }
-        }
-    }
-
-    // Camera fov point
-
-    MapQuickItem {
-        id:             cameraFovIndicator
-        anchorPoint.x:  sourceItem.anchorPointX
-        anchorPoint.y:  sourceItem.anchorPointY
-        coordinate:     _activeVehicle ? _activeVehicle.cameraFovPosition : QtPositioning.coordinate()
-        visible:        _activeVehicle ? _activeVehicle.cameraFovPosition : false
-
-        sourceItem: CameraPOIIndicator {
         }
     }
 
@@ -823,47 +587,6 @@ FlightMap {
         }
     }
 
-    // Change Heading visuals
-    MapQuickItem {
-        id:             changeHeadingItem
-        visible:        false
-        z:              QGroundControl.zOrderMapItems
-        anchorPoint.x:  sourceItem.anchorPointX
-        anchorPoint.y:  sourceItem.anchorPointY
-        sourceItem: MissionItemIndexLabel {
-            checked:    true
-            index:      -1
-            label:      qsTr("Yaw towards here", "Turn towards location waypoint")
-        }
-
-        Connections {
-            target: QGroundControl.multiVehicleManager
-            function onActiveVehicleChanged(activeVehicle) {
-                if (!activeVehicle) {
-                    changeHeadingItem.visible = false
-                }
-            }
-        }
-
-        function show(coord) {
-            changeHeadingItem.coordinate = coord
-            changeHeadingItem.visible = true
-        }
-
-        function hide() {
-            changeHeadingItem.visible = false
-        }
-
-        function actionConfirmed() {
-            hide()
-        }
-
-        function actionCancelled() {
-            hide()
-        }
-    }
-
-
     // Orbit telemetry visuals
     QGCMapCircleVisuals {
         id:             orbitTelemetryCircle
@@ -928,7 +651,7 @@ FlightMap {
                         Layout.fillWidth:   true
                         text:               qsTr("Edit Position")
                         onClicked: {
-                            roiEditPositionDialogFactory.open({ showSetPositionFromVehicle: false })
+                            roiEditPositionDialogFactory.open()
                             roiEditDropPanel.close()
                         }
                     }
@@ -1000,15 +723,15 @@ FlightMap {
                         }
                     }
 
-                    // QGCButton {
-                    //     Layout.fillWidth:   true
-                    //     text:               qsTr("Set Estimator Origin")
-                    //     visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
-                    //     onClicked: {
-                    //         mapClickDropPanel.close()
-                    //         globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetEstimatorOrigin, mapClickCoord)
-                    //     }
-                    // }
+                    QGCButton {
+                        Layout.fillWidth:   true
+                        text:               qsTr("Set Estimator Origin")
+                        visible:            globals.guidedControllerFlyView.showSetEstimatorOrigin
+                        onClicked: {
+                            mapClickDropPanel.close()
+                            globals.guidedControllerFlyView.confirmAction(globals.guidedControllerFlyView.actionSetEstimatorOrigin, mapClickCoord)
+                        }
+                    }
 
                     QGCButton {
                         Layout.fillWidth:   true
@@ -1024,7 +747,6 @@ FlightMap {
                         spacing: 0
                         QGCLabel { text: qsTr("Lat: %1").arg(mapClickCoord.latitude.toFixed(6)) }
                         QGCLabel { text: qsTr("Lon: %1").arg(mapClickCoord.longitude.toFixed(6)) }
-                        QGCLabel { text: qsTr("Az: %1").arg(_activeVehicleCoordinate.azimuthTo(mapClickCoord).toFixed(1)) }
                     }
                 }
             }
@@ -1053,20 +775,8 @@ FlightMap {
         anchors.top:        parent.top
         mapControl:         _root
         visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && mapControl.pipState.state === mapControl.pipState.windowState
+
+        property real centerInset: visible ? parent.height - y : 0
     }
 
-    //    Rectangle {
-    //        height: 1
-    //        width:  _toolsMargin * 7
-    //        anchors.verticalCenter: parent.verticalCenter
-    //        anchors.horizontalCenter: parent.horizontalCenter
-    //    }
-
-    //    Rectangle {
-    //        height: _toolsMargin * 7
-    //        width:  1
-    //        anchors.verticalCenter: parent.verticalCenter
-    //        anchors.horizontalCenter: parent.horizontalCenter
-    //    }
-    // }
 }
