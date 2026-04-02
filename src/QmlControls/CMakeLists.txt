@@ -21,6 +21,8 @@ target_sources(${CMAKE_PROJECT_NAME}
         MavlinkAction.h
         MavlinkActionManager.cc
         MavlinkActionManager.h
+        ObjectItemModelBase.cc
+        ObjectItemModelBase.h
         ObjectListModelBase.cc
         ObjectListModelBase.h
         ParameterEditorController.cc
@@ -51,6 +53,8 @@ target_sources(${CMAKE_PROJECT_NAME}
         QGroundControlQmlGlobal.h
         QmlObjectListModel.cc
         QmlObjectListModel.h
+        QmlObjectTreeModel.cc
+        QmlObjectTreeModel.h
         QmlUnitsConversion.h
         RCChannelMonitorController.cc
         RCChannelMonitorController.h
