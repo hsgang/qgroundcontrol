@@ -63,15 +63,15 @@ ToolIndicatorPage {
                     buttonText: qsTr("Configure")
 
                     onClicked: {
-                        mainWindow.showAppSettings(qsTr("Comm Links"))
+                        mainWindow.showSettingsTool(qsTr("Comm Links"))
                         mainWindow.closeIndicatorDrawer()
                     }
                 }
             }
 
             SettingsGroupLayout {
-                heading:        qsTr("Auto Connect")
-                visible:        autoConnectSettings.visible
+                heading:        qsTr("AutoConnect")
+                visible:        autoConnectSettings.userVisible
 
                 Repeater {
                     id: autoConnectRepeater
@@ -79,14 +79,12 @@ ToolIndicatorPage {
                     model: [
                         autoConnectSettings.autoConnectPixhawk,
                         autoConnectSettings.autoConnectSiKRadio,
-                        autoConnectSettings.autoConnectUDP
+                        autoConnectSettings.autoConnectLibrePilot,
+                        autoConnectSettings.autoConnectUDP,
+                        autoConnectSettings.autoConnectRTKGPS,
                     ]
 
-                    property var names: [
-                        qsTr("Pixhawk"),
-                        qsTr("SiK Radio"),
-                        qsTr("UDP")
-                    ]
+                    property var names: [ qsTr("Pixhawk"), qsTr("SiK Radio"), qsTr("LibrePilot"), qsTr("UDP"), qsTr("RTK") ]
 
                     FactCheckBoxSlider {
                         Layout.fillWidth:   true

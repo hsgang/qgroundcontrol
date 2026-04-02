@@ -28,7 +28,7 @@ FirstRunPrompt {
     Component.onCompleted: {
         var cVisibleFacts = 0
         for (var i=0; i<_rgFacts.length; i++) {
-            if (_rgFacts[i].visible) {
+            if (_rgFacts[i].userVisible) {
                 cVisibleFacts++
             }
         }
@@ -40,19 +40,19 @@ FirstRunPrompt {
         unitComboBoxRepeater.model = 0
         unitComboBoxRepeater.model = _rgFacts.length
 
-        if (_unitsSettings.horizontalDistanceUnits.visible) {
+        if (_unitsSettings.horizontalDistanceUnits.userVisible) {
             _unitsSettings.horizontalDistanceUnits.value = metric ? UnitsSettings.HorizontalDistanceUnitsMeters : UnitsSettings.HorizontalDistanceUnitsFeet
         }
-        if (_unitsSettings.verticalDistanceUnits.visible) {
+        if (_unitsSettings.verticalDistanceUnits.userVisible) {
             _unitsSettings.verticalDistanceUnits.value = metric ? UnitsSettings.VerticalDistanceUnitsMeters : UnitsSettings.VerticalDistanceUnitsFeet
         }
-        if (_unitsSettings.areaUnits.visible) {
+        if (_unitsSettings.areaUnits.userVisible) {
             _unitsSettings.areaUnits.value = metric ? UnitsSettings.AreaUnitsSquareMeters : UnitsSettings.AreaUnitsSquareFeet
         }
-        if (_unitsSettings.speedUnits.visible) {
+        if (_unitsSettings.speedUnits.userVisible) {
             _unitsSettings.speedUnits.value = metric ? UnitsSettings.SpeedUnitsMetersPerSecond : UnitsSettings.SpeedUnitsFeetPerSecond
         }
-        if (_unitsSettings.temperatureUnits.visible) {
+        if (_unitsSettings.temperatureUnits.userVisible) {
             _unitsSettings.temperatureUnits.value = metric ? UnitsSettings.TemperatureUnitsCelsius : UnitsSettings.TemperatureUnitsFarenheit
         }
     }
@@ -89,7 +89,7 @@ FirstRunPrompt {
                     model: _rgFacts.length
                     QGCLabel {
                         text:       _rgLabels[index]
-                        visible:    _rgFacts[index].visible
+                        visible:    _rgFacts[index].userVisible
                     }
                 }
 
@@ -109,7 +109,7 @@ FirstRunPrompt {
                         sizeToContents:     true
                         fact:               _rgFacts[index]
                         indexModel:         false
-                        visible:            _rgFacts[index].visible
+                        visible:            _rgFacts[index].userVisible
                     }
                 }
             }

@@ -4,7 +4,7 @@
     "groups": [
         {
             "heading": "AutoConnect",
-            "showWhen": "QGroundControl.settingsManager.autoConnectSettings.visible",
+            "showWhen": "QGroundControl.settingsManager.autoConnectSettings.userVisible",
             "controls": [
                 {
                     "setting": "autoConnectSettings.autoConnectPixhawk"

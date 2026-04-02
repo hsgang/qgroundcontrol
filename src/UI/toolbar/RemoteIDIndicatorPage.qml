@@ -340,7 +340,7 @@ ToolIndicatorPage {
                             id:                 sendSelfIDSlider
                             text:               qsTr("Broadcast")
                             fact:               _fact
-                            visible:            _fact.visible
+                            visible:            _fact.userVisible
                             Layout.fillWidth:   true
 
                             property Fact _fact: remoteIDSettings.sendSelfID
@@ -360,7 +360,7 @@ ToolIndicatorPage {
                         label:              qsTr("Broadcast Message")
                         fact:               _fact
                         indexModel:         false
-                        visible:            _fact.visible
+                        visible:            _fact.userVisible
                         enabled:            sendSelfIDSlider._fact.rawValue
                         Layout.fillWidth:   true
 
@@ -370,7 +370,7 @@ ToolIndicatorPage {
                     LabelledFactTextField {
                         label:                      _fact.shortDescription
                         fact:                       _fact
-                        visible:                    _fact.visible
+                        visible:                    _fact.userVisible
                         enabled:                     sendSelfIDSlider._fact.rawValue
                         textField.maximumLength:    23
                         Layout.fillWidth:           true
@@ -382,7 +382,7 @@ ToolIndicatorPage {
                     LabelledFactTextField {
                         label:                      _fact.shortDescription
                         fact:                       _fact
-                        visible:                    _fact.visible
+                        visible:                    _fact.userVisible
                         enabled:                    sendSelfIDSlider._fact.rawValue
                         textField.maximumLength:    23
                         Layout.fillWidth:           true
@@ -394,7 +394,7 @@ ToolIndicatorPage {
                     LabelledFactTextField {
                         label:                      _fact.shortDescription
                         fact:                       _fact
-                        visible:                    _fact.visible
+                        visible:                    _fact.userVisible
                         textField.maximumLength:    23
                         Layout.fillWidth:           true
                         textFieldPreferredWidth:    textFieldWidth

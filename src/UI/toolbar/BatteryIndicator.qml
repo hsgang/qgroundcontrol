@@ -480,13 +480,13 @@ Item {
                     Layout.fillWidth:   true
                     fact:               _batterySettings.consolidateMultipleBatteries
                     text:               qsTr("Only show battery with lowest charge")
-                    visible:            fact.visible
+                    visible:            fact.userVisible
                 }
 
                 LabelledFactComboBox {
                     label:      qsTr("Value")
                     fact:       _batterySettings.valueDisplay
-                    visible:    fact.visible
+                    visible:    fact.userVisible
                 }
 
                 ColumnLayout {
@@ -523,7 +523,7 @@ Item {
                                 fact: _batterySettings.threshold1
                                 implicitWidth: ScreenTools.defaultFontPixelWidth * 6
                                 height: ScreenTools.defaultFontPixelHeight * 1.5
-                                enabled: fact.visible
+                                enabled: fact.userVisible
                                 onEditingFinished: {
                                     // Validate and set the new threshold value
                                     _batterySettings.setThreshold1(parseInt(text));
@@ -545,7 +545,7 @@ Item {
                                 fact: _batterySettings.threshold2
                                 implicitWidth: ScreenTools.defaultFontPixelWidth * 6
                                 height: ScreenTools.defaultFontPixelHeight * 1.5
-                                enabled: fact.visible
+                                enabled: fact.userVisible
                                 onEditingFinished: {
                                     // Validate and set the new threshold value
                                     _batterySettings.setThreshold2(parseInt(text));
