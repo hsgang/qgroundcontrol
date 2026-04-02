@@ -73,7 +73,13 @@ add_qgc_test(GeoTagControllerTest LABELS Unit AnalyzeView RESOURCE_LOCK TempFile
 add_qgc_test(GeoTagDataTest LABELS Unit AnalyzeView)
 add_qgc_test(GeoTagImageModelTest LABELS Unit AnalyzeView)
 add_qgc_test(ULogParserTest LABELS Unit AnalyzeView RESOURCE_LOCK TempFiles)
-add_qgc_test(LogDownloadTest LABELS Integration Vehicle RESOURCE_LOCK MockLink)
+add_qgc_test(MAVLinkChartControllerTest LABELS Unit AnalyzeView)
+add_qgc_test(MAVLinkConsoleControllerTest LABELS Unit AnalyzeView)
+add_qgc_test(MAVLinkInspectorControllerTest LABELS Unit AnalyzeView)
+add_qgc_test(OnboardLogDownloadTest LABELS Integration AnalyzeView Vehicle RESOURCE_LOCK MockLink)
+add_qgc_test(MAVLinkMessageFieldTest LABELS Unit AnalyzeView)
+add_qgc_test(MAVLinkMessageTest LABELS Unit AnalyzeView)
+add_qgc_test(MAVLinkSystemTest LABELS Unit AnalyzeView)
 add_qgc_test(MavlinkLogTest LABELS Integration AnalyzeView Vehicle RESOURCE_LOCK MockLink)
 
 # ----------------------------------------------------------------------------
@@ -84,6 +90,12 @@ add_qgc_test(QGCCameraManagerTest LABELS Integration Vehicle RESOURCE_LOCK MockL
 add_qgc_test(VehicleCameraControlTest LABELS Integration Vehicle RESOURCE_LOCK MockLink)
 add_qgc_test(QGCVideoStreamInfoTest LABELS Unit Camera)
 add_qgc_test(VideoManagerTest LABELS Unit)
+
+# ----------------------------------------------------------------------------
+# VideoManager
+# ----------------------------------------------------------------------------
+add_subdirectory(VideoManager)
+add_qgc_test(GStreamerTest LABELS Integration)
 
 # ----------------------------------------------------------------------------
 # Comms
@@ -137,7 +149,6 @@ add_qgc_test(SDLTest LABELS Unit Joystick RESOURCE_LOCK Joystick)
 # ----------------------------------------------------------------------------
 add_subdirectory(MAVLink)
 add_qgc_test(SigningTest LABELS Unit MAVLink)
-add_qgc_test(MockLinkSigningTest LABELS Integration Vehicle MAVLink RESOURCE_LOCK MockLink)
 add_qgc_test(StatusTextHandlerTest LABELS Unit MAVLink)
 add_qgc_test(SysStatusSensorInfoTest LABELS Unit MAVLink)
 
