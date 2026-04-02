@@ -60,6 +60,9 @@ public:
     Q_INVOKABLE void stopRecording();
     Q_INVOKABLE void stopVideo();
 
+    void pushWebRtcRtp(const QByteArray &packet);
+    bool isWebRtcInternalModeEnabled() const { return _webrtcInternalModeEnabled; }
+
     void init(QQuickWindow *mainWindow);
     void startGStreamerInit();
     bool waitForGStreamerInit(int timeoutMs = 60000);
@@ -145,6 +148,7 @@ private:
     bool _initialized = false;
     bool _gstreamerDisabledForUnitTests = false;
     bool _fullScreen = false;
+    bool _webrtcInternalModeEnabled = false;
 
     QAtomicInteger<bool> _decoding = false;
     QAtomicInteger<bool> _recording = false;

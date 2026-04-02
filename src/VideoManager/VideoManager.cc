@@ -13,6 +13,7 @@
 #include "VideoSettings.h"
 #include "VideoItemStub.h"
 #ifdef QGC_GST_STREAMING
+#include "GstVideoReceiver.h"
 #include "gstqml6glregister.h"
 #ifdef QGC_GST_D3D11_SINK
 #include "gstqml6d3d11register.h"
@@ -386,6 +387,22 @@ void VideoManager::startRecording(const QString &videoFile)
         const QString videoFileName = videoFileNameTemplate.arg(streamName);
         receiver->startRecording(videoFileName, fileFormat);
     }
+}
+
+void VideoManager::pushWebRtcRtp(const QByteArray &packet)
+{
+#ifdef QGC_GST_STREAMING
+    if (_videoReceivers.isEmpty()) {
+        return;
+    }
+    VideoReceiver *receiver = _videoReceivers.front();
+    auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+    if (gstReceiver) {
+        gstReceiver->pushRtpPacket(packet);
+    }
+#else
+    Q_UNUSED(packet)
+#endif
 }
 
 void VideoManager::stopRecording()
