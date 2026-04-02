@@ -123,8 +123,6 @@ qt_add_qml_module(QGroundControlControlsModule
         LabelledSlider.qml
         LogReplayStatusBar.qml
         MainWindowSavedState.qml
-        MAVLinkChart.qml
-        MAVLinkMessageButton.qml
         MissionCommandDialog.qml
         MvPanelPage.qml
         OfflineMapButton.qml
@@ -201,9 +199,6 @@ qt_add_qml_module(QGroundControlControlsModule
 # NOTE: Due to Windows limitations with set_source_files_properties and qt_add_qml_module,
 # various QML files from other modules are temporarily included here.
 # This will be revisited in a future release.
-
-        # src/AnalyzeView/
-        AnalyzePage.qml
 
         # src/FirstRunPromptDialogs/
         FirstRunPrompt.qml

@@ -10,6 +10,7 @@ add_subdirectory(OnboardLogs)
 
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
+        LogEntry.cc
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -32,5 +33,7 @@ qt_add_qml_module(AnalyzeViewModule
         MAVLinkInspector/MAVLinkInspectorPage.qml
         OnboardLogs/OnboardLogPage.qml
         Vibration/VibrationPage.qml
+        CloudUploadPage.qml
+        ImageDownloadPage.qml
     NO_PLUGIN
 )
