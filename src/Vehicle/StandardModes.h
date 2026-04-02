@@ -1,7 +1,8 @@
 #pragma once
 
-#include "FirmwarePlugin/FirmwarePlugin.h"
-#include "MAVLinkLib.h"
+#include "FirmwarePlugin.h"
+#include "MAVLinkEnums.h"
+#include "MAVLinkMessageType.h"
 
 #include <QtCore/QObject>
 #include <QtCore/QString>

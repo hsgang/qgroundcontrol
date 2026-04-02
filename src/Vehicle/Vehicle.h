@@ -18,6 +18,7 @@
 #include "QmlObjectListModel.h"
 #include "SysStatusSensorInfo.h"
 #include "VehicleLinkManager.h"
+#include "VehicleTypes.h"
 
 #include "TerrainFactGroup.h"
 #include "VehicleFactGroup.h"
@@ -98,7 +99,7 @@ class ParsedEvent;
 
 Q_DECLARE_LOGGING_CATEGORY(VehicleLog)
 
-class Vehicle : public VehicleFactGroup
+class Vehicle : public VehicleFactGroup, public VehicleTypes
 {
     Q_OBJECT
     QML_ELEMENT
@@ -660,12 +661,6 @@ public:
     /// Same as sendMavCommand but available from Qml.
     Q_INVOKABLE void sendCommand(int compId, int command, bool showError, double param1 = 0.0, double param2 = 0.0, double param3 = 0.0, double param4 = 0.0, double param5 = 0.0, double param6 = 0.0, double param7 = 0.0);
 
-    typedef enum {
-        MavCmdResultCommandResultOnly,          ///< commandResult specifies full success/fail info
-        MavCmdResultFailureNoResponseToCommand, ///< No response from vehicle to command
-        MavCmdResultFailureDuplicateCommand,    ///< Unable to send command since duplicate is already being waited on for response
-    } MavCmdResultFailureCode_t;
-
     static QString mavCmdResultFailureCodeToString(MavCmdResultFailureCode_t failureCode);
 
     /// Callback for sendMavCommandWithHandler which handles MAV_RESULT_IN_PROGRESS acks
@@ -710,14 +705,6 @@ public:
         float param1 = 0.0f, float param2 = 0.0f, float param3 = 0.0f, float param4 = 0.0f, float param5 = 0.0f, float param6 = 0.0f, float param7 = 0.0f);
 
 
-    typedef enum {
-        RequestMessageNoFailure,
-        RequestMessageFailureCommandError,
-        RequestMessageFailureCommandNotAcked,
-        RequestMessageFailureMessageNotReceived,
-        RequestMessageFailureDuplicate,           ///< Exact duplicate request already active or queued for this component/message id
-    } RequestMessageResultHandlerFailureCode_t;
-
     static QString requestMessageResultHandlerFailureCodeToString(RequestMessageResultHandlerFailureCode_t failureCode);
 
     /// Callback for requestMessage
@@ -744,7 +731,7 @@ public:
     QString firmwareVersionTypeString() const;
     void setFirmwareVersion(int majorVersion, int minorVersion, int patchVersion, FIRMWARE_VERSION_TYPE versionType = FIRMWARE_VERSION_TYPE_OFFICIAL);
     void setFirmwareCustomVersion(int majorVersion, int minorVersion, int patchVersion);
-    static const int versionNotSetValue = -1;
+    // versionNotSetValue inherited from VehicleTypes
 
     QString gitHash() const { return _gitHash; }
     quint64 vehicleUID() const { return _uid; }
