@@ -22,6 +22,8 @@ qt_add_qml_module(PlanViewModule
         MissionItemEditor.qml
         MissionItemIndexLabel.qml
         MissionItemMapVisual.qml
+        MissionItemMapVisualBase.qml
+        HomePositionMapVisual.qml
         MissionItemStatus.qml
         MissionItemTreeView.qml
         MissionSettingsEditor.qml
