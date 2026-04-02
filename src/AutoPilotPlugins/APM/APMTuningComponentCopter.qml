@@ -10,50 +10,31 @@ SetupPage {
     id:             tuningPage
     pageComponent:  tuningPageComponent
 
-    property real _margins: ScreenTools.defaultFontPixelHeight
-
-    QGCPalette { id: qgcPal; colorGroupEnabled: true }
-
     Component {
         id: tuningPageComponent
 
-        Item {
-            width: availableWidth//Math.max(availableWidth, outerColumn.width)
-            height: flowLayout.height//availableHeight
+        ColumnLayout {
+            width:  availableWidth
 
             FactPanelController { id: controller; }
 
             property bool _atcInputTCAvailable: controller.parameterExists(-1, "ATC_INPUT_TC")
             property Fact _atcInputTC:          controller.getParameterFact(-1, "ATC_INPUT_TC", false)
-            property Fact _atcAngPitP:          controller.getParameterFact(-1, "ATC_ANG_PIT_P")
-            property Fact _atcAngRllP:          controller.getParameterFact(-1, "ATC_ANG_RLL_P")
-            property Fact _atcAngYawP:          controller.getParameterFact(-1, "ATC_ANG_YAW_P")
-            property Fact _atcAccelPMax:        controller.getParameterFact(-1, "ATC_ACCEL_P_MAX")
-            property Fact _atcAccelRMax:        controller.getParameterFact(-1, "ATC_ACCEL_R_MAX")
-            property Fact _atcAccelYMax:        controller.getParameterFact(-1, "ATC_ACCEL_Y_MAX")
             property Fact _rateRollP:           controller.getParameterFact(-1, "ATC_RAT_RLL_P")
             property Fact _rateRollI:           controller.getParameterFact(-1, "ATC_RAT_RLL_I")
-            property Fact _rateRollD:           controller.getParameterFact(-1, "ATC_RAT_RLL_D")
             property Fact _ratePitchP:          controller.getParameterFact(-1, "ATC_RAT_PIT_P")
             property Fact _ratePitchI:          controller.getParameterFact(-1, "ATC_RAT_PIT_I")
-            property Fact _ratePitchD:          controller.getParameterFact(-1, "ATC_RAT_PIT_D")
-            property Fact _rateYawP:            controller.getParameterFact(-1, "ATC_RAT_YAW_P")
-            property Fact _rateYawI:            controller.getParameterFact(-1, "ATC_RAT_YAW_I")
-            property Fact _rateYawD:            controller.getParameterFact(-1, "ATC_RAT_YAW_D")
-            property Fact _rateClimbP:          controller.getParameterFact(-1, "PSC_ACCZ_P")
-            property Fact _rateClimbI:          controller.getParameterFact(-1, "PSC_ACCZ_I")
-            property Fact _pscVelXYP:           controller.getParameterFact(-1, "PSC_VELXY_P")
-            property Fact _pscVelXYI:           controller.getParameterFact(-1, "PSC_VELXY_I")
-            property Fact _pscVelXYD:           controller.getParameterFact(-1, "PSC_VELXY_D")
+            property Fact _rateClimbP:          controller.getParameterFact(-1, "PSC_D_ACC_P")
+            property Fact _rateClimbI:          controller.getParameterFact(-1, "PSC_D_ACC_I")
             property Fact _motSpinArm:          controller.getParameterFact(-1, "MOT_SPIN_ARM")
             property Fact _motSpinMin:          controller.getParameterFact(-1, "MOT_SPIN_MIN")
 
-            property Fact _ch7Opt:              controller.getParameterFact(-1, "r.RC7_OPTION")
-            property Fact _ch8Opt:              controller.getParameterFact(-1, "r.RC8_OPTION")
-            property Fact _ch9Opt:              controller.getParameterFact(-1, "r.RC9_OPTION")
-            property Fact _ch10Opt:             controller.getParameterFact(-1, "r.RC10_OPTION")
-            property Fact _ch11Opt:             controller.getParameterFact(-1, "r.RC11_OPTION")
-            property Fact _ch12Opt:             controller.getParameterFact(-1, "r.RC12_OPTION")
+            property Fact _ch7Opt:  controller.getParameterFact(-1, "RC7_OPTION")
+            property Fact _ch8Opt:  controller.getParameterFact(-1, "RC8_OPTION")
+            property Fact _ch9Opt:  controller.getParameterFact(-1, "RC9_OPTION")
+            property Fact _ch10Opt: controller.getParameterFact(-1, "RC10_OPTION")
+            property Fact _ch11Opt: controller.getParameterFact(-1, "RC11_OPTION")
+            property Fact _ch12Opt: controller.getParameterFact(-1, "RC12_OPTION")
 
             readonly property int   _firstOptionChannel:    7
             readonly property int   _lastOptionChannel:     12
@@ -63,9 +44,6 @@ SetupPage {
             readonly property int _autoTuneOption:          17
 
             property real _margins: ScreenTools.defaultFontPixelHeight
-
-            readonly property real factSpinBoxLabelWidth:  ScreenTools.defaultFontPixelWidth * 12
-            readonly property real _spinboxPreferredWidth: ScreenTools.defaultFontPixelWidth * 20
 
             property bool _loadComplete: false
 
@@ -80,9 +58,9 @@ SetupPage {
             /// to find them and setup the ui accordindly.
             function calcAutoTuneChannel() {
                 _autoTuneSwitchChannelIndex = 0
-                for (var channel=_firstOptionChannel; channel<=_lastOptionChannel; channel++) {
-                    var optionFact = controller.getParameterFact(-1, "r.RC" + channel + "_OPTION")
-                    if (optionFact.value === _autoTuneOption) {
+                for (let channel=_firstOptionChannel; channel<=_lastOptionChannel; channel++) {
+                    let optionFact = controller.getParameterFact(-1, "RC" + channel + "_OPTION")
+                    if (optionFact.value == _autoTuneOption) {
                         _autoTuneSwitchChannelIndex = channel - _firstOptionChannel + 1
                         break
                     }
@@ -92,16 +70,16 @@ SetupPage {
             /// We need to clear AutoTune from any previous channel before setting it to a new one
             function setChannelAutoTuneOption(channel) {
                 // First clear any previous settings for AutTune
-                for (var optionChannel=_firstOptionChannel; optionChannel<=_lastOptionChannel; optionChannel++) {
-                    var optionFact = controller.getParameterFact(-1, "r.RC" + optionChannel + "_OPTION")
-                    if (optionFact.value === _autoTuneOption) {
+                for (let optionChannel=_firstOptionChannel; optionChannel<=_lastOptionChannel; optionChannel++) {
+                    let optionFact = controller.getParameterFact(-1, "RC" + optionChannel + "_OPTION")
+                    if (optionFact.value == _autoTuneOption) {
                         optionFact.value = 0
                     }
                 }
 
                 // Now set the function into the new channel
-                if (channel !== 0) {
-                    var optionFact = controller.getParameterFact(-1, "r.RC" + channel + "_OPTION")
+                if (channel != 0) {
+                    let optionFact = controller.getParameterFact(-1, "RC" + channel + "_OPTION")
                     optionFact.value = _autoTuneOption
                 }
             }
@@ -113,598 +91,166 @@ SetupPage {
             Connections { target: _ch11Opt; function onValueChanged(value) { calcAutoTuneChannel() } }
             Connections { target: _ch12Opt; function onValueChanged(value) { calcAutoTuneChannel() } }
 
-            Flow {
-                id:         flowLayout
-                width:      availableWidth
-                spacing:    _margins / 2
-                visible:    !advanced
+            ColumnLayout {
+                Layout.fillWidth:   true
+                spacing:            _margins
+                visible:            !advanced
 
-                Column {
-                    spacing: _margins / 2
+                SettingsGroupLayout {
+                    Layout.fillWidth:   true
+                    heading:            qsTr("Roll/Pitch Sensitivity")
+                    headingDescription: qsTr("Slide to the right if the copter is sluggish or slide to the left if the copter is twitchy")
 
-                    QGCLabel {
-                        text: qsTr("Roll")
-                    }
+                    FactSlider {
+                        id:                 rollPitch
+                        Layout.fillWidth:   true
+                        from:               0.08
+                        to:                 0.4
+                        majorTickStepSize:  0.02
+                        decimalPlaces:      3
+                        fact:              _rateRollP
 
-                    Rectangle {
-                        border.width:   1
-                        border.color:   qgcPal.groupBorder
-                        radius:         _margins / 2
-                        width:          stabRRow.width + _margins
-                        height:         stabRRow.height + _margins
-                        color:          qgcPal.windowShadeDark
-
-                        ColumnLayout{
-                            id:             stabRRow
-                            anchors.horizontalCenter:   parent.horizontalCenter
-                            anchors.verticalCenter:     parent.verticalCenter
-                            spacing: _margins / 2
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("ATC_ANG_P")
-                                fact:   controller.getParameterFact(-1, "ATC_ANG_RLL_P")
-                                toValue:     12
-                                fromValue:    1
-                                decimals:     2
-                                stepValue:  0.05
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Accel Max")
-                                fact:   controller.getParameterFact(-1, "ATC_ACCEL_R_MAX")
-                                toValue:     200000
-                                fromValue:    0
-                                decimals:     0
-                                stepValue:  1000
-                            }
-
-                            Rectangle {
-                                Layout.fillWidth: true
-                                height: 1
-                                color: qgcPal.groupBorder
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Rate_Roll_P")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_P")
-                                toValue:     1
-                                fromValue:    0
-                                decimals:     3
-                                stepValue:  0.005
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Rate_Roll_I")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_I")
-                                toValue:     1
-                                fromValue:    0
-                                decimals:     3
-                                stepValue:  0.005
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Rate_Roll_D")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_D")
-                                toValue:     1
-                                fromValue:    0
-                                decimals:     4
-                                stepValue:  0.0001
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("FLTE")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTE")
-                                toValue:     100
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:    1
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("FLTD")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTD")
-                                toValue:     100
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:    1
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("FLTT")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_RLL_FLTT")
-                                toValue:     100
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:    1
-                            }
+                        onValueChanged: {
+                            _rateRollI.rawValue = value
+                            _ratePitchP.rawValue = value
+                            _ratePitchI.rawValue = value
                         }
                     }
                 }
 
-                Column {
-                    spacing: _margins / 2
+                SettingsGroupLayout {
+                    Layout.fillWidth:   true
+                    heading:            qsTr("Climb Sensitivity")
+                    headingDescription: qsTr("Slide to the right to climb more aggressively or slide to the left to climb more gently")
 
-                    QGCLabel {
-                        text: qsTr("Pitch")
-                    }
-
-                    Rectangle {
-                        border.width:   1
-                        border.color:   qgcPal.groupBorder
-                        radius:         _margins / 4
-                        width:          stabPRow.width + _margins
-                        height:         stabPRow.height + _margins
-                        color:          qgcPal.windowShadeDark
-
-                        ColumnLayout{
-                            id:             stabPRow
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: _margins / 2
-
-
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("ATC_ANG_P")
-                                fact:   controller.getParameterFact(-1, "ATC_ANG_PIT_P")
-                                toValue:     12
-                                fromValue:    1
-                                decimals:     2
-                                stepValue:  0.05
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Accel Max")
-                                fact:   controller.getParameterFact(-1, "ATC_ACCEL_P_MAX")
-                                toValue:     200000
-                                fromValue:    0
-                                decimals:     0
-                                stepValue:  1000
-                            }
-
-                            Rectangle {
-                                Layout.fillWidth: true
-                                height: 1
-                                color: qgcPal.groupBorder
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Rate_Pitch_P")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_P")
-                                toValue:     1
-                                fromValue:    0
-                                decimals:     3
-                                stepValue:  0.005
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Rate_Pitch_I")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_I")
-                                toValue:     1
-                                fromValue:    0
-                                decimals:     3
-                                stepValue:  0.005
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Rate_Pitch_D")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_D")
-                                toValue:     1
-                                fromValue:    0
-                                decimals:     4
-                                stepValue:  0.0001
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("FLTE")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTE")
-                                toValue:     100
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:    1
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("FLTD")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTD")
-                                toValue:     100
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:    1
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("FLTT")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_PIT_FLTT")
-                                toValue:     100
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:    1
-                            }
-                        }
+                    FactSlider {
+                        id:                 climb
+                        Layout.fillWidth:   true
+                        from:               0.03
+                        to:                 1.0
+                        majorTickStepSize:  0.05
+                        decimalPlaces:      3
+                        fact:               _rateClimbP
+                        onValueChanged:     _rateClimbI.rawValue = value * 2
                     }
                 }
 
-                Column {
-                    spacing : _margins / 2
+                SettingsGroupLayout {
+                    Layout.fillWidth:   true
+                    heading:            qsTr("RC Roll/Pitch Feel")
+                    headingDescription: qsTr("Slide to the left for soft control, slide to the right for crisp control")
 
-                    QGCLabel {
-                        text: qsTr("Yaw")
-                    }
-
-                    Rectangle {
-                        border.width:   1
-                        border.color:   qgcPal.groupBorder
-                        radius:         _margins / 4
-                        width:          stabYRow.width + _margins
-                        height:         stabYRow.height + _margins
-                        color:          qgcPal.windowShadeDark
-
-                        ColumnLayout{
-                            id:             stabYRow
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: _margins / 2
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("ATC_ANG_P")
-                                fact:   controller.getParameterFact(-1, "ATC_ANG_YAW_P")
-                                toValue:     12
-                                fromValue:    1
-                                decimals:     2
-                                stepValue:  0.05
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Accel Max")
-                                fact:   controller.getParameterFact(-1, "ATC_ACCEL_Y_MAX")
-                                toValue:     200000
-                                fromValue:    0
-                                decimals:     0
-                                stepValue:  1000
-                            }
-
-                            Rectangle {
-                                Layout.fillWidth: true
-                                height: 1
-                                color: qgcPal.groupBorder
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Rate_Yaw_P")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_P")
-                                toValue:     1
-                                fromValue:    0
-                                decimals:     3
-                                stepValue:  0.005
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Rate_Yaw_I")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_I")
-                                toValue:     1
-                                fromValue:    0
-                                decimals:     3
-                                stepValue:  0.005
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("Rate_Yaw_D")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_D")
-                                toValue:     1
-                                fromValue:    0
-                                decimals:     4
-                                stepValue:  0.0001
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("FLTE")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTE")
-                                toValue:     100
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:    1
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("FLTD")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTD")
-                                toValue:     100
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:    1
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("FLTT")
-                                fact:   controller.getParameterFact(-1, "ATC_RAT_YAW_FLTT")
-                                toValue:     100
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:    1
-                            }
-                        }
+                    FactSlider {
+                        id:                 atcInputTC
+                        Layout.fillWidth:   true
+                        from:               _atcInputTC.min
+                        to:                 _atcInputTC.max
+                        majorTickStepSize:  _atcInputTC.increment
+                        decimalPlaces:      2
+                        unitsString:        ""
+                        fact:              _atcInputTC
                     }
                 }
 
-                Column {
-                    spacing : _margins / 2
+                SettingsGroupLayout {
+                    Layout.fillWidth:   true
+                    heading:            qsTr("Spin While Armed")
+                    headingDescription: qsTr("Adjust the amount the motors spin to indicate armed. Should be lower than 'Minimum Thrust'")
 
-                    QGCLabel {
-                        text: qsTr("Throttle Accel(Acc to Mot)")
-                    }
-
-                    Rectangle {
-                        border.width:   1
-                        border.color:   qgcPal.groupBorder
-                        radius:         _margins / 4
-                        width:          pscACCZGrid.width + _margins
-                        height:         pscACCZGrid.height + _margins
-                        color:          qgcPal.windowShadeDark
-                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-                        ColumnLayout{
-                            id:             pscACCZGrid
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: _margins / 2
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PSC_ACCZ_P")
-                                fact:   controller.getParameterFact(-1, "PSC_ACCZ_P")
-                                toValue:     2
-                                fromValue:    0
-                                decimals:     2
-                                stepValue:  0.01
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PSC_ACCZ_I")
-                                fact:   controller.getParameterFact(-1, "PSC_ACCZ_I")
-                                toValue:     2
-                                fromValue:    0
-                                decimals:     2
-                                stepValue:  0.01
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PSC_ACCZ_D")
-                                fact:   controller.getParameterFact(-1, "PSC_ACCZ_D")
-                                toValue:    0.1
-                                fromValue:    0
-                                decimals:     3
-                                stepValue:  0.001
-                            }
-
-                            Rectangle {
-                                Layout.fillWidth: true
-                                height: 1
-                                color: qgcPal.groupBorder
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PSC_VELZ_P")
-                                description:     "VSpd to Acc"
-                                fact:   controller.getParameterFact(-1, "PSC_VELZ_P")
-                                toValue:      6
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:  0.1
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PSC_POSZ_P")
-                                description:    "Alt to VSpd"
-                                fact:   controller.getParameterFact(-1, "PSC_POSZ_P")
-                                toValue:      2
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:  0.1
-                            }
-
-                            Rectangle {
-                                Layout.fillWidth: true
-                                height: 1
-                                color: qgcPal.groupBorder
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("THR_EXPO")
-                                fact:   controller.getParameterFact(-1, "MOT_THST_EXPO")
-                                toValue:       1
-                                fromValue:    -1
-                                decimals:      3
-                                stepValue:  0.001
-                            }
-                        }
+                    FactSlider {
+                        Layout.fillWidth:   true
+                        from:               0
+                        to:                 0.3
+                        majorTickStepSize:  0.1
+                        decimalPlaces:      1
+                        fact:              _motSpinArm
                     }
                 }
 
-                Column {
-                    spacing : _margins / 2
+                SettingsGroupLayout {
+                    Layout.fillWidth:   true
+                    heading:            qsTr("Minimum Thrust")
+                    headingDescription: qsTr("Adjust the minimum amount of thrust require for the vehicle to move. Should be higher than 'Spin While Armed")
 
-                    QGCLabel {
-                        text: qsTr("Velocity XY")
-                    }
-
-                    Rectangle {
-                        border.width:   1
-                        border.color:   qgcPal.groupBorder
-                        radius:         _margins / 4
-                        width:          pscVelGrid.width + _margins
-                        height:         pscVelGrid.height + _margins
-                        color:          qgcPal.windowShadeDark
-
-                        ColumnLayout{
-                            id:             pscVelGrid
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: _margins / 2
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PSC_VELXY_P")
-                                fact:   controller.getParameterFact(-1, "PSC_VELXY_P")
-                                toValue:      6
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:  0.1
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PSC_VELXY_I")
-                                fact:   controller.getParameterFact(-1, "PSC_VELXY_I")
-                                toValue:      6
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:  0.1
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PSC_VELXY_D")
-                                fact:   controller.getParameterFact(-1, "PSC_VELXY_D")
-                                toValue:      6
-                                fromValue:    0
-                                decimals:     1
-                                stepValue:  0.1
-                            }
-
-                            Rectangle {
-                                Layout.fillWidth: true
-                                height: 1
-                                color: qgcPal.groupBorder
-                            }
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PSC_POSXY_P")
-                                fact:   controller.getParameterFact(-1, "PSC_POSXY_P")
-                                toValue:       2
-                                fromValue:     0
-                                decimals:      1
-                                stepValue:     0.1
-                            }
-                        }
+                    FactSlider {
+                        Layout.fillWidth:   true
+                        from:               0
+                        to:                 0.3
+                        majorTickStepSize:  0.1
+                        decimalPlaces:      1
+                        fact:              _motSpinArm
                     }
                 }
 
-                Column {
-                    spacing : _margins / 2
+                Flow {
+                    id:                 flowLayout
+                    Layout.fillWidth:   true
+                    spacing:            _margins
 
-                    QGCLabel {
-                        text: qsTr("Yaw Gain")
-                    }
+                    SettingsGroupLayout {
+                        heading: qsTr("AutoTune")
 
-                    Rectangle {
-                        border.width:   1
-                        border.color:   qgcPal.groupBorder
-                        radius:         _margins / 4
-                        width:          yawGainGrid.width + _margins
-                        height:         yawGainGrid.height + _margins
-                        color:          qgcPal.windowShadeDark
+                        ColumnLayout {
+                            RowLayout {
+                                spacing: _margins
 
-                        ColumnLayout{
-                            id:             yawGainGrid
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: _margins / 2
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("ATC_SLEW_YAW")
-                                description:    "cdeg/s"
-                                fact:   controller.getParameterFact(-1, "ATC_SLEW_YAW")
-                                toValue:       10000
-                                fromValue:     0
-                                decimals:      1
-                                stepValue:     500
+                                QGCLabel { text: qsTr("Axes to AutoTune:") }
+                                FactBitmask {
+                                    fact: _autoTuneAxes
+                                    Layout.preferredWidth: tuningPage.availableWidth * 0.75
+                                }
                             }
 
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("PILOT_Y_RATE")
-                                description:    "deg/s"
-                                fact:   controller.getParameterFact(-1, "PILOT_Y_RATE")
-                                toValue:    1000
-                                fromValue:  0
-                                decimals:   1
-                                stepValue:  5
+                            LabelledComboBox {
+                                id:             autoTuneChannelCombo
+                                comboBoxPreferredWidth: ScreenTools.defaultFontPixelWidth * 30
+                                label:          qsTr("Channel for AutoTune switch:")
+                                model:          [qsTr("None"), qsTr("Channel 7"), qsTr("Channel 8"), qsTr("Channel 9"), qsTr("Channel 10"), qsTr("Channel 11"), qsTr("Channel 12") ]
+                                currentIndex:   _autoTuneSwitchChannelIndex
+
+                                onActivated: (index) => {
+                                    let channel = index
+
+                                    if (channel > 0) {
+                                        channel += 6
+                                    }
+                                    setChannelAutoTuneOption(channel)
+                                }
                             }
                         }
                     }
-                }
 
-                Column {
-                    spacing : _margins / 2
+                    SettingsGroupLayout {
+                        heading: qsTr("In Flight Tuning")
 
-                    QGCLabel {
-                        text: qsTr("FILTER")
-                    }
+                        ColumnLayout {
+                            id:     channel6TuningOptColumn
+                            spacing: ScreenTools.defaultFontPixelHeight
 
-                    Rectangle {
-                        border.width:   1
-                        border.color:   qgcPal.groupBorder
-                        radius:         _margins / 4
-                        width:          filterGrid.width + _margins
-                        height:         filterGrid.height + _margins
-                        color:          qgcPal.windowShadeDark
-
-                        ColumnLayout{
-                            id:             filterGrid
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.verticalCenter: parent.verticalCenter
-                            spacing: _margins / 2
-
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("ACCEL FILT")
-                                fact:   controller.getParameterFact(-1, "INS_ACCEL_FILTER")
-                                toValue:    100
-                                fromValue:  0
-                                decimals:   1
-                                stepValue:  1
+                            LabelledFactComboBox {
+                                id:         optCombo
+                                comboBoxPreferredWidth: ScreenTools.defaultFontPixelWidth * 30
+                                label:      qsTr("RC Channel 6 Option (Tuning):")
+                                fact:       controller.getParameterFact(-1, "TUNE")
+                                indexModel: false
                             }
 
-                            LabelledFactSpinBox{
-                                spinboxPreferredWidth: _spinboxPreferredWidth
-                                label: qsTr("GYRO FILT")
-                                fact:   controller.getParameterFact(-1, "INS_GYRO_FILTER")
-                                toValue:    100
-                                fromValue:  0
-                                decimals:   1
-                                stepValue:  1
+                            RowLayout {
+                                spacing: ScreenTools.defaultFontPixelWidth
+
+                                LabelledFactTextField {
+                                    id:                     tuneMinField
+                                    textField.validator:    DoubleValidator {bottom: 0; top: 32767;}
+                                    label:                  qsTr("Min:")
+                                    fact:                   controller.getParameterFact(-1, "TUNE_MIN")
+                                }
+
+                                LabelledFactTextField {
+                                    id:                     tuneMaxField
+                                    textField.validator:    DoubleValidator {bottom: 0; top: 32767;}
+                                    label:                  qsTr("Max:")
+                                    fact:                   controller.getParameterFact(-1, "TUNE_MAX")
+                                }
                             }
                         }
                     }
