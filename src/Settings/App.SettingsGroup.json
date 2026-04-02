@@ -303,6 +303,16 @@
             "type": "bool",
             "default": false,
             "label": "Clear Settings Next Boot"
+        },
+        {
+            "name": "uiScalePercent",
+            "shortDesc": "Scales the entire user interface including fonts and controls.",
+            "type": "uint32",
+            "units": "%",
+            "min": 50,
+            "max": 200,
+            "default": 100,
+            "label": "UI Scaling"
         }
     ]
 }
