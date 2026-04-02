@@ -7,35 +7,40 @@
             "shortDesc": "Video source",
             "longDesc": "Source for video. UDP, TCP, RTSP and UVC Cameras may be supported depending on Vehicle and ground station version.",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Video source"
         },
         {
             "name": "udpUrl",
             "shortDesc": "Video UDP Url",
             "longDesc": "UDP url address and port to bind to for video stream. Example: 0.0.0.0:5600",
             "type": "string",
-            "default": "0.0.0.0:5600"
+            "default": "0.0.0.0:5600",
+            "label": "Video UDP Url"
         },
         {
             "name": "rtspUrl",
             "shortDesc": "Video RTSP Url",
             "longDesc": "RTSP url address and port to bind to for video stream. Example: rtsp://192.168.42.1:554/live",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Video RTSP Url"
         },
         {
             "name": "tcpUrl",
             "shortDesc": "Video TCP Url",
             "longDesc": "TCP url address and port to bind to for video stream. Example: 192.168.143.200:3001",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Video TCP Url"
         },
         {
             "name": "videoSavePath",
             "shortDesc": "Video save directory",
             "longDesc": "Directory to save videos to.",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Video save directory"
         },
         {
             "name": "aspectRatio",
@@ -43,14 +48,16 @@
             "longDesc": "Video Aspect Ratio (width / height). Use 0.0 to ignore it.",
             "type": "float",
             "decimalPlaces": 6,
-            "default": 1.777777
+            "default": 1.777777,
+            "label": "Video Aspect Ratio"
         },
         {
             "name": "gridLines",
             "shortDesc": "Video Grid Lines",
             "longDesc": "Displays a grid overlaid over the video view.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Video Grid Lines"
         },
         {
             "name": "videoFit",
@@ -59,14 +66,16 @@
             "type": "uint32",
             "enumStrings": "Fit Width,Fit Height,Fill,No Crop",
             "enumValues": "0,1,2,3",
-            "default": 1
+            "default": 1,
+            "label": "Video Display Fit"
         },
         {
             "name": "showRecControl",
             "shortDesc": "Show Video Record Control",
             "longDesc": "Show recording control in the UI.",
             "type": "bool",
-            "default": true
+            "default": true,
+            "label": "Show Video Record Control"
         },
         {
             "name": "recordingFormat",
@@ -75,7 +84,8 @@
             "type": "uint32",
             "enumStrings": "mp4,mov,mkv",
             "enumValues": "2,1,0",
-            "default": 2
+            "default": 2,
+            "label": "Video Recording Format"
         },
         {
             "name": "maxVideoSize",
@@ -85,7 +95,8 @@
             "min": 100,
             "units": "MB",
             "default": 10240,
-            "mobileDefault": 2048
+            "mobileDefault": 2048,
+            "label": "Max Video Storage Usage"
         },
         {
             "name": "enableStorageLimit",
@@ -93,7 +104,8 @@
             "longDesc": "When enabled, old video files will be auto-deleted when the total size of QGC-recorded video exceeds the maximum video storage usage.",
             "type": "bool",
             "default": false,
-            "mobileDefault": true
+            "mobileDefault": true,
+            "label": "Enable/Disable Limits on Storage Usage"
         },
         {
             "name": "rtspTimeout",
@@ -102,28 +114,32 @@
             "type": "uint32",
             "min": 1,
             "units": "s",
-            "default": 8
+            "default": 8,
+            "label": "RTSP Video Timeout"
         },
         {
             "name": "streamEnabled",
             "shortDesc": "Video Stream Enabled",
             "longDesc": "Start/Stop Video Stream.",
             "type": "bool",
-            "default": true
+            "default": true,
+            "label": "Video Stream Enabled"
         },
         {
             "name": "disableWhenDisarmed",
             "shortDesc": "Video Stream Disnabled When Armed",
             "longDesc": "Disable Video Stream when disarmed.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Video Stream Disnabled When Armed"
         },
         {
             "name": "lowLatencyMode",
             "shortDesc": "Tweaks video for lower latency",
             "longDesc": "If this option is enabled, the rtpjitterbuffer is removed and the video sink is set to assynchronous mode, reducing the latency by about 200 ms.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Tweaks video for lower latency"
         },
         {
             "name": "forceVideoDecoder",
@@ -133,49 +149,56 @@
             "enumStrings": "Default,Force software decoder,Force hardware decoder,Force NVIDIA decoder,Force VA-API decoder,Force DirectX3D 11 decoder,Force VideoToolbox decoder,Force Intel decoder,Force Vulkan decoder",
             "enumValues": "0,1,8,2,3,4,5,6,7",
             "default": 0,
-            "qgcRebootRequired": true
+            "qgcRebootRequired": true,
+            "label": "Force video decoder priority"
         },
         {
             "name": "enableMavlinkCameraStreamInformaion",
             "shortDesc": "enableMavlinkCameraStreamInformaion",
             "longDesc": "enableMavlinkCameraStreamInformaion",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "enableMavlinkCameraStreamInformaion"
         },
         {
             "name": "enableManualThermalConfig",
             "shortDesc": "Enable Manual Thermal Configuration",
             "longDesc": "Enable manual thermal video stream configuration. When disabled, thermal stream is auto-configured from MAVLink VIDEO_STREAM_INFORMATION.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Enable Manual Thermal Configuration"
         },
         {
             "name": "thermalVideoSource",
             "shortDesc": "Thermal Video source",
             "longDesc": "Source for thermal video. When disabled, thermal video is auto-configured from MAVLink.",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Thermal Video source"
         },
         {
             "name": "thermalUdpUrl",
             "shortDesc": "Thermal Video UDP Url",
             "longDesc": "UDP url address and port for thermal video stream. Example: 0.0.0.0:5601",
             "type": "string",
-            "default": "0.0.0.0:5601"
+            "default": "0.0.0.0:5601",
+            "label": "Thermal Video UDP Url"
         },
         {
             "name": "thermalRtspUrl",
             "shortDesc": "Thermal Video RTSP Url",
             "longDesc": "RTSP url for thermal video stream. Example: rtsp://192.168.42.1:554/thermal",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Thermal Video RTSP Url"
         },
         {
             "name": "thermalTcpUrl",
             "shortDesc": "Thermal Video TCP Url",
             "longDesc": "TCP url for thermal video stream. Example: 192.168.143.200:3002",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Thermal Video TCP Url"
         },
         {
             "name": "thermalViewMode",
@@ -184,7 +207,8 @@
             "type": "uint32",
             "enumStrings": "Off,Blend,Full,Picture In Picture",
             "enumValues": "0,1,2,3",
-            "default": 2
+            "default": 2,
+            "label": "Thermal View Mode"
         },
         {
             "name": "thermalOpacity",
@@ -193,7 +217,8 @@
             "type": "uint32",
             "default": 85,
             "min": 0,
-            "max": 100
+            "max": 100,
+            "label": "Thermal Blend Opacity"
         }
     ]
 }
