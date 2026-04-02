@@ -9,12 +9,16 @@ target_sources(${CMAKE_PROJECT_NAME}
         APMAirframeComponent.h
         APMAirframeComponentController.cc
         APMAirframeComponentController.h
+        APMAirspeedComponent.cc
+        APMAirspeedComponent.h
         APMAutoPilotPlugin.cc
         APMESCComponent.cc
         APMESCComponent.h
         APMAutoPilotPlugin.h
         APMChannelsComponent.cc
         APMChannelsComponent.h
+        APMFailsafesComponent.cc
+        APMFailsafesComponent.h
         APMFlightModesComponent.cc
         APMFlightModesComponent.h
         APMFlightModesComponentController.cc
@@ -31,6 +35,8 @@ target_sources(${CMAKE_PROJECT_NAME}
         APMLightsComponent.h
         APMMotorComponent.cc
         APMMotorComponent.h
+        APMServoComponent.cc
+        APMServoComponent.h
         APMPowerComponent.cc
         APMPowerComponent.h
         APMPortsComponent.cc
@@ -39,8 +45,8 @@ target_sources(${CMAKE_PROJECT_NAME}
         APMRadioComponent.h
         APMRemoteSupportComponent.cc
         APMRemoteSupportComponent.h
-        APMSafetyComponent.cc
-        APMSafetyComponent.h
+        APMFlightSafetyComponent.cc
+        APMFlightSafetyComponent.h
         APMSensorsComponent.cc
         APMSensorsComponent.h
         APMSensorsComponentController.cc
@@ -75,8 +81,9 @@ file(GLOB _apm_config_page_definitions CONFIGURE_DEPENDS "${APM_CONFIG_PAGES_DIR
 
 # Generated QML outputs (must match what generate_pages.py produces)
 set(_apm_config_generated_qml_names
+    APMFailsafesComponent.qml
     APMPowerComponent.qml
-    APMSafetyComponent.qml
+    APMFlightSafetyComponent.qml
 )
 
 # Full paths in the build tree
@@ -133,6 +140,8 @@ qt_add_qml_module(AutoPilotPluginsAPMModule
         APMChannelsComponent.qml
         APMESCComponent.qml
         APMESCComponentSummary.qml
+        APMFailsafesComponentSummary.qml
+        APMFailsafesComponentSummarySub.qml
         APMFlightModesComponent.qml
         APMFlightModesComponentSummary.qml
         APMFollowComponent.qml
@@ -150,9 +159,9 @@ qt_add_qml_module(AutoPilotPluginsAPMModule
         APMPortsComponent.qml
         APMRadioComponentSummary.qml
         APMRemoteSupportComponent.qml
-        APMSafetyComponentSub.qml
-        APMSafetyComponentSummary.qml
-        APMSafetyComponentSummarySub.qml
+        APMFlightSafetyComponentSub.qml
+        APMFlightSafetyComponentSummary.qml
+        APMFlightSafetyComponentSummarySub.qml
         APMSensorsComponent.qml
         APMSensorsComponentSummary.qml
         APMSensorIdDecoder.qml
@@ -163,8 +172,9 @@ qt_add_qml_module(AutoPilotPluginsAPMModule
         APMTuningComponentCopter.qml
         APMTuningComponentSub.qml
     RESOURCES
+        VehicleConfig/APMFailsafes.VehicleConfig.json
         VehicleConfig/APMPower.VehicleConfig.json
-        VehicleConfig/APMSafety.VehicleConfig.json
+        VehicleConfig/APMFlightSafety.VehicleConfig.json
     NO_PLUGIN
 )
 

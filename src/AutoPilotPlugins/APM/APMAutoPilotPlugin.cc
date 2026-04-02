@@ -1,17 +1,20 @@
 #include "APMAutoPilotPlugin.h"
 #include "APMAirframeComponent.h"
+#include "APMAirspeedComponent.h"
 #include "APMChannelsComponent.h"
 #include "APMGimbalComponent.h"
 #include "APMFlightModesComponent.h"
 #include "APMHeliComponent.h"
 #include "APMLightsComponent.h"
 #include "APMMotorComponent.h"
+#include "APMServoComponent.h"
 #include "APMESCComponent.h"
 #include "APMPowerComponent.h"
 #include "APMPortsComponent.h"
 #include "APMRadioComponent.h"
 #include "APMRemoteSupportComponent.h"
-#include "APMSafetyComponent.h"
+#include "APMFailsafesComponent.h"
+#include "APMFlightSafetyComponent.h"
 #include "APMSensorsComponent.h"
 #include "APMSubFrameComponent.h"
 #include "APMTuningComponent.h"
@@ -24,6 +27,9 @@
 #include "Vehicle.h"
 #include "VehicleSupports.h"
 #include "VehicleComponent.h"
+
+#include <algorithm>
+
 #ifdef QT_DEBUG
 #include "APMFollowComponent.h"
 #include "ArduCopterFirmwarePlugin.h"
@@ -84,6 +90,12 @@ const QVariantList &APMAutoPilotPlugin::vehicleComponents()
             _sensorsComponent->setupTriggerSignals();
             _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_sensorsComponent)));
 
+            if (_vehicle->parameterManager()->parameterExists(-1, QStringLiteral("ARSPD_TYPE"))) {
+                _airspeedComponent = new APMAirspeedComponent(_vehicle, this);
+                _airspeedComponent->setupTriggerSignals();
+                _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_airspeedComponent)));
+            }
+
             _powerComponent = new APMPowerComponent(_vehicle, this);
             _powerComponent->setupTriggerSignals();
             _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_powerComponent)));
@@ -98,9 +110,19 @@ const QVariantList &APMAutoPilotPlugin::vehicleComponents()
                 _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_motorComponent)));
             }
 
-            _safetyComponent = new APMSafetyComponent(_vehicle, this);
-            _safetyComponent->setupTriggerSignals();
-            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_safetyComponent)));
+            if (_vehicle->parameterManager()->parameterExists(-1, QStringLiteral("SERVO1_MIN"))) {
+                _servoComponent = new APMServoComponent(_vehicle, this);
+                _servoComponent->setupTriggerSignals();
+                _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_servoComponent)));
+            }
+
+            _flightSafetyComponent = new APMFlightSafetyComponent(_vehicle, this);
+            _flightSafetyComponent->setupTriggerSignals();
+            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_flightSafetyComponent)));
+
+            _failsafesComponent = new APMFailsafesComponent(_vehicle, this);
+            _failsafesComponent->setupTriggerSignals();
+            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_failsafesComponent)));
 
 // #ifdef QT_DEBUG
 //             if ((qobject_cast<ArduCopterFirmwarePlugin*>(_vehicle->firmwarePlugin()) || qobject_cast<ArduRoverFirmwarePlugin*>(_vehicle->firmwarePlugin())) &&
@@ -181,7 +203,7 @@ QString APMAutoPilotPlugin::prerequisiteSetup(VehicleComponent *component) const
         requiresAirframeCheck = true;
     } else if (qobject_cast<const APMESCComponent*>(component)) {
         requiresAirframeCheck = true;
-    } else if (qobject_cast<const APMSafetyComponent*>(component)) {
+    } else if (qobject_cast<const APMFlightSafetyComponent*>(component)) {
         requiresAirframeCheck = true;
     } else if (qobject_cast<const APMTuningComponent*>(component)) {
         requiresAirframeCheck = true;

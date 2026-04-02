@@ -13,6 +13,7 @@
     "groups": [
         {
             "heading": "Region",
+            "keywords": ["region", "faa", "eu", "remote id", "regulation"],
             "controls": [
                 {
                     "setting": "remoteIDSettings.region"
@@ -20,12 +21,8 @@
             ]
         },
         {
-            "component": "RemoteIDStatusFlags",
-            "sectionName": "Status Flags",
-            "keywords": "status,arm,comms,gps,remote id status"
-        },
-        {
             "heading": "Basic ID",
+            "keywords": ["basic id", "serial number", "drone id", "ua type", "registration", "broadcast"],
             "controls": [
                 {
                     "setting": "remoteIDSettings.sendBasicID"
@@ -46,6 +43,7 @@
         },
         {
             "heading": "Operator ID",
+            "keywords": ["operator", "pilot", "registration", "broadcast"],
             "controls": [
                 {
                     "setting": "remoteIDSettings.sendOperatorID",
@@ -60,12 +58,8 @@
             ]
         },
         {
-            "component": "RemoteIDOperatorIDValidation",
-            "sectionName": "Operator ID Validation",
-            "keywords": "operator validation,verify"
-        },
-        {
             "heading": "Self ID",
+            "keywords": ["self id", "flight purpose", "emergency", "broadcast", "description"],
             "controls": [
                 {
                     "setting": "remoteIDSettings.sendSelfID"
@@ -89,6 +83,7 @@
         },
         {
             "heading": "GroundStation Location",
+            "keywords": ["ground station", "gcs location", "latitude", "longitude", "altitude", "fixed position", "gnss"],
             "controls": [
                 {
                     "setting": "remoteIDSettings.locationType"
@@ -108,12 +103,28 @@
             ]
         },
         {
+            "component": "GcsPositionStatus",
+            "sectionName": "GCS Position",
+            "keywords": [
+                "latitude",
+                "longitude",
+                "hdop",
+                "gcs position"
+            ]
+        },
+        {
             "component": "RemoteIDGpsLocation",
             "sectionName": "GPS Location",
-            "keywords": "gps,nmea,hdop,position"
+            "keywords": [
+                "gps",
+                "nmea",
+                "hdop",
+                "position"
+            ]
         },
         {
             "heading": "EU Vehicle Info",
+            "keywords": ["eu", "classification", "category", "class", "ce marking"],
             "showWhen": "isEURegion",
             "controls": [
                 {
