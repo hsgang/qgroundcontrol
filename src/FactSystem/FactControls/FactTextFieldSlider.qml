@@ -35,8 +35,8 @@ Rectangle {
     property bool _loadComplete:            false
     property bool _showSlider:              _sliderMin !== undefined && _sliderMax !== undefined
     property color _ftfsBackgroundColor:    Qt.rgba(qgcPal.windowShadeLight.r, qgcPal.windowShadeLight.g, qgcPal.windowShadeLight.b, 0.2)
-    property var  _sliderMin:               sliderMin !== undefined ? sliderMin : (fact.userMin !== undefined ? fact.userMin : (allowUsingMinMax ? fact.min : undefined))
-    property var  _sliderMax:               sliderMax !== undefined ? sliderMax : (fact.userMax !== undefined ? fact.userMax : (allowUsingMinMax ? fact.max : undefined))
+    property var  _sliderMin:               sliderMin !== undefined ? sliderMin : (fact ? (fact.userMin !== undefined ? fact.userMin : (allowUsingMinMax ? fact.min : undefined)) : undefined)
+    property var  _sliderMax:               sliderMax !== undefined ? sliderMax : (fact ? (fact.userMax !== undefined ? fact.userMax : (allowUsingMinMax ? fact.max : undefined)) : undefined)
 
     function updateSliderToClampedValue() {
         if (_showSlider && sliderLoader.item) {
