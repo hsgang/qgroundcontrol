@@ -41,7 +41,7 @@
 #include "Vehicle.h"
 #include "VehicleComponent.h"
 #include "VideoManager.h"
-#include "GPS/NTRIP.h"
+#include "NTRIPManager.h"
 #include "CloudManager.h"
 #include "GridManager.h"
 

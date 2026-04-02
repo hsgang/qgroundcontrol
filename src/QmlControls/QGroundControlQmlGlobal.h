@@ -19,6 +19,7 @@ class MissionCommandTree;
 class MultiVehicleManager;
 class QGCCorePlugin;
 class QGCMapEngineManager;
+class NTRIPManager;
 class QGCPalette;
 class QGCPositionManager;
 class SettingsManager;
@@ -32,6 +33,7 @@ class SignalingServerManager;
 class KMLOverlayManager;
 
 Q_MOC_INCLUDE("ADSBVehicleManager.h")
+Q_MOC_INCLUDE("NTRIPManager.h")
 Q_MOC_INCLUDE("FactGroup.h")
 Q_MOC_INCLUDE("LinkManager.h")
 Q_MOC_INCLUDE("MissionCommandTree.h")
@@ -43,7 +45,7 @@ Q_MOC_INCLUDE("PositionManager.h")
 Q_MOC_INCLUDE("SettingsManager.h")
 Q_MOC_INCLUDE("VideoManager.h")
 Q_MOC_INCLUDE("CloudManager.h")
-Q_MOC_INCLUDE("GPS/NTRIP.h")
+Q_MOC_INCLUDE("NTRIPManager.h")
 Q_MOC_INCLUDE("GridManager.h")
 Q_MOC_INCLUDE("SiYi.h")
 Q_MOC_INCLUDE("SignalingServerManager.h")
@@ -255,12 +257,12 @@ signals:
 private:
     QGCMapEngineManager*    _mapEngineManager       = nullptr;
     ADSBVehicleManager*     _adsbVehicleManager     = nullptr;
+    NTRIPManager*           _ntripManager           = nullptr;
     QGCPositionManager*     _qgcPositionManager     = nullptr;
     MissionCommandTree*     _missionCommandTree     = nullptr;
     VideoManager*           _videoManager           = nullptr;
     LinkManager*            _linkManager            = nullptr;
     MultiVehicleManager*    _multiVehicleManager    = nullptr;
-    NTRIPManager*               _ntripManager               = nullptr;
     CloudManager*               _cloudManager               = nullptr;
     GridManager*                _gridManager                = nullptr;
     SiYi*                       _siyi                       = nullptr;

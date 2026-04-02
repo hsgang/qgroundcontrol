@@ -11,9 +11,10 @@
 #include "PositionManager.h"
 #include "QGCMapEngineManager.h"
 #include "ADSBVehicleManager.h"
+#include "NTRIPManager.h"
 #include "MissionCommandTree.h"
 #include "VideoManager.h"
-#include "GPS/NTRIP.h"
+#include "NTRIPManager.h"
 #include "CloudManager.h"
 #include "GridManager.h"
 #include "SiYi.h"
@@ -41,12 +42,12 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QObject *parent)
     : QObject(parent)
     , _mapEngineManager(QGCMapEngineManager::instance())
     , _adsbVehicleManager(ADSBVehicleManager::instance())
+    , _ntripManager(NTRIPManager::instance())
     , _qgcPositionManager(QGCPositionManager::instance())
     , _missionCommandTree(MissionCommandTree::instance())
     , _videoManager(VideoManager::instance())
     , _linkManager(LinkManager::instance())
     , _multiVehicleManager(MultiVehicleManager::instance())
-    , _ntripManager(NTRIPManager::instance())
     , _cloudManager(CloudManager::instance())
     , _gridManager(GridManager::instance())
     , _siyi(SiYi::instance())

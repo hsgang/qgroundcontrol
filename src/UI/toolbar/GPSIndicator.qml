@@ -126,7 +126,7 @@ Item {
                 width:          ScreenTools.defaultFontPixelHeight * 0.7
                 height:         width
                 color:          Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-                border.color:   _ntripManager && _ntripManager.ntripStatus == "Connected" ? qgcPal.colorGreen : qgcPal.text
+                border.color:   _ntripManager && _ntripManager.connectionStatus === 2 ? qgcPal.colorGreen : qgcPal.text
                 border.width:   1
                 radius:         ScreenTools.defaultFontPixelHeight / 5
                 anchors.left:   parent.left
@@ -135,7 +135,7 @@ Item {
                 QGCLabel {
                     text:                       "N"
                     font.bold:                  true
-                    color:                      (_ntripManager && _ntripManager.ntripStatus == "Connected") ? qgcPal.colorGreen : qgcPal.text
+                    color:                      (_ntripManager && _ntripManager.connectionStatus === 2) ? qgcPal.colorGreen : qgcPal.text
                     anchors.horizontalCenter:   parent.horizontalCenter
                     anchors.verticalCenter:     parent.verticalCenter
                     font.pointSize:             ScreenTools.smallFontPointSize

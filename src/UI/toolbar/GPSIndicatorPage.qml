@@ -165,7 +165,7 @@ ToolIndicatorPage {
 
                 LabelledLabel {
                     label:      qsTr("NTRIP")
-                    labelText:  QGroundControl.ntripManager.ntripStatus
+                    labelText:  QGroundControl.ntripManager ? QGroundControl.ntripManager.statusMessage : "N/A"
                 }
 
                 // LabelledLabel {
