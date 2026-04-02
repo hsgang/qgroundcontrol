@@ -75,12 +75,6 @@ public:
 
     Q_PROPERTY(QmlObjectListModel*  visualItems                     READ visualItems                    NOTIFY visualItemsChanged)
     Q_PROPERTY(QmlObjectTreeModel*  visualItemsTree                 READ visualItemsTree                CONSTANT)                               ///< Tree-structured view of visualItems for TreeView
-    Q_PROPERTY(QPersistentModelIndex planFileGroupIndex              READ planFileGroupIndex              CONSTANT)
-    Q_PROPERTY(QPersistentModelIndex defaultsGroupIndex              READ defaultsGroupIndex              CONSTANT)
-    Q_PROPERTY(QPersistentModelIndex missionGroupIndex               READ missionGroupIndex               CONSTANT)
-    Q_PROPERTY(QPersistentModelIndex fenceGroupIndex                 READ fenceGroupIndex                 CONSTANT)
-    Q_PROPERTY(QPersistentModelIndex rallyGroupIndex                 READ rallyGroupIndex                 CONSTANT)
-    Q_PROPERTY(QPersistentModelIndex transformGroupIndex              READ transformGroupIndex              CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  simpleFlightPathSegments        READ simpleFlightPathSegments       CONSTANT)                               ///< Used by Plan view only for interactive editing
     Q_PROPERTY(QmlObjectListModel*  directionArrows                 READ directionArrows                CONSTANT)
     Q_PROPERTY(QStringList          complexMissionItemNames         READ complexMissionItemNames        NOTIFY complexMissionItemNamesChanged)
@@ -120,8 +114,8 @@ public:
     Q_PROPERTY(double               minAMSLAltitude                 MEMBER _minAMSLAltitude             NOTIFY minAMSLAltitudeChanged)          ///< Minimum altitude associated with this mission. Used to calculate percentages for terrain status.
     Q_PROPERTY(double               maxAMSLAltitude                 MEMBER _maxAMSLAltitude             NOTIFY maxAMSLAltitudeChanged)          ///< Maximum altitude associated with this mission. Used to calculate percentages for terrain status.
 
-    Q_PROPERTY(QGroundControlQmlGlobal::AltitudeFrame globalAltitudeFrame         READ globalAltitudeFrame         WRITE setGlobalAltitudeFrame NOTIFY globalAltitudeFrameChanged)
-    Q_PROPERTY(QGroundControlQmlGlobal::AltitudeFrame globalAltitudeFrameDefault  READ globalAltitudeFrameDefault  NOTIFY globalAltitudeFrameChanged)                               ///< Default to use for newly created items
+    Q_PROPERTY(QGroundControlQmlGlobal::AltMode globalAltitudeMode         READ globalAltitudeMode         WRITE setGlobalAltitudeMode NOTIFY globalAltitudeModeChanged)
+    Q_PROPERTY(QGroundControlQmlGlobal::AltMode globalAltitudeModeDefault  READ globalAltitudeModeDefault  NOTIFY globalAltitudeModeChanged)                               ///< Default to use for newly created items
 
     Q_INVOKABLE void removeVisualItem(int viIndex);
 
@@ -202,7 +196,9 @@ public:
                                        bool repositionLandingItems = true);
 
     /// Offsets all mission items which specify a coordinate by the specified
-    /// ENU amounts in meters. Home altitude remains unchanged.
+    /// ENU amounts in meters. Home altitude remains unchanged. Requires a valid
+    /// planned home position; otherwise the mission is not modified and a
+    /// warning is logged.
     /// @param eastMeters Distance to offset items to the east, in meters
     /// @param northMeters Distance to offset items to the north, in meters
     /// @param upMeters Distance to offset items upwards, in meters
@@ -275,12 +271,6 @@ public:
 
     QmlObjectListModel* visualItems                 (void) { return _visualItems; }
     QmlObjectTreeModel* visualItemsTree             (void) { return &_visualItemsTree; }
-    QPersistentModelIndex planFileGroupIndex         (void) const { return _planFileGroupIndex; }
-    QPersistentModelIndex defaultsGroupIndex         (void) const { return _defaultsGroupIndex; }
-    QPersistentModelIndex missionGroupIndex          (void) const { return _missionGroupIndex; }
-    QPersistentModelIndex fenceGroupIndex            (void) const { return _fenceGroupIndex; }
-    QPersistentModelIndex rallyGroupIndex            (void) const { return _rallyGroupIndex; }
-    QPersistentModelIndex transformGroupIndex         (void) const { return _transformGroupIndex; }
     QmlObjectListModel* simpleFlightPathSegments    (void) { return &_simpleFlightPathSegments; }
     QmlObjectListModel* directionArrows             (void) { return &_directionArrows; }
     QStringList         complexMissionItemNames     (void) const;
@@ -317,9 +307,9 @@ public:
     bool isFirstLandingComplexItem  (const LandingComplexItem* item) const;
     bool isEmpty                    (void) const;
 
-    QGroundControlQmlGlobal::AltitudeFrame globalAltitudeFrame(void);
-    QGroundControlQmlGlobal::AltitudeFrame globalAltitudeFrameDefault(void);
-    void setGlobalAltitudeFrame(QGroundControlQmlGlobal::AltitudeFrame altFrame);
+    QGroundControlQmlGlobal::AltMode globalAltitudeMode(void);
+    QGroundControlQmlGlobal::AltMode globalAltitudeModeDefault(void);
+    void setGlobalAltitudeMode(QGroundControlQmlGlobal::AltMode altMode);
 
     // Top-level group row indices in _visualItemsTree (must match _setupTreeModel order)
     static constexpr int kPlanFileGroupRow = 0;
@@ -327,8 +317,7 @@ public:
     static constexpr int kMissionGroupRow  = 2;
     static constexpr int kFenceGroupRow    = 3;
     static constexpr int kRallyGroupRow    = 4;
-    static constexpr int kTransformGroupRow = 5;
-    static constexpr int kGroupCount       = 6;
+    static constexpr int kGroupCount       = 5;
 
 signals:
     void visualItemsChanged                 (void);
@@ -371,7 +360,7 @@ signals:
     void recalcTerrainProfile               (void);
     void _recalcMissionFlightStatusSignal   (void);
     void _recalcFlightPathSegmentsSignal    (void);
-    void globalAltitudeFrameChanged          (void);
+    void globalAltitudeModeChanged          (void);
 
 private slots:
     void _newMissionItemsAvailableFromVehicle   (bool removeAllRequested);
@@ -410,8 +399,9 @@ private:
     void                    _deinitVisualItem                   (VisualMissionItem* item);
     void                    _setupActiveVehicle                 (Vehicle* activeVehicle, bool forceLoadFromVehicle);
     void                    _calcPrevWaypointValues             (VisualMissionItem* currentItem, VisualMissionItem* prevItem, double* azimuth, double* distance, double* altDifference);
-    bool                    _findPreviousAltitude               (int newIndex, double* prevAltitude, QGroundControlQmlGlobal::AltitudeFrame* prevAltFrame);
+    bool                    _findPreviousAltitude               (int newIndex, double* prevAltitude, QGroundControlQmlGlobal::AltMode* prevAltMode);
     MissionSettingsItem*    _addMissionSettings                 (QmlObjectListModel* visualItems);
+    void                    _centerHomePositionOnMissionItems   (QmlObjectListModel* visualItems);
     bool                    _loadJsonMissionFile                (const QByteArray& bytes, QmlObjectListModel* visualItems, QString& errorString);
     bool                    _loadJsonMissionFileV1              (const QJsonObject& json, QmlObjectListModel* visualItems, QString& errorString);
     bool                    _loadJsonMissionFileV2              (const QJsonObject& json, QmlObjectListModel* visualItems, QString& errorString);
@@ -446,12 +436,12 @@ private:
     MissionManager*             _missionManager =               nullptr;
     int                         _missionItemCount =             0;
     QmlObjectListModel*         _visualItems =                  nullptr;
+    QmlObjectTreeModel          _visualItemsTree;
     QPersistentModelIndex       _planFileGroupIndex;            ///< Persistent index for "Plan File" group in tree
     QPersistentModelIndex       _defaultsGroupIndex;            ///< Persistent index for "Defaults" group in tree
     QPersistentModelIndex       _missionGroupIndex;             ///< Persistent index for "Mission Items" group in tree
     QPersistentModelIndex       _fenceGroupIndex;               ///< Persistent index for "GeoFence" group in tree
     QPersistentModelIndex       _rallyGroupIndex;               ///< Persistent index for "Rally Points" group in tree
-    QPersistentModelIndex       _transformGroupIndex;            ///< Persistent index for "Transform" group in tree
     QObject                     _planFileGroupNode;             ///< Group node for "Plan File" in tree view
     QObject                     _planFileInfoMarker;            ///< Marker child for plan file info delegate
     QObject                     _defaultsGroupNode;             ///< Group node for "Defaults" in tree view
@@ -459,11 +449,8 @@ private:
     QObject                     _missionItemsGroupNode;         ///< Group node for "Mission Items" in tree view
     QObject                     _fenceGroupNode;                ///< Group node for "GeoFence" in tree view
     QObject                     _rallyGroupNode;                ///< Group node for "Rally Points" in tree view
-    QObject                     _transformGroupNode;             ///< Group node for "Transform" in tree view
     QObject                     _fenceEditorMarker;             ///< Marker child for GeoFenceEditor delegate
     QObject                     _rallyHeaderMarker;             ///< Marker child for RallyPointEditorHeader delegate
-    QObject                     _transformEditorMarker;          ///< Marker child for TransformEditor delegate
-    QmlObjectTreeModel          _visualItemsTree;               // Must be declared after group nodes so it's destroyed first
     MissionSettingsItem*        _settingsItem =                 nullptr;
     PlanViewSettings*           _planViewSettings =             nullptr;
     QmlObjectListModel          _simpleFlightPathSegments;
@@ -496,7 +483,7 @@ private:
     double                      _maxAMSLAltitude =              0;
     bool                        _missionContainsVTOLTakeoff =   false;
 
-    QGroundControlQmlGlobal::AltitudeFrame _globalAltFrame = QGroundControlQmlGlobal::AltitudeFrameRelative;
+    QGroundControlQmlGlobal::AltMode _globalAltMode = QGroundControlQmlGlobal::AltitudeModeRelative;
 
     static constexpr const char* _settingsGroup =                 "MissionController";
     static constexpr const char* _jsonFileTypeValue =             "Mission";
