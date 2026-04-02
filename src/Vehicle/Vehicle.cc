@@ -584,6 +584,37 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     case MAVLINK_MSG_ID_RC_CHANNELS:
         _handleRCChannels(message);
         break;
+    case MAVLINK_MSG_ID_SERVO_OUTPUT_RAW:
+    {
+        mavlink_servo_output_raw_t servoOutputRaw;
+        mavlink_msg_servo_output_raw_decode(&message, &servoOutputRaw);
+
+        const uint16_t rawValues[16] = {
+            servoOutputRaw.servo1_raw,
+            servoOutputRaw.servo2_raw,
+            servoOutputRaw.servo3_raw,
+            servoOutputRaw.servo4_raw,
+            servoOutputRaw.servo5_raw,
+            servoOutputRaw.servo6_raw,
+            servoOutputRaw.servo7_raw,
+            servoOutputRaw.servo8_raw,
+            servoOutputRaw.servo9_raw,
+            servoOutputRaw.servo10_raw,
+            servoOutputRaw.servo11_raw,
+            servoOutputRaw.servo12_raw,
+            servoOutputRaw.servo13_raw,
+            servoOutputRaw.servo14_raw,
+            servoOutputRaw.servo15_raw,
+            servoOutputRaw.servo16_raw
+        };
+
+        for (int servoIndex = 0; servoIndex < _servoOutputRawValues.size() && servoIndex < 16; servoIndex++) {
+            _servoOutputRawValues[servoIndex] = (rawValues[servoIndex] == UINT16_MAX) ? -1 : static_cast<int>(rawValues[servoIndex]);
+        }
+
+        emit servoOutputsChanged(_servoOutputRawValues);
+    }
+        break;
     case MAVLINK_MSG_ID_BATTERY_STATUS:
         _handleBatteryStatus(message);
         break;
