@@ -10,7 +10,7 @@ RowLayout {
     id:         control
 
     property bool   showIndicator:          true
-    property bool   waitForParameters:      true   // UI won't show until parameters are ready
+    property bool   waitForParameters:      false
 
     property real fontPointSize:    ScreenTools.largeFontPointSize
     property var  activeVehicle:    QGroundControl.multiVehicleManager.activeVehicle
@@ -81,7 +81,8 @@ RowLayout {
 
         ToolIndicatorPage {
             showExpand:         true
-            waitForParameters:  control.waitForParameters
+            waitForParameters:                  false
+            expandedComponentWaitForParameters: true
 
             contentComponent:    flightModeContentComponent
             expandedComponent:   flightModeExpandedComponent

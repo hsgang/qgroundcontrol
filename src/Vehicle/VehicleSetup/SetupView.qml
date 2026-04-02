@@ -139,6 +139,7 @@ Rectangle {
     Component {
         id: disconnectedVehicleAndParamsSummaryComponent
         Rectangle {
+            id: disconnectedRect
             color: qgcPal.windowShade
             ColumnLayout {
                 anchors.margins:        _defaultTextWidth * 2
@@ -149,9 +150,21 @@ Rectangle {
                     horizontalAlignment:    Text.AlignHCenter
                     wrapMode:               Text.WordWrap
                     font.pointSize:         ScreenTools.largeFontPointSize
-                    text:                   qsTr("Vehicle settings and info will display after connecting your vehicle.")
+                    text:                   !_activeVehicle
+                                                ? qsTr("Vehicle settings and info will display after connecting your vehicle.")
+                                                : (_activeVehicle.parameterManager.parameterDownloadSkipped
+                                                    ? qsTr("Parameter download was skipped because the vehicle is flying. Configuration pages will be available after parameters are downloaded.")
+                                                    : qsTr("Waiting for vehicle parameters to download…"))
 
                     onLinkActivated: (link) => Qt.openUrlExternally(link)
+                }
+                QGCButton {
+                    anchors.horizontalCenter:   parent.horizontalCenter
+                    Layout.fillWidth:           false
+                    text:                       qsTr("Download Parameters")
+                    visible:                    _activeVehicle && _activeVehicle.parameterManager.parameterDownloadSkipped
+                    enabled:                    _activeVehicle && _activeVehicle.parameterManager.parameterDownloadSkipped && _activeVehicle.parameterManager.loadProgress === 0
+                    onClicked:                  _activeVehicle.parameterManager.refreshAllParameters()
                 }
                 Rectangle {
                     color:              qgcPal.windowShade

@@ -82,6 +82,13 @@
     "enumValues":       "1,2,5,10",
     "default":          1,
     "qgcRebootRequired":true
+},
+{
+    "name":         "noInitialDownloadWhenFlying",
+    "shortDesc":    "Skip param/plan download on connect if flying",
+    "longDesc":     "When enabled, parameter and mission plan downloads are skipped when connecting to a vehicle that is already flying. This prevents bandwidth-heavy transfers from disrupting an active flight.",
+    "type":         "bool",
+    "default":      false
 }
 ]
 }
