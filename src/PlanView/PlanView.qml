@@ -700,7 +700,7 @@ Item {
                         text:               globals.activeVehicle ?
                                                 qsTr("You have unsaved changes. You should upload to your vehicle, or save to a file.") :
                                                 qsTr("You have unsaved changes.")
-                        visible:            _planMasterController.dirty
+                        visible:            _planMasterController ? _planMasterController.dirty : false
                         color:              qgcPal.colorRed
                     }
 

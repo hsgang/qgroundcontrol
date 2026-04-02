@@ -52,7 +52,7 @@ Rectangle {
             QGCToolBarButton {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
-                icon.source:            "/qmlimages/Hamburger.svg"
+                icon.source:            "/res/amplogo.svg"
                 logo:                   true
                 onClicked:              mainWindow.showToolSelectDialog()
             }

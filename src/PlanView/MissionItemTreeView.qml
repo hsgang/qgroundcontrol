@@ -274,7 +274,7 @@ TreeView {
                     LabelledButton {
                         Layout.fillWidth: true
                         label: qsTr("Altitude Mode")
-                        buttonText: QGroundControl.altitudeModeShortDescription(defaultsRect._missionController.globalAltitudeFrame)
+                        buttonText: QGroundControl.altitudeFrameShortDescription(defaultsRect._missionController.globalAltitudeFrame)
 
                         onClicked: {
                             let removeModes = []

@@ -218,15 +218,9 @@ Rectangle {
         }
     }
 
-    FlyViewToolBar {
-        id:                 toolbar
-        guidedValueSlider:  null
-        visible:            !QGroundControl.videoManager.fullScreen
-    }
-
     Item {
         id: setupviewHolder
-        anchors.top:    toolbar.bottom
+        anchors.top:    parent.top
         anchors.bottom: parent.bottom
         anchors.left:   parent.left
         anchors.right:  parent.right
