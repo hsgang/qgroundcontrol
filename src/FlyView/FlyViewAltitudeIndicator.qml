@@ -22,7 +22,7 @@ Rectangle {
     property var    missionItems:               _controllerValid ? _missionController.visualItems : undefined
     property bool   _missionValid:              missionItems !== undefined
 
-    property real   _missionMaxAltitude:        _missionValid ? _missionController.missionMaxAltitude : NaN
+    property real   _missionMaxAltitude: NaN
     property real   _vehicleAltitude:           _activeVehicle ? _activeVehicle.altitudeRelative.rawValue : 0
 
     property string _missionMaxAltitudeText:    (isNaN(_missionMaxAltitude) || (_missionMaxAltitude <= 0)) ? "--" + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_missionMaxAltitude).toFixed(0) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString

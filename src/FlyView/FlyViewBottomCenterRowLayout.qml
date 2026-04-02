@@ -33,6 +33,6 @@ RowLayout {
     FlyViewAltitudeIndicator{
         id:                         altitudeIndicator
         height:                     flyviewMissionProgress.height * 0.9
-        visible:                    flyviewMissionProgress.visible && QGroundControl.settingsManager.flyViewSettings.missionMaxAltitudeIndicator.rawValue
+        visible:                    flyviewMissionProgress.visible
     }
 }
