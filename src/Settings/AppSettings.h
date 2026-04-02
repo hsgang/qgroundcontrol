@@ -29,7 +29,6 @@ public:
     DEFINE_SETTINGFACT(virtualJoystick)
     DEFINE_SETTINGFACT(virtualJoystickAutoCenterThrottle)
     DEFINE_SETTINGFACT(virtualJoystickLeftHandedMode)
-    DEFINE_SETTINGFACT(appFontPointSize)
     DEFINE_SETTINGFACT(uiScalePercent)
     DEFINE_SETTINGFACT(indoorPalette)
     DEFINE_SETTINGFACT(savePath)

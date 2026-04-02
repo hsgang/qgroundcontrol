@@ -156,17 +156,6 @@
             "label": "Enable Multi-Vehicle Panel"
         },
         {
-            "name": "appFontPointSize",
-            "shortDesc": "Application font size",
-            "longDesc": "The point size for the default font used.",
-            "type": "uint32",
-            "units": "pt",
-            "min": 6,
-            "max": 48,
-            "default": 0,
-            "label": "Application font size"
-        },
-        {
             "name": "indoorPalette",
             "shortDesc": "Application color scheme",
             "longDesc": "The color scheme for the user interface.",
