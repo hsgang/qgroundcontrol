@@ -8,7 +8,8 @@
             "type": "uint32",
             "enumStrings": "ArduPilot,PX4 Pro,MAVLink",
             "enumValues": "3,12,0",
-            "default": 12
+            "default": 12,
+            "label": "Offline editing firmware class"
         },
         {
             "name": "offlineEditingVehicleClass",
@@ -16,7 +17,8 @@
             "type": "uint32",
             "enumStrings": "Fixed Wing,Multi-Rotor,VTOL,Rover,Sub,Unknown",
             "enumValues": "1,2,20,10,12,0",
-            "default": 2
+            "default": 2,
+            "label": "Offline editing vehicle class"
         },
         {
             "name": "offlineEditingCruiseSpeed",
@@ -26,7 +28,8 @@
             "default": 15.0,
             "min": 1.0,
             "units": "m/s",
-            "decimalPlaces": 2
+            "decimalPlaces": 2,
+            "label": "Offline editing cruise speed"
         },
         {
             "name": "offlineEditingHoverSpeed",
@@ -36,7 +39,8 @@
             "default": 5.0,
             "min": 1.0,
             "units": "m/s",
-            "decimalPlaces": 2
+            "decimalPlaces": 2,
+            "label": "Offline editing hover speed"
         },
         {
             "name": "offlineEditingAscentSpeed",
@@ -46,7 +50,8 @@
             "default": 3.0,
             "min": 0.1,
             "units": "m/s",
-            "decimalPlaces": 2
+            "decimalPlaces": 2,
+            "label": "Offline editing ascent speed"
         },
         {
             "name": "offlineEditingDescentSpeed",
@@ -56,7 +61,8 @@
             "default": 1.0,
             "min": 0.1,
             "units": "m/s",
-            "decimalPlaces": 2
+            "decimalPlaces": 2,
+            "label": "Offline editing descent speed"
         },
         {
             "name": "batteryPercentRemainingAnnounce",
@@ -66,7 +72,8 @@
             "default": 30,
             "units": "%",
             "min": 0,
-            "max": 100
+            "max": 100,
+            "label": "Announce battery remaining percent"
         },
         {
             "name": "defaultMissionItemAltitude",
@@ -78,35 +85,40 @@
             "units": "m",
             "decimalPlaces": 1,
             "userMin": 0.0,
-            "userMax": 121.92
+            "userMax": 121.92,
+            "label": "Default value for altitude"
         },
         {
             "name": "audioMuted",
             "shortDesc": "Mute audio output",
             "longDesc": "If this option is enabled all audio output will be muted.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Mute audio output"
         },
         {
             "name": "virtualJoystick",
             "shortDesc": "Show virtual joystick",
             "longDesc": "If this option is enabled the virtual joystick will be shown on the Fly view.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Show virtual joystick"
         },
         {
             "name": "virtualJoystickAutoCenterThrottle",
             "shortDesc": "Auto-Center Throttle",
             "longDesc": "If enabled the throttle stick will snap back to center when released.",
             "type": "bool",
-            "default": true
+            "default": true,
+            "label": "Auto-Center Throttle"
         },
         {
             "name": "virtualJoystickLeftHandedMode",
             "shortDesc": "Left Handed Mode",
             "longDesc": "If this option is enabled the virtual joystick layout will be reversed",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Left Handed Mode"
         },
         {
             "name": "gstDebugLevel",
@@ -116,28 +128,32 @@
             "enumStrings": "Disabled,Error,Warning,FixMe,Info,Debug,Log,Trace",
             "enumValues": "0,1,2,3,4,5,6,7",
             "default": 0,
-            "qgcRebootRequired": true
+            "qgcRebootRequired": true,
+            "label": "Video streaming debug"
         },
         {
             "name": "useChecklist",
             "shortDesc": "Use preflight checklist",
             "longDesc": "If this option is enabled the preflight checklist will be used.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Use preflight checklist"
         },
         {
             "name": "enforceChecklist",
             "shortDesc": "Preflight checklist must pass before arming",
             "longDesc": "If this option is enabled the preflight checklist must pass before arming.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Preflight checklist must pass before arming"
         },
         {
             "name": "enableMultiVehiclePanel",
             "shortDesc": "Enable Multi-Vehicle Panel",
             "longDesc": "Enable Multi-Vehicle Panel when multiple vehicles are connected.",
             "type": "bool",
-            "default": true
+            "default": true,
+            "label": "Enable Multi-Vehicle Panel"
         },
         {
             "name": "appFontPointSize",
@@ -147,7 +163,8 @@
             "units": "pt",
             "min": 6,
             "max": 48,
-            "default": 0
+            "default": 0,
+            "label": "Application font size"
         },
         {
             "name": "indoorPalette",
@@ -156,14 +173,16 @@
             "type": "uint32",
             "enumStrings": "Indoor,Outdoor",
             "enumValues": "1,0",
-            "default": 0
+            "default": 0,
+            "label": "Application color scheme"
         },
         {
             "name": "savePath",
             "shortDesc": "Application save directory",
             "longDesc": "Directory to which all data files are saved/loaded from",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Application save directory"
         },
         {
             "name": "androidDontSaveToSDCard",
@@ -171,63 +190,72 @@
             "longDesc": "If this option is enabled, application data will not be saved to the SD card.",
             "type": "bool",
             "default": false,
-            "qgcRebootRequired": true
+            "qgcRebootRequired": true,
+            "label": "Don't save to SD card, even if available"
         },
         {
             "name": "tiandituToken",
             "shortDesc": "Access token to TianDiTu maps",
             "longDesc": "Your personal access token for TianDiTu maps",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Access token to TianDiTu maps"
         },
         {
             "name": "mapboxToken",
             "shortDesc": "Access token to Mapbox maps",
             "longDesc": "Your personal access token for Mapbox maps",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Access token to Mapbox maps"
         },
         {
             "name": "mapboxAccount",
             "shortDesc": "Account name for Mapbox maps",
             "longDesc": "Your personal account name for Mapbox maps",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Account name for Mapbox maps"
         },
         {
             "name": "mapboxStyle",
             "shortDesc": "Map style ID",
             "longDesc": "Map design style ID for Mapbox maps",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Map style ID"
         },
         {
             "name": "esriToken",
             "shortDesc": "Access token to Esri maps",
             "longDesc": "Your personal access token for Esri maps",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Access token to Esri maps"
         },
         {
             "name": "customURL",
             "shortDesc": "Custom Map URL",
             "longDesc": "URL for X Y Z map with {x} {y} {z} or {zoom} substitutions. Eg: https://basemaps.linz.govt.nz/v1/tiles/aerial/EPSG:3857/{z}/{x}/{y}.png?api=d01ev80nqcjxddfvc6amyvkk1ka",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Custom Map URL"
         },
         {
             "name": "vworldToken",
             "shortDesc": "VWorld Token",
             "longDesc": "Your personal access token for VWorld maps",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "VWorld Token"
         },
         {
             "name": "openaipToken",
             "shortDesc": "OpenAIP API Key",
             "longDesc": "Your personal API key for OpenAIP aviation maps. Get one at https://www.openaip.net",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "OpenAIP API Key"
         },
         {
             "name": "followTarget",
@@ -235,7 +263,8 @@
             "type": "uint32",
             "enumStrings": "Never,Always,When in Follow Me Flight Mode",
             "enumValues": "0,1,2",
-            "default": 2
+            "default": 2,
+            "label": "Stream GCS' coordinates to Autopilot"
         },
         {
             "name": "qLocaleLanguage",
@@ -243,26 +272,30 @@
             "type": "uint32",
             "default": 0,
             "qgcRebootRequired": true,
-            "comment": "QLocale::Language id. Fact enum metadata is setup in AppSettings code. QGC reboot required in order to load new json translations into FactMetaData."
+            "comment": "QLocale::Language id. Fact enum metadata is setup in AppSettings code. QGC reboot required in order to load new json translations into FactMetaData.",
+            "label": "Language"
         },
         {
             "name": "disableAllPersistence",
             "shortDesc": "Disable all data persistence",
             "longDesc": "If this option is set, nothing will be saved to disk.",
             "type": "bool",
-            "default": false
+            "default": false,
+            "label": "Disable all data persistence"
         },
         {
             "name": "firstRunPromptIdsShown",
             "shortDesc": "Comma separated list of first run prompt ids which have already been shown.",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Comma separated list of first run prompt ids which have already been shown."
         },
         {
             "name": "favoriteParameters",
             "shortDesc": "Comma separated list of favorite parameter names.",
             "type": "string",
-            "default": ""
+            "default": "",
+            "label": "Comma separated list of favorite parameter names."
         },
         {
             "name": "clearSettingsNextBoot",
