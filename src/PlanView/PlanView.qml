@@ -453,7 +453,7 @@ Item {
                         id: roiButton
                         text: qsTr("ROI")
                         iconSource: "/qmlimages/roi.svg"
-                        visible: toolStrip._isMissionLayer && _planMasterController.controllerVehicle.roiModeSupported
+                        visible: toolStrip._isMissionLayer && _planMasterController.controllerVehicle.supports.roiMode
                         checkable: true
                         onTriggered: { _addROIOnClick = !_addROIOnClick; if (_addROIOnClick) _addWaypointOnClick = false }
                     },

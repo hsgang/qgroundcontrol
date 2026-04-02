@@ -49,7 +49,7 @@ Rectangle {
     Connections {
         target: _controllerVehicle
         function onSupportsTerrainFrameChanged() {
-            if (!_controllerVehicle.supportsTerrainFrame && _missionController.globalAltitudeMode === QGroundControl.AltitudeModeTerrainFrame) {
+            if (!_controllerVehicle.supports.terrainFrame && _missionController.globalAltitudeMode === QGroundControl.AltitudeModeTerrainFrame) {
                 _missionController.globalAltitudeMode = QGroundControl.AltitudeModeCalcAboveTerrain
             }
         }
@@ -71,7 +71,7 @@ Rectangle {
             onClicked: {
                 var removeModes = []
                 var updateFunction = function(altMode){ _missionController.globalAltitudeMode = altMode }
-                if (!_controllerVehicle.supportsTerrainFrame) {
+                if (!_controllerVehicle.supports.terrainFrame) {
                     removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
                 }
                 if (!_noMissionItemsAdded) {
