@@ -20,18 +20,14 @@ Rectangle {
     property real _defaultSize:                 usedByMultipleVehicleList ? ScreenTools.defaultFontPixelHeight * 3 : ScreenTools.defaultFontPixelHeight * 10
     property real _sizeRatio:                   (usedByMultipleVehicleList || ScreenTools.isTinyScreen) ? (size / _defaultSize) * 0.5 : size / _defaultSize
     property int  _fontSize:                    ScreenTools.defaultFontPointSize * _sizeRatio < 8 ? 8 : ScreenTools.defaultFontPointSize * _sizeRatio
-    property real _heading:                     vehicle?.heading?.rawValue ?? 0
-    property real _headingToHome:               vehicle?.headingToHome?.rawValue ?? 0
-    property real _groundSpeed:                 vehicle?.groundSpeed?.rawValue ?? 0
-    property real _headingToNextWP:             vehicle?.headingToNextWP?.rawValue ?? 0
-    property real _distanceToNextWP:            vehicle?.distanceToNextWP?.rawValue ?? 0
-    property real _courseOverGround:            vehicle?.gps?.courseOverGround?.rawValue ?? 0
+    property real _heading:                     vehicle ? vehicle.heading.rawValue : 0
+    property real _headingToHome:               vehicle ? vehicle.headingToHome.rawValue : 0
+    property real _groundSpeed:                 vehicle ? vehicle.groundSpeed.rawValue : 0
+    property real _headingToNextWP:             vehicle ? vehicle.headingToNextWP.rawValue : 0
+    property real _courseOverGround:            vehicle ? vehicle.gps.courseOverGround.rawValue : 0
     property var  _flyViewSettings:             QGroundControl.settingsManager.flyViewSettings
     property bool _showAdditionalIndicators:    _flyViewSettings.showAdditionalIndicatorsCompass.value && !usedByMultipleVehicleList
     property bool _lockNoseUpCompass:           _flyViewSettings.lockNoseUpCompass.value && !usedByMultipleVehicleList
-
-    property string _flightMode:                vehicle ? vehicle.flightMode : ""
-    property bool   _vehicleInMissionMode:      vehicle ? _flightMode === vehicle.missionFlightMode : false
 
     function showCOG(){
         if (_groundSpeed < 0.5) {
@@ -49,10 +45,6 @@ Rectangle {
         return vehicle && _showAdditionalIndicators && !isNaN(_headingToNextWP)
     }
 
-    function showDistanceToNextWP(){
-        return vehicle && _vehicleInMissionMode && _showAdditionalIndicators && !isNaN(_distanceToNextWP)
-    }
-
     function translateCenterToAngleX(radius, angle) {
         return radius * Math.sin(angle * (Math.PI / 180))
     }
@@ -66,12 +58,7 @@ Rectangle {
     Item {
         id:             rotationParent
         anchors.fill:   parent
-
-        transform: Rotation {
-            origin.x:       rotationParent.width  / 2
-            origin.y:       rotationParent.height / 2
-            angle:         _lockNoseUpCompass ? -_heading : 0
-        }
+        rotation:           _lockNoseUpCompass ? -_heading : 0
 
         CompassDial {
             anchors.fill:   parent
@@ -92,12 +79,7 @@ Rectangle {
             anchors.fill:       parent
             sourceSize.height:  parent.height
             visible:            showCOG()
-
-            transform: Rotation {
-                origin.x:   cogPointer.width  / 2
-                origin.y:   cogPointer.height / 2
-                angle:      _courseOverGround
-            }
+            rotation:           _courseOverGround
         }
 
         Image {
@@ -108,64 +90,33 @@ Rectangle {
             anchors.fill:       parent
             sourceSize.height:  parent.height
             visible:            showHeadingToNextWP()
-
-            transform: Rotation {
-                origin.x:   nextWPPointer.width  / 2
-                origin.y:   nextWPPointer.height / 2
-                angle:      _headingToNextWP
-            }
-        }
-
-        Rectangle {
-            width:                      distanceToNextWPText.width + (size * 0.05)
-            height:                     size * 0.12
-            border.color:               qgcPal.buttonHighlight
-            color:                      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-            radius:                     height * 0.2
-            visible:                    showDistanceToNextWP()
-            anchors.centerIn:           parent
-
-            QGCLabel {
-                id:                 distanceToNextWPText
-                text:               _distanceToNextWP.toFixed(0)
-                font.pointSize:     _fontSize < 8 ? 8 : _fontSize;
-                font.bold:          true
-                color:              qgcPal.text
-                anchors.centerIn:   parent
-            }
-
-            transform: Translate {
-                property double _angle: _headingToNextWP
-
-                x: translateCenterToAngleX(parent.width / 4, _angle)
-                y: translateCenterToAngleY(parent.height / 4, _angle)
-            }
+            rotation:           _headingToNextWP
         }
 
         // Launch location indicator
         Rectangle {
             width:              Math.max(label.contentWidth, label.contentHeight)
             height:             width
+            color:              qgcPal.mapIndicator
             radius:             width / 2
             anchors.centerIn:   parent
             visible:            showHeadingHome()
-            //color:              qgcPal.mapIndicator
-            color:              qgcPal.alertBackground //qgcPal.text
-            border.color:       "black" //qgcPal.alertBackground
 
             QGCLabel {
                 id:                 label
-                text:               "H"
+                text:               qsTr("L")
                 font.bold:          true
-                color:              "black"
+                color:              qgcPal.text
                 anchors.centerIn:   parent
+                rotation:           _lockNoseUpCompass ? _heading : 0
             }
 
             transform: Translate {
-                property double _angle: _headingToHome
+                property double _angle:        _headingToHome
+                property real   _labelOffset:  root.width / 2 + ScreenTools.defaultFontPixelHeight / 2
 
-                x: translateCenterToAngleX(parent.width / 2.2, _angle)
-                y: translateCenterToAngleY(parent.height / 2.2, _angle)
+                x: translateCenterToAngleX(_labelOffset, _angle)
+                y: translateCenterToAngleY(_labelOffset, _angle)
             }
         }
     }
