@@ -6,6 +6,7 @@
 #include "APMHeliComponent.h"
 #include "APMLightsComponent.h"
 #include "APMMotorComponent.h"
+#include "APMESCComponent.h"
 #include "APMPowerComponent.h"
 #include "APMPortsComponent.h"
 #include "APMRadioComponent.h"
@@ -86,6 +87,10 @@ const QVariantList &APMAutoPilotPlugin::vehicleComponents()
             _powerComponent = new APMPowerComponent(_vehicle, this);
             _powerComponent->setupTriggerSignals();
             _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_powerComponent)));
+
+            _escComponent = new APMESCComponent(_vehicle, this);
+            _escComponent->setupTriggerSignals();
+            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_escComponent)));
 
             if (!_vehicle->sub() || (_vehicle->sub() && (_vehicle->versionCompare(3, 5, 3) >= 0))) {
                 _motorComponent = new APMMotorComponent(_vehicle, this);
@@ -173,6 +178,8 @@ QString APMAutoPilotPlugin::prerequisiteSetup(VehicleComponent *component) const
     } else if (qobject_cast<const APMRadioComponent*>(component)) {
         requiresAirframeCheck = true;
     } else if (qobject_cast<const APMPowerComponent*>(component)) {
+        requiresAirframeCheck = true;
+    } else if (qobject_cast<const APMESCComponent*>(component)) {
         requiresAirframeCheck = true;
     } else if (qobject_cast<const APMSafetyComponent*>(component)) {
         requiresAirframeCheck = true;
