@@ -2084,7 +2084,7 @@ void Vehicle::guidedModeChangeAltitudeAMSL(double altitudeAMSL, bool pauseVehicl
 
 void Vehicle::setPositionAndVelocityTargetLocalNed(double xValue, double yValue, double zValue, double vxValue, double vyValue, double vzValue, double yaw, bool pauseVehicle)
 {
-    if (!guidedModeSupported()) {
+    if (!_vehicleSupports->guidedMode()) {
         qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
         return;
     }

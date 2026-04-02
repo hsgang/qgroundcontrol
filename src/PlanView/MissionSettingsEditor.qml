@@ -47,8 +47,8 @@ Rectangle {
     }
 
     Connections {
-        target: _controllerVehicle
-        function onSupportsTerrainFrameChanged() {
+        target: _controllerVehicle ? _controllerVehicle.supports : null
+        function onTerrainFrameChanged() {
             if (!_controllerVehicle.supports.terrainFrame && _missionController.globalAltitudeMode === QGroundControl.AltitudeModeTerrainFrame) {
                 _missionController.globalAltitudeMode = QGroundControl.AltitudeModeCalcAboveTerrain
             }

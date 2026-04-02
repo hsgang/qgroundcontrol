@@ -242,51 +242,10 @@ Item {
             anchors.fill:           parent
             anchors.margins:        ScreenTools.defaultFontPixelHeight / 4
             fillMode:               Image.PreserveAspectFit
-            source:                 _outdoorPalette ? _brandImageOutdoor : _brandImageIndoor
-            sourceSize.width: 256
-            sourceSize.height: 256
+            source:                 qgcPal.globalTheme === QGCPalette.Light ? "/qmlimages/amp_logo_blue.png" : "/qmlimages/amp_logo_white.png"
+            sourceSize.width:       256
+            sourceSize.height:      256
             mipmap:                 true
-
-            property bool   _outdoorPalette:        qgcPal.globalTheme === QGCPalette.Light
-            property bool   _corePluginBranding:    QGroundControl.corePlugin.brandImageIndoor.length != 0
-            property string _userBrandImageIndoor:  QGroundControl.settingsManager.brandImageSettings.userBrandImageIndoor.value
-            property string _userBrandImageOutdoor: QGroundControl.settingsManager.brandImageSettings.userBrandImageOutdoor.value
-            property bool   _userBrandingIndoor:    _userBrandImageIndoor.length != 0
-            property bool   _userBrandingOutdoor:   _userBrandImageOutdoor.length != 0
-            property string _brandImageIndoor:      brandImageIndoor()
-            property string _brandImageOutdoor:     brandImageOutdoor()
-
-            function brandImageIndoor() {
-               if (_userBrandingIndoor) {
-                   return _userBrandImageIndoor
-               } else {
-                   if (_userBrandingOutdoor) {
-                       return _userBrandingOutdoor
-                   } else {
-                       if (_corePluginBranding) {
-                           return "/qmlimages/amp_logo_white.png" //QGroundControl.corePlugin.brandImageIndoor
-                       } else {
-                           return "/qmlimages/amp_logo_white.png" //_activeVehicle ? _activeVehicle.brandImageIndoor : ""
-                       }
-                   }
-               }
-            }
-
-            function brandImageOutdoor() {
-               if (_userBrandingOutdoor) {
-                   return _userBrandingOutdoor
-               } else {
-                   if (_userBrandingIndoor) {
-                       return _userBrandingIndoor
-                   } else {
-                       if (_corePluginBranding) {
-                           return "/qmlimages/amp_logo_blue.png" //QGroundControl.corePlugin.brandImageOutdoor
-                       } else {
-                           return "/qmlimages/amp_logo_blue.png" //_activeVehicle ? _activeVehicle.brandImageOutdoor : ""
-                       }
-                   }
-               }
-            }
         }
     }
 
