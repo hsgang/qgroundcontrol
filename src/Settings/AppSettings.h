@@ -15,8 +15,6 @@ public:
 
     DEFINE_SETTING_NAME_GROUP()
 
-    DEFINE_SETTINGFACT(preferredFirmwareClass)
-    DEFINE_SETTINGFACT(preferredVehicleClass)
     DEFINE_SETTINGFACT(offlineEditingFirmwareClass)
     DEFINE_SETTINGFACT(offlineEditingVehicleClass)
     DEFINE_SETTINGFACT(offlineEditingCruiseSpeed)
@@ -29,7 +27,7 @@ public:
     DEFINE_SETTINGFACT(virtualJoystick)
     DEFINE_SETTINGFACT(virtualJoystickAutoCenterThrottle)
     DEFINE_SETTINGFACT(virtualJoystickLeftHandedMode)
-    DEFINE_SETTINGFACT(uiScalePercent)
+    DEFINE_SETTINGFACT(appFontPointSize)
     DEFINE_SETTINGFACT(indoorPalette)
     DEFINE_SETTINGFACT(savePath)
     DEFINE_SETTINGFACT(androidDontSaveToSDCard)
@@ -43,22 +41,13 @@ public:
     DEFINE_SETTINGFACT(esriToken)
     DEFINE_SETTINGFACT(customURL)
     DEFINE_SETTINGFACT(vworldToken)
-    DEFINE_SETTINGFACT(openWeatherApiKey)
     DEFINE_SETTINGFACT(openaipToken)
     DEFINE_SETTINGFACT(gstDebugLevel)
     DEFINE_SETTINGFACT(followTarget)
     DEFINE_SETTINGFACT(qLocaleLanguage)
-    DEFINE_SETTINGFACT(clearSettingsNextBoot)
     DEFINE_SETTINGFACT(disableAllPersistence)
     DEFINE_SETTINGFACT(firstRunPromptIdsShown)
-    DEFINE_SETTINGFACT(useComponentInformationQuery)
-    DEFINE_SETTINGFACT(enableOpenWeatherAPI)
-    DEFINE_SETTINGFACT(enableSiyiSDK)
-    DEFINE_SETTINGFACT(fullScreen)
-
-    // QSettings key for clearSettingsNextBoot. Accessed directly by QGCApplication
-    // at startup before SettingsManager is initialized.
-    static constexpr const char *clearSettingsNextBootKey = "clearSettingsNextBoot";
+    DEFINE_SETTINGFACT(favoriteParameters)
 
     Q_PROPERTY(QString missionSavePath          READ missionSavePath            NOTIFY savePathsChanged)
     Q_PROPERTY(QString parameterSavePath        READ parameterSavePath          NOTIFY savePathsChanged)
@@ -67,7 +56,6 @@ public:
     Q_PROPERTY(QString videoSavePath            READ videoSavePath              NOTIFY savePathsChanged)
     Q_PROPERTY(QString photoSavePath            READ photoSavePath              NOTIFY savePathsChanged)
     Q_PROPERTY(QString crashSavePath            READ crashSavePath              NOTIFY savePathsChanged)
-    Q_PROPERTY(QString sensorSavePath           READ sensorSavePath             NOTIFY savePathsChanged)
     Q_PROPERTY(QString mavlinkActionsSavePath   READ mavlinkActionsSavePath     NOTIFY savePathsChanged)
     Q_PROPERTY(QString settingsSavePath         READ settingsSavePath           NOTIFY savePathsChanged)
 
@@ -89,7 +77,6 @@ public:
     QString videoSavePath         ();
     QString photoSavePath         ();
     QString crashSavePath         ();
-    QString sensorSavePath        ();
     QString mavlinkActionsSavePath();
     QString settingsSavePath      ();
 
@@ -117,7 +104,6 @@ public:
     static constexpr const char* videoDirectory =           QT_TRANSLATE_NOOP("AppSettings", "Video");
     static constexpr const char* photoDirectory =           QT_TRANSLATE_NOOP("AppSettings", "Photo");
     static constexpr const char* crashDirectory =           QT_TRANSLATE_NOOP("AppSettings", "CrashLogs");
-    static constexpr const char* sensorDirectory =          QT_TRANSLATE_NOOP("AppSettings", "SensorLogs");
     static constexpr const char* mavlinkActionsDirectory =  QT_TRANSLATE_NOOP("AppSettings", "MavlinkActions");
     static constexpr const char* settingsDirectory =        QT_TRANSLATE_NOOP("AppSettings", "Settings");
 
