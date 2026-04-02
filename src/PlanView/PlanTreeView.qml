@@ -43,13 +43,63 @@ TreeView {
     QGCFlickableScrollIndicator { parent: root; orientation: QGCFlickableScrollIndicator.Horizontal }
     QGCFlickableScrollIndicator { parent: root; orientation: QGCFlickableScrollIndicator.Vertical }
 
+    property int _lastMissionItemCount: 0
+
+    Connections {
+        target: root._missionController.visualItems
+        function onCountChanged() {
+            var newCount = _missionController.visualItems ? _missionController.visualItems.count : 0
+            if (newCount > root._lastMissionItemCount) {
+                // First waypoint added — collapse Plan Info and Defaults
+                if (root._lastMissionItemCount <= 1 && newCount > 1) {
+                    var planFileRow = _rowFor(_missionController.planFileGroupIndex)
+                    if (root.isExpanded(planFileRow)) {
+                        root.collapse(planFileRow)
+                    }
+                    var defaultsRow = _rowFor(_missionController.defaultsGroupIndex)
+                    if (root.isExpanded(defaultsRow)) {
+                        root.collapse(defaultsRow)
+                    }
+                }
+                // Expand mission group and scroll to the new item
+                var missionRow = _rowFor(_missionController.missionGroupIndex)
+                if (!root.isExpanded(missionRow)) {
+                    root.expand(missionRow)
+                }
+                // Scroll happens when the editor signals editorExpandedAndLoaded
+            }
+            root._lastMissionItemCount = newCount
+        }
+    }
+
     Connections {
         target: root._missionController
         function onVisualItemsChanged() {
-            // Mission group always expanded after rebuild (clear / load)
             root.collapseRecursively()
-            root.expand(_rowFor(_missionController.missionGroupIndex))
+            if (_missionController.containsItems) {
+                // Non-empty plan: expand mission group
+                root.expand(_rowFor(_missionController.missionGroupIndex))
+            } else {
+                // Empty plan: expand Plan Info and Defaults, scroll to top
+                root.expand(_rowFor(_missionController.planFileGroupIndex))
+                root.expand(_rowFor(_missionController.defaultsGroupIndex))
+                root.contentY = 0
+            }
+            root._lastMissionItemCount = _missionController.visualItems ? _missionController.visualItems.count : 0
             root.editingLayerChangeRequested(root._layerMission)
+        }
+        function onPlanViewStateChanged() {
+            // Current item changed — bring it on-screen if completely off-screen.
+            // Fine-tuned scroll happens later via editorExpandedAndLoaded.
+            var item = _missionController.currentPlanViewItem
+            if (item) {
+                var modelIndex = _missionController.visualItemsTree.indexForObject(item)
+                var row = root.rowAtIndex(modelIndex)
+                if (row >= 0) {
+                    root.forceLayout()
+                    root.positionViewAtRow(row, TableView.Visible)
+                }
+            }
         }
     }
 
@@ -107,6 +157,16 @@ TreeView {
         onTriggered: root.forceLayout()
     }
 
+    // Called by MissionItemEditor delegates when their editor height has settled.
+    function _scrollToMissionItem(delegateItem) {
+        root.forceLayout()
+        var bottomY = delegateItem.mapToItem(root.contentItem, 0, delegateItem.height).y
+        var neededContentY = bottomY - root.height
+        if (neededContentY > root.contentY) {
+            root.contentY = neededContentY
+        }
+    }
+
     delegate: Item {
         id: delegateRoot
         implicitWidth: root.width
@@ -126,32 +186,109 @@ TreeView {
         readonly property string nodeType: model.nodeType
         readonly property bool separator: model.separator ?? false
 
-
         onImplicitHeightChanged: layoutTimer.restart()
 
+        readonly property string _qrcBase: "qrc:/qml/QGroundControl/PlanView/"
+
+        // We use setSource() instead of sourceComponent so that required properties
+        // (e.g. missionItem) are injected before internal bindings activate,
+        // preventing "Cannot read property of null" warnings.
         Loader {
             id: loader
             width: parent.width
-            sourceComponent: {
-                // Guard: non-group delegates need a valid object. During model
-                // row removal the role data goes null before the delegate is
-                // destroyed, which would cause "Cannot read property of null"
-                // warnings in every downstream editor binding.
+
+            Component.onCompleted: {
                 switch (delegateRoot.nodeType) {
-                case "planFileGroup":   return groupHeaderComponent
-                case "defaultsGroup":   return groupHeaderComponent
-                case "missionGroup":    return groupHeaderComponent
-                case "fenceGroup":      return groupHeaderComponent
-                case "rallyGroup":      return groupHeaderComponent
-                case "transformGroup":  return groupHeaderComponent
-                case "planFileInfo":    return planFileInfoComponent
-                case "defaultsInfo":    return defaultsEditorComponent
-                case "missionItem":     return delegateRoot.nodeObject ? missionItemComponent  : null
-                case "fenceEditor":     return delegateRoot.nodeObject ? fenceEditorComponent  : null
-                case "rallyHeader":     return delegateRoot.nodeObject ? rallyHeaderComponent  : null
-                case "rallyItem":       return delegateRoot.nodeObject ? rallyItemComponent    : null
-                case "transformEditor": return transformEditorComponent
-                default:                return null
+                case "planFileGroup":
+                case "defaultsGroup":
+                case "missionGroup":
+                case "fenceGroup":
+                case "rallyGroup":
+                case "transformGroup":
+                    sourceComponent = groupHeaderComponent
+                    break
+                case "planFileInfo":
+                    setSource(delegateRoot._qrcBase + "PlanInfoEditor.qml", {
+                        width:                  Qt.binding(() => delegateRoot.width),
+                        planMasterController:   root.planMasterController,
+                        missionController:      root._missionController,
+                        editorMap:              root.editorMap
+                    })
+                    break
+                case "defaultsInfo":
+                    setSource(delegateRoot._qrcBase + "MissionDefaultsEditor.qml", {
+                        width:                  Qt.binding(() => delegateRoot.width),
+                        missionController:      root._missionController,
+                        planMasterController:   root.planMasterController
+                    })
+                    break
+                case "missionItem":
+                    if (delegateRoot.nodeObject) {
+                        setSource(delegateRoot._qrcBase + "MissionItemEditor.qml", {
+                            width:          Qt.binding(() => delegateRoot.width),
+                            map:            root.editorMap,
+                            missionItem:    delegateRoot.nodeObject
+                        })
+                    }
+                    break
+                case "fenceEditor":
+                    if (delegateRoot.nodeObject) {
+                        setSource(delegateRoot._qrcBase + "GeoFenceEditor.qml", {
+                            width:                  Qt.binding(() => delegateRoot.width),
+                            myGeoFenceController:   root._geoFenceController,
+                            flightMap:              root.editorMap
+                        })
+                    }
+                    break
+                case "rallyHeader":
+                    if (delegateRoot.nodeObject) {
+                        setSource(delegateRoot._qrcBase + "RallyPointEditorHeader.qml", {
+                            width:      Qt.binding(() => delegateRoot.width),
+                            controller: root._rallyPointController
+                        })
+                    }
+                    break
+                case "rallyItem":
+                    if (delegateRoot.nodeObject) {
+                        setSource(delegateRoot._qrcBase + "RallyPointItemEditor.qml", {
+                            width:      Qt.binding(() => delegateRoot.width),
+                            rallyPoint: delegateRoot.nodeObject,
+                            controller: root._rallyPointController
+                        })
+                    }
+                    break
+                case "transformEditor":
+                    setSource(delegateRoot._qrcBase + "TransformEditor.qml", {
+                        width:              Qt.binding(() => delegateRoot.width),
+                        missionController:  root._missionController
+                    })
+                    break
+                }
+            }
+
+            onLoaded: {
+                if (delegateRoot.nodeType === "missionItem" && item) {
+                    item.clicked.connect(function() {
+                        root._missionController.setCurrentPlanViewSeqNum(delegateRoot.nodeObject.sequenceNumber, false)
+                    })
+                    item.remove.connect(function() {
+                        var viIndex = root._missionController.visualItemIndexForObject(delegateRoot.nodeObject)
+                        if (viIndex > 0) {
+                            root._missionController.removeVisualItem(viIndex)
+                        }
+                    })
+                    item.selectNextNotReadyItem.connect(function() {
+                        for (var i = 0; i < root._missionController.visualItems.count; i++) {
+                            var vmi = root._missionController.visualItems.get(i)
+                            if (vmi.readyForSaveState === VisualMissionItem.NotReadyForSaveData) {
+                                root._missionController.setCurrentPlanViewSeqNum(vmi.sequenceNumber, true)
+                                break
+                            }
+                        }
+                    })
+                    item.editorExpandedAndLoaded.connect(function() {
+                        root._scrollToMissionItem(delegateRoot)
+                    })
                 }
             }
         }
@@ -217,101 +354,5 @@ TreeView {
             }
         }
 
-        // ── Plan info delegate ──
-        Component {
-            id: planFileInfoComponent
-
-            PlanInfoEditor {
-                width: delegateRoot.width
-                planMasterController: root.planMasterController
-                missionController: root._missionController
-                editorMap: root.editorMap
-            }
-        }
-
-        // ── Defaults editor delegate ──
-        Component {
-            id: defaultsEditorComponent
-
-            MissionDefaultsEditor {
-                width: delegateRoot.width
-                missionController: root._missionController
-                planMasterController: root.planMasterController
-            }
-        }
-
-        // ── Mission item delegate ──
-        Component {
-            id: missionItemComponent
-
-            MissionItemEditor {
-                width: delegateRoot.width
-                map: root.editorMap
-                masterController: root.planMasterController
-                missionItem: delegateRoot.nodeObject
-                readOnly: false
-
-                onClicked:  root._missionController.setCurrentPlanViewSeqNum(delegateRoot.nodeObject.sequenceNumber, false)
-
-                onRemove: {
-                    var viIndex = root._missionController.visualItemIndexForObject(delegateRoot.nodeObject)
-                    if (viIndex > 0) {
-                        root._missionController.removeVisualItem(viIndex)
-                    }
-                }
-
-                onSelectNextNotReadyItem: {
-                    for (var i = 0; i < root._missionController.visualItems.count; i++) {
-                        var vmi = root._missionController.visualItems.get(i)
-                        if (vmi.readyForSaveState === VisualMissionItem.NotReadyForSaveData) {
-                            root._missionController.setCurrentPlanViewSeqNum(vmi.sequenceNumber, true)
-                            break
-                        }
-                    }
-                }
-            }
-        }
-
-        // ── GeoFence editor (single child of fence group) ──
-        Component {
-            id: fenceEditorComponent
-
-            GeoFenceEditor {
-                width: delegateRoot.width
-                myGeoFenceController: root._geoFenceController
-                flightMap: root.editorMap
-            }
-        }
-
-        // ── Rally header / instructions ──
-        Component {
-            id: rallyHeaderComponent
-
-            RallyPointEditorHeader {
-                width: delegateRoot.width
-                controller: root._rallyPointController
-            }
-        }
-
-        // ── Rally point item editor ──
-        Component {
-            id: rallyItemComponent
-
-            RallyPointItemEditor {
-                width: delegateRoot.width
-                rallyPoint: delegateRoot.nodeObject
-                controller: root._rallyPointController
-            }
-        }
-
-        // ── Transform editor (single child of transform group) ──
-        Component {
-            id: transformEditorComponent
-
-            TransformEditor {
-                width: delegateRoot.width
-                missionController: root._missionController
-            }
-        }
     }
 }

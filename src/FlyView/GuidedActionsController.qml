@@ -128,8 +128,8 @@ Item {
     property bool showRTL:                  _guidedActionsEnabled && _vehicleArmed && _activeVehicle.supports.guidedMode && _vehicleFlying && !_vehicleInRTLMode
     property bool showTakeoff:              _guidedActionsEnabled && (_activeVehicle.supports.guidedTakeoffWithAltitude || _activeVehicle.supports.guidedTakeoffWithoutAltitude) && !_vehicleFlying && _canTakeoff
     property bool showLand:                 _guidedActionsEnabled && _activeVehicle.supports.guidedMode && _vehicleArmed && !_activeVehicle.fixedWing && !_vehicleInLandMode
-    property bool showStartMission:         _guidedActionsEnabled && _missionAvailable && !_missionActive && _canStartMission
-    property bool showContinueMission:      _guidedActionsEnabled && _missionAvailable && !_missionActive && _vehicleArmed && _vehicleFlying && (_currentMissionIndex < _missionItemCount - 1)
+    property bool showStartMission:         _guidedActionsEnabled && _missionAvailable && !_missionActive && !_vehicleFlying && _canStartMission
+    property bool showContinueMission:      _guidedActionsEnabled && _missionAvailable && !_missionActive && _vehicleArmed && _vehicleFlying && (_currentMissionIndex < _visualItemsCount - 1)
     property bool showPause:                _guidedActionsEnabled && _vehicleArmed && _activeVehicle.supports.pauseVehicle && _vehicleFlying && !_vehiclePaused && !_fixedWingOnApproach
     property bool showChangeAlt:            _guidedActionsEnabled && _vehicleFlying && _activeVehicle.supports.guidedMode && _vehicleArmed && !_missionActive
     property bool showChangeLoiterRadius:   _guidedActionsEnabled && _vehicleFlying && _activeVehicle.supports.guidedMode && _vehicleArmed && !_missionActive && _vehicleInFwdFlight && fwdFlightGotoMapCircle.visible
@@ -145,10 +145,10 @@ Item {
     property string changeSpeedTitle:   _vehicleInFwdFlight ? changeAirspeedTitle : changeCruiseSpeedTitle
     property string changeSpeedMessage: _vehicleInFwdFlight ? changeAirspeedMessage : changeCruiseSpeedMessage
 
-    // Note: The '_missionItemCount - 2' is a hack to not trigger resume mission when a mission ends with an RTL item
-    property bool showResumeMission:    _activeVehicle && !_vehicleArmed && _vehicleWasFlying && _missionAvailable && _resumeMissionIndex > 0 && (_resumeMissionIndex < _missionItemCount - 2)
+    // Note: The '_visualItemsCount - 2' is a hack to not trigger resume mission when a mission ends with an RTL item
+    property bool showResumeMission:    _activeVehicle && !_vehicleArmed && _vehicleWasFlying && _missionAvailable && _resumeMissionIndex > 0 && (_resumeMissionIndex < _visualItemsCount - 2)
 
-    property bool guidedUIVisible:          confirmDialog ? confirmDialog.visible : false
+    property bool guidedUIVisible:          confirmDialog.visible
 
     property var    _corePlugin:            QGroundControl.corePlugin
     property var    _corePluginOptions:     QGroundControl.corePlugin.options
@@ -163,7 +163,7 @@ Item {
     property bool   _vehicleInMissionMode:  false
     property bool   _vehicleInRTLMode:      false
     property bool   _vehicleInLandMode:     false
-    property int    _missionItemCount:      missionController.missionItemCount
+    property int    _visualItemsCount:      missionController.visualItems ? missionController.visualItems.count : 0
     property int    _currentMissionIndex:   missionController.currentMissionIndex
     property int    _resumeMissionIndex:    missionController.resumeMissionIndex
     property bool   _hideEmergenyStop:      !_corePluginOptions.flyView.guidedBarShowEmergencyStop
@@ -194,7 +194,7 @@ Item {
 
     function _outputState() {
         if (_isGuidedActionsControllerLogEnabled()) {
-            console.log(qsTr("_activeVehicle(%1) _vehicleArmed(%2) guidedModeSupported(%3) _vehicleFlying(%4) _vehicleWasFlying(%5) _vehicleInRTLMode(%6) pauseVehicleSupported(%7) _vehiclePaused(%8) _flightMode(%9) _missionItemCount(%10) roiSupported(%11) orbitSupported(%12) _missionActive(%13) _hideROI(%14) _hideOrbit(%15)").arg(_activeVehicle ? 1 : 0).arg(_vehicleArmed ? 1 : 0).arg(__guidedModeSupported ? 1 : 0).arg(_vehicleFlying ? 1 : 0).arg(_vehicleWasFlying ? 1 : 0).arg(_vehicleInRTLMode ? 1 : 0).arg(__pauseVehicleSupported ? 1 : 0).arg(_vehiclePaused ? 1 : 0).arg(_flightMode).arg(_missionItemCount).arg(__roiSupported).arg(__orbitSupported).arg(_missionActive).arg(_hideROI).arg(_hideOrbit))
+            console.log(qsTr("_activeVehicle(%1) _vehicleArmed(%2) guidedModeSupported(%3) _vehicleFlying(%4) _vehicleWasFlying(%5) _vehicleInRTLMode(%6) pauseVehicleSupported(%7) _vehiclePaused(%8) _flightMode(%9) _visualItemsCount(%10) roiSupported(%11) orbitSupported(%12) _missionActive(%13) _hideROI(%14) _hideOrbit(%15)").arg(_activeVehicle ? 1 : 0).arg(_vehicleArmed ? 1 : 0).arg(__guidedModeSupported ? 1 : 0).arg(_vehicleFlying ? 1 : 0).arg(_vehicleWasFlying ? 1 : 0).arg(_vehicleInRTLMode ? 1 : 0).arg(__pauseVehicleSupported ? 1 : 0).arg(_vehiclePaused ? 1 : 0).arg(_flightMode).arg(_visualItemsCount).arg(__roiSupported).arg(__orbitSupported).arg(_missionActive).arg(_hideROI).arg(_hideOrbit))
         }
     }
 
@@ -218,8 +218,8 @@ Item {
                 guidedValueSlider.setupSlider(
                     GuidedValueSlider.SliderType.Speed,
                     _unitsConversion.metersSecondToAppSettingsSpeedUnits(0.1).toFixed(1),
-                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotor()).toFixed(1),
-                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotor()/2).toFixed(1),
+                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotorMetersSecond()).toFixed(1),
+                    _unitsConversion.metersSecondToAppSettingsSpeedUnits(_activeVehicle.maximumHorizontalSpeedMultirotorMetersSecond()/2).toFixed(1),
                     qsTr("Speed"))
             } else {
                 console.error("setupSlider called for inapproproate change speed action", _vehicleInFwdFlight, _activeVehicle.haveMRSpeedLimits)
@@ -245,7 +245,7 @@ Item {
     on__PauseVehicleSupportedChanged:   _outputState()
     on__RoiSupportedChanged:            _outputState()
     on__OrbitSupportedChanged:          _outputState()
-    on_MissionItemCountChanged:         _outputState()
+    on_VisualItemsCountChanged:         _outputState()
     on_MissionActiveChanged:            _outputState()
 
     on_CurrentMissionIndexChanged: {
@@ -501,8 +501,10 @@ Item {
             confirmDialog.hideTrigger = Qt.binding(function() { return !showLandAbort })
             break;
         case actionPause:
-            // Pause 명령은 확인 없이 바로 실행
-            executeAction(actionPause, undefined, undefined, undefined)
+            confirmDialog.title = pauseTitle
+            confirmDialog.message = pauseMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return !showPause })
+            guidedValueSlider.visible = true
             break;
         case actionMVPause:
             confirmDialog.title = mvPauseTitle
@@ -547,6 +549,7 @@ Item {
     }
 
     // Executes the specified action
+    // Returns false if the action failed and any associated map indicator should be restored
     function executeAction(actionCode, actionData, sliderOutputValue, optionChecked) {
         var i;
         var selectedVehicles;
@@ -609,22 +612,26 @@ Item {
         case actionChangeAlt:
             var valueInMeters = _unitsConversion.appSettingsVerticalDistanceUnitsToMeters(sliderOutputValue)
             var altitudeChangeInMeters = valueInMeters - _activeVehicle.altitudeRelative.rawValue
-            _activeVehicle.guidedModeChangeAltitudeAMSL(altitudeChangeInMeters, false /* pauseVehicle */)
+            _activeVehicle.guidedModeChangeAltitude(altitudeChangeInMeters, false /* pauseVehicle */)
             break
         case actionChangeLoiterRadius:
-            _activeVehicle.guidedModeGotoLocation(
+            if (!_activeVehicle.guidedModeGotoLocation(
                 fwdFlightGotoMapCircle.coordinate,
                 (fwdFlightGotoMapCircle.clockwiseRotation ? 1 : -1) *
                         Math.abs(fwdFlightGotoMapCircle.radius.rawValue)
-            )
+            )) {
+                return false
+            }
             break
         case actionGoto:
-            _activeVehicle.guidedModeGotoLocation(
+            if (!_activeVehicle.guidedModeGotoLocation(
                 actionData,
                 _vehicleInFwdFlight /* forwardFlightLoiterRadius */
                     ? _flyViewSettings.forwardFlightGoToLocationLoiterRad.value
                     : 0
-            )
+            )) {
+                return false
+            }
             break
         case actionSetWaypoint:
             _activeVehicle.setCurrentMissionSequence(actionData)
@@ -637,10 +644,9 @@ Item {
             _activeVehicle.abortLanding(50)     // hardcoded value for climbOutAltitude that is currently ignored
             break
         case actionPause:
-            // var valueInMeters = _unitsConversion.appSettingsVerticalDistanceUnitsToMeters(sliderOutputValue)
-            // var altitudeChangeInMeters = valueInMeters - _activeVehicle.altitudeRelative.rawValue
-            // _activeVehicle.guidedModeChangeAltitudeAMSL(altitudeChangeInMeters, true /* pauseVehicle */)
-            _activeVehicle.pauseVehicle()
+            var valueInMeters = _unitsConversion.appSettingsVerticalDistanceUnitsToMeters(sliderOutputValue)
+            var altitudeChangeInMeters = valueInMeters - _activeVehicle.altitudeRelative.rawValue
+            _activeVehicle.guidedModeChangeAltitude(altitudeChangeInMeters, true /* pauseVehicle */)
             break
         case actionMVPause:
             selectedVehicles = QGroundControl.multiVehicleManager.selectedVehicles
@@ -677,9 +683,10 @@ Item {
         default:
             if (!customController.customExecuteAction(actionCode, actionData, sliderOutputValue, optionChecked)) {
                 console.warn(qsTr("Internal error: unknown actionCode"), actionCode)
-                return
+                return false
             }
             break
         }
+        return true
     }
 }
