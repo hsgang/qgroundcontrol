@@ -284,6 +284,11 @@ QString AppSettings::settingsSavePath(void)
     return _childSavePath(settingsDirectory);
 }
 
+QString AppSettings::sensorSavePath(void)
+{
+    return _childSavePath("Sensor");
+}
+
 QList<int> AppSettings::firstRunPromptsIdsVariantToList(const QVariant& firstRunPromptIds)
 {
     QList<int> rgIds;
