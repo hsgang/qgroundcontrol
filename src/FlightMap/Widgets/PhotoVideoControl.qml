@@ -12,7 +12,7 @@ Rectangle {
     id: photoVideoControl
     width: mainLayout.width + (_smallMargins * 2)
     height: mainLayout.height + (_smallMargins * 2)
-    color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
+    color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
     radius: _margins
     visible: _camera.capturesVideo || _camera.capturesPhotos || _camera.hasTracking || _camera.hasVideoStream
 
@@ -21,11 +21,10 @@ Rectangle {
     property var _activeVehicle: globals.activeVehicle
     property var _cameraManager: _activeVehicle.cameraManager
     property var _camera: _cameraManager.currentCameraInstance
-    property bool _cameraInPhotoMode: _camera.cameraMode === MavlinkCameraControl.CAM_MODE_PHOTO || _camera.cameraMode === MavlinkCameraControl.CAM_MODE_SURVEY
+    property bool _cameraInPhotoMode: _camera.cameraMode === MavlinkCameraControlInterface.CAM_MODE_PHOTO || _camera.cameraMode === MavlinkCameraControlInterface.CAM_MODE_SURVEY
     property bool _cameraInVideoMode: !_cameraInPhotoMode
-    property bool _videoCaptureIdle: _camera.captureVideoState === MavlinkCameraControl.CaptureVideoStateIdle
-    property bool _photoCaptureIdle: _camera.capturePhotosState === MavlinkCameraControl.CapturePhotosStateIdle
-    property real   backgroundOpacity:          QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
+    property bool _videoCaptureIdle: _camera.captureVideoState === MavlinkCameraControlInterface.CaptureVideoStateIdle
+    property bool _photoCaptureIdle: _camera.capturePhotosState === MavlinkCameraControlInterface.CapturePhotosStateIdle
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
@@ -152,7 +151,7 @@ Rectangle {
                     border.width: 1
                     border.color: videoCaptureButtonPalette.buttonBorder
                     visible: (_camera.hasModes && _cameraInVideoMode) || (!_camera.hasModes && _camera.capturesVideo)
-                    enabled: _camera.captureVideoState !== MavlinkCameraControl.CaptureVideoStateDisabled
+                    enabled: _camera.captureVideoState !== MavlinkCameraControlInterface.CaptureVideoStateDisabled
 
                     QGCPalette { id: videoCaptureButtonPalette; colorGroupEnabled: videoCaptureButton.enabled }
 
@@ -175,7 +174,7 @@ Rectangle {
                         border.width: 1
                         border.color: videoCaptureButtonPalette.buttonBorder
 
-                        property bool _isCapturing: _camera.captureVideoState === MavlinkCameraControl.CaptureVideoStateCapturing
+                        property bool _isCapturing: _camera.captureVideoState === MavlinkCameraControlInterface.CaptureVideoStateCapturing
                     }
 
                     MouseArea {
@@ -228,7 +227,7 @@ Rectangle {
                     border.width: 1
                     border.color: photoCaptureButtonPalette.buttonBorder
                     visible: (_camera.hasModes && _cameraInPhotoMode) || (!_camera.hasModes && (_camera.hasVideoStream || _camera.capturesPhotos))
-                    enabled: _camera.capturePhotosState !== MavlinkCameraControl.CapturePhotosStateDisabled
+                    enabled: _camera.capturePhotosState !== MavlinkCameraControlInterface.CapturePhotosStateDisabled
 
                     QGCPalette { id: photoCaptureButtonPalette; colorGroupEnabled: photoCaptureButton.enabled }
 
@@ -251,16 +250,16 @@ Rectangle {
                         border.width: 1
                         border.color: photoCaptureButtonPalette.buttonBorder
 
-                        property bool _isCapturing: _camera.capturePhotosState === MavlinkCameraControl.CapturePhotosStateCapturingSinglePhoto ||
-                                                        _camera.capturePhotosState === MavlinkCameraControl.CapturePhotosStateCapturingMultiplePhotos
+                        property bool _isCapturing: _camera.capturePhotosState === MavlinkCameraControlInterface.CapturePhotosStateCapturingSinglePhoto ||
+                                                        _camera.capturePhotosState === MavlinkCameraControlInterface.CapturePhotosStateCapturingMultiplePhotos
                     }
 
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            if (_camera.capturePhotosState === MavlinkCameraControl.CapturePhotosStateCapturingMultiplePhotos) {
+                            if (_camera.capturePhotosState === MavlinkCameraControlInterface.CapturePhotosStateCapturingMultiplePhotos) {
                                 _camera.stopTakePhoto()
-                            } else if (_camera.capturePhotosState === MavlinkCameraControl.CapturePhotosStateIdle) {
+                            } else if (_camera.capturePhotosState === MavlinkCameraControlInterface.CapturePhotosStateIdle) {
                                 _camera.takePhoto()
                             }
                         }
@@ -305,7 +304,7 @@ Rectangle {
                     Layout.alignment: Qt.AlignHCenter
                     text: qsTr("Free: ") + _camera.storageFreeStr
                     font.pointSize: ScreenTools.defaultFontPointSize
-                    visible: _camera.storageStatus === MavlinkCameraControl.STORAGE_READY
+                    visible: _camera.storageStatus === MavlinkCameraControlInterface.STORAGE_READY
                 }
 
                 QGCLabel {
@@ -391,7 +390,7 @@ Rectangle {
 
                 property bool _multipleMavlinkCameras: _cameraManager.cameras.count > 1
                 property bool _multipleMavlinkCameraStreams: _camera.streamLabels.length > 1
-                property bool _cameraStorageSupported: _camera.storageStatus !== MavlinkCameraControl.STORAGE_NOT_SUPPORTED
+                property bool _cameraStorageSupported: _camera.storageStatus !== MavlinkCameraControlInterface.STORAGE_NOT_SUPPORTED
                 property var _videoSettings: QGroundControl.settingsManager.videoSettings
 
                 ColumnLayout {
@@ -425,7 +424,7 @@ Rectangle {
 
                         QGCLabel {
                             text: qsTr("Blend Opacity")
-                            visible: _camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND
+                            visible: _camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControlInterface.THERMAL_BLEND
                             onVisibleChanged: gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
@@ -446,7 +445,7 @@ Rectangle {
 
                         QGCLabel {
                             text: qsTr("Photo Interval (seconds)")
-                            visible: _camera.capturesPhotos && _camera.photoCaptureMode === MavlinkCameraControl.PHOTO_CAPTURE_TIMELAPSE
+                            visible: _camera.capturesPhotos && _camera.photoCaptureMode === MavlinkCameraControlInterface.PHOTO_CAPTURE_TIMELAPSE
                             onVisibleChanged: gridLayout.dynamicRows += visible ? 1 : -1
                         }
 
@@ -507,7 +506,7 @@ Rectangle {
                             from: 0
                             value: _camera.thermalOpacity
                             live: true
-                            visible: _camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND
+                            visible: _camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControlInterface.THERMAL_BLEND
                             onValueChanged: _camera.thermalOpacity = value
                         }
 
@@ -583,7 +582,7 @@ Rectangle {
                             value: _camera.photoLapse
                             displayValue: true
                             live: true
-                            visible: _camera.capturesPhotos && _camera.photoCaptureMode === MavlinkCameraControl.PHOTO_CAPTURE_TIMELAPSE
+                            visible: _camera.capturesPhotos && _camera.photoCaptureMode === MavlinkCameraControlInterface.PHOTO_CAPTURE_TIMELAPSE
                             onValueChanged: _camera.photoLapse = value
                         }
 
