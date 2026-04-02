@@ -791,11 +791,11 @@ out:
     delete data;
 }
 
-void APMFirmwarePlugin::guidedModeGotoLocation(Vehicle *vehicle, const QGeoCoordinate &gotoCoord, double forwardFlightLoiterRadius) const
+bool APMFirmwarePlugin::guidedModeGotoLocation(Vehicle *vehicle, const QGeoCoordinate &gotoCoord, double forwardFlightLoiterRadius) const
 {
     if (qIsNaN(vehicle->altitudeRelative()->rawValue().toDouble())) {
         qgcApp()->showAppMessage(QStringLiteral("Unable to go to location, vehicle position not known."));
-        return;
+        return false;
     }
 
     // attempt to use MAV_CMD_DO_REPOSITION to move vehicle.  If that
@@ -844,7 +844,7 @@ void APMFirmwarePlugin::guidedModeGotoLocation(Vehicle *vehicle, const QGeoCoord
         }
         if (instanceData->MAV_CMD_DO_REPOSITION_supported) {
             // no need to fall back
-            return;
+            return true;
         }
     }
 
@@ -853,6 +853,8 @@ void APMFirmwarePlugin::guidedModeGotoLocation(Vehicle *vehicle, const QGeoCoord
     QGeoCoordinate coordWithAltitude = gotoCoord;
     coordWithAltitude.setAltitude(vehicle->altitudeRelative()->rawValue().toDouble());
     vehicle->missionManager()->writeArduPilotGuidedMissionItem(coordWithAltitude, false /* altChangeOnly */);
+
+    return true;
 }
 
 void APMFirmwarePlugin::guidedModeRTL(Vehicle *vehicle, bool smartRTL) const

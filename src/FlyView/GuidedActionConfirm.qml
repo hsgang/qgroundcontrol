@@ -96,11 +96,16 @@ Item {
                     guidedValueSlider.visible = false
                 }
                 hideTrigger = false
+                let success = false
                 if (guidedController) {
-                    guidedController.executeAction(control.action, control.actionData, sliderOutputValue, control.optionChecked)
+                    success = guidedController.executeAction(control.action, control.actionData, sliderOutputValue, control.optionChecked)
                 }
                 if (mapIndicator) {
-                    mapIndicator.actionConfirmed()
+                    if (success) {
+                        mapIndicator.actionConfirmed()
+                    } else {
+                        mapIndicator.actionCancelled()
+                    }
                     mapIndicator = undefined
                 }
             }
