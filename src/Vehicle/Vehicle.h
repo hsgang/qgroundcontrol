@@ -883,6 +883,10 @@ signals:
     ///     @param channelValues The clamped values for rc channels
     void rcChannelsClampedChanged(QVector<int> channelValues);
 
+    /// New SERVO output values coming from SERVO_OUTPUT_RAW message
+    ///     @param servoValues The current servo output values in microseconds (0-15 -> SERVO1..SERVO16). Invalid values are -1.
+    void servoOutputsChanged(QVector<int> servoValues);
+
     /// Remote control RSSI changed  (0% - 100%)
     void remoteControlRSSIChanged       (uint8_t rssi);
 
@@ -1308,6 +1312,9 @@ public:
     // TunnelingDataFactGroup          _tunnelingDataFactGroup;
     WinchStatusFactGroup            _winchStatusFactGroup;
     VehicleLandingTargetFactGroup   _landingTargetFactGroup;
+
+    // Live SERVO_OUTPUT_RAW values (microseconds). Indexed 0..15 -> SERVO1..SERVO16.
+    QVector<int>                       _servoOutputRawValues = QVector<int>(16, -1);
 
     // Dynamic FactGroups
     BatteryFactGroupListModel       _batteryFactGroupListModel;

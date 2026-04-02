@@ -62,23 +62,24 @@ SetupPage {
                     columnSpacing: ScreenTools.defaultFontPixelWidth * 2
 
                     // --- Headers (all explicitly in row 0) -----------------
-                    QGCLabel { text: "";         Layout.row: 0; Layout.column: 0; Layout.alignment: Qt.AlignHCenter }
+                    QGCLabel { text: qsTr("Servo");         font.bold: true; Layout.row: 0; Layout.column: 0 }
                     QGCLabel {
                         text: qsTr("Position")
+                        font.bold: true
                         Layout.row: 0
                         Layout.column: 1
-                        Layout.alignment: Qt.AlignHCenter
+                        Layout.preferredWidth: _positionBarWidth
+                        Layout.fillWidth: false
                     }
-                    QGCLabel { text: qsTr("Function");      Layout.row: 0; Layout.column: 2; Layout.alignment: Qt.AlignHCenter }
-                    QGCLabel { text: qsTr("Min");           Layout.row: 0; Layout.column: 3; Layout.alignment: Qt.AlignHCenter }
-                    QGCLabel { text: qsTr("Trim");          Layout.row: 0; Layout.column: 4; Layout.alignment: Qt.AlignHCenter }
-                    QGCLabel { text: qsTr("Max");           Layout.row: 0; Layout.column: 5; Layout.alignment: Qt.AlignHCenter }
-                    QGCLabel { text: qsTr("Reversed");      Layout.row: 0; Layout.column: 6; Layout.alignment: Qt.AlignHCenter }
+                    QGCLabel { text: qsTr("Function");      font.bold: true; Layout.row: 0; Layout.column: 2 }
+                    QGCLabel { text: qsTr("Min");           font.bold: true; Layout.row: 0; Layout.column: 3 }
+                    QGCLabel { text: qsTr("Trim");          font.bold: true; Layout.row: 0; Layout.column: 4 }
+                    QGCLabel { text: qsTr("Max");           font.bold: true; Layout.row: 0; Layout.column: 5 }
+                    QGCLabel { text: qsTr("Reversed");      font.bold: true; Layout.row: 0; Layout.column: 6 }
 
                     // --- Column 0: Servo number ----------------------------
                     Repeater {
                         model: _maxServos
-
                         QGCLabel {
                             text:          index + 1
                             visible:       servoExists(index + 1)
@@ -91,7 +92,6 @@ SetupPage {
                     Repeater {
                         id: positionRepeater
                         model: _maxServos
-
                         Item {
                             readonly property int _servoIndex: index + 1
                             readonly property var _minFact:  getFact("SERVO" + _servoIndex + "_MIN")
@@ -173,7 +173,6 @@ SetupPage {
                     // --- Column 2: Function --------------------------------
                     Repeater {
                         model: _maxServos
-
                         FactComboBox {
                             fact:           getFact("SERVO" + (index + 1) + "_FUNCTION")
                             indexModel:     false
@@ -187,9 +186,8 @@ SetupPage {
                     // --- Column 3: Min ---------------------------------------
                     Repeater {
                         model: _maxServos
-
                         RowLayout {
-                            spacing:       ScreenTools.defaultFontPixelWidth / 2
+                            spacing:       ScreenTools.defaultFontPixelWidth
                             visible:       servoExists(index + 1)
                             Layout.row:    index + 1
                             Layout.column: 3
@@ -215,12 +213,6 @@ SetupPage {
 
                             QGCButton {
                                 text: "-"
-                                leftPadding: 0
-                                rightPadding: 0
-                                topPadding: 0
-                                bottomPadding: 0
-                                Layout.preferredWidth:  ScreenTools.implicitTextFieldHeight
-                                Layout.preferredHeight: ScreenTools.implicitTextFieldHeight
                                 onPressed: {
                                     if (!spFact) {
                                         _repeatDir = 0
@@ -239,12 +231,6 @@ SetupPage {
                             FactTextField { fact: spFact; showUnits: false; Layout.fillWidth: true }
                             QGCButton {
                                 text: "+"
-                                leftPadding: 0
-                                rightPadding: 0
-                                topPadding: 0
-                                bottomPadding: 0
-                                Layout.preferredWidth:  ScreenTools.implicitTextFieldHeight
-                                Layout.preferredHeight: ScreenTools.implicitTextFieldHeight
                                 onPressed: {
                                     if (!spFact) {
                                         _repeatDir = 0
@@ -266,9 +252,8 @@ SetupPage {
                     // --- Column 4: Trim --------------------------------------
                     Repeater {
                         model: _maxServos
-
                         RowLayout {
-                            spacing:       ScreenTools.defaultFontPixelWidth / 2
+                            spacing:       ScreenTools.defaultFontPixelWidth
                             visible:       servoExists(index + 1)
                             Layout.row:    index + 1
                             Layout.column: 4
@@ -294,12 +279,6 @@ SetupPage {
 
                             QGCButton {
                                 text: "-"
-                                leftPadding: 0
-                                rightPadding: 0
-                                topPadding: 0
-                                bottomPadding: 0
-                                Layout.preferredWidth:  ScreenTools.implicitTextFieldHeight
-                                Layout.preferredHeight: ScreenTools.implicitTextFieldHeight
                                 onPressed: {
                                     if (!spFact) {
                                         _repeatDir = 0
@@ -318,12 +297,6 @@ SetupPage {
                             FactTextField { fact: spFact; showUnits: false; Layout.fillWidth: true }
                             QGCButton {
                                 text: "+"
-                                leftPadding: 0
-                                rightPadding: 0
-                                topPadding: 0
-                                bottomPadding: 0
-                                Layout.preferredWidth:  ScreenTools.implicitTextFieldHeight
-                                Layout.preferredHeight: ScreenTools.implicitTextFieldHeight
                                 onPressed: {
                                     if (!spFact) {
                                         _repeatDir = 0
@@ -345,9 +318,8 @@ SetupPage {
                     // --- Column 5: Max ---------------------------------------
                     Repeater {
                         model: _maxServos
-
                         RowLayout {
-                            spacing:       ScreenTools.defaultFontPixelWidth / 2
+                            spacing:       ScreenTools.defaultFontPixelWidth
                             visible:       servoExists(index + 1)
                             Layout.row:    index + 1
                             Layout.column: 5
@@ -373,12 +345,6 @@ SetupPage {
 
                             QGCButton {
                                 text: "-"
-                                leftPadding: 0
-                                rightPadding: 0
-                                topPadding: 0
-                                bottomPadding: 0
-                                Layout.preferredWidth:  ScreenTools.implicitTextFieldHeight
-                                Layout.preferredHeight: ScreenTools.implicitTextFieldHeight
                                 onPressed: {
                                     if (!spFact) {
                                         _repeatDir = 0
@@ -397,12 +363,6 @@ SetupPage {
                             FactTextField { fact: spFact; showUnits: false; Layout.fillWidth: true }
                             QGCButton {
                                 text: "+"
-                                leftPadding: 0
-                                rightPadding: 0
-                                topPadding: 0
-                                bottomPadding: 0
-                                Layout.preferredWidth:  ScreenTools.implicitTextFieldHeight
-                                Layout.preferredHeight: ScreenTools.implicitTextFieldHeight
                                 onPressed: {
                                     if (!spFact) {
                                         _repeatDir = 0
@@ -424,13 +384,11 @@ SetupPage {
                     // --- Column 6: Reversed ---------------------------------
                     Repeater {
                         model: _maxServos
-
                         FactCheckBox {
                             fact:          getFact("SERVO" + (index + 1) + "_REVERSED")
                             visible:       servoExists(index + 1)
                             Layout.row:    index + 1
                             Layout.column: 6
-                            Layout.alignment: Qt.AlignHCenter
                         }
                     }
                 }
