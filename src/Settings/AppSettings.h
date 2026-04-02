@@ -108,6 +108,7 @@ public:
     static constexpr const char* crashDirectory =           QT_TRANSLATE_NOOP("AppSettings", "CrashLogs");
     static constexpr const char* mavlinkActionsDirectory =  QT_TRANSLATE_NOOP("AppSettings", "MavlinkActions");
     static constexpr const char* settingsDirectory =        QT_TRANSLATE_NOOP("AppSettings", "Settings");
+    static constexpr const char* sensorDirectory =          QT_TRANSLATE_NOOP("AppSettings", "Sensor");
 
 signals:
     void savePathsChanged();

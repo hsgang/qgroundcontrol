@@ -216,6 +216,7 @@ void AppSettings::_checkSavePathDirectories(void)
         QGCFileHelper::ensureDirectoryExists(QGCFileHelper::joinPath(savePath, crashDirectory));
         QGCFileHelper::ensureDirectoryExists(QGCFileHelper::joinPath(savePath, mavlinkActionsDirectory));
         QGCFileHelper::ensureDirectoryExists(QGCFileHelper::joinPath(savePath, settingsDirectory));
+        QGCFileHelper::ensureDirectoryExists(QGCFileHelper::joinPath(savePath, sensorDirectory));
     }
 }
 
@@ -286,7 +287,7 @@ QString AppSettings::settingsSavePath(void)
 
 QString AppSettings::sensorSavePath(void)
 {
-    return _childSavePath("Sensor");
+    return _childSavePath(sensorDirectory);
 }
 
 QList<int> AppSettings::firstRunPromptsIdsVariantToList(const QVariant& firstRunPromptIds)
