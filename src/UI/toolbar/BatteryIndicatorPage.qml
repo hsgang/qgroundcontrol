@@ -140,16 +140,18 @@ ToolIndicatorPage {
                 Layout.fillWidth:   true
 
                 FactCheckBoxSlider {
+                    id:                 consolidateCheckBox
                     Layout.fillWidth:   true
                     fact:               _batterySettings.consolidateMultipleBatteries
                     text:               qsTr("Only show battery with lowest charge")
-                    visible:            fact.visible
+                    visible:            consolidateCheckBox.fact ? consolidateCheckBox.fact.visible : false
                 }
 
                 LabelledFactComboBox {
+                    id:                 displayTypeCombo
                     label:              qsTr("Display Type")
                     fact:               _batterySettings.valueDisplay
-                    visible:            fact.visible
+                    visible:            displayTypeCombo.fact ? displayTypeCombo.fact.visible : false
                 }
             }
 
@@ -188,7 +190,7 @@ ToolIndicatorPage {
                             fact: _batterySettings.threshold1
                             implicitWidth: ScreenTools.defaultFontPixelWidth * 6.5
                             height: ScreenTools.defaultFontPixelHeight * 1.5
-                            enabled: fact.visible
+                            enabled: threshold1Field.fact ? threshold1Field.fact.visible : false
                             onEditingFinished: {
                                 // Validate and set the new threshold value
                                 _batterySettings.setThreshold1(parseInt(text));
@@ -207,10 +209,11 @@ ToolIndicatorPage {
                             color: qgcPal.colorYellow
                         }
                         FactTextField {
+                            id: threshold2Field
                             fact: _batterySettings.threshold2
                             implicitWidth: ScreenTools.defaultFontPixelWidth * 6.5
                             height: ScreenTools.defaultFontPixelHeight * 1.5
-                            enabled: fact.visible
+                            enabled: threshold2Field.fact ? threshold2Field.fact.visible : false
                             onEditingFinished: {
                                 // Validate and set the new threshold value
                                 _batterySettings.setThreshold2(parseInt(text));

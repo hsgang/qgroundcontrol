@@ -13,21 +13,8 @@ MissionItemMapVisualBase {
 
     indicatorComponent: indicatorComponent
 
-    function hideItemVisuals() {
-        if (_itemVisualShowing) {
-            itemVisualLoader.active = false
-            loiterVisualLoader.active = false
-            _itemVisualShowing = false
-        }
-    }
-
-    function showItemVisuals() {
-        if (!_itemVisualShowing) {
-            itemVisualLoader.active = true
-            loiterVisualLoader.active = true
-            _itemVisualShowing = true
-        }
-    }
+    // loiterVisualLoader.active is bound to _itemVisualShowing
+    // so it follows the base class hideItemVisuals()/showItemVisuals() automatically
 
     Connections {
         target: _missionItem.isSimpleItem ? _missionItem : null
@@ -49,7 +36,7 @@ MissionItemMapVisualBase {
         id: loiterVisualLoader
 
         asynchronous: true
-        active: false
+        active: _root._itemVisualShowing
 
         sourceComponent: loiterComponent
 
