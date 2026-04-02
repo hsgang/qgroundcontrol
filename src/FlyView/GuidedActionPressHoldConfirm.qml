@@ -125,7 +125,7 @@ Item {
 
     property color backgroundColor: "transparent"
     property color dialColor: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)//"#FF505050"
-    property color progressColor: qgcPal.textHighlight //qgcPal.buttonHighlight // "#FFA51BAB"
+    property color progressColor: qgcPal.buttonHighlight //qgcPal.buttonHighlight // "#FFA51BAB"
 
     property int penStyle: Qt.RoundCap
 

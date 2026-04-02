@@ -64,12 +64,12 @@ Rectangle {
             height:             ScreenTools.defaultFontPixelHeight
             width:              ScreenTools.defaultFontPixelWidth * 18
             color:              "transparent"
-            border.color:       qgcPal.textHighlight
+            border.color:       qgcPal.buttonHighlight
 
             Rectangle {
                 anchors.top:    parent.top
                 anchors.bottom: parent.bottom
-                color:          qgcPal.textHighlight
+                color:          qgcPal.buttonHighlight
                 width:          parent.width * _pctComplete
 
                 QGCLabel {

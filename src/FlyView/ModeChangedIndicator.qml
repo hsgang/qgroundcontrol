@@ -46,14 +46,14 @@ Rectangle {
 
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
-            color:                      qgcPal.textHighlight
+            color:                      qgcPal.buttonHighlight
             font.pointSize:             ScreenTools.mediumFontPointSize
             text:                       qsTr("Switched to")
         }
 
         QGCLabel {
             anchors.horizontalCenter:   parent.horizontalCenter
-            color:                      qgcPal.textHighlight
+            color:                      qgcPal.buttonHighlight
             font.pointSize:             ScreenTools.largeFontPointSize * 1.5
             font.weight:                Font.DemiBold
             text:                       flightMode

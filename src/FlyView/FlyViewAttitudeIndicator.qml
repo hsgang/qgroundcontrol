@@ -134,7 +134,7 @@ Item{
                     QGCLabel {
                         text:                   zeroPad(_vehicleGroundSpeedText, 4)
                         font.bold :             true
-                        color:                  qgcPal.textHighlight
+                        color:                  qgcPal.buttonHighlight
                         font.pointSize :        ScreenTools.defaultFontPointSize * 2
                         Layout.fillWidth:       true
                         Layout.preferredWidth:  _largeValueWidth
@@ -385,7 +385,7 @@ Item{
                         id:                     altitudeValueLabel
                         text:                   zeroPad(_vehicleAltitudeText, 5)
                         font.bold:              true
-                        color:                  qgcPal.textHighlight
+                        color:                  qgcPal.buttonHighlight
                         font.pointSize:         ScreenTools.defaultFontPointSize * 2
                         Layout.fillWidth:       true
                         Layout.preferredWidth:  _largeValueWidth

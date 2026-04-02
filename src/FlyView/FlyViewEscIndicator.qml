@@ -42,7 +42,7 @@ Rectangle {
         }
 
         ShapePath {
-            strokeColor: qgcPal.textHighlight
+            strokeColor: qgcPal.buttonHighlight
             strokeWidth: _strokeWidth
             fillColor: "transparent"
             capStyle: ShapePath.RoundCap

@@ -59,7 +59,7 @@ Rectangle {
                         anchors.bottom: parent.bottom
                         width:          parent.width
                         height:         parent.height * (Math.min(_barMaximum, _velocity_variance) / (_barMaximum - _barMinimum))
-                        color:          qgcPal.colorWhite
+                        color:          "white"
                     }
 
                     // Max vibe indication line at 60
@@ -108,7 +108,7 @@ Rectangle {
                         anchors.bottom: parent.bottom
                         width:          parent.width
                         height:         parent.height * (Math.min(_barMaximum, _pos_horiz_variance) / (_barMaximum - _barMinimum))
-                        color:          qgcPal.colorWhite
+                        color:          "white"
                     }
 
                     // Max vibe indication line at 60
@@ -157,7 +157,7 @@ Rectangle {
                         anchors.bottom: parent.bottom
                         width:          parent.width
                         height:         parent.height * (Math.min(_barMaximum, _pos_vert_variance) / (_barMaximum - _barMinimum))
-                        color:          qgcPal.colorWhite
+                        color:          "white"
                     }
 
                     // Max vibe indication line at 60
@@ -206,7 +206,7 @@ Rectangle {
                         anchors.bottom: parent.bottom
                         width:          parent.width
                         height:         parent.height * (Math.min(_barMaximum, _compass_variance) / (_barMaximum - _barMinimum))
-                        color:          qgcPal.colorWhite
+                        color:          "white"
                     }
 
                     // Max vibe indication line at 60
@@ -255,7 +255,7 @@ Rectangle {
                         anchors.bottom: parent.bottom
                         width:          parent.width
                         height:         parent.height * (Math.min(_barMaximum, _terrain_alt_variance) / (_barMaximum - _barMinimum))
-                        color:          qgcPal.colorWhite
+                        color:          "white"
                     }
 
                     // Max vibe indication line at 60
