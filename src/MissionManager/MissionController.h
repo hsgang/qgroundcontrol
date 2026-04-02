@@ -63,7 +63,7 @@ public:
     Q_PROPERTY(QmlObjectListModel*  directionArrows                 READ directionArrows                CONSTANT)
     Q_PROPERTY(QStringList          complexMissionItemNames         READ complexMissionItemNames        NOTIFY complexMissionItemNamesChanged)
     Q_PROPERTY(QGeoCoordinate       plannedHomePosition             READ plannedHomePosition            NOTIFY plannedHomePositionChanged)      ///< Includes AMSL altitude
-    Q_PROPERTY(bool                 homePositionSet                 READ homePositionSet                NOTIFY homePositionSetChanged)          ///< true: Home position has been set by the user
+    Q_PROPERTY(bool                 homePositionSet                 READ homePositionSet                NOTIFY homePositionSetChanged)
     Q_PROPERTY(QGeoCoordinate       previousCoordinate              MEMBER _previousCoordinate          NOTIFY planViewStateChanged)
     Q_PROPERTY(FlightPathSegment*   splitSegment                    MEMBER _splitSegment                NOTIFY splitSegmentChanged)             ///< Segment which show show + split ui element
     Q_PROPERTY(double               progressPct                     READ progressPct                    NOTIFY progressPctChanged)
@@ -336,6 +336,7 @@ signals:
     void planViewStateChanged               (void);  ///< All plan-view properties are recomputed together in setCurrentPlanViewSeqNum, so one signal covers them all
     void takeoffMissionItemChanged          (void);
     void missionBoundingCubeChanged         (void);
+    void missionItemCountChanged            (void);
     void hasLandItemChanged                 (void);
     void multipleLandPatternsAllowedChanged (void);
     void minAMSLAltitudeChanged             (double minAMSLAltitude);
