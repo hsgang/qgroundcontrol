@@ -177,7 +177,6 @@ Item {
                                 label:      qsTr("ICE")
                                 labelText:  _iceCandidate !== "" ? _iceCandidate : qsTr("N/A")
                                 labelPreferredWidth: ScreenTools.defaultFontPixelWidth * 26
-                                labelTextElide: Text.ElideMiddle
                                 visible:    _iceCandidate !== ""
                             }
                         }
