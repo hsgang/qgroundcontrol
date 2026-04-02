@@ -9,6 +9,8 @@ Item {
     required property var editorMap
     required property var planMasterController
 
+    signal editingLayerChangeRequested(int layer)
+
     id: root
 
     property var  _missionController: planMasterController.missionController
@@ -92,6 +94,7 @@ Item {
             anchors.fill:           parent
             editorMap:              root.editorMap
             planMasterController:   root.planMasterController
+            onEditingLayerChangeRequested: (layer) => root.editingLayerChangeRequested(layer)
         }
     }
 }

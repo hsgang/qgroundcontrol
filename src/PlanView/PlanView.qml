@@ -221,6 +221,7 @@ Item {
     PlanViewToolBar {
         id: planToolBar
         planMasterController: _planMasterController
+        showRallyPointsHelp: _editingLayer === _layerRally
     }
 
     Item {
@@ -505,6 +506,7 @@ Item {
             width: _rightPanelWidth
             planMasterController: _planMasterController
             editorMap: editorMap
+            onEditingLayerChangeRequested: (layer) => _editingLayer = layer
         }
 
         RowLayout {
