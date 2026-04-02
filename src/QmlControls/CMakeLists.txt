@@ -5,10 +5,6 @@
 
 target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
-        EditPositionDialogController.cc
-        EditPositionDialogController.h
-        KMLOverlayManager.cc
-        KMLOverlayManager.h
         FactValueGrid.cc
         FactValueGrid.h
         FlightPathSegment.cc
@@ -68,6 +64,8 @@ target_sources(${CMAKE_PROJECT_NAME}
         ToolStripAction.h
         ToolStripActionList.cc
         ToolStripActionList.h
+        TransformPositionController.cc
+        TransformPositionController.h
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -86,8 +84,8 @@ qt_add_qml_module(QGroundControlControlsModule
     VERSION 1.0
     RESOURCE_PREFIX /qml
     QML_FILES
-        AltFrameCombo.qml
-        AltFrameDialog.qml
+        AltModeCombo.qml
+        AltModeDialog.qml
         AppSettings.qml
         APMSubMotorDisplay.qml
         AppLogging.qml
@@ -101,7 +99,6 @@ qt_add_qml_module(QGroundControlControlsModule
         EditPositionDialog.qml
         ExclusiveGroupItem.qml
         FactSlider.qml
-        FakeToolStripHoverButton.qml
         FileButton.qml
         FlightModeMenu.qml
         HeightIndicator.qml
@@ -120,6 +117,7 @@ qt_add_qml_module(QGroundControlControlsModule
         MAVLinkChart.qml
         MAVLinkMessageButton.qml
         MissionCommandDialog.qml
+        MissionItemIndexLabel.qml
         MvPanelPage.qml
         OfflineMapButton.qml
         ParameterDiffDialog.qml
@@ -160,7 +158,6 @@ qt_add_qml_module(QGroundControlControlsModule
         QGCRoundButton.qml
         QGCSimpleMessageDialog.qml
         QGCSlider.qml
-        QGCSwitch.qml
         QGCSwipeView.qml
         QGCTabBar.qml
         QGCTabButton.qml
@@ -181,15 +178,14 @@ qt_add_qml_module(QGroundControlControlsModule
         ToolStrip.qml
         ToolStripDropPanel.qml
         ToolStripHoverButton.qml
+        TransformEditor.qml
         ValueSlider.qml
         VehicleRotationCal.qml
         VehicleSummaryRow.qml
 
-# NOTE: The QML files below belong to other modules but are declared here because
-# CMake's set_source_files_properties() has directory scope. Properties like
-# QT_QML_SINGLETON_TYPE must be visible in the same CMakeLists.txt that calls
-# qt_add_qml_module(). On Windows this cross-directory property propagation fails,
-# so these files are kept in this module until a better solution is available.
+# NOTE: Due to Windows limitations with set_source_files_properties and qt_add_qml_module,
+# various QML files from other modules are temporarily included here.
+# This will be revisited in a future release.
 
         # src/AnalyzeView/
         AnalyzePage.qml
@@ -197,16 +193,67 @@ qt_add_qml_module(QGroundControlControlsModule
         # src/FirstRunPromptDialogs/
         FirstRunPrompt.qml
 
+        # src/PlanView/
+        CameraCalcCamera.qml
+        CameraCalcGrid.qml
+        CameraSection.qml
+        CorridorScanEditor.qml
+        CorridorScanMapVisual.qml
+        FWLandingPatternEditor.qml
+        FWLandingPatternMapVisual.qml
+        GeoFenceEditor.qml
+        GeoFenceMapVisuals.qml
+        MissionItemEditor.qml
+        MissionItemMapVisual.qml
+        MissionItemStatus.qml
+        MissionItemTreeView.qml
+        MissionSettingsEditor.qml
+        MissionStats.qml
+        PlanEditToolbar.qml
+        PlanToolBarIndicators.qml
+        PlanView.qml
+        PlanViewRightPanel.qml
+        RallyPointEditorHeader.qml
+        RallyPointItemEditor.qml
+        RallyPointMapVisuals.qml
+        SimpleItemEditor.qml
+        SimpleItemMapVisual.qml
+        StructureScanEditor.qml
+        StructureScanMapVisual.qml
+        SurveyItemEditor.qml
+        SurveyMapVisual.qml
+        TakeoffItemMapVisual.qml
+        TerrainStatus.qml
+        TransectStyleComplexItemEditor.qml
+        TransectStyleComplexItemStats.qml
+        TransectStyleComplexItemTabBar.qml
+        TransectStyleComplexItemTerrainFollow.qml
+        TransectStyleMapVisuals.qml
+        VTOLLandingPatternEditor.qml
+        VTOLLandingPatternMapVisual.qml
+
         # src/UI/preferences/
         OfflineMapInfo.qml
 
-        CameraPOIIndicator.qml
+        # src/UI/toolbar/
+        BatteryIndicator.qml
+        FlightModeIndicator.qml
+        FlightModeMenuIndicator.qml
+        FlyViewToolBar.qml
+        FlyViewToolBarIndicators.qml
+        GPSIndicator.qml
+        GPSIndicatorPage.qml
+        MainStatusIndicator.qml
+        MainStatusIndicatorOfflinePage.qml
+        ParameterDownloadProgress.qml
+        PlanViewToolBar.qml
+        RemoteIDIndicatorPage.qml
+        SignalStrength.qml
+        VehicleMessageList.qml
 
         # src/QtLocationPlugin/QMLControl/
         OfflineMapEditor.qml
 
-        WelcomeView.qml
-        
         ScreenTools.qml
     NO_PLUGIN
 )

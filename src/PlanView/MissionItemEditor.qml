@@ -140,7 +140,7 @@ Rectangle {
 
                 property real _padding: ScreenTools.comboBoxPadding
 
-                QGCLabel { text: qsTr("#%1 %2").arg(missionItem.sequenceNumber).arg(missionItem.commandName) }
+                QGCLabel { text: missionItem.commandName }
 
                 QGCColoredImage {
                     height:             ScreenTools.defaultFontPixelWidth
@@ -184,7 +184,7 @@ Rectangle {
             height:                 commandPicker.height
             visible:                !missionItem.isCurrentItem || !missionItem.isSimpleItem || _waypointsOnlyMode || missionItem.isTakeoffItem
             verticalAlignment:      Text.AlignVCenter
-            text:                   qsTr("#%1 %2").arg(missionItem.sequenceNumber).arg(missionItem.commandName)
+            text:                   missionItem.commandName
             color:                  _outerTextColor
         }
     }
@@ -194,6 +194,7 @@ Rectangle {
 
         DropPanel {
             id: hamburgerMenuDropPanel
+            onClosed: destroy()
 
             sourceComponent: Component {
                 ColumnLayout {
@@ -271,7 +272,6 @@ Rectangle {
         }
     }
 
-
     QGCColoredImage {
         id:                     hamburger
         anchors.margins:        _margin
@@ -291,6 +291,7 @@ Rectangle {
                 position = Qt.point(position.x, position.y)
                 // For some strange reason using mainWindow in mapToItem doesn't work, so we use globals.parent instead which also gets us mainWindow
                 position = mapToItem(globals.parent, position)
+
                 var dropPanel = hamburgerMenuDropPanelComponent.createObject(mainWindow, { clickRect: Qt.rect(position.x, position.y, 0, 0) })
                 dropPanel.open()
             }
