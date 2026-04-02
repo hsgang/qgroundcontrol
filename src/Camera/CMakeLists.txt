@@ -9,8 +9,6 @@ target_sources(${CMAKE_PROJECT_NAME}
         CameraMetaData.h
         MavlinkCameraControl.cc
         MavlinkCameraControl.h
-        MavlinkCameraControlInterface.cc
-        MavlinkCameraControlInterface.h
         QGCCameraIO.cc
         QGCCameraIO.h
         QGCCameraManager.cc
