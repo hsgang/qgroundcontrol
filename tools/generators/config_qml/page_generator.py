@@ -19,14 +19,12 @@ from ..common.controls import (
     ActionButtonDef,
     RadioOptionDef,
     ToggleCheckboxDef,
-    LinkedParamDef,
     parse_enable_checkbox,
     parse_button,
     parse_dialog_button,
     parse_action_button,
     parse_radio_options,
     parse_toggle_checkbox,
-    parse_linked_params,
     qml_tr,
     render_label,
     render_slider,
@@ -39,7 +37,6 @@ from ..common.controls import (
     render_bitmask_checkbox,
     render_bitmask,
     render_toggle_checkbox,
-    render_factslider,
 )
 
 
@@ -71,13 +68,6 @@ class ControlDef:
     toggleCheckbox: ToggleCheckboxDef | None = None  # toggleCheckbox: custom checked/onClicked
     indent: bool = False                              # indent control with left margin
     smallFont: bool = False                           # label: use small font size
-    description: str = ""                             # factslider: help text above slider
-    sliderFrom: str = ""                              # factslider: min override
-    sliderTo: str = ""                                # factslider: max override
-    majorTickStepSize: str = ""                       # factslider: tick interval
-    decimalPlaces: str = ""                           # factslider: decimal places
-    linkedParams: list[LinkedParamDef] = field(default_factory=list)  # factslider: coupled params
-    component: str = ""                               # component: inline hand-written QML component
 
 
 @dataclass
@@ -180,13 +170,6 @@ def load_page_def(json_path: Path) -> PageDef:
                 toggleCheckbox=parse_toggle_checkbox(ctrl_data.get("toggleCheckbox")),
                 indent=ctrl_data.get("indent", False),
                 smallFont=ctrl_data.get("smallFont", False),
-                description=ctrl_data.get("description", ""),
-                sliderFrom=str(ctrl_data.get("sliderFrom", "")),
-                sliderTo=str(ctrl_data.get("sliderTo", "")),
-                majorTickStepSize=str(ctrl_data.get("majorTickStepSize", "")),
-                decimalPlaces=str(ctrl_data.get("decimalPlaces", "")),
-                linkedParams=parse_linked_params(ctrl_data.get("linkedParams")),
-                component=ctrl_data.get("component", ""),
             ))
         repeat_data = sec_data.get("repeat")
         repeat_def = None
@@ -352,17 +335,6 @@ def _qml_control(ctrl: ControlDef, indent: str, *, indexed: bool = False, dialog
             qml = _inject_prop(qml, f"{indent}    Layout.leftMargin: ScreenTools.defaultFontPixelWidth * 2")
         return qml
 
-    # Inline component escape hatch — hand-written QML component
-    if control_type == "component" and ctrl.component:
-        lines: list[str] = []
-        lines.append(f"{indent}{ctrl.component} {{")
-        lines.append(f"{indent}    controller: controller")
-        lines.append(f"{indent}    Layout.fillWidth: true")
-        if ctrl.showWhen:
-            lines.append(f"{indent}    visible: {ctrl.showWhen}")
-        lines.append(f"{indent}}}")
-        return _apply_indent("\n".join(lines))
-
     # Static label — no fact binding
     if control_type == "label":
         qml = render_label(
@@ -476,23 +448,6 @@ def _qml_control(ctrl: ControlDef, indent: str, *, indexed: bool = False, dialog
         )
         if ctrl.showWhen:
             qml = _inject_prop(qml, f"{indent}    visible: {ctrl.showWhen}")
-        return _apply_indent(qml)
-
-    # FactSlider — visual slider with optional description and linked params
-    if control_type == "factslider":
-        qml = render_factslider(
-            fact_ref, indent,
-            label=ctrl.label,
-            description=ctrl.description,
-            from_=ctrl.sliderFrom,
-            to=ctrl.sliderTo,
-            major_tick_step_size=ctrl.majorTickStepSize,
-            decimal_places=ctrl.decimalPlaces,
-            linked_params=ctrl.linkedParams if ctrl.linkedParams else None,
-            show_when=ctrl.showWhen,
-            enable_when=ctrl.enableWhen,
-            tr_context=tr_context,
-        )
         return _apply_indent(qml)
 
     # Slider — has its own label
