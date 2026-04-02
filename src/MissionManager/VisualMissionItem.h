@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MissionFlightStatus.h"
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QLoggingCategory>
@@ -163,7 +164,7 @@ public:
 
     /// Update item to mission flight status at point where this item appears in mission.
     /// IMPORTANT: Overrides must call base class implementation
-    virtual void setMissionFlightStatus(MissionController::MissionFlightStatus_t& missionFlightStatus);
+    virtual void setMissionFlightStatus(MissionFlightStatus_t& missionFlightStatus);
 
     virtual bool exitCoordinateSameAsEntry          (void) const = 0;
 

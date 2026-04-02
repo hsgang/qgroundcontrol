@@ -346,7 +346,7 @@ double TransectStyleComplexItem::greatestDistanceTo(const QGeoCoordinate &other)
     return greatestDistance;
 }
 
-void TransectStyleComplexItem::setMissionFlightStatus(MissionController::MissionFlightStatus_t& missionFlightStatus)
+void TransectStyleComplexItem::setMissionFlightStatus(MissionFlightStatus_t& missionFlightStatus)
 {
     ComplexMissionItem::setMissionFlightStatus(missionFlightStatus);
     if (!QGC::fuzzyCompare(_vehicleSpeed, missionFlightStatus.vehicleSpeed)) {

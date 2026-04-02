@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MissionFlightStatus.h"
 #include "ComplexMissionItem.h"
 #include "MissionItem.h"
 #include "SettingsFact.h"
@@ -77,7 +78,7 @@ public:
     double              specifiedGimbalYaw          (void) final { return std::numeric_limits<double>::quiet_NaN(); }
     double              specifiedGimbalPitch        (void) final { return std::numeric_limits<double>::quiet_NaN(); }
     void                appendMissionItems          (QList<MissionItem*>& items, QObject* missionItemParent) final;
-    void                setMissionFlightStatus      (MissionController::MissionFlightStatus_t& missionFlightStatus) final;
+    void                setMissionFlightStatus      (MissionFlightStatus_t& missionFlightStatus) final;
     void                applyNewAltitude            (double newAltitude) final;
     double              additionalTimeDelay         (void) const final { return 0; }
     ReadyForSaveState   readyForSaveState           (void) const final;

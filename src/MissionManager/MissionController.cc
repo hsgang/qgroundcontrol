@@ -1,5 +1,6 @@
 #include "MissionController.h"
 #include "Vehicle.h"
+#include "VehicleSupports.h"
 #include "MissionManager.h"
 #include "FlightPathSegment.h"
 #include "FirmwarePlugin.h"
@@ -194,7 +195,7 @@ void MissionController::_newMissionItemsAvailableFromVehicle(bool removeAllReque
         _settingsItem = settingsItem;
 
         // We set Altitude mode to mixed, otherwise if we need a non relative altitude frame we won't be able to change it
-        setGlobalAltitudeMode(weHaveItemsFromVehicle ? QGroundControlQmlGlobal::AltitudeModeMixed : QGroundControlQmlGlobal::AltitudeModeRelative);
+        setGlobalAltitudeFrame(weHaveItemsFromVehicle ? QGroundControlQmlGlobal::AltitudeFrameMixed : QGroundControlQmlGlobal::AltitudeFrameRelative);
 
         MissionController::_scanForAdditionalSettings(_visualItems, _masterController);
 
@@ -314,13 +315,13 @@ VisualMissionItem* MissionController::_insertSimpleMissionItemWorker(QGeoCoordin
     if (newItem->specifiesAltitude()) {
         if (!MissionCommandTree::instance()->isLandCommand(command)) {
             double                              prevAltitude;
-            QGroundControlQmlGlobal::AltMode    prevAltMode;
+            QGroundControlQmlGlobal::AltitudeFrame    prevAltMode;
 
             if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltMode)) {
                 newItem->altitude()->setRawValue(prevAltitude);
-                if (globalAltitudeMode() == QGroundControlQmlGlobal::AltitudeModeMixed) {
+                if (globalAltitudeFrame() == QGroundControlQmlGlobal::AltitudeFrameMixed) {
                     // We are in mixed altitude modes, so copy from previous. Otherwise alt mode will be set from global setting.
-                    newItem->setAltitudeMode(static_cast<QGroundControlQmlGlobal::AltMode>(prevAltMode));
+                    newItem->setAltitudeFrame(static_cast<QGroundControlQmlGlobal::AltitudeFrame>(prevAltMode));
                 }
             }
         }
@@ -358,11 +359,11 @@ VisualMissionItem* MissionController::insertTakeoffItem(QGeoCoordinate /*coordin
 
     if (_takeoffMissionItem->specifiesAltitude()) {
         double                              prevAltitude;
-        QGroundControlQmlGlobal::AltMode    prevAltMode;
+        QGroundControlQmlGlobal::AltitudeFrame    prevAltMode;
 
         if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltMode)) {
             _takeoffMissionItem->altitude()->setRawValue(prevAltitude);
-            _takeoffMissionItem->setAltitudeMode(static_cast<QGroundControlQmlGlobal::AltMode>(prevAltMode));
+            _takeoffMissionItem->setAltitudeFrame(static_cast<QGroundControlQmlGlobal::AltitudeFrame>(prevAltMode));
         }
     }
     if (visualItemIndex == -1) {
@@ -436,8 +437,8 @@ VisualMissionItem* MissionController::insertComplexMissionItem(QString itemName,
         newItem->setCoordinate(mapCenterCoordinate);
 
         double                              prevAltitude;
-        QGroundControlQmlGlobal::AltMode    prevAltMode;
-        if (globalAltitudeMode() == QGroundControlQmlGlobal::AltitudeModeMixed) {
+        QGroundControlQmlGlobal::AltitudeFrame    prevAltMode;
+        if (globalAltitudeFrame() == QGroundControlQmlGlobal::AltitudeFrameMixed) {
             // We are in mixed altitude modes, so copy from previous. Otherwise alt mode will be set from global setting in constructor.
             if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltMode)) {
                 qobject_cast<SurveyComplexItem*>(newItem)->cameraCalc()->setDistanceMode(prevAltMode);
@@ -635,7 +636,7 @@ bool MissionController::_loadJsonMissionFileV1(const QJsonObject& json, QmlObjec
         return false;
     }
 
-    setGlobalAltitudeMode(QGroundControlQmlGlobal::AltitudeModeMixed);
+    setGlobalAltitudeFrame(QGroundControlQmlGlobal::AltitudeFrameMixed);
 
     // Read complex items
     QList<SurveyComplexItem*> surveyItems;
@@ -740,7 +741,7 @@ bool MissionController::_loadJsonMissionFileV2(const QJsonObject& json, QmlObjec
         return false;
     }
 
-    setGlobalAltitudeMode(QGroundControlQmlGlobal::AltitudeModeMixed);
+    setGlobalAltitudeFrame(QGroundControlQmlGlobal::AltitudeFrameMixed);
 
     qCDebug(MissionControllerLog) << "MissionController::_loadJsonMissionFileV2 itemCount:" << json[_jsonItemsKey].toArray().count();
 
@@ -773,7 +774,7 @@ bool MissionController::_loadJsonMissionFileV2(const QJsonObject& json, QmlObjec
         appSettings->offlineEditingHoverSpeed()->setRawValue(json[_jsonHoverSpeedKey].toDouble());
     }
     if (json.contains(_jsonGlobalPlanAltitudeModeKey)) {
-        setGlobalAltitudeMode(json[_jsonGlobalPlanAltitudeModeKey].toVariant().value<QGroundControlQmlGlobal::AltMode>());
+        setGlobalAltitudeFrame(json[_jsonGlobalPlanAltitudeModeKey].toVariant().value<QGroundControlQmlGlobal::AltitudeFrame>());
     }
 
     QGeoCoordinate homeCoordinate;
@@ -1040,7 +1041,7 @@ bool MissionController::loadTextFile(QFile& file, QString& errorString)
     QByteArray  bytes = file.readAll();
     QTextStream stream(bytes);
 
-    setGlobalAltitudeMode(QGroundControlQmlGlobal::AltitudeModeMixed);
+    setGlobalAltitudeFrame(QGroundControlQmlGlobal::AltitudeFrameMixed);
 
     QmlObjectListModel* loadedVisualItems = new QmlObjectListModel(this);
     if (!_loadTextMissionFile(stream, loadedVisualItems, errorStr)) {
@@ -1083,7 +1084,7 @@ void MissionController::save(QJsonObject& json)
     json[_jsonVehicleTypeKey]               = _controllerVehicle->vehicleType();
     json[_jsonCruiseSpeedKey]               = _controllerVehicle->defaultCruiseSpeed();
     json[_jsonHoverSpeedKey]                = _controllerVehicle->defaultHoverSpeed();
-    json[_jsonGlobalPlanAltitudeModeKey]    = _globalAltMode;
+    json[_jsonGlobalPlanAltitudeModeKey]    = _globalAltitudeFrame;
 
     // Save the visual items
 
@@ -2169,11 +2170,11 @@ void MissionController::_inProgressChanged(bool inProgress)
     emit syncInProgressChanged(inProgress);
 }
 
-bool MissionController::_findPreviousAltitude(int newIndex, double* prevAltitude, QGroundControlQmlGlobal::AltMode* prevAltitudeMode)
+bool MissionController::_findPreviousAltitude(int newIndex, double* prevAltitude, QGroundControlQmlGlobal::AltitudeFrame* prevAltitudeMode)
 {
     bool                                found = false;
     double                              foundAltitude = 0;
-    QGroundControlQmlGlobal::AltMode    foundAltMode = QGroundControlQmlGlobal::AltitudeModeNone;
+    QGroundControlQmlGlobal::AltitudeFrame    foundAltMode = QGroundControlQmlGlobal::AltitudeFrameNone;
 
     if (newIndex > _visualItems->count()) {
         return false;
@@ -2188,7 +2189,7 @@ bool MissionController::_findPreviousAltitude(int newIndex, double* prevAltitude
                 SimpleMissionItem* simpleItem = qobject_cast<SimpleMissionItem*>(visualItem);
                 if (simpleItem->specifiesAltitude()) {
                     foundAltitude   = simpleItem->altitude()->rawValue().toDouble();
-                    foundAltMode    = simpleItem->altitudeMode();
+                    foundAltMode    = simpleItem->altitudeFrame();
                     found           = true;
                     break;
                 }
@@ -2521,7 +2522,7 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
         _previousCoordinate =           QGeoCoordinate();
 
         bool noItemsAddedYet = _visualItems->count() == 1;
-        if (_masterController->controllerVehicle()->takeoffVehicleSupported() && !_planViewSettings->takeoffItemNotRequired()->rawValue().toBool() && noItemsAddedYet) {
+        if (_masterController->controllerVehicle()->supports()->takeoffMissionCommand() && !_planViewSettings->takeoffItemNotRequired()->rawValue().toBool() && noItemsAddedYet) {
             _onlyInsertTakeoffValid = true;
         }
 
@@ -2970,24 +2971,24 @@ MissionController::SendToVehiclePreCheckState MissionController::sendToVehiclePr
     return SendToVehiclePreCheckStateOk;
 }
 
-QGroundControlQmlGlobal::AltMode MissionController::globalAltitudeMode(void)
+QGroundControlQmlGlobal::AltitudeFrame MissionController::globalAltitudeFrame(void)
 {
-    return _globalAltMode;
+    return _globalAltitudeFrame;
 }
 
-QGroundControlQmlGlobal::AltMode MissionController::globalAltitudeModeDefault(void)
+QGroundControlQmlGlobal::AltitudeFrame MissionController::globalAltitudeFrameDefault(void)
 {
-    if (_globalAltMode == QGroundControlQmlGlobal::AltitudeModeMixed) {
-        return QGroundControlQmlGlobal::AltitudeModeRelative;
+    if (_globalAltitudeFrame == QGroundControlQmlGlobal::AltitudeFrameMixed) {
+        return QGroundControlQmlGlobal::AltitudeFrameRelative;
     } else {
-        return _globalAltMode;
+        return _globalAltitudeFrame;
     }
 }
 
-void MissionController::setGlobalAltitudeMode(QGroundControlQmlGlobal::AltMode altMode)
+void MissionController::setGlobalAltitudeFrame(QGroundControlQmlGlobal::AltitudeFrame altMode)
 {
-    if (_globalAltMode != altMode) {
-        _globalAltMode = altMode;
-        emit globalAltitudeModeChanged();
+    if (_globalAltitudeFrame != altMode) {
+        _globalAltitudeFrame = altMode;
+        emit globalAltitudeFrameChanged();
     }
 }

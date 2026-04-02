@@ -250,8 +250,8 @@ TreeView {
                     target: defaultsRect._controllerVehicle
                     function onFirmwareTypeChanged() {
                         if (!defaultsRect._controllerVehicle.supports.terrainFrame
-                                && defaultsRect._missionController.globalAltitudeMode === QGroundControl.AltitudeModeTerrainFrame) {
-                            defaultsRect._missionController.globalAltitudeMode = QGroundControl.AltitudeModeCalcAboveTerrain
+                                && defaultsRect._missionController.globalAltitudeFrame === QGroundControl.AltitudeModeTerrainFrame) {
+                            defaultsRect._missionController.globalAltitudeFrame = QGroundControl.AltitudeModeCalcAboveTerrain
                         }
                     }
                 }
@@ -274,25 +274,25 @@ TreeView {
                     LabelledButton {
                         Layout.fillWidth: true
                         label: qsTr("Altitude Mode")
-                        buttonText: QGroundControl.altitudeModeShortDescription(defaultsRect._missionController.globalAltitudeMode)
+                        buttonText: QGroundControl.altitudeModeShortDescription(defaultsRect._missionController.globalAltitudeFrame)
 
                         onClicked: {
                             let removeModes = []
-                            let updateFunction = function(altMode) { defaultsRect._missionController.globalAltitudeMode = altMode }
+                            let updateFunction = function(altMode) { defaultsRect._missionController.globalAltitudeFrame = altMode }
                             if (!defaultsRect._controllerVehicle.supports.terrainFrame) {
                                 removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
                             }
                             if (!defaultsRect._noMissionItemsAdded) {
-                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeRelative) {
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeRelative) {
                                     removeModes.push(QGroundControl.AltitudeModeRelative)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeAbsolute) {
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeAbsolute) {
                                     removeModes.push(QGroundControl.AltitudeModeAbsolute)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeCalcAboveTerrain) {
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeCalcAboveTerrain) {
                                     removeModes.push(QGroundControl.AltitudeModeCalcAboveTerrain)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeTerrainFrame) {
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeTerrainFrame) {
                                     removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
                                 }
                             }

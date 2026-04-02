@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MissionFlightStatus.h"
 #include "ComplexMissionItem.h"
 #include "MissionItem.h"
 #include "SettingsFact.h"
@@ -88,7 +89,7 @@ public:
     double              specifiedFlightSpeed        (void) final { return std::numeric_limits<double>::quiet_NaN(); }
     double              specifiedGimbalYaw          (void) final { return std::numeric_limits<double>::quiet_NaN(); }
     double              specifiedGimbalPitch        (void) final { return std::numeric_limits<double>::quiet_NaN(); }
-    void                setMissionFlightStatus      (MissionController::MissionFlightStatus_t& missionFlightStatus) final;
+    void                setMissionFlightStatus      (MissionFlightStatus_t& missionFlightStatus) final;
     ReadyForSaveState   readyForSaveState         (void) const override;
     QString             commandDescription          (void) const override { return tr("Transect"); }
     QString             commandName                 (void) const override { return tr("Transect"); }
