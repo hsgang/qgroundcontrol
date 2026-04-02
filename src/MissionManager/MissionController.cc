@@ -171,7 +171,7 @@ void MissionController::_newMissionItemsAvailableFromVehicle(bool removeAllReque
             // First item is fake home position
             MissionItem* fakeHomeItem = newMissionItems[0];
             if (fakeHomeItem->coordinate().latitude() != 0 || fakeHomeItem->coordinate().longitude() != 0) {
-                settingsItem->setInitialHomePosition(fakeHomeItem->coordinate());
+                settingsItem->setCoordinate(fakeHomeItem->coordinate());
             }
             i = 1;
         }
@@ -194,7 +194,7 @@ void MissionController::_newMissionItemsAvailableFromVehicle(bool removeAllReque
         _visualItems = newControllerMissionItems;
         _settingsItem = settingsItem;
 
-        // We set Altitude mode to mixed, otherwise if we need a non relative altitude frame we won't be able to change it
+        // We set Altitude frame to mixed, otherwise if we need a non relative altitude frame we won't be able to change it
         setGlobalAltitudeFrame(weHaveItemsFromVehicle ? QGroundControlQmlGlobal::AltitudeFrameMixed : QGroundControlQmlGlobal::AltitudeFrameRelative);
 
         MissionController::_scanForAdditionalSettings(_visualItems, _masterController);
@@ -315,13 +315,13 @@ VisualMissionItem* MissionController::_insertSimpleMissionItemWorker(QGeoCoordin
     if (newItem->specifiesAltitude()) {
         if (!MissionCommandTree::instance()->isLandCommand(command)) {
             double                              prevAltitude;
-            QGroundControlQmlGlobal::AltitudeFrame    prevAltMode;
+            QGroundControlQmlGlobal::AltitudeFrame    prevAltFrame;
 
-            if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltMode)) {
+            if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltFrame)) {
                 newItem->altitude()->setRawValue(prevAltitude);
                 if (globalAltitudeFrame() == QGroundControlQmlGlobal::AltitudeFrameMixed) {
-                    // We are in mixed altitude modes, so copy from previous. Otherwise alt mode will be set from global setting.
-                    newItem->setAltitudeFrame(static_cast<QGroundControlQmlGlobal::AltitudeFrame>(prevAltMode));
+                    // We are in mixed altitude frames, so copy from previous. Otherwise altitude frame will be set from global setting.
+                    newItem->setAltitudeFrame(static_cast<QGroundControlQmlGlobal::AltitudeFrame>(prevAltFrame));
                 }
             }
         }
@@ -359,11 +359,11 @@ VisualMissionItem* MissionController::insertTakeoffItem(QGeoCoordinate /*coordin
 
     if (_takeoffMissionItem->specifiesAltitude()) {
         double                              prevAltitude;
-        QGroundControlQmlGlobal::AltitudeFrame    prevAltMode;
+        QGroundControlQmlGlobal::AltitudeFrame    prevAltFrame;
 
-        if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltMode)) {
+        if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltFrame)) {
             _takeoffMissionItem->altitude()->setRawValue(prevAltitude);
-            _takeoffMissionItem->setAltitudeFrame(static_cast<QGroundControlQmlGlobal::AltitudeFrame>(prevAltMode));
+            _takeoffMissionItem->setAltitudeFrame(static_cast<QGroundControlQmlGlobal::AltitudeFrame>(prevAltFrame));
         }
     }
     if (visualItemIndex == -1) {
@@ -437,11 +437,11 @@ VisualMissionItem* MissionController::insertComplexMissionItem(QString itemName,
         newItem->setCoordinate(mapCenterCoordinate);
 
         double                              prevAltitude;
-        QGroundControlQmlGlobal::AltitudeFrame    prevAltMode;
+        QGroundControlQmlGlobal::AltitudeFrame    prevAltFrame;
         if (globalAltitudeFrame() == QGroundControlQmlGlobal::AltitudeFrameMixed) {
-            // We are in mixed altitude modes, so copy from previous. Otherwise alt mode will be set from global setting in constructor.
-            if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltMode)) {
-                qobject_cast<SurveyComplexItem*>(newItem)->cameraCalc()->setDistanceMode(prevAltMode);
+            // We are in mixed altitude frames, so copy from previous. Otherwise alt mode will be set from global setting in constructor.
+            if (_findPreviousAltitude(visualItemIndex, &prevAltitude, &prevAltFrame)) {
+                qobject_cast<SurveyComplexItem*>(newItem)->cameraCalc()->setDistanceMode(prevAltFrame);
             }
         }
     } else if (itemName == FixedWingLandingComplexItem::name) {
@@ -670,7 +670,7 @@ bool MissionController::_loadJsonMissionFileV1(const QJsonObject& json, QmlObjec
     if (json.contains(_jsonPlannedHomePositionKey)) {
         SimpleMissionItem* item = new SimpleMissionItem(_masterController, _flyView, true /* forLoad */);
         if (item->load(json[_jsonPlannedHomePositionKey].toObject(), 0, errorString)) {
-            settingsItem->setInitialHomePositionFromUser(item->coordinate());
+            settingsItem->setCoordinate(item->coordinate());
             item->deleteLater();
         } else {
             return false;
@@ -957,7 +957,7 @@ bool MissionController::_loadTextMissionFile(QTextStream& stream, QmlObjectListM
             SimpleMissionItem* item = new SimpleMissionItem(_masterController, _flyView, true /* forLoad */);
             if (item->load(stream)) {
                 if (firstItem && plannedHomePositionInFile) {
-                    settingsItem->setInitialHomePositionFromUser(item->coordinate());
+                    settingsItem->setCoordinate(item->coordinate());
                 } else {
                     if (TakeoffMissionItem::isTakeoffCommand(static_cast<MAV_CMD>(item->command()))) {
                         // This needs to be a TakeoffMissionItem
@@ -1084,7 +1084,7 @@ void MissionController::save(QJsonObject& json)
     json[_jsonVehicleTypeKey]               = _controllerVehicle->vehicleType();
     json[_jsonCruiseSpeedKey]               = _controllerVehicle->defaultCruiseSpeed();
     json[_jsonHoverSpeedKey]                = _controllerVehicle->defaultHoverSpeed();
-    json[_jsonGlobalPlanAltitudeModeKey]    = _globalAltitudeFrame;
+    json[_jsonGlobalPlanAltitudeModeKey]    = _globalAltFrame;
 
     // Save the visual items
 
@@ -1818,64 +1818,73 @@ void MissionController::_recalcChildItems(void)
 
 void MissionController::_setupTreeModel(void)
 {
-    // Tree starts empty — no need for beginReset/endReset.
-    // We use incremental inserts so QPersistentModelIndex stays valid.
+    _visualItemsTree.beginResetModel();
+
     _visualItemsTree.clear();
 
     // ── Plan File group ──
-    _planFileGroupNode.setObjectName(tr("Plan File"));
-    _planFileGroupIndex = QPersistentModelIndex(
-        _visualItemsTree.appendItem(&_planFileGroupNode, QModelIndex(), QStringLiteral("planFileGroup")));
+    _planFileGroupNode.setObjectName(tr("Plan Info"));
+    _visualItemsTree.appendItem(&_planFileGroupNode, QModelIndex(), QStringLiteral("planFileGroup"));
 
     _planFileInfoMarker.setObjectName(QStringLiteral("planFileInfo"));
-    _visualItemsTree.appendItem(&_planFileInfoMarker, _planFileGroupIndex, QStringLiteral("planFileInfo"));
+    _visualItemsTree.appendItem(&_planFileInfoMarker,
+        _visualItemsTree.indexForObject(&_planFileGroupNode), QStringLiteral("planFileInfo"));
 
     // ── Defaults group ──
     _defaultsGroupNode.setObjectName(tr("Defaults"));
-    _defaultsGroupIndex = QPersistentModelIndex(
-        _visualItemsTree.appendItem(&_defaultsGroupNode, QModelIndex(), QStringLiteral("defaultsGroup")));
+    _visualItemsTree.appendItem(&_defaultsGroupNode, QModelIndex(), QStringLiteral("defaultsGroup"));
 
     _defaultsInfoMarker.setObjectName(QStringLiteral("defaultsInfo"));
-    _visualItemsTree.appendItem(&_defaultsInfoMarker, _defaultsGroupIndex, QStringLiteral("defaultsInfo"));
+    _visualItemsTree.appendItem(&_defaultsInfoMarker,
+        _visualItemsTree.indexForObject(&_defaultsGroupNode), QStringLiteral("defaultsInfo"));
 
     // ── Mission Items group ──
     _missionItemsGroupNode.setObjectName(tr("Mission Items"));
-    _missionGroupIndex = QPersistentModelIndex(
-        _visualItemsTree.appendItem(&_missionItemsGroupNode, QModelIndex(), QStringLiteral("missionGroup")));
+    _visualItemsTree.appendItem(&_missionItemsGroupNode, QModelIndex(), QStringLiteral("missionGroup"));
 
     // ── GeoFence group ──
     _fenceGroupNode.setObjectName(tr("GeoFence"));
-    _fenceGroupIndex = QPersistentModelIndex(
-        _visualItemsTree.appendItem(&_fenceGroupNode, QModelIndex(), QStringLiteral("fenceGroup")));
+    _visualItemsTree.appendItem(&_fenceGroupNode, QModelIndex(), QStringLiteral("fenceGroup"));
 
     // Single marker child — delegate loads the full GeoFenceEditor
     _fenceEditorMarker.setObjectName(QStringLiteral("fenceEditor"));
-    _visualItemsTree.appendItem(&_fenceEditorMarker, _fenceGroupIndex, QStringLiteral("fenceEditor"));
+    _visualItemsTree.appendItem(&_fenceEditorMarker,
+        _visualItemsTree.indexForObject(&_fenceGroupNode), QStringLiteral("fenceEditor"));
 
     // ── Rally Points group ──
     _rallyGroupNode.setObjectName(tr("Rally Points"));
-    _rallyGroupIndex = QPersistentModelIndex(
-        _visualItemsTree.appendItem(&_rallyGroupNode, QModelIndex(), QStringLiteral("rallyGroup")));
+    _visualItemsTree.appendItem(&_rallyGroupNode, QModelIndex(), QStringLiteral("rallyGroup"));
 
     // Marker child for the rally header / instructions
     _rallyHeaderMarker.setObjectName(QStringLiteral("rallyHeader"));
-    _visualItemsTree.appendItem(&_rallyHeaderMarker, _rallyGroupIndex, QStringLiteral("rallyHeader"));
+    _visualItemsTree.appendItem(&_rallyHeaderMarker,
+        _visualItemsTree.indexForObject(&_rallyGroupNode), QStringLiteral("rallyHeader"));
 
     // ── Transform group ──
     _transformGroupNode.setObjectName(tr("Transform"));
-    _transformGroupIndex = QPersistentModelIndex(
-        _visualItemsTree.appendItem(&_transformGroupNode, QModelIndex(), QStringLiteral("transformGroup")));
+    _visualItemsTree.appendItem(&_transformGroupNode, QModelIndex(), QStringLiteral("transformGroup"));
 
     // Single marker child — delegate loads the inline TransformEditor
     _transformEditorMarker.setObjectName(QStringLiteral("transformEditor"));
-    _visualItemsTree.appendItem(&_transformEditorMarker, _transformGroupIndex, QStringLiteral("transformEditor"));
+    _visualItemsTree.appendItem(&_transformEditorMarker,
+        _visualItemsTree.indexForObject(&_transformGroupNode), QStringLiteral("transformEditor"));
+
+    _visualItemsTree.endResetModel();
+
+    // Capture persistent indexes after the reset so they aren't invalidated
+    _planFileGroupIndex  = QPersistentModelIndex(_visualItemsTree.indexForObject(&_planFileGroupNode));
+    _defaultsGroupIndex  = QPersistentModelIndex(_visualItemsTree.indexForObject(&_defaultsGroupNode));
+    _missionGroupIndex   = QPersistentModelIndex(_visualItemsTree.indexForObject(&_missionItemsGroupNode));
+    _fenceGroupIndex     = QPersistentModelIndex(_visualItemsTree.indexForObject(&_fenceGroupNode));
+    _rallyGroupIndex     = QPersistentModelIndex(_visualItemsTree.indexForObject(&_rallyGroupNode));
+    _transformGroupIndex = QPersistentModelIndex(_visualItemsTree.indexForObject(&_transformGroupNode));
 }
 
 //-----------------------------------------------------------------------------
 // Incremental tree model sync — Mission Items
 //-----------------------------------------------------------------------------
 
-void MissionController::_onMissionItemsInserted(const QModelIndex& parent, int first, int last)
+void MissionController::_syncTreeMissionItemsInserted(const QModelIndex& parent, int first, int last)
 {
     Q_UNUSED(parent);
     for (int i = first; i <= last; i++) {
@@ -1886,7 +1895,7 @@ void MissionController::_onMissionItemsInserted(const QModelIndex& parent, int f
     }
 }
 
-void MissionController::_onMissionItemsAboutToBeRemoved(const QModelIndex& parent, int first, int last)
+void MissionController::_syncTreeMissionItemsAboutToBeRemoved(const QModelIndex& parent, int first, int last)
 {
     Q_UNUSED(parent);
     // Remove in reverse order so indexes stay valid
@@ -1895,9 +1904,10 @@ void MissionController::_onMissionItemsAboutToBeRemoved(const QModelIndex& paren
     }
 }
 
-void MissionController::_onMissionItemsReset(void)
+void MissionController::_syncTreeMissionItemsReset(void)
 {
-    // Clear mission group children and repopulate from _visualItems
+    // removeChildren + appendItem each fire their own row-level signals scoped
+    // to _missionGroupIndex, so persistent indexes for other groups survive.
     _visualItemsTree.removeChildren(_missionGroupIndex);
 
     if (_visualItems) {
@@ -1914,42 +1924,64 @@ void MissionController::_onMissionItemsReset(void)
 // Incremental tree model sync — Rally Points
 //-----------------------------------------------------------------------------
 
-void MissionController::_onRallyPointsInserted(const QModelIndex& parent, int first, int last)
+void MissionController::_syncTreeRallyPointsInserted(const QModelIndex& parent, int first, int last)
 {
     Q_UNUSED(parent);
     auto* rallyController = _masterController->rallyPointController();
     if (!rallyController) return;
 
+    // If this is the first rally point, remove the header marker
+    if (first == 0 && _visualItemsTree.rowCount(_rallyGroupIndex) == 1) {
+        const QModelIndex child = _visualItemsTree.index(0, 0, _rallyGroupIndex);
+        if (_visualItemsTree.data(child, QmlObjectTreeModel::NodeTypeRole).toString() == QStringLiteral("rallyHeader")) {
+            _visualItemsTree.removeItem(child);
+        }
+    }
+
     auto* pts = rallyController->points();
-    // Rally children: index 0 is the rallyHeader marker, rally items start at index 1
     for (int i = first; i <= last; i++) {
-        _visualItemsTree.insertItem(i + 1, (*pts)[i], _rallyGroupIndex, QStringLiteral("rallyItem"));
+        _visualItemsTree.insertItem(i, (*pts)[i], _rallyGroupIndex, QStringLiteral("rallyItem"));
     }
 }
 
-void MissionController::_onRallyPointsAboutToBeRemoved(const QModelIndex& parent, int first, int last)
+void MissionController::_syncTreeRallyPointsAboutToBeRemoved(const QModelIndex& parent, int first, int last)
 {
     Q_UNUSED(parent);
-    // Rally children: index 0 is header marker, rally items start at index 1
     for (int i = last; i >= first; i--) {
-        _visualItemsTree.removeAt(_rallyGroupIndex, i + 1);
+        _visualItemsTree.removeAt(_rallyGroupIndex, i);
     }
 }
 
-void MissionController::_onRallyPointsReset(void)
+void MissionController::_syncTreeRallyPointsRemoved(const QModelIndex& parent, int first, int last)
 {
-    // Remove all rally children except the header marker (index 0)
-    while (_visualItemsTree.rowCount(_rallyGroupIndex) > 1) {
-        _visualItemsTree.removeAt(_rallyGroupIndex, _visualItemsTree.rowCount(_rallyGroupIndex) - 1);
-    }
+    Q_UNUSED(parent);
+    Q_UNUSED(first);
+    Q_UNUSED(last);
 
-    // Repopulate
+    // Re-add the header marker once the source model has finished removing rows
     auto* rallyController = _masterController->rallyPointController();
-    if (rallyController) {
+    if (rallyController && rallyController->points()->count() == 0) {
+        _rallyHeaderMarker.setObjectName(QStringLiteral("rallyHeader"));
+        _visualItemsTree.appendItem(&_rallyHeaderMarker, _rallyGroupIndex, QStringLiteral("rallyHeader"));
+    }
+}
+
+void MissionController::_syncTreeRallyPointsReset(void)
+{
+    // removeChildren + appendItem each fire their own row-level signals scoped
+    // to _rallyGroupIndex, so persistent indexes for other groups survive.
+    _visualItemsTree.removeChildren(_rallyGroupIndex);
+
+    // Repopulate — either rally items or the header marker
+    auto* rallyController = _masterController->rallyPointController();
+    if (rallyController && rallyController->points()->count() > 0) {
         auto* pts = rallyController->points();
         for (int i = 0; i < pts->count(); i++) {
             _visualItemsTree.appendItem((*pts)[i], _rallyGroupIndex, QStringLiteral("rallyItem"));
         }
+    } else {
+        _rallyHeaderMarker.setObjectName(QStringLiteral("rallyHeader"));
+        _visualItemsTree.appendItem(&_rallyHeaderMarker, _rallyGroupIndex, QStringLiteral("rallyHeader"));
     }
 }
 
@@ -1981,7 +2013,7 @@ void MissionController::_setPlannedHomePositionFromFirstCoordinate(const QGeoCoo
     if (firstCoordinate.isValid()) {
         QGeoCoordinate plannedHomeCoord = firstCoordinate.atDistanceAndAzimuth(30, 0);
         plannedHomeCoord.setAltitude(0);
-        _settingsItem->setInitialHomePositionFromUser(plannedHomeCoord);
+        _settingsItem->setCoordinate(plannedHomeCoord);
     }
 }
 
@@ -2034,23 +2066,24 @@ void MissionController::_initAllVisualItems(void)
     connect(_visualItems, &QmlObjectListModel::countChanged, this, &MissionController::_updateContainsItems);
 
     // Connect for incremental tree model sync
-    connect(_visualItems, &QAbstractItemModel::rowsInserted, this, &MissionController::_onMissionItemsInserted);
-    connect(_visualItems, &QAbstractItemModel::rowsAboutToBeRemoved, this, &MissionController::_onMissionItemsAboutToBeRemoved);
-    connect(_visualItems, &QAbstractItemModel::modelReset, this, &MissionController::_onMissionItemsReset);
+    connect(_visualItems, &QAbstractItemModel::rowsInserted, this, &MissionController::_syncTreeMissionItemsInserted);
+    connect(_visualItems, &QAbstractItemModel::rowsAboutToBeRemoved, this, &MissionController::_syncTreeMissionItemsAboutToBeRemoved);
+    connect(_visualItems, &QAbstractItemModel::modelReset, this, &MissionController::_syncTreeMissionItemsReset);
 
     // Populate tree's mission group from current _visualItems
-    _onMissionItemsReset();
+    _syncTreeMissionItemsReset();
 
     // Connect rally controller for incremental tree model sync
     auto* rallyController = _masterController->rallyPointController();
     if (rallyController) {
         auto* pts = rallyController->points();
-        connect(pts, &QAbstractItemModel::rowsInserted, this, &MissionController::_onRallyPointsInserted);
-        connect(pts, &QAbstractItemModel::rowsAboutToBeRemoved, this, &MissionController::_onRallyPointsAboutToBeRemoved);
-        connect(pts, &QAbstractItemModel::modelReset, this, &MissionController::_onRallyPointsReset);
+        connect(pts, &QAbstractItemModel::rowsInserted, this, &MissionController::_syncTreeRallyPointsInserted);
+        connect(pts, &QAbstractItemModel::rowsAboutToBeRemoved, this, &MissionController::_syncTreeRallyPointsAboutToBeRemoved);
+        connect(pts, &QAbstractItemModel::rowsRemoved, this, &MissionController::_syncTreeRallyPointsRemoved);
+        connect(pts, &QAbstractItemModel::modelReset, this, &MissionController::_syncTreeRallyPointsReset);
 
         // Populate any existing rally points
-        _onRallyPointsReset();
+        _syncTreeRallyPointsReset();
     }
 
     emit visualItemsChanged();
@@ -2066,6 +2099,12 @@ void MissionController::_initAllVisualItems(void)
 
 void MissionController::_deinitAllVisualItems(void)
 {
+    // Remove mission items from the tree model before their C++ objects are
+    // scheduled for deletion via deleteLater below. Without this, the TreeView
+    // delegates still hold references when the objects are destroyed, causing
+    // null-reference warnings in QML (e.g. "Cannot read property 'masterController' of null").
+    _visualItemsTree.removeChildren(_missionGroupIndex);
+
     disconnect(_settingsItem, &MissionSettingsItem::coordinateChanged, this, &MissionController::_recalcAll);
     disconnect(_settingsItem, &MissionSettingsItem::coordinateChanged, this, &MissionController::plannedHomePositionChanged);
 
@@ -2077,17 +2116,18 @@ void MissionController::_deinitAllVisualItems(void)
     disconnect(_visualItems, &QmlObjectListModel::countChanged, this, &MissionController::_updateContainsItems);
 
     // Disconnect incremental tree model sync
-    disconnect(_visualItems, &QAbstractItemModel::rowsInserted, this, &MissionController::_onMissionItemsInserted);
-    disconnect(_visualItems, &QAbstractItemModel::rowsAboutToBeRemoved, this, &MissionController::_onMissionItemsAboutToBeRemoved);
-    disconnect(_visualItems, &QAbstractItemModel::modelReset, this, &MissionController::_onMissionItemsReset);
+    disconnect(_visualItems, &QAbstractItemModel::rowsInserted, this, &MissionController::_syncTreeMissionItemsInserted);
+    disconnect(_visualItems, &QAbstractItemModel::rowsAboutToBeRemoved, this, &MissionController::_syncTreeMissionItemsAboutToBeRemoved);
+    disconnect(_visualItems, &QAbstractItemModel::modelReset, this, &MissionController::_syncTreeMissionItemsReset);
 
     // Disconnect rally controller tree model sync
     auto* rallyController = _masterController->rallyPointController();
     if (rallyController) {
         auto* pts = rallyController->points();
-        disconnect(pts, &QAbstractItemModel::rowsInserted, this, &MissionController::_onRallyPointsInserted);
-        disconnect(pts, &QAbstractItemModel::rowsAboutToBeRemoved, this, &MissionController::_onRallyPointsAboutToBeRemoved);
-        disconnect(pts, &QAbstractItemModel::modelReset, this, &MissionController::_onRallyPointsReset);
+        disconnect(pts, &QAbstractItemModel::rowsInserted, this, &MissionController::_syncTreeRallyPointsInserted);
+        disconnect(pts, &QAbstractItemModel::rowsAboutToBeRemoved, this, &MissionController::_syncTreeRallyPointsAboutToBeRemoved);
+        disconnect(pts, &QAbstractItemModel::rowsRemoved, this, &MissionController::_syncTreeRallyPointsRemoved);
+        disconnect(pts, &QAbstractItemModel::modelReset, this, &MissionController::_syncTreeRallyPointsReset);
     }
 }
 
@@ -2183,7 +2223,7 @@ bool MissionController::_findPreviousAltitude(int newIndex, double* prevAltitude
 {
     bool                                found = false;
     double                              foundAltitude = 0;
-    QGroundControlQmlGlobal::AltitudeFrame    foundAltMode = QGroundControlQmlGlobal::AltitudeFrameNone;
+    QGroundControlQmlGlobal::AltitudeFrame    foundAltFrame = QGroundControlQmlGlobal::AltitudeFrameNone;
 
     if (newIndex > _visualItems->count()) {
         return false;
@@ -2198,7 +2238,7 @@ bool MissionController::_findPreviousAltitude(int newIndex, double* prevAltitude
                 SimpleMissionItem* simpleItem = qobject_cast<SimpleMissionItem*>(visualItem);
                 if (simpleItem->specifiesAltitude()) {
                     foundAltitude   = simpleItem->altitude()->rawValue().toDouble();
-                    foundAltMode    = simpleItem->altitudeFrame();
+                    foundAltFrame    = simpleItem->altitudeFrame();
                     found           = true;
                     break;
                 }
@@ -2208,7 +2248,7 @@ bool MissionController::_findPreviousAltitude(int newIndex, double* prevAltitude
 
     if (found) {
         *prevAltitude       = foundAltitude;
-        *prevAltitudeMode   = foundAltMode;
+        *prevAltitudeMode   = foundAltFrame;
     }
 
     return found;
@@ -2239,43 +2279,6 @@ MissionSettingsItem* MissionController::_addMissionSettings(QmlObjectListModel* 
     }
 
     return settingsItem;
-}
-
-void MissionController::_centerHomePositionOnMissionItems(QmlObjectListModel *visualItems)
-{
-    qCDebug(MissionControllerLog) << "_centerHomePositionOnMissionItems";
-
-    if (visualItems->count() > 1) {
-        double north = 0.0;
-        double south = 0.0;
-        double east  = 0.0;
-        double west  = 0.0;
-        bool firstCoordSet = false;
-
-        for (int i=1; i<visualItems->count(); i++) {
-            VisualMissionItem* item = qobject_cast<VisualMissionItem*>(visualItems->get(i));
-            if (item->specifiesCoordinate()) {
-                if (firstCoordSet) {
-                    double lat = _normalizeLat(item->entryCoordinate().latitude());
-                    double lon = _normalizeLon(item->entryCoordinate().longitude());
-                    north = fmax(north, lat);
-                    south = fmin(south, lat);
-                    east  = fmax(east, lon);
-                    west  = fmin(west, lon);
-                } else {
-                    firstCoordSet = true;
-                    north = _normalizeLat(item->entryCoordinate().latitude());
-                    south = north;
-                    east  = _normalizeLon(item->entryCoordinate().longitude());
-                    west  = east;
-                }
-            }
-        }
-
-        if (firstCoordSet) {
-            _settingsItem->setInitialHomePositionFromUser(QGeoCoordinate((south + ((north - south) / 2)) - 90.0, (west + ((east - west) / 2)) - 180.0, 0.0));
-        }
-    }
 }
 
 int MissionController::resumeMissionIndex(void) const
@@ -2996,22 +2999,22 @@ MissionController::SendToVehiclePreCheckState MissionController::sendToVehiclePr
 
 QGroundControlQmlGlobal::AltitudeFrame MissionController::globalAltitudeFrame(void)
 {
-    return _globalAltitudeFrame;
+    return _globalAltFrame;
 }
 
 QGroundControlQmlGlobal::AltitudeFrame MissionController::globalAltitudeFrameDefault(void)
 {
-    if (_globalAltitudeFrame == QGroundControlQmlGlobal::AltitudeFrameMixed) {
+    if (_globalAltFrame == QGroundControlQmlGlobal::AltitudeFrameMixed) {
         return QGroundControlQmlGlobal::AltitudeFrameRelative;
     } else {
-        return _globalAltitudeFrame;
+        return _globalAltFrame;
     }
 }
 
-void MissionController::setGlobalAltitudeFrame(QGroundControlQmlGlobal::AltitudeFrame altMode)
+void MissionController::setGlobalAltitudeFrame(QGroundControlQmlGlobal::AltitudeFrame altFrame)
 {
-    if (_globalAltitudeFrame != altMode) {
-        _globalAltitudeFrame = altMode;
+    if (_globalAltFrame != altFrame) {
+        _globalAltFrame = altFrame;
         emit globalAltitudeFrameChanged();
     }
 }
