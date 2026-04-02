@@ -355,17 +355,6 @@ QString QGroundControlQmlGlobal::displayName()
     return qgcApp()->displayName();
 }
 
-void QGroundControlQmlGlobal::deleteAllSettingsNextBoot()
-{
-    QGCApplication::deleteAllSettingsNextBoot();
-}
-
-void QGroundControlQmlGlobal::clearDeleteAllSettingsNextBoot()
-{
-    QGCApplication::clearDeleteAllSettingsNextBoot();
-}
-
-
 QmlObjectListModel *QGroundControlQmlGlobal::treeLoggingCategoriesModel()
 {
     return QGCLoggingCategoryManager::instance()->treeCategoryModel();
