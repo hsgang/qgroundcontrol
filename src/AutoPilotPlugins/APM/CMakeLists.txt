@@ -144,7 +144,6 @@ qt_add_qml_module(AutoPilotPluginsAPMModule
         APMESCComponent.qml
         APMESCComponentSummary.qml
         APMFailsafesComponentSummary.qml
-        APMFailsafesComponentSummarySub.qml
         APMFlightModesComponent.qml
         APMFlightModesComponentSummary.qml
         APMFollowComponent.qml
