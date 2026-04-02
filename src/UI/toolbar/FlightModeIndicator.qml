@@ -45,7 +45,7 @@ RowLayout {
                     text:               activeVehicle ? activeVehicle.flightMode : qsTr("비행모드")
                     font.pointSize:     ScreenTools.largeFontPointSize * 0.9
                     font.bold:          true
-                    color:              qgcPal.windowTransparentText
+                    color:              qgcPal.text
                 }
 
                 QGCColoredImage {
@@ -54,7 +54,7 @@ RowLayout {
                     fillMode:   Image.PreserveAspectFit
                     mipmap:     true
                     source:     "/InstrumentValueIcons/cheveron-down.svg"
-                    color:      qgcPal.windowTransparentText
+                    color:      qgcPal.text
                 }
             }
 

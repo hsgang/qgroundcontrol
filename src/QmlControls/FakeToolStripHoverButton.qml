@@ -37,8 +37,8 @@ Button {
     property bool forceImageScale11: false
     property real imageScale:        forceImageScale11 && (text == "") ? 0.8 : 0.6
     property real contentMargins:    innerText.height * 0.1
-    property color currentContentColor:  (checked || pressed) ? qgcPal.buttonHighlightText : qgcPal.windowTransparentText
-    property color currentContentColorSecondary:  (checked || pressed) ? qgcPal.windowTransparentText : qgcPal.buttonHighlight
+    property color currentContentColor:  (checked || pressed) ? qgcPal.buttonHighlightText : qgcPal.text
+    property color currentContentColorSecondary:  (checked || pressed) ? qgcPal.text : qgcPal.buttonHighlight
 
     QGCPalette { id: qgcPal; colorGroupEnabled: control.enabled }
 

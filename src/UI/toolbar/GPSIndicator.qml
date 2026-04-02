@@ -149,7 +149,7 @@ Item {
 
             QGCLabel {
                 anchors.left:   parent.left
-                color:          qgcPal.windowTransparentText
+                color:          qgcPal.text
                 font.pointSize: ScreenTools.smallFontPointSize
                 text:           _activeVehicle ? (isGNSS2 ? getGpsLock() + "("+ _activeVehicle.gps.count.valueString +")" : getGpsLock()) : ""
             }
@@ -157,7 +157,7 @@ Item {
             QGCLabel {
                 id:             hdopValue
                 anchors.left:   parent.left
-                color:          qgcPal.windowTransparentText
+                color:          qgcPal.text
                 font.pointSize: isGNSS2 ? ScreenTools.smallFontPointSize : ScreenTools.defaultFontPointSize
                 text:           _activeVehicle ? (isGNSS2 ? getGps2Lock() + "("+ _activeVehicle.gps2.count.valueString +")" : _activeVehicle.gps.count.valueString) : ""
             }

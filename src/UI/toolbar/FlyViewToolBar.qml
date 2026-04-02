@@ -48,7 +48,7 @@ Item {
                 width:                  height
                 color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
-                border.color:           qgcPal.windowTransparentText
+                border.color:           qgcPal.text
                 border.width:           1
 
                 QGCToolBarButton {
@@ -66,7 +66,7 @@ Item {
                 width:                  height
                 color:                  QGroundControl.globalPalette.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
-                border.color:           qgcPal.windowTransparentText
+                border.color:           qgcPal.text
                 border.width:           1
                 visible:                !ScreenTools.isMobile/* && currentToolbar === flyViewToolbar*/
 
@@ -79,7 +79,7 @@ Item {
                     sourceSize.height:  height
                     fillMode:           Image.PreserveAspectFit
                     mipmap:             true
-                    color:              qgcPal.windowTransparentText
+                    color:              qgcPal.text
                 }
 
                 MouseArea{
@@ -210,7 +210,7 @@ Item {
                     sourceSize.height:  height
                     fillMode:           Image.PreserveAspectFit
                     mipmap:             true
-                    color:              qgcPal.windowTransparentText
+                    color:              qgcPal.text
                 }
 
                 MouseArea{
@@ -232,7 +232,7 @@ Item {
         anchors.margins:        ScreenTools.defaultFontPixelHeight / 2
         visible:                !ScreenTools.isMobile /*&& currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth) */
         color:                  "transparent"
-        border.color:           qgcPal.windowTransparentText
+        border.color:           qgcPal.text
         border.width:           1
         width:                  ScreenTools.defaultFontPixelHeight * 6
         radius:                 ScreenTools.defaultFontPixelHeight / 4
