@@ -42,7 +42,7 @@ DECLARE_SETTINGGROUP(Video, "Video")
     if (videoSourceList.count() == 0) {
         _noVideo = true;
         videoSourceList.append(videoSourceNoVideo);
-        setVisible(false);
+        setUserVisible(false);
     } else {
         videoSourceList.insert(0, videoDisabled);
     }
@@ -126,7 +126,7 @@ DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, forceVideoDecoder)
     if (!_forceVideoDecoderFact) {
         _forceVideoDecoderFact = _createSettingsFact(forceVideoDecoderName);
 
-        _forceVideoDecoderFact->setVisible(
+        _forceVideoDecoderFact->setUserVisible(
 #ifdef QGC_GST_STREAMING
             true
 #else
@@ -144,7 +144,7 @@ DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, lowLatencyMode)
     if (!_lowLatencyModeFact) {
         _lowLatencyModeFact = _createSettingsFact(lowLatencyModeName);
 
-        _lowLatencyModeFact->setVisible(
+        _lowLatencyModeFact->setUserVisible(
 #ifdef QGC_GST_STREAMING
             true
 #else
@@ -162,7 +162,7 @@ DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, rtspTimeout)
     if (!_rtspTimeoutFact) {
         _rtspTimeoutFact = _createSettingsFact(rtspTimeoutName);
 
-        _rtspTimeoutFact->setVisible(
+        _rtspTimeoutFact->setUserVisible(
 #ifdef QGC_GST_STREAMING
             true
 #else
