@@ -1107,6 +1107,11 @@ QGeoCoordinate SimpleMissionItem::coordinate(void) const
     }
 }
 
+double SimpleMissionItem::editableAlt() const
+{
+    return _missionItem.param7();
+}
+
 double SimpleMissionItem::amslEntryAlt(void) const
 {
     switch (_altitudeFrame) {
