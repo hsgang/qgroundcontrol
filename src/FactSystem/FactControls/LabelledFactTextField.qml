@@ -6,35 +6,20 @@ import QGroundControl.Controls
 import QGroundControl.FactControls
 
 RowLayout {
-    property string label:                   fact.shortDescription
-    property alias  description:             _description.text
+    property string label:                   fact ? fact.shortDescription : ""
     property alias  fact:                    _factTextField.fact
     property real   textFieldPreferredWidth: -1
     property alias  textFieldUnitsLabel:     _factTextField.unitsLabel
     property alias  textFieldShowUnits:      _factTextField.showUnits
     property alias  textFieldShowHelp:       _factTextField.showHelp
     property alias  textField:               _factTextField
-    property alias  echoMode:                _factTextField.echoMode
 
     spacing: ScreenTools.defaultFontPixelWidth * 2
 
-    ColumnLayout {
-        spacing : ScreenTools.defaultFontPixelHeight * 0.2
-
-        QGCLabel {
-            Layout.fillWidth:   true
-            text:               label
-            visible:            label !== ""
-        }
-        QGCLabel {
-            id:                 _description
-            visible:            description !== ""
-            Layout.fillWidth:   true
-            font.pointSize:     ScreenTools.smallFontPointSize
-            color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
-            wrapMode:           Text.WordWrap
-            width:              parent.width
-        }
+    QGCLabel {
+        Layout.fillWidth:   true
+        text:               label
+        visible:            label !== ""
     }
 
     FactTextField {
