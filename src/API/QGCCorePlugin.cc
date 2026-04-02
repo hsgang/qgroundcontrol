@@ -3,7 +3,6 @@
 #include "AppSettings.h"
 #include "MavlinkSettings.h"
 #include "FactMetaData.h"
-#include "QGCMAVLink.h"
 #ifdef QGC_GST_STREAMING
 #include "GStreamer.h"
 #endif
@@ -64,19 +63,29 @@ const QVariantList &QGCCorePlugin::analyzePages()
 {
     static const QVariantList analyzeList = {
         QVariant::fromValue(new QmlComponentInfo(
-            tr("Log Download"),
-            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/LogDownloadPage.qml")),
-            QUrl::fromUserInput(QStringLiteral("qrc:/qmlimages/LogDownloadIcon.svg")))),
+            tr("Onboard Logs"),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/OnboardLogs/OnboardLogPage.qml")),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qmlimages/OnboardLogIcon.svg")),
+            nullptr, true /* requiresVehicle */)),
         QVariant::fromValue(new QmlComponentInfo(
-            tr("Cloud Upload"),
-            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/CloudUploadPage.qml")),
-            QUrl::fromUserInput(QStringLiteral("qrc:/InstrumentValueIcons/cloud-upload.svg")))),
-#ifndef QGC_DISABLE_MAVLINK_INSPECTOR
+            tr("GeoTag Images"),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/GeoTag/GeoTagPage.qml")),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/GeoTag/GeoTagIcon.svg")))),
+        QVariant::fromValue(new QmlComponentInfo(
+            tr("MAVLink Console"),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/MAVLinkConsole/MAVLinkConsolePage.qml")),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qmlimages/MAVLinkConsoleIcon.svg")),
+            nullptr, true /* requiresVehicle */)),
         QVariant::fromValue(new QmlComponentInfo(
             tr("MAVLink Inspector"),
-            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/MAVLinkInspectorPage.qml")),
-            QUrl::fromUserInput(QStringLiteral("qrc:/qmlimages/MAVLinkInspector.svg")))),
-#endif
+            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/MAVLinkInspector/MAVLinkInspectorPage.qml")),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qmlimages/MAVLinkInspector.svg")),
+            nullptr, true /* requiresVehicle */)),
+        QVariant::fromValue(new QmlComponentInfo(
+            tr("Vibration"),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/Vibration/VibrationPage.qml")),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qmlimages/VibrationPageIcon")),
+            nullptr, true /* requiresVehicle */)),
     };
 
     return analyzeList;
@@ -92,10 +101,10 @@ const QmlObjectListModel *QGCCorePlugin::customMapItems()
     return _emptyCustomMapItems;
 }
 
-void QGCCorePlugin::adjustSettingMetaData(const QString &settingsGroup, FactMetaData &metaData, bool &userVisible)
+void QGCCorePlugin::adjustSettingMetaData(const QString &settingsGroup, FactMetaData &metaData, bool &visible)
 {
 #ifdef Q_OS_ANDROID
-    Q_UNUSED(userVisible);
+    Q_UNUSED(visible);
 #endif
 
     if (settingsGroup == AppSettings::settingsGroup) {
@@ -117,7 +126,7 @@ void QGCCorePlugin::adjustSettingMetaData(const QString &settingsGroup, FactMeta
 #endif
 #ifndef Q_OS_ANDROID
         else if (metaData.name() == AppSettings::androidDontSaveToSDCardName) {
-            userVisible = false;
+            visible = false;
             return;
         }
 #endif
@@ -327,8 +336,10 @@ QVariantList QGCCorePlugin::firstRunPromptsToShow()
 QString QGCCorePlugin::firstRunPromptResource(int id) const
 {
     switch (id) {
-    case kInitialSetupPromptId:
-        return QStringLiteral("/qml/QGroundControl/FirstRunPromptDialogs/InitialSetupPrompt.qml");
+    case kUnitsFirstRunPromptId:
+        return QStringLiteral("/qml/QGroundControl/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml");
+    case kOfflineVehicleFirstRunPromptId:
+        return QStringLiteral("/qml/QGroundControl/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml");
     default:
         return QString();
     }
