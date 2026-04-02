@@ -96,6 +96,7 @@ qt_add_qml_module(QGroundControlControlsModule
         ClickableColor.qml
         ComponentLabelValueRow.qml
         ConfigButton.qml
+        ConfigSection.qml
         DeadMouseArea.qml
         DropButton.qml
         DropPanel.qml

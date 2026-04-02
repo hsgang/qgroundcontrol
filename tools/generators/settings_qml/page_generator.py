@@ -16,6 +16,17 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from ..common.controls import (
+    EnableCheckboxDef,
+    ButtonDef,
+    parse_enable_checkbox,
+    parse_button,
+    render_slider,
+    render_checkbox,
+    render_combobox,
+    render_textfield,
+)
+
 # Matches C++ FactMetaData::splitTranslatedList() regex: [,，、]
 # Handles ASCII comma, fullwidth comma (U+FF0C), and enumeration comma (U+3001)
 # which translators sometimes substitute for standard commas.
@@ -35,8 +46,8 @@ class ControlDef:
     showWhen: str = ""  # extra visibility expression (ANDed with fact.userVisible)
     enableWhen: str = ""  # enabled expression
     placeholder: str = ""  # placeholder text for text fields
-    enableCheckbox: dict = field(default_factory=dict)  # slider: {"checked": expr, "onClicked": expr}
-    button: dict = field(default_factory=dict)           # adjacent button: {"text": str, "onClicked": expr, "enabled": expr}
+    enableCheckbox: EnableCheckboxDef | None = None  # slider: checked/onClicked
+    button: ButtonDef | None = None                    # adjacent button: text/onClicked/enabled
 
     @property
     def settings_group(self) -> str:
@@ -104,8 +115,8 @@ def load_page_def(json_path: Path) -> PageDef:
                 showWhen=ctrl_data.get("showWhen", ""),
                 enableWhen=ctrl_data.get("enableWhen", ""),
                 placeholder=ctrl_data.get("placeholder", ""),
-                enableCheckbox=ctrl_data.get("enableCheckbox", {}),
-                button=ctrl_data.get("button", {}),
+                enableCheckbox=parse_enable_checkbox(ctrl_data.get("enableCheckbox")),
+                button=parse_button(ctrl_data.get("button")),
             ))
         page.groups.append(grp)
     return page
@@ -190,28 +201,58 @@ def _split_translated_list(csv: str) -> list[str]:
 
 
 def _get_fact_search_terms(setting: str, settings_dir: Path) -> list[str]:
-    """Get search terms for a fact from its keywords."""
+    """Get search terms for a fact from its label, shortDesc, and keywords."""
     meta = _load_settings_metadata(settings_dir)
     fact = meta.get(setting, {})
+    terms: list[str] = []
+    # Include label and shortDesc so users can search by visible text
+    for field in ("label", "shortDesc"):
+        val = fact.get(field, "")
+        if val:
+            terms.append(val.lower())
     kw_str = fact.get("keywords", "")
-    if not kw_str:
-        return []
-    return [kw.lower() for kw in _split_translated_list(kw_str)]
+    if kw_str:
+        terms.extend(kw.lower() for kw in _split_translated_list(kw_str))
+    return terms
 
 
 # --------------------------------------------------------------------------- #
 # QML generation
 # --------------------------------------------------------------------------- #
 
+def _wrap_with_description(control_qml: str, fact_ref: str, vis_expr: str, indent: str) -> str:
+    """Wrap a control's QML in a ColumnLayout that appends a shortDescription label."""
+    wrapper_lines = [
+        f"{indent}ColumnLayout {{",
+        f"{indent}    Layout.fillWidth: true",
+        f"{indent}    spacing: ScreenTools.defaultFontPixelHeight / 4",
+        f"{indent}    visible: {vis_expr}",
+        f"",
+    ]
+    # Indent the inner control QML by one extra level
+    for line in control_qml.splitlines():
+        wrapper_lines.append(f"    {line}" if line.strip() else line)
+    wrapper_lines.append(f"")
+    wrapper_lines.append(f"{indent}    QGCLabel {{")
+    wrapper_lines.append(f"{indent}        Layout.fillWidth: true")
+    wrapper_lines.append(f"{indent}        text: {fact_ref}.shortDescription")
+    wrapper_lines.append(f"{indent}        visible: text !== \"\"")
+    wrapper_lines.append(f"{indent}        font.pointSize: ScreenTools.smallFontPointSize")
+    wrapper_lines.append(f"{indent}        wrapMode: Text.WordWrap")
+    wrapper_lines.append(f"{indent}    }}")
+    wrapper_lines.append(f"{indent}}}")
+    return "\n".join(wrapper_lines)
+
+
 def _qml_control(ctrl: ControlDef, settings_dir: Path) -> str:
     """Generate QML for a single control."""
     indent = "        "
     fact_ref = f"QGroundControl.settingsManager.{ctrl.setting}"
 
-    def _vis_line() -> str:
+    def _vis_expr() -> str:
         if ctrl.showWhen:
-            return f"{indent}    visible: ({ctrl.showWhen}) && fact.userVisible"
-        return f"{indent}    visible: fact.userVisible"
+            return f"({ctrl.showWhen}) && {fact_ref}.userVisible"
+        return f"{fact_ref}.userVisible"
 
     def _enabled_line() -> str:
         if ctrl.enableWhen:
@@ -220,72 +261,38 @@ def _qml_control(ctrl: ControlDef, settings_dir: Path) -> str:
 
     # Determine control type: explicit override or auto-detect from metadata
     if ctrl.control == "slider":
-        label_line = f'    label: qsTr("{ctrl.label}")' if ctrl.label else "    label: fact.label"
-        inner_indent = indent
-        has_button = bool(ctrl.button)
-        if has_button:
-            inner_indent = indent + "    "
-        lines = []
-        if has_button:
-            lines.append(f"{indent}RowLayout {{")
-            lines.append(f"{indent}    Layout.fillWidth: true")
-            lines.append(f"{indent}    spacing: ScreenTools.defaultFontPixelWidth")
-            if ctrl.showWhen:
-                lines.append(f"{indent}    visible: ({ctrl.showWhen}) && {fact_ref}.userVisible")
-            else:
-                lines.append(f"{indent}    visible: {fact_ref}.userVisible")
-        lines.append(f"{inner_indent}FactTextFieldSlider {{")
-        lines.append(f"{inner_indent}    Layout.fillWidth: true")
-        lines.append(f"{inner_indent}{label_line}")
-        lines.append(f"{inner_indent}    fact: {fact_ref}")
-        if not has_button:
-            if ctrl.showWhen:
-                lines.append(f"{inner_indent}    visible: ({ctrl.showWhen}) && fact.userVisible")
-            else:
-                lines.append(f"{inner_indent}    visible: fact.userVisible")
-        if ctrl.enableCheckbox:
-            lines.append(f"{inner_indent}    showEnableCheckbox: true")
-            if ctrl.enableCheckbox.get("checked"):
-                lines.append(f"{inner_indent}    enableCheckBoxChecked: {ctrl.enableCheckbox['checked']}")
-            if ctrl.enableCheckbox.get("onClicked"):
-                lines.append(f"{inner_indent}    onEnableCheckboxClicked: {ctrl.enableCheckbox['onClicked']}")
-        if ctrl.enableWhen:
-            lines.append(f"{inner_indent}    enabled: {ctrl.enableWhen}")
-        lines.append(f"{inner_indent}}}")
-        if has_button:
-            btn = ctrl.button
-            lines.append(f'{inner_indent}QGCButton {{')
-            lines.append(f'{inner_indent}    text: qsTr("{btn["text"]}")')
-            lines.append(f'{inner_indent}    onClicked: {btn["onClicked"]}')
-            if btn.get("enabled"):
-                lines.append(f'{inner_indent}    enabled: {btn["enabled"]}')
-            lines.append(f'{inner_indent}}}')
-            lines.append(f"{indent}}}")
-        return "\n".join(lines)
+        control_qml = render_slider(
+            fact_ref, indent,
+            label=ctrl.label,
+            enable_checkbox=ctrl.enableCheckbox,
+            button=ctrl.button,
+            enable_when=ctrl.enableWhen,
+        )
+        return _wrap_with_description(control_qml, fact_ref, _vis_expr(), indent)
     elif ctrl.control == "browse":
         label_line = f'    label: qsTr("{ctrl.label}")' if ctrl.label else "    label: fact.label"
         enabled = _enabled_line()
-        return (
+        control_qml = (
             f"{indent}LabelledFactBrowse {{\n"
             f"{indent}    Layout.fillWidth: true\n"
             f"{indent}{label_line}\n"
             f"{indent}    fact: {fact_ref}\n"
-            f"{_vis_line()}\n"
             f"{enabled}"
             f"{indent}}}"
         )
+        return _wrap_with_description(control_qml, fact_ref, _vis_expr(), indent)
     elif ctrl.control == "scaler":
         label_line = f'    label: qsTr("{ctrl.label}")' if ctrl.label else "    label: fact.label"
         enabled = _enabled_line()
-        return (
+        control_qml = (
             f"{indent}LabelledFactIncrementer {{\n"
             f"{indent}    Layout.fillWidth: true\n"
             f"{indent}{label_line}\n"
             f"{indent}    fact: {fact_ref}\n"
-            f"{_vis_line()}\n"
             f"{enabled}"
             f"{indent}}}"
         )
+        return _wrap_with_description(control_qml, fact_ref, _vis_expr(), indent)
     elif ctrl.control == "checkbox":
         use_checkbox = True
         use_combobox = False
@@ -304,46 +311,39 @@ def _qml_control(ctrl: ControlDef, settings_dir: Path) -> str:
     enabled = _enabled_line()
 
     if use_checkbox:
-        label_line = f'    text: qsTr("{ctrl.label}")' if ctrl.label else "    text: fact.label"
-        return (
-            f"{indent}FactCheckBoxSlider {{\n"
-            f"{indent}    Layout.fillWidth: true\n"
-            f"{indent}{label_line}\n"
-            f"{indent}    fact: {fact_ref}\n"
-            f"{_vis_line()}\n"
-            f"{enabled}"
-            f"{indent}}}"
+        control_qml = render_checkbox(
+            fact_ref, indent,
+            label=ctrl.label,
+            enable_when=ctrl.enableWhen,
+            label_property="text",
+            label_source="fact.label",
+            qml_type="FactCheckBoxSlider",
         )
+        return _wrap_with_description(control_qml, fact_ref, _vis_expr(), indent)
     elif use_combobox:
-        label_line = f'    label: qsTr("{ctrl.label}")' if ctrl.label else "    label: fact.label"
-        return (
-            f"{indent}LabelledFactComboBox {{\n"
-            f"{indent}    Layout.fillWidth: true\n"
-            f"{indent}{label_line}\n"
-            f"{indent}    fact: {fact_ref}\n"
-            f"{indent}    indexModel: false\n"
-            f"{_vis_line()}\n"
-            f"{enabled}"
-            f"{indent}}}"
+        control_qml = render_combobox(
+            fact_ref, indent,
+            label=ctrl.label,
+            enable_when=ctrl.enableWhen,
+            label_source="fact.label",
+            qml_type="LabelledFactComboBox",
         )
+        return _wrap_with_description(control_qml, fact_ref, _vis_expr(), indent)
     else:
-        label_line = f'    label: qsTr("{ctrl.label}")' if ctrl.label else "    label: fact.label"
         fact_type = _get_fact_type(ctrl.setting, settings_dir)
-        lines = [
-            f"{indent}LabelledFactTextField {{",
-            f"{indent}    Layout.fillWidth: true",
-            f"{indent}{label_line}",
-            f"{indent}    fact: {fact_ref}",
-            _vis_line(),
-        ]
-        if ctrl.enableWhen:
-            lines.append(f"{indent}    enabled: {ctrl.enableWhen}")
+        extra: list[str] = []
         if fact_type == "string":
-            lines.append(f"{indent}    textFieldPreferredWidth: _stringFieldWidth")
-        if ctrl.placeholder:
-            lines.append(f'{indent}    textField.placeholderText: qsTr("{ctrl.placeholder}")')
-        lines.append(f"{indent}}}")
-        return "\n".join(lines)
+            extra.append("textFieldPreferredWidth: _stringFieldWidth")
+        control_qml = render_textfield(
+            fact_ref, indent,
+            label=ctrl.label,
+            enable_when=ctrl.enableWhen,
+            placeholder=ctrl.placeholder,
+            label_source="fact.label",
+            qml_type="LabelledFactTextField",
+            extra_lines=extra if extra else None,
+        )
+        return _wrap_with_description(control_qml, fact_ref, _vis_expr(), indent)
 
 
 def _qml_missing_placeholder(description: str) -> str:
@@ -406,18 +406,49 @@ def generate_page_qml(page: PageDef, settings_dir: Path) -> str:
 
     lines.append("")
 
+    # Generate sectionVisible(index) function for dynamic sidebar filtering.
+    # Each case returns the visibility expression for that group index,
+    # excluding sectionFilter (which only controls the content area).
+    section_cases: list[str] = []
+    for grp_idx, grp in enumerate(page.groups):
+        vis_parts: list[str] = []
+        if grp.showWhen:
+            vis_parts.append(f"({grp.showWhen})")
+        if grp.controls:
+            fact_refs = [f"QGroundControl.settingsManager.{c.setting}" for c in grp.controls]
+            auto_vis = " || ".join(f"{ref}.userVisible" for ref in fact_refs)
+            vis_parts.append(f"({auto_vis})")
+        if vis_parts:
+            section_cases.append(f"        case {grp_idx}: return {' && '.join(vis_parts)}")
+    if section_cases:
+        lines.append("    function sectionVisible(index) {")
+        lines.append("        switch (index) {")
+        for case_line in section_cases:
+            lines.append(case_line)
+        lines.append("        default: return true")
+        lines.append("        }")
+        lines.append("    }")
+        lines.append("")
+
     # Groups
     for grp_idx, grp in enumerate(page.groups):
         section_vis = f"(sectionFilter === -1 || sectionFilter === {grp_idx})"
 
-        # Custom component: emit it directly instead of generating controls
+        # Custom component: wrap in a ColumnLayout so that sectionFilter
+        # controls the wrapper's visibility without overriding the
+        # component's own visible: binding.
         if grp.component:
-            lines.append(f"    {grp.component} {{")
-            lines.append("        Layout.fillWidth: true")
+            vis_parts = [section_vis]
             if grp.showWhen:
-                lines.append(f"        visible: {section_vis} && ({grp.showWhen})")
-            else:
-                lines.append(f"        visible: {section_vis}")
+                vis_parts.append(f"({grp.showWhen})")
+            lines.append("    ColumnLayout {")
+            lines.append("        Layout.fillWidth: true")
+            lines.append("        spacing: 0")
+            lines.append(f"        visible: {' && '.join(vis_parts)}")
+            lines.append("")
+            lines.append(f"        {grp.component} {{")
+            lines.append("            Layout.fillWidth: true")
+            lines.append("        }")
             lines.append("    }")
             lines.append("")
             continue

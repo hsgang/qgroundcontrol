@@ -12,20 +12,10 @@ RowLayout {
 
     spacing: ScreenTools.defaultFontPixelWidth * 2
 
-    ColumnLayout {
-        spacing : ScreenTools.defaultFontPixelHeight * 0.2
-
-        QGCLabel {
-            id:                 label
-            Layout.fillWidth:   true
-        }
-        QGCLabel {
-            id:                 _description
-            visible:            description !== ""
-            Layout.fillWidth:   true
-            font.pointSize:     ScreenTools.smallFontPointSize
-            color:              Qt.darker(QGroundControl.globalPalette.text, 1.5)
-        }
+    QGCLabel {
+        id:                  label
+        Layout.fillWidth:    true
+        Layout.minimumWidth: implicitWidth
     }
 
     QGCSlider {
