@@ -84,8 +84,8 @@ qt_add_qml_module(QGroundControlControlsModule
     VERSION 1.0
     RESOURCE_PREFIX /qml
     QML_FILES
-        AltModeCombo.qml
-        AltModeDialog.qml
+        AltFrameCombo.qml
+        AltFrameDialog.qml
         AppSettings.qml
         APMSubMotorDisplay.qml
         AppLogging.qml
@@ -117,7 +117,6 @@ qt_add_qml_module(QGroundControlControlsModule
         MAVLinkChart.qml
         MAVLinkMessageButton.qml
         MissionCommandDialog.qml
-        MissionItemIndexLabel.qml
         MvPanelPage.qml
         OfflineMapButton.qml
         ParameterDiffDialog.qml
@@ -193,63 +192,10 @@ qt_add_qml_module(QGroundControlControlsModule
         # src/FirstRunPromptDialogs/
         FirstRunPrompt.qml
 
-        # src/PlanView/
-        CameraCalcCamera.qml
-        CameraCalcGrid.qml
-        CameraSection.qml
-        CorridorScanEditor.qml
-        CorridorScanMapVisual.qml
-        FWLandingPatternEditor.qml
-        FWLandingPatternMapVisual.qml
-        GeoFenceEditor.qml
-        GeoFenceMapVisuals.qml
-        MissionItemEditor.qml
-        MissionItemMapVisual.qml
-        MissionItemStatus.qml
-        MissionItemTreeView.qml
-        MissionSettingsEditor.qml
-        MissionStats.qml
-        PlanEditToolbar.qml
-        PlanToolBarIndicators.qml
-        PlanView.qml
-        PlanViewRightPanel.qml
-        RallyPointEditorHeader.qml
-        RallyPointItemEditor.qml
-        RallyPointMapVisuals.qml
-        SimpleItemEditor.qml
-        SimpleItemMapVisual.qml
-        StructureScanEditor.qml
-        StructureScanMapVisual.qml
-        SurveyItemEditor.qml
-        SurveyMapVisual.qml
-        TakeoffItemMapVisual.qml
-        TerrainStatus.qml
-        TransectStyleComplexItemEditor.qml
-        TransectStyleComplexItemStats.qml
-        TransectStyleComplexItemTabBar.qml
-        TransectStyleComplexItemTerrainFollow.qml
-        TransectStyleMapVisuals.qml
-        VTOLLandingPatternEditor.qml
-        VTOLLandingPatternMapVisual.qml
-
         # src/UI/preferences/
         OfflineMapInfo.qml
 
-        # src/UI/toolbar/
-        BatteryIndicator.qml
-        FlightModeIndicator.qml
-        FlightModeMenuIndicator.qml
-        FlyViewToolBar.qml
-        FlyViewToolBarIndicators.qml
-        GPSIndicator.qml
-        GPSIndicatorPage.qml
-        MainStatusIndicator.qml
-        MainStatusIndicatorOfflinePage.qml
-        ParameterDownloadProgress.qml
-        PlanViewToolBar.qml
-        RemoteIDIndicatorPage.qml
-        SignalStrength.qml
-        VehicleMessageList.qml
+        CameraPOIIndicator.qml
 
         # src/QtLocationPlugin/QMLControl/
         OfflineMapEditor.qml
