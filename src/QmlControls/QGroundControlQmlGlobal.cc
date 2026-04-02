@@ -365,6 +365,7 @@ void QGroundControlQmlGlobal::clearDeleteAllSettingsNextBoot()
     QGCApplication::clearDeleteAllSettingsNextBoot();
 }
 
+
 QmlObjectListModel *QGroundControlQmlGlobal::treeLoggingCategoriesModel()
 {
     return QGCLoggingCategoryManager::instance()->treeCategoryModel();

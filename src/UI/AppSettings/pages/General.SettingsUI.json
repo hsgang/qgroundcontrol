@@ -1,13 +1,8 @@
 {
     "version": 1,
-    "fileType": "SettingsUI",
-    "bindings": {
-        "_appSettings": "QGroundControl.settingsManager.appSettings"
-    },
     "groups": [
         {
             "heading": "General",
-            "keywords": ["language", "locale", "color scheme", "dark mode", "theme", "palette", "follow me", "audio", "volume", "sound", "gstreamer", "debug level", "ui scale", "font size", "zoom", "save path", "storage", "reset", "clear settings", "factory reset"],
             "controls": [
                 {
                     "setting": "appSettings.qLocaleLanguage",
@@ -23,13 +18,13 @@
                     "setting": "appSettings.audioVolume",
                     "control": "slider",
                     "enableCheckbox": {
-                        "checked": "!_appSettings.audioMuted.rawValue",
-                        "onClicked": "{ if (enableCheckBoxChecked && _appSettings.audioVolume.rawValue <= 0) _appSettings.audioVolume.rawValue = 75; _appSettings.audioMuted.rawValue = !enableCheckBoxChecked }"
+                        "checked": "fact.rawValue > 0.0",
+                        "onClicked": "fact.rawValue = enableCheckBoxChecked ? 100 : 0"
                     },
                     "button": {
                         "text": "Test",
                         "onClicked": "QGroundControl.testAudioOutput()",
-                        "enabled": "!_appSettings.audioMuted.rawValue && _appSettings.audioVolume.rawValue > 0"
+                        "enabled": "QGroundControl.settingsManager.appSettings.audioVolume.rawValue > 0.0"
                     }
                 },
                 {
@@ -50,23 +45,8 @@
             ]
         },
         {
-            "heading": "Vehicle Preferences",
-            "keywords": ["firmware", "ardupilot", "px4", "vehicle", "multirotor", "fixed wing", "vtol", "rover", "sub"],
-            "controls": [
-                {
-                    "setting": "appSettings.preferredFirmwareClass",
-                    "control": "combobox"
-                },
-                {
-                    "setting": "appSettings.preferredVehicleClass",
-                    "control": "combobox"
-                }
-            ]
-        },
-        {
             "heading": "Units",
-            "keywords": ["units", "metric", "imperial", "distance", "speed", "area", "temperature", "feet", "meters"],
-            "showWhen": "QGroundControl.settingsManager.unitsSettings.userVisible",
+            "showWhen": "QGroundControl.settingsManager.unitsSettings.visible",
             "controls": [
                 {
                     "setting": "unitsSettings.horizontalDistanceUnits",

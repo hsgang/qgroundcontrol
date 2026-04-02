@@ -209,7 +209,9 @@ Rectangle {
                         Layout.fillWidth: true
                         text:          pageName
                         icon.source:   pageIconUrl
-                        checked:       isSelected
+                        expandable:    hasMultipleSections
+                        expanded:      isExpanded
+                        checked:       isSelected && settingsView._selectedSectionIndex === -1
                         visible:       pageName !== "Divider" && pageVisible()
 
                         onClicked: {
@@ -222,7 +224,9 @@ Rectangle {
                             }
                         }
 
-                        // toggleExpand removed - not available in current SettingsButton
+                        onToggleExpand: {
+                            settingsView._setExpanded(index, !isExpanded)
+                        }
                     }
 
                     // Section sub-items (indented, shown when page is expanded)
@@ -243,14 +247,8 @@ Rectangle {
                                 var matches = settingsView._matchingSections(pageColumn.index)
                                 return matches.indexOf(sectionIndex) !== -1
                             }
-                            property bool sectionContentVisible: {
-                                if (!pageColumn.isSelected) return true
-                                if (!rightPanel.item) return true
-                                if (typeof rightPanel.item.sectionVisible !== "function") return true
-                                return rightPanel.item.sectionVisible(sectionIndex)
-                            }
                             property color textColor: sectionChecked || pressed ? qgcPal.buttonHighlightText : qgcPal.buttonText
-                            visible: sectionMatchesSearch && sectionContentVisible
+                            visible: sectionMatchesSearch
 
                             background: Rectangle {
                                 color:   qgcPal.buttonHighlight
