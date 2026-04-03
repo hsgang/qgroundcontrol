@@ -317,8 +317,8 @@ TreeView {
                     target: defaultsRect._controllerVehicle
                     function onFirmwareTypeChanged() {
                         if (!defaultsRect._controllerVehicle.supportsTerrainFrame
-                                && defaultsRect._missionController.globalAltitudeMode === QGroundControl.AltitudeModeTerrainFrame) {
-                            defaultsRect._missionController.globalAltitudeMode = QGroundControl.AltitudeModeCalcAboveTerrain
+                                && defaultsRect._missionController.globalAltitudeFrame === QGroundControl.AltitudeFrameTerrainFrame) {
+                            defaultsRect._missionController.globalAltitudeFrame = QGroundControl.AltitudeFrameCalcAboveTerrain
                         }
                     }
                 }
@@ -341,29 +341,29 @@ TreeView {
                     LabelledButton {
                         Layout.fillWidth: true
                         label: qsTr("Altitude Mode")
-                        buttonText: QGroundControl.altitudeModeShortDescription(defaultsRect._missionController.globalAltitudeMode)
+                        buttonText: QGroundControl.altitudeFrameShortDescription(defaultsRect._missionController.globalAltitudeFrame)
 
                         onClicked: {
                             let removeModes = []
-                            let updateFunction = function(altMode) { defaultsRect._missionController.globalAltitudeMode = altMode }
+                            let updateFunction = function(altMode) { defaultsRect._missionController.globalAltitudeFrame = altMode }
                             if (!defaultsRect._controllerVehicle.supportsTerrainFrame) {
-                                removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
+                                removeModes.push(QGroundControl.AltitudeFrameTerrainFrame)
                             }
                             if (!defaultsRect._noMissionItemsAdded) {
-                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeRelative) {
-                                    removeModes.push(QGroundControl.AltitudeModeRelative)
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameRelative) {
+                                    removeModes.push(QGroundControl.AltitudeFrameRelative)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeAbsolute) {
-                                    removeModes.push(QGroundControl.AltitudeModeAbsolute)
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameAbsolute) {
+                                    removeModes.push(QGroundControl.AltitudeFrameAbsolute)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeCalcAboveTerrain) {
-                                    removeModes.push(QGroundControl.AltitudeModeCalcAboveTerrain)
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameCalcAboveTerrain) {
+                                    removeModes.push(QGroundControl.AltitudeFrameCalcAboveTerrain)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeTerrainFrame) {
-                                    removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
+                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameTerrainFrame) {
+                                    removeModes.push(QGroundControl.AltitudeFrameTerrainFrame)
                                 }
                             }
-                            defaultsAltFrameDialogFactory.open({ rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
+                            defaultsAltFrameDialogFactory.open({ rgRemoveModes: removeModes, updateAltFrameFn: updateFunction })
                         }
                     }
 
