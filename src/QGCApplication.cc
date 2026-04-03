@@ -36,20 +36,14 @@
 #include "SettingsManager.h"
 #include "MavlinkSettings.h"
 #include "AppSettings.h"
-#include "SignalingServerManager.h"
 #include "UDPLink.h"
 #include "Vehicle.h"
 #include "VehicleComponent.h"
 #include "VideoManager.h"
-#include "NTRIPManager.h"
-#include "CloudManager.h"
-#include "GridManager.h"
 
 #ifndef QGC_NO_SERIAL_LINK
 #include "SerialLink.h"
 #endif
-
-#include "SiYi.h"
 
 QGC_LOGGING_CATEGORY(QGCApplicationLog, "API.QGCApplication")
 
@@ -90,16 +84,12 @@ QGCApplication::QGCApplication(int &argc, char *argv[], const QGCCommandLinePars
 #ifdef QGC_DAILY_BUILD
         // This gives daily builds their own separate settings space. Allowing you to use daily and stable builds
         // side by side without daily screwing up your stable settings.
-        applicationName = "AMC";//QStringLiteral("%1 AMP").arg(QGC_APPLICATION_NAME);
+        applicationName = QStringLiteral("%1 Daily").arg(QGC_APP_NAME);
 #else
-        applicationName = "AMC";
+        applicationName = QGC_APP_NAME;
 #endif
     }
     setApplicationName(applicationName);
-
-    // Set display name for window title (can be different from applicationName)
-    _displayName = "AMC - AMP Mission Control";
-
     setOrganizationName(QGC_ORG_NAME);
     setOrganizationDomain(QGC_ORG_DOMAIN);
     setApplicationVersion(QString(QGC_APP_VERSION_STR));
@@ -114,7 +104,7 @@ QGCApplication::QGCApplication(int &argc, char *argv[], const QGCCommandLinePars
     }
 
     // The setting will delete all settings on this boot
-    fClearSettingsOptions |= settings.value(AppSettings::clearSettingsNextBootKey, false).toBool();
+    fClearSettingsOptions |= settings.contains(_deleteAllSettingsKey);
 
     if (_runningUnitTests || _simpleBootTest) {
         // Unit tests run with clean settings
@@ -226,10 +216,6 @@ void QGCApplication::init()
         SettingsManager::instance()->mavlinkSettings()->gcsMavlinkSystemID()->setRawValue(_systemId);
     }
 
-    //CloudManager::registerQmlTypes();
-    //GridManager::registerQmlTypes();
-    //NTRIPManager::registerQmlTypes();
-
     // Although this should really be in _initForNormalAppBoot putting it here allowws us to create unit tests which pop up more easily
     if (QFontDatabase::addApplicationFont(":/fonts/opensans") < 0) {
         qCWarning(QGCApplicationLog) << "Could not load /fonts/opensans font";
@@ -242,13 +228,13 @@ void QGCApplication::init()
     if (_simpleBootTest) {
         // Since GStream builds are so problematic we initialize video during the simple boot test
         // to make sure it works and verfies plugin availability.
-        _initVideo();
+        _bootTestPassed = _initVideo();
     } else if (!_runningUnitTests) {
         _initForNormalAppBoot();
     }
 }
 
-void QGCApplication::_initVideo()
+bool QGCApplication::_initVideo()
 {
 #ifdef QGC_GST_STREAMING
     // Gstreamer video playback requires OpenGL
@@ -256,29 +242,29 @@ void QGCApplication::_initVideo()
 #endif
 
     QGCCorePlugin::instance();  // CorePlugin must be initialized before VideoManager for Video Cleanup
-    VideoManager::instance();
+    VideoManager *videoManager = VideoManager::instance();
+    videoManager->startGStreamerInit();
+    const bool initSucceeded = !_simpleBootTest || videoManager->waitForGStreamerInit();
     _videoManagerInitialized = true;
+    return initSucceeded;
 }
 
 void QGCApplication::_initForNormalAppBoot()
 {
-    _initVideo(); // GStreamer must be initialized before QmlEngine
+    (void) _initVideo();
 
     QQuickStyle::setStyle("Basic");
     QGCCorePlugin::instance()->init();
     MAVLinkProtocol::instance()->init();
     MultiVehicleManager::instance()->init();
-    SiYi::instance()->init();
     _qmlAppEngine = QGCCorePlugin::instance()->createQmlApplicationEngine(this);
     QObject::connect(_qmlAppEngine, &QQmlApplicationEngine::objectCreationFailed, this, QCoreApplication::quit, Qt::QueuedConnection);
     QGCCorePlugin::instance()->createRootWindow(_qmlAppEngine);
-    AudioOutput::instance()->init(SettingsManager::instance()->appSettings()->audioMuted());
+
+    AudioOutput::instance()->init(SettingsManager::instance()->appSettings()->audioMuted(), SettingsManager::instance()->appSettings()->audioVolume());
     FollowMe::instance()->init();
     QGCPositionManager::instance()->init();
     LinkManager::instance()->init();
-    SignalingServerManager::instance()->init();
-    MultiVehicleManager::instance()->init();
-    MAVLinkProtocol::instance()->init();
     VideoManager::instance()->init(mainRootWindow());
 
     // Image provider for Optical Flow
@@ -286,11 +272,6 @@ void QGCApplication::_initForNormalAppBoot()
 
     // Set the window icon now that custom plugin has a chance to override it
 #ifdef Q_OS_LINUX
-    QUrl windowIcon = QUrl("qrc:/res/qgroundcontrol.ico");
-    windowIcon = _qmlAppEngine->interceptUrl(windowIcon, QQmlAbstractUrlInterceptor::UrlString);
-    // The interceptor needs "qrc:/path" but QIcon expects ":/path"
-    setWindowIcon(QIcon(":" + windowIcon.path()));
-#elif defined(Q_OS_WIN)
     QUrl windowIcon = QUrl("qrc:/res/qgroundcontrol.ico");
     windowIcon = _qmlAppEngine->interceptUrl(windowIcon, QQmlAbstractUrlInterceptor::UrlString);
     // The interceptor needs "qrc:/path" but QIcon expects ":/path"
@@ -343,9 +324,18 @@ void QGCApplication::_initForNormalAppBoot()
 
     // Connect links with flag AutoconnectLink
     LinkManager::instance()->startAutoConnectedLinks();
+}
 
-    CloudManager::instance()->init();
-    GridManager::instance()->init();
+void QGCApplication::deleteAllSettingsNextBoot()
+{
+    QSettings settings;
+    settings.setValue(_deleteAllSettingsKey, true);
+}
+
+void QGCApplication::clearDeleteAllSettingsNextBoot()
+{
+    QSettings settings;
+    settings.remove(_deleteAllSettingsKey);
 }
 
 void QGCApplication::reportMissingParameter(int componentId, const QString &name)
@@ -461,6 +451,7 @@ QQuickWindow *QGCApplication::mainRootWindow()
     if (!_mainRootWindow) {
         _mainRootWindow = qobject_cast<QQuickWindow*>(_rootQmlObject());
     }
+
     return _mainRootWindow;
 }
 
@@ -658,9 +649,6 @@ bool QGCApplication::event(QEvent *e)
         // On OSX if the user selects Quit from the menu (or Command-Q) the ApplicationWindow does not signal closing. Instead you get a Quit event here only.
         // This in turn causes the standard QGC shutdown sequence to not run. So in this case we close the window ourselves such that the
         // signal is sent and the normal shutdown sequence runs.
-        if (!_mainRootWindow) {
-            return QApplication::event(e);
-        }
         const bool forceClose = _mainRootWindow->property("_forceClose").toBool();
         qCDebug(QGCApplicationLog) << "Quit event" << forceClose;
         // forceClose
@@ -685,9 +673,6 @@ QGCImageProvider *QGCApplication::qgcImageProvider()
 void QGCApplication::shutdown()
 {
     qCDebug(QGCApplicationLog) << "Exit";
-
-    // Shutdown SignalingServerManager first to properly close connections
-    SignalingServerManager::shutdown();
 
     if (_videoManagerInitialized) {
         VideoManager::instance()->cleanup();
