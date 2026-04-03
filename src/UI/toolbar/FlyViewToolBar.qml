@@ -242,7 +242,7 @@ Item {
             anchors.fill:           parent
             anchors.margins:        ScreenTools.defaultFontPixelHeight / 4
             fillMode:               Image.PreserveAspectFit
-            source:                 qgcPal.globalTheme === QGCPalette.Light ? "/qmlimages/amp_logo_blue.png" : "/qmlimages/amp_logo_white.png"
+            source:                 "/res/amplogo.svg"
             sourceSize.width:       256
             sourceSize.height:      256
             mipmap:                 true

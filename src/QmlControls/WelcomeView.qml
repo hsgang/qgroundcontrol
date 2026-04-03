@@ -38,7 +38,7 @@ Rectangle {
 
     on_CurrentSelectionChanged: {
         if (!_currentSelection || !_currentSelection.model) {
-            vehicleImage0.source = "/qmlimages/amp_logo_white.png"
+            vehicleImage0.source = "/res/amplogo.svg"
             return
         }
 
@@ -59,7 +59,7 @@ Rectangle {
             vehicleImage0.source = "/vehicleImage/amp900.png"
             break
         default:
-            vehicleImage0.source = "/qmlimages/amp_logo_white.png"
+            vehicleImage0.source = "/res/amplogo.svg"
             break
         }
     }
@@ -124,7 +124,7 @@ Rectangle {
                         Image {
                             id: vehicleImage0
                             anchors.fill: parent
-                            source: "/qmlimages/amp_logo_white.png"
+                            source: "/res/amplogo.svg"
                             fillMode: Image.PreserveAspectFit
                         }
                         MultiEffect {
