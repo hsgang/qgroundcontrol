@@ -36,9 +36,6 @@ Item {
     property bool   _layoutSpacing:         ScreenTools.defaultFontPixelWidth
     property bool   _showSingleVehicleUI:   true
 
-    property var _siyi: QGroundControl.siyi
-    property SiYiCamera camera: _siyi.camera
-
     QGCToolInsets {
         id:                     _totalToolInsets
         leftEdgeTopInset:       toolStrip.leftEdgeTopInset
@@ -48,17 +45,16 @@ Item {
         rightEdgeCenterInset:   topRightPanel.rightEdgeCenterInset
         rightEdgeBottomInset:   bottomRightRowLayout.rightEdgeBottomInset
         topEdgeLeftInset:       toolStrip.topEdgeLeftInset
-        topEdgeCenterInset:     flyviewMissionProgress.topEdgeCenterInset
+        topEdgeCenterInset:     mapScale.topEdgeCenterInset
         topEdgeRightInset:      topRightPanel.topEdgeRightInset
         bottomEdgeLeftInset:    virtualJoystickMultiTouch.visible ? virtualJoystickMultiTouch.bottomEdgeLeftInset : parentToolInsets.bottomEdgeLeftInset
-        bottomEdgeCenterInset:  parentToolInsets.bottomEdgeCenterInset
+        bottomEdgeCenterInset:  bottomRightRowLayout.bottomEdgeCenterInset
         bottomEdgeRightInset:   virtualJoystickMultiTouch.visible ? virtualJoystickMultiTouch.bottomEdgeRightInset : bottomRightRowLayout.bottomEdgeRightInset
     }
 
     FlyViewTopRightPanel {
         id:                     topRightPanel
         anchors.top:            parent.top
-        anchors.bottom:         bottomRightRowLayout.top
         anchors.right:          parent.right
         maximumHeight:          parent.height - (bottomRightRowLayout.height + _margins * 4)
 
@@ -72,18 +68,11 @@ Item {
         anchors.top:        parent.top
         anchors.right:      parent.right
         spacing:            _layoutSpacing
-        visible:            !topRightPanel.visible
+        visible:           !topRightPanel.visible
 
         property real topEdgeRightInset:    childrenRect.height + _layoutMargin
         property real rightEdgeTopInset:    width + _layoutMargin
         property real rightEdgeCenterInset: rightEdgeTopInset
-    }
-
-    FlyViewRightPanel {
-        id:                 rightPanel
-        anchors.top:        topRightColumnLayout.bottom
-        anchors.bottom:     bottomRightRowLayout.top
-        anchors.right:      parent.right
     }
 
     FlyViewBottomRightRowLayout {
@@ -92,59 +81,15 @@ Item {
         anchors.right:      parent.right
         spacing:            _layoutSpacing
 
-        property real bottomEdgeRightInset:     height + _layoutMargin * 3
-        //property real bottomEdgeCenterInset:    bottomEdgeRightInset
+        property real bottomEdgeRightInset:     height + _layoutMargin
+        property real bottomEdgeCenterInset:    bottomEdgeRightInset
         property real rightEdgeBottomInset:     width + _layoutMargin
     }
-
-    // FlyViewBottomCenterRowLayout {
-    //     id:                 bottomCenterRowLayout
-    //     anchors.bottomMargin:       _layoutMargin * 3
-    //     anchors.bottom:             parent.bottom
-    //     anchors.horizontalCenter:   parent.horizontalCenter
-    //     spacing:                    _layoutSpacing
-
-    //     property real bottomEdgeCenterInset:    height + (_layoutMargin * 2)
-    // }
-
-    // TelemetryValuesBar {
-    //     id:                 telemetryPanel
-    //     x:                  recalcXPosition()
-    //     anchors.margins:    _toolsMargin
-    //     anchors.horizontalCenter: parent.horizontalCenter
-    //     anchors.top:        parent.top //guidedActionConfirm.visible ? guidedActionConfirm.bottom : parent.top
-    //     visible:            QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel.rawValue
-
-    //     property real topEdgeCenterInset: visible ? y + height : 0
-
-    //     function recalcXPosition() {
-    //         // First try centered
-    //         var halfRootWidth   = _root.width / 2
-    //         var halfPanelWidth  = telemetryPanel.width / 2
-    //         var leftX           = (halfRootWidth - halfPanelWidth) - _toolsMargin
-    //         var rightX          = (halfRootWidth + halfPanelWidth) + _toolsMargin
-    //         if (leftX >= parentToolInsets.leftEdgeTopInset || rightX <= parentToolInsets.rightEdgeTopInset ) {
-    //             // It will fit in the horizontalCenter
-    //             return halfRootWidth - halfPanelWidth
-    //         } else {
-    //             // Anchor to left edge
-    //             return parentToolInsets.leftEdgeTopInset + _toolsMargin
-    //         }
-    //     }
-    // }
 
     FlyViewMissionCompleteDialog {
         missionController:      _missionController
         geoFenceController:     _geoFenceController
         rallyPointController:   _rallyPointController
-    }
-
-    RequestConfirmPopup {
-        id:                         requestConfirmPopup
-        anchors.margins:            _toolsMargin * 2
-        anchors.top:                parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
-        anchors.horizontalCenter:   parent.horizontalCenter
-        z:                          QGroundControl.zOrderTopMost
     }
 
     //-- Virtual Joystick
@@ -220,10 +165,9 @@ Item {
 
     MapScale {
         id:                 mapScale
-        anchors.bottomMargin: _toolsMargin //_pipView.visible ? _totalToolInsets.bottomEdgeLeftInset + _toolsMargin : _toolsMargin
-        anchors.bottom:     parent.bottom
-        anchors.leftMargin: _totalToolInsets.leftEdgeBottomInset + _toolsMargin
-        anchors.left:       parent.left
+        anchors.left:       toolStrip.right
+        anchors.leftMargin: _toolsMargin
+        anchors.top:        parent.top
         mapControl:         _mapControl
         autoHide:           true
         visible:            !ScreenTools.isTinyScreen && QGroundControl.corePlugin.options.flyView.showMapScale && QGCViewer3DManager.displayMode !== QGCViewer3DManager.View3D && mapControl.pipState.state === mapControl.pipState.fullState
@@ -240,179 +184,6 @@ Item {
     Component {
         id: preFlightChecklistPopup
         FlyViewPreFlightChecklistPopup {
-        }
-    }
-
-    GuidedActionConfirm {
-        id:                         guidedActionConfirm
-        height:                     ScreenTools.defaultFontPixelHeight * 2
-        anchors.top:                parent.top
-        anchors.horizontalCenter:   parent.horizontalCenter
-        guidedController:           _guidedController
-        guidedValueSlider:          guidedValueSlider
-        messageDisplay:             undefined
-    }
-
-    // GuidedActionPressHoldConfirm{
-    //     Layout.fillWidth:   true
-    //     z:                  QGroundControl.zOrderTopMost
-    //     anchors.verticalCenter: parent.verticalCenter
-    //     anchors.horizontalCenter: parent.horizontalCenter
-    //     guidedController:   _guidedController
-    //     guidedValueSlider:  _guidedValueSlider
-    // }
-
-    Rectangle {
-        id:                         flyviewStatusRect
-        anchors.horizontalCenter:   parent.horizontalCenter
-        anchors.bottom:             bottomRightRowLayout.top
-        anchors.bottomMargin:       _toolsMargin
-        color:                      "transparent"
-        width:                      flyviewStatusRow.width
-        height:                     flyviewStatusRow.height
-
-        RowLayout{
-            id: flyviewStatusRow
-
-            FlyViewVibrationStatus{
-                id:         flyviewVibrationStatus
-                visible:    QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue
-            }
-
-            FlyViewEKFStatus{
-                id:         flyviewEKFStatus
-                visible:    QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue
-            }
-        }
-    }
-
-    // FlyViewAtmosphericSensorView{
-    //     id:                         atmosphericSensorView
-    //     anchors.top:                parent.top
-    //     anchors.topMargin:          _toolsMargin
-    //     anchors.left:               toolStrip.right
-    //     anchors.leftMargin:         _toolsMargin
-    //     visible:                    QGroundControl.settingsManager.flyViewSettings.showAtmosphericValueBar.rawValue && mapControl.pipState.state === mapControl.pipState.pipState
-    // }
-
-    // FlyViewWindvane {
-    //     id:                         windvane
-    //     vehicle:                    _activeVehicle
-    //     anchors.top:                parent.top
-    //     anchors.topMargin:          _toolsMargin
-    //     anchors.left:               toolStrip.right
-    //     anchors.leftMargin:         _toolsMargin
-    //     //anchors.leftMargin:         (ScreenTools.isMobile ? ScreenTools.minTouchPixels : ScreenTools.defaultFontPixelWidth * 8) + _toolsMargin * 2
-    //     visible:                    QGroundControl.settingsManager.flyViewSettings.showWindvane.rawValue
-    // }
-
-    ModeChangedIndicator {
-        anchors.centerIn:   parent
-        z:                  QGroundControl.zOrderTopMost
-    }
-
-    Rectangle {
-        id:                 messageToastManagerRect
-        anchors.margins:    _toolsMargin * 3
-        anchors.top:        parent.top
-        anchors.left:       toolStrip.right
-        width:              ScreenTools.isMobile ? parent.width / 2 : parent.width / 4
-        height:             parent.height / 2
-        color:              "transparent"
-
-        MessageToastManager {
-            id:                 messageToastManager
-
-            Connections {
-                target: _activeVehicle
-                function onNewFormattedMessage(formattedMessage) {
-                    messageToastManager.show(formattedMessage, 5000)
-                }
-            }
-        }
-    }
-
-    FlyViewAtmosphericChart{
-        id: flyViewChartWidget
-        anchors.margins:        _toolsMargin
-        anchors.top:            parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
-        anchors.bottom:         bottomRightRowLayout.top
-        anchors.right:          rightPanel.left
-        width:                  ScreenTools.isMobile ? mainWindow.width * 0.7 : mainWindow.width * 0.4
-        visible:                QGroundControl.settingsManager.flyViewSettings.showChartWidget.rawValue
-    }
-
-    // FlyViewEscStatus {
-    //     id: flyViewEscStatus
-    //     anchors.margins:        _toolsMargin
-    //     anchors.top:            parent.top
-    //     anchors.topMargin:      _toolsMargin
-    //     anchors.right:          rightPanel.left
-    //     visible:                QGroundControl.settingsManager.flyViewSettings.showEscStatus.rawValue
-    // }
-
-    FlyViewMissionProgress{
-        id:                     flyviewMissionProgress
-        anchors.margins:        _toolsMargin
-        anchors.top:            parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        _planMasterController: planController
-        visible:  QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
-
-        property real topEdgeCenterInset: visible ? height+_toolsMargin : 0
-    }
-
-    Rectangle {
-        id: siyiResultRectangle
-        anchors.top: parent.top //telemetryPanel.visible ? telemetryPanel.bottom : parent.top
-        width: resultLabel.width + resultLabel.width*0.4
-        height: resultLabel.height + resultLabel.height*0.4
-        anchors.margins: _toolsMargin
-        anchors.horizontalCenter: parent.horizontalCenter //telemetryPanel.visible ? telemetryPanel.horizontalCenter : parent.horizontalCenter
-        color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-        visible: false
-        radius: _toolsMargin / 2
-        QGCLabel {
-            id: resultLabel
-            anchors.centerIn: parent
-            color: qgcPal.text
-
-            Timer {
-                id: resultTimer
-                interval: 5000
-                running: false
-                repeat: false
-                onTriggered: siyiResultRectangle.visible = false
-            }
-
-            Connections {
-                target: camera
-                function onOperationResultChanged(result) {
-                    if (result === 0) {
-                        resultLabel.text = qsTr("Take Photo Success")
-                    } else if (result === 1) {
-                        resultLabel.text = qsTr("Take Photo Failed")
-                    } else if (result === 4) {
-                        resultLabel.text = qsTr("Video Record Failed")
-                    } else if (result === -1) {
-                        resultLabel.text = qsTr("Not supportted") //4K视频不支持变倍
-                    } else if (result === camera.TipOptionLaserNotInRange) {
-                        resultLabel.text = qsTr("Not in the range of laser")
-                    } else if (result === camera.TipOptionSettingOK) {
-                        resultLabel.text = qsTr("Setting OK")
-                    } else if (result === camera.TipOptionSettingFailed) {
-                        resultLabel.text = qsTr("Setting Failed")
-                    } else if (result === camera.TipOptionIsNotAiTrackingMode) {
-                        resultLabel.text = qsTr("Not in AI tracking mode") // 不支持AI跟踪模式
-                    } else if (result === camera.TipOptionStreamNotSupportedAiTracking) {
-                        resultLabel.text = qsTr("AI tracking not supportted") //AI跟踪不支持
-                    }
-
-                    resultTimer.restart()
-                    zoomMultipleRectangle.visible = false
-                    siyiResultRectangle.visible = true
-                }
-            }
         }
     }
 }
