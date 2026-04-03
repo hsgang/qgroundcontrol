@@ -5,6 +5,7 @@ import QtQuick.Layouts
 import QGroundControl
 import QGroundControl.Controls
 import QGroundControl.FactControls
+import QGroundControl.PlanView
 
 /// Unified plan tree view showing Mission Items, GeoFence, and Rally Points
 /// as collapsible sections using a real TreeView with type-discriminating delegates.
@@ -88,6 +89,16 @@ TreeView {
         root.forceLayout()
     }
 
+    // Subtitle text shown on group headers, varies by node type
+    function _groupSubtitle(nodeType) {
+        switch (nodeType) {
+        case "planFileGroup":   return planMasterController.currentPlanFileName
+        case "missionGroup":    return _missionController.visualItems ? (_missionController.visualItems.count - 1) + qsTr(" items") : ""
+        case "rallyGroup":      return _rallyPointController.points ? _rallyPointController.points.count + qsTr(" points") : ""
+        default:                return ""
+        }
+    }
+
     // Coalesces multiple delegate height changes into a single forceLayout() call
     Timer {
         id: layoutTimer
@@ -132,12 +143,14 @@ TreeView {
                 case "missionGroup":    return groupHeaderComponent
                 case "fenceGroup":      return groupHeaderComponent
                 case "rallyGroup":      return groupHeaderComponent
+                case "transformGroup":  return groupHeaderComponent
                 case "planFileInfo":    return planFileInfoComponent
                 case "defaultsInfo":    return defaultsEditorComponent
                 case "missionItem":     return delegateRoot.nodeObject ? missionItemComponent  : null
                 case "fenceEditor":     return delegateRoot.nodeObject ? fenceEditorComponent  : null
                 case "rallyHeader":     return delegateRoot.nodeObject ? rallyHeaderComponent  : null
                 case "rallyItem":       return delegateRoot.nodeObject ? rallyItemComponent    : null
+                case "transformEditor": return transformEditorComponent
                 default:                return null
                 }
             }
@@ -173,6 +186,14 @@ TreeView {
                         font.bold: true
                         anchors.verticalCenter: parent.verticalCenter
                     }
+
+                    QGCLabel {
+                        text: root._groupSubtitle(delegateRoot.nodeType)
+                        font.pointSize: ScreenTools.smallFontPointSize
+                        color: qgcPal.colorGrey
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: text !== ""
+                    }
                 }
 
                 MouseArea {
@@ -182,42 +203,15 @@ TreeView {
             }
         }
 
-        // ── Plan file info delegate ──
+        // ── Plan info delegate ──
         Component {
             id: planFileInfoComponent
 
-            Rectangle {
+            PlanInfoEditor {
                 width: delegateRoot.width
-                height: planFileColumn.height + ScreenTools.defaultFontPixelHeight
-                color: qgcPal.windowShadeDark
-
-                Column {
-                    id: planFileColumn
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: ScreenTools.defaultFontPixelWidth
-                    spacing: ScreenTools.defaultFontPixelHeight * 0.25
-
-                    QGCTextField {
-                        id: planNameField
-                        placeholderText: qsTr("Untitled")
-                        width: parent.width
-
-                        Component.onCompleted: text = root.planMasterController.currentPlanFileName
-
-                        Connections {
-                            target: root.planMasterController
-                            function onCurrentPlanFileNameChanged() {
-                                if (!planNameField.activeFocus) {
-                                    planNameField.text = root.planMasterController.currentPlanFileName
-                                }
-                            }
-                        }
-
-                        onEditingFinished: root.planMasterController.currentPlanFileName = text
-                    }
-                }
+                planMasterController: root.planMasterController
+                missionController: root._missionController
+                editorMap: root.editorMap
             }
         }
 
@@ -225,228 +219,10 @@ TreeView {
         Component {
             id: defaultsEditorComponent
 
-            Rectangle {
-                id: defaultsRect
+            MissionDefaultsEditor {
                 width: delegateRoot.width
-                height: defaultsColumn.height + ScreenTools.defaultFontPixelHeight
-                color: qgcPal.windowShadeDark
-
-                property var _missionController: root._missionController
-                property var _controllerVehicle: root.planMasterController.controllerVehicle
-                property var _visualItems: root._missionController.visualItems
-                property bool _noMissionItemsAdded: _visualItems ? _visualItems.count <= 1 : true
-                property var _settingsItem: _visualItems && _visualItems.count > 0 ? _visualItems.get(0) : null
-                property bool _multipleFirmware: !QGroundControl.singleFirmwareSupport
-                property bool _multipleVehicleTypes: !QGroundControl.singleVehicleSupport
-                property bool _allowFWVehicleTypeSelection: _noMissionItemsAdded && !globals.activeVehicle
-                property bool _showCruiseSpeed: _controllerVehicle ? !_controllerVehicle.multiRotor : false
-                property bool _showHoverSpeed: _controllerVehicle ? (_controllerVehicle.multiRotor || _controllerVehicle.vtol) : false
-                property bool _vehicleHasHomePosition: _controllerVehicle ? _controllerVehicle.homePosition.isValid : false
-                property bool _waypointsOnlyMode: QGroundControl.corePlugin.options.missionWaypointsOnly
-                property real _fieldWidth: ScreenTools.defaultFontPixelWidth * 16
-                readonly property real _margin: ScreenTools.defaultFontPixelWidth / 2
-
-                Connections {
-                    target: defaultsRect._controllerVehicle
-                    function onFirmwareTypeChanged() {
-                        if (!defaultsRect._controllerVehicle.supports.terrainFrame
-                                && defaultsRect._missionController.globalAltitudeFrame === QGroundControl.AltitudeFrameTerrain) {
-                            defaultsRect._missionController.globalAltitudeFrame = QGroundControl.AltitudeFrameCalcAboveTerrain
-                        }
-                    }
-                }
-
-                Component { id: altModeDialogComponent; AltFrameDialog { } }
-
-                QGCPopupDialogFactory {
-                    id: defaultsAltFrameDialogFactory
-                    dialogComponent: altModeDialogComponent
-                }
-
-                ColumnLayout {
-                    id: defaultsColumn
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.margins: ScreenTools.defaultFontPixelWidth
-                    spacing: ScreenTools.defaultFontPixelHeight * 0.5
-
-                    LabelledButton {
-                        Layout.fillWidth: true
-                        label: qsTr("Altitude Mode")
-                        buttonText: QGroundControl.altitudeFrameShortDescription(defaultsRect._missionController.globalAltitudeFrame)
-
-                        onClicked: {
-                            let removeModes = []
-                            let updateFunction = function(altMode) { defaultsRect._missionController.globalAltitudeFrame = altMode }
-                            if (!defaultsRect._controllerVehicle.supports.terrainFrame) {
-                                removeModes.push(QGroundControl.AltitudeFrameTerrain)
-                            }
-                            if (!defaultsRect._noMissionItemsAdded) {
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameRelative) {
-                                    removeModes.push(QGroundControl.AltitudeFrameRelative)
-                                }
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameAbsolute) {
-                                    removeModes.push(QGroundControl.AltitudeFrameAbsolute)
-                                }
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameCalcAboveTerrain) {
-                                    removeModes.push(QGroundControl.AltitudeFrameCalcAboveTerrain)
-                                }
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameTerrain) {
-                                    removeModes.push(QGroundControl.AltitudeFrameTerrain)
-                                }
-                            }
-                            defaultsAltFrameDialogFactory.open({ rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
-                        }
-                    }
-
-                    FactTextFieldSlider {
-                        Layout.fillWidth: true
-                        label: qsTr("Waypoints Altitude")
-                        fact: QGroundControl.settingsManager.appSettings.defaultMissionItemAltitude
-                    }
-
-                    FactTextFieldSlider {
-                        Layout.fillWidth: true
-                        label: qsTr("Flight Speed")
-                        fact: defaultsRect._settingsItem ? defaultsRect._settingsItem.speedSection.flightSpeed : null
-                        showEnableCheckbox: true
-                        enableCheckBoxChecked: defaultsRect._settingsItem ? defaultsRect._settingsItem.speedSection.specifyFlightSpeed : false
-                        visible: defaultsRect._settingsItem ? defaultsRect._settingsItem.speedSection.available : false
-
-                        onEnableCheckboxClicked: {
-                            if (defaultsRect._settingsItem) {
-                                defaultsRect._settingsItem.speedSection.specifyFlightSpeed = enableCheckBoxChecked
-                            }
-                        }
-                    }
-
-                    // ── Vehicle Info ──
-                    SectionHeader {
-                        id: vehicleInfoSectionHeader
-                        Layout.fillWidth: true
-                        text: qsTr("Vehicle Info")
-                        visible: !defaultsRect._waypointsOnlyMode
-                        checked: false
-                    }
-
-                    GridLayout {
-                        Layout.fillWidth: true
-                        columnSpacing: ScreenTools.defaultFontPixelWidth
-                        rowSpacing: columnSpacing
-                        columns: 2
-                        visible: vehicleInfoSectionHeader.visible && vehicleInfoSectionHeader.checked
-
-                        QGCLabel {
-                            text: qsTr("Firmware")
-                            Layout.fillWidth: true
-                            visible: defaultsRect._multipleFirmware
-                        }
-                        FactComboBox {
-                            fact: QGroundControl.settingsManager.appSettings.offlineEditingFirmwareClass
-                            indexModel: false
-                            Layout.preferredWidth: defaultsRect._fieldWidth
-                            visible: defaultsRect._multipleFirmware && defaultsRect._allowFWVehicleTypeSelection
-                        }
-                        QGCLabel {
-                            text: defaultsRect._controllerVehicle ? defaultsRect._controllerVehicle.firmwareTypeString : ""
-                            visible: defaultsRect._multipleFirmware && !defaultsRect._allowFWVehicleTypeSelection
-                        }
-
-                        QGCLabel {
-                            text: qsTr("Vehicle")
-                            Layout.fillWidth: true
-                            visible: defaultsRect._multipleVehicleTypes
-                        }
-                        FactComboBox {
-                            fact: QGroundControl.settingsManager.appSettings.offlineEditingVehicleClass
-                            indexModel: false
-                            Layout.preferredWidth: defaultsRect._fieldWidth
-                            visible: defaultsRect._multipleVehicleTypes && defaultsRect._allowFWVehicleTypeSelection
-                        }
-                        QGCLabel {
-                            text: defaultsRect._controllerVehicle ? defaultsRect._controllerVehicle.vehicleTypeString : ""
-                            visible: defaultsRect._multipleVehicleTypes && !defaultsRect._allowFWVehicleTypeSelection
-                        }
-
-                        QGCLabel {
-                            Layout.columnSpan: 2
-                            Layout.alignment: Qt.AlignHCenter
-                            Layout.fillWidth: true
-                            wrapMode: Text.WordWrap
-                            font.pointSize: ScreenTools.smallFontPointSize
-                            text: qsTr("The following speed values are used to calculate total mission time. They do not affect the flight speed for the mission.")
-                            visible: defaultsRect._showCruiseSpeed || defaultsRect._showHoverSpeed
-                        }
-
-                        QGCLabel {
-                            text: qsTr("Cruise speed")
-                            visible: defaultsRect._showCruiseSpeed
-                            Layout.fillWidth: true
-                        }
-                        FactTextField {
-                            fact: QGroundControl.settingsManager.appSettings.offlineEditingCruiseSpeed
-                            visible: defaultsRect._showCruiseSpeed
-                            Layout.preferredWidth: defaultsRect._fieldWidth
-                        }
-
-                        QGCLabel {
-                            text: qsTr("Hover speed")
-                            visible: defaultsRect._showHoverSpeed
-                            Layout.fillWidth: true
-                        }
-                        FactTextField {
-                            fact: QGroundControl.settingsManager.appSettings.offlineEditingHoverSpeed
-                            visible: defaultsRect._showHoverSpeed
-                            Layout.preferredWidth: defaultsRect._fieldWidth
-                        }
-                    }
-
-                    // ── Launch Position ──
-                    SectionHeader {
-                        id: plannedHomePositionSection
-                        Layout.fillWidth: true
-                        text: qsTr("Launch Position")
-                        visible: !defaultsRect._vehicleHasHomePosition
-                        checked: false
-                    }
-
-                    GridLayout {
-                        Layout.fillWidth: true
-                        columnSpacing: ScreenTools.defaultFontPixelWidth
-                        rowSpacing: columnSpacing
-                        columns: 2
-                        visible: plannedHomePositionSection.checked && !defaultsRect._vehicleHasHomePosition
-
-                        QGCLabel {
-                            text: qsTr("Altitude")
-                        }
-                        FactTextField {
-                            fact: defaultsRect._settingsItem ? defaultsRect._settingsItem.plannedHomePositionAltitude : null
-                            Layout.fillWidth: true
-                        }
-                    }
-
-                    QGCLabel {
-                        Layout.fillWidth: true
-                        wrapMode: Text.WordWrap
-                        font.pointSize: ScreenTools.smallFontPointSize
-                        text: qsTr("Actual position set by vehicle at flight time.")
-                        horizontalAlignment: Text.AlignHCenter
-                        visible: plannedHomePositionSection.checked && !defaultsRect._vehicleHasHomePosition
-                    }
-
-                    QGCButton {
-                        text: qsTr("Set To Map Center")
-                        Layout.alignment: Qt.AlignHCenter
-                        visible: plannedHomePositionSection.checked && !defaultsRect._vehicleHasHomePosition
-                        onClicked: {
-                            if (defaultsRect._settingsItem) {
-                                defaultsRect._settingsItem.coordinate = root.editorMap.center
-                            }
-                        }
-                    }
-                }
+                missionController: root._missionController
+                planMasterController: root.planMasterController
             }
         }
 
@@ -457,7 +233,9 @@ TreeView {
             MissionItemEditor {
                 width: delegateRoot.width
                 map: root.editorMap
+                masterController: root.planMasterController
                 missionItem: delegateRoot.nodeObject
+                readOnly: false
 
                 onClicked:  root._missionController.setCurrentPlanViewSeqNum(delegateRoot.nodeObject.sequenceNumber, false)
 
@@ -509,6 +287,16 @@ TreeView {
                 width: delegateRoot.width
                 rallyPoint: delegateRoot.nodeObject
                 controller: root._rallyPointController
+            }
+        }
+
+        // ── Transform editor (single child of transform group) ──
+        Component {
+            id: transformEditorComponent
+
+            TransformEditor {
+                width: delegateRoot.width
+                missionController: root._missionController
             }
         }
     }

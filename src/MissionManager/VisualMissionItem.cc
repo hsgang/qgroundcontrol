@@ -181,6 +181,11 @@ void VisualMissionItem::_updateTerrainAltitude(void)
     _terrainAltitude = qQNaN();
     emit terrainAltitudeChanged(qQNaN());
 
+    if (_terrainQueryFailed) {
+        _terrainQueryFailed = false;
+        emit terrainQueryFailedChanged(_terrainQueryFailed);
+    }
+
     if (!_flyView && specifiesCoordinate() && coordinate().isValid()) {
         // We use a timer so that any additional requests before the timer fires result in only a single request
         _updateTerrainTimer.start();
@@ -210,6 +215,11 @@ void VisualMissionItem::_terrainDataReceived(bool success, QList<double> heights
     _terrainAltitude = success ? heights[0] : qQNaN();
     emit terrainAltitudeChanged(_terrainAltitude);
     _currentTerrainAtCoordinateQuery = nullptr;
+
+    if (_terrainQueryFailed != !success) {
+        _terrainQueryFailed = !success;
+        emit terrainQueryFailedChanged(_terrainQueryFailed);
+    }
 }
 
 void VisualMissionItem::_setBoundingCube(QGCGeoBoundingCube bc)

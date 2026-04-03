@@ -11,6 +11,7 @@ import QGroundControl.FlightMap
 import QGroundControl.Controls
 import QGroundControl.FactControls
 import QGroundControl.FlyView
+import QGroundControl.Toolbar
 
 Item {
     id: _root
@@ -161,8 +162,9 @@ Item {
         }
     }
 
+    // Stop tracking map center when the home position is changed externally (e.g. drag, file load)
     Connections {
-        target: _visualItems && _visualItems.count > 0 ? _visualItems.get(0) : null
+        target: _visualItems.get(0)
         function onCoordinateChanged() {
             if (!_updatingHomeFromMapCenter && !_planMasterController.containsItems) {
                 _homeTrackingMapCenter = false
@@ -176,11 +178,9 @@ Item {
         function onContainsItemsChanged() {
             if (!_planMasterController.containsItems) {
                 _homeTrackingMapCenter = true
-                if (_visualItems && _visualItems.count > 0) {
-                    _updatingHomeFromMapCenter = true
-                    _visualItems.get(0).coordinate = editorMap.center
-                    _updatingHomeFromMapCenter = false
-                }
+                _updatingHomeFromMapCenter = true
+                _visualItems.get(0).coordinate = editorMap.center
+                _updatingHomeFromMapCenter = false
             }
         }
     }
@@ -243,6 +243,7 @@ Item {
     PlanViewToolBar {
         id: planToolBar
         planMasterController: _planMasterController
+        showRallyPointsHelp: _editingLayer === _layerRally
     }
 
     Item {
@@ -278,7 +279,7 @@ Item {
             }
             onCenterChanged: {
                 QGroundControl.flightMapPosition = editorMap.center
-                if (_homeTrackingMapCenter && !_planMasterController.containsItems && _visualItems && _visualItems.count > 0) {
+                if (_homeTrackingMapCenter && !_planMasterController.containsItems) {
                     _updatingHomeFromMapCenter = true
                     _visualItems.get(0).coordinate = editorMap.center
                     _updatingHomeFromMapCenter = false
@@ -485,7 +486,7 @@ Item {
                         id: roiButton
                         text: qsTr("ROI")
                         iconSource: "/qmlimages/roi.svg"
-                        visible: toolStrip._isMissionLayer && _planMasterController.controllerVehicle.roiModeSupported
+                        visible: toolStrip._isMissionLayer && _planMasterController.controllerVehicle.supports.roiMode
                         checkable: true
                         onTriggered: { _addROIOnClick = !_addROIOnClick; if (_addROIOnClick) _addWaypointOnClick = false }
                     },
@@ -530,6 +531,7 @@ Item {
             width: _rightPanelWidth
             planMasterController: _planMasterController
             editorMap: editorMap
+            onEditingLayerChangeRequested: (layer) => _editingLayer = layer
         }
 
         // Layer switching icons — only active icon visible; click to expand choices leftward

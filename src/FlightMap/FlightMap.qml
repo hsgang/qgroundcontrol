@@ -237,7 +237,7 @@ Map {
     MapQuickItem {
         anchorPoint.x:  sourceItem.width / 2
         anchorPoint.y:  sourceItem.height / 2
-        visible:        gcsPosition.isValid
+        visible:        gcsPosition.isValid && !planView
         coordinate:     gcsPosition
 
         sourceItem: Rectangle {

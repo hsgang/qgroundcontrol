@@ -31,17 +31,17 @@ Rectangle {
         target: _root._controllerVehicle
         function onFirmwareTypeChanged() {
             if (!_root._controllerVehicle.supports.terrainFrame
-                    && _root.missionController.globalAltitudeFrame === QGroundControl.AltitudeFrameTerrain) {
-                _root.missionController.globalAltitudeFrame = QGroundControl.AltitudeFrameCalcAboveTerrain
+                    && _root.missionController.globalAltitudeMode === QGroundControl.AltitudeModeTerrainFrame) {
+                _root.missionController.globalAltitudeMode = QGroundControl.AltitudeModeCalcAboveTerrain
             }
         }
     }
 
-    Component { id: altFrameDialogComponent; AltFrameDialog { } }
+    Component { id: altModeDialogComponent; AltModeDialog { } }
 
     QGCPopupDialogFactory {
-        id: altFrameDialogFactory
-        dialogComponent: altFrameDialogComponent
+        id: altModeDialogFactory
+        dialogComponent: altModeDialogComponent
     }
 
     ColumnLayout {
@@ -54,30 +54,30 @@ Rectangle {
 
         LabelledButton {
             Layout.fillWidth: true
-            label: qsTr("Alt Frame")
-            buttonText: QGroundControl.altitudeFrameExtraUnits(_root.missionController.globalAltitudeFrame)
+            label: qsTr("Altitude Mode")
+            buttonText: QGroundControl.altitudeModeShortDescription(_root.missionController.globalAltitudeMode)
 
             onClicked: {
                 let removeModes = []
-                let updateFunction = function(altFrame) { _root.missionController.globalAltitudeFrame = altFrame }
+                let updateFunction = function(altMode) { _root.missionController.globalAltitudeMode = altMode }
                 if (!_root._controllerVehicle.supports.terrainFrame) {
-                    removeModes.push(QGroundControl.AltitudeFrameTerrain)
+                    removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
                 }
                 if (!_root._noMissionItemsAdded) {
-                    if (_root.missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameRelative) {
-                        removeModes.push(QGroundControl.AltitudeFrameRelative)
+                    if (_root.missionController.globalAltitudeMode !== QGroundControl.AltitudeModeRelative) {
+                        removeModes.push(QGroundControl.AltitudeModeRelative)
                     }
-                    if (_root.missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameAbsolute) {
-                        removeModes.push(QGroundControl.AltitudeFrameAbsolute)
+                    if (_root.missionController.globalAltitudeMode !== QGroundControl.AltitudeModeAbsolute) {
+                        removeModes.push(QGroundControl.AltitudeModeAbsolute)
                     }
-                    if (_root.missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameCalcAboveTerrain) {
-                        removeModes.push(QGroundControl.AltitudeFrameCalcAboveTerrain)
+                    if (_root.missionController.globalAltitudeMode !== QGroundControl.AltitudeModeCalcAboveTerrain) {
+                        removeModes.push(QGroundControl.AltitudeModeCalcAboveTerrain)
                     }
-                    if (_root.missionController.globalAltitudeFrame !== QGroundControl.AltitudeFrameTerrain) {
-                        removeModes.push(QGroundControl.AltitudeFrameTerrain)
+                    if (_root.missionController.globalAltitudeMode !== QGroundControl.AltitudeModeTerrainFrame) {
+                        removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
                     }
                 }
-                altFrameDialogFactory.open({ currentAltFrame: _root.missionController.globalAltitudeFrame, rgRemoveModes: removeModes, updateAltFrameFn: updateFunction })
+                altModeDialogFactory.open({ rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
             }
         }
 
