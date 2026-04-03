@@ -361,7 +361,7 @@ FirstRunPrompt {
                     font.bold: true
                     onClicked: {
                         close()
-                        mainWindow.showAppSettings(qsTr("Comm Links"))
+                        mainWindow.showSettingsTool(qsTr("Comm Links"))
                     }
                 }
             }

@@ -47,8 +47,7 @@ ToolIndicatorPage {
         if (mainWindow.allowViewSwitch()) {
             mainWindow.closeIndicatorDrawer()
             globals.commingFromRIDIndicator = true
-            //mainWindow.showSettingsTool()
-            mainWindow.showAppSettings(qsTr("Remote ID"))
+            mainWindow.showSettingsTool(qsTr("Remote ID"))
             mainWindow.closeIndicatorDrawer()
         }
     }

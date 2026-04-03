@@ -611,7 +611,7 @@ Rectangle {
                             text:       qsTr("Configure")
                             font.bold: true
                             onClicked: {
-                                mainWindow.showAppSettings(qsTr("Comm Links"))
+                                mainWindow.showSettingsTool(qsTr("Comm Links"))
                             }
                         }
 
