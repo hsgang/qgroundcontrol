@@ -14,12 +14,6 @@ TreeView {
     required property var editorMap
     required property var planMasterController
 
-    signal editingLayerChangeRequested(int layer)
-
-    readonly property int _layerMission: 1
-    readonly property int _layerFence:   2
-    readonly property int _layerRally:   3
-
     property var _missionController: planMasterController.missionController
     property var _geoFenceController: planMasterController.geoFenceController
     property var _rallyPointController: planMasterController.rallyPointController
@@ -32,8 +26,12 @@ TreeView {
     selectionBehavior: TableView.SelectionDisabled
     rowSpacing: 2
 
-    // Helper: convert a persistent model index to the current visual row
-    function _rowFor(modelIndex) { return root.rowAtIndex(modelIndex) }
+    // After collapseRecursively() groups are always at these row indices
+    readonly property int _rowPlanFile: 0
+    readonly property int _rowDefaults: 1
+    readonly property int _rowMission:  2
+    readonly property int _rowFence:    3
+    readonly property int _rowRally:    4
 
     // QGCFlickableScrollIndicator expects parent to have indicatorColor (provided by QGCFlickable/QGCListView)
     property color indicatorColor: qgcPal.text
@@ -43,49 +41,117 @@ TreeView {
     QGCFlickableScrollIndicator { parent: root; orientation: QGCFlickableScrollIndicator.Horizontal }
     QGCFlickableScrollIndicator { parent: root; orientation: QGCFlickableScrollIndicator.Vertical }
 
+    Component.onCompleted: {
+        // Expand only Mission Items by default
+        root.expand(_rowMission)
+    }
+
     Connections {
         target: root._missionController
         function onVisualItemsChanged() {
             // Mission group always expanded after rebuild (clear / load)
             root.collapseRecursively()
-            root.expand(_rowFor(_missionController.missionGroupIndex))
-            root.editingLayerChangeRequested(root._layerMission)
+            root.expand(_rowMission)
+            _editingLayer = _layerMission
         }
     }
 
-    // Public API: select a layer and expand its group. Called by the layer tool buttons.
+    // Public API: select a layer and expand its group (no toggle — always selects).
     function selectLayer(nodeType) {
+        root.collapseRecursively()
+
         let targetRow = -1
         switch (nodeType) {
         case "missionGroup":
-            targetRow = _rowFor(_missionController.missionGroupIndex)
-            editingLayerChangeRequested(_layerMission)
+            targetRow = _rowMission
+            _editingLayer = _layerMission
             break
         case "fenceGroup":
-            targetRow = _rowFor(_missionController.fenceGroupIndex)
-            editingLayerChangeRequested(_layerFence)
+            targetRow = _rowFence
+            _editingLayer = _layerFence
             break
         case "rallyGroup":
-            targetRow = _rowFor(_missionController.rallyGroupIndex)
-            editingLayerChangeRequested(_layerRally)
+            targetRow = _rowRally
+            _editingLayer = _layerRally
             break
         }
 
         if (targetRow >= 0) {
-            if (!root.isExpanded(targetRow))
-                root.expand(targetRow)
+            root.expand(targetRow)
             root.forceLayout()
             root.positionViewAtRow(targetRow, TableView.AlignTop)
         }
     }
 
-    // Toggle expand/collapse for a group header. Does not affect the editing layer.
-    function _toggleGroup(row) {
-        if (root.isExpanded(row))
-            root.collapse(row)
-        else
-            root.expand(row)
-        root.forceLayout()
+    // Switching editing layer on group expand — exclusive: only one group expanded at a time.
+    // Clicking an already-expanded group collapses it (toggle behavior).
+    function _expandExclusive(clickedNodeType) {
+        // Check if the clicked group is already expanded
+        let alreadyActive = false
+        switch (clickedNodeType) {
+        case "planFileGroup":
+            alreadyActive = root.isExpanded(_rowPlanFile)
+            break
+        case "defaultsGroup":
+            alreadyActive = root.isExpanded(_rowDefaults)
+            break
+        case "missionGroup":
+            alreadyActive = _editingLayer === _layerMission
+            break
+        case "fenceGroup":
+            alreadyActive = _editingLayer === _layerFence
+            break
+        case "rallyGroup":
+            alreadyActive = _editingLayer === _layerRally
+            break
+        default:
+            alreadyActive = false
+            break
+        }
+
+        // Collapse everything
+        root.collapseRecursively()
+
+        // If the group was already expanded, just leave everything collapsed
+        if (alreadyActive) {
+            _editingLayer = -1
+            root.forceLayout()
+            root.positionViewAtRow(0, TableView.AlignTop)
+            return
+        }
+
+        // Determine target visual row and editing layer from nodeType
+        let targetRow = -1
+        switch (clickedNodeType) {
+        case "planFileGroup":
+            targetRow = _rowPlanFile
+            _editingLayer = -1
+            break
+        case "defaultsGroup":
+            targetRow = _rowDefaults
+            _editingLayer = -1
+            break
+        case "missionGroup":
+            targetRow = _rowMission
+            _editingLayer = _layerMission
+            break
+        case "fenceGroup":
+            targetRow = _rowFence
+            _editingLayer = _layerFence
+            break
+        case "rallyGroup":
+            targetRow = _rowRally
+            _editingLayer = _layerRally
+            break
+        }
+
+        if (targetRow >= 0) {
+            root.expand(targetRow)
+            // After collapse/expand the view may still be scrolled past the new content.
+            // Force layout then scroll so the expanded group header is at the top.
+            root.forceLayout()
+            root.positionViewAtRow(targetRow, TableView.AlignTop)
+        }
     }
 
     // Coalesces multiple delegate height changes into a single forceLayout() call
@@ -112,7 +178,7 @@ TreeView {
         readonly property string nodeType: model.nodeType
 
         implicitWidth: root.width
-        implicitHeight: loader.item ? loader.item.height : 1
+        implicitHeight: loader.item ? loader.item.height : 0
         width: root.width
         height: implicitHeight
 
@@ -132,14 +198,12 @@ TreeView {
                 case "missionGroup":    return groupHeaderComponent
                 case "fenceGroup":      return groupHeaderComponent
                 case "rallyGroup":      return groupHeaderComponent
-                case "transformGroup":  return groupHeaderComponent
                 case "planFileInfo":    return planFileInfoComponent
                 case "defaultsInfo":    return defaultsEditorComponent
                 case "missionItem":     return delegateRoot.nodeObject ? missionItemComponent  : null
                 case "fenceEditor":     return delegateRoot.nodeObject ? fenceEditorComponent  : null
                 case "rallyHeader":     return delegateRoot.nodeObject ? rallyHeaderComponent  : null
                 case "rallyItem":       return delegateRoot.nodeObject ? rallyItemComponent    : null
-                case "transformEditor": return transformEditorComponent
                 default:                return null
                 }
             }
@@ -179,7 +243,7 @@ TreeView {
 
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: root._toggleGroup(delegateRoot.row)
+                    onClicked: root._expandExclusive(delegateRoot.nodeType)
                 }
             }
         }
@@ -251,17 +315,17 @@ TreeView {
                 Connections {
                     target: defaultsRect._controllerVehicle
                     function onFirmwareTypeChanged() {
-                        if (!defaultsRect._controllerVehicle.supports.terrainFrame
-                                && defaultsRect._missionController.globalAltitudeFrame === QGroundControl.AltitudeModeTerrainFrame) {
-                            defaultsRect._missionController.globalAltitudeFrame = QGroundControl.AltitudeModeCalcAboveTerrain
+                        if (!defaultsRect._controllerVehicle.supportsTerrainFrame
+                                && defaultsRect._missionController.globalAltitudeMode === QGroundControl.AltitudeModeTerrainFrame) {
+                            defaultsRect._missionController.globalAltitudeMode = QGroundControl.AltitudeModeCalcAboveTerrain
                         }
                     }
                 }
 
-                Component { id: altModeDialogComponent; AltFrameDialog { } }
+                Component { id: altModeDialogComponent; AltModeDialog { } }
 
                 QGCPopupDialogFactory {
-                    id: defaultsAltFrameDialogFactory
+                    id: defaultsAltModeDialogFactory
                     dialogComponent: altModeDialogComponent
                 }
 
@@ -276,29 +340,29 @@ TreeView {
                     LabelledButton {
                         Layout.fillWidth: true
                         label: qsTr("Altitude Mode")
-                        buttonText: QGroundControl.altitudeFrameShortDescription(defaultsRect._missionController.globalAltitudeFrame)
+                        buttonText: QGroundControl.altitudeModeShortDescription(defaultsRect._missionController.globalAltitudeMode)
 
                         onClicked: {
                             let removeModes = []
-                            let updateFunction = function(altMode) { defaultsRect._missionController.globalAltitudeFrame = altMode }
-                            if (!defaultsRect._controllerVehicle.supports.terrainFrame) {
+                            let updateFunction = function(altMode) { defaultsRect._missionController.globalAltitudeMode = altMode }
+                            if (!defaultsRect._controllerVehicle.supportsTerrainFrame) {
                                 removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
                             }
                             if (!defaultsRect._noMissionItemsAdded) {
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeRelative) {
+                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeRelative) {
                                     removeModes.push(QGroundControl.AltitudeModeRelative)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeAbsolute) {
+                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeAbsolute) {
                                     removeModes.push(QGroundControl.AltitudeModeAbsolute)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeCalcAboveTerrain) {
+                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeCalcAboveTerrain) {
                                     removeModes.push(QGroundControl.AltitudeModeCalcAboveTerrain)
                                 }
-                                if (defaultsRect._missionController.globalAltitudeFrame !== QGroundControl.AltitudeModeTerrainFrame) {
+                                if (defaultsRect._missionController.globalAltitudeMode !== QGroundControl.AltitudeModeTerrainFrame) {
                                     removeModes.push(QGroundControl.AltitudeModeTerrainFrame)
                                 }
                             }
-                            defaultsAltFrameDialogFactory.open({ rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
+                            defaultsAltModeDialogFactory.open({ rgRemoveModes: removeModes, updateAltModeFn: updateFunction })
                         }
                     }
 
@@ -459,7 +523,9 @@ TreeView {
             MissionItemEditor {
                 width: delegateRoot.width
                 map: root.editorMap
+                masterController: root.planMasterController
                 missionItem: delegateRoot.nodeObject
+                readOnly: false
 
                 onClicked:  root._missionController.setCurrentPlanViewSeqNum(delegateRoot.nodeObject.sequenceNumber, false)
 
@@ -511,16 +577,6 @@ TreeView {
                 width: delegateRoot.width
                 rallyPoint: delegateRoot.nodeObject
                 controller: root._rallyPointController
-            }
-        }
-
-        // ── Transform editor (single child of transform group) ──
-        Component {
-            id: transformEditorComponent
-
-            TransformEditor {
-                width: delegateRoot.width
-                missionController: root._missionController
             }
         }
     }
