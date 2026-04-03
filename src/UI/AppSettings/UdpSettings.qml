@@ -7,7 +7,7 @@ import QGroundControl.Controls
 
 ColumnLayout {
     spacing: _rowSpacing
-    width:  _columnLayoutWidth
+
 
     function saveSettings() {
         // No need

@@ -16,7 +16,6 @@ import QGroundControl.Controls
 
 ColumnLayout {
     spacing: _rowSpacing
-    width:  _columnLayoutWidth
 
     function saveSettings() {
         subEditConfig.gcsId = gcsIdField.text

@@ -9,7 +9,7 @@ GridLayout {
     columns:        2
     rowSpacing:     _rowSpacing
     columnSpacing:  _colSpacing
-    width:  _columnLayoutWidth
+
 
     function saveSettings() {
         subEditConfig.host = hostField.text.trim()
