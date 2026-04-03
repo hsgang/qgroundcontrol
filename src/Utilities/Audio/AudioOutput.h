@@ -37,7 +37,19 @@ public:
     static AudioOutput *instance();
 
     /// Initialize the Singleton
-    void init(Fact *volumeFact, Fact *mutedFact);
+    void init(Fact *mutedFact, Fact *volumeFact);
+
+    /// Checks if the audio output is muted.
+    ///     @return True if muted, false otherwise.
+    bool isMuted() const { return _muted; }
+
+    /// Sets the mute state of the audio output.
+    ///     @param enable True to mute, false to unmute.
+    void setMuted(bool muted);
+
+    /// Sets the volume of the audio output.
+    ///     @param volume The volume level to set (between 0.0 and 100.0).
+    void setVolume(double volume);
 
     /// Reads the specified text with optional text modifications.
     ///     @param text The text to be read.
@@ -51,18 +63,8 @@ private:
     QTextToSpeech *_engine = nullptr;
     QAtomicInteger<qsizetype> _textQueueSize = 0;
     bool _initialized = false;
-    Fact *_volumeFact = nullptr;
-    Fact *_mutedFact = nullptr;
-    double _lastVolume = -1.0;
-
-    /// Returns the current volume (0.0 - 100.0) from the settings Fact.
-    double _volumeSetting() const;
-
-    /// Returns the current muted state from the settings Fact.
-    bool _mutedSetting() const;
-
-    /// Sets the TTS engine volume from the current Fact value.
-    void _setVolume();
+    std::atomic_bool _muted = false;
+    std::atomic<double> _volume = 100.0;
 
     static const QHash<QString, QString> _textHash;
 
