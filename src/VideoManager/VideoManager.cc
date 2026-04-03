@@ -468,6 +468,15 @@ bool VideoManager::gstreamerEnabled()
 #endif
 }
 
+bool VideoManager::gstreamerD3D11Sink()
+{
+#ifdef QGC_GST_D3D11_SINK
+    return true;
+#else
+    return false;
+#endif
+}
+
 bool VideoManager::uvcEnabled()
 {
     return UVCReceiver::enabled();
