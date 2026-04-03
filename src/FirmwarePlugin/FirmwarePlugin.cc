@@ -157,13 +157,6 @@ void FirmwarePlugin::guidedModeChangeAltitude(Vehicle*, double, bool pauseVehicl
     qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
 }
 
-void FirmwarePlugin::setPositionAndVelocityTargetLocalNed(Vehicle*, double, double, double, double, double, double, double, bool pauseVehicle)
-{
-    // Not supported by generic vehicle
-    Q_UNUSED(pauseVehicle);
-    qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
-}
-
 void FirmwarePlugin::guidedModeChangeGroundSpeedMetersSecond(Vehicle*, double) const
 {
     qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
@@ -203,9 +196,6 @@ const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
     //-- Default list of indicators for all vehicles.
     if (_toolIndicatorList.isEmpty()) {
         _toolIndicatorList = QVariantList({
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/GimbalIndicator.qml")),
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/VehicleIndicator.qml")),
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/EscIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/VehicleGPSIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/GPSResilienceIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/TelemetryRSSIIndicator.qml")),
@@ -213,7 +203,8 @@ const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/SiyiRSSIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/BatteryIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/RemoteIDIndicator.qml")),
-            //QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/MessageIndicator.qml")),
+            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/GimbalIndicator.qml")),
+            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/EscIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/JoystickIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/SigningIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/MultiVehicleSelector.qml")),
