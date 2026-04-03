@@ -90,8 +90,6 @@ qt_add_qml_module(QGroundControlControlsModule
     QML_FILES
         AltFrameCombo.qml
         AltFrameDialog.qml
-        AltModeCombo.qml
-        AltModeDialog.qml
         AppSettings.qml
         APMSubMotorDisplay.qml
         AppLogging.qml
