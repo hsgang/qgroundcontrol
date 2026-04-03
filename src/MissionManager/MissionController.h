@@ -13,6 +13,8 @@
 #include "QGCGeoBoundingCube.h"
 #include "QGroundControlQmlGlobal.h"
 #include "QGCMAVLink.h"
+#include "MissionFlightStatus.h"
+#include "MissionFlightStatusCalculator.h"
 
 Q_DECLARE_LOGGING_CATEGORY(MissionControllerLog)
 
@@ -46,34 +48,10 @@ public:
     MissionController(PlanMasterController* masterController, QObject* parent = nullptr);
     ~MissionController();
 
-    typedef struct {
-        double                      maxTelemetryDistance;
-        double                      totalDistance;
-        double                      plannedDistance;
-        double                      totalTime;
-        double                      hoverDistance;
-        double                      hoverTime;
-        double                      cruiseDistance;
-        double                      cruiseTime;
-        int                         mAhBattery;             ///< 0 for not available
-        double                      hoverAmps;              ///< Amp consumption during hover
-        double                      cruiseAmps;             ///< Amp consumption during cruise
-        double                      ampMinutesAvailable;    ///< Amp minutes available from single battery
-        double                      hoverAmpsTotal;         ///< Total hover amps used
-        double                      cruiseAmpsTotal;        ///< Total cruise amps used
-        int                         batteryChangePoint;     ///< -1 for not supported, 0 for not needed
-        int                         batteriesRequired;      ///< -1 for not supported
-        double                      vehicleYaw;
-        double                      gimbalYaw;              ///< NaN signals yaw was never changed
-        double                      gimbalPitch;            ///< NaN signals pitch was never changed
-        // The following values are the state prior to executing this item
-        QGCMAVLink::VehicleClass_t  vtolMode;               ///< Either VehicleClassFixedWing, VehicleClassMultiRotor, VehicleClassGeneric (mode unknown)
-        double                      cruiseSpeed;
-        double                      hoverSpeed;
-        double                      vehicleSpeed;           ///< Either cruise or hover speed based on vehicle type and vtol state
-    } MissionFlightStatus_t;
+    // Legacy alias kept for source compatibility with external code
+    using MissionFlightStatus_t = ::MissionFlightStatus_t;
 
-    Q_PROPERTY(QmlObjectListModel*  visualItems                     READ visualItems                    NOTIFY visualItemsChanged)
+    Q_PROPERTY(QmlObjectListModel*  visualItems                     READ visualItems                    NOTIFY visualItemsReset)
     Q_PROPERTY(QmlObjectTreeModel*  visualItemsTree                 READ visualItemsTree                CONSTANT)                               ///< Tree-structured view of visualItems for TreeView
     Q_PROPERTY(QPersistentModelIndex planFileGroupIndex              READ planFileGroupIndex              CONSTANT)
     Q_PROPERTY(QPersistentModelIndex defaultsGroupIndex              READ defaultsGroupIndex              CONSTANT)
@@ -85,15 +63,15 @@ public:
     Q_PROPERTY(QmlObjectListModel*  directionArrows                 READ directionArrows                CONSTANT)
     Q_PROPERTY(QStringList          complexMissionItemNames         READ complexMissionItemNames        NOTIFY complexMissionItemNamesChanged)
     Q_PROPERTY(QGeoCoordinate       plannedHomePosition             READ plannedHomePosition            NOTIFY plannedHomePositionChanged)      ///< Includes AMSL altitude
-    Q_PROPERTY(QGeoCoordinate       previousCoordinate              MEMBER _previousCoordinate          NOTIFY previousCoordinateChanged)
+    Q_PROPERTY(bool                 homePositionSet                 READ homePositionSet                NOTIFY homePositionSetChanged)          ///< true: Home position has been set by the user
+    Q_PROPERTY(QGeoCoordinate       previousCoordinate              MEMBER _previousCoordinate          NOTIFY planViewStateChanged)
     Q_PROPERTY(FlightPathSegment*   splitSegment                    MEMBER _splitSegment                NOTIFY splitSegmentChanged)             ///< Segment which show show + split ui element
     Q_PROPERTY(double               progressPct                     READ progressPct                    NOTIFY progressPctChanged)
-    Q_PROPERTY(int                  missionItemCount                READ missionItemCount               NOTIFY missionItemCountChanged)         ///< True mission item command count (only valid in Fly View)
     Q_PROPERTY(int                  currentMissionIndex             READ currentMissionIndex            NOTIFY currentMissionIndexChanged)
     Q_PROPERTY(int                  resumeMissionIndex              READ resumeMissionIndex             NOTIFY resumeMissionIndexChanged)       ///< Returns the item index two which a mission should be resumed. -1 indicates resume mission not available.
-    Q_PROPERTY(int                  currentPlanViewSeqNum           READ currentPlanViewSeqNum          NOTIFY currentPlanViewSeqNumChanged)
-    Q_PROPERTY(int                  currentPlanViewVIIndex          READ currentPlanViewVIIndex         NOTIFY currentPlanViewVIIndexChanged)
-    Q_PROPERTY(VisualMissionItem*   currentPlanViewItem             READ currentPlanViewItem            NOTIFY currentPlanViewItemChanged)
+    Q_PROPERTY(int                  currentPlanViewSeqNum           READ currentPlanViewSeqNum          NOTIFY planViewStateChanged)
+    Q_PROPERTY(int                  currentPlanViewVIIndex          READ currentPlanViewVIIndex         NOTIFY planViewStateChanged)
+    Q_PROPERTY(VisualMissionItem*   currentPlanViewItem             READ currentPlanViewItem            NOTIFY planViewStateChanged)
     Q_PROPERTY(TakeoffMissionItem*  takeoffMissionItem              READ takeoffMissionItem             NOTIFY takeoffMissionItemChanged)
     Q_PROPERTY(double               missionTotalDistance            READ missionTotalDistance           NOTIFY missionTotalDistanceChanged)
     Q_PROPERTY(double               missionPlannedDistance          READ missionPlannedDistance         NOTIFY missionPlannedDistanceChanged)
@@ -109,24 +87,27 @@ public:
     Q_PROPERTY(QString              surveyComplexItemName           READ surveyComplexItemName          CONSTANT)
     Q_PROPERTY(QString              corridorScanComplexItemName     READ corridorScanComplexItemName    CONSTANT)
     Q_PROPERTY(QString              structureScanComplexItemName    READ structureScanComplexItemName   CONSTANT)
-    Q_PROPERTY(bool                 onlyInsertTakeoffValid          MEMBER _onlyInsertTakeoffValid      NOTIFY onlyInsertTakeoffValidChanged)
-    Q_PROPERTY(bool                 isInsertTakeoffValid            MEMBER _isInsertTakeoffValid        NOTIFY isInsertTakeoffValidChanged)
-    Q_PROPERTY(bool                 isInsertLandValid               MEMBER _isInsertLandValid           NOTIFY isInsertLandValidChanged)
+    Q_PROPERTY(bool                 onlyInsertTakeoffValid          MEMBER _onlyInsertTakeoffValid      NOTIFY planViewStateChanged)
+    Q_PROPERTY(bool                 isInsertTakeoffValid            MEMBER _isInsertTakeoffValid        NOTIFY planViewStateChanged)
+    Q_PROPERTY(bool                 isInsertLandValid               MEMBER _isInsertLandValid           NOTIFY planViewStateChanged)
     Q_PROPERTY(bool                 hasLandItem                     MEMBER _hasLandItem                 NOTIFY hasLandItemChanged)
     Q_PROPERTY(bool                 multipleLandPatternsAllowed     READ multipleLandPatternsAllowed    NOTIFY multipleLandPatternsAllowedChanged)
-    Q_PROPERTY(bool                 isROIActive                     MEMBER _isROIActive                 NOTIFY isROIActiveChanged)
-    Q_PROPERTY(bool                 isROIBeginCurrentItem           MEMBER _isROIBeginCurrentItem       NOTIFY isROIBeginCurrentItemChanged)
-    Q_PROPERTY(bool                 flyThroughCommandsAllowed       MEMBER _flyThroughCommandsAllowed   NOTIFY flyThroughCommandsAllowedChanged)
+    Q_PROPERTY(bool                 isROIActive                     MEMBER _isROIActive                 NOTIFY planViewStateChanged)
+    Q_PROPERTY(bool                 isROIBeginCurrentItem           MEMBER _isROIBeginCurrentItem       NOTIFY planViewStateChanged)
+    Q_PROPERTY(bool                 flyThroughCommandsAllowed       MEMBER _flyThroughCommandsAllowed   NOTIFY planViewStateChanged)
     Q_PROPERTY(double               minAMSLAltitude                 MEMBER _minAMSLAltitude             NOTIFY minAMSLAltitudeChanged)          ///< Minimum altitude associated with this mission. Used to calculate percentages for terrain status.
     Q_PROPERTY(double               maxAMSLAltitude                 MEMBER _maxAMSLAltitude             NOTIFY maxAMSLAltitudeChanged)          ///< Maximum altitude associated with this mission. Used to calculate percentages for terrain status.
 
-    Q_PROPERTY(QGroundControlQmlGlobal::AltMode globalAltitudeMode         READ globalAltitudeMode         WRITE setGlobalAltitudeMode NOTIFY globalAltitudeModeChanged)
-    Q_PROPERTY(QGroundControlQmlGlobal::AltMode globalAltitudeModeDefault  READ globalAltitudeModeDefault  NOTIFY globalAltitudeModeChanged)                               ///< Default to use for newly created items
+    Q_PROPERTY(QGroundControlQmlGlobal::AltitudeFrame globalAltitudeFrame         READ globalAltitudeFrame         WRITE setGlobalAltitudeFrame NOTIFY globalAltitudeFrameChanged)
+    Q_PROPERTY(QGroundControlQmlGlobal::AltitudeFrame globalAltitudeFrameDefault  READ globalAltitudeFrameDefault  NOTIFY globalAltitudeFrameChanged)                               ///< Default to use for newly created items
 
     Q_INVOKABLE void removeVisualItem(int viIndex);
 
     /// Returns the visual item index for the given VisualMissionItem object, or -1 if not found
     Q_INVOKABLE int visualItemIndexForObject(QObject* object) const;
+
+    /// Set the planned home position from a map click
+    Q_INVOKABLE void setHomePosition(QGeoCoordinate coordinate);
 
     /// Add a new simple mission item to the list
     ///     @param coordinate: Coordinate for item
@@ -285,6 +266,7 @@ public:
     QmlObjectListModel* directionArrows             (void) { return &_directionArrows; }
     QStringList         complexMissionItemNames     (void) const;
     QGeoCoordinate      plannedHomePosition         (void) const;
+    bool                homePositionSet             (void) const;
     VisualMissionItem*  currentPlanViewItem         (void) const { return _currentPlanViewItem; }
     TakeoffMissionItem* takeoffMissionItem          (void) const { return _takeoffMissionItem; }
     double              progressPct                 (void) const { return _progressPct; }
@@ -296,7 +278,6 @@ public:
     double              minAMSLAltitude             (void) const { return _minAMSLAltitude; }
     double              maxAMSLAltitude             (void) const { return _maxAMSLAltitude; }
 
-    int missionItemCount            (void) const { return _missionItemCount; }
     int currentMissionIndex         (void) const;
     int resumeMissionIndex          (void) const;
     int currentPlanViewSeqNum       (void) const { return _currentPlanViewSeqNum; }
@@ -317,9 +298,9 @@ public:
     bool isFirstLandingComplexItem  (const LandingComplexItem* item) const;
     bool isEmpty                    (void) const;
 
-    QGroundControlQmlGlobal::AltMode globalAltitudeMode(void);
-    QGroundControlQmlGlobal::AltMode globalAltitudeModeDefault(void);
-    void setGlobalAltitudeMode(QGroundControlQmlGlobal::AltMode altMode);
+    QGroundControlQmlGlobal::AltitudeFrame globalAltitudeFrame(void);
+    QGroundControlQmlGlobal::AltitudeFrame globalAltitudeFrameDefault(void);
+    void setGlobalAltitudeFrame(QGroundControlQmlGlobal::AltitudeFrame altFrame);
 
     // Top-level group row indices in _visualItemsTree (must match _setupTreeModel order)
     static constexpr int kPlanFileGroupRow = 0;
@@ -331,7 +312,7 @@ public:
     static constexpr int kGroupCount       = 6;
 
 signals:
-    void visualItemsChanged                 (void);
+    void visualItemsReset                   (void);
     void splitSegmentChanged                (void);
     void newItemsFromVehicle                (void);
     void missionTotalDistanceChanged        (double missionTotalDistance);
@@ -349,29 +330,20 @@ signals:
     void batteryChangePointChanged          (int batteryChangePoint);
     void batteriesRequiredChanged           (int batteriesRequired);
     void plannedHomePositionChanged         (QGeoCoordinate plannedHomePosition);
+    void homePositionSetChanged              (void);
     void progressPctChanged                 (double progressPct);
     void currentMissionIndexChanged         (int currentMissionIndex);
-    void currentPlanViewSeqNumChanged       (void);
-    void currentPlanViewVIIndexChanged      (void);
-    void currentPlanViewItemChanged         (void);
+    void planViewStateChanged               (void);  ///< All plan-view properties are recomputed together in setCurrentPlanViewSeqNum, so one signal covers them all
     void takeoffMissionItemChanged          (void);
     void missionBoundingCubeChanged         (void);
-    void missionItemCountChanged            (int missionItemCount);
-    void onlyInsertTakeoffValidChanged      (void);
-    void isInsertTakeoffValidChanged        (void);
-    void isInsertLandValidChanged           (void);
     void hasLandItemChanged                 (void);
     void multipleLandPatternsAllowedChanged (void);
-    void isROIActiveChanged                 (void);
-    void isROIBeginCurrentItemChanged       (void);
-    void flyThroughCommandsAllowedChanged   (void);
-    void previousCoordinateChanged          (void);
     void minAMSLAltitudeChanged             (double minAMSLAltitude);
     void maxAMSLAltitudeChanged             (double maxAMSLAltitude);
     void recalcTerrainProfile               (void);
     void _recalcMissionFlightStatusSignal   (void);
     void _recalcFlightPathSegmentsSignal    (void);
-    void globalAltitudeModeChanged          (void);
+    void globalAltitudeFrameChanged          (void);
 
 private slots:
     void _newMissionItemsAvailableFromVehicle   (bool removeAllRequested);
@@ -380,7 +352,6 @@ private slots:
     void _currentMissionIndexChanged            (int sequenceNumber);
     void _recalcFlightPathSegments              (void);
     void _recalcMissionFlightStatus             (void);
-    void _updateContainsItems                   (void);
     void _progressPctChanged                    (double progressPct);
     void _visualItemsDirtyChanged               (bool dirty);
     void _managerSendComplete                   (bool error);
@@ -391,42 +362,36 @@ private slots:
     void _managerVehicleChanged                 (Vehicle* managerVehicle);
     void _forceRecalcOfAllowedBits              (void);
     // Incremental tree model sync slots
-    void _onMissionItemsInserted                (const QModelIndex& parent, int first, int last);
-    void _onMissionItemsAboutToBeRemoved         (const QModelIndex& parent, int first, int last);
-    void _onMissionItemsReset                   (void);
-    void _onRallyPointsInserted                 (const QModelIndex& parent, int first, int last);
-    void _onRallyPointsAboutToBeRemoved          (const QModelIndex& parent, int first, int last);
-    void _onRallyPointsReset                    (void);
+    void _syncTreeMissionItemsInserted                (const QModelIndex& parent, int first, int last);
+    void _syncTreeMissionItemsAboutToBeRemoved         (const QModelIndex& parent, int first, int last);
+    void _syncTreeMissionItemsReset                   (void);
+    void _syncTreeRallyPointsInserted                 (const QModelIndex& parent, int first, int last);
+    void _syncTreeRallyPointsAboutToBeRemoved          (const QModelIndex& parent, int first, int last);
+    void _syncTreeRallyPointsRemoved                   (const QModelIndex& parent, int first, int last);
+
+    void _syncTreeRallyPointsReset                    (void);
 private:
     void                    _init                               (void);
     void                    _setupTreeModel                     (void);
     void                    _recalcSequence                     (void);
     void                    _recalcChildItems                   (void);
     void                    _recalcAllWithCoordinate            (const QGeoCoordinate& coordinate);
-    void                    _recalcROISpecialVisuals            (void);
+    void                    _setupNewVisualItems                (QmlObjectListModel* newItems = nullptr);
     void                    _initAllVisualItems                 (void);
     void                    _deinitAllVisualItems               (void);
     void                    _initVisualItem                     (VisualMissionItem* item);
     void                    _deinitVisualItem                   (VisualMissionItem* item);
     void                    _setupActiveVehicle                 (Vehicle* activeVehicle, bool forceLoadFromVehicle);
-    void                    _calcPrevWaypointValues             (VisualMissionItem* currentItem, VisualMissionItem* prevItem, double* azimuth, double* distance, double* altDifference);
-    bool                    _findPreviousAltitude               (int newIndex, double* prevAltitude, QGroundControlQmlGlobal::AltMode* prevAltMode);
+    bool                    _findPreviousAltitude               (int newIndex, double* prevAltitude, QGroundControlQmlGlobal::AltitudeFrame* prevAltFrame);
     MissionSettingsItem*    _addMissionSettings                 (QmlObjectListModel* visualItems);
-    bool                    _loadJsonMissionFile                (const QByteArray& bytes, QmlObjectListModel* visualItems, QString& errorString);
-    bool                    _loadJsonMissionFileV1              (const QJsonObject& json, QmlObjectListModel* visualItems, QString& errorString);
     bool                    _loadJsonMissionFileV2              (const QJsonObject& json, QmlObjectListModel* visualItems, QString& errorString);
     bool                    _loadTextMissionFile                (QTextStream& stream, QmlObjectListModel* visualItems, QString& errorString);
     int                     _nextSequenceNumber                 (void);
     void                    _scanForAdditionalSettings          (QmlObjectListModel* visualItems, PlanMasterController* masterController);
     void                    _setPlannedHomePositionFromFirstCoordinate(const QGeoCoordinate& clickCoordinate);
     void                    _resetMissionFlightStatus           (void);
-    void                    _addHoverTime                       (double hoverTime, double hoverDistance, int waypointIndex);
-    void                    _addCruiseTime                      (double cruiseTime, double cruiseDistance, int wayPointIndex);
-    void                    _updateBatteryInfo                  (int waypointIndex);
-    bool                    _loadItemsFromJson                  (const QJsonObject& json, QmlObjectListModel* visualItems, QString& errorString);
     void                    _initLoadedVisualItems              (QmlObjectListModel* loadedVisualItems);
     FlightPathSegment*      _addFlightPathSegment               (FlightPathSegmentHashTable& prevItemPairHashTable, VisualItemPair& pair, bool mavlinkTerrainFrame);
-    void                    _addTimeDistance                    (bool vtolInHover, double hoverTime, double cruiseTime, double extraTime, double distance, int seqNum);
     VisualMissionItem*      _insertSimpleMissionItemWorker      (QGeoCoordinate coordinate, MAV_CMD command, int visualItemIndex, bool makeCurrentItem);
     void                    _insertComplexMissionItemWorker     (const QGeoCoordinate& mapCenterCoordinate, ComplexMissionItem* complexItem, int visualItemIndex, bool makeCurrentItem);
     bool                    _isROIBeginItem                     (SimpleMissionItem* simpleItem);
@@ -435,7 +400,6 @@ private:
     void                    _allItemsRemoved                    (void);
     void                    _firstItemAdded                     (void);
 
-    static double           _calcDistanceToHome                 (VisualMissionItem* currentItem, VisualMissionItem* homeItem);
     static double           _normalizeLat                       (double lat);
     static double           _normalizeLon                       (double lon);
     static bool             _convertToMissionItems              (QmlObjectListModel* visualMissionItems, QList<MissionItem*>& rgMissionItems, QObject* missionItemParent);
@@ -444,7 +408,6 @@ private:
     Vehicle*                    _controllerVehicle =            nullptr;
     Vehicle*                    _managerVehicle =               nullptr;
     MissionManager*             _missionManager =               nullptr;
-    int                         _missionItemCount =             0;
     QmlObjectListModel*         _visualItems =                  nullptr;
     QPersistentModelIndex       _planFileGroupIndex;            ///< Persistent index for "Plan File" group in tree
     QPersistentModelIndex       _defaultsGroupIndex;            ///< Persistent index for "Defaults" group in tree
@@ -472,6 +435,7 @@ private:
     bool                        _firstItemsFromVehicle =        false;
     bool                        _itemsRequested =               false;
     bool                        _inRecalcSequence =             false;
+    MissionFlightStatusCalculator _flightStatusCalc;
     MissionFlightStatus_t       _missionFlightStatus;
     AppSettings*                _appSettings =                  nullptr;
     double                      _progressPct =                  0;
@@ -496,10 +460,9 @@ private:
     double                      _maxAMSLAltitude =              0;
     bool                        _missionContainsVTOLTakeoff =   false;
 
-    QGroundControlQmlGlobal::AltMode _globalAltMode = QGroundControlQmlGlobal::AltitudeModeRelative;
+    QGroundControlQmlGlobal::AltitudeFrame _globalAltFrame = QGroundControlQmlGlobal::AltitudeFrameRelative;
 
     static constexpr const char* _settingsGroup =                 "MissionController";
-    static constexpr const char* _jsonFileTypeValue =             "Mission";
     static constexpr const char* _jsonItemsKey =                  "items";
     static constexpr const char* _jsonPlannedHomePositionKey =    "plannedHomePosition";
     static constexpr const char* _jsonFirmwareTypeKey =           "firmwareType";
@@ -508,10 +471,6 @@ private:
     static constexpr const char* _jsonHoverSpeedKey =             "hoverSpeed";
     static constexpr const char* _jsonParamsKey =                 "params";
     static constexpr const char* _jsonGlobalPlanAltitudeModeKey = "globalPlanAltitudeMode";
-
-    // Deprecated V1 format keys
-    static constexpr const char* _jsonComplexItemsKey =           "complexItems";
-    static constexpr const char* _jsonMavAutopilotKey =           "MAV_AUTOPILOT";
 
     static constexpr int   _missionFileVersion =            2;
 };
