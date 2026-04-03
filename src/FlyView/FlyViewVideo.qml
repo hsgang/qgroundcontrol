@@ -81,9 +81,7 @@ Item {
     OnScreenGimbalController {
         id:                      onScreenGimbalController
         anchors.fill:            parent
-        screenX:                 flyViewVideoMouseArea.mouseX
-        screenY:                 flyViewVideoMouseArea.mouseY
-        cameraTrackingEnabled:   videoStreaming._camera && videoStreaming._camera.trackingEnabled
+        cameraTrackingEnabled:   !!(videoStreaming._camera && videoStreaming._camera.trackingEnabled)
     }
 
     MouseArea {
