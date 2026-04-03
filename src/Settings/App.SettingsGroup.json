@@ -341,6 +341,40 @@
             "type": "string",
             "default": "",
             "label": "Comma separated list of favorite parameter names."
+        },
+        {
+            "name": "saveSensorLog",
+            "shortDesc": "Save sensor log",
+            "type": "bool",
+            "default": false,
+            "label": "Save Sensor Log"
+        },
+        {
+            "name": "rateSaveSensorLog",
+            "shortDesc": "Rate to save sensor log (Hz)",
+            "type": "uint32",
+            "default": 1,
+            "min": 1,
+            "max": 50,
+            "label": "Sensor Log Rate"
+        },
+        {
+            "name": "preferredFirmwareClass",
+            "shortDesc": "Preferred firmware class",
+            "type": "uint32",
+            "enumStrings": "All,PX4 Pro,ArduPilot",
+            "enumValues": "0,12,3",
+            "default": 0,
+            "label": "Preferred Firmware"
+        },
+        {
+            "name": "preferredVehicleClass",
+            "shortDesc": "Preferred vehicle class",
+            "type": "uint32",
+            "enumStrings": "All,Multi-Rotor,Fixed Wing,VTOL,Rover,Sub",
+            "enumValues": "0,2,1,19,10,12",
+            "default": 0,
+            "label": "Preferred Vehicle"
         }
     ]
 }
