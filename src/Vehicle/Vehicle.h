@@ -19,6 +19,7 @@
 #include "SysStatusSensorInfo.h"
 #include "VehicleFactGroup.h"
 #include "VehicleLinkManager.h"
+#include "VehicleTypes.h"
 
 class Actuators;
 class AtmosphericSensorFactGroup;
