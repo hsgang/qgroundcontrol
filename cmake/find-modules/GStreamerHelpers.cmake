@@ -420,10 +420,10 @@ function(gstreamer_install_libs)
     foreach(_prefix IN LISTS _blocked_prefixes)
         cmake_path(IS_PREFIX _prefix "${ARG_SOURCE_DIR}" NORMALIZE _is_system)
         if(_is_system)
-            message(FATAL_ERROR
-                "gstreamer_install_libs: refusing to copy from system/shared prefix '${ARG_SOURCE_DIR}'.\n"
-                "This function copies ALL shared libraries unfiltered. Use an auto-downloaded SDK "
-                "or set GStreamer_ROOT_DIR to an isolated installation.")
+            message(WARNING
+                "gstreamer_install_libs: skipping copy from system/shared prefix '${ARG_SOURCE_DIR}'.\n"
+                "DLLs must be available at runtime via PATH or manual deployment.")
+            return()
         endif()
     endforeach()
 
