@@ -87,6 +87,16 @@
             "visible": "QGroundControl.settingsManager.videoSettings.userVisible"
         },
         {
+            "name": "WebRTC",
+            "url": "qrc:/qml/QGroundControl/AppSettings/WebRTCSettings.qml",
+            "icon": "qrc:/InstrumentValueIcons/camera.svg"
+        },
+        {
+            "name": "Cloud",
+            "url": "qrc:/qml/QGroundControl/AppSettings/CloudSettings.qml",
+            "icon": "qrc:/InstrumentValueIcons/cloud.svg"
+        },
+        {
             "divider": true
         },
         {
