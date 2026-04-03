@@ -498,13 +498,13 @@ void PX4FirmwarePlugin::guidedModeChangeAltitude(Vehicle* vehicle, double altitu
         handlerInfo.resultHandlerData   = resultData;
 
         vehicle->sendMavCommandWithHandler(
-            &handlerInfo,
-            vehicle->defaultComponentId(),
-            MAV_CMD_DO_REPOSITION,
-            -1.0f,                                  // Don't change groundspeed
-            MAV_DO_REPOSITION_FLAGS_CHANGE_MODE,
-            0.0f,                                   // Reserved
-            qQNaN(), qQNaN(), qQNaN(), qQNaN());    // No change to yaw, lat, lon, alt
+                    &handlerInfo,
+                    vehicle->defaultComponentId(),
+                    MAV_CMD_DO_REPOSITION,
+                    -1.0f,                                  // Don't change groundspeed
+                    MAV_DO_REPOSITION_FLAGS_CHANGE_MODE,
+                    0.0f,                                   // Reserved
+                    qQNaN(), qQNaN(), qQNaN(), qQNaN());    // No change to yaw, lat, lon, alt
     } else {
         _changeAltAfterPause(resultData, true /* pauseSucceeded */);
     }

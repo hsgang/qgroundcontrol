@@ -535,18 +535,21 @@ QList<MAV_CMD> APMFirmwarePlugin::supportedMissionCommands(QGCMAVLink::VehicleCl
 {
     QList<MAV_CMD> supportedCommands = {
         MAV_CMD_NAV_WAYPOINT,
+        MAV_CMD_NAV_LOITER_UNLIM, MAV_CMD_NAV_LOITER_TURNS, MAV_CMD_NAV_LOITER_TIME,
         MAV_CMD_NAV_RETURN_TO_LAUNCH,
         MAV_CMD_NAV_CONTINUE_AND_CHANGE_ALT,
+        MAV_CMD_NAV_LOITER_TO_ALT,
         MAV_CMD_NAV_SPLINE_WAYPOINT,
         MAV_CMD_NAV_GUIDED_ENABLE,
         MAV_CMD_NAV_DELAY,
-        //MAV_CMD_CONDITION_DELAY, MAV_CMD_CONDITION_DISTANCE, MAV_CMD_CONDITION_YAW,
+        MAV_CMD_CONDITION_DELAY, MAV_CMD_CONDITION_DISTANCE, MAV_CMD_CONDITION_YAW,
         MAV_CMD_DO_SET_MODE,
         MAV_CMD_DO_JUMP,
         MAV_CMD_DO_CHANGE_SPEED,
         MAV_CMD_DO_SET_HOME,
         MAV_CMD_DO_SET_RELAY, MAV_CMD_DO_REPEAT_RELAY,
         MAV_CMD_DO_SET_SERVO, MAV_CMD_DO_REPEAT_SERVO,
+        MAV_CMD_DO_LAND_START,
         MAV_CMD_DO_SET_ROI,
         MAV_CMD_DO_DIGICAM_CONFIGURE, MAV_CMD_DO_DIGICAM_CONTROL,
         MAV_CMD_DO_MOUNT_CONTROL,
@@ -557,17 +560,16 @@ QList<MAV_CMD> APMFirmwarePlugin::supportedMissionCommands(QGCMAVLink::VehicleCl
         MAV_CMD_DO_PARACHUTE,
         MAV_CMD_DO_INVERTED_FLIGHT,
         MAV_CMD_DO_GRIPPER,
-        //MAV_CMD_DO_GUIDED_LIMITS,
-        //MAV_CMD_DO_AUTOTUNE_ENABLE,
+        MAV_CMD_DO_GUIDED_LIMITS,
+        MAV_CMD_DO_AUTOTUNE_ENABLE,
     };
 
     QList<MAV_CMD> vtolCommands = {
         MAV_CMD_NAV_VTOL_TAKEOFF, MAV_CMD_NAV_VTOL_LAND, MAV_CMD_DO_VTOL_TRANSITION,
-        MAV_CMD_NAV_LOITER_UNLIM, MAV_CMD_NAV_LOITER_TURNS, MAV_CMD_NAV_LOITER_TIME, MAV_CMD_NAV_LOITER_TO_ALT,
     };
 
     QList<MAV_CMD> flightCommands = {
-        MAV_CMD_NAV_LAND, MAV_CMD_NAV_TAKEOFF, MAV_CMD_DO_LAND_START,
+        MAV_CMD_NAV_LAND, MAV_CMD_NAV_TAKEOFF,
     };
 
     if (vehicleClass == QGCMAVLink::VehicleClassGeneric) {
@@ -902,47 +904,7 @@ void APMFirmwarePlugin::guidedModeChangeAltitude(Vehicle *vehicle, double altitu
             sharedLink->mavlinkChannel(),
             &msg,
             &cmd
-            );
-
-        (void) vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
-    }
-}
-
-void APMFirmwarePlugin::setPositionAndVelocityTargetLocalNed(Vehicle* vehicle, double xValue, double yValue, double zValue, double vxValue, double vyValue, double vzValue, double yaw, bool pauseVehicle)
-{
-    if (pauseVehicle && !_setFlightModeAndValidate(vehicle, pauseFlightMode())) {
-        qgcApp()->showAppMessage(tr("Unable to pause vehicle."));
-        return;
-    }
-
-    setGuidedMode(vehicle, true);
-
-    SharedLinkInterfacePtr sharedLink = vehicle->vehicleLinkManager()->primaryLink().lock();
-    if (sharedLink) {
-        mavlink_message_t                       msg;
-        mavlink_set_position_target_local_ned_t cmd;
-
-        memset(&cmd, 0, sizeof(cmd));
-
-        cmd.target_system    = static_cast<uint8_t>(vehicle->id());
-        cmd.target_component = static_cast<uint8_t>(vehicle->defaultComponentId());
-        cmd.coordinate_frame = MAV_FRAME_BODY_NED;
-        // type_mask: 0xFBF8 = position and yaw valid, 0xFC78 = position, velocity and yaw valid
-        cmd.type_mask = 0x09C0; // Position, velocity and yaw valid
-        cmd.x = static_cast<float>(xValue);
-        cmd.y = static_cast<float>(yValue);
-        cmd.z = static_cast<float>(-zValue);
-        cmd.vx = static_cast<float>(vxValue);
-        cmd.vy = static_cast<float>(vyValue);
-        cmd.vz = static_cast<float>(-vzValue);
-        cmd.yaw = static_cast<float>(yaw);
-
-        mavlink_msg_set_position_target_local_ned_encode_chan(
-            static_cast<uint8_t>(MAVLinkProtocol::instance()->getSystemId()),
-            static_cast<uint8_t>(MAVLinkProtocol::getComponentId()),
-            sharedLink->mavlinkChannel(),
-            &msg,
-            &cmd);
+        );
 
         (void) vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
     }
