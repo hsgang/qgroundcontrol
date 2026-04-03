@@ -12,9 +12,9 @@ Item {
     anchors.bottom: parent.bottom
 
     property var _siyi:                     QGroundControl.siyi
-    property SiYiTransmitter transmitter:   _siyi.transmitter
+    property var transmitter:               _siyi ? _siyi.transmitter : null
 
-    property bool showIndicator:            transmitter.isConnected
+    property bool showIndicator:            transmitter ? transmitter.isConnected : false
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
     property real _columnSpacing:   ScreenTools.defaultFontPixelHeight / 3
     property real _margins:         ScreenTools.defaultFontPixelHeight / 2
@@ -37,7 +37,7 @@ Item {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
                 size:                       parent.height * 0.9
-                percent:                    transmitter.signalQuality
+                percent:                    transmitter ? transmitter.signalQuality : 0
             }
 
             QGCColoredImage {
@@ -60,13 +60,13 @@ Item {
                 anchors.left:   parent.left
                 font.pointSize: ScreenTools.smallFontPointSize
                 color:          qgcPal.text
-                text:           (transmitter.downStream / 1024).toFixed(0) + "KB"
+                text:           transmitter ? (transmitter.downStream / 1024).toFixed(0) + "KB" : ""
             }
 
             QGCLabel {
                 anchors.left:   parent.left
                 color:          qgcPal.text
-                text:           transmitter.rssi
+                text:           transmitter ? transmitter.rssi : ""
             }
         }
     }
