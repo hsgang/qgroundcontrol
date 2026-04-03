@@ -129,7 +129,7 @@ def walkDirectoryTreeForJsonFiles(dir, multiFileLocArray):
             walkDirectoryTreeForJsonFiles(path, multiFileLocArray)
 
 
-def writeJsonTSFile(multiFileLocArray):
+def writeJsonTSFile(output_path, multiFileLocArray):
     ts_root = ET.Element("TS", version="2.1")
 
     for entry in multiFileLocArray:
@@ -167,7 +167,7 @@ def writeJsonTSFile(multiFileLocArray):
             ET.SubElement(message, "source").text = sourceStr
             ET.SubElement(message, "translation", type="unfinished")
 
-    with open("translations/qgc-json.ts", "w", encoding="utf-8") as jsonTSFile:
+    with open(output_path, "w", encoding="utf-8") as jsonTSFile:
         jsonTSFile.write('<?xml version="1.0" encoding="utf-8"?>\n')
         jsonTSFile.write("<!DOCTYPE TS>\n")
         jsonTSFile.write(ET.tostring(ts_root, encoding="unicode"))
@@ -175,9 +175,13 @@ def writeJsonTSFile(multiFileLocArray):
 
 
 def main():
+    # Resolve repo root from script location so CWD doesn't matter
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    repo_root = os.path.normpath(os.path.join(script_dir, "..", ".."))
+
     multiFileLocArray = []
-    walkDirectoryTreeForJsonFiles("../src", multiFileLocArray)
-    writeJsonTSFile(multiFileLocArray)
+    walkDirectoryTreeForJsonFiles(os.path.join(repo_root, "src"), multiFileLocArray)
+    writeJsonTSFile(os.path.join(repo_root, "translations", "qgc-json.ts"), multiFileLocArray)
 
 
 if __name__ == "__main__":
