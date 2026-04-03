@@ -215,6 +215,12 @@ void GstVideoReceiver::start(uint32_t timeout)
     }
 }
 
+void GstVideoReceiver::enableInternalRtpMode(InternalCodec codec)
+{
+    _useInternalRtp = true;
+    _internalCodec = codec;
+}
+
 void GstVideoReceiver::pushRtpPacket(const QByteArray &packet)
 {
     if (_needDispatch()) {
@@ -244,6 +250,70 @@ void GstVideoReceiver::pushRtpPacket(const QByteArray &packet)
     g_signal_emit_by_name(_appsrc, "push-buffer", buffer, &flow);
     gst_buffer_unref(buffer);
     _appsrcDataPushed = true;
+}
+
+GstElement *GstVideoReceiver::_makeInternalRtpSource()
+{
+    GstElement *bin = nullptr;
+    GstElement *appsrc = nullptr;
+    GstElement *jitter = nullptr;
+    GstElement *depay = nullptr;
+    GstElement *parser = nullptr;
+
+    do {
+        bin = gst_bin_new("internalrtpsrc");
+        if (!bin) { qCCritical(GstVideoReceiverLog) << "gst_bin_new failed"; break; }
+
+        appsrc = gst_element_factory_make("appsrc", "appsrc");
+        if (!appsrc) { qCCritical(GstVideoReceiverLog) << "appsrc factory failed"; break; }
+
+        g_object_set(appsrc, "is-live", TRUE, "format", 3, "do-timestamp", TRUE, nullptr);
+
+        GstCaps *caps = nullptr;
+        if (_internalCodec == InternalCodec::H264)
+            caps = gst_caps_from_string("application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264");
+        else
+            caps = gst_caps_from_string("application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265");
+        if (!caps) { qCCritical(GstVideoReceiverLog) << "caps failed"; break; }
+        g_object_set(appsrc, "caps", caps, nullptr);
+        gst_clear_caps(&caps);
+
+        jitter = gst_element_factory_make("rtpjitterbuffer", nullptr);
+        if (!jitter) { qCCritical(GstVideoReceiverLog) << "jitterbuffer failed"; break; }
+        g_object_set(jitter, "latency", 0, nullptr);
+
+        const char *depayName = (_internalCodec == InternalCodec::H264) ? "rtph264depay" : "rtph265depay";
+        depay = gst_element_factory_make(depayName, nullptr);
+        if (!depay) { qCCritical(GstVideoReceiverLog) << depayName << " failed"; break; }
+
+        const char *parserName = (_internalCodec == InternalCodec::H264) ? "h264parse" : "h265parse";
+        parser = gst_element_factory_make(parserName, "parser");
+        if (!parser) { qCCritical(GstVideoReceiverLog) << parserName << " failed"; break; }
+
+        gst_bin_add_many(GST_BIN(bin), appsrc, jitter, depay, parser, nullptr);
+        if (!gst_element_link_many(appsrc, jitter, depay, parser, nullptr)) {
+            qCCritical(GstVideoReceiverLog) << "link failed"; break;
+        }
+
+        GstPad *srcpad = gst_element_get_static_pad(parser, "src");
+        if (!srcpad) { qCCritical(GstVideoReceiverLog) << "srcpad failed"; break; }
+        GstPad *ghostpad = gst_ghost_pad_new("src", srcpad);
+        gst_object_unref(srcpad);
+        if (!ghostpad || !gst_element_add_pad(bin, ghostpad)) {
+            qCCritical(GstVideoReceiverLog) << "ghost pad failed"; break;
+        }
+
+        _appsrc = appsrc;
+        appsrc = nullptr;
+        return bin;
+    } while (0);
+
+    gst_clear_object(&parser);
+    gst_clear_object(&depay);
+    gst_clear_object(&jitter);
+    gst_clear_object(&appsrc);
+    gst_clear_object(&bin);
+    return nullptr;
 }
 
 void GstVideoReceiver::stop()

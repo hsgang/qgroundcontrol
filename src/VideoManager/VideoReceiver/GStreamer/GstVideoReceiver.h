@@ -51,6 +51,12 @@ public:
     explicit GstVideoReceiver(QObject *parent = nullptr);
     ~GstVideoReceiver();
 
+    enum class InternalCodec {
+        H264,
+        H265
+    };
+    void enableInternalRtpMode(InternalCodec codec);
+
     void pushRtpPacket(const QByteArray &packet);
 
 public slots:
@@ -69,6 +75,7 @@ private slots:
 private:
     GstElement *_makeSource(const QString &input);
     GstElement *_makeDecoder();
+    GstElement *_makeInternalRtpSource();
     GstElement *_makeFileSink(const QString &videoFile, FILE_FORMAT format);
 
     void _onNewSourcePad(GstPad *pad);
@@ -111,6 +118,8 @@ private:
     GstElement *_tee = nullptr;
     GstElement *_appsrc = nullptr;
     bool _appsrcDataPushed = false;
+    bool _useInternalRtp = false;
+    InternalCodec _internalCodec = InternalCodec::H264;
     GstElement *_videoSink = nullptr;
     GstVideoWorker *_worker = nullptr;
     gulong _teeProbeId = 0;
