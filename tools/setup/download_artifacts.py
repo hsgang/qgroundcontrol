@@ -75,6 +75,8 @@ def _is_newer_run(candidate: dict[str, Any], existing: dict[str, Any]) -> bool:
 def select_latest_successful_runs(
     runs: list[dict[str, Any]],
     workflows: list[str],
+    *,
+    event: str = "",
 ) -> list[dict[str, Any]]:
     """Return latest completed/successful run per workflow name."""
     workflow_set = set(workflows)
@@ -85,6 +87,8 @@ def select_latest_successful_runs(
         if name not in workflow_set:
             continue
         if run.get("status") != "completed" or run.get("conclusion") != "success":
+            continue
+        if event and run.get("event") != event:
             continue
         existing = latest_by_workflow.get(name)
         if existing is None or _is_newer_run(run, existing):
@@ -100,6 +104,8 @@ def select_latest_successful_runs(
 def group_successful_runs_by_workflow(
     runs: list[dict[str, Any]],
     workflows: list[str],
+    *,
+    event: str = "",
 ) -> dict[str, list[dict[str, Any]]]:
     """Group successful runs by workflow name, newest first."""
     workflow_set = set(workflows)
@@ -110,6 +116,8 @@ def group_successful_runs_by_workflow(
         if name not in workflow_set:
             continue
         if run.get("status") != "completed" or run.get("conclusion") != "success":
+            continue
+        if event and run.get("event") != event:
             continue
         grouped[name].append(run)
 
@@ -125,10 +133,10 @@ def group_successful_runs_by_workflow(
     return grouped
 
 
-def get_workflow_runs(repo: str, head_sha: str, workflows: list[str]) -> list[dict]:
+def get_workflow_runs(repo: str, head_sha: str, workflows: list[str], *, event: str = "") -> list[dict]:
     """Return completed successful runs for the given workflows and commit."""
     all_runs = _gh_actions.list_workflow_runs_for_sha(repo, head_sha)
-    return select_latest_successful_runs(all_runs, workflows)
+    return select_latest_successful_runs(all_runs, workflows, event=event)
 
 
 def select_artifact_names_for_run(repo: str, run_id: int, prefixes: list[str]) -> list[str]:
@@ -214,6 +222,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Comma-separated workflow names to download from (default: Linux,Windows,MacOS,Android)",
     )
     parser.add_argument(
+        "--event",
+        default="",
+        choices=["", "push", "pull_request", "workflow_dispatch", "schedule"],
+        help="Optional workflow event name to filter runs by",
+    )
+    parser.add_argument(
         "--runs-file",
         default="",
         help="Path to cached workflow runs JSON (skips API call if provided)",
@@ -241,6 +255,7 @@ def main(argv: list[str] | None = None) -> int:
     head_sha = args.head_sha
     output_dir = args.output_dir
     workflows = [w.strip() for w in args.workflows.split(",") if w.strip()]
+    event = str(args.event).strip()
     artifact_prefixes = [p.strip() for p in args.artifact_prefixes.split(",") if p.strip()]
     artifact_metadata_out = Path(args.artifact_metadata_out) if args.artifact_metadata_out else None
 
@@ -267,10 +282,10 @@ def main(argv: list[str] | None = None) -> int:
     else:
         all_runs = _gh_actions.list_workflow_runs_for_sha(repo, head_sha)
     preloaded_artifacts: dict[int, list[dict[str, Any]]] = {}
-    had_successful_runs = bool(select_latest_successful_runs(all_runs, workflows))
+    had_successful_runs = bool(select_latest_successful_runs(all_runs, workflows, event=event))
     if artifact_prefixes:
         runs = []
-        grouped_runs = group_successful_runs_by_workflow(all_runs, workflows)
+        grouped_runs = group_successful_runs_by_workflow(all_runs, workflows, event=event)
         for workflow_name in workflows:
             candidates = grouped_runs.get(workflow_name, [])
             selected_run: dict[str, Any] | None = None
@@ -284,7 +299,7 @@ def main(argv: list[str] | None = None) -> int:
             if selected_run is not None:
                 runs.append(selected_run)
     else:
-        runs = select_latest_successful_runs(all_runs, workflows)
+        runs = select_latest_successful_runs(all_runs, workflows, event=event)
 
     if not runs:
         if artifact_prefixes and had_successful_runs:

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QtCore/QFuture>
 #include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(GStreamerLog)
@@ -24,6 +25,7 @@ enum VideoDecoderOptions {
     ForceVideoDecoderHardware
 };
 
+QFuture<bool> initializeAsync();
 void prepareEnvironment();
 bool initialize();
 bool completeInit();

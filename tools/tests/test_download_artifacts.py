@@ -5,12 +5,8 @@ from __future__ import annotations
 
 import json
 import subprocess
-import sys
 from pathlib import Path
 from unittest.mock import patch
-
-TOOLS_DIR = Path(__file__).parent.parent
-sys.path.insert(0, str(TOOLS_DIR))
 
 from setup import download_artifacts as mod
 
@@ -25,6 +21,7 @@ def test_parse_args_defaults() -> None:
     assert args.head_sha == "abc123"
     assert args.output_dir == Path("artifacts")
     assert args.workflows == "Linux,Windows,MacOS,Android"
+    assert args.event == ""
     assert args.artifact_prefixes == ""
     assert args.artifact_metadata_out == ""
 
@@ -76,6 +73,18 @@ def test_get_workflow_runs_keeps_latest_successful_run_per_workflow() -> None:
     by_name = {run["name"]: run["id"] for run in runs}
     assert by_name["Linux"] == 11
     assert by_name["Windows"] == 20
+
+
+def test_get_workflow_runs_filters_by_event() -> None:
+    all_runs = [
+        {"id": 10, "name": "Linux", "status": "completed", "conclusion": "success", "event": "push"},
+        {"id": 11, "name": "Linux", "status": "completed", "conclusion": "success", "event": "pull_request"},
+    ]
+
+    with patch.object(mod._gh_actions, "list_workflow_runs_for_sha", return_value=all_runs):
+        runs = mod.get_workflow_runs("owner/repo", "abc", ["Linux"], event="pull_request")
+
+    assert [run["id"] for run in runs] == [11]
 
 
 def test_download_run_artifacts_failure_returns_false() -> None:
