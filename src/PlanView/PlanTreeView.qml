@@ -237,7 +237,6 @@ TreeView {
                 map: root.editorMap
                 masterController: root.planMasterController
                 missionItem: delegateRoot.nodeObject
-                readOnly: false
 
                 onClicked:  root._missionController.setCurrentPlanViewSeqNum(delegateRoot.nodeObject.sequenceNumber, false)
 
