@@ -103,7 +103,11 @@ def detect_host_arch() -> str:
 # Common meson options for all Meson-based platforms
 MESON_COMMON = {
     'auto_features': 'disabled',
-    'gst-full-libraries': 'video,gl',
+    'introspection': 'disabled',
+    'tests': 'disabled',
+    'examples': 'disabled',
+    'gtk_doc': 'disabled',
+    'gst-full-libraries': 'app,video,audio,gl,codecparsers',
     'gpl': 'enabled',
     'libav': 'enabled',
     'orc': 'enabled',
@@ -276,6 +280,13 @@ class MesonBuilder:
         else:
             log_info(f"Using existing source at {self.config.source_dir}")
 
+    def _find_ccache(self) -> str | None:
+        """Find ccache if available."""
+        path = shutil.which('ccache')
+        if path:
+            log_info(f"Using ccache: {path}")
+        return path
+
     def get_meson_args(self) -> list:
         """Build meson configuration arguments."""
         args = [
@@ -333,6 +344,11 @@ class MesonBuilder:
         env = {}
         if self.config.qt_prefix:
             env['PKG_CONFIG_PATH'] = f"{self.config.qt_prefix}/lib/pkgconfig"
+
+        ccache = self._find_ccache()
+        if ccache:
+            env['CC'] = f'ccache cc'
+            env['CXX'] = f'ccache c++'
 
         run_cmd(args, cwd=self.config.source_dir, env=env)
 

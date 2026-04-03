@@ -290,6 +290,7 @@ void GstVideoReceiver::stop()
         GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(_pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "pipeline-stopped");
 
         gst_clear_object(&_pipeline);
+        _pipeline = nullptr;
 
         _recorderValve = nullptr;
         _decoderValve = nullptr;
@@ -370,7 +371,7 @@ void GstVideoReceiver::startDecoding(void *sink)
 
     if (!_addDecoder(_decoderValve)) {
         qCCritical(GstVideoReceiverLog) << "_addDecoder() failed" << _uri;
-        _cleanupVideoSinkOnFailure();
+        _shutdownDecodingBranch();
         _dispatchSignal([this]() { emit onStartDecodingComplete(STATUS_FAIL); });
         return;
     }
@@ -579,6 +580,7 @@ void GstVideoReceiver::_handleEOS()
     }*/
 }
 
+#if !defined(QGC_GST_BUILD_VERSION_MAJOR) || (QGC_GST_BUILD_VERSION_MAJOR == 1 && QGC_GST_BUILD_VERSION_MINOR < 28)
 gboolean GstVideoReceiver::_filterParserCaps(GstElement *bin, GstPad *pad, GstElement *element, GstQuery *query, gpointer data)
 {
     Q_UNUSED(bin); Q_UNUSED(pad); Q_UNUSED(element); Q_UNUSED(data)
@@ -618,6 +620,7 @@ gboolean GstVideoReceiver::_filterParserCaps(GstElement *bin, GstPad *pad, GstEl
 
     return FALSE;
 }
+#endif
 
 GstElement *GstVideoReceiver::_makeSource(const QString &input)
 {
@@ -725,7 +728,13 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
             break;
         }
 
+        // GStreamer < 1.28: decodebin3 didn't negotiate stream-format caps properly
+        // between parser and decoder, so we forced hvc1/avc. GStreamer 1.28+ fixes
+        // this natively, and the forced caps break hardware decoders that need
+        // byte-stream format (e.g. Qualcomm AMC on Android, D3D12 on Windows).
+#if !defined(QGC_GST_BUILD_VERSION_MAJOR) || (QGC_GST_BUILD_VERSION_MAJOR == 1 && QGC_GST_BUILD_VERSION_MINOR < 28)
         (void) g_signal_connect(parser, "autoplug-query", G_CALLBACK(_filterParserCaps), nullptr);
+#endif
 
         gst_bin_add_many(GST_BIN(bin), source, parser, nullptr);
 
@@ -902,7 +911,7 @@ void GstVideoReceiver::_onNewSourcePad(GstPad *pad)
 
     if (!_addDecoder(_decoderValve)) {
         qCCritical(GstVideoReceiverLog) << "_addDecoder() failed";
-        _cleanupVideoSinkOnFailure();
+        _shutdownDecodingBranch();
         return;
     }
 
@@ -986,7 +995,7 @@ bool GstVideoReceiver::_addDecoder(GstElement *src)
 
     if (!gst_element_link(src, _decoder)) {
         qCCritical(GstVideoReceiverLog) << "Unable to link decoder";
-        (void) gst_element_set_state(_decoder, GST_STATE_NULL);
+        gst_element_set_state(_decoder, GST_STATE_NULL);
         (void) gst_bin_remove(GST_BIN(_pipeline), _decoder);
         gst_clear_object(&_decoder);
         return false;
@@ -1079,11 +1088,7 @@ bool GstVideoReceiver::_addVideoSink(GstPad *pad)
     // on QML's paint cycle).  For live streams with hardware decoders that
     // have startup latency, this causes all frames to be silently dropped
     // after the first one.  Override after state sync so it sticks.
-    // Re-apply the configured sync value since state sync may also reset it.
-    g_object_set(_videoSink,
-                 "sync", (_buffer >= 0),
-                 "max-lateness", G_GINT64_CONSTANT(-1),
-                 nullptr);
+    g_object_set(_videoSink, "sync", FALSE, "max-lateness", G_GINT64_CONSTANT(-1), nullptr);
 
     GST_DEBUG_BIN_TO_DOT_FILE(GST_BIN(_pipeline), GST_DEBUG_GRAPH_SHOW_ALL, "pipeline-with-videosink");
 
@@ -1190,34 +1195,13 @@ bool GstVideoReceiver::_unlinkBranch(GstElement *from)
     return true;
 }
 
-void GstVideoReceiver::_cleanupVideoSinkOnFailure()
-{
-    if (_videoSinkProbeId != 0) {
-        GstPad *sinkpad = gst_element_get_static_pad(_videoSink, "sink");
-        if (sinkpad) {
-            gst_pad_remove_probe(sinkpad, _videoSinkProbeId);
-            gst_clear_object(&sinkpad);
-        }
-        _videoSinkProbeId = 0;
-    }
-
-    GstObject *parent = gst_element_get_parent(_videoSink);
-    if (parent) {
-        (void) gst_element_set_state(_videoSink, GST_STATE_NULL);
-        (void) gst_bin_remove(GST_BIN(_pipeline), _videoSink);
-        gst_clear_object(&parent);
-    }
-
-    gst_clear_object(&_videoSink);
-}
-
 void GstVideoReceiver::_shutdownDecodingBranch()
 {
     if (_decoder) {
         GstObject *parent = gst_element_get_parent(_decoder);
         if (parent) {
-            (void) gst_element_set_state(_decoder, GST_STATE_NULL);
             (void) gst_bin_remove(GST_BIN(_pipeline), _decoder);
+            (void) gst_element_set_state(_decoder, GST_STATE_NULL);
             gst_clear_object(&parent);
         }
 
@@ -1237,8 +1221,8 @@ void GstVideoReceiver::_shutdownDecodingBranch()
 
     GstObject *parent = gst_element_get_parent(_videoSink);
     if (parent) {
-        (void) gst_element_set_state(_videoSink, GST_STATE_NULL);
         (void) gst_bin_remove(GST_BIN(_pipeline), _videoSink);
+        (void) gst_element_set_state(_videoSink, GST_STATE_NULL);
         gst_clear_object(&parent);
     }
 
