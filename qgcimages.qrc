@@ -49,6 +49,8 @@
         <file alias="AirframeStandardPlane.svg">src/AutoPilotPlugins/Common/Images/Plane.svg</file>
         <file alias="AlertAircraft.svg">src/FlightMap/Images/AlertAircraft.svg</file>
         <file alias="Analyze.svg">src/UI/toolbar/Images/Analyze.svg</file>
+        <file alias="APM/BrandImage">src/FirmwarePlugin/APM/APMBrandImage.png</file>
+        <file alias="APM/BrandImageSub">src/FirmwarePlugin/APM/APMBrandImageSub.png</file>
         <file alias="APMode.svg">src/AutoPilotPlugins/Common/Images/APMode.svg</file>
         <file alias="Armed.svg">src/UI/toolbar/Images/Armed.svg</file>
         <file alias="arrow-down.png">src/QmlControls/arrow-down.png</file>
@@ -113,7 +115,7 @@
         <file alias="LandMode.svg">src/AutoPilotPlugins/PX4/Images/LandMode.svg</file>
         <file alias="LandModeCopter.svg">src/AutoPilotPlugins/PX4/Images/LandModeCopter.svg</file>
         <file alias="LightsComponentIcon.png">src/AutoPilotPlugins/APM/Images/LightsComponentIcon.png</file>
-        <file alias="OnboardLogIcon.svg">src/AnalyzeView/OnboardLogs/OnboardLogIcon.svg</file>
+        <file alias="MAVLinkLogIcon.svg">src/AnalyzeView/MAVLinkLogs/MAVLinkLogIcon.svg</file>
         <file alias="LowBattery.svg">src/AutoPilotPlugins/PX4/Images/LowBattery.svg</file>
         <file alias="LowBatteryLight.svg">src/AutoPilotPlugins/PX4/Images/LowBatteryLight.svg</file>
         <file alias="MapAddMission.svg">src/FlightMap/Images/MapAddMission.svg</file>
@@ -155,6 +157,7 @@
         <file alias="PowerComponentBattery_05cell.svg">src/AutoPilotPlugins/PX4/Images/PowerComponentBattery_05cell.svg</file>
         <file alias="PowerComponentBattery_06cell.svg">src/AutoPilotPlugins/PX4/Images/PowerComponentBattery_06cell.svg</file>
         <file alias="PowerComponentIcon.png">src/AutoPilotPlugins/Common/Images/PowerComponentIcon.png</file>
+        <file alias="PX4/BrandImage">src/FirmwarePlugin/PX4/PX4BrandImage.png</file>
         <file alias="Quad.svg">src/UI/toolbar/Images/Quad.svg</file>
         <file alias="RadioComponentIcon.png">src/AutoPilotPlugins/Common/Images/RadioComponentIcon.png</file>
         <file alias="RidEmergencyBackgroundHighlight.svg">src/UI/toolbar/Images/RidEmergencyBackgroundHighlight.svg</file>

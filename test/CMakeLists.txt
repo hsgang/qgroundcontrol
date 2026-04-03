@@ -76,7 +76,7 @@ add_qgc_test(ULogParserTest LABELS Unit AnalyzeView RESOURCE_LOCK TempFiles)
 add_qgc_test(MAVLinkChartControllerTest LABELS Unit AnalyzeView)
 add_qgc_test(MAVLinkConsoleControllerTest LABELS Unit AnalyzeView)
 add_qgc_test(MAVLinkInspectorControllerTest LABELS Unit AnalyzeView)
-add_qgc_test(OnboardLogDownloadTest LABELS Integration AnalyzeView Vehicle RESOURCE_LOCK MockLink)
+add_qgc_test(MAVLinkLogDownloadTest LABELS Integration AnalyzeView Vehicle RESOURCE_LOCK MockLink)
 add_qgc_test(MAVLinkMessageFieldTest LABELS Unit AnalyzeView)
 add_qgc_test(MAVLinkMessageTest LABELS Unit AnalyzeView)
 add_qgc_test(MAVLinkSystemTest LABELS Unit AnalyzeView)
@@ -90,8 +90,6 @@ add_qgc_test(QGCCameraManagerTest LABELS Integration Vehicle RESOURCE_LOCK MockL
 add_qgc_test(VehicleCameraControlTest LABELS Integration Vehicle RESOURCE_LOCK MockLink)
 add_qgc_test(QGCVideoStreamInfoTest LABELS Unit Camera)
 add_qgc_test(VideoManagerTest LABELS Unit)
-
-# VideoManager tests disabled - upstream GStreamer refactor not yet applied
 
 # ----------------------------------------------------------------------------
 # Comms
@@ -126,10 +124,7 @@ add_qgc_test(FollowMeTest LABELS Integration Vehicle RESOURCE_LOCK MockLink)
 # GPS
 # ----------------------------------------------------------------------------
 add_subdirectory(GPS)
-add_qgc_test(RTCMParserTest LABELS Unit)
-add_qgc_test(NTRIPManagerTest LABELS Unit)
-add_qgc_test(NTRIPHttpTransportTest LABELS Unit)
-add_qgc_test(NTRIPSourceTableTest LABELS Unit)
+add_qgc_test(GpsTest LABELS Unit GPS)
 
 # ----------------------------------------------------------------------------
 # Joystick

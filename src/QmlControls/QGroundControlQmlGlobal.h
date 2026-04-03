@@ -121,7 +121,6 @@ public:
     Q_PROPERTY(qreal zOrderTrajectoryLines      READ zOrderTrajectoryLines      CONSTANT)
     Q_PROPERTY(qreal zOrderWaypointLines        READ zOrderWaypointLines        CONSTANT)
     Q_PROPERTY(bool     hasAPMSupport           READ hasAPMSupport              CONSTANT)
-    Q_PROPERTY(bool     hasMAVLinkInspector     READ hasMAVLinkInspector        CONSTANT)
 
 
     //-------------------------------------------------------------------------
@@ -223,12 +222,6 @@ public:
     bool    hasAPMSupport           () { return false; }
 #else
     bool    hasAPMSupport           () { return true; }
-#endif
-
-#if defined(QGC_DISABLE_MAVLINK_INSPECTOR)
-    bool    hasMAVLinkInspector     () { return false; }
-#else
-    bool    hasMAVLinkInspector     () { return true; }
 #endif
 
     QString elevationProviderName   ();

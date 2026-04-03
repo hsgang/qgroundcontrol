@@ -74,9 +74,6 @@ ApplicationWindow {
         // Number of QGCTextField's with validation errors. Used to prevent closing panels with validation errors.
         property int                validationErrorCount:           0
 
-        // Set to a non-empty string to block navigation with a custom reason (e.g. during calibration)
-        property string             navigationBlockedReason:        ""
-
         // Property to manage RemoteID quick access to settings page
         property bool               commingFromRIDIndicator:        false
     }
@@ -98,49 +95,27 @@ ApplicationWindow {
     //-- Global Scope Functions
 
     // This function is used to prevent view switching if there are validation errors
-    function allowViewSwitch(previousValidationErrorCount = 0, showErrorOnDisallow = true) {
-        // Check for explicit navigation block (e.g. calibration in progress)
-        if (globals.navigationBlockedReason !== "") {
-            if (showErrorOnDisallow) {
-                validationErrorToast.text = globals.navigationBlockedReason
-                if (validationErrorToast.visible) {
-                    validationErrorToast.close()
-                }
-                validationErrorToast.open()
-            }
-            return false
-        }
+    function allowViewSwitch(previousValidationErrorCount = 0) {
         // Run validation on active focus control to ensure it is valid before switching views
         if (mainWindow.activeFocusControl instanceof FactTextField) {
             mainWindow.activeFocusControl._onEditingFinished()
         }
-        var allowed = globals.validationErrorCount <= previousValidationErrorCount
-        if (!allowed && showErrorOnDisallow) {
-            validationErrorToast.text = qsTr("Please correct the invalid value before continuing")
-            if (validationErrorToast.visible) {
-                validationErrorToast.close()
-            }
-            validationErrorToast.open()
-        }
-        return allowed
+        return globals.validationErrorCount <= previousValidationErrorCount
     }
 
     function showPlanView() {
-        welcomeView.visible = false
         flyView.visible = false
         planView.visible = true
         toolDrawer.visible = false
     }
 
     function showFlyView() {
-        welcomeView.visible = false
         flyView.visible = true
         planView.visible = false
         toolDrawer.visible = false
     }
 
     function showTool(toolTitle, toolSource, toolIcon) {
-        welcomeView.visible = false
         toolDrawer.backIcon     = flyView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
         toolDrawer.toolTitle    = toolTitle
         toolDrawer.toolSource   = toolSource
@@ -153,7 +128,7 @@ ApplicationWindow {
     }
 
     function showVehicleConfig() {
-        showTool(qsTr("Vehicle Configuration"), "qrc:/qml/QGroundControl/VehicleSetup/VehicleConfigView.qml", "/qmlimages/Gears.svg")
+        showTool(qsTr("Vehicle Configuration"), "qrc:/qml/QGroundControl/VehicleSetup/SetupView.qml", "/qmlimages/Gears.svg")
     }
 
     function showVehicleConfigParametersPage() {
@@ -287,15 +262,9 @@ ApplicationWindow {
         color:          QGroundControl.globalPalette.window
     }
 
-    WelcomeView {
-        id:             welcomeView
-        anchors.fill:   parent
-    }
-
     FlyView {
         id:                     flyView
         anchors.fill:           parent
-        visible:                false
     }
 
     PlanView {
@@ -345,26 +314,6 @@ ApplicationWindow {
         }
     }
 
-    // Toast notification shown when a view switch is blocked by a validation error
-    ToolTip {
-        id:             validationErrorToast
-        x:              (mainWindow.width - width) / 2
-        y:              mainWindow.height - height - ScreenTools.defaultFontPixelHeight * 3
-        timeout:        3000
-        closePolicy:    Popup.NoAutoClose
-        text:           qsTr("Please correct the invalid value before continuing")
-
-        background: Rectangle {
-            color:  qgcPal.alertBackground
-            radius: ScreenTools.defaultFontPixelWidth / 2
-        }
-
-        contentItem: QGCLabel {
-            text:   validationErrorToast.text
-            color:  qgcPal.alertText
-        }
-    }
-
     Component {
         id: toolSelectComponent
 
@@ -411,11 +360,11 @@ ApplicationWindow {
                 spacing:            ScreenTools.defaultFontPixelWidth
 
                 QGCToolBarButton {
-                    id:             qgcButton
-                    height:         parent.height
-                    icon.source:    "/res/amplogo.svg"
-                    logo:           true
-                    onClicked:      mainWindow.showToolSelectDialog()
+                    id: qgcButton
+                    height: parent.height
+                    icon.source: "/res/QGCLogoFull.svg"
+                    logo: true
+                    onClicked: mainWindow.showToolSelectDialog()
                 }
 
                 QGCLabel {
@@ -659,11 +608,10 @@ ApplicationWindow {
     // to mainWindow. Otherwise if they are rooted to the AnalyzeView itself they will die when the analyze viewSwitch
     // closes.
 
-    function createWindowedAnalyzePage(title, source, requiresVehicle) {
+    function createWindowedAnalyzePage(title, source) {
         var windowedPage = windowedAnalyzePage.createObject(mainWindow)
         windowedPage.title = title
         windowedPage.source = source
-        windowedPage.requiresVehicle = requiresVehicle
     }
 
     Component {
@@ -675,16 +623,6 @@ ApplicationWindow {
             visible:    true
 
             property alias source: loader.source
-            property bool requiresVehicle: false
-
-            Connections {
-                target: QGroundControl.multiVehicleManager
-                function onActiveVehicleChanged() {
-                    if (requiresVehicle) {
-                        close()
-                    }
-                }
-            }
 
             Rectangle {
                 color:          QGroundControl.globalPalette.window
@@ -700,7 +638,6 @@ ApplicationWindow {
             onClosing: {
                 visible = false
                 source = ""
-                Qt.callLater(destroy)
             }
         }
     }

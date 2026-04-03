@@ -10,7 +10,6 @@
 #include "InstrumentValueData.h"
 #include "JoystickManager.h"
 #include "MAVLinkLib.h"
-#include "QGCMAVLink.h"
 #include "QGCLoggingCategory.h"
 #include "QGCOptions.h"
 #include "QmlComponentInfo.h"
@@ -64,9 +63,9 @@ const QVariantList &QGCCorePlugin::analyzePages()
 {
     static const QVariantList analyzeList = {
         QVariant::fromValue(new QmlComponentInfo(
-            tr("Onboard Logs"),
-            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/OnboardLogs/OnboardLogPage.qml")),
-            QUrl::fromUserInput(QStringLiteral("qrc:/qmlimages/OnboardLogIcon.svg")),
+            tr("MAVLink Log"),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qml/QGroundControl/AnalyzeView/MAVLinkLogs/MAVLinkLogPage.qml")),
+            QUrl::fromUserInput(QStringLiteral("qrc:/qmlimages/MAVLinkLogIcon.svg")),
             nullptr, true /* requiresVehicle */)),
         QVariant::fromValue(new QmlComponentInfo(
             tr("GeoTag Images"),
@@ -337,8 +336,10 @@ QVariantList QGCCorePlugin::firstRunPromptsToShow()
 QString QGCCorePlugin::firstRunPromptResource(int id) const
 {
     switch (id) {
-    case kInitialSetupPromptId:
-        return QStringLiteral("/qml/QGroundControl/FirstRunPromptDialogs/InitialSetupPrompt.qml");
+    case kUnitsFirstRunPromptId:
+        return QStringLiteral("/qml/QGroundControl/FirstRunPromptDialogs/UnitsFirstRunPrompt.qml");
+    case kOfflineVehicleFirstRunPromptId:
+        return QStringLiteral("/qml/QGroundControl/FirstRunPromptDialogs/OfflineVehicleFirstRunPrompt.qml");
     default:
         return QString();
     }
