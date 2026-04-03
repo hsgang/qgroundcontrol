@@ -215,6 +215,37 @@ void GstVideoReceiver::start(uint32_t timeout)
     }
 }
 
+void GstVideoReceiver::pushRtpPacket(const QByteArray &packet)
+{
+    if (_needDispatch()) {
+        const QByteArray copy = packet;
+        _worker->dispatch([this, copy]() { pushRtpPacket(copy); });
+        return;
+    }
+
+    if (!_pipeline || !_appsrc || packet.isEmpty()) {
+        return;
+    }
+
+    GstBuffer *buffer = gst_buffer_new_allocate(nullptr, packet.size(), nullptr);
+    if (!buffer) {
+        return;
+    }
+
+    GstMapInfo map;
+    if (!gst_buffer_map(buffer, &map, GST_MAP_WRITE)) {
+        gst_buffer_unref(buffer);
+        return;
+    }
+    memcpy(map.data, packet.constData(), packet.size());
+    gst_buffer_unmap(buffer, &map);
+
+    GstFlowReturn flow = GST_FLOW_OK;
+    g_signal_emit_by_name(_appsrc, "push-buffer", buffer, &flow);
+    gst_buffer_unref(buffer);
+    _appsrcDataPushed = true;
+}
+
 void GstVideoReceiver::stop()
 {
     if (_needDispatch()) {

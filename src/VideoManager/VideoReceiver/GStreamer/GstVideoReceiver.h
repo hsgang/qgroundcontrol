@@ -51,6 +51,8 @@ public:
     explicit GstVideoReceiver(QObject *parent = nullptr);
     ~GstVideoReceiver();
 
+    void pushRtpPacket(const QByteArray &packet);
+
 public slots:
     void start(uint32_t timeout) override;
     void stop() override;
@@ -107,6 +109,8 @@ private:
     GstElement *_recorderValve = nullptr;
     GstElement *_source = nullptr;
     GstElement *_tee = nullptr;
+    GstElement *_appsrc = nullptr;
+    bool _appsrcDataPushed = false;
     GstElement *_videoSink = nullptr;
     GstVideoWorker *_worker = nullptr;
     gulong _teeProbeId = 0;
