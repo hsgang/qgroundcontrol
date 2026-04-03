@@ -37,7 +37,7 @@ Rectangle {
         }
     }
 
-    Component { id: altModeDialogComponent; AltModeDialog { } }
+    Component { id: altModeDialogComponent; AltFrameDialog { } }
 
     QGCPopupDialogFactory {
         id: altModeDialogFactory
