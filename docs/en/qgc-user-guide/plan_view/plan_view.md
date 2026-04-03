@@ -4,7 +4,7 @@ The _Plan View_ is used to plan _autonomous missions_ for your vehicle, and uplo
 
 It is also used to configure the [GeoFence](plan_geofence.md) and [Rally Points](plan_rally_points.md) if these are supported by the firmware.
 
-<a id="plan_screenshot"></a>
+<span id="plan_screenshot"></span>
 ![Plan View](../../../assets/plan/plan_view_overview.png)
 
 ## UI Overview {#ui_overview}
@@ -18,7 +18,7 @@ The main elements of the UI are:
   Click on the indicators to select them (for editing) or drag them around to reposition them.
   Flight path lines and direction arrows show the planned route between waypoints.
 - **Plan Toolbar:** Located at the top of the view with buttons for **Open**, **Save**, **Upload**, and **Clear**.
-  A hamburger menu (☰) provides additional options such as _Save as KML_ and _Download_ (load plan from vehicle).
+  A hamburger menu (⋮) provides additional options such as _Save as KML_ and _Download_ (load plan from vehicle).
   The **Save** and **Upload** buttons are highlighted when there are unsaved or un-uploaded changes.
 - **[Plan Tools](#plan_tools):** A vertical tool strip on the left side of the map used to add mission items (Takeoff, Waypoint, Pattern, ROI, Return/Land) and toggle the stats panel.
 - **[Plan Editor Panel](#plan_editor_panel):** A collapsible tree view on the right side containing the plan file info, mission items, GeoFence, and rally point editors.
@@ -90,7 +90,7 @@ File operations are located in the **Plan Toolbar** at the top of the view:
 - **Save** — Save the current plan to a file. Highlighted when there are unsaved changes.
 - **Upload** — Upload the plan to the vehicle. Highlighted when the plan has un-uploaded changes.
 - **Clear** — Remove all mission items, geofence, and rally points. If connected to a vehicle, also clears them from the vehicle.
-- **Hamburger menu** (☰) — Additional options:
+- **Hamburger menu** (⋮) — Additional options:
   - _Save as KML_ — Export the plan as a KML file.
   - _Download_ — Download the current plan from the vehicle (only available when connected).
 
@@ -115,13 +115,13 @@ The Plan Info section contains general plan-level settings:
 
 - **Plan File** — An editable name for the plan file.
 - **Vehicle Info** — Firmware and vehicle type selectors. When connected to a vehicle these are determined automatically; when planning offline you must set them before adding any mission items so that the correct mission commands are available.
-- **Expected Home Position** — The altitude (AMSL) for the planned home position is determined automatically from terrain data. A **Move To Map Center** button repositions the home marker to the center of the map. This is only the _planned_ home position for estimating mission times and drawing waypoint lines — the actual home position is set by the vehicle when it arms.
+- **Expected Home Position** — The altitude (AMSL) for the planned home position. A **Move To Map Center** button repositions the home marker to the center of the map. This is only the _planned_ home position for estimating mission times and drawing waypoint lines — the actual home position is set by the vehicle when it arms.
 
 ### Defaults {#mission_settings}
 
 The Defaults section sets plan-wide values that apply to new mission items:
 
-- **Altitude Frame** — Select the altitude reference frame for waypoints.
+- **Altitude Mode** — Select the altitude reference frame for waypoints.
 - **Waypoints Altitude** — The default altitude for the first mission item added (subsequent items take their initial altitude from the previous item). Changing this value when items already exist will prompt to update all items to the new altitude.
 - **Flight Speed** — Set a flight speed that differs from the default mission speed.
 - **Vehicle Speeds** — Cruise speed (fixed-wing) and/or hover speed (multi-rotor/VTOL), used for estimating mission time.
@@ -133,7 +133,7 @@ Each item can be expanded to edit its parameters.
 
 - Click an item to select it on the map and expand its editor.
 - Click the **command name** dropdown to change the item type. A dialog shows "Basic Commands" by default; use the **Category** dropdown to see all available commands.
-- Each item has a **hamburger menu** (☰) with options such as _Show all values_, _Move to vehicle position_, _Move to previous item position_, and _Edit position_.
+- Each item has a **hamburger menu** (⋮) with options such as _Show all values_, _Move to vehicle position_, _Move to previous item position_, and _Edit position_.
 - A **delete button** (trash icon) removes the item.
 - Items that are incomplete or missing required values show a **?** status indicator.
 
@@ -185,7 +185,7 @@ If a failure occurs you should see a status message in the QGC UI similar to:
 
 > Mission transfer failed. Retry transfer. Error: Mission write mission count failed, maximum retries exceeded.
 
-The loss rate for your link can be viewed in [App Settings > Telemetry](../settings_view/telemetry.md).
+The loss rate for your link can be viewed in [Settings View > MAVLink](../settings_view/mavlink.md).
 The loss rate should be in the low single digits (i.e. maximum of 2 or 3):
 
 - A loss rate in the high single digits can lead to intermittent failures.
@@ -196,5 +196,5 @@ To analyze this possibility you can turn on [Console Logging](../settings_view/c
 
 ## Further Info
 
-- New Plan View features for [QGC release v3.2](../releases/release_note_stable_v3.md#plan-view-v32)
-- New Plan View features for [QGC release v3.3](../releases/release_note_stable_v3.md#plan-view-v33)
+- New Plan View features for [QGC release v3.2](../releases/release_note_stable_v3.md#plan_view)
+- New Plan View features for [QGC release v3.3](../releases/release_note_stable_v3.md#plan-view-1)
