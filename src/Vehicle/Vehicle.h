@@ -17,52 +17,36 @@
 #include "QGCMAVLink.h"
 #include "QmlObjectListModel.h"
 #include "SysStatusSensorInfo.h"
-#include "VehicleLinkManager.h"
-#include "VehicleTypes.h"
-
-#include "TerrainFactGroup.h"
 #include "VehicleFactGroup.h"
-#include "VehicleClockFactGroup.h"
-#include "VehicleDistanceSensorFactGroup.h"
-#include "VehicleEFIFactGroup.h"
-#include "VehicleEstimatorStatusFactGroup.h"
-#include "VehicleGeneratorFactGroup.h"
-#include "VehicleGPS2FactGroup.h"
-#include "VehicleGPSFactGroup.h"
-#include "VehicleGPSAggregateFactGroup.h"
-#include "VehicleHygrometerFactGroup.h"
-#include "VehicleLocalPositionFactGroup.h"
-#include "VehicleLocalPositionSetpointFactGroup.h"
-#include "VehicleRPMFactGroup.h"
-#include "VehicleSetpointFactGroup.h"
-#include "VehicleTemperatureFactGroup.h"
-#include "VehicleVibrationFactGroup.h"
-#include "VehicleEKFStatusFactGroup.h"
-#include "VehicleEscStatusFactGroup.h"
-#include "VehicleEstimatorStatusFactGroup.h"
-#include "VehicleHygrometerFactGroup.h"
 #include "VehicleLinkManager.h"
-#include "MissionManager.h"
-#include "GeoFenceManager.h"
-#include "RallyPointManager.h"
-#include "FTPManager.h"
-#include "ImageProtocolManager.h"
-#include "AtmosphericSensorFactGroup.h"
-#include "VehicleLandingTargetFactGroup.h"
-#include "HealthAndArmingCheckReport.h"
-#include "WinchStatusFactGroup.h"
-// #include "TunnelingDataFactGroup.h"
-#include "TerrainQuery.h"
-#include "StandardModes.h"
-#include "VehicleGeneratorFactGroup.h"
-#include "VehicleEFIFactGroup.h"
-#include "VehicleWindFactGroup.h"
-#include "GimbalController.h"
-#include "BatteryFactGroupListModel.h"
-#include "EscStatusFactGroupListModel.h"
 
 class Actuators;
+class AtmosphericSensorFactGroup;
 class AutoPilotPlugin;
+class BatteryFactGroupListModel;
+class EscStatusFactGroupListModel;
+class GimbalController;
+class HealthAndArmingCheckReport;
+class TerrainFactGroup;
+class VehicleEKFStatusFactGroup;
+class VehicleLandingTargetFactGroup;
+class VehicleClockFactGroup;
+class VehicleDistanceSensorFactGroup;
+class VehicleEFIFactGroup;
+class VehicleEstimatorStatusFactGroup;
+class VehicleGeneratorFactGroup;
+class VehicleGPS2FactGroup;
+class VehicleGPSFactGroup;
+class VehicleGPSAggregateFactGroup;
+class VehicleHygrometerFactGroup;
+class VehicleLocalPositionFactGroup;
+class VehicleLocalPositionSetpointFactGroup;
+class VehicleRPMFactGroup;
+class VehicleSetpointFactGroup;
+class VehicleTemperatureFactGroup;
+class VehicleVibrationFactGroup;
+class VehicleWindFactGroup;
+class WinchStatusFactGroup;
 class Autotune;
 class ComponentInformationManager;
 class DropSequence;
@@ -114,6 +98,7 @@ class Vehicle : public VehicleFactGroup, public VehicleTypes
     Q_MOC_INCLUDE("MAVLinkLogManager.h")
     Q_MOC_INCLUDE("LinkInterface.h")
     Q_MOC_INCLUDE("VehicleSupports.h")
+    Q_MOC_INCLUDE("GimbalController.h")
 
     friend class InitialConnectStateMachine;
     friend class VehicleLinkManager;
@@ -590,30 +575,30 @@ public:
     void stopUAVCANBusConfig(void);
 
     FactGroup* vehicleFactGroup             () { return _vehicleFactGroup; }
-    FactGroup* gpsFactGroup                 () { return &_gpsFactGroup; }
-    FactGroup* gps2FactGroup                () { return &_gps2FactGroup; }
-    FactGroup* gpsAggregateFactGroup        () { return &_gpsAggregateFactGroup; }
-    FactGroup* windFactGroup                () { return &_windFactGroup; }
-    FactGroup* vibrationFactGroup           () { return &_vibrationFactGroup; }
-    FactGroup* ekfStatusFactGroup           () { return &_ekfStatusFactGroup; }
-    FactGroup* temperatureFactGroup         () { return &_temperatureFactGroup; }
-    FactGroup* clockFactGroup               () { return &_clockFactGroup; }
-    FactGroup* setpointFactGroup            () { return &_setpointFactGroup; }
-    FactGroup* distanceSensorFactGroup      () { return &_distanceSensorFactGroup; }
-    FactGroup* localPositionFactGroup       () { return &_localPositionFactGroup; }
-    FactGroup* localPositionSetpointFactGroup() { return &_localPositionSetpointFactGroup; }
-    FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
-    FactGroup* terrainFactGroup             () { return &_terrainFactGroup; }
-    FactGroup* hygrometerFactGroup          () { return &_hygrometerFactGroup; }
-    FactGroup* generatorFactGroup           () { return &_generatorFactGroup; }
-    FactGroup* efiFactGroup                 () { return &_efiFactGroup; }
-    FactGroup* rpmFactGroup                 () { return &_rpmFactGroup; }
-    FactGroup* atmosphericSensorFactGroup   () { return &_atmosphericSensorFactGroup; }
-    FactGroup* winchStatusFactGroup         () { return &_winchStatusFactGroup; }
-    FactGroup* landingTargetFactGroup       () { return &_landingTargetFactGroup; }
+    FactGroup* gpsFactGroup                 ();
+    FactGroup* gps2FactGroup                ();
+    FactGroup* gpsAggregateFactGroup        ();
+    FactGroup* windFactGroup                ();
+    FactGroup* vibrationFactGroup           ();
+    FactGroup* ekfStatusFactGroup           ();
+    FactGroup* temperatureFactGroup         ();
+    FactGroup* clockFactGroup               ();
+    FactGroup* setpointFactGroup            ();
+    FactGroup* distanceSensorFactGroup      ();
+    FactGroup* localPositionFactGroup       ();
+    FactGroup* localPositionSetpointFactGroup();
+    FactGroup* estimatorStatusFactGroup     ();
+    FactGroup* terrainFactGroup             ();
+    FactGroup* hygrometerFactGroup          ();
+    FactGroup* generatorFactGroup           ();
+    FactGroup* efiFactGroup                 ();
+    FactGroup* rpmFactGroup                 ();
+    FactGroup* atmosphericSensorFactGroup   ();
+    FactGroup* winchStatusFactGroup         ();
+    FactGroup* landingTargetFactGroup       ();
 
-    QmlObjectListModel* batteries           () { return &_batteryFactGroupListModel; }
-    QmlObjectListModel* escs                () { return &_escStatusFactGroupListModel; }
+    QmlObjectListModel* batteries           ();
+    QmlObjectListModel* escs                ();
 
     MissionManager*                 missionManager      () { return _missionManager; }
     GeoFenceManager*                geoFenceManager     () { return _geoFenceManager; }
@@ -1284,32 +1269,32 @@ public:
     const QString _rpmFactGroupName =                QStringLiteral("rpm");
 
     VehicleFactGroup*               _vehicleFactGroup;
-    VehicleGPSFactGroup             _gpsFactGroup;
-    VehicleGPS2FactGroup            _gps2FactGroup;
-    VehicleGPSAggregateFactGroup    _gpsAggregateFactGroup;
-    VehicleWindFactGroup            _windFactGroup;
-    VehicleVibrationFactGroup       _vibrationFactGroup;
-    VehicleEKFStatusFactGroup       _ekfStatusFactGroup;
-    VehicleTemperatureFactGroup     _temperatureFactGroup;
-    VehicleClockFactGroup           _clockFactGroup;
-    VehicleSetpointFactGroup        _setpointFactGroup;
-    VehicleDistanceSensorFactGroup  _distanceSensorFactGroup;
-    VehicleLocalPositionFactGroup   _localPositionFactGroup;
-    VehicleLocalPositionSetpointFactGroup _localPositionSetpointFactGroup;
-    VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
-    VehicleHygrometerFactGroup      _hygrometerFactGroup;
-    VehicleGeneratorFactGroup       _generatorFactGroup;
-    VehicleEFIFactGroup             _efiFactGroup;
-    VehicleRPMFactGroup             _rpmFactGroup;
-    TerrainFactGroup                _terrainFactGroup;
-    AtmosphericSensorFactGroup      _atmosphericSensorFactGroup;
-    // TunnelingDataFactGroup          _tunnelingDataFactGroup;
-    WinchStatusFactGroup            _winchStatusFactGroup;
-    VehicleLandingTargetFactGroup   _landingTargetFactGroup;
+    VehicleGPSFactGroup*                _gpsFactGroup               = nullptr;
+    VehicleGPS2FactGroup*               _gps2FactGroup              = nullptr;
+    VehicleGPSAggregateFactGroup*       _gpsAggregateFactGroup      = nullptr;
+    VehicleWindFactGroup*               _windFactGroup              = nullptr;
+    VehicleVibrationFactGroup*          _vibrationFactGroup         = nullptr;
+    VehicleEKFStatusFactGroup*          _ekfStatusFactGroup         = nullptr;
+    VehicleTemperatureFactGroup*        _temperatureFactGroup       = nullptr;
+    VehicleClockFactGroup*              _clockFactGroup             = nullptr;
+    VehicleSetpointFactGroup*           _setpointFactGroup          = nullptr;
+    VehicleDistanceSensorFactGroup*     _distanceSensorFactGroup    = nullptr;
+    VehicleLocalPositionFactGroup*      _localPositionFactGroup     = nullptr;
+    VehicleLocalPositionSetpointFactGroup* _localPositionSetpointFactGroup = nullptr;
+    VehicleEstimatorStatusFactGroup*    _estimatorStatusFactGroup   = nullptr;
+    VehicleHygrometerFactGroup*         _hygrometerFactGroup        = nullptr;
+    VehicleGeneratorFactGroup*          _generatorFactGroup         = nullptr;
+    VehicleEFIFactGroup*                _efiFactGroup               = nullptr;
+    VehicleRPMFactGroup*                _rpmFactGroup               = nullptr;
+    TerrainFactGroup*                   _terrainFactGroup           = nullptr;
+    AtmosphericSensorFactGroup*         _atmosphericSensorFactGroup = nullptr;
+    // TunnelingDataFactGroup*          _tunnelingDataFactGroup     = nullptr;
+    WinchStatusFactGroup*               _winchStatusFactGroup       = nullptr;
+    VehicleLandingTargetFactGroup*      _landingTargetFactGroup     = nullptr;
 
     // Dynamic FactGroups
-    BatteryFactGroupListModel       _batteryFactGroupListModel;
-    EscStatusFactGroupListModel     _escStatusFactGroupListModel;
+    BatteryFactGroupListModel*          _batteryFactGroupListModel  = nullptr;
+    EscStatusFactGroupListModel*        _escStatusFactGroupListModel = nullptr;
 
     TerrainProtocolHandler* _terrainProtocolHandler = nullptr;
 

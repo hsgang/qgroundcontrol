@@ -1,5 +1,29 @@
 #include "Vehicle.h"
 #include "Actuators.h"
+#include "BatteryFactGroupListModel.h"
+#include "EscStatusFactGroupListModel.h"
+#include "TerrainFactGroup.h"
+#include "VehicleClockFactGroup.h"
+#include "VehicleDistanceSensorFactGroup.h"
+#include "VehicleEFIFactGroup.h"
+#include "VehicleEstimatorStatusFactGroup.h"
+#include "VehicleGeneratorFactGroup.h"
+#include "VehicleGPS2FactGroup.h"
+#include "VehicleGPSFactGroup.h"
+#include "VehicleGPSAggregateFactGroup.h"
+#include "VehicleHygrometerFactGroup.h"
+#include "VehicleLocalPositionFactGroup.h"
+#include "VehicleLocalPositionSetpointFactGroup.h"
+#include "VehicleRPMFactGroup.h"
+#include "VehicleSetpointFactGroup.h"
+#include "VehicleTemperatureFactGroup.h"
+#include "VehicleVibrationFactGroup.h"
+#include "VehicleWindFactGroup.h"
+#include "VehicleEKFStatusFactGroup.h"
+#include "AtmosphericSensorFactGroup.h"
+#include "WinchStatusFactGroup.h"
+#include "VehicleLandingTargetFactGroup.h"
+#include "HealthAndArmingCheckReport.h"
 #include "VehicleSupports.h"
 #include "ADSBVehicleManager.h"
 #include "AudioOutput.h"
@@ -91,29 +115,6 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _trajectoryPoints             (new TrajectoryPoints(this, this))
     , _mavlinkStreamConfig          (std::bind(&Vehicle::_setMessageInterval, this, std::placeholders::_1, std::placeholders::_2))
     , _vehicleFactGroup             (this)
-    , _gpsFactGroup                 (this)
-    , _gps2FactGroup                (this)
-    , _gpsAggregateFactGroup        (this)
-    , _windFactGroup                (this)
-    , _vibrationFactGroup           (this)
-    , _ekfStatusFactGroup           (this)
-    , _temperatureFactGroup         (this)
-    , _clockFactGroup               (this)
-    , _setpointFactGroup            (this)
-    , _distanceSensorFactGroup      (this)
-    , _localPositionFactGroup       (this)
-    , _localPositionSetpointFactGroup(this)
-    , _estimatorStatusFactGroup     (this)
-    , _hygrometerFactGroup          (this)
-    , _generatorFactGroup           (this)
-    , _efiFactGroup                 (this)
-    , _rpmFactGroup                 (this)
-    , _terrainFactGroup             (this)
-    , _atmosphericSensorFactGroup   (this)
-    // , _tunnelingDataFactGroup       (this)
-    , _winchStatusFactGroup         (this)
-    , _landingTargetFactGroup       (this)
-    , _terrainProtocolHandler       (new TerrainProtocolHandler(this, &_terrainFactGroup, this))
 {
     connect(MultiVehicleManager::instance(), &MultiVehicleManager::activeVehicleChanged, this, &Vehicle::_activeVehicleChanged);
 
@@ -204,20 +205,6 @@ Vehicle::Vehicle(MAV_AUTOPILOT              firmwareType,
     , _trajectoryPoints                 (new TrajectoryPoints(this, this))
     , _mavlinkStreamConfig              (std::bind(&Vehicle::_setMessageInterval, this, std::placeholders::_1, std::placeholders::_2))
     , _vehicleFactGroup                 (this)
-    , _gpsFactGroup                     (this)
-    , _gps2FactGroup                    (this)
-    , _gpsAggregateFactGroup            (this)
-    , _windFactGroup                    (this)
-    , _vibrationFactGroup               (this)
-    , _ekfStatusFactGroup               (this)
-    , _clockFactGroup                   (this)
-    , _distanceSensorFactGroup          (this)
-    , _localPositionFactGroup           (this)
-    , _localPositionSetpointFactGroup   (this)
-    , _atmosphericSensorFactGroup       (this)
-    // , _tunnelingDataFactGroup           (this)
-    , _winchStatusFactGroup             (this)
-    , _landingTargetFactGroup           (this)
 {
     // This will also set the settings based firmware/vehicle types. So it needs to happen first.
     if (_firmwareType == MAV_AUTOPILOT_TRACK) {
@@ -325,35 +312,64 @@ void Vehicle::_commonInit(LinkInterface* link)
     // Flight modes can differ based on advanced mode
     connect(QGCCorePlugin::instance(), &QGCCorePlugin::showAdvancedUIChanged, this, &Vehicle::flightModesChanged);
 
-    _gpsAggregateFactGroup.bindToGps(&_gpsFactGroup, &_gps2FactGroup);
+    _gpsFactGroup                   = new VehicleGPSFactGroup(this);
+    _gps2FactGroup                  = new VehicleGPS2FactGroup(this);
+    _gpsAggregateFactGroup          = new VehicleGPSAggregateFactGroup(this);
+    _windFactGroup                  = new VehicleWindFactGroup(this);
+    _vibrationFactGroup             = new VehicleVibrationFactGroup(this);
+    _temperatureFactGroup           = new VehicleTemperatureFactGroup(this);
+    _clockFactGroup                 = new VehicleClockFactGroup(this);
+    _setpointFactGroup              = new VehicleSetpointFactGroup(this);
+    _distanceSensorFactGroup        = new VehicleDistanceSensorFactGroup(this);
+    _localPositionFactGroup         = new VehicleLocalPositionFactGroup(this);
+    _localPositionSetpointFactGroup = new VehicleLocalPositionSetpointFactGroup(this);
+    _estimatorStatusFactGroup       = new VehicleEstimatorStatusFactGroup(this);
+    _hygrometerFactGroup            = new VehicleHygrometerFactGroup(this);
+    _generatorFactGroup             = new VehicleGeneratorFactGroup(this);
+    _efiFactGroup                   = new VehicleEFIFactGroup(this);
+    _rpmFactGroup                   = new VehicleRPMFactGroup(this);
+    _terrainFactGroup               = new TerrainFactGroup(this);
+    _ekfStatusFactGroup             = new VehicleEKFStatusFactGroup(this);
+    _atmosphericSensorFactGroup     = new AtmosphericSensorFactGroup(this);
+    // _tunnelingDataFactGroup      = new TunnelingDataFactGroup(this);
+    _winchStatusFactGroup           = new WinchStatusFactGroup(this);
+    _landingTargetFactGroup         = new VehicleLandingTargetFactGroup(this);
+    _batteryFactGroupListModel      = new BatteryFactGroupListModel(this);
+    _escStatusFactGroupListModel    = new EscStatusFactGroupListModel(this);
+
+    if (!_offlineEditingVehicle) {
+        _terrainProtocolHandler = new TerrainProtocolHandler(this, _terrainFactGroup, this);
+    }
+
+    _gpsAggregateFactGroup->bindToGps(_gpsFactGroup, _gps2FactGroup);
 
     _createImageProtocolManager();
     _createStatusTextHandler();
     _createMAVLinkLogManager();
 
     // _addFactGroup(_vehicleFactGroup,            _vehicleFactGroupName);
-    _addFactGroup(&_gpsFactGroup,               _gpsFactGroupName);
-    _addFactGroup(&_gps2FactGroup,              _gps2FactGroupName);
-    _addFactGroup(&_gpsAggregateFactGroup,      _gpsAggregateFactGroupName);
-    _addFactGroup(&_windFactGroup,              _windFactGroupName);
-    _addFactGroup(&_vibrationFactGroup,         _vibrationFactGroupName);
-    _addFactGroup(&_ekfStatusFactGroup,         _ekfStatusFactGroupName);
-    _addFactGroup(&_temperatureFactGroup,       _temperatureFactGroupName);
-    _addFactGroup(&_clockFactGroup,             _clockFactGroupName);
-    _addFactGroup(&_setpointFactGroup,          _setpointFactGroupName);
-    _addFactGroup(&_distanceSensorFactGroup,    _distanceSensorFactGroupName);
-    _addFactGroup(&_localPositionFactGroup,     _localPositionFactGroupName);
-    _addFactGroup(&_localPositionSetpointFactGroup,_localPositionSetpointFactGroupName);
-    _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
-    _addFactGroup(&_hygrometerFactGroup,        _hygrometerFactGroupName);
-    _addFactGroup(&_generatorFactGroup,         _generatorFactGroupName);
-    _addFactGroup(&_efiFactGroup,               _efiFactGroupName);
-    _addFactGroup(&_rpmFactGroup,               _rpmFactGroupName);
-    _addFactGroup(&_terrainFactGroup,           _terrainFactGroupName);
-    _addFactGroup(&_atmosphericSensorFactGroup, _atmosphericSensorFactGroupName);
-    // _addFactGroup(&_tunnelingDataFactGroup,     _tunnelingDataFactGroupName);
-    _addFactGroup(&_winchStatusFactGroup,       _winchStatusFactGroupName);
-    _addFactGroup(&_landingTargetFactGroup,     _landingTargetFactGroupName);
+    _addFactGroup(_gpsFactGroup,               _gpsFactGroupName);
+    _addFactGroup(_gps2FactGroup,              _gps2FactGroupName);
+    _addFactGroup(_gpsAggregateFactGroup,      _gpsAggregateFactGroupName);
+    _addFactGroup(_windFactGroup,              _windFactGroupName);
+    _addFactGroup(_vibrationFactGroup,         _vibrationFactGroupName);
+    _addFactGroup(_ekfStatusFactGroup,         _ekfStatusFactGroupName);
+    _addFactGroup(_temperatureFactGroup,       _temperatureFactGroupName);
+    _addFactGroup(_clockFactGroup,             _clockFactGroupName);
+    _addFactGroup(_setpointFactGroup,          _setpointFactGroupName);
+    _addFactGroup(_distanceSensorFactGroup,    _distanceSensorFactGroupName);
+    _addFactGroup(_localPositionFactGroup,     _localPositionFactGroupName);
+    _addFactGroup(_localPositionSetpointFactGroup,_localPositionSetpointFactGroupName);
+    _addFactGroup(_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
+    _addFactGroup(_hygrometerFactGroup,        _hygrometerFactGroupName);
+    _addFactGroup(_generatorFactGroup,         _generatorFactGroupName);
+    _addFactGroup(_efiFactGroup,               _efiFactGroupName);
+    _addFactGroup(_rpmFactGroup,               _rpmFactGroupName);
+    _addFactGroup(_terrainFactGroup,           _terrainFactGroupName);
+    _addFactGroup(_atmosphericSensorFactGroup, _atmosphericSensorFactGroupName);
+    // _addFactGroup(_tunnelingDataFactGroup,     _tunnelingDataFactGroupName);
+    _addFactGroup(_winchStatusFactGroup,       _winchStatusFactGroupName);
+    _addFactGroup(_landingTargetFactGroup,     _landingTargetFactGroupName);
 
     // Add firmware-specific fact groups, if provided
     QMap<QString, FactGroup*>* fwFactGroups = _firmwarePlugin->factGroups();
@@ -400,6 +416,31 @@ Vehicle::~Vehicle()
     delete _autopilotPlugin;
     _autopilotPlugin = nullptr;
 }
+
+FactGroup* Vehicle::gpsFactGroup()                  { return _gpsFactGroup; }
+FactGroup* Vehicle::gps2FactGroup()                 { return _gps2FactGroup; }
+FactGroup* Vehicle::gpsAggregateFactGroup()         { return _gpsAggregateFactGroup; }
+FactGroup* Vehicle::windFactGroup()                 { return _windFactGroup; }
+FactGroup* Vehicle::vibrationFactGroup()            { return _vibrationFactGroup; }
+FactGroup* Vehicle::temperatureFactGroup()          { return _temperatureFactGroup; }
+FactGroup* Vehicle::clockFactGroup()                { return _clockFactGroup; }
+FactGroup* Vehicle::setpointFactGroup()             { return _setpointFactGroup; }
+FactGroup* Vehicle::distanceSensorFactGroup()       { return _distanceSensorFactGroup; }
+FactGroup* Vehicle::localPositionFactGroup()        { return _localPositionFactGroup; }
+FactGroup* Vehicle::localPositionSetpointFactGroup() { return _localPositionSetpointFactGroup; }
+FactGroup* Vehicle::estimatorStatusFactGroup()      { return _estimatorStatusFactGroup; }
+FactGroup* Vehicle::terrainFactGroup()              { return _terrainFactGroup; }
+FactGroup* Vehicle::hygrometerFactGroup()           { return _hygrometerFactGroup; }
+FactGroup* Vehicle::generatorFactGroup()            { return _generatorFactGroup; }
+FactGroup* Vehicle::efiFactGroup()                  { return _efiFactGroup; }
+FactGroup* Vehicle::rpmFactGroup()                  { return _rpmFactGroup; }
+FactGroup* Vehicle::ekfStatusFactGroup()             { return _ekfStatusFactGroup; }
+FactGroup* Vehicle::atmosphericSensorFactGroup()     { return _atmosphericSensorFactGroup; }
+FactGroup* Vehicle::winchStatusFactGroup()           { return _winchStatusFactGroup; }
+FactGroup* Vehicle::landingTargetFactGroup()         { return _landingTargetFactGroup; }
+
+QmlObjectListModel* Vehicle::batteries()            { return _batteryFactGroupListModel; }
+QmlObjectListModel* Vehicle::escs()                 { return _escStatusFactGroupListModel; }
 
 void Vehicle::_deleteCameraManager()
 {
@@ -561,8 +602,8 @@ void Vehicle::_mavlinkMessageReceived(LinkInterface* link, mavlink_message_t mes
     _waitForMavlinkMessageMessageReceivedHandler(message);
 
     // Handle creation of dynamic fact group lists
-    _batteryFactGroupListModel.handleMessageForFactGroupCreation(this, message);
-    _escStatusFactGroupListModel.handleMessageForFactGroupCreation(this, message);
+    _batteryFactGroupListModel->handleMessageForFactGroupCreation(this, message);
+    _escStatusFactGroupListModel->handleMessageForFactGroupCreation(this, message);
 
     // Let the fact groups take a whack at the mavlink traffic
     for (FactGroup* factGroup : factGroups()) {
@@ -1180,7 +1221,7 @@ void Vehicle::_handleBatteryStatus(mavlink_message_t& message)
 
     if (!batteryMessage.isEmpty()) {
         QString batteryIdStr("%1");
-        if (_batteryFactGroupListModel.count() > 1) {
+        if (_batteryFactGroupListModel->count() > 1) {
             batteryIdStr = batteryIdStr.arg(batteryStatus.id);
         } else {
             batteryIdStr = batteryIdStr.arg("");
@@ -3824,9 +3865,9 @@ void Vehicle::setPIDTuningTelemetryMode(PIDTuningTelemetryMode mode)
 {
     bool liveUpdate = mode != ModeDisabled;
     setLiveUpdates(liveUpdate);
-    _setpointFactGroup.setLiveUpdates(liveUpdate);
-    _localPositionFactGroup.setLiveUpdates(liveUpdate);
-    _localPositionSetpointFactGroup.setLiveUpdates(liveUpdate);
+    _setpointFactGroup->setLiveUpdates(liveUpdate);
+    _localPositionFactGroup->setLiveUpdates(liveUpdate);
+    _localPositionSetpointFactGroup->setLiveUpdates(liveUpdate);
 
     switch (mode) {
     case ModeDisabled:
