@@ -196,20 +196,13 @@ qt_add_qml_module(QGroundControlControlsModule
         VehicleSummaryRow.qml
         WelcomeView.qml
 
-# NOTE: Due to Windows limitations with set_source_files_properties and qt_add_qml_module,
-# various QML files from other modules are temporarily included here.
-# This will be revisited in a future release.
-
-        # src/FirstRunPromptDialogs/
-        FirstRunPrompt.qml
-
-        # src/UI/preferences/
-        OfflineMapInfo.qml
+# NOTE: ScreenTools.qml is declared here because CMake's
+# set_source_files_properties() has directory scope. The QT_QML_SINGLETON_TYPE
+# property must be visible in the same CMakeLists.txt that calls
+# qt_add_qml_module(). On Windows this cross-directory property propagation
+# fails, so this file is kept in this module until a better solution is available.
 
         CameraPOIIndicator.qml
-
-        # src/QtLocationPlugin/QMLControl/
-        OfflineMapEditor.qml
 
         ScreenTools.qml
     NO_PLUGIN
