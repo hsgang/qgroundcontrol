@@ -91,10 +91,20 @@ Item {
         }
 
         MissionItemTreeView {
+            id:                     missionItemTreeView
             anchors.fill:           parent
             editorMap:              root.editorMap
             planMasterController:   root.planMasterController
             onEditingLayerChangeRequested: (layer) => root.editingLayerChangeRequested(layer)
         }
+    }
+
+    function selectLayer(nodeType) {
+        // Ensure panel is open
+        if (!panelOpenCloseButton._expanded) {
+            root.anchors.left = undefined
+            root.anchors.right = root.parent.right
+        }
+        missionItemTreeView.selectLayer(nodeType)
     }
 }
