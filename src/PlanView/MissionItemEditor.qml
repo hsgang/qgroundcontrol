@@ -16,7 +16,6 @@ Rectangle {
     signal clicked
     signal remove
     signal selectNextNotReadyItem
-    signal editorExpandedAndLoaded
 
     id:             _root
     height:         _currentItem ? (editorLoader.y + editorLoader.height + _innerMargin) : (topRowLayout.y + topRowLayout.height + _margin)
@@ -90,14 +89,8 @@ Rectangle {
         id: editPositionDialog
 
         EditPositionDialog {
-            property bool _editCenterCoordinate: false
-
-            onCoordinateChanged: {
-                if (_editCenterCoordinate)
-                    missionItem.centerCoordinate = coordinate
-                else
-                    missionItem.coordinate = coordinate
-            }
+            coordinate:             missionItem.isSurveyItem ?  missionItem.centerCoordinate : missionItem.coordinate
+            onCoordinateChanged:    missionItem.isSurveyItem ?  missionItem.centerCoordinate = coordinate : missionItem.coordinate = coordinate
         }
     }
 
@@ -250,13 +243,7 @@ Rectangle {
                         text:               qsTr("Edit position...")
                         enabled:            missionItem.specifiesCoordinate
                         onClicked: {
-                            const editCenterCoordinate = missionItem.isSurveyItem
-                            editPositionDialogFactory.open({
-                                _editCenterCoordinate:   editCenterCoordinate,
-                                coordinate:              editCenterCoordinate ? missionItem.centerCoordinate : missionItem.coordinate,
-                                altitudeFact:            !editCenterCoordinate && missionItem.specifiesAltitude ? missionItem.altitude : null,
-                                altitudeFrame:           !editCenterCoordinate && missionItem.specifiesAltitude ? missionItem.altitudeFrame : QGroundControl.AltitudeFrameNone,
-                            })
+                            editPositionDialogFactory.open()
                             hamburgerMenuDropPanel.close()
                         }
                     }
@@ -352,17 +339,5 @@ Rectangle {
         asynchronous:       true
 
         Component.onCompleted: _root._loadEditor()
-    }
-
-    onHeightChanged: {
-        if (_currentItem && editorLoader.status === Loader.Ready) {
-            _editorHeightSettleTimer.restart()
-        }
-    }
-
-    Timer {
-        id: _editorHeightSettleTimer
-        interval: 100
-        onTriggered: _root.editorExpandedAndLoaded()
     }
 }
