@@ -202,15 +202,6 @@ qt_add_qml_module(QGroundControlControlsModule
 # qt_add_qml_module(). On Windows this cross-directory property propagation fails,
 # so these files are kept in this module until a better solution is available.
 
-        # src/FirstRunPromptDialogs/
-        FirstRunPrompt.qml
-
-        # src/UI/preferences/
-        OfflineMapInfo.qml
-
-        # src/QtLocationPlugin/QMLControl/
-        OfflineMapEditor.qml
-
         CameraPOIIndicator.qml
 
         ScreenTools.qml
