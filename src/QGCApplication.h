@@ -50,6 +50,7 @@ public:
 
     bool runningUnitTests() const { return _runningUnitTests; }
     bool simpleBootTest() const { return _simpleBootTest; }
+    bool bootTestPassed() const { return _bootTestPassed; }
 
     /// Returns true if Qt debug output should be logged to a file
     bool logOutput() const { return _logOutput; }
@@ -97,6 +98,8 @@ public slots:
     /// Get current language
     QLocale getCurrentLanguage() const { return _locale; }
 
+    QString displayName() const { return _displayName; }
+
     /// Show non-modal vehicle message to the user
     void showCriticalVehicleMessage(const QString &message);
 
@@ -109,9 +112,6 @@ public slots:
 
     QGCImageProvider *qgcImageProvider();
 
-    /// Get the display name for window title (can be different from applicationName)
-    QString displayName() const { return _displayName; }
-
 private slots:
     /// Called when the delay timer fires to show the missing parameters warning
     void _missingParamsDisplay();
@@ -122,7 +122,7 @@ private slots:
 private:
     bool compressEvent(QEvent *event, QObject *receiver, QPostEventList *postedEvents) final;
 
-    void _initVideo();
+    bool _initVideo();
 
     /// Initialize the application for normal application boot. Or in other words we are not going to run unit tests.
     void _initForNormalAppBoot();
@@ -153,9 +153,10 @@ private:
     bool _showErrorsInToolbar = false;
     QElapsedTimer _msecsElapsedTime;
     bool _videoManagerInitialized = false;
+    bool _bootTestPassed = true;
+    QString _displayName;
 
     QList<QPair<QString /* title */, QString /* message */>> _delayedAppMessages;
-    QString _displayName;   ///< Display name for window title (separate from applicationName)
 
     class CompressedSignalList
     {
