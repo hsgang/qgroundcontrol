@@ -104,18 +104,21 @@ ApplicationWindow {
     }
 
     function showPlanView() {
+        welcomeView.visible = false
         flyView.visible = false
         planView.visible = true
         toolDrawer.visible = false
     }
 
     function showFlyView() {
+        welcomeView.visible = false
         flyView.visible = true
         planView.visible = false
         toolDrawer.visible = false
     }
 
     function showTool(toolTitle, toolSource, toolIcon) {
+        welcomeView.visible = false
         toolDrawer.backIcon     = flyView.visible ? "/qmlimages/PaperPlane.svg" : "/qmlimages/Plan.svg"
         toolDrawer.toolTitle    = toolTitle
         toolDrawer.toolSource   = toolSource
@@ -262,9 +265,15 @@ ApplicationWindow {
         color:          QGroundControl.globalPalette.window
     }
 
+    WelcomeView {
+        id:             welcomeView
+        anchors.fill:   parent
+    }
+
     FlyView {
         id:                     flyView
         anchors.fill:           parent
+        visible:                false
     }
 
     PlanView {
@@ -362,7 +371,7 @@ ApplicationWindow {
                 QGCToolBarButton {
                     id: qgcButton
                     height: parent.height
-                    icon.source: "/res/QGCLogoFull.svg"
+                    icon.source: "/res/amplogo.svg"
                     logo: true
                     onClicked: mainWindow.showToolSelectDialog()
                 }
