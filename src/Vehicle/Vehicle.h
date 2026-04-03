@@ -336,9 +336,6 @@ public:
     ///     @param pauseVehicle true: pause vehicle prior to altitude change
     Q_INVOKABLE void guidedModeChangeAltitudeAMSL(double altitudeAMSL, bool pauseVehicle);
 
-    /// Command vehicle to set position and velocity target local ned
-    Q_INVOKABLE void setPositionAndVelocityTargetLocalNed(double xValue, double yValue, double zValue, double vxValue, double vyValue, double vzValue, double yaw, bool pauseVehicle);
-
     /// Command vehicle to change yaw
     ///     @param coordinate to rotate towards
     Q_INVOKABLE void guidedModeChangeHeading(const QGeoCoordinate &headingCoord);
