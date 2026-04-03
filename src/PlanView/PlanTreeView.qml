@@ -235,7 +235,6 @@ TreeView {
             MissionItemEditor {
                 width: delegateRoot.width
                 map: root.editorMap
-                masterController: root.planMasterController
                 missionItem: delegateRoot.nodeObject
 
                 onClicked:  root._missionController.setCurrentPlanViewSeqNum(delegateRoot.nodeObject.sequenceNumber, false)
