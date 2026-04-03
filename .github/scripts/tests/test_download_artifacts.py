@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tests for tools/setup/download_artifacts.py."""
+"""Tests for download_artifacts.py."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ import subprocess
 from pathlib import Path
 from unittest.mock import patch
 
-from setup import download_artifacts as mod
+import download_artifacts as mod
 
 
 def _cp(stdout: str = "", stderr: str = "", returncode: int = 0) -> subprocess.CompletedProcess:

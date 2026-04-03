@@ -31,27 +31,13 @@ permissions:
   id-token: write
   attestations: write
   actions: read
+  security-events: write
 
 jobs:
   changes:
-    name: Detect Changes
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    permissions:
-      contents: read
-    outputs:
-      should_build: ${{ steps.detect.outputs.any }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-      - name: Detect changes
-        id: detect
-        uses: ./.github/actions/detect-changes
-        with:
-          platform: android
+    uses: ./.github/workflows/_detect-changes.yml
+    with:
+      platform: android
 
   build:
     name: Android (${{ matrix.host }})
@@ -71,37 +57,37 @@ jobs:
             shell: bash
             primary: true
             emulator: false
-          # - host: mac
-          #   runner: macos-latest
-          #   arch: clang_64
-          #   qt_host_path: macos
-          #   shell: bash
-          #   primary: false
-          #   emulator: false
-          # - host: windows
-          #   runner: windows-latest
-          #   arch: win64_msvc2022_64
-          #   qt_host_path: msvc2022_64
-          #   shell: pwsh
-          #   primary: false
-          #   emulator: false
-          # - host: linux-emulator
-          #   qt_host: linux
-          #   runner: ubuntu-latest
-          #   arch: linux_gcc_64
-          #   qt_host_path: gcc_64
-          #   shell: bash
-          #   primary: false
-          #   emulator: true
+          - host: mac
+            runner: macos-latest
+            arch: clang_64
+            qt_host_path: macos
+            shell: bash
+            primary: false
+            emulator: false
+          - host: windows
+            runner: windows-latest
+            arch: win64_msvc2022_64
+            qt_host_path: msvc2022_64
+            shell: pwsh
+            primary: false
+            emulator: false
+          - host: linux-emulator
+            qt_host: linux
+            runner: ubuntu-latest
+            arch: linux_gcc_64
+            qt_host_path: gcc_64
+            shell: bash
+            primary: false
+            emulator: true
 
     defaults:
       run:
         shell: ${{ matrix.shell }}
 
     env:
-      PACKAGE: AMC
+      PACKAGE: QGroundControl
       QT_ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/deploy/android/android_release.keystore
-      QT_ANDROID_KEYSTORE_ALIAS: ${{ secrets.ANDROID_KEYSTORE_ALIAS }}
+      QT_ANDROID_KEYSTORE_ALIAS: QGCAndroidKeyStore
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       QT_ANDROID_ABIS: ${{ matrix.emulator && 'x86_64' || matrix.primary && 'arm64-v8a;armeabi-v7a' || 'arm64-v8a' }}
@@ -109,7 +95,6 @@ jobs:
 
     steps:
       - name: Harden Runner
-        if: runner.os == 'Linux'
         uses: step-security/harden-runner@v2
         with:
           egress-policy: audit
@@ -127,16 +112,13 @@ jobs:
       - name: Initial Setup
         uses: ./.github/actions/common
 
-      - name: Install host build dependencies
-        if: runner.os == 'Linux'
-        uses: ./.github/actions/install-dependencies
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
         with:
           cache-read-only: ${{ github.event_name == 'pull_request' }}
 
       - name: Install Qt for Android
+        id: qt-android
         uses: ./.github/actions/qt-android
         with:
           host: ${{ matrix.qt_host || matrix.host }}
@@ -151,7 +133,6 @@ jobs:
           android-platform: ${{ steps.config.outputs.android_platform }}
           android-cmdline-tools: ${{ steps.config.outputs.android_cmdline_tools }}
           android-build-tools: ${{ steps.config.outputs.android_build_tools }}
-          save-cache: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
 
       - name: Create Debug Keystore
         if: ${{ env.QT_ANDROID_KEYSTORE_STORE_PASS == '' || !matrix.primary }}
@@ -175,10 +156,13 @@ jobs:
           build-dir: ${{ runner.temp }}/build
           build-type: ${{ inputs.build_type || 'Release' }}
           stable: ${{ (github.ref_type == 'tag' || contains(github.ref, 'Stable')) && 'true' || 'false' }}
+          use-qt-cmake: 'false'
           extra-args: >-
             -DCMAKE_WARN_DEPRECATED=FALSE
+            -DCMAKE_TOOLCHAIN_FILE=${{ steps.qt-android.outputs.target_qt_root_dir }}/lib/cmake/Qt6/qt.toolchain.cmake
+            -DCMAKE_PREFIX_PATH=${{ steps.qt-android.outputs.target_qt_root_dir }}
             -DQT_ANDROID_ABIS=${{ env.QT_ANDROID_ABIS }}
-            -DQT_HOST_PATH=${{ env.QT_ROOT_DIR }}/../${{ matrix.qt_host_path }}
+            -DQT_HOST_PATH=${{ steps.qt-android.outputs.host_qt_root_dir }}
             -DQT_ANDROID_SIGN_APK=ON
 
       - name: Build
@@ -352,14 +336,6 @@ jobs:
               timeout 30s adb -e logcat -d > "${OUT_DIR}/adb-logcat-full.txt" 2>/dev/null || true
               timeout 30s adb -e shell dumpsys activity > "${OUT_DIR}/dumpsys-activity.txt" 2>/dev/null || true
               timeout 30s adb -e shell getprop > "${OUT_DIR}/getprop.txt" 2>/dev/null || true
-
-              # Extract GStreamer-specific lines for quick diagnosis
-              if [ -f "${OUT_DIR}/adb-logcat-full.txt" ]; then
-                grep -iE 'gst|gstreamer|libgst|GST_PLUGIN|GstVideoReceiver|qml6glsink|qgcvideosinkbin' \
-                  "${OUT_DIR}/adb-logcat-full.txt" > "${OUT_DIR}/gstreamer-logcat.txt" 2>/dev/null || true
-                grep -iE 'dlopen.*gst|UnsatisfiedLinkError.*gst|cannot.*load.*gst' \
-                  "${OUT_DIR}/adb-logcat-full.txt" > "${OUT_DIR}/gstreamer-load-errors.txt" 2>/dev/null || true
-              fi
             else
               echo "No online emulator device found; skipping adb diagnostics." > "${OUT_DIR}/adb-skipped.txt"
             fi
@@ -376,32 +352,25 @@ jobs:
 
       - name: Upload Emulator Diagnostics
         if: ${{ failure() && matrix.emulator }}
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: emulator-diagnostics-${{ matrix.host }}-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/emulator-diagnostics
           if-no-files-found: warn
           retention-days: 14
 
-      # - name: Attest Build with SBOM
-      #   if: ${{ !matrix.emulator }}
-      #   uses: ./.github/actions/attest-sbom
-      #   with:
-      #     subject-path: ${{ runner.temp }}/build/${{ env.PACKAGE }}.apk
-      #     subject-name: ${{ env.PACKAGE }}-${{ matrix.host }}
-      #     scan-path: ${{ runner.temp }}/build
-
-      - name: Upload Build File
+      - name: Attest and Upload
         if: ${{ !matrix.emulator }}
-        uses: ./.github/actions/upload
+        uses: ./.github/actions/attest-and-upload
         with:
-          artifact_name: ${{ env.PACKAGE }}.apk
-          package_name: ${{ matrix.primary && env.PACKAGE || format('{0}-{1}', env.PACKAGE, matrix.host) }}
-          aws_role_arn: ${{ secrets.AWS_ROLE_ARN }}
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_distribution_id: ${{ secrets.AWS_DISTRIBUTION_ID }}
-          upload_aws: ${{ matrix.primary }}
+          artifact-name: ${{ env.PACKAGE }}.apk
+          package-name: ${{ matrix.primary && env.PACKAGE || format('{0}-{1}', env.PACKAGE, matrix.host) }}
+          subject-name: ${{ env.PACKAGE }}-${{ matrix.host }}
+          aws-role-arn: ${{ secrets.AWS_ROLE_ARN }}
+          aws-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-distribution-id: ${{ secrets.AWS_DISTRIBUTION_ID }}
+          upload-aws: ${{ matrix.primary }}
 
       - name: Deploy to Play Store
         if: ${{ !matrix.emulator && matrix.primary && github.ref_type == 'tag' && env.HAS_PLAYSTORE_SECRET == 'true' }}

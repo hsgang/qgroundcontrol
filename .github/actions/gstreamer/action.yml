@@ -45,7 +45,7 @@ runs:
     - name: Read build config
       id: config
       shell: bash
-      run: python3 ./tools/setup/resolve_gstreamer_config.py --platform "${{ inputs.platform }}" --version "${{ inputs.version }}"
+      run: python3 "${GITHUB_WORKSPACE}/.github/scripts/resolve_gstreamer_config.py" --platform "${{ inputs.platform }}" --version "${{ inputs.version }}"
 
     # ===== DEPENDENCIES =====
 
@@ -257,6 +257,9 @@ runs:
         Get-ChildItem (Join-Path $prefix 'bin') -Filter '*.exe' | Select-Object Name, Length | Format-Table
         $libCount = (Get-ChildItem (Join-Path $prefix 'lib') -Filter '*.lib' | Measure-Object).Count
         Write-Host "$libCount library files found"
+        $env:PATH = (Join-Path $prefix 'bin') + ";" + $env:PATH
+        $env:GST_PLUGIN_PATH = Join-Path $prefix 'lib' 'gstreamer-1.0'
+        & (Join-Path $prefix 'bin' 'gst-launch-1.0.exe') --version
 
     # ===== ARCHIVE & UPLOAD =====
 
@@ -302,7 +305,7 @@ runs:
         "${PY_CMD}" "${WORKSPACE}/.github/scripts/gstreamer_archive.py" "${args[@]}"
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: ${{ steps.archive.outputs.name }}
         path: ${{ steps.archive.outputs.path }}

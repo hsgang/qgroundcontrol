@@ -5,7 +5,7 @@ Uses the GitHub CLI (gh) to query the GitHub API and download artifacts
 from all successful platform builds for a given commit SHA.
 
 Usage:
-    python3 tools/setup/download_artifacts.py \\
+    python3 .github/scripts/download_artifacts.py \\
         --repo owner/repo \\
         --head-sha abc123 \\
         --output-dir artifacts \\
@@ -22,15 +22,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
-try:
-    from .setup_bootstrap import ensure_setup_imports
-except ImportError:
-    setup_dir = Path(__file__).resolve().parent
-    if str(setup_dir) not in sys.path:
-        sys.path.insert(0, str(setup_dir))
-    from setup_bootstrap import ensure_setup_imports
+from ci_bootstrap import ensure_tools_dir
 
-ensure_setup_imports()
+ensure_tools_dir(__file__)
 
 from common.gh_actions import gh, list_workflow_runs_for_sha, list_run_artifacts
 from common.github_runs import group_runs_by_name, select_latest_runs_by_name
@@ -47,6 +41,7 @@ ARTIFACT_EXTENSIONS = (
     ".zip",
 )
 ARTIFACT_EXTENSION_SET = frozenset(ARTIFACT_EXTENSIONS)
+
 
 def select_latest_successful_runs(
     runs: list[dict[str, Any]],
