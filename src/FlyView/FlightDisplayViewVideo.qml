@@ -265,10 +265,10 @@ Item {
             id:                 thermalItem
             width:              height * QGroundControl.videoManager.thermalAspectRatio
             height: {
-                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
-                if (mode === MavlinkCameraControl.THERMAL_FULL) {
+                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControlInterface.THERMAL_FULL)
+                if (mode === MavlinkCameraControlInterface.THERMAL_FULL) {
                     return parent.height
-                } else if (mode === MavlinkCameraControl.THERMAL_PIP) {
+                } else if (mode === MavlinkCameraControlInterface.THERMAL_PIP) {
                     return parent.height / 3
                 } else {
                     return parent.height * _thermalHeightFactor
@@ -277,14 +277,14 @@ Item {
             anchors.centerIn:   parent
             visible: {
                 if (!QGroundControl.videoManager.hasThermal) return false
-                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
-                return mode !== MavlinkCameraControl.THERMAL_OFF
+                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControlInterface.THERMAL_FULL)
+                return mode !== MavlinkCameraControlInterface.THERMAL_OFF
             }
 
             function pipOrNot() {
-                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
+                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControlInterface.THERMAL_FULL)
 
-                if(mode === MavlinkCameraControl.THERMAL_PIP) {
+                if(mode === MavlinkCameraControlInterface.THERMAL_PIP) {
                     anchors.centerIn    = undefined
                     anchors.bottom      = parent.bottom
                     anchors.bottomMargin= ScreenTools.defaultFontPixelHeight * 0.5
@@ -314,8 +314,8 @@ Item {
                 objectName:     "thermalVideo"
                 anchors.fill:   parent
                 opacity: {
-                    var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
-                    if (mode === MavlinkCameraControl.THERMAL_BLEND) {
+                    var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControlInterface.THERMAL_FULL)
+                    if (mode === MavlinkCameraControlInterface.THERMAL_BLEND) {
                         return _manualThermalConfig ? (_videoSettings.thermalOpacity.rawValue / 100) : (_camera ? _camera.thermalOpacity / 100 : 0.85)
                     }
                     return 1.0
