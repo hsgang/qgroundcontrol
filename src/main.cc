@@ -1,3 +1,5 @@
+#include <QSplashScreen>
+
 #include "QGCApplication.h"
 #include "QGCCommandLineParser.h"
 #include "QGCLogging.h"
@@ -29,7 +31,27 @@ int main(int argc, char *argv[])
 
     Platform::setupPostApp();
 
+    // Splash screen initializes the windowing system early,
+    // preventing QFont ASSERT in debug builds
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
+    QPixmap splashPixmap(":/qmlimages/splash.png");
+    if (splashPixmap.isNull()) {
+        splashPixmap = QPixmap(screenGeometry.width() / 3, screenGeometry.height() / 3);
+        splashPixmap.fill(Qt::black);
+    } else {
+        splashPixmap = splashPixmap.scaled(
+            screenGeometry.width() / 3, screenGeometry.height() / 3,
+            Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    }
+    QSplashScreen splash(splashPixmap);
+    splash.show();
+    splash.showMessage(QCoreApplication::applicationVersion(),
+                       Qt::AlignRight | Qt::AlignBottom, Qt::white);
+
     app.init();
+
+    splash.close();
 
     // --- Run application or tests ---
     const auto run = [&]() -> int {
