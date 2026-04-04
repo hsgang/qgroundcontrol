@@ -26,6 +26,7 @@ DECLARE_SETTINGGROUP(Video, "Video")
     videoSourceList.append(videoSource3DRSolo);
     videoSourceList.append(videoSourceParrotDiscovery);
     videoSourceList.append(videoSourceYuneecMantisG);
+    videoSourceList.append(videoSourceWebRTC);
 
     #ifdef QGC_HERELINK_AIRUNIT_VIDEO
         videoSourceList.append(videoSourceHerelinkAirUnit);

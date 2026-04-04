@@ -37,6 +37,7 @@ public:
     Q_PROPERTY(QString  tcpVideoSource          READ tcpVideoSource         CONSTANT)
     Q_PROPERTY(QString  mpegtsVideoSource       READ mpegtsVideoSource      CONSTANT)
     Q_PROPERTY(QString  disabledVideoSource     READ disabledVideoSource    CONSTANT)
+    Q_PROPERTY(QString  webrtcVideoSource       READ webrtcVideoSource      CONSTANT)
 
     bool     streamConfigured       ();
     QString  rtspVideoSource        () { return videoSourceRTSP; }
@@ -45,6 +46,7 @@ public:
     QString  tcpVideoSource         () { return videoSourceTCP; }
     QString  mpegtsVideoSource      () { return videoSourceMPEGTS; }
     QString  disabledVideoSource    () { return videoDisabled; }
+    QString  webrtcVideoSource     () { return videoSourceWebRTC; }
 
     static constexpr const char* videoSourceNoVideo           = QT_TRANSLATE_NOOP("VideoSettings", "No Video Available");
     static constexpr const char* videoDisabled                = QT_TRANSLATE_NOOP("VideoSettings", "Video Stream Disabled");
@@ -58,6 +60,7 @@ public:
     static constexpr const char* videoSourceYuneecMantisG     = QT_TRANSLATE_NOOP("VideoSettings", "Yuneec Mantis G");
     static constexpr const char* videoSourceHerelinkAirUnit   = QT_TRANSLATE_NOOP("VideoSettings", "Herelink AirUnit");
     static constexpr const char* videoSourceHerelinkHotspot   = QT_TRANSLATE_NOOP("VideoSettings", "Herelink Hotspot");
+    static constexpr const char* videoSourceWebRTC            = QT_TRANSLATE_NOOP("VideoSettings", "WebRTC");
 
 signals:
     void streamConfiguredChanged    (bool configured);
