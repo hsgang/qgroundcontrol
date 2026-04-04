@@ -266,15 +266,7 @@ void QGCApplication::_initForNormalAppBoot()
     QGCPositionManager::instance()->init();
     LinkManager::instance()->init();
 
-    // VideoManager::init with mainWindow deferred until QML ready
-    QObject::connect(_qmlAppEngine, &QQmlApplicationEngine::objectCreated, this, [this](QObject *obj, const QUrl &) {
-        if (obj) {
-            auto *window = mainRootWindow();
-            if (window) {
-                VideoManager::instance()->init(window);
-            }
-        }
-    }, Qt::QueuedConnection);
+    VideoManager::instance()->init(mainRootWindow());
 
     // Image provider for Optical Flow
     _qmlAppEngine->addImageProvider(_qgcImageProviderId, new QGCImageProvider());
