@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.FlyView
@@ -13,9 +12,11 @@ Item {
 
     property bool useSmallFont: true
 
-    property double _ar:                QGroundControl.videoManager.gstreamerEnabled
-                                            ? QGroundControl.videoManager.videoSize.width / QGroundControl.videoManager.videoSize.height
-                                            : QGroundControl.videoManager.aspectRatio
+    property double _ar:                (cameraLoader.visible && cameraLoader.status === Loader.Ready)
+                                            ? cameraLoader.item.implicitWidth / cameraLoader.item.implicitHeight
+                                            : QGroundControl.videoManager.gstreamerEnabled
+                                                ? QGroundControl.videoManager.videoSize.width / QGroundControl.videoManager.videoSize.height
+                                                : QGroundControl.videoManager.aspectRatio
     property bool   _showGrid:          QGroundControl.settingsManager.videoSettings.gridLines.rawValue
     property var    _dynamicCameras:    globals.activeVehicle ? globals.activeVehicle.cameraManager : null
     property bool   _connected:         globals.activeVehicle ? !globals.activeVehicle.communicationLost : false
@@ -24,6 +25,8 @@ Item {
     property var    _camera:            _isCamera ? _dynamicCameras.cameras.get(_curCameraIndex) : null
     property bool   _hasZoom:           _camera && _camera.hasZoom
     property int    _fitMode:           QGroundControl.settingsManager.videoSettings.videoFit.rawValue
+    property bool   _showStreamLoader:  QGroundControl.videoManager.decoding
+    property bool   _showUvcLoader:     QGroundControl.videoManager.isUvc
 
     property bool   _isMode_FIT_WIDTH:  _fitMode === 0
     property bool   _isMode_FIT_HEIGHT: _fitMode === 1
@@ -36,132 +39,32 @@ Item {
     function getHeight() {
         return videoBackground.getHeight()
     }
-    property var    _settingsManager:           QGroundControl.settingsManager
-    property var    _videoSettings:             _settingsManager.videoSettings
-    property string _videoSource:               _videoSettings.videoSource.rawValue
-    // property bool   _isGst:                  QGroundControl.videoManager.isGStreamer
-    property bool   _isRTSP:                    _videoSource === _videoSettings.rtspVideoSource
-    property var    _videoManager:              QGroundControl.videoManager
-    property bool   _videoAutoStreamConfig:     _videoManager.autoStreamConfigured
-    property bool   _manualThermalConfig:       _videoSettings.enableManualThermalConfig.rawValue
 
     property double _thermalHeightFactor: 0.85 //-- TODO
 
-        // Image {
-        //     id:             noVideo
-        //     anchors.fill:   parent
-        //     source:         "/res/NoVideoBackground.jpg"
-        //     fillMode:       Image.PreserveAspectCrop
-        //     visible:        !(QGroundControl.videoManager.decoding)
-
-        Rectangle {
+        Image {
             id:             noVideo
             anchors.fill:   parent
-            visible:        !(QGroundControl.videoManager.decoding)
-            color:          qgcPal.window
+            source:         "/res/NoVideoBackground.jpg"
+            fillMode:       Image.PreserveAspectCrop
+            visible:        !_showStreamLoader && !_showUvcLoader
 
             Rectangle {
                 anchors.centerIn:   parent
-                width:              noVideoColumn.width + ScreenTools.defaultFontPixelHeight
-                height:             noVideoColumn.height + ScreenTools.defaultFontPixelHeight / 2
-                radius:             ScreenTools.defaultFontPixelHeight / 4
-                color:              "transparent"//Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.7)
-                //opacity:            0.5
+                width:              noVideoLabel.contentWidth + ScreenTools.defaultFontPixelHeight
+                height:             noVideoLabel.contentHeight + ScreenTools.defaultFontPixelHeight
+                radius:             ScreenTools.defaultFontPixelWidth / 2
+                color:              "black"
+                opacity:            0.5
+            }
 
-                RowLayout {
-                    id: noVideoColumn
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.verticalCenter: parent.verticalCenter
-                    spacing:   ScreenTools.defaultFontPixelHeight / 2
-
-                    BusyIndicator {
-                        id: control
-                        Layout.alignment: Qt.AlignVCenter | Qt.AlignHCenter
-                        Layout.fillWidth: true
-
-                        property real size:ScreenTools.defaultFontPixelHeight * 1.5
-                        property real ballSize: ScreenTools.defaultFontPixelHeight / 6
-
-                        contentItem:  Item {
-                            implicitWidth:  control.size
-                            implicitHeight: control.size
-
-                            Item {
-                                id: item
-                                x: control.size / 2 - control.size / 2
-                                y: control.size / 2 - control.size / 2
-                                width: control.size
-                                height: control.size
-                                //opacity: control.running ? 1 : 0
-
-                                OpacityAnimator on opacity{
-                                    duration: 300
-                                    from: 0
-                                    to: 1
-                                }
-
-                                RotationAnimator {
-                                    target: item
-                                    running: control.visible && control.running
-                                    from: 0
-                                    to: 360
-                                    loops: Animation.Infinite
-                                    duration: 2100
-                                }
-
-                                Repeater {
-                                    id: repeater
-                                    model: 7
-
-                                    Rectangle {
-                                        x: item.width / 2 - width / 2
-                                        y: item.height / 2 - height / 2
-                                        implicitWidth: control.ballSize * 2
-                                        implicitHeight: control.ballSize * 2
-                                        radius: control.ballSize
-                                        color: "transparent"
-                                        border.color: qgcPal.text
-                                        transform: [
-                                            Translate {
-                                                y: -Math.min(item.width, item.height) * 0.5 + control.ballSize
-                                            },
-                                            Rotation {
-                                                angle: index / repeater.count * 360
-                                                origin.x: control.ballSize
-                                                origin.y: control.ballSize
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Column {
-                        Layout.alignment:   Qt.AlignVCenter | Qt.AlignHCenter
-                        Layout.fillWidth:   true
-                        spacing:            ScreenTools.defaultFontPixelHeight / 4
-
-                        QGCLabel {
-                            id:             noVideoLabel
-                            text:           QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("WAITING FOR VIDEO") : qsTr("VIDEO DISABLED")
-                            font.bold:      true
-                            color:          qgcPal.text
-                            font.pointSize: useSmallFont ? ScreenTools.smallFontPointSize : ScreenTools.largeFontPointSize
-                        }
-
-                        QGCLabel {
-                            text:           _videoAutoStreamConfig ? qsTr("Auto Configured") : _videoSource
-                            font.pointSize: ScreenTools.smallFontPointSize
-                        }
-
-                        QGCLabel {
-                            text:           _videoSettings.rtspUrl.rawValue
-                            visible:        _isRTSP && !_videoAutoStreamConfig
-                            font.pointSize: ScreenTools.smallFontPointSize
-                        }
-                    }
-                }
+            QGCLabel {
+                id:                 noVideoLabel
+                text:               QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("WAITING FOR VIDEO") : qsTr("VIDEO DISABLED")
+                font.bold:          true
+                color:              "white"
+                font.pointSize:     useSmallFont ? ScreenTools.smallFontPointSize : ScreenTools.largeFontPointSize
+                anchors.centerIn:   parent
             }
         }
 
@@ -169,7 +72,7 @@ Item {
         id:             videoBackground
         anchors.fill:   parent
         color:          "black"
-        visible:        QGroundControl.videoManager.decoding
+        visible:        _showStreamLoader || _showUvcLoader
         function getWidth() {
             if(_ar != 0.0){
                 if(_isMode_FIT_HEIGHT
@@ -201,49 +104,36 @@ Item {
             return root.height
         }
         Component {
-            id: videoBackgroundComponent
+            id: videoBackgroundGLComponent
             QGCVideoBackground {
-                id:             videoContent
                 objectName:     "videoContent"
 
                 Connections {
                     target: QGroundControl.videoManager
                     function onImageFileChanged(filename) {
-                        videoContent.grabToImage(function(result) {
+                        grabToImage(function(result) {
                             if (!result.saveToFile(filename)) {
                                 console.error('Error capturing video frame');
                             }
                         });
                     }
                 }
+            }
+        }
+        Component {
+            id: videoBackgroundD3D11Component
+            QGCVideoBackgroundD3D11 {
+                objectName:     "videoContent"
 
-                Rectangle {
-                    color:  Qt.rgba(1,1,1,0.5)
-                    height: parent.height
-                    width:  1
-                    x:      parent.width * 0.33
-                    visible: _showGrid && !QGroundControl.videoManager.fullScreen
-                }
-                Rectangle {
-                    color:  Qt.rgba(1,1,1,0.5)
-                    height: parent.height
-                    width:  1
-                    x:      parent.width * 0.66
-                    visible: _showGrid && !QGroundControl.videoManager.fullScreen
-                }
-                Rectangle {
-                    color:  Qt.rgba(1,1,1,0.5)
-                    width:  parent.width
-                    height: 1
-                    y:      parent.height * 0.33
-                    visible: _showGrid && !QGroundControl.videoManager.fullScreen
-                }
-                Rectangle {
-                    color:  Qt.rgba(1,1,1,0.5)
-                    width:  parent.width
-                    height: 1
-                    y:      parent.height * 0.66
-                    visible: _showGrid && !QGroundControl.videoManager.fullScreen
+                Connections {
+                    target: QGroundControl.videoManager
+                    function onImageFileChanged(filename) {
+                        grabToImage(function(result) {
+                            if (!result.saveToFile(filename)) {
+                                console.error('Error capturing video frame');
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -251,74 +141,108 @@ Item {
             // GStreamer is causing crashes on Lenovo laptop OpenGL Intel drivers. In order to workaround this
             // we don't load a QGCVideoBackground object when video is disabled. This prevents any video rendering
             // code from running. Hence the Loader to completely remove it.
+            id:                 videoStreamLoader
+            anchors.fill:       videoContentArea
+            visible:            _showStreamLoader
+            sourceComponent:    QGroundControl.videoManager.gstreamerD3D11Sink
+                                    ? videoBackgroundD3D11Component
+                                    : videoBackgroundGLComponent
+
+            property bool videoDisabled: QGroundControl.settingsManager.videoSettings.videoSource.rawValue === QGroundControl.settingsManager.videoSettings.disabledVideoSource
+        }
+        //-- UVC Video (USB Camera or Video Device)
+        Loader {
+            id:             cameraLoader
+            anchors.fill:   videoContentArea
+            visible:        _showUvcLoader
+            source:         QGroundControl.videoManager.uvcEnabled ? "qrc:/qml/QGroundControl/FlyView/FlightDisplayViewUVC.qml" : "qrc:/qml/QGroundControl/FlyView//FlightDisplayViewDummy.qml"
+        }
+
+        Item {
+            id:                 videoContentArea
             height:             parent.getHeight()
             width:              parent.getWidth()
             anchors.centerIn:   parent
-            visible:            QGroundControl.videoManager.decoding
-            sourceComponent:    videoBackgroundComponent
+            visible:           _showStreamLoader || _showUvcLoader
 
-            property bool videoDisabled: QGroundControl.settingsManager.videoSettings.videoSource.rawValue === QGroundControl.settingsManager.videoSettings.disabledVideoSource
+            // grid lines
+            Item {
+                anchors.fill:   parent
+                visible:        _showGrid && !QGroundControl.videoManager.fullScreen
+
+                Rectangle {
+                    color:  Qt.rgba(1,1,1,0.5)
+                    height: parent.height
+                    width:  1
+                    x:      parent.width * 0.33
+                }
+                Rectangle {
+                    color:  Qt.rgba(1,1,1,0.5)
+                    height: parent.height
+                    width:  1
+                    x:      parent.width * 0.66
+                }
+                Rectangle {
+                    color:  Qt.rgba(1,1,1,0.5)
+                    width:  parent.width
+                    height: 1
+                    y:      parent.height * 0.33
+                }
+                Rectangle {
+                    color:  Qt.rgba(1,1,1,0.5)
+                    width:  parent.width
+                    height: 1
+                    y:      parent.height * 0.66
+                }
+            }
         }
 
         //-- Thermal Image
         Item {
             id:                 thermalItem
             width:              height * QGroundControl.videoManager.thermalAspectRatio
-            height: {
-                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
-                if (mode === MavlinkCameraControl.THERMAL_FULL) {
-                    return parent.height
-                } else if (mode === MavlinkCameraControl.THERMAL_PIP) {
-                    return parent.height / 3
-                } else {
-                    return parent.height * _thermalHeightFactor
-                }
-            }
+            height:             _camera ? (_camera.thermalMode === MavlinkCameraControlInterface.THERMAL_FULL ? parent.height : (_camera.thermalMode === MavlinkCameraControlInterface.THERMAL_PIP ? ScreenTools.defaultFontPixelHeight * 12 : parent.height * _thermalHeightFactor)) : 0
             anchors.centerIn:   parent
-            visible: {
-                if (!QGroundControl.videoManager.hasThermal) return false
-                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
-                return mode !== MavlinkCameraControl.THERMAL_OFF
-            }
-
+            visible:            QGroundControl.videoManager.hasThermal && _camera.thermalMode !== MavlinkCameraControlInterface.THERMAL_OFF
             function pipOrNot() {
-                var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
-
-                if(mode === MavlinkCameraControl.THERMAL_PIP) {
-                    anchors.centerIn    = undefined
-                    anchors.bottom      = parent.bottom
-                    anchors.bottomMargin= ScreenTools.defaultFontPixelHeight * 0.5
-                    anchors.horizontalCenter = parent.horizontalCenter
-                } else {
-                    anchors.top         = undefined
-                    anchors.topMargin   = undefined
-                    anchors.left        = undefined
-                    anchors.leftMargin  = undefined
-                    anchors.centerIn    = parent
+                if(_camera) {
+                    if(_camera.thermalMode === MavlinkCameraControlInterface.THERMAL_PIP) {
+                        anchors.centerIn    = undefined
+                        anchors.top         = parent.top
+                        anchors.topMargin   = mainWindow.header.height + (ScreenTools.defaultFontPixelHeight * 0.5)
+                        anchors.left        = parent.left
+                        anchors.leftMargin  = ScreenTools.defaultFontPixelWidth * 12
+                    } else {
+                        anchors.top         = undefined
+                        anchors.topMargin   = undefined
+                        anchors.left        = undefined
+                        anchors.leftMargin  = undefined
+                        anchors.centerIn    = parent
+                    }
                 }
             }
             Connections {
                 target:                 _camera
-                function onThermalModeChanged() {
-                    thermalItem.pipOrNot()
-                }
+                function onThermalModeChanged() { thermalItem.pipOrNot() }
             }
-            Connections {
-                target:                 _videoSettings.thermalViewMode
-                function onRawValueChanged() {
-                    thermalItem.pipOrNot()
-                }
+            onVisibleChanged: {
+                thermalItem.pipOrNot()
             }
-            QGCVideoBackground {
+            Loader {
                 id:             thermalVideo
-                objectName:     "thermalVideo"
                 anchors.fill:   parent
-                opacity: {
-                    var mode = _manualThermalConfig ? _videoSettings.thermalViewMode.rawValue : (_camera ? _camera.thermalMode : MavlinkCameraControl.THERMAL_FULL)
-                    if (mode === MavlinkCameraControl.THERMAL_BLEND) {
-                        return _manualThermalConfig ? (_videoSettings.thermalOpacity.rawValue / 100) : (_camera ? _camera.thermalOpacity / 100 : 0.85)
-                    }
-                    return 1.0
+                opacity:        _camera ? (_camera.thermalMode === MavlinkCameraControlInterface.THERMAL_BLEND ? _camera.thermalOpacity / 100 : 1.0) : 0
+                sourceComponent: QGroundControl.videoManager.gstreamerD3D11Sink
+                    ? thermalBackgroundD3D11 : thermalBackgroundGL
+                onLoaded: { if (item) item.objectName = "thermalVideo" }
+
+                Component {
+                    id: thermalBackgroundGL
+                    QGCVideoBackground {}
+                }
+                Component {
+                    id: thermalBackgroundD3D11
+                    QGCVideoBackgroundD3D11 {}
                 }
             }
         }
