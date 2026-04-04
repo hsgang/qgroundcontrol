@@ -266,8 +266,7 @@ void QGCApplication::_initForNormalAppBoot()
     QGCPositionManager::instance()->init();
     LinkManager::instance()->init();
 
-    // Start GStreamer init early (async), VideoManager::init with mainWindow deferred until QML ready
-    VideoManager::instance()->startGStreamerInit();
+    // VideoManager::init with mainWindow deferred until QML ready
     QObject::connect(_qmlAppEngine, &QQmlApplicationEngine::objectCreated, this, [this](QObject *obj, const QUrl &) {
         if (obj) {
             auto *window = mainRootWindow();
