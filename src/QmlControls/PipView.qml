@@ -258,7 +258,7 @@ Item {
                         id: view3DIcon
                         visible: _viewer3DEnabled && (item1.pipState.state === item1.pipState.fullState)
                         text:           qsTr("3D View")
-                        iconSource:     "/qmlimages/Viewer3D/City3DMapIcon.svg"
+                        iconSource:     "/qml/QGroundControl/Viewer3D/City3DMapIcon.svg"
                         onTriggered:{
                             _root.isViewer3DOpen = !_root.isViewer3DOpen
                         }
@@ -268,7 +268,7 @@ Item {
                                 view3DIcon.iconSource =     "/InstrumentValueIcons/outlineMap.svg"
                                 text=           qsTr("2D View")
                             }else{
-                                iconSource =     "/qmlimages/Viewer3D/City3DMapIcon.svg"
+                                iconSource =     "/qml/QGroundControl/Viewer3D/City3DMapIcon.svg"
                                 text =           qsTr("3D View")
                             }
                         }
