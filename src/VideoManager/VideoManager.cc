@@ -73,15 +73,8 @@ VideoManager::VideoManager(QObject *parent)
         (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
         (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6D3D11VideoItem", 1, 0, "GstD3D11Qt6VideoItem");
     } else {
-        // Register QML types eagerly so the QML engine can resolve imports before
-        // GStreamer finishes async init. On Android/iOS the Qt6GLVideoItem constructor
-        // calls GStreamer GL functions that crash before gst_init completes, so use
-        // a stub here — the real type is registered in _onGstInitComplete().
-#if defined(QGC_GST_STREAMING) && !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-        gstQml6GLRegisterQmlTypes();
-#else
+        // Register stubs now — real types registered after GStreamer init in _onGstInitComplete()
         (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
-#endif
 #ifdef QGC_GST_D3D11_SINK
         gstQml6D3D11RegisterQmlTypes();
 #else
