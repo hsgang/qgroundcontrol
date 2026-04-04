@@ -304,7 +304,7 @@ Item {
                 }
             }
             Connections {
-                target:                 _videoSettings.thermalViewMode
+                target:                 null // thermal not used in this fork
                 function onRawValueChanged() {
                     thermalItem.pipOrNot()
                 }
