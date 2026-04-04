@@ -1,5 +1,3 @@
-#include <QSplashScreen>
-
 #include "QGCApplication.h"
 #include "QGCCommandLineParser.h"
 #include "QGCLogging.h"
@@ -31,31 +29,7 @@ int main(int argc, char *argv[])
 
     Platform::setupPostApp();
 
-    ////////////////Splash image////////////////////////
-    ///
-    // 화면 크기 가져오기
-    QScreen *screen = QGuiApplication::primaryScreen();
-    QRect screenGeometry = screen->geometry();
-
-    QPixmap originalPixmap(":/qmlimages/splash.png");
-
-    // 스플래시 이미지 크기 조절 방법 1: 고정 크기로 조절
-    QPixmap scaledPixmap = originalPixmap.scaled(
-        screenGeometry.width()/3,
-        screenGeometry.height()/3,
-        Qt::KeepAspectRatio, // 가로세로 비율 유지
-        Qt::SmoothTransformation // 고품질 크기 조절
-    );
-
-    QSplashScreen splash(scaledPixmap);
-    splash.show();
-
-    splash.showMessage(QCoreApplication::applicationVersion(), Qt::AlignRight | Qt::AlignBottom, Qt::white);
-    ////////////////Splash image////////////////////////
-
     app.init();
-
-    splash.close();
 
     // --- Run application or tests ---
     const auto run = [&]() -> int {

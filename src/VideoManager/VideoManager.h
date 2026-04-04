@@ -2,9 +2,13 @@
 
 #include <QtCore/QFuture>
 #include <QtCore/QLoggingCategory>
+#include <QtCore/QPromise>
 #include <QtCore/QObject>
 #include <QtCore/QSize>
 #include <QtQmlIntegration/QtQmlIntegration>
+
+#include <functional>
+#include <memory>
 
 Q_DECLARE_LOGGING_CATEGORY(VideoManagerLog)
 
@@ -42,6 +46,8 @@ class VideoManager : public QObject
     Q_PROPERTY(QString  imageFile               READ imageFile                                  NOTIFY imageFileChanged)
     Q_PROPERTY(QString  uvcVideoSourceID        READ uvcVideoSourceID                           NOTIFY uvcVideoSourceIDChanged)
 
+    friend class VideoManagerInitTest;
+
 public:
     explicit VideoManager(QObject *parent = nullptr);
     ~VideoManager();
@@ -54,12 +60,13 @@ public:
     Q_INVOKABLE void stopRecording();
     Q_INVOKABLE void stopVideo();
 
+    void pushWebRtcRtp(const QByteArray &packet);
+    bool isWebRtcInternalModeEnabled() const { return _webrtcInternalModeEnabled; }
+
     void init(QQuickWindow *mainWindow);
     void startGStreamerInit();
     bool waitForGStreamerInit(int timeoutMs = 60000);
     void cleanup();
-    void pushWebRtcRtp(const QByteArray &packet);
-    bool isWebRtcInternalModeEnabled() const { return _webrtcInternalModeEnabled; }
     bool autoStreamConfigured() const;
     bool decoding() const { return _decoding; }
     bool fullScreen() const { return _fullScreen; }
@@ -136,6 +143,8 @@ private:
 
     InitState _initState = InitState::NotStarted;
     QFuture<bool> _gstInitFuture;
+#if defined(QGC_GST_STREAMING) && defined(Q_OS_ANDROID)
+#endif
     bool _initialized = false;
     bool _gstreamerDisabledForUnitTests = false;
     bool _fullScreen = false;
@@ -147,4 +156,8 @@ private:
     QSize _videoSize;
     QString _imageFile;
     QString _uvcVideoSourceID;
+
+#ifdef QGC_UNITTEST_BUILD
+    std::function<void()> _createVideoReceiversForTest;
+#endif
 };
