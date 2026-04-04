@@ -152,7 +152,7 @@ MACOS_PACKAGES: list[str] = [
 ]
 
 # Windows GStreamer
-WINDOWS_GSTREAMER_BASE_URL = "https://qgroundcontrol.s3.us-west-2.amazonaws.com/dependencies/gstreamer/windows"
+WINDOWS_GSTREAMER_BASE_URL = "https://gstreamer.freedesktop.org/data/pkg/windows"
 WINDOWS_GSTREAMER_INSTALL_DIR = "C:\\gstreamer"
 WINDOWS_GSTREAMER_PREFIX = "C:\\gstreamer\\1.0\\msvc_x86_64"
 WINDOWS_VULKAN_INSTALL_DIR = "C:\\VulkanSDK\\latest"
@@ -576,7 +576,7 @@ def install_windows_gstreamer(version: str, dry_run: bool = False) -> bool:
         print(f"Skipping GStreamer: only supported on AMD64 (detected: {arch or 'unknown'})")
         return True
 
-    base_url = f"{WINDOWS_GSTREAMER_BASE_URL}/{version}"
+    base_url = f"{WINDOWS_GSTREAMER_BASE_URL}/{version}/msvc"
     runtime_name = f"gstreamer-1.0-msvc-x86_64-{version}.msi"
     devel_name = f"gstreamer-1.0-devel-msvc-x86_64-{version}.msi"
 
