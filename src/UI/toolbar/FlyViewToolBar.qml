@@ -221,34 +221,6 @@ Item {
         }
     }
 
-    //-------------------------------------------------------------------------
-    //-- Branding Logo
-
-    Rectangle {
-        id: brandingLogo
-        anchors.right:          parent.right
-        anchors.top:            parent.top
-        anchors.bottom:         parent.bottom
-        anchors.margins:        ScreenTools.defaultFontPixelHeight / 2
-        visible:                !ScreenTools.isMobile /*&& currentToolbar !== planViewToolbar && x > (toolsFlickable.x + toolsFlickable.contentWidth + ScreenTools.defaultFontPixelWidth) */
-        color:                  "transparent"
-        border.color:           qgcPal.text
-        border.width:           1
-        width:                  ScreenTools.defaultFontPixelHeight * 6
-        radius:                 ScreenTools.defaultFontPixelHeight / 4
-
-        Image {
-            id:                     brandImage
-            anchors.fill:           parent
-            anchors.margins:        ScreenTools.defaultFontPixelHeight / 4
-            fillMode:               Image.PreserveAspectFit
-            source:                 "/res/amplogo.svg"
-            sourceSize.width:       256
-            sourceSize.height:      256
-            mipmap:                 true
-        }
-    }
-
     Component{
         id: linkManagerDialogComponent
 
