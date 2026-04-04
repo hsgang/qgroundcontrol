@@ -239,16 +239,8 @@ bool QGCApplication::_initVideo()
 #ifdef QGC_GST_STREAMING
     const bool isOffscreen = (qApp->platformName() == QLatin1String("offscreen"));
 
-#if defined(QGC_GST_D3D11_SINK)
-    // D3D11 sink renders via Qt's native D3D11 RHI — no OpenGL needed.
-    if (isOffscreen) {
-        QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-    }
-    qCDebug(QGCApplicationLog) << "D3D11 video sink available, using default graphics API";
-#else
     Q_UNUSED(isOffscreen);
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-#endif  // QGC_GST_D3D11_SINK
 #endif
 
     QGCCorePlugin::instance();  // CorePlugin must be initialized before VideoManager for Video Cleanup
