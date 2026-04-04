@@ -12,6 +12,9 @@
 #include "VideoReceiver.h"
 #include "VideoSettings.h"
 #include "VideoItemStub.h"
+#ifdef QGC_GST_D3D11_SINK
+#include "gstqml6d3d11register.h"
+#endif
 #include "QtMultimediaReceiver.h"
 #include <QtConcurrent/QtConcurrent>
 #include "UVCReceiver.h"
@@ -66,6 +69,11 @@ VideoManager::VideoManager(QObject *parent)
     if (needsStub) {
         (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
     }
+#ifdef QGC_GST_D3D11_SINK
+    gstQml6D3D11RegisterQmlTypes();
+#else
+    (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6D3D11VideoItem", 1, 0, "GstD3D11Qt6VideoItem");
+#endif
 }
 
 VideoManager::~VideoManager()
