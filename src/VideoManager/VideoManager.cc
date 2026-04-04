@@ -13,6 +13,7 @@
 #include "VideoSettings.h"
 #include "VideoItemStub.h"
 #include "QtMultimediaReceiver.h"
+#include <QtConcurrent/QtConcurrent>
 #include "UVCReceiver.h"
 #ifdef QGC_GST_STREAMING
 #include "GStreamer.h"
@@ -92,7 +93,7 @@ void VideoManager::startGStreamerInit()
     }
 
     _initState = InitState::Pending;
-    _gstInitFuture = GStreamer::initializeAsync();
+    _gstInitFuture = QtConcurrent::run(&GStreamer::initialize);
     _gstInitFuture.then(this, [this](bool success) {
         _onGstInitComplete(success);
     }).onCanceled(this, [this] {
