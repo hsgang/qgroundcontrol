@@ -2,8 +2,8 @@ if(NOT WIN32 OR ANDROID)
     return()
 endif()
 
-if(NOT GStreamer_VERSION VERSION_GREATER_EQUAL "1.24")
-    message(STATUS "gstqml6d3d11: Requires GStreamer >= 1.24 (have ${GStreamer_VERSION}), skipping")
+if(NOT GStreamer_VERSION VERSION_GREATER_EQUAL "1.26")
+    message(STATUS "gstqml6d3d11: Requires GStreamer >= 1.26 (have ${GStreamer_VERSION}), skipping")
     return()
 endif()
 
