@@ -31,7 +31,7 @@ Item {
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         anchors.left:           parent.left
-        anchors.right:          brandingLogo.visible ? brandingLogo.left : parent.right
+        anchors.right:          parent.right
         anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
         spacing:                ScreenTools.defaultFontPixelWidth
 
