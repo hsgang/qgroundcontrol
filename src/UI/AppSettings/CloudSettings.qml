@@ -152,7 +152,6 @@ SettingsPage {
             Layout.fillWidth:   true
             textFieldPreferredWidth:    _urlFieldWidth * 1.4
             label:              qsTr("서버 주소")
-            description:        qsTr("ex)example.host.com")
             fact:               cloudSettings.webrtcSignalingServer
         }
 
