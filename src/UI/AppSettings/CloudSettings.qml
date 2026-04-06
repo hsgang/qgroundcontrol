@@ -65,7 +65,6 @@ SettingsPage {
                 font.family:    ScreenTools.normalFontFamily
                 color:          qgcPal.text
                 antialiasing:   true
-                echoMode:       TextField.PasswordEchoOnEdit
                 text:           QGroundControl.cloudManager.password
 
                 Rectangle {
@@ -160,7 +159,6 @@ SettingsPage {
             textFieldPreferredWidth:    _urlFieldWidth * 1.4
             label:              qsTr("API 키")
             fact:               cloudSettings.webrtcApiKey
-            echoMode:           TextField.PasswordEchoOnEdit
         }
 
         LabelledFactTextField {
@@ -182,7 +180,6 @@ SettingsPage {
             textFieldPreferredWidth:    _urlFieldWidth * 1.4
             label:              qsTr("TURN 비밀번호")
             fact:               cloudSettings.webrtcTurnPassword
-            echoMode:           TextField.PasswordEchoOnEdit
         }
 
         RowLayout {
