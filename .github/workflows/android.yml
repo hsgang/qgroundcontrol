@@ -87,6 +87,12 @@ jobs:
         id: config
         uses: ./.github/actions/build-config
 
+      - name: Install host EGL libraries (needed by qsb shader compiler)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1-mesa libegl1-mesa-dev
+
       - name: Initial Setup
         uses: ./.github/actions/common
 
