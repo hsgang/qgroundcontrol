@@ -140,6 +140,16 @@ Item {
             guidedValueSlider:     _guidedValueSlider
         }
 
+        GuidedActionConfirm {
+            id:                         guidedActionConfirm
+            anchors.bottom:             parent.bottom
+            anchors.bottomMargin:       ScreenTools.defaultFontPixelHeight * 4
+            anchors.horizontalCenter:   parent.horizontalCenter
+            z:                          QGroundControl.zOrderTopMost
+            guidedController:           guidedActionsController
+            guidedValueSlider:          _guidedValueSlider
+        }
+
         //-- Guided value slider (e.g. altitude)
         GuidedValueSlider {
             id:                 guidedValueSlider
