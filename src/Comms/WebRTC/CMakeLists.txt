@@ -31,8 +31,6 @@ set(LIBDATACHANNEL_OPTIONS
 
 # CPMAddPackage 호출
 if(ANDROID)
-  # Remove NDK prebuilt lib from CMAKE_LIBRARY_PATH to avoid x86_64/ARM64 mismatch
-  list(FILTER CMAKE_LIBRARY_PATH EXCLUDE REGEX "prebuilt/linux-x86_64/lib")
   CPMAddPackage(
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
@@ -43,8 +41,17 @@ if(ANDROID)
         "OPENSSL_CRYPTO_LIBRARY=${OPENSSL_CRYPTO_LIBRARY}"
         "OPENSSL_SSL_LIBRARY=${OPENSSL_SSL_LIBRARY}"
         "OPENSSL_USE_STATIC_LIBS=TRUE"
+        "NO_MEDIA=ON"
     PATCH_COMMAND ${CMAKE_COMMAND} -E echo "include_directories(${OPENSSL_INCLUDE_DIR})" >> ${CMAKE_CURRENT_BINARY_DIR}/cpm_modules/libdatachannel/deps/libsrtp/CMakeLists.txt
   )
+  # Prevent NDK prebuilt x86_64 libunwind.so from leaking into ARM64 link
+  if(TARGET datachannel-static)
+    get_target_property(_dc_libs datachannel-static INTERFACE_LINK_LIBRARIES)
+    if(_dc_libs)
+      list(FILTER _dc_libs EXCLUDE REGEX "libunwind")
+      set_target_properties(datachannel-static PROPERTIES INTERFACE_LINK_LIBRARIES "${_dc_libs}")
+    endif()
+  endif()
 else()
   CPMAddPackage(
     NAME libdatachannel
