@@ -203,6 +203,10 @@ bool VideoSettings::streamConfigured(void)
         qCDebug(VideoManagerLog) << "Stream configured for Herelink Hotspot";
         return true;
     }
+    if(vSource == videoSourceWebRTC) {
+        qCDebug(VideoManagerLog) << "Stream configured for WebRTC";
+        return true;
+    }
 #ifndef QGC_DISABLE_UVC
     if (UVCReceiver::enabled() && UVCReceiver::deviceExists(vSource)) {
         qCDebug(VideoManagerLog) << "Stream configured for UVC";

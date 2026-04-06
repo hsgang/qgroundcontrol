@@ -52,7 +52,7 @@ void GstVideoReceiver::start(uint32_t timeout)
         return;
     }
 
-    if (_uri.isEmpty()) {
+    if (_uri.isEmpty() && !_useInternalRtp) {
         qCDebug(GstVideoReceiverLog) << "Failed because URI is not specified";
         _dispatchSignal([this]() { emit onStartComplete(STATUS_INVALID_URL); });
         return;
@@ -131,9 +131,9 @@ void GstVideoReceiver::start(uint32_t timeout)
                      "message-forward", TRUE,
                      nullptr);
 
-        _source = _makeSource(_uri);
+        _source = _useInternalRtp ? _makeInternalRtpSource() : _makeSource(_uri);
         if (!_source) {
-            qCCritical(GstVideoReceiverLog) << "_makeSource() failed";
+            qCCritical(GstVideoReceiverLog) << (_useInternalRtp ? "_makeInternalRtpSource()" : "_makeSource()") << "failed";
             break;
         }
 
@@ -229,7 +229,17 @@ void GstVideoReceiver::pushRtpPacket(const QByteArray &packet)
         return;
     }
 
-    if (!_pipeline || !_appsrc || packet.isEmpty()) {
+    if (packet.isEmpty()) {
+        return;
+    }
+
+    // Lazy start: build pipeline on first RTP packet arrival
+    if (!_pipeline && _useInternalRtp) {
+        qCDebug(GstVideoReceiverLog) << "First RTP packet received — starting internal pipeline";
+        start(0);
+    }
+
+    if (!_pipeline || !_appsrc) {
         return;
     }
 
@@ -280,7 +290,7 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
 
         jitter = gst_element_factory_make("rtpjitterbuffer", nullptr);
         if (!jitter) { qCCritical(GstVideoReceiverLog) << "jitterbuffer failed"; break; }
-        g_object_set(jitter, "latency", 0, nullptr);
+        g_object_set(jitter, "latency", (_buffer >= 0) ? qMax(0, _buffer) : 0, nullptr);
 
         const char *depayName = (_internalCodec == InternalCodec::H264) ? "rtph264depay" : "rtph265depay";
         depay = gst_element_factory_make(depayName, nullptr);
@@ -323,7 +333,7 @@ void GstVideoReceiver::stop()
         return;
     }
 
-    if (_uri.isEmpty()) {
+    if (_uri.isEmpty() && !_useInternalRtp) {
         qCWarning(GstVideoReceiverLog) << "Stop called on empty URI";
         return;
     }
@@ -1384,7 +1394,7 @@ gboolean GstVideoReceiver::_onBusMessage(GstBus * /* bus */, GstMessage *msg, gp
         gst_message_parse_error(msg, &error, &debug);
 
         if (debug) {
-            qCDebug(GstVideoReceiverLog) << "GStreamer debug:" << debug;
+            qCCritical(GstVideoReceiverLog) << "GStreamer debug:" << debug;
             g_clear_pointer(&debug, g_free);
         }
 

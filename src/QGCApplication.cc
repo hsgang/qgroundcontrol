@@ -40,6 +40,7 @@
 #include "Vehicle.h"
 #include "VehicleComponent.h"
 #include "VideoManager.h"
+#include "SignalingServerManager.h"
 
 #ifndef QGC_NO_SERIAL_LINK
 #include "SerialLink.h"
@@ -239,8 +240,16 @@ bool QGCApplication::_initVideo()
 #ifdef QGC_GST_STREAMING
     const bool isOffscreen = (qApp->platformName() == QLatin1String("offscreen"));
 
+#if defined(QGC_GST_D3D11_SINK)
+    // D3D11 sink renders via Qt's native D3D11 RHI — no OpenGL needed.
+    if (isOffscreen) {
+        QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+    }
+    qCDebug(QGCApplicationLog) << "D3D11 video sink available, using default graphics API";
+#else
     Q_UNUSED(isOffscreen);
     QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+#endif
 #endif
 
     QGCCorePlugin::instance();  // CorePlugin must be initialized before VideoManager for Video Cleanup
@@ -267,6 +276,7 @@ void QGCApplication::_initForNormalAppBoot()
     FollowMe::instance()->init();
     QGCPositionManager::instance()->init();
     LinkManager::instance()->init();
+    SignalingServerManager::instance()->init();
 
     VideoManager::instance()->init(mainRootWindow());
 

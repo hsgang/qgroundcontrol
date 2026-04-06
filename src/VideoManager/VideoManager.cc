@@ -73,8 +73,13 @@ VideoManager::VideoManager(QObject *parent)
         (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
         (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6D3D11VideoItem", 1, 0, "GstD3D11Qt6VideoItem");
     } else {
-        // Register stubs now — real types registered after GStreamer init in _onGstInitComplete()
+        // Register real GL types eagerly on desktop platforms.
+        // On Android/iOS, register stubs now — real type registered after gst_init in _onGstInitComplete().
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
         (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
+#else
+        gstQml6GLRegisterQmlTypes();
+#endif
 #ifdef QGC_GST_D3D11_SINK
         gstQml6D3D11RegisterQmlTypes();
 #else
@@ -548,6 +553,7 @@ bool VideoManager::isStreamSource() const
         VideoSettings::videoSourceYuneecMantisG,
         VideoSettings::videoSourceHerelinkAirUnit,
         VideoSettings::videoSourceHerelinkHotspot,
+        VideoSettings::videoSourceWebRTC,
     };
     const QString videoSource = _videoSettings->videoSource()->rawValue().toString();
     return (videoSourceList.contains(videoSource) || autoStreamConfigured());
@@ -743,6 +749,15 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.0.10:8554/H264Video"));
     } else if (source == VideoSettings::videoSourceHerelinkHotspot) {
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.43.1:8554/fpv_stream"));
+    } else if (source == VideoSettings::videoSourceWebRTC) {
+        _webrtcInternalModeEnabled = false;
+        auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+        if (gstReceiver) {
+            gstReceiver->enableInternalRtpMode(GstVideoReceiver::InternalCodec::H264);
+            _webrtcInternalModeEnabled = true;
+            settingsChanged |= _updateVideoUri(receiver, QString());
+            return settingsChanged;
+        }
     } else if ((source == VideoSettings::videoDisabled) || (source == VideoSettings::videoSourceNoVideo)) {
         settingsChanged |= _updateVideoUri(receiver, QString());
     } else {
@@ -866,12 +881,19 @@ void VideoManager::_startReceiver(VideoReceiver *receiver)
         return;
     }
 
+    const QString source = _videoSettings->videoSource()->rawValue().toString();
+
+    // WebRTC: don't start pipeline now — it will be started on first RTP packet
+    if (source == VideoSettings::videoSourceWebRTC) {
+        qCDebug(VideoManagerLog) << "WebRTC mode: waiting for RTP data" << receiver->name();
+        return;
+    }
+
     if (receiver->uri().isEmpty()) {
         qCDebug(VideoManagerLog) << "VideoUri is NULL" << receiver->name();
         return;
     }
 
-    const QString source = _videoSettings->videoSource()->rawValue().toString();
     /* The gstreamer rtsp source will switch to tcp if udp is not available after 5 seconds.
        So we should allow for some negotiation time for rtsp */
 
