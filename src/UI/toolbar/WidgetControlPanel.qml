@@ -48,14 +48,6 @@ ToolIndicatorPage{
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true
-                    text:       qsTr("Grid Viewer")
-                    fact:       _showGridViewer
-                    visible:    true
-                    property Fact   _showGridViewer:            QGroundControl.settingsManager.flyViewSettings.showGridViewer
-                }
-
-                FactCheckBoxSlider {
-                    Layout.fillWidth: true
                     text:       "배송 제어"//qsTr("Vehicle Step Control")
                     fact:       _showVehicleStepMoveControl
                     visible:    true

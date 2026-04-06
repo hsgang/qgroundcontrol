@@ -18,7 +18,7 @@
 #include "VideoManager.h"
 #include "NTRIPManager.h"
 #include "CloudManager.h"
-#include "GridManager.h"
+
 #include "SiYi.h"
 #include "SignalingServerManager.h"
 #include "KMLOverlayManager.h"
@@ -52,7 +52,7 @@ QGroundControlQmlGlobal::QGroundControlQmlGlobal(QObject *parent)
     , _linkManager(LinkManager::instance())
     , _multiVehicleManager(MultiVehicleManager::instance())
     , _cloudManager(CloudManager::instance())
-    , _gridManager(GridManager::instance())
+
     , _siyi(SiYi::instance())
     , _signalingServerManager(SignalingServerManager::instance())
     , _kmlOverlayManager(new KMLOverlayManager(this))

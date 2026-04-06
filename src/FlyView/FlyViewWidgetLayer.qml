@@ -75,6 +75,17 @@ Item {
         property real rightEdgeCenterInset: rightEdgeTopInset
     }
 
+    FlyViewRightPanel {
+        id:                     rightPanel
+        anchors.right:          parent.right
+        anchors.rightMargin:    _toolsMargin
+        anchors.top:            topRightPanel.visible ? topRightPanel.bottom : parent.top
+        anchors.bottom:         bottomRightRowLayout.top
+        anchors.bottomMargin:   _margins
+        z:                      QGroundControl.zOrderWidgets
+        visible:                !QGroundControl.videoManager.fullScreen
+    }
+
     FlyViewBottomRightRowLayout {
         id:                 bottomRightRowLayout
         anchors.bottom:     parent.bottom

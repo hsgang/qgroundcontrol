@@ -32,8 +32,7 @@ target_sources(${CMAKE_PROJECT_NAME}
         QGCLoggingCategory.h
         CloudManager.cc
         CloudManager.h
-        GridManager.cc
-        GridManager.h
+
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME}

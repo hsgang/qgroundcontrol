@@ -49,7 +49,7 @@ public:
     DEFINE_SETTINGFACT(showEscStatus)
     DEFINE_SETTINGFACT(showSiyiCameraControl)
     DEFINE_SETTINGFACT(showGridOnMap)
-    DEFINE_SETTINGFACT(showGridViewer)
+
     DEFINE_SETTINGFACT(showVehicleStepMoveControl)
     DEFINE_SETTINGFACT(vehicleMoveStep)
     DEFINE_SETTINGFACT(showLandingGuideView)

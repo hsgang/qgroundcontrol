@@ -299,13 +299,6 @@
             "label": "SiYi Camera"
         },
         {
-            "name": "showGridViewer",
-            "shortDesc": "Show Grid Viewer",
-            "type": "bool",
-            "default": false,
-            "label": "Grid Viewer"
-        },
-        {
             "name": "showVehicleStepMoveControl",
             "shortDesc": "Show Vehicle Step Move Control",
             "type": "bool",

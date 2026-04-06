@@ -26,7 +26,7 @@ class QGCPositionManager;
 class SettingsManager;
 class VideoManager;
 class CloudManager;
-class GridManager;
+
 class NTRIPManager;
 class SiYi;
 class QmlObjectListModel;
@@ -48,7 +48,7 @@ Q_MOC_INCLUDE("SettingsManager.h")
 Q_MOC_INCLUDE("VideoManager.h")
 Q_MOC_INCLUDE("CloudManager.h")
 Q_MOC_INCLUDE("NTRIPManager.h")
-Q_MOC_INCLUDE("GridManager.h")
+
 Q_MOC_INCLUDE("SiYi.h")
 Q_MOC_INCLUDE("SignalingServerManager.h")
 Q_MOC_INCLUDE("KMLOverlayManager.h")
@@ -85,7 +85,7 @@ public:
     Q_PROPERTY(SettingsManager*     settingsManager         READ    settingsManager         CONSTANT)
     Q_PROPERTY(ADSBVehicleManager*  adsbVehicleManager      READ    adsbVehicleManager      CONSTANT)
     Q_PROPERTY(CloudManager*            cloudManager            READ    cloudManager            CONSTANT)
-    Q_PROPERTY(GridManager*             gridManager             READ    gridManager             CONSTANT)
+
     Q_PROPERTY(NTRIPManager*            ntripManager            READ    ntripManager            CONSTANT)
     Q_PROPERTY(SiYi*                    siyi                    READ    siyi                    CONSTANT)
     Q_PROPERTY(SignalingServerManager*  signalingServerManager  READ    signalingServerManager  CONSTANT)
@@ -201,7 +201,7 @@ public:
 #endif
     ADSBVehicleManager*     adsbVehicleManager  ()  { return _adsbVehicleManager; }
     CloudManager*               cloudManager            ()  { return _cloudManager; }
-    GridManager*                gridManager             ()  { return _gridManager; }
+
     NTRIPManager*               ntripManager            ()  { return _ntripManager; }
     SiYi*                       siyi                    ()  { return _siyi; }
     SignalingServerManager*     signalingServerManager  ()  { return _signalingServerManager; }
@@ -264,7 +264,7 @@ private:
     LinkManager*            _linkManager            = nullptr;
     MultiVehicleManager*    _multiVehicleManager    = nullptr;
     CloudManager*               _cloudManager               = nullptr;
-    GridManager*                _gridManager                = nullptr;
+
     SiYi*                       _siyi                       = nullptr;
     SignalingServerManager*     _signalingServerManager     = nullptr;
     KMLOverlayManager*          _kmlOverlayManager          = nullptr;
