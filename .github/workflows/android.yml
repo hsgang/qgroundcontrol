@@ -103,7 +103,7 @@ jobs:
         id: qt-android
         uses: ./.github/actions/qt-android
         with:
-          host: ${{ matrix.qt_host || matrix.host }}
+          host: ${{ matrix.host }}
           arch: ${{ matrix.arch }}
           version: ${{ steps.config.outputs.qt_version }}
           modules: ${{ steps.config.outputs.qt_modules }}

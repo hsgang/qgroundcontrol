@@ -18,6 +18,8 @@ if(ANDROID)
   set(OPENSSL_INCLUDE_DIR ${OPENSSL_ROOT_DIR}/include)
   set(OPENSSL_CRYPTO_LIBRARY ${OPENSSL_ROOT_DIR}/lib/libcrypto.a)
   set(OPENSSL_SSL_LIBRARY ${OPENSSL_ROOT_DIR}/lib/libssl.a)
+  # Prevent NDK's prebuilt x86_64 libunwind.so from being linked into ARM64 builds
+  set(OPENSSL_USE_STATIC_LIBS TRUE)
 endif()
 
 set(LIBDATACHANNEL_OPTIONS
@@ -29,6 +31,8 @@ set(LIBDATACHANNEL_OPTIONS
 
 # CPMAddPackage 호출
 if(ANDROID)
+  # Remove NDK prebuilt lib from CMAKE_LIBRARY_PATH to avoid x86_64/ARM64 mismatch
+  list(FILTER CMAKE_LIBRARY_PATH EXCLUDE REGEX "prebuilt/linux-x86_64/lib")
   CPMAddPackage(
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
@@ -38,6 +42,7 @@ if(ANDROID)
         "OPENSSL_INCLUDE_DIR=${OPENSSL_INCLUDE_DIR}"
         "OPENSSL_CRYPTO_LIBRARY=${OPENSSL_CRYPTO_LIBRARY}"
         "OPENSSL_SSL_LIBRARY=${OPENSSL_SSL_LIBRARY}"
+        "OPENSSL_USE_STATIC_LIBS=TRUE"
     PATCH_COMMAND ${CMAKE_COMMAND} -E echo "include_directories(${OPENSSL_INCLUDE_DIR})" >> ${CMAKE_CURRENT_BINARY_DIR}/cpm_modules/libdatachannel/deps/libsrtp/CMakeLists.txt
   )
 else()
