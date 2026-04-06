@@ -494,12 +494,14 @@ macro(_gst_resolve_and_link_libraries _grll_TARGET _grll_SCOPE _grll_LIBS_VAR _g
             string(REGEX REPLACE "${_gst_SRT_REGEX_PATCH}" "\\1" _grll_LIB "${_grll_LIB}")
         endif()
 
+        # On Android, skip linking unwind entirely — NDK provides built-in unwinding.
+        # The host toolchain's x86_64 libunwind.so is incompatible with ARM targets.
+        # Catch both name ("unwind") and full path ("/path/to/libunwind.so").
+        if(ANDROID AND ("${_grll_LIB}" STREQUAL "unwind" OR "${_grll_LIB}" MATCHES "libunwind"))
+            continue()
+        endif()
+
         if("${_grll_LIB}" IN_LIST _gst_IGNORED_SYSTEM_LIBRARIES)
-            # On Android, skip linking unwind entirely — NDK provides built-in unwinding.
-            # The host toolchain's x86_64 libunwind.so is incompatible with ARM targets.
-            if(ANDROID AND "${_grll_LIB}" STREQUAL "unwind")
-                continue()
-            endif()
             target_link_libraries(${_grll_TARGET} ${_grll_SCOPE} "${_grll_LIB}")
             continue()
         endif()
