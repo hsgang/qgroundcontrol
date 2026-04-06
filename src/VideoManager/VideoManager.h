@@ -31,6 +31,7 @@ class VideoManager : public QObject
     Q_PROPERTY(bool     uvcEnabled              READ uvcEnabled                                 CONSTANT)
     Q_PROPERTY(bool     autoStreamConfigured    READ autoStreamConfigured                       NOTIFY autoStreamConfiguredChanged)
     Q_PROPERTY(bool     decoding                READ decoding                                   NOTIFY decodingChanged)
+    Q_PROPERTY(bool     videoStalled            READ videoStalled                               NOTIFY videoStalledChanged)
     Q_PROPERTY(bool     fullScreen              READ fullScreen             WRITE setfullScreen NOTIFY fullScreenChanged)
     Q_PROPERTY(bool     hasThermal              READ hasThermal                                 NOTIFY decodingChanged)
     Q_PROPERTY(bool     hasVideo                READ hasVideo                                   NOTIFY hasVideoChanged)
@@ -70,6 +71,7 @@ public:
     void cleanup();
     bool autoStreamConfigured() const;
     bool decoding() const { return _decoding; }
+    bool videoStalled() const { return _videoStalled; }
     bool fullScreen() const { return _fullScreen; }
     bool hasThermal() const;
     bool hasVideo() const;
@@ -94,6 +96,7 @@ signals:
     void aspectRatioChanged();
     void autoStreamConfiguredChanged();
     void decodingChanged();
+    void videoStalledChanged();
     void fullScreenChanged();
     void hasVideoChanged();
     void imageFileChanged(const QString &filename);
@@ -152,6 +155,9 @@ private:
     bool _webrtcInternalModeEnabled = false;
 
     QAtomicInteger<bool> _decoding = false;
+    bool _videoStalled = false;
+    QTimer *_stallTimer = nullptr;
+    static constexpr int VIDEO_STALL_TIMEOUT_MS = 500;
     QAtomicInteger<bool> _recording = false;
     QAtomicInteger<bool> _streaming = false;
     QSize _videoSize;

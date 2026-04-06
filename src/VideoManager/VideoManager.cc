@@ -978,6 +978,43 @@ void VideoManager::_initVideoReceiver(VideoReceiver *receiver, QQuickWindow *win
         if (!receiver->isThermal()) {
             _decoding = active;
             emit decodingChanged();
+
+            // Stall 감지 타이머 관리
+            if (active) {
+                if (!_stallTimer) {
+                    _stallTimer = new QTimer(this);
+                    _stallTimer->setSingleShot(true);
+                    connect(_stallTimer, &QTimer::timeout, this, [this]() {
+                        if (_decoding && !_videoStalled) {
+                            _videoStalled = true;
+                            emit videoStalledChanged();
+                            qCDebug(VideoManagerLog) << "Video stalled — no frames for" << VIDEO_STALL_TIMEOUT_MS << "ms";
+                        }
+                    });
+                }
+                _stallTimer->start(VIDEO_STALL_TIMEOUT_MS);
+            } else {
+                if (_stallTimer) {
+                    _stallTimer->stop();
+                }
+                if (_videoStalled) {
+                    _videoStalled = false;
+                    emit videoStalledChanged();
+                }
+            }
+        }
+    });
+
+    (void) connect(receiver, &VideoReceiver::videoFrameReceived, this, [this, receiver]() {
+        if (receiver->isThermal()) return;
+
+        // 프레임이 도착하면 stall 해제 + 타이머 재시작
+        if (_videoStalled) {
+            _videoStalled = false;
+            emit videoStalledChanged();
+        }
+        if (_stallTimer) {
+            _stallTimer->start(VIDEO_STALL_TIMEOUT_MS);
         }
     });
 

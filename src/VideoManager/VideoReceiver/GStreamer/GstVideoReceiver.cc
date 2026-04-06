@@ -290,10 +290,6 @@ void GstVideoReceiver::pushRtpPacket(QByteArray packet)
         return;
     }
 
-    // 타임스탬프를 설정하지 않음 — rtpjitterbuffer가 RTP 헤더 타임스탬프를 직접 사용
-    GST_BUFFER_PTS(buffer) = GST_CLOCK_TIME_NONE;
-    GST_BUFFER_DTS(buffer) = GST_CLOCK_TIME_NONE;
-
     GstFlowReturn flow = GST_FLOW_OK;
     g_signal_emit_by_name(_appsrc, "push-buffer", buffer, &flow);
     gst_buffer_unref(buffer);
@@ -318,7 +314,7 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
         g_object_set(appsrc,
                      "is-live", TRUE,
                      "format", GST_FORMAT_TIME,
-                     "do-timestamp", FALSE,  // RTP 헤더 타임스탬프를 jitterbuffer가 직접 사용
+                     "do-timestamp", TRUE,
                      "max-bytes", G_GUINT64_CONSTANT(0),
                      "emit-signals", FALSE,
                      "stream-type", 0,  // GST_APP_STREAM_TYPE_STREAM
@@ -338,7 +334,7 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
         if (!jitter) { qCCritical(GstVideoReceiverLog) << "jitterbuffer failed"; break; }
         g_object_set(jitter,
                      "latency", (_buffer >= 0) ? qMax(0, _buffer) : 0,
-                     "drop-on-latency", TRUE,
+                     "drop-on-latency", FALSE,
                      "do-lost", TRUE,
                      "do-retransmission", FALSE,
                      nullptr);
@@ -1303,6 +1299,7 @@ void GstVideoReceiver::_noteVideoSinkFrame()
         qCDebug(GstVideoReceiverLog) << "Decoding started";
         _dispatchSignal([this]() { emit decodingChanged(_decoding); });
     }
+    _dispatchSignal([this]() { emit videoFrameReceived(); });
 }
 
 void GstVideoReceiver::_noteEndOfStream()
