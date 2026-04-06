@@ -19,6 +19,7 @@ file(GLOB _settings_metadata "${SETTINGS_METADATA_DIR}/*.SettingsGroup.json")
 # Generated QML outputs (must match what generate_pages.py produces)
 set(_generated_qml_names
     ADSBServerSettings.qml
+    CloudSettings.qml
     CommLinksSettings.qml
     FlyViewSettings.qml
     GeneralSettings.qml
@@ -78,6 +79,8 @@ qt_add_qml_module(AppSettingsModule
 
         # Hand-coded pages and components
         BluetoothSettings.qml
+        CloudLoginSection.qml
+        CloudWebRTCSection.qml
         DebugWindow.qml
         GcsPositionStatus.qml
         HelpSettings.qml
@@ -104,7 +107,6 @@ qt_add_qml_module(AppSettingsModule
         SettingsPage.qml
         TcpSettings.qml
         UdpSettings.qml
-        CloudSettings.qml
         WebRTCSettings.qml
     NO_PLUGIN
 )

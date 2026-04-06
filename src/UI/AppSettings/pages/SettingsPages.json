@@ -88,8 +88,9 @@
         },
         {
             "name": "Cloud / WebRTC",
-            "url": "qrc:/qml/QGroundControl/AppSettings/CloudSettings.qml",
-            "icon": "qrc:/InstrumentValueIcons/cloud.svg"
+            "qml": "CloudSettings.qml",
+            "icon": "qrc:/InstrumentValueIcons/cloud.svg",
+            "pageDefinition": "Cloud.SettingsUI.json"
         },
         {
             "divider": true

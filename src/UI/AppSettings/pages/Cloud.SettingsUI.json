@@ -1,0 +1,31 @@
+{
+    "version": 1,
+    "fileType": "SettingsUI",
+    "groups": [
+        {
+            "component": "CloudLoginSection",
+            "sectionName": "Cloud Login",
+            "keywords": [
+                "cloud",
+                "login",
+                "email",
+                "password",
+                "logout"
+            ]
+        },
+        {
+            "component": "CloudWebRTCSection",
+            "sectionName": "WebRTC",
+            "keywords": [
+                "webrtc",
+                "rtc",
+                "signaling",
+                "server",
+                "api key",
+                "turn",
+                "stun",
+                "connection"
+            ]
+        }
+    ]
+}
