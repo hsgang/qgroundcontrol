@@ -80,7 +80,7 @@ jobs:
         with:
           qt-host: ${{ matrix.host }}
           qt-arch: ${{ matrix.arch }}
-          qt-version: ${{ matrix.qt_version || '' }}
+          qt-version: ''
           build-type: ${{ matrix.build_type }}
 
       - name: Install GStreamer
@@ -138,7 +138,7 @@ jobs:
         if: matrix.build_type == 'Release' && matrix.arch != 'win64_msvc2022_arm64_cross_compiled'
         uses: ./.github/actions/verify-executable
         with:
-          binary-path: ${{ runner.temp }}/build/${{ matrix.build_type }}/QGroundControl.exe
+          binary-path: ${{ runner.temp }}/build/${{ matrix.build_type }}/AMC.exe
           type: exe
           build-dir: ${{ runner.temp }}/build
 
