@@ -16,6 +16,8 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 if(ANDROID)
   set(OPENSSL_ROOT_DIR ${android_openssl_SOURCE_DIR}/ssl_3/${CMAKE_ANDROID_ARCH_ABI})
   set(OPENSSL_INCLUDE_DIR ${OPENSSL_ROOT_DIR}/include)
+  set(OPENSSL_CRYPTO_LIBRARY ${OPENSSL_ROOT_DIR}/lib/libcrypto.a)
+  set(OPENSSL_SSL_LIBRARY ${OPENSSL_ROOT_DIR}/lib/libssl.a)
 endif()
 
 set(LIBDATACHANNEL_OPTIONS
@@ -32,6 +34,10 @@ if(ANDROID)
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
     GIT_TAG v0.24.1
     OPTIONS ${LIBDATACHANNEL_OPTIONS}
+        "OPENSSL_ROOT_DIR=${OPENSSL_ROOT_DIR}"
+        "OPENSSL_INCLUDE_DIR=${OPENSSL_INCLUDE_DIR}"
+        "OPENSSL_CRYPTO_LIBRARY=${OPENSSL_CRYPTO_LIBRARY}"
+        "OPENSSL_SSL_LIBRARY=${OPENSSL_SSL_LIBRARY}"
     PATCH_COMMAND ${CMAKE_COMMAND} -E echo "include_directories(${OPENSSL_INCLUDE_DIR})" >> ${CMAKE_CURRENT_BINARY_DIR}/cpm_modules/libdatachannel/deps/libsrtp/CMakeLists.txt
   )
 else()

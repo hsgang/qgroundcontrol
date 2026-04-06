@@ -140,6 +140,7 @@ jobs:
         with:
           binary-path: ${{ runner.temp }}/build/${{ matrix.build_type }}/QGroundControl.exe
           type: exe
+          build-dir: ${{ runner.temp }}/build
 
       - name: Create Installer
         working-directory: ${{ runner.temp }}\build

@@ -74,8 +74,7 @@ DEBIAN_PACKAGES: dict[str, list[str]] = {
     ],
     "qt": [
         "libatspi2.0-dev",
-        "libegl1-mesa",
-        "libegl1-mesa-dev",
+        "libegl-dev",
         "libfontconfig1-dev",
         "libfreetype-dev",
         "libgtk-3-dev",
