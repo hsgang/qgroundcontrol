@@ -1509,7 +1509,9 @@ void WebRTCWorker::_handlePeerDisconnection()
     WorkerState currentState = _state.load();
     if (currentState == WorkerState::Connected ||
         currentState == WorkerState::EstablishingPeer ||
-        currentState == WorkerState::WaitingForOffer) {
+        currentState == WorkerState::WaitingForOffer ||
+        currentState == WorkerState::Starting ||
+        currentState == WorkerState::Connecting) {
 
         if (!transitionState(currentState, WorkerState::Reconnecting)) {
             qCWarning(WebRTCLinkLog) << "[DISCONNECT] Failed to transition to Reconnecting state from"
