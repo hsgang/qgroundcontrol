@@ -592,6 +592,10 @@ if(GSTREAMER_IS_MOBILE AND TARGET GStreamerMobile)
             get_target_property(_plugin_iface_libs GStreamer::${_gst_PLUGIN} INTERFACE_LINK_LIBRARIES)
             if(_plugin_iface_libs)
                 list(REMOVE_ITEM _plugin_iface_libs "${_gst_resolved_plugin_lib_${_gst_PLUGIN}}")
+                # On Android, NDK's prebuilt x86_64 libunwind.so is incompatible with ARM targets.
+                if(ANDROID)
+                    list(FILTER _plugin_iface_libs EXCLUDE REGEX "[Uu]nwind")
+                endif()
                 if(_plugin_iface_libs)
                     target_link_libraries(GStreamerMobile PRIVATE ${_plugin_iface_libs})
                 endif()
@@ -622,6 +626,16 @@ if(GSTREAMER_IS_MOBILE AND TARGET GStreamerMobile)
     if(GStreamer_DEBUG)
         get_target_property(_dbg_deps_libs GStreamer::deps INTERFACE_LINK_LIBRARIES)
         message(STATUS "[GstMobile] GStreamer::deps INTERFACE_LINK_LIBRARIES = ${_dbg_deps_libs}")
+    endif()
+
+    # On Android, NDK's prebuilt x86_64 libunwind.so leaks into the ARM link line
+    # via transitive dependencies. Strip it from GStreamer::deps before linking.
+    if(ANDROID)
+        get_target_property(_deps_iface_libs GStreamer::deps INTERFACE_LINK_LIBRARIES)
+        if(_deps_iface_libs)
+            list(FILTER _deps_iface_libs EXCLUDE REGEX "[Uu]nwind")
+            set_target_properties(GStreamer::deps PROPERTIES INTERFACE_LINK_LIBRARIES "${_deps_iface_libs}")
+        endif()
     endif()
 
     target_link_libraries(GStreamerMobile PRIVATE GStreamer::deps)
