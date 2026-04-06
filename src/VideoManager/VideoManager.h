@@ -61,6 +61,7 @@ public:
     Q_INVOKABLE void stopVideo();
 
     void pushWebRtcRtp(QByteArray packet);
+    void prepareWebRtcPipeline();  // Pre-build pipeline before first RTP packet
     bool isWebRtcInternalModeEnabled() const { return _webrtcInternalModeEnabled; }
 
     void init(QQuickWindow *mainWindow);

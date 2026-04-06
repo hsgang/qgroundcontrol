@@ -221,6 +221,27 @@ void GstVideoReceiver::enableInternalRtpMode(InternalCodec codec)
     _internalCodec = codec;
 }
 
+void GstVideoReceiver::preparePipeline()
+{
+    if (_needDispatch()) {
+        _worker->dispatch([this]() { preparePipeline(); });
+        return;
+    }
+
+    if (_pipeline || !_useInternalRtp) {
+        return;
+    }
+
+    qCDebug(GstVideoReceiverLog) << "Pre-building internal RTP pipeline (PAUSED)";
+    start(0);
+
+    // PAUSED 상태로 전환하여 엘리먼트 초기화만 수행 (데이터 흐름 없음)
+    if (_pipeline) {
+        gst_element_set_state(_pipeline, GST_STATE_PAUSED);
+        qCDebug(GstVideoReceiverLog) << "Pipeline pre-built in PAUSED state";
+    }
+}
+
 void GstVideoReceiver::pushRtpPacket(QByteArray packet)
 {
     if (_needDispatch()) {
@@ -232,10 +253,20 @@ void GstVideoReceiver::pushRtpPacket(QByteArray packet)
         return;
     }
 
-    // Lazy start: build pipeline on first RTP packet arrival
+    // Lazy start: build pipeline on first RTP packet arrival (fallback)
     if (!_pipeline && _useInternalRtp) {
         qCDebug(GstVideoReceiverLog) << "First RTP packet received — starting internal pipeline";
         start(0);
+    }
+
+    // Pre-built 파이프라인이 PAUSED 상태면 PLAYING으로 전환
+    if (_pipeline && !_appsrcDataPushed) {
+        GstState current = GST_STATE_NULL;
+        gst_element_get_state(_pipeline, &current, nullptr, 0);
+        if (current == GST_STATE_PAUSED) {
+            qCDebug(GstVideoReceiverLog) << "First RTP data — transitioning pipeline to PLAYING";
+            gst_element_set_state(_pipeline, GST_STATE_PLAYING);
+        }
     }
 
     if (!_pipeline || !_appsrc) {
@@ -259,6 +290,10 @@ void GstVideoReceiver::pushRtpPacket(QByteArray packet)
         return;
     }
 
+    // 타임스탬프를 설정하지 않음 — rtpjitterbuffer가 RTP 헤더 타임스탬프를 직접 사용
+    GST_BUFFER_PTS(buffer) = GST_CLOCK_TIME_NONE;
+    GST_BUFFER_DTS(buffer) = GST_CLOCK_TIME_NONE;
+
     GstFlowReturn flow = GST_FLOW_OK;
     g_signal_emit_by_name(_appsrc, "push-buffer", buffer, &flow);
     gst_buffer_unref(buffer);
@@ -280,7 +315,15 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
         appsrc = gst_element_factory_make("appsrc", "appsrc");
         if (!appsrc) { qCCritical(GstVideoReceiverLog) << "appsrc factory failed"; break; }
 
-        g_object_set(appsrc, "is-live", TRUE, "format", 3, "do-timestamp", TRUE, nullptr);
+        g_object_set(appsrc,
+                     "is-live", TRUE,
+                     "format", GST_FORMAT_TIME,
+                     "do-timestamp", FALSE,  // RTP 헤더 타임스탬프를 jitterbuffer가 직접 사용
+                     "max-bytes", G_GUINT64_CONSTANT(0),
+                     "emit-signals", FALSE,
+                     "stream-type", 0,  // GST_APP_STREAM_TYPE_STREAM
+                     "min-latency", (gint64)0,
+                     nullptr);
 
         GstCaps *caps = nullptr;
         if (_internalCodec == InternalCodec::H264)
@@ -293,7 +336,12 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
 
         jitter = gst_element_factory_make("rtpjitterbuffer", nullptr);
         if (!jitter) { qCCritical(GstVideoReceiverLog) << "jitterbuffer failed"; break; }
-        g_object_set(jitter, "latency", (_buffer >= 0) ? qMax(0, _buffer) : 0, nullptr);
+        g_object_set(jitter,
+                     "latency", (_buffer >= 0) ? qMax(0, _buffer) : 0,
+                     "drop-on-latency", TRUE,
+                     "do-lost", TRUE,
+                     "do-retransmission", FALSE,
+                     nullptr);
 
         const char *depayName = (_internalCodec == InternalCodec::H264) ? "rtph264depay" : "rtph265depay";
         depay = gst_element_factory_make(depayName, nullptr);

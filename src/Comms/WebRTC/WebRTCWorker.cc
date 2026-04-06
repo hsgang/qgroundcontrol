@@ -1296,6 +1296,12 @@ void WebRTCWorker::_onWebRTCOfferReceived(const QJsonObject& message)
         qCDebug(WebRTCLinkLog) << "[WEBRTC] Remote description set, answer will be sent via onLocalDescription callback";
         emit rtcStatusMessageChanged("드론으로부터 offer 수신 완료");
 
+        // 비디오 파이프라인 사전 구축 (첫 프레임 지연 단축)
+        auto* vidMgr = VideoManager::instance();
+        if (vidMgr && vidMgr->isWebRtcInternalModeEnabled()) {
+            vidMgr->prepareWebRtcPipeline();
+        }
+
     } catch (const std::exception& e) {
         qCWarning(WebRTCLinkLog) << "[WEBRTC] Failed to process drone offer:" << e.what();
         emit errorOccurred(QString("드론 offer 처리 실패: %1").arg(e.what()));

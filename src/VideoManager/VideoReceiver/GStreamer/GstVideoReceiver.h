@@ -56,6 +56,7 @@ public:
         H265
     };
     void enableInternalRtpMode(InternalCodec codec);
+    void preparePipeline();  // Pre-build pipeline in PAUSED state for faster first-frame
 
     void pushRtpPacket(QByteArray packet);
 

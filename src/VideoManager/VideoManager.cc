@@ -403,6 +403,20 @@ void VideoManager::pushWebRtcRtp(QByteArray packet)
 #endif
 }
 
+void VideoManager::prepareWebRtcPipeline()
+{
+#ifdef QGC_GST_STREAMING
+    if (_videoReceivers.isEmpty() || !_webrtcInternalModeEnabled) {
+        return;
+    }
+    VideoReceiver *receiver = _videoReceivers.front();
+    auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+    if (gstReceiver) {
+        gstReceiver->preparePipeline();
+    }
+#endif
+}
+
 void VideoManager::stopRecording()
 {
     for (VideoReceiver *receiver : std::as_const(_videoReceivers)) {
