@@ -12,9 +12,9 @@ Item {
 
     property bool useSmallFont: true
 
-    property double _ar:                (cameraLoader.visible && cameraLoader.status === Loader.Ready)
+    property double _ar:                (cameraLoader.visible && cameraLoader.status === Loader.Ready && cameraLoader.item.implicitHeight > 0)
                                             ? cameraLoader.item.implicitWidth / cameraLoader.item.implicitHeight
-                                            : QGroundControl.videoManager.gstreamerEnabled
+                                            : (QGroundControl.videoManager.gstreamerEnabled && QGroundControl.videoManager.videoSize.height > 0)
                                                 ? QGroundControl.videoManager.videoSize.width / QGroundControl.videoManager.videoSize.height
                                                 : QGroundControl.videoManager.aspectRatio
     property bool   _showGrid:          QGroundControl.settingsManager.videoSettings.gridLines.rawValue
