@@ -56,7 +56,7 @@ jobs:
             os: windows-2022
             host: windows
             arch: win64_msvc2022_64
-            package: QGroundControl-installer-AMD64
+            package: AMC-installer-AMD64
 
     defaults:
       run:
