@@ -72,7 +72,6 @@ WebRTCWorker::~WebRTCWorker()
 
     safeStopTimer(_cleanupTimer);
     safeStopTimer(_reconnectTimer);
-    safeStopTimer(_rttTimer);
     safeStopTimer(_statsTimer);
 
     // 3. 리소스 정리
@@ -84,9 +83,6 @@ WebRTCWorker::~WebRTCWorker()
 
     delete _reconnectTimer;
     _reconnectTimer = nullptr;
-
-    delete _rttTimer;
-    _rttTimer = nullptr;
 
     delete _statsTimer;
     _statsTimer = nullptr;
@@ -198,14 +194,10 @@ void WebRTCWorker::writeData(const QByteArray &data)
         return;
     }
 
-    // 성능 최적화: 불필요한 string_view 래퍼 제거, 직접 변환
-    auto binaryData = rtc::binary(
-        reinterpret_cast<const std::byte*>(data.constData()),
-        reinterpret_cast<const std::byte*>(data.constData() + data.size())
-    );
-
     try {
-        _pcContext.mavlinkDc->send(binaryData);
+        _pcContext.mavlinkDc->send(
+            reinterpret_cast<const std::byte*>(data.constData()),
+            static_cast<size_t>(data.size()));
         _dataChannelSentCalc.addData(data.size());
         emit bytesSent(data);
     } catch (const std::exception& e) {
@@ -226,17 +218,13 @@ void WebRTCWorker::sendCustomMessage(const QString& message)
         return;
     }
 
-    // QString을 binary 데이터로 변환
     QByteArray data = message.toUtf8();
-    std::string_view view(data.constData(), data.size());
-    auto binaryData = rtc::binary(
-        reinterpret_cast<const std::byte*>(view.data()),
-        reinterpret_cast<const std::byte*>(view.data() + view.size())
-    );
 
     try {
-        _pcContext.customDc->send(binaryData);
-        _dataChannelSentCalc.addData(data.size());  // 바이트 통계 추가
+        _pcContext.customDc->send(
+            reinterpret_cast<const std::byte*>(data.constData()),
+            static_cast<size_t>(data.size()));
+        _dataChannelSentCalc.addData(data.size());
         qCDebug(WebRTCLinkLog) << "Custom message sent:" << message;
     } catch (const std::exception& e) {
         if (!isShuttingDown()) {
@@ -282,10 +270,7 @@ void WebRTCWorker::disconnectLink()
         return;
     }
 
-    // 즉시 모든 타이머 중지 (RTT 업데이트 등)
-    if (_rttTimer) {
-        _rttTimer->stop();
-    }
+    // 즉시 통계 타이머 중지
     if (_statsTimer) {
         _statsTimer->stop();
     }
@@ -339,7 +324,6 @@ void WebRTCWorker::disconnectLink()
 
             // 완전한 정리 수행 (재연결 플래그는 이미 취소됨)
             self->_cleanup(CleanupMode::Complete);
-            emit self->rttUpdated(0);
             emit self->disconnected();
 
             // 타이머 정리
@@ -352,7 +336,6 @@ void WebRTCWorker::disconnectLink()
     } else {
         // If not in a room, cleanup immediately
         _cleanup(CleanupMode::Complete);
-        emit rttUpdated(0);
         emit disconnected();
     }
 }
@@ -589,10 +572,7 @@ void WebRTCWorker::manualReconnect()
 
     // 재연결을 위해 기존 PeerConnection 정리 (Reconnecting 상태로 전환)
     if (transitionState(currentState, WorkerState::Reconnecting)) {
-        // 타이머 중지
-        if (_rttTimer) {
-            _rttTimer->stop();
-        }
+        // 통계 타이머 중지
         if (_statsTimer) {
             _statsTimer->stop();
         }
@@ -971,10 +951,6 @@ void WebRTCWorker::_setupMavlinkDataChannel(std::shared_ptr<rtc::DataChannel> dc
         if (!self || self->isShuttingDown()) return;
 
         self->_pcContext.dataChannelOpened.store(false);
-        QMetaObject::invokeMethod(self, [self]() {
-            if (!self || self->isDisconnecting()) return;
-            emit self->rttUpdated(0);
-        }, Qt::QueuedConnection);
     });
 
     dc->onError([self](std::string error) {
@@ -1043,29 +1019,22 @@ void WebRTCWorker::_setupCustomDataChannel(std::shared_ptr<rtc::DataChannel> dc)
 
                 if (parseError.error == QJsonParseError::NoError) {
                     QJsonObject jsonObj = jsonDoc.object();
+                    const QString msgType = jsonObj.value(QLatin1String("type")).toString();
 
-                    if (jsonObj.contains("type") && jsonObj["type"].toString() == "system_info") {
+                    if (msgType == QLatin1String("system_info")) {
                         RTCModuleSystemInfo systemInfo(jsonObj);
                         if (systemInfo.isValid()) {
                             emit self->rtcModuleSystemInfoUpdated(systemInfo);
-                        } else {
-                            qCWarning(WebRTCLinkLog) << "Invalid RTC module system info received";
                         }
-                    } else if (jsonObj.contains("type") && jsonObj["type"].toString() == "video_metrics") {
+                    } else if (msgType == QLatin1String("video_metrics")) {
                         VideoMetrics videoMetrics(jsonObj);
                         if (videoMetrics.isValid()) {
-                            qCDebug(WebRTCLinkLog) << "[Video Metrics]" << videoMetrics.toString();
                             emit self->videoMetricsUpdated(videoMetrics);
-                        } else {
-                            qCWarning(WebRTCLinkLog) << "Invalid video metrics received";
                         }
-                    } else if (jsonObj.contains("type") && jsonObj["type"].toString() == "version_check") {
+                    } else if (msgType == QLatin1String("version_check")) {
                         RTCModuleVersionInfo versionInfo(jsonObj);
                         if (versionInfo.isValid()) {
-                            qCDebug(WebRTCLinkLog) << "RTC Module Version Info:" << versionInfo.toString();
                             emit self->rtcModuleVersionInfoUpdated(versionInfo);
-                        } else {
-                            qCWarning(WebRTCLinkLog) << "Invalid RTC module version info received";
                         }
                     } else {
                         qCDebug(WebRTCLinkLog) << "CustomDataChannel received JSON:" << QString::fromStdString(receivedText);
@@ -1118,14 +1087,6 @@ void WebRTCWorker::_processDataChannelOpen()
 
 void WebRTCWorker::_startTimers()
 {
-    if (!_rttTimer) {
-        _rttTimer = new QTimer(this);
-        connect(_rttTimer, &QTimer::timeout, this, &WebRTCWorker::_updateRtt);
-    }
-    if (_rttTimer && !_rttTimer->isActive()) {
-        _rttTimer->start(RTT_UPDATE_INTERVAL_MS);
-    }
-
     if (_statsTimer && !_statsTimer->isActive()) {
         _statsTimer->start(STATS_UPDATE_INTERVAL_MS);
     }
@@ -1158,10 +1119,9 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
             auto* vidMgr = VideoManager::instance();
             if (vidMgr && vidMgr->isWebRtcInternalModeEnabled()) {
                 self->_videoReceivedCalc.addData(binaryData.size());
-                // Deep copy 필수: VideoManager가 데이터를 버퍼링할 수 있어 원본 수명 보장 안됨
                 QByteArray rtpData(reinterpret_cast<const char*>(binaryData.data()),
                                    static_cast<int>(binaryData.size()));
-                vidMgr->pushWebRtcRtp(rtpData);
+                vidMgr->pushWebRtcRtp(std::move(rtpData));
             }
         });
 
@@ -1522,9 +1482,6 @@ void WebRTCWorker::_handlePeerDisconnection()
     if (_statsTimer) {
         _statsTimer->stop();
     }
-    if (_rttTimer) {
-        _rttTimer->stop();
-    }
 
     _pcContext.dataChannelOpened.store(false);
 
@@ -1536,7 +1493,6 @@ void WebRTCWorker::_handlePeerDisconnection()
 
     _cleanup(CleanupMode::ForReconnection);
 
-    emit rttUpdated(0);
     emit disconnected();
 
     if (!isInState(WorkerState::Shutdown) && !_waitingForReconnect.load()) {
@@ -1640,47 +1596,6 @@ void WebRTCWorker::_onGatheringStateChanged(rtc::PeerConnection::GatheringState 
     }
 }
 
-void WebRTCWorker::_updateRtt()
-{
-    // Disconnecting/Shutdown 상태에서는 RTT 업데이트 스킵
-    if (isDisconnecting() || isShuttingDown()) {
-        return;
-    }
-
-    // Single path: collect RTT from the single peer connection
-    if (_pcContext.pc) {
-        auto rttOpt = _pcContext.pc->rtt();
-        if (rttOpt.has_value()) {
-            _rttMs = rttOpt.value().count();
-        }
-    } else {
-        _rttMs = 0;
-    }
-
-    // WebRTCStats 수집 (RTT와 candidate 정보 모두 포함)
-    WebRTCStats stats = _collectWebRTCStats();
-
-    // 디버그: Candidate가 실제로 변경되었을 때만 로그 출력 (빈 값 무시)
-    QString currentCandidate;
-    {
-        QMutexLocker locker(&_cachedCandidateMutex);
-        currentCandidate = _cachedCandidate;
-    }
-    if (!currentCandidate.isEmpty() && currentCandidate != _lastCandidateForLog) {
-        qCDebug(WebRTCLinkLog) << "[RTT_UPDATE] Candidate changed:"
-                              << (_lastCandidateForLog.isEmpty() ? "(empty)" : _lastCandidateForLog)
-                              << "->" << currentCandidate;
-        _lastCandidateForLog = currentCandidate;
-    }
-
-    emit webRtcStatsUpdated(stats);
-
-    // 기존 시그널도 유지
-    if (_rttMs > 0) {
-        emit rttUpdated(_rttMs);
-    }
-}
-
 QString WebRTCWorker::_stateToString(rtc::PeerConnection::State state) const
 {
     switch (state) {
@@ -1753,8 +1668,6 @@ void WebRTCWorker::_cleanup(CleanupMode mode)
 
     _pcContext.dataChannelOpened.store(false);
 
-    _safeDeleteTimer(_rttTimer, "RTT Timer");
-
     if (_statsTimer) {
         _statsTimer->stop();
     }
@@ -1811,19 +1724,28 @@ WebRTCStats WebRTCWorker::_collectWebRTCStats() const
 
 void WebRTCWorker::_updateAllStatistics()
 {
+    if (isDisconnecting() || isShuttingDown()) {
+        return;
+    }
+
+    // RTT 업데이트 (기존 _updateRtt 통합)
+    if (_pcContext.pc) {
+        auto rttOpt = _pcContext.pc->rtt();
+        if (rttOpt.has_value()) {
+            _rttMs = rttOpt.value().count();
+        }
+    } else {
+        _rttMs = 0;
+    }
+
+    // 전송률 업데이트
     _dataChannelSentCalc.updateRate();
     _dataChannelReceivedCalc.updateRate();
     _videoReceivedCalc.updateRate();
 
+    // 통합 통계 수집 및 단일 시그널 emit
     WebRTCStats stats = _collectWebRTCStats();
-
     emit webRtcStatsUpdated(stats);
-
-    emit dataChannelStatsUpdated(stats.webRtcSent, stats.webRtcRecv);
-    emit videoStatsUpdated(stats.videoRateKBps, stats.videoPacketCount, stats.videoBytesReceived);
-    // 성능 최적화: videoRateChanged 제거 (videoStatsUpdated에 이미 포함)
-
-    emit statisticsUpdated();
 }
 
 bool WebRTCWorker::isWaitingForReconnect() const

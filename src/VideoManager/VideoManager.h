@@ -60,7 +60,7 @@ public:
     Q_INVOKABLE void stopRecording();
     Q_INVOKABLE void stopVideo();
 
-    void pushWebRtcRtp(const QByteArray &packet);
+    void pushWebRtcRtp(QByteArray packet);
     bool isWebRtcInternalModeEnabled() const { return _webrtcInternalModeEnabled; }
 
     void init(QQuickWindow *mainWindow);

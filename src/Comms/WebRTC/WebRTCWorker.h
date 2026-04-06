@@ -10,6 +10,7 @@
 #include <QtCore/QJsonObject>
 #include <QtCore/QLoggingCategory>
 #include <QtCore/QDateTime>
+#include <QtCore/QElapsedTimer>
 #include <QRandomGenerator>
 #include <atomic>
 #include <vector>
@@ -215,42 +216,34 @@ class TransferRateCalculator {
     };
 
     TransferRateCalculator()
-        : _lastUpdateTime(QDateTime::currentMSecsSinceEpoch())
-        , _smoothedRate(0.0)
-    {}
+        : _smoothedRate(0.0)
+    {
+        _elapsed.start();
+    }
 
     void addData(qint64 bytes, int packets = 1) {
         _stats.totalBytes += bytes;
         _stats.totalPackets += packets;
 
-        // 평균 패킷 크기 업데이트 (온라인 평균 계산)
         if (_stats.totalPackets > 0) {
             _stats.averagePacketSize = static_cast<double>(_stats.totalBytes) / _stats.totalPackets;
         }
     }
 
     void updateRate() {
-        qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
-        qint64 timeDiff = currentTime - _lastUpdateTime;
+        qint64 timeDiff = _elapsed.restart();
 
         if (timeDiff > 0) {
             qint64 bytesDiff = _stats.totalBytes - _lastBytes;
 
-            // 올바른 단위 변환: Bytes/ms -> KB/s
-            // = (Bytes / 1024) / (ms / 1000)
-            // = Bytes * 1000 / 1024 / ms
-            // = Bytes * 0.9765625 / ms
             double instantRate = static_cast<double>(bytesDiff) * 1000.0 / 1024.0 / timeDiff;
 
-            // 지수 이동 평균 (EMA)으로 급격한 변동 완화
-            // alpha = 0.3: 현재 값 20%, 이전 값 80% 반영
             const double alpha = 0.2;
             _smoothedRate = (_smoothedRate == 0.0) ? instantRate : (alpha * instantRate + (1.0 - alpha) * _smoothedRate);
 
             _stats.currentRateKBps = std::round(_smoothedRate * 100.0) / 100.0;
 
             _lastBytes = _stats.totalBytes;
-            _lastUpdateTime = currentTime;
         }
     }
 
@@ -260,15 +253,15 @@ class TransferRateCalculator {
     void reset() {
         _stats = Stats{};
         _lastBytes = 0;
-        _lastUpdateTime = QDateTime::currentMSecsSinceEpoch();
+        _elapsed.restart();
         _smoothedRate = 0.0;
     }
 
    private:
     Stats _stats;
     qint64 _lastBytes = 0;
-    qint64 _lastUpdateTime;
-    double _smoothedRate;  // 이동 평균을 위한 상태 변수
+    QElapsedTimer _elapsed;
+    double _smoothedRate;
 };
 
 class WebRTCWorker : public QObject
@@ -307,7 +300,7 @@ class WebRTCWorker : public QObject
     void bytesReceived(const QByteArray &data);
     void bytesSent(const QByteArray &data);
     void errorOccurred(const QString &errorString);
-    void rttUpdated(int rtt);  // RTT 측정 signal
+    void rttUpdated(int rtt);  // RTT 측정 signal (legacy, unused externally)
     void rtcStatusMessageChanged(const QString& message);
     void decodingStatsChanged(int total, int decoded, int dropped);
 
@@ -336,7 +329,7 @@ class WebRTCWorker : public QObject
     void _onRegistrationFailed(const QString& reason);
     void _onPeerStateChanged(rtc::PeerConnection::State state);
     void _onGatheringStateChanged(rtc::PeerConnection::GatheringState state);
-    void _updateRtt();  // RTT 측정용 slot
+    // RTT 업데이트는 _updateAllStatistics()에 통합됨
 
     // GCS management slots
     void _onGcsUnregisteredSuccessfully(const QString& gcsId);
@@ -385,7 +378,6 @@ class WebRTCWorker : public QObject
 
     // Signaling and reconnection management
     SignalingServerManager *_signalingManager = nullptr;
-    QTimer *_rttTimer = nullptr;
     QTimer *_cleanupTimer = nullptr;  // disconnect 후 cleanup용 타이머
     QTimer *_reconnectTimer = nullptr;  // 재연결용 타이머
 
@@ -534,8 +526,7 @@ class WebRTCWorker : public QObject
     static constexpr int SCTP_MAX_RETRANSMIT_ATTEMPTS = 5;
     static constexpr int SCTP_HEARTBEAT_INTERVAL_MS = 10000;
 
-    // Timer Intervals
-    static constexpr int RTT_UPDATE_INTERVAL_MS = 200;
+    // Timer Intervals (RTT와 통계를 단일 타이머로 통합)
     static constexpr int STATS_UPDATE_INTERVAL_MS = 500;
 
     // Reconnection Constants

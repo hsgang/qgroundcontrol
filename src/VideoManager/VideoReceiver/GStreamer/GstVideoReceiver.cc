@@ -221,11 +221,10 @@ void GstVideoReceiver::enableInternalRtpMode(InternalCodec codec)
     _internalCodec = codec;
 }
 
-void GstVideoReceiver::pushRtpPacket(const QByteArray &packet)
+void GstVideoReceiver::pushRtpPacket(QByteArray packet)
 {
     if (_needDispatch()) {
-        const QByteArray copy = packet;
-        _worker->dispatch([this, copy]() { pushRtpPacket(copy); });
+        _worker->dispatch([this, pkt = std::move(packet)]() mutable { pushRtpPacket(std::move(pkt)); });
         return;
     }
 
@@ -243,18 +242,22 @@ void GstVideoReceiver::pushRtpPacket(const QByteArray &packet)
         return;
     }
 
-    GstBuffer *buffer = gst_buffer_new_allocate(nullptr, packet.size(), nullptr);
-    if (!buffer) {
-        return;
-    }
+    // Zero-copy: QByteArray 데이터를 GstBuffer로 직접 래핑 (memcpy 제거)
+    auto *owned = new QByteArray(std::move(packet));
+    GstBuffer *buffer = gst_buffer_new_wrapped_full(
+        GST_MEMORY_FLAG_READONLY,
+        const_cast<char*>(owned->constData()),
+        static_cast<gsize>(owned->size()),
+        0,
+        static_cast<gsize>(owned->size()),
+        owned,
+        [](gpointer p) { delete static_cast<QByteArray*>(p); }
+    );
 
-    GstMapInfo map;
-    if (!gst_buffer_map(buffer, &map, GST_MAP_WRITE)) {
-        gst_buffer_unref(buffer);
+    if (!buffer) {
+        delete owned;
         return;
     }
-    memcpy(map.data, packet.constData(), packet.size());
-    gst_buffer_unmap(buffer, &map);
 
     GstFlowReturn flow = GST_FLOW_OK;
     g_signal_emit_by_name(_appsrc, "push-buffer", buffer, &flow);

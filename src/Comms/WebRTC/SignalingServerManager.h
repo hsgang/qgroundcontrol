@@ -177,5 +177,5 @@ private:
     static const int DEFAULT_RECONNECT_INTERVAL_MS = 5000;
     static const int MAX_RECONNECT_ATTEMPTS = 10;
     static const int MAX_RECONNECT_DELAY_MS = 30000;
-    static const int GET_DRONES_INTERVAL_MS = 2500;
+    static const int GET_DRONES_INTERVAL_MS = 10000;
 };

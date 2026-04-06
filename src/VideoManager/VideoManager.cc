@@ -387,7 +387,7 @@ void VideoManager::startRecording(const QString &videoFile)
     }
 }
 
-void VideoManager::pushWebRtcRtp(const QByteArray &packet)
+void VideoManager::pushWebRtcRtp(QByteArray packet)
 {
 #ifdef QGC_GST_STREAMING
     if (_videoReceivers.isEmpty()) {
@@ -396,7 +396,7 @@ void VideoManager::pushWebRtcRtp(const QByteArray &packet)
     VideoReceiver *receiver = _videoReceivers.front();
     auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
     if (gstReceiver) {
-        gstReceiver->pushRtpPacket(packet);
+        gstReceiver->pushRtpPacket(std::move(packet));
     }
 #else
     Q_UNUSED(packet)

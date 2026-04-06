@@ -57,7 +57,7 @@ public:
     };
     void enableInternalRtpMode(InternalCodec codec);
 
-    void pushRtpPacket(const QByteArray &packet);
+    void pushRtpPacket(QByteArray packet);
 
 public slots:
     void start(uint32_t timeout) override;
