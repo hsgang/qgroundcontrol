@@ -30,20 +30,19 @@ def main() -> None:
         sys.exit(1)
 
     binary_name = binary_path.name
-    run_binary = binary_name
     headless = True
 
     # AppImages typically don't ship the "offscreen" Qt platform plugin.
     if args.exe_type == "appimage" or binary_name.endswith(".AppImage"):
         headless = False
 
+    exe = work_dir / binary_name
     if os.name != "nt":
-        exe = work_dir / binary_name
         try:
             exe.chmod(exe.stat().st_mode | stat.S_IEXEC)
         except OSError:
             pass
-        run_binary = str(exe.resolve())
+    run_binary = str(exe.resolve())
 
     workspace = os.environ.get("GITHUB_WORKSPACE", ".")
     cmd = [
