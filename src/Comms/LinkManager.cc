@@ -881,9 +881,6 @@ bool LinkManager::_allowAutoConnectToBoard(QGCSerialPortInfo::BoardType_t boardT
         }
         break;
     case QGCSerialPortInfo::BoardTypeOpenPilot:
-        if (_autoConnectSettings->autoConnectLibrePilot()->rawValue().toBool()) {
-            return true;
-        }
         break;
     case QGCSerialPortInfo::BoardTypeRTKGPS:
         if (_autoConnectSettings->autoConnectRTKGPS()->rawValue().toBool() && !GPSManager::instance()->gpsRtk()->connected()) {

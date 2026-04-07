@@ -34,14 +34,7 @@
             "default": true,
             "label": "Automatically connect to an RTK GPS"
         },
-        {
-            "name": "autoConnectLibrePilot",
-            "shortDesc": "Automatically connect to a LibrePilot",
-            "longDesc": "If this option is enabled GroundControl will automatically connect to a LibrePilot board which is connected via USB.",
-            "type": "bool",
-            "default": true,
-            "label": "Automatically connect to a LibrePilot"
-        },
+
         {
             "name": "autoConnectNmeaPort",
             "shortDesc": "NMEA GPS device for GCS position",

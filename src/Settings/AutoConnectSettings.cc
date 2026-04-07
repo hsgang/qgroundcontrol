@@ -63,16 +63,6 @@ DECLARE_SETTINGSFACT_NO_FUNC(AutoConnectSettings, autoConnectRTKGPS)
     return _autoConnectRTKGPSFact;
 }
 
-DECLARE_SETTINGSFACT_NO_FUNC(AutoConnectSettings, autoConnectLibrePilot)
-{
-    if (!_autoConnectLibrePilotFact) {
-        _autoConnectLibrePilotFact = _createSettingsFact(autoConnectLibrePilotName);
-#ifdef Q_OS_IOS
-        _autoConnectLibrePilotFact->setUserVisible(false);
-#endif
-    }
-    return _autoConnectLibrePilotFact;
-}
 
 DECLARE_SETTINGSFACT_NO_FUNC(AutoConnectSettings, autoConnectNmeaPort)
 {
