@@ -970,6 +970,11 @@ void VideoManager::_initVideoReceiver(VideoReceiver *receiver, QQuickWindow *win
         if (!receiver->isThermal()) {
             _streaming = active;
             emit streamingChanged();
+            // 스트리밍 완전 종료 시 stall 상태 해제 → "WAITING FOR VIDEO" 표시
+            if (!active && _videoStalled) {
+                _videoStalled = false;
+                emit videoStalledChanged();
+            }
         }
     });
 
@@ -997,9 +1002,11 @@ void VideoManager::_initVideoReceiver(VideoReceiver *receiver, QQuickWindow *win
                 if (_stallTimer) {
                     _stallTimer->stop();
                 }
-                if (_videoStalled) {
-                    _videoStalled = false;
+                // 디코딩 중단 시 (영상 끊김) stall 상태로 전환하여 마지막 프레임을 그레이스케일로 유지
+                if (!_videoStalled && _streaming) {
+                    _videoStalled = true;
                     emit videoStalledChanged();
+                    qCDebug(VideoManagerLog) << "Video decoding stopped while streaming — entering stalled state";
                 }
             }
         }

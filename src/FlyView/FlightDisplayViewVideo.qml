@@ -26,7 +26,7 @@ Item {
     property var    _camera:            _isCamera ? _dynamicCameras.cameras.get(_curCameraIndex) : null
     property bool   _hasZoom:           _camera && _camera.hasZoom
     property int    _fitMode:           QGroundControl.settingsManager.videoSettings.videoFit.rawValue
-    property bool   _showStreamLoader:  QGroundControl.videoManager.decoding
+    property bool   _showStreamLoader:  QGroundControl.videoManager.decoding || QGroundControl.videoManager.videoStalled
     property bool   _showUvcLoader:     QGroundControl.videoManager.isUvc
 
     property bool   _isMode_FIT_WIDTH:  _fitMode === 0
