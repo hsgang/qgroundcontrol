@@ -27,12 +27,10 @@
         },
         {
             "heading": "Tokens",
-            "keywords": ["token", "api key", "tianditu", "mapbox", "esri", "vworld", "openaip"],
+            "keywords": ["token", "api key", "mapbox", "esri", "vworld", "openaip"],
             "headingDescription": "qsTr(\"Allows access to additional providers\")",
             "controls": [
-                {
-                    "setting": "appSettings.tiandituToken"
-                },
+
                 {
                     "setting": "appSettings.mapboxToken"
                 },
