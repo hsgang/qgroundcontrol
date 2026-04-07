@@ -43,29 +43,31 @@ Item {
 
     property double _thermalHeightFactor: 0.85 //-- TODO
 
-        Image {
+        Rectangle {
             id:             noVideo
             anchors.fill:   parent
-            source:         "/res/NoVideoBackground.jpg"
-            fillMode:       Image.PreserveAspectCrop
+            color:          "black"
             visible:        !_showStreamLoader && !_showUvcLoader
 
-            Rectangle {
-                anchors.centerIn:   parent
-                width:              noVideoLabel.contentWidth + ScreenTools.defaultFontPixelHeight
-                height:             noVideoLabel.contentHeight + ScreenTools.defaultFontPixelHeight
-                radius:             ScreenTools.defaultFontPixelWidth / 2
-                color:              "black"
-                opacity:            0.5
+            Image {
+                id:                     noVideoLogo
+                anchors.centerIn:       parent
+                anchors.verticalCenterOffset: -noVideoLabel.height * 0.5
+                source:                 "/res/amplogo.svg"
+                sourceSize.width:       ScreenTools.defaultFontPixelHeight * 4
+                sourceSize.height:      ScreenTools.defaultFontPixelHeight * 4
+                fillMode:              Image.PreserveAspectFit
             }
 
             QGCLabel {
                 id:                 noVideoLabel
+                anchors.top:        noVideoLogo.bottom
+                anchors.topMargin:  ScreenTools.defaultFontPixelHeight * 0.5
+                anchors.horizontalCenter: parent.horizontalCenter
                 text:               QGroundControl.settingsManager.videoSettings.streamEnabled.rawValue ? qsTr("WAITING FOR VIDEO") : qsTr("VIDEO DISABLED")
                 font.bold:          true
                 color:              "white"
                 font.pointSize:     useSmallFont ? ScreenTools.smallFontPointSize : ScreenTools.largeFontPointSize
-                anchors.centerIn:   parent
             }
         }
 
