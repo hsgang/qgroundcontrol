@@ -177,7 +177,7 @@ function(gstreamer_resilient_download)
     endif()
 
     if(NOT ARG_TIMEOUT)
-        set(ARG_TIMEOUT 120)
+        set(ARG_TIMEOUT 600)
     endif()
     if(NOT ARG_INACTIVITY_TIMEOUT)
         set(ARG_INACTIVITY_TIMEOUT 60)
