@@ -445,6 +445,14 @@ else()
 endif()
 set(GStreamer_VERSION "${PC_GSTREAMER_VERSION}")
 
+# Export build-time version as compile definitions so C++ code can branch
+# on the GStreamer version (e.g. videoconvertscale vs videoconvert/videoscale).
+string(REGEX MATCH "^([0-9]+)\\.([0-9]+)" _gst_ver_match "${GStreamer_VERSION}")
+if(_gst_ver_match)
+    set(GStreamer_VERSION_MAJOR "${CMAKE_MATCH_1}")
+    set(GStreamer_VERSION_MINOR "${CMAKE_MATCH_2}")
+endif()
+
 function(find_gstreamer_component component pkgconfig_name)
     set(target GStreamer::${component})
 
@@ -512,6 +520,13 @@ if(QGCGStreamer_FOUND AND NOT TARGET GStreamer::GStreamer)
 
     if(GStreamer_USE_STATIC_LIBS)
         target_compile_definitions(GStreamer::GStreamer INTERFACE QGC_GST_STATIC_BUILD)
+    endif()
+
+    if(GStreamer_VERSION_MAJOR AND GStreamer_VERSION_MINOR)
+        target_compile_definitions(GStreamer::GStreamer INTERFACE
+            QGC_GST_BUILD_VERSION_MAJOR=${GStreamer_VERSION_MAJOR}
+            QGC_GST_BUILD_VERSION_MINOR=${GStreamer_VERSION_MINOR}
+        )
     endif()
 
     if(APPLE AND GStreamer_USE_FRAMEWORK)
