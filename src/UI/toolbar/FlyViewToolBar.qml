@@ -48,8 +48,6 @@ Item {
                 width:                  height
                 color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
-                border.color:           qgcPal.text
-                border.width:           1
 
                 QGCToolBarButton {
                     anchors.horizontalCenter:   parent.horizontalCenter
@@ -66,8 +64,6 @@ Item {
                 width:                  height
                 color:                  QGroundControl.globalPalette.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
-                border.color:           qgcPal.text
-                border.width:           1
                 visible:                !ScreenTools.isMobile/* && currentToolbar === flyViewToolbar*/
 
                 QGCColoredImage{

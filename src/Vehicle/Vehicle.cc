@@ -177,9 +177,8 @@ Vehicle::Vehicle(LinkInterface*             link,
     _csvLogTimer.start(1000);
 
     // Start sensor logger
-    auto customLogTerm = 1000 / (SettingsManager::instance()->mavlinkSettings()->rateSaveSensorLog()->rawValue().toInt());
     connect(&_customLogTimer, &QTimer::timeout, this, &Vehicle::_writeCustomLogLine);
-    _customLogTimer.start(customLogTerm);
+    _customLogTimer.start(1000);
 
     connect(&_dbWriteTimer, &QTimer::timeout, this, &Vehicle::_sendToDb);
     _dbWriteTimer.start(1000);

@@ -46,7 +46,6 @@ Rectangle {
             height:                 _root.height * 0.8
             width:                  height
             color:                  "transparent"
-            border.color:           qgcPal.text
             radius:                 ScreenTools.defaultFontPixelHeight / 4
 
             QGCToolBarButton {

@@ -42,6 +42,9 @@
                 },
                 {
                     "setting": "mavlinkSettings.saveCsvTelemetry"
+                },
+                {
+                    "setting": "mavlinkSettings.saveSensorLog"
                 }
             ]
         },

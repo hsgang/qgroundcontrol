@@ -24,7 +24,6 @@ public:
     DEFINE_SETTINGFACT(sendGCSHeartbeat)
     DEFINE_SETTINGFACT(gcsMavlinkSystemID)
     DEFINE_SETTINGFACT(saveSensorLog)
-    DEFINE_SETTINGFACT(rateSaveSensorLog)
 
     DEFINE_SETTINGFACT(noInitialDownloadWhenFlying)
 

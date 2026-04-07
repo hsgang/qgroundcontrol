@@ -124,7 +124,7 @@ Item{
                 text:                   _vehicleAltitudeText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
-                color:                  qgcPal.buttonHighlight
+                color:                  qgcPal.text
                 horizontalAlignment:    Text.AlignHCenter
             }
             QGCLabel {
@@ -170,7 +170,7 @@ Item{
                 Layout.fillWidth:       true
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
-                color:                  qgcPal.buttonHighlight
+                color:                  qgcPal.text
                 horizontalAlignment:    Text.AlignHCenter
             }
             QGCLabel {
@@ -193,7 +193,7 @@ Item{
                 text:                   _vehicleVerticalSpeedText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
-                color:                  qgcPal.buttonHighlight
+                color:                  qgcPal.text
                 horizontalAlignment:    Text.AlignHCenter
             }
             QGCLabel {
@@ -216,7 +216,7 @@ Item{
                 text:                   _flightTimeText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
-                color:                  qgcPal.buttonHighlight
+                color:                  qgcPal.text
                 horizontalAlignment:    Text.AlignHCenter
             }
             QGCLabel {
