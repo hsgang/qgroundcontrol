@@ -36,12 +36,12 @@ ListModel {
         name: "Divider"
     }
 
-    ListElement {
-        name: qsTr("ADSB Server")
-        url: "qrc:/qml/QGroundControl/AppSettings/ADSBServerSettings.qml"
-        iconUrl: "qrc:/InstrumentValueIcons/airplane.svg"
-        pageVisible: function() { return true }
-    }
+    // ListElement {
+    //     name: qsTr("ADSB Server")
+    //     url: "qrc:/qml/QGroundControl/AppSettings/ADSBServerSettings.qml"
+    //     iconUrl: "qrc:/InstrumentValueIcons/airplane.svg"
+    //     pageVisible: function() { return true }
+    // }
 
     ListElement {
         name: qsTr("Comm Links")
@@ -51,11 +51,11 @@ ListModel {
     }
 
     ListElement {
-        name: qsTr("Logging")
-        url: "qrc:/qml/QGroundControl/Controls/AppLogging.qml"
-        iconUrl: "qrc:/InstrumentValueIcons/conversation.svg"
-        pageVisible: function() { return true }
-    }
+        name: qsTr("Video")
+        url: "qrc:/qml/QGroundControl/AppSettings/VideoSettings.qml"
+        iconUrl: "qrc:/InstrumentValueIcons/camera.svg"
+        pageVisible: function() { return QGroundControl.settingsManager.videoSettings.visible }
+    }   
 
     ListElement {
         name: qsTr("Maps")
@@ -74,24 +74,24 @@ ListModel {
         }
     }
 
-    ListElement {
-        name: qsTr("PX4 Log Transfer")
-        url: "qrc:/qml/QGroundControl/AppSettings/PX4LogTransferSettings.qml"
-        iconUrl: "qrc:/InstrumentValueIcons/inbox-download.svg"
-        pageVisible: function() {
-            var activeVehicle = QGroundControl.multiVehicleManager.activeVehicle
-            return QGroundControl.corePlugin.options.showPX4LogTransferOptions &&
-                        QGroundControl.px4ProFirmwareSupported &&
-                        (activeVehicle ? activeVehicle.px4Firmware : true)
-        }
-    }
+    // ListElement {
+    //     name: qsTr("PX4 Log Transfer")
+    //     url: "qrc:/qml/QGroundControl/AppSettings/PX4LogTransferSettings.qml"
+    //     iconUrl: "qrc:/InstrumentValueIcons/inbox-download.svg"
+    //     pageVisible: function() {
+    //         var activeVehicle = QGroundControl.multiVehicleManager.activeVehicle
+    //         return QGroundControl.corePlugin.options.showPX4LogTransferOptions &&
+    //                     QGroundControl.px4ProFirmwareSupported &&
+    //                     (activeVehicle ? activeVehicle.px4Firmware : true)
+    //     }
+    // }
 
-    ListElement {
-        name: qsTr("Remote ID")
-        url: "qrc:/qml/QGroundControl/AppSettings/RemoteIDSettings.qml"
-        iconUrl: "qrc:/qmlimages/RidIconManNoID.svg"
-        pageVisible: function() { return true }
-    }
+    // ListElement {
+    //     name: qsTr("Remote ID")
+    //     url: "qrc:/qml/QGroundControl/AppSettings/RemoteIDSettings.qml"
+    //     iconUrl: "qrc:/qmlimages/RidIconManNoID.svg"
+    //     pageVisible: function() { return true }
+    // }
 
     ListElement {
         name: qsTr("Telemetry")
@@ -101,14 +101,14 @@ ListModel {
     }
 
     ListElement {
-        name: qsTr("Video")
-        url: "qrc:/qml/QGroundControl/AppSettings/VideoSettings.qml"
-        iconUrl: "qrc:/InstrumentValueIcons/camera.svg"
-        pageVisible: function() { return QGroundControl.settingsManager.videoSettings.visible }
+        name: "Divider"
     }
 
     ListElement {
-        name: "Divider"
+        name: qsTr("Logging")
+        url: "qrc:/qml/QGroundControl/Controls/AppLogging.qml"
+        iconUrl: "qrc:/InstrumentValueIcons/conversation.svg"
+        pageVisible: function() { return true }
     }
 
     ListElement {

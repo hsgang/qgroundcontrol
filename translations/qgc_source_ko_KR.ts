@@ -3907,6 +3907,190 @@ Please place your vehicle in water, click the button, and wait. Note that the th
         <source> (Test only)</source>
         <translation type="unfinished"> (Test only)</translation>
     </message>
+    <message>
+        <source>General</source>
+        <translation>일반 설정</translation>
+    </message>
+    <message>
+        <source>Units</source>
+        <translation>단위 표시</translation>
+    </message>
+    <message>
+        <source>Guided Commands</source>
+        <translation>가이디드 명령</translation>
+    </message>
+    <message>
+        <source>MAVLink Actions</source>
+        <translation>MAVLink 사용자 명령</translation>
+    </message>
+    <message>
+        <source>Virtual Joystick</source>
+        <translation>가상 조이스틱</translation>
+    </message>
+    <message>
+        <source>Instrument Panel</source>
+        <translation>계기판</translation>
+    </message>
+    <message>
+        <source>ADSB Server</source>
+        <translation>ADSB 서버</translation>
+    </message>
+    <message>
+        <source>AutoConnect</source>
+        <translation>자동 연결</translation>
+    </message>
+    <message>
+        <source>NMEA GPS</source>
+        <translation>NMEA GPS</translation>
+    </message>
+    <message>
+        <source>Link Management</source>
+        <translation>링크 관리</translation>
+    </message>
+    <message>
+        <source>Map Provider</source>
+        <translation>지도 공급자</translation>
+    </message>
+    <message>
+        <source>Offline Maps</source>
+        <translation>오프라인 지도</translation>
+    </message>
+    <message>
+        <source>Tokens</source>
+        <translation>토큰</translation>
+    </message>
+    <message>
+        <source>Mapbox Login</source>
+        <translation>Mapbox 로그인</translation>
+    </message>
+    <message>
+        <source>Custom Map URL</source>
+        <translation>사용자 지도 URL</translation>
+    </message>
+    <message>
+        <source>Tile Cache</source>
+        <translation>타일 캐시</translation>
+    </message>
+    <message>
+        <source>Connection Status</source>
+        <translation>연결 상태</translation>
+    </message>
+    <message>
+        <source>Server Settings</source>
+        <translation>서버 설정</translation>
+    </message>
+    <message>
+        <source>Mountpoint Browser</source>
+        <translation>마운트포인트 브라우저</translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <translation>옵션</translation>
+    </message>
+    <message>
+        <source>UDP Forwarding</source>
+        <translation>UDP 포워딩</translation>
+    </message>
+    <message>
+        <source>Log Control</source>
+        <translation>로그 제어</translation>
+    </message>
+    <message>
+        <source>Upload Settings</source>
+        <translation>업로드 설정</translation>
+    </message>
+    <message>
+        <source>Log Files</source>
+        <translation>로그 파일</translation>
+    </message>
+    <message>
+        <source>Region</source>
+        <translation>지역</translation>
+    </message>
+    <message>
+        <source>Basic ID</source>
+        <translation>기본 ID</translation>
+    </message>
+    <message>
+        <source>Operator ID</source>
+        <translation>운영자 ID</translation>
+    </message>
+    <message>
+        <source>Self ID</source>
+        <translation>자체 ID</translation>
+    </message>
+    <message>
+        <source>GroundStation Location</source>
+        <translation>지상국 위치</translation>
+    </message>
+    <message>
+        <source>GCS Position</source>
+        <translation>GCS 위치</translation>
+    </message>
+    <message>
+        <source>GPS Location</source>
+        <translation>GPS 위치</translation>
+    </message>
+    <message>
+        <source>EU Vehicle Info</source>
+        <translation>EU 기체 정보</translation>
+    </message>
+    <message>
+        <source>Ground Station</source>
+        <translation>지상국</translation>
+    </message>
+    <message>
+        <source>MAVLink Forwarding</source>
+        <translation>MAVLink 포워딩</translation>
+    </message>
+    <message>
+        <source>Logging</source>
+        <translation>로깅</translation>
+    </message>
+    <message>
+        <source>Stream Rates (ArduPilot Only)</source>
+        <translation>스트림 속도 (ArduPilot 전용)</translation>
+    </message>
+    <message>
+        <source>Signing Key</source>
+        <translation>서명 키</translation>
+    </message>
+    <message>
+        <source>Link Status</source>
+        <translation>링크 상태</translation>
+    </message>
+    <message>
+        <source>Video Source</source>
+        <translation>비디오 소스</translation>
+    </message>
+    <message>
+        <source>Connection</source>
+        <translation>연결</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <source>Local Video Storage</source>
+        <translation>로컬 비디오 저장소</translation>
+    </message>
+    <message>
+        <source>Cloud Login</source>
+        <translation>클라우드 로그인</translation>
+    </message>
+    <message>
+        <source>WebRTC</source>
+        <translation>WebRTC</translation>
+    </message>
+    <message>
+        <source>Data</source>
+        <translation>데이터</translation>
+    </message>
+    <message>
+        <source>Search settings...</source>
+        <translation>설정 검색...</translation>
+    </message>
 </context>
 <context>
     <name>ArmedIndicator</name>
@@ -8000,149 +8184,77 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>GeneralSettings</name>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="36"/>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="19"/>
         <source>General</source>
         <translation>일반 설정</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="407"/>
-        <source>Units</source>
-        <translation>단위 표시</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="427"/>
-        <source>Area</source>
-        <translation>면적</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="427"/>
-        <source>Speed</source>
-        <translation>속도</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="427"/>
-        <source>Temperature</source>
-        <translation>온도</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="444"/>
-        <source>Miscellaneous</source>
-        <translation>기타</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="468"/>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="22"/>
         <source>Language</source>
         <translation>언어</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="479"/>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="29"/>
         <source>Color Scheme</source>
         <translation>테마 구성</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="490"/>
-        <source>Map Settings</source>
-        <translation>지도 설정</translation>
-    </message>    
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="529"/>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="36"/>
         <source>Stream GCS Position</source>
         <translation>GCS 위치 전송</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="611"/>
-        <source>Mute all audio output</source>
-        <translation>오디오 출력 음소거</translation>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="49"/>
+        <source>Audio Output</source>
+        <translation>오디오 출력</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="611"/>
-        <source>Save application data to SD Card</source>
-        <translation>SD카드 저장소 사용</translation>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="58"/>
+        <source>Test</source>
+        <translation>테스트</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="618"/>
-        <source>Check for Internet connection</source>
-        <translation>인터넷 연결 확인</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="626"/>
-        <source>Clear all settings</source>
-        <translation>설정 초기화</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="626"/>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="73"/>
         <source>Clear all settings on next start</source>
         <translation>설정 초기화</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="539"/>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="91"/>
         <source>UI Scaling</source>
         <translation>UI 크기</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="806"/>
-        <source>Enable Remote ID</source>
-        <translation>Remote ID 활성화</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="636"/>
-        <source>Clear Settings</source>
-        <translation>설정 취소</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="637"/>
-        <source>All saved settings will be reset the next time you start %1. Is this really what you want?</source>
-        <translation>저장된 모든 설정은 %1을 다음에 다시 시작할 때 재설정됩니다. 정말 하시겠습니까?</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="661"/>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="136"/>
         <source>Application Load/Save Path</source>
         <translation>저장 경로</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="172"/>
-        <source>Full Screen</source>
-        <translation>전체 화면</translation>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="140"/>
+        <source>&lt;default location&gt;</source>
+        <translation>&lt;기본 경로&gt;</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="665"/>
-        <source>&lt;not set&gt;</source>
-        <translation>&lt;설정되지 않음&lt;&gt;</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="668"/>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="1072"/>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="1094"/>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="146"/>
         <source>Browse</source>
         <translation>찾아보기</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="672"/>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="150"/>
         <source>Choose the location to save/load files</source>
         <translation>파일을 저장/열기할 위치를 지정해주십시오.</translation>
     </message>
     <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="685"/>
-        <source>Telemetry Logs from Vehicle</source>
-        <translation>기체의 텔레메트리 로그</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="703"/>
-        <source>Save log after each flight</source>
-        <translation>비행 완료 후마다 로그 저장하기</translation>
-    </message>
-    <message>
-        <location filename="../src/ui/preferences/GeneralSettings.qml" line="711"/>
-        <source>Save logs even if vehicle was not armed</source>
-        <translation>기체를 시동하지 않은 경우에도 로그 저장하기</translation>
+        <location filename="../src/UI/AppSettings/GeneralSettings.qml" line="161"/>
+        <source>Units</source>
+        <translation>단위 표시</translation>
     </message>
 </context>
 <context>
     <name>FlyViewSettings</name>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="84"/>
-        <source>FlyView General</source>
-        <translation>비행화면 설정</translation>
+        <source>General</source>
+        <translation>일반 설정</translation>
     </message>
     <message>
         <location filename="../src/ui/preferences/FlyViewSettings.qml" line="103"/>
@@ -10434,6 +10546,61 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/comm/LinkManager.cc" line="884"/>
         <source>Log Replay</source>
         <translation>로그 리플레이</translation>
+    </message>
+</context>
+<context>
+    <name>LinkConfigurationManager</name>
+    <message>
+        <source>Links</source>
+        <translation>링크</translation>
+    </message>
+    <message>
+        <source>Add New Link</source>
+        <translation>새 링크 추가</translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation>추가</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>이름</translation>
+    </message>
+    <message>
+        <source>Enter name</source>
+        <translation>이름 입력</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>유형</translation>
+    </message>
+    <message>
+        <source>Automatically Connect on Start</source>
+        <translation>시작시 자동 연결</translation>
+    </message>
+    <message>
+        <source>High Latency</source>
+        <translation>높은 지연</translation>
+    </message>
+    <message>
+        <source>Connect</source>
+        <translation>연결</translation>
+    </message>
+    <message>
+        <source>Disconnect</source>
+        <translation>연결 해제</translation>
+    </message>
+    <message>
+        <source>Edit Link</source>
+        <translation>링크 편집</translation>
+    </message>
+    <message>
+        <source>Delete Link</source>
+        <translation>링크 삭제</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete &apos;%1&apos;?</source>
+        <translation>&apos;%1&apos;을(를) 삭제하시겠습니까?</translation>
     </message>
 </context>
 <context>
@@ -19449,6 +19616,16 @@ Confirm change?</source>
         <source>Temperature</source>
         <translation>온도</translation>
     </message>
+    <message>
+        <location filename="../src/Settings/UnitsSettings.cc" line="48"/>
+        <source>Horizontal Distance</source>
+        <translation>수평 거리</translation>
+    </message>
+    <message>
+        <location filename="../src/Settings/UnitsSettings.cc" line="80"/>
+        <source>Vertical Distance</source>
+        <translation>수직 거리</translation>
+    </message>
 </context>
 <context>
     <name>VTOLChecklist</name>
@@ -20429,6 +20606,44 @@ Confirm change?</source>
         <location filename="../src/MAVLink/StatusTextHandler.qml" line="184"/>
         <source>Debug</source>
         <translation>디버그</translation>
+    </message>
+</context>
+<context>
+    <name>SelectViewDropdown</name>
+    <message>
+        <location filename="../src/UI/toolbar/SelectViewDropdown.qml" line="22"/>
+        <source>Fly</source>
+        <translation>비행</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/SelectViewDropdown.qml" line="35"/>
+        <source>Plan</source>
+        <translation>계획</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/SelectViewDropdown.qml" line="48"/>
+        <source>Analyze</source>
+        <translation>분석</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/SelectViewDropdown.qml" line="63"/>
+        <source>Configure</source>
+        <translation>설정</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/SelectViewDropdown.qml" line="77"/>
+        <source>Settings</source>
+        <translation>환경설정</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/SelectViewDropdown.qml" line="92"/>
+        <source>Close</source>
+        <translation>종료</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/SelectViewDropdown.qml" line="111"/>
+        <source>%1 Version</source>
+        <translation>%1 버전</translation>
     </message>
 </context>
 </TS>

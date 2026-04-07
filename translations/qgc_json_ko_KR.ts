@@ -247,13 +247,13 @@
       <extracomment>.groups[Basic ID].heading</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/UI/AppSettings/pages/RemoteID.SettingsUI.json"/>
       <source>Basic ID</source>
-      <translation type="unfinished">Basic ID</translation>
+      <translation>기본 ID</translation>
     </message>
     <message>
       <extracomment>.groups[Operator ID].heading</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/UI/AppSettings/pages/RemoteID.SettingsUI.json"/>
       <source>Operator ID</source>
-      <translation type="unfinished">Operator ID</translation>
+      <translation>운영자 ID</translation>
     </message>
     <message>
       <extracomment>.groups[Self ID].heading</extracomment>
@@ -496,7 +496,7 @@
       <extracomment>.QGC.MetaData.Facts[guidedMinimumAltitude].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Minimum Altitude</source>
-      <translation type="unfinished">Minimum Altitude</translation>
+      <translation>최소 고도</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[guidedMinimumAltitude].keywords</extracomment>
@@ -515,7 +515,7 @@
       <extracomment>.QGC.MetaData.Facts[guidedMaximumAltitude].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Maximum Altitude</source>
-      <translation type="unfinished">Maximum Altitude</translation>
+      <translation>최대 고도</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[guidedMaximumAltitude].keywords</extracomment>
@@ -534,7 +534,7 @@
       <extracomment>.QGC.MetaData.Facts[showLogReplayStatusBar].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Show Telemetry Log Replay Status Bar</source>
-      <translation type="unfinished">Show Telemetry Log Replay Status Bar</translation>
+      <translation>텔레메트리 로그 재생 상태바 표시</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[showLogReplayStatusBar].keywords</extracomment>
@@ -553,7 +553,7 @@
       <extracomment>.QGC.MetaData.Facts[showAdditionalIndicatorsCompass].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Show additional heading indicators on Compass</source>
-      <translation type="unfinished">Show additional heading indicators on Compass</translation>
+      <translation>나침반에 추가 방위 표시</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[showAdditionalIndicatorsCompass].keywords</extracomment>
@@ -572,7 +572,7 @@
       <extracomment>.QGC.MetaData.Facts[lockNoseUpCompass].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Lock Compass Nose-Up</source>
-      <translation type="unfinished">Lock Compass Nose-Up</translation>
+      <translation>나침반 기수 상단 고정</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[lockNoseUpCompass].keywords</extracomment>
@@ -591,7 +591,7 @@
       <extracomment>.QGC.MetaData.Facts[keepMapCenteredOnVehicle].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Keep Map Centered On Vehicle</source>
-      <translation type="unfinished">Keep Map Centered On Vehicle</translation>
+      <translation>기체 중심 지도 유지</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[keepMapCenteredOnVehicle].keywords</extracomment>
@@ -610,7 +610,7 @@
       <extracomment>.QGC.MetaData.Facts[showSimpleCameraControl].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Show simple camera controls (DIGICAM_CONTROL)</source>
-      <translation type="unfinished">Show simple camera controls (DIGICAM_CONTROL)</translation>
+      <translation>간단한 카메라 컨트롤 표시 (DIGICAM_CONTROL)</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[showSimpleCameraControl].keywords</extracomment>
@@ -635,7 +635,7 @@
       <extracomment>.QGC.MetaData.Facts[maxGoToLocationDistance].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Go To Location Max Distance</source>
-      <translation type="unfinished">Go To Location Max Distance</translation>
+      <translation>위치 이동 최대 거리</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[maxGoToLocationDistance].keywords</extracomment>
@@ -654,7 +654,7 @@
       <extracomment>.QGC.MetaData.Facts[forwardFlightGoToLocationLoiterRad].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Loiter Radius in Forward Flight Guided Mode</source>
-      <translation type="unfinished">Loiter Radius in Forward Flight Guided Mode</translation>
+      <translation>전진 비행 유도 모드 선회 반경</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[forwardFlightGoToLocationLoiterRad].keywords</extracomment>
@@ -673,7 +673,7 @@
       <extracomment>.QGC.MetaData.Facts[goToLocationRequiresConfirmInGuided].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Require Confirmation for Go To Location in Guided Mode</source>
-      <translation type="unfinished">Require Confirmation for Go To Location in Guided Mode</translation>
+      <translation>유도 모드에서 위치 이동 시 확인 필요</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[goToLocationRequiresConfirmInGuided].keywords</extracomment>
@@ -692,7 +692,7 @@
       <extracomment>.QGC.MetaData.Facts[updateHomePosition].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Update return to home position based on device location</source>
-      <translation type="unfinished">Update return to home position based on device location</translation>
+      <translation>기기 위치 기반 홈 위치 업데이트</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[updateHomePosition].keywords</extracomment>
@@ -718,7 +718,7 @@
       <extracomment>.QGC.MetaData.Facts[instrumentQmlFile2].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Qml file for instrument panel</source>
-      <translation type="unfinished">Qml file for instrument panel</translation>
+      <translation>계기판 QML 파일</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[instrumentQmlFile2].keywords</extracomment>
@@ -749,7 +749,7 @@
       <extracomment>.QGC.MetaData.Facts[enableAutomaticMissionPopups].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlyView.SettingsGroup.json"/>
       <source>Enable automatic mission start/resume popups</source>
-      <translation type="unfinished">Enable automatic mission start/resume popups</translation>
+      <translation>자동 임무 시작/재개 팝업 활성화</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[enableAutomaticMissionPopups].keywords</extracomment>
@@ -863,7 +863,7 @@
       <extracomment>.QGC.MetaData.Facts[defaultMissionItemAltitude].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Default Mission Altitude</source>
-      <translation type="unfinished">Default Mission Altitude</translation>
+      <translation>기본 임무 고도</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[defaultMissionItemAltitude].keywords</extracomment>
@@ -888,7 +888,7 @@
       <extracomment>.QGC.MetaData.Facts[audioMuted].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Mute Audio Output</source>
-      <translation type="unfinished">Mute Audio Output</translation>
+      <translation>오디오 출력 음소거</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[audioMuted].keywords</extracomment>
@@ -913,7 +913,7 @@
       <extracomment>.QGC.MetaData.Facts[audioVolume].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Audio Output Volume</source>
-      <translation type="unfinished">Audio Output Volume</translation>
+      <translation>오디오 출력</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[audioVolume].keywords</extracomment>
@@ -938,7 +938,7 @@
       <extracomment>.QGC.MetaData.Facts[virtualJoystick].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Virtual Joystick</source>
-      <translation type="unfinished">Virtual Joystick</translation>
+      <translation>가상 조이스틱</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[virtualJoystick].keywords</extracomment>
@@ -963,7 +963,7 @@
       <extracomment>.QGC.MetaData.Facts[virtualJoystickAutoCenterThrottle].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Auto-Center Throttle</source>
-      <translation type="unfinished">Auto-Center Throttle</translation>
+      <translation>자동 중립 스로틀</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[virtualJoystickAutoCenterThrottle].keywords</extracomment>
@@ -988,7 +988,7 @@
       <extracomment>.QGC.MetaData.Facts[virtualJoystickLeftHandedMode].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Left-Handed Mode</source>
-      <translation type="unfinished">Left-Handed Mode</translation>
+      <translation>왼손 모드</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[virtualJoystickLeftHandedMode].keywords</extracomment>
@@ -1020,7 +1020,7 @@
       <extracomment>.QGC.MetaData.Facts[gstDebugLevel].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Video streaming debug</source>
-      <translation type="unfinished">Video streaming debug</translation>
+      <translation>비디오 스트리밍 디버그</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[gstDebugLevel].keywords</extracomment>
@@ -1045,7 +1045,7 @@
       <extracomment>.QGC.MetaData.Facts[useChecklist].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Use Preflight Checklist</source>
-      <translation type="unfinished">Use Preflight Checklist</translation>
+      <translation>비행 전 체크리스트 사용</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[useChecklist].keywords, .QGC.MetaData.Facts[enforceChecklist].keywords</extracomment>
@@ -1070,7 +1070,7 @@
       <extracomment>.QGC.MetaData.Facts[enforceChecklist].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Enforce Preflight Checklist</source>
-      <translation type="unfinished">Enforce Preflight Checklist</translation>
+      <translation>비행 전 체크리스트 강제 사용</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[enableMultiVehiclePanel].shortDesc</extracomment>
@@ -1088,7 +1088,7 @@
       <extracomment>.QGC.MetaData.Facts[enableMultiVehiclePanel].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Enable Multi-Vehicle Panel</source>
-      <translation type="unfinished">Enable Multi-Vehicle Panel</translation>
+      <translation>다중 기체 패널 활성화</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[enableMultiVehiclePanel].keywords</extracomment>
@@ -1113,7 +1113,7 @@
       <extracomment>.QGC.MetaData.Facts[uiScalePercent].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>UI Scaling</source>
-      <translation type="unfinished">UI Scaling</translation>
+      <translation>UI 크기</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[uiScalePercent].keywords</extracomment>
@@ -1145,7 +1145,7 @@
       <extracomment>.QGC.MetaData.Facts[indoorPalette].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Color Scheme</source>
-      <translation type="unfinished">Color Scheme</translation>
+      <translation>테마 구성</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[indoorPalette].keywords</extracomment>
@@ -1170,7 +1170,7 @@
       <extracomment>.QGC.MetaData.Facts[savePath].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Application Load/Save Path</source>
-      <translation type="unfinished">Application Load/Save Path</translation>
+      <translation>저장 경로</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[savePath].keywords</extracomment>
@@ -1207,7 +1207,7 @@
       <extracomment>.QGC.MetaData.Facts[tiandituToken].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>TianDiTu</source>
-      <translation type="unfinished">TianDiTu</translation>
+      <translation>TianDiTu</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[tiandituToken].keywords</extracomment>
@@ -1232,7 +1232,7 @@
       <extracomment>.QGC.MetaData.Facts[mapboxToken].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Mapbox</source>
-      <translation type="unfinished">Mapbox</translation>
+      <translation>Mapbox</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[mapboxToken].keywords</extracomment>
@@ -1257,7 +1257,7 @@
       <extracomment>.QGC.MetaData.Facts[mapboxAccount].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Account</source>
-      <translation type="unfinished">Account</translation>
+      <translation>계정</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[mapboxAccount].keywords</extracomment>
@@ -1282,7 +1282,7 @@
       <extracomment>.QGC.MetaData.Facts[mapboxStyle].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Map Style</source>
-      <translation type="unfinished">Map Style</translation>
+      <translation>지도 스타일</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[mapboxStyle].keywords</extracomment>
@@ -1307,7 +1307,7 @@
       <extracomment>.QGC.MetaData.Facts[esriToken].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Esri</source>
-      <translation type="unfinished">Esri</translation>
+      <translation>Esri</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[esriToken].keywords</extracomment>
@@ -1332,7 +1332,7 @@
       <extracomment>.QGC.MetaData.Facts[customURL].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Server URL</source>
-      <translation type="unfinished">Server URL</translation>
+      <translation>서버 URL</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[customURL].keywords</extracomment>
@@ -1357,7 +1357,7 @@
       <extracomment>.QGC.MetaData.Facts[vworldToken].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>VWorld</source>
-      <translation type="unfinished">VWorld</translation>
+      <translation>VWorld</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[vworldToken].keywords</extracomment>
@@ -1382,7 +1382,7 @@
       <extracomment>.QGC.MetaData.Facts[openaipToken].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>OpenAIP</source>
-      <translation type="unfinished">OpenAIP</translation>
+      <translation>OpenAIP</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[openaipToken].keywords</extracomment>
@@ -1408,7 +1408,7 @@
       <extracomment>.QGC.MetaData.Facts[followTarget].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Stream GCS Position</source>
-      <translation type="unfinished">Stream GCS Position</translation>
+      <translation>GCS 위치 전송</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[followTarget].keywords</extracomment>
@@ -1427,7 +1427,7 @@
       <extracomment>.QGC.MetaData.Facts[qLocaleLanguage].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Language</source>
-      <translation type="unfinished">Language</translation>
+      <translation>언어</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[qLocaleLanguage].keywords</extracomment>
@@ -1452,7 +1452,7 @@
       <extracomment>.QGC.MetaData.Facts[clearSettingsNextBoot].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Clear all settings on next start</source>
-      <translation type="unfinished">Clear all settings on next start</translation>
+      <translation>설정 초기화</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[clearSettingsNextBoot].keywords</extracomment>
@@ -1484,6 +1484,12 @@
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
       <source>Comma separated list of favorite parameter names.</source>
       <translation type="unfinished">Comma separated list of favorite parameter names.</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[saveSensorLog].label</extracomment>
+      <location filename="/Users/don/repos/qgroundcontrol/src/Settings/App.SettingsGroup.json"/>
+      <source>Save Sensor Log</source>
+      <translation>센서 로그 저장</translation>
     </message>
   </context>
   <context>
@@ -1712,7 +1718,49 @@
       <extracomment>.QGC.MetaData.Defines.StreamRateEnumStrings</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/APMMavlinkStreamRate.SettingsGroup.json"/>
       <source>Controlled By Vehicle,0 hz,1 hz,2 hz,3 hz,4 hz,5 hz,6 hz,7 hz,8 hz,9 hz,10 hz,50 hz,100 hz</source>
-      <translation type="unfinished">Controlled By Vehicle,0 hz,1 hz,2 hz,3 hz,4 hz,5 hz,6 hz,7 hz,8 hz,9 hz,10 hz,50 hz,100 hz</translation>
+      <translation>기체 제어,0 hz,1 hz,2 hz,3 hz,4 hz,5 hz,6 hz,7 hz,8 hz,9 hz,10 hz,50 hz,100 hz</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[streamRateRawSensors].label</extracomment>
+      <location filename="/Users/don/repos/qgroundcontrol/src/Settings/APMMavlinkStreamRate.SettingsGroup.json"/>
+      <source>Raw Sensors</source>
+      <translation>원시 센서</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[streamRateExtendedStatus].label</extracomment>
+      <location filename="/Users/don/repos/qgroundcontrol/src/Settings/APMMavlinkStreamRate.SettingsGroup.json"/>
+      <source>Extended Status</source>
+      <translation>확장 상태</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[streamRateRCChannels].label</extracomment>
+      <location filename="/Users/don/repos/qgroundcontrol/src/Settings/APMMavlinkStreamRate.SettingsGroup.json"/>
+      <source>RC Channels</source>
+      <translation>RC 채널</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[streamRatePosition].label</extracomment>
+      <location filename="/Users/don/repos/qgroundcontrol/src/Settings/APMMavlinkStreamRate.SettingsGroup.json"/>
+      <source>Position</source>
+      <translation>위치</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[streamRateExtra1].label</extracomment>
+      <location filename="/Users/don/repos/qgroundcontrol/src/Settings/APMMavlinkStreamRate.SettingsGroup.json"/>
+      <source>Extra 1</source>
+      <translation>추가 1</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[streamRateExtra2].label</extracomment>
+      <location filename="/Users/don/repos/qgroundcontrol/src/Settings/APMMavlinkStreamRate.SettingsGroup.json"/>
+      <source>Extra 2</source>
+      <translation>추가 2</translation>
+    </message>
+    <message>
+      <extracomment>.QGC.MetaData.Facts[streamRateExtra3].label</extracomment>
+      <location filename="/Users/don/repos/qgroundcontrol/src/Settings/APMMavlinkStreamRate.SettingsGroup.json"/>
+      <source>Extra 3</source>
+      <translation>추가 3</translation>
     </message>
   </context>
   <context>
@@ -1721,7 +1769,7 @@
       <extracomment>.QGC.MetaData.Facts[mapProvider].shortDesc, .QGC.MetaData.Facts[mapProvider].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/FlightMap.SettingsGroup.json"/>
       <source>Currently selected map provider for flight maps</source>
-      <translation type="unfinished">Currently selected map provider for flight maps</translation>
+      <translation>비행 지도 공급자</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[mapProvider].keywords</extracomment>
@@ -1776,7 +1824,7 @@
       <extracomment>.QGC.MetaData.Facts[autoConnectUDP].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/AutoConnect.SettingsGroup.json"/>
       <source>Automatically open a connection over UDP</source>
-      <translation type="unfinished">Automatically open a connection over UDP</translation>
+      <translation>UDP 연결 자동 열기</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[autoConnectUDP].keywords</extracomment>
@@ -1801,7 +1849,7 @@
       <extracomment>.QGC.MetaData.Facts[autoConnectPixhawk].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/AutoConnect.SettingsGroup.json"/>
       <source>Automatically connect to a Pixhawk board</source>
-      <translation type="unfinished">Automatically connect to a Pixhawk board</translation>
+      <translation>Pixhawk 보드 자동 연결</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[autoConnectPixhawk].keywords</extracomment>
@@ -1826,7 +1874,7 @@
       <extracomment>.QGC.MetaData.Facts[autoConnectSiKRadio].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/AutoConnect.SettingsGroup.json"/>
       <source>Automatically connect to a SiK Radio</source>
-      <translation type="unfinished">Automatically connect to a SiK Radio</translation>
+      <translation>SiK 라디오 자동 연결</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[autoConnectSiKRadio].keywords</extracomment>
@@ -1851,7 +1899,7 @@
       <extracomment>.QGC.MetaData.Facts[autoConnectRTKGPS].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/AutoConnect.SettingsGroup.json"/>
       <source>Automatically connect to an RTK GPS</source>
-      <translation type="unfinished">Automatically connect to an RTK GPS</translation>
+      <translation>RTK GPS 자동 연결</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[autoConnectRTKGPS].keywords</extracomment>
@@ -1876,7 +1924,7 @@
       <extracomment>.QGC.MetaData.Facts[autoConnectLibrePilot].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/AutoConnect.SettingsGroup.json"/>
       <source>Automatically connect to a LibrePilot</source>
-      <translation type="unfinished">Automatically connect to a LibrePilot</translation>
+      <translation>LibrePilot 자동 연결</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[autoConnectLibrePilot].keywords</extracomment>
@@ -1946,7 +1994,7 @@
       <extracomment>.QGC.MetaData.Facts[enabled].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Viewer3D.SettingsGroup.json"/>
       <source>Enable the 3D viewer</source>
-      <translation type="unfinished">Enable the 3D viewer</translation>
+      <translation>3D 뷰어 활성화</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[enabled].keywords</extracomment>
@@ -1991,7 +2039,7 @@
       <extracomment>.QGC.MetaData.Facts[osmFilePath].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Viewer3D.SettingsGroup.json"/>
       <source>Path to the OSM file for the 3D viewer.</source>
-      <translation type="unfinished">Path to the OSM file for the 3D viewer.</translation>
+      <translation>3D 뷰어용 OSM 파일 경로</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[osmFilePath].keywords</extracomment>
@@ -2010,7 +2058,7 @@
       <extracomment>.QGC.MetaData.Facts[buildingLevelHeight].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Viewer3D.SettingsGroup.json"/>
       <source>Average Height for each level of the buildings</source>
-      <translation type="unfinished">Average Height for each level of the buildings</translation>
+      <translation>건물 층당 평균 높이</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[buildingLevelHeight].keywords</extracomment>
@@ -2029,7 +2077,7 @@
       <extracomment>.QGC.MetaData.Facts[altitudeBias].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Viewer3D.SettingsGroup.json"/>
       <source>Altitude bias for vehicles in the 3D View</source>
-      <translation type="unfinished">Altitude bias for vehicles in the 3D View</translation>
+      <translation>3D 뷰 기체 고도 보정값</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[altitudeBias].keywords</extracomment>
@@ -2051,7 +2099,7 @@
       <extracomment>.QGC.MetaData.Facts[maxCacheDiskSize].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Maps.SettingsGroup.json"/>
       <source>Max disk cache</source>
-      <translation type="unfinished">Max disk cache</translation>
+      <translation>최대 디스크 캐시</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[maxCacheDiskSize].keywords</extracomment>
@@ -2070,7 +2118,7 @@
       <extracomment>.QGC.MetaData.Facts[maxCacheMemorySize].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Maps.SettingsGroup.json"/>
       <source>Max memory cache</source>
-      <translation type="unfinished">Max memory cache</translation>
+      <translation>최대 메모리 캐시</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[maxCacheMemorySize].keywords</extracomment>
@@ -2243,7 +2291,7 @@
       <extracomment>.QGC.MetaData.Facts[telemetrySave].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Mavlink.SettingsGroup.json"/>
       <source>Save log after each flight</source>
-      <translation type="unfinished">Save log after each flight</translation>
+      <translation>비행 완료 후마다 로그 저장</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[telemetrySave].keywords</extracomment>
@@ -2268,7 +2316,7 @@
       <extracomment>.QGC.MetaData.Facts[telemetrySaveNotArmed].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Mavlink.SettingsGroup.json"/>
       <source>Save logs even if vehicle was not armed</source>
-      <translation type="unfinished">Save logs even if vehicle was not armed</translation>
+      <translation>기체 시동하지 않은 경우에도 로그 저장</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[telemetrySaveNotArmed].keywords</extracomment>
@@ -2287,7 +2335,7 @@
       <extracomment>.QGC.MetaData.Facts[apmStartMavlinkStreams].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Mavlink.SettingsGroup.json"/>
       <source>Request start of MAVLink telemetry streams (ArduPilot only)</source>
-      <translation type="unfinished">Request start of MAVLink telemetry streams (ArduPilot only)</translation>
+      <translation>MAVLink 텔레메트리 스트림 시작 요청 (ArduPilot 전용)</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[apmStartMavlinkStreams].keywords</extracomment>
@@ -2312,7 +2360,7 @@
       <extracomment>.QGC.MetaData.Facts[saveCsvTelemetry].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Mavlink.SettingsGroup.json"/>
       <source>Save CSV log of telemetry data</source>
-      <translation type="unfinished">Save CSV log of telemetry data</translation>
+      <translation>텔레메트리 데이터 CSV 로그 저장</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[saveCsvTelemetry].keywords</extracomment>
@@ -2337,7 +2385,7 @@
       <extracomment>.QGC.MetaData.Facts[forwardMavlink].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Mavlink.SettingsGroup.json"/>
       <source>Enable</source>
-      <translation type="unfinished">Enable</translation>
+      <translation>활성화</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[forwardMavlink].keywords</extracomment>
@@ -2362,7 +2410,7 @@
       <extracomment>.QGC.MetaData.Facts[forwardMavlinkHostName].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Mavlink.SettingsGroup.json"/>
       <source>Host name</source>
-      <translation type="unfinished">Host name</translation>
+      <translation>호스트 이름</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[forwardMavlinkHostName].keywords</extracomment>
@@ -2393,7 +2441,7 @@
       <extracomment>.QGC.MetaData.Facts[sendGCSHeartbeat].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Mavlink.SettingsGroup.json"/>
       <source>Emit heartbeat</source>
-      <translation type="unfinished">Emit heartbeat</translation>
+      <translation>하트비트 전송</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[sendGCSHeartbeat].keywords</extracomment>
@@ -2412,7 +2460,7 @@
       <extracomment>.QGC.MetaData.Facts[gcsMavlinkSystemID].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Mavlink.SettingsGroup.json"/>
       <source>MAVLink System ID</source>
-      <translation type="unfinished">MAVLink System ID</translation>
+      <translation>MAVLink 시스템 ID</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[gcsMavlinkSystemID].keywords</extracomment>
@@ -2437,7 +2485,7 @@
       <extracomment>.QGC.MetaData.Facts[noInitialDownloadWhenFlying].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Mavlink.SettingsGroup.json"/>
       <source>Skip param/plan download if flying on connect</source>
-      <translation type="unfinished">Skip param/plan download if flying on connect</translation>
+      <translation>연결 시 비행중이면 파라미터/계획 다운로드 건너뛰기</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[noInitialDownloadWhenFlying].keywords</extracomment>
@@ -2465,7 +2513,7 @@
       <extracomment>.QGC.MetaData.Facts[videoSource].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>Source</source>
-      <translation type="unfinished">Source</translation>
+      <translation>소스</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[videoSource].keywords</extracomment>
@@ -2490,7 +2538,7 @@
       <extracomment>.QGC.MetaData.Facts[udpUrl].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>UDP URL</source>
-      <translation type="unfinished">UDP URL</translation>
+      <translation>UDP URL</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[udpUrl].keywords</extracomment>
@@ -2515,7 +2563,7 @@
       <extracomment>.QGC.MetaData.Facts[rtspUrl].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>RTSP URL</source>
-      <translation type="unfinished">RTSP URL</translation>
+      <translation>RTSP URL</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[rtspUrl].keywords</extracomment>
@@ -2540,7 +2588,7 @@
       <extracomment>.QGC.MetaData.Facts[tcpUrl].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>TCP URL</source>
-      <translation type="unfinished">TCP URL</translation>
+      <translation>TCP URL</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[tcpUrl].keywords</extracomment>
@@ -2577,7 +2625,7 @@
       <extracomment>.QGC.MetaData.Facts[aspectRatio].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>Aspect Ratio</source>
-      <translation type="unfinished">Aspect Ratio</translation>
+      <translation>화면 비율</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[aspectRatio].keywords</extracomment>
@@ -2652,7 +2700,7 @@
       <extracomment>.QGC.MetaData.Facts[recordingFormat].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>Record File Format</source>
-      <translation type="unfinished">Record File Format</translation>
+      <translation>녹화 파일 형식</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[recordingFormat].keywords</extracomment>
@@ -2677,7 +2725,7 @@
       <extracomment>.QGC.MetaData.Facts[maxVideoSize].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>Max Storage Usage</source>
-      <translation type="unfinished">Max Storage Usage</translation>
+      <translation>최대 저장 용량</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[maxVideoSize].keywords</extracomment>
@@ -2702,7 +2750,7 @@
       <extracomment>.QGC.MetaData.Facts[enableStorageLimit].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>Auto-Delete Saved Recordings</source>
-      <translation type="unfinished">Auto-Delete Saved Recordings</translation>
+      <translation>저장된 녹화 자동 삭제</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[enableStorageLimit].keywords</extracomment>
@@ -2751,7 +2799,7 @@
       <extracomment>.QGC.MetaData.Facts[disableWhenDisarmed].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>Stop recording when disarmed</source>
-      <translation type="unfinished">Stop recording when disarmed</translation>
+      <translation>시동 해제 시 녹화 중지</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[disableWhenDisarmed].keywords</extracomment>
@@ -2776,7 +2824,7 @@
       <extracomment>.QGC.MetaData.Facts[lowLatencyMode].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>Low Latency Mode</source>
-      <translation type="unfinished">Low Latency Mode</translation>
+      <translation>저지연 모드</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[lowLatencyMode].keywords</extracomment>
@@ -2808,7 +2856,7 @@
       <extracomment>.QGC.MetaData.Facts[forceVideoDecoder].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/Video.SettingsGroup.json"/>
       <source>Force video decoder priority</source>
-      <translation type="unfinished">Force video decoder priority</translation>
+      <translation>비디오 디코더 우선순위 강제 설정</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[forceVideoDecoder].keywords</extracomment>
@@ -2836,7 +2884,7 @@
       <extracomment>.QGC.MetaData.Facts[operatorID].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Operator ID</source>
-      <translation type="unfinished">Operator ID</translation>
+      <translation>운영자 ID</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[operatorID].keywords</extracomment>
@@ -2874,7 +2922,7 @@
       <extracomment>.QGC.MetaData.Facts[operatorIDType].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Operator ID type</source>
-      <translation type="unfinished">Operator ID type</translation>
+      <translation>운영자 ID 유형</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[operatorIDType].keywords</extracomment>
@@ -2899,7 +2947,7 @@
       <extracomment>.QGC.MetaData.Facts[sendOperatorID].label, .QGC.MetaData.Facts[sendSelfID].label, .QGC.MetaData.Facts[sendBasicID].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Broadcast</source>
-      <translation type="unfinished">Broadcast</translation>
+      <translation>브로드캐스트</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[sendOperatorID].keywords</extracomment>
@@ -2924,7 +2972,7 @@
       <extracomment>.QGC.MetaData.Facts[selfIDFree].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Flight Purpose</source>
-      <translation type="unfinished">Flight Purpose</translation>
+      <translation>비행 목적</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[selfIDFree].keywords, .QGC.MetaData.Facts[selfIDExtended].keywords</extracomment>
@@ -2949,7 +2997,7 @@
       <extracomment>.QGC.MetaData.Facts[selfIDEmergency].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Emergency Text</source>
-      <translation type="unfinished">Emergency Text</translation>
+      <translation>비상 텍스트</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[selfIDEmergency].keywords</extracomment>
@@ -2974,7 +3022,7 @@
       <extracomment>.QGC.MetaData.Facts[selfIDExtended].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Extended Status</source>
-      <translation type="unfinished">Extended Status</translation>
+      <translation>확장 상태</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[selfIDType].shortDesc</extracomment>
@@ -2993,7 +3041,7 @@
       <extracomment>.QGC.MetaData.Facts[selfIDType].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Broadcast Message</source>
-      <translation type="unfinished">Broadcast Message</translation>
+      <translation>브로드캐스트 메시지</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[selfIDType].keywords, .QGC.MetaData.Facts[sendSelfID].keywords</extracomment>
@@ -3024,7 +3072,7 @@
       <extracomment>.QGC.MetaData.Facts[basicID].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Basic ID</source>
-      <translation type="unfinished">Basic ID</translation>
+      <translation>기본 ID</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[basicID].keywords</extracomment>
@@ -3050,7 +3098,7 @@
       <extracomment>.QGC.MetaData.Facts[basicIDType].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Basic ID Type</source>
-      <translation type="unfinished">Basic ID Type</translation>
+      <translation>기본 ID 유형</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[basicIDType].keywords, .QGC.MetaData.Facts[basicIDUaType].keywords</extracomment>
@@ -3076,7 +3124,7 @@
       <extracomment>.QGC.MetaData.Facts[basicIDUaType].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>UA type</source>
-      <translation type="unfinished">UA type</translation>
+      <translation>UA 유형</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[sendBasicID].shortDesc</extracomment>
@@ -3120,7 +3168,7 @@
       <extracomment>.QGC.MetaData.Facts[region].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Region of operation</source>
-      <translation type="unfinished">Region of operation</translation>
+      <translation>운용 지역</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[region].keywords</extracomment>
@@ -3152,7 +3200,7 @@
       <extracomment>.QGC.MetaData.Facts[locationType].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Location Type</source>
-      <translation type="unfinished">Location Type</translation>
+      <translation>위치 유형</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[locationType].keywords</extracomment>
@@ -3177,7 +3225,7 @@
       <extracomment>.QGC.MetaData.Facts[latitudeFixed].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Latitude Fixed</source>
-      <translation type="unfinished">Latitude Fixed</translation>
+      <translation>고정 위도</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[latitudeFixed].keywords</extracomment>
@@ -3202,7 +3250,7 @@
       <extracomment>.QGC.MetaData.Facts[longitudeFixed].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Longitude Fixed</source>
-      <translation type="unfinished">Longitude Fixed</translation>
+      <translation>고정 경도</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[longitudeFixed].keywords</extracomment>
@@ -3227,7 +3275,7 @@
       <extracomment>.QGC.MetaData.Facts[altitudeFixed].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Altitude Fixed</source>
-      <translation type="unfinished">Altitude Fixed</translation>
+      <translation>고정 고도</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[altitudeFixed].keywords</extracomment>
@@ -3259,7 +3307,7 @@
       <extracomment>.QGC.MetaData.Facts[classificationType].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Classification Type</source>
-      <translation type="unfinished">Classification Type</translation>
+      <translation>분류 유형</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[classificationType].keywords</extracomment>
@@ -3291,7 +3339,7 @@
       <extracomment>.QGC.MetaData.Facts[categoryEU].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Category</source>
-      <translation type="unfinished">Category</translation>
+      <translation>카테고리</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[categoryEU].keywords</extracomment>
@@ -3323,7 +3371,7 @@
       <extracomment>.QGC.MetaData.Facts[classEU].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/RemoteID.SettingsGroup.json"/>
       <source>Class</source>
-      <translation type="unfinished">Class</translation>
+      <translation>클래스</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[classEU].keywords</extracomment>
@@ -3351,7 +3399,7 @@
       <extracomment>.QGC.MetaData.Facts[adsbServerConnectEnabled].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/ADSBVehicleManager.SettingsGroup.json"/>
       <source>Connect to ADSB SBS server</source>
-      <translation type="unfinished">Connect to ADSB SBS server</translation>
+      <translation>ADSB SBS 서버 연결</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[adsbServerConnectEnabled].keywords</extracomment>
@@ -3370,7 +3418,7 @@
       <extracomment>.QGC.MetaData.Facts[adsbServerHostAddress].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/ADSBVehicleManager.SettingsGroup.json"/>
       <source>Host address</source>
-      <translation type="unfinished">Host address</translation>
+      <translation>호스트 주소</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[adsbServerHostAddress].keywords</extracomment>
@@ -3389,7 +3437,7 @@
       <extracomment>.QGC.MetaData.Facts[adsbServerPort].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/ADSBVehicleManager.SettingsGroup.json"/>
       <source>Server port</source>
-      <translation type="unfinished">Server port</translation>
+      <translation>서버 포트</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[adsbServerPort].keywords</extracomment>
@@ -3417,13 +3465,13 @@
       <extracomment>.QGC.MetaData.Facts[ntripServerHostAddress].shortDesc, .QGC.MetaData.Facts[ntripServerHostAddress].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/NTRIP.SettingsGroup.json"/>
       <source>Host address</source>
-      <translation type="unfinished">Host address</translation>
+      <translation>호스트 주소</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[ntripServerPort].shortDesc, .QGC.MetaData.Facts[ntripServerPort].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/NTRIP.SettingsGroup.json"/>
       <source>Server port</source>
-      <translation type="unfinished">Server port</translation>
+      <translation>서버 포트</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[ntripUsername].shortDesc, .QGC.MetaData.Facts[ntripUsername].label</extracomment>
@@ -3465,7 +3513,7 @@
       <extracomment>.QGC.MetaData.Facts[ntripWhitelist].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/NTRIP.SettingsGroup.json"/>
       <source>RTCM Message Filter</source>
-      <translation type="unfinished">RTCM Message Filter</translation>
+      <translation>RTCM 메시지 필터</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[ntripWhitelist].keywords</extracomment>
@@ -3502,7 +3550,7 @@
       <extracomment>.QGC.MetaData.Facts[ntripUdpForwardEnabled].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/NTRIP.SettingsGroup.json"/>
       <source>UDP forward RTCM data</source>
-      <translation type="unfinished">UDP forward RTCM data</translation>
+      <translation>RTCM 데이터 UDP 포워딩</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[ntripUdpForwardEnabled].keywords</extracomment>
@@ -3527,7 +3575,7 @@
       <extracomment>.QGC.MetaData.Facts[ntripUdpTargetAddress].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/NTRIP.SettingsGroup.json"/>
       <source>UDP target address</source>
-      <translation type="unfinished">UDP target address</translation>
+      <translation>UDP 대상 주소</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[ntripUdpTargetAddress].keywords, .QGC.MetaData.Facts[ntripUdpTargetPort].keywords</extracomment>
@@ -3552,7 +3600,7 @@
       <extracomment>.QGC.MetaData.Facts[ntripUdpTargetPort].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/NTRIP.SettingsGroup.json"/>
       <source>UDP target port</source>
-      <translation type="unfinished">UDP target port</translation>
+      <translation>UDP 대상 포트</translation>
     </message>
   </context>
   <context>
@@ -3654,7 +3702,7 @@
       <extracomment>.QGC.MetaData.Facts[takeoffItemNotRequired].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/PlanView.SettingsGroup.json"/>
       <source>Missions do not require takeoff item</source>
-      <translation type="unfinished">Missions do not require takeoff item</translation>
+      <translation>임무에 이륙 항목 필요 없음</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[takeoffItemNotRequired].keywords</extracomment>
@@ -3673,7 +3721,7 @@
       <extracomment>.QGC.MetaData.Facts[allowMultipleLandingPatterns].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/PlanView.SettingsGroup.json"/>
       <source>Allow configuring multiple landing sequences</source>
-      <translation type="unfinished">Allow configuring multiple landing sequences</translation>
+      <translation>다중 착륙 시퀀스 설정 허용</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[allowMultipleLandingPatterns].keywords</extracomment>
@@ -3692,7 +3740,7 @@
       <extracomment>.QGC.MetaData.Facts[useConditionGate].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/PlanView.SettingsGroup.json"/>
       <source>Use MAV_CMD_CONDITION_GATE for pattern generation</source>
-      <translation type="unfinished">Use MAV_CMD_CONDITION_GATE for pattern generation</translation>
+      <translation>패턴 생성에 MAV_CMD_CONDITION_GATE 사용</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[useConditionGate].keywords</extracomment>
@@ -3717,7 +3765,7 @@
       <extracomment>.QGC.MetaData.Facts[vtolTransitionDistance].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/Settings/PlanView.SettingsGroup.json"/>
       <source>VTOL Transition Distance</source>
-      <translation type="unfinished">VTOL Transition Distance</translation>
+      <translation>VTOL 전환 거리</translation>
     </message>
     <message>
       <extracomment>.QGC.MetaData.Facts[vtolTransitionDistance].keywords</extracomment>
@@ -6085,7 +6133,7 @@
       <extracomment>.sections[Battery].controls[0].label</extracomment>
       <location filename="/Users/don/repos/qgroundcontrol/src/AutoPilotPlugins/PX4/VehicleConfig/Power.VehicleConfig.json"/>
       <source>Source</source>
-      <translation type="unfinished">Source</translation>
+      <translation>소스</translation>
     </message>
     <message>
       <extracomment>.sections[Battery].controls[1].label</extracomment>

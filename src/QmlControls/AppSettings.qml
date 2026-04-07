@@ -266,7 +266,7 @@ Rectangle {
                             }
 
                             contentItem: QGCLabel {
-                                text:  modelData
+                                text:  qsTr(modelData)
                                 color: sectionBtn.textColor
                                 font.pointSize: ScreenTools.defaultFontPointSize * 0.9
                                 horizontalAlignment: Text.AlignLeft

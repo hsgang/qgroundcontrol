@@ -31,21 +31,17 @@
             "divider": true
         },
         {
-            "name": "ADSB Server",
-            "qml": "ADSBServerSettings.qml",
-            "icon": "qrc:/InstrumentValueIcons/airplane.svg",
-            "pageDefinition": "ADSBVehicleManager.SettingsUI.json"
-        },
-        {
             "name": "Comm Links",
             "qml": "CommLinksSettings.qml",
             "icon": "qrc:/InstrumentValueIcons/usb.svg",
             "pageDefinition": "CommLinks.SettingsUI.json"
         },
         {
-            "name": "Logging",
-            "url": "qrc:/qml/QGroundControl/Controls/AppLogging.qml",
-            "icon": "qrc:/InstrumentValueIcons/conversation.svg"
+            "name": "Video",
+            "qml": "VideoSettings.qml",
+            "icon": "qrc:/InstrumentValueIcons/camera.svg",
+            "pageDefinition": "Video.SettingsUI.json",
+            "visible": "QGroundControl.settingsManager.videoSettings.userVisible"
         },
         {
             "name": "Maps",
@@ -61,39 +57,24 @@
             "pageDefinition": "NTRIP.SettingsUI.json"
         },
         {
-            "name": "PX4 Log Transfer",
-            "qml": "PX4LogTransferSettings.qml",
-            "icon": "qrc:/InstrumentValueIcons/inbox-download.svg",
-            "visible": "QGroundControl.corePlugin.options.showPX4LogTransferOptions && QGroundControl.px4ProFirmwareSupported && (QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.px4Firmware : true)",
-            "pageDefinition": "PX4LogTransfer.SettingsUI.json"
-        },
-        {
-            "name": "Remote ID",
-            "qml": "RemoteIDSettings.qml",
-            "icon": "qrc:/qmlimages/RidIconManNoID.svg",
-            "pageDefinition": "RemoteID.SettingsUI.json"
-        },
-        {
             "name": "Telemetry",
             "qml": "TelemetrySettings.qml",
             "icon": "qrc:/InstrumentValueIcons/drone.svg",
             "pageDefinition": "Telemetry.SettingsUI.json"
         },
         {
-            "name": "Video",
-            "qml": "VideoSettings.qml",
-            "icon": "qrc:/InstrumentValueIcons/camera.svg",
-            "pageDefinition": "Video.SettingsUI.json",
-            "visible": "QGroundControl.settingsManager.videoSettings.userVisible"
-        },
-        {
-            "name": "Cloud / WebRTC",
+            "name": "WebRTC",
             "qml": "CloudSettings.qml",
             "icon": "qrc:/InstrumentValueIcons/cloud.svg",
             "pageDefinition": "Cloud.SettingsUI.json"
         },
         {
             "divider": true
+        },
+        {
+            "name": "Logging",
+            "url": "qrc:/qml/QGroundControl/Controls/AppLogging.qml",
+            "icon": "qrc:/InstrumentValueIcons/conversation.svg"
         },
         {
             "name": "Help",
