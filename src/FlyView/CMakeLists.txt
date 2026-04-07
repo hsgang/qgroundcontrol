@@ -80,8 +80,6 @@ qt_add_qml_module(FlyViewModule
         FlyViewEscIndicator.qml
         FlyViewEscStatus.qml
         FlyViewVibrationStatus.qml
-        FlyViewAltitudeIndicator.qml
-        FlyViewAtmosphericChart.qml
         FlyViewAtmosphericSensorView.qml
         RequestConfirmPopup.qml
         FlyViewRightPanel.qml
