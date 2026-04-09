@@ -130,7 +130,10 @@ add_qgc_test(FollowMeTest LABELS Integration Vehicle RESOURCE_LOCK MockLink)
 # GPS
 # ----------------------------------------------------------------------------
 add_subdirectory(GPS)
-add_qgc_test(GpsTest LABELS Unit GPS)
+add_qgc_test(RTCMParserTest LABELS Unit)
+add_qgc_test(NTRIPManagerTest LABELS Unit)
+add_qgc_test(NTRIPHttpTransportTest LABELS Unit)
+add_qgc_test(NTRIPSourceTableTest LABELS Unit)
 
 # ----------------------------------------------------------------------------
 # Joystick
@@ -146,6 +149,7 @@ add_qgc_test(SDLTest LABELS Unit Joystick RESOURCE_LOCK Joystick)
 # ----------------------------------------------------------------------------
 add_subdirectory(MAVLink)
 add_qgc_test(SigningTest LABELS Unit MAVLink)
+add_qgc_test(MockLinkSigningTest LABELS Integration Vehicle MAVLink RESOURCE_LOCK MockLink)
 add_qgc_test(StatusTextHandlerTest LABELS Unit MAVLink)
 add_qgc_test(SysStatusSensorInfoTest LABELS Unit MAVLink)
 
@@ -234,6 +238,17 @@ add_qgc_test(GeoTest LABELS Unit Utilities)
 add_qgc_test(GeoJsonHelperTest LABELS Unit Utilities)
 add_qgc_test(KMLDomDocumentTest LABELS Unit Utilities)
 add_qgc_test(QGCMathTest LABELS Unit Utilities)
+# Database
+add_qgc_test(QGCSqlHelperTest LABELS Unit Utilities)
+# Logging
+add_qgc_test(LogEntryTest LABELS Unit Utilities)
+add_qgc_test(LogFormatterTest LABELS Unit Utilities)
+add_qgc_test(LogManagerTest LABELS Unit Utilities)
+add_qgc_test(LogModelTest LABELS Unit Utilities)
+add_qgc_test(LoggingQmlBindingTest LABELS Unit Utilities)
+add_qgc_test(LogRemoteSinkTest LABELS Unit Utilities)
+add_qgc_test(LogStoreTest LABELS Unit Utilities)
+add_qgc_test(LogStoreQueryModelTest LABELS Unit Utilities)
 # StateMachine
 add_qgc_test(QGCStateMachineTest LABELS Unit Utilities)
 add_qgc_test(ErrorRecoveryBuilderTest LABELS Unit Utilities)

@@ -28,6 +28,7 @@ Options:
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import platform
 import shutil
@@ -38,28 +39,20 @@ import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
-try:
-    from .setup_bootstrap import ensure_setup_imports
-except ImportError:
-    setup_dir = Path(__file__).resolve().parent
-    if str(setup_dir) not in sys.path:
-        sys.path.insert(0, str(setup_dir))
-    from setup_bootstrap import ensure_setup_imports
+_tools_dir = Path(__file__).resolve().parents[1]
+if str(_tools_dir) not in sys.path:
+    sys.path.insert(0, str(_tools_dir))
 
-ensure_setup_imports()
-
-from common.logging import log_info, log_ok, log_warn, log_error
-from common.build_config import get_build_config_value
 from common.gh_actions import write_github_output
+from common.logging import log_info, log_ok, log_warn, log_error
 
 
 # ============================================================================
-# Build Utilities
+# Shared Utilities
 # ============================================================================
 
 MESON_VERSION = "1.10.1"
 NINJA_VERSION = "1.13.0"
-
 
 def run_cmd(cmd: list, cwd: Path | None = None, check: bool = True,
             env: dict | None = None) -> subprocess.CompletedProcess:
@@ -95,6 +88,25 @@ def detect_host_arch() -> str:
         return 'armv7'
     return machine
 
+def read_config(key: str, default: str = '') -> str:
+    """Read a value from build-config.json."""
+    script_dir = Path(__file__).parent
+    config_file = script_dir.parent.parent / '.github' / 'build-config.json'
+
+    if not config_file.exists():
+        return default
+
+    try:
+        with open(config_file) as f:
+            config = json.load(f)
+        return config.get(key, default)
+    except FileNotFoundError:
+        return default
+    except json.JSONDecodeError as error:
+        log_error(f"Failed to parse JSON config '{config_file}': {error}")
+        raise
+
+
 
 # ============================================================================
 # Plugin Configurations
@@ -103,7 +115,11 @@ def detect_host_arch() -> str:
 # Common meson options for all Meson-based platforms
 MESON_COMMON = {
     'auto_features': 'disabled',
-    'gst-full-libraries': 'video,gl',
+    'introspection': 'disabled',
+    'tests': 'disabled',
+    'examples': 'disabled',
+    'gtk_doc': 'disabled',
+    'gst-full-libraries': 'app,video,audio,gl,codecparsers',
     'gpl': 'enabled',
     'libav': 'enabled',
     'orc': 'enabled',
@@ -251,7 +267,8 @@ class MesonBuilder:
             packages.append(f"ninja=={NINJA_VERSION}")
 
         log_info(f"Installing pinned build tools: {', '.join(packages)}")
-        run_cmd([sys.executable, '-m', 'pip', 'install', '--quiet', *packages])
+        from common import pip_install
+        pip_install(packages)
 
         user_scripts = Path(site.getuserbase()) / ('Scripts' if os.name == 'nt' else 'bin')
         os.environ['PATH'] = f"{user_scripts}{os.pathsep}{os.environ['PATH']}"
@@ -275,6 +292,13 @@ class MesonBuilder:
             ])
         else:
             log_info(f"Using existing source at {self.config.source_dir}")
+
+    def _find_ccache(self) -> str | None:
+        """Find ccache if available."""
+        path = shutil.which('ccache')
+        if path:
+            log_info(f"Using ccache: {path}")
+        return path
 
     def get_meson_args(self) -> list:
         """Build meson configuration arguments."""
@@ -333,6 +357,11 @@ class MesonBuilder:
         env = {}
         if self.config.qt_prefix:
             env['PKG_CONFIG_PATH'] = f"{self.config.qt_prefix}/lib/pkgconfig"
+
+        ccache = self._find_ccache()
+        if ccache:
+            env['CC'] = f'ccache cc'
+            env['CXX'] = f'ccache c++'
 
         run_cmd(args, cwd=self.config.source_dir, env=env)
 
@@ -604,11 +633,7 @@ def main() -> int:
     args = parse_args()
 
     # Resolve defaults
-    version = args.version or get_build_config_value(
-        'gstreamer_version',
-        '1.24.10',
-        start=Path(__file__).resolve(),
-    )
+    version = args.version or read_config('gstreamer_default_version', '1.24.13')
     arch = args.arch or get_default_arch(args.platform)
     prefix = Path(args.prefix) if args.prefix else None
     work_dir = Path(args.work_dir)

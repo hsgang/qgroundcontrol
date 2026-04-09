@@ -177,7 +177,7 @@ function(gstreamer_resilient_download)
     endif()
 
     if(NOT ARG_TIMEOUT)
-        set(ARG_TIMEOUT 600)
+        set(ARG_TIMEOUT 120)
     endif()
     if(NOT ARG_INACTIVITY_TIMEOUT)
         set(ARG_INACTIVITY_TIMEOUT 60)
@@ -492,13 +492,6 @@ macro(_gst_resolve_and_link_libraries _grll_TARGET _grll_SCOPE _grll_LIBS_VAR _g
     foreach(_grll_LIB IN LISTS ${_grll_LIBS_VAR})
         if(_grll_LIB MATCHES "${_gst_SRT_REGEX_PATCH}")
             string(REGEX REPLACE "${_gst_SRT_REGEX_PATCH}" "\\1" _grll_LIB "${_grll_LIB}")
-        endif()
-
-        # On Android, skip linking unwind entirely — NDK provides built-in unwinding.
-        # The host toolchain's x86_64 libunwind.so is incompatible with ARM targets.
-        # Catch both name ("unwind") and full path ("/path/to/libunwind.so").
-        if(ANDROID AND ("${_grll_LIB}" STREQUAL "unwind" OR "${_grll_LIB}" MATCHES "libunwind"))
-            continue()
         endif()
 
         if("${_grll_LIB}" IN_LIST _gst_IGNORED_SYSTEM_LIBRARIES)

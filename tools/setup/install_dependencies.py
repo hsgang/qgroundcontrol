@@ -22,22 +22,8 @@ import shutil
 import subprocess
 import sys
 import tempfile
-import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-
-try:
-    from .setup_bootstrap import ensure_setup_imports
-except ImportError:
-    setup_dir = Path(__file__).resolve().parent
-    if str(setup_dir) not in sys.path:
-        sys.path.insert(0, str(setup_dir))
-    from setup_bootstrap import ensure_setup_imports
-
-ensure_setup_imports()
-
-from common.file_traversal import find_repo_root
-from common.build_config import load_build_config as load_shared_build_config
 
 # Package categories for Debian/Ubuntu
 DEBIAN_PACKAGES: dict[str, list[str]] = {
@@ -74,7 +60,6 @@ DEBIAN_PACKAGES: dict[str, list[str]] = {
     ],
     "qt": [
         "libatspi2.0-dev",
-        "libegl-dev",
         "libfontconfig1-dev",
         "libfreetype-dev",
         "libgtk-3-dev",
@@ -105,6 +90,7 @@ DEBIAN_PACKAGES: dict[str, list[str]] = {
         "libxkbcommon-x11-dev",
         "libxrender-dev",
         "libunwind-dev",
+        "libegl-dev",
     ],
     "gstreamer": [
         "libgstreamer1.0-dev",
@@ -153,7 +139,7 @@ MACOS_PACKAGES: list[str] = [
 ]
 
 # Windows GStreamer
-WINDOWS_GSTREAMER_BASE_URL = "https://gstreamer.freedesktop.org/data/pkg/windows"
+WINDOWS_GSTREAMER_BASE_URL = "https://qgroundcontrol.s3.us-west-2.amazonaws.com/dependencies/gstreamer/windows"
 WINDOWS_GSTREAMER_INSTALL_DIR = "C:\\gstreamer"
 WINDOWS_GSTREAMER_PREFIX = "C:\\gstreamer\\1.0\\msvc_x86_64"
 WINDOWS_VULKAN_INSTALL_DIR = "C:\\VulkanSDK\\latest"
@@ -173,16 +159,26 @@ APT_BASE_OPTIONS: list[str] = [
 PACKAGE_NAME_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9.+-]*$")
 
 
+def get_repo_root() -> Path:
+    """Find repository root directory."""
+    current = Path(__file__).resolve()
+    for parent in [current] + list(current.parents):
+        if (parent / ".git").exists():
+            return parent
+    return Path.cwd()
+
+
 def load_build_config() -> dict:
     """Load build configuration from .github/build-config.json."""
-    config_path = find_repo_root() / ".github" / "build-config.json"
-    if not config_path.exists():
-        return {}
-    try:
-        return load_shared_build_config(config_path)
-    except (json.JSONDecodeError, OSError, ValueError) as e:
-        print(f"Error: invalid JSON in {config_path}: {e}", file=sys.stderr)
-        return {}
+    config_path = get_repo_root() / ".github" / "build-config.json"
+    if config_path.exists():
+        try:
+            with open(config_path) as f:
+                return json.load(f)
+        except json.JSONDecodeError as e:
+            print(f"Error: invalid JSON in {config_path}: {e}", file=sys.stderr)
+            return {}
+    return {}
 
 
 def get_config_value(key: str) -> str | None:
@@ -293,7 +289,11 @@ def check_apt_package_available(package: str) -> bool:
 
 def get_available_debian_packages(category: str) -> list[str]:
     """Return packages in *category* that exist in apt metadata."""
-    return [pkg for pkg in get_debian_packages(category) if check_apt_package_available(pkg)]
+    from concurrent.futures import ThreadPoolExecutor
+    packages = get_debian_packages(category)
+    with ThreadPoolExecutor() as pool:
+        available = list(pool.map(check_apt_package_available, packages))
+    return [pkg for pkg, ok in zip(packages, available) if ok]
 
 
 def validate_extra_packages(packages: list[str]) -> list[str]:
@@ -393,32 +393,36 @@ def download_file(
     retries: int = 3,
 ) -> bool:
     """Download a file from a URL."""
-    import urllib.error
-    import urllib.request
-
     if dry_run:
         print(f"  Would download: {url} -> {dest.name}")
         return True
 
-    req = urllib.request.Request(url, headers={"User-Agent": "qgc-deps-installer/1.0"})
-    for attempt in range(1, retries + 1):
-        print(f"  Downloading {dest.name} (attempt {attempt}/{retries})...")
-        try:
-            with urllib.request.urlopen(req, timeout=timeout) as response, open(dest, "wb") as out:
-                shutil.copyfileobj(response, out)
-            return True
-        except (TimeoutError, urllib.error.URLError, OSError) as e:
-            if attempt == retries:
-                print(f"Failed to download {url}: {e}", file=sys.stderr)
-                return False
-            backoff_seconds = attempt * 2
-            print(
-                f"  Download attempt {attempt} failed for {dest.name}: {e}. "
-                f"Retrying in {backoff_seconds}s...",
-                file=sys.stderr,
-            )
-            time.sleep(backoff_seconds)
-    return False
+    try:
+        import httpx
+        transport = httpx.HTTPTransport(retries=retries)
+        with httpx.Client(
+            transport=transport,
+            timeout=timeout,
+            headers={"User-Agent": "qgc-deps-installer/1.0"},
+            follow_redirects=True,
+        ) as client:
+            print(f"  Downloading {dest.name}...")
+            with client.stream("GET", url) as response:
+                response.raise_for_status()
+                with open(dest, "wb") as out:
+                    for chunk in response.iter_bytes(chunk_size=65536):
+                        out.write(chunk)
+        return True
+    except ImportError:
+        import urllib.request
+        req = urllib.request.Request(url, headers={"User-Agent": "qgc-deps-installer/1.0"})
+        print(f"  Downloading {dest.name}...")
+        with urllib.request.urlopen(req, timeout=timeout) as response, open(dest, "wb") as out:
+            shutil.copyfileobj(response, out)
+        return True
+    except Exception as e:
+        print(f"Failed to download {url}: {e}", file=sys.stderr)
+        return False
 
 
 def install_debian(
@@ -577,7 +581,7 @@ def install_windows_gstreamer(version: str, dry_run: bool = False) -> bool:
         print(f"Skipping GStreamer: only supported on AMD64 (detected: {arch or 'unknown'})")
         return True
 
-    base_url = f"{WINDOWS_GSTREAMER_BASE_URL}/{version}/msvc"
+    base_url = f"{WINDOWS_GSTREAMER_BASE_URL}/{version}"
     runtime_name = f"gstreamer-1.0-msvc-x86_64-{version}.msi"
     devel_name = f"gstreamer-1.0-devel-msvc-x86_64-{version}.msi"
 
@@ -768,11 +772,6 @@ Examples:
         help="Print space-separated package list (machine-readable, for CI caching)",
     )
     parser.add_argument(
-        "--print-available-packages",
-        action="store_true",
-        help="Print available apt packages in the selected Debian category",
-    )
-    parser.add_argument(
         "--category",
         help="Install only specific category (Debian only)",
     )
@@ -794,6 +793,11 @@ Examples:
         "--vulkan",
         action="store_true",
         help="Install Vulkan SDK (Windows only)",
+    )
+    parser.add_argument(
+        "--print-available-packages",
+        action="store_true",
+        help="Print available apt packages in the selected Debian category",
     )
     parser.add_argument(
         "--validate-extra-packages",

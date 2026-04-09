@@ -4,7 +4,7 @@ The _Plan View_ is used to plan _autonomous missions_ for your vehicle, and uplo
 
 It is also used to configure the [GeoFence](plan_geofence.md) and [Rally Points](plan_rally_points.md) if these are supported by the firmware.
 
-<span id="plan_screenshot"></span>
+<a id="plan_screenshot"></a>
 ![Plan View](../../../assets/plan/plan_view_overview.png)
 
 ## UI Overview {#ui_overview}
@@ -121,7 +121,7 @@ The Plan Info section contains general plan-level settings:
 
 The Defaults section sets plan-wide values that apply to new mission items:
 
-- **Altitude Mode** — Select the altitude reference frame for waypoints.
+- **Altitude Frame** — Select the altitude reference frame for waypoints.
 - **Waypoints Altitude** — The default altitude for the first mission item added (subsequent items take their initial altitude from the previous item). Changing this value when items already exist will prompt to update all items to the new altitude.
 - **Flight Speed** — Set a flight speed that differs from the default mission speed.
 - **Vehicle Speeds** — Cruise speed (fixed-wing) and/or hover speed (multi-rotor/VTOL), used for estimating mission time.
@@ -185,7 +185,7 @@ If a failure occurs you should see a status message in the QGC UI similar to:
 
 > Mission transfer failed. Retry transfer. Error: Mission write mission count failed, maximum retries exceeded.
 
-The loss rate for your link can be viewed in [Settings View > MAVLink](../settings_view/mavlink.md).
+The loss rate for your link can be viewed in [App Settings > Telemetry](../settings_view/telemetry.md).
 The loss rate should be in the low single digits (i.e. maximum of 2 or 3):
 
 - A loss rate in the high single digits can lead to intermittent failures.
@@ -196,5 +196,5 @@ To analyze this possibility you can turn on [Console Logging](../settings_view/c
 
 ## Further Info
 
-- New Plan View features for [QGC release v3.2](../releases/release_note_stable_v3.md#plan_view)
-- New Plan View features for [QGC release v3.3](../releases/release_note_stable_v3.md#plan-view-1)
+- New Plan View features for [QGC release v3.2](../releases/release_note_stable_v3.md#plan-view-v32)
+- New Plan View features for [QGC release v3.3](../releases/release_note_stable_v3.md#plan-view-v33)
