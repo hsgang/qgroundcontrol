@@ -661,13 +661,13 @@ void CloudManager::loadDirFile(QString dirName)
 
     QString uploadDirPath;
     if(dirName == "Sensors"){
-        uploadDirPath = SettingsManager::instance()->appSettings()->sensorSavePath();
+        uploadDirPath = SettingsManager::instance()->appSettings()->logSavePath();
     } else if (dirName == "Missions") {
         uploadDirPath = SettingsManager::instance()->appSettings()->missionSavePath();
     } else if (dirName == "Telemetry") {
         uploadDirPath = SettingsManager::instance()->appSettings()->telemetrySavePath();
     } else {
-        uploadDirPath = SettingsManager::instance()->appSettings()->sensorSavePath();
+        uploadDirPath = SettingsManager::instance()->appSettings()->logSavePath();
     }
 
     const QDir uploadDir(uploadDirPath);

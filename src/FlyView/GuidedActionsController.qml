@@ -189,7 +189,7 @@ Item {
     property var _customController: customController
 
     function _isGuidedActionsControllerLogEnabled() {
-        return QGroundControl.categoryLoggingOn("GuidedActionsControllerLog")
+        return false
     }
 
     function _outputState() {

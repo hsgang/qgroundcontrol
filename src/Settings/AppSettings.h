@@ -37,7 +37,6 @@ public:
     DEFINE_SETTINGFACT(useChecklist)
     DEFINE_SETTINGFACT(enforceChecklist)
     DEFINE_SETTINGFACT(enableMultiVehiclePanel)
-
     DEFINE_SETTINGFACT(mapboxToken)
     DEFINE_SETTINGFACT(mapboxAccount)
     DEFINE_SETTINGFACT(mapboxStyle)
@@ -48,11 +47,22 @@ public:
     DEFINE_SETTINGFACT(gstDebugLevel)
     DEFINE_SETTINGFACT(followTarget)
     DEFINE_SETTINGFACT(qLocaleLanguage)
-    DEFINE_SETTINGFACT(disableAllPersistence)
     DEFINE_SETTINGFACT(clearSettingsNextBoot)
+    DEFINE_SETTINGFACT(disableAllPersistence)
     DEFINE_SETTINGFACT(firstRunPromptIdsShown)
     DEFINE_SETTINGFACT(favoriteParameters)
+    DEFINE_SETTINGFACT(remoteLoggingEnabled)
+    DEFINE_SETTINGFACT(remoteLoggingHost)
+    DEFINE_SETTINGFACT(remoteLoggingPort)
+    DEFINE_SETTINGFACT(remoteLoggingProtocol)
+    DEFINE_SETTINGFACT(remoteLoggingVehicleId)
+    DEFINE_SETTINGFACT(remoteLoggingTlsEnabled)
+    DEFINE_SETTINGFACT(remoteLoggingTlsVerifyPeer)
+    DEFINE_SETTINGFACT(remoteLoggingCompressionEnabled)
+    DEFINE_SETTINGFACT(remoteLoggingCompressionLevel)
 
+    // QSettings key for clearSettingsNextBoot. Accessed directly by QGCApplication
+    // at startup before SettingsManager is initialized.
     static constexpr const char *clearSettingsNextBootKey = "clearSettingsNextBoot";
 
     Q_PROPERTY(QString missionSavePath          READ missionSavePath            NOTIFY savePathsChanged)
@@ -64,7 +74,6 @@ public:
     Q_PROPERTY(QString crashSavePath            READ crashSavePath              NOTIFY savePathsChanged)
     Q_PROPERTY(QString mavlinkActionsSavePath   READ mavlinkActionsSavePath     NOTIFY savePathsChanged)
     Q_PROPERTY(QString settingsSavePath         READ settingsSavePath           NOTIFY savePathsChanged)
-    Q_PROPERTY(QString sensorSavePath           READ sensorSavePath             NOTIFY savePathsChanged)
 
     Q_PROPERTY(QString planFileExtension        MEMBER planFileExtension        CONSTANT)
     Q_PROPERTY(QString waypointsFileExtension   MEMBER waypointsFileExtension   CONSTANT)
@@ -86,7 +95,6 @@ public:
     QString crashSavePath         ();
     QString mavlinkActionsSavePath();
     QString settingsSavePath      ();
-    QString sensorSavePath        ();
 
     // Helper methods for working with firstRunPromptIds QVariant settings string list
     static QList<int> firstRunPromptsIdsVariantToList   (const QVariant& firstRunPromptIds);
@@ -114,7 +122,6 @@ public:
     static constexpr const char* crashDirectory =           QT_TRANSLATE_NOOP("AppSettings", "CrashLogs");
     static constexpr const char* mavlinkActionsDirectory =  QT_TRANSLATE_NOOP("AppSettings", "MavlinkActions");
     static constexpr const char* settingsDirectory =        QT_TRANSLATE_NOOP("AppSettings", "Settings");
-    static constexpr const char* sensorDirectory =          QT_TRANSLATE_NOOP("AppSettings", "Sensor");
 
 signals:
     void savePathsChanged();

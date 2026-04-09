@@ -110,15 +110,27 @@ DECLARE_SETTINGGROUP(App, "")
     connect(savePathFact, &Fact::rawValueChanged, this, &AppSettings::_checkSavePathDirectories);
 
     _checkSavePathDirectories();
+
+    // When a specific preferred firmware/vehicle is chosen, keep the offline editing settings in sync
+    connect(preferredFirmwareClass(), &Fact::rawValueChanged, this, [this](QVariant value) {
+        if (value.toUInt() != 0) {
+            offlineEditingFirmwareClass()->setRawValue(value);
+        }
+    });
+    connect(preferredVehicleClass(), &Fact::rawValueChanged, this, [this](QVariant value) {
+        if (value.toUInt() != 0) {
+            offlineEditingVehicleClass()->setRawValue(value);
+        }
+    });
 }
 
+DECLARE_SETTINGSFACT(AppSettings, preferredFirmwareClass)
+DECLARE_SETTINGSFACT(AppSettings, preferredVehicleClass)
 DECLARE_SETTINGSFACT(AppSettings, offlineEditingFirmwareClass)
 DECLARE_SETTINGSFACT(AppSettings, offlineEditingVehicleClass)
 DECLARE_SETTINGSFACT(AppSettings, offlineEditingCruiseSpeed)
 DECLARE_SETTINGSFACT(AppSettings, offlineEditingHoverSpeed)
 DECLARE_SETTINGSFACT(AppSettings, offlineEditingAscentSpeed)
-DECLARE_SETTINGSFACT(AppSettings, preferredFirmwareClass)
-DECLARE_SETTINGSFACT(AppSettings, preferredVehicleClass)
 DECLARE_SETTINGSFACT(AppSettings, offlineEditingDescentSpeed)
 DECLARE_SETTINGSFACT(AppSettings, batteryPercentRemainingAnnounce)
 DECLARE_SETTINGSFACT(AppSettings, defaultMissionItemAltitude)
@@ -133,7 +145,6 @@ DECLARE_SETTINGSFACT(AppSettings, androidDontSaveToSDCard)
 DECLARE_SETTINGSFACT(AppSettings, useChecklist)
 DECLARE_SETTINGSFACT(AppSettings, enforceChecklist)
 DECLARE_SETTINGSFACT(AppSettings, enableMultiVehiclePanel)
-
 DECLARE_SETTINGSFACT(AppSettings, mapboxToken)
 DECLARE_SETTINGSFACT(AppSettings, mapboxAccount)
 DECLARE_SETTINGSFACT(AppSettings, mapboxStyle)
@@ -143,10 +154,19 @@ DECLARE_SETTINGSFACT(AppSettings, vworldToken)
 DECLARE_SETTINGSFACT(AppSettings, openaipToken)
 DECLARE_SETTINGSFACT(AppSettings, gstDebugLevel)
 DECLARE_SETTINGSFACT(AppSettings, followTarget)
-DECLARE_SETTINGSFACT(AppSettings, disableAllPersistence)
 DECLARE_SETTINGSFACT(AppSettings, clearSettingsNextBoot)
+DECLARE_SETTINGSFACT(AppSettings, disableAllPersistence)
 DECLARE_SETTINGSFACT(AppSettings, firstRunPromptIdsShown)
 DECLARE_SETTINGSFACT(AppSettings, favoriteParameters)
+DECLARE_SETTINGSFACT(AppSettings, remoteLoggingEnabled)
+DECLARE_SETTINGSFACT(AppSettings, remoteLoggingHost)
+DECLARE_SETTINGSFACT(AppSettings, remoteLoggingPort)
+DECLARE_SETTINGSFACT(AppSettings, remoteLoggingProtocol)
+DECLARE_SETTINGSFACT(AppSettings, remoteLoggingVehicleId)
+DECLARE_SETTINGSFACT(AppSettings, remoteLoggingTlsEnabled)
+DECLARE_SETTINGSFACT(AppSettings, remoteLoggingTlsVerifyPeer)
+DECLARE_SETTINGSFACT(AppSettings, remoteLoggingCompressionEnabled)
+DECLARE_SETTINGSFACT(AppSettings, remoteLoggingCompressionLevel)
 
 DECLARE_SETTINGSFACT_NO_FUNC(AppSettings, indoorPalette)
 {
@@ -220,7 +240,6 @@ void AppSettings::_checkSavePathDirectories(void)
         QGCFileHelper::ensureDirectoryExists(QGCFileHelper::joinPath(savePath, crashDirectory));
         QGCFileHelper::ensureDirectoryExists(QGCFileHelper::joinPath(savePath, mavlinkActionsDirectory));
         QGCFileHelper::ensureDirectoryExists(QGCFileHelper::joinPath(savePath, settingsDirectory));
-        QGCFileHelper::ensureDirectoryExists(QGCFileHelper::joinPath(savePath, sensorDirectory));
     }
 }
 
@@ -287,11 +306,6 @@ QString AppSettings::mavlinkActionsSavePath(void)
 QString AppSettings::settingsSavePath(void)
 {
     return _childSavePath(settingsDirectory);
-}
-
-QString AppSettings::sensorSavePath(void)
-{
-    return _childSavePath(sensorDirectory);
 }
 
 QList<int> AppSettings::firstRunPromptsIdsVariantToList(const QVariant& firstRunPromptIds)

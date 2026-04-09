@@ -3982,7 +3982,7 @@ void Vehicle::_initializeCustomLog()
     }
     QString now = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
     QString fileName = QString("vehicle%1_%2.txt").arg(id()).arg(now);
-    QDir saveDir(SettingsManager::instance()->appSettings()->sensorSavePath());
+    QDir saveDir(SettingsManager::instance()->appSettings()->logSavePath());
     _customLogFile.setFileName(saveDir.absoluteFilePath(fileName));
 
     QString text = "사용자 정의 로그 저장을 시작합니다";

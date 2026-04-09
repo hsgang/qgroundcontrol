@@ -361,27 +361,3 @@ QString QGroundControlQmlGlobal::displayName()
     return qgcApp()->displayName();
 }
 
-QmlObjectListModel *QGroundControlQmlGlobal::treeLoggingCategoriesModel()
-{
-    return QGCLoggingCategoryManager::instance()->treeCategoryModel();
-}
-
-QmlObjectListModel *QGroundControlQmlGlobal::flatLoggingCategoriesModel()
-{
-    return QGCLoggingCategoryManager::instance()->flatCategoryModel();
-}
-
-void QGroundControlQmlGlobal::setCategoryLoggingOn(const QString &category, bool enable)
-{
-    QGCLoggingCategoryManager::instance()->setCategoryLoggingOn(category, enable);
-}
-
-bool QGroundControlQmlGlobal::categoryLoggingOn(const QString &category)
-{
-    return QGCLoggingCategoryManager::categoryLoggingOn(category);
-}
-
-void QGroundControlQmlGlobal::disableAllLoggingCategories()
-{
-    QGCLoggingCategoryManager::instance()->disableAllCategories();
-}
