@@ -31,6 +31,5 @@ qt_add_qml_module(AnalyzeViewModule
         MAVLinkInspector/MAVLinkMessageButton.qml
         MAVLinkInspector/MAVLinkInspectorPage.qml
         OnboardLogs/OnboardLogPage.qml
-        Vibration/VibrationPage.qml
     NO_PLUGIN
 )
