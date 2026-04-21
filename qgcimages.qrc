@@ -196,6 +196,7 @@
         <file alias="TrackingIcon.svg">src/UI/toolbar/Images/TrackingIcon.svg</file>
         <file alias="TuningComponentIcon.png">src/AutoPilotPlugins/Common/Images/TuningComponentIcon.png</file>
         <file alias="vehicleArrowOpaque.svg">src/FlightMap/Images/vehicleArrowOpaque.svg</file>
+        <file alias="vehicleQuadRotor.svg">src/FlightMap/Images/vehicleQuadRotor.svg</file>
         <file alias="vehicleArrowOutline.svg">src/FlightMap/Images/vehicleArrowOutline.svg</file>
         <file alias="windVaneArrow.svg">src/FlightMap/Images/windVaneArrow.svg</file>
         <file alias="VehicleDown.png">src/AutoPilotPlugins/PX4/Images/VehicleDown.png</file>
