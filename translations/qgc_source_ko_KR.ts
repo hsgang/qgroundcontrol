@@ -12,6 +12,11 @@
 <context>
     <name>APMAirframeComponent</name>
     <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMAirframeComponent.h" line="18"/>
+        <source>Configure the airframe type that matches your vehicle.</source>
+        <translation>기체 유형을 기체에 맞게 설정합니다.</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/APM/APMAirframeComponent.qml" line="71"/>
         <source>Airframe is currently not set.</source>
         <translation>기체유형이 설정되지 않았습니다.</translation>
@@ -454,6 +459,11 @@
 <context>
     <name>APMGimbalComponent</name>
     <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMGimbalComponent.h" line="18"/>
+        <source>Configure camera mount type and stabilization settings.</source>
+        <translation>카메라 마운트 유형과 안정화 설정을 구성합니다.</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/APM/APMGimbalComponent.qml" line="1"/>
         <source>Gimbal</source>
         <translation>짐벌</translation>
@@ -582,6 +592,11 @@
 </context>
 <context>
     <name>APMFlightModesComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFlightModesComponent.h" line="18"/>
+        <source>Configure transmitter switch assignments and flight mode selection.</source>
+        <translation>조종기 스위치 할당과 비행 모드를 설정합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightModesComponent.qml" line="58"/>
         <source>Flight Mode Settings</source>
@@ -742,6 +757,11 @@
 <context>
     <name>APMFollowComponent</name>
     <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFollowComponent.h" line="18"/>
+        <source>Configure the vehicle to track the ground station position.</source>
+        <translation>기체가 지상국 위치를 추적하도록 설정합니다.</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponent.qml" line="193"/>
         <source>Enable Follow Me</source>
         <translation>따라오기 모드 활성화하기</translation>
@@ -862,6 +882,11 @@
 </context>
 <context>
     <name>APMHeliComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMHeliComponent.h" line="18"/>
+        <source>Configure swashplate, governor, and rotor parameters.</source>
+        <translation>스와시플레이트, 거버너, 로터 파라미터를 설정합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMHeliComponent.qml" line="79"/>
         <source>Servo Setup</source>
@@ -985,6 +1010,11 @@
 </context>
 <context>
     <name>APMLightsComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMLightsComponent.h" line="18"/>
+        <source>Configure light output channels.</source>
+        <translation>조명 출력 채널을 설정합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMLightsComponent.qml" line="135"/>
         <source>Disabled</source>
@@ -1137,6 +1167,11 @@
 </context>
 <context>
     <name>APMPowerComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.h" line="18"/>
+        <source>Configure battery monitoring and capacity parameters.</source>
+        <translation>배터리 모니터링과 용량 파라미터를 설정합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="50"/>
         <source>Requires vehicle reboot</source>
@@ -1434,6 +1469,11 @@
 </context>
 <context>
     <name>APMRadioComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMRadioComponent.h" line="18"/>
+        <source>Configure transmitter calibration and channel assignment.</source>
+        <translation>조종기 보정과 채널 할당을 설정합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMRadioComponent.cc" line="18"/>
         <source>Radio</source>
@@ -2450,6 +2490,11 @@
 <context>
     <name>APMSensorsComponent</name>
     <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.h" line="18"/>
+        <source>Configure and calibrate compass, accelerometer, and other onboard sensors.</source>
+        <translation>나침반, 가속도계 등 기체 내장 센서를 설정하고 보정합니다.</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="40"/>
         <source>If mounted in the direction of flight, select None.</source>
         <translation>비행방향과 같은 방향으로 장착되어 있다면, &apos;해당사항 없음&apos;을 선택하여 주십시오.</translation>
@@ -2987,6 +3032,11 @@ Click Ok to start calibration.</source>
 <context>
     <name>APMSubFrameComponent</name>
     <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMSubFrameComponent.h" line="18"/>
+        <source>Configure the submarine motor layout and load default parameters.</source>
+        <translation>잠수정 모터 배치와 기본 파라미터를 설정합니다.</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSubFrameComponent.cc" line="21"/>
         <source>Frame</source>
         <translation>프레임</translation>
@@ -3108,6 +3158,11 @@ Please place your vehicle in water, click the button, and wait. Note that the th
 </context>
 <context>
     <name>APMTuningComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMTuningComponent.h" line="18"/>
+        <source>Configure flight performance and controller parameters.</source>
+        <translation>비행 성능과 컨트롤러 파라미터를 설정합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMTuningComponent.cc" line="18"/>
         <source>Tuning</source>
@@ -3305,6 +3360,11 @@ Please place your vehicle in water, click the button, and wait. Note that the th
 </context>
 <context>
     <name>AirframeComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/PX4/AirframeComponent.cc" line="20"/>
+        <source>Configure the airframe type and apply default tuning parameters.</source>
+        <translation>기체 유형을 설정하고 기본 튜닝 파라미터를 적용합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/AirframeComponent.qml" line="45"/>
         <source>Your vehicle is using a custom airframe configuration. </source>
@@ -14209,6 +14269,11 @@ Is this really what you want?</source>
 <context>
     <name>PX4RadioComponent</name>
     <message>
+        <location filename="../src/AutoPilotPlugins/PX4/PX4RadioComponent.cc" line="20"/>
+        <source>Configure and calibrate your transmitter and assign control channels.</source>
+        <translation>조종기를 보정하고 제어 채널을 할당합니다.</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4RadioComponent.cc" line="16"/>
         <source>Radio</source>
         <translation>라디오</translation>
@@ -14304,6 +14369,11 @@ Is this really what you want?</source>
 </context>
 <context>
     <name>PX4TuningComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponent.cc" line="20"/>
+        <source>Configure rate, attitude, and velocity controller gains.</source>
+        <translation>각속도, 자세, 속도 컨트롤러 게인을 설정합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponent.cc" line="17"/>
         <source>PID Tuning</source>
@@ -15841,6 +15911,11 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
 </context>
 <context>
     <name>PowerComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.cc" line="20"/>
+        <source>Configure battery parameters, ESC calibration, and UAVCAN bus settings.</source>
+        <translation>배터리 파라미터, ESC 보정, UAVCAN 버스 설정을 구성합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="58"/>
         <location filename="../src/AutoPilotPlugins/PX4/PowerComponent.qml" line="59"/>
@@ -17767,6 +17842,11 @@ Click the Next button to upload calibration to board. Click Cancel if you don&ap
 <context>
     <name>SafetyComponent</name>
     <message>
+        <location filename="../src/AutoPilotPlugins/PX4/SafetyComponent.cc" line="20"/>
+        <source>Configure failsafe actions, geofence, return to launch, and land mode settings.</source>
+        <translation>안전장치 동작, 지오펜스, 복귀, 착륙 모드 설정을 구성합니다.</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/PX4/SafetyComponent.qml" line="67"/>
         <source>Low Battery Failsafe Trigger</source>
         <translation>Battery1 안전장치 트리거</translation>
@@ -18022,6 +18102,11 @@ Click the Next button to upload calibration to board. Click Cancel if you don&ap
 </context>
 <context>
     <name>SensorsComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/PX4/SensorsComponent.cc" line="30"/>
+        <source>Configure and calibrate gyroscope, accelerometer, magnetometer, and airspeed sensors.</source>
+        <translation>자이로스코프, 가속도계, 자력계, 대기속도 센서를 설정하고 보정합니다.</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/SensorsComponent.cc" line="27"/>
         <source>Sensors</source>
