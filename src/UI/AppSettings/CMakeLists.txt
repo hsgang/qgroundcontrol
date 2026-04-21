@@ -18,6 +18,7 @@ file(GLOB _settings_metadata "${SETTINGS_METADATA_DIR}/*.SettingsGroup.json")
 
 # Generated QML outputs (must match what generate_pages.py produces)
 set(_generated_qml_names
+    ADSBServerSettings.qml
     CloudSettings.qml
     CommLinksSettings.qml
     FlyViewSettings.qml
@@ -25,6 +26,8 @@ set(_generated_qml_names
     MapsSettings.qml
     NTRIPSettings.qml
     PlanViewSettings.qml
+    PX4LogTransferSettings.qml
+    RemoteIDSettings.qml
     SettingsPagesModel.qml
     TelemetrySettings.qml
     VideoSettings.qml
