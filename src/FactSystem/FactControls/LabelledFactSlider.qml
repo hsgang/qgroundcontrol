@@ -15,11 +15,14 @@ import QGroundControl.Controls
 import QGroundControl.FactControls
 
 ColumnLayout {
+    id:                                     control
+
     property alias label:                   label.text
     property alias description:             _description.text
     property alias fact:                    factSlider.fact
     property alias from:                    factSlider.from
     property alias to:                      factSlider.to
+    property real  majorTickStepSize:       1
     property real  sliderPreferredWidth:    -1
     
     enabled:       fact
@@ -40,5 +43,6 @@ ColumnLayout {
     FactSlider {
         id:                     factSlider
         Layout.preferredWidth:  sliderPreferredWidth
+        majorTickStepSize:      control.majorTickStepSize
     }
 }
