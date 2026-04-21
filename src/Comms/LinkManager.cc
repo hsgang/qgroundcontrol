@@ -229,7 +229,6 @@ void LinkManager::_linkDisconnected()
         return;
     }
 
-    (void) disconnect(link, &LinkInterface::communicationError, qgcApp(), &QGCApplication::showAppMessage);
     SharedLinkInterfacePtr linkToCleanup;
     SharedLinkConfigurationPtr config;
     {
