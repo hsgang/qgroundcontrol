@@ -184,6 +184,139 @@
         <source>Configure and calibrate Electronic Speed Controllers.</source>
         <translation>전자 속도 컨트롤러(ESC)를 설정하고 캘리브레이션합니다.</translation>
     </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="52"/>
+        <source>Requires vehicle reboot</source>
+        <translation>기체 재부팅이 필요합니다</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="59"/>
+        <source>Configuration</source>
+        <translation>구성</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="66"/>
+        <source>Output type</source>
+        <translation>출력 유형</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="78"/>
+        <source>Output PWM min</source>
+        <translation>PWM 출력 최소값</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="85"/>
+        <source>Output PWM max</source>
+        <translation>PWM 출력 최대값</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="92"/>
+        <source>Spin when armed</source>
+        <translation>시동 시 회전</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="99"/>
+        <source>Spin minimum</source>
+        <translation>최소 회전</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="106"/>
+        <source>Spin maximum</source>
+        <translation>최대 회전</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="114"/>
+        <source>DShot ESC type</source>
+        <translation>DShot ESC 유형</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="122"/>
+        <source>DShot output rate</source>
+        <translation>DShot 출력 속도</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="132"/>
+        <source>Calibration</source>
+        <translation>캘리브레이션</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="139"/>
+        <source>WARNING: Remove props prior to calibration!</source>
+        <translation>경고: 캘리브레이션 전에 프로펠러를 제거하세요!</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="147"/>
+        <source>Calibrate</source>
+        <translation>캘리브레이션 시작</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="154"/>
+        <source>Now perform these steps:</source>
+        <translation>다음 단계를 진행하세요:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="154"/>
+        <source>Click Calibrate to start, then:</source>
+        <translation>캘리브레이션 시작을 클릭한 후 다음 단계를 진행하세요:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="155"/>
+        <source>- Disconnect USB and battery so flight controller powers down</source>
+        <translation>- USB와 배터리를 분리하여 비행 컨트롤러 전원을 끕니다</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="156"/>
+        <source>- Connect the battery</source>
+        <translation>- 배터리를 연결합니다</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="157"/>
+        <source>- The arming tone will be played (if the vehicle has a buzzer attached)</source>
+        <translation>- 시동 음이 재생됩니다 (기체에 부저가 장착된 경우)</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="158"/>
+        <source>- If using a flight controller with a safety button press it until it displays solid red</source>
+        <translation>- 안전 버튼이 있는 비행 컨트롤러라면 빨간불이 계속 켜질 때까지 안전 버튼을 누릅니다</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="159"/>
+        <source>- You will hear a musical tone then two beeps</source>
+        <translation>- 멜로디 음과 두 번의 비프음이 들립니다</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="160"/>
+        <source>- A few seconds later you should hear a number of beeps (one for each battery cell you&apos;re using)</source>
+        <translation>- 몇 초 후 배터리 셀 수만큼 비프음이 들립니다</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="161"/>
+        <source>- And finally a single long beep indicating the end points have been set and the ESC is calibrated</source>
+        <translation>- 마지막으로 긴 비프음이 한 번 들리면 ESC 엔드포인트가 설정되어 캘리브레이션이 완료된 것입니다</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.qml" line="162"/>
+        <source>- Disconnect the battery and power up again normally</source>
+        <translation>- 배터리를 분리한 후 정상적으로 다시 전원을 인가합니다</translation>
+    </message>
+</context>
+<context>
+    <name>APMESCComponentSummary</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponentSummary.qml" line="33"/>
+        <source>Output type</source>
+        <translation>출력 유형</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponentSummary.qml" line="39"/>
+        <source>DShot ESC type</source>
+        <translation>DShot ESC 유형</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponentSummary.qml" line="45"/>
+        <source>DShot output rate</source>
+        <translation>DShot 출력 속도</translation>
+    </message>
 </context>
 <context>
     <name>APMCameraComponent</name>
