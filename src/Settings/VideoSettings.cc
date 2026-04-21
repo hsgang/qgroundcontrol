@@ -207,7 +207,7 @@ bool VideoSettings::streamConfigured(void)
         return true;
     }
     if(vSource == videoSourceWebRTC) {
-        qCDebug(VideoManagerLog) << "Stream configured for WebRTC";
+        qCDebug(VideoSettingsLog) << "Stream configured for WebRTC";
         return true;
     }
 #ifndef QGC_DISABLE_UVC
