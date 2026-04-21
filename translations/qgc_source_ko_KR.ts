@@ -5547,6 +5547,74 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>EscIndicator</name>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicator.qml" line="94"/>
+        <source>OK</source>
+        <translation>정상</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicator.qml" line="94"/>
+        <source>ERR</source>
+        <translation>오류</translation>
+    </message>
+</context>
+<context>
+    <name>EscIndicatorPage</name>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="13"/>
+        <source>N/A</source>
+        <comment>No data to display</comment>
+        <translation>해당 없음</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="14"/>
+        <source>–</source>
+        <comment>No data to display</comment>
+        <translation>–</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="32"/>
+        <source>ESC Status Overview</source>
+        <translation>ESC 상태 요약</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="42"/>
+        <source>Healthy Motors</source>
+        <translation>정상 모터</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="70"/>
+        <source>Motor %1 %2</source>
+        <translation>모터 %1 %2</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="70"/>
+        <source>- OFFLINE</source>
+        <translation>- 오프라인</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="82"/>
+        <source>RPM</source>
+        <translation>RPM</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="87"/>
+        <source>Temp</source>
+        <translation>온도</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="92"/>
+        <source>Voltage</source>
+        <translation>전압</translation>
+    </message>
+    <message>
+        <location filename="../src/UI/toolbar/EscIndicatorPage.qml" line="97"/>
+        <source>Current</source>
+        <translation>전류</translation>
+    </message>
+</context>
+<context>
     <name>EditPositionDialog</name>
     <message>
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="51"/>
