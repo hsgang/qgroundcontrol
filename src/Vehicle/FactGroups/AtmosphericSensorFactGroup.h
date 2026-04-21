@@ -1,7 +1,5 @@
 #pragma once
 
-//#define USE_ATMOSPHERIC_VALUE
-
 #include "FactGroup.h"
 
 class AtmosphericSensorFactGroup : public FactGroup
@@ -27,6 +25,7 @@ class AtmosphericSensorFactGroup : public FactGroup
     Q_PROPERTY(Fact *unixTime     READ unixTime     CONSTANT)
     Q_PROPERTY(Fact *timeHMS      READ timeHMS      CONSTANT)
     Q_PROPERTY(Fact *sdVolume     READ sdVolume     CONSTANT)
+    Q_PROPERTY(Fact *windRef      READ windRef      CONSTANT)
 
 public:
     AtmosphericSensorFactGroup(QObject* parent = nullptr);   
@@ -51,14 +50,14 @@ public:
     Fact *unixTime      () { return &_unixTimeFact; }
     Fact *timeHMS       () { return &_timeHMSFact; }
     Fact *sdVolume      () { return &_sdVolumeFact; }
+    Fact *windRef       () { return &_windRefFact; }
 
     // Overrides from FactGroup
     void handleMessage(Vehicle *vehicle, const mavlink_message_t &message) override;
 
-protected:
+private:
     void _handleData32              (const mavlink_message_t &message);
     void _handleTunnel              (const mavlink_message_t &message);
-    void _handleScaledPressure      (const mavlink_message_t &message);
     void _handleHygrometerSensor    (const mavlink_message_t &message);
     void _handleWind                (const mavlink_message_t &message);
 
@@ -82,7 +81,7 @@ protected:
     Fact _unixTimeFact = Fact(0, QStringLiteral("unixTime"), FactMetaData::valueTypeUint64);
     Fact _timeHMSFact = Fact(0, QStringLiteral("timeHMS"), FactMetaData::valueTypeString);
     Fact _sdVolumeFact = Fact(0, QStringLiteral("sdVolume"), FactMetaData::valueTypeFloat);
+    Fact _windRefFact = Fact(0, QStringLiteral("windRef"), FactMetaData::valueTypeUint8);
 
-   private:
     bool _windDirByWindPacket = false;
 };

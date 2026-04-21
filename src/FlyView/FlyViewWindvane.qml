@@ -38,6 +38,7 @@ Item {
     property real   _batt:          _activeVehicle?.atmosphericSensor?.batt?.rawValue ?? NaN
     property real   _sdVolume:      _activeVehicle?.atmosphericSensor?.sdVolume?.rawValue ?? NaN
     property var    _timeHMS:       _activeVehicle?.atmosphericSensor?.timeHMS?.rawValue ?? "--:--:--"
+    property int    _windRef:       _activeVehicle?.atmosphericSensor?.windRef?.rawValue ?? 0
 
     property string _logCountText:    !isNaN(_logCount)     ? _logCount.toFixed(0)     : "--"
     property string _temperatureText: !isNaN(_temperature)  ? _temperature.toFixed(2) + " ℃" : "--.- ℃"
@@ -57,6 +58,7 @@ Item {
     property string _battText:        !isNaN(_batt)         ? _batt.toFixed(0) + " %" : "--- %"
     property string _sdVolumeText:    _sdVolume > 0         ? _sdVolume.toFixed(2) + " GB" : "Error"
     property string _timeHMSText:     _timeHMS !== ""      ? _timeHMS : "--:--:--"
+    property string _windRefText:     _windRef === 2 ? "T" : _windRef === 1 ? "R" : ""
 
     function isWindVaneOK(){
         return _activeVehicle && !isNaN(_windDir)
@@ -116,7 +118,7 @@ Item {
                     }
                     QGCLabel {
                         Layout.alignment:       Qt.AlignHCenter
-                        text:                   _windDirText
+                        text:                   _windDirText + (root._windRefText ? " (" + root._windRefText + ")" : "")
                         horizontalAlignment:    Text.AlignHCenter
                         font.pointSize:         ScreenTools.defaultFontPointSize * 1.2
                     }

@@ -3,6 +3,7 @@
 
 #include <QtMath>
 #include <QDateTime>
+#include <cstring>
 
 struct Sensor_Payload {
     float logCountRaw;
@@ -23,6 +24,7 @@ struct Sensor_Payload {
     float battRaw;
     quint64 unixTimeRaw;
     float sdVolumeRaw;
+    uint8_t _pad[4];
 };
 
 struct Sensor_Tunnel_sC {
@@ -34,6 +36,7 @@ struct Sensor_Tunnel_sC {
     uint16_t pm1p0Raw;
     uint16_t pm2p5Raw;
     uint16_t pm10Raw;
+    uint16_t _pad;
 };
 
 struct Sensor_Tunnel_Legacy {
@@ -48,6 +51,30 @@ struct Sensor_Tunnel_Legacy {
     int16_t sensor3;
     int16_t sensor4;
 };
+
+struct Tunnel_AWS_Ex {
+    float logCount;
+    float temp;
+    float humi;
+    float pres;
+    float windDir;
+    float windSpd;
+    float hubTemp1;
+    float hubTemp2;
+    float hubHumi1;
+    float hubHumi2;
+    float hubPressure;
+    float opc1;
+    float opc2;
+    float opc3;
+    float radiation;
+    float batt;
+    uint64_t unixTime;
+    float sdVolume;
+    uint8_t windRef;
+    uint8_t _pad[3];
+};
+static_assert(sizeof(Tunnel_AWS_Ex) == 80, "Tunnel_AWS_Ex layout must match firmware");
 
 AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     : FactGroup(500, ":/json/Vehicle/AtmosphericSensorFact.json", parent)
@@ -72,29 +99,31 @@ AtmosphericSensorFactGroup::AtmosphericSensorFactGroup(QObject* parent)
     _addFact(&_unixTimeFact);
     _addFact(&_timeHMSFact);
     _addFact(&_sdVolumeFact);
+    _addFact(&_windRefFact);
 
     // Start out as not available "--.--"
+    _logCountFact.setRawValue    (qQNaN());
     _temperatureFact.setRawValue (qQNaN());
-    _humidityFact.setRawValue  (qQNaN());
-    _pressureFact.setRawValue  (qQNaN());
-    _windDirFact.setRawValue   (qQNaN());
-    _windSpdFact.setRawValue   (qQNaN());
-    _hubTemp1Fact.setRawValue (qQNaN());
-    _hubTemp2Fact.setRawValue (qQNaN());
-    _hubHumi1Fact.setRawValue (qQNaN());
-    _hubHumi2Fact.setRawValue (qQNaN());
-    _hubPressureFact.setRawValue(qQNaN());
-    _opc1Fact.setRawValue (qQNaN());
-    _opc2Fact.setRawValue (qQNaN());
-    _opc3Fact.setRawValue (qQNaN());
-    _radiationFact.setRawValue (qQNaN());
-    _battFact.setRawValue(qQNaN());
-
+    _humidityFact.setRawValue    (qQNaN());
+    _pressureFact.setRawValue    (qQNaN());
+    _windDirFact.setRawValue     (qQNaN());
+    _windSpdFact.setRawValue     (qQNaN());
+    _hubTemp1Fact.setRawValue    (qQNaN());
+    _hubTemp2Fact.setRawValue    (qQNaN());
+    _hubHumi1Fact.setRawValue    (qQNaN());
+    _hubHumi2Fact.setRawValue    (qQNaN());
+    _hubPressureFact.setRawValue (qQNaN());
+    _opc1Fact.setRawValue        (qQNaN());
+    _opc2Fact.setRawValue        (qQNaN());
+    _opc3Fact.setRawValue        (qQNaN());
+    _radiationFact.setRawValue   (qQNaN());
+    _battFact.setRawValue        (qQNaN());
+    _sdVolumeFact.setRawValue    (qQNaN());
 }
 
 void AtmosphericSensorFactGroup::handleMessage(Vehicle *vehicle, const mavlink_message_t &message)
 {
-    Q_UNUSED(vehicle);
+    Q_UNUSED(vehicle)
 
     switch (message.msgid) {
     case MAVLINK_MSG_ID_DATA32:
@@ -174,7 +203,7 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     }
     if(unixTimeRaw > 0) {
         unixTime()->setRawValue(unixTimeRaw);
-        QDateTime dateTime = QDateTime::fromSecsSinceEpoch(unixTimeRaw);
+        QDateTime dateTime = QDateTime::fromSecsSinceEpoch(static_cast<qint64>(unixTimeRaw));
         QString timeString = dateTime.toString("hh:mm:ss");
         timeHMS()->setRawValue(timeString);
     }
@@ -183,13 +212,6 @@ void AtmosphericSensorFactGroup::_handleData32(const mavlink_message_t &message)
     }
 
     status()->setRawValue(data32.type);
-}
-
-void AtmosphericSensorFactGroup::_handleScaledPressure(const mavlink_message_t& message)
-{
-    mavlink_scaled_pressure_t pressure;
-    mavlink_msg_scaled_pressure_decode(&message, &pressure);
-    //sensorBaro()->setRawValue(pressure.press_abs);
 }
 
 void AtmosphericSensorFactGroup::_handleHygrometerSensor(const mavlink_message_t& message)
@@ -211,23 +233,23 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             struct Sensor_Tunnel_sC sC;
             memcpy(&sC, &tunnel.payload, sizeof(sC));
 
-            float tempRaw = sC.temperatureRaw * 0.01;
-            float humiRaw = sC.humidityRaw * 0.01;
+            float tempRaw = sC.temperatureRaw * 0.01f;
+            float humiRaw = sC.humidityRaw * 0.01f;
             float pressRaw = sC.pressureRaw;
             float windDRaw = sC.windHeadingRaw;
-            float windSRaw = sC.windSpeedRaw * 0.1;
-            float opc1Raw = sC.pm1p0Raw * 0.1;
-            float opc2Raw = sC.pm2p5Raw * 0.1;
-            float opc3Raw = sC.pm10Raw * 0.1;
+            float windSRaw = sC.windSpeedRaw * 0.1f;
+            float opc1Raw = sC.pm1p0Raw * 0.1f;
+            float opc2Raw = sC.pm2p5Raw * 0.1f;
+            float opc3Raw = sC.pm10Raw * 0.1f;
 
-            if(tempRaw)  {temperature()->setRawValue(tempRaw);}
-            if(humiRaw)     {humidity()->setRawValue(humiRaw);}
-            if(pressRaw)    {pressure()->setRawValue(pressRaw);}
-            if(windDRaw && !_windDirByWindPacket)    {windDir()->setRawValue(windDRaw);}
-            if(windSRaw && !_windDirByWindPacket)    {windSpd()->setRawValue(windSRaw);}
-            if(opc1Raw)    {opc1()->setRawValue(opc1Raw);}
-            if(opc2Raw)    {opc2()->setRawValue(opc2Raw);}
-            if(opc3Raw)    {opc3()->setRawValue(opc3Raw);}
+            if(!qIsNaN(tempRaw))    {temperature()->setRawValue(tempRaw);}
+            if(!qIsNaN(humiRaw))    {humidity()->setRawValue(humiRaw);}
+            if(!qIsNaN(pressRaw))   {pressure()->setRawValue(pressRaw);}
+            if(!qIsNaN(windDRaw) && !_windDirByWindPacket)    {windDir()->setRawValue(windDRaw);}
+            if(!qIsNaN(windSRaw) && !_windDirByWindPacket)    {windSpd()->setRawValue(windSRaw);}
+            if(!qIsNaN(opc1Raw))    {opc1()->setRawValue(opc1Raw);}
+            if(!qIsNaN(opc2Raw))    {opc2()->setRawValue(opc2Raw);}
+            if(!qIsNaN(opc3Raw))    {opc3()->setRawValue(opc3Raw);}
 
             status()->setRawValue(tunnel.payload_type);
 
@@ -257,29 +279,29 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
             quint64 unixTimeRaw     = tP.unixTimeRaw;
             float sdVolumeRaw       = tP.sdVolumeRaw;
 
-            if(logCountRaw)     {logCount()->setRawValue(logCountRaw);}
-            if(temperatureRaw)  {temperature()->setRawValue(temperatureRaw);}
-            if(humidityRaw)     {humidity()->setRawValue(humidityRaw);}
-            if(pressureRaw)     {pressure()->setRawValue(pressureRaw);}
-            if(windDirRaw && !_windDirByWindPacket)      {windDir()->setRawValue(windDirRaw);}
-            if(windSpdRaw && !_windDirByWindPacket)      {windSpd()->setRawValue(windSpdRaw);}
-            if(hubTemp1Raw)     {hubTemp1()->setRawValue(hubTemp1Raw);}
-            if(hubTemp2Raw)     {hubTemp2()->setRawValue(hubTemp2Raw);}
-            if(hubHumi1Raw)     {hubHumi1()->setRawValue(hubHumi1Raw);}
-            if(hubHumi2Raw)     {hubHumi2()->setRawValue(hubHumi2Raw);}
-            if(hubPressureRaw)  {hubPressure()->setRawValue(hubPressureRaw);}
-            if(opc1Raw)         {opc1()->setRawValue(opc1Raw);}
-            if(opc2Raw)         {opc2()->setRawValue(opc2Raw);}
-            if(opc3Raw)         {opc3()->setRawValue(opc3Raw);}
-            if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
-            if(battRaw)         {batt()->setRawValue(battRaw);}
-            if(unixTimeRaw)     {
+            if(!qIsNaN(logCountRaw))     {logCount()->setRawValue(logCountRaw);}
+            if(!qIsNaN(temperatureRaw))  {temperature()->setRawValue(temperatureRaw);}
+            if(!qIsNaN(humidityRaw))     {humidity()->setRawValue(humidityRaw);}
+            if(!qIsNaN(pressureRaw))     {pressure()->setRawValue(pressureRaw);}
+            if(!qIsNaN(windDirRaw) && !_windDirByWindPacket)      {windDir()->setRawValue(windDirRaw);}
+            if(!qIsNaN(windSpdRaw) && !_windDirByWindPacket)      {windSpd()->setRawValue(windSpdRaw);}
+            if(!qIsNaN(hubTemp1Raw))     {hubTemp1()->setRawValue(hubTemp1Raw);}
+            if(!qIsNaN(hubTemp2Raw))     {hubTemp2()->setRawValue(hubTemp2Raw);}
+            if(!qIsNaN(hubHumi1Raw))     {hubHumi1()->setRawValue(hubHumi1Raw);}
+            if(!qIsNaN(hubHumi2Raw))     {hubHumi2()->setRawValue(hubHumi2Raw);}
+            if(!qIsNaN(hubPressureRaw))  {hubPressure()->setRawValue(hubPressureRaw);}
+            if(!qIsNaN(opc1Raw))         {opc1()->setRawValue(opc1Raw);}
+            if(!qIsNaN(opc2Raw))         {opc2()->setRawValue(opc2Raw);}
+            if(!qIsNaN(opc3Raw))         {opc3()->setRawValue(opc3Raw);}
+            if(!qIsNaN(radiationRaw))    {radiation()->setRawValue(radiationRaw);}
+            if(!qIsNaN(battRaw))         {batt()->setRawValue(battRaw);}
+            if(unixTimeRaw != 0)         {
                 unixTime()->setRawValue(unixTimeRaw);
-                QDateTime dateTime = QDateTime::fromSecsSinceEpoch(unixTimeRaw);
+                QDateTime dateTime = QDateTime::fromSecsSinceEpoch(static_cast<qint64>(unixTimeRaw));
                 QString timeString = dateTime.toString("hh:mm:ss");
                 timeHMS()->setRawValue(timeString);
             }
-            if(sdVolumeRaw)     {sdVolume()->setRawValue(sdVolumeRaw);}
+            if(!qIsNaN(sdVolumeRaw))     {sdVolume()->setRawValue(sdVolumeRaw);}
 
             status()->setRawValue(tunnel.payload_type);
             break;
@@ -292,17 +314,75 @@ void AtmosphericSensorFactGroup::_handleTunnel(const mavlink_message_t &message)
 
             float radiationRaw  = tL.sensor4;
 
-            if(radiationRaw)    {radiation()->setRawValue(radiationRaw);}
+            if(radiationRaw != 0.0f)    {radiation()->setRawValue(radiationRaw);}
 
             status()->setRawValue(tunnel.payload_type);
             break;
         }
+        case 302: {
+            struct Tunnel_AWS_Ex tE;
+
+            memcpy(&tE, &tunnel.payload, sizeof(tE));
+
+            float logCountRaw       = tE.logCount;
+            float temperatureRaw    = tE.temp;
+            float humidityRaw       = tE.humi;
+            float pressureRaw       = tE.pres;
+            float windDirRaw        = tE.windDir;
+            float windSpdRaw        = tE.windSpd;
+            float hubTemp1Raw       = tE.hubTemp1;
+            float hubTemp2Raw       = tE.hubTemp2;
+            float hubHumi1Raw       = tE.hubHumi1;
+            float hubHumi2Raw       = tE.hubHumi2;
+            float hubPressureRaw    = tE.hubPressure;
+            float opc1Raw           = tE.opc1;
+            float opc2Raw           = tE.opc2;
+            float opc3Raw           = tE.opc3;
+            float radiationRaw      = tE.radiation;
+            float battRaw           = tE.batt;
+            quint64 unixTimeRaw     = tE.unixTime;
+            float sdVolumeRaw       = tE.sdVolume;
+
+            // Firmware sends 0=N, 1=R, 2=T directly
+            uint8_t windRefNorm = (tE.windRef <= 2) ? tE.windRef : 0;
+            windRef()->setRawValue(windRefNorm);
+
+            if(!qIsNaN(logCountRaw))     {logCount()->setRawValue(logCountRaw);}
+            if(!qIsNaN(temperatureRaw))  {temperature()->setRawValue(temperatureRaw);}
+            if(!qIsNaN(humidityRaw))     {humidity()->setRawValue(humidityRaw);}
+            if(!qIsNaN(pressureRaw))     {pressure()->setRawValue(pressureRaw);}
+            if(!qIsNaN(windDirRaw) && !_windDirByWindPacket)      {windDir()->setRawValue(windDirRaw);}
+            if(!qIsNaN(windSpdRaw) && !_windDirByWindPacket)      {windSpd()->setRawValue(windSpdRaw);}
+            if(!qIsNaN(hubTemp1Raw))     {hubTemp1()->setRawValue(hubTemp1Raw);}
+            if(!qIsNaN(hubTemp2Raw))     {hubTemp2()->setRawValue(hubTemp2Raw);}
+            if(!qIsNaN(hubHumi1Raw))     {hubHumi1()->setRawValue(hubHumi1Raw);}
+            if(!qIsNaN(hubHumi2Raw))     {hubHumi2()->setRawValue(hubHumi2Raw);}
+            if(!qIsNaN(hubPressureRaw))  {hubPressure()->setRawValue(hubPressureRaw);}
+            if(!qIsNaN(opc1Raw))         {opc1()->setRawValue(opc1Raw);}
+            if(!qIsNaN(opc2Raw))         {opc2()->setRawValue(opc2Raw);}
+            if(!qIsNaN(opc3Raw))         {opc3()->setRawValue(opc3Raw);}
+            if(!qIsNaN(radiationRaw))    {radiation()->setRawValue(radiationRaw);}
+            if(!qIsNaN(battRaw))         {batt()->setRawValue(battRaw);}
+            if(unixTimeRaw != 0)         {
+                unixTime()->setRawValue(unixTimeRaw);
+                QDateTime dateTime = QDateTime::fromSecsSinceEpoch(static_cast<qint64>(unixTimeRaw));
+                QString timeString = dateTime.toString("hh:mm:ss");
+                timeHMS()->setRawValue(timeString);
+            }
+            if(!qIsNaN(sdVolumeRaw))     {sdVolume()->setRawValue(sdVolumeRaw);}
+
+            status()->setRawValue(tunnel.payload_type);
+            break;
+        }
+        default:
+            break;
     }
 }
 
 void AtmosphericSensorFactGroup::_handleWind(const mavlink_message_t &message)
 {
-    mavlink_wind_t wind{};
+    mavlink_wind_t wind;
+    memset(&wind, 0, sizeof(wind));
     mavlink_msg_wind_decode(&message, &wind);
 
             // We don't want negative wind angles

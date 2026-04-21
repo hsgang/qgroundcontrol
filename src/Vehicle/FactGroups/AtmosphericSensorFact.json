@@ -104,6 +104,14 @@
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "nSv"
+},
+{
+    "name":             "windRef",
+    "shortDesc":        "Wind Reference",
+    "type":             "uint8",
+    "enumStrings":      "N,R,T",
+    "enumValues":       "0,1,2",
+    "decimalPlaces":    0
 }
 ]
 }
