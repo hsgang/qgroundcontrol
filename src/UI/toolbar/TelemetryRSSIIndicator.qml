@@ -102,12 +102,12 @@ Item {
             QGCLabel {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 color:                      qgcPal.buttonText
-                text:                       _activeVehicle ? _activeVehicle.telemetryLRSSI : 0
+                text:                       _activeVehicle ? _radioStatus.lrssi.rawValue : 0
             }
             QGCLabel {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 color:                      qgcPal.buttonText
-                text:                       _activeVehicle ? _activeVehicle.telemetryRRSSI : 0
+                text:                       _activeVehicle ? _radioStatus.rrssi.rawValue : 0
             }
         }
     }
