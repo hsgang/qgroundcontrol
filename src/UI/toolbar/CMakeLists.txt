@@ -45,7 +45,6 @@ qt_add_qml_module(ToolbarModule
         TelemetryRSSIIndicator.qml
         VehicleGPSIndicator.qml
         VehicleIndicator.qml
-        VehicleIndicatorPage.qml
         VehicleMessageList.qml
         WEBRTCIndicator.qml
         WidgetControlPanel.qml
