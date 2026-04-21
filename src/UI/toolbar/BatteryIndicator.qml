@@ -291,20 +291,6 @@ Item {
                 return qsTr("n/a")
             }
 
-            function getBatteryIcon(){
-                if (battery.percentRemaining.rawValue < 10)
-                    return "/qmlimages/battery_0.svg"
-                if (battery.percentRemaining.rawValue < 30)
-                    return "/qmlimages/battery_20.svg"
-                if (battery.percentRemaining.rawValue < 50)
-                    return "/qmlimages/battery_40.svg"
-                if (battery.percentRemaining.rawValue < 70)
-                    return "/qmlimages/battery_60.svg"
-                if (battery.percentRemaining.rawValue < 90)
-                    return "/qmlimages/battery_80.svg"
-                return "/qmlimages/battery_100.svg"
-            }
-
             state: isBlink ? "blinking" : ""
 
             states: [
