@@ -65,7 +65,7 @@ SettingsPage {
             Layout.fillWidth: true
             text:       fact.shortDescription
             fact:       _appSettings.androidDontSaveToSDCard
-            visible:    fact.visible
+            visible:    !!fact
         }
 
         QGCCheckBoxSlider {
