@@ -13248,6 +13248,94 @@ Is this really what you want?</source>
         <translation>기체</translation>
     </message>
 </context>
+<context>
+    <name>OnboardLogPage</name>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="12"/>
+        <source>Onboard Logs allows you to download binary log files from your vehicle. Click Refresh to get list of available logs.</source>
+        <translation>기체 로그 페이지에서 기체에 저장된 바이너리 로그 파일을 다운로드할 수 있습니다. 새로 고침을 클릭하여 사용 가능한 로그 목록을 받아오세요.</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="54"/>
+        <source>Id</source>
+        <translation>번호</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="62"/>
+        <source>Date</source>
+        <translation>날짜</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="74"/>
+        <source>Date Unknown</source>
+        <translation>날짜 알 수 없음</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="82"/>
+        <source>Size</source>
+        <translation>크기</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="90"/>
+        <source>Status</source>
+        <translation>상태</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="108"/>
+        <source>Refresh</source>
+        <translation>새로 고침</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="112"/>
+        <source>Onboard Log Refresh</source>
+        <translation>기체 로그 새로 고침</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="112"/>
+        <source>You must be connected to a vehicle in order to download onboard logs.</source>
+        <translation>기체 로그를 다운로드하려면 기체에 연결되어 있어야 합니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="123"/>
+        <source>Download</source>
+        <translation>다운로드</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="135"/>
+        <source>Onboard Log</source>
+        <translation>기체 로그</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="135"/>
+        <source>You must select at least one onboard log file to download.</source>
+        <translation>다운로드할 기체 로그 파일을 최소 하나 이상 선택해야 합니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="144"/>
+        <source>Select save directory</source>
+        <translation>저장 폴더 선택</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="162"/>
+        <source>Erase All</source>
+        <translation>모두 삭제</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="165"/>
+        <source>Delete All Onboard Log Files</source>
+        <translation>모든 기체 로그 파일 삭제</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="166"/>
+        <source>All onboard log files will be erased permanently. Is this really what you want?</source>
+        <translation>모든 기체 로그 파일이 영구적으로 삭제됩니다. 정말 진행하시겠습니까?</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="174"/>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+</context>
 
 <context>
     <name>ConnectFirstRunPrompt</name>
@@ -16224,6 +16312,11 @@ sudo apt-get remove modemmanager</translation>
         <location filename="../src/api/QGCCorePlugin.cc" line="199"/>
         <source>MAVLink Inspector</source>
         <translation>MAVLink 탐색기</translation>
+    </message>
+    <message>
+        <location filename="../src/API/QGCCorePlugin.cc" line="65"/>
+        <source>Onboard Logs</source>
+        <translation>기체 로그</translation>
     </message>
     <message>
         <location filename="../src/api/QGCCorePlugin.cc" line="286"/>
