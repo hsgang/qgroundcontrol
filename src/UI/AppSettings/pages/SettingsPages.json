@@ -31,6 +31,12 @@
             "divider": true
         },
         {
+            "name": "ADSB Server",
+            "qml": "ADSBServerSettings.qml",
+            "icon": "qrc:/InstrumentValueIcons/airplane.svg",
+            "pageDefinition": "ADSBVehicleManager.SettingsUI.json"
+        },
+        {
             "name": "Comm Links",
             "qml": "CommLinksSettings.qml",
             "icon": "qrc:/InstrumentValueIcons/usb.svg",
@@ -55,6 +61,19 @@
             "icon": "qrc:/InstrumentValueIcons/globe.svg",
             "visible": "QGroundControl.settingsManager && QGroundControl.settingsManager.ntripSettings !== undefined",
             "pageDefinition": "NTRIP.SettingsUI.json"
+        },
+        {
+            "name": "PX4 Log Transfer",
+            "qml": "PX4LogTransferSettings.qml",
+            "icon": "qrc:/InstrumentValueIcons/inbox-download.svg",
+            "visible": "QGroundControl.corePlugin.options.showPX4LogTransferOptions && QGroundControl.px4ProFirmwareSupported && (QGroundControl.multiVehicleManager.activeVehicle ? QGroundControl.multiVehicleManager.activeVehicle.px4Firmware : true)",
+            "pageDefinition": "PX4LogTransfer.SettingsUI.json"
+        },
+        {
+            "name": "Remote ID",
+            "qml": "RemoteIDSettings.qml",
+            "icon": "qrc:/qmlimages/RidIconManNoID.svg",
+            "pageDefinition": "RemoteID.SettingsUI.json"
         },
         {
             "name": "Telemetry",
