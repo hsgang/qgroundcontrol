@@ -48,11 +48,11 @@ def detect_platform() -> str:
 def get_binary_name(platform: str) -> str:
     """Get binary name for platform."""
     if platform == "windows":
-        return "QGroundControl.exe"
+        return "AMC.exe"
     elif platform == "macos":
-        return "QGroundControl.app"
+        return "AMC.app"
     else:
-        return "QGroundControl"
+        return "AMC"
 
 
 def find_binary(

@@ -181,7 +181,7 @@ jobs:
         if: matrix.build_type == 'Release' && matrix.arch != 'win64_msvc2022_arm64_cross_compiled'
         uses: ./.github/actions/verify-executable
         with:
-          binary-path: ${{ runner.temp }}/build/${{ matrix.build_type }}/QGroundControl.exe
+          binary-path: ${{ runner.temp }}/build/${{ matrix.build_type }}/AMC.exe
           type: exe
           build-dir: ${{ runner.temp }}/build
 
@@ -202,9 +202,9 @@ jobs:
           $installDir = "${{ runner.temp }}\qgc-install-test"
           Write-Host "Installing $($installerExe.Name) to $installDir"
           Start-Process -FilePath $installerExe.FullName -ArgumentList "/S", "/D=$installDir" -Wait -NoNewWindow
-          $binary = Join-Path $installDir "bin\QGroundControl.exe"
+          $binary = Join-Path $installDir "bin\AMC.exe"
           if (-not (Test-Path $binary)) {
-            Write-Error "QGroundControl.exe not found at $binary after install"
+            Write-Error "AMC.exe not found at $binary after install"
             Get-ChildItem -Path $installDir -Recurse | Select-Object FullName
             exit 1
           }
@@ -228,8 +228,9 @@ jobs:
           $cacheFile = "${{ runner.temp }}\build\CMakeCache.txt"
           $match = Select-String -Path $cacheFile -Pattern '^GStreamer_ROOT_DIR:.*=(.+)$'
           if (-not $match) {
-            Write-Error "GStreamer_ROOT_DIR not found in CMakeCache.txt"
-            exit 1
+            # ARM64 build without GStreamer SDK — nothing to strip, pass PATH through.
+            "QGC_VERIFY_INSTALLED_PATH=$env:PATH" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+            exit 0
           }
           $sdkBin = Join-Path $match.Matches[0].Groups[1].Value "bin"
           $sanitizedPath = (($env:PATH -split ';') | Where-Object { $_ -and ($_ -ne $sdkBin) }) -join ';'
@@ -241,7 +242,7 @@ jobs:
         env:
           PATH: ${{ env.QGC_VERIFY_INSTALLED_PATH }}
         with:
-          binary-path: ${{ runner.temp }}\qgc-install-test\bin\QGroundControl.exe
+          binary-path: ${{ runner.temp }}\qgc-install-test\bin\AMC.exe
           type: exe
 
       - name: Attest and Upload
