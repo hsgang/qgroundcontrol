@@ -280,6 +280,17 @@ FlightMap {
             z:              QGroundControl.zOrderVehicles
         }
     }
+
+    // Add camera projection (FOV) overlay on the map
+    MapItemView {
+        model: QGroundControl.multiVehicleManager.vehicles
+        delegate: CameraProjectionMapItem {
+            coordinate: object.coordinate
+            map:        _root
+            z:          QGroundControl.zOrderVehicles
+            visible:    coordinate.isValid && QGroundControl.settingsManager.flyViewSettings.showCameraProjectionOnMap.rawValue
+        }
+    }
     // Add ADSB vehicles to the map
     MapItemView {
         model: QGroundControl.adsbVehicleManager.adsbVehicles

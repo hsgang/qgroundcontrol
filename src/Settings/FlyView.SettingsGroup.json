@@ -222,13 +222,6 @@
             "label": "Winch Control"
         },
         {
-            "name": "showChartWidget",
-            "shortDesc": "Show Chart Widget",
-            "type": "bool",
-            "default": false,
-            "label": "Chart Widget"
-        },
-        {
             "name": "showTelemetryPanel",
             "shortDesc": "Show Telemetry Panel",
             "type": "bool",
@@ -271,13 +264,6 @@
             "label": "Wind Vane"
         },
         {
-            "name": "showVehicleInfoOnMap",
-            "shortDesc": "Show Vehicle Info On Map",
-            "type": "bool",
-            "default": true,
-            "label": "Vehicle Info On Map"
-        },
-        {
             "name": "showCameraProjectionOnMap",
             "shortDesc": "Show Camera Projection On Map",
             "type": "bool",
@@ -311,13 +297,6 @@
             "type": "double",
             "default": 1.0,
             "label": "Move Step (m)"
-        },
-        {
-            "name": "showLandingGuideView",
-            "shortDesc": "Show Landing Guide View",
-            "type": "bool",
-            "default": false,
-            "label": "Landing Guide"
         }
     ]
 }

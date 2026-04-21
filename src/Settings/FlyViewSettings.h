@@ -36,7 +36,6 @@ public:
     DEFINE_SETTINGFACT(showPhotoVideoControl)
     DEFINE_SETTINGFACT(showMountControl)
     DEFINE_SETTINGFACT(showWinchControl)
-    DEFINE_SETTINGFACT(showChartWidget)
     DEFINE_SETTINGFACT(showMissionProgress)
     DEFINE_SETTINGFACT(showTelemetryPanel)
     DEFINE_SETTINGFACT(showVibrationStatus)
@@ -44,7 +43,6 @@ public:
     DEFINE_SETTINGFACT(flyviewWidgetOpacity)
     DEFINE_SETTINGFACT(instrumentQmlFile)
     DEFINE_SETTINGFACT(showWindvane)
-    DEFINE_SETTINGFACT(showVehicleInfoOnMap)
     DEFINE_SETTINGFACT(showCameraProjectionOnMap)
     DEFINE_SETTINGFACT(showEscStatus)
     DEFINE_SETTINGFACT(showSiyiCameraControl)
@@ -52,7 +50,6 @@ public:
 
     DEFINE_SETTINGFACT(showVehicleStepMoveControl)
     DEFINE_SETTINGFACT(vehicleMoveStep)
-    DEFINE_SETTINGFACT(showLandingGuideView)
     DEFINE_SETTINGFACT(instrumentQmlFile2)
     DEFINE_SETTINGFACT(requestControlAllowTakeover)
     DEFINE_SETTINGFACT(requestControlTimeout)

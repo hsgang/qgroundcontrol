@@ -72,7 +72,6 @@ qt_add_qml_module(FlyViewModule
         TerrainProgress.qml
         VehicleWarnings.qml
         VirtualJoystick.qml
-        VideoLandingGuideOverlay.qml
         FlyViewVideoSiYiController.qml
         MessageToastManager.qml
         MessageToast.qml

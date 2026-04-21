@@ -70,14 +70,6 @@ ToolIndicatorPage{
                     property Fact   _showWinchControl:          QGroundControl.settingsManager.flyViewSettings.showWinchControl
                 }
 
-                FactCheckBoxSlider {
-                    Layout.fillWidth: true
-                    text:       qsTr("Chart Widget")
-                    fact:       _showChartWidget
-                    visible:    true
-                    property Fact   _showChartWidget:           QGroundControl.settingsManager.flyViewSettings.showChartWidget
-                }
-
                 // FactCheckBoxSlider {
                 //     Layout.fillWidth: true
                 //     text:       qsTr("Atmospheric Data")
@@ -92,14 +84,6 @@ ToolIndicatorPage{
                     fact:       _showWindvane
                     visible:    true
                     property Fact   _showWindvane:              QGroundControl.settingsManager.flyViewSettings.showWindvane
-                }                
-
-                FactCheckBoxSlider {
-                    Layout.fillWidth: true
-                    text:       qsTr("Landing Guide View")
-                    fact:       _showLandingGuideView
-                    visible:    true
-                    property Fact   _showLandingGuideView:    QGroundControl.settingsManager.flyViewSettings.showLandingGuideView
                 }
             }
 
@@ -120,14 +104,6 @@ ToolIndicatorPage{
                     fact:       _showMissionProgress
                     visible:    true
                     property Fact   _showMissionProgress:      QGroundControl.settingsManager.flyViewSettings.showMissionProgress
-                }
-
-                FactCheckBoxSlider {
-                    Layout.fillWidth: true
-                    text:       qsTr("Vehicle Info on Map")
-                    fact:       _showVehicleInfoOnMap
-                    visible:    true
-                    property Fact   _showVehicleInfoOnMap:      QGroundControl.settingsManager.flyViewSettings.showVehicleInfoOnMap
                 }
 
                 // FactCheckBoxSlider {
