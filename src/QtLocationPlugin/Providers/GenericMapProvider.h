@@ -300,5 +300,5 @@ public:
             QStringLiteral("Hybrid"),
             QStringLiteral("png"),
             QGC_AVERAGE_TILE_SIZE,
-            QGeoMapType::HybridMap) {}
+            MapProvider::HybridMap) {}
 };
