@@ -144,46 +144,52 @@ ToolIndicatorPage {
             heading: qsTr("Vehicle Parameter")
 
             LabelledFactSlider {
-                label:      qsTr("Responsiveness")
-                fact:       atcInputTCFact
-                from:       0.01
-                to:         0.5
-                visible:    true
+                label:              qsTr("Responsiveness")
+                fact:               atcInputTCFact
+                from:               0.01
+                to:                 0.5
+                majorTickStepSize:  0.05
+                visible:            true
             }
             LabelledFactSlider {
-                label:      qsTr("Loiter Horizontal Speed(cm/s)")
-                fact:       loitSpeedFact
-                from:       500
-                to:         1500
-                visible:    true
+                label:              qsTr("Loiter Horizontal Speed(cm/s)")
+                fact:               loitSpeedFact
+                from:               500
+                to:                 1500
+                majorTickStepSize:  100
+                visible:            true
             }
             LabelledFactSlider {
-                label:      qsTr("WP Horizontal Speed(cm/s)")
-                fact:       wpnavSpeedFact
-                from:       500
-                to:         1500
-                visible:    true
+                label:              qsTr("WP Horizontal Speed(cm/s)")
+                fact:               wpnavSpeedFact
+                from:               500
+                to:                 1500
+                majorTickStepSize:  100
+                visible:            true
             }
             LabelledFactSlider {
-                label:      qsTr("WP Climb Speed(cm/s)")
-                fact:       wpnavSpeedUpFact
-                from:       100
-                to:         500
-                visible:    true
+                label:              qsTr("WP Climb Speed(cm/s)")
+                fact:               wpnavSpeedUpFact
+                from:               100
+                to:                 500
+                majorTickStepSize:  50
+                visible:            true
             }
             LabelledFactSlider {
-                label:      qsTr("WP Descent Speed(cm/s)")
-                fact:       wpnavSpeedDnFact
-                from:       100
-                to:         500
-                visible:    true
+                label:              qsTr("WP Descent Speed(cm/s)")
+                fact:               wpnavSpeedDnFact
+                from:               100
+                to:                 500
+                majorTickStepSize:  50
+                visible:            true
             }
             LabelledFactSlider {
-                label:      qsTr("Mission Turning Radius(cm)")
-                fact:       wpnavRadiusFact
-                from:       200
-                to:         1000
-                visible:    true
+                label:              qsTr("Mission Turning Radius(cm)")
+                fact:               wpnavRadiusFact
+                from:               200
+                to:                 1000
+                majorTickStepSize:  100
+                visible:            true
             }
 
             LabelledFactTextField {
