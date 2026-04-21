@@ -198,6 +198,7 @@ const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
     //-- Default list of indicators for all vehicles.
     if (_toolIndicatorList.isEmpty()) {
         _toolIndicatorList = QVariantList({
+            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/VehicleIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/VehicleGPSIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/GPSResilienceIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/TelemetryRSSIIndicator.qml")),
