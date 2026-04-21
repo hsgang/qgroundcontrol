@@ -211,20 +211,9 @@ Item {
 
             property bool isBlink : false
 
+            // Alarm chargeStates take precedence over percent-based color
             function getBatteryColor() {
                 switch (battery.chargeState.rawValue) {
-                    case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_OK:
-                        if (!isNaN(battery.percentRemaining.rawValue)) {
-                            if (battery.percentRemaining.rawValue > threshold1) {
-                                return qgcPal.colorGreen
-                            } else if (battery.percentRemaining.rawValue > threshold2) {
-                                return qgcPal.colorYellowGreen
-                            } else {
-                                return qgcPal.colorYellow
-                            }
-                        } else {
-                            return qgcPal.text
-                        }
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_LOW:
                         return qgcPal.colorOrange
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_CRITICAL:
@@ -232,35 +221,33 @@ Item {
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_FAILED:
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_UNHEALTHY:
                         return qgcPal.colorRed
-                    default:
-                        return qgcPal.text
                 }
+                // OK / UNDEFINED / CHARGING fall through to percent-based color
+                if (!isNaN(battery.percentRemaining.rawValue)) {
+                    if (battery.percentRemaining.rawValue > threshold1) return qgcPal.colorGreen
+                    if (battery.percentRemaining.rawValue > threshold2) return qgcPal.colorYellowGreen
+                    return qgcPal.colorYellow
+                }
+                return qgcPal.text
             }
 
             function getBatterySvgSource() {
                 switch (battery.chargeState.rawValue) {
-                    case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_OK:
-                        if (!isNaN(battery.percentRemaining.rawValue)) {
-                            if (battery.percentRemaining.rawValue > threshold1) {
-                                return "/qmlimages/BatteryGreen.svg"
-                            } else if (battery.percentRemaining.rawValue > threshold2) {
-                                return "/qmlimages/BatteryYellowGreen.svg"
-                            } else {
-                                return "/qmlimages/BatteryYellow.svg"
-                            }
-                        }
-                        return "/qmlimages/Battery.svg" // OK but percent unknown
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_LOW:
-                        return "/qmlimages/BatteryOrange.svg" // Low with orange svg
+                        return "/qmlimages/BatteryOrange.svg"
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_CRITICAL:
-                        return "/qmlimages/BatteryCritical.svg" // Critical with red svg
+                        return "/qmlimages/BatteryCritical.svg"
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_EMERGENCY:
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_FAILED:
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_UNHEALTHY:
-                        return "/qmlimages/BatteryEMERGENCY.svg" // Exclamation mark
-                    default:
-                        return "/qmlimages/Battery.svg" // Fallback if state unknown
+                        return "/qmlimages/BatteryEMERGENCY.svg"
                 }
+                if (!isNaN(battery.percentRemaining.rawValue)) {
+                    if (battery.percentRemaining.rawValue > threshold1) return "/qmlimages/BatteryGreen.svg"
+                    if (battery.percentRemaining.rawValue > threshold2) return "/qmlimages/BatteryYellowGreen.svg"
+                    return "/qmlimages/BatteryYellow.svg"
+                }
+                return "/qmlimages/Battery.svg"
             }
 
             function getBatteryPercentageText() {
