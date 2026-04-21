@@ -249,6 +249,7 @@ Item {
                                 return "/qmlimages/BatteryYellow.svg"
                             }
                         }
+                        return "/qmlimages/Battery.svg" // OK but percent unknown
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_LOW:
                         return "/qmlimages/BatteryOrange.svg" // Low with orange svg
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_CRITICAL:
@@ -258,7 +259,7 @@ Item {
                     case MAVLinkEnums.MAV_BATTERY_CHARGE_STATE_UNHEALTHY:
                         return "/qmlimages/BatteryEMERGENCY.svg" // Exclamation mark
                     default:
-                        return "/qmlimages/Battery.svg" // Fallback if percentage is unavailable
+                        return "/qmlimages/Battery.svg" // Fallback if state unknown
                 }
             }
 
