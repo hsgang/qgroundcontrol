@@ -1,15 +1,17 @@
 name: Docker
 
 on:
-  push:
-    branches:
-      - master
-      - 'Stable*'
-    tags:
-      - 'v*'
-    paths-ignore:
-      - 'docs/**'
-  pull_request:
+  # Disabled automatic triggers for this fork; only Windows and Android build
+  # by default. Keep workflow_dispatch so it can still be run manually.
+  # push:
+  #   branches:
+  #     - master
+  #     - 'Stable*'
+  #   tags:
+  #     - 'v*'
+  #   paths-ignore:
+  #     - 'docs/**'
+  # pull_request:
   workflow_dispatch:
 
 concurrency:
