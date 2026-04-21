@@ -1,5 +1,6 @@
 #include "QGroundControlQmlGlobal.h"
 
+#include "QGCApplication.h"
 #include "QGCCorePlugin.h"
 #include "LinkManager.h"
 #include "MAVLinkProtocol.h"
