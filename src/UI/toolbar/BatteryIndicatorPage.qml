@@ -144,14 +144,14 @@ ToolIndicatorPage {
                     Layout.fillWidth:   true
                     fact:               _batterySettings.consolidateMultipleBatteries
                     text:               qsTr("Only show battery with lowest charge")
-                    visible:            consolidateCheckBox.fact ? consolidateCheckBox.fact.visible : false
+                    visible:            !!consolidateCheckBox.fact
                 }
 
                 LabelledFactComboBox {
                     id:                 displayTypeCombo
                     label:              qsTr("Display Type")
                     fact:               _batterySettings.valueDisplay
-                    visible:            displayTypeCombo.fact ? displayTypeCombo.fact.visible : false
+                    visible:            !!displayTypeCombo.fact
                 }
             }
 
@@ -190,7 +190,7 @@ ToolIndicatorPage {
                             fact: _batterySettings.threshold1
                             implicitWidth: ScreenTools.defaultFontPixelWidth * 6.5
                             height: ScreenTools.defaultFontPixelHeight * 1.5
-                            enabled: threshold1Field.fact ? threshold1Field.fact.visible : false
+                            enabled: !!threshold1Field.fact
                             onEditingFinished: {
                                 // Validate and set the new threshold value
                                 _batterySettings.setThreshold1(parseInt(text));
@@ -213,7 +213,7 @@ ToolIndicatorPage {
                             fact: _batterySettings.threshold2
                             implicitWidth: ScreenTools.defaultFontPixelWidth * 6.5
                             height: ScreenTools.defaultFontPixelHeight * 1.5
-                            enabled: threshold2Field.fact ? threshold2Field.fact.visible : false
+                            enabled: !!threshold2Field.fact
                             onEditingFinished: {
                                 // Validate and set the new threshold value
                                 _batterySettings.setThreshold2(parseInt(text));
