@@ -9429,56 +9429,163 @@ Click Ok to start the auto-tuning process.
 <context>
     <name>GeoTagPage</name>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="26"/>
-        <source>Used to tag a set of images from a survey mission with gps coordinates. You must provide the binary log from the flight as well as the directory which contains the images to tag.</source>
-        <translation type="unfinished">Used to tag a set of images from a survey mission with gps coordinates. You must provide the binary log from the flight as well as the directory which contains the images to tag.</translation>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="12"/>
+        <source>Tag images from a survey mission with GPS coordinates from your flight log.</source>
+        <translation>측량 임무 이미지에 비행 로그의 GPS 좌표를 태깅합니다.</translation>
     </message>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="67"/>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="75"/>
-        <source>Select log file</source>
-        <translation>로그 파일 선택</translation>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="57"/>
+        <source>Geotagging in progress...</source>
+        <translation>지오태깅 진행 중...</translation>
     </message>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="77"/>
-        <source>ULog file (*.ulg)</source>
-        <translation>ULog file (*.ulg)</translation>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="84"/>
+        <source>Successfully tagged %1 images</source>
+        <translation>%1 개 이미지 태깅 성공</translation>
     </message>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="77"/>
-        <source>PX4 log file (*.px4log)</source>
-        <translation>PX4 log file (*.px4log)</translation>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="87"/>
+        <source>%1 skipped</source>
+        <translation>%1 개 건너뜀</translation>
     </message>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="77"/>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="90"/>
+        <source>%1 failed</source>
+        <translation>%1 개 실패</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="141"/>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="157"/>
+        <source>Select Flight Log</source>
+        <translation>비행 로그 선택</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="151"/>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="221"/>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="290"/>
+        <source>Browse...</source>
+        <translation>찾아보기...</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="158"/>
+        <source>Flight logs (*.ulg *.bin)</source>
+        <translation>비행 로그 (*.ulg *.bin)</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="158"/>
+        <source>ULog (*.ulg)</source>
+        <translation>ULog (*.ulg)</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="158"/>
+        <source>DataFlash (*.bin)</source>
+        <translation>DataFlash (*.bin)</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="158"/>
         <source>All Files (*)</source>
         <translation>모든 파일 (*)</translation>
     </message>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="95"/>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="103"/>
-        <source>Select image directory</source>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="169"/>
+        <source>No file selected</source>
+        <translation>선택된 파일 없음</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="211"/>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="227"/>
+        <source>Select Image Folder</source>
         <translation>이미지 폴더 선택</translation>
     </message>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="122"/>
-        <source>(Optionally) Select save directory</source>
-        <translation>(부가기능) 저장폴더 선택</translation>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="238"/>
+        <source>No folder selected</source>
+        <translation>선택된 폴더 없음</translation>
     </message>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="130"/>
-        <source>Select save directory</source>
-        <translation>저장 폴더 선택</translation>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="280"/>
+        <source>Output Folder (Optional)</source>
+        <translation>출력 폴더 (선택 사항)</translation>
     </message>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="149"/>
-        <source>Cancel Tagging</source>
-        <translation>지도정보 입력 취소</translation>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="296"/>
+        <source>Select Output Folder</source>
+        <translation>출력 폴더 선택</translation>
     </message>
     <message>
-        <location filename="../src/AnalyzeView/GeoTagPage.qml" line="149"/>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="313"/>
+        <source>Default: /TAGGED subfolder</source>
+        <translation>기본값: /TAGGED 하위 폴더</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="338"/>
+        <source>Advanced Options</source>
+        <translation>고급 옵션</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="347"/>
+        <source>Time Offset (seconds):</source>
+        <translation>시간 오프셋 (초):</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="362"/>
+        <source>Adjust if camera clock differs from flight log</source>
+        <translation>카메라 시계가 비행 로그와 다를 때 조정</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="374"/>
+        <source>Preview mode (don&apos;t write files)</source>
+        <translation>미리 보기 모드 (파일 쓰지 않음)</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="382"/>
+        <source>Verify time offset before committing</source>
+        <translation>적용 전 시간 오프셋 확인</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="396"/>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="398"/>
+        <source>Preview</source>
+        <translation>미리 보기</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="400"/>
         <source>Start Tagging</source>
-        <translation>지도정보 입력 시작</translation>
+        <translation>태깅 시작</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="432"/>
+        <source>Images (%1)</source>
+        <translation>이미지 (%1)</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="445"/>
+        <source>Pending</source>
+        <translation>대기 중</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="450"/>
+        <source>Processing</source>
+        <translation>처리 중</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="455"/>
+        <source>Tagged</source>
+        <translation>태깅 완료</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="460"/>
+        <source>Skipped</source>
+        <translation>건너뜀</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/GeoTag/GeoTagPage.qml" line="465"/>
+        <source>Failed</source>
+        <translation>실패</translation>
     </message>
 </context>
 <context>
