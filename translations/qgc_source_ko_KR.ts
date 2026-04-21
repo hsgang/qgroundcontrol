@@ -1306,6 +1306,96 @@
         <translation>배터리 모니터링과 용량 파라미터를 설정합니다.</translation>
     </message>
     <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="68"/>
+        <source>Battery1 monitor:</source>
+        <translation>배터리1 모니터:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="155"/>
+        <source>Battery2 monitor:</source>
+        <translation>배터리2 모니터:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="332"/>
+        <source>Blue Robotics Power Sense Module</source>
+        <translation>Blue Robotics 전원 감지 모듈</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="341"/>
+        <source>Navigator w/ Blue Robotics Power Sense Module</source>
+        <translation>Navigator + Blue Robotics 전원 감지 모듈</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="350"/>
+        <source>Other</source>
+        <translation>기타</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="360"/>
+        <source>Battery monitor:</source>
+        <translation>배터리 모니터:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="372"/>
+        <source>Battery capacity:</source>
+        <translation>배터리 용량:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="384"/>
+        <source>Minimum arming voltage:</source>
+        <translation>최소 시동 전압:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="396"/>
+        <source>Power sensor:</source>
+        <translation>전원 센서:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="421"/>
+        <source>Current pin:</source>
+        <translation>전류 핀:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="436"/>
+        <source>Voltage pin:</source>
+        <translation>전압 핀:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="451"/>
+        <source>Voltage multiplier:</source>
+        <translation>전압 배율:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="477"/>
+        <source>Amps per volt:</source>
+        <translation>볼트당 전류:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="503"/>
+        <source>Amps Offset:</source>
+        <translation>전류 오프셋:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="556"/>
+        <source>Measured voltage:</source>
+        <translation>측정 전압:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="560"/>
+        <source>Vehicle voltage:</source>
+        <translation>기체 전압:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="615"/>
+        <source>Measured current:</source>
+        <translation>측정 전류:</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="619"/>
+        <source>Vehicle current:</source>
+        <translation>기체 전류:</translation>
+    </message>
+    <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponent.qml" line="50"/>
         <source>Requires vehicle reboot</source>
         <translation>기체 재부팅이 필요합니다</translation>
@@ -1579,6 +1669,16 @@
 </context>
 <context>
     <name>APMPowerComponentSummary</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponentSummary.qml" line="42"/>
+        <source>Batt%1 monitor</source>
+        <translation>배터리%1 모니터</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMPowerComponentSummary.qml" line="47"/>
+        <source>Batt%1 capacity</source>
+        <translation>배터리%1 용량</translation>
+    </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMPowerComponentSummary.qml" line="36"/>
         <source>Batt1 monitor</source>
