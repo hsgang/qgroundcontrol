@@ -33,6 +33,7 @@
 #include "QGCFileDownload.h"
 #include "QGCImageProvider.h"
 #include "QGCLoggingCategory.h"
+#include "QGCLoggingCategoryManager.h"
 #include "SettingsManager.h"
 #include "MavlinkSettings.h"
 #include "AppSettings.h"
@@ -135,10 +136,15 @@ QGCApplication::QGCApplication(int &argc, char *argv[], const QGCCommandLinePars
     if (fClearCache) {
         QDir dir(ParameterManager::parameterCacheDir());
         dir.removeRecursively();
-        QFile airframe(cachedAirframeMetaDataFile());
-        airframe.remove();
         QFile parameter(cachedParameterMetaDataFile());
         parameter.remove();
+        QFile airframe(cachedAirframeMetaDataFile());
+        airframe.remove();
+
+        // Clear versioned parameter metadata cache
+        const QString metaDataCachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation)
+                                          + QStringLiteral("/ParameterMetaData");
+        QDir(metaDataCachePath).removeRecursively();
     }
 
     // Set up our logging filters
@@ -546,7 +552,7 @@ QString QGCApplication::cachedParameterMetaDataFile()
 {
     QSettings settings;
     const QDir parameterDir = QFileInfo(settings.fileName()).dir();
-    return parameterDir.filePath(QStringLiteral("ParameterFactMetaData.xml"));
+    return parameterDir.filePath(QStringLiteral("ParameterFactMetaData.json"));
 }
 
 QString QGCApplication::cachedAirframeMetaDataFile()
@@ -728,39 +734,3 @@ void QGCApplication::shutdown()
     delete _qmlAppEngine;
 }
 
-QString QGCApplication::numberToString(quint64 number)
-{
-    return getCurrentLanguage().toString(number);
-}
-
-QString QGCApplication::bigSizeToString(quint64 size)
-{
-    QString result;
-    const QLocale kLocale = getCurrentLanguage();
-    if (size < 1024) {
-        result = kLocale.toString(size) + "B";
-    } else if (size < pow(1024, 2)) {
-        result = kLocale.toString(static_cast<double>(size) / 1024.0, 'f', 1) + "KB";
-    } else if (size < pow(1024, 3)) {
-        result = kLocale.toString(static_cast<double>(size) / pow(1024, 2), 'f', 1) + "MB";
-    } else if (size < pow(1024, 4)) {
-        result = kLocale.toString(static_cast<double>(size) / pow(1024, 3), 'f', 1) + "GB";
-    } else {
-        result = kLocale.toString(static_cast<double>(size) / pow(1024, 4), 'f', 1) + "TB";
-    }
-    return result;
-}
-
-QString QGCApplication::bigSizeMBToString(quint64 size_MB)
-{
-    QString result;
-    const QLocale kLocale = getCurrentLanguage();
-    if (size_MB < 1024) {
-        result = kLocale.toString(static_cast<double>(size_MB) , 'f', 0) + " MB";
-    } else if(size_MB < pow(1024, 2)) {
-        result = kLocale.toString(static_cast<double>(size_MB) / 1024.0, 'f', 1) + " GB";
-    } else {
-        result = kLocale.toString(static_cast<double>(size_MB) / pow(1024, 2), 'f', 2) + " TB";
-    }
-    return result;
-}

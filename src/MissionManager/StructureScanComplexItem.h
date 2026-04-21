@@ -7,10 +7,6 @@
 #include "QGCMapPolygon.h"
 #include "CameraCalc.h"
 
-#include <QtCore/QLoggingCategory>
-
-Q_DECLARE_LOGGING_CATEGORY(StructureScanComplexItemLog)
-
 class PlanMasterController;
 
 class StructureScanComplexItem : public ComplexMissionItem
@@ -144,7 +140,6 @@ private:
     double          _timeBetweenShots;
     double          _vehicleSpeed;
     CameraCalc      _cameraCalc;
-
 
     SettingsFact    _scanBottomAltFact;
     SettingsFact    _structureHeightFact;

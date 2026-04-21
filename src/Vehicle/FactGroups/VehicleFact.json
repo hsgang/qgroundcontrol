@@ -204,6 +204,12 @@
     "type":             "double",
     "units":            "",
     "decimalPlaces":    7
+},
+{
+    "name":             "rcRSSI",
+    "shortDesc": "RC RSSI",
+    "type":             "uint8",
+    "units":            "%"
 }
 ]
 }

@@ -2,13 +2,16 @@
 #include "AppSettings.h"
 #include "MavlinkCameraControlInterface.h"
 #include "MultiVehicleManager.h"
+#include "QGC.h"
 #include "QGCApplication.h"
 #include "QGCCameraManager.h"
 #include "QGCCorePlugin.h"
 #include "QGCLoggingCategory.h"
+#include "QGCVideoStreamInfo.h"
 #include "SettingsManager.h"
 #include "SubtitleWriter.h"
 #include "Vehicle.h"
+#include "VehicleLinkManager.h"
 #include "VideoReceiver.h"
 #include "VideoSettings.h"
 #include "VideoItemStub.h"
@@ -49,7 +52,7 @@ Q_APPLICATION_STATIC(VideoManager, _videoManagerInstance);
 
 bool VideoManager::_shouldSkipGStreamerForUnitTests()
 {
-    return qgcApp() && qgcApp()->runningUnitTests() && !qEnvironmentVariableIsSet("QGC_TEST_ENABLE_GSTREAMER");
+    return qgcApp() && QGC::runningUnitTests() && !qEnvironmentVariableIsSet("QGC_TEST_ENABLE_GSTREAMER");
 }
 
 VideoManager::VideoManager(QObject *parent)
@@ -359,7 +362,7 @@ void VideoManager::startRecording(const QString &videoFile)
 {
     const VideoReceiver::FILE_FORMAT fileFormat = static_cast<VideoReceiver::FILE_FORMAT>(_videoSettings->recordingFormat()->rawValue().toInt());
     if (!VideoReceiver::isValidFileFormat(fileFormat)) {
-        qgcApp()->showAppMessage(tr("Invalid video format defined."));
+        QGC::showAppMessage(tr("Invalid video format defined."));
         return;
     }
 
@@ -367,7 +370,7 @@ void VideoManager::startRecording(const QString &videoFile)
 
     const QString savePath = SettingsManager::instance()->appSettings()->videoSavePath();
     if (savePath.isEmpty()) {
-        qgcApp()->showAppMessage(tr("Unabled to record video. Video save path must be specified in Settings."));
+        QGC::showAppMessage(tr("Unabled to record video. Video save path must be specified in Settings."));
         return;
     }
 

@@ -1,4 +1,5 @@
 #include "EscStatusFactGroupListModel.h"
+#include "MAVLinkLib.h"
 #include "QGCMAVLink.h"
 #include <QDateTime>
 

@@ -16,7 +16,7 @@ Item {
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _communicationLost: _activeVehicle ? _activeVehicle.vehicleLinkManager.communicationLost : false
-    property bool   _rcRSSIAvailable:   _activeVehicle.rcRSSI > 0 && _activeVehicle.rcRSSI <= 100
+    property bool   _rcRSSIAvailable:   _activeVehicle.rcRSSI.rawValue > 0 && _activeVehicle.rcRSSI.rawValue <= 100
 
     Component {
         id: rcRSSIInfoPage
@@ -29,7 +29,7 @@ Item {
 
                 LabelledLabel {
                     label:      qsTr("RSSI")
-                    labelText:  _activeVehicle.rcRSSI + "%"
+                    labelText:  _activeVehicle.rcRSSI.rawValue + "%"
                 }
             }
         }
@@ -53,7 +53,7 @@ Item {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
                 size:                       parent.height * 0.9// * 0.5
-                percent:                    _rcRSSIAvailable ? _activeVehicle.rcRSSI : 0
+                percent:                    _rcRSSIAvailable ? _activeVehicle.rcRSSI.rawValue : 0
             }
 
             QGCColoredImage {
@@ -77,7 +77,7 @@ Item {
                 anchors.left:   parent.left
                 font.pointSize: ScreenTools.smallFontPointSize
                 color:          qgcPal.text
-                text:           _activeVehicle.rcRSSI + "%"
+                text:           _activeVehicle.rcRSSI.rawValue + "%"
             }
 
             QGCLabel {

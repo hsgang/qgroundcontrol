@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QtCore/QList>
-#include <QtCore/QLoggingCategory>
 #include <QtCore/QMutex>
 #include <QtCore/QMutexLocker>
 #include <QtCore/QStringList>
@@ -15,9 +14,6 @@
 #ifndef QGC_NO_SERIAL_LINK
     #include "QGCSerialPortInfo.h"
 #endif
-
-Q_DECLARE_LOGGING_CATEGORY(LinkManagerLog)
-Q_DECLARE_LOGGING_CATEGORY(LinkManagerVerboseLog)
 
 class AutoConnectSettings;
 class LogReplayLink;

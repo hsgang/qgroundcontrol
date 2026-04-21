@@ -1,7 +1,7 @@
 #include "AudioOutput.h"
 #include "Fact.h"
+#include "QGC.h"
 #include "QGCLoggingCategory.h"
-#include "QGCApplication.h"
 
 #include <QtCore/QRegularExpression>
 #include <QtCore/QApplicationStatic>
@@ -159,7 +159,7 @@ void AudioOutput::_setVolume()
 void AudioOutput::say(const QString &text, TextMods textMods)
 {
     if (!_initialized) {
-        if (!qgcApp()->runningUnitTests()) {
+        if (!QGC::runningUnitTests()) {
             qCWarning(AudioOutputLog) << "AudioOutput not initialized. Call init() before using say().";
         }
         return;

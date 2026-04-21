@@ -37,6 +37,9 @@ cpm_modules
 .cache/
 .ccache/
 
+# CTest working files created in the source tree when tests run
+Testing/
+
 # ------------------------------------------------------------------------------
 # Qt Generated Files
 # ------------------------------------------------------------------------------
@@ -158,10 +161,8 @@ Qt*-linux*.tar.*
 
 # AI Assistants
 .claude/
-.claudeignore
 .geminiignore
 .cursorignore
-**/CLAUDE.md
 
 # Pre-commit hooks
 .ruff_cache/

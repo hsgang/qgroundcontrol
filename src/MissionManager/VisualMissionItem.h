@@ -3,14 +3,16 @@
 #include "MissionFlightStatus.h"
 #include <QtCore/QObject>
 #include <QtCore/QString>
-#include <QtCore/QLoggingCategory>
 #include <QtPositioning/QGeoCoordinate>
 #include <QtQmlIntegration/QtQmlIntegration>
 
-#include "MissionController.h"
+#include "MissionFlightStatus.h"
+#include "QGCGeoBoundingCube.h"
 #include "QGCMAVLinkTypes.h"
 #include "QmlObjectListModel.h"
 
+class FlightPathSegment;
+class MissionController;
 class MissionItem;
 class PlanMasterController;
 class TerrainAtCoordinateQuery;

@@ -29,6 +29,7 @@ qt_add_plugin(QGCLocation
     QGCMapEngine.h
     QGCMapEngineManager.cc
     QGCMapEngineManager.h
+    QGCMapTaskBase.h
     QGCMapTasks.h
     QGCMapUrlEngine.cpp
     QGCMapUrlEngine.h

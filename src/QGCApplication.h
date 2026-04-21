@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QtCore/QLoggingCategory>
 #include <QtCore/QElapsedTimer>
 #include <QtCore/QMap>
 #include <QtCore/QSet>
@@ -32,8 +31,6 @@ struct QMetaObject;
 #define qGuiApp (static_cast<QGCApplication*>(QGuiApplication::instance()))
 
 #define qgcApp() qApp
-
-Q_DECLARE_LOGGING_CATEGORY(QGCApplicationLog)
 
 /// The main application and management class.
 /// Needs QApplication base to support QtCharts module.
@@ -71,9 +68,6 @@ public:
     void setLanguage();
     QQuickWindow *mainRootWindow();
     uint64_t msecsSinceBoot() const { return _msecsElapsedTime.elapsed(); }
-    QString numberToString(quint64 number);
-    QString bigSizeToString(quint64 size);
-    QString bigSizeMBToString(quint64 size_MB);
 
     /// Registers the signal such that only the last duplicate signal added is left in the queue.
     void addCompressedSignal(const QMetaMethod &method);
