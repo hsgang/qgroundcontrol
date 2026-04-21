@@ -142,8 +142,8 @@ Item {
 
         GuidedActionConfirm {
             id:                         guidedActionConfirm
-            anchors.bottom:             parent.bottom
-            anchors.bottomMargin:       ScreenTools.defaultFontPixelHeight * 4
+            anchors.top:                parent.top
+            anchors.topMargin:          toolbar.height + ScreenTools.defaultFontPixelHeight
             anchors.horizontalCenter:   parent.horizontalCenter
             z:                          QGroundControl.zOrderTopMost
             guidedController:           guidedActionsController
