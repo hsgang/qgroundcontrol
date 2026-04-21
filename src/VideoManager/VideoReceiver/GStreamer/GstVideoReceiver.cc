@@ -738,6 +738,7 @@ void GstVideoReceiver::_handleEOS()
     }*/
 }
 
+#if !defined(QGC_GST_BUILD_VERSION_MAJOR) || (QGC_GST_BUILD_VERSION_MAJOR == 1 && QGC_GST_BUILD_VERSION_MINOR < 28)
 gboolean GstVideoReceiver::_filterParserCaps(GstElement *bin, GstPad *pad, GstElement *element, GstQuery *query, gpointer data)
 {
     Q_UNUSED(bin); Q_UNUSED(pad); Q_UNUSED(element); Q_UNUSED(data)
@@ -777,6 +778,7 @@ gboolean GstVideoReceiver::_filterParserCaps(GstElement *bin, GstPad *pad, GstEl
 
     return FALSE;
 }
+#endif
 
 GstElement *GstVideoReceiver::_makeSource(const QString &input)
 {
@@ -884,7 +886,9 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
             break;
         }
 
+#if !defined(QGC_GST_BUILD_VERSION_MAJOR) || (QGC_GST_BUILD_VERSION_MAJOR == 1 && QGC_GST_BUILD_VERSION_MINOR < 28)
         (void) g_signal_connect(parser, "autoplug-query", G_CALLBACK(_filterParserCaps), nullptr);
+#endif
 
         gst_bin_add_many(GST_BIN(bin), source, parser, nullptr);
 
