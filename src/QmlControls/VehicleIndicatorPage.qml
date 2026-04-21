@@ -8,8 +8,8 @@
  ****************************************************************************/
 
 
-import QtQuick 2.3
-import QtQuick.Layouts 1.2
+import QtQuick
+import QtQuick.Layouts
 
 import QGroundControl
 import QGroundControl.Controls
@@ -50,6 +50,7 @@ ToolIndicatorPage {
             spacing: _margins
 
             SettingsGroupLayout {
+                Layout.fillWidth: true
                 heading: qsTr("Vehicle Information")
 
                 LabelledLabel {
@@ -69,6 +70,7 @@ ToolIndicatorPage {
             }
 
             SettingsGroupLayout{
+                Layout.fillWidth: true
                 heading: qsTr("Parameter Summary")
 
                 LabelledLabel {
@@ -116,6 +118,7 @@ ToolIndicatorPage {
             }
 
             SettingsGroupLayout{
+                Layout.fillWidth: true
                 heading: qsTr("Operating Summary")
 
                 LabelledLabel {
@@ -141,6 +144,8 @@ ToolIndicatorPage {
 
     expandedComponent : Component {
         SettingsGroupLayout{
+            Layout.fillWidth:       true
+            Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 50
             heading: qsTr("Vehicle Parameter")
 
             LabelledFactSlider {
