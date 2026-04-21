@@ -8,6 +8,7 @@ import QGroundControl.Controls
 TextField {
     id:                 control
     color:              qgcPal.text //textFieldText
+    placeholderTextColor: Qt.rgba(qgcPal.text.r, qgcPal.text.g, qgcPal.text.b, 0.6)
     selectionColor:     qgcPal.text //textFieldText
     selectedTextColor:  qgcPal.window //textField
     cursorDelegate:     cursorComponent
