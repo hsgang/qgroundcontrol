@@ -3974,10 +3974,44 @@ void Vehicle::_writeCsvLine()
     stream << allFactValues.join(",") << "\n";
 }
 
+namespace {
+
+struct CustomLogColumn {
+    enum Source { Seq, Date, SysTime, FactGroupFact, VehicleFact };
+    const char* header;
+    Source      source;
+    const char* group;   // FactGroupFact only
+    const char* fact;
+};
+
+static const QVector<CustomLogColumn> kCustomLogSpec = {
+    { "Sequence",    CustomLogColumn::Seq,           nullptr,             nullptr           },
+    { "Date",        CustomLogColumn::Date,          nullptr,             nullptr           },
+    { "SysTime",     CustomLogColumn::SysTime,       nullptr,             nullptr           },
+    { "Time",        CustomLogColumn::FactGroupFact, "atmosphericSensor", "timeHMS"         },
+    { "Latitude",    CustomLogColumn::FactGroupFact, "gps",               "lat"             },
+    { "Longitude",   CustomLogColumn::FactGroupFact, "gps",               "lon"             },
+    { "Heading",     CustomLogColumn::VehicleFact,   nullptr,             "heading"         },
+    { "Altitude",    CustomLogColumn::VehicleFact,   nullptr,             "altitudeRelative"},
+    { "Temperature", CustomLogColumn::FactGroupFact, "atmosphericSensor", "Temperature"     },
+    { "Humidity",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "Humidity"        },
+    { "Pressure",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "Pressure"        },
+    { "WindDir",     CustomLogColumn::FactGroupFact, "atmosphericSensor", "WindDir"         },
+    { "WindSpd",     CustomLogColumn::FactGroupFact, "atmosphericSensor", "WindSpd"         },
+    { "WindRef",     CustomLogColumn::FactGroupFact, "atmosphericSensor", "windRef"         },
+    { "HubTemp1",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubTemp1"        },
+    { "HubTemp2",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubTemp2"        },
+    { "HubHumi1",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubHumi1"        },
+    { "HubHumi2",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubHumi2"        },
+    { "HubPressure", CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubPressure"     },
+    { "Radiation",   CustomLogColumn::FactGroupFact, "atmosphericSensor", "radiation"       },
+};
+
+} // namespace
+
 void Vehicle::_initializeCustomLog()
 {
     if(!SettingsManager::instance()->mavlinkSettings()->saveSensorLog()->rawValue().toBool()){
-        //qInfo() << "disable save Sensor Log" ;
         return;
     }
     QString now = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
@@ -3985,125 +4019,81 @@ void Vehicle::_initializeCustomLog()
     QDir saveDir(SettingsManager::instance()->appSettings()->logSavePath());
     _customLogFile.setFileName(saveDir.absoluteFilePath(fileName));
 
-    QString text = "사용자 정의 로그 저장을 시작합니다";
-    QString description = "";
-    _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE, text, description);
+    _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE,
+                         QStringLiteral("사용자 정의 로그 저장을 시작합니다"), QString());
 
     if (!_customLogFile.open(QIODevice::Append)) {
         qCWarning(VehicleLog) << "unable to open file for csv logging, Stopping csv logging!";
-        // qInfo() << "unable to open file for csv logging" ;
-        text = "Unable to open file for csv logging, Stopping csv logging!";
-        description = "";
-        _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_INFO, text, description);
+        _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_INFO,
+                             QStringLiteral("Unable to open file for csv logging, Stopping csv logging!"), QString());
         return;
     }
     _customLogSeq = 1;
 
+    QStringList headers;
+    headers.reserve(kCustomLogSpec.size());
+    for (const CustomLogColumn& col : kCustomLogSpec) {
+        headers << QString::fromLatin1(col.header);
+    }
+
     QTextStream customLogStream(&_customLogFile);
-    QString customLogFactValue;
-
-    customLogFactValue = "Sequence";
-    customLogFactValue.append(",Date");
-    customLogFactValue.append(",Time");
-    customLogFactValue.append(",Latitude");
-    customLogFactValue.append(",Longitude");
-    customLogFactValue.append(",Heading");
-    customLogFactValue.append(",Altitude");
-    customLogFactValue.append(",Temperature");
-    customLogFactValue.append(",Humidity");
-    customLogFactValue.append(",Pressure");
-    customLogFactValue.append(",WindDir");
-    customLogFactValue.append(",WindSpd");
-    customLogFactValue.append(",HubTemp1");
-    customLogFactValue.append(",HubTemp2");
-    customLogFactValue.append(",HubHumi1");
-    customLogFactValue.append(",HubHumi2");
-    customLogFactValue.append(",HubPressure");
-    customLogFactValue.append(",Radiation");
-    customLogFactValue.append("\r\n");
-
-    customLogStream << customLogFactValue;
+    customLogStream << headers.join(',') << "\r\n";
+    customLogStream.flush();
+    _customLogFile.flush();
 }
 
 void Vehicle::_writeCustomLogLine()
 {
-    if(!_customLogFile.isOpen() && _armed) {
-        if(_armed){
-        _initializeCustomLog();
+    if (!_customLogFile.isOpen()) {
+        if (_armed) {
+            _initializeCustomLog();
+        }
+        if (!_customLogFile.isOpen()) {
+            return;
         }
     }
 
-    if(!_customLogFile.isOpen()){
+    if (!_armed) {
+        _customLogFile.close();
+        _customLogSeq = 0;
+        _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE,
+                             QStringLiteral("사용자 정의 로그 저장을 종료합니다"), QString());
         return;
     }
 
-    if(_armed==true){
-        QTextStream customLogStream(&_customLogFile);
-        QString seq = QString::number(_customLogSeq++);
-        QString date = QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd"));
-        QString time = getFactGroup("atmosphericSensor")->getFact("timeHMS")->cookedValueString();
-        QString lat = getFactGroup("gps")->getFact("lat")->cookedValueString();
-        QString lon = getFactGroup("gps")->getFact("lon")->cookedValueString();
-        QString yaw = getFact("heading")->cookedValueString();
-        QString alt = getFact("altitudeRelative")->cookedValueString();
-        QString temp = getFactGroup("atmosphericSensor")->getFact("Temperature")->cookedValueString();
-        QString humi = getFactGroup("atmosphericSensor")->getFact("Humidity")->cookedValueString();
-        QString baro = getFactGroup("atmosphericSensor")->getFact("Pressure")->cookedValueString();
-        QString windDir = getFactGroup("atmosphericSensor")->getFact("WindDir")->cookedValueString();
-        QString windSpd = getFactGroup("atmosphericSensor")->getFact("WindSpd")->cookedValueString();
-        QString hubTemp1 = getFactGroup("atmosphericSensor")->getFact("HubTemp1")->cookedValueString();
-        QString hubTemp2 = getFactGroup("atmosphericSensor")->getFact("HubTemp2")->cookedValueString();
-        QString hubHumi1 = getFactGroup("atmosphericSensor")->getFact("HubHumi1")->cookedValueString();
-        QString hubHumi2 = getFactGroup("atmosphericSensor")->getFact("HubHumi2")->cookedValueString();
-        QString hubPressure = getFactGroup("atmosphericSensor")->getFact("HubPressure")->cookedValueString();
-        QString radiation = getFactGroup("atmosphericSensor")->getFact("radiation")->cookedValueString();
+    const QDateTime nowDt = QDateTime::currentDateTime();
 
-        // QString GroundSpeed = getFact("groundSpeed")->cookedValueString();
-        // QString ClimbRate = getFact("climbRate")->cookedValueString();
-        // QString Roll = getFact("roll")->cookedValueString();
-        // QString Pitch = getFact("pitch")->cookedValueString();
-        // QString Yaw = getFact("heading")->cookedValueString();
-        // QString Voltage = getFactGroup("battery0")->getFact("voltage")->cookedValueString();
-        // QString BatteryPercent = getFactGroup("battery0")->getFact("percentRemaining")->cookedValueString();
-
-        QString customLogFactValue;
-
-        customLogFactValue = seq;
-        customLogFactValue.append("," + date);
-        customLogFactValue.append("," + time);
-        customLogFactValue.append("," + lat);
-        customLogFactValue.append("," + lon);
-        customLogFactValue.append("," + yaw);
-        customLogFactValue.append("," + alt);
-        customLogFactValue.append("," + temp);
-        customLogFactValue.append("," + humi);
-        customLogFactValue.append("," + baro);
-        customLogFactValue.append("," + windDir);
-        customLogFactValue.append("," + windSpd);
-        customLogFactValue.append("," + hubTemp1);
-        customLogFactValue.append("," + hubTemp2);
-        customLogFactValue.append("," + hubHumi1);
-        customLogFactValue.append("," + hubHumi2);
-        customLogFactValue.append("," + hubPressure);
-        customLogFactValue.append("," + radiation);
-        // jsonFactValue.append("\t\"Speed\": " + GroundSpeed + ",\r\n");
-        // jsonFactValue.append("\t\"AscSpd\": " + ClimbRate + ",\r\n");
-        // jsonFactValue.append("\t\"Roll\": " + Roll + ",\r\n");
-        // jsonFactValue.append("\t\"Pitch\": " + Pitch + ",\r\n");
-        // jsonFactValue.append("\t\"Yaw\": " + Yaw + ",\r\n");
-        customLogFactValue.append("\r\n");
-
-        customLogStream << customLogFactValue;
+    QStringList values;
+    values.reserve(kCustomLogSpec.size());
+    for (const CustomLogColumn& col : kCustomLogSpec) {
+        switch (col.source) {
+        case CustomLogColumn::Seq:
+            values << QString::number(_customLogSeq++);
+            break;
+        case CustomLogColumn::Date:
+            values << nowDt.toString(QStringLiteral("yyyyMMdd"));
+            break;
+        case CustomLogColumn::SysTime:
+            values << nowDt.toString(QStringLiteral("hh:mm:ss.zzz"));
+            break;
+        case CustomLogColumn::FactGroupFact: {
+            FactGroup* fg = getFactGroup(QString::fromLatin1(col.group));
+            Fact* f = fg ? fg->getFact(QString::fromLatin1(col.fact)) : nullptr;
+            values << (f ? f->cookedValueString() : QString());
+            break;
+        }
+        case CustomLogColumn::VehicleFact: {
+            Fact* f = getFact(QString::fromLatin1(col.fact));
+            values << (f ? f->cookedValueString() : QString());
+            break;
+        }
+        }
     }
 
-    else if(!_armed){
-        _customLogFile.close();
-        _customLogSeq = 0;
-
-        QString text = "사용자 정의 로그 저장을 종료합니다";
-        QString description = "";
-        _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE, text, description);
-    }
+    QTextStream customLogStream(&_customLogFile);
+    customLogStream << values.join(',') << "\r\n";
+    customLogStream.flush();
+    _customLogFile.flush();
 }
 
 void Vehicle::_sendToDb()
