@@ -280,7 +280,7 @@ Item {
                 height:         parent.height
                 width:          1
                 color:          qgcPal.groupBorder
-                visible:        column == 2
+                visible:        column == 3
             }
 
             // Bottom border
@@ -322,7 +322,7 @@ Item {
         }
 
         delegate: Rectangle {
-            implicitWidth:  column == 1 ? ScreenTools.defaultFontPixelWidth * 16 : label.contentWidth + ScreenTools.defaultFontPixelWidth
+            implicitWidth:  column == 2 ? ScreenTools.defaultFontPixelWidth * 16 : label.contentWidth + ScreenTools.defaultFontPixelWidth
             implicitHeight: label.contentHeight + ScreenTools.defaultFontPixelHeight * 0.5
             color:          row % 2 === 0 ? "transparent" : qgcPal.windowShade
             clip:           true
@@ -349,20 +349,21 @@ Item {
                 height:         parent.height
                 width:          1
                 color:          qgcPal.groupBorder
-                visible:        column == 2
+                visible:        column == 3
             }
 
             QGCLabel {
                 id:                 label
+                visible:            column != 0
                 anchors.left:       parent.left
                 anchors.leftMargin: ScreenTools.defaultFontPixelWidth / 2
                 anchors.verticalCenter: parent.verticalCenter
-                width:              column == 1 ? ScreenTools.defaultFontPixelWidth * 15 : contentWidth
-                text:               column == 1 ? col1String() : display
-                color:              column == 1 && fact.defaultValueAvailable && !fact.valueEqualsDefault ? qgcPal.modifiedParamValue : qgcPal.text
-                font.bold:          column == 1 && fact.defaultValueAvailable && !fact.valueEqualsDefault
+                width:              column == 2 ? ScreenTools.defaultFontPixelWidth * 15 : contentWidth
+                text:               column == 2 ? col1String() : display
+                color:              column == 2 && fact.defaultValueAvailable && !fact.valueEqualsDefault ? qgcPal.modifiedParamValue : qgcPal.text
+                font.bold:          column == 2 && fact.defaultValueAvailable && !fact.valueEqualsDefault
                 maximumLineCount:   1
-                elide:              column == 1 ? Text.ElideRight : Text.ElideNone
+                elide:              column == 2 ? Text.ElideRight : Text.ElideNone
 
                 function col1String() {
                     if (fact.enumStrings.length === 0) {
