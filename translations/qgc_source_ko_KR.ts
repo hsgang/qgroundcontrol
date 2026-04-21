@@ -18318,6 +18318,84 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
     </message>
 </context>
 <context>
+    <name>VehicleConfigView</name>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="25"/>
+        <source>This operation cannot be performed while the vehicle is armed.</source>
+        <translation>이 동작은 기체가 시동되어 있는 동안은 진행할 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="29"/>
+        <source>missing message panel text</source>
+        <translation>메세지 패널 텍스트를 찾을 수 없습니다</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="162"/>
+        <source>%1 setup must be completed prior to %2 setup.</source>
+        <translation>%2 설정은 %1 설정이 완료된 후에 진행해야 합니다</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="243"/>
+        <source>%1 does not currently support configuration of your vehicle. </source>
+        <translation>%1은(는) 현재 기체종류를 지원하지 않습니다 </translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="264"/>
+        <source>Vehicle configuration pages will display after you connect your vehicle and parameters have been downloaded.</source>
+        <translation>기체 정보 및 설정은 기체와 연결되고 파라미터가 다운로드된 후 표시됩니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="266"/>
+        <source>Parameter download was skipped because the vehicle is flying. Configuration pages will be available after parameters are downloaded.</source>
+        <translation>비행 중인 기체이므로 파라미터 다운로드가 건너뛰어졌습니다. 파라미터가 다운로드된 후 설정 페이지를 사용할 수 있습니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="267"/>
+        <source>Waiting for vehicle parameters to download…</source>
+        <translation>기체 파라미터 다운로드를 기다리는 중…</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="271"/>
+        <source>Download Parameters</source>
+        <translation>파라미터 다운로드</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="293"/>
+        <source>Vehicle did not return the full parameter list. </source>
+        <translation>기체가 전체 파라미터 목록을 반환하지 않았습니다. </translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="294"/>
+        <source>As a result, the configuration pages are not available.</source>
+        <translation>이로 인해 설정 페이지를 사용할 수 없습니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="328"/>
+        <source>Search configuration...</source>
+        <translation>구성 검색...</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="353"/>
+        <source>Summary</source>
+        <translation>기체 정보</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="491"/>
+        <source>Optical Flow</source>
+        <translation>옵티컬 플로우</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="509"/>
+        <source>Parameters</source>
+        <translation>파라미터</translation>
+    </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleConfigView.qml" line="521"/>
+        <source>Firmware</source>
+        <translation>펌웨어</translation>
+    </message>
+</context>
+<context>
     <name>ShapeFileHelper</name>
     <message>
         <location filename="../src/ShapeFileHelper.cc" line="17"/>
