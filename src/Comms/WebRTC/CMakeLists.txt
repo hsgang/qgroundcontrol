@@ -34,7 +34,7 @@ if(ANDROID)
   CPMAddPackage(
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
-    GIT_TAG v0.24.1
+    GIT_TAG v0.24.2
     OPTIONS ${LIBDATACHANNEL_OPTIONS}
         "OPENSSL_ROOT_DIR=${OPENSSL_ROOT_DIR}"
         "OPENSSL_INCLUDE_DIR=${OPENSSL_INCLUDE_DIR}"
@@ -56,7 +56,7 @@ else()
   CPMAddPackage(
     NAME libdatachannel
     GITHUB_REPOSITORY paullouisageneau/libdatachannel
-    GIT_TAG v0.24.1
+    GIT_TAG v0.24.2
     GIT_SHALLOW TRUE
     OPTIONS ${LIBDATACHANNEL_OPTIONS}
   )

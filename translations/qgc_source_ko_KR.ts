@@ -146,12 +146,38 @@
     </message>
 </context>
 <context>
+    <name>APMAirspeedComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMAirspeedComponent.h" line="24"/>
+        <source>Airspeed</source>
+        <translation>대기속도</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMAirspeedComponent.h" line="15"/>
+        <source>Airspeed sensor configuration and calibration.</source>
+        <translation>대기속도 센서 설정 및 캘리브레이션.</translation>
+    </message>
+</context>
+<context>
     <name>APMAutoPilotPlugin</name>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMAutoPilotPlugin.cc" line="226"/>
         <source>WARNING: The flight board you are using has a critical service bulletin against it which advises against flying. For details see: https://discuss.cubepilot.org/t/sb-0000002-critical-service-bulletin-for-cubes-purchased-between-january-2019-to-present-do-not-fly/406</source>
         <translation>경고 : 사용중인 비행 보드에는 비행에 대한 조언을 제공하는 중요한 서비스 공지가 있습니다.
 자세한 내용은 다음을 참조하십시오: https://discuss.cubepilot.org/t/sb-0000002-critical-service-bulletin-for-cubes-purchased-between-january-2019-to-present-do-not-fly/406</translation>
+    </message>
+</context>
+<context>
+    <name>APMESCComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.h" line="24"/>
+        <source>ESC</source>
+        <translation>ESC</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMESCComponent.h" line="15"/>
+        <source>Configure and calibrate Electronic Speed Controllers.</source>
+        <translation>전자 속도 컨트롤러(ESC)를 설정하고 캘리브레이션합니다.</translation>
     </message>
 </context>
 <context>
@@ -447,6 +473,47 @@
         <location filename="../src/AutoPilotPlugins/APM/JoystickComponent.qml" line="1"/>
         <source>Joystick</source>
         <translation>조이스틱</translation>
+    </message>
+</context>
+<context>
+    <name>APMFailsafesComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponent.h" line="26"/>
+        <source>Failsafes</source>
+        <translation>페일세이프</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponent.cc" line="20"/>
+        <source>Configure failsafe actions and leak detection.</source>
+        <translation>안전장치 동작 및 누수 감지를 설정합니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponent.cc" line="22"/>
+        <source>Configure battery, GCS, throttle, and EKF failsafes.</source>
+        <translation>배터리, GCS, 스로틀 및 EKF 안전장치를 설정합니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponent.cc" line="24"/>
+        <source>Configure battery, GCS, and throttle failsafes.</source>
+        <translation>배터리, GCS 및 스로틀 안전장치를 설정합니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponent.cc" line="26"/>
+        <source>Configure battery, GCS, RC, throttle, EKF, and dead reckoning failsafes.</source>
+        <translation>배터리, GCS, RC, 스로틀, EKF 및 추측 항법 안전장치를 설정합니다.</translation>
+    </message>
+</context>
+<context>
+    <name>APMFlightSafetyComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFlightSafetyComponent.h" line="26"/>
+        <source>Flight Safety</source>
+        <translation>비행 안전</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMFlightSafetyComponent.cc" line="20"/>
+        <source>Configure Return to Launch, geofence, and arming checks.</source>
+        <translation>자동 귀환, 지오펜스 및 시동 점검을 설정합니다.</translation>
     </message>
 </context>
 <context>
@@ -1426,6 +1493,19 @@
     </message>
 </context>
 <context>
+    <name>APMRemoteSupportComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMRemoteSupportComponent.h" line="23"/>
+        <source>Remote Support</source>
+        <translation>원격 지원</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMRemoteSupportComponent.h" line="15"/>
+        <source>Configure forwarding of MAVLink telemetry to a support engineer.</source>
+        <translation>지원 엔지니어에게 MAVLink 텔레메트리 전달을 설정합니다.</translation>
+    </message>
+</context>
+<context>
     <name>APMSafetyComponent</name>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="66"/>
@@ -2355,6 +2435,19 @@
     </message>
 </context>
 <context>
+    <name>APMServoComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMServoComponent.h" line="23"/>
+        <source>Servo Outputs</source>
+        <translation>서보 출력</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMServoComponent.h" line="14"/>
+        <source>Configure servo PWM limits, trim, direction, and function.</source>
+        <translation>서보 PWM 제한, 트림, 방향 및 기능을 설정합니다.</translation>
+    </message>
+</context>
+<context>
     <name>APMSensorsComponent</name>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="40"/>
@@ -2998,6 +3091,19 @@ Blue Robotics 추진기는 물로 윤활되고 대기에서 작동하도록 설�
 Please place your vehicle in water, click the button, and wait. Note that the thrusters still need to be connected to the correct outputs (thrusters 2 and 3 can&apos;t be swapped, for example).</source>
         <translation>This will attempt to automatically detect the direction (normal/reversed) of your thrusters.
 Please place your vehicle in water, click the button, and wait. Note that the thrusters still need to be connected to the correct outputs (thrusters 2 and 3 can&apos;t be swapped, for example).</translation>
+    </message>
+</context>
+<context>
+    <name>APMAdvancedTuningCopterComponent</name>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMAdvancedTuningCopterComponent.h" line="24"/>
+        <source>Tuning - Advanced</source>
+        <translation>튜닝 - 고급</translation>
+    </message>
+    <message>
+        <location filename="../src/AutoPilotPlugins/APM/APMAdvancedTuningCopterComponent.h" line="15"/>
+        <source>Advanced rate controller PID tuning with live telemetry charts.</source>
+        <translation>실시간 텔레메트리 차트를 통한 고급 레이트 컨트롤러 PID 튜닝.</translation>
     </message>
 </context>
 <context>
@@ -18205,6 +18311,11 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
         <source>Parameters</source>
         <translation>파라미터</translation>
     </message>
+    <message>
+        <location filename="../src/Vehicle/VehicleSetup/SetupView.qml" line="243"/>
+        <source>Optical Flow</source>
+        <translation>옵티컬 플로우</translation>
+    </message>
 </context>
 <context>
     <name>ShapeFileHelper</name>
@@ -20281,14 +20392,14 @@ Confirm change?</source>
 <context>
     <name>VehicleSummary</name>
     <message>
-        <location filename="../src/Vehicle/VehicleSetup/VehicleSummary.qml" line="87"/>
-        <source>Below you will find a summary of the settings for your vehicle. To the left are the setup menus for each component.</source>
-        <translation>기체의 설정에 대한 요약을 아래에서 찾을 수 있습니다. 왼쪽에는 각 항목에 대한 설정메뉴가 있습니다.</translation>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleSummary.qml" line="74"/>
+        <source>Your vehicle configuration summary appears below. Select components on the left to review or fine-tune settings.</source>
+        <translation>기체 설정 요약이 아래에 표시됩니다. 왼쪽에서 항목을 선택하여 설정을 검토하거나 조정하십시오.</translation>
     </message>
     <message>
-        <location filename="../src/Vehicle/VehicleSetup/VehicleSummary.qml" line="88"/>
-        <source>WARNING: Your vehicle requires setup prior to flight. Please resolve the items marked in red using the menu on the left.</source>
-        <translation>경고: 비행 전 기체설정이 필요합니다. 빨간색으로 표시되어있는 항목을 확인해주십시오.</translation>
+        <location filename="../src/Vehicle/VehicleSetup/VehicleSummary.qml" line="75"/>
+        <source>WARNING: Configuration tasks remain before this vehicle is ready to fly. Open the red-marked components on the left to finish setup.</source>
+        <translation>경고: 비행 전 완료해야 할 설정 항목이 남아 있습니다. 왼쪽에서 빨간색으로 표시된 항목을 열어 설정을 완료하십시오.</translation>
     </message>
 </context>
 <context>
