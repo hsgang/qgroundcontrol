@@ -42,6 +42,7 @@ ColumnLayout {
 
     FactSlider {
         id:                     factSlider
+        Layout.fillWidth:       true
         Layout.preferredWidth:  sliderPreferredWidth
         majorTickStepSize:      control.majorTickStepSize
     }
