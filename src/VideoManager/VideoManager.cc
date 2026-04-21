@@ -78,10 +78,10 @@ VideoManager::VideoManager(QObject *parent)
     } else {
         // Register real GL types eagerly on desktop platforms.
         // On Android/iOS, register stubs now — real type registered after gst_init in _onGstInitComplete().
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-        (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
-#else
+#if defined(QGC_GST_STREAMING) && !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
         gstQml6GLRegisterQmlTypes();
+#else
+        (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
 #endif
 #ifdef QGC_GST_D3D11_SINK
         gstQml6D3D11RegisterQmlTypes();
@@ -768,6 +768,7 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.43.1:8554/fpv_stream"));
     } else if (source == VideoSettings::videoSourceWebRTC) {
         _webrtcInternalModeEnabled = false;
+#ifdef QGC_GST_STREAMING
         auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
         if (gstReceiver) {
             gstReceiver->enableInternalRtpMode(GstVideoReceiver::InternalCodec::H264);
@@ -775,6 +776,7 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
             settingsChanged |= _updateVideoUri(receiver, QString());
             return settingsChanged;
         }
+#endif
     } else if ((source == VideoSettings::videoDisabled) || (source == VideoSettings::videoSourceNoVideo)) {
         settingsChanged |= _updateVideoUri(receiver, QString());
     } else {
