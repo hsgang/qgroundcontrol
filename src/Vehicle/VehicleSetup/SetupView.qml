@@ -306,5 +306,13 @@ Rectangle {
         }
 
         property var vehicleComponent
+
+        Connections {
+            target: panelLoader.item
+            ignoreUnknownSignals: true
+            function onShowVehicleComponentPanel(vehicleComponent) {
+                setupView.showVehicleComponentPanel(vehicleComponent)
+            }
+        }
     }
 }

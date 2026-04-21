@@ -12,6 +12,8 @@ Rectangle {
     anchors.leftMargin:  ScreenTools.defaultFontPixelWidth
     color:          qgcPal.window
 
+    signal showVehicleComponentPanel(var vehicleComponent)
+
     property real _minSummaryW:     ScreenTools.isTinyScreen ? ScreenTools.defaultFontPixelWidth * 28 : ScreenTools.defaultFontPixelWidth * 36
     property real _summaryBoxWidth: _minSummaryW
     property real _summaryBoxSpace: ScreenTools.defaultFontPixelWidth * 2
@@ -87,7 +89,7 @@ Rectangle {
 
                     // Outer summary item rectangle
                     Rectangle {
-                        width: mainLayout.width + (_margins * 2)
+                        width: _summaryBoxWidth
                         height: mainLayout.height + (_margins * 2)
                         color: qgcPal.windowShade
                         visible: modelData.summaryQmlSource.toString() !== ""
@@ -104,6 +106,7 @@ Rectangle {
                             id: mainLayout
                             anchors.margins: _margins
                             anchors.left: parent.left
+                            anchors.right: parent.right
                             anchors.top: parent.top
                             spacing: ScreenTools.defaultFontPixelHeight / 2
 
@@ -127,7 +130,7 @@ Rectangle {
 
                                 onClicked : {
                                     if (modelData.setupSource !== "") {
-                                        setupView.showVehicleComponentPanel(modelData)
+                                        _summaryRoot.showVehicleComponentPanel(modelData)
                                     }
                                 }
                             }
