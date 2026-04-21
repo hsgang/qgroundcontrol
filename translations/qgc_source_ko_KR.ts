@@ -11971,6 +11971,24 @@ Click Ok to start the auto-tuning process.
     </message>
 </context>
 <context>
+    <name>MAVLinkConsolePage</name>
+    <message>
+        <location filename="../src/AnalyzeView/MAVLinkConsole/MAVLinkConsolePage.qml" line="11"/>
+        <source>Provides a connection to the vehicle&apos;s system shell.</source>
+        <translation>기체의 시스템 셸에 연결합니다.</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/MAVLinkConsole/MAVLinkConsolePage.qml" line="235"/>
+        <source>Enter Commands here...</source>
+        <translation>여기에 명령을 입력하세요...</translation>
+    </message>
+    <message>
+        <location filename="../src/AnalyzeView/MAVLinkConsole/MAVLinkConsolePage.qml" line="248"/>
+        <source>Send</source>
+        <translation>보내기</translation>
+    </message>
+</context>
+<context>
     <name>MapScale</name>
     <message>
         <location filename="../src/FlightMap/MapScale.qml" line="46"/>
