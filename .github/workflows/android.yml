@@ -68,28 +68,6 @@ jobs:
             shell: bash
             primary: true
             emulator: false
-          - host: mac
-            runner: macos-latest
-            arch: clang_64
-            qt_host_path: macos
-            shell: bash
-            primary: false
-            emulator: false
-          - host: windows
-            runner: windows-latest
-            arch: win64_msvc2022_64
-            qt_host_path: msvc2022_64
-            shell: pwsh
-            primary: false
-            emulator: false
-          - host: linux-emulator
-            qt_host: linux
-            runner: ubuntu-latest
-            arch: linux_gcc_64
-            qt_host_path: gcc_64
-            shell: bash
-            primary: false
-            emulator: true
 
     defaults:
       run:
@@ -136,7 +114,7 @@ jobs:
         id: qt-android
         uses: ./.github/actions/qt-android
         with:
-          host: ${{ matrix.qt_host || matrix.host }}
+          host: ${{ matrix.host }}
           arch: ${{ matrix.arch }}
           version: ${{ steps.config.outputs.qt_version }}
           modules: ${{ steps.config.outputs.qt_modules }}
