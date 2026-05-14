@@ -19,6 +19,7 @@
 #ifdef QGC_GST_STREAMING
 #include "GStreamerHelpers.h"
 #include "GStreamer.h"
+#include "GstVideoReceiver.h"
 #if defined(QGC_HAS_ANY_GPU_PATH)
 #include "VideoReceiver/GStreamer/HwBuffers/QGCRhiCapture.h"
 #endif
@@ -367,14 +368,32 @@ void VideoManager::startRecording(const QString &videoFile)
 
 void VideoManager::pushWebRtcRtp(QByteArray packet)
 {
-    // TODO: re-integrate WebRTC after upstream's videoconvert→appsink rewrite removed
-    // GstVideoReceiver::pushRtpPacket/preparePipeline/enableInternalRtpMode.
+#ifdef QGC_GST_STREAMING
+    if (_videoReceivers.isEmpty()) {
+        return;
+    }
+    VideoReceiver *receiver = _videoReceivers.front();
+    auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+    if (gstReceiver) {
+        gstReceiver->pushRtpPacket(std::move(packet));
+    }
+#else
     Q_UNUSED(packet)
+#endif
 }
 
 void VideoManager::prepareWebRtcPipeline()
 {
-    // TODO: see pushWebRtcRtp.
+#ifdef QGC_GST_STREAMING
+    if (_videoReceivers.isEmpty() || !_webrtcInternalModeEnabled) {
+        return;
+    }
+    VideoReceiver *receiver = _videoReceivers.front();
+    auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+    if (gstReceiver) {
+        gstReceiver->preparePipeline();
+    }
+#endif
 }
 
 void VideoManager::stopRecording()
@@ -714,9 +733,16 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
     } else if (source == VideoSettings::videoSourceHerelinkHotspot) {
         settingsChanged |= _updateVideoUri(receiver, QStringLiteral("rtsp://192.168.43.1:8554/fpv_stream"));
     } else if (source == VideoSettings::videoSourceWebRTC) {
-        // TODO: re-integrate WebRTC after upstream's appsink rewrite (see pushWebRtcRtp).
         _webrtcInternalModeEnabled = false;
-        settingsChanged |= _updateVideoUri(receiver, QString());
+#ifdef QGC_GST_STREAMING
+        auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+        if (gstReceiver) {
+            gstReceiver->enableInternalRtpMode(GstVideoReceiver::InternalCodec::H264);
+            _webrtcInternalModeEnabled = true;
+            settingsChanged |= _updateVideoUri(receiver, QString());
+            return settingsChanged;
+        }
+#endif
     } else if ((source == VideoSettings::videoDisabled) || (source == VideoSettings::videoSourceNoVideo)) {
         settingsChanged |= _updateVideoUri(receiver, QString());
     } else {

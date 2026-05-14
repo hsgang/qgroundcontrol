@@ -61,6 +61,14 @@ public:
     double  qosProportion()   const { return _qosProportion; }
     int     qosQuality()      const { return _qosQuality; }
 
+    // Internal RTP mode: feed RTP packets directly via pushRtpPacket() instead of
+    // pulling from a URI (e.g. WebRTC track frames). The pipeline is built from
+    // appsrc instead of _makeSource().
+    enum class InternalCodec { H264, H265 };
+    void enableInternalRtpMode(InternalCodec codec);
+    void preparePipeline();
+    void pushRtpPacket(QByteArray packet);
+
 public slots:
     void start(uint32_t timeout) override;
     void stop() override;
@@ -81,6 +89,7 @@ private slots:
 private:
     GstElement *_makeSource(const QString &input);
     GstElement *_makeDecoder();
+    GstElement *_makeInternalRtpSource();
     GstElement *_makeFileSink(const QString &videoFile, FILE_FORMAT format);
 
     void _onNewSourcePad(GstPad *pad);
@@ -121,6 +130,10 @@ private:
     GstElement *_recorderValve = nullptr;
     GstElement *_source = nullptr;
     GstElement *_tee = nullptr;
+    GstElement *_appsrc = nullptr;          // owned by _source bin when _useInternalRtp
+    bool        _appsrcDataPushed = false;
+    bool        _useInternalRtp = false;
+    InternalCodec _internalCodec = InternalCodec::H264;
     GstElement *_videoSink = nullptr;
     GstVideoWorker *_worker = nullptr;
     gulong _teeProbeId = 0;

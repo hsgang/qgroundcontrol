@@ -69,7 +69,7 @@ void GstVideoReceiver::start(uint32_t timeout)
         return;
     }
 
-    if (_uri.isEmpty()) {
+    if (_uri.isEmpty() && !_useInternalRtp) {
         qCDebug(GstVideoReceiverLog) << "Failed because URI is not specified";
         _dispatchSignal([this]() { emit onStartComplete(STATUS_INVALID_URL); });
         return;
@@ -153,9 +153,9 @@ void GstVideoReceiver::start(uint32_t timeout)
                      "message-forward", TRUE,
                      nullptr);
 
-        _source = _makeSource(_uri);
+        _source = _useInternalRtp ? _makeInternalRtpSource() : _makeSource(_uri);
         if (!_source) {
-            qCCritical(GstVideoReceiverLog) << "_makeSource() failed";
+            qCCritical(GstVideoReceiverLog) << (_useInternalRtp ? "_makeInternalRtpSource()" : "_makeSource()") << "failed";
             break;
         }
 
@@ -256,7 +256,7 @@ void GstVideoReceiver::stop()
         return;
     }
 
-    if (_uri.isEmpty()) {
+    if (_uri.isEmpty() && !_useInternalRtp) {
         qCDebug(GstVideoReceiverLog) << "Stop called on empty URI (no-op)";
         return;
     }
@@ -333,6 +333,8 @@ void GstVideoReceiver::stop()
         _decoderValve = nullptr;
         _tee = nullptr;
         _source = nullptr;
+        _appsrc = nullptr;             // owned by _source bin; cleared with the pipeline
+        _appsrcDataPushed = false;
 
         _lastSourceFrameTime = 0;
 
@@ -1783,4 +1785,169 @@ void GstVideoWorker::run()
 
         task();
     }
+}
+
+/*===========================================================================*/
+// Internal RTP mode (WebRTC) — accept RTP packets via pushRtpPacket() and feed
+// them into an appsrc-based source bin instead of a network/file source.
+
+void GstVideoReceiver::enableInternalRtpMode(InternalCodec codec)
+{
+    _useInternalRtp = true;
+    _internalCodec = codec;
+}
+
+void GstVideoReceiver::preparePipeline()
+{
+    if (_needDispatch()) {
+        _worker->dispatch([this]() { preparePipeline(); });
+        return;
+    }
+
+    if (_pipeline || !_useInternalRtp) {
+        return;
+    }
+
+    qCDebug(GstVideoReceiverLog) << "Pre-building internal RTP pipeline (PAUSED)";
+    start(0);
+
+    if (_pipeline) {
+        gst_element_set_state(_pipeline, GST_STATE_PAUSED);
+    }
+}
+
+void GstVideoReceiver::pushRtpPacket(QByteArray packet)
+{
+    if (_needDispatch()) {
+        _worker->dispatch([this, pkt = std::move(packet)]() mutable { pushRtpPacket(std::move(pkt)); });
+        return;
+    }
+
+    if (packet.isEmpty()) {
+        return;
+    }
+
+    // Lazy start: build pipeline on first RTP packet arrival (if preparePipeline wasn't called).
+    if (!_pipeline && _useInternalRtp) {
+        qCDebug(GstVideoReceiverLog) << "First RTP packet received — starting internal pipeline";
+        start(0);
+    }
+
+    // Pre-built pipeline may be PAUSED — bump to PLAYING on first data.
+    if (_pipeline && !_appsrcDataPushed) {
+        GstState current = GST_STATE_NULL;
+        gst_element_get_state(_pipeline, &current, nullptr, 0);
+        if (current == GST_STATE_PAUSED) {
+            qCDebug(GstVideoReceiverLog) << "First RTP data — transitioning pipeline to PLAYING";
+            gst_element_set_state(_pipeline, GST_STATE_PLAYING);
+        }
+    }
+
+    if (!_pipeline || !_appsrc) {
+        return;
+    }
+
+    // Zero-copy wrap of QByteArray as a GstBuffer; rtpjitterbuffer uses the RTP header
+    // timestamps directly, so leave PTS/DTS as NONE.
+    auto *owned = new QByteArray(std::move(packet));
+    GstBuffer *buffer = gst_buffer_new_wrapped_full(
+        GST_MEMORY_FLAG_READONLY,
+        const_cast<char*>(owned->constData()),
+        static_cast<gsize>(owned->size()),
+        0,
+        static_cast<gsize>(owned->size()),
+        owned,
+        [](gpointer p) { delete static_cast<QByteArray*>(p); }
+    );
+
+    if (!buffer) {
+        delete owned;
+        return;
+    }
+
+    GST_BUFFER_PTS(buffer) = GST_CLOCK_TIME_NONE;
+    GST_BUFFER_DTS(buffer) = GST_CLOCK_TIME_NONE;
+
+    GstFlowReturn flow = GST_FLOW_OK;
+    g_signal_emit_by_name(_appsrc, "push-buffer", buffer, &flow);
+    gst_buffer_unref(buffer);
+    _appsrcDataPushed = true;
+}
+
+GstElement *GstVideoReceiver::_makeInternalRtpSource()
+{
+    GstElement *bin = nullptr;
+    GstElement *appsrc = nullptr;
+    GstElement *jitter = nullptr;
+    GstElement *depay = nullptr;
+    GstElement *parser = nullptr;
+
+    do {
+        bin = gst_bin_new("internalrtpsrc");
+        if (!bin) { qCCritical(GstVideoReceiverLog) << "gst_bin_new failed"; break; }
+
+        appsrc = gst_element_factory_make("appsrc", "appsrc");
+        if (!appsrc) { qCCritical(GstVideoReceiverLog) << "appsrc factory failed"; break; }
+
+        g_object_set(appsrc,
+                     "is-live", TRUE,
+                     "format", GST_FORMAT_TIME,
+                     "do-timestamp", FALSE,
+                     "max-bytes", G_GUINT64_CONSTANT(0),
+                     "emit-signals", FALSE,
+                     "stream-type", 0,  // GST_APP_STREAM_TYPE_STREAM
+                     "min-latency", (gint64)0,
+                     nullptr);
+
+        GstCaps *caps = nullptr;
+        if (_internalCodec == InternalCodec::H264) {
+            caps = gst_caps_from_string("application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264");
+        } else {
+            caps = gst_caps_from_string("application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H265");
+        }
+        if (!caps) { qCCritical(GstVideoReceiverLog) << "caps failed"; break; }
+        g_object_set(appsrc, "caps", caps, nullptr);
+        gst_clear_caps(&caps);
+
+        jitter = gst_element_factory_make("rtpjitterbuffer", nullptr);
+        if (!jitter) { qCCritical(GstVideoReceiverLog) << "jitterbuffer failed"; break; }
+        g_object_set(jitter,
+                     "latency", (_buffer >= 0) ? qMax(0, _buffer) : 0,
+                     "drop-on-latency", TRUE,
+                     "do-lost", TRUE,
+                     "do-retransmission", FALSE,
+                     nullptr);
+
+        const char *depayName = (_internalCodec == InternalCodec::H264) ? "rtph264depay" : "rtph265depay";
+        depay = gst_element_factory_make(depayName, nullptr);
+        if (!depay) { qCCritical(GstVideoReceiverLog) << depayName << " failed"; break; }
+
+        const char *parserName = (_internalCodec == InternalCodec::H264) ? "h264parse" : "h265parse";
+        parser = gst_element_factory_make(parserName, "parser");
+        if (!parser) { qCCritical(GstVideoReceiverLog) << parserName << " failed"; break; }
+
+        gst_bin_add_many(GST_BIN(bin), appsrc, jitter, depay, parser, nullptr);
+        if (!gst_element_link_many(appsrc, jitter, depay, parser, nullptr)) {
+            qCCritical(GstVideoReceiverLog) << "link failed"; break;
+        }
+
+        GstPad *srcpad = gst_element_get_static_pad(parser, "src");
+        if (!srcpad) { qCCritical(GstVideoReceiverLog) << "srcpad failed"; break; }
+        GstPad *ghostpad = gst_ghost_pad_new("src", srcpad);
+        gst_object_unref(srcpad);
+        if (!ghostpad || !gst_element_add_pad(bin, ghostpad)) {
+            qCCritical(GstVideoReceiverLog) << "ghost pad failed"; break;
+        }
+
+        _appsrc = appsrc;
+        appsrc = nullptr;  // ownership transferred to bin
+        return bin;
+    } while (0);
+
+    gst_clear_object(&parser);
+    gst_clear_object(&depay);
+    gst_clear_object(&jitter);
+    gst_clear_object(&appsrc);
+    gst_clear_object(&bin);
+    return nullptr;
 }
