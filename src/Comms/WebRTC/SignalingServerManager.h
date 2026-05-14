@@ -135,6 +135,10 @@ private:
     void _handleRegistrationResponse(const QJsonObject &message);
     void _handleUnregisterResponse(const QJsonObject &message);
     void _handleDronesListResponse(const QJsonObject &message);
+    void _handleDroneConnected(const QJsonObject &message);
+    void _handleDroneDisconnected(const QJsonObject &message);
+    void _handleServerConnected(const QJsonObject &message);
+    void _handleServerShutdown(const QJsonObject &message);
     
     // 자동 재등록
     void _autoReRegister();
@@ -177,5 +181,5 @@ private:
     static const int DEFAULT_RECONNECT_INTERVAL_MS = 5000;
     static const int MAX_RECONNECT_ATTEMPTS = 10;
     static const int MAX_RECONNECT_DELAY_MS = 30000;
-    static const int GET_DRONES_INTERVAL_MS = 10000;
+    static const int GET_DRONES_INTERVAL_MS = 60000;  // 푸시 이벤트(drone:connected/disconnected) 누락 안전망
 };

@@ -501,6 +501,14 @@ void SignalingServerManager::_onWebSocketMessageReceived(const QString &message)
         _updateConnectionStatus("연결 대체 무시됨 - WebSocket 연결 유지");
     } else if (messageType == "drones:list") {
         _handleDronesListResponse(messageObj);
+    } else if (messageType == "drone:connected") {
+        _handleDroneConnected(messageObj);
+    } else if (messageType == "drone:disconnected") {
+        _handleDroneDisconnected(messageObj);
+    } else if (messageType == "connected") {
+        _handleServerConnected(messageObj);
+    } else if (messageType == "serverShutdown") {
+        _handleServerShutdown(messageObj);
     } else if (messageType == "error") {
         qCWarning(SignalingServerManagerLog) << "Received error message from server:" << messageObj;
     } else {
@@ -610,6 +618,84 @@ void SignalingServerManager::_handleDronesListResponse(const QJsonObject &messag
     if (totalDrones == 0) {
         qCDebug(SignalingServerManagerLog) << "No drones currently connected";
     }
+}
+
+void SignalingServerManager::_handleDroneConnected(const QJsonObject &message)
+{
+    // 서버 푸시: 드론이 시그널링 서버에 접속함
+    QJsonObject droneObj = message["drone"].toObject();
+    QString droneId = droneObj["id"].toString();
+
+    if (droneId.isEmpty()) {
+        qCWarning(SignalingServerManagerLog) << "drone:connected message missing drone.id";
+        return;
+    }
+
+    if (_connectedDronesList.contains(droneId)) {
+        qCDebug(SignalingServerManagerLog) << "drone:connected for already-known drone, ignoring:" << droneId;
+        return;
+    }
+
+    qCDebug(SignalingServerManagerLog) << "=== drone:connected ===" << droneId
+                                       << "Timestamp:" << message["timestamp"].toString();
+
+    _connectedDronesList.append(droneId);
+    _connectedDronesCount = _connectedDronesList.size();
+
+    emit connectedDronesListChanged();
+    emit connectedDronesCountChanged();
+}
+
+void SignalingServerManager::_handleDroneDisconnected(const QJsonObject &message)
+{
+    // 서버 푸시: 드론이 시그널링 서버에서 끊김
+    QString droneId = message["id"].toString();
+
+    if (droneId.isEmpty()) {
+        qCWarning(SignalingServerManagerLog) << "drone:disconnected message missing id";
+        return;
+    }
+
+    qCDebug(SignalingServerManagerLog) << "=== drone:disconnected ===" << droneId
+                                       << "Reason:" << message["reason"].toString()
+                                       << "Timestamp:" << message["timestamp"].toString();
+
+    if (!_connectedDronesList.removeOne(droneId)) {
+        qCDebug(SignalingServerManagerLog) << "drone:disconnected for unknown drone, ignoring:" << droneId;
+        return;
+    }
+    _connectedDronesCount = _connectedDronesList.size();
+
+    emit connectedDronesListChanged();
+    emit connectedDronesCountChanged();
+}
+
+void SignalingServerManager::_handleServerConnected(const QJsonObject &message)
+{
+    // WebSocket 연결 직후 서버가 자동 발신하는 환영 메시지
+    // serverVersion / features / supportedMessageTypes 로깅으로 prototocl 호환성 확인 용이
+    const QString serverVersion = message["serverVersion"].toString();
+    const QJsonArray features = message["features"].toArray();
+    const QJsonArray supportedTypes = message["supportedMessageTypes"].toArray();
+
+    QStringList featureList;
+    for (const auto &v : features) featureList << v.toString();
+
+    QStringList typeList;
+    for (const auto &v : supportedTypes) typeList << v.toString();
+
+    qCDebug(SignalingServerManagerLog) << "=== server connected ==="
+                                       << "Version:" << serverVersion
+                                       << "Features:" << featureList
+                                       << "SupportedTypes:" << typeList;
+}
+
+void SignalingServerManager::_handleServerShutdown(const QJsonObject &message)
+{
+    // 서버가 graceful shutdown 시작 — WS는 곧 close될 예정
+    const QString reason = message["message"].toString();
+    qCWarning(SignalingServerManagerLog) << "Server is shutting down:" << reason;
+    _updateConnectionStatus(QString("서버 종료 중: %1").arg(reason.isEmpty() ? tr("점검") : reason));
 }
 
 bool SignalingServerManager::isDroneConnected(const QString &droneId) const

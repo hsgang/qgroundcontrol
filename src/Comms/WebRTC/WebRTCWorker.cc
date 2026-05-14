@@ -499,6 +499,11 @@ void WebRTCWorker::reconnectToRoom()
 {
     qCDebug(WebRTCLinkLog) << "Reconnect requested, state:" << stateToString();
 
+    // 타이머가 발화하여 실제 시도가 시작됨 — "대기 중" 상태 종료.
+    // 이 시도가 실패해 피어 상태가 Disconnected/Failed로 떨어지면 _handlePeerDisconnection
+    // 가드(!_waitingForReconnect)를 통과해 다음 _scheduleReconnect 호출이 가능해짐.
+    _waitingForReconnect.store(false);
+
     // Reconnecting 상태에서만 실행 가능
     if (!isInState(WorkerState::Reconnecting)) {
         qCWarning(WebRTCLinkLog) << "Invalid state for reconnect:" << stateToString();
@@ -1170,11 +1175,16 @@ void WebRTCWorker::_handleSignalingMessage(const QJsonObject& message)
         }
 
     } else if (type == "peerDisconnected") {
-        QString disconnectedId = message["id"].toString();
+        // 서버 페이로드: {droneId, message, timestamp}
+        // 서버는 페어링된 GCS에만 발신하므로 droneId == _currentTargetDroneId가 보장되지만 방어적으로 확인.
+        const QString disconnectedId = message["droneId"].toString();
         if (disconnectedId == _currentTargetDroneId) {
-            qCWarning(WebRTCLinkLog) << "Peer disconnected by signaling server:" << disconnectedId;
-
+            qCWarning(WebRTCLinkLog) << "Peer disconnected by signaling server:" << disconnectedId
+                                     << "reason:" << message["message"].toString();
             _handlePeerDisconnection();
+        } else {
+            qCDebug(WebRTCLinkLog) << "peerDisconnected for non-target drone, ignoring:"
+                                   << disconnectedId << "target:" << _currentTargetDroneId;
         }
 
     } else if (type == "registered") {
@@ -1499,8 +1509,9 @@ void WebRTCWorker::_handlePeerDisconnection()
 
     _cleanup(CleanupMode::ForReconnection);
 
-    emit disconnected();
-
+    // 재연결 스케줄링을 먼저 수행하여 _waitingForReconnect=true를 세팅한 뒤
+    // emit disconnected()를 호출. WebRTCLink::_onDisconnected는 QueuedConnection으로
+    // GUI 스레드에서 처리되므로, 슬롯 진입 시점에 가드가 결정론적으로 동작함.
     if (!isInState(WorkerState::Shutdown) && !_waitingForReconnect.load()) {
         qCDebug(WebRTCLinkLog) << "[DISCONNECT] Starting automatic reconnection";
         emit rtcStatusMessageChanged("자동 재연결 시작...");
@@ -1510,6 +1521,8 @@ void WebRTCWorker::_handlePeerDisconnection()
         qCDebug(WebRTCLinkLog) << "[DISCONNECT] Manual reconnection required (shutting down or already reconnecting)";
         emit rtcStatusMessageChanged("기체 연결 해제됨, 수동 재연결 필요");
     }
+
+    emit disconnected();
 }
 
 void WebRTCWorker::_resetPeerConnection()
@@ -1942,10 +1955,19 @@ void WebRTCWorker::_scheduleReconnect()
         qCWarning(WebRTCLinkLog) << "Max reconnection attempts reached:" << MAX_RECONNECT_ATTEMPTS;
         emit rtcStatusMessageChanged("최대 재연결 시도 횟수 도달");
 
+        // 재연결 포기 — 가드 해제 및 타이머 정리
+        _waitingForReconnect.store(false);
+        if (_reconnectTimer && _reconnectTimer->isActive()) {
+            _reconnectTimer->stop();
+        }
+
         WorkerState currentState = _state.load();
         if (currentState == WorkerState::Reconnecting) {
             transitionState(currentState, WorkerState::Idle);
         }
+
+        // 최종 disconnect를 UI까지 전파하여 LinkConfiguration::link를 클리어
+        emit disconnected();
         return;
     }
 
