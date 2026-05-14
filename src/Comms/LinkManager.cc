@@ -3,7 +3,7 @@
 #include "QGCNetworkHelper.h"
 #include "MAVLinkProtocol.h"
 #include "MultiVehicleManager.h"
-#include "QGC.h"
+#include "AppMessages.h"
 #include "QGCLoggingCategory.h"
 #include "QmlObjectListModel.h"
 #include "SettingsManager.h"
@@ -15,11 +15,12 @@
 
 #include "BluetoothLink.h"
 
+#include "PositionManager.h"
+#include "UdpIODevice.h"
+
 #ifndef QGC_NO_SERIAL_LINK
 #include "SerialLink.h"
 #include "GPSManager.h"
-#include "PositionManager.h"
-#include "UdpIODevice.h"
 #include "GPSRtk.h"
 #endif
 
@@ -40,9 +41,7 @@ LinkManager::LinkManager(QObject *parent)
     , _portListTimer(new QTimer(this))
     , _qmlConfigurations(new QmlObjectListModel(this))
     , _qmlLinksModel(new QmlObjectListModel(this))
-#ifndef QGC_NO_SERIAL_LINK
     , _nmeaSocket(new UdpIODevice(this))
-#endif
 {
     qCDebug(LinkManagerLog) << this;
 
@@ -700,7 +699,7 @@ void LinkManager::_createDynamicForwardLink(const char *linkName, const QString 
     qCDebug(LinkManagerLog) << "New dynamic MAVLink forwarding port added:" << linkName << " hostname:" << hostName;
 }
 
-bool LinkManager::isLinkUSBDirect(const LinkInterface *link)
+bool LinkManager::isLinkUSBDirect([[maybe_unused]] const LinkInterface *link)
 {
 #ifndef QGC_NO_SERIAL_LINK
     const SerialLink* const serialLink = qobject_cast<const SerialLink*>(link);

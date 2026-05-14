@@ -26,7 +26,7 @@ tags
 # ------------------------------------------------------------------------------
 # Build System & CMake
 # ------------------------------------------------------------------------------
-/build*/
+build*/
 cmake-build-*/
 out/
 CMakeFiles
@@ -161,13 +161,20 @@ Qt*-linux*.tar.*
 
 # AI Assistants
 .claude/
+.gemini/
 .geminiignore
 .cursorignore
 
-# Pre-commit hooks
+# Python tooling caches
 .ruff_cache/
+.pytest_cache/
+.venv/
 
 # Vale prose linter (downloaded via `vale sync`)
 .github/styles/
-.gemini/
-.pytest_cache/
+
+# direnv / version managers
+.envrc
+.direnv/
+.tool-versions
+.python-version

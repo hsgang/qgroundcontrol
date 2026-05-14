@@ -9,12 +9,12 @@ Button {
     width:          contentLayoutItem.contentWidth + (contentMargins * 2)
     height:         width
     hoverEnabled:   !ScreenTools.isMobile
-    enabled:        toolStripAction ? toolStripAction.enabled : false
-    visible:        toolStripAction ? toolStripAction.visible : false
-    imageSource:    toolStripAction && modelData ? (toolStripAction.showAlternateIcon ? modelData.alternateIconSource : modelData.iconSource) : ""
+    enabled:        toolStripAction ? toolStripAction.enabled : true
+    visible:        toolStripAction ? toolStripAction.visible : true
+    imageSource:    (toolStripAction && modelData) ? (toolStripAction.showAlternateIcon ? modelData.alternateIconSource : modelData.iconSource) : ""
     text:           toolStripAction ? toolStripAction.text : ""
     checked:        toolStripAction ? toolStripAction.checked : false
-    checkable:      toolStripAction ? (toolStripAction.dropPanelComponent || (modelData ? modelData.checkable : false)) : false
+    checkable:      toolStripAction ? (toolStripAction.dropPanelComponent || (modelData && modelData.checkable)) : false
 
     property var    toolStripAction:    undefined
     property var    dropPanel:          undefined
@@ -32,7 +32,7 @@ Button {
 
     signal dropped(int index)
 
-    onCheckedChanged: if (toolStripAction) toolStripAction.checked = checked
+    onCheckedChanged: { if (toolStripAction) toolStripAction.checked = checked }
 
     onClicked: {
         if (mainWindow.allowViewSwitch()) {
@@ -73,7 +73,7 @@ Button {
                 sourceSize.width:           width
                 anchors.horizontalCenter:   parent.horizontalCenter
                 source:                     control.imageSource
-                visible:                    source != "" && modelData && modelData.fullColorIcon
+                visible:                    source != "" && !!modelData && modelData.fullColorIcon
             }
 
             QGCColoredImage {
@@ -88,7 +88,7 @@ Button {
                 sourceSize.height:          height
                 sourceSize.width:           width
                 anchors.horizontalCenter:   parent.horizontalCenter
-                visible:                    source != "" && modelData && !modelData.fullColorIcon
+                visible:                    source != "" && !(modelData && modelData.fullColorIcon)
 
                 QGCColoredImage {
                     id:                         innerImageSecondColor
@@ -103,7 +103,7 @@ Button {
                     sourceSize.height:          height
                     sourceSize.width:           width
                     anchors.horizontalCenter:   parent.horizontalCenter
-                    visible:                    source != "" && modelData && modelData.biColorIcon
+                    visible:                    source != "" && !!modelData && modelData.biColorIcon
                 }
             }
 
@@ -122,6 +122,6 @@ Button {
         id:     buttonBkRect
         color:  (control.checked || control.pressed) ?
                     qgcPal.buttonHighlight :
-                    ((control.enabled && control.hovered) ? qgcPal.buttonHighlight : "transparent")
+                    ((control.enabled && control.hovered) ? qgcPal.toolStripHoverColor : "transparent")
     }
 }

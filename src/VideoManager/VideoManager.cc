@@ -2,7 +2,7 @@
 #include "AppSettings.h"
 #include "MavlinkCameraControlInterface.h"
 #include "MultiVehicleManager.h"
-#include "QGC.h"
+#include "AppMessages.h"
 #include "QGCApplication.h"
 #include "QGCCameraManager.h"
 #include "QGCCorePlugin.h"
@@ -14,18 +14,16 @@
 #include "VehicleLinkManager.h"
 #include "VideoReceiver.h"
 #include "VideoSettings.h"
-#include "VideoItemStub.h"
-#ifdef QGC_GST_STREAMING
-#include "gstqml6glregister.h"
-#ifdef QGC_GST_D3D11_SINK
-#include "gstqml6d3d11register.h"
-#endif
-#endif
 #include "QtMultimediaReceiver.h"
 #include "UVCReceiver.h"
 #ifdef QGC_GST_STREAMING
 #include "GStreamerHelpers.h"
-#include "GstVideoReceiver.h"
+#include "GStreamer.h"
+#if defined(QGC_HAS_ANY_GPU_PATH)
+#include "VideoReceiver/GStreamer/HwBuffers/QGCRhiCapture.h"
+#endif
+#include <QtMultimedia/QVideoSink>
+#include <QtMultimediaQuick/private/qquickvideooutput_p.h>
 #endif
 
 #include <QtConcurrent/QtConcurrent>
@@ -64,31 +62,12 @@ VideoManager::VideoManager(QObject *parent)
 
     (void) qRegisterMetaType<VideoReceiver::STATUS>("STATUS");
 
-    bool needsStub = true;
 #ifdef QGC_GST_STREAMING
     _gstreamerDisabledForUnitTests = _shouldSkipGStreamerForUnitTests();
-    needsStub = _gstreamerDisabledForUnitTests;
     if (_gstreamerDisabledForUnitTests) {
         qCInfo(VideoManagerLog) << "Skipping GStreamer initialization for unit tests";
     }
 #endif
-    if (needsStub) {
-        (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
-        (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6D3D11VideoItem", 1, 0, "GstD3D11Qt6VideoItem");
-    } else {
-        // Register real GL types eagerly on desktop platforms.
-        // On Android/iOS, register stubs now — real type registered after gst_init in _onGstInitComplete().
-#if defined(QGC_GST_STREAMING) && !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
-        gstQml6GLRegisterQmlTypes();
-#else
-        (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6GLVideoItem", 1, 0, "GstGLQt6VideoItem");
-#endif
-#ifdef QGC_GST_D3D11_SINK
-        gstQml6D3D11RegisterQmlTypes();
-#else
-        (void) qmlRegisterType<VideoItemStub>("org.freedesktop.gstreamer.Qt6D3D11VideoItem", 1, 0, "GstD3D11Qt6VideoItem");
-#endif
-    }
 }
 
 VideoManager::~VideoManager()
@@ -196,7 +175,10 @@ void VideoManager::init(QQuickWindow *mainWindow)
     }
     _mainWindow = mainWindow;
 
-    // TODO: VideoSettings _configChanged/streamConfiguredChanged
+#if defined(QGC_HAS_ANY_GPU_PATH)
+    QGCRhiCapture::connectWindow(mainWindow);  // populate cached QRhi for GPU bridge handlers
+#endif
+
     (void) connect(_videoSettings->videoSource(), &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
     (void) connect(_videoSettings->udpUrl(), &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
     (void) connect(_videoSettings->rtspUrl(), &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
@@ -261,13 +243,6 @@ void VideoManager::_onGstInitComplete(bool success)
     }
 
 #ifdef QGC_GST_STREAMING
-    // On Android/iOS the real Qt6GLVideoItem can't be registered before gst_init
-    // (its constructor calls GStreamer GL functions). Now that init is done,
-    // replace the stub with the real type.
-#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
-    gstQml6GLRegisterQmlTypes();
-#endif
-
     if (_videoSettings) {
         const auto decoderOption = static_cast<GStreamer::VideoDecoderOptions>(
             _videoSettings->forceVideoDecoder()->rawValue().toInt());
@@ -524,15 +499,6 @@ bool VideoManager::gstreamerEnabled()
 #endif
 }
 
-bool VideoManager::gstreamerD3D11Sink()
-{
-#ifdef QGC_GST_D3D11_SINK
-    return true;
-#else
-    return false;
-#endif
-}
-
 bool VideoManager::uvcEnabled()
 {
     return UVCReceiver::enabled();
@@ -588,7 +554,6 @@ void VideoManager::_videoSourceChanged()
             } else {
                 info = camMgr ? camMgr->currentStreamInstance() : nullptr;
             }
-            // Assign stream info
             receiver->setVideoStreamInfo(info);
             changed |= _updateSettings(receiver);
         }
@@ -938,6 +903,46 @@ void VideoManager::_initVideoReceiver(VideoReceiver *receiver, QQuickWindow *win
         qCCritical(VideoManagerLog) << "createVideoSink() failed" << receiver->name();
     }
     receiver->setSink(sink);
+
+#ifdef QGC_GST_STREAMING
+    if (sink && widget) {
+        auto *videoOutput = qobject_cast<QQuickVideoOutput *>(widget);
+        if (videoOutput) {
+            QVideoSink *videoSink = videoOutput->videoSink();
+            if (!GStreamer::setupAppSinkAdapter(sink, videoSink, receiver)) {
+                qCWarning(VideoManagerLog) << "setupAppSinkAdapter failed" << receiver->name();
+            }
+            // Visibility gate: drop frames at the appsink while the host window is hidden
+            // or minimized. The decoder still runs (cheap with HW accel) but render-thread
+            // and copy work disappears. Connector handles late window attachment via
+            // QQuickItem::windowChanged.
+            auto applyVisibility = [receiver](QWindow *win) {
+                if (!win) return;
+                const QWindow::Visibility v = win->visibility();
+                const bool active = (v != QWindow::Hidden && v != QWindow::Minimized);
+                GStreamer::setAppSinkAdaptersActive(receiver, active);
+            };
+            // Track the previous connection so windowChanged can drop it before wiring the
+            // new window. Without this, an old hidden/minimized window keeps gating the
+            // live receiver after the video output reparents to a new window.
+            auto prevConn = std::make_shared<QMetaObject::Connection>();
+            auto wireWindow = [receiver, applyVisibility, prevConn](QQuickWindow *qw) {
+                if (*prevConn) {
+                    QObject::disconnect(*prevConn);
+                    *prevConn = QMetaObject::Connection{};
+                }
+                if (!qw) return;
+                applyVisibility(qw);
+                *prevConn = QObject::connect(qw, &QWindow::visibilityChanged, receiver,
+                    [applyVisibility, qw](QWindow::Visibility) { applyVisibility(qw); });
+            };
+            if (QQuickWindow *qw = videoOutput->window()) wireWindow(qw);
+            QObject::connect(videoOutput, &QQuickVideoOutput::windowChanged, receiver, wireWindow);
+        } else {
+            qCWarning(VideoManagerLog) << "Widget is not a VideoOutput, cannot connect appsink" << receiver->name();
+        }
+    }
+#endif
 
     (void) connect(receiver, &VideoReceiver::onStartComplete, this, [this, receiver](VideoReceiver::STATUS status) {
         qCDebug(VideoManagerLog) << "Video" << receiver->name() << "Start complete, status:" << status;

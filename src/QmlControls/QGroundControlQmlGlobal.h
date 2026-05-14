@@ -166,6 +166,9 @@ public:
     // Test audio output
     Q_INVOKABLE void testAudioOutput();
 
+    /// Copy text to the system clipboard
+    Q_INVOKABLE static void copyToClipboard(const QString& text);
+
     // Property accessors
 
     static QString appName();

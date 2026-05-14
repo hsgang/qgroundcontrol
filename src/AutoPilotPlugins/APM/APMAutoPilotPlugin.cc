@@ -11,6 +11,7 @@
 #include "APMESCComponent.h"
 #include "APMPowerComponent.h"
 #include "APMRadioComponent.h"
+#include "APMLoggingComponent.h"
 #include "APMRemoteSupportComponent.h"
 #include "APMFailsafesComponent.h"
 #include "APMFlightSafetyComponent.h"
@@ -22,7 +23,7 @@
 #include "ScriptingComponent.h"
 #include "JoystickComponent.h"
 #include "ParameterManager.h"
-#include "QGC.h"
+#include "AppMessages.h"
 #include "QGCLoggingCategory.h"
 #include "Vehicle.h"
 #include "VehicleLinkManager.h"
@@ -169,9 +170,13 @@ const QVariantList &APMAutoPilotPlugin::vehicleComponents()
                 _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_esp8266Component)));
             }
 
-            // _apmRemoteSupportComponent = new APMRemoteSupportComponent(_vehicle, this);
-            // _apmRemoteSupportComponent->setupTriggerSignals();
-            // _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_apmRemoteSupportComponent)));
+            _loggingComponent = new APMLoggingComponent(_vehicle, this);
+            _loggingComponent->setupTriggerSignals();
+            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_loggingComponent)));
+
+            _apmRemoteSupportComponent = new APMRemoteSupportComponent(_vehicle, this);
+            _apmRemoteSupportComponent->setupTriggerSignals();
+            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_apmRemoteSupportComponent)));
 
             _joystickComponent = new JoystickComponent(_vehicle, this, this);
             _joystickComponent->setupTriggerSignals();

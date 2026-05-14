@@ -1,3 +1,4 @@
+#include "JsonParsing.h"
 #include "QGCApplication.h"
 #include "qgc_version.h"
 
@@ -22,7 +23,6 @@
 #include "AudioOutput.h"
 #include "FollowMe.h"
 #include "JoystickManager.h"
-#include "JsonHelper.h"
 #include "LinkManager.h"
 #include "MAVLinkProtocol.h"
 #include "MultiVehicleManager.h"
@@ -31,6 +31,7 @@
 #include "QGCCommandLineParser.h"
 #include "QGCCorePlugin.h"
 #include "QGCFileDownload.h"
+#include "ColoredSvgImageProvider.h"
 #include "QGCImageProvider.h"
 #include "QGCLoggingCategory.h"
 #include "QGCLoggingCategoryManager.h"
@@ -50,7 +51,7 @@
 QGC_LOGGING_CATEGORY(QGCApplicationLog, "API.QGCApplication")
 
 QGCApplication::QGCApplication(int &argc, char *argv[], const QGCCommandLineParser::CommandLineParseResult &cli)
-    : QApplication(argc, argv)
+    : QGuiApplication(argc, argv)
     , _runningUnitTests(cli.runningUnitTests)
     , _simpleBootTest(cli.simpleBootTest)
     , _fakeMobile(cli.fakeMobile)
@@ -182,7 +183,7 @@ void QGCApplication::setLanguage()
         }
     }
     qCDebug(QGCApplicationLog) << "Loading localizations for" << _locale.name();
-    removeTranslator(JsonHelper::translator());
+    removeTranslator(JsonParsing::translator());
     removeTranslator(&_qgcTranslatorSourceCode);
     removeTranslator(&_qgcTranslatorQtLibs);
     if (_locale.name() != "en_US") {
@@ -197,8 +198,8 @@ void QGCApplication::setLanguage()
         } else {
             qCWarning(QGCApplicationLog) << "Error loading source localization for" << _locale.name();
         }
-        if (JsonHelper::translator()->load(_locale, QLatin1String("qgc_json_"), "", ":/i18n")) {
-            installTranslator(JsonHelper::translator());
+        if (JsonParsing::translator()->load(_locale, QLatin1String("qgc_json_"), "", ":/i18n")) {
+            installTranslator(JsonParsing::translator());
         } else {
             qCWarning(QGCApplicationLog) << "Error loading json localization for" << _locale.name();
         }
@@ -245,18 +246,7 @@ void QGCApplication::init()
 bool QGCApplication::_initVideo()
 {
 #ifdef QGC_GST_STREAMING
-    const bool isOffscreen = (qApp->platformName() == QLatin1String("offscreen"));
-
-#if defined(QGC_GST_D3D11_SINK)
-    // D3D11 sink renders via Qt's native D3D11 RHI — no OpenGL needed.
-    if (isOffscreen) {
-        QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-    }
-    qCDebug(QGCApplicationLog) << "D3D11 video sink available, using default graphics API";
-#else
-    Q_UNUSED(isOffscreen);
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
-#endif
+    qCDebug(QGCApplicationLog) << "Using default graphics API for appsink → VideoOutput video path";
 #endif
 
     QGCCorePlugin::instance();  // CorePlugin must be initialized before VideoManager for Video Cleanup
@@ -277,6 +267,11 @@ void QGCApplication::_initForNormalAppBoot()
     MultiVehicleManager::instance()->init();
     _qmlAppEngine = QGCCorePlugin::instance()->createQmlApplicationEngine(this);
     QObject::connect(_qmlAppEngine, &QQmlApplicationEngine::objectCreationFailed, this, QCoreApplication::quit, Qt::QueuedConnection);
+
+    // Must register before createRootWindow — root QML references QGCColoredImage which resolves image://coloredsvg/... at load time.
+    _qmlAppEngine->addImageProvider(_qgcImageProviderId, new QGCImageProvider());
+    _qmlAppEngine->addImageProvider(QLatin1String(ColoredSvgImageProvider::ProviderId), new ColoredSvgImageProvider());
+
     QGCCorePlugin::instance()->createRootWindow(_qmlAppEngine);
 
     AudioOutput::instance()->init(SettingsManager::instance()->appSettings()->audioVolume(), SettingsManager::instance()->appSettings()->audioMuted());
@@ -286,9 +281,6 @@ void QGCApplication::_initForNormalAppBoot()
     SignalingServerManager::instance()->init();
 
     VideoManager::instance()->init(mainRootWindow());
-
-    // Image provider for Optical Flow
-    _qmlAppEngine->addImageProvider(_qgcImageProviderId, new QGCImageProvider());
 
     // Set the window icon now that custom plugin has a chance to override it
     QUrl windowIcon = QUrl("qrc:/res/qgroundcontrol.ico");
@@ -624,12 +616,12 @@ QT_WARNING_DISABLE_DEPRECATED
 bool QGCApplication::compressEvent(QEvent *event, QObject *receiver, QPostEventList *postedEvents)
 {
     if (event->type() != QEvent::MetaCall) {
-        return QApplication::compressEvent(event, receiver, postedEvents);
+        return QGuiApplication::compressEvent(event, receiver, postedEvents);
     }
 
     const QMetaCallEvent *mce = static_cast<QMetaCallEvent*>(event);
     if (!mce->sender() || !_compressedSignals.contains(mce->sender()->metaObject(), mce->signalId())) {
-        return QApplication::compressEvent(event, receiver, postedEvents);
+        return QGuiApplication::compressEvent(event, receiver, postedEvents);
     }
 
     for (QPostEventList::iterator it = postedEvents->begin(); it != postedEvents->end(); ++it) {
@@ -664,6 +656,9 @@ QT_WARNING_POP
 bool QGCApplication::event(QEvent *e)
 {
     if (e->type() == QEvent::Quit) {
+        if (!_mainRootWindow) {
+            return QGuiApplication::event(e);
+        }
         // On OSX if the user selects Quit from the menu (or Command-Q) the ApplicationWindow does not signal closing. Instead you get a Quit event here only.
         // This in turn causes the standard QGC shutdown sequence to not run. So in this case we close the window ourselves such that the
         // signal is sent and the normal shutdown sequence runs.
@@ -680,7 +675,7 @@ bool QGCApplication::event(QEvent *e)
         }
     }
 
-    return QApplication::event(e);
+    return QGuiApplication::event(e);
 }
 
 QGCImageProvider *QGCApplication::qgcImageProvider()
@@ -733,4 +728,3 @@ void QGCApplication::shutdown()
     // This is bad, but currently qobject inheritances are incorrect and cause crashes on exit without
     delete _qmlAppEngine;
 }
-

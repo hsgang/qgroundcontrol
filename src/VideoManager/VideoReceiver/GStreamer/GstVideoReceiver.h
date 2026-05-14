@@ -43,19 +43,23 @@ typedef struct _GstElement GstElement;
 class GstVideoReceiver : public VideoReceiver
 {
     Q_OBJECT
+    Q_PROPERTY(QString decoderName       READ decoderName       NOTIFY decoderStatsChanged)
+    Q_PROPERTY(quint64 processedFrames   READ processedFrames   NOTIFY decoderStatsChanged)
+    Q_PROPERTY(quint64 droppedFrames     READ droppedFrames     NOTIFY decoderStatsChanged)
+    Q_PROPERTY(qint64  currentJitterNs   READ currentJitterNs   NOTIFY decoderStatsChanged)
+    Q_PROPERTY(double  qosProportion     READ qosProportion     NOTIFY decoderStatsChanged)
+    Q_PROPERTY(int     qosQuality        READ qosQuality        NOTIFY decoderStatsChanged)
 
 public:
     explicit GstVideoReceiver(QObject *parent = nullptr);
     ~GstVideoReceiver();
 
-    enum class InternalCodec {
-        H264,
-        H265
-    };
-    void enableInternalRtpMode(InternalCodec codec);
-    void preparePipeline();  // Pre-build pipeline in PAUSED state for faster first-frame
-
-    void pushRtpPacket(QByteArray packet);
+    QString decoderName()     const { return _decoderName; }
+    quint64 processedFrames() const { return _processedFrames; }
+    quint64 droppedFrames()   const { return _droppedFrames; }
+    qint64  currentJitterNs() const { return _currentJitterNs; }
+    double  qosProportion()   const { return _qosProportion; }
+    int     qosQuality()      const { return _qosQuality; }
 
 public slots:
     void start(uint32_t timeout) override;
@@ -66,6 +70,10 @@ public slots:
     void stopRecording() override;
     void takeScreenshot(const QString &imageFile) override;
 
+signals:
+    void decoderStatsChanged();
+    void latencyChanged();
+
 private slots:
     void _watchdog();
     void _handleEOS();
@@ -73,7 +81,6 @@ private slots:
 private:
     GstElement *_makeSource(const QString &input);
     GstElement *_makeDecoder();
-    GstElement *_makeInternalRtpSource();
     GstElement *_makeFileSink(const QString &videoFile, FILE_FORMAT format);
 
     void _onNewSourcePad(GstPad *pad);
@@ -114,14 +121,21 @@ private:
     GstElement *_recorderValve = nullptr;
     GstElement *_source = nullptr;
     GstElement *_tee = nullptr;
-    GstElement *_appsrc = nullptr;
-    bool _appsrcDataPushed = false;
-    bool _useInternalRtp = false;
-    InternalCodec _internalCodec = InternalCodec::H264;
     GstElement *_videoSink = nullptr;
     GstVideoWorker *_worker = nullptr;
     gulong _teeProbeId = 0;
     gulong _videoSinkProbeId = 0;
+    gulong _eosProbeId = 0;
+    GstPad *_eosProbePad = nullptr;  // ref-held: probe install pad, kept so removal targets the right pad regardless of _decoder lifecycle
+    gulong _keyframeWatchId = 0;
+    bool _recordingStopRequested = false;
+
+    QString _decoderName;
+    quint64 _processedFrames = 0;
+    quint64 _droppedFrames = 0;
+    qint64  _currentJitterNs = 0;
+    double  _qosProportion = 1.0;
+    int     _qosQuality = 1000000;
 
     static constexpr const char *_kFileMux[FILE_FORMAT_MAX + 1] = {
         "matroskamux",

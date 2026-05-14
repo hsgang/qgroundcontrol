@@ -16,6 +16,7 @@
 
 #include "QGCMAVLink.h"
 #include "VehicleFactGroup.h"
+#include "VehicleSigningController.h"  // Q_PROPERTY needs the full QObject type for moc/QML metatype registration
 #include "VehicleTypes.h"
 
 class Actuators;
@@ -278,8 +279,7 @@ public:
     Q_PROPERTY(QString  vehicleUID2                 READ vehicleUID2                NOTIFY vehicleUID2Changed)
     Q_PROPERTY(QString  vehicleUID2Str              READ vehicleUID2Str             NOTIFY vehicleUID2Changed)
 
-    Q_PROPERTY(bool     mavlinkSigning              READ mavlinkSigning             NOTIFY mavlinkSigningChanged)
-    Q_PROPERTY(QString  mavlinkSigningKeyName       READ mavlinkSigningKeyName      NOTIFY mavlinkSigningChanged)
+    Q_PROPERTY(VehicleSigningController* signingController READ signingController CONSTANT)
 
     Q_PROPERTY(QGeoCoordinate   cameraFovPosition   READ cameraFovPosition          NOTIFY cameraFovPositionChanged)
 
@@ -409,10 +409,6 @@ public:
 
     /// Set home from flight map coordinate
     Q_INVOKABLE void doSetHome(const QGeoCoordinate& coord);
-
-    /// Send SETUP_SIGNING with the key at the given index in MAVLinkSigningKeys
-    Q_INVOKABLE void sendSetupSigning(int keyIndex);
-    Q_INVOKABLE void sendDisableSigning();
 
     Q_INVOKABLE QVariant expandedToolbarIndicatorSource(const QString& indicatorName);
 
@@ -555,8 +551,8 @@ public:
     bool            requiresGpsFix              () const { return static_cast<bool>(_onboardControlSensorsPresent & MAV_SYS_STATUS_SENSOR_GPS); }
     bool            hilMode                     () const { return _base_mode & MAV_MODE_FLAG_HIL_ENABLED; }
     Actuators*      actuators                   () const { return _actuators; }
-    bool            mavlinkSigning          () const { return _mavlinkSigning; }
-    QString         mavlinkSigningKeyName   () const { return _mavlinkSigningKeyName; }
+    VehicleSigningController* signingController() { return _signingController; }
+    const VehicleSigningController* signingController() const { return _signingController; }
 
     QGeoCoordinate  cameraFovPosition           () { return _cameraFovPosition; }
 
@@ -842,7 +838,6 @@ signals:
     void mavlinkSerialControl           (uint8_t device, uint8_t flags, uint16_t timeout, uint32_t baudrate, QByteArray data);
 
     void mavlinkStatusChanged           ();
-    void mavlinkSigningChanged          ();
 
     void cameraFovPositionChanged       ();
 
@@ -982,6 +977,7 @@ private:
     bool            _gpsRawIntMessageAvailable              = false;
     bool            _gps2RawMessageAvailable                = false;
     bool            _globalPositionIntMessageAvailable      = false;
+    bool            _cameraImageCapturedMessageAvailable    = false;
     double          _defaultCruiseSpeed = qQNaN();
     double          _defaultHoverSpeed = qQNaN();
     bool            _capabilityBitsKnown                    = false;
@@ -990,8 +986,7 @@ private:
     bool            _readyToFlyAvailable                    = false;
     bool            _readyToFly                             = false;
     bool            _allSensorsHealthy                      = true;
-    bool            _mavlinkSigning                         = false;
-    QString         _mavlinkSigningKeyName;
+    VehicleSigningController* _signingController            = nullptr;
 
     QGeoCoordinate  _cameraFovPosition;
 
@@ -1311,6 +1306,7 @@ signals:
 
 private:
     void _createImageProtocolManager();
+    void _createSigningController();
 
     ImageProtocolManager *_imageProtocolManager = nullptr;
 
@@ -1363,7 +1359,7 @@ private:
 
 public:
     HealthAndArmingCheckReport* healthAndArmingCheckReport();
-    
+
     void setEventsMetadata(uint8_t compid, const QString& metadataJsonFileName);
 
 private:

@@ -25,6 +25,10 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_
 
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE QGC_UNITTEST_BUILD)
 
+target_precompile_headers(${CMAKE_PROJECT_NAME} PRIVATE
+    <QtTest/QTest>
+)
+
 # ----------------------------------------------------------------------------
 # CTest Integration (CTest included in root CMakeLists.txt)
 # ----------------------------------------------------------------------------
@@ -82,6 +86,8 @@ add_qgc_test(MAVLinkMessageFieldTest LABELS Unit AnalyzeView)
 add_qgc_test(MAVLinkMessageTest LABELS Unit AnalyzeView)
 add_qgc_test(MAVLinkSystemTest LABELS Unit AnalyzeView)
 add_qgc_test(MavlinkLogTest LABELS Integration AnalyzeView Vehicle RESOURCE_LOCK MockLink)
+add_qgc_test(APMDataFlashLogParserTest LABELS Unit AnalyzeView)
+add_qgc_test(LogFileParserTest LABELS Unit AnalyzeView)
 
 # ----------------------------------------------------------------------------
 # Camera
@@ -159,6 +165,8 @@ add_qgc_test(SDLTest LABELS Unit Joystick RESOURCE_LOCK Joystick)
 # ----------------------------------------------------------------------------
 add_subdirectory(MAVLink)
 add_qgc_test(SigningTest LABELS Unit MAVLink)
+add_qgc_test(SigningStatusTest LABELS Unit MAVLink)
+add_qgc_test(SigningControllerTest LABELS Unit MAVLink)
 add_qgc_test(MockLinkSigningTest LABELS Integration Vehicle MAVLink RESOURCE_LOCK MockLink)
 add_qgc_test(HealthAndArmingCheckReportTest LABELS Unit MAVLink)
 add_qgc_test(ImageProtocolManagerTest LABELS Unit MAVLink)
@@ -238,11 +246,11 @@ add_qgc_test(QGCStreamingDecompressionTest LABELS Unit Utilities)
 # Network
 add_qgc_test(QGCNetworkHelperTest LABELS Unit Utilities Network)
 # Parsing
-add_qgc_test(DataFlashUtilityTest LABELS Unit Utilities)
+add_qgc_test(APMDataFlashUtilityTest LABELS Unit Utilities)
 add_qgc_test(ExifUtilityTest LABELS Unit Utilities)
 add_qgc_test(JsonHelperTest LABELS Unit Utilities)
 add_qgc_test(JsonParsingTest LABELS Unit Utilities)
-add_qgc_test(ULogUtilityTest LABELS Unit Utilities)
+add_qgc_test(PX4ULogUtilityTest LABELS Unit Utilities)
 # FileSystem
 add_qgc_test(QGCArchiveWatcherTest LABELS Unit Utilities RESOURCE_LOCK TempFiles)
 add_qgc_test(QGCCachedFileDownloadTest LABELS Integration Network Utilities)
@@ -302,9 +310,12 @@ add_qgc_test(SignalDataTransitionTest LABELS Unit Utilities)
 add_qgc_test(TimeoutTransitionTest LABELS Unit Utilities)
 add_qgc_test(AdditionalStatesCoverageTest LABELS Unit Utilities)
 add_qgc_test(AdditionalTransitionsCoverageTest LABELS Unit Utilities)
+# Memory
+add_qgc_test(SecureMemoryTest LABELS Unit Utilities)
 # Platform (desktop only)
 if(NOT ANDROID AND NOT IOS)
     add_qgc_test(PlatformTest LABELS Unit Utilities)
+    add_qgc_test(QGCKeychainTest LABELS Unit Utilities)
     add_qgc_test(RunGuardTest LABELS Unit Utilities)
     add_qgc_test(SignalHandlerTest LABELS Unit Utilities)
 endif()

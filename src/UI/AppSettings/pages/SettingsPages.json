@@ -50,6 +50,11 @@
             "visible": "QGroundControl.settingsManager.videoSettings.userVisible"
         },
         {
+            "name": "Logging",
+            "url": "qrc:/qml/QGroundControl/LogManager/AppLogging.qml",
+            "icon": "qrc:/InstrumentValueIcons/conversation.svg"
+        },
+        {
             "name": "Maps",
             "qml": "MapsSettings.qml",
             "icon": "qrc:/InstrumentValueIcons/globe.svg",
@@ -89,11 +94,6 @@
         },
         {
             "divider": true
-        },
-        {
-            "name": "Logging",
-            "url": "qrc:/qml/QGroundControl/Controls/AppLogging.qml",
-            "icon": "qrc:/InstrumentValueIcons/conversation.svg"
         },
         {
             "name": "Help",

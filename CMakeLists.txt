@@ -40,6 +40,11 @@ set(CMAKE_POLICY_VERSION_MINIMUM ${CMAKE_MINIMUM_REQUIRED_VERSION})
 # Load default options and allow custom builds to override
 include(CustomOptions)
 
+# build-config.json is the source of truth; keep cmake_minimum_required(...) above in sync.
+if(CMAKE_VERSION VERSION_LESS QGC_CONFIG_CMAKE_MINIMUM)
+    message(FATAL_ERROR "QGC requires CMake ${QGC_CONFIG_CMAKE_MINIMUM}+, found ${CMAKE_VERSION}")
+endif()
+
 if(IS_DIRECTORY "${CMAKE_SOURCE_DIR}/custom")
     message(STATUS "QGC: Custom build directory detected")
     set(QGC_CUSTOM_BUILD ON)
@@ -59,11 +64,11 @@ endif()
 # ----------------------------------------------------------------------------
 # Apple-Specific Pre-Project Settings
 # ----------------------------------------------------------------------------
-if(APPLE)
+# APPLE is true on iOS too; gate on CMAKE_SYSTEM_NAME or the iOS toolchain's
+# arm64-only CMAKE_OSX_ARCHITECTURES gets clobbered with x86_64h;arm64.
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     set(CMAKE_OSX_DEPLOYMENT_TARGET "${QGC_CONFIG_MACOS_DEPLOYMENT_TARGET}" CACHE STRING "macOS minimum deployment target")
-    # iOS builds: set(CMAKE_OSX_SYSROOT "iphoneos")
     if(QGC_MACOS_UNIVERSAL_BUILD)
-        # Universal binary for both Intel and Apple Silicon
         set(CMAKE_OSX_ARCHITECTURES "x86_64h;arm64")
     endif()
 endif()
@@ -185,10 +190,9 @@ find_package(Qt6
     ${QGC_QT_MINIMUM_VERSION}...${QGC_QT_MAXIMUM_VERSION}
     REQUIRED
     COMPONENTS
-        Charts
+        Graphs
         Concurrent
         Core
-        Core5Compat
         Gui
         HttpServer
         LinguistTools
@@ -201,12 +205,12 @@ find_package(Qt6
         QmlIntegration
         Quick
         QuickControls2
+        QuickVectorImage
         QuickWidgets
         Sensors
         Sql
         Svg
         TextToSpeech
-        Widgets
         Xml
         Quick3D
         StateMachine
@@ -229,15 +233,6 @@ qt_standard_project_setup(
     SUPPORTS_UP_TO ${QGC_QT_MAXIMUM_VERSION}
     I18N_SOURCE_LANGUAGE en
 )
-
-# ----------------------------------------------------------------------------
-# QML Linting Configuration
-# ----------------------------------------------------------------------------
-if(QGC_ENABLE_QMLLINT)
-    set(QT_QML_GENERATE_QMLLINT ON CACHE BOOL "Enable automatic QML linting" FORCE)
-else()
-    set(QT_QML_GENERATE_QMLLINT OFF CACHE BOOL "Disable automatic QML linting" FORCE)
-endif()
 
 # ----------------------------------------------------------------------------
 # Qt Policies (Enable modern Qt6 behaviors)
@@ -270,9 +265,7 @@ endif()
 # Don't route the big .qrcs through qt_add_big_resources — its pass2 object-file
 # output fails on MSVC ("No data signature found") when large data sections are elided.
 list(APPEND QGC_RESOURCES
-    "${CMAKE_SOURCE_DIR}/qgcimages.qrc"
     "${CMAKE_SOURCE_DIR}/qgcresources.qrc"
-    "${CMAKE_SOURCE_DIR}/resources/InstrumentValueIcons/InstrumentValueIcons.qrc"
 )
 
 # ============================================================================
@@ -338,7 +331,15 @@ endif()
 # ----------------------------------------------------------------------------
 # Translation/Localization Configuration
 # ----------------------------------------------------------------------------
-file(GLOB TS_SOURCES "${CMAKE_SOURCE_DIR}/translations/qgc_*.ts")
+file(GLOB TS_SOURCES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/translations/qgc_*.ts")
+# Exclude pseudo-localization files from non-debug builds.
+# Multi-config generators (VS, Xcode, Ninja Multi-Config) do not set CMAKE_BUILD_TYPE
+# at configure time, so _eo files cannot be conditionally included for Debug only —
+# excluding them from all multi-config configurations avoids shipping them in Release.
+get_property(_qgc_is_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(_qgc_is_multi_config OR NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+    list(FILTER TS_SOURCES EXCLUDE REGEX "_eo\\.ts$")
+endif()
 set_source_files_properties(${TS_SOURCES} PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/i18n")
 
 qt_add_translations(${CMAKE_PROJECT_NAME}

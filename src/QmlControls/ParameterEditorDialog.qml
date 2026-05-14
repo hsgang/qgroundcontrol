@@ -11,7 +11,7 @@ QGCPopupDialog {
     id:         root
     title:      fact.componentId > 0 ? fact.name : qsTr("Value Editor")
 
-    buttons:    Dialog.Save | (validate ? 0 : Dialog.Cancel)
+    buttons:    fact.readOnly ? Dialog.Close : (Dialog.Save | (validate ? 0 : Dialog.Cancel))
 
     property Fact   fact
     property bool   showRCToParam:  false
@@ -31,6 +31,7 @@ QGCPopupDialog {
     QGCPalette { id: qgcPal; colorGroupEnabled: true }
 
     onAccepted: {
+        if (fact.readOnly) return
         if (bitmaskColumn.visible && !manualEntry.checked) {
             fact.value = bitmaskValue();
             fact.valueChanged(fact.value)
@@ -79,8 +80,10 @@ QGCPopupDialog {
         spacing:    globals.defaultTextHeight
 
         QGCLabel {
-            text:       qsTr("Parameter name: ") + fact.name
-            visible:    fact.componentId > 0 // > 0 means it's a parameter fact
+            Layout.fillWidth:   true
+            wrapMode:           Text.WordWrap
+            text:               qsTr("This parameter is read-only and cannot be modified.")
+            visible:            fact.readOnly
         }
 
         QGCLabel {
@@ -94,10 +97,11 @@ QGCPopupDialog {
         RowLayout {
             id:         editRow
             spacing:    ScreenTools.defaultFontPixelWidth
+            visible:    !fact.readOnly
 
             QGCTextField {
                 id:                 valueField
-                Layout.preferredWidth:  _editFieldWidth
+                width:              _editFieldWidth
                 unitsLabel:         fact.units
                 showUnits:          fact.units != ""
                 focus:              setFocus && visible
@@ -142,10 +146,15 @@ QGCPopupDialog {
             }
         }
 
+        QGCLabel {
+            visible:            fact.readOnly
+            text:               qsTr("Value: ") + fact.valueString + (fact.units != "" ? (" " + fact.units) : "")
+        }
+
         Column {
             id:         bitmaskColumn
             spacing:    ScreenTools.defaultFontPixelHeight / 2
-            visible:    fact.bitmaskStrings.length > 0
+            visible:    fact.bitmaskStrings.length > 0 && !fact.readOnly
 
             Repeater {
                 id:     bitmaskRepeater
@@ -207,13 +216,13 @@ QGCPopupDialog {
             text:       qsTr("Application restart required after change")
         }
 
-        // QGCLabel {
-        //     Layout.fillWidth:   true
-        //     wrapMode:   Text.WordWrap
-        //     text:       qsTr("Warning: Modifying values while vehicle is in flight can lead to vehicle instability and possible vehicle loss. ") +
-        //                 qsTr("Make sure you know what you are doing and double-check your values before Save!")
-        //     visible:    fact.componentId != -1
-        // }
+        QGCLabel {
+            Layout.fillWidth:   true
+            wrapMode:   Text.WordWrap
+            text:       qsTr("Warning: Modifying values while vehicle is in flight can lead to vehicle instability and possible vehicle loss. ") +
+                        qsTr("Make sure you know what you are doing and double-check your values before Save!")
+            visible:    fact.componentId != -1 && !fact.readOnly
+        }
 
         QGCCheckBox {
             id:         forceSave
@@ -224,7 +233,7 @@ QGCPopupDialog {
         QGCCheckBox {
             id:         _advanced
             text:       qsTr("Advanced settings")
-            visible:    showRCToParam || factCombo.visible || bitmaskColumn.visible
+            visible:    !fact.readOnly && (showRCToParam || factCombo.visible || bitmaskColumn.visible)
         }
 
         // Checkbox to allow manual entry of enumerated or bitmask parameters

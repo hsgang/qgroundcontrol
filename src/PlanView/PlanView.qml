@@ -11,6 +11,7 @@ import QGroundControl.FlightMap
 import QGroundControl.Controls
 import QGroundControl.FactControls
 import QGroundControl.FlyView
+import QGroundControl.Geo
 import QGroundControl.Toolbar
 
 Item {
@@ -26,15 +27,14 @@ Item {
     property var    _geoFenceController: _planMasterController.geoFenceController
     property var    _rallyPointController: _planMasterController.rallyPointController
     property var    _visualItems: _missionController.visualItems
-    property bool   _singleComplexItem: _missionController.complexMissionItemNames.length === 1
+    property bool   _singleComplexItem: _missionController.complexMissionItems.length === 1
     property int    _editingLayer: _layerMission
     property var    _appSettings: QGroundControl.settingsManager.appSettings
     property var    _planViewSettings: QGroundControl.settingsManager.planViewSettings
     property bool   _promptForPlanUsageShowing: false
     property bool   _addROIOnClick: false
     property bool   _addWaypointOnClick: false
-    property bool   _homeTrackingMapCenter: true
-    property bool   _updatingHomeFromMapCenter: false
+    property bool   _homePositionSet: _missionController.homePositionSet
 
     readonly property int _layerMission: 1
     readonly property int _layerFence: 2
@@ -44,6 +44,14 @@ Item {
         if(visible) {
             editorMap.zoomLevel = QGroundControl.flightMapZoom
             editorMap.center    = QGroundControl.flightMapPosition
+        }
+    }
+
+    Connections {
+        target: planToolBar
+        function onToolbarButtonClicked() {
+            _addWaypointOnClick = false
+            _addROIOnClick = false
         }
     }
 
@@ -162,29 +170,6 @@ Item {
         }
     }
 
-    // Stop tracking map center when the home position is changed externally (e.g. drag, file load)
-    Connections {
-        target: _visualItems.get(0)
-        function onCoordinateChanged() {
-            if (!_updatingHomeFromMapCenter && !_planMasterController.containsItems) {
-                _homeTrackingMapCenter = false
-            }
-        }
-    }
-
-    // Resume tracking when the plan becomes empty again
-    Connections {
-        target: _planMasterController
-        function onContainsItemsChanged() {
-            if (!_planMasterController.containsItems) {
-                _homeTrackingMapCenter = true
-                _updatingHomeFromMapCenter = true
-                _visualItems.get(0).coordinate = editorMap.center
-                _updatingHomeFromMapCenter = false
-            }
-        }
-    }
-
     function insertSimpleItemAfterCurrent(coordinate) {
         var nextIndex = _missionController.currentPlanViewVIIndex + 1
         _missionController.insertSimpleMissionItem(coordinate, nextIndex, true /* makeCurrentItem */)
@@ -299,7 +284,9 @@ Item {
 
                 switch (_editingLayer) {
                 case _layerMission:
-                    if (_addROIOnClick) {
+                    if (_planMasterController.showCreateFromTemplate) {
+                        _missionController.setHomePosition(coordinate)
+                    } else if (_addROIOnClick) {
                         _addROIOnClick = false
                         if (_missionController.isROIActive) {
                             var pos = Qt.point(mouse.x, mouse.y)
@@ -451,21 +438,21 @@ Item {
                     ToolStripAction {
                         text: qsTr("Takeoff")
                         iconSource: "/res/takeoff.svg"
-                        enabled: _missionController.isInsertTakeoffValid
+                        enabled: _homePositionSet && _missionController.isInsertTakeoffValid
                         visible: toolStrip._isMissionLayer && !_planMasterController.controllerVehicle.rover
                         onTriggered: {
                             insertTakeoffItemAfterCurrent()
                         }
                     },
                     ToolStripAction {
-                        text: _singleComplexItem ? _missionController.complexMissionItemNames[0] : qsTr("Pattern")
+                        text: _singleComplexItem ? _missionController.complexMissionItems[0].translatedName : qsTr("Pattern")
                         iconSource: "/qmlimages/MapDrawShape.svg"
-                        enabled: _missionController.flyThroughCommandsAllowed
+                        enabled: _homePositionSet && _missionController.flyThroughCommandsAllowed
                         visible: toolStrip._isMissionLayer
                         dropPanelComponent: _singleComplexItem ? undefined : patternDropPanel
                         onTriggered: {
                             if (_singleComplexItem) {
-                                insertComplexItemAfterCurrent(_missionController.complexMissionItemNames[0])
+                                insertComplexItemAfterCurrent(_missionController.complexMissionItems[0].canonicalName)
                             }
                         }
                     },
@@ -473,6 +460,7 @@ Item {
                         id: waypointButton
                         text: qsTr("Waypoint")
                         iconSource: "/res/waypoint.svg"
+                        enabled: _homePositionSet
                         visible: toolStrip._isMissionLayer
                         checkable: true
                         onTriggered: { _addWaypointOnClick = !_addWaypointOnClick; if (_addWaypointOnClick) _addROIOnClick = false }
@@ -481,6 +469,7 @@ Item {
                         id: roiButton
                         text: qsTr("ROI")
                         iconSource: "/qmlimages/roi.svg"
+                        enabled: _homePositionSet
                         visible: toolStrip._isMissionLayer && _planMasterController.controllerVehicle.supports.roiMode
                         checkable: true
                         onTriggered: { _addROIOnClick = !_addROIOnClick; if (_addROIOnClick) _addWaypointOnClick = false }
@@ -492,7 +481,7 @@ Item {
                                       ? qsTr("Alt Land")
                                       : qsTr("Land")
                         iconSource: "/res/rtl.svg"
-                        enabled: _missionController.isInsertLandValid
+                        enabled: _homePositionSet && _missionController.isInsertLandValid
                         visible: toolStrip._isMissionLayer
                         onTriggered: {
                             insertLandItemAfterCurrent()
@@ -766,14 +755,14 @@ Item {
             QGCLabel { text: qsTr("Create complex pattern:") }
 
             Repeater {
-                model: _missionController.complexMissionItemNames
+                model: _missionController.complexMissionItems
 
                 QGCButton {
-                    text: modelData
+                    text: modelData.translatedName
                     Layout.fillWidth: true
 
                     onClicked: {
-                        insertComplexItemAfterCurrent(modelData)
+                        insertComplexItemAfterCurrent(modelData.canonicalName)
                         dropPanel.hide()
                     }
                 }

@@ -13,12 +13,14 @@ Item {
     property Fact   _editorDialogFact: Fact { }
     property int    _rowHeight:         ScreenTools.defaultFontPixelHeight * 2
     property int    _rowWidth:          10 // Dynamic adjusted at runtime
-    property bool   _searchFilter:      searchText.text.trim() != "" || controller.showModifiedOnly  ///< true: showing results of search
+    property bool   _searchFilter:      searchText.text.trim() != "" || controller.showModifiedOnly || controller.showFavoritesOnly  ///< true: showing results of search
     property var    _searchResults      ///< List of parameter names from search results
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _showRCToParam:     _activeVehicle.px4Firmware
     property var    _appSettings:       QGroundControl.settingsManager.appSettings
     property var    _controller:        controller
+    property var    _favorites:         controller.favoriteParameterNames
+    property real   _margins:           ScreenTools.defaultFontPixelHeight / 2
 
     ParameterEditorController {
         id: controller
@@ -70,6 +72,11 @@ Item {
                 fileDialog.title =          qsTr("Save Parameters")
                 fileDialog.openForSave()
             }
+        }
+        QGCMenuSeparator { }
+        QGCMenuItem {
+            text:           qsTr("Clear all favorites")
+            onTriggered:    controller.clearAllFavorites()
         }
         QGCMenuSeparator { visible: _showRCToParam }
         QGCMenuItem {
@@ -161,9 +168,9 @@ Item {
             }
 
             QGCCheckBox {
-                text:       qsTr("Show modified only")
-                checked:    controller.showModifiedOnly
-                onClicked:  controller.showModifiedOnly = checked
+                text:       qsTr("Hide read-only")
+                checked:    controller.hideReadOnly
+                onClicked:  controller.hideReadOnly = checked
             }
         }
 
@@ -174,11 +181,29 @@ Item {
         }
     }
 
+    QGCTabBar {
+        id:             tabBar
+        anchors.left:   parent.left
+        anchors.right:  parent.right
+        anchors.top:        header.bottom
+        anchors.topMargin:  _margins
+
+        QGCTabButton { text: qsTr("Full List") }
+        QGCTabButton { text: qsTr("Modified") }
+        QGCTabButton { text: qsTr("Favorites") }
+
+        onCurrentIndexChanged: {
+            controller.showModifiedOnly  = (currentIndex === 1)
+            controller.showFavoritesOnly = (currentIndex === 2)
+        }
+    }
+
     /// Group buttons
     QGCFlickable {
         id :                groupScroll
         width:              ScreenTools.defaultFontPixelWidth * 25
-        anchors.top:        header.bottom
+        anchors.top:        tabBar.bottom
+        anchors.topMargin:  _margins
         anchors.bottom:     parent.bottom
         clip:               true
         pixelAligned:       true
@@ -240,12 +265,14 @@ Item {
         id:                 headerView
         anchors.left:       tableView.left
         anchors.right:      tableView.right
-        anchors.top:        header.bottom
+        anchors.top:        tabBar.bottom
+        anchors.topMargin:  _margins
         syncView:           tableView
         clip:               true
 
         delegate: Rectangle {
-            implicitWidth:  headerLabel.contentWidth + ScreenTools.defaultFontPixelWidth
+            implicitWidth:  column === 0 ? ScreenTools.implicitCheckBoxHeight + ScreenTools.defaultFontPixelWidth
+                                         : headerLabel.contentWidth + ScreenTools.defaultFontPixelWidth
             implicitHeight: headerLabel.contentHeight + ScreenTools.defaultFontPixelHeight * 0.5
             color:          qgcPal.windowShade
 
@@ -322,7 +349,10 @@ Item {
         }
 
         delegate: Rectangle {
-            implicitWidth:  column == 2 ? ScreenTools.defaultFontPixelWidth * 16 : label.contentWidth + ScreenTools.defaultFontPixelWidth
+            implicitWidth:  column === 0 ? ScreenTools.implicitCheckBoxHeight + ScreenTools.defaultFontPixelWidth
+                                         : column === 1 ? nameRow.implicitWidth + ScreenTools.defaultFontPixelWidth
+                                         : column === 2 ? ScreenTools.defaultFontPixelWidth * 16
+                                                        : label.contentWidth + ScreenTools.defaultFontPixelWidth
             implicitHeight: label.contentHeight + ScreenTools.defaultFontPixelHeight * 0.5
             color:          row % 2 === 0 ? "transparent" : qgcPal.windowShade
             clip:           true
@@ -352,13 +382,46 @@ Item {
                 visible:        column == 3
             }
 
+            QGCCheckBox {
+                visible:                column === 0
+                anchors.centerIn:       parent
+                checked:                _root._favorites.indexOf(fact.name) >= 0
+                z:                      1
+                onClicked:              controller.toggleFavorite(fact.name)
+            }
+
+            Row {
+                id:                     nameRow
+                visible:                column === 1
+                anchors.left:           parent.left
+                anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
+                anchors.verticalCenter: parent.verticalCenter
+                spacing:               lockIcon.visible ? ScreenTools.defaultFontPixelWidth / 3 : 0
+
+                QGCLabel {
+                    text:               column === 1 ? display : ""
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+
+                QGCColoredImage {
+                    id:                 lockIcon
+                    visible:            fact.readOnly
+                    source:             "qrc:/InstrumentValueIcons/lock-closed.svg"
+                    color:              qgcPal.text
+                    width:              ScreenTools.defaultFontPixelHeight * 0.8
+                    height:             width
+                    sourceSize.width:   width
+                    anchors.verticalCenter: parent.verticalCenter
+                }
+            }
+
             QGCLabel {
                 id:                 label
-                visible:            column != 0
+                visible:            column !== 0 && column !== 1
                 anchors.left:       parent.left
                 anchors.leftMargin: ScreenTools.defaultFontPixelWidth / 2
                 anchors.verticalCenter: parent.verticalCenter
-                width:              column == 2 ? ScreenTools.defaultFontPixelWidth * 15 : contentWidth
+                width:              column == 2 ? ScreenTools.defaultFontPixelWidth * 15 : implicitWidth
                 text:               column == 2 ? col1String() : display
                 color:              column == 2 && fact.defaultValueAvailable && !fact.valueEqualsDefault ? qgcPal.modifiedParamValue : qgcPal.text
                 font.bold:          column == 2 && fact.defaultValueAvailable && !fact.valueEqualsDefault
@@ -378,6 +441,7 @@ Item {
 
             QGCMouseArea {
                 anchors.fill: parent
+                visible:      column !== 0
                 onClicked: mouse => {
                     _editorDialogFact = fact
                     editorDialogFactory.open()

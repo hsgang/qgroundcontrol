@@ -42,21 +42,42 @@ Rectangle {
         var entry = settingsPagesModel.get(pageIndex)
         if (!entry) return []
 
+        // Check English search terms
         var termsStr = entry.searchTerms
-        if (!termsStr || termsStr === "") return []
-
-        try {
-            var terms = JSON.parse(termsStr)
-        } catch(e) {
-            return []
-        }
-
         var matches = []
-        for (var i = 0; i < terms.length; i++) {
-            if (terms[i].terms.indexOf(query) !== -1) {
-                matches.push(terms[i].section)
-            }
+        var matched = {}
+        if (termsStr && termsStr !== "") {
+            try {
+                var terms = JSON.parse(termsStr)
+                for (var i = 0; i < terms.length; i++) {
+                    if (terms[i].terms.indexOf(query) !== -1) {
+                        matched[terms[i].section] = true
+                        matches.push(terms[i].section)
+                    }
+                }
+            } catch(e) { console.warn("AppSettings: JSON parse error in searchTerms:", e) }
         }
+
+        // Check translatable terms (translated at runtime)
+        var trStr = entry.translatableTerms
+        if (trStr && trStr !== "") {
+            try {
+                var trTerms = JSON.parse(trStr)
+                for (var j = 0; j < trTerms.length; j++) {
+                    if (matched[trTerms[j].section]) continue
+                    var ctx = trTerms[j].context
+                    var tList = trTerms[j].terms
+                    for (var k = 0; k < tList.length; k++) {
+                        if (qsTranslate(ctx, tList[k]).toLowerCase().indexOf(query) !== -1) {
+                            matched[trTerms[j].section] = true
+                            matches.push(trTerms[j].section)
+                            break
+                        }
+                    }
+                }
+            } catch(e) { console.warn("AppSettings: JSON parse error in translatableTerms:", e) }
+        }
+
         return matches
     }
 
@@ -105,7 +126,7 @@ Rectangle {
         // Find and select the default page
         var targetUrl = globals.commingFromRIDIndicator
             ? "qrc:/qml/QGroundControl/AppSettings/RemoteIDSettings.qml"
-            : "qrc:/qml/QGroundControl/AppSettings/AppSettings.qml"
+            : "qrc:/qml/QGroundControl/AppSettings/GeneralSettings.qml"
         globals.commingFromRIDIndicator = false
 
         for (var i = 0; i < settingsPagesModel.count; i++) {
@@ -178,9 +199,18 @@ Rectangle {
                     property var    pageVisible: model.pageVisible ?? function() { return true }
                     property var    pageSections: {
                         try {
+                            var trStr = model.translatableTerms
+                            if (trStr && trStr !== "") {
+                                var trTerms = JSON.parse(trStr)
+                                return trTerms.map(function(t) {
+                                    if (!t.terms || t.terms.length === 0) return ""
+                                    return qsTranslate(t.context, t.terms[0])
+                                }).filter(function(s) { return s !== "" })
+                            }
                             var s = model.sections
                             return (s && s !== "") ? JSON.parse(s) : []
                         } catch(e) {
+                            console.warn("AppSettings: JSON parse error in pageSections:", e)
                             return []
                         }
                     }
@@ -217,9 +247,13 @@ Rectangle {
                         onClicked: {
                             if (mainWindow.allowViewSwitch()) {
                                 settingsView._navigateTo(index, -1)
-                                // Auto-expand when selecting a page
-                                if (hasMultipleSections && !isExpanded) {
-                                    settingsView._setExpanded(index, true)
+                                if (hasMultipleSections) {
+                                    // Toggle expand/collapse when re-clicking the same page
+                                    if (isSelected && isExpanded) {
+                                        settingsView._setExpanded(index, false)
+                                    } else if (!isExpanded) {
+                                        settingsView._setExpanded(index, true)
+                                    }
                                 }
                             }
                         }
@@ -228,7 +262,11 @@ Rectangle {
                             if (!mainWindow.allowViewSwitch()) {
                                 return
                             }
-                            settingsView._setExpanded(index, !isExpanded)
+                            var expanding = !isExpanded
+                            settingsView._setExpanded(index, expanding)
+                            if (!expanding && isSelected) {
+                                settingsView._navigateTo(index, -1)
+                            }
                         }
                     }
 
@@ -266,7 +304,7 @@ Rectangle {
                             }
 
                             contentItem: QGCLabel {
-                                text:  qsTr(modelData)
+                                text:  modelData
                                 color: sectionBtn.textColor
                                 font.pointSize: ScreenTools.defaultFontPointSize * 0.9
                                 horizontalAlignment: Text.AlignLeft
@@ -308,5 +346,6 @@ Rectangle {
         anchors.right:          parent.right
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
+
     }
 }

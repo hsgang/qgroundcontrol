@@ -5,7 +5,7 @@
 #include "MAVLinkLib.h"
 #include "MAVLinkProtocol.h"
 #include "ParameterMetaData.h"
-#include "QGC.h"
+#include "AppMessages.h"
 #include "QGCApplication.h"
 #include "QGCCameraManager.h"
 #include "QGCFileDownload.h"
@@ -15,6 +15,7 @@
 #include "VehicleCameraControl.h"
 #include "VehicleComponent.h"
 
+#include "QGCCompression.h"
 #include "QGCFileHelper.h"
 
 #include <QtCore/QDir>
@@ -208,7 +209,6 @@ const QVariantList &FirmwarePlugin::toolIndicators(const Vehicle*)
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/GimbalIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/EscIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/JoystickIndicator.qml")),
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/SigningIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/MultiVehicleSelector.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Toolbar/VehicleIndicator.qml")),
 #ifdef QT_DEBUG
@@ -553,7 +553,7 @@ void FirmwarePlugin::cacheParameterMetaDataFile(const QString &metaDataFile)
     }
 
     QString readError;
-    const QByteArray data = QGCFileHelper::readFile(metaDataFile, &readError);
+    const QByteArray data = QGCCompression::readFile(metaDataFile, &readError);
     if (data.isEmpty()) {
         qCWarning(FirmwarePluginLog) << "Cannot cache parameter metadata: failed to read" << metaDataFile << readError;
         return;

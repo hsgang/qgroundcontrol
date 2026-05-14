@@ -1,5 +1,5 @@
 import QtQuick
-import QtCharts
+import QtGraphs
 
 import QGroundControl
 import QGroundControl.Controls
@@ -21,7 +21,7 @@ Rectangle {
     property real _indicatorSpacing:        5
     property real _minAMSLAltitude:         isNaN(terrainProfile.minAMSLAlt) ? 0 : terrainProfile.minAMSLAlt
     property real _maxAMSLAltitude:         isNaN(terrainProfile.maxAMSLAlt) ? 100 : terrainProfile.maxAMSLAlt
-    property real _missionPlannedDistance:    isNaN(missionController.missionPlannedDistance) ? 100 : missionController.missionPlannedDistance
+    property real _missionTotalDistance:    isNaN(missionController.missionTotalDistance) ? 100 : missionController.missionTotalDistance
     property var  _unitsConversion:         QGroundControl.unitsConversion
 
     QGCPalette { id: qgcPal }
@@ -31,7 +31,7 @@ Rectangle {
         anchors.top:            parent.bottom
         width:                  parent.height
         font.pointSize:         ScreenTools.smallFontPointSize
-        text:                   qsTr("Height AMSL (%1)").arg(_unitsConversion.appSettingsDistanceUnitsString)
+        text:                   qsTr("Height AMSL (%1)").arg(_unitsConversion.appSettingsVerticalDistanceUnitsString)
         horizontalAlignment:    Text.AlignHCenter
         rotation:               -90
         transformOrigin:        Item.TopLeft
@@ -50,51 +50,70 @@ Rectangle {
             height: terrainProfileFlickable.height
             width:  terrainProfileFlickable.width
 
-            ChartView {
+            GraphsView {
                 id:                 chart
                 anchors.fill:       parent
-                margins.top:        0
-                margins.right:      0
-                margins.bottom:     0
-                margins.left:       0
-                backgroundColor:    "transparent"
-                legend.visible:     false
-                antialiasing:       true
+                marginTop:          ScreenTools.defaultFontPixelHeight / 2  // Fixes top clipping problem
+                marginRight:        ScreenTools.defaultFontPixelWidth * 2   // Prevents clipping last tick mark
+                marginBottom:       -ScreenTools.defaultFontPixelHeight / 2 // For some reason you can't get rid of bottom margin by setting to 0
+                marginLeft:         0
 
-                ValueAxis {
-                    id:                         axisX
-                    min:                        0
-                    max:                        _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(missionController.missionPlannedDistance)
-                    lineVisible:                true
-                    labelsFont.family:          ScreenTools.fixedFontFamily
-                    labelsFont.pointSize:       ScreenTools.smallFontPointSize
-                    labelsColor:                qgcPal.text
-                    labelFormat:                "%d %1".arg(_unitsConversion.appSettingsDistanceUnitsString)
-                    tickCount:                  5
-                    gridLineColor:              applyOpacity(qgcPal.text, 0.25)
+                theme: GraphsTheme {
+                    colorScheme:                qgcPal.globalTheme === QGCPalette.Light ? GraphsTheme.ColorScheme.Light : GraphsTheme.ColorScheme.Dark
+                    backgroundColor:            "transparent"
+                    backgroundVisible:          false
+                    plotAreaBackgroundColor:     qgcPal.window
+                    grid.mainColor:             applyOpacity(qgcPal.text, 0.5)
+                    grid.subColor:              applyOpacity(qgcPal.text, 0.3)
+                    grid.mainWidth:             1
+                    labelBackgroundVisible:     false
+                    labelTextColor:             qgcPal.text
+                    axisXLabelFont.family:      ScreenTools.fixedFontFamily
+                    axisXLabelFont.pointSize:   ScreenTools.smallFontPointSize
+                    axisYLabelFont.family:      ScreenTools.fixedFontFamily
+                    axisYLabelFont.pointSize:   ScreenTools.smallFontPointSize
                 }
 
-                ValueAxis {
-                    id:                         axisY
-                    min:                        _unitsConversion.metersToAppSettingsDistanceUnits(_minAMSLAltitude)
-                    max:                        _unitsConversion.metersToAppSettingsDistanceUnits(_maxAMSLAltitude)
+                axisX: ValueAxis {
+                    id:                         axisX
+                    min:                        0
+                    max:                        _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionTotalDistance)
                     lineVisible:                true
-                    labelsFont.family:          ScreenTools.fixedFontFamily
-                    labelsFont.pointSize:       ScreenTools.smallFontPointSize
-                    labelsColor:                qgcPal.text
-                    labelFormat:                "%d %1".arg(_unitsConversion.appSettingsDistanceUnitsString)
-                    tickCount:                  4
-                    gridLineColor:              applyOpacity(qgcPal.text, 0.25)
+                    tickInterval:               max > 0 ? max / 4 : 1
+                    labelDecimals:              1
+                }
+
+                axisY: ValueAxis {
+                    id:                         axisY
+                    min:                        _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_minAMSLAltitude)
+                    max:                        _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_maxAMSLAltitude)
+                    lineVisible:                true
+                    tickInterval:               (max - min) > 0 ? (max - min) / 3 : 1
+                    labelDecimals:              1
                 }
 
                 LineSeries {
-                    id:         lineSeries
-                    axisX:      axisX
-                    axisY:      axisY
-                    visible:    true
+                    id:         terrainSeries
+                    color:      "green"
+                    width:      2
+                }
 
-                    XYPoint { x: 0; y: _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_minAMSLAltitude) }
-                    XYPoint { x: _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_missionPlannedDistance); y: _unitsConversion.metersToAppSettingsVerticalDistanceUnits(_maxAMSLAltitude) }
+                LineSeries {
+                    id:         flightSeries
+                    color:      "orange"
+                    width:      2
+                }
+
+                LineSeries {
+                    id:         missingSeries
+                    color:      "yellow"
+                    width:      2
+                }
+
+                LineSeries {
+                    id:         collisionSeries
+                    color:      "red"
+                    width:      3
                 }
             }
 
@@ -105,6 +124,10 @@ Rectangle {
                 height:             chart.plotArea.height
                 visibleWidth:       chart.plotArea.width
                 missionController:  root.missionController
+                horizontalScale:    _unitsConversion.metersToAppSettingsHorizontalDistanceUnits(1)
+                verticalScale:      _unitsConversion.metersToAppSettingsVerticalDistanceUnits(1)
+
+                onProfileChanged:   terrainProfile.updateSeries(terrainSeries, flightSeries, missingSeries, collisionSeries)
 
                 Repeater {
                     model: missionController.visualItems
@@ -173,9 +196,9 @@ Rectangle {
                             id:             complexItem
                             anchors.bottom: parent.bottom
                             x:              (object.distanceFromStart * terrainProfile.pixelsPerMeter)
-                            width:          visible ? object.complexDistance * terrainProfile.pixelsPerMeter : 0
+                            width:          complexItem.visible ? object.complexDistance * terrainProfile.pixelsPerMeter : 0
                             height:         patternNameLabel.height
-                            color:          qgcPal.colorGreen //"green"
+                            color:          "green"
                             opacity:        0.5
                             visible:        !object.isSimpleItem && !object.isSingleItem
 

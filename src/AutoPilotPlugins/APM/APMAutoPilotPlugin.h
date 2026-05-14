@@ -20,6 +20,7 @@ class APMSubFrameComponent;
 class APMServoComponent;
 class ESP8266Component;
 class APMHeliComponent;
+class APMLoggingComponent;
 class APMRemoteSupportComponent;
 class APMChannelsComponent;
 class APMFollowComponent;
@@ -60,6 +61,7 @@ protected:
     APMAdvancedTuningCopterComponent *_advancedTuningCopterComponent = nullptr;
     ESP8266Component *_esp8266Component = nullptr;
     APMHeliComponent *_heliComponent = nullptr;
+    APMLoggingComponent *_loggingComponent = nullptr;
     APMRemoteSupportComponent *_apmRemoteSupportComponent = nullptr;
     APMFollowComponent *_followComponent = nullptr;
     JoystickComponent *_joystickComponent = nullptr;

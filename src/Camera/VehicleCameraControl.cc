@@ -1,6 +1,7 @@
 #include "VehicleCameraControl.h"
 #include "QGCCameraIO.h"
-#include "QGC.h"
+#include "AppMessages.h"
+#include "QGCFormat.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
 #include "VideoManager.h"
@@ -9,7 +10,8 @@
 #include "QGCCompression.h"
 #include "QGCCorePlugin.h"
 #include "QGCFileHelper.h"
-#include "QGC.h"
+#include "AppMessages.h"
+#include "QGCFormat.h"
 #include "Vehicle.h"
 #include "VehicleLinkManager.h"
 #include "LinkInterface.h"
@@ -120,6 +122,8 @@ VehicleCameraControl::VehicleCameraControl(const mavlink_camera_information_t *i
                                     _modelName.toStdString().c_str(),
                                     static_cast<int>(_mavlinkCameraInfo.cam_definition_version));
 
+    connect(this, &VehicleCameraControl::dataReady, this, &VehicleCameraControl::_dataReady);
+
     if(info->cam_definition_uri[0] != 0) {
         //-- Process camera definition file
         _handleDefinitionFile(info->cam_definition_uri);
@@ -141,8 +145,6 @@ VehicleCameraControl::VehicleCameraControl(const mavlink_camera_information_t *i
     //-- Tracking capabilities
     _hasTrackingRectCapability = _mavlinkCameraInfo.flags & CAMERA_CAP_FLAGS_HAS_TRACKING_RECTANGLE;
     _hasTrackingPointCapability = _mavlinkCameraInfo.flags & CAMERA_CAP_FLAGS_HAS_TRACKING_POINT;
-
-    connect(this, &VehicleCameraControl::dataReady, this, &VehicleCameraControl::_dataReady);
 
     qCDebug(VehicleCameraControlLog) << "Camera Info:";
     qCDebug(VehicleCameraControlLog) << "   vendor:" << vendor();
@@ -266,10 +268,17 @@ MavlinkCameraControlInterface::CapturePhotosState VehicleCameraControl::captureP
 
 QString VehicleCameraControl::firmwareVersion() const
 {
-    int major = (_mavlinkCameraInfo.firmware_version >> 24) & 0xFF;
-    int minor = (_mavlinkCameraInfo.firmware_version >> 16) & 0xFF;
-    int build = _mavlinkCameraInfo.firmware_version & 0xFFFF;
-    return QString::asprintf("%d.%d.%d", major, minor, build);
+    if (_mavlinkCameraInfo.firmware_version == 0) {
+        return {};
+    }
+    int major = (_mavlinkCameraInfo.firmware_version)       & 0xFF;
+    int minor = (_mavlinkCameraInfo.firmware_version >> 8)  & 0xFF;
+    int patch = (_mavlinkCameraInfo.firmware_version >> 16) & 0xFF;
+    int dev   = (_mavlinkCameraInfo.firmware_version >> 24) & 0xFF;
+    if (dev != 0) {
+        return QString::asprintf("%d.%d.%d.%d", major, minor, patch, dev);
+    }
+    return QString::asprintf("%d.%d.%d", major, minor, patch);
 }
 
 QString VehicleCameraControl::recordTimeStr() const
@@ -666,6 +675,45 @@ void VehicleCameraControl::stopZoom()
             false,                                  // ShowError
             ZOOM_TYPE_CONTINUOUS,                   // Zoom type
             0);                                     // Direction (-1 wide, 1 tele)
+    }
+}
+
+void VehicleCameraControl::stepFocus(int direction)
+{
+    qCDebug(VehicleCameraControlLog) << "Camera step focus" << direction;
+    if(_vehicle && hasFocus()) {
+        _vehicle->sendMavCommand(
+            _compID,                                // Target component
+            MAV_CMD_SET_CAMERA_FOCUS,               // Command id
+            false,                                  // ShowError
+            FOCUS_TYPE_STEP,                        // Focus type
+            direction);                             // Direction (-1 in, 1 out)
+    }
+}
+
+void VehicleCameraControl::startFocus(int direction)
+{
+    qCDebug(VehicleCameraControlLog) << "Camera start focus" << direction;
+    if(_vehicle && hasFocus()) {
+        _vehicle->sendMavCommand(
+            _compID,                                // Target component
+            MAV_CMD_SET_CAMERA_FOCUS,               // Command id
+            false,                                  // ShowError
+            FOCUS_TYPE_CONTINUOUS,                  // Focus type
+            direction);                             // Direction (-1 in, 1 out)
+    }
+}
+
+void VehicleCameraControl::stopFocus()
+{
+    qCDebug(VehicleCameraControlLog) << "Camera stop focus";
+    if(_vehicle && hasFocus()) {
+        _vehicle->sendMavCommand(
+            _compID,                                // Target component
+            MAV_CMD_SET_CAMERA_FOCUS,               // Command id
+            false,                                  // ShowError
+            FOCUS_TYPE_CONTINUOUS,                  // Focus type
+            0);                                     // Direction (-1 in, 1 out)
     }
 }
 
