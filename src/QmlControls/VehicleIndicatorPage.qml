@@ -32,18 +32,45 @@ ToolIndicatorPage {
     property Fact _stat_runtime:            apmController.getParameterFact(-1, "STAT_RUNTIME")
     property Fact _stat_flttime:            apmController.getParameterFact(-1, "STAT_FLTTIME")
 
-    property Fact landSpeedFact:            controller.getParameterFact(-1, "LAND_SPEED", false)
+    // ArduCopter 4.7+ renamed many parameters and converted units cm→m, cm/s→m/s.
+    property bool _useNewParams:            _activeVehicle && _activeVehicle.firmwareMajorVersion >= 0 &&
+                                            (_activeVehicle.firmwareMajorVersion > 4 ||
+                                             (_activeVehicle.firmwareMajorVersion === 4 && _activeVehicle.firmwareMinorVersion >= 7))
+    property real _speedScale:              _useNewParams ? 1.0 : 0.01
+    property real _altScale:                _useNewParams ? 1.0 : 0.01
+    property string _sliderUnit:            _useNewParams ? "m/s" : "cm/s"
+    property string _radiusUnit:            _useNewParams ? "m"   : "cm"
+
+    property Fact landSpeedFact:            _useNewParams
+                                            ? controller.getParameterFact(-1, "LAND_SPD_MS", false)
+                                            : controller.getParameterFact(-1, "LAND_SPEED", false)
     property Fact precisionLandingFact:     controller.getParameterFact(-1, "PLND_ENABLED", false)
     property Fact atcInputTCFact:           controller.getParameterFact(-1, "ATC_INPUT_TC", false)
-    property Fact loitSpeedFact:            controller.getParameterFact(-1, "LOIT_SPEED", false)
-    property Fact pilotSpeedUpFact:         controller.getParameterFact(-1, "PILOT_SPEED_UP", false)
-    property Fact pilotSpeedDnFact:         controller.getParameterFact(-1, "PILOT_SPEED_DN", false)
-    property bool isPilotSpeedDn:           (pilotSpeedDnFact.value !== 0) ? true : false
-    property Fact wpnavSpeedFact:           controller.getParameterFact(-1, "WPNAV_SPEED", false)
-    property Fact wpnavSpeedUpFact:         controller.getParameterFact(-1, "WPNAV_SPEED_UP", false)
-    property Fact wpnavSpeedDnFact:         controller.getParameterFact(-1, "WPNAV_SPEED_DN", false)
-    property Fact wpnavRadiusFact:          controller.getParameterFact(-1, "WPNAV_RADIUS", false)
-    property Fact rtlAltitudeFact:          controller.getParameterFact(-1, "RTL_ALT", false)
+    property Fact loitSpeedFact:            _useNewParams
+                                            ? controller.getParameterFact(-1, "LOIT_SPEED_MS", false)
+                                            : controller.getParameterFact(-1, "LOIT_SPEED", false)
+    property Fact pilotSpeedUpFact:         _useNewParams
+                                            ? controller.getParameterFact(-1, "PILOT_SPD_UP", false)
+                                            : controller.getParameterFact(-1, "PILOT_SPEED_UP", false)
+    property Fact pilotSpeedDnFact:         _useNewParams
+                                            ? controller.getParameterFact(-1, "PILOT_SPD_DN", false)
+                                            : controller.getParameterFact(-1, "PILOT_SPEED_DN", false)
+    property bool isPilotSpeedDn:           pilotSpeedDnFact && (pilotSpeedDnFact.value !== 0)
+    property Fact wpnavSpeedFact:           _useNewParams
+                                            ? controller.getParameterFact(-1, "WP_SPD", false)
+                                            : controller.getParameterFact(-1, "WPNAV_SPEED", false)
+    property Fact wpnavSpeedUpFact:         _useNewParams
+                                            ? controller.getParameterFact(-1, "WP_SPD_UP", false)
+                                            : controller.getParameterFact(-1, "WPNAV_SPEED_UP", false)
+    property Fact wpnavSpeedDnFact:         _useNewParams
+                                            ? controller.getParameterFact(-1, "WP_SPD_DN", false)
+                                            : controller.getParameterFact(-1, "WPNAV_SPEED_DN", false)
+    property Fact wpnavRadiusFact:          _useNewParams
+                                            ? controller.getParameterFact(-1, "WP_RADIUS_M", false)
+                                            : controller.getParameterFact(-1, "WPNAV_RADIUS", false)
+    property Fact rtlAltitudeFact:          _useNewParams
+                                            ? controller.getParameterFact(-1, "RTL_ALT_M", false)
+                                            : controller.getParameterFact(-1, "RTL_ALT", false)
 
     contentComponent: Component {
         ColumnLayout {
@@ -75,45 +102,52 @@ ToolIndicatorPage {
 
                 LabelledLabel {
                     label: qsTr("Loiter Speed")
-                    labelText: (loitSpeedFact.value * 0.01).toFixed(1) + " m/s"
+                    labelText: loitSpeedFact ? (loitSpeedFact.value * _speedScale).toFixed(1) + " m/s" : qsTr("N/A")
+                    visible: loitSpeedFact
                 }
 
                 LabelledLabel {
                     label: qsTr("Pilot Climb Speed")
-                    labelText: (pilotSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
+                    labelText: pilotSpeedUpFact ? (pilotSpeedUpFact.value * _speedScale).toFixed(1) + " m/s" : qsTr("N/A")
+                    visible: pilotSpeedUpFact
                 }
 
                 LabelledLabel {
                     label: qsTr("Pilot Descent Speed")
-                    labelText: { isPilotSpeedDn ?
-                                (pilotSpeedDnFact.value * 0.01).toFixed(1) + " m/s" :
-                                (pilotSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
-                    }
+                    labelText: isPilotSpeedDn
+                                ? (pilotSpeedDnFact.value * _speedScale).toFixed(1) + " m/s"
+                                : (pilotSpeedUpFact ? (pilotSpeedUpFact.value * _speedScale).toFixed(1) + " m/s" : qsTr("N/A"))
+                    visible: pilotSpeedDnFact || pilotSpeedUpFact
                 }
 
                 LabelledLabel {
                     label: qsTr("WP Horizontal Speed")
-                    labelText: (wpnavSpeedFact.value * 0.01).toFixed(1) + " m/s"
+                    labelText: wpnavSpeedFact ? (wpnavSpeedFact.value * _speedScale).toFixed(1) + " m/s" : qsTr("N/A")
+                    visible: wpnavSpeedFact
                 }
 
                 LabelledLabel {
                     label: qsTr("WP Climb Speed")
-                    labelText: (wpnavSpeedUpFact.value * 0.01).toFixed(1) + " m/s"
+                    labelText: wpnavSpeedUpFact ? (wpnavSpeedUpFact.value * _speedScale).toFixed(1) + " m/s" : qsTr("N/A")
+                    visible: wpnavSpeedUpFact
                 }
 
                 LabelledLabel {
                     label: qsTr("WP Descent Speed")
-                    labelText: (wpnavSpeedDnFact.value * 0.01).toFixed(1) + " m/s"
+                    labelText: wpnavSpeedDnFact ? (wpnavSpeedDnFact.value * _speedScale).toFixed(1) + " m/s" : qsTr("N/A")
+                    visible: wpnavSpeedDnFact
                 }
 
                 LabelledLabel {
                     label: qsTr("RTL Altitude")
-                    labelText: (rtlAltitudeFact.value * 0.01).toFixed(1) + " m"
+                    labelText: rtlAltitudeFact ? (rtlAltitudeFact.value * _altScale).toFixed(1) + " m" : qsTr("N/A")
+                    visible: rtlAltitudeFact
                 }
 
                 LabelledLabel {
                     label: qsTr("Land Speed")
-                    labelText: (landSpeedFact.value * 0.01).toFixed(1) + " m/s"
+                    labelText: landSpeedFact ? (landSpeedFact.value * _speedScale).toFixed(1) + " m/s" : qsTr("N/A")
+                    visible: landSpeedFact
                 }
             }
 
@@ -157,57 +191,57 @@ ToolIndicatorPage {
                 visible:            true
             }
             LabelledFactSlider {
-                label:              qsTr("Loiter Horizontal Speed(cm/s)")
+                label:              qsTr("Loiter Horizontal Speed") + " (" + _sliderUnit + ")"
                 fact:               loitSpeedFact
-                from:               500
-                to:                 1500
-                majorTickStepSize:  100
-                visible:            true
+                from:               _useNewParams ? 5    : 500
+                to:                 _useNewParams ? 15   : 1500
+                majorTickStepSize:  _useNewParams ? 1    : 100
+                visible:            loitSpeedFact
             }
             LabelledFactSlider {
-                label:              qsTr("WP Horizontal Speed(cm/s)")
+                label:              qsTr("WP Horizontal Speed") + " (" + _sliderUnit + ")"
                 fact:               wpnavSpeedFact
-                from:               500
-                to:                 1500
-                majorTickStepSize:  100
-                visible:            true
+                from:               _useNewParams ? 5    : 500
+                to:                 _useNewParams ? 15   : 1500
+                majorTickStepSize:  _useNewParams ? 1    : 100
+                visible:            wpnavSpeedFact
             }
             LabelledFactSlider {
-                label:              qsTr("WP Climb Speed(cm/s)")
+                label:              qsTr("WP Climb Speed") + " (" + _sliderUnit + ")"
                 fact:               wpnavSpeedUpFact
-                from:               100
-                to:                 500
-                majorTickStepSize:  50
-                visible:            true
+                from:               _useNewParams ? 1    : 100
+                to:                 _useNewParams ? 5    : 500
+                majorTickStepSize:  _useNewParams ? 0.5  : 50
+                visible:            wpnavSpeedUpFact
             }
             LabelledFactSlider {
-                label:              qsTr("WP Descent Speed(cm/s)")
+                label:              qsTr("WP Descent Speed") + " (" + _sliderUnit + ")"
                 fact:               wpnavSpeedDnFact
-                from:               100
-                to:                 500
-                majorTickStepSize:  50
-                visible:            true
+                from:               _useNewParams ? 1    : 100
+                to:                 _useNewParams ? 5    : 500
+                majorTickStepSize:  _useNewParams ? 0.5  : 50
+                visible:            wpnavSpeedDnFact
             }
             LabelledFactSlider {
-                label:              qsTr("Mission Turning Radius(cm)")
+                label:              qsTr("Mission Turning Radius") + " (" + _radiusUnit + ")"
                 fact:               wpnavRadiusFact
-                from:               200
-                to:                 1000
-                majorTickStepSize:  100
-                visible:            true
+                from:               _useNewParams ? 2    : 200
+                to:                 _useNewParams ? 10   : 1000
+                majorTickStepSize:  _useNewParams ? 1    : 100
+                visible:            wpnavRadiusFact
             }
 
             LabelledFactTextField {
                 label:      qsTr("RTL Altitude")
                 fact:       rtlAltitudeFact
-                visible:    true
+                visible:    rtlAltitudeFact
             }
 
             LabelledFactTextField {
                 label:      qsTr("Land Speed")
                 fact:       landSpeedFact
                 visible:    landSpeedFact && controller.vehicle
-                enabled:     !controller.vehicle.fixedWing
+                enabled:     controller.vehicle && !controller.vehicle.fixedWing
             }
 
             FactCheckBoxSlider {
