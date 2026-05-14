@@ -2,9 +2,6 @@
 #define SIYICRCAPI_H
 
 #include <QObject>
-#ifndef SAK_IMPORT_MODULE_TESTLIB
-#include <QComboBox>
-#endif
 #include <QStringList>
 
 class SiYiCrcApi : public QObject

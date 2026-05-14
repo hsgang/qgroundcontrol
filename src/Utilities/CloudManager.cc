@@ -21,7 +21,6 @@
 #include <QDateTime>
 #include <QtQml/qqml.h>
 #include <QtCore/QProcess>
-#include <QMessageBox>
 
 QGC_LOGGING_CATEGORY(CloudManagerLog, "Utilities.CloudManager")
 
