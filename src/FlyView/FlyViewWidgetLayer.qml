@@ -97,6 +97,15 @@ Item {
         property real rightEdgeBottomInset:     width + _layoutMargin
     }
 
+    FlyViewBottomCenterRowLayout {
+        id:                         bottomCenterRowLayout
+        anchors.bottom:             parent.bottom
+        anchors.horizontalCenter:   parent.horizontalCenter
+        anchors.bottomMargin:       _margins
+        spacing:                    _layoutSpacing
+        planMasterController:       _planMasterController
+    }
+
     FlyViewMissionCompleteDialog {
         missionController:      _missionController
         geoFenceController:     _geoFenceController

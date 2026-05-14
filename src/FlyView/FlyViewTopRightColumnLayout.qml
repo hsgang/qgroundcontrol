@@ -15,16 +15,6 @@ ColumnLayout {
         Layout.fillWidth:       true
     }
 
-    FlyViewEKFStatus {
-        Layout.alignment:   Qt.AlignRight
-        visible:            QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue
-    }
-
-    FlyViewVibrationStatus {
-        Layout.alignment:   Qt.AlignRight
-        visible:            QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue
-    }
-
     Rectangle {
         id:                 multiVehiclePanelSelector
         Layout.preferredWidth:  parent.width

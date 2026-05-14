@@ -16,18 +16,23 @@ import QGroundControl.Controls
 import QGroundControl.FlyView
 
 RowLayout {
+    spacing: ScreenTools.defaultFontPixelHeight / 2
 
-    // FlyViewAttitudeIndicator{
-    //     id:                         attitudeIndicator
-    //     Layout.fillHeight: true
-    //     visible:                    !flyviewMissionProgress.visible
-    // }
+    property var planMasterController
 
-    FlyViewMissionProgress{
-        id:                         flyviewMissionProgress
-        Layout.alignment:           Qt.AlignHCenter
-        _planMasterController: planController
-        visible:  QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
+    FlyViewEKFStatus {
+        Layout.alignment:   Qt.AlignBottom
+        visible:            QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue
     }
 
+    FlyViewVibrationStatus {
+        Layout.alignment:   Qt.AlignBottom
+        visible:            QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue
+    }
+
+    FlyViewMissionProgress {
+        Layout.alignment:           Qt.AlignBottom
+        _planMasterController:      planMasterController
+        visible:                    QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
+    }
 }
