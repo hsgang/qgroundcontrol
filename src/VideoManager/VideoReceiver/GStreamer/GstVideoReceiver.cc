@@ -1256,6 +1256,8 @@ void GstVideoReceiver::_noteVideoSinkFrame()
         qCDebug(GstVideoReceiverLog) << "Decoding started";
         _dispatchSignal([this]() { emit decodingChanged(_decoding); });
     }
+    // Per-frame ping so VideoManager's stall timer can be reset on every decoded frame.
+    _dispatchSignal([this]() { emit videoFrameReceived(); });
 }
 
 void GstVideoReceiver::_noteEndOfStream()

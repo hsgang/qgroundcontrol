@@ -266,6 +266,7 @@ endif()
 # output fails on MSVC ("No data signature found") when large data sections are elided.
 list(APPEND QGC_RESOURCES
     "${CMAKE_SOURCE_DIR}/qgcresources.qrc"
+    "${CMAKE_SOURCE_DIR}/qgcimages.qrc"
 )
 
 # ============================================================================

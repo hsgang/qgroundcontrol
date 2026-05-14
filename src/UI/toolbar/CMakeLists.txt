@@ -58,6 +58,7 @@ qt_add_resources(${CMAKE_PROJECT_NAME} toolbar_resources
         "${CMAKE_SOURCE_DIR}/resources/GearWithPaperPlane.svg"
         "${CMAKE_SOURCE_DIR}/resources/OpenDoor.svg"
         "${CMAKE_SOURCE_DIR}/resources/VehicleMessages.png"
+        "${CMAKE_SOURCE_DIR}/resources/gear-white.svg"
 )
 
 qt_add_resources(${CMAKE_PROJECT_NAME} toolbar_qmlimages
