@@ -6,12 +6,12 @@
     <message>
         <source>Enable connection to an ADS-B SBS-1 server to receive nearby aircraft tracking data.</source>
         <extracomment>.QGC.MetaData.Facts[adsbServerConnectEnabled].shortDesc</extracomment>
-        <translation type="unfinished">Enable connection to an ADS-B SBS-1 server to receive nearby aircraft tracking data.</translation>
+        <translation>ADSB SBS 서버 연결</translation>
     </message>
     <message>
         <source>Connect to ADSB SBS-1 server using specified address/port</source>
         <extracomment>.QGC.MetaData.Facts[adsbServerConnectEnabled].longDesc</extracomment>
-        <translation type="unfinished">Connect to ADSB SBS-1 server using specified address/port</translation>
+        <translation>ADSB SBS 서버 연결</translation>
     </message>
     <message>
         <source>Connect to ADSB SBS server</source>
@@ -22,12 +22,12 @@
         <source>adsb,ads-b,traffic,aircraft,tracking</source>
         <extracomment>.QGC.MetaData.Facts[adsbServerConnectEnabled].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">adsb,ads-b,traffic,aircraft,tracking</translation>
+        <translation>On,Off</translation>
     </message>
     <message>
         <source>IP address or hostname of the ADS-B SBS-1 server to connect to.</source>
         <extracomment>.QGC.MetaData.Facts[adsbServerHostAddress].shortDesc</extracomment>
-        <translation type="unfinished">IP address or hostname of the ADS-B SBS-1 server to connect to.</translation>
+        <translation>호스트 주소</translation>
     </message>
     <message>
         <source>Host address</source>
@@ -38,12 +38,12 @@
         <source>adsb,server,host</source>
         <extracomment>.QGC.MetaData.Facts[adsbServerHostAddress].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">adsb,server,host</translation>
+        <translation>On,Off</translation>
     </message>
     <message>
         <source>Network port number on which the ADS-B SBS-1 server is listening.</source>
         <extracomment>.QGC.MetaData.Facts[adsbServerPort].shortDesc</extracomment>
-        <translation type="unfinished">Network port number on which the ADS-B SBS-1 server is listening.</translation>
+        <translation>서버 포트</translation>
     </message>
     <message>
         <source>Server port</source>
@@ -54,7 +54,7 @@
         <source>adsb,server,port</source>
         <extracomment>.QGC.MetaData.Facts[adsbServerPort].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">adsb,server,port</translation>
+        <translation>On,Off</translation>
     </message>
 </context>
 <context>
@@ -67,12 +67,12 @@
     <message>
         <source>adsb</source>
         <extracomment>.groups[ADSB Server].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>adsb</translation>
     </message>
     <message>
         <source>ads-b</source>
         <extracomment>.groups[ADSB Server].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>ADS-B</translation>
     </message>
     <message>
         <source>traffic</source>
@@ -92,22 +92,22 @@
     <message>
         <source>sbs</source>
         <extracomment>.groups[ADSB Server].keywords[5]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>sbs</translation>
     </message>
     <message>
         <source>server</source>
         <extracomment>.groups[ADSB Server].keywords[6]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>서버</translation>
     </message>
     <message>
         <source>host</source>
         <extracomment>.groups[ADSB Server].keywords[7]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>host</translation>
     </message>
     <message>
         <source>port</source>
         <extracomment>.groups[ADSB Server].keywords[8]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>포트</translation>
     </message>
 </context>
 <context>
@@ -176,27 +176,27 @@
     <message>
         <source>Battery Failsafe</source>
         <extracomment>.sections[Battery Failsafe].title</extracomment>
-        <translation type="unfinished">Battery Failsafe</translation>
+        <translation>기체 제어,0 hz,1 hz,2 hz,3 hz,4 hz,5 hz,6 hz,7 hz,8 hz,9 hz,10 hz,50 hz,100 hz</translation>
     </message>
     <message>
         <source>voltage</source>
         <extracomment>.sections[Battery Failsafe].keywords[0]</extracomment>
-        <translation type="unfinished">voltage</translation>
+        <translation>전압</translation>
     </message>
     <message>
         <source>mah</source>
         <extracomment>.sections[Battery Failsafe].keywords[1]</extracomment>
-        <translation type="unfinished">mah</translation>
+        <translation>mah</translation>
     </message>
     <message>
         <source>capacity</source>
         <extracomment>.sections[Battery Failsafe].keywords[2]</extracomment>
-        <translation type="unfinished">capacity</translation>
+        <translation>튜닝</translation>
     </message>
     <message>
         <source>low battery</source>
         <extracomment>.sections[Battery Failsafe].keywords[3]</extracomment>
-        <translation type="unfinished">low battery</translation>
+        <translation>lipo</translation>
     </message>
     <message>
         <source>critical battery</source>
@@ -206,22 +206,22 @@
     <message>
         <source>lipo</source>
         <extracomment>.sections[Battery Failsafe].keywords[5]</extracomment>
-        <translation type="unfinished">lipo</translation>
+        <translation>lipo</translation>
     </message>
     <message>
         <source>power</source>
         <extracomment>.sections[Battery Failsafe].keywords[6]</extracomment>
-        <translation type="unfinished">power</translation>
+        <translation>전원</translation>
     </message>
     <message>
         <source>Low action</source>
         <extracomment>.sections[Battery Failsafe].controls[0].label</extracomment>
-        <translation type="unfinished">Low action</translation>
+        <translation>활성화됨</translation>
     </message>
     <message>
         <source>Critical action</source>
         <extracomment>.sections[Battery Failsafe].controls[1].label</extracomment>
-        <translation type="unfinished">Critical action</translation>
+        <translation>gcs</translation>
     </message>
     <message>
         <source>Low voltage threshold</source>
@@ -251,12 +251,12 @@
     <message>
         <source>gcs</source>
         <extracomment>.sections[Ground Station Failsafe].keywords[0], .sections[Ground Station Failsafe].keywords[0], .sections[Ground Station Failsafe].keywords[0]</extracomment>
-        <translation type="unfinished">gcs</translation>
+        <translation>gcs</translation>
     </message>
     <message>
         <source>ground station</source>
         <extracomment>.sections[Ground Station Failsafe].keywords[1], .sections[Ground Station Failsafe].keywords[1], .sections[Ground Station Failsafe].keywords[1]</extracomment>
-        <translation type="unfinished">ground station</translation>
+        <translation>rssi</translation>
     </message>
     <message>
         <source>heartbeat</source>
@@ -281,42 +281,42 @@
     <message>
         <source>rssi</source>
         <extracomment>.sections[Ground Station Failsafe].keywords[6], .sections[Ground Station Failsafe].keywords[6], .sections[Ground Station Failsafe].keywords[6]</extracomment>
-        <translation type="unfinished">rssi</translation>
+        <translation>rssi</translation>
     </message>
     <message>
         <source>Enabled</source>
         <extracomment>.sections[Ground Station Failsafe].controls[0].label, .sections[Ground Station Failsafe].controls[0].label, .sections[Ground Station Failsafe].controls[0].label, .sections[Throttle Failsafe].controls[0].label, .sections[Throttle Failsafe].controls[0].label, .sections[EKF Failsafe].controls[0].label, .sections[EKF Failsafe].controls[0].label, .sections[Dead Reckoning Failsafe].controls[0].label</extracomment>
-        <translation type="unfinished">Enabled</translation>
+        <translation>활성화됨</translation>
     </message>
     <message>
         <source>Timeout</source>
         <extracomment>.sections[Ground Station Failsafe].controls[1].label, .sections[Ground Station Failsafe].controls[1].label, .sections[Throttle Failsafe].controls[2].label, .sections[Dead Reckoning Failsafe].controls[1].label</extracomment>
-        <translation type="unfinished">Timeout</translation>
+        <translation>시간 초과</translation>
     </message>
     <message>
         <source>Action:</source>
         <extracomment>.sections[Ground Station Failsafe].controls[2].label, .sections[Throttle Failsafe].controls[2].label, .sections[Throttle Failsafe].controls[3].label, .sections[EKF Failsafe].controls[2].label, .sections[EKF Failsafe].controls[2].label, .sections[Dead Reckoning Failsafe].controls[2].label, .sections[Other Failsafe Options].controls[1].label</extracomment>
-        <translation type="unfinished">Action:</translation>
+        <translation>RTL</translation>
     </message>
     <message>
         <source>RTL</source>
         <extracomment>.sections[Ground Station Failsafe].controls[2].options[0].label, .sections[Throttle Failsafe].controls[3].options[1].label, .sections[Dead Reckoning Failsafe].controls[2].options[1].label</extracomment>
-        <translation type="unfinished">RTL</translation>
+        <translation>RTL</translation>
     </message>
     <message>
         <source>Land</source>
         <extracomment>.sections[Ground Station Failsafe].controls[2].options[1].label, .sections[Dead Reckoning Failsafe].controls[2].options[0].label</extracomment>
-        <translation type="unfinished">Land</translation>
+        <translation>착륙</translation>
     </message>
     <message>
         <source>SmartRTL or RTL</source>
         <extracomment>.sections[Ground Station Failsafe].controls[2].options[2].label, .sections[Throttle Failsafe].controls[3].options[3].label, .sections[Dead Reckoning Failsafe].controls[2].options[2].label</extracomment>
-        <translation type="unfinished">SmartRTL or RTL</translation>
+        <translation>무선</translation>
     </message>
     <message>
         <source>SmartRTL or Land</source>
         <extracomment>.sections[Ground Station Failsafe].controls[2].options[3].label, .sections[Dead Reckoning Failsafe].controls[2].options[3].label</extracomment>
-        <translation type="unfinished">SmartRTL or Land</translation>
+        <translation>pwm</translation>
     </message>
     <message>
         <source>Auto DO_LAND_START or RTL</source>
@@ -381,12 +381,12 @@
     <message>
         <source>pwm</source>
         <extracomment>.sections[Failsafe Triggers].keywords[1], .sections[Throttle Failsafe].keywords[1], .sections[Throttle Failsafe].keywords[1]</extracomment>
-        <translation type="unfinished">pwm</translation>
+        <translation>pwm</translation>
     </message>
     <message>
         <source>short failsafe</source>
         <extracomment>.sections[Failsafe Triggers].keywords[2]</extracomment>
-        <translation type="unfinished">short failsafe</translation>
+        <translation>무선</translation>
     </message>
     <message>
         <source>long failsafe</source>
@@ -441,17 +441,17 @@
     <message>
         <source>radio</source>
         <extracomment>.sections[RC Failsafe].keywords[0]</extracomment>
-        <translation type="unfinished">radio</translation>
+        <translation>무선</translation>
     </message>
     <message>
         <source>receiver</source>
         <extracomment>.sections[RC Failsafe].keywords[1], .sections[Throttle Failsafe].keywords[2], .sections[Throttle Failsafe].keywords[2]</extracomment>
-        <translation type="unfinished">receiver</translation>
+        <translation>착륙</translation>
     </message>
     <message>
         <source>transmitter</source>
         <extracomment>.sections[RC Failsafe].keywords[2]</extracomment>
-        <translation type="unfinished">transmitter</translation>
+        <translation>착륙</translation>
     </message>
     <message>
         <source>rc loss</source>
@@ -476,17 +476,17 @@
     <message>
         <source>Landing</source>
         <extracomment>.sections[RC Failsafe].controls[4].label, .sections[Throttle Failsafe].controls[6].label, .sections[EKF Failsafe].controls[4].label, .sections[Dead Reckoning Failsafe].controls[4].label</extracomment>
-        <translation type="unfinished">Landing</translation>
+        <translation>착륙</translation>
     </message>
     <message>
         <source>Throttle Failsafe</source>
         <extracomment>.sections[Throttle Failsafe].title, .sections[Throttle Failsafe].title</extracomment>
-        <translation type="unfinished">Throttle Failsafe</translation>
+        <translation>유지</translation>
     </message>
     <message>
         <source>Always RTL</source>
         <extracomment>.sections[Throttle Failsafe].controls[2].options[0].label</extracomment>
-        <translation type="unfinished">Always RTL</translation>
+        <translation>유지</translation>
     </message>
     <message>
         <source>Always Land</source>
@@ -516,17 +516,17 @@
     <message>
         <source>Hold</source>
         <extracomment>.sections[Throttle Failsafe].controls[3].options[2].label, .sections[EKF Failsafe].controls[2].options[0].label, .sections[Other Failsafe Options].controls[1].options[0].label</extracomment>
-        <translation type="unfinished">Hold</translation>
+        <translation>유지</translation>
     </message>
     <message>
         <source>SmartRTL or Hold</source>
         <extracomment>.sections[Throttle Failsafe].controls[3].options[4].label</extracomment>
-        <translation type="unfinished">SmartRTL or Hold</translation>
+        <translation>EKF 안전장치</translation>
     </message>
     <message>
         <source>Terminate</source>
         <extracomment>.sections[Throttle Failsafe].controls[3].options[5].label</extracomment>
-        <translation type="unfinished">Terminate</translation>
+        <translation>EKF 안전장치</translation>
     </message>
     <message>
         <source>Loiter or Hold</source>
@@ -536,17 +536,17 @@
     <message>
         <source>EKF Failsafe</source>
         <extracomment>.sections[EKF Failsafe].title, .sections[EKF Failsafe].title</extracomment>
-        <translation type="unfinished">EKF Failsafe</translation>
+        <translation>EKF 안전장치</translation>
     </message>
     <message>
         <source>ekf</source>
         <extracomment>.sections[EKF Failsafe].keywords[0], .sections[EKF Failsafe].keywords[0]</extracomment>
-        <translation type="unfinished">ekf</translation>
+        <translation>ekf</translation>
     </message>
     <message>
         <source>extended kalman filter</source>
         <extracomment>.sections[EKF Failsafe].keywords[1], .sections[EKF Failsafe].keywords[1]</extracomment>
-        <translation type="unfinished">extended kalman filter</translation>
+        <translation>임계값</translation>
     </message>
     <message>
         <source>position estimate</source>
@@ -566,17 +566,17 @@
     <message>
         <source>Threshold</source>
         <extracomment>.sections[EKF Failsafe].controls[1].label, .sections[EKF Failsafe].controls[1].label</extracomment>
-        <translation type="unfinished">Threshold</translation>
+        <translation>임계값</translation>
     </message>
     <message>
         <source>Land if position required</source>
         <extracomment>.sections[EKF Failsafe].controls[2].options[0].label</extracomment>
-        <translation type="unfinished">Land if position required</translation>
+        <translation>보고만</translation>
     </message>
     <message>
         <source>AltHold if position required</source>
         <extracomment>.sections[EKF Failsafe].controls[2].options[1].label</extracomment>
-        <translation type="unfinished">AltHold if position required</translation>
+        <translation>보고만</translation>
     </message>
     <message>
         <source>Land from all modes</source>
@@ -586,17 +586,17 @@
     <message>
         <source>Report only</source>
         <extracomment>.sections[EKF Failsafe].controls[2].options[1].label</extracomment>
-        <translation type="unfinished">Report only</translation>
+        <translation>보고만</translation>
     </message>
     <message>
         <source>Dead Reckoning Failsafe</source>
         <extracomment>.sections[Dead Reckoning Failsafe].title</extracomment>
-        <translation type="unfinished">Dead Reckoning Failsafe</translation>
+        <translation>출발 지점 복귀</translation>
     </message>
     <message>
         <source>dead reckoning</source>
         <extracomment>.sections[Dead Reckoning Failsafe].keywords[0]</extracomment>
-        <translation type="unfinished">dead reckoning</translation>
+        <translation>출발 지점 복귀</translation>
     </message>
     <message>
         <source>Auto Land/Return or RTL</source>
@@ -611,7 +611,7 @@
     <message>
         <source>crash</source>
         <extracomment>.sections[Other Failsafe Options].keywords[0], .sections[Other Failsafe Options].keywords[0]</extracomment>
-        <translation type="unfinished">crash</translation>
+        <translation>충돌</translation>
     </message>
     <message>
         <source>vibration</source>
@@ -649,17 +649,17 @@
     <message>
         <source>Return to Launch</source>
         <extracomment>.sections[Return to Launch].title, .sections[Return to Launch].title</extracomment>
-        <translation type="unfinished">Return to Launch</translation>
+        <translation>출발 지점 복귀</translation>
     </message>
     <message>
         <source>rtl</source>
         <extracomment>.sections[Return to Launch].keywords[0], .sections[Return to Launch].keywords[0]</extracomment>
-        <translation type="unfinished">rtl</translation>
+        <translation>rtl</translation>
     </message>
     <message>
         <source>return home</source>
         <extracomment>.sections[Return to Launch].keywords[1], .sections[Return to Launch].keywords[1]</extracomment>
-        <translation type="unfinished">return home</translation>
+        <translation>선회 대기</translation>
     </message>
     <message>
         <source>return to launch</source>
@@ -669,27 +669,27 @@
     <message>
         <source>loiter</source>
         <extracomment>.sections[Return to Launch].keywords[3], .sections[Return to Launch].keywords[3]</extracomment>
-        <translation type="unfinished">loiter</translation>
+        <translation>선회 대기</translation>
     </message>
     <message>
         <source>land</source>
         <extracomment>.sections[Return to Launch].keywords[4], .sections[Return to Launch].keywords[4]</extracomment>
-        <translation type="unfinished">land</translation>
+        <translation>land</translation>
     </message>
     <message>
         <source>altitude</source>
         <extracomment>.sections[Return to Launch].keywords[5], .sections[Return to Launch].keywords[5]</extracomment>
-        <translation type="unfinished">altitude</translation>
+        <translation>고도</translation>
     </message>
     <message>
         <source>Return at specified altitude:</source>
         <extracomment>.sections[Return to Launch].controls[0].label</extracomment>
-        <translation type="unfinished">Return at specified altitude:</translation>
+        <translation>지오펜스</translation>
     </message>
     <message>
         <source>Return at current altitude</source>
         <extracomment>.sections[Return to Launch].controls[0].options[0].label, .sections[Return to Launch].controls[0].options[0].label</extracomment>
-        <translation type="unfinished">Return at current altitude</translation>
+        <translation>지오펜스</translation>
     </message>
     <message>
         <source>Return at specified altitude</source>
@@ -729,42 +729,42 @@
     <message>
         <source>GeoFence</source>
         <extracomment>.sections[GeoFence].title, .sections[GeoFence].title</extracomment>
-        <translation type="unfinished">GeoFence</translation>
+        <translation>지오펜스</translation>
     </message>
     <message>
         <source>geofence</source>
         <extracomment>.sections[GeoFence].keywords[0], .sections[GeoFence].keywords[0]</extracomment>
-        <translation type="unfinished">geofence</translation>
+        <translation>경계</translation>
     </message>
     <message>
         <source>boundary</source>
         <extracomment>.sections[GeoFence].keywords[1], .sections[GeoFence].keywords[1]</extracomment>
-        <translation type="unfinished">boundary</translation>
+        <translation>경계</translation>
     </message>
     <message>
         <source>fence</source>
         <extracomment>.sections[GeoFence].keywords[2], .sections[GeoFence].keywords[2]</extracomment>
-        <translation type="unfinished">fence</translation>
+        <translation>활성화됨</translation>
     </message>
     <message>
         <source>containment</source>
         <extracomment>.sections[GeoFence].keywords[3], .sections[GeoFence].keywords[3]</extracomment>
-        <translation type="unfinished">containment</translation>
+        <translation>활성화됨</translation>
     </message>
     <message>
         <source>rally</source>
         <extracomment>.sections[GeoFence].keywords[4], .sections[GeoFence].keywords[4]</extracomment>
-        <translation type="unfinished">rally</translation>
+        <translation>랠리</translation>
     </message>
     <message>
         <source>breach</source>
         <extracomment>.sections[GeoFence].keywords[5], .sections[GeoFence].keywords[5]</extracomment>
-        <translation type="unfinished">breach</translation>
+        <translation>위반</translation>
     </message>
     <message>
         <source>radius</source>
         <extracomment>.sections[GeoFence].keywords[6], .sections[GeoFence].keywords[6]</extracomment>
-        <translation type="unfinished">radius</translation>
+        <translation>반경</translation>
     </message>
     <message>
         <source>inclusion</source>
@@ -779,17 +779,17 @@
     <message>
         <source>Enabled</source>
         <extracomment>.sections[GeoFence].controls[0].label, .sections[GeoFence].controls[0].label</extracomment>
-        <translation type="unfinished">Enabled</translation>
+        <translation>활성화됨</translation>
     </message>
     <message>
         <source>Maximum Altitude</source>
         <extracomment>.sections[GeoFence].controls[1].label, .sections[GeoFence].controls[1].label</extracomment>
-        <translation type="unfinished">Maximum Altitude</translation>
+        <translation>로깅</translation>
     </message>
     <message>
         <source>Maximum altitude</source>
         <extracomment>.sections[GeoFence].controls[2].label, .sections[GeoFence].controls[2].label</extracomment>
-        <translation type="unfinished">Maximum altitude</translation>
+        <translation>로깅</translation>
     </message>
     <message>
         <source>Minimum Altitude</source>
@@ -849,12 +849,12 @@
     <message>
         <source>arming</source>
         <extracomment>.sections[Arming Checks].keywords[0]</extracomment>
-        <translation type="unfinished">arming</translation>
+        <translation>시동</translation>
     </message>
     <message>
         <source>pre-arm</source>
         <extracomment>.sections[Arming Checks].keywords[1]</extracomment>
-        <translation type="unfinished">pre-arm</translation>
+        <translation>ekf</translation>
     </message>
     <message>
         <source>preflight</source>
@@ -925,22 +925,22 @@
     <message>
         <source>logging</source>
         <extracomment>.sections[Storage].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>로깅</translation>
     </message>
     <message>
         <source>log</source>
         <extracomment>.sections[Storage].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>로그</translation>
     </message>
     <message>
         <source>backend</source>
         <extracomment>.sections[Storage].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>옵션</translation>
     </message>
     <message>
         <source>bitmask</source>
         <extracomment>.sections[Storage].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>rate</translation>
     </message>
     <message>
         <source>sd card</source>
@@ -995,17 +995,17 @@
     <message>
         <source>rate</source>
         <extracomment>.sections[Rate Limits].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>rate</translation>
     </message>
     <message>
         <source>hz</source>
         <extracomment>.sections[Rate Limits].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>hz</translation>
     </message>
     <message>
         <source>limit</source>
         <extracomment>.sections[Rate Limits].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>옵션</translation>
     </message>
     <message>
         <source>file rate</source>
@@ -1045,37 +1045,37 @@
     <message>
         <source>Options</source>
         <extracomment>.sections[Options].title</extracomment>
-        <translation type="unfinished">Options</translation>
+        <translation>옵션</translation>
     </message>
     <message>
         <source>disarmed</source>
         <extracomment>.sections[Options].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>비활성화됨</translation>
     </message>
     <message>
         <source>pre-arm</source>
         <extracomment>.sections[Options].keywords[1]</extracomment>
-        <translation type="unfinished">pre-arm</translation>
+        <translation>ekf</translation>
     </message>
     <message>
         <source>rotate</source>
         <extracomment>.sections[Options].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>회전</translation>
     </message>
     <message>
         <source>replay</source>
         <extracomment>.sections[Options].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>재생</translation>
     </message>
     <message>
         <source>ekf</source>
         <extracomment>.sections[Options].keywords[4]</extracomment>
-        <translation type="unfinished">ekf</translation>
+        <translation>ekf</translation>
     </message>
     <message>
         <source>ekf3</source>
         <extracomment>.sections[Options].keywords[5]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>비활성화됨</translation>
     </message>
     <message>
         <source>log options</source>
@@ -1120,7 +1120,7 @@
     <message>
         <source>Disabled</source>
         <extracomment>.sections[Options].controls[3].enumValues[3].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>비활성화됨</translation>
     </message>
 </context>
 <context>
@@ -1136,47 +1136,47 @@
     <message>
         <source>Battery</source>
         <extracomment>.sections[Battery].title</extracomment>
-        <translation type="unfinished">Battery</translation>
+        <translation>실내,실외</translation>
     </message>
     <message>
         <source>battery</source>
         <extracomment>.sections[Battery].keywords[0]</extracomment>
-        <translation type="unfinished">battery</translation>
+        <translation>배터리</translation>
     </message>
     <message>
         <source>voltage</source>
         <extracomment>.sections[Battery].keywords[1]</extracomment>
-        <translation type="unfinished">voltage</translation>
+        <translation>전압</translation>
     </message>
     <message>
         <source>current</source>
         <extracomment>.sections[Battery].keywords[2]</extracomment>
-        <translation type="unfinished">current</translation>
+        <translation>현재</translation>
     </message>
     <message>
         <source>power module</source>
         <extracomment>.sections[Battery].keywords[3]</extracomment>
-        <translation type="unfinished">power module</translation>
+        <translation>센서</translation>
     </message>
     <message>
         <source>sensor</source>
         <extracomment>.sections[Battery].keywords[4]</extracomment>
-        <translation type="unfinished">sensor</translation>
+        <translation>센서</translation>
     </message>
     <message>
         <source>capacity</source>
         <extracomment>.sections[Battery].keywords[5]</extracomment>
-        <translation type="unfinished">capacity</translation>
+        <translation>튜닝</translation>
     </message>
     <message>
         <source>amps</source>
         <extracomment>.sections[Battery].keywords[6]</extracomment>
-        <translation type="unfinished">amps</translation>
+        <translation>amps</translation>
     </message>
     <message>
         <source>Disabled Batteries</source>
         <extracomment>.sections[Battery].repeat.disabledSection.heading</extracomment>
-        <translation type="unfinished">Disabled Batteries</translation>
+        <translation>튜닝</translation>
     </message>
     <message>
         <source>Battery monitor</source>
@@ -1224,52 +1224,52 @@
     <message>
         <source>tuning</source>
         <extracomment>.sections[Flight Response].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>튜닝</translation>
     </message>
     <message>
         <source>pid</source>
         <extracomment>.sections[Flight Response].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>pid</translation>
     </message>
     <message>
         <source>roll</source>
         <extracomment>.sections[Flight Response].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>roll</translation>
     </message>
     <message>
         <source>pitch</source>
         <extracomment>.sections[Flight Response].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>상승</translation>
     </message>
     <message>
         <source>climb</source>
         <extracomment>.sections[Flight Response].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>상승</translation>
     </message>
     <message>
         <source>sensitivity</source>
         <extracomment>.sections[Flight Response].keywords[5]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>모터</translation>
     </message>
     <message>
         <source>thrust</source>
         <extracomment>.sections[Flight Response].keywords[6]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>모터</translation>
     </message>
     <message>
         <source>motor</source>
         <extracomment>.sections[Flight Response].keywords[7]</extracomment>
-        <translation type="unfinished">motor</translation>
+        <translation>모터</translation>
     </message>
     <message>
         <source>Roll/Pitch Sensitivity</source>
         <extracomment>.sections[Flight Response].controls[0].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>자동 튜닝</translation>
     </message>
     <message>
         <source>Climb Sensitivity</source>
         <extracomment>.sections[Flight Response].controls[1].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>자동 튜닝</translation>
     </message>
     <message>
         <source>RC Roll/Pitch Feel</source>
@@ -1289,32 +1289,32 @@
     <message>
         <source>AutoTune</source>
         <extracomment>.sections[AutoTune].title</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>자동 튜닝</translation>
     </message>
     <message>
         <source>autotune</source>
         <extracomment>.sections[AutoTune].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>최소</translation>
     </message>
     <message>
         <source>auto tune</source>
         <extracomment>.sections[AutoTune].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>axes</translation>
     </message>
     <message>
         <source>axes</source>
         <extracomment>.sections[AutoTune].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>axes</translation>
     </message>
     <message>
         <source>channel</source>
         <extracomment>.sections[AutoTune].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>tune</translation>
     </message>
     <message>
         <source>switch</source>
         <extracomment>.sections[AutoTune].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>스위치</translation>
     </message>
     <message>
         <source>Axes to AutoTune</source>
@@ -1344,12 +1344,12 @@
     <message>
         <source>tune</source>
         <extracomment>.sections[In Flight Tuning].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>tune</translation>
     </message>
     <message>
         <source>channel 6</source>
         <extracomment>.sections[In Flight Tuning].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>최소</translation>
     </message>
     <message>
         <source>rc tuning</source>
@@ -1364,12 +1364,12 @@
     <message>
         <source>Min</source>
         <extracomment>.sections[In Flight Tuning].controls[1].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>최소</translation>
     </message>
     <message>
         <source>Max</source>
         <extracomment>.sections[In Flight Tuning].controls[2].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>최대</translation>
     </message>
 </context>
 <context>
@@ -1377,13 +1377,13 @@
     <message>
         <source>Offline editing firmware class</source>
         <extracomment>.QGC.MetaData.Facts[offlineEditingFirmwareClass].shortDesc, .QGC.MetaData.Facts[offlineEditingFirmwareClass].label</extracomment>
-        <translation type="unfinished">Offline editing firmware class</translation>
+        <translation>실내,실외</translation>
     </message>
     <message>
         <source>ArduPilot,PX4 Pro,MAVLink</source>
         <extracomment>.QGC.MetaData.Facts[offlineEditingFirmwareClass].enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">ArduPilot,PX4 Pro,MAVLink</translation>
+        <translation>실내,실외</translation>
     </message>
     <message>
         <source>Offline editing vehicle class</source>
@@ -1404,7 +1404,7 @@
     <message>
         <source>This value defines the default speed for calculating mission statistics for vehicles which do not support hover or VTOL vehicles in fixed wing mode. It does not modify the flight speed for a specific flight plan.</source>
         <extracomment>.QGC.MetaData.Facts[offlineEditingCruiseSpeed].longDesc</extracomment>
-        <translation type="unfinished">This value defines the default speed for calculating mission statistics for vehicles which do not support hover or VTOL vehicles in fixed wing mode. It does not modify the flight speed for a specific flight plan.</translation>
+        <translation>이 값은 정지비행을 지원하지 않는 기체 또는 고정익 모드의 VTOL 기체에 대해 미션 통계를 계산할 때 사용되는 기본 속도를 정의합니다. 특정 비행 플랜의 비행 속도는 변경하지 않습니다.</translation>
     </message>
     <message>
         <source>Offline editing hover speed</source>
@@ -1414,7 +1414,7 @@
     <message>
         <source>This value defines the default speed for calculating mission statistics for multi-rotor vehicles or VTOL vehicle in multi-rotor mode. It does not modify the flight speed for a specific flight plan.</source>
         <extracomment>.QGC.MetaData.Facts[offlineEditingHoverSpeed].longDesc</extracomment>
-        <translation type="unfinished">This value defines the default speed for calculating mission statistics for multi-rotor vehicles or VTOL vehicle in multi-rotor mode. It does not modify the flight speed for a specific flight plan.</translation>
+        <translation>이 값은 멀티콥터 기체 또는 멀티콥터 모드의 VTOL 기체에 대해 미션 통계를 계산할 때 사용되는 기본 속도를 정의합니다. 특정 비행 플랜의 비행 속도는 변경하지 않습니다.</translation>
     </message>
     <message>
         <source>Offline editing ascent speed</source>
@@ -1692,17 +1692,17 @@
         <source>palette,dark mode,theme,color scheme</source>
         <extracomment>.QGC.MetaData.Facts[indoorPalette].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">palette,dark mode,theme,color scheme</translation>
+        <translation>하지 않음,항상 실행,Follow Me 모드에서만 실행</translation>
     </message>
     <message>
         <source>Directory where mission files, logs, and other application data are saved.</source>
         <extracomment>.QGC.MetaData.Facts[savePath].shortDesc</extracomment>
-        <translation type="unfinished">Directory where mission files, logs, and other application data are saved.</translation>
+        <translation>저장 경로</translation>
     </message>
     <message>
         <source>Directory to which all data files are saved/loaded from</source>
         <extracomment>.QGC.MetaData.Facts[savePath].longDesc</extracomment>
-        <translation type="unfinished">Directory to which all data files are saved/loaded from</translation>
+        <translation>저장 경로</translation>
     </message>
     <message>
         <source>Application Load/Save Path</source>
@@ -1713,12 +1713,12 @@
         <source>save path,storage</source>
         <extracomment>.QGC.MetaData.Facts[savePath].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">save path,storage</translation>
+        <translation>하지 않음,항상 실행,Follow Me 모드에서만 실행</translation>
     </message>
     <message>
         <source>Don&apos;t save to SD card, even if available</source>
         <extracomment>.QGC.MetaData.Facts[androidDontSaveToSDCard].shortDesc, .QGC.MetaData.Facts[androidDontSaveToSDCard].label</extracomment>
-        <translation type="unfinished">Don&apos;t save to SD card, even if available</translation>
+        <translation>Mapbox</translation>
     </message>
     <message>
         <source>If this option is enabled, application data will not be saved to the SD card.</source>
@@ -1744,7 +1744,7 @@
         <source>token,api key,mapbox</source>
         <extracomment>.QGC.MetaData.Facts[mapboxToken].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">token,api key,mapbox</translation>
+        <translation>하지 않음,항상 실행,Follow Me 모드에서만 실행</translation>
     </message>
     <message>
         <source>Mapbox account username for accessing account-specific map resources.</source>
@@ -1892,12 +1892,12 @@
         <source>follow me</source>
         <extracomment>.QGC.MetaData.Facts[followTarget].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">follow me</translation>
+        <translation>N/A,모든 비행 시스템,추진체,전자,임무장비</translation>
     </message>
     <message>
         <source>Determines the language used for the application interface. Requires restart.</source>
         <extracomment>.QGC.MetaData.Facts[qLocaleLanguage].shortDesc</extracomment>
-        <translation type="unfinished">Determines the language used for the application interface. Requires restart.</translation>
+        <translation>언어</translation>
     </message>
     <message>
         <source>Language</source>
@@ -1908,12 +1908,12 @@
         <source>language,locale</source>
         <extracomment>.QGC.MetaData.Facts[qLocaleLanguage].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">language,locale</translation>
+        <translation>N/A,모든 비행 시스템,추진체,전자,임무장비</translation>
     </message>
     <message>
         <source>Resets all application preferences to their defaults on the next launch.</source>
         <extracomment>.QGC.MetaData.Facts[clearSettingsNextBoot].shortDesc</extracomment>
-        <translation type="unfinished">Resets all application preferences to their defaults on the next launch.</translation>
+        <translation>설정 초기화</translation>
     </message>
     <message>
         <source>When enabled, all application settings will be reset to defaults on the next start.</source>
@@ -1929,7 +1929,7 @@
         <source>reset,clear settings,factory reset</source>
         <extracomment>.QGC.MetaData.Facts[clearSettingsNextBoot].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">reset,clear settings,factory reset</translation>
+        <translation>N/A,모든 비행 시스템,추진체,전자,임무장비</translation>
     </message>
     <message>
         <source>Disable all data persistence</source>
@@ -1969,7 +1969,7 @@
     <message>
         <source>Preferred Firmware</source>
         <extracomment>.QGC.MetaData.Facts[preferredFirmwareClass].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>선호 펌웨어</translation>
     </message>
     <message>
         <source>firmware,ardupilot,px4</source>
@@ -1994,7 +1994,7 @@
     <message>
         <source>Preferred Vehicle</source>
         <extracomment>.QGC.MetaData.Facts[preferredVehicleClass].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>선호 기체</translation>
     </message>
     <message>
         <source>vehicle,multirotor,fixed wing,vtol,rover,sub</source>
@@ -2024,7 +2024,7 @@
     <message>
         <source>Remote Logging</source>
         <extracomment>.QGC.MetaData.Facts[remoteLoggingEnabled].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>원격 로깅</translation>
     </message>
     <message>
         <source>remote,logging,stream</source>
@@ -2192,7 +2192,7 @@
     <message>
         <source>Status</source>
         <extracomment>.QGC.MetaData.Facts[status].shortDesc</extracomment>
-        <translation type="unfinished">Status</translation>
+        <translation>상태</translation>
     </message>
     <message>
         <source>Waiting,Logging,Logging</source>
@@ -2207,7 +2207,7 @@
     <message>
         <source>Temperature</source>
         <extracomment>.QGC.MetaData.Facts[temperature].shortDesc</extracomment>
-        <translation type="unfinished">Temperature</translation>
+        <translation>온도</translation>
     </message>
     <message>
         <source>Humidity</source>
@@ -2217,22 +2217,22 @@
     <message>
         <source>Pressure</source>
         <extracomment>.QGC.MetaData.Facts[pressure].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>압력</translation>
     </message>
     <message>
         <source>PM1.0</source>
         <extracomment>.QGC.MetaData.Facts[opcPM1p0].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>PM1.0</translation>
     </message>
     <message>
         <source>PM2.5</source>
         <extracomment>.QGC.MetaData.Facts[opcPM2p5].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>PM2.5</translation>
     </message>
     <message>
         <source>PM10</source>
         <extracomment>.QGC.MetaData.Facts[opcPM10].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>PM10</translation>
     </message>
     <message>
         <source>Extension Value1</source>
@@ -2267,7 +2267,7 @@
     <message>
         <source>Wind Speed</source>
         <extracomment>.QGC.MetaData.Facts[windSpd].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>풍속</translation>
     </message>
     <message>
         <source>radiation</source>
@@ -2282,7 +2282,7 @@
     <message>
         <source>N,R,T</source>
         <extracomment>.QGC.MetaData.Facts[windRef].enumStrings</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>N,R,T</translation>
     </message>
 </context>
 <context>
@@ -2380,7 +2380,7 @@
     <message>
         <source>Battery Type</source>
         <extracomment>.QGC.MetaData.Facts[batteryType].shortDesc</extracomment>
-        <translation type="unfinished">Battery Type</translation>
+        <translation>N/A,리포,리페,리온,니켈수소</translation>
     </message>
     <message>
         <source>n/a,LIPO,LIFE,LION,NIMH</source>
@@ -2391,42 +2391,42 @@
     <message>
         <source>Voltage</source>
         <extracomment>.QGC.MetaData.Facts[voltage].shortDesc</extracomment>
-        <translation type="unfinished">Voltage</translation>
+        <translation>N/A,확인,부족,심각,비상,실패,위험,충전중</translation>
     </message>
     <message>
         <source>Percent</source>
         <extracomment>.QGC.MetaData.Facts[percentRemaining].shortDesc</extracomment>
-        <translation type="unfinished">Percent</translation>
+        <translation>퍼센트</translation>
     </message>
     <message>
         <source>Consumed</source>
         <extracomment>.QGC.MetaData.Facts[mahConsumed].shortDesc</extracomment>
-        <translation type="unfinished">Consumed</translation>
+        <translation>전류</translation>
     </message>
     <message>
         <source>Current</source>
         <extracomment>.QGC.MetaData.Facts[current].shortDesc</extracomment>
-        <translation type="unfinished">Current</translation>
+        <translation>전류</translation>
     </message>
     <message>
         <source>Temperature</source>
         <extracomment>.QGC.MetaData.Facts[temperature].shortDesc</extracomment>
-        <translation type="unfinished">Temperature</translation>
+        <translation>온도</translation>
     </message>
     <message>
         <source>Watts</source>
         <extracomment>.QGC.MetaData.Facts[instantPower].shortDesc</extracomment>
-        <translation type="unfinished">Watts</translation>
+        <translation>남은 시간</translation>
     </message>
     <message>
         <source>Time Remaining</source>
         <extracomment>.QGC.MetaData.Facts[timeRemaining].shortDesc, .QGC.MetaData.Facts[timeRemainingStr].shortDesc</extracomment>
-        <translation type="unfinished">Time Remaining</translation>
+        <translation>남은 시간</translation>
     </message>
     <message>
         <source>Charge State</source>
         <extracomment>.QGC.MetaData.Facts[chargeState].shortDesc</extracomment>
-        <translation type="unfinished">Charge State</translation>
+        <translation>N/A,확인,부족,심각,비상,실패,위험,충전중</translation>
     </message>
     <message>
         <source>n/a,Ok,Low,Critical,Emergency,Failed,Unhealthy,Charging</source>
@@ -2440,18 +2440,18 @@
     <message>
         <source>Select values to display in indicator</source>
         <extracomment>.QGC.MetaData.Facts[valueDisplay].shortDesc, .QGC.MetaData.Facts[valueDisplay].label</extracomment>
-        <translation type="unfinished">Select values to display in indicator</translation>
+        <translation>ChibiOS,NuttX</translation>
     </message>
     <message>
         <source>Percentage,Voltage,Percentage and Voltage</source>
         <extracomment>.QGC.MetaData.Facts[valueDisplay].enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">Percentage,Voltage,Percentage and Voltage</translation>
+        <translation>ChibiOS,NuttX</translation>
     </message>
     <message>
         <source>Battery level threshold 1</source>
         <extracomment>.QGC.MetaData.Facts[threshold1].shortDesc, .QGC.MetaData.Facts[threshold1].label</extracomment>
-        <translation type="unfinished">Battery level threshold 1</translation>
+        <translation>ChibiOS,NuttX</translation>
     </message>
     <message>
         <source>Battery level threshold 2</source>
@@ -2623,7 +2623,7 @@
     <message>
         <source>Time</source>
         <extracomment>.QGC.MetaData.Facts[currentTime].shortDesc</extracomment>
-        <translation type="unfinished">Time</translation>
+        <translation>시간</translation>
     </message>
     <message>
         <source>UTC Time</source>
@@ -2633,7 +2633,7 @@
     <message>
         <source>Date</source>
         <extracomment>.QGC.MetaData.Facts[currentDate].shortDesc</extracomment>
-        <translation type="unfinished">Date</translation>
+        <translation>날짜</translation>
     </message>
 </context>
 <context>
@@ -2681,7 +2681,7 @@
     <message>
         <source>시그널링 서버 API 인증 키</source>
         <extracomment>.QGC.MetaData.Facts[webrtcApiKey].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>시그널링 서버 API 인증 키</translation>
     </message>
     <message>
         <source>WebRTC Signaling Server</source>
@@ -2691,7 +2691,7 @@
     <message>
         <source>WebRTC 시그널링 서버 주소 (예: example.host.com)</source>
         <extracomment>.QGC.MetaData.Facts[webrtcSignalingServer].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>WebRTC 시그널링 서버 주소 (예: example.host.com)</translation>
     </message>
     <message>
         <source>WebRTC STUN Server</source>
@@ -2701,7 +2701,7 @@
     <message>
         <source>STUN 서버 주소 (예: stun.l.google.com:19302)</source>
         <extracomment>.QGC.MetaData.Facts[webrtcStunServer].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>STUN 서버 주소 (예: stun.l.google.com:19302)</translation>
     </message>
     <message>
         <source>WebRTC TURN Server</source>
@@ -2711,7 +2711,7 @@
     <message>
         <source>TURN 서버 주소 (예: turn.example.com:3478)</source>
         <extracomment>.QGC.MetaData.Facts[webrtcTurnServer].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>TURN 서버 주소 (예: turn.example.com:3478)</translation>
     </message>
     <message>
         <source>WebRTC TURN Username</source>
@@ -2721,7 +2721,7 @@
     <message>
         <source>TURN 서버 인증 사용자명</source>
         <extracomment>.QGC.MetaData.Facts[webrtcTurnUsername].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>TURN 서버 인증 사용자명</translation>
     </message>
     <message>
         <source>WebRTC TURN Password</source>
@@ -2731,7 +2731,7 @@
     <message>
         <source>TURN 서버 인증 비밀번호</source>
         <extracomment>.QGC.MetaData.Facts[webrtcTurnPassword].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>TURN 서버 인증 비밀번호</translation>
     </message>
 </context>
 <context>
@@ -2739,17 +2739,17 @@
     <message>
         <source>WebRTC</source>
         <extracomment>.groups[WebRTC].sectionName</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>WebRTC</translation>
     </message>
     <message>
         <source>webrtc</source>
         <extracomment>.groups[WebRTC].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>WebRTC</translation>
     </message>
     <message>
         <source>rtc</source>
         <extracomment>.groups[WebRTC].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>rtc</translation>
     </message>
     <message>
         <source>signaling</source>
@@ -2759,7 +2759,7 @@
     <message>
         <source>server</source>
         <extracomment>.groups[WebRTC].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>서버</translation>
     </message>
     <message>
         <source>api key</source>
@@ -2769,17 +2769,17 @@
     <message>
         <source>turn</source>
         <extracomment>.groups[WebRTC].keywords[5]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>turn</translation>
     </message>
     <message>
         <source>stun</source>
         <extracomment>.groups[WebRTC].keywords[6]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>stun</translation>
     </message>
     <message>
         <source>connection</source>
         <extracomment>.groups[WebRTC].keywords[7]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>연결</translation>
     </message>
 </context>
 <context>
@@ -2787,12 +2787,12 @@
     <message>
         <source>AutoConnect</source>
         <extracomment>.groups[AutoConnect].heading</extracomment>
-        <translation type="unfinished">AutoConnect</translation>
+        <translation>자동 연결</translation>
     </message>
     <message>
         <source>NMEA GPS</source>
         <extracomment>.groups[NMEA GPS].sectionName</extracomment>
-        <translation type="unfinished">NMEA GPS</translation>
+        <translation>NMEA GPS</translation>
     </message>
     <message>
         <source>Link Management</source>
@@ -2817,7 +2817,7 @@
     <message>
         <source>udp</source>
         <extracomment>.groups[AutoConnect].keywords[3], .groups[Link Management].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>udp</translation>
     </message>
     <message>
         <source>rtk gps</source>
@@ -2827,22 +2827,22 @@
     <message>
         <source>usb</source>
         <extracomment>.groups[AutoConnect].keywords[5]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>usb</translation>
     </message>
     <message>
         <source>nmea</source>
         <extracomment>.groups[NMEA GPS].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>nmea</translation>
     </message>
     <message>
         <source>gps</source>
         <extracomment>.groups[NMEA GPS].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>gps</translation>
     </message>
     <message>
         <source>serial</source>
         <extracomment>.groups[NMEA GPS].keywords[2], .groups[Link Management].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>시리얼</translation>
     </message>
     <message>
         <source>baud rate</source>
@@ -2857,17 +2857,17 @@
     <message>
         <source>link</source>
         <extracomment>.groups[Link Management].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>link</translation>
     </message>
     <message>
         <source>connection</source>
         <extracomment>.groups[Link Management].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>연결</translation>
     </message>
     <message>
         <source>tcp</source>
         <extracomment>.groups[Link Management].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>tcp</translation>
     </message>
     <message>
         <source>bluetooth</source>
@@ -2913,7 +2913,7 @@
     <message>
         <source>Forward</source>
         <extracomment>.QGC.MetaData.Facts[rotationNone].shortDesc</extracomment>
-        <translation type="unfinished">Forward</translation>
+        <translation>앞으로</translation>
     </message>
     <message>
         <source>Forward/Right</source>
@@ -2923,7 +2923,7 @@
     <message>
         <source>Right</source>
         <extracomment>.QGC.MetaData.Facts[rotationYaw90].shortDesc</extracomment>
-        <translation type="unfinished">Right</translation>
+        <translation>오른쪽</translation>
     </message>
     <message>
         <source>Rear/Right</source>
@@ -2933,7 +2933,7 @@
     <message>
         <source>Rear</source>
         <extracomment>.QGC.MetaData.Facts[rotationYaw180].shortDesc</extracomment>
-        <translation type="unfinished">Rear</translation>
+        <translation>후면</translation>
     </message>
     <message>
         <source>Rear/Left</source>
@@ -2943,7 +2943,7 @@
     <message>
         <source>Left</source>
         <extracomment>.QGC.MetaData.Facts[rotationYaw270].shortDesc</extracomment>
-        <translation type="unfinished">Left</translation>
+        <translation>왼쪽</translation>
     </message>
     <message>
         <source>Forward/Left</source>
@@ -2953,12 +2953,12 @@
     <message>
         <source>Up</source>
         <extracomment>.QGC.MetaData.Facts[rotationPitch90].shortDesc</extracomment>
-        <translation type="unfinished">Up</translation>
+        <translation>위</translation>
     </message>
     <message>
         <source>Down</source>
         <extracomment>.QGC.MetaData.Facts[rotationPitch270].shortDesc</extracomment>
-        <translation type="unfinished">Down</translation>
+        <translation>아래</translation>
     </message>
     <message>
         <source>Minimum distance sensor can detect</source>
@@ -2976,7 +2976,7 @@
     <message>
         <source>Health</source>
         <extracomment>.QGC.MetaData.Facts[health].shortDesc</extracomment>
-        <translation type="unfinished">Health</translation>
+        <translation>건강</translation>
     </message>
     <message>
         <source>Ecu Index</source>
@@ -2986,7 +2986,7 @@
     <message>
         <source>Rpm</source>
         <extracomment>.QGC.MetaData.Facts[rpm].shortDesc</extracomment>
-        <translation type="unfinished">Rpm</translation>
+        <translation>Rpm</translation>
     </message>
     <message>
         <source>Fuel Consumed</source>
@@ -3122,12 +3122,12 @@
     <message>
         <source>Current</source>
         <extracomment>.QGC.MetaData.Facts[current].shortDesc</extracomment>
-        <translation type="unfinished">Current</translation>
+        <translation>전류</translation>
     </message>
     <message>
         <source>Voltage</source>
         <extracomment>.QGC.MetaData.Facts[voltage].shortDesc</extracomment>
-        <translation type="unfinished">Voltage</translation>
+        <translation>N/A,확인,부족,심각,비상,실패,위험,충전중</translation>
     </message>
     <message>
         <source>Total number of ESCs</source>
@@ -3158,7 +3158,7 @@
     <message>
         <source>Temperature</source>
         <extracomment>.QGC.MetaData.Facts[temperature].shortDesc</extracomment>
-        <translation type="unfinished">Temperature</translation>
+        <translation>온도</translation>
     </message>
     <message>
         <source>Error Count</source>
@@ -3353,7 +3353,7 @@
     <message>
         <source>apmChibiOS</source>
         <extracomment>.QGC.MetaData.Facts[apmChibiOS].label</extracomment>
-        <translation type="unfinished">apmChibiOS</translation>
+        <translation>Multi-Rotor,Helicopter,Plane,Rover,Sub</translation>
     </message>
     <message>
         <source>Multi-Rotor,Helicopter,Plane,Rover,Sub</source>
@@ -3364,7 +3364,7 @@
     <message>
         <source>apmVehicleType</source>
         <extracomment>.QGC.MetaData.Facts[apmVehicleType].label</extracomment>
-        <translation type="unfinished">apmVehicleType</translation>
+        <translation>비행 지도 공급자</translation>
     </message>
 </context>
 <context>
@@ -3378,17 +3378,17 @@
         <source>3d map</source>
         <extracomment>.QGC.MetaData.Facts[mapProvider].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">3d map</translation>
+        <translation>켜기,끄기</translation>
     </message>
     <message>
         <source>Currently selected map type for flight maps</source>
         <extracomment>.QGC.MetaData.Facts[mapType].shortDesc, .QGC.MetaData.Facts[mapType].label</extracomment>
-        <translation type="unfinished">Currently selected map type for flight maps</translation>
+        <translation>최소 고도</translation>
     </message>
     <message>
         <source>Currently selected elevation map provider</source>
         <extracomment>.QGC.MetaData.Facts[elevationMapProvider].shortDesc, .QGC.MetaData.Facts[elevationMapProvider].label</extracomment>
-        <translation type="unfinished">Currently selected elevation map provider</translation>
+        <translation>최소 고도</translation>
     </message>
     <message>
         <source>KML/SHP file path for map overlay</source>
@@ -3460,12 +3460,12 @@
         <source>altitude,guided,minimum</source>
         <extracomment>.QGC.MetaData.Facts[guidedMinimumAltitude].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">altitude,guided,minimum</translation>
+        <translation>켜기,끄기</translation>
     </message>
     <message>
         <source>Maximum altitude allowed for guided mode actions like takeoff and altitude changes.</source>
         <extracomment>.QGC.MetaData.Facts[guidedMaximumAltitude].shortDesc</extracomment>
-        <translation type="unfinished">Maximum altitude allowed for guided mode actions like takeoff and altitude changes.</translation>
+        <translation>최대 고도</translation>
     </message>
     <message>
         <source>Maximum Altitude</source>
@@ -3476,7 +3476,7 @@
         <source>altitude,guided,maximum</source>
         <extracomment>.QGC.MetaData.Facts[guidedMaximumAltitude].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">altitude,guided,maximum</translation>
+        <translation>켜기,끄기</translation>
     </message>
     <message>
         <source>Show the playback control bar during telemetry log replay.</source>
@@ -3657,7 +3657,7 @@
     <message>
         <source>Timeout in seconds before a request to a GCS to allow takeover is assumed to be rejected. This is used to display the timeout graphically on requestor and GCS in control.</source>
         <extracomment>.QGC.MetaData.Facts[requestControlTimeout].shortDesc, .QGC.MetaData.Facts[requestControlTimeout].label</extracomment>
-        <translation type="unfinished">Timeout in seconds before a request to a GCS to allow takeover is assumed to be rejected. This is used to display the timeout graphically on requestor and GCS in control.</translation>
+        <translation>지상국에 인계 허용 요청이 거부된 것으로 간주되기까지의 초 단위 시간 초과입니다. 요청자와 제어 중인 지상국에 시간 초과를 그래픽으로 표시하는 데 사용됩니다.</translation>
     </message>
     <message>
         <source>Automatically show mission start and resume confirmation dialogs.</source>
@@ -3901,7 +3901,7 @@
     <message>
         <source>General</source>
         <extracomment>.groups[General].heading</extracomment>
-        <translation type="unfinished">General</translation>
+        <translation>일반</translation>
     </message>
     <message>
         <source>Guided Commands</source>
@@ -3911,7 +3911,7 @@
     <message>
         <source>MAVLink Actions</source>
         <extracomment>.groups[MAVLink Actions].sectionName</extracomment>
-        <translation type="unfinished">MAVLink Actions</translation>
+        <translation>MAVLink 동작</translation>
     </message>
     <message>
         <source>Virtual Joystick</source>
@@ -3966,12 +3966,12 @@
     <message>
         <source>altitude</source>
         <extracomment>.groups[Guided Commands].keywords[0]</extracomment>
-        <translation type="unfinished">altitude</translation>
+        <translation>고도</translation>
     </message>
     <message>
         <source>guided</source>
         <extracomment>.groups[Guided Commands].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Guided</translation>
     </message>
     <message>
         <source>minimum</source>
@@ -3986,12 +3986,12 @@
     <message>
         <source>goto</source>
         <extracomment>.groups[Guided Commands].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>goto</translation>
     </message>
     <message>
         <source>go to</source>
         <extracomment>.groups[Guided Commands].keywords[5]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>이동</translation>
     </message>
     <message>
         <source>loiter radius</source>
@@ -4011,7 +4011,7 @@
     <message>
         <source>pre-arm</source>
         <extracomment>.groups[MAVLink Actions].keywords[1]</extracomment>
-        <translation type="unfinished">pre-arm</translation>
+        <translation>ekf</translation>
     </message>
     <message>
         <source>post-arm</source>
@@ -4026,7 +4026,7 @@
     <message>
         <source>joystick</source>
         <extracomment>.groups[Virtual Joystick].keywords[0]</extracomment>
-        <translation type="unfinished">joystick</translation>
+        <translation>조이스틱</translation>
     </message>
     <message>
         <source>virtual stick</source>
@@ -4051,7 +4051,7 @@
     <message>
         <source>compass</source>
         <extracomment>.groups[Instrument Panel].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>나침반</translation>
     </message>
     <message>
         <source>indicators</source>
@@ -4061,7 +4061,7 @@
     <message>
         <source>hud</source>
         <extracomment>.groups[Instrument Panel].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>hud</translation>
     </message>
     <message>
         <source>instrument</source>
@@ -4079,12 +4079,12 @@
     <message>
         <source>Latitude</source>
         <extracomment>.QGC.MetaData.Facts[lat].shortDesc</extracomment>
-        <translation type="unfinished">Latitude</translation>
+        <translation>위도</translation>
     </message>
     <message>
         <source>Longitude</source>
         <extracomment>.QGC.MetaData.Facts[lon].shortDesc</extracomment>
-        <translation type="unfinished">Longitude</translation>
+        <translation>경도</translation>
     </message>
     <message>
         <source>MGRS Position</source>
@@ -4094,12 +4094,12 @@
     <message>
         <source>HDOP</source>
         <extracomment>.QGC.MetaData.Facts[hdop].shortDesc</extracomment>
-        <translation type="unfinished">HDOP</translation>
+        <translation>HDOP</translation>
     </message>
     <message>
         <source>VDOP</source>
         <extracomment>.QGC.MetaData.Facts[vdop].shortDesc</extracomment>
-        <translation type="unfinished">VDOP</translation>
+        <translation>VDOP</translation>
     </message>
     <message>
         <source>Course Over Ground</source>
@@ -4109,7 +4109,7 @@
     <message>
         <source>Yaw</source>
         <extracomment>.QGC.MetaData.Facts[yaw].shortDesc</extracomment>
-        <translation type="unfinished">Yaw</translation>
+        <translation>요</translation>
     </message>
     <message>
         <source>GPS Lock</source>
@@ -4190,7 +4190,7 @@
     <message>
         <source>Connected</source>
         <extracomment>.QGC.MetaData.Facts[connected].shortDesc</extracomment>
-        <translation type="unfinished">Connected</translation>
+        <translation>연결됨</translation>
     </message>
     <message>
         <source>Current Survey-In Accuracy</source>
@@ -4238,7 +4238,7 @@
     <message>
         <source>Status</source>
         <extracomment>.QGC.MetaData.Facts[status].shortDesc</extracomment>
-        <translation type="unfinished">Status</translation>
+        <translation>상태</translation>
     </message>
     <message>
         <source>Generator Speed</source>
@@ -4397,17 +4397,17 @@
     <message>
         <source>latitude</source>
         <extracomment>.QGC.MetaData.Facts[latitude].shortDesc, .QGC.MetaData.Facts[latitude].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>위도</translation>
     </message>
     <message>
         <source>longitude</source>
         <extracomment>.QGC.MetaData.Facts[longitude].shortDesc, .QGC.MetaData.Facts[longitude].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>경도</translation>
     </message>
     <message>
         <source>rows</source>
         <extracomment>.QGC.MetaData.Facts[rows].shortDesc, .QGC.MetaData.Facts[rows].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>rows</translation>
     </message>
     <message>
         <source>columns</source>
@@ -4417,22 +4417,22 @@
     <message>
         <source>value1</source>
         <extracomment>.QGC.MetaData.Facts[value1].shortDesc, .QGC.MetaData.Facts[value1].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>값1</translation>
     </message>
     <message>
         <source>value2</source>
         <extracomment>.QGC.MetaData.Facts[value2].shortDesc, .QGC.MetaData.Facts[value2].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>값2</translation>
     </message>
     <message>
         <source>value3</source>
         <extracomment>.QGC.MetaData.Facts[value3].shortDesc, .QGC.MetaData.Facts[value3].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>값3</translation>
     </message>
     <message>
         <source>value4</source>
         <extracomment>.QGC.MetaData.Facts[value4].shortDesc, .QGC.MetaData.Facts[value4].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>값4</translation>
     </message>
     <message>
         <source>gridSize</source>
@@ -4445,7 +4445,7 @@
     <message>
         <source>Temperature</source>
         <extracomment>.QGC.MetaData.Facts[temperature].shortDesc</extracomment>
-        <translation type="unfinished">Temperature</translation>
+        <translation>온도</translation>
     </message>
     <message>
         <source>Humidity %</source>
@@ -4455,7 +4455,7 @@
     <message>
         <source>ID</source>
         <extracomment>.QGC.MetaData.Facts[hygrometerid].shortDesc</extracomment>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
 </context>
 <context>
@@ -4574,42 +4574,42 @@
     <message>
         <source>AngleX</source>
         <extracomment>.QGC.MetaData.Facts[angleX].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>각도 X</translation>
     </message>
     <message>
         <source>AngleY</source>
         <extracomment>.QGC.MetaData.Facts[angleY].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>각도 Y</translation>
     </message>
     <message>
         <source>Distance</source>
         <extracomment>.QGC.MetaData.Facts[distance].shortDesc</extracomment>
-        <translation type="unfinished">거리</translation>
+        <translation>거리</translation>
     </message>
     <message>
         <source>SizeX</source>
         <extracomment>.QGC.MetaData.Facts[sizeX].shortDesc, .QGC.MetaData.Facts[sizeY].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>SizeX</translation>
     </message>
     <message>
         <source>X</source>
         <extracomment>.QGC.MetaData.Facts[x].shortDesc</extracomment>
-        <translation type="unfinished">X</translation>
+        <translation>X</translation>
     </message>
     <message>
         <source>Y</source>
         <extracomment>.QGC.MetaData.Facts[y].shortDesc</extracomment>
-        <translation type="unfinished">Y</translation>
+        <translation>Y</translation>
     </message>
     <message>
         <source>Z</source>
         <extracomment>.QGC.MetaData.Facts[z].shortDesc</extracomment>
-        <translation type="unfinished">Z</translation>
+        <translation>Z</translation>
     </message>
     <message>
         <source>Type</source>
         <extracomment>.QGC.MetaData.Facts[type].shortDesc</extracomment>
-        <translation type="unfinished">유형</translation>
+        <translation>유형</translation>
     </message>
     <message>
         <source>PostionValid</source>
@@ -4622,32 +4622,32 @@
     <message>
         <source>X</source>
         <extracomment>.QGC.MetaData.Facts[x].shortDesc</extracomment>
-        <translation type="unfinished">X</translation>
+        <translation>X</translation>
     </message>
     <message>
         <source>Y</source>
         <extracomment>.QGC.MetaData.Facts[y].shortDesc</extracomment>
-        <translation type="unfinished">Y</translation>
+        <translation>Y</translation>
     </message>
     <message>
         <source>Z</source>
         <extracomment>.QGC.MetaData.Facts[z].shortDesc</extracomment>
-        <translation type="unfinished">Z</translation>
+        <translation>Z</translation>
     </message>
     <message>
         <source>VX</source>
         <extracomment>.QGC.MetaData.Facts[vx].shortDesc</extracomment>
-        <translation type="unfinished">VX</translation>
+        <translation>VX</translation>
     </message>
     <message>
         <source>Vy</source>
         <extracomment>.QGC.MetaData.Facts[vy].shortDesc</extracomment>
-        <translation type="unfinished">Vy</translation>
+        <translation>Vy</translation>
     </message>
     <message>
         <source>Vz</source>
         <extracomment>.QGC.MetaData.Facts[vz].shortDesc</extracomment>
-        <translation type="unfinished">Vz</translation>
+        <translation>Vz</translation>
     </message>
 </context>
 <context>
@@ -4695,12 +4695,12 @@
     <message>
         <source>Offline Maps</source>
         <extracomment>.groups[Offline Maps].sectionName</extracomment>
-        <translation type="unfinished">Offline Maps</translation>
+        <translation>오프라인 지도</translation>
     </message>
     <message>
         <source>Tokens</source>
         <extracomment>.groups[Tokens].heading</extracomment>
-        <translation type="unfinished">Tokens</translation>
+        <translation>토큰</translation>
     </message>
     <message>
         <source>Mapbox Login</source>
@@ -4720,7 +4720,7 @@
     <message>
         <source>map provider</source>
         <extracomment>.groups[Map Provider].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>osm</translation>
     </message>
     <message>
         <source>satellite</source>
@@ -4735,22 +4735,22 @@
     <message>
         <source>street</source>
         <extracomment>.groups[Map Provider].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>도로</translation>
     </message>
     <message>
         <source>hybrid</source>
         <extracomment>.groups[Map Provider].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>하이브리드</translation>
     </message>
     <message>
         <source>google</source>
         <extracomment>.groups[Map Provider].keywords[5]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>구글</translation>
     </message>
     <message>
         <source>bing</source>
         <extracomment>.groups[Map Provider].keywords[6]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>bing</translation>
     </message>
     <message>
         <source>offline</source>
@@ -4765,7 +4765,7 @@
     <message>
         <source>cache</source>
         <extracomment>.groups[Offline Maps].keywords[2], .groups[Tile Cache].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>캐시</translation>
     </message>
     <message>
         <source>tile set</source>
@@ -4775,7 +4775,7 @@
     <message>
         <source>token</source>
         <extracomment>.groups[Tokens].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>토큰</translation>
     </message>
     <message>
         <source>api key</source>
@@ -4785,17 +4785,17 @@
     <message>
         <source>mapbox</source>
         <extracomment>.groups[Tokens].keywords[2], .groups[Mapbox Login].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Mapbox</translation>
     </message>
     <message>
         <source>esri</source>
         <extracomment>.groups[Tokens].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>esri</translation>
     </message>
     <message>
         <source>vworld</source>
         <extracomment>.groups[Tokens].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>VWorld</translation>
     </message>
     <message>
         <source>openaip</source>
@@ -4810,7 +4810,7 @@
     <message>
         <source>style</source>
         <extracomment>.groups[Mapbox Login].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>스타일</translation>
     </message>
     <message>
         <source>custom map</source>
@@ -4820,7 +4820,7 @@
     <message>
         <source>wms</source>
         <extracomment>.groups[Custom Map URL].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>wms</translation>
     </message>
     <message>
         <source>tile url</source>
@@ -4928,7 +4928,7 @@
     <message>
         <source>Turns</source>
         <extracomment>.mavCmdInfo[MAV_CMD_NAV_LOITER_TURNS].param1.label</extracomment>
-        <translation type="unfinished">Turns</translation>
+        <translation>회전</translation>
     </message>
     <message>
         <source>Leave Loiter</source>
@@ -5202,7 +5202,7 @@
     <message>
         <source>Delay until the specified time is reached.</source>
         <extracomment>.mavCmdInfo[MAV_CMD_NAV_DELAY].description</extracomment>
-        <translation type="unfinished">Delay until the specified time is reached.</translation>
+        <translation>시 (utc)</translation>
     </message>
     <message>
         <source>Hour (utc)</source>
@@ -5227,17 +5227,17 @@
     <message>
         <source>Delay the mission for the number of seconds.</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_DELAY].description</extracomment>
-        <translation type="unfinished">Delay the mission for the number of seconds.</translation>
+        <translation>거리</translation>
     </message>
     <message>
         <source>Wait for altitude</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_CHANGE_ALT].friendlyName</extracomment>
-        <translation type="unfinished">Wait for altitude</translation>
+        <translation>속도</translation>
     </message>
     <message>
         <source>Delay the mission until the specified altitide is reached.</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_CHANGE_ALT].description</extracomment>
-        <translation type="unfinished">Delay the mission until the specified altitide is reached.</translation>
+        <translation>속도</translation>
     </message>
     <message>
         <source>Conditionals</source>
@@ -5247,22 +5247,22 @@
     <message>
         <source>Rate</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_CHANGE_ALT].param1.label, .mavCmdInfo[MAV_CMD_CONDITION_YAW].param2.label</extracomment>
-        <translation type="unfinished">Rate</translation>
+        <translation>속도</translation>
     </message>
     <message>
         <source>Target</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_CHANGE_ALT].param7.label</extracomment>
-        <translation type="unfinished">Target</translation>
+        <translation>대상</translation>
     </message>
     <message>
         <source>Wait for distance</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_DISTANCE].friendlyName</extracomment>
-        <translation type="unfinished">Wait for distance</translation>
+        <translation>거리</translation>
     </message>
     <message>
         <source>Delay the mission until within the specified distance of the next waypoint.</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_DISTANCE].description</extracomment>
-        <translation type="unfinished">Delay the mission until within the specified distance of the next waypoint.</translation>
+        <translation>거리</translation>
     </message>
     <message>
         <source>Distance</source>
@@ -5272,12 +5272,12 @@
     <message>
         <source>Wait for Yaw</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_YAW].friendlyName</extracomment>
-        <translation type="unfinished">Wait for Yaw</translation>
+        <translation>진행방향</translation>
     </message>
     <message>
         <source>Delay the mission until the specified heading is reached.</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_YAW].description</extracomment>
-        <translation type="unfinished">Delay the mission until the specified heading is reached.</translation>
+        <translation>진행방향</translation>
     </message>
     <message>
         <source>Heading</source>
@@ -5293,7 +5293,7 @@
         <source>Clockwise,Shortest,Counter-Clockwise</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_YAW].param3.enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">Clockwise,Shortest,Counter-Clockwise</translation>
+        <translation>아니요,네</translation>
     </message>
     <message>
         <source>Offset</source>
@@ -5304,7 +5304,7 @@
         <source>Relative,Absolute</source>
         <extracomment>.mavCmdInfo[MAV_CMD_CONDITION_YAW].param4.enumStrings, .mavCmdInfo[MAV_CMD_DO_CHANGE_SPEED].param4.enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">Relative,Absolute</translation>
+        <translation>아니요,네</translation>
     </message>
     <message>
         <source>Set mode</source>
@@ -5314,7 +5314,7 @@
     <message>
         <source>Set flight mode</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_SET_MODE].friendlyName</extracomment>
-        <translation type="unfinished">Set flight mode</translation>
+        <translation>사용자 지정 모드</translation>
     </message>
     <message>
         <source>Set flight mode.</source>
@@ -5329,7 +5329,7 @@
     <message>
         <source>Sub Mode</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_SET_MODE].param3.label</extracomment>
-        <translation type="unfinished">Sub Mode</translation>
+        <translation>반복</translation>
     </message>
     <message>
         <source>Jump to item</source>
@@ -5344,7 +5344,7 @@
     <message>
         <source>Item #</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_JUMP].param1.label</extracomment>
-        <translation type="unfinished">Item #</translation>
+        <translation>항목 #</translation>
     </message>
     <message>
         <source>Repeat</source>
@@ -5359,7 +5359,7 @@
     <message>
         <source>Change speed and/or throttle set points.</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_CHANGE_SPEED].description</extracomment>
-        <translation type="unfinished">Change speed and/or throttle set points.</translation>
+        <translation>유형</translation>
     </message>
     <message>
         <source>Type</source>
@@ -5370,7 +5370,7 @@
         <source>Airspeed,Ground Speed,Ascend Speed,Descend Speed</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_CHANGE_SPEED].param1.enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">Airspeed,Ground Speed,Ascend Speed,Descend Speed</translation>
+        <translation>아니요,네</translation>
     </message>
     <message>
         <source>Speed</source>
@@ -5436,7 +5436,7 @@
     <message>
         <source>Cycles</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_REPEAT_RELAY].param2.label, .mavCmdInfo[MAV_CMD_DO_REPEAT_SERVO].param3.label</extracomment>
-        <translation type="unfinished">Cycles</translation>
+        <translation>사이클</translation>
     </message>
     <message>
         <source>Time</source>
@@ -5526,7 +5526,7 @@
     <message>
         <source>Reposition</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_REPOSITION].friendlyName</extracomment>
-        <translation type="unfinished">Reposition</translation>
+        <translation>재배치</translation>
     </message>
     <message>
         <source>Pause/Continue</source>
@@ -5730,17 +5730,17 @@
     <message>
         <source>Stabilize Pitch</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_MOUNT_CONFIGURE].param3.label</extracomment>
-        <translation type="unfinished">Stabilize Pitch</translation>
+        <translation>사용 안 함,사용</translation>
     </message>
     <message>
         <source>Stabilize Yaw</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_MOUNT_CONFIGURE].param4.label</extracomment>
-        <translation type="unfinished">Stabilize Yaw</translation>
+        <translation>피치</translation>
     </message>
     <message>
         <source>Control Mount</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_MOUNT_CONTROL].friendlyName</extracomment>
-        <translation type="unfinished">Control Mount</translation>
+        <translation>피치</translation>
     </message>
     <message>
         <source>Control the vehicle mount (e.g. gimbal).</source>
@@ -5775,17 +5775,17 @@
     <message>
         <source>Pitch</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW].param1.label</extracomment>
-        <translation type="unfinished">Pitch</translation>
+        <translation>피치</translation>
     </message>
     <message>
         <source>Pitch rate</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW].param3.label</extracomment>
-        <translation type="unfinished">Pitch rate</translation>
+        <translation>활성,비활성</translation>
     </message>
     <message>
         <source>Yaw rate</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW].param4.label</extracomment>
-        <translation type="unfinished">Yaw rate</translation>
+        <translation>활성,비활성</translation>
     </message>
     <message>
         <source>Follow yaw</source>
@@ -5801,7 +5801,7 @@
     <message>
         <source>Gimbal</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GIMBAL_MANAGER_PITCHYAW].param7.label</extracomment>
-        <translation type="unfinished">Gimbal</translation>
+        <translation>짐벌</translation>
     </message>
     <message>
         <source>Primary,first gimbal,second gimbal</source>
@@ -5916,7 +5916,7 @@
     <message>
         <source>Action</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GRIPPER].param2.label</extracomment>
-        <translation type="unfinished">Action</translation>
+        <translation>동작</translation>
     </message>
     <message>
         <source>Release,Grab</source>
@@ -5938,32 +5938,32 @@
         <source>Enable,Disable</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_AUTOTUNE_ENABLE].param1.enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">Enable,Disable</translation>
+        <translation>활성,비활성</translation>
     </message>
     <message>
         <source>Guided limits</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GUIDED_LIMITS].friendlyName</extracomment>
-        <translation type="unfinished">Guided limits</translation>
+        <translation>시간 초과</translation>
     </message>
     <message>
         <source>Set limits for external control</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GUIDED_LIMITS].description</extracomment>
-        <translation type="unfinished">Set limits for external control</translation>
+        <translation>시간 초과</translation>
     </message>
     <message>
         <source>Timeout</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GUIDED_LIMITS].param1.label</extracomment>
-        <translation type="unfinished">Timeout</translation>
+        <translation>시간 초과</translation>
     </message>
     <message>
         <source>Min Alt</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GUIDED_LIMITS].param2.label</extracomment>
-        <translation type="unfinished">Min Alt</translation>
+        <translation>보정</translation>
     </message>
     <message>
         <source>Max Alt</source>
         <extracomment>.mavCmdInfo[MAV_CMD_DO_GUIDED_LIMITS].param3.label</extracomment>
-        <translation type="unfinished">Max Alt</translation>
+        <translation>보정</translation>
     </message>
     <message>
         <source>H Limit</source>
@@ -5978,7 +5978,7 @@
     <message>
         <source>Set sensor offsets</source>
         <extracomment>.mavCmdInfo[MAV_CMD_PREFLIGHT_SET_SENSOR_OFFSETS].friendlyName</extracomment>
-        <translation type="unfinished">Set sensor offsets</translation>
+        <translation>UAVCAN 설정</translation>
     </message>
     <message>
         <source>UAVCAN configure</source>
@@ -5988,12 +5988,12 @@
     <message>
         <source>Store parameters</source>
         <extracomment>.mavCmdInfo[MAV_CMD_PREFLIGHT_STORAGE].friendlyName</extracomment>
-        <translation type="unfinished">Store parameters</translation>
+        <translation>임무 시작</translation>
     </message>
     <message>
         <source>Reboot/Shutdown vehicle</source>
         <extracomment>.mavCmdInfo[MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN].friendlyName</extracomment>
-        <translation type="unfinished">Reboot/Shutdown vehicle</translation>
+        <translation>임무 시작</translation>
     </message>
     <message>
         <source>Override goto</source>
@@ -6013,12 +6013,12 @@
     <message>
         <source>Get launch position</source>
         <extracomment>.mavCmdInfo[MAV_CMD_GET_HOME_POSITION].friendlyName</extracomment>
-        <translation type="unfinished">Get launch position</translation>
+        <translation>이륙</translation>
     </message>
     <message>
         <source>Bind Spektrum receiver</source>
         <extracomment>.mavCmdInfo[MAV_CMD_START_RX_PAIR].friendlyName</extracomment>
-        <translation type="unfinished">Bind Spektrum receiver</translation>
+        <translation>이륙</translation>
     </message>
     <message>
         <source>Get message interval</source>
@@ -6373,7 +6373,7 @@
     <message>
         <source>When enabled, parameter and mission plan downloads are skipped when connecting to a vehicle that is already flying. This prevents bandwidth-heavy transfers from disrupting an active flight.</source>
         <extracomment>.QGC.MetaData.Facts[noInitialDownloadWhenFlying].longDesc</extracomment>
-        <translation type="unfinished">When enabled, parameter and mission plan downloads are skipped when connecting to a vehicle that is already flying. This prevents bandwidth-heavy transfers from disrupting an active flight.</translation>
+        <translation>활성화하면 이미 비행 중인 기체에 연결할 때 파라미터 및 미션 플랜 다운로드를 건너뜁니다. 대역폭 사용이 큰 전송이 활성 비행을 방해하지 않도록 막습니다.</translation>
     </message>
     <message>
         <source>Skip param/plan download if flying on connect</source>
@@ -6412,7 +6412,7 @@
     <message>
         <source>Fly View Actions</source>
         <extracomment>.QGC.MetaData.Facts[flyViewActionsFile].label</extracomment>
-        <translation type="unfinished">Fly View Actions</translation>
+        <translation>Fly View 동작</translation>
     </message>
     <message>
         <source>Name of JSON custom actions file for Joysticks</source>
@@ -6422,7 +6422,7 @@
     <message>
         <source>Joystick Actions</source>
         <extracomment>.QGC.MetaData.Facts[joystickActionsFile].label</extracomment>
-        <translation type="unfinished">Joystick Actions</translation>
+        <translation>조이스틱 동작</translation>
     </message>
 </context>
 <context>
@@ -6458,12 +6458,12 @@
     <message>
         <source>Username</source>
         <extracomment>.QGC.MetaData.Facts[ntripUsername].shortDesc, .QGC.MetaData.Facts[ntripUsername].label</extracomment>
-        <translation type="unfinished">Username</translation>
+        <translation>사용자 이름</translation>
     </message>
     <message>
         <source>Password</source>
         <extracomment>.QGC.MetaData.Facts[ntripPassword].shortDesc, .QGC.MetaData.Facts[ntripPassword].label</extracomment>
-        <translation type="unfinished">Password</translation>
+        <translation>비밀번호</translation>
     </message>
     <message>
         <source>Mount Point</source>
@@ -6604,7 +6604,7 @@
     <message>
         <source>Options</source>
         <extracomment>.groups[Options].heading</extracomment>
-        <translation type="unfinished">Options</translation>
+        <translation>옵션</translation>
     </message>
     <message>
         <source>e.g. 1005,1077,1087</source>
@@ -6619,12 +6619,12 @@
     <message>
         <source>ntrip</source>
         <extracomment>.groups[Connection Status].keywords[0], .groups[Options].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>NTRIP</translation>
     </message>
     <message>
         <source>rtk</source>
         <extracomment>.groups[Connection Status].keywords[1], .groups[Server Settings].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>rtk</translation>
     </message>
     <message>
         <source>connection status</source>
@@ -6644,17 +6644,17 @@
     <message>
         <source>caster</source>
         <extracomment>.groups[Server Settings].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>캐스터</translation>
     </message>
     <message>
         <source>host</source>
         <extracomment>.groups[Server Settings].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>host</translation>
     </message>
     <message>
         <source>port</source>
         <extracomment>.groups[Server Settings].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>포트</translation>
     </message>
     <message>
         <source>username</source>
@@ -6679,12 +6679,12 @@
     <message>
         <source>stream</source>
         <extracomment>.groups[Mountpoint Browser].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>스트림</translation>
     </message>
     <message>
         <source>rtcm</source>
         <extracomment>.groups[Options].keywords[0], .groups[UDP Forwarding].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>rtcm</translation>
     </message>
     <message>
         <source>whitelist</source>
@@ -6704,7 +6704,7 @@
     <message>
         <source>relay</source>
         <extracomment>.groups[UDP Forwarding].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>릴레이</translation>
     </message>
     <message>
         <source>corrections forward</source>
@@ -6765,7 +6765,7 @@
     <message>
         <source>logging</source>
         <extracomment>.groups[Log Control].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>로깅</translation>
     </message>
     <message>
         <source>start log</source>
@@ -6785,7 +6785,7 @@
     <message>
         <source>upload</source>
         <extracomment>.groups[Upload Settings].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>업로드</translation>
     </message>
     <message>
         <source>flight review</source>
@@ -6795,22 +6795,22 @@
     <message>
         <source>email</source>
         <extracomment>.groups[Upload Settings].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>이메일</translation>
     </message>
     <message>
         <source>description</source>
         <extracomment>.groups[Upload Settings].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>설명</translation>
     </message>
     <message>
         <source>wind</source>
         <extracomment>.groups[Upload Settings].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>wind</translation>
     </message>
     <message>
         <source>rating</source>
         <extracomment>.groups[Upload Settings].keywords[5]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>등급</translation>
     </message>
     <message>
         <source>log files</source>
@@ -6859,12 +6859,12 @@
         <source>takeoff</source>
         <extracomment>.QGC.MetaData.Facts[takeoffItemNotRequired].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">takeoff</translation>
+        <translation>이륙</translation>
     </message>
     <message>
         <source>Enable creating multiple landing sequences for Return-to-Launch contingency selection.</source>
         <extracomment>.QGC.MetaData.Facts[allowMultipleLandingPatterns].shortDesc</extracomment>
-        <translation type="unfinished">Enable creating multiple landing sequences for Return-to-Launch contingency selection.</translation>
+        <translation>다중 착륙 시퀀스 설정 허용</translation>
     </message>
     <message>
         <source>Allow configuring multiple landing sequences</source>
@@ -6875,12 +6875,12 @@
         <source>landing pattern</source>
         <extracomment>.QGC.MetaData.Facts[allowMultipleLandingPatterns].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">landing pattern</translation>
+        <translation>CAA</translation>
     </message>
     <message>
         <source>Use MAV_CMD_CONDITION_GATE for mission pattern transitions instead of standard waypoints.</source>
         <extracomment>.QGC.MetaData.Facts[useConditionGate].shortDesc</extracomment>
-        <translation type="unfinished">Use MAV_CMD_CONDITION_GATE for mission pattern transitions instead of standard waypoints.</translation>
+        <translation>패턴 생성에 MAV_CMD_CONDITION_GATE 사용</translation>
     </message>
     <message>
         <source>Use MAV_CMD_CONDITION_GATE for pattern generation</source>
@@ -6891,7 +6891,7 @@
         <source>condition gate</source>
         <extracomment>.QGC.MetaData.Facts[useConditionGate].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">condition gate</translation>
+        <translation>CAA</translation>
     </message>
     <message>
         <source>Show gimbal yaw visual only when set explicitly for the waypoint</source>
@@ -6920,7 +6920,7 @@
     <message>
         <source>General</source>
         <extracomment>.groups[General].heading</extracomment>
-        <translation type="unfinished">General</translation>
+        <translation>일반</translation>
     </message>
     <message>
         <source>mission altitude</source>
@@ -6940,22 +6940,22 @@
     <message>
         <source>condition gate</source>
         <extracomment>.groups[General].keywords[3]</extracomment>
-        <translation type="unfinished">condition gate</translation>
+        <translation>CAA</translation>
     </message>
     <message>
         <source>takeoff</source>
         <extracomment>.groups[General].keywords[4]</extracomment>
-        <translation type="unfinished">takeoff</translation>
+        <translation>이륙</translation>
     </message>
     <message>
         <source>landing pattern</source>
         <extracomment>.groups[General].keywords[5]</extracomment>
-        <translation type="unfinished">landing pattern</translation>
+        <translation>CAA</translation>
     </message>
     <message>
         <source>waypoint</source>
         <extracomment>.groups[General].keywords[6]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>경유점</translation>
     </message>
 </context>
 <context>
@@ -6963,42 +6963,42 @@
     <message>
         <source>Battery</source>
         <extracomment>.sections[Battery].title</extracomment>
-        <translation type="unfinished">Battery</translation>
+        <translation>실내,실외</translation>
     </message>
     <message>
         <source>battery</source>
         <extracomment>.sections[Battery].keywords[0]</extracomment>
-        <translation type="unfinished">battery</translation>
+        <translation>배터리</translation>
     </message>
     <message>
         <source>voltage</source>
         <extracomment>.sections[Battery].keywords[1]</extracomment>
-        <translation type="unfinished">voltage</translation>
+        <translation>전압</translation>
     </message>
     <message>
         <source>current</source>
         <extracomment>.sections[Battery].keywords[2]</extracomment>
-        <translation type="unfinished">current</translation>
+        <translation>현재</translation>
     </message>
     <message>
         <source>power module</source>
         <extracomment>.sections[Battery].keywords[3]</extracomment>
-        <translation type="unfinished">power module</translation>
+        <translation>센서</translation>
     </message>
     <message>
         <source>sensor</source>
         <extracomment>.sections[Battery].keywords[4]</extracomment>
-        <translation type="unfinished">sensor</translation>
+        <translation>센서</translation>
     </message>
     <message>
         <source>cells</source>
         <extracomment>.sections[Battery].keywords[5]</extracomment>
-        <translation type="unfinished">cells</translation>
+        <translation>셀</translation>
     </message>
     <message>
         <source>lipo</source>
         <extracomment>.sections[Battery].keywords[6]</extracomment>
-        <translation type="unfinished">lipo</translation>
+        <translation>lipo</translation>
     </message>
     <message>
         <source>Source</source>
@@ -7048,22 +7048,22 @@
     <message>
         <source>esc</source>
         <extracomment>.sections[ESC PWM Calibration].keywords[0], .sections[UAVCAN Bus Configuration].keywords[3]</extracomment>
-        <translation type="unfinished">esc</translation>
+        <translation>esc</translation>
     </message>
     <message>
         <source>calibration</source>
         <extracomment>.sections[ESC PWM Calibration].keywords[1]</extracomment>
-        <translation type="unfinished">calibration</translation>
+        <translation>보정</translation>
     </message>
     <message>
         <source>motor</source>
         <extracomment>.sections[ESC PWM Calibration].keywords[2]</extracomment>
-        <translation type="unfinished">motor</translation>
+        <translation>모터</translation>
     </message>
     <message>
         <source>pwm</source>
         <extracomment>.sections[ESC PWM Calibration].keywords[3]</extracomment>
-        <translation type="unfinished">pwm</translation>
+        <translation>pwm</translation>
     </message>
     <message>
         <source>electronic speed controller</source>
@@ -7083,7 +7083,7 @@
     <message>
         <source>Calibrate</source>
         <extracomment>.sections[ESC PWM Calibration].controls[2].dialogButton.text</extracomment>
-        <translation type="unfinished">Calibrate</translation>
+        <translation>보정</translation>
     </message>
     <message>
         <source>UAVCAN Bus Configuration</source>
@@ -7093,7 +7093,7 @@
     <message>
         <source>uavcan</source>
         <extracomment>.sections[UAVCAN Bus Configuration].keywords[0]</extracomment>
-        <translation type="unfinished">uavcan</translation>
+        <translation>UAVCAN</translation>
     </message>
     <message>
         <source>can bus</source>
@@ -7108,12 +7108,12 @@
     <message>
         <source>node</source>
         <extracomment>.sections[UAVCAN Bus Configuration].keywords[4]</extracomment>
-        <translation type="unfinished">node</translation>
+        <translation>node</translation>
     </message>
     <message>
         <source>UAVCAN</source>
         <extracomment>.sections[UAVCAN Bus Configuration].controls[0].label</extracomment>
-        <translation type="unfinished">UAVCAN</translation>
+        <translation>UAVCAN</translation>
     </message>
     <message>
         <source>WARNING: Propellers must be removed from vehicle prior to performing UAVCAN ESC configuration.</source>
@@ -7177,22 +7177,22 @@
     <message>
         <source>RPM 1</source>
         <extracomment>.QGC.MetaData.Facts[rpm1].shortDesc</extracomment>
-        <translation type="unfinished">RPM 1</translation>
+        <translation>RPM 1</translation>
     </message>
     <message>
         <source>RPM 2</source>
         <extracomment>.QGC.MetaData.Facts[rpm2].shortDesc</extracomment>
-        <translation type="unfinished">RPM 2</translation>
+        <translation>RPM 2</translation>
     </message>
     <message>
         <source>RPM 3</source>
         <extracomment>.QGC.MetaData.Facts[rpm3].shortDesc</extracomment>
-        <translation type="unfinished">RPM 3</translation>
+        <translation>RPM 3</translation>
     </message>
     <message>
         <source>RPM 4</source>
         <extracomment>.QGC.MetaData.Facts[rpm4].shortDesc</extracomment>
-        <translation type="unfinished">RPM 4</translation>
+        <translation>RPM 4</translation>
     </message>
     <message>
         <source>RPM Sensor 1</source>
@@ -7338,12 +7338,12 @@
     <message>
         <source>Latitude</source>
         <extracomment>.QGC.MetaData.Facts[Latitude].shortDesc</extracomment>
-        <translation type="unfinished">Latitude</translation>
+        <translation>위도</translation>
     </message>
     <message>
         <source>Longitude</source>
         <extracomment>.QGC.MetaData.Facts[Longitude].shortDesc</extracomment>
-        <translation type="unfinished">Longitude</translation>
+        <translation>경도</translation>
     </message>
     <message>
         <source>Altitude (rel)</source>
@@ -7393,7 +7393,7 @@
         <source>CAA</source>
         <extracomment>.QGC.MetaData.Facts[operatorIDType].enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">CAA</translation>
+        <translation>CAA</translation>
     </message>
     <message>
         <source>Operator ID type</source>
@@ -7404,12 +7404,12 @@
         <source>operator,registration</source>
         <extracomment>.QGC.MetaData.Facts[operatorIDType].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">operator,registration</translation>
+        <translation>사용 안 함,사용</translation>
     </message>
     <message>
         <source>Broadcast the operator identification information via Remote ID.</source>
         <extracomment>.QGC.MetaData.Facts[sendOperatorID].shortDesc</extracomment>
-        <translation type="unfinished">Broadcast the operator identification information via Remote ID.</translation>
+        <translation>브로드캐스트</translation>
     </message>
     <message>
         <source>When enabled, sends operator ID message</source>
@@ -7425,7 +7425,7 @@
         <source>operator,pilot</source>
         <extracomment>.QGC.MetaData.Facts[sendOperatorID].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">operator,pilot</translation>
+        <translation>사용 안 함,사용</translation>
     </message>
     <message>
         <source>Flight purpose description to broadcast (max 23 characters).</source>
@@ -7563,7 +7563,7 @@
         <source>Undefined,Airplane/FixedWing,Helicopter/Multirrotor,Gyroplane,VTOL,Ornithopter,Glider,Kite,Free Ballon,Captive Ballon,Airship,Parachute,Rocket,Tethered powered aircraft,Ground Obstacle,Other</source>
         <extracomment>.QGC.MetaData.Facts[basicIDUaType].enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">Undefined,Airplane/FixedWing,Helicopter/Multirrotor,Gyroplane,VTOL,Ornithopter,Glider,Kite,Free Ballon,Captive Ballon,Airship,Parachute,Rocket,Tethered powered aircraft,Ground Obstacle,Other</translation>
+        <translation>정의되지 않음, 비행기/고정익, 헬리콥터/멀티콥터, 자이로콥터, VTOL, 날갯짓 비행체, 글라이더, 카이트, 자유 풍선, 묶인 풍선, 비행선, 낙하산, 로켓, 묶인 동력 항공기, 지상 장애물, 기타</translation>
     </message>
     <message>
         <source>UA type</source>
@@ -7600,7 +7600,7 @@
         <source>FAA,EU</source>
         <extracomment>.QGC.MetaData.Facts[region].enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">FAA,EU</translation>
+        <translation>FAA, EU</translation>
     </message>
     <message>
         <source>Region of operation</source>
@@ -7808,17 +7808,17 @@
     <message>
         <source>battery</source>
         <extracomment>.sections[Low Battery Failsafe].keywords[0]</extracomment>
-        <translation type="unfinished">battery</translation>
+        <translation>배터리</translation>
     </message>
     <message>
         <source>voltage</source>
         <extracomment>.sections[Low Battery Failsafe].keywords[1]</extracomment>
-        <translation type="unfinished">voltage</translation>
+        <translation>전압</translation>
     </message>
     <message>
         <source>low battery</source>
         <extracomment>.sections[Low Battery Failsafe].keywords[2]</extracomment>
-        <translation type="unfinished">low battery</translation>
+        <translation>lipo</translation>
     </message>
     <message>
         <source>critical battery</source>
@@ -7833,7 +7833,7 @@
     <message>
         <source>power</source>
         <extracomment>.sections[Low Battery Failsafe].keywords[5]</extracomment>
-        <translation type="unfinished">power</translation>
+        <translation>전원</translation>
     </message>
     <message>
         <source>Failsafe action</source>
@@ -7883,7 +7883,7 @@
     <message>
         <source>distance</source>
         <extracomment>.sections[Object Detection].keywords[4]</extracomment>
-        <translation type="unfinished">distance</translation>
+        <translation>거리</translation>
     </message>
     <message>
         <source>Collision prevention minimum distance</source>
@@ -7903,17 +7903,17 @@
     <message>
         <source>radio</source>
         <extracomment>.sections[RC/Joystick Loss Failsafe].keywords[0]</extracomment>
-        <translation type="unfinished">radio</translation>
+        <translation>무선</translation>
     </message>
     <message>
         <source>receiver</source>
         <extracomment>.sections[RC/Joystick Loss Failsafe].keywords[1]</extracomment>
-        <translation type="unfinished">receiver</translation>
+        <translation>착륙</translation>
     </message>
     <message>
         <source>transmitter</source>
         <extracomment>.sections[RC/Joystick Loss Failsafe].keywords[2]</extracomment>
-        <translation type="unfinished">transmitter</translation>
+        <translation>착륙</translation>
     </message>
     <message>
         <source>rc loss</source>
@@ -7923,7 +7923,7 @@
     <message>
         <source>joystick</source>
         <extracomment>.sections[RC/Joystick Loss Failsafe].keywords[4]</extracomment>
-        <translation type="unfinished">joystick</translation>
+        <translation>조이스틱</translation>
     </message>
     <message>
         <source>signal loss</source>
@@ -7953,12 +7953,12 @@
     <message>
         <source>ground station</source>
         <extracomment>.sections[Data Link Loss Failsafe].keywords[2]</extracomment>
-        <translation type="unfinished">ground station</translation>
+        <translation>rssi</translation>
     </message>
     <message>
         <source>gcs</source>
         <extracomment>.sections[Data Link Loss Failsafe].keywords[3]</extracomment>
-        <translation type="unfinished">gcs</translation>
+        <translation>gcs</translation>
     </message>
     <message>
         <source>disconnect</source>
@@ -7978,37 +7978,37 @@
     <message>
         <source>geofence</source>
         <extracomment>.sections[Geofence Failsafe].keywords[0]</extracomment>
-        <translation type="unfinished">geofence</translation>
+        <translation>경계</translation>
     </message>
     <message>
         <source>boundary</source>
         <extracomment>.sections[Geofence Failsafe].keywords[1]</extracomment>
-        <translation type="unfinished">boundary</translation>
+        <translation>경계</translation>
     </message>
     <message>
         <source>fence</source>
         <extracomment>.sections[Geofence Failsafe].keywords[2]</extracomment>
-        <translation type="unfinished">fence</translation>
+        <translation>활성화됨</translation>
     </message>
     <message>
         <source>containment</source>
         <extracomment>.sections[Geofence Failsafe].keywords[3]</extracomment>
-        <translation type="unfinished">containment</translation>
+        <translation>활성화됨</translation>
     </message>
     <message>
         <source>radius</source>
         <extracomment>.sections[Geofence Failsafe].keywords[4]</extracomment>
-        <translation type="unfinished">radius</translation>
+        <translation>반경</translation>
     </message>
     <message>
         <source>altitude</source>
         <extracomment>.sections[Geofence Failsafe].keywords[5], .sections[Return to launch settings].keywords[5]</extracomment>
-        <translation type="unfinished">altitude</translation>
+        <translation>고도</translation>
     </message>
     <message>
         <source>breach</source>
         <extracomment>.sections[Geofence Failsafe].keywords[6]</extracomment>
-        <translation type="unfinished">breach</translation>
+        <translation>위반</translation>
     </message>
     <message>
         <source>Action on breach</source>
@@ -8033,12 +8033,12 @@
     <message>
         <source>rtl</source>
         <extracomment>.sections[Return to launch settings].keywords[0]</extracomment>
-        <translation type="unfinished">rtl</translation>
+        <translation>rtl</translation>
     </message>
     <message>
         <source>return home</source>
         <extracomment>.sections[Return to launch settings].keywords[1]</extracomment>
-        <translation type="unfinished">return home</translation>
+        <translation>선회 대기</translation>
     </message>
     <message>
         <source>return to launch</source>
@@ -8048,12 +8048,12 @@
     <message>
         <source>loiter</source>
         <extracomment>.sections[Return to launch settings].keywords[3]</extracomment>
-        <translation type="unfinished">loiter</translation>
+        <translation>선회 대기</translation>
     </message>
     <message>
         <source>land</source>
         <extracomment>.sections[Return to launch settings].keywords[4]</extracomment>
-        <translation type="unfinished">land</translation>
+        <translation>land</translation>
     </message>
     <message>
         <source>Climb to altitude of</source>
@@ -8098,12 +8098,12 @@
     <message>
         <source>landing</source>
         <extracomment>.sections[Land Mode Settings].keywords[0]</extracomment>
-        <translation type="unfinished">landing</translation>
+        <translation>착륙</translation>
     </message>
     <message>
         <source>descent</source>
         <extracomment>.sections[Land Mode Settings].keywords[1]</extracomment>
-        <translation type="unfinished">descent</translation>
+        <translation>하강</translation>
     </message>
     <message>
         <source>disarm</source>
@@ -8164,7 +8164,7 @@
     <message>
         <source>General</source>
         <extracomment>.pages[General].name</extracomment>
-        <translation type="unfinished">General</translation>
+        <translation>일반</translation>
     </message>
     <message>
         <source>Fly View</source>
@@ -8179,7 +8179,7 @@
     <message>
         <source>Plan View</source>
         <extracomment>.pages[Plan View].name</extracomment>
-        <translation type="unfinished">Plan View</translation>
+        <translation>플랜 뷰</translation>
     </message>
     <message>
         <source>ADSB Server</source>
@@ -8189,22 +8189,22 @@
     <message>
         <source>Comm Links</source>
         <extracomment>.pages[Comm Links].name</extracomment>
-        <translation type="unfinished">Comm Links</translation>
+        <translation>통신 링크</translation>
     </message>
     <message>
         <source>Logging</source>
         <extracomment>.pages[Logging].name</extracomment>
-        <translation type="unfinished">Logging</translation>
+        <translation>로깅</translation>
     </message>
     <message>
         <source>Maps</source>
         <extracomment>.pages[Maps].name</extracomment>
-        <translation type="unfinished">Maps</translation>
+        <translation>지도</translation>
     </message>
     <message>
         <source>NTRIP/RTK</source>
         <extracomment>.pages[NTRIP/RTK].name</extracomment>
-        <translation type="unfinished">NTRIP/RTK</translation>
+        <translation>NTRIP/RTK</translation>
     </message>
     <message>
         <source>PX4 Log Transfer</source>
@@ -8214,22 +8214,22 @@
     <message>
         <source>Remote ID</source>
         <extracomment>.pages[Remote ID].name</extracomment>
-        <translation type="unfinished">Remote ID</translation>
+        <translation>원격 ID</translation>
     </message>
     <message>
         <source>Telemetry</source>
         <extracomment>.pages[Telemetry].name</extracomment>
-        <translation type="unfinished">Telemetry</translation>
+        <translation>텔레메트리</translation>
     </message>
     <message>
         <source>Video</source>
         <extracomment>.pages[Video].name</extracomment>
-        <translation type="unfinished">Video</translation>
+        <translation>영상</translation>
     </message>
     <message>
         <source>Help</source>
         <extracomment>.pages[Help].name</extracomment>
-        <translation type="unfinished">Help</translation>
+        <translation>도움말</translation>
     </message>
     <message>
         <source>Mock Link</source>
@@ -8239,17 +8239,17 @@
     <message>
         <source>Debug</source>
         <extracomment>.pages[Debug].name</extracomment>
-        <translation type="unfinished">Debug</translation>
+        <translation>디버그</translation>
     </message>
     <message>
         <source>Palette Test</source>
         <extracomment>.pages[Palette Test].name</extracomment>
-        <translation type="unfinished">Palette Test</translation>
+        <translation>팔레트 테스트</translation>
     </message>
     <message>
         <source>WebRTC</source>
         <extracomment>.pages[WebRTC].name</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>WebRTC</translation>
     </message>
 </context>
 <context>
@@ -8344,17 +8344,17 @@
     <message>
         <source>Rangefinder</source>
         <extracomment>.QGC.MetaData.Facts[rangefinderDistance].shortDesc</extracomment>
-        <translation type="unfinished">Rangefinder</translation>
+        <translation>사용 안 함,사용,사용 불가</translation>
     </message>
     <message>
         <source>RFTarget</source>
         <extracomment>.QGC.MetaData.Facts[rangefinderTarget].shortDesc</extracomment>
-        <translation type="unfinished">RFTarget</translation>
+        <translation>사용 안 함,사용,사용 불가</translation>
     </message>
     <message>
         <source>Roll/Pitch Toggle</source>
         <extracomment>.QGC.MetaData.Facts[rollPitchToggle].shortDesc</extracomment>
-        <translation type="unfinished">Roll/Pitch Toggle</translation>
+        <translation>사용 안 함,사용,사용 불가</translation>
     </message>
     <message>
         <source>Disabled,Enabled,Unavailable</source>
@@ -8368,17 +8368,17 @@
     <message>
         <source>Angle for parallel lines of grid.</source>
         <extracomment>.QGC.MetaData.Facts[GridAngle].shortDesc</extracomment>
-        <translation type="unfinished">Angle for parallel lines of grid.</translation>
+        <translation>비디오 디코더 우선순위 강제 설정</translation>
     </message>
     <message>
         <source>Fly every other transect in each pass.</source>
         <extracomment>.QGC.MetaData.Facts[FlyAlternateTransects].shortDesc</extracomment>
-        <translation type="unfinished">Fly every other transect in each pass.</translation>
+        <translation>로깅</translation>
     </message>
     <message>
         <source>Split mission concave polygons into separate regular, convex polygons.</source>
         <extracomment>.QGC.MetaData.Facts[SplitConcavePolygons].shortDesc</extracomment>
-        <translation type="unfinished">Split mission concave polygons into separate regular, convex polygons.</translation>
+        <translation>로깅</translation>
     </message>
 </context>
 <context>
@@ -8396,17 +8396,17 @@
     <message>
         <source>Logging</source>
         <extracomment>.groups[Logging].heading</extracomment>
-        <translation type="unfinished">Logging</translation>
+        <translation>로깅</translation>
     </message>
     <message>
         <source>Stream Rates (ArduPilot Only)</source>
         <extracomment>.groups[Stream Rates (ArduPilot Only)].heading</extracomment>
-        <translation type="unfinished">Stream Rates (ArduPilot Only)</translation>
+        <translation>녹화</translation>
     </message>
     <message>
         <source>Signing Key</source>
         <extracomment>.groups[Signing Key].sectionName</extracomment>
-        <translation type="unfinished">Signing Key</translation>
+        <translation>gcs</translation>
     </message>
     <message>
         <source>Link Status</source>
@@ -8436,17 +8436,17 @@
     <message>
         <source>gcs</source>
         <extracomment>.groups[Ground Station].keywords[4]</extracomment>
-        <translation type="unfinished">gcs</translation>
+        <translation>gcs</translation>
     </message>
     <message>
         <source>forward</source>
         <extracomment>.groups[MAVLink Forwarding].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>host</translation>
     </message>
     <message>
         <source>relay</source>
         <extracomment>.groups[MAVLink Forwarding].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>릴레이</translation>
     </message>
     <message>
         <source>mavlink forward</source>
@@ -8456,37 +8456,37 @@
     <message>
         <source>host</source>
         <extracomment>.groups[MAVLink Forwarding].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>host</translation>
     </message>
     <message>
         <source>telemetry log</source>
         <extracomment>.groups[Logging].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>tlog</translation>
     </message>
     <message>
         <source>tlog</source>
         <extracomment>.groups[Logging].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>tlog</translation>
     </message>
     <message>
         <source>save log</source>
         <extracomment>.groups[Logging].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>녹화</translation>
     </message>
     <message>
         <source>recording</source>
         <extracomment>.groups[Logging].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>녹화</translation>
     </message>
     <message>
         <source>csv</source>
         <extracomment>.groups[Logging].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>csv</translation>
     </message>
     <message>
         <source>stream rate</source>
         <extracomment>.groups[Stream Rates (ArduPilot Only)].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>apm</translation>
     </message>
     <message>
         <source>ardupilot</source>
@@ -8496,12 +8496,12 @@
     <message>
         <source>apm</source>
         <extracomment>.groups[Stream Rates (ArduPilot Only)].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>apm</translation>
     </message>
     <message>
         <source>raw sensors</source>
         <extracomment>.groups[Stream Rates (ArduPilot Only)].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>key</translation>
     </message>
     <message>
         <source>rc channels</source>
@@ -8526,12 +8526,12 @@
     <message>
         <source>key</source>
         <extracomment>.groups[Signing Key].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>key</translation>
     </message>
     <message>
         <source>security</source>
         <extracomment>.groups[Signing Key].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>sent</translation>
     </message>
     <message>
         <source>mavlink2</source>
@@ -8556,12 +8556,12 @@
     <message>
         <source>sent</source>
         <extracomment>.groups[Link Status].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>sent</translation>
     </message>
     <message>
         <source>latency</source>
         <extracomment>.groups[Link Status].keywords[4]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>3D 뷰어 활성화</translation>
     </message>
 </context>
 <context>
@@ -8702,7 +8702,7 @@
     <message>
         <source>Temperature</source>
         <extracomment>.QGC.MetaData.Facts[temperature].shortDesc</extracomment>
-        <translation type="unfinished">Temperature</translation>
+        <translation>온도</translation>
     </message>
     <message>
         <source>Humidity</source>
@@ -8712,7 +8712,7 @@
     <message>
         <source>Pressure</source>
         <extracomment>.QGC.MetaData.Facts[pressure].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>압력</translation>
     </message>
     <message>
         <source>WindSpeed</source>
@@ -8727,17 +8727,17 @@
     <message>
         <source>PM1.0</source>
         <extracomment>.QGC.MetaData.Facts[pm1p0].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>PM1.0</translation>
     </message>
     <message>
         <source>PM2.5</source>
         <extracomment>.QGC.MetaData.Facts[pm2p5].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>PM2.5</translation>
     </message>
     <message>
         <source>PM10</source>
         <extracomment>.QGC.MetaData.Facts[pm10].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>PM10</translation>
     </message>
 </context>
 <context>
@@ -8803,22 +8803,22 @@
     <message>
         <source>Roll</source>
         <extracomment>.QGC.MetaData.Facts[roll].shortDesc</extracomment>
-        <translation type="unfinished">Roll</translation>
+        <translation>롤</translation>
     </message>
     <message>
         <source>Pitch</source>
         <extracomment>.QGC.MetaData.Facts[pitch].shortDesc</extracomment>
-        <translation type="unfinished">Pitch</translation>
+        <translation>피치</translation>
     </message>
     <message>
         <source>Heading</source>
         <extracomment>.QGC.MetaData.Facts[heading].shortDesc</extracomment>
-        <translation type="unfinished">Heading</translation>
+        <translation>기수 방향</translation>
     </message>
     <message>
         <source>Roll Rate</source>
         <extracomment>.QGC.MetaData.Facts[rollRate].shortDesc</extracomment>
-        <translation type="unfinished">Roll Rate</translation>
+        <translation>롤 속도</translation>
     </message>
     <message>
         <source>Pitch Rate</source>
@@ -8828,7 +8828,7 @@
     <message>
         <source>Yaw Rate</source>
         <extracomment>.QGC.MetaData.Facts[yawRate].shortDesc</extracomment>
-        <translation type="unfinished">Yaw Rate</translation>
+        <translation>요 속도</translation>
     </message>
     <message>
         <source>Ground Speed</source>
@@ -8848,12 +8848,12 @@
     <message>
         <source>Alt (Rel)</source>
         <extracomment>.QGC.MetaData.Facts[altitudeRelative].shortDesc</extracomment>
-        <translation type="unfinished">Alt (Rel)</translation>
+        <translation>고도 (상대)</translation>
     </message>
     <message>
         <source>Alt (AMSL)</source>
         <extracomment>.QGC.MetaData.Facts[altitudeAMSL].shortDesc</extracomment>
-        <translation type="unfinished">Alt (AMSL)</translation>
+        <translation>고도 (해수면 기준)</translation>
     </message>
     <message>
         <source>Alt (Above Terrain)</source>
@@ -8913,7 +8913,7 @@
     <message>
         <source>Flight Time</source>
         <extracomment>.QGC.MetaData.Facts[flightTime].shortDesc</extracomment>
-        <translation type="unfinished">Flight Time</translation>
+        <translation>비행 시간</translation>
     </message>
     <message>
         <source>Hobbs Meter</source>
@@ -9122,7 +9122,7 @@
         <source>Default,Force software decoder,Force hardware decoder,Force NVIDIA decoder,Force VA-API decoder,Force DirectX3D 11 decoder,Force VideoToolbox decoder,Force Intel decoder,Force Vulkan decoder</source>
         <extracomment>.QGC.MetaData.Facts[forceVideoDecoder].enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">Default,Force software decoder,Force hardware decoder,Force NVIDIA decoder,Force VA-API decoder,Force DirectX3D 11 decoder,Force VideoToolbox decoder,Force Intel decoder,Force Vulkan decoder</translation>
+        <translation>기본, 소프트웨어 디코더 강제, 하드웨어 디코더 강제, NVIDIA 디코더 강제, VA-API 디코더 강제, DirectX3D 11 디코더 강제, VideoToolbox 디코더 강제, Intel 디코더 강제, Vulkan 디코더 강제</translation>
     </message>
     <message>
         <source>Force video decoder priority</source>
@@ -9133,17 +9133,17 @@
         <source>decoder,hardware decode</source>
         <extracomment>.QGC.MetaData.Facts[forceVideoDecoder].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">decoder,hardware decode</translation>
+        <translation>3D 뷰어 활성화</translation>
     </message>
     <message>
         <source>Video source</source>
         <extracomment>.QGC.MetaData.Facts[videoSource].shortDesc, .QGC.MetaData.Facts[videoSource].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>영상 소스</translation>
     </message>
     <message>
         <source>Video UDP Url</source>
         <extracomment>.QGC.MetaData.Facts[udpUrl].shortDesc, .QGC.MetaData.Facts[udpUrl].label</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>영상 소스</translation>
     </message>
     <message>
         <source>Video RTSP Url</source>
@@ -9193,7 +9193,7 @@
     <message>
         <source>By default, when a hardware decoder produces GPU-backed frames (DMABuf, GLMemory, D3D11, IOSurface, AHardwareBuffer), the pipeline imports them directly into Qt&apos;s render thread to avoid a per-frame CPU copy. The pipeline already falls back to the CPU path automatically when a GPU import fails, so this option is only needed for debugging or to work around a broken driver.</source>
         <extracomment>.QGC.MetaData.Facts[forceCpuVideoPath].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>기본적으로 하드웨어 디코더가 GPU 메모리 프레임(DMABuf, GLMemory, D3D11, IOSurface, AHardwareBuffer)을 생성하면 파이프라인이 이를 Qt 렌더 스레드로 직접 가져와 프레임마다 CPU 복사를 피합니다. GPU 가져오기가 실패하면 파이프라인은 자동으로 CPU 경로로 폴백하므로, 이 옵션은 디버깅이나 결함 있는 드라이버 회피용으로만 필요합니다.</translation>
     </message>
     <message>
         <source>Force CPU video path</source>
@@ -9213,7 +9213,7 @@
     <message>
         <source>Leave blank to auto-probe (SoC-native imxvideoconvert_g2d / nvvidconv when present, otherwise videoconvert). Set to a specific GStreamer factory name to force that element. Used as a workaround when an SoC&apos;s preferred element has a defect; takes effect on next stream restart.</source>
         <extracomment>.QGC.MetaData.Facts[videoConversionElement].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>비워두면 자동 탐색합니다(SoC 기본 imxvideoconvert_g2d / nvvidconv가 있으면 사용, 없으면 videoconvert). 특정 GStreamer factory 이름을 지정하면 강제로 사용됩니다. SoC의 기본 요소에 결함이 있을 때 우회책으로 사용되며, 다음 스트림 재시작 시 적용됩니다.</translation>
     </message>
     <message>
         <source>Video conversion element override</source>
@@ -9233,7 +9233,7 @@
     <message>
         <source>QGC normally inserts a pixel-aspect-ratio=1/1 capsfilter so non-square-pixel sources (some RTSP cams, DVB) don&apos;t render geometrically distorted. A few v4l2 drivers without VIDIOC_CROPCAP deadlock negotiation when PAR is forced; enable this option as a workaround. Takes effect on next stream restart.</source>
         <extracomment>.QGC.MetaData.Facts[disablePixelAspectRatio].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>QGC는 보통 pixel-aspect-ratio=1/1 capsfilter를 삽입해 비정사각형 픽셀 소스(일부 RTSP 카메라, DVB)가 기하학적으로 왜곡되어 표시되지 않도록 합니다. VIDIOC_CROPCAP을 지원하지 않는 일부 v4l2 드라이버는 PAR이 강제될 때 협상에서 데드락에 빠지므로 이 옵션을 우회책으로 활성화합니다. 다음 스트림 재시작 시 적용됩니다.</translation>
     </message>
     <message>
         <source>Disable pixel-aspect-ratio normalization</source>
@@ -9253,7 +9253,7 @@
     <message>
         <source>Off by default — appsink frames are delivered to the renderer immediately. When enabled, the adapter holds a 3-frame ring and a display-rate timer picks the frame closest to the expected presentation time (PTS-anchored, 70 ms tolerance). Smooths out jitter from bursty decoders or variable network at the cost of up to one frame of added latency. Frozen sources keep the last good frame on screen. Takes effect on next stream restart.</source>
         <extracomment>.QGC.MetaData.Facts[frameSmoothingEnabled].longDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>기본값은 꺼짐 — appsink 프레임이 즉시 렌더러로 전달됩니다. 활성화하면 어댑터가 3프레임 링 버퍼를 유지하고, 화면 갱신율 타이머가 예상 표시 시간(PTS 기준, 70ms 허용 오차)에 가장 가까운 프레임을 선택합니다. 디코더가 버스트로 작동하거나 네트워크가 가변적인 경우 지터를 부드럽게 다듬지만 최대 1프레임 지연이 추가됩니다. 정지된 소스는 마지막 정상 프레임을 유지합니다. 다음 스트림 재시작 시 적용됩니다.</translation>
     </message>
     <message>
         <source>Smooth frame pacing (experimental)</source>
@@ -9351,57 +9351,57 @@
     <message>
         <source>Video Source</source>
         <extracomment>.groups[Video Source].heading</extracomment>
-        <translation type="unfinished">Video Source</translation>
+        <translation>영상 소스</translation>
     </message>
     <message>
         <source>Connection</source>
         <extracomment>.groups[Connection].heading</extracomment>
-        <translation type="unfinished">Connection</translation>
+        <translation>연결</translation>
     </message>
     <message>
         <source>Settings</source>
         <extracomment>.groups[Settings].heading</extracomment>
-        <translation type="unfinished">Settings</translation>
+        <translation>설정</translation>
     </message>
     <message>
         <source>Local Video Storage</source>
         <extracomment>.groups[Local Video Storage].heading</extracomment>
-        <translation type="unfinished">Local Video Storage</translation>
+        <translation>카메라</translation>
     </message>
     <message>
         <source>video source</source>
         <extracomment>.groups[Video Source].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>카메라</translation>
     </message>
     <message>
         <source>camera</source>
         <extracomment>.groups[Video Source].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>카메라</translation>
     </message>
     <message>
         <source>stream</source>
         <extracomment>.groups[Video Source].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>스트림</translation>
     </message>
     <message>
         <source>rtsp</source>
         <extracomment>.groups[Connection].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>rtsp</translation>
     </message>
     <message>
         <source>tcp</source>
         <extracomment>.groups[Connection].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>tcp</translation>
     </message>
     <message>
         <source>udp</source>
         <extracomment>.groups[Connection].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>udp</translation>
     </message>
     <message>
         <source>mpegts</source>
         <extracomment>.groups[Connection].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>gpu</translation>
     </message>
     <message>
         <source>video url</source>
@@ -9441,17 +9441,17 @@
     <message>
         <source>gpu</source>
         <extracomment>.groups[Settings].keywords[5]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>gpu</translation>
     </message>
     <message>
         <source>zero-copy</source>
         <extracomment>.groups[Settings].keywords[6]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>mkv</translation>
     </message>
     <message>
         <source>record</source>
         <extracomment>.groups[Local Video Storage].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>녹화</translation>
     </message>
     <message>
         <source>recording format</source>
@@ -9461,17 +9461,17 @@
     <message>
         <source>mp4</source>
         <extracomment>.groups[Local Video Storage].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>mp4</translation>
     </message>
     <message>
         <source>mkv</source>
         <extracomment>.groups[Local Video Storage].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>mkv</translation>
     </message>
     <message>
         <source>storage limit</source>
         <extracomment>.groups[Local Video Storage].keywords[4]</extracomment>
-        <translation type="unfinished">storage limit</translation>
+        <translation>3D 뷰어 활성화</translation>
     </message>
     <message>
         <source>video file</source>
@@ -9495,18 +9495,18 @@
         <source>3d view,3d map,enable 3d</source>
         <extracomment>.QGC.MetaData.Facts[enabled].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">3d view,3d map,enable 3d</translation>
+        <translation>3D 뷰어용 OSM 파일 경로</translation>
     </message>
     <message>
         <source>Data source for 3D map terrain and building information.</source>
         <extracomment>.QGC.MetaData.Facts[mapProvider].shortDesc</extracomment>
-        <translation type="unfinished">Data source for 3D map terrain and building information.</translation>
+        <translation>켜기,끄기</translation>
     </message>
     <message>
         <source>OpenStreetMap</source>
         <extracomment>.QGC.MetaData.Facts[mapProvider].enumStrings</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">OpenStreetMap</translation>
+        <translation>켜기,끄기</translation>
     </message>
     <message>
         <source>3D map data provider</source>
@@ -9517,12 +9517,12 @@
         <source>3d map</source>
         <extracomment>.QGC.MetaData.Facts[mapProvider].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">3d map</translation>
+        <translation>켜기,끄기</translation>
     </message>
     <message>
         <source>Path to an offline OpenStreetMap file for 3D terrain rendering.</source>
         <extracomment>.QGC.MetaData.Facts[osmFilePath].shortDesc</extracomment>
-        <translation type="unfinished">Path to an offline OpenStreetMap file for 3D terrain rendering.</translation>
+        <translation>3D 뷰어용 OSM 파일 경로</translation>
     </message>
     <message>
         <source>Path to the OSM file for the 3D viewer.</source>
@@ -9533,12 +9533,12 @@
         <source>osm,openstreetmap,3d data</source>
         <extracomment>.QGC.MetaData.Facts[osmFilePath].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">osm,openstreetmap,3d data</translation>
+        <translation>건물 층당 평균 높이</translation>
     </message>
     <message>
         <source>Average floor-to-floor height in meters used for 3D building visualization.</source>
         <extracomment>.QGC.MetaData.Facts[buildingLevelHeight].shortDesc</extracomment>
-        <translation type="unfinished">Average floor-to-floor height in meters used for 3D building visualization.</translation>
+        <translation>건물 층당 평균 높이</translation>
     </message>
     <message>
         <source>Average Height for each level of the buildings</source>
@@ -9549,12 +9549,12 @@
         <source>building height,3d data</source>
         <extracomment>.QGC.MetaData.Facts[buildingLevelHeight].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">building height,3d data</translation>
+        <translation>3D 뷰 기체 고도 보정값</translation>
     </message>
     <message>
         <source>Vertical offset in meters for vehicle rendering in the 3D viewer.</source>
         <extracomment>.QGC.MetaData.Facts[altitudeBias].shortDesc</extracomment>
-        <translation type="unfinished">Vertical offset in meters for vehicle rendering in the 3D viewer.</translation>
+        <translation>3D 뷰 기체 고도 보정값</translation>
     </message>
     <message>
         <source>Altitude bias for vehicles in the 3D View</source>
@@ -9565,7 +9565,7 @@
         <source>altitude bias,3d data</source>
         <extracomment>.QGC.MetaData.Facts[altitudeBias].keywords</extracomment>
         <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
-        <translation type="unfinished">altitude bias,3d data</translation>
+        <translation>일반</translation>
     </message>
 </context>
 <context>
@@ -9573,42 +9573,42 @@
     <message>
         <source>General</source>
         <extracomment>.groups[General].heading</extracomment>
-        <translation type="unfinished">General</translation>
+        <translation>일반</translation>
     </message>
     <message>
         <source>Data</source>
         <extracomment>.groups[Data].heading</extracomment>
-        <translation type="unfinished">Data</translation>
+        <translation>데이터</translation>
     </message>
     <message>
         <source>3d view</source>
         <extracomment>.groups[General].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>켜기,끄기</translation>
     </message>
     <message>
         <source>3d map</source>
         <extracomment>.groups[General].keywords[1]</extracomment>
-        <translation type="unfinished">3d map</translation>
+        <translation>켜기,끄기</translation>
     </message>
     <message>
         <source>enable 3d</source>
         <extracomment>.groups[General].keywords[2]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>속도</translation>
     </message>
     <message>
         <source>map provider</source>
         <extracomment>.groups[General].keywords[3]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>osm</translation>
     </message>
     <message>
         <source>osm</source>
         <extracomment>.groups[Data].keywords[0]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>osm</translation>
     </message>
     <message>
         <source>openstreetmap</source>
         <extracomment>.groups[Data].keywords[1]</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>속도</translation>
     </message>
     <message>
         <source>3d data</source>
@@ -9641,32 +9641,32 @@
     <message>
         <source>Speed</source>
         <extracomment>.QGC.MetaData.Facts[speed].shortDesc</extracomment>
-        <translation type="unfinished">속도</translation>
+        <translation>속도</translation>
     </message>
     <message>
         <source>Tension</source>
         <extracomment>.QGC.MetaData.Facts[tension].shortDesc</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>N/A,확인,부족,심각,비상,실패,위험,충전중</translation>
     </message>
     <message>
         <source>Voltage</source>
         <extracomment>.QGC.MetaData.Facts[voltage].shortDesc</extracomment>
-        <translation type="unfinished">Voltage</translation>
+        <translation>N/A,확인,부족,심각,비상,실패,위험,충전중</translation>
     </message>
     <message>
         <source>Current</source>
         <extracomment>.QGC.MetaData.Facts[current].shortDesc</extracomment>
-        <translation type="unfinished">Current</translation>
+        <translation>전류</translation>
     </message>
     <message>
         <source>Temperature</source>
         <extracomment>.QGC.MetaData.Facts[temperature].shortDesc</extracomment>
-        <translation type="unfinished">Temperature</translation>
+        <translation>온도</translation>
     </message>
     <message>
         <source>Status</source>
         <extracomment>.QGC.MetaData.Facts[status].shortDesc</extracomment>
-        <translation type="unfinished">Status</translation>
+        <translation>상태</translation>
     </message>
     <message>
         <source>Healthy, Fully_Retracted, Moving, Clutch_Engaged, Locked, Dropping, Arresting, Ground_Sense, Retracting, Redeliver, Abandon_Line, Locking, Load_Line, Load_Payload</source>
