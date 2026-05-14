@@ -32,45 +32,26 @@ ToolIndicatorPage {
     property Fact _stat_runtime:            apmController.getParameterFact(-1, "STAT_RUNTIME")
     property Fact _stat_flttime:            apmController.getParameterFact(-1, "STAT_FLTTIME")
 
-    // ArduCopter 4.7+ renamed many parameters and converted units cm→m, cm/s→m/s.
-    property bool _useNewParams:            _activeVehicle && _activeVehicle.firmwareMajorVersion >= 0 &&
-                                            (_activeVehicle.firmwareMajorVersion > 4 ||
-                                             (_activeVehicle.firmwareMajorVersion === 4 && _activeVehicle.firmwareMinorVersion >= 7))
-    property real _speedScale:              _useNewParams ? 1.0 : 0.01
-    property real _altScale:                _useNewParams ? 1.0 : 0.01
-    property string _sliderUnit:            _useNewParams ? "m/s" : "cm/s"
-    property string _radiusUnit:            _useNewParams ? "m"   : "cm"
-
-    property Fact landSpeedFact:            _useNewParams
-                                            ? controller.getParameterFact(-1, "LAND_SPD_MS", false)
-                                            : controller.getParameterFact(-1, "LAND_SPEED", false)
-    property Fact precisionLandingFact:     controller.getParameterFact(-1, "PLND_ENABLED", false)
-    property Fact atcInputTCFact:           controller.getParameterFact(-1, "ATC_INPUT_TC", false)
-    property Fact loitSpeedFact:            _useNewParams
-                                            ? controller.getParameterFact(-1, "LOIT_SPEED_MS", false)
-                                            : controller.getParameterFact(-1, "LOIT_SPEED", false)
-    property Fact pilotSpeedUpFact:         _useNewParams
-                                            ? controller.getParameterFact(-1, "PILOT_SPD_UP", false)
-                                            : controller.getParameterFact(-1, "PILOT_SPEED_UP", false)
-    property Fact pilotSpeedDnFact:         _useNewParams
-                                            ? controller.getParameterFact(-1, "PILOT_SPD_DN", false)
-                                            : controller.getParameterFact(-1, "PILOT_SPEED_DN", false)
+    // Always query the newest parameter names; ParameterManager auto-remaps to legacy
+    // names on ArduCopter ≤4.6 via ArduCopterFirmwarePlugin._remapParamName.
+    property Fact landSpeedFact:            controller.getParameterFact(-1, "LAND_SPD_MS",   false)
+    property Fact precisionLandingFact:     controller.getParameterFact(-1, "PLND_ENABLED",  false)
+    property Fact atcInputTCFact:           controller.getParameterFact(-1, "ATC_INPUT_TC",  false)
+    property Fact loitSpeedFact:            controller.getParameterFact(-1, "LOIT_SPEED_MS", false)
+    property Fact pilotSpeedUpFact:         controller.getParameterFact(-1, "PILOT_SPD_UP",  false)
+    property Fact pilotSpeedDnFact:         controller.getParameterFact(-1, "PILOT_SPD_DN",  false)
     property bool isPilotSpeedDn:           pilotSpeedDnFact && (pilotSpeedDnFact.value !== 0)
-    property Fact wpnavSpeedFact:           _useNewParams
-                                            ? controller.getParameterFact(-1, "WP_SPD", false)
-                                            : controller.getParameterFact(-1, "WPNAV_SPEED", false)
-    property Fact wpnavSpeedUpFact:         _useNewParams
-                                            ? controller.getParameterFact(-1, "WP_SPD_UP", false)
-                                            : controller.getParameterFact(-1, "WPNAV_SPEED_UP", false)
-    property Fact wpnavSpeedDnFact:         _useNewParams
-                                            ? controller.getParameterFact(-1, "WP_SPD_DN", false)
-                                            : controller.getParameterFact(-1, "WPNAV_SPEED_DN", false)
-    property Fact wpnavRadiusFact:          _useNewParams
-                                            ? controller.getParameterFact(-1, "WP_RADIUS_M", false)
-                                            : controller.getParameterFact(-1, "WPNAV_RADIUS", false)
-    property Fact rtlAltitudeFact:          _useNewParams
-                                            ? controller.getParameterFact(-1, "RTL_ALT_M", false)
-                                            : controller.getParameterFact(-1, "RTL_ALT", false)
+    property Fact wpnavSpeedFact:           controller.getParameterFact(-1, "WP_SPD",        false)
+    property Fact wpnavSpeedUpFact:         controller.getParameterFact(-1, "WP_SPD_UP",     false)
+    property Fact wpnavSpeedDnFact:         controller.getParameterFact(-1, "WP_SPD_DN",     false)
+    property Fact wpnavRadiusFact:          controller.getParameterFact(-1, "WP_RADIUS_M",   false)
+    property Fact rtlAltitudeFact:          controller.getParameterFact(-1, "RTL_ALT_M",     false)
+
+    // 4.7+ stores values natively in m/s and m; ≤4.6 in cm/s and cm. The "noremap." prefix
+    // bypasses the rename mapping so we detect the *actual* on-vehicle parameter.
+    property bool _unitsInSI:               controller.parameterExists(-1, "noremap.LOIT_SPEED_MS")
+    property real _speedScale:              _unitsInSI ? 1.0 : 0.01
+    property real _altScale:                _unitsInSI ? 1.0 : 0.01
 
     contentComponent: Component {
         ColumnLayout {
@@ -176,6 +157,27 @@ ToolIndicatorPage {
         }
     }
 
+    // Use a slider when the Fact has a defined min/max from metadata; otherwise fall
+    // back to a text field. ArduCopter 4.7+ removed @Range from several renamed params.
+    Component {
+        id: _factSliderComp
+        LabelledFactSlider {
+            Layout.fillWidth:   true
+            label:              parent.theLabel
+            fact:               parent.theFact
+            from:               parent.theFact.min
+            to:                 parent.theFact.max
+        }
+    }
+    Component {
+        id: _factTextComp
+        LabelledFactTextField {
+            Layout.fillWidth:   true
+            label:              parent.theLabel
+            fact:               parent.theFact
+        }
+    }
+
     expandedComponent : Component {
         SettingsGroupLayout{
             Layout.fillWidth:       true
@@ -188,47 +190,47 @@ ToolIndicatorPage {
                 from:               0.01
                 to:                 0.5
                 majorTickStepSize:  0.05
-                visible:            true
+                visible:            atcInputTCFact
             }
-            LabelledFactSlider {
-                label:              qsTr("Loiter Horizontal Speed") + " (" + _sliderUnit + ")"
-                fact:               loitSpeedFact
-                from:               _useNewParams ? 5    : 500
-                to:                 _useNewParams ? 15   : 1500
-                majorTickStepSize:  _useNewParams ? 1    : 100
-                visible:            loitSpeedFact
+            Loader {
+                Layout.fillWidth:   true
+                property var    theFact:  loitSpeedFact
+                property string theLabel: qsTr("Loiter Horizontal Speed")
+                visible:          theFact
+                sourceComponent:  !theFact ? undefined
+                                  : (!theFact.minIsDefaultForType && !theFact.maxIsDefaultForType ? _factSliderComp : _factTextComp)
             }
-            LabelledFactSlider {
-                label:              qsTr("WP Horizontal Speed") + " (" + _sliderUnit + ")"
-                fact:               wpnavSpeedFact
-                from:               _useNewParams ? 5    : 500
-                to:                 _useNewParams ? 15   : 1500
-                majorTickStepSize:  _useNewParams ? 1    : 100
-                visible:            wpnavSpeedFact
+            Loader {
+                Layout.fillWidth:   true
+                property var    theFact:  wpnavSpeedFact
+                property string theLabel: qsTr("WP Horizontal Speed")
+                visible:          theFact
+                sourceComponent:  !theFact ? undefined
+                                  : (!theFact.minIsDefaultForType && !theFact.maxIsDefaultForType ? _factSliderComp : _factTextComp)
             }
-            LabelledFactSlider {
-                label:              qsTr("WP Climb Speed") + " (" + _sliderUnit + ")"
-                fact:               wpnavSpeedUpFact
-                from:               _useNewParams ? 1    : 100
-                to:                 _useNewParams ? 5    : 500
-                majorTickStepSize:  _useNewParams ? 0.5  : 50
-                visible:            wpnavSpeedUpFact
+            Loader {
+                Layout.fillWidth:   true
+                property var    theFact:  wpnavSpeedUpFact
+                property string theLabel: qsTr("WP Climb Speed")
+                visible:          theFact
+                sourceComponent:  !theFact ? undefined
+                                  : (!theFact.minIsDefaultForType && !theFact.maxIsDefaultForType ? _factSliderComp : _factTextComp)
             }
-            LabelledFactSlider {
-                label:              qsTr("WP Descent Speed") + " (" + _sliderUnit + ")"
-                fact:               wpnavSpeedDnFact
-                from:               _useNewParams ? 1    : 100
-                to:                 _useNewParams ? 5    : 500
-                majorTickStepSize:  _useNewParams ? 0.5  : 50
-                visible:            wpnavSpeedDnFact
+            Loader {
+                Layout.fillWidth:   true
+                property var    theFact:  wpnavSpeedDnFact
+                property string theLabel: qsTr("WP Descent Speed")
+                visible:          theFact
+                sourceComponent:  !theFact ? undefined
+                                  : (!theFact.minIsDefaultForType && !theFact.maxIsDefaultForType ? _factSliderComp : _factTextComp)
             }
-            LabelledFactSlider {
-                label:              qsTr("Mission Turning Radius") + " (" + _radiusUnit + ")"
-                fact:               wpnavRadiusFact
-                from:               _useNewParams ? 2    : 200
-                to:                 _useNewParams ? 10   : 1000
-                majorTickStepSize:  _useNewParams ? 1    : 100
-                visible:            wpnavRadiusFact
+            Loader {
+                Layout.fillWidth:   true
+                property var    theFact:  wpnavRadiusFact
+                property string theLabel: qsTr("Mission Turning Radius")
+                visible:          theFact
+                sourceComponent:  !theFact ? undefined
+                                  : (!theFact.minIsDefaultForType && !theFact.maxIsDefaultForType ? _factSliderComp : _factTextComp)
             }
 
             LabelledFactTextField {
