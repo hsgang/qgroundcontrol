@@ -32,7 +32,8 @@ class MavlinkSettings;
 class FactMetaData;
 class JoystickManagerSettings;
 
-/// Provides access to all app settings
+/// \brief Provides access to all app settings
+///
 class SettingsManager : public QObject
 {
     Q_OBJECT
