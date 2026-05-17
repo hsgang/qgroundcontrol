@@ -404,7 +404,7 @@ ApplicationWindow {
                 QGCToolBarButton {
                     id: qgcButton
                     height: parent.height
-                    icon.source: "/res/QGCLogoFull.svg"
+                    icon.source: "/res/amplogo.svg"
                     logo: true
                     onClicked: mainWindow.showToolSelectDialog()
                 }
