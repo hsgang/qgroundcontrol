@@ -20,6 +20,7 @@
 #include <QtCore/private/qthread_p.h>
 
 #include "QGCLogging.h"
+#include "LogManager.h"
 #include "AudioOutput.h"
 #include "FollowMe.h"
 #include "JoystickManager.h"
@@ -224,6 +225,8 @@ void QGCApplication::init()
         qCDebug(QGCApplicationLog) << "Setting MAVLink System ID to:" << _systemId;
         SettingsManager::instance()->mavlinkSettings()->gcsMavlinkSystemID()->setRawValue(_systemId);
     }
+
+    LogManager::instance()->init();
 
     // Although this should really be in _initForNormalAppBoot putting it here allowws us to create unit tests which pop up more easily
     if (QFontDatabase::addApplicationFont(":/fonts/opensans") < 0) {
