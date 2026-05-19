@@ -961,6 +961,7 @@ private:
     QTimer              _customLogTimer;
     QFile               _customLogFile;
     int                 _customLogSeq = 0;
+    bool                _customLogInitFailed = false;
 
     QTimer              _dbWriteTimer;
 

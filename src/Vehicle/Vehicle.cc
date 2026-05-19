@@ -2975,17 +2975,17 @@ static const QVector<CustomLogColumn> kCustomLogSpec = {
     { "Longitude",   CustomLogColumn::FactGroupFact, "gps",               "lon"             },
     { "Heading",     CustomLogColumn::VehicleFact,   nullptr,             "heading"         },
     { "Altitude",    CustomLogColumn::VehicleFact,   nullptr,             "altitudeRelative"},
-    { "Temperature", CustomLogColumn::FactGroupFact, "atmosphericSensor", "Temperature"     },
-    { "Humidity",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "Humidity"        },
-    { "Pressure",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "Pressure"        },
-    { "WindDir",     CustomLogColumn::FactGroupFact, "atmosphericSensor", "WindDir"         },
-    { "WindSpd",     CustomLogColumn::FactGroupFact, "atmosphericSensor", "WindSpd"         },
+    { "Temperature", CustomLogColumn::FactGroupFact, "atmosphericSensor", "temperature"     },
+    { "Humidity",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "humidity"        },
+    { "Pressure",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "pressure"        },
+    { "WindDir",     CustomLogColumn::FactGroupFact, "atmosphericSensor", "windDir"         },
+    { "WindSpd",     CustomLogColumn::FactGroupFact, "atmosphericSensor", "windSpd"         },
     { "WindRef",     CustomLogColumn::FactGroupFact, "atmosphericSensor", "windRef"         },
-    { "HubTemp1",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubTemp1"        },
-    { "HubTemp2",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubTemp2"        },
-    { "HubHumi1",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubHumi1"        },
-    { "HubHumi2",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubHumi2"        },
-    { "HubPressure", CustomLogColumn::FactGroupFact, "atmosphericSensor", "HubPressure"     },
+    { "HubTemp1",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "hubTemp1"        },
+    { "HubTemp2",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "hubTemp2"        },
+    { "HubHumi1",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "hubHumi1"        },
+    { "HubHumi2",    CustomLogColumn::FactGroupFact, "atmosphericSensor", "hubHumi2"        },
+    { "HubPressure", CustomLogColumn::FactGroupFact, "atmosphericSensor", "hubPressure"     },
     { "Radiation",   CustomLogColumn::FactGroupFact, "atmosphericSensor", "radiation"       },
 };
 
@@ -2996,18 +2996,19 @@ void Vehicle::_initializeCustomLog()
     if(!SettingsManager::instance()->mavlinkSettings()->saveSensorLog()->rawValue().toBool()){
         return;
     }
-    QString now = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss");
-    QString fileName = QString("vehicle%1_%2.txt").arg(id()).arg(now);
-    QDir saveDir(SettingsManager::instance()->appSettings()->logSavePath());
-    _customLogFile.setFileName(saveDir.absoluteFilePath(fileName));
+    const QString now = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss_zzz");
+    const QDir saveDir(SettingsManager::instance()->appSettings()->logSavePath());
+    QString fullPath = saveDir.absoluteFilePath(QString("vehicle%1_%2.txt").arg(id()).arg(now));
+    for (int dup = 2; QFile::exists(fullPath); ++dup) {
+        fullPath = saveDir.absoluteFilePath(QString("vehicle%1_%2_%3.txt").arg(id()).arg(now).arg(dup));
+    }
+    _customLogFile.setFileName(fullPath);
 
-    _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE,
-                         QStringLiteral("사용자 정의 로그 저장을 시작합니다"), QString());
-
-    if (!_customLogFile.open(QIODevice::Append)) {
+    if (!_customLogFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         qCWarning(VehicleLog) << "unable to open file for csv logging, Stopping csv logging!";
         _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_INFO,
                              QStringLiteral("Unable to open file for csv logging, Stopping csv logging!"), QString());
+        _customLogInitFailed = true;
         return;
     }
     _customLogSeq = 1;
@@ -3022,25 +3023,34 @@ void Vehicle::_initializeCustomLog()
     customLogStream << headers.join(',') << "\r\n";
     customLogStream.flush();
     _customLogFile.flush();
+
+    _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE,
+                         QStringLiteral("사용자 정의 로그 저장을 시작합니다"), QString());
 }
 
 void Vehicle::_writeCustomLogLine()
 {
-    if (!_customLogFile.isOpen()) {
-        if (_armed) {
-            _initializeCustomLog();
+    const bool saveEnabled = SettingsManager::instance()->mavlinkSettings()->saveSensorLog()->rawValue().toBool();
+
+    if (!_armed || !saveEnabled) {
+        if (_customLogFile.isOpen()) {
+            _customLogFile.close();
+            _customLogSeq = 0;
+            _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE,
+                                 QStringLiteral("사용자 정의 로그 저장을 종료합니다"), QString());
         }
+        _customLogInitFailed = false;
+        return;
+    }
+
+    if (!_customLogFile.isOpen()) {
+        if (_customLogInitFailed) {
+            return;
+        }
+        _initializeCustomLog();
         if (!_customLogFile.isOpen()) {
             return;
         }
-    }
-
-    if (!_armed) {
-        _customLogFile.close();
-        _customLogSeq = 0;
-        _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE,
-                             QStringLiteral("사용자 정의 로그 저장을 종료합니다"), QString());
-        return;
     }
 
     const QDateTime nowDt = QDateTime::currentDateTime();
