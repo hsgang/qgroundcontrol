@@ -1,27 +1,7 @@
 name: iOS
 
 on:
-  push:
-    branches:
-      - master
-      - 'Stable*'
-    tags:
-      - 'v*'
-    paths-ignore:
-      - 'docs/**'
-  pull_request:
-    paths:
-      - 'src/**'
-      - 'cmake/**'
-      - 'CMakeLists.txt'
-      - 'deploy/ios/**'
-      - '.github/workflows/ios.yml'
-      - '.github/actions/qt-ios/**'
-      - '.github/actions/build-setup/**'
-      - '.github/actions/cmake-configure/**'
-      - '.github/actions/cmake-build/**'
-      - '.github/build-config.json'
-  merge_group:
+  # Fork does not ship iOS builds; only manual dispatch is enabled.
   workflow_dispatch:
 
 concurrency:
