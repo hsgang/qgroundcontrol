@@ -258,6 +258,9 @@ public:
     Q_PROPERTY(FactGroup*           generator       READ generatorFactGroup         CONSTANT)
     Q_PROPERTY(FactGroup*           efi             READ efiFactGroup               CONSTANT)
     Q_PROPERTY(FactGroup*           atmosphericSensor READ atmosphericSensorFactGroup CONSTANT)
+    Q_PROPERTY(bool                 customLogActive       READ customLogActive       NOTIFY customLogActiveChanged)
+    Q_PROPERTY(bool                 customLogManualActive READ customLogManualActive WRITE setCustomLogManualActive NOTIFY customLogManualActiveChanged)
+    Q_PROPERTY(int                  customLogSeq          READ customLogSeq          NOTIFY customLogSeqChanged)
     Q_PROPERTY(FactGroup*           winchStatus     READ winchStatusFactGroup       CONSTANT)
     Q_PROPERTY(FactGroup*           radioStatus     READ radioStatusFactGroup       CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
@@ -589,6 +592,11 @@ public:
     FactGroup* radioStatusFactGroup         ();
     FactGroup* rpmFactGroup                 ();
     FactGroup* atmosphericSensorFactGroup   ();
+
+    bool customLogActive       () const { return _customLogFile.isOpen(); }
+    bool customLogManualActive () const { return _customLogManualActive; }
+    int  customLogSeq          () const { return _customLogSeq; }
+    void setCustomLogManualActive(bool active);
     FactGroup* winchStatusFactGroup         ();
     FactGroup* landingTargetFactGroup       ();
 
@@ -816,6 +824,9 @@ signals:
     void loadProgressChanged            (float value);
 
     void atmosphericValueChanged        ();
+    void customLogActiveChanged         ();
+    void customLogManualActiveChanged   ();
+    void customLogSeqChanged            ();
 
     /// Raw RC channel values coming from RC_CHANNELS message
     ///     @param channelValues The current raw values for rc channels
@@ -962,6 +973,7 @@ private:
     QFile               _customLogFile;
     int                 _customLogSeq = 0;
     bool                _customLogInitFailed = false;
+    bool                _customLogManualActive = false;
 
     QTimer              _dbWriteTimer;
 

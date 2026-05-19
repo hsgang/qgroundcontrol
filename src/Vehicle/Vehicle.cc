@@ -2993,9 +2993,7 @@ static const QVector<CustomLogColumn> kCustomLogSpec = {
 
 void Vehicle::_initializeCustomLog()
 {
-    if(!SettingsManager::instance()->mavlinkSettings()->saveSensorLog()->rawValue().toBool()){
-        return;
-    }
+    // Gating (armed / manual / saveSensorLog) is handled by _writeCustomLogLine.
     const QString now = QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss_zzz");
     const QDir saveDir(SettingsManager::instance()->appSettings()->logSavePath());
     QString fullPath = saveDir.absoluteFilePath(QString("vehicle%1_%2.txt").arg(id()).arg(now));
@@ -3012,6 +3010,7 @@ void Vehicle::_initializeCustomLog()
         return;
     }
     _customLogSeq = 1;
+    emit customLogSeqChanged();
 
     QStringList headers;
     headers.reserve(kCustomLogSpec.size());
@@ -3024,6 +3023,7 @@ void Vehicle::_initializeCustomLog()
     customLogStream.flush();
     _customLogFile.flush();
 
+    emit customLogActiveChanged();
     _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE,
                          QStringLiteral("사용자 정의 로그 저장을 시작합니다"), QString());
 }
@@ -3031,11 +3031,15 @@ void Vehicle::_initializeCustomLog()
 void Vehicle::_writeCustomLogLine()
 {
     const bool saveEnabled = SettingsManager::instance()->mavlinkSettings()->saveSensorLog()->rawValue().toBool();
+    // Manual button overrides both armed-trigger and saveSensorLog gate.
+    const bool shouldLog = _customLogManualActive || (_armed && saveEnabled);
 
-    if (!_armed || !saveEnabled) {
+    if (!shouldLog) {
         if (_customLogFile.isOpen()) {
             _customLogFile.close();
             _customLogSeq = 0;
+            emit customLogActiveChanged();
+            emit customLogSeqChanged();
             _textMessageReceived(MAV_COMPONENT::MAV_COMP_ID_MISSIONPLANNER, MAV_SEVERITY::MAV_SEVERITY_NOTICE,
                                  QStringLiteral("사용자 정의 로그 저장을 종료합니다"), QString());
         }
@@ -3086,6 +3090,23 @@ void Vehicle::_writeCustomLogLine()
     customLogStream << values.join(',') << "\r\n";
     customLogStream.flush();
     _customLogFile.flush();
+
+    emit customLogSeqChanged();
+}
+
+void Vehicle::setCustomLogManualActive(bool active)
+{
+    if (_customLogManualActive == active) {
+        return;
+    }
+    _customLogManualActive = active;
+    emit customLogManualActiveChanged();
+    if (active) {
+        // Allow a fresh init after a previous failure.
+        _customLogInitFailed = false;
+    }
+    // Apply immediately rather than waiting up to 1 s for the next timer tick.
+    _writeCustomLogLine();
 }
 
 void Vehicle::_sendToDb()

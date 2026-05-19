@@ -60,6 +60,9 @@ Item {
     property string _timeHMSText:     _timeHMS !== ""      ? _timeHMS : "--:--:--"
     property string _windRefText:     _windRef === 2 ? "T" : _windRef === 1 ? "R" : ""
 
+    property bool   _logActive:       _activeVehicle ? _activeVehicle.customLogActive : false
+    property bool   _logManualActive: _activeVehicle ? _activeVehicle.customLogManualActive : false
+
     function isWindVaneOK(){
         return _activeVehicle && !isNaN(_windDir)
     }
@@ -205,6 +208,139 @@ Item {
                 LabelledLabel {
                     label:      "LogCount"
                     labelText: _logCountText
+                }
+
+                Rectangle {
+                    height: 1
+                    Layout.fillWidth: true
+                    color: qgcPal.groupBorder
+                }
+
+                RowLayout {
+                    Layout.fillWidth:   true
+                    spacing:            ScreenTools.defaultFontPixelWidth
+
+                    Rectangle {
+                        id:                     logStatusLed
+                        Layout.preferredWidth:  ScreenTools.defaultFontPixelHeight * 0.7
+                        Layout.preferredHeight: width
+                        Layout.alignment:       Qt.AlignVCenter
+                        radius:                 width / 2
+                        color:                  _logActive ? "#22cc22" : "#888888"
+                        border.color:           Qt.darker(color, 1.4)
+                        border.width:           1
+                        opacity:                1.0
+
+                        Behavior on color { ColorAnimation { duration: 150 } }
+
+                        SequentialAnimation {
+                            running: _logActive
+                            loops:   Animation.Infinite
+                            NumberAnimation { target: logStatusLed; property: "opacity"; to: 0.35; duration: 700; easing.type: Easing.InOutSine }
+                            NumberAnimation { target: logStatusLed; property: "opacity"; to: 1.0;  duration: 700; easing.type: Easing.InOutSine }
+                            onStopped: logStatusLed.opacity = 1.0
+                        }
+                    }
+
+                    QGCLabel {
+                        text:               _logActive
+                                            ? (_logManualActive ? qsTr("수동 기록 중") : qsTr("자동 기록 중"))
+                                            : qsTr("기록 정지")
+                        Layout.alignment:   Qt.AlignVCenter
+                        Layout.fillWidth:   true
+                    }
+
+                    QGCColoredImage {
+                        Layout.preferredWidth:  ScreenTools.defaultFontPixelHeight * 0.7
+                        Layout.preferredHeight: width
+                        Layout.alignment:       Qt.AlignVCenter
+                        source:                 "/InstrumentValueIcons/folder-outline.svg"
+                        sourceSize.width:       width
+                        sourceSize.height:      height
+                        fillMode:               Image.PreserveAspectFit
+                        color:                  folderIconMa.pressed ? qgcPal.colorBlue
+                                                : (folderIconMa.containsMouse ? qgcPal.colorBlue : qgcPal.text)
+
+                        MouseArea {
+                            id:             folderIconMa
+                            anchors.fill:   parent
+                            hoverEnabled:   true
+                            cursorShape:    Qt.PointingHandCursor
+                            onClicked:      logFolderDialog.open()
+                        }
+
+                        ToolTip.text:       qsTr("저장 폴더 보기")
+                        ToolTip.visible:    folderIconMa.containsMouse
+                        ToolTip.delay:      500
+                    }
+                }
+
+                QGCButton {
+                    Layout.fillWidth:   true
+                    text:       _logManualActive ? qsTr("기록 정지") : qsTr("기록 시작")
+                    enabled:    _activeVehicle !== null
+                    onClicked:  if (_activeVehicle) _activeVehicle.customLogManualActive = !_logManualActive
+                }
+            }
+        }
+    }
+
+    Dialog {
+        id:                 logFolderDialog
+        title:              qsTr("로그 저장 폴더")
+        modal:              true
+        standardButtons:    Dialog.Close
+        parent:             Overlay.overlay
+        anchors.centerIn:   Overlay.overlay
+        width:              Math.min(mainWindow.width * 0.8, ScreenTools.defaultFontPixelWidth * 80)
+
+        property string savePath: QGroundControl.settingsManager.appSettings.logSavePath
+
+        ColumnLayout {
+            anchors.left:   parent.left
+            anchors.right:  parent.right
+            spacing:        ScreenTools.defaultFontPixelHeight / 2
+
+            QGCLabel {
+                text:               qsTr("센서 로그가 아래 폴더에 저장됩니다:")
+                Layout.fillWidth:   true
+                wrapMode:           Text.WordWrap
+            }
+
+            Rectangle {
+                Layout.fillWidth:       true
+                Layout.preferredHeight: pathText.implicitHeight + ScreenTools.defaultFontPixelHeight / 2
+                color:                  qgcPal.windowShade
+                border.color:           qgcPal.groupBorder
+                radius:                 ScreenTools.defaultFontPixelHeight / 4
+
+                QGCLabel {
+                    id:                 pathText
+                    text:               logFolderDialog.savePath
+                    anchors.margins:    ScreenTools.defaultFontPixelWidth / 2
+                    anchors.left:       parent.left
+                    anchors.right:      parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    wrapMode:           Text.WrapAnywhere
+                    font.family:        ScreenTools.fixedFontFamily
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth:   true
+                spacing:            ScreenTools.defaultFontPixelWidth
+
+                QGCButton {
+                    text:               qsTr("폴더 열기")
+                    Layout.fillWidth:   true
+                    // Android/iOS: file:// URIs are blocked for external apps (Android 7+ FileUriExposedException, iOS sandbox)
+                    visible:            !ScreenTools.isMobile
+                    onClicked:          Qt.openUrlExternally("file:///" + logFolderDialog.savePath.replace(/\\/g, "/"))
+                }
+                QGCButton {
+                    text:               qsTr("경로 복사")
+                    Layout.fillWidth:   true
+                    onClicked:          QGroundControl.copyToClipboard(logFolderDialog.savePath)
                 }
             }
         }
