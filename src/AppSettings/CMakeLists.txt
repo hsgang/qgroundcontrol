@@ -22,18 +22,17 @@ set(_generated_qml_names
     CloudSettings.qml
     CommLinksSettings.qml
     FlyViewSettings.qml
+    GeneralSettings.qml
     LoggingSettings.qml
     MapsSettings.qml
     NTRIPSettings.qml
     PlanViewSettings.qml
     PX4LogTransferSettings.qml
     RemoteIDSettings.qml
+    SettingsPagesModel.qml
     TelemetrySettings.qml
     VideoSettings.qml
     Viewer3DSettings.qml
-    # GeneralSettings.qml and SettingsPagesModel.qml are kept as hand-coded files
-    # in this fork (see "Hand-coded pages and components" below). Excluded from
-    # JSON generation to avoid duplicate-name conflicts in the QML module.
 )
 
 # Full paths in the build tree
@@ -90,7 +89,6 @@ qt_add_qml_module(AppSettingsModule
         CloudWebRTCSection.qml
         DebugWindow.qml
         GcsPositionStatus.qml
-        GeneralSettings.qml
         HelpSettings.qml
         LinkConfigurationManager.qml
         LogReplaySettings.qml
@@ -115,7 +113,6 @@ qt_add_qml_module(AppSettingsModule
         RemoteIDGpsLocation.qml
         SerialSettings.qml
         SettingsPage.qml
-        SettingsPagesModel.qml
         TcpSettings.qml
         UdpSettings.qml
         WebRTCSettings.qml
