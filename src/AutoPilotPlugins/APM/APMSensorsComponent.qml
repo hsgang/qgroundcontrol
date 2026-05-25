@@ -148,11 +148,7 @@ SetupPage {
                     }
                 }
 
-                onCalibrationComplete: {
-                    handleCalibrationComplete
-                }
-
-                function handleCalibrationComplete(calType) {
+                onCalibrationComplete: (calType) => {
                     switch (calType) {
                     case MAVLink.CalibrationAccel:
                     case MAVLink.CalibrationMag:
@@ -162,11 +158,7 @@ SetupPage {
                     }
                 }
 
-                onSetAllCalButtonsEnabled: {
-                    handleSetAllCalButtonsEnabled
-                }
-
-                function handleSetAllCalButtonsEnabled(enabled) {
+                onSetAllCalButtonsEnabled: (enabled) => {
                     buttonColumn.enabled = enabled
                 }
             }

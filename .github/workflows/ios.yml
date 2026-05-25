@@ -15,11 +15,15 @@ permissions:
   actions: read
   security-events: write
 
-env:
-  IS_STABLE_BUILD: ${{ (github.ref_type == 'tag' || contains(github.ref, 'Stable')) && 'true' || 'false' }}
-
 jobs:
+  changes:
+    uses: ./.github/workflows/_detect-changes.yml
+    with:
+      platform: ios
+
   build:
+    needs: changes
+    if: needs.changes.outputs.should_build == 'true'
     runs-on: macos-15
     timeout-minutes: 120
 
@@ -58,7 +62,6 @@ jobs:
         with:
           build-dir: ${{ runner.temp }}/build
           build-type: ${{ matrix.build_type }}
-          stable: ${{ env.IS_STABLE_BUILD }}
           # Qt6LinguistTools cmake config ships with the desktop qtbase install (host),
           # not iOS qtbase; point CMake at the host copy directly.
           extra-args: >-
@@ -76,5 +79,7 @@ jobs:
         uses: ./.github/actions/attest-and-upload
         with:
           artifact-name: ${{ env.PACKAGE }}.app
+          # iOS uses Ninja Multi-Config; the .app lands in build/<config>/, not build/.
+          artifact-source-path: ${{ runner.temp }}/build/${{ matrix.build_type }}/${{ env.PACKAGE }}.app
           package-name: ${{ env.PACKAGE }}
           upload-aws: 'false'
