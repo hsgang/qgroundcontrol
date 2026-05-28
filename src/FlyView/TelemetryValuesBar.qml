@@ -22,8 +22,6 @@ Item {
         color:      qgcPal.window
         radius:     ScreenTools.defaultFontPixelWidth / 2
         opacity:    0.75
-        border.color: qgcPal.groupBorder
-        border.width: 1
     }
 
     ColumnLayout {

@@ -25,10 +25,10 @@ public:
     };
 
     enum {
-        FavColumn = 0,
-        NameColumn,
+        NameColumn = 0,
         ValueColumn,
         DescriptionColumn,
+        FavColumn,
     };
 
     Q_PROPERTY(int rowCount READ rowCount NOTIFY rowCountChanged)

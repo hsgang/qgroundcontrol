@@ -21,7 +21,6 @@ class APMServoComponent;
 class ESP8266Component;
 class APMHeliComponent;
 class APMLoggingComponent;
-class APMRemoteSupportComponent;
 class APMChannelsComponent;
 class APMFollowComponent;
 class JoystickComponent;
@@ -63,7 +62,6 @@ protected:
     ESP8266Component *_esp8266Component = nullptr;
     APMHeliComponent *_heliComponent = nullptr;
     APMLoggingComponent *_loggingComponent = nullptr;
-    APMRemoteSupportComponent *_apmRemoteSupportComponent = nullptr;
     APMFollowComponent *_followComponent = nullptr;
     JoystickComponent *_joystickComponent = nullptr;
     ScriptingComponent *_scriptingComponent = nullptr;

@@ -42,6 +42,7 @@ void SiYi::init()
 
     camera_ = new SiYiCamera(this);
     transmitter_ = new SiYiTransmitter(this);
+    uniRC_ = new SiYiUniRC(this);
 
     connect(transmitter_, &SiYiCamera::connected, this, [this](){
         isTransmitterConnected_ = true;
@@ -73,6 +74,7 @@ void SiYi::init()
 #if 1   // 为1时，云台控制无需先连接
     camera_->start();
 #endif
+    uniRC_->start();
 
     initialized_ = true;
 }
@@ -85,4 +87,9 @@ SiYiCamera *SiYi::cameraInstance()
 SiYiTransmitter *SiYi::transmitterInstance()
 {
     return transmitter_;
+}
+
+SiYiUniRC *SiYi::uniRCInstance()
+{
+    return uniRC_;
 }

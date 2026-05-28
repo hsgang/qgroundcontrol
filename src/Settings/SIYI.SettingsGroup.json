@@ -19,6 +19,15 @@
             "default": false,
             "qgcRebootRequired": true,
             "label": "siyiCameraEnabled"
+        },
+        {
+            "name": "siyiUniRCEnabled",
+            "shortDesc": "siyiUniRCEnabled",
+            "longDesc": "siyiUniRCEnabled",
+            "type": "bool",
+            "default": false,
+            "qgcRebootRequired": true,
+            "label": "siyiUniRCEnabled"
         }
     ]
 }

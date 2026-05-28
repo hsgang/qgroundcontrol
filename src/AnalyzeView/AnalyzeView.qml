@@ -126,7 +126,7 @@ Rectangle {
         anchors.top:            parent.top
         anchors.bottom:         parent.bottom
         width:                  1
-        color:                  qgcPal.windowShade
+        color:                  qgcPal.groupBorder
     }
 
     Item {

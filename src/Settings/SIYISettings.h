@@ -20,4 +20,5 @@ public:
 
     DEFINE_SETTINGFACT(siyiTransmitterEnabled)
     DEFINE_SETTINGFACT(siyiCameraEnabled)
+    DEFINE_SETTINGFACT(siyiUniRCEnabled)
 };

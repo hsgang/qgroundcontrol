@@ -52,7 +52,8 @@ Rectangle {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 anchors.verticalCenter:     parent.verticalCenter
                 icon.source:            "/res/amplogo.svg"
-                logo:                   true
+                // logo:false so QGCColoredImage tints via palette text colour
+                // (visible on both light and dark themes). amplogo is monochrome.
                 onClicked:              mainWindow.showToolSelectDialog()
             }
         }

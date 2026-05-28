@@ -15,6 +15,10 @@ LinkInterface::LinkInterface(SharedLinkConfigurationPtr &config, QObject *parent
     , _config(config)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+
+    // Propagate state-change events to a single notify signal for QML bindings on `linkConnected`.
+    (void) connect(this, &LinkInterface::connected,    this, &LinkInterface::linkConnectedChanged);
+    (void) connect(this, &LinkInterface::disconnected, this, &LinkInterface::linkConnectedChanged);
 }
 
 LinkInterface::~LinkInterface()

@@ -12,7 +12,9 @@ Button {
     autoExclusive:  true
     icon.color:     textColor
 
-    property color textColor: checked || pressed ? qgcPal.buttonHighlightText : qgcPal.buttonText
+    // Always use the regular text colour so it stays legible on the soft tinted
+    // background; the left accent bar + bold label below convey the selected state.
+    property color textColor: qgcPal.buttonText
     property bool expandable: false
     property bool expanded:   false
 
@@ -25,7 +27,11 @@ Button {
 
     background: Rectangle {
         color:      qgcPal.buttonHighlight
-        opacity:    checked || pressed ? 1 : enabled && hovered ? .5 : 0
+        // 0.5 selected / 0.25 hover — half-tinted background reads as
+        // "this row is active" while staying lighter than the old solid fill.
+        opacity:    control.checked || control.pressed ? 0.5
+                    : control.enabled && control.hovered ? 0.25
+                    : 0
         radius:     ScreenTools.defaultFontPixelWidth / 2
     }
 
@@ -44,6 +50,7 @@ Button {
             Layout.fillWidth:       true
             text:                   control.text
             color:                  control.textColor
+            font.bold:              control.checked
             horizontalAlignment:    QGCLabel.AlignLeft
         }
 

@@ -45,7 +45,7 @@ SetupPage {
                 Rectangle {
                     implicitWidth:                  rcOptionGroupColumn.width + _margins
                     implicitHeight:                 rcOptionGroupColumn.height + _margins
-                    color:                          qgcPal.windowShadeDark
+                    color:                          qgcPal.windowShade
                     border.color:                   qgcPal.groupBorder
                     radius:                         _margins / 2
 
@@ -99,7 +99,7 @@ SetupPage {
                     implicitWidth:                  servoOptionGroupColumn.width + _margins
                     implicitHeight:                 servoOptionGroupColumn.height + _margins
                     radius:                         _margins / 2
-                    color:                          qgcPal.windowShadeDark
+                    color:                          qgcPal.windowShade
                     border.color:                   qgcPal.groupBorder
 
                     Column {

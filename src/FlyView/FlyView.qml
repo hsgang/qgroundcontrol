@@ -91,7 +91,6 @@ Item {
         PipView {
             id:                     _pipView
             anchors.left:           parent.left
-            anchors.leftMargin:     ScreenTools.isMobile ? undefined : widgetLayer.totalToolInsets.leftEdgeTopInset + ScreenTools.defaultFontPixelWidth
             anchors.bottom:         parent.bottom
             anchors.margins:        _toolsMargin
             item1IsFullSettingsKey: "MainFlyWindowIsMap"
@@ -100,7 +99,6 @@ Item {
             show:                   QGroundControl.videoManager.hasVideo && !QGroundControl.videoManager.fullScreen &&
                                         (videoControl.pipState.state === videoControl.pipState.pipState || mapControl.pipState.state === mapControl.pipState.pipState)
             z:                      QGroundControl.zOrderWidgets
-            isViewer3DOpen:         false
 
             property real leftEdgeBottomInset: visible ? width + anchors.margins + ScreenTools.defaultFontPixelHeight * 3 : 0
             property real bottomEdgeLeftInset: visible ? height + anchors.margins : 0

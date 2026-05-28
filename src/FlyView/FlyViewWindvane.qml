@@ -135,7 +135,6 @@ Item {
             width:      valueGridLayout.width + _toolsMargin * 2
             color:      qgcPal.windowTransparent
             radius:     _toolsMargin
-            border.color: qgcPal.groupBorder
 
             ColumnLayout {
                 id: valueGridLayout

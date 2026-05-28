@@ -87,6 +87,17 @@ Item {
         QGCDelayButton {
             text:               control.title
             enabled:            true
+            backgroundColor:    Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.75)
+            borderColor:        _emergencyAction ? qgcPal.colorRed : qgcPal.colorOrange
+            borderWidth:        2
+            highlightColor:     _emergencyAction ? qgcPal.colorRed : qgcPal.colorOrange
+            progressBorder:     true
+            fontWeight:         Font.Bold
+            pointSize:          ScreenTools.mediumFontPointSize
+            heightFactor:       0.8
+            backRadius:         height / 2
+            leftPadding:        ScreenTools.defaultFontPixelWidth * 4
+            rightPadding:       ScreenTools.defaultFontPixelWidth * 4
 
             onActivated: {
                 control.visible = false

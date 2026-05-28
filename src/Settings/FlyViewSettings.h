@@ -36,7 +36,6 @@ public:
     DEFINE_SETTINGFACT(showPhotoVideoControl)
     DEFINE_SETTINGFACT(showMountControl)
     DEFINE_SETTINGFACT(showWinchControl)
-    DEFINE_SETTINGFACT(showMissionProgress)
     DEFINE_SETTINGFACT(showTelemetryPanel)
     DEFINE_SETTINGFACT(showVibrationStatus)
     DEFINE_SETTINGFACT(showEKFStatus)

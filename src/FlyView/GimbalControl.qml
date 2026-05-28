@@ -22,8 +22,6 @@ Rectangle {
     width:      mainGridLayout.width + _margins
     height:     mainGridLayout.height + _margins
     color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
-    border.color: qgcPal.groupBorder
-    border.width: 1
     radius:     _margins
 
     property real   _margins:           ScreenTools.defaultFontPixelHeight / 2

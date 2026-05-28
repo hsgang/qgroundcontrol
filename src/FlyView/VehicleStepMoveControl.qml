@@ -132,8 +132,6 @@ Item {
             height:     statusLayout.height + _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:     _margins
-            border.color: qgcPal.groupBorder
-            border.width: 1
             Layout.alignment: Qt.AlignTop
 
             ColumnLayout {
@@ -183,8 +181,6 @@ Item {
             height:     controlLayout.height + _margins
             color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, backgroundOpacity)
             radius:     _margins
-            border.color: qgcPal.groupBorder
-            border.width: 1
 
             ColumnLayout {
                 id:                         controlLayout

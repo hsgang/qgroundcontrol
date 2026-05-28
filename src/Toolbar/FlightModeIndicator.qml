@@ -30,10 +30,10 @@ RowLayout {
             height:             parent.height * 0.8
             width:              parent.width
             anchors.centerIn:   parent
-            color:              qgcPal.windowTransparent
+            color:              flightModeMouseArea.containsMouse
+                                ? Qt.rgba(qgcPal.buttonHighlight.r, qgcPal.buttonHighlight.g, qgcPal.buttonHighlight.b, 0.85)
+                                : qgcPal.windowTransparent
             radius:             ScreenTools.defaultFontPixelHeight / 4
-            border.color:       qgcPal.groupBorder
-            border.width:       1
 
             RowLayout {
                 id: innerLayout
@@ -71,7 +71,9 @@ RowLayout {
         }
 
         MouseArea {
+            id:             flightModeMouseArea
             anchors.fill:   parent
+            hoverEnabled:   true
             onClicked:      mainWindow.showIndicatorDrawer(drawerComponent, control)
         }
     }

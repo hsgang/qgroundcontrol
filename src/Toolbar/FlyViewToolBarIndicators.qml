@@ -18,8 +18,6 @@ Item {
         anchors.centerIn:   parent
         color:              qgcPal.windowTransparent
         radius:             ScreenTools.defaultFontPixelHeight / 4
-        border.color:       qgcPal.groupBorder
-        border.width:       1
 
         Row {
             id:                 mainLayout

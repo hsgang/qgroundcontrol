@@ -8,6 +8,7 @@
 
 #include "SiYiCamera.h"
 #include "SiYiTransmitter.h"
+#include "SiYiUniRC.h"
 
 Q_DECLARE_LOGGING_CATEGORY(SiYiLog)
 
@@ -18,8 +19,10 @@ class SiYi : public QObject
     QML_UNCREATABLE("")
     Q_MOC_INCLUDE("SiYiCamera.h")
     Q_MOC_INCLUDE("SiYiTransmitter.h")
+    Q_MOC_INCLUDE("SiYiUniRC.h")
     Q_PROPERTY(QVariant camera READ camera CONSTANT)
     Q_PROPERTY(QVariant transmitter READ transmitter CONSTANT)
+    Q_PROPERTY(QVariant uniRC READ uniRC CONSTANT)
     Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT)
     Q_PROPERTY(bool hideWidgets READ hideWidgets WRITE setHideWidgets NOTIFY hideWidgetsChanged FINAL)
     Q_PROPERTY(int iconsHeight READ iconsHeight WRITE setIconsHeight NOTIFY iconsHeightChanged FINAL)
@@ -33,14 +36,17 @@ public:
 
     SiYiCamera *cameraInstance();
     SiYiTransmitter *transmitterInstance();
+    SiYiUniRC *uniRCInstance();
 
 private:
     SiYiCamera *camera_ = nullptr;
     SiYiTransmitter *transmitter_ = nullptr;
+    SiYiUniRC *uniRC_ = nullptr;
     bool isTransmitterConnected_ = false;
     bool initialized_ = false;
     QVariant camera() { return QVariant::fromValue(camera_); }
     QVariant transmitter() { return QVariant::fromValue(transmitter_); }
+    QVariant uniRC() { return QVariant::fromValue(uniRC_); }
 
     bool isAndroid_ = false;
     bool isAndroid() { return isAndroid_; }

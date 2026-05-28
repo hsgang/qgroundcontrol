@@ -12,7 +12,6 @@
 #include "APMPowerComponent.h"
 #include "APMRadioComponent.h"
 #include "APMLoggingComponent.h"
-#include "APMRemoteSupportComponent.h"
 #include "APMFailsafesComponent.h"
 #include "APMFlightSafetyComponent.h"
 #include "APMSensorsComponent.h"
@@ -173,10 +172,6 @@ const QVariantList &APMAutoPilotPlugin::vehicleComponents()
             _loggingComponent = new APMLoggingComponent(_vehicle, this);
             _loggingComponent->setupTriggerSignals();
             _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_loggingComponent)));
-
-            _apmRemoteSupportComponent = new APMRemoteSupportComponent(_vehicle, this);
-            _apmRemoteSupportComponent->setupTriggerSignals();
-            _components.append(QVariant::fromValue(qobject_cast<VehicleComponent*>(_apmRemoteSupportComponent)));
 
             _joystickComponent = new JoystickComponent(_vehicle, this, this);
             _joystickComponent->setupTriggerSignals();

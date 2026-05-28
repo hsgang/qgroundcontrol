@@ -45,7 +45,7 @@ SetupPage {
                 Rectangle {
                     implicitWidth:                  portsGroupColumn.width + _margins
                     implicitHeight:                 portsGroupColumn.height + _margins
-                    color:                          qgcPal.windowShadeDark
+                    color:                          qgcPal.windowShade
                     border.color:                   qgcPal.groupBorder
                     radius:                         _margins / 2
 

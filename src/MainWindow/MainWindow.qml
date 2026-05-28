@@ -409,7 +409,8 @@ ApplicationWindow {
                     objectName: "toolbar_qgcLogo"
                     height: parent.height
                     icon.source: "/res/amplogo.svg"
-                    logo: true
+                    // logo:false so QGCColoredImage tints via palette text colour
+                    // (visible on both light and dark themes). amplogo is monochrome.
                     onClicked: mainWindow.showToolSelectDialog()
                 }
 
@@ -421,11 +422,22 @@ ApplicationWindow {
             }
         }
 
+        // 1px divider between the header (toolDrawerToolbar) and the page body.
+        // Applies to every tool drawer page (App Settings, Vehicle Setup, Analyze).
+        Rectangle {
+            id:             toolDrawerDivider
+            anchors.left:   parent.left
+            anchors.right:  parent.right
+            anchors.top:    toolDrawerToolbar.bottom
+            height:         1
+            color:          qgcPal.groupBorder
+        }
+
         Loader {
             id:             toolDrawerLoader
             anchors.left:   parent.left
             anchors.right:  parent.right
-            anchors.top:    toolDrawerToolbar.bottom
+            anchors.top:    toolDrawerDivider.bottom
             anchors.bottom: parent.bottom
         }
     }

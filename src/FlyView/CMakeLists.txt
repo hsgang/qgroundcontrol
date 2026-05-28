@@ -82,7 +82,6 @@ qt_add_qml_module(FlyViewModule
         FlyViewRightPanel.qml
         FlyViewWindvane.qml
         ModeChangedIndicator.qml
-        FlyViewMissionProgress.qml
         GimbalControl.qml
 
         VehicleStepMoveControl.qml

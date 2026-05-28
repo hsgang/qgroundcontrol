@@ -60,10 +60,10 @@ QVariant ParameterTableModel::headerData(int section, Qt::Orientation orientatio
     }
 
     switch (section) {
-    case FavColumn:         return tr("Fav");
     case NameColumn:        return tr("Name");
     case ValueColumn:       return tr("Value");
     case DescriptionColumn: return tr("Description");
+    case FavColumn:         return tr("Fav");
     default:                return QVariant();
     }
 }

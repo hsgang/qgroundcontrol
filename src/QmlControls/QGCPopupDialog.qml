@@ -51,8 +51,8 @@ Popup {
     property bool   destroyOnClose:         true
     property bool   preventClose:           false
 
-    property real maxContentAvailableWidth:    mainWindow.width - _contentMargin * 6
-    property real maxContentAvailableHeight:   mainWindow.height - titleRowLayout.height - _contentMargin * 7
+    property real maxContentAvailableWidth:    mainWindow.width - _contentMargin * 4
+    property real maxContentAvailableHeight:   mainWindow.height - titleRowLayout.height - _contentMargin * 6
 
     readonly property real headerMinWidth: titleLabel.implicitWidth + rejectButton.width + acceptButton.width + titleRowLayout.spacing * 2
 
@@ -232,10 +232,9 @@ Popup {
 
         ColumnLayout {
             id:                 mainLayout
-            anchors.centerIn:   parent
-            x:          _contentMargin
-            y:          _contentMargin
-            spacing:    _contentMargin
+            anchors.fill:       parent
+            anchors.margins:    _contentMargin
+            spacing:            _contentMargin
 
             RowLayout {
                 id:                     titleRowLayout
@@ -272,6 +271,7 @@ Popup {
 
             Rectangle {
                 Layout.fillWidth:       true
+                Layout.fillHeight:      true
                 Layout.preferredWidth:  Math.min(maxAvailableWidth, totalContentWidth)
                 Layout.preferredHeight: Math.min(maxAvailableHeight, totalContentHeight)
                 color:                  "transparent" //_qgcPal.window
@@ -280,15 +280,16 @@ Popup {
                 // radius:                 ScreenTools.defaultFontPixelHeight / 4
 
                 property real maxAvailableWidth:    mainWindow.width - _contentMargin * 4
-                property real maxAvailableHeight:   mainWindow.height - titleRowLayout.height - _contentMargin * 5
-                property real totalContentWidth:    dialogContentParent.childrenRect.width + _contentMargin * 2
+                property real maxAvailableHeight:   mainWindow.height - titleRowLayout.height - _contentMargin * 6
+                property real totalContentWidth:    dialogContentParent.childrenRect.width
                 property real totalContentHeight:   dialogContentParent.childrenRect.height + _contentMargin * 2
 
                 QGCFlickable {
-                    anchors.margins:    _contentMargin
-                    anchors.fill:       parent
-                    contentWidth:       dialogContentParent.childrenRect.width
-                    contentHeight:      dialogContentParent.childrenRect.height
+                    anchors.fill:           parent
+                    anchors.topMargin:      _contentMargin
+                    anchors.bottomMargin:   _contentMargin
+                    contentWidth:           dialogContentParent.childrenRect.width
+                    contentHeight:          dialogContentParent.childrenRect.height
 
                     Item {
                         id:     dialogContentParent

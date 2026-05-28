@@ -11,6 +11,7 @@ import QGroundControl.Controls
 Button {
     id: control
     Layout.fillWidth: true
+    Layout.preferredWidth: 1
     topPadding: _verticalPadding
     bottomPadding: _verticalPadding
     leftPadding: _horizontalPadding
@@ -40,19 +41,6 @@ Button {
         border.width: showBorder ? 1 : 0
         border.color: qgcPal.buttonBorder
         color: _showHighlight ? qgcPal.buttonHighlight : qgcPal.button
-
-        Rectangle {
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.topMargin: _vertMargin
-            anchors.bottomMargin: _vertMargin
-            width: 1
-            color: Qt.darker(qgcPal.buttonText, 1.5)
-            visible: control._showSeparator
-
-            property real _vertMargin: ScreenTools.defaultFontPixelHeight * 0.25
-        }
     }
 
     contentItem: Item {

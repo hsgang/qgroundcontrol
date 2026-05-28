@@ -103,7 +103,6 @@ Item {
         anchors.horizontalCenter:   parent.horizontalCenter
         anchors.bottomMargin:       _margins
         spacing:                    _layoutSpacing
-        planMasterController:       _planMasterController
     }
 
     FlyViewMissionCompleteDialog {

@@ -45,8 +45,6 @@ target_sources(${CMAKE_PROJECT_NAME}
         APMPortsComponent.h
         APMRadioComponent.cc
         APMRadioComponent.h
-        APMRemoteSupportComponent.cc
-        APMRemoteSupportComponent.h
         APMFlightSafetyComponent.cc
         APMFlightSafetyComponent.h
         APMSensorsComponent.cc
@@ -164,7 +162,6 @@ qt_add_qml_module(AutoPilotPluginsAPMModule
         APMPowerComponentSummary.qml
         APMPortsComponent.qml
         APMRadioComponentSummary.qml
-        APMRemoteSupportComponent.qml
         APMFlightSafetyComponentSub.qml
         APMFlightSafetyComponentSummary.qml
         APMFlightSafetyComponentSummarySub.qml

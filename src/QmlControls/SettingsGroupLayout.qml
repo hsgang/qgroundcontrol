@@ -62,7 +62,7 @@ ColumnLayout {
         Layout.fillWidth:   true
         implicitWidth:      _contentLayout.implicitWidth + (showBorder ? _margins * 2 : 0)
         implicitHeight:     _contentLayout.implicitHeight + (showBorder ? _margins * 2: 0)
-        color:              qgcPal.windowShadeDark//"transparent"
+        color:              qgcPal.windowShade
         border.color:       outerBorderColor
         border.width:       showBorder ? 1 : 0
         radius:             ScreenTools.defaultFontPixelHeight / 2

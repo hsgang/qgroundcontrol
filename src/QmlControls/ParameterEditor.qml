@@ -153,6 +153,8 @@ Item {
 
             QGCTextField {
                 id:                     searchText
+                Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 25
+                Layout.preferredHeight: ScreenTools.defaultFontPixelHeight * 2
                 placeholderText:        qsTr("Search")
                 onDisplayTextChanged:   controller.searchText = displayText
             }
@@ -271,7 +273,7 @@ Item {
         clip:               true
 
         delegate: Rectangle {
-            implicitWidth:  column === 0 ? ScreenTools.implicitCheckBoxHeight + ScreenTools.defaultFontPixelWidth
+            implicitWidth:  column === 3 ? ScreenTools.implicitCheckBoxHeight + ScreenTools.defaultFontPixelWidth
                                          : headerLabel.contentWidth + ScreenTools.defaultFontPixelWidth
             implicitHeight: headerLabel.contentHeight + ScreenTools.defaultFontPixelHeight * 0.5
             color:          qgcPal.windowShade
@@ -333,6 +335,23 @@ Item {
         contentWidth:       width
         clip:               true
 
+        property real _nameColWidth:  ScreenTools.defaultFontPixelWidth * 22
+        property real _valueColWidth: ScreenTools.defaultFontPixelWidth * 16
+        property real _favColWidth:   ScreenTools.implicitCheckBoxHeight + ScreenTools.defaultFontPixelWidth
+
+        columnWidthProvider: function(column) {
+            switch (column) {
+                case 0: return _nameColWidth
+                case 1: return _valueColWidth
+                case 2: return Math.max(ScreenTools.defaultFontPixelWidth * 20,
+                                        tableView.width - _nameColWidth - _valueColWidth - _favColWidth)
+                case 3: return _favColWidth
+            }
+            return -1
+        }
+
+        onWidthChanged: forceLayout()
+
         // Qt is supposed to adjust column widths automatically when larger widths come into view.
         // But it doesn't work. So we have to do it force a layout manually when we scroll.
         Timer {
@@ -349,10 +368,10 @@ Item {
         }
 
         delegate: Rectangle {
-            implicitWidth:  column === 0 ? ScreenTools.implicitCheckBoxHeight + ScreenTools.defaultFontPixelWidth
-                                         : column === 1 ? nameRow.implicitWidth + ScreenTools.defaultFontPixelWidth
-                                         : column === 2 ? ScreenTools.defaultFontPixelWidth * 16
-                                                        : label.contentWidth + ScreenTools.defaultFontPixelWidth
+            implicitWidth:  column === 0 ? nameRow.implicitWidth + ScreenTools.defaultFontPixelWidth
+                                         : column === 1 ? ScreenTools.defaultFontPixelWidth * 16
+                                         : column === 2 ? label.contentWidth + ScreenTools.defaultFontPixelWidth
+                                                        : ScreenTools.implicitCheckBoxHeight + ScreenTools.defaultFontPixelWidth
             implicitHeight: label.contentHeight + ScreenTools.defaultFontPixelHeight * 0.5
             color:          row % 2 === 0 ? "transparent" : qgcPal.windowShade
             clip:           true
@@ -383,7 +402,7 @@ Item {
             }
 
             QGCCheckBox {
-                visible:                column === 0
+                visible:                column === 3
                 anchors.centerIn:       parent
                 checked:                _root._favorites.indexOf(fact.name) >= 0
                 z:                      1
@@ -392,14 +411,14 @@ Item {
 
             Row {
                 id:                     nameRow
-                visible:                column === 1
+                visible:                column === 0
                 anchors.left:           parent.left
                 anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
                 anchors.verticalCenter: parent.verticalCenter
                 spacing:               lockIcon.visible ? ScreenTools.defaultFontPixelWidth / 3 : 0
 
                 QGCLabel {
-                    text:               column === 1 ? display : ""
+                    text:               column === 0 ? display : ""
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
@@ -417,16 +436,16 @@ Item {
 
             QGCLabel {
                 id:                 label
-                visible:            column !== 0 && column !== 1
+                visible:            column === 1 || column === 2
                 anchors.left:       parent.left
                 anchors.leftMargin: ScreenTools.defaultFontPixelWidth / 2
                 anchors.verticalCenter: parent.verticalCenter
-                width:              column == 2 ? ScreenTools.defaultFontPixelWidth * 15 : implicitWidth
-                text:               column == 2 ? col1String() : display
-                color:              column == 2 && fact.defaultValueAvailable && !fact.valueEqualsDefault ? qgcPal.modifiedParamValue : qgcPal.text
-                font.bold:          column == 2 && fact.defaultValueAvailable && !fact.valueEqualsDefault
+                width:              column == 1 ? ScreenTools.defaultFontPixelWidth * 15 : implicitWidth
+                text:               column == 1 ? col1String() : display
+                color:              column == 1 && fact.defaultValueAvailable && !fact.valueEqualsDefault ? qgcPal.modifiedParamValue : qgcPal.text
+                font.bold:          column == 1 && fact.defaultValueAvailable && !fact.valueEqualsDefault
                 maximumLineCount:   1
-                elide:              column == 2 ? Text.ElideRight : Text.ElideNone
+                elide:              column == 1 ? Text.ElideRight : Text.ElideNone
 
                 function col1String() {
                     if (fact.enumStrings.length === 0) {
@@ -441,7 +460,7 @@ Item {
 
             QGCMouseArea {
                 anchors.fill: parent
-                visible:      column !== 0
+                visible:      column !== 3
                 onClicked: mouse => {
                     _editorDialogFact = fact
                     editorDialogFactory.open()

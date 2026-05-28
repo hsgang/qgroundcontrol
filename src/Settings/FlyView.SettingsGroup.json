@@ -145,13 +145,6 @@
             "label": "Show Grid On Map"
         },
         {
-            "name": "showMissionProgress",
-            "shortDesc": "Show Mission Progress",
-            "type": "bool",
-            "default": true,
-            "label": "Show Mission Progress"
-        },
-        {
             "name": "showAttitudeHUD",
             "shortDesc": "Show Attitude HUD",
             "type": "bool",

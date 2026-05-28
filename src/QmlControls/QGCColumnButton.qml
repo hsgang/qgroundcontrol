@@ -36,6 +36,10 @@ QGCButton {
                 width:                  control.font.pointSize * 2
                 Layout.alignment:       control.text !== "" ? Qt.AlignTop : Qt.AlignHCenter | Qt.AlignVCenter
                 source:                 control.iconSource
+                // Match the text label's colour logic below so the icon is
+                // visible on both light and dark themes (default was hard-coded
+                // white, which disappeared on light backgrounds).
+                color:                  _showHighlight ? qgcPal.buttonHighlightText : (primary ? qgcPal.primaryButtonText : qgcPal.buttonText)
                 fillMode:               Image.PreserveAspectFit
                 sourceSize.height:      height
                 sourceSize.width:       width

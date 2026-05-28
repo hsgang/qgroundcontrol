@@ -18,6 +18,8 @@ class LinkInterface : public QObject
     QML_UNCREATABLE("")
     friend class LinkManager;
 
+    Q_PROPERTY(bool linkConnected READ isConnected NOTIFY linkConnectedChanged)
+
 public:
     virtual ~LinkInterface();
 
@@ -47,6 +49,7 @@ signals:
     void bytesSent(LinkInterface *link, const QByteArray &data);
     void connected();
     void disconnected();
+    void linkConnectedChanged();
     void communicationError(const QString &error, const QString &title);
 
 protected:

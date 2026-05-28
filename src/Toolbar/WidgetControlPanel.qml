@@ -98,14 +98,6 @@ ToolIndicatorPage{
                     property Fact   _showTelemetryPanel:      QGroundControl.settingsManager.flyViewSettings.showTelemetryPanel
                 }
 
-                FactCheckBoxSlider {
-                    Layout.fillWidth: true
-                    text:       qsTr("Mission Progress")
-                    fact:       _showMissionProgress
-                    visible:    true
-                    property Fact   _showMissionProgress:      QGroundControl.settingsManager.flyViewSettings.showMissionProgress
-                }
-
                 // FactCheckBoxSlider {
                 //     Layout.fillWidth: true
                 //     text:       qsTr("ESC Status")

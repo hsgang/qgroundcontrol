@@ -19,7 +19,7 @@ QGCPopupDialog {
     property string validateValue
     property bool   setFocus:       true    ///< true: focus is set to text field on display, false: focus not set (works around strange virtual keyboard bug with FactValueSlider
 
-    property real   _editFieldWidth:            ScreenTools.defaultFontPixelWidth * 20
+    property real   _editFieldWidth:            ScreenTools.defaultFontPixelWidth * 35
     property bool   _longDescriptionAvailable:  fact.longDescription != ""
     property bool   _editingParameter:          fact.componentId != 0
     property bool   _allowForceSave:            QGroundControl.corePlugin.showAdvancedUI && _editingParameter
@@ -100,9 +100,9 @@ QGCPopupDialog {
             visible:    !fact.readOnly
 
             QGCTextField {
-                id:                 valueField
-                width:              _editFieldWidth
-                unitsLabel:         fact.units
+                id:                     valueField
+                Layout.preferredWidth:  _editFieldWidth
+                unitsLabel:             fact.units
                 showUnits:          fact.units != ""
                 focus:              setFocus && visible
                 inputMethodHints:   (fact.typeIsString || ScreenTools.isiOS) ? // iOS numeric keyboard has no done button, we can't use it
@@ -112,9 +112,9 @@ QGCPopupDialog {
             }
 
             QGCComboBox {
-                id:             factCombo
-                width:          _editFieldWidth
-                model:          fact.enumStrings
+                id:                     factCombo
+                Layout.preferredWidth:  _editFieldWidth
+                model:                  fact.enumStrings
                 sizeToContents: true
                 visible:        _showCombo
                 focus:          setFocus && visible

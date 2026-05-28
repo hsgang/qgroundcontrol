@@ -13,10 +13,11 @@ Rectangle {
     id:             control
     width:          ScreenTools.defaultFontPixelHeight * 8//Math.max(rowLayout.width + _margins, ScreenTools.defaultFontPixelHeight * 10)
     height:         parent.height
-    color:          QGroundControl.globalPalette.windowTransparent
+    color:          Qt.rgba(_mainStatusBGColor.r, _mainStatusBGColor.g, _mainStatusBGColor.b, 0.85)
     radius:         ScreenTools.defaultFontPixelHeight / 4
-    border.color:   _mainStatusBGColor
-    border.width:   1
+    border.width:   0
+
+    Behavior on color { ColorAnimation { duration: 200 } }
 
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property bool   _armed:             _activeVehicle ? _activeVehicle.armed : false
@@ -108,7 +109,7 @@ Rectangle {
                             }
                         } else if (_activeVehicle.loadProgress) {
                                 _mainStatusBGColor = qgcPal.colorYellow
-                                return mainStatusLabel._parametersSynchronizingText
+                                return mainStatusLabel._parametersSynchronizingText + " " + Math.round(_activeVehicle.loadProgress * 100) + "%"
                         } else if (_activeVehicle.readyToFlyAvailable) {
                             if (_activeVehicle.readyToFly) {
                                 _mainStatusBGColor = qgcPal.colorGreen

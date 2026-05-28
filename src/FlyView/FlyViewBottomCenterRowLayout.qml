@@ -18,8 +18,6 @@ import QGroundControl.FlyView
 RowLayout {
     spacing: ScreenTools.defaultFontPixelHeight / 2
 
-    property var planMasterController
-
     FlyViewEKFStatus {
         Layout.alignment:   Qt.AlignBottom
         visible:            QGroundControl.settingsManager.flyViewSettings.showEKFStatus.rawValue
@@ -28,11 +26,5 @@ RowLayout {
     FlyViewVibrationStatus {
         Layout.alignment:   Qt.AlignBottom
         visible:            QGroundControl.settingsManager.flyViewSettings.showVibrationStatus.rawValue
-    }
-
-    FlyViewMissionProgress {
-        Layout.alignment:           Qt.AlignBottom
-        _planMasterController:      planMasterController
-        visible:                    QGroundControl.settingsManager.flyViewSettings.showMissionProgress.rawValue
     }
 }

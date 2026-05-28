@@ -48,7 +48,7 @@ SetupPage {
                 width:  motorTestColumn.width + _margins
                 height: motorTestColumn.height + _margins
                 radius: ScreenTools.defaultFontPixelHeight * 0.5
-                color:  qgcPal.windowShadeDark
+                color:  qgcPal.windowShade
                 border.color: qgcPal.groupBorder
 
                 Column {

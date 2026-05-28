@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Shapes
 
 import QGroundControl
 import QGroundControl.Controls
@@ -27,6 +28,10 @@ DelayButton {
     property alias horizontalAlignment: text.horizontalAlignment
     property alias backgroundColor:     backRect.color
     property alias textColor:           text.color
+    property color borderColor:         qgcPal.buttonBorder
+    property real  borderWidth:         showBorder ? 1 : 0
+    property color highlightColor:      qgcPal.buttonHighlight
+    property bool  progressBorder:      false   // when true: border draws clockwise as progress advances
 
     property bool   _showHighlight:     enabled && pressed
     property int    _horizontalPadding: ScreenTools.defaultFontPixelWidth * 2
@@ -65,15 +70,20 @@ DelayButton {
         radius:         backRadius
         implicitWidth:  Math.max(ScreenTools.defaultFontPixelWidth * 16, Math.max(control._showHelp ? helpText.contentWidth : 0, ScreenTools.implicitButtonWidth))
         implicitHeight: ScreenTools.implicitButtonHeight
-        border.width:   showBorder ? 1 : 0
-        border.color:   qgcPal.buttonBorder
+        border.width:   control.borderWidth
+        border.color:   control.borderColor
         color:          qgcPal.button
 
         Rectangle {
             anchors.fill:   parent
-            color:          qgcPal.buttonHighlight
-            opacity:        control._showHighlight ? 1 : (control.enabled && control.hovered ? 0.2 : 0)
+            color:          control.highlightColor
+            opacity:        control._showHighlight
+                                ? (control.progressBorder ? 0.18 : 1)
+                                : (control.enabled && control.hovered ? 0.15 : 0)
             radius:         parent.radius
+
+            Behavior on opacity { NumberAnimation { duration: 150 } }
+            Behavior on color   { ColorAnimation  { duration: 150 } }
         }
 
         QGCColoredImage {
@@ -89,8 +99,53 @@ DelayButton {
             fillMode:               Image.PreserveAspectFit
             color:                  control._showHighlight ? qgcPal.buttonHighlightText : qgcPal.buttonText
             opacity:                control._showHighlight ? 0.75 : 0.2
+            visible:                !control.progressBorder
 
             property real _sliderIndicatorMargin: ScreenTools.defaultFontPixelHeight * 0.5
+        }
+
+        // 시계방향 진행 테두리 — progressBorder 옵션이 켜진 경우에만 활성화
+        Shape {
+            id:             progressShape
+            anchors.fill:   parent
+            anchors.margins: control.borderWidth / 2
+            antialiasing:   true
+            visible:        control.progressBorder
+
+            property real w:         width
+            property real h:         height
+            property real r:         Math.max(0, control.backRadius - control.borderWidth / 2)
+            property real strokeW:   Math.max(2, control.borderWidth + 2)   // 정적 테두리보다 두껍게
+            property real perimeter: 2 * Math.max(0, w - 2 * r)
+                                     + 2 * Math.max(0, h - 2 * r)
+                                     + 2 * Math.PI * r
+
+            // 진행 호 — 상단 중앙에서 시작해 시계방향으로 progress 만큼 그려짐
+            ShapePath {
+                strokeWidth:    progressShape.strokeW
+                strokeColor:    control.progress > 0 ? control.borderColor : "transparent"
+                fillColor:      "transparent"
+                strokeStyle:    ShapePath.DashLine
+                capStyle:       ShapePath.FlatCap
+                joinStyle:      ShapePath.RoundJoin
+
+                startX: progressShape.w / 2
+                startY: 0
+                PathLine { x: progressShape.w - progressShape.r; y: 0 }
+                PathArc  { x: progressShape.w; y: progressShape.r; radiusX: progressShape.r; radiusY: progressShape.r; direction: PathArc.Clockwise }
+                PathLine { x: progressShape.w; y: progressShape.h - progressShape.r }
+                PathArc  { x: progressShape.w - progressShape.r; y: progressShape.h; radiusX: progressShape.r; radiusY: progressShape.r; direction: PathArc.Clockwise }
+                PathLine { x: progressShape.r; y: progressShape.h }
+                PathArc  { x: 0; y: progressShape.h - progressShape.r; radiusX: progressShape.r; radiusY: progressShape.r; direction: PathArc.Clockwise }
+                PathLine { x: 0; y: progressShape.r }
+                PathArc  { x: progressShape.r; y: 0; radiusX: progressShape.r; radiusY: progressShape.r; direction: PathArc.Clockwise }
+                PathLine { x: progressShape.w / 2; y: 0 }
+
+                dashPattern: [
+                    (progressShape.perimeter * control.progress) / progressShape.strokeW,
+                    progressShape.perimeter / progressShape.strokeW
+                ]
+            }
         }
 
         QGCLabel {

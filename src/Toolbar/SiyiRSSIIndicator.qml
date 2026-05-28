@@ -12,9 +12,13 @@ Item {
     anchors.bottom: parent.bottom
 
     property var _siyi:                     QGroundControl.siyi
-    property var transmitter:               _siyi ? _siyi.transmitter : null
+    property var _transmitter:              _siyi ? _siyi.transmitter : null
+    property var _uniRC:                    _siyi ? _siyi.uniRC : null
+    // Prefer UniRC if connected, otherwise fall back to legacy transmitter.
+    property var transmitter:               (_uniRC && _uniRC.isConnected) ? _uniRC : _transmitter
 
-    property bool showIndicator:            transmitter ? transmitter.isConnected : false
+    property bool showIndicator:            (_uniRC && _uniRC.isConnected)
+                                            || (_transmitter && _transmitter.isConnected)
     property var  _activeVehicle:           QGroundControl.multiVehicleManager.activeVehicle
     property real _columnSpacing:   ScreenTools.defaultFontPixelHeight / 3
     property real _margins:         ScreenTools.defaultFontPixelHeight / 2

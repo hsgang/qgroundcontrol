@@ -22,7 +22,7 @@ QGCPopupDialog {
     }
 
     ColumnLayout {
-        width: maxContentAvailableWidth
+        width: Math.min(maxContentAvailableWidth, ScreenTools.defaultFontPixelWidth * 80)
 
         SettingsGroupLayout {
             Layout.fillWidth: true

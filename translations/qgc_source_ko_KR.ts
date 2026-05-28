@@ -452,7 +452,7 @@
         <location filename="../src/FirmwarePlugin/APM/APMBatteryIndicator.qml" line="16"/>
         <location filename="../src/UI/toolbar/APMBatteryIndicator.qml" line="30"/>
         <source>Low Voltage Failsafe</source>
-        <translation type="unfinished"></translation>
+        <translation>저전압 페일세이프</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMBatteryIndicator.qml" line="20"/>
@@ -468,7 +468,7 @@
         <location filename="../src/UI/toolbar/APMBatteryIndicator.qml" line="41"/>
         <location filename="../src/UI/toolbar/APMBatteryIndicator.qml" line="71"/>
         <source>Voltage Trigger</source>
-        <translation type="unfinished">전압 입계값</translation>
+        <translation>전압 트리거</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMBatteryIndicator.qml" line="36"/>
@@ -482,7 +482,7 @@
         <location filename="../src/FirmwarePlugin/APM/APMBatteryIndicator.qml" line="46"/>
         <location filename="../src/UI/toolbar/APMBatteryIndicator.qml" line="60"/>
         <source>Critical Voltage Failsafe</source>
-        <translation type="unfinished"></translation>
+        <translation>위험 전압 페일세이프</translation>
     </message>
 </context>
 <context>
@@ -500,7 +500,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCalcAmpsPerVoltDialog.qml" line="35"/>
         <source>Vehicle current telemetry is not available. Connect to a vehicle with a powered battery to enable automatic calculation.</source>
-        <translation type="unfinished"></translation>
+        <translation>기체 전류 텔레메트리를 사용할 수 없습니다. 배터리 전원이 켜진 기체에 연결해야 자동 계산이 가능합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCalcAmpsPerVoltDialog.qml" line="43"/>
@@ -538,7 +538,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCalcVoltageDividerDialog.qml" line="35"/>
         <source>Vehicle voltage telemetry is not available. Connect to a vehicle with a powered battery to enable automatic calculation.</source>
-        <translation type="unfinished"></translation>
+        <translation>기체 전압 텔레메트리를 사용할 수 없습니다. 배터리 전원이 켜진 기체에 연결해야 자동 계산이 가능합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCalcVoltageDividerDialog.qml" line="43"/>
@@ -566,7 +566,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCameraComponent.qml" line="164"/>
         <source>Disabled</source>
-        <translation>비활성화됨</translation>
+        <translation>비활성화</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCameraComponent.qml" line="172"/>
@@ -658,12 +658,12 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCameraComponent.qml" line="523"/>
         <source>Gimbal Control settings</source>
-        <translation type="unfinished"></translation>
+        <translation>짐벌 제어 설정</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCameraComponent.qml" line="566"/>
         <source>On screen control type: </source>
-        <translation type="unfinished"></translation>
+        <translation>화면 제어 유형: </translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCameraComponent.qml" line="585"/>
@@ -678,7 +678,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMCameraComponent.qml" line="611"/>
         <source>Max speed for click and slide</source>
-        <translation type="unfinished"></translation>
+        <translation>클릭 및 슬라이드 최대 속도</translation>
     </message>
 </context>
 <context>
@@ -737,7 +737,7 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="131"/>
         <source>Optflow</source>
-        <translation type="unfinished"></translation>
+        <translation>옵티컬 플로우</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="132"/>
@@ -792,7 +792,7 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="142"/>
         <source>Parachute</source>
-        <translation type="unfinished"></translation>
+        <translation>낙하산</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="143"/>
@@ -847,7 +847,7 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="153"/>
         <source>Sensor Failsafe</source>
-        <translation type="unfinished"></translation>
+        <translation>센서 페일세이프</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="154"/>
@@ -872,7 +872,7 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="158"/>
         <source>Deadreckon Failsafe</source>
-        <translation>데드레커닝 안전장치</translation>
+        <translation>추측항법 안전장치</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="159"/>
@@ -899,7 +899,7 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="173"/>
         <source>Failed to initialise</source>
-        <translation type="unfinished"></translation>
+        <translation>초기화 실패</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="174"/>
@@ -922,27 +922,27 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="192"/>
         <source>Altitude fence breach</source>
-        <translation type="unfinished"></translation>
+        <translation>고도 펜스 위반</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="193"/>
         <source>Circular fence breach</source>
-        <translation type="unfinished"></translation>
+        <translation>원형 펜스 위반</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="194"/>
         <source>Altitude and circular fence breach</source>
-        <translation type="unfinished"></translation>
+        <translation>고도 및 원형 펜스 위반</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="195"/>
         <source>Polygon fence breach</source>
-        <translation type="unfinished"></translation>
+        <translation>다각형 펜스 위반</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="198"/>
         <source>Flight mode change failure</source>
-        <translation type="unfinished"></translation>
+        <translation>비행 모드 전환 실패</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="201"/>
@@ -957,12 +957,12 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="205"/>
         <source>Crash into ground detected</source>
-        <translation type="unfinished"></translation>
+        <translation>지면 충돌 감지</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="206"/>
         <source>Loss of control detected</source>
-        <translation type="unfinished"></translation>
+        <translation>제어 상실 감지</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="209"/>
@@ -972,12 +972,12 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="212"/>
         <source>Parachute not deployed (too low)</source>
-        <translation type="unfinished"></translation>
+        <translation>낙하산 미전개 (너무 낮음)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="213"/>
         <source>Parachute not deployed (landed)</source>
-        <translation type="unfinished"></translation>
+        <translation>낙하산 미전개 (착륙됨)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="216"/>
@@ -1002,22 +1002,22 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="227"/>
         <source>No action report only</source>
-        <translation type="unfinished"></translation>
+        <translation>동작 없음 (보고만)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="228"/>
         <source>Avoid by climb/descend</source>
-        <translation type="unfinished"></translation>
+        <translation>상승/하강으로 회피</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="229"/>
         <source>Avoid by horizontal move</source>
-        <translation type="unfinished"></translation>
+        <translation>수평 이동으로 회피</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="230"/>
         <source>Avoid perpendicular move</source>
-        <translation type="unfinished"></translation>
+        <translation>수직 이동으로 회피</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="231"/>
@@ -1027,12 +1027,12 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="234"/>
         <source>Missing terrain data</source>
-        <translation type="unfinished"></translation>
+        <translation>지형 데이터 없음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="237"/>
         <source>Failed to set destination</source>
-        <translation type="unfinished"></translation>
+        <translation>목적지 설정 실패</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="238"/>
@@ -1042,52 +1042,52 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="239"/>
         <source>Circle initialisation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>서클 모드 초기화 실패</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="240"/>
         <source>Destination outside fence</source>
-        <translation type="unfinished"></translation>
+        <translation>목적지가 펜스 밖에 있음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="241"/>
         <source>RTL missing rangefinder</source>
-        <translation type="unfinished"></translation>
+        <translation>RTL 시 거리 측정기 없음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="244"/>
         <source>1st EKF became primary</source>
-        <translation type="unfinished"></translation>
+        <translation>1번 EKF가 주(primary)로 전환됨</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="245"/>
         <source>2nd EKF became primary</source>
-        <translation type="unfinished"></translation>
+        <translation>2번 EKF가 주(primary)로 전환됨</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="248"/>
         <source>Thrust restored</source>
-        <translation type="unfinished"></translation>
+        <translation>추력 복원됨</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="249"/>
         <source>Thrust loss detected</source>
-        <translation type="unfinished"></translation>
+        <translation>추력 손실 감지</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="252"/>
         <source>Excessive vibration compensation de-activated</source>
-        <translation type="unfinished"></translation>
+        <translation>과도한 진동 보정 비활성화됨</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="253"/>
         <source>Excessive vibration compensation activated</source>
-        <translation type="unfinished"></translation>
+        <translation>과도한 진동 보정 활성화됨</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="256"/>
         <source>Internal errors detected</source>
-        <translation type="unfinished"></translation>
+        <translation>내부 오류 감지</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="263"/>
@@ -1137,7 +1137,7 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="280"/>
         <source>Set Home</source>
-        <translation type="unfinished"></translation>
+        <translation>홈 설정</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="281"/>
@@ -1147,7 +1147,7 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="282"/>
         <source>Simple Mode Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>심플 모드 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="283"/>
@@ -1157,12 +1157,12 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="284"/>
         <source>Super Simple Mode Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>슈퍼 심플 모드 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="285"/>
         <source>AutoTune Initialised</source>
-        <translation type="unfinished"></translation>
+        <translation>오토튠 초기화됨</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="286"/>
@@ -1187,17 +1187,17 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="290"/>
         <source>AutoTune Reached Limit</source>
-        <translation type="unfinished"></translation>
+        <translation>오토튠 한계 도달</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="291"/>
         <source>AutoTune Pilot Testing</source>
-        <translation type="unfinished"></translation>
+        <translation>오토튠 조종 테스트</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="292"/>
         <source>AutoTune Saved Gains</source>
-        <translation type="unfinished"></translation>
+        <translation>오토튠 게인 저장</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="293"/>
@@ -1227,12 +1227,12 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="298"/>
         <source>Acro Trainer Leveling</source>
-        <translation type="unfinished"></translation>
+        <translation>Acro 트레이너 수평 유지</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="299"/>
         <source>Acro Trainer Limited</source>
-        <translation type="unfinished"></translation>
+        <translation>Acro 트레이너 제한 모드</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="300"/>
@@ -1262,42 +1262,42 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="305"/>
         <source>Landing Gear Deployed</source>
-        <translation type="unfinished"></translation>
+        <translation>랜딩기어 전개</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="306"/>
         <source>Landing Gear Retracted</source>
-        <translation type="unfinished"></translation>
+        <translation>랜딩기어 수납</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="307"/>
         <source>Motors Emergency Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 비상 정지</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="308"/>
         <source>Motors Emergency Stop Cleared</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 비상 정지 해제</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="309"/>
         <source>Motors Interlock Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 인터록 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="310"/>
         <source>Motors Interlock Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 인터록 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="311"/>
         <source>Rotor Runup Complete</source>
-        <translation type="unfinished"></translation>
+        <translation>로터 가속 완료</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="312"/>
         <source>Rotor Speed Below Critical</source>
-        <translation type="unfinished"></translation>
+        <translation>로터 속도 위험 수준 이하</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="313"/>
@@ -1307,7 +1307,7 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="314"/>
         <source>Land Cancelled By Pilot</source>
-        <translation type="unfinished"></translation>
+        <translation>조종사가 착륙 취소</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="315"/>
@@ -1317,22 +1317,22 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="316"/>
         <source>ADSB Avoidance Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>ADSB 회피 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="317"/>
         <source>ADSB Avoidance Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>ADSB 회피 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="318"/>
         <source>Proximity Avoidance Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>근접 회피 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="319"/>
         <source>Proximity Avoidance Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>근접 회피 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="320"/>
@@ -1357,7 +1357,7 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="324"/>
         <source>Standby Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>대기 모드 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="325"/>
@@ -1367,67 +1367,67 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="326"/>
         <source>Fence Alt Max Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>최대 고도 펜스 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="327"/>
         <source>Fence Alt Max Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>최대 고도 펜스 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="328"/>
         <source>Fence Circle Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>원형 펜스 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="329"/>
         <source>Fence Circle Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>원형 펜스 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="330"/>
         <source>Fence Alt Min Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>최저 고도 펜스 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="331"/>
         <source>Fence Alt Min Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>최저 고도 펜스 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="332"/>
         <source>Fence Polygon Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>다각형 펜스 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="333"/>
         <source>Fence Polygon Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>다각형 펜스 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="334"/>
         <source>EK3 Source Set: Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>EK3 소스 설정: 주(Primary)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="335"/>
         <source>EK3 Source Set: Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>EK3 소스 설정: 보조(Secondary)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="336"/>
         <source>EK3 Source Set: Tertiary</source>
-        <translation type="unfinished"></translation>
+        <translation>EK3 소스 설정: 3차(Tertiary)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="337"/>
         <source>Airspeed Primary Changed</source>
-        <translation type="unfinished"></translation>
+        <translation>주 대기 속도 변경됨</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="338"/>
         <source>Surfaced</source>
-        <translation type="unfinished"></translation>
+        <translation>부상</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="339"/>
@@ -1452,27 +1452,27 @@
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="380"/>
         <source>Failed to open DataFlash file</source>
-        <translation type="unfinished"></translation>
+        <translation>DataFlash 파일 열기 실패</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="386"/>
         <source>DataFlash file is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>DataFlash 파일이 비어 있음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="390"/>
         <source>DataFlash file is too large to parse</source>
-        <translation type="unfinished"></translation>
+        <translation>DataFlash 파일이 너무 커서 파싱할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="396"/>
         <source>Failed to memory-map DataFlash file</source>
-        <translation type="unfinished"></translation>
+        <translation>DataFlash 파일 메모리 매핑 실패</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="415"/>
         <source>No valid FMT messages were found</source>
-        <translation type="unfinished"></translation>
+        <translation>유효한 FMT 메시지를 찾을 수 없음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/APMDataFlashLogParser.cc" line="485"/>
@@ -1656,7 +1656,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponent.cc" line="26"/>
         <source>Configure battery, GCS, RC, throttle, EKF, and dead reckoning failsafes.</source>
-        <translation>배터리, GCS, RC, 스로틀, EKF 및 추측 항법 안전장치를 설정합니다.</translation>
+        <translation>배터리, GCS, RC, 스로틀, EKF 및 추측항법 안전장치를 설정합니다.</translation>
     </message>
 </context>
 <context>
@@ -1703,7 +1703,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponentSummary.qml" line="102"/>
         <source>Batt1 critical failsafe:</source>
-        <translation type="unfinished">Batt1 중요 안전장치:</translation>
+        <translation>배터리1 위험 페일세이프:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponentSummary.qml" line="108"/>
@@ -1713,7 +1713,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponentSummary.qml" line="114"/>
         <source>Batt2 critical failsafe:</source>
-        <translation type="unfinished">Batt2 중요 안전장치:</translation>
+        <translation>배터리2 위험 페일세이프:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponentSummary.qml" line="120"/>
@@ -1794,17 +1794,17 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponentSummarySub.qml" line="54"/>
         <source>Pilot Input failsafe:</source>
-        <translation type="unfinished">파일럿 입력 안전장치:</translation>
+        <translation>조종 입력 페일세이프:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponentSummarySub.qml" line="58"/>
         <source>Int. Temperature failsafe:</source>
-        <translation type="unfinished">내부 온도 안전장치:</translation>
+        <translation>내부 온도 페일세이프:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFailsafesComponentSummarySub.qml" line="62"/>
         <source>Int. Pressure failsafe:</source>
-        <translation type="unfinished">내부 압력 안전장치:</translation>
+        <translation>내부 압력 페일세이프:</translation>
     </message>
 </context>
 <context>
@@ -1827,7 +1827,7 @@
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="940"/>
         <source>Vehicle does not support guided rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>기체가 유도 모드 회전을 지원하지 않습니다</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="1011"/>
@@ -1852,17 +1852,17 @@
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="1050"/>
         <source>Unable to start takeoff: Vehicle is already in the air.</source>
-        <translation type="unfinished"></translation>
+        <translation>이륙을 시작할 수 없습니다: 기체가 이미 공중에 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="1056"/>
         <source>Unable to start takeoff: Vehicle failed to change to Takeoff mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>이륙을 시작할 수 없습니다: 기체가 이륙 모드로 전환되지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="1061"/>
         <source>Unable to start takeoff: Vehicle failed to arm.</source>
-        <translation type="unfinished"></translation>
+        <translation>이륙을 시작할 수 없습니다: 기체 시동에 실패했습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/APMFirmwarePlugin.cc" line="1072"/>
@@ -1952,7 +1952,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightModesComponent.qml" line="69"/>
         <source>Flight mode channel:</source>
-        <translation type="unfinished"></translation>
+        <translation>비행 모드 채널:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightModesComponent.qml" line="75"/>
@@ -2142,7 +2142,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightSafetyComponentSub.qml" line="118"/>
         <source>Power module not set up</source>
-        <translation type="unfinished"></translation>
+        <translation>파워 모듈이 설정되지 않음</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightSafetyComponentSub.qml" line="124"/>
@@ -2179,7 +2179,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightSafetyComponentSub.qml" line="189"/>
         <source>Internal Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>내부 온도</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFlightSafetyComponentSub.qml" line="208"/>
@@ -2350,22 +2350,22 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponent.qml" line="265"/>
         <source>Maintain current vehicle orientation</source>
-        <translation type="unfinished">Maintain current vehicle orientation</translation>
+        <translation>현재 기체 방향 유지</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponent.qml" line="265"/>
         <source>Point at ground station location</source>
-        <translation type="unfinished">Point at ground station location</translation>
+        <translation>지상국 위치 향함</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponent.qml" line="265"/>
         <source>Same direction as ground station movement</source>
-        <translation type="unfinished">Same direction as ground station movement</translation>
+        <translation>지상국 이동 방향과 동일</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponent.qml" line="272"/>
         <source>Vehicle Offsets</source>
-        <translation type="unfinished">Vehicle Offsets</translation>
+        <translation>기체 오프셋</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponent.qml" line="277"/>
@@ -2418,17 +2418,17 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponentSummary.qml" line="26"/>
         <source>Offset X</source>
-        <translation type="unfinished"></translation>
+        <translation>오프셋 X</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponentSummary.qml" line="27"/>
         <source>Offset Y</source>
-        <translation type="unfinished"></translation>
+        <translation>오프셋 Y</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponentSummary.qml" line="28"/>
         <source>Offset Z</source>
-        <translation type="unfinished"></translation>
+        <translation>오프셋 Z</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMFollowComponentSummary.qml" line="29"/>
@@ -2471,7 +2471,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMGimbalComponent.qml" line="74"/>
         <source>Gimbal settings are not available for this firmware version.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 펌웨어 버전에서는 짐벌 설정을 사용할 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -2573,7 +2573,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMGimbalInstance.qml" line="269"/>
         <source>Servo Controlled Gimbal</source>
-        <translation type="unfinished"></translation>
+        <translation>서보 제어 짐벌</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMGimbalInstance.qml" line="296"/>
@@ -2603,7 +2603,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMGimbalInstance.qml" line="383"/>
         <source>Gimbal settings will be available after rebooting the vehicle.</source>
-        <translation type="unfinished"></translation>
+        <translation>기체 재부팅 후 짐벌 설정을 사용할 수 있습니다.</translation>
     </message>
 </context>
 <context>
@@ -2846,7 +2846,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMLoggingComponent.h" line="15"/>
         <source>Configure ArduPilot logging parameters.</source>
-        <translation type="unfinished"></translation>
+        <translation>ArduPilot 로깅 파라미터를 구성합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMLoggingComponent.h" line="26"/>
@@ -3252,7 +3252,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMRemoteSupportComponent.qml" line="44"/>
         <source>Forwarding traffic: Mavlink traffic will keep being forwarded until application restarts</source>
-        <translation type="unfinished"></translation>
+        <translation>트래픽 전달 중: MAVLink 트래픽은 애플리케이션 재시작 시까지 계속 전달됩니다</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMRemoteSupportComponent.h" line="15"/>
@@ -3311,12 +3311,12 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="83"/>
         <source>Low voltage threshold:</source>
-        <translation type="unfinished"></translation>
+        <translation>저전압 임계값:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="91"/>
         <source>Critical voltage threshold:</source>
-        <translation type="unfinished"></translation>
+        <translation>위험 전압 임계값:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="98"/>
@@ -3326,18 +3326,18 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="105"/>
         <source>Critical mAh threshold:</source>
-        <translation type="unfinished"></translation>
+        <translation>위험 mAh 임계값:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="228"/>
         <source>Throttle PWM threshold:</source>
-        <translation type="unfinished">스로틀 PWM 임계값:</translation>
+        <translation>스로틀 PWM 임계값:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="286"/>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="356"/>
         <source>Ground Station failsafe:</source>
-        <translation type="unfinished"></translation>
+        <translation>지상국 페일세이프:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="293"/>
@@ -3354,7 +3354,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="335"/>
         <source>General Failsafe Triggers</source>
-        <translation type="unfinished">일반 안전장치 트리거</translation>
+        <translation>일반 페일세이프 트리거</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="365"/>
@@ -3389,28 +3389,28 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="468"/>
         <source>Inclusion/Exclusion Circles+Polygons</source>
-        <translation type="unfinished"></translation>
+        <translation>포함/제외 원+다각형</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="577"/>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="685"/>
         <source>Return at specified altitude:</source>
-        <translation type="unfinished">설정 고도에서 귀환:</translation>
+        <translation>지정 고도로 복귀:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="599"/>
         <source>Loiter above Home for:</source>
-        <translation type="unfinished">홈 위에서 정지비행:</translation>
+        <translation>홈 위에서 로이터 시간:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="617"/>
         <source>Final land stage altitude:</source>
-        <translation type="unfinished"></translation>
+        <translation>최종 착륙 단계 고도:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="632"/>
         <source>Final land stage descent speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>최종 착륙 단계 하강 속도:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponent.qml" line="433"/>
@@ -3508,7 +3508,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponentSub.qml" line="166"/>
         <source>Power module not set up</source>
-        <translation type="unfinished"></translation>
+        <translation>파워 모듈이 설정되지 않음</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSafetyComponentSub.qml" line="174"/>
@@ -3769,7 +3769,7 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="486"/>
         <source>Simple accelerometer calibration is less precise but allows calibrating without rotating the vehicle. Check this if you have a large/heavy vehicle.</source>
-        <translation type="unfinished"></translation>
+        <translation>간이 가속도계 보정은 정밀도가 다소 떨어지지만 기체를 회전시키지 않고도 보정할 수 있습니다. 대형/중량 기체인 경우 선택하세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="504"/>
@@ -3784,22 +3784,22 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="538"/>
         <source>Fast compass calibration given vehicle position and yaw. This </source>
-        <translation type="unfinished"></translation>
+        <translation>기체 위치와 요(yaw) 기반의 빠른 컴퍼스 보정. 이 방법은 </translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="539"/>
         <source>results in zero diagonal and off-diagonal elements, so is only </source>
-        <translation type="unfinished"></translation>
+        <translation>대각/비대각 요소를 0으로 만들기 때문에 </translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="540"/>
         <source>suitable for vehicles where the field is close to spherical. It is </source>
-        <translation type="unfinished"></translation>
+        <translation>자기장 분포가 구형에 가까운 기체에 적합합니다. </translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="541"/>
         <source>useful for large vehicles where moving the vehicle to calibrate it </source>
-        <translation type="unfinished"></translation>
+        <translation>보정을 위해 기체를 움직이기 어려운 대형 기체에 유용합니다 </translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="542"/>
@@ -3814,22 +3814,22 @@
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="563"/>
         <source>Vehicle has no Valid positon, please provide it</source>
-        <translation type="unfinished"></translation>
+        <translation>기체에 유효한 위치 정보가 없습니다. 위치를 제공해 주세요</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="569"/>
         <source>Use GCS position instead</source>
-        <translation type="unfinished"></translation>
+        <translation>대신 GCS 위치 사용</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="575"/>
         <source>Use current map position instead</source>
-        <translation type="unfinished"></translation>
+        <translation>대신 현재 지도 위치 사용</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="615"/>
         <source>Compass Motor Interference Calibration</source>
-        <translation type="unfinished"></translation>
+        <translation>컴퍼스 모터 간섭 보정</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponent.qml" line="628"/>
@@ -4102,7 +4102,7 @@ Click Ok to start calibration.</source>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSensorsComponentSummary.qml" line="89"/>
         <source>Not Supported(Over APM 4.1)</source>
-        <translation type="unfinished"></translation>
+        <translation>지원되지 않음 (APM 4.1 이상)</translation>
     </message>
 </context>
 <context>
@@ -4110,7 +4110,7 @@ Click Ok to start calibration.</source>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMServoComponent.qml" line="51"/>
         <source>Configure ArduPilot servo outputs.</source>
-        <translation type="unfinished"></translation>
+        <translation>ArduPilot 서보 출력을 설정합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMServoComponent.qml" line="57"/>
@@ -4174,17 +4174,17 @@ Click Ok to start calibration.</source>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSubFrameComponent.qml" line="203"/>
         <source>Would you like to load the default parameters for the frame?</source>
-        <translation type="unfinished"></translation>
+        <translation>해당 프레임의 기본 파라미터를 불러오시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSubFrameComponent.qml" line="204"/>
         <source>Would you like to set the desired frame?</source>
-        <translation type="unfinished"></translation>
+        <translation>원하는 프레임으로 설정하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSubFrameComponent.qml" line="210"/>
         <source>Yes, Load default parameter set for %1</source>
-        <translation type="unfinished">Yes, Load default parameter set for %1</translation>
+        <translation>예, %1의 기본 파라미터 세트 불러오기</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/APM/APMSubFrameComponent.qml" line="223"/>
@@ -4518,12 +4518,12 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/Vehicle/Actuators/ActuatorActions.cc" line="17"/>
         <source>Set Spin Direction 1</source>
-        <translation type="unfinished"></translation>
+        <translation>회전 방향 1 설정</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Actuators/ActuatorActions.cc" line="18"/>
         <source>Set Spin Direction 2</source>
-        <translation type="unfinished"></translation>
+        <translation>회전 방향 2 설정</translation>
     </message>
 </context>
 <context>
@@ -4531,7 +4531,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/Vehicle/Actuators/ActuatorActions.cc" line="50"/>
         <source>Actuator action command failed</source>
-        <translation type="unfinished"></translation>
+        <translation>액추에이터 동작 명령 실패</translation>
     </message>
 </context>
 <context>
@@ -4549,17 +4549,17 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ActuatorComponent.qml" line="198"/>
         <source>Configure some outputs in order to test them.</source>
-        <translation type="unfinished"></translation>
+        <translation>테스트를 위해 출력을 먼저 설정하세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ActuatorComponent.qml" line="235"/>
         <source>Careful: Actuator sliders are enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>주의: 액추에이터 슬라이더가 활성화되어 있습니다</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ActuatorComponent.qml" line="235"/>
         <source>Propellers are removed - Enable sliders</source>
-        <translation type="unfinished"></translation>
+        <translation>프로펠러 제거됨 - 슬라이더 활성화</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ActuatorComponent.qml" line="324"/>
@@ -4569,17 +4569,17 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ActuatorComponent.qml" line="329"/>
         <source>One or more actuator still needs to be assigned to an output.</source>
-        <translation type="unfinished"></translation>
+        <translation>아직 출력에 할당되지 않은 액추에이터가 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ActuatorComponent.qml" line="371"/>
         <source>Identify &amp; Assign Motors</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 식별 및 할당</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ActuatorComponent.qml" line="387"/>
         <source>Motor Order Identification and Assignment</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 순서 식별 및 할당</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ActuatorComponent.qml" line="402"/>
@@ -4607,7 +4607,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ActuatorFact.qml" line="45"/>
         <source>(Param not available)</source>
-        <translation type="unfinished"></translation>
+        <translation>(파라미터 사용 불가)</translation>
     </message>
 </context>
 <context>
@@ -4620,22 +4620,22 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/Vehicle/Actuators/ActuatorTesting.cc" line="144"/>
         <source>Actuator test command temporarily rejected</source>
-        <translation type="unfinished"></translation>
+        <translation>액추에이터 테스트 명령이 일시적으로 거부됨</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Actuators/ActuatorTesting.cc" line="146"/>
         <source>Actuator test command denied</source>
-        <translation type="unfinished"></translation>
+        <translation>액추에이터 테스트 명령 거부됨</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Actuators/ActuatorTesting.cc" line="148"/>
         <source>Actuator test command not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>액추에이터 테스트 명령 미지원</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Actuators/ActuatorTesting.cc" line="150"/>
         <source>Actuator test command failed</source>
-        <translation type="unfinished"></translation>
+        <translation>액추에이터 테스트 명령 실패</translation>
     </message>
 </context>
 <context>
@@ -4672,7 +4672,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/AirframeComponent.qml" line="108"/>
         <source>Clicking &apos;Apply&apos; will save the changes you have made to your airframe configuration.&lt;br&gt;&lt;br&gt;                                                                        All vehicle parameters other than Radio Calibration will be reset.&lt;br&gt;&lt;br&gt;                                                                        Your vehicle will also be restarted in order to complete the process.</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;적용&apos;을 클릭하면 기체 프레임 설정 변경사항이 저장됩니다.&lt;br&gt;&lt;br&gt;라디오 보정을 제외한 모든 기체 파라미터가 초기화됩니다.&lt;br&gt;&lt;br&gt;작업 완료를 위해 기체가 재시작됩니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/AirframeComponent.qml" line="96"/>
@@ -4687,7 +4687,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/AirframeComponent.qml" line="98"/>
         <source> To change this configuration, select the desired airframe below then click &apos;Apply and Restart&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation> 이 설정을 변경하려면 아래에서 원하는 기체 프레임을 선택한 후 &apos;적용 후 재시작&apos;을 클릭하세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/AirframeComponent.qml" line="106"/>
@@ -4758,32 +4758,32 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/QmlControls/AltFrameDialog.qml" line="20"/>
         <source>Altitude above home position</source>
-        <translation type="unfinished"></translation>
+        <translation>홈 위치 기준 고도</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AltFrameDialog.qml" line="23"/>
         <source>Altitude above mean sea level</source>
-        <translation type="unfinished"></translation>
+        <translation>평균 해수면 기준 고도 (AMSL)</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AltFrameDialog.qml" line="26"/>
         <source>Altitude above terrain at waypoint using MAVLink terrain protocol</source>
-        <translation type="unfinished"></translation>
+        <translation>MAVLink 지형 프로토콜을 사용한 경유점 지형 기준 고도</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AltFrameDialog.qml" line="29"/>
         <source>Altitudes are terrain-relative; converting to AMSL before upload</source>
-        <translation type="unfinished"></translation>
+        <translation>고도는 지형 기준이며, 업로드 전 AMSL로 변환됩니다</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AltFrameDialog.qml" line="32"/>
         <source>Each waypoint specifies its own altitude frame</source>
-        <translation type="unfinished"></translation>
+        <translation>각 경유점이 자체 고도 기준을 지정</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/AltFrameDialog.qml" line="61"/>
         <source>Altitude frame for mission items</source>
-        <translation type="unfinished"></translation>
+        <translation>임무 항목의 고도 기준</translation>
     </message>
 </context>
 <context>
@@ -4848,7 +4848,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
         <location filename="../src/LogManager/AppLogging.qml" line="249"/>
         <location filename="../src/QmlControls/AppLogging.qml" line="249"/>
         <source>Search…</source>
-        <translation type="unfinished"></translation>
+        <translation>검색...</translation>
     </message>
     <message>
         <location filename="../src/LogManager/AppLogging.qml" line="255"/>
@@ -4932,22 +4932,22 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/Settings/AppSettings.cc" line="89"/>
         <source>Save to SD card specified for application data. But SD card is write protected. Using internal storage.</source>
-        <translation type="unfinished"></translation>
+        <translation>애플리케이션 데이터를 SD 카드에 저장하도록 지정되었으나 SD 카드가 쓰기 보호되어 있습니다. 내부 저장소를 사용합니다.</translation>
     </message>
     <message>
         <location filename="../src/Settings/AppSettings.cc" line="203"/>
         <source> (Partial)</source>
-        <translation type="unfinished"> (Partial)</translation>
+        <translation> (부분)</translation>
     </message>
     <message>
         <location filename="../src/Settings/AppSettings.cc" line="211"/>
         <source> (Test Only)</source>
-        <translation type="unfinished"></translation>
+        <translation> (테스트 전용)</translation>
     </message>
     <message>
         <location filename="../src/Settings/AppSettings.cc" line="218"/>
         <source>Pseudo Localization (Test Only)</source>
-        <translation type="unfinished"></translation>
+        <translation>유사 현지화 (테스트 전용)</translation>
     </message>
     <message>
         <location filename="../src/Settings/AppSettings.h" line="124"/>
@@ -5070,12 +5070,12 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="94"/>
         <source>ZigZag</source>
-        <translation type="unfinished"></translation>
+        <translation>지그재그</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="95"/>
         <source>SystemID</source>
-        <translation type="unfinished"></translation>
+        <translation>SystemID</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="96"/>
@@ -5090,7 +5090,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduCopterFirmwarePlugin.h" line="98"/>
         <source>Turtle</source>
-        <translation type="unfinished"></translation>
+        <translation>터틀</translation>
     </message>
 </context>
 <context>
@@ -5113,7 +5113,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduPlaneFirmwarePlugin.h" line="61"/>
         <source>Training</source>
-        <translation type="unfinished"></translation>
+        <translation>훈련</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduPlaneFirmwarePlugin.h" line="62"/>
@@ -5213,7 +5213,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduPlaneFirmwarePlugin.h" line="81"/>
         <source>Thermal</source>
-        <translation type="unfinished"></translation>
+        <translation>써멀</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduPlaneFirmwarePlugin.h" line="82"/>
@@ -5246,7 +5246,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduRoverFirmwarePlugin.h" line="52"/>
         <source>Steering</source>
-        <translation type="unfinished"></translation>
+        <translation>스티어링</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduRoverFirmwarePlugin.h" line="53"/>
@@ -5344,7 +5344,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduSubFirmwarePlugin.h" line="117"/>
         <source>Surface</source>
-        <translation type="unfinished"></translation>
+        <translation>수면 부상</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduSubFirmwarePlugin.h" line="118"/>
@@ -5359,7 +5359,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/FirmwarePlugin/APM/ArduSubFirmwarePlugin.h" line="120"/>
         <source>Surftrak</source>
-        <translation type="unfinished"></translation>
+        <translation>해저 추적</translation>
     </message>
 </context>
 <context>
@@ -5433,7 +5433,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/Utilities/Audio/AudioOutput.cc" line="210"/>
         <source>Audio test. Volume is %1 percent</source>
-        <translation type="unfinished"></translation>
+        <translation>오디오 테스트. 볼륨은 %1 퍼센트입니다</translation>
     </message>
 </context>
 <context>
@@ -5474,7 +5474,7 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     <message>
         <location filename="../src/Vehicle/Autotune.cpp" line="90"/>
         <source>Wait for disarm</source>
-        <translation type="unfinished">Wait for disarm</translation>
+        <translation>시동 해제 대기</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Autotune.cpp" line="93"/>
@@ -5526,18 +5526,28 @@ Please place your vehicle in water, click the button, and wait. Note that the th
     </message>
     <message>
         <location filename="../src/QmlControls/AutotuneUI.qml" line="24"/>
-        <source>WARNING!        
+        <source>WARNING!
 
-The auto-tuning procedure should be executed with caution and requires the vehicle to fly stable enough before attempting the procedure!         
+The auto-tuning procedure should be executed with caution and requires the vehicle to fly stable enough before attempting the procedure!
 
-Before starting the auto-tuning process, make sure that:         
-1. You have read the auto-tuning guide and have followed the preliminary steps         
-2. The current control gains are good enough to stabilize the drone in presence of medium disturbances         
-3. You are ready to abort the auto-tuning sequence by moving the RC sticks, if anything unexpected happens.         
+Before starting the auto-tuning process, make sure that:
+1. You have read the auto-tuning guide and have followed the preliminary steps
+2. The current control gains are good enough to stabilize the drone in presence of medium disturbances
+3. You are ready to abort the auto-tuning sequence by moving the RC sticks, if anything unexpected happens.
 
 Click Ok to start the auto-tuning process.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>경고!
+
+자동 튜닝 절차는 신중히 수행해야 하며, 절차 시도 전에 기체가 충분히 안정적으로 비행해야 합니다!
+
+자동 튜닝 시작 전에 다음을 확인하세요:
+1. 자동 튜닝 가이드를 읽고 사전 절차를 모두 수행했습니다
+2. 현재 제어 게인이 중간 정도의 외란에서도 드론을 안정시킬 만큼 충분합니다
+3. 예기치 못한 상황 발생 시 RC 스틱을 움직여 자동 튜닝 시퀀스를 즉시 중단할 준비가 되어 있습니다.
+
+확인을 클릭하여 자동 튜닝 프로세스를 시작합니다.
+</translation>
     </message>
 </context>
 <context>
@@ -5806,57 +5816,57 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="72"/>
         <source>BLE controller not available</source>
-        <translation type="unfinished"></translation>
+        <translation>BLE 컨트롤러를 사용할 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="128"/>
         <source>Failed to create BLE controller</source>
-        <translation type="unfinished"></translation>
+        <translation>BLE 컨트롤러 생성 실패</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="200"/>
         <source>Write characteristic is not valid</source>
-        <translation type="unfinished"></translation>
+        <translation>쓰기 특성(characteristic)이 유효하지 않음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="205"/>
         <source>BLE service not available</source>
-        <translation type="unfinished"></translation>
+        <translation>BLE 서비스를 사용할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="224"/>
         <source>Write queue full, dropping data</source>
-        <translation type="unfinished"></translation>
+        <translation>쓰기 큐가 가득 차 데이터 폐기</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="347"/>
         <source>Controller error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>컨트롤러 오류: %1</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="387"/>
         <source>No services found on BLE device</source>
-        <translation type="unfinished"></translation>
+        <translation>BLE 장치에서 서비스를 찾을 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="395"/>
         <source>Controller not available</source>
-        <translation type="unfinished"></translation>
+        <translation>컨트롤러를 사용할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="404"/>
         <source>No services available</source>
-        <translation type="unfinished"></translation>
+        <translation>사용 가능한 서비스가 없음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="423"/>
         <source>Failed to create service object</source>
-        <translation type="unfinished"></translation>
+        <translation>서비스 객체 생성 실패</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="528"/>
         <source>Write characteristic not found</source>
-        <translation type="unfinished"></translation>
+        <translation>쓰기 특성(characteristic)을 찾을 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothBleWorker.cc" line="631"/>
@@ -5869,12 +5879,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothClassicWorker.cc" line="31"/>
         <source>Socket not available</source>
-        <translation type="unfinished"></translation>
+        <translation>소켓을 사용할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothClassicWorker.cc" line="106"/>
         <source>Socket is not writable</source>
-        <translation type="unfinished"></translation>
+        <translation>소켓에 쓰기가 불가능함</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothClassicWorker.cc" line="115"/>
@@ -5884,17 +5894,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothClassicWorker.cc" line="118"/>
         <source>Write returned 0 bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>쓰기에서 0바이트 반환</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothClassicWorker.cc" line="175"/>
         <source>Socket error: Null Socket</source>
-        <translation type="unfinished"></translation>
+        <translation>소켓 오류: 널 소켓</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothClassicWorker.cc" line="274"/>
         <source>Service discovery error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>서비스 검색 오류: %1</translation>
     </message>
 </context>
 <context>
@@ -5907,7 +5917,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="359"/>
         <source>Bluetooth Low Energy Link Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 저전력(BLE) 링크 설정</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="361"/>
@@ -5917,23 +5927,23 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="400"/>
         <source>Invalid service UUID format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>서비스 UUID 형식이 잘못됨: %1</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="413"/>
         <source>Invalid read characteristic UUID format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>읽기 특성 UUID 형식이 잘못됨: %1</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="426"/>
         <source>Invalid write characteristic UUID format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>쓰기 특성 UUID 형식이 잘못됨: %1</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="452"/>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="457"/>
         <source>Bluetooth Permission Denied</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 권한 거부됨</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="563"/>
@@ -5943,7 +5953,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="1066"/>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="1085"/>
         <source>Bluetooth adapter not available</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 어댑터를 사용할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="685"/>
@@ -5971,25 +5981,25 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="708"/>
         <source>Discoverable (Limited Inquiry)</source>
-        <translation type="unfinished"></translation>
+        <translation>검색 가능 (제한적 검색)</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="727"/>
         <source>Bluetooth adapter powered off</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 어댑터 전원이 꺼져 있음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="758"/>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="876"/>
         <source>Unpaired</source>
-        <translation type="unfinished"></translation>
+        <translation>페어링 해제됨</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="761"/>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="878"/>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="961"/>
         <source>Paired</source>
-        <translation type="unfinished"></translation>
+        <translation>페어링됨</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="764"/>
@@ -6005,17 +6015,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="781"/>
         <source>Device %1 (%2) unpaired</source>
-        <translation type="unfinished"></translation>
+        <translation>장치 %1 (%2) 페어링 해제됨</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="785"/>
         <source>Device %1 paired successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>장치 %1 페어링 성공</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="786"/>
         <source>Device %1 (%2) paired successfully</source>
-        <translation type="unfinished"></translation>
+        <translation>장치 %1 (%2) 페어링 성공</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="799"/>
@@ -6025,28 +6035,28 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="802"/>
         <source>Missing Bluetooth Permissions</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 권한이 없음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="806"/>
         <source>Unknown Bluetooth Adapter Error</source>
-        <translation type="unfinished"></translation>
+        <translation>알 수 없는 블루투스 어댑터 오류</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="822"/>
         <source>Pairing is only supported for Classic Bluetooth</source>
-        <translation type="unfinished"></translation>
+        <translation>페어링은 클래식 블루투스에서만 지원됩니다</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="828"/>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="850"/>
         <source>Invalid Bluetooth address</source>
-        <translation type="unfinished"></translation>
+        <translation>잘못된 블루투스 주소</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="844"/>
         <source>Unpairing is only supported for Classic Bluetooth</source>
-        <translation type="unfinished"></translation>
+        <translation>페어링 해제는 클래식 블루투스에서만 지원됩니다</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="861"/>
@@ -6082,7 +6092,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="1116"/>
         <source>Invalid adapter address</source>
-        <translation type="unfinished"></translation>
+        <translation>잘못된 어댑터 주소</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="1130"/>
@@ -6092,7 +6102,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="1141"/>
         <source>Failed to initialize adapter</source>
-        <translation type="unfinished"></translation>
+        <translation>어댑터 초기화 실패</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="1178"/>
@@ -6102,7 +6112,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothConfiguration.cc" line="1189"/>
         <source>Discoverable (Limited)</source>
-        <translation type="unfinished"></translation>
+        <translation>검색 가능 (제한적)</translation>
     </message>
 </context>
 <context>
@@ -6115,7 +6125,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothLink.cc" line="115"/>
         <source>Bluetooth Low Energy</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 저전력 (BLE)</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothLink.cc" line="115"/>
@@ -6130,17 +6140,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothLink.cc" line="118"/>
         <source>Link %1: (Device: %2) %3</source>
-        <translation type="unfinished"></translation>
+        <translation>링크 %1: (장치: %2) %3</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothLink.cc" line="166"/>
         <source>Bluetooth Permission Denied</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 권한 거부됨</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothLink.cc" line="177"/>
         <source>Failed to start Bluetooth worker thread</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 워커 스레드 시작 실패</translation>
     </message>
 </context>
 <context>
@@ -6175,7 +6185,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="243"/>
         <source>Bluetooth adapter unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 어댑터를 사용할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="256"/>
@@ -6210,7 +6220,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="305"/>
         <source>Selected Device</source>
-        <translation type="unfinished"></translation>
+        <translation>선택된 장치</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="308"/>
@@ -6230,12 +6240,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="319"/>
         <source>Pairing</source>
-        <translation type="unfinished"></translation>
+        <translation>페어링 중</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="333"/>
         <source>Unpair</source>
-        <translation type="unfinished"></translation>
+        <translation>페어링 해제</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="333"/>
@@ -6245,7 +6255,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="344"/>
         <source>Signal Strength</source>
-        <translation type="unfinished"></translation>
+        <translation>신호 강도</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="389"/>
@@ -6260,7 +6270,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="401"/>
         <source>Advanced BLE Configuration</source>
-        <translation type="unfinished"></translation>
+        <translation>고급 BLE 설정</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="413"/>
@@ -6287,7 +6297,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="442"/>
         <source>UUIDs are auto-detected for most devices. Only configure if connection fails.</source>
-        <translation type="unfinished"></translation>
+        <translation>대부분의 장치는 UUID가 자동 감지됩니다. 연결에 실패한 경우에만 설정하세요.</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="455"/>
@@ -6297,7 +6307,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="484"/>
         <source>Available BLE Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>사용 가능한 BLE 장치</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="484"/>
@@ -6307,12 +6317,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="500"/>
         <source>Scanning for devices...</source>
-        <translation type="unfinished"></translation>
+        <translation>장치 스캔 중...</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="581"/>
         <source>Paired</source>
-        <translation type="unfinished"></translation>
+        <translation>페어링됨</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="611"/>
@@ -6322,12 +6332,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="618"/>
         <source>Make sure your BLE device is powered on and advertising</source>
-        <translation type="unfinished"></translation>
+        <translation>BLE 장치의 전원이 켜져 있고 광고 중인지 확인하세요</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="619"/>
         <source>Make sure your Bluetooth device is powered on and discoverable</source>
-        <translation type="unfinished"></translation>
+        <translation>블루투스 장치의 전원이 켜져 있고 검색 가능한지 확인하세요</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/BluetoothSettings.qml" line="631"/>
@@ -6345,17 +6355,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothWorker.cc" line="101"/>
         <source>Device is not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>장치가 연결되지 않음</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothWorker.cc" line="116"/>
         <source>Max reconnection attempts reached</source>
-        <translation type="unfinished"></translation>
+        <translation>최대 재연결 시도 횟수 도달</translation>
     </message>
     <message>
         <location filename="../src/Comms/Bluetooth/BluetoothWorker.cc" line="143"/>
         <source>Service discovery timed out</source>
-        <translation type="unfinished"></translation>
+        <translation>서비스 검색 시간 초과</translation>
     </message>
 </context>
 <context>
@@ -6474,7 +6484,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="85"/>
         <source>Unable to put radio into command mode +++</source>
-        <translation type="unfinished">Unable to put radio into command mode +++</translation>
+        <translation>라디오를 명령 모드(+++)로 전환할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="90"/>
@@ -6484,12 +6494,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="98"/>
         <source>Radio did not respond to ATI2 command</source>
-        <translation type="unfinished">Radio did not respond to ATI2 command</translation>
+        <translation>라디오가 ATI2 명령에 응답하지 않음</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="105"/>
         <source>Radio did not return board id</source>
-        <translation type="unfinished">Radio did not return board id</translation>
+        <translation>라디오가 보드 ID를 반환하지 않음</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="122"/>
@@ -6509,7 +6519,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="320"/>
         <source>Get Device: </source>
-        <translation type="unfinished">Get Device: </translation>
+        <translation>장치 정보: </translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/Bootloader.cc" line="751"/>
@@ -6555,12 +6565,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/CalcVoltageDividerDialog.qml" line="9"/>
         <source>Calculate Voltage Divider</source>
-        <translation type="unfinished">전압 계수 계산</translation>
+        <translation>전압 계수 계산</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/CalcVoltageDividerDialog.qml" line="28"/>
         <source>Measure battery voltage using an external voltmeter and enter the value below. Click Calculate to set the new voltage multiplier.</source>
-        <translation type="unfinished">전압계를 이용하여 배터리 전압을 측정하고 아래 값과 비교해주십시오. 새로운 전압 배수를 적용하기 위해서 계산을 눌러주십시오.</translation>
+        <translation>외부 전압계로 배터리 전압을 측정하여 아래에 입력하세요. 계산하기를 눌러 새로운 전압 배수를 설정합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/CalcVoltageDividerDialog.qml" line="35"/>
@@ -6954,7 +6964,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/MissionManager/ComplexMissionItem.cc" line="56"/>
         <source>&apos;%1&apos; is a built-in preset which cannot be deleted.</source>
-        <translation type="unfinished">&apos;%1&apos; is a built-in preset which cannot be deleted.</translation>
+        <translation>&apos;%1&apos;은(는) 내장 프리셋으로 삭제할 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -6962,7 +6972,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/ComponentInformation/ComponentInformationTranslation.cc" line="203"/>
         <source>File open failed: file:error %1 %2</source>
-        <translation type="unfinished">파일 열기 오류: 파일:오류 %1 %2</translation>
+        <translation>파일 열기 실패: 파일:오류 %1 %2</translation>
     </message>
 </context>
 <context>
@@ -7093,7 +7103,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/CorridorScanEditor.qml" line="13"/>
         <source>Use the Polyline Tools to create the polyline which defines the corridor.</source>
-        <translation type="unfinished">Use the Polyline Tools to create the polyline which defines the corridor.</translation>
+        <translation>폴리라인 도구를 사용해 코리도를 정의하는 폴리라인을 생성하세요.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/CorridorScanEditor.qml" line="47"/>
@@ -7361,7 +7371,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/Vehicle/DropSequence.cc" line="22"/>
         <location filename="../src/Vehicle/DropSequence.cc" line="54"/>
         <source>Starting</source>
-        <translation type="unfinished"></translation>
+        <translation>시작 중</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/DropSequence.cc" line="38"/>
@@ -7426,7 +7436,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/DropSequence.cc" line="168"/>
         <source>Drop sequence successful.</source>
-        <translation type="unfinished"></translation>
+        <translation>투하 시퀀스 성공.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/DropSequence.cc" line="180"/>
@@ -7436,7 +7446,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/DropSequence.cc" line="181"/>
         <source>Drop sequence failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>투하 시퀀스 실패.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/DropSequence.cc" line="190"/>
@@ -7446,7 +7456,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/DropSequence.cc" line="191"/>
         <source>Drop sequence error: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>투하 시퀀스 오류: %1</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/DropSequence.h" line="49"/>
@@ -7467,32 +7477,32 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="33"/>
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="49"/>
         <source>ESC Calibration failed. </source>
-        <translation type="unfinished">ESC 캘리브레이션에 실패하였습니다.</translation>
+        <translation>ESC 보정에 실패했습니다. </translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="22"/>
         <source>%1 cannot perform ESC Calibration with this version of firmware. You will need to upgrade to a newer firmware.</source>
-        <translation type="unfinished">%1이(가) 현재 펌웨어 버전으로 ESC 캘리브레이션을 할 수 없습니다. 새로운 버전의 펌웨어로 업그레이드가 필요합니다.</translation>
+        <translation>%1은(는) 현재 펌웨어 버전에서 ESC 보정을 수행할 수 없습니다. 최신 펌웨어로 업그레이드가 필요합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="28"/>
         <source>%1 cannot perform ESC Calibration with this version of firmware. You will need to upgrade %1.</source>
-        <translation type="unfinished">%1이(가) 현재 펌웨어 버전으로 ESC 캘리브레이션을 할 수 없습니다. %1의 업그레이드가 필요합니다.</translation>
+        <translation>%1은(는) 현재 펌웨어 버전에서 ESC 보정을 수행할 수 없습니다. %1을(를) 업그레이드해야 합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="34"/>
         <source>You must disconnect the battery prior to performing ESC Calibration. Disconnect your battery and try again.</source>
-        <translation type="unfinished">ESC 캘리브레이션 전에 반드시 배터리를 분리해야 합니다. 배터리를 분리하고 다시 시도해주십시오.</translation>
+        <translation>ESC 보정을 수행하기 전에 배터리를 분리해야 합니다. 배터리를 분리하고 다시 시도하세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="39"/>
         <source>WARNING: Props must be removed from vehicle prior to performing ESC calibration.</source>
-        <translation type="unfinished">경고: ESC 캘리브레이션을 하기 전 프로펠러가 기체에서 분리되어야합니다.</translation>
+        <translation>경고: ESC 보정을 수행하기 전에 프로펠러를 기체에서 분리해야 합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="40"/>
         <source> Connect the battery now and calibration will begin.</source>
-        <translation type="unfinished"> 배터리를 연결하면 캘리브레이션을 시작합니다.</translation>
+        <translation> 지금 배터리를 연결하면 보정이 시작됩니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="44"/>
@@ -7502,12 +7512,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="54"/>
         <source>Calibration complete. You can disconnect your battery now if you like.</source>
-        <translation type="unfinished">캘리브레이션 완료. 배터리 전원을 분리해도 됩니다.</translation>
+        <translation>보정이 완료되었습니다. 이제 배터리를 분리해도 됩니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/ESCCalibrationDialog.qml" line="64"/>
         <source>Starting ESC calibration...</source>
-        <translation type="unfinished"></translation>
+        <translation>ESC 보정 시작 중...</translation>
     </message>
 </context>
 <context>
@@ -7711,13 +7721,13 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="46"/>
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="47"/>
         <source>Universal Transverse Mercator</source>
-        <translation type="unfinished"></translation>
+        <translation>UTM 좌표계</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="46"/>
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="47"/>
         <source>Military Grid Reference</source>
-        <translation type="unfinished"></translation>
+        <translation>군용 그리드 좌표 (MGRS)</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="46"/>
@@ -7762,12 +7772,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="143"/>
         <source>Set position from vehicle</source>
-        <translation type="unfinished"></translation>
+        <translation>기체 위치로 설정</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="150"/>
         <source>Set altitude from vehicle</source>
-        <translation type="unfinished"></translation>
+        <translation>기체 고도로 설정</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/EditPositionDialog.qml" line="156"/>
@@ -7871,7 +7881,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/Vehicle/FTPController.cc" line="112"/>
         <location filename="../src/Vehicle/FTPController.cc" line="152"/>
         <source>Another FTP operation is in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>다른 FTP 작업이 진행 중입니다</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="57"/>
@@ -7881,17 +7891,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="78"/>
         <source>Could not create directory %1</source>
-        <translation type="unfinished"></translation>
+        <translation>디렉터리 %1을(를) 생성할 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="98"/>
         <source>Failed to download %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 다운로드 실패</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="120"/>
         <source>File %1 does not exist</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 %1이(가) 존재하지 않습니다</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="138"/>
@@ -7907,28 +7917,28 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/Vehicle/FTPController.cc" line="352"/>
         <location filename="../src/Vehicle/FTPController.cc" line="379"/>
         <source>No archive path specified</source>
-        <translation type="unfinished"></translation>
+        <translation>아카이브 경로가 지정되지 않음</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="357"/>
         <location filename="../src/Vehicle/FTPController.cc" line="384"/>
         <source>Archive file not found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>아카이브 파일을 찾을 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="362"/>
         <source>Not a supported archive format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>지원하지 않는 아카이브 형식: %1</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="374"/>
         <source>Extraction already in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>이미 압축 해제가 진행 중</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="394"/>
         <source>Could not create output directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>출력 디렉터리를 생성할 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPController.cc" line="442"/>
@@ -7981,25 +7991,25 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/Vehicle/FTPManager.cc" line="555"/>
         <location filename="../src/Vehicle/FTPManager.cc" line="603"/>
         <source>Upload failed for: %1 - error: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>업로드 실패: %1 - 오류: %2</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPManager.cc" line="457"/>
         <location filename="../src/Vehicle/FTPManager.cc" line="563"/>
         <location filename="../src/Vehicle/FTPManager.cc" line="611"/>
         <source>Upload failed for: %1 - no response from vehicle</source>
-        <translation type="unfinished"></translation>
+        <translation>업로드 실패: %1 - 기체로부터 응답 없음</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPManager.cc" line="468"/>
         <source>Upload failed for: %1 - file not open</source>
-        <translation type="unfinished"></translation>
+        <translation>업로드 실패: %1 - 파일이 열려 있지 않음</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPManager.cc" line="498"/>
         <location filename="../src/Vehicle/FTPManager.cc" line="505"/>
         <source>Upload failed for: %1 - error reading file</source>
-        <translation type="unfinished"></translation>
+        <translation>업로드 실패: %1 - 파일 읽기 오류</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/FTPManager.cc" line="620"/>
@@ -8016,7 +8026,7 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/Vehicle/FTPManager.cc" line="980"/>
         <location filename="../src/Vehicle/FTPManager.cc" line="989"/>
         <source>List directory failed</source>
-        <translation type="unfinished"></translation>
+        <translation>디렉터리 목록 조회 실패</translation>
     </message>
 </context>
 <context>
@@ -8096,7 +8106,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/PlanView/FWLandingPatternEditor.qml" line="55"/>
         <source>Use loiter to altitude</source>
-        <translation type="unfinished">Use loiter to altitude</translation>
+        <translation>고도까지 로이터 사용</translation>
     </message>
     <message>
         <location filename="../src/PlanView/FWLandingPatternEditor.qml" line="148"/>
@@ -8172,12 +8182,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/FactSystem/Fact.cc" line="872"/>
         <source>Reboot vehicle for changes to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>변경 사항을 적용하려면 기체를 재부팅하세요.</translation>
     </message>
     <message>
         <location filename="../src/FactSystem/Fact.cc" line="874"/>
         <source>Restart application for changes to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>변경 사항을 적용하려면 애플리케이션을 재시작하세요.</translation>
     </message>
 </context>
 <context>
@@ -8432,7 +8442,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="32"/>
         <source>%1 can upgrade the firmware on Pixhawk devices and SiK Radios.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1은(는) Pixhawk 장치 및 SiK 라디오의 펌웨어를 업그레이드할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="34"/>
@@ -8442,7 +8452,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="34"/>
         <source> via USB, then select it below and press </source>
-        <translation type="unfinished"></translation>
+        <translation>를 USB로 연결한 다음 아래에서 선택하고 누르세요 </translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="34"/>
@@ -8453,12 +8463,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="35"/>
         <source>Now unplug your device and plug it back in to enter bootloader mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>이제 장치를 분리한 후 다시 연결하여 부트로더 모드로 진입하세요.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="36"/>
         <source>If upgrade failed, make sure to connect </source>
-        <translation type="unfinished"></translation>
+        <translation>업그레이드에 실패했다면 다음을 연결하세요 </translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="36"/>
@@ -8468,12 +8478,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="36"/>
         <source> to a powered USB port on your computer, not through a USB hub. </source>
-        <translation type="unfinished"></translation>
+        <translation>를 컴퓨터의 전원이 공급되는 USB 포트에 직접 연결하세요 (USB 허브 사용 금지). </translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="37"/>
         <source>Also make sure you are only powered via USB </source>
-        <translation type="unfinished"></translation>
+        <translation>또한 USB로만 전원이 공급되는지 확인하세요 </translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="37"/>
@@ -8483,7 +8493,7 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="128"/>
         <source>Device disconnected — waiting for it to reappear in bootloader mode...</source>
-        <translation type="unfinished"></translation>
+        <translation>장치 연결 해제 — 부트로더 모드로 재연결되기를 기다리는 중...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="173"/>
@@ -8509,17 +8519,17 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="243"/>
         <source>Either firmware list is still downloading, or no firmware is available for current selection.</source>
-        <translation type="unfinished"></translation>
+        <translation>펌웨어 목록을 아직 다운로드 중이거나, 현재 선택에 사용 가능한 펌웨어가 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="248"/>
         <source>You must choose a board type.</source>
-        <translation type="unfinished"></translation>
+        <translation>보드 유형을 선택해야 합니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="255"/>
         <source>No firmware was found for the current selection.</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 선택에 해당하는 펌웨어를 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgrade.qml" line="282"/>
@@ -8729,12 +8739,12 @@ Click Ok to start the auto-tuning process.
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="389"/>
         <source>Downloading firmware from %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1에서 펌웨어 다운로드 중</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="391"/>
         <source>Using firmware file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>펌웨어 파일 %1 사용 중</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/FirmwareUpgradeController.cc" line="507"/>
@@ -8901,13 +8911,15 @@ Click Ok to start the auto-tuning process.
         <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="67"/>
         <source>FW
 VTOL</source>
-        <translation type="unfinished"></translation>
+        <translation>고정익
+VTOL</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="67"/>
         <source>MR
 VTOL</source>
-        <translation type="unfinished"></translation>
+        <translation>멀티로터
+VTOL</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/FlightModeIndicator.qml" line="152"/>
@@ -8991,7 +9003,7 @@ VTOL</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/FlightModesComponent.cc" line="43"/>
         <source>Switch Settings</source>
-        <translation type="unfinished">스위치 세팅</translation>
+        <translation>스위치 설정</translation>
     </message>
 </context>
 <context>
@@ -9064,31 +9076,36 @@ VTOL</source>
         <location filename="../src/FlyView/FlyViewEKFStatus.qml" line="90"/>
         <source>Velocity
  (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>속도
+ (%1)</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewEKFStatus.qml" line="139"/>
         <source>Pos_H
  (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>수평 위치
+ (%1)</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewEKFStatus.qml" line="188"/>
         <source>Pos_V
  (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>수직 위치
+ (%1)</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewEKFStatus.qml" line="237"/>
         <source>Compass
  (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>컴퍼스
+ (%1)</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewEKFStatus.qml" line="286"/>
         <source>Terrain
  (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>지형
+ (%1)</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewEKFStatus.qml" line="312"/>
@@ -9140,7 +9157,7 @@ VTOL</source>
         <location filename="../src/FlyView/FlyViewMap.qml" line="592"/>
         <source>ROI here</source>
         <comment>Make this a Region Of Interest</comment>
-        <translation type="unfinished">ROI here</translation>
+        <translation>여기를 ROI로</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewMap.qml" line="619"/>
@@ -9311,7 +9328,7 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/FlyViewTopRightPanel.qml" line="119"/>
         <source>Vehicles Selected: </source>
-        <translation type="unfinished"></translation>
+        <translation>선택된 기체: </translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewTopRightPanel.qml" line="129"/>
@@ -9326,7 +9343,7 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/FlyViewTopRightPanel.qml" line="144"/>
         <source>Multi Vehicle Actions</source>
-        <translation type="unfinished"></translation>
+        <translation>다중 기체 동작</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewTopRightPanel.qml" line="153"/>
@@ -9353,21 +9370,24 @@ VTOL</source>
     <name>FlyViewVibrationStatus</name>
     <message>
         <location filename="../src/FlyView/FlyViewVibrationStatus.qml" line="88"/>
-        <source>X 
+        <source>X
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>X
+(%1)</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewVibrationStatus.qml" line="136"/>
-        <source>Y 
+        <source>Y
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Y
+(%1)</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewVibrationStatus.qml" line="184"/>
-        <source>Z 
+        <source>Z
 (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Z
+(%1)</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewVibrationStatus.qml" line="195"/>
@@ -9408,17 +9428,17 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/FlyViewVideoSiYiControllerAiSettings.qml" line="199"/>
         <source>确定</source>
-        <translation type="unfinished"></translation>
+        <translation>확인</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewVideoSiYiControllerAiSettings.qml" line="212"/>
         <source>取消</source>
-        <translation type="unfinished"></translation>
+        <translation>취소</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewVideoSiYiControllerAiSettings.qml" line="219"/>
         <source>关闭</source>
-        <translation type="unfinished"></translation>
+        <translation>닫기</translation>
     </message>
 </context>
 <context>
@@ -9426,7 +9446,7 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/FlyViewVideoToolStrip.qml" line="41"/>
         <source>Do you want to take over gimbal control?</source>
-        <translation type="unfinished"></translation>
+        <translation>짐벌 제어를 가져오시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewVideoToolStrip.qml" line="68"/>
@@ -9550,32 +9570,32 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="76"/>
         <source>Internet Not Connect.</source>
-        <translation type="unfinished"></translation>
+        <translation>인터넷에 연결되지 않음.</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="76"/>
         <source>Check Your Internet Connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>인터넷 연결을 확인하세요.</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="80"/>
         <source>OpenWeather Key Error</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenWeather 키 오류</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="80"/>
         <source>OpenWeather Key Error. Check Your API Key.</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenWeather 키 오류. API 키를 확인하세요.</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="85"/>
         <source>OpenWeather API Use Excess.</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenWeather API 사용량 초과.</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="85"/>
         <source>OpenWeather API Use Excess. Make your request a little bit slower.</source>
-        <translation type="unfinished"></translation>
+        <translation>OpenWeather API 사용량 초과. 요청 속도를 조금 늦춰 주세요.</translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="107"/>
@@ -9585,37 +9605,37 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="131"/>
         <source>Location : </source>
-        <translation type="unfinished">위치 : </translation>
+        <translation>위치 : </translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="136"/>
         <source>Weather : </source>
-        <translation type="unfinished">날씨 : </translation>
+        <translation>날씨 : </translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="141"/>
         <source>Temperature : </source>
-        <translation type="unfinished">기온 : </translation>
+        <translation>기온 : </translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="146"/>
         <source>Humidity : </source>
-        <translation type="unfinished">습도 : </translation>
+        <translation>습도 : </translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="151"/>
         <source>Wind Direction : </source>
-        <translation type="unfinished">풍향 : </translation>
+        <translation>풍향 : </translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="156"/>
         <source>Wind Speed : </source>
-        <translation type="unfinished">풍속 : </translation>
+        <translation>풍속 : </translation>
     </message>
     <message>
         <location filename="../src/FlyView/FlyViewWeatherWidget.qml" line="161"/>
         <source>Visibility : </source>
-        <translation type="unfinished">시정 : </translation>
+        <translation>시정 : </translation>
     </message>
 </context>
 <context>
@@ -9628,7 +9648,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="106"/>
         <source> is requesting control</source>
-        <translation type="unfinished"></translation>
+        <translation>이(가) 제어를 요청 중입니다</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="111"/>
@@ -9638,7 +9658,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="128"/>
         <source>Ignoring automatically in </source>
-        <translation type="unfinished"></translation>
+        <translation>자동 무시까지 </translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="128"/>
@@ -9654,27 +9674,27 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="183"/>
         <source>Reverting back to takeover not allowed if GCS </source>
-        <translation type="unfinished"></translation>
+        <translation>인계 불가 상태로 복귀 — GCS </translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="184"/>
         <source> doesn&apos;t take control in </source>
-        <translation type="unfinished"></translation>
+        <translation>이(가) 제어를 가져가지 않으면 </translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="185"/>
         <source> seconds ...</source>
-        <translation type="unfinished"></translation>
+        <translation>초 ...</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="234"/>
         <source>System in control: </source>
-        <translation type="unfinished"></translation>
+        <translation>제어 중인 시스템: </translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="238"/>
         <source>This GCS</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 GCS</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="246"/>
@@ -9684,22 +9704,22 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="246"/>
         <source>Takeover NOT allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>인계 불가</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="262"/>
         <source>Send Control Request:</source>
-        <translation type="unfinished"></translation>
+        <translation>제어 요청 전송:</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="267"/>
         <source>Change takeover condition:</source>
-        <translation type="unfinished"></translation>
+        <translation>인계 조건 변경:</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="273"/>
         <source>Request sent: </source>
-        <translation type="unfinished"></translation>
+        <translation>요청 전송됨: </translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="278"/>
@@ -9719,7 +9739,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="297"/>
         <source>Request Timeout (sec):</source>
-        <translation type="unfinished"></translation>
+        <translation>요청 시간 초과 (초):</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="307"/>
@@ -9729,7 +9749,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GCSControlIndicator.qml" line="324"/>
         <source>This GCS Mavlink System ID: </source>
-        <translation type="unfinished"></translation>
+        <translation>이 GCS의 MAVLink 시스템 ID: </translation>
     </message>
 </context>
 <context>
@@ -9742,7 +9762,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GPS2Indicator.qml" line="67"/>
         <source>GNSS Data Unavailable</source>
-        <translation type="unfinished">GNSS 데이터 수집 불가</translation>
+        <translation>GNSS 데이터 사용 불가</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GPS2Indicator.qml" line="80"/>
@@ -9869,7 +9889,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GPSIndicatorPage.qml" line="68"/>
         <source>Software</source>
-        <translation type="unfinished"></translation>
+        <translation>소프트웨어</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GPSIndicatorPage.qml" line="70"/>
@@ -9995,7 +10015,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GPSResilienceIndicator.qml" line="103"/>
         <source>GPS Resilience Status</source>
-        <translation type="unfinished"></translation>
+        <translation>GPS 복원성 상태</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GPSResilienceIndicator.qml" line="107"/>
@@ -10040,7 +10060,7 @@ VTOL</source>
         <location filename="../src/UI/toolbar/GPSResilienceIndicator.qml" line="141"/>
         <location filename="../src/UI/toolbar/GPSResilienceIndicator.qml" line="168"/>
         <source>Spoofing</source>
-        <translation type="unfinished"></translation>
+        <translation>스푸핑</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GPSResilienceIndicator.qml" line="146"/>
@@ -10310,37 +10330,37 @@ VTOL</source>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="72"/>
         <source>Unable to open file: %1 error: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>파일을 열 수 없습니다: %1 오류: %2</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="99"/>
         <source>No shapes found in GeoJson file.</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJson 파일에서 도형을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="122"/>
         <source>No supported type found in GeoJson file.</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJson 파일에서 지원되는 유형을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="140"/>
         <source>No polygon data found in GeoJson file.</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJson 파일에서 다각형 데이터를 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="163"/>
         <source>No polygon found in GeoJson file.</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJson 파일에서 다각형을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="181"/>
         <source>No polyline data found in GeoJson file.</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJson 파일에서 폴리라인 데이터를 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="204"/>
         <source>No polyline found in GeoJson file.</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJson 파일에서 폴리라인을 찾을 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -10348,30 +10368,30 @@ VTOL</source>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="24"/>
         <source>GeoJson file load failed. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>GeoJson 파일 불러오기 실패. %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="211"/>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="253"/>
         <source>value for coordinate is not array</source>
-        <translation type="unfinished">좌표를 위한 값이 어레이가 아닙니다</translation>
+        <translation>좌표 값이 배열이 아닙니다</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="218"/>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="260"/>
         <source>Coordinate array must contain %1 values</source>
-        <translation type="unfinished">좌표 어레이는 %1개의 값을 포함해야합니다</translation>
+        <translation>좌표 배열은 %1개의 값을 포함해야 합니다</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="225"/>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="267"/>
         <source>Coordinate array may only contain double values, found: %1</source>
-        <translation type="unfinished">좌표 어레이는 double값만 포함해야 합니다. 다음 값이 있습니다: %1</translation>
+        <translation>좌표 배열은 double 값만 포함할 수 있습니다. 발견된 값: %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/GeoJsonHelper.cc" line="299"/>
         <source>value for coordinate array is not array</source>
-        <translation type="unfinished">좌표행렬을 위한 값이 배열 형식이 아닙니다</translation>
+        <translation>좌표 배열 값이 배열 형식이 아닙니다</translation>
     </message>
 </context>
 <context>
@@ -10397,7 +10417,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="252"/>
         <source>Images have already been tagged. Existing images will be removed.</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지가 이미 태그되어 있습니다. 기존 이미지는 제거됩니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="285"/>
@@ -10407,12 +10427,12 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="361"/>
         <source>Please select an image directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지 디렉터리를 선택해 주세요.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="366"/>
         <source>Please select a log file.</source>
-        <translation type="unfinished"></translation>
+        <translation>로그 파일을 선택해 주세요.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="371"/>
@@ -10432,54 +10452,54 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="475"/>
         <source>%1 image(s) failed to tag</source>
-        <translation type="unfinished"></translation>
+        <translation>%1개 이미지 태그 실패</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="545"/>
         <source>Could not read EXIF timestamp</source>
-        <translation type="unfinished"></translation>
+        <translation>EXIF 타임스탬프를 읽을 수 없음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="551"/>
         <source>Could not read EXIF data from any images</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지에서 EXIF 데이터를 읽을 수 없음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="663"/>
         <source>All images failed to tag</source>
-        <translation type="unfinished"></translation>
+        <translation>모든 이미지 태그 실패</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="697"/>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="714"/>
         <source>The image directory doesn&apos;t contain supported images. Supported formats: JPEG, TIFF, DNG</source>
-        <translation type="unfinished"></translation>
+        <translation>이미지 디렉터리에 지원되는 이미지가 없습니다. 지원 형식: JPEG, TIFF, DNG</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="743"/>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="966"/>
         <source>Geotagging failed. Couldn&apos;t open image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>지오태깅 실패. 이미지를 열 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="749"/>
         <source>Geotagging failed. Couldn&apos;t extract time from image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>지오태깅 실패. 이미지에서 시간을 추출할 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="764"/>
         <source>Geotagging failed. Couldn&apos;t open log file.</source>
-        <translation type="unfinished">지도정보 추가에 실패하였습니다. 로그 파일을 열수 없습니다</translation>
+        <translation>지오태깅 실패. 로그 파일을 열 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="770"/>
         <source>Geotagging failed. Log file is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>지오태깅 실패. 로그 파일이 비어 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="788"/>
         <source>Geotagging failed. Couldn&apos;t read log file.</source>
-        <translation type="unfinished"></translation>
+        <translation>지오태깅 실패. 로그 파일을 읽을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="823"/>
@@ -10499,27 +10519,27 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="876"/>
         <source>Calibration failed: No matching triggers found for images.</source>
-        <translation type="unfinished"></translation>
+        <translation>보정 실패: 이미지와 일치하는 트리거를 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="887"/>
         <source>Geotagging failed. Insufficient disk space. Need approximately %1 MB.</source>
-        <translation type="unfinished"></translation>
+        <translation>지오태깅 실패. 디스크 공간이 부족합니다. 약 %1 MB가 필요합니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="893"/>
         <source>Geotagging failed. Couldn&apos;t create output directory: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>지오태깅 실패. 출력 디렉터리를 생성할 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="912"/>
         <source>Geotagging failed. Requesting image #%1, but only %2 images present.</source>
-        <translation type="unfinished">Geotagging failed. Requesting image #%1, but only %2 images present.</translation>
+        <translation>지오태깅 실패. 이미지 #%1을(를) 요청했지만 %2개의 이미지만 존재합니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="918"/>
         <source>Geotagging failed. Requesting trigger #%1, but only %2 triggers present.</source>
-        <translation type="unfinished"></translation>
+        <translation>지오태깅 실패. 트리거 #%1을(를) 요청했지만 %2개의 트리거만 존재합니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="976"/>
@@ -10529,7 +10549,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="982"/>
         <source>Geotagging failed. Couldn&apos;t save image: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>지오태깅 실패. 이미지를 저장할 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/GeoTag/GeoTagController.cc" line="376"/>
@@ -10792,7 +10812,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="211"/>
         <source>Release Control</source>
-        <translation type="unfinished"></translation>
+        <translation>제어 해제</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="211"/>
@@ -10827,12 +10847,12 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="270"/>
         <source>Max speed (min zoom)</source>
-        <translation type="unfinished"></translation>
+        <translation>최대 속도 (최소 줌)</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="275"/>
         <source>Min speed (max zoom)</source>
-        <translation type="unfinished"></translation>
+        <translation>최소 속도 (최대 줌)</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/GimbalIndicator.qml" line="283"/>
@@ -10926,7 +10946,7 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="47"/>
         <source>Set Home</source>
-        <translation type="unfinished"></translation>
+        <translation>홈 설정</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="48"/>
@@ -10936,7 +10956,7 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="49"/>
         <source>Set Flight Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>비행 모드 설정</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="50"/>
@@ -10946,92 +10966,92 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="58"/>
         <source>Takeoff and hold position</source>
-        <translation type="unfinished"></translation>
+        <translation>이륙 후 위치 홀드</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="59"/>
         <source>Takeoff and start the current mission</source>
-        <translation type="unfinished"></translation>
+        <translation>이륙 후 현재 임무 시작</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="60"/>
         <source>Takeoff and start the current mission for selected vehicles</source>
-        <translation type="unfinished"></translation>
+        <translation>선택된 기체에서 이륙 후 현재 임무 시작</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="61"/>
         <source>Continue the mission from the current waypoint</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 경유점부터 임무 계속</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="63"/>
         <source>Land the vehicle at the current position</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 위치에 기체 착륙</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="64"/>
         <source>Return to the launch position of the vehicle</source>
-        <translation type="unfinished"></translation>
+        <translation>기체의 출발 위치로 복귀</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="65"/>
         <source>Change the altitude of the vehicle up or down</source>
-        <translation type="unfinished"></translation>
+        <translation>기체 고도를 위/아래로 변경</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="66"/>
         <source>Change the forward flight loiter radius</source>
-        <translation type="unfinished"></translation>
+        <translation>전진 비행 로이터 반경 변경</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="67"/>
         <source>Change the maximum horizontal cruise speed</source>
-        <translation type="unfinished"></translation>
+        <translation>최대 수평 순항 속도 변경</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="68"/>
         <source>Change the equivalent airspeed setpoint</source>
-        <translation type="unfinished"></translation>
+        <translation>등가 대기 속도 설정값 변경</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="69"/>
         <source>Move the vehicle to the specified location</source>
-        <translation type="unfinished"></translation>
+        <translation>지정한 위치로 기체 이동</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="70"/>
         <source>Adjust current waypoint to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 경유점을 %1(으)로 조정</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="71"/>
         <source>Orbit the vehicle around the specified location</source>
-        <translation type="unfinished"></translation>
+        <translation>지정한 위치를 중심으로 기체 선회</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="72"/>
         <source>Abort the landing sequence</source>
-        <translation type="unfinished"></translation>
+        <translation>착륙 시퀀스 중단</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="73"/>
         <source>Pause at current position</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 위치에서 일시 정지</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="74"/>
         <source>Pause selected vehicles at their current position</source>
-        <translation type="unfinished"></translation>
+        <translation>선택된 기체를 현재 위치에서 일시 정지</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="75"/>
         <source>Make the specified location a Region Of Interest</source>
-        <translation type="unfinished"></translation>
+        <translation>지정한 위치를 관심 영역(ROI)으로 설정</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="77"/>
         <source>Make the specified location the estimator origin</source>
-        <translation type="unfinished"></translation>
+        <translation>지정한 위치를 추정기 원점으로 설정</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="79"/>
@@ -11041,7 +11061,7 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="197"/>
         <source>_activeVehicle(%1) _vehicleArmed(%2) guidedModeSupported(%3) _vehicleFlying(%4) _vehicleWasFlying(%5) _vehicleInRTLMode(%6) pauseVehicleSupported(%7) _vehiclePaused(%8) _flightMode(%9) _visualItemsCount(%10) roiSupported(%11) orbitSupported(%12) _missionActive(%13) _hideROI(%14) _hideOrbit(%15)</source>
-        <translation type="unfinished"></translation>
+        <translation>_activeVehicle(%1) _vehicleArmed(%2) guidedModeSupported(%3) _vehicleFlying(%4) _vehicleWasFlying(%5) _vehicleInRTLMode(%6) pauseVehicleSupported(%7) _vehiclePaused(%8) _flightMode(%9) _visualItemsCount(%10) roiSupported(%11) orbitSupported(%12) _missionActive(%13) _hideROI(%14) _hideOrbit(%15)</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="208"/>
@@ -11116,7 +11136,7 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="39"/>
         <source>Change Loiter Radius</source>
-        <translation type="unfinished"></translation>
+        <translation>로이터 반경 변경</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="41"/>
@@ -11151,7 +11171,7 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="53"/>
         <source>Arm selected vehicles.</source>
-        <translation type="unfinished"></translation>
+        <translation>선택된 기체 시동.</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="54"/>
@@ -11166,7 +11186,7 @@ VTOL</source>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="56"/>
         <source>Disarm selected vehicles.</source>
-        <translation type="unfinished"></translation>
+        <translation>선택된 기체 시동 해제.</translation>
     </message>
     <message>
         <location filename="../src/FlyView/GuidedActionsController.qml" line="57"/>
@@ -11313,12 +11333,12 @@ VTOL</source>
     <message>
         <location filename="../src/UI/FirstRunPromptDialogs/InitialSetupPrompt.qml" line="45"/>
         <source>Vehicle Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>기체 환경설정</translation>
     </message>
     <message>
         <location filename="../src/UI/FirstRunPromptDialogs/InitialSetupPrompt.qml" line="46"/>
         <source>Select the firmware and vehicle type you use. This tailors the interface for a simpler experience. Choose &apos;All&apos; if you use multiple types.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용 중인 펌웨어와 기체 유형을 선택하세요. 인터페이스를 간소화해 줍니다. 여러 유형을 사용하면 &apos;전체&apos;를 선택하세요.</translation>
     </message>
     <message>
         <location filename="../src/UI/FirstRunPromptDialogs/InitialSetupPrompt.qml" line="50"/>
@@ -11348,12 +11368,12 @@ VTOL</source>
     <message>
         <location filename="../src/UI/FirstRunPromptDialogs/InitialSetupPrompt.qml" line="84"/>
         <source>Choose the measurement units you want to use. You can also change it later in General Settings.</source>
-        <translation type="unfinished">측정단위계를 선택하십시오. 일반설정에서도 변경할 수 있습니다.</translation>
+        <translation>사용할 측정 단위를 선택하세요. 나중에 일반 설정에서 변경할 수도 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/UI/FirstRunPromptDialogs/InitialSetupPrompt.qml" line="92"/>
         <source>System of units</source>
-        <translation type="unfinished">단위계</translation>
+        <translation>단위계</translation>
     </message>
     <message>
         <location filename="../src/UI/FirstRunPromptDialogs/InitialSetupPrompt.qml" line="97"/>
@@ -11416,7 +11436,7 @@ VTOL</source>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="28"/>
         <source>Value requires a connected vehicle for setup.</source>
-        <translation type="unfinished"></translation>
+        <translation>값 설정을 위해 기체 연결이 필요합니다.</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="42"/>
@@ -11461,7 +11481,7 @@ VTOL</source>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="284"/>
         <source>Specify the color you want to apply based on value ranges. The color will be applied to the icon if available, otherwise to the value itself.</source>
-        <translation type="unfinished">Specify the color you want to apply based on value ranges. The color will be applied to the icon if available, otherwise to the value itself.</translation>
+        <translation>값 범위에 따라 적용할 색상을 지정하세요. 아이콘이 있으면 아이콘에, 없으면 값 자체에 색상이 적용됩니다.</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="365"/>
@@ -11473,12 +11493,12 @@ VTOL</source>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="397"/>
         <source>Specify the icon you want to display based on value ranges.</source>
-        <translation type="unfinished">Specify the icon you want to display based on value ranges.</translation>
+        <translation>값 범위에 따라 표시할 아이콘을 지정하세요.</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="502"/>
         <source>Specify the icon opacity you want based on value ranges.</source>
-        <translation type="unfinished">Specify the icon opacity you want based on value ranges.</translation>
+        <translation>값 범위에 따라 적용할 아이콘 불투명도를 지정하세요.</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/InstrumentValueEditDialog.qml" line="579"/>
@@ -11554,7 +11574,7 @@ VTOL</source>
     <message>
         <location filename="../src/Joystick/Joystick.h" line="492"/>
         <source>Continuous Focus Out</source>
-        <translation type="unfinished"></translation>
+        <translation>연속 초점 아웃</translation>
     </message>
     <message>
         <location filename="../src/Joystick/Joystick.h" line="493"/>
@@ -11649,17 +11669,17 @@ VTOL</source>
     <message>
         <location filename="../src/Joystick/Joystick.h" line="515"/>
         <source>Landing gear retract</source>
-        <translation type="unfinished"></translation>
+        <translation>랜딩기어 수납</translation>
     </message>
     <message>
         <location filename="../src/Joystick/Joystick.h" line="516"/>
         <source>Motor Interlock enable</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 인터록 활성화</translation>
     </message>
     <message>
         <location filename="../src/Joystick/Joystick.h" line="517"/>
         <source>Motor Interlock disable</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 인터록 비활성화</translation>
     </message>
     <message>
         <location filename="../src/Joystick/Joystick.h" line="495"/>
@@ -11692,12 +11712,12 @@ VTOL</source>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponent.cc" line="28"/>
         <source>Configure axis calibration, button assignments, and input settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>축 보정, 버튼 할당, 입력 설정을 구성합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponent.cc" line="49"/>
         <source>No joystick detected</source>
-        <translation type="unfinished"></translation>
+        <translation>조이스틱이 감지되지 않음</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponent.cc" line="53"/>
@@ -11717,7 +11737,7 @@ VTOL</source>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponent.cc" line="72"/>
         <source>Rumble</source>
-        <translation type="unfinished"></translation>
+        <translation>진동</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponent.cc" line="75"/>
@@ -11742,7 +11762,7 @@ VTOL</source>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponent.cc" line="87"/>
         <source>Touchpad</source>
-        <translation type="unfinished"></translation>
+        <translation>터치패드</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponent.qml" line="68"/>
@@ -11752,7 +11772,7 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponent.qml" line="77"/>
         <source>Not currently available</source>
-        <translation type="unfinished"></translation>
+        <translation>현재 사용할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponent.qml" line="83"/>
@@ -11763,7 +11783,7 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponent.qml" line="83"/>
         <source>Requires Calibration</source>
-        <translation type="unfinished"></translation>
+        <translation>보정 필요</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponent.qml" line="129"/>
@@ -11773,7 +11793,7 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponent.qml" line="130"/>
         <source>%1 calibration is complete. Enable it now?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 보정이 완료되었습니다. 지금 활성화하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponent.qml" line="148"/>
@@ -11788,7 +11808,7 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponent.qml" line="191"/>
         <source>No joysticks or gamepads detected.</source>
-        <translation type="unfinished"></translation>
+        <translation>조이스틱 또는 게임패드가 감지되지 않았습니다.</translation>
     </message>
 </context>
 <context>
@@ -11796,12 +11816,12 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponentButtons.qml" line="22"/>
         <source>Multiple buttons that have the same action must be pressed simultaneously to invoke the action.</source>
-        <translation type="unfinished"></translation>
+        <translation>동일한 동작이 할당된 버튼들은 모두 동시에 눌러야 동작이 실행됩니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponentButtons.qml" line="76"/>
         <source>Repeat</source>
-        <translation type="unfinished">반복</translation>
+        <translation>반복</translation>
     </message>
 </context>
 <context>
@@ -11809,12 +11829,12 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponentSettings.qml" line="27"/>
         <source>Center stick is zero throttle</source>
-        <translation type="unfinished">조이스틱의 중앙이 스로틀 0으로 설정</translation>
+        <translation>스틱 중앙이 스로틀 0</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponentSettings.qml" line="34"/>
         <source>Spring loaded throttle smoothing</source>
-        <translation type="unfinished">탄성이 적용된 스로틀 스무딩</translation>
+        <translation>탄성 스로틀 스무딩</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponentSettings.qml" line="47"/>
@@ -11840,17 +11860,17 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponentSettings.qml" line="100"/>
         <source>Deadband can be set during the first step of calibration by gently wiggling each axis. </source>
-        <translation type="unfinished"></translation>
+        <translation>각 축을 부드럽게 흔들어 보정의 첫 단계에서 데드밴드를 설정할 수 있습니다. </translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponentSettings.qml" line="106"/>
         <source>MANUAL_CONTROL Pitch Extension</source>
-        <translation type="unfinished"></translation>
+        <translation>MANUAL_CONTROL 피치 확장</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponentSettings.qml" line="113"/>
         <source>MANUAL_CONTROL Roll Extension</source>
-        <translation type="unfinished"></translation>
+        <translation>MANUAL_CONTROL 롤 확장</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/JoystickComponentSettings.qml" line="120"/>
@@ -11893,7 +11913,7 @@ VTOL</source>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponentSummary.qml" line="23"/>
         <source>No joystick detected</source>
-        <translation type="unfinished"></translation>
+        <translation>조이스틱이 감지되지 않음</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponentSummary.qml" line="24"/>
@@ -11978,12 +11998,12 @@ VTOL</source>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponentSummary.qml" line="80"/>
         <source>Rumble</source>
-        <translation type="unfinished"></translation>
+        <translation>진동</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponentSummary.qml" line="81"/>
         <source>Triggers</source>
-        <translation type="unfinished"></translation>
+        <translation>트리거</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponentSummary.qml" line="82"/>
@@ -12013,7 +12033,7 @@ VTOL</source>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponentSummary.qml" line="103"/>
         <source>Virtual</source>
-        <translation type="unfinished"></translation>
+        <translation>가상</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/JoystickComponentSummary.qml" line="104"/>
@@ -12109,7 +12129,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/JoystickIndicator.qml" line="95"/>
         <source>Rumble</source>
-        <translation type="unfinished"></translation>
+        <translation>진동</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/JoystickIndicator.qml" line="96"/>
@@ -12136,7 +12156,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/JoystickIndicator.qml" line="108"/>
         <source>Player:</source>
-        <translation type="unfinished"></translation>
+        <translation>플레이어:</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/JoystickIndicator.qml" line="119"/>
@@ -12151,12 +12171,12 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/JoystickIndicator.qml" line="135"/>
         <source>Vendor/Product:</source>
-        <translation type="unfinished"></translation>
+        <translation>제조사/제품:</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/JoystickIndicator.qml" line="144"/>
         <source>Serial:</source>
-        <translation type="unfinished"></translation>
+        <translation>시리얼:</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/JoystickIndicator.qml" line="153"/>
@@ -12176,7 +12196,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/JoystickIndicator.qml" line="186"/>
         <source>Virtual:</source>
-        <translation type="unfinished"></translation>
+        <translation>가상:</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/JoystickIndicator.qml" line="195"/>
@@ -12254,57 +12274,57 @@ VTOL</source>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="34"/>
         <source>Unable to open file: %1 error: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>파일을 열 수 없습니다: %1 오류: %2</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="41"/>
         <source>Unable to parse KML file: %1 error: %2 line: %3</source>
-        <translation type="unfinished">파일을 분석할 수 없습니다. KML 파일: %1 에러: %2 줄: %3</translation>
+        <translation>KML 파일을 파싱할 수 없습니다: %1 오류: %2 줄: %3</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="53"/>
         <source>Empty coordinates string</source>
-        <translation type="unfinished"></translation>
+        <translation>빈 좌표 문자열</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="90"/>
         <source>No valid coordinates found</source>
-        <translation type="unfinished"></translation>
+        <translation>유효한 좌표를 찾을 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="158"/>
         <source>No supported type found in KML file.</source>
-        <translation type="unfinished">KML 파일에서 지원되는 유형을 찾을 수 없습니다.</translation>
+        <translation>KML 파일에서 지원되는 유형을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="188"/>
         <source>Unable to find Polygon node in KML</source>
-        <translation type="unfinished">KML 파일에서 다각형 노드를 찾을 수 없습니다.</translation>
+        <translation>KML에서 Polygon 노드를 찾을 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="239"/>
         <source>No valid polygons found in KML file</source>
-        <translation type="unfinished"></translation>
+        <translation>KML 파일에서 유효한 다각형을 찾을 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="258"/>
         <source>Unable to find LineString node in KML</source>
-        <translation type="unfinished">KML 파일에서 LineString 노드를 찾을 수 없습니다.</translation>
+        <translation>KML에서 LineString 노드를 찾을 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="292"/>
         <source>No valid polylines found in KML file</source>
-        <translation type="unfinished"></translation>
+        <translation>KML 파일에서 유효한 폴리라인을 찾을 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="311"/>
         <source>Unable to find Point node in KML</source>
-        <translation type="unfinished"></translation>
+        <translation>KML에서 Point 노드를 찾을 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/KMLHelper.cc" line="340"/>
         <source>No valid points found in KML file</source>
-        <translation type="unfinished"></translation>
+        <translation>KML 파일에서 유효한 포인트를 찾을 수 없습니다</translation>
     </message>
 </context>
 <context>
@@ -12423,7 +12443,7 @@ VTOL</source>
     <message>
         <location filename="../src/Comms/LinkInterface.cc" line="127"/>
         <source>MAVLink v1 traffic detected on link &apos;%1&apos;. %2 only supports MAVLink v2. Please ensure your vehicle is configured to use MAVLink v2.</source>
-        <translation type="unfinished"></translation>
+        <translation>링크 &apos;%1&apos;에서 MAVLink v1 트래픽이 감지되었습니다. %2은(는) MAVLink v2만 지원합니다. 기체가 MAVLink v2를 사용하도록 설정되었는지 확인하세요.</translation>
     </message>
 </context>
 <context>
@@ -12502,7 +12522,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="79"/>
         <source>Optflow</source>
-        <translation type="unfinished"></translation>
+        <translation>옵티컬 플로우</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="80"/>
@@ -12557,7 +12577,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="90"/>
         <source>Parachute</source>
-        <translation type="unfinished"></translation>
+        <translation>낙하산</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="91"/>
@@ -12612,7 +12632,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="101"/>
         <source>Sensor Failsafe</source>
-        <translation type="unfinished"></translation>
+        <translation>센서 페일세이프</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="102"/>
@@ -12637,7 +12657,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="106"/>
         <source>Deadreckon Failsafe</source>
-        <translation>데드레커닝 안전장치</translation>
+        <translation>추측항법 안전장치</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="107"/>
@@ -12687,7 +12707,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="123"/>
         <source>Set Home</source>
-        <translation type="unfinished"></translation>
+        <translation>홈 설정</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="124"/>
@@ -12697,7 +12717,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="125"/>
         <source>Simple Mode Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>심플 모드 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="126"/>
@@ -12707,12 +12727,12 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="127"/>
         <source>Super Simple Mode Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>슈퍼 심플 모드 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="128"/>
         <source>AutoTune Initialised</source>
-        <translation type="unfinished"></translation>
+        <translation>오토튠 초기화됨</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="129"/>
@@ -12737,17 +12757,17 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="133"/>
         <source>AutoTune Reached Limit</source>
-        <translation type="unfinished"></translation>
+        <translation>오토튠 한계 도달</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="134"/>
         <source>AutoTune Pilot Testing</source>
-        <translation type="unfinished"></translation>
+        <translation>오토튠 조종 테스트</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="135"/>
         <source>AutoTune Saved Gains</source>
-        <translation type="unfinished"></translation>
+        <translation>오토튠 게인 저장</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="136"/>
@@ -12777,12 +12797,12 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="141"/>
         <source>Acro Trainer Leveling</source>
-        <translation type="unfinished"></translation>
+        <translation>Acro 트레이너 수평 유지</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="142"/>
         <source>Acro Trainer Limited</source>
-        <translation type="unfinished"></translation>
+        <translation>Acro 트레이너 제한 모드</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="143"/>
@@ -12812,42 +12832,42 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="148"/>
         <source>Landing Gear Deployed</source>
-        <translation type="unfinished"></translation>
+        <translation>랜딩기어 전개</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="149"/>
         <source>Landing Gear Retracted</source>
-        <translation type="unfinished"></translation>
+        <translation>랜딩기어 수납</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="150"/>
         <source>Motors Emergency Stopped</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 비상 정지</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="151"/>
         <source>Motors Emergency Stop Cleared</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 비상 정지 해제</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="152"/>
         <source>Motors Interlock Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 인터록 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="153"/>
         <source>Motors Interlock Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>모터 인터록 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="154"/>
         <source>Rotor Runup Complete</source>
-        <translation type="unfinished"></translation>
+        <translation>로터 가속 완료</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="155"/>
         <source>Rotor Speed Below Critical</source>
-        <translation type="unfinished"></translation>
+        <translation>로터 속도 위험 수준 이하</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="156"/>
@@ -12857,7 +12877,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="157"/>
         <source>Land Cancelled By Pilot</source>
-        <translation type="unfinished"></translation>
+        <translation>조종사가 착륙 취소</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="158"/>
@@ -12867,22 +12887,22 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="159"/>
         <source>ADSB Avoidance Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>ADSB 회피 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="160"/>
         <source>ADSB Avoidance Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>ADSB 회피 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="161"/>
         <source>Proximity Avoidance Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>근접 회피 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="162"/>
         <source>Proximity Avoidance Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>근접 회피 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="163"/>
@@ -12907,7 +12927,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="167"/>
         <source>Standby Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>대기 모드 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="168"/>
@@ -12917,67 +12937,67 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="169"/>
         <source>Fence Alt Max Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>최대 고도 펜스 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="170"/>
         <source>Fence Alt Max Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>최대 고도 펜스 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="171"/>
         <source>Fence Circle Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>원형 펜스 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="172"/>
         <source>Fence Circle Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>원형 펜스 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="173"/>
         <source>Fence Alt Min Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>최저 고도 펜스 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="174"/>
         <source>Fence Alt Min Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>최저 고도 펜스 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="175"/>
         <source>Fence Polygon Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>다각형 펜스 활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="176"/>
         <source>Fence Polygon Disabled</source>
-        <translation type="unfinished"></translation>
+        <translation>다각형 펜스 비활성화</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="177"/>
         <source>EK3 Source Set: Primary</source>
-        <translation type="unfinished"></translation>
+        <translation>EK3 소스 설정: 주(Primary)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="178"/>
         <source>EK3 Source Set: Secondary</source>
-        <translation type="unfinished"></translation>
+        <translation>EK3 소스 설정: 보조(Secondary)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="179"/>
         <source>EK3 Source Set: Tertiary</source>
-        <translation type="unfinished"></translation>
+        <translation>EK3 소스 설정: 3차(Tertiary)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="180"/>
         <source>Airspeed Primary Changed</source>
-        <translation type="unfinished"></translation>
+        <translation>주 대기 속도 변경됨</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="181"/>
         <source>Surfaced</source>
-        <translation type="unfinished"></translation>
+        <translation>부상</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="182"/>
@@ -13015,23 +13035,23 @@ VTOL</source>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="236"/>
         <location filename="../src/AnalyzeView/LogViewer/PX4ULog/LogViewerULogParser.cc" line="32"/>
         <source>File is too large to parse</source>
-        <translation type="unfinished"></translation>
+        <translation>파일이 너무 커서 파싱할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="242"/>
         <location filename="../src/AnalyzeView/LogViewer/PX4ULog/LogViewerULogParser.cc" line="38"/>
         <source>Failed to memory-map file</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 메모리 매핑 실패</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="258"/>
         <source>File does not appear to be a DataFlash log (invalid header)</source>
-        <translation type="unfinished"></translation>
+        <translation>DataFlash 로그 파일이 아닌 것으로 보입니다 (잘못된 헤더)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="266"/>
         <source>No valid FMT messages were found</source>
-        <translation type="unfinished"></translation>
+        <translation>유효한 FMT 메시지를 찾을 수 없음</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/APMDataFlash/LogViewerDataFlashParser.cc" line="341"/>
@@ -13051,22 +13071,22 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogFileParser.cc" line="38"/>
         <source>Unsupported file type (%1) for file &apos;%2&apos;. Expected .bin, .log, or .ulg.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 &apos;%2&apos;의 지원되지 않는 파일 유형(%1). .bin, .log, .ulg 형식이 필요합니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/PX4ULog/LogViewerULogParser.cc" line="52"/>
         <source>File does not appear to be a ULog file (invalid header)</source>
-        <translation type="unfinished"></translation>
+        <translation>ULog 파일이 아닌 것으로 보입니다 (잘못된 헤더)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/PX4ULog/LogViewerULogParser.cc" line="62"/>
         <source>Fatal error while parsing ULog file</source>
-        <translation type="unfinished"></translation>
+        <translation>ULog 파일 파싱 중 치명적 오류</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/PX4ULog/LogViewerULogParser.cc" line="68"/>
         <source>ULog file header is incomplete or corrupt</source>
-        <translation type="unfinished"></translation>
+        <translation>ULog 파일 헤더가 불완전하거나 손상되었습니다</translation>
     </message>
 </context>
 <context>
@@ -13097,7 +13117,7 @@ VTOL</source>
     <message>
         <location filename="../src/Comms/LogReplayLink.h" line="33"/>
         <source>Log Replay Link Settings</source>
-        <translation type="unfinished">로그 재생 링크 설정</translation>
+        <translation>로그 재생 링크 설정</translation>
     </message>
 </context>
 <context>
@@ -13105,7 +13125,7 @@ VTOL</source>
     <message>
         <location filename="../src/Comms/LogReplayLink.cc" line="477"/>
         <source>Log Replay Link Error</source>
-        <translation type="unfinished"></translation>
+        <translation>로그 재생 링크 오류</translation>
     </message>
     <message>
         <location filename="../src/Comms/LogReplayLink.cc" line="477"/>
@@ -13128,7 +13148,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/AppSettings/LogReplaySettings.qml" line="31"/>
         <source>Select Telemetery Log</source>
-        <translation type="unfinished"></translation>
+        <translation>텔레메트리 로그 선택</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/LogReplaySettings.qml" line="32"/>
@@ -13156,7 +13176,7 @@ VTOL</source>
     <message>
         <location filename="../src/QmlControls/LogReplayStatusBar.qml" line="30"/>
         <source>Select Telemetery Log</source>
-        <translation type="unfinished"></translation>
+        <translation>텔레메트리 로그 선택</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/LogReplayStatusBar.qml" line="31"/>
@@ -13199,28 +13219,28 @@ VTOL</source>
     <message>
         <location filename="../src/Comms/LogReplayLink.cc" line="151"/>
         <source>Connect not allowed during Flight Data replay.</source>
-        <translation type="unfinished">Flight Data 재생 중에는 연결이 허용되지 않습니다.</translation>
+        <translation>비행 데이터 재생 중에는 연결이 허용되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/Comms/LogReplayLink.cc" line="196"/>
         <location filename="../src/Comms/LogReplayLink.cc" line="208"/>
         <source>Unable to seek to new position</source>
-        <translation type="unfinished">새 위치를 검색 할 수 없습니다</translation>
+        <translation>새 위치로 이동할 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/Comms/LogReplayLink.cc" line="271"/>
         <source>Attempt to load new log while log being played</source>
-        <translation type="unfinished">로그 재생 중 새로운 로그파일 열기를 시도합니다</translation>
+        <translation>로그 재생 중 새 로그 파일을 불러오려 시도</translation>
     </message>
     <message>
         <location filename="../src/Comms/LogReplayLink.cc" line="278"/>
         <source>Unable to open log file: &apos;%1&apos;, error: %2</source>
-        <translation type="unfinished">파일을 열 수 없습니다: &apos;%1&apos;, 오류: %2</translation>
+        <translation>로그 파일을 열 수 없습니다: &apos;%1&apos;, 오류: %2</translation>
     </message>
     <message>
         <location filename="../src/Comms/LogReplayLink.cc" line="290"/>
         <source>The log file &apos;%1&apos; is corrupt or empty.</source>
-        <translation type="unfinished">로그 파일 &apos;%1&apos; 이 손상되었거나 비어 있습니다.</translation>
+        <translation>로그 파일 &apos;%1&apos;이(가) 손상되었거나 비어 있습니다.</translation>
     </message>
 </context>
 <context>
@@ -13228,7 +13248,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerAltChart.qml" line="230"/>
         <source>Time (s)</source>
-        <translation type="unfinished"></translation>
+        <translation>시간 (s)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerAltChart.qml" line="237"/>
@@ -13238,7 +13258,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerAltChart.qml" line="364"/>
         <source>t = %1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>t = %1 s</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerAltChart.qml" line="371"/>
@@ -13296,7 +13316,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerChart.qml" line="541"/>
         <source>Time (s)</source>
-        <translation type="unfinished"></translation>
+        <translation>시간 (s)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerChart.qml" line="548"/>
@@ -13306,7 +13326,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerChart.qml" line="654"/>
         <source>t=%1 s</source>
-        <translation type="unfinished"></translation>
+        <translation>t=%1 s</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerChart.qml" line="668"/>
@@ -13346,7 +13366,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerChart.qml" line="834"/>
         <source>Drag on chart to zoom X-axis. Right click chart to reset zoom.</source>
-        <translation type="unfinished"></translation>
+        <translation>차트를 드래그하여 X축을 확대하세요. 우클릭하면 확대가 초기화됩니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerChart.qml" line="838"/>
@@ -13367,7 +13387,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="15"/>
         <source>Open and inspect DataFlash (.bin), PX4 ULog (.ulg), and telemetry (.tlog) logs in a unified workflow.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataFlash (.bin), PX4 ULog (.ulg), 텔레메트리 (.tlog) 로그를 통합 워크플로우에서 열고 분석합니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="53"/>
@@ -13384,12 +13404,12 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="219"/>
         <source>Open .bin</source>
-        <translation type="unfinished"></translation>
+        <translation>.bin 열기</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="227"/>
         <source>Open .ulg</source>
-        <translation type="unfinished"></translation>
+        <translation>.ulg 열기</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="235"/>
@@ -13399,7 +13419,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="239"/>
         <source>Close active vehicle connections before starting telemetry replay.</source>
-        <translation type="unfinished"></translation>
+        <translation>텔레메트리 재생 시작 전에 활성 기체 연결을 닫으세요.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="248"/>
@@ -13434,12 +13454,12 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="295"/>
         <source>Fields: %1  Parameters: %2  Events: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>필드: %1  파라미터: %2  이벤트: %3</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="303"/>
         <source>Detected vehicle type: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>감지된 기체 유형: %1</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="306"/>
@@ -13474,12 +13494,12 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="622"/>
         <source>No GPS data found in this log</source>
-        <translation type="unfinished"></translation>
+        <translation>이 로그에서 GPS 데이터를 찾을 수 없습니다</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="629"/>
         <source>Load a log file to view the flight path</source>
-        <translation type="unfinished"></translation>
+        <translation>비행 경로를 보려면 로그 파일을 불러오세요</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="671"/>
@@ -13499,17 +13519,17 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="764"/>
         <source> (default: %1)</source>
-        <translation type="unfinished"></translation>
+        <translation> (기본값: %1)</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="874"/>
         <source>Select log file</source>
-        <translation type="unfinished"></translation>
+        <translation>로그 파일 선택</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="889"/>
         <source>Failed to start telemetry replay for the selected .tlog file.</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 .tlog 파일의 텔레메트리 재생을 시작하지 못했습니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/LogViewer/LogViewerPage.qml" line="920"/>
@@ -13562,7 +13582,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingCategoriesDialog.qml" line="157"/>
         <source>No categories registered</source>
-        <translation type="unfinished"></translation>
+        <translation>등록된 카테고리 없음</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingCategoriesDialog.qml" line="165"/>
@@ -13572,7 +13592,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingCategoriesDialog.qml" line="209"/>
         <source>No matching categories</source>
-        <translation type="unfinished"></translation>
+        <translation>일치하는 카테고리 없음</translation>
     </message>
 </context>
 <context>
@@ -13626,7 +13646,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="19"/>
         <source>JSON Lines files (*.jsonl)</source>
-        <translation type="unfinished"></translation>
+        <translation>JSON Lines 파일 (*.jsonl)</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="24"/>
@@ -13646,7 +13666,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="46"/>
         <source>Log files are saved to: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>로그 파일 저장 위치: %1</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="57"/>
@@ -13676,7 +13696,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="87"/>
         <source>Enable remote logging</source>
-        <translation type="unfinished"></translation>
+        <translation>원격 로깅 활성화</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="96"/>
@@ -13783,7 +13803,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="243"/>
         <source>Select CA Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>CA 인증서 선택</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="258"/>
@@ -13818,7 +13838,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="288"/>
         <source>Select Client Certificate</source>
-        <translation type="unfinished"></translation>
+        <translation>클라이언트 인증서 선택</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="299"/>
@@ -13848,7 +13868,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="361"/>
         <source>Compresses log data using zlib. Level 1 is fastest, level 9 provides best compression.</source>
-        <translation type="unfinished"></translation>
+        <translation>zlib를 사용하여 로그 데이터를 압축합니다. 레벨 1은 가장 빠르고, 레벨 9는 최고의 압축률을 제공합니다.</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="370"/>
@@ -13863,7 +13883,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="404"/>
         <source>Number of log entries kept in memory for the console view. Higher values use more RAM.</source>
-        <translation type="unfinished"></translation>
+        <translation>콘솔 보기를 위해 메모리에 유지되는 로그 항목 수입니다. 값이 높을수록 더 많은 RAM을 사용합니다.</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="412"/>
@@ -13873,7 +13893,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="418"/>
         <source>Session: %1 (%2 entries)</source>
-        <translation type="unfinished"></translation>
+        <translation>세션: %1 (%2 항목)</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="426"/>
@@ -13883,7 +13903,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="454"/>
         <source>%1 entries in selected session</source>
-        <translation type="unfinished"></translation>
+        <translation>선택된 세션에 %1 항목</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="464"/>
@@ -13903,7 +13923,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="482"/>
         <source>Delete session &quot;%1&quot; and all its log entries?</source>
-        <translation type="unfinished"></translation>
+        <translation>세션 &quot;%1&quot;과(와) 모든 로그 항목을 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="495"/>
@@ -13933,7 +13953,7 @@ VTOL</source>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="560"/>
         <source>Save Log</source>
-        <translation type="unfinished"></translation>
+        <translation>로그 저장</translation>
     </message>
     <message>
         <location filename="../src/LogManager/LoggingSettingsDialog.qml" line="569"/>
@@ -13991,7 +14011,7 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="340"/>
         <source>Differential pressure</source>
-        <translation type="unfinished">Differential pressure</translation>
+        <translation>차압</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="341"/>
@@ -14006,22 +14026,22 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="343"/>
         <source>Computer vision position</source>
-        <translation type="unfinished">Computer vision position</translation>
+        <translation>컴퓨터 비전 위치</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="344"/>
         <source>Laser based position</source>
-        <translation type="unfinished">Laser based position</translation>
+        <translation>레이저 기반 위치</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="345"/>
         <source>External ground truth</source>
-        <translation type="unfinished">External ground truth</translation>
+        <translation>외부 기준 위치</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="346"/>
         <source>Angular rate control</source>
-        <translation type="unfinished">Angular rate control</translation>
+        <translation>각속도 제어</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="347"/>
@@ -14379,7 +14399,7 @@ VTOL</source>
     <message>
         <location filename="../src/AnalyzeView/MAVLinkInspector/MAVLinkInspectorPage.qml" line="239"/>
         <source>Plot 2</source>
-        <translation type="unfinished">Plot 2</translation>
+        <translation>플롯 2</translation>
     </message>
 </context>
 <context>
@@ -14387,37 +14407,37 @@ VTOL</source>
     <message>
         <location filename="../src/Comms/MAVLinkProtocol.cc" line="437"/>
         <source>Unable to save telemetry log. Error opening source &apos;%1&apos;: &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>텔레메트리 로그를 저장할 수 없습니다. 소스 &apos;%1&apos; 열기 오류: &apos;%2&apos;.</translation>
     </message>
     <message>
         <location filename="../src/Comms/MAVLinkProtocol.cc" line="447"/>
         <source>Unable to save telemetry log. Error opening destination &apos;%1&apos;: &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>텔레메트리 로그를 저장할 수 없습니다. 대상 &apos;%1&apos; 열기 오류: &apos;%2&apos;.</translation>
     </message>
     <message>
         <location filename="../src/Comms/MAVLinkProtocol.cc" line="464"/>
         <source>Unable to save telemetry log. Error reading source &apos;%1&apos;: &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>텔레메트리 로그를 저장할 수 없습니다. 소스 &apos;%1&apos; 읽기 오류: &apos;%2&apos;.</translation>
     </message>
     <message>
         <location filename="../src/Comms/MAVLinkProtocol.cc" line="472"/>
         <source>Unable to save telemetry log. Error writing destination &apos;%1&apos;: &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>텔레메트리 로그를 저장할 수 없습니다. 대상 &apos;%1&apos; 쓰기 오류: &apos;%2&apos;.</translation>
     </message>
     <message>
         <location filename="../src/Comms/MAVLinkProtocol.cc" line="483"/>
         <source>Unable to finalize telemetry log &apos;%1&apos;: &apos;%2&apos;.</source>
-        <translation type="unfinished"></translation>
+        <translation>텔레메트리 로그 &apos;%1&apos; 마무리 실패: &apos;%2&apos;.</translation>
     </message>
     <message>
         <location filename="../src/Comms/MAVLinkProtocol.cc" line="501"/>
         <source>Unable to save telemetry log. Application save directory is not set.</source>
-        <translation type="unfinished">텔레메트리 로그를 저장할 수 없습니다. 저장할 위치를 선택해주십시오.</translation>
+        <translation>텔레메트리 로그를 저장할 수 없습니다. 애플리케이션 저장 디렉터리가 설정되지 않았습니다.</translation>
     </message>
     <message>
         <location filename="../src/Comms/MAVLinkProtocol.cc" line="509"/>
         <source>Unable to save telemetry log. Telemetry save directory &quot;%1&quot; does not exist.</source>
-        <translation type="unfinished">텔레메트리 로그를 저장할 수 없습니다. 텔레메트리 저장 디렉토리 &quot;%1&quot;가 존재하지 않습니다.</translation>
+        <translation>텔레메트리 로그를 저장할 수 없습니다. 텔레메트리 저장 디렉터리 &quot;%1&quot;이(가) 존재하지 않습니다.</translation>
     </message>
 </context>
 <context>
@@ -14425,7 +14445,7 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="383"/>
         <source>Generic micro air vehicle</source>
-        <translation type="unfinished">일반 초소형 기체</translation>
+        <translation>일반 초소형 기체</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="384"/>
@@ -14445,7 +14465,7 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="387"/>
         <source>Normal helicopter with tail rotor.</source>
-        <translation type="unfinished">테일로터가 있는 일반 헬리콥터</translation>
+        <translation>테일로터가 있는 일반 헬리콥터.</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="388"/>
@@ -14455,7 +14475,7 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="389"/>
         <source>Operator control unit / ground control station</source>
-        <translation type="unfinished">운용 제어기 / 지상국</translation>
+        <translation>운용 제어기 / 지상국</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="390"/>
@@ -14465,12 +14485,12 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="391"/>
         <source>Free balloon, uncontrolled</source>
-        <translation type="unfinished">풍선, 제어불가</translation>
+        <translation>풍선, 제어 불가</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="392"/>
         <source>Rocket</source>
-        <translation type="unfinished">로켓</translation>
+        <translation>로켓</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="393"/>
@@ -14480,7 +14500,7 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="394"/>
         <source>Surface vessel, boat, ship</source>
-        <translation type="unfinished">무인정, 배, 선박</translation>
+        <translation>수상정, 보트, 선박</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="395"/>
@@ -14505,7 +14525,7 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="399"/>
         <source>trirotor</source>
-        <translation type="unfinished"></translation>
+        <translation>트라이콥터</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="400"/>
@@ -14520,17 +14540,17 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="402"/>
         <source>Onboard companion controller</source>
-        <translation type="unfinished">온보드 컴페니언 컴퓨터</translation>
+        <translation>온보드 컴패니언 컨트롤러</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="403"/>
         <source>Two-rotor VTOL using control surfaces in vertical operation in addition. Tailsitter</source>
-        <translation type="unfinished">수직기동에 제어표면을 사용하는 듀오로터 수직이착륙기. 테일시터</translation>
+        <translation>수직 모드에서 제어면을 추가로 사용하는 듀얼 로터 VTOL. 테일시터</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="404"/>
         <source>Quad-rotor VTOL using a V-shaped quad config in vertical operation. Tailsitter</source>
-        <translation type="unfinished">수직 기동시 V형상 쿼드인 쿼드로터 수직이착륙기(VTOL). 테일시터</translation>
+        <translation>수직 모드에서 V형 쿼드 구성을 사용하는 쿼드로터 VTOL. 테일시터</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="405"/>
@@ -14540,12 +14560,12 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="406"/>
         <source>VTOL Fixedrotor</source>
-        <translation type="unfinished"></translation>
+        <translation>VTOL 고정 로터</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="407"/>
         <source>VTOL Tailsitter</source>
-        <translation type="unfinished"></translation>
+        <translation>VTOL 테일시터</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="408"/>
@@ -14555,7 +14575,7 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="409"/>
         <source>VTOL reserved 5</source>
-        <translation type="unfinished">VTOL 예약 5</translation>
+        <translation>VTOL 예약 5</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="410"/>
@@ -14565,7 +14585,7 @@ VTOL</source>
     <message>
         <location filename="../src/MAVLink/QGCMAVLink.cc" line="411"/>
         <source>Onboard ADSB peripheral</source>
-        <translation type="unfinished">온보드 ADSB 페리퍼럴</translation>
+        <translation>온보드 ADSB 주변장치</translation>
     </message>
 </context>
 <context>
@@ -14733,7 +14753,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/toolbar/MainStatusIndicatorOfflinePage.qml" line="86"/>
         <source>Pixhawk</source>
-        <translation type="unfinished">픽스호크</translation>
+        <translation>픽스호크</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/MainStatusIndicatorOfflinePage.qml" line="86"/>
@@ -14776,7 +14796,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/MainWindow.qml" line="219"/>
         <source>You have a mission edit in progress which has not been saved/uploaded. If you close you will lose changes. Are you sure you want to close?</source>
-        <translation type="unfinished"></translation>
+        <translation>저장/업로드되지 않은 임무 편집이 진행 중입니다. 닫으면 변경 사항을 잃게 됩니다. 정말로 닫으시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/UI/MainWindow.qml" line="244"/>
@@ -14791,12 +14811,12 @@ VTOL</source>
     <message>
         <location filename="../src/UI/MainWindow.qml" line="283"/>
         <source>Touch Area display toggled</source>
-        <translation type="unfinished"></translation>
+        <translation>터치 영역 표시 전환됨</translation>
     </message>
     <message>
         <location filename="../src/UI/MainWindow.qml" line="302"/>
         <source>Turn off Advanced Mode?</source>
-        <translation type="unfinished"></translation>
+        <translation>고급 모드를 끄시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/UI/MainWindow.qml" line="452"/>
@@ -14806,7 +14826,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/MainWindow.qml" line="476"/>
         <source>Additional errors received</source>
-        <translation type="unfinished"></translation>
+        <translation>추가 오류 수신됨</translation>
     </message>
     <message>
         <location filename="../src/UI/MainWindow.qml" line="127"/>
@@ -14886,32 +14906,32 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/MavCommandQueue.cc" line="271"/>
         <source>Unable to send command: %1.</source>
-        <translation type="unfinished">명령을 보낼 수 없음: %1</translation>
+        <translation>명령을 보낼 수 없음: %1.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/MavCommandQueue.cc" line="271"/>
         <source>Internal error - MAV_COMP_ID_ALL not supported</source>
-        <translation type="unfinished">내부 오류 - MAV_COMP_ID_ALL이 지원되지 않음</translation>
+        <translation>내부 오류 - MAV_COMP_ID_ALL은 지원되지 않음</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/MavCommandQueue.cc" line="271"/>
         <source>Waiting on previous response to same command.</source>
-        <translation type="unfinished">동일한 명령에 대한 이전 응답을 기다리는 중입니다.</translation>
+        <translation>동일한 명령에 대한 이전 응답을 기다리는 중입니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/MavCommandQueue.cc" line="291"/>
         <source>Unable to send command: Vehicle is not connected.</source>
-        <translation type="unfinished"></translation>
+        <translation>명령을 보낼 수 없음: 기체가 연결되지 않았습니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/MavCommandQueue.cc" line="351"/>
         <source>Vehicle did not respond to command: %1</source>
-        <translation type="unfinished">기체가 명령에 응답 하지 않습니다: %1</translation>
+        <translation>기체가 명령에 응답하지 않습니다: %1</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/MavCommandQueue.cc" line="441"/>
         <source>%1 command temporarily rejected</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 명령이 일시적으로 거부됨</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/MavCommandQueue.cc" line="444"/>
@@ -14921,7 +14941,7 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/MavCommandQueue.cc" line="447"/>
         <source>%1 command not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 명령 미지원</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/MavCommandQueue.cc" line="450"/>
@@ -14940,12 +14960,12 @@ VTOL</source>
         <location filename="../src/QmlControls/MavlinkActionManager.cc" line="81"/>
         <location filename="../src/QmlControls/MavlinkActionManager.cc" line="110"/>
         <source>Custom actions file - incorrect format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 정의 동작 파일 - 잘못된 형식: %1</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/MavlinkActionManager.cc" line="88"/>
         <source>Custom actions file - incorrect format: JsonValue not an object</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 정의 동작 파일 - 잘못된 형식: JsonValue가 객체가 아님</translation>
     </message>
 </context>
 <context>
@@ -14981,12 +15001,12 @@ VTOL</source>
     <message>
         <location filename="../src/Settings/MavlinkActionsSettings.cc" line="17"/>
         <source>Support for Fly View custom actions has changed. The location of the files has changed. You will need to setup up your settings again from Fly View Settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fly View 사용자 정의 동작 지원이 변경되었습니다. 파일 위치가 변경되어 Fly View 설정에서 다시 구성해야 합니다.</translation>
     </message>
     <message>
         <location filename="../src/Settings/MavlinkActionsSettings.cc" line="23"/>
         <source>Support for Joystick custom actions has changed. The format and location of the files has changed. New setting is available from Fly View Settings. File format is documented in user guide. Delete the %1 file to disable this warning</source>
-        <translation type="unfinished"></translation>
+        <translation>조이스틱 사용자 정의 동작 지원이 변경되었습니다. 파일 형식과 위치가 변경되었으며, 새 설정은 Fly View 설정에서 사용할 수 있습니다. 파일 형식은 사용자 안내서에 설명되어 있습니다. 이 경고를 비활성화하려면 %1 파일을 삭제하세요.</translation>
     </message>
 </context>
 <context>
@@ -14994,7 +15014,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/AppSettings/MavlinkLinkStatus.qml" line="9"/>
         <source>Link Status (Current Vehicle)</source>
-        <translation type="unfinished">연결 상태(현재 연결된 기체)</translation>
+        <translation>링크 상태(현재 연결된 기체)</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/MavlinkLinkStatus.qml" line="12"/>
@@ -15004,12 +15024,12 @@ VTOL</source>
     <message>
         <location filename="../src/UI/AppSettings/MavlinkLinkStatus.qml" line="16"/>
         <source>Total messages sent (computed)</source>
-        <translation type="unfinished">전체 송신 메시지</translation>
+        <translation>전체 송신 메시지 (계산값)</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/MavlinkLinkStatus.qml" line="22"/>
         <source>Total messages received</source>
-        <translation type="unfinished">전체 수신 메시지</translation>
+        <translation>전체 수신 메시지</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/MavlinkLinkStatus.qml" line="28"/>
@@ -15039,7 +15059,7 @@ VTOL</source>
     <message>
         <location filename="../src/UI/AppSettings/MavlinkLinkStatus.qml" line="55"/>
         <source>Signing streams</source>
-        <translation type="unfinished"></translation>
+        <translation>서명 스트림</translation>
     </message>
 </context>
 <context>
@@ -15160,12 +15180,12 @@ VTOL</source>
     <message>
         <location filename="../src/PlanView/MissionDefaultsEditor.qml" line="111"/>
         <source>Expected Vehicle Speeds</source>
-        <translation type="unfinished"></translation>
+        <translation>예상 기체 속도</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionDefaultsEditor.qml" line="124"/>
         <source>The following speed values are used to calculate total mission time. They do not affect the flight speed for the mission.</source>
-        <translation type="unfinished">경로 시간을 계산하는 데 사용되며, 실제 비행 속도에는 영향을 미치지 않습니다.</translation>
+        <translation>다음 속도 값들은 전체 임무 시간 계산에 사용되며, 실제 임무 비행 속도에는 영향을 주지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionDefaultsEditor.qml" line="129"/>
@@ -15279,12 +15299,12 @@ VTOL</source>
     <message>
         <location filename="../src/PlanView/MissionItemTreeView.qml" line="96"/>
         <source> items</source>
-        <translation type="unfinished"></translation>
+        <translation> 항목</translation>
     </message>
     <message>
         <location filename="../src/PlanView/MissionItemTreeView.qml" line="97"/>
         <source> points</source>
-        <translation type="unfinished"></translation>
+        <translation> 지점</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/MissionItemTreeView.qml" line="271"/>
@@ -15324,7 +15344,7 @@ VTOL</source>
     <message>
         <location filename="../src/QmlControls/MissionItemTreeView.qml" line="445"/>
         <source>The following speed values are used to calculate total mission time. They do not affect the flight speed for the mission.</source>
-        <translation type="unfinished">경로 시간을 계산하는 데 사용되며, 실제 비행 속도에는 영향을 미치지 않습니다.</translation>
+        <translation>다음 속도 값들은 전체 임무 시간 계산에 사용되며, 실제 임무 비행 속도에는 영향을 주지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/MissionItemTreeView.qml" line="450"/>
@@ -15349,7 +15369,7 @@ VTOL</source>
     <message>
         <location filename="../src/QmlControls/MissionItemTreeView.qml" line="501"/>
         <source>Actual position set by vehicle at flight time.</source>
-        <translation type="unfinished">비행 중 설정된 기체의 실제 위치</translation>
+        <translation>비행 시 기체가 설정한 실제 위치.</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/MissionItemTreeView.qml" line="507"/>
@@ -15389,7 +15409,7 @@ VTOL</source>
         <location filename="../src/MissionManager/MissionSettingsItem.h" line="53"/>
         <location filename="../src/MissionManager/MissionSettingsItem.h" line="54"/>
         <source>Initial Camera Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>초기 카메라 설정</translation>
     </message>
 </context>
 <context>
@@ -15476,7 +15496,7 @@ VTOL</source>
     <message>
         <location filename="../src/Vehicle/Actuators/Mixer.cc" line="105"/>
         <source>Upwards</source>
-        <translation type="unfinished"></translation>
+        <translation>위쪽</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Actuators/Mixer.cc" line="105"/>
@@ -15656,18 +15676,21 @@ VTOL</source>
         <source>&lt;br /&gt;No motors are assigned yet.
 By saying yes, all motors will be assigned to the first %1 channels of the selected output (%2)
  (you can also first assign all motors, then start the identification).&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br /&gt;아직 할당된 모터가 없습니다.
+예를 선택하면 모든 모터가 선택된 출력(%2)의 첫 %1개 채널에 할당됩니다
+ (먼저 모든 모터를 할당한 후 식별을 시작할 수도 있습니다).&lt;br /&gt;</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Actuators/MotorAssignment.cc" line="78"/>
         <source>&lt;br /&gt;Motors are currently assigned to a different output.
 By saying yes, all motors will be reassigned to the first %1 channels of the selected output (%2).&lt;br /&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br /&gt;현재 모터가 다른 출력에 할당되어 있습니다.
+예를 선택하면 모든 모터가 선택된 출력(%2)의 첫 %1개 채널로 재할당됩니다.&lt;br /&gt;</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Actuators/MotorAssignment.cc" line="84"/>
         <source>Not all motors are assigned yet. Either clear all existing assignments or assign all motors to an output.</source>
-        <translation type="unfinished"></translation>
+        <translation>아직 모든 모터가 할당되지 않았습니다. 기존 할당을 모두 지우거나 모든 모터를 출력에 할당하세요.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Actuators/MotorAssignment.cc" line="89"/>
@@ -15682,12 +15705,22 @@ The procedure is as following:&lt;br /&gt;
 - The motor output functions will automatically be reassigned by the selected order.&lt;br /&gt;
 &lt;br /&gt;
 Do you wish to proceed?</source>
-        <translation type="unfinished"></translation>
+        <translation>각 모터를 자동으로 15% 추력으로 회전시킵니다.&lt;br /&gt;&lt;br /&gt;
+&lt;b&gt;경고: 모든 프로펠러를 제거한 후에만 진행하세요&lt;/b&gt;.&lt;br /&gt;
+%1
+&lt;br /&gt;
+절차는 다음과 같습니다:&lt;br /&gt;
+- 확인 후 첫 번째 모터가 0.5초간 회전합니다.&lt;br /&gt;
+- 회전한 모터를 클릭하세요.&lt;br /&gt;
+- 위 단계가 모든 모터에 대해 반복됩니다.&lt;br /&gt;
+- 선택한 순서에 따라 모터 출력 기능이 자동으로 재할당됩니다.&lt;br /&gt;
+&lt;br /&gt;
+계속 진행하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Actuators/MotorAssignment.cc" line="207"/>
         <source>Actuator test command failed</source>
-        <translation type="unfinished"></translation>
+        <translation>액추에이터 테스트 명령 실패</translation>
     </message>
 </context>
 <context>
@@ -15888,7 +15921,7 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/UI/toolbar/MultiVehicleSelector.qml" line="84"/>
         <source>Enable Multi-Vehicle Panel</source>
-        <translation type="unfinished">다중 기체 제어 패널 활성화</translation>
+        <translation>다중 기체 패널 활성화</translation>
     </message>
 </context>
 <context>
@@ -15896,7 +15929,7 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPHttpTransport.cc" line="42"/>
         <source>No data received for %1 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>%1초 동안 데이터 수신 없음</translation>
     </message>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPHttpTransport.cc" line="84"/>
@@ -15906,12 +15939,12 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPHttpTransport.cc" line="262"/>
         <source>HTTP response header too large</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP 응답 헤더가 너무 큼</translation>
     </message>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPHttpTransport.cc" line="302"/>
         <source>Authentication failed (401): check username and password</source>
-        <translation type="unfinished"></translation>
+        <translation>인증 실패 (401): 사용자 이름과 비밀번호를 확인하세요</translation>
     </message>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPHttpTransport.cc" line="309"/>
@@ -15926,7 +15959,7 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPHttpTransport.cc" line="327"/>
         <source>Invalid HTTP response from caster</source>
-        <translation type="unfinished"></translation>
+        <translation>캐스터로부터 잘못된 HTTP 응답</translation>
     </message>
 </context>
 <context>
@@ -15944,7 +15977,7 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPManager.cc" line="214"/>
         <source>Connecting to %1:%2...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1:%2에 연결 중...</translation>
     </message>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPManager.cc" line="239"/>
@@ -15961,12 +15994,12 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPManager.cc" line="335"/>
         <source>Reconnecting in %1s...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1초 후 재연결...</translation>
     </message>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPManager.cc" line="589"/>
         <source>Host address is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>호스트 주소가 비어 있음</translation>
     </message>
 </context>
 <context>
@@ -15979,7 +16012,7 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/GPS/NTRIP/NTRIPSourceTable.cc" line="195"/>
         <source>Response does not contain a valid source table</source>
-        <translation type="unfinished"></translation>
+        <translation>응답에 유효한 소스 테이블이 포함되어 있지 않음</translation>
     </message>
 </context>
 <context>
@@ -16002,12 +16035,12 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/UI/AppSettings/NmeaGpsSettings.qml" line="28"/>
         <source>UDP Port</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP 포트</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/NmeaGpsSettings.qml" line="31"/>
         <source>Serial &lt;none available&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>시리얼 &lt;사용 가능 없음&gt;</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/NmeaGpsSettings.qml" line="47"/>
@@ -16027,7 +16060,7 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/UI/AppSettings/NmeaGpsSettings.qml" line="98"/>
         <source>NMEA stream UDP port</source>
-        <translation type="unfinished"></translation>
+        <translation>NMEA 스트림 UDP 포트</translation>
     </message>
 </context>
 <context>
@@ -16088,7 +16121,7 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/UI/AppSettings/NtripMountpointBrowser.qml" line="45"/>
         <source>Fetching mountpoints…</source>
-        <translation type="unfinished"></translation>
+        <translation>마운트포인트 가져오는 중...</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/NtripMountpointBrowser.qml" line="99"/>
@@ -16204,7 +16237,7 @@ Do you wish to proceed?</source>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMap.qml" line="394"/>
         <source>URL with {x} {y} {z} or {zoom} substitutions</source>
-        <translation type="unfinished">URL with {x} {y} {z} or {zoom} substitutions</translation>
+        <translation>{x} {y} {z} 또는 {zoom} 치환이 포함된 URL</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMap.qml" line="407"/>
@@ -16283,12 +16316,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMap.qml" line="1226"/>
         <source>Map Tile Set import Progress</source>
-        <translation type="unfinished"></translation>
+        <translation>지도 타일 세트 가져오기 진행</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMap.qml" line="1228"/>
         <source>Map Tile Set import Completed</source>
-        <translation type="unfinished"></translation>
+        <translation>지도 타일 세트 가져오기 완료</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMap.qml" line="1287"/>
@@ -16576,7 +16609,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMapEditor.qml" line="652"/>
         <source>Tile set with this name already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>이 이름의 타일 세트가 이미 존재합니다</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMapEditor.qml" line="663"/>
@@ -16598,7 +16631,7 @@ Is this really what you want?</source>
         <source>This will delete all tiles INCLUDING the tile sets you have created yourself.
 
 Is this really what you want?</source>
-        <translation type="unfinished">직접 만든 타일 세트를 포함한 모든 타일이 삭제됩니다.
+        <translation>직접 만든 타일 세트를 포함한 모든 타일이 삭제됩니다.
 
 삭제하시겠습니까?</translation>
     </message>
@@ -16630,7 +16663,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMapSettings.qml" line="34"/>
         <source>Download map tiles for use when offline</source>
-        <translation type="unfinished">오프라인에서 사용할 지도 타일을 다운로드합니다</translation>
+        <translation>오프라인에서 사용할 지도 타일을 다운로드합니다</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMapSettings.qml" line="47"/>
@@ -16680,7 +16713,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMapSettings.qml" line="117"/>
         <source>Export Selected Tile Sets</source>
-        <translation type="unfinished"></translation>
+        <translation>선택한 타일 세트 내보내기</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMapSettings.qml" line="122"/>
@@ -16700,12 +16733,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMapSettings.qml" line="164"/>
         <source>Append to existing sets</source>
-        <translation type="unfinished"></translation>
+        <translation>기존 세트에 추가</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMapSettings.qml" line="169"/>
         <source>Replace existing sets</source>
-        <translation type="unfinished"></translation>
+        <translation>기존 세트 교체</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/OfflineMapSettings.qml" line="186"/>
@@ -16782,7 +16815,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AnalyzeView/OnboardLogsFtp/OnboardLogFtpPage.qml" line="12"/>
         <source>Onboard Logs (FTP) lists log files on the vehicle&apos;s SD card via MAVLink FTP. Click Refresh to query the vehicle.</source>
-        <translation type="unfinished"></translation>
+        <translation>온보드 로그 (FTP)는 MAVLink FTP를 통해 기체의 SD 카드에 있는 로그 파일을 나열합니다. 새로 고침을 클릭하여 기체에 조회하세요.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/OnboardLogsFtp/OnboardLogFtpPage.qml" line="52"/>
@@ -16822,7 +16855,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AnalyzeView/OnboardLogsFtp/OnboardLogFtpPage.qml" line="110"/>
         <source>You must be connected to a vehicle in order to download logs.</source>
-        <translation type="unfinished">로그를 다운로드 하기 위해서는 기체에 연결해야 합니다.</translation>
+        <translation>로그를 다운로드하려면 기체에 연결되어 있어야 합니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/OnboardLogsFtp/OnboardLogFtpPage.qml" line="121"/>
@@ -16837,7 +16870,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AnalyzeView/OnboardLogsFtp/OnboardLogFtpPage.qml" line="133"/>
         <source>You must select at least one log file to download.</source>
-        <translation type="unfinished"></translation>
+        <translation>다운로드할 로그 파일을 하나 이상 선택해야 합니다.</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/OnboardLogsFtp/OnboardLogFtpPage.qml" line="142"/>
@@ -16930,7 +16963,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="166"/>
         <source>Sort Descending</source>
-        <translation type="unfinished"></translation>
+        <translation>내림차순 정렬</translation>
     </message>
     <message>
         <location filename="../src/AnalyzeView/OnboardLogs/OnboardLogPage.qml" line="166"/>
@@ -17026,7 +17059,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/QmlControls/PIDTuning.qml" line="346"/>
         <source>Use auto-tuning</source>
-        <translation type="unfinished"></translation>
+        <translation>자동 튜닝 사용</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/PIDTuning.qml" line="352"/>
@@ -17195,17 +17228,17 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="523"/>
         <source>Vehicle does not support guided rotate</source>
-        <translation type="unfinished"></translation>
+        <translation>기체가 유도 모드 회전을 지원하지 않습니다</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="545"/>
         <source>Unable to start takeoff: Vehicle rejected arming.</source>
-        <translation type="unfinished"></translation>
+        <translation>이륙을 시작할 수 없습니다: 기체가 시동을 거부했습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="549"/>
         <source>Unable to start takeoff: Vehicle not changing to %1 flight mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>이륙을 시작할 수 없습니다: 기체가 %1 비행 모드로 전환되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/FirmwarePlugin/PX4/PX4FirmwarePlugin.cc" line="557"/>
@@ -17261,7 +17294,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehavior.cc" line="18"/>
         <source>Configure mission, position hold, and altitude mode settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>임무, 위치 홀드, 고도 모드 설정을 구성합니다.</translation>
     </message>
 </context>
 <context>
@@ -17269,7 +17302,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="68"/>
         <source>Enable responsiveness slider (if enabled, acceleration limit parameters and others are automatically set)</source>
-        <translation type="unfinished">Enable responsiveness slider (if enabled, acceleration limit parameters and others are automatically set)</translation>
+        <translation>반응성 슬라이더 활성화 (활성화 시 가속도 제한 파라미터 등이 자동으로 설정됩니다)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="40"/>
@@ -17279,22 +17312,22 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="41"/>
         <source>A higher value makes the vehicle react faster. Be aware that this affects braking as well, and a combination of slow responsiveness with high maximum velocity will lead to long braking distances.</source>
-        <translation type="unfinished">A higher value makes the vehicle react faster. Be aware that this affects braking as well, and a combination of slow responsiveness with high maximum velocity will lead to long braking distances.</translation>
+        <translation>값이 클수록 기체 반응이 빨라집니다. 제동에도 영향을 주므로, 느린 반응성과 높은 최대 속도의 조합은 제동 거리가 길어질 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="77"/>
         <source>Warning: a high responsiveness requires a vehicle with large thrust-to-weight ratio. The vehicle might lose altitude otherwise.</source>
-        <translation type="unfinished"></translation>
+        <translation>경고: 높은 반응성을 위해서는 추력 대 중량비가 큰 기체가 필요합니다. 그렇지 않으면 기체가 고도를 잃을 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="116"/>
         <source>Enable horizontal velocity slider (if enabled, individual velocity limit parameters are automatically set)</source>
-        <translation type="unfinished">Enable horizontal velocity slider (if enabled, individual velocity limit parameters are automatically set)</translation>
+        <translation>수평 속도 슬라이더 활성화 (활성화 시 개별 속도 제한 파라미터가 자동으로 설정됩니다)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="88"/>
         <source>Horizontal velocity (m/s)</source>
-        <translation type="unfinished">Horizontal velocity (m/s)</translation>
+        <translation>수평 속도 (m/s)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="89"/>
@@ -17304,12 +17337,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="129"/>
         <source>Vertical velocity (m/s)</source>
-        <translation type="unfinished"></translation>
+        <translation>수직 속도 (m/s)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="157"/>
         <source>Enable vertical velocity slider (if enabled, individual velocity limit parameters are automatically set)</source>
-        <translation type="unfinished">Enable vertical velocity slider (if enabled, individual velocity limit parameters are automatically set)</translation>
+        <translation>수직 속도 슬라이더 활성화 (활성화 시 개별 속도 제한 파라미터가 자동으로 설정됩니다)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="130"/>
@@ -17319,12 +17352,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="165"/>
         <source>Mission Turning Radius</source>
-        <translation type="unfinished">Mission Turning Radius</translation>
+        <translation>임무 선회 반경</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightBehaviorCopter.qml" line="166"/>
         <source>Increasing this leads to rounder turns in missions (corner cutting). Use the minimum value for accurate corner tracking.</source>
-        <translation type="unfinished">Increasing this leads to rounder turns in missions (corner cutting). Use the minimum value for accurate corner tracking.</translation>
+        <translation>값을 늘리면 임무에서 더 둥근 선회(코너 컷팅)가 가능합니다. 정확한 코너 추적을 원하면 최소값을 사용하세요.</translation>
     </message>
 </context>
 <context>
@@ -17381,7 +17414,7 @@ Is this really what you want?</source>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightModes.qml" line="123"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4FlightModes.qml" line="126"/>
         <source>Switch Settings</source>
-        <translation type="unfinished">스위치 세팅</translation>
+        <translation>스위치 설정</translation>
     </message>
 </context>
 <context>
@@ -17389,7 +17422,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogControl.qml" line="9"/>
         <source>MAVLink 2.0 Logging (PX4 Pro Only)</source>
-        <translation type="unfinished">MAVLINK 2.0 로그 기록하기(PX4 펌웨어만 적용)</translation>
+        <translation>MAVLink 2.0 로깅 (PX4 Pro 전용)</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogControl.qml" line="22"/>
@@ -17409,7 +17442,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogControl.qml" line="41"/>
         <source>Enable automatic logging</source>
-        <translation type="unfinished">자동 로그 기록 사용</translation>
+        <translation>자동 로깅 활성화</translation>
     </message>
 </context>
 <context>
@@ -17417,7 +17450,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="11"/>
         <source>Saved Log Files</source>
-        <translation type="unfinished">저장된 로그파일</translation>
+        <translation>저장된 로그 파일</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="85"/>
@@ -17442,17 +17475,17 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="137"/>
         <source>Delete Selected Log Files</source>
-        <translation type="unfinished">선택된 로그파일이 삭제되었습니다</translation>
+        <translation>선택된 로그 파일 삭제</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="138"/>
         <source>Confirm deleting selected log files?</source>
-        <translation type="unfinished">선택된 로그파일을 지우겠습니까?</translation>
+        <translation>선택된 로그 파일을 삭제하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="147"/>
         <source>Upload Selected</source>
-        <translation type="unfinished">업로드 선택</translation>
+        <translation>선택 항목 업로드</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="161"/>
@@ -17462,17 +17495,17 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="162"/>
         <source>Please enter an email address before uploading MAVLink log files.</source>
-        <translation type="unfinished">MAVLink 로그파일을 업로드하기 전에 이메일을 입력해주십시오.</translation>
+        <translation>MAVLink 로그 파일을 업로드하기 전에 이메일 주소를 입력해주십시오.</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="169"/>
         <source>Upload Selected Log Files</source>
-        <translation type="unfinished">선택된 로그파일을 업로드합니다</translation>
+        <translation>선택된 로그 파일 업로드</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="170"/>
         <source>Confirm uploading selected log files?</source>
-        <translation type="unfinished">선택된 로그파일을 업로드하시겠습니까?</translation>
+        <translation>선택된 로그 파일을 업로드하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="179"/>
@@ -17487,7 +17520,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogFileManager.qml" line="189"/>
         <source>Confirm canceling the upload process?</source>
-        <translation type="unfinished">업로드를 취소하시겠습니까?</translation>
+        <translation>업로드를 취소하시겠습니까?</translation>
     </message>
 </context>
 <context>
@@ -17495,7 +17528,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="11"/>
         <source>MAVLink 2.0 Log Uploads (PX4 Pro Only)</source>
-        <translation type="unfinished">MAVLINK 2.0 로그 업로드 (PX4 펌웨어만 적용)</translation>
+        <translation>MAVLink 2.0 로그 업로드 (PX4 펌웨어만 적용)</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="39"/>
@@ -17505,17 +17538,17 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="40"/>
         <source>Please enter an email address before uploading MAVLink log files.</source>
-        <translation type="unfinished">MAVLink 로그파일을 업로드하기 전에 이메일을 입력해주십시오.</translation>
+        <translation>MAVLink 로그 파일을 업로드하기 전에 이메일 주소를 입력해주십시오.</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="48"/>
         <source>Email address for Log Upload:</source>
-        <translation type="unfinished">로그 업로드를 위한 이메일 주소:</translation>
+        <translation>로그 업로드용 이메일 주소:</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="67"/>
         <source>Default Description:</source>
-        <translation type="unfinished">기본 내용:</translation>
+        <translation>기본 설명:</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="85"/>
@@ -17566,12 +17599,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="144"/>
         <source>Crashed (Pilot Error)</source>
-        <translation type="unfinished"></translation>
+        <translation>추락 (조종자 실수)</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="144"/>
         <source>Crashed (Software or Hardware issue)</source>
-        <translation type="unfinished"></translation>
+        <translation>추락 (소프트웨어 또는 하드웨어 문제)</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="145"/>
@@ -17591,22 +17624,22 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="169"/>
         <source>Additional Feedback:</source>
-        <translation type="unfinished">추가 피드백:</translation>
+        <translation>추가 피드백:</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="189"/>
         <source>Make this log publicly available</source>
-        <translation type="unfinished">로그 공개하기</translation>
+        <translation>로그 공개하기</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="198"/>
         <source>Enable automatic log uploads</source>
-        <translation type="unfinished">자동 로그 업로드 활성화</translation>
+        <translation>자동 로그 업로드 활성화</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/PX4LogUploadSettings.qml" line="211"/>
         <source>Delete log file after uploading</source>
-        <translation type="unfinished">업로드 후 로그파일 삭제</translation>
+        <translation>업로드 후 로그 파일 삭제</translation>
     </message>
 </context>
 <context>
@@ -17648,7 +17681,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/FirmwarePlugin/PX4/PX4MainStatusIndicatorExpandedItem.qml" line="40"/>
         <source>Initial Vehicle Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>초기 기체 설정</translation>
     </message>
 </context>
 <context>
@@ -17745,7 +17778,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAll.qml" line="19"/>
         <source>Velocity Controller</source>
-        <translation type="unfinished">Velocity Controller</translation>
+        <translation>속도 컨트롤러</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAll.qml" line="23"/>
@@ -17763,13 +17796,13 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAttitude.qml" line="26"/>
         <source>Proportional Gain (MC_ROLL_P)</source>
-        <translation type="unfinished">Proportional Gain (MC_ROLL_P)</translation>
+        <translation>비례 게인 (MC_ROLL_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAttitude.qml" line="27"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAttitude.qml" line="44"/>
         <source>Increase for more responsiveness, reduce if the attitude overshoots.</source>
-        <translation type="unfinished">Increase for more responsiveness, reduce if the attitude overshoots.</translation>
+        <translation>반응성을 높이려면 증가시키고, 자세가 오버슈트하면 감소시키세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAttitude.qml" line="36"/>
@@ -17779,7 +17812,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAttitude.qml" line="43"/>
         <source>Proportional Gain (MC_PITCH_P)</source>
-        <translation type="unfinished">Proportional Gain (MC_PITCH_P)</translation>
+        <translation>비례 게인 (MC_PITCH_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAttitude.qml" line="53"/>
@@ -17789,12 +17822,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAttitude.qml" line="60"/>
         <source>Proportional Gain (MC_YAW_P)</source>
-        <translation type="unfinished">Proportional Gain (MC_YAW_P)</translation>
+        <translation>비례 게인 (MC_YAW_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterAttitude.qml" line="61"/>
         <source>Increase for more responsiveness, reduce if the attitude overshoots (there is only a setpoint when yaw is fixed, i.e. when centering the stick).</source>
-        <translation type="unfinished">Increase for more responsiveness, reduce if the attitude overshoots (there is only a setpoint when yaw is fixed, i.e. when centering the stick).</translation>
+        <translation>반응성을 높이려면 증가시키고, 자세가 오버슈트하면 감소시키세요 (요가 고정될 때, 즉 스틱을 중앙으로 두었을 때만 설정값이 있습니다).</translation>
     </message>
 </context>
 <context>
@@ -17802,7 +17835,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterPosition.qml" line="18"/>
         <source>Position control mode (set this to &apos;simple&apos; during tuning):</source>
-        <translation type="unfinished">Position control mode (set this to &apos;simple&apos; during tuning):</translation>
+        <translation>위치 제어 모드 (튜닝 중에는 &apos;simple&apos;로 설정):</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterPosition.qml" line="34"/>
@@ -17812,18 +17845,18 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterPosition.qml" line="35"/>
         <source>Horizontal (Y direction, sidewards)</source>
-        <translation type="unfinished">Horizontal (Y direction, sidewards)</translation>
+        <translation>수평 (Y 방향, 좌우)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterPosition.qml" line="42"/>
         <source>Proportional gain (MPC_XY_P)</source>
-        <translation type="unfinished">Proportional gain (MPC_XY_P)</translation>
+        <translation>비례 게인 (MPC_XY_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterPosition.qml" line="43"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterPosition.qml" line="60"/>
         <source>Increase for more responsiveness, reduce if the position overshoots (there is only a setpoint when hovering, i.e. when centering the stick).</source>
-        <translation type="unfinished">Increase for more responsiveness, reduce if the position overshoots (there is only a setpoint when hovering, i.e. when centering the stick).</translation>
+        <translation>반응성을 높이려면 증가시키고, 위치가 오버슈트하면 감소시키세요 (호버링할 때, 즉 스틱을 중앙으로 두었을 때만 설정값이 있습니다).</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterPosition.qml" line="52"/>
@@ -17833,7 +17866,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterPosition.qml" line="59"/>
         <source>Proportional gain (MPC_Z_P)</source>
-        <translation type="unfinished">Proportional gain (MPC_Z_P)</translation>
+        <translation>비례 게인 (MPC_Z_P)</translation>
     </message>
 </context>
 <context>
@@ -17841,12 +17874,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="20"/>
         <source>Airmode (disable during tuning) &lt;b&gt;&lt;a href=&quot;https://docs.px4.io/main/en/config_mc/pid_tuning_guide_multicopter.html#airmode-mixer-saturation&quot;&gt;?&lt;/a&gt;&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>에어모드 (튜닝 중에는 비활성화) &lt;b&gt;&lt;a href=&quot;https://docs.px4.io/main/en/config_mc/pid_tuning_guide_multicopter.html#airmode-mixer-saturation&quot;&gt;?&lt;/a&gt;&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="37"/>
         <source>Thrust curve &lt;b&gt;&lt;a href=&quot;https://docs.px4.io/main/en/config_mc/pid_tuning_guide_multicopter.html#thrust-curve&quot;&gt;?&lt;/a&gt;&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>추력 커브 &lt;b&gt;&lt;a href=&quot;https://docs.px4.io/main/en/config_mc/pid_tuning_guide_multicopter.html#thrust-curve&quot;&gt;?&lt;/a&gt;&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="51"/>
@@ -17866,37 +17899,37 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="67"/>
         <source>Overall Multiplier (MC_ROLLRATE_K)</source>
-        <translation type="unfinished">Overall Multiplier (MC_ROLLRATE_K)</translation>
+        <translation>전체 배수 (MC_ROLLRATE_K)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="68"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="101"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="134"/>
         <source>Multiplier for P, I and D gains: increase for more responsiveness, reduce if the rates overshoot (and increasing D does not help).</source>
-        <translation type="unfinished">Multiplier for P, I and D gains: increase for more responsiveness, reduce if the rates overshoot (and increasing D does not help).</translation>
+        <translation>P, I, D 게인의 배수: 반응성을 높이려면 증가시키고, 속도가 오버슈트하고 D 증가도 도움이 안 되면 감소시키세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="75"/>
         <source>Differential Gain (MC_ROLLRATE_D)</source>
-        <translation type="unfinished">Differential Gain (MC_ROLLRATE_D)</translation>
+        <translation>미분 게인 (MC_ROLLRATE_D)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="76"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="109"/>
         <source>Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</source>
-        <translation type="unfinished">Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</translation>
+        <translation>댐핑: 오버슈트와 진동을 줄이려면 증가시키되, 꼭 필요한 만큼만 높이세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="83"/>
         <source>Integral Gain (MC_ROLLRATE_I)</source>
-        <translation type="unfinished">Integral Gain (MC_ROLLRATE_I)</translation>
+        <translation>적분 게인 (MC_ROLLRATE_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="84"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="117"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="142"/>
         <source>Generally does not need much adjustment, reduce this when seeing slow oscillations.</source>
-        <translation type="unfinished">Generally does not need much adjustment, reduce this when seeing slow oscillations.</translation>
+        <translation>일반적으로 많이 조정할 필요는 없으며, 느린 진동이 보이면 줄이세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="93"/>
@@ -17906,17 +17939,17 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="100"/>
         <source>Overall Multiplier (MC_PITCHRATE_K)</source>
-        <translation type="unfinished">Overall Multiplier (MC_PITCHRATE_K)</translation>
+        <translation>전체 배수 (MC_PITCHRATE_K)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="108"/>
         <source>Differential Gain (MC_PITCHRATE_D)</source>
-        <translation type="unfinished">Differential Gain (MC_PITCHRATE_D)</translation>
+        <translation>미분 게인 (MC_PITCHRATE_D)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="116"/>
         <source>Integral Gain (MC_PITCHRATE_I)</source>
-        <translation type="unfinished">Integral Gain (MC_PITCHRATE_I)</translation>
+        <translation>적분 게인 (MC_PITCHRATE_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="126"/>
@@ -17926,12 +17959,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="133"/>
         <source>Overall Multiplier (MC_YAWRATE_K)</source>
-        <translation type="unfinished">Overall Multiplier (MC_YAWRATE_K)</translation>
+        <translation>전체 배수 (MC_YAWRATE_K)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterRate.qml" line="141"/>
         <source>Integral Gain (MC_YAWRATE_I)</source>
-        <translation type="unfinished">Integral Gain (MC_YAWRATE_I)</translation>
+        <translation>적분 게인 (MC_YAWRATE_I)</translation>
     </message>
 </context>
 <context>
@@ -17939,7 +17972,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="18"/>
         <source>Position control mode (set this to &apos;simple&apos; during tuning):</source>
-        <translation type="unfinished">Position control mode (set this to &apos;simple&apos; during tuning):</translation>
+        <translation>위치 제어 모드 (튜닝 중에는 &apos;simple&apos;로 설정):</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="34"/>
@@ -17949,39 +17982,39 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="35"/>
         <source>Horizontal (Y direction, sidewards)</source>
-        <translation type="unfinished">Horizontal (Y direction, sidewards)</translation>
+        <translation>수평 (Y 방향, 좌우)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="42"/>
         <source>Proportional gain (MPC_XY_VEL_P_ACC)</source>
-        <translation type="unfinished">Proportional gain (MPC_XY_VEL_P_ACC)</translation>
+        <translation>비례 게인 (MPC_XY_VEL_P_ACC)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="43"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="76"/>
         <source>Increase for more responsiveness, reduce if the velocity overshoots (and increasing D does not help).</source>
-        <translation type="unfinished">Increase for more responsiveness, reduce if the velocity overshoots (and increasing D does not help).</translation>
+        <translation>반응성을 높이려면 증가시키고, 속도가 오버슈트하고 D 증가도 도움이 안 되면 감소시키세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="50"/>
         <source>Integral gain (MPC_XY_VEL_I_ACC)</source>
-        <translation type="unfinished">Integral gain (MPC_XY_VEL_I_ACC)</translation>
+        <translation>적분 게인 (MPC_XY_VEL_I_ACC)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="51"/>
         <source>Increase to reduce steady-state error (e.g. wind)</source>
-        <translation type="unfinished">Increase to reduce steady-state error (e.g. wind)</translation>
+        <translation>정상 상태 오차(예: 바람)를 줄이려면 증가시키세요</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="58"/>
         <source>Differential gain (MPC_XY_VEL_D_ACC)</source>
-        <translation type="unfinished">Differential gain (MPC_XY_VEL_D_ACC)</translation>
+        <translation>미분 게인 (MPC_XY_VEL_D_ACC)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="59"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="92"/>
         <source>Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</source>
-        <translation type="unfinished">Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</translation>
+        <translation>댐핑: 오버슈트와 진동을 줄이려면 증가시키되, 꼭 필요한 만큼만 높이세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="68"/>
@@ -17991,22 +18024,22 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="75"/>
         <source>Proportional gain (MPC_Z_VEL_P_ACC)</source>
-        <translation type="unfinished">Proportional gain (MPC_Z_VEL_P_ACC)</translation>
+        <translation>비례 게인 (MPC_Z_VEL_P_ACC)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="83"/>
         <source>Integral gain (MPC_Z_VEL_I_ACC)</source>
-        <translation type="unfinished">Integral gain (MPC_Z_VEL_I_ACC)</translation>
+        <translation>적분 게인 (MPC_Z_VEL_I_ACC)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="84"/>
         <source>Increase to reduce steady-state error</source>
-        <translation type="unfinished">Increase to reduce steady-state error</translation>
+        <translation>정상 상태 오차를 줄이려면 증가시키세요</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentCopterVelocity.qml" line="91"/>
         <source>Differential gain (MPC_Z_VEL_D_ACC)</source>
-        <translation type="unfinished">Differential gain (MPC_Z_VEL_D_ACC)</translation>
+        <translation>미분 게인 (MPC_Z_VEL_D_ACC)</translation>
     </message>
 </context>
 <context>
@@ -18028,12 +18061,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneAttitude.qml" line="26"/>
         <source>Time constant (FW_R_TC)</source>
-        <translation type="unfinished"></translation>
+        <translation>시정수 (FW_R_TC)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneAttitude.qml" line="27"/>
         <source>The latency between a roll step input and the achieved setpoint (inverse to a P gain)</source>
-        <translation type="unfinished"></translation>
+        <translation>롤 스텝 입력과 도달한 설정값 사이의 지연시간 (P 게인과 반비례)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneAttitude.qml" line="36"/>
@@ -18043,12 +18076,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneAttitude.qml" line="43"/>
         <source>Time Constant (FW_P_TC)</source>
-        <translation type="unfinished"></translation>
+        <translation>시정수 (FW_P_TC)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneAttitude.qml" line="44"/>
         <source>The latency between a pitch step input and the achieved setpoint (inverse to a P gain)</source>
-        <translation type="unfinished"></translation>
+        <translation>피치 스텝 입력과 도달한 설정값 사이의 지연시간 (P 게인과 반비례)</translation>
     </message>
 </context>
 <context>
@@ -18061,7 +18094,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="26"/>
         <source>Porportional gain (FW_RR_P)</source>
-        <translation type="unfinished"></translation>
+        <translation>비례 게인 (FW_RR_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="27"/>
@@ -18071,18 +18104,18 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="34"/>
         <source>Differential Gain (FW_RR_D)</source>
-        <translation type="unfinished"></translation>
+        <translation>미분 게인 (FW_RR_D)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="35"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="76"/>
         <source>Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</source>
-        <translation type="unfinished">Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</translation>
+        <translation>댐핑: 오버슈트와 진동을 줄이려면 증가시키되, 꼭 필요한 만큼만 높이세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="42"/>
         <source>Integral Gain (FW_RR_I)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 (FW_RR_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="43"/>
@@ -18090,19 +18123,19 @@ Is this really what you want?</source>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="117"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="125"/>
         <source>Generally does not need much adjustment, reduce this when seeing slow oscillations.</source>
-        <translation type="unfinished">Generally does not need much adjustment, reduce this when seeing slow oscillations.</translation>
+        <translation>일반적으로 많이 조정할 필요는 없으며, 느린 진동이 보이면 줄이세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="50"/>
         <source>Feedforward Gain (FW_RR_FF)</source>
-        <translation type="unfinished"></translation>
+        <translation>피드포워드 게인 (FW_RR_FF)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="51"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="92"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="133"/>
         <source>Feedforward gused to compensate for aerodynamic damping.</source>
-        <translation type="unfinished"></translation>
+        <translation>공기역학적 댐핑을 보상하기 위해 사용되는 피드포워드 게인.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="60"/>
@@ -18112,7 +18145,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="67"/>
         <source>Porportional Gain (FW_PR_P)</source>
-        <translation type="unfinished"></translation>
+        <translation>비례 게인 (FW_PR_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="68"/>
@@ -18123,17 +18156,17 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="75"/>
         <source>Differential Gain (FW_PR_D)</source>
-        <translation type="unfinished"></translation>
+        <translation>미분 게인 (FW_PR_D)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="83"/>
         <source>Integral Gain (FW_PR_I)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 (FW_PR_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="91"/>
         <source>Feedforward Gain (FW_PR_FF)</source>
-        <translation type="unfinished"></translation>
+        <translation>피드포워드 게인 (FW_PR_FF)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="101"/>
@@ -18143,32 +18176,32 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="108"/>
         <source>Porportional Gain (FW_YR_P)</source>
-        <translation type="unfinished"></translation>
+        <translation>비례 게인 (FW_YR_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="116"/>
         <source>Integral Gain (FW_YR_D)</source>
-        <translation type="unfinished"></translation>
+        <translation>미분 게인 (FW_YR_D)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="124"/>
         <source>Integral Gain (FW_YR_I)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 (FW_YR_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="132"/>
         <source>Feedforward Gain (FW_YR_FF)</source>
-        <translation type="unfinished"></translation>
+        <translation>피드포워드 게인 (FW_YR_FF)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="140"/>
         <source>Roll control to yaw feedforward (FW_RLL_TO_YAW_FF)</source>
-        <translation type="unfinished"></translation>
+        <translation>롤 제어에서 요로의 피드포워드 (FW_RLL_TO_YAW_FF)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneRate.qml" line="141"/>
         <source>Used to counteract the adverse yaw effect for fixed wings.</source>
-        <translation type="unfinished"></translation>
+        <translation>고정익의 역 요(adverse yaw) 효과를 상쇄하는 데 사용됩니다.</translation>
     </message>
 </context>
 <context>
@@ -18181,7 +18214,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneTECS.qml" line="28"/>
         <source>Height rate feed forward (FW_T_HRATE_FF)</source>
-        <translation type="unfinished">Height rate feed forward (FW_T_HRATE_FF)</translation>
+        <translation>고도 속도 피드포워드 (FW_T_HRATE_FF)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentPlaneTECS.qml" line="29"/>
@@ -18204,7 +18237,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAll.qml" line="19"/>
         <source>Velocity Controller</source>
-        <translation type="unfinished">Velocity Controller</translation>
+        <translation>속도 컨트롤러</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAll.qml" line="23"/>
@@ -18222,13 +18255,13 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAttitude.qml" line="26"/>
         <source>Proportional Gain (SC_ROLL_P)</source>
-        <translation type="unfinished"></translation>
+        <translation>비례 게인 (SC_ROLL_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAttitude.qml" line="27"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAttitude.qml" line="44"/>
         <source>Increase for more responsiveness, reduce if the attitude overshoots.</source>
-        <translation type="unfinished">Increase for more responsiveness, reduce if the attitude overshoots.</translation>
+        <translation>반응성을 높이려면 증가시키고, 자세가 오버슈트하면 감소시키세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAttitude.qml" line="36"/>
@@ -18238,7 +18271,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAttitude.qml" line="43"/>
         <source>Proportional Gain (SC_PITCH_P)</source>
-        <translation type="unfinished"></translation>
+        <translation>비례 게인 (SC_PITCH_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAttitude.qml" line="53"/>
@@ -18248,12 +18281,12 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAttitude.qml" line="60"/>
         <source>Proportional Gain (SC_YAW_P)</source>
-        <translation type="unfinished"></translation>
+        <translation>비례 게인 (SC_YAW_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftAttitude.qml" line="61"/>
         <source>Increase for more responsiveness, reduce if the attitude overshoots (there is only a setpoint when yaw is fixed, i.e. when centering the stick).</source>
-        <translation type="unfinished">Increase for more responsiveness, reduce if the attitude overshoots (there is only a setpoint when yaw is fixed, i.e. when centering the stick).</translation>
+        <translation>반응성을 높이려면 증가시키고, 자세가 오버슈트하면 감소시키세요 (요가 고정될 때, 즉 스틱을 중앙으로 두었을 때만 설정값이 있습니다).</translation>
     </message>
 </context>
 <context>
@@ -18266,43 +18299,43 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftPosition.qml" line="20"/>
         <source>Position (X direction)</source>
-        <translation type="unfinished"></translation>
+        <translation>위치 (X 방향)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftPosition.qml" line="27"/>
         <source>Proportional gain (SPC_POS_P)</source>
-        <translation type="unfinished"></translation>
+        <translation>비례 게인 (SPC_POS_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftPosition.qml" line="28"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftPosition.qml" line="52"/>
         <source>Increase for more responsiveness, reduce if the position overshoots.</source>
-        <translation type="unfinished"></translation>
+        <translation>반응성을 높이려면 증가시키고, 위치가 오버슈트하면 감소시키세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftPosition.qml" line="35"/>
         <source>Integral gain (SPC_POS_I)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 (SPC_POS_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftPosition.qml" line="36"/>
         <source>Increase for faster convergence to zero steady-state error.</source>
-        <translation type="unfinished"></translation>
+        <translation>정상 상태 오차가 0에 더 빠르게 수렴하도록 증가시키세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftPosition.qml" line="43"/>
         <source>Integral gain limit (SPC_POS_I_LIM)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 제한 (SPC_POS_I_LIM)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftPosition.qml" line="44"/>
         <source>Anti-windup limit for the position controller integral component.</source>
-        <translation type="unfinished"></translation>
+        <translation>위치 컨트롤러 적분 성분의 안티 와인드업 제한.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftPosition.qml" line="51"/>
         <source>Position Error Limit (SPC_VEL_MAX)</source>
-        <translation type="unfinished"></translation>
+        <translation>위치 오차 제한 (SPC_VEL_MAX)</translation>
     </message>
 </context>
 <context>
@@ -18325,38 +18358,38 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="35"/>
         <source>Overall Multiplier (SC_ROLLRATE_K)</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 배수 (SC_ROLLRATE_K)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="36"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="69"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="102"/>
         <source>Multiplier for P, I and D gains: increase for more responsiveness, reduce if the rates overshoot (and increasing D does not help).</source>
-        <translation type="unfinished">Multiplier for P, I and D gains: increase for more responsiveness, reduce if the rates overshoot (and increasing D does not help).</translation>
+        <translation>P, I, D 게인의 배수: 반응성을 높이려면 증가시키고, 속도가 오버슈트하고 D 증가도 도움이 안 되면 감소시키세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="43"/>
         <source>Differential Gain (SC_ROLLRATE_D)</source>
-        <translation type="unfinished"></translation>
+        <translation>미분 게인 (SC_ROLLRATE_D)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="44"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="77"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="110"/>
         <source>Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</source>
-        <translation type="unfinished">Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</translation>
+        <translation>댐핑: 오버슈트와 진동을 줄이려면 증가시키되, 꼭 필요한 만큼만 높이세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="51"/>
         <source>Integral Gain (SC_ROLLRATE_I)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 (SC_ROLLRATE_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="52"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="85"/>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="118"/>
         <source>Generally does not need much adjustment, reduce this when seeing slow oscillations.</source>
-        <translation type="unfinished">Generally does not need much adjustment, reduce this when seeing slow oscillations.</translation>
+        <translation>일반적으로 많이 조정할 필요는 없으며, 느린 진동이 보이면 줄이세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="61"/>
@@ -18366,17 +18399,17 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="68"/>
         <source>Overall Multiplier (SC_PITCHRATE_K)</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 배수 (SC_PITCHRATE_K)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="76"/>
         <source>Differential Gain (SC_PITCHRATE_D)</source>
-        <translation type="unfinished"></translation>
+        <translation>미분 게인 (SC_PITCHRATE_D)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="84"/>
         <source>Integral Gain (SC_PITCHRATE_I)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 (SC_PITCHRATE_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="94"/>
@@ -18386,27 +18419,27 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="101"/>
         <source>Overall Multiplier (SC_YAWRATE_K)</source>
-        <translation type="unfinished"></translation>
+        <translation>전체 배수 (SC_YAWRATE_K)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="109"/>
         <source>Derivative Gain (SC_YAWRATE_D)</source>
-        <translation type="unfinished"></translation>
+        <translation>미분 게인 (SC_YAWRATE_D)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="117"/>
         <source>Integral Gain (SC_YAWRATE_I)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 (SC_YAWRATE_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="125"/>
         <source>Integral Limit (SC_YR_INT_LIM)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 제한 (SC_YR_INT_LIM)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftRate.qml" line="126"/>
         <source>Increase if the robot still has a steady-state error at maximum integral gain.</source>
-        <translation type="unfinished"></translation>
+        <translation>최대 적분 게인에서도 정상 상태 오차가 남아 있으면 증가시키세요.</translation>
     </message>
 </context>
 <context>
@@ -18424,37 +18457,37 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftVelocity.qml" line="27"/>
         <source>Proportional gain (SPC_VEL_P)</source>
-        <translation type="unfinished"></translation>
+        <translation>비례 게인 (SPC_VEL_P)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftVelocity.qml" line="28"/>
         <source>Increase for more responsiveness, reduce if the velocity overshoots (and increasing D does not help).</source>
-        <translation type="unfinished">Increase for more responsiveness, reduce if the velocity overshoots (and increasing D does not help).</translation>
+        <translation>반응성을 높이려면 증가시키고, 속도가 오버슈트하고 D 증가도 도움이 안 되면 감소시키세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftVelocity.qml" line="35"/>
         <source>Differential gain (SPC_VEL_D)</source>
-        <translation type="unfinished"></translation>
+        <translation>미분 게인 (SPC_VEL_D)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftVelocity.qml" line="36"/>
         <source>Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</source>
-        <translation type="unfinished">Damping: increase to reduce overshoots and oscillations, but not higher than really needed.</translation>
+        <translation>댐핑: 오버슈트와 진동을 줄이려면 증가시키되, 꼭 필요한 만큼만 높이세요.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftVelocity.qml" line="43"/>
         <source>Integral gain (SPC_VEL_I)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 (SPC_VEL_I)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftVelocity.qml" line="44"/>
         <source>Increase to reduce steady-state error (e.g. wind)</source>
-        <translation type="unfinished">Increase to reduce steady-state error (e.g. wind)</translation>
+        <translation>정상 상태 오차(예: 바람)를 줄이려면 증가시키세요</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftVelocity.qml" line="51"/>
         <source>Integral gain Limiter (SPC_VEL_I_LIM)</source>
-        <translation type="unfinished"></translation>
+        <translation>적분 게인 제한 (SPC_VEL_I_LIM)</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PX4TuningComponentSpacecraftVelocity.qml" line="52"/>
@@ -18523,7 +18556,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/UI/toolbar/ParameterDownloadProgress.qml" line="59"/>
         <source>Click anywhere to hide</source>
-        <translation type="unfinished"></translation>
+        <translation>아무 곳이나 클릭하여 숨기기</translation>
     </message>
 </context>
 <context>
@@ -18607,7 +18640,7 @@ Is this really what you want?</source>
     <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="192"/>
         <source>Modified</source>
-        <translation>수정됨</translation>
+        <translation>수정된 항목</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="193"/>
@@ -18619,14 +18652,14 @@ Is this really what you want?</source>
         <source>Select Reset to reset all parameters to their defaults.
 
 Note that this will also completely reset everything, including UAVCAN nodes, all vehicle settings, setup and calibrations.</source>
-        <translation type="unfinished">Select Reset to reset all parameters to their defaults.
+        <translation>모든 파라미터를 기본값으로 초기화하려면 재설정을 선택하세요.
 
-Note that this will also completely reset everything, including UAVCAN nodes, all vehicle settings, setup and calibrations.</translation>
+이 작업은 UAVCAN 노드, 모든 기체 설정, 설치 및 보정 등 전체를 초기화합니다.</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="63"/>
         <source>Load from file for review...</source>
-        <translation type="unfinished"></translation>
+        <translation>검토를 위해 파일에서 불러오기...</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/ParameterEditor.qml" line="89"/>
@@ -18703,12 +18736,12 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/QmlControls/ParameterEditorDialog.qml" line="211"/>
         <source>Vehicle reboot required after change</source>
-        <translation type="unfinished"></translation>
+        <translation>변경 후 기체 재부팅 필요</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/ParameterEditorDialog.qml" line="216"/>
         <source>Application restart required after change</source>
-        <translation type="unfinished"></translation>
+        <translation>변경 후 애플리케이션 재시작 필요</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/ParameterEditorDialog.qml" line="222"/>
@@ -18752,13 +18785,13 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
         <location filename="../src/FactSystem/ParameterManager.cc" line="1197"/>
         <source>Parameters not loaded since they are not currently on the vehicle: %1
 </source>
-        <translation type="unfinished">Parameters not loaded since they are not currently on the vehicle: %1
+        <translation>현재 기체에 존재하지 않아 불러오지 못한 파라미터: %1
 </translation>
     </message>
     <message>
         <location filename="../src/FactSystem/ParameterManager.cc" line="1201"/>
         <source>Parameters not loaded due to type mismatch: %1</source>
-        <translation type="unfinished">Parameters not loaded due to type mismatch: %1</translation>
+        <translation>유형 불일치로 불러오지 못한 파라미터: %1</translation>
     </message>
     <message>
         <location filename="../src/FactSystem/ParameterManager.cc" line="1348"/>
@@ -18768,7 +18801,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/FactSystem/ParameterManager.cc" line="1396"/>
         <source>Vehicle %1 did not respond to request for parameters. This will cause %2 to be unable to display its full user interface.</source>
-        <translation type="unfinished"></translation>
+        <translation>기체 %1이(가) 파라미터 요청에 응답하지 않았습니다. 이로 인해 %2의 전체 사용자 인터페이스가 표시되지 않을 수 있습니다.</translation>
     </message>
 </context>
 <context>
@@ -18814,7 +18847,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/FlightMap/Widgets/PhotoVideoControl.qml" line="305"/>
         <source>Free: </source>
-        <translation type="unfinished"></translation>
+        <translation>여유: </translation>
     </message>
     <message>
         <location filename="../src/FlightMap/Widgets/PhotoVideoControl.qml" line="313"/>
@@ -18996,12 +19029,12 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanInfoEditor.qml" line="110"/>
         <source>Expected Home Position</source>
-        <translation type="unfinished"></translation>
+        <translation>예상 홈 위치</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanInfoEditor.qml" line="132"/>
         <source>Click in map to set position</source>
-        <translation type="unfinished"></translation>
+        <translation>지도를 클릭하여 위치 설정</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanInfoEditor.qml" line="140"/>
@@ -19016,7 +19049,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanInfoEditor.qml" line="174"/>
         <source>Actual position/alt set by vehicle at flight time.</source>
-        <translation type="unfinished"></translation>
+        <translation>비행 시 기체가 설정한 실제 위치/고도.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanInfoEditor.qml" line="183"/>
@@ -19084,7 +19117,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/MissionManager/PlanManager.cc" line="353"/>
         <source>Internal Error: Call to Vehicle _requestNextMissionItem with no more indices to read</source>
-        <translation type="unfinished">Internal Error: Call to Vehicle _requestNextMissionItem with no more indices to read</translation>
+        <translation>내부 오류: 읽을 인덱스가 없는 상태에서 Vehicle _requestNextMissionItem이 호출됨</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/PlanManager.cc" line="511"/>
@@ -19190,7 +19223,7 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/MissionManager/PlanManager.cc" line="789"/>
         <source>Not accepting any mission commands.</source>
-        <translation type="unfinished">Not accepting any mission commands.</translation>
+        <translation>임무 명령을 받지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/PlanManager.cc" line="793"/>
@@ -19235,22 +19268,22 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/MissionManager/PlanMasterController.cc" line="680"/>
         <source>Supported types (*.%1 *.%2 *.%3)</source>
-        <translation type="unfinished"></translation>
+        <translation>지원 형식 (*.%1 *.%2 *.%3)</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/PlanMasterController.cc" line="879"/>
         <source>Archive file not found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>아카이브 파일을 찾을 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/PlanMasterController.cc" line="884"/>
         <source>Not a supported archive format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>지원하지 않는 아카이브 형식: %1</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/PlanMasterController.cc" line="890"/>
         <source>Could not create temporary directory</source>
-        <translation type="unfinished"></translation>
+        <translation>임시 디렉터리를 생성할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/PlanMasterController.cc" line="908"/>
@@ -19260,12 +19293,12 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/MissionManager/PlanMasterController.cc" line="909"/>
         <source>Failed to extract plan archive: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>플랜 아카이브 압축 해제 실패: %1</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/PlanMasterController.cc" line="923"/>
         <source>No plan file found in archive</source>
-        <translation type="unfinished"></translation>
+        <translation>아카이브에서 플랜 파일을 찾을 수 없음</translation>
     </message>
     <message>
         <location filename="../src/MissionManager/PlanMasterController.cc" line="681"/>
@@ -19301,22 +19334,22 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="40"/>
         <source>You have unsaved changes. Downloading from the Vehicle will lose these changes. Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>저장되지 않은 변경 사항이 있습니다. 기체에서 다운로드하면 변경 사항이 사라집니다. 계속하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="50"/>
         <source>Open Plan</source>
-        <translation type="unfinished"></translation>
+        <translation>플랜 열기</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="51"/>
         <source>You have unsaved/unsent changes. Loading a new Plan will lose these changes. Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>저장/전송되지 않은 변경 사항이 있습니다. 새 플랜을 불러오면 변경 사항이 사라집니다. 계속하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="75"/>
         <source>&apos;%1&apos; already exists. Overwrite?</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos;이(가) 이미 존재합니다. 덮어쓰시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="76"/>
@@ -19333,17 +19366,17 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="94"/>
         <source>Are you sure you want to remove all the items from the plan editor?</source>
-        <translation type="unfinished"></translation>
+        <translation>플랜 편집기에서 모든 항목을 제거하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="101"/>
         <source>Are you sure you want to remove the plan from the vehicle and the plan editor?</source>
-        <translation type="unfinished"></translation>
+        <translation>기체와 플랜 편집기에서 플랜을 제거하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="163"/>
         <source>Click in map to add rally points</source>
-        <translation type="unfinished"></translation>
+        <translation>지도를 클릭하여 랠리 지점 추가</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanToolBarIndicators.qml" line="180"/>
@@ -19366,12 +19399,12 @@ Note that this will also completely reset everything, including UAVCAN nodes, al
     <message>
         <location filename="../src/PlanView/PlanTreeView.qml" line="158"/>
         <source> items</source>
-        <translation type="unfinished"></translation>
+        <translation> 항목</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanTreeView.qml" line="159"/>
         <source> points</source>
-        <translation type="unfinished"></translation>
+        <translation> 지점</translation>
     </message>
 </context>
 <context>
@@ -19488,7 +19521,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="91"/>
         <source>Plan has incomplete items. Complete all items and %1 again.</source>
-        <translation type="unfinished"></translation>
+        <translation>플랜에 미완료 항목이 있습니다. 모든 항목을 완성하고 %1을(를) 다시 시도하세요.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/PlanView.qml" line="117"/>
@@ -19549,7 +19582,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/UI/toolbar/PlanViewToolBar.qml" line="126"/>
         <source>Syncing Mission</source>
-        <translation type="unfinished">미션을 동기화중입니다</translation>
+        <translation>임무 동기화 중</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/PlanViewToolBar.qml" line="133"/>
@@ -19559,7 +19592,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/UI/toolbar/PlanViewToolBar.qml" line="142"/>
         <source>Click anywhere to hide</source>
-        <translation type="unfinished"></translation>
+        <translation>아무 곳이나 클릭하여 숨기기</translation>
     </message>
 </context>
 <context>
@@ -19620,7 +19653,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/PowerComponentSummary.qml" line="73"/>
         <source>Battery %1 Number of Cells</source>
-        <translation type="unfinished"></translation>
+        <translation>배터리 %1 셀 개수</translation>
     </message>
 </context>
 <context>
@@ -19795,7 +19828,7 @@ Click &apos;Ok&apos; to upload the Plan anyway.</source>
     <message>
         <location filename="../src/UI/toolbar/PrecisionLandingIndicator.qml" line="51"/>
         <source>Precision Landing Unavailable</source>
-        <translation type="unfinished"></translation>
+        <translation>정밀 착륙 사용 불가</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/PrecisionLandingIndicator.qml" line="64"/>
@@ -19858,17 +19891,17 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QtLocationPlugin/QGCTileCacheWorker.cpp" line="44"/>
         <source>Database Not Initialized</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터베이스가 초기화되지 않음</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGCTileCacheWorker.cpp" line="73"/>
         <source>Database Init Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터베이스 초기화 실패</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGCTileCacheWorker.cpp" line="119"/>
         <source>Worker shutting down</source>
-        <translation type="unfinished"></translation>
+        <translation>워커 종료 중</translation>
     </message>
 </context>
 <context>
@@ -19884,7 +19917,7 @@ sudo apt-get remove modemmanager</translation>
         <location filename="../src/Utilities/Network/QGCCachedFileDownload.cc" line="162"/>
         <location filename="../src/Utilities/Network/QGCCachedFileDownload.cc" line="219"/>
         <source>Cache directory not configured</source>
-        <translation type="unfinished"></translation>
+        <translation>캐시 디렉터리가 설정되지 않음</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCCachedFileDownload.cc" line="272"/>
@@ -20007,17 +20040,17 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/QGCFileDialogController.cc" line="132"/>
         <source>Missions directory is not configured</source>
-        <translation type="unfinished"></translation>
+        <translation>임무 디렉터리가 설정되지 않음</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/QGCFileDialogController.cc" line="139"/>
         <source>Missions save path does not exist</source>
-        <translation type="unfinished"></translation>
+        <translation>임무 저장 경로가 존재하지 않음</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/QGCFileDialogController.cc" line="163"/>
         <source>Failed to import file</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 가져오기 실패</translation>
     </message>
 </context>
 <context>
@@ -20035,22 +20068,22 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="123"/>
         <source>Unable to determine output path</source>
-        <translation type="unfinished"></translation>
+        <translation>출력 경로를 확인할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="130"/>
         <source>Cannot create output directory</source>
-        <translation type="unfinished"></translation>
+        <translation>출력 디렉터리를 생성할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="137"/>
         <source>Cannot open output file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>출력 파일을 열 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="152"/>
         <source>Failed to start download</source>
-        <translation type="unfinished"></translation>
+        <translation>다운로드 시작 실패</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="182"/>
@@ -20066,12 +20099,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="326"/>
         <source>File not found (404)</source>
-        <translation type="unfinished"></translation>
+        <translation>파일을 찾을 수 없음 (404)</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="329"/>
         <source>Connection timed out</source>
-        <translation type="unfinished"></translation>
+        <translation>연결 시간 초과</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="332"/>
@@ -20086,7 +20119,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="338"/>
         <source>SSL handshake failed</source>
-        <translation type="unfinished"></translation>
+        <translation>SSL 핸드셰이크 실패</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="344"/>
@@ -20096,22 +20129,22 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="375"/>
         <source>Decompression failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>압축 해제 실패: %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="461"/>
         <source>Failed to write downloaded file (%1): %2</source>
-        <translation type="unfinished"></translation>
+        <translation>다운로드된 파일 쓰기 실패 (%1): %2</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="516"/>
         <source>Failed to compute file hash</source>
-        <translation type="unfinished"></translation>
+        <translation>파일 해시 계산 실패</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/QGCFileDownload.cc" line="521"/>
         <source>Hash verification failed. Expected: %1, Got: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>해시 검증 실패. 예상값: %1, 실제값: %2</translation>
     </message>
 </context>
 <context>
@@ -20119,12 +20152,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/QGCLogging.cc" line="250"/>
         <source>Unable to reopen log file %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>로그 파일을 다시 열 수 없음 %1: %2</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCLogging.cc" line="274"/>
         <source>Open console log output file failed %1 : %2</source>
-        <translation type="unfinished">콘솔 로그 출력파일 열기 오류 %1 : %2</translation>
+        <translation>콘솔 로그 출력 파일 열기 실패 %1 : %2</translation>
     </message>
 </context>
 <context>
@@ -20145,27 +20178,27 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QtLocationPlugin/QGCMapEngineManager.cc" line="487"/>
         <source>No archive path specified</source>
-        <translation type="unfinished"></translation>
+        <translation>아카이브 경로가 지정되지 않음</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGCMapEngineManager.cc" line="492"/>
         <source>Archive file not found: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>아카이브 파일을 찾을 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGCMapEngineManager.cc" line="497"/>
         <source>Not a supported archive format: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>지원하지 않는 아카이브 형식: %1</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGCMapEngineManager.cc" line="502"/>
         <source>Import already in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>이미 가져오기가 진행 중</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGCMapEngineManager.cc" line="508"/>
         <source>Could not create temporary directory</source>
-        <translation type="unfinished"></translation>
+        <translation>임시 디렉터리를 생성할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGCMapEngineManager.cc" line="537"/>
@@ -20175,12 +20208,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QtLocationPlugin/QGCMapEngineManager.cc" line="553"/>
         <source>No tile database found in archive</source>
-        <translation type="unfinished"></translation>
+        <translation>아카이브에서 타일 데이터베이스를 찾을 수 없음</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGCMapEngineManager.cc" line="574"/>
         <source>Failed to start import task</source>
-        <translation type="unfinished"></translation>
+        <translation>가져오기 작업 시작 실패</translation>
     </message>
 </context>
 <context>
@@ -20188,7 +20221,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/QGCMapPolygon.cc" line="580"/>
         <source>No polygons found in file</source>
-        <translation type="unfinished"></translation>
+        <translation>파일에서 다각형을 찾을 수 없음</translation>
     </message>
 </context>
 <context>
@@ -20211,7 +20244,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/FlightMap/MapItems/QGCMapPolygonVisuals.qml" line="40"/>
         <source>Click in the map to add vertices. Click &apos;Done Tracing&apos; when finished.</source>
-        <translation type="unfinished">Click in the map to add vertices. Click &apos;Done Tracing&apos; when finished.</translation>
+        <translation>지도를 클릭하여 정점을 추가하세요. 완료되면 &apos;추적 완료&apos;를 클릭하세요.</translation>
     </message>
     <message>
         <location filename="../src/FlightMap/MapItems/QGCMapPolygonVisuals.qml" line="252"/>
@@ -20232,7 +20265,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/FlightMap/MapItems/QGCMapPolygonVisuals.qml" line="552"/>
         <source>Enter circle radius.</source>
-        <translation type="unfinished"></translation>
+        <translation>원의 반경을 입력하세요.</translation>
     </message>
     <message>
         <location filename="../src/FlightMap/MapItems/QGCMapPolygonVisuals.qml" line="582"/>
@@ -20275,7 +20308,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/QGCMapPolyline.cc" line="385"/>
         <source>No polylines found in file</source>
-        <translation type="unfinished"></translation>
+        <translation>파일에서 폴리라인을 찾을 수 없음</translation>
     </message>
 </context>
 <context>
@@ -20288,7 +20321,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/FlightMap/MapItems/QGCMapPolylineVisuals.qml" line="32"/>
         <source>Click in the map to add vertices. Click &apos;Done Tracing&apos; when finished.</source>
-        <translation type="unfinished">Click in the map to add vertices. Click &apos;Done Tracing&apos; when finished.</translation>
+        <translation>지도를 클릭하여 정점을 추가하세요. 완료되면 &apos;추적 완료&apos;를 클릭하세요.</translation>
     </message>
     <message>
         <location filename="../src/FlightMap/MapItems/QGCMapPolylineVisuals.qml" line="139"/>
@@ -20303,7 +20336,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/FlightMap/MapItems/QGCMapPolylineVisuals.qml" line="118"/>
         <source>Select Polyline File</source>
-        <translation type="unfinished"></translation>
+        <translation>폴리라인 파일 선택</translation>
     </message>
     <message>
         <location filename="../src/FlightMap/MapItems/QGCMapPolylineVisuals.qml" line="397"/>
@@ -20515,7 +20548,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QtLocationPlugin/QGeoFileTileCacheQGC.cpp" line="208"/>
         <source>The Offline Map Cache database has been upgraded. Your old map cache sets have been reset.</source>
-        <translation type="unfinished">오프라인 지도 데이터베이스가 업그레이드 되었습니다. 오래된 지도 캐쉬가 초기화됩니다</translation>
+        <translation>오프라인 지도 캐시 데이터베이스가 업그레이드되었습니다. 기존 지도 캐시 세트가 초기화됩니다.</translation>
     </message>
 </context>
 <context>
@@ -20538,17 +20571,17 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QtLocationPlugin/QGeoMapReplyQGC.cpp" line="121"/>
         <source>Invalid Map Provider</source>
-        <translation type="unfinished"></translation>
+        <translation>잘못된 지도 공급자</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGeoMapReplyQGC.cpp" line="126"/>
         <source>Bing Tile Above Zoom Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Bing 타일이 줌 레벨을 초과함</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGeoMapReplyQGC.cpp" line="134"/>
         <source>Failed to Serialize Terrain Tile</source>
-        <translation type="unfinished"></translation>
+        <translation>지형 타일 직렬화 실패</translation>
     </message>
     <message>
         <location filename="../src/QtLocationPlugin/QGeoMapReplyQGC.cpp" line="142"/>
@@ -20568,7 +20601,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QtLocationPlugin/QGeoMapReplyQGC.cpp" line="201"/>
         <source>Network Not Available</source>
-        <translation type="unfinished"></translation>
+        <translation>네트워크 사용 불가</translation>
     </message>
 </context>
 <context>
@@ -20617,7 +20650,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/QGroundControlQmlGlobal.cc" line="309"/>
         <source>Above Terrain Calced (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>지형 기준 계산 (%1)</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/QGroundControlQmlGlobal.cc" line="311"/>
@@ -20671,12 +20704,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Parsing/Json/JsonParsing.cc" line="348"/>
         <source>Unable to parse json file: %1 error: %2 offset: %3</source>
-        <translation type="unfinished">파일을 분석할 수 없습니다. KML 파일: %1 에러: %2 줄: %3</translation>
+        <translation>JSON 파일을 파싱할 수 없습니다: %1 오류: %2 오프셋: %3</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Parsing/Json/JsonParsing.cc" line="355"/>
         <source>Root of json file is not object: %1</source>
-        <translation type="unfinished">Root of json file is not object: %1</translation>
+        <translation>JSON 파일의 루트가 객체가 아닙니다: %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Parsing/Json/JsonParsing.cc" line="363"/>
@@ -20691,7 +20724,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Compression/QGCCompression.cc" line="1013"/>
         <source>Failed to open compressed file: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>압축 파일을 열 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/FileSystem/QGCFileHelper.cc" line="23"/>
@@ -20701,7 +20734,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/FileSystem/QGCFileHelper.cc" line="31"/>
         <source>Failed to open file: %1 - %2</source>
-        <translation type="unfinished"></translation>
+        <translation>파일을 열 수 없음: %1 - %2</translation>
     </message>
 </context>
 <context>
@@ -20714,7 +20747,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport.cpp" line="26"/>
         <source>Device is already open</source>
-        <translation type="unfinished"></translation>
+        <translation>장치가 이미 열려 있음</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport.cpp" line="29"/>
@@ -20729,62 +20762,62 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport.cpp" line="35"/>
         <source>Error reading from device</source>
-        <translation type="unfinished"></translation>
+        <translation>장치 읽기 오류</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport.cpp" line="38"/>
         <source>Error writing to device</source>
-        <translation type="unfinished"></translation>
+        <translation>장치 쓰기 오류</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport.cpp" line="41"/>
         <source>Device disappeared from the system</source>
-        <translation type="unfinished"></translation>
+        <translation>시스템에서 장치가 사라짐</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport.cpp" line="448"/>
         <source>Unsupported open mode</source>
-        <translation type="unfinished"></translation>
+        <translation>지원하지 않는 열기 모드</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="75"/>
         <source>Closing device failed</source>
-        <translation type="unfinished"></translation>
+        <translation>장치 닫기 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="97"/>
         <source>Failed to start async read</source>
-        <translation type="unfinished"></translation>
+        <translation>비동기 읽기 시작 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="117"/>
         <source>Failed to stop async read</source>
-        <translation type="unfinished"></translation>
+        <translation>비동기 읽기 중지 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="297"/>
         <source>Timeout while waiting for ready read</source>
-        <translation type="unfinished"></translation>
+        <translation>읽기 준비 대기 중 시간 초과</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="308"/>
         <source>Timeout while waiting for bytes written</source>
-        <translation type="unfinished"></translation>
+        <translation>바이트 쓰기 대기 중 시간 초과</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="329"/>
         <source>Failed to write data one shot</source>
-        <translation type="unfinished"></translation>
+        <translation>단일 쓰기 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="351"/>
         <source>Failed to write to port</source>
-        <translation type="unfinished"></translation>
+        <translation>포트에 쓰기 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="361"/>
         <source>Invalid data or size</source>
-        <translation type="unfinished"></translation>
+        <translation>잘못된 데이터 또는 크기</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="373"/>
@@ -20794,7 +20827,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="387"/>
         <source>Failed to purge buffers</source>
-        <translation type="unfinished"></translation>
+        <translation>버퍼 비우기 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="403"/>
@@ -20809,47 +20842,47 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="428"/>
         <source>Failed to set parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>파라미터 설정 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="444"/>
         <source>Invalid baud rate value</source>
-        <translation type="unfinished"></translation>
+        <translation>잘못된 보드레이트 값</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="451"/>
         <source>Custom baud rate direction is unsupported</source>
-        <translation type="unfinished"></translation>
+        <translation>사용자 정의 보드레이트 방향이 지원되지 않음</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="460"/>
         <source>Failed to set baud rate</source>
-        <translation type="unfinished"></translation>
+        <translation>보드레이트 설정 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="488"/>
         <source>Failed to set data bits</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터 비트 설정 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="518"/>
         <source>Failed to set parity</source>
-        <translation type="unfinished"></translation>
+        <translation>패리티 설정 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="544"/>
         <source>Failed to set StopBits</source>
-        <translation type="unfinished"></translation>
+        <translation>정지 비트 설정 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="570"/>
         <source>Failed to set Flow Control</source>
-        <translation type="unfinished"></translation>
+        <translation>흐름 제어 설정 실패</translation>
     </message>
     <message>
         <location filename="../src/Android/qtandroidserialport/qserialport_android.cpp" line="580"/>
         <source>Failed to set Break Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>브레이크 활성화 설정 실패</translation>
     </message>
 </context>
 <context>
@@ -21001,12 +21034,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/RCToParamDialog.qml" line="29"/>
         <source>Bind an RC Channel to a parameter value. Tuning IDs can be mapped to an RC Channel from Radio Setup page.</source>
-        <translation type="unfinished">Bind an RC Channel to a parameter value. Tuning IDs can be mapped to an RC Channel from Radio Setup page.</translation>
+        <translation>RC 채널을 파라미터 값에 바인딩합니다. 튜닝 ID는 라디오 설정 페이지에서 RC 채널에 매핑할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/RCToParamDialog.qml" line="35"/>
         <source>Waiting on parameter update from Vehicle.</source>
-        <translation type="unfinished">Waiting on parameter update from Vehicle.</translation>
+        <translation>기체로부터 파라미터 업데이트를 기다리는 중.</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/RCToParamDialog.qml" line="46"/>
@@ -21041,7 +21074,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/QmlControls/RCToParamDialog.qml" line="86"/>
         <source>Double check that all values are correct prior to confirming dialog.</source>
-        <translation type="unfinished">Double check that all values are correct prior to confirming dialog.</translation>
+        <translation>대화상자를 확인하기 전에 모든 값이 올바른지 다시 한 번 확인하세요.</translation>
     </message>
 </context>
 <context>
@@ -21075,12 +21108,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/RadioComponent.qml" line="110"/>
         <source>Click Ok to place your Spektrum receiver in the bind mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>확인을 클릭하여 Spektrum 수신기를 바인드 모드로 전환합니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/RadioComponent.qml" line="115"/>
         <source>Select the specific receiver type below:</source>
-        <translation type="unfinished"></translation>
+        <translation>아래에서 특정 수신기 유형을 선택하세요:</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/RadioComponent.qml" line="119"/>
@@ -21261,7 +21294,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibration.qml" line="235"/>
         <source>%1 axes or more are needed to fly. Joystick is reporting %2 axes.</source>
-        <translation type="unfinished"></translation>
+        <translation>비행을 위해서는 %1개 이상의 축이 필요합니다. 조이스틱이 %2개의 축을 보고하고 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibration.qml" line="237"/>
@@ -21271,12 +21304,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibration.qml" line="238"/>
         <source>Please turn on RC transmitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>RC 송신기를 켜주세요.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibration.qml" line="238"/>
         <source>%1 channels or more are needed to fly.</source>
-        <translation type="unfinished">비행을 하기 위해서는 %1 채널 이상이 필요합니다.</translation>
+        <translation>비행을 위해서는 %1개 이상의 채널이 필요합니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibration.qml" line="243"/>
@@ -21288,14 +21321,14 @@ sudo apt-get remove modemmanager</translation>
         <source>Before calibrating you should zero all your trims and subtrims. Click Ok to start Calibration.
 
 %1</source>
-        <translation type="unfinished">캘리브레이션을 시작하기 전에 트림과 서브 트림을 모두 0으로 돌려놓아야 합니다. 캘리브레이션을 시작하기 위해 확인을 눌러주십시오.
+        <translation>보정을 시작하기 전에 모든 트림과 서브트림을 0으로 맞춰야 합니다. 확인을 클릭하여 보정을 시작하세요.
 
-%1.</translation>
+%1</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibration.qml" line="245"/>
         <source>Please ensure all motor power is disconnected AND all props are removed from the vehicle.</source>
-        <translation type="unfinished">모터의 전원이 연결되어 있지 않고 프롭이 모두 제거되었는지 확인해주십시오</translation>
+        <translation>모터 전원이 모두 분리되어 있고 기체에서 프로펠러가 모두 제거되었는지 확인하세요.</translation>
     </message>
 </context>
 <context>
@@ -21305,79 +21338,83 @@ sudo apt-get remove modemmanager</translation>
         <source>* Lower the Throttle stick all the way down as shown in diagram
 * Please ensure all motor power is disconnected AND all props are removed from the vehicle.
 * Click Next to continue</source>
-        <translation type="unfinished"></translation>
+        <translation>* 다이어그램과 같이 스로틀 스틱을 끝까지 아래로 내리세요
+* 모터 전원이 모두 분리되어 있고 기체에서 프로펠러가 모두 제거되었는지 확인하세요.
+* 계속하려면 다음을 클릭하세요</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="20"/>
         <source>* Center all sticks as shown in diagram.
 * Please ensure all motor power is disconnected from the vehicle.
 * Click Next to continue</source>
-        <translation type="unfinished"></translation>
+        <translation>* 다이어그램과 같이 모든 스틱을 중앙에 두세요.
+* 기체의 모터 전원이 모두 분리되어 있는지 확인하세요.
+* 계속하려면 다음을 클릭하세요</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="25"/>
         <source>Move the Throttle stick all the way up and hold it there...</source>
-        <translation type="unfinished">스로틀 스틱을 위로 올리고 멈추어주십시오...</translation>
+        <translation>스로틀 스틱을 끝까지 위로 올린 채 유지하세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="26"/>
         <source>Move the Throttle stick all the way down and leave it there...</source>
-        <translation type="unfinished">스로틀 스틱을 아래로 내려주시고 멈추어주십시오...</translation>
+        <translation>스로틀 스틱을 끝까지 아래로 내린 채 두세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="27"/>
         <source>Move the Yaw stick all the way to the left and hold it there...</source>
-        <translation type="unfinished">요 스틱을 왼쪽으로 최대한 밀고 멈추어주십시오...</translation>
+        <translation>요 스틱을 끝까지 왼쪽으로 민 채 유지하세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="28"/>
         <source>Move the Yaw stick all the way to the right and hold it there...</source>
-        <translation type="unfinished">요 스틱을 오른쪽으로 최대한 밀고 멈추어주십시오...</translation>
+        <translation>요 스틱을 끝까지 오른쪽으로 민 채 유지하세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="29"/>
         <source>Move the Roll stick all the way to the left and hold it there...</source>
-        <translation type="unfinished">롤 스틱을 왼쪽으로 최대한 밀고 멈추어주십시오...</translation>
+        <translation>롤 스틱을 끝까지 왼쪽으로 민 채 유지하세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="30"/>
         <source>Move the Roll stick all the way to the right and hold it there...</source>
-        <translation type="unfinished">롤 스틱을 오른쪽으로 최대한 밀고 멈추어주십시오...</translation>
+        <translation>롤 스틱을 끝까지 오른쪽으로 민 채 유지하세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="31"/>
         <source>Move the Pitch stick all the way down and hold it there...</source>
-        <translation type="unfinished">피치 스틱을 아래로 내리고 멈추어주십시오...</translation>
+        <translation>피치 스틱을 끝까지 아래로 내린 채 유지하세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="32"/>
         <source>Move the Pitch stick all the way up and hold it there...</source>
-        <translation type="unfinished">피치 스틱을 최대한 위로 올리고 멈추어주십시오...</translation>
+        <translation>피치 스틱을 끝까지 위로 올린 채 유지하세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="33"/>
         <source>Allow the Pitch stick to move back to center...</source>
-        <translation type="unfinished">피치 스틱을 가운데로 다시 옮기십시오...</translation>
+        <translation>피치 스틱을 중앙으로 다시 되돌리세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="34"/>
         <source>Move the %1 Extension stick to its high value position and hold it there...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 확장 스틱을 높은 값 위치로 옮긴 채 유지하세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="35"/>
         <source>Move the %1 Extension stick to its low value position and hold it there...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 확장 스틱을 낮은 값 위치로 옮긴 채 유지하세요...</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="36"/>
         <source>Move all the transmitter switches and/or dials back and forth to their extreme positions.</source>
-        <translation type="unfinished">조종기의 모든 스위치/다이얼을 최대한 움직여주십시오.</translation>
+        <translation>송신기의 모든 스위치와 다이얼을 양 극단 위치까지 앞뒤로 움직이세요.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="37"/>
         <source>All settings have been captured. Click Next to write the new parameters to your board.</source>
-        <translation type="unfinished">모든 설정이 완료되었습니다. 보드에 새로운 파라미터를 쓰기위해서 다음을 눌러주십시오.</translation>
+        <translation>모든 설정이 캡처되었습니다. 보드에 새 파라미터를 쓰려면 다음을 클릭하세요.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleSetup/RemoteControlCalibrationController.cc" line="365"/>
@@ -21525,12 +21562,12 @@ sudo apt-get remove modemmanager</translation>
         <location filename="../src/UI/AppSettings/RemoteIDGpsLocation.qml" line="35"/>
         <location filename="../src/UI/AppSettings/RemoteIDGpsLocation.qml" line="67"/>
         <source>UDP Port</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP 포트</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/RemoteIDGpsLocation.qml" line="43"/>
         <source>Serial &lt;none available&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>시리얼 &lt;사용 가능 없음&gt;</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/RemoteIDGpsLocation.qml" line="50"/>
@@ -21549,7 +21586,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/UI/toolbar/RemoteIDIndicatorPage.qml" line="73"/>
         <source>RemoteID Status</source>
-        <translation type="unfinished"></translation>
+        <translation>원격 ID 상태</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/RemoteIDIndicatorPage.qml" line="96"/>
@@ -21584,12 +21621,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/UI/toolbar/RemoteIDIndicatorPage.qml" line="221"/>
         <source>EMERGENCY HAS BEEN DECLARED, Press and Hold for 3 seconds to cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>비상 상황이 선언되었습니다. 취소하려면 3초간 길게 누르세요</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/RemoteIDIndicatorPage.qml" line="221"/>
         <source>Press and Hold below button to declare emergency</source>
-        <translation type="unfinished"></translation>
+        <translation>비상 상황을 선언하려면 아래 버튼을 길게 누르세요</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/RemoteIDIndicatorPage.qml" line="246"/>
@@ -21609,7 +21646,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/UI/toolbar/RemoteIDIndicatorPage.qml" line="331"/>
         <source>Self ID</source>
-        <translation type="unfinished">자체 ID</translation>
+        <translation>자체 ID</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/RemoteIDIndicatorPage.qml" line="340"/>
@@ -21619,7 +21656,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/UI/toolbar/RemoteIDIndicatorPage.qml" line="349"/>
         <source>If an emergency is declared, Emergency Text will be broadcast even if Broadcast setting is not enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>비상 상황이 선언되면 방송 설정이 활성화되어 있지 않더라도 비상 텍스트가 방송됩니다.</translation>
     </message>
     <message>
         <location filename="../src/UI/toolbar/RemoteIDIndicatorPage.qml" line="359"/>
@@ -21645,7 +21682,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/FlyView/RoverChecklist.qml" line="14"/>
         <source>Rover Initial Checks</source>
-        <translation type="unfinished">Rover Initial Checks</translation>
+        <translation>로버 초기 점검</translation>
     </message>
     <message>
         <location filename="../src/FlyView/RoverChecklist.qml" line="17"/>
@@ -21655,7 +21692,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/FlyView/RoverChecklist.qml" line="18"/>
         <source>Battery mounted and secured?</source>
-        <translation type="unfinished">Battery mounted and secured?</translation>
+        <translation>배터리가 장착되고 단단히 고정되어 있습니까?</translation>
     </message>
     <message>
         <location filename="../src/FlyView/RoverChecklist.qml" line="39"/>
@@ -21713,7 +21750,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="161"/>
         <source>File is not a .shp file: %1</source>
-        <translation type="unfinished">파일이 .shp 파일이 아닙니다 : %1</translation>
+        <translation>파일이 .shp 파일이 아닙니다: %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="168"/>
@@ -21723,22 +21760,22 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="195"/>
         <source>UTM projection is not in supported format. Must be PROJCS[&quot;WGS_1984_UTM_Zone_##N/S</source>
-        <translation type="unfinished">UTM 프로젝션이 지원되는 형식이 아닙니다. PROJCS[&quot;WGS_1984_UTM_Zone_##N/S 이어야 합니다</translation>
+        <translation>UTM 투영이 지원되는 형식이 아닙니다. PROJCS[&quot;WGS_1984_UTM_Zone_##N/S 형식이어야 합니다</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="209"/>
         <source>Unsupported projection: %1. Supported projections are: WGS84 (GEOGCS[&quot;GCS_WGS_1984&quot;]) and UTM (PROJCS[&quot;WGS_1984_UTM_Zone_##N/S&quot;]). Convert your shapefile to WGS84 using QGIS or ogr2ogr.</source>
-        <translation type="unfinished"></translation>
+        <translation>지원되지 않는 투영: %1. 지원되는 투영은 다음과 같습니다: WGS84 (GEOGCS[&quot;GCS_WGS_1984&quot;]) 및 UTM (PROJCS[&quot;WGS_1984_UTM_Zone_##N/S&quot;]). QGIS 또는 ogr2ogr을 사용하여 셰이프파일을 WGS84로 변환하세요.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="213"/>
         <source>Unable to parse projection from PRJ file. Supported projections are: WGS84 (GEOGCS[&quot;GCS_WGS_1984&quot;]) and UTM (PROJCS[&quot;WGS_1984_UTM_Zone_##N/S&quot;]).</source>
-        <translation type="unfinished"></translation>
+        <translation>PRJ 파일에서 투영을 파싱할 수 없습니다. 지원되는 투영: WGS84 (GEOGCS[&quot;GCS_WGS_1984&quot;]) 및 UTM (PROJCS[&quot;WGS_1984_UTM_Zone_##N/S&quot;]).</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="234"/>
         <source>SHPOpen failed.</source>
-        <translation type="unfinished">SHP 열기가 되지 않았습니다.</translation>
+        <translation>SHP 열기 실패.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="258"/>
@@ -21748,22 +21785,22 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="266"/>
         <source>No supported types found.</source>
-        <translation type="unfinished">지원되는 유형을 찾을 수 없습니다.</translation>
+        <translation>지원되는 유형을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="401"/>
         <source>No valid polygons found.</source>
-        <translation type="unfinished"></translation>
+        <translation>유효한 다각형을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="494"/>
         <source>No valid polylines found.</source>
-        <translation type="unfinished"></translation>
+        <translation>유효한 폴리라인을 찾을 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="562"/>
         <source>No valid points found.</source>
-        <translation type="unfinished"></translation>
+        <translation>유효한 포인트를 찾을 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -21776,17 +21813,17 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="317"/>
         <source>File contains %1, expected Polygon.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일에 %1이(가) 포함되어 있으나 Polygon이 필요합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="430"/>
         <source>File contains %1, expected Arc.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일에 %1이(가) 포함되어 있으나 Arc가 필요합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="523"/>
         <source>File contains %1, expected Point.</source>
-        <translation type="unfinished"></translation>
+        <translation>파일에 %1이(가) 포함되어 있으나 Point가 필요합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Geo/Formats/SHPFileHelper.cc" line="173"/>
@@ -21817,12 +21854,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/SafetyComponentSummary.qml" line="36"/>
         <source>RC/Joystick Loss Failsafe</source>
-        <translation type="unfinished"></translation>
+        <translation>RC/조이스틱 손실 페일세이프</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/SafetyComponentSummary.qml" line="41"/>
         <source>RC/Joystick Loss Timeout</source>
-        <translation type="unfinished"></translation>
+        <translation>RC/조이스틱 손실 시간 초과</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/SafetyComponentSummary.qml" line="46"/>
@@ -21885,17 +21922,17 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="86"/>
         <source>Upload succeeded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>업로드 성공: %1</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="95"/>
         <source>Download succeeded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>다운로드 성공: %1</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="103"/>
         <source>Delete succeeded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>삭제 성공: %1</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="116"/>
@@ -21915,7 +21952,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="200"/>
         <source>Are you sure you want to delete the script &quot;%1&quot;? This action cannot be undone.</source>
-        <translation type="unfinished"></translation>
+        <translation>스크립트 &quot;%1&quot;을(를) 삭제하시겠습니까? 이 작업은 취소할 수 없습니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="201"/>
@@ -21945,7 +21982,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="235"/>
         <source>Select Lua script to upload</source>
-        <translation type="unfinished"></translation>
+        <translation>업로드할 Lua 스크립트 선택</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="253"/>
@@ -21960,7 +21997,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="262"/>
         <source>Save Lua Script</source>
-        <translation type="unfinished"></translation>
+        <translation>Lua 스크립트 저장</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="274"/>
@@ -21975,12 +22012,12 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.qml" line="289"/>
         <source>Scripting is not supported by this version of firmware.</source>
-        <translation type="unfinished"></translation>
+        <translation>이 펌웨어 버전에서는 스크립팅이 지원되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/ScriptingComponent.h" line="14"/>
         <source>Provides access to onboard script management.</source>
-        <translation type="unfinished"></translation>
+        <translation>온보드 스크립트 관리 기능을 제공합니다.</translation>
     </message>
 </context>
 <context>
@@ -22271,7 +22308,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/SensorsSetup.qml" line="154"/>
         <source>Complete or cancel the current calibration first</source>
-        <translation type="unfinished"></translation>
+        <translation>먼저 현재 보정을 완료하거나 취소하세요</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/SensorsSetup.qml" line="238"/>
@@ -22282,7 +22319,7 @@ sudo apt-get remove modemmanager</translation>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/SensorsSetup.qml" line="247"/>
         <source>ROTATION_NONE indicates component points in direction of flight.</source>
-        <translation type="unfinished">ROTATION_NONE indicates component points in direction of flight.</translation>
+        <translation>ROTATION_NONE은 구성품이 비행 방향을 가리킨다는 의미입니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/SensorsSetup.qml" line="253"/>
@@ -22299,9 +22336,9 @@ sudo apt-get remove modemmanager</translation>
         <source>Adjust orientations as needed.
 
 ROTATION_NONE indicates component points in direction of flight.</source>
-        <translation type="unfinished">Adjust orientations as needed.
+        <translation>필요에 따라 방향을 조정하세요.
 
-ROTATION_NONE indicates component points in direction of flight.</translation>
+ROTATION_NONE은 구성품이 비행 방향을 가리킨다는 의미입니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/PX4/SensorsSetup.qml" line="319"/>
@@ -22445,7 +22482,9 @@ ROTATION_NONE indicates component points in direction of flight.</translation>
         <source>Link Name : %1
 Port : %2
 Error : %3</source>
-        <translation type="unfinished"></translation>
+        <translation>링크 이름 : %1
+포트 : %2
+오류 : %3</translation>
     </message>
 </context>
 <context>
@@ -22526,37 +22565,37 @@ Error : %3</source>
     <message>
         <location filename="../src/Comms/SerialLink.cc" line="233"/>
         <source>Not connecting to a bootloader</source>
-        <translation type="unfinished"></translation>
+        <translation>부트로더에 연결되지 않음</translation>
     </message>
     <message>
         <location filename="../src/Comms/SerialLink.cc" line="246"/>
         <source>Could not open port: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>포트를 열 수 없음: %1</translation>
     </message>
     <message>
         <location filename="../src/Comms/SerialLink.cc" line="273"/>
         <source>Data to Send is Empty</source>
-        <translation type="unfinished"></translation>
+        <translation>전송할 데이터가 비어 있음</translation>
     </message>
     <message>
         <location filename="../src/Comms/SerialLink.cc" line="278"/>
         <source>Port is not Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>포트가 연결되지 않음</translation>
     </message>
     <message>
         <location filename="../src/Comms/SerialLink.cc" line="283"/>
         <source>Port is not Writable</source>
-        <translation type="unfinished"></translation>
+        <translation>포트에 쓰기가 불가능함</translation>
     </message>
     <message>
         <location filename="../src/Comms/SerialLink.cc" line="291"/>
         <source>Could Not Send Data - Write Failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터를 보낼 수 없음 - 쓰기 실패: %1</translation>
     </message>
     <message>
         <location filename="../src/Comms/SerialLink.cc" line="294"/>
         <source>Could Not Send Data - Write Returned 0 Bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터를 보낼 수 없음 - 쓰기에서 0바이트 반환됨</translation>
     </message>
 </context>
 <context>
@@ -22647,7 +22686,7 @@ Error : %3</source>
     <message>
         <location filename="../src/QmlControls/SetupPage.qml" line="88"/>
         <source>Disabled while the vehicle is %1</source>
-        <translation type="unfinished"></translation>
+        <translation>기체가 %1 상태일 때 비활성화됨</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/SetupPage.qml" line="70"/>
@@ -22675,7 +22714,7 @@ Error : %3</source>
     <message>
         <location filename="../src/Utilities/Geo/Formats/ShapeFileHelper.cc" line="116"/>
         <source>KML/SHP Files (*%1 *%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>KML/SHP 파일 (*%1 *%2)</translation>
     </message>
 </context>
 <context>
@@ -22704,57 +22743,57 @@ Error : %3</source>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="165"/>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="201"/>
         <source>Signing operation already pending</source>
-        <translation type="unfinished"></translation>
+        <translation>이미 서명 작업이 대기 중</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="176"/>
         <source>Failed to install signing for pending verification</source>
-        <translation type="unfinished"></translation>
+        <translation>대기 중인 검증을 위한 서명 설치 실패</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="207"/>
         <source>Channel not signing — cannot disable</source>
-        <translation type="unfinished"></translation>
+        <translation>채널이 서명 중이 아니므로 비활성화할 수 없음</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="244"/>
         <source>MAVLink signing: %1 consecutive bad signatures while enabling — the chosen key likely does not match the vehicle&apos;s stored key. Verify the key on the vehicle, then retry.</source>
-        <translation type="unfinished"></translation>
+        <translation>MAVLink 서명: 활성화 중 %1개의 잘못된 서명이 연속 발생 — 선택한 키가 기체에 저장된 키와 일치하지 않을 가능성이 높습니다. 기체의 키를 확인한 후 다시 시도하세요.</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="247"/>
         <source>MAVLink signing: %1 consecutive bad signatures on this link — wrong key or vehicle clock drift</source>
-        <translation type="unfinished"></translation>
+        <translation>MAVLink 서명: 이 링크에서 %1개의 잘못된 서명이 연속 발생 — 잘못된 키이거나 기체 시계 드리프트 가능성</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="302"/>
         <source>Vehicle rejected signing change: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>기체가 서명 변경을 거부함: %1</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="336"/>
         <source>Signing confirmation received but local activation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>서명 확인을 받았으나 로컬 활성화 실패</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="378"/>
         <source>Signing disable not confirmed — vehicle is unreachable or still requires signed messages. Local signing remains enabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>서명 비활성화가 확인되지 않음 — 기체에 도달할 수 없거나 여전히 서명된 메시지를 요구합니다. 로컬 서명은 활성화 상태로 유지됩니다.</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="399"/>
         <source>Signing operation cancelled — primary link changed before vehicle confirmation</source>
-        <translation type="unfinished"></translation>
+        <translation>서명 작업 취소됨 — 기체 확인 전에 주 링크가 변경됨</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="412"/>
         <source>Signing setup not confirmed by vehicle (timeout)</source>
-        <translation type="unfinished"></translation>
+        <translation>기체가 서명 설정을 확인하지 않음 (시간 초과)</translation>
     </message>
     <message>
         <location filename="../src/MAVLink/Signing/SigningController.cc" line="413"/>
         <source>Signing disable not confirmed by vehicle (timeout)</source>
-        <translation type="unfinished"></translation>
+        <translation>기체가 서명 비활성화를 확인하지 않음 (시간 초과)</translation>
     </message>
 </context>
 <context>
@@ -22767,7 +22806,7 @@ Error : %3</source>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="15"/>
         <source>Signing keys should only be sent to the vehicle over secure links (e.g. USB).</source>
-        <translation type="unfinished"></translation>
+        <translation>서명 키는 안전한 링크(예: USB)를 통해서만 기체로 전송해야 합니다.</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="37"/>
@@ -22777,7 +22816,7 @@ Error : %3</source>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="56"/>
         <source>Could not add key. Name may already exist or input is invalid.</source>
-        <translation type="unfinished"></translation>
+        <translation>키를 추가할 수 없습니다. 이름이 이미 존재하거나 입력이 잘못되었을 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="63"/>
@@ -22787,7 +22826,7 @@ Error : %3</source>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="68"/>
         <source>Enter a friendly name</source>
-        <translation type="unfinished"></translation>
+        <translation>표시할 이름을 입력하세요</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="75"/>
@@ -22802,12 +22841,12 @@ Error : %3</source>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="91"/>
         <source>Enter passphrase (min %1 chars)</source>
-        <translation type="unfinished"></translation>
+        <translation>패스프레이즈 입력 (최소 %1자)</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="98"/>
         <source>Passphrase too short (%1/%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>패스프레이즈가 너무 짧습니다 (%1/%2)</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="111"/>
@@ -22822,7 +22861,7 @@ Error : %3</source>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="125"/>
         <source>%1/64 hex characters</source>
-        <translation type="unfinished"></translation>
+        <translation>%1/64 16진수 문자</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="144"/>
@@ -22837,7 +22876,7 @@ Error : %3</source>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="177"/>
         <source>(another key active)</source>
-        <translation type="unfinished"></translation>
+        <translation>(다른 키 활성)</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="184"/>
@@ -22862,7 +22901,7 @@ Error : %3</source>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="197"/>
         <source>This will transmit key &apos;%1&apos; to the vehicle over &apos;%2&apos;. Only proceed if this link is secure (USB or trusted local network).</source>
-        <translation type="unfinished"></translation>
+        <translation>이 작업은 키 &apos;%1&apos;을(를) &apos;%2&apos;을(를) 통해 기체로 전송합니다. 이 링크가 안전한 경우(USB 또는 신뢰할 수 있는 로컬 네트워크)에만 진행하세요.</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="208"/>
@@ -22877,14 +22916,16 @@ Error : %3</source>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="219"/>
         <source>Disable Signing While Armed?</source>
-        <translation type="unfinished"></translation>
+        <translation>시동 중에 서명을 비활성화하시겠습니까?</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="220"/>
         <source>Vehicle is armed. ArduPilot will refuse to disable signing while armed and PX4 will not accept the disable packet without a valid signature. The disable attempt will likely time out and leave the link in an inconsistent state.
 
 Disarm the vehicle first.</source>
-        <translation type="unfinished"></translation>
+        <translation>기체가 시동 중입니다. ArduPilot은 시동 중 서명 비활성화를 거부하며, PX4는 유효한 서명 없이 비활성화 패킷을 받지 않습니다. 비활성화 시도가 시간 초과되어 링크가 일관성 없는 상태로 남을 수 있습니다.
+
+먼저 기체의 시동을 해제하세요.</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="229"/>
@@ -22899,7 +22940,7 @@ Disarm the vehicle first.</source>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="239"/>
         <source>Key copied to clipboard. Store it securely — it will be cleared from the clipboard in 30 seconds.</source>
-        <translation type="unfinished"></translation>
+        <translation>키가 클립보드에 복사되었습니다. 안전하게 보관하세요 — 30초 후 클립보드에서 자동으로 지워집니다.</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="246"/>
@@ -22916,7 +22957,9 @@ Disarm the vehicle first.</source>
         <source>Are you sure you want to delete &apos;%1&apos;?
 
 If a vehicle still has this key configured, you will no longer be able to communicate with it over a signed connection. Raw or generated keys cannot be recovered — Export the hex first if you may need it later.</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos;을(를) 삭제하시겠습니까?
+
+이 키를 사용하도록 설정된 기체가 있다면 더 이상 서명된 연결로 통신할 수 없게 됩니다. 원시 또는 생성된 키는 복구할 수 없으므로 — 나중에 필요할 수 있다면 먼저 16진수를 내보내세요.</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/SigningKeyManager.qml" line="259"/>
@@ -22934,7 +22977,7 @@ If a vehicle still has this key configured, you will no longer be able to commun
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="49"/>
         <source>Move &apos;%1&apos; %2 to the %3 location. %4</source>
-        <translation type="unfinished">Move &apos;%1&apos; %2 to the %3 location. %4</translation>
+        <translation>&apos;%1&apos; %2을(를) %3 위치로 이동하세요. %4</translation>
     </message>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="50"/>
@@ -22964,12 +23007,12 @@ If a vehicle still has this key configured, you will no longer be able to commun
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="53"/>
         <source>Ensure distance from launch to transition direction is far enough to complete transition.</source>
-        <translation type="unfinished">Ensure distance from launch to transition direction is far enough to complete transition.</translation>
+        <translation>전환을 완료할 수 있도록 출발지에서 전환 방향까지의 거리가 충분한지 확인하세요.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="60"/>
         <source>Ensure clear of obstacles and into the wind.</source>
-        <translation type="unfinished">Ensure clear of obstacles and into the wind.</translation>
+        <translation>장애물이 없고 바람을 맞이하는 방향인지 확인하세요.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="67"/>
@@ -22984,7 +23027,7 @@ If a vehicle still has this key configured, you will no longer be able to commun
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="79"/>
         <source>Click in map to set planned Launch location.</source>
-        <translation type="unfinished">Click in map to set planned Launch location.</translation>
+        <translation>지도를 클릭하여 계획된 출발 위치를 설정하세요.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="159"/>
@@ -23004,7 +23047,7 @@ If a vehicle still has this key configured, you will no longer be able to commun
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="182"/>
         <source>Actual AMSL alt sent: %1 %2</source>
-        <translation type="unfinished">Actual AMSL alt sent: %1 %2</translation>
+        <translation>실제 전송된 AMSL 고도: %1 %2</translation>
     </message>
     <message>
         <location filename="../src/PlanView/SimpleItemEditor.qml" line="243"/>
@@ -23060,7 +23103,7 @@ If a vehicle still has this key configured, you will no longer be able to commun
     <message>
         <location filename="../src/Camera/SimulatedCameraControl.cc" line="152"/>
         <source>Time lapse capture not supported by this camera</source>
-        <translation type="unfinished"></translation>
+        <translation>이 카메라는 타임랩스 촬영을 지원하지 않습니다</translation>
     </message>
 </context>
 <context>
@@ -23490,7 +23533,7 @@ If a vehicle still has this key configured, you will no longer be able to commun
     <message>
         <location filename="../src/AutoPilotPlugins/Common/SyslinkComponent.qml" line="93"/>
         <source>Address in hex. Default is E7E7E7E7E7.</source>
-        <translation type="unfinished"></translation>
+        <translation>16진수 주소. 기본값은 E7E7E7E7E7입니다.</translation>
     </message>
     <message>
         <location filename="../src/AutoPilotPlugins/Common/SyslinkComponent.qml" line="99"/>
@@ -23534,7 +23577,10 @@ If a vehicle still has this key configured, you will no longer be able to commun
 Host : %2
 Port : %3
 Error : %4</source>
-        <translation type="unfinished"></translation>
+        <translation>링크 이름 : %1
+호스트 : %2
+포트 : %3
+오류 : %4</translation>
     </message>
 </context>
 <context>
@@ -23542,32 +23588,32 @@ Error : %4</source>
     <message>
         <location filename="../src/Comms/TCPLink.cc" line="143"/>
         <source>Connection Failed: Host address is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>연결 실패: 호스트 주소가 비어 있음</translation>
     </message>
     <message>
         <location filename="../src/Comms/TCPLink.cc" line="156"/>
         <source>Connection Failed: %1</source>
-        <translation type="unfinished">연결 실패: %1</translation>
+        <translation>연결 실패: %1</translation>
     </message>
     <message>
         <location filename="../src/Comms/TCPLink.cc" line="184"/>
         <source>Data to Send is Empty</source>
-        <translation type="unfinished"></translation>
+        <translation>전송할 데이터가 비어 있음</translation>
     </message>
     <message>
         <location filename="../src/Comms/TCPLink.cc" line="189"/>
         <source>Socket is not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>소켓이 연결되지 않음</translation>
     </message>
     <message>
         <location filename="../src/Comms/TCPLink.cc" line="197"/>
         <source>Could Not Send Data - Write Failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터를 보낼 수 없음 - 쓰기 실패: %1</translation>
     </message>
     <message>
         <location filename="../src/Comms/TCPLink.cc" line="200"/>
         <source>Could Not Send Data - Write Returned 0 Bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터를 보낼 수 없음 - 쓰기에서 0바이트 반환됨</translation>
     </message>
 </context>
 <context>
@@ -23588,7 +23634,7 @@ Error : %4</source>
     <message>
         <location filename="../src/UI/AppSettings/TcpSettings.qml" line="24"/>
         <source>localhost or 192.168.1.1</source>
-        <translation type="unfinished"></translation>
+        <translation>localhost 또는 192.168.1.1</translation>
     </message>
     <message>
         <location filename="../src/UI/AppSettings/TcpSettings.qml" line="38"/>
@@ -23603,7 +23649,7 @@ Error : %4</source>
     <message>
         <location filename="../src/UI/AppSettings/TcpSettings.qml" line="63"/>
         <source>You can enter an IP address (e.g. 192.168.1.1) or hostname (e.g. my-drone.local)</source>
-        <translation type="unfinished"></translation>
+        <translation>IP 주소(예: 192.168.1.1) 또는 호스트 이름(예: my-drone.local)을 입력할 수 있습니다</translation>
     </message>
 </context>
 <context>
@@ -23673,7 +23719,7 @@ Error : %4</source>
     <message>
         <location filename="../src/Vehicle/TerrainQueryCoordinator.cc" line="80"/>
         <source>Set Home failed, terrain data not available for selected coordinate</source>
-        <translation type="unfinished"></translation>
+        <translation>홈 설정 실패. 선택한 좌표에 지형 데이터가 없습니다</translation>
     </message>
 </context>
 <context>
@@ -23690,13 +23736,13 @@ Error : %4</source>
         <location filename="../src/QmlControls/ToolIndicatorPage.qml" line="31"/>
         <location filename="../src/QmlControls/ToolIndicatorPage.qml" line="55"/>
         <source>Parameters not available</source>
-        <translation type="unfinished"></translation>
+        <translation>파라미터 사용 불가</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/ToolIndicatorPage.qml" line="31"/>
         <location filename="../src/QmlControls/ToolIndicatorPage.qml" line="55"/>
         <source>Waiting for parameters...</source>
-        <translation type="unfinished"></translation>
+        <translation>파라미터 대기 중...</translation>
     </message>
 </context>
 <context>
@@ -23810,7 +23856,7 @@ Error : %4</source>
     <message>
         <location filename="../src/PlanView/TransectStyleComplexItemEditor.qml" line="295"/>
         <source>Preset name cannot include the &quot;/&quot; character.</source>
-        <translation type="unfinished">Preset name cannot include the &quot;/&quot; character.</translation>
+        <translation>프리셋 이름에는 &quot;/&quot; 문자를 사용할 수 없습니다.</translation>
     </message>
 </context>
 <context>
@@ -23896,7 +23942,7 @@ Error : %4</source>
         <location filename="../src/QmlControls/TransformEditor.qml" line="88"/>
         <location filename="../src/QmlControls/TransformEditor.qml" line="305"/>
         <source>Also move takeoff items</source>
-        <translation type="unfinished"></translation>
+        <translation>이륙 항목도 함께 이동</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransformEditor.qml" line="93"/>
@@ -23904,13 +23950,13 @@ Error : %4</source>
         <location filename="../src/QmlControls/TransformEditor.qml" line="93"/>
         <location filename="../src/QmlControls/TransformEditor.qml" line="310"/>
         <source>Also move landing items</source>
-        <translation type="unfinished"></translation>
+        <translation>착륙 항목도 함께 이동</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransformEditor.qml" line="101"/>
         <location filename="../src/QmlControls/TransformEditor.qml" line="101"/>
         <source>Note: Home altitude is not modified.</source>
-        <translation type="unfinished"></translation>
+        <translation>참고: 홈 고도는 변경되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransformEditor.qml" line="106"/>
@@ -23950,7 +23996,7 @@ Error : %4</source>
         <location filename="../src/QmlControls/TransformEditor.qml" line="162"/>
         <location filename="../src/QmlControls/TransformEditor.qml" line="163"/>
         <source>Universal Transverse Mercator</source>
-        <translation type="unfinished"></translation>
+        <translation>UTM 좌표계</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransformEditor.qml" line="162"/>
@@ -23958,7 +24004,7 @@ Error : %4</source>
         <location filename="../src/QmlControls/TransformEditor.qml" line="162"/>
         <location filename="../src/QmlControls/TransformEditor.qml" line="163"/>
         <source>Military Grid Reference</source>
-        <translation type="unfinished"></translation>
+        <translation>군용 그리드 좌표 (MGRS)</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransformEditor.qml" line="162"/>
@@ -24022,7 +24068,7 @@ Error : %4</source>
         <location filename="../src/PlanView/TransformEditor.qml" line="264"/>
         <location filename="../src/QmlControls/TransformEditor.qml" line="264"/>
         <source>Move to Vehicle Position</source>
-        <translation type="unfinished"></translation>
+        <translation>기체 위치로 이동</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransformEditor.qml" line="278"/>
@@ -24034,7 +24080,7 @@ Error : %4</source>
         <location filename="../src/PlanView/TransformEditor.qml" line="291"/>
         <location filename="../src/QmlControls/TransformEditor.qml" line="291"/>
         <source>Home position must be set to rotate the mission.</source>
-        <translation type="unfinished"></translation>
+        <translation>임무를 회전하려면 홈 위치가 설정되어 있어야 합니다.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransformEditor.qml" line="297"/>
@@ -24046,7 +24092,7 @@ Error : %4</source>
         <location filename="../src/PlanView/TransformEditor.qml" line="318"/>
         <location filename="../src/QmlControls/TransformEditor.qml" line="318"/>
         <source>Note: Complex items are rotated by moving their reference coordinate: their geometry and orientation are not changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>참고: 복합 항목은 기준 좌표를 이동하여 회전합니다. 항목의 형상과 방향은 변경되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/TransformEditor.qml" line="323"/>
@@ -24074,7 +24120,8 @@ Error : %4</source>
         <location filename="../src/Comms/UDPLink.cc" line="554"/>
         <source>Link Name : %1
 Error : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>링크 이름 : %1
+오류 : %2</translation>
     </message>
 </context>
 <context>
@@ -24082,22 +24129,22 @@ Error : %2</source>
     <message>
         <location filename="../src/Comms/UDPLink.cc" line="329"/>
         <source>Failed to bind UDP socket to port</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP 소켓을 포트에 바인딩 실패</translation>
     </message>
     <message>
         <location filename="../src/Comms/UDPLink.cc" line="369"/>
         <source>Could Not Send Data - Link is Disconnected!</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터를 보낼 수 없음 - 링크가 연결 해제됨!</translation>
     </message>
     <message>
         <location filename="../src/Comms/UDPLink.cc" line="415"/>
         <source>Could Not Read Data - Link is Disconnected!</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터를 읽을 수 없음 - 링크가 연결 해제됨!</translation>
     </message>
     <message>
         <location filename="../src/Comms/UDPLink.cc" line="421"/>
         <source>Could Not Read Data - No Data Available!</source>
-        <translation type="unfinished"></translation>
+        <translation>데이터를 읽을 수 없음 - 사용 가능한 데이터 없음!</translation>
     </message>
 </context>
 <context>
@@ -24138,12 +24185,12 @@ Error : %2</source>
     <message>
         <location filename="../src/Utilities/Network/RemoteTransport.cc" line="30"/>
         <source>UDP payload too large (%1 bytes), dropped</source>
-        <translation type="unfinished"></translation>
+        <translation>UDP 페이로드가 너무 큼 (%1 바이트), 폐기됨</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Network/RemoteTransport.cc" line="39"/>
         <source>DNS resolution failed for &apos;%1&apos;: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos;의 DNS 확인 실패: %2</translation>
     </message>
 </context>
 <context>
@@ -24170,12 +24217,12 @@ Error : %2</source>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="49"/>
         <source>Display unit for horizontal distances and ranges.</source>
-        <translation type="unfinished"></translation>
+        <translation>수평 거리 및 범위 표시 단위입니다.</translation>
     </message>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="81"/>
         <source>Display unit for altitudes and vertical heights.</source>
-        <translation type="unfinished"></translation>
+        <translation>고도 및 수직 높이 표시 단위입니다.</translation>
     </message>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="106"/>
@@ -24215,7 +24262,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="117"/>
         <source>Display unit for area measurements.</source>
-        <translation type="unfinished"></translation>
+        <translation>면적 측정 표시 단위입니다.</translation>
     </message>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="143"/>
@@ -24250,7 +24297,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="153"/>
         <source>Display unit for speed and velocity values.</source>
-        <translation type="unfinished"></translation>
+        <translation>속력 및 속도 값 표시 단위입니다.</translation>
     </message>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="179"/>
@@ -24270,7 +24317,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="184"/>
         <source>Display unit for temperature readings.</source>
-        <translation type="unfinished"></translation>
+        <translation>온도 측정 표시 단위입니다.</translation>
     </message>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="210"/>
@@ -24285,12 +24332,12 @@ Error : %2</source>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="210"/>
         <source>Ounces</source>
-        <translation type="unfinished"></translation>
+        <translation>온스</translation>
     </message>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="210"/>
         <source>Pounds</source>
-        <translation type="unfinished"></translation>
+        <translation>파운드</translation>
     </message>
     <message>
         <location filename="../src/Settings/UnitsSettings.cc" line="218"/>
@@ -24430,7 +24477,7 @@ Error : %2</source>
     <message>
         <location filename="../src/PlanView/VTOLLandingPatternEditor.qml" line="55"/>
         <source>Use loiter to altitude</source>
-        <translation type="unfinished">Use loiter to altitude</translation>
+        <translation>고도까지 로이터 사용</translation>
     </message>
     <message>
         <location filename="../src/PlanView/VTOLLandingPatternEditor.qml" line="64"/>
@@ -24481,12 +24528,12 @@ Error : %2</source>
     <message>
         <location filename="../src/PlanView/VTOLLandingPatternEditor.qml" line="210"/>
         <source>* Avoid tailwind on approach to land.</source>
-        <translation type="unfinished">* Avoid tailwind on approach to land.</translation>
+        <translation>* 착륙 접근 시 배풍을 피하세요.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/VTOLLandingPatternEditor.qml" line="219"/>
         <source>* Ensure landing distance is enough to complete transition.</source>
-        <translation type="unfinished">* Ensure landing distance is enough to complete transition.</translation>
+        <translation>* 착륙 거리가 전환을 완료할 만큼 충분한지 확인하세요.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/VTOLLandingPatternEditor.qml" line="245"/>
@@ -24501,7 +24548,7 @@ Error : %2</source>
     <message>
         <location filename="../src/PlanView/VTOLLandingPatternEditor.qml" line="284"/>
         <source>Drag the loiter point to adjust landing direction for wind and obstacles as well as distance to land point.</source>
-        <translation type="unfinished">Drag the loiter point to adjust landing direction for wind and obstacles as well as distance to land point.</translation>
+        <translation>로이터 지점을 드래그하여 바람과 장애물, 착륙 지점까지의 거리를 고려해 착륙 방향을 조정하세요.</translation>
     </message>
     <message>
         <location filename="../src/PlanView/VTOLLandingPatternEditor.qml" line="288"/>
@@ -24597,17 +24644,17 @@ Error : %2</source>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="3387"/>
         <source>Waiting for previous operator control request</source>
-        <translation type="unfinished"></translation>
+        <translation>이전 운영자 제어 요청을 대기 중</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="3390"/>
         <source>No response to operator control request</source>
-        <translation type="unfinished"></translation>
+        <translation>운영자 제어 요청에 응답 없음</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="3657"/>
         <source>Vehicle %1: </source>
-        <translation type="unfinished"></translation>
+        <translation>기체 %1: </translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="1840"/>
@@ -24617,7 +24664,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="2115"/>
         <source>Change Heading not supported by Vehicle.</source>
-        <translation type="unfinished"></translation>
+        <translation>기체가 방향 변경을 지원하지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/Vehicle.cc" line="2386"/>
@@ -24698,7 +24745,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Camera/VehicleCameraControl.cc" line="468"/>
         <source>Timelapse photo capture is not supported on cameras without still capture capability</source>
-        <translation type="unfinished"></translation>
+        <translation>스틸 촬영 기능이 없는 카메라에서는 타임랩스 사진 촬영이 지원되지 않습니다</translation>
     </message>
 </context>
 <context>
@@ -24901,12 +24948,12 @@ Error : %2</source>
     <message>
         <location filename="../src/QmlControls/VehicleIndicatorPage.qml" line="194"/>
         <source>Loiter Horizontal Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>로이터 수평 속도</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/VehicleIndicatorPage.qml" line="226"/>
         <source>Mission Turning Radius</source>
-        <translation type="unfinished">Mission Turning Radius</translation>
+        <translation>임무 선회 반경</translation>
     </message>
     <message>
         <location filename="../src/QmlControls/VehicleIndicatorPage.qml" line="250"/>
@@ -24919,7 +24966,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Vehicle/VehicleLinkManager.cc" line="67"/>
         <source>%1Communication regained on %2 link</source>
-        <translation type="unfinished">%1Communication regained on %2 link</translation>
+        <translation>%1%2 링크에서 통신이 복구됨</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleLinkManager.cc" line="67"/>
@@ -24941,17 +24988,17 @@ Error : %2</source>
     <message>
         <location filename="../src/Vehicle/VehicleLinkManager.cc" line="75"/>
         <source>%1Switching communication to new primary link</source>
-        <translation type="unfinished">%1Switching communication to new primary link</translation>
+        <translation>%1통신을 새 주 링크로 전환 중</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleLinkManager.cc" line="126"/>
         <source>%1Communication lost on %2 link.</source>
-        <translation type="unfinished">%1Communication lost on %2 link.</translation>
+        <translation>%1%2 링크에서 통신이 끊겼습니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleLinkManager.cc" line="137"/>
         <source>%1Switching communication to secondary link.</source>
-        <translation type="unfinished">%1Switching communication to secondary link.</translation>
+        <translation>%1통신을 보조 링크로 전환합니다.</translation>
     </message>
     <message>
         <location filename="../src/Vehicle/VehicleLinkManager.cc" line="161"/>
@@ -25014,7 +25061,7 @@ Error : %2</source>
         <location filename="../src/Vehicle/VehicleSigningController.cc" line="201"/>
         <location filename="../src/Vehicle/VehicleSigningController.cc" line="242"/>
         <source>Failed to transmit SETUP_SIGNING to vehicle</source>
-        <translation type="unfinished"></translation>
+        <translation>기체로 SETUP_SIGNING 전송 실패</translation>
     </message>
 </context>
 <context>
@@ -25091,7 +25138,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Settings/VideoSettings.h" line="61"/>
         <source>MPEG-TS Video Stream</source>
-        <translation type="unfinished"></translation>
+        <translation>MPEG-TS 비디오 스트림</translation>
     </message>
     <message>
         <location filename="../src/Settings/VideoSettings.h" line="65"/>
@@ -25129,7 +25176,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Viewer3D/Viewer3DQml/Models3D/Viewer3DModel.qml" line="103"/>
         <source>Downloading Imageries: </source>
-        <translation type="unfinished"></translation>
+        <translation>이미지 다운로드 중: </translation>
     </message>
 </context>
 <context>
@@ -25341,7 +25388,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Comms/WebRTC/WebRTCConfiguration.h" line="30"/>
         <source>WebRTC Link Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>WebRTC 링크 설정</translation>
     </message>
 </context>
 <context>
@@ -25494,17 +25541,17 @@ Error : %2</source>
     <message>
         <location filename="../src/Utilities/Platform/Platform.cc" line="255"/>
         <source>You are running %1 as root. You should not do this since it will cause other issues with %1. %1 will now exit.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1을(를) root로 실행 중입니다. %1에 다른 문제가 발생할 수 있으므로 권장되지 않습니다. %1을(를) 종료합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/Platform/Platform.cc" line="267"/>
         <source>A second instance of %1 is already running. Please close the other instance and try again.</source>
-        <translation type="unfinished">%1의 두 번째 인스턴스가 이미 실행 중입니다. 다른 인스턴스를 닫고 다시 시도하십시오.</translation>
+        <translation>%1의 다른 인스턴스가 이미 실행 중입니다. 다른 인스턴스를 닫고 다시 시도하세요.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="124"/>
         <source>MAVLink GCS system id.</source>
-        <translation type="unfinished"></translation>
+        <translation>MAVLink GCS 시스템 ID.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="125"/>
@@ -25514,22 +25561,22 @@ Error : %2</source>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="130"/>
         <source>Clear stored application settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>저장된 애플리케이션 설정을 지웁니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="135"/>
         <source>Clear parameter and airframe caches.</source>
-        <translation type="unfinished"></translation>
+        <translation>파라미터 및 기체 프레임 캐시를 지웁니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="140"/>
         <source>Enable logging with optional rules string.</source>
-        <translation type="unfinished"></translation>
+        <translation>선택적 규칙 문자열로 로깅을 활성화합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="141"/>
         <source>rules</source>
-        <translation type="unfinished"></translation>
+        <translation>규칙</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="146"/>
@@ -25539,12 +25586,12 @@ Error : %2</source>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="151"/>
         <source>Initialize subsystems and exit.</source>
-        <translation type="unfinished"></translation>
+        <translation>서브시스템을 초기화하고 종료합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="158"/>
         <source>Run unit tests (optional filter value).</source>
-        <translation type="unfinished"></translation>
+        <translation>단위 테스트를 실행합니다 (선택적 필터 값).</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="159"/>
@@ -25564,7 +25611,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="170"/>
         <source>Output test results to file (JUnit XML format).</source>
-        <translation type="unfinished"></translation>
+        <translation>테스트 결과를 파일로 출력합니다 (JUnit XML 형식).</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="171"/>
@@ -25574,7 +25621,7 @@ Error : %2</source>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="176"/>
         <source>Filter tests by label (unit, integration, vehicle, missionmanager, etc.).</source>
-        <translation type="unfinished"></translation>
+        <translation>레이블로 테스트를 필터링합니다 (unit, integration, vehicle, missionmanager 등).</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="177"/>
@@ -25584,72 +25631,72 @@ Error : %2</source>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="182"/>
         <source>List available unit tests and exit.</source>
-        <translation type="unfinished"></translation>
+        <translation>사용 가능한 단위 테스트를 나열하고 종료합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="190"/>
         <source>Run with mobile-style UI.</source>
-        <translation type="unfinished"></translation>
+        <translation>모바일 스타일 UI로 실행합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="195"/>
         <source>Bypass single-instance guard.</source>
-        <translation type="unfinished"></translation>
+        <translation>단일 인스턴스 보호를 우회합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="203"/>
         <source>Force software OpenGL.</source>
-        <translation type="unfinished"></translation>
+        <translation>소프트웨어 OpenGL을 강제로 사용합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="211"/>
         <source>Force Desktop OpenGL.</source>
-        <translation type="unfinished"></translation>
+        <translation>데스크톱 OpenGL을 강제로 사용합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="216"/>
         <source>Disable Windows assert dialog boxes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Windows assert 대화상자를 비활성화합니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="236"/>
         <source>--unittest/--unittest-stress/--unittest-output/--list-tests options are only available in unittest builds.</source>
-        <translation type="unfinished"></translation>
+        <translation>--unittest/--unittest-stress/--unittest-output/--list-tests 옵션은 unittest 빌드에서만 사용할 수 있습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="248"/>
         <source>--fake-mobile/--allow-multiple are not supported on mobile platforms.</source>
-        <translation type="unfinished"></translation>
+        <translation>--fake-mobile/--allow-multiple은 모바일 플랫폼에서 지원되지 않습니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="260"/>
         <source>--desktop/--no-windows-assert-ui are only supported on Windows.</source>
-        <translation type="unfinished"></translation>
+        <translation>--desktop/--no-windows-assert-ui는 Windows에서만 지원됩니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="271"/>
         <source>--swrast is only supported on Windows and macOS.</source>
-        <translation type="unfinished"></translation>
+        <translation>--swrast는 Windows와 macOS에서만 지원됩니다.</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="280"/>
         <source>Unknown options: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>알 수 없는 옵션: %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="290"/>
         <source>Unexpected positional arguments: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>예상치 못한 위치 인수: %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="316"/>
         <source>Invalid System ID (must be 1-255): %1</source>
-        <translation type="unfinished"></translation>
+        <translation>잘못된 시스템 ID (1-255 사이여야 함): %1</translation>
     </message>
     <message>
         <location filename="../src/Utilities/QGCCommandLineParser.cc" line="359"/>
         <source>Invalid stress test count (must be &gt; 0): %1</source>
-        <translation type="unfinished"></translation>
+        <translation>잘못된 스트레스 테스트 횟수 (0보다 커야 함): %1</translation>
     </message>
 </context>
 </TS>
