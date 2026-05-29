@@ -22,6 +22,7 @@ public:
 
     void sendMessage(const QByteArray &msg);
     Q_INVOKABLE virtual void analyzeIp(QString videoUrl);
+    Q_INVOKABLE void setIp(const QString &ip) { resetIp(ip); }
 
 protected:
     virtual void analyzeMessage() = 0;

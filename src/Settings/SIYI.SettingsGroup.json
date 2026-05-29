@@ -3,31 +3,58 @@
     "fileType": "FactMetaData",
     "QGC.MetaData.Facts": [
         {
-            "name": "siyiTransmitterEnabled",
-            "shortDesc": "siyiTransmitterEnabled",
-            "longDesc": "siyiTransmitterEnabled",
+            "name": "siyiUniRCEnabled",
+            "shortDesc": "Enable SIYI UniRC 7 datalink SDK (UDP).",
+            "longDesc": "Polls UniRC 7 over UDP for link status, signal strength, frequency, and channel.",
             "type": "bool",
-            "default": false,
+            "default": true,
             "qgcRebootRequired": true,
-            "label": "siyiTransmitterEnabled"
+            "label": "Enable UniRC 7 (UDP)"
+        },
+        {
+            "name": "siyiUniRCIp",
+            "shortDesc": "UniRC 7 UDP server IP address.",
+            "longDesc": "Default 192.168.144.20 per SIYI UniRC 7 SDK manual. Port is fixed at 19856.",
+            "type": "string",
+            "default": "192.168.144.20",
+            "qgcRebootRequired": true,
+            "label": "UniRC 7 IP"
+        },
+        {
+            "name": "siyiTransmitterEnabled",
+            "shortDesc": "Enable SIYI transmitter (image link) connection (TCP).",
+            "longDesc": "Connects to legacy SIYI image transmitter for RSSI / link statistics.",
+            "type": "bool",
+            "default": true,
+            "qgcRebootRequired": true,
+            "label": "Enable Transmitter (TCP)"
+        },
+        {
+            "name": "siyiTransmitterIp",
+            "shortDesc": "SIYI transmitter TCP server IP address.",
+            "longDesc": "Default 192.168.144.12. Port is fixed at 5864.",
+            "type": "string",
+            "default": "192.168.144.12",
+            "qgcRebootRequired": true,
+            "label": "Transmitter IP"
         },
         {
             "name": "siyiCameraEnabled",
-            "shortDesc": "siyiCameraEnabled",
-            "longDesc": "siyiCameraEnabled",
+            "shortDesc": "Enable SIYI camera / gimbal control (TCP).",
+            "longDesc": "Connects to SIYI camera/gimbal for control and status.",
             "type": "bool",
-            "default": false,
+            "default": true,
             "qgcRebootRequired": true,
-            "label": "siyiCameraEnabled"
+            "label": "Enable Camera/Gimbal (TCP)"
         },
         {
-            "name": "siyiUniRCEnabled",
-            "shortDesc": "siyiUniRCEnabled",
-            "longDesc": "siyiUniRCEnabled",
-            "type": "bool",
-            "default": false,
+            "name": "siyiCameraIp",
+            "shortDesc": "SIYI camera/gimbal TCP server IP address.",
+            "longDesc": "Default 192.168.144.25. Port is fixed at 37256.",
+            "type": "string",
+            "default": "192.168.144.25",
             "qgcRebootRequired": true,
-            "label": "siyiUniRCEnabled"
+            "label": "Camera IP"
         }
     ]
 }

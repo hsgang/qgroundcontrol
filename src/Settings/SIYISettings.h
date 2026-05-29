@@ -18,7 +18,10 @@ public:
     SIYISettings(QObject* parent = nullptr);
     DEFINE_SETTING_NAME_GROUP()
 
-    DEFINE_SETTINGFACT(siyiTransmitterEnabled)
-    DEFINE_SETTINGFACT(siyiCameraEnabled)
     DEFINE_SETTINGFACT(siyiUniRCEnabled)
+    DEFINE_SETTINGFACT(siyiUniRCIp)
+    DEFINE_SETTINGFACT(siyiTransmitterEnabled)
+    DEFINE_SETTINGFACT(siyiTransmitterIp)
+    DEFINE_SETTINGFACT(siyiCameraEnabled)
+    DEFINE_SETTINGFACT(siyiCameraIp)
 };

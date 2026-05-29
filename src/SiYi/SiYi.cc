@@ -1,6 +1,8 @@
 #include "SiYi.h"
 #include "QGCApplication.h"
 #include "QGCLoggingCategory.h"
+#include "SIYISettings.h"
+#include "SettingsManager.h"
 
 #include <QtCore/QApplicationStatic>
 #include <QtCore/QCoreApplication>
@@ -40,9 +42,18 @@ void SiYi::init()
 
     qCDebug(SiYiLog) << "Initializing SiYi";
 
+    SIYISettings *settings = SettingsManager::instance()->siyiSettings();
+    const bool cameraEnabled      = settings->siyiCameraEnabled()->rawValue().toBool();
+    const bool transmitterEnabled = settings->siyiTransmitterEnabled()->rawValue().toBool();
+    const bool uniRCEnabled       = settings->siyiUniRCEnabled()->rawValue().toBool();
+
     camera_ = new SiYiCamera(this);
     transmitter_ = new SiYiTransmitter(this);
     uniRC_ = new SiYiUniRC(this);
+
+    camera_->setIp(settings->siyiCameraIp()->rawValue().toString());
+    transmitter_->setIp(settings->siyiTransmitterIp()->rawValue().toString());
+    uniRC_->setIp(settings->siyiUniRCIp()->rawValue().toString());
 
     connect(transmitter_, &SiYiCamera::connected, this, [this](){
         isTransmitterConnected_ = true;
@@ -70,11 +81,15 @@ void SiYi::init()
         camera_->start();
     });
 
-    transmitter_->start();
-#if 1   // 为1时，云台控制无需先连接
-    camera_->start();
-#endif
-    uniRC_->start();
+    if (transmitterEnabled) {
+        transmitter_->start();
+    }
+    if (cameraEnabled) {
+        camera_->start();
+    }
+    if (uniRCEnabled) {
+        uniRC_->start();
+    }
 
     initialized_ = true;
 }

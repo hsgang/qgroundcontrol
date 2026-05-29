@@ -1,0 +1,60 @@
+{
+    "version": 1,
+    "fileType": "SettingsUI",
+    "groups": [
+        {
+            "heading": "UniRC 7 (UDP)",
+            "keywords": ["siyi", "unirc", "udp", "datalink", "19856", "192.168.144.20"],
+            "controls": [
+                {
+                    "setting": "siyiSettings.siyiUniRCEnabled"
+                },
+                {
+                    "setting": "siyiSettings.siyiUniRCIp",
+                    "control": "textfield"
+                }
+            ]
+        },
+        {
+            "component": "SiyiUniRCStatusSection",
+            "sectionName": "UniRC 7 Status",
+            "keywords": ["siyi", "unirc", "hardware id", "battery", "pairing", "joystick", "firmware", "rssi", "signal"]
+        },
+        {
+            "component": "SiyiUniRCChannelSection",
+            "sectionName": "UniRC 7 Channel Mapping / Reverse",
+            "keywords": ["siyi", "unirc", "channel", "mapping", "reverse", "joystick", "switch"]
+        },
+        {
+            "component": "SiyiUniRCRcChannelsSection",
+            "sectionName": "UniRC 7 RC Channels",
+            "keywords": ["siyi", "unirc", "rc", "channels", "live", "stick", "frequency", "output"]
+        },
+        {
+            "heading": "Transmitter (TCP)",
+            "keywords": ["siyi", "transmitter", "tcp", "5864", "192.168.144.12", "image link"],
+            "controls": [
+                {
+                    "setting": "siyiSettings.siyiTransmitterEnabled"
+                },
+                {
+                    "setting": "siyiSettings.siyiTransmitterIp",
+                    "control": "textfield"
+                }
+            ]
+        },
+        {
+            "heading": "Camera / Gimbal (TCP)",
+            "keywords": ["siyi", "camera", "gimbal", "tcp", "37256", "192.168.144.25"],
+            "controls": [
+                {
+                    "setting": "siyiSettings.siyiCameraEnabled"
+                },
+                {
+                    "setting": "siyiSettings.siyiCameraIp",
+                    "control": "textfield"
+                }
+            ]
+        }
+    ]
+}

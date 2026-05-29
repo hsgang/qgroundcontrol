@@ -87,6 +87,12 @@
             "pageDefinition": "RemoteID.SettingsUI.json"
         },
         {
+            "name": "SIYI",
+            "qml": "SIYISettings.qml",
+            "icon": "qrc:/qmlimages/TelemRSSI.svg",
+            "pageDefinition": "SIYI.SettingsUI.json"
+        },
+        {
             "name": "Telemetry",
             "qml": "TelemetrySettings.qml",
             "icon": "qrc:/InstrumentValueIcons/drone.svg",

@@ -30,6 +30,7 @@ set(_generated_qml_names
     PX4LogTransferSettings.qml
     RemoteIDSettings.qml
     SettingsPagesModel.qml
+    SIYISettings.qml
     TelemetrySettings.qml
     VideoSettings.qml
     Viewer3DSettings.qml
@@ -113,6 +114,9 @@ qt_add_qml_module(AppSettingsModule
         RemoteIDGpsLocation.qml
         SerialSettings.qml
         SettingsPage.qml
+        SiyiUniRCStatusSection.qml
+        SiyiUniRCChannelSection.qml
+        SiyiUniRCRcChannelsSection.qml
         TcpSettings.qml
         UdpSettings.qml
         WebRTCSettings.qml

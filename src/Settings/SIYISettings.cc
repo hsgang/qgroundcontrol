@@ -17,6 +17,9 @@ DECLARE_SETTINGGROUP(SIYI, "SIYI")
     qmlRegisterUncreatableType<SIYISettings>("QGroundControl.SettingsManager", 1, 0, "SIYISettings", "Reference only");
 }
 
-DECLARE_SETTINGSFACT(SIYISettings, siyiTransmitterEnabled)
-DECLARE_SETTINGSFACT(SIYISettings, siyiCameraEnabled)
 DECLARE_SETTINGSFACT(SIYISettings, siyiUniRCEnabled)
+DECLARE_SETTINGSFACT(SIYISettings, siyiUniRCIp)
+DECLARE_SETTINGSFACT(SIYISettings, siyiTransmitterEnabled)
+DECLARE_SETTINGSFACT(SIYISettings, siyiTransmitterIp)
+DECLARE_SETTINGSFACT(SIYISettings, siyiCameraEnabled)
+DECLARE_SETTINGSFACT(SIYISettings, siyiCameraIp)
