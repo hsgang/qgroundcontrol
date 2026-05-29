@@ -468,7 +468,7 @@ Item {
 
                                     Layout.alignment:   Qt.AlignHCenter
                                     text:               _altitudeValue
-                                                        ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+                                                        ? QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
                                                         : "-- " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
                                     font.pointSize:     ScreenTools.smallFontPointSize
                                 }

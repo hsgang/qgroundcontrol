@@ -62,12 +62,6 @@ public:
 
     const FactMetaData &operator=(const FactMetaData &other);
 
-    static QVariant metersToAppSettingsDistanceUnits(const QVariant& meters);
-
-    static QVariant appSettingsDistanceUnitsToMeters(const QVariant& distance);
-
-    static QString appSettingsDistanceUnitsString(void);
-
     /// Converts from meters to the user specified horizontal distance unit
     static QVariant metersToAppSettingsHorizontalDistanceUnits(const QVariant &meters);
 

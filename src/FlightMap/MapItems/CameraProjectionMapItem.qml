@@ -108,7 +108,7 @@ MapQuickItem {
             var leftCoord  = _map.toCoordinate(Qt.point(0, parent.y), false /* clipToViewPort */)
             var rightCoord = _map.toCoordinate(Qt.point(scaleLinePixelLength, parent.y), false /* clipToViewPort */)
             var scaleLineMeters = Math.round(leftCoord.distanceTo(rightCoord))
-            if (QGroundControl.settingsManager.unitsSettings.distanceUnits.value === UnitsSettings.DistanceUnitsFeet) {
+            if (QGroundControl.settingsManager.unitsSettings.horizontalDistanceUnits.value === UnitsSettings.HorizontalDistanceUnitsFeet) {
                 calculateFeetRatio(scaleLineMeters, scaleLinePixelLength)
             } else {
                 calculateMetersRatio(scaleLineMeters, scaleLinePixelLength)

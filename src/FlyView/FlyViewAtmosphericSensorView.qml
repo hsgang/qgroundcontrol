@@ -50,7 +50,7 @@ Rectangle {
 
             QGCLabel { text: qsTr("ALT"); opacity: 0.7; font.pointSize: _fontSize; }
             QGCLabel {
-                text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"
+                text: _altitudeValue ? QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_altitudeValue).toFixed(1) +" "+ QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString: "No data"
                 font.pointSize: _fontSize
                 Layout.preferredWidth: ScreenTools.defaultFontPixelWidth * 8
                 horizontalAlignment:    Text.AlignRight

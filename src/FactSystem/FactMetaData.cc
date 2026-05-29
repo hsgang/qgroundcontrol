@@ -993,16 +993,6 @@ const FactMetaData::AppSettingsTranslation_s* FactMetaData::_findAppSettingsUnit
     return nullptr;
 }
 
-QVariant FactMetaData::metersToAppSettingsDistanceUnits(const QVariant &meters)
-{
-    const AppSettingsTranslation_s* pAppSettingsTranslation = _findAppSettingsUnitsTranslation("m", UnitDistance);
-    if (pAppSettingsTranslation) {
-        return pAppSettingsTranslation->rawTranslator(meters);
-    } else {
-        return meters;
-    }
-}
-
 QVariant FactMetaData::metersToAppSettingsHorizontalDistanceUnits(const QVariant &meters)
 {
     const AppSettingsTranslation_s *const pAppSettingsTranslation = _findAppSettingsUnitsTranslation("m", UnitHorizontalDistance);
@@ -1023,16 +1013,6 @@ QVariant FactMetaData::metersToAppSettingsVerticalDistanceUnits(const QVariant &
     }
 }
 
-QVariant FactMetaData::appSettingsDistanceUnitsToMeters(const QVariant &distance)
-{
-    const AppSettingsTranslation_s* pAppSettingsTranslation = _findAppSettingsUnitsTranslation("m", UnitDistance);
-    if (pAppSettingsTranslation) {
-        return pAppSettingsTranslation->cookedTranslator(distance);
-    } else {
-        return distance;
-    }
-}
-
 QVariant FactMetaData::appSettingsHorizontalDistanceUnitsToMeters(const QVariant &distance)
 {
     const AppSettingsTranslation_s *const pAppSettingsTranslation = _findAppSettingsUnitsTranslation("m", UnitHorizontalDistance);
@@ -1050,16 +1030,6 @@ QVariant FactMetaData::appSettingsVerticalDistanceUnitsToMeters(const QVariant &
         return pAppSettingsTranslation->cookedTranslator(distance);
     } else {
         return distance;
-    }
-}
-
-QString FactMetaData::appSettingsDistanceUnitsString()
-{
-    const AppSettingsTranslation_s* pAppSettingsTranslation = _findAppSettingsUnitsTranslation("m", UnitDistance);
-    if (pAppSettingsTranslation) {
-        return pAppSettingsTranslation->cookedUnits;
-    } else {
-        return QStringLiteral("m");
     }
 }
 
