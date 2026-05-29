@@ -44,6 +44,7 @@
 #include "VehicleComponent.h"
 #include "VideoManager.h"
 #include "SignalingServerManager.h"
+#include "SiYi.h"
 
 #ifndef QGC_NO_SERIAL_LINK
 #include "SerialLink.h"
@@ -282,6 +283,7 @@ void QGCApplication::_initForNormalAppBoot()
     QGCPositionManager::instance()->init();
     LinkManager::instance()->init();
     SignalingServerManager::instance()->init();
+    SiYi::instance()->init();
 
     VideoManager::instance()->init(mainRootWindow());
 
