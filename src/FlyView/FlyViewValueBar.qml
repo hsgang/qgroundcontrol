@@ -52,14 +52,15 @@ Item{
     property real   _distanceToHome:            _activeVehicle?.distanceToHome?.rawValue ?? 0
     property real   _distanceDecimal:           (_distanceToHome >= 100) ? 0 : 1
     property real   _distanceDown:              _activeVehicle?.distanceSensors?.rotationPitch270?.rawValue ?? 0
-    property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitude).toFixed(_alitutdeDecimal)
-    property string _vehicleAltitudeAMSLText:   isNaN(_vehicleAltitudeAMSL) ? "-.-" : "ASL " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_vehicleAltitudeAMSL).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _vehicleAltitudeText:       isNaN(_vehicleAltitude) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_vehicleAltitude).toFixed(_alitutdeDecimal)
+    property string _vehicleAltitudeAMSLText:   isNaN(_vehicleAltitudeAMSL) ? "-.-" : "ASL " + QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_vehicleAltitudeAMSL).toFixed(1) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
     property string _vehicleVerticalSpeedText:  isNaN(_vehicleVerticalSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleVerticalSpeed).toFixed(1)
     property string _speedUnitText:             QGroundControl.unitsConversion.appSettingsSpeedUnitsString
     property string _vehicleGroundSpeedText:    isNaN(_vehicleGroundSpeed) ? "-.-" : QGroundControl.unitsConversion.meterPerSecToAppSettingsSpeedUnits(_vehicleGroundSpeed).toFixed(1)
-    property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceToHome).toFixed(_distanceDecimal)
-    property string _distanceUnitText:          QGroundControl.unitsConversion.appSettingsDistanceUnitsString
-    property string _distanceDownText:          isNaN(_distanceDown) ? "   " : "RNG " + QGroundControl.unitsConversion.metersToAppSettingsDistanceUnits(_distanceDown).toFixed(2) + " " + QGroundControl.unitsConversion.appSettingsDistanceUnitsString
+    property string _distanceToHomeText:        isNaN(_distanceToHome) ? "-.-" : QGroundControl.unitsConversion.metersToAppSettingsHorizontalDistanceUnits(_distanceToHome).toFixed(_distanceDecimal)
+    property string _distanceUnitText:          QGroundControl.unitsConversion.appSettingsHorizontalDistanceUnitsString
+    property string _verticalDistanceUnitText:  QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
+    property string _distanceDownText:          isNaN(_distanceDown) ? "   " : "RNG " + QGroundControl.unitsConversion.metersToAppSettingsVerticalDistanceUnits(_distanceDown).toFixed(2) + " " + QGroundControl.unitsConversion.appSettingsVerticalDistanceUnitsString
     property string _flightTimeText:            _activeVehicle ? formatFlightTime(_activeVehicle.flightTime.rawValue) : "00:00"
 
     function getVerticalSpeedState() {
@@ -129,7 +130,7 @@ Item{
             }
             QGCLabel {
                 Layout.alignment: Qt.AlignHCenter
-                text:   _distanceUnitText
+                text:   _verticalDistanceUnitText
             }
         }
 
