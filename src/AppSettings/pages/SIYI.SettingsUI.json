@@ -16,6 +16,11 @@
             ]
         },
         {
+            "component": "SiyiUniRCTransportSection",
+            "sectionName": "UniRC 7 Transport",
+            "keywords": ["siyi", "unirc", "serial", "uart", "transport", "udp", "port", "baud"]
+        },
+        {
             "component": "SiyiUniRCStatusSection",
             "sectionName": "UniRC 7 Status",
             "keywords": ["siyi", "unirc", "hardware id", "battery", "pairing", "joystick", "firmware", "rssi", "signal"]

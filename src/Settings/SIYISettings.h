@@ -20,6 +20,9 @@ public:
 
     DEFINE_SETTINGFACT(siyiUniRCEnabled)
     DEFINE_SETTINGFACT(siyiUniRCIp)
+    DEFINE_SETTINGFACT(siyiUniRCTransportMode)
+    DEFINE_SETTINGFACT(siyiUniRCSerialPort)
+    DEFINE_SETTINGFACT(siyiUniRCSerialBaud)
     DEFINE_SETTINGFACT(siyiTransmitterEnabled)
     DEFINE_SETTINGFACT(siyiTransmitterIp)
     DEFINE_SETTINGFACT(siyiCameraEnabled)

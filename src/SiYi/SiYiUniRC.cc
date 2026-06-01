@@ -7,6 +7,10 @@
 #include <QtNetwork/QNetworkDatagram>
 #include <QtNetwork/QUdpSocket>
 
+#ifdef Q_OS_ANDROID
+#include <qserialport.h>
+#endif
+
 #include "QGCLoggingCategory.h"
 #include "SiYiCrcApi.h"
 
@@ -69,21 +73,52 @@ void SiYiUniRC::start()
     if (socket_) {
         return;
     }
-
-    serverAddress_ = QHostAddress(ip_);
-    if (serverAddress_.isNull()) {
-        qCWarning(SiYiUniRCLog) << "Invalid IP:" << ip_;
+#ifdef Q_OS_ANDROID
+    if (serialPort_) {
         return;
     }
+#endif
 
-    socket_ = new QUdpSocket(this);
-    if (!socket_->bind(QHostAddress::AnyIPv4, 0, QUdpSocket::ShareAddress)) {
-        qCWarning(SiYiUniRCLog) << "UDP bind failed:" << socket_->errorString();
-        socket_->deleteLater();
-        socket_ = nullptr;
+    if (transportMode_ == TransportSerial) {
+#ifdef Q_OS_ANDROID
+        if (serialPortName_.isEmpty()) {
+            qCWarning(SiYiUniRCLog) << "Serial port name is empty";
+            return;
+        }
+        serialPort_ = new QSerialPort(this);
+        serialPort_->setPortName(serialPortName_);
+        connect(serialPort_, &QSerialPort::readyRead, this, &SiYiUniRC::onSerialReadyRead);
+        if (!serialPort_->open(QIODevice::ReadWrite)) {
+            qCWarning(SiYiUniRCLog) << "Serial open failed:" << serialPort_->errorString();
+            serialPort_->deleteLater();
+            serialPort_ = nullptr;
+            return;
+        }
+        serialPort_->setBaudRate(serialBaud_);
+        serialPort_->setDataBits(QSerialPort::Data8);
+        serialPort_->setParity(QSerialPort::NoParity);
+        serialPort_->setStopBits(QSerialPort::OneStop);
+        serialPort_->setFlowControl(QSerialPort::NoFlowControl);
+#else
+        qCWarning(SiYiUniRCLog) << "Serial transport is only supported on Android";
         return;
+#endif
+    } else {
+        serverAddress_ = QHostAddress(ip_);
+        if (serverAddress_.isNull()) {
+            qCWarning(SiYiUniRCLog) << "Invalid IP:" << ip_;
+            return;
+        }
+
+        socket_ = new QUdpSocket(this);
+        if (!socket_->bind(QHostAddress::AnyIPv4, 0, QUdpSocket::ShareAddress)) {
+            qCWarning(SiYiUniRCLog) << "UDP bind failed:" << socket_->errorString();
+            socket_->deleteLater();
+            socket_ = nullptr;
+            return;
+        }
+        connect(socket_, &QUdpSocket::readyRead, this, &SiYiUniRC::onReadyRead);
     }
-    connect(socket_, &QUdpSocket::readyRead, this, &SiYiUniRC::onReadyRead);
 
     pollTimer_ = new QTimer(this);
     pollTimer_->setInterval(kPollIntervalMs);
@@ -115,6 +150,13 @@ void SiYiUniRC::stop()
         socket_->deleteLater();
         socket_ = nullptr;
     }
+#ifdef Q_OS_ANDROID
+    if (serialPort_) {
+        serialPort_->close();
+        serialPort_->deleteLater();
+        serialPort_ = nullptr;
+    }
+#endif
     rxBuffer_.clear();
     initialQueriesSent_ = false;
     setConnected(false);
@@ -132,6 +174,13 @@ void SiYiUniRC::setIp(const QString &ip)
         stop();
         start();
     }
+}
+
+void SiYiUniRC::setTransport(int mode, const QString &port, qint32 baud)
+{
+    transportMode_ = mode;
+    serialPortName_ = port;
+    serialBaud_ = baud;
 }
 
 void SiYiUniRC::setConnected(bool connected)
@@ -162,7 +211,22 @@ QByteArray SiYiUniRC::packMessage(quint8 cmdId, const QByteArray &payload, bool 
 
 void SiYiUniRC::sendMessage(const QByteArray &msg)
 {
-    if (!socket_ || msg.isEmpty()) {
+    if (msg.isEmpty()) {
+        return;
+    }
+#ifdef Q_OS_ANDROID
+    if (transportMode_ == TransportSerial) {
+        if (!serialPort_ || !serialPort_->isOpen()) {
+            return;
+        }
+        const qint64 written = serialPort_->write(msg);
+        if (written != msg.size()) {
+            qCDebug(SiYiUniRCLog) << "serial write failed:" << serialPort_->errorString();
+        }
+        return;
+    }
+#endif
+    if (!socket_) {
         return;
     }
     const qint64 written = socket_->writeDatagram(msg, serverAddress_, port_);
@@ -216,6 +280,17 @@ void SiYiUniRC::onReadyRead()
         rxBuffer_.append(dg.data());
     }
     parseRxBuffer();
+}
+
+void SiYiUniRC::onSerialReadyRead()
+{
+#ifdef Q_OS_ANDROID
+    if (!serialPort_) {
+        return;
+    }
+    rxBuffer_.append(serialPort_->readAll());
+    parseRxBuffer();
+#endif
 }
 
 void SiYiUniRC::parseRxBuffer()

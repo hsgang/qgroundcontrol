@@ -24,6 +24,11 @@ public:
     Q_INVOKABLE virtual void analyzeIp(QString videoUrl);
     Q_INVOKABLE void setIp(const QString &ip) { resetIp(ip); }
 
+    // Runtime enable/disable: starts/stops the worker thread and gates the
+    // auto-reconnect (finished -> start) so a disabled client stays stopped.
+    Q_INVOKABLE void setEnabled(bool enabled);
+    bool isEnabled() const { return enabled_; }
+
 protected:
     virtual void analyzeMessage() = 0;
     virtual QByteArray heartbeatMessage() = 0;
@@ -49,6 +54,7 @@ signals:
     void disconnected();
     void ipChanged();
 private:
+    bool enabled_{false};
     bool isConnected_{false};
     bool isConnected(){return isConnected_;}
     Q_SIGNAL void isConnectedChanged();

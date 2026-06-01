@@ -21,6 +21,35 @@
             "label": "UniRC 7 IP"
         },
         {
+            "name": "siyiUniRCTransportMode",
+            "shortDesc": "Transport for the UniRC 7 datalink.",
+            "longDesc": "UDP (network) or Serial (UART over USB). Serial is supported on Android only.",
+            "type": "uint32",
+            "enumStrings": "UDP,Serial",
+            "enumValues": "0,1",
+            "default": 0,
+            "qgcRebootRequired": true,
+            "label": "UniRC 7 Transport"
+        },
+        {
+            "name": "siyiUniRCSerialPort",
+            "shortDesc": "Serial port for the UniRC 7 datalink (Serial transport only).",
+            "longDesc": "Serial device used when Transport is Serial. Android only.",
+            "type": "string",
+            "default": "",
+            "qgcRebootRequired": true,
+            "label": "UniRC 7 Serial Port"
+        },
+        {
+            "name": "siyiUniRCSerialBaud",
+            "shortDesc": "Baud rate for the UniRC 7 serial datalink.",
+            "longDesc": "Serial port baud rate when Transport is Serial (default 115200).",
+            "type": "uint32",
+            "default": 115200,
+            "qgcRebootRequired": true,
+            "label": "UniRC 7 Serial Baud"
+        },
+        {
             "name": "siyiTransmitterEnabled",
             "shortDesc": "Enable SIYI transmitter (image link) connection (TCP).",
             "longDesc": "Connects to legacy SIYI image transmitter for RSSI / link statistics.",

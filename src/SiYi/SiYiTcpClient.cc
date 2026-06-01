@@ -16,7 +16,29 @@ SiYiTcpClient::SiYiTcpClient(const QString ip, quint16 port, QObject *parent)
     , port_(port)
 {
     sequence_ = quint16(QDateTime::currentMSecsSinceEpoch());
-    connect(this, &SiYiTcpClient::finished, this, [=, this]() { start(); });
+    connect(this, &SiYiTcpClient::finished, this, [this]() {
+        // Auto-reconnect only while enabled; a disabled client must stay stopped.
+        if (enabled_) {
+            start();
+        }
+    });
+}
+
+void SiYiTcpClient::setEnabled(bool enabled)
+{
+    if (enabled_ == enabled) {
+        return;
+    }
+    enabled_ = enabled;
+
+    if (enabled_) {
+        if (!isRunning()) {
+            start();
+        }
+    } else if (isRunning()) {
+        exit();
+        wait();
+    }
 }
 
 SiYiTcpClient::~SiYiTcpClient()

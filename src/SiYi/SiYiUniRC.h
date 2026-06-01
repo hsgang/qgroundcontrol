@@ -11,6 +11,7 @@
 
 class QTimer;
 class QUdpSocket;
+class QSerialPort;
 
 Q_DECLARE_LOGGING_CATEGORY(SiYiUniRCLog)
 
@@ -54,12 +55,23 @@ class SiYiUniRC : public QObject
     Q_PROPERTY(int rcOutputFreq READ rcOutputFreq NOTIFY rcOutputFreqChanged)
 
 public:
+    // Transport for the UniRC 7 datalink. Serial (UART over USB) is Android-only;
+    // on other platforms selecting Serial logs a warning and does not connect.
+    enum TransportMode {
+        TransportUdp = 0,
+        TransportSerial = 1,
+    };
+    Q_ENUM(TransportMode)
+
     explicit SiYiUniRC(QObject *parent = nullptr);
     ~SiYiUniRC() override;
 
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
     Q_INVOKABLE void setIp(const QString &ip);
+
+    // Configure the transport before start(). mode: 0=UDP, 1=Serial.
+    Q_INVOKABLE void setTransport(int mode, const QString &port, qint32 baud);
 
     // Read-only query refresh
     Q_INVOKABLE void requestHardwareId();
@@ -106,6 +118,7 @@ signals:
 
 private slots:
     void onReadyRead();
+    void onSerialReadyRead();
     void onPollTick();
     void onWatchdogTick();
 
@@ -145,10 +158,17 @@ private:
     int rcOutputFreq() const { return rcOutputFreq_; }
 
     QUdpSocket *socket_ = nullptr;
+#ifdef Q_OS_ANDROID
+    QSerialPort *serialPort_ = nullptr;
+#endif
     QTimer *pollTimer_ = nullptr;
     QTimer *watchdogTimer_ = nullptr;
     QByteArray rxBuffer_;
     QHostAddress serverAddress_;
+
+    int transportMode_{TransportUdp};
+    QString serialPortName_;
+    qint32 serialBaud_{115200};
 
     QString ip_{QStringLiteral("192.168.144.20")};
     quint16 port_{19856};

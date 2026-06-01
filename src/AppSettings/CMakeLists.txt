@@ -117,6 +117,7 @@ qt_add_qml_module(AppSettingsModule
         SiyiUniRCStatusSection.qml
         SiyiUniRCChannelSection.qml
         SiyiUniRCRcChannelsSection.qml
+        SiyiUniRCTransportSection.qml
         TcpSettings.qml
         UdpSettings.qml
         WebRTCSettings.qml
