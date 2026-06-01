@@ -265,7 +265,6 @@ public:
     Q_PROPERTY(FactGroup*           radioStatus     READ radioStatusFactGroup       CONSTANT)
     Q_PROPERTY(Actuators*           actuators       READ actuators                  CONSTANT)
     Q_PROPERTY(FactGroup*           landingTarget   READ landingTargetFactGroup     CONSTANT)
-    Q_PROPERTY(HealthAndArmingCheckReport* healthAndArmingCheckReport READ healthAndArmingCheckReport CONSTANT)
 
     // Dynamic FactGroupListModel properties
     Q_PROPERTY(QmlObjectListModel*  batteries       READ batteries                  CONSTANT)
