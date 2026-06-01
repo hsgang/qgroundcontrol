@@ -59,6 +59,10 @@ void SiYi::init()
         settings->siyiUniRCTransportMode()->rawValue().toInt(),
         settings->siyiUniRCSerialPort()->rawValue().toString(),
         settings->siyiUniRCSerialBaud()->rawValue().toInt());
+    // Variant A feasibility test: relay datalink MAVLink to a loopback UDP link.
+    // Set this to the local port your QGC MAVLink UDP link listens on; 0 disables
+    // the relay and keeps the legacy SDK-only ephemeral socket behavior.
+    uniRC_->setRelayPort(14550);
 
     connect(transmitter_, &SiYiCamera::connected, this, [this, cameraEnabledFact](){
         isTransmitterConnected_ = true;

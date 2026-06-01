@@ -111,7 +111,11 @@ void SiYiUniRC::start()
         }
 
         socket_ = new QUdpSocket(this);
-        if (!socket_->bind(QHostAddress::AnyIPv4, 0, QUdpSocket::ShareAddress)) {
+        // Relay mode owns the datalink port so it can demux MAVLink + SDK on a
+        // single socket; SDK-only mode keeps an ephemeral source port as before.
+        const quint16 bindPort = (relayPort_ > 0) ? port_ : quint16(0);
+        if (!socket_->bind(QHostAddress::AnyIPv4, bindPort,
+                           QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
             qCWarning(SiYiUniRCLog) << "UDP bind failed:" << socket_->errorString();
             socket_->deleteLater();
             socket_ = nullptr;
@@ -181,6 +185,11 @@ void SiYiUniRC::setTransport(int mode, const QString &port, qint32 baud)
     transportMode_ = mode;
     serialPortName_ = port;
     serialBaud_ = baud;
+}
+
+void SiYiUniRC::setRelayPort(quint16 port)
+{
+    relayPort_ = port;
 }
 
 void SiYiUniRC::setConnected(bool connected)
@@ -276,8 +285,34 @@ void SiYiUniRC::onWatchdogTick()
 void SiYiUniRC::onReadyRead()
 {
     while (socket_ && socket_->hasPendingDatagrams()) {
-        QNetworkDatagram dg = socket_->receiveDatagram();
-        rxBuffer_.append(dg.data());
+        const QNetworkDatagram dg = socket_->receiveDatagram();
+        const QByteArray data = dg.data();
+        if (data.isEmpty()) {
+            continue;
+        }
+
+        // SDK-only mode (relay disabled): every datagram is a SiYi SDK reply.
+        if (relayPort_ == 0) {
+            rxBuffer_.append(data);
+            continue;
+        }
+
+        // Relay mode: route by direction and protocol on the shared socket.
+        // Uplink MAVLink arrives from the loopback link -> forward to the datalink.
+        if (dg.senderAddress().isLoopback()) {
+            socket_->writeDatagram(data, serverAddress_, port_);
+            continue;
+        }
+
+        // Downlink from the datalink: SiYi SDK frames (STX 0x55 0x66) stay local,
+        // MAVLink frames (0xFD/0xFE) are relayed to the loopback telemetry link.
+        const bool isSiYiFrame = (data.size() >= 2)
+            && (quint8(data.at(0)) == 0x55) && (quint8(data.at(1)) == 0x66);
+        if (isSiYiFrame) {
+            rxBuffer_.append(data);
+        } else {
+            socket_->writeDatagram(data, QHostAddress::LocalHost, relayPort_);
+        }
     }
     parseRxBuffer();
 }
