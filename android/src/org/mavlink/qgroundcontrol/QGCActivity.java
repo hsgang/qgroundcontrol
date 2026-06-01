@@ -11,9 +11,13 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
+import android.os.Build;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
 
 
 import org.qtproject.qt.android.bindings.QtActivity;
@@ -30,6 +34,7 @@ public class QGCActivity extends QtActivity {
 
     private WifiManager.MulticastLock m_wifiMulticastLock;
     private volatile QGCStoragePermissionController m_storagePermissionController;
+    private boolean m_immersiveListenerRegistered = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +47,53 @@ public class QGCActivity extends QtActivity {
         QGCUsbSerialManager.initialize(this);
         QGCSDLManager.initialize(this);
         m_storagePermissionController = new QGCStoragePermissionController(this);
+
+        hideSystemBars();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemBars();
+        }
+    }
+
+    // Hide the status bar and navigation (back/home) bar so QGC uses the full
+    // screen. Sticky immersive: the bars reappear transiently on an edge swipe
+    // and auto-hide again, so they no longer permanently reserve screen space.
+    private void hideSystemBars() {
+        if (Build.VERSION.SDK_INT >= 30) {
+            getWindow().setDecorFitsSystemWindows(false);
+            final WindowInsetsController controller =
+                getWindow().getDecorView().getWindowInsetsController();
+            if (controller != null) {
+                controller.hide(WindowInsets.Type.statusBars()
+                              | WindowInsets.Type.navigationBars());
+                controller.setSystemBarsBehavior(
+                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+            }
+        } else {
+            final View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                  View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+
+            // On Android < 11 the legacy flags get cleared whenever the system
+            // bars become visible (focus change, keyboard, Qt surface refresh).
+            // Watch for that and immediately re-hide so the bars never stay up.
+            if (!m_immersiveListenerRegistered) {
+                m_immersiveListenerRegistered = true;
+                decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
+                    if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                        hideSystemBars();
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -54,6 +106,7 @@ public class QGCActivity extends QtActivity {
     protected void onResume() {
         super.onResume();
         QGCSDLManager.onResume();
+        hideSystemBars();
     }
 
     @Override
