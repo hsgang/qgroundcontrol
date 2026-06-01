@@ -14,11 +14,6 @@ import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.Window;
-
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 
 import org.qtproject.qt.android.bindings.QtActivity;
 
@@ -46,33 +41,6 @@ public class QGCActivity extends QtActivity {
         QGCUsbSerialManager.initialize(this);
         QGCSDLManager.initialize(this);
         m_storagePermissionController = new QGCStoragePermissionController(this);
-
-        hideSystemBars();
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            hideSystemBars();
-        }
-    }
-
-    // Hide the status bar and navigation (back/home) bar so QGC uses the full
-    // screen. Sticky immersive: the bars reappear transiently on an edge swipe
-    // and auto-hide again, so they no longer permanently reserve screen space.
-    private void hideSystemBars() {
-        final Window window = getWindow();
-        // Lay out edge-to-edge so content extends behind the system bars
-        // instead of reserving space for them. WindowInsetsControllerCompat
-        // maps to the correct mechanism on every API level (including the
-        // legacy path on Android < 11), so no SDK_INT branching is needed.
-        WindowCompat.setDecorFitsSystemWindows(window, false);
-        final WindowInsetsControllerCompat controller =
-            WindowCompat.getInsetsController(window, window.getDecorView());
-        controller.hide(WindowInsetsCompat.Type.systemBars());
-        controller.setSystemBarsBehavior(
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
     }
 
     @Override
@@ -85,7 +53,6 @@ public class QGCActivity extends QtActivity {
     protected void onResume() {
         super.onResume();
         QGCSDLManager.onResume();
-        hideSystemBars();
     }
 
     @Override

@@ -17,6 +17,10 @@ import QGroundControl.Toolbar
 ApplicationWindow {
     id:         mainWindow
     visible:    true
+    // On Android use Qt-native fullscreen so Qt itself hides the status and
+    // navigation bars and keeps them hidden, instead of fighting Qt from the
+    // Activity with manual system-UI flags.
+    visibility: ScreenTools.isAndroid ? Window.FullScreen : Window.AutomaticVisibility
     // The special casing for android prevents white bars from showing up on the edges of the screen with newer android versions
     flags:      Qt.Window | (ScreenTools.isAndroid ? Qt.ExpandedClientAreaHint | Qt.NoTitleBarBackgroundHint : 0)
 
