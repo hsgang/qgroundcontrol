@@ -198,4 +198,13 @@ void setKeepScreenOn(bool on)
     }
 }
 
+void hideSystemBars()
+{
+    QJniObject::callStaticMethod<void>(kJniQGCActivityClassName, "updateSystemBars", "()V");
+    QJniEnvironment env;
+    if (env.checkAndClearExceptions()) {
+        qCWarning(AndroidInterfaceLog) << "Exception in hideSystemBars";
+    }
+}
+
 }  // namespace AndroidInterface

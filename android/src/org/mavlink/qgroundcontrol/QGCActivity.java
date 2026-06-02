@@ -56,11 +56,6 @@ public class QGCActivity extends QtActivity {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             hideSystemBars();
-            // On first launch the Qt surface finishes its initial layout after
-            // this focus change, which leaves the bars' space reserved until the
-            // next re-focus. Re-apply once the view tree has settled so the very
-            // first launch is full screen too.
-            getWindow().getDecorView().post(this::hideSystemBars);
         }
     }
 
@@ -87,11 +82,6 @@ public class QGCActivity extends QtActivity {
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
-            // Force a fresh inset/layout pass so the space the bars used to
-            // reserve is reclaimed immediately. Without this the content stays
-            // inset on first launch until the activity is re-focused.
-            decorView.requestApplyInsets();
-
             // On Android < 11 the legacy flags get cleared whenever the system
             // bars become visible (focus change, keyboard, Qt surface refresh).
             // Watch for that and immediately re-hide so the bars never stay up.
@@ -103,6 +93,17 @@ public class QGCActivity extends QtActivity {
                     }
                 });
             }
+        }
+    }
+
+    // Called from native code (QGCApplication) when the Qt application becomes
+    // active. On first launch that happens after the Qt surface is laid out,
+    // which is the point at which hiding the bars actually reclaims their space
+    // (the Activity lifecycle callbacks fire too early on the very first start).
+    public static void updateSystemBars() {
+        final QGCActivity activity = m_instance;
+        if (activity != null) {
+            activity.runOnUiThread(activity::hideSystemBars);
         }
     }
 

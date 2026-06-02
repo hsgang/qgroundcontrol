@@ -11,6 +11,7 @@ void setNativeMethods();
 bool checkStoragePermissions();
 QString getSDCardPath();
 void setKeepScreenOn(bool on);
+void hideSystemBars();
 void openFileImportDialog(const QString& destPath, std::function<void(const QString&)> callback);
 
 constexpr const char* kJniQGCActivityClassName = "org/mavlink/qgroundcontrol/QGCActivity";

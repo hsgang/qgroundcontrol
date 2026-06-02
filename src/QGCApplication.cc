@@ -50,6 +50,10 @@
 #include "SerialLink.h"
 #endif
 
+#ifdef Q_OS_ANDROID
+#include "AndroidInterface.h"
+#endif
+
 QGC_LOGGING_CATEGORY(QGCApplicationLog, "API.QGCApplication")
 QGC_LOGGING_CATEGORY(QGCAppMessageLog, "API.QGCApplication.AppMessage")
 
@@ -278,6 +282,21 @@ void QGCApplication::_initForNormalAppBoot()
     _qmlAppEngine->addImageProvider(QLatin1String(ColoredSvgImageProvider::ProviderId), new ColoredSvgImageProvider());
 
     QGCCorePlugin::instance()->createRootWindow(_qmlAppEngine);
+
+#ifdef Q_OS_ANDROID
+    // Qt does not keep the Android system bars hidden on its own, and it resets
+    // them while bringing its surface up. Re-apply the immersive hide whenever
+    // the application becomes active. On first launch that signal arrives only
+    // after the Qt surface is laid out, which is the point at which the hide
+    // actually reclaims the bars' space (the Activity lifecycle callbacks fire
+    // too early on the very first start).
+    (void) connect(this, &QGuiApplication::applicationStateChanged, this, [](Qt::ApplicationState state) {
+        if (state == Qt::ApplicationActive) {
+            AndroidInterface::hideSystemBars();
+        }
+    });
+    AndroidInterface::hideSystemBars();
+#endif
 
     AudioOutput::instance()->init(SettingsManager::instance()->appSettings()->audioVolume(), SettingsManager::instance()->appSettings()->audioMuted());
     FollowMe::instance()->init();
