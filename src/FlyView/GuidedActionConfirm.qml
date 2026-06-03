@@ -43,11 +43,11 @@ Item {
         }
     }
 
-    function confirmCancelled() {
+    function reset() {
+        visible = false
         if (guidedValueSlider) {
             guidedValueSlider.visible = false
         }
-        visible = false
         hideTrigger = false
         visibleTimer.stop()
         if (messageDisplay) {
@@ -55,10 +55,20 @@ Item {
         }
         // messageFadeTimer.stop()
         // messageOpacityAnimation.stop()
-        if (mapIndicator) {
+    }
+
+    // Cancel the current pending action and notify its map indicator.
+    // Pass incomingIndicator when superseding one action with another (e.g. from confirmAction):
+    // if the old and new indicator are the same object, actionCancelled() is intentionally skipped
+    // so that a show() call made before confirmAction() is not undone (e.g. goto -> goto).
+    // Omit incomingIndicator (or pass undefined) for explicit user cancellation via the X button
+    // or auto-hide trigger, where the indicator must always be notified.
+    function confirmCancelled(incomingIndicator) {
+        reset()
+        if (mapIndicator && mapIndicator !== incomingIndicator) {
             mapIndicator.actionCancelled()
-            mapIndicator = undefined
         }
+        mapIndicator = undefined
     }
 
     function _reallyShow() {
