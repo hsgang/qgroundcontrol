@@ -4,35 +4,45 @@
     "groups": [
         {
             "heading": "UniRC 7 (UDP)",
-            "keywords": ["siyi", "unirc", "udp", "datalink", "19856", "192.168.144.20"],
+            "keywords": ["siyi", "unirc", "udp", "datalink", "19856", "192.168.144.20", "relay", "mavlink", "14550"],
             "controls": [
                 {
                     "setting": "siyiSettings.siyiUniRCEnabled"
                 },
                 {
                     "setting": "siyiSettings.siyiUniRCIp",
-                    "control": "textfield"
+                    "control": "textfield",
+                    "showWhen": "QGroundControl.settingsManager.siyiSettings.siyiUniRCEnabled.value"
+                },
+                {
+                    "setting": "siyiSettings.siyiUniRCRelayPort",
+                    "control": "textfield",
+                    "showWhen": "QGroundControl.settingsManager.siyiSettings.siyiUniRCEnabled.value"
                 }
             ]
         },
         {
             "component": "SiyiUniRCTransportSection",
             "sectionName": "UniRC 7 Transport",
+            "showWhen": "QGroundControl.settingsManager.siyiSettings.siyiUniRCEnabled.value",
             "keywords": ["siyi", "unirc", "serial", "uart", "transport", "udp", "port", "baud"]
         },
         {
             "component": "SiyiUniRCStatusSection",
             "sectionName": "UniRC 7 Status",
+            "showWhen": "QGroundControl.settingsManager.siyiSettings.siyiUniRCEnabled.value",
             "keywords": ["siyi", "unirc", "hardware id", "battery", "pairing", "joystick", "firmware", "rssi", "signal"]
         },
         {
             "component": "SiyiUniRCChannelSection",
             "sectionName": "UniRC 7 Channel Mapping / Reverse",
+            "showWhen": "QGroundControl.settingsManager.siyiSettings.siyiUniRCEnabled.value",
             "keywords": ["siyi", "unirc", "channel", "mapping", "reverse", "joystick", "switch"]
         },
         {
             "component": "SiyiUniRCRcChannelsSection",
             "sectionName": "UniRC 7 RC Channels",
+            "showWhen": "QGroundControl.settingsManager.siyiSettings.siyiUniRCEnabled.value",
             "keywords": ["siyi", "unirc", "rc", "channels", "live", "stick", "frequency", "output"]
         },
         {
@@ -44,7 +54,8 @@
                 },
                 {
                     "setting": "siyiSettings.siyiTransmitterIp",
-                    "control": "textfield"
+                    "control": "textfield",
+                    "showWhen": "QGroundControl.settingsManager.siyiSettings.siyiTransmitterEnabled.value"
                 }
             ]
         },
@@ -57,7 +68,8 @@
                 },
                 {
                     "setting": "siyiSettings.siyiCameraIp",
-                    "control": "textfield"
+                    "control": "textfield",
+                    "showWhen": "QGroundControl.settingsManager.siyiSettings.siyiCameraEnabled.value"
                 }
             ]
         }

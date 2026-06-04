@@ -12,75 +12,160 @@ SettingsGroupLayout {
 
     property var _linkManager: QGroundControl.linkManager
 
+    QGCPalette { id: qgcPal }
+
+    property real _iconSize: ScreenTools.defaultFontPixelHeight * 0.85
+
+    // Link type icon / name / sub-info, matching the connect rows on
+    // MainStatusIndicatorOfflinePage so both surfaces describe links identically.
+    function _linkTypeIcon(linkType) {
+        switch (linkType) {
+        case LinkConfiguration.TypeSerial: return "/InstrumentValueIcons/usb.svg"
+        case LinkConfiguration.TypeUdp:    return "/InstrumentValueIcons/network.svg"
+        case LinkConfiguration.TypeTcp:    return "/InstrumentValueIcons/network-transmit-receive.svg"
+        case LinkConfiguration.TypeWebRTC: return "/InstrumentValueIcons/cloud.svg"
+        }
+        return "/InstrumentValueIcons/link.svg"
+    }
+    function _linkTypeName(linkType) {
+        switch (linkType) {
+        case LinkConfiguration.TypeSerial: return qsTr("Serial")
+        case LinkConfiguration.TypeUdp:    return qsTr("UDP")
+        case LinkConfiguration.TypeTcp:    return qsTr("TCP")
+        case LinkConfiguration.TypeWebRTC: return qsTr("WebRTC")
+        }
+        return qsTr("Link")
+    }
+    function _linkSubInfo(config) {
+        var detail = ""
+        switch (config.linkType) {
+        case LinkConfiguration.TypeUdp:
+            if (config.localPort > 0) {
+                detail = ":" + config.localPort                 // QGC's listen port
+            } else if (config.hostList && config.hostList.length > 0) {
+                detail = config.hostList[0]                     // outgoing link: target host:port
+            }
+            break
+        case LinkConfiguration.TypeWebRTC:
+            detail = config.targetDroneId || ""
+            break
+        }
+        return detail !== "" ? _linkTypeName(config.linkType) + " · " + detail : _linkTypeName(config.linkType)
+    }
+
+    QGCLabel {
+        Layout.fillWidth:   true
+        visible:            _linkCount === 0
+        text:               qsTr("No links configured. Add a link below to connect.")
+        color:              Qt.darker(qgcPal.text, 1.5)
+        wrapMode:           Text.WordWrap
+        font.pointSize:     ScreenTools.smallFontPointSize
+
+        // Count the non-dynamic (user-configured) links so the empty hint only
+        // shows when there is nothing to manage.
+        property int _linkCount: {
+            var count = 0
+            for (var i = 0; i < _linkManager.linkConfigurations.count; ++i) {
+                if (!_linkManager.linkConfigurations.get(i).dynamic) {
+                    count++
+                }
+            }
+            return count
+        }
+    }
+
     Repeater {
         model: _linkManager.linkConfigurations
 
+        // Icon + name + "Type · detail" sub-info, mirroring the offline connect page.
         RowLayout {
             Layout.fillWidth:   true
             visible:            !object.dynamic
+            spacing:            ScreenTools.defaultFontPixelWidth
 
-            QGCLabel {
+            property bool _connected: object.link && object.link.linkConnected
+
+            QGCColoredImage {
+                source:             _linkTypeIcon(object.linkType)
+                color:              qgcPal.text
+                width:              _iconSize
+                height:             _iconSize
+                sourceSize.height:  _iconSize
+                fillMode:           Image.PreserveAspectFit
+                Layout.alignment:   Qt.AlignVCenter
+            }
+
+            ColumnLayout {
                 Layout.fillWidth:   true
-                text:               object.name
-            }
-            QGCColoredImage {
-                height:                 ScreenTools.minTouchPixels
-                width:                  height
-                sourceSize.height:      height
-                fillMode:               Image.PreserveAspectFit
-                mipmap:                 true
-                smooth:                 true
-                color:                  qgcPalEdit.text
-                source:                 "/res/pencil.svg"
-                enabled:                !object.link
+                spacing:            0
 
-                QGCPalette {
-                    id: qgcPalEdit
-                    colorGroupEnabled: parent.enabled
+                QGCLabel {
+                    Layout.fillWidth:   true
+                    text:               object.name
+                    font.bold:          true
+                    elide:              Text.ElideRight
                 }
-
-                QGCMouseArea {
-                    fillItem: parent
-                    onClicked: {
-                        var editingConfig = _linkManager.startConfigurationEditing(object)
-                        linkDialogFactory.open({ editingConfig: editingConfig, originalConfig: object })
-                    }
+                QGCLabel {
+                    Layout.fillWidth:   true
+                    text:               _linkSubInfo(object)
+                    visible:            text !== ""
+                    font.pointSize:     ScreenTools.smallFontPointSize
+                    color:              Qt.darker(qgcPal.text, 1.5)
+                    elide:              Text.ElideRight
                 }
             }
-            QGCColoredImage {
-                height:                 ScreenTools.minTouchPixels
-                width:                  height
-                sourceSize.height:      height
-                fillMode:               Image.PreserveAspectFit
-                mipmap:                 true
-                smooth:                 true
-                color:                  qgcPalDelete.text
-                source:                 "/res/TrashDelete.svg"
 
-                QGCPalette {
-                    id: qgcPalDelete
-                    colorGroupEnabled: parent.enabled
-                }
-
-                QGCMouseArea {
-                    fillItem:   parent
-                    onClicked:  QGroundControl.showMessageDialog(
-                                    _root,
-                                    qsTr("Delete Link"),
-                                    qsTr("Are you sure you want to delete '%1'?").arg(object.name),
-                                    Dialog.Ok | Dialog.Cancel,
-                                    function () {
-                                        _linkManager.removeConfiguration(object)
-                                    })
-                }
-            }
             QGCButton {
-                text:       object.link ? qsTr("Disconnect") : qsTr("Connect")
+                text:       _connected ? qsTr("Disconnect") : qsTr("Connect")
+                primary:    !_connected
                 onClicked: {
                     if (object.link) {
                         object.link.disconnect()
                     } else {
                         _linkManager.createConnectedLink(object)
+                    }
+                }
+            }
+
+            // Secondary actions (edit / delete) live in an overflow menu so the
+            // row exposes a single primary button instead of mixed icons + button.
+            QGCColoredImage {
+                height:                 ScreenTools.minTouchPixels
+                width:                  height
+                sourceSize.height:      height
+                fillMode:               Image.PreserveAspectFit
+                mipmap:                 true
+                smooth:                 true
+                color:                  qgcPal.text
+                source:                 "/InstrumentValueIcons/dots-horizontal-triple.svg"
+                Layout.alignment:       Qt.AlignVCenter
+
+                QGCMouseArea {
+                    fillItem:   parent
+                    onClicked:  actionMenu.popup()
+                }
+
+                QGCMenu {
+                    id: actionMenu
+
+                    QGCMenuItem {
+                        text:        qsTr("Edit")
+                        enabled:     !object.link
+                        onTriggered: {
+                            var editingConfig = _linkManager.startConfigurationEditing(object)
+                            linkDialogFactory.open({ editingConfig: editingConfig, originalConfig: object })
+                        }
+                    }
+                    QGCMenuItem {
+                        text:        qsTr("Delete")
+                        onTriggered: QGroundControl.showMessageDialog(
+                                        _root,
+                                        qsTr("Delete Link"),
+                                        qsTr("Are you sure you want to delete '%1'?").arg(object.name),
+                                        Dialog.Ok | Dialog.Cancel,
+                                        function () {
+                                            _linkManager.removeConfiguration(object)
+                                        })
                     }
                 }
             }

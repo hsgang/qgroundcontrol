@@ -59,10 +59,11 @@ void SiYi::init()
         settings->siyiUniRCTransportMode()->rawValue().toInt(),
         settings->siyiUniRCSerialPort()->rawValue().toString(),
         settings->siyiUniRCSerialBaud()->rawValue().toInt());
-    // Variant A feasibility test: relay datalink MAVLink to a loopback UDP link.
-    // Set this to the local port your QGC MAVLink UDP link listens on; 0 disables
-    // the relay and keeps the legacy SDK-only ephemeral socket behavior.
-    uniRC_->setRelayPort(14550);
+    // Variant A: relay datalink MAVLink to a loopback UDP link. The relay port is
+    // the local port QGC's MAVLink UDP link listens on; 0 disables the relay and
+    // keeps the legacy SDK-only ephemeral socket behavior. Bound at start(), so a
+    // change requires a restart (qgcRebootRequired on the fact).
+    uniRC_->setRelayPort(static_cast<quint16>(settings->siyiUniRCRelayPort()->rawValue().toUInt()));
 
     connect(transmitter_, &SiYiCamera::connected, this, [this, cameraEnabledFact](){
         isTransmitterConnected_ = true;
@@ -119,6 +120,19 @@ void SiYi::init()
         } else {
             uniRC_->stop();
         }
+    });
+
+    // Apply IP changes live. setIp() restarts the UniRC client itself; for the
+    // transmitter/camera, setIp() emits ipChanged() which the handlers above use
+    // to restart the running client.
+    connect(settings->siyiUniRCIp(), &Fact::rawValueChanged, this, [this](QVariant value){
+        uniRC_->setIp(value.toString());
+    });
+    connect(settings->siyiTransmitterIp(), &Fact::rawValueChanged, this, [this](QVariant value){
+        transmitter_->setIp(value.toString());
+    });
+    connect(settings->siyiCameraIp(), &Fact::rawValueChanged, this, [this](QVariant value){
+        camera_->setIp(value.toString());
     });
 
     initialized_ = true;

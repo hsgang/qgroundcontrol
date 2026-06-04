@@ -54,10 +54,12 @@ Item {
                     // }
                     if (!isNaN(rotationValue)) {
                         var a=Math.PI/4 * i;
-                        var gradient = ctx.createRadialGradient(0, 0, _minRadius + (rotationValue * _ratio), 0, 0, (_root.width / 2));
-                        gradient.addColorStop(0, warningColor); // 내부부터 시작하는 색상
-                        gradient.addColorStop(0.15, "transparent");
-                        gradient.addColorStop(1, "transparent"); // 외부로 퍼지는 색상
+                        // 바깥쪽(장애물 쪽) 모서리가 가장 짙고 중심으로 갈수록 투명해지도록 구성.
+                        // 끝 반지름을 부채꼴 바깥 경계(장애물 반지름)에 맞춰, 그 지점에 색이 몰린다.
+                        var gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, _minRadius + (rotationValue * _ratio));
+                        gradient.addColorStop(0, "transparent");    // 중심(안쪽) = 투명
+                        gradient.addColorStop(0.85, "transparent");
+                        gradient.addColorStop(1, warningColor);     // 바깥쪽 = 짙게
                         ctx.beginPath();
                         //ctx.arc(0, 0, proximityItem._minRadius + (rotationValue * proximityItem._ratio), 0 + a + Math.PI/50, Math.PI/4 + a - Math.PI/50, false);
                         //ctx.stroke();

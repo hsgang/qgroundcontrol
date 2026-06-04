@@ -95,6 +95,7 @@ Item {
         spacing:    ScreenTools.defaultFontPixelWidth
 
         QGCDelayButton {
+            id:                 confirmButton
             text:               control.title
             enabled:            true
             backgroundColor:    Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.75)
@@ -137,18 +138,35 @@ Item {
             visible:            text !== ""
         }
 
-        QGCColoredImage {
-            id:                 closeButton
-            //Layout.alignment:   Qt.AlignVCenter
-            width:              height
-            height:             parent.height * 0.3
-            source:             "/res/XDelete.svg"
-            fillMode:           Image.PreserveAspectFit
-            color:              qgcPal.text
+        // Circular cancel button, height-matched to the confirm button so the two
+        // read as a paired confirm / cancel control.
+        Rectangle {
+            id:                 cancelButton
+            Layout.alignment:   Qt.AlignVCenter
+            implicitWidth:      confirmButton.height
+            implicitHeight:     confirmButton.height
+            radius:             width / 2
+            color:              cancelMouseArea.containsMouse
+                                    ? qgcPal.windowShadeLight
+                                    : Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.75)
+            border.color:       qgcPal.text
+            border.width:       2
+
+            QGCColoredImage {
+                anchors.centerIn:   parent
+                width:              parent.width * 0.4
+                height:             width
+                sourceSize.height:  height
+                source:             "/res/XDelete.svg"
+                fillMode:           Image.PreserveAspectFit
+                color:              qgcPal.text
+            }
 
             QGCMouseArea {
-                fillItem:   parent
-                onClicked:  confirmCancelled()
+                id:             cancelMouseArea
+                fillItem:       parent
+                hoverEnabled:   true
+                onClicked:      confirmCancelled()
             }
         }
     }

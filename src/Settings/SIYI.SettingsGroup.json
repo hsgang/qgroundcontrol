@@ -8,7 +8,6 @@
             "longDesc": "Polls UniRC 7 over UDP for link status, signal strength, frequency, and channel.",
             "type": "bool",
             "default": true,
-            "qgcRebootRequired": true,
             "label": "Enable UniRC 7 (UDP)"
         },
         {
@@ -17,7 +16,6 @@
             "longDesc": "Default 192.168.144.20 per SIYI UniRC 7 SDK manual. Port is fixed at 19856.",
             "type": "string",
             "default": "192.168.144.20",
-            "qgcRebootRequired": true,
             "label": "UniRC 7 IP"
         },
         {
@@ -50,12 +48,22 @@
             "label": "UniRC 7 Serial Baud"
         },
         {
+            "name": "siyiUniRCRelayPort",
+            "shortDesc": "Local UDP port for relaying UniRC 7 MAVLink to QGC.",
+            "longDesc": "When > 0, SiYiUniRC binds the datalink port exclusively, parses SIYI SDK frames locally, and relays MAVLink to/from 127.0.0.1 on this port. QGC's MAVLink UDP link must listen on this same port. 0 disables the relay (SDK-only mode).",
+            "type": "uint32",
+            "min": 0,
+            "max": 65535,
+            "default": 14550,
+            "qgcRebootRequired": true,
+            "label": "UniRC 7 MAVLink Relay Port"
+        },
+        {
             "name": "siyiTransmitterEnabled",
             "shortDesc": "Enable SIYI transmitter (image link) connection (TCP).",
             "longDesc": "Connects to legacy SIYI image transmitter for RSSI / link statistics.",
             "type": "bool",
             "default": true,
-            "qgcRebootRequired": true,
             "label": "Enable Transmitter (TCP)"
         },
         {
@@ -64,7 +72,6 @@
             "longDesc": "Default 192.168.144.12. Port is fixed at 5864.",
             "type": "string",
             "default": "192.168.144.12",
-            "qgcRebootRequired": true,
             "label": "Transmitter IP"
         },
         {
@@ -73,7 +80,6 @@
             "longDesc": "Connects to SIYI camera/gimbal for control and status.",
             "type": "bool",
             "default": true,
-            "qgcRebootRequired": true,
             "label": "Enable Camera/Gimbal (TCP)"
         },
         {
@@ -82,7 +88,6 @@
             "longDesc": "Default 192.168.144.25. Port is fixed at 37256.",
             "type": "string",
             "default": "192.168.144.25",
-            "qgcRebootRequired": true,
             "label": "Camera IP"
         }
     ]

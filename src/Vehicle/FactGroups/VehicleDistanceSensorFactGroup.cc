@@ -1,6 +1,8 @@
 #include "VehicleDistanceSensorFactGroup.h"
 #include "Vehicle.h"
 
+#include <QtCore/qnumeric.h>
+
 VehicleDistanceSensorFactGroup::VehicleDistanceSensorFactGroup(QObject *parent)
     : FactGroup(1000, QStringLiteral(":/json/Vehicle/DistanceSensorFact.json"), parent)
 {
@@ -49,7 +51,13 @@ void VehicleDistanceSensorFactGroup::handleMessage(Vehicle *vehicle, const mavli
 
     for (const orientation2Fact_s &orientation2Fact : rgOrientation2Fact) {
         if (orientation2Fact.orientation == distanceSensor.orientation) {
-            orientation2Fact.fact->setRawValue(distanceSensor.current_distance / 100.0); // cm to meters
+            // A reading outside the sensor's valid [min, max] range means out-of-range /
+            // no target. Store NaN so overlays (which guard on isNaN) clear the value
+            // instead of freezing on the last in-range reading.
+            const bool inRange = (distanceSensor.current_distance >= distanceSensor.min_distance) &&
+                                 (distanceSensor.current_distance <= distanceSensor.max_distance);
+            orientation2Fact.fact->setRawValue(inRange ? (distanceSensor.current_distance / 100.0) // cm to meters
+                                                       : qQNaN());
             break;
         }
     }
