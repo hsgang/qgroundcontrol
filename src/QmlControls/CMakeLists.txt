@@ -195,7 +195,6 @@ qt_add_qml_module(QGroundControlControlsModule
         VehicleIndicatorPage.qml
         VehicleRotationCal.qml
         VehicleSummaryRow.qml
-        WelcomeView.qml
 
 # NOTE: The QML files below belong to other modules but are declared here because
 # CMake's set_source_files_properties() has directory scope. Properties like
