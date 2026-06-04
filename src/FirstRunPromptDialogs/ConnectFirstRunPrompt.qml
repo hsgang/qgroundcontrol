@@ -361,7 +361,7 @@ FirstRunPrompt {
                     font.bold: true
                     onClicked: {
                         close()
-                        mainWindow.showSettingsTool(qsTr("Comm Links"))
+                        mainWindow.showSettingsTool("Comm Links")  // language-independent nameKey, not a display string
                     }
                 }
             }

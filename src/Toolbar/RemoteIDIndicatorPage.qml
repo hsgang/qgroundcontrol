@@ -47,7 +47,7 @@ ToolIndicatorPage {
         if (mainWindow.allowViewSwitch()) {
             mainWindow.closeIndicatorDrawer()
             globals.commingFromRIDIndicator = true
-            mainWindow.showSettingsTool(qsTr("Remote ID"))
+            mainWindow.showSettingsTool("Remote ID")  // language-independent nameKey, not a display string
             mainWindow.closeIndicatorDrawer()
         }
     }

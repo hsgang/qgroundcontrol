@@ -528,7 +528,7 @@ Item {
                         text:               qsTr("+ 새 연결 추가")
                         onClicked: {
                             linkPopup.close()
-                            mainWindow.showSettingsTool(qsTr("Comm Links"))
+                            mainWindow.showSettingsTool("Comm Links")  // language-independent nameKey, not a display string
                         }
                     }
                 }

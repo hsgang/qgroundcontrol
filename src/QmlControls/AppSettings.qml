@@ -108,7 +108,9 @@ Rectangle {
     function showSettingsPage(settingsPage) {
         for (var i = 0; i < settingsPagesModel.count; i++) {
             var entry = settingsPagesModel.get(i)
-            if (entry && entry.name === settingsPage) {
+            // Match on the language-independent nameKey first so navigation works in any
+            // locale; fall back to the translated name for legacy callers passing qsTr().
+            if (entry && (entry.nameKey === settingsPage || entry.name === settingsPage)) {
                 _navigateTo(i, -1)
                 break
             }
