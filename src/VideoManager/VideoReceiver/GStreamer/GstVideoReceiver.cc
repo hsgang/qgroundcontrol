@@ -1256,8 +1256,14 @@ void GstVideoReceiver::_noteVideoSinkFrame()
         qCDebug(GstVideoReceiverLog) << "Decoding started";
         _dispatchSignal([this]() { emit decodingChanged(_decoding); });
     }
-    // Per-frame ping so VideoManager's stall timer can be reset on every decoded frame.
-    _dispatchSignal([this]() { emit videoFrameReceived(); });
+    // Coalesce the stall-watchdog ping to <=4Hz instead of emitting a cross-thread
+    // signal (and re-arming a GUI QTimer) on every decoded frame. A gap larger than
+    // the throttle window still pings immediately, so recovery from stall is prompt.
+    const qint64 nowMs = QDateTime::currentMSecsSinceEpoch();
+    if ((nowMs - _lastFramePingMs) >= 250) {
+        _lastFramePingMs = nowMs;
+        _dispatchSignal([this]() { emit videoFrameReceived(); });
+    }
 }
 
 void GstVideoReceiver::_noteEndOfStream()
@@ -1913,8 +1919,14 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
 
         jitter = gst_element_factory_make("rtpjitterbuffer", nullptr);
         if (!jitter) { qCCritical(GstVideoReceiverLog) << "jitterbuffer failed"; break; }
+        // WebRTC/UDP transport is inherently jittery and reorders packets. The original
+        // code forced latency=0 (because _buffer is only ever 0 or -1), which with
+        // drop-on-latency made the buffer discard nearly every jittered/reordered packet
+        // -> stutter. Give it a real ~100ms reorder window (decoupled from _buffer); keep
+        // drop-on-latency=TRUE so end-to-end delay stays bounded for live control video.
+        const int jitterLatencyMs = (_buffer > 0) ? _buffer : 100;
         g_object_set(jitter,
-                     "latency", (_buffer >= 0) ? qMax(0, _buffer) : 0,
+                     "latency", jitterLatencyMs,
                      "drop-on-latency", TRUE,
                      "do-lost", TRUE,
                      "do-retransmission", FALSE,
@@ -1923,10 +1935,19 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
         const char *depayName = (_internalCodec == InternalCodec::H264) ? "rtph264depay" : "rtph265depay";
         depay = gst_element_factory_make(depayName, nullptr);
         if (!depay) { qCCritical(GstVideoReceiverLog) << depayName << " failed"; break; }
+#if GST_CHECK_VERSION(1, 20, 0)
+        // After loss, suppress corrupted access units until the next keyframe (a brief
+        // freeze instead of seconds of green/gray smear) and ask upstream for a fresh
+        // IDR. request-keyframe is a no-op if nothing translates it to an RTCP PLI yet.
+        g_object_set(depay, "wait-for-keyframe", TRUE, "request-keyframe", TRUE, nullptr);
+#endif
 
         const char *parserName = (_internalCodec == InternalCodec::H264) ? "h264parse" : "h265parse";
         parser = gst_element_factory_make(parserName, "parser");
         if (!parser) { qCCritical(GstVideoReceiverLog) << parserName << " failed"; break; }
+        // Repeat SPS/PPS(/VPS) in-band with every IDR so a recovered or mid-stream-joined
+        // keyframe is immediately decodable after loss.
+        g_object_set(parser, "config-interval", -1, nullptr);
 
         gst_bin_add_many(GST_BIN(bin), appsrc, jitter, depay, parser, nullptr);
         if (!gst_element_link_many(appsrc, jitter, depay, parser, nullptr)) {

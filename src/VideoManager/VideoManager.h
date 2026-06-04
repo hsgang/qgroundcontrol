@@ -152,7 +152,9 @@ private:
     QAtomicInteger<bool> _decoding = false;
     bool _videoStalled = false;
     QTimer *_stallTimer = nullptr;
-    static constexpr int VIDEO_STALL_TIMEOUT_MS = 500;
+    // Tolerant of low-fps/jittery links so a brief gap doesn't flash the grayscale
+    // overlay; pair with the <=4Hz frame ping in GstVideoReceiver::_noteVideoSinkFrame.
+    static constexpr int VIDEO_STALL_TIMEOUT_MS = 2000;
     QAtomicInteger<bool> _recording = false;
     QAtomicInteger<bool> _streaming = false;
     QSize _videoSize;
