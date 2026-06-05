@@ -8,6 +8,7 @@ import QGroundControl.Controls
 Item {
     id:         control
     width:      mainLayout.width
+    height:     mainLayout.implicitHeight + (_margins * 2)
     visible:    false
 
     property var    guidedController
@@ -90,8 +91,8 @@ Item {
 
     RowLayout {
         id:         mainLayout
-        y:          2
-        height:     parent.height - 4
+        y:          _margins
+        height:     implicitHeight
         spacing:    ScreenTools.defaultFontPixelWidth
 
         QGCDelayButton {
