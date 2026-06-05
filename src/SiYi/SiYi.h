@@ -20,9 +20,9 @@ class SiYi : public QObject
     Q_MOC_INCLUDE("SiYiCamera.h")
     Q_MOC_INCLUDE("SiYiTransmitter.h")
     Q_MOC_INCLUDE("SiYiUniRC.h")
-    Q_PROPERTY(QVariant camera READ camera CONSTANT)
-    Q_PROPERTY(QVariant transmitter READ transmitter CONSTANT)
-    Q_PROPERTY(QVariant uniRC READ uniRC CONSTANT)
+    Q_PROPERTY(QVariant camera READ camera NOTIFY cameraChanged)
+    Q_PROPERTY(QVariant transmitter READ transmitter NOTIFY transmitterChanged)
+    Q_PROPERTY(QVariant uniRC READ uniRC NOTIFY uniRCChanged)
     Q_PROPERTY(bool isAndroid READ isAndroid CONSTANT)
     Q_PROPERTY(bool hideWidgets READ hideWidgets WRITE setHideWidgets NOTIFY hideWidgetsChanged FINAL)
     Q_PROPERTY(int iconsHeight READ iconsHeight WRITE setIconsHeight NOTIFY iconsHeightChanged FINAL)
@@ -70,6 +70,9 @@ private:
 signals:
     void hideWidgetsChanged();
     void iconsHeightChanged();
+    void cameraChanged();
+    void transmitterChanged();
+    void uniRCChanged();
 };
 
 #endif // SIYI_H

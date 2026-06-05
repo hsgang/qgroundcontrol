@@ -63,6 +63,7 @@ Item {
             QGCLabel {
                 anchors.left:   parent.left
                 font.pointSize: ScreenTools.smallFontPointSize
+                font.family:    ScreenTools.fixedFontFamily
                 color:          qgcPal.text
                 text:           transmitter ? (transmitter.downStream / 1024).toFixed(0) + "KB" : ""
             }
@@ -70,6 +71,7 @@ Item {
             QGCLabel {
                 anchors.left:   parent.left
                 color:          qgcPal.text
+                font.family:    ScreenTools.fixedFontFamily
                 text:           transmitter ? transmitter.rssi : ""
             }
         }

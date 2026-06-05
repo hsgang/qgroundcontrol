@@ -30,21 +30,21 @@ ToolIndicatorPage{
             SettingsGroupLayout {
                 heading:                qsTr("Payload")
 
-                // FactCheckBoxSlider {
-                //     Layout.fillWidth: true
-                //     text:       qsTr("PhotoVideo Control")
-                //     fact:       _showPhotoVideoControl
-                //     visible:    _showPhotoVideoControl.visible
-                //     property Fact   _showPhotoVideoControl:     QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl
-                // }
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       "촬영 제어"//qsTr("PhotoVideo Control")
+                    fact:       _showPhotoVideoControl
+                    visible:    true
+                    property Fact   _showPhotoVideoControl:     QGroundControl.settingsManager.flyViewSettings.showPhotoVideoControl
+                }
 
-                // FactCheckBoxSlider {
-                //     Layout.fillWidth: true
-                //     text:       qsTr("Camera Payload Control")
-                //     fact:       _showSiyiCameraControl
-                //     visible:    _showSiyiCameraControl.visible
-                //     property Fact   _showSiyiCameraControl:     QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl
-                // }
+                FactCheckBoxSlider {
+                    Layout.fillWidth: true
+                    text:       "카메라 페이로드 제어"//qsTr("Camera Payload Control")
+                    fact:       _showSiyiCameraControl
+                    visible:    true
+                    property Fact   _showSiyiCameraControl:     QGroundControl.settingsManager.flyViewSettings.showSiyiCameraControl
+                }
 
                 FactCheckBoxSlider {
                     Layout.fillWidth: true

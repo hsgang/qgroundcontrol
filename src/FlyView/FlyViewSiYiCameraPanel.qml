@@ -29,10 +29,10 @@ Rectangle {
     property var siyi: QGroundControl.siyi
     property SiYiCamera camera: siyi.camera
     property SiYiTransmitter transmitter: siyi.transmitter
-    property bool isRecording: camera.isRecording
+    property bool isRecording: camera ? camera.isRecording : false
     property int minDelta: 5
     property bool hasBeenMoved: false
-    property bool isConnected : camera.isConnected
+    property bool isConnected : camera ? camera.isConnected : false
 
     property real videoW: 1280
     property real videoH: 720
@@ -41,11 +41,11 @@ Rectangle {
     property real iconScale: SiYi.isAndroid ? 0.7 : 1.5
     //property int  iconLeftMargin: 150
     property bool laserIconShow: false
-    property bool showLaserOnLeft: camera.mainStreamSplitMode === 3
-                                   || camera.mainStreamSplitMode === 5
-    property bool doNotShowLaserIcon: camera.mainStreamSplitMode === 1
+    property bool showLaserOnLeft: camera ? (camera.mainStreamSplitMode === 3
+                                   || camera.mainStreamSplitMode === 5) : false
+    property bool doNotShowLaserIcon: camera ? (camera.mainStreamSplitMode === 1
                                       || camera.mainStreamSplitMode === 2
-                                      || camera.mainStreamSplitMode === 4
+                                      || camera.mainStreamSplitMode === 4) : false
 
     property int currentImageMode : 0
     property int currentThermalPalette : 0
@@ -150,7 +150,7 @@ Rectangle {
             implicitWidth:      _idealWidth
             implicitHeight:     width
 
-            visible:            camera.enableZoom
+            visible:            camera && camera.enableZoom
 
             iconSource:         "/SiYi/ZoomIn.svg"
             text:               "ZoomIn"
@@ -186,7 +186,7 @@ Rectangle {
             implicitWidth:      _idealWidth
             implicitHeight:     width
 
-            visible:            camera.enableZoom
+            visible:            camera && camera.enableZoom
 
             iconSource:         "/SiYi/ZoomOut.svg"
             text:               "ZoomOut"
@@ -222,7 +222,7 @@ Rectangle {
             implicitWidth:      _idealWidth
             implicitHeight:     width
 
-            visible:            camera.enableFocus
+            visible:            camera && camera.enableFocus
 
             iconSource:         "/SiYi/far.svg"
             text:               "Far"
@@ -253,7 +253,7 @@ Rectangle {
             implicitWidth:      _idealWidth
             implicitHeight:     width
 
-            visible:            camera.enableFocus
+            visible:            camera && camera.enableFocus
 
             iconSource:         "/SiYi/neer.svg"
             text:               "Neer"
@@ -308,7 +308,7 @@ Rectangle {
             iconSource:         "/SiYi/AiGreen.svg"
             text:               "AI"
             font.pointSize:     _fontSize * 0.7
-            visible:            camera.enableAi
+            visible:            camera && camera.enableAi
 
             onClicked: {
                 if (camera.aiModeOn) {
@@ -331,7 +331,7 @@ Rectangle {
             iconSource:         "/SiYi/LaserDistance.svg"
             text:               "Laser"
             font.pointSize:     _fontSize * 0.7
-            visible:            camera.enableLaser
+            visible:            camera && camera.enableLaser
 
             onClicked: {
                 if (camera.laserStateHasResponse) {
@@ -353,7 +353,7 @@ Rectangle {
             iconSource:         "/InstrumentValueIcons/view-tile.svg"
             text:               "Screen"
             font.pointSize:     _fontSize * 0.7
-            visible:            camera.enableThermal
+            visible:            camera && camera.enableThermal
 
             onClicked: {
                 imageModePopupDialog.open()
@@ -368,7 +368,7 @@ Rectangle {
             iconSource:         "/InstrumentValueIcons/border-all.svg"
             text:               "Palette"
             font.pointSize:     _fontSize * 0.7
-            visible:            camera.enableThermal
+            visible:            camera && camera.enableThermal
 
             onClicked: {
                 thermalPalettePopupDialog.open()

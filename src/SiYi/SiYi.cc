@@ -52,6 +52,13 @@ void SiYi::init()
     transmitter_ = new SiYiTransmitter(this);
     uniRC_ = new SiYiUniRC(this);
 
+    // The QML camera/transmitter/uniRC properties are null until created here.
+    // Notify so any binding that read them before init() (e.g. a panel shown at
+    // startup) re-reads the now-valid instances instead of caching null.
+    emit cameraChanged();
+    emit transmitterChanged();
+    emit uniRCChanged();
+
     camera_->setIp(settings->siyiCameraIp()->rawValue().toString());
     transmitter_->setIp(settings->siyiTransmitterIp()->rawValue().toString());
     uniRC_->setIp(settings->siyiUniRCIp()->rawValue().toString());

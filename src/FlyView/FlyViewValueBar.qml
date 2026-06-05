@@ -125,6 +125,7 @@ Item{
                 text:                   _vehicleAltitudeText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
+                font.family :           ScreenTools.fixedFontFamily
                 color:                  qgcPal.text
                 horizontalAlignment:    Text.AlignHCenter
             }
@@ -171,6 +172,7 @@ Item{
                 Layout.fillWidth:       true
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
+                font.family :           ScreenTools.fixedFontFamily
                 color:                  qgcPal.text
                 horizontalAlignment:    Text.AlignHCenter
             }
@@ -194,6 +196,7 @@ Item{
                 text:                   _vehicleVerticalSpeedText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
+                font.family :           ScreenTools.fixedFontFamily
                 color:                  qgcPal.text
                 horizontalAlignment:    Text.AlignHCenter
             }
@@ -217,6 +220,7 @@ Item{
                 text:                   _flightTimeText
                 font.pointSize :        ScreenTools.defaultFontPointSize * 1.5
                 font.bold :             true
+                font.family :           ScreenTools.fixedFontFamily
                 color:                  qgcPal.text
                 horizontalAlignment:    Text.AlignHCenter
             }

@@ -102,11 +102,13 @@ Item {
             QGCLabel {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 color:                      qgcPal.buttonText
+                font.family:                ScreenTools.fixedFontFamily
                 text:                       _activeVehicle ? _radioStatus.lrssi.rawValue : 0
             }
             QGCLabel {
                 anchors.horizontalCenter:   parent.horizontalCenter
                 color:                      qgcPal.buttonText
+                font.family:                ScreenTools.fixedFontFamily
                 text:                       _activeVehicle ? _radioStatus.rrssi.rawValue : 0
             }
         }

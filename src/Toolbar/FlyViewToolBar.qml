@@ -115,44 +115,88 @@ Item {
                 }
             }
 
-            QGCButton {
-                id:                 disconnectButton
+            Rectangle {
+                id:                     disconnectButton
                 Layout.alignment:       Qt.AlignVCenter
-                text:               qsTr("Disconnect")
-                onClicked:          _activeVehicle.closeVehicle()
-                visible:            _activeVehicle && _communicationLost
+                height:                 _mainHeight * 0.8
+                width:                  height
+                radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+                visible:                _activeVehicle && _communicationLost
+                color:                  disconnectMouseArea.containsMouse
+                                        ? Qt.rgba(qgcPal.buttonHighlight.r, qgcPal.buttonHighlight.g, qgcPal.buttonHighlight.b, 0.85)
+                                        : qgcPal.windowTransparent
+
+                QGCColoredImage {
+                    anchors.centerIn:   parent
+                    height:             parent.height * 0.5
+                    width:              height
+                    source:             "/InstrumentValueIcons/close.svg"
+                    sourceSize.height:  height
+                    fillMode:           Image.PreserveAspectFit
+                    mipmap:             true
+                    color:              qgcPal.colorRed
+                }
+
+                MouseArea {
+                    id:                 disconnectMouseArea
+                    anchors.fill:       parent
+                    hoverEnabled:       true
+                    onClicked:          _activeVehicle.closeVehicle()
+                }
             }
 
-            QGCButton {
-                id:                 reconnectButton
+            Rectangle {
+                id:                     reconnectButton
                 Layout.alignment:       Qt.AlignVCenter
-                text:               qsTr("Reconnect")
-                onClicked:          {
-                    if (_activeVehicle) {
-                        var primaryLinkName = _activeVehicle.vehicleLinkManager.primaryLinkName
-                        var linkConfigs = QGroundControl.linkManager.linkConfigurations
-                        for (var i = 0; i < linkConfigs.count; i++) {
-                            var config = linkConfigs.get(i)
-                            if (config.name === primaryLinkName) {
-                                if (config.link) {
-                                    // WebRTC 링크인 경우 재연결 메서드 사용
-                                    if (config.linkType === 3) { // LinkConfiguration.TypeWebRTC = 3
-                                        config.link.reconnectLink()
+                height:                 _mainHeight * 0.8
+                width:                  height
+                radius:                 ScreenTools.defaultFontPixelHeight * 0.2
+                visible:                _activeVehicle && _communicationLost
+                color:                  reconnectMouseArea.containsMouse
+                                        ? Qt.rgba(qgcPal.buttonHighlight.r, qgcPal.buttonHighlight.g, qgcPal.buttonHighlight.b, 0.85)
+                                        : qgcPal.windowTransparent
+
+                QGCColoredImage {
+                    anchors.centerIn:   parent
+                    height:             parent.height * 0.5
+                    width:              height
+                    source:             "/InstrumentValueIcons/refresh.svg"
+                    sourceSize.height:  height
+                    fillMode:           Image.PreserveAspectFit
+                    mipmap:             true
+                    color:              qgcPal.colorGreen
+                }
+
+                MouseArea {
+                    id:                 reconnectMouseArea
+                    anchors.fill:       parent
+                    hoverEnabled:       true
+                    onClicked: {
+                        if (_activeVehicle) {
+                            var primaryLinkName = _activeVehicle.vehicleLinkManager.primaryLinkName
+                            var linkConfigs = QGroundControl.linkManager.linkConfigurations
+                            for (var i = 0; i < linkConfigs.count; i++) {
+                                var config = linkConfigs.get(i)
+                                if (config.name === primaryLinkName) {
+                                    if (config.link) {
+                                        // WebRTC 링크인 경우 재연결 메서드 사용
+                                        if (config.linkType === 3) { // LinkConfiguration.TypeWebRTC = 3
+                                            config.link.reconnectLink()
+                                        } else {
+                                            // 다른 링크는 기존 방식 사용
+                                            config.link.disconnect()
+                                            QGroundControl.linkManager.createConnectedLink(config)
+                                        }
                                     } else {
-                                        // 다른 링크는 기존 방식 사용
-                                        config.link.disconnect()
+                                        // 링크가 없으면 새로 생성
                                         QGroundControl.linkManager.createConnectedLink(config)
                                     }
-                                } else {
-                                    // 링크가 없으면 새로 생성
-                                    QGroundControl.linkManager.createConnectedLink(config)
+                                    break
                                 }
-                                break
                             }
                         }
                     }
                 }
-                visible:            _activeVehicle && _communicationLost
             }
         }
         RowLayout {

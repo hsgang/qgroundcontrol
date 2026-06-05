@@ -4,6 +4,7 @@
 #include "SettingsManager.h"
 #include "AppSettings.h"
 
+#include <QtCore/QStringList>
 #include <QtGui/QCursor>
 #include <QtGui/QFontDatabase>
 #include <QtGui/QFontMetrics>
@@ -59,6 +60,23 @@ QString ScreenToolsController::iOSDevice()
 
 QString ScreenToolsController::fixedFontFamily()
 {
+    // Prefer a clean, widely-available monospace over the platform default
+    // (e.g. Courier New on Windows, which looks dated), falling back to the
+    // system fixed font when none of the preferred families are installed.
+    static const QStringList preferred = {
+        QStringLiteral("Roboto Mono"),      // bundled (:/fonts/robotomono) - identical on all platforms
+        QStringLiteral("Consolas"),         // Windows
+        QStringLiteral("SF Mono"),          // macOS
+        QStringLiteral("Menlo"),            // macOS
+        QStringLiteral("DejaVu Sans Mono"), // Linux
+        QStringLiteral("Noto Sans Mono"),   // Linux
+    };
+    const QStringList families = QFontDatabase::families();
+    for (const QString &family : preferred) {
+        if (families.contains(family, Qt::CaseInsensitive)) {
+            return family;
+        }
+    }
     return QFontDatabase::systemFont(QFontDatabase::FixedFont).family();
 }
 

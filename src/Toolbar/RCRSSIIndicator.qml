@@ -76,6 +76,7 @@ Item {
             QGCLabel {
                 anchors.left:   parent.left
                 font.pointSize: ScreenTools.smallFontPointSize
+                font.family:    ScreenTools.fixedFontFamily
                 color:          qgcPal.text
                 text:           _activeVehicle.rcRSSI.rawValue + "%"
             }

@@ -151,6 +151,7 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.text
                 font.pointSize: ScreenTools.smallFontPointSize
+                font.family:    ScreenTools.fixedFontFamily
                 text:           _activeVehicle ? (isGNSS2 ? getGpsLock() + "("+ _activeVehicle.gps.count.valueString +")" : getGpsLock()) : ""
             }
 
@@ -159,6 +160,7 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.text
                 font.pointSize: isGNSS2 ? ScreenTools.smallFontPointSize : ScreenTools.defaultFontPointSize
+                font.family:    ScreenTools.fixedFontFamily
                 text:           _activeVehicle ? (isGNSS2 ? getGps2Lock() + "("+ _activeVehicle.gps2.count.valueString +")" : _activeVehicle.gps.count.valueString) : ""
             }
         }

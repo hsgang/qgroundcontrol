@@ -84,7 +84,8 @@ Item {
             }
             QGCLabel {
                 id:             pitchLabel
-                font.pointSize: ScreenTools.smallFontPointSize
+                font.pointSize: ScreenTools.defaultFontPointSize
+                font.family:    ScreenTools.fixedFontFamily
                 text:           activeGimbal ? qsTr("P: ") + activeGimbal.absolutePitch.valueString : ""
                 color:          qgcPal.text
             }

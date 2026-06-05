@@ -144,8 +144,8 @@ Item {
         Rectangle {
             id:                 cancelButton
             Layout.alignment:   Qt.AlignVCenter
-            implicitWidth:      confirmButton.height
-            implicitHeight:     confirmButton.height
+            implicitWidth:      confirmButton.height * 0.8
+            implicitHeight:     confirmButton.height * 0.8
             radius:             width / 2
             color:              cancelMouseArea.containsMouse
                                     ? qgcPal.windowShadeLight

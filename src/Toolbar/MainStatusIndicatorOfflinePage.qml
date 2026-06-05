@@ -41,6 +41,11 @@ ToolIndicatorPage {
     function linkSubInfo(config) {
         var detail = ""
         switch (config.linkType) {
+            case LinkConfiguration.TypeSerial:
+                if (config.portName) {
+                    detail = config.portName + (config.baud > 0 ? " @ " + config.baud : "")
+                }
+                break
             case LinkConfiguration.TypeUdp:
                 if (config.localPort > 0) {
                     detail = ":" + config.localPort                 // QGC's listen port

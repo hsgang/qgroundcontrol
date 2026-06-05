@@ -57,6 +57,7 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.defaultFontPointSize
+                font.family:    ScreenTools.fixedFontFamily
                 text:           _activeVehicle ? _activeVehicle.imuTemp.valueString + "°C" : ""
             }
         }

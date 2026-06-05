@@ -243,6 +243,17 @@ void QGCApplication::init()
         qCWarning(QGCApplicationLog) << "Could not load /fonts/opensans-demibold font";
     }
 
+    // Bundled monospace used for numeric readouts (instrument values, toolbar
+    // indicators, speed bar) so digits are fixed-width and identical on every
+    // platform (Windows/Android/etc.) instead of relying on a system font.
+    if (QFontDatabase::addApplicationFont(":/fonts/robotomono") < 0) {
+        qCWarning(QGCApplicationLog) << "Could not load /fonts/robotomono font";
+    }
+
+    if (QFontDatabase::addApplicationFont(":/fonts/robotomono-bold") < 0) {
+        qCWarning(QGCApplicationLog) << "Could not load /fonts/robotomono-bold font";
+    }
+
     if (_simpleBootTest) {
         // Since GStream builds are so problematic we initialize video during the simple boot test
         // to make sure it works and verfies plugin availability.

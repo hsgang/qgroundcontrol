@@ -336,6 +336,7 @@ Item {
                 QGCLabel {
                     Layout.alignment:       Qt.AlignHCenter
                     font.pointSize:         _showBoth ? ScreenTools.smallFontPointSize : ScreenTools.mediumFontPointSize
+                    font.family:            ScreenTools.fixedFontFamily
                     color:                  qgcPal.text
                     text:                   getBatteryVoltageText()
                     visible:                _showBoth || _showVoltage
@@ -347,6 +348,7 @@ Item {
                     color:                  qgcPal.text
                     text:                   getBatteryPercentageText()
                     font.pointSize:         _showBoth ? ScreenTools.defaultFontPointSize : ScreenTools.mediumFontPointSize
+                    font.family:            ScreenTools.fixedFontFamily
                     visible:                _showBoth || _showPercentage
                 }
             }
