@@ -27,12 +27,7 @@ endif()
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-file(GLOB_RECURSE JSON_FILES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.json)
-qt_add_resources(${CMAKE_PROJECT_NAME} json_firmaware_plugin_apm
-    PREFIX "/json"
-    FILES
-    ${JSON_FILES}
-)
+qgc_add_json_resources(json_firmaware_plugin_apm)
 
 qt_add_resources(${CMAKE_PROJECT_NAME} firmaware_plugin_apm_resource
     PREFIX "/FirmwarePlugin/APM"
@@ -46,7 +41,7 @@ qt_add_resources(${CMAKE_PROJECT_NAME} firmaware_plugin_apm_resource
 #===========================================================================#
 
 CPMAddPackage(
-    NAME ArduPilotParams
+    NAME              ArduPilotParams
     GITHUB_REPOSITORY ArduPilot/ParameterRepository
     GIT_TAG b8c887d4973b7679471ce311b533ba7ffb158a31
 )

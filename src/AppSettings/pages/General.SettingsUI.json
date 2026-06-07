@@ -31,7 +31,8 @@
                     }
                 },
                 {
-                    "setting": "appSettings.gstDebugLevel"
+                    "setting": "appSettings.androidDontSaveToSDCard",
+                    "showWhen": "ScreenTools.isMobile"
                 },
                 {
                     "setting": "appSettings.uiScalePercent",

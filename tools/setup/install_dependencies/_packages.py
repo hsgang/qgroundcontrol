@@ -26,6 +26,7 @@ DEBIAN_PACKAGES: dict[str, list[str]] = {
         "libtool",
         "locales",
         "mold",
+        "nasm",
         "ninja-build",
         "patchelf",
         "pipx",
@@ -101,10 +102,6 @@ DEBIAN_PACKAGES: dict[str, list[str]] = {
     "audio": [
         "libpulse-dev",
     ],
-    "keychain": [
-        "libgcrypt20-dev",
-        "libsecret-1-dev",
-    ],
     "misc": [
         "libvulkan-dev",
         "libpipewire-0.3-dev",
@@ -120,6 +117,7 @@ MACOS_PACKAGES: list[str] = [
     "pkgconf",
     "create-dmg",
     "mold",
+    "nasm",
 ]
 
 PIPX_PACKAGES: list[str] = [

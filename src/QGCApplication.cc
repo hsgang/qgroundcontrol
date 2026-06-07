@@ -257,7 +257,9 @@ void QGCApplication::init()
     if (_simpleBootTest) {
         // Since GStream builds are so problematic we initialize video during the simple boot test
         // to make sure it works and verfies plugin availability.
-        _bootTestPassed = _initVideo();
+        const bool videoInitialized = _initVideo();
+        const bool qmlRootLoaded = _initQmlRootWindow();
+        _bootTestPassed = videoInitialized && qmlRootLoaded;
     } else if (!_runningUnitTests) {
         _initForNormalAppBoot();
     }
@@ -277,10 +279,8 @@ bool QGCApplication::_initVideo()
     return initSucceeded;
 }
 
-void QGCApplication::_initForNormalAppBoot()
+bool QGCApplication::_initQmlRootWindow()
 {
-    (void) _initVideo();
-
     QQuickStyle::setStyle("Basic");
     QGCCorePlugin::instance()->init();
     MAVLinkProtocol::instance()->init();
@@ -308,6 +308,15 @@ void QGCApplication::_initForNormalAppBoot()
     });
     AndroidInterface::hideSystemBars();
 #endif
+
+    return mainRootWindow() != nullptr;
+}
+
+void QGCApplication::_initForNormalAppBoot()
+{
+    (void) _initVideo();
+
+    (void) _initQmlRootWindow();
 
     AudioOutput::instance()->init(SettingsManager::instance()->appSettings()->audioVolume(), SettingsManager::instance()->appSettings()->audioMuted());
     FollowMe::instance()->init();

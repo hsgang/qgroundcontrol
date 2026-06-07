@@ -50,13 +50,13 @@
             "visible": "QGroundControl.settingsManager.videoSettings.userVisible"
         },
         {
-            "name": "Logging",
+            "name": "App Logging",
             "qml": "LoggingSettings.qml",
             "icon": "qrc:/InstrumentValueIcons/conversation.svg",
             "pageDefinition": "Logging.SettingsUI.json"
         },
         {
-            "name": "Log Viewer",
+            "name": "App Log Viewer",
             "qml": "AppLogging.qml",
             "icon": "qrc:/InstrumentValueIcons/conversation.svg"
         },

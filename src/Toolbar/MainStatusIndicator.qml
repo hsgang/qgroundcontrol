@@ -168,7 +168,10 @@ Rectangle {
         Component {
             id: overallStatusOfflineIndicatorPage
 
-            MainStatusIndicatorOfflinePage {}
+            MainStatusIndicatorOfflinePage {
+                Component.onCompleted:   mainWindow.suppressCriticalVehicleMessages = true
+                Component.onDestruction: mainWindow.suppressCriticalVehicleMessages = false
+            }
         }
 
         Component {
@@ -179,6 +182,9 @@ Rectangle {
                 waitForParameters:  true
                 contentComponent:   mainStatusContentComponent
                 expandedComponent:  mainStatusExpandedComponent
+
+                Component.onCompleted:   mainWindow.suppressCriticalVehicleMessages = true
+                Component.onDestruction: mainWindow.suppressCriticalVehicleMessages = false
             }
         }
 

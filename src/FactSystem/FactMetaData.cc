@@ -154,6 +154,12 @@ void FactMetaData::setRawDefaultValue(const QVariant &rawDefaultValue)
     }
 }
 
+void FactMetaData::setRawDefaultValueFirmwareForce(const QVariant &rawDefaultValue)
+{
+    _rawDefaultValue = rawDefaultValue;
+    _defaultValueAvailable = true;
+}
+
 void FactMetaData::setRawMin(const QVariant &rawMin)
 {
     if (isInRawMinLimit(rawMin)) {
