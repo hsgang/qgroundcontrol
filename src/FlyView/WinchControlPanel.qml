@@ -28,6 +28,7 @@ Rectangle {
     property real   backgroundOpacity:  QGroundControl.settingsManager.flyViewSettings.flyviewWidgetOpacity.rawValue
     property var    _activeVehicle:     QGroundControl.multiVehicleManager.activeVehicle
     property real   _idealWidth:        ScreenTools.defaultFontPixelWidth * 6
+    property real   _fontSize:          ScreenTools.isMobile ? ScreenTools.defaultFontPointSize * 0.8 : ScreenTools.defaultFontPointSize
 
     property string _winchStatus:     _activeVehicle ? _activeVehicle.winchStatus.status.enumStringValue : "unknown"
     property string _winchLineLength: _activeVehicle ? _activeVehicle.winchStatus.lineLength.valueString : "--"
