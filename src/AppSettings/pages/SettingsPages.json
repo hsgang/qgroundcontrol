@@ -75,12 +75,6 @@
             "pageDefinition": "PX4LogTransfer.SettingsUI.json"
         },
         {
-            "name": "Remote ID",
-            "qml": "RemoteIDSettings.qml",
-            "icon": "qrc:/qmlimages/RidIconManNoID.svg",
-            "pageDefinition": "RemoteID.SettingsUI.json"
-        },
-        {
             "name": "SIYI",
             "qml": "SIYISettings.qml",
             "icon": "qrc:/qmlimages/TelemRSSI.svg",
