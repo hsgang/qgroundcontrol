@@ -109,6 +109,8 @@ public:
     static constexpr const char* terrainAdjustMaxClimbRateName         = "TerrainAdjustMaxClimbRate";
     static constexpr const char* terrainAdjustMaxDescentRateName       = "TerrainAdjustMaxDescentRate";
 
+    static constexpr int maxTransectCount = 1000; ///< Maximum number of transects allowed; spacing is raised to enforce this limit
+
 signals:
     void cameraShotsChanged             (void);
     void timeBetweenShotsChanged        (void);
@@ -201,8 +203,6 @@ protected:
 
     static constexpr int _terrainQueryTimeoutMsecs=     1000;
     static constexpr int _hoverAndCaptureDelaySeconds = 4;
-    static constexpr double _minimumTransectSpacingMeters = 0.3;
-    static constexpr double _forceLargeTransectSpacingMeters = 100000;
 
 private slots:
     void _reallyQueryTransectsPathHeightInfo        (void);
