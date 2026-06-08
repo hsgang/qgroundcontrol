@@ -50,7 +50,11 @@ function(qgc_apply_global_hardening)
             _qgc_try_compile_flag("-fstack-clash-protection" _cxx)
             if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i[0-9]86|x86")
                 _qgc_try_compile_flag("-fcf-protection=full" _cxx)
-            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|armv7|arm")
+            elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64")
+                # -mbranch-protection (BTI/PAC) is AArch64-only; clang rejects it on
+                # 32-bit ARM (thumbv7/armeabi-v7a) and -Werror turns that into a hard
+                # build failure. The configure probe misses it because clang emits only
+                # a -Wbranch-protection warning, which the probe does not treat as fatal.
                 _qgc_try_compile_flag("-mbranch-protection=standard" _cxx)
             endif()
             _qgc_try_link_flag("-Wl,-z,relro" _link)
