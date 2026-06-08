@@ -31,12 +31,6 @@
             "divider": true
         },
         {
-            "name": "ADSB Server",
-            "qml": "ADSBServerSettings.qml",
-            "icon": "qrc:/InstrumentValueIcons/airplane.svg",
-            "pageDefinition": "ADSBVehicleManager.SettingsUI.json"
-        },
-        {
             "name": "Comm Links",
             "qml": "CommLinksSettings.qml",
             "icon": "qrc:/InstrumentValueIcons/usb.svg",

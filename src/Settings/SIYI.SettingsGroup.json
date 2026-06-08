@@ -7,7 +7,7 @@
             "shortDesc": "Enable SIYI UniRC 7 datalink SDK (UDP).",
             "longDesc": "Polls UniRC 7 over UDP for link status, signal strength, frequency, and channel.",
             "type": "bool",
-            "default": true,
+            "default": false,
             "label": "Enable UniRC 7 (UDP)"
         },
         {

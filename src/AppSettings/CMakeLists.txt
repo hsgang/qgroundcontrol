@@ -79,7 +79,6 @@ qt_add_qml_module(AppSettingsModule
         SigningKeyManager.qml
         MockLink.qml
         MockLinkSettings.qml
-        NmeaGpsSettings.qml
         NtripConnectionStatus.qml
         NtripMountpointBrowser.qml
         NtripServerSettings.qml

@@ -130,7 +130,9 @@ SettingsGroupLayout {
             // Secondary actions (edit / delete) live in an overflow menu so the
             // row exposes a single primary button instead of mixed icons + button.
             QGCColoredImage {
-                height:                 ScreenTools.minTouchPixels
+                // Match the adjacent Connect button height so the overflow icon
+                // doesn't look oversized on mobile, where minTouchPixels is large.
+                height:                 ScreenTools.implicitButtonHeight
                 width:                  height
                 sourceSize.height:      height
                 fillMode:               Image.PreserveAspectFit

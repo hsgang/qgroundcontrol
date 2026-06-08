@@ -3,6 +3,19 @@
     "fileType": "SettingsUI",
     "groups": [
         {
+            "component": "LinkConfigurationManager",
+            "sectionName": "Link Management",
+            "keywords": [
+                "link",
+                "connection",
+                "serial",
+                "tcp",
+                "udp",
+                "bluetooth",
+                "add link"
+            ]
+        },
+        {
             "heading": "AutoConnect",
             "keywords": ["auto connect", "pixhawk", "sik radio", "udp", "rtk gps", "usb"],
             "showWhen": "QGroundControl.settingsManager.autoConnectSettings.userVisible",
@@ -19,30 +32,6 @@
                 {
                     "setting": "autoConnectSettings.autoConnectRTKGPS"
                 }
-            ]
-        },
-        {
-            "component": "NmeaGpsSettings",
-            "sectionName": "NMEA GPS",
-            "keywords": [
-                "nmea",
-                "gps",
-                "serial",
-                "baud rate",
-                "external gps"
-            ]
-        },
-        {
-            "component": "LinkConfigurationManager",
-            "sectionName": "Link Management",
-            "keywords": [
-                "link",
-                "connection",
-                "serial",
-                "tcp",
-                "udp",
-                "bluetooth",
-                "add link"
             ]
         }
     ]

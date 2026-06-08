@@ -1373,7 +1373,90 @@
     </message>
 </context>
 <context>
+    <name>Logging.SettingsUI.json</name>
+    <message>
+        <source>Save To Disk</source>
+        <extracomment>.groups[Save To Disk].heading, .groups[Save To Disk].sectionName</extracomment>
+        <translation>디스크에 저장</translation>
+    </message>
+    <message>
+        <source>Log Viewer</source>
+        <extracomment>.groups[Log Viewer].heading, .groups[Log Viewer].sectionName</extracomment>
+        <translation>로그 뷰어</translation>
+    </message>
+</context>
+<context>
+    <name>LogManager.SettingsGroup.json</name>
+    <message>
+        <source>Enable</source>
+        <extracomment>.QGC.MetaData.Facts[diskLoggingEnabled].label</extracomment>
+        <translation>활성화</translation>
+    </message>
+    <message>
+        <source>Write application log messages to disk in Logs directory.</source>
+        <extracomment>.QGC.MetaData.Facts[diskLoggingEnabled].shortDesc</extracomment>
+        <translation>애플리케이션 로그 메시지를 Logs 디렉터리에 디스크로 기록합니다.</translation>
+    </message>
+    <message>
+        <source>Max File Size (MB)</source>
+        <extracomment>.QGC.MetaData.Facts[diskLoggingMaxFileSizeMB].label</extracomment>
+        <translation>최대 파일 크기 (MB)</translation>
+    </message>
+    <message>
+        <source>Maximum size of a single log file in megabytes before rotation.</source>
+        <extracomment>.QGC.MetaData.Facts[diskLoggingMaxFileSizeMB].shortDesc</extracomment>
+        <translation>회전(롤오버) 전 단일 로그 파일의 최대 크기(메가바이트).</translation>
+    </message>
+    <message>
+        <source>Max Backup Files</source>
+        <extracomment>.QGC.MetaData.Facts[diskLoggingMaxBackupFiles].label</extracomment>
+        <translation>최대 백업 파일 수</translation>
+    </message>
+    <message>
+        <source>Number of rotated backup log files to keep.</source>
+        <extracomment>.QGC.MetaData.Facts[diskLoggingMaxBackupFiles].shortDesc</extracomment>
+        <translation>보관할 회전 백업 로그 파일 개수.</translation>
+    </message>
+    <message>
+        <source>Save Format</source>
+        <extracomment>.QGC.MetaData.Facts[saveFormat].label</extracomment>
+        <translation>저장 형식</translation>
+    </message>
+    <message>
+        <source>File format used when saving the application log.</source>
+        <extracomment>.QGC.MetaData.Facts[saveFormat].shortDesc</extracomment>
+        <translation>애플리케이션 로그를 저장할 때 사용하는 파일 형식.</translation>
+    </message>
+    <message>
+        <source>Text (.txt),CSV (.csv)</source>
+        <extracomment>.QGC.MetaData.Facts[saveFormat].enumStrings</extracomment>
+        <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
+        <translation>텍스트 (.txt),CSV (.csv)</translation>
+    </message>
+</context>
+<context>
     <name>App.SettingsGroup.json</name>
+    <message>
+        <source>Elapsed Timestamps</source>
+        <extracomment>.QGC.MetaData.Facts[showAppLogTimestampAsElapsedTime].label</extracomment>
+        <translation>경과 시간 타임스탬프</translation>
+    </message>
+    <message>
+        <source>Show log timestamps as elapsed time since app start</source>
+        <extracomment>.QGC.MetaData.Facts[showAppLogTimestampAsElapsedTime].shortDesc</extracomment>
+        <translation>로그 타임스탬프를 앱 시작 이후 경과 시간으로 표시</translation>
+    </message>
+    <message>
+        <source>When enabled, the log console shows time as seconds since application start (e.g. 3.727). When disabled, shows wall-clock time (HH:MM:SS.mmm).</source>
+        <extracomment>.QGC.MetaData.Facts[showAppLogTimestampAsElapsedTime].longDesc</extracomment>
+        <translation>활성화하면 로그 콘솔이 애플리케이션 시작 이후 경과 초(예: 3.727)로 시간을 표시합니다. 비활성화하면 실제 시각(HH:MM:SS.mmm)을 표시합니다.</translation>
+    </message>
+    <message>
+        <source>log,time,elapsed,timestamp,console</source>
+        <extracomment>.QGC.MetaData.Facts[showAppLogTimestampAsElapsedTime].keywords</extracomment>
+        <translatorcomment>Only use english comma &apos;,&apos; to separate strings</translatorcomment>
+        <translation>로그,시간,경과,타임스탬프,콘솔</translation>
+    </message>
     <message>
         <source>Offline editing firmware class</source>
         <extracomment>.QGC.MetaData.Facts[offlineEditingFirmwareClass].shortDesc, .QGC.MetaData.Facts[offlineEditingFirmwareClass].label</extracomment>
@@ -8195,6 +8278,16 @@
         <source>Logging</source>
         <extracomment>.pages[Logging].name</extracomment>
         <translation>로깅</translation>
+    </message>
+    <message>
+        <source>App Logging</source>
+        <extracomment>.pages[App Logging].name</extracomment>
+        <translation>앱 로깅</translation>
+    </message>
+    <message>
+        <source>App Log Viewer</source>
+        <extracomment>.pages[App Log Viewer].name</extracomment>
+        <translation>앱 로그 뷰어</translation>
     </message>
     <message>
         <source>Maps</source>
