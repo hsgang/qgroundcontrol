@@ -1809,7 +1809,7 @@ void GstVideoReceiver::preparePipeline()
     }
 
     qCDebug(GstVideoReceiverLog) << "Pre-building internal RTP pipeline (PAUSED)";
-    start(0);
+    start(kInternalRtpTimeoutSecs);
 
     if (_pipeline) {
         gst_element_set_state(_pipeline, GST_STATE_PAUSED);
@@ -1830,7 +1830,7 @@ void GstVideoReceiver::pushRtpPacket(QByteArray packet)
     // Lazy start: build pipeline on first RTP packet arrival (if preparePipeline wasn't called).
     if (!_pipeline && _useInternalRtp) {
         qCDebug(GstVideoReceiverLog) << "First RTP packet received — starting internal pipeline";
-        start(0);
+        start(kInternalRtpTimeoutSecs);
     }
 
     // Pre-built pipeline may be PAUSED — bump to PLAYING on first data.

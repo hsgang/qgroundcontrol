@@ -134,6 +134,11 @@ private:
     bool        _appsrcDataPushed = false;
     bool        _useInternalRtp = false;
     InternalCodec _internalCodec = InternalCodec::H264;
+    // Watchdog timeout for internal RTP mode (matches VideoManager's non-RTSP default).
+    // Must be > 0: _watchdog() compares second-truncated timestamps, so with timeout=0
+    // a healthy stream still trips `elapsed(1) > 0` whenever the 1Hz tick lands just
+    // after a second boundary — tearing down a perfectly good pipeline.
+    static constexpr uint32_t kInternalRtpTimeoutSecs = 3;
     GstElement *_videoSink = nullptr;
     GstVideoWorker *_worker = nullptr;
     gulong _teeProbeId = 0;
