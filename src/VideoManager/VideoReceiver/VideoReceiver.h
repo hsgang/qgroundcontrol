@@ -64,7 +64,6 @@ signals:
     void timeout();
     void streamingChanged(bool active);
     void decodingChanged(bool active);
-    void videoFrameReceived();
     void recordingChanged(bool active);
     void recordingStarted(const QString &filename);
     void videoSizeChanged(QSize size);

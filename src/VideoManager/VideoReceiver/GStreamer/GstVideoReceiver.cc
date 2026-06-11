@@ -1256,14 +1256,6 @@ void GstVideoReceiver::_noteVideoSinkFrame()
         qCDebug(GstVideoReceiverLog) << "Decoding started";
         _dispatchSignal([this]() { emit decodingChanged(_decoding); });
     }
-    // Coalesce the stall-watchdog ping to <=4Hz instead of emitting a cross-thread
-    // signal (and re-arming a GUI QTimer) on every decoded frame. A gap larger than
-    // the throttle window still pings immediately, so recovery from stall is prompt.
-    const qint64 nowMs = QDateTime::currentMSecsSinceEpoch();
-    if ((nowMs - _lastFramePingMs) >= 250) {
-        _lastFramePingMs = nowMs;
-        _dispatchSignal([this]() { emit videoFrameReceived(); });
-    }
 }
 
 void GstVideoReceiver::_noteEndOfStream()

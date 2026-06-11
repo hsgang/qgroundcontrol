@@ -134,7 +134,6 @@ private:
     bool        _appsrcDataPushed = false;
     bool        _useInternalRtp = false;
     InternalCodec _internalCodec = InternalCodec::H264;
-    qint64      _lastFramePingMs = 0;       // throttles the per-frame videoFrameReceived ping
     GstElement *_videoSink = nullptr;
     GstVideoWorker *_worker = nullptr;
     gulong _teeProbeId = 0;

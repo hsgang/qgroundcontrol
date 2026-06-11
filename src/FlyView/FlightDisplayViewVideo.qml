@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Effects
 
 import QGroundControl
 import QGroundControl.FlyView
@@ -26,7 +25,7 @@ Item {
     property var    _camera:            _isCamera ? _dynamicCameras.cameras.get(_curCameraIndex) : null
     property bool   _hasZoom:           _camera && _camera.hasZoom
     property int    _fitMode:           QGroundControl.settingsManager.videoSettings.videoFit.rawValue
-    property bool   _showStreamLoader:  QGroundControl.videoManager.decoding || QGroundControl.videoManager.videoStalled
+    property bool   _showStreamLoader:  QGroundControl.videoManager.decoding
     property bool   _showUvcLoader:     QGroundControl.videoManager.isUvc
 
     property bool   _isMode_FIT_WIDTH:  _fitMode === 0
@@ -117,41 +116,6 @@ Item {
         Component {
             id: videoOutputComponent
             FlightDisplayViewVideoOutput {
-            }
-        }
-
-        // 영상 끊김 시 그레이스케일 효과
-        MultiEffect {
-            id:             stallEffect
-            anchors.fill:   videoStreamLoader
-            source:         videoStreamLoader
-            visible:        QGroundControl.videoManager.videoStalled && _showStreamLoader
-            saturation:     -1.0  // 완전 그레이스케일
-            brightness:     -0.1  // 약간 어둡게
-
-            Behavior on visible {
-                enabled: false
-            }
-        }
-
-        // 끊김 표시 라벨
-        Rectangle {
-            anchors.top:        videoContentArea.top
-            anchors.topMargin:  ScreenTools.defaultFontPixelHeight * 0.5
-            anchors.horizontalCenter: videoContentArea.horizontalCenter
-            width:              stallLabel.contentWidth + ScreenTools.defaultFontPixelHeight
-            height:             stallLabel.contentHeight + ScreenTools.defaultFontPixelHeight * 0.5
-            radius:             ScreenTools.defaultFontPixelWidth / 2
-            color:              "#CC000000"
-            visible:            QGroundControl.videoManager.videoStalled && _showStreamLoader
-
-            QGCLabel {
-                id:                 stallLabel
-                text:               qsTr("VIDEO STALLED")
-                font.bold:          true
-                color:              "#FF4444"
-                font.pointSize:     ScreenTools.defaultFontPointSize
-                anchors.centerIn:   parent
             }
         }
 
