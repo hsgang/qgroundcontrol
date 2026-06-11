@@ -86,6 +86,7 @@ MockLink::MockLink(SharedLinkConfigurationPtr &config, QObject *parent)
                                                         _mockConfig->gimbalHasRetract(),
                                                         _mockConfig->gimbalHasNeutral())
                                     : nullptr)
+    , _mockLinkPX4Calibration(new MockLinkPX4Calibration(this))
     , _mockLinkFTP(new MockLinkFTP(_vehicleSystemId, _vehicleComponentId, this))
 {
     qCDebug(MockLinkLog) << this;
@@ -131,6 +132,7 @@ MockLink::~MockLink()
 
     delete _mockLinkCamera;
     delete _mockLinkGimbal;
+    delete _mockLinkPX4Calibration;
 
     if (!_logDownloadFilename.isEmpty()) {
         QFile::remove(_logDownloadFilename);
@@ -213,6 +215,10 @@ void MockLink::run1HzTasks()
         _mockLinkGimbal->run1HzTasks();
     }
 
+    _sendEscInfo();
+    _sendEscStatus();
+    _sendRadioStatus();
+
     if (_enableCamera) {
         _mockLinkCamera->sendCameraHeartbeats();
     }
@@ -243,10 +249,12 @@ void MockLink::run10HzTasks()
 
     if (_mavlinkStarted && _connected && mavlinkChannelIsSet()) {
         _sendHeartBeat();
+        const bool gpsDelayExpired = (_sendGPSPositionDelayCount == 0);
         if (_sendGPSPositionDelayCount > 0) {
             // We delay gps position for better testing
             _sendGPSPositionDelayCount--;
-        } else {
+        }
+        if (gpsDelayExpired || QGC::runningUnitTests()) {
             if (_vehicleType != MAV_TYPE_SUBMARINE) {
                 _sendGpsRawInt();
                 _sendGlobalPositionInt();
@@ -258,6 +266,8 @@ void MockLink::run10HzTasks()
         _sendAttitudeTarget();
         _sendLocalPositionNed();
         _sendPositionTargetLocalNed();
+
+        _mockLinkPX4Calibration->run10HzTasks();
 
         if (_enableCamera) {
             _mockLinkCamera->run10HzTasks();
@@ -2107,23 +2117,35 @@ void MockLink::_sendRCChannels()
 
 void MockLink::_handlePreFlightCalibration(const mavlink_command_long_t& request)
 {
-    static constexpr const char *gyroCalResponse = "[cal] calibration started: 2 gyro";
-    static constexpr const char *magCalResponse = "[cal] calibration started: 2 mag";
-    static constexpr const char *accelCalResponse = "[cal] calibration started: 2 accel";
-    const char *pCalMessage;
-
-    if (request.param1 == 1) {
-        pCalMessage = gyroCalResponse;
-    } else if (request.param2 == 1) {
-        pCalMessage = magCalResponse;
-    } else if (request.param5 == 1) {
-        pCalMessage = accelCalResponse;
-    } else {
+    if ((request.param1 == 0) && (request.param2 == 0) && (request.param3 == 0) &&
+        (request.param4 == 0) && (request.param5 == 0) && (request.param6 == 0) &&
+        (request.param7 == 0)) {
+        // All zeros is a calibration cancel request. See PX4 calibrate_cancel_check().
+        (void) _mockLinkPX4Calibration->cancel();
         return;
     }
 
+    if (request.param2 == 1) {
+        // Magnetometer calibration runs the full pose-driven simulation
+        _mockLinkPX4Calibration->startMagCalibration();
+        return;
+    }
+
+    if (request.param1 == 1) {
+        sendStatusTextMessage(MAV_SEVERITY_INFO, QStringLiteral("[cal] calibration started: 2 gyro"));
+        return;
+    }
+
+    if (request.param5 == 1) {
+        // Accelerometer calibration runs the full pose-driven simulation
+        _mockLinkPX4Calibration->startAccelCalibration();
+    }
+}
+
+void MockLink::sendStatusTextMessage(uint8_t severity, const QString &text)
+{
     char statusText[MAVLINK_MSG_STATUSTEXT_FIELD_TEXT_LEN] = {};
-    (void) std::strncpy(statusText, pCalMessage, sizeof(statusText) - 1);
+    (void) std::strncpy(statusText, text.toUtf8().constData(), sizeof(statusText) - 1);
 
     mavlink_message_t msg{};
     (void) mavlink_msg_statustext_pack_chan(
@@ -2131,7 +2153,7 @@ void MockLink::_handlePreFlightCalibration(const mavlink_command_long_t& request
         _vehicleComponentId,
         _outgoingMavlinkChannel,
         &msg,
-        MAV_SEVERITY_INFO,
+        severity,
         statusText,
         0,
         0 // Not chunked
@@ -2455,6 +2477,75 @@ void MockLink::_sendRemoteIDArmStatus()
         &msg,
         MAV_ODID_ARM_STATUS_GOOD_TO_ARM,
         armStatusError
+    );
+    respondWithMavlinkMessage(msg);
+}
+
+void MockLink::_sendEscInfo()
+{
+    // Send ESC_INFO for 4 motors starting at index 0.
+    // count=4 and info bitmask=0x0F (all 4 online) makes the ESC indicator visible.
+    static const uint16_t failureFlags[4] = {0, 0, 0, 0};
+    static const uint32_t errorCount[4]   = {0, 0, 0, 0};
+    static const int16_t  temperature[4]  = {3000, 3000, 3000, 3000}; // centidegrees
+
+    mavlink_message_t msg{};
+    (void) mavlink_msg_esc_info_pack_chan(
+        _vehicleSystemId,
+        _vehicleComponentId,
+        _outgoingMavlinkChannel,
+        &msg,
+        0,                              // index: first group starts at 0
+        static_cast<uint64_t>(_runningTime.elapsed()) * 1000, // time_usec
+        0,                              // counter
+        4,                              // count: 4 motors
+        ESC_CONNECTION_TYPE_DSHOT,      // connection_type
+        0x0F,                           // info: bitmask — motors 0-3 online
+        failureFlags,
+        errorCount,
+        temperature
+    );
+    respondWithMavlinkMessage(msg);
+}
+
+void MockLink::_sendEscStatus()
+{
+    static const int32_t rpm[4]     = {5000, 5000, 5000, 5000};
+    static const float   voltage[4] = {16.0f, 16.0f, 16.0f, 16.0f};
+    static const float   current[4] = {5.0f, 5.0f, 5.0f, 5.0f};
+
+    mavlink_message_t msg{};
+    (void) mavlink_msg_esc_status_pack_chan(
+        _vehicleSystemId,
+        _vehicleComponentId,
+        _outgoingMavlinkChannel,
+        &msg,
+        0,                              // index: first group
+        static_cast<uint64_t>(_runningTime.elapsed()) * 1000, // time_usec
+        rpm,
+        voltage,
+        current
+    );
+    respondWithMavlinkMessage(msg);
+}
+
+void MockLink::_sendRadioStatus()
+{
+    // Send a RADIO_STATUS message to make the TelemetryRSSI indicator visible.
+    // Any non-zero rssi value triggers showIndicator (TelemetryRSSIIndicator checks lrssi.rawValue != 0).
+    mavlink_message_t msg{};
+    (void) mavlink_msg_radio_status_pack_chan(
+        _vehicleSystemId,
+        _vehicleComponentId,
+        _outgoingMavlinkChannel,
+        &msg,
+        100,    // rssi: local signal strength
+        100,    // remrssi: remote signal strength
+        50,     // txbuf: transmit buffer fill (%)
+        10,     // noise: local background noise
+        10,     // remnoise: remote background noise
+        0,      // rxerrors
+        0       // fixed
     );
     respondWithMavlinkMessage(msg);
 }

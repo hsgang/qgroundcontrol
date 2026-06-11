@@ -10,6 +10,7 @@ class MockLink;
 class QQmlApplicationEngine;
 class QQuickItem;
 class QQuickWindow;
+class QVariant;
 class Vehicle;
 
 /// Base class for QML UI smoke tests.
@@ -37,6 +38,7 @@ class QmlUITestBase : public UnitTest
 protected slots:
     void cleanup() override
     {
+        _verifyFileDialogTestHookConsumed();
         stopUI();
         UnitTest::cleanup();
     }
@@ -49,7 +51,6 @@ protected:
     void startUI();
 
     /// Close the QML window and wait for it to settle.
-    /// Call this before any MockLink disconnect to avoid QML teardown null-dereferences.
     void closeUIWindow();
 
     /// Delete the QML engine and reset all pointers.
@@ -57,18 +58,59 @@ protected:
     void destroyUIEngine();
 
     /// Convenience: closeUIWindow() followed by destroyUIEngine().
-    /// Use closeUIWindow() + destroyUIEngine() separately when MockLink
-    /// teardown needs to happen between them.
+    /// When a MockLink is active, call mockLink->disconnect() first so the
+    /// window tears down with a null vehicle — this intentionally exposes
+    /// null-reference bugs in QML bindings.
     void stopUI();
+
+    /// Fail the current test if the QGCFileDialogController test hook is still
+    /// armed at teardown. A hook armed but never consumed means the expected
+    /// dialog never opened; left armed it would be silently consumed by the
+    /// next dialog anywhere — possibly in a later test. Clears the hook so the
+    /// failure stays in the offending test.
+    void _verifyFileDialogTestHookConsumed();
 
     /// Click the visible QQuickItem with \a objectName in the current window.
     /// Returns false if the item cannot be found.
     bool clickButton(const QString &objectName);
 
+    /// Verify the enabled state of a visible item found by \a objectName,
+    /// waiting up to 2 seconds for bindings to settle. Returns false (after
+    /// recording a test failure) if the item is missing or the enabled state
+    /// does not match. \a context is prepended to failure messages.
+    bool verifyEnabled(const QString &objectName, bool expectedEnabled, const QString &context);
+
+    /// Verify the primary (highlight) state of a button found by \a objectName.
+    /// Same semantics as verifyEnabled().
+    bool verifyPrimary(const QString &objectName, bool expectedPrimary, const QString &context);
+
+    /// Verify the checked state of a checkable button found by \a objectName.
+    /// Same semantics as verifyEnabled().
+    bool verifyChecked(const QString &objectName, bool expectedChecked, const QString &context);
+
+    /// Same semantics as verifyEnabled().
+    bool verifyText(const QString &objectName, const QString &expectedText, const QString &context);
+
     /// Scroll the QQuickFlickable identified by \a flickableObjectName so that
     /// \a item's centre is fully visible inside the flickable. Does nothing if
     /// \a item is already visible or if the flickable cannot be found.
     void scrollIntoView(QQuickItem *item, const QString &flickableObjectName);
+
+    /// Convenience wrapper: boots the UI, connects a MockLink, runs \a body
+    /// with the active MockLink and Vehicle, then tears down in the correct
+    /// order (disconnect → closeUIWindow → destroyUIEngine).
+    ///
+    /// \a body may use QVERIFY2/QFAIL; on failure the lambda returns early and
+    /// teardown still runs via the scope guard.
+    void runWithMockLink(
+        const std::function<MockLink *()> &factory,
+        const std::function<void(QPointer<MockLink>, Vehicle *)> &body);
+
+    /// Disconnect a MockLink and wait for the active vehicle to clear.
+    /// Safe to call with a null pointer. Always call before closeUIWindow() so
+    /// QML handles a null vehicle while the window is still open, exposing
+    /// binding bugs.
+    void disconnectMockLink(QPointer<MockLink> mockLink);
 
     /// Register ignores for known warnings produced by any ArduPilot MockLink
     /// connection. Call once before connectMockLinkAndWaitReady().
@@ -79,8 +121,10 @@ protected:
     /// \a vehicleOut to the active Vehicle.
     ///
     /// Returns null and marks the test failed on any error — check the return
-    /// value before proceeding. The caller owns teardown: call closeUIWindow(),
-    /// mockLink->disconnect(), and destroyUIEngine() in that order.
+    /// value before proceeding. The caller owns teardown: call
+    /// mockLink->disconnect(), closeUIWindow(), and destroyUIEngine() in that
+    /// order — disconnecting first forces QML to handle a null vehicle while
+    /// the window is still open, exposing binding bugs.
     QPointer<MockLink> connectMockLinkAndWaitReady(
         const std::function<MockLink *()> &factory,
         Vehicle *&vehicleOut);
@@ -90,4 +134,12 @@ protected:
     QQuickItem            *_rootItem = nullptr;
     int _viewDelay = 0;  ///< ms to pause between view switches when onscreen
     int _pageDelay = 0;  ///< ms to pause between page switches when onscreen
+
+private:
+    /// Shared implementation for the verify* helpers: find the visible item,
+    /// guard against the property not existing (an invalid QVariant silently
+    /// converts to false/"" which would make false/empty expectations pass
+    /// vacuously), then wait up to 2 seconds for the property to match.
+    bool _verifyItemProperty(const QString &objectName, const char *propertyName,
+                             const QVariant &expectedValue, const QString &context);
 };

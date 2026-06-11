@@ -5,6 +5,7 @@ import QGroundControl.Controls
 import QGroundControl.Toolbar
 
 Item {
+    objectName:         "flyViewToolBarIndicators"
     implicitWidth:      mainLayout.width + _widthMargin
     visible:            mainLayout.implicitWidth > 0
 
