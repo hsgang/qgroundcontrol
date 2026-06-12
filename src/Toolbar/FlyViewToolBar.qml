@@ -96,8 +96,9 @@ Item {
             }
 
             MainStatusIndicator {
-                id:      mainStatusIndicator
-                height:  _mainHeight * 0.8
+                id:          mainStatusIndicator
+                objectName:  "toolbar_mainStatusIndicator"
+                height:      _mainHeight * 0.8
             }
 
             Rectangle {
@@ -211,6 +212,7 @@ Item {
             spacing:            ScreenTools.defaultFontPixelWidth
 
             FlightModeIndicator {
+                objectName:             "toolbar_flightModeIndicator"
                 Layout.fillHeight:      true
                 Layout.alignment:       Qt.AlignVCenter
                 visible:                _activeVehicle
