@@ -81,6 +81,10 @@ public slots:
 signals:
     void decoderStatsChanged();
     void latencyChanged();
+    // Internal RTP mode: the decode branch requested a fresh keyframe (e.g. the
+    // depayloader detected loss). The transport layer (WebRTC) translates this into
+    // an RTCP PLI back to the sender. Throttled in _onUpstreamKeyframeRequest().
+    void keyframeRequested();
 
 private slots:
     void _watchdog();
@@ -122,6 +126,9 @@ private:
     static GstPadProbeReturn _videoSinkProbe(GstPad *pad, GstPadProbeInfo *info, gpointer user_data);
     static GstPadProbeReturn _eosProbe(GstPad *pad, GstPadProbeInfo *info, gpointer user_data);
     static GstPadProbeReturn _keyframeWatch(GstPad *pad, GstPadProbeInfo *info, gpointer user_data);
+    // Internal RTP mode: catch the upstream force-key-unit event the depayloader emits
+    // on loss and re-emit it as keyframeRequested() (-> RTCP PLI in the WebRTC layer).
+    static GstPadProbeReturn _onUpstreamKeyframeRequest(GstPad *pad, GstPadProbeInfo *info, gpointer user_data);
 
     GstElement *_decoder = nullptr;
     GstElement *_decoderValve = nullptr;
@@ -139,6 +146,11 @@ private:
     // a healthy stream still trips `elapsed(1) > 0` whenever the 1Hz tick lands just
     // after a second boundary — tearing down a perfectly good pipeline.
     static constexpr uint32_t kInternalRtpTimeoutSecs = 3;
+    // Internal RTP keyframe (PLI) request throttling. A depayloader can emit a
+    // force-key-unit per lost-packet burst; cap outgoing requests so we don't flood
+    // the sender with RTCP feedback while still recovering quickly after loss.
+    gint64 _lastKeyframeRequestUs = 0;
+    static constexpr gint64 kKeyframeRequestMinIntervalUs = 500000;  // 500 ms
     GstElement *_videoSink = nullptr;
     GstVideoWorker *_worker = nullptr;
     gulong _teeProbeId = 0;

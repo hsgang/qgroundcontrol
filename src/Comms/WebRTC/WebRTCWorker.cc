@@ -1132,6 +1132,35 @@ void WebRTCWorker::_handleTrackReceived(std::shared_ptr<rtc::Track> track)
 
         auto session = std::make_shared<rtc::RtcpReceivingSession>();
         track->setMediaHandler(session);
+
+        // Bridge decode-side keyframe requests (loss recovery) to an RTCP PLI. The
+        // RtcpReceivingSession set above emits the PLI; VideoManager relays the request
+        // from the GStreamer depayloader. UniqueConnection keeps re-received tracks idempotent.
+        auto* vm = VideoManager::instance();
+        if (vm) {
+            connect(vm, &VideoManager::webRtcKeyframeRequested,
+                    this, &WebRTCWorker::_requestVideoKeyframe, Qt::UniqueConnection);
+        }
+    }
+}
+
+void WebRTCWorker::_requestVideoKeyframe()
+{
+    if (isShuttingDown()) {
+        return;
+    }
+
+    auto track = _pcContext.videoTrack;  // copy shared_ptr; track may be reset concurrently
+    if (!track) {
+        return;
+    }
+
+    try {
+        if (track->requestKeyframe()) {
+            qCDebug(WebRTCLinkLog) << "[WebRTC] Sent RTCP PLI (keyframe request) to sender";
+        }
+    } catch (const std::exception& e) {
+        qCWarning(WebRTCLinkLog) << "[WebRTC] requestKeyframe failed:" << e.what();
     }
 }
 

@@ -335,6 +335,9 @@ class WebRTCWorker : public QObject
     void _onGcsUnregisteredSuccessfully(const QString& gcsId);
     void _onGcsUnregisterFailed(const QString& gcsId, const QString& reason);
 
+    // Decode branch (VideoManager) asked for a keyframe -> send RTCP PLI to the sender.
+    void _requestVideoKeyframe();
+
    private:
     // Signaling management
     void _setupSignalingManager();

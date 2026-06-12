@@ -738,6 +738,8 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
         auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
         if (gstReceiver) {
             gstReceiver->enableInternalRtpMode(GstVideoReceiver::InternalCodec::H264);
+            (void) connect(gstReceiver, &GstVideoReceiver::keyframeRequested,
+                           this, &VideoManager::webRtcKeyframeRequested, Qt::UniqueConnection);
             _webrtcInternalModeEnabled = true;
             settingsChanged |= _updateVideoUri(receiver, QString());
             return settingsChanged;

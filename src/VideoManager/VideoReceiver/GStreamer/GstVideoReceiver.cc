@@ -1909,6 +1909,18 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
         g_object_set(appsrc, "caps", caps, nullptr);
         gst_clear_caps(&caps);
 
+        // The depayloader emits an upstream force-key-unit event on loss (request-keyframe
+        // below). That event has nowhere to go past appsrc, so catch it here and surface it
+        // as keyframeRequested() — the WebRTC layer turns it into an RTCP PLI to the sender.
+        {
+            GstPad *appsrcSrcPad = gst_element_get_static_pad(appsrc, "src");
+            if (appsrcSrcPad) {
+                gst_pad_add_probe(appsrcSrcPad, GST_PAD_PROBE_TYPE_EVENT_UPSTREAM,
+                                  _onUpstreamKeyframeRequest, this, nullptr);
+                gst_object_unref(appsrcSrcPad);
+            }
+        }
+
         jitter = gst_element_factory_make("rtpjitterbuffer", nullptr);
         if (!jitter) { qCCritical(GstVideoReceiverLog) << "jitterbuffer failed"; break; }
         // WebRTC/UDP transport is inherently jittery and reorders packets. The original
@@ -1965,4 +1977,30 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
     gst_clear_object(&appsrc);
     gst_clear_object(&bin);
     return nullptr;
+}
+
+GstPadProbeReturn GstVideoReceiver::_onUpstreamKeyframeRequest(GstPad * /*pad*/, GstPadProbeInfo *info, gpointer user_data)
+{
+    GstEvent *event = GST_PAD_PROBE_INFO_EVENT(info);
+    if (!event || !gst_video_event_is_force_key_unit(event)) {
+        return GST_PAD_PROBE_OK;
+    }
+
+    auto *self = static_cast<GstVideoReceiver*>(user_data);
+    if (!self) {
+        return GST_PAD_PROBE_OK;
+    }
+
+    // Throttle: collapse bursts of force-key-unit events into at most one PLI per
+    // interval so a lossy link doesn't flood the sender with RTCP feedback.
+    const gint64 now = g_get_monotonic_time();
+    if ((now - self->_lastKeyframeRequestUs) < kKeyframeRequestMinIntervalUs) {
+        return GST_PAD_PROBE_OK;
+    }
+    self->_lastKeyframeRequestUs = now;
+
+    qCDebug(GstVideoReceiverLog) << "Internal RTP: decode branch requested keyframe — forwarding as PLI";
+    emit self->keyframeRequested();
+
+    return GST_PAD_PROBE_OK;
 }

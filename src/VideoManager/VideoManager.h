@@ -100,6 +100,9 @@ signals:
     void streamingChanged();
     void uvcVideoSourceIDChanged();
     void videoSizeChanged();
+    // Relayed from the WebRTC GstVideoReceiver when the decode branch needs a fresh
+    // keyframe; the WebRTC link translates it into an RTCP PLI to the sender.
+    void webRtcKeyframeRequested();
 
 private slots:
     void _communicationLostChanged(bool communicationLost);
