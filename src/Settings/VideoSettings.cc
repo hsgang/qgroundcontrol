@@ -197,6 +197,18 @@ DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, rtspTimeout)
     return _rtspTimeoutFact;
 }
 
+DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, rtspLatency)
+{
+    if (!_rtspLatencyFact) {
+        _rtspLatencyFact = _createSettingsFact(rtspLatencyName);
+
+        _rtspLatencyFact->setUserVisible(kGstEnabled);
+
+        connect(_rtspLatencyFact, &Fact::valueChanged, this, &VideoSettings::_configChanged);
+    }
+    return _rtspLatencyFact;
+}
+
 DECLARE_SETTINGSFACT_NO_FUNC(VideoSettings, udpUrl)
 {
     if (!_udpUrlFact) {

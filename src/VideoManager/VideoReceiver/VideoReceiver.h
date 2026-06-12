@@ -26,6 +26,7 @@ public:
     QString uri() const { return _uri; }
     bool started() const { return _started; }
     bool lowLatency() const { return _lowLatency; }
+    int rtspLatencyMs() const { return _rtspLatencyMs; }
     QGCVideoStreamInfo *videoStreamInfo() { return _videoStreamInfo; }
     QString recordingOutput() const { return _recordingOutput; }
 
@@ -35,6 +36,7 @@ public:
     void setUri(const QString &uri) { if (uri != _uri) { _uri = uri; emit uriChanged(_uri); } }
     void setStarted(bool started) { if (started != _started) { _started = started; emit startedChanged(_started); } }
     void setLowLatency(bool lowLatency) { if (lowLatency != _lowLatency) { _lowLatency = lowLatency; emit lowLatencyChanged(_lowLatency); } }
+    void setRtspLatency(int ms) { _rtspLatencyMs = ms; }
     void setVideoStreamInfo(QGCVideoStreamInfo *videoStreamInfo) { if (videoStreamInfo != _videoStreamInfo) { _videoStreamInfo = videoStreamInfo; emit videoStreamInfoChanged(); } }
 
     // QMediaFormat::FileFormat
@@ -104,6 +106,7 @@ protected:
     bool _recording = false;
     bool _streaming = false;
     bool _lowLatency = false;
+    int _rtspLatencyMs = 100;  // RTSP jitter buffer size (ms); driven by VideoSettings.rtspLatency
     bool _resetVideoSink = false;
     bool _endOfStream = false;
     bool _removingDecoder = false;

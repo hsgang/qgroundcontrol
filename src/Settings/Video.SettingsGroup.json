@@ -118,6 +118,17 @@
             "label": "RTSP Video Timeout"
         },
         {
+            "name": "rtspLatency",
+            "shortDesc": "RTSP Jitter Buffer",
+            "longDesc": "Size of the RTSP receive (jitter) buffer in milliseconds. Larger values absorb network jitter and packet reordering, reducing blocky video artifacts, at the cost of higher end-to-end latency. Lower values reduce latency but may produce artifacts on lossy links.",
+            "type": "uint32",
+            "min": 0,
+            "max": 2000,
+            "units": "ms",
+            "default": 100,
+            "label": "RTSP Jitter Buffer"
+        },
+        {
             "name": "streamEnabled",
             "shortDesc": "Video Stream Enabled",
             "longDesc": "Start/Stop Video Stream.",

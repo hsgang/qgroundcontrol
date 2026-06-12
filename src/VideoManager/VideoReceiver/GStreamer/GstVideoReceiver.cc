@@ -721,13 +721,19 @@ GstElement *GstVideoReceiver::_makeSource(const QString &input)
             cleanUrl.setUserInfo(QString());
             const QByteArray cleanLocation = cleanUrl.toString().toUtf8();
 
+            // Jitter buffer size (ms) comes from VideoSettings.rtspLatency. The old hard-coded
+            // 25 ms was far too tight for real networks: normal jitter/reordering pushed packets
+            // past the window and drop-on-latency discarded them, causing macroblocking. Keep
+            // drop-on-latency only in low-latency mode (minimal delay, tolerates drops); otherwise
+            // let late packets through so the picture stays intact.
+            const gint latencyMs = (rtspLatencyMs() >= 0) ? rtspLatencyMs() : 100;
             g_object_set(source,
                          "location", cleanLocation.constData(),
-                         "latency", 25,
+                         "latency", latencyMs,
                          "do-rtcp", TRUE,
                          "tcp-timeout", G_GUINT64_CONSTANT(5000000),
                          "udp-reconnect", TRUE,
-                         "drop-on-latency", TRUE,
+                         "drop-on-latency", lowLatency() ? TRUE : FALSE,
                          "retry", 3,
                          nullptr);
 

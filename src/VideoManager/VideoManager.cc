@@ -186,6 +186,7 @@ void VideoManager::init(QQuickWindow *mainWindow)
     (void) connect(_videoSettings->tcpUrl(), &Fact::rawValueChanged, this, &VideoManager::_videoSourceChanged);
     (void) connect(_videoSettings->aspectRatio(), &Fact::rawValueChanged, this, &VideoManager::aspectRatioChanged);
     (void) connect(_videoSettings->lowLatencyMode(), &Fact::rawValueChanged, this, [this](const QVariant &value) { Q_UNUSED(value); _restartAllVideos(); });
+    (void) connect(_videoSettings->rtspLatency(), &Fact::rawValueChanged, this, [this](const QVariant &value) { Q_UNUSED(value); _restartAllVideos(); });
     (void) connect(MultiVehicleManager::instance(), &MultiVehicleManager::activeVehicleChanged, this, &VideoManager::_setActiveVehicle);
 
     (void) connect(this, &VideoManager::autoStreamConfiguredChanged, this, &VideoManager::_videoSourceChanged);
@@ -701,6 +702,12 @@ bool VideoManager::_updateSettings(VideoReceiver *receiver)
     const bool lowLatency = _videoSettings->lowLatencyMode()->rawValue().toBool();
     if (lowLatency != receiver->lowLatency()) {
         receiver->setLowLatency(lowLatency);
+        settingsChanged = true;
+    }
+
+    const int rtspLatency = _videoSettings->rtspLatency()->rawValue().toInt();
+    if (rtspLatency != receiver->rtspLatencyMs()) {
+        receiver->setRtspLatency(rtspLatency);
         settingsChanged = true;
     }
 
