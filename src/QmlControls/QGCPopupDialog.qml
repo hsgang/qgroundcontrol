@@ -244,6 +244,7 @@ Popup {
 
                 QGCLabel {
                     id:                 titleLabel
+                    objectName:         "popupDialog_title"
                     Layout.fillWidth:   true
                     text:               root.title
                     font.pointSize:     ScreenTools.mediumFontPointSize

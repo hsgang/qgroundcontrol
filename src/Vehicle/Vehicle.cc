@@ -3457,7 +3457,7 @@ void Vehicle::startTimerRevertAllowTakeover()
     disconnect(&_timerRevertAllowTakeover, &QTimer::timeout, nullptr, nullptr);
 
     connect(&_timerRevertAllowTakeover, &QTimer::timeout, this, [this](){
-        if (MAVLinkProtocol::instance()->getSystemId() == _sysid_in_control) {
+        if (MAVLinkProtocol::instance()->getSystemId() == _gcsMain) {
             this->requestOperatorControl(false);
         }
     });
@@ -3553,8 +3553,8 @@ void Vehicle::_handleControlStatus(const mavlink_message_t& message)
         updateControlStatusSignals = true;
     }
 
-    if (_sysid_in_control != controlStatus.sysid_in_control) {
-        _sysid_in_control = controlStatus.sysid_in_control;
+    if (_gcsMain != controlStatus.gcs_main) {
+        _gcsMain = controlStatus.gcs_main;
         updateControlStatusSignals = true;
     }
 

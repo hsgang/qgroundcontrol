@@ -2,6 +2,7 @@
 
 #include "PX4/px4_custom_mode.h"
 #include "LinkInterface.h"
+#include "MAVLinkEnums.h"
 #include "MAVLinkMessageType.h"
 #include "QGCMAVLinkTypes.h"
 #include "MockConfiguration.h"
@@ -89,6 +90,9 @@ public:
     /// Reset the state of the MissionItemHandler to no items, no transactions in progress.
     void resetMissionItemHandler() const { _missionItemHandler->reset(); }
 
+    /// Test-only: seeds a simple multirotor mission (takeoff, waypoint, RTL) onto the simulated vehicle.
+    void loadSimpleMultirotorMission() const { _missionItemHandler->loadSimpleMultirotorMission(); }
+
     /// Returns the filename for the simulated log file. Only available after a download is requested.
     QString logDownloadFile() const { return _logDownloadFilename; }
 
@@ -145,13 +149,27 @@ public:
 
     void setHashCheckNoResponse(bool noResponse) { _hashCheckNoResponse = noResponse; }
 
+    /// Controls whether SYS_AUTOSTART is also reset when a MAV_CMD_PREFLIGHT_STORAGE
+    /// param1=2 (reset params to defaults) command is received. Defaults to false so
+    /// the simulated airframe doesn't change.
+    void setResetSysAutostartOnParamReset(bool reset) { _resetSysAutostartOnParamReset = reset; }
+
     /// Returns the number of standalone PARAM_REQUEST_READ requests for _HASH_CHECK received
     int hashCheckRequestCount() const { return _hashCheckRequestCount; }
 
     /// Change a float parameter value directly on MockLink (for testing cache invalidation)
     void setMockParamValue(int componentId, const QString &paramName, float value);
 
+    /// Change an int32 parameter value directly on MockLink. Used to simulate the
+    /// firmware storing calibration results (e.g. CAL_MAG0_ID).
+    void setInt32ParamValue(int componentId, const QString &paramName, int32_t value) { _mapParamName2Value[componentId][paramName] = QVariant::fromValue(value); }
+
+    /// Returns the current MockLink-side value of a parameter. Used by unit tests
+    /// to verify that PARAM_SET writes reached the simulated firmware.
+    QVariant paramValue(int componentId, const QString &paramName) const { return _mapParamName2Value.value(componentId).value(paramName); }
+
     static MockLink *startPX4MockLink(bool sendStatusText, bool enableCamera, bool enableGimbal, MockConfiguration::FailureMode_t failureMode = MockConfiguration::FailNone);
+    static MockLink *startPX4MockLinkWithMission(bool sendStatusText, bool enableCamera, bool enableGimbal, MockConfiguration::FailureMode_t failureMode = MockConfiguration::FailNone);
     static MockLink *startGenericMockLink(bool sendStatusText, bool enableCamera, bool enableGimbal, MockConfiguration::FailureMode_t failureMode = MockConfiguration::FailNone);
     static MockLink *startNoInitialConnectMockLink(bool sendStatusText, bool enableCamera, bool enableGimbal, MockConfiguration::FailureMode_t failureMode = MockConfiguration::FailNone);
     static MockLink *startAPMArduCopterMockLink(bool sendStatusText, bool enableCamera, bool enableGimbal, MockConfiguration::FailureMode_t failureMode = MockConfiguration::FailNone);
@@ -196,6 +214,7 @@ private:
     bool _outgoingMavlinkChannelIsSet() const;
 
     void _loadParams();
+    void _resetParamsToDefaults();
 
     /// Convert from a parameter variant to the float value from mavlink_param_union_t
     float _floatUnionForParam(int componentId, const QString &paramName);
@@ -261,11 +280,13 @@ private:
     void _paramRequestListWorker();
     void _logDownloadWorker();
     void _availableModesWorker();
+    void _apmCompassCalWorker();
+    void _apmAccelCalWorker();
     void _sendAvailableMode(uint8_t modeIndexOneBased);
     int  _availableModesCount() const;
     void _moveADSBVehicle(int vehicleIndex);
 
-    static MockLink *_startMockLinkWorker(const QString &configName, MAV_AUTOPILOT firmwareType, MAV_TYPE vehicleType, bool sendStatusText, bool enableCamera, bool enableGimbal, MockConfiguration::FailureMode_t failureMode);
+    static MockLink *_startMockLinkWorker(const QString &configName, MAV_AUTOPILOT firmwareType, MAV_TYPE vehicleType, bool sendStatusText, bool enableCamera, bool enableGimbal, MockConfiguration::FailureMode_t failureMode, bool preloadMission = false);
     static MockLink *_startMockLink(MockConfiguration *mockConfig);
 
     /// Creates a file with random contents of the specified size.
@@ -364,6 +385,31 @@ private:
     bool _hashCheckNoResponse = false;
     int _hashCheckRequestCount = 0;
     bool _paramRequestListHashCheckSent = false;
+    bool _resetSysAutostartOnParamReset = false;
+
+    // APM compass calibration worker state
+    // Protects _apmCompassCalProgress: main thread writes 0 to start/stop,
+    // worker thread reads/increments each 100ms tick.
+    QMutex _apmCompassCalMutex;
+    int    _apmCompassCalProgress  = -1; ///< -1 = inactive, 0-100 = progress pct
+    int    _apmCompassCalTickCount = 0;  ///< 500 Hz tick counter for ~10 Hz throttle
+
+    // APM accel calibration worker state
+    // Protects _apmAccelCalPos: main thread writes the starting pos,
+    // worker thread reads and advances through the sequence.
+    QMutex _apmAccelCalMutex;
+    /// Each position the firmware sends to QGC in sequence
+    static constexpr ACCELCAL_VEHICLE_POS kAPMAccelCalPosSequence[] = {
+        ACCELCAL_VEHICLE_POS_LEVEL,
+        ACCELCAL_VEHICLE_POS_LEFT,
+        ACCELCAL_VEHICLE_POS_RIGHT,
+        ACCELCAL_VEHICLE_POS_NOSEDOWN,
+        ACCELCAL_VEHICLE_POS_NOSEUP,
+        ACCELCAL_VEHICLE_POS_BACK,
+    };
+    int  _apmAccelCalPosIndex   = -1;   ///< -1 = inactive, 0..5 = current pos, 6 = done
+    bool _apmAccelCalGotAck     = false; ///< GCS clicked Next
+    int  _apmAccelCalTickCount  = 0;    ///< 500 Hz tick counter for ~10 Hz throttle
 
     struct RCChannelOverride {
         enum class State { Ignore, Overridden, Released } state = State::Ignore;
@@ -406,6 +452,16 @@ private:
     static constexpr uint32_t _logDownloadFileSize = 1000;  ///< Size of simulated log file
 
     static constexpr bool _mavlinkStarted = true;
+
+    /// ArduPilot calibration-indicator parameters whose firmware default is 0 (uncalibrated).
+    /// Used by _resetParamsToDefaults() and MockLinkFTP::_generateParamPck() to keep both
+    /// sites in sync.
+    inline static const QSet<QString> kAPMCalOffsetParams = {
+        QStringLiteral("COMPASS_OFS_X"),  QStringLiteral("COMPASS_OFS_Y"),  QStringLiteral("COMPASS_OFS_Z"),
+        QStringLiteral("COMPASS_OFS2_X"), QStringLiteral("COMPASS_OFS2_Y"), QStringLiteral("COMPASS_OFS2_Z"),
+        QStringLiteral("COMPASS_OFS3_X"), QStringLiteral("COMPASS_OFS3_Y"), QStringLiteral("COMPASS_OFS3_Z"),
+        QStringLiteral("INS_ACCOFFS_X"),  QStringLiteral("INS_ACCOFFS_Y"),  QStringLiteral("INS_ACCOFFS_Z"),
+    };
 
     static QList<FlightMode_t> _availableFlightModes;
 
