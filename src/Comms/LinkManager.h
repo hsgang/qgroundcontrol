@@ -47,6 +47,8 @@ class LinkManager : public QObject
     Q_PROPERTY(bool mavlinkSupportForwardingEnabled READ mavlinkSupportForwardingEnabled NOTIFY mavlinkSupportForwardingEnabledChanged)
     Q_PROPERTY(QmlObjectListModel *links READ _qmlLinks NOTIFY linksChanged)
 
+    friend class LinkManagerTest;
+
 public:
     explicit LinkManager(QObject *parent = nullptr);
     ~LinkManager();
@@ -64,6 +66,9 @@ public:
     Q_INVOKABLE void removeConfiguration(LinkConfiguration *config);
     /// This should only be used by Qml code
     Q_INVOKABLE void createConnectedLink(const LinkConfiguration *config);
+    Q_INVOKABLE void disconnectLink(LinkInterface *link);
+    /// Stop a link and suppress auto-reconnect, working whether or not a live link currently exists.
+    Q_INVOKABLE void disconnectLinkConfiguration(LinkConfiguration *config);
     Q_INVOKABLE void createMavlinkForwardingSupportLink();
     /// Called to signal app shutdown. Disconnects all links while turning off auto-connect.
     Q_INVOKABLE void shutdown();
@@ -121,6 +126,7 @@ signals:
     void linksChanged();
 
 private slots:
+    void _linkConnected();
     void _linkDisconnected();
     void _communicationError(const QString &title, const QString &error);
 
@@ -133,6 +139,7 @@ private:
     void _removeConfiguration(const LinkConfiguration *config);
     void _addUDPAutoConnectLink();
     void _addMAVLinkForwardingLink();
+    void _reconnectAutoConnectLinks();
     void _createDynamicForwardLink(const char *linkName, const QString &hostName);
 
     QTimer *_portListTimer = nullptr;

@@ -83,7 +83,7 @@ SettingsGroupLayout {
             visible:            !object.dynamic
             spacing:            ScreenTools.defaultFontPixelWidth
 
-            property bool _connected: object.link && object.link.linkConnected
+            property bool _connected: object.linkActive
 
             QGCColoredImage {
                 source:             _linkTypeIcon(object.linkType)
@@ -119,8 +119,8 @@ SettingsGroupLayout {
                 text:       _connected ? qsTr("Disconnect") : qsTr("Connect")
                 primary:    !_connected
                 onClicked: {
-                    if (object.link) {
-                        object.link.disconnect()
+                    if (object.linkActive) {
+                        _linkManager.disconnectLinkConfiguration(object)
                     } else {
                         _linkManager.createConnectedLink(object)
                     }

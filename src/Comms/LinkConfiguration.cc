@@ -139,6 +139,7 @@ void LinkConfiguration::setLink(const SharedLinkInterfacePtr link)
     if (link.get() != this->link()) {
         _link = link;
         emit linkChanged();
+        emit linkActiveChanged();
 
         if (link.get()) {
             (void) connect(link.get(), &LinkInterface::disconnected, this, &LinkConfiguration::linkChanged, Qt::QueuedConnection);
@@ -159,6 +160,7 @@ void LinkConfiguration::setAutoConnect(bool autoc)
     if (autoc != _autoConnect) {
         _autoConnect = autoc;
         emit autoConnectChanged();
+        emit linkActiveChanged();
     }
 }
 

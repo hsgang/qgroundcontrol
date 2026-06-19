@@ -3,6 +3,7 @@
 
 #include <QtCore/QRegularExpression>
 #include <QtTest/QSignalSpy>
+#include <QtTest/QTest>
 
 #include "LinkManager.h"
 #include "MultiSignalSpy.h"
@@ -37,8 +38,9 @@ void VehicleLinkManagerTest::_simpleLinkTest()
     QVERIFY_TRUE_WAIT(spyVehicleInitialConnectComplete.count() > 0 || vehicle->isInitialConnectComplete(),
                       TestTimeout::mediumMs());
 
-    // Drain queued command traffic before disconnect to avoid racing pending writes with link teardown.
-    UnitTest::settleEventLoopForCleanup(2, 10);
+    // Flush currently-queued command traffic before disconnect; the disconnect->destroyed
+    // wait below absorbs any remaining async, so a single event-loop drain suffices here.
+    QTest::qWait(0);
     mockLink->disconnect();
 
     // Vehicle should go away due to disconnect
@@ -178,7 +180,7 @@ void VehicleLinkManagerTest::_multiLinkSingleVehicleTest()
     QCOMPARE(multiSpy.waitForSignal(_primaryLinkChangedSignalName, VehicleLinkManager::kTestCommLostDetectionTimeoutMs),
              true);
     QVERIFY(
-        multiSpy.onlyEmittedOnceByMask(multiSpy.mask(_primaryLinkChangedSignalName, _linkStatusesChangedSignalName)));
+        multiSpy.onlyEmittedOnce(_primaryLinkChangedSignalName, _linkStatusesChangedSignalName));
 
     QCOMPARE(pMockLink2, vehicleLinkManager->primaryLink().lock().get());
     rgStatus = vehicleLinkManager->linkStatuses();
@@ -205,6 +207,10 @@ void VehicleLinkManagerTest::_multiLinkSingleVehicleTest()
 
 void VehicleLinkManagerTest::_connectionRemovedTest()
 {
+    // Connection removal makes MavCommandQueue give up pending commands, same as the comm-loss tests.
+    ignoreLogMessage("Vehicle.MavCommandQueue", QtWarningMsg,
+                     QRegularExpression("Giving up sending command after max retries:"));
+
     SharedLinkConfigurationPtr mockConfig;
     SharedLinkInterfacePtr mockLink;
     _startMockLink(1, false /*highLatency*/, true /*incrementVehicleId*/, mockConfig, mockLink);

@@ -17,7 +17,7 @@ from ci_bootstrap import ensure_tools_dir
 
 ensure_tools_dir(__file__)
 
-from common.gh_actions import parse_bool, write_github_output  # noqa: E402
+from common.gh_actions import parse_bool, write_github_output
 
 COVERAGE_JOB: dict[str, str | int] = {
     "job_name": "Test + Coverage linux_gcc_64 Debug",
@@ -31,7 +31,9 @@ SANITIZER_JOB: dict[str, str | int] = {
     "job_name": "Sanitizers linux_gcc_64 Debug (ASan+UBSan)",
     "mode": "sanitizers",
     "timeout_minutes": 120,
-    "configure_extra": "-DQGC_ENABLE_ASAN=ON -DQGC_ENABLE_UBSAN=ON",
+    # QGC_TEST_DETECT_LEAKS=ON opts in to LSan; the default suppresses it per-test
+    # so that non-sanitizer runs don't fail on expected Qt object leaks.
+    "configure_extra": "-DQGC_ENABLE_ASAN=ON -DQGC_ENABLE_UBSAN=ON -DQGC_TEST_DETECT_LEAKS=ON",
     "exclude_labels": "Flaky|Network|NoSanitizer",
 }
 

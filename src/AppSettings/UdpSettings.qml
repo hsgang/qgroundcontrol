@@ -51,7 +51,7 @@ ColumnLayout {
                     Layout.preferredWidth:  _secondColumnWidth * 0.7
                     Layout.fillWidth:       true
                     inputMethodHints:       Qt.ImhFormattedNumbersOnly
-                    onTextChanged:          subEditConfig.localPort = parseInt(portField.text)
+                    onTextChanged:          { if (subEditConfig) subEditConfig.localPort = parseInt(portField.text) }
                 }
             }
         }
@@ -75,7 +75,7 @@ ColumnLayout {
     QGCLabel { text: qsTr("Server List") }
 
     Repeater {
-        model: subEditConfig.hostList
+        model: subEditConfig ? subEditConfig.hostList : []
 
         delegate: RowLayout {
             spacing: _colSpacing
