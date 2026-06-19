@@ -4,7 +4,10 @@
 #include <QRegularExpression>
 #include <QDateTime>
 #include <QRandomGenerator>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QUrlQuery>
 #include <QtCore/QApplicationStatic>
 #include "QGCLoggingCategory.h"
 #include "SettingsManager.h"
@@ -171,6 +174,15 @@ void SignalingServerManager::applyNewSettings()
     _userDisconnected = false;  // 자동 재연결 방지를 위해 먼저 false로 설정
     _stopReconnectTimer();
     _stopConnectionMonitoring();
+
+    // issuer/clientSecret 등이 바뀌었을 수 있으므로 캐시된 Bearer 토큰/TURN 자격을 폐기
+    _jwtToken.clear();
+    _jwtExpiresAtMs = 0;
+    {
+        QMutexLocker locker(&_bundleTurnMutex);
+        _bundleTurn = {};
+        _bundleTurnExpiresAtMs = 0;
+    }
 
     if (_webSocket && _webSocket->state() != QAbstractSocket::UnconnectedState) {
         _webSocket->close();
@@ -703,13 +715,53 @@ bool SignalingServerManager::isDroneConnected(const QString &droneId) const
     return _connectedDronesList.contains(droneId);
 }
 
+QString SignalingServerManager::deriveAuthIssuerUrl()
+{
+    const QString server = SettingsManager::instance()->cloudSettings()->webrtcSignalingServer()->rawValue().toString().trimmed();
+    if (server.isEmpty()) {
+        return QString();
+    }
+    // 스킴이 없으면 임시로 붙여 host만 안전하게 파싱한다. (signaling 값에 경로/포트가
+    // 섞여 있어도 host만 추출) issuer는 표준 https(443)에 있다고 보고 포트는 무시한다.
+    const QString withScheme = server.contains("://") ? server : (QStringLiteral("https://") + server);
+    const QString host = QUrl(withScheme).host();
+    if (host.isEmpty()) {
+        return QString();
+    }
+    return QStringLiteral("https://%1/auth-api").arg(host);
+}
+
+SignalingServerManager::TurnCredentials SignalingServerManager::cachedTurnCredentials() const
+{
+    QMutexLocker locker(&_bundleTurnMutex);
+    // 만료 60초 전부터는 무효로 간주(워커가 폴백 발급하도록)
+    if (!_bundleTurn.isValid() ||
+        QDateTime::currentMSecsSinceEpoch() >= (_bundleTurnExpiresAtMs - 60000)) {
+        return {};
+    }
+    return _bundleTurn;
+}
+
 QString SignalingServerManager::_formatWebSocketUrl(const QString &baseUrl) const
 {
-    QString url = baseUrl;
+    QString url = baseUrl.trimmed();
+    if (url.isEmpty()) {
+        return url;
+    }
 
     // wss:// 프로토콜 추가 (없는 경우)
     if (!url.startsWith("ws://") && !url.startsWith("wss://")) {
         url = "wss://" + url;
+    }
+
+    // 경로가 없으면(호스트만 입력) signaling 경로를 자동 부착해 issuer와 동일하게 호스트만으로
+    // 동작하게 한다. 끝 슬래시(/signaling/)는 서버 라우팅상 필수. 이미 경로가 있으면
+    // (예: .../signaling/) 그대로 두어 기존 값과 충돌하지 않는다.
+    QUrl parsed(url);
+    const QString path = parsed.path();
+    if (path.isEmpty() || path == QStringLiteral("/")) {
+        parsed.setPath(QStringLiteral("/signaling/"));
+        url = parsed.toString();
     }
 
     return url;
@@ -816,19 +868,172 @@ void SignalingServerManager::_autoReRegister()
 
 void SignalingServerManager::_openWebSocketWithAuth(const QString &wsUrl)
 {
-    const QString apiKey = SettingsManager::instance()->cloudSettings()->webrtcApiKey()->rawValue().toString();
-    if (apiKey.isEmpty()) {
-        qCWarning(SignalingServerManagerLog) << "API key is not configured, connection rejected";
-        _updateConnectionState(ConnectionState::Error);
-        _updateConnectionStatus("API 키가 설정되지 않았습니다");
-        emit connectionError("API 키가 설정되지 않았습니다");
+    // 매 연결 시도마다 세대를 올려, 비동기 토큰 요청 도중 연결이 취소/재시작되면
+    // 늦게 도착한 토큰 응답이 엉뚱하게 WebSocket을 열지 않도록 한다.
+    const quint64 generation = ++_connectGeneration;
+
+    // 유효한 캐시 토큰(만료 60초 전)이 있으면 issuer 왕복 없이 바로 사용
+    if (!_jwtToken.isEmpty() &&
+        QDateTime::currentMSecsSinceEpoch() < (_jwtExpiresAtMs - 60000)) {
+        _openWebSocketWithToken(wsUrl, _jwtToken);
         return;
     }
 
-    const QUrl url(wsUrl);
+    _requestAuthTokenAndOpen(wsUrl, generation);
+}
+
+void SignalingServerManager::_requestAuthTokenAndOpen(const QString &wsUrl, quint64 generation)
+{
+    CloudSettings *cloudSettings = SettingsManager::instance()->cloudSettings();
+    const QString issuerUrl = deriveAuthIssuerUrl();   // 서버 호스트에서 파생
+    const QString clientId = cloudSettings->webrtcAuthClientId()->rawValue().toString().trimmed();
+    const QString clientSecret = cloudSettings->webrtcAuthClientSecret()->rawValue().toString();
+
+    if (issuerUrl.isEmpty() || clientSecret.isEmpty()) {
+        qCWarning(SignalingServerManagerLog) << "Auth issuer not configured, cannot obtain bearer token";
+        _updateConnectionState(ConnectionState::Error);
+        _updateConnectionStatus("인증 발급자(issuer)가 설정되지 않았습니다");
+        emit connectionError("인증 발급자가 설정되지 않았습니다");
+        return;
+    }
+
+    if (!_authNam) {
+        _authNam = new QNetworkAccessManager(this);
+    }
+
+    // /token은 서버 전역 상수로 aud=relay-server 토큰만 발급하므로, 서비스별 aud 토큰을
+    // 한꺼번에 내려주는 /bundle을 사용해 aud=signaling-server 토큰을 받는다.
+    //   POST {issuer}/bundle (application/json)  { client_id, client_secret }
+    //   -> { "tokens": { "relay": "<jwt>", "signaling": "<jwt aud=signaling-server>" },
+    //        "turn": {...}, "token_type": "Bearer", "expires_in": <sec> }
+    QString endpoint = issuerUrl;
+    while (endpoint.endsWith('/')) {
+        endpoint.chop(1);
+    }
+    endpoint += "/bundle";
+
+    QNetworkRequest request{QUrl(endpoint)};
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject body;
+    body["client_id"] = clientId.isEmpty() ? QStringLiteral("operator-ui") : clientId;
+    body["client_secret"] = clientSecret;
+
+    _updateConnectionStatus("인증 토큰 요청 중...");
+    qCDebug(SignalingServerManagerLog) << "Requesting bearer token from issuer:" << endpoint;
+
+    QNetworkReply *reply = _authNam->post(request, QJsonDocument(body).toJson(QJsonDocument::Compact));
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, wsUrl, generation]() {
+        reply->deleteLater();
+
+        // 취소/재시작된 연결 시도의 늦은 응답은 무시
+        if (generation != _connectGeneration || _userDisconnected) {
+            qCDebug(SignalingServerManagerLog) << "Ignoring stale/aborted auth token response";
+            return;
+        }
+
+        const auto failAndRetry = [this](const QString &reason) {
+            qCWarning(SignalingServerManagerLog) << "Bearer token error:" << reason;
+            _updateConnectionState(ConnectionState::Error);
+            _updateConnectionStatus(QString("인증 토큰 발급 실패: %1").arg(reason));
+            emit connectionError(reason);
+            if (!_userDisconnected) {
+                _reconnectAttempts++;
+                _startReconnectTimer();
+            }
+        };
+
+        if (reply->error() != QNetworkReply::NoError) {
+            // 서버가 내려준 본문에 실패 원인(필드/그랜트 불일치 등)이 담겨 있는 경우가 많아 함께 로깅
+            const QByteArray errBody = reply->readAll();
+            qCWarning(SignalingServerManagerLog) << "Token endpoint HTTP error body:" << errBody;
+            failAndRetry(reply->errorString());
+            return;
+        }
+
+        QJsonParseError parseError;
+        const QJsonDocument doc = QJsonDocument::fromJson(reply->readAll(), &parseError);
+        if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {
+            failAndRetry(QStringLiteral("응답 파싱 실패"));
+            return;
+        }
+
+        const QJsonObject obj = doc.object();
+        // /bundle 응답의 tokens.signaling이 aud=signaling-server 토큰이다.
+        const QString token = obj["tokens"].toObject()["signaling"].toString();
+        if (token.isEmpty()) {
+            failAndRetry(QStringLiteral("응답에 tokens.signaling 없음"));
+            return;
+        }
+
+        const qint64 ttlSec = obj.contains("expires_in") ? obj["expires_in"].toVariant().toLongLong() : 600;
+        _jwtToken = token;
+        _jwtExpiresAtMs = QDateTime::currentMSecsSinceEpoch() + (ttlSec * 1000);
+
+        // /bundle이 함께 준 TURN 임시자격을 캐시한다. 워커가 PeerConnection 셋업 시
+        // 별도의 /turn-credentials 왕복 없이 cachedTurnCredentials()로 재사용한다.
+        {
+            const QJsonObject turnObj = obj["turn"].toObject();
+            TurnCredentials turn;
+            const QJsonValue urlsVal = turnObj["urls"];
+            if (urlsVal.isArray()) {
+                for (const QJsonValue &v : urlsVal.toArray()) {
+                    const QString u = v.toString().trimmed();
+                    if (!u.isEmpty()) {
+                        turn.urls << u;
+                    }
+                }
+            } else {
+                const QString u = urlsVal.toString().trimmed();
+                if (!u.isEmpty()) {
+                    turn.urls << u;
+                }
+            }
+            turn.username = turnObj["username"].toString();
+            turn.credential = turnObj["credential"].toString();
+
+            QMutexLocker locker(&_bundleTurnMutex);
+            _bundleTurn = turn;
+            // TURN 자격도 같은 발급에서 나왔으므로 토큰과 동일한 TTL을 사용
+            _bundleTurnExpiresAtMs = turn.isValid() ? (QDateTime::currentMSecsSinceEpoch() + (ttlSec * 1000)) : 0;
+            qCDebug(SignalingServerManagerLog) << "Cached bundle TURN credentials, valid:" << turn.isValid()
+                                               << "urls:" << turn.urls.size();
+        }
+
+        // 발급된 JWT의 payload(claim)를 디버그 로깅한다(서명 검증 아님). aud/iss/exp가
+        // 시그널링 서버 기대값(aud=signaling-server, iss=amp-auth-issuer)과 어긋날 때
+        // 빠르게 진단하기 위한 용도. payload는 base64url JSON일 뿐 서명/시크릿은 포함되지 않는다.
+        {
+            const QStringList parts = token.split('.');
+            if (parts.size() >= 2) {
+                const QByteArray payload = QByteArray::fromBase64(
+                    parts[1].toUtf8(), QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals);
+                qCDebug(SignalingServerManagerLog) << "Issued signaling JWT claims:" << QString::fromUtf8(payload);
+            } else {
+                qCDebug(SignalingServerManagerLog) << "Signaling token is not a JWT (segments:" << parts.size() << ")";
+            }
+        }
+
+        _openWebSocketWithToken(wsUrl, token);
+    });
+}
+
+void SignalingServerManager::_openWebSocketWithToken(const QString &wsUrl, const QString &token)
+{
+    // 서버 verifyClient는 ?token= 쿼리를 우선 확인한다(server.js). 쿼리 방식은 nginx
+    // proxy_pass로 보존되어 Authorization 헤더가 중간에서 떨어져 나가는 문제가 없다.
+    // Authorization 헤더도 함께 실어 헤더만 읽는 경로(네이티브 직결 등)와 호환시킨다.
+    // 주의: 토큰이 URL에 들어가므로 토큰 포함 URL은 로그로 남기지 않는다.
+    QUrl url(wsUrl);
+    QUrlQuery query(url.query());
+    query.removeQueryItem(QStringLiteral("token"));
+    query.addQueryItem(QStringLiteral("token"), token);
+    url.setQuery(query);
+
     QNetworkRequest request(url);
-    request.setRawHeader("x-api-key", apiKey.toUtf8());
-    qCDebug(SignalingServerManagerLog) << "API key authentication header added";
+    request.setRawHeader("Authorization", QByteArray("Bearer ") + token.toUtf8());
+    qCDebug(SignalingServerManagerLog) << "Opening signaling WebSocket with bearer token (query + header)";
 
     _webSocket->open(request);
 }

@@ -51,17 +51,9 @@
             "label": "minioEndpoint"
         },
         {
-            "name": "webrtcApiKey",
-            "shortDesc": "WebRTC API Key",
-            "longDesc": "\uc2dc\uadf8\ub110\ub9c1 \uc11c\ubc84 API \uc778\uc99d \ud0a4",
-            "type": "string",
-            "default": "",
-            "label": "WebRTC API Key"
-        },
-        {
             "name": "webrtcSignalingServer",
             "shortDesc": "WebRTC Signaling Server",
-            "longDesc": "WebRTC \uc2dc\uadf8\ub110\ub9c1 \uc11c\ubc84 \uc8fc\uc18c (\uc608: example.host.com)",
+            "longDesc": "WebRTC \uc11c\ubc84 \ud638\uc2a4\ud2b8 (\uc608: example.host.com). signaling \uacbd\ub85c(/signaling/)\uc640 auth-issuer(https://host/auth-api), TURN \ubc1c\uae09\uc774 \ubaa8\ub450 \uc774 \ud638\uc2a4\ud2b8\uc5d0\uc11c \uc790\ub3d9 \ud30c\uc0dd\ub428",
             "type": "string",
             "default": "",
             "label": "WebRTC Signaling Server"
@@ -97,6 +89,30 @@
             "type": "string",
             "default": "",
             "label": "WebRTC TURN Password"
+        },
+        {
+            "name": "webrtcAuthClientId",
+            "shortDesc": "WebRTC Auth Client ID",
+            "longDesc": "issuer \ub4f1\ub85d \ud074\ub77c\uc774\uc5b8\ud2b8 ID (\uae30\ubcf8 operator-ui)",
+            "type": "string",
+            "default": "operator-ui",
+            "label": "WebRTC Auth Client ID"
+        },
+        {
+            "name": "webrtcAuthClientSecret",
+            "shortDesc": "WebRTC Auth Client Secret",
+            "longDesc": "issuer \ud074\ub77c\uc774\uc5b8\ud2b8 \uc2dc\ud06c\ub9bf (operator-ui \uc2dc\ud06c\ub9bf \uac12)",
+            "type": "string",
+            "default": "",
+            "label": "WebRTC Auth Client Secret"
+        },
+        {
+            "name": "webrtcBindAddress",
+            "shortDesc": "WebRTC ICE Bind Address",
+            "longDesc": "\uba40\ud2f0\ud648 PC\uc5d0\uc11c ICE\ub97c \uc778\ud130\ub137 NIC\ub85c\ub9cc \ubb36\uc744 \ub85c\uceec IP (\uc608: 192.168.0.11). \ube44\uc6b0\uba74 \uc790\ub3d9 \uc120\ud0dd",
+            "type": "string",
+            "default": "",
+            "label": "WebRTC ICE Bind Address"
         }
     ]
 }

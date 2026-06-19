@@ -2,6 +2,8 @@
 #include <QDebug>
 #include <QtQml/qqml.h>
 #include "QGCLoggingCategory.h"
+#include "SettingsManager.h"
+#include "CloudSettings.h"
 
 //------------------------------------------------------
 // WebRTCLink (구현)
@@ -21,6 +23,14 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     QString turnServer = _rtcConfig->turnServer();
     QString turnUsername = _rtcConfig->turnUsername();
     QString turnPassword = _rtcConfig->turnPassword();
+
+    // worker 스레드의 _setupPeerConnection()이 issuer TURN 자격 설정을 읽기 전에,
+    // 이 SettingsFact들을 메인 스레드에서 먼저 생성해 둔다. 그렇지 않으면 worker 스레드가
+    // 최초 접근 시 Fact를 worker 스레드에 만들어 QML 바인딩이 cross-thread 연결 에러를 낸다.
+    auto* cloudSettings = SettingsManager::instance()->cloudSettings();
+    (void)cloudSettings->webrtcAuthClientId();
+    (void)cloudSettings->webrtcAuthClientSecret();
+    (void)cloudSettings->webrtcBindAddress();
 
     _worker = new WebRTCWorker(_rtcConfig, stunServer, turnServer, turnUsername, turnPassword);
     _workerThread = new QThread(this);
@@ -133,14 +143,19 @@ void WebRTCLink::_onDisconnected()
 {
     qCDebug(WebRTCLinkLog) << "[WebRTCLink] Disconnected";
 
-    // 재연결 중이 아닐 때만 disconnected 시그널 발생
+    // 재연결 중이 아닐 때만 disconnected 시그널 발생 (vehicle 정리를 유발)
     if (_worker && !_worker->isWaitingForReconnect()) {
         qCDebug(WebRTCLinkLog) << "[WebRTCLink] Emitting disconnected signal (not reconnecting)";
         _onRtcStatusMessageChanged("RTC 연결 종료");
         emit disconnected();
     } else {
+        // 자동 재연결 중에는 vehicle 정리를 막기 위해 disconnected()는 보류한다.
+        // 다만 데이터 채널은 이미 닫혀 isConnected()가 false이므로, linkConnected
+        // 바인딩을 갱신해 연결관리 UI("연결됨"/"온라인" 표시)가 실제 상태와 어긋나지
+        // 않게 한다. (disconnected()와 달리 이 시그널은 링크/vehicle을 파괴하지 않음)
         qCDebug(WebRTCLinkLog) << "[WebRTCLink] Skipping disconnected signal (reconnecting)";
         _onRtcStatusMessageChanged("RTC 재연결 중...");
+        emit linkConnectedChanged();
     }
 }
 

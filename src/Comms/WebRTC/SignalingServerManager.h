@@ -8,7 +8,11 @@
 #include <QtCore/QLoggingCategory>
 #include <QtWebSockets/QWebSocket>
 #include <QtNetwork/QAbstractSocket>
+#include <QtCore/QMutex>
+#include <QtCore/QStringList>
 #include <climits>
+
+class QNetworkAccessManager;
 
 Q_DECLARE_LOGGING_CATEGORY(SignalingServerManagerLog)
 
@@ -80,6 +84,23 @@ public:
     Q_INVOKABLE bool isDroneConnected(const QString &droneId) const;
     Q_INVOKABLE void applyNewSettings();  // 설정 변경 후 재연결
 
+    // /bundle이 시그널링 JWT와 함께 내려주는 TURN 임시자격. 워커가 별도 /turn-credentials
+    // 왕복 없이 재사용할 수 있도록 공유한다.
+    struct TurnCredentials {
+        QStringList urls;
+        QString username;
+        QString credential;
+        bool isValid() const { return !urls.isEmpty() && !username.isEmpty(); }
+    };
+
+    // 스레드 안전: 워커 스레드에서 호출 가능. 캐시가 비었거나 만료됐으면 빈 값을 반환한다.
+    TurnCredentials cachedTurnCredentials() const;
+
+    // 서버 주소(webrtcSignalingServer)의 호스트에서 auth-issuer 주소를 파생한다:
+    //   https://{host}/auth-api  (호스트가 비어있으면 빈 문자열). 시그널링/issuer/TURN이
+    //   같은 호스트를 공유하는 배포를 전제로, 입력 필드를 서버 주소 하나로 통합하기 위함.
+    static QString deriveAuthIssuerUrl();
+
 public slots:
     void retryConnection();
 
@@ -148,6 +169,9 @@ private:
     bool _isValidUrl(const QString &url) const;
     void _generateClientId();
     void _openWebSocketWithAuth(const QString &wsUrl);
+    // issuer 토큰 엔드포인트(client_credentials)에서 Bearer JWT를 받아 WebSocket을 연다.
+    void _requestAuthTokenAndOpen(const QString &wsUrl, quint64 generation);
+    void _openWebSocketWithToken(const QString &wsUrl, const QString &token);
 
     // === 핵심 멤버 변수 ===
     
@@ -157,7 +181,19 @@ private:
     QString _gcsId;
     QString _targetDroneId;
     QString _clientId; // 클라이언트 고유 ID
-    
+
+    // Bearer JWT 인증 (issuer client_credentials 그랜트로 발급, 만료 전까지 캐시)
+    QNetworkAccessManager *_authNam = nullptr;
+    QString _jwtToken;
+    qint64 _jwtExpiresAtMs = 0;
+    // 비동기 토큰 요청 도중 연결이 취소/재시작되면, 늦게 도착한 응답을 무시하기 위한 세대 카운터
+    quint64 _connectGeneration = 0;
+
+    // /bundle에서 파싱한 TURN 임시자격 캐시 (cachedTurnCredentials로 워커 스레드와 공유)
+    mutable QMutex _bundleTurnMutex;
+    TurnCredentials _bundleTurn;
+    qint64 _bundleTurnExpiresAtMs = 0;
+
     // 연결 상태
     ConnectionState _connectionState = ConnectionState::Disconnected;
     QString _connectionStatusMessage;

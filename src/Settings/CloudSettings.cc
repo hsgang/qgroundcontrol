@@ -26,9 +26,15 @@ DECLARE_SETTINGSFACT(CloudSettings, minioEndpoint)
 DECLARE_SETTINGSFACT(CloudSettings, firebaseAPIKey)
 
 // WebRTC 설정
-DECLARE_SETTINGSFACT(CloudSettings, webrtcApiKey)
 DECLARE_SETTINGSFACT(CloudSettings, webrtcSignalingServer)
 DECLARE_SETTINGSFACT(CloudSettings, webrtcStunServer)
 DECLARE_SETTINGSFACT(CloudSettings, webrtcTurnServer)
 DECLARE_SETTINGSFACT(CloudSettings, webrtcTurnUsername)
 DECLARE_SETTINGSFACT(CloudSettings, webrtcTurnPassword)
+
+// TURN 임시자격 발급용 auth-issuer 설정 (issuer URL은 서버 호스트에서 파생)
+DECLARE_SETTINGSFACT(CloudSettings, webrtcAuthClientId)
+DECLARE_SETTINGSFACT(CloudSettings, webrtcAuthClientSecret)
+
+// 멀티홈 환경용 ICE 바인딩 주소
+DECLARE_SETTINGSFACT(CloudSettings, webrtcBindAddress)

@@ -35,6 +35,8 @@ SettingsGroupLayout {
         }
     }
 
+    // 서버 주소(호스트) 하나만 입력받는다. 시그널링 WS, auth-issuer(https://{host}/auth-api),
+    // TURN 자격 발급이 모두 이 호스트에서 파생된다.
     LabelledFactTextField {
         Layout.fillWidth:   true
         textFieldPreferredWidth:    _urlFieldWidth * 1.4
@@ -42,32 +44,22 @@ SettingsGroupLayout {
         fact:               cloudSettings.webrtcSignalingServer
     }
 
+    // 정적 TURN 서버/사용자명/비밀번호 및 Auth Issuer URL은 서버 호스트에서 파생/발급되므로 UI에서 제거.
+    // Auth Client ID는 비워도 기본값 operator-ui로 발급되므로 UI 입력란은 제거.
+    // (다른 client(mission-scheduler 등)가 필요하면 설정파일의 webrtcAuthClientId로 override)
+
     LabelledFactTextField {
         Layout.fillWidth:   true
         textFieldPreferredWidth:    _urlFieldWidth * 1.4
-        label:              qsTr("API 키")
-        fact:               cloudSettings.webrtcApiKey
+        label:              qsTr("Auth Client Secret")
+        fact:               cloudSettings.webrtcAuthClientSecret
     }
 
     LabelledFactTextField {
         Layout.fillWidth:   true
         textFieldPreferredWidth:    _urlFieldWidth * 1.4
-        label:              qsTr("TURN 서버")
-        fact:               cloudSettings.webrtcTurnServer
-    }
-
-    LabelledFactTextField {
-        Layout.fillWidth:   true
-        textFieldPreferredWidth:    _urlFieldWidth * 1.4
-        label:              qsTr("TURN 사용자명")
-        fact:               cloudSettings.webrtcTurnUsername
-    }
-
-    LabelledFactTextField {
-        Layout.fillWidth:   true
-        textFieldPreferredWidth:    _urlFieldWidth * 1.4
-        label:              qsTr("TURN 비밀번호")
-        fact:               cloudSettings.webrtcTurnPassword
+        label:              qsTr("ICE Bind Address")
+        fact:               cloudSettings.webrtcBindAddress
     }
 
     RowLayout {

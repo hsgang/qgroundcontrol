@@ -1,6 +1,14 @@
 #include "WebRTCWorker.h"
 #include <QDebug>
 #include <QRandomGenerator>
+#include <QEventLoop>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QStringList>
+#include <QUrl>
 #include <mutex>
 #include "QGCLoggingCategory.h"
 #include "VideoManager.h"
@@ -12,6 +20,116 @@ QGC_LOGGING_CATEGORY(WebRTCLinkLog, "Comms.WEBRTCLink")
 
 namespace {
     std::once_flag s_sctpSettingsInitialized;
+
+    // issuer가 발급하는 시간제한(HMAC) TURN 자격
+    struct EphemeralTurnCreds {
+        QStringList urls;
+        QString username;
+        QString credential;
+        qint64 expiresAtMs = 0;
+        bool isValid() const { return !urls.isEmpty() && !username.isEmpty(); }
+    };
+
+    QMutex s_turnCredsMutex;
+    EphemeralTurnCreds s_turnCredsCache;
+
+    // auth-issuer에서 시간제한 TURN 자격을 받아온다. 미설정/실패 시 invalid 반환 → 호출부에서 정적 폴백.
+    // 응답 계약: POST {issuer}/turn-credentials {client_id, client_secret} -> { urls, username, credential, ttl }
+    EphemeralTurnCreds fetchEphemeralTurnCreds(const QString &issuerUrl, const QString &clientId, const QString &clientSecret)
+    {
+        // 캐시가 유효(만료 60초 전)하면 재사용하여 매 연결마다 issuer를 때리지 않음
+        {
+            QMutexLocker locker(&s_turnCredsMutex);
+            if (s_turnCredsCache.isValid() &&
+                QDateTime::currentMSecsSinceEpoch() < (s_turnCredsCache.expiresAtMs - 60000)) {
+                return s_turnCredsCache;
+            }
+        }
+
+        EphemeralTurnCreds result;
+        if (issuerUrl.isEmpty() || clientSecret.isEmpty()) {
+            return result; // 미설정 → 정적 폴백
+        }
+
+        QString endpoint = issuerUrl;
+        while (endpoint.endsWith('/')) {
+            endpoint.chop(1);
+        }
+        endpoint += "/turn-credentials";
+
+        QJsonObject body;
+        body["client_id"] = clientId.isEmpty() ? QStringLiteral("operator-ui") : clientId;
+        body["client_secret"] = clientSecret;
+
+        QNetworkAccessManager nam;
+        QNetworkRequest request{QUrl(endpoint)};
+        request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+        QEventLoop loop;
+        QNetworkReply *reply = nam.post(request, QJsonDocument(body).toJson(QJsonDocument::Compact));
+
+        QTimer timeoutTimer;
+        timeoutTimer.setSingleShot(true);
+        QObject::connect(&timeoutTimer, &QTimer::timeout, &loop, &QEventLoop::quit);
+        QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        timeoutTimer.start(5000);
+        loop.exec();
+
+        if (timeoutTimer.isActive()) {
+            timeoutTimer.stop();
+        } else {
+            qCWarning(WebRTCLinkLog) << "TURN credential request timed out:" << endpoint;
+            reply->abort();
+            reply->deleteLater();
+            return result;
+        }
+
+        if (reply->error() != QNetworkReply::NoError) {
+            qCWarning(WebRTCLinkLog) << "TURN credential request failed:" << reply->errorString();
+            reply->deleteLater();
+            return result;
+        }
+
+        const QByteArray data = reply->readAll();
+        reply->deleteLater();
+
+        QJsonParseError parseError;
+        const QJsonDocument doc = QJsonDocument::fromJson(data, &parseError);
+        if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {
+            qCWarning(WebRTCLinkLog) << "TURN credential parse error:" << parseError.errorString();
+            return result;
+        }
+
+        const QJsonObject obj = doc.object();
+        // urls는 문자열 또는 배열 모두 허용 (RTCIceServer.urls 규약)
+        const QJsonValue urlsVal = obj["urls"];
+        if (urlsVal.isArray()) {
+            const QJsonArray arr = urlsVal.toArray();
+            for (const QJsonValue &v : arr) {
+                const QString u = v.toString().trimmed();
+                if (!u.isEmpty()) {
+                    result.urls << u;
+                }
+            }
+        } else {
+            const QString u = urlsVal.toString().trimmed();
+            if (!u.isEmpty()) {
+                result.urls << u;
+            }
+        }
+        result.username = obj["username"].toString();
+        result.credential = obj["credential"].toString();
+        const qint64 ttlSec = obj.contains("ttl") ? obj["ttl"].toVariant().toLongLong() : 86400;
+        result.expiresAtMs = QDateTime::currentMSecsSinceEpoch() + (ttlSec * 1000);
+
+        if (result.isValid()) {
+            QMutexLocker locker(&s_turnCredsMutex);
+            s_turnCredsCache = result;
+        } else {
+            qCWarning(WebRTCLinkLog) << "TURN credential response missing urls/username";
+        }
+        return result;
+    }
 }
 
 const QString WebRTCWorker::kDataChannelLabel = "mavlink";
@@ -92,7 +210,9 @@ WebRTCWorker::~WebRTCWorker()
 
 void WebRTCWorker::initializeLogger()
 {
-    //rtc::InitLogger(rtc::LogLevel::Debug);
+    // libdatachannel 내부 로그는 평소 끔. TURN/STUN gathering·ICE 문제 디버깅이 필요하면
+    // 아래를 Debug로 올려 일시적으로 켠다.
+    // rtc::InitLogger(rtc::LogLevel::Debug);
 }
 
 void WebRTCWorker::start()
@@ -866,6 +986,14 @@ void WebRTCWorker::_setupPeerConnection()
         QString turnUsername = cloudSettings->webrtcTurnUsername()->rawValue().toString();
         QString turnPassword = cloudSettings->webrtcTurnPassword()->rawValue().toString();
 
+        // 멀티홈 PC에서 juice가 인터넷 게이트웨이 없는 NIC로 게더링/송신하다 NETUNREACH가 나는
+        // 문제를 피하기 위해, 설정된 경우 ICE를 인터넷 NIC IP로만 바인딩한다.
+        const QString bindAddress = cloudSettings->webrtcBindAddress()->rawValue().toString().trimmed();
+        if (!bindAddress.isEmpty()) {
+            config.bindAddress = bindAddress.toStdString();
+            qCDebug(WebRTCLinkLog) << "ICE bound to local address:" << bindAddress;
+        }
+
         // STUN 서버 추가 (P2P 직접 연결용)
         if (!stunServer.isEmpty()) {
             config.iceServers.emplace_back(stunServer.toStdString());
@@ -873,18 +1001,60 @@ void WebRTCWorker::_setupPeerConnection()
         }
 
         // TURN 서버 추가 (중계 연결용)
-        if (!turnServer.isEmpty()) {
-            QString turnUrl = turnServer;
+        // coturn이 long-term 정적 자격 -> HMAC 임시자격으로 전환됨. 임시자격 우선순위:
+        //   1) 시그널링 매니저가 /bundle로 이미 받아 캐시한 TURN 자격 재사용 (issuer 왕복 없음)
+        //   2) (cold/만료 시) issuer에서 직접 발급
+        //   3) (미설정/실패 시) 기존 정적 자격으로 폴백
+        QStringList turnUrls;
+        QString turnIssuerUsername;
+        QString turnIssuerCredential;
+
+        if (auto *signaling = SignalingServerManager::instance()) {
+            const SignalingServerManager::TurnCredentials cached = signaling->cachedTurnCredentials();
+            if (cached.isValid()) {
+                turnUrls = cached.urls;
+                turnIssuerUsername = cached.username;
+                turnIssuerCredential = cached.credential;
+                qCDebug(WebRTCLinkLog) << "Reusing TURN credentials from signaling /bundle cache, urls:" << turnUrls.size();
+            }
+        }
+
+        if (turnUrls.isEmpty()) {
+            const QString issuerUrl = SignalingServerManager::deriveAuthIssuerUrl();   // 서버 호스트에서 파생
+            const QString authClientId = cloudSettings->webrtcAuthClientId()->rawValue().toString().trimmed();
+            const QString authClientSecret = cloudSettings->webrtcAuthClientSecret()->rawValue().toString();
+            const EphemeralTurnCreds ephemeral = fetchEphemeralTurnCreds(issuerUrl, authClientId, authClientSecret);
+            if (ephemeral.isValid()) {
+                turnUrls = ephemeral.urls;
+                turnIssuerUsername = ephemeral.username;
+                turnIssuerCredential = ephemeral.credential;
+            }
+        }
+
+        const auto addTurnServer = [&config](const QString &server, const QString &username, const QString &password, const char *origin) {
+            if (server.isEmpty()) {
+                return;
+            }
+            QString turnUrl = server;
             // turn: 접두사가 없으면 자동 추가
             if (!turnUrl.startsWith("turn:") && !turnUrl.startsWith("turns:")) {
                 turnUrl = "turn:" + turnUrl;
             }
             rtc::IceServer rtcTurnServer(turnUrl.toStdString());
-            rtcTurnServer.username = turnUsername.toStdString();
-            rtcTurnServer.password = turnPassword.toStdString();
+            rtcTurnServer.username = username.toStdString();
+            rtcTurnServer.password = password.toStdString();
             config.iceServers.emplace_back(rtcTurnServer);
-            qCDebug(WebRTCLinkLog) << "Added TURN server:" << turnUrl
-                                   << "username:" << turnUsername;
+            qCDebug(WebRTCLinkLog) << "Added TURN server (" << origin << "):" << turnUrl
+                                   << "username:" << username;
+        };
+
+        if (!turnUrls.isEmpty()) {
+            for (const QString &url : turnUrls) {
+                addTurnServer(url, turnIssuerUsername, turnIssuerCredential, "issuer");
+            }
+        } else {
+            // 정적 폴백 (기존 동작 유지)
+            addTurnServer(turnServer, turnUsername, turnPassword, "static");
         }
 
         // PeerConnection 생성
@@ -1292,18 +1462,22 @@ void WebRTCWorker::_onWebRTCOfferReceived(const QJsonObject& message)
                                   << "State:" << _stateToString(currentState)
                                   << "Signaling:" << static_cast<int>(signalingState);
 
-            if (currentState == rtc::PeerConnection::State::Connecting ||
-                currentState == rtc::PeerConnection::State::Connected) {
-                qCDebug(WebRTCLinkLog) << "[WEBRTC] Ignoring duplicate offer - connection already in progress/connected";
+            // 드론이 offer를 다중 전송(버스트)하므로, 이미 PeerConnection이 살아있으면
+            // (New/Connecting/Connected 모두 셋업·연결 진행 중) 중복 offer로 보고 무시한다.
+            // 여기서 setRemoteDescription을 재호출하면 진행 중이던 연결이 깨지고
+            // reset 루프(연결 churn)에 빠지므로, New 상태도 반드시 무시해야 한다.
+            if (currentState != rtc::PeerConnection::State::Failed &&
+                currentState != rtc::PeerConnection::State::Disconnected &&
+                currentState != rtc::PeerConnection::State::Closed) {
+                qCDebug(WebRTCLinkLog) << "[WEBRTC] Ignoring duplicate offer - setup/connection already in progress, state:"
+                                       << _stateToString(currentState);
                 return;
             }
 
-            if (currentState == rtc::PeerConnection::State::Failed ||
-                currentState == rtc::PeerConnection::State::Disconnected) {
-                qCDebug(WebRTCLinkLog) << "[WEBRTC] Resetting failed/disconnected connection";
-                emit rtcStatusMessageChanged("재연결 시작: 기존 연결 재설정 중...");
-                _resetPeerConnection();
-            }
+            // 실패/해제/종료된 연결이면 재설정 후 아래에서 새로 생성한다.
+            qCDebug(WebRTCLinkLog) << "[WEBRTC] Resetting failed/disconnected connection";
+            emit rtcStatusMessageChanged("재연결 시작: 기존 연결 재설정 중...");
+            _resetPeerConnection();
         }
 
         if (!_pcContext.pc) {
