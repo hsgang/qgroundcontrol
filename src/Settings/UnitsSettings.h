@@ -12,11 +12,6 @@ class UnitsSettings : public SettingsGroup
 public:
     UnitsSettings(QObject* parent = nullptr);
 
-    enum DistanceUnits {
-        DistanceUnitsFeet = 0,
-        DistanceUnitsMeters
-    };
-
     enum HorizontalDistanceUnits {
         HorizontalDistanceUnitsFeet = 0,
         HorizontalDistanceUnitsMeters
@@ -56,7 +51,6 @@ public:
         WeightUnitsLbs
     };
 
-    Q_ENUM(DistanceUnits)
     Q_ENUM(HorizontalDistanceUnits)
     Q_ENUM(VerticalDistanceUnits)
     Q_ENUM(AreaUnits)
@@ -66,7 +60,6 @@ public:
 
     DEFINE_SETTING_NAME_GROUP()
 
-    DEFINE_SETTINGFACT(distanceUnits)
     DEFINE_SETTINGFACT(horizontalDistanceUnits)
     DEFINE_SETTINGFACT(verticalDistanceUnits)
     DEFINE_SETTINGFACT(areaUnits)

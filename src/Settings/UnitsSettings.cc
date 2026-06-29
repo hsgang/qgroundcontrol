@@ -4,36 +4,6 @@ DECLARE_SETTINGGROUP(Units, "Units")
 {
 }
 
-DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, distanceUnits)
-{
-    if (!_distanceUnitsFact) {
-        // Distance/Area/Speed units settings can't be loaded from json since it creates an infinite loop of meta data loading.
-        QStringList     enumStrings;
-        QVariantList    enumValues;
-        enumStrings << UnitsSettings::tr("Feet") << UnitsSettings::tr("Meters");
-        enumValues << QVariant::fromValue(static_cast<uint32_t>(DistanceUnitsFeet))
-                   << QVariant::fromValue(static_cast<uint32_t>(DistanceUnitsMeters));
-        FactMetaData* metaData = new FactMetaData(FactMetaData::valueTypeUint32, this);
-        metaData->setName(distanceUnitsName);
-        metaData->setShortDescription(UnitsSettings::tr("Distance"));
-        metaData->setEnumInfo(enumStrings, enumValues);
-        DistanceUnits defaultDistanceUnit = DistanceUnitsMeters;
-        switch(QLocale::system().measurementSystem()) {
-        case QLocale::MetricSystem: {
-            defaultDistanceUnit = DistanceUnitsMeters;
-        } break;
-        case QLocale::ImperialUSSystem:
-        case QLocale::ImperialUKSystem:
-            defaultDistanceUnit = DistanceUnitsFeet;
-            break;
-        }
-        metaData->setRawDefaultValue(defaultDistanceUnit);
-        metaData->setQGCRebootRequired(true);
-        _distanceUnitsFact = new SettingsFact(_settingsGroup, metaData, this);
-    }
-    return _distanceUnitsFact;
-}
-
 DECLARE_SETTINGSFACT_NO_FUNC(UnitsSettings, horizontalDistanceUnits)
 {
     if (!_horizontalDistanceUnitsFact) {

@@ -314,8 +314,7 @@ private:
     static QVariant _gramsToPunds(const QVariant &g);
 
     enum UnitTypes {
-        UnitDistance = 0,
-        UnitHorizontalDistance,
+        UnitHorizontalDistance = 0,
         UnitVerticalDistance,
         UnitArea,
         UnitSpeed,
