@@ -10,12 +10,18 @@ target_sources(${CMAKE_PROJECT_NAME}
     PRIVATE
         AppMessages.cc
         AppMessages.h
+        DataRateTracker.cc
+        DataRateTracker.h
+        NMEAUtils.cc
+        NMEAUtils.h
         QGCCommandLineParser.cc
         QGCCommandLineParser.h
         QGCLogging.cc
         QGCLogging.h
         CloudManager.cc
         CloudManager.h
+        RTCMParser.cc
+        RTCMParser.h
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME}

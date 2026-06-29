@@ -101,6 +101,7 @@ qt_add_qml_module(QGroundControlControlsModule
         ComponentLabelValueRow.qml
         ConfigButton.qml
         ConfigSection.qml
+        ConnectionStatusRow.qml
         DeadMouseArea.qml
         DropButton.qml
         DropPanel.qml
@@ -110,6 +111,7 @@ qt_add_qml_module(QGroundControlControlsModule
         FactSlider.qml
         FactSliderPanel.qml
         FileButton.qml
+        FixStatusDot.qml
         FlightModeMenu.qml
         HeightIndicator.qml
         HorizontalFactValueGrid.qml
