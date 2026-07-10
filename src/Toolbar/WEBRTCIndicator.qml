@@ -91,6 +91,13 @@ Item {
     property real _videoSrtFramesPerSec:      _webrtcLink ? _webrtcLink.videoSrtFramesPerSec : 0
     property real _videoRtpFramesPerSec:      _webrtcLink ? _webrtcLink.videoRtpFramesPerSec : 0
 
+    // 혼잡 제어 (Congestion) 정보
+    property string _congestionController:    _webrtcLink ? _webrtcLink.videoCongestionController : ""
+    property real _encoderBitrateBps:         _webrtcLink ? _webrtcLink.videoEncoderBitrateBps : 0
+    property real _gccEstimateBps:            _webrtcLink ? _webrtcLink.videoGccEstimateBps : 0
+    property real _congestionRttMs:           _webrtcLink ? _webrtcLink.videoCongestionRttMs : 0
+    property real _lossPercent:               _webrtcLink ? _webrtcLink.videoLossPercent : 0
+
     Row {
         id: vehicleRow
         anchors.top: parent.top
@@ -204,6 +211,34 @@ Item {
                             LabelledLabel {
                                 label:      qsTr("RTP 프레임")
                                 labelText:  qsTr("%1 fps").arg(_videoRtpFramesPerSec.toFixed(1))
+                            }
+                        }
+
+                        // 혼잡 제어 (Congestion control) 정보 섹션
+                        // 드론이 congestion 필드를 보낼 때만 표시 (구버전/미전송 시 숨김)
+                        SettingsGroupLayout {
+                            heading:    qsTr("혼잡 제어")
+                            visible:    _congestionController !== ""
+
+                            LabelledLabel {
+                                label:      qsTr("컨트롤러")
+                                labelText:  _congestionController === "gcc" ? qsTr("GCC (자동)") : qsTr("수동")
+                            }
+                            LabelledLabel {
+                                label:      qsTr("인코더 비트레이트")
+                                labelText:  qsTr("%1 Mbps").arg((_encoderBitrateBps / 1000000).toFixed(2))
+                            }
+                            LabelledLabel {
+                                label:      qsTr("GCC 추정 대역폭")
+                                labelText:  _gccEstimateBps > 0 ? qsTr("%1 Mbps").arg((_gccEstimateBps / 1000000).toFixed(2)) : qsTr("N/A")
+                            }
+                            LabelledLabel {
+                                label:      qsTr("왕복 지연(RTT)")
+                                labelText:  qsTr("%1 ms").arg(_congestionRttMs.toFixed(1))
+                            }
+                            LabelledLabel {
+                                label:      qsTr("패킷 손실")
+                                labelText:  qsTr("%1 %").arg(_lossPercent.toFixed(2))
                             }
                         }
                     }

@@ -56,6 +56,13 @@ class WebRTCLink : public LinkInterface
     Q_PROPERTY(double videoSrtFramesPerSec READ videoSrtFramesPerSec NOTIFY videoMetricsChanged)
     Q_PROPERTY(double videoRtpFramesPerSec READ videoRtpFramesPerSec NOTIFY videoMetricsChanged)
 
+    // 혼잡 제어(Congestion) 개별 프로퍼티 (drone GCC/manual 상태)
+    Q_PROPERTY(QString videoCongestionController READ videoCongestionController NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoEncoderBitrateBps READ videoEncoderBitrateBps NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoGccEstimateBps READ videoGccEstimateBps NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoCongestionRttMs READ videoCongestionRttMs NOTIFY videoMetricsChanged)
+    Q_PROPERTY(double videoLossPercent READ videoLossPercent NOTIFY videoMetricsChanged)
+
    public:
     explicit WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent = nullptr);
     ~WebRTCLink();
@@ -117,6 +124,13 @@ class WebRTCLink : public LinkInterface
     double videoTeeFramesPerSec() const { return _videoMetrics.teeFramesPerSec; }
     double videoSrtFramesPerSec() const { return _videoMetrics.srtFramesPerSec; }
     double videoRtpFramesPerSec() const { return _videoMetrics.rtpFramesPerSec; }
+
+    // 혼잡 제어(Congestion) 개별 getter 메서드들
+    QString videoCongestionController() const { return _videoMetrics.congestionController; }
+    double videoEncoderBitrateBps() const { return _videoMetrics.encoderBitrateBps; }
+    double videoGccEstimateBps() const { return _videoMetrics.gccEstimateBps; }
+    double videoCongestionRttMs() const { return _videoMetrics.congestionRttMs; }
+    double videoLossPercent() const { return _videoMetrics.lossPercent; }
 
    protected:
     bool _connect() override;

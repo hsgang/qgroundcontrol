@@ -76,6 +76,14 @@ struct VideoMetrics {
     double rtpFramesPerSec = 0.0;
     qint64 timestamp = 0;
 
+    // 혼잡 제어 상태 (congestion 하위 객체). 드론이 GCC/수동 비트레이트 제어 상태를 실어 보낸다.
+    // 이 필드가 없는 드론/메시지는 기본값(빈 컨트롤러)으로 남아 하위 호환된다.
+    QString congestionController = "";   // "gcc" | "manual" (빈 문자열이면 미전송)
+    double  encoderBitrateBps    = 0.0;  // 현재 인코더 목표 비트레이트
+    double  gccEstimateBps       = 0.0;  // GCC 추정 가용 대역폭 (manual일 때 0/미전송)
+    double  congestionRttMs      = 0.0;  // 혼잡 제어가 측정한 왕복 지연
+    double  lossPercent          = 0.0;  // 측정 패킷 손실률(%)
+
     // JSON에서 파싱하는 생성자
     VideoMetrics(const QJsonObject& json) {
         timestamp = json["timestamp"].toVariant().toLongLong();
@@ -87,6 +95,13 @@ struct VideoMetrics {
         teeFramesPerSec = perSecond["tee_frames_ps"].toDouble();
         srtFramesPerSec = perSecond["srt_frames_ps"].toDouble();
         rtpFramesPerSec = perSecond["rtp_frames_ps"].toDouble();
+
+        const QJsonObject congestion = json["congestion"].toObject();
+        congestionController = congestion["controller"].toString();
+        encoderBitrateBps    = congestion["encoder_bitrate_bps"].toDouble();
+        gccEstimateBps       = congestion["gcc_estimate_bps"].toDouble();
+        congestionRttMs      = congestion["rtt_ms"].toDouble();
+        lossPercent          = congestion["loss_percent"].toDouble();
     }
 
     // 기본 생성자
@@ -100,6 +115,11 @@ struct VideoMetrics {
                qFuzzyCompare(teeFramesPerSec, other.teeFramesPerSec) &&
                qFuzzyCompare(srtFramesPerSec, other.srtFramesPerSec) &&
                qFuzzyCompare(rtpFramesPerSec, other.rtpFramesPerSec) &&
+               congestionController == other.congestionController &&
+               qFuzzyCompare(encoderBitrateBps, other.encoderBitrateBps) &&
+               qFuzzyCompare(gccEstimateBps, other.gccEstimateBps) &&
+               qFuzzyCompare(congestionRttMs, other.congestionRttMs) &&
+               qFuzzyCompare(lossPercent, other.lossPercent) &&
                timestamp == other.timestamp;
     }
 
@@ -117,11 +137,20 @@ struct VideoMetrics {
 
     // 디버그 출력용
     QString toString() const {
-        return QString("RTSP: %1 pkt/s, Decoded: %2 fps, Encoded: %3 fps, RTP: %6 fps")
+        QString s = QString("RTSP: %1 pkt/s, Decoded: %2 fps, Encoded: %3 fps, RTP: %4 fps")
                .arg(rtspPacketsPerSec, 0, 'f', 1)
                .arg(decodedFramesPerSec, 0, 'f', 1)
                .arg(encodedFramesPerSec, 0, 'f', 1)
                .arg(rtpFramesPerSec, 0, 'f', 1);
+        if (!congestionController.isEmpty()) {
+            s += QString(", Cong[%1]: enc=%2 kbps, gcc=%3 kbps, rtt=%4 ms, loss=%5%%")
+                 .arg(congestionController)
+                 .arg(encoderBitrateBps / 1000.0, 0, 'f', 0)
+                 .arg(gccEstimateBps / 1000.0, 0, 'f', 0)
+                 .arg(congestionRttMs, 0, 'f', 1)
+                 .arg(lossPercent, 0, 'f', 2);
+        }
+        return s;
     }
 };
 
