@@ -153,6 +153,27 @@
             "label": "Tweaks video for lower latency"
         },
         {
+            "name": "rtpJitterLatencyMs",
+            "shortDesc": "RTP jitter-buffer playout latency (ms).",
+            "longDesc": "Latency budget for the RTP jitter buffer (rtspsrc.latency / rtpjitterbuffer.latency). Lower = less glass-to-glass delay; higher = more headroom for packet reordering and retransmission. The default of 80 ms allows RFC 4588 retransmission to recover lost packets before the playout deadline; values <40 ms effectively disable retransmission. Ignored when Low Latency Mode is enabled.",
+            "type": "uint32",
+            "min": 0,
+            "max": 2000,
+            "units": "ms",
+            "default": 80,
+            "label": "RTP jitter latency",
+            "keywords": "rtp,jitter,latency,rtsp,rtx,retransmission,advanced"
+        },
+        {
+            "name": "rtspAutoReconnect",
+            "shortDesc": "Automatically restart the pipeline on watchdog timeout or pipeline error.",
+            "longDesc": "When enabled, the receiver reconnects with exponential backoff (1s → 30s) after a stream timeout or a fatal pipeline error. Disable to fall back to the legacy behaviour of giving up after one failure.",
+            "type": "bool",
+            "default": true,
+            "label": "Auto-reconnect on stream loss",
+            "keywords": "rtsp,reconnect,watchdog,recovery,advanced"
+        },
+        {
             "name": "forceVideoDecoder",
             "shortDesc": "Force video decoder priority",
             "longDesc": "Force the change of prioritization between video decode methods, allowing the user to force some video hardware decode plugins if necessary.",
@@ -191,83 +212,6 @@
             "default": false,
             "label": "Disable pixel-aspect-ratio normalization",
             "keywords": "pixel aspect ratio,capsfilter,v4l2,workaround,advanced"
-        },
-        {
-            "name": "frameSmoothingEnabled",
-            "shortDesc": "Buffer up to 3 decoded frames and pace delivery to the display refresh rate.",
-            "longDesc": "Off by default — appsink frames are delivered to the renderer immediately. When enabled, the adapter holds a 3-frame ring and a display-rate timer picks the frame closest to the expected presentation time (PTS-anchored, 70 ms tolerance). Smooths out jitter from bursty decoders or variable network at the cost of up to one frame of added latency. Frozen sources keep the last good frame on screen. Takes effect on next stream restart.",
-            "type": "bool",
-            "default": false,
-            "label": "Smooth frame pacing (experimental)",
-            "keywords": "smoothing,jitter,pacing,latency,obs"
-        },
-        {
-            "name": "enableMavlinkCameraStreamInformaion",
-            "shortDesc": "enableMavlinkCameraStreamInformaion",
-            "longDesc": "enableMavlinkCameraStreamInformaion",
-            "type": "bool",
-            "default": false,
-            "label": "enableMavlinkCameraStreamInformaion"
-        },
-        {
-            "name": "enableManualThermalConfig",
-            "shortDesc": "Enable Manual Thermal Configuration",
-            "longDesc": "Enable manual thermal video stream configuration. When disabled, thermal stream is auto-configured from MAVLink VIDEO_STREAM_INFORMATION.",
-            "type": "bool",
-            "default": false,
-            "label": "Enable Manual Thermal Configuration"
-        },
-        {
-            "name": "thermalVideoSource",
-            "shortDesc": "Thermal Video source",
-            "longDesc": "Source for thermal video. When disabled, thermal video is auto-configured from MAVLink.",
-            "type": "string",
-            "default": "",
-            "label": "Thermal Video source"
-        },
-        {
-            "name": "thermalUdpUrl",
-            "shortDesc": "Thermal Video UDP Url",
-            "longDesc": "UDP url address and port for thermal video stream. Example: 0.0.0.0:5601",
-            "type": "string",
-            "default": "0.0.0.0:5601",
-            "label": "Thermal Video UDP Url"
-        },
-        {
-            "name": "thermalRtspUrl",
-            "shortDesc": "Thermal Video RTSP Url",
-            "longDesc": "RTSP url for thermal video stream. Example: rtsp://192.168.42.1:554/thermal",
-            "type": "string",
-            "default": "",
-            "label": "Thermal Video RTSP Url"
-        },
-        {
-            "name": "thermalTcpUrl",
-            "shortDesc": "Thermal Video TCP Url",
-            "longDesc": "TCP url for thermal video stream. Example: 192.168.143.200:3002",
-            "type": "string",
-            "default": "",
-            "label": "Thermal Video TCP Url"
-        },
-        {
-            "name": "thermalViewMode",
-            "shortDesc": "Thermal View Mode",
-            "longDesc": "Display mode for thermal video overlay: Off, Blend, Full, or Picture-in-Picture",
-            "type": "uint32",
-            "enumStrings": "Off,Blend,Full,Picture In Picture",
-            "enumValues": "0,1,2,3",
-            "default": 2,
-            "label": "Thermal View Mode"
-        },
-        {
-            "name": "thermalOpacity",
-            "shortDesc": "Thermal Blend Opacity",
-            "longDesc": "Opacity percentage for thermal video in Blend mode",
-            "type": "uint32",
-            "default": 85,
-            "min": 0,
-            "max": 100,
-            "label": "Thermal Blend Opacity"
         }
     ]
 }

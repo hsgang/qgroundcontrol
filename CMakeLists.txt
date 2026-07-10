@@ -16,7 +16,6 @@ list(APPEND CMAKE_MODULE_PATH
     "${CMAKE_SOURCE_DIR}/cmake/platform"
 )
 
-# Include helper functions early
 include(Helpers)
 
 # ----------------------------------------------------------------------------
@@ -288,7 +287,6 @@ list(APPEND QGC_RESOURCES
 include(Hardening)
 qgc_apply_global_hardening()
 
-# Create the main executable
 qt_add_executable(${CMAKE_PROJECT_NAME}
     WIN32          # Windows GUI application
     MACOSX_BUNDLE  # macOS application bundle
@@ -301,13 +299,10 @@ set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES
     ADDITIONAL_CLEAN_FILES "${CMAKE_BINARY_DIR}/ccache-launcher"
 )
 
-# Apply optional sanitizer instrumentation to the main target.
 include(Sanitizers)
 
-# Apply optional coverage instrumentation and coverage targets.
 include(Coverage)
 
-# Apply compiler warning configuration to QGC target
 qgc_apply_warning_flags()
 
 # ----------------------------------------------------------------------------
@@ -346,6 +341,8 @@ if(QGC_BUILD_TESTING)
     add_subdirectory(test)
     # Exclude test directory from translation scanning
     set_property(DIRECTORY test PROPERTY QT_EXCLUDE_FROM_TRANSLATION ON)
+    # Pure-CMake unit tests for cmake/GStreamer helpers (no project build needed).
+    add_subdirectory(cmake/GStreamer/tests)
 endif()
 
 # ----------------------------------------------------------------------------

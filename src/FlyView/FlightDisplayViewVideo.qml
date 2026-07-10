@@ -124,7 +124,7 @@ Item {
             id:             cameraLoader
             anchors.fill:   videoContentArea
             visible:        _showUvcLoader
-            source:         QGroundControl.videoManager.uvcEnabled ? "qrc:/qml/QGroundControl/FlyView/FlightDisplayViewUVC.qml" : "qrc:/qml/QGroundControl/FlyView//FlightDisplayViewDummy.qml"
+            source:         _showUvcLoader ? "qrc:/qml/QGroundControl/FlyView/FlightDisplayViewUVC.qml" : "qrc:/qml/QGroundControl/FlyView/FlightDisplayViewDummy.qml"
         }
 
         Item {
@@ -172,7 +172,7 @@ Item {
             width:              height * QGroundControl.videoManager.thermalAspectRatio
             height:             _camera ? (_camera.thermalMode === MavlinkCameraControlInterface.THERMAL_FULL ? parent.height : (_camera.thermalMode === MavlinkCameraControlInterface.THERMAL_PIP ? ScreenTools.defaultFontPixelHeight * 12 : parent.height * _thermalHeightFactor)) : 0
             anchors.centerIn:   parent
-            visible:            QGroundControl.videoManager.hasThermal && _camera.thermalMode !== MavlinkCameraControlInterface.THERMAL_OFF
+            visible:            QGroundControl.videoManager.hasThermal && _camera && _camera.thermalMode !== MavlinkCameraControlInterface.THERMAL_OFF
             function pipOrNot() {
                 if(_camera) {
                     if(_camera.thermalMode === MavlinkCameraControlInterface.THERMAL_PIP) {

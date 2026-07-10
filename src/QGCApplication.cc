@@ -22,6 +22,7 @@
 #include "AudioOutput.h"
 #include "ColoredSvgImageProvider.h"
 #include "FollowMe.h"
+#include "GraphicsSetup.h"
 #include "JoystickManager.h"
 #include "JsonParsing.h"
 #include "LinkManager.h"
@@ -40,9 +41,7 @@
 #include "QGCLoggingCategoryManager.h"
 #include "QGCNetworkHelper.h"
 #include "SettingsManager.h"
-#include "UDPLink.h"
 #include "Vehicle.h"
-#include "VehicleComponent.h"
 #include "VideoManager.h"
 #include "SignalingServerManager.h"
 #include "SiYi.h"
@@ -284,8 +283,8 @@ bool QGCApplication::_initVideo()
 
     QGCCorePlugin::instance();  // CorePlugin must be initialized before VideoManager for Video Cleanup
     VideoManager* videoManager = VideoManager::instance();
-    videoManager->startGStreamerInit();
-    const bool initSucceeded = !_simpleBootTest || videoManager->waitForGStreamerInit();
+    videoManager->startVideoBackendInit();
+    const bool initSucceeded = !_simpleBootTest || videoManager->waitForVideoBackendReady();
     _videoManagerInitialized = true;
     return initSucceeded;
 }
@@ -321,6 +320,10 @@ bool QGCApplication::_initQmlRootWindow()
     });
     AndroidInterface::hideSystemBars();
 #endif
+
+    // The root QQuickWindow exists now (load() is synchronous) but its scene graph has not been
+    // initialized yet -- the only safe point to apply RHI graphics config / forced device.
+    GraphicsSetup::configureMainWindow(mainRootWindow());
 
     return mainRootWindow() != nullptr;
 }
@@ -701,6 +704,12 @@ bool QGCApplication::compressEvent(QEvent* event, QObject* receiver, QPostEventL
         return QGuiApplication::compressEvent(event, receiver, postedEvents);
     }
 
+    // QMetaCallEvent::id() was removed in 6.11; its protected Data is reachable from a derived helper.
+    struct MetaCallHelper : public QMetaCallEvent {
+        int id() const { return d.method_offset_ + d.method_relative_; }
+    };
+    const auto methodId = [](const QMetaCallEvent *e) { return static_cast<const MetaCallHelper*>(e)->id(); };
+
     for (QPostEventList::iterator it = postedEvents->begin(); it != postedEvents->end(); ++it) {
         QPostEvent& cur = *it;
         if (cur.receiver != receiver || cur.event == 0 || cur.event->type() != event->type()) {
@@ -708,7 +717,7 @@ bool QGCApplication::compressEvent(QEvent* event, QObject* receiver, QPostEventL
         }
         const QMetaCallEvent* cur_mce = static_cast<QMetaCallEvent*>(cur.event);
         if (cur_mce->sender() != mce->sender() || cur_mce->signalId() != mce->signalId() ||
-            cur_mce->id() != mce->id()) {
+            methodId(cur_mce) != methodId(mce)) {
             continue;
         }
 
