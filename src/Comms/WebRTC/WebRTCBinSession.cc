@@ -19,6 +19,7 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <thread>
 
 QGC_LOGGING_CATEGORY(WebRTCBinLog, "Comms.WebRTCBin")
 
@@ -128,30 +129,54 @@ void WebRTCBinSession::stop()
     if (_statsTimer) {
         _statsTimer->stop();
     }
+
+    // Detach every signal handler carrying `this` as user-data before we hand the pipeline
+    // to a background thread, so a late webrtcbin / ICE / data-channel callback can't fire
+    // into a session that's about to be destroyed. (_onEncodedSample is intentionally
+    // self-independent, so it stays safe even if it fires during the flush.)
+    if (_webrtc) {
+        g_signal_handlers_disconnect_by_data(_webrtc, this);
+    }
+
     {
         QMutexLocker lock(&_mavlinkChannelMutex);
         _mavlinkChannelOpen.store(false);
         if (_mavlinkChannel) {
+            g_signal_handlers_disconnect_by_data(_mavlinkChannel, this);
             g_object_unref(_mavlinkChannel);
             _mavlinkChannel = nullptr;
         }
     }
     if (_customChannel) {
+        g_signal_handlers_disconnect_by_data(_customChannel, this);
         g_object_unref(_customChannel);
         _customChannel = nullptr;
     }
-    if (_pipeline) {
-        gst_element_set_state(_pipeline, GST_STATE_NULL);
+
+    // Tearing a *live* webrtcbin down to GST_STATE_NULL blocks the caller while GStreamer
+    // joins the internal ICE/DTLS/nice threads. On the UI thread that froze the whole app
+    // whenever the user disconnected an active connection. Hand the blocking teardown to a
+    // detached thread that fully owns the pipeline; we've already dropped our pointers and
+    // callbacks, so the session can be destroyed without waiting for it.
+    GstElement *pipeline = _pipeline;
+    GstBus     *bus      = _bus;
+    _pipeline = nullptr;
+    _webrtc   = nullptr;
+    _bus      = nullptr;
+    if (pipeline) {
+        std::thread([pipeline, bus]() {
+            qCDebug(WebRTCBinLog) << "[teardown] setting pipeline to NULL";
+            gst_element_set_state(pipeline, GST_STATE_NULL);
+            if (bus) {
+                gst_object_unref(bus);
+            }
+            gst_object_unref(pipeline);   // drops webrtcbin too (owned by the pipeline)
+            qCDebug(WebRTCBinLog) << "[teardown] pipeline released";
+        }).detach();
+    } else if (bus) {
+        gst_object_unref(bus);
     }
-    if (_bus) {
-        gst_object_unref(_bus);
-        _bus = nullptr;
-    }
-    if (_pipeline) {
-        gst_object_unref(_pipeline);   // drops _webrtc too (owned by the pipeline)
-        _pipeline = nullptr;
-        _webrtc = nullptr;
-    }
+
     gst_clear_caps(&_offerVideoCaps);
     _started = false;
     _remoteDescriptionSet = false;
