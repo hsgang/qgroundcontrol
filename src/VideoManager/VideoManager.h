@@ -62,6 +62,11 @@ public:
     void prepareWebRtcPipeline();  // Pre-build pipeline before first RTP packet
     bool isWebRtcInternalModeEnabled() const { return _webrtcInternalModeEnabled; }
 
+    // External-encoded path (webrtcbin backend): the WebRTC layer depays the stream
+    // and pushes elementary H264, so QGC skips its own jitter buffer/depay.
+    void enableWebRtcEncodedMode();
+    void pushWebRtcEncoded(QByteArray frame);
+
     void init(QQuickWindow *mainWindow);
     void startVideoBackendInit();
     bool waitForVideoBackendReady(std::chrono::milliseconds timeout = std::chrono::minutes(1));

@@ -2,11 +2,16 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
-#include <QtCore/QThread>
+#include <QtCore/QLoggingCategory>
 
 #include "LinkInterface.h"
 #include "WebRTCConfiguration.h"
-#include "WebRTCWorker.h"
+#include "WebRTCTypes.h"   // RTCModuleSystemInfo / VideoMetrics / RTCModuleVersionInfo
+#include "WebRTCStats.h"   // WebRTCStats
+
+Q_DECLARE_LOGGING_CATEGORY(WebRTCLinkLog)
+
+class WebRTCBinSession;   // webrtcbin backend (defined only under QGC_GST_STREAMING)
 
 class WebRTCLink : public LinkInterface
 {
@@ -141,8 +146,9 @@ class WebRTCLink : public LinkInterface
 
    private:
     const WebRTCConfiguration *_rtcConfig = nullptr;
-    WebRTCWorker *_worker = nullptr;
-    QThread *_workerThread = nullptr;
+    WebRTCBinSession *_binSession = nullptr;   // GStreamer webrtcbin backend (the only backend)
+    bool _connected = false;                   // real webrtcbin peer state, drives isConnected()/linkConnected
+    bool _disconnecting = false;               // guards disconnect() against re-entrant/multiple calls
     QString _rtcStatusMessage = "";
 
     // RTC Module 시스템 정보

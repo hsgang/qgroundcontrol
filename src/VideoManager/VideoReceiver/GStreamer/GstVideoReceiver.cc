@@ -90,7 +90,7 @@ void GstVideoReceiver::start(uint32_t timeout)
         return;
     }
 
-    if (_uri.isEmpty() && !_useInternalRtp) {
+    if (_uri.isEmpty() && !_useInternalRtp && !_useExternalEncoded) {
         qCDebug(GstVideoReceiverLog) << "Failed because URI is not specified";
         emit onStartComplete(STATUS_INVALID_URL);
         return;
@@ -197,7 +197,9 @@ void GstVideoReceiver::start(uint32_t timeout)
         // WebRTC internal-RTP mode feeds packets via an appsrc bin; network URIs go
         // through upstream's SourceFactory. Keeping both lets the appsrc path coexist
         // with the refactored source builder.
-        if (_useInternalRtp) {
+        if (_useExternalEncoded) {
+            _source = _makeExternalEncodedSource();
+        } else if (_useInternalRtp) {
             _source = _makeInternalRtpSource();
         } else {
             GStreamer::SourceFactory::Config sourceConfig;
@@ -213,7 +215,9 @@ void GstVideoReceiver::start(uint32_t timeout)
             _source = GStreamer::SourceFactory::create(_uri, sourceConfig);
         }
         if (!_source) {
-            qCCritical(GstVideoReceiverLog) << (_useInternalRtp ? "_makeInternalRtpSource()" : "SourceFactory::create()") << "failed";
+            qCCritical(GstVideoReceiverLog) << (_useExternalEncoded ? "_makeExternalEncodedSource()"
+                                               : _useInternalRtp ? "_makeInternalRtpSource()"
+                                               : "SourceFactory::create()") << "failed";
             break;
         }
 
@@ -293,7 +297,7 @@ void GstVideoReceiver::stop()
         return;
     }
 
-    if (_uri.isEmpty() && !_useInternalRtp) {
+    if (_uri.isEmpty() && !_useInternalRtp && !_useExternalEncoded) {
         qCDebug(GstVideoReceiverLog) << "Stop called on empty URI (no-op)";
         return;
     }
@@ -1699,6 +1703,13 @@ void GstVideoReceiver::enableInternalRtpMode(InternalCodec codec)
     _internalCodec = codec;
 }
 
+void GstVideoReceiver::enableExternalEncodedMode(InternalCodec codec)
+{
+    _useExternalEncoded = true;
+    _useInternalRtp = false;   // external-encoded takes precedence over the RTP appsrc
+    _internalCodec = codec;
+}
+
 void GstVideoReceiver::preparePipeline()
 {
     if (_needDispatch()) {
@@ -1776,6 +1787,57 @@ void GstVideoReceiver::pushRtpPacket(QByteArray packet)
     _appsrcDataPushed = true;
 }
 
+void GstVideoReceiver::pushEncodedFrame(QByteArray frame)
+{
+    if (_needDispatch()) {
+        _worker->dispatch([this, f = std::move(frame)]() mutable { pushEncodedFrame(std::move(f)); });
+        return;
+    }
+
+    if (frame.isEmpty()) {
+        return;
+    }
+
+    // Lazy start: build the appsrc(H264)->h264parse pipeline on the first frame.
+    if (!_pipeline && _useExternalEncoded) {
+        qCDebug(GstVideoReceiverLog) << "First encoded frame received — starting external pipeline";
+        start(kInternalRtpTimeoutSecs);
+    }
+
+    if (_pipeline && !_appsrcDataPushed) {
+        GstState current = GST_STATE_NULL;
+        gst_element_get_state(_pipeline, &current, nullptr, 0);
+        if (current == GST_STATE_PAUSED) {
+            gst_element_set_state(_pipeline, GST_STATE_PLAYING);
+        }
+    }
+
+    if (!_pipeline || !_appsrc) {
+        return;
+    }
+
+    auto *owned = new QByteArray(std::move(frame));
+    GstBuffer *buffer = gst_buffer_new_wrapped_full(
+        GST_MEMORY_FLAG_READONLY,
+        const_cast<char*>(owned->constData()),
+        static_cast<gsize>(owned->size()),
+        0,
+        static_cast<gsize>(owned->size()),
+        owned,
+        [](gpointer p) { delete static_cast<QByteArray*>(p); }
+    );
+    if (!buffer) {
+        delete owned;
+        return;
+    }
+
+    // appsrc has do-timestamp=TRUE, so leave PTS/DTS unset and let it stamp arrival time.
+    GstFlowReturn flow = GST_FLOW_OK;
+    g_signal_emit_by_name(_appsrc, "push-buffer", buffer, &flow);
+    gst_buffer_unref(buffer);
+    _appsrcDataPushed = true;
+}
+
 GstElement *GstVideoReceiver::_makeInternalRtpSource()
 {
     GstElement *bin = nullptr;
@@ -1828,12 +1890,30 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
         // WebRTC/UDP transport is inherently jittery and reorders packets. The original
         // code forced latency=0 (because _buffer is only ever 0 or -1), which with
         // drop-on-latency made the buffer discard nearly every jittered/reordered packet
-        // -> stutter. Give it a real ~100ms reorder window (decoupled from _buffer); keep
-        // drop-on-latency=TRUE so end-to-end delay stays bounded for live control video.
-        const int jitterLatencyMs = (_buffer > 0) ? _buffer : 100;
+        // -> stutter. Give it a real reorder window (decoupled from _buffer).
+        //
+        // drop-on-latency MUST stay FALSE: an H.264 IDR keyframe is large and spans many
+        // FU-A packets. With drop-on-latency=TRUE the buffer discards fragments that miss
+        // the latency deadline, so rtph264depay (wait-for-keyframe=TRUE) never assembles a
+        // complete IDR -> it keeps emitting force-key-unit (endless RTCP PLI) and no frame
+        // ever reaches the sink (small SPS/PPS packets still get through, so resolution is
+        // known but decode never starts, tripping the no-frames watchdog). Keeping late
+        // packets guarantees the keyframe survives; the leaky display queue downstream
+        // still bounds end-to-end latency, so a ~100 ms reorder window is enough.
+        //
+        // do-lost=TRUE and drop-on-latency=FALSE match the upstream SourceFactory Buffered
+        // config (GstSourceFactory::configureJitterBuffer). do-lost only *signals* loss to
+        // downstream; on its own it does not freeze the stream — the freeze came from the
+        // depayloader's wait-for-keyframe (disabled below), not from here.
+        //
+        // Honor the same rtpJitterLatencyMs setting the SourceFactory path uses (default
+        // 80 ms) instead of hardcoding the depth. This makes the buffer tunable at runtime:
+        // raise it (e.g. 300 ms) to absorb a lossy/jittery link and cut macroblocking at the
+        // cost of glass-to-glass delay; lower it for minimum latency on a clean link.
+        const int jitterLatencyMs = (_rtpJitterLatencyMs > 0) ? _rtpJitterLatencyMs : 80;
         g_object_set(jitter,
                      "latency", jitterLatencyMs,
-                     "drop-on-latency", TRUE,
+                     "drop-on-latency", FALSE,
                      "do-lost", TRUE,
                      "do-retransmission", FALSE,
                      nullptr);
@@ -1842,10 +1922,13 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
         depay = gst_element_factory_make(depayName, nullptr);
         if (!depay) { qCCritical(GstVideoReceiverLog) << depayName << " failed"; break; }
 #if GST_CHECK_VERSION(1, 20, 0)
-        // After loss, suppress corrupted access units until the next keyframe (a brief
-        // freeze instead of seconds of green/gray smear) and ask upstream for a fresh
-        // IDR. request-keyframe is a no-op if nothing translates it to an RTCP PLI yet.
-        g_object_set(depay, "wait-for-keyframe", TRUE, "request-keyframe", TRUE, nullptr);
+        // Match upstream (SourceFactory leaves these at the GStreamer defaults, both FALSE):
+        // wait-for-keyframe=FALSE passes a lost/incomplete access unit through (brief decoder
+        // glitch) instead of dropping every frame until the next keyframe (a visible freeze
+        // when keyframe recovery is slow/unavailable). request-keyframe=FALSE avoids spamming
+        // force-key-unit → RTCP PLI, which is unreliable here (can fail "Track is not open");
+        // the decoder rides through loss and the sender's periodic IDRs clean it up.
+        g_object_set(depay, "wait-for-keyframe", FALSE, "request-keyframe", FALSE, nullptr);
 #endif
 
         const char *parserName = (_internalCodec == InternalCodec::H264) ? "h264parse" : "h265parse";
@@ -1876,6 +1959,61 @@ GstElement *GstVideoReceiver::_makeInternalRtpSource()
     gst_clear_object(&parser);
     gst_clear_object(&depay);
     gst_clear_object(&jitter);
+    gst_clear_object(&appsrc);
+    gst_clear_object(&bin);
+    return nullptr;
+}
+
+// External-encoded source: appsrc fed with already-depayed elementary video (the
+// WebRTC layer did the jitter buffering + loss recovery). No jitter buffer or
+// depayloader here — just wrap the appsrc so its H264/H265 flows into the shared
+// tee -> decode/record/sink downstream. One jitter buffer end-to-end.
+GstElement *GstVideoReceiver::_makeExternalEncodedSource()
+{
+    GstElement *bin    = nullptr;
+    GstElement *appsrc = nullptr;
+
+    do {
+        bin = gst_bin_new("externalencodedsrc");
+        if (!bin) { qCCritical(GstVideoReceiverLog) << "gst_bin_new failed"; break; }
+
+        appsrc = gst_element_factory_make("appsrc", "appsrc");
+        if (!appsrc) { qCCritical(GstVideoReceiverLog) << "appsrc factory failed"; break; }
+
+        g_object_set(appsrc,
+                     "is-live", TRUE,
+                     "format", GST_FORMAT_TIME,
+                     "do-timestamp", TRUE,   // frames arrive without PTS; stamp with arrival time
+                     "max-bytes", G_GUINT64_CONSTANT(0),
+                     "emit-signals", FALSE,
+                     "stream-type", 0,       // GST_APP_STREAM_TYPE_STREAM
+                     "min-latency", (gint64)0,
+                     nullptr);
+
+        // The producer (WebRTCBinSession) normalizes to byte-stream/au before pushing.
+        const char *capsStr = (_internalCodec == InternalCodec::H264)
+            ? "video/x-h264, stream-format=(string)byte-stream, alignment=(string)au"
+            : "video/x-h265, stream-format=(string)byte-stream, alignment=(string)au";
+        GstCaps *caps = gst_caps_from_string(capsStr);
+        if (!caps) { qCCritical(GstVideoReceiverLog) << "caps failed"; break; }
+        g_object_set(appsrc, "caps", caps, nullptr);
+        gst_clear_caps(&caps);
+
+        gst_bin_add(GST_BIN(bin), appsrc);
+
+        GstPad *srcpad = gst_element_get_static_pad(appsrc, "src");
+        if (!srcpad) { qCCritical(GstVideoReceiverLog) << "srcpad failed"; break; }
+        GstPad *ghostpad = gst_ghost_pad_new("src", srcpad);
+        gst_object_unref(srcpad);
+        if (!ghostpad || !gst_element_add_pad(bin, ghostpad)) {
+            qCCritical(GstVideoReceiverLog) << "ghost pad failed"; break;
+        }
+
+        _appsrc = appsrc;
+        appsrc = nullptr;  // ownership transferred to bin
+        return bin;
+    } while (0);
+
     gst_clear_object(&appsrc);
     gst_clear_object(&bin);
     return nullptr;

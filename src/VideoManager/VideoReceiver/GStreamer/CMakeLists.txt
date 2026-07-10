@@ -3,7 +3,7 @@ if(NOT QGC_ENABLE_GST_VIDEOSTREAMING)
 endif()
 
 # Linux adds Allocators (gstreamer-allocators-1.0) for the DMABuf header probe in Orchestrator.cmake.
-set(_qgc_gst_components Core Base Video App Rtsp)
+set(_qgc_gst_components Core Base Video App Rtsp Sdp WebRTC)
 if(LINUX)
     list(APPEND _qgc_gst_components Allocators)
 endif()

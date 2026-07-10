@@ -71,6 +71,13 @@ public:
     void preparePipeline();
     void pushRtpPacket(QByteArray packet);
 
+    // External encoded mode: feed already-depayed elementary video (e.g. tapped from
+    // webrtcbin -> rtph264depay) via pushEncodedFrame(). No jitter buffer or depay here
+    // — the WebRTC transport already recovered/ordered the stream — so only one jitter
+    // buffer exists end-to-end. The tee/decode/record/sink downstream is shared unchanged.
+    void enableExternalEncodedMode(InternalCodec codec);
+    void pushEncodedFrame(QByteArray frame);
+
 public slots:
     void start(uint32_t timeout) override;
     void stop() override;
@@ -99,6 +106,7 @@ private slots:
 private:
     GstElement *_makeDecoder();
     GstElement *_makeInternalRtpSource();
+    GstElement *_makeExternalEncodedSource();
     GstElement *_makeFileSink(const QString &videoFile, FILE_FORMAT format);
 
     void _onNewSourcePad(GstPad *pad);
@@ -149,6 +157,7 @@ private:
     GstElement *_appsrc = nullptr;          // owned by _source bin when _useInternalRtp
     bool        _appsrcDataPushed = false;
     bool        _useInternalRtp = false;
+    bool        _useExternalEncoded = false;   // appsrc(H264) -> h264parse, no jitter/depay
     InternalCodec _internalCodec = InternalCodec::H264;
     // Watchdog timeout for internal RTP mode (matches VideoManager's non-RTSP default).
     // Must be > 0: _watchdog() compares second-truncated timestamps, so with timeout=0

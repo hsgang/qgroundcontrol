@@ -915,16 +915,19 @@ void SignalingServerManager::_requestAuthTokenAndOpen(const QString &wsUrl, quin
     QNetworkRequest request{QUrl(endpoint)};
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
+    const QString effectiveClientId = clientId.isEmpty() ? QStringLiteral("operator-ui") : clientId;
+
     QJsonObject body;
-    body["client_id"] = clientId.isEmpty() ? QStringLiteral("operator-ui") : clientId;
+    body["client_id"] = effectiveClientId;
     body["client_secret"] = clientSecret;
 
     _updateConnectionStatus("인증 토큰 요청 중...");
-    qCDebug(SignalingServerManagerLog) << "Requesting bearer token from issuer:" << endpoint;
+    qCDebug(SignalingServerManagerLog) << "Requesting bearer token from issuer:" << endpoint
+                                       << "client_id:" << effectiveClientId;
 
     QNetworkReply *reply = _authNam->post(request, QJsonDocument(body).toJson(QJsonDocument::Compact));
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, wsUrl, generation]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply, wsUrl, generation, endpoint, effectiveClientId]() {
         reply->deleteLater();
 
         // 취소/재시작된 연결 시도의 늦은 응답은 무시
@@ -945,9 +948,21 @@ void SignalingServerManager::_requestAuthTokenAndOpen(const QString &wsUrl, quin
         };
 
         if (reply->error() != QNetworkReply::NoError) {
-            // 서버가 내려준 본문에 실패 원인(필드/그랜트 불일치 등)이 담겨 있는 경우가 많아 함께 로깅
+            // 서버가 내려준 본문에 실패 원인(필드/그랜트 불일치 등)이 담겨 있는 경우가 많아 함께 로깅.
+            // 401 invalid_client 류를 진단하려면 HTTP 상태코드와 WWW-Authenticate 챌린지가 결정적이다.
+            //   - 상태코드 401 + WWW-Authenticate 존재 → 서버가 표준 OAuth2 Basic 헤더 인증을 기대(방식 불일치)
+            //   - 상태코드 401 + 챌린지 없음/본문 invalid_client → client_id/secret 값 불일치
             const QByteArray errBody = reply->readAll();
-            qCWarning(SignalingServerManagerLog) << "Token endpoint HTTP error body:" << errBody;
+            const QVariant statusCodeVar = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+            const int httpStatus = statusCodeVar.isValid() ? statusCodeVar.toInt() : -1;
+            const QByteArray wwwAuth = reply->rawHeader("WWW-Authenticate");
+            qCWarning(SignalingServerManagerLog).nospace()
+                << "Token endpoint auth failed - endpoint: " << endpoint
+                << ", client_id: " << effectiveClientId
+                << ", HTTP status: " << httpStatus
+                << ", WWW-Authenticate: " << (wwwAuth.isEmpty() ? QByteArray("<none>") : wwwAuth)
+                << ", body: " << errBody
+                << ", qtError: " << reply->errorString();
             failAndRetry(reply->errorString());
             return;
         }

@@ -5,13 +5,19 @@
 #include "SettingsManager.h"
 #include "CloudSettings.h"
 
+#ifdef QGC_GST_STREAMING
+#include "WebRTCBinSession.h"
+#include "SignalingServerManager.h"
+#endif
+
+QGC_LOGGING_CATEGORY(WebRTCLinkLog, "Comms.WEBRTCLink")
+
 //------------------------------------------------------
-// WebRTCLink (구현)
+// WebRTCLink — GStreamer webrtcbin backend (WebRTCBinSession).
 //------------------------------------------------------
 WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
     : LinkInterface(config, parent)
 {
-    // 메타타입 등록
     qRegisterMetaType<RTCModuleSystemInfo>("RTCModuleSystemInfo");
     qRegisterMetaType<WebRTCStats>("WebRTCStats");
     qRegisterMetaType<VideoMetrics>("VideoMetrics");
@@ -19,68 +25,61 @@ WebRTCLink::WebRTCLink(SharedLinkConfigurationPtr &config, QObject *parent)
 
     _rtcConfig = qobject_cast<const WebRTCConfiguration*>(config.get());
 
-    QString stunServer = _rtcConfig->stunServer();
-    QString turnServer = _rtcConfig->turnServer();
-    QString turnUsername = _rtcConfig->turnUsername();
-    QString turnPassword = _rtcConfig->turnPassword();
-
-    // worker 스레드의 _setupPeerConnection()이 issuer TURN 자격 설정을 읽기 전에,
-    // 이 SettingsFact들을 메인 스레드에서 먼저 생성해 둔다. 그렇지 않으면 worker 스레드가
-    // 최초 접근 시 Fact를 worker 스레드에 만들어 QML 바인딩이 cross-thread 연결 에러를 낸다.
+    // Pre-create these SettingsFacts on the main thread so later access doesn't
+    // build them off-thread and trip QML binding cross-thread errors.
     auto* cloudSettings = SettingsManager::instance()->cloudSettings();
     (void)cloudSettings->webrtcAuthClientId();
     (void)cloudSettings->webrtcAuthClientSecret();
     (void)cloudSettings->webrtcBindAddress();
 
-    _worker = new WebRTCWorker(_rtcConfig, stunServer, turnServer, turnUsername, turnPassword);
-    _workerThread = new QThread(this);
-    _worker->moveToThread(_workerThread);
+#ifdef QGC_GST_STREAMING
+    WebRTCBinSession::Config cfg;
+    cfg.gcsId         = _rtcConfig->gcsId();
+    cfg.targetDroneId = _rtcConfig->targetDroneId();
+    QString stun = _rtcConfig->stunServer();
+    if (!stun.isEmpty() && !stun.startsWith(QStringLiteral("stun:"))) {
+        stun = QStringLiteral("stun://") + stun;
+    }
+    cfg.stunServer = stun;
+    const auto turn = SignalingServerManager::instance()->cachedTurnCredentials();
+    cfg.turn.urls       = turn.urls;
+    cfg.turn.username   = turn.username;
+    cfg.turn.credential = turn.credential;
 
-    connect(_workerThread, &QThread::started, _worker, &WebRTCWorker::start);
-    connect(_workerThread, &QThread::finished, _worker, &QObject::deleteLater);
-
-    connect(_worker, &WebRTCWorker::connected, this, &WebRTCLink::_onConnected, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::disconnected, this, &WebRTCLink::_onDisconnected, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::errorOccurred, this, &WebRTCLink::_onErrorOccurred, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::bytesReceived, this, &WebRTCLink::_onDataReceived, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::bytesSent, this, &WebRTCLink::_onDataSent, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::rtcStatusMessageChanged, this, &WebRTCLink::_onRtcStatusMessageChanged, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::rtcModuleSystemInfoUpdated, this, &WebRTCLink::_onRtcModuleSystemInfoUpdated, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::webRtcStatsUpdated, this, &WebRTCLink::_onWebRtcStatsUpdated, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::videoMetricsUpdated, this, &WebRTCLink::_onVideoMetricsUpdated, Qt::QueuedConnection);
-    connect(_worker, &WebRTCWorker::rtcModuleVersionInfoUpdated, this, &WebRTCLink::_onRtcModuleVersionInfoUpdated, Qt::QueuedConnection);
-
-    _workerThread->start();
+    _binSession = new WebRTCBinSession(cfg, this);
+    connect(_binSession, &WebRTCBinSession::connected,                   this, &WebRTCLink::_onConnected);
+    connect(_binSession, &WebRTCBinSession::disconnected,               this, &WebRTCLink::_onDisconnected);
+    connect(_binSession, &WebRTCBinSession::mavlinkDataReceived,        this, &WebRTCLink::_onDataReceived);
+    connect(_binSession, &WebRTCBinSession::bytesSent,                  this, &WebRTCLink::_onDataSent);
+    connect(_binSession, &WebRTCBinSession::rtcModuleSystemInfoUpdated, this, &WebRTCLink::_onRtcModuleSystemInfoUpdated);
+    connect(_binSession, &WebRTCBinSession::videoMetricsUpdated,        this, &WebRTCLink::_onVideoMetricsUpdated);
+    connect(_binSession, &WebRTCBinSession::rtcModuleVersionInfoUpdated,this, &WebRTCLink::_onRtcModuleVersionInfoUpdated);
+    connect(_binSession, &WebRTCBinSession::webRtcStatsUpdated,         this, &WebRTCLink::_onWebRtcStatsUpdated);
+    _binSession->start();
+    qCInfo(WebRTCLinkLog) << "WebRTCLink using webrtcbin backend";
+#else
+    qCWarning(WebRTCLinkLog) << "WebRTC requires GStreamer video streaming (QGC_ENABLE_GST_VIDEOSTREAMING); link is inert";
+#endif
 }
 
 WebRTCLink::~WebRTCLink()
 {
     qCDebug(WebRTCLinkLog) << "[WebRTCLink] Destructor called";
-
-    if (_worker) {
-        // SignalingServerManager와의 연결을 먼저 끊음 (싱글톤이므로 매우 중요!)
-        QMetaObject::invokeMethod(_worker, "disconnectFromSignalingManager", Qt::BlockingQueuedConnection);
-
-        // 워커에게 정리 요청
-        QMetaObject::invokeMethod(_worker, "disconnectLink", Qt::BlockingQueuedConnection);
+#ifdef QGC_GST_STREAMING
+    if (_binSession) {
+        _binSession->stop();   // unregisters the GCS + tears down the pipeline
     }
-
-    // 스레드 종료 요청
-    _workerThread->quit();
-
-    // 최대 5초 대기
-    if (!_workerThread->wait(5000)) {
-        qCWarning(WebRTCLinkLog) << "[WebRTCLink] Worker thread did not finish in time, forcing termination";
-        _workerThread->terminate();
-        _workerThread->wait(1000);
-    }
-
+#endif
     qCDebug(WebRTCLinkLog) << "[WebRTCLink] Destructor completed";
 }
 
 bool WebRTCLink::isConnected() const
 {
-    return _worker && _worker->isDataChannelOpen() && _worker->isOperational();
+    // Reflect the real webrtcbin peer state, not merely that the session object
+    // exists. The Link Management UI reads this (linkConnected) to decide the
+    // "연결됨/대기" chip and the "해제/연결" toggle; returning true while the peer is
+    // down left the card stuck showing a live connection after the drone dropped.
+    return _connected;
 }
 
 void WebRTCLink::connectLink()
@@ -91,72 +90,86 @@ void WebRTCLink::connectLink()
 void WebRTCLink::reconnectLink()
 {
     qCDebug(WebRTCLinkLog) << "Manual reconnection requested";
-
-    if (_worker) {
-        // 수동 재연결 요청 (manualReconnect는 어떤 상태에서든 작동)
-        QMetaObject::invokeMethod(_worker, "manualReconnect", Qt::QueuedConnection);
-    } else {
-        qCWarning(WebRTCLinkLog) << "Worker not available for reconnection";
+#ifdef QGC_GST_STREAMING
+    if (_binSession) {
+        _binSession->stop();
+        _binSession->start();
     }
+#endif
 }
 
 bool WebRTCLink::isReconnecting() const
 {
-    if (!_worker) {
-        return false;
-    }
-
-    // Worker의 자동 재연결 상태를 직접 확인 (스레드 안전하지 않지만 빠름)
-    // 실제로는 _waitingForReconnect가 atomic이 아니므로 더 안전한 방법 필요
-    return _worker->isWaitingForReconnect();
+    return false;
 }
 
 bool WebRTCLink::_connect()
 {
-    // 실제 연결은 이미 worker가 WebSocket에서 시작하고 있음.
+    // Connection is driven by the signaling server / webrtcbin session on construction.
     return true;
 }
 
 void WebRTCLink::disconnect()
 {
-    if (_worker) {
-        QMetaObject::invokeMethod(_worker, "disconnectLink", Qt::QueuedConnection);
+    // Guard against re-entrant/multiple calls, as the LinkInterface contract requires.
+    // disconnected() below runs LinkManager/VehicleLinkManager cleanup which, via
+    // LinkInterface::_connectionRemoved(), calls disconnect() again — without this guard
+    // that re-entry (nested inside the QML "해제" handler) tore down twice and froze the UI.
+    if (_disconnecting) {
+        return;
     }
+    _disconnecting = true;
+
+#ifdef QGC_GST_STREAMING
+    if (_binSession) {
+        _binSession->stop();   // tears down the pipeline + unregisters the GCS
+    }
+#endif
+
+    if (_connected) {
+        _connected = false;
+        emit linkConnectedChanged();
+    }
+
+    // Defer the disconnected() cascade out of the current call stack. It frees this link
+    // (and can delete us) and updates QML; emitting it synchronously from inside the QML
+    // click handler / the _connectionRemoved() re-entry deadlocked the UI. A queued emit
+    // lets the caller fully unwind first. Safe if we're destroyed meanwhile — Qt drops the
+    // pending event.
+    QMetaObject::invokeMethod(this, [this]() { emit disconnected(); }, Qt::QueuedConnection);
 }
 
 void WebRTCLink::_writeBytes(const QByteArray& bytes)
 {
-    QMetaObject::invokeMethod(_worker, [worker = _worker, data = bytes]() {
-        worker->writeData(data);
-    }, Qt::QueuedConnection);
+#ifdef QGC_GST_STREAMING
+    if (_binSession) {
+        _binSession->sendMavlink(bytes);
+    }
+#else
+    Q_UNUSED(bytes)
+#endif
 }
 
 void WebRTCLink::_onConnected()
 {
     qCDebug(WebRTCLinkLog) << "[WebRTCLink] Connected";
-
     _onRtcStatusMessageChanged("RTC 연결됨");
+    if (!_connected) {
+        _connected = true;
+        emit linkConnectedChanged();   // updates linkConnected in the Link Management UI
+    }
     emit connected();
 }
 
 void WebRTCLink::_onDisconnected()
 {
     qCDebug(WebRTCLinkLog) << "[WebRTCLink] Disconnected";
-
-    // 재연결 중이 아닐 때만 disconnected 시그널 발생 (vehicle 정리를 유발)
-    if (_worker && !_worker->isWaitingForReconnect()) {
-        qCDebug(WebRTCLinkLog) << "[WebRTCLink] Emitting disconnected signal (not reconnecting)";
-        _onRtcStatusMessageChanged("RTC 연결 종료");
-        emit disconnected();
-    } else {
-        // 자동 재연결 중에는 vehicle 정리를 막기 위해 disconnected()는 보류한다.
-        // 다만 데이터 채널은 이미 닫혀 isConnected()가 false이므로, linkConnected
-        // 바인딩을 갱신해 연결관리 UI("연결됨"/"온라인" 표시)가 실제 상태와 어긋나지
-        // 않게 한다. (disconnected()와 달리 이 시그널은 링크/vehicle을 파괴하지 않음)
-        qCDebug(WebRTCLinkLog) << "[WebRTCLink] Skipping disconnected signal (reconnecting)";
-        _onRtcStatusMessageChanged("RTC 재연결 중...");
-        emit linkConnectedChanged();
+    _onRtcStatusMessageChanged("RTC 연결 종료");
+    if (_connected) {
+        _connected = false;
+        emit linkConnectedChanged();   // card reverts to "대기/연결" instead of staying "연결됨/해제"
     }
+    emit disconnected();
 }
 
 void WebRTCLink::_onErrorOccurred(const QString &errorString)
@@ -184,48 +197,39 @@ void WebRTCLink::_onRtcStatusMessageChanged(const QString& message)
 
 bool WebRTCLink::isVideoStreamActive() const
 {
-    return _worker ? _worker->isVideoStreamActive() : false;
+    return _binSession != nullptr;
 }
 
 void WebRTCLink::_onWebRtcStatsUpdated(const WebRTCStats& stats)
 {
-    // 구조체 비교를 통한 효율적인 변경 감지
     if (_webRtcStats != stats) {
-        // Candidate 변경 여부 로그
         if (_webRtcStats.iceCandidate != stats.iceCandidate) {
             qCDebug(WebRTCLinkLog) << "ICE candidate changed:"
                                   << _webRtcStats.iceCandidate << "->" << stats.iceCandidate;
         }
-
         _webRtcStats = stats;
-        //qCDebug(WebRTCLinkLog) << "WebRTC Stats Updated:" << stats.toString();
         emit webRtcStatsChanged(stats);
     }
 }
 
 void WebRTCLink::_onRtcModuleSystemInfoUpdated(const RTCModuleSystemInfo& systemInfo)
 {
-    // 구조체 비교를 통한 효율적인 변경 감지
     if (_rtcModuleSystemInfo != systemInfo) {
         _rtcModuleSystemInfo = systemInfo;
-        //qCDebug(WebRTCLinkLog) << "RTC Module System Info Updated:" << systemInfo.toString();
         emit rtcModuleSystemInfoChanged(systemInfo);
     }
 }
 
 void WebRTCLink::_onVideoMetricsUpdated(const VideoMetrics& videoMetrics)
 {
-    // 구조체 비교를 통한 효율적인 변경 감지
     if (_videoMetrics != videoMetrics) {
         _videoMetrics = videoMetrics;
-        //qCDebug(WebRTCLinkLog) << "Video Metrics Updated:" << videoMetrics.toString();
         emit videoMetricsChanged(videoMetrics);
     }
 }
 
 void WebRTCLink::_onRtcModuleVersionInfoUpdated(const RTCModuleVersionInfo& versionInfo)
 {
-    // 구조체 비교를 통한 효율적인 변경 감지
     if (_rtcModuleVersionInfo != versionInfo) {
         _rtcModuleVersionInfo = versionInfo;
         qCDebug(WebRTCLinkLog) << "RTC Module Version Info Updated:" << versionInfo.toString();
@@ -235,11 +239,6 @@ void WebRTCLink::_onRtcModuleVersionInfoUpdated(const RTCModuleVersionInfo& vers
 
 void WebRTCLink::sendCustomMessage(const QString& message)
 {
-    if (_worker) {
-        QMetaObject::invokeMethod(_worker, "sendCustomMessage",
-                                  Qt::QueuedConnection,
-                                  Q_ARG(QString, message));
-    } else {
-        qCWarning(WebRTCLinkLog) << "Cannot send custom message: worker not available";
-    }
+    Q_UNUSED(message)
+    qCDebug(WebRTCLinkLog) << "sendCustomMessage is not supported on the webrtcbin backend";
 }

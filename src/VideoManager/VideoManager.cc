@@ -415,6 +415,36 @@ void VideoManager::prepareWebRtcPipeline()
 #endif
 }
 
+void VideoManager::enableWebRtcEncodedMode()
+{
+#ifdef QGC_GST_STREAMING
+    if (_videoReceivers.isEmpty()) {
+        return;
+    }
+    VideoReceiver *receiver = _videoReceivers.front();
+    auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+    if (gstReceiver) {
+        gstReceiver->enableExternalEncodedMode(GstVideoReceiver::InternalCodec::H264);
+    }
+#endif
+}
+
+void VideoManager::pushWebRtcEncoded(QByteArray frame)
+{
+#ifdef QGC_GST_STREAMING
+    if (_videoReceivers.isEmpty()) {
+        return;
+    }
+    VideoReceiver *receiver = _videoReceivers.front();
+    auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
+    if (gstReceiver) {
+        gstReceiver->pushEncodedFrame(std::move(frame));
+    }
+#else
+    Q_UNUSED(frame)
+#endif
+}
+
 void VideoManager::stopRecording()
 {
     for (VideoReceiver *receiver : std::as_const(_videoReceivers)) {
@@ -898,7 +928,6 @@ void VideoManager::_startReceiver(VideoReceiver *receiver)
         return;
     }
 
-    const QString source = _videoSettings->videoSource()->rawValue().toString();
     const uint32_t timeout = ((source == VideoSettings::videoSourceRTSP) ? _videoSettings->rtspTimeout()->rawValue().toUInt() : 3);
 
     receiver->start(timeout);

@@ -45,6 +45,12 @@ public:
     void setCommunicationLostEnabled(bool communicationLostEnabled);
     void closeVehicle();
 
+    /// Actively disconnect (tear down) every link this vehicle uses. Unlike closeVehicle(),
+    /// which only drops the vehicle's references and leaves the underlying link running, this
+    /// calls LinkInterface::disconnect() so links that own a live transport (e.g. WebRTC) are
+    /// actually shut down. The resulting disconnected() cascade removes the vehicle as well.
+    Q_INVOKABLE void disconnectLinks();
+
 signals:
     void primaryLinkChanged();
     void allLinksRemoved(Vehicle *vehicle);

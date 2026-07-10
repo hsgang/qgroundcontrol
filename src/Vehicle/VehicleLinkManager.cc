@@ -369,6 +369,19 @@ void VehicleLinkManager::closeVehicle()
     emit allLinksRemoved(_vehicle);
 }
 
+void VehicleLinkManager::disconnectLinks()
+{
+    // Iterate a copy: disconnect() emits disconnected() synchronously, which runs
+    // _linkDisconnected -> _removeLink and mutates _rgLinkInfo underneath us.
+    const QList<LinkInfo_t> rgLinkInfoCopy = _rgLinkInfo;
+    for (const LinkInfo_t &linkInfo: rgLinkInfoCopy) {
+        if (linkInfo.link) {
+            qCDebug(VehicleLinkManagerLog) << "disconnectLinks:" << linkInfo.link->linkConfiguration()->name();
+            linkInfo.link->disconnect();
+        }
+    }
+}
+
 void VehicleLinkManager::setCommunicationLostEnabled(bool communicationLostEnabled)
 {
     if (_communicationLostEnabled != communicationLostEnabled) {
