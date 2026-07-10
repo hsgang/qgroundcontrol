@@ -63,8 +63,9 @@ public:
     bool isWebRtcInternalModeEnabled() const { return _webrtcInternalModeEnabled; }
 
     // External-encoded path (webrtcbin backend): the WebRTC layer depays the stream
-    // and pushes elementary H264, so QGC skips its own jitter buffer/depay.
-    void enableWebRtcEncodedMode();
+    // and pushes elementary H264/H265, so QGC skips its own jitter buffer/depay.
+    // h265 selects the parser/caps; the codec comes from the negotiated pad caps.
+    void enableWebRtcEncodedMode(bool h265);
     void pushWebRtcEncoded(QByteArray frame);
 
     void init(QQuickWindow *mainWindow);

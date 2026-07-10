@@ -415,7 +415,7 @@ void VideoManager::prepareWebRtcPipeline()
 #endif
 }
 
-void VideoManager::enableWebRtcEncodedMode()
+void VideoManager::enableWebRtcEncodedMode(bool h265)
 {
 #ifdef QGC_GST_STREAMING
     if (_videoReceivers.isEmpty()) {
@@ -424,8 +424,11 @@ void VideoManager::enableWebRtcEncodedMode()
     VideoReceiver *receiver = _videoReceivers.front();
     auto *gstReceiver = qobject_cast<GstVideoReceiver*>(receiver);
     if (gstReceiver) {
-        gstReceiver->enableExternalEncodedMode(GstVideoReceiver::InternalCodec::H264);
+        gstReceiver->enableExternalEncodedMode(h265 ? GstVideoReceiver::InternalCodec::H265
+                                                    : GstVideoReceiver::InternalCodec::H264);
     }
+#else
+    Q_UNUSED(h265)
 #endif
 }
 

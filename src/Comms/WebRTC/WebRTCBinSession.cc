@@ -24,8 +24,8 @@
 QGC_LOGGING_CATEGORY(WebRTCBinLog, "Comms.WebRTCBin")
 
 // Built against gstreamer-webrtc-1.0 / gstreamer-sdp-1.0. Delivers the drone's
-// H264 (via webrtcbin NACK/RTX) into VideoManager's external-encoded source and
-// bridges the mavlink/custom data channels to the link. See WebRTCBinSession.h.
+// H264/H265 (via webrtcbin NACK/RTX) into VideoManager's external-encoded source
+// and bridges the mavlink/custom data channels to the link. See WebRTCBinSession.h.
 
 namespace {
 // SCTP send-buffer thresholds. Low threshold matches the libdatachannel path
@@ -538,25 +538,48 @@ void WebRTCBinSession::_onPadAdded(GstElement * /*webrtc*/, GstPad *pad, gpointe
         return;   // only interested in the drone's outgoing media (our recv src pads)
     }
 
+    // The negotiated codec rides on the pad caps (application/x-rtp,
+    // encoding-name=H264|H265). Read it here so the depay/parse chain below and
+    // VideoManager's appsrc caps match what the drone actually sends; anything
+    // else is unsupported — bail rather than feed a mismatched depayloader.
+    bool isH265 = false;
+    if (GstCaps *padCaps = gst_pad_get_current_caps(pad)) {
+        const GstStructure *s = gst_caps_get_structure(padCaps, 0);
+        const gchar *encoding = s ? gst_structure_get_string(s, "encoding-name") : nullptr;
+        if (encoding && g_ascii_strcasecmp(encoding, "H265") == 0) {
+            isH265 = true;
+        } else if (encoding && g_ascii_strcasecmp(encoding, "H264") != 0) {
+            qCWarning(WebRTCBinLog) << "Unsupported video encoding on webrtcbin pad:"
+                                    << encoding << "— no video (data channels unaffected)";
+            gst_caps_unref(padCaps);
+            return;
+        }
+        gst_caps_unref(padCaps);
+    }
+    qCDebug(WebRTCBinLog) << "Video pad added, codec:" << (isH265 ? "H265" : "H264");
+
     // Render inside QGC with one jitter buffer end-to-end: webrtcbin already did
     // NACK/RTX + jitter buffering, so depay + parse the recovered stream to elementary
-    // H264 (byte-stream/au) and hand it to VideoManager's external-encoded source
+    // H264/H265 (byte-stream/au) and hand it to VideoManager's external-encoded source
     // (GstVideoReceiver appsrc -> tee -> decode/record/sink -> FlyView). No second
     // jitter buffer or depay downstream; QGC decode/record/metrics/overlay are reused.
-    VideoManager::instance()->enableWebRtcEncodedMode();
+    VideoManager::instance()->enableWebRtcEncodedMode(isH265);
 
-    GstElement *depay   = gst_element_factory_make("rtph264depay", nullptr);
-    GstElement *parse   = gst_element_factory_make("h264parse", nullptr);
+    GstElement *depay   = gst_element_factory_make(isH265 ? "rtph265depay" : "rtph264depay", nullptr);
+    GstElement *parse   = gst_element_factory_make(isH265 ? "h265parse" : "h264parse", nullptr);
     GstElement *capsf   = gst_element_factory_make("capsfilter", nullptr);
     GstElement *appsink = gst_element_factory_make("appsink", nullptr);
     if (!depay || !parse || !capsf || !appsink) {
-        qCWarning(WebRTCBinLog) << "depay/parse/capsfilter/appsink create failed";
+        qCWarning(WebRTCBinLog) << "depay/parse/capsfilter/appsink create failed"
+                                << (isH265 ? "(H265 — rtph265depay/h265parse plugin missing?)" : "");
         gst_clear_object(&depay); gst_clear_object(&parse);
         gst_clear_object(&capsf); gst_clear_object(&appsink);
         return;
     }
     g_object_set(parse, "config-interval", -1, nullptr);
-    GstCaps *caps = gst_caps_from_string("video/x-h264, stream-format=(string)byte-stream, alignment=(string)au");
+    GstCaps *caps = gst_caps_from_string(isH265
+        ? "video/x-h265, stream-format=(string)byte-stream, alignment=(string)au"
+        : "video/x-h264, stream-format=(string)byte-stream, alignment=(string)au");
     g_object_set(capsf, "caps", caps, nullptr);
     gst_clear_caps(&caps);
     g_object_set(appsink, "emit-signals", TRUE, "sync", FALSE,
@@ -573,7 +596,8 @@ void WebRTCBinSession::_onPadAdded(GstElement * /*webrtc*/, GstPad *pad, gpointe
     }
     GstPad *sink = gst_element_get_static_pad(depay, "sink");
     if (gst_pad_link(pad, sink) != GST_PAD_LINK_OK) {
-        qCWarning(WebRTCBinLog) << "Failed to link webrtcbin pad -> rtph264depay";
+        qCWarning(WebRTCBinLog) << "Failed to link webrtcbin pad ->"
+                                << (isH265 ? "rtph265depay" : "rtph264depay");
     }
     gst_object_unref(sink);
     // NOTE: no connected() here — the link is "connected" when the mavlink data channel

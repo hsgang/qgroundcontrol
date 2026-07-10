@@ -1705,6 +1705,12 @@ void GstVideoReceiver::enableInternalRtpMode(InternalCodec codec)
 
 void GstVideoReceiver::enableExternalEncodedMode(InternalCodec codec)
 {
+    // A codec change (drone reconnected with H264 <-> H265 swapped) invalidates a
+    // live appsrc pipeline built with the old caps/parser; stop it (async, on the
+    // worker) so the next pushEncodedFrame() lazily rebuilds with the new codec.
+    if (_useExternalEncoded && _internalCodec != codec && _pipeline) {
+        stop();
+    }
     _useExternalEncoded = true;
     _useInternalRtp = false;   // external-encoded takes precedence over the RTP appsrc
     _internalCodec = codec;
