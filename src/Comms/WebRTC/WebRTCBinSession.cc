@@ -127,6 +127,19 @@ void WebRTCBinSession::stop()
         _statsTimer->stop();
     }
 
+    // Leave the signaling session cleanly. Detach our Qt connections so a stopped
+    // session no longer answers offers (start() re-connects them — without this a
+    // stop()/start() reconnect stacks duplicate connections and every offer gets
+    // double-handled). Then tell the server we're gone: the drone only sends a fresh
+    // offer on a (re)register event, so without the unregister a disconnect/reconnect
+    // leaves the drone holding its dead PeerConnection and no new offer ever arrives.
+    if (_signaling) {
+        QObject::disconnect(_signaling, nullptr, this, nullptr);
+        if (_started) {
+            _signaling->unregisterGCS(_config.gcsId);
+        }
+    }
+
     // Detach every signal handler carrying `this` as user-data before we hand the pipeline
     // to a background thread, so a late webrtcbin / ICE / data-channel callback can't fire
     // into a session that's about to be destroyed. (_onEncodedSample is intentionally

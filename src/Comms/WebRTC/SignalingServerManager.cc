@@ -262,8 +262,11 @@ void SignalingServerManager::registerGCS(const QString &gcsId, const QString &ta
         _updateConnectionStatus("GCS 등록 중...");
 
     } else {
+        // connectToServer()가 아니라 connectToServerWebSocketOnly()로 가면 _gcsId가
+        // 지워지고 _webSocketOnlyMode=true가 되어, 연결 후 자동 등록이 영영 나가지
+        // 않는다(등록 의도 유실). 등록 정보를 유지한 채 연결한다.
         qCDebug(SignalingServerManagerLog) << "Not connected, establishing WebSocket connection first";
-        connectToServerWebSocketOnly(_serverUrl);
+        connectToServer(_serverUrl, _gcsId, _targetDroneId);
     }
 }
 
