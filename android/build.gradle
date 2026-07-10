@@ -51,7 +51,7 @@ android {
 
     // namespace = androidPackageName
     namespace = "org.mavlink.AMPMissionControl"
-    compileSdk qgcConfigOrDefault('QGC_ANDROID_COMPILE_SDK_VERSION', androidCompileSdkVersion).toInteger()
+    compileSdk androidCompileSdkVersion.toInteger()
     buildToolsVersion androidBuildToolsVersion
     ndkVersion androidNdkVersion
 
