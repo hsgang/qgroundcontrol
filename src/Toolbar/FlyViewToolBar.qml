@@ -174,8 +174,6 @@ Item {
                 color:                  qgcPal.windowTransparent
                 radius:                 ScreenTools.defaultFontPixelHeight / 4
                 visible:                webrtcIndicator.showIndicator
-                border.color:           qgcPal.groupBorder
-                border.width:           1
 
                 WEBRTCIndicator{
                     id:                 webrtcIndicator
