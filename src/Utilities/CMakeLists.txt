@@ -15,8 +15,6 @@ target_sources(${CMAKE_PROJECT_NAME}
         QGCLogging.h
         CloudManager.cc
         CloudManager.h
-        RTCMParser.cc
-        RTCMParser.h
 )
 
 target_include_directories(${CMAKE_PROJECT_NAME}

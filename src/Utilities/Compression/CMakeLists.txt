@@ -277,9 +277,11 @@ endif()
 
 CPMAddPackage(
     NAME LibArchive
-    VERSION 3.8.8
+    # Pinned to 3.8.6 (fork-verified): 3.8.8's Windows CryptoAPI digest path fails to
+    # define Digest_CTX under MSVC with crypto backends off, breaking archive_digest.
+    VERSION 3.8.6
     GITHUB_REPOSITORY libarchive/libarchive
-    GIT_TAG v3.8.8
+    GIT_TAG v3.8.6
     OPTIONS
         "ENABLE_WERROR OFF"
         "ENABLE_TEST OFF"

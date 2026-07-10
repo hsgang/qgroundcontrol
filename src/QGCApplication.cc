@@ -93,13 +93,7 @@ QGCApplication::QGCApplication(int& argc, char* argv[], const QGCCommandLinePars
                 QStringLiteral("%1_unittest_%2").arg(QGC_APP_NAME).arg(QCoreApplication::applicationPid());
         }
     } else {
-#ifdef QGC_DAILY_BUILD
-        // This gives daily builds their own separate settings space. Allowing you to use daily and stable builds
-        // side by side without daily screwing up your stable settings.
-        applicationName = QStringLiteral("%1 Daily").arg(QGC_APP_NAME);
-#else
         applicationName = QGC_APP_NAME;
-#endif
     }
     setApplicationName(applicationName);
     setOrganizationName(QGC_ORG_NAME);
