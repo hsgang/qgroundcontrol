@@ -66,10 +66,6 @@
                     "showWhen": "!autoStreamConfig && isStreamSource"
                 },
                 {
-                    "setting": "videoSettings.rtspLatency",
-                    "showWhen": "!autoStreamConfig && isStreamSource && isGST"
-                },
-                {
                     "setting": "videoSettings.forceCpuVideoPath",
                     "showWhen": "QGroundControl.settingsManager.videoSettings.forceCpuVideoPath.userVisible"
                 },

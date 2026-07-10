@@ -57,7 +57,7 @@ Item {
     }
 
     // WebRTC 통계 정보 (WebRTCLink에서 직접 접근)
-    property real _rtt:             _webrtcLink ? _webrtcLink.webRtcRtt : 0
+    property real _jitter:             _webrtcLink ? _webrtcLink.webRtcRtt : 0
     property string _iceCandidate:  _webrtcLink ? _webrtcLink.iceCandidate : ""
 
     // 송수신 속도
@@ -122,7 +122,7 @@ Item {
                 anchors.left:   parent.left
                 color:          qgcPal.buttonText
                 font.pointSize: ScreenTools.smallFontPointSize
-                text:           qsTr("%1 ms").arg(_rtt)
+                text:           qsTr("%1 ms").arg(_jitter)
             }
 
             QGCLabel {
@@ -158,8 +158,8 @@ Item {
                             heading: qsTr("RTC 상태 정보")
 
                             LabelledLabel {
-                                label:      qsTr("응답지연")
-                                labelText:  qsTr("%1 ms").arg(_rtt)
+                                label:      qsTr("지터")
+                                labelText:  qsTr("%1 ms").arg(_jitter)
                             }
                             LabelledLabel {
                                 label:      qsTr("데이터 송신")
