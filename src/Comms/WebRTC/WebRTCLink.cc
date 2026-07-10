@@ -100,6 +100,9 @@ void WebRTCLink::reconnectLink()
 
 bool WebRTCLink::isReconnecting() const
 {
+    // No auto-reconnect state machine on the webrtcbin backend: a dropped link is torn
+    // down and re-established by LinkManager, not resumed in place. reconnectLink() does
+    // an explicit stop()+start() but does not expose a transient "reconnecting" phase.
     return false;
 }
 
@@ -197,7 +200,9 @@ void WebRTCLink::_onRtcStatusMessageChanged(const QString& message)
 
 bool WebRTCLink::isVideoStreamActive() const
 {
-    return _binSession != nullptr;
+    // Video flows over the same webrtcbin session as the data channel, so the link
+    // being connected is our best available signal that the stream is live.
+    return _connected;
 }
 
 void WebRTCLink::_onWebRtcStatsUpdated(const WebRTCStats& stats)
@@ -239,6 +244,11 @@ void WebRTCLink::_onRtcModuleVersionInfoUpdated(const RTCModuleVersionInfo& vers
 
 void WebRTCLink::sendCustomMessage(const QString& message)
 {
+#ifdef QGC_GST_STREAMING
+    if (_binSession) {
+        _binSession->sendCustom(message);   // string command on the "custom" data channel
+    }
+#else
     Q_UNUSED(message)
-    qCDebug(WebRTCLinkLog) << "sendCustomMessage is not supported on the webrtcbin backend";
+#endif
 }

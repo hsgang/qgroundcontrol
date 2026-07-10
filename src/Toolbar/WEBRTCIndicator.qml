@@ -57,7 +57,7 @@ Item {
     }
 
     // WebRTC 통계 정보 (WebRTCLink에서 직접 접근)
-    property real _jitter:             _webrtcLink ? _webrtcLink.webRtcRtt : 0
+    property real _jitter:             _webrtcLink ? _webrtcLink.webRtcJitter : 0
     property string _iceCandidate:  _webrtcLink ? _webrtcLink.iceCandidate : ""
 
     // 송수신 속도
@@ -106,7 +106,7 @@ Item {
 
         QGCLabel {
             horizontalAlignment: Text.AlignRight
-            text: (_webrtcLink && _webrtcLink.webRtcRtt < 0) ? _webrtcLink.rtcStatusMessage : ""
+            text: (_webrtcLink && _webrtcLink.webRtcJitter < 0) ? _webrtcLink.rtcStatusMessage : ""
             anchors.verticalCenter: parent.verticalCenter
             visible: text !== ""
         }
@@ -196,18 +196,10 @@ Item {
                                 label:      qsTr("RTSP 소스 패킷")
                                 labelText:  qsTr("%1 pkt/s").arg(_videoRtspPacketsPerSec.toFixed(1))
                             }
-                            // LabelledLabel {
-                            //     label:      qsTr("디코딩 프레임")
-                            //     labelText:  qsTr("%1 fps").arg(_videoDecodedFramesPerSec.toFixed(1))
-                            // }
                             LabelledLabel {
                                 label:      qsTr("인코딩 프레임")
                                 labelText:  qsTr("%1 fps").arg(_videoEncodedFramesPerSec.toFixed(1))
                             }
-                            // LabelledLabel {
-                            //     label:      qsTr("SRT 프레임")
-                            //     labelText:  qsTr("%1 fps").arg(_videoSrtFramesPerSec.toFixed(1))
-                            // }
                             LabelledLabel {
                                 label:      qsTr("RTP 프레임")
                                 labelText:  qsTr("%1 fps").arg(_videoRtpFramesPerSec.toFixed(1))

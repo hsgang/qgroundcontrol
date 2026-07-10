@@ -23,7 +23,7 @@ class WebRTCLink : public LinkInterface
     Q_PROPERTY(RTCModuleVersionInfo rtcModuleVersionInfo READ rtcModuleVersionInfo NOTIFY rtcModuleVersionInfoChanged)
 
     // WebRTC 통계 프로퍼티 (QML에서 편리하게 접근하기 위해)
-    Q_PROPERTY(int webRtcRtt READ webRtcRtt NOTIFY webRtcStatsChanged)
+    Q_PROPERTY(int webRtcJitter READ webRtcJitter NOTIFY webRtcStatsChanged)
     Q_PROPERTY(QString iceCandidate READ iceCandidate NOTIFY webRtcStatsChanged)
 
     // 송수신 속도
@@ -92,7 +92,7 @@ class WebRTCLink : public LinkInterface
     const RTCModuleVersionInfo& rtcModuleVersionInfo() const { return _rtcModuleVersionInfo; }
 
     // WebRTC 통계 getter 메서드들
-    int webRtcRtt() const { return _webRtcStats.rttMs; }
+    int webRtcJitter() const { return _webRtcStats.jitterMs; }
     QString iceCandidate() const { return _webRtcStats.iceCandidate; }
 
     // 송수신 속도 getter

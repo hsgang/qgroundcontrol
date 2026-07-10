@@ -23,12 +23,9 @@
 
 QGC_LOGGING_CATEGORY(WebRTCBinLog, "Comms.WebRTCBin")
 
-// NOTE: first-cut PoC. Compiles against gstreamer-webrtc-1.0 / gstreamer-sdp-1.0
-// (added to the GStreamer component set in Phase 0). It has NOT been build- or
-// run-tested yet — expect to iterate the negotiation/pad-linking details on the
-// first real build. The goal is to prove clean, low-latency video from the drone
-// via webrtcbin (NACK/RTX) before wiring it into the QGC QML sink and the MAVLink
-// data path.
+// Built against gstreamer-webrtc-1.0 / gstreamer-sdp-1.0. Delivers the drone's
+// H264 (via webrtcbin NACK/RTX) into VideoManager's external-encoded source and
+// bridges the mavlink/custom data channels to the link. See WebRTCBinSession.h.
 
 namespace {
 // SCTP send-buffer thresholds. Low threshold matches the libdatachannel path
@@ -541,60 +538,46 @@ void WebRTCBinSession::_onPadAdded(GstElement * /*webrtc*/, GstPad *pad, gpointe
         return;   // only interested in the drone's outgoing media (our recv src pads)
     }
 
-    if (self->_config.showDebugWindow) {
-        // Debug: recv pad -> decodebin -> videoconvert -> autovideosink (standalone window).
-        GstElement *decodebin = gst_element_factory_make("decodebin", nullptr);
-        if (!decodebin) { qCWarning(WebRTCBinLog) << "decodebin create failed"; return; }
-        g_signal_connect(decodebin, "pad-added", G_CALLBACK(_onDecodebinPadAdded), self);
-        gst_bin_add(GST_BIN(self->_pipeline), decodebin);
-        gst_element_sync_state_with_parent(decodebin);
-        GstPad *sink = gst_element_get_static_pad(decodebin, "sink");
-        if (gst_pad_link(pad, sink) != GST_PAD_LINK_OK) {
-            qCWarning(WebRTCBinLog) << "Failed to link webrtcbin pad -> decodebin";
-        }
-        gst_object_unref(sink);
-    } else {
-        // Render inside QGC with one jitter buffer end-to-end: webrtcbin already did
-        // NACK/RTX + jitter buffering, so depay + parse the recovered stream to elementary
-        // H264 (byte-stream/au) and hand it to VideoManager's external-encoded source
-        // (GstVideoReceiver appsrc -> tee -> decode/record/sink -> FlyView). No second
-        // jitter buffer or depay downstream; QGC decode/record/metrics/overlay are reused.
-        VideoManager::instance()->enableWebRtcEncodedMode();
+    // Render inside QGC with one jitter buffer end-to-end: webrtcbin already did
+    // NACK/RTX + jitter buffering, so depay + parse the recovered stream to elementary
+    // H264 (byte-stream/au) and hand it to VideoManager's external-encoded source
+    // (GstVideoReceiver appsrc -> tee -> decode/record/sink -> FlyView). No second
+    // jitter buffer or depay downstream; QGC decode/record/metrics/overlay are reused.
+    VideoManager::instance()->enableWebRtcEncodedMode();
 
-        GstElement *depay   = gst_element_factory_make("rtph264depay", nullptr);
-        GstElement *parse   = gst_element_factory_make("h264parse", nullptr);
-        GstElement *capsf   = gst_element_factory_make("capsfilter", nullptr);
-        GstElement *appsink = gst_element_factory_make("appsink", nullptr);
-        if (!depay || !parse || !capsf || !appsink) {
-            qCWarning(WebRTCBinLog) << "depay/parse/capsfilter/appsink create failed";
-            gst_clear_object(&depay); gst_clear_object(&parse);
-            gst_clear_object(&capsf); gst_clear_object(&appsink);
-            return;
-        }
-        g_object_set(parse, "config-interval", -1, nullptr);
-        GstCaps *caps = gst_caps_from_string("video/x-h264, stream-format=(string)byte-stream, alignment=(string)au");
-        g_object_set(capsf, "caps", caps, nullptr);
-        gst_clear_caps(&caps);
-        g_object_set(appsink, "emit-signals", TRUE, "sync", FALSE,
-                     "max-buffers", 8, "drop", FALSE, nullptr);
-        g_signal_connect(appsink, "new-sample", G_CALLBACK(_onEncodedSample), self);
-
-        gst_bin_add_many(GST_BIN(self->_pipeline), depay, parse, capsf, appsink, nullptr);
-        gst_element_sync_state_with_parent(depay);
-        gst_element_sync_state_with_parent(parse);
-        gst_element_sync_state_with_parent(capsf);
-        gst_element_sync_state_with_parent(appsink);
-        if (!gst_element_link_many(depay, parse, capsf, appsink, nullptr)) {
-            qCWarning(WebRTCBinLog) << "Failed to link depay -> parse -> capsfilter -> appsink";
-        }
-        GstPad *sink = gst_element_get_static_pad(depay, "sink");
-        if (gst_pad_link(pad, sink) != GST_PAD_LINK_OK) {
-            qCWarning(WebRTCBinLog) << "Failed to link webrtcbin pad -> rtph264depay";
-        }
-        gst_object_unref(sink);
+    GstElement *depay   = gst_element_factory_make("rtph264depay", nullptr);
+    GstElement *parse   = gst_element_factory_make("h264parse", nullptr);
+    GstElement *capsf   = gst_element_factory_make("capsfilter", nullptr);
+    GstElement *appsink = gst_element_factory_make("appsink", nullptr);
+    if (!depay || !parse || !capsf || !appsink) {
+        qCWarning(WebRTCBinLog) << "depay/parse/capsfilter/appsink create failed";
+        gst_clear_object(&depay); gst_clear_object(&parse);
+        gst_clear_object(&capsf); gst_clear_object(&appsink);
+        return;
     }
+    g_object_set(parse, "config-interval", -1, nullptr);
+    GstCaps *caps = gst_caps_from_string("video/x-h264, stream-format=(string)byte-stream, alignment=(string)au");
+    g_object_set(capsf, "caps", caps, nullptr);
+    gst_clear_caps(&caps);
+    g_object_set(appsink, "emit-signals", TRUE, "sync", FALSE,
+                 "max-buffers", 8, "drop", FALSE, nullptr);
+    g_signal_connect(appsink, "new-sample", G_CALLBACK(_onEncodedSample), self);
 
-    QMetaObject::invokeMethod(self, [self]() { emit self->connected(); }, Qt::QueuedConnection);
+    gst_bin_add_many(GST_BIN(self->_pipeline), depay, parse, capsf, appsink, nullptr);
+    gst_element_sync_state_with_parent(depay);
+    gst_element_sync_state_with_parent(parse);
+    gst_element_sync_state_with_parent(capsf);
+    gst_element_sync_state_with_parent(appsink);
+    if (!gst_element_link_many(depay, parse, capsf, appsink, nullptr)) {
+        qCWarning(WebRTCBinLog) << "Failed to link depay -> parse -> capsfilter -> appsink";
+    }
+    GstPad *sink = gst_element_get_static_pad(depay, "sink");
+    if (gst_pad_link(pad, sink) != GST_PAD_LINK_OK) {
+        qCWarning(WebRTCBinLog) << "Failed to link webrtcbin pad -> rtph264depay";
+    }
+    gst_object_unref(sink);
+    // NOTE: no connected() here — the link is "connected" when the mavlink data channel
+    // opens (see _onDataChannel / _onMavlinkChannelOpen), not when video starts flowing.
 }
 
 GstFlowReturn WebRTCBinSession::_onEncodedSample(GstElement *appsink, gpointer /*userData*/)
@@ -613,47 +596,6 @@ GstFlowReturn WebRTCBinSession::_onEncodedSample(GstElement *appsink, gpointer /
     }
     gst_sample_unref(sample);
     return GST_FLOW_OK;
-}
-
-void WebRTCBinSession::_onDecodebinPadAdded(GstElement * /*decodebin*/, GstPad *pad, gpointer userData)
-{
-    auto *self = static_cast<WebRTCBinSession *>(userData);
-
-    // Only handle raw video caps.
-    GstCaps *caps = gst_pad_get_current_caps(pad);
-    const gchar *name = caps ? gst_structure_get_name(gst_caps_get_structure(caps, 0)) : "";
-    const bool isVideo = name && g_str_has_prefix(name, "video/");
-    if (caps) gst_caps_unref(caps);
-    if (!isVideo) {
-        return;
-    }
-
-    GstElement *convert = gst_element_factory_make("videoconvert", nullptr);
-    GstElement *sink    = gst_element_factory_make(
-        self->_config.showDebugWindow ? "autovideosink" : "fakesink", nullptr);
-    if (!convert || !sink) {
-        qCWarning(WebRTCBinLog) << "videoconvert/sink create failed";
-        return;
-    }
-    // Low-latency: render frames as they decode; the browser comparison showed
-    // buffering was our latency source.
-    g_object_set(sink, "sync", FALSE, nullptr);
-
-    gst_bin_add_many(GST_BIN(self->_pipeline), convert, sink, nullptr);
-    gst_element_sync_state_with_parent(convert);
-    gst_element_sync_state_with_parent(sink);
-
-    if (!gst_element_link(convert, sink)) {
-        qCWarning(WebRTCBinLog) << "Failed to link videoconvert -> sink";
-        return;
-    }
-    GstPad *convSink = gst_element_get_static_pad(convert, "sink");
-    if (gst_pad_link(pad, convSink) != GST_PAD_LINK_OK) {
-        qCWarning(WebRTCBinLog) << "Failed to link decodebin pad -> videoconvert";
-    }
-    gst_object_unref(convSink);
-
-    qCDebug(WebRTCBinLog) << "Video branch linked; rendering" << name;
 }
 
 void WebRTCBinSession::_onDataChannel(GstElement * /*webrtc*/, GstElement *channel, gpointer userData)
@@ -689,10 +631,16 @@ void WebRTCBinSession::_onDataChannel(GstElement * /*webrtc*/, GstElement *chann
         // send gate from the current ready-state so we don't miss the on-open edge.
         GstWebRTCDataChannelState state = GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING;
         g_object_get(channel, "ready-state", &state, nullptr);
-        self->_mavlinkChannelOpen.store(state == GST_WEBRTC_DATA_CHANNEL_STATE_OPEN);
+        const bool alreadyOpen = (state == GST_WEBRTC_DATA_CHANNEL_STATE_OPEN);
+        self->_mavlinkChannelOpen.store(alreadyOpen);
 
-        // The mavlink channel is what makes the vehicle come online — signal connected.
-        QMetaObject::invokeMethod(self, [self]() { emit self->connected(); }, Qt::QueuedConnection);
+        // connected() means "the mavlink channel can carry MAVLink". Emit it from a
+        // single place keyed on the channel being OPEN: here if it already is, otherwise
+        // _onMavlinkChannelOpen fires it on the CONNECTING->OPEN edge. (Do NOT emit it
+        // from the video pad path — video flowing is not the link being up.)
+        if (alreadyOpen) {
+            QMetaObject::invokeMethod(self, [self]() { emit self->connected(); }, Qt::QueuedConnection);
+        }
     } else if (name == QStringLiteral("custom")) {
         // RTC module status (system_info / video_metrics / version_check) arrives here
         // as JSON *strings*, so use on-message-string (not -data).
@@ -786,6 +734,21 @@ void WebRTCBinSession::sendMavlink(const QByteArray &data)
     // Emit outside the lock: mirrors the libdatachannel path so the link keeps its
     // sent-byte statistics, without re-entering the mutex on a direct connection.
     emit bytesSent(data);
+}
+
+void WebRTCBinSession::sendCustom(const QString &text)
+{
+    if (text.isEmpty() || !_customChannel) {
+        return;
+    }
+    // The "custom" channel is string-based (drone reads it via on-message-string).
+    // Only send once it's OPEN — webrtcbin drops sends on a not-yet-open channel.
+    GstWebRTCDataChannelState state = GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING;
+    g_object_get(_customChannel, "ready-state", &state, nullptr);
+    if (state != GST_WEBRTC_DATA_CHANNEL_STATE_OPEN) {
+        return;
+    }
+    g_signal_emit_by_name(_customChannel, "send-string", text.toUtf8().constData());
 }
 
 void WebRTCBinSession::_onMavlinkChannelOpen(GstElement * /*channel*/, gpointer userData)
@@ -908,10 +871,10 @@ void WebRTCBinSession::_onStatsPromise(GstPromise *promise, gpointer userData)
     WebRTCStats stats;
     stats.videoBytesReceived = static_cast<qint64>(sc.bytesReceived);
     stats.videoPacketCount   = static_cast<int>(sc.packetsReceived);
-    // No RTT available on a recvonly webrtcbin receiver — surface jitter (ms) in the
-    // rttMs field so the existing status readout shows link quality.
+    // No ICE/RTCP RTT available on a recvonly webrtcbin receiver — report interarrival
+    // jitter (ms) as the link-quality number.
     if (sc.jitterSec >= 0.0) {
-        stats.rttMs = static_cast<int>(sc.jitterSec * 1000.0 + 0.5);
+        stats.jitterMs = static_cast<int>(sc.jitterSec * 1000.0 + 0.5);
     }
     if (self->_lastStatsMs > 0 && nowMs > self->_lastStatsMs && sc.bytesReceived >= self->_lastVideoBytes) {
         const double dtSec = (nowMs - self->_lastStatsMs) / 1000.0;

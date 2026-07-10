@@ -6,7 +6,7 @@
 
 // WebRTC 통계 정보를 효율적으로 묶어서 전달하기 위한 구조체
 struct WebRTCStats {
-    int rttMs = 0;  // RTT (Round Trip Time)
+    int jitterMs = 0;  // interarrival jitter (ms); webrtcbin exposes no ICE RTT for a recvonly receiver
 
     // ICE Candidate 정보
     QString iceCandidate;  // 선택된 candidate pair
@@ -25,7 +25,7 @@ struct WebRTCStats {
 
     // 비교 연산자 (변경 감지용)
     bool operator==(const WebRTCStats& other) const {
-        return rttMs == other.rttMs &&
+        return jitterMs == other.jitterMs &&
                iceCandidate == other.iceCandidate &&
                qFuzzyCompare(webRtcSent, other.webRtcSent) &&
                qFuzzyCompare(webRtcRecv, other.webRtcRecv) &&
@@ -40,15 +40,15 @@ struct WebRTCStats {
 
     // 유효성 검사
     bool isValid() const {
-        return rttMs >= 0 && webRtcSent >= 0.0 && webRtcRecv >= 0.0 &&
+        return jitterMs >= 0 && webRtcSent >= 0.0 && webRtcRecv >= 0.0 &&
                videoRateKBps >= 0.0 && videoPacketCount >= 0 && videoBytesReceived >= 0;
     }
 
     // 디버그 출력용
     QString toString() const {
-        QString rttStr = QString("RTT: %1ms").arg(rttMs);
+        QString jitterStr = QString("Jitter: %1ms").arg(jitterMs);
         if (!iceCandidate.isEmpty()) {
-            rttStr += QString(" [%1]").arg(iceCandidate);
+            jitterStr += QString(" [%1]").arg(iceCandidate);
         }
 
         QString dataRateStr = QString("Sent: %1 KB/s, Recv: %2 KB/s")
@@ -61,7 +61,7 @@ struct WebRTCStats {
                                .arg(videoBytesReceived);
 
         return QString("%1, %2, %3")
-               .arg(rttStr)
+               .arg(jitterStr)
                .arg(dataRateStr)
                .arg(videoRateStr);
     }

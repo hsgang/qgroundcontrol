@@ -1,24 +1,23 @@
 #pragma once
 
 // -----------------------------------------------------------------------------
-// WebRTCBinSession — PoC WebRTC receive path built on GStreamer `webrtcbin`.
+// WebRTCBinSession — the WebRTC receive path built on GStreamer `webrtcbin`.
 //
-// This is an ALTERNATIVE to the libdatachannel WebRTCWorker, used to validate
-// that webrtcbin (with its built-in rtpbin NACK/RTX jitter buffer) delivers the
-// clean, low-latency video a browser gets from the same drone — which the
-// libdatachannel + hand-rolled appsrc bridge does not.
+// This replaced the libdatachannel worker: webrtcbin's built-in rtpbin gives
+// NACK/RTX loss recovery and a proper jitter buffer, so the drone's stream
+// arrives as clean and low-latency as a browser gets it.
 //
-// Scope of this first cut (desktop PoC):
 //   * Reuses SignalingServerManager (auth, WS, GCS registration, offer/answer/ICE).
-//   * Role: answerer. The drone sends the offer (sendonly video + datachannels).
-//   * Video: webrtcbin recv pad -> decodebin -> videoconvert -> autovideosink
-//     (a standalone window). Proves media quality without touching the QGC QML
-//     sink. Wiring into QGCQVideoSinkController is the NEXT increment.
-//   * Data channels: on-data-channel is logged; the MAVLink byte bridge to
-//     WebRTCLink is a TODO (see .cc).
+//   * Role: answerer. The drone sends the offer (sendrecv video + data channels).
+//     We pin the offered codec (incl. the transport-wide-cc extmap) as the
+//     transceiver codec-preferences so TWCC survives into our answer.
+//   * Video: webrtcbin recv pad -> rtph264depay -> h264parse -> appsink ->
+//     VideoManager::pushWebRtcEncoded() -> GstVideoReceiver's external-encoded
+//     source, reusing QGC decode/record/metrics/overlay.
+//   * Data channels: "mavlink" bridges to the link's bytes; "custom" carries
+//     JSON status (system_info / video_metrics / version) to the QML indicators.
 //
-// The existing libdatachannel path is untouched; this compiles only when
-// GStreamer video streaming is enabled and is selected behind a build flag.
+// Only compiled when GStreamer video streaming is enabled (QGC_GST_STREAMING).
 // -----------------------------------------------------------------------------
 
 #include <QtCore/QObject>
@@ -68,7 +67,6 @@ public:
         QString targetDroneId;     ///< drone we pair with
         QString stunServer;        ///< "stun://host:port" (optional)
         WebRTCBinTurn turn;        ///< time-limited TURN from /bundle (optional)
-        bool    showDebugWindow = false; ///< true: standalone autovideosink; false: render inside QGC
     };
 
     explicit WebRTCBinSession(const Config &config, QObject *parent = nullptr);
@@ -81,6 +79,9 @@ public:
 
     /// Send bytes on the "mavlink" data channel (no-op until the channel opens).
     void sendMavlink(const QByteArray &data);
+
+    /// Send a command/status string on the "custom" data channel (no-op until it opens).
+    void sendCustom(const QString &text);
 
 signals:
     void connected();
@@ -127,7 +128,6 @@ private:
     static void _onMavlinkChannelOpen(GstElement *channel, gpointer userData);
     static void _onMavlinkChannelClosed(GstElement *channel, gpointer userData);
     static void _onMavlinkChannelError(GstElement *channel, GError *error, gpointer userData);
-    static void _onDecodebinPadAdded(GstElement *decodebin, GstPad *pad, gpointer userData);
     // appsink new-sample: forward depayed elementary H264 into QGC's VideoManager pipeline.
     static GstFlowReturn _onEncodedSample(GstElement *appsink, gpointer userData);
 
