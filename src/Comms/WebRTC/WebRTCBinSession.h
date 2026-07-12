@@ -115,9 +115,9 @@ private:
     void _teardownPipeline();
     void _applyIceServers();
     void _handleOffer(const QString &sdp, const QString &fromDroneId);
-    /// sdpMLineIndex < 0 이면(구버전 드론) sdpMid를 offer의 m-line 인덱스로 역매핑한다.
+    /// sdpMLineIndex는 필수 계약 — 음수(부재)는 위반으로 간주해 drop한다.
     void _handleRemoteCandidate(const QString &candidate, const QString &sdpMid,
-                                int sdpMLineIndex = -1);
+                                int sdpMLineIndex);
 
     // webrtcbin signal callbacks (static -> instance)
     static void _onIceCandidate(GstElement *webrtc, guint mlineIndex, gchar *candidate, gpointer userData);
@@ -152,9 +152,6 @@ private:
     void _pollStats();
     static void _onStatsPromise(GstPromise *promise, gpointer userData);
 
-    // Map the drone's sdpMid (e.g. "video", "0") to the m-line index webrtcbin needs.
-    int _mlineIndexForMid(const QString &sdpMid) const;
-
     Config _config;
     SignalingServerManager *_signaling = nullptr;
 
@@ -175,14 +172,18 @@ private:
 
     bool _started = false;
     bool _remoteDescriptionSet = false;
+    /// True while this session's answer was built with pinned codec-preferences —
+    /// gates the answer self-check that detects a pin-broken video m-line.
+    bool _pinnedThisSession = false;
 
     /// Reffed caps of the offer's video m-line (codec + extmap + rtcp-fb), captured in
     /// _handleOffer and pinned onto the transceiver in _applyAnswerCodecPreferences.
     GstCaps *_offerVideoCaps = nullptr;
 
-    /// sdpMid ("video", "0", …) -> m-line index, filled from the drone's offer so
-    /// remote ICE candidates (which carry sdpMid) can be mapped to the index
-    /// webrtcbin's add-ice-candidate expects.
+    /// sdpMid ("video", "0", …) -> m-line index, filled from the drone's offer.
+    /// Used only for OUTGOING candidates: webrtcbin reports an m-line index and the
+    /// signaling message needs the matching sdpMid. (Incoming candidates use their
+    /// sdpMLineIndex directly — the mid reverse-mapping fallback was removed.)
     QHash<QString, int> _midToMline;
     QString _fromDroneId;
 

@@ -36,6 +36,14 @@ constexpr guint64 kBufferedAmountLowThreshold = 8 * 1024;          // 8 KB
 constexpr guint64 kBufferedAmountHighWarn     = 4 * 1024 * 1024;   // 4 MB
 constexpr qint64  kBufferWarnIntervalMs       = 1000;
 
+// Set once a pinned answer produced a rejected video m-line (m=video port 0).
+// The pin failure is a property of the bundled GStreamer, so every retry this
+// run would fail identically — later sessions skip the pin and connect without
+// TWCC (the drone demotes GCC to manual control). Process-lifetime on purpose:
+// an app restart (e.g. after an update) retries the pin from scratch.
+// QGC_WEBRTC_PIN_TWCC=0 remains the manual override.
+std::atomic_bool s_twccPinBroken{false};
+
 // Send `{ id, to, type, ... }` back to the drone via the shared signaling channel.
 QJsonObject baseMessage(const QString &gcsId, const QString &droneId, const QString &type)
 {
@@ -197,6 +205,7 @@ void WebRTCBinSession::_teardownPipeline()
     gst_clear_caps(&_offerVideoCaps);
     _midToMline.clear();
     _remoteDescriptionSet = false;
+    _pinnedThisSession = false;
 }
 
 bool WebRTCBinSession::_buildPipeline()
@@ -300,16 +309,6 @@ void WebRTCBinSession::_onSignalingMessage(const QJsonObject &message)
 void WebRTCBinSession::_onRegistrationSuccessful()
 {
     qCDebug(WebRTCBinLog) << "GCS registered; waiting for drone offer";
-}
-
-int WebRTCBinSession::_mlineIndexForMid(const QString &sdpMid) const
-{
-    if (_midToMline.contains(sdpMid)) {
-        return _midToMline.value(sdpMid);
-    }
-    bool isNum = false;
-    const int asNum = sdpMid.toInt(&isNum);
-    return isNum ? asNum : 0;   // pragmatic fallback
 }
 
 void WebRTCBinSession::_handleOffer(const QString &sdp, const QString &fromDroneId)
@@ -456,6 +455,11 @@ void WebRTCBinSession::_applyAnswerCodecPreferences()
         qCDebug(WebRTCBinLog) << "codec-preferences pin disabled via QGC_WEBRTC_PIN_TWCC=0";
         return;
     }
+    if (s_twccPinBroken.load()) {
+        qCDebug(WebRTCBinLog) << "codec-preferences pin skipped (a pinned answer broke the "
+                                 "video m-line earlier this run)";
+        return;
+    }
 
     // Video is the first (and only) RTP transceiver in the drone's bundle; the
     // datachannel m-line is not a transceiver, so index 0 is the video transceiver.
@@ -467,6 +471,7 @@ void WebRTCBinSession::_applyAnswerCodecPreferences()
     }
 
     g_object_set(transceiver, "codec-preferences", _offerVideoCaps, nullptr);
+    _pinnedThisSession = true;
 
     gchar *capsStr = gst_caps_to_string(_offerVideoCaps);
     qCDebug(WebRTCBinLog) << "Pinned answer codec-preferences:" << capsStr;
@@ -505,11 +510,26 @@ void WebRTCBinSession::_sendLocalDescription(GstWebRTCSessionDescription *desc)
     const QString sdp = QString::fromUtf8(sdpText);
     g_free(sdpText);
 
-    // Confirm at a glance whether the TWCC extmap survived into the answer we ship.
-    // If false while the offer had it, webrtcbin dropped the extension (rtphdrexttwcc
-    // missing, or codec-preferences didn't take) and the drone won't enable TWCC.
-    qCDebug(WebRTCBinLog) << "Answer transport-wide-cc extmap present:"
-                          << sdp.contains(QStringLiteral("transport-wide-cc"));
+    // Self-check the answer we are about to ship. A rejected video m-line surfaces
+    // as "m=video 0" (port zero); under max-bundle that kills DTLS and the data
+    // channels too, so this session cannot connect. No active recovery needed here:
+    // mark the pin broken, and the drone's negotiation watchdog re-offers in ~20s —
+    // the next answer (unpinned) connects, and the drone demotes GCC to manual.
+    const bool twccEchoed = sdp.contains(QStringLiteral("transport-wide-cc"));
+    if (_pinnedThisSession) {
+        if (sdp.contains(QStringLiteral("m=video 0 "))) {
+            s_twccPinBroken.store(true);
+            qCCritical(WebRTCBinLog) << "TWCC codec-preferences pin broke the video m-line "
+                                        "(m=video port 0); disabling the pin for the rest of "
+                                        "this run — the drone will re-offer and reconnect "
+                                        "without TWCC (manual congestion control)";
+        } else if (!twccEchoed) {
+            qCWarning(WebRTCBinLog) << "Pinned codec-preferences but the answer lacks "
+                                       "transport-wide-cc (rtphdrexttwcc missing?); the drone "
+                                       "will demote GCC to manual congestion control";
+        }
+    }
+    qCDebug(WebRTCBinLog) << "Answer transport-wide-cc extmap present:" << twccEchoed;
 
     // Dump the full answer webrtcbin produced. This is our create-answer output — it
     // proves the SDP negotiation layer is webrtcbin (not libdatachannel) and lets the
@@ -532,9 +552,15 @@ void WebRTCBinSession::_handleRemoteCandidate(const QString &candidate, const QS
                                               int sdpMLineIndex)
 {
     if (!_webrtc) return;
-    // 메시지에 실려온 인덱스를 우선하고, 없으면(구버전 드론) mid로 역매핑한다.
-    const int mline = (sdpMLineIndex >= 0) ? sdpMLineIndex : _mlineIndexForMid(sdpMid);
-    g_signal_emit_by_name(_webrtc, "add-ice-candidate", static_cast<guint>(mline),
+    // Contract: candidates carry sdpMLineIndex (drone module 0456c06+). The mid
+    // reverse-mapping fallback is gone — drop and surface the violation instead
+    // of silently guessing m-line 0.
+    if (sdpMLineIndex < 0) {
+        qCWarning(WebRTCBinLog) << "candidate dropped: sdpMLineIndex missing (mid=" << sdpMid
+                                << ") — drone module predates the index contract";
+        return;
+    }
+    g_signal_emit_by_name(_webrtc, "add-ice-candidate", static_cast<guint>(sdpMLineIndex),
                           candidate.toUtf8().constData());
 }
 
