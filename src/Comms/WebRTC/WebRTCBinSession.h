@@ -109,6 +109,10 @@ private slots:
 private:
     // --- GStreamer glue (run on the GLib/GStreamer side; hop to Qt where needed) ---
     bool _buildPipeline();
+    /// Release channels/webrtcbin and hand the pipeline to a detached teardown thread.
+    /// Shared by stop() and the renegotiation path in _handleOffer() (a drone-side
+    /// session restart sends a fresh offer that needs a fresh pipeline to answer).
+    void _teardownPipeline();
     void _applyIceServers();
     void _handleOffer(const QString &sdp, const QString &fromDroneId);
     void _handleRemoteCandidate(const QString &candidate, const QString &sdpMid);

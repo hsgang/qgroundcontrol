@@ -11,6 +11,7 @@
 #include <QtCore/QMutex>
 #include <QtCore/QStringList>
 #include <climits>
+#include <functional>
 
 class QNetworkAccessManager;
 
@@ -172,6 +173,10 @@ private:
     // issuer 토큰 엔드포인트(client_credentials)에서 Bearer JWT를 받아 WebSocket을 연다.
     void _requestAuthTokenAndOpen(const QString &wsUrl, quint64 generation);
     void _openWebSocketWithToken(const QString &wsUrl, const QString &token);
+    // POST {issuer}/bundle — JWT + TURN 임시자격을 발급받아 캐시하고 done(ok, tokenOrError) 호출.
+    void _fetchBundle(std::function<void(bool, const QString &)> done);
+    // 만료 임박 시 번들 재발급 — 오래 사는 WS에서도 cachedTurnCredentials()를 유효하게 유지.
+    void _refreshBundleIfStale();
 
     // === 핵심 멤버 변수 ===
     
@@ -209,6 +214,9 @@ private:
     QTimer *_getDronesTimer = nullptr;
     void _sendGetDronesRequest();
 
+    // JWT/TURN 번들 신선도 유지
+    QTimer *_bundleRefreshTimer = nullptr;
+
     // 드론 연결 상태 추적
     int _connectedDronesCount = 0;
     QStringList _connectedDronesList;
@@ -218,4 +226,8 @@ private:
     static const int MAX_RECONNECT_ATTEMPTS = 10;
     static const int MAX_RECONNECT_DELAY_MS = 30000;
     static const int GET_DRONES_INTERVAL_MS = 60000;  // 푸시 이벤트(drone:connected/disconnected) 누락 안전망
+    // 번들 갱신: 30초 주기로 검사, 만료 120초 전부터 재발급.
+    // cachedTurnCredentials()의 무효 마진(60초)보다 커야 빈 구간이 없다.
+    static const int BUNDLE_REFRESH_CHECK_MS = 30000;
+    static const int BUNDLE_REFRESH_MARGIN_MS = 120000;
 };

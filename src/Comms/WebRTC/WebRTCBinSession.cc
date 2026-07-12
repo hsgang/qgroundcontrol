@@ -140,6 +140,13 @@ void WebRTCBinSession::stop()
         }
     }
 
+    _teardownPipeline();
+
+    _started = false;
+}
+
+void WebRTCBinSession::_teardownPipeline()
+{
     // Detach every signal handler carrying `this` as user-data before we hand the pipeline
     // to a background thread, so a late webrtcbin / ICE / data-channel callback can't fire
     // into a session that's about to be destroyed. (_onEncodedSample is intentionally
@@ -188,7 +195,7 @@ void WebRTCBinSession::stop()
     }
 
     gst_clear_caps(&_offerVideoCaps);
-    _started = false;
+    _midToMline.clear();
     _remoteDescriptionSet = false;
 }
 
@@ -245,12 +252,25 @@ void WebRTCBinSession::_applyIceServers()
         g_object_set(_webrtc, "stun-server", _config.stunServer.toUtf8().constData(), nullptr);
     }
 
+    // Prefer the signaling manager's *current* bundle TURN over the snapshot taken at
+    // link construction: a renegotiation rebuild can happen hours later, and the manager
+    // keeps its cache refreshed while the snapshot's time-limited credential goes stale.
+    WebRTCBinTurn turn = _config.turn;
+    if (SignalingServerManager *mgr = SignalingServerManager::instance()) {
+        const auto cached = mgr->cachedTurnCredentials();
+        if (cached.isValid()) {
+            turn.urls       = cached.urls;
+            turn.username   = cached.username;
+            turn.credential = cached.credential;
+        }
+    }
+
     // webrtcbin wants turn(s)://user:credential@host:port. The /bundle response
     // gives urls like "turn:host:3478" plus a shared username/credential, so we
     // splice the credentials into the authority.
-    const QString user = QString::fromUtf8(QUrl::toPercentEncoding(_config.turn.username));
-    const QString cred = QString::fromUtf8(QUrl::toPercentEncoding(_config.turn.credential));
-    for (const QString &url : _config.turn.urls) {
+    const QString user = QString::fromUtf8(QUrl::toPercentEncoding(turn.username));
+    const QString cred = QString::fromUtf8(QUrl::toPercentEncoding(turn.credential));
+    for (const QString &url : turn.urls) {
         QString u = url.trimmed();
         if (u.isEmpty()) continue;
         const QString scheme = u.startsWith(QStringLiteral("turns:")) ? QStringLiteral("turns://")
@@ -297,6 +317,21 @@ void WebRTCBinSession::_handleOffer(const QString &sdp, const QString &fromDrone
         return;
     }
     _fromDroneId = fromDroneId;
+
+    // A second offer on a negotiated session means the drone restarted its peer
+    // (SCTP recovery / connection-failed). That offer carries fresh ICE credentials
+    // and a fresh DTLS fingerprint, which webrtcbin cannot renegotiate onto a used
+    // session — so rebuild the pipeline and answer it like a first offer. The old
+    // channels' late on-close can't fire disconnected(): teardown detaches handlers.
+    if (_remoteDescriptionSet) {
+        qCWarning(WebRTCBinLog) << "Renegotiation offer from" << fromDroneId
+                                << "(drone restarted its session); rebuilding pipeline";
+        _teardownPipeline();
+        if (!_buildPipeline()) {
+            qCWarning(WebRTCBinLog) << "Pipeline rebuild for renegotiation failed";
+            return;
+        }
+    }
 
     const QByteArray sdpUtf8 = sdp.toUtf8();
     GstSDPMessage *sdpMsg = nullptr;
@@ -651,6 +686,12 @@ void WebRTCBinSession::_onDataChannel(GstElement * /*webrtc*/, GstElement *chann
         // GstWebRTCDataChannel is a GObject (not a GstObject), so use g_object_ref.
         {
             QMutexLocker lock(&self->_mavlinkChannelMutex);
+            if (self->_mavlinkChannel) {
+                // A renegotiated session delivers a fresh channel: drop the stale one so
+                // its late on-close can't tear the link down, and don't leak the ref.
+                g_signal_handlers_disconnect_by_data(self->_mavlinkChannel, self);
+                g_object_unref(self->_mavlinkChannel);
+            }
             self->_mavlinkChannel = static_cast<GstElement *>(g_object_ref(channel));
         }
 
@@ -681,6 +722,10 @@ void WebRTCBinSession::_onDataChannel(GstElement * /*webrtc*/, GstElement *chann
     } else if (name == QStringLiteral("custom")) {
         // RTC module status (system_info / video_metrics / version_check) arrives here
         // as JSON *strings*, so use on-message-string (not -data).
+        if (self->_customChannel) {
+            g_signal_handlers_disconnect_by_data(self->_customChannel, self);
+            g_object_unref(self->_customChannel);
+        }
         self->_customChannel = static_cast<GstElement *>(g_object_ref(channel));
         g_signal_connect(channel, "on-message-string", G_CALLBACK(_onCustomChannelMessageString), self);
     }

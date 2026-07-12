@@ -62,6 +62,12 @@ SignalingServerManager::SignalingServerManager(QObject *parent)
     _getDronesTimer->setSingleShot(false);
     connect(_getDronesTimer, &QTimer::timeout, this, &SignalingServerManager::_sendGetDronesRequest);
 
+    // JWT/TURN 번들 신선도 유지 타이머 (연결 중일 때만 실제 동작)
+    _bundleRefreshTimer = new QTimer(this);
+    _bundleRefreshTimer->setInterval(BUNDLE_REFRESH_CHECK_MS);
+    connect(_bundleRefreshTimer, &QTimer::timeout, this, &SignalingServerManager::_refreshBundleIfStale);
+    _bundleRefreshTimer->start();
+
     _updateConnectionState(ConnectionState::Disconnected);
     _updateConnectionStatus("초기화됨");
 }
@@ -887,16 +893,50 @@ void SignalingServerManager::_openWebSocketWithAuth(const QString &wsUrl)
 
 void SignalingServerManager::_requestAuthTokenAndOpen(const QString &wsUrl, quint64 generation)
 {
+    // 설정 미비는 재시도 대상이 아니다 — Error 상태로 두고 applyNewSettings를 기다린다.
+    if (deriveAuthIssuerUrl().isEmpty() ||
+        SettingsManager::instance()->cloudSettings()->webrtcAuthClientSecret()->rawValue().toString().isEmpty()) {
+        qCWarning(SignalingServerManagerLog) << "Auth issuer not configured, cannot obtain bearer token";
+        _updateConnectionState(ConnectionState::Error);
+        _updateConnectionStatus("인증 발급자(issuer)가 설정되지 않았습니다");
+        emit connectionError("인증 발급자가 설정되지 않았습니다");
+        return;
+    }
+
+    _updateConnectionStatus("인증 토큰 요청 중...");
+    _fetchBundle([this, wsUrl, generation](bool ok, const QString &tokenOrError) {
+        // 취소/재시작된 연결 시도의 늦은 응답은 무시
+        if (generation != _connectGeneration || _userDisconnected) {
+            qCDebug(SignalingServerManagerLog) << "Ignoring stale/aborted auth token response";
+            return;
+        }
+        if (!ok) {
+            qCWarning(SignalingServerManagerLog) << "Bearer token error:" << tokenOrError;
+            _updateConnectionState(ConnectionState::Error);
+            _updateConnectionStatus(QString("인증 토큰 발급 실패: %1").arg(tokenOrError));
+            emit connectionError(tokenOrError);
+            if (!_userDisconnected) {
+                _reconnectAttempts++;
+                _startReconnectTimer();
+            }
+            return;
+        }
+        _openWebSocketWithToken(wsUrl, tokenOrError);
+    });
+}
+
+// /bundle에서 JWT + TURN 임시자격을 받아 캐시하고 done(ok, tokenOrError)로 알린다.
+// 연결 오픈 경로(_requestAuthTokenAndOpen)와 주기 갱신(_refreshBundleIfStale)이 공유:
+// UI 상태/재연결 처리는 각 호출자의 몫이고 여기서는 발급/캐시만 한다.
+void SignalingServerManager::_fetchBundle(std::function<void(bool, const QString &)> done)
+{
     CloudSettings *cloudSettings = SettingsManager::instance()->cloudSettings();
     const QString issuerUrl = deriveAuthIssuerUrl();   // 서버 호스트에서 파생
     const QString clientId = cloudSettings->webrtcAuthClientId()->rawValue().toString().trimmed();
     const QString clientSecret = cloudSettings->webrtcAuthClientSecret()->rawValue().toString();
 
     if (issuerUrl.isEmpty() || clientSecret.isEmpty()) {
-        qCWarning(SignalingServerManagerLog) << "Auth issuer not configured, cannot obtain bearer token";
-        _updateConnectionState(ConnectionState::Error);
-        _updateConnectionStatus("인증 발급자(issuer)가 설정되지 않았습니다");
-        emit connectionError("인증 발급자가 설정되지 않았습니다");
+        done(false, QStringLiteral("인증 발급자(issuer)가 설정되지 않았습니다"));
         return;
     }
 
@@ -924,31 +964,13 @@ void SignalingServerManager::_requestAuthTokenAndOpen(const QString &wsUrl, quin
     body["client_id"] = effectiveClientId;
     body["client_secret"] = clientSecret;
 
-    _updateConnectionStatus("인증 토큰 요청 중...");
     qCDebug(SignalingServerManagerLog) << "Requesting bearer token from issuer:" << endpoint
                                        << "client_id:" << effectiveClientId;
 
     QNetworkReply *reply = _authNam->post(request, QJsonDocument(body).toJson(QJsonDocument::Compact));
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, wsUrl, generation, endpoint, effectiveClientId]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply, done, endpoint, effectiveClientId]() {
         reply->deleteLater();
-
-        // 취소/재시작된 연결 시도의 늦은 응답은 무시
-        if (generation != _connectGeneration || _userDisconnected) {
-            qCDebug(SignalingServerManagerLog) << "Ignoring stale/aborted auth token response";
-            return;
-        }
-
-        const auto failAndRetry = [this](const QString &reason) {
-            qCWarning(SignalingServerManagerLog) << "Bearer token error:" << reason;
-            _updateConnectionState(ConnectionState::Error);
-            _updateConnectionStatus(QString("인증 토큰 발급 실패: %1").arg(reason));
-            emit connectionError(reason);
-            if (!_userDisconnected) {
-                _reconnectAttempts++;
-                _startReconnectTimer();
-            }
-        };
 
         if (reply->error() != QNetworkReply::NoError) {
             // 서버가 내려준 본문에 실패 원인(필드/그랜트 불일치 등)이 담겨 있는 경우가 많아 함께 로깅.
@@ -966,14 +988,14 @@ void SignalingServerManager::_requestAuthTokenAndOpen(const QString &wsUrl, quin
                 << ", WWW-Authenticate: " << (wwwAuth.isEmpty() ? QByteArray("<none>") : wwwAuth)
                 << ", body: " << errBody
                 << ", qtError: " << reply->errorString();
-            failAndRetry(reply->errorString());
+            done(false, reply->errorString());
             return;
         }
 
         QJsonParseError parseError;
         const QJsonDocument doc = QJsonDocument::fromJson(reply->readAll(), &parseError);
         if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {
-            failAndRetry(QStringLiteral("응답 파싱 실패"));
+            done(false, QStringLiteral("응답 파싱 실패"));
             return;
         }
 
@@ -981,7 +1003,7 @@ void SignalingServerManager::_requestAuthTokenAndOpen(const QString &wsUrl, quin
         // /bundle 응답의 tokens.signaling이 aud=signaling-server 토큰이다.
         const QString token = obj["tokens"].toObject()["signaling"].toString();
         if (token.isEmpty()) {
-            failAndRetry(QStringLiteral("응답에 tokens.signaling 없음"));
+            done(false, QStringLiteral("응답에 tokens.signaling 없음"));
             return;
         }
 
@@ -1033,7 +1055,30 @@ void SignalingServerManager::_requestAuthTokenAndOpen(const QString &wsUrl, quin
             }
         }
 
-        _openWebSocketWithToken(wsUrl, token);
+        done(true, token);
+    });
+}
+
+void SignalingServerManager::_refreshBundleIfStale()
+{
+    // /bundle의 JWT·TURN 자격이 WS를 열 때만 발급되면, WS가 몇 시간 살아 있는 동안
+    // 캐시가 만료되어 이후 생성되는 WebRTCLink(및 재협상 파이프라인 재구축)가 TURN
+    // 없이(STUN만) 시작한다. 만료가 임박하면 재발급해 cachedTurnCredentials()가
+    // 항상 유효한 값을 주도록 유지한다.
+    if (!isConnected() || _userDisconnected) {
+        return;
+    }
+    const qint64 now = QDateTime::currentMSecsSinceEpoch();
+    // TURN 자격은 같은 발급/TTL을 공유하므로 JWT 신선도로 함께 판단한다.
+    if (!_jwtToken.isEmpty() && now < (_jwtExpiresAtMs - BUNDLE_REFRESH_MARGIN_MS)) {
+        return;
+    }
+    qCDebug(SignalingServerManagerLog) << "Auth bundle nearing expiry - refreshing JWT/TURN credentials";
+    _fetchBundle([](bool ok, const QString &error) {
+        if (!ok) {
+            // 다음 체크 주기에 자동 재시도되므로 로그만 남긴다.
+            qCWarning(SignalingServerManagerLog) << "Bundle refresh failed (will retry):" << error;
+        }
     });
 }
 
