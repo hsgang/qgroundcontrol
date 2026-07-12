@@ -491,6 +491,16 @@ void WebRTCBinSession::_onAnswerCreated(GstPromise *promise, gpointer userData)
 
     if (!answer) {
         qCWarning(WebRTCBinLog) << "create-answer produced no answer";
+        // With pinned codec-preferences this never reaches the answer self-check in
+        // _sendLocalDescription, so without this the drone's watchdog re-offers into
+        // the same failure forever. Mis-attribution is safe: later sessions merely
+        // run unpinned (connected, TWCC off, drone on manual congestion control).
+        if (self->_pinnedThisSession) {
+            s_twccPinBroken.store(true);
+            qCCritical(WebRTCBinLog) << "create-answer failed on a pinned session; disabling "
+                                        "the TWCC pin for the rest of this run — the drone "
+                                        "will re-offer and reconnect without TWCC";
+        }
         return;
     }
 
