@@ -115,7 +115,9 @@ private:
     void _teardownPipeline();
     void _applyIceServers();
     void _handleOffer(const QString &sdp, const QString &fromDroneId);
-    void _handleRemoteCandidate(const QString &candidate, const QString &sdpMid);
+    /// sdpMLineIndex < 0 이면(구버전 드론) sdpMid를 offer의 m-line 인덱스로 역매핑한다.
+    void _handleRemoteCandidate(const QString &candidate, const QString &sdpMid,
+                                int sdpMLineIndex = -1);
 
     // webrtcbin signal callbacks (static -> instance)
     static void _onIceCandidate(GstElement *webrtc, guint mlineIndex, gchar *candidate, gpointer userData);

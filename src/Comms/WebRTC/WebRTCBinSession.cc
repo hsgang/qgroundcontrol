@@ -290,7 +290,9 @@ void WebRTCBinSession::_onSignalingMessage(const QJsonObject &message)
     if (type == "offer") {
         _handleOffer(message["sdp"].toString(), message["from"].toString());
     } else if (type == "candidate") {
-        _handleRemoteCandidate(message["candidate"].toString(), message["sdpMid"].toString());
+        // sdpMLineIndex가 있으면 그대로 쓰고(-1 = 없음), 없으면 mid로 역매핑한다.
+        _handleRemoteCandidate(message["candidate"].toString(), message["sdpMid"].toString(),
+                               message["sdpMLineIndex"].toInt(-1));
     }
     // registered/drones:list/etc. are handled by SignalingServerManager itself.
 }
@@ -526,10 +528,12 @@ void WebRTCBinSession::_sendLocalDescription(GstWebRTCSessionDescription *desc)
     }, Qt::QueuedConnection);
 }
 
-void WebRTCBinSession::_handleRemoteCandidate(const QString &candidate, const QString &sdpMid)
+void WebRTCBinSession::_handleRemoteCandidate(const QString &candidate, const QString &sdpMid,
+                                              int sdpMLineIndex)
 {
     if (!_webrtc) return;
-    const int mline = _mlineIndexForMid(sdpMid);
+    // 메시지에 실려온 인덱스를 우선하고, 없으면(구버전 드론) mid로 역매핑한다.
+    const int mline = (sdpMLineIndex >= 0) ? sdpMLineIndex : _mlineIndexForMid(sdpMid);
     g_signal_emit_by_name(_webrtc, "add-ice-candidate", static_cast<guint>(mline),
                           candidate.toUtf8().constData());
 }
@@ -547,11 +551,14 @@ void WebRTCBinSession::_onIceCandidate(GstElement * /*webrtc*/, guint mlineIndex
 
     const QString gcsId = self->_config.gcsId;
     const QString droneId = self->_fromDroneId.isEmpty() ? self->_config.targetDroneId : self->_fromDroneId;
-    QMetaObject::invokeMethod(self, [self, gcsId, droneId, cand, mid]() {
+    const int mline = static_cast<int>(mlineIndex);
+    QMetaObject::invokeMethod(self, [self, gcsId, droneId, cand, mid, mline]() {
         if (!self->_signaling) return;
         QJsonObject m = baseMessage(gcsId, droneId, "candidate");
         m["candidate"] = cand;
         m["sdpMid"]    = mid;
+        // 드론이 mid 역매핑(+0 폴백)에 의존하지 않도록 인덱스를 명시한다.
+        m["sdpMLineIndex"] = mline;
         self->_signaling->sendMessage(m);
     }, Qt::QueuedConnection);
 }
