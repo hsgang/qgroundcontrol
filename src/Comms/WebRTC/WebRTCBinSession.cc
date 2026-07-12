@@ -162,6 +162,9 @@ void WebRTCBinSession::_teardownPipeline()
     if (_webrtc) {
         g_signal_handlers_disconnect_by_data(_webrtc, this);
     }
+    if (_bus) {
+        g_signal_handlers_disconnect_by_data(_bus, this);
+    }
 
     {
         QMutexLocker lock(&_mavlinkChannelMutex);
@@ -206,6 +209,7 @@ void WebRTCBinSession::_teardownPipeline()
     _midToMline.clear();
     _remoteDescriptionSet = false;
     _pinnedThisSession = false;
+    _pipelineErrored.store(false);
 }
 
 bool WebRTCBinSession::_buildPipeline()
@@ -246,7 +250,16 @@ bool WebRTCBinSession::_buildPipeline()
     }
 
     _bus = gst_element_get_bus(_pipeline);
-    // TODO: attach a bus watch to surface errors/state to Qt (omitted in PoC).
+    if (_bus) {
+        // Surface pipeline errors to Qt: a decode/depay/flow failure on the receive
+        // path otherwise leaves the link "connected" with dead video (the drone has
+        // bus-error recovery; the GCS receive path had none). sync-message delivers on
+        // a streaming thread without needing a GLib main loop iterating (QGC has none
+        // here); the handler only hops to Qt and is disconnected-by-data in
+        // _teardownPipeline before the pipeline is released. Matches GstVideoReceiver.
+        gst_bus_enable_sync_message_emission(_bus);
+        g_signal_connect(_bus, "sync-message", G_CALLBACK(_onBusMessage), this);
+    }
 
     if (gst_element_set_state(_pipeline, GST_STATE_PLAYING) == GST_STATE_CHANGE_FAILURE) {
         qCCritical(WebRTCBinLog) << "Pipeline failed to reach PLAYING";
@@ -597,6 +610,56 @@ void WebRTCBinSession::_onIceCandidate(GstElement * /*webrtc*/, guint mlineIndex
         m["sdpMLineIndex"] = mline;
         self->_signaling->sendMessage(m);
     }, Qt::QueuedConnection);
+}
+
+void WebRTCBinSession::_onBusMessage(GstBus * /*bus*/, GstMessage *msg, gpointer userData)
+{
+    auto *self = static_cast<WebRTCBinSession *>(userData);
+    if (!msg) {
+        return;
+    }
+
+    switch (GST_MESSAGE_TYPE(msg)) {
+    case GST_MESSAGE_ERROR: {
+        GError *error = nullptr;
+        gchar *debug = nullptr;
+        gst_message_parse_error(msg, &error, &debug);
+        GstObject *src = GST_MESSAGE_SRC(msg);
+        qCCritical(WebRTCBinLog) << "Pipeline error from" << (src ? GST_OBJECT_NAME(src) : "?")
+                                 << ":" << (error ? error->message : "unknown")
+                                 << "debug:" << (debug ? debug : "(none)");
+        const QString reason = error ? QString::fromUtf8(error->message) : QStringLiteral("pipeline error");
+        g_clear_error(&error);
+        g_free(debug);
+
+        // A single fault fans out into a burst of ERRORs from every downstream element;
+        // collapse them into one teardown.
+        if (self->_pipelineErrored.exchange(true)) {
+            break;
+        }
+        // A fatal pipeline error stops data flow for both video and the SCTP data
+        // channels (one pipeline), so recover like a transport/channel failure: tear
+        // the link down and let LinkManager re-establish (drone re-registers -> fresh
+        // offer). Mirrors _onMavlinkChannelError and the conn-state FAILED path.
+        QMetaObject::invokeMethod(self, [self, reason]() {
+            emit self->errorOccurred(reason);
+            emit self->disconnected();
+        }, Qt::QueuedConnection);
+        break;
+    }
+    case GST_MESSAGE_WARNING: {
+        GError *error = nullptr;
+        gchar *debug = nullptr;
+        gst_message_parse_warning(msg, &error, &debug);
+        qCWarning(WebRTCBinLog) << "Pipeline warning:" << (error ? error->message : "(no message)")
+                                << "debug:" << (debug ? debug : "(none)");
+        g_clear_error(&error);
+        g_free(debug);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 void WebRTCBinSession::_onConnectionStateNotify(GstElement *webrtc, GParamSpec * /*pspec*/, gpointer userData)

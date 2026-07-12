@@ -128,6 +128,9 @@ private:
     // GCS-side trace. These surface the transition that actually tears the link down.
     static void _onConnectionStateNotify(GstElement *webrtc, GParamSpec *pspec, gpointer userData);
     static void _onIceConnectionStateNotify(GstElement *webrtc, GParamSpec *pspec, gpointer userData);
+    // Pipeline bus errors (decode/depay/flow) -> tear the link down and reconnect. The
+    // drone recovers from bus errors; the GCS receive path previously had no watch.
+    static void _onBusMessage(GstBus *bus, GstMessage *msg, gpointer userData);
     static void _onDataChannelMessage(GstElement *channel, GBytes *data, gpointer userData);
     static void _onCustomChannelMessageString(GstElement *channel, gchar *str, gpointer userData);
     // "mavlink" data channel lifecycle -> _mavlinkChannelOpen (send gating).
@@ -175,6 +178,9 @@ private:
     /// True while this session's answer was built with pinned codec-preferences —
     /// gates the answer self-check that detects a pin-broken video m-line.
     bool _pinnedThisSession = false;
+    /// Set on the first pipeline ERROR (bus watch) so the burst a single fault fans
+    /// out into collapses to one teardown; reset when the pipeline is rebuilt.
+    std::atomic_bool _pipelineErrored{false};
 
     /// Reffed caps of the offer's video m-line (codec + extmap + rtcp-fb), captured in
     /// _handleOffer and pinned onto the transceiver in _applyAnswerCodecPreferences.
