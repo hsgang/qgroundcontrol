@@ -316,11 +316,10 @@ function(_qgc_bake_credential _name _default)
     add_compile_definitions(${_name}="${_val}")
 endfunction()
 
-# Supabase host is a public identifier (appears in every request URL), so it
-# keeps a default. The anon key is injected from QGC_SUPABASE_ANON_KEY (CI
-# secret / .env) and is no longer hardcoded; without it, Supabase features are
-# inert until a key is provided.
-_qgc_bake_credential(QGC_SUPABASE_HOST "vxtkbbhlxkfzkhfdgtrk.supabase.co")
+# Supabase host and anon key are injected from QGC_SUPABASE_HOST /
+# QGC_SUPABASE_ANON_KEY (CI secret / .env) and are no longer hardcoded. Without
+# them, Supabase features are inert until both are provided.
+_qgc_bake_credential(QGC_SUPABASE_HOST "")
 _qgc_bake_credential(QGC_SUPABASE_ANON_KEY "")
 
 # WebRTC: empty default means "keep the Fact default from Cloud.SettingsGroup.json"
