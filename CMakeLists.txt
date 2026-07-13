@@ -261,6 +261,79 @@ if(QT_QML_NO_CACHEGEN)
 endif()
 
 # ============================================================================
+# Build-time Credentials (Supabase + WebRTC)
+# ============================================================================
+# Selected API/connection credentials are baked into the binary at configure
+# time. For each name the value is resolved with this precedence:
+#   real environment variable  >  .env.local  >  .env  >  built-in default
+# CI injects via environment variables (GitHub Actions secrets); local builds
+# can drop a git-ignored .env file at the repo root (see .env.example).
+# SECURITY: anything baked here is extractable from the shipped binary. The
+# Supabase anon key is a public, RLS-protected key and safe to ship. NEVER bake
+# a service_role or other truly-secret key. Prefer short-lived, server-issued
+# TURN credentials over a static secret; treat webrtcAuthClientSecret as low-trust.
+
+# Parse KEY=VALUE lines from an optional dotenv file into _QGC_DOTENV_<KEY> vars.
+function(_qgc_load_env_file _path)
+    if(NOT EXISTS "${_path}")
+        return()
+    endif()
+    file(STRINGS "${_path}" _lines)
+    foreach(_line IN LISTS _lines)
+        string(STRIP "${_line}" _line)
+        if("${_line}" STREQUAL "" OR "${_line}" MATCHES "^#")
+            continue()
+        endif()
+        if("${_line}" MATCHES "^([^=]+)=(.*)$")
+            string(STRIP "${CMAKE_MATCH_1}" _key)
+            set(_val "${CMAKE_MATCH_2}")
+            string(REGEX REPLACE "^[\"']" "" _val "${_val}")  # strip a leading quote
+            string(REGEX REPLACE "[\"']$" "" _val "${_val}")  # strip a trailing quote
+            set(_QGC_DOTENV_${_key} "${_val}" PARENT_SCOPE)
+        endif()
+    endforeach()
+endfunction()
+
+# .env.local overrides .env (loaded second wins).
+_qgc_load_env_file("${CMAKE_SOURCE_DIR}/.env")
+_qgc_load_env_file("${CMAKE_SOURCE_DIR}/.env.local")
+
+# Re-run CMake configure automatically when a .env file changes, so editing it
+# and hitting build (any tool/IDE) re-bakes the values without a manual reconfigure.
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/.env"
+    "${CMAKE_SOURCE_DIR}/.env.local")
+
+# Resolve one credential by precedence and bake it in as a compile definition.
+function(_qgc_bake_credential _name _default)
+    set(_val "${_default}")
+    if(DEFINED _QGC_DOTENV_${_name})
+        set(_val "${_QGC_DOTENV_${_name}}")
+    endif()
+    if(DEFINED ENV{${_name}} AND NOT "$ENV{${_name}}" STREQUAL "")
+        set(_val "$ENV{${_name}}")
+    endif()
+    add_compile_definitions(${_name}="${_val}")
+endfunction()
+
+# Supabase: ship with working public defaults; override to rotate.
+_qgc_bake_credential(QGC_SUPABASE_HOST "vxtkbbhlxkfzkhfdgtrk.supabase.co")
+_qgc_bake_credential(QGC_SUPABASE_ANON_KEY "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dGtiYmhseGtmemtoZmRndHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyODkyNDYsImV4cCI6MjA2MDg2NTI0Nn0.yLo8vPPUhFhKUnt6VqnwSnerLRj3psSEtOZDHhekq2g")
+
+# WebRTC: empty default means "keep the Fact default from Cloud.SettingsGroup.json"
+# (see CloudSettings::_applyBuildTimeDefaults, which only overrides on non-empty).
+foreach(_qgc_webrtc_var
+    QGC_WEBRTC_SIGNALING_SERVER
+    QGC_WEBRTC_STUN_SERVER
+    QGC_WEBRTC_TURN_SERVER
+    QGC_WEBRTC_TURN_USERNAME
+    QGC_WEBRTC_TURN_PASSWORD
+    QGC_WEBRTC_AUTH_CLIENT_ID
+    QGC_WEBRTC_AUTH_CLIENT_SECRET)
+    _qgc_bake_credential(${_qgc_webrtc_var} "")
+endforeach()
+
+# ============================================================================
 # Custom Build Subdirectory
 # ============================================================================
 

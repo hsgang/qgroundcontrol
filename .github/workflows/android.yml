@@ -30,6 +30,19 @@ permissions:
   contents: read
   actions: read
 
+env:
+  # Baked into the build at configure time (read by CMakeLists.txt). Falls back
+  # to the committed/JSON defaults when the secret is unset, so builds never break.
+  QGC_SUPABASE_HOST: ${{ secrets.QGC_SUPABASE_HOST }}
+  QGC_SUPABASE_ANON_KEY: ${{ secrets.QGC_SUPABASE_ANON_KEY }}
+  QGC_WEBRTC_SIGNALING_SERVER: ${{ secrets.QGC_WEBRTC_SIGNALING_SERVER }}
+  QGC_WEBRTC_STUN_SERVER: ${{ secrets.QGC_WEBRTC_STUN_SERVER }}
+  QGC_WEBRTC_TURN_SERVER: ${{ secrets.QGC_WEBRTC_TURN_SERVER }}
+  QGC_WEBRTC_TURN_USERNAME: ${{ secrets.QGC_WEBRTC_TURN_USERNAME }}
+  QGC_WEBRTC_TURN_PASSWORD: ${{ secrets.QGC_WEBRTC_TURN_PASSWORD }}
+  QGC_WEBRTC_AUTH_CLIENT_ID: ${{ secrets.QGC_WEBRTC_AUTH_CLIENT_ID }}
+  QGC_WEBRTC_AUTH_CLIENT_SECRET: ${{ secrets.QGC_WEBRTC_AUTH_CLIENT_SECRET }}
+
 jobs:
   changes:
     uses: ./.github/workflows/_detect-changes.yml

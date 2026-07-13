@@ -192,8 +192,8 @@ private:
     QString m_networkStatus;
     QString _emailAddress;
     QString _password;
-    QString m_supabaseEndpoint = "vxtkbbhlxkfzkhfdgtrk.supabase.co";
-    QString m_apiAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dGtiYmhseGtmemtoZmRndHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyODkyNDYsImV4cCI6MjA2MDg2NTI0Nn0.yLo8vPPUhFhKUnt6VqnwSnerLRj3psSEtOZDHhekq2g";
+    QString m_supabaseEndpoint = QGC_SUPABASE_HOST;
+    QString m_apiAnonKey = QGC_SUPABASE_ANON_KEY;
     QString m_accessToken;
     QString m_refreshToken;
     QString m_signedUserName;

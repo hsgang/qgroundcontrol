@@ -147,9 +147,8 @@ AnalyzePage {
                             model: QGroundControl.cloudManager.fileList
 
                             QGCButton {
-                                property bool exists : modelData["existsInMinio"]
-                                text: exists ? qsTr("Uploaded") : qsTr("Upload")
-                                enabled: _isSignIn && !exists
+                                text: qsTr("Upload")
+                                enabled: _isSignIn
                                 onClicked: {
                                     var bucketName = dirCombobox.currentText;
                                     QGroundControl.cloudManager.uploadFile(modelData["filePath"], bucketName, modelData["fileName"]);

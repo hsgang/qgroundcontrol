@@ -183,6 +183,10 @@ Qt*-linux*.tar.*
 # Vale prose linter (downloaded via `vale sync`)
 .github/styles/
 
+# Local build-time credentials (see CMakeLists.txt / .env.example). Never commit.
+.env
+.env.local
+
 # direnv / version managers
 .envrc
 .direnv/

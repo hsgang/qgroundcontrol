@@ -109,13 +109,13 @@ void CloudManager::setMessageString(QString messageString)
 
 void CloudManager::checkConnection()
 {
-    QString url = "https://vxtkbbhlxkfzkhfdgtrk.supabase.co/auth/v1/health";
+    QString url = QString("https://%1/auth/v1/health").arg(m_supabaseEndpoint);
 
     QNetworkRequest request;
 
     request.setUrl(QUrl(url));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QString("application/json"));
-    request.setRawHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dGtiYmhseGtmemtoZmRndHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyODkyNDYsImV4cCI6MjA2MDg2NTI0Nn0.yLo8vPPUhFhKUnt6VqnwSnerLRj3psSEtOZDHhekq2g");
+    request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
 
     if (!_nam) {
         _nam = new QNetworkAccessManager(this);
@@ -139,10 +139,7 @@ void CloudManager::checkConnection()
 void CloudManager::signUserIn(const QString &emailAddress, const QString &password)
 {
     // API Endpoint 설정
-    //QString endpointHost = m_endPointHost; // 예: vxtkbbhlxkfzkhfdgtrk.supabase.co
-    //QString signInEndpoint = QString("https://%1/auth/v1/token?grant_type=password").arg(m_endPointHost);
-
-    QString signInEndpoint = "https://vxtkbbhlxkfzkhfdgtrk.supabase.co/auth/v1/token?grant_type=password";
+    QString signInEndpoint = QString("https://%1/auth/v1/token?grant_type=password").arg(m_supabaseEndpoint);
 
     QVariantMap variantPayload;
     variantPayload["email"] = emailAddress;
@@ -154,7 +151,7 @@ void CloudManager::signUserIn(const QString &emailAddress, const QString &passwo
     request.setAttribute(QNetworkRequest::Http2AllowedAttribute, false);
     request.setUrl(QUrl(signInEndpoint));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QString("application/json"));
-    request.setRawHeader("apikey", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dGtiYmhseGtmemtoZmRndHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyODkyNDYsImV4cCI6MjA2MDg2NTI0Nn0.yLo8vPPUhFhKUnt6VqnwSnerLRj3psSEtOZDHhekq2g");
+    request.setRawHeader("apikey", m_apiAnonKey.toUtf8());
 
     if (!_nam) {
         _nam = new QNetworkAccessManager(this);
@@ -679,10 +676,8 @@ void CloudManager::loadDirFile(QString dirName)
         fileInfoMap["fileName"] = fileInfo.fileName();
         fileInfoMap["filePath"] = fileInfo.absoluteFilePath();
         fileInfoMap["fileSize"] = formatFileSize(fileInfo.size());
-        fileInfoMap["existsInMinio"] = false;
         m_fileList.append(QVariant::fromValue(fileInfoMap));
     }
-    //checkFilesExistInMinio(dirName);
 
     emit fileListChanged();
 }

@@ -23,32 +23,11 @@
             "label": "cloudToken"
         },
         {
-            "name": "minioAccessKey",
-            "shortDesc": "minioAccessKey",
-            "type": "string",
-            "default": "",
-            "label": "minioAccessKey"
-        },
-        {
-            "name": "minioSecretKey",
-            "shortDesc": "minioSecretKey",
-            "type": "string",
-            "default": "",
-            "label": "minioSecretKey"
-        },
-        {
             "name": "firebaseAPIKey",
             "shortDesc": "firebaseAPIKey",
             "type": "string",
             "default": "",
             "label": "firebaseAPIKey"
-        },
-        {
-            "name": "minioEndpoint",
-            "shortDesc": "minioEndpoint",
-            "type": "string",
-            "default": "",
-            "label": "minioEndpoint"
         },
         {
             "name": "webrtcSignalingServer",
