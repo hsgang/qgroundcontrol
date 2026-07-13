@@ -316,9 +316,12 @@ function(_qgc_bake_credential _name _default)
     add_compile_definitions(${_name}="${_val}")
 endfunction()
 
-# Supabase: ship with working public defaults; override to rotate.
+# Supabase host is a public identifier (appears in every request URL), so it
+# keeps a default. The anon key is injected from QGC_SUPABASE_ANON_KEY (CI
+# secret / .env) and is no longer hardcoded; without it, Supabase features are
+# inert until a key is provided.
 _qgc_bake_credential(QGC_SUPABASE_HOST "vxtkbbhlxkfzkhfdgtrk.supabase.co")
-_qgc_bake_credential(QGC_SUPABASE_ANON_KEY "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4dGtiYmhseGtmemtoZmRndHJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUyODkyNDYsImV4cCI6MjA2MDg2NTI0Nn0.yLo8vPPUhFhKUnt6VqnwSnerLRj3psSEtOZDHhekq2g")
+_qgc_bake_credential(QGC_SUPABASE_ANON_KEY "")
 
 # WebRTC: empty default means "keep the Fact default from Cloud.SettingsGroup.json"
 # (see CloudSettings::_applyBuildTimeDefaults, which only overrides on non-empty).
