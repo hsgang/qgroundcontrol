@@ -82,10 +82,13 @@ jobs:
     env:
       BUILD_TYPE: ${{ inputs.build_type || 'Release' }}
       PACKAGE: AMC
-      QT_ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/deploy/android/android_release.keystore
+      # Release keystore is injected from a secret at build time (see "Restore
+      # Release Keystore" below); it is no longer committed to the repo.
       QT_ANDROID_KEYSTORE_ALIAS: missioncontrolkey
       QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      # Release signing needs both the base64 keystore and its password as secrets.
+      USE_RELEASE_SIGNING: ${{ secrets.APP_KEYSTORE_BASE64 != '' && secrets.ANDROID_KEYSTORE_PASSWORD != '' }}
       QT_ANDROID_ABIS: >-
         ${{ matrix.emulator && 'x86_64'
           || (matrix.primary && github.event_name != 'pull_request' && github.event_name != 'pull_request_target') && 'arm64-v8a;armeabi-v7a'
@@ -137,8 +140,18 @@ jobs:
         if: runner.os == 'Linux'
         uses: ./.github/actions/install-dependencies
 
+      - name: Restore Release Keystore
+        if: ${{ env.USE_RELEASE_SIGNING == 'true' && matrix.primary }}
+        shell: bash
+        env:
+          APP_KEYSTORE_BASE64: ${{ secrets.APP_KEYSTORE_BASE64 }}
+        run: |
+          KEYSTORE="${RUNNER_TEMP}/android_release.keystore"
+          echo "$APP_KEYSTORE_BASE64" | base64 -d > "$KEYSTORE"
+          echo "QT_ANDROID_KEYSTORE_PATH=${KEYSTORE}" >> "$GITHUB_ENV"
+
       - name: Create Debug Keystore
-        if: ${{ env.QT_ANDROID_KEYSTORE_STORE_PASS == '' || !matrix.primary }}
+        if: ${{ env.USE_RELEASE_SIGNING != 'true' || !matrix.primary }}
         shell: bash
         run: |
           keytool -genkey -v \

@@ -187,6 +187,9 @@ Qt*-linux*.tar.*
 .env
 .env.local
 
+# Android release signing keystore — injected from a CI secret, never committed.
+deploy/android/android_release.keystore
+
 # direnv / version managers
 .envrc
 .direnv/
