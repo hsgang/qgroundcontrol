@@ -37,6 +37,8 @@ constexpr quint8 kCmdSetMapping      = 0x4A;
 constexpr quint8 kCmdGetAllReverses  = 0x4B;
 constexpr quint8 kCmdGetReverse      = 0x4C;
 constexpr quint8 kCmdSetReverse      = 0x4D;
+constexpr quint8 kCmdMultiDeviceStatus = 0x4E;
+constexpr quint8 kCmdSystemStatus      = 0x4F;
 
 template <typename T>
 T readLE(const char *src)
@@ -257,6 +259,9 @@ void SiYiUniRC::requestInitialQueries()
     sendCommand(kCmdFirmwareVersion);
     sendCommand(kCmdGetAllMappings);
     sendCommand(kCmdGetAllReverses);
+    sendCommand(kCmdMultiDeviceStatus);
+    // Enable active system-status (warning LED) reporting so alerts arrive unpolled.
+    sendCommand(kCmdSystemStatus, QByteArray(1, 0x01));
     initialQueriesSent_ = true;
 }
 
@@ -271,6 +276,7 @@ void SiYiUniRC::onPollTick()
     ++pollCounter_;
     if ((pollCounter_ % kSystemSettingsPollSec) == 0) {
         sendCommand(kCmdGetSettings);
+        sendCommand(kCmdMultiDeviceStatus);
     }
 }
 
@@ -509,6 +515,32 @@ void SiYiUniRC::handlePacket(quint8 cmdId, const QByteArray &data)
         emit commandAckReceived(kCmdSetReverse, qint8(data.at(1)));
         break;
     }
+    case kCmdMultiDeviceStatus: {
+        // 4 x uint8: rc_multi_ctl_mode, main_vice_link_status, rc_relay_status, dual_ctl_status
+        if (data.size() < 4) return;
+        const int mode  = int(quint8(data.at(0)));
+        const int link  = int(quint8(data.at(1)));
+        const int relay = int(quint8(data.at(2)));
+        const int dual  = int(quint8(data.at(3)));
+        if (mode != rcMultiCtlMode_)     { rcMultiCtlMode_ = mode;      emit rcMultiCtlModeChanged(); }
+        if (link != mainViceLinkStatus_) { mainViceLinkStatus_ = link;  emit mainViceLinkStatusChanged(); }
+        if (relay != rcRelayStatus_)     { rcRelayStatus_ = relay;      emit rcRelayStatusChanged(); }
+        if (dual != dualCtlStatus_)      { dualCtlStatus_ = dual;       emit dualCtlStatusChanged(); }
+        break;
+    }
+    case kCmdSystemStatus: {
+        // Active status reports carry 2 x uint8 (G_led_status, s_led_status);
+        // the enable/disable command's ACK is a single status byte.
+        if (data.size() >= 2) {
+            const int gLed = int(quint8(data.at(0)));
+            const int sLed = int(quint8(data.at(1)));
+            if (gLed != groundLedStatus_) { groundLedStatus_ = gLed; emit groundLedStatusChanged(); }
+            if (sLed != skyLedStatus_)    { skyLedStatus_ = sLed;    emit skyLedStatusChanged(); }
+        } else if (data.size() == 1) {
+            emit commandAckReceived(kCmdSystemStatus, qint8(data.at(0)));
+        }
+        break;
+    }
     default:
         qCDebug(SiYiUniRCLog) << "Unhandled CMD" << Qt::hex << cmdId;
         break;
@@ -522,6 +554,14 @@ void SiYiUniRC::requestSystemSettings()  { sendCommand(kCmdGetSettings); }
 void SiYiUniRC::requestChannelMappings() { sendCommand(kCmdGetAllMappings); }
 void SiYiUniRC::requestChannelReverses() { sendCommand(kCmdGetAllReverses); }
 void SiYiUniRC::requestFirmwareVersion() { sendCommand(kCmdFirmwareVersion); }
+void SiYiUniRC::requestMultiDeviceStatus() { sendCommand(kCmdMultiDeviceStatus); }
+
+void SiYiUniRC::setSystemStatusReport(bool enable)
+{
+    QByteArray p;
+    p.append(char(enable ? 0x01 : 0x00));
+    sendCommand(kCmdSystemStatus, p);
+}
 
 void SiYiUniRC::startPairing()
 {

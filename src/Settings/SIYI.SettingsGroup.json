@@ -3,6 +3,16 @@
     "fileType": "FactMetaData",
     "QGC.MetaData.Facts": [
         {
+            "name": "siyiDeviceModel",
+            "shortDesc": "SIYI device model preset.",
+            "longDesc": "Selecting a model applies its default service preset (enabled links and IP addresses). Individual link/IP settings below can still be edited afterwards.",
+            "type": "uint32",
+            "enumStrings": "UniRC 7,MK15,MK32",
+            "enumValues": "0,1,2",
+            "default": 0,
+            "label": "Device Model"
+        },
+        {
             "name": "siyiUniRCEnabled",
             "shortDesc": "Enable SIYI UniRC 7 datalink SDK (UDP).",
             "longDesc": "Polls UniRC 7 over UDP for link status, signal strength, frequency, and channel.",

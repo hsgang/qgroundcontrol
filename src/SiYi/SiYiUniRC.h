@@ -54,6 +54,16 @@ class SiYiUniRC : public QObject
     Q_PROPERTY(QVariantList rcChannels READ rcChannels NOTIFY rcChannelsChanged)
     Q_PROPERTY(int rcOutputFreq READ rcOutputFreq NOTIFY rcOutputFreqChanged)
 
+    // Multi-device interconnection status (from 0x4E)
+    Q_PROPERTY(int rcMultiCtlMode READ rcMultiCtlMode NOTIFY rcMultiCtlModeChanged)
+    Q_PROPERTY(int mainViceLinkStatus READ mainViceLinkStatus NOTIFY mainViceLinkStatusChanged)
+    Q_PROPERTY(int rcRelayStatus READ rcRelayStatus NOTIFY rcRelayStatusChanged)
+    Q_PROPERTY(int dualCtlStatus READ dualCtlStatus NOTIFY dualCtlStatusChanged)
+
+    // System status warning LEDs (from 0x4F, pushed actively when a warning is raised)
+    Q_PROPERTY(int groundLedStatus READ groundLedStatus NOTIFY groundLedStatusChanged)
+    Q_PROPERTY(int skyLedStatus READ skyLedStatus NOTIFY skyLedStatusChanged)
+
 public:
     // Transport for the UniRC 7 datalink. Serial (UART over USB) is Android-only;
     // on other platforms selecting Serial logs a warning and does not connect.
@@ -87,6 +97,11 @@ public:
     Q_INVOKABLE void requestChannelMappings();
     Q_INVOKABLE void requestChannelReverses();
     Q_INVOKABLE void requestFirmwareVersion();
+    Q_INVOKABLE void requestMultiDeviceStatus();
+
+    // Enable/disable active system-status (0x4F) reporting. When enabled the RC
+    // pushes warning LED status frames on its own, without polling.
+    Q_INVOKABLE void setSystemStatusReport(bool enable);
 
     // System / mapping / reverse writers (0x17, 0x4A, 0x4D)
     Q_INVOKABLE void startPairing();
@@ -122,6 +137,12 @@ signals:
     void channelReversesChanged();
     void rcChannelsChanged();
     void rcOutputFreqChanged();
+    void rcMultiCtlModeChanged();
+    void mainViceLinkStatusChanged();
+    void rcRelayStatusChanged();
+    void dualCtlStatusChanged();
+    void groundLedStatusChanged();
+    void skyLedStatusChanged();
     void commandAckReceived(int cmdId, int status);
 
 private slots:
@@ -164,6 +185,12 @@ private:
     QVariantList channelReverses() const { return channelReverses_; }
     QVariantList rcChannels() const { return rcChannels_; }
     int rcOutputFreq() const { return rcOutputFreq_; }
+    int rcMultiCtlMode() const { return rcMultiCtlMode_; }
+    int mainViceLinkStatus() const { return mainViceLinkStatus_; }
+    int rcRelayStatus() const { return rcRelayStatus_; }
+    int dualCtlStatus() const { return dualCtlStatus_; }
+    int groundLedStatus() const { return groundLedStatus_; }
+    int skyLedStatus() const { return skyLedStatus_; }
 
     QUdpSocket *socket_ = nullptr;
 #ifdef Q_OS_ANDROID
@@ -209,6 +236,13 @@ private:
     QVariantList channelReverses_;
     QVariantList rcChannels_;
     int rcOutputFreq_{0};
+
+    int rcMultiCtlMode_{-1};
+    int mainViceLinkStatus_{-1};
+    int rcRelayStatus_{-1};
+    int dualCtlStatus_{-1};
+    int groundLedStatus_{-1};
+    int skyLedStatus_{-1};
 };
 
 #endif // SIYIUNIRC_H

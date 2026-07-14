@@ -18,6 +18,7 @@ public:
     SIYISettings(QObject* parent = nullptr);
     DEFINE_SETTING_NAME_GROUP()
 
+    DEFINE_SETTINGFACT(siyiDeviceModel)
     DEFINE_SETTINGFACT(siyiUniRCEnabled)
     DEFINE_SETTINGFACT(siyiUniRCIp)
     DEFINE_SETTINGFACT(siyiUniRCTransportMode)
@@ -28,4 +29,9 @@ public:
     DEFINE_SETTINGFACT(siyiTransmitterIp)
     DEFINE_SETTINGFACT(siyiCameraEnabled)
     DEFINE_SETTINGFACT(siyiCameraIp)
+
+private slots:
+    // Applies the enabled-service / IP preset for the selected siyiDeviceModel.
+    // Custom (0) is a no-op so manual settings are preserved.
+    void _applyDeviceModelPreset();
 };

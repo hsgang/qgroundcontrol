@@ -38,6 +38,74 @@ SettingsGroupLayout {
         default: return "-"
         }
     }
+    function _multiCtlModeText(m) {
+        switch (m) {
+        case 0: return qsTr("Dual control master")
+        case 1: return qsTr("Dual control slave")
+        case 2: return qsTr("Relay master")
+        case 3: return qsTr("Relay slave")
+        case 4: return qsTr("Relay")
+        case 5: return qsTr("Single control")
+        default: return "-"
+        }
+    }
+    function _linkStatusText(s) {
+        switch (s) {
+        case 0: return qsTr("Not connected")
+        case 1: return qsTr("Connected")
+        case 2: return qsTr("Out of control")
+        default: return "-"
+        }
+    }
+    function _relayStatusText(s) {
+        switch (s) {
+        case 0: return qsTr("Master has authority")
+        case 1: return qsTr("Slave has authority")
+        case 2: return qsTr("Out of control")
+        default: return "-"
+        }
+    }
+    function _dualCtlText(s) {
+        switch (s) {
+        case 0: return qsTr("Disabled (master only)")
+        case 1: return qsTr("Enabled (slave channels)")
+        default: return "-"
+        }
+    }
+    function _groundLedText(s) {
+        switch (s) {
+        case 0:  return qsTr("Normal")
+        case 1:  return qsTr("Ground/air not communicating")
+        case 2:  return qsTr("Binding in progress")
+        case 3:  return qsTr("MCU firmware mismatch")
+        case 4:  return qsTr("Link initialization failed")
+        case 5:  return qsTr("Joystick needs calibration")
+        case 6:  return qsTr("Video transmission starting")
+        case 7:  return qsTr("Upgrading air unit firmware")
+        case 8:  return qsTr("Power supply voltage abnormal")
+        case 9:  return qsTr("Bluetooth not recognized")
+        case 10: return qsTr("Temperature alarm level 1")
+        case 11: return qsTr("Temperature alarm level 2")
+        case 12: return qsTr("Temperature alarm level 3")
+        case 13: return qsTr("Video firmware mismatch")
+        case 14: return qsTr("Valid packet rate 100%")
+        case 15: return qsTr("Valid packet rate 99–95%")
+        case 16: return qsTr("Valid packet rate 75–50%")
+        case 17: return qsTr("Valid packet rate 50–25%")
+        case 18: return qsTr("Valid packet rate below 25%")
+        default: return "-"
+        }
+    }
+    function _skyLedText(s) {
+        switch (s) {
+        case 0:  return qsTr("Normal")
+        case 1:  return qsTr("Voltage alarm (below 12V)")
+        case 2:  return qsTr("Temperature alarm level 1")
+        case 3:  return qsTr("Temperature alarm level 2")
+        case 4:  return qsTr("Temperature alarm level 3")
+        default: return "-"
+        }
+    }
 
     QGCPalette { id: qgcPal }
 
@@ -121,6 +189,59 @@ SettingsGroupLayout {
         Layout.fillWidth: true
         label:     qsTr("Channel")
         labelText: (_uniRC && _uniRC.channel > 0) ? _uniRC.channel : "-"
+    }
+
+    // Multi-device interconnection status (0x4E)
+    LabelledLabel {
+        Layout.fillWidth: true
+        label:     qsTr("Interconnect Mode")
+        labelText: _uniRC ? _multiCtlModeText(_uniRC.rcMultiCtlMode) : "-"
+    }
+    LabelledLabel {
+        Layout.fillWidth: true
+        visible:   _uniRC && _uniRC.rcMultiCtlMode >= 0 && _uniRC.rcMultiCtlMode !== 5
+        label:     qsTr("Peer Link")
+        labelText: _uniRC ? _linkStatusText(_uniRC.mainViceLinkStatus) : "-"
+    }
+    LabelledLabel {
+        Layout.fillWidth: true
+        visible:   _uniRC && (_uniRC.rcMultiCtlMode === 2 || _uniRC.rcMultiCtlMode === 3)
+        label:     qsTr("Relay Authority")
+        labelText: _uniRC ? _relayStatusText(_uniRC.rcRelayStatus) : "-"
+    }
+    LabelledLabel {
+        Layout.fillWidth: true
+        visible:   _uniRC && (_uniRC.rcMultiCtlMode === 0 || _uniRC.rcMultiCtlMode === 1)
+        label:     qsTr("Dual Control")
+        labelText: _uniRC ? _dualCtlText(_uniRC.dualCtlStatus) : "-"
+    }
+
+    // System status warning LEDs (0x4F); highlighted red when a warning is active
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: ScreenTools.defaultFontPixelWidth * 2
+        QGCLabel {
+            Layout.fillWidth:    true
+            Layout.minimumWidth: implicitWidth
+            text: qsTr("Ground Unit")
+        }
+        QGCLabel {
+            text:  _uniRC ? _groundLedText(_uniRC.groundLedStatus) : "-"
+            color: (_uniRC && _uniRC.groundLedStatus > 0) ? qgcPal.colorRed : qgcPal.text
+        }
+    }
+    RowLayout {
+        Layout.fillWidth: true
+        spacing: ScreenTools.defaultFontPixelWidth * 2
+        QGCLabel {
+            Layout.fillWidth:    true
+            Layout.minimumWidth: implicitWidth
+            text: qsTr("Air Unit")
+        }
+        QGCLabel {
+            text:  _uniRC ? _skyLedText(_uniRC.skyLedStatus) : "-"
+            color: (_uniRC && _uniRC.skyLedStatus > 0) ? qgcPal.colorRed : qgcPal.text
+        }
     }
 
     RowLayout {

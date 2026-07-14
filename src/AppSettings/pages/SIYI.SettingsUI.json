@@ -3,6 +3,15 @@
     "fileType": "SettingsUI",
     "groups": [
         {
+            "heading": "SIYI Device",
+            "keywords": ["siyi", "model", "device", "mk15", "mk32", "unirc", "preset"],
+            "controls": [
+                {
+                    "setting": "siyiSettings.siyiDeviceModel"
+                }
+            ]
+        },
+        {
             "heading": "UniRC 7 (UDP)",
             "keywords": ["siyi", "unirc", "udp", "datalink", "19856", "192.168.144.20", "relay", "mavlink", "14550"],
             "controls": [
