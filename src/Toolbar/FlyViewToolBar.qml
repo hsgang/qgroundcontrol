@@ -231,12 +231,15 @@ Item {
         anchors.right:          parent.right
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth
         anchors.rightMargin:    ScreenTools.defaultFontPixelWidth
-        height:                 ScreenTools.defaultFontPixelHeight * 0.15
+        height:                 ScreenTools.defaultFontPixelHeight * 0.15 + 2
         radius:                 height / 2
-        color:                  Qt.rgba(qgcPal.windowShade.r, qgcPal.windowShade.g, qgcPal.windowShade.b, 0.6)
+        color:                  _trackColor
+        border.width:           1
+        border.color:           _trackColor
         clip:                   true
         visible:                _activeVehicle && _activeVehicle.batteries.count > 0
 
+        property color _trackColor: Qt.rgba(qgcPal.windowShade.r, qgcPal.windowShade.g, qgcPal.windowShade.b, 0.6)
         property var _battery: (_activeVehicle && _activeVehicle.batteries.count > 0) ? _activeVehicle.batteries.get(0) : null
         property var _batterySettings: QGroundControl.settingsManager.batteryIndicatorSettings
         property real _percent: _battery && !isNaN(_battery.percentRemaining.rawValue)
@@ -247,7 +250,8 @@ Item {
             anchors.left:       parent.left
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
-            width:              parent.width * (batteryProgressBar._percent / 100)
+            anchors.margins:    parent.border.width
+            width:              (parent.width - parent.border.width * 2) * (batteryProgressBar._percent / 100)
             color: {
                 if (!batteryProgressBar._battery) return qgcPal.text
                 switch (batteryProgressBar._battery.chargeState.rawValue) {
@@ -288,14 +292,14 @@ Item {
         anchors.verticalCenter: batteryProgressBar.verticalCenter
 
         x: {
-            var fillRightEdge = batteryProgressBar.x + batteryProgressFill.width
+            var fillRightEdge = batteryProgressBar.x + batteryProgressFill.x + batteryProgressFill.width
             var centered      = fillRightEdge - width / 2
             var minX          = batteryProgressBar.x
             var maxX          = batteryProgressBar.x + batteryProgressBar.width - width
             return Math.max(minX, Math.min(maxX, centered))
         }
 
-        Behavior on x { NumberAnimation { duration: 250 } }
+        // No Behavior on x: it tracks batteryProgressFill.width, which is already animated
         Behavior on border.color { ColorAnimation { duration: 250 } }
 
         QGCLabel {
