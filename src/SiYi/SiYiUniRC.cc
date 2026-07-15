@@ -260,7 +260,10 @@ void SiYiUniRC::sendMessage(const QByteArray &msg)
 void SiYiUniRC::sendCommand(quint8 cmdId, const QByteArray &payload, int repeatCount)
 {
     for (int i = 0; i < std::max(1, repeatCount); ++i) {
-        sendMessage(packMessage(cmdId, payload));
+        // need_ack must be set (CTRL bit0 = 1): every SDK send example in the
+        // manual uses CTRL 0x01, and the UniRC only returns an ACK/reply when
+        // the request asks for one. Without it 0x43/0x44 etc. get no response.
+        sendMessage(packMessage(cmdId, payload, /*needAck*/ true));
     }
 }
 
