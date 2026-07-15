@@ -247,6 +247,11 @@ void SiYiUniRC::sendMessage(const QByteArray &msg)
         return;
     }
     const qint64 written = socket_->writeDatagram(msg, serverAddress_, port_);
+    qCDebug(SiYiUniRCLog) << "[diag] tx cmd" << Qt::hex
+                          << (msg.size() > 7 ? quint8(msg.at(7)) : quint8(0)) << Qt::dec
+                          << "to" << serverAddress_.toString() << port_
+                          << "written" << written << "/" << msg.size()
+                          << "srcPort" << socket_->localPort();
     if (written != msg.size()) {
         qCDebug(SiYiUniRCLog) << "writeDatagram failed:" << socket_->errorString();
     }
@@ -273,6 +278,7 @@ void SiYiUniRC::requestInitialQueries()
 
 void SiYiUniRC::onPollTick()
 {
+    qCDebug(SiYiUniRCLog) << "[diag] pollTick initialQueriesSent" << initialQueriesSent_;
     if (!initialQueriesSent_) {
         requestInitialQueries();
     }
