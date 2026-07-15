@@ -113,9 +113,12 @@ void SiYiUniRC::start()
         }
 
         socket_ = new QUdpSocket(this);
-        // Relay mode owns the datalink port so it can demux MAVLink + SDK on a
-        // single socket; SDK-only mode keeps an ephemeral source port as before.
-        const quint16 bindPort = (relayPort_ > 0) ? port_ : quint16(0);
+        // Always bind an ephemeral local port. Binding the server port (19856)
+        // on the client side conflicts with the UniRC server per SDK manual
+        // §6.3 ("avoid using port 19856 on the client side") and fails outright
+        // when the port is already taken. The relay still receives the full
+        // MAVLink+SDK stream because the UniRC server replies to our source port.
+        const quint16 bindPort = 0;
         if (!socket_->bind(QHostAddress::AnyIPv4, bindPort,
                            QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint)) {
             qCWarning(SiYiUniRCLog) << "UDP bind failed:" << socket_->errorString();

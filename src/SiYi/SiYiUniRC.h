@@ -83,12 +83,12 @@ public:
     // Configure the transport before start(). mode: 0=UDP, 1=Serial.
     Q_INVOKABLE void setTransport(int mode, const QString &port, qint32 baud);
 
-    // Variant A (feasibility): when > 0, SiYiUniRC binds the datalink port (port_)
-    // exclusively and demuxes incoming datagrams on a single socket: SiYi SDK
-    // frames (STX 0x55 0x66) are parsed locally, MAVLink frames are relayed to
-    // 127.0.0.1:relayPort, and MAVLink coming back from loopback is forwarded to
-    // the datalink. QGC's MAVLink UDP link must then listen on relayPort instead
-    // of port_. 0 (default) disables relay: legacy ephemeral SDK-only behavior.
+    // Variant A (feasibility): when > 0, SiYiUniRC demuxes incoming datagrams on
+    // a single ephemeral socket: SiYi SDK frames (STX 0x55 0x66) are parsed
+    // locally, MAVLink frames are relayed to 127.0.0.1:relayPort, and MAVLink
+    // coming back from loopback is forwarded to the datalink. QGC's MAVLink UDP
+    // link must then listen on relayPort. The client never binds the server port
+    // 19856 (SDK manual §6.3). 0 (default) disables relay: SDK-only behavior.
     Q_INVOKABLE void setRelayPort(quint16 port);
 
     // Read-only query refresh
