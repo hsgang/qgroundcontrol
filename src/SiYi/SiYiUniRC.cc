@@ -127,6 +127,9 @@ void SiYiUniRC::start()
             return;
         }
         connect(socket_, &QUdpSocket::readyRead, this, &SiYiUniRC::onReadyRead);
+        qCDebug(SiYiUniRCLog) << "[diag] UDP started: server" << ip_ << port_
+                              << "localPort" << socket_->localPort()
+                              << "relayPort" << relayPort_;
     }
 
     pollTimer_ = new QTimer(this);
@@ -302,6 +305,9 @@ void SiYiUniRC::onReadyRead()
 
         // SDK-only mode (relay disabled): every datagram is a SiYi SDK reply.
         if (relayPort_ == 0) {
+            qCDebug(SiYiUniRCLog) << "[diag] SDK-only rx from" << dg.senderAddress().toString()
+                                  << "size" << data.size()
+                                  << "first" << (data.size() >= 2 ? data.left(2).toHex(' ') : QByteArray());
             rxBuffer_.append(data);
             continue;
         }
@@ -317,6 +323,10 @@ void SiYiUniRC::onReadyRead()
         // MAVLink frames (0xFD/0xFE) are relayed to the loopback telemetry link.
         const bool isSiYiFrame = (data.size() >= 2)
             && (quint8(data.at(0)) == 0x55) && (quint8(data.at(1)) == 0x66);
+        qCDebug(SiYiUniRCLog) << "[diag] datalink rx from" << dg.senderAddress().toString()
+                              << (isSiYiFrame ? "SDK" : "MAVLink->relay")
+                              << "size" << data.size()
+                              << "first" << (data.size() >= 2 ? data.left(2).toHex(' ') : QByteArray());
         if (isSiYiFrame) {
             rxBuffer_.append(data);
         } else {
@@ -365,6 +375,8 @@ void SiYiUniRC::parseRxBuffer()
 
 void SiYiUniRC::handlePacket(quint8 cmdId, const QByteArray &data)
 {
+    qCDebug(SiYiUniRCLog) << "[diag] handlePacket cmd" << Qt::hex << cmdId
+                          << Qt::dec << "len" << data.size();
     setConnected(true);
     if (watchdogTimer_) {
         watchdogTimer_->start();
