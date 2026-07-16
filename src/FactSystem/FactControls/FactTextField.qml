@@ -13,6 +13,7 @@ QGCTextField {
     showHelp:               false
     numericValuesOnly:      fact && !fact.typeIsString
     horizontalAlignment:    Text.AlignLeft
+    maximumLength:          fact && fact.maxStringLength > 0 ? fact.maxStringLength : 32767 // 32767 is the TextInput default (no limit)
 
     signal updated()
 

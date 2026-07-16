@@ -732,7 +732,7 @@ uint8_t LinkManager::allocateMavlinkChannel()
         return mavlinkChannel;
     }
 
-    qWarning(LinkManagerLog) << "allocateMavlinkChannel: all channels reserved!";
+    qCWarning(LinkManagerLog) << "allocateMavlinkChannel: all channels reserved!";
     return invalidMavlinkChannel();
 }
 
